@@ -1,0 +1,88 @@
+System Setup
+1. Google Cloud Setup
+Create a Google Project (If Not Already Created)
+Visit Google Cloud Project Creation.
+Create a project with a suitable name and location.
+image.png
+
+Set Up Consent Screen
+Navigate to Consent Screen Setup.
+Choose User Type:
+Internal: For organizational use (requires Google Workspace).
+External: Requires app verification due to sensitive scopes.
+Fill out the following:
+App Name: Enter a name for your app.
+Support Email: Add your contact email.
+Authorized Domain: Provide your app's domain or skip to auto-generate.
+image
+
+Add Required Scopes
+Click Add or Remove Scopes.
+Either include the full https://www.googleapis.com/auth/calendar scope or add the following fine-grained scopes:
+API	Scope
+Google Calendar API	.../auth/calendar.calendarlist.readonly
+Google Calendar API	.../auth/calendar.events.freebusy
+Google Calendar API	.../auth/calendar.events.public.readonly
+Google Calendar API	.../auth/calendar.calendarlist
+Google Calendar API	.../auth/calendar.calendars
+Google Calendar API	.../auth/calendar.calendars.readonly
+Google Calendar API	.../auth/calendar.events
+Google Calendar API	.../auth/calendar.events.owned
+Google Calendar API	.../auth/calendar.events.owned.readonly
+Google Calendar API	.../auth/calendar.events.readonly
+Enable Calendar API
+Visit Calendar API Marketplace.
+Click Enable.
+image
+
+Create OAuth Credentials
+Navigate to Google API Credentials.
+Select Create Credentials > OAuth Client ID.
+image
+
+Configure:
+Application Type: Web application.
+Authorized JavaScript Origins: Add your Frappe app’s base URL (must use HTTPS).
+Authorized Redirect URIs:
+   <BASE_URL>?cmd=frappe.integrations.doctype.google_calendar.google_calendar.google_callback
+Replace <BASE_URL> with your Frappe installation URL, e.g., https://erp-dev.rt.gw.
+
+image
+
+Save the generated Client ID and Client Secret.
+Note: Use the same OAuth credentials for other Frappe integrations like Gmail Threads or Drive.
+
+2. Frappe Appointment Setup
+Install the App (using bench)
+bench get-app git@github.com:rtCamp/frappe-appointment.git
+bench --site {sitename} install-app frappe_appointment
+Configure Google Settings
+Steps:
+Log in as Administrator in Frappe.
+Navigate to Google Settings:
+Enable Google API.
+Enter the saved Client ID and Client Secret.
+image
+
+Created with ❤️ by rtCamp
+
+Pages 6
+Find a page…
+Home
+Google Calendar Setup
+Group Meetings
+Personal Meetings
+System Setup
+System Setup
+1. Google Cloud Setup
+Create a Google Project (If Not Already Created)
+Set Up Consent Screen
+Add Required Scopes
+Enable Calendar API
+Create OAuth Credentials
+2. Frappe Appointment Setup
+Install the App (using bench)
+Configure Google Settings
+Steps:
+Zoom Setup
+Clone this wiki locally
