@@ -1,8 +1,37 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer base {
   :root {
+    /* ========================================
+       LANDING PAGE BRAND COLORS
+       Change these to update the entire design
+       ======================================== */
+    
+    /* Primary Brand Color (Indigo) */
+    --brand-primary: #6366F1;
+    --brand-primary-dark: #4F46E5;
+    --brand-primary-light: #818CF8;
+    
+    /* Secondary Brand Color (Emerald - Success/Money) */
+    --brand-secondary: #10B981;
+    --brand-secondary-dark: #059669;
+    
+    /* Accent Colors */
+    --brand-accent-gold: #F59E0B;
+    --brand-accent-teal: #14B8A6;
+    
+    /* Gradient Definitions */
+    --gradient-hero-start: #667eea;
+    --gradient-hero-end: #764ba2;
+    --gradient-feature-start: #6366F1;
+    --gradient-feature-mid: #8B5CF6;
+    --gradient-feature-end: #D946EF;
+    
+    /* ========================================
+       SHADCN/UI SYSTEM COLORS (Default)
+       ======================================== */
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
@@ -29,6 +58,7 @@
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
   }
+  
   .dark {
     --background: 240 5% 8%;
     --foreground: 0 0% 95%;

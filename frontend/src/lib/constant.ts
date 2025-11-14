@@ -1,1 +1,1 @@
-export const BASE_ROUTE = "/schedule";
+export const BASE_ROUTE = "/";

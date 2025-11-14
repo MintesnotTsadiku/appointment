@@ -6,10 +6,10 @@
 
 ## 0) Repo & Branching
 - Fork `rtCamp/frappe-appointment` → `org/ethi-scheduler`.
-- Create apps:
-  - `ethi_scheduler` (core scheduling, policies, front‑desk UI)
-  - `ethi_payments` (payment drivers: telebirr, chapa, mpesa)
-  - `ethi_channels` (SMS/Email/USSD)
+- Create **modules** within `frappe_appointment` app:
+  - `scheduler` (core scheduling, policies, front‑desk UI)
+  - `payments` (payment drivers: telebirr, chapa, mpesa)
+  - `channels` (SMS/Email/USSD)
 - Branching: `main` (release), `develop`, feature branches `feat/*`, hotfix `fix/*`.
 - CI: lint + unit tests + type checks + export fixtures + `bench build`.
 
@@ -30,8 +30,8 @@
 
 ### Sprint 1 — Foundations (env, doctypes, permissions)
 **Tasks**
-1. Scaffold apps (`bench new-app`) and install into site; enable modules.
-2. Create doctypes: Provider, Location, Service, EventType, Appointment.
+1. Scaffold modules (add to `modules.txt`, create directories) within `frappe_appointment` app.
+2. Create doctypes: Provider, Location, Service, EventType, Appointment (in `scheduler` module).
 3. Access control roles: Owner, Manager, Provider, Front‑Desk.
 4. Timezone, currency defaults; localization strings (Amharic/English).
 
@@ -59,7 +59,7 @@
 
 ### Sprint 3 — Payments v1 (telebirr & Chapa)
 **Tasks**
-1. `PaymentIntent` doctype and service layer.
+1. `PaymentIntent` doctype and service layer (in `payments` module).
 2. Driver `telebirr`: init payment, signature verify, webhook endpoint.
 3. Driver `chapa`: hosted checkout, webhook verify.
 4. Update `Appointment.status` on success/failure; refund endpoint for host cancel.
@@ -75,7 +75,7 @@
 
 ### Sprint 4 — Notifications (SMS/Email)
 **Tasks**
-1. `ethi_channels` sms provider abstraction; templates with i18n.
+1. `channels` module SMS provider abstraction; templates with i18n.
 2. Reminder scheduler (T‑48h/T‑24h/T‑3h configurable).
 3. Delivery receipts (DLR) processing; opt‑out flag.
 
@@ -150,32 +150,32 @@
 ## 3) Frontend — API Shapes & Screens
 
 ### Public Booking Page
-**GET** `/api/method/ethi_scheduler.api.list_slots?event_id=UUID&from=ISO&to=ISO`
+**GET** `/api/method/frappe_appointment.scheduler.api.list_slots?event_id=UUID&from=ISO&to=ISO`
 - **200** `{ slots: [{start,end,tz}, ...], policy: {...}, price: {...} ] }`
 
-**POST** `/api/method/ethi_scheduler.api.create_appointment`
+**POST** `/api/method/frappe_appointment.scheduler.api.create_appointment`
 - **Req** `{ event_id, client:{name,phone,email,lang}, slot:{start,end}, payment:{method, deposit_percent} }`
 - **Res** `{ appointment_id, payment_intent_id, redirect_url? }`
 
-**Webhook** `/api/method/ethi_payments.webhook.<provider>`
+**Webhook** `/api/method/frappe_appointment.payments.webhook.<provider>`
 - **Req**: raw PSP payload
 - **Res**: `200` if signature valid; transitions Appointment status
 
 ### Front‑Desk Board
-**GET** `/api/method/ethi_scheduler.api.board?date=YYYY‑MM‑DD&location=ID`
+**GET** `/api/method/frappe_appointment.scheduler.api.board?date=YYYY‑MM‑DD&location=ID`
 - **200** `{ providers:[...], appointments:[...], walkins:[...] }`
 
-**POST** `/api/method/ethi_scheduler.api.reschedule`
+**POST** `/api/method/frappe_appointment.scheduler.api.reschedule`
 - **Req** `{ appointment_id, new_start, new_end }`
 - **Res** `{ ok:true }` (policy errors return 409 with message)
 
 ### Notifications
-**POST** `/api/method/ethi_channels.api.send_test`
+**POST** `/api/method/frappe_appointment.channels.api.send_test`
 - **Req** `{ channel:"sms", to, template, vars }`
 
 ### Compliance
-**GET** `/api/method/ethi_scheduler.api.export_subject?phone=+251...`
-**POST** `/api/method/ethi_scheduler.api.delete_subject` `{ phone }`
+**GET** `/api/method/frappe_appointment.scheduler.api.export_subject?phone=+251...`
+**POST** `/api/method/frappe_appointment.scheduler.api.delete_subject` `{ phone }`
 
 ---
 

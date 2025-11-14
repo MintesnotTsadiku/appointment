@@ -1,8 +1,8 @@
 app_name = "frappe_appointment"
-app_title = "Frappe Appointment"
-app_publisher = "rtCamp"
+app_title = "Appointment"
+app_publisher = "minte"
 app_description = "The appointment scheduling app with team support in Frappe."
-app_email = "sys@rtcamp.com"
+app_email = "mtsadiku@gmail.com"
 app_license = "GNU AFFERO GENERAL PUBLIC LICENSE (v3)"
 # required_apps = []
 
@@ -13,6 +13,10 @@ website_route_rules = [
     {
         "from_route": "/schedule/<path:app_path>",
         "to_route": "schedule",
+    },
+    {
+        "from_route": "/<path:app_path>",
+        "to_route": "/",
     },
 ]
 

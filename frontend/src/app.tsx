@@ -18,6 +18,7 @@ import { BASE_ROUTE } from "./lib/constant";
 import { getSiteName } from "./lib/utils";
 import { TooltipProvider } from "@/components/tooltip";
 import { AppProvider } from "./context/app";
+import { TranslationProvider } from "./context/translation";
 import { Toaster } from "./components/sonner";
 import ModeToggle from "./components/theme-provider/components/modeToggle";
 
@@ -28,24 +29,26 @@ const App = () => {
   return (
     <>
       <AppProvider>
-        <HelmetProvider>
-          <FrappeProvider
-            url={import.meta.env.VITE_BASE_URL ?? ""}
-            socketPort={import.meta.env.VITE_SOCKET_PORT}
-            enableSocket={
-              import.meta.env.VITE_ENABLE_SOCKET === "true" ? true : false
-            }
-            siteName={getSiteName()}
-          >
-            <TooltipProvider>
-              <Suspense fallback={<></>}>
-                <RouterProvider router={router} />
-                <Toaster />
-                <ModeToggle/>
-              </Suspense>
-            </TooltipProvider>
-          </FrappeProvider>
-        </HelmetProvider>
+        <TranslationProvider>
+          <HelmetProvider>
+            <FrappeProvider
+              url={import.meta.env.VITE_BASE_URL ?? ""}
+              socketPort={import.meta.env.VITE_SOCKET_PORT}
+              enableSocket={
+                import.meta.env.VITE_ENABLE_SOCKET === "true" ? true : false
+              }
+              siteName={getSiteName()}
+            >
+              <TooltipProvider>
+                <Suspense fallback={<></>}>
+                  <RouterProvider router={router} />
+                  <Toaster />
+                  <ModeToggle/>
+                </Suspense>
+              </TooltipProvider>
+            </FrappeProvider>
+          </HelmetProvider>
+        </TranslationProvider>
       </AppProvider>
     </>
   );
