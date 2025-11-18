@@ -28,50 +28,50 @@ const SetupChecklist = () => {
   const checklistItems: ChecklistItem[] = [
     {
       id: '1',
-      title: t('checklist.connectCalendar') || 'Connect calendar',
-      description: t('checklist.connectCalendarDesc') || 'Google or built-in calendar',
+      title: 'Connect calendar',
+      description: 'Google or built-in calendar',
       completed: completedSteps.includes(1),
       actionUrl: '/settings/calendar',
     },
     {
       id: '2',
-      title: t('checklist.setAvailability') || 'Set availability',
-      description: t('checklist.setAvailabilityDesc') || 'Define your working hours',
+      title: 'Set availability',
+      description: 'Define your working hours',
       completed: completedSteps.includes(2),
       actionUrl: '/settings/availability',
     },
     {
       id: '3',
-      title: t('checklist.createService') || 'Create appointment type',
-      description: t('checklist.createServiceDesc') || 'Add services you offer',
+      title: 'Create appointment type',
+      description: 'Add services you offer',
       completed: completedSteps.includes(3),
       actionUrl: '/settings/services',
     },
     {
       id: '4',
-      title: t('checklist.shareLink') || 'Share booking link',
-      description: t('checklist.shareLinkDesc') || 'Send to your first customer',
+      title: 'Share booking link',
+      description: 'Send to your first customer',
       completed: completedSteps.includes(4),
       actionUrl: '/settings/booking-link',
     },
     {
       id: '5',
-      title: t('checklist.testBooking') || 'Test booking',
-      description: t('checklist.testBookingDesc') || 'Book as guest to test',
+      title: 'Test booking',
+      description: 'Book as guest to test',
       completed: completedSteps.includes(5),
       actionUrl: '/schedule/in/test',
     },
     {
       id: '6',
-      title: t('checklist.configureNotifications') || 'Configure notifications',
-      description: t('checklist.configureNotificationsDesc') || 'SMS/Email reminders',
+      title: 'Configure notifications',
+      description: 'SMS/Email reminders',
       completed: completedSteps.includes(6),
       actionUrl: '/settings/notifications',
     },
     {
       id: '7',
-      title: t('checklist.addPayment') || 'Add payment method',
-      description: t('checklist.addPaymentDesc') || 'telebirr or Chapa',
+      title: 'Add payment method',
+      description: 'telebirr or Chapa',
       completed: completedSteps.includes(7),
       actionUrl: '/settings/payments',
     },
@@ -103,15 +103,15 @@ const SetupChecklist = () => {
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <div className="flex items-center justify-between">
-          <div className="flex-1">
-            <div className="flex items-center space-x-3 mb-2">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                {t('checklist.title') || 'Setup Checklist'}
-              </h3>
-              <span className="px-3 py-1 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 text-sm font-medium rounded-full">
-                {completedCount}/{totalCount} {t('common.complete') || 'complete'}
-              </span>
-            </div>
+            <div className="flex-1">
+              <div className="flex items-center space-x-3 mb-2">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  Setup Checklist
+                </h3>
+                <span className="px-3 py-1 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 text-sm font-medium rounded-full">
+                  {completedCount}/{totalCount} complete
+                </span>
+              </div>
             {/* Progress Bar */}
             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
               <motion.div
@@ -192,7 +192,7 @@ const SetupChecklist = () => {
                       }}
                       className="flex-shrink-0 px-3 py-1 text-xs font-medium text-brand-primary hover:text-brand-primary-dark dark:text-brand-primary-light transition-colors"
                     >
-                      {t('common.setup') || 'Setup →'}
+                      Setup →
                     </button>
                   )}
                 </motion.div>

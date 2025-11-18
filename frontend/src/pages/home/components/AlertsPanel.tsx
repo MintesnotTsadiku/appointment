@@ -71,7 +71,7 @@ const AlertsPanel = () => {
     <Card className="p-6">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-          {t('dashboard.alerts') || 'Alerts & Notifications'}
+          Alerts & Notifications
         </h3>
         {alerts.length > 0 && (
           <span className="px-2 py-1 bg-brand-primary text-white text-xs font-medium rounded-full">
@@ -89,7 +89,7 @@ const AlertsPanel = () => {
       {error && (
         <div className="text-center py-12">
           <p className="text-red-600 dark:text-red-400">
-            {t('error.loadAlertsFailed') || 'Failed to load alerts'}
+            Failed to load alerts
           </p>
         </div>
       )}
@@ -100,10 +100,10 @@ const AlertsPanel = () => {
             <CheckCircle className="w-8 h-8 text-green-600" />
           </div>
           <p className="text-gray-900 dark:text-white font-medium">
-            {t('dashboard.allGood') || "You're all set!"}
+            You're all set!
           </p>
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-            {t('dashboard.noAlerts') || 'No alerts or issues to address'}
+            No alerts or issues to address
           </p>
         </div>
       )}
@@ -129,7 +129,7 @@ const AlertsPanel = () => {
                         onClick={() => handleAction(alert.action_url!)}
                         className="mt-2 text-xs font-medium text-brand-primary hover:text-brand-primary-dark transition-colors"
                       >
-                        {t('common.takeAction') || 'Take Action →'}
+                        Take Action →
                       </button>
                     )}
                   </div>

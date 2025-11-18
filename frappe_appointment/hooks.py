@@ -92,6 +92,7 @@ doctype_js = {
 # }
 
 fixtures = [
+    # Custom Fields for Frappe Appointment module
     {
         "dt": "Custom Field",
         "filters": [
@@ -104,6 +105,7 @@ fixtures = [
             ]
         ],
     },
+    # Property Setters for Frappe Appointment module
     {
         "dt": "Property Setter",
         "filters": [
@@ -113,6 +115,37 @@ fixtures = [
                 {
                     "Frappe Appointment",
                 },
+            ]
+        ],
+    },
+    # Roles for the multi-business system  
+    {
+        "dt": "Role",
+        "filters": [
+            [
+                "name",
+                "in",
+                [
+                    "Organization Manager",
+                    "Front Desk",
+                    "Assistant",
+                    "Provider",
+                ],
+            ]
+        ],
+    },
+    # Doctypes for the multi-business system
+    {
+        "dt": "DocType",
+        "filters": [
+            [
+                "name",
+                "in",
+                [
+                    "Organization",
+                    "Organization Manager",
+                    "Provider Delegation",
+                ],
             ]
         ],
     },

@@ -1,4 +1,4 @@
-export type TimeFormat = "12h" | "24h";
+export type TimeFormat = "12h" | "24h" | "ethiopian";
 
 export interface MeetingData {
   all_available_slots_for_data: any[]; // Define a more specific type if possible

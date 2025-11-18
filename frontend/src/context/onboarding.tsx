@@ -1,11 +1,12 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useFrappeGetCall, useFrappePostCall } from 'frappe-react-sdk';
+import { useFrappeGetCall, useFrappePostCall, useFrappeAuth } from 'frappe-react-sdk';
 
 interface OnboardingProgress {
   current_step: number;
   completed_steps: number[];
   onboarding_complete: boolean;
   completed_at?: string;
+  onboarding_type?: 'individual' | 'organization' | null;
 }
 
 interface OnboardingContextType {
@@ -15,12 +16,24 @@ interface OnboardingContextType {
   updateProgress: (step: number) => Promise<void>;
   completeOnboarding: () => Promise<void>;
   refreshProgress: () => void;
+  setOnboardingType: (type: 'individual' | 'organization') => Promise<void>;
+  resetOnboardingType: () => Promise<void>;
 }
 
 const OnboardingContext = createContext<OnboardingContextType | undefined>(undefined);
 
 export const OnboardingProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [progress, setProgress] = useState<OnboardingProgress | null>(null);
+  const { currentUser, isLoading: authLoading } = useFrappeAuth();
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!authLoading && (!currentUser || currentUser === 'Guest')) {
+      // Redirect to our frontend login page with return URL
+      const currentPath = window.location.pathname;
+      window.location.href = `/login?redirect-to=${encodeURIComponent(currentPath)}`;
+    }
+  }, [currentUser, authLoading]);
 
   // Fetch onboarding progress
   const { data, error, isLoading, mutate } = useFrappeGetCall<{ message: OnboardingProgress }>(
@@ -35,6 +48,8 @@ export const OnboardingProvider: React.FC<{ children: ReactNode }> = ({ children
 
   const { call: updateCall } = useFrappePostCall('frappe_appointment.onboarding.update_step');
   const { call: completeCall } = useFrappePostCall('frappe_appointment.onboarding.complete');
+  const { call: setTypeCall } = useFrappePostCall('frappe_appointment.onboarding.set_onboarding_type');
+  const { call: resetTypeCall } = useFrappePostCall('frappe_appointment.onboarding.reset_onboarding_type');
 
   useEffect(() => {
     if (data?.message) {
@@ -72,6 +87,44 @@ export const OnboardingProvider: React.FC<{ children: ReactNode }> = ({ children
     mutate();
   };
 
+  const setOnboardingType = async (type: 'individual' | 'organization') => {
+    try {
+      const result = await setTypeCall({ onboarding_type: type });
+      if (result?.message) {
+        setProgress(result.message);
+      }
+      mutate();
+    } catch (err) {
+      console.error('Failed to set onboarding type:', err);
+      throw err;
+    }
+  };
+
+  const resetOnboardingType = async () => {
+    try {
+      const result = await resetTypeCall({});
+      if (result?.message) {
+        setProgress(result.message);
+      }
+      mutate();
+    } catch (err) {
+      console.error('Failed to reset onboarding type:', err);
+      throw err;
+    }
+  };
+
+  // Show loading while checking authentication
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-gray-900">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400">Checking authentication...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <OnboardingContext.Provider
       value={{
@@ -81,6 +134,8 @@ export const OnboardingProvider: React.FC<{ children: ReactNode }> = ({ children
         updateProgress,
         completeOnboarding,
         refreshProgress,
+        setOnboardingType,
+        resetOnboardingType,
       }}
     >
       {children}

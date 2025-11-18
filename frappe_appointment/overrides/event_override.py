@@ -132,9 +132,12 @@ class EventOverride(Event):
         if not hasattr(self, "ics_event_description"):
             self.ics_event_description = None
         if self.is_new() and (not hasattr(self, "has_event_inserted") or not self.has_event_inserted):
-            _, updates = insert_event_in_google_calendar_override(self, update_doc=False)
-            for key, value in updates.items():
-                self.set(key, value)
+            # Only sync with Google Calendar if sync_with_google_calendar is enabled and google_calendar is set
+            if self.sync_with_google_calendar and self.google_calendar:
+                _, updates = insert_event_in_google_calendar_override(self, update_doc=False)
+                if updates:
+                    for key, value in updates.items():
+                        self.set(key, value)
         self.pulled_from_google_calendar = True
         if self.custom_appointment_group or self.custom_user_calendar:
             self.appointment_group = self.custom_appointment_group and frappe.get_doc(
@@ -289,13 +292,45 @@ class EventOverride(Event):
 
         members = self.appointment_group.members
 
-        google_calendar_api_obj, account = get_google_calendar_object(self.appointment_group.event_creator)
+        # Check if Google Calendar is configured (not "builtin" provider)
+        meeting_provider = self.appointment_group.get("meet_provider") or self.appointment_group.get("meeting_provider")
+        has_google_calendar = self.appointment_group.event_creator and meeting_provider and meeting_provider.lower() != "builtin"
+        
+        google_calendar_api_obj = None
+        account = None
+        
+        if has_google_calendar:
+            try:
+                google_calendar_api_obj, account = get_google_calendar_object(self.appointment_group.event_creator)
+            except Exception:
+                # If Google Calendar setup fails, skip Google Calendar logic
+                has_google_calendar = False
 
         idx = len(self.event_participants) + 1
 
         for member in members:
             try:
-                if member.user == account.user:
+                # Get the User Appointment Availability to find the linked User
+                user_availability = frappe.get_doc(USER_APPOINTMENT_AVAILABILITY, member.user)
+                linked_user = user_availability.user
+                
+                # Get the email from the User doctype
+                user_email = frappe.db.get_value("User", linked_user, "email")
+                
+                # If no email found, try getting from User doc directly
+                if not user_email or "@" not in user_email:
+                    try:
+                        user_doc = frappe.get_doc("User", linked_user)
+                        user_email = user_doc.email
+                    except Exception:
+                        user_email = None
+                
+                # If still no email, use a placeholder format
+                if not user_email or "@" not in user_email:
+                    user_email = f"{linked_user}@system.local"  # Placeholder email
+                
+                # Skip if Google Calendar is configured and this is the account user
+                if has_google_calendar and account and linked_user == account.user:
                     continue
 
                 user = frappe.get_doc(
@@ -305,7 +340,7 @@ class EventOverride(Event):
                         "parent": self.name,
                         "reference_doctype": USER_APPOINTMENT_AVAILABILITY,
                         "reference_docname": member.user,
-                        "email": member.user,
+                        "email": user_email,  # Use actual email, not username
                         "parenttype": "Event",
                         "parentfield": "event_participants",
                     }
@@ -315,19 +350,21 @@ class EventOverride(Event):
             except Exception:
                 pass
 
-        user = frappe.get_doc(
-            {
-                "idx": idx,
-                "doctype": "Event Participants",
-                "parent": self.name,
-                "reference_doctype": "Google Calendar",
-                "reference_docname": account.name,
-                "email": account.user,
-                "parenttype": "Event",
-                "parentfield": "event_participants",
-            }
-        )
-        self.event_participants.append(user)
+        # Only add Google Calendar participant if Google Calendar is configured
+        if has_google_calendar and account:
+            user = frappe.get_doc(
+                {
+                    "idx": idx,
+                    "doctype": "Event Participants",
+                    "parent": self.name,
+                    "reference_doctype": "Google Calendar",
+                    "reference_docname": account.name,
+                    "email": account.user,
+                    "parenttype": "Event",
+                    "parentfield": "event_participants",
+                }
+            )
+            self.event_participants.append(user)
 
     def handle_webhook(self, body):
         """Handle the webhook call
@@ -539,7 +576,20 @@ def _create_event_for_appointment_group(
     if len(members) <= 0:
         return frappe.throw(_("No Member found"))
 
-    google_calendar_api_obj, account = get_google_calendar_object(appointment_group.event_creator)
+    # Check if Google Calendar is configured (not "builtin" provider)
+    meeting_provider = appointment_group.get("meet_provider") or appointment_group.get("meeting_provider")
+    has_google_calendar = appointment_group.event_creator and meeting_provider and meeting_provider.lower() != "builtin"
+    
+    google_calendar_api_obj = None
+    account = None
+    
+    if has_google_calendar:
+        try:
+            google_calendar_api_obj, account = get_google_calendar_object(appointment_group.event_creator)
+        except Exception as e:
+            # If Google Calendar setup fails, fall back to builtin
+            frappe.log_error(f"Failed to get Google Calendar object: {str(e)}")
+            has_google_calendar = False
 
     if reschedule:
         if not appointment_group.allow_rescheduling:
@@ -570,6 +620,10 @@ def _create_event_for_appointment_group(
             event.starts_on = starts_on
             event.ends_on = ends_on
             event.event_info = event_info
+            
+            # Update time format if provided
+            if event_info.get("time_format"):
+                event.custom_time_format = event_info.get("time_format")
 
             webhook_call = event.handle_webhook(
                 {
@@ -608,18 +662,25 @@ def _create_event_for_appointment_group(
         "description": event_info.get("description"),
         "starts_on": starts_on,
         "ends_on": ends_on,
-        "sync_with_google_calendar": 1,
-        "google_calendar": account.name,
-        "google_calendar_id": account.google_calendar_id,
+        "sync_with_google_calendar": 1 if has_google_calendar else 0,
         "pulled_from_google_calendar": 0,
-        "custom_sync_participants_google_calendars": 1,
+        "custom_sync_participants_google_calendars": 1 if has_google_calendar else 0,
         "event_participants": json.loads(event_participants),
         "custom_doctype_link_with_event": json.loads(event_info.get("custom_doctype_link_with_event", "[]")),
         "send_reminder": 0,
         "event_type": "Private",
-        "custom_appointment_group": appointment_group.name,
+        "custom_appointment_group": appointment_group.name if appointment_group.name else None,
         "event_info": event_info,
     }
+    
+    # Store user's preferred time format for email/SMS notifications
+    if event_info.get("time_format"):
+        calendar_event["custom_time_format"] = event_info.get("time_format")
+    
+    # Only set Google Calendar fields if Google Calendar is configured
+    if has_google_calendar and account:
+        calendar_event["google_calendar"] = account.name
+        calendar_event["google_calendar_id"] = account.google_calendar_id
 
     if personal:
         calendar_event["custom_user_calendar"] = event_info.get("user_calendar")

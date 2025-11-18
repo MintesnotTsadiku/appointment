@@ -27,8 +27,31 @@ class UserAppointmentAvailability(Document):
         if self.appointment_time_slot:
             weekdays = []
             for slot in self.appointment_time_slot:
-                start_time = datetime.strptime(slot.start_time, "%H:%M:%S")
-                end_time = datetime.strptime(slot.end_time, "%H:%M:%S")
+                # Handle both string and timedelta objects for start_time and end_time
+                if isinstance(slot.start_time, str):
+                    start_time = datetime.strptime(slot.start_time, "%H:%M:%S")
+                elif hasattr(slot.start_time, 'total_seconds'):
+                    # It's a timedelta object - convert to datetime for comparison
+                    total_seconds = int(slot.start_time.total_seconds())
+                    hours = total_seconds // 3600
+                    minutes = (total_seconds % 3600) // 60
+                    seconds = total_seconds % 60
+                    start_time = datetime.strptime(f"{hours:02d}:{minutes:02d}:{seconds:02d}", "%H:%M:%S")
+                else:
+                    frappe.throw(frappe._("Invalid start_time format for day {0}").format(slot.day))
+                
+                if isinstance(slot.end_time, str):
+                    end_time = datetime.strptime(slot.end_time, "%H:%M:%S")
+                elif hasattr(slot.end_time, 'total_seconds'):
+                    # It's a timedelta object - convert to datetime for comparison
+                    total_seconds = int(slot.end_time.total_seconds())
+                    hours = total_seconds // 3600
+                    minutes = (total_seconds % 3600) // 60
+                    seconds = total_seconds % 60
+                    end_time = datetime.strptime(f"{hours:02d}:{minutes:02d}:{seconds:02d}", "%H:%M:%S")
+                else:
+                    frappe.throw(frappe._("Invalid end_time format for day {0}").format(slot.day))
+                
                 if start_time > end_time:
                     frappe.throw(frappe._("Start time should be less than end time for the day {0}").format(slot.day))
                 if slot.day in weekdays:
@@ -38,9 +61,11 @@ class UserAppointmentAvailability(Document):
                         )
                     )
                 weekdays.append(slot.day)
-        calendar = frappe.get_doc("Google Calendar", self.google_calendar)
-        if not calendar.custom_is_google_calendar_authorized:
-            frappe.throw(frappe._("Please authorize Google Calendar before creating appointment availability."))
+        # Only validate Google Calendar if it's the selected meeting provider
+        if self.meeting_provider == "google" and self.google_calendar:
+            calendar = frappe.get_doc("Google Calendar", self.google_calendar)
+            if not calendar.custom_is_google_calendar_authorized:
+                frappe.throw(frappe._("Please authorize Google Calendar before creating appointment availability."))
         if self.enable_scheduling and not self.slug:
             frappe.throw(frappe._("Please set a slug before enabling scheduling."))
         if self.slug:

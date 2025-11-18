@@ -4,20 +4,32 @@ import { useTranslation } from '@/lib/i18n';
 const LogoCloud = () => {
   const { t } = useTranslation();
 
-  // Partner logos - placeholder data
+  // Partner logos - companies with verified working logo URLs
   const partners = [
-    { name: 'Ethio Telecom', logo: '🇪🇹' },
-    { name: 'Commercial Bank', logo: '🏦' },
-    { name: 'Ethiopian Airlines', logo: '✈️' },
-    { name: 'Safaricom', logo: '📱' },
-    { name: 'Addis Chamber', logo: '🏛️' },
-    { name: 'St. Paul Hospital', logo: '🏥' },
-    { name: 'AAU', logo: '🎓' },
-    { name: 'Zemen Bank', logo: '💳' },
-    { name: 'DireTube', logo: '📺' },
-    { name: 'Ride', logo: '🚗' },
-    { name: 'Kobo360', logo: '🚚' },
-    { name: 'iCog Labs', logo: '🤖' },
+    { 
+      name: 'Ethiopian Airlines', 
+      logo: 'https://logo.clearbit.com/ethiopianairlines.com' 
+    },
+    { 
+      name: 'Safaricom', 
+      logo: 'https://logo.clearbit.com/safaricom.co.ke' 
+    },
+    { 
+      name: 'Ethio Telecom', 
+      logo: 'https://logo.clearbit.com/ethiotelecom.et' 
+    },
+    { 
+      name: 'Commercial Bank of Ethiopia', 
+      logo: 'https://logo.clearbit.com/combanketh.et' 
+    },
+    { 
+      name: 'Dashen Bank', 
+      logo: 'https://logo.clearbit.com/dashenbanksc.com' 
+    },
+    { 
+      name: 'Bank of Abyssinia', 
+      logo: 'https://logo.clearbit.com/bankofabyssinia.com' 
+    },
   ];
 
   return (
@@ -64,15 +76,23 @@ const LogoCloud = () => {
             {[...partners, ...partners].map((partner, index) => (
               <motion.div
                 key={index}
-                whileHover={{ scale: 1.1 }}
-                className="flex-shrink-0 flex items-center justify-center w-32 h-20 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
+                whileHover={{ scale: 1.05 }}
+                className="flex-shrink-0 flex items-center justify-center w-40 h-24 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 p-4"
               >
-                <div className="text-center">
-                  <div className="text-4xl mb-1">{partner.logo}</div>
-                  <p className="text-xs font-medium text-gray-600 dark:text-gray-400">
-                    {partner.name}
-                  </p>
-                </div>
+                <img
+                  src={partner.logo}
+                  alt={`${partner.name} logo`}
+                  className="max-w-full max-h-full object-contain transition-all duration-300 opacity-90 hover:opacity-100 hover:scale-105"
+                  loading="lazy"
+                  onError={(e) => {
+                    // Fallback to styled text if image fails to load
+                    e.currentTarget.style.display = 'none';
+                    const parent = e.currentTarget.parentElement;
+                    if (parent) {
+                      parent.innerHTML = `<div class="text-center px-2"><span class="text-xs font-bold text-gray-700 dark:text-gray-300 leading-tight">${partner.name}</span></div>`;
+                    }
+                  }}
+                />
               </motion.div>
             ))}
           </motion.div>

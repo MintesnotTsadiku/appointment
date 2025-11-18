@@ -19,6 +19,7 @@ import { getSiteName } from "./lib/utils";
 import { TooltipProvider } from "@/components/tooltip";
 import { AppProvider } from "./context/app";
 import { TranslationProvider } from "./context/translation";
+import { LandingPageSettingsProvider } from "./context/landingPageSettings";
 import { Toaster } from "./components/sonner";
 import ModeToggle from "./components/theme-provider/components/modeToggle";
 
@@ -30,24 +31,26 @@ const App = () => {
     <>
       <AppProvider>
         <TranslationProvider>
-          <HelmetProvider>
-            <FrappeProvider
-              url={import.meta.env.VITE_BASE_URL ?? ""}
-              socketPort={import.meta.env.VITE_SOCKET_PORT}
-              enableSocket={
-                import.meta.env.VITE_ENABLE_SOCKET === "true" ? true : false
-              }
-              siteName={getSiteName()}
-            >
-              <TooltipProvider>
-                <Suspense fallback={<></>}>
-                  <RouterProvider router={router} />
-                  <Toaster />
-                  <ModeToggle/>
-                </Suspense>
-              </TooltipProvider>
-            </FrappeProvider>
-          </HelmetProvider>
+          <LandingPageSettingsProvider>
+            <HelmetProvider>
+              <FrappeProvider
+                url={import.meta.env.VITE_BASE_URL ?? ""}
+                socketPort={import.meta.env.VITE_SOCKET_PORT}
+                enableSocket={
+                  import.meta.env.VITE_ENABLE_SOCKET === "true" ? true : false
+                }
+                siteName={getSiteName()}
+              >
+                <TooltipProvider>
+                  <Suspense fallback={<></>}>
+                    <RouterProvider router={router} />
+                    <Toaster />
+                    <ModeToggle/>
+                  </Suspense>
+                </TooltipProvider>
+              </FrappeProvider>
+            </HelmetProvider>
+          </LandingPageSettingsProvider>
         </TranslationProvider>
       </AppProvider>
     </>

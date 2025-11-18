@@ -12,6 +12,8 @@ const HowItWorks = () => {
       duration: t('howItWorks.step1Duration'),
       description: t('howItWorks.step1Description'),
       color: 'from-blue-500 to-cyan-500',
+      image: 'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=400&h=300&fit=crop',
+      imageAlt: 'Set your availability and working hours'
     },
     {
       icon: Settings,
@@ -19,6 +21,8 @@ const HowItWorks = () => {
       duration: t('howItWorks.step2Duration'),
       description: t('howItWorks.step2Description'),
       color: 'from-purple-500 to-pink-500',
+      image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=400&h=300&fit=crop',
+      imageAlt: 'Configure your services and pricing'
     },
     {
       icon: Share2,
@@ -26,6 +30,8 @@ const HowItWorks = () => {
       duration: t('howItWorks.step3Duration'),
       description: t('howItWorks.step3Description'),
       color: 'from-amber-500 to-orange-500',
+      image: 'https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=400&h=300&fit=crop',
+      imageAlt: 'Share your booking link with customers'
     },
     {
       icon: CheckCircle2,
@@ -33,6 +39,8 @@ const HowItWorks = () => {
       duration: t('howItWorks.step4Duration'),
       description: t('howItWorks.step4Description'),
       color: 'from-green-500 to-emerald-500',
+      image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=400&h=300&fit=crop',
+      imageAlt: 'Automatic booking confirmation and payment'
     },
   ];
 
@@ -71,29 +79,42 @@ const HowItWorks = () => {
                 className="relative"
               >
                 {/* Step Card */}
-                <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-shadow duration-300">
+                <div className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-shadow duration-300">
                   {/* Step Number */}
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
                     <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${step.color} flex items-center justify-center text-white font-bold text-sm shadow-lg`}>
                       {index + 1}
                     </div>
                   </div>
 
-                  {/* Icon */}
-                  <div className={`w-14 h-14 mx-auto mb-4 rounded-xl bg-gradient-to-br ${step.color} flex items-center justify-center mt-4`}>
-                    <step.icon className="w-7 h-7 text-white" />
+                  {/* Screenshot Image */}
+                  <div className="relative h-40 overflow-hidden">
+                    <img
+                      src={step.image}
+                      alt={step.imageAlt}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                    
+                    {/* Icon overlay */}
+                    <div className={`absolute bottom-3 left-3 w-10 h-10 rounded-lg bg-gradient-to-br ${step.color} flex items-center justify-center shadow-lg`}>
+                      <step.icon className="w-5 h-5 text-white" />
+                    </div>
                   </div>
 
                   {/* Content */}
-                  <h3 className="text-lg font-heading font-bold text-gray-900 dark:text-white text-center mb-2">
-                    {step.title}
-                  </h3>
-                  <div className={`text-sm font-bold text-center mb-3 bg-gradient-to-r ${step.color} bg-clip-text text-transparent`}>
-                    {step.duration}
+                  <div className="p-5">
+                    <h3 className="text-base font-heading font-bold text-gray-900 dark:text-white text-center mb-2">
+                      {step.title}
+                    </h3>
+                    <div className={`text-xs font-bold text-center mb-2 bg-gradient-to-r ${step.color} bg-clip-text text-transparent`}>
+                      {step.duration}
+                    </div>
+                    <p className="text-xs text-gray-600 dark:text-gray-300 text-center leading-relaxed">
+                      {step.description}
+                    </p>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 text-center">
-                    {step.description}
-                  </p>
                 </div>
               </motion.div>
             ))}

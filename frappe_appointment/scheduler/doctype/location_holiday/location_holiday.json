@@ -1,0 +1,50 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "hash",
+ "creation": "2025-11-16 01:26:34.199005",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "holiday_date",
+  "holiday_name",
+  "is_all_day"
+ ],
+ "fields": [
+  {
+   "fieldname": "holiday_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Holiday Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "holiday_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Holiday Name",
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "is_all_day",
+   "fieldtype": "Check",
+   "label": "Is All Day"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-11-16 01:26:34.199005",
+ "modified_by": "Administrator",
+ "module": "Scheduler",
+ "name": "Location Holiday",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

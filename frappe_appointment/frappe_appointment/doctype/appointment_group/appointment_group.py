@@ -69,8 +69,10 @@ class AppointmentGroup(Document):
 
 
 def _get_time_slots_for_day(
-    appointment_group: object, date: str, user_timezone_offset: str, time_slot_cache_dict: dict = None
+    appointment_group: object, date: str, user_timezone_offset: str, time_slot_cache_dict: dict = None, debug_messages: list = None
 ) -> object:
+    if debug_messages is None:
+        debug_messages = []
     try:
         datetime_today = get_datetime(date)
         datetime_tomorrow = add_days(datetime_today, 1)
@@ -80,13 +82,13 @@ def _get_time_slots_for_day(
 
         if int(user_timezone_offset) > 0:
             all_time_slots_global_object = {
-                "yesterday": get_time_slots_for_given_date(appointment_group, datetime_yesterday, time_slot_cache_dict),
-                "today": get_time_slots_for_given_date(appointment_group, datetime_today, time_slot_cache_dict),
+                "yesterday": get_time_slots_for_given_date(appointment_group, datetime_yesterday, time_slot_cache_dict, debug_messages=debug_messages),
+                "today": get_time_slots_for_given_date(appointment_group, datetime_today, time_slot_cache_dict, debug_messages=debug_messages),
             }
         else:
             all_time_slots_global_object = {
-                "today": get_time_slots_for_given_date(appointment_group, datetime_today, time_slot_cache_dict),
-                "tomorrow": get_time_slots_for_given_date(appointment_group, datetime_tomorrow, time_slot_cache_dict),
+                "today": get_time_slots_for_given_date(appointment_group, datetime_today, time_slot_cache_dict, debug_messages=debug_messages),
+                "tomorrow": get_time_slots_for_given_date(appointment_group, datetime_tomorrow, time_slot_cache_dict, debug_messages=debug_messages),
             }
 
         user_time_slots = get_user_time_slots(all_time_slots_global_object, date, user_timezone_offset)
@@ -111,11 +113,21 @@ def _get_time_slots_for_day(
 
         return time_slots_today_object
     except GoogleBadRequest as e:
+        if debug_messages is not None:
+            debug_messages.append(f"[EXCEPTION] GoogleBadRequest: {str(e)}")
         frappe.log_error(e)
         frappe.throw(frappe._("Something went wrong while fetching time slots. Please try again later."))
-    except Exception:
+    except Exception as e:
+        if debug_messages is not None:
+            debug_messages.append(f"[EXCEPTION] General exception in _get_time_slots_for_day: {str(e)}")
+            debug_messages.append(f"[EXCEPTION] Exception type: {type(e).__name__}")
+            import traceback
+            debug_messages.append(f"[EXCEPTION] Traceback: {traceback.format_exc()}")
         frappe.log_error()
-        return None
+        response = {"error": str(e)}
+        if debug_messages is not None:
+            response["debug_messages"] = debug_messages
+        return response
 
 
 def get_user_time_slots(all_time_slots_global_object: list, date: str, user_timezone_offset: str):
@@ -177,75 +189,125 @@ def hours_to_time_slot(start_time, user_timezone_offset, current_time=None) -> i
     return int((start_time - current_time).total_seconds() / 3600)
 
 
-def get_time_slots_for_given_date(appointment_group: object, datetime: datetime, time_slot_cache_dict=None):
+def get_time_slots_for_given_date(appointment_group: object, datetime: datetime, time_slot_cache_dict=None, debug_messages: list = None):
     if time_slot_cache_dict is not None:
         if datetime in time_slot_cache_dict:
             return time_slot_cache_dict[datetime]
-    data = _get_time_slots_for_given_date(appointment_group, datetime)
+    data = _get_time_slots_for_given_date(appointment_group, datetime, debug_messages=debug_messages)
     if time_slot_cache_dict is not None:
         time_slot_cache_dict[datetime] = data
     return data
 
 
-def _get_time_slots_for_given_date(appointment_group: object, datetime: datetime):
+def _get_time_slots_for_given_date(appointment_group: object, datetime: datetime, debug_messages: list = None):
     date = datetime.date()
     weekday = get_weekday(datetime)
+    if debug_messages is not None:
+        debug_messages.append(f"[6.0] _get_time_slots_for_given_date called: date={date}, weekday={weekday}")
 
     date_validation_obj = vaild_date(datetime, appointment_group)
+    if debug_messages is not None:
+        debug_messages.append(f"[6.0.1] Date validation: valid_start_date={date_validation_obj.get('valid_start_date')}, valid_end_date={date_validation_obj.get('valid_end_date')}")
 
     weekend_availability = check_availability(date_validation_obj, weekday, appointment_group)
+    if debug_messages is not None:
+        debug_messages.append(f"[6.0.2] Weekend availability: is_invalid_date={weekend_availability.get('is_invalid_date')}, available_days={weekend_availability.get('available_days')}")
 
     date_validation_obj["available_days"] = weekend_availability["available_days"]
 
     if is_member_on_leave_or_is_holiday(appointment_group, date):
-        return get_response_body(
+        if debug_messages is not None:
+            debug_messages.append(f"[6.0.3] EARLY RETURN: Member is on leave or it's a holiday")
+        result = get_response_body(
             avaiable_time_slot_for_day=[],
             appointment_group=appointment_group,
             date=date,
             date_validation_obj=date_validation_obj,
             is_invalid_date=weekend_availability["is_invalid_date"],
         )
+        if debug_messages is not None:
+            result["debug_messages"] = debug_messages
+        return result
 
     if weekend_availability["is_invalid_date"]:
-        return get_response_body(
+        if debug_messages is not None:
+            debug_messages.append(f"[6.0.4] EARLY RETURN: Invalid date (weekend or outside availability window)")
+        result = get_response_body(
             avaiable_time_slot_for_day=[],
             appointment_group=appointment_group,
             date=date,
             date_validation_obj=weekend_availability["date_validation_obj"],
             is_invalid_date=True,
         )
+        if debug_messages is not None:
+            result["debug_messages"] = debug_messages
+        return result
 
     booking_frequency_reached_obj = get_booking_frequency_reached(datetime, appointment_group)
+    if debug_messages is not None:
+        debug_messages.append(f"[6.0.5] Booking frequency: is_slots_available={booking_frequency_reached_obj.get('is_slots_available')}")
 
     if not booking_frequency_reached_obj["is_slots_available"]:
-        return get_response_body(
+        if debug_messages is not None:
+            debug_messages.append(f"[6.0.6] EARLY RETURN: Booking frequency limit reached")
+        result = get_response_body(
             avaiable_time_slot_for_day=[],
             appointment_group=appointment_group,
             date=date,
             date_validation_obj=date_validation_obj,
         )
+        if debug_messages is not None:
+            result["debug_messages"] = debug_messages
+        return result
 
     members = appointment_group.members
+    if debug_messages is not None:
+        debug_messages.append(f"[6.1] Processing {len(members)} members for weekday={weekday}")
 
     member_time_slots = {}
-    max_start_time, min_end_time = "00:00:00", "24:00:00"
+    max_start_time, min_end_time = "00:00:00", "23:59:59"
+    if debug_messages is not None:
+        debug_messages.append(f"[6.2] Initial max_start_time={max_start_time}, min_end_time={min_end_time}")
 
     for member in members:
         if not member.is_mandatory:
+            if debug_messages is not None:
+                debug_messages.append(f"[6.3] Skipping non-mandatory member: {member.user}")
             continue
 
+        if debug_messages is not None:
+            debug_messages.append(f"[6.4] Processing mandatory member: {member.user}")
         appointment_time_slots = frappe.db.get_all(
             APPOINTMENT_TIME_SLOT,
             filters={"parent": member.user, "day": weekday},
             fields="*",
         )
-
-        max_start_time, min_end_time = get_max_min_time_slot(appointment_time_slots, max_start_time, min_end_time)
+        if debug_messages is not None:
+            debug_messages.append(f"[6.5] Found {len(appointment_time_slots)} appointment_time_slots for {member.user} on {weekday}")
+        
+        if appointment_time_slots:
+            if debug_messages is not None:
+                debug_messages.append(f"[6.6] Before get_max_min_time_slot: max_start_time={max_start_time}, min_end_time={min_end_time}")
+                for slot in appointment_time_slots:
+                    if debug_messages is not None:
+                        debug_messages.append(f"[6.6.1] Slot: day={slot.get('day')}, start_time={slot.get('start_time')} (type={type(slot.get('start_time')).__name__}), end_time={slot.get('end_time')} (type={type(slot.get('end_time')).__name__})")
+            
+            max_start_time, min_end_time = get_max_min_time_slot(appointment_time_slots, max_start_time, min_end_time)
+            if debug_messages is not None:
+                debug_messages.append(f"[6.7] After get_max_min_time_slot: max_start_time={max_start_time}, min_end_time={min_end_time}")
+        else:
+            if debug_messages is not None:
+                debug_messages.append(f"[6.8] No appointment_time_slots found for {member.user} on {weekday} - keeping default values")
+        # If no slots found, keep the default values (will result in no available slots, which is correct)
 
         member_time_slots[member.user] = appointment_time_slots
 
+    if debug_messages is not None:
+        debug_messages.append(f"[6.9] Final max_start_time={max_start_time}, min_end_time={min_end_time}")
     starttime = get_utc_datatime_with_time(date, max_start_time)
     endtime = get_utc_datatime_with_time(date, min_end_time)
+    if debug_messages is not None:
+        debug_messages.append(f"[6.10] Calculated starttime={starttime}, endtime={endtime}")
 
     all_slots = get_all_unavailable_google_calendar_slots_for_day(
         member_time_slots, starttime, endtime, date, appointment_group
@@ -262,8 +324,10 @@ def _get_time_slots_for_given_date(appointment_group: object, datetime: datetime
     all_slots = update_cal_slots_with_events(all_slots, booking_frequency_reached_obj["events"])
 
     avaiable_time_slot_for_day = get_avaiable_time_slot_for_day(all_slots, starttime, endtime, appointment_group)
+    if debug_messages is not None:
+        debug_messages.append(f"[6.11] Generated {len(avaiable_time_slot_for_day)} available time slots")
 
-    return get_response_body(
+    result = get_response_body(
         avaiable_time_slot_for_day=avaiable_time_slot_for_day,
         appointment_group=appointment_group,
         starttime=starttime,
@@ -271,6 +335,9 @@ def _get_time_slots_for_given_date(appointment_group: object, datetime: datetime
         date=date,
         date_validation_obj=date_validation_obj,
     )
+    if debug_messages is not None:
+        result["debug_messages"] = debug_messages
+    return result
 
 
 def check_availability(date_validation_obj: object, weekday: str, appointment_group: object) -> object:
@@ -425,15 +492,22 @@ def get_booking_frequency_reached(datetime: datetime, appointment_group: object)
         Returns:
         Object: List of events
     """
+    limit_booking_frequency = int(appointment_group.limit_booking_frequency or 0)
+    
+    # If limit_booking_frequency is 0 or negative, it means "no limit" (unlimited slots available)
+    # 0 = no limit, negative = no limit, positive = actual limit
     res = {
-        "is_slots_available": int(appointment_group.limit_booking_frequency) < 0,
+        "is_slots_available": limit_booking_frequency <= 0,  # True if 0 or negative (no limit)
         "events": [],
     }
 
     # Get today's data and the range for the next day to fetch events.
     start_datetime, end_datetime = get_datetime_str(datetime), get_datetime_str(add_days(datetime, 1))
 
-    if appointment_group.get("is_personal_meeting", False):
+    all_events = []
+    
+    # For personal meetings, use duration_id to find events
+    if appointment_group.get("is_personal_meeting", False) and appointment_group.get("duration_id"):
         all_events = frappe.get_list(
             "Event",
             filters=[
@@ -447,6 +521,7 @@ def get_booking_frequency_reached(datetime: datetime, appointment_group: object)
             order_by="starts_on asc",
             ignore_permissions=True,
         )
+    # For regular appointment groups, use appointment_group name
     elif appointment_group.name:
         all_events = frappe.get_list(
             "Event",
@@ -461,7 +536,11 @@ def get_booking_frequency_reached(datetime: datetime, appointment_group: object)
             order_by="starts_on asc",
             ignore_permissions=True,
         )
+    # If no name and not a personal meeting, return with is_slots_available=True (no limit)
+    # This handles dummy appointment groups created for personal meetings
     else:
+        # For dummy appointment groups (no name), assume no limit unless explicitly set
+        res["is_slots_available"] = limit_booking_frequency <= 0
         return res
 
     all_events = sorted(
@@ -469,8 +548,10 @@ def get_booking_frequency_reached(datetime: datetime, appointment_group: object)
         key=lambda slot: get_datetime_str(slot["ends_on"]),
     )
 
-    if int(appointment_group.limit_booking_frequency) >= 0:
-        res["is_slots_available"] = len(all_events) < int(appointment_group.limit_booking_frequency)
+    # Only check limit if limit_booking_frequency is positive (actual limit set)
+    if limit_booking_frequency > 0:
+        res["is_slots_available"] = len(all_events) < limit_booking_frequency
+    # If limit is 0 or negative, is_slots_available is already True (no limit)
 
     res["events"] = all_events
 
@@ -490,7 +571,22 @@ def vaild_date(date: datetime, appointment_group: object) -> object:
     """
     current_date = get_datetime(datetime.datetime.utcnow().date())
 
-    start_date = add_days(current_date, int(appointment_group.minimum_notice_before_event))
+    # minimum_notice_before_event is in seconds, convert to days if needed
+    # If value is >= 86400 (1 day in seconds), treat as seconds and convert to days
+    # If value is < 86400, it's less than a day, so allow booking from today (0 days)
+    # Otherwise, assume it's already in days
+    minimum_notice = int(appointment_group.minimum_notice_before_event or 0)
+    if minimum_notice >= 86400:
+        # It's in seconds (>= 1 day), convert to days (round up)
+        minimum_notice_days = (minimum_notice + 86399) // 86400  # Round up
+    elif minimum_notice > 0 and minimum_notice < 86400:
+        # It's in seconds but less than 1 day, allow booking from today
+        minimum_notice_days = 0
+    else:
+        # Assume it's already in days or 0
+        minimum_notice_days = minimum_notice
+    
+    start_date = add_days(current_date, minimum_notice_days)
     end_date = ""
 
     # Add the days == event_availability_window into start_date date
@@ -675,8 +771,11 @@ def get_max_min_time_slot(appointmen_time_slots: list, max_start_time: str, min_
     """
 
     for appointmen_time_slot in appointmen_time_slots:
-        max_start_time = max(max_start_time, format_time(get_time_str(appointmen_time_slot.start_time)))
-        min_end_time = min(min_end_time, format_time(get_time_str(appointmen_time_slot.end_time)))
+        # Handle both dict (from db.get_all) and object (from doc) access
+        start_time = appointmen_time_slot.get("start_time") if isinstance(appointmen_time_slot, dict) else appointmen_time_slot.start_time
+        end_time = appointmen_time_slot.get("end_time") if isinstance(appointmen_time_slot, dict) else appointmen_time_slot.end_time
+        max_start_time = max(max_start_time, format_time(get_time_str(start_time)))
+        min_end_time = min(min_end_time, format_time(get_time_str(end_time)))
 
     return [max_start_time, min_end_time]
 

@@ -1,0 +1,194 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:appointment_id",
+ "creation": "2025-11-16 01:34:55.052429",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "appointment_id",
+  "event",
+  "event_type",
+  "provider",
+  "location",
+  "service",
+  "client_name",
+  "client_email",
+  "client_phone",
+  "appointment_date",
+  "start_time",
+  "end_time",
+  "status",
+  "amount_paid",
+  "notes",
+  "cancellation_reason"
+ ],
+ "fields": [
+  {
+   "description": "Auto-generated appointment ID",
+   "fieldname": "appointment_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Appointment ID",
+   "read_only": 1,
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "description": "Link to Frappe Event (upstream)",
+   "fieldname": "event",
+   "fieldtype": "Link",
+   "label": "Event",
+   "options": "Event"
+  },
+  {
+   "fieldname": "event_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Event Type",
+   "options": "EventType",
+   "reqd": 1
+  },
+  {
+   "fieldname": "provider",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Provider",
+   "options": "Provider",
+   "reqd": 1
+  },
+  {
+   "fieldname": "location",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Location",
+   "options": "Location",
+   "reqd": 1
+  },
+  {
+   "fieldname": "service",
+   "fieldtype": "Link",
+   "label": "Service",
+   "options": "Service",
+   "reqd": 1
+  },
+  {
+   "fieldname": "client_name",
+   "fieldtype": "Data",
+   "label": "Client Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "client_email",
+   "fieldtype": "Data",
+   "label": "Client Email",
+   "options": "Email",
+   "reqd": 1
+  },
+  {
+   "fieldname": "client_phone",
+   "fieldtype": "Data",
+   "label": "Client Phone",
+   "options": "Phone",
+   "reqd": 1
+  },
+  {
+   "fieldname": "appointment_date",
+   "fieldtype": "Date",
+   "label": "Appointment Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "start_time",
+   "fieldtype": "Time",
+   "label": "Start Time",
+   "reqd": 1
+  },
+  {
+   "fieldname": "end_time",
+   "fieldtype": "Time",
+   "label": "End Time",
+   "reqd": 1
+  },
+  {
+   "default": "Pending",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Pending\nConfirmed\nCompleted\nCancelled\nNo Show",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "amount_paid",
+   "fieldtype": "Currency",
+   "label": "Amount Paid (ETB)"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes",
+   "length": 500
+  },
+  {
+   "depends_on": "eval:doc.status == \"Cancelled\"",
+   "fieldname": "cancellation_reason",
+   "fieldtype": "Small Text",
+   "label": "Cancellation Reason",
+   "length": 500
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-11-16 01:34:55.052429",
+ "modified_by": "Administrator",
+ "module": "Scheduler",
+ "name": "Appointment",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 0,
+   "email": 0,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Provider",
+   "share": 0,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 0,
+   "email": 0,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Front-Desk",
+   "share": 0,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "appointment_id"
+}

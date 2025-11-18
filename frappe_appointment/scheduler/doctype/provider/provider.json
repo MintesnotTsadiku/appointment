@@ -1,0 +1,282 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:provider_name",
+ "creation": "2025-11-16 01:21:41.686814",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "provider_name",
+  "full_name",
+  "display_name",
+  "Section Break-1",
+  "email",
+  "phone",
+  "user",
+  "Column Break-2",
+  "profile_photo",
+  "is_active",
+  "Section Break-3",
+  "bio",
+  "timezone",
+  "language",
+  "business_type",
+  "calendar_preference",
+  "section_break_organization",
+  "organization",
+  "organization_status",
+  "column_break_org",
+  "accept_org_bookings",
+  "enable_personal_booking",
+  "section_break_delegation",
+  "delegations",
+  "Section Break-5",
+  "onboarding_type",
+  "onboarding_complete",
+  "onboarding_current_step",
+  "onboarding_completed_at",
+  "Section Break-4",
+  "locations"
+ ],
+ "fields": [
+  {
+   "fieldname": "provider_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Provider Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "full_name",
+   "fieldtype": "Data",
+   "label": "Full Name",
+   "description": "Full legal name (optional)"
+  },
+  {
+   "fieldname": "display_name",
+   "fieldtype": "Data",
+   "label": "Display Name",
+   "description": "Short name or preferred name to show publicly (optional). If not provided, uses Full Name or Linked User name."
+  },
+  {
+   "fieldname": "Section Break-1",
+   "fieldtype": "Section Break",
+   "label": "Contact Information"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Phone",
+   "options": "Phone"
+  },
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "label": "Linked User",
+   "options": "User",
+   "description": "Link to Frappe User account for authentication"
+  },
+  {
+   "fieldname": "Column Break-2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "profile_photo",
+   "fieldtype": "Attach Image",
+   "label": "Profile Photo"
+  },
+  {
+   "default": "1",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active"
+  },
+  {
+   "fieldname": "Section Break-3",
+   "fieldtype": "Section Break",
+   "label": "Additional Information"
+  },
+  {
+   "fieldname": "bio",
+   "fieldtype": "Small Text",
+   "label": "Bio",
+   "length": 500
+  },
+  {
+   "fieldname": "timezone",
+   "fieldtype": "Data",
+   "label": "Timezone",
+   "default": "Africa/Addis_Ababa"
+  },
+  {
+   "fieldname": "language",
+   "fieldtype": "Select",
+   "label": "Preferred Language",
+   "options": "en\nam",
+   "default": "en"
+  },
+  {
+   "fieldname": "business_type",
+   "fieldtype": "Select",
+   "label": "Business Type",
+   "options": "clinic\nsalon\nuniversity\nlegal\nother"
+  },
+  {
+   "fieldname": "calendar_preference",
+   "fieldtype": "Select",
+   "label": "Calendar Preference",
+   "options": "builtin\ngoogle"
+  },
+  {
+   "fieldname": "section_break_organization",
+   "fieldtype": "Section Break",
+   "label": "Organization Settings"
+  },
+  {
+   "fieldname": "organization",
+   "fieldtype": "Link",
+   "label": "Organization",
+   "options": "Organization",
+   "description": "If this provider belongs to an organization"
+  },
+  {
+   "fieldname": "organization_status",
+   "fieldtype": "Select",
+   "label": "Organization Status",
+   "options": "Independent\nPending\nActive\nInactive",
+   "default": "Independent",
+   "depends_on": "organization"
+  },
+  {
+   "fieldname": "column_break_org",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "accept_org_bookings",
+   "fieldtype": "Check",
+   "label": "Accept Organization Bookings",
+   "default": 1,
+   "depends_on": "organization",
+   "description": "Allow customers to book through organization page"
+  },
+  {
+   "fieldname": "enable_personal_booking",
+   "fieldtype": "Check",
+   "label": "Enable Personal Booking Page",
+   "default": 1,
+   "description": "Allow direct booking via personal URL"
+  },
+  {
+   "fieldname": "section_break_delegation",
+   "fieldtype": "Section Break",
+   "label": "Delegation & Access"
+  },
+  {
+   "fieldname": "delegations",
+   "fieldtype": "Table",
+   "label": "Delegated Access",
+   "options": "Provider Delegation",
+   "description": "Users who can manage this provider's calendar"
+  },
+  {
+   "fieldname": "Section Break-5",
+   "fieldtype": "Section Break",
+   "label": "Onboarding"
+  },
+  {
+   "fieldname": "onboarding_type",
+   "fieldtype": "Select",
+   "label": "Onboarding Type",
+   "options": "\nindividual\norganization",
+   "description": "Type of onboarding: individual provider or organization"
+  },
+  {
+   "fieldname": "onboarding_complete",
+   "fieldtype": "Check",
+   "label": "Onboarding Complete",
+   "default": 0
+  },
+  {
+   "fieldname": "onboarding_current_step",
+   "fieldtype": "Int",
+   "label": "Onboarding Current Step",
+   "default": 1
+  },
+  {
+   "fieldname": "onboarding_completed_at",
+   "fieldtype": "Datetime",
+   "label": "Onboarding Completed At"
+  },
+  {
+   "fieldname": "Section Break-4",
+   "fieldtype": "Section Break",
+   "label": "Locations"
+  },
+  {
+   "fieldname": "locations",
+   "fieldtype": "Table",
+   "label": "Locations",
+   "options": "Provider Location"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-11-16 01:21:41.686814",
+ "modified_by": "Administrator",
+ "module": "Scheduler",
+ "name": "Provider",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 0,
+   "email": 0,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Provider",
+   "share": 0,
+   "write": 1
+  },
+  {
+   "create": 0,
+   "delete": 0,
+   "email": 0,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Front-Desk",
+   "share": 0,
+   "write": 0
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "provider_name"
+}

@@ -18,37 +18,43 @@ const Features = () => {
       icon: Calendar,
       title: t('features.feature1Title'),
       description: t('features.feature1Description'),
-      visual: '📅',
+      image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600&h=400&fit=crop',
+      imageAlt: 'Smart scheduling calendar interface'
     },
     {
       icon: CreditCard,
       title: t('features.feature2Title'),
       description: t('features.feature2Description'),
-      visual: '💳',
+      image: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=600&h=400&fit=crop',
+      imageAlt: 'Payment integration with TeleBirr and Chapa'
     },
     {
       icon: Smartphone,
       title: t('features.feature3Title'),
       description: t('features.feature3Description'),
-      visual: '📱',
+      image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&h=400&fit=crop',
+      imageAlt: 'Multi-channel booking via SMS and WhatsApp'
     },
     {
       icon: Users,
       title: t('features.feature4Title'),
       description: t('features.feature4Description'),
-      visual: '👥',
+      image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&h=400&fit=crop',
+      imageAlt: 'Team and multi-location management'
     },
     {
       icon: UserCircle,
       title: t('features.feature5Title'),
       description: t('features.feature5Description'),
-      visual: '❤️',
+      image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=600&h=400&fit=crop',
+      imageAlt: 'Customer relationship management'
     },
     {
       icon: BarChart3,
       title: t('features.feature6Title'),
       description: t('features.feature6Description'),
-      visual: '📊',
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop',
+      imageAlt: 'Analytics and reporting dashboard'
     },
   ];
 
@@ -140,25 +146,22 @@ const Features = () => {
                       {/* Animated background */}
                       <div className="absolute inset-0 bg-gradient-hero opacity-5" />
 
-                      {/* Large emoji/icon visual */}
-                      <div className="relative text-center">
+                      {/* Real Product Screenshot */}
+                      <div className="relative">
                         <motion.div
-                          animate={{
-                            scale: [1, 1.1, 1],
-                            rotate: [0, 5, -5, 0],
-                          }}
-                          transition={{
-                            duration: 4,
-                            repeat: Infinity,
-                            ease: 'easeInOut',
-                          }}
-                          className="text-9xl mb-4"
+                          whileHover={{ scale: 1.02 }}
+                          transition={{ duration: 0.3 }}
+                          className="relative overflow-hidden rounded-xl"
                         >
-                          {feature.visual}
+                          <img
+                            src={feature.image}
+                            alt={feature.imageAlt}
+                            className="w-full h-64 object-cover"
+                            loading="lazy"
+                          />
+                          {/* Overlay gradient for better text contrast */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                         </motion.div>
-                        <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                          {feature.title}
-                        </div>
                       </div>
 
                       {/* Floating elements */}

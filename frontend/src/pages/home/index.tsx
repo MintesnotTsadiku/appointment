@@ -1,10 +1,16 @@
 import { OnboardingProvider, useOnboarding } from '@/context/onboarding';
+import { useFrappeAuth } from 'frappe-react-sdk';
 import Spinner from '@/components/spinner';
 import OnboardingWizard from './sections/OnboardingWizard';
 import Dashboard from './sections/Dashboard';
+import { OnboardingTypeSelection } from './components/OnboardingTypeSelection';
+import { Button } from '@/components/button';
+import { Settings, RefreshCw } from 'lucide-react';
 
 const HomeContent = () => {
-  const { progress, loading, error } = useOnboarding();
+  const { progress, loading, error, setOnboardingType, resetOnboardingType, refreshProgress } = useOnboarding();
+  const { currentUser } = useFrappeAuth();
+  const isAdministrator = currentUser === 'Administrator';
 
   if (loading) {
     return (
@@ -53,12 +59,106 @@ const HomeContent = () => {
     );
   }
 
+  // Show type selection if user hasn't chosen yet
+  if (!progress?.onboarding_type) {
+    return <OnboardingTypeSelection onSelect={setOnboardingType} />;
+  }
+
   // Show onboarding wizard if not complete
   if (!progress?.onboarding_complete) {
+    // For Administrator: Add option to switch onboarding type even during onboarding
+    if (isAdministrator) {
+      return (
+        <div className="relative">
+          {/* Admin Controls - Floating Button */}
+          <div className="fixed bottom-6 right-6 z-50">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 p-2 flex flex-col gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={async () => {
+                  // Switch to opposite type
+                  const newType = progress.onboarding_type === 'individual' ? 'organization' : 'individual';
+                  await setOnboardingType(newType);
+                  refreshProgress();
+                  window.location.reload();
+                }}
+                className="text-xs"
+              >
+                <RefreshCw className="w-3 h-3 mr-2" />
+                Switch to {progress.onboarding_type === 'individual' ? 'Organization' : 'Individual'}
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={async () => {
+                  // Reset to show type selection
+                  if (confirm('Reset onboarding? This will allow you to choose a new onboarding type.')) {
+                    await resetOnboardingType();
+                    refreshProgress();
+                    window.location.reload();
+                  }
+                }}
+                className="text-xs"
+              >
+                <Settings className="w-3 h-3 mr-2" />
+                Reset & Choose Type
+              </Button>
+            </div>
+          </div>
+          <OnboardingWizard />
+        </div>
+      );
+    }
     return <OnboardingWizard />;
   }
 
   // Show dashboard if onboarding complete
+  // For Administrator: Add option to switch onboarding type
+  if (isAdministrator) {
+    return (
+      <div className="relative">
+        {/* Admin Controls - Floating Button */}
+        <div className="fixed bottom-6 right-6 z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 p-2 flex flex-col gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={async () => {
+                // Reset onboarding type to allow switching
+                const newType = progress.onboarding_type === 'individual' ? 'organization' : 'individual';
+                await setOnboardingType(newType);
+                refreshProgress();
+                window.location.reload();
+              }}
+              className="text-xs"
+            >
+              <RefreshCw className="w-3 h-3 mr-2" />
+              Switch to {progress.onboarding_type === 'individual' ? 'Organization' : 'Individual'}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={async () => {
+                // For Administrator: reset to show type selection
+                if (confirm('Reset onboarding? This will allow you to choose a new onboarding type.')) {
+                  await resetOnboardingType();
+                  refreshProgress();
+                  window.location.reload();
+                }
+              }}
+              className="text-xs"
+            >
+              <Settings className="w-3 h-3 mr-2" />
+              Reset & Choose Type
+            </Button>
+          </div>
+        </div>
+        <Dashboard />
+      </div>
+    );
+  }
+
   return <Dashboard />;
 };
 

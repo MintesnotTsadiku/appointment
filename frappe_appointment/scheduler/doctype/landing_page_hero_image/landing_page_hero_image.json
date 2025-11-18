@@ -1,0 +1,47 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-11-16 00:17:43.004865",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "image",
+  "alt_text_en",
+  "alt_text_am"
+ ],
+ "fields": [
+  {
+   "fieldname": "image",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Image URL",
+   "reqd": 1
+  },
+  {
+   "fieldname": "alt_text_en",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Alt Text (EN)"
+  },
+  {
+   "fieldname": "alt_text_am",
+   "fieldtype": "Data",
+   "label": "Alt Text (AM)"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-11-16 00:17:43.004865",
+ "modified_by": "Administrator",
+ "module": "Scheduler",
+ "name": "Landing Page Hero Image",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

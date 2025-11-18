@@ -1,0 +1,71 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-11-16 00:17:43.570101",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "title_en",
+  "title_am",
+  "description_en",
+  "description_am",
+  "metric_en",
+  "metric_am",
+  "image_url"
+ ],
+ "fields": [
+  {
+   "fieldname": "title_en",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Title (EN)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "title_am",
+   "fieldtype": "Data",
+   "label": "Title (AM)"
+  },
+  {
+   "fieldname": "description_en",
+   "fieldtype": "Small Text",
+   "label": "Description (EN)"
+  },
+  {
+   "fieldname": "description_am",
+   "fieldtype": "Small Text",
+   "label": "Description (AM)"
+  },
+  {
+   "fieldname": "metric_en",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Metric (EN)"
+  },
+  {
+   "fieldname": "metric_am",
+   "fieldtype": "Data",
+   "label": "Metric (AM)"
+  },
+  {
+   "fieldname": "image_url",
+   "fieldtype": "Data",
+   "label": "Image URL"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-11-16 00:17:43.570101",
+ "modified_by": "Administrator",
+ "module": "Scheduler",
+ "name": "Landing Page Value Proposition",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

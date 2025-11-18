@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useFrappePostCall } from 'frappe-react-sdk';
 import { Button } from '@/components/button';
 import { Card } from '@/components/card';
-import { useTranslation } from '@/lib/i18n';
 import { CheckCircle, Calendar, ArrowLeft } from 'lucide-react';
 
 interface Step2CalendarProps {
@@ -11,41 +10,40 @@ interface Step2CalendarProps {
 }
 
 const Step2Calendar = ({ onNext, onBack }: Step2CalendarProps) => {
-  const { t } = useTranslation();
   const [selectedOption, setSelectedOption] = useState<'manual' | 'google' | null>(null);
   const [isConnected, setIsConnected] = useState(false);
 
   const { call, loading } = useFrappePostCall('frappe_appointment.onboarding.connect_calendar');
+  
+  // Handle calendar connection
+  const handleConnect = async (calendar_provider: 'manual' | 'google') => {
+    setSelectedOption(calendar_provider);
+    try {
+      const result = await call({ calendar_provider });
+      setIsConnected(true);
+      if (calendar_provider === 'google' && result?.message?.oauth_url) {
+        // Redirect to OAuth URL if provided
+        window.location.href = result.message.oauth_url;
+      }
+    } catch (error) {
+      console.error(`Failed to connect ${calendar_provider} calendar:`, error);
+    }
+  };
 
   const handleSelectManual = async () => {
-    setSelectedOption('manual');
-    try {
-      await call({ provider: 'manual' });
-      setIsConnected(true);
-    } catch (error) {
-      console.error('Failed to set manual calendar:', error);
-    }
+    await handleConnect('manual');
   };
 
   const handleSelectGoogle = async () => {
-    setSelectedOption('google');
-    try {
-      const result = await call({ provider: 'google' });
-      if (result?.message?.oauth_url) {
-        // Redirect to OAuth URL
-        window.location.href = result.message.oauth_url;
-      } else {
-        setIsConnected(true);
-      }
-    } catch (error) {
-      console.error('Failed to initiate Google OAuth:', error);
-    }
+    await handleConnect('google');
   };
 
   const handleContinue = () => {
-    if (isConnected) {
-      onNext();
-    }
+    onNext();
+  };
+
+  const handleSkip = () => {
+    onNext();
   };
 
   return (
@@ -69,28 +67,27 @@ const Step2Calendar = ({ onNext, onBack }: Step2CalendarProps) => {
 
             {/* Title */}
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-              {t('onboarding.step2.manualTitle') || 'Built-in Calendar'}
+              Built-in Calendar
             </h3>
 
             {/* Description */}
             <p className="text-gray-600 dark:text-gray-400">
-              {t('onboarding.step2.manualDescription') ||
-                'No external setup required. Start booking immediately.'}
+              No external setup required. Start booking immediately.
             </p>
 
             {/* Features */}
             <ul className="text-left space-y-2 text-sm text-gray-600 dark:text-gray-400">
               <li className="flex items-start">
                 <CheckCircle className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                <span>{t('onboarding.step2.feature1') || 'No configuration needed'}</span>
+                <span>No configuration needed</span>
               </li>
               <li className="flex items-start">
                 <CheckCircle className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                <span>{t('onboarding.step2.feature2') || 'Works offline'}</span>
+                <span>Works offline</span>
               </li>
               <li className="flex items-start">
                 <CheckCircle className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                <span>{t('onboarding.step2.feature3') || 'Simple and easy'}</span>
+                <span>Simple and easy</span>
               </li>
             </ul>
 
@@ -99,7 +96,7 @@ const Step2Calendar = ({ onNext, onBack }: Step2CalendarProps) => {
               <div className="pt-4 border-t">
                 <div className="inline-flex items-center space-x-2 text-green-600 dark:text-green-400">
                   <CheckCircle className="w-5 h-5" />
-                  <span className="font-medium">{t('common.connected') || 'Connected'}</span>
+                  <span className="font-medium">Connected</span>
                 </div>
               </div>
             )}
@@ -140,28 +137,27 @@ const Step2Calendar = ({ onNext, onBack }: Step2CalendarProps) => {
 
             {/* Title */}
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-              {t('onboarding.step2.googleTitle') || 'Google Calendar'}
+              Google Calendar
             </h3>
 
             {/* Description */}
             <p className="text-gray-600 dark:text-gray-400">
-              {t('onboarding.step2.googleDescription') ||
-                'Sync appointments with your Google Calendar automatically.'}
+              Sync appointments with your Google Calendar automatically.
             </p>
 
             {/* Features */}
             <ul className="text-left space-y-2 text-sm text-gray-600 dark:text-gray-400">
               <li className="flex items-start">
                 <CheckCircle className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                <span>{t('onboarding.step2.googleFeature1') || 'Two-way sync'}</span>
+                <span>Two-way sync</span>
               </li>
               <li className="flex items-start">
                 <CheckCircle className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                <span>{t('onboarding.step2.googleFeature2') || 'Prevent double-booking'}</span>
+                <span>Prevent double-booking</span>
               </li>
               <li className="flex items-start">
                 <CheckCircle className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                <span>{t('onboarding.step2.googleFeature3') || 'Access anywhere'}</span>
+                <span>Access anywhere</span>
               </li>
             </ul>
 
@@ -173,7 +169,7 @@ const Step2Calendar = ({ onNext, onBack }: Step2CalendarProps) => {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  <span className="font-medium">{t('common.connecting') || 'Connecting...'}</span>
+                  <span className="font-medium">Connecting...</span>
                 </div>
               </div>
             )}
@@ -183,8 +179,17 @@ const Step2Calendar = ({ onNext, onBack }: Step2CalendarProps) => {
 
       {/* Help Text */}
       <div className="text-center text-sm text-gray-500 dark:text-gray-400">
-        {t('onboarding.step2.helpText') ||
-          "Don't worry, you can change this later in settings"}
+        Don't worry, you can change this later in settings
+      </div>
+
+      {/* Skip Option */}
+      <div className="text-center pt-4">
+        <button
+          onClick={handleSkip}
+          className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 underline"
+        >
+          Skip for now
+        </button>
       </div>
 
       {/* Navigation Buttons */}
@@ -195,16 +200,16 @@ const Step2Calendar = ({ onNext, onBack }: Step2CalendarProps) => {
           className="flex items-center space-x-2"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>{t('common.back') || 'Back'}</span>
+          <span>Back</span>
         </Button>
 
         <Button
           onClick={handleContinue}
-          disabled={!isConnected || loading}
+          disabled={loading}
           className="bg-gradient-hero hover:opacity-90 text-white"
         >
           <span className="flex items-center space-x-2">
-            <span>{t('common.continue') || 'Continue'}</span>
+            <span>Continue</span>
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>

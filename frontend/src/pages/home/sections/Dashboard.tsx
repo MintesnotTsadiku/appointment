@@ -26,10 +26,10 @@ const Dashboard = () => {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                {t('dashboard.welcome') || 'Welcome back'}, {userName}!
+                Welcome back, {userName}!
               </h1>
               <p className="text-gray-600 dark:text-gray-400 mt-1">
-                {t('dashboard.subtitle') || "Here's what's happening with your appointments"}
+                Here's what's happening with your appointments
               </p>
             </div>
             <div className="flex items-center space-x-3">

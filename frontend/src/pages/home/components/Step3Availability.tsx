@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useFrappePostCall } from 'frappe-react-sdk';
 import { Button } from '@/components/button';
-import { useTranslation } from '@/lib/i18n';
 import { ArrowLeft } from 'lucide-react';
 
 interface Step3AvailabilityProps {
@@ -25,7 +24,6 @@ interface WeeklySchedule {
 }
 
 const Step3Availability = ({ onNext, onBack }: Step3AvailabilityProps) => {
-  const { t } = useTranslation();
   const [schedule, setSchedule] = useState<WeeklySchedule>({
     monday: [],
     tuesday: [],
@@ -160,7 +158,7 @@ const Step3Availability = ({ onNext, onBack }: Step3AvailabilityProps) => {
     // Check if at least one day has availability
     const hasAvailability = Object.values(schedule).some((slots) => slots.length > 0);
     if (!hasAvailability) {
-      alert(t('onboarding.step3.noAvailability') || 'Please set at least one available time slot');
+      alert('Please set at least one available time slot');
       return;
     }
 
@@ -177,7 +175,7 @@ const Step3Availability = ({ onNext, onBack }: Step3AvailabilityProps) => {
       {/* Quick Templates */}
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          {t('onboarding.step3.templates') || 'Quick Templates'}
+          Quick Templates
         </h3>
         <div className="grid grid-cols-3 gap-3">
           <Button
@@ -185,21 +183,21 @@ const Step3Availability = ({ onNext, onBack }: Step3AvailabilityProps) => {
             onClick={() => applyTemplate('work')}
             className="flex-1"
           >
-            {t('template.work') || '9-5 Mon-Fri'}
+            9-5 Mon-Fri
           </Button>
           <Button
             variant="outline"
             onClick={() => applyTemplate('flexible')}
             className="flex-1"
           >
-            {t('template.flexible') || 'Flexible Hours'}
+            Flexible Hours
           </Button>
           <Button
             variant="outline"
             onClick={() => applyTemplate('weekend')}
             className="flex-1"
           >
-            {t('template.weekend') || 'Weekends Only'}
+            Weekends Only
           </Button>
         </div>
       </div>
@@ -207,14 +205,14 @@ const Step3Availability = ({ onNext, onBack }: Step3AvailabilityProps) => {
       {/* Weekly Grid */}
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 overflow-x-auto">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          {t('onboarding.step3.clickToToggle') || 'Click to toggle availability'}
+          Click to toggle availability
         </h3>
         <div className="min-w-max">
           <table className="w-full border-collapse">
             <thead>
               <tr>
                 <th className="p-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                  {t('common.time') || 'Time'}
+                  Time
                 </th>
                 {dayLabels.map((day, i) => (
                   <th
@@ -252,7 +250,7 @@ const Step3Availability = ({ onNext, onBack }: Step3AvailabilityProps) => {
         </div>
 
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-4">
-          {t('onboarding.step3.dragHint') || 'Click and drag to select multiple hours'}
+          Click and drag to select multiple hours
         </p>
       </div>
 
@@ -264,7 +262,7 @@ const Step3Availability = ({ onNext, onBack }: Step3AvailabilityProps) => {
           className="flex items-center space-x-2"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>{t('common.back') || 'Back'}</span>
+          <span>Back</span>
         </Button>
 
         <Button
@@ -278,11 +276,11 @@ const Step3Availability = ({ onNext, onBack }: Step3AvailabilityProps) => {
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
-              <span>{t('common.saving') || 'Saving...'}</span>
+              <span>Saving...</span>
             </span>
           ) : (
             <span className="flex items-center space-x-2">
-              <span>{t('common.continue') || 'Continue'}</span>
+              <span>Continue</span>
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>

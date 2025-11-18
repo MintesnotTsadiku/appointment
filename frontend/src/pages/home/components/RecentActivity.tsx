@@ -63,10 +63,10 @@ const RecentActivity = () => {
       const diffHours = Math.floor(diffMins / 60);
       const diffDays = Math.floor(diffHours / 24);
 
-      if (diffMins < 1) return t('time.justNow') || 'Just now';
-      if (diffMins < 60) return `${diffMins} ${t('time.minutesAgo') || 'min ago'}`;
-      if (diffHours < 24) return `${diffHours} ${t('time.hoursAgo') || 'hours ago'}`;
-      if (diffDays < 7) return `${diffDays} ${t('time.daysAgo') || 'days ago'}`;
+      if (diffMins < 1) return 'Just now';
+      if (diffMins < 60) return `${diffMins} min ago`;
+      if (diffHours < 24) return `${diffHours} hours ago`;
+      if (diffDays < 7) return `${diffDays} days ago`;
       return date.toLocaleDateString();
     } catch {
       return timeStr;
@@ -77,7 +77,7 @@ const RecentActivity = () => {
     <Card className="p-6">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-          {t('dashboard.recentActivity') || 'Recent Activity'}
+          Recent Activity
         </h3>
         <button
           onClick={() => {
@@ -100,7 +100,7 @@ const RecentActivity = () => {
       {error && (
         <div className="text-center py-12">
           <p className="text-red-600 dark:text-red-400">
-            {t('error.loadActivityFailed') || 'Failed to load activity'}
+            Failed to load activity
           </p>
         </div>
       )}
@@ -111,10 +111,10 @@ const RecentActivity = () => {
             <Clock className="w-8 h-8 text-gray-400" />
           </div>
           <p className="text-gray-600 dark:text-gray-400">
-            {t('dashboard.noActivity') || 'No recent activity'}
+            No recent activity
           </p>
           <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
-            {t('dashboard.noActivityDesc') || 'Activity will appear here once customers start booking'}
+            Activity will appear here once customers start booking
           </p>
         </div>
       )}
@@ -147,7 +147,7 @@ const RecentActivity = () => {
                 }}
                 className="flex-shrink-0 text-xs text-brand-primary hover:text-brand-primary-dark transition-colors"
               >
-                {t('common.view') || 'View'}
+                View
               </button>
             </motion.div>
           ))}
@@ -160,7 +160,7 @@ const RecentActivity = () => {
               }}
               className="w-full py-3 text-sm font-medium text-brand-primary hover:text-brand-primary-dark transition-colors"
             >
-              {t('dashboard.viewAllActivity') || 'View All Activity →'}
+              View All Activity →
             </button>
           )}
         </div>

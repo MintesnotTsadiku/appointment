@@ -3,11 +3,20 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useOnboarding } from '@/context/onboarding';
 import { Button } from '@/components/button';
 import { useTranslation } from '@/lib/i18n';
+
+// Individual Provider Steps
 import Step1Profile from '../components/Step1Profile';
 import Step2Calendar from '../components/Step2Calendar';
 import Step3Availability from '../components/Step3Availability';
 import Step4Service from '../components/Step4Service';
 import Step5Success from '../components/Step5Success';
+
+// Organization Steps
+import Step1OrgProfile from '../components/Step1OrgProfile';
+import Step2OrgProviders from '../components/Step2OrgProviders';
+import Step3OrgAvailability from '../components/Step3OrgAvailability';
+import Step4OrgService from '../components/Step4OrgService';
+import Step5OrgSuccess from '../components/Step5OrgSuccess';
 
 const OnboardingWizard = () => {
   const { t } = useTranslation();
@@ -16,6 +25,7 @@ const OnboardingWizard = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const totalSteps = 5;
+  const isOrganization = progress?.onboarding_type === 'organization';
 
   const handleNext = async () => {
     if (currentStep < totalSteps) {
@@ -42,29 +52,56 @@ const OnboardingWizard = () => {
   };
 
   const renderStep = () => {
-    switch (currentStep) {
-      case 1:
-        return <Step1Profile onNext={handleNext} />;
-      case 2:
-        return <Step2Calendar onNext={handleNext} onBack={handleBack} />;
-      case 3:
-        return <Step3Availability onNext={handleNext} onBack={handleBack} />;
-      case 4:
-        return <Step4Service onNext={handleNext} onBack={handleBack} />;
-      case 5:
-        return <Step5Success />;
-      default:
-        return <Step1Profile onNext={handleNext} />;
+    if (isOrganization) {
+      // Organization Onboarding Flow
+      switch (currentStep) {
+        case 1:
+          return <Step1OrgProfile onNext={handleNext} />;
+        case 2:
+          return <Step2OrgProviders onNext={handleNext} onBack={handleBack} />;
+        case 3:
+          return <Step3OrgAvailability onNext={handleNext} onBack={handleBack} />;
+        case 4:
+          return <Step4OrgService onNext={handleNext} onBack={handleBack} />;
+        case 5:
+          return <Step5OrgSuccess onComplete={() => window.location.reload()} />;
+        default:
+          return <Step1OrgProfile onNext={handleNext} />;
+      }
+    } else {
+      // Individual Provider Flow
+      switch (currentStep) {
+        case 1:
+          return <Step1Profile onNext={handleNext} />;
+        case 2:
+          return <Step2Calendar onNext={handleNext} onBack={handleBack} />;
+        case 3:
+          return <Step3Availability onNext={handleNext} onBack={handleBack} />;
+        case 4:
+          return <Step4Service onNext={handleNext} onBack={handleBack} />;
+        case 5:
+          return <Step5Success />;
+        default:
+          return <Step1Profile onNext={handleNext} />;
+      }
     }
   };
 
-  const stepTitles = [
-    'Business Profile',
-    'Connect Calendar',
-    'Set Availability',
-    'Create Service',
-    'Get Booking Link',
-  ];
+  const stepTitles = isOrganization
+    ? [
+        'Organization Profile',
+        'Add Providers',
+        'Business Hours',
+        'Create Service',
+        'Get Booking Links',
+      ]
+    : [
+        'Business Profile',
+        'Connect Calendar',
+        'Set Availability',
+        'Create Service',
+        'Get Booking Link',
+      ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-gray-900">
@@ -144,11 +181,23 @@ const OnboardingWizard = () => {
                 {stepTitles[currentStep - 1]}
               </h2>
               <p className="text-gray-600 dark:text-gray-400 text-lg">
-                {currentStep === 1 && 'Tell us about your business'}
-                {currentStep === 2 && 'Choose how to manage your calendar'}
-                {currentStep === 3 && 'Set when you\'re available for appointments'}
-                {currentStep === 4 && 'Create your first service or appointment type'}
-                {currentStep === 5 && 'Share your booking link with customers'}
+                {isOrganization ? (
+                  <>
+                    {currentStep === 1 && 'Tell us about your organization'}
+                    {currentStep === 2 && 'Add team members who will provide services'}
+                    {currentStep === 3 && 'Set your organization\'s operating hours'}
+                    {currentStep === 4 && 'Create services your organization offers'}
+                    {currentStep === 5 && 'Share your booking links with customers'}
+                  </>
+                ) : (
+                  <>
+                    {currentStep === 1 && 'Tell us about your business'}
+                    {currentStep === 2 && 'Choose how to manage your calendar'}
+                    {currentStep === 3 && 'Set when you\'re available for appointments'}
+                    {currentStep === 4 && 'Create your first service or appointment type'}
+                    {currentStep === 5 && 'Share your booking link with customers'}
+                  </>
+                )}
               </p>
             </motion.div>
 

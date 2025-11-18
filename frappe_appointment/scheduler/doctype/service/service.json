@@ -1,0 +1,185 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2025-11-16 01:29:08.471363",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "service_name",
+  "description",
+  "is_active",
+  "organization",
+  "provider",
+  "Section Break-1",
+  "duration",
+  "price",
+  "Column Break-2",
+  "buffer_before",
+  "buffer_after"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "SRV-.YYYY.-.####",
+   "reqd": 1,
+   "default": "SRV-.YYYY.-.####"
+  },
+  {
+   "fieldname": "service_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Service Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description",
+   "length": 500
+  },
+  {
+   "default": "30",
+   "fieldname": "duration",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Duration (minutes)",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "price",
+   "fieldtype": "Currency",
+   "label": "Price (ETB)"
+  },
+  {
+   "default": "0",
+   "description": "Minimum gap before this appointment",
+   "fieldname": "buffer_before",
+   "fieldtype": "Int",
+   "label": "Buffer Before (minutes)"
+  },
+  {
+   "default": "0",
+   "description": "Minimum gap after this appointment",
+   "fieldname": "buffer_after",
+   "fieldtype": "Int",
+   "label": "Buffer After (minutes)"
+  },
+  {
+   "default": "1",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active"
+  },
+  {
+   "fieldname": "organization",
+   "fieldtype": "Link",
+   "label": "Organization",
+   "options": "Organization",
+   "description": "Organization this service belongs to (for organization-based bookings)",
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "provider",
+   "fieldtype": "Link",
+   "label": "Provider",
+   "options": "Provider",
+   "description": "Provider this service belongs to (for individual provider bookings)",
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "Section Break-1",
+   "fieldtype": "Section Break",
+   "label": "Timing & Pricing"
+  },
+  {
+   "default": "30",
+   "fieldname": "duration",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Duration (minutes)",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "price",
+   "fieldtype": "Currency",
+   "label": "Price (ETB)"
+  },
+  {
+   "fieldname": "Column Break-2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "description": "Minimum gap before this appointment",
+   "fieldname": "buffer_before",
+   "fieldtype": "Int",
+   "label": "Buffer Before (minutes)"
+  },
+  {
+   "default": "0",
+   "description": "Minimum gap after this appointment",
+   "fieldname": "buffer_after",
+   "fieldtype": "Int",
+   "label": "Buffer After (minutes)"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-11-17 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Scheduler",
+ "name": "Service",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 0,
+   "email": 0,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Provider",
+   "share": 0,
+   "write": 1
+  },
+  {
+   "create": 0,
+   "delete": 0,
+   "email": 0,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Front-Desk",
+   "share": 0,
+   "write": 0
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "service_name"
+}

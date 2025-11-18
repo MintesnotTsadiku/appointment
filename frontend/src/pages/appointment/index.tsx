@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useFrappeGetCall } from "frappe-react-sdk";
 
@@ -56,12 +56,24 @@ const Appointment = () => {
     }
   );
 
+  const [friendlyError, setFriendlyError] = useState<string>("");
+  const [resolvedType, setResolvedType] = useState<string | null>(null);
+
   useEffect(() => {
     if (meetId) {
       setMeetingId(meetId);
     }
     setTimeZone(getLocalTimezone());
   }, []);
+
+  // Sync resolvedType with type from URL when it changes (e.g., user navigates)
+  useEffect(() => {
+    if (type && type !== "default") {
+      setResolvedType(type);
+    } else if (type === "default") {
+      setResolvedType(null); // Reset to allow auto-selection
+    }
+  }, [type]);
 
   useEffect(() => {
     if (data) {
@@ -75,9 +87,23 @@ const Appointment = () => {
         banner_image: data?.message?.banner_image,
       });
       setMeetingDurationCards(data?.message?.durations);
+      setFriendlyError("");
+      
+      // Always show selection screen when type is missing or "default"
+      // This allows users to see available options even if there's only one duration
+      // Users can click "Schedule Meeting" to proceed
+      const durations = data?.message?.durations || [];
+      if (!type || type === "default") {
+        // Show selection screen - don't auto-select
+        // This gives users visibility into available duration options
+        setResolvedType(null);
+      }
     }
     if (error) {
-      navigate("/");
+      // Build a friendly error; do not redirect away from the page
+      // @ts-ignore
+      const errMsg = error?.response?.data?.message?.error || error?.message || "This booking link is not available.";
+      setFriendlyError(errMsg);
     }
   }, [data, error]);
 
@@ -87,7 +113,23 @@ const Appointment = () => {
         title={userInfo.name ? `${userInfo.name} | Appointment` : "Appointment"}
         description={`Book appointment with ${userInfo.name}`}
       />
-      {!type || isLoading ? (
+      {friendlyError ? (
+        <div className="w-full h-full flex items-center justify-center p-8">
+          <div className="max-w-xl w-full bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 rounded-xl p-6">
+            <div className="flex items-start space-x-3">
+              <Info className="w-5 h-5 mt-1" />
+              <div>
+                <h2 className="font-semibold text-lg mb-1">Booking link not available</h2>
+                <p className="text-sm">{friendlyError}</p>
+                <p className="text-sm mt-3">
+                  Please check the link or contact the provider for a new one.{" "}
+                  <a href="/" className="underline">Go to home</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : !type || type === "default" || isLoading || (meetingDurationCards.length > 1 && !resolvedType) ? (
         <div className="w-full h-full max-md:h-fit flex justify-center">
           <div className="container max-w-[74rem] mx-auto md:p-4 md:py-8 lg:py-16 grid md:gap-12">
             <div className="grid lg:grid-cols-[360px,1fr] md:gap-8 max-md:gap-10  items-start relative rounded-lg">
@@ -167,6 +209,7 @@ const Appointment = () => {
                         onClick={() => {
                           setDuration(card.duration / 60);
                           updateTypeQuery(card.id);
+                          setResolvedType(card.id);
                         }}
                       />
                     ))
@@ -185,10 +228,12 @@ const Appointment = () => {
             </div>
           </div>
         </div>
-      ) : (
+      ) : type && type !== "default" ? (
         <Booking type={type} banner={userInfo.banner_image} />
-      )}
-      <PoweredBy />
+      ) : null}
+      <div className="mt-8 pb-16">
+        <PoweredBy />
+      </div>
     </>
   );
 };

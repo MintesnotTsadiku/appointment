@@ -13,6 +13,8 @@ const ValueProposition = () => {
       title: t('valueProposition.value1Title'),
       description: t('valueProposition.value1Description'),
       metric: t('valueProposition.value1Metric'),
+      image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=250&fit=crop',
+      imageAlt: 'Calendar scheduling automation'
     },
     {
       icon: DollarSign,
@@ -20,6 +22,8 @@ const ValueProposition = () => {
       title: t('valueProposition.value2Title'),
       description: t('valueProposition.value2Description'),
       metric: t('valueProposition.value2Metric'),
+      image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=250&fit=crop',
+      imageAlt: 'Local payment methods integration'
     },
     {
       icon: TrendingUp,
@@ -27,6 +31,8 @@ const ValueProposition = () => {
       title: t('valueProposition.value3Title'),
       description: t('valueProposition.value3Description'),
       metric: t('valueProposition.value3Metric'),
+      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=250&fit=crop',
+      imageAlt: 'Business growth analytics'
     },
   ];
 
@@ -65,34 +71,42 @@ const ValueProposition = () => {
               className="relative group"
             >
               {/* Card */}
-              <div className="relative p-8 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
+              <div className="relative bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
                 {/* Background gradient on hover */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${value.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
 
-                {/* Icon */}
-                <div className={`relative w-16 h-16 mb-6 rounded-xl bg-gradient-to-br ${value.color} flex items-center justify-center`}>
-                  <value.icon className="w-8 h-8 text-white" />
+                {/* Screenshot Image */}
+                <div className="relative h-48 overflow-hidden">
+                  <img
+                    src={value.image}
+                    alt={value.imageAlt}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                  
+                  {/* Icon overlay */}
+                  <div className={`absolute top-4 left-4 w-12 h-12 rounded-xl bg-gradient-to-br ${value.color} flex items-center justify-center shadow-lg`}>
+                    <value.icon className="w-6 h-6 text-white" />
+                  </div>
                 </div>
 
                 {/* Content */}
-                <div className="relative">
-                  <h3 className="text-2xl font-heading font-bold text-gray-900 dark:text-white mb-3">
+                <div className="relative p-6">
+                  <h3 className="text-xl font-heading font-bold text-gray-900 dark:text-white mb-2">
                     {value.title}
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-300 mb-6">
+                  <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm">
                     {value.description}
                   </p>
 
                   {/* Metric */}
-                  <div className={`inline-flex items-center space-x-2 px-4 py-2 bg-gradient-to-r ${value.color} bg-opacity-10 rounded-full`}>
-                    <span className={`text-sm font-bold bg-gradient-to-r ${value.color} bg-clip-text text-transparent`}>
+                  <div className={`inline-flex items-center space-x-2 px-3 py-1.5 bg-gradient-to-r ${value.color} bg-opacity-10 rounded-full`}>
+                    <span className={`text-xs font-bold bg-gradient-to-r ${value.color} bg-clip-text text-transparent`}>
                       {value.metric}
                     </span>
                   </div>
                 </div>
-
-                {/* Decorative element */}
-                <div className="absolute -right-8 -bottom-8 w-32 h-32 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-500" />
               </div>
             </motion.div>
           ))}

@@ -5,6 +5,15 @@
 @layer base {
   :root {
     /* ========================================
+       BOOKING SYSTEM COLORS
+       Customize from backend
+       ======================================== */
+    
+    /* Primary color for selected dates, buttons, etc */
+    --primary-color: #3b82f6;
+    --primary-color-hover: #2563eb;
+    
+    /* ========================================
        LANDING PAGE BRAND COLORS
        Change these to update the entire design
        ======================================== */
@@ -147,4 +156,28 @@ body {
   100% {
     transform: translateX(100%);
   }
+}
+
+/* Force selected calendar date styles */
+button[role="gridcell"][aria-selected="true"] {
+  background-color: var(--primary-color, #3b82f6) !important;
+  color: white !important;
+}
+
+button[role="gridcell"][aria-selected="true"] span {
+  color: white !important;
+  -webkit-text-fill-color: white !important;
+}
+
+/* Ensure it works in both light and dark mode */
+.light button[role="gridcell"][aria-selected="true"],
+:root:not(.dark) button[role="gridcell"][aria-selected="true"] {
+  background-color: var(--primary-color, #3b82f6) !important;
+  color: #ffffff !important;
+}
+
+.light button[role="gridcell"][aria-selected="true"] span,
+:root:not(.dark) button[role="gridcell"][aria-selected="true"] span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
 }

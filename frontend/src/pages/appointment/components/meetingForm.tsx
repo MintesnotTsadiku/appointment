@@ -47,6 +47,7 @@ interface MeetingFormProps {
   onSuccess: (data: any) => void;
   durationId: string;
   isMobileView: boolean;
+  timeFormat: "12h" | "24h" | "ethiopian";
 }
 
 const MeetingForm = ({
@@ -54,6 +55,7 @@ const MeetingForm = ({
   durationId,
   onSuccess,
   isMobileView,
+  timeFormat,
 }: MeetingFormProps) => {
   const [isGuestsOpen, setIsGuestsOpen] = useState(false);
   const [guestInput, setGuestInput] = useState("");
@@ -117,6 +119,7 @@ const MeetingForm = ({
       user_name: data.fullName,
       user_email: data.email,
       other_participants: data.guests.join(", "),
+      time_format: timeFormat, // Store user's preferred time format
     };
 
     bookMeeting(meetingData)

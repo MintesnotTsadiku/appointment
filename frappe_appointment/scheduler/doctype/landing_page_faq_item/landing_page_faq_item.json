@@ -1,0 +1,52 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-11-16 00:17:44.522249",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "question_en",
+  "question_am",
+  "answer_en",
+  "answer_am"
+ ],
+ "fields": [
+  {
+   "fieldname": "question_en",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Question (EN)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "question_am",
+   "fieldtype": "Data",
+   "label": "Question (AM)"
+  },
+  {
+   "fieldname": "answer_en",
+   "fieldtype": "Text",
+   "label": "Answer (EN)"
+  },
+  {
+   "fieldname": "answer_am",
+   "fieldtype": "Text",
+   "label": "Answer (AM)"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-11-16 00:17:44.522249",
+ "modified_by": "Administrator",
+ "module": "Scheduler",
+ "name": "Landing Page FAQ Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

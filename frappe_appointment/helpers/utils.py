@@ -156,3 +156,77 @@ def duration_to_string(duration):
 
     duration_str = duration_str.strip()
     return duration_str
+
+
+def format_time_in_user_format(dt: datetime, time_format: str = "12h", timezone: str = None) -> str:
+    """
+    Format datetime according to user's preferred time format.
+    
+    Args:
+        dt (datetime): Datetime object (can be timezone-aware or naive)
+        time_format (str): Format preference - "12h", "24h", or "ethiopian"
+        timezone (str): Optional timezone string (e.g., "Africa/Addis_Ababa")
+    
+    Returns:
+        str: Formatted time string
+    """
+    # Convert to timezone if provided
+    if timezone:
+        if dt.tzinfo is None:
+            # Assume UTC if naive
+            dt = pytz.utc.localize(dt)
+        dt = dt.astimezone(pytz.timezone(timezone))
+    elif dt.tzinfo is None:
+        # If no timezone provided and datetime is naive, use system timezone
+        system_tz = pytz.timezone(get_system_timezone())
+        dt = system_tz.localize(dt)
+    
+    if time_format == "ethiopian":
+        return format_ethiopian_time(dt)
+    elif time_format == "24h":
+        return dt.strftime("%H:%M")
+    else:  # Default to 12h
+        return dt.strftime("%I:%M %p")
+
+
+def format_ethiopian_time(dt: datetime) -> str:
+    """
+    Convert standard datetime to Ethiopian time format.
+    Ethiopian time starts at 6 AM (sunrise) as 12:00
+    6 AM - 12 PM = ጠዋት (morning)
+    12 PM - 6 PM = ከሰዓት (afternoon, "from hour")
+    6 PM - 12 AM = ምሽት (evening)
+    12 AM - 6 AM = ሌሊት (night)
+    
+    Args:
+        dt (datetime): Datetime object (should be timezone-aware)
+    
+    Returns:
+        str: Formatted Ethiopian time string (e.g., "ሰዓት 3:00 ጠዋት")
+    """
+    standard_hour = dt.hour
+    minute = dt.minute
+    
+    # Ethiopian time calculation
+    ethiopian_hour = standard_hour - 6
+    if ethiopian_hour < 0:
+        ethiopian_hour += 12
+    
+    # If ethiopian_hour is 0, make it 12 (Ethiopian convention)
+    if ethiopian_hour == 0:
+        ethiopian_hour = 12
+    elif ethiopian_hour > 12:
+        ethiopian_hour -= 12
+    
+    # Determine period based on standard time
+    if standard_hour >= 0 and standard_hour < 6:
+        period = "ሌሊት"  # Night (12 AM - 6 AM)
+    elif standard_hour >= 6 and standard_hour < 12:
+        period = "ጠዋት"  # Morning (6 AM - 12 PM)
+    elif standard_hour >= 12 and standard_hour < 18:
+        period = "ከሰዓት"  # Afternoon (12 PM - 6 PM) - literally "from hour"
+    else:
+        period = "ምሽት"  # Evening (6 PM - 12 AM)
+    
+    minute_str = str(minute).zfill(2)
+    return f"ሰዓት {ethiopian_hour}:{minute_str} {period}"

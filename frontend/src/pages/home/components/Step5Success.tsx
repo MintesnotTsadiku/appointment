@@ -1,29 +1,75 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useOnboarding } from '@/context/onboarding';
 import { Button } from '@/components/button';
-import { useTranslation } from '@/lib/i18n';
 import { Check, Copy, Share2, QrCode } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useFrappeGetCall } from 'frappe-react-sdk';
 
 const Step5Success = () => {
-  const { t } = useTranslation();
   const { completeOnboarding } = useOnboarding();
   const navigate = useNavigate();
-  const [bookingUrl, setBookingUrl] = useState('https://app.com/schedule/in/abc123');
+  const [bookingUrl, setBookingUrl] = useState('');
+  const [fullBookingUrl, setFullBookingUrl] = useState('');
   const [copied, setCopied] = useState(false);
   const [showConfetti, setShowConfetti] = useState(true);
+  const [showQR, setShowQR] = useState(false);
+  const qrCanvasRef = useRef<HTMLCanvasElement>(null);
+
+  // Fetch the booking URL from the backend
+  const { data: bookingData, isLoading: loadingBookingUrl } = useFrappeGetCall<{
+    message: { success: boolean; booking_url: string; event_type_id?: string };
+  }>('frappe_appointment.onboarding.get_booking_url');
 
   useEffect(() => {
-    // Fetch the actual booking URL from the previous step's result
-    // For now, using a placeholder
-    const fullUrl = `${window.location.origin}${bookingUrl}`;
-    setBookingUrl(fullUrl);
-  }, []);
+    if (bookingData?.message?.booking_url) {
+      const relativeUrl = bookingData.message.booking_url;
+      setBookingUrl(relativeUrl);
+      // Construct full URL properly - only prepend origin if it's a relative path
+      const fullUrl = relativeUrl.startsWith('http')
+        ? relativeUrl
+        : `${window.location.origin}${relativeUrl}`;
+      setFullBookingUrl(fullUrl);
+    }
+  }, [bookingData]);
+
+  // Generate QR Code
+  const generateQRCode = () => {
+    if (!qrCanvasRef.current || !fullBookingUrl) return;
+
+    const canvas = qrCanvasRef.current;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Simple QR code generation using a basic pattern
+    // For production, use a proper QR library like qrcode or qrcode.react
+    const size = 200;
+    canvas.width = size;
+    canvas.height = size;
+
+    // Use a simple QR code library approach - for now, we'll use a web API or library
+    // For simplicity, let's use a QR code API service
+    const qrImage = new Image();
+    qrImage.crossOrigin = 'anonymous';
+    qrImage.onload = () => {
+      ctx.clearRect(0, 0, size, size);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, size, size);
+      ctx.drawImage(qrImage, 0, 0, size, size);
+    };
+    // Using QR Server API (free, no key required)
+    qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(fullBookingUrl)}`;
+  };
+
+  useEffect(() => {
+    if (showQR && fullBookingUrl && qrCanvasRef.current) {
+      generateQRCode();
+    }
+  }, [showQR, fullBookingUrl]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(bookingUrl);
+      await navigator.clipboard.writeText(fullBookingUrl || bookingUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
@@ -32,17 +78,20 @@ const Step5Success = () => {
   };
 
   const handleWhatsAppShare = () => {
-    const message = encodeURIComponent(
-      `Book an appointment with me: ${bookingUrl}`
-    );
+    const url = fullBookingUrl || bookingUrl;
+    const message = encodeURIComponent(`Book an appointment with me: ${url}`);
     window.open(`https://wa.me/?text=${message}`, '_blank');
   };
 
   const handleTelegramShare = () => {
-    const message = encodeURIComponent(
-      `Book an appointment with me: ${bookingUrl}`
-    );
-    window.open(`https://t.me/share/url?url=${bookingUrl}&text=${message}`, '_blank');
+    const url = fullBookingUrl || bookingUrl;
+    const message = encodeURIComponent(`Book an appointment with me: ${url}`);
+    window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${message}`, '_blank');
+  };
+
+  const handleQRCodeClick = () => {
+    if (!fullBookingUrl && !bookingUrl) return;
+    setShowQR(!showQR);
   };
 
   const handleGoToDashboard = async () => {
@@ -110,7 +159,7 @@ const Step5Success = () => {
             transition={{ delay: 0.2 }}
             className="text-3xl font-bold text-gray-900 dark:text-white"
           >
-            {t('onboarding.step5.title') || "🎉 You're All Set!"}
+            🎉 You're All Set!
           </motion.h2>
 
           {/* Description */}
@@ -120,7 +169,7 @@ const Step5Success = () => {
             transition={{ delay: 0.3 }}
             className="text-gray-600 dark:text-gray-400 text-lg"
           >
-            {t('onboarding.step5.description') || 'Your booking page is ready to share with customers'}
+            Your booking page is ready to share with customers
           </motion.p>
 
           {/* Booking URL */}
@@ -131,11 +180,11 @@ const Step5Success = () => {
             className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 border border-gray-200 dark:border-gray-600"
           >
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-              {t('onboarding.step5.yourBookingLink') || 'Your booking link:'}
+              Your booking link:
             </p>
             <div className="flex items-center justify-between space-x-2">
               <code className="text-sm text-brand-primary flex-1 text-left break-all">
-                {bookingUrl}
+                {fullBookingUrl || bookingUrl || (loadingBookingUrl ? 'Loading...' : 'No booking URL available')}
               </code>
               <Button
                 size="sm"
@@ -146,12 +195,12 @@ const Step5Success = () => {
                 {copied ? (
                   <>
                     <Check className="w-4 h-4 text-green-500" />
-                    <span>{t('common.copied') || 'Copied!'}</span>
+                    <span>Copied!</span>
                   </>
                 ) : (
                   <>
                     <Copy className="w-4 h-4" />
-                    <span>{t('common.copy') || 'Copy'}</span>
+                    <span>Copy</span>
                   </>
                 )}
               </Button>
@@ -166,7 +215,7 @@ const Step5Success = () => {
             className="space-y-3"
           >
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              {t('onboarding.step5.shareWith') || 'Share with your customers:'}
+              Share with your customers:
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               <Button
@@ -191,14 +240,48 @@ const Step5Success = () => {
               </Button>
               <Button
                 variant="outline"
-                onClick={() => alert('QR Code generation coming soon!')}
+                onClick={handleQRCodeClick}
+                disabled={!fullBookingUrl && !bookingUrl}
                 className="flex items-center space-x-2"
               >
                 <QrCode className="w-5 h-5" />
-                <span>{t('common.qrCode') || 'QR Code'}</span>
+                <span>QR Code</span>
               </Button>
             </div>
           </motion.div>
+
+          {/* QR Code Modal */}
+          {showQR && fullBookingUrl && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+              onClick={() => setShowQR(false)}
+            >
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-xl max-w-md w-full mx-4"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 text-center">
+                  Scan to Book
+                </h3>
+                <div className="flex justify-center mb-4">
+                  <canvas ref={qrCanvasRef} className="border-2 border-gray-200 dark:border-gray-700 rounded-lg" />
+                </div>
+                <p className="text-sm text-gray-600 dark:text-gray-400 text-center mb-4">
+                  Scan this QR code to open the booking page
+                </p>
+                <Button
+                  onClick={() => setShowQR(false)}
+                  className="w-full bg-gradient-hero hover:opacity-90 text-white"
+                >
+                  Close
+                </Button>
+              </motion.div>
+            </motion.div>
+          )}
 
           {/* Next Steps */}
           <motion.div
@@ -208,24 +291,24 @@ const Step5Success = () => {
             className="text-left bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-800 rounded-lg p-6"
           >
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-              {t('onboarding.step5.nextSteps') || 'Next steps:'}
+              Next steps:
             </h3>
             <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
               <li className="flex items-start">
                 <span className="text-brand-primary mr-2">•</span>
-                <span>{t('onboarding.step5.step1') || 'Test your booking page by visiting the link'}</span>
+                <span>Test your booking page by visiting the link</span>
               </li>
               <li className="flex items-start">
                 <span className="text-brand-primary mr-2">•</span>
-                <span>{t('onboarding.step5.step2') || 'Configure payment (optional) to accept deposits'}</span>
+                <span>Configure payment (optional) to accept deposits</span>
               </li>
               <li className="flex items-start">
                 <span className="text-brand-primary mr-2">•</span>
-                <span>{t('onboarding.step5.step3') || 'Customize notifications for customers'}</span>
+                <span>Customize notifications for customers</span>
               </li>
               <li className="flex items-start">
                 <span className="text-brand-primary mr-2">•</span>
-                <span>{t('onboarding.step5.step4') || 'Add more services or team members'}</span>
+                <span>Add more services or team members</span>
               </li>
             </ul>
           </motion.div>
@@ -240,7 +323,7 @@ const Step5Success = () => {
               onClick={handleGoToDashboard}
               className="w-full bg-gradient-hero hover:opacity-90 text-white text-lg py-6"
             >
-              {t('onboarding.step5.goToDashboard') || 'Go to Dashboard →'}
+              Go to Dashboard →
             </Button>
           </motion.div>
         </div>

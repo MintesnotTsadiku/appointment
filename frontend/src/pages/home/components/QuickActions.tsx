@@ -9,8 +9,8 @@ const QuickActions = () => {
     {
       id: 'new-service',
       icon: Plus,
-      title: t('actions.newService') || 'New Service',
-      description: t('actions.newServiceDesc') || 'Add appointment type',
+      title: 'New Service',
+      description: 'Add appointment type',
       color: 'bg-gradient-hero',
       textColor: 'text-white',
       onClick: () => {
@@ -21,8 +21,8 @@ const QuickActions = () => {
     {
       id: 'my-calendar',
       icon: Calendar,
-      title: t('actions.myCalendar') || 'My Calendar',
-      description: t('actions.myCalendarDesc') || 'View all appointments',
+      title: 'My Calendar',
+      description: 'View all appointments',
       color: 'bg-white dark:bg-gray-800',
       textColor: 'text-gray-900 dark:text-white',
       border: true,
@@ -34,8 +34,8 @@ const QuickActions = () => {
     {
       id: 'edit-availability',
       icon: Clock,
-      title: t('actions.editAvailability') || 'Edit Availability',
-      description: t('actions.editAvailabilityDesc') || 'Update your hours',
+      title: 'Edit Availability',
+      description: 'Update your hours',
       color: 'bg-white dark:bg-gray-800',
       textColor: 'text-gray-900 dark:text-white',
       border: true,
@@ -47,8 +47,8 @@ const QuickActions = () => {
     {
       id: 'share-link',
       icon: Share2,
-      title: t('actions.shareLink') || 'Share Link',
-      description: t('actions.shareLinkDesc') || 'Get your booking URL',
+      title: 'Share Link',
+      description: 'Get your booking URL',
       color: 'bg-white dark:bg-gray-800',
       textColor: 'text-gray-900 dark:text-white',
       border: true,
@@ -60,8 +60,8 @@ const QuickActions = () => {
     {
       id: 'analytics',
       icon: BarChart3,
-      title: t('actions.analytics') || 'View Analytics',
-      description: t('actions.analyticsDesc') || 'Deep-dive reports',
+      title: 'View Analytics',
+      description: 'Deep-dive reports',
       color: 'bg-white dark:bg-gray-800',
       textColor: 'text-gray-900 dark:text-white',
       border: true,
@@ -73,8 +73,8 @@ const QuickActions = () => {
     {
       id: 'manage-team',
       icon: Users,
-      title: t('actions.manageTeam') || 'Manage Team',
-      description: t('actions.manageTeamDesc') || 'Add team members',
+      title: 'Manage Team',
+      description: 'Add team members',
       color: 'bg-white dark:bg-gray-800',
       textColor: 'text-gray-900 dark:text-white',
       border: true,
@@ -88,7 +88,7 @@ const QuickActions = () => {
   return (
     <div>
       <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-        {t('dashboard.quickActions') || 'Quick Actions'}
+        Quick Actions
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {actions.map((action, index) => (
@@ -109,13 +109,25 @@ const QuickActions = () => {
                 className={`flex-shrink-0 p-3 rounded-lg ${
                   action.id === 'new-service'
                     ? 'bg-white/20'
-                    : 'bg-gradient-hero bg-opacity-10'
+                    : ''
                 }`}
+                style={
+                  action.id !== 'new-service'
+                    ? {
+                        backgroundColor: 'color-mix(in srgb, var(--brand-primary) 10%, transparent)',
+                      }
+                    : undefined
+                }
               >
                 <action.icon
                   className={`w-6 h-6 ${
-                    action.id === 'new-service' ? 'text-white' : 'text-brand-primary'
+                    action.id === 'new-service' ? 'text-white' : ''
                   }`}
+                  style={
+                    action.id !== 'new-service'
+                      ? { color: 'var(--brand-primary)' }
+                      : undefined
+                  }
                 />
               </div>
               <div className="flex-1 min-w-0">

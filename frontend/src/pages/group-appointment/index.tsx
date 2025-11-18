@@ -21,6 +21,7 @@ import {
   cn,
   convertMinutesToTimeFormat,
   convertToMinutes,
+  convertToEthiopianTime,
   getAllSupportedTimeZones,
   getTimeZoneOffsetFromTimeZoneString,
   parseDateString,
@@ -154,12 +155,48 @@ const GroupAppointment = () => {
   };
 
   const formatTimeSlot = (date: Date) => {
+    if (timeFormat === "ethiopian") {
+      const { hour, minute, period } = convertToEthiopianTime(date);
+      const minuteStr = minute.toString().padStart(2, "0");
+      return `ሰዓት ${hour}:${minuteStr} ${period}`;
+    }
+    
     return new Intl.DateTimeFormat("en-US", {
       hour: "numeric",
       minute: "numeric",
       hour12: timeFormat === "12h",
       timeZone: state.timeZone,
     }).format(date);
+  };
+
+  // Helper function to check if a time slot is in the past
+  const isSlotInPast = (slotStartTime: string): boolean => {
+    try {
+      const slotDate = new Date(slotStartTime);
+      const now = new Date();
+      
+      // Get selected date without time
+      const selectedDateObj = date ? parseDateString(date) : state.selectedDate;
+      const selectedDateOnly = new Date(selectedDateObj);
+      selectedDateOnly.setHours(0, 0, 0, 0);
+      
+      // Get today without time
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      // Only check time if the selected date is today
+      if (selectedDateOnly.getTime() === today.getTime()) {
+        // Compare slot time with current time
+        return slotDate.getTime() < now.getTime();
+      }
+      
+      // For future dates, no slots are in the past
+      // For past dates, calendar already prevents selection
+      return false;
+    } catch (err) {
+      console.error("Error checking if slot is in past:", err);
+      return false;
+    }
   };
 
   const scheduleMeeting = () => {
@@ -176,6 +213,7 @@ const GroupAppointment = () => {
       ),
       start_time: state.selectedSlot!.start_time,
       end_time: state.selectedSlot!.end_time,
+      time_format: timeFormat, // Store user's preferred time format
     };
 
     bookMeeting(meetingData)
@@ -346,9 +384,56 @@ const GroupAppointment = () => {
                     className="rounded-md md:border md:h-96 w-full flex lg:px-6 lg:p-2 p-0"
                   />
                 </div>
-                <div className="w-full mt-4 gap-5 flex max-md:flex-col md:justify-between md:items-center ">
+                <div className="w-full mt-4 gap-4 flex flex-col">
+                  {/* Time Format Selection */}
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <Typography className="text-sm text-gray-700 dark:text-slate-300">
+                      Time Format:
+                    </Typography>
+                    <div className="flex gap-2 flex-wrap">
+                      <Button
+                        variant={timeFormat === "12h" ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setTimeFormat("12h")}
+                        className={cn(
+                          "h-8 px-3 text-xs",
+                          timeFormat === "12h" 
+                            ? "bg-blue-500 dark:bg-blue-400 text-white hover:bg-blue-600 dark:hover:bg-blue-500"
+                            : "text-gray-700 dark:text-slate-300"
+                        )}
+                      >
+                        AM/PM
+                      </Button>
+                      <Button
+                        variant={timeFormat === "24h" ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setTimeFormat("24h")}
+                        className={cn(
+                          "h-8 px-3 text-xs",
+                          timeFormat === "24h" 
+                            ? "bg-blue-500 dark:bg-blue-400 text-white hover:bg-blue-600 dark:hover:bg-blue-500"
+                            : "text-gray-700 dark:text-slate-300"
+                        )}
+                      >
+                        24H
+                      </Button>
+                      <Button
+                        variant={timeFormat === "ethiopian" ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setTimeFormat("ethiopian")}
+                        className={cn(
+                          "h-8 px-3 text-xs",
+                          timeFormat === "ethiopian" 
+                            ? "bg-blue-500 dark:bg-blue-400 text-white hover:bg-blue-600 dark:hover:bg-blue-500"
+                            : "text-gray-700 dark:text-slate-300"
+                        )}
+                      >
+                        Local Time
+                      </Button>
+                    </div>
+                  </div>
+                  
                   {/* Timezone */}
-
                   <TimeZoneSelect
                     timeZones={getAllSupportedTimeZones()}
                     setTimeZone={(tz) =>
@@ -357,24 +442,6 @@ const GroupAppointment = () => {
                     timeZone={state.timeZone}
                     disable={loading}
                   />
-
-                  {/* Time Format Toggle */}
-                  <div className="flex items-center gap-2">
-                    <Typography className="text-sm text-gray-700">
-                      AM/PM
-                    </Typography>
-                    <Switch
-                      disabled={loading}
-                      className="data-[state=checked]:bg-blue-500 active:ring-blue-400 focus-visible:ring-blue-400"
-                      checked={timeFormat === "24h"}
-                      onCheckedChange={(checked) =>
-                        setTimeFormat(checked ? "24h" : "12h")
-                      }
-                    />
-                    <Typography className="text-sm text-gray-700">
-                      24H
-                    </Typography>
-                  </div>
                 </div>
               </div>
             )}
@@ -435,32 +502,54 @@ const GroupAppointment = () => {
                     {state.meetingData.all_available_slots_for_data.length >
                     0 ? (
                       state.meetingData.all_available_slots_for_data.map(
-                        (slot, index) => (
-                          <Button
-                            key={index}
-                            onClick={() => {
-                              dispatch({
-                                type: "SET_SELECTED_SLOT",
-                                payload: {
-                                  start_time: slot.start_time,
-                                  end_time: slot.end_time,
-                                },
-                              });
-                            }}
-                            disabled={loading}
-                            variant="outline"
-                            className={cn(
-                              "w-full font-normal border border-blue-500 dark:border-blue-400 text-blue-500 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-800/10 transition-colors ",
-                              state.selectedSlot?.start_time ===
-                                slot.start_time &&
-                                state.selectedSlot?.end_time ===
-                                  slot.end_time &&
-                                "bg-blue-500 dark:bg-blue-400 text-background dark:text-background hover:bg-blue-500 dark:hover:bg-blue-400 hover:text-background dark:hover:text-background"
-                            )}
-                          >
-                            {formatTimeSlot(new Date(slot.start_time))}
-                          </Button>
-                        )
+                        (slot, index) => {
+                          const isPast = isSlotInPast(slot.start_time);
+                          return (
+                            <Button
+                              key={index}
+                              onClick={() => {
+                                if (isPast) {
+                                  toast("Cannot book past time slots", {
+                                    duration: 3000,
+                                    classNames: {
+                                      actionButton:
+                                        "group-[.toast]:!bg-red-500 group-[.toast]:hover:!bg-red-300 group-[.toast]:!text-white",
+                                    },
+                                    icon: <CircleAlert className="h-5 w-5 text-red-500" />,
+                                    action: {
+                                      label: "OK",
+                                      onClick: () => toast.dismiss(),
+                                    },
+                                  });
+                                  return;
+                                }
+                                dispatch({
+                                  type: "SET_SELECTED_SLOT",
+                                  payload: {
+                                    start_time: slot.start_time,
+                                    end_time: slot.end_time,
+                                  },
+                                });
+                              }}
+                              disabled={loading || isPast}
+                              variant="outline"
+                              className={cn(
+                                "w-full font-normal border transition-colors",
+                                isPast
+                                  ? "border-gray-300 dark:border-gray-600 text-gray-400 dark:text-gray-500 cursor-not-allowed opacity-50"
+                                  : "border-blue-500 dark:border-blue-400 text-blue-500 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-800/10",
+                                state.selectedSlot?.start_time ===
+                                  slot.start_time &&
+                                  state.selectedSlot?.end_time ===
+                                    slot.end_time &&
+                                  !isPast &&
+                                  "bg-blue-500 dark:bg-blue-400 text-background dark:text-background hover:bg-blue-500 dark:hover:bg-blue-400 hover:text-background dark:hover:text-background"
+                              )}
+                            >
+                              {formatTimeSlot(new Date(slot.start_time))}
+                            </Button>
+                          );
+                        }
                       )
                     ) : (
                       <div className="h-full max-md:h-44 w-full flex justify-center items-center">

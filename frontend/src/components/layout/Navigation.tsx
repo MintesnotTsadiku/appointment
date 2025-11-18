@@ -86,14 +86,14 @@ const Navigation = () => {
               {/* Desktop CTAs */}
               <div className="hidden md:flex items-center space-x-3">
                 <Button variant="ghost" size="sm" asChild>
-                  <a href="#signin">{t('nav.signIn')}</a>
+                  <a href="/login">Sign In</a>
                 </Button>
                 <Button
                   size="sm"
                   className="bg-gradient-hero hover:opacity-90 text-white"
                   asChild
                 >
-                  <a href="#get-started">{t('nav.getStarted')}</a>
+                  <a href="/signup">Get Started</a>
                 </Button>
               </div>
 
@@ -189,10 +189,10 @@ const Navigation = () => {
                     <ModeToggle />
                   </div>
                   <Button variant="outline" className="w-full" asChild>
-                    <a href="#signin">{t('nav.signIn')}</a>
+                    <a href="/login">Sign In</a>
                   </Button>
                   <Button className="w-full bg-gradient-hero text-white" asChild>
-                    <a href="#get-started">{t('nav.getStarted')}</a>
+                    <a href="/signup">Get Started</a>
                   </Button>
                 </div>
               </div>

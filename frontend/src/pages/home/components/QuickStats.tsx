@@ -33,22 +33,22 @@ const QuickStats = () => {
 
   const statCards = [
     {
-      title: t('dashboard.stats.thisWeek') || 'This Week',
+      title: 'This Week',
       value: stats.appointments_this_week,
       icon: Calendar,
       color: 'text-blue-600',
       bgColor: 'bg-blue-100 dark:bg-blue-900/30',
     },
     {
-      title: t('dashboard.stats.today') || 'Today',
+      title: 'Today',
       value: stats.upcoming_today,
-      subtitle: t('dashboard.stats.upcoming') || 'upcoming',
+      subtitle: 'upcoming',
       icon: Clock,
       color: 'text-purple-600',
       bgColor: 'bg-purple-100 dark:bg-purple-900/30',
     },
     {
-      title: t('dashboard.stats.bookingRate') || 'Booking Rate',
+      title: 'Booking Rate',
       value: `${stats.booking_rate_change > 0 ? '+' : ''}${stats.booking_rate_change}%`,
       icon: TrendingUp,
       color: stats.booking_rate_change >= 0 ? 'text-green-600' : 'text-red-600',
@@ -59,7 +59,7 @@ const QuickStats = () => {
       trend: stats.booking_rate_change >= 0 ? 'up' : 'down',
     },
     {
-      title: t('dashboard.stats.revenue') || 'Revenue',
+      title: 'Revenue',
       value: stats.revenue,
       suffix: ' ETB',
       icon: DollarSign,
@@ -85,7 +85,7 @@ const QuickStats = () => {
     return (
       <Card className="p-6">
         <p className="text-red-600 dark:text-red-400">
-          {t('error.loadStatsFailed') || 'Failed to load stats'}
+          Failed to load stats
         </p>
       </Card>
     );
@@ -94,7 +94,7 @@ const QuickStats = () => {
   return (
     <div>
       <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-        {t('dashboard.quickStats') || 'Quick Stats'}
+        Quick Stats
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {statCards.map((stat, index) => (
@@ -160,7 +160,7 @@ const QuickStats = () => {
                         </svg>
                       )}
                       <span className="text-xs text-gray-600 dark:text-gray-400">
-                        {t('dashboard.stats.vsLastWeek') || 'vs last week'}
+                        vs last week
                       </span>
                     </div>
                   )}

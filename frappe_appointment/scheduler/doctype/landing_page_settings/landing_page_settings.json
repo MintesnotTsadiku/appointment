@@ -1,0 +1,1168 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-11-16 00:12:17.193217",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "hero_tab",
+  "hero_enabled",
+  "hero_section",
+  "hero_eyebrow_en",
+  "hero_eyebrow_am",
+  "column_break_hero1",
+  "hero_headline_1_en",
+  "hero_headline_1_am",
+  "column_break_hero2",
+  "hero_headline_2_en",
+  "hero_headline_2_am",
+  "hero_content_section",
+  "hero_subheadline_en",
+  "hero_subheadline_am",
+  "hero_cta_section",
+  "hero_cta_primary_en",
+  "hero_cta_primary_am",
+  "column_break_cta",
+  "hero_cta_secondary_en",
+  "hero_cta_secondary_am",
+  "hero_trust_section",
+  "hero_trust_count",
+  "hero_trust_label_en",
+  "hero_trust_label_am",
+  "column_break_trust",
+  "hero_rating",
+  "hero_reviews_count",
+  "hero_carousel_section",
+  "hero_carousel_images",
+  "partners_tab",
+  "partners_enabled",
+  "partners_section",
+  "partners_title_en",
+  "partners_title_am",
+  "column_break_partners",
+  "partners_subtitle_en",
+  "partners_subtitle_am",
+  "partners_list_section",
+  "partners_list",
+  "partners_stats_section",
+  "stat_active_users",
+  "stat_active_users_label_en",
+  "stat_active_users_label_am",
+  "column_break_stat1",
+  "stat_appointments",
+  "stat_appointments_label_en",
+  "stat_appointments_label_am",
+  "column_break_stat2",
+  "stat_uptime",
+  "stat_uptime_label_en",
+  "stat_uptime_label_am",
+  "column_break_stat3",
+  "stat_rating",
+  "stat_rating_label_en",
+  "stat_rating_label_am",
+  "value_prop_tab",
+  "value_prop_enabled",
+  "value_prop_section",
+  "value_prop_title_en",
+  "value_prop_title_am",
+  "column_break_vp",
+  "value_prop_subtitle_en",
+  "value_prop_subtitle_am",
+  "value_propositions_section",
+  "value_propositions",
+  "features_tab",
+  "features_enabled",
+  "features_section",
+  "features_title_en",
+  "features_title_am",
+  "column_break_feat",
+  "features_subtitle_en",
+  "features_subtitle_am",
+  "features_list_section",
+  "features_list",
+  "use_cases_tab",
+  "use_cases_enabled",
+  "use_cases_section",
+  "use_cases_title_en",
+  "use_cases_title_am",
+  "column_break_uc",
+  "use_cases_subtitle_en",
+  "use_cases_subtitle_am",
+  "use_cases_list_section",
+  "use_cases_list",
+  "how_it_works_tab",
+  "how_it_works_enabled",
+  "how_it_works_section",
+  "how_it_works_title_en",
+  "how_it_works_title_am",
+  "column_break_hiw",
+  "how_it_works_subtitle_en",
+  "how_it_works_subtitle_am",
+  "steps_section",
+  "steps",
+  "pricing_tab",
+  "pricing_enabled",
+  "pricing_section",
+  "pricing_title_en",
+  "pricing_title_am",
+  "column_break_pricing",
+  "pricing_subtitle_en",
+  "pricing_subtitle_am",
+  "currency_section",
+  "currency_symbol",
+  "currency_code",
+  "pricing_tiers_section",
+  "pricing_tiers",
+  "faq_tab",
+  "faq_enabled",
+  "faq_section",
+  "faq_title_en",
+  "faq_title_am",
+  "column_break_faq",
+  "faq_subtitle_en",
+  "faq_subtitle_am",
+  "faq_items_section",
+  "faq_items",
+  "final_cta_tab",
+  "final_cta_enabled",
+  "final_cta_section",
+  "final_cta_title_en",
+  "final_cta_title_am",
+  "column_break_fcta",
+  "final_cta_subtitle_en",
+  "final_cta_subtitle_am",
+  "final_cta_button_section",
+  "final_cta_button_text_en",
+  "final_cta_button_text_am",
+  "final_cta_trust_section",
+  "trust_indicator_1_en",
+  "trust_indicator_1_am",
+  "column_break_trust1",
+  "trust_indicator_2_en",
+  "trust_indicator_2_am",
+  "column_break_trust2",
+  "trust_indicator_3_en",
+  "trust_indicator_3_am",
+  "footer_tab",
+  "footer_enabled",
+  "footer_section",
+  "footer_tagline_en",
+  "footer_tagline_am",
+  "footer_contact_section",
+  "company_email",
+  "company_phone",
+  "column_break_contact",
+  "company_location_en",
+  "company_location_am",
+  "column_break_contact2",
+  "support_hours_en",
+  "support_hours_am",
+  "footer_social_section",
+  "social_links",
+  "footer_links_section",
+  "footer_links",
+  "brand_tab",
+  "brand_colors_section",
+  "brand_primary_color",
+  "brand_secondary_color",
+  "column_break_brand",
+  "brand_accent_gold",
+  "brand_accent_teal",
+  "brand_logos_section",
+  "logo_light",
+  "logo_dark",
+  "column_break_logo",
+  "favicon",
+  "seo_tab",
+  "seo_section",
+  "meta_title_en",
+  "meta_title_am",
+  "column_break_seo",
+  "meta_description_en",
+  "meta_description_am",
+  "seo_images_section",
+  "og_image",
+  "keywords",
+  "cache_tab",
+  "cache_section",
+  "enable_caching",
+  "cache_duration",
+  "column_break_cache",
+  "last_published",
+  "published_by"
+ ],
+ "fields": [
+  {
+   "fieldname": "hero_tab",
+   "fieldtype": "Tab Break",
+   "label": "Hero Section"
+  },
+  {
+   "default": "1",
+   "fieldname": "hero_enabled",
+   "fieldtype": "Check",
+   "label": "Enable Hero Section"
+  },
+  {
+   "fieldname": "hero_section",
+   "fieldtype": "Section Break",
+   "label": "Headlines"
+  },
+  {
+   "fieldname": "hero_eyebrow_en",
+   "fieldtype": "Small Text",
+   "label": "Eyebrow Text (EN)"
+  },
+  {
+   "fieldname": "hero_eyebrow_am",
+   "fieldtype": "Small Text",
+   "label": "Eyebrow Text (AM)"
+  },
+  {
+   "fieldname": "column_break_hero1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "hero_headline_1_en",
+   "fieldtype": "Data",
+   "label": "Headline Part 1 (EN)"
+  },
+  {
+   "fieldname": "hero_headline_1_am",
+   "fieldtype": "Data",
+   "label": "Headline Part 1 (AM)"
+  },
+  {
+   "fieldname": "column_break_hero2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "hero_headline_2_en",
+   "fieldtype": "Data",
+   "label": "Headline Part 2 (EN)"
+  },
+  {
+   "fieldname": "hero_headline_2_am",
+   "fieldtype": "Data",
+   "label": "Headline Part 2 (AM)"
+  },
+  {
+   "fieldname": "hero_content_section",
+   "fieldtype": "Section Break",
+   "label": "Subheadline"
+  },
+  {
+   "fieldname": "hero_subheadline_en",
+   "fieldtype": "Text Editor",
+   "label": "Subheadline (EN)"
+  },
+  {
+   "fieldname": "hero_subheadline_am",
+   "fieldtype": "Text Editor",
+   "label": "Subheadline (AM)"
+  },
+  {
+   "fieldname": "hero_cta_section",
+   "fieldtype": "Section Break",
+   "label": "Call to Action Buttons"
+  },
+  {
+   "fieldname": "hero_cta_primary_en",
+   "fieldtype": "Data",
+   "label": "Primary CTA (EN)"
+  },
+  {
+   "fieldname": "hero_cta_primary_am",
+   "fieldtype": "Data",
+   "label": "Primary CTA (AM)"
+  },
+  {
+   "fieldname": "column_break_cta",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "hero_cta_secondary_en",
+   "fieldtype": "Data",
+   "label": "Secondary CTA (EN)"
+  },
+  {
+   "fieldname": "hero_cta_secondary_am",
+   "fieldtype": "Data",
+   "label": "Secondary CTA (AM)"
+  },
+  {
+   "fieldname": "hero_trust_section",
+   "fieldtype": "Section Break",
+   "label": "Trust Indicators"
+  },
+  {
+   "fieldname": "hero_trust_count",
+   "fieldtype": "Data",
+   "label": "Trust Count (e.g., 10,000+)"
+  },
+  {
+   "fieldname": "hero_trust_label_en",
+   "fieldtype": "Data",
+   "label": "Trust Label (EN)"
+  },
+  {
+   "fieldname": "hero_trust_label_am",
+   "fieldtype": "Data",
+   "label": "Trust Label (AM)"
+  },
+  {
+   "fieldname": "column_break_trust",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "hero_rating",
+   "fieldtype": "Data",
+   "label": "Rating (e.g., 4.9/5)"
+  },
+  {
+   "fieldname": "hero_reviews_count",
+   "fieldtype": "Data",
+   "label": "Reviews Count (e.g., 1,247)"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "hero_carousel_section",
+   "fieldtype": "Section Break",
+   "label": "Carousel Images"
+  },
+  {
+   "fieldname": "hero_carousel_images",
+   "fieldtype": "Table",
+   "label": "Carousel Images",
+   "options": "Landing Page Hero Image"
+  },
+  {
+   "fieldname": "partners_tab",
+   "fieldtype": "Tab Break",
+   "label": "Logo Cloud"
+  },
+  {
+   "default": "1",
+   "fieldname": "partners_enabled",
+   "fieldtype": "Check",
+   "label": "Enable Partners Section"
+  },
+  {
+   "fieldname": "partners_section",
+   "fieldtype": "Section Break",
+   "label": "Section Headers"
+  },
+  {
+   "fieldname": "partners_title_en",
+   "fieldtype": "Data",
+   "label": "Title (EN)"
+  },
+  {
+   "fieldname": "partners_title_am",
+   "fieldtype": "Data",
+   "label": "Title (AM)"
+  },
+  {
+   "fieldname": "column_break_partners",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "partners_subtitle_en",
+   "fieldtype": "Small Text",
+   "label": "Subtitle (EN)"
+  },
+  {
+   "fieldname": "partners_subtitle_am",
+   "fieldtype": "Small Text",
+   "label": "Subtitle (AM)"
+  },
+  {
+   "fieldname": "partners_list_section",
+   "fieldtype": "Section Break",
+   "label": "Partners"
+  },
+  {
+   "fieldname": "partners_list",
+   "fieldtype": "Table",
+   "label": "Partners List",
+   "options": "Landing Page Partner"
+  },
+  {
+   "fieldname": "partners_stats_section",
+   "fieldtype": "Section Break",
+   "label": "Statistics"
+  },
+  {
+   "fieldname": "stat_active_users",
+   "fieldtype": "Data",
+   "label": "Active Users (e.g., 10,000+)"
+  },
+  {
+   "fieldname": "stat_active_users_label_en",
+   "fieldtype": "Data",
+   "label": "Label (EN)"
+  },
+  {
+   "fieldname": "stat_active_users_label_am",
+   "fieldtype": "Data",
+   "label": "Label (AM)"
+  },
+  {
+   "fieldname": "column_break_stat1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "stat_appointments",
+   "fieldtype": "Data",
+   "label": "Appointments (e.g., 500,000+)"
+  },
+  {
+   "fieldname": "stat_appointments_label_en",
+   "fieldtype": "Data",
+   "label": "Label (EN)"
+  },
+  {
+   "fieldname": "stat_appointments_label_am",
+   "fieldtype": "Data",
+   "label": "Label (AM)"
+  },
+  {
+   "fieldname": "column_break_stat2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "stat_uptime",
+   "fieldtype": "Data",
+   "label": "Uptime (e.g., 99.9%)"
+  },
+  {
+   "fieldname": "stat_uptime_label_en",
+   "fieldtype": "Data",
+   "label": "Label (EN)"
+  },
+  {
+   "fieldname": "stat_uptime_label_am",
+   "fieldtype": "Data",
+   "label": "Label (AM)"
+  },
+  {
+   "fieldname": "column_break_stat3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "stat_rating",
+   "fieldtype": "Data",
+   "label": "Rating (e.g., 4.9/5)"
+  },
+  {
+   "fieldname": "stat_rating_label_en",
+   "fieldtype": "Data",
+   "label": "Label (EN)"
+  },
+  {
+   "fieldname": "stat_rating_label_am",
+   "fieldtype": "Data",
+   "label": "Label (AM)"
+  },
+  {
+   "fieldname": "value_prop_tab",
+   "fieldtype": "Tab Break",
+   "label": "Value Proposition"
+  },
+  {
+   "default": "1",
+   "fieldname": "value_prop_enabled",
+   "fieldtype": "Check",
+   "label": "Enable Value Proposition"
+  },
+  {
+   "fieldname": "value_prop_section",
+   "fieldtype": "Section Break",
+   "label": "Section Headers"
+  },
+  {
+   "fieldname": "value_prop_title_en",
+   "fieldtype": "Data",
+   "label": "Title (EN)"
+  },
+  {
+   "fieldname": "value_prop_title_am",
+   "fieldtype": "Data",
+   "label": "Title (AM)"
+  },
+  {
+   "fieldname": "column_break_vp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "value_prop_subtitle_en",
+   "fieldtype": "Small Text",
+   "label": "Subtitle (EN)"
+  },
+  {
+   "fieldname": "value_prop_subtitle_am",
+   "fieldtype": "Small Text",
+   "label": "Subtitle (AM)"
+  },
+  {
+   "fieldname": "value_propositions_section",
+   "fieldtype": "Section Break",
+   "label": "Value Propositions (3 Cards)"
+  },
+  {
+   "fieldname": "value_propositions",
+   "fieldtype": "Table",
+   "label": "Value Propositions",
+   "options": "Landing Page Value Proposition"
+  },
+  {
+   "fieldname": "features_tab",
+   "fieldtype": "Tab Break",
+   "label": "Features"
+  },
+  {
+   "default": "1",
+   "fieldname": "features_enabled",
+   "fieldtype": "Check",
+   "label": "Enable Features Section"
+  },
+  {
+   "fieldname": "features_section",
+   "fieldtype": "Section Break",
+   "label": "Section Headers"
+  },
+  {
+   "fieldname": "features_title_en",
+   "fieldtype": "Data",
+   "label": "Title (EN)"
+  },
+  {
+   "fieldname": "features_title_am",
+   "fieldtype": "Data",
+   "label": "Title (AM)"
+  },
+  {
+   "fieldname": "column_break_feat",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "features_subtitle_en",
+   "fieldtype": "Small Text",
+   "label": "Subtitle (EN)"
+  },
+  {
+   "fieldname": "features_subtitle_am",
+   "fieldtype": "Small Text",
+   "label": "Subtitle (AM)"
+  },
+  {
+   "fieldname": "features_list_section",
+   "fieldtype": "Section Break",
+   "label": "Features List (6 Features)"
+  },
+  {
+   "fieldname": "features_list",
+   "fieldtype": "Table",
+   "label": "Features",
+   "options": "Landing Page Feature"
+  },
+  {
+   "fieldname": "use_cases_tab",
+   "fieldtype": "Tab Break",
+   "label": "Use Cases"
+  },
+  {
+   "default": "1",
+   "fieldname": "use_cases_enabled",
+   "fieldtype": "Check",
+   "label": "Enable Use Cases Section"
+  },
+  {
+   "fieldname": "use_cases_section",
+   "fieldtype": "Section Break",
+   "label": "Section Headers"
+  },
+  {
+   "fieldname": "use_cases_title_en",
+   "fieldtype": "Data",
+   "label": "Title (EN)"
+  },
+  {
+   "fieldname": "use_cases_title_am",
+   "fieldtype": "Data",
+   "label": "Title (AM)"
+  },
+  {
+   "fieldname": "column_break_uc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "use_cases_subtitle_en",
+   "fieldtype": "Small Text",
+   "label": "Subtitle (EN)"
+  },
+  {
+   "fieldname": "use_cases_subtitle_am",
+   "fieldtype": "Small Text",
+   "label": "Subtitle (AM)"
+  },
+  {
+   "fieldname": "use_cases_list_section",
+   "fieldtype": "Section Break",
+   "label": "Use Cases List"
+  },
+  {
+   "fieldname": "use_cases_list",
+   "fieldtype": "Table",
+   "label": "Use Cases",
+   "options": "Landing Page Use Case"
+  },
+  {
+   "fieldname": "how_it_works_tab",
+   "fieldtype": "Tab Break",
+   "label": "How It Works"
+  },
+  {
+   "default": "1",
+   "fieldname": "how_it_works_enabled",
+   "fieldtype": "Check",
+   "label": "Enable How It Works Section"
+  },
+  {
+   "fieldname": "how_it_works_section",
+   "fieldtype": "Section Break",
+   "label": "Section Headers"
+  },
+  {
+   "fieldname": "how_it_works_title_en",
+   "fieldtype": "Data",
+   "label": "Title (EN)"
+  },
+  {
+   "fieldname": "how_it_works_title_am",
+   "fieldtype": "Data",
+   "label": "Title (AM)"
+  },
+  {
+   "fieldname": "column_break_hiw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "how_it_works_subtitle_en",
+   "fieldtype": "Small Text",
+   "label": "Subtitle (EN)"
+  },
+  {
+   "fieldname": "how_it_works_subtitle_am",
+   "fieldtype": "Small Text",
+   "label": "Subtitle (AM)"
+  },
+  {
+   "fieldname": "steps_section",
+   "fieldtype": "Section Break",
+   "label": "Steps (4 Steps)"
+  },
+  {
+   "fieldname": "steps",
+   "fieldtype": "Table",
+   "label": "Steps",
+   "options": "Landing Page Step"
+  },
+  {
+   "fieldname": "pricing_tab",
+   "fieldtype": "Tab Break",
+   "label": "Pricing"
+  },
+  {
+   "default": "1",
+   "fieldname": "pricing_enabled",
+   "fieldtype": "Check",
+   "label": "Enable Pricing Section"
+  },
+  {
+   "fieldname": "pricing_section",
+   "fieldtype": "Section Break",
+   "label": "Section Headers"
+  },
+  {
+   "fieldname": "pricing_title_en",
+   "fieldtype": "Data",
+   "label": "Title (EN)"
+  },
+  {
+   "fieldname": "pricing_title_am",
+   "fieldtype": "Data",
+   "label": "Title (AM)"
+  },
+  {
+   "fieldname": "column_break_pricing",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "pricing_subtitle_en",
+   "fieldtype": "Small Text",
+   "label": "Subtitle (EN)"
+  },
+  {
+   "fieldname": "pricing_subtitle_am",
+   "fieldtype": "Small Text",
+   "label": "Subtitle (AM)"
+  },
+  {
+   "fieldname": "currency_section",
+   "fieldtype": "Section Break",
+   "label": "Currency Settings"
+  },
+  {
+   "default": "ETB",
+   "fieldname": "currency_symbol",
+   "fieldtype": "Data",
+   "label": "Currency Symbol"
+  },
+  {
+   "default": "ETB",
+   "fieldname": "currency_code",
+   "fieldtype": "Data",
+   "label": "Currency Code"
+  },
+  {
+   "fieldname": "pricing_tiers_section",
+   "fieldtype": "Section Break",
+   "label": "Pricing Tiers"
+  },
+  {
+   "fieldname": "pricing_tiers",
+   "fieldtype": "Table",
+   "label": "Pricing Tiers",
+   "options": "Landing Page Pricing Tier"
+  },
+  {
+   "fieldname": "faq_tab",
+   "fieldtype": "Tab Break",
+   "label": "FAQ"
+  },
+  {
+   "default": "1",
+   "fieldname": "faq_enabled",
+   "fieldtype": "Check",
+   "label": "Enable FAQ Section"
+  },
+  {
+   "fieldname": "faq_section",
+   "fieldtype": "Section Break",
+   "label": "Section Headers"
+  },
+  {
+   "fieldname": "faq_title_en",
+   "fieldtype": "Data",
+   "label": "Title (EN)"
+  },
+  {
+   "fieldname": "faq_title_am",
+   "fieldtype": "Data",
+   "label": "Title (AM)"
+  },
+  {
+   "fieldname": "column_break_faq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "faq_subtitle_en",
+   "fieldtype": "Small Text",
+   "label": "Subtitle (EN)"
+  },
+  {
+   "fieldname": "faq_subtitle_am",
+   "fieldtype": "Small Text",
+   "label": "Subtitle (AM)"
+  },
+  {
+   "fieldname": "faq_items_section",
+   "fieldtype": "Section Break",
+   "label": "FAQ Items"
+  },
+  {
+   "fieldname": "faq_items",
+   "fieldtype": "Table",
+   "label": "FAQ Items",
+   "options": "Landing Page FAQ Item"
+  },
+  {
+   "fieldname": "final_cta_tab",
+   "fieldtype": "Tab Break",
+   "label": "Final CTA"
+  },
+  {
+   "default": "1",
+   "fieldname": "final_cta_enabled",
+   "fieldtype": "Check",
+   "label": "Enable Final CTA Section"
+  },
+  {
+   "fieldname": "final_cta_section",
+   "fieldtype": "Section Break",
+   "label": "CTA Content"
+  },
+  {
+   "fieldname": "final_cta_title_en",
+   "fieldtype": "Data",
+   "label": "Title (EN)"
+  },
+  {
+   "fieldname": "final_cta_title_am",
+   "fieldtype": "Data",
+   "label": "Title (AM)"
+  },
+  {
+   "fieldname": "column_break_fcta",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "final_cta_subtitle_en",
+   "fieldtype": "Small Text",
+   "label": "Subtitle (EN)"
+  },
+  {
+   "fieldname": "final_cta_subtitle_am",
+   "fieldtype": "Small Text",
+   "label": "Subtitle (AM)"
+  },
+  {
+   "fieldname": "final_cta_button_section",
+   "fieldtype": "Section Break",
+   "label": "Button"
+  },
+  {
+   "fieldname": "final_cta_button_text_en",
+   "fieldtype": "Data",
+   "label": "Button Text (EN)"
+  },
+  {
+   "fieldname": "final_cta_button_text_am",
+   "fieldtype": "Data",
+   "label": "Button Text (AM)"
+  },
+  {
+   "fieldname": "final_cta_trust_section",
+   "fieldtype": "Section Break",
+   "label": "Trust Indicators"
+  },
+  {
+   "fieldname": "trust_indicator_1_en",
+   "fieldtype": "Data",
+   "label": "Indicator 1 (EN)"
+  },
+  {
+   "fieldname": "trust_indicator_1_am",
+   "fieldtype": "Data",
+   "label": "Indicator 1 (AM)"
+  },
+  {
+   "fieldname": "column_break_trust1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "trust_indicator_2_en",
+   "fieldtype": "Data",
+   "label": "Indicator 2 (EN)"
+  },
+  {
+   "fieldname": "trust_indicator_2_am",
+   "fieldtype": "Data",
+   "label": "Indicator 2 (AM)"
+  },
+  {
+   "fieldname": "column_break_trust2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "trust_indicator_3_en",
+   "fieldtype": "Data",
+   "label": "Indicator 3 (EN)"
+  },
+  {
+   "fieldname": "trust_indicator_3_am",
+   "fieldtype": "Data",
+   "label": "Indicator 3 (AM)"
+  },
+  {
+   "fieldname": "footer_tab",
+   "fieldtype": "Tab Break",
+   "label": "Footer"
+  },
+  {
+   "default": "1",
+   "fieldname": "footer_enabled",
+   "fieldtype": "Check",
+   "label": "Enable Footer"
+  },
+  {
+   "fieldname": "footer_section",
+   "fieldtype": "Section Break",
+   "label": "Footer Content"
+  },
+  {
+   "fieldname": "footer_tagline_en",
+   "fieldtype": "Small Text",
+   "label": "Tagline (EN)"
+  },
+  {
+   "fieldname": "footer_tagline_am",
+   "fieldtype": "Small Text",
+   "label": "Tagline (AM)"
+  },
+  {
+   "fieldname": "footer_contact_section",
+   "fieldtype": "Section Break",
+   "label": "Contact Information"
+  },
+  {
+   "fieldname": "company_email",
+   "fieldtype": "Data",
+   "label": "Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "company_phone",
+   "fieldtype": "Data",
+   "label": "Phone"
+  },
+  {
+   "fieldname": "column_break_contact",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "company_location_en",
+   "fieldtype": "Data",
+   "label": "Location (EN)"
+  },
+  {
+   "fieldname": "company_location_am",
+   "fieldtype": "Data",
+   "label": "Location (AM)"
+  },
+  {
+   "fieldname": "column_break_contact2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "support_hours_en",
+   "fieldtype": "Data",
+   "label": "Support Hours (EN)"
+  },
+  {
+   "fieldname": "support_hours_am",
+   "fieldtype": "Data",
+   "label": "Support Hours (AM)"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "footer_social_section",
+   "fieldtype": "Section Break",
+   "label": "Social Media Links"
+  },
+  {
+   "fieldname": "social_links",
+   "fieldtype": "Table",
+   "label": "Social Links",
+   "options": "Landing Page Social Link"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "footer_links_section",
+   "fieldtype": "Section Break",
+   "label": "Footer Links"
+  },
+  {
+   "fieldname": "footer_links",
+   "fieldtype": "Table",
+   "label": "Footer Links",
+   "options": "Landing Page Footer Link"
+  },
+  {
+   "fieldname": "brand_tab",
+   "fieldtype": "Tab Break",
+   "label": "Brand Settings"
+  },
+  {
+   "description": "Brand colors for the landing page",
+   "fieldname": "brand_colors_section",
+   "fieldtype": "Section Break",
+   "label": "Brand Colors"
+  },
+  {
+   "fieldname": "brand_primary_color",
+   "fieldtype": "Color",
+   "label": "Primary Color (Indigo)"
+  },
+  {
+   "fieldname": "brand_secondary_color",
+   "fieldtype": "Color",
+   "label": "Secondary Color (Emerald)"
+  },
+  {
+   "fieldname": "column_break_brand",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "brand_accent_gold",
+   "fieldtype": "Color",
+   "label": "Accent Gold"
+  },
+  {
+   "fieldname": "brand_accent_teal",
+   "fieldtype": "Color",
+   "label": "Accent Teal"
+  },
+  {
+   "fieldname": "brand_logos_section",
+   "fieldtype": "Section Break",
+   "label": "Logos & Favicon"
+  },
+  {
+   "fieldname": "logo_light",
+   "fieldtype": "Attach Image",
+   "label": "Logo (Light Mode)"
+  },
+  {
+   "fieldname": "logo_dark",
+   "fieldtype": "Attach Image",
+   "label": "Logo (Dark Mode)"
+  },
+  {
+   "fieldname": "column_break_logo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "favicon",
+   "fieldtype": "Attach Image",
+   "label": "Favicon"
+  },
+  {
+   "fieldname": "seo_tab",
+   "fieldtype": "Tab Break",
+   "label": "SEO & Meta"
+  },
+  {
+   "fieldname": "seo_section",
+   "fieldtype": "Section Break",
+   "label": "Meta Tags"
+  },
+  {
+   "fieldname": "meta_title_en",
+   "fieldtype": "Data",
+   "label": "Meta Title (EN)"
+  },
+  {
+   "fieldname": "meta_title_am",
+   "fieldtype": "Data",
+   "label": "Meta Title (AM)"
+  },
+  {
+   "fieldname": "column_break_seo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "meta_description_en",
+   "fieldtype": "Text",
+   "label": "Meta Description (EN)"
+  },
+  {
+   "fieldname": "meta_description_am",
+   "fieldtype": "Text",
+   "label": "Meta Description (AM)"
+  },
+  {
+   "fieldname": "seo_images_section",
+   "fieldtype": "Section Break",
+   "label": "SEO Images"
+  },
+  {
+   "fieldname": "og_image",
+   "fieldtype": "Attach Image",
+   "label": "OG Image (Social Sharing)"
+  },
+  {
+   "description": "Comma separated keywords",
+   "fieldname": "keywords",
+   "fieldtype": "Small Text",
+   "label": "SEO Keywords"
+  },
+  {
+   "fieldname": "cache_tab",
+   "fieldtype": "Tab Break",
+   "label": "Cache Settings"
+  },
+  {
+   "description": "Enable caching for faster page loading",
+   "fieldname": "cache_section",
+   "fieldtype": "Section Break",
+   "label": "Cache Configuration"
+  },
+  {
+   "default": "1",
+   "fieldname": "enable_caching",
+   "fieldtype": "Check",
+   "label": "Enable Caching"
+  },
+  {
+   "default": "3600",
+   "description": "Cache duration in seconds (default: 3600 = 1 hour)",
+   "fieldname": "cache_duration",
+   "fieldtype": "Int",
+   "label": "Cache Duration (seconds)"
+  },
+  {
+   "fieldname": "column_break_cache",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "last_published",
+   "fieldtype": "Datetime",
+   "label": "Last Published",
+   "read_only": 1
+  },
+  {
+   "fieldname": "published_by",
+   "fieldtype": "Link",
+   "label": "Published By",
+   "options": "User",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-11-16 00:12:17.193217",
+ "modified_by": "Administrator",
+ "module": "Scheduler",
+ "name": "Landing Page Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Website Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

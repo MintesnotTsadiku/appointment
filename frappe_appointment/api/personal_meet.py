@@ -18,6 +18,96 @@ def get_meeting_windows(slug):
         "User Appointment Availability", filters={"slug": slug, "enable_scheduling": 1}, fields=["*"]
     )
     if not user_availability:
+        # Graceful fallback: allow EventType-based booking links (from onboarding)
+        # Try to resolve slug as EventType name
+        event_types = frappe.get_all(
+            "EventType",
+            filters={"name": slug},
+            fields=["name", "provider", "description"],
+            limit=1,
+        )
+        if event_types:
+            et = event_types[0]
+            # Find the provider's linked user if available
+            provider_doc = frappe.get_all("Provider", filters={"name": et.get("provider")}, fields=["user", "provider_name"], limit=1)
+            user = provider_doc[0]["user"] if provider_doc and provider_doc[0].get("user") else None
+            full_name = provider_doc[0]["provider_name"] if provider_doc else slug
+            
+            # Try to find User Appointment Availability for this user to get actual durations
+            durations = []
+            if user:
+                user_availability_list = frappe.get_all(
+                    "User Appointment Availability",
+                    filters={"user": user, "enable_scheduling": 1},
+                    fields=["name"],
+                    limit=1
+                )
+                if user_availability_list:
+                    # Found User Appointment Availability - get actual durations
+                    ua_name = user_availability_list[0]["name"]
+                    all_durations = frappe.get_all(
+                        "Appointment Slot Duration",
+                        filters={"parent": ua_name},
+                        fields=["name", "title", "duration"]
+                    )
+                    durations = [
+                        {"id": d["name"], "label": d["title"], "duration": int(d["duration"] / 60)}  # Convert seconds to minutes
+                        for d in all_durations
+                    ]
+            
+            # Fallback: if no durations found, use Service duration
+            if not durations:
+                service_link = frappe.get_value("EventType", et["name"], "service")
+                default_duration = frappe.get_value("Service", service_link, "duration") if service_link else 30
+                # Try to find the actual Appointment Slot Duration record by title
+                if user:
+                    user_availability_list = frappe.get_all(
+                        "User Appointment Availability",
+                        filters={"user": user},
+                        fields=["name"],
+                        limit=1
+                    )
+                    if user_availability_list:
+                        ua_name = user_availability_list[0]["name"]
+                        # Look for duration with matching title
+                        duration_title = f"{int(default_duration)} min"
+                        matching_duration = frappe.get_all(
+                            "Appointment Slot Duration",
+                            filters={"parent": ua_name, "title": duration_title},
+                            fields=["name", "title", "duration"],
+                            limit=1
+                        )
+                        if matching_duration:
+                            d = matching_duration[0]
+                            durations = [{"id": d["name"], "label": d["title"], "duration": int(d["duration"] / 60)}]
+                        else:
+                            # Last resort: use first available duration
+                            all_durations = frappe.get_all(
+                                "Appointment Slot Duration",
+                                filters={"parent": ua_name},
+                                fields=["name", "title", "duration"],
+                                limit=1
+                            )
+                            if all_durations:
+                                d = all_durations[0]
+                                durations = [{"id": d["name"], "label": d["title"], "duration": int(d["duration"] / 60)}]
+            
+            # If still no durations, create a fallback (shouldn't happen if onboarding completed)
+            if not durations:
+                service_link = frappe.get_value("EventType", et["name"], "service")
+                default_duration = frappe.get_value("Service", service_link, "duration") if service_link else 30
+                durations = [{"id": "default", "label": f"{int(default_duration)} min", "duration": int(default_duration or 30)}]
+            
+            return {
+                "full_name": full_name,
+                "profile_pic": None,
+                "banner_image": None,
+                "position": None,
+                "company": None,
+                "meeting_provider": "builtin",
+                "durations": durations,
+            }, 200
+        # Original behavior if nothing found
         return {"error": "No user found"}, 404
     user_availability = user_availability[0]
     user = user_availability.get("user")
@@ -64,31 +154,118 @@ def get_meeting_windows(slug):
 @frappe.whitelist(allow_guest=True)
 @add_response_code
 def get_time_slots(
-    duration_id: str, date: str = None, user_timezone_offset: str = None, start_date: str = None, end_date: str = None
+    duration_id: str, date: str = None, user_timezone_offset: str = None, start_date: str = None, end_date: str = None,
+    organization_id: str = None, service_id: str = None
 ):
+    # Only include debug messages in developer mode
+    include_debug = frappe.conf.developer_mode or frappe.conf.get("developer_mode")
+    debug_messages = [] if include_debug else None
+    if debug_messages is not None:
+        debug_messages.append(f"[1] API called with duration_id={duration_id}, date={date}, user_timezone_offset={user_timezone_offset}")
+    
+    # Validate duration_id is not empty
+    if not duration_id or duration_id.strip() == "":
+        if debug_messages is not None:
+            debug_messages.append("[ERROR] duration_id is required but was empty or missing")
+        response = {"error": "duration_id is required", "debug_messages": debug_messages}
+        frappe.local.response["http_status_code"] = 400
+        return response
+    
+    # Validate date is not in the past (for single date queries)
+    if date:
+        from frappe.utils import get_datetime, now_datetime
+        requested_date = get_datetime(date)
+        current_date = now_datetime().replace(hour=0, minute=0, second=0, microsecond=0)
+        
+        if requested_date.replace(hour=0, minute=0, second=0, microsecond=0) < current_date:
+            if debug_messages is not None:
+                debug_messages.append(f"[ERROR] Requested date {date} is in the past (current date: {current_date})")
+            response = {"error": "Cannot book appointments for past dates", "is_past_date": True}
+            if debug_messages is not None:
+                response["debug_messages"] = debug_messages
+            return response, 400
+    
+    # Check if this is an organization booking
+    if organization_id and service_id:
+        # Multi-provider booking with round-robin
+        return get_multi_provider_time_slots(
+            organization_id, service_id, duration_id, date, user_timezone_offset
+        )
+    
     if not date and not (start_date and end_date):
-        return {"error": "Date is required"}, 400
+        if debug_messages is not None:
+            debug_messages.append("[ERROR] Date is required but not provided")
+        response = {"error": "Date is required"}
+        if debug_messages is not None:
+            response["debug_messages"] = debug_messages
+        return response, 400
 
     if not user_timezone_offset:
-        return {"error": "User timezone offset is required"}, 400
+        if debug_messages is not None:
+            debug_messages.append("[ERROR] User timezone offset is required but not provided")
+        response = {"error": "User timezone offset is required"}
+        if debug_messages is not None:
+            response["debug_messages"] = debug_messages
+        return response, 400
 
-    duration = frappe.get_doc("Appointment Slot Duration", duration_id)
+    # Try to fetch the configured duration; gracefully handle missing records
+    try:
+        duration = frappe.get_doc("Appointment Slot Duration", duration_id)
+        if debug_messages is not None:
+            debug_messages.append(f"[2] Found Appointment Slot Duration: name={duration.name}, title={duration.title}, duration={duration.duration}s, parent={duration.parent}")
+    except Exception as e:
+        if debug_messages is not None:
+            debug_messages.append(f"[ERROR] Failed to get Appointment Slot Duration {duration_id}: {str(e)}")
+        # If duration_id is "default" or doesn't exist, try to find the first available duration
+        # by looking up the User Appointment Availability from the slug in the URL context
+        # For now, return empty - the frontend should use the correct duration_id from get_meeting_windows
+        empty = {
+            "all_available_slots_for_data": [],
+            "dates": [],
+            "duration": None,
+            "starttime": None,
+            "endtime": None,
+            "total_slots": 0,
+            "available_days": [],
+            "user": None,
+            "label": "Default",
+            "rescheduling_allowed": False,
+            "is_invalid_date": False,
+        }
+        if debug_messages is not None:
+            empty["debug_messages"] = debug_messages
+        return empty, 200
 
     user_availability = frappe.get_all(
         "User Appointment Availability", filters={"name": duration.get("parent")}, fields=["*"]
     )
 
     if not user_availability:
-        return {"error": "No user found"}, 404
+        if debug_messages is not None:
+            debug_messages.append(f"[ERROR] No User Appointment Availability found for parent={duration.get('parent')}")
+        response = {"error": "No user found"}
+        if debug_messages is not None:
+            response["debug_messages"] = debug_messages
+        return response, 404
 
     user_availability = user_availability[0]
+    if debug_messages is not None:
+        debug_messages.append(f"[3] Found User Appointment Availability: name={user_availability.get('name')}, user={user_availability.get('user')}, meeting_provider={user_availability.get('meeting_provider')}")
 
     appointment_group_obj = create_dummy_appointment_group(duration, user_availability)
+    if debug_messages is not None:
+        debug_messages.append(f"[4] Created appointment_group_obj: {appointment_group_obj.get('name') if isinstance(appointment_group_obj, dict) else 'N/A'}")
 
     appointment_group = frappe.get_doc(appointment_group_obj)
+    if debug_messages is not None:
+        debug_messages.append(f"[5] Created Appointment Group doc: name={appointment_group.name}, members_count={len(appointment_group.members)}")
+        for i, member in enumerate(appointment_group.members):
+            debug_messages.append(f"[5.{i+1}] Member {i+1}: user={member.user}, is_mandatory={member.is_mandatory}")
 
     if date:
-        data = _get_time_slots_for_day(appointment_group, date, user_timezone_offset)
+        if debug_messages is not None:
+            debug_messages.append(f"[6] Calling _get_time_slots_for_day with date={date}")
+        data = _get_time_slots_for_day(appointment_group, date, user_timezone_offset, debug_messages=debug_messages)
     else:
         data = {
             "all_available_slots_for_data": [],
@@ -108,7 +285,7 @@ def get_time_slots(
             if datetime > enddatetime:
                 break
             _data = _get_time_slots_for_day(
-                appointment_group, date, user_timezone_offset, time_slot_cache_dict=cache_dict
+                appointment_group, date, user_timezone_offset, time_slot_cache_dict=cache_dict, debug_messages=debug_messages
             )
             if _data["is_invalid_date"]:
                 date = _data["next_valid_date"]
@@ -129,13 +306,22 @@ def get_time_slots(
                 date = frappe.utils.add_days(date, 1)
 
     if not data:
-        return None
+        if debug_messages is not None:
+            debug_messages.append("[ERROR] _get_time_slots_for_day returned None or empty data")
+        response = {"error": "No data returned"}
+        if debug_messages is not None:
+            response["debug_messages"] = debug_messages
+        return response, 500
 
     if "appointment_group_id" in data:
         del data["appointment_group_id"]
     data["user"] = user_availability.get("name")
     data["label"] = duration.title
     data["rescheduling_allowed"] = bool(duration.allow_rescheduling)
+    
+    if debug_messages is not None:
+        data["debug_messages"] = debug_messages
+        debug_messages.append(f"[FINAL] Returning data: total_slots={data.get('total_slots_for_day', 0)}, starttime={data.get('starttime')}, endtime={data.get('endtime')}, available_days={data.get('available_days')}")
 
     return data
 
@@ -151,28 +337,91 @@ def book_time_slot(
     user_name: str,
     user_email: str,
     other_participants: str = None,
+    provider_id: str = None,
+    organization_id: str = None,
+    time_format: str = "12h",
     **args,
 ):
-    duration = frappe.get_doc("Appointment Slot Duration", duration_id)
+    # Validate date is not in the past
+    from frappe.utils import get_datetime, now_datetime
+    requested_date = get_datetime(date)
+    current_date = now_datetime().replace(hour=0, minute=0, second=0, microsecond=0)
+    
+    if requested_date.replace(hour=0, minute=0, second=0, microsecond=0) < current_date:
+        return {
+            "error": "Cannot book appointments for past dates",
+            "is_past_date": True
+        }, 400
+    
+    # Handle organization booking with specific provider
+    if organization_id and provider_id:
+        # Verify provider belongs to organization
+        provider = frappe.get_doc("Provider", provider_id)
+        if provider.organization != organization_id:
+            return {"error": "Invalid provider for this organization"}, 400
+        
+        # Get provider's user
+        provider_user = provider.user
+        
+        # Get User Appointment Availability for this provider
+        user_availability = frappe.get_all(
+            "User Appointment Availability",
+            filters={"user": provider_user, "enable_scheduling": 1},
+            fields=["*"],
+            limit=1
+        )
+        
+        if not user_availability:
+            return {"error": "Provider availability not found"}, 404
+        
+        user_availability = user_availability[0]
+    else:
+        # Individual provider booking (existing logic)
+        duration = frappe.get_doc("Appointment Slot Duration", duration_id)
 
-    user_availability = frappe.get_all(
-        "User Appointment Availability", filters={"name": duration.get("parent")}, fields=["*"]
-    )
+        user_availability = frappe.get_all(
+            "User Appointment Availability", filters={"name": duration.get("parent")}, fields=["*"]
+        )
 
-    if not user_availability:
-        return {"error": "No user found"}, 404
+        if not user_availability:
+            return {"error": "No user found"}, 404
 
-    user_availability = user_availability[0]
+        user_availability = user_availability[0]
+    
+    # Get duration if not already fetched
+    if not organization_id:
+        duration = frappe.get_doc("Appointment Slot Duration", duration_id)
+    else:
+        # For organization booking, get duration from provider's availability
+        duration = frappe.get_doc("Appointment Slot Duration", duration_id)
 
     appointment_group_obj = create_dummy_appointment_group(duration, user_availability)
 
     appointment_group = frappe.get_doc(appointment_group_obj)
 
+    # Get the provider's email address from the User doctype
+    provider_user = user_availability.get("user")
+    provider_email = frappe.db.get_value("User", provider_user, "email")
+    
+    # If no email found, fallback to username (but this will cause validation error)
+    # In practice, all Users should have emails, but handle gracefully
+    if not provider_email or "@" not in provider_email:
+        # Try getting from User doc directly
+        try:
+            user_doc = frappe.get_doc("User", provider_user)
+            provider_email = user_doc.email
+        except Exception:
+            provider_email = None
+        
+        # If still no email, use a placeholder format (username@system)
+        if not provider_email or "@" not in provider_email:
+            provider_email = f"{provider_user}@system.local"  # Placeholder email
+
     event_participants = [
         {
             "reference_doctype": "User Appointment Availability",
             "reference_docname": user_availability.get("name"),
-            "email": user_availability.get("user"),
+            "email": provider_email,
         },
         {
             "email": user_email,
@@ -220,6 +469,7 @@ def book_time_slot(
     args["user_calendar"] = user_availability.name
     args["appointment_slot_duration"] = duration.name
     args["user_slug"] = user_availability.slug
+    args["time_format"] = time_format  # Store user's preferred time format
 
     success_message = ""
 
@@ -303,3 +553,504 @@ def get_schedular_link(user):
             for duration in all_durations
         ],
     }
+
+
+# ===================================================================
+# MULTI-PROVIDER / ORGANIZATION BOOKING LOGIC
+# ===================================================================
+
+# Store last assigned provider for round-robin (in-memory cache)
+_last_assigned_provider = {}
+
+def get_service_providers(service_name):
+    """
+    Get all active providers for a service
+    Returns list of Provider documents
+    """
+    # Get Service
+    service = frappe.get_doc("Service", service_name)
+    
+    if not service.organization:
+        # Not an organization service, return empty
+        return []
+    
+    # Get all providers for this organization
+    providers = frappe.get_all(
+        "Provider",
+        filters={
+            "organization": service.organization,
+            "accept_org_bookings": 1,
+            "organization_status": "active"
+        },
+        fields=["name", "provider_name", "user"],
+        order_by="name"
+    )
+    
+    return providers
+
+
+def get_last_assigned_provider(service_name):
+    """Get last assigned provider for round-robin"""
+    return _last_assigned_provider.get(service_name, None)
+
+
+def update_last_assigned_provider(service_name, provider_name):
+    """Update last assigned provider for round-robin"""
+    _last_assigned_provider[service_name] = provider_name
+
+
+@frappe.whitelist(allow_guest=True)
+@add_response_code
+def get_organization_services(org_slug):
+    """
+    Get list of services for an organization (when no specific service is selected)
+    Returns organization info and list of available services
+    """
+    # Get Organization
+    org = frappe.get_all(
+        "Organization",
+        filters={"slug": org_slug, "is_active": 1},
+        fields=["name", "organization_name", "logo", "description"],
+        limit=1
+    )
+    
+    if not org:
+        return {"error": "Organization not found"}, 404
+    
+    org = org[0]
+    
+    # Get all services for this organization
+    services = frappe.get_all(
+        "Service",
+        filters={"organization": org["name"], "is_active": 1},
+        fields=["name", "service_name", "description", "duration", "price"]
+    )
+    
+    # Get EventType for each service to build URLs
+    from frappe_appointment.onboarding import make_slug
+    service_list = []
+    for service in services:
+        event_type = frappe.db.get_value("EventType", {"service": service["name"]}, "name")
+        if event_type:
+            slug = make_slug(event_type)
+            service_list.append({
+                "name": service["service_name"],
+                "description": service.get("description"),
+                "duration": service.get("duration", 30),
+                "price": service.get("price", 0),
+                "url": f"/schedule/org/{org_slug}/{slug}",
+                "slug": slug,
+                "type": "organization"
+            })
+    
+    # Also get individual provider services (nested services)
+    # Get all providers for this organization
+    providers = frappe.get_all(
+        "Provider",
+        filters={"organization": org["name"], "organization_status": "Active"},
+        fields=["name", "provider_name", "user"]
+    )
+    
+    # Get individual provider services (services without organization)
+    for provider in providers:
+        provider_services = frappe.get_all(
+            "Service",
+            filters={"provider": provider["name"], "organization": ["is", "not set"], "is_active": 1},
+            fields=["name", "service_name", "description", "duration", "price"]
+        )
+        for service in provider_services:
+            event_type = frappe.db.get_value("EventType", {"service": service["name"], "provider": provider["name"]}, "name")
+            if event_type:
+                # Get User Appointment Availability slug for individual provider
+                user_avail = frappe.db.get_value("User Appointment Availability", {"user": provider["user"]}, "slug")
+                if user_avail:
+                    slug = make_slug(event_type)
+                    service_list.append({
+                        "name": service["service_name"],
+                        "description": service.get("description"),
+                        "duration": service.get("duration", 30),
+                        "price": service.get("price", 0),
+                        "url": f"/schedule/in/{user_avail}?type={slug}",
+                        "slug": slug,
+                        "type": "individual",
+                        "provider_name": provider.get("provider_name", provider["user"])
+                    })
+    
+    return {
+        "full_name": org["organization_name"],
+        "profile_pic": org.get("logo"),
+        "banner_image": None,
+        "position": None,
+        "company": org["organization_name"],
+        "description": org.get("description"),
+        "is_organization": True,
+        "organization_id": org["name"],
+        "services": service_list
+    }
+
+
+@frappe.whitelist(allow_guest=True)
+@add_response_code
+def get_organization_meeting_windows(org_slug, service_slug):
+    """
+    Get meeting windows for organization booking
+    Returns organization info and available durations
+    """
+    # Get Organization
+    org = frappe.get_all(
+        "Organization",
+        filters={"slug": org_slug, "is_active": 1},
+        fields=["name", "organization_name", "logo"],
+        limit=1
+    )
+    
+    if not org:
+        return {"error": "Organization not found"}, 404
+    
+    org = org[0]
+    
+    # Get EventType/Service
+    # Try to find by name first (in case slug matches name)
+    event_type = frappe.get_all(
+        "EventType",
+        filters={"name": service_slug},
+        fields=["name", "service", "description"],
+        limit=1
+    )
+    
+    # If not found, try to find by matching slug (case-insensitive)
+    if not event_type:
+        # Get all EventTypes and check if any match the slug
+        all_event_types = frappe.get_all(
+            "EventType",
+            fields=["name", "service", "description"]
+        )
+        for et in all_event_types:
+            # Create slug from EventType name and compare
+            from frappe_appointment.onboarding import make_slug
+            et_slug = make_slug(et["name"])
+            if et_slug.lower() == service_slug.lower():
+                event_type = [et]
+                break
+    
+    if not event_type:
+        return {"error": "Service not found"}, 404
+    
+    event_type = event_type[0]
+    
+    # Get Service
+    service = frappe.get_doc("Service", event_type["service"])
+    
+    # Get providers for this service
+    providers = get_service_providers(service.name)
+    
+    if not providers:
+        return {"error": "No providers available"}, 404
+    
+    # Get durations from first provider (all have same durations for org services)
+    first_provider = providers[0]
+    user_availability_list = frappe.get_all(
+        "User Appointment Availability",
+        filters={"user": first_provider["user"], "enable_scheduling": 1},
+        fields=["name"],
+        limit=1
+    )
+    
+    durations = []
+    if user_availability_list:
+        ua_name = user_availability_list[0]["name"]
+        all_durations = frappe.get_all(
+            "Appointment Slot Duration",
+            filters={"parent": ua_name},
+            fields=["name", "title", "duration"]
+        )
+        durations = [
+            {"id": d["name"], "label": d["title"], "duration": int(d["duration"] / 60)}
+            for d in all_durations
+        ]
+    
+    # Fallback: use service duration
+    if not durations:
+        durations = [{
+            "id": "default",
+            "label": f"{int(service.duration)} min",
+            "duration": int(service.duration)
+        }]
+    
+    # Get provider details with their services
+    provider_details = []
+    for provider in providers:
+        # Get provider's services/event types
+        provider_event_types = frappe.get_all(
+            "EventType",
+            filters={"provider": provider["name"]},
+            fields=["name", "event_type_name", "service"]
+        )
+        provider_details.append({
+            "id": provider["name"],
+            "name": provider.get("provider_name", provider["user"]),
+            "user": provider["user"],
+            "services": [et["event_type_name"] for et in provider_event_types]
+        })
+    
+    return {
+        "full_name": org["organization_name"],
+        "profile_pic": org.get("logo"),
+        "banner_image": None,
+        "position": None,
+        "company": org["organization_name"],
+        "meeting_provider": "builtin",
+        "durations": durations,
+        "is_organization": True,
+        "organization_id": org["name"],
+        "service_id": service.name,
+        "provider_count": len(providers),
+        "providers": provider_details
+    }
+
+
+def get_multi_provider_time_slots(org_id, service_id, duration_id, date, user_timezone_offset):
+    """
+    Get time slots from multiple providers with round-robin assignment
+    """
+    # Always collect debug messages for troubleshooting
+    debug_messages = []
+    debug_messages.append(f"[MULTI-START] org_id={org_id}, service_id={service_id}, duration_id={duration_id}, date={date}")
+    
+    # Get service and providers
+    service = frappe.get_doc("Service", service_id)
+    debug_messages.append(f"[MULTI] Service found: {service.name}, service_name={service.service_name}")
+    
+    providers = get_service_providers(service.name)
+    debug_messages.append(f"[MULTI] Found {len(providers) if providers else 0} providers for service")
+    
+    if not providers:
+        debug_messages.append("[MULTI-ERROR] No providers found!")
+        frappe.log_error(message="\n".join(debug_messages), title="Multi-Provider Slots - No Providers")
+        return {
+            "all_available_slots_for_data": [],
+            "date": date,
+            "duration": None,
+            "starttime": None,
+            "endtime": None,
+            "total_slots_for_day": 0,
+            "available_days": [],
+            "is_organization": True,
+            "provider_count": 0,
+            "debug_messages": debug_messages
+        }
+    
+    # Get duration details
+    duration = frappe.get_doc("Appointment Slot Duration", duration_id)
+    debug_messages.append(f"[MULTI] Duration: {duration.duration} minutes")
+    
+    # Collect slots from all providers
+    all_provider_slots = {}
+    
+    for idx, provider in enumerate(providers):
+        debug_messages.append(f"[MULTI-PROVIDER-{idx+1}] Processing provider: {provider['name']} (user={provider['user']})")
+        
+        # Get User Appointment Availability for this provider
+        user_availability = frappe.get_all(
+            "User Appointment Availability",
+            filters={"user": provider["user"], "enable_scheduling": 1},
+            fields=["*"],
+            limit=1
+        )
+        
+        if not user_availability:
+            debug_messages.append(f"[MULTI-PROVIDER-{idx+1}] No User Appointment Availability found")
+            continue
+        
+        user_availability = user_availability[0]
+        debug_messages.append(f"[MULTI-PROVIDER-{idx+1}] User Availability found: {user_availability.name}")
+        
+        # Get slots for this provider
+        appointment_group_obj = create_dummy_appointment_group(duration, user_availability)
+        appointment_group = frappe.get_doc(appointment_group_obj)
+        debug_messages.append(f"[MULTI-PROVIDER-{idx+1}] Appointment group created with {len(appointment_group.members)} members")
+        
+        # Get slots for this date
+        debug_messages.append(f"[MULTI-PROVIDER-{idx+1}] Calling _get_time_slots_for_day...")
+        slots_data = _get_time_slots_for_day(
+            appointment_group, date, user_timezone_offset, debug_messages=debug_messages
+        )
+        debug_messages.append(f"[MULTI-PROVIDER-{idx+1}] _get_time_slots_for_day returned: type={type(slots_data)}, keys={list(slots_data.keys()) if isinstance(slots_data, dict) else 'N/A'}")
+        
+        # Check if slots_data is valid (is a dict and has no error)
+        # _get_time_slots_for_day returns a FLAT dict with all_available_slots_for_data at the top level
+        if slots_data and isinstance(slots_data, dict) and not slots_data.get("error"):
+            debug_messages.append(f"[MULTI-PROVIDER-{idx+1}] slots_data is valid dict without error")
+            
+            # Extract slots directly from slots_data (NOT nested under "today")
+            provider_slots = slots_data.get("all_available_slots_for_data", [])
+            debug_messages.append(f"[MULTI-PROVIDER-{idx+1}] Extracted {len(provider_slots)} slots from slots_data")
+            
+            if len(provider_slots) > 0:
+                debug_messages.append(f"[MULTI-PROVIDER-{idx+1}] First 3 slots: {provider_slots[:3]}")
+                all_provider_slots[provider["name"]] = {
+                    "provider": provider,
+                    "slots": provider_slots,
+                    "data": slots_data  # Use slots_data which has all the data
+                }
+                debug_messages.append(f"[MULTI-PROVIDER-{idx+1}] Added to all_provider_slots")
+            else:
+                debug_messages.append(f"[MULTI-PROVIDER-{idx+1}] No slots to add (empty list)")
+        else:
+            error_msg = slots_data.get("error") if isinstance(slots_data, dict) else "Invalid slots_data format"
+            debug_messages.append(f"[MULTI-PROVIDER-{idx+1}] Failed: {error_msg}")
+    
+    # Merge slots with round-robin assignment
+    debug_messages.append(f"[MULTI-MERGE] Starting merge with {len(all_provider_slots)} providers that have slots")
+    debug_messages.append(f"[MULTI-MERGE] Provider names with slots: {list(all_provider_slots.keys())}")
+    
+    merged_slots = merge_slots_round_robin(all_provider_slots, service.name)
+    debug_messages.append(f"[MULTI-MERGE] Merge completed, result has {len(merged_slots)} slots")
+    
+    if len(merged_slots) > 0:
+        debug_messages.append(f"[MULTI-MERGE] First 3 merged slots: {merged_slots[:3]}")
+    
+    # Get common data from first provider
+    first_data = None
+    for prov_data in all_provider_slots.values():
+        first_data = prov_data["data"]
+        debug_messages.append(f"[MULTI-MERGE] Using first_data from provider, keys: {list(first_data.keys())}")
+        break
+    
+    if not first_data:
+        debug_messages.append("[MULTI-MERGE] No first_data found, using defaults")
+        first_data = {
+            "duration": duration.duration,
+            "available_days": [],
+            "is_invalid_date": False
+        }
+    
+    result = {
+        "all_available_slots_for_data": merged_slots,
+        "date": date,
+        "duration": first_data.get("duration"),
+        "starttime": merged_slots[0]["start_time"] if merged_slots else None,
+        "endtime": merged_slots[-1]["end_time"] if merged_slots else None,
+        "total_slots_for_day": len(merged_slots),
+        "available_days": first_data.get("available_days", []),
+        "is_organization": True,
+        "provider_count": len(providers),
+        "user": org_id,  # Use org_id as user for frontend compatibility
+        "label": duration.title,
+        "rescheduling_allowed": bool(duration.allow_rescheduling),
+        "is_invalid_date": first_data.get("is_invalid_date", False),
+        "debug_messages": debug_messages
+    }
+    
+    debug_messages.append(f"[MULTI-END] Final result: {len(merged_slots)} slots, is_invalid_date={result['is_invalid_date']}")
+    
+    # Log all debug messages
+    frappe.log_error(
+        message="\n".join(debug_messages),
+        title=f"Multi-Provider Time Slots Debug: {service.service_name} on {date}"
+    )
+    
+    return result
+
+
+def merge_slots_round_robin(all_provider_slots, service_name):
+    """
+    Merge slots from multiple providers using round-robin assignment
+    
+    Returns list of slots with assigned provider:
+    [
+        {
+            "start_time": "2025-11-17 09:00:00+00:00",
+            "end_time": "2025-11-17 09:30:00+00:00",
+            "provider_id": "PRV-001",
+            "provider_name": "Dr. Sarah"
+        },
+        ...
+    ]
+    """
+    frappe.logger().info(f"[MERGE] merge_slots_round_robin called with {len(all_provider_slots)} providers")
+    
+    if not all_provider_slots:
+        frappe.logger().info("[MERGE] No provider slots to merge, returning empty list")
+        return []
+    
+    # Get last assigned provider for round-robin
+    last_assigned = get_last_assigned_provider(service_name)
+    
+    # Create time slot buckets: {time_key: [provider1, provider2, ...]}
+    time_slot_map = {}
+    
+    # Collect all unique time slots
+    for provider_name, data in all_provider_slots.items():
+        provider = data["provider"]
+        slots = data["slots"]
+        frappe.logger().info(f"[MERGE] Provider {provider_name} has {len(slots)} slots")
+        
+        for slot in slots:
+            time_key = f"{slot['start_time']}_{slot['end_time']}"
+            if time_key not in time_slot_map:
+                time_slot_map[time_key] = []
+            time_slot_map[time_key].append(provider)
+    
+    frappe.logger().info(f"[MERGE] Created time_slot_map with {len(time_slot_map)} unique time slots")
+    
+    # Sort time slots chronologically
+    sorted_time_keys = sorted(time_slot_map.keys())
+    frappe.logger().info(f"[MERGE] Sorted {len(sorted_time_keys)} time keys")
+    
+    # Get providers list for round-robin
+    providers_list = list(all_provider_slots.keys())
+    frappe.logger().info(f"[MERGE] Providers list for round-robin: {providers_list}")
+    
+    # Find starting index for round-robin
+    current_provider_index = 0
+    if last_assigned and last_assigned in providers_list:
+        current_provider_index = (providers_list.index(last_assigned) + 1) % len(providers_list)
+    frappe.logger().info(f"[MERGE] Starting round-robin from index {current_provider_index}")
+    
+    # Assign providers to slots using round-robin
+    merged_slots = []
+    
+    for time_key in sorted_time_keys:
+        available_providers = time_slot_map[time_key]
+        
+        # Find next available provider using round-robin
+        assigned = False
+        for i in range(len(providers_list)):
+            provider_index = (current_provider_index + i) % len(providers_list)
+            provider_name = providers_list[provider_index]
+            
+            # Check if this provider is available for this slot
+            if any(p["name"] == provider_name for p in available_providers):
+                provider = next(p for p in available_providers if p["name"] == provider_name)
+                
+                start_time, end_time = time_key.split("_")
+                merged_slots.append({
+                    "start_time": start_time,
+                    "end_time": end_time,
+                    "provider_id": provider["name"],
+                    "provider_name": provider["provider_name"]
+                })
+                
+                # Move to next provider for next slot (true round-robin)
+                current_provider_index = (provider_index + 1) % len(providers_list)
+                assigned = True
+                break
+        
+        # If no provider available (shouldn't happen), skip slot
+        if not assigned:
+            continue
+    
+    # Update last assigned provider for this service
+    if merged_slots and providers_list:
+        # Store the provider that was assigned to the last slot
+        last_slot_provider = merged_slots[-1]["provider_id"]
+        update_last_assigned_provider(service_name, last_slot_provider)
+        frappe.logger().info(f"[MERGE] Assigned last provider: {last_slot_provider}")
+    
+    frappe.logger().info(f"[MERGE] Final merged_slots count: {len(merged_slots)}")
+    if merged_slots:
+        frappe.logger().info(f"[MERGE] First merged slot: {merged_slots[0]}")
+        frappe.logger().info(f"[MERGE] Last merged slot: {merged_slots[-1]}")
+    
+    return merged_slots

@@ -1,5 +1,6 @@
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, PlayCircle, CheckCircle, Users } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/button';
 import {
   heroContentVariants,
@@ -7,16 +8,64 @@ import {
   slideInFromRight,
 } from '@/lib/animations';
 import { useTranslation } from '@/lib/i18n';
+import { useLandingPageSettingsContext } from '@/context/landingPageSettings';
 
 const Hero = () => {
   const { t } = useTranslation();
-  // Mock avatar URLs for trusted users
+  const { settings, getText, loading } = useLandingPageSettingsContext();
+
+  // Helper to get content with CMS fallback
+  const getContent = (cmsValue: { en: string; am: string } | undefined, translationKey: string) => {
+    if (settings?.hero && cmsValue) {
+      return getText(cmsValue);
+    }
+    return t(translationKey);
+  };
+  
+  // Professional stock photos of diverse Ethiopian professionals
   const avatars = [
-    'https://api.dicebear.com/7.x/avataaars/svg?seed=1',
-    'https://api.dicebear.com/7.x/avataaars/svg?seed=2',
-    'https://api.dicebear.com/7.x/avataaars/svg?seed=3',
-    'https://api.dicebear.com/7.x/avataaars/svg?seed=4',
+    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=faces',
+    'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=faces',
+    'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&crop=faces',
+    'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&h=150&fit=crop&crop=faces',
   ];
+
+  // Hero carousel images - use CMS data if available, otherwise use defaults
+  const defaultHeroImages = [
+    {
+      url: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=600&fit=crop',
+      alt: 'Calendar scheduling interface',
+      type: 'calendar'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop',
+      alt: 'Dashboard analytics view',
+      type: 'dashboard'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop',
+      alt: 'Appointment booking flow',
+      type: 'booking'
+    },
+  ];
+
+  const heroImages = settings?.hero?.carouselImages && settings.hero.carouselImages.length > 0
+    ? settings.hero.carouselImages.map((img: any) => ({
+        url: img.url,
+        alt: getText(img.altText),
+        type: 'custom'
+      }))
+    : defaultHeroImages;
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
+    }, 5000); // Change image every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [heroImages.length]);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-16 px-4 sm:px-6 lg:px-8">
@@ -64,7 +113,7 @@ const Hero = () => {
               <div className="inline-flex items-center space-x-2 px-4 py-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full border border-brand-indigo/20 shadow-sm">
                 <CheckCircle className="w-4 h-4 text-brand-emerald" />
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  {t('hero.eyebrow')}
+                  {getContent(settings?.hero?.eyebrow, 'hero.eyebrow')}
                 </span>
               </div>
             </motion.div>
@@ -75,11 +124,11 @@ const Hero = () => {
               className="font-heading font-extrabold text-5xl sm:text-6xl lg:text-7xl mb-6 leading-tight"
             >
               <span className="bg-gradient-hero bg-clip-text text-transparent">
-                {t('hero.headline1')}
+                {getContent(settings?.hero?.headline1, 'hero.headline1')}
               </span>
               <br />
               <span className="text-gray-900 dark:text-white">
-                {t('hero.headline2')}
+                {getContent(settings?.hero?.headline2, 'hero.headline2')}
               </span>
             </motion.h1>
 
@@ -88,7 +137,7 @@ const Hero = () => {
               variants={heroItemVariants}
               className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto lg:mx-0"
             >
-              {t('hero.subheadline')}
+              {getContent(settings?.hero?.subheadline, 'hero.subheadline')}
             </motion.p>
 
             {/* CTA Buttons */}
@@ -100,7 +149,7 @@ const Hero = () => {
                 size="lg"
                 className="bg-gradient-hero hover:opacity-90 text-white shadow-lg shadow-indigo-500/50 text-base sm:text-lg px-8 py-6 group"
               >
-                <span>{t('hero.ctaPrimary')}</span>
+                <span>{getContent(settings?.hero?.ctaPrimary, 'hero.ctaPrimary')}</span>
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
               <Button
@@ -109,7 +158,7 @@ const Hero = () => {
                 className="border-2 text-base sm:text-lg px-8 py-6 group"
               >
                 <PlayCircle className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
-                <span>{t('hero.ctaSecondary')}</span>
+                <span>{getContent(settings?.hero?.ctaSecondary, 'hero.ctaSecondary')}</span>
               </Button>
             </motion.div>
 
@@ -140,7 +189,7 @@ const Hero = () => {
                 <div className="ml-3 flex items-center space-x-1">
                   <Users className="w-4 h-4 text-brand-indigo" />
                   <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    10,000+ {t('hero.trustUsers')}
+                    {settings?.hero?.trust?.count || '10,000+'} {getContent(settings?.hero?.trust?.label, 'hero.trustUsers')}
                   </span>
                 </div>
               </div>
@@ -159,7 +208,7 @@ const Hero = () => {
                   ))}
                 </div>
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300 ml-2">
-                  4.9/5 {t('hero.trustRating')} 1,247 {t('hero.trustReviews')}
+                  {settings?.hero?.trust?.rating || '4.9/5'} {t('hero.trustRating')} {settings?.hero?.trust?.reviewsCount || '1,247'} {t('hero.trustReviews')}
                 </span>
               </div>
             </motion.div>
@@ -222,52 +271,48 @@ const Hero = () => {
                 </p>
               </motion.div>
 
-              {/* Main Mockup Container */}
-              <div className="relative bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 border border-gray-200 dark:border-gray-700">
-                {/* Calendar Grid Mockup */}
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between mb-6">
-                    <div>
-                      <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                        November 2024
-                      </h3>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        32 appointments scheduled
+              {/* Main Mockup Container with Carousel */}
+              <div className="relative bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentImageIndex}
+                    initial={{ opacity: 0, x: 100 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -100 }}
+                    transition={{ duration: 0.5 }}
+                    className="relative"
+                  >
+                    <img
+                      src={heroImages[currentImageIndex].url}
+                      alt={heroImages[currentImageIndex].alt}
+                      className="w-full h-[500px] object-cover"
+                    />
+                    {/* Image overlay with gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent" />
+                    
+                    {/* Image label */}
+                    <div className="absolute bottom-4 left-4 px-4 py-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-lg">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">
+                        {heroImages[currentImageIndex].alt}
                       </p>
                     </div>
-                    <div className="w-10 h-10 bg-gradient-hero rounded-lg"></div>
-                  </div>
+                  </motion.div>
+                </AnimatePresence>
 
-                  {/* Mini Calendar */}
-                  <div className="grid grid-cols-7 gap-2 text-center">
-                    {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => (
-                      <div
-                        key={i}
-                        className="text-xs font-semibold text-gray-500 dark:text-gray-400 pb-2"
-                      >
-                        {day}
-                      </div>
-                    ))}
-                    {Array.from({ length: 35 }).map((_, i) => (
-                      <motion.div
-                        key={i}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: i * 0.01 }}
-                        className={`aspect-square rounded-lg flex items-center justify-center text-sm ${
-                          i % 7 === 0 || i % 7 === 6
-                            ? 'text-gray-400 dark:text-gray-600'
-                            : i % 5 === 0
-                            ? 'bg-gradient-hero text-white font-semibold'
-                            : i % 3 === 0
-                            ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
-                            : 'text-gray-700 dark:text-gray-300'
-                        }`}
-                      >
-                        {i + 1}
-                      </motion.div>
-                    ))}
-                  </div>
+                {/* Carousel Navigation Dots */}
+                <div className="absolute bottom-8 right-4 flex space-x-2">
+                  {heroImages.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentImageIndex(index)}
+                      className={`w-2 h-2 rounded-full transition-all ${
+                        index === currentImageIndex
+                          ? 'bg-white w-6'
+                          : 'bg-white/50 hover:bg-white/75'
+                      }`}
+                      aria-label={`Go to slide ${index + 1}`}
+                    />
+                  ))}
                 </div>
               </div>
 

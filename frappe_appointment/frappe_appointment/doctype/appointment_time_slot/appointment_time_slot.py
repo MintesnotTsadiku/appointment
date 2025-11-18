@@ -53,6 +53,10 @@ def get_all_unavailable_google_calendar_slots_for_day(
         if google_calendar_slots == False:  # noqa: E712
             return False
 
+        # Handle None (no Google Calendar configured) as empty list
+        if google_calendar_slots is None:
+            google_calendar_slots = []
+
         cal_slots = cal_slots + google_calendar_slots
 
     cal_slots.sort(key=cmp_to_key(compare_end_time_slots))

@@ -42,8 +42,7 @@
    "fieldname": "google_calendar",
    "fieldtype": "Link",
    "label": "Google Calendar",
-   "options": "Google Calendar",
-   "reqd": 1
+   "options": "Google Calendar"
   },
   {
    "default": "0",
@@ -82,7 +81,7 @@
    "fieldname": "meeting_provider",
    "fieldtype": "Select",
    "label": "Meeting Provider",
-   "options": "None\nCustom\nZoom\nGoogle Meet"
+   "options": "builtin\nNone\nCustom\nZoom\nGoogle Meet"
   },
   {
    "depends_on": "eval:doc.enable_scheduling && doc.meeting_provider===\"Custom\"",

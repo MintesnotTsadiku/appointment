@@ -25,7 +25,20 @@ def insert_event_in_google_calendar_override(
     """
     Insert Events in Google Calendar if sync_with_google_calendar is checked.
     """
-    if not doc.sync_with_google_calendar or not frappe.db.exists("Google Calendar", {"name": doc.google_calendar}):
+    # Skip if sync_with_google_calendar is not enabled
+    if not doc.sync_with_google_calendar:
+        if update_doc:
+            return None
+        return None, {}
+    
+    # Skip if google_calendar is None or empty
+    if not doc.google_calendar:
+        if update_doc:
+            return None
+        return None, {}
+    
+    # Skip if Google Calendar record doesn't exist
+    if not frappe.db.exists("Google Calendar", {"name": doc.google_calendar}):
         if update_doc:
             return None
         return None, {}

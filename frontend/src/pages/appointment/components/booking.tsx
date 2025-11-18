@@ -27,6 +27,7 @@ import {
   cn,
   convertMinutesToTimeFormat,
   convertToMinutes,
+  convertToEthiopianTime,
   getAllSupportedTimeZones,
   getTimeZoneOffsetFromTimeZoneString,
   parseDateString,
@@ -46,15 +47,19 @@ import { CalendarWrapper } from "@/components/calendar-wrapper";
 import { useBookingReducer } from "../reducer";
 
 interface BookingProp {
-  type: string;
-  banner: string;
+  type?: string;
+  banner?: string;
+  duration?: { id: string; label: string; duration: number };
+  isOrganization?: boolean;
+  organizationId?: string;
+  serviceId?: string;
 }
 
-const Booking = ({ type, banner }: BookingProp) => {
+const Booking = ({ type, banner, duration: durationProp, isOrganization, organizationId, serviceId }: BookingProp) => {
   const {
     userInfo,
     timeZone,
-    duration,
+    duration: contextDuration,
     setDuration,
     setTimeZone,
     selectedDate,
@@ -63,6 +68,9 @@ const Booking = ({ type, banner }: BookingProp) => {
     setSelectedSlot,
     meetingId,
   } = useAppContext();
+  
+  // Use duration prop if provided, otherwise use context duration
+  const duration = durationProp || contextDuration;
   const [state, dispatch] = useBookingReducer();
   const containerRef = useRef<HTMLDivElement>(null);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -94,25 +102,122 @@ const Booking = ({ type, banner }: BookingProp) => {
   };
 
   const navigate = useNavigate();
+  const formattedDate = new Intl.DateTimeFormat("en-CA", {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+  }).format(date ? parseDateString(date) : selectedDate);
+  
+  // Use duration prop if provided (for organization bookings), otherwise use type
+  const durationId = durationProp?.id || type;
+  
+  // Always construct params - the hook needs consistent params
+  const apiParams = {
+    duration_id: durationId || "",
+    date: formattedDate,
+    user_timezone_offset: String(
+      getTimeZoneOffsetFromTimeZoneString(timeZone || "Asia/Calcutta")
+    ),
+    ...(isOrganization && organizationId && serviceId ? {
+      organization_id: organizationId,
+      service_id: serviceId,
+    } : {}),
+  };
+
+  // Frontend Debug: Log API call parameters
+  useEffect(() => {
+    console.log("[FRONTEND DEBUG] API Call Parameters:", {
+      endpoint: "frappe_appointment.api.personal_meet.get_time_slots",
+      params: apiParams,
+      type: type,
+      durationId: durationId,
+      selectedDate: selectedDate,
+      date: date,
+      timeZone: timeZone,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [type, formattedDate, timeZone, durationId]);
+  
+  // Always make the API call - it will handle validation on the backend
   const { data, isLoading, error, mutate } = useFrappeGetCall(
     "frappe_appointment.api.personal_meet.get_time_slots",
-    {
-      duration_id: type,
-      date: new Intl.DateTimeFormat("en-CA", {
-        year: "numeric",
-        month: "numeric",
-        day: "numeric",
-      }).format(date ? parseDateString(date) : selectedDate),
-      user_timezone_offset: String(
-        getTimeZoneOffsetFromTimeZoneString(timeZone || "Asia/Calcutta")
-      ),
-    },
+    apiParams,
     undefined,
     {
       revalidateOnFocus: false,
       errorRetryCount: 3,
     }
   );
+
+  // Frontend Debug: Log API response
+  useEffect(() => {
+    if (data) {
+      console.log("========== API RESPONSE ==========");
+      console.log("[FRONTEND] API Response Summary:", {
+        total_slots: data?.message?.total_slots_for_day,
+        all_available_slots_count: data?.message?.all_available_slots_for_data?.length || 0,
+        starttime: data?.message?.starttime,
+        endtime: data?.message?.endtime,
+        available_days: data?.message?.available_days,
+        is_invalid_date: data?.message?.is_invalid_date,
+        is_organization: data?.message?.is_organization,
+        provider_count: data?.message?.provider_count,
+      });
+      
+      console.log("[FRONTEND] Slots Data:", data?.message?.all_available_slots_for_data);
+      
+      // Always log debug messages from backend if they exist
+      if (data?.message?.debug_messages) {
+        console.log("========== BACKEND DEBUG MESSAGES ==========");
+        data.message.debug_messages.forEach((msg: string, idx: number) => {
+          console.log(`${msg}`);
+        });
+        console.log("=========================================");
+      }
+    }
+  }, [data]);
+
+  // Frontend Debug: Log API errors
+  useEffect(() => {
+    if (error) {
+      console.error("[FRONTEND DEBUG] API Error:", {
+        error: error,
+        errorMessage: error?.message,
+        errorResponse: error?.response?.data,
+      });
+    }
+  }, [error]);
+
+  // Helper function to check if a time slot is in the past
+  const isSlotInPast = (slotStartTime: string): boolean => {
+    try {
+      const slotDate = new Date(slotStartTime);
+      const now = new Date();
+      
+      // Get selected date without time
+      const selectedDateObj = date ? parseDateString(date) : selectedDate;
+      const selectedDateOnly = new Date(selectedDateObj);
+      selectedDateOnly.setHours(0, 0, 0, 0);
+      
+      // Get today without time
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      // Only check time if the selected date is today
+      if (selectedDateOnly.getTime() === today.getTime()) {
+        // Compare slot time with current time
+        return slotDate.getTime() < now.getTime();
+      }
+      
+      // For future dates, no slots are in the past
+      // For past dates, calendar already prevents selection
+      return false;
+    } catch (err) {
+      console.error("Error checking if slot is in past:", err);
+      return false;
+    }
+  };
+
   const { call: rescheduleMeeting, loading: rescheduleLoading } =
     useFrappePostCall("frappe_appointment.api.personal_meet.book_time_slot");
 
@@ -194,6 +299,12 @@ const Booking = ({ type, banner }: BookingProp) => {
   }, [data, error, type, navigate, setDuration, dispatch, mutate]);
 
   const formatTimeSlot = (date: Date) => {
+    if (state.timeFormat === "ethiopian") {
+      const { hour, minute, period } = convertToEthiopianTime(date);
+      const minuteStr = minute.toString().padStart(2, "0");
+      return `ሰዓት ${hour}:${minuteStr} ${period}`;
+    }
+    
     return new Intl.DateTimeFormat("en-US", {
       hour: "numeric",
       minute: "numeric",
@@ -303,14 +414,20 @@ const Booking = ({ type, banner }: BookingProp) => {
                   )}
                   <Typography
                     className="hidden md:flex text-blue-600 dark:text-blue-400 mt-1 items-center hover:underline cursor-pointer"
-                    onClick={() => navigate(`/in/${meetingId}`)}
+                    onClick={() => {
+                      if (isOrganization && organizationId) {
+                        navigate(`/schedule/org/${meetingId}`);
+                      } else {
+                        navigate(`/schedule/in/${meetingId}`);
+                      }
+                    }}
                   >
                     <Home className="inline-block w-4 h-4 mr-1" />
                     Home
                   </Typography>
                 </div>
               </div>
-              <div className="max-lg:w-full shrink-0 lg:max-h-[31rem] md:overflow-hidden">
+              <div className="max-lg:w-full shrink-0">
                 {/* Calendar and Availability slots */}
                 <AnimatePresence mode="wait">
                   {!state.showMeetingForm && (
@@ -327,7 +444,7 @@ const Booking = ({ type, banner }: BookingProp) => {
                         duration: 0.2,
                         ease: "easeInOut",
                       }}
-                      className="w-full flex max-lg:flex-col gap-4 md:p-6 pb-5"
+                      className="w-full flex max-lg:flex-col gap-4 md:p-6 pb-8"
                     >
                       {(!state.isMobileView || !state.expanded) && (
                         <div className="flex flex-col w-full lg:w-[25rem] shrink-0">
@@ -349,6 +466,19 @@ const Booking = ({ type, banner }: BookingProp) => {
                             }}
                             setSelectedDate={setSelectedDate}
                             onDayClick={(date) => {
+                              // Validate date is not in the past
+                              const today = new Date();
+                              today.setHours(0, 0, 0, 0);
+                              const clickedDate = new Date(date);
+                              clickedDate.setHours(0, 0, 0, 0);
+                              
+                              if (clickedDate.getTime() < today.getTime()) {
+                                toast.error("Cannot select past dates. Please choose today or a future date.", {
+                                  duration: 3000,
+                                });
+                                return; // Don't process the click
+                              }
+                              
                               setSelectedDate(date);
                               updateDateQuery(date);
                               dispatch({
@@ -370,36 +500,77 @@ const Booking = ({ type, banner }: BookingProp) => {
                             }}
                             className="rounded-xl md:border md:h-96 w-full flex md:px-6 p-0"
                           />
-                          <div className="mt-4 gap-5 flex max-md:flex-col md:justify-between md:items-center">
+                          <div className="mt-4 gap-4 flex flex-col">
+                            {/* Time Format Selection */}
+                            <div className="flex items-center gap-3 flex-wrap">
+                              <Typography className="text-sm text-gray-700 dark:text-slate-300">
+                                Time Format:
+                              </Typography>
+                              <div className="flex gap-2 flex-wrap">
+                                <Button
+                                  variant={state.timeFormat === "12h" ? "default" : "outline"}
+                                  size="sm"
+                                  onClick={() => {
+                                    dispatch({
+                                      type: "SET_TIMEFORMAT",
+                                      payload: "12h",
+                                    });
+                                  }}
+                                  className={cn(
+                                    "h-8 px-3 text-xs",
+                                    state.timeFormat === "12h" 
+                                      ? "bg-blue-500 dark:bg-blue-400 text-white hover:bg-blue-600 dark:hover:bg-blue-500"
+                                      : "text-gray-700 dark:text-slate-300"
+                                  )}
+                                >
+                                  AM/PM
+                                </Button>
+                                <Button
+                                  variant={state.timeFormat === "24h" ? "default" : "outline"}
+                                  size="sm"
+                                  onClick={() => {
+                                    dispatch({
+                                      type: "SET_TIMEFORMAT",
+                                      payload: "24h",
+                                    });
+                                  }}
+                                  className={cn(
+                                    "h-8 px-3 text-xs",
+                                    state.timeFormat === "24h" 
+                                      ? "bg-blue-500 dark:bg-blue-400 text-white hover:bg-blue-600 dark:hover:bg-blue-500"
+                                      : "text-gray-700 dark:text-slate-300"
+                                  )}
+                                >
+                                  24H
+                                </Button>
+                                <Button
+                                  variant={state.timeFormat === "ethiopian" ? "default" : "outline"}
+                                  size="sm"
+                                  onClick={() => {
+                                    dispatch({
+                                      type: "SET_TIMEFORMAT",
+                                      payload: "ethiopian",
+                                    });
+                                  }}
+                                  className={cn(
+                                    "h-8 px-3 text-xs",
+                                    state.timeFormat === "ethiopian" 
+                                      ? "bg-blue-500 dark:bg-blue-400 text-white hover:bg-blue-600 dark:hover:bg-blue-500"
+                                      : "text-gray-700 dark:text-slate-300"
+                                  )}
+                                >
+                                  Local Time
+                                </Button>
+                              </div>
+                            </div>
+                            
                             {/* Timezone */}
-
                             <TimeZoneSelect
                               timeZones={getAllSupportedTimeZones()}
                               setTimeZone={setTimeZone}
                               timeZone={timeZone}
                               disable={rescheduleLoading}
                             />
-
-                            {/* Time Format Toggle */}
-                            <div className="flex items-center gap-2">
-                              <Typography className="text-sm text-gray-700 dark:text-slate-300">
-                                AM/PM
-                              </Typography>
-                              <Switch
-                                disabled={rescheduleLoading}
-                                className="data-[state=checked]:bg-blue-500 dark:data-[state=checked]:bg-blue-400 active:ring-blue-400 focus-visible:ring-blue-400"
-                                checked={state.timeFormat === "24h"}
-                                onCheckedChange={(checked) => {
-                                  dispatch({
-                                    type: "SET_TIMEFORMAT",
-                                    payload: checked ? "24h" : "12h",
-                                  });
-                                }}
-                              />
-                              <Typography className="text-sm text-gray-700 dark:text-slate-300">
-                                24H
-                              </Typography>
-                            </div>
                           </div>
                         </div>
                       )}
@@ -435,7 +606,7 @@ const Booking = ({ type, banner }: BookingProp) => {
                       {/* Available slots */}
                       <div
                         className={cn(
-                          "w-48 shrink-0 max-lg:w-full overflow-hidden space-y-4 max-md:pb-10  transition-all duration-300 ",
+                          "w-48 shrink-0 max-lg:w-full space-y-4 max-md:pb-10 transition-all duration-300 flex flex-col",
                           !state.expanded && "max-lg:hidden",
                           state.showReschedule &&
                             "lg:flex lg:flex-col lg:justify-between"
@@ -449,7 +620,7 @@ const Booking = ({ type, banner }: BookingProp) => {
                         ) : (
                           <div
                             className={cn(
-                              "lg:h-[22rem] overflow-y-auto no-scrollbar space-y-2 transition-transform transform",
+                              "lg:max-h-[28rem] lg:min-h-[22rem] overflow-y-auto no-scrollbar space-y-2 pb-4 transition-transform transform",
                               state.showReschedule && "lg:!mt-0"
                             )}
                             style={{
@@ -461,42 +632,64 @@ const Booking = ({ type, banner }: BookingProp) => {
                             {state.meetingData.all_available_slots_for_data
                               .length > 0 ? (
                               state.meetingData.all_available_slots_for_data.map(
-                                (slot, index) => (
-                                  <Button
-                                    disabled={rescheduleLoading}
-                                    key={index}
-                                    onClick={() => {
-                                      if (reschedule && event_token) {
-                                        dispatch({
-                                          type: "SET_SHOW_RESCHEDULE",
-                                          payload: true,
+                                (slot, index) => {
+                                  const isPast = isSlotInPast(slot.start_time);
+                                  return (
+                                    <Button
+                                      disabled={rescheduleLoading || isPast}
+                                      key={index}
+                                      onClick={() => {
+                                        if (isPast) {
+                                          toast("Cannot book past time slots", {
+                                            duration: 3000,
+                                            classNames: {
+                                              actionButton:
+                                                "group-[.toast]:!bg-red-500 group-[.toast]:hover:!bg-red-300 group-[.toast]:!text-white",
+                                            },
+                                            icon: <CircleAlert className="h-5 w-5 text-red-500" />,
+                                            action: {
+                                              label: "OK",
+                                              onClick: () => toast.dismiss(),
+                                            },
+                                          });
+                                          return;
+                                        }
+                                        if (reschedule && event_token) {
+                                          dispatch({
+                                            type: "SET_SHOW_RESCHEDULE",
+                                            payload: true,
+                                          });
+                                        } else {
+                                          dispatch({
+                                            type: "SET_SHOW_MEETING_FORM",
+                                            payload: true,
+                                          });
+                                        }
+                                        setSelectedSlot({
+                                          start_time: slot.start_time,
+                                          end_time: slot.end_time,
                                         });
-                                      } else {
-                                        dispatch({
-                                          type: "SET_SHOW_MEETING_FORM",
-                                          payload: true,
-                                        });
-                                      }
-                                      setSelectedSlot({
-                                        start_time: slot.start_time,
-                                        end_time: slot.end_time,
-                                      });
-                                    }}
-                                    variant="outline"
-                                    className={cn(
-                                      "w-full font-normal border border-blue-500 dark:border-blue-400 text-blue-500 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-400 ease-in-out duration-200 hover:bg-blue-50 dark:hover:bg-blue-800/20 transition-colors ",
-                                      selectedSlot.start_time ===
-                                        slot.start_time &&
-                                        selectedSlot.end_time ===
-                                          slot.end_time &&
-                                        reschedule &&
-                                        event_token &&
-                                        "bg-blue-500 dark:bg-blue-400 text-white dark:text-background hover:bg-blue-500 dark:hover:bg-blue-400 hover:text-white dark:hover:text-background"
-                                    )}
-                                  >
-                                    {formatTimeSlot(new Date(slot.start_time))}
-                                  </Button>
-                                )
+                                      }}
+                                      variant="outline"
+                                      className={cn(
+                                        "w-full font-normal border ease-in-out duration-200 transition-colors",
+                                        isPast
+                                          ? "border-gray-300 dark:border-gray-600 text-gray-400 dark:text-gray-500 cursor-not-allowed opacity-50"
+                                          : "border-blue-500 dark:border-blue-400 text-blue-500 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-800/20",
+                                        selectedSlot.start_time ===
+                                          slot.start_time &&
+                                          selectedSlot.end_time ===
+                                            slot.end_time &&
+                                          reschedule &&
+                                          event_token &&
+                                          !isPast &&
+                                          "bg-blue-500 dark:bg-blue-400 text-white dark:text-background hover:bg-blue-500 dark:hover:bg-blue-400 hover:text-white dark:hover:text-background"
+                                      )}
+                                    >
+                                      {formatTimeSlot(new Date(slot.start_time))}
+                                    </Button>
+                                  );
+                                }
                               )
                             ) : (
                               <div className="h-full max-md:h-44 w-full flex justify-center items-center">
@@ -548,6 +741,7 @@ const Booking = ({ type, banner }: BookingProp) => {
                       }}
                       durationId={type}
                       isMobileView={state.isMobileView}
+                      timeFormat={state.timeFormat}
                     />
                   )}
                 </AnimatePresence>
@@ -563,7 +757,13 @@ const Booking = ({ type, banner }: BookingProp) => {
           <Button
             type="button"
             className="text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-400 md:hover:bg-blue-50 md:dark:hover:bg-blue-800/10 max-md:px-0 max-md:hover:underline max-md:hover:bg-transparent"
-            onClick={() => navigate(`/in/${meetingId}`)}
+            onClick={() => {
+              if (isOrganization && organizationId) {
+                navigate(`/schedule/org/${meetingId}`);
+              } else {
+                navigate(`/schedule/in/${meetingId}`);
+              }
+            }}
             variant="ghost"
           >
             <ChevronLeft className="w-4 h-4" /> Home
@@ -579,7 +779,14 @@ const Booking = ({ type, banner }: BookingProp) => {
           }
           selectedSlot={selectedSlot}
           onClose={() => {
-            navigate(`/in/${meetingId}`);
+            // Handle navigation based on booking type
+            if (isOrganization && organizationId) {
+              // For organization bookings, meetingId is "orgSlug/serviceSlug"
+              navigate(`/schedule/org/${meetingId}`);
+            } else {
+              // For individual bookings
+              navigate(`/schedule/in/${meetingId}`);
+            }
           }}
           meetingProvider={state.bookingResponse.meeting_provider}
           meetLink={state.bookingResponse.meet_link}

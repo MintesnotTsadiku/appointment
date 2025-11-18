@@ -173,7 +173,8 @@ export const convertMinutesToTimeFormat = (
       typeof minutes === "string" ? parseInt(minutes, 10) : minutes;
       
     if (isNaN(totalMinutes)) {
-      throw new Error("Invalid input: Cannot convert to number");
+      console.warn("Invalid input: Cannot convert to number", minutes);
+      return "";
     }
 
     // If minutes less than 60, return as is with "Minute" suffix
@@ -189,7 +190,47 @@ export const convertMinutesToTimeFormat = (
 
     return `${hoursStr}:${minutesStr} ${useAbbr ? "hr" : "Hour"}`;
   } catch (error) {
-    console.log(error);
+    console.error("Error in convertMinutesToTimeFormat:", error);
     return "";
   }
+};
+
+/**
+ * Convert standard time to Ethiopian time format
+ * Ethiopian time starts at 6 AM (sunrise) as 12:00
+ * 6 AM - 12 PM = ጠዋት (morning)
+ * 12 PM - 6 PM = ከሰዓት (afternoon, "from hour")
+ * 6 PM - 12 AM = ምሽት (evening)
+ * 12 AM - 6 AM = ሌሊት (night)
+ */
+export const convertToEthiopianTime = (date: Date): { hour: number; minute: number; period: string } => {
+  const standardHour = date.getHours();
+  const minute = date.getMinutes();
+  
+  // Ethiopian time calculation
+  let ethiopianHour = standardHour - 6;
+  if (ethiopianHour < 0) {
+    ethiopianHour += 12;
+  }
+  
+  // If ethiopianHour is 0, make it 12 (Ethiopian convention)
+  if (ethiopianHour === 0) {
+    ethiopianHour = 12;
+  } else if (ethiopianHour > 12) {
+    ethiopianHour -= 12;
+  }
+  
+  // Determine period based on standard time
+  let period = "";
+  if (standardHour >= 0 && standardHour < 6) {
+    period = "ሌሊት"; // Night (12 AM - 6 AM)
+  } else if (standardHour >= 6 && standardHour < 12) {
+    period = "ጠዋት"; // Morning (6 AM - 12 PM)
+  } else if (standardHour >= 12 && standardHour < 18) {
+    period = "ከሰዓት"; // Afternoon (12 PM - 6 PM) - literally "from hour"
+  } else {
+    period = "ምሽት"; // Evening (6 PM - 12 AM)
+  }
+  
+  return { hour: ethiopianHour, minute, period };
 };

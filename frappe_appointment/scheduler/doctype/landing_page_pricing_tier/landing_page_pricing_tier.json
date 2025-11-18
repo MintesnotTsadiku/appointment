@@ -1,0 +1,73 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-11-16 00:17:44.333491",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "tier_name_en",
+  "tier_name_am",
+  "monthly_price",
+  "yearly_price",
+  "description_en",
+  "description_am",
+  "is_popular"
+ ],
+ "fields": [
+  {
+   "fieldname": "tier_name_en",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Tier Name (EN)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "tier_name_am",
+   "fieldtype": "Data",
+   "label": "Tier Name (AM)"
+  },
+  {
+   "fieldname": "monthly_price",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Monthly Price"
+  },
+  {
+   "fieldname": "yearly_price",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Yearly Price"
+  },
+  {
+   "fieldname": "description_en",
+   "fieldtype": "Small Text",
+   "label": "Description (EN)"
+  },
+  {
+   "fieldname": "description_am",
+   "fieldtype": "Small Text",
+   "label": "Description (AM)"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_popular",
+   "fieldtype": "Check",
+   "label": "Is Popular"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-11-16 00:17:44.333491",
+ "modified_by": "Administrator",
+ "module": "Scheduler",
+ "name": "Landing Page Pricing Tier",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
