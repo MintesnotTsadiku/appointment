@@ -10,20 +10,22 @@
 export interface EthiopianTime {
   hour: number;
   minute: number;
-  period: 'ከቀን' | 'ከሌሊት'; // Day/Night
+  period: 'ጠዋት' | 'ከሰዓት' | 'ማታ' | 'ለሊት'; // Morning/Day/Evening/Night
   formatted: string;
 }
 
 /**
  * Convert standard time to Ethiopian time
+ * 
+ * Ethiopian time periods:
+ * - ጠዋት (tewat): Before 6 ሰዓት (6 AM - 12 PM standard)
+ * - ከሰዓት (keseat): 6-12 ሰዓት (12 PM - 6 PM standard)
+ * - ማታ (mata): After 12 ሰዓት / Before midnight (6 PM - 12 AM standard)
+ * - ለሊት (lelit): Midnight onwards (12 AM - 6 AM standard)
  */
 export const toEthiopianTime = (date: Date): EthiopianTime => {
   let hour = date.getHours();
   const minute = date.getMinutes();
-  
-  // Determine period (day/night)
-  const isDayTime = hour >= 6 && hour < 18;
-  const period = isDayTime ? 'ከቀን' : 'ከሌሊት';
   
   // Convert hour to Ethiopian time (shift by 6 hours)
   let ethiopianHour = hour - 6;
@@ -31,7 +33,24 @@ export const toEthiopianTime = (date: Date): EthiopianTime => {
   if (ethiopianHour === 0) ethiopianHour = 12;
   if (ethiopianHour > 12) ethiopianHour -= 12;
   
-  const formatted = `ሰዓት ${ethiopianHour}:${minute.toString().padStart(2, '0')} ${period}`;
+  // Determine period based on Ethiopian hour
+  let period: 'ጠዋት' | 'ከሰዓት' | 'ማታ' | 'ለሊት';
+  
+  if (hour >= 6 && hour < 12) {
+    // 6 AM - 12 PM standard = Ethiopian morning (before 6 ሰዓት)
+    period = 'ጠዋት';
+  } else if (hour >= 12 && hour < 18) {
+    // 12 PM - 6 PM standard = Ethiopian day (6-12 ሰዓት)
+    period = 'ከሰዓት';
+  } else if (hour >= 18 && hour < 24) {
+    // 6 PM - 12 AM standard = Ethiopian evening (after 12 ሰዓት)
+    period = 'ማታ';
+  } else {
+    // 12 AM - 6 AM standard = Ethiopian night
+    period = 'ለሊት';
+  }
+  
+  const formatted = `${ethiopianHour}:${minute.toString().padStart(2, '0')} ${period}`;
   
   return {
     hour: ethiopianHour,
@@ -46,7 +65,7 @@ export const toEthiopianTime = (date: Date): EthiopianTime => {
  */
 export const formatEthiopianTime = (date: Date): string => {
   const { hour, minute, period } = toEthiopianTime(date);
-  return `ሰዓት ${hour}:${minute.toString().padStart(2, '0')} ${period}`;
+  return `${hour}:${minute.toString().padStart(2, '0')} ${period}`;
 };
 
 /**
@@ -73,8 +92,16 @@ export const formatDualTime = (
  */
 export const getEthiopianPeriodLabel = (date: Date): string => {
   const hour = date.getHours();
-  const isDayTime = hour >= 6 && hour < 18;
-  return isDayTime ? 'Day' : 'Night';
+  
+  if (hour >= 6 && hour < 12) {
+    return 'Morning'; // ጠዋት
+  } else if (hour >= 12 && hour < 18) {
+    return 'Day'; // ከሰዓት
+  } else if (hour >= 18 && hour < 24) {
+    return 'Evening'; // ማታ
+  } else {
+    return 'Night'; // ለሊት
+  }
 };
 
 /**
@@ -116,7 +143,7 @@ export const formatWithEthiopicNumerals = (date: Date): string => {
   const hourStr = ethiopicNumerals[hour] || hour;
   const minuteStr = minute.toString().padStart(2, '0');
   
-  return `ሰዓት ${hourStr}:${minuteStr} ${period}`;
+  return `${hourStr}:${minuteStr} ${period}`;
 };
 
 /**

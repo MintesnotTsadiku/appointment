@@ -37,7 +37,6 @@ export function TimeSlotsPanel({
           slots,
         },
       ];
-
   // Format time based on user preference
   const formatSlotTime = (timeString: string): string => {
     const date = new Date(timeString);
@@ -61,9 +60,25 @@ export function TimeSlotsPanel({
   // Get slot button styling
   const getSlotButtonClasses = (slot: TimeSlot) => {
     const selected = isSelected(slot);
-    const past = slot.isPast;
+    const past = Boolean(slot.isPast);
+    const booked = Boolean(slot.booked);
+    const available = slot.available !== false;
+    const disabled = past || booked || !available;
 
-    return cn(
+    const hoverClasses =
+      !disabled && !selected
+        ? "hover:border-primary-400 dark:hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:shadow-md hover:scale-[1.02] active:scale-[0.98]"
+        : undefined;
+
+    const selectedClasses = selected
+      ? "border-primary-500 dark:border-primary-400 bg-primary-500 dark:bg-primary-600 text-white dark:text-white shadow-lg scale-[1.02]"
+      : undefined;
+
+    const disabledClasses = disabled
+      ? "opacity-40 cursor-not-allowed hover:border-gray-200 dark:hover:border-gray-700 hover:bg-white dark:hover:bg-gray-800 hover:shadow-none hover:scale-100"
+      : undefined;
+
+    const classes = cn(
       // Base styles
       "relative w-full h-14 md:h-16 rounded-xl font-medium transition-all duration-200",
       "flex items-center justify-between px-4 md:px-5",
@@ -75,35 +90,12 @@ export function TimeSlotsPanel({
       "bg-white dark:bg-gray-800",
       "text-gray-900 dark:text-gray-100",
 
-      // Hover state
-      !past &&
-        !selected && [
-          "hover:border-primary-400 dark:hover:border-primary-500",
-          "hover:bg-primary-50 dark:hover:bg-primary-900/20",
-          "hover:shadow-md",
-          "hover:scale-[1.02]",
-          "active:scale-[0.98]",
-        ],
-
-      // Selected state
-      selected && [
-        "border-primary-500 dark:border-primary-400",
-        "bg-primary-500 dark:bg-primary-600",
-        "text-white dark:text-white",
-        "shadow-lg",
-        "scale-[1.02]",
-      ],
-
-      // Past/disabled state
-      past && [
-        "opacity-40",
-        "cursor-not-allowed",
-        "hover:border-gray-200 dark:hover:border-gray-700",
-        "hover:bg-white dark:hover:bg-gray-800",
-        "hover:shadow-none",
-        "hover:scale-100",
-      ]
+      hoverClasses,
+      selectedClasses,
+      disabledClasses
     );
+
+    return classes;
   };
 
   if (loading) {
@@ -151,16 +143,22 @@ export function TimeSlotsPanel({
 
               {/* Slots Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-3">
-                {group.slots.map((slot) => (
+                {group.slots.map((slot) => {
+                  const past = Boolean(slot.isPast);
+                  const booked = Boolean(slot.booked);
+                  const available = slot.available !== false;
+                  const disabled = past || booked || !available;
+
+                  return (
                   <button
                     key={slot.id}
-                    onClick={() => !slot.isPast && onSlotSelect(slot)}
-                    disabled={slot.isPast || !slot.available}
+                    onClick={() => !disabled && onSlotSelect(slot)}
+                    disabled={disabled}
                     aria-label={`Time slot ${formatSlotTime(slot.start_time)}${
                       slot.provider ? ` with ${slot.provider.name}` : ""
                     }${slot.recommended ? " (Recommended)" : ""}${
                       slot.isPast ? " (Past)" : ""
-                    }`}
+                    }${slot.booked ? " (Booked)" : ""}`}
                     className={getSlotButtonClasses(slot)}
                   >
                     {/* Time Display */}
@@ -200,7 +198,8 @@ export function TimeSlotsPanel({
                       )}
                     </div>
                   </button>
-                ))}
+                  );
+                })}
               </div>
             </div>
           );
@@ -302,4 +301,3 @@ function EmptySlots({ date }: { date: Date }) {
     </div>
   );
 }
-

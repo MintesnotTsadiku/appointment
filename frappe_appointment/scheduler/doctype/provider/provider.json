@@ -23,6 +23,11 @@
   "language",
   "business_type",
   "calendar_preference",
+  "section_break_booking_preferences",
+  "disable_past_slots_by",
+  "column_break_booking_prefs",
+  "minimum_booking_notice",
+  "show_booked_slots",
   "section_break_organization",
   "organization",
   "organization_status",
@@ -36,6 +41,7 @@
   "onboarding_complete",
   "onboarding_current_step",
   "onboarding_completed_at",
+  "onboarding_organization",
   "Section Break-4",
   "locations"
  ],
@@ -136,6 +142,38 @@
    "options": "builtin\ngoogle"
   },
   {
+   "fieldname": "section_break_booking_preferences",
+   "fieldtype": "Section Break",
+   "label": "Booking Preferences",
+   "description": "Configure how your availability and time slots are displayed to customers"
+  },
+  {
+   "fieldname": "disable_past_slots_by",
+   "fieldtype": "Select",
+   "label": "Disable Past Slots By",
+   "options": "Start Time\nEnd Time",
+   "default": "Start Time",
+   "description": "Start Time: Slot disabled once it starts | End Time: Slot disabled only after it ends (more lenient)"
+  },
+  {
+   "fieldname": "column_break_booking_prefs",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "minimum_booking_notice",
+   "fieldtype": "Int",
+   "label": "Minimum Booking Notice (Minutes)",
+   "default": 0,
+   "description": "Minimum time required before a slot starts to allow booking (e.g., 30 = can't book slots starting in next 30 minutes)"
+  },
+  {
+   "fieldname": "show_booked_slots",
+   "fieldtype": "Check",
+   "label": "Show Booked Slots (as disabled)",
+   "default": 1,
+   "description": "Display already booked time slots as disabled rather than hiding them"
+  },
+  {
    "fieldname": "section_break_organization",
    "fieldtype": "Section Break",
    "label": "Organization Settings"
@@ -214,6 +252,13 @@
    "fieldname": "onboarding_completed_at",
    "fieldtype": "Datetime",
    "label": "Onboarding Completed At"
+  },
+  {
+   "fieldname": "onboarding_organization",
+   "fieldtype": "Link",
+   "label": "Selected Onboarding Organization",
+   "options": "Organization",
+   "description": "Organization currently being configured in onboarding"
   },
   {
    "fieldname": "Section Break-4",

@@ -45,6 +45,126 @@ def time_to_str(time_value):
         return str(time_value)
 
 
+def _user_can_manage_organization(user, organization_name):
+    if not organization_name:
+        return False
+    owner_user = frappe.db.get_value("Organization", organization_name, "owner_user")
+    if owner_user == user:
+        return True
+    return bool(frappe.db.exists("Organization Manager", {"parent": organization_name, "user": user}))
+
+
+def _fetch_user_organizations(user):
+    """Return organizations the user can manage (owner or listed manager)."""
+    base_fields = [
+        "name",
+        "organization_name",
+        "organization_type",
+        "slug",
+        "email",
+        "phone",
+        "timezone",
+        "language",
+        "description",
+        "owner_user",
+    ]
+    owner_orgs = frappe.db.get_all(
+        "Organization",
+        filters={"owner_user": user},
+        fields=base_fields,
+        order_by="organization_name asc",
+    )
+    manager_orgs = frappe.db.sql(
+        """
+        select
+            org.name,
+            org.organization_name,
+            org.organization_type,
+            org.slug,
+            org.email,
+            org.phone,
+            org.timezone,
+            org.language,
+            org.description,
+            org.owner_user
+        from `tabOrganization` org
+        inner join `tabOrganization Manager` mgr on mgr.parent = org.name
+        where mgr.user = %s
+        order by org.organization_name asc
+        """,
+        user,
+        as_dict=True,
+    )
+
+    organizations = []
+    seen = set()
+
+    for org in owner_orgs + manager_orgs:
+        if org["name"] in seen:
+            continue
+        seen.add(org["name"])
+        role = "Owner" if org.get("owner_user") == user else "Manager"
+        organizations.append({**org, "role": role})
+
+    return organizations
+
+
+def _resolve_user_organization(user, organization_id=None):
+    """
+    Determine which organization the user is currently configuring.
+    Preference order:
+    1. Explicit organization_id (validated)
+    2. Provider.onboarding_organization (if still accessible)
+    3. First organization the user can manage
+    """
+    if organization_id:
+        if not _user_can_manage_organization(user, organization_id):
+            frappe.throw(_("You do not have access to this organization."))
+        return organization_id
+
+    provider_data = frappe.db.get_value(
+        "Provider", {"user": user}, ["onboarding_organization"], as_dict=True
+    )
+    selected_org = provider_data.get("onboarding_organization") if provider_data else None
+    if selected_org and _user_can_manage_organization(user, selected_org):
+        return selected_org
+
+    orgs = _fetch_user_organizations(user)
+    if orgs:
+        return orgs[0]["name"]
+
+    return None
+
+
+def _get_manageable_providers(user):
+    """Providers created by the user or under organizations they can manage."""
+    provider_fields = ["name", "provider_name", "user", "phone", "organization", "organization_status", "owner"]
+    provider_map = {}
+
+    owner_providers = frappe.db.get_all("Provider", filters={"owner": user}, fields=provider_fields)
+    for prov in owner_providers:
+        provider_map[prov["name"]] = {**prov, "source": "owner"}
+
+    managed_orgs = _fetch_user_organizations(user)
+    org_names = [org["name"] for org in managed_orgs]
+    org_label_map = {org["name"]: org["organization_name"] for org in managed_orgs}
+
+    if org_names:
+        org_providers = frappe.db.get_all(
+            "Provider",
+            filters={"organization": ["in", org_names]},
+            fields=provider_fields,
+        )
+        for prov in org_providers:
+            provider_map[prov["name"]] = {**prov, "source": "organization"}
+
+    providers = list(provider_map.values())
+    for prov in providers:
+        prov["organization_name"] = org_label_map.get(prov.get("organization"))
+
+    return providers
+
+
 @frappe.whitelist()
 def get_progress():
     """
@@ -54,7 +174,12 @@ def get_progress():
     user = frappe.session.user
     
     # Check if Provider exists for this user
-    provider = frappe.db.get_value("Provider", {"user": user}, ["name", "onboarding_complete", "onboarding_current_step", "onboarding_type"], as_dict=True)
+    provider = frappe.db.get_value(
+        "Provider",
+        {"user": user},
+        ["name", "onboarding_complete", "onboarding_current_step", "onboarding_type", "onboarding_organization"],
+        as_dict=True,
+    )
     
     if provider:
         """
@@ -66,6 +191,16 @@ def get_progress():
         """
 
         current_step = provider.onboarding_current_step or 1
+
+        selected_org_summary = None
+        selected_org = provider.get("onboarding_organization")
+        if selected_org:
+            selected_org_summary = frappe.db.get_value(
+                "Organization",
+                selected_org,
+                ["name", "organization_name", "slug"],
+                as_dict=True,
+            )
 
         # Clamp current_step between 1 and 5
         if current_step < 1:
@@ -86,6 +221,7 @@ def get_progress():
                 "onboarding_complete": True,
                 "completed_at": completed_at,
                 "onboarding_type": provider.get("onboarding_type"),
+                "selected_organization": selected_org_summary,
             }
 
         return {
@@ -94,6 +230,7 @@ def get_progress():
             "onboarding_complete": False,
             "completed_at": None,
             "onboarding_type": provider.get("onboarding_type"),
+            "selected_organization": selected_org_summary,
         }
     
     # No Provider exists - start from Step 1
@@ -134,8 +271,12 @@ def set_onboarding_type(onboarding_type):
                 provider.onboarding_current_step = 1
                 provider.onboarding_complete = 0
                 provider.onboarding_completed_at = None
+                provider.onboarding_organization = None
             else:
                 provider.onboarding_type = onboarding_type
+            
+            if onboarding_type != "organization":
+                provider.onboarding_organization = None
             
             provider.save(ignore_permissions=True)
         else:
@@ -152,6 +293,7 @@ def set_onboarding_type(onboarding_type):
                 provider.provider_name = user
             provider.onboarding_type = onboarding_type
             provider.onboarding_current_step = 1
+            provider.onboarding_organization = None
             provider.insert(ignore_permissions=True)
         
         frappe.db.commit()
@@ -700,24 +842,132 @@ def get_booking_url():
 # ===================================================================
 
 @frappe.whitelist()
-def save_organization_profile(organization_name, organization_type, email, phone, timezone="Africa/Addis_Ababa", language="en", description=""):
+def get_user_organizations():
     """
-    Step 1: Save organization profile
-    Creates/updates Organization record for current user
+    Get list of organizations accessible by current user (owner or manager)
+    Used for organization selection dropdown in onboarding
     """
     user = frappe.session.user
     
     try:
-        # Get existing Organization for this user (owner_user)
-        org_name = frappe.db.get_value("Organization", {"owner_user": user}, "name")
+        # Get organizations where user is owner
+        owner_orgs = frappe.db.get_all(
+            "Organization",
+            filters={"owner_user": user},
+            fields=["name", "organization_name", "organization_type", "email", "phone", "timezone", "language", "description", "slug"],
+            order_by="modified desc"
+        )
         
-        if org_name:
-            # Update existing
-            org = frappe.get_doc("Organization", org_name)
+        # Get organizations where user is a manager
+        manager_orgs = frappe.db.sql("""
+            SELECT DISTINCT o.name, o.organization_name, o.organization_type, o.email, 
+                   o.phone, o.timezone, o.language, o.description, o.slug
+            FROM `tabOrganization` o
+            INNER JOIN `tabOrganization Manager` om ON om.parent = o.name
+            WHERE om.user = %s
+            ORDER BY o.modified desc
+        """, (user,), as_dict=True)
+        
+        # Combine and deduplicate
+        all_orgs = {org.name: org for org in owner_orgs}
+        for org in manager_orgs:
+            if org.name not in all_orgs:
+                all_orgs[org.name] = org
+        
+        frappe.response["message"] = {
+            "success": True,
+            "organizations": list(all_orgs.values())
+        }
+    except Exception as e:
+        frappe.log_error(str(e), "Organization Onboarding: Get User Organizations Error")
+        frappe.response["message"] = {
+            "success": False,
+            "error": str(e),
+            "organizations": []
+        }
+
+
+@frappe.whitelist()
+def get_organization_profile(organization_id):
+    """
+    Get full details of a specific organization
+    Used to populate form when editing existing organization
+    """
+    user = frappe.session.user
+    
+    try:
+        # Check if user has access (owner or manager)
+        org = frappe.get_doc("Organization", organization_id)
+        
+        # Check ownership
+        is_owner = org.owner_user == user
+        
+        # Check manager access
+        is_manager = False
+        for manager in org.managers:
+            if manager.user == user:
+                is_manager = True
+                break
+        
+        if not (is_owner or is_manager):
+            frappe.throw(_("You do not have access to this organization"))
+        
+        frappe.response["message"] = {
+            "success": True,
+            "organization": {
+                "name": org.name,
+                "organization_name": org.organization_name,
+                "organization_type": org.organization_type,
+                "email": org.email,
+                "phone": org.phone,
+                "timezone": org.timezone,
+                "language": org.language,
+                "description": org.description,
+                "slug": org.slug,
+                "is_owner": is_owner
+            }
+        }
+    except Exception as e:
+        frappe.log_error(str(e), "Organization Onboarding: Get Organization Profile Error")
+        frappe.response["message"] = {
+            "success": False,
+            "error": str(e)
+        }
+
+
+@frappe.whitelist()
+def save_organization_profile(organization_name, organization_type, email, phone, timezone="Africa/Addis_Ababa", language="en", description="", organization_id=None):
+    """
+    Step 1: Save organization profile
+    Creates new or updates existing Organization record
+    
+    Args:
+        organization_id: Optional. If provided, updates existing org (must have access)
+    """
+    user = frappe.session.user
+    
+    try:
+        if organization_id:
+            # Update existing organization
+            org = frappe.get_doc("Organization", organization_id)
+            
+            # Verify access (owner or manager)
+            is_owner = org.owner_user == user
+            is_manager = any(m.user == user for m in org.managers)
+            
+            if not (is_owner or is_manager):
+                frappe.throw(_("You do not have permission to edit this organization"))
         else:
-            # Create new
-            org = frappe.new_doc("Organization")
-            org.owner_user = user
+            # Check if user already has an organization (for auto-select on return)
+            existing_org = frappe.db.get_value("Organization", {"owner_user": user}, "name")
+            
+            if existing_org:
+                # Update existing
+                org = frappe.get_doc("Organization", existing_org)
+            else:
+                # Create new
+                org = frappe.new_doc("Organization")
+                org.owner_user = user
         
         # Update fields
         org.organization_name = organization_name
@@ -738,12 +988,15 @@ def save_organization_profile(organization_name, organization_type, email, phone
         else:
             org.save(ignore_permissions=True)
         
-        # Also update the Provider record to bump onboarding_current_step to 2
+        # Update Provider record to store selected organization and bump step
         provider_name = frappe.db.get_value("Provider", {"user": user}, "name")
         if provider_name:
             provider = frappe.get_doc("Provider", provider_name)
             provider.onboarding_current_step = 2
+            provider.organization = org.name  # Store selected org in provider
             provider.save(ignore_permissions=True)
+        
+        frappe.db.commit()
         
         frappe.response["message"] = {
             "success": True,
@@ -759,23 +1012,73 @@ def save_organization_profile(organization_name, organization_type, email, phone
 
 
 @frappe.whitelist()
-def add_organization_provider(provider_name, email, phone="", specialization="", invite_existing=False):
+def search_user_providers():
     """
-    Step 2: Add provider to organization
-    Creates Provider record and links to Organization
+    Search for providers that current user can link to organization
+    Returns providers owned by the user or accessible to them
     """
     user = frappe.session.user
     
     try:
-        # Get Organization for this user
-        org_name = frappe.db.get_value("Organization", {"owner_user": user}, "name")
+        # Get providers where user is the linked user
+        providers = frappe.db.get_all(
+            "Provider",
+            filters={"user": user},
+            fields=["name", "provider_name", "full_name", "email", "phone", "organization", "organization_status"],
+            order_by="modified desc"
+        )
+        
+        frappe.response["message"] = {
+            "success": True,
+            "providers": providers
+        }
+    except Exception as e:
+        frappe.log_error(str(e), "Organization Onboarding: Search User Providers Error")
+        frappe.response["message"] = {
+            "success": False,
+            "error": str(e),
+            "providers": []
+        }
+
+
+@frappe.whitelist()
+def add_organization_provider(provider_name, email, phone="", specialization="", invite_existing=False, organization_id=None, existing_provider_id=None):
+    """
+    Step 2: Add provider to organization
+    Creates new Provider or links existing Provider to Organization
+    
+    Args:
+        organization_id: Optional. Specific org to add to (defaults to provider's stored selection)
+        existing_provider_id: Optional. If provided with invite_existing=True, links this provider
+    """
+    user = frappe.session.user
+    
+    try:
+        # Determine which organization to use
+        if organization_id:
+            org_name = organization_id
+        else:
+            # Get from Provider's stored selection or fallback to owner lookup
+            provider_rec = frappe.db.get_value("Provider", {"user": user}, ["organization"], as_dict=True)
+            if provider_rec and provider_rec.organization:
+                org_name = provider_rec.organization
+            else:
+                org_name = frappe.db.get_value("Organization", {"owner_user": user}, "name")
+        
         if not org_name:
             frappe.throw(_("Organization not found. Please complete Step 1 first."))
         
-        # Check if user exists
-        user_exists = frappe.db.exists("User", email)
-        
-        if invite_existing and user_exists:
+        # Check if linking an existing provider by ID
+        if existing_provider_id and invite_existing:
+            # Link specific existing provider to this organization
+            provider = frappe.get_doc("Provider", existing_provider_id)
+            provider.organization = org_name
+            provider.organization_status = "Active"
+            provider.accept_org_bookings = 1
+            provider.save(ignore_permissions=True)
+        elif invite_existing:
+            # Legacy flow: check if user exists and create/link provider
+            user_exists = frappe.db.exists("User", email)
             # Check if they have a Provider record
             provider_doc_name = frappe.db.get_value("Provider", {"user": email}, "name")
             
@@ -845,15 +1148,27 @@ def add_organization_provider(provider_name, email, phone="", specialization="",
 
 
 @frappe.whitelist()
-def get_organization_providers():
+def get_organization_providers(organization_id=None):
     """
     Step 2: Get list of providers for the organization
+    
+    Args:
+        organization_id: Optional. Specific org to get providers for (defaults to provider's selection)
     """
     user = frappe.session.user
     
     try:
-        # Get Organization for this user
-        org_name = frappe.db.get_value("Organization", {"owner_user": user}, "name")
+        # Determine which organization to query
+        if organization_id:
+            org_name = organization_id
+        else:
+            # Get from Provider's stored selection or fallback to owner lookup
+            provider_rec = frappe.db.get_value("Provider", {"user": user}, ["organization"], as_dict=True)
+            if provider_rec and provider_rec.organization:
+                org_name = provider_rec.organization
+            else:
+                org_name = frappe.db.get_value("Organization", {"owner_user": user}, "name")
+        
         if not org_name:
             frappe.throw(_("Organization not found"))
         

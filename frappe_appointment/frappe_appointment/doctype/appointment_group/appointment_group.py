@@ -95,21 +95,11 @@ def _get_time_slots_for_day(
 
         time_slots_today_object = all_time_slots_global_object["today"]
 
-        current_time = utc_to_given_time_zone(datetime.datetime.now(), user_timezone_offset)
-
-        filtered_slots = []
-
-        for slot in user_time_slots:
-            start_time = utc_to_given_time_zone(slot["start_time"], user_timezone_offset)
-            end_time = utc_to_given_time_zone(slot["end_time"], user_timezone_offset)
-
-            if current_time.date() == end_time.date() and (start_time < current_time and end_time < current_time):
-                continue
-
-            filtered_slots.append(slot)
-
-        time_slots_today_object["all_available_slots_for_data"] = filtered_slots
-        time_slots_today_object["total_slots_for_day"] = len(filtered_slots)
+        # DON'T filter past slots - let frontend handle past/disabled state
+        # This ensures users can see the full day's schedule including booked/past slots
+        # (Previously filtered out slots where end_time < current_time)
+        time_slots_today_object["all_available_slots_for_data"] = user_time_slots
+        time_slots_today_object["total_slots_for_day"] = len(user_time_slots)
 
         return time_slots_today_object
     except GoogleBadRequest as e:

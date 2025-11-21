@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from '@/components/select';
 import { ArrowLeft, Briefcase } from 'lucide-react';
+import { StepLayout } from './StepLayout';
 
 interface Step4OrgServiceProps {
   onNext: () => void;
@@ -70,45 +71,37 @@ const Step4OrgService = ({ onNext, onBack }: Step4OrgServiceProps) => {
         price: price ? parseFloat(price) : 0,
         description,
         provider_assignment: providerAssignment,
-        providers: ['all'], // For now, assign to all providers
+        providers: ['all'],
       });
 
-      // Check if the API returned an error
       if (result?.message?.success === false) {
-        setErrors({
-          submit: result?.message?.error || 'Failed to create service. Please try again.',
-        });
+        setErrors({ submit: result?.message?.error || 'Failed to create service. Please try again.' });
         return;
       }
 
-      // Only proceed if successful
       onNext();
     } catch (error: any) {
-      console.error('Failed to create service:', error);
-      setErrors({
-        submit: error?.message || error?.exception || 'Failed to create service. Please try again.',
-      });
+      setErrors({ submit: error?.message || 'Failed to create service. Please try again.' });
     }
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
-          <Briefcase className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+    <StepLayout
+      icon={Briefcase}
+      title="Create Service"
+      description="Define a service your organization offers"
+      footer={
+        <div className="flex items-center justify-between">
+          <Button variant="ghost" onClick={onBack}>
+            <ArrowLeft className="h-4 w-4 mr-2" /> Back
+          </Button>
+          <Button onClick={handleSubmit} disabled={loading}>
+            {loading ? 'Creating...' : 'Next: Get Booking Links'}
+          </Button>
         </div>
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Create Service
-          </h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Define a service your organization offers
-          </p>
-        </div>
-      </div>
-
+      }
+    >
       <div className="space-y-6">
-        {/* Service Name */}
         <div className="space-y-2">
           <Label htmlFor="serviceName">
             Service Name <span className="text-red-500">*</span>
@@ -129,14 +122,13 @@ const Step4OrgService = ({ onNext, onBack }: Step4OrgServiceProps) => {
           )}
         </div>
 
-        {/* Duration & Price (side by side) */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="duration">
               Duration <span className="text-red-500">*</span>
             </Label>
             <Select value={duration} onValueChange={setDuration}>
-              <SelectTrigger className={errors.duration ? 'border-red-500' : ''}>
+              <SelectTrigger className={errors.duration ? 'border-red-500' : 'bg-white dark:bg-gray-950'}>
                 <SelectValue placeholder="Select duration" />
               </SelectTrigger>
               <SelectContent>
@@ -153,9 +145,7 @@ const Step4OrgService = ({ onNext, onBack }: Step4OrgServiceProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="price">
-              Price (ETB, Optional)
-            </Label>
+            <Label htmlFor="price">Price (ETB, Optional)</Label>
             <Input
               id="price"
               type="number"
@@ -168,13 +158,10 @@ const Step4OrgService = ({ onNext, onBack }: Step4OrgServiceProps) => {
           </div>
         </div>
 
-        {/* Provider Assignment */}
         <div className="space-y-2">
-          <Label htmlFor="providerAssignment">
-            Provider Assignment
-          </Label>
+          <Label htmlFor="providerAssignment">Provider Assignment</Label>
           <Select value={providerAssignment} onValueChange={setProviderAssignment}>
-            <SelectTrigger>
+            <SelectTrigger className="bg-white dark:bg-gray-950">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -186,20 +173,14 @@ const Step4OrgService = ({ onNext, onBack }: Step4OrgServiceProps) => {
             </SelectContent>
           </Select>
           <p className="text-xs text-gray-500 dark:text-gray-400">
-            {providerAssignment === 'round_robin' && 
-              'Bookings will be automatically distributed fairly across all providers'}
-            {providerAssignment === 'customer_choice' && 
-              'Customers will choose their preferred provider'}
-            {providerAssignment === 'all' && 
-              'All providers will be available for this service'}
+            {providerAssignment === 'round_robin' && 'Bookings will be automatically distributed fairly across providers.'}
+            {providerAssignment === 'customer_choice' && 'Customers will choose their preferred provider.'}
+            {providerAssignment === 'all' && 'All providers will be available for this service.'}
           </p>
         </div>
 
-        {/* Description */}
         <div className="space-y-2">
-          <Label htmlFor="description">
-            Description (Optional)
-          </Label>
+          <Label htmlFor="description">Description (Optional)</Label>
           <Textarea
             id="description"
             placeholder="Brief description of the service"
@@ -209,41 +190,18 @@ const Step4OrgService = ({ onNext, onBack }: Step4OrgServiceProps) => {
           />
         </div>
 
-        {/* Info Box */}
-        <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-          <p className="text-sm text-blue-700 dark:text-blue-300">
-            <strong>Note:</strong> You can add more services later from your dashboard.
-          </p>
+        <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-sm text-blue-700 dark:text-blue-300">
+          <strong>Tip:</strong> You can add more services later from your dashboard.
         </div>
 
-        {/* Error Message */}
         {errors.submit && (
           <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
             <p className="text-sm text-red-600 dark:text-red-400">{errors.submit}</p>
           </div>
         )}
-
-        {/* Navigation Buttons */}
-        <div className="flex justify-between pt-4">
-          <Button
-            variant="outline"
-            onClick={onBack}
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back
-          </Button>
-          <Button
-            onClick={handleSubmit}
-            disabled={loading}
-          >
-            {loading ? 'Creating...' : 'Next: Get Booking Links'}
-          </Button>
-        </div>
       </div>
-    </div>
+    </StepLayout>
   );
 };
 
 export default Step4OrgService;
-
-

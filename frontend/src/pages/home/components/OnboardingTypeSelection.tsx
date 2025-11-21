@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { Building2, User, Users, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/button';
@@ -7,160 +6,100 @@ interface OnboardingTypeSelectionProps {
   onSelect: (type: 'individual' | 'organization') => void;
 }
 
-export const OnboardingTypeSelection: React.FC<OnboardingTypeSelectionProps> = ({ onSelect }) => {
+const gradientBackground =
+  "min-h-screen bg-[radial-gradient(circle_at_top,_#f5f7ff,_#ffffff_45%,_#ffffff)] dark:bg-[radial-gradient(circle_at_top,_#020617,_#0f172a_45%,_#020617)]";
+
+const Card = ({
+  title,
+  description,
+  bullets,
+  icon,
+  onClick,
+}: {
+  title: string;
+  description: string;
+  bullets: string[];
+  icon: React.ReactNode;
+  onClick: () => void;
+}) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5 }}
+    className="bg-white dark:bg-gray-900/80 border border-gray-200 dark:border-gray-800 rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all"
+  >
+    <div className="flex items-center gap-4">
+      <div className="h-12 w-12 rounded-2xl bg-primary-50 dark:bg-primary-900/30 text-primary-600 flex items-center justify-center">
+        {icon}
+      </div>
+      <div>
+        <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">{title}</h3>
+        <p className="text-sm text-gray-600 dark:text-gray-300">{description}</p>
+      </div>
+    </div>
+    <ul className="mt-6 space-y-3 text-sm text-gray-600 dark:text-gray-300">
+      {bullets.map((bullet) => (
+        <li key={bullet} className="flex items-start gap-2">
+          <span className="text-primary-500">•</span>
+          <span>{bullet}</span>
+        </li>
+      ))}
+    </ul>
+    <Button onClick={onClick} className="w-full mt-6">
+      Continue
+      <ArrowRight className="ml-2 h-4 w-4" />
+    </Button>
+  </motion.div>
+);
+
+export const OnboardingTypeSelection = ({ onSelect }: OnboardingTypeSelectionProps) => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 p-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-4xl"
-      >
-        <div className="text-center mb-12">
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="flex justify-center mb-6"
-          >
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-xl">
-              <Building2 className="w-8 h-8 text-white" />
-            </div>
-          </motion.div>
-          
-          <motion.h1
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="text-4xl font-bold text-slate-900 dark:text-white mb-4"
-          >
+    <div className={gradientBackground}>
+      <div className="max-w-5xl mx-auto px-4 py-12 space-y-10">
+        <div className="text-center space-y-4">
+          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-primary-50 text-primary-700">
+            <Building2 className="h-5 w-5" />
             Welcome to Ethiopian Scheduler
-          </motion.h1>
-          
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto"
-          >
-            Let's get you set up. First, tell us how you'll be using the platform.
-          </motion.p>
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">
+            Choose how you want to get started
+          </h1>
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            Pick the setup path that fits your workflow. You can switch anytime after onboarding.
+          </p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
-          {/* Individual Provider Card */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.5 }}
-          >
-            <div className="h-full bg-white dark:bg-slate-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border-2 border-slate-200 dark:border-slate-700 hover:border-blue-500 group p-6">
-              <div className="space-y-4">
-                <div className="w-14 h-14 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <User className="w-7 h-7 text-blue-600 dark:text-blue-400" />
-                </div>
-                <h3 className="text-2xl font-semibold text-slate-900 dark:text-white">Individual Provider</h3>
-                <p className="text-base text-slate-600 dark:text-slate-400">
-                  I'm a solo practitioner managing my own appointments
-                </p>
-              </div>
-              
-              <div className="space-y-4 mt-6">
-                <ul className="space-y-3 text-sm text-slate-600 dark:text-slate-400">
-                  <li className="flex items-start">
-                    <span className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-1.5 mr-2 flex-shrink-0" />
-                    <span>Personal booking page with custom URL</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-1.5 mr-2 flex-shrink-0" />
-                    <span>Manage your own calendar and availability</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-1.5 mr-2 flex-shrink-0" />
-                    <span>Direct client bookings</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-1.5 mr-2 flex-shrink-0" />
-                    <span>Optional: Invite assistants to help manage</span>
-                  </li>
-                </ul>
-                
-                <Button
-                  onClick={() => onSelect('individual')}
-                  className="w-full mt-6"
-                >
-                  Continue as Individual
-                  <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Organization Card */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.6 }}
-          >
-            <div className="h-full bg-white dark:bg-slate-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border-2 border-slate-200 dark:border-slate-700 hover:border-indigo-500 group p-6">
-              <div className="space-y-4">
-                <div className="w-14 h-14 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Users className="w-7 h-7 text-indigo-600 dark:text-indigo-400" />
-                </div>
-                <h3 className="text-2xl font-semibold text-slate-900 dark:text-white">Organization</h3>
-                <p className="text-base text-slate-600 dark:text-slate-400">
-                  I'm managing a business with multiple providers
-                </p>
-              </div>
-              
-              <div className="space-y-4 mt-6">
-                <ul className="space-y-3 text-sm text-slate-600 dark:text-slate-400">
-                  <li className="flex items-start">
-                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 mt-1.5 mr-2 flex-shrink-0" />
-                    <span>Centralized business booking page</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 mt-1.5 mr-2 flex-shrink-0" />
-                    <span>Add and manage multiple providers</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 mt-1.5 mr-2 flex-shrink-0" />
-                    <span>Smart provider assignment (customer preference or round-robin)</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 mt-1.5 mr-2 flex-shrink-0" />
-                    <span>Aggregate analytics and reporting</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 mt-1.5 mr-2 flex-shrink-0" />
-                    <span>Front desk and manager roles</span>
-                  </li>
-                </ul>
-                
-                <Button
-                  onClick={() => onSelect('organization')}
-                  className="w-full mt-6"
-                >
-                  Continue as Organization
-                  <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
-              </div>
-            </div>
-          </motion.div>
+          <Card
+            title="Individual Provider"
+            description="I'm a solo practitioner managing my own appointments"
+            bullets={[
+              'Personal booking page with custom URL',
+              'Manage your own calendar and availability',
+              'Direct client bookings',
+              'Invite assistants if needed',
+            ]}
+            icon={<User className="h-6 w-6" />}
+            onClick={() => onSelect('individual')}
+          />
+          <Card
+            title="Organization"
+            description="I'm managing a business with multiple providers"
+            bullets={[
+              'Centralized business booking page',
+              'Add and manage multiple providers',
+              'Smart provider assignment',
+              'Aggregated analytics and reporting',
+            ]}
+            icon={<Users className="h-6 w-6" />}
+            onClick={() => onSelect('organization')}
+          />
         </div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.7 }}
-          className="text-center mt-8"
-        >
-          <p className="text-sm text-slate-500 dark:text-slate-400">
-            Don't worry, you can always change this later or add organizations to your account
-          </p>
-        </motion.div>
-      </motion.div>
+        <p className="text-center text-sm text-gray-500 dark:text-gray-400">
+          Don’t worry, you can always change this later or add organizations to your account.
+        </p>
+      </div>
     </div>
   );
 };
-

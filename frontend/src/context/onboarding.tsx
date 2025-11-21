@@ -1,13 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useFrappeGetCall, useFrappePostCall, useFrappeAuth } from 'frappe-react-sdk';
-
-interface OnboardingProgress {
-  current_step: number;
-  completed_steps: number[];
-  onboarding_complete: boolean;
-  completed_at?: string;
-  onboarding_type?: 'individual' | 'organization' | null;
-}
+import type { OnboardingProgress } from './onboarding/types';
 
 interface OnboardingContextType {
   progress: OnboardingProgress | null;
@@ -150,4 +143,3 @@ export const useOnboarding = () => {
   }
   return context;
 };
-

@@ -11,6 +11,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/select';
+import { StepLayout } from './StepLayout';
+import { SearchableSelect } from './SearchableSelect';
+import { User } from 'lucide-react';
 
 interface Step1ProfileProps {
   onNext: () => void;
@@ -77,7 +80,11 @@ const Step1Profile = ({ onNext }: Step1ProfileProps) => {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">
+    <StepLayout
+      icon={User}
+      title="Business Profile"
+      description="Tell us about your business"
+    >
       <div className="space-y-6">
         {/* Business Name */}
         <div className="space-y-2">
@@ -105,18 +112,16 @@ const Step1Profile = ({ onNext }: Step1ProfileProps) => {
           <Label htmlFor="businessType">
             Business Type <span className="text-red-500">*</span>
           </Label>
-          <Select value={businessType} onValueChange={setBusinessType}>
-            <SelectTrigger className={errors.businessType ? 'border-red-500' : ''}>
-              <SelectValue placeholder="Select business type" />
-            </SelectTrigger>
-            <SelectContent>
-              {businessTypes.map((type) => (
-                <SelectItem key={type.value} value={type.value}>
-                  {type.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <SearchableSelect
+            value={businessType}
+            onChange={(value) => {
+              setBusinessType(value);
+              if (errors.businessType) setErrors({ ...errors, businessType: '' });
+            }}
+            options={businessTypes}
+            placeholder="Search business type"
+            emptyMessage="No business types found"
+          />
           {errors.businessType && (
             <p className="text-sm text-red-500">{errors.businessType}</p>
           )}
@@ -128,7 +133,7 @@ const Step1Profile = ({ onNext }: Step1ProfileProps) => {
             Timezone
           </Label>
           <Select value={timezone} onValueChange={setTimezone}>
-            <SelectTrigger>
+            <SelectTrigger className="bg-white dark:bg-gray-950">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -149,7 +154,7 @@ const Step1Profile = ({ onNext }: Step1ProfileProps) => {
             Preferred Language
           </Label>
           <Select value={language} onValueChange={setLanguage}>
-            <SelectTrigger>
+            <SelectTrigger className="bg-white dark:bg-gray-950">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -170,32 +175,12 @@ const Step1Profile = ({ onNext }: Step1ProfileProps) => {
         )}
 
         {/* Next Button */}
-        <Button
-          onClick={handleSubmit}
-          disabled={loading}
-          className="w-full bg-gradient-hero hover:opacity-90 text-white text-lg py-6"
-        >
-          {loading ? (
-            <span className="flex items-center justify-center">
-              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Saving...
-            </span>
-          ) : (
-            <span className="flex items-center justify-center">
-              Continue
-              <svg className="w-5 h-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </span>
-          )}
+        <Button onClick={handleSubmit} disabled={loading} className="w-full sm:w-auto px-6">
+          {loading ? 'Saving...' : 'Next: Connect Calendar'}
         </Button>
       </div>
-    </div>
+    </StepLayout>
   );
 };
 
 export default Step1Profile;
-

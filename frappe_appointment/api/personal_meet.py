@@ -315,6 +315,25 @@ def get_time_slots(
 
     if "appointment_group_id" in data:
         del data["appointment_group_id"]
+    
+    # Mark booked slots (for single-provider bookings) - don't filter them out
+    if "all_available_slots_for_data" in data and data["all_available_slots_for_data"]:
+        original_count = len(data["all_available_slots_for_data"])
+        data["all_available_slots_for_data"] = mark_booked_slots(
+            data["all_available_slots_for_data"], 
+            debug_messages
+        )
+        marked_count = len(data["all_available_slots_for_data"])
+        available_count = len([s for s in data["all_available_slots_for_data"] if not s.get("booked", False)])
+        booked_count = len([s for s in data["all_available_slots_for_data"] if s.get("booked", False)])
+        
+        if debug_messages is not None:
+            debug_messages.append(f"[MARK-SINGLE] Marked single-provider slots: {marked_count} total ({available_count} available, {booked_count} booked)")
+        
+        # Add counts to response
+        data["available_slots_count"] = available_count
+        data["booked_slots_count"] = booked_count
+    
     data["user"] = user_availability.get("name")
     data["label"] = duration.title
     data["rescheduling_allowed"] = bool(duration.allow_rescheduling)
@@ -809,6 +828,167 @@ def get_organization_meeting_windows(org_slug, service_slug):
     }
 
 
+def get_booking_configuration(organization_id=None, provider_id=None):
+    """
+    Get booking configuration with hierarchy: Organization > Provider > System Default
+    
+    Returns:
+        dict: Configuration with keys: disable_past_slots_by, minimum_booking_notice, show_booked_slots
+    """
+    # System defaults
+    config = {
+        "disable_past_slots_by": "start_time",  # "start_time" or "end_time"
+        "minimum_booking_notice": 0,  # minutes
+        "show_booked_slots": True,
+    }
+    
+    # Try to get provider config
+    if provider_id:
+        provider = frappe.get_all(
+            "Provider",
+            filters={"name": provider_id},
+            fields=["disable_past_slots_by", "minimum_booking_notice", "show_booked_slots"],
+            limit=1
+        )
+        if provider:
+            provider = provider[0]
+            # Apply provider settings
+            if provider.get("disable_past_slots_by"):
+                config["disable_past_slots_by"] = "start_time" if provider["disable_past_slots_by"] == "Start Time" else "end_time"
+            if provider.get("minimum_booking_notice") is not None:
+                config["minimum_booking_notice"] = provider["minimum_booking_notice"]
+            if provider.get("show_booked_slots") is not None:
+                config["show_booked_slots"] = bool(provider["show_booked_slots"])
+    
+    # Try to get organization config (overrides provider)
+    if organization_id:
+        org = frappe.get_all(
+            "Organization",
+            filters={"name": organization_id},
+            fields=["override_provider_booking_settings", "disable_past_slots_by", "minimum_booking_notice", "show_booked_slots"],
+            limit=1
+        )
+        if org and org[0].get("override_provider_booking_settings"):
+            org = org[0]
+            # Organization overrides all
+            if org.get("disable_past_slots_by"):
+                config["disable_past_slots_by"] = "start_time" if org["disable_past_slots_by"] == "Start Time" else "end_time"
+            if org.get("minimum_booking_notice") is not None:
+                config["minimum_booking_notice"] = org["minimum_booking_notice"]
+            if org.get("show_booked_slots") is not None:
+                config["show_booked_slots"] = bool(org["show_booked_slots"])
+    
+    return config
+
+
+def mark_booked_slots(slots, debug_messages=None):
+    """
+    Mark slots that already have confirmed events as booked
+    
+    Instead of filtering out booked slots, we mark them with booked=True
+    so the UI can show them as disabled (better UX - users see full schedule)
+    
+    Args:
+        slots: List of slot dictionaries with start_time, end_time, provider_id (optional)
+        debug_messages: Optional list to append debug info
+    
+    Returns:
+        List of all slots with booked flag set appropriately
+    """
+    if debug_messages is None:
+        debug_messages = []
+    
+    if not slots:
+        return []
+    
+    marked_slots = []
+    booked_count = 0
+    
+    if debug_messages is not None:
+        debug_messages.append(f"[MARK-START] Checking {len(slots)} slots for existing bookings")
+    
+    # Determine system timezone once so we can normalize comparisons
+    system_timezone = frappe.db.get_single_value("System Settings", "time_zone") or "UTC"
+    try:
+        site_tz = pytz.timezone(system_timezone)
+    except pytz.UnknownTimeZoneError:
+        site_tz = pytz.UTC
+        if debug_messages is not None:
+            debug_messages.append(f"[MARK-TZ] Unknown timezone '{system_timezone}', defaulting to UTC")
+
+    def build_time_variants(start: str, end: str):
+        """Return tuples of (start, end) timestamps to try when matching events."""
+        start_dt = frappe.utils.get_datetime(start)
+        end_dt = frappe.utils.get_datetime(end)
+        variants = [(start_dt.replace(tzinfo=None), end_dt.replace(tzinfo=None))]
+
+        # If slot carries tz info (UTC), also compare using site timezone naive timestamps
+        if start_dt.tzinfo is not None:
+            local_start = start_dt.astimezone(site_tz).replace(tzinfo=None)
+            local_end = end_dt.astimezone(site_tz).replace(tzinfo=None)
+            if (local_start, local_end) not in variants:
+                variants.append((local_start, local_end))
+        return variants
+
+    for i, slot in enumerate(slots):
+        # Check if there's an existing event at this time
+        time_variants = build_time_variants(slot["start_time"], slot["end_time"])
+
+        # Log details for 9:00 AM slot specifically
+        slot_time_str = str(slot["start_time"])
+        is_9am_slot = "09:00:00" in slot_time_str
+
+        if debug_messages is not None and (i == 0 or is_9am_slot):
+            debug_messages.append(f"[MARK-CHECK] Slot #{i}: {slot['start_time']} to {slot['end_time']}, Provider: {slot.get('provider_name', 'N/A')}")
+
+        existing_events = []
+        matched_variant = None
+        for start_variant, end_variant in time_variants:
+            event_filters = {
+                "starts_on": start_variant,
+                "ends_on": end_variant,
+                "status": ["in", ["Open", "Confirmed"]],
+            }
+
+            existing_events = frappe.get_all(
+                "Event",
+                filters=event_filters,
+                fields=["name", "status", "starts_on", "ends_on"],
+                limit=1
+            )
+            if existing_events:
+                matched_variant = (start_variant, end_variant)
+                break
+        
+        # Mark slot as booked if event exists
+        if existing_events:
+            slot["booked"] = True
+            slot["available"] = False
+            if debug_messages is not None:
+                variant_label = "UTC" if matched_variant and matched_variant == time_variants[0] else "LOCAL"
+                debug_messages.append(
+                    f"[MARK-BOOKED] Slot {slot['start_time']} ({slot.get('provider_name', 'N/A')}) "
+                    f"-> Event: {existing_events[0]['name']}, Status: {existing_events[0]['status']} (matched {variant_label})"
+                )
+            booked_count += 1
+        else:
+            slot["booked"] = False
+            slot["available"] = True
+            # Log 9:00 AM if not booked
+            if debug_messages is not None and is_9am_slot:
+                debug_messages.append(f"[MARK-AVAILABLE] Slot {slot['start_time']} ({slot.get('provider_name', 'N/A')}) -> No events found, marking as available")
+        
+        marked_slots.append(slot)
+    
+    if debug_messages is not None:
+        debug_messages.append(f"[MARK-END] Result: {len(slots)} total, {len(slots) - booked_count} available, {booked_count} booked")
+        if booked_count > 0:
+            booked_list = [f"{s['start_time']} ({s.get('provider_name', 'N/A')})" for s in marked_slots if s.get("booked")]
+            debug_messages.append(f"[MARK-BOOKED-LIST] All booked slots: {', '.join(booked_list)}")
+    
+    return marked_slots
+
+
 def get_multi_provider_time_slots(org_id, service_id, duration_id, date, user_timezone_offset):
     """
     Get time slots from multiple providers with round-robin assignment
@@ -826,7 +1006,6 @@ def get_multi_provider_time_slots(org_id, service_id, duration_id, date, user_ti
     
     if not providers:
         debug_messages.append("[MULTI-ERROR] No providers found!")
-        frappe.log_error(message="\n".join(debug_messages), title="Multi-Provider Slots - No Providers")
         return {
             "all_available_slots_for_data": [],
             "date": date,
@@ -907,8 +1086,14 @@ def get_multi_provider_time_slots(org_id, service_id, duration_id, date, user_ti
     merged_slots = merge_slots_round_robin(all_provider_slots, service.name)
     debug_messages.append(f"[MULTI-MERGE] Merge completed, result has {len(merged_slots)} slots")
     
-    if len(merged_slots) > 0:
-        debug_messages.append(f"[MULTI-MERGE] First 3 merged slots: {merged_slots[:3]}")
+    # Mark booked slots (don't filter them out - show as disabled in UI)
+    marked_slots = mark_booked_slots(merged_slots, debug_messages)
+    available_count = len([s for s in marked_slots if not s.get("booked", False)])
+    booked_count = len([s for s in marked_slots if s.get("booked", False)])
+    debug_messages.append(f"[MULTI-MERGE] After marking: {available_count} available, {booked_count} booked (total: {len(marked_slots)})")
+    
+    if len(marked_slots) > 0:
+        debug_messages.append(f"[MULTI-MERGE] First 3 slots: {marked_slots[:3]}")
     
     # Get common data from first provider
     first_data = None
@@ -925,13 +1110,19 @@ def get_multi_provider_time_slots(org_id, service_id, duration_id, date, user_ti
             "is_invalid_date": False
         }
     
+    # Get booking configuration (Organization settings override Provider settings)
+    booking_config = get_booking_configuration(organization_id=org_id)
+    debug_messages.append(f"[MULTI-CONFIG] Booking configuration: {booking_config}")
+    
     result = {
-        "all_available_slots_for_data": merged_slots,
+        "all_available_slots_for_data": marked_slots,
         "date": date,
         "duration": first_data.get("duration"),
-        "starttime": merged_slots[0]["start_time"] if merged_slots else None,
-        "endtime": merged_slots[-1]["end_time"] if merged_slots else None,
-        "total_slots_for_day": len(merged_slots),
+        "starttime": marked_slots[0]["start_time"] if marked_slots else None,
+        "endtime": marked_slots[-1]["end_time"] if marked_slots else None,
+        "total_slots_for_day": len(marked_slots),
+        "available_slots_count": available_count,  # Number of bookable slots
+        "booked_slots_count": booked_count,  # Number of booked slots
         "available_days": first_data.get("available_days", []),
         "is_organization": True,
         "provider_count": len(providers),
@@ -939,16 +1130,11 @@ def get_multi_provider_time_slots(org_id, service_id, duration_id, date, user_ti
         "label": duration.title,
         "rescheduling_allowed": bool(duration.allow_rescheduling),
         "is_invalid_date": first_data.get("is_invalid_date", False),
+        "booking_config": booking_config,  # Configuration for frontend
         "debug_messages": debug_messages
     }
     
-    debug_messages.append(f"[MULTI-END] Final result: {len(merged_slots)} slots, is_invalid_date={result['is_invalid_date']}")
-    
-    # Log all debug messages
-    frappe.log_error(
-        message="\n".join(debug_messages),
-        title=f"Multi-Provider Time Slots Debug: {service.service_name} on {date}"
-    )
+    debug_messages.append(f"[MULTI-END] Final result: {len(marked_slots)} total slots ({available_count} available, {booked_count} booked), is_invalid_date={result['is_invalid_date']}")
     
     return result
 

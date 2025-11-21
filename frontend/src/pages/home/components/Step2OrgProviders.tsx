@@ -3,25 +3,30 @@ import { useFrappePostCall, useFrappeGetCall } from 'frappe-react-sdk';
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
 import { Label } from '@/components/label';
-import { Card } from '@/components/card';
-import { ArrowLeft, Plus, Users, Trash2, Mail, Phone } from 'lucide-react';
+import { StepLayout } from './StepLayout';
+import { ArrowLeft, Plus, Users, Mail, Phone, Link as LinkIcon } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/select';
+import type { Provider, Organization } from '@/context/onboarding/types';
+import { useOnboarding } from '@/context/onboarding';
 
 interface Step2OrgProvidersProps {
   onNext: () => void;
   onBack: () => void;
 }
 
-interface Provider {
-  name: string;
-  provider_name: string;
-  user: string;
-  phone: string;
-  organization_status: string;
-}
-
 const Step2OrgProviders = ({ onNext, onBack }: Step2OrgProvidersProps) => {
+  const { progress } = useOnboarding();
+  const [selectedOrgId, setSelectedOrgId] = useState<string | null>(null);
   const [providers, setProviders] = useState<Provider[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [isLinkingMode, setIsLinkingMode] = useState(false);
+  const [selectedProviderId, setSelectedProviderId] = useState<string>('');
   const [providerName, setProviderName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -32,12 +37,35 @@ const Step2OrgProviders = ({ onNext, onBack }: Step2OrgProvidersProps) => {
   const { call: addProvider, loading: adding } = useFrappePostCall('frappe_appointment.onboarding.add_organization_provider');
   const { data: providersData, mutate: refreshProviders, isLoading: loadingProviders } = useFrappeGetCall<{ success: boolean; providers: Provider[] }>(
     'frappe_appointment.onboarding.get_organization_providers',
-    undefined,
-    undefined,
+    selectedOrgId ? { organization_id: selectedOrgId } : undefined,
+    `org-providers-${selectedOrgId}`,
     {
       revalidateOnFocus: false,
     }
   );
+  
+  // Get list of organizations for selection
+  const { data: orgsData } = useFrappeGetCall<{ success: boolean; organizations: Organization[] }>(
+    'frappe_appointment.onboarding.get_user_organizations'
+  );
+  
+  // Get available providers to link
+  const { data: availableProvidersData } = useFrappeGetCall<{ success: boolean; providers: Provider[] }>(
+    'frappe_appointment.onboarding.search_user_providers'
+  );
+  
+  const organizations = orgsData?.message?.organizations || orgsData?.organizations || [];
+  const availableProviders = availableProvidersData?.message?.providers || availableProvidersData?.providers || [];
+  
+  // Filter out providers already in this organization
+  const linkableProviders = availableProviders.filter(p => p.organization !== selectedOrgId);
+
+  // Set selected organization from context on mount
+  useEffect(() => {
+    if (progress?.selected_organization?.id) {
+      setSelectedOrgId(progress.selected_organization.id);
+    }
+  }, [progress]);
 
   useEffect(() => {
     if (providersData?.message?.providers) {
@@ -66,6 +94,37 @@ const Step2OrgProviders = ({ onNext, onBack }: Step2OrgProvidersProps) => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const handleLinkExistingProvider = async () => {
+    if (!selectedProviderId) {
+      setErrors({ submit: 'Please select a provider to link' });
+      return;
+    }
+
+    try {
+      const result = await addProvider({
+        existing_provider_id: selectedProviderId,
+        invite_existing: true,
+        organization_id: selectedOrgId,
+        provider_name: '', // Not needed for linking
+        email: '', // Not needed for linking
+      });
+
+      if (result?.message?.success !== false) {
+        const provider = availableProviders.find(p => p.name === selectedProviderId);
+        setSuccessMessage(`${provider?.provider_name || 'Provider'} has been linked successfully!`);
+        setSelectedProviderId('');
+        setIsLinkingMode(false);
+        setErrors({});
+        await refreshProviders();
+        setTimeout(() => setSuccessMessage(''), 3000);
+      } else {
+        setErrors({ submit: result?.message?.error || 'Failed to link provider. Please try again.' });
+      }
+    } catch (error: any) {
+      setErrors({ submit: error?.message || 'Failed to link provider. Please try again.' });
+    }
+  };
+
   const handleAddProvider = async () => {
     if (!validate()) {
       return;
@@ -78,151 +137,188 @@ const Step2OrgProviders = ({ onNext, onBack }: Step2OrgProvidersProps) => {
         phone,
         specialization,
         invite_existing: false,
+        organization_id: selectedOrgId,
       });
 
-      // Check if successful
       if (result?.message?.success !== false) {
-        // Show success message
-        const addedName = result?.message?.provider_name || providerName;
-        setSuccessMessage(`${addedName} has been added successfully!`);
-        
-        // Clear form
+        setSuccessMessage(`${result?.message?.provider_name || providerName} has been added successfully!`);
         setProviderName('');
         setEmail('');
         setPhone('');
         setSpecialization('');
         setShowAddForm(false);
         setErrors({});
-
-        // Refresh providers list - force revalidation
         await refreshProviders();
-        
-        // Also manually update the list if refresh doesn't work immediately
-        // This ensures the UI updates right away
-        setTimeout(async () => {
-          await refreshProviders();
-        }, 100);
-        
-        // Clear success message after 3 seconds
-        setTimeout(() => {
-          setSuccessMessage('');
-        }, 3000);
+        setTimeout(() => setSuccessMessage(''), 3000);
       } else {
-        setErrors({
-          submit: result?.message?.error || 'Failed to add provider. Please try again.',
-        });
+        setErrors({ submit: result?.message?.error || 'Failed to add provider. Please try again.' });
       }
     } catch (error: any) {
-      console.error('Failed to add provider:', error);
-      setErrors({
-        submit: error?.message || 'Failed to add provider. Please try again.',
-      });
+      setErrors({ submit: error?.message || 'Failed to add provider. Please try again.' });
     }
   };
 
   const handleNext = () => {
     if (providers.length === 0) {
-      setErrors({
-        submit: 'Please add at least one provider to continue.',
-      });
+      setErrors({ submit: 'Please add at least one provider to continue.' });
       return;
     }
     onNext();
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
-          <Users className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+    <StepLayout
+      icon={Users}
+      title="Add Providers"
+      description="Add team members who will provide services"
+      footer={
+        <div className="flex items-center justify-between pt-4">
+          <Button variant="ghost" onClick={onBack}>
+            <ArrowLeft className="h-4 w-4 mr-2" /> Back
+          </Button>
+          <Button onClick={handleNext} disabled={providers.length === 0}>
+            Next: Set Business Hours
+          </Button>
         </div>
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Add Providers
-          </h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Add team members who will provide services
-          </p>
-        </div>
-      </div>
-
+      }
+    >
       <div className="space-y-6">
-        {/* Success Message */}
+        {/* Organization Selector */}
+        {organizations.length > 1 && (
+          <div className="space-y-2 p-4 border border-gray-200 dark:border-gray-800 rounded-lg bg-gray-50 dark:bg-gray-900">
+            <Label htmlFor="orgSelector">Organization</Label>
+            <Select value={selectedOrgId || ''} onValueChange={setSelectedOrgId}>
+              <SelectTrigger className="bg-white dark:bg-gray-950">
+                <SelectValue placeholder="Select organization" />
+              </SelectTrigger>
+              <SelectContent>
+                {organizations.map((org) => (
+                  <SelectItem key={org.name} value={org.name}>
+                    {org.organization_name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              Managing providers for this organization
+            </p>
+          </div>
+        )}
+
         {successMessage && (
           <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
             <p className="text-sm text-green-700 dark:text-green-400">{successMessage}</p>
           </div>
         )}
 
-        {/* Loading State */}
         {loadingProviders && providers.length === 0 && (
           <div className="text-center py-4 text-gray-500 dark:text-gray-400">
             <p className="text-sm">Loading providers...</p>
           </div>
         )}
 
-        {/* Providers List */}
         {providers.length > 0 && (
           <div className="space-y-3">
             <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
               Providers ({providers.length})
             </h3>
             {providers.map((provider) => (
-              <Card key={provider.name} className="p-4">
+              <div key={provider.name} className="p-4 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/20 rounded-full flex items-center justify-center">
-                      <span className="text-lg font-semibold text-blue-600 dark:text-blue-400">
-                        {provider.provider_name.charAt(0).toUpperCase()}
-                      </span>
+                    <div className="w-12 h-12 rounded-full bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-200 flex items-center justify-center font-semibold">
+                      {provider.provider_name.charAt(0).toUpperCase()}
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900 dark:text-white">
-                        {provider.provider_name}
-                      </h4>
-                      <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-                        <div className="flex items-center gap-1">
+                      <h4 className="font-semibold text-gray-900 dark:text-white">{provider.provider_name}</h4>
+                      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                        <span className="flex items-center gap-1">
                           <Mail className="w-3 h-3" />
                           {provider.user}
-                        </div>
+                        </span>
                         {provider.phone && (
-                          <div className="flex items-center gap-1">
+                          <span className="flex items-center gap-1">
                             <Phone className="w-3 h-3" />
                             {provider.phone}
-                          </div>
+                          </span>
                         )}
                       </div>
                     </div>
                   </div>
-                  <span className="px-3 py-1 bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400 text-xs font-medium rounded-full">
+                  <span className="px-3 py-1 rounded-full bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 text-xs font-semibold">
                     {provider.organization_status}
                   </span>
                 </div>
-              </Card>
+              </div>
             ))}
           </div>
         )}
 
-        {/* Add Provider Button/Form */}
-        {!showAddForm ? (
-          <Button
-            onClick={() => setShowAddForm(true)}
-            variant="outline"
-            className="w-full border-dashed border-2"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Add Provider
-          </Button>
-        ) : (
-          <Card className="p-6 bg-gray-50 dark:bg-gray-900/50">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Add New Provider
-            </h3>
+        {/* Link Existing Provider */}
+        {isLinkingMode && linkableProviders.length > 0 ? (
+          <div className="p-4 border border-dashed border-primary-300 dark:border-primary-700 rounded-2xl bg-primary-50 dark:bg-primary-900/10">
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 mb-4">
+                <LinkIcon className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                <h3 className="font-semibold text-gray-900 dark:text-white">Link Existing Provider</h3>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="existingProvider">Select Provider</Label>
+                <Select value={selectedProviderId} onValueChange={setSelectedProviderId}>
+                  <SelectTrigger className="bg-white dark:bg-gray-950">
+                    <SelectValue placeholder="Choose a provider to link" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {linkableProviders.map((prov) => (
+                      <SelectItem key={prov.name} value={prov.name}>
+                        <div className="flex flex-col">
+                          <span>{prov.provider_name}</span>
+                          <span className="text-xs text-gray-500">
+                            {prov.user} {prov.organization_name && `• Currently: ${prov.organization_name}`}
+                          </span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-gray-600 dark:text-gray-400">
+                  Link an existing provider to this organization
+                </p>
+              </div>
+
+              {errors.submit && (
+                <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                  <p className="text-sm text-red-600 dark:text-red-400">{errors.submit}</p>
+                </div>
+              )}
+
+              <div className="flex gap-3">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setIsLinkingMode(false);
+                    setSelectedProviderId('');
+                    setErrors({});
+                  }}
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+                <Button onClick={handleLinkExistingProvider} disabled={adding || !selectedProviderId} className="flex-1">
+                  {adding ? 'Linking...' : 'Link Provider'}
+                </Button>
+              </div>
+            </div>
+          </div>
+        ) : null}
+
+        {/* Add Provider */}
+        {showAddForm ? (
+          <div className="p-4 border border-dashed border-gray-300 dark:border-gray-700 rounded-2xl bg-white dark:bg-gray-900">
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="providerName">
-                  Provider Name <span className="text-red-500">*</span>
-                </Label>
+                <Label htmlFor="providerName">Provider Name <span className="text-red-500">*</span></Label>
                 <Input
                   id="providerName"
                   type="text"
@@ -234,15 +330,11 @@ const Step2OrgProviders = ({ onNext, onBack }: Step2OrgProvidersProps) => {
                   }}
                   className={errors.providerName ? 'border-red-500' : ''}
                 />
-                {errors.providerName && (
-                  <p className="text-sm text-red-500">{errors.providerName}</p>
-                )}
+                {errors.providerName && <p className="text-sm text-red-500">{errors.providerName}</p>}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email">
-                  Email <span className="text-red-500">*</span>
-                </Label>
+                <Label htmlFor="email">Email <span className="text-red-500">*</span></Label>
                 <Input
                   id="email"
                   type="email"
@@ -254,15 +346,11 @@ const Step2OrgProviders = ({ onNext, onBack }: Step2OrgProvidersProps) => {
                   }}
                   className={errors.email ? 'border-red-500' : ''}
                 />
-                {errors.email && (
-                  <p className="text-sm text-red-500">{errors.email}</p>
-                )}
+                {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="phone">
-                  Phone <span className="text-red-500">*</span>
-                </Label>
+                <Label htmlFor="phone">Phone <span className="text-red-500">*</span></Label>
                 <Input
                   id="phone"
                   type="tel"
@@ -274,15 +362,11 @@ const Step2OrgProviders = ({ onNext, onBack }: Step2OrgProvidersProps) => {
                   }}
                   className={errors.phone ? 'border-red-500' : ''}
                 />
-                {errors.phone && (
-                  <p className="text-sm text-red-500">{errors.phone}</p>
-                )}
+                {errors.phone && <p className="text-sm text-red-500">{errors.phone}</p>}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="specialization">
-                  Specialization (Optional)
-                </Label>
+                <Label htmlFor="specialization">Specialization (Optional)</Label>
                 <Input
                   id="specialization"
                   type="text"
@@ -313,19 +397,33 @@ const Step2OrgProviders = ({ onNext, onBack }: Step2OrgProvidersProps) => {
                 >
                   Cancel
                 </Button>
-                <Button
-                  onClick={handleAddProvider}
-                  disabled={adding}
-                  className="flex-1"
-                >
+                <Button onClick={handleAddProvider} disabled={adding} className="flex-1">
                   {adding ? 'Adding...' : 'Add Provider'}
                 </Button>
               </div>
             </div>
-          </Card>
-        )}
+          </div>
+        ) : !isLinkingMode ? (
+          <div className="flex gap-3">
+            <Button
+              onClick={() => setShowAddForm(true)}
+              variant="outline"
+              className="flex-1 border-dashed border-2"
+            >
+              <Plus className="w-4 h-4 mr-2" /> Create New Provider
+            </Button>
+            {linkableProviders.length > 0 && (
+              <Button
+                onClick={() => setIsLinkingMode(true)}
+                variant="outline"
+                className="flex-1 border-dashed border-2"
+              >
+                <LinkIcon className="w-4 h-4 mr-2" /> Link Existing Provider
+              </Button>
+            )}
+          </div>
+        ) : null}
 
-        {/* Empty State */}
         {providers.length === 0 && !showAddForm && (
           <div className="text-center py-8 text-gray-500 dark:text-gray-400">
             <Users className="w-12 h-12 mx-auto mb-3 opacity-50" />
@@ -334,34 +432,14 @@ const Step2OrgProviders = ({ onNext, onBack }: Step2OrgProvidersProps) => {
           </div>
         )}
 
-        {/* Error Message */}
         {errors.submit && !showAddForm && (
           <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
             <p className="text-sm text-red-600 dark:text-red-400">{errors.submit}</p>
           </div>
         )}
-
-        {/* Navigation Buttons */}
-        <div className="flex justify-between pt-4">
-          <Button
-            variant="outline"
-            onClick={onBack}
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back
-          </Button>
-          <Button
-            onClick={handleNext}
-            disabled={providers.length === 0}
-          >
-            Next: Set Business Hours
-          </Button>
-        </div>
       </div>
-    </div>
+    </StepLayout>
   );
 };
 
 export default Step2OrgProviders;
-
-

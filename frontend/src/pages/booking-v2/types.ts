@@ -46,6 +46,7 @@ export interface TimeSlot {
   available: boolean;
   recommended?: boolean;
   isPast?: boolean;
+  booked?: boolean; // Slot is already booked
 }
 
 export interface TimeSlotGroup {

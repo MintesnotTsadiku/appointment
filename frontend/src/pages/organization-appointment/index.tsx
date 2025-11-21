@@ -1,51 +1,62 @@
 /**
- * External dependencies
+ * Organization Appointment V2 - Drop-in Replacement
+ * Uses new redesigned UI with exact same API integration as old version
+ * Compatible with existing AppContext and URL structure
  */
+
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useFrappeGetCall } from "frappe-react-sdk";
-
-/**
- * Internal dependencies
- */
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
-import { MeetingCardSkeleton, ProfileSkeleton } from "../appointment/components/skeletons";
-import MeetingCard from "../appointment/components/meetingCard";
-import Booking from "../appointment/components/booking";
-import SocialProfiles from "../appointment/components/socialProfiles";
 import { useAppContext } from "@/context/app";
-import { Skeleton } from "@/components/skeleton";
 import { getLocalTimezone } from "@/lib/utils";
-import PoweredBy from "@/components/powered-by";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/tooltip";
-import Typography from "@/components/typography";
-import MetaTags from "@/components/meta-tags";
 import { Info } from "lucide-react";
+import MetaTags from "@/components/meta-tags";
+import PoweredBy from "@/components/powered-by";
 
-const OrganizationAppointment = () => {
+// Import new V2 components
+import { ServiceSelector } from "@/pages/booking-v2/components/ServiceSelector";
+import { DateTimeSelector } from "@/pages/booking-v2/components/DateTimeSelector";
+import { BookingForm } from "@/pages/booking-v2/components/BookingForm";
+import { ConfirmationModal } from "@/pages/booking-v2/components/ConfirmationModal";
+import { useTimeSlots } from "@/pages/booking-v2/hooks/useTimeSlots";
+import { useBookingSubmit } from "@/pages/booking-v2/hooks/useBookingSubmit";
+import type { Organization, Service, TimeSlot as V2TimeSlot, BookingFormData } from "@/pages/booking-v2/types";
+
+// Import old components for fallback
+import { ProfileSkeleton } from "@/pages/appointment/components/skeletons";
+
+const OrganizationAppointmentV2 = () => {
   const { orgSlug, serviceSlug } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-
-  const type = searchParams.get("type");
-
-  const updateTypeQuery = (type: string) => {
-    setSearchParams({ type });
-  };
-
   const navigate = useNavigate();
+
+  // Use existing AppContext (important for compatibility!)
   const {
     setMeetingId,
     setUserInfo,
     userInfo,
     setDuration,
     setTimeZone,
+    timeZone,
+    selectedDate,
+    setSelectedDate,
+    selectedSlot,
+    setSelectedSlot,
     meetingDurationCards,
     setMeetingDurationCards,
   } = useAppContext();
 
-  // Use organization-specific API
-  // If serviceSlug exists, get meeting windows for that service
-  // Otherwise, get list of services
+  // Local state
+  const [friendlyError, setFriendlyError] = useState<string>("");
+  const [currentPhase, setCurrentPhase] = useState<'service' | 'datetime' | 'form' | 'success'>('service');
+  const [displayMonth, setDisplayMonth] = useState(new Date());
+  const [timeFormat, setTimeFormat] = useState<'12h' | '24h' | 'ethiopian'>('12h');
+  const [bookingResponse, setBookingResponse] = useState<any>(null);
+  
+  // Get type from URL (this is how old implementation works)
+  const type = searchParams.get("type");
+
+  // EXACT SAME API calls as old implementation
   const apiEndpoint = orgSlug && serviceSlug 
     ? "frappe_appointment.api.personal_meet.get_organization_meeting_windows"
     : orgSlug 
@@ -69,26 +80,15 @@ const OrganizationAppointment = () => {
     }
   );
 
-  const [friendlyError, setFriendlyError] = useState<string>("");
-  const [resolvedType, setResolvedType] = useState<string | null>(null);
-
+  // Initialize timezone (same as old implementation)
   useEffect(() => {
     if (orgSlug && serviceSlug) {
-      // For organization booking, use org_slug/service_slug as the meeting ID
       setMeetingId(`${orgSlug}/${serviceSlug}`);
     }
     setTimeZone(getLocalTimezone());
   }, [orgSlug, serviceSlug]);
 
-  // Sync resolvedType with type from URL when it changes
-  useEffect(() => {
-    if (type && type !== "default") {
-      setResolvedType(type);
-    } else if (type === "default") {
-      setResolvedType(null);
-    }
-  }, [type]);
-
+  // Process API response (same as old implementation)
   useEffect(() => {
     if (data) {
       setUserInfo({
@@ -101,72 +101,197 @@ const OrganizationAppointment = () => {
         banner_image: data?.message?.banner_image,
       });
       
-      // If this is a service list (no serviceSlug), don't set durations
       if (data?.message?.durations) {
         setMeetingDurationCards(data?.message?.durations);
-        const durations = data?.message?.durations || [];
-        if (!type || type === "default") {
-          setResolvedType(null);
+        
+        // If we have a serviceSlug and no type, auto-select the first duration
+        if (serviceSlug && data?.message?.durations?.length > 0 && !type) {
+          const firstDurationId = data.message.durations[0].id;
+          // Update URL with type parameter
+          setSearchParams({ type: firstDurationId });
+        }
+        
+        // If we have a serviceSlug and type, move to datetime phase
+        if (serviceSlug && type && data?.message?.durations?.length > 0) {
+          setCurrentPhase('datetime');
         }
       }
       
       setFriendlyError("");
     }
-  }, [data]);
+  }, [data, serviceSlug, type]);
 
   useEffect(() => {
     if (error) {
       const errorMessage = error?.message || error?.exception || "Failed to load booking page";
       setFriendlyError(errorMessage);
-      if (import.meta.env.DEV) {
-        console.error("Organization booking error:", error);
-      }
     }
   }, [error]);
 
-  // Auto-select first duration if only one exists and type is missing/default
-  useEffect(() => {
-    if (meetingDurationCards && meetingDurationCards.length === 1 && (!type || type === "default")) {
-      const firstDuration = meetingDurationCards[0];
-      if (firstDuration?.id && firstDuration.id !== "default") {
-        updateTypeQuery(firstDuration.id);
-        setResolvedType(firstDuration.id);
-      }
-    }
-  }, [meetingDurationCards, type]);
+  // Fetch time slots using new hook
+  const shouldFetchSlots = !!(
+    serviceSlug &&
+    type &&
+    selectedDate &&
+    meetingDurationCards.length > 0
+  );
 
+  const {
+    slots,
+    availableDays,
+    validStartDate,
+    validEndDate,
+    isLoading: slotsLoading,
+    refetch: refetchSlots,
+    rawApiData,
+    bookingConfig,
+  } = useTimeSlots({
+    durationId: type || meetingDurationCards[0]?.id || "",
+    date: shouldFetchSlots ? selectedDate : null,
+    timezone: timeZone,
+    organizationId: data?.message?.organization_id,
+    serviceId: data?.message?.service_id,
+    enabled: shouldFetchSlots,
+  });
+
+  // Booking submission
+  const { submitBooking, loading: bookingLoading } = useBookingSubmit();
+
+  // Transform data for V2 components
+  const organization: Organization | null = data ? {
+    id: orgSlug || "",
+    slug: orgSlug || "",
+    name: data.message.company || data.message.full_name || "",
+    logo: data.message.profile_pic,
+    banner: data.message.banner_image,
+    description: data.message.description || "",
+    providers: data.message.providers?.map((p: any) => ({
+      id: p.id || p.name,
+      name: p.name,
+      designation: data.message.position,
+      services: p.services,
+    })) || [],
+    services: data.message.services?.map((s: any) => ({
+      id: s.service_id || s.slug || s.name, // Use slug or name as fallback
+      slug: s.slug,
+      name: s.name,
+      description: s.description,
+      duration: s.duration,
+      price: s.price,
+      currency: "ETB",
+      type: s.type,
+      provider: s.provider_id ? {
+        id: s.provider_id,
+        name: s.provider_name,
+      } : undefined,
+      providerCount: data.message.provider_count,
+    })) || [],
+  } : null;
+
+  const currentService: Service | null = serviceSlug && data ? {
+    id: data.message.service_id || serviceSlug,
+    slug: serviceSlug,
+    name: userInfo.name || serviceSlug,
+    duration: meetingDurationCards[0]?.duration / 60 || 30,
+    type: "organization",
+    providerCount: data.message.provider_count,
+  } : null;
+
+  // Convert available days to numbers
+  const availableDaysNumbers = availableDays?.map((day: string) => {
+    const dayMap: { [key: string]: number } = {
+      Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3,
+      Thursday: 4, Friday: 5, Saturday: 6,
+    };
+    return dayMap[day];
+  }).filter((d: number | undefined) => d !== undefined) || [];
+
+  // Handlers
+  const handleServiceSelect = (service: Service) => {
+    // Navigate with service slug (same as old implementation)
+    navigate(`/schedule/org/${orgSlug}/${service.slug}`);
+  };
+
+  const handleDateSelect = (date: Date) => {
+    setSelectedDate(date);
+  };
+
+  const handleSlotSelect = (slot: V2TimeSlot) => {
+    // Convert V2 slot format to old format (preserve provider info!)
+    setSelectedSlot({
+      start_time: slot.start_time,
+      end_time: slot.end_time,
+      provider: slot.provider, // IMPORTANT: Pass provider for multi-provider bookings
+    });
+    setCurrentPhase('form');
+  };
+
+  const handleBookingSubmit = async (formData: BookingFormData) => {
+    if (!currentService || !selectedDate || !selectedSlot) return;
+
+    try {
+      const response = await submitBooking({
+        durationId: type || meetingDurationCards[0]?.id || "",
+        date: selectedDate,
+        timeSlot: {
+          id: "temp",
+          start_time: selectedSlot.start_time,
+          end_time: selectedSlot.end_time,
+          available: true,
+          provider: selectedSlot.provider, // Pass provider from selected slot
+        },
+        formData,
+        timezone: timeZone,
+        timeFormat,
+        organizationId: data?.message?.organization_id,
+        serviceId: data?.message?.service_id,
+      });
+
+      // Re-fetch slots after successful booking to update availability
+      if (refetchSlots) {
+        await refetchSlots();
+      }
+
+      setBookingResponse(response);
+      setCurrentPhase('success');
+    } catch (error) {
+      console.error("Booking error:", error);
+    }
+  };
+
+  // Loading state
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <div className="container mx-auto px-4 py-8">
           <ProfileSkeleton />
-          <div className="mt-8">
-            <MeetingCardSkeleton />
-          </div>
         </div>
       </div>
     );
   }
 
+  // Error state
   if (error || friendlyError) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">404</h1>
-          <p className="text-gray-600 dark:text-gray-400 mb-2">
-            {friendlyError || "Sorry, we couldn't find the page you're looking for."}
-          </p>
-          <p className="text-sm text-gray-500 dark:text-gray-500">
-            The organization or service you're looking for may not exist or may have been removed.
-          </p>
+      <>
+        <MetaTags title="Error | Appointment" description="Error loading booking page" />
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4">
+          <div className="max-w-xl w-full bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 rounded-xl p-6">
+            <div className="flex items-start space-x-3">
+              <Info className="w-5 h-5 mt-1 flex-shrink-0" />
+              <div>
+                <h2 className="font-semibold text-lg mb-1">Booking link not available</h2>
+                <p className="text-sm">{friendlyError || "Page not found"}</p>
+                <p className="text-sm mt-3">
+                  <a href="/" className="underline">Go to home</a>
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
-
-  const selectedDuration = meetingDurationCards?.find((d) => d.id === resolvedType);
-  const showSelectionScreen = meetingDurationCards && meetingDurationCards.length > 1 && !resolvedType;
-  const showServiceList = !serviceSlug && data?.message?.services;
 
   return (
     <>
@@ -175,150 +300,111 @@ const OrganizationAppointment = () => {
         description={`Schedule an appointment with ${userInfo?.name || "us"}`}
       />
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-16">
-        <div className="container mx-auto px-4 pt-8 pb-12 max-w-6xl">
-          {/* Profile Section */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-8 mt-4">
-            <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-              <Avatar className="w-24 h-24">
-                <AvatarImage src={userInfo?.userImage} alt={userInfo?.name} />
-                <AvatarFallback>
-                  {userInfo?.name?.charAt(0)?.toUpperCase() || "O"}
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex-1 text-center md:text-left">
-                <Typography variant="h2" className="mb-2">
-                  {userInfo?.name || <Skeleton className="h-8 w-48" />}
-                </Typography>
-                {userInfo?.designation && (
-                  <Typography variant="muted" className="mb-1">
-                    {userInfo.designation}
-                  </Typography>
-                )}
-                {userInfo?.organizationName && (
-                  <Typography variant="muted" className="mb-4">
-                    {userInfo.organizationName}
-                  </Typography>
-                )}
-                {data?.message?.provider_count && (
-                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-4">
-                    <Info className="w-4 h-4" />
-                    <span>{data.message.provider_count} provider{data.message.provider_count !== 1 ? 's' : ''} available</span>
-                  </div>
-                )}
-                
-                {/* Provider List */}
-                {data?.message?.providers && data.message.providers.length > 0 && (
-                  <div className="mt-4 space-y-3">
-                    <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                      Available Providers:
-                    </h4>
-                    {data.message.providers.map((provider: any) => (
-                      <div key={provider.id} className="p-3 bg-gray-50 dark:bg-gray-900/50 rounded-lg border border-gray-200 dark:border-gray-700">
-                        <div className="font-medium text-gray-900 dark:text-white mb-1">
-                          {provider.name}
-                        </div>
-                        {provider.services && provider.services.length > 0 && (
-                          <div className="text-xs text-gray-600 dark:text-gray-400">
-                            Services: {provider.services.join(", ")}
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-                
-                <SocialProfiles profiles={userInfo?.socialProfiles || []} />
-              </div>
-            </div>
-          </div>
-
-          {/* Service List (when no specific service selected) */}
-          {showServiceList ? (
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
-              <Typography variant="h3" className="mb-6">
-                Select a Service
-              </Typography>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {data?.message?.services?.map((service: any) => (
-                  <div
-                    key={service.slug}
-                    className="p-6 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-blue-500 dark:hover:border-blue-400 cursor-pointer transition-colors relative"
-                    onClick={() => navigate(service.url)}
-                  >
-                    {service.type === "individual" && (
-                      <div className="absolute top-2 right-2">
-                        <span className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded">
-                          Individual
-                        </span>
-                      </div>
-                    )}
-                    <h4 className="font-semibold text-lg text-gray-900 dark:text-white mb-2">
-                      {service.name}
-                    </h4>
-                    {service.provider_name && (
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                        Provider: {service.provider_name}
-                      </p>
-                    )}
-                    {service.description && (
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                        {service.description}
-                      </p>
-                    )}
-                    <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-                      <span>{service.duration} min</span>
-                      {service.price > 0 && (
-                        <span>{service.price} ETB</span>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : showSelectionScreen ? (
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
-              <Typography variant="h3" className="mb-6">
-                Select Appointment Type
-              </Typography>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {meetingDurationCards.map((duration) => (
-                  <MeetingCard
-                    key={duration.id}
-                    duration={duration}
-                    onClick={() => {
-                      updateTypeQuery(duration.id);
-                      setResolvedType(duration.id);
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-          ) : selectedDuration ? (
-            <Booking
-              type={selectedDuration.id}
-              duration={selectedDuration}
-              isOrganization={true}
-              organizationId={data?.message?.organization_id}
-              serviceId={data?.message?.service_id}
+        {/* Phase 1: Service Selection */}
+        {currentPhase === 'service' && organization && !serviceSlug && (
+          <div className="py-8 px-4">
+            <ServiceSelector
+              organization={organization}
+              services={organization.services}
+              onServiceSelect={handleServiceSelect}
+              loading={false}
             />
-          ) : null}
+          </div>
+        )}
 
-          {/* Info Tooltip */}
-          {data?.message?.provider_count && data.message.provider_count > 1 && (
-            <div className="mt-6 mb-8 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-              <div className="flex items-start gap-3">
-                <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-                <div className="text-sm text-blue-800 dark:text-blue-300">
-                  <p className="font-semibold mb-1">Multiple Providers Available</p>
-                  <p>
-                    This organization has {data.message.provider_count} providers. 
-                    Available time slots will be distributed across all providers using round-robin assignment.
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
+        {/* Phase 2: Date & Time Selection */}
+        {currentPhase === 'datetime' && currentService && (
+          <div className="py-8 px-4">
+            <DateTimeSelector
+              selectedDate={selectedDate}
+              displayMonth={displayMonth}
+              onDateSelect={handleDateSelect}
+              onMonthChange={setDisplayMonth}
+              availableDays={availableDaysNumbers}
+              minDate={validStartDate}
+              maxDate={validEndDate}
+              availableSlots={slots}
+              selectedSlot={selectedSlot ? {
+                id: "temp",
+                start_time: selectedSlot.start_time,
+                end_time: selectedSlot.end_time,
+                available: true,
+              } : null}
+              onSlotSelect={handleSlotSelect}
+              timeFormat={timeFormat}
+              onTimeFormatChange={setTimeFormat}
+              timezone={timeZone}
+              loading={slotsLoading}
+              serviceName={currentService.name}
+              duration={currentService.duration}
+              onBack={() => {
+                if (organization?.services && organization.services.length > 1) {
+                  setCurrentPhase('service');
+                  navigate(`/schedule/org/${orgSlug}`);
+                } else {
+                  navigate("/");
+                }
+              }}
+              rawApiData={rawApiData}
+              bookingConfig={bookingConfig}
+            />
+          </div>
+        )}
+
+        {/* Phase 3: Booking Form */}
+        {currentPhase === 'form' && currentService && selectedSlot && (
+          <div className="py-8 px-4">
+            <BookingForm
+              service={currentService}
+              selectedDate={selectedDate}
+              selectedSlot={{
+                id: "temp",
+                start_time: selectedSlot.start_time,
+                end_time: selectedSlot.end_time,
+                available: true,
+              }}
+              timeFormat={timeFormat}
+              timezone={timeZone}
+              onSubmit={handleBookingSubmit}
+              onBack={() => {
+                // Re-fetch slots when going back to datetime selection
+                if (refetchSlots) {
+                  refetchSlots();
+                }
+                setCurrentPhase('datetime');
+              }}
+              loading={bookingLoading}
+            />
+          </div>
+        )}
+
+        {/* Phase 4: Confirmation Modal */}
+        {currentPhase === 'success' && bookingResponse && currentService && selectedSlot && (
+          <ConfirmationModal
+            open={true}
+            onClose={() => {
+              // Go back to datetime phase and refetch slots to show updated availability
+              if (refetchSlots) {
+                refetchSlots();
+              }
+              setCurrentPhase('datetime');
+            }}
+            bookingResponse={bookingResponse}
+            service={currentService}
+            selectedDate={selectedDate}
+            selectedSlot={{
+              id: "temp",
+              start_time: selectedSlot.start_time,
+              end_time: selectedSlot.end_time,
+              available: true,
+            }}
+            timeFormat={timeFormat}
+            timezone={timeZone}
+            userEmail={bookingResponse.userEmail || ""}
+          />
+        )}
+
+        {/* Powered By Footer */}
         <div className="mt-8">
           <PoweredBy />
         </div>
@@ -327,5 +413,4 @@ const OrganizationAppointment = () => {
   );
 };
 
-export default OrganizationAppointment;
-
+export default OrganizationAppointmentV2;

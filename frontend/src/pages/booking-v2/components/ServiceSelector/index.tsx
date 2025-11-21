@@ -180,7 +180,7 @@ export function ServiceSelector({
             {servicesByProvider.map(({ provider, services: providerServices }) => {
               if (providerServices.length === 0) return null;
               return (
-                <div key={provider.id} className="space-y-4">
+                <div key={`provider-${provider.id}`} className="space-y-4">
                   {/* Provider Header */}
                   <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
                     <Avatar className="h-12 w-12">
@@ -305,8 +305,8 @@ function ServiceCard({ service, onSelect, availableProviders = [], showProviderN
         <div className="mb-3">
           <p className="text-xs text-gray-500 dark:text-gray-500 mb-2">Available providers:</p>
           <div className="flex -space-x-2">
-            {availableProviders.slice(0, 3).map((provider, index) => (
-              <Avatar key={provider.id} className="h-7 w-7 border-2 border-white dark:border-gray-800" title={provider.name}>
+            {availableProviders.slice(0, 3).map((provider) => (
+              <Avatar key={`avatar-${provider.id}`} className="h-7 w-7 border-2 border-white dark:border-gray-800" title={provider.name}>
                 <AvatarImage src={provider.avatar} alt={provider.name} />
                 <AvatarFallback className="text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400">
                   {provider.name.charAt(0).toUpperCase()}

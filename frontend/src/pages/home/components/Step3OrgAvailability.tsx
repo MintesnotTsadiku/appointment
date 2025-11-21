@@ -3,7 +3,8 @@ import { useFrappePostCall } from 'frappe-react-sdk';
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
 import { Label } from '@/components/label';
-import { ArrowLeft, Clock, MapPin } from 'lucide-react';
+import { ArrowLeft, Clock } from 'lucide-react';
+import { StepLayout } from './StepLayout';
 
 interface Step3OrgAvailabilityProps {
   onNext: () => void;
@@ -45,7 +46,7 @@ const Step3OrgAvailability = ({ onNext, onBack }: Step3OrgAvailabilityProps) => 
   const dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
   // Quick templates
-  const applyTemplate = (template: 'work' | 'flexible' | 'weekend') => {
+  const applyTemplate = (template: 'work' | 'flexible' | 'weekend' | 'round_the_clock') => {
     let newSchedule: WeeklySchedule = {
       monday: [],
       tuesday: [],
@@ -78,6 +79,18 @@ const Step3OrgAvailability = ({ onNext, onBack }: Step3OrgAvailabilityProps) => 
         thursday: flexSlot,
         friday: flexSlot,
         saturday: flexSlot,
+        sunday: [],
+      };
+    } else if (template === 'round_the_clock') {
+      // 24-hour coverage Mon-Sat
+      const fullDaySlot = [{ start: '00:00', end: '23:59' }];
+      newSchedule = {
+        monday: fullDaySlot,
+        tuesday: fullDaySlot,
+        wednesday: fullDaySlot,
+        thursday: fullDaySlot,
+        friday: fullDaySlot,
+        saturday: fullDaySlot,
         sunday: [],
       };
     } else if (template === 'weekend') {
@@ -156,21 +169,21 @@ const Step3OrgAvailability = ({ onNext, onBack }: Step3OrgAvailabilityProps) => 
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
-          <Clock className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+    <StepLayout
+      icon={Clock}
+      title="Business Hours"
+      description="Set your organization's operating hours"
+      footer={
+        <div className="flex items-center justify-between">
+          <Button variant="ghost" onClick={onBack}>
+            <ArrowLeft className="h-4 w-4 mr-2" /> Back
+          </Button>
+          <Button onClick={handleSubmit} disabled={loading}>
+            {loading ? 'Saving...' : 'Next: Create Services'}
+          </Button>
         </div>
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Business Hours
-          </h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Set your organization's operating hours
-          </p>
-        </div>
-      </div>
-
+      }
+    >
       <div className="space-y-6">
         {/* Location Info */}
         <div className="space-y-4 p-4 bg-gray-50 dark:bg-gray-900/50 rounded-lg">
@@ -227,6 +240,14 @@ const Step3OrgAvailability = ({ onNext, onBack }: Step3OrgAvailabilityProps) => 
               onClick={() => applyTemplate('flexible')}
             >
               9-6 (Mon-Sat)
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => applyTemplate('round_the_clock')}
+            >
+              24h (Mon-Sat)
             </Button>
             <Button
               type="button"
@@ -327,28 +348,9 @@ const Step3OrgAvailability = ({ onNext, onBack }: Step3OrgAvailabilityProps) => 
           </div>
         )}
 
-        {/* Navigation Buttons */}
-        <div className="flex justify-between pt-4">
-          <Button
-            variant="outline"
-            onClick={onBack}
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back
-          </Button>
-          <Button
-            onClick={handleSubmit}
-            disabled={loading}
-          >
-            {loading ? 'Saving...' : 'Next: Create Services'}
-          </Button>
-        </div>
       </div>
-    </div>
+    </StepLayout>
   );
 };
 
 export default Step3OrgAvailability;
-
-
-

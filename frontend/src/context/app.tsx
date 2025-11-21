@@ -38,6 +38,10 @@ type durationCard = {
 export interface slotType {
   start_time: string;
   end_time: string;
+  provider?: {
+    id: string;
+    name: string;
+  };
 }
 
 interface AppContextType {

@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useOnboarding } from '@/context/onboarding';
 import { Button } from '@/components/button';
-import { useTranslation } from '@/lib/i18n';
+import { WizardSidebar } from '../components/WizardSidebar';
 
 // Individual Provider Steps
 import Step1Profile from '../components/Step1Profile';
@@ -18,13 +18,48 @@ import Step3OrgAvailability from '../components/Step3OrgAvailability';
 import Step4OrgService from '../components/Step4OrgService';
 import Step5OrgSuccess from '../components/Step5OrgSuccess';
 
+const totalSteps = 5;
+const gradientBackground =
+  "min-h-screen bg-[radial-gradient(circle_at_top,_#f5f7ff,_#ffffff_45%,_#ffffff)] dark:bg-[radial-gradient(circle_at_top,_#020617,_#0f172a_45%,_#020617)]";
+
+const getStepDescription = (isOrganization: boolean, currentStep: number) => {
+  if (isOrganization) {
+    switch (currentStep) {
+      case 1:
+        return 'Tell us about your organization';
+      case 2:
+        return 'Add team members who will provide services';
+      case 3:
+        return "Set your organization's operating hours";
+      case 4:
+        return 'Create services your organization offers';
+      case 5:
+        return 'Share your booking links with customers';
+      default:
+        return '';
+    }
+  }
+  switch (currentStep) {
+    case 1:
+      return 'Tell us about your business';
+    case 2:
+      return 'Choose how to manage your calendar';
+    case 3:
+      return "Set when you're available for appointments";
+    case 4:
+      return 'Create your first service or appointment type';
+    case 5:
+      return 'Share your booking link with customers';
+    default:
+      return '';
+  }
+};
+
 const OnboardingWizard = () => {
-  const { t } = useTranslation();
-  const { progress, updateProgress } = useOnboarding();
+  const { progress, updateProgress, resetOnboardingType, refreshProgress } = useOnboarding();
   const [currentStep, setCurrentStep] = useState(progress?.current_step || 1);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const totalSteps = 5;
   const isOrganization = progress?.onboarding_type === 'organization';
 
   const handleNext = async () => {
@@ -53,7 +88,6 @@ const OnboardingWizard = () => {
 
   const renderStep = () => {
     if (isOrganization) {
-      // Organization Onboarding Flow
       switch (currentStep) {
         case 1:
           return <Step1OrgProfile onNext={handleNext} />;
@@ -68,22 +102,21 @@ const OnboardingWizard = () => {
         default:
           return <Step1OrgProfile onNext={handleNext} />;
       }
-    } else {
-      // Individual Provider Flow
-      switch (currentStep) {
-        case 1:
-          return <Step1Profile onNext={handleNext} />;
-        case 2:
-          return <Step2Calendar onNext={handleNext} onBack={handleBack} />;
-        case 3:
-          return <Step3Availability onNext={handleNext} onBack={handleBack} />;
-        case 4:
-          return <Step4Service onNext={handleNext} onBack={handleBack} />;
-        case 5:
-          return <Step5Success />;
-        default:
-          return <Step1Profile onNext={handleNext} />;
-      }
+    }
+
+    switch (currentStep) {
+      case 1:
+        return <Step1Profile onNext={handleNext} />;
+      case 2:
+        return <Step2Calendar onNext={handleNext} onBack={handleBack} />;
+      case 3:
+        return <Step3Availability onNext={handleNext} onBack={handleBack} />;
+      case 4:
+        return <Step4Service onNext={handleNext} onBack={handleBack} />;
+      case 5:
+        return <Step5Success />;
+      default:
+        return <Step1Profile onNext={handleNext} />;
     }
   };
 
@@ -104,141 +137,73 @@ const OnboardingWizard = () => {
       ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-gray-900">
-      {/* Animated Background Orbs */}
-      <motion.div
-        animate={{
-          scale: [1, 1.2, 1],
-          rotate: [0, 90, 0],
-        }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          ease: 'linear',
-        }}
-        className="absolute top-0 -left-1/4 w-96 h-96 bg-gradient-hero opacity-20 rounded-full blur-3xl"
-      />
-      <motion.div
-        animate={{
-          scale: [1.2, 1, 1.2],
-          rotate: [90, 0, 90],
-        }}
-        transition={{
-          duration: 25,
-          repeat: Infinity,
-          ease: 'linear',
-        }}
-        className="absolute bottom-0 -right-1/4 w-96 h-96 bg-gradient-feature opacity-20 rounded-full blur-3xl"
-      />
+    <div className={gradientBackground}>
+      <div className="max-w-7xl mx-auto px-4 md:px-6 py-10 lg:grid lg:grid-cols-[360px,1fr] lg:gap-10 space-y-8 lg:space-y-0">
+        <WizardSidebar currentStep={currentStep} isOrganization={isOrganization} />
 
-      {/* Main Content */}
-      <div className="relative z-10 min-h-screen flex flex-col">
-        {/* Header */}
-        <header className="py-6 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-hero rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">📅</span>
-              </div>
-              <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-                Ethiopian Scheduler
-              </h1>
-            </div>
-
-            {/* Progress Indicator */}
-            <div className="flex items-center space-x-2">
-              <span className="text-sm text-gray-600 dark:text-gray-400">
-                Step {currentStep} of {totalSteps}
-              </span>
-              <div className="flex space-x-1">
-                {Array.from({ length: totalSteps }).map((_, index) => (
-                  <div
-                    key={index}
-                    className={`w-2 h-2 rounded-full transition-colors ${
-                      index + 1 <= currentStep
-                        ? 'bg-gradient-hero'
-                        : 'bg-gray-300 dark:bg-gray-600'
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
+        <div className="flex flex-col gap-6">
+          <div className="text-left space-y-2">
+            <p className="text-xs uppercase tracking-[0.3em] text-gray-500">Guided onboarding</p>
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white">
+              {stepTitles[currentStep - 1]}
+            </h2>
+            <p className="text-gray-600 dark:text-gray-300 max-w-3xl">
+              {getStepDescription(isOrganization, currentStep)}
+            </p>
           </div>
-        </header>
 
-        {/* Step Content */}
-        <main className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
-          <div className="w-full max-w-3xl">
-            {/* Step Title */}
+          <AnimatePresence mode="wait">
             <motion.div
-              key={`title-${currentStep}`}
-              initial={{ opacity: 0, y: -20 }}
+              key={`step-${currentStep}`}
+              initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -24 }}
               transition={{ duration: 0.3 }}
-              className="text-center mb-8"
+              className="bg-white dark:bg-gray-900/80 backdrop-blur rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 p-6 sm:p-8"
             >
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-3">
-                {stepTitles[currentStep - 1]}
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400 text-lg">
-                {isOrganization ? (
-                  <>
-                    {currentStep === 1 && 'Tell us about your organization'}
-                    {currentStep === 2 && 'Add team members who will provide services'}
-                    {currentStep === 3 && 'Set your organization\'s operating hours'}
-                    {currentStep === 4 && 'Create services your organization offers'}
-                    {currentStep === 5 && 'Share your booking links with customers'}
-                  </>
-                ) : (
-                  <>
-                    {currentStep === 1 && 'Tell us about your business'}
-                    {currentStep === 2 && 'Choose how to manage your calendar'}
-                    {currentStep === 3 && 'Set when you\'re available for appointments'}
-                    {currentStep === 4 && 'Create your first service or appointment type'}
-                    {currentStep === 5 && 'Share your booking link with customers'}
-                  </>
-                )}
-              </p>
+              {renderStep()}
             </motion.div>
+          </AnimatePresence>
 
-            {/* Step Component */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentStep}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3 }}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              Step {currentStep} of {totalSteps}
+            </div>
+            <div className="flex items-center gap-3 flex-wrap">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={async () => {
+                  if (confirm('Change onboarding type? You will return to the selection screen.')) {
+                    await resetOnboardingType();
+                    refreshProgress();
+                    window.location.reload();
+                  }
+                }}
               >
-                {renderStep()}
-              </motion.div>
-            </AnimatePresence>
-
-            {/* Skip Button for power users (except last step) */}
-            {currentStep < totalSteps && (
-              <div className="text-center mt-6">
-                <button
-                  onClick={handleSkip}
-                  disabled={isSubmitting}
-                  className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
-                >
-                  Skip for now
-                </button>
-              </div>
-            )}
+                Change type
+              </Button>
+              {currentStep > 1 && (
+                <Button variant="ghost" onClick={handleBack} disabled={isSubmitting}>
+                  Back
+                </Button>
+              )}
+              {currentStep < totalSteps && (
+                <>
+                  <Button variant="ghost" onClick={handleSkip} disabled={isSubmitting}>
+                    Skip for now
+                  </Button>
+                  <Button onClick={handleNext} disabled={isSubmitting}>
+                    Continue
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
-        </main>
-
-        {/* Footer */}
-        <footer className="py-6 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto text-center text-sm text-gray-500 dark:text-gray-400">
-            Need help? Contact support@ethiopianscheduler.com
-          </div>
-        </footer>
+        </div>
       </div>
     </div>
   );
 };
 
 export default OnboardingWizard;
-

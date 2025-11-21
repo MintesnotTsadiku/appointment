@@ -3,6 +3,7 @@
  * Unified calendar + time slots view
  */
 
+import { useEffect, useMemo, useState } from "react";
 import { formatDate } from "../../utils/dateHelpers";
 import { CalendarPanel } from "./CalendarPanel";
 import { TimeSlotsPanel } from "./TimeSlotsPanel";
@@ -64,6 +65,62 @@ export function DateTimeSelector({
   duration,
   onBack,
 }: DateTimeSelectorProps) {
+  const MAX_VISIBLE_PROVIDERS = 4;
+  const providers = useMemo(() => {
+    const map = new Map<string, { id: string; name: string }>();
+    availableSlots.forEach((slot) => {
+      if (slot.provider?.id && slot.provider.name) {
+        map.set(slot.provider.id, {
+          id: slot.provider.id,
+          name: slot.provider.name,
+        });
+      }
+    });
+    return Array.from(map.values());
+  }, [availableSlots]);
+
+  const [selectedProviderId, setSelectedProviderId] = useState<string>("all");
+  const [showAllProviders, setShowAllProviders] = useState(false);
+
+  useEffect(() => {
+    if (
+      selectedProviderId !== "all" &&
+      !providers.some((provider) => provider.id === selectedProviderId)
+    ) {
+      setSelectedProviderId("all");
+    }
+  }, [providers, selectedProviderId]);
+
+useEffect(() => {
+  if (providers.length <= MAX_VISIBLE_PROVIDERS && showAllProviders) {
+    setShowAllProviders(false);
+  }
+}, [providers.length, showAllProviders]);
+
+const filteredSlots = useMemo(() => {
+  if (selectedProviderId === "all") return availableSlots;
+  return availableSlots.filter(
+    (slot) => slot.provider?.id === selectedProviderId
+  );
+}, [availableSlots, selectedProviderId]);
+
+useEffect(() => {
+  if (providers.length > 0) {
+    console.log("[ProviderFilter] Updated", {
+      providers: providers.map((p) => p.name),
+      selectedProviderId,
+      filteredSlotsCount: filteredSlots.length,
+    });
+  }
+}, [providers, selectedProviderId, filteredSlots.length]);
+
+  const visibleProviders = useMemo(() => {
+    if (showAllProviders) return providers;
+    return providers.slice(0, MAX_VISIBLE_PROVIDERS);
+  }, [providers, showAllProviders]);
+
+  const shouldCollapseProviders = providers.length > MAX_VISIBLE_PROVIDERS;
+
   return (
     <div className="w-full max-w-7xl mx-auto">
       {/* Header */}
@@ -148,9 +205,57 @@ export function DateTimeSelector({
                 </div>
 
                 {/* Time Slots */}
+                {providers.length > 0 && (
+                  <div className="mb-6">
+                    <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-300">
+                      <span>Filter by provider</span>
+                      {shouldCollapseProviders && (
+                        <button
+                          type="button"
+                          className="text-primary-600 dark:text-primary-400 hover:underline"
+                          onClick={() => setShowAllProviders(!showAllProviders)}
+                        >
+                          {showAllProviders ? "Show fewer" : "Show all"}
+                        </button>
+                      )}
+                    </div>
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedProviderId("all")}
+                        className={cn(
+                          "px-4 py-1.5 rounded-full text-sm font-medium transition-colors",
+                          selectedProviderId === "all"
+                            ? "border-2 border-primary-600 text-primary-700 dark:text-primary-200 bg-white dark:bg-gray-900 shadow-sm"
+                            : "border border-transparent text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-300"
+                        )}
+                        aria-pressed={selectedProviderId === "all"}
+                      >
+                        All providers
+                      </button>
+                      {visibleProviders.map((provider) => (
+                        <button
+                          key={provider.id}
+                          type="button"
+                          onClick={() => setSelectedProviderId(provider.id)}
+                          className={cn(
+                            "px-4 py-1.5 rounded-full text-sm font-medium transition-colors",
+                            selectedProviderId === provider.id
+                              ? "border-2 border-primary-600 text-primary-700 dark:text-primary-200 bg-white dark:bg-gray-900 shadow-sm"
+                              : "border border-transparent text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-300"
+                          )}
+                          aria-pressed={selectedProviderId === provider.id}
+                        >
+                          {provider.name}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <TimeSlotsPanel
                   date={selectedDate}
-                  slots={availableSlots}
+                  slots={filteredSlots}
                   selectedSlot={selectedSlot}
                   onSlotSelect={onSlotSelect}
                   timeFormat={timeFormat}
@@ -203,7 +308,7 @@ export function DateTimeSelector({
           </div>
         </div>
       </div>
+      
     </div>
   );
 }
-

@@ -84,17 +84,6 @@ export function CalendarPanel({
     const isCurrentDay = isToday(date);
     const inCurrentMonth = isCurrentMonth(date);
 
-    // Debug logging for selected date
-    if (selected) {
-      console.log('Selected date styling:', {
-        date: date.getDate(),
-        selected,
-        isCurrentDay,
-        inCurrentMonth,
-        selectable
-      });
-    }
-
     return cn(
       // Base styles
       "relative h-12 w-12 md:h-14 md:w-14 rounded-xl font-medium transition-all duration-200",
@@ -218,35 +207,6 @@ export function CalendarPanel({
                     WebkitTextFillColor: '#ffffff',
                     textShadow: 'none'
                   }}
-                  ref={(el) => {
-                    if (el) {
-                      const computed = window.getComputedStyle(el);
-                      const parent = el.parentElement;
-                      const parentComputed = parent ? window.getComputedStyle(parent) : null;
-                      
-                      console.log('🔍 Selected span DEBUG:', {
-                        // Text color
-                        color: computed.color,
-                        webkitTextFillColor: computed.webkitTextFillColor,
-                        // Other properties that might hide text
-                        opacity: computed.opacity,
-                        visibility: computed.visibility,
-                        display: computed.display,
-                        fontSize: computed.fontSize,
-                        zIndex: computed.zIndex,
-                        // Background (might be covering text)
-                        backgroundColor: computed.backgroundColor,
-                        // Parent button background
-                        parentBackground: parentComputed?.backgroundColor,
-                        // Position
-                        position: computed.position,
-                        transform: computed.transform
-                      });
-                      
-                      console.log('📝 Actual element:', el);
-                      console.log('🎨 Parent button:', parent);
-                    }
-                  }}
                 >
                   {date.getDate()}
                 </span>
@@ -329,4 +289,3 @@ export function CalendarPanel({
     </div>
   );
 }
-

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useFrappePostCall } from 'frappe-react-sdk';
+import { useState, useEffect } from 'react';
+import { useFrappePostCall, useFrappeGetCall } from 'frappe-react-sdk';
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
 import { Label } from '@/components/label';
@@ -11,13 +11,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/select';
-import { Building2 } from 'lucide-react';
+import { Building2, Plus } from 'lucide-react';
+import { StepLayout } from './StepLayout';
+import { SearchableSelect } from './SearchableSelect';
+import type { Organization } from '@/context/onboarding/types';
+import { useOnboarding } from '@/context/onboarding';
 
 interface Step1OrgProfileProps {
   onNext: () => void;
 }
 
 const Step1OrgProfile = ({ onNext }: Step1OrgProfileProps) => {
+  const { progress } = useOnboarding();
+  const [selectedOrgId, setSelectedOrgId] = useState<string>('new');
   const [organizationName, setOrganizationName] = useState('');
   const [organizationType, setOrganizationType] = useState('');
   const [email, setEmail] = useState('');
@@ -28,6 +34,10 @@ const Step1OrgProfile = ({ onNext }: Step1OrgProfileProps) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const { call, loading } = useFrappePostCall('frappe_appointment.onboarding.save_organization_profile');
+  const { data: orgsData, isLoading: loadingOrgs } = useFrappeGetCall<{ 
+    success: boolean; 
+    organizations: Organization[] 
+  }>('frappe_appointment.onboarding.get_user_organizations');
 
   const organizationTypes = [
     { value: 'Healthcare', label: 'Healthcare Clinic' },
@@ -44,6 +54,41 @@ const Step1OrgProfile = ({ onNext }: Step1OrgProfileProps) => {
     { value: 'en', label: 'English' },
     { value: 'am', label: 'አማርኛ (Amharic)' },
   ];
+
+  // Get available organizations
+  const organizations = orgsData?.message?.organizations || orgsData?.organizations || [];
+
+  // Load selected organization on mount if coming back to this step
+  useEffect(() => {
+    if (progress?.selected_organization?.id && organizations.length > 0) {
+      setSelectedOrgId(progress.selected_organization.id);
+    }
+  }, [progress, organizations]);
+
+  // Load organization data when selection changes
+  useEffect(() => {
+    if (selectedOrgId && selectedOrgId !== 'new') {
+      const org = organizations.find(o => o.name === selectedOrgId);
+      if (org) {
+        setOrganizationName(org.organization_name);
+        setOrganizationType(org.organization_type);
+        setEmail(org.email);
+        setPhone(org.phone);
+        setTimezone(org.timezone);
+        setLanguage(org.language);
+        setDescription(org.description || '');
+      }
+    } else if (selectedOrgId === 'new') {
+      // Reset form for new organization
+      setOrganizationName('');
+      setOrganizationType('');
+      setEmail('');
+      setPhone('');
+      setTimezone('Africa/Addis_Ababa');
+      setLanguage('en');
+      setDescription('');
+    }
+  }, [selectedOrgId, organizations]);
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
@@ -82,6 +127,7 @@ const Step1OrgProfile = ({ onNext }: Step1OrgProfileProps) => {
         timezone,
         language,
         description,
+        organization_id: selectedOrgId !== 'new' ? selectedOrgId : null,
       });
 
       onNext();
@@ -94,22 +140,42 @@ const Step1OrgProfile = ({ onNext }: Step1OrgProfileProps) => {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
-          <Building2 className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-        </div>
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Organization Profile
-          </h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Tell us about your organization
-          </p>
-        </div>
-      </div>
-
+    <StepLayout
+      icon={Building2}
+      title="Organization Profile"
+      description="Tell us about your organization"
+    >
       <div className="space-y-6">
+        {/* Organization Selector */}
+        {organizations.length > 0 && (
+          <div className="space-y-2 p-4 border border-gray-200 dark:border-gray-800 rounded-lg bg-gray-50 dark:bg-gray-900">
+            <Label htmlFor="orgSelector">Select Organization</Label>
+            <Select value={selectedOrgId} onValueChange={setSelectedOrgId}>
+              <SelectTrigger className="bg-white dark:bg-gray-950">
+                <SelectValue placeholder="Choose existing or create new" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="new">
+                  <div className="flex items-center gap-2">
+                    <Plus className="h-4 w-4" />
+                    <span>Create New Organization</span>
+                  </div>
+                </SelectItem>
+                {organizations.map((org) => (
+                  <SelectItem key={org.name} value={org.name}>
+                    {org.organization_name} {org.role && `(${org.role})`}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {selectedOrgId !== 'new' && (
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Editing existing organization. Changes will be saved.
+              </p>
+            )}
+          </div>
+        )}
+
         {/* Organization Name */}
         <div className="space-y-2">
           <Label htmlFor="organizationName">
@@ -136,18 +202,16 @@ const Step1OrgProfile = ({ onNext }: Step1OrgProfileProps) => {
           <Label htmlFor="organizationType">
             Organization Type <span className="text-red-500">*</span>
           </Label>
-          <Select value={organizationType} onValueChange={setOrganizationType}>
-            <SelectTrigger className={errors.organizationType ? 'border-red-500' : ''}>
-              <SelectValue placeholder="Select organization type" />
-            </SelectTrigger>
-            <SelectContent>
-              {organizationTypes.map((type) => (
-                <SelectItem key={type.value} value={type.value}>
-                  {type.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <SearchableSelect
+            value={organizationType}
+            onChange={(value) => {
+              setOrganizationType(value);
+              if (errors.organizationType) setErrors({ ...errors, organizationType: '' });
+            }}
+            options={organizationTypes}
+            placeholder="Search organization type"
+            emptyMessage="No types found."
+          />
           {errors.organizationType && (
             <p className="text-sm text-red-500">{errors.organizationType}</p>
           )}
@@ -196,11 +260,11 @@ const Step1OrgProfile = ({ onNext }: Step1OrgProfileProps) => {
         </div>
 
         {/* Timezone & Language (side by side) */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="timezone">Timezone</Label>
             <Select value={timezone} onValueChange={setTimezone}>
-              <SelectTrigger>
+              <SelectTrigger className="bg-white dark:bg-gray-950">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -214,7 +278,7 @@ const Step1OrgProfile = ({ onNext }: Step1OrgProfileProps) => {
           <div className="space-y-2">
             <Label htmlFor="language">Language</Label>
             <Select value={language} onValueChange={setLanguage}>
-              <SelectTrigger>
+              <SelectTrigger className="bg-white dark:bg-gray-950">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -251,20 +315,14 @@ const Step1OrgProfile = ({ onNext }: Step1OrgProfileProps) => {
 
         {/* Next Button */}
         <div className="flex justify-end pt-4">
-          <Button
-            onClick={handleSubmit}
-            disabled={loading}
-            className="px-8"
-          >
+          <Button onClick={handleSubmit} disabled={loading} className="px-6">
             {loading ? 'Saving...' : 'Next: Add Providers'}
           </Button>
         </div>
       </div>
-    </div>
+    </StepLayout>
   );
 };
 
 export default Step1OrgProfile;
-
-
 

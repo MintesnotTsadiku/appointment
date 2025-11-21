@@ -37,6 +37,7 @@
     --gradient-feature-start: #6366F1;
     --gradient-feature-mid: #8B5CF6;
     --gradient-feature-end: #D946EF;
+    --onboarding-progress-inactive: rgba(148, 163, 184, 0.45);
     
     /* ========================================
        SHADCN/UI SYSTEM COLORS (Default)
@@ -88,6 +89,7 @@
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
     --ring: 0 0% 83.1%;
+    --onboarding-progress-inactive: rgba(255, 255, 255, 0.22);
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;

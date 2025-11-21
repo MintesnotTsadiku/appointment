@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { OnboardingProvider, useOnboarding } from '@/context/onboarding';
 import { useFrappeAuth } from 'frappe-react-sdk';
 import Spinner from '@/components/spinner';
@@ -66,18 +67,20 @@ const HomeContent = () => {
 
   // Show onboarding wizard if not complete
   if (!progress?.onboarding_complete) {
-    // For Administrator: Add option to switch onboarding type even during onboarding
+    const wizard = (
+      <div className="px-4">
+        <OnboardingWizard />
+      </div>
+    );
     if (isAdministrator) {
       return (
         <div className="relative">
-          {/* Admin Controls - Floating Button */}
           <div className="fixed bottom-6 right-6 z-50">
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 p-2 flex flex-col gap-2">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={async () => {
-                  // Switch to opposite type
                   const newType = progress.onboarding_type === 'individual' ? 'organization' : 'individual';
                   await setOnboardingType(newType);
                   refreshProgress();
@@ -92,7 +95,6 @@ const HomeContent = () => {
                 variant="outline"
                 size="sm"
                 onClick={async () => {
-                  // Reset to show type selection
                   if (confirm('Reset onboarding? This will allow you to choose a new onboarding type.')) {
                     await resetOnboardingType();
                     refreshProgress();
@@ -106,11 +108,11 @@ const HomeContent = () => {
               </Button>
             </div>
           </div>
-          <OnboardingWizard />
+          {wizard}
         </div>
       );
     }
-    return <OnboardingWizard />;
+    return wizard;
   }
 
   // Show dashboard if onboarding complete
@@ -171,4 +173,3 @@ const Home = () => {
 };
 
 export default Home;
-

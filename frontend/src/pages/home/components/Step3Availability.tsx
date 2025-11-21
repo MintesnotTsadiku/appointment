@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useFrappePostCall } from 'frappe-react-sdk';
 import { Button } from '@/components/button';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Clock3 } from 'lucide-react';
+import { StepLayout } from './StepLayout';
 
 interface Step3AvailabilityProps {
   onNext: () => void;
@@ -171,126 +172,82 @@ const Step3Availability = ({ onNext, onBack }: Step3AvailabilityProps) => {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Quick Templates */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          Quick Templates
-        </h3>
-        <div className="grid grid-cols-3 gap-3">
-          <Button
-            variant="outline"
-            onClick={() => applyTemplate('work')}
-            className="flex-1"
-          >
-            9-5 Mon-Fri
+    <StepLayout
+      icon={Clock3}
+      title="Set Availability"
+      description="Choose when you're available for appointments"
+      footer={
+        <div className="flex items-center justify-between">
+          <Button variant="ghost" onClick={onBack}>
+            <ArrowLeft className="h-4 w-4 mr-2" /> Back
           </Button>
-          <Button
-            variant="outline"
-            onClick={() => applyTemplate('flexible')}
-            className="flex-1"
-          >
-            Flexible Hours
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => applyTemplate('weekend')}
-            className="flex-1"
-          >
-            Weekends Only
+          <Button onClick={handleSubmit} disabled={loading}>
+            {loading ? 'Saving...' : 'Continue'}
           </Button>
         </div>
-      </div>
+      }
+    >
+      <div className="space-y-6">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Quick Templates
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <Button variant="outline" onClick={() => applyTemplate('work')}>
+              9-5 Mon-Fri
+            </Button>
+            <Button variant="outline" onClick={() => applyTemplate('flexible')}>
+              9-6 Mon-Sat
+            </Button>
+            <Button variant="outline" onClick={() => applyTemplate('weekend')}>
+              Weekend Only
+            </Button>
+          </div>
+        </div>
 
-      {/* Weekly Grid */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 overflow-x-auto">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          Click to toggle availability
-        </h3>
-        <div className="min-w-max">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr>
-                <th className="p-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                  Time
-                </th>
-                {dayLabels.map((day, i) => (
-                  <th
-                    key={day}
-                    className="p-2 text-center text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    {day}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {hours.map((hour) => (
-                <tr key={hour}>
-                  <td className="p-2 text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">
-                    {hour === 12 ? '12 PM' : hour > 12 ? `${hour - 12} PM` : `${hour} AM`}
-                  </td>
-                  {days.map((day) => (
-                    <td key={`${day}-${hour}`} className="p-1">
-                      <button
-                        onClick={() => toggleTimeSlot(day, hour)}
-                        className={`w-12 h-12 rounded-lg transition-all ${
-                          isTimeSlotSelected(day, hour)
-                            ? 'bg-gradient-hero text-white shadow-md'
-                            : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
-                        }`}
-                        aria-label={`Toggle ${day} at ${hour}:00`}
-                      />
-                    </td>
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 overflow-x-auto">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Click to toggle availability</h3>
+          <div className="min-w-max">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr>
+                  <th className="p-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400">Time</th>
+                  {dayLabels.map((day) => (
+                    <th key={day} className="p-2 text-center text-sm font-medium text-gray-900 dark:text-white">
+                      {day}
+                    </th>
                   ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {hours.map((hour) => (
+                  <tr key={hour}>
+                    <td className="p-2 text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">
+                      {hour === 12 ? '12 PM' : hour > 12 ? `${hour - 12} PM` : `${hour} AM`}
+                    </td>
+                    {days.map((day) => (
+                      <td key={`${day}-${hour}`} className="p-1">
+                        <button
+                          onClick={() => toggleTimeSlot(day, hour)}
+                          className={`w-12 h-12 rounded-lg transition-all ${
+                            isTimeSlotSelected(day, hour)
+                              ? 'bg-primary-600 dark:bg-primary-500 text-white shadow-md'
+                              : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
+                          }`}
+                          aria-label={`Toggle ${day} at ${hour}:00`}
+                        />
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-4">Click and drag to select multiple hours</p>
         </div>
-
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-4">
-          Click and drag to select multiple hours
-        </p>
       </div>
-
-      {/* Navigation Buttons */}
-      <div className="flex items-center justify-between">
-        <Button
-          variant="outline"
-          onClick={onBack}
-          className="flex items-center space-x-2"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Back</span>
-        </Button>
-
-        <Button
-          onClick={handleSubmit}
-          disabled={loading}
-          className="bg-gradient-hero hover:opacity-90 text-white"
-        >
-          {loading ? (
-            <span className="flex items-center space-x-2">
-              <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              <span>Saving...</span>
-            </span>
-          ) : (
-            <span className="flex items-center space-x-2">
-              <span>Continue</span>
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </span>
-          )}
-        </Button>
-      </div>
-    </div>
+    </StepLayout>
   );
 };
 
 export default Step3Availability;
-
