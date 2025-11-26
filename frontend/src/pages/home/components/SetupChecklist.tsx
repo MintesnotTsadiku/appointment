@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useFrappeGetCall } from 'frappe-react-sdk';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card } from '@/components/card';
 import { useTranslation } from '@/lib/i18n';
-import { CheckCircle2, Circle, ChevronDown, ChevronUp } from 'lucide-react';
+import { CheckCircle2, Circle, ChevronDown, ChevronUp, PartyPopper } from 'lucide-react';
 
 interface ChecklistItem {
   id: string;
@@ -15,75 +15,69 @@ interface ChecklistItem {
 
 const SetupChecklist = () => {
   const { t } = useTranslation();
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false); // Default collapsed
 
-  const { data, isLoading } = useFrappeGetCall<{ message: { completed_steps: number[] } }>(
-    'frappe_appointment.onboarding.get_progress',
+  const { data, isLoading } = useFrappeGetCall<{ 
+    message: { 
+      items: ChecklistItem[]; 
+      completed_count: number; 
+      total_count: number; 
+      progress_percent: number;
+      all_complete: boolean;
+    } 
+  }>(
+    'frappe_appointment.onboarding.get_detailed_checklist',
     undefined,
-    'checklist-progress'
+    'checklist-detailed'
   );
 
-  const completedSteps = data?.message?.completed_steps || [];
+  const checklistData = data?.message || {
+    items: [],
+    completed_count: 0,
+    total_count: 7,
+    progress_percent: 0,
+    all_complete: false
+  };
 
-  const checklistItems: ChecklistItem[] = [
-    {
-      id: '1',
-      title: 'Connect calendar',
-      description: 'Google or built-in calendar',
-      completed: completedSteps.includes(1),
-      actionUrl: '/settings/calendar',
-    },
-    {
-      id: '2',
-      title: 'Set availability',
-      description: 'Define your working hours',
-      completed: completedSteps.includes(2),
-      actionUrl: '/settings/availability',
-    },
-    {
-      id: '3',
-      title: 'Create appointment type',
-      description: 'Add services you offer',
-      completed: completedSteps.includes(3),
-      actionUrl: '/settings/services',
-    },
-    {
-      id: '4',
-      title: 'Share booking link',
-      description: 'Send to your first customer',
-      completed: completedSteps.includes(4),
-      actionUrl: '/settings/booking-link',
-    },
-    {
-      id: '5',
-      title: 'Test booking',
-      description: 'Book as guest to test',
-      completed: completedSteps.includes(5),
-      actionUrl: '/schedule/in/test',
-    },
-    {
-      id: '6',
-      title: 'Configure notifications',
-      description: 'SMS/Email reminders',
-      completed: completedSteps.includes(6),
-      actionUrl: '/settings/notifications',
-    },
-    {
-      id: '7',
-      title: 'Add payment method',
-      description: 'telebirr or Chapa',
-      completed: completedSteps.includes(7),
-      actionUrl: '/settings/payments',
-    },
-  ];
+  const checklistItems = checklistData.items;
+  const completedCount = checklistData.completed_count;
+  const totalCount = checklistData.total_count;
+  const progressPercent = checklistData.progress_percent;
 
-  const completedCount = checklistItems.filter((item) => item.completed).length;
-  const totalCount = checklistItems.length;
-  const progressPercent = Math.round((completedCount / totalCount) * 100);
+  // Celebrate when all complete
+  useEffect(() => {
+    if (checklistData.all_complete && completedCount === totalCount && totalCount > 0) {
+      // Simple celebration message
+      console.log('🎉 Checklist complete!');
+    }
+  }, [checklistData.all_complete, completedCount, totalCount]);
 
-  // Hide checklist if all items are complete
-  if (completedCount === totalCount) {
-    return null;
+  // Show celebration card if all items are complete
+  if (completedCount === totalCount && totalCount > 0) {
+    return (
+      <Card className="overflow-hidden border-2 border-green-500 dark:border-green-600 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20">
+        <div className="p-6 text-center">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 200, damping: 15 }}
+            className="inline-flex items-center justify-center w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full mb-4"
+          >
+            <PartyPopper className="w-8 h-8 text-green-600 dark:text-green-400" />
+          </motion.div>
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+            🎉 All Set Up!
+          </h3>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
+            Your scheduling platform is ready to accept bookings
+          </p>
+          <div className="flex items-center justify-center space-x-2 text-sm text-green-700 dark:text-green-300">
+            <CheckCircle2 className="w-5 h-5" />
+            <span>{totalCount}/{totalCount} tasks completed</span>
+          </div>
+        </div>
+      </Card>
+    );
   }
 
   if (isLoading) {

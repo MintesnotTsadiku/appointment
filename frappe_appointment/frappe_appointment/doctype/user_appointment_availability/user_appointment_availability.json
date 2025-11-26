@@ -10,6 +10,7 @@
  "engine": "InnoDB",
  "field_order": [
   "user",
+  "provider",
   "google_calendar",
   "appointment_time_slot",
   "personal_meetings_section",
@@ -20,7 +21,9 @@
   "meeting_link",
   "response_email_template",
   "section_break_fjby",
-  "available_durations"
+  "available_durations",
+  "section_break_booking_urls",
+  "booking_urls"
  ],
  "fields": [
   {
@@ -31,6 +34,13 @@
    "options": "User",
    "reqd": 1,
    "unique": 1
+  },
+  {
+   "fieldname": "provider",
+   "fieldtype": "Link",
+   "label": "Provider",
+   "options": "Provider",
+   "description": "One-to-one link to Provider record. Auto-populated from user email."
   },
   {
    "fieldname": "appointment_time_slot",
@@ -100,11 +110,22 @@
    "fieldtype": "Link",
    "label": "Response Email Template",
    "options": "Email Template"
+  },
+  {
+   "fieldname": "section_break_booking_urls",
+   "fieldtype": "Section Break",
+   "label": "Booking URLs"
+  },
+  {
+   "fieldname": "booking_urls",
+   "fieldtype": "Table",
+   "label": "Booking URLs",
+   "options": "Booking URL"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-02-20 12:47:50.808412",
+ "modified": "2025-11-23 15:08:30.466018",
  "modified_by": "Administrator",
  "module": "Frappe Appointment",
  "name": "User Appointment Availability",
@@ -142,6 +163,7 @@
    "select": 1
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],

@@ -3,7 +3,7 @@
  * Mobile-first, scannable, beautiful
  */
 
-import { Clock, Star, User } from "lucide-react";
+import { Clock, Star, User, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/button";
 import {
@@ -25,6 +25,7 @@ export function TimeSlotsPanel({
   loading = false,
   groupByTimeOfDay = true,
   className,
+  location,
 }: TimeSlotsProps) {
   // Group slots by time of day
   const groupedSlots: TimeSlotGroup[] = groupByTimeOfDay
@@ -123,6 +124,32 @@ export function TimeSlotsPanel({
           <span>{timezone.split("/")[1]?.replace("_", " ")}</span>
         </div>
       </div>
+
+      {/* Location Info */}
+      {location && (
+        <div className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
+          <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
+            <MapPin className="h-4 w-4 text-primary-600 dark:text-primary-400" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+              {location.is_online ? (
+                <span className="flex items-center gap-2">
+                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                  Online Meeting
+                </span>
+              ) : (
+                location.location_name
+              )}
+            </p>
+            {location.address && !location.is_online && (
+              <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                {location.address}
+              </p>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Grouped Time Slots */}
       <div className="space-y-6">

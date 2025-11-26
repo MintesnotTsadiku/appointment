@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useFrappeGetCall } from 'frappe-react-sdk';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { Card } from '@/components/card';
 import { useTranslation } from '@/lib/i18n';
 import { AlertTriangle, Info, CheckCircle, XCircle, X } from 'lucide-react';
@@ -16,6 +17,7 @@ interface Alert {
 
 const AlertsPanel = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [dismissedAlerts, setDismissedAlerts] = useState<Set<string>>(new Set());
 
   const { data, isLoading, error, mutate } = useFrappeGetCall<{ message: { alerts: Alert[] } }>(
@@ -64,7 +66,13 @@ const AlertsPanel = () => {
   };
 
   const handleAction = (actionUrl: string) => {
+    // Use React Router navigation for internal routes
+    if (actionUrl.startsWith('/')) {
+      navigate(actionUrl);
+    } else {
+      // External URLs use window.location
     window.location.href = actionUrl;
+    }
   };
 
   return (

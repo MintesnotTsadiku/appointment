@@ -1,10 +1,21 @@
-app_name = "frappe_appointment"
-app_title = "Appointment"
+app_name = "scheduler"
+app_title = "Scheduler"
 app_publisher = "minte"
 app_description = "The appointment scheduling app with team support in Frappe."
 app_email = "mtsadiku@gmail.com"
 app_license = "GNU AFFERO GENERAL PUBLIC LICENSE (v3)"
 # required_apps = []
+
+# App Switcher Configuration
+# --------------------------
+add_to_apps_screen = [
+    {
+        "name": "frappe_appointment",
+        "logo": "/assets/frappe_appointment/logo.png",
+        "title": "Appointment",
+        "route": "app/appointment",
+    }
+]
 
 
 # Includes in <head>
@@ -194,7 +205,7 @@ fixtures = [
 # }
 
 has_permission = {
-    "Event": "frappe_appointment.overrides.event_override.has_permission",
+    "Booking Event": "frappe_appointment.overrides.event_override.has_permission",
 }
 
 # DocType Class
@@ -202,7 +213,7 @@ has_permission = {
 # Override standard doctype classes
 
 override_doctype_class = {
-    "Event": "frappe_appointment.overrides.event_override.EventOverride",
+    "Booking Event": "frappe_appointment.overrides.event_override.BookingEventOverride",
     "Google Calendar": "frappe_appointment.overrides.google_calendar_override.GoogleCalendarOverride",
     "Customize Form": "frappe_appointment.overrides.customize_form_override.AppointmentOverrideCustomizeForm",
 }

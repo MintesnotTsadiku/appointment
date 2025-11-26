@@ -12,19 +12,22 @@ docs/
 │
 ├── getting-started/          # 🚀 Onboarding & quick reference
 │   ├── START_HERE.md
+│   ├── START_HERE_ROOT.md (moved from root)
 │   ├── GETTING_STARTED.md
 │   ├── SETUP_GUIDE.md
 │   ├── QUICK_SETUP.md
 │   ├── MODULE_SCAFFOLDING_GUIDE.md
 │   ├── MODULES_CREATED.md
 │   ├── MODULE_STRUCTURE.md
-│   └── QUICK_REFERENCE.md
+│   ├── QUICK_REFERENCE.md
+│   └── README_ETHIOPIAN_SCHEDULER.md (moved from root)
 │
 ├── planning/                # 📋 Project planning & tracking
 │   ├── PROJECT_SUMMARY.md
 │   ├── PROJECT_STATUS_TRACKER.md
 │   ├── scheduling_platform_prd.md
-│   └── scheduling_platform_implementation_plan_sprint_board.md
+│   ├── scheduling_platform_implementation_plan_sprint_board.md
+│   └── BOOKING_REDESIGN_SPEC.md (moved from root)
 │
 ├── strategy/                # 🎯 Business strategy & vision
 │   ├── ethiopian_scheduling_platform_overview_strategy.md
@@ -34,7 +37,25 @@ docs/
 ├── technical/               # 🛠️ Technical setup & guides
 │   ├── system_setup_guide.md
 │   ├── frappe-console-execution.md
+│   ├── ARCHITECTURE_DIAGRAM.md (moved from root)
+│   ├── API_COMPATIBILITY_MATRIX.md (moved from root)
+│   ├── API_INTEGRATION_COMPLETE.md (moved from root)
+│   ├── DROP_IN_REPLACEMENT_GUIDE.md (moved from root)
+│   ├── README_V2_INTEGRATION.md (moved from root)
+│   ├── COMPLETE_BOOKING_FLOW.md (moved from root)
+│   ├── DEBUG_GUIDE.md (moved from root)
 │   └── images_for_setup/
+│
+├── implementation/          # 📝 Implementation progress & status
+│   └── (various implementation status docs)
+│
+├── testing/                 # 🧪 Testing guides
+│   └── (testing documentation)
+│
+├── WORKSPACE_ENHANCEMENT_GUIDE.md  # Workspace setup guide
+├── WORKSPACE_SETUP_GUIDE.md        # Workspace configuration
+├── HOW_IT_WORKS.md                 # Data model overview
+├── TESTING_GUIDE.md                # Testing guide
 │
 └── ai-generated/           # 🤖 AI-generated outputs
     └── README.md
@@ -80,6 +101,10 @@ docs/
 |----------|-------------|-------------|
 | **[technical/system_setup_guide.md](technical/system_setup_guide.md)** | ⚙️ Google Calendar & Zoom setup | Setting up integrations |
 | **[technical/frappe-console-execution.md](technical/frappe-console-execution.md)** | 💻 Console commands, debugging | Console operations |
+| **[technical/ARCHITECTURE_DIAGRAM.md](technical/ARCHITECTURE_DIAGRAM.md)** | 🏗️ System architecture overview | Understanding system design |
+| **[technical/API_COMPATIBILITY_MATRIX.md](technical/API_COMPATIBILITY_MATRIX.md)** | 🔌 API compatibility reference | API integration |
+| **[technical/COMPLETE_BOOKING_FLOW.md](technical/COMPLETE_BOOKING_FLOW.md)** | 📋 Complete booking flow documentation | Understanding booking process |
+| **[technical/DEBUG_GUIDE.md](technical/DEBUG_GUIDE.md)** | 🐛 Debugging guide | Troubleshooting issues |
 
 ---
 
@@ -106,7 +131,7 @@ docs/
 ### For New Team Members
 1. [getting-started/START_HERE.md](getting-started/START_HERE.md) (5 min)
 2. [planning/PROJECT_SUMMARY.md](planning/PROJECT_SUMMARY.md) (10 min)
-3. [README_ETHIOPIAN_SCHEDULER.md](../README_ETHIOPIAN_SCHEDULER.md) (15 min)
+3. [getting-started/README_ETHIOPIAN_SCHEDULER.md](getting-started/README_ETHIOPIAN_SCHEDULER.md) (15 min)
 4. [getting-started/GETTING_STARTED.md](getting-started/GETTING_STARTED.md) (30 min + hands-on)
 5. [planning/scheduling_platform_prd.md](planning/scheduling_platform_prd.md) (30 min)
 
@@ -169,13 +194,15 @@ docs/
 | Need | Document |
 |------|----------|
 | **Understand what we're building** | [planning/PROJECT_SUMMARY.md](planning/PROJECT_SUMMARY.md) |
-| **Start development** | [README_ETHIOPIAN_SCHEDULER.md](../README_ETHIOPIAN_SCHEDULER.md) |
+| **Start development** | [getting-started/README_ETHIOPIAN_SCHEDULER.md](getting-started/README_ETHIOPIAN_SCHEDULER.md) |
 | **Learn the existing app** | [getting-started/GETTING_STARTED.md](getting-started/GETTING_STARTED.md) |
 | **Track progress** | [planning/PROJECT_STATUS_TRACKER.md](planning/PROJECT_STATUS_TRACKER.md) |
 | **Find a command** | [getting-started/QUICK_REFERENCE.md](getting-started/QUICK_REFERENCE.md) |
 | **Understand requirements** | [planning/scheduling_platform_prd.md](planning/scheduling_platform_prd.md) |
 | **Get API shapes** | [planning/scheduling_platform_implementation_plan_sprint_board.md](planning/scheduling_platform_implementation_plan_sprint_board.md) |
 | **Setup Google Calendar** | [technical/system_setup_guide.md](technical/system_setup_guide.md) |
+| **Understand architecture** | [technical/ARCHITECTURE_DIAGRAM.md](technical/ARCHITECTURE_DIAGRAM.md) |
+| **Workspace setup** | [WORKSPACE_ENHANCEMENT_GUIDE.md](WORKSPACE_ENHANCEMENT_GUIDE.md) |
 | **Explore data** | [../scripts/explore_app.py](../scripts/explore_app.py) |
 | **AI-generated content** | [ai-generated/](ai-generated/) |
 

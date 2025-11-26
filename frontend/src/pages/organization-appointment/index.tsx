@@ -91,6 +91,21 @@ const OrganizationAppointmentV2 = () => {
   // Process API response (same as old implementation)
   useEffect(() => {
     if (data) {
+      // Check if response contains an error
+      if (data?.message?.error) {
+        const errorMsg = typeof data.message.error === 'string' 
+          ? data.message.error 
+          : JSON.stringify(data.message.error);
+        setFriendlyError(errorMsg);
+        return;
+      }
+      
+      // Only process if we have valid data
+      if (!data?.message?.full_name && !data?.message?.company) {
+        setFriendlyError("Invalid response from server");
+        return;
+      }
+      
       setUserInfo({
         name: data?.message?.full_name,
         designation: data?.message?.position,
@@ -123,7 +138,22 @@ const OrganizationAppointmentV2 = () => {
 
   useEffect(() => {
     if (error) {
-      const errorMessage = error?.message || error?.exception || "Failed to load booking page";
+      // Handle error object properly - extract string message
+      let errorMessage = "Failed to load booking page";
+      if (typeof error === 'string') {
+        errorMessage = error;
+      } else if (error?.message) {
+        errorMessage = String(error.message);
+      } else if (error?.exception) {
+        errorMessage = String(error.exception);
+      } else if (typeof error === 'object' && error !== null) {
+        // If error is an object, try to extract a message or stringify safely
+        if ('error' in error) {
+          errorMessage = String(error.error);
+        } else {
+          errorMessage = "An error occurred. Please try again.";
+        }
+      }
       setFriendlyError(errorMessage);
     }
   }, [error]);
@@ -149,16 +179,16 @@ const OrganizationAppointmentV2 = () => {
     durationId: type || meetingDurationCards[0]?.id || "",
     date: shouldFetchSlots ? selectedDate : null,
     timezone: timeZone,
-    organizationId: data?.message?.organization_id,
-    serviceId: data?.message?.service_id,
-    enabled: shouldFetchSlots,
+    organizationId: data?.message?.error ? undefined : data?.message?.organization_id,
+    serviceId: data?.message?.error ? undefined : data?.message?.service_id,
+    enabled: shouldFetchSlots && !data?.message?.error,
   });
 
   // Booking submission
   const { submitBooking, loading: bookingLoading } = useBookingSubmit();
 
   // Transform data for V2 components
-  const organization: Organization | null = data ? {
+  const organization: Organization | null = data && !data?.message?.error ? {
     id: orgSlug || "",
     slug: orgSlug || "",
     name: data.message.company || data.message.full_name || "",
@@ -188,13 +218,14 @@ const OrganizationAppointmentV2 = () => {
     })) || [],
   } : null;
 
-  const currentService: Service | null = serviceSlug && data ? {
+  const currentService: Service | null = serviceSlug && data && !data?.message?.error ? {
     id: data.message.service_id || serviceSlug,
     slug: serviceSlug,
     name: userInfo.name || serviceSlug,
     duration: meetingDurationCards[0]?.duration / 60 || 30,
     type: "organization",
     providerCount: data.message.provider_count,
+    location: data.message.location, // Add location information
   } : null;
 
   // Convert available days to numbers
@@ -243,8 +274,8 @@ const OrganizationAppointmentV2 = () => {
         formData,
         timezone: timeZone,
         timeFormat,
-        organizationId: data?.message?.organization_id,
-        serviceId: data?.message?.service_id,
+        organizationId: data?.message?.error ? undefined : data?.message?.organization_id,
+        serviceId: data?.message?.error ? undefined : data?.message?.service_id,
       });
 
       // Re-fetch slots after successful booking to update availability
@@ -337,6 +368,7 @@ const OrganizationAppointmentV2 = () => {
               loading={slotsLoading}
               serviceName={currentService.name}
               duration={currentService.duration}
+              location={currentService.location}
               onBack={() => {
                 if (organization?.services && organization.services.length > 1) {
                   setCurrentPhase('service');

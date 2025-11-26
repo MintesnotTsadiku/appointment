@@ -36,11 +36,11 @@
    "unique": 1
   },
   {
-   "description": "Link to Frappe Event (upstream)",
+   "description": "Link to Booking Event",
    "fieldname": "event",
    "fieldtype": "Link",
    "label": "Event",
-   "options": "Event"
+   "options": "Booking Event"
   },
   {
    "fieldname": "event_type",

@@ -1,0 +1,206 @@
+{
+ "actions": [],
+ "creation": "2025-11-21 23:42:18.015395",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "demo_data_tab",
+  "creation_order_info",
+  "section_break_selection",
+  "include_organizations",
+  "demo_org_count",
+  "column_break_1",
+  "include_providers",
+  "demo_provider_count",
+  "section_break_2",
+  "include_services",
+  "demo_service_count",
+  "column_break_2",
+  "include_locations",
+  "demo_location_count",
+  "section_break_3",
+  "include_appointments",
+  "demo_appointment_count",
+  "demo_date_range_days",
+  "section_break_actions",
+  "btn_generate_demo_data",
+  "column_break_actions",
+  "btn_delete_demo_data",
+  "section_break_log",
+  "demo_generation_log",
+  "statistics_tab",
+  "stats_html"
+ ],
+ "fields": [
+  {
+   "fieldname": "demo_data_tab",
+   "fieldtype": "Tab Break",
+   "label": "Demo Data Generation"
+  },
+  {
+   "fieldname": "creation_order_info",
+   "fieldtype": "HTML",
+   "label": "Creation Order",
+   "options": "<div style='background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); border: 2px solid #00D9FF; color: #ffffff; padding: 20px; border-radius: 8px; margin-bottom: 20px;'>\n  <h3 style='margin-top: 0; color: #00D9FF;'>📋 Demo Data Generator</h3>\n  <p style='margin-bottom: 15px; color: #e0e0e0;'>Select which data types to generate. Data will be created in the correct order:</p>\n  <ol style='line-height: 1.8; margin: 0; padding-left: 20px; color: #cccccc;'>\n    <li><strong style=\"color: #00D9FF;\">Organizations</strong> - Business entities (clinics, salons)</li>\n    <li><strong style=\"color: #00D9FF;\">Providers</strong> - Individual service providers (doctors, stylists)</li>\n    <li><strong style=\"color: #00D9FF;\">Services</strong> - Appointment types offered</li>\n    <li><strong style=\"color: #00D9FF;\">Locations</strong> - Physical locations with opening hours</li>\n    <li><strong style=\"color: #00D9FF;\">Appointments</strong> - Booked appointments (last 2 weeks)</li>\n  </ol>\n  <div style='margin-top: 15px; padding: 10px; background: rgba(0, 217, 255, 0.1); border-left: 3px solid #00D9FF; border-radius: 4px;'>\n    <strong style=\"color: #00D9FF;\">💡 Tip:</strong> <span style=\"color: #e0e0e0;\">Check the boxes below and click \"Generate Demo Data\" to create realistic Ethiopian test data.</span>\n  </div>\n</div>"
+  },
+  {
+   "fieldname": "section_break_selection",
+   "fieldtype": "Section Break",
+   "label": "Select Data Types to Generate"
+  },
+  {
+   "default": "1",
+   "fieldname": "include_organizations",
+   "fieldtype": "Check",
+   "label": "Organizations"
+  },
+  {
+   "default": "3",
+   "depends_on": "eval:doc.include_organizations",
+   "fieldname": "demo_org_count",
+   "fieldtype": "Int",
+   "label": "Count"
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "include_providers",
+   "fieldtype": "Check",
+   "label": "Providers"
+  },
+  {
+   "default": "5",
+   "depends_on": "eval:doc.include_providers",
+   "fieldname": "demo_provider_count",
+   "fieldtype": "Int",
+   "label": "Count"
+  },
+  {
+   "fieldname": "section_break_2",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "include_services",
+   "fieldtype": "Check",
+   "label": "Services"
+  },
+  {
+   "default": "5",
+   "depends_on": "eval:doc.include_services",
+   "fieldname": "demo_service_count",
+   "fieldtype": "Int",
+   "label": "Count"
+  },
+  {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "include_locations",
+   "fieldtype": "Check",
+   "label": "Locations"
+  },
+  {
+   "default": "3",
+   "depends_on": "eval:doc.include_locations",
+   "fieldname": "demo_location_count",
+   "fieldtype": "Int",
+   "label": "Count"
+  },
+  {
+   "fieldname": "section_break_3",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "include_appointments",
+   "fieldtype": "Check",
+   "label": "Appointments"
+  },
+  {
+   "default": "50",
+   "depends_on": "eval:doc.include_appointments",
+   "fieldname": "demo_appointment_count",
+   "fieldtype": "Int",
+   "label": "Count"
+  },
+  {
+   "default": "14",
+   "depends_on": "eval:doc.include_appointments",
+   "fieldname": "demo_date_range_days",
+   "fieldtype": "Int",
+   "label": "Days Back"
+  },
+  {
+   "collapsible": 0,
+   "fieldname": "section_break_actions",
+   "fieldtype": "Section Break",
+   "label": "Actions"
+  },
+  {
+   "fieldname": "btn_generate_demo_data",
+   "fieldtype": "Button",
+   "label": "🚀 Generate Demo Data"
+  },
+  {
+   "fieldname": "column_break_actions",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "btn_delete_demo_data",
+   "fieldtype": "Button",
+   "label": "🗑️ Delete Demo Data"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "section_break_log",
+   "fieldtype": "Section Break",
+   "label": "Generation Log"
+  },
+  {
+   "fieldname": "demo_generation_log",
+   "fieldtype": "Text",
+   "label": "Log",
+   "read_only": 1
+  },
+  {
+   "fieldname": "statistics_tab",
+   "fieldtype": "Tab Break",
+   "label": "Statistics"
+  },
+  {
+   "fieldname": "stats_html",
+   "fieldtype": "HTML",
+   "label": "Demo Data Statistics"
+  }
+ ],
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-11-21 23:50:00.000000",
+ "modified_by": "Administrator",
+ "module": "Scheduler",
+ "name": "Configuration Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

@@ -3,6 +3,8 @@
 
 import frappe
 from frappe.model.document import Document
+from frappe import _
+from frappe_appointment.scheduler.availability import validate_availability_hierarchy
 
 
 class Provider(Document):
@@ -10,6 +12,51 @@ class Provider(Document):
 		"""Auto-populate provider_name if not set or empty"""
 		if not self.provider_name or self.provider_name.strip() == "":
 			self.provider_name = self.get_display_name()
+		
+		# Auto-link User Appointment Availability if not set
+		if not self.user_appointment_availability and self.email:
+			# Find User Appointment Availability by user email
+			availability = frappe.db.get_value("User Appointment Availability", {"user": self.email}, "name")
+			if availability:
+				self.user_appointment_availability = availability
+		
+		# Validate availability hierarchy if custom hours are set
+		# Safely check if opening_hours exists and has data, and use_default_hours is not set
+		opening_hours = getattr(self, 'opening_hours', [])
+		use_default_hours = getattr(self, 'use_default_hours', 1)  # Default to True if not set
+		if opening_hours and not use_default_hours:
+			self.validate_availability()
+	
+	def validate_availability(self):
+		"""Validate that Provider hours are within Service and Location hours."""
+		if not self.locations:
+			return  # No locations, skip validation
+		
+		# Get first location (for now, validate against first location)
+		# TODO: Support multiple locations
+		location_name = self.locations[0].location if self.locations else None
+		if not location_name:
+			return
+		
+		# Get service from EventTypes for this provider
+		event_types = frappe.get_all(
+			"EventType",
+			filters={"provider": self.name, "location": location_name, "is_active": 1},
+			fields=["service"],
+			limit=1
+		)
+		
+		service_name = event_types[0].service if event_types else None
+		
+		# Validate hierarchy
+		is_valid, error_msg = validate_availability_hierarchy(
+			location_name=location_name,
+			service_name=service_name,
+			provider_name=self.name
+		)
+		
+		if not is_valid:
+			frappe.throw(_(error_msg or "Provider availability must be within Service and Location hours."))
 	
 	def get_display_name(self):
 		"""
@@ -39,3 +86,16 @@ class Provider(Document):
 			return self.email
 		
 		return "Provider"
+	
+	def on_update(self):
+		"""Sync booking URLs when provider is updated"""
+		# Skip if we're already syncing to prevent recursion
+		if frappe.flags.syncing_booking_urls:
+			return
+		
+		try:
+			from frappe_appointment.scheduler.booking_url_manager import sync_booking_urls_for_provider
+			sync_booking_urls_for_provider(self.name)
+		except Exception as e:
+			# Don't fail the save if URL sync fails
+			frappe.log_error(str(e), "Provider: Sync Booking URLs Error")

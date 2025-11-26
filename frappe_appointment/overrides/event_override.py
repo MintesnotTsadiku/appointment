@@ -6,7 +6,7 @@ import frappe
 import frappe.utils
 import requests
 from frappe import _, clear_messages
-from frappe.desk.doctype.event.event import Event
+from frappe_appointment.scheduler.doctype.booking_event.booking_event import BookingEvent
 from frappe.integrations.doctype.google_calendar.google_calendar import (
     get_google_calendar_object,
 )
@@ -31,7 +31,7 @@ from frappe_appointment.helpers.utils import utc_to_sys_time
 from frappe_appointment.helpers.zoom import create_meeting, delete_meeting, update_meeting
 
 
-class EventOverride(Event):
+class BookingEventOverride(BookingEvent):
     """Event Doctype Overwrite
 
     Args:
@@ -341,7 +341,7 @@ class EventOverride(Event):
                         "reference_doctype": USER_APPOINTMENT_AVAILABILITY,
                         "reference_docname": member.user,
                         "email": user_email,  # Use actual email, not username
-                        "parenttype": "Event",
+                        "parenttype": "Booking Event",
                         "parentfield": "event_participants",
                     }
                 )
@@ -360,7 +360,7 @@ class EventOverride(Event):
                     "reference_doctype": "Google Calendar",
                     "reference_docname": account.name,
                     "email": account.user,
-                    "parenttype": "Event",
+                    "parenttype": "Booking Event",
                     "parentfield": "event_participants",
                 }
             )
@@ -615,7 +615,7 @@ def _create_event_for_appointment_group(
             if not event_id:
                 return frappe.throw(_("Unable to Update an event"))
 
-            event = frappe.get_doc("Event", event_id)
+            event = frappe.get_doc("Booking Event", event_id)
 
             event.starts_on = starts_on
             event.ends_on = ends_on
@@ -657,7 +657,7 @@ def _create_event_for_appointment_group(
             return frappe.throw(_("Unable to Update an event"))
 
     calendar_event = {
-        "doctype": "Event",
+        "doctype": "Booking Event",
         "subject": event_info.get("subject"),
         "description": event_info.get("description"),
         "starts_on": starts_on,
@@ -716,7 +716,7 @@ def _create_event_for_appointment_group(
         resp["meeting_provider"] = event.custom_meeting_provider
         resp["meet_link"] = event.custom_meet_link
         if appointment_group.allow_rescheduling:
-            event = frappe.get_doc("Event", event.name)
+            event = frappe.get_doc("Booking Event", event.name)
             resp["reschedule_url"] = event.reschedule_url
         resp["google_calendar_event_url"] = event.custom_google_calendar_event_url
 
@@ -735,7 +735,7 @@ def check_one_time_schedule(
         event_id = json.loads(event_info.get("custom_doctype_link_with_event", "[]"))
         event_id = event_id[1]["reference_docname"]
         scheduled_events = frappe.get_all(
-            "Event",
+            "Booking Event",
             filters=[
                 ["Event DocType Link", "reference_docname", "=", event_id],
             ],
@@ -776,7 +776,7 @@ def get_events_from_doc(doctype, docname, past_events=False):
         filters["ends_on"] = [">=", cur_datetime]
 
     events_data = frappe.get_all(
-        "Event",
+        "Booking Event",
         filters=filters,
         fields=["name", "subject", "starts_on", "ends_on", "status", "custom_appointment_group"],
         order_by="starts_on",
@@ -879,7 +879,7 @@ def get_personal_meetings(user, past_events=False):
         filters["ends_on"] = [">=", cur_datetime]
 
     events_data = frappe.get_all(
-        "Event",
+        "Booking Event",
         filters=filters,
         fields=[
             "name",

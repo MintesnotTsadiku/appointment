@@ -499,7 +499,7 @@ def get_booking_frequency_reached(datetime: datetime, appointment_group: object)
     # For personal meetings, use duration_id to find events
     if appointment_group.get("is_personal_meeting", False) and appointment_group.get("duration_id"):
         all_events = frappe.get_list(
-            "Event",
+            "Booking Event",
             filters=[
                 ["custom_appointment_slot_duration", "=", appointment_group.duration_id],
                 ["starts_on", ">=", start_datetime],
@@ -514,7 +514,7 @@ def get_booking_frequency_reached(datetime: datetime, appointment_group: object)
     # For regular appointment groups, use appointment_group name
     elif appointment_group.name:
         all_events = frappe.get_list(
-            "Event",
+            "Booking Event",
             filters=[
                 ["custom_appointment_group", "=", appointment_group.name],
                 ["starts_on", ">=", start_datetime],

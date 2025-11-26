@@ -118,7 +118,7 @@ def insert_event_in_google_calendar_override(
 
         if update_doc:
             frappe.db.set_value(
-                "Event",
+                "Booking Event",
                 doc.name,
                 {
                     "google_calendar_event_id": event.get("id"),
@@ -129,7 +129,7 @@ def insert_event_in_google_calendar_override(
 
             if doc.custom_meeting_provider == "Google Meet":
                 frappe.db.set_value(
-                    "Event",
+                    "Booking Event",
                     doc.name,
                     {
                         "google_meet_link": event.get("hangoutLink"),

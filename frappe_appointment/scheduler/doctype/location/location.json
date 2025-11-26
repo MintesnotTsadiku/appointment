@@ -9,6 +9,7 @@
  "field_order": [
   "location_name",
   "is_active",
+  "organization",
   "Section Break-1",
   "address_line_1",
   "address_line_2",
@@ -63,6 +64,13 @@
    "fieldname": "is_active",
    "fieldtype": "Check",
    "label": "Is Active"
+  },
+  {
+   "fieldname": "organization",
+   "fieldtype": "Link",
+   "label": "Organization",
+   "options": "Organization",
+   "description": "If set, this is an Organization Branch. If empty, this is a Provider Personal Location."
   },
   {
    "fieldname": "Section Break-1",

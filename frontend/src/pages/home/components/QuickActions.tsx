@@ -1,9 +1,16 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from '@/lib/i18n';
-import { Plus, Calendar, Clock, Share2, BarChart3, Users } from 'lucide-react';
+import { Plus, Calendar, Clock, Share2, BarChart3, Users, Settings } from 'lucide-react';
+import { CreateServiceModal } from '../modals/CreateServiceModal';
+import { ShareLinkModal } from '../modals/ShareLinkModal';
 
 const QuickActions = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [createServiceOpen, setCreateServiceOpen] = useState(false);
+  const [shareLinkOpen, setShareLinkOpen] = useState(false);
 
   const actions = [
     {
@@ -13,10 +20,7 @@ const QuickActions = () => {
       description: 'Add appointment type',
       color: 'bg-gradient-hero',
       textColor: 'text-white',
-      onClick: () => {
-        // Navigate to create service
-        alert('Create new service - to be implemented');
-      },
+      onClick: () => setCreateServiceOpen(true),
     },
     {
       id: 'my-calendar',
@@ -27,8 +31,7 @@ const QuickActions = () => {
       textColor: 'text-gray-900 dark:text-white',
       border: true,
       onClick: () => {
-        // Navigate to calendar
-        alert('View calendar - to be implemented');
+        navigate('/calendar');
       },
     },
     {
@@ -40,8 +43,7 @@ const QuickActions = () => {
       textColor: 'text-gray-900 dark:text-white',
       border: true,
       onClick: () => {
-        // Navigate to availability settings
-        alert('Edit availability - to be implemented');
+        navigate('/settings/availability');
       },
     },
     {
@@ -52,10 +54,7 @@ const QuickActions = () => {
       color: 'bg-white dark:bg-gray-800',
       textColor: 'text-gray-900 dark:text-white',
       border: true,
-      onClick: () => {
-        // Show share dialog
-        alert('Share booking link - to be implemented');
-      },
+      onClick: () => setShareLinkOpen(true),
     },
     {
       id: 'analytics',
@@ -66,8 +65,7 @@ const QuickActions = () => {
       textColor: 'text-gray-900 dark:text-white',
       border: true,
       onClick: () => {
-        // Navigate to analytics
-        alert('View analytics - to be implemented');
+        navigate('/analytics');
       },
     },
     {
@@ -79,13 +77,25 @@ const QuickActions = () => {
       textColor: 'text-gray-900 dark:text-white',
       border: true,
       onClick: () => {
-        // Navigate to team management
-        alert('Manage team - to be implemented');
+        navigate('/settings/team');
+      },
+    },
+    {
+      id: 'manage',
+      icon: Settings,
+      title: 'Manage Setup',
+      description: 'View & manage all items',
+      color: 'bg-white dark:bg-gray-800',
+      textColor: 'text-gray-900 dark:text-white',
+      border: true,
+      onClick: () => {
+        navigate('/settings/manage');
       },
     },
   ];
 
   return (
+    <>
     <div>
       <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
         Quick Actions
@@ -147,6 +157,21 @@ const QuickActions = () => {
         ))}
       </div>
     </div>
+
+      {/* Modals */}
+      <CreateServiceModal 
+        open={createServiceOpen} 
+        onOpenChange={setCreateServiceOpen}
+        onSuccess={() => {
+          // Optionally refresh data or show success message
+          window.location.reload();
+        }}
+      />
+      <ShareLinkModal 
+        open={shareLinkOpen} 
+        onOpenChange={setShareLinkOpen}
+      />
+    </>
   );
 };
 

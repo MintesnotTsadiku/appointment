@@ -6,7 +6,7 @@
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
- "field_order": [
+  "field_order": [
   "provider_name",
   "full_name",
   "display_name",
@@ -14,6 +14,7 @@
   "email",
   "phone",
   "user",
+  "user_appointment_availability",
   "Column Break-2",
   "profile_photo",
   "is_active",
@@ -43,7 +44,10 @@
   "onboarding_completed_at",
   "onboarding_organization",
   "Section Break-4",
-  "locations"
+  "locations",
+  "Section Break-6",
+  "use_default_hours",
+  "opening_hours"
  ],
  "fields": [
   {
@@ -89,6 +93,13 @@
    "label": "Linked User",
    "options": "User",
    "description": "Link to Frappe User account for authentication"
+  },
+  {
+   "fieldname": "user_appointment_availability",
+   "fieldtype": "Link",
+   "label": "User Appointment Availability",
+   "options": "User Appointment Availability",
+   "description": "One-to-one link to User Appointment Availability record for this provider"
   },
   {
    "fieldname": "Column Break-2",
@@ -179,31 +190,42 @@
    "label": "Organization Settings"
   },
   {
-   "fieldname": "organization",
-   "fieldtype": "Link",
-   "label": "Organization",
-   "options": "Organization",
-   "description": "If this provider belongs to an organization"
-  },
-  {
-   "fieldname": "organization_status",
-   "fieldtype": "Select",
-   "label": "Organization Status",
-   "options": "Independent\nPending\nActive\nInactive",
-   "default": "Independent",
-   "depends_on": "organization"
+   "fieldname": "organizations",
+   "fieldtype": "Table",
+   "label": "Organizations",
+   "options": "Provider Organization",
+   "description": "Organizations this provider works for. Provider can work for multiple organizations simultaneously."
   },
   {
    "fieldname": "column_break_org",
    "fieldtype": "Column Break"
   },
   {
+   "fieldname": "organization",
+   "fieldtype": "Link",
+   "label": "Organization (Legacy - Deprecated)",
+   "options": "Organization",
+   "description": "[DEPRECATED] Use 'Organizations' child table above. Kept for backward compatibility during migration.",
+   "depends_on": "eval:doc.organizations.length == 0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "organization_status",
+   "fieldtype": "Select",
+   "label": "Organization Status (Legacy)",
+   "options": "Independent\nPending\nActive\nInactive",
+   "default": "Independent",
+   "depends_on": "eval:doc.organizations.length == 0 && doc.organization",
+   "read_only": 1
+  },
+  {
    "fieldname": "accept_org_bookings",
    "fieldtype": "Check",
-   "label": "Accept Organization Bookings",
+   "label": "Accept Organization Bookings (Legacy)",
    "default": 1,
-   "depends_on": "organization",
-   "description": "Allow customers to book through organization page"
+   "depends_on": "eval:doc.organizations.length == 0 && doc.organization",
+   "read_only": 1,
+   "description": "[DEPRECATED] Use 'Organizations' child table settings"
   },
   {
    "fieldname": "enable_personal_booking",
@@ -270,6 +292,25 @@
    "fieldtype": "Table",
    "label": "Locations",
    "options": "Provider Location"
+  },
+  {
+   "fieldname": "Section Break-6",
+   "fieldtype": "Section Break",
+   "label": "Availability"
+  },
+  {
+   "default": "1",
+   "fieldname": "use_default_hours",
+   "fieldtype": "Check",
+   "label": "Use Default Hours",
+   "description": "If checked, uses default hours inherited from Service/Location. Uncheck to set custom availability."
+  },
+  {
+   "fieldname": "opening_hours",
+   "fieldtype": "Table",
+   "label": "Opening Hours",
+   "options": "Opening Hours",
+   "description": "Provider-specific availability. Multiple time ranges per day allowed (for breaks). Must be within Service and Location hours."
   }
  ],
  "grid_page_length": 50,

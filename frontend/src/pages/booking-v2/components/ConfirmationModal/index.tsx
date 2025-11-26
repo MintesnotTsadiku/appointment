@@ -141,6 +141,38 @@ export function ConfirmationModal({
               </div>
             </div>
 
+            {/* Location */}
+            {service.location && (
+              <div className="flex items-start gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
+                  <MapPin className="h-5 w-5 text-primary-600 dark:text-primary-400" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Location</p>
+                  <p className="font-semibold text-gray-900 dark:text-gray-100 text-lg">
+                    {service.location.is_online ? (
+                      <span className="flex items-center gap-2">
+                        <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                        Online Meeting
+                      </span>
+                    ) : (
+                      service.location.location_name
+                    )}
+                  </p>
+                  {service.location.address && !service.location.is_online && (
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                      {service.location.address}
+                    </p>
+                  )}
+                  {service.location.phone && !service.location.is_online && (
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                      📞 {service.location.phone}
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
+
             {/* Meeting Link */}
             {bookingResponse.meetLink && (
               <div className="flex items-start gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">

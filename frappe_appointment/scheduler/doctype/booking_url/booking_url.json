@@ -1,0 +1,108 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "hash",
+ "creation": "2025-11-23 15:07:58.130213",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "url_type",
+  "slug",
+  "full_url",
+  "is_active",
+  "access_level",
+  "service",
+  "provider",
+  "location",
+  "description",
+  "created_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "url_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "URL Type",
+   "options": "personal\norganization\nprovider\nservice\nlocation",
+   "reqd": 1
+  },
+  {
+   "fieldname": "slug",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Slug",
+   "reqd": 1
+  },
+  {
+   "description": "Auto-calculated from slug and url_type",
+   "fieldname": "full_url",
+   "fieldtype": "Data",
+   "label": "Full URL",
+   "read_only": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Is Active"
+  },
+  {
+   "default": "public",
+   "fieldname": "access_level",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Access Level",
+   "options": "private\npublic"
+  },
+  {
+   "description": "If service-specific",
+   "fieldname": "service",
+   "fieldtype": "Link",
+   "label": "Service",
+   "options": "Service"
+  },
+  {
+   "description": "If provider-specific",
+   "fieldname": "provider",
+   "fieldtype": "Link",
+   "label": "Provider",
+   "options": "Provider"
+  },
+  {
+   "description": "If location-specific",
+   "fieldname": "location",
+   "fieldtype": "Link",
+   "label": "Location",
+   "options": "Location"
+  },
+  {
+   "description": "Human-readable description",
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "description": "For tracking which doctype this URL belongs to",
+   "fieldname": "created_from",
+   "fieldtype": "Select",
+   "label": "Created From",
+   "options": "User Appointment Availability\nOrganization"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-11-23 15:07:58.130213",
+ "modified_by": "Administrator",
+ "module": "Scheduler",
+ "name": "Booking URL",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

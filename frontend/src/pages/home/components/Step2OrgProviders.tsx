@@ -405,11 +405,11 @@ const Step2OrgProviders = ({ onNext, onBack }: Step2OrgProvidersProps) => {
           </div>
         ) : !isLinkingMode ? (
           <div className="flex gap-3">
-            <Button
-              onClick={() => setShowAddForm(true)}
-              variant="outline"
+          <Button
+            onClick={() => setShowAddForm(true)}
+            variant="outline"
               className="flex-1 border-dashed border-2"
-            >
+          >
               <Plus className="w-4 h-4 mr-2" /> Create New Provider
             </Button>
             {linkableProviders.length > 0 && (
@@ -419,8 +419,8 @@ const Step2OrgProviders = ({ onNext, onBack }: Step2OrgProvidersProps) => {
                 className="flex-1 border-dashed border-2"
               >
                 <LinkIcon className="w-4 h-4 mr-2" /> Link Existing Provider
-              </Button>
-            )}
+          </Button>
+        )}
           </div>
         ) : null}
 

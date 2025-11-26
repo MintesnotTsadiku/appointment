@@ -47,6 +47,12 @@ export interface TimeSlot {
   recommended?: boolean;
   isPast?: boolean;
   booked?: boolean; // Slot is already booked
+  location?: {
+    name: string;
+    location_name: string;
+    address?: string;
+    is_online?: boolean;
+  };
 }
 
 export interface TimeSlotGroup {
@@ -178,6 +184,12 @@ export interface CalendarProps {
 }
 
 export interface TimeSlotsProps {
+  location?: {
+    name: string;
+    location_name: string;
+    address?: string;
+    is_online?: boolean;
+  };
   date: Date;
   slots: TimeSlot[];
   selectedSlot: TimeSlot | null;

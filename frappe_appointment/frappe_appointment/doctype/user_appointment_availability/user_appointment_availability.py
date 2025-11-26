@@ -95,6 +95,26 @@ class UserAppointmentAvailability(Document):
                     "Google Calendar", calendar.name, "Google Calendar"
                 )
                 return frappe.throw(frappe._(f"Please set Zoom User Email in {google_calendar_link}."))
+        
+        # Auto-link Provider if not set (one-to-one relationship)
+        if not self.provider and self.user:
+            # Find Provider by user email
+            provider = frappe.db.get_value("Provider", {"email": self.user}, "name")
+            if provider:
+                self.provider = provider
+    
+    def on_update(self):
+        """Sync booking URLs when User Appointment Availability changes"""
+        # Skip if we're already syncing to prevent recursion
+        if frappe.flags.syncing_booking_urls:
+            return
+        
+        try:
+            from frappe_appointment.scheduler.booking_url_manager import sync_booking_urls_for_user_availability
+            sync_booking_urls_for_user_availability(self.name)
+        except Exception as e:
+            # Don't fail the save if URL sync fails
+            frappe.log_error(str(e), "User Appointment Availability: Sync Booking URLs Error")
 
 
 def suggest_slug(og_slug: str):

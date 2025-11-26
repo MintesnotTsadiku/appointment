@@ -374,10 +374,25 @@ def book_time_slot(
     
     # Handle organization booking with specific provider
     if organization_id and provider_id:
-        # Verify provider belongs to organization
+        # Verify provider belongs to organization using Provider Organization child table
         provider = frappe.get_doc("Provider", provider_id)
-        if provider.organization != organization_id:
-            return {"error": "Invalid provider for this organization"}, 400
+        
+        # Check if provider is linked to this organization via Provider Organization child table
+        provider_org_link = frappe.get_all(
+            "Provider Organization",
+            filters={"parent": provider_id, "organization": organization_id, "status": "Active"},
+            fields=["organization"],
+            limit=1
+        )
+        
+        # Also check legacy organization field for backward compatibility
+        if not provider_org_link:
+            # Check if provider has direct organization field (legacy)
+            if hasattr(provider, 'organization') and provider.organization:
+                if provider.organization != organization_id:
+                    return {"error": "Invalid provider for this organization"}, 400
+            else:
+                return {"error": "Invalid provider for this organization"}, 400
         
         # Get provider's user
         provider_user = provider.user
@@ -584,28 +599,43 @@ _last_assigned_provider = {}
 def get_service_providers(service_name):
     """
     Get all active providers for a service
-    Returns list of Provider documents
+    Returns list of Provider documents with child table data
     """
-    # Get Service
-    service = frappe.get_doc("Service", service_name)
+    # Get providers from Service Provider child table
+    service_providers = frappe.get_all(
+        "Service Provider",
+        filters={"parent": service_name, "status": "Active"},
+        fields=["provider", "is_primary", "price_override", "duration_override", "commission_rate", "notes"],
+        order_by="is_primary desc, creation asc"
+    )
     
-    if not service.organization:
-        # Not an organization service, return empty
+    if not service_providers:
         return []
     
-    # Get all providers for this organization
+    # Get provider details
+    provider_names = [sp.get("provider") for sp in service_providers]
     providers = frappe.get_all(
         "Provider",
-        filters={
-            "organization": service.organization,
-            "accept_org_bookings": 1,
-            "organization_status": "active"
-        },
+        filters={"name": ["in", provider_names]},
         fields=["name", "provider_name", "user"],
         order_by="name"
     )
     
-    return providers
+    # Merge child table data with provider data
+    provider_map = {p.get("name"): p for p in providers}
+    result = []
+    for sp in service_providers:
+        provider_name = sp.get("provider")
+        if provider_name in provider_map:
+            prov_data = provider_map[provider_name].copy()  # Already a dict from get_all
+            prov_data["is_primary"] = sp.get("is_primary")
+            prov_data["price_override"] = sp.get("price_override")
+            prov_data["duration_override"] = sp.get("duration_override")
+            prov_data["commission_rate"] = sp.get("commission_rate")
+            prov_data["notes"] = sp.get("notes")
+            result.append(prov_data)
+    
+    return result
 
 
 def get_last_assigned_provider(service_name):
@@ -733,7 +763,7 @@ def get_organization_meeting_windows(org_slug, service_slug):
     event_type = frappe.get_all(
         "EventType",
         filters={"name": service_slug},
-        fields=["name", "service", "description"],
+        fields=["name", "service", "description", "location"],
         limit=1
     )
     
@@ -760,11 +790,77 @@ def get_organization_meeting_windows(org_slug, service_slug):
     # Get Service
     service = frappe.get_doc("Service", event_type["service"])
     
+    # Get organization's active providers first
+    org_provider_names = frappe.get_all(
+        "Provider Organization",
+        filters={"organization": org["name"], "status": "Active"},
+        fields=["parent"],
+        pluck="parent"
+    )
+    
+    if not org_provider_names:
+        return {"error": "No active providers in organization"}, 404
+    
     # Get providers for this service
     providers = get_service_providers(service.name)
     
+    # Filter to only include providers in the organization
+    if providers:
+        providers = [p for p in providers if p.get("name") in org_provider_names]
+    
+    # If no providers from Service Provider child table, get from EventTypes
+    # Find EventTypes for this service that belong to organization providers
     if not providers:
-        return {"error": "No providers available"}, 404
+        # Get all EventTypes for this service
+        all_event_types = frappe.get_all(
+            "EventType",
+            filters={"service": service.name, "is_active": 1},
+            fields=["provider", "name"]
+        )
+        
+        # Get providers from EventTypes, but only if they're in the organization
+        provider_docs = []
+        seen_providers = set()
+        
+        for et in all_event_types:
+            prov_name = et.get("provider")
+            if not prov_name:
+                continue
+            
+            prov_doc_name = None
+            
+            # Try direct lookup
+            if prov_name in org_provider_names:
+                prov_doc_name = prov_name
+            elif frappe.db.exists("Provider", prov_name):
+                # Check if this provider is in the organization
+                if prov_name in org_provider_names:
+                    prov_doc_name = prov_name
+            else:
+                # Try to find by provider_name
+                matching = frappe.get_all(
+                    "Provider",
+                    filters={"provider_name": prov_name, "name": ["in", org_provider_names]},
+                    fields=["name"],
+                    limit=1
+                )
+                if matching:
+                    prov_doc_name = matching[0].name
+            
+            # Only add if provider is in organization and not already added
+            if prov_doc_name and prov_doc_name not in seen_providers:
+                prov = frappe.get_doc("Provider", prov_doc_name)
+                provider_docs.append({
+                    "name": prov.name,
+                    "provider_name": prov.provider_name,
+                    "user": prov.user
+                })
+                seen_providers.add(prov_doc_name)
+        
+        providers = provider_docs
+    
+    if not providers:
+        return {"error": "No providers available for this service in the organization"}, 404
     
     # Get durations from first provider (all have same durations for org services)
     first_provider = providers[0]
@@ -812,6 +908,41 @@ def get_organization_meeting_windows(org_slug, service_slug):
             "services": [et["event_type_name"] for et in provider_event_types]
         })
     
+    # Get location information from EventType
+    location_info = None
+    if event_type.get("location"):
+        try:
+            location = frappe.get_doc("Location", event_type["location"])
+            # Combine address fields
+            address_parts = [location.address_line_1, location.address_line_2, location.city]
+            address = ", ".join([part for part in address_parts if part])
+            
+            # Check if location is online/virtual
+            # Check for is_online field, or if location_name contains "online", "virtual", "zoom", "meet", etc.
+            is_online = False
+            if hasattr(location, 'is_online') and location.is_online:
+                is_online = True
+            elif location.location_name:
+                online_keywords = ['online', 'virtual', 'zoom', 'meet', 'webex', 'teams', 'video call', 'video call']
+                is_online = any(keyword in location.location_name.lower() for keyword in online_keywords)
+            # Also check if there's no physical address
+            elif not address or address.strip() == "":
+                is_online = True
+            
+            location_info = {
+                "name": location.name,
+                "location_name": location.location_name,
+                "address": address if not is_online else None,
+                "address_line_1": location.address_line_1 if not is_online else None,
+                "address_line_2": location.address_line_2 if not is_online else None,
+                "city": location.city if not is_online else None,
+                "phone": location.phone,
+                "timezone": location.timezone,
+                "is_online": is_online
+            }
+        except:
+            pass
+    
     return {
         "full_name": org["organization_name"],
         "profile_pic": org.get("logo"),
@@ -824,7 +955,8 @@ def get_organization_meeting_windows(org_slug, service_slug):
         "organization_id": org["name"],
         "service_id": service.name,
         "provider_count": len(providers),
-        "providers": provider_details
+        "providers": provider_details,
+        "location": location_info  # Add location information
     }
 
 
@@ -951,7 +1083,7 @@ def mark_booked_slots(slots, debug_messages=None):
             }
 
             existing_events = frappe.get_all(
-                "Event",
+                "Booking Event",
                 filters=event_filters,
                 fields=["name", "status", "starts_on", "ends_on"],
                 limit=1

@@ -40,6 +40,12 @@ interface DateTimeSelectorProps {
   serviceName?: string;
   providerName?: string;
   duration?: number;
+  location?: {
+    name: string;
+    location_name: string;
+    address?: string;
+    is_online?: boolean;
+  };
   
   // Navigation
   onBack?: () => void;
@@ -63,6 +69,7 @@ export function DateTimeSelector({
   serviceName,
   providerName,
   duration,
+  location,
   onBack,
 }: DateTimeSelectorProps) {
   const MAX_VISIBLE_PROVIDERS = 4;
@@ -262,6 +269,7 @@ useEffect(() => {
                   timezone={timezone}
                   loading={loading}
                   groupByTimeOfDay={true}
+                  location={location}
                 />
               </>
             ) : (

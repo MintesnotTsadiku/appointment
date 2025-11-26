@@ -6,19 +6,23 @@
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
- "field_order": [
+  "field_order": [
   "naming_series",
   "service_name",
   "description",
   "is_active",
   "organization",
-  "provider",
+  "Section Break-Providers",
+  "service_providers",
   "Section Break-1",
   "duration",
   "price",
   "Column Break-2",
   "buffer_before",
-  "buffer_after"
+  "buffer_after",
+  "Section Break-2",
+  "use_default_hours",
+  "opening_hours"
  ],
  "fields": [
   {
@@ -85,31 +89,21 @@
    "in_standard_filter": 1
   },
   {
-   "fieldname": "provider",
-   "fieldtype": "Link",
-   "label": "Provider",
-   "options": "Provider",
-   "description": "Provider this service belongs to (for individual provider bookings)",
-   "in_standard_filter": 1
+   "fieldname": "Section Break-Providers",
+   "fieldtype": "Section Break",
+   "label": "Service Providers"
+  },
+  {
+   "fieldname": "service_providers",
+   "fieldtype": "Table",
+   "label": "Providers",
+   "options": "Service Provider",
+   "description": "Providers who offer this service. Multiple providers can be assigned."
   },
   {
    "fieldname": "Section Break-1",
    "fieldtype": "Section Break",
    "label": "Timing & Pricing"
-  },
-  {
-   "default": "30",
-   "fieldname": "duration",
-   "fieldtype": "Int",
-   "in_list_view": 1,
-   "label": "Duration (minutes)",
-   "reqd": 1
-  },
-  {
-   "default": "0",
-   "fieldname": "price",
-   "fieldtype": "Currency",
-   "label": "Price (ETB)"
   },
   {
    "fieldname": "Column Break-2",
@@ -128,6 +122,25 @@
    "fieldname": "buffer_after",
    "fieldtype": "Int",
    "label": "Buffer After (minutes)"
+  },
+  {
+   "fieldname": "Section Break-2",
+   "fieldtype": "Section Break",
+   "label": "Availability"
+  },
+  {
+   "default": "1",
+   "fieldname": "use_default_hours",
+   "fieldtype": "Check",
+   "label": "Use Default Hours",
+   "description": "If checked, uses default hours inherited from Location. Uncheck to set custom availability with breaks."
+  },
+  {
+   "fieldname": "opening_hours",
+   "fieldtype": "Table",
+   "label": "Opening Hours",
+   "options": "Opening Hours",
+   "description": "Service-specific availability. Multiple time ranges per day allowed (for breaks like lunch). Must be within Location hours."
   }
  ],
  "grid_page_length": 50,
