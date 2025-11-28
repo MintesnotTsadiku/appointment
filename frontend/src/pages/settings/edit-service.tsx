@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft, Save, Loader2, UserPlus, X, Check, Trash2 } from 'lucide-react';
+import { ChevronLeft, Save, Loader2, UserPlus, X, Check, Trash2, Calendar } from 'lucide-react';
 import { Button } from '@/components/button';
 import { Card } from '@/components/card';
 import { Input } from '@/components/input';
@@ -127,7 +128,10 @@ const EditService = () => {
 
   if (loadingService) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-gray-900 flex items-center justify-center">
+      <div
+        className="min-h-screen text-[var(--text-primary)] flex items-center justify-center"
+        style={{ backgroundColor: 'var(--bg-primary)' }}
+      >
         <Spinner />
       </div>
     );
@@ -135,12 +139,29 @@ const EditService = () => {
 
   if (!service) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-gray-900">
+      <div
+        className="min-h-screen text-[var(--text-primary)]"
+        style={{ backgroundColor: 'var(--bg-primary)' }}
+      >
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <Card className="p-6">
+          <Card
+            className="p-6 backdrop-blur-sm"
+            style={{
+              backgroundColor: 'var(--bg-elevated)',
+              border: '1px solid var(--border-default)'
+            }}
+          >
             <div className="text-center">
-              <p className="text-gray-600 dark:text-gray-400 mb-4">Service not found</p>
-              <Button onClick={() => navigate('/settings/services')}>Back to Services</Button>
+              <p className="mb-4" style={{ color: 'var(--text-muted)' }}>Service not found</p>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => navigate('/settings/services')}
+                className="relative group flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-white overflow-hidden mx-auto"
+              >
+                <div className="absolute inset-0 bg-gradient-primary group-hover:opacity-90 transition-opacity" />
+                <span className="relative z-10">Back to Services</span>
+              </motion.button>
             </div>
           </Card>
         </div>
@@ -149,192 +170,313 @@ const EditService = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-gray-900">
-      {/* Header */}
-      <header className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-800 sticky top-0 z-10">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="icon" onClick={() => navigate('/settings/services')}>
-                <ChevronLeft className="w-5 h-5" />
-              </Button>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Edit Service</h1>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{service.service_name}</p>
-              </div>
-            </div>
-            <Button onClick={handleSave} disabled={updating} className="flex items-center gap-2">
-              {updating ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Saving...
-                </>
-              ) : (
-                <>
-                  <Save className="w-4 h-4" />
-                  Save Changes
-                </>
-              )}
-            </Button>
-          </div>
-        </div>
-      </header>
+    <div
+      className="min-h-screen text-[var(--text-primary)] overflow-hidden"
+      style={{ backgroundColor: 'var(--bg-primary)' }}
+    >
+      {/* Ambient background effects */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div
+          className="absolute -top-40 -right-40 w-80 h-80 rounded-full blur-[100px]"
+          style={{ backgroundColor: 'var(--glow-primary)' }}
+        />
+        <div
+          className="absolute top-1/2 -left-40 w-80 h-80 rounded-full blur-[100px]"
+          style={{ backgroundColor: 'var(--glow-secondary)' }}
+        />
+        <div
+          className="absolute -bottom-40 right-1/3 w-80 h-80 rounded-full blur-[100px]"
+          style={{ backgroundColor: 'var(--glow-success)' }}
+        />
+      </div>
 
-      {/* Main Content */}
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="space-y-6">
-          {/* Service Details */}
-          <Card className="p-6">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Service Information</h2>
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="serviceName">Service Name *</Label>
-                <Input
-                  id="serviceName"
-                  value={serviceName}
-                  onChange={(e) => setServiceName(e.target.value)}
-                  placeholder="e.g., General Consultation"
-                  className="mt-1"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="description">Description</Label>
-                <Textarea
-                  id="description"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Describe this service..."
-                  className="mt-1"
-                  rows={3}
-                />
-              </div>
-
-              <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <Label htmlFor="duration">Duration (minutes) *</Label>
-                  <Input
-                    id="duration"
-                    type="number"
-                    value={duration}
-                    onChange={(e) => setDuration(e.target.value)}
-                    min="5"
-                    step="5"
-                    className="mt-1"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="price">Price (ETB)</Label>
-                  <Input
-                    id="price"
-                    type="number"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                    min="0"
-                    step="0.01"
-                    className="mt-1"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="buffer">Buffer Time (minutes)</Label>
-                  <Input
-                    id="buffer"
-                    type="number"
-                    value={buffer}
-                    onChange={(e) => setBuffer(e.target.value)}
-                    min="0"
-                    className="mt-1"
-                  />
-                </div>
-              </div>
-            </div>
-          </Card>
-
-          {/* Service Providers */}
-          <Card className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Service Providers</h2>
-              {service.organization && (
-                <Button
-                  size="sm"
-                  onClick={() => setLinkProviderModalOpen(true)}
-                  className="flex items-center gap-2"
+      <div className="relative z-10">
+        {/* Header */}
+        <header
+          className="sticky top-0 z-50 backdrop-blur-xl"
+          style={{
+            backgroundColor: 'color-mix(in srgb, var(--bg-primary) 80%, transparent)',
+            borderBottom: '1px solid var(--border-subtle)'
+          }}
+        >
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => navigate('/settings/services')}
+                  className="p-1.5 lg:p-2 rounded-lg transition-all"
+                  style={{
+                    backgroundColor: 'var(--border-subtle)',
+                    border: '1px solid var(--border-default)',
+                    color: 'var(--text-muted)'
+                  }}
                 >
-                  <UserPlus className="w-4 h-4" />
-                  Link Provider
-                </Button>
-              )}
-            </div>
-
-            {providers.length === 0 ? (
-              <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                <p className="mb-4">No providers linked to this service</p>
-                {service.organization && (
-                  <Button
-                    variant="outline"
-                    onClick={() => setLinkProviderModalOpen(true)}
-                    className="flex items-center gap-2"
-                  >
-                    <UserPlus className="w-4 h-4" />
-                    Link Providers
-                  </Button>
-                )}
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {providers.map((provider) => (
-                  <div
-                    key={provider.name}
-                    className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg"
-                  >
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <h3 className="font-medium text-gray-900 dark:text-white">
-                          {provider.provider_name}
-                        </h3>
-                        {provider.is_primary && (
-                          <span className="px-2 py-0.5 text-xs bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 rounded">
-                            Primary
-                          </span>
-                        )}
-                        <span
-                          className={`px-2 py-0.5 text-xs rounded ${
-                            provider.status === 'Active'
-                              ? 'bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300'
-                              : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
-                          }`}
-                        >
-                          {provider.status}
-                        </span>
-                      </div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{provider.email}</p>
-                      {provider.price_override && (
-                        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-                          Price Override: {provider.price_override} ETB
-                        </p>
-                      )}
-                      {provider.duration_override && (
-                        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-                          Duration Override: {provider.duration_override} min
-                        </p>
-                      )}
+                  <ChevronLeft className="w-4 h-4 lg:w-5 lg:h-5" />
+                </motion.button>
+                <div className="flex items-center gap-3">
+                  <div className="relative">
+                    <div
+                      className="absolute inset-0 rounded-xl blur-lg opacity-50 bg-gradient-primary"
+                    />
+                    <div className="relative bg-gradient-primary p-2.5 rounded-xl">
+                      <Calendar className="w-5 h-5 text-white" />
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => handleRemoveProvider(provider.name)}
-                      disabled={removingProvider}
-                      className="text-red-600 hover:text-red-700"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
                   </div>
-                ))}
+                  <div>
+                    <h1 className="text-xl lg:text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>Edit Service</h1>
+                    <p className="text-xs lg:text-sm mt-1" style={{ color: 'var(--text-subtle)' }}>{service.service_name}</p>
+                  </div>
+                </div>
               </div>
-            )}
-          </Card>
-        </div>
-      </main>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={handleSave}
+                disabled={updating}
+                className="relative group flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-white overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-primary group-hover:opacity-90 transition-opacity" />
+                {updating ? (
+                  <>
+                    <Loader2 className="relative z-10 w-4 h-4 animate-spin" />
+                    <span className="relative z-10">Saving...</span>
+                  </>
+                ) : (
+                  <>
+                    <Save className="relative z-10 w-4 h-4" />
+                    <span className="relative z-10">Save Changes</span>
+                  </>
+                )}
+              </motion.button>
+            </div>
+          </div>
+        </header>
+
+        {/* Main Content */}
+        <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="space-y-6">
+            {/* Service Details */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <Card
+                className="p-6 backdrop-blur-sm"
+                style={{
+                  backgroundColor: 'var(--bg-elevated)',
+                  border: '1px solid var(--border-default)'
+                }}
+              >
+                <h2 className="text-lg font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>Service Information</h2>
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="serviceName" style={{ color: 'var(--text-primary)' }}>Service Name *</Label>
+                    <Input
+                      id="serviceName"
+                      value={serviceName}
+                      onChange={(e) => setServiceName(e.target.value)}
+                      placeholder="e.g., General Consultation"
+                      className="mt-1"
+                      style={{
+                        backgroundColor: 'var(--bg-secondary)',
+                        borderColor: 'var(--border-default)',
+                        color: 'var(--text-primary)'
+                      }}
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="description" style={{ color: 'var(--text-primary)' }}>Description</Label>
+                    <Textarea
+                      id="description"
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      placeholder="Describe this service..."
+                      className="mt-1"
+                      rows={3}
+                      style={{
+                        backgroundColor: 'var(--bg-secondary)',
+                        borderColor: 'var(--border-default)',
+                        color: 'var(--text-primary)'
+                      }}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-4">
+                    <div>
+                      <Label htmlFor="duration" style={{ color: 'var(--text-primary)' }}>Duration (minutes) *</Label>
+                      <Input
+                        id="duration"
+                        type="number"
+                        value={duration}
+                        onChange={(e) => setDuration(e.target.value)}
+                        min="5"
+                        step="5"
+                        className="mt-1"
+                        style={{
+                          backgroundColor: 'var(--bg-secondary)',
+                          borderColor: 'var(--border-default)',
+                          color: 'var(--text-primary)'
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="price" style={{ color: 'var(--text-primary)' }}>Price (ETB)</Label>
+                      <Input
+                        id="price"
+                        type="number"
+                        value={price}
+                        onChange={(e) => setPrice(e.target.value)}
+                        min="0"
+                        step="0.01"
+                        className="mt-1"
+                        style={{
+                          backgroundColor: 'var(--bg-secondary)',
+                          borderColor: 'var(--border-default)',
+                          color: 'var(--text-primary)'
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="buffer" style={{ color: 'var(--text-primary)' }}>Buffer Time (minutes)</Label>
+                      <Input
+                        id="buffer"
+                        type="number"
+                        value={buffer}
+                        onChange={(e) => setBuffer(e.target.value)}
+                        min="0"
+                        className="mt-1"
+                        style={{
+                          backgroundColor: 'var(--bg-secondary)',
+                          borderColor: 'var(--border-default)',
+                          color: 'var(--text-primary)'
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
+
+            {/* Service Providers */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <Card
+                className="p-6 backdrop-blur-sm"
+                style={{
+                  backgroundColor: 'var(--bg-elevated)',
+                  border: '1px solid var(--border-default)'
+                }}
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>Service Providers</h2>
+                  {service.organization && (
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => setLinkProviderModalOpen(true)}
+                      className="relative group flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium text-white overflow-hidden"
+                    >
+                      <div className="absolute inset-0 bg-gradient-primary group-hover:opacity-90 transition-opacity" />
+                      <UserPlus className="relative z-10 w-4 h-4" />
+                      <span className="relative z-10">Link Provider</span>
+                    </motion.button>
+                  )}
+                </div>
+
+                {providers.length === 0 ? (
+                  <div className="text-center py-8">
+                    <p className="mb-4" style={{ color: 'var(--text-muted)' }}>No providers linked to this service</p>
+                    {service.organization && (
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => setLinkProviderModalOpen(true)}
+                        className="relative group flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-white overflow-hidden mx-auto"
+                      >
+                        <div className="absolute inset-0 bg-gradient-primary group-hover:opacity-90 transition-opacity" />
+                        <UserPlus className="relative z-10 w-4 h-4" />
+                        <span className="relative z-10">Link Providers</span>
+                      </motion.button>
+                    )}
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {providers.map((provider) => (
+                      <div
+                        key={provider.name}
+                        className="flex items-center justify-between p-4 rounded-lg border"
+                        style={{
+                          backgroundColor: 'var(--bg-secondary)',
+                          borderColor: 'var(--border-default)'
+                        }}
+                      >
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            <h3 className="font-medium" style={{ color: 'var(--text-primary)' }}>
+                              {provider.provider_name}
+                            </h3>
+                            {provider.is_primary && (
+                              <span
+                                className="px-2 py-0.5 text-xs rounded"
+                                style={{
+                                  backgroundColor: 'var(--accent-primary-light)',
+                                  color: 'var(--accent-primary)'
+                                }}
+                              >
+                                Primary
+                              </span>
+                            )}
+                            <span
+                              className="px-2 py-0.5 text-xs rounded"
+                              style={{
+                                backgroundColor: provider.status === 'Active' ? 'var(--accent-success-light)' : 'var(--border-subtle)',
+                                color: provider.status === 'Active' ? 'var(--accent-success)' : 'var(--text-muted)'
+                              }}
+                            >
+                              {provider.status}
+                            </span>
+                          </div>
+                          <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>{provider.email}</p>
+                          {provider.price_override && (
+                            <p className="text-xs mt-1" style={{ color: 'var(--text-subtle)' }}>
+                              Price Override: {provider.price_override} ETB
+                            </p>
+                          )}
+                          {provider.duration_override && (
+                            <p className="text-xs mt-1" style={{ color: 'var(--text-subtle)' }}>
+                              Duration Override: {provider.duration_override} min
+                            </p>
+                          )}
+                        </div>
+                        <motion.button
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={() => handleRemoveProvider(provider.name)}
+                          disabled={removingProvider}
+                          className="p-2 rounded-lg transition-colors"
+                          style={{
+                            backgroundColor: 'var(--border-subtle)',
+                            color: 'var(--accent-secondary)'
+                          }}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </motion.button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </Card>
+            </motion.div>
+          </div>
+        </main>
+      </div>
 
       {/* Link Provider Modal */}
       {service.organization && (

@@ -316,21 +316,128 @@ def get_time_slots(
     if "appointment_group_id" in data:
         del data["appointment_group_id"]
     
-    # Mark booked slots (for single-provider bookings) - don't filter them out
+    # Apply slot engine filters (working hours, time-off, buffers, conflicts)
     if "all_available_slots_for_data" in data and data["all_available_slots_for_data"]:
-        original_count = len(data["all_available_slots_for_data"])
-        data["all_available_slots_for_data"] = mark_booked_slots(
-            data["all_available_slots_for_data"], 
-            debug_messages
+        from frappe_appointment.scheduler.helpers.slot_engine import (
+            filter_by_working_hours,
+            filter_by_time_off,
+            apply_buffer_times,
+            check_conflicts
         )
-        marked_count = len(data["all_available_slots_for_data"])
-        available_count = len([s for s in data["all_available_slots_for_data"] if not s.get("booked", False)])
-        booked_count = len([s for s in data["all_available_slots_for_data"] if s.get("booked", False)])
+        
+        slots = data["all_available_slots_for_data"]
+        original_count = len(slots)
+        
+        # Get provider, location, and service for filtering
+        provider_name = None
+        location_name = None
+        service_name = None
+        
+        # Get provider from user_availability
+        provider_user = user_availability.get("user")
+        provider = frappe.get_all(
+            "Provider",
+            filters={"user": provider_user},
+            fields=["name"],
+            limit=1
+        )
+        if provider:
+            provider_name = provider[0].get("name")
+            # Get location from provider
+            provider_locations = frappe.get_all(
+                "Provider Location",
+                filters={"parent": provider_name},
+                fields=["location"],
+                limit=1
+            )
+            if provider_locations:
+                location_name = provider_locations[0].get("location")
+            # Get service from EventType
+            event_types = frappe.get_all(
+                "EventType",
+                filters={"provider": provider_name, "is_active": 1},
+                fields=["service"],
+                limit=1
+            )
+            if event_types:
+                service_name = event_types[0].get("service")
+        
+        # Apply filters
+        if location_name:
+            # Filter by working hours
+            slots = filter_by_working_hours(slots, location_name, service_name, provider_name)
+            if debug_messages is not None:
+                debug_messages.append(f"[FILTER] After working hours: {len(slots)} slots")
+        
+        if provider_name:
+            # Filter by time-off
+            slots = filter_by_time_off(slots, provider_name)
+            if debug_messages is not None:
+                debug_messages.append(f"[FILTER] After time-off: {len(slots)} slots")
+        
+        # Get buffer times from service
+        buffer_before = 0
+        buffer_after = 0
+        if service_name:
+            service = frappe.get_doc("Service", service_name)
+            buffer_before = service.buffer_before or 0
+            buffer_after = service.buffer_after or 0
+        
+        # Get existing appointments for buffer calculation
+        existing_appointments = []
+        if provider_name and location_name:
+            appointments = frappe.get_all(
+                "Appointment",
+                filters={
+                    "provider": provider_name,
+                    "location": location_name,
+                    "status": ["in", ["Pending", "Confirmed"]]
+                },
+                fields=["appointment_date", "start_time", "end_time"]
+            )
+            for apt in appointments:
+                existing_appointments.append({
+                    "start_time": f"{apt.appointment_date} {apt.start_time}",
+                    "end_time": f"{apt.appointment_date} {apt.end_time}"
+                })
+        
+        # Apply buffer times
+        if buffer_before > 0 or buffer_after > 0:
+            slots = apply_buffer_times(slots, buffer_before, buffer_after, existing_appointments)
+            if debug_messages is not None:
+                debug_messages.append(f"[FILTER] After buffer times: {len(slots)} slots")
+        
+        # Check conflicts and mark slots as unavailable
+        if provider_name and location_name:
+            for slot in slots:
+                if slot.get("booked"):
+                    continue  # Skip already booked slots
+                
+                slot_start = frappe.utils.get_datetime(slot.get("start_time"))
+                slot_end = frappe.utils.get_datetime(slot.get("end_time"))
+                
+                conflicts = check_conflicts(
+                    provider_name=provider_name,
+                    location_name=location_name,
+                    start_time=slot_start,
+                    end_time=slot_end
+                )
+                
+                if conflicts:
+                    slot["booked"] = True
+                    slot["available"] = False
+                    slot["conflicts"] = conflicts
+        
+        # Mark booked slots (for single-provider bookings) - don't filter them out
+        slots = mark_booked_slots(slots, debug_messages)
+        marked_count = len(slots)
+        available_count = len([s for s in slots if not s.get("booked", False)])
+        booked_count = len([s for s in slots if s.get("booked", False)])
         
         if debug_messages is not None:
-            debug_messages.append(f"[MARK-SINGLE] Marked single-provider slots: {marked_count} total ({available_count} available, {booked_count} booked)")
+            debug_messages.append(f"[FILTER-FINAL] Filtered slots: {original_count} -> {marked_count} total ({available_count} available, {booked_count} booked)")
         
-        # Add counts to response
+        data["all_available_slots_for_data"] = slots
         data["available_slots_count"] = available_count
         data["booked_slots_count"] = booked_count
     
@@ -429,6 +536,91 @@ def book_time_slot(
         # For organization booking, get duration from provider's availability
         duration = frappe.get_doc("Appointment Slot Duration", duration_id)
 
+    # Get provider, location, and service for conflict detection
+    provider_name = None
+    location_name = None
+    service_name = None
+    
+    if organization_id and provider_id:
+        # Organization booking - we have provider_id and service_id
+        provider_name = provider_id
+        service_name = args.get("service_id") or args.get("service_name")
+        # Get location from service or provider
+        if service_name:
+            # Try to get location from EventType
+            event_type = frappe.get_all(
+                "EventType",
+                filters={"service": service_name, "provider": provider_id, "is_active": 1},
+                fields=["location"],
+                limit=1
+            )
+            if event_type and event_type[0].get("location"):
+                location_name = event_type[0].get("location")
+            else:
+                # Get from provider's first location
+                provider_locations = frappe.get_all(
+                    "Provider Location",
+                    filters={"parent": provider_id},
+                    fields=["location"],
+                    limit=1
+                )
+                if provider_locations:
+                    location_name = provider_locations[0].get("location")
+    else:
+        # Individual booking - get from Provider linked to user
+        provider_user = user_availability.get("user")
+        provider = frappe.get_all(
+            "Provider",
+            filters={"user": provider_user},
+            fields=["name"],
+            limit=1
+        )
+        if provider:
+            provider_name = provider[0].get("name")
+            # Get location from provider
+            provider_locations = frappe.get_all(
+                "Provider Location",
+                filters={"parent": provider_name},
+                fields=["location"],
+                limit=1
+            )
+            if provider_locations:
+                location_name = provider_locations[0].get("location")
+            # Get service from EventType linked to this provider
+            event_types = frappe.get_all(
+                "EventType",
+                filters={"provider": provider_name, "is_active": 1},
+                fields=["service"],
+                limit=1
+            )
+            if event_types:
+                service_name = event_types[0].get("service")
+    
+    # Check for conflicts before creating appointment
+    if provider_name and location_name:
+        from frappe_appointment.scheduler.helpers.slot_engine import check_conflicts
+        from frappe.utils import get_datetime
+        
+        # Build appointment datetime
+        appointment_datetime_str = f"{date} {start_time}"
+        appointment_end_datetime_str = f"{date} {end_time}"
+        appointment_start_dt = get_datetime(appointment_datetime_str)
+        appointment_end_dt = get_datetime(appointment_end_datetime_str)
+        
+        conflicts = check_conflicts(
+            provider_name=provider_name,
+            location_name=location_name,
+            start_time=appointment_start_dt,
+            end_time=appointment_end_dt,
+            exclude_appointment=None  # For new bookings, no exclusion
+        )
+        
+        if conflicts:
+            return {
+                "error": "Time slot is already booked",
+                "conflicts": conflicts
+            }, 409  # Conflict status code
+    
     appointment_group_obj = create_dummy_appointment_group(duration, user_availability)
 
     appointment_group = frappe.get_doc(appointment_group_obj)

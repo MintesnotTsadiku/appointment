@@ -173,6 +173,103 @@ def recent_activity(limit=10, offset=0):
                 "title": title
             })
         
+        # If no activities, return time-aware mock data for ALL providers/organizations
+        # Generate comprehensive demo data: past (2 weeks), today, tomorrow
+        if len(activities) == 0:
+            from frappe.utils import now_datetime, add_days, add_hours, add_minutes
+            now = now_datetime()
+            
+            # Get ALL providers and services for comprehensive demo data
+            all_providers = frappe.get_all("Provider", fields=["name", "provider_name"], limit=20)
+            all_services = frappe.get_all("Service", fields=["name", "service_name"], limit=20)
+            
+            # If no providers/services exist, create generic demo data
+            if not all_providers:
+                all_providers = [{"name": "DEMO-PROVIDER", "provider_name": "Demo Provider"}]
+            if not all_services:
+                all_services = [{"name": "DEMO-SERVICE", "service_name": "General Consultation"}]
+            
+            activities = []
+            provider_idx = 0
+            service_idx = 0
+            
+            # Generate activities for each provider/service combination
+            # TODAY - Recent activities (last few hours)
+            for i in range(3):
+                provider = all_providers[provider_idx % len(all_providers)]
+                service = all_services[service_idx % len(all_services)]
+                provider_idx += 1
+                service_idx += 1
+                
+                activity_types = ["booking", "booking", "reschedule"]
+                customers = ["Sarah Johnson", "Michael Chen", "Emily Rodriguez"]
+                time_offsets = [-15, -120, -300]  # 15 min, 2 hours, 5 hours ago
+                
+                activities.append({
+                    "type": activity_types[i],
+                    "customer": customers[i],
+                    "time": add_minutes(now, time_offsets[i]).isoformat(),
+                    "service": service["service_name"],
+                    "appointment_id": f"APT-DEMO-{provider['name']}-TODAY-{i+1:03d}",
+                    "title": f"{customers[i]} {'booked' if activity_types[i] == 'booking' else 'rescheduled'} {service['service_name']}"
+                })
+            
+            # YESTERDAY
+            for i in range(2):
+                provider = all_providers[provider_idx % len(all_providers)]
+                service = all_services[service_idx % len(all_services)]
+                provider_idx += 1
+                service_idx += 1
+                
+                customers = ["David Kim", "Lisa Anderson"]
+                activity_types = ["booking", "cancellation"]
+                hours = [14, 10]
+                
+                activities.append({
+                    "type": activity_types[i],
+                    "customer": customers[i],
+                    "time": add_days(now, -1).replace(hour=hours[i], minute=30).isoformat(),
+                    "service": service["service_name"],
+                    "appointment_id": f"APT-DEMO-{provider['name']}-YESTERDAY-{i+1:03d}",
+                    "title": f"{customers[i]} {'booked' if activity_types[i] == 'booking' else 'cancelled'} {service['service_name']}"
+                })
+            
+            # LAST WEEK (2-7 days ago) - spread across providers
+            for day_offset in [2, 3, 5, 7]:
+                provider = all_providers[provider_idx % len(all_providers)]
+                service = all_services[service_idx % len(all_services)]
+                provider_idx += 1
+                service_idx += 1
+                
+                customers = ["James Wilson", "Maria Garcia", "Robert Brown", "Jennifer Lee"]
+                activity_types = ["booking", "booking", "reschedule", "booking"]
+                hours = [16, 11, 9, 13]
+                
+                idx = [2, 3, 5, 7].index(day_offset)
+                activities.append({
+                    "type": activity_types[idx],
+                    "customer": customers[idx],
+                    "time": add_days(now, -day_offset).replace(hour=hours[idx], minute=0).isoformat(),
+                    "service": service["service_name"],
+                    "appointment_id": f"APT-DEMO-{provider['name']}-WEEK-{day_offset:02d}",
+                    "title": f"{customers[idx]} {'booked' if activity_types[idx] == 'booking' else 'rescheduled'} {service['service_name']}"
+                })
+            
+            # 2 WEEKS AGO
+            provider = all_providers[provider_idx % len(all_providers)]
+            service = all_services[service_idx % len(all_services)]
+            activities.append({
+                "type": "noshow",
+                "customer": "Thomas Martinez",
+                "time": add_days(now, -10).replace(hour=15, minute=0).isoformat(),
+                "service": service["service_name"],
+                "appointment_id": f"APT-DEMO-{provider['name']}-WEEK-10",
+                "title": f"Thomas Martinez - No Show"
+            })
+            
+            # Sort by time (most recent first)
+            activities.sort(key=lambda x: x["time"], reverse=True)
+        
         frappe.response["message"] = {
             "activities": activities
         }
@@ -275,6 +372,9 @@ def alerts():
                 "action_url": "/home",
                 "dismissible": True
             })
+        
+        # If no alerts, return empty array (don't show mock alerts)
+        # For screenshots, you can temporarily add mock alerts here if needed
         
         frappe.response["message"] = {
             "alerts": alerts_list

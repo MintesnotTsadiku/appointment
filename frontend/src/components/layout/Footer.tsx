@@ -44,21 +44,26 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-gray-900 dark:bg-black text-gray-300">
+    <footer style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-secondary)' }}>
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
           {/* Brand Column */}
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
-              <div className="w-10 h-10 bg-gradient-hero rounded-lg flex items-center justify-center">
+              <div 
+                className="w-10 h-10 rounded-lg flex items-center justify-center"
+                style={{ 
+                  background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))'
+                }}
+              >
                 <span className="text-white font-bold text-xl">ET</span>
               </div>
-              <span className="font-heading font-bold text-xl text-white">
+              <span className="font-heading font-bold text-xl" style={{ color: 'var(--text-primary)' }}>
                 Meet.et
               </span>
             </div>
-            <p className="text-gray-400 mb-6 max-w-sm">
+            <p className="mb-6 max-w-sm" style={{ color: 'var(--text-muted)' }}>
               Turn your time into revenue. Ethiopia's leading scheduling and payment platform for professionals.
             </p>
 
@@ -70,7 +75,19 @@ const Footer = () => {
                   href={social.href}
                   whileHover={{ scale: 1.1, y: -2 }}
                   transition={{ duration: 0.2 }}
-                  className="w-10 h-10 bg-gray-800 hover:bg-gradient-hero rounded-lg flex items-center justify-center transition-colors duration-200"
+                  className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-200 backdrop-blur-sm"
+                  style={{ 
+                    backgroundColor: 'var(--bg-elevated)',
+                    border: '1px solid var(--border-default)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))';
+                    e.currentTarget.style.border = 'none';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'var(--bg-elevated)';
+                    e.currentTarget.style.border = '1px solid var(--border-default)';
+                  }}
                   aria-label={social.label}
                 >
                   <social.icon className="w-5 h-5" />
@@ -81,37 +98,51 @@ const Footer = () => {
             {/* Contact Info */}
             <div className="space-y-3">
               <div className="flex items-start space-x-3">
-                <Mail className="w-5 h-5 text-brand-indigo-light mt-0.5 flex-shrink-0" />
+                <Mail className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: 'var(--accent-primary)' }} />
                 <div>
-                  <p className="text-sm font-medium text-white">Email</p>
+                  <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>Email</p>
                   <a
                     href="mailto:support@ethiopianscheduler.com"
-                    className="text-sm text-gray-400 hover:text-brand-indigo-light transition-colors"
+                    className="text-sm transition-colors"
+                    style={{ color: 'var(--text-muted)' }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = 'var(--accent-primary)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = 'var(--text-muted)';
+                    }}
                   >
                     support@ethiopianscheduler.com
                   </a>
                 </div>
               </div>
               <div className="flex items-start space-x-3">
-                <Phone className="w-5 h-5 text-brand-indigo-light mt-0.5 flex-shrink-0" />
+                <Phone className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: 'var(--accent-primary)' }} />
                 <div>
-                  <p className="text-sm font-medium text-white">Phone</p>
+                  <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>Phone</p>
                   <a
                     href="tel:+251111234567"
-                    className="text-sm text-gray-400 hover:text-brand-indigo-light transition-colors"
+                    className="text-sm transition-colors"
+                    style={{ color: 'var(--text-muted)' }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = 'var(--accent-primary)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = 'var(--text-muted)';
+                    }}
                   >
                     +251 11 123 4567
                   </a>
                 </div>
               </div>
               <div className="flex items-start space-x-3">
-                <MapPin className="w-5 h-5 text-brand-indigo-light mt-0.5 flex-shrink-0" />
+                <MapPin className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: 'var(--accent-primary)' }} />
                 <div>
-                  <p className="text-sm font-medium text-white">Location</p>
-                  <p className="text-sm text-gray-400">
+                  <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>Location</p>
+                  <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
                     Addis Ababa, Ethiopia
                   </p>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs mt-1" style={{ color: 'var(--text-subtle)' }}>
                     Mon-Fri, 8AM-6PM EAT
                   </p>
                 </div>
@@ -121,17 +152,30 @@ const Footer = () => {
 
           {/* Product Column */}
           <div>
-            <h3 className="font-semibold text-white mb-4">Product</h3>
+            <h3 className="font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>Product</h3>
             <ul className="space-y-3">
               {footerLinks.product.map((link) => (
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-sm text-gray-400 hover:text-brand-indigo-light transition-colors duration-200 flex items-center space-x-2"
+                    className="text-sm transition-colors duration-200 flex items-center space-x-2"
+                    style={{ color: 'var(--text-muted)' }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = 'var(--accent-primary)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = 'var(--text-muted)';
+                    }}
                   >
                     <span>{link.label}</span>
                     {link.badge && (
-                      <span className="text-xs px-2 py-0.5 bg-brand-emerald/20 text-brand-emerald rounded-full">
+                      <span 
+                        className="text-xs px-2 py-0.5 rounded-full"
+                        style={{ 
+                          backgroundColor: 'var(--accent-success-light)',
+                          color: 'var(--accent-success)'
+                        }}
+                      >
                         {link.badge}
                       </span>
                     )}
@@ -143,13 +187,20 @@ const Footer = () => {
 
           {/* Resources Column */}
           <div>
-            <h3 className="font-semibold text-white mb-4">Resources</h3>
+            <h3 className="font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>Resources</h3>
             <ul className="space-y-3">
               {footerLinks.resources.map((link) => (
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-sm text-gray-400 hover:text-brand-indigo-light transition-colors duration-200"
+                    className="text-sm transition-colors duration-200"
+                    style={{ color: 'var(--text-muted)' }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = 'var(--accent-primary)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = 'var(--text-muted)';
+                    }}
                   >
                     {link.label}
                   </a>
@@ -160,17 +211,30 @@ const Footer = () => {
 
           {/* Company Column */}
           <div>
-            <h3 className="font-semibold text-white mb-4">Company</h3>
+            <h3 className="font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>Company</h3>
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-sm text-gray-400 hover:text-brand-indigo-light transition-colors duration-200 flex items-center space-x-2"
+                    className="text-sm transition-colors duration-200 flex items-center space-x-2"
+                    style={{ color: 'var(--text-muted)' }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = 'var(--accent-primary)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = 'var(--text-muted)';
+                    }}
                   >
                     <span>{link.label}</span>
                     {link.badge && (
-                      <span className="text-xs px-2 py-0.5 bg-brand-gold/20 text-brand-gold rounded-full">
+                      <span 
+                        className="text-xs px-2 py-0.5 rounded-full"
+                        style={{ 
+                          backgroundColor: 'var(--accent-secondary-light)',
+                          color: 'var(--accent-secondary)'
+                        }}
+                      >
                         {link.badge}
                       </span>
                     )}
@@ -183,18 +247,18 @@ const Footer = () => {
       </div>
 
       {/* Footer Bottom */}
-      <div className="border-t border-gray-800">
+      <div style={{ borderTop: '1px solid var(--border-default)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             {/* Copyright */}
-            <p className="text-sm text-gray-400">
+            <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
               © {new Date().getFullYear()} Meet.et. All rights reserved.
             </p>
 
             {/* Compliance Badges */}
-            <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500">
+            <div className="flex flex-wrap items-center gap-4 text-xs" style={{ color: 'var(--text-subtle)' }}>
               <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: 'var(--accent-success)' }}></div>
                 <span>99.9% Uptime</span>
               </div>
               <span className="hidden md:inline">•</span>
@@ -205,15 +269,20 @@ const Footer = () => {
           </div>
 
           {/* Payment Methods */}
-          <div className="mt-6 pt-6 border-t border-gray-800">
-            <p className="text-xs text-gray-500 text-center mb-3">
+          <div className="mt-6 pt-6" style={{ borderTop: '1px solid var(--border-default)' }}>
+            <p className="text-xs text-center mb-3" style={{ color: 'var(--text-subtle)' }}>
               Supported Payment Methods
             </p>
             <div className="flex flex-wrap justify-center items-center gap-6">
               {['TeleBirr', 'Chapa', 'M-PESA', 'Stripe', 'PayPal'].map((method) => (
                 <div
                   key={method}
-                  className="px-4 py-2 bg-gray-800 rounded-lg text-xs text-gray-400 font-medium"
+                  className="px-4 py-2 rounded-lg text-xs font-medium backdrop-blur-sm"
+                  style={{ 
+                    backgroundColor: 'var(--bg-elevated)',
+                    border: '1px solid var(--border-default)',
+                    color: 'var(--text-muted)'
+                  }}
                 >
                   {method}
                 </div>

@@ -90,13 +90,33 @@ class ConfigurationSettings(Document):
 				generated.append(f"{count} locations")
 			
 			if self.include_appointments:
-				count = self.demo_appointment_count or 50
+				count = self.demo_appointment_count or 10
 				days = self.demo_date_range_days or 14
 				result = generate_appointments(count, days)
 				event_types_count = result.get("event_types", 0)
-				events_count = result.get("events", 0)
-				self.log(f"✓ Generated {result.get('event_types', 0)} event types, {count} appointments, and {events_count} calendar events (last {days} days)")
-				generated.append(f"{event_types_count} event types, {count} appointments, {events_count} events")
+				appointments_count = result.get("appointments", 0)
+				booking_events_count = result.get("booking_events", 0)
+				self.log(f"✓ Generated {event_types_count} event types, {appointments_count} appointments, and {booking_events_count} booking events (last {days} days)")
+				generated.append(f"{event_types_count} event types, {appointments_count} appointments, {booking_events_count} booking events")
+			
+			# Generate Policies (Sprint 2) - after services, locations, and providers are created
+			# Check if we have the necessary data to create policies
+			services_exist = frappe.db.count("Service") > 0
+			locations_exist = frappe.db.count("Location") > 0
+			providers_exist = frappe.db.count("Provider") > 0
+			
+			if services_exist or locations_exist or providers_exist:
+				try:
+					from frappe_appointment.demo_data_policies import generate_policies_for_existing_data
+					result = generate_policies_for_existing_data()
+					policy_count = result.get("count", 0)
+					if policy_count > 0:
+						self.log(f"✓ Generated {policy_count} policies")
+						generated.append(f"{policy_count} policies")
+				except Exception as e:
+					# Don't fail entire generation if policies fail
+					frappe.log_error(f"Policy generation failed: {str(e)}", "Demo Data: Policy Generation Error")
+					self.log(f"⚠ Policy generation skipped: {str(e)}")
 			
 			if generated:
 				self.log("✅ Generation complete!")

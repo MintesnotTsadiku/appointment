@@ -33,7 +33,7 @@ const LogoCloud = () => {
   ];
 
   return (
-    <section className="py-16 bg-gray-50 dark:bg-gray-900/50">
+    <section className="py-16" style={{ backgroundColor: 'var(--bg-secondary)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Title */}
         <motion.div
@@ -43,10 +43,10 @@ const LogoCloud = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-12"
         >
-          <h2 className="text-2xl sm:text-3xl font-heading font-bold text-gray-900 dark:text-white mb-2">
+          <h2 className="text-2xl sm:text-3xl font-heading font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
             {t('logoCloud.title')}
           </h2>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p style={{ color: 'var(--text-muted)' }}>
             {t('logoCloud.subtitle')}
           </p>
         </motion.div>
@@ -54,8 +54,14 @@ const LogoCloud = () => {
         {/* Logo Grid with Infinite Scroll Effect */}
         <div className="relative overflow-hidden">
           {/* Gradient overlays for fade effect */}
-          <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-gray-50 dark:from-gray-900/50 to-transparent z-10" />
-          <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-gray-50 dark:from-gray-900/50 to-transparent z-10" />
+          <div 
+            className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r to-transparent z-10"
+            style={{ background: `linear-gradient(to right, var(--bg-secondary), transparent)` }}
+          />
+          <div 
+            className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l to-transparent z-10"
+            style={{ background: `linear-gradient(to left, var(--bg-secondary), transparent)` }}
+          />
 
           {/* Scrolling logos */}
           <motion.div
@@ -77,7 +83,11 @@ const LogoCloud = () => {
               <motion.div
                 key={index}
                 whileHover={{ scale: 1.05 }}
-                className="flex-shrink-0 flex items-center justify-center w-40 h-24 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 p-4"
+                className="flex-shrink-0 flex items-center justify-center w-40 h-24 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 p-4 backdrop-blur-sm"
+                style={{ 
+                  backgroundColor: 'var(--bg-elevated)',
+                  border: '1px solid var(--border-default)'
+                }}
               >
                 <img
                   src={partner.logo}
@@ -113,10 +123,15 @@ const LogoCloud = () => {
             { value: '4.9/5', label: t('logoCloud.stat4') },
           ].map((stat, index) => (
             <div key={index} className="text-center">
-              <div className="text-3xl sm:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent mb-2">
+              <div 
+                className="text-3xl sm:text-4xl font-bold bg-clip-text text-transparent mb-2"
+                style={{ 
+                  backgroundImage: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))'
+                }}
+              >
                 {stat.value}
               </div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">
+              <div className="text-sm" style={{ color: 'var(--text-muted)' }}>
                 {stat.label}
               </div>
             </div>

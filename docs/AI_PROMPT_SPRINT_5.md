@@ -558,3 +558,6 @@ When complete, front-desk staff should be able to:
 7. Create appointments on behalf of clients
 8. See real-time updates when appointments change
 
+
+
+

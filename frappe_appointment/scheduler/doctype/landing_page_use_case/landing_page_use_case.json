@@ -5,15 +5,16 @@
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
- "field_order": [
-  "title_en",
-  "title_am",
-  "subtitle_en",
-  "subtitle_am",
-  "description_en",
-  "description_am",
-  "image_url"
- ],
+  "field_order": [
+    "title_en",
+    "title_am",
+    "subtitle_en",
+    "subtitle_am",
+    "description_en",
+    "description_am",
+    "image",
+    "image_url"
+  ],
  "fields": [
   {
    "fieldname": "title_en",
@@ -48,12 +49,17 @@
    "fieldtype": "Text",
    "label": "Description (AM)"
   },
-  {
-   "fieldname": "image_url",
-   "fieldtype": "Data",
-   "label": "Image URL"
-  }
- ],
+    {
+      "fieldname": "image",
+      "fieldtype": "Attach Image",
+      "label": "Image"
+    },
+    {
+      "fieldname": "image_url",
+      "fieldtype": "Data",
+      "label": "Image URL (fallback)"
+    }
+  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,

@@ -13,6 +13,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogClose,
 } from '@/components/dialog';
 import {
   Select,
@@ -172,374 +173,603 @@ const LocationSettings = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-gray-900">
-      {/* Header */}
-      <header className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-800 sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => navigate('/home')}
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </Button>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                  <MapPin className="w-6 h-6" />
-                  Location Settings
-                </h1>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                  Manage your business locations
-                </p>
-              </div>
-            </div>
-            <Button
-              onClick={handleOpenCreate}
-              className="flex items-center gap-2"
-            >
-              <Plus className="w-4 h-4" />
-              Add Location
-            </Button>
-          </div>
-        </div>
-      </header>
+    <div
+      className="min-h-screen text-[var(--text-primary)] overflow-hidden"
+      style={{ backgroundColor: 'var(--bg-primary)' }}
+    >
+      {/* Ambient background effects */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div
+          className="absolute -top-40 -right-40 w-80 h-80 rounded-full blur-[100px]"
+          style={{ backgroundColor: 'var(--glow-primary)' }}
+        />
+        <div
+          className="absolute top-1/2 -left-40 w-80 h-80 rounded-full blur-[100px]"
+          style={{ backgroundColor: 'var(--glow-secondary)' }}
+        />
+        <div
+          className="absolute -bottom-40 right-1/3 w-80 h-80 rounded-full blur-[100px]"
+          style={{ backgroundColor: 'var(--glow-success)' }}
+        />
+      </div>
 
-      {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="space-y-6">
-          {/* Info Card */}
-          <Card className="p-6 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
-            <div className="flex items-start space-x-3">
-              <MapPin className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5" />
-              <div>
-                <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-1">
-                  About Locations
-                </h3>
-                <p className="text-sm text-blue-800 dark:text-blue-200">
-                  Locations define where you provide services. Each location can have its own address and opening hours. 
-                  You can link multiple locations to your provider profile.
-                </p>
-              </div>
-            </div>
-          </Card>
-
-          {/* Locations List */}
-          {isLoading ? (
-            <Card className="p-12">
-              <div className="flex items-center justify-center">
-                <Spinner />
-              </div>
-            </Card>
-          ) : locations.length > 0 ? (
-            <div className="grid gap-4 md:grid-cols-2">
-              {locations.map((location) => (
-                <Card key={location.name} className="p-6 hover:shadow-lg transition-shadow">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
-                        <MapPin className="w-4 h-4 text-indigo-600" />
-                        {location.location_name}
-                      </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                        {location.address}
-                      </p>
-                      <div className="flex items-center gap-4 mt-3 text-xs text-gray-500 dark:text-gray-400">
-                        <span className="flex items-center gap-1">
-                          <Clock className="w-3 h-3" />
-                          {location.opening_hours_count} hours set
-                        </span>
-                        <span>{location.timezone}</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleOpenEdit(location)}
-                      >
-                        <Edit2 className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleDelete(location)}
-                        disabled={deleting}
-                        className="text-red-600 hover:text-red-700"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
+      <div className="relative z-10">
+        {/* Header */}
+        <header
+          className="sticky top-0 z-50 backdrop-blur-xl"
+          style={{
+            backgroundColor: 'color-mix(in srgb, var(--bg-primary) 80%, transparent)',
+            borderBottom: '1px solid var(--border-subtle)'
+          }}
+        >
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => navigate('/home')}
+                  className="p-1.5 lg:p-2 rounded-lg transition-all"
+                  style={{
+                    backgroundColor: 'var(--border-subtle)',
+                    border: '1px solid var(--border-default)',
+                    color: 'var(--text-muted)'
+                  }}
+                >
+                  <ChevronLeft className="w-4 h-4 lg:w-5 lg:h-5" />
+                </motion.button>
+                <div className="flex items-center gap-3">
+                  <div className="relative">
+                    <div
+                      className="absolute inset-0 rounded-xl blur-lg opacity-50 bg-gradient-primary"
+                    />
+                    <div className="relative bg-gradient-primary p-2.5 rounded-xl">
+                      <MapPin className="w-5 h-5 text-white" />
                     </div>
                   </div>
-                  {!location.has_opening_hours && (
-                    <div className="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-                      <p className="text-xs text-yellow-800 dark:text-yellow-200">
-                        ⚠️ No opening hours set. Set availability to accept bookings.
+                  <div>
+                    <h1 className="text-xl lg:text-2xl font-bold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+                      Location Settings
+                      <span
+                        className="px-2 py-0.5 text-[10px] font-semibold rounded-full"
+                        style={{
+                          background: 'var(--accent-primary-light)',
+                          color: 'var(--accent-primary)',
+                          border: '1px solid var(--accent-primary-light)'
+                        }}
+                      >
+                        PRO
+                      </span>
+                    </h1>
+                    <p className="text-xs lg:text-sm mt-1" style={{ color: 'var(--text-subtle)' }}>
+                      Manage your business locations
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={handleOpenCreate}
+                className="relative group flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-white overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-primary group-hover:opacity-90 transition-opacity" />
+                <Plus className="relative z-10 w-4 h-4" />
+                <span className="relative z-10">Add Location</span>
+              </motion.button>
+            </div>
+          </div>
+        </header>
+
+        {/* Main Content */}
+        <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="space-y-6">
+            {/* Info Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <Card
+                className="p-6 backdrop-blur-sm"
+                style={{
+                  backgroundColor: 'var(--bg-elevated)',
+                  border: '1px solid var(--accent-primary-light)'
+                }}
+              >
+                <div className="flex items-start space-x-3">
+                  <div className="inline-flex p-2 rounded-lg bg-gradient-primary">
+                    <MapPin className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>
+                      About Locations
+                    </h3>
+                    <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+                      Locations define where you provide services. Each location can have its own address and opening hours. 
+                      You can link multiple locations to your provider profile.
+                    </p>
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
+
+            {/* Locations List */}
+            {isLoading ? (
+              <Card
+                className="p-12 backdrop-blur-sm"
+                style={{
+                  backgroundColor: 'var(--bg-elevated)',
+                  border: '1px solid var(--border-default)'
+                }}
+              >
+                <div className="flex items-center justify-center">
+                  <Spinner />
+                </div>
+              </Card>
+            ) : locations && locations.length > 0 ? (
+              <div className="grid gap-4 md:grid-cols-2">
+                <AnimatePresence>
+                  {locations.map((location, index) => (
+                    <motion.div
+                      key={location.name}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="relative group"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl blur-xl" />
+                      <Card
+                        className="relative p-6 backdrop-blur-sm hover:scale-[1.02] transition-all duration-300"
+                        style={{
+                          backgroundColor: 'var(--bg-elevated)',
+                          border: '1px solid var(--border-default)'
+                        }}
+                      >
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex-1">
+                            <h3 className="font-semibold mb-1 flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+                              <MapPin className="w-4 h-4" style={{ color: 'var(--accent-primary)' }} />
+                              {location.location_name}
+                            </h3>
+                            <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
+                              {location.address}
+                            </p>
+                            <div className="flex items-center gap-4 mt-3 text-xs" style={{ color: 'var(--text-subtle)' }}>
+                              <span className="flex items-center gap-1">
+                                <Clock className="w-3 h-3" />
+                                {location.opening_hours_count} hours set
+                              </span>
+                              <span>{location.timezone}</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <motion.button
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                              onClick={() => handleOpenEdit(location)}
+                              className="p-2 rounded-lg transition-colors"
+                              style={{
+                                backgroundColor: 'var(--border-subtle)',
+                                color: 'var(--text-muted)'
+                              }}
+                            >
+                              <Edit2 className="w-4 h-4" />
+                            </motion.button>
+                            <motion.button
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                              onClick={() => handleDelete(location)}
+                              disabled={deleting}
+                              className="p-2 rounded-lg transition-colors"
+                              style={{
+                                backgroundColor: 'var(--border-subtle)',
+                                color: 'var(--accent-secondary)'
+                              }}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </motion.button>
+                          </div>
+                        </div>
+                        {!location.has_opening_hours && (
+                          <div
+                            className="mt-4 p-3 rounded-lg border"
+                            style={{
+                              backgroundColor: 'var(--accent-secondary-light)',
+                              borderColor: 'var(--accent-secondary-light)'
+                            }}
+                          >
+                            <p className="text-xs" style={{ color: 'var(--accent-secondary)' }}>
+                              ⚠️ No opening hours set. Set availability to accept bookings.
+                            </p>
+                          </div>
+                        )}
+                      </Card>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
+            ) : (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                <Card
+                  className="p-6 backdrop-blur-sm"
+                  style={{
+                    backgroundColor: 'var(--bg-elevated)',
+                    border: '1px solid var(--border-default)'
+                  }}
+                >
+                  <div className="text-center py-12">
+                    <div className="inline-flex p-4 rounded-2xl bg-gradient-primary mb-4">
+                      <MapPin className="w-16 h-16 text-white" />
+                    </div>
+                    <p className="mb-4" style={{ color: 'var(--text-muted)' }}>
+                      No locations added yet
+                    </p>
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={handleOpenCreate}
+                      className="relative group flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-white overflow-hidden mx-auto"
+                    >
+                      <div className="absolute inset-0 bg-gradient-primary group-hover:opacity-90 transition-opacity" />
+                      <Plus className="relative z-10 w-4 h-4" />
+                      <span className="relative z-10">Add Your First Location</span>
+                    </motion.button>
+                  </div>
+                </Card>
+              </motion.div>
+            )}
+
+            {/* Quick Link to Availability */}
+            {locations && locations.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                <Card
+                  className="p-6 backdrop-blur-sm hover:scale-[1.02] transition-all duration-300 cursor-pointer"
+                  style={{
+                    backgroundColor: 'var(--bg-elevated)',
+                    border: '1px solid var(--border-default)'
+                  }}
+                  onClick={() => navigate('/settings/availability')}
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>
+                        Set Opening Hours
+                      </h3>
+                      <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+                        Configure when you're available at each location
                       </p>
                     </div>
-                  )}
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                      style={{
+                        backgroundColor: 'var(--border-subtle)',
+                        border: '1px solid var(--border-default)',
+                        color: 'var(--text-primary)'
+                      }}
+                    >
+                      <Clock className="w-4 h-4" />
+                      Edit Availability
+                    </motion.button>
+                  </div>
                 </Card>
-              ))}
-            </div>
-          ) : (
-            <Card className="p-6">
-              <div className="text-center py-12">
-                <MapPin className="w-16 h-16 mx-auto mb-4 text-gray-400 dark:text-gray-600" />
-                <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  No locations added yet
-                </p>
-                <Button
-                  onClick={handleOpenCreate}
-                  className="flex items-center gap-2 mx-auto"
-                >
-                  <Plus className="w-4 h-4" />
-                  Add Your First Location
-                </Button>
-              </div>
-            </Card>
-          )}
+              </motion.div>
+            )}
+          </div>
+        </main>
 
-          {/* Quick Link to Availability */}
-          {locations.length > 0 && (
-            <Card className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
-                    Set Opening Hours
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Configure when you're available at each location
-                  </p>
+        {/* Create/Edit Modal */}
+        <Dialog open={showCreateModal} onOpenChange={setShowCreateModal}>
+          <DialogContent
+            className="relative w-full max-w-[500px] border rounded-2xl shadow-2xl overflow-hidden p-0"
+            style={{
+              backgroundColor: 'var(--bg-elevated)',
+              borderColor: 'var(--border-default)'
+            }}
+          >
+            {/* Gradient accent */}
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-violet-500 via-purple-500 to-pink-500" />
+
+            <DialogHeader className="p-6 border-b" style={{ borderColor: 'var(--border-default)' }}>
+              <DialogTitle className="flex items-center gap-2 text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
+                <div className="relative">
+                  <div className="absolute inset-0 bg-gradient-to-br from-violet-500 to-purple-600 rounded-xl blur opacity-50" />
+                  <div className="relative bg-gradient-to-br from-violet-500 to-purple-600 p-2.5 rounded-xl">
+                    <Plus className="w-5 h-5 text-white" />
+                  </div>
                 </div>
-                <Button
-                  variant="outline"
-                  onClick={() => navigate('/settings/availability')}
-                  className="flex items-center gap-2"
-                >
-                  <Clock className="w-4 h-4" />
-                  Edit Availability
-                </Button>
-              </div>
-            </Card>
-          )}
-        </div>
-      </main>
+                {editingLocation ? 'Edit Location' : 'Create New Location'}
+              </DialogTitle>
+              <DialogDescription className="text-sm" style={{ color: 'var(--text-muted)' }}>
+                {editingLocation ? 'Update location details' : 'Add a new location where you provide services'}
+              </DialogDescription>
+              <DialogClose className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+                <X className="h-4 w-4" style={{ color: 'var(--text-muted)' }} />
+                <span className="sr-only">Close</span>
+              </DialogClose>
+            </DialogHeader>
 
-      {/* Create/Edit Modal */}
-      <Dialog open={showCreateModal} onOpenChange={setShowCreateModal}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Plus className="w-5 h-5" />
-              {editingLocation ? 'Edit Location' : 'Create New Location'}
-            </DialogTitle>
-            <DialogDescription>
-              {editingLocation ? 'Update location details' : 'Add a new location where you provide services'}
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-4 mt-4">
-            <div className="space-y-2">
-              <Label htmlFor="location_name">
-                Location Name <span className="text-red-500">*</span>
-              </Label>
-              <Input
-                id="location_name"
-                placeholder="e.g., Main Office, Bole Branch"
-                value={formData.location_name}
-                onChange={(e) => {
-                  setFormData({ ...formData, location_name: e.target.value });
-                  if (errors.location_name) setErrors({ ...errors, location_name: '' });
-                }}
-                className={errors.location_name ? 'border-red-500' : ''}
-              />
-              {errors.location_name && (
-                <p className="text-sm text-red-500">{errors.location_name}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="address_line_1">
-                Address Line 1 <span className="text-red-500">*</span>
-              </Label>
-              <Input
-                id="address_line_1"
-                placeholder="e.g., Bole Road, Near Edna Mall"
-                value={formData.address_line_1}
-                onChange={(e) => {
-                  setFormData({ ...formData, address_line_1: e.target.value });
-                  if (errors.address_line_1) setErrors({ ...errors, address_line_1: '' });
-                }}
-                className={errors.address_line_1 ? 'border-red-500' : ''}
-              />
-              {errors.address_line_1 && (
-                <p className="text-sm text-red-500">{errors.address_line_1}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="address_line_2">Address Line 2 (Optional)</Label>
-              <Input
-                id="address_line_2"
-                placeholder="e.g., Building 123, Floor 2"
-                value={formData.address_line_2}
-                onChange={(e) => {
-                  setFormData({ ...formData, address_line_2: e.target.value });
-                }}
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-4 mt-4 p-6">
               <div className="space-y-2">
-                <Label htmlFor="city">
-                  City <span className="text-red-500">*</span>
+                <Label htmlFor="location_name" style={{ color: 'var(--text-primary)' }}>
+                  Location Name <span className="text-red-500">*</span>
                 </Label>
                 <Input
-                  id="city"
-                  placeholder="e.g., Addis Ababa"
-                  value={formData.city}
+                  id="location_name"
+                  placeholder="e.g., Main Office, Bole Branch"
+                  value={formData.location_name}
                   onChange={(e) => {
-                    setFormData({ ...formData, city: e.target.value });
-                    if (errors.city) setErrors({ ...errors, city: '' });
+                    setFormData({ ...formData, location_name: e.target.value });
+                    if (errors.location_name) setErrors({ ...errors, location_name: '' });
                   }}
-                  className={errors.city ? 'border-red-500' : ''}
+                  className={errors.location_name ? 'border-red-500' : ''}
+                  style={{
+                    backgroundColor: 'var(--bg-secondary)',
+                    borderColor: errors.location_name ? 'red-500' : 'var(--border-default)',
+                    color: 'var(--text-primary)'
+                  }}
                 />
-                {errors.city && (
-                  <p className="text-sm text-red-500">{errors.city}</p>
+                {errors.location_name && (
+                  <p className="text-sm text-red-500">{errors.location_name}</p>
                 )}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="phone">Phone (Optional)</Label>
+                <Label htmlFor="address_line_1" style={{ color: 'var(--text-primary)' }}>
+                  Address Line 1 <span className="text-red-500">*</span>
+                </Label>
                 <Input
-                  id="phone"
-                  type="tel"
-                  placeholder="+251 911 234 567"
-                  value={formData.phone}
+                  id="address_line_1"
+                  placeholder="e.g., Bole Road, Near Edna Mall"
+                  value={formData.address_line_1}
                   onChange={(e) => {
-                    setFormData({ ...formData, phone: e.target.value });
+                    setFormData({ ...formData, address_line_1: e.target.value });
+                    if (errors.address_line_1) setErrors({ ...errors, address_line_1: '' });
+                  }}
+                  className={errors.address_line_1 ? 'border-red-500' : ''}
+                  style={{
+                    backgroundColor: 'var(--bg-secondary)',
+                    borderColor: errors.address_line_1 ? 'red-500' : 'var(--border-default)',
+                    color: 'var(--text-primary)'
+                  }}
+                />
+                {errors.address_line_1 && (
+                  <p className="text-sm text-red-500">{errors.address_line_1}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="address_line_2" style={{ color: 'var(--text-primary)' }}>Address Line 2 (Optional)</Label>
+                <Input
+                  id="address_line_2"
+                  placeholder="e.g., Building 123, Floor 2"
+                  value={formData.address_line_2}
+                  onChange={(e) => {
+                    setFormData({ ...formData, address_line_2: e.target.value });
+                  }}
+                  style={{
+                    backgroundColor: 'var(--bg-secondary)',
+                    borderColor: 'var(--border-default)',
+                    color: 'var(--text-primary)'
                   }}
                 />
               </div>
-            </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="timezone">Timezone</Label>
-              <Select
-                value={formData.timezone}
-                onValueChange={(value) => setFormData({ ...formData, timezone: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {timezones.map((tz) => (
-                    <SelectItem key={tz.value} value={tz.value}>
-                      {tz.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="city" style={{ color: 'var(--text-primary)' }}>
+                    City <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id="city"
+                    placeholder="e.g., Addis Ababa"
+                    value={formData.city}
+                    onChange={(e) => {
+                      setFormData({ ...formData, city: e.target.value });
+                      if (errors.city) setErrors({ ...errors, city: '' });
+                    }}
+                    className={errors.city ? 'border-red-500' : ''}
+                    style={{
+                      backgroundColor: 'var(--bg-secondary)',
+                      borderColor: errors.city ? 'red-500' : 'var(--border-default)',
+                      color: 'var(--text-primary)'
+                    }}
+                  />
+                  {errors.city && (
+                    <p className="text-sm text-red-500">{errors.city}</p>
+                  )}
+                </div>
 
-            {/* Provider Selection - Only show if multiple providers available and creating (not editing) */}
-            {!editingLocation && availableProviders.length > 1 && (
+                <div className="space-y-2">
+                  <Label htmlFor="phone" style={{ color: 'var(--text-primary)' }}>Phone (Optional)</Label>
+                  <Input
+                    id="phone"
+                    type="tel"
+                    placeholder="+251 911 234 567"
+                    value={formData.phone}
+                    onChange={(e) => {
+                      setFormData({ ...formData, phone: e.target.value });
+                    }}
+                    style={{
+                      backgroundColor: 'var(--bg-secondary)',
+                      borderColor: 'var(--border-default)',
+                      color: 'var(--text-primary)'
+                    }}
+                  />
+                </div>
+              </div>
+
               <div className="space-y-2">
-                <Label htmlFor="provider_id">
-                  Assign to Provider
-                </Label>
+                <Label htmlFor="timezone" style={{ color: 'var(--text-primary)' }}>Timezone</Label>
                 <Select
-                  value={formData.provider_id}
-                  onValueChange={(value) => setFormData({ ...formData, provider_id: value })}
+                  value={formData.timezone}
+                  onValueChange={(value) => setFormData({ ...formData, timezone: value })}
                 >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a provider" />
+                  <SelectTrigger
+                    style={{
+                      backgroundColor: 'var(--bg-secondary)',
+                      borderColor: 'var(--border-default)',
+                      color: 'var(--text-primary)'
+                    }}
+                  >
+                    <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
-                    {availableProviders.map((provider) => (
-                      <SelectItem key={provider.name} value={provider.name}>
-                        {provider.provider_name} {provider.full_name ? `(${provider.full_name})` : ''}
+                  <SelectContent
+                    style={{
+                      backgroundColor: 'var(--bg-elevated)',
+                      borderColor: 'var(--border-default)'
+                    }}
+                  >
+                    {timezones.map((tz) => (
+                      <SelectItem key={tz.value} value={tz.value} style={{ color: 'var(--text-primary)' }}>
+                        {tz.label}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  Select which provider this location belongs to
-                </p>
               </div>
-            )}
 
-            {/* Service Selection - Only show if services available and creating (not editing) */}
-            {!editingLocation && availableServices.length > 0 && (
-              <div className="space-y-2">
-                <Label htmlFor="service_ids">
-                  Link to Services (Optional)
-                </Label>
-                <div className="space-y-2 max-h-48 overflow-y-auto border rounded-lg p-3">
-                  {availableServices.map((service) => (
-                    <div key={service.name} className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        id={`service-${service.name}`}
-                        checked={formData.service_ids.includes(service.name)}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setFormData({
-                              ...formData,
-                              service_ids: [...formData.service_ids, service.name]
-                            });
-                          } else {
-                            setFormData({
-                              ...formData,
-                              service_ids: formData.service_ids.filter(id => id !== service.name)
-                            });
-                          }
-                        }}
-                        className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      />
-                      <label
-                        htmlFor={`service-${service.name}`}
-                        className="text-sm text-gray-700 dark:text-gray-300 cursor-pointer flex-1"
-                      >
-                        <span className="font-medium">{service.service_name}</span>
-                        {service.description && (
-                          <span className="text-gray-500 dark:text-gray-400 ml-2">
-                            - {service.description}
-                          </span>
-                        )}
-                      </label>
-                    </div>
-                  ))}
+              {/* Provider Selection - Only show if multiple providers available and creating (not editing) */}
+              {!editingLocation && availableProviders.length > 1 && (
+                <div className="space-y-2">
+                  <Label htmlFor="provider_id" style={{ color: 'var(--text-primary)' }}>
+                    Assign to Provider
+                  </Label>
+                  <Select
+                    value={formData.provider_id}
+                    onValueChange={(value) => setFormData({ ...formData, provider_id: value })}
+                  >
+                    <SelectTrigger
+                      style={{
+                        backgroundColor: 'var(--bg-secondary)',
+                        borderColor: 'var(--border-default)',
+                        color: 'var(--text-primary)'
+                      }}
+                    >
+                      <SelectValue placeholder="Select a provider" />
+                    </SelectTrigger>
+                    <SelectContent
+                      style={{
+                        backgroundColor: 'var(--bg-elevated)',
+                        borderColor: 'var(--border-default)'
+                      }}
+                    >
+                      {availableProviders.map((provider) => (
+                        <SelectItem key={provider.name} value={provider.name} style={{ color: 'var(--text-primary)' }}>
+                          {provider.provider_name} {provider.full_name ? `(${provider.full_name})` : ''}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs" style={{ color: 'var(--text-subtle)' }}>
+                    Select which provider this location belongs to
+                  </p>
                 </div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  Select which services are available at this location
-                </p>
-              </div>
-            )}
+              )}
 
-            {errors.submit && (
-              <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
-                <p className="text-sm text-red-600 dark:text-red-400">{errors.submit}</p>
-              </div>
-            )}
+              {/* Service Selection - Only show if services available and creating (not editing) */}
+              {!editingLocation && availableServices.length > 0 && (
+                <div className="space-y-2">
+                  <Label htmlFor="service_ids" style={{ color: 'var(--text-primary)' }}>
+                    Link to Services (Optional)
+                  </Label>
+                  <div
+                    className="space-y-2 max-h-48 overflow-y-auto border rounded-lg p-3"
+                    style={{
+                      backgroundColor: 'var(--bg-secondary)',
+                      borderColor: 'var(--border-default)'
+                    }}
+                  >
+                    {availableServices.map((service) => (
+                      <div key={service.name} className="flex items-center space-x-2">
+                        <input
+                          type="checkbox"
+                          id={`service-${service.name}`}
+                          checked={formData.service_ids.includes(service.name)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setFormData({
+                                ...formData,
+                                service_ids: [...formData.service_ids, service.name]
+                              });
+                            } else {
+                              setFormData({
+                                ...formData,
+                                service_ids: formData.service_ids.filter(id => id !== service.name)
+                              });
+                            }
+                          }}
+                          className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                          style={{ accentColor: 'var(--accent-primary)' }}
+                        />
+                        <label
+                          htmlFor={`service-${service.name}`}
+                          className="text-sm cursor-pointer flex-1"
+                          style={{ color: 'var(--text-primary)' }}
+                        >
+                          <span className="font-medium">{service.service_name}</span>
+                          {service.description && (
+                            <span className="ml-2" style={{ color: 'var(--text-muted)' }}>
+                              - {service.description}
+                            </span>
+                          )}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-xs" style={{ color: 'var(--text-subtle)' }}>
+                    Select which services are available at this location
+                  </p>
+                </div>
+              )}
 
-            <div className="flex justify-end space-x-3 pt-4">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setShowCreateModal(false)}
-                disabled={creating}
-              >
-                Cancel
-              </Button>
-              <Button onClick={handleSubmit} disabled={creating}>
-                {creating ? 'Saving...' : editingLocation ? 'Update' : 'Create'}
-              </Button>
+              {errors.submit && (
+                <div
+                  className="p-3 rounded-lg border"
+                  style={{
+                    backgroundColor: 'var(--accent-secondary-light)',
+                    borderColor: 'var(--accent-secondary-light)'
+                  }}
+                >
+                  <p className="text-sm" style={{ color: 'var(--accent-secondary)' }}>{errors.submit}</p>
+                </div>
+              )}
+
+              <div className="flex justify-end space-x-3 pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setShowCreateModal(false)}
+                  disabled={creating}
+                  style={{
+                    backgroundColor: 'var(--border-subtle)',
+                    borderColor: 'var(--border-default)',
+                    color: 'var(--text-primary)'
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleSubmit}
+                  disabled={creating}
+                  className="bg-gradient-primary text-white hover:opacity-90"
+                >
+                  {creating ? 'Saving...' : editingLocation ? 'Update' : 'Create'}
+                </Button>
+              </div>
             </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+          </DialogContent>
+        </Dialog>
+      </div>
     </div>
   );
 };

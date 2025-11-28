@@ -867,6 +867,16 @@ def create_service(service_name, duration, organization=None, price=0, currency=
     user = frappe.session.user
     
     try:
+        # Check for duplicate service name within the same organization
+        if organization:
+            existing_service = frappe.db.get_value(
+                "Service",
+                {"service_name": service_name, "organization": organization, "is_active": 1},
+                "name"
+            )
+            if existing_service:
+                frappe.throw(_("A service with the name '{0}' already exists for this organization. Please use a different name or edit the existing service.").format(service_name))
+        
         service = frappe.new_doc("Service")
         service.service_name = service_name
         service.duration = duration

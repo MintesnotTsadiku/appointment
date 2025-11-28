@@ -33,96 +33,208 @@ const TeamManagement = () => {
   const selectedOrg = progressData?.message?.selected_organization;
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-gray-900">
-      {/* Header */}
-      <header className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-800 sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => window.history.back()}
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </Button>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                  <Users className="w-6 h-6" style={{ color: 'var(--brand-primary)' }} />
-                  Team Management
-                </h1>
-                <div className="flex items-center gap-2 mt-1">
-                  {onboardingType === 'organization' && selectedOrg ? (
-                    <>
-                      <Building2 className="w-4 h-4 text-gray-500" />
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {selectedOrg.organization_name}
-                      </p>
-                    </>
-                  ) : (
-                    <>
-                      <User className="w-4 h-4 text-gray-500" />
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        Individual Provider
-                      </p>
-                    </>
-                  )}
+    <div 
+      className="min-h-screen text-[var(--text-primary)]"
+      style={{ backgroundColor: 'var(--bg-primary)' }}
+    >
+      {/* Ambient background effects */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div 
+          className="absolute -top-40 -right-40 w-96 h-96 rounded-full blur-[120px]"
+          style={{ backgroundColor: 'var(--glow-primary)' }}
+        />
+        <div 
+          className="absolute top-1/3 -left-40 w-96 h-96 rounded-full blur-[120px]"
+          style={{ backgroundColor: 'var(--glow-secondary)' }}
+        />
+        <div 
+          className="absolute -bottom-40 right-1/4 w-96 h-96 rounded-full blur-[120px]"
+          style={{ backgroundColor: 'var(--glow-success)' }}
+        />
+      </div>
+
+      <div className="relative z-10">
+        {/* Header */}
+        <header 
+          className="sticky top-0 z-50 backdrop-blur-xl"
+          style={{ 
+            backgroundColor: 'color-mix(in srgb, var(--bg-primary) 80%, transparent)',
+            borderBottom: '1px solid var(--border-subtle)'
+          }}
+        >
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => window.history.back()}
+                  className="p-2 rounded-lg transition-all"
+                  style={{ 
+                    backgroundColor: 'var(--border-subtle)',
+                    border: '1px solid var(--border-default)',
+                    color: 'var(--text-muted)'
+                  }}
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </motion.button>
+                <div className="flex items-center gap-3">
+                  <div className="relative">
+                    <div 
+                      className="absolute inset-0 rounded-xl blur-lg opacity-50 bg-gradient-primary"
+                    />
+                    <div className="relative bg-gradient-primary p-2.5 rounded-xl">
+                      <Users className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+                  <div>
+                    <h1 className="text-xl lg:text-2xl font-bold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+                      Team Management
+                      <span 
+                        className="px-2 py-0.5 text-[10px] font-semibold rounded-full"
+                        style={{ 
+                          background: 'var(--accent-primary-light)',
+                          color: 'var(--accent-primary)',
+                          border: '1px solid var(--accent-primary-light)'
+                        }}
+                      >
+                        PRO
+                      </span>
+                    </h1>
+                    <div className="flex items-center gap-2 mt-1">
+                      {onboardingType === 'organization' && selectedOrg ? (
+                        <>
+                          <Building2 className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
+                          <p className="text-xs lg:text-sm" style={{ color: 'var(--text-subtle)' }}>
+                            {selectedOrg.organization_name}
+                          </p>
+                        </>
+                      ) : (
+                        <>
+                          <User className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
+                          <p className="text-xs lg:text-sm" style={{ color: 'var(--text-subtle)' }}>
+                            Individual Provider
+                          </p>
+                        </>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
+              
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setShowInviteModal(true)}
+                className="relative group flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-white overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-primary group-hover:opacity-90 transition-opacity" />
+                <Plus className="relative z-10 w-4 h-4" />
+                <span className="relative z-10">Invite Member</span>
+              </motion.button>
             </div>
-            
-            <Button 
-              size="sm" 
-              style={{ background: 'var(--brand-primary)' }} 
-              className="text-white"
-              onClick={() => setShowInviteModal(true)}
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Invite Member
-            </Button>
           </div>
-        </div>
-      </header>
+        </header>
 
-      {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            <Card className="p-6">
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Total Members</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">1</p>
-              <p className="text-xs text-gray-500 mt-1">Owner only</p>
-            </Card>
-          </motion.div>
+        {/* Main Content */}
+        <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* Stats Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="relative group"
+            >
+              <div 
+                className="relative backdrop-blur-sm rounded-2xl p-5 hover:scale-[1.02] transition-all duration-300"
+                style={{ 
+                  backgroundColor: 'var(--border-subtle)',
+                  border: '1px solid var(--border-default)'
+                }}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="inline-flex p-2.5 rounded-xl bg-gradient-primary">
+                    <Users className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-2xl lg:text-3xl font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>
+                      1
+                    </div>
+                    <div className="text-xs lg:text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                      Total Members
+                    </div>
+                    <div className="text-xs mt-1" style={{ color: 'var(--text-subtle)' }}>
+                      Owner only
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-          >
-            <Card className="p-6">
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Active Providers</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">1</p>
-              <p className="text-xs text-gray-500 mt-1">Accepting bookings</p>
-            </Card>
-          </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="relative group"
+            >
+              <div 
+                className="relative backdrop-blur-sm rounded-2xl p-5 hover:scale-[1.02] transition-all duration-300"
+                style={{ 
+                  backgroundColor: 'var(--border-subtle)',
+                  border: '1px solid var(--border-default)'
+                }}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="inline-flex p-2.5 rounded-xl bg-gradient-success">
+                    <Shield className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-2xl lg:text-3xl font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>
+                      1
+                    </div>
+                    <div className="text-xs lg:text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                      Active Providers
+                    </div>
+                    <div className="text-xs mt-1" style={{ color: 'var(--text-subtle)' }}>
+                      Accepting bookings
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <Card className="p-6">
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Pending Invites</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">0</p>
-              <p className="text-xs text-gray-500 mt-1">Waiting response</p>
-            </Card>
-          </motion.div>
-        </div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="relative group"
+            >
+              <div 
+                className="relative backdrop-blur-sm rounded-2xl p-5 hover:scale-[1.02] transition-all duration-300"
+                style={{ 
+                  backgroundColor: 'var(--border-subtle)',
+                  border: '1px solid var(--border-default)'
+                }}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="inline-flex p-2.5 rounded-xl bg-gradient-secondary">
+                    <Mail className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-2xl lg:text-3xl font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>
+                      0
+                    </div>
+                    <div className="text-xs lg:text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                      Pending Invites
+                    </div>
+                    <div className="text-xs mt-1" style={{ color: 'var(--text-subtle)' }}>
+                      Waiting response
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
 
         {/* Team Members List */}
         <motion.div

@@ -78,7 +78,7 @@ const UseCases = () => {
   ];
 
   return (
-    <section id="use-cases" className="py-20 bg-gray-50 dark:bg-gray-900/50">
+    <section id="use-cases" className="py-20" style={{ backgroundColor: 'var(--bg-primary)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
@@ -88,10 +88,10 @@ const UseCases = () => {
           transition={{ duration: 0.5 }}
           className="text-center max-w-3xl mx-auto mb-16"
         >
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-gray-900 dark:text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold mb-4" style={{ color: 'var(--text-primary)' }}>
             {t('useCases.title')}
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300">
+          <p className="text-lg" style={{ color: 'var(--text-secondary)' }}>
             {t('useCases.subtitle')}
           </p>
         </motion.div>
@@ -104,11 +104,11 @@ const UseCases = () => {
                 key={index}
                 onClick={() => setActiveCase(index)}
                 whileHover={{ x: 8 }}
-                className={`w-full text-left p-6 rounded-xl transition-all duration-300 ${
-                  activeCase === index
-                    ? 'bg-white dark:bg-gray-800 shadow-lg border-2 border-brand-indigo'
-                    : 'bg-white/50 dark:bg-gray-800/50 border-2 border-transparent hover:border-gray-300 dark:hover:border-gray-700'
-                }`}
+                className="w-full text-left p-6 rounded-xl transition-all duration-300 backdrop-blur-sm"
+                style={{ 
+                  backgroundColor: activeCase === index ? 'var(--bg-elevated)' : 'var(--border-subtle)',
+                  border: activeCase === index ? '2px solid var(--accent-primary)' : '2px solid var(--border-default)'
+                }}
               >
                 <div className="flex items-center space-x-4">
                   <div
@@ -117,19 +117,19 @@ const UseCases = () => {
                     <useCase.icon className="w-6 h-6 text-white" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
+                    <h3 className="text-lg font-bold mb-1" style={{ color: 'var(--text-primary)' }}>
                       {useCase.title}
                     </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
                       {useCase.subtitle}
                     </p>
                   </div>
                   <div
-                    className={`w-2 h-2 rounded-full transition-all ${
-                      activeCase === index
-                        ? 'bg-brand-indigo scale-100'
-                        : 'bg-gray-300 dark:bg-gray-600 scale-75'
-                    }`}
+                    className="w-2 h-2 rounded-full transition-all"
+                    style={{ 
+                      backgroundColor: activeCase === index ? 'var(--accent-primary)' : 'var(--border-default)',
+                      transform: activeCase === index ? 'scale(1)' : 'scale(0.75)'
+                    }}
                   />
                 </div>
               </motion.button>
@@ -145,7 +145,11 @@ const UseCases = () => {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.3 }}
-                className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-700"
+                className="rounded-2xl shadow-2xl overflow-hidden backdrop-blur-sm"
+                style={{ 
+                  backgroundColor: 'var(--bg-elevated)',
+                  border: '1px solid var(--border-default)'
+                }}
               >
                 {/* Screenshot Image */}
                 <div className="relative h-56 overflow-hidden">
@@ -170,38 +174,68 @@ const UseCases = () => {
 
                 {/* Content */}
                 <div className="p-8">
-                  <h3 className="text-2xl font-heading font-bold text-gray-900 dark:text-white mb-4">
+                  <h3 className="text-2xl font-heading font-bold mb-4" style={{ color: 'var(--text-primary)' }}>
                     {useCases[activeCase].title}
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                  <p className="mb-6 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
                     {useCases[activeCase].description}
                   </p>
 
                   {/* Example */}
-                  <div className="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-gray-200 dark:border-gray-700">
-                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
+                  <div 
+                    className="p-4 rounded-xl backdrop-blur-sm"
+                    style={{ 
+                      backgroundColor: 'var(--bg-secondary)',
+                      border: '1px solid var(--border-default)'
+                    }}
+                  >
+                    <p className="text-sm font-medium mb-2" style={{ color: 'var(--text-muted)' }}>
                       {t('useCases.exampleLabel')}
                     </p>
-                    <p className="text-gray-900 dark:text-white font-medium">
+                    <p className="font-medium" style={{ color: 'var(--text-primary)' }}>
                       {useCases[activeCase].example}
                     </p>
                   </div>
 
                   {/* Stats/Benefits */}
                   <div className="grid grid-cols-2 gap-4 mt-6">
-                    <div className="text-center p-4 bg-gradient-to-br from-brand-indigo/10 to-brand-emerald/10 rounded-xl">
-                      <div className={`text-2xl font-bold bg-gradient-to-r ${useCases[activeCase].color} bg-clip-text text-transparent`}>
+                    <div 
+                      className="text-center p-4 rounded-xl backdrop-blur-sm"
+                      style={{ 
+                        backgroundColor: 'var(--accent-primary-light)'
+                      }}
+                    >
+                      <div 
+                        className="text-2xl font-bold"
+                        style={{ 
+                          backgroundImage: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
+                          WebkitBackgroundClip: 'text',
+                          WebkitTextFillColor: 'transparent'
+                        }}
+                      >
                         40%
                       </div>
-                      <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                      <div className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
                         {t('useCases.benefitTime')}
                       </div>
                     </div>
-                    <div className="text-center p-4 bg-gradient-to-br from-brand-emerald/10 to-brand-indigo/10 rounded-xl">
-                      <div className={`text-2xl font-bold bg-gradient-to-r ${useCases[activeCase].color} bg-clip-text text-transparent`}>
+                    <div 
+                      className="text-center p-4 rounded-xl backdrop-blur-sm"
+                      style={{ 
+                        backgroundColor: 'var(--accent-success-light)'
+                      }}
+                    >
+                      <div 
+                        className="text-2xl font-bold"
+                        style={{ 
+                          backgroundImage: 'linear-gradient(to right, var(--gradient-success-from), var(--gradient-success-to))',
+                          WebkitBackgroundClip: 'text',
+                          WebkitTextFillColor: 'transparent'
+                        }}
+                      >
                         3x
                       </div>
-                      <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                      <div className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
                         {t('useCases.benefitBookings')}
                       </div>
                     </div>

@@ -1,7 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, PlayCircle, CheckCircle, Users } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/button';
 import {
   heroContentVariants,
   heroItemVariants,
@@ -69,34 +68,8 @@ const Hero = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-16 px-4 sm:px-6 lg:px-8">
-      {/* Animated Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-gray-900">
-        {/* Animated gradient orbs */}
-        <motion.div
-          animate={{
-            scale: [1, 1.2, 1],
-            rotate: [0, 90, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: 'linear',
-          }}
-          className="absolute top-0 -left-1/4 w-96 h-96 bg-gradient-hero opacity-30 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{
-            scale: [1.2, 1, 1.2],
-            rotate: [90, 0, 90],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: 'linear',
-          }}
-          className="absolute bottom-0 -right-1/4 w-96 h-96 bg-gradient-feature opacity-30 rounded-full blur-3xl"
-        />
-      </div>
+      {/* Background uses CSS variables - ambient glows are handled by parent */}
+      <div className="absolute inset-0" style={{ backgroundColor: 'var(--bg-primary)' }} />
 
       {/* Content Container */}
       <div className="relative z-10 max-w-7xl mx-auto w-full">
@@ -110,9 +83,15 @@ const Hero = () => {
           >
             {/* Eyebrow */}
             <motion.div variants={heroItemVariants} className="mb-6">
-              <div className="inline-flex items-center space-x-2 px-4 py-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full border border-brand-indigo/20 shadow-sm">
-                <CheckCircle className="w-4 h-4 text-brand-emerald" />
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <div 
+                className="inline-flex items-center space-x-2 px-4 py-2 backdrop-blur-sm rounded-full"
+                style={{ 
+                  backgroundColor: 'var(--bg-elevated)',
+                  border: '1px solid var(--border-default)'
+                }}
+              >
+                <CheckCircle className="w-4 h-4" style={{ color: 'var(--accent-success)' }} />
+                <span className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
                   {getContent(settings?.hero?.eyebrow, 'hero.eyebrow')}
                 </span>
               </div>
@@ -123,11 +102,16 @@ const Hero = () => {
               variants={heroItemVariants}
               className="font-heading font-extrabold text-5xl sm:text-6xl lg:text-7xl mb-6 leading-tight"
             >
-              <span className="bg-gradient-hero bg-clip-text text-transparent">
+              <span 
+                className="bg-clip-text text-transparent"
+                style={{ 
+                  backgroundImage: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))'
+                }}
+              >
                 {getContent(settings?.hero?.headline1, 'hero.headline1')}
               </span>
               <br />
-              <span className="text-gray-900 dark:text-white">
+              <span style={{ color: 'var(--text-primary)' }}>
                 {getContent(settings?.hero?.headline2, 'hero.headline2')}
               </span>
             </motion.h1>
@@ -135,7 +119,8 @@ const Hero = () => {
             {/* Subheadline */}
             <motion.p
               variants={heroItemVariants}
-              className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto lg:mx-0"
+              className="text-lg sm:text-xl mb-8 max-w-2xl mx-auto lg:mx-0"
+              style={{ color: 'var(--text-secondary)' }}
             >
               {getContent(settings?.hero?.subheadline, 'hero.subheadline')}
             </motion.p>
@@ -145,21 +130,31 @@ const Hero = () => {
               variants={heroItemVariants}
               className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8"
             >
-              <Button
-                size="lg"
-                className="bg-gradient-hero hover:opacity-90 text-white shadow-lg shadow-indigo-500/50 text-base sm:text-lg px-8 py-6 group"
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="relative group flex items-center gap-2 px-8 py-6 rounded-xl font-medium text-base sm:text-lg overflow-hidden"
+                style={{ 
+                  background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
+                  color: 'white'
+                }}
               >
                 <span>{getContent(settings?.hero?.ctaPrimary, 'hero.ctaPrimary')}</span>
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-2 text-base sm:text-lg px-8 py-6 group"
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex items-center gap-2 px-8 py-6 rounded-xl font-medium text-base sm:text-lg border-2 transition-all"
+                style={{ 
+                  backgroundColor: 'var(--bg-elevated)',
+                  borderColor: 'var(--border-default)',
+                  color: 'var(--text-primary)'
+                }}
               >
-                <PlayCircle className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
+                <PlayCircle className="w-5 h-5 group-hover:scale-110 transition-transform" />
                 <span>{getContent(settings?.hero?.ctaSecondary, 'hero.ctaSecondary')}</span>
-              </Button>
+              </motion.button>
             </motion.div>
 
             {/* Trust Indicators */}
@@ -187,8 +182,8 @@ const Hero = () => {
                   ))}
                 </div>
                 <div className="ml-3 flex items-center space-x-1">
-                  <Users className="w-4 h-4 text-brand-indigo" />
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <Users className="w-4 h-4" style={{ color: 'var(--accent-primary)' }} />
+                  <span className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
                     {settings?.hero?.trust?.count || '10,000+'} {getContent(settings?.hero?.trust?.label, 'hero.trustUsers')}
                   </span>
                 </div>
@@ -200,14 +195,15 @@ const Hero = () => {
                   {[1, 2, 3, 4, 5].map((star) => (
                     <svg
                       key={star}
-                      className="w-5 h-5 text-yellow-400 fill-current"
+                      className="w-5 h-5 fill-current"
+                      style={{ color: 'var(--accent-secondary)' }}
                       viewBox="0 0 20 20"
                     >
                       <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
                     </svg>
                   ))}
                 </div>
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300 ml-2">
+                <span className="text-sm font-medium ml-2" style={{ color: 'var(--text-primary)' }}>
                   {settings?.hero?.trust?.rating || '4.9/5'} {t('hero.trustRating')} {settings?.hero?.trust?.reviewsCount || '1,247'} {t('hero.trustReviews')}
                 </span>
               </div>
@@ -221,58 +217,88 @@ const Hero = () => {
             animate="animate"
             className="relative hidden lg:block"
           >
-            {/* Main Product Mockup */}
-            <div className="relative">
-              {/* Floating Cards */}
-              <motion.div
-                animate={{ y: [0, -20, 0] }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                }}
-                className="absolute -top-8 -left-8 z-20 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-4 max-w-xs"
-              >
-                <div className="flex items-center space-x-3">
-                  <div className="w-12 h-12 bg-gradient-hero rounded-full flex items-center justify-center">
-                    <CheckCircle className="w-6 h-6 text-white" />
+              {/* Main Product Mockup */}
+              <div className="relative">
+                {/* Floating Cards */}
+                <motion.div
+                  animate={{ y: [0, -20, 0] }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  }}
+                  className="absolute -top-8 -left-8 z-20 rounded-2xl shadow-2xl p-4 max-w-xs backdrop-blur-sm"
+                  style={{ 
+                    backgroundColor: 'var(--bg-elevated)',
+                    border: '1px solid var(--border-default)'
+                  }}
+                >
+                  <div className="flex items-center space-x-3">
+                    <div 
+                      className="w-12 h-12 rounded-full flex items-center justify-center"
+                      style={{ 
+                        background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))'
+                      }}
+                    >
+                      <CheckCircle className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+                        Appointment Confirmed
+                      </p>
+                      <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+                        Payment received: 500 ETB
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm font-semibold text-gray-900 dark:text-white">
-                      Appointment Confirmed
-                    </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                      Payment received: 500 ETB
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
+                </motion.div>
 
-              <motion.div
-                animate={{ y: [0, 20, 0] }}
-                transition={{
-                  duration: 5,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                  delay: 1,
-                }}
-                className="absolute -bottom-8 -right-8 z-20 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-4 max-w-xs"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <p className="text-sm font-semibold text-gray-900 dark:text-white">
-                    Revenue This Month
+                <motion.div
+                  animate={{ y: [0, 20, 0] }}
+                  transition={{
+                    duration: 5,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                    delay: 1,
+                  }}
+                  className="absolute -bottom-8 -right-8 z-20 rounded-2xl shadow-2xl p-4 max-w-xs backdrop-blur-sm"
+                  style={{ 
+                    backgroundColor: 'var(--bg-elevated)',
+                    border: '1px solid var(--border-default)'
+                  }}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+                      Revenue This Month
+                    </p>
+                    <span 
+                      className="text-xs px-2 py-1 rounded-full"
+                      style={{ 
+                        backgroundColor: 'var(--accent-success-light)',
+                        color: 'var(--accent-success)'
+                      }}
+                    >
+                      +40%
+                    </span>
+                  </div>
+                  <p 
+                    className="text-2xl font-bold bg-clip-text text-transparent"
+                    style={{ 
+                      backgroundImage: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))'
+                    }}
+                  >
+                    45,230 ETB
                   </p>
-                  <span className="text-xs px-2 py-1 bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 rounded-full">
-                    +40%
-                  </span>
-                </div>
-                <p className="text-2xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                  45,230 ETB
-                </p>
-              </motion.div>
+                </motion.div>
 
-              {/* Main Mockup Container with Carousel */}
-              <div className="relative bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
+                {/* Main Mockup Container with Carousel */}
+                <div 
+                  className="relative rounded-3xl shadow-2xl overflow-hidden backdrop-blur-sm"
+                  style={{ 
+                    backgroundColor: 'var(--bg-elevated)',
+                    border: '1px solid var(--border-default)'
+                  }}
+                >
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={currentImageIndex}
@@ -288,11 +314,17 @@ const Hero = () => {
                       className="w-full h-[500px] object-cover"
                     />
                     {/* Image overlay with gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                     
                     {/* Image label */}
-                    <div className="absolute bottom-4 left-4 px-4 py-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-lg">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    <div 
+                      className="absolute bottom-4 left-4 px-4 py-2 backdrop-blur-sm rounded-lg"
+                      style={{ 
+                        backgroundColor: 'var(--bg-elevated)',
+                        border: '1px solid var(--border-default)'
+                      }}
+                    >
+                      <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
                         {heroImages[currentImageIndex].alt}
                       </p>
                     </div>
@@ -316,16 +348,18 @@ const Hero = () => {
                 </div>
               </div>
 
-              {/* Decorative Elements */}
+              {/* Decorative Elements - using CSS variables */}
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
-                className="absolute -z-10 top-1/4 right-1/4 w-32 h-32 bg-gradient-feature opacity-20 rounded-full blur-2xl"
+                className="absolute -z-10 top-1/4 right-1/4 w-32 h-32 opacity-20 rounded-full blur-2xl"
+                style={{ backgroundColor: 'var(--glow-secondary)' }}
               />
               <motion.div
                 animate={{ rotate: -360 }}
                 transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
-                className="absolute -z-10 bottom-1/4 left-1/4 w-40 h-40 bg-gradient-hero opacity-20 rounded-full blur-2xl"
+                className="absolute -z-10 bottom-1/4 left-1/4 w-40 h-40 opacity-20 rounded-full blur-2xl"
+                style={{ backgroundColor: 'var(--glow-primary)' }}
               />
             </div>
           </motion.div>
@@ -342,7 +376,8 @@ const Hero = () => {
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
-          className="flex flex-col items-center space-y-2 text-gray-500 dark:text-gray-400"
+          className="flex flex-col items-center space-y-2"
+          style={{ color: 'var(--text-muted)' }}
         >
           <span className="text-sm font-medium">{t('hero.scrollPrompt')}</span>
           <div className="w-6 h-10 border-2 border-current rounded-full flex justify-center pt-2">

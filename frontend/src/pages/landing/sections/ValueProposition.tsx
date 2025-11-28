@@ -37,7 +37,7 @@ const ValueProposition = () => {
   ];
 
   return (
-    <section className="py-20 bg-white dark:bg-gray-900">
+    <section className="py-20" style={{ backgroundColor: 'var(--bg-primary)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
@@ -47,10 +47,10 @@ const ValueProposition = () => {
           transition={{ duration: 0.5 }}
           className="text-center max-w-3xl mx-auto mb-16"
         >
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-gray-900 dark:text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold mb-4" style={{ color: 'var(--text-primary)' }}>
             {t('valueProposition.title')}
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300">
+          <p className="text-lg" style={{ color: 'var(--text-secondary)' }}>
             {t('valueProposition.subtitle')}
           </p>
         </motion.div>
@@ -71,9 +71,24 @@ const ValueProposition = () => {
               className="relative group"
             >
               {/* Card */}
-              <div className="relative bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
+              <div 
+                className="relative rounded-2xl backdrop-blur-sm hover:shadow-2xl transition-all duration-300 overflow-hidden group"
+                style={{ 
+                  backgroundColor: 'var(--bg-elevated)',
+                  border: '1px solid var(--border-default)'
+                }}
+              >
                 {/* Background gradient on hover */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${value.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
+                <div 
+                  className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300"
+                  style={{ 
+                    background: index === 0 
+                      ? 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))'
+                      : index === 1
+                      ? 'linear-gradient(to right, var(--gradient-success-from), var(--gradient-success-to))'
+                      : 'linear-gradient(to right, var(--gradient-secondary-from), var(--gradient-secondary-to))'
+                  }}
+                />
 
                 {/* Screenshot Image */}
                 <div className="relative h-48 overflow-hidden">
@@ -86,23 +101,50 @@ const ValueProposition = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                   
                   {/* Icon overlay */}
-                  <div className={`absolute top-4 left-4 w-12 h-12 rounded-xl bg-gradient-to-br ${value.color} flex items-center justify-center shadow-lg`}>
+                  <div 
+                    className="absolute top-4 left-4 w-12 h-12 rounded-xl flex items-center justify-center shadow-lg"
+                    style={{ 
+                      background: index === 0 
+                        ? 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))'
+                        : index === 1
+                        ? 'linear-gradient(to right, var(--gradient-success-from), var(--gradient-success-to))'
+                        : 'linear-gradient(to right, var(--gradient-secondary-from), var(--gradient-secondary-to))'
+                    }}
+                  >
                     <value.icon className="w-6 h-6 text-white" />
                   </div>
                 </div>
 
                 {/* Content */}
                 <div className="relative p-6">
-                  <h3 className="text-xl font-heading font-bold text-gray-900 dark:text-white mb-2">
+                  <h3 className="text-xl font-heading font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
                     {value.title}
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm">
+                  <p className="mb-4 text-sm" style={{ color: 'var(--text-secondary)' }}>
                     {value.description}
                   </p>
 
                   {/* Metric */}
-                  <div className={`inline-flex items-center space-x-2 px-3 py-1.5 bg-gradient-to-r ${value.color} bg-opacity-10 rounded-full`}>
-                    <span className={`text-xs font-bold bg-gradient-to-r ${value.color} bg-clip-text text-transparent`}>
+                  <div 
+                    className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full"
+                    style={{ 
+                      backgroundColor: index === 0 
+                        ? 'var(--accent-primary-light)'
+                        : index === 1
+                        ? 'var(--accent-success-light)'
+                        : 'var(--accent-secondary-light)'
+                    }}
+                  >
+                    <span 
+                      className="text-xs font-bold"
+                      style={{ 
+                        color: index === 0 
+                          ? 'var(--accent-primary)'
+                          : index === 1
+                          ? 'var(--accent-success)'
+                          : 'var(--accent-secondary)'
+                      }}
+                    >
                       {value.metric}
                     </span>
                   </div>

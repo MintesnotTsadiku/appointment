@@ -5,14 +5,15 @@
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
- "field_order": [
-  "step_number",
-  "title_en",
-  "title_am",
-  "description_en",
-  "description_am",
-  "image_url"
- ],
+  "field_order": [
+    "step_number",
+    "title_en",
+    "title_am",
+    "description_en",
+    "description_am",
+    "image",
+    "image_url"
+  ],
  "fields": [
   {
    "fieldname": "step_number",
@@ -43,12 +44,17 @@
    "fieldtype": "Small Text",
    "label": "Description (AM)"
   },
-  {
-   "fieldname": "image_url",
-   "fieldtype": "Data",
-   "label": "Image URL"
-  }
- ],
+    {
+      "fieldname": "image",
+      "fieldtype": "Attach Image",
+      "label": "Image"
+    },
+    {
+      "fieldname": "image_url",
+      "fieldtype": "Data",
+      "label": "Image URL (fallback)"
+    }
+  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,

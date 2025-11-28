@@ -5,42 +5,135 @@
 @layer base {
   :root {
     /* ========================================
-       BOOKING SYSTEM COLORS
-       Customize from backend
+       THEME COLORS - DYNAMIC FROM BACKEND
+       These are set dynamically via JavaScript
+       from Landing Page Settings
        ======================================== */
     
-    /* Primary color for selected dates, buttons, etc */
-    --primary-color: #3b82f6;
-    --primary-color-hover: #2563eb;
+    /* Background Colors (Light Mode Defaults) */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f9fafb;
+    --bg-tertiary: #f3f4f6;
+    --bg-elevated: #ffffff;
+    
+    /* Text Colors (Light Mode Defaults) */
+    --text-primary: #111827;
+    --text-secondary: #374151;
+    --text-muted: #6b7280;
+    --text-subtle: #9ca3af;
+    
+    /* Border Colors (Light Mode Defaults) */
+    --border-subtle: #f3f4f6;
+    --border-default: #e5e7eb;
+    --border-strong: #d1d5db;
+    
+    /* Shadow Colors (Light Mode Only) */
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+    --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+    
+    /* Glow Colors (Dark Mode Only - defaults here for completeness) */
+    --glow-primary: rgba(139,92,246,0.2);
+    --glow-secondary: rgba(59,130,246,0.2);
+    --glow-success: rgba(16,185,129,0.1);
     
     /* ========================================
-       LANDING PAGE BRAND COLORS
-       Change these to update the entire design
+       ACCENT COLORS
+       Primary: Violet/Purple (main accent)
+       Secondary: Orange/Amber (walk-ins, warnings)
+       Success: Emerald/Teal (confirmations)
+       Warning: Amber (alerts)
        ======================================== */
     
-    /* Primary Brand Color (Indigo) */
-    --brand-primary: #6366F1;
+    /* Primary Accent (Violet/Purple) */
+    --accent-primary: #8b5cf6;
+    --accent-primary-hover: #7c3aed;
+    --accent-primary-light: rgba(139,92,246,0.2);
+    
+    /* Secondary Accent (Orange/Amber) */
+    --accent-secondary: #f97316;
+    --accent-secondary-hover: #ea580c;
+    --accent-secondary-light: rgba(249,115,22,0.2);
+    
+    /* Success Accent (Emerald/Teal) */
+    --accent-success: #10b981;
+    --accent-success-hover: #059669;
+    --accent-success-light: rgba(16,185,129,0.2);
+    
+    /* Warning Accent (Amber) */
+    --accent-warning: #f59e0b;
+    --accent-warning-hover: #d97706;
+    --accent-warning-light: rgba(245,158,11,0.2);
+    
+    /* ========================================
+       STATUS COLORS
+       For appointment/booking statuses
+       ======================================== */
+    
+    --status-pending: #3b82f6;
+    --status-pending-bg: rgba(59,130,246,0.2);
+    
+    --status-confirmed: #10b981;
+    --status-confirmed-bg: rgba(16,185,129,0.2);
+    
+    --status-completed: #6b7280;
+    --status-completed-bg: rgba(107,114,128,0.2);
+    
+    --status-cancelled: #ef4444;
+    --status-cancelled-bg: rgba(239,68,68,0.2);
+    
+    --status-no-show: #f59e0b;
+    --status-no-show-bg: rgba(245,158,11,0.2);
+    
+    --status-in-progress: #8b5cf6;
+    --status-in-progress-bg: rgba(139,92,246,0.2);
+    
+    /* ========================================
+       GRADIENT COLORS
+       ======================================== */
+    
+    --gradient-primary-from: #8b5cf6;
+    --gradient-primary-to: #7c3aed;
+    
+    --gradient-secondary-from: #f97316;
+    --gradient-secondary-to: #f59e0b;
+    
+    --gradient-success-from: #10b981;
+    --gradient-success-to: #14b8a6;
+    
+    /* ========================================
+       BRAND COLORS
+       ======================================== */
+    
+    --brand-primary: #030303;
+    --brand-secondary: #10B981;
+    --brand-gold: #F59E0B;
+    --brand-teal: #14B8A6;
+    
+    /* Legacy brand colors (for backward compatibility) */
     --brand-primary-dark: #4F46E5;
     --brand-primary-light: #818CF8;
-    
-    /* Secondary Brand Color (Emerald - Success/Money) */
-    --brand-secondary: #10B981;
     --brand-secondary-dark: #059669;
-    
-    /* Accent Colors */
     --brand-accent-gold: #F59E0B;
     --brand-accent-teal: #14B8A6;
     
-    /* Gradient Definitions */
+    /* Legacy gradient definitions */
     --gradient-hero-start: #667eea;
     --gradient-hero-end: #764ba2;
     --gradient-feature-start: #6366F1;
     --gradient-feature-mid: #8B5CF6;
     --gradient-feature-end: #D946EF;
+    
+    /* ========================================
+       LEGACY/BOOKING SYSTEM COLORS
+       ======================================== */
+    
+    --primary-color: #3b82f6;
+    --primary-color-hover: #2563eb;
     --onboarding-progress-inactive: rgba(148, 163, 184, 0.45);
     
     /* ========================================
-       SHADCN/UI SYSTEM COLORS (Default)
+       SHADCN/UI SYSTEM COLORS (Light Mode)
        ======================================== */
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
@@ -70,6 +163,35 @@
   }
   
   .dark {
+    /* ========================================
+       DARK MODE - THEME COLORS
+       ======================================== */
+    
+    /* Background Colors */
+    --bg-primary: #0a0a0f;
+    --bg-secondary: #0f0f17;
+    --bg-tertiary: #12121a;
+    --bg-elevated: #1a1a24;
+    
+    /* Text Colors */
+    --text-primary: #ffffff;
+    --text-secondary: #d1d5db;
+    --text-muted: #9ca3af;
+    --text-subtle: #6b7280;
+    
+    /* Border Colors */
+    --border-subtle: rgba(255,255,255,0.05);
+    --border-default: rgba(255,255,255,0.1);
+    --border-strong: rgba(255,255,255,0.2);
+    
+    /* Glow Colors (Dark Mode specific) */
+    --glow-primary: rgba(139,92,246,0.2);
+    --glow-secondary: rgba(59,130,246,0.2);
+    --glow-success: rgba(16,185,129,0.1);
+    
+    /* ========================================
+       SHADCN/UI SYSTEM COLORS (Dark Mode)
+       ======================================== */
     --background: 240 5% 8%;
     --foreground: 0 0% 95%;
     --card: 240 6% 10%;
@@ -97,6 +219,7 @@
     --chart-5: 340 75% 55%;
   }
 }
+
 @layer base {
   * {
     @apply border-border;
@@ -120,16 +243,106 @@ body {
   width: 100%;
 }
 
+/* ========================================
+   UTILITY CLASSES FOR THEME COLORS
+   Use these for quick access to theme colors
+   ======================================== */
+
 @layer utilities {
+  /* Background utilities */
+  .bg-theme-primary { background-color: var(--bg-primary); }
+  .bg-theme-secondary { background-color: var(--bg-secondary); }
+  .bg-theme-tertiary { background-color: var(--bg-tertiary); }
+  .bg-theme-elevated { background-color: var(--bg-elevated); }
+  
+  /* Text utilities */
+  .text-theme-primary { color: var(--text-primary); }
+  .text-theme-secondary { color: var(--text-secondary); }
+  .text-theme-muted { color: var(--text-muted); }
+  .text-theme-subtle { color: var(--text-subtle); }
+  
+  /* Border utilities */
+  .border-theme-subtle { border-color: var(--border-subtle); }
+  .border-theme-default { border-color: var(--border-default); }
+  .border-theme-strong { border-color: var(--border-strong); }
+  
+  /* Accent utilities */
+  .bg-accent-primary { background-color: var(--accent-primary); }
+  .bg-accent-primary-hover:hover { background-color: var(--accent-primary-hover); }
+  .bg-accent-primary-light { background-color: var(--accent-primary-light); }
+  .text-accent-primary { color: var(--accent-primary); }
+  
+  .bg-accent-secondary { background-color: var(--accent-secondary); }
+  .bg-accent-secondary-hover:hover { background-color: var(--accent-secondary-hover); }
+  .bg-accent-secondary-light { background-color: var(--accent-secondary-light); }
+  .text-accent-secondary { color: var(--accent-secondary); }
+  
+  .bg-accent-success { background-color: var(--accent-success); }
+  .bg-accent-success-hover:hover { background-color: var(--accent-success-hover); }
+  .bg-accent-success-light { background-color: var(--accent-success-light); }
+  .text-accent-success { color: var(--accent-success); }
+  
+  .bg-accent-warning { background-color: var(--accent-warning); }
+  .bg-accent-warning-hover:hover { background-color: var(--accent-warning-hover); }
+  .bg-accent-warning-light { background-color: var(--accent-warning-light); }
+  .text-accent-warning { color: var(--accent-warning); }
+  
+  /* Status utilities */
+  .text-status-pending { color: var(--status-pending); }
+  .bg-status-pending { background-color: var(--status-pending-bg); }
+  .border-status-pending { border-color: var(--status-pending); }
+  
+  .text-status-confirmed { color: var(--status-confirmed); }
+  .bg-status-confirmed { background-color: var(--status-confirmed-bg); }
+  .border-status-confirmed { border-color: var(--status-confirmed); }
+  
+  .text-status-completed { color: var(--status-completed); }
+  .bg-status-completed { background-color: var(--status-completed-bg); }
+  .border-status-completed { border-color: var(--status-completed); }
+  
+  .text-status-cancelled { color: var(--status-cancelled); }
+  .bg-status-cancelled { background-color: var(--status-cancelled-bg); }
+  .border-status-cancelled { border-color: var(--status-cancelled); }
+  
+  .text-status-no-show { color: var(--status-no-show); }
+  .bg-status-no-show { background-color: var(--status-no-show-bg); }
+  .border-status-no-show { border-color: var(--status-no-show); }
+  
+  .text-status-in-progress { color: var(--status-in-progress); }
+  .bg-status-in-progress { background-color: var(--status-in-progress-bg); }
+  .border-status-in-progress { border-color: var(--status-in-progress); }
+  
+  /* Gradient utilities */
+  .bg-gradient-primary {
+    background: linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to));
+  }
+  .bg-gradient-secondary {
+    background: linear-gradient(to right, var(--gradient-secondary-from), var(--gradient-secondary-to));
+  }
+  .bg-gradient-success {
+    background: linear-gradient(to right, var(--gradient-success-from), var(--gradient-success-to));
+  }
+  
+  /* Glow utilities (dark mode) */
+  .glow-primary {
+    box-shadow: 0 0 60px var(--glow-primary);
+  }
+  .glow-secondary {
+    box-shadow: 0 0 60px var(--glow-secondary);
+  }
+  .glow-success {
+    box-shadow: 0 0 60px var(--glow-success);
+  }
+  
   /* Ensure scrolling works */
   .no-scrollbar {
-    overflow: auto; /* Always enable scrolling */
-    padding-right: 5px; /* Adds space between content & scrollbar */
+    overflow: auto;
+    padding-right: 5px;
   }
 
   /* Reserve scrollbar space but hide it initially */
   .no-scrollbar::-webkit-scrollbar {
-    width: 6px; /* Reserve space */
+    width: 6px;
     height: 8px;
     background: transparent;
   }
@@ -138,7 +351,7 @@ body {
   .no-scrollbar::-webkit-scrollbar-thumb {
     background: transparent;
     border-radius: 4px;
-    margin: 2px; /* Adds gap between content & scrollbar */
+    margin: 2px;
   }
 
   /* Show scrollbar on hover */

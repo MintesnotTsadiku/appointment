@@ -173,6 +173,86 @@
   "logo_dark",
   "column_break_logo",
   "favicon",
+  "theme_tab",
+  "theme_dark_mode_section",
+  "dark_bg_primary",
+  "dark_bg_secondary",
+  "dark_bg_tertiary",
+  "dark_bg_elevated",
+  "column_break_dark_bg",
+  "dark_text_primary",
+  "dark_text_secondary",
+  "dark_text_muted",
+  "dark_text_subtle",
+  "theme_dark_borders_section",
+  "dark_border_subtle",
+  "dark_border_default",
+  "dark_border_strong",
+  "column_break_dark_border",
+  "dark_glow_primary",
+  "dark_glow_secondary",
+  "dark_glow_success",
+  "theme_light_mode_section",
+  "light_bg_primary",
+  "light_bg_secondary",
+  "light_bg_tertiary",
+  "light_bg_elevated",
+  "column_break_light_bg",
+  "light_text_primary",
+  "light_text_secondary",
+  "light_text_muted",
+  "light_text_subtle",
+  "theme_light_borders_section",
+  "light_border_subtle",
+  "light_border_default",
+  "light_border_strong",
+  "column_break_light_border",
+  "light_shadow_sm",
+  "light_shadow_md",
+  "light_shadow_lg",
+  "theme_accent_colors_section",
+  "accent_primary",
+  "accent_primary_hover",
+  "accent_primary_light",
+  "column_break_accent1",
+  "accent_secondary",
+  "accent_secondary_hover",
+  "accent_secondary_light",
+  "theme_accent_extended_section",
+  "accent_success",
+  "accent_success_hover",
+  "accent_success_light",
+  "column_break_accent2",
+  "accent_warning",
+  "accent_warning_hover",
+  "accent_warning_light",
+  "theme_status_colors_section",
+  "status_pending",
+  "status_pending_bg",
+  "column_break_status1",
+  "status_confirmed",
+  "status_confirmed_bg",
+  "column_break_status2",
+  "status_completed",
+  "status_completed_bg",
+  "theme_status_colors_section2",
+  "status_cancelled",
+  "status_cancelled_bg",
+  "column_break_status3",
+  "status_no_show",
+  "status_no_show_bg",
+  "column_break_status4",
+  "status_in_progress",
+  "status_in_progress_bg",
+  "theme_gradient_section",
+  "gradient_primary_from",
+  "gradient_primary_to",
+  "column_break_gradient1",
+  "gradient_secondary_from",
+  "gradient_secondary_to",
+  "column_break_gradient2",
+  "gradient_success_from",
+  "gradient_success_to",
   "seo_tab",
   "seo_section",
   "meta_title_en",
@@ -1039,6 +1119,521 @@
    "label": "Favicon"
   },
   {
+   "fieldname": "theme_tab",
+   "fieldtype": "Tab Break",
+   "label": "Theme Colors"
+  },
+  {
+   "description": "Background colors for dark mode interface",
+   "fieldname": "theme_dark_mode_section",
+   "fieldtype": "Section Break",
+   "label": "Dark Mode - Backgrounds & Text"
+  },
+  {
+   "default": "#0a0a0f",
+   "description": "Main dark background",
+   "fieldname": "dark_bg_primary",
+   "fieldtype": "Color",
+   "label": "Background Primary"
+  },
+  {
+   "default": "#0f0f17",
+   "description": "Secondary dark background",
+   "fieldname": "dark_bg_secondary",
+   "fieldtype": "Color",
+   "label": "Background Secondary"
+  },
+  {
+   "default": "#12121a",
+   "description": "Tertiary dark background",
+   "fieldname": "dark_bg_tertiary",
+   "fieldtype": "Color",
+   "label": "Background Tertiary"
+  },
+  {
+   "default": "#1a1a24",
+   "description": "Elevated elements background",
+   "fieldname": "dark_bg_elevated",
+   "fieldtype": "Color",
+   "label": "Background Elevated"
+  },
+  {
+   "fieldname": "column_break_dark_bg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "#ffffff",
+   "description": "Primary text color",
+   "fieldname": "dark_text_primary",
+   "fieldtype": "Color",
+   "label": "Text Primary"
+  },
+  {
+   "default": "#d1d5db",
+   "description": "Secondary text color (gray-300)",
+   "fieldname": "dark_text_secondary",
+   "fieldtype": "Color",
+   "label": "Text Secondary"
+  },
+  {
+   "default": "#9ca3af",
+   "description": "Muted text color (gray-400)",
+   "fieldname": "dark_text_muted",
+   "fieldtype": "Color",
+   "label": "Text Muted"
+  },
+  {
+   "default": "#6b7280",
+   "description": "Subtle text color (gray-500)",
+   "fieldname": "dark_text_subtle",
+   "fieldtype": "Color",
+   "label": "Text Subtle"
+  },
+  {
+   "description": "Border and glow colors for dark mode",
+   "fieldname": "theme_dark_borders_section",
+   "fieldtype": "Section Break",
+   "label": "Dark Mode - Borders & Glows"
+  },
+  {
+   "default": "rgba(255,255,255,0.05)",
+   "description": "Subtle border (white/5)",
+   "fieldname": "dark_border_subtle",
+   "fieldtype": "Data",
+   "label": "Border Subtle"
+  },
+  {
+   "default": "rgba(255,255,255,0.1)",
+   "description": "Default border (white/10)",
+   "fieldname": "dark_border_default",
+   "fieldtype": "Data",
+   "label": "Border Default"
+  },
+  {
+   "default": "rgba(255,255,255,0.2)",
+   "description": "Strong border (white/20)",
+   "fieldname": "dark_border_strong",
+   "fieldtype": "Data",
+   "label": "Border Strong"
+  },
+  {
+   "fieldname": "column_break_dark_border",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "rgba(139,92,246,0.2)",
+   "description": "Primary ambient glow (purple)",
+   "fieldname": "dark_glow_primary",
+   "fieldtype": "Data",
+   "label": "Glow Primary"
+  },
+  {
+   "default": "rgba(59,130,246,0.2)",
+   "description": "Secondary ambient glow (blue)",
+   "fieldname": "dark_glow_secondary",
+   "fieldtype": "Data",
+   "label": "Glow Secondary"
+  },
+  {
+   "default": "rgba(16,185,129,0.1)",
+   "description": "Success ambient glow (emerald)",
+   "fieldname": "dark_glow_success",
+   "fieldtype": "Data",
+   "label": "Glow Success"
+  },
+  {
+   "collapsible": 1,
+   "description": "Background and text colors for light mode",
+   "fieldname": "theme_light_mode_section",
+   "fieldtype": "Section Break",
+   "label": "Light Mode - Backgrounds & Text"
+  },
+  {
+   "default": "#ffffff",
+   "description": "Main light background",
+   "fieldname": "light_bg_primary",
+   "fieldtype": "Color",
+   "label": "Background Primary"
+  },
+  {
+   "default": "#f9fafb",
+   "description": "Secondary light background",
+   "fieldname": "light_bg_secondary",
+   "fieldtype": "Color",
+   "label": "Background Secondary"
+  },
+  {
+   "default": "#f3f4f6",
+   "description": "Tertiary light background",
+   "fieldname": "light_bg_tertiary",
+   "fieldtype": "Color",
+   "label": "Background Tertiary"
+  },
+  {
+   "default": "#ffffff",
+   "description": "Elevated elements background",
+   "fieldname": "light_bg_elevated",
+   "fieldtype": "Color",
+   "label": "Background Elevated"
+  },
+  {
+   "fieldname": "column_break_light_bg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "#111827",
+   "description": "Primary text color (gray-900)",
+   "fieldname": "light_text_primary",
+   "fieldtype": "Color",
+   "label": "Text Primary"
+  },
+  {
+   "default": "#374151",
+   "description": "Secondary text color (gray-700)",
+   "fieldname": "light_text_secondary",
+   "fieldtype": "Color",
+   "label": "Text Secondary"
+  },
+  {
+   "default": "#6b7280",
+   "description": "Muted text color (gray-500)",
+   "fieldname": "light_text_muted",
+   "fieldtype": "Color",
+   "label": "Text Muted"
+  },
+  {
+   "default": "#9ca3af",
+   "description": "Subtle text color (gray-400)",
+   "fieldname": "light_text_subtle",
+   "fieldtype": "Color",
+   "label": "Text Subtle"
+  },
+  {
+   "collapsible": 1,
+   "description": "Border and shadow colors for light mode",
+   "fieldname": "theme_light_borders_section",
+   "fieldtype": "Section Break",
+   "label": "Light Mode - Borders & Shadows"
+  },
+  {
+   "default": "#f3f4f6",
+   "description": "Subtle border (gray-100)",
+   "fieldname": "light_border_subtle",
+   "fieldtype": "Color",
+   "label": "Border Subtle"
+  },
+  {
+   "default": "#e5e7eb",
+   "description": "Default border (gray-200)",
+   "fieldname": "light_border_default",
+   "fieldtype": "Color",
+   "label": "Border Default"
+  },
+  {
+   "default": "#d1d5db",
+   "description": "Strong border (gray-300)",
+   "fieldname": "light_border_strong",
+   "fieldtype": "Color",
+   "label": "Border Strong"
+  },
+  {
+   "fieldname": "column_break_light_border",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0 1px 2px rgba(0,0,0,0.05)",
+   "description": "Small shadow",
+   "fieldname": "light_shadow_sm",
+   "fieldtype": "Data",
+   "label": "Shadow Small"
+  },
+  {
+   "default": "0 4px 6px rgba(0,0,0,0.1)",
+   "description": "Medium shadow",
+   "fieldname": "light_shadow_md",
+   "fieldtype": "Data",
+   "label": "Shadow Medium"
+  },
+  {
+   "default": "0 10px 15px rgba(0,0,0,0.1)",
+   "description": "Large shadow",
+   "fieldname": "light_shadow_lg",
+   "fieldtype": "Data",
+   "label": "Shadow Large"
+  },
+  {
+   "description": "Primary and secondary accent colors (used for buttons, highlights, etc.)",
+   "fieldname": "theme_accent_colors_section",
+   "fieldtype": "Section Break",
+   "label": "Accent Colors - Primary & Secondary"
+  },
+  {
+   "default": "#8b5cf6",
+   "description": "Primary accent (violet-500)",
+   "fieldname": "accent_primary",
+   "fieldtype": "Color",
+   "label": "Primary Accent"
+  },
+  {
+   "default": "#7c3aed",
+   "description": "Primary accent hover (violet-600)",
+   "fieldname": "accent_primary_hover",
+   "fieldtype": "Color",
+   "label": "Primary Accent Hover"
+  },
+  {
+   "default": "rgba(139,92,246,0.2)",
+   "description": "Primary accent light/transparent",
+   "fieldname": "accent_primary_light",
+   "fieldtype": "Data",
+   "label": "Primary Accent Light"
+  },
+  {
+   "fieldname": "column_break_accent1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "#f97316",
+   "description": "Secondary accent (orange-500)",
+   "fieldname": "accent_secondary",
+   "fieldtype": "Color",
+   "label": "Secondary Accent"
+  },
+  {
+   "default": "#ea580c",
+   "description": "Secondary accent hover (orange-600)",
+   "fieldname": "accent_secondary_hover",
+   "fieldtype": "Color",
+   "label": "Secondary Accent Hover"
+  },
+  {
+   "default": "rgba(249,115,22,0.2)",
+   "description": "Secondary accent light/transparent",
+   "fieldname": "accent_secondary_light",
+   "fieldtype": "Data",
+   "label": "Secondary Accent Light"
+  },
+  {
+   "description": "Success and warning accent colors",
+   "fieldname": "theme_accent_extended_section",
+   "fieldtype": "Section Break",
+   "label": "Accent Colors - Success & Warning"
+  },
+  {
+   "default": "#10b981",
+   "description": "Success accent (emerald-500)",
+   "fieldname": "accent_success",
+   "fieldtype": "Color",
+   "label": "Success Accent"
+  },
+  {
+   "default": "#059669",
+   "description": "Success accent hover (emerald-600)",
+   "fieldname": "accent_success_hover",
+   "fieldtype": "Color",
+   "label": "Success Accent Hover"
+  },
+  {
+   "default": "rgba(16,185,129,0.2)",
+   "description": "Success accent light/transparent",
+   "fieldname": "accent_success_light",
+   "fieldtype": "Data",
+   "label": "Success Accent Light"
+  },
+  {
+   "fieldname": "column_break_accent2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "#f59e0b",
+   "description": "Warning accent (amber-500)",
+   "fieldname": "accent_warning",
+   "fieldtype": "Color",
+   "label": "Warning Accent"
+  },
+  {
+   "default": "#d97706",
+   "description": "Warning accent hover (amber-600)",
+   "fieldname": "accent_warning_hover",
+   "fieldtype": "Color",
+   "label": "Warning Accent Hover"
+  },
+  {
+   "default": "rgba(245,158,11,0.2)",
+   "description": "Warning accent light/transparent",
+   "fieldname": "accent_warning_light",
+   "fieldtype": "Data",
+   "label": "Warning Accent Light"
+  },
+  {
+   "description": "Colors for appointment/booking statuses",
+   "fieldname": "theme_status_colors_section",
+   "fieldtype": "Section Break",
+   "label": "Status Colors - Part 1"
+  },
+  {
+   "default": "#3b82f6",
+   "description": "Pending status (blue-500)",
+   "fieldname": "status_pending",
+   "fieldtype": "Color",
+   "label": "Pending"
+  },
+  {
+   "default": "rgba(59,130,246,0.2)",
+   "description": "Pending background",
+   "fieldname": "status_pending_bg",
+   "fieldtype": "Data",
+   "label": "Pending Background"
+  },
+  {
+   "fieldname": "column_break_status1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "#10b981",
+   "description": "Confirmed status (emerald-500)",
+   "fieldname": "status_confirmed",
+   "fieldtype": "Color",
+   "label": "Confirmed"
+  },
+  {
+   "default": "rgba(16,185,129,0.2)",
+   "description": "Confirmed background",
+   "fieldname": "status_confirmed_bg",
+   "fieldtype": "Data",
+   "label": "Confirmed Background"
+  },
+  {
+   "fieldname": "column_break_status2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "#6b7280",
+   "description": "Completed status (gray-500)",
+   "fieldname": "status_completed",
+   "fieldtype": "Color",
+   "label": "Completed"
+  },
+  {
+   "default": "rgba(107,114,128,0.2)",
+   "description": "Completed background",
+   "fieldname": "status_completed_bg",
+   "fieldtype": "Data",
+   "label": "Completed Background"
+  },
+  {
+   "description": "More status colors",
+   "fieldname": "theme_status_colors_section2",
+   "fieldtype": "Section Break",
+   "label": "Status Colors - Part 2"
+  },
+  {
+   "default": "#ef4444",
+   "description": "Cancelled status (red-500)",
+   "fieldname": "status_cancelled",
+   "fieldtype": "Color",
+   "label": "Cancelled"
+  },
+  {
+   "default": "rgba(239,68,68,0.2)",
+   "description": "Cancelled background",
+   "fieldname": "status_cancelled_bg",
+   "fieldtype": "Data",
+   "label": "Cancelled Background"
+  },
+  {
+   "fieldname": "column_break_status3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "#f59e0b",
+   "description": "No Show status (amber-500)",
+   "fieldname": "status_no_show",
+   "fieldtype": "Color",
+   "label": "No Show"
+  },
+  {
+   "default": "rgba(245,158,11,0.2)",
+   "description": "No Show background",
+   "fieldname": "status_no_show_bg",
+   "fieldtype": "Data",
+   "label": "No Show Background"
+  },
+  {
+   "fieldname": "column_break_status4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "#8b5cf6",
+   "description": "In Progress status (violet-500)",
+   "fieldname": "status_in_progress",
+   "fieldtype": "Color",
+   "label": "In Progress"
+  },
+  {
+   "default": "rgba(139,92,246,0.2)",
+   "description": "In Progress background",
+   "fieldname": "status_in_progress_bg",
+   "fieldtype": "Data",
+   "label": "In Progress Background"
+  },
+  {
+   "description": "Gradient colors for buttons and accents",
+   "fieldname": "theme_gradient_section",
+   "fieldtype": "Section Break",
+   "label": "Gradient Colors"
+  },
+  {
+   "default": "#8b5cf6",
+   "description": "Primary gradient start (violet-500)",
+   "fieldname": "gradient_primary_from",
+   "fieldtype": "Color",
+   "label": "Primary Gradient From"
+  },
+  {
+   "default": "#7c3aed",
+   "description": "Primary gradient end (purple-600)",
+   "fieldname": "gradient_primary_to",
+   "fieldtype": "Color",
+   "label": "Primary Gradient To"
+  },
+  {
+   "fieldname": "column_break_gradient1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "#f97316",
+   "description": "Secondary gradient start (orange-500)",
+   "fieldname": "gradient_secondary_from",
+   "fieldtype": "Color",
+   "label": "Secondary Gradient From"
+  },
+  {
+   "default": "#f59e0b",
+   "description": "Secondary gradient end (amber-500)",
+   "fieldname": "gradient_secondary_to",
+   "fieldtype": "Color",
+   "label": "Secondary Gradient To"
+  },
+  {
+   "fieldname": "column_break_gradient2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "#10b981",
+   "description": "Success gradient start (emerald-500)",
+   "fieldname": "gradient_success_from",
+   "fieldtype": "Color",
+   "label": "Success Gradient From"
+  },
+  {
+   "default": "#14b8a6",
+   "description": "Success gradient end (teal-500)",
+   "fieldname": "gradient_success_to",
+   "fieldtype": "Color",
+   "label": "Success Gradient To"
+  },
+  {
    "fieldname": "seo_tab",
    "fieldtype": "Tab Break",
    "label": "SEO & Meta"
@@ -1134,7 +1729,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-11-16 00:12:17.193217",
+ "modified": "2025-11-27 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Scheduler",
  "name": "Landing Page Settings",

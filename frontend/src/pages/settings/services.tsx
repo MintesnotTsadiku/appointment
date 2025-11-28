@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, Plus, Calendar, Clock, DollarSign, Edit2, Trash2, MapPin } from 'lucide-react';
 import { Button } from '@/components/button';
 import { Card } from '@/components/card';
@@ -49,7 +50,8 @@ const ServicesSettings = () => {
     }
   };
 
-  const formatDuration = (minutes: number) => {
+  const formatDuration = (minutes: number | undefined) => {
+    if (!minutes || isNaN(minutes) || minutes <= 0) return 'Not set';
     if (minutes < 60) return `${minutes} min`;
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
@@ -57,185 +59,340 @@ const ServicesSettings = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-gray-900">
-      {/* Header */}
-      <header className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-800 sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => navigate('/home')}
+    <div
+      className="min-h-screen text-[var(--text-primary)] overflow-hidden"
+      style={{ backgroundColor: 'var(--bg-primary)' }}
+    >
+      {/* Ambient background effects */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div
+          className="absolute -top-40 -right-40 w-80 h-80 rounded-full blur-[100px]"
+          style={{ backgroundColor: 'var(--glow-primary)' }}
+        />
+        <div
+          className="absolute top-1/2 -left-40 w-80 h-80 rounded-full blur-[100px]"
+          style={{ backgroundColor: 'var(--glow-secondary)' }}
+        />
+        <div
+          className="absolute -bottom-40 right-1/3 w-80 h-80 rounded-full blur-[100px]"
+          style={{ backgroundColor: 'var(--glow-success)' }}
+        />
+      </div>
+
+      <div className="relative z-10">
+        {/* Header */}
+        <header
+          className="sticky top-0 z-50 backdrop-blur-xl"
+          style={{
+            backgroundColor: 'color-mix(in srgb, var(--bg-primary) 80%, transparent)',
+            borderBottom: '1px solid var(--border-subtle)'
+          }}
+        >
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => navigate('/home')}
+                  className="p-1.5 lg:p-2 rounded-lg transition-all"
+                  style={{
+                    backgroundColor: 'var(--border-subtle)',
+                    border: '1px solid var(--border-default)',
+                    color: 'var(--text-muted)'
+                  }}
+                >
+                  <ChevronLeft className="w-4 h-4 lg:w-5 lg:h-5" />
+                </motion.button>
+                <div className="flex items-center gap-3">
+                  <div className="relative">
+                    <div
+                      className="absolute inset-0 rounded-xl blur-lg opacity-50 bg-gradient-primary"
+                    />
+                    <div className="relative bg-gradient-primary p-2.5 rounded-xl">
+                      <Calendar className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+                  <div>
+                    <h1 className="text-xl lg:text-2xl font-bold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+                      Services & Appointment Types
+                      <span
+                        className="px-2 py-0.5 text-[10px] font-semibold rounded-full"
+                        style={{
+                          background: 'var(--accent-primary-light)',
+                          color: 'var(--accent-primary)',
+                          border: '1px solid var(--accent-primary-light)'
+                        }}
+                      >
+                        PRO
+                      </span>
+                    </h1>
+                    <p className="text-xs lg:text-sm mt-1" style={{ color: 'var(--text-subtle)' }}>
+                      Manage your services and appointment types
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setShowCreateModal(true)}
+                className="relative group flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-white overflow-hidden"
               >
-                <ChevronLeft className="w-5 h-5" />
-              </Button>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                  <Calendar className="w-6 h-6" />
-                  Services & Appointment Types
-                </h1>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                  Manage your services and appointment types
-                </p>
-              </div>
+                <div className="absolute inset-0 bg-gradient-primary group-hover:opacity-90 transition-opacity" />
+                <Plus className="relative z-10 w-4 h-4" />
+                <span className="relative z-10">New Service</span>
+              </motion.button>
             </div>
-            <Button
-              onClick={() => setShowCreateModal(true)}
-              className="flex items-center gap-2"
-            >
-              <Plus className="w-4 h-4" />
-              New Service
-            </Button>
           </div>
-        </div>
-      </header>
+        </header>
 
-      {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="space-y-6">
-          {/* Info Card */}
-          <Card className="p-6 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
-            <div className="flex items-start space-x-3">
-              <Calendar className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5" />
-              <div>
-                <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-1">
-                  About Services
-                </h3>
-                <p className="text-sm text-blue-800 dark:text-blue-200">
-                  Services define what types of appointments you offer. Each service can have its own duration, 
-                  price, and availability. Create multiple services to offer different appointment types.
-                </p>
-              </div>
-            </div>
-          </Card>
+        {/* Main Content */}
+        <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="space-y-6">
+            {/* Info Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <Card
+                className="p-6 backdrop-blur-sm"
+                style={{
+                  backgroundColor: 'var(--bg-elevated)',
+                  border: '1px solid var(--accent-primary-light)'
+                }}
+              >
+                <div className="flex items-start space-x-3">
+                  <div className="inline-flex p-2 rounded-lg bg-gradient-primary">
+                    <Calendar className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>
+                      About Services
+                    </h3>
+                    <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+                      Services define what types of appointments you offer. Each service can have its own duration, 
+                      price, and availability. Create multiple services to offer different appointment types.
+                    </p>
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
 
-          {/* Services List */}
-          {isLoading ? (
-            <Card className="p-12">
-              <div className="flex items-center justify-center">
-                <Spinner />
-              </div>
-            </Card>
-          ) : services.length > 0 ? (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {services.map((service) => (
-                <Card key={service.name} className="p-6 hover:shadow-lg transition-shadow">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
-                        {service.service_name}
-                      </h3>
-                      {service.description && (
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                          {service.description}
-                        </p>
-                      )}
-                      <div className="space-y-2 text-sm">
-                        <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                          <Clock className="w-4 h-4" />
-                          {formatDuration(service.duration)}
+            {/* Services List */}
+            {isLoading ? (
+              <Card
+                className="p-12 backdrop-blur-sm"
+                style={{
+                  backgroundColor: 'var(--bg-elevated)',
+                  border: '1px solid var(--border-default)'
+                }}
+              >
+                <div className="flex items-center justify-center">
+                  <Spinner />
+                </div>
+              </Card>
+            ) : services.length > 0 ? (
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <AnimatePresence>
+                  {services.map((service, index) => (
+                    <motion.div
+                      key={service.name}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="relative group"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl blur-xl" />
+                      <Card
+                        className="relative p-6 backdrop-blur-sm hover:scale-[1.02] transition-all duration-300"
+                        style={{
+                          backgroundColor: 'var(--bg-elevated)',
+                          border: '1px solid var(--border-default)'
+                        }}
+                      >
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex-1">
+                            <h3 className="font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>
+                              {service.service_name}
+                            </h3>
+                            {service.description && (
+                              <p className="text-sm mb-3" style={{ color: 'var(--text-muted)' }}>
+                                {service.description}
+                              </p>
+                            )}
+                            <div className="space-y-2 text-sm">
+                              <div className="flex items-center gap-2" style={{ color: 'var(--text-muted)' }}>
+                                <Clock className="w-4 h-4" />
+                                {formatDuration(service.duration || 0)}
+                              </div>
+                              {service.price > 0 && (
+                                <div className="flex items-center gap-2" style={{ color: 'var(--text-muted)' }}>
+                                  <DollarSign className="w-4 h-4" />
+                                  {service.price} ETB
+                                </div>
+                              )}
+                              {service.event_types && service.event_types.length > 0 && (
+                                <div className="flex items-center gap-2" style={{ color: 'var(--text-muted)' }}>
+                                  <MapPin className="w-4 h-4" />
+                                  {service.event_types.length} location{service.event_types.length > 1 ? 's' : ''}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <motion.button
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                              onClick={() => service.name && navigate(`/settings/services/${service.name}`)}
+                              className="p-2 rounded-lg transition-colors"
+                              style={{
+                                backgroundColor: 'var(--border-subtle)',
+                                color: 'var(--text-muted)'
+                              }}
+                              title="Edit service"
+                            >
+                              <Edit2 className="w-4 h-4" />
+                            </motion.button>
+                            <motion.button
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                              onClick={() => handleDelete(service)}
+                              disabled={deleting}
+                              className="p-2 rounded-lg transition-colors"
+                              style={{
+                                backgroundColor: 'var(--border-subtle)',
+                                color: 'var(--accent-secondary)'
+                              }}
+                              title="Delete service"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </motion.button>
+                          </div>
                         </div>
-                        {service.price > 0 && (
-                          <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                            <DollarSign className="w-4 h-4" />
-                            {service.price} ETB
-                          </div>
-                        )}
-                        {service.event_types.length > 0 && (
-                          <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                            <MapPin className="w-4 h-4" />
-                            {service.event_types.length} location{service.event_types.length > 1 ? 's' : ''}
-                          </div>
-                        )}
-                      </div>
+                      </Card>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
+            ) : (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                <Card
+                  className="p-6 backdrop-blur-sm"
+                  style={{
+                    backgroundColor: 'var(--bg-elevated)',
+                    border: '1px solid var(--border-default)'
+                  }}
+                >
+                  <div className="text-center py-12">
+                    <div className="inline-flex p-4 rounded-2xl bg-gradient-primary mb-4">
+                      <Calendar className="w-16 h-16 text-white" />
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => navigate(`/settings/services/${service.name}`)}
-                        title="Edit service"
-                      >
-                        <Edit2 className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleDelete(service)}
-                        disabled={deleting}
-                        className="text-red-600 hover:text-red-700"
-                        title="Delete service"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
+                    <p className="mb-4" style={{ color: 'var(--text-muted)' }}>
+                      No services created yet
+                    </p>
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => setShowCreateModal(true)}
+                      className="relative group flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-white overflow-hidden mx-auto"
+                    >
+                      <div className="absolute inset-0 bg-gradient-primary group-hover:opacity-90 transition-opacity" />
+                      <Plus className="relative z-10 w-4 h-4" />
+                      <span className="relative z-10">Create Your First Service</span>
+                    </motion.button>
                   </div>
                 </Card>
-              ))}
-            </div>
-          ) : (
-            <Card className="p-6">
-              <div className="text-center py-12">
-                <Calendar className="w-16 h-16 mx-auto mb-4 text-gray-400 dark:text-gray-600" />
-                <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  No services created yet
-                </p>
-                <Button
-                  onClick={() => setShowCreateModal(true)}
-                  className="flex items-center gap-2 mx-auto"
-                >
-                  <Plus className="w-4 h-4" />
-                  Create Your First Service
-                </Button>
-              </div>
-            </Card>
-          )}
+              </motion.div>
+            )}
 
-          {/* Quick Actions */}
-          {services.length > 0 && (
-            <div className="grid md:grid-cols-2 gap-4">
-              <Card className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
-                      Set Availability
-                    </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Configure when services are available
-                    </p>
-                  </div>
-                  <Button
-                    variant="outline"
+            {/* Quick Actions */}
+            {services && services.length > 0 && (
+              <div className="grid md:grid-cols-2 gap-4">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <Card
+                    className="p-6 backdrop-blur-sm hover:scale-[1.02] transition-all duration-300 cursor-pointer"
+                    style={{
+                      backgroundColor: 'var(--bg-elevated)',
+                      border: '1px solid var(--border-default)'
+                    }}
                     onClick={() => navigate('/settings/availability')}
                   >
-                    Edit
-                  </Button>
-                </div>
-              </Card>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>
+                          Set Availability
+                        </h3>
+                        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+                          Configure when services are available
+                        </p>
+                      </div>
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                        style={{
+                          backgroundColor: 'var(--border-subtle)',
+                          border: '1px solid var(--border-default)',
+                          color: 'var(--text-primary)'
+                        }}
+                      >
+                        Edit
+                      </motion.button>
+                    </div>
+                  </Card>
+                </motion.div>
 
-              <Card className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
-                      Add Location
-                    </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Link services to locations
-                    </p>
-                  </div>
-                  <Button
-                    variant="outline"
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                >
+                  <Card
+                    className="p-6 backdrop-blur-sm hover:scale-[1.02] transition-all duration-300 cursor-pointer"
+                    style={{
+                      backgroundColor: 'var(--bg-elevated)',
+                      border: '1px solid var(--border-default)'
+                    }}
                     onClick={() => navigate('/settings/location')}
                   >
-                    Add
-                  </Button>
-                </div>
-              </Card>
-            </div>
-          )}
-        </div>
-      </main>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>
+                          Add Location
+                        </h3>
+                        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+                          Link services to locations
+                        </p>
+                      </div>
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                        style={{
+                          backgroundColor: 'var(--border-subtle)',
+                          border: '1px solid var(--border-default)',
+                          color: 'var(--text-primary)'
+                        }}
+                      >
+                        Add
+                      </motion.button>
+                    </div>
+                  </Card>
+                </motion.div>
+              </div>
+            )}
+          </div>
+        </main>
+      </div>
 
       {/* Create Service Modal */}
       <CreateServiceModal

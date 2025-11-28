@@ -45,7 +45,7 @@ const HowItWorks = () => {
   ];
 
   return (
-    <section className="py-20 bg-white dark:bg-gray-900">
+    <section className="py-20" style={{ backgroundColor: 'var(--bg-secondary)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
@@ -55,10 +55,10 @@ const HowItWorks = () => {
           transition={{ duration: 0.5 }}
           className="text-center max-w-3xl mx-auto mb-20"
         >
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-gray-900 dark:text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold mb-4" style={{ color: 'var(--text-primary)' }}>
             {t('howItWorks.title')}
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300">
+          <p className="text-lg" style={{ color: 'var(--text-secondary)' }}>
             {t('howItWorks.subtitle')}
           </p>
         </motion.div>
@@ -66,7 +66,13 @@ const HowItWorks = () => {
         {/* Timeline - Desktop */}
         <div className="hidden lg:block relative">
           {/* Connecting Line */}
-          <div className="absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-blue-200 via-purple-200 via-amber-200 to-green-200 dark:from-blue-900 dark:via-purple-900 dark:via-amber-900 dark:to-green-900 transform -translate-y-1/2" />
+          <div 
+            className="absolute top-1/2 left-0 right-0 h-1 transform -translate-y-1/2"
+            style={{ 
+              background: 'linear-gradient(to right, var(--glow-primary), var(--glow-secondary), var(--glow-success), var(--glow-primary))',
+              opacity: 0.3
+            }}
+          />
 
           <div className="grid grid-cols-4 gap-8 relative">
             {steps.map((step, index) => (
@@ -79,10 +85,21 @@ const HowItWorks = () => {
                 className="relative"
               >
                 {/* Step Card */}
-                <div className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-shadow duration-300">
+                <div 
+                  className="rounded-2xl overflow-hidden shadow-lg backdrop-blur-sm hover:shadow-2xl transition-shadow duration-300"
+                  style={{ 
+                    backgroundColor: 'var(--bg-elevated)',
+                    border: '1px solid var(--border-default)'
+                  }}
+                >
                   {/* Step Number */}
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
-                    <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${step.color} flex items-center justify-center text-white font-bold text-sm shadow-lg`}>
+                    <div 
+                      className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg"
+                      style={{ 
+                        background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))'
+                      }}
+                    >
                       {index + 1}
                     </div>
                   </div>
@@ -98,20 +115,32 @@ const HowItWorks = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                     
                     {/* Icon overlay */}
-                    <div className={`absolute bottom-3 left-3 w-10 h-10 rounded-lg bg-gradient-to-br ${step.color} flex items-center justify-center shadow-lg`}>
+                    <div 
+                      className="absolute bottom-3 left-3 w-10 h-10 rounded-lg flex items-center justify-center shadow-lg"
+                      style={{ 
+                        background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))'
+                      }}
+                    >
                       <step.icon className="w-5 h-5 text-white" />
                     </div>
                   </div>
 
                   {/* Content */}
                   <div className="p-5">
-                    <h3 className="text-base font-heading font-bold text-gray-900 dark:text-white text-center mb-2">
+                    <h3 className="text-base font-heading font-bold text-center mb-2" style={{ color: 'var(--text-primary)' }}>
                       {step.title}
                     </h3>
-                    <div className={`text-xs font-bold text-center mb-2 bg-gradient-to-r ${step.color} bg-clip-text text-transparent`}>
+                    <div 
+                      className="text-xs font-bold text-center mb-2"
+                      style={{ 
+                        backgroundImage: `linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))`,
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent'
+                      }}
+                    >
                       {step.duration}
                     </div>
-                    <p className="text-xs text-gray-600 dark:text-gray-300 text-center leading-relaxed">
+                    <p className="text-xs text-center leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
                       {step.description}
                     </p>
                   </div>
@@ -134,30 +163,58 @@ const HowItWorks = () => {
             >
               {/* Connecting Line */}
               {index < steps.length - 1 && (
-                <div className="absolute left-6 top-14 bottom-0 w-0.5 bg-gradient-to-b from-gray-300 to-transparent dark:from-gray-700" />
+                <div 
+                  className="absolute left-6 top-14 bottom-0 w-0.5 bg-gradient-to-b to-transparent"
+                  style={{ 
+                    background: `linear-gradient(to bottom, var(--border-default), transparent)`
+                  }}
+                />
               )}
 
               {/* Step Number */}
               <div className="absolute left-0 top-0">
-                <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${step.color} flex items-center justify-center text-white font-bold shadow-lg`}>
+                <div 
+                  className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold shadow-lg"
+                  style={{ 
+                    background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))'
+                  }}
+                >
                   {index + 1}
                 </div>
               </div>
 
               {/* Card */}
-              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+              <div 
+                className="rounded-xl p-6 shadow-lg backdrop-blur-sm"
+                style={{ 
+                  backgroundColor: 'var(--bg-elevated)',
+                  border: '1px solid var(--border-default)'
+                }}
+              >
                 <div className="flex items-start space-x-4">
-                  <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${step.color} flex items-center justify-center flex-shrink-0`}>
+                  <div 
+                    className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0"
+                    style={{ 
+                      background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))'
+                    }}
+                  >
                     <step.icon className="w-6 h-6 text-white" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-lg font-heading font-bold text-gray-900 dark:text-white mb-1">
+                    <h3 className="text-lg font-heading font-bold mb-1" style={{ color: 'var(--text-primary)' }}>
                       {step.title}
                     </h3>
-                    <div className={`text-sm font-bold mb-2 bg-gradient-to-r ${step.color} bg-clip-text text-transparent`}>
+                    <div 
+                      className="text-sm font-bold mb-2"
+                      style={{ 
+                        backgroundImage: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent'
+                      }}
+                    >
                       {step.duration}
                     </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                    <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
                       {step.description}
                     </p>
                   </div>
@@ -175,13 +232,16 @@ const HowItWorks = () => {
           transition={{ duration: 0.5, delay: 0.5 }}
           className="text-center mt-16"
         >
-          <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
+          <p className="text-lg mb-6" style={{ color: 'var(--text-secondary)' }}>
             {t('howItWorks.cta')}
           </p>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="px-8 py-4 bg-gradient-hero text-white rounded-xl font-semibold shadow-lg shadow-indigo-500/50 hover:shadow-xl transition-shadow"
+            className="px-8 py-4 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-shadow"
+            style={{ 
+              background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))'
+            }}
           >
             {t('howItWorks.ctaButton')}
           </motion.button>

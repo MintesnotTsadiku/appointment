@@ -59,7 +59,7 @@ const Features = () => {
   ];
 
   return (
-    <section id="features" className="py-20 bg-gray-50 dark:bg-gray-900/50">
+    <section id="features" className="py-20" style={{ backgroundColor: 'var(--bg-secondary)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
@@ -69,10 +69,10 @@ const Features = () => {
           transition={{ duration: 0.5 }}
           className="text-center max-w-3xl mx-auto mb-20"
         >
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-gray-900 dark:text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold mb-4" style={{ color: 'var(--text-primary)' }}>
             {t('features.title')}
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300">
+          <p className="text-lg" style={{ color: 'var(--text-secondary)' }}>
             {t('features.subtitle')}
           </p>
         </motion.div>
@@ -98,15 +98,20 @@ const Features = () => {
                   className={!isEven ? 'lg:col-start-2' : ''}
                 >
                   {/* Icon */}
-                  <div className="w-16 h-16 mb-6 rounded-2xl bg-gradient-hero flex items-center justify-center">
+                  <div 
+                    className="w-16 h-16 mb-6 rounded-2xl flex items-center justify-center"
+                    style={{ 
+                      background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))'
+                    }}
+                  >
                     <feature.icon className="w-8 h-8 text-white" />
                   </div>
 
                   {/* Content */}
-                  <h3 className="text-2xl sm:text-3xl font-heading font-bold text-gray-900 dark:text-white mb-4">
+                  <h3 className="text-2xl sm:text-3xl font-heading font-bold mb-4" style={{ color: 'var(--text-primary)' }}>
                     {feature.title}
                   </h3>
-                  <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
+                  <p className="text-lg mb-6" style={{ color: 'var(--text-secondary)' }}>
                     {feature.description}
                   </p>
 
@@ -114,7 +119,12 @@ const Features = () => {
                   <ul className="space-y-3">
                     {[1, 2, 3].map((item) => (
                       <li key={item} className="flex items-start space-x-3">
-                        <div className="flex-shrink-0 w-6 h-6 rounded-full bg-brand-emerald flex items-center justify-center mt-0.5">
+                        <div 
+                          className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center mt-0.5"
+                          style={{ 
+                            background: 'linear-gradient(to right, var(--gradient-success-from), var(--gradient-success-to))'
+                          }}
+                        >
                           <svg
                             className="w-4 h-4 text-white"
                             fill="none"
@@ -127,7 +137,7 @@ const Features = () => {
                             <path d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-gray-700 dark:text-gray-300">
+                        <span style={{ color: 'var(--text-primary)' }}>
                           {t(`features.feature${index + 1}Point${item}`)}
                         </span>
                       </li>
@@ -142,9 +152,20 @@ const Features = () => {
                 >
                   <div className="relative">
                     {/* Main visual container */}
-                    <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    <div 
+                      className="relative rounded-2xl shadow-2xl p-8 backdrop-blur-sm overflow-hidden"
+                      style={{ 
+                        backgroundColor: 'var(--bg-elevated)',
+                        border: '1px solid var(--border-default)'
+                      }}
+                    >
                       {/* Animated background */}
-                      <div className="absolute inset-0 bg-gradient-hero opacity-5" />
+                      <div 
+                        className="absolute inset-0 opacity-5"
+                        style={{ 
+                          background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))'
+                        }}
+                      />
 
                       {/* Real Product Screenshot */}
                       <div className="relative">
@@ -172,7 +193,8 @@ const Features = () => {
                           repeat: Infinity,
                           ease: 'easeInOut',
                         }}
-                        className="absolute top-4 right-4 w-12 h-12 bg-brand-indigo rounded-full opacity-20"
+                        className="absolute top-4 right-4 w-12 h-12 rounded-full opacity-20"
+                        style={{ backgroundColor: 'var(--glow-primary)' }}
                       />
                       <motion.div
                         animate={{ y: [0, 10, 0] }}
@@ -182,12 +204,16 @@ const Features = () => {
                           ease: 'easeInOut',
                           delay: 0.5,
                         }}
-                        className="absolute bottom-4 left-4 w-16 h-16 bg-brand-emerald rounded-full opacity-20"
+                        className="absolute bottom-4 left-4 w-16 h-16 rounded-full opacity-20"
+                        style={{ backgroundColor: 'var(--glow-success)' }}
                       />
                     </div>
 
                     {/* Decorative elements */}
-                    <div className="absolute -z-10 -inset-4 bg-gradient-to-br from-brand-indigo/20 to-brand-emerald/20 rounded-3xl blur-2xl" />
+                    <div 
+                      className="absolute -z-10 -inset-4 rounded-3xl blur-2xl"
+                      style={{ backgroundColor: 'var(--glow-primary)' }}
+                    />
                   </div>
                 </motion.div>
               </motion.div>

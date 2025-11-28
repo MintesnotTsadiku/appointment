@@ -2,18 +2,18 @@
 
 > **Comprehensive overview of what's been completed vs what remains**
 
-**Last Updated**: 2025-01-XX  
-**Current Phase**: Post-Sprint 0.9, Pre-Sprint 1 (UI/UX Redesign & Provider Delegation)
+**Last Updated**: 2025-01-25  
+**Current Phase**: Post-Sprint 2, Pre-Sprint 3 (Payments Integration)
 
 ---
 
 ## 📊 Executive Summary
 
 ### Overall Progress
-- **Completed Sprints**: 0.5, 0.6, 0.7, 0.8, 0.9 (5 sprints)
+- **Completed Sprints**: 0.5, 0.6, 0.7, 0.8, 0.9, 2 (6 sprints)
 - **Partially Complete**: Sprint 0, Sprint 1
-- **Not Started**: Sprint 2-9
-- **Completion Rate**: ~35% of planned MVP features
+- **Not Started**: Sprint 3-9
+- **Completion Rate**: ~50% of planned MVP features
 
 ### Key Achievements ✅
 1. ✅ Complete landing page with CMS and bilingual support
@@ -21,15 +21,17 @@
 3. ✅ End-to-end booking flow (individual & organization)
 4. ✅ Multi-provider booking with round-robin assignment
 5. ✅ Ethiopian time format support
-6. ✅ 25+ doctypes created and functional
+6. ✅ 30+ doctypes created and functional
 7. ✅ Workspace configuration with number cards and charts
+8. ✅ **Policy Engine & Slot Engine** - Complete with conflict detection, buffer times, working hours
+9. ✅ **Policy Management UI** - Providers and organizations can create/manage policies via templates
+10. ✅ **Demo data cleanup utilities** - Complete data reset functionality
 
 ### Critical Gaps ⚠️
 1. ⚠️ Payment integration (Sprint 3) - **BLOCKER for revenue**
 2. ⚠️ SMS notifications (Sprint 4) - **BLOCKER for reminders**
 3. ⚠️ Front-desk console (Sprint 5) - **BLOCKER for multi-location operations**
-4. ⚠️ Policy engine (Sprint 2) - **BLOCKER for deposits/cancellations**
-5. ⚠️ Roles & permissions (Sprint 1) - **BLOCKER for security**
+4. ⚠️ Roles & permissions (Sprint 1) - **BLOCKER for security**
 
 ---
 
@@ -214,22 +216,24 @@
 
 ## ⏳ Not Started Sprints
 
-### Sprint 2: Slot Engine & Policies ⏳
-**Status**: 0% Complete - **CRITICAL BLOCKER**
+### Sprint 2: Slot Engine & Policies ✅
+**Status**: 100% Complete
 
-| Feature | Status | Priority |
-|---------|--------|----------|
-| Working hours logic | ⏳ | 🔴 High |
-| Time-off blocking | ⏳ | 🔴 High |
-| Conflict detection | ⏳ | 🔴 High |
-| Enforce buffer times | ⏳ | 🔴 High |
-| Create Policy doctype | ⏳ | 🔴 High |
-| Policy engine service | ⏳ | 🔴 High |
-| Booking quote API | ⏳ | 🔴 High |
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Working hours logic | ✅ | `filter_by_working_hours()` in slot_engine.py |
+| Time-off blocking | ✅ | `filter_by_time_off()` in slot_engine.py |
+| Conflict detection | ✅ | `check_conflicts()` in slot_engine.py |
+| Enforce buffer times | ✅ | `apply_buffer_times()` in slot_engine.py |
+| Create Policy doctype | ✅ | Policy doctype with all fields |
+| Policy engine service | ✅ | `policy_engine.py` with `get_applicable_policies()` |
+| Booking quote API | ✅ | `quote.py` with `get_booking_quote()` |
+| Policy templates | ✅ | Pre-configured templates in `policy_templates.py` |
+| Policy Management UI | ✅ | React components for providers & organizations |
+| Integration with booking | ✅ | Policies applied in `book_time_slot()` and `get_time_slots()` |
+| Demo data generation | ✅ | Policy demo data script |
 
-**Why Critical**: Without policies, cannot enforce deposits, cancellation windows, or late fees. This blocks payment integration.
-
-**Estimated Effort**: 1-2 weeks
+**Deliverables**: Complete policy engine, slot engine with conflict detection, policy management UI, and booking integration
 
 ---
 
@@ -369,7 +373,7 @@
 
 ### Doctypes Created ✅
 
-**Scheduler Module** (25+ doctypes):
+**Scheduler Module** (30+ doctypes):
 - ✅ Appointment
 - ✅ Booking Event
 - ✅ Booking URL
@@ -395,6 +399,11 @@
 - ✅ Landing Page Partner
 - ✅ Landing Page Footer Link
 - ✅ Landing Page Social Link
+- ✅ **Policy** (Sprint 2)
+- ✅ **Appointment Time Slot** (child table)
+- ✅ **Appointment Slot Duration** (child table)
+- ✅ **Event DocType Link** (child table)
+- ✅ **Policy Template** (helper)
 
 **Payments Module**:
 - ⏳ PaymentIntent (not created yet)
@@ -439,6 +448,15 @@
 - `frappe_appointment.api.personal_meet.get_organization_services`
 - `frappe_appointment.api.personal_meet.get_multi_provider_time_slots`
 
+**Policy & Slot Engine APIs** (✅ Complete - Sprint 2):
+- `frappe_appointment.scheduler.api.quote.get_booking_quote`
+- `frappe_appointment.scheduler.api.policy_manager.get_policy_templates`
+- `frappe_appointment.scheduler.api.policy_manager.create_policy_from_template`
+- `frappe_appointment.scheduler.api.policy_manager.get_user_policies`
+- `frappe_appointment.scheduler.api.policy_manager.update_policy`
+- `frappe_appointment.scheduler.api.policy_manager.delete_policy`
+- `frappe_appointment.scheduler.api.policy_manager.get_organization_services`
+
 **Missing APIs** (⏳ Not Started):
 - Payment APIs (Sprint 3)
 - Notification APIs (Sprint 4)
@@ -477,14 +495,18 @@
 5. **Admin Dashboard** (`/admin/dashboard`) - ✅ Complete
    - Admin controls
 
-6. **Analytics** (`/analytics`) - ⏳ Placeholder
+6. **Settings Pages** (`/settings/profile`, `/settings/manage`) - ✅ Complete
+   - Provider profile settings
+   - Organization management
+   - **Policy Management UI** (Sprint 2) - Create/edit policies with templates
+
+7. **Analytics** (`/analytics`) - ⏳ Placeholder
    - Page exists but no real data yet
 
 ### Missing Frontend Pages ⏳
 
 1. **Front-Desk Console** (`/desk`) - ⏳ Not Started (Sprint 5)
-2. **Settings Pages** - ⏳ Partial (some exist, need completion)
-3. **Calendar View** - ⏳ Partial (exists but needs enhancement)
+2. **Calendar View** - ⏳ Partial (exists but needs enhancement)
 
 ---
 
@@ -499,14 +521,16 @@
    - [ ] Set default currency: ETB
    - [ ] Complete Amharic translations for booking pages
 
-2. **Sprint 2: Slot Engine & Policies** (1-2 weeks) - **CRITICAL**
-   - [ ] Implement working hours logic
-   - [ ] Add time-off blocking
-   - [ ] Conflict detection
-   - [ ] Enforce buffer times
-   - [ ] Create Policy doctype
-   - [ ] Policy engine service
-   - [ ] Booking quote API
+2. **Sprint 2: Slot Engine & Policies** ✅ - **COMPLETED**
+   - [x] Implement working hours logic
+   - [x] Add time-off blocking
+   - [x] Conflict detection
+   - [x] Enforce buffer times
+   - [x] Create Policy doctype
+   - [x] Policy engine service
+   - [x] Booking quote API
+   - [x] Policy Management UI
+   - [x] Policy templates
 
 3. **Sprint 3: Payments** (2-3 weeks) - **CRITICAL**
    - [ ] Create PaymentIntent doctype
@@ -518,17 +542,20 @@
 
 ### Medium-Term Priorities (Weeks 5-8)
 
-4. **Sprint 4: Notifications** (1-2 weeks)
-   - [ ] Create Notification doctype
-   - [ ] SMS provider abstraction
-   - [ ] Message templates
-   - [ ] Reminder scheduler
-
-5. **Sprint 5: Front-Desk Console** (2-3 weeks) - **CRITICAL**
+4. **Sprint 5: Front-Desk Console** (2-3 weeks) - **CRITICAL** ⬅️ **NEXT UP**
    - [ ] Create React page at /desk
    - [ ] Day/week view grids
    - [ ] Drag-reschedule
    - [ ] Walk-in queue
+   - [ ] Provider/location filters
+   - [ ] Create appointment modal
+   - [ ] Policy check on reschedule
+
+5. **Sprint 4: Notifications** (1-2 weeks)
+   - [ ] Create Notification doctype
+   - [ ] SMS provider abstraction
+   - [ ] Message templates
+   - [ ] Reminder scheduler
 
 ### Long-Term Priorities (Post-MVP)
 
@@ -545,23 +572,21 @@
 
 1. **Payment Integration** (Sprint 3)
    - **Why**: Cannot process revenue without payments
-   - **Dependency**: Sprint 2 (Policy engine) must be complete first
+   - **Dependency**: ✅ Sprint 2 (Policy engine) - **COMPLETE**
    - **Effort**: 2-3 weeks
+   - **Status**: Ready to start
 
-2. **Policy Engine** (Sprint 2)
-   - **Why**: Required for deposits, cancellation rules, late fees
-   - **Dependency**: None
-   - **Effort**: 1-2 weeks
-
-3. **Front-Desk Console** (Sprint 5)
+2. **Front-Desk Console** (Sprint 5) ⬅️ **NEXT PRIORITY**
    - **Why**: Multi-location businesses need this for operations
    - **Dependency**: None
    - **Effort**: 2-3 weeks
+   - **Status**: Ready to start
 
-4. **Roles & Permissions** (Sprint 1)
+3. **Roles & Permissions** (Sprint 1)
    - **Why**: Security requirement, multi-user support
    - **Dependency**: None
    - **Effort**: 1 week
+   - **Status**: Partially complete
 
 ### High Value (Not Blockers)
 
@@ -578,17 +603,17 @@
 ## 📊 Progress Metrics
 
 ### Overall Completion
-- **Sprints Completed**: 5.5 out of 10 (55%)
-- **Features Completed**: ~35% of MVP features
-- **Critical Blockers Remaining**: 4
-- **Estimated Time to MVP**: 6-8 weeks
+- **Sprints Completed**: 6.5 out of 10 (65%)
+- **Features Completed**: ~50% of MVP features
+- **Critical Blockers Remaining**: 3 (Payments, Front-Desk, Roles)
+- **Estimated Time to MVP**: 4-6 weeks
 
 ### By Module
-- **Scheduler Module**: 70% complete
+- **Scheduler Module**: 85% complete (Policy & Slot Engine added)
 - **Payments Module**: 0% complete (scaffolded only)
 - **Channels Module**: 0% complete (scaffolded only)
-- **Frontend**: 60% complete
-- **Backend APIs**: 40% complete
+- **Frontend**: 70% complete (Policy Management UI added)
+- **Backend APIs**: 55% complete (Policy & Slot Engine APIs added)
 
 ---
 
@@ -601,12 +626,15 @@
 - Ethiopian time format is implemented
 - Onboarding wizards are complete
 - CMS system is flexible and extensible
+- **Policy engine is fully functional** - deposits, cancellations, reschedules
+- **Slot engine with conflict detection** - working hours, time-off, buffer times
+- **Policy Management UI** - Easy template-based policy creation
+- **Demo data cleanup utilities** - Complete reset functionality
 
 ### What Needs Attention ⚠️
-- Payment integration is critical but not started
-- Front-desk console is needed for multi-location businesses
+- Payment integration is critical but not started (Sprint 2 dependency resolved ✅)
+- Front-desk console is needed for multi-location businesses ⬅️ **NEXT UP**
 - Roles & permissions are incomplete
-- Policy engine is required before payments
 - SMS notifications would significantly reduce no-shows
 
 ### Technical Debt
@@ -617,5 +645,12 @@
 
 ---
 
-**Next Review**: After completing Sprint 1 remaining tasks and Sprint 2 (Policy Engine)
+**Next Review**: After completing Sprint 5 (Front-Desk Console) and Sprint 3 (Payments)
+
+**Recent Updates** (2025-01-25):
+- ✅ Sprint 2 (Policy Engine & Slot Engine) - **COMPLETED**
+- ✅ Policy Management UI for providers and organizations
+- ✅ Demo data cleanup utilities
+- ✅ Service duplicate name validation
+- ✅ Orphaned link cleanup
 

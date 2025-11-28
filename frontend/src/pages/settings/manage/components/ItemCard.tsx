@@ -51,31 +51,37 @@ export const ItemCard = ({ type, item, onEdit, onDelete, onRefresh, nested = fal
   const validation = item.validation || { status: 'complete', issues: [] };
 
   return (
-    <div className={`bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 ${nested ? 'ml-4' : ''}`}>
+    <div 
+      className={`rounded-xl p-4 backdrop-blur-sm ${nested ? 'ml-4' : ''}`}
+      style={{
+        backgroundColor: 'var(--bg-elevated)',
+        border: '1px solid var(--border-default)'
+      }}
+    >
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
-            <h3 className="font-semibold text-gray-900 dark:text-white">
+            <h3 className="font-semibold" style={{ color: 'var(--text-primary)' }}>
               {getItemName()}
             </h3>
             <ValidationBadge status={validation.status} size="sm" />
           </div>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+          <p className="text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>
             {getItemDescription()}
           </p>
           
           {validation.issues && validation.issues.length > 0 && (
-            <div className="text-xs text-yellow-600 dark:text-yellow-400 mb-2">
+            <div className="text-xs mb-2" style={{ color: 'var(--accent-secondary)' }}>
               {validation.issues.join(', ')}
             </div>
           )}
 
           {/* Booking URLs for Provider */}
           {type === 'provider' && item.booking_urls && item.booking_urls.length > 0 && (
-            <div className="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+            <div className="mt-2 pt-2" style={{ borderTop: '1px solid var(--border-subtle)' }}>
               <div className="flex items-center gap-1 mb-1">
-                <LinkIcon className="w-3 h-3 text-gray-500" />
-                <span className="text-xs font-medium text-gray-600 dark:text-gray-400">Booking URLs:</span>
+                <LinkIcon className="w-3 h-3" style={{ color: 'var(--text-muted)' }} />
+                <span className="text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>Booking URLs:</span>
               </div>
               <div className="space-y-1">
                 {item.booking_urls.map((url: any, idx: number) => (
@@ -84,7 +90,8 @@ export const ItemCard = ({ type, item, onEdit, onDelete, onRefresh, nested = fal
                       href={url.full_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
+                      className="hover:underline flex items-center gap-1"
+                      style={{ color: 'var(--accent-primary)' }}
                     >
                       <LinkIcon className="w-3 h-3" />
                       {url.description || url.url_type || url.full_url}

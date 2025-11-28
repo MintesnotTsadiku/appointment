@@ -376,3 +376,6 @@ When complete, you should be able to:
 5. Reschedule appointment within policy window → success
 6. Reschedule outside policy window → get error with policy details
 
+
+
+

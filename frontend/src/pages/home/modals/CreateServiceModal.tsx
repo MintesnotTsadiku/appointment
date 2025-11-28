@@ -1,25 +1,21 @@
 import { useState, useEffect } from 'react';
 import { useFrappePostCall, useFrappeGetCall } from 'frappe-react-sdk';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/dialog';
-import { Button } from '@/components/button';
-import { Input } from '@/components/input';
-import { Label } from '@/components/label';
-import { Textarea } from '@/components/textarea';
-import { Plus, Loader2, Info } from 'lucide-react';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/select';
-import { Checkbox } from '@/components/checkbox';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Plus, 
+  Loader2, 
+  Info, 
+  X,
+  Briefcase,
+  Clock,
+  DollarSign,
+  MapPin,
+  Building2,
+  Users,
+  FileText,
+  Sparkles
+} from 'lucide-react';
+import { toast } from 'sonner';
 
 interface CreateServiceModalProps {
   open: boolean;
@@ -45,8 +41,9 @@ export const CreateServiceModal = ({ open, onOpenChange, onSuccess }: CreateServ
   const [selectedLocation, setSelectedLocation] = useState<string>('');
   const [selectedProviders, setSelectedProviders] = useState<string[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [activeField, setActiveField] = useState<string | null>(null);
 
-  // Fetch form data (organizations, providers, locations)
+  // Fetch form data
   const { data: formData, isLoading: loadingFormData } = useFrappeGetCall<{ message: FormData }>(
     'frappe_appointment.onboarding.get_service_form_data',
     undefined,
@@ -62,10 +59,8 @@ export const CreateServiceModal = ({ open, onOpenChange, onSuccess }: CreateServ
   useEffect(() => {
     if (selectedOrganization && formDataResult?.org_providers) {
       const orgProviders = formDataResult.org_providers[selectedOrganization] || [];
-      // Auto-select all providers by default
       setSelectedProviders(orgProviders.map(p => p.name));
     } else if (!selectedOrganization && formDataResult?.user_provider) {
-      // Individual provider - auto-select user's provider
       setSelectedProviders([formDataResult.user_provider.name]);
     } else {
       setSelectedProviders([]);
@@ -123,6 +118,10 @@ export const CreateServiceModal = ({ open, onOpenChange, onSuccess }: CreateServ
         selected_providers: selectedOrganization && selectedProviders.length > 0 ? selectedProviders : undefined,
       });
 
+      toast.success('Service created successfully!', {
+        description: `${serviceName} is now available for booking`,
+      });
+
       // Reset form
       setServiceName('');
       setDuration('30');
@@ -142,179 +141,327 @@ export const CreateServiceModal = ({ open, onOpenChange, onSuccess }: CreateServ
         onSuccess();
       }
     } catch (error: any) {
+      toast.error('Failed to create service', {
+        description: error?.message || 'Please try again.',
+      });
       setErrors({ submit: error?.message || 'Failed to create service. Please try again.' });
     }
   };
 
+  const InputField = ({ 
+    id, 
+    label, 
+    icon: Icon, 
+    type = 'text', 
+    placeholder,
+    value,
+    onChange,
+    required,
+    ...props 
+  }: { 
+    id: string; 
+    label: string; 
+    icon: React.ElementType; 
+    type?: string;
+    placeholder?: string;
+    value?: string;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    required?: boolean;
+    [key: string]: any;
+  }) => (
+    <div className="relative">
+      <label 
+        className="block text-xs font-medium mb-1.5"
+        style={{ color: 'var(--text-muted)' }}
+      >
+        {label}
+        {required && <span style={{ color: 'var(--status-cancelled)' }}> *</span>}
+      </label>
+      <div className="relative">
+        <div 
+          className={`absolute left-3 top-1/2 -translate-y-1/2 transition-colors`}
+          style={{ color: activeField === id ? 'var(--accent-primary)' : 'var(--text-muted)' }}
+        >
+          <Icon className="w-4 h-4" />
+        </div>
+        <input
+          type={type}
+          value={value || ''}
+          onChange={onChange}
+          onFocus={() => setActiveField(id)}
+          onBlur={() => setActiveField(null)}
+          placeholder={placeholder}
+          className={`w-full pl-10 pr-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 transition-all ${
+            errors[id] 
+              ? 'border-red-500/50 focus:ring-red-500/20' 
+              : 'focus:ring-violet-500/20'
+          }`}
+          style={{ 
+            backgroundColor: 'var(--bg-elevated)',
+            border: `1px solid ${errors[id] ? 'var(--status-cancelled)' : 'var(--border-default)'}`,
+            color: 'var(--text-primary)'
+          }}
+          {...props}
+        />
+      </div>
+      {errors[id] && (
+        <p className="text-xs mt-1" style={{ color: 'var(--status-cancelled)' }}>{errors[id]}</p>
+      )}
+    </div>
+  );
+
+  if (!open) return null;
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px]">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Plus className="w-5 h-5" />
-            Create New Service
-          </DialogTitle>
-          <DialogDescription>
-            Add a new appointment type that customers can book
-          </DialogDescription>
-        </DialogHeader>
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      >
+        {/* Backdrop */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={() => onOpenChange(false)}
+          className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        />
 
-        {loadingFormData ? (
-          <div className="flex items-center justify-center py-8">
-            <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-            {/* Organization Selection (if user has organizations) */}
-            {formDataResult?.is_organization_user && formDataResult.organizations.length > 0 && (
-              <div className="space-y-2">
-                <Label htmlFor="organization">
-                  Organization <span className="text-red-500">*</span>
-                </Label>
-                <Select
-                  value={selectedOrganization}
-                  onValueChange={(value) => {
-                    setSelectedOrganization(value);
-                    setErrors({ ...errors, organization: '' });
-                  }}
-                >
-                  <SelectTrigger className={errors.organization ? 'border-red-500' : ''}>
-                    <SelectValue placeholder="Select organization" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {formDataResult.organizations.map((org) => (
-                      <SelectItem key={org.name} value={org.name}>
-                        {org.organization_name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {errors.organization && (
-                  <p className="text-sm text-red-500">{errors.organization}</p>
-                )}
-              </div>
-            )}
+        {/* Modal */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          className="relative w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden"
+          style={{ 
+            backgroundColor: 'var(--bg-primary)',
+            border: '1px solid var(--border-default)'
+          }}
+        >
+          {/* Gradient accent */}
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-primary" />
 
-            {/* Provider Selection (if organization selected) */}
-            {selectedOrganization && formDataResult?.org_providers[selectedOrganization] && (
-              <div className="space-y-2">
-                <Label>
-                  Providers <span className="text-red-500">*</span>
-                </Label>
-                <div className="space-y-2 max-h-40 overflow-y-auto border rounded-lg p-3">
-                  {formDataResult.org_providers[selectedOrganization].map((provider) => (
-                    <div key={provider.name} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`provider-${provider.name}`}
-                        checked={selectedProviders.includes(provider.name)}
-                        onCheckedChange={(checked) => {
-                          if (checked) {
-                            setSelectedProviders([...selectedProviders, provider.name]);
-                          } else {
-                            setSelectedProviders(selectedProviders.filter(p => p !== provider.name));
-                          }
-                          setErrors({ ...errors, providers: '' });
-                        }}
-                      />
-                      <Label
-                        htmlFor={`provider-${provider.name}`}
-                        className="font-normal cursor-pointer flex-1"
-                      >
-                        {provider.provider_name}
-                        {provider.is_primary && (
-                          <span className="ml-2 text-xs text-gray-500">(Primary)</span>
-                        )}
-                      </Label>
-                    </div>
-                  ))}
+          {/* Header */}
+          <div 
+            className="flex items-center justify-between p-6"
+            style={{ borderBottom: '1px solid var(--border-default)' }}
+          >
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <div 
+                  className="absolute inset-0 rounded-xl blur-lg opacity-50 bg-gradient-primary"
+                />
+                <div className="relative bg-gradient-primary p-2.5 rounded-xl">
+                  <Plus className="w-5 h-5 text-white" />
                 </div>
-                {errors.providers && (
-                  <p className="text-sm text-red-500">{errors.providers}</p>
-                )}
               </div>
-            )}
+              <div>
+                <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
+                  Create New Service
+                </h2>
+                <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+                  Add a new appointment type that customers can book
+                </p>
+              </div>
+            </div>
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => onOpenChange(false)}
+              className="p-2 rounded-lg transition-colors"
+              style={{ 
+                backgroundColor: 'var(--border-subtle)',
+                color: 'var(--text-muted)'
+              }}
+            >
+              <X className="w-5 h-5" />
+            </motion.button>
+          </div>
 
-            {/* Location Selection */}
-            {formDataResult?.locations && formDataResult.locations.length > 0 && (
-              <div className="space-y-2">
-                <Label htmlFor="location">
-                  Location <span className="text-red-500">*</span>
-                </Label>
-                <Select
-                  value={selectedLocation}
-                  onValueChange={(value) => {
-                    setSelectedLocation(value);
-                    setErrors({ ...errors, location: '' });
-                  }}
-                >
-                  <SelectTrigger className={errors.location ? 'border-red-500' : ''}>
-                    <SelectValue placeholder="Select location" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {formDataResult.locations.map((loc) => (
-                      <SelectItem key={loc.name} value={loc.name}>
-                        {loc.location_name}
-                        {loc.organization && (
-                          <span className="text-xs text-gray-500 ml-2">(Org Branch)</span>
-                        )}
-                      </SelectItem>
+          {/* Form */}
+          {loadingFormData ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="w-6 h-6 animate-spin" style={{ color: 'var(--accent-primary)' }} />
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="p-6 space-y-5 max-h-[70vh] overflow-y-auto">
+              {/* Organization Selection */}
+              {formDataResult?.is_organization_user && formDataResult.organizations.length > 0 && (
+                <div className="relative">
+                  <label 
+                    className="block text-xs font-medium mb-1.5"
+                    style={{ color: 'var(--text-muted)' }}
+                  >
+                    Organization <span style={{ color: 'var(--status-cancelled)' }}>*</span>
+                  </label>
+                  <div className="relative">
+                    <div 
+                      className="absolute left-3 top-1/2 -translate-y-1/2"
+                      style={{ color: 'var(--text-muted)' }}
+                    >
+                      <Building2 className="w-4 h-4" />
+                    </div>
+                    <select
+                      value={selectedOrganization}
+                      onChange={(e) => {
+                        setSelectedOrganization(e.target.value);
+                        setErrors({ ...errors, organization: '' });
+                      }}
+                      className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm appearance-none focus:outline-none focus:ring-2 transition-all"
+                      style={{ 
+                        backgroundColor: 'var(--bg-elevated)',
+                        border: `1px solid ${errors.organization ? 'var(--status-cancelled)' : 'var(--border-default)'}`,
+                        color: 'var(--text-primary)'
+                      }}
+                    >
+                      <option value="" style={{ backgroundColor: 'var(--bg-elevated)' }}>
+                        Select organization
+                      </option>
+                      {formDataResult.organizations.map((org) => (
+                        <option key={org.name} value={org.name} style={{ backgroundColor: 'var(--bg-elevated)' }}>
+                          {org.organization_name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  {errors.organization && (
+                    <p className="text-xs mt-1" style={{ color: 'var(--status-cancelled)' }}>{errors.organization}</p>
+                  )}
+                </div>
+              )}
+
+              {/* Provider Selection */}
+              {selectedOrganization && formDataResult?.org_providers[selectedOrganization] && (
+                <div className="relative">
+                  <label 
+                    className="block text-xs font-medium mb-1.5"
+                    style={{ color: 'var(--text-muted)' }}
+                  >
+                    Providers <span style={{ color: 'var(--status-cancelled)' }}>*</span>
+                  </label>
+                  <div 
+                    className="space-y-2 max-h-40 overflow-y-auto rounded-xl p-3"
+                    style={{ 
+                      backgroundColor: 'var(--bg-elevated)',
+                      border: `1px solid ${errors.providers ? 'var(--status-cancelled)' : 'var(--border-default)'}`
+                    }}
+                  >
+                    {formDataResult.org_providers[selectedOrganization].map((provider) => (
+                      <label key={provider.name} className="flex items-center space-x-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={selectedProviders.includes(provider.name)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setSelectedProviders([...selectedProviders, provider.name]);
+                            } else {
+                              setSelectedProviders(selectedProviders.filter(p => p !== provider.name));
+                            }
+                            setErrors({ ...errors, providers: '' });
+                          }}
+                          className="rounded"
+                          style={{ accentColor: 'var(--accent-primary)' }}
+                        />
+                        <span className="text-sm" style={{ color: 'var(--text-primary)' }}>
+                          {provider.provider_name}
+                          {provider.is_primary && (
+                            <span className="ml-2 text-xs" style={{ color: 'var(--text-muted)' }}>
+                              (Primary)
+                            </span>
+                          )}
+                        </span>
+                      </label>
                     ))}
-                  </SelectContent>
-                </Select>
-                {errors.location && (
-                  <p className="text-sm text-red-500">{errors.location}</p>
-                )}
-              </div>
-            )}
+                  </div>
+                  {errors.providers && (
+                    <p className="text-xs mt-1" style={{ color: 'var(--status-cancelled)' }}>{errors.providers}</p>
+                  )}
+                </div>
+              )}
 
-            {/* Service Name */}
-            <div className="space-y-2">
-              <Label htmlFor="serviceName">
-                Service Name <span className="text-red-500">*</span>
-              </Label>
-              <Input
-                id="serviceName"
+              {/* Location Selection */}
+              {formDataResult?.locations && formDataResult.locations.length > 0 && (
+                <div className="relative">
+                  <label 
+                    className="block text-xs font-medium mb-1.5"
+                    style={{ color: 'var(--text-muted)' }}
+                  >
+                    Location <span style={{ color: 'var(--status-cancelled)' }}>*</span>
+                  </label>
+                  <div className="relative">
+                    <div 
+                      className="absolute left-3 top-1/2 -translate-y-1/2"
+                      style={{ color: 'var(--text-muted)' }}
+                    >
+                      <MapPin className="w-4 h-4" />
+                    </div>
+                    <select
+                      value={selectedLocation}
+                      onChange={(e) => {
+                        setSelectedLocation(e.target.value);
+                        setErrors({ ...errors, location: '' });
+                      }}
+                      className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm appearance-none focus:outline-none focus:ring-2 transition-all"
+                      style={{ 
+                        backgroundColor: 'var(--bg-elevated)',
+                        border: `1px solid ${errors.location ? 'var(--status-cancelled)' : 'var(--border-default)'}`,
+                        color: 'var(--text-primary)'
+                      }}
+                    >
+                      <option value="" style={{ backgroundColor: 'var(--bg-elevated)' }}>
+                        Select location
+                      </option>
+                      {formDataResult.locations.map((loc) => (
+                        <option key={loc.name} value={loc.name} style={{ backgroundColor: 'var(--bg-elevated)' }}>
+                          {loc.location_name}
+                          {loc.organization && ' (Org Branch)'}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  {errors.location && (
+                    <p className="text-xs mt-1" style={{ color: 'var(--status-cancelled)' }}>{errors.location}</p>
+                  )}
+                </div>
+              )}
+
+              {/* Service Name */}
+              <InputField 
+                id="serviceName" 
+                label="Service Name" 
+                icon={Briefcase} 
                 placeholder="e.g., 30-min Consultation"
+                required
                 value={serviceName}
                 onChange={(e) => {
                   setServiceName(e.target.value);
                   if (errors.serviceName) setErrors({ ...errors, serviceName: '' });
                 }}
-                className={errors.serviceName ? 'border-red-500' : ''}
               />
-              {errors.serviceName && (
-                <p className="text-sm text-red-500">{errors.serviceName}</p>
-              )}
-            </div>
 
-            {/* Duration, Buffer, and Price */}
-            <div className="grid grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="duration">
-                  Duration (min) <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="duration"
+              {/* Duration, Buffer, and Price */}
+              <div className="grid grid-cols-3 gap-4">
+                <InputField 
+                  id="duration" 
+                  label="Duration (min)" 
+                  icon={Clock} 
                   type="number"
                   min="5"
                   step="5"
                   placeholder="30"
+                  required
                   value={duration}
                   onChange={(e) => {
                     setDuration(e.target.value);
                     if (errors.duration) setErrors({ ...errors, duration: '' });
                   }}
-                  className={errors.duration ? 'border-red-500' : ''}
                 />
-                {errors.duration && (
-                  <p className="text-sm text-red-500">{errors.duration}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="buffer">Buffer (min)</Label>
-                <Input
-                  id="buffer"
+                <InputField 
+                  id="buffer" 
+                  label="Buffer (min)" 
+                  icon={Clock} 
                   type="number"
                   min="0"
                   step="5"
@@ -322,13 +469,10 @@ export const CreateServiceModal = ({ open, onOpenChange, onSuccess }: CreateServ
                   value={buffer}
                   onChange={(e) => setBuffer(e.target.value)}
                 />
-                <p className="text-xs text-gray-500">Between bookings</p>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="price">Price (ETB)</Label>
-                <Input
-                  id="price"
+                <InputField 
+                  id="price" 
+                  label="Price (ETB)" 
+                  icon={DollarSign} 
                   type="number"
                   min="0"
                   step="10"
@@ -337,58 +481,106 @@ export const CreateServiceModal = ({ open, onOpenChange, onSuccess }: CreateServ
                   onChange={(e) => setPrice(e.target.value)}
                 />
               </div>
-            </div>
 
-            {/* Description */}
-            <div className="space-y-2">
-              <Label htmlFor="description">Description (Optional)</Label>
-              <Textarea
-                id="description"
-                placeholder="What customers can expect from this service..."
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                rows={3}
-              />
-            </div>
-
-            {/* Availability Info */}
-            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 flex items-start gap-2">
-              <Info className="w-4 h-4 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-              <div className="text-sm text-blue-800 dark:text-blue-300">
-                <p className="font-medium mb-1">Availability Configuration</p>
-                <p className="text-xs">
-                  Availability hours will be inherited from the selected Location by default. 
-                  You can customize availability later in the Service form after creation.
-                </p>
+              {/* Description */}
+              <div className="relative">
+                <label 
+                  className="block text-xs font-medium mb-1.5"
+                  style={{ color: 'var(--text-muted)' }}
+                >
+                  Description (Optional)
+                </label>
+                <div className="relative">
+                  <div 
+                    className="absolute left-3 top-3"
+                    style={{ color: 'var(--text-muted)' }}
+                  >
+                    <FileText className="w-4 h-4" />
+                  </div>
+                  <textarea
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="What customers can expect from this service..."
+                    rows={3}
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 transition-all resize-none"
+                    style={{ 
+                      backgroundColor: 'var(--bg-elevated)',
+                      border: '1px solid var(--border-default)',
+                      color: 'var(--text-primary)'
+                    }}
+                  />
+                </div>
               </div>
-            </div>
 
-          {/* Error Message */}
-          {errors.submit && (
-            <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
-              <p className="text-sm text-red-600 dark:text-red-400">{errors.submit}</p>
-            </div>
+              {/* Info Box */}
+              <div 
+                className="rounded-xl p-4 flex items-start gap-3"
+                style={{ 
+                  backgroundColor: 'var(--accent-primary-light)',
+                  border: '1px solid var(--accent-primary-light)'
+                }}
+              >
+                <Info className="w-5 h-5 flex-shrink-0" style={{ color: 'var(--accent-primary)' }} />
+                <div className="text-sm">
+                  <p className="font-medium mb-1" style={{ color: 'var(--text-primary)' }}>
+                    Availability Configuration
+                  </p>
+                  <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+                    Availability hours will be inherited from the selected Location by default. 
+                    You can customize availability later in the Service form after creation.
+                  </p>
+                </div>
+              </div>
+
+              {/* Error Message */}
+              {errors.submit && (
+                <div 
+                  className="rounded-xl p-4"
+                  style={{ 
+                    backgroundColor: 'var(--status-cancelled-bg)',
+                    border: '1px solid var(--status-cancelled)'
+                  }}
+                >
+                  <p className="text-sm" style={{ color: 'var(--status-cancelled)' }}>{errors.submit}</p>
+                </div>
+              )}
+
+              {/* Actions */}
+              <div className="flex justify-end space-x-3 pt-4 border-t" style={{ borderColor: 'var(--border-default)' }}>
+                <motion.button
+                  type="button"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => onOpenChange(false)}
+                  disabled={loading}
+                  className="px-5 py-2.5 rounded-xl text-sm font-medium transition-all"
+                  style={{ 
+                    backgroundColor: 'var(--border-subtle)',
+                    border: '1px solid var(--border-default)',
+                    color: 'var(--text-primary)'
+                  }}
+                >
+                  Cancel
+                </motion.button>
+                <motion.button
+                  type="submit"
+                  disabled={loading}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="relative group px-5 py-2.5 rounded-xl text-sm font-medium text-white overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-primary group-hover:opacity-90 transition-opacity" />
+                  <div className="relative z-10 flex items-center gap-2">
+                    {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+                    <Sparkles className="w-4 h-4" />
+                    Create Service
+                  </div>
+                </motion.button>
+              </div>
+            </form>
           )}
-
-          {/* Actions */}
-          <div className="flex justify-end space-x-3 pt-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => onOpenChange(false)}
-              disabled={loading}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" disabled={loading}>
-              {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-              Create Service
-            </Button>
-          </div>
-          </form>
-        )}
-      </DialogContent>
-    </Dialog>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
-

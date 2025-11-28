@@ -1392,12 +1392,12 @@ def get_available_providers_for_service(service_id, organization_id=None):
 
 
 @frappe.whitelist()
-def get_service_providers(service_id):
+def get_service_providers(service_id=None):
     """
     Get all providers linked to a service
     
     Args:
-        service_id: Service document name
+        service_id: Service document name (optional, returns empty list if not provided)
     
     Returns:
         List of providers with their details
@@ -1405,6 +1405,14 @@ def get_service_providers(service_id):
     user = frappe.session.user
     
     try:
+        # If service_id is not provided, return empty list
+        if not service_id:
+            frappe.response["message"] = {
+                "success": True,
+                "providers": []
+            }
+            return
+        
         # Get the service
         service = frappe.get_doc("Service", service_id)
         

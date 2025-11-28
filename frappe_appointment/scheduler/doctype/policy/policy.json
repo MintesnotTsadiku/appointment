@@ -1,0 +1,297 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2025-01-20 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+  "field_order": [
+  "naming_series",
+  "policy_name",
+  "description",
+  "is_active",
+  "Section Break-1",
+  "applies_to",
+  "organization",
+  "service",
+  "location",
+  "provider",
+  "Section Break-2",
+  "deposit_percentage",
+  "deposit_amount",
+  "Column Break-1",
+  "cancellation_window_hours",
+  "reschedule_window_hours",
+  "Section Break-3",
+  "late_cancellation_fee_percentage",
+  "late_cancellation_fee_amount",
+  "Column Break-2",
+  "no_show_fee_percentage",
+  "refund_policy",
+  "Section Break-4",
+  "valid_from",
+  "valid_to",
+  "Section Break-5",
+  "is_template_based",
+  "template_used",
+  "Column Break-3",
+  "created_by_provider",
+  "created_by_organization"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "POL-.YYYY.-.####",
+   "reqd": 1,
+   "default": "POL-.YYYY.-.####"
+  },
+  {
+   "fieldname": "policy_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Policy Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description",
+   "length": 500
+  },
+  {
+   "default": "1",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Is Active"
+  },
+  {
+   "fieldname": "Section Break-1",
+   "fieldtype": "Section Break",
+   "label": "Applicability"
+  },
+  {
+   "default": "All Services",
+   "fieldname": "applies_to",
+   "fieldtype": "Select",
+   "label": "Applies To",
+   "options": "All Services\nSpecific Service\nSpecific Location\nSpecific Provider",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval:doc.applies_to == \"All Services\"",
+   "fieldname": "organization",
+   "fieldtype": "Link",
+   "label": "Organization",
+   "options": "Organization",
+   "description": "Required for 'All Services' - applies to all services in this organization"
+  },
+  {
+   "depends_on": "eval:doc.applies_to == \"Specific Service\"",
+   "fieldname": "service",
+   "fieldtype": "Link",
+   "label": "Service",
+   "options": "Service"
+  },
+  {
+   "depends_on": "eval:doc.applies_to == \"Specific Location\"",
+   "fieldname": "location",
+   "fieldtype": "Link",
+   "label": "Location",
+   "options": "Location"
+  },
+  {
+   "depends_on": "eval:doc.applies_to == \"Specific Provider\"",
+   "fieldname": "provider",
+   "fieldtype": "Link",
+   "label": "Provider",
+   "options": "Provider"
+  },
+  {
+   "fieldname": "Section Break-2",
+   "fieldtype": "Section Break",
+   "label": "Deposit & Fees"
+  },
+  {
+   "default": "0",
+   "fieldname": "deposit_percentage",
+   "fieldtype": "Percent",
+   "label": "Deposit Percentage",
+   "description": "Required deposit as percentage of total price (0-100)"
+  },
+  {
+   "default": "0",
+   "fieldname": "deposit_amount",
+   "fieldtype": "Currency",
+   "label": "Deposit Amount (ETB)",
+   "description": "Fixed deposit amount (alternative to percentage)"
+  },
+  {
+   "fieldname": "Column Break-1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "cancellation_window_hours",
+   "fieldtype": "Int",
+   "label": "Cancellation Window (hours)",
+   "description": "Hours before appointment for free cancellation",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "reschedule_window_hours",
+   "fieldtype": "Int",
+   "label": "Reschedule Window (hours)",
+   "description": "Hours before appointment for free reschedule",
+   "reqd": 1
+  },
+  {
+   "fieldname": "Section Break-3",
+   "fieldtype": "Section Break",
+   "label": "Late Fees"
+  },
+  {
+   "default": "0",
+   "fieldname": "late_cancellation_fee_percentage",
+   "fieldtype": "Percent",
+   "label": "Late Cancellation Fee (%)",
+   "description": "Fee percentage for late cancellation"
+  },
+  {
+   "default": "0",
+   "fieldname": "late_cancellation_fee_amount",
+   "fieldtype": "Currency",
+   "label": "Late Cancellation Fee (ETB)",
+   "description": "Fixed fee amount for late cancellation"
+  },
+  {
+   "fieldname": "Column Break-2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "no_show_fee_percentage",
+   "fieldtype": "Percent",
+   "label": "No Show Fee (%)",
+   "description": "Fee percentage for no-show"
+  },
+  {
+   "default": "Full Refund",
+   "fieldname": "refund_policy",
+   "fieldtype": "Select",
+   "label": "Refund Policy",
+   "options": "Full Refund\nPartial Refund\nNo Refund"
+  },
+  {
+   "fieldname": "Section Break-4",
+   "fieldtype": "Section Break",
+   "label": "Validity Period"
+  },
+  {
+   "fieldname": "valid_from",
+   "fieldtype": "Date",
+   "label": "Valid From",
+   "reqd": 1
+  },
+  {
+   "fieldname": "valid_to",
+   "fieldtype": "Date",
+   "label": "Valid To",
+   "description": "Leave blank for no expiration"
+  },
+  {
+   "fieldname": "Section Break-5",
+   "fieldtype": "Section Break",
+   "label": "Metadata",
+   "collapsible": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_template_based",
+   "fieldtype": "Check",
+   "label": "Created from Template",
+   "read_only": 1
+  },
+  {
+   "fieldname": "template_used",
+   "fieldtype": "Data",
+   "label": "Template Used",
+   "read_only": 1
+  },
+  {
+   "fieldname": "Column Break-3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "created_by_provider",
+   "fieldtype": "Link",
+   "label": "Created by Provider",
+   "options": "Provider",
+   "read_only": 1
+  },
+  {
+   "fieldname": "created_by_organization",
+   "fieldtype": "Link",
+   "label": "Created by Organization",
+   "options": "Organization",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-01-20 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Scheduler",
+ "name": "Policy",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 0,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Provider",
+   "share": 0,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 0,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Organization Manager",
+   "share": 0,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "policy_name"
+}
+

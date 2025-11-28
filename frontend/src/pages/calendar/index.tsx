@@ -475,182 +475,326 @@ const Calendar = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-gray-900">
-      {/* Header */}
-      <header className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-800 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => window.history.back()}
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </Button>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                  <CalendarIcon className="w-6 h-6" style={{ color: 'var(--brand-primary)' }} />
-                  My Calendar
-                </h1>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {viewMode === 'month' && format(currentDate, 'MMMM yyyy')}
-                  {viewMode === 'week' && `${format(startOfWeek(currentDate, { weekStartsOn: 1 }), 'MMM d')} - ${format(endOfWeek(currentDate, { weekStartsOn: 1 }), 'MMM d, yyyy')}`}
-                  {viewMode === 'day' && format(currentDate, 'MMMM d, yyyy')}
-                  {viewMode === 'list' && 'Appointments List'}
-                </p>
+    <div 
+      className="min-h-screen text-[var(--text-primary)]"
+      style={{ backgroundColor: 'var(--bg-primary)' }}
+    >
+      {/* Ambient background effects */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div 
+          className="absolute -top-40 -right-40 w-96 h-96 rounded-full blur-[120px]"
+          style={{ backgroundColor: 'var(--glow-primary)' }}
+        />
+        <div 
+          className="absolute top-1/3 -left-40 w-96 h-96 rounded-full blur-[120px]"
+          style={{ backgroundColor: 'var(--glow-secondary)' }}
+        />
+        <div 
+          className="absolute -bottom-40 right-1/4 w-96 h-96 rounded-full blur-[120px]"
+          style={{ backgroundColor: 'var(--glow-success)' }}
+        />
+      </div>
+
+      <div className="relative z-10">
+        {/* Header */}
+        <header 
+          className="sticky top-0 z-50 backdrop-blur-xl"
+          style={{ 
+            backgroundColor: 'color-mix(in srgb, var(--bg-primary) 80%, transparent)',
+            borderBottom: '1px solid var(--border-subtle)'
+          }}
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center space-x-4">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => window.history.back()}
+                  className="p-2 rounded-lg transition-all"
+                  style={{ 
+                    backgroundColor: 'var(--border-subtle)',
+                    border: '1px solid var(--border-default)',
+                    color: 'var(--text-muted)'
+                  }}
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </motion.button>
+                <div className="flex items-center gap-3">
+                  <div className="relative">
+                    <div 
+                      className="absolute inset-0 rounded-xl blur-lg opacity-50 bg-gradient-primary"
+                    />
+                    <div className="relative bg-gradient-primary p-2.5 rounded-xl">
+                      <CalendarIcon className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+                  <div>
+                    <h1 className="text-xl lg:text-2xl font-bold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+                      My Calendar
+                      <span 
+                        className="px-2 py-0.5 text-[10px] font-semibold rounded-full"
+                        style={{ 
+                          background: 'var(--accent-primary-light)',
+                          color: 'var(--accent-primary)',
+                          border: '1px solid var(--accent-primary-light)'
+                        }}
+                      >
+                        PRO
+                      </span>
+                    </h1>
+                    <p className="text-xs lg:text-sm" style={{ color: 'var(--text-subtle)' }}>
+                      {viewMode === 'month' && format(currentDate, 'MMMM yyyy')}
+                      {viewMode === 'week' && `${format(startOfWeek(currentDate, { weekStartsOn: 1 }), 'MMM d')} - ${format(endOfWeek(currentDate, { weekStartsOn: 1 }), 'MMM d, yyyy')}`}
+                      {viewMode === 'day' && format(currentDate, 'MMMM d, yyyy')}
+                      {viewMode === 'list' && 'Appointments List'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={exportToCSV}
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all"
+                  style={{ 
+                    backgroundColor: 'var(--border-subtle)',
+                    border: '1px solid var(--border-default)',
+                    color: 'var(--text-primary)'
+                  }}
+                >
+                  <Download className="w-4 h-4" />
+                  Export
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="relative group flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-white overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-primary group-hover:opacity-90 transition-opacity" />
+                  <Plus className="relative z-10 w-4 h-4" />
+                  <span className="relative z-10">New Booking</span>
+                </motion.button>
               </div>
             </div>
-            
-            <div className="flex items-center gap-3">
-              <Button variant="outline" size="sm" onClick={exportToCSV}>
-                <Download className="w-4 h-4 mr-2" />
-                Export
-              </Button>
-              <Button size="sm" style={{ background: 'var(--brand-primary)' }} className="text-white">
-                <Plus className="w-4 h-4 mr-2" />
-                New Booking
-              </Button>
-            </div>
-          </div>
 
-          {/* View Mode Switcher */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
-              <Button
-                variant={viewMode === 'month' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setViewMode('month')}
-                className="gap-2"
+            {/* View Mode Switcher */}
+            <div className="flex items-center justify-between">
+              <div 
+                className="flex items-center gap-1 p-1 rounded-xl"
+                style={{ 
+                  backgroundColor: 'var(--border-subtle)',
+                  border: '1px solid var(--border-default)'
+                }}
               >
-                <Grid3x3 className="w-4 h-4" />
-                Month
-              </Button>
-              <Button
-                variant={viewMode === 'week' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setViewMode('week')}
-                className="gap-2"
-              >
-                <CalendarDays className="w-4 h-4" />
-                Week
-              </Button>
-              <Button
-                variant={viewMode === 'day' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setViewMode('day')}
-                className="gap-2"
-              >
-                <Clock className="w-4 h-4" />
-                Day
-              </Button>
-              <Button
-                variant={viewMode === 'list' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setViewMode('list')}
-                className="gap-2"
-              >
-                <List className="w-4 h-4" />
-                List
-              </Button>
-            </div>
+                {(['month', 'week', 'day', 'list'] as ViewMode[]).map((mode) => {
+                  const icons = {
+                    month: Grid3x3,
+                    week: CalendarDays,
+                    day: Clock,
+                    list: List
+                  };
+                  const labels = {
+                    month: 'Month',
+                    week: 'Week',
+                    day: 'Day',
+                    list: 'List'
+                  };
+                  const Icon = icons[mode];
+                  const isActive = viewMode === mode;
+                  
+                  return (
+                    <motion.button
+                      key={mode}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setViewMode(mode)}
+                      className="relative px-3 py-1.5 text-xs lg:text-sm font-medium rounded-lg transition-all"
+                      style={{ 
+                        color: isActive ? 'var(--text-primary)' : 'var(--text-subtle)'
+                      }}
+                    >
+                      {isActive && (
+                        <motion.div
+                          layoutId="viewToggle"
+                          className="absolute inset-0 rounded-lg"
+                          style={{
+                            background: 'var(--accent-primary-light)',
+                            border: '1px solid var(--accent-primary-light)'
+                          }}
+                          transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                        />
+                      )}
+                      <span className="relative z-10 flex items-center gap-1.5">
+                        <Icon className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
+                        <span className="hidden sm:inline">{labels[mode]}</span>
+                      </span>
+                    </motion.button>
+                  );
+                })}
+              </div>
 
-            {/* Navigation */}
-            <div className="flex items-center gap-2">
-              <Button variant="outline" size="icon" onClick={goToPrev}>
-                <ChevronLeft className="w-4 h-4" />
-              </Button>
-              <Button variant="outline" size="sm" onClick={goToToday}>
-                Today
-              </Button>
-              <Button variant="outline" size="icon" onClick={goToNext}>
-                <ChevronRight className="w-4 h-4" />
-              </Button>
+              {/* Navigation */}
+              <div className="flex items-center gap-2">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={goToPrev}
+                  className="p-2 rounded-lg transition-all"
+                  style={{ 
+                    backgroundColor: 'var(--border-subtle)',
+                    border: '1px solid var(--border-default)',
+                    color: 'var(--text-muted)'
+                  }}
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={goToToday}
+                  className="px-3 py-1.5 rounded-lg text-sm font-medium transition-all"
+                  style={{ 
+                    backgroundColor: 'var(--border-subtle)',
+                    border: '1px solid var(--border-default)',
+                    color: 'var(--text-primary)'
+                  }}
+                >
+                  Today
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={goToNext}
+                  className="p-2 rounded-lg transition-all"
+                  style={{ 
+                    backgroundColor: 'var(--border-subtle)',
+                    border: '1px solid var(--border-default)',
+                    color: 'var(--text-muted)'
+                  }}
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </motion.button>
+              </div>
             </div>
-          </div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Filters Bar */}
-        <div className="mb-6 flex flex-col sm:flex-row gap-4">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <Input
-              placeholder="Search appointments..."
-              className="pl-10"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+        {/* Main Content */}
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* Filters Bar */}
+          <div className="mb-6 flex flex-col sm:flex-row gap-4">
+            <div className="flex-1 relative">
+              <Search 
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4" 
+                style={{ color: 'var(--text-muted)' }}
+              />
+              <input
+                placeholder="Search appointments..."
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 transition-all"
+                style={{ 
+                  backgroundColor: 'var(--bg-elevated)',
+                  border: '1px solid var(--border-default)',
+                  color: 'var(--text-primary)'
+                }}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="h-10 rounded-xl px-3 text-sm focus:outline-none focus:ring-2 transition-all"
+                style={{ 
+                  backgroundColor: 'var(--bg-elevated)',
+                  border: '1px solid var(--border-default)',
+                  color: 'var(--text-primary)'
+                }}
+              >
+                <option value="All">All Status</option>
+                <option value="Confirmed">Confirmed</option>
+                <option value="Completed">Completed</option>
+                <option value="Pending">Pending</option>
+                <option value="Cancelled">Cancelled</option>
+                <option value="No Show">No Show</option>
+              </select>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all"
+                style={{ 
+                  backgroundColor: 'var(--border-subtle)',
+                  border: '1px solid var(--border-default)',
+                  color: 'var(--text-primary)'
+                }}
+                onClick={() => setShowFilters(!showFilters)}
+              >
+                <Filter className="w-4 h-4" />
+                Filters
+              </motion.button>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="h-10 rounded-md border border-input bg-background px-3 text-sm"
-            >
-              <option value="All">All Status</option>
-              <option value="Confirmed">Confirmed</option>
-              <option value="Completed">Completed</option>
-              <option value="Pending">Pending</option>
-              <option value="Cancelled">Cancelled</option>
-              <option value="No Show">No Show</option>
-            </select>
-            <Button variant="outline" className="gap-2" onClick={() => setShowFilters(!showFilters)}>
-              <Filter className="w-4 h-4" />
-              Filters
-            </Button>
-          </div>
-        </div>
 
-        {/* Calendar View */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800 overflow-hidden"
-        >
-          <div className="p-6">
-            {renderView()}
-          </div>
-        </motion.div>
-
-        {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+          {/* Calendar View */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="bg-white dark:bg-gray-900 rounded-xl p-6 border border-gray-200 dark:border-gray-800"
+            className="rounded-2xl overflow-hidden backdrop-blur-sm"
+            style={{ 
+              backgroundColor: 'var(--border-subtle)',
+              border: '1px solid var(--border-default)'
+            }}
           >
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">This Week</p>
-            <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.this_week}</p>
-            <p className="text-xs text-gray-500 mt-1">appointments</p>
+            <div className="p-6">
+              {renderView()}
+            </div>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="bg-white dark:bg-gray-900 rounded-xl p-6 border border-gray-200 dark:border-gray-800"
-          >
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Upcoming</p>
-            <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.upcoming}</p>
-            <p className="text-xs text-gray-500 mt-1">in next 7 days</p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="bg-white dark:bg-gray-900 rounded-xl p-6 border border-gray-200 dark:border-gray-800"
-          >
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Completed</p>
-            <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.completed_this_month}</p>
-            <p className="text-xs text-gray-500 mt-1">this month</p>
-          </motion.div>
-        </div>
-      </main>
+          {/* Quick Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+            {[
+              { label: 'This Week', value: stats.this_week, subtitle: 'appointments', icon: CalendarIcon, gradient: 'bg-gradient-primary' },
+              { label: 'Upcoming', value: stats.upcoming, subtitle: 'in next 7 days', icon: Clock, gradient: 'bg-gradient-to-br from-blue-500 to-indigo-600' },
+              { label: 'Completed', value: stats.completed_this_month, subtitle: 'this month', icon: CheckCircle, gradient: 'bg-gradient-success' },
+            ].map((stat, index) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 * (index + 1) }}
+                className="relative group"
+              >
+                <div 
+                  className="relative backdrop-blur-sm rounded-2xl p-5 hover:scale-[1.02] transition-all duration-300"
+                  style={{ 
+                    backgroundColor: 'var(--border-subtle)',
+                    border: '1px solid var(--border-default)'
+                  }}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={`inline-flex p-2.5 rounded-xl ${stat.gradient}`}>
+                      <stat.icon className="w-5 h-5 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-2xl lg:text-3xl font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>
+                        {stat.value}
+                      </div>
+                      <div className="text-xs lg:text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                        {stat.label}
+                      </div>
+                      <div className="text-xs mt-1" style={{ color: 'var(--text-subtle)' }}>
+                        {stat.subtitle}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </main>
+      </div>
 
       {/* Appointment Detail Modal */}
       <AnimatePresence>
@@ -659,80 +803,110 @@ const Calendar = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
             onClick={() => setSelectedAppointment(null)}
           >
             <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              className="rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+              style={{ 
+                backgroundColor: 'var(--bg-primary)',
+                border: '1px solid var(--border-default)'
+              }}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="p-6 border-b border-gray-200 dark:border-gray-800">
+              {/* Gradient accent */}
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-primary" />
+              
+              <div 
+                className="p-6"
+                style={{ borderBottom: '1px solid var(--border-default)' }}
+              >
                 <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                    <h3 className="text-xl lg:text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
                       {selectedAppointment.client_name}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-400 mt-1">
+                    <p className="mt-1" style={{ color: 'var(--text-muted)' }}>
                       {selectedAppointment.service_name}
                     </p>
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
                     onClick={() => setSelectedAppointment(null)}
+                    className="p-2 rounded-lg transition-colors"
+                    style={{ 
+                      backgroundColor: 'var(--border-subtle)',
+                      color: 'var(--text-muted)'
+                    }}
                   >
                     <X className="w-5 h-5" />
-                  </Button>
+                  </motion.button>
                 </div>
               </div>
               
               <div className="p-6 space-y-4">
                 <div className="flex items-center gap-2">
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(selectedAppointment.status)}`}>
+                  <span 
+                    className="px-3 py-1 rounded-full text-sm font-medium border"
+                    style={{ 
+                      backgroundColor: getStatusColor(selectedAppointment.status).includes('blue') ? 'var(--status-pending-bg)' :
+                                      getStatusColor(selectedAppointment.status).includes('green') ? 'var(--status-confirmed-bg)' :
+                                      getStatusColor(selectedAppointment.status).includes('orange') ? 'var(--accent-warning-light)' :
+                                      getStatusColor(selectedAppointment.status).includes('red') ? 'var(--status-cancelled-bg)' :
+                                      'var(--border-subtle)',
+                      color: getStatusColor(selectedAppointment.status).includes('blue') ? 'var(--status-pending)' :
+                             getStatusColor(selectedAppointment.status).includes('green') ? 'var(--status-confirmed)' :
+                             getStatusColor(selectedAppointment.status).includes('orange') ? 'var(--accent-warning)' :
+                             getStatusColor(selectedAppointment.status).includes('red') ? 'var(--status-cancelled)' :
+                             'var(--text-primary)',
+                      borderColor: 'var(--border-default)'
+                    }}
+                  >
                     {selectedAppointment.status}
                   </span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Date</p>
-                    <p className="font-medium text-gray-900 dark:text-white">
+                    <p className="text-sm mb-1" style={{ color: 'var(--text-muted)' }}>Date</p>
+                    <p className="font-medium" style={{ color: 'var(--text-primary)' }}>
                       {selectedAppointment.appointment_date && format(parseISO(selectedAppointment.appointment_date), 'MMMM d, yyyy')}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Time</p>
-                    <p className="font-medium text-gray-900 dark:text-white">
+                    <p className="text-sm mb-1" style={{ color: 'var(--text-muted)' }}>Time</p>
+                    <p className="font-medium" style={{ color: 'var(--text-primary)' }}>
                       {selectedAppointment.start_time} - {selectedAppointment.end_time}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Client Email</p>
-                    <p className="font-medium text-gray-900 dark:text-white">
+                    <p className="text-sm mb-1" style={{ color: 'var(--text-muted)' }}>Client Email</p>
+                    <p className="font-medium" style={{ color: 'var(--text-primary)' }}>
                       {selectedAppointment.client_email}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Client Phone</p>
-                    <p className="font-medium text-gray-900 dark:text-white">
+                    <p className="text-sm mb-1" style={{ color: 'var(--text-muted)' }}>Client Phone</p>
+                    <p className="font-medium" style={{ color: 'var(--text-primary)' }}>
                       {selectedAppointment.client_phone}
                     </p>
                   </div>
                   {selectedAppointment.location_name && (
                     <div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Location</p>
-                      <p className="font-medium text-gray-900 dark:text-white">
+                      <p className="text-sm mb-1" style={{ color: 'var(--text-muted)' }}>Location</p>
+                      <p className="font-medium" style={{ color: 'var(--text-primary)' }}>
                         {selectedAppointment.location_name}
                       </p>
                     </div>
                   )}
                   {selectedAppointment.amount_paid && selectedAppointment.amount_paid > 0 && (
                     <div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Amount Paid</p>
-                      <p className="font-medium text-gray-900 dark:text-white">
+                      <p className="text-sm mb-1" style={{ color: 'var(--text-muted)' }}>Amount Paid</p>
+                      <p className="font-medium" style={{ color: 'var(--text-primary)' }}>
                         {selectedAppointment.amount_paid} {selectedAppointment.currency || 'ETB'}
                       </p>
                     </div>
@@ -741,8 +915,8 @@ const Calendar = () => {
 
                 {selectedAppointment.notes && (
                   <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Notes</p>
-                    <p className="text-gray-900 dark:text-white">{selectedAppointment.notes}</p>
+                    <p className="text-sm mb-1" style={{ color: 'var(--text-muted)' }}>Notes</p>
+                    <p style={{ color: 'var(--text-primary)' }}>{selectedAppointment.notes}</p>
                   </div>
                 )}
               </div>

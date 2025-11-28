@@ -1,8 +1,15 @@
 import { useFrappeGetCall } from 'frappe-react-sdk';
 import { motion } from 'framer-motion';
-import { Card } from '@/components/card';
 import { useTranslation } from '@/lib/i18n';
-import { CheckCircle, XCircle, RefreshCw, Clock } from 'lucide-react';
+import { 
+  CheckCircle, 
+  XCircle, 
+  RefreshCw, 
+  Clock, 
+  Activity,
+  ExternalLink,
+  Inbox
+} from 'lucide-react';
 import Spinner from '@/components/spinner';
 
 interface Activity {
@@ -16,7 +23,7 @@ interface Activity {
 const RecentActivity = () => {
   const { t } = useTranslation();
 
-  const { data, isLoading, error } = useFrappeGetCall<{ message: { activities: Activity[] } }>(
+  const { data, isLoading, error, mutate } = useFrappeGetCall<{ message: { activities: Activity[] } }>(
     'frappe_appointment.dashboard.recent_activity',
     { limit: 10, offset: 0 },
     'recent-activity'
@@ -25,32 +32,33 @@ const RecentActivity = () => {
   const activities = data?.message?.activities || [];
 
   const getActivityIcon = (type: string) => {
+    const iconClass = "w-4 h-4";
     switch (type) {
       case 'booking':
-        return <CheckCircle className="w-5 h-5 text-green-600" />;
+        return <CheckCircle className={iconClass} style={{ color: 'var(--accent-success)' }} />;
       case 'cancellation':
-        return <XCircle className="w-5 h-5 text-red-600" />;
+        return <XCircle className={iconClass} style={{ color: 'var(--status-cancelled)' }} />;
       case 'reschedule':
-        return <RefreshCw className="w-5 h-5 text-blue-600" />;
+        return <RefreshCw className={iconClass} style={{ color: 'var(--status-pending)' }} />;
       case 'noshow':
-        return <Clock className="w-5 h-5 text-orange-600" />;
+        return <Clock className={iconClass} style={{ color: 'var(--accent-warning)' }} />;
       default:
-        return <CheckCircle className="w-5 h-5 text-gray-600" />;
+        return <CheckCircle className={iconClass} style={{ color: 'var(--text-muted)' }} />;
     }
   };
 
-  const getActivityColor = (type: string) => {
+  const getActivityGradient = (type: string) => {
     switch (type) {
       case 'booking':
-        return 'bg-green-50 dark:bg-green-900/10';
+        return 'bg-gradient-success';
       case 'cancellation':
-        return 'bg-red-50 dark:bg-red-900/10';
+        return 'bg-gradient-to-br from-red-500 to-rose-600';
       case 'reschedule':
-        return 'bg-blue-50 dark:bg-blue-900/10';
+        return 'bg-gradient-to-br from-blue-500 to-indigo-600';
       case 'noshow':
-        return 'bg-orange-50 dark:bg-orange-900/10';
+        return 'bg-gradient-secondary';
       default:
-        return 'bg-gray-50 dark:bg-gray-800/50';
+        return 'bg-gradient-to-br from-gray-500 to-gray-600';
     }
   };
 
@@ -64,9 +72,9 @@ const RecentActivity = () => {
       const diffDays = Math.floor(diffHours / 24);
 
       if (diffMins < 1) return 'Just now';
-      if (diffMins < 60) return `${diffMins} min ago`;
-      if (diffHours < 24) return `${diffHours} hours ago`;
-      if (diffDays < 7) return `${diffDays} days ago`;
+      if (diffMins < 60) return `${diffMins}m ago`;
+      if (diffHours < 24) return `${diffHours}h ago`;
+      if (diffDays < 7) return `${diffDays}d ago`;
       return date.toLocaleDateString();
     } catch {
       return timeStr;
@@ -74,100 +82,154 @@ const RecentActivity = () => {
   };
 
   return (
-    <Card className="p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-          Recent Activity
-        </h3>
-        <button
-          onClick={() => {
-            // Refresh activity
-            window.location.reload();
+    <div 
+      className="relative backdrop-blur-sm rounded-2xl overflow-hidden"
+      style={{ 
+        backgroundColor: 'var(--border-subtle)',
+        border: '1px solid var(--border-default)'
+      }}
+    >
+      {/* Header */}
+      <div 
+        className="flex items-center justify-between p-5"
+        style={{ borderBottom: '1px solid var(--border-default)' }}
+      >
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-lg bg-gradient-primary">
+            <Activity className="w-4 h-4 text-white" />
+          </div>
+          <h3 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
+            Recent Activity
+          </h3>
+        </div>
+        <motion.button
+          whileHover={{ scale: 1.05, rotate: 180 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => mutate()}
+          className="p-2 rounded-lg transition-colors"
+          style={{ 
+            backgroundColor: 'var(--border-default)',
+            color: 'var(--text-muted)'
           }}
-          className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
           aria-label="Refresh"
         >
-          <RefreshCw className="w-5 h-5" />
-        </button>
+          <RefreshCw className="w-4 h-4" />
+        </motion.button>
       </div>
 
-      {isLoading && (
-        <div className="flex items-center justify-center py-12">
-          <Spinner />
-        </div>
-      )}
-
-      {error && (
-        <div className="text-center py-12">
-          <p className="text-red-600 dark:text-red-400">
-            Failed to load activity
-          </p>
-        </div>
-      )}
-
-      {!isLoading && !error && activities.length === 0 && (
-        <div className="text-center py-12">
-          <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center">
-            <Clock className="w-8 h-8 text-gray-400" />
+      {/* Content */}
+      <div className="p-5">
+        {isLoading && (
+          <div className="flex items-center justify-center py-12">
+            <Spinner />
           </div>
-          <p className="text-gray-600 dark:text-gray-400">
-            No recent activity
-          </p>
-          <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
-            Activity will appear here once customers start booking
-          </p>
-        </div>
-      )}
+        )}
 
-      {!isLoading && !error && activities.length > 0 && (
-        <div className="space-y-3">
-          {activities.map((activity, index) => (
-            <motion.div
-              key={`${activity.appointment_id}-${index}`}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.05 }}
-              className={`flex items-start space-x-3 p-4 rounded-lg ${getActivityColor(
-                activity.type
-              )}`}
+        {error && (
+          <div className="text-center py-12">
+            <p style={{ color: 'var(--status-cancelled)' }}>
+              Failed to load activity
+            </p>
+          </div>
+        )}
+
+        {!isLoading && !error && activities.length === 0 && (
+          <div className="text-center py-12">
+            <div 
+              className="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center"
+              style={{ backgroundColor: 'var(--border-default)' }}
             >
-              <div className="flex-shrink-0 mt-0.5">{getActivityIcon(activity.type)}</div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 dark:text-white">
-                  {activity.title || `${activity.customer} ${activity.type}`}
-                </p>
-                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                  {formatTime(activity.time)}
-                </p>
-              </div>
-              <button
-                onClick={() => {
-                  // Navigate to appointment details
-                  alert(`View appointment ${activity.appointment_id}`);
+              <Inbox className="w-8 h-8" style={{ color: 'var(--text-muted)' }} />
+            </div>
+            <p className="font-medium" style={{ color: 'var(--text-primary)' }}>
+              No recent activity
+            </p>
+            <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
+              Activity will appear here once customers start booking
+            </p>
+          </div>
+        )}
+
+        {!isLoading && !error && activities.length > 0 && (
+          <div className="space-y-3">
+            {activities.map((activity, index) => (
+              <motion.div
+                key={`${activity.appointment_id}-${index}`}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.05 }}
+                className="group flex items-start gap-3 p-3 rounded-xl transition-all duration-300 hover:scale-[1.01]"
+                style={{ 
+                  backgroundColor: 'var(--bg-elevated)',
+                  border: '1px solid var(--border-subtle)'
                 }}
-                className="flex-shrink-0 text-xs text-brand-primary hover:text-brand-primary-dark transition-colors"
               >
-                View
-              </button>
-            </motion.div>
-          ))}
+                {/* Activity Icon with gradient background */}
+                <div 
+                  className={`flex-shrink-0 p-2 rounded-lg ${getActivityGradient(activity.type)}`}
+                >
+                  <span className="text-white">
+                    {getActivityIcon(activity.type)}
+                  </span>
+                </div>
 
-          {activities.length >= 10 && (
-            <button
-              onClick={() => {
-                // Navigate to full activity log
-                alert('View all activity - to be implemented');
-              }}
-              className="w-full py-3 text-sm font-medium text-brand-primary hover:text-brand-primary-dark transition-colors"
-            >
-              View All Activity →
-            </button>
-          )}
-        </div>
-      )}
-    </Card>
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                  <p 
+                    className="text-sm font-medium truncate"
+                    style={{ color: 'var(--text-primary)' }}
+                  >
+                    {activity.title || `${activity.customer} ${activity.type}`}
+                  </p>
+                  <p 
+                    className="text-xs mt-0.5"
+                    style={{ color: 'var(--text-muted)' }}
+                  >
+                    {formatTime(activity.time)}
+                  </p>
+                </div>
+
+                {/* View Button */}
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    // Navigate to appointment details
+                    console.log(`View appointment ${activity.appointment_id}`);
+                  }}
+                  className="flex-shrink-0 p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
+                  style={{ 
+                    backgroundColor: 'var(--accent-primary-light)',
+                    color: 'var(--accent-primary)'
+                  }}
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </motion.button>
+              </motion.div>
+            ))}
+
+            {activities.length >= 10 && (
+              <motion.button
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
+                onClick={() => {
+                  // Navigate to full activity log
+                  console.log('View all activity');
+                }}
+                className="w-full py-3 text-sm font-medium rounded-xl transition-all"
+                style={{ 
+                  backgroundColor: 'var(--border-default)',
+                  color: 'var(--accent-primary)'
+                }}
+              >
+                View All Activity →
+              </motion.button>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 
 export default RecentActivity;
-

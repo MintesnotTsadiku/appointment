@@ -428,47 +428,106 @@ const AvailabilitySettings = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-gray-900">
-      {/* Header */}
-      <header className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-800 sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => navigate('/home')}
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </Button>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                  <Clock className="w-6 h-6" style={{ color: 'var(--brand-primary)' }} />
-                  Availability Settings
-                </h1>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  Configure availability for locations, services, and providers
-                </p>
+    <div 
+      className="min-h-screen text-[var(--text-primary)]"
+      style={{ backgroundColor: 'var(--bg-primary)' }}
+    >
+      {/* Ambient background effects */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div 
+          className="absolute -top-40 -right-40 w-96 h-96 rounded-full blur-[120px]"
+          style={{ backgroundColor: 'var(--glow-primary)' }}
+        />
+        <div 
+          className="absolute top-1/3 -left-40 w-96 h-96 rounded-full blur-[120px]"
+          style={{ backgroundColor: 'var(--glow-secondary)' }}
+        />
+        <div 
+          className="absolute -bottom-40 right-1/4 w-96 h-96 rounded-full blur-[120px]"
+          style={{ backgroundColor: 'var(--glow-success)' }}
+        />
+      </div>
+
+      <div className="relative z-10">
+        {/* Header */}
+        <header 
+          className="sticky top-0 z-50 backdrop-blur-xl"
+          style={{ 
+            backgroundColor: 'color-mix(in srgb, var(--bg-primary) 80%, transparent)',
+            borderBottom: '1px solid var(--border-subtle)'
+          }}
+        >
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => navigate('/home')}
+                  className="p-2 rounded-lg transition-all"
+                  style={{ 
+                    backgroundColor: 'var(--border-subtle)',
+                    border: '1px solid var(--border-default)',
+                    color: 'var(--text-muted)'
+                  }}
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </motion.button>
+                <div className="flex items-center gap-3">
+                  <div className="relative">
+                    <div 
+                      className="absolute inset-0 rounded-xl blur-lg opacity-50 bg-gradient-primary"
+                    />
+                    <div className="relative bg-gradient-primary p-2.5 rounded-xl">
+                      <Clock className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+                  <div>
+                    <h1 className="text-xl lg:text-2xl font-bold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+                      Availability Settings
+                      <span 
+                        className="px-2 py-0.5 text-[10px] font-semibold rounded-full"
+                        style={{ 
+                          background: 'var(--accent-primary-light)',
+                          color: 'var(--accent-primary)',
+                          border: '1px solid var(--accent-primary-light)'
+                        }}
+                      >
+                        PRO
+                      </span>
+                    </h1>
+                    <p className="text-xs lg:text-sm mt-1" style={{ color: 'var(--text-subtle)' }}>
+                      Configure availability for locations, services, and providers
+                    </p>
+                  </div>
+                </div>
               </div>
+              
+              <motion.button
+                whileHover={saving || savingAvailability ? {} : { scale: 1.02 }}
+                whileTap={saving || savingAvailability ? {} : { scale: 0.98 }}
+                onClick={handleSave}
+                disabled={saving || savingAvailability}
+                className="relative group flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-white overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{
+                  background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))'
+                }}
+              >
+                {saving || savingAvailability ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Saving...</span>
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-4 h-4" />
+                    <span>Save Changes</span>
+                  </>
+                )}
+              </motion.button>
             </div>
-            
-            <Button 
-              size="sm" 
-              style={{ background: 'var(--brand-primary)' }} 
-              className="text-white"
-              onClick={handleSave}
-              disabled={saving || savingAvailability}
-            >
-              {saving || savingAvailability ? (
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              ) : (
-                <Save className="w-4 h-4 mr-2" />
-              )}
-              Save Changes
-            </Button>
           </div>
-        </div>
-      </header>
+        </header>
 
       {/* Main Content */}
       <main className={`max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 ${
@@ -481,69 +540,110 @@ const AvailabilitySettings = () => {
           animate={{ opacity: 1, y: 0 }}
         >
           {/* Tabs */}
-          <Card className="p-2 mb-6">
+          <div 
+            className="p-2 mb-6 rounded-xl backdrop-blur-sm"
+            style={{
+              backgroundColor: 'var(--bg-elevated)',
+              border: '1px solid var(--border-default)'
+            }}
+          >
             <div className="flex space-x-2">
-              <button
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => setActiveTab('location')}
-                className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${
+                className={`flex-1 px-4 py-2.5 rounded-lg font-medium transition-all ${
                   activeTab === 'location'
-                    ? 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-900 dark:text-indigo-100'
-                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                    ? 'bg-gradient-primary text-white'
+                    : 'hover:bg-[var(--border-subtle)]'
                 }`}
+                style={activeTab !== 'location' ? {
+                  color: 'var(--text-secondary)',
+                  backgroundColor: 'transparent'
+                } : {}}
               >
                 <div className="flex items-center justify-center gap-2">
                   <Building2 className="w-4 h-4" />
                   <span>Location</span>
                 </div>
-              </button>
-              <button
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => setActiveTab('service')}
-                className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${
+                className={`flex-1 px-4 py-2.5 rounded-lg font-medium transition-all ${
                   activeTab === 'service'
-                    ? 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-900 dark:text-indigo-100'
-                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                    ? 'bg-gradient-primary text-white'
+                    : 'hover:bg-[var(--border-subtle)]'
                 }`}
+                style={activeTab !== 'service' ? {
+                  color: 'var(--text-secondary)',
+                  backgroundColor: 'transparent'
+                } : {}}
               >
                 <div className="flex items-center justify-center gap-2">
                   <Calendar className="w-4 h-4" />
                   <span>Service</span>
                 </div>
-              </button>
-              <button
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => setActiveTab('provider')}
-                className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${
+                className={`flex-1 px-4 py-2.5 rounded-lg font-medium transition-all ${
                   activeTab === 'provider'
-                    ? 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-900 dark:text-indigo-100'
-                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                    ? 'bg-gradient-primary text-white'
+                    : 'hover:bg-[var(--border-subtle)]'
                 }`}
+                style={activeTab !== 'provider' ? {
+                  color: 'var(--text-secondary)',
+                  backgroundColor: 'transparent'
+                } : {}}
               >
                 <div className="flex items-center justify-center gap-2">
                   <User className="w-4 h-4" />
                   <span>Provider</span>
                 </div>
-              </button>
+              </motion.button>
             </div>
-          </Card>
+          </div>
 
           {/* Tab Content */}
           {isLoading ? (
-            <Card className="p-12">
+            <div 
+              className="p-12 rounded-xl backdrop-blur-sm"
+              style={{
+                backgroundColor: 'var(--bg-elevated)',
+                border: '1px solid var(--border-default)'
+              }}
+            >
               <div className="flex items-center justify-center">
                 <Spinner />
               </div>
-            </Card>
+            </div>
           ) : (
-            <Card className="p-6">
+            <div 
+              className="p-6 rounded-xl backdrop-blur-sm"
+              style={{
+                backgroundColor: 'var(--bg-elevated)',
+                border: '1px solid var(--border-default)'
+              }}
+            >
               {/* Organization Selector for Services */}
               {activeTab === 'service' && organizations.length > 0 && (
                 <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
                     Select Organization
                   </label>
                   <select
                     value={selectedOrganization || ''}
                     onChange={(e) => setSelectedOrganization(e.target.value || null)}
-                    className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                    className="w-full px-3 py-2 rounded-lg transition-all"
+                    style={{
+                      backgroundColor: 'var(--bg-secondary)',
+                      border: '1px solid var(--border-default)',
+                      color: 'var(--text-primary)'
+                    }}
                   >
                     <option value="">All Organizations</option>
                     {organizations.map((org) => (
@@ -559,13 +659,18 @@ const AvailabilitySettings = () => {
               {activeTab === 'location' && (
                 <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
                   <div className="flex flex-col">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
                       Select Location
                     </label>
                     <select
                       value={selectedLocation || ''}
                       onChange={(e) => setSelectedLocation(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white h-[42px]"
+                      className="w-full px-3 py-2 rounded-lg transition-all h-[42px]"
+                      style={{
+                        backgroundColor: 'var(--bg-secondary)',
+                        border: '1px solid var(--border-default)',
+                        color: 'var(--text-primary)'
+                      }}
                     >
                       <option value="">Select...</option>
                       {locations.map((item) => (
@@ -579,7 +684,7 @@ const AvailabilitySettings = () => {
                   {/* Time Format Toggle */}
                   {selectedLocation && (
                     <div className="flex flex-col">
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
                         Time Format
                       </label>
                       <div className="h-[42px] flex items-center">
@@ -600,13 +705,18 @@ const AvailabilitySettings = () => {
                 <div className="mb-6 space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
                     <div className="flex flex-col">
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
                         Select Location
                       </label>
                       <select
                         value={selectedServiceLocation || ''}
                         onChange={(e) => setSelectedServiceLocation(e.target.value || null)}
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white h-[42px]"
+                        className="w-full px-3 py-2 rounded-lg transition-all h-[42px]"
+                        style={{
+                          backgroundColor: 'var(--bg-secondary)',
+                          border: '1px solid var(--border-default)',
+                          color: 'var(--text-primary)'
+                        }}
                         disabled={!locations.length}
                       >
                         <option value="">{locations.length ? 'Select a location...' : 'No locations available'}</option>
@@ -616,13 +726,13 @@ const AvailabilitySettings = () => {
                           </option>
                         ))}
                       </select>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
                         Services are scoped to the selected location.
                       </p>
                     </div>
 
                     <div className="flex flex-col">
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
                         Time Format
                       </label>
                       <div className="h-[42px] flex items-center">
@@ -637,13 +747,18 @@ const AvailabilitySettings = () => {
                   </div>
 
                   <div className="flex flex-col">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
                       Select Service
                     </label>
                     <select
                       value={selectedService || ''}
                       onChange={(e) => setSelectedService(e.target.value || null)}
-                      className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white h-[42px]"
+                      className="w-full px-3 py-2 rounded-lg transition-all h-[42px]"
+                      style={{
+                        backgroundColor: 'var(--bg-secondary)',
+                        border: '1px solid var(--border-default)',
+                        color: 'var(--text-primary)'
+                      }}
                       disabled={!selectedServiceLocation || services.length === 0}
                     >
                       <option value="">
@@ -655,7 +770,7 @@ const AvailabilitySettings = () => {
                         </option>
                       ))}
                     </select>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
                       The list shows services available at the chosen location.
                     </p>
                   </div>
@@ -667,13 +782,18 @@ const AvailabilitySettings = () => {
                 <>
                   {organizations.length > 0 && (
                     <div className="mb-4">
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
                         Select Organization
                       </label>
                       <select
                         value={selectedOrganization || ''}
                         onChange={(e) => setSelectedOrganization(e.target.value || null)}
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                        className="w-full px-3 py-2 rounded-lg transition-all"
+                        style={{
+                          backgroundColor: 'var(--bg-secondary)',
+                          border: '1px solid var(--border-default)',
+                          color: 'var(--text-primary)'
+                        }}
                       >
                         <option value="">Select an organization...</option>
                         {organizations.map((org) => (
@@ -687,13 +807,18 @@ const AvailabilitySettings = () => {
                   
                   {selectedOrganization && (
                     <div className="mb-4">
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
                         Select Location
                       </label>
                       <select
                         value={selectedLocation || ''}
                         onChange={(e) => setSelectedLocation(e.target.value || null)}
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                        className="w-full px-3 py-2 rounded-lg transition-all"
+                        style={{
+                          backgroundColor: 'var(--bg-secondary)',
+                          border: '1px solid var(--border-default)',
+                          color: 'var(--text-primary)'
+                        }}
                         disabled={!selectedOrganization}
                       >
                         <option value="">Select a location...</option>
@@ -703,7 +828,7 @@ const AvailabilitySettings = () => {
                           </option>
                         ))}
                       </select>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
                         Select a location for this organization
                       </p>
                     </div>
@@ -711,13 +836,18 @@ const AvailabilitySettings = () => {
                   
                   {selectedOrganization && (
                     <div className="mb-4">
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Select Service <span className="text-red-500">*</span>
+                      <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
+                        Select Service <span style={{ color: 'var(--accent-secondary)' }}>*</span>
                       </label>
                       <select
                         value={selectedService || ''}
                         onChange={(e) => setSelectedService(e.target.value || null)}
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                        className="w-full px-3 py-2 rounded-lg transition-all"
+                        style={{
+                          backgroundColor: 'var(--bg-secondary)',
+                          border: '1px solid var(--border-default)',
+                          color: 'var(--text-primary)'
+                        }}
                         disabled={!selectedOrganization}
                       >
                         <option value="">Select a service...</option>
@@ -727,7 +857,7 @@ const AvailabilitySettings = () => {
                           </option>
                         ))}
                       </select>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
                         Provider availability must be set for a specific service in this organization
                       </p>
                     </div>
@@ -735,11 +865,17 @@ const AvailabilitySettings = () => {
                   
                   {/* Provider Info Display */}
                   {selectedService && providerInfo && (
-                    <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-                      <p className="text-sm font-medium text-blue-900 dark:text-blue-300">
+                    <div 
+                      className="mb-6 p-4 rounded-lg backdrop-blur-sm"
+                      style={{
+                        backgroundColor: 'var(--accent-primary-light)',
+                        border: '1px solid var(--accent-primary-light)'
+                      }}
+                    >
+                      <p className="text-sm font-medium" style={{ color: 'var(--accent-primary)' }}>
                         Editing availability for: <span className="font-semibold">{providerInfo.provider_name}</span>
                       </p>
-                      <p className="text-xs text-blue-700 dark:text-blue-400 mt-1">
+                      <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
                         Service: {services.find(s => s.name === selectedService)?.service_name || selectedService}
                         {selectedLocation && ` • Location: ${locations.find(l => l.name === selectedLocation)?.location_name || selectedLocation}`}
                       </p>
@@ -747,16 +883,28 @@ const AvailabilitySettings = () => {
                   )}
                   
                   {!selectedOrganization && (
-                    <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
-                      <p className="text-sm text-amber-800 dark:text-amber-400">
+                    <div 
+                      className="mb-6 p-4 rounded-lg backdrop-blur-sm"
+                      style={{
+                        backgroundColor: 'var(--accent-secondary-light)',
+                        border: '1px solid var(--accent-secondary-light)'
+                      }}
+                    >
+                      <p className="text-sm" style={{ color: 'var(--accent-secondary)' }}>
                         Please select an organization first, then location, then service to configure provider availability.
                       </p>
                     </div>
                   )}
                   
                   {selectedOrganization && !selectedService && (
-                    <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
-                      <p className="text-sm text-amber-800 dark:text-amber-400">
+                    <div 
+                      className="mb-6 p-4 rounded-lg backdrop-blur-sm"
+                      style={{
+                        backgroundColor: 'var(--accent-secondary-light)',
+                        border: '1px solid var(--accent-secondary-light)'
+                      }}
+                    >
+                      <p className="text-sm" style={{ color: 'var(--accent-secondary)' }}>
                         Please select a service to configure provider availability. Provider availability is contextual and must be set for a specific service.
                       </p>
                     </div>
@@ -766,13 +914,13 @@ const AvailabilitySettings = () => {
                   {selectedService && serviceProviders.length > 0 && (
                     <div className="mb-4">
                       <div className="flex items-center justify-between mb-2">
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                          Select Provider <span className="text-red-500">*</span>
+                        <label className="block text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+                          Select Provider <span style={{ color: 'var(--accent-secondary)' }}>*</span>
                         </label>
                         {selectedProvider && (
-                          <Button
-                            size="sm"
-                            variant="outline"
+                          <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
                             onClick={async () => {
                               if (!confirm(`Are you sure you want to unlink this provider from the service?`)) {
                                 return;
@@ -791,16 +939,26 @@ const AvailabilitySettings = () => {
                                 });
                               }
                             }}
-                            className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
+                            className="px-3 py-1.5 rounded-lg text-sm font-medium transition-colors"
+                            style={{
+                              backgroundColor: 'var(--border-subtle)',
+                              border: '1px solid var(--accent-secondary)',
+                              color: 'var(--accent-secondary)'
+                            }}
                           >
                             Unlink Provider
-                          </Button>
+                          </motion.button>
                         )}
                       </div>
                       <select
                         value={selectedProvider || ''}
                         onChange={(e) => setSelectedProvider(e.target.value || null)}
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white h-[42px]"
+                        className="w-full px-3 py-2 rounded-lg transition-all h-[42px]"
+                        style={{
+                          backgroundColor: 'var(--bg-secondary)',
+                          border: '1px solid var(--border-default)',
+                          color: 'var(--text-primary)'
+                        }}
                       >
                         <option value="">Select a provider...</option>
                         {serviceProviders.map((provider) => (
@@ -810,44 +968,62 @@ const AvailabilitySettings = () => {
                           </option>
                         ))}
                       </select>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
                         {serviceProviders.length} provider{serviceProviders.length !== 1 ? 's' : ''} linked to this service
                       </p>
                     </div>
                   )}
 
                   {selectedService && serviceProviders.length === 0 && (
-                    <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+                    <div 
+                      className="mb-6 p-4 rounded-lg backdrop-blur-sm"
+                      style={{
+                        backgroundColor: 'var(--accent-secondary-light)',
+                        border: '1px solid var(--accent-secondary-light)'
+                      }}
+                    >
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1">
-                          <p className="text-sm text-amber-800 dark:text-amber-400 mb-2">
+                          <p className="text-sm mb-2" style={{ color: 'var(--accent-secondary)' }}>
                             No providers linked to this service.
                           </p>
-                          <p className="text-xs text-amber-700 dark:text-amber-500">
+                          <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
                             Link providers to this service to configure their availability, or edit the service directly to manage providers.
                           </p>
                         </div>
                         <div className="flex gap-2">
                           {selectedOrganization && (
-                            <Button
-                              size="sm"
+                            <motion.button
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
                               onClick={() => setLinkProviderModalOpen(true)}
-                              className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                              className="px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                              style={{
+                                background: 'var(--gradient-primary-from)',
+                                backgroundImage: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
+                                color: 'white'
+                              }}
                             >
-                              <UserPlus className="w-4 h-4 mr-2" />
+                              <UserPlus className="w-4 h-4" />
                               Link Providers
-                            </Button>
+                            </motion.button>
                           )}
-                          <Button
-                            size="sm"
-                            variant="outline"
+                          <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
                             onClick={() => {
                               navigate(`/settings/services/${selectedService}`);
                             }}
+                            className="px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                            style={{
+                              backgroundColor: 'var(--border-subtle)',
+                              border: '1px solid var(--border-default)',
+                              color: 'var(--text-primary)'
+                            }}
                           >
-                            <ExternalLink className="w-4 h-4 mr-2" />
+                            <ExternalLink className="w-4 h-4" />
                             Edit Service
-                          </Button>
+                          </motion.button>
                         </div>
                       </div>
                     </div>
@@ -919,15 +1095,17 @@ const AvailabilitySettings = () => {
               {((activeTab === 'location' && !selectedLocation) ||
                 (activeTab === 'service' && !selectedService)) && (
                 <div className="text-center py-12">
-                  <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600 dark:text-gray-400">
+                  <div className="inline-flex p-3 rounded-xl bg-gradient-primary mb-4">
+                    <AlertCircle className="w-8 h-8 text-white" />
+                  </div>
+                  <p style={{ color: 'var(--text-muted)' }}>
                     {activeTab === 'location'
                       ? 'Please select a location to edit availability'
                       : 'Please select a service to edit availability'}
                   </p>
                 </div>
               )}
-            </Card>
+            </div>
           )}
         </motion.div>
       </main>
@@ -936,33 +1114,42 @@ const AvailabilitySettings = () => {
       {((activeTab === 'location' && selectedLocation) ||
         (activeTab === 'service' && selectedService) ||
         (activeTab === 'provider' && selectedService && selectedProvider && providerInfo)) && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg border-t border-gray-200 dark:border-gray-800 shadow-lg z-50">
+        <div 
+          className="fixed bottom-0 left-0 right-0 backdrop-blur-xl border-t shadow-lg z-50"
+          style={{
+            backgroundColor: 'color-mix(in srgb, var(--bg-primary) 90%, transparent)',
+            borderColor: 'var(--border-subtle)'
+          }}
+        >
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center justify-between">
-              <div className="text-sm text-gray-600 dark:text-gray-400">
+              <div className="text-sm" style={{ color: 'var(--text-muted)' }}>
                 {activeTab === 'location' && 'Location availability changes'}
                 {activeTab === 'service' && 'Service availability changes'}
                 {activeTab === 'provider' && 'Provider availability changes'}
               </div>
-              <Button 
-                size="lg" 
-                style={{ background: 'var(--brand-primary)' }} 
-                className="text-white px-8"
+              <motion.button
+                whileHover={saving || savingAvailability ? {} : { scale: 1.02 }}
+                whileTap={saving || savingAvailability ? {} : { scale: 0.98 }}
                 onClick={handleSave}
                 disabled={saving || savingAvailability}
+                className="relative group flex items-center gap-2 px-8 py-3 rounded-xl text-base font-medium text-white overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{
+                  background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))'
+                }}
               >
                 {saving || savingAvailability ? (
                   <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Saving...
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <span>Saving...</span>
                   </>
                 ) : (
                   <>
-                    <Save className="w-4 h-4 mr-2" />
-                    Save Changes
+                    <Save className="w-5 h-5" />
+                    <span>Save Changes</span>
                   </>
                 )}
-              </Button>
+              </motion.button>
             </div>
           </div>
         </div>
@@ -987,6 +1174,7 @@ const AvailabilitySettings = () => {
           }}
         />
       )}
+      </div>
     </div>
   );
 };

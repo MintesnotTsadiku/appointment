@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, Sparkles } from 'lucide-react';
-import { Button } from '@/components/button';
 import { useTranslation } from '@/lib/i18n';
 
 const FinalCTA = () => {
@@ -9,7 +8,12 @@ const FinalCTA = () => {
   return (
     <section className="relative py-20 overflow-hidden">
       {/* Animated Background */}
-      <div className="absolute inset-0 bg-gradient-hero">
+      <div 
+        className="absolute inset-0"
+        style={{ 
+          background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))'
+        }}
+      >
         {/* Animated Shapes */}
         <motion.div
           animate={{
@@ -91,15 +95,23 @@ const FinalCTA = () => {
             transition={{ duration: 0.5, delay: 0.5 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                size="lg"
-                className="bg-white text-brand-indigo hover:bg-gray-100 shadow-2xl text-lg px-10 py-6 group"
-              >
-                <span>{t('finalCTA.primaryButton')}</span>
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </motion.div>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-white shadow-2xl text-lg px-10 py-6 rounded-xl font-semibold group flex items-center gap-2"
+              style={{ 
+                color: 'var(--accent-primary)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = 'var(--bg-elevated)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'white';
+              }}
+            >
+              <span>{t('finalCTA.primaryButton')}</span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </motion.button>
           </motion.div>
 
           {/* Trust Indicators */}

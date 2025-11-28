@@ -8,6 +8,23 @@ from frappe_appointment.scheduler.availability import validate_availability_hier
 
 
 class Service(Document):
+	def validate(self):
+		"""Validate service data including duplicate name check."""
+		# Check for duplicate service names within the same organization
+		if self.organization and self.service_name:
+			existing_service = frappe.db.get_value(
+				"Service",
+				{
+					"service_name": self.service_name,
+					"organization": self.organization,
+					"is_active": 1,
+					"name": ["!=", self.name]  # Exclude current record when updating
+				},
+				"name"
+			)
+			if existing_service:
+				frappe.throw(_("A service with the name '{0}' already exists for this organization. Please use a different name or edit the existing service.").format(self.service_name))
+	
 	def before_save(self):
 		"""Validate availability hierarchy if custom hours are set."""
 		if self.opening_hours and not self.use_default_hours:

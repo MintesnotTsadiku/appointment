@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Sparkles } from 'lucide-react';
-import { Button } from '@/components/button';
 import { useTranslation } from '@/lib/i18n';
 import { fadeInUp, staggerContainer, scaleIn } from '@/lib/animations';
 
@@ -87,7 +86,7 @@ const Pricing = () => {
   ];
 
   return (
-    <section id="pricing" className="py-20 bg-white dark:bg-gray-900">
+    <section id="pricing" className="py-20" style={{ backgroundColor: 'var(--bg-primary)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
@@ -97,35 +96,41 @@ const Pricing = () => {
           transition={{ duration: 0.5 }}
           className="text-center max-w-3xl mx-auto mb-12"
         >
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-gray-900 dark:text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold mb-4" style={{ color: 'var(--text-primary)' }}>
             {t('pricing.title')}
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
+          <p className="text-lg mb-8" style={{ color: 'var(--text-secondary)' }}>
             {t('pricing.subtitle')}
           </p>
 
           {/* Billing Toggle */}
-          <div className="inline-flex items-center space-x-4 p-1 bg-gray-100 dark:bg-gray-800 rounded-full">
+          <div 
+            className="inline-flex items-center space-x-4 p-1 rounded-full backdrop-blur-sm"
+            style={{ backgroundColor: 'var(--bg-elevated)' }}
+          >
             <button
               onClick={() => setIsYearly(false)}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
-                !isYearly
-                  ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
-                  : 'text-gray-600 dark:text-gray-400'
-              }`}
+              className="px-6 py-2 rounded-full text-sm font-medium transition-all"
+              style={{ 
+                backgroundColor: !isYearly ? 'var(--bg-primary)' : 'transparent',
+                color: !isYearly ? 'var(--text-primary)' : 'var(--text-muted)'
+              }}
             >
               {t('pricing.monthly')}
             </button>
             <button
               onClick={() => setIsYearly(true)}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-all relative ${
-                isYearly
-                  ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
-                  : 'text-gray-600 dark:text-gray-400'
-              }`}
+              className="px-6 py-2 rounded-full text-sm font-medium transition-all relative"
+              style={{ 
+                backgroundColor: isYearly ? 'var(--bg-primary)' : 'transparent',
+                color: isYearly ? 'var(--text-primary)' : 'var(--text-muted)'
+              }}
             >
               {t('pricing.yearly')}
-              <span className="absolute -top-2 -right-2 px-2 py-0.5 bg-brand-emerald text-white text-xs rounded-full">
+              <span 
+                className="absolute -top-2 -right-2 px-2 py-0.5 text-white text-xs rounded-full"
+                style={{ backgroundColor: 'var(--accent-success)' }}
+              >
                 {t('pricing.save20')}
               </span>
             </button>
@@ -150,7 +155,12 @@ const Pricing = () => {
               {/* Popular Badge */}
               {tier.popular && (
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
-                  <div className="flex items-center space-x-1 px-4 py-1 bg-gradient-hero rounded-full shadow-lg">
+                  <div 
+                    className="flex items-center space-x-1 px-4 py-1 rounded-full shadow-lg"
+                    style={{ 
+                      background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))'
+                    }}
+                  >
                     <Sparkles className="w-4 h-4 text-white" />
                     <span className="text-sm font-bold text-white">
                       {t('pricing.popular')}
@@ -161,17 +171,17 @@ const Pricing = () => {
 
               {/* Card */}
               <div
-                className={`relative h-full p-8 rounded-2xl border-2 transition-all duration-300 ${
-                  tier.popular
-                    ? 'border-brand-indigo bg-gradient-to-b from-brand-indigo/5 to-transparent dark:from-brand-indigo/10'
-                    : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800'
-                } hover:border-brand-indigo dark:hover:border-brand-indigo shadow-lg hover:shadow-2xl`}
+                className="relative h-full p-8 rounded-2xl border-2 transition-all duration-300 backdrop-blur-sm shadow-lg hover:shadow-2xl"
+                style={{ 
+                  backgroundColor: tier.popular ? 'var(--bg-elevated)' : 'var(--bg-elevated)',
+                  borderColor: tier.popular ? 'var(--accent-primary)' : 'var(--border-default)'
+                }}
               >
                 {/* Tier Name */}
-                <h3 className="text-xl font-heading font-bold text-gray-900 dark:text-white mb-2">
+                <h3 className="text-xl font-heading font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
                   {tier.name}
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+                <p className="text-sm mb-6" style={{ color: 'var(--text-muted)' }}>
                   {tier.description}
                 </p>
 
@@ -188,21 +198,21 @@ const Pricing = () => {
                       {tier.price !== null ? (
                         <>
                           <div className="flex items-baseline">
-                            <span className="text-4xl font-bold text-gray-900 dark:text-white">
+                            <span className="text-4xl font-bold" style={{ color: 'var(--text-primary)' }}>
                               {tier.priceLabel}
                             </span>
-                            <span className="ml-2 text-gray-600 dark:text-gray-400">
+                            <span className="ml-2" style={{ color: 'var(--text-muted)' }}>
                               /{tier.priceUnit}
                             </span>
                           </div>
                           {isYearly && (
-                            <p className="text-sm text-brand-emerald mt-1">
+                            <p className="text-sm mt-1" style={{ color: 'var(--accent-success)' }}>
                               {t('pricing.saveAmount')}
                             </p>
                           )}
                         </>
                       ) : (
-                        <div className="text-3xl font-bold text-gray-900 dark:text-white">
+                        <div className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>
                           {tier.priceLabel}
                         </div>
                       )}
@@ -211,15 +221,20 @@ const Pricing = () => {
                 </div>
 
                 {/* CTA Button */}
-                <Button
-                  className={`w-full mb-6 ${
-                    tier.popular
-                      ? 'bg-gradient-hero text-white hover:opacity-90'
-                      : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600'
-                  }`}
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full mb-6 px-6 py-3 rounded-xl font-medium transition-all"
+                  style={{ 
+                    background: tier.popular
+                      ? 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))'
+                      : 'var(--bg-secondary)',
+                    color: tier.popular ? 'white' : 'var(--text-primary)',
+                    border: tier.popular ? 'none' : '1px solid var(--border-default)'
+                  }}
                 >
                   {tier.cta}
-                </Button>
+                </motion.button>
 
                 {/* Features */}
                 <ul className="space-y-3">
@@ -232,8 +247,8 @@ const Pricing = () => {
                       transition={{ delay: fIndex * 0.05 }}
                       className="flex items-start space-x-3"
                     >
-                      <Check className="w-5 h-5 text-brand-emerald flex-shrink-0 mt-0.5" />
-                      <span className="text-sm text-gray-700 dark:text-gray-300">
+                      <Check className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: 'var(--accent-success)' }} />
+                      <span className="text-sm" style={{ color: 'var(--text-primary)' }}>
                         {feature}
                       </span>
                     </motion.li>
@@ -250,7 +265,8 @@ const Pricing = () => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.5 }}
-          className="text-center text-sm text-gray-600 dark:text-gray-400 mt-12"
+          className="text-center text-sm mt-12"
+          style={{ color: 'var(--text-muted)' }}
         >
           {t('pricing.bottomNote')}
         </motion.p>

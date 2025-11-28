@@ -11,14 +11,15 @@ import {
   LogOut,
   Camera,
   Edit2,
-  X
+  X,
+  FileText
 } from 'lucide-react';
 import { Button } from '@/components/button';
 import { Card } from '@/components/card';
 import { Input } from '@/components/input';
 import { Label } from '@/components/label';
 import { useFrappeGetCall, useFrappePostCall, useFrappeAuth } from 'frappe-react-sdk';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Select,
   SelectContent,
@@ -26,12 +27,32 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/select';
+import { PolicyManager } from './components/PolicyManager';
+
+type TabType = 'profile' | 'policies';
 
 const Profile = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { currentUser, logout } = useFrappeAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  
+  // Initialize active tab from URL parameter or default to 'profile'
+  const tabParam = searchParams.get('tab');
+  const [activeTab, setActiveTab] = useState<TabType>(
+    (tabParam === 'policies' ? 'policies' : 'profile') as TabType
+  );
+  
+  // Update tab when URL parameter changes
+  useEffect(() => {
+    const tabParam = searchParams.get('tab');
+    if (tabParam === 'policies') {
+      setActiveTab('policies');
+    } else if (tabParam === null || tabParam === 'profile') {
+      setActiveTab('profile');
+    }
+  }, [searchParams]);
   
   // Fetch user data
   const { data: userData, mutate: refetchUser } = useFrappeGetCall<{ 
@@ -46,8 +67,8 @@ const Profile = () => {
     'user-info'
   );
 
-  // Fetch provider data
-  const { data: providerData, mutate: refetchProvider } = useFrappeGetCall<{
+  // Fetch provider data (may fail for organization owners)
+  const { data: providerData, mutate: refetchProvider, error: providerError } = useFrappeGetCall<{
     message: {
       name: string;
       provider_name: string;
@@ -67,6 +88,34 @@ const Profile = () => {
     undefined,
     'provider-profile'
   );
+
+  // Fetch organization data for organization owners
+  const { data: hierarchyData } = useFrappeGetCall<{
+    message: {
+      user_type: 'organization_owner' | 'organization_member' | 'individual' | 'none';
+      organization?: {
+        name: string;
+        organization_name: string;
+      };
+      organizations?: Array<{
+        name: string;
+        organization_name: string;
+      }>;
+    }
+  }>(
+    'frappe_appointment.api.manage.get_management_hierarchy',
+    undefined,
+    'management-hierarchy'
+  );
+
+  // Determine user type and entity ID
+  const isOrganizationOwner = hierarchyData?.message?.user_type === 'organization_owner' || 
+                               hierarchyData?.message?.user_type === 'organization_member';
+  const organization = hierarchyData?.message?.organization || 
+                       (hierarchyData?.message?.organizations && hierarchyData.message.organizations[0]);
+  const organizationId = organization?.name;
+  const isProvider = !providerError && providerData?.message?.name;
+  const providerId = providerData?.message?.name;
 
   const { call: updateProfile } = useFrappePostCall('frappe_appointment.onboarding.update_provider_profile');
 
@@ -146,49 +195,156 @@ const Profile = () => {
   const userName = userData?.message?.full_name || currentUser || 'User';
   const userEmail = userData?.message?.email || currentUser || '';
   const profilePhoto = providerData?.message?.profile_photo || userData?.message?.user_image;
+  const orgName = organization?.organization_name;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-gray-900">
-      {/* Header */}
-      <header className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-800 sticky top-0 z-10">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => navigate('/home')}
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </Button>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                  <User className="w-6 h-6" />
-                  Profile Settings
-                </h1>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                  Manage your profile information
-                </p>
+    <div 
+      className="min-h-screen text-[var(--text-primary)]"
+      style={{ backgroundColor: 'var(--bg-primary)' }}
+    >
+      {/* Ambient background effects */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div 
+          className="absolute -top-40 -right-40 w-96 h-96 rounded-full blur-[120px]"
+          style={{ backgroundColor: 'var(--glow-primary)' }}
+        />
+        <div 
+          className="absolute top-1/3 -left-40 w-96 h-96 rounded-full blur-[120px]"
+          style={{ backgroundColor: 'var(--glow-secondary)' }}
+        />
+        <div 
+          className="absolute -bottom-40 right-1/4 w-96 h-96 rounded-full blur-[120px]"
+          style={{ backgroundColor: 'var(--glow-success)' }}
+        />
+      </div>
+
+      <div className="relative z-10">
+        {/* Header */}
+        <header 
+          className="sticky top-0 z-50 backdrop-blur-xl"
+          style={{ 
+            backgroundColor: 'color-mix(in srgb, var(--bg-primary) 80%, transparent)',
+            borderBottom: '1px solid var(--border-subtle)'
+          }}
+        >
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => navigate('/home')}
+                  className="p-2 rounded-lg transition-all"
+                  style={{ 
+                    backgroundColor: 'var(--border-subtle)',
+                    border: '1px solid var(--border-default)',
+                    color: 'var(--text-muted)'
+                  }}
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </motion.button>
+                <div className="flex items-center gap-3">
+                  <div className="relative">
+                    <div 
+                      className="absolute inset-0 rounded-xl blur-lg opacity-50 bg-gradient-primary"
+                    />
+                    <div className="relative bg-gradient-primary p-2.5 rounded-xl">
+                      <User className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+                  <div>
+                    <h1 className="text-xl lg:text-2xl font-bold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+                      Profile Settings
+                      <span 
+                        className="px-2 py-0.5 text-[10px] font-semibold rounded-full"
+                        style={{ 
+                          background: 'var(--accent-primary-light)',
+                          color: 'var(--accent-primary)',
+                          border: '1px solid var(--accent-primary-light)'
+                        }}
+                      >
+                        PRO
+                      </span>
+                    </h1>
+                    <p className="text-xs lg:text-sm mt-1" style={{ color: 'var(--text-subtle)' }}>
+                      Manage your profile information
+                    </p>
+                  </div>
+                </div>
               </div>
+              {!isEditing && (
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setIsEditing(true)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all"
+                  style={{ 
+                    backgroundColor: 'var(--border-subtle)',
+                    border: '1px solid var(--border-default)',
+                    color: 'var(--text-primary)'
+                  }}
+                >
+                  <Edit2 className="w-4 h-4" />
+                  Edit Profile
+                </motion.button>
+              )}
             </div>
-            {!isEditing && (
-              <Button
-                onClick={() => setIsEditing(true)}
-                variant="outline"
-                className="flex items-center gap-2"
-              >
-                <Edit2 className="w-4 h-4" />
-                Edit Profile
-              </Button>
-            )}
           </div>
-        </div>
-      </header>
+        </header>
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Tabs */}
+        <div className="mb-6 border-b border-gray-200 dark:border-gray-700">
+          <nav className="flex space-x-8">
+            <button
+              onClick={() => setActiveTab('profile')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                activeTab === 'profile'
+                  ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <User className="w-4 h-4" />
+                Profile
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab('policies')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                activeTab === 'policies'
+                  ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <FileText className="w-4 h-4" />
+                Policies
+              </div>
+            </button>
+          </nav>
+        </div>
+
         <div className="space-y-6">
-          {/* Profile Photo Section */}
+          {activeTab === 'profile' && (
+            <>
+          {/* Show message for organization owners without provider profile */}
+          {isOrganizationOwner && !isProvider && (
+            <Card className="p-6 mb-6">
+              <div className="text-center py-4">
+                <p className="text-gray-600 dark:text-gray-400">
+                  You are managing <strong>{orgName}</strong> as an organization owner.
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
+                  Profile settings are available for individual providers. Use the Policies tab to manage organization policies.
+                </p>
+              </div>
+            </Card>
+          )}
+
+          {/* Profile Photo Section - Only show if provider data exists */}
+          {isProvider && (
           <Card className="p-6">
             <div className="flex items-center space-x-6">
               <div className="relative">
@@ -217,16 +373,18 @@ const Profile = () => {
                   <Mail className="w-4 h-4" />
                   {userEmail}
                 </p>
-                {providerData?.message?.organization && (
+                {(providerData?.message?.organization || orgName) && (
                   <p className="text-sm text-indigo-600 dark:text-indigo-400 mt-2">
-                    Organization: {providerData.message.organization_name || providerData.message.organization}
+                    Organization: {orgName || providerData?.message?.organization_name || providerData?.message?.organization}
                   </p>
                 )}
               </div>
             </div>
           </Card>
+          )}
 
-          {/* Profile Information */}
+          {/* Profile Information - Only show if provider data exists */}
+          {isProvider && (
           <Card className="p-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
               Profile Information
@@ -431,6 +589,7 @@ const Profile = () => {
               </div>
             )}
           </Card>
+          )}
 
           {/* Danger Zone */}
           <Card className="p-6 border-red-200 dark:border-red-900">
@@ -454,6 +613,34 @@ const Profile = () => {
               </Button>
             </div>
           </Card>
+            </>
+          )}
+
+          {activeTab === 'policies' && (
+            <>
+              {isProvider && providerId && (
+                <PolicyManager
+                  userType="provider"
+                  entityId={providerId}
+                />
+              )}
+              {isOrganizationOwner && organizationId && (
+                <PolicyManager
+                  userType="organization"
+                  entityId={organizationId}
+                />
+              )}
+              {!isProvider && !isOrganizationOwner && (
+                <Card className="p-6">
+                  <div className="text-center py-8">
+                    <p className="text-gray-500 dark:text-gray-400">
+                      Please complete onboarding to manage policies.
+                    </p>
+                  </div>
+                </Card>
+              )}
+            </>
+          )}
         </div>
       </main>
     </div>

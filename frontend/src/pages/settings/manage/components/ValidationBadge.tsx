@@ -21,7 +21,7 @@ export const ValidationBadge = ({ status, size = 'md' }: ValidationBadgeProps) =
 
   if (status === 'complete') {
     return (
-      <span className="inline-flex items-center gap-1 text-green-600 dark:text-green-400" title="Complete">
+      <span className="inline-flex items-center gap-1" style={{ color: 'var(--accent-success)' }} title="Complete">
         <CheckCircle2 className={iconSize} />
         <span className="text-sm font-medium">Complete</span>
       </span>
@@ -30,7 +30,7 @@ export const ValidationBadge = ({ status, size = 'md' }: ValidationBadgeProps) =
 
   if (status === 'warning') {
     return (
-      <span className="inline-flex items-center gap-1 text-yellow-600 dark:text-yellow-400" title="Warning">
+      <span className="inline-flex items-center gap-1" style={{ color: 'var(--accent-secondary)' }} title="Warning">
         <AlertTriangle className={iconSize} />
         <span className="text-sm font-medium">Warning</span>
       </span>
@@ -38,12 +38,15 @@ export const ValidationBadge = ({ status, size = 'md' }: ValidationBadgeProps) =
   }
 
   return (
-    <span className="inline-flex items-center gap-1 text-red-600 dark:text-red-400" title="Error">
+    <span className="inline-flex items-center gap-1" style={{ color: 'var(--status-cancelled)' }} title="Error">
       <XCircle className={iconSize} />
       <span className="text-sm font-medium">Error</span>
     </span>
   );
 };
+
+
+
 
 
 
