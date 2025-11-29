@@ -27,14 +27,14 @@ ETHIOPIAN_LAST_NAMES = [
 ]
 
 ADDIS_LOCATIONS = [
-    "Bole Road, Near Edna Mall",
-    "Merkato, CMC Area",
-    "Piassa, Churchill Avenue",
-    "4 Kilo, Near ECA",
-    "Kazanchis, Business District",
-    "Sarbet, Near Megenagna",
-    "Arat Kilo, University Area",
-    "Mexico Square, Atlas Area"
+    ("Bole Road, Near Edna Mall", "Bole Road, Near Edna Mall", "Addis Ababa"),
+    ("Merkato, CMC Area", "CMC Area, Merkato", "Addis Ababa"),
+    ("Piassa, Churchill Avenue", "Churchill Avenue, Piassa", "Addis Ababa"),
+    ("4 Kilo, Near ECA", "Near ECA, 4 Kilo", "Addis Ababa"),
+    ("Kazanchis, Business District", "Business District, Kazanchis", "Addis Ababa"),
+    ("Sarbet, Near Megenagna", "Near Megenagna, Sarbet", "Addis Ababa"),
+    ("Arat Kilo, University Area", "University Area, Arat Kilo", "Addis Ababa"),
+    ("Mexico Square, Atlas Area", "Atlas Area, Mexico Square", "Addis Ababa")
 ]
 
 ORGANIZATION_TYPES = {
@@ -155,6 +155,11 @@ def attach_image_from_url(doc, fieldname, image_url):
         import requests
         from frappe.utils.file_manager import save_file
         
+        # CRITICAL: Reload document fresh from database to avoid link validation errors
+        # This ensures we have the latest version without any stale child table references
+        frappe.db.commit()  # Commit any pending changes first
+        doc.reload()
+        
         response = requests.get(image_url, timeout=10)
         if response.status_code == 200:
             file_doc = save_file(
@@ -165,6 +170,7 @@ def attach_image_from_url(doc, fieldname, image_url):
                 folder="Home/Attachments",
                 is_private=0
             )
+            # Set the field and save - reload ensures we don't have invalid child table references
             setattr(doc, fieldname, file_doc.file_url)
             doc.save(ignore_permissions=True)
     except Exception as e:
@@ -233,10 +239,17 @@ def generate_organizations(count=3):
             org.require_payment = 0
             
             mark_as_demo(org)
-            org.insert(ignore_permissions=True)
             
-            # Add profile photo using placeholder image (after insert and commit to avoid concurrency issues)
-            frappe.db.commit()  # Commit before attaching image to avoid concurrency issues
+            # Set flag to skip booking URL sync during demo data generation
+            # This prevents on_update hook from trying to sync URLs before services/providers exist
+            frappe.flags.skip_booking_url_sync = True
+            
+            org.insert(ignore_permissions=True)
+            frappe.db.commit()
+            
+            # Add profile photo using placeholder image
+            # IMPORTANT: Do this BEFORE any other operations that might modify the document
+            # and reload the document fresh to avoid link validation errors
             photo_urls = [
                 "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=400&h=400&fit=crop",  # Medical
                 "https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=400&h=400&fit=crop",  # Dental
@@ -245,7 +258,8 @@ def generate_organizations(count=3):
             ]
             if hasattr(org, 'logo'):
                 try:
-                    # Reload org to get latest version before attaching image
+                    # Reload org fresh from database to avoid any stale references
+                    frappe.db.commit()  # Ensure all pending changes are committed
                     org.reload()
                     attach_image_from_url(org, 'logo', photo_urls[i % len(photo_urls)])
                     frappe.db.commit()
@@ -254,19 +268,15 @@ def generate_organizations(count=3):
                     frappe.log_error(str(e), "Demo Data: Image Attachment Error")
                     pass
             
+            # Clear the flag after image attachment
+            frappe.flags.skip_booking_url_sync = False
+            
             created.append(org.name)
             org_names.append(org.name)
             frappe.db.commit()
             
-            # Sync booking URLs for this organization (after commit to ensure document is saved)
-            try:
-                from frappe_appointment.scheduler.booking_url_manager import sync_booking_urls_for_organization
-                # Reload document before syncing to avoid concurrency issues
-                frappe.db.commit()  # Ensure commit before reload
-                sync_booking_urls_for_organization(org.name)
-                frappe.db.commit()
-            except Exception as e:
-                frappe.log_error(str(e), "Demo Data: Sync Organization Booking URLs Error")
+            # NOTE: Do NOT sync booking URLs here - they reference services/providers that don't exist yet
+            # Booking URLs will be synced later in generate_all_demo_data() after all services/providers are created
         
         message = f"✓ Created {len(created)} organizations:\n" + "\n".join(f"  • {name}" for name in created)
         
@@ -321,37 +331,63 @@ def generate_all_demo_data():
         results["services"] = service_result.get("services", [])
         frappe.db.commit()
         
+        # Step 3.5: Link providers to services (ensure all services have providers)
+        frappe.msgprint("Step 3.5: Linking providers to services...", alert=True)
+        link_result = link_providers_to_services()
+        frappe.db.commit()
+        
         # Step 4: Generate Locations
         frappe.msgprint("Step 4: Generating locations...", alert=True)
         location_result = generate_locations(6)  # 2 per org
         results["locations"] = location_result.get("locations", [])
         frappe.db.commit()
         
-        # Step 5: Generate EventTypes and Appointments
-        frappe.msgprint("Step 5: Generating event types and appointments...", alert=True)
-        appointment_result = generate_appointments(10, days_back=14)  # Create EventTypes + appointments
-        results["event_types"] = appointment_result.get("event_types", [])
+        # Step 4.5: Fix any locations with missing addresses
+        frappe.msgprint("Step 4.5: Fixing location addresses...", alert=True)
+        fix_address_result = fix_location_addresses()
+        frappe.db.commit()
+        
+        # Step 5: Generate EventTypes for ALL services and providers
+        frappe.msgprint("Step 5: Generating EventTypes for all services and providers...", alert=True)
+        eventtype_result = generate_event_types()
+        results["event_types"] = eventtype_result.get("event_types", [])
+        frappe.db.commit()
+        
+        # Step 6: Generate Appointments
+        frappe.msgprint("Step 6: Generating appointments...", alert=True)
+        appointment_result = generate_appointments(10, days_back=14)  # Create appointments using existing EventTypes
         results["appointments"] = appointment_result.get("appointments", 0)
         results["booking_events"] = appointment_result.get("booking_events", 0)
         frappe.db.commit()
         
-        # Step 6: Sync ALL booking URLs
-        frappe.msgprint("Step 6: Syncing booking URLs...", alert=True)
+        # Step 6.5: Add Available Durations to all providers
+        frappe.msgprint("Step 6.5: Adding available durations to providers...", alert=True)
+        duration_result = add_available_durations_to_providers()
+        frappe.db.commit()
+        
+        # Step 7: Sync ALL booking URLs (CRITICAL - ensures all have booking URLs)
+        frappe.msgprint("Step 7: Syncing booking URLs for all providers and organizations...", alert=True)
         from frappe_appointment.scheduler.booking_url_manager import sync_booking_urls_for_provider, sync_booking_urls_for_organization
         
-        # Sync all providers
+        # Sync all providers (both org-linked and solo)
         all_providers = frappe.get_all("Provider", pluck="name")
+        providers_synced = 0
         for provider_name in all_providers:
             try:
                 sync_booking_urls_for_provider(provider_name)
+                providers_synced += 1
+                frappe.db.commit()
             except Exception as e:
                 frappe.log_error(str(e), f"Demo Data: Sync Provider {provider_name} Booking URLs Error")
         
         # Sync all organizations
         all_orgs = frappe.get_all("Organization", pluck="name")
+        orgs_synced = 0
         for org_name in all_orgs:
             try:
                 sync_booking_urls_for_organization(org_name)
+                orgs_synced += 1
+                frappe.db.commit()
             except Exception as e:
                 frappe.log_error(str(e), f"Demo Data: Sync Organization {org_name} Booking URLs Error")
         
@@ -363,18 +399,24 @@ def generate_all_demo_data():
         providers_with_urls = 0
         
         for org_name in all_orgs:
-            org_doc = frappe.get_doc("Organization", org_name)
-            if hasattr(org_doc, 'booking_urls') and org_doc.booking_urls:
-                orgs_with_urls += 1
+            try:
+                org_doc = frappe.get_doc("Organization", org_name)
+                if hasattr(org_doc, 'booking_urls') and org_doc.booking_urls:
+                    orgs_with_urls += 1
+            except:
+                pass
         
         for provider_name in all_providers:
-            provider = frappe.get_doc("Provider", provider_name)
-            if provider.email:
-                availability = frappe.db.get_value("User Appointment Availability", {"user": provider.email}, "name")
-                if availability:
-                    avail_doc = frappe.get_doc("User Appointment Availability", availability)
-                    if hasattr(avail_doc, 'booking_urls') and avail_doc.booking_urls:
-                        providers_with_urls += 1
+            try:
+                provider = frappe.get_doc("Provider", provider_name)
+                if provider.email:
+                    availability = frappe.db.get_value("User Appointment Availability", {"user": provider.email}, "name")
+                    if availability:
+                        avail_doc = frappe.get_doc("User Appointment Availability", availability)
+                        if hasattr(avail_doc, 'booking_urls') and avail_doc.booking_urls:
+                            providers_with_urls += 1
+            except:
+                pass
         
         message = f"""✓ Demo data generation complete!
 
@@ -382,7 +424,7 @@ Organizations: {len(all_orgs)} ({orgs_with_urls} with booking URLs)
 Providers: {len(all_providers)} ({providers_with_urls} with booking URLs)
 Services: {len(results['services'])}
 Locations: {len(results['locations'])}
-EventTypes: {results['event_types']}
+EventTypes: {len(results.get('event_types', []))}
 Appointments: {results['appointments']}
 Booking Events: {results['booking_events']}
 
@@ -481,6 +523,47 @@ def generate_providers(count=5):
                 provider.user_appointment_availability = availability.name
                 provider.save(ignore_permissions=True)
                 
+                # Add Available Durations and Time Slots immediately
+                try:
+                    availability_doc = frappe.get_doc("User Appointment Availability", availability.name)
+                    needs_update = False
+                    
+                    # Days to add (Monday to Saturday)
+                    weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+                    default_start_time = "09:00:00"
+                    default_end_time = "18:00:00"
+                    
+                    # Add default duration if none exists
+                    if not availability_doc.available_durations or len(availability_doc.available_durations) == 0:
+                        availability_doc.append("available_durations", {
+                            "title": "30 Minute Meeting",
+                            "duration": 30 * 60,  # 30 minutes in seconds
+                            "allow_rescheduling": 1,
+                            "availability_window": 30,  # 30 days
+                            "minimum_notice_before_event": 2  # 2 hours
+                        })
+                        needs_update = True
+                    
+                    # Add time slots (Monday to Saturday) if missing
+                    existing_days = set()
+                    if availability_doc.appointment_time_slot:
+                        existing_days = {slot.day for slot in availability_doc.appointment_time_slot}
+                    
+                    for day in weekdays:
+                        if day not in existing_days:
+                            availability_doc.append("appointment_time_slot", {
+                                "day": day,
+                                "start_time": default_start_time,
+                                "end_time": default_end_time
+                            })
+                            needs_update = True
+                    
+                    if needs_update:
+                        availability_doc.save(ignore_permissions=True)
+                        frappe.db.commit()
+                except Exception as e:
+                    frappe.log_error(str(e), "Demo Data: Add Durations/Time Slots Error")
+                
                 created.append(provider.name)
                 provider_index += 1
                 frappe.db.commit()
@@ -542,6 +625,47 @@ def generate_providers(count=5):
             provider.user_appointment_availability = availability.name
             provider.save(ignore_permissions=True)
             
+            # Add Available Durations and Time Slots immediately
+            try:
+                availability_doc = frappe.get_doc("User Appointment Availability", availability.name)
+                needs_update = False
+                
+                # Days to add (Monday to Saturday)
+                weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+                default_start_time = "09:00:00"
+                default_end_time = "18:00:00"
+                
+                # Add default duration if none exists
+                if not availability_doc.available_durations or len(availability_doc.available_durations) == 0:
+                    availability_doc.append("available_durations", {
+                        "title": "30 Minute Meeting",
+                        "duration": 30 * 60,  # 30 minutes in seconds
+                        "allow_rescheduling": 1,
+                        "availability_window": 30,  # 30 days
+                        "minimum_notice_before_event": 2  # 2 hours
+                    })
+                    needs_update = True
+                
+                # Add time slots (Monday to Saturday) if missing
+                existing_days = set()
+                if availability_doc.appointment_time_slot:
+                    existing_days = {slot.day for slot in availability_doc.appointment_time_slot}
+                
+                for day in weekdays:
+                    if day not in existing_days:
+                        availability_doc.append("appointment_time_slot", {
+                            "day": day,
+                            "start_time": default_start_time,
+                            "end_time": default_end_time
+                        })
+                        needs_update = True
+                
+                if needs_update:
+                    availability_doc.save(ignore_permissions=True)
+                    frappe.db.commit()
+            except Exception as e:
+                frappe.log_error(str(e), "Demo Data: Add Durations/Time Slots Error")
+            
             created.append(provider.name)
             provider_index += 1
             frappe.db.commit()
@@ -571,11 +695,14 @@ def generate_providers(count=5):
 def generate_services(count=5):
     """
     Generate demo services for organizations
+    Automatically links providers to services during creation
+    Ensures all services have at least one provider linked
     """
     frappe.only_for("System Manager")
     count = int(count)
     
     created = []
+    linked_count = 0
     
     try:
         orgs = frappe.get_all("Organization", fields=["name", "organization_type"])
@@ -604,7 +731,70 @@ def generate_services(count=5):
                 )
                 
                 if existing_service:
-                    # Service already exists, skip it
+                    # Service already exists - ensure it has providers linked
+                    try:
+                        # CRITICAL: Reload service fresh from database to avoid stale child table references
+                        frappe.db.commit()  # Ensure all pending changes are committed
+                        service_doc = frappe.get_doc("Service", existing_service)
+                        service_doc.reload()  # Reload to get latest version
+                        
+                        # CRITICAL: Remove any stale child table rows that reference non-existent providers
+                        if service_doc.service_providers:
+                            valid_service_providers = []
+                            for sp in service_doc.service_providers:
+                                # Only keep providers that actually exist
+                                if frappe.db.exists("Provider", sp.provider):
+                                    valid_service_providers.append(sp)
+                                else:
+                                    # Log removal of stale reference
+                                    frappe.log_error(f"Removing stale provider reference: {sp.provider} from service {existing_service}", "Demo Data: Clean Stale Provider Links")
+                            
+                            # Replace service_providers with only valid ones
+                            service_doc.service_providers = valid_service_providers
+                        
+                        # Check if service has providers (after cleaning stale ones)
+                        existing_providers = frappe.get_all(
+                            "Service Provider",
+                            filters={"parent": existing_service, "status": "Active"},
+                            limit=1
+                        )
+                        
+                        if not existing_providers:
+                            # Service exists but has no providers - link them now
+                            org_providers = frappe.get_all(
+                                "Provider Organization",
+                                filters={"organization": org.name, "status": "Active"},
+                                fields=["parent"],
+                                pluck="parent"
+                            )
+                            valid_org_providers = [p for p in org_providers if frappe.db.exists("Provider", p)]
+                            
+                            if valid_org_providers and hasattr(service_doc, 'service_providers'):
+                                for idx, provider_name in enumerate(valid_org_providers[:3]):
+                                    # Double-check provider exists before adding
+                                    if not frappe.db.exists("Provider", provider_name):
+                                        continue
+                                    
+                                    # Check if already linked
+                                    already_linked = any(
+                                        sp.provider == provider_name 
+                                        for sp in (service_doc.service_providers or [])
+                                    )
+                                    if not already_linked:
+                                        service_doc.append("service_providers", {
+                                            "provider": provider_name,
+                                            "status": "Active",
+                                            "is_primary": 1 if idx == 0 else 0,
+                                            "price_override": price,
+                                        })
+                                        linked_count += 1
+                                
+                                if linked_count > 0:
+                                    service_doc.save(ignore_permissions=True)
+                                    frappe.db.commit()
+                    except Exception as e:
+                        frappe.log_error(f"Error linking providers to existing service {existing_service}: {str(e)}", "Demo Data: Link Providers Error")
+                    
                     service_index += 1
                     continue
                 
@@ -621,7 +811,7 @@ def generate_services(count=5):
                     service.is_active = 1
                     mark_as_demo(service)
                     
-                    # Link providers from this organization to the service
+                    # ALWAYS link providers from this organization to the service
                     # Get all active providers for this organization
                     org_providers = frappe.get_all(
                         "Provider Organization",
@@ -630,15 +820,31 @@ def generate_services(count=5):
                         pluck="parent"
                     )
                     
-                    if org_providers and hasattr(service, 'service_providers'):
-                        # Add first provider as primary, others as regular
-                        for idx, provider_name in enumerate(org_providers[:3]):  # Max 3 providers per service
+                    # Filter to only providers that actually exist
+                    valid_org_providers = [p for p in org_providers if frappe.db.exists("Provider", p)]
+                    
+                    # If no providers found via Provider Organization, try to find any active providers
+                    if not valid_org_providers:
+                        # Fallback: Get any active providers (might be solo providers or not yet linked)
+                        all_providers = frappe.get_all(
+                            "Provider",
+                            filters={"is_active": 1},
+                            fields=["name"],
+                            limit=3
+                        )
+                        valid_org_providers = [p["name"] for p in all_providers]
+                    
+                    # Link providers to service (CRITICAL - ensures service has providers)
+                    if valid_org_providers and hasattr(service, 'service_providers'):
+                        # Add providers to service (first one as primary)
+                        for idx, provider_name in enumerate(valid_org_providers[:3]):  # Max 3 providers per service
                             service.append("service_providers", {
                                 "provider": provider_name,
                                 "status": "Active",
                                 "is_primary": 1 if idx == 0 else 0,
                                 "price_override": price,  # Use service price as default
                             })
+                            linked_count += 1
                     
                     service.insert(ignore_permissions=True)
                     
@@ -657,17 +863,442 @@ def generate_services(count=5):
                     service_index += 1
                     continue
         
+        # Final step: Ensure ALL services (including existing ones) have providers linked
+        # This catches any services that might have been missed
+        all_services = frappe.get_all("Service", fields=["name", "organization", "price"])
+        final_linked = 0
+        
+        for svc in all_services:
+            service_name = svc["name"]
+            service_org = svc.get("organization")
+            
+            if not service_org:
+                continue
+            
+            # Check if service has providers
+            existing_providers = frappe.get_all(
+                "Service Provider",
+                filters={"parent": service_name, "status": "Active"},
+                limit=1
+            )
+            
+            if not existing_providers:
+                # Service has no providers - link them
+                org_providers = frappe.get_all(
+                    "Provider Organization",
+                    filters={"organization": service_org, "status": "Active"},
+                    fields=["parent"],
+                    pluck="parent"
+                )
+                valid_providers = [p for p in org_providers if frappe.db.exists("Provider", p)]
+                
+                if valid_providers:
+                    try:
+                        # CRITICAL: Reload service fresh from database to avoid stale child table references
+                        frappe.db.commit()  # Ensure all pending changes are committed
+                        service_doc = frappe.get_doc("Service", service_name)
+                        service_doc.reload()  # Reload to get latest version
+                        
+                        # CRITICAL: Remove any stale child table rows that reference non-existent providers
+                        if service_doc.service_providers:
+                            valid_service_providers = []
+                            for sp in service_doc.service_providers:
+                                # Only keep providers that actually exist
+                                if frappe.db.exists("Provider", sp.provider):
+                                    valid_service_providers.append(sp)
+                                else:
+                                    # Log removal of stale reference
+                                    frappe.log_error(f"Removing stale provider reference: {sp.provider} from service {service_name}", "Demo Data: Clean Stale Provider Links")
+                            
+                            # Replace service_providers with only valid ones
+                            service_doc.service_providers = valid_service_providers
+                        
+                        for idx, provider_name in enumerate(valid_providers[:3]):
+                            # Double-check provider exists before adding
+                            if not frappe.db.exists("Provider", provider_name):
+                                frappe.log_error(f"Provider {provider_name} does not exist, skipping link to service {service_name}", "Demo Data: Provider Not Found")
+                                continue
+                            
+                            # Check if already linked
+                            already_linked = any(
+                                sp.provider == provider_name 
+                                for sp in (service_doc.service_providers or [])
+                            )
+                            if not already_linked:
+                                service_doc.append("service_providers", {
+                                    "provider": provider_name,
+                                    "status": "Active",
+                                    "is_primary": 1 if idx == 0 else 0,
+                                    "price_override": svc.get("price"),
+                                })
+                                final_linked += 1
+                        
+                        if final_linked > 0:
+                            service_doc.save(ignore_permissions=True)
+                            frappe.db.commit()
+                    except Exception as e:
+                        frappe.log_error(f"Error linking providers to service {service_name}: {str(e)}", "Demo Data: Final Link Providers Error")
+        
+        total_linked = linked_count + final_linked
+        message = f"✓ Created {len(created)} services"
+        if total_linked > 0:
+            message += f" and linked {total_linked} providers"
+        
         return {
             "success": True,
             "count": len(created),
             "services": created,
-            "message": f"✓ Created {len(created)} services"
+            "providers_linked": total_linked,
+            "message": message
         }
     
     except Exception as e:
         frappe.db.rollback()
         frappe.log_error(str(e), "Demo Data: Generate Services Error")
         frappe.throw(_(f"Error generating services: {str(e)}"))
+
+
+@frappe.whitelist()
+def add_available_durations_to_providers():
+    """
+    Add Available Durations and Appointment Time Slots to all User Appointment Availability records
+    - Creates durations based on services linked to each provider
+    - Adds time slots for Monday to Saturday (9 AM - 6 PM)
+    """
+    frappe.only_for("System Manager")
+    
+    updated_count = 0
+    
+    try:
+        # Get all providers
+        providers = frappe.get_all("Provider", fields=["name", "email", "user_appointment_availability"])
+        
+        # Days to add (Monday to Saturday)
+        weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+        default_start_time = "09:00:00"
+        default_end_time = "18:00:00"
+        
+        for provider in providers:
+            provider_name = provider["name"]
+            availability_name = provider.get("user_appointment_availability")
+            
+            if not availability_name:
+                continue
+            
+            try:
+                availability_doc = frappe.get_doc("User Appointment Availability", availability_name)
+                needs_update = False
+                
+                # 1. Add Available Durations if missing
+                if not availability_doc.available_durations or len(availability_doc.available_durations) == 0:
+                    # Get services for this provider
+                    # First check Service Provider child table
+                    service_providers = frappe.get_all(
+                        "Service Provider",
+                        filters={"provider": provider_name, "status": "Active"},
+                        fields=["parent"],
+                        pluck="parent"
+                    )
+                    
+                    # Also get services from provider's organizations
+                    provider_orgs = frappe.get_all(
+                        "Provider Organization",
+                        filters={"parent": provider_name, "status": "Active"},
+                        fields=["organization"],
+                        pluck="organization"
+                    )
+                    
+                    org_services = []
+                    if provider_orgs:
+                        org_services = frappe.get_all(
+                            "Service",
+                            filters={"organization": ["in", provider_orgs]},
+                            fields=["name", "service_name", "duration"]
+                        )
+                    
+                    # Merge services
+                    all_services = []
+                    if service_providers:
+                        services = frappe.get_all(
+                            "Service",
+                            filters={"name": ["in", service_providers]},
+                            fields=["name", "service_name", "duration"]
+                        )
+                        all_services.extend(services)
+                    
+                    # Add org services that aren't already in the list
+                    existing_service_names = {s["name"] for s in all_services}
+                    for svc in org_services:
+                        if svc["name"] not in existing_service_names:
+                            all_services.append(svc)
+                    
+                    # If no services found, create a default duration
+                    if not all_services:
+                        availability_doc.append("available_durations", {
+                            "title": "30 Minute Meeting",
+                            "duration": 30 * 60,  # 30 minutes in seconds
+                            "allow_rescheduling": 1,
+                            "availability_window": 30,  # 30 days
+                            "minimum_notice_before_event": 2  # 2 hours
+                        })
+                        needs_update = True
+                    else:
+                        # Create duration for each service
+                        for service in all_services[:5]:  # Max 5 durations
+                            service_name = service.get("service_name", "Meeting")
+                            duration_minutes = service.get("duration", 30)
+                            duration_seconds = duration_minutes * 60  # Convert to seconds
+                            
+                            # Check if duration already exists
+                            duration_exists = False
+                            for existing_duration in (availability_doc.available_durations or []):
+                                if existing_duration.title == service_name:
+                                    duration_exists = True
+                                    break
+                            
+                            if not duration_exists:
+                                availability_doc.append("available_durations", {
+                                    "title": service_name,
+                                    "duration": duration_seconds,
+                                    "allow_rescheduling": 1,
+                                    "availability_window": 30,  # 30 days
+                                    "minimum_notice_before_event": 2  # 2 hours
+                                })
+                                needs_update = True
+                
+                # 2. Add Appointment Time Slots (Monday to Saturday) if missing
+                existing_days = set()
+                if availability_doc.appointment_time_slot:
+                    existing_days = {slot.day for slot in availability_doc.appointment_time_slot}
+                
+                for day in weekdays:
+                    if day not in existing_days:
+                        availability_doc.append("appointment_time_slot", {
+                            "day": day,
+                            "start_time": default_start_time,
+                            "end_time": default_end_time
+                        })
+                        needs_update = True
+                
+                # Save only if we made changes
+                if needs_update:
+                    availability_doc.save(ignore_permissions=True)
+                    updated_count += 1
+                    frappe.db.commit()
+            except Exception as e:
+                frappe.log_error(f"Error adding durations to provider {provider_name}: {str(e)}", "Demo Data: Add Available Durations Error")
+                continue
+        
+        return {
+            "success": True,
+            "count": updated_count,
+            "message": f"✓ Added available durations and time slots (Monday-Saturday) to {updated_count} providers"
+        }
+    
+    except Exception as e:
+        frappe.db.rollback()
+        frappe.log_error(str(e), "Demo Data: Add Available Durations Error")
+        frappe.throw(_(f"Error adding available durations: {str(e)}"))
+
+
+@frappe.whitelist()
+def link_providers_to_services():
+    """
+    Link providers to services for all organizations
+    This ensures every service has at least one provider linked
+    """
+    frappe.only_for("System Manager")
+    
+    linked_count = 0
+    updated_services = []
+    
+    try:
+        # Get all services
+        services = frappe.get_all("Service", fields=["name", "organization", "price"])
+        
+        for service in services:
+            service_name = service["name"]
+            service_org = service.get("organization")
+            
+            if not service_org:
+                continue
+            
+            # Check if service already has providers linked
+            existing_providers = frappe.get_all(
+                "Service Provider",
+                filters={"parent": service_name, "status": "Active"},
+                limit=1
+            )
+            
+            if existing_providers:
+                # Service already has providers, skip it
+                continue
+            
+            # Get providers for this organization
+            org_providers = frappe.get_all(
+                "Provider Organization",
+                filters={"organization": service_org, "status": "Active"},
+                fields=["parent"],
+                pluck="parent"
+            )
+            
+            # Filter to only providers that actually exist
+            valid_providers = [p for p in org_providers if frappe.db.exists("Provider", p)]
+            
+            if not valid_providers:
+                # No providers for this org, skip
+                continue
+            
+            # Load service and link providers
+            try:
+                # CRITICAL: Reload service fresh from database to avoid stale child table references
+                frappe.db.commit()  # Ensure all pending changes are committed
+                service_doc = frappe.get_doc("Service", service_name)
+                service_doc.reload()  # Reload to get latest version
+                
+                # CRITICAL: Remove any stale child table rows that reference non-existent providers
+                # This prevents link validation errors when saving
+                if service_doc.service_providers:
+                    valid_service_providers = []
+                    for sp in service_doc.service_providers:
+                        # Only keep providers that actually exist
+                        if frappe.db.exists("Provider", sp.provider):
+                            valid_service_providers.append(sp)
+                        else:
+                            # Log removal of stale reference
+                            frappe.log_error(f"Removing stale provider reference: {sp.provider} from service {service_name}", "Demo Data: Clean Stale Provider Links")
+                    
+                    # Replace service_providers with only valid ones
+                    service_doc.service_providers = valid_service_providers
+                
+                service_linked_count = 0
+                
+                # Add providers to service (first one as primary)
+                for idx, provider_name in enumerate(valid_providers[:3]):  # Max 3 providers per service
+                    # Double-check provider exists before adding
+                    if not frappe.db.exists("Provider", provider_name):
+                        frappe.log_error(f"Provider {provider_name} does not exist, skipping link to service {service_name}", "Demo Data: Provider Not Found")
+                        continue
+                    
+                    # Check if already linked
+                    already_linked = any(
+                        sp.provider == provider_name 
+                        for sp in (service_doc.service_providers or [])
+                    )
+                    
+                    if not already_linked:
+                        service_doc.append("service_providers", {
+                            "provider": provider_name,
+                            "status": "Active",
+                            "is_primary": 1 if idx == 0 else 0,
+                            "price_override": service.get("price"),  # Use service price as default
+                        })
+                        service_linked_count += 1
+                        linked_count += 1
+                
+                # Save if we added any providers for this service
+                if service_linked_count > 0:
+                    service_doc.save(ignore_permissions=True)
+                    updated_services.append(service_name)
+                    frappe.db.commit()
+            except Exception as e:
+                frappe.log_error(f"Error linking providers to service {service_name}: {str(e)}", "Demo Data: Link Providers Error")
+                continue
+        
+        return {
+            "success": True,
+            "count": linked_count,
+            "services_updated": len(updated_services),
+            "message": f"✓ Linked {linked_count} providers to {len(updated_services)} services"
+        }
+    
+    except Exception as e:
+        frappe.db.rollback()
+        frappe.log_error(str(e), "Demo Data: Link Providers to Services Error")
+        frappe.throw(_(f"Error linking providers to services: {str(e)}"))
+
+
+@frappe.whitelist()
+def fix_location_addresses():
+    """
+    Fix locations that are missing addresses
+    This ensures all locations have address_line_1 and city set
+    """
+    frappe.only_for("System Manager")
+    
+    fixed_count = 0
+    updated_locations = []
+    
+    try:
+        # Get all locations
+        locations = frappe.get_all("Location", fields=["name", "location_name", "address_line_1", "city"])
+        
+        for location in locations:
+            location_name = location["name"]
+            has_address = bool(location.get("address_line_1"))
+            has_city = bool(location.get("city"))
+            
+            if has_address and has_city:
+                # Location already has address, skip it
+                continue
+            
+            # Try to extract address from location_name
+            # Format is usually "Organization - Address"
+            location_display_name = location.get("location_name", "")
+            
+            # Find matching address from ADDIS_LOCATIONS
+            address_line_1 = None
+            city = "Addis Ababa"
+            
+            for loc_data in ADDIS_LOCATIONS:
+                if isinstance(loc_data, tuple):
+                    loc_name, addr, city_name = loc_data
+                    if loc_name in location_display_name:
+                        address_line_1 = addr
+                        city = city_name
+                        break
+                else:
+                    # Backward compatibility
+                    if loc_data in location_display_name:
+                        address_line_1 = loc_data
+                        break
+            
+            # If no match found, use a default based on location name
+            if not address_line_1:
+                # Extract the part after the organization name
+                parts = location_display_name.split(" - ", 1)
+                if len(parts) > 1:
+                    address_line_1 = parts[1]
+                else:
+                    address_line_1 = location_display_name
+            
+            # Update location
+            try:
+                location_doc = frappe.get_doc("Location", location_name)
+                if not location_doc.address_line_1:
+                    location_doc.address_line_1 = address_line_1
+                if not location_doc.city:
+                    location_doc.city = city
+                
+                location_doc.save(ignore_permissions=True)
+                fixed_count += 1
+                updated_locations.append(location_name)
+                frappe.db.commit()
+            except Exception as e:
+                frappe.log_error(f"Error fixing location {location_name}: {str(e)}", "Demo Data: Fix Location Address Error")
+                continue
+        
+        return {
+            "success": True,
+            "count": fixed_count,
+            "locations_updated": len(updated_locations),
+            "message": f"✓ Fixed addresses for {fixed_count} locations"
+        }
+    
+    except Exception as e:
+        frappe.db.rollback()
+        frappe.log_error(str(e), "Demo Data: Fix Location Addresses Error")
+        frappe.throw(_(f"Error fixing location addresses: {str(e)}"))
 
 
 @frappe.whitelist()
@@ -691,7 +1322,17 @@ def generate_locations(count=3):
                 if location_index >= count:
                     break
                 
-                location_name = f"{org_name} - {ADDIS_LOCATIONS[i % len(ADDIS_LOCATIONS)]}"
+                # Get location data (name, address_line_1, city)
+                location_data = ADDIS_LOCATIONS[i % len(ADDIS_LOCATIONS)]
+                if isinstance(location_data, tuple):
+                    loc_name, address_line_1, city = location_data
+                else:
+                    # Backward compatibility - if it's a string, use it as address_line_1
+                    loc_name = location_data
+                    address_line_1 = location_data
+                    city = "Addis Ababa"
+                
+                location_name = f"{org_name} - {loc_name}"
                 
                 if frappe.db.exists("Location", {"location_name": location_name}):
                     location_index += 1
@@ -701,7 +1342,8 @@ def generate_locations(count=3):
                     location = frappe.new_doc("Location")
                     location.location_name = location_name
                     location.organization = org_name
-                    location.address = ADDIS_LOCATIONS[i % len(ADDIS_LOCATIONS)]
+                    location.address_line_1 = address_line_1
+                    location.city = city
                     location.timezone = "Africa/Addis_Ababa"
                     location.is_active = 1
                     mark_as_demo(location)
@@ -736,46 +1378,44 @@ def generate_locations(count=3):
 
 
 @frappe.whitelist()
-def generate_appointments(count=10, days_back=14):
+def generate_event_types():
     """
-    Generate demo appointments with EventTypes, Booking Events, and Appointments
-    
-    Args:
-        count: Number of appointments to create (default: 10)
-        days_back: Number of days in the past to create appointments (default: 14)
+    Generate EventTypes for ALL services and providers
+    This ensures every service has at least one EventType and every provider has booking URLs
     """
     frappe.only_for("System Manager")
-    count = int(count)
-    days_back = int(days_back)
     
     created_eventtypes = []
-    created_appointments = []
-    created_booking_events = []
     
     try:
+        services = frappe.get_all("Service", fields=["name", "service_name", "organization"])
         providers = frappe.get_all("Provider", pluck="name")
-        services = frappe.get_all("Service", fields=["name", "service_name", "duration", "price", "organization"])
-        locations = frappe.get_all("Location", pluck="name")
+        locations = frappe.get_all("Location", fields=["name", "organization"])
         
-        if not providers or not services or not locations:
-            frappe.throw("Please create providers, services, and locations first")
+        if not services:
+            frappe.throw("Please create services first")
+        if not providers:
+            frappe.throw("Please create providers first")
+        if not locations:
+            frappe.throw("Please create locations first")
         
-        # Create EventTypes (link providers + services + locations)
-        # Only create EventTypes for providers that belong to the service's organization
-        for service in services[:min(3, len(services))]:
+        # Create a location map by organization
+        location_map = {}
+        for loc in locations:
+            org = loc.get("organization")
+            if org:
+                if org not in location_map:
+                    location_map[org] = []
+                location_map[org].append(loc["name"])
+        
+        # Process ALL services (not just first 3)
+        for service in services:
             service_name = service["name"]
-            if not service.get("organization"):
-                continue
-        
-            # Get providers that belong to this service's organization
-            org_providers = frappe.get_all(
-                "Provider Organization",
-                filters={"organization": service["organization"], "status": "Active"},
-                fields=["parent"],
-                pluck="parent"
-            )
+            service_org = service.get("organization")
             
-            # Also check Service Provider child table for this service
+            # Get providers for this service
+            # CRITICAL: ONLY use providers from Service Provider child table
+            # This ensures EventTypes match the providers that the API will find
             service_provider_names = frappe.get_all(
                 "Service Provider",
                 filters={"parent": service_name, "status": "Active"},
@@ -783,31 +1423,97 @@ def generate_appointments(count=10, days_back=14):
                 pluck="provider"
             )
             
-            # Use Service Provider entries if available, otherwise use org providers
-            potential_providers = service_provider_names if service_provider_names else org_providers
+            # Filter to only providers that actually exist
+            valid_providers = [p for p in service_provider_names if frappe.db.exists("Provider", p)]
             
-            # Filter to only providers that actually exist in the Provider doctype
-            valid_providers = [p for p in potential_providers if frappe.db.exists("Provider", p)]
+            # If no providers in Service Provider child table, try to link them first
+            if not valid_providers and service_org:
+                # Try to get providers from organization and link them to service
+                org_providers = frappe.get_all(
+                    "Provider Organization",
+                    filters={"organization": service_org, "status": "Active"},
+                    fields=["parent"],
+                    pluck="parent"
+                )
+                valid_org_providers = [p for p in org_providers if frappe.db.exists("Provider", p)]
+                
+                if valid_org_providers:
+                    # Link providers to service first
+                    try:
+                        # CRITICAL: Reload service fresh from database to avoid stale child table references
+                        frappe.db.commit()  # Ensure all pending changes are committed
+                        service_doc = frappe.get_doc("Service", service_name)
+                        service_doc.reload()  # Reload to get latest version
+                        
+                        # CRITICAL: Remove any stale child table rows that reference non-existent providers
+                        if service_doc.service_providers:
+                            valid_service_providers = []
+                            for sp in service_doc.service_providers:
+                                # Only keep providers that actually exist
+                                if frappe.db.exists("Provider", sp.provider):
+                                    valid_service_providers.append(sp)
+                                else:
+                                    # Log removal of stale reference
+                                    frappe.log_error(f"Removing stale provider reference: {sp.provider} from service {service_name}", "Demo Data: Clean Stale Provider Links")
+                            
+                            # Replace service_providers with only valid ones
+                            service_doc.service_providers = valid_service_providers
+                        
+                        for idx, provider_name in enumerate(valid_org_providers[:3]):
+                            # Double-check provider exists before adding
+                            if not frappe.db.exists("Provider", provider_name):
+                                frappe.log_error(f"Provider {provider_name} does not exist, skipping link to service {service_name}", "Demo Data: Provider Not Found")
+                                continue
+                            
+                            # Check if already linked
+                            already_linked = any(
+                                sp.provider == provider_name 
+                                for sp in (service_doc.service_providers or [])
+                            )
+                            if not already_linked:
+                                service_doc.append("service_providers", {
+                                    "provider": provider_name,
+                                    "status": "Active",
+                                    "is_primary": 1 if idx == 0 else 0,
+                                    "price_override": service_doc.price,
+                                })
+                        service_doc.save(ignore_permissions=True)
+                        frappe.db.commit()
+                        
+                        # Reload service to get latest data, then get providers from Service Provider child table again
+                        service_doc.reload()
+                        service_provider_names = frappe.get_all(
+                            "Service Provider",
+                            filters={"parent": service_name, "status": "Active"},
+                            fields=["provider"],
+                            pluck="provider"
+                        )
+                        valid_providers = [p for p in service_provider_names if frappe.db.exists("Provider", p)]
+                    except Exception as e:
+                        frappe.log_error(f"Error linking providers to service {service_name}: {str(e)}", "Demo Data: EventType Provider Link Error")
             
             if not valid_providers:
-                # Skip this service - no valid providers linked
+                # Skip this service - no valid providers in Service Provider child table
+                frappe.log_error(f"Service {service_name} has no providers in Service Provider child table. Skipping EventType creation.", "Demo Data: No Service Providers")
                 continue
-        
-            # Get locations for this organization
-            org_locations = frappe.get_all(
-                "Location",
-                filters={"organization": service["organization"]},
-                fields=["name"],
-                limit=2
-            )
-                    
-            if not org_locations:
+            
+            # Get locations for this service
+            # If service has organization, use org locations
+            service_locations = []
+            if service_org and service_org in location_map:
+                service_locations = location_map[service_org]
+            else:
+                # Use any available location
+                service_locations = [loc["name"] for loc in locations[:1]]
+            
+            if not service_locations:
                 continue
-                    
-            # Create EventTypes for each valid provider + service + location combination
-            for provider_name in valid_providers[:min(3, len(valid_providers))]:
-                for location_name in [loc.name for loc in org_locations[:1]]:  # One location per service
-                    # Check if EventType exists
+            
+            # Create EventTypes for each provider + service + location combination
+            # Ensure at least one EventType per service
+            for provider_name in valid_providers[:1]:  # One provider per service for demo
+                for location_name in service_locations[:1]:  # One location per service
+                    # Check if EventType already exists
                     existing = frappe.db.get_value(
                         "EventType",
                         {
@@ -842,7 +1548,136 @@ def generate_appointments(count=10, days_back=14):
                         frappe.log_error(f"Error creating event type: {str(e)}", "Demo Data: EventType Creation Error")
                         continue
         
-        # Now create Appointments and Booking Events
+        # Ensure ALL providers have at least one EventType
+        all_providers = frappe.get_all("Provider", pluck="name")
+        for provider_name in all_providers:
+            # Check if provider has any EventTypes
+            existing_eventtypes = frappe.get_all(
+                "EventType",
+                filters={"provider": provider_name, "is_active": 1},
+                limit=1
+            )
+            
+            if not existing_eventtypes:
+                # Provider has no EventTypes - create one
+                # Find a service this provider can use
+                # Check if provider is linked to any organization
+                provider_orgs = frappe.get_all(
+                    "Provider Organization",
+                    filters={"parent": provider_name, "status": "Active"},
+                    fields=["organization"],
+                    pluck="organization"
+                )
+                
+                # Get services from provider's organizations or any available service
+                available_services = []
+                if provider_orgs:
+                    available_services = frappe.get_all(
+                        "Service",
+                        filters={"organization": ["in", provider_orgs]},
+                        fields=["name", "service_name", "organization"],
+                        limit=5
+                    )
+                
+                # If no org services, check Service Provider links
+                if not available_services:
+                    service_provider_links = frappe.get_all(
+                        "Service Provider",
+                        filters={"provider": provider_name, "status": "Active"},
+                        fields=["parent"],
+                        pluck="parent"
+                    )
+                    if service_provider_links:
+                        available_services = frappe.get_all(
+                            "Service",
+                            filters={"name": ["in", service_provider_links]},
+                            fields=["name", "service_name", "organization"],
+                            limit=5
+                        )
+                
+                # If still no services, use any available service
+                if not available_services:
+                    available_services = frappe.get_all(
+                        "Service",
+                        fields=["name", "service_name", "organization"],
+                        limit=5
+                    )
+                
+                if available_services:
+                    service = available_services[0]
+                    service_org = service.get("organization")
+                    
+                    # Get a location
+                    service_location = None
+                    if service_org and service_org in location_map:
+                        service_location = location_map[service_org][0] if location_map[service_org] else None
+                    
+                    if not service_location:
+                        service_location = locations[0]["name"] if locations else None
+                    
+                    if service_location:
+                        # Check if EventType already exists
+                        existing = frappe.db.get_value(
+                            "EventType",
+                            {
+                                "provider": provider_name,
+                                "service": service["name"],
+                                "location": service_location
+                            },
+                            "name"
+                        )
+                        
+                        if not existing:
+                            try:
+                                event_type = frappe.new_doc("EventType")
+                                event_type.event_type_name = f"{service['service_name']} - {service_location}"
+                                event_type.service = service["name"]
+                                event_type.provider = provider_name
+                                event_type.location = service_location
+                                event_type.is_active = 1
+                                mark_as_demo(event_type)
+                                event_type.insert(ignore_permissions=True)
+                                
+                                created_eventtypes.append(event_type.name)
+                                frappe.db.commit()
+                            except Exception as e:
+                                frappe.db.rollback()
+                                frappe.log_error(f"Error creating event type for provider {provider_name}: {str(e)}", "Demo Data: EventType Creation Error")
+        
+        return {
+            "success": True,
+            "count": len(created_eventtypes),
+            "event_types": created_eventtypes,
+            "message": f"✓ Created {len(created_eventtypes)} EventTypes for all services and providers"
+        }
+    
+    except Exception as e:
+        frappe.db.rollback()
+        frappe.log_error(str(e), "Demo Data: Generate EventTypes Error")
+        frappe.throw(_(f"Error generating EventTypes: {str(e)}"))
+
+
+@frappe.whitelist()
+def generate_appointments(count=10, days_back=14):
+    """
+    Generate demo appointments with Booking Events and Appointments
+    If EventTypes don't exist, they will be created automatically first.
+    
+    Args:
+        count: Number of appointments to create (default: 10)
+        days_back: Number of days in the past to create appointments (default: 14)
+    """
+    frappe.only_for("System Manager")
+    count = int(count)
+    days_back = int(days_back)
+    
+    created_appointments = []
+    created_booking_events = []
+    
+    try:
+        services = frappe.get_all("Service", fields=["name", "service_name", "duration", "price", "organization"])
+        
+        # Get EventTypes (create them if they don't exist)
         event_types = frappe.get_all(
             "EventType",
             filters={"is_active": 1},
@@ -850,7 +1685,20 @@ def generate_appointments(count=10, days_back=14):
         )
         
         if not event_types:
-            frappe.throw("No active EventTypes found. Please create EventTypes first.")
+            # Auto-create EventTypes if they don't exist
+            frappe.msgprint("No EventTypes found. Creating EventTypes first...", alert=True)
+            eventtype_result = generate_event_types()
+            frappe.db.commit()
+            
+            # Get EventTypes again after creation
+            event_types = frappe.get_all(
+                "EventType",
+                filters={"is_active": 1},
+                fields=["name", "provider", "service", "location"]
+            )
+            
+            if not event_types:
+                frappe.throw("Failed to create EventTypes. Please ensure you have providers, services, and locations created first.")
         
         # Filter event_types to only include those with valid providers, services, and locations
         valid_event_types = []
@@ -862,14 +1710,40 @@ def generate_appointments(count=10, days_back=14):
             if provider_exists and service_exists and location_exists:
                 valid_event_types.append(et)
             else:
-                # Log and optionally delete invalid EventType
+                # Log invalid EventType
                 frappe.log_error(
                     f"EventType {et['name']} has invalid references - Provider: {et['provider']} ({provider_exists}), Service: {et['service']} ({service_exists}), Location: {et['location']} ({location_exists})",
                     "Demo Data: Invalid EventType"
                 )
         
         if not valid_event_types:
-            frappe.throw("No valid EventTypes found. All EventTypes have invalid provider/service/location references. Please clear demo data and regenerate.")
+            # Try to create EventTypes again if none are valid
+            frappe.msgprint("No valid EventTypes found. Attempting to create EventTypes...", alert=True)
+            try:
+                eventtype_result = generate_event_types()
+                frappe.db.commit()
+                
+                # Get EventTypes again after creation
+                event_types = frappe.get_all(
+                    "EventType",
+                    filters={"is_active": 1},
+                    fields=["name", "provider", "service", "location"]
+                )
+                
+                # Re-validate
+                valid_event_types = []
+                for et in event_types:
+                    provider_exists = frappe.db.exists("Provider", et["provider"])
+                    service_exists = frappe.db.exists("Service", et["service"])
+                    location_exists = frappe.db.exists("Location", et["location"])
+                    
+                    if provider_exists and service_exists and location_exists:
+                        valid_event_types.append(et)
+            except Exception as e:
+                frappe.log_error(str(e), "Demo Data: Auto-create EventTypes Error")
+            
+            if not valid_event_types:
+                frappe.throw("No valid EventTypes found. Please ensure you have providers, services, and locations created, then run generate_event_types() first.")
         
         # Get service details for duration
         service_map = {s["name"]: s for s in services}
@@ -996,36 +1870,13 @@ def generate_appointments(count=10, days_back=14):
                 frappe.log_error(f"Error creating appointment: {str(e)}", "Demo Data: Appointment Creation Error")
                 continue
         
-        # Sync booking URLs after creating EventTypes
-        frappe.db.commit()
-        try:
-            from frappe_appointment.scheduler.booking_url_manager import sync_booking_urls_for_provider, sync_booking_urls_for_organization
-            
-            all_providers = frappe.get_all("Provider", pluck="name")
-            for provider_name in all_providers:
-                try:
-                    sync_booking_urls_for_provider(provider_name)
-                except:
-                    pass
-            
-            all_orgs = frappe.get_all("Organization", pluck="name")
-            for org_name in all_orgs:
-                try:
-                    sync_booking_urls_for_organization(org_name)
-                except:
-                    pass
-        except Exception as e:
-            frappe.log_error(str(e), "Demo Data: Final Booking URL Sync Error")
-        
         message = f"""✓ Demo appointments created:
-- Event Types: {len(created_eventtypes)}
 - Booking Events: {len(created_booking_events)}
 - Appointments: {len(created_appointments)}"""
         
         return {
             "success": True,
             "count": len(created_appointments),
-            "event_types": len(created_eventtypes),
             "booking_events": len(created_booking_events),
             "appointments": len(created_appointments),
             "message": message

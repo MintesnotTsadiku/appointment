@@ -12,6 +12,11 @@ class Organization(Document):
 		if frappe.flags.syncing_booking_urls:
 			return
 		
+		# Skip during demo data generation to avoid link validation errors
+		# Booking URLs will be synced later after all services/providers are created
+		if getattr(frappe.flags, 'skip_booking_url_sync', False):
+			return
+		
 		try:
 			from frappe_appointment.scheduler.booking_url_manager import sync_booking_urls_for_organization
 			sync_booking_urls_for_organization(self.name)

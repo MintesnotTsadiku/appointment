@@ -1,0 +1,40 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle with gradient -->
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle (full size for maskable icon) -->
+  <circle cx="512" cy="512" r="512" fill="url(#gradient)"/>
+  
+  <!-- Safe zone content (80% of 1024 = 819.2, centered) -->
+  <!-- Calendar base -->
+  <rect x="256" y="280" width="512" height="512" rx="32" fill="white" opacity="0.95"/>
+  
+  <!-- Calendar header (month bar) -->
+  <rect x="256" y="280" width="512" height="96" rx="32" fill="url(#gradient)"/>
+  
+  <!-- Calendar grid lines -->
+  <line x1="384" y1="376" x2="384" y2="792" stroke="#E5E7EB" stroke-width="2"/>
+  <line x1="512" y1="376" x2="512" y2="792" stroke="#E5E7EB" stroke-width="2"/>
+  <line x1="640" y1="376" x2="640" y2="792" stroke="#E5E7EB" stroke-width="2"/>
+  <line x1="256" y1="472" x2="768" y2="472" stroke="#E5E7EB" stroke-width="2"/>
+  <line x1="256" y1="568" x2="768" y2="568" stroke="#E5E7EB" stroke-width="2"/>
+  <line x1="256" y1="664" x2="768" y2="664" stroke="#E5E7EB" stroke-width="2"/>
+  <line x1="256" y1="760" x2="768" y2="760" stroke="#E5E7EB" stroke-width="2"/>
+  
+  <!-- Appointment indicator (checkmark in a circle on a date) -->
+  <circle cx="448" cy="520" r="40" fill="#10B981"/>
+  <path d="M428 520 L448 540 L488 500" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  
+  <!-- Clock icon (small, top right of calendar) -->
+  <circle cx="680" cy="360" r="32" fill="white" opacity="0.9"/>
+  <circle cx="680" cy="360" r="32" stroke="#667eea" stroke-width="3" fill="none"/>
+  <line x1="680" y1="360" x2="680" y2="340" stroke="#667eea" stroke-width="4" stroke-linecap="round"/>
+  <line x1="680" y1="360" x2="695" y2="360" stroke="#667eea" stroke-width="3" stroke-linecap="round"/>
+</svg>
+
+

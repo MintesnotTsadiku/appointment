@@ -242,3 +242,4 @@ Begin with `/home` (Provider Dashboard) and work through the priority list. Comp
 - `frontend/src/pages/reception/` for complete reference implementation
 
 
+

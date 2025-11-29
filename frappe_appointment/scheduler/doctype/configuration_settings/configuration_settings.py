@@ -58,7 +58,11 @@ class ConfigurationSettings(Document):
 				generate_providers,
 				generate_services,
 				generate_locations,
-				generate_appointments
+				generate_appointments,
+				link_providers_to_services,
+				generate_event_types,
+				fix_location_addresses,
+				add_available_durations_to_providers
 			)
 			
 			self.log("🚀 Starting demo data generation...")
@@ -70,34 +74,73 @@ class ConfigurationSettings(Document):
 				result = generate_organizations(count)
 				self.log(f"✓ Generated {count} organizations")
 				generated.append(f"{count} organizations")
+				frappe.db.commit()
 			
 			if self.include_providers:
 				count = self.demo_provider_count or 5
 				result = generate_providers(count)
 				self.log(f"✓ Generated {count} providers")
 				generated.append(f"{count} providers")
+				frappe.db.commit()
 			
 			if self.include_services:
 				count = self.demo_service_count or 5
 				result = generate_services(count)
 				self.log(f"✓ Generated {count} services")
 				generated.append(f"{count} services")
+				frappe.db.commit()
+				
+				# CRITICAL: Ensure all services have providers linked
+				self.log("🔗 Linking providers to services...")
+				link_result = link_providers_to_services()
+				linked_count = link_result.get("count", 0)
+				if linked_count > 0:
+					self.log(f"✓ Linked {linked_count} providers to services")
+				frappe.db.commit()
 			
 			if self.include_locations:
 				count = self.demo_location_count or 3
 				result = generate_locations(count)
 				self.log(f"✓ Generated {count} locations")
 				generated.append(f"{count} locations")
+				frappe.db.commit()
+				
+				# Fix any locations with missing addresses
+				self.log("🔧 Fixing location addresses...")
+				fix_result = fix_location_addresses()
+				fixed_count = fix_result.get("count", 0)
+				if fixed_count > 0:
+					self.log(f"✓ Fixed {fixed_count} location addresses")
+				frappe.db.commit()
+			
+			# CRITICAL: Generate EventTypes BEFORE appointments
+			# This ensures all services have EventTypes with correct provider links
+			if self.include_appointments:
+				# First, ensure providers have available durations
+				self.log("⏱️ Adding available durations to providers...")
+				duration_result = add_available_durations_to_providers()
+				duration_count = duration_result.get("count", 0)
+				if duration_count > 0:
+					self.log(f"✓ Added durations to {duration_count} providers")
+				frappe.db.commit()
+				
+				# Generate EventTypes for all services and providers
+				self.log("📅 Generating EventTypes...")
+				eventtype_result = generate_event_types()
+				eventtype_count = eventtype_result.get("count", 0)
+				if eventtype_count > 0:
+					self.log(f"✓ Generated {eventtype_count} EventTypes")
+				frappe.db.commit()
 			
 			if self.include_appointments:
 				count = self.demo_appointment_count or 10
 				days = self.demo_date_range_days or 14
 				result = generate_appointments(count, days)
-				event_types_count = result.get("event_types", 0)
 				appointments_count = result.get("appointments", 0)
 				booking_events_count = result.get("booking_events", 0)
-				self.log(f"✓ Generated {event_types_count} event types, {appointments_count} appointments, and {booking_events_count} booking events (last {days} days)")
-				generated.append(f"{event_types_count} event types, {appointments_count} appointments, {booking_events_count} booking events")
+				self.log(f"✓ Generated {appointments_count} appointments and {booking_events_count} booking events (last {days} days)")
+				generated.append(f"{appointments_count} appointments, {booking_events_count} booking events")
+				frappe.db.commit()
 			
 			# Generate Policies (Sprint 2) - after services, locations, and providers are created
 			# Check if we have the necessary data to create policies

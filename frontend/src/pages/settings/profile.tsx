@@ -643,6 +643,7 @@ const Profile = () => {
           )}
         </div>
       </main>
+      </div>
     </div>
   );
 };

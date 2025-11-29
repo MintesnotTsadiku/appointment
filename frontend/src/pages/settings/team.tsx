@@ -394,6 +394,7 @@ const TeamManagement = () => {
           </motion.div>
         </div>
       )}
+      </div>
     </div>
   );
 };

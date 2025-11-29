@@ -2,12 +2,35 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/assets/frappe_appointment/frappe-appointment-logo.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+    
+    <!-- PWA Meta Tags -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#4F46E5" />
+    <meta name="description" content="Professional appointment scheduling for Ethiopian businesses - መርሃግብር" />
+    
+    <!-- iOS PWA Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Scheduler" />
+    <link rel="apple-touch-icon" href="/assets/frappe_appointment/frontend/icons/apple-touch-icon-180x180.png" />
+    
+    <!-- Windows/Edge PWA Support -->
+    <meta name="msapplication-TileColor" content="#4F46E5" />
+    <meta name="msapplication-TileImage" content="/assets/frappe_appointment/frontend/icons/icon-144x144.png" />
+    
+    <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+Ethiopic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <title>{{app_name}}</title>
   </head>
   <body>
@@ -15,13 +38,40 @@
     <script>
       // Load everything from the page context to window object
       // This will allow us to access frappe boot in our react app.
-      window.csrf_token = '{{ csrf_token }}';
+      // CRITICAL FIX: Safe offline handling - check if Frappe boot data exists
+      window.csrf_token = '{{ csrf_token }}' || '';
       if (!window.frappe) window.frappe = {};
   
-      window.app_name = "{{ app_name }}";
+      window.app_name = "{{ app_name }}" || "Ethiopian Scheduler";
   
-      frappe.boot = JSON.parse({{ boot }});
-      frappe.csrf_token = "{{ csrf_token }}";
+      // Safely parse boot data - handle offline scenario where template vars might be empty
+      try {
+        if (typeof {{ boot }} !== 'undefined' && {{ boot }}) {
+          frappe.boot = JSON.parse({{ boot }});
+          frappe.csrf_token = "{{ csrf_token }}" || '';
+        } else {
+          // Offline mode - set minimal boot data
+          frappe.boot = {
+            user: { name: 'Guest' },
+            sysdefaults: {},
+            app_name: window.app_name
+          };
+          frappe.csrf_token = '';
+          
+          // Set offline flag for React app to disable write operations
+          window.__PWA_OFFLINE__ = true;
+        }
+      } catch (e) {
+        console.warn('Failed to parse Frappe boot data:', e);
+        // Fallback for offline mode
+        frappe.boot = {
+          user: { name: 'Guest' },
+          sysdefaults: {},
+          app_name: window.app_name
+        };
+        frappe.csrf_token = '';
+        window.__PWA_OFFLINE__ = true;
+      }
     </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>

@@ -22,6 +22,9 @@ import { TranslationProvider } from "./context/translation";
 import { LandingPageSettingsProvider } from "./context/landingPageSettings";
 import { Toaster } from "./components/sonner";
 import ModeToggle from "./components/theme-provider/components/modeToggle";
+import { InstallPrompt } from "./components/pwa/InstallPrompt";
+import { UpdateNotification } from "./components/pwa/UpdateNotification";
+import { ConnectionStatus } from "./components/pwa/ConnectionStatus";
 
 const App = () => {
   const router = createBrowserRouter(createRoutesFromElements(Router()), {
@@ -46,6 +49,10 @@ const App = () => {
                     <RouterProvider router={router} />
                     <Toaster />
                     <ModeToggle/>
+                    {/* PWA Components */}
+                    <InstallPrompt />
+                    <UpdateNotification />
+                    <ConnectionStatus />
                   </Suspense>
                 </TooltipProvider>
               </FrappeProvider>

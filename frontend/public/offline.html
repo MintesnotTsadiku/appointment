@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#4F46E5">
+  <title>Offline - Ethiopian Scheduler</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: #1a202c;
+    }
+    
+    .container {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+    
+    .icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 20px;
+      background: #f7fafc;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+    }
+    
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #2d3748;
+    }
+    
+    .subtitle {
+      font-size: 18px;
+      color: #4a5568;
+      margin-bottom: 30px;
+    }
+    
+    p {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #718096;
+      margin-bottom: 30px;
+    }
+    
+    .features {
+      text-align: left;
+      background: #f7fafc;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .features h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: #2d3748;
+    }
+    
+    .features ul {
+      list-style: none;
+    }
+    
+    .features li {
+      padding: 8px 0;
+      font-size: 14px;
+      color: #4a5568;
+      display: flex;
+      align-items: center;
+    }
+    
+    .features li:before {
+      content: "✓";
+      color: #48bb78;
+      font-weight: bold;
+      margin-right: 10px;
+      font-size: 18px;
+    }
+    
+    .btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 14px 32px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      transition: transform 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+    
+    .btn:active {
+      transform: translateY(0);
+    }
+    
+    .amharic {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #e2e8f0;
+      font-family: 'Noto Sans Ethiopic', sans-serif;
+    }
+    
+    @media (max-width: 480px) {
+      .container {
+        padding: 30px 20px;
+      }
+      
+      h1 {
+        font-size: 24px;
+      }
+      
+      .subtitle {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">📡</div>
+    <h1>You're Offline</h1>
+    <p class="subtitle">No internet connection detected</p>
+    
+    <p>
+      Don't worry! Some features are still available while you're offline.
+      Your changes will sync automatically when you reconnect.
+    </p>
+    
+    <div class="features">
+      <h3>Available Offline:</h3>
+      <ul>
+        <li>View your cached appointments</li>
+        <li>Browse your schedule</li>
+        <li>Access saved provider information</li>
+        <li>Review booking history</li>
+      </ul>
+    </div>
+    
+    <button onclick="window.location.reload()" class="btn">
+      Try Again
+    </button>
+    
+    <div class="amharic">
+      <h1>ከመስመር ውጭ ነዎት</h1>
+      <p>የበይነመረብ ግንኙነት የለም። አንዳንድ ባህሪያት አሁንም ይገኛሉ።</p>
+    </div>
+  </div>
+  
+  <script>
+    // Auto-reload when back online
+    window.addEventListener('online', () => {
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    });
+    
+    // Update UI when online status changes
+    function updateOnlineStatus() {
+      if (navigator.onLine) {
+        document.querySelector('.container').innerHTML = `
+          <div class="icon">✓</div>
+          <h1>Back Online!</h1>
+          <p>Reconnecting...</p>
+        `;
+        setTimeout(() => window.location.reload(), 1000);
+      }
+    }
+    
+    window.addEventListener('online', updateOnlineStatus);
+  </script>
+</body>
+</html>
+
+

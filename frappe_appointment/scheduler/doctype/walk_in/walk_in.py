@@ -23,3 +23,4 @@ class WalkIn(Document):
 				frappe.throw("Assigned appointment does not exist")
 
 
+

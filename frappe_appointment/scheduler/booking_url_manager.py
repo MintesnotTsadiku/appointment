@@ -339,6 +339,60 @@ def sync_booking_urls_for_organization(org_name):
 				# Skip if provider can't be loaded
 				continue
 		
+		# 4. Include provider booking URLs from User Appointment Availability
+		# Get all providers in this organization and their booking URLs
+		for provider_row in providers:
+			provider_name = provider_row.get("parent")
+			if not frappe.db.exists("Provider", provider_name):
+				continue
+			
+			try:
+				provider = frappe.get_doc("Provider", provider_name)
+				user_email = provider.email
+				
+				if not user_email:
+					continue
+				
+				# Get User Appointment Availability for this provider
+				availability_name = frappe.db.get_value("User Appointment Availability", {"user": user_email}, "name")
+				if not availability_name:
+					continue
+				
+				availability_doc = frappe.get_doc("User Appointment Availability", availability_name)
+				
+				# Check if availability has booking_urls
+				if not hasattr(availability_doc, 'booking_urls') or not availability_doc.booking_urls:
+					continue
+				
+				# Copy provider booking URLs to organization (with provider reference)
+				for provider_url in availability_doc.booking_urls:
+					if not provider_url.is_active:
+						continue
+					
+					# Create unique key for this URL
+					# Use provider name + url_type + slug to avoid duplicates
+					key = f"provider_{provider_name}:{provider_url.url_type}:{provider_url.slug}"
+					
+					if key not in existing_urls:
+						# Add provider's booking URL to organization
+						org.append("booking_urls", {
+							"url_type": provider_url.url_type,
+							"slug": provider_url.slug,
+							"full_url": provider_url.full_url,
+							"is_active": provider_url.is_active,
+							"access_level": provider_url.access_level,
+							"service": provider_url.service if hasattr(provider_url, 'service') else None,
+							"provider": provider_name,
+							"location": provider_url.location if hasattr(provider_url, 'location') else None,
+							"description": f"{provider.provider_name}: {provider_url.description or provider_url.slug}",
+							"created_from": "User Appointment Availability"
+						})
+						existing_urls[key] = True  # Mark as added to avoid duplicates
+			except Exception as e:
+				# Skip if there's an error loading provider or availability
+				frappe.log_error(f"Error copying provider URLs for {provider_name}: {str(e)}", "Booking URL Manager: Copy Provider URLs")
+				continue
+		
 		# Save without triggering hooks to prevent recursion
 		org.flags.ignore_validate = True
 		org.flags.ignore_links = True
