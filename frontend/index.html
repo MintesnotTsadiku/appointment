@@ -12,7 +12,7 @@
     <!-- PWA Meta Tags -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#4F46E5" />
-    <meta name="description" content="Professional appointment scheduling for Ethiopian businesses - መርሃግብር" />
+    <meta name="description" content="Professional appointment scheduling for businesses - መርሃግብር" />
     
     <!-- iOS PWA Support -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -31,7 +31,14 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+Ethiopic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <title>{{app_name}}</title>
+    <title>Scheduler - Scheduling Platform</title>
+    <meta name="description" content="Scheduler is a platform for scheduling appointments. It is a platform for scheduling appointments for businesses and organizations. It is a platform for scheduling appointments for businesses and organizations.">
+    <meta name="keywords" content="Scheduler, scheduling appointments, appointments, scheduling, platform, business, organization">
+    <meta name="author" content="Scheduler">
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    <meta name="google" content="notranslate">
+    <meta name="google-site-verification" content="google-site-verification=google-site-verification">
   </head>
   <body>
     <div id="root"></div>
@@ -42,7 +49,7 @@
       window.csrf_token = '{{ csrf_token }}' || '';
       if (!window.frappe) window.frappe = {};
   
-      window.app_name = "{{ app_name }}" || "Ethiopian Scheduler";
+      window.app_name = "{{ app_name }}" || "Scheduler";
   
       // Safely parse boot data - handle offline scenario where template vars might be empty
       try {

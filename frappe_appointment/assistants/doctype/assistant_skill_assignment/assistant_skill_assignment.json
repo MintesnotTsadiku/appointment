@@ -1,0 +1,47 @@
+{
+ "actions": [],
+ "creation": "2025-01-25 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "skill",
+  "skill_level",
+  "years_of_experience"
+ ],
+ "fields": [
+  {
+   "fieldname": "skill",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Skill",
+   "options": "Assistant Skill",
+   "reqd": 1
+  },
+  {
+   "default": "intermediate",
+   "fieldname": "skill_level",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Skill Level",
+   "options": "beginner\nintermediate\nadvanced\nexpert",
+   "reqd": 1
+  },
+  {
+   "fieldname": "years_of_experience",
+   "fieldtype": "Int",
+   "label": "Years of Experience"
+  }
+ ],
+ "istable": 1,
+ "modified": "2025-01-25 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Assistants",
+ "name": "Assistant Skill Assignment",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
+

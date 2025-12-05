@@ -2,18 +2,12 @@
  * External dependencies
  */
 import { Clock, Video } from "lucide-react";
+import { motion } from "framer-motion";
 
 /**
  * Internal dependencies
  */
 import { Button } from "@/components/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/card";
 import Typography from "@/components/typography";
 import { useAppContext } from "@/context/app";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/tooltip";
@@ -28,36 +22,71 @@ interface MeetingCardProps {
 const MeetingCard = ({ title, duration, onClick }: MeetingCardProps) => {
   const { userInfo } = useAppContext();
   return (
-    <Card onClick={onClick} className="group cursor-pointer transform hover:-translate-y-1 hover:border-blue-300 dark:hover:border-blue-400 duration-300 relative overflow-hidden rounded-2xl transition-all hover:shadow-lg">
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-xl py-2">
-          <Tooltip>
-            <TooltipTrigger>{title}</TooltipTrigger>
-            <TooltipContent>{title}</TooltipContent>
-          </Tooltip>
-        </CardTitle>
-        <CardDescription className="flex items-center gap-1">
-          <Clock className="w-4 h-4 text-blue-500" />
-          <Typography>{convertMinutesToTimeFormat(duration,true)}</Typography>
-          <span className="mx-1">•</span>
-          <Video className="w-4 h-4 text-blue-400" />
-          <Typography className="text-blue-400">
-            {userInfo.meetingProvider}
-          </Typography>
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="cursor-pointer">
+    <motion.div
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      onClick={onClick}
+      className="group cursor-pointer relative overflow-hidden rounded-2xl backdrop-blur-sm transition-all duration-300"
+      style={{ 
+        backgroundColor: 'var(--border-subtle)',
+        border: '1px solid var(--border-default)'
+      }}
+    >
+      {/* Gradient glow on hover */}
+      <div className="absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl blur-xl"
+        style={{
+          background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))'
+        }}
+      />
+      
+      <div className="relative p-5 space-y-4">
+        {/* Header with gradient icon */}
+        <div className="flex items-start justify-between">
+          <div className="flex-1">
+            <Tooltip>
+              <TooltipTrigger>
+                <h3 className="text-xl font-semibold mb-3" style={{ color: 'var(--text-primary)' }}>
+                  {title}
+                </h3>
+              </TooltipTrigger>
+              <TooltipContent>{title}</TooltipContent>
+            </Tooltip>
+            
+            <div className="flex items-center gap-2 flex-wrap" style={{ color: 'var(--text-secondary)' }}>
+              <div className="inline-flex items-center gap-1">
+                <Clock className="w-4 h-4" style={{ color: 'var(--accent-primary)' }} />
+                <Typography className="text-sm">
+                  {convertMinutesToTimeFormat(duration, true)}
+                </Typography>
+              </div>
+              <span className="mx-1">•</span>
+              <div className="inline-flex items-center gap-1">
+                <Video className="w-4 h-4" style={{ color: 'var(--accent-primary)' }} />
+                <Typography className="text-sm">
+                  {userInfo.meetingProvider}
+                </Typography>
+              </div>
+            </div>
+          </div>
+          
+          {/* Gradient icon badge */}
+          <div className="inline-flex p-2.5 rounded-xl bg-gradient-primary">
+            <Clock className="w-5 h-5 text-white" />
+          </div>
+        </div>
+        
+        {/* Button */}
         <Button
           onClick={(e) => {
             e.stopPropagation();
             onClick();
           }}
-          className="w-full bg-blue-500 hover:bg-blue-500 dark:bg-blue-400 dark:hover:bg-blue-400 rounded-2xl"
+          className="w-full bg-gradient-primary hover:opacity-90 rounded-xl text-white font-medium transition-all duration-300"
         >
           Schedule Meeting
         </Button>
-      </CardContent>
-    </Card>
+      </div>
+    </motion.div>
   );
 };
 

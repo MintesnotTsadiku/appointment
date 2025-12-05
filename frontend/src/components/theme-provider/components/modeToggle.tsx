@@ -11,7 +11,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useTheme } from "..";
 
 // Routes that have their own integrated theme toggle
-const ROUTES_WITH_INTEGRATED_TOGGLE = ['/reception'];
+// These routes should hide the global ModeToggle and use their own integrated toggle
+const ROUTES_WITH_INTEGRATED_TOGGLE = [
+  '/reception',
+  '/schedule', // All booking pages have integrated toggles
+];
 
 const ModeToggle = () => {
   const { theme, setTheme } = useTheme();
@@ -27,18 +31,34 @@ const ModeToggle = () => {
       setShouldHide(hide);
     };
 
+    // Initial check
     checkPath();
     
     // Listen for popstate (browser back/forward)
     window.addEventListener('popstate', checkPath);
     
-    // Create a MutationObserver to detect SPA route changes
-    const observer = new MutationObserver(checkPath);
-    observer.observe(document.body, { childList: true, subtree: true });
+    // Listen for pushstate/replacestate (SPA navigation)
+    const originalPushState = history.pushState;
+    const originalReplaceState = history.replaceState;
+    
+    history.pushState = function(...args) {
+      originalPushState.apply(history, args);
+      setTimeout(checkPath, 0);
+    };
+    
+    history.replaceState = function(...args) {
+      originalReplaceState.apply(history, args);
+      setTimeout(checkPath, 0);
+    };
+    
+    // Also check periodically (fallback for edge cases)
+    const interval = setInterval(checkPath, 500);
 
     return () => {
       window.removeEventListener('popstate', checkPath);
-      observer.disconnect();
+      clearInterval(interval);
+      history.pushState = originalPushState;
+      history.replaceState = originalReplaceState;
     };
   }, []);
 

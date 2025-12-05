@@ -1,11 +1,12 @@
 /**
- * Modern Time Slots Panel - Grouped by time of day
- * Mobile-first, scannable, beautiful
+ * Modern Time Slots Panel - Premium Design System
+ * Mobile-first, scannable, beautiful with glass-morphism
  */
 
 import { Clock, Star, User, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/button";
+import { motion } from "framer-motion";
 import {
   getTimeOfDay,
   getTimeOfDayLabel,
@@ -59,6 +60,38 @@ export function TimeSlotsPanel({
   };
 
   // Get slot button styling
+  const getSlotButtonStyles = (slot: TimeSlot) => {
+    const selected = isSelected(slot);
+    const past = Boolean(slot.isPast);
+    const booked = Boolean(slot.booked);
+    const available = slot.available !== false;
+    const disabled = past || booked || !available;
+
+    if (selected) {
+      return {
+        background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
+        color: 'white',
+        border: '1px solid transparent',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+      };
+    }
+
+    if (disabled) {
+      return {
+        backgroundColor: 'var(--bg-secondary)',
+        color: 'var(--text-muted)',
+        border: '1px solid var(--border-subtle)',
+        opacity: 0.4
+      };
+    }
+
+    return {
+      backgroundColor: 'var(--bg-elevated)',
+      color: 'var(--text-primary)',
+      border: '1px solid var(--border-default)',
+    };
+  };
+
   const getSlotButtonClasses = (slot: TimeSlot) => {
     const selected = isSelected(slot);
     const past = Boolean(slot.isPast);
@@ -66,37 +99,31 @@ export function TimeSlotsPanel({
     const available = slot.available !== false;
     const disabled = past || booked || !available;
 
-    const hoverClasses =
-      !disabled && !selected
-        ? "hover:border-primary-400 dark:hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:shadow-md hover:scale-[1.02] active:scale-[0.98]"
-        : undefined;
-
-    const selectedClasses = selected
-      ? "border-primary-500 dark:border-primary-400 bg-primary-500 dark:bg-primary-600 text-white dark:text-white shadow-lg scale-[1.02]"
-      : undefined;
-
-    const disabledClasses = disabled
-      ? "opacity-40 cursor-not-allowed hover:border-gray-200 dark:hover:border-gray-700 hover:bg-white dark:hover:bg-gray-800 hover:shadow-none hover:scale-100"
-      : undefined;
-
-    const classes = cn(
+    return cn(
       // Base styles
       "relative w-full h-14 md:h-16 rounded-xl font-medium transition-all duration-200",
       "flex items-center justify-between px-4 md:px-5",
-      "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2",
+      "focus:outline-none focus:ring-2 focus:ring-offset-2 backdrop-blur-sm",
+      "focus:ring-offset-transparent",
       "group",
 
-      // Default state
-      "border-2 border-gray-200 dark:border-gray-700",
-      "bg-white dark:bg-gray-800",
-      "text-gray-900 dark:text-gray-100",
+      // Selectable states
+      !disabled && !selected && [
+        "cursor-pointer",
+        "hover:scale-[1.02] active:scale-[0.98]",
+      ],
 
-      hoverClasses,
-      selectedClasses,
-      disabledClasses
+      // Selected state
+      selected && [
+        "shadow-lg scale-[1.02]",
+      ],
+
+      // Non-selectable states
+      disabled && [
+        "cursor-not-allowed",
+        "hover:scale-100",
+      ]
     );
-
-    return classes;
   };
 
   if (loading) {
@@ -112,30 +139,60 @@ export function TimeSlotsPanel({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+          <h3 
+            className="text-lg font-semibold"
+            style={{ color: 'var(--text-primary)' }}
+          >
             Available Times
           </h3>
-          <p className="text-sm text-gray-700 dark:text-gray-300 mt-1">
+          <p 
+            className="text-sm mt-1"
+            style={{ color: 'var(--text-secondary)' }}
+          >
             {slots.length} slot{slots.length !== 1 ? "s" : ""} available
           </p>
         </div>
-        <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-          <Clock className="h-4 w-4" />
+        <div 
+          className="flex items-center gap-2 text-sm"
+          style={{ color: 'var(--text-secondary)' }}
+        >
+          <Clock className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
           <span>{timezone.split("/")[1]?.replace("_", " ")}</span>
         </div>
       </div>
 
       {/* Location Info */}
       {location && (
-        <div className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
-          <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
-            <MapPin className="h-4 w-4 text-primary-600 dark:text-primary-400" />
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="flex items-start gap-3 p-3 rounded-lg backdrop-blur-sm"
+          style={{ 
+            backgroundColor: 'var(--bg-elevated)',
+            border: '1px solid var(--border-default)'
+          }}
+        >
+          <div 
+            className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center"
+            style={{ 
+              background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
+              opacity: 0.2
+            }}
+          >
+            <MapPin className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+            <p 
+              className="text-sm font-medium"
+              style={{ color: 'var(--text-primary)' }}
+            >
               {location.is_online ? (
                 <span className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                  <span 
+                    className="w-2 h-2 rounded-full"
+                    style={{ backgroundColor: 'var(--accent-success)' }}
+                  />
                   Online Meeting
                 </span>
               ) : (
@@ -143,64 +200,85 @@ export function TimeSlotsPanel({
               )}
             </p>
             {location.address && !location.is_online && (
-              <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+              <p 
+                className="text-xs mt-1"
+                style={{ color: 'var(--text-muted)' }}
+              >
                 {location.address}
               </p>
             )}
           </div>
-        </div>
+        </motion.div>
       )}
 
       {/* Grouped Time Slots */}
       <div className="space-y-6">
-        {groupedSlots.map((group) => {
+        {groupedSlots.map((group, groupIndex) => {
           if (group.slots.length === 0) return null;
 
           return (
-            <div key={group.timeOfDay} className="space-y-3">
+            <motion.div
+              key={group.timeOfDay}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: groupIndex * 0.1 }}
+              className="space-y-3"
+            >
               {/* Group Header */}
               <div className="flex items-baseline justify-between">
-                <h4 className="text-base font-semibold text-gray-900 dark:text-gray-100">
+                <h4 
+                  className="text-base font-semibold"
+                  style={{ color: 'var(--text-primary)' }}
+                >
                   {group.label}
                 </h4>
-                <span className="text-xs text-gray-600 dark:text-gray-400">
+                <span 
+                  className="text-xs"
+                  style={{ color: 'var(--text-muted)' }}
+                >
                   {group.range}
                 </span>
               </div>
 
               {/* Slots Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-3">
-                {group.slots.map((slot) => {
+                {group.slots.map((slot, slotIndex) => {
                   const past = Boolean(slot.isPast);
                   const booked = Boolean(slot.booked);
                   const available = slot.available !== false;
                   const disabled = past || booked || !available;
+                  const selected = isSelected(slot);
 
                   return (
-                  <button
+                  <motion.button
                     key={slot.id}
                     onClick={() => !disabled && onSlotSelect(slot)}
                     disabled={disabled}
+                    whileHover={!disabled && !selected ? { scale: 1.02 } : {}}
+                    whileTap={!disabled && !selected ? { scale: 0.98 } : {}}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: (groupIndex * 0.1) + (slotIndex * 0.05) }}
                     aria-label={`Time slot ${formatSlotTime(slot.start_time)}${
                       slot.provider ? ` with ${slot.provider.name}` : ""
                     }${slot.recommended ? " (Recommended)" : ""}${
                       slot.isPast ? " (Past)" : ""
                     }${slot.booked ? " (Booked)" : ""}`}
                     className={getSlotButtonClasses(slot)}
+                    style={getSlotButtonStyles(slot)}
                   >
                     {/* Time Display */}
                     <div className="flex flex-col items-start gap-1">
-                      <span className="text-base md:text-lg font-semibold">
+                      <span 
+                        className="text-base md:text-lg font-semibold"
+                        style={{ color: selected ? 'white' : 'var(--text-primary)' }}
+                      >
                         {formatSlotTime(slot.start_time)}
                       </span>
                       {slot.provider && (
                         <span
-                          className={cn(
-                            "text-xs flex items-center gap-1",
-                            isSelected(slot)
-                              ? "text-white/90 dark:text-white/90"
-                              : "text-gray-700 dark:text-gray-300"
-                          )}
+                          className="text-xs flex items-center gap-1"
+                          style={{ color: selected ? 'rgba(255, 255, 255, 0.9)' : 'var(--text-secondary)' }}
                         >
                           <User className="h-3 w-3" />
                           {slot.provider.name}
@@ -212,23 +290,26 @@ export function TimeSlotsPanel({
                     <div className="flex flex-col items-end gap-1">
                       {slot.recommended && (
                         <div
-                          className={cn(
-                            "flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium",
-                            isSelected(slot)
-                              ? "bg-white/20 text-white"
-                              : "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400"
-                          )}
+                          className="flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium backdrop-blur-sm"
+                          style={selected ? {
+                            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                            color: 'white'
+                          } : {
+                            backgroundColor: 'var(--bg-elevated)',
+                            color: 'var(--accent-primary)',
+                            border: '1px solid var(--border-default)'
+                          }}
                         >
                           <Star className="h-3 w-3 fill-current" />
                           <span>Best</span>
                         </div>
                       )}
                     </div>
-                  </button>
+                  </motion.button>
                   );
                 })}
               </div>
-            </div>
+            </motion.div>
           );
         })}
       </div>
@@ -301,15 +382,32 @@ function TimeSlotsLoading() {
 // Empty state component
 function EmptySlots({ date }: { date: Date }) {
   return (
-    <div className="w-full h-64 flex flex-col items-center justify-center text-center space-y-4 p-6">
-      <div className="h-16 w-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-        <Clock className="h-8 w-8 text-gray-500 dark:text-gray-500" />
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.3 }}
+      className="w-full h-64 flex flex-col items-center justify-center text-center space-y-4 p-6"
+    >
+      <div 
+        className="h-16 w-16 rounded-full flex items-center justify-center backdrop-blur-sm"
+        style={{ 
+          background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
+          opacity: 0.2
+        }}
+      >
+        <Clock className="h-8 w-8" style={{ color: 'var(--accent-primary)' }} />
       </div>
       <div className="space-y-2">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+        <h3 
+          className="text-lg font-semibold"
+          style={{ color: 'var(--text-primary)' }}
+        >
           No available time slots
         </h3>
-        <p className="text-sm text-gray-700 dark:text-gray-300 max-w-xs">
+        <p 
+          className="text-sm max-w-xs"
+          style={{ color: 'var(--text-secondary)' }}
+        >
           There are no available appointments for{" "}
           {date.toLocaleDateString("en-US", {
             weekday: "long",
@@ -319,12 +417,12 @@ function EmptySlots({ date }: { date: Date }) {
         </p>
       </div>
       <div className="flex flex-col gap-2 mt-4">
-        <p className="text-xs text-gray-600 dark:text-gray-400">Try:</p>
+        <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Try:</p>
         <div className="flex gap-2 text-sm">
-          <span className="text-primary-600 dark:text-primary-400">• Select another date</span>
-          <span className="text-primary-600 dark:text-primary-400">• View next available</span>
+          <span style={{ color: 'var(--accent-primary)' }}>• Select another date</span>
+          <span style={{ color: 'var(--accent-primary)' }}>• View next available</span>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

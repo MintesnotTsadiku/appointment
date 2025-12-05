@@ -3,22 +3,27 @@
 > **Strategic analysis and phased implementation plan for expanding from time-based appointments to a multi-category marketplace**
 
 **Date**: 2025-01-25  
-**Status**: Architecture Review & Recommendation  
+**Status**: Architecture Review & Recommendation (Expert-Validated)  
 **Author**: AI Architecture Analysis
+
+**⚠️ Important Update:** This document has been updated to incorporate expert recommendations. See `MARKETPLACE_EXPANSION_COMPARISON.md` for detailed comparison of approaches and synthesis recommendations.
 
 ---
 
 ## 🎯 Executive Summary
 
-**Recommendation: Hybrid Extension Model with Unified Booking Abstraction**
+**Recommendation: Polymorphism-Based Architecture with Engine Separation (Expert-Validated)**
 
-After analyzing your current architecture and expansion goals, I recommend a **phased hybrid approach** that:
-1. ✅ **Extends** existing Service/Appointment models (Phase 1-2)
-2. ✅ **Adds** Resource doctype for inventory tracking (Phase 2)
-3. ✅ **Unifies** booking patterns through a Booking Engine abstraction (Phase 3)
-4. ✅ **Preserves** all existing appointment functionality
+After analyzing your current architecture, expansion goals, and expert review, I recommend a **polymorphism-based approach** that:
+1. ✅ **Extends** existing Service/Appointment models with `booking_mode` field
+2. ✅ **Adds** Resource doctype with Serialized vs Pool inventory tracking
+3. ✅ **Separates** availability logic into distinct engines (SlotEngine, InventoryEngine, TaskEngine)
+4. ✅ **Orchestrates** via AvailabilityManager pattern
+5. ✅ **Preserves** all existing appointment functionality
 
-**Key Insight**: Your existing Slot Engine and Policy Engine are **70% reusable** - don't rebuild, extend strategically.
+**Key Insight**: Your existing Slot Engine and Policy Engine are **70% reusable** - but separate engines prevent coupling and maintainability issues.
+
+**⚠️ Important:** This document has been updated to incorporate expert recommendations. See `MARKETPLACE_EXPANSION_COMPARISON.md` for detailed comparison.
 
 ---
 
@@ -34,44 +39,64 @@ After analyzing your current architecture and expansion goals, I recommend a **p
 - ✅ Allows incremental rollout
 - ✅ Maintains backward compatibility
 
-**Schema Changes:**
+**Schema Changes (Expert-Validated):**
 ```python
-# Service doctype - ADD these fields
+# Service doctype - ADD these fields (Expert's approach)
 {
-  "service_type": "Select",  # "appointment" | "resource" | "skill" | "task"
-  "booking_pattern": "Select",  # "time_slot" | "date_range" | "flexible" | "on_demand"
-  "resource_link": "Link",  # Link to Resource (if service_type = "resource")
-  "is_bookable_in_advance": "Check",  # For on-demand services
-  "minimum_booking_advance_hours": "Int",  # Hours before service can be booked
+  "booking_mode": "Select",  # "Appointment" (Default) | "Resource" | "Task"
+  "resource_category": "Link",  # Link to Resource Category (if booking_mode = "Resource")
+  "unit_of_measure": "Select",  # "Minutes" (Default) | "Days" | "Hours" | "Quantity"
+  "inventory_method": "Select",  # "Serialized" (Specific ID) | "Pool" (Generic Count)
+  "requires_preparation": "Int",  # Minutes - replaces buffer for resources (cleaning/charging time)
+  
+  # Keep existing fields:
+  "duration": "Int",  # Still needed for appointments
+  "buffer_before": "Int",  # Still needed for appointments
+  "buffer_after": "Int",  # Still needed for appointments
 }
 
-# NEW: Resource doctype (for physical inventory)
+# NEW: Resource doctype (Expert's structure + enhancements)
 {
-  "resource_name": "Data",  # "Parking Spot #5", "Truck-001"
-  "resource_type": "Select",  # "parking", "vehicle", "equipment", "space"
-  "provider": "Link",  # Owner
-  "location": "Link",  # Where resource is located
-  "quantity": "Int",  # How many units available (1 = single item, 5 = 5 parking spots)
-  "current_available_quantity": "Int",  # Calculated field
+  "resource_name": "Data",  # "Canon EOS R5 #04" or "Parking Spot A-5"
+  "category": "Link",  # Link to Resource Category (Vehicles, Equipment, Spaces, etc.)
+  "status": "Select",  # "Available" | "Booked" | "Maintenance" | "Lost"
+  "location": "Link",  # Home base for the asset
+  "service": "Link",  # Which Service this resource belongs to (if inventory_method = Serialized)
+  "quantity": "Int",  # For Pool: how many units (default: 1). For Serialized: always 1
   "attributes": "JSON",  # Flexible metadata (truck capacity, equipment specs)
+  "calendar": "Table",  # Child table caching bookings for this specific asset (performance)
   "is_active": "Check",
 }
 
-# Appointment doctype - EXTEND these fields
+# Appointment doctype - EXTEND these fields (Expert's approach)
 {
-  "service_type": "Select",  # Inherit from Service, or override
-  "start_date": "Date",  # For date-range bookings (nullable)
-  "end_date": "Date",  # For date-range bookings (nullable)
-  "resource_quantity": "Int",  # How many units booked (default: 1)
-  "resource_allocation": "Table",  # Child table: Resource Allocation (links to specific Resource units)
-  "task_status": "Select",  # For task-based: "requested", "assigned", "in_progress", "completed"
-  "flexible_time_window": "Data",  # For flexible bookings (e.g., "Morning", "Afternoon")
+  "booking_mode": "Select",  # Inherited from Service, read-only
+  
+  # Time-based (Appointment mode) - existing fields (keep)
+  "appointment_date": "Date",  # Keep existing
+  "start_time": "Time",  # Keep existing
+  "end_time": "Time",  # Keep existing
+  
+  # Date-range (Resource mode) - new fields (Expert's clearer naming)
+  "pickup_date": "Date",  # For resources - clearer than start_date
+  "return_date": "Date",  # For resources - clearer than end_date
+  
+  # Resource-specific
+  "resource_link": "Link",  # Link to Resource (if booking_mode=Resource & inventory_method=Serialized)
+  "quantity": "Int",  # Default: 1. For Pool inventory, how many units booked
+  
+  # Task-specific
+  "task_deadline": "Datetime",  # For Tasks. Replaces end_time logic
+  "delivery_location": "Data",  # For Tasks/Deliveries (Client address)
+  "task_status": "Select",  # For Tasks: "requested", "assigned", "in_progress", "completed"
 }
 ```
 
 **❌ Avoid:** Creating completely separate doctypes (ResourceBooking, TaskBooking) - too much duplication
 
-**✅ Instead:** Extend Appointment to be polymorphic based on `service_type`
+**✅ Instead:** Extend Appointment to be polymorphic based on `booking_mode` (Expert's approach)
+
+**✅ Architecture Pattern:** Use separate engines (SlotEngine, InventoryEngine, TaskEngine) with AvailabilityManager orchestrator (prevents coupling)
 
 ---
 
@@ -134,64 +159,82 @@ class OnDemandPattern(BookingPattern):
 
 ---
 
-## 3. Slot Engine vs Availability Engine
+## 3. Slot Engine vs Availability Engine (UPDATED: Expert's Approach)
 
-### ✅ **Recommendation: Extend Slot Engine → Availability Engine**
+### ✅ **Recommendation: Separate Engines with AvailabilityManager Orchestrator**
 
-**Current Slot Engine** (`frappe_appointment/scheduler/helpers/slot_engine.py`) already handles:
-- ✅ Conflict detection
-- ✅ Buffer times
-- ✅ Working hours filtering
+**Expert's Insight:** Don't extend Slot Engine directly - use separate engines for better isolation.
 
-**What to ADD:**
-1. **Resource Availability Checker**
-   ```python
-   def check_resource_availability(
-       resource_name: str,
-       start_date: datetime.date,
-       end_date: datetime.date,
-       quantity: int = 1
-   ) -> bool:
-       """Check if resource has enough quantity available for date range"""
-       # Get all existing bookings for this resource in date range
-       # Check if (total_quantity - booked_quantity) >= requested_quantity
-       pass
-   ```
+**Architecture:**
+1. **Keep SlotEngine** (`slot_engine.py`) - unchanged, handles time-based appointments
+2. **Create InventoryEngine** - new engine for resource availability
+3. **Create TaskEngine** - new engine for task capacity
+4. **Create AvailabilityManager** - orchestrator that routes to appropriate engine
 
-2. **Date-Range Conflict Detection**
-   ```python
-   def check_date_range_conflicts(
-       resource_name: str,
-       start_date: datetime.date,
-       end_date: datetime.date
-   ) -> List[Dict]:
-       """Check for overlapping date-range bookings"""
-       # Similar to time overlap, but for dates
-       pass
-   ```
+**Why Separate Engines?**
+- ✅ **Prevents Coupling**: SlotEngine logic stays focused on time slots
+- ✅ **Easier Maintenance**: Each engine has single responsibility
+- ✅ **Clear Boundaries**: No risk of breaking existing appointment logic
+- ✅ **Testability**: Each engine can be tested independently
 
-3. **Capacity Management**
-   ```python
-   def check_capacity(
-       provider_name: str,
-       service_name: str,
-       date: datetime.date,
-       requested_quantity: int
-   ) -> bool:
-       """Check if provider can handle X concurrent tasks on date"""
-       # For task-based services with capacity limits
-       pass
-   ```
+**AvailabilityManager (Orchestrator):**
+```python
+# frappe_appointment/scheduler/helpers/availability_manager.py
 
-**Refactor Strategy:**
-- Rename `slot_engine.py` → `availability_engine.py`
-- Keep all existing functions (backward compatible)
-- Add new functions for resource/date-range patterns
-- Use strategy pattern to route to appropriate checker based on `service_type`
+class AvailabilityManager:
+    """
+    Orchestrator that routes availability requests to appropriate engine.
+    Expert's approach: Clear separation of concerns.
+    """
+    
+    def get_availability(self, service_doc, start_date, end_date=None):
+        """Unified entry point - routes based on booking_mode"""
+        if service_doc.booking_mode == "Appointment":
+            from frappe_appointment.scheduler.helpers.slot_engine import SlotEngine
+            return SlotEngine.get_slots(service_doc, start_date)
+        elif service_doc.booking_mode == "Resource":
+            from frappe_appointment.scheduler.helpers.inventory_engine import InventoryEngine
+            return InventoryEngine.get_stock_availability(service_doc, start_date, end_date)
+        elif service_doc.booking_mode == "Task":
+            from frappe_appointment.scheduler.helpers.task_engine import TaskEngine
+            return TaskEngine.get_capacity(service_doc, start_date)
+```
 
-**❌ Don't:** Create a completely new Availability Engine - too much duplication
+**InventoryEngine (New):**
+```python
+# frappe_appointment/scheduler/helpers/inventory_engine.py
 
-**✅ Do:** Extend Slot Engine with new pattern support, gradually migrate naming
+def check_resource_conflict(resource_name, pickup_datetime, return_datetime):
+    """
+    Expert's approach: Multi-day overlap logic for resources.
+    Returns True if conflict exists.
+    """
+    # Check for overlapping date ranges (not time slots)
+    filters = {
+        "resource_link": resource_name,
+        "status": ["in", ["Pending", "Confirmed"]],
+        "pickup_date": ["<=", return_datetime.date()],
+        "return_date": [">=", pickup_datetime.date()]
+    }
+    existing = frappe.get_all("Appointment", filters=filters, limit=1)
+    return len(existing) > 0
+
+def get_stock_availability(service_doc, start_date, end_date):
+    """
+    Handles both Serialized and Pool inventory methods.
+    Expert's sophisticated inventory handling.
+    """
+    if service_doc.inventory_method == "Serialized":
+        # Check each resource individually
+        # Return list of available resources
+        pass
+    elif service_doc.inventory_method == "Pool":
+        # Check total quantity available
+        # Return available quantity count
+        pass
+```
+
+**✅ Expert's approach wins:** Better isolation, easier to maintain, prevents code coupling.
 
 ---
 
@@ -911,6 +954,170 @@ Resource: "Parking Lot A" (quantity=5)
 - Comprehensive testing at each phase
 - User feedback loops
 - Clear rollback plan if issues arise
+
+---
+
+## 7. Marketplace Expansion Modules
+
+### 7.1 Modular Architecture Approach
+
+Each business expansion is implemented as a **separate module** that can:
+- ✅ Share common utilities from existing modules (scheduler, payments, channels)
+- ✅ Be developed and deployed independently
+- ✅ Extend base models (Provider, Service, Appointment) without breaking changes
+- ✅ Have its own dedicated landing page
+- ✅ Be enabled/disabled via configuration
+
+**Key Principle**: Modular isolation prevents code coupling and allows independent development while leveraging shared infrastructure.
+
+### 7.2 Current Marketplace Modules
+
+#### **1. Scheduler Module** (Existing)
+- **Purpose**: Core appointment booking system
+- **Location**: `frappe_appointment/scheduler/`
+- **Doctypes**: Provider, Location, Service, EventType, Appointment, Policy
+- **Landing Page**: `/scheduler` (moved from `/`)
+- **Status**: ✅ Production
+
+#### **2. Resources Module** (Planned)
+- **Purpose**: Physical resource bookings (parking, trucks, equipment)
+- **Location**: `frappe_appointment/resources/` (to be created)
+- **Key Features**:
+  - Date-range bookings (vs time-based appointments)
+  - Serialized vs Pool inventory tracking
+  - Resource availability management
+  - Booking mode: "Resource"
+- **Landing Page**: `/logistics` or `/resources`
+- **Engine**: InventoryEngine (separate from SlotEngine)
+- **Status**: ⏳ Planned (Phase 1-2 from expert's plan)
+
+#### **3. Tasks Module** (NEW)
+- **Purpose**: Core task management functionality
+- **Location**: `frappe_appointment/tasks/`
+- **Key Features**:
+  - Task creation and management
+  - Task templates and categories
+  - Task projects (grouping)
+  - Status workflow (requested → assigned → in_progress → completed)
+- **Reusability**: Can be used standalone or by assistants module
+- **Status**: ⏳ Planned
+
+#### **4. Assistants Module** (NEW)
+- **Purpose**: Virtual assistant marketplace platform
+- **Location**: `frappe_appointment/assistants/`
+- **Key Features**:
+  - Client-assistant matching
+  - Workload balancing (1:1, 1:2, 1:3 client models)
+  - Multi-client dashboard for assistants
+  - AI-augmented assistant tools
+  - Performance tracking
+- **Dependencies**: Tasks module (uses tasks for task management)
+- **Landing Page**: `/assistance`
+- **Status**: ⏳ Planned
+
+### 7.3 Module Dependency Graph
+
+```
+scheduler (existing)
+    ↑
+    ├── resources (extends Service/Appointment)
+    ├── tasks (standalone, reusable)
+    │       ↑
+    │       └── assistants (uses tasks, extends Provider)
+    │
+payments (existing) ← assistants, resources
+channels (existing) ← assistants, resources
+```
+
+**Dependency Rules**:
+- **Tasks Module**: Standalone, no dependencies on other marketplace modules
+- **Assistants Module**: Depends on Tasks module for task management
+- **Resources Module**: Independent, extends Service/Appointment
+- **All Modules**: Can use scheduler, payments, channels as shared utilities
+
+### 7.4 Landing Page Architecture
+
+#### **Multi-Module Landing Page Strategy**
+
+Each major marketplace module has its own dedicated landing page, allowing:
+- ✅ Focused user experience per module
+- ✅ SEO optimization per module
+- ✅ Independent marketing campaigns
+- ✅ Module-specific branding and messaging
+- ✅ Flexible site configuration
+
+#### **Landing Page Routes**
+
+| Route | Purpose | Target Audience |
+|-------|---------|----------------|
+| `/` | Hub page | All users (routes to modules or redirects to default) |
+| `/scheduler` | Appointment booking | Service providers, clients needing appointments |
+| `/assistance` | Virtual assistant platform | US professionals, virtual assistants |
+| `/logistics` | Resource booking | Resource owners, renters |
+| `/resources` | Alternative logistics route | Same as logistics |
+
+#### **Hub Page (`/`)**
+
+**Behavior**:
+- **Multi-Module Mode**: Shows all available modules as cards with descriptions
+- **Single-Module Mode**: Redirects to default module landing page
+- **Configuration**: Controlled via Website Settings
+
+**Implementation**:
+- Check Website Settings for "Default Module Landing Page"
+- If set: Redirect `/` to that module's landing page
+- If hub enabled: Show hub page with all enabled modules
+
+#### **Website Settings Integration**
+
+**New Setting**: "Default Module Landing Page"
+
+**Fields**:
+- `default_module_landing_page` (Select): `/`, `/scheduler`, `/assistance`, `/logistics`
+- `enable_hub_page` (Check): Show hub page at `/` or redirect to default
+- `enabled_modules` (Table): List of enabled modules for hub page display
+
+**Use Cases**:
+- **Focused Site**: Set default to `/assistance` → All traffic goes to assistant platform
+- **Multi-Module Site**: Enable hub page → Shows all modules, users choose
+- **Marketing**: Different campaigns can direct to specific module landing pages
+
+### 7.5 Shared Marketplace Utilities
+
+Common functionality shared across marketplace modules:
+
+#### **From Scheduler Module**:
+- **Availability Management**: Opening hours, time-off, availability calculation
+- **Provider Model**: Base for Virtual Assistant (assistants extends Provider)
+- **Policy Engine**: Cancellation policies, refund policies, service level agreements
+- **Conflict Detection**: Reusable logic for availability checking
+
+#### **From Payments Module**:
+- **Payment Processing**: Subscription billing, payment processing
+- **PaymentIntent Doctype**: Payment tracking and management
+- **Refund Handling**: Subscription cancellations, refund processing
+- **Assistant Payroll**: Assistant compensation processing (for assistants module)
+
+#### **From Channels Module**:
+- **Real-Time Messaging**: Client-assistant communication
+- **Email Notifications**: Automated email communications
+- **SMS Integration**: Optional SMS notifications
+- **Notification Doctype**: Notification tracking and delivery
+
+### 7.6 Module-Specific Implementation Plans
+
+**Important**: Each business expansion gets its own detailed implementation plan. This document (`MARKETPLACE_EXPANSION_ARCHITECTURE.md`) provides high-level overview only.
+
+**Implementation Plans**:
+1. **Resources Module**: See Phase 1-5 in this document (expert's plan)
+2. **Assistants Module**: See `docs/marketplace-expansion/task+assistance/ASSISTANTS_IMPLEMENTATION_PLAN.md`
+3. **Tasks Module**: Standalone, documented in Assistants plan (Phase 1)
+
+**Why Separate Plans?**
+- Each module has unique requirements and timelines
+- Allows independent development and deployment
+- Clearer documentation and tracking
+- Easier to prioritize and resource allocation
 
 ---
 

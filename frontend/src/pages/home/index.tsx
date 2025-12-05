@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { OnboardingProvider, useOnboarding } from '@/context/onboarding';
-import { useFrappeAuth } from 'frappe-react-sdk';
+import { useFrappeAuth, useFrappeGetCall } from 'frappe-react-sdk';
 import Spinner from '@/components/spinner';
 import OnboardingWizard from './sections/OnboardingWizard';
 import Dashboard from './sections/Dashboard';
@@ -13,12 +13,54 @@ const HomeContent = () => {
   const { currentUser } = useFrappeAuth();
   const isAdministrator = currentUser === 'Administrator';
 
+  // Fetch user data for welcome message
+  const { data: userData } = useFrappeGetCall<{ message: { full_name?: string; email?: string; name?: string } }>(
+    'frappe.auth.get_logged_user',
+    undefined,
+    'user-info'
+  );
+
+  // Try to get provider profile as fallback (more reliable for full_name)
+  const { data: providerData } = useFrappeGetCall<{ message: { full_name?: string; provider_name?: string } }>(
+    'frappe_appointment.onboarding.get_provider_profile',
+    undefined,
+    'provider-profile-home',
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
+  );
+
+  // Try multiple fallbacks to get user name
+  // Priority: provider full_name > user full_name > provider name > email username > currentUser
+  const userName = providerData?.message?.full_name ||
+                   userData?.message?.full_name || 
+                   providerData?.message?.provider_name ||
+                   userData?.message?.name ||
+                   (userData?.message?.email ? userData.message.email.split('@')[0] : null) ||
+                   currentUser || 
+                   'User';
+
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-gray-900">
-        <div className="text-center">
+      <div 
+        className="min-h-screen flex items-center justify-center"
+        style={{ backgroundColor: 'var(--bg-primary)' }}
+      >
+        {/* Ambient Background Glows */}
+        <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+          <div 
+            className="absolute -top-40 -right-40 w-80 h-80 rounded-full blur-[100px] opacity-30"
+            style={{ backgroundColor: 'var(--glow-primary)' }}
+          />
+          <div 
+            className="absolute top-1/2 -left-40 w-80 h-80 rounded-full blur-[100px] opacity-20"
+            style={{ backgroundColor: 'var(--glow-secondary)' }}
+          />
+        </div>
+        <div className="text-center relative z-10">
           <Spinner className="mx-auto mb-4" />
-          <p className="text-gray-600 dark:text-gray-400">Loading your dashboard...</p>
+          <p style={{ color: 'var(--text-secondary)' }}>Loading your dashboard...</p>
         </div>
       </div>
     );
@@ -26,9 +68,29 @@ const HomeContent = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-gray-900">
-        <div className="text-center max-w-md mx-auto p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
-          <div className="text-red-500 mb-4">
+      <div 
+        className="min-h-screen flex items-center justify-center"
+        style={{ backgroundColor: 'var(--bg-primary)' }}
+      >
+        {/* Ambient Background Glows */}
+        <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+          <div 
+            className="absolute -top-40 -right-40 w-80 h-80 rounded-full blur-[100px] opacity-30"
+            style={{ backgroundColor: 'var(--glow-primary)' }}
+          />
+          <div 
+            className="absolute top-1/2 -left-40 w-80 h-80 rounded-full blur-[100px] opacity-20"
+            style={{ backgroundColor: 'var(--glow-secondary)' }}
+          />
+        </div>
+        <div 
+          className="text-center max-w-md mx-auto p-8 rounded-2xl backdrop-blur-sm relative z-10"
+          style={{ 
+            backgroundColor: 'var(--bg-elevated)',
+            border: '1px solid var(--border-default)'
+          }}
+        >
+          <div className="mb-4" style={{ color: 'var(--status-cancelled)' }}>
             <svg
               className="w-16 h-16 mx-auto"
               fill="none"
@@ -43,15 +105,21 @@ const HomeContent = () => {
               />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+          <h2 
+            className="text-2xl font-bold mb-2"
+            style={{ color: 'var(--text-primary)' }}
+          >
             Something went wrong
           </h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
+          <p 
+            className="mb-6"
+            style={{ color: 'var(--text-secondary)' }}
+          >
             {error.message || 'Unable to load your dashboard. Please try again.'}
           </p>
           <button
             onClick={() => window.location.reload()}
-            className="px-6 py-3 bg-gradient-hero text-white rounded-lg font-medium hover:opacity-90 transition-opacity"
+            className="px-6 py-3 bg-gradient-primary text-white rounded-lg font-medium hover:opacity-90 transition-opacity"
           >
             Reload Page
           </button>
@@ -156,12 +224,12 @@ const HomeContent = () => {
             </Button>
           </div>
         </div>
-        <Dashboard />
+        <Dashboard userName={userName} />
       </div>
     );
   }
 
-  return <Dashboard />;
+  return <Dashboard userName={userName} />;
 };
 
 const Home = () => {

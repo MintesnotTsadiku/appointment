@@ -1,0 +1,147 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:user",
+ "creation": "2025-01-25 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "user",
+  "assistant_tier",
+  "max_clients",
+  "current_clients",
+  "section_break_contact",
+  "timezone",
+  "languages",
+  "section_break_profile",
+  "bio",
+  "education",
+  "section_break_skills",
+  "skills",
+  "section_break_status",
+  "is_active"
+ ],
+ "fields": [
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "User",
+   "options": "User",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "default": "standard",
+   "fieldname": "assistant_tier",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Assistant Tier",
+   "options": "junior\nstandard\nsenior",
+   "reqd": 1
+  },
+  {
+   "default": 1,
+   "fieldname": "max_clients",
+   "fieldtype": "Int",
+   "label": "Max Clients",
+   "options": "1\n2\n3",
+   "reqd": 1
+  },
+  {
+   "default": 0,
+   "fieldname": "current_clients",
+   "fieldtype": "Int",
+   "label": "Current Clients",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_contact",
+   "fieldtype": "Section Break",
+   "label": "Contact & Location"
+  },
+  {
+   "default": "Africa/Addis_Ababa",
+   "fieldname": "timezone",
+   "fieldtype": "Select",
+   "label": "Timezone",
+   "options": "Africa/Addis_Ababa\nAfrica/Nairobi\nAfrica/Cairo\nAfrica/Lagos\nAfrica/Johannesburg"
+  },
+  {
+   "fieldname": "languages",
+   "fieldtype": "Table",
+   "label": "Languages Spoken",
+   "options": "VA Language"
+  },
+  {
+   "fieldname": "section_break_profile",
+   "fieldtype": "Section Break",
+   "label": "Profile"
+  },
+  {
+   "fieldname": "bio",
+   "fieldtype": "Small Text",
+   "label": "Bio"
+  },
+  {
+   "fieldname": "education",
+   "fieldtype": "Small Text",
+   "label": "Education"
+  },
+  {
+   "fieldname": "section_break_skills",
+   "fieldtype": "Section Break",
+   "label": "Skills"
+  },
+  {
+   "fieldname": "skills",
+   "fieldtype": "Table",
+   "label": "Skills",
+   "options": "Assistant Skill Assignment"
+  },
+  {
+   "fieldname": "section_break_status",
+   "fieldtype": "Section Break",
+   "label": "Status"
+  },
+  {
+   "default": 1,
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active"
+  }
+ ],
+ "links": [],
+ "modified": "2025-01-25 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Assistants",
+ "name": "VA Profile",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "read": 1,
+   "role": "Virtual Assistant",
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
+

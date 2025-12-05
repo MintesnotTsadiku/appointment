@@ -1,0 +1,153 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2025-01-25 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "assistant",
+  "client_profile",
+  "section_break_activity",
+  "reference_doctype",
+  "reference_name",
+  "action",
+  "description",
+  "section_break_metadata",
+  "performed_by",
+  "performed_at",
+  "changes_made",
+  "section_break_context",
+  "ip_address",
+  "user_agent"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "ACT-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "assistant",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Virtual Assistant",
+   "options": "VA Profile"
+  },
+  {
+   "fieldname": "client_profile",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Client Profile",
+   "options": "Client Profile"
+  },
+  {
+   "fieldname": "section_break_activity",
+   "fieldtype": "Section Break",
+   "label": "Activity Details"
+  },
+  {
+   "fieldname": "reference_doctype",
+   "fieldtype": "Link",
+   "label": "Reference Doctype",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "reference_name",
+   "fieldtype": "Dynamic Link",
+   "label": "Reference Name",
+   "options": "reference_doctype"
+  },
+  {
+   "fieldname": "action",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Action",
+   "options": "created\nupdated\ndeleted\nviewed\nassigned\ncompleted\ncommented",
+   "reqd": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "section_break_metadata",
+   "fieldtype": "Section Break",
+   "label": "Metadata"
+  },
+  {
+   "fieldname": "performed_by",
+   "fieldtype": "Link",
+   "label": "Performed By",
+   "options": "User",
+   "reqd": 1
+  },
+  {
+   "fieldname": "performed_at",
+   "fieldtype": "Datetime",
+   "label": "Performed At",
+   "reqd": 1
+  },
+  {
+   "fieldname": "changes_made",
+   "fieldtype": "JSON",
+   "label": "Changes Made"
+  },
+  {
+   "fieldname": "section_break_context",
+   "fieldtype": "Section Break",
+   "label": "Context",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "ip_address",
+   "fieldtype": "Data",
+   "label": "IP Address"
+  },
+  {
+   "fieldname": "user_agent",
+   "fieldtype": "Small Text",
+   "label": "User Agent"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-01-25 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Assistants",
+ "name": "Activity Log",
+ "naming_rule": "By \"Naming Series\"",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "Virtual Assistant"
+  },
+  {
+   "read": 1,
+   "role": "Client"
+  }
+ ],
+ "sort_field": "performed_at",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
+

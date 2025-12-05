@@ -1,0 +1,139 @@
+{
+ "app": "frappe_appointment",
+ "charts": [],
+ "content": "[{\"id\": \"header_tasks_assistants\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\">Tasks & Assistants Management Dashboard</span>\", \"col\": 12}}, {\"id\": \"number_card_total_tasks\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Total Tasks\", \"col\": 3}}, {\"id\": \"number_card_total_va_profiles\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Total VA Profiles\", \"col\": 3}}, {\"id\": \"number_card_total_client_profiles\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Total Client Profiles\", \"col\": 3}}, {\"id\": \"number_card_active_assignments\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Active Assignments\", \"col\": 3}}, {\"id\": \"number_card_total_task_projects\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Total Task Projects\", \"col\": 3}}, {\"id\": \"number_card_task_categories\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Task Categories\", \"col\": 3}}, {\"id\": \"spacer_main\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"card_break_tasks_module\", \"type\": \"card\", \"data\": {\"card_name\": \"Tasks Module\", \"col\": 6}}, {\"id\": \"card_break_assistants_module\", \"type\": \"card\", \"data\": {\"card_name\": \"Assistants Module\", \"col\": 6}}, {\"id\": \"card_break_configuration\", \"type\": \"card\", \"data\": {\"card_name\": \"Configuration\", \"col\": 6}}]",
+ "creation": "2025-11-30 00:52:12.984713",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "hide_custom": 0,
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Tasks and Assistants",
+ "link_type": "DocType",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Tasks Module",
+   "link_count": 0,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Task",
+   "link_count": 0,
+   "link_to": "Task",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Task Category",
+   "link_count": 0,
+   "link_to": "Task Category",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Task Project",
+   "link_count": 0,
+   "link_to": "Task Project",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Task Template",
+   "link_count": 0,
+   "link_to": "Task Template",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "VA Profile",
+   "link_count": 0,
+   "link_to": "VA Profile",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Client Profile",
+   "link_count": 0,
+   "link_to": "Client Profile",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Assistant Client Assignment",
+   "link_count": 0,
+   "link_to": "Assistant Client Assignment",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Assistant Skill",
+   "link_count": 0,
+   "link_to": "Assistant Skill",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Activity Log",
+   "link_count": 0,
+   "link_to": "Activity Log",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Configuration Settings",
+   "link_count": 0,
+   "link_to": "Configuration Settings",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2025-11-30 22:18:08.781751",
+ "modified_by": "Administrator",
+ "module": "Frappe Appointment",
+ "name": "Tasks and Assistants",
+ "number_cards": [],
+ "owner": "Administrator",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 0.0,
+ "shortcuts": [],
+ "title": "Tasks and Assistants",
+ "type": "Workspace"
+}

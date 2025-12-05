@@ -100,6 +100,58 @@ ACTION_MAP = {
     'u3p4d5a6': ('frappe_appointment.scheduler.api.policy_manager', 'update_policy'),
     'd7e8l9p0': ('frappe_appointment.scheduler.api.policy_manager', 'delete_policy'),
     'g1o2r3s4': ('frappe_appointment.scheduler.api.policy_manager', 'get_organization_services'),
+    
+    # Tasks Module APIs
+    'd5b80608': ('frappe_appointment.tasks.api.task_api', 'create_task'),
+    '4d696c8c': ('frappe_appointment.tasks.api.task_api', 'get_task'),
+    'ba79d18a': ('frappe_appointment.tasks.api.task_api', 'list_tasks'),
+    'e3220d99': ('frappe_appointment.tasks.api.task_api', 'update_task'),
+    'a859a851': ('frappe_appointment.tasks.api.task_api', 'delete_task'),
+    '97023fd9': ('frappe_appointment.tasks.api.task_api', 'update_task_status'),
+    'b62fa73f': ('frappe_appointment.tasks.api.task_api', 'assign_task'),
+    '6b5d0ea8': ('frappe_appointment.tasks.api.task_api', 'get_tasks_by_client'),
+    '0e0368d2': ('frappe_appointment.tasks.api.task_api', 'get_tasks_by_assignee'),
+    '760ffdb7': ('frappe_appointment.tasks.api.task_api', 'get_daily_briefing_tasks'),
+    '2ef1c6a9': ('frappe_appointment.tasks.api.task_api', 'get_task_statistics'),
+    '60bf0ea1': ('frappe_appointment.tasks.api.task_master_data_api', 'create_task_category'),
+    '62b0ca92': ('frappe_appointment.tasks.api.task_master_data_api', 'list_task_categories'),
+    'a16a7d92': ('frappe_appointment.tasks.api.task_master_data_api', 'create_task_template'),
+    '496816cc': ('frappe_appointment.tasks.api.task_master_data_api', 'get_task_template'),
+    'e6e3c51b': ('frappe_appointment.tasks.api.task_master_data_api', 'list_task_templates'),
+    'f8f7cec3': ('frappe_appointment.tasks.api.task_master_data_api', 'create_tasks_from_template'),
+    '73b4ff03': ('frappe_appointment.tasks.api.task_master_data_api', 'create_task_project'),
+    '4d03ad6f': ('frappe_appointment.tasks.api.task_master_data_api', 'get_task_project'),
+    'b55f0def': ('frappe_appointment.tasks.api.task_master_data_api', 'list_task_projects'),
+    '5b5470c1': ('frappe_appointment.tasks.api.task_master_data_api', 'get_project_statistics'),
+    
+    # Assistants Module APIs
+    '75a7c028': ('frappe_appointment.assistants.api.assistant_api', 'create_va_profile'),
+    '35fd42e7': ('frappe_appointment.assistants.api.assistant_api', 'get_va_profile'),
+    '7fa5b066': ('frappe_appointment.assistants.api.assistant_api', 'list_va_profiles'),
+    '98fc243c': ('frappe_appointment.assistants.api.assistant_api', 'update_va_profile'),
+    '52bc4669': ('frappe_appointment.assistants.api.assistant_api', 'delete_va_profile'),
+    '55081dd1': ('frappe_appointment.assistants.api.assistant_api', 'create_client_profile'),
+    '44e25052': ('frappe_appointment.assistants.api.assistant_api', 'get_client_profile'),
+    '8cd817e4': ('frappe_appointment.assistants.api.assistant_api', 'list_client_profiles'),
+    '3cd540d4': ('frappe_appointment.assistants.api.assistant_api', 'update_client_profile'),
+    'a4605cf0': ('frappe_appointment.assistants.api.assistant_api', 'delete_client_profile'),
+    'f0767f52': ('frappe_appointment.assistants.api.assistant_api', 'create_assignment'),
+    'f59696de': ('frappe_appointment.assistants.api.assistant_api', 'get_assignment'),
+    'e7cb015b': ('frappe_appointment.assistants.api.assistant_api', 'list_assignments'),
+    'cbb71d95': ('frappe_appointment.assistants.api.assistant_api', 'update_assignment'),
+    '2669041d': ('frappe_appointment.assistants.api.assistant_api', 'delete_assignment'),
+    '3ec93d01': ('frappe_appointment.assistants.api.assistant_api', 'get_clients_for_va'),
+    '486ca9aa': ('frappe_appointment.assistants.api.assistant_api', 'get_vas_for_client'),
+    'c9ab672d': ('frappe_appointment.assistants.api.assistant_api', 'get_assignment_statistics'),
+    'a51ab4de': ('frappe_appointment.assistants.api.assistant_skill_api', 'create_assistant_skill'),
+    'f360e142': ('frappe_appointment.assistants.api.assistant_skill_api', 'get_assistant_skill'),
+    '0d3344cc': ('frappe_appointment.assistants.api.assistant_skill_api', 'list_assistant_skills'),
+    'f71a8bf3': ('frappe_appointment.assistants.api.assistant_skill_api', 'update_assistant_skill'),
+    'cc7d6bce': ('frappe_appointment.assistants.api.assistant_skill_api', 'delete_assistant_skill'),
+    'a6f41d9a': ('frappe_appointment.assistants.api.assistant_skill_api', 'assign_skill_to_va'),
+    '69646948': ('frappe_appointment.assistants.api.assistant_skill_api', 'remove_skill_from_va'),
+    'a0b3fac2': ('frappe_appointment.assistants.api.assistant_skill_api', 'get_va_skills'),
+    '6868f6e5': ('frappe_appointment.assistants.api.assistant_skill_api', 'get_vas_by_skill'),
 }
 
 
@@ -134,17 +186,22 @@ def _check_rate_limit(user, action):
     Basic rate limiting - 100 requests per minute per user per action
     For production, use frappe.rate_limiter or implement more sophisticated limits
     """
-    from frappe.cache import cache
-    key = f"gateway_rate_limit:{user}:{action}"
-    current = cache().get(key) or 0
-    
-    # 100 requests per minute per action
-    limit = frappe.conf.get('gateway_rate_limit', 100)
-    if current >= limit:
-        frappe.throw(_("Rate limit exceeded. Please try again later."))
-    
-    cache().setex(key, current + 1, 60)
-    return True
+    try:
+        key = f"gateway_rate_limit:{user}:{action}"
+        current = frappe.cache().get(key) or 0
+        
+        # 100 requests per minute per action
+        limit = frappe.conf.get('gateway_rate_limit', 100)
+        if current >= limit:
+            frappe.throw(_("Rate limit exceeded. Please try again later."))
+        
+        # Increment and set expiry
+        frappe.cache().set_value(key, current + 1, expires_in_sec=60)
+        return True
+    except Exception:
+        # If rate limiting fails, allow the request (fail open)
+        # This prevents rate limiting from breaking the API if cache is unavailable
+        return True
 
 
 def _log_gateway_request(action, user, success, error=None, duration=None):
@@ -260,8 +317,42 @@ def route(action=None, **kwargs):
                 "error": "Function not found"
             }
         
+        # Get function signature to know which parameters it accepts
+        import inspect
+        try:
+            sig = inspect.signature(function)
+            accepted_params = set(sig.parameters.keys())
+        except (ValueError, TypeError):
+            # If signature inspection fails, accept all parameters (fallback)
+            accepted_params = None
+        
         # Remove 'action' from kwargs before passing to target function
-        call_params = {k: v for k, v in kwargs.items() if k != 'action'}
+        # Also handle parameter conversion and filtering
+        call_params = {}
+        for k, v in kwargs.items():
+            if k == 'action':
+                continue
+            
+            # Only pass parameters that the function accepts (if we could inspect signature)
+            if accepted_params is not None and k not in accepted_params:
+                continue
+            
+            # Skip empty strings (treat as None/not provided)
+            if v == '':
+                continue
+                
+            # Try to parse JSON if it looks like JSON
+            if isinstance(v, str) and (v.startswith('{') or v.startswith('[')):
+                try:
+                    parsed = json.loads(v)
+                    # Include parsed value (empty dicts are valid for filters)
+                    call_params[k] = parsed
+                except (json.JSONDecodeError, ValueError):
+                    if v:  # Only include non-empty strings
+                        call_params[k] = v
+            else:
+                if v is not None and v != '':
+                    call_params[k] = v
         
         # Call the function with all parameters as keyword arguments
         # This matches how Frappe normally calls whitelisted methods
@@ -278,12 +369,17 @@ def route(action=None, **kwargs):
         }
         
     except TypeError as e:
-        # Handle parameter mismatch errors
+        # Handle parameter mismatch errors - log the actual error for debugging
         duration = time.time() - start_time
-        _log_gateway_request(action, user, False, f"Parameter error: {str(e)}", duration)
+        error_msg = f"Parameter error: {str(e)}"
+        frappe.log_error(
+            f"Gateway TypeError: {error_msg}\nFunction: {module_path}.{function_name}\nParams: {call_params}",
+            "API Gateway Parameter Error"
+        )
+        _log_gateway_request(action, user, False, error_msg, duration)
         return {
             "success": False,
-            "error": "Parameter error"  # Generic error for users
+            "error": f"Parameter error: {str(e)}",  # Include actual error for debugging
         }
     except Exception as e:
         duration = time.time() - start_time

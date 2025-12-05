@@ -58,7 +58,12 @@ SERVICES_BY_TYPE = {
         ("Dental Checkup", 45, 750, "Comprehensive dental examination"),
         ("Eye Examination", 30, 600, "Vision test and eye health check"),
         ("Vaccination", 15, 300, "Immunization services"),
-        ("Pediatric Consultation", 30, 550, "Child health checkup")
+        ("Pediatric Consultation", 30, 550, "Child health checkup"),
+        ("Emergency Consultation", 20, 800, "Urgent medical care"),
+        ("Follow-up Visit", 20, 400, "Post-treatment follow-up"),
+        ("Wellness Check", 45, 600, "Comprehensive health assessment"),
+        ("Specialist Consultation", 60, 1200, "Expert medical consultation"),
+        ("Lab Test Consultation", 30, 450, "Laboratory test review")
     ],
     "Salon & Spa": [
         ("Hair Cut & Style", 60, 300, "Professional haircut and styling"),
@@ -325,9 +330,14 @@ def generate_all_demo_data():
         results["providers"] = provider_result.get("providers", [])
         frappe.db.commit()
         
+        # Step 2.5: Ensure all organizations have active providers (fix missing providers)
+        frappe.msgprint("Step 2.5: Ensuring all organizations have providers...", alert=True)
+        ensure_orgs_have_providers_result = ensure_all_organizations_have_providers()
+        frappe.db.commit()
+        
         # Step 3: Generate Services (for organizations)
         frappe.msgprint("Step 3: Generating services...", alert=True)
-        service_result = generate_services(9)  # 3 per org
+        service_result = generate_services(15)  # 5 per org (more services for better testing)
         results["services"] = service_result.get("services", [])
         frappe.db.commit()
         
@@ -363,6 +373,12 @@ def generate_all_demo_data():
         # Step 6.5: Add Available Durations to all providers
         frappe.msgprint("Step 6.5: Adding available durations to providers...", alert=True)
         duration_result = add_available_durations_to_providers()
+        frappe.db.commit()
+        
+        # Step 6.6: Generate Appointment Groups
+        frappe.msgprint("Step 6.6: Generating appointment groups...", alert=True)
+        group_result = generate_appointment_groups(3)  # Create 3 group meetings
+        results["appointment_groups"] = group_result.get("groups", [])
         frappe.db.commit()
         
         # Step 7: Sync ALL booking URLs (CRITICAL - ensures all have booking URLs)
@@ -709,7 +725,8 @@ def generate_services(count=5):
         if not orgs:
             frappe.throw("Please create organizations first")
         
-        services_per_org = max(1, count // len(orgs))
+        # Distribute services more evenly, with at least 3-5 per org
+        services_per_org = max(3, count // len(orgs))
         service_index = 0
         
         for org in orgs:
@@ -2372,3 +2389,386 @@ def clear_organizations():
     except Exception as e:
         frappe.log_error(str(e), "Demo Data: Clear Organizations Error")
         frappe.throw(_(f"Error clearing organizations: {str(e)}"))
+
+
+@frappe.whitelist()
+def generate_appointment_groups(count=3):
+    """
+    Generate demo appointment groups for testing group booking
+    """
+    frappe.only_for("System Manager")
+    count = int(count)
+    
+    created = []
+    
+    try:
+        # Get providers with user appointment availability
+        providers = frappe.get_all(
+            "Provider",
+            filters={"is_active": 1},
+            fields=["name", "user", "email"],
+            limit=count * 2  # Get more providers to choose from
+        )
+        
+        if not providers:
+            frappe.throw("No active providers found. Please generate providers first.")
+        
+        # Get a Google Calendar for event_creator (required field)
+        google_calendars = frappe.get_all("Google Calendar", fields=["name"], limit=1)
+        event_creator = google_calendars[0].name if google_calendars else None
+        
+        if not event_creator:
+            frappe.throw("No Google Calendar found. Appointment Groups require a Google Calendar for event_creator. Please create one first.")
+        
+        # Group names for demo
+        group_names = [
+            "Team Consultation",
+            "Group Meeting",
+            "Collaborative Session",
+            "Multi-Person Call",
+            "Team Sync"
+        ]
+        
+        for i in range(count):
+            if i >= len(group_names):
+                break
+            
+            group_name = group_names[i]
+            
+            # Check if group already exists
+            if frappe.db.exists("Appointment Group", {"group_name": group_name}):
+                continue
+            
+            # Select 2-3 providers for this group
+            selected_providers = providers[i * 2:(i * 2) + min(3, len(providers) - i * 2)]
+            if not selected_providers:
+                selected_providers = providers[:min(2, len(providers))]
+            
+            try:
+                # Get first provider's user appointment availability for settings
+                first_provider = selected_providers[0]
+                user_availability = frappe.get_all(
+                    "User Appointment Availability",
+                    filters={"user": first_provider.get("user")},
+                    fields=["meeting_provider", "meeting_link"],
+                    limit=1
+                )
+                
+                meeting_provider = "Custom"
+                meeting_link = None
+                if user_availability:
+                    avail_provider = user_availability[0].get("meeting_provider", "Custom")
+                    # Convert "builtin" to "Custom" for Appointment Groups
+                    if avail_provider == "builtin":
+                        meeting_provider = "Custom"
+                    elif avail_provider in ["Custom", "Zoom", "Google Meet"]:
+                        meeting_provider = avail_provider
+                    meeting_link = user_availability[0].get("meeting_link")
+                
+                # Create Appointment Group
+                appointment_group = frappe.new_doc("Appointment Group")
+                appointment_group.group_name = group_name
+                appointment_group.event_creator = event_creator  # Required: Google Calendar
+                appointment_group.event_organizer = first_provider.get("user")
+                appointment_group.duration_for_event = 30 * 60  # 30 minutes in seconds
+                appointment_group.minimum_buffer_time = 5 * 60  # 5 minutes
+                appointment_group.allow_rescheduling = 1
+                appointment_group.minimum_notice_for_reschedule = 2 * 60 * 60  # 2 hours
+                appointment_group.minimum_notice_before_event = 24 * 60 * 60  # 24 hours
+                appointment_group.event_availability_window = 30  # 30 days
+                appointment_group.meet_provider = meeting_provider
+                if meeting_link:
+                    appointment_group.meet_link = meeting_link
+                else:
+                    # Set a default meeting link for Custom provider
+                    appointment_group.meet_link = "https://meet.example.com/group-meeting"
+                mark_as_demo(appointment_group)
+                
+                # Add members
+                for idx, provider in enumerate(selected_providers):
+                    appointment_group.append("members", {
+                        "user": provider.get("user"),
+                        "is_mandatory": 1 if idx == 0 else 0  # First one is mandatory
+                    })
+                
+                appointment_group.insert(ignore_permissions=True)
+                created.append({
+                    "name": appointment_group.name,
+                    "group_name": group_name,
+                    "booking_url": f"/schedule/gr/{appointment_group.name}"
+                })
+                frappe.db.commit()
+                
+            except Exception as e:
+                frappe.log_error(f"Error creating appointment group {group_name}: {str(e)}", "Demo Data: Generate Appointment Groups Error")
+                continue
+        
+        return {
+            "success": True,
+            "count": len(created),
+            "groups": created,
+            "message": f"Created {len(created)} appointment groups"
+        }
+        
+    except Exception as e:
+        frappe.log_error(str(e), "Demo Data: Generate Appointment Groups Error")
+        frappe.throw(_(f"Error generating appointment groups: {str(e)}"))
+
+
+@frappe.whitelist()
+def add_services_to_organization(org_name, count=5):
+    """
+    Add multiple services to a specific organization
+    Useful for testing with organizations that have many services
+    """
+    frappe.only_for("System Manager")
+    count = int(count)
+    
+    created = []
+    linked_count = 0
+    
+    try:
+        # Check if organization exists
+        if not frappe.db.exists("Organization", org_name):
+            frappe.throw(f"Organization '{org_name}' not found")
+        
+        org = frappe.get_doc("Organization", org_name)
+        org_type = org.organization_type or "Healthcare"
+        service_list = SERVICES_BY_TYPE.get(org_type, SERVICES_BY_TYPE["Healthcare"])
+        
+        # Get providers for this organization
+        org_providers = frappe.get_all(
+            "Provider Organization",
+            filters={"organization": org_name, "status": "Active"},
+            fields=["parent"],
+            pluck="parent"
+        )
+        valid_providers = [p for p in org_providers if frappe.db.exists("Provider", p)]
+        
+        if not valid_providers:
+            frappe.throw(f"No active providers found for organization '{org_name}'. Please add providers first.")
+        
+        # Get existing services to avoid duplicates
+        existing_services = frappe.get_all(
+            "Service",
+            filters={"organization": org_name},
+            fields=["service_name"],
+            pluck="service_name"
+        )
+        
+        # Create services
+        service_index = 0
+        for i in range(len(service_list)):
+            if service_index >= count:
+                break
+            
+            service_data = service_list[i % len(service_list)]
+            service_name, duration, price, description = service_data
+            
+            # Skip if service already exists
+            if service_name in existing_services:
+                continue
+            
+            try:
+                service = frappe.new_doc("Service")
+                service.service_name = service_name
+                service.organization = org_name
+                service.duration = duration
+                service.buffer_before = 5
+                service.buffer_after = 5
+                service.price = price
+                service.description = description
+                service.is_active = 1
+                mark_as_demo(service)
+                
+                # Link providers to service
+                for idx, provider_name in enumerate(valid_providers[:3]):  # Max 3 providers per service
+                    if not frappe.db.exists("Provider", provider_name):
+                        continue
+                    
+                    service.append("service_providers", {
+                        "provider": provider_name,
+                        "status": "Active",
+                        "is_primary": 1 if idx == 0 else 0,
+                        "price_override": price,
+                    })
+                    linked_count += 1
+                
+                service.insert(ignore_permissions=True)
+                created.append(service_name)
+                service_index += 1
+                
+            except Exception as e:
+                frappe.log_error(f"Error creating service {service_name} for {org_name}: {str(e)}", "Demo Data: Add Services Error")
+                continue
+        
+        frappe.db.commit()
+        
+        return {
+            "success": True,
+            "created": created,
+            "count": len(created),
+            "linked_providers": linked_count,
+            "message": f"Added {len(created)} services to {org_name}"
+        }
+        
+    except Exception as e:
+        frappe.log_error(str(e), "Demo Data: Add Services to Organization Error")
+        frappe.throw(_(f"Error adding services: {str(e)}"))
+
+
+@frappe.whitelist()
+def ensure_all_organizations_have_providers():
+    """
+    Ensure all organizations have at least one active provider linked
+    This fixes the "No active providers in organization" error
+    """
+    frappe.only_for("System Manager")
+    
+    fixed_count = 0
+    created_providers = []
+    
+    try:
+        # Get all organizations
+        orgs = frappe.get_all("Organization", fields=["name", "organization_name"])
+        
+        for org in orgs:
+            org_name = org["name"]
+            
+            # Check if organization has active providers
+            org_providers = frappe.get_all(
+                "Provider Organization",
+                filters={"organization": org_name, "status": "Active"},
+                fields=["parent"],
+                pluck="parent"
+            )
+            
+            # Filter to only providers that actually exist
+            valid_providers = [p for p in org_providers if frappe.db.exists("Provider", p)]
+            
+            if valid_providers:
+                # Organization already has providers, skip
+                continue
+            
+            # Organization has no providers - create one
+            try:
+                name = generate_ethiopian_name()
+                email = generate_email(name)
+                
+                # Check if user/provider already exists
+                if frappe.db.exists("User", email) or frappe.db.exists("Provider", {"email": email}):
+                    # Try a different email
+                    email = generate_email(name, domain="demo.et")
+                    if frappe.db.exists("User", email):
+                        continue
+                
+                # Create User
+                user = frappe.new_doc("User")
+                user.email = email
+                user.first_name = name.split()[0] if len(name.split()) > 0 else "Provider"
+                user.last_name = " ".join(name.split()[1:]) if len(name.split()) > 1 else ""
+                user.send_welcome_email = 0
+                user.user_type = "System User"
+                user.insert(ignore_permissions=True)
+                
+                # Create Provider
+                provider = frappe.new_doc("Provider")
+                provider.provider_name = name
+                provider.full_name = name
+                provider.email = email
+                provider.user = email
+                provider.phone = generate_ethiopian_phone()
+                provider.timezone = "Africa/Addis_Ababa"
+                provider.language = "en"
+                provider.is_active = 1
+                provider.onboarding_complete = 1
+                mark_as_demo(provider)
+                
+                # Link to organization via Provider Organization child table
+                if hasattr(provider, 'organizations'):
+                    provider.append("organizations", {
+                        "organization": org_name,
+                        "status": "Active",
+                        "accept_org_bookings": 1,
+                        "is_primary": 1
+                    })
+                
+                provider.insert(ignore_permissions=True)
+                
+                # Create User Appointment Availability
+                availability = frappe.new_doc("User Appointment Availability")
+                availability.user = email
+                availability.provider = provider.name
+                base_slug = sanitize_email_string(name)
+                availability.slug = generate_unique_slug(base_slug, "User Appointment Availability", "slug")
+                availability.enable_scheduling = 1
+                availability.meeting_provider = "builtin"
+                availability.insert(ignore_permissions=True)
+                
+                # Link back to provider
+                provider.user_appointment_availability = availability.name
+                provider.save(ignore_permissions=True)
+                
+                # Add default duration and time slots
+                try:
+                    availability_doc = frappe.get_doc("User Appointment Availability", availability.name)
+                    needs_update = False
+                    
+                    weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+                    default_start_time = "09:00:00"
+                    default_end_time = "18:00:00"
+                    
+                    if not availability_doc.available_durations or len(availability_doc.available_durations) == 0:
+                        availability_doc.append("available_durations", {
+                            "title": "30 Minute Meeting",
+                            "duration": 30 * 60,
+                            "allow_rescheduling": 1,
+                            "availability_window": 30,
+                            "minimum_notice_before_event": 2
+                        })
+                        needs_update = True
+                    
+                    existing_days = set()
+                    if availability_doc.appointment_time_slot:
+                        existing_days = {slot.day for slot in availability_doc.appointment_time_slot}
+                    
+                    for day in weekdays:
+                        if day not in existing_days:
+                            availability_doc.append("appointment_time_slot", {
+                                "day": day,
+                                "start_time": default_start_time,
+                                "end_time": default_end_time
+                            })
+                            needs_update = True
+                    
+                    if needs_update:
+                        availability_doc.save(ignore_permissions=True)
+                except Exception as e:
+                    frappe.log_error(str(e), "Demo Data: Add Durations/Time Slots Error")
+                
+                created_providers.append(provider.name)
+                fixed_count += 1
+                frappe.db.commit()
+                
+                # Sync booking URLs
+                try:
+                    from frappe_appointment.scheduler.booking_url_manager import sync_booking_urls_for_provider
+                    sync_booking_urls_for_provider(provider.name)
+                    frappe.db.commit()
+                except Exception as e:
+                    frappe.log_error(str(e), "Demo Data: Sync Provider Booking URLs Error")
+                    
+            except Exception as e:
+                frappe.log_error(f"Error creating provider for organization {org_name}: {str(e)}", "Demo Data: Ensure Org Providers Error")
+                continue
+        
+        return {
+            "success": True,
+            "fixed_count": fixed_count,
+            "created_providers": created_providers,
+            "message": f"Ensured {fixed_count} organizations have providers"
+        }
+        
+    except Exception as e:
+        frappe.log_error(str(e), "Demo Data: Ensure Org Providers Error")
+        frappe.throw(_(f"Error ensuring organizations have providers: {str(e)}"))

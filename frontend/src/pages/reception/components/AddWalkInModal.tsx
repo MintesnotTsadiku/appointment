@@ -310,3 +310,6 @@ export const AddWalkInModal = ({
 
 
 
+
+
+

@@ -1,0 +1,39 @@
+{
+ "actions": [],
+ "creation": "2025-01-25 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "depends_on_task",
+  "dependency_type"
+ ],
+ "fields": [
+  {
+   "fieldname": "depends_on_task",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Depends On Task",
+   "options": "Task",
+   "reqd": 1
+  },
+  {
+   "default": "finish_to_start",
+   "fieldname": "dependency_type",
+   "fieldtype": "Select",
+   "label": "Dependency Type",
+   "options": "finish_to_start\nstart_to_start\nfinish_to_finish\nstart_to_finish"
+  }
+ ],
+ "istable": 1,
+ "modified": "2025-01-25 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Tasks",
+ "name": "Task Dependency",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
+

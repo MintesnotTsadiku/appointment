@@ -1,0 +1,178 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2025-01-25 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "assistant",
+  "client_profile",
+  "section_break_assignment",
+  "assignment_type",
+  "priority",
+  "status",
+  "section_break_dates",
+  "start_date",
+  "end_date",
+  "section_break_performance",
+  "tasks_completed",
+  "tasks_pending",
+  "average_response_time",
+  "satisfaction_rating",
+  "section_break_notes",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "ACA-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "assistant",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Virtual Assistant",
+   "options": "VA Profile",
+   "reqd": 1
+  },
+  {
+   "fieldname": "client_profile",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Client Profile",
+   "options": "Client Profile",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_assignment",
+   "fieldtype": "Section Break",
+   "label": "Assignment Details"
+  },
+  {
+   "default": "dedicated",
+   "fieldname": "assignment_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Assignment Type",
+   "options": "dedicated\nshared_2\nshared_3",
+   "reqd": 1
+  },
+  {
+   "default": "primary",
+   "depends_on": "eval:doc.assignment_type!==\"dedicated\"",
+   "fieldname": "priority",
+   "fieldtype": "Select",
+   "label": "Priority",
+   "options": "primary\nsecondary"
+  },
+  {
+   "default": "active",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "active\npaused\nended",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_dates",
+   "fieldtype": "Section Break",
+   "label": "Timeline"
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "label": "Start Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "label": "End Date"
+  },
+  {
+   "fieldname": "section_break_performance",
+   "fieldtype": "Section Break",
+   "label": "Performance Metrics",
+   "collapsible": 1
+  },
+  {
+   "default": 0,
+   "fieldname": "tasks_completed",
+   "fieldtype": "Int",
+   "label": "Tasks Completed",
+   "read_only": 1
+  },
+  {
+   "default": 0,
+   "fieldname": "tasks_pending",
+   "fieldtype": "Int",
+   "label": "Tasks Pending",
+   "read_only": 1
+  },
+  {
+   "description": "Average response time in hours",
+   "fieldname": "average_response_time",
+   "fieldtype": "Float",
+   "label": "Average Response Time (Hours)",
+   "read_only": 1
+  },
+  {
+   "default": 0,
+   "fieldname": "satisfaction_rating",
+   "fieldtype": "Rating",
+   "label": "Satisfaction Rating",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_notes",
+   "fieldtype": "Section Break",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Text Editor",
+   "label": "Notes"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-01-25 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Assistants",
+ "name": "Assistant Client Assignment",
+ "naming_rule": "By \"Naming Series\"",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "read": 1,
+   "role": "Virtual Assistant",
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
+

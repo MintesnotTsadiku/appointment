@@ -1,0 +1,126 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:template_name",
+ "creation": "2025-01-25 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "template_name",
+  "description",
+  "category",
+  "estimated_duration",
+  "priority",
+  "section_break_fields",
+  "default_title",
+  "default_description",
+  "default_tags",
+  "section_break_tasks",
+  "template_tasks",
+  "is_active"
+ ],
+ "fields": [
+  {
+   "fieldname": "template_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Template Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "category",
+   "fieldtype": "Link",
+   "label": "Category",
+   "options": "Task Category"
+  },
+  {
+   "description": "Default estimated duration in minutes",
+   "fieldname": "estimated_duration",
+   "fieldtype": "Int",
+   "label": "Estimated Duration (Minutes)"
+  },
+  {
+   "default": "medium",
+   "fieldname": "priority",
+   "fieldtype": "Select",
+   "label": "Default Priority",
+   "options": "low\nmedium\nhigh\nurgent"
+  },
+  {
+   "fieldname": "section_break_fields",
+   "fieldtype": "Section Break",
+   "label": "Default Fields"
+  },
+  {
+   "fieldname": "default_title",
+   "fieldtype": "Data",
+   "label": "Default Title"
+  },
+  {
+   "fieldname": "default_description",
+   "fieldtype": "Small Text",
+   "label": "Default Description"
+  },
+  {
+   "fieldname": "default_tags",
+   "fieldtype": "Small Text",
+   "label": "Default Tags"
+  },
+  {
+   "fieldname": "section_break_tasks",
+   "fieldtype": "Section Break",
+   "label": "Template Tasks"
+  },
+  {
+   "fieldname": "template_tasks",
+   "fieldtype": "Table",
+   "label": "Tasks",
+   "options": "Task Template Task"
+  },
+  {
+   "default": 1,
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active"
+  }
+ ],
+ "links": [],
+ "modified": "2025-01-25 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Tasks",
+ "name": "Task Template",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "read": 1,
+   "role": "Virtual Assistant",
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
+

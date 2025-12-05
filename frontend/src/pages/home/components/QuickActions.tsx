@@ -17,12 +17,14 @@ import {
 } from 'lucide-react';
 import { CreateServiceModal } from '../modals/CreateServiceModal';
 import { ShareLinkModal } from '../modals/ShareLinkModal';
+import { CreateAppointmentGroupModal } from '../modals/CreateAppointmentGroupModal';
 
 const QuickActions = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [createServiceOpen, setCreateServiceOpen] = useState(false);
   const [shareLinkOpen, setShareLinkOpen] = useState(false);
+  const [createGroupOpen, setCreateGroupOpen] = useState(false);
 
   const actions = [
     {
@@ -32,6 +34,14 @@ const QuickActions = () => {
       description: 'Add appointment type',
       isPrimary: true,
       onClick: () => setCreateServiceOpen(true),
+    },
+    {
+      id: 'new-group',
+      icon: Users,
+      title: 'Group Meeting',
+      description: 'Create team meeting',
+      isPrimary: false,
+      onClick: () => setCreateGroupOpen(true),
     },
     {
       id: 'my-calendar',
@@ -63,7 +73,7 @@ const QuickActions = () => {
     },
     {
       id: 'manage-team',
-      icon: Users,
+      icon: Settings,
       title: 'Manage Team',
       description: 'Add team members',
       onClick: () => navigate('/settings/team'),
@@ -76,9 +86,16 @@ const QuickActions = () => {
       onClick: () => navigate('/settings/profile?tab=policies'),
     },
     {
-      id: 'manage',
+      id: 'settings',
       icon: Settings,
-      title: 'Manage Setup',
+      title: 'Settings',
+      description: 'All settings in one place',
+      onClick: () => navigate('/settings'),
+    },
+    {
+      id: 'manage',
+      icon: FileText,
+      title: 'Manage All',
       description: 'View & manage all items',
       onClick: () => navigate('/settings/manage'),
     },
@@ -203,6 +220,13 @@ const QuickActions = () => {
       <ShareLinkModal 
         open={shareLinkOpen} 
         onOpenChange={setShareLinkOpen}
+      />
+      <CreateAppointmentGroupModal 
+        open={createGroupOpen} 
+        onOpenChange={setCreateGroupOpen}
+        onSuccess={() => {
+          window.location.reload();
+        }}
       />
     </>
   );

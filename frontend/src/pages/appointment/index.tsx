@@ -10,7 +10,10 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useFrappeGetCall } from "frappe-react-sdk";
 import { useAppContext } from "@/context/app";
 import { getLocalTimezone } from "@/lib/utils";
-import { Info } from "lucide-react";
+import { Info, Moon, Sun, ArrowLeft } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useTheme } from "@/components/theme-provider";
+import { Button } from "@/components/button";
 import MetaTags from "@/components/meta-tags";
 import PoweredBy from "@/components/powered-by";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
@@ -59,6 +62,12 @@ const AppointmentV2 = () => {
   const [displayMonth, setDisplayMonth] = useState(new Date());
   const [timeFormat, setTimeFormat] = useState<'12h' | '24h' | 'ethiopian'>('12h');
   const [bookingResponse, setBookingResponse] = useState<any>(null);
+  const { theme, setTheme } = useTheme();
+
+  // Theme toggle handler
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
   
   // Get type from URL
   const type = searchParams.get("type");
@@ -241,6 +250,58 @@ const AppointmentV2 = () => {
         title={userInfo.name ? `${userInfo.name} | Appointment` : "Appointment"}
         description={`Book appointment with ${userInfo.name}`}
       />
+      {/* Sticky Header with Back Button and Theme Toggle (only show in selection phase, not datetime/form) */}
+      {currentPhase === 'selection' && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="sticky top-0 z-50 w-full backdrop-blur-xl"
+          style={{ 
+            backgroundColor: 'color-mix(in srgb, var(--bg-primary) 95%, transparent)',
+            borderBottom: '1px solid var(--border-subtle)'
+          }}
+        >
+          <div className="w-full max-w-7xl mx-auto px-5 md:px-6 py-4 flex items-center justify-end">
+            {/* No back button in selection phase - only theme toggle */}
+
+            {/* Theme Toggle */}
+            <motion.button
+              onClick={toggleTheme}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg backdrop-blur-sm transition-all"
+              style={{ 
+                backgroundColor: 'var(--border-subtle)',
+                border: '1px solid var(--border-default)'
+              }}
+              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.02 }}
+              aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+            >
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={theme + "-icon"}
+                  initial={{ opacity: 0, rotate: -90 }}
+                  animate={{ opacity: 1, rotate: 0 }}
+                  exit={{ opacity: 0, rotate: 90 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {theme === "light" ? (
+                    <Moon className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
+                  ) : (
+                    <Sun className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
+                  )}
+                </motion.div>
+              </AnimatePresence>
+              <span 
+                className="text-sm font-medium"
+                style={{ color: 'var(--text-secondary)' }}
+              >
+                {theme === "light" ? "Dark" : "Light"}
+              </span>
+            </motion.button>
+          </div>
+        </motion.div>
+      )}
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         {/* Phase 1: Duration Selection */}
         {currentPhase === 'selection' && (

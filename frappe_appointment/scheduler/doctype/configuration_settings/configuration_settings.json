@@ -30,7 +30,39 @@
   "section_break_log",
   "demo_generation_log",
   "statistics_tab",
-  "stats_html"
+  "stats_html",
+  "assistants_tasks_tab",
+  "at_creation_order_info",
+  "section_break_tasks",
+  "include_task_categories",
+  "demo_task_category_count",
+  "column_break_at1",
+  "include_task_templates",
+  "demo_task_template_count",
+  "section_break_at2",
+  "include_task_projects",
+  "demo_task_project_count",
+  "column_break_at3",
+  "include_tasks",
+  "demo_task_count",
+  "section_break_assistants",
+  "include_assistant_skills",
+  "demo_assistant_skill_count",
+  "column_break_at4",
+  "include_va_profiles",
+  "demo_va_profile_count",
+  "section_break_at5",
+  "include_client_profiles",
+  "demo_client_profile_count",
+  "column_break_at6",
+  "include_assignments",
+  "demo_assignment_count",
+  "section_break_at_actions",
+  "btn_generate_at_demo_data",
+  "column_break_at_actions",
+  "btn_delete_at_demo_data",
+  "section_break_at_log",
+  "at_demo_generation_log"
  ],
  "fields": [
   {
@@ -178,6 +210,187 @@
    "fieldname": "stats_html",
    "fieldtype": "HTML",
    "label": "Demo Data Statistics"
+  },
+  {
+   "fieldname": "assistants_tasks_tab",
+   "fieldtype": "Tab Break",
+   "label": "Assistants & Tasks Demo Data"
+  },
+  {
+   "fieldname": "at_creation_order_info",
+   "fieldtype": "HTML",
+   "label": "Creation Order",
+   "options": "<div style='background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); border: 2px solid #9C27B0; color: #ffffff; padding: 20px; border-radius: 8px; margin-bottom: 20px;'>\n  <h3 style='margin-top: 0; color: #9C27B0;'>📋 Assistants & Tasks Demo Data Generator</h3>\n  <p style='margin-bottom: 15px; color: #e0e0e0;'>Select which data types to generate. Data will be created in the correct order:</p>\n  <ol style='line-height: 1.8; margin: 0; padding-left: 20px; color: #cccccc;'>\n    <li><strong style=\"color: #9C27B0;\">Assistant Skills</strong> - Skills catalog</li>\n    <li><strong style=\"color: #9C27B0;\">Task Categories</strong> - Task classification</li>\n    <li><strong style=\"color: #9C27B0;\">Task Templates</strong> - Reusable task templates</li>\n    <li><strong style=\"color: #9C27B0;\">VA Profiles</strong> - Virtual Assistant profiles</li>\n    <li><strong style=\"color: #9C27B0;\">Client Profiles</strong> - Client profiles</li>\n    <li><strong style=\"color: #9C27B0;\">Assistant Client Assignments</strong> - Assignment relationships</li>\n    <li><strong style=\"color: #9C27B0;\">Task Projects</strong> - Project groupings</li>\n    <li><strong style=\"color: #9C27B0;\">Tasks</strong> - Individual tasks</li>\n  </ol>\n  <div style='margin-top: 15px; padding: 10px; background: rgba(156, 39, 176, 0.1); border-left: 3px solid #9C27B0; border-radius: 4px;'>\n    <strong style=\"color: #9C27B0;\">💡 Tip:</strong> <span style=\"color: #e0e0e0;\">Check the boxes below and click \"Generate Demo Data\" to create realistic test data for Tasks and Assistants modules.</span>\n  </div>\n</div>"
+  },
+  {
+   "fieldname": "section_break_tasks",
+   "fieldtype": "Section Break",
+   "label": "Tasks Module Data"
+  },
+  {
+   "default": "1",
+   "fieldname": "include_task_categories",
+   "fieldtype": "Check",
+   "label": "Task Categories"
+  },
+  {
+   "default": "5",
+   "depends_on": "eval:doc.include_task_categories",
+   "fieldname": "demo_task_category_count",
+   "fieldtype": "Int",
+   "label": "Count"
+  },
+  {
+   "fieldname": "column_break_at1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "include_task_templates",
+   "fieldtype": "Check",
+   "label": "Task Templates"
+  },
+  {
+   "default": "3",
+   "depends_on": "eval:doc.include_task_templates",
+   "fieldname": "demo_task_template_count",
+   "fieldtype": "Int",
+   "label": "Count"
+  },
+  {
+   "fieldname": "section_break_at2",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "include_task_projects",
+   "fieldtype": "Check",
+   "label": "Task Projects"
+  },
+  {
+   "default": "5",
+   "depends_on": "eval:doc.include_task_projects",
+   "fieldname": "demo_task_project_count",
+   "fieldtype": "Int",
+   "label": "Count"
+  },
+  {
+   "fieldname": "column_break_at3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "include_tasks",
+   "fieldtype": "Check",
+   "label": "Tasks"
+  },
+  {
+   "default": "20",
+   "depends_on": "eval:doc.include_tasks",
+   "fieldname": "demo_task_count",
+   "fieldtype": "Int",
+   "label": "Count"
+  },
+  {
+   "fieldname": "section_break_assistants",
+   "fieldtype": "Section Break",
+   "label": "Assistants Module Data"
+  },
+  {
+   "default": "1",
+   "fieldname": "include_assistant_skills",
+   "fieldtype": "Check",
+   "label": "Assistant Skills"
+  },
+  {
+   "default": "10",
+   "depends_on": "eval:doc.include_assistant_skills",
+   "fieldname": "demo_assistant_skill_count",
+   "fieldtype": "Int",
+   "label": "Count"
+  },
+  {
+   "fieldname": "column_break_at4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "include_va_profiles",
+   "fieldtype": "Check",
+   "label": "VA Profiles"
+  },
+  {
+   "default": "5",
+   "depends_on": "eval:doc.include_va_profiles",
+   "fieldname": "demo_va_profile_count",
+   "fieldtype": "Int",
+   "label": "Count"
+  },
+  {
+   "fieldname": "section_break_at5",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "include_client_profiles",
+   "fieldtype": "Check",
+   "label": "Client Profiles"
+  },
+  {
+   "default": "10",
+   "depends_on": "eval:doc.include_client_profiles",
+   "fieldname": "demo_client_profile_count",
+   "fieldtype": "Int",
+   "label": "Count"
+  },
+  {
+   "fieldname": "column_break_at6",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "include_assignments",
+   "fieldtype": "Check",
+   "label": "Assistant Client Assignments"
+  },
+  {
+   "default": "8",
+   "depends_on": "eval:doc.include_assignments",
+   "fieldname": "demo_assignment_count",
+   "fieldtype": "Int",
+   "label": "Count"
+  },
+  {
+   "collapsible": 0,
+   "fieldname": "section_break_at_actions",
+   "fieldtype": "Section Break",
+   "label": "Actions"
+  },
+  {
+   "fieldname": "btn_generate_at_demo_data",
+   "fieldtype": "Button",
+   "label": "🚀 Generate Assistants & Tasks Demo Data"
+  },
+  {
+   "fieldname": "column_break_at_actions",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "btn_delete_at_demo_data",
+   "fieldtype": "Button",
+   "label": "🗑️ Delete Assistants & Tasks Demo Data"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "section_break_at_log",
+   "fieldtype": "Section Break",
+   "label": "Generation Log"
+  },
+  {
+   "fieldname": "at_demo_generation_log",
+   "fieldtype": "Text",
+   "label": "Log",
+   "read_only": 1
   }
  ],
  "issingle": 1,

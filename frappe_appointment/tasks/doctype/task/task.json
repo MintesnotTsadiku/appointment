@@ -1,0 +1,268 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2025-01-25 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "title",
+  "section_break_basic",
+  "description",
+  "status",
+  "priority",
+  "column_break_status",
+  "deadline",
+  "is_daily_briefing",
+  "section_break_assignment",
+  "client_profile",
+  "assignee",
+  "column_break_assignment2",
+  "category",
+  "project",
+  "related_event",
+  "section_break_duration",
+  "estimated_duration",
+  "actual_duration",
+  "column_break_duration2",
+  "tags",
+  "section_break_details",
+  "notes",
+  "section_break_dependencies",
+  "dependencies",
+  "section_break_attachments",
+  "attachments",
+  "section_break_meta",
+  "created_by",
+  "created_at",
+  "column_break_meta2",
+  "updated_at"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "TASK-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Title",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_basic",
+   "fieldtype": "Section Break",
+   "label": "Basic Information"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "requested\nassigned\nin_progress\ncompleted\ncancelled",
+   "default": "requested"
+  },
+  {
+   "fieldname": "priority",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Priority",
+   "options": "low\nmedium\nhigh\nurgent",
+   "default": "medium"
+  },
+  {
+   "fieldname": "column_break_status",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "deadline",
+   "fieldtype": "Datetime",
+   "label": "Deadline"
+  },
+  {
+   "default": 0,
+   "fieldname": "is_daily_briefing",
+   "fieldtype": "Check",
+   "label": "Show in Daily Briefing"
+  },
+  {
+   "fieldname": "section_break_assignment",
+   "fieldtype": "Section Break",
+   "label": "Assignment"
+  },
+  {
+   "fieldname": "client_profile",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Client Profile",
+   "options": "Client Profile",
+   "reqd": 1
+  },
+  {
+   "fieldname": "assignee",
+   "fieldtype": "Link",
+   "label": "Virtual Assistant",
+   "options": "VA Profile"
+  },
+  {
+   "fieldname": "column_break_assignment2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "category",
+   "fieldtype": "Link",
+   "label": "Category",
+   "options": "Task Category"
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Task Project"
+  },
+  {
+   "fieldname": "related_event",
+   "fieldtype": "Link",
+   "label": "Related Appointment",
+   "options": "Appointment"
+  },
+  {
+   "fieldname": "section_break_duration",
+   "fieldtype": "Section Break",
+   "label": "Duration"
+  },
+  {
+   "description": "Estimated duration in minutes",
+   "fieldname": "estimated_duration",
+   "fieldtype": "Int",
+   "label": "Estimated Duration (Minutes)"
+  },
+  {
+   "description": "Actual duration in minutes",
+   "fieldname": "actual_duration",
+   "fieldtype": "Int",
+   "label": "Actual Duration (Minutes)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_duration2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "tags",
+   "fieldtype": "Small Text",
+   "label": "Tags"
+  },
+  {
+   "fieldname": "section_break_details",
+   "fieldtype": "Section Break",
+   "label": "Details"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Text Editor",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "section_break_dependencies",
+   "fieldtype": "Section Break",
+   "label": "Dependencies"
+  },
+  {
+   "fieldname": "dependencies",
+   "fieldtype": "Table",
+   "label": "Task Dependencies",
+   "options": "Task Dependency"
+  },
+  {
+   "fieldname": "section_break_attachments",
+   "fieldtype": "Section Break",
+   "label": "Attachments"
+  },
+  {
+   "fieldname": "attachments",
+   "fieldtype": "Attach",
+   "label": "Attachments"
+  },
+  {
+   "fieldname": "section_break_meta",
+   "fieldtype": "Section Break",
+   "label": "Metadata",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "created_by",
+   "fieldtype": "Link",
+   "label": "Created By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "created_at",
+   "fieldtype": "Datetime",
+   "label": "Created At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_meta2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "updated_at",
+   "fieldtype": "Datetime",
+   "label": "Updated At",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-01-25 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Tasks",
+ "name": "Task",
+ "naming_rule": "By \"Naming Series\"",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "read": 1,
+   "role": "Virtual Assistant",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "role": "Client",
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
+

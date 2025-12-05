@@ -153,21 +153,45 @@ const Calendar = () => {
     });
   }, [filteredAppointments]);
 
-  // Get status color
+  // Get status color using CSS variables
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'Confirmed':
-        return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 border-blue-200 dark:border-blue-800';
+        return {
+          backgroundColor: 'var(--status-confirmed-bg)',
+          color: 'var(--status-confirmed)',
+          borderColor: 'var(--status-confirmed-border)'
+        };
       case 'Completed':
-        return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300 border-green-200 dark:border-green-800';
+        return {
+          backgroundColor: 'var(--status-confirmed-bg)',
+          color: 'var(--status-confirmed)',
+          borderColor: 'var(--status-confirmed-border)'
+        };
       case 'Pending':
-        return 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300 border-orange-200 dark:border-orange-800';
+        return {
+          backgroundColor: 'var(--status-pending-bg)',
+          color: 'var(--status-pending)',
+          borderColor: 'var(--status-pending-border)'
+        };
       case 'Cancelled':
-        return 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300 border-red-200 dark:border-red-800';
+        return {
+          backgroundColor: 'var(--status-cancelled-bg)',
+          color: 'var(--status-cancelled)',
+          borderColor: 'var(--status-cancelled-border)'
+        };
       case 'No Show':
-        return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 border-gray-200 dark:border-gray-700';
+        return {
+          backgroundColor: 'var(--bg-elevated)',
+          color: 'var(--text-muted)',
+          borderColor: 'var(--border-default)'
+        };
       default:
-        return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 border-gray-200 dark:border-gray-700';
+        return {
+          backgroundColor: 'var(--bg-elevated)',
+          color: 'var(--text-muted)',
+          borderColor: 'var(--border-default)'
+        };
     }
   };
 
@@ -218,10 +242,20 @@ const Calendar = () => {
     const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
     return (
-      <div className="grid grid-cols-7 gap-px bg-gray-200 dark:bg-gray-700">
+      <div 
+        className="grid grid-cols-7 gap-px"
+        style={{ backgroundColor: 'var(--border-default)' }}
+      >
         {/* Week day headers */}
         {weekDays.map(day => (
-          <div key={day} className="bg-white dark:bg-gray-900 p-2 text-center text-sm font-semibold text-gray-700 dark:text-gray-300">
+          <div 
+            key={day} 
+            className="p-2 text-center text-sm font-semibold"
+            style={{ 
+              backgroundColor: 'var(--bg-elevated)',
+              color: 'var(--text-primary)'
+            }}
+          >
             {day}
           </div>
         ))}
@@ -235,27 +269,44 @@ const Calendar = () => {
           return (
             <div
               key={day.toString()}
-              className={`bg-white dark:bg-gray-900 p-2 min-h-[100px] border-l border-t border-gray-200 dark:border-gray-700 ${
+              className={`p-2 min-h-[100px] border-l border-t ${
                 !isCurrentMonth ? 'opacity-50' : ''
-              } ${isTodayDate ? 'ring-2 ring-indigo-500 dark:ring-indigo-400' : ''}`}
+              } ${isTodayDate ? 'ring-2' : ''}`}
+              style={{ 
+                backgroundColor: 'var(--bg-elevated)',
+                borderColor: 'var(--border-default)',
+                ...(isTodayDate ? { 
+                  ringColor: 'var(--accent-primary)',
+                  ringWidth: '2px'
+                } : {})
+              }}
             >
-              <div className={`text-sm font-medium mb-1 ${isTodayDate ? 'text-indigo-600 dark:text-indigo-400' : 'text-gray-900 dark:text-white'}`}>
+              <div 
+                className="text-sm font-medium mb-1"
+                style={{ 
+                  color: isTodayDate ? 'var(--accent-primary)' : 'var(--text-primary)'
+                }}
+              >
                 {format(day, 'd')}
               </div>
               <div className="space-y-1">
-                {dayAppointments.slice(0, 3).map(apt => (
-                  <button
-                    key={apt.name}
-                    onClick={() => setSelectedAppointment(apt)}
-                    className={`w-full text-left text-xs px-2 py-1 rounded border ${getStatusColor(apt.status)} truncate hover:opacity-80 transition-opacity`}
-                    title={`${apt.client_name} - ${apt.service_name} (${apt.start_time})`}
-                  >
-                    <div className="font-medium truncate">{apt.client_name}</div>
-                    <div className="text-[10px] opacity-75 truncate">{apt.start_time}</div>
-                  </button>
-                ))}
+                {dayAppointments.slice(0, 3).map(apt => {
+                  const statusColors = getStatusColor(apt.status);
+                  return (
+                    <button
+                      key={apt.name}
+                      onClick={() => setSelectedAppointment(apt)}
+                      className="w-full text-left text-xs px-2 py-1 rounded border truncate hover:opacity-80 transition-opacity"
+                      style={statusColors}
+                      title={`${apt.client_name} - ${apt.service_name} (${apt.start_time})`}
+                    >
+                      <div className="font-medium truncate">{apt.client_name}</div>
+                      <div className="text-[10px] opacity-75 truncate">{apt.start_time}</div>
+                    </button>
+                  );
+                })}
                 {dayAppointments.length > 3 && (
-                  <div className="text-xs text-gray-500 dark:text-gray-400 px-2">
+                  <div className="text-xs px-2" style={{ color: 'var(--text-muted)' }}>
                     +{dayAppointments.length - 3} more
                   </div>
                 )}
@@ -277,10 +328,23 @@ const Calendar = () => {
       <div className="overflow-x-auto">
         <div className="flex min-w-full">
           {/* Time column */}
-          <div className="w-16 flex-shrink-0 border-r border-gray-200 dark:border-gray-700">
-            <div className="h-12 border-b border-gray-200 dark:border-gray-700"></div>
+          <div 
+            className="w-16 flex-shrink-0 border-r"
+            style={{ borderColor: 'var(--border-default)' }}
+          >
+            <div 
+              className="h-12 border-b"
+              style={{ borderColor: 'var(--border-default)' }}
+            ></div>
             {hours.map(hour => (
-              <div key={hour} className="h-16 border-b border-gray-200 dark:border-gray-700 px-2 text-xs text-gray-500 dark:text-gray-400">
+              <div 
+                key={hour} 
+                className="h-16 border-b px-2 text-xs"
+                style={{ 
+                  borderColor: 'var(--border-default)',
+                  color: 'var(--text-muted)'
+                }}
+              >
                 {hour.toString().padStart(2, '0')}:00
               </div>
             ))}
@@ -289,18 +353,40 @@ const Calendar = () => {
           {/* Days */}
           {weekDays.map(day => {
             const dayAppointments = getAppointmentsForDate(day);
+            const isTodayDate = isToday(day);
             
             return (
-              <div key={day.toString()} className="flex-1 border-r border-gray-200 dark:border-gray-700">
-                <div className={`h-12 border-b border-gray-200 dark:border-gray-700 p-2 text-center ${isToday(day) ? 'bg-indigo-50 dark:bg-indigo-900/20' : 'bg-white dark:bg-gray-900'}`}>
-                  <div className="text-xs text-gray-500 dark:text-gray-400">{format(day, 'EEE')}</div>
-                  <div className={`text-lg font-semibold ${isToday(day) ? 'text-indigo-600 dark:text-indigo-400' : 'text-gray-900 dark:text-white'}`}>
+              <div 
+                key={day.toString()} 
+                className="flex-1 border-r"
+                style={{ borderColor: 'var(--border-default)' }}
+              >
+                <div 
+                  className={`h-12 border-b p-2 text-center ${
+                    isTodayDate ? '' : ''
+                  }`}
+                  style={{ 
+                    borderColor: 'var(--border-default)',
+                    backgroundColor: isTodayDate ? 'var(--accent-primary-light)' : 'var(--bg-elevated)'
+                  }}
+                >
+                  <div className="text-xs" style={{ color: 'var(--text-muted)' }}>{format(day, 'EEE')}</div>
+                  <div 
+                    className="text-lg font-semibold"
+                    style={{ 
+                      color: isTodayDate ? 'var(--accent-primary)' : 'var(--text-primary)'
+                    }}
+                  >
                     {format(day, 'd')}
                   </div>
                 </div>
                 <div className="relative">
                   {hours.map(hour => (
-                    <div key={hour} className="h-16 border-b border-gray-200 dark:border-gray-700"></div>
+                    <div 
+                      key={hour} 
+                      className="h-16 border-b"
+                      style={{ borderColor: 'var(--border-default)' }}
+                    ></div>
                   ))}
                   
                   {/* Appointments */}
@@ -315,8 +401,12 @@ const Calendar = () => {
                       <button
                         key={apt.name}
                         onClick={() => setSelectedAppointment(apt)}
-                        className={`absolute left-1 right-1 rounded px-2 py-1 text-xs ${getStatusColor(apt.status)} hover:opacity-80 transition-opacity z-10`}
-                        style={{ top: `${top}px`, height: `${height}px` }}
+                        className="absolute left-1 right-1 rounded px-2 py-1 text-xs hover:opacity-80 transition-opacity z-10 border"
+                        style={{ 
+                          top: `${top}px`, 
+                          height: `${height}px`,
+                          ...getStatusColor(apt.status)
+                        }}
                         title={`${apt.client_name} - ${apt.service_name}`}
                       >
                         <div className="font-medium truncate">{apt.client_name}</div>
@@ -342,9 +432,19 @@ const Calendar = () => {
       <div className="overflow-x-auto">
         <div className="flex">
           {/* Time column */}
-          <div className="w-20 flex-shrink-0 border-r border-gray-200 dark:border-gray-700">
+          <div 
+            className="w-20 flex-shrink-0 border-r"
+            style={{ borderColor: 'var(--border-default)' }}
+          >
             {hours.map(hour => (
-              <div key={hour} className="h-16 border-b border-gray-200 dark:border-gray-700 px-2 text-sm text-gray-500 dark:text-gray-400">
+              <div 
+                key={hour} 
+                className="h-16 border-b px-2 text-sm"
+                style={{ 
+                  borderColor: 'var(--border-default)',
+                  color: 'var(--text-muted)'
+                }}
+              >
                 {hour.toString().padStart(2, '0')}:00
               </div>
             ))}
@@ -353,7 +453,11 @@ const Calendar = () => {
           {/* Day column */}
           <div className="flex-1 relative">
             {hours.map(hour => (
-              <div key={hour} className="h-16 border-b border-gray-200 dark:border-gray-700"></div>
+              <div 
+                key={hour} 
+                className="h-16 border-b"
+                style={{ borderColor: 'var(--border-default)' }}
+              ></div>
             ))}
             
             {/* Appointments */}
@@ -368,8 +472,12 @@ const Calendar = () => {
                 <button
                   key={apt.name}
                   onClick={() => setSelectedAppointment(apt)}
-                  className={`absolute left-2 right-2 rounded px-3 py-2 text-sm ${getStatusColor(apt.status)} hover:opacity-80 transition-opacity z-10`}
-                  style={{ top: `${top}px`, height: `${Math.max(height, 40)}px` }}
+                  className="absolute left-2 right-2 rounded px-3 py-2 text-sm hover:opacity-80 transition-opacity z-10 border"
+                  style={{ 
+                    top: `${top}px`, 
+                    height: `${Math.max(height, 40)}px`,
+                    ...getStatusColor(apt.status)
+                  }}
                 >
                   <div className="font-semibold">{apt.client_name}</div>
                   <div className="text-xs opacity-75">{apt.service_name}</div>
@@ -397,8 +505,8 @@ const Calendar = () => {
     if (sortedAppointments.length === 0) {
       return (
         <div className="text-center py-12">
-          <CalendarIcon className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-          <p className="text-gray-600 dark:text-gray-400">No appointments found</p>
+          <CalendarIcon className="w-16 h-16 mx-auto mb-4" style={{ color: 'var(--text-muted)' }} />
+          <p style={{ color: 'var(--text-secondary)' }}>No appointments found</p>
         </div>
       );
     }
@@ -410,19 +518,23 @@ const Calendar = () => {
             key={apt.name}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className={`p-4 rounded-lg border ${getStatusColor(apt.status)} cursor-pointer hover:opacity-80 transition-opacity`}
+            className="p-4 rounded-lg border cursor-pointer hover:opacity-80 transition-opacity"
+            style={getStatusColor(apt.status)}
             onClick={() => setSelectedAppointment(apt)}
           >
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <h4 className="font-semibold text-gray-900 dark:text-white">{apt.client_name}</h4>
-                  <span className={`text-xs px-2 py-0.5 rounded border ${getStatusColor(apt.status)}`}>
+                  <h4 className="font-semibold" style={{ color: 'var(--text-primary)' }}>{apt.client_name}</h4>
+                  <span 
+                    className="text-xs px-2 py-0.5 rounded border"
+                    style={getStatusColor(apt.status)}
+                  >
                     {apt.status}
                   </span>
                 </div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">{apt.service_name}</p>
-                <div className="flex items-center gap-4 mt-2 text-xs text-gray-500 dark:text-gray-500">
+                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{apt.service_name}</p>
+                <div className="flex items-center gap-4 mt-2 text-xs" style={{ color: 'var(--text-muted)' }}>
                   <span className="flex items-center gap-1">
                     <CalendarIcon className="w-3 h-3" />
                     {apt.appointment_date && format(parseISO(apt.appointment_date), 'MMM d, yyyy')}
@@ -438,7 +550,7 @@ const Calendar = () => {
               </div>
               {apt.amount_paid && apt.amount_paid > 0 && (
                 <div className="text-right">
-                  <div className="font-semibold text-gray-900 dark:text-white">
+                  <div className="font-semibold" style={{ color: 'var(--text-primary)' }}>
                     {apt.amount_paid} {apt.currency || 'ETB'}
                   </div>
                 </div>
@@ -852,19 +964,7 @@ const Calendar = () => {
                 <div className="flex items-center gap-2">
                   <span 
                     className="px-3 py-1 rounded-full text-sm font-medium border"
-                    style={{ 
-                      backgroundColor: getStatusColor(selectedAppointment.status).includes('blue') ? 'var(--status-pending-bg)' :
-                                      getStatusColor(selectedAppointment.status).includes('green') ? 'var(--status-confirmed-bg)' :
-                                      getStatusColor(selectedAppointment.status).includes('orange') ? 'var(--accent-warning-light)' :
-                                      getStatusColor(selectedAppointment.status).includes('red') ? 'var(--status-cancelled-bg)' :
-                                      'var(--border-subtle)',
-                      color: getStatusColor(selectedAppointment.status).includes('blue') ? 'var(--status-pending)' :
-                             getStatusColor(selectedAppointment.status).includes('green') ? 'var(--status-confirmed)' :
-                             getStatusColor(selectedAppointment.status).includes('orange') ? 'var(--accent-warning)' :
-                             getStatusColor(selectedAppointment.status).includes('red') ? 'var(--status-cancelled)' :
-                             'var(--text-primary)',
-                      borderColor: 'var(--border-default)'
-                    }}
+                    style={getStatusColor(selectedAppointment.status)}
                   >
                     {selectedAppointment.status}
                   </span>

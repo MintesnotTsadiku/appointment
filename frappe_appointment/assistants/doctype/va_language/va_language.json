@@ -1,0 +1,41 @@
+{
+ "actions": [],
+ "creation": "2025-01-25 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "language",
+  "proficiency_level"
+ ],
+ "fields": [
+  {
+   "fieldname": "language",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Language",
+   "options": "English\nAmharic\nFrench\nArabic\nOromo\nTigrinya\nSomali\nAfar",
+   "reqd": 1
+  },
+  {
+   "default": "intermediate",
+   "fieldname": "proficiency_level",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Proficiency Level",
+   "options": "beginner\nintermediate\nadvanced\nnative",
+   "reqd": 1
+  }
+ ],
+ "istable": 1,
+ "modified": "2025-01-25 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Assistants",
+ "name": "VA Language",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
+

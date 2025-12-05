@@ -1,6 +1,6 @@
 /**
- * DateTimeSelector - The heart of the redesign
- * Unified calendar + time slots view
+ * DateTimeSelector - Premium Design System
+ * Unified calendar + time slots view with glass-morphism and animations
  */
 
 import { useEffect, useMemo, useState } from "react";
@@ -9,8 +9,10 @@ import { CalendarPanel } from "./CalendarPanel";
 import { TimeSlotsPanel } from "./TimeSlotsPanel";
 import { TimeFormatToggle } from "../shared/TimeFormatToggle";
 import { cn } from "@/lib/utils";
-import { ArrowLeft, Info } from "lucide-react";
+import { ArrowLeft, Info, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/button";
+import { motion, AnimatePresence } from "framer-motion";
+import { useTheme } from "@/components/theme-provider";
 import type { TimeSlot } from "../../types";
 
 interface DateTimeSelectorProps {
@@ -88,6 +90,12 @@ export function DateTimeSelector({
 
   const [selectedProviderId, setSelectedProviderId] = useState<string>("all");
   const [showAllProviders, setShowAllProviders] = useState(false);
+  const { theme, setTheme } = useTheme();
+
+  // Theme toggle handler
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
 
   useEffect(() => {
     if (
@@ -129,42 +137,136 @@ useEffect(() => {
   const shouldCollapseProviders = providers.length > MAX_VISIBLE_PROVIDERS;
 
   return (
-    <div className="w-full max-w-7xl mx-auto">
-      {/* Header */}
-      <div className="mb-8 space-y-4">
-        {/* Back Button */}
-        {onBack && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onBack}
-            className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 -ml-2"
+    <div className="w-full max-w-7xl mx-auto relative">
+      {/* Ambient Background Glows */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+        <div 
+          className="absolute top-1/4 -left-1/4 w-96 h-96 rounded-full blur-3xl opacity-30"
+          style={{ background: 'var(--glow-primary)' }}
+        />
+        <div 
+          className="absolute bottom-1/4 -right-1/4 w-96 h-96 rounded-full blur-3xl opacity-20"
+          style={{ background: 'var(--glow-secondary)' }}
+        />
+        <div 
+          className="absolute top-1/2 right-1/4 w-72 h-72 rounded-full blur-3xl opacity-15"
+          style={{ background: 'var(--glow-success)' }}
+        />
+      </div>
+
+      {/* Sticky Header with Back Button and Theme Toggle */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="sticky top-0 z-50 w-full backdrop-blur-xl"
+        style={{ 
+          backgroundColor: 'color-mix(in srgb, var(--bg-primary) 95%, transparent)',
+          borderBottom: '1px solid var(--border-subtle)'
+        }}
+      >
+        <div className="w-full max-w-7xl mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
+          {/* Back Button */}
+          {onBack ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onBack}
+              className="backdrop-blur-sm"
+              style={{ 
+                color: 'var(--text-secondary)',
+                backgroundColor: 'var(--border-subtle)',
+                border: '1px solid var(--border-default)'
+              }}
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Services
+            </Button>
+          ) : (
+            <div /> // Spacer when no back button
+          )}
+
+          {/* Theme Toggle */}
+          <motion.button
+            onClick={toggleTheme}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg backdrop-blur-sm transition-all"
+            style={{ 
+              backgroundColor: 'var(--border-subtle)',
+              border: '1px solid var(--border-default)'
+            }}
+            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.02 }}
+            aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
           >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Services
-          </Button>
-        )}
-        
-        {/* Title */}
-        <div>
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={theme + "-icon"}
+                initial={{ opacity: 0, rotate: -90 }}
+                animate={{ opacity: 1, rotate: 0 }}
+                exit={{ opacity: 0, rotate: 90 }}
+                transition={{ duration: 0.2 }}
+              >
+                {theme === "light" ? (
+                  <Moon className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
+                ) : (
+                  <Sun className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
+                )}
+              </motion.div>
+            </AnimatePresence>
+            <span 
+              className="text-sm font-medium"
+              style={{ color: 'var(--text-secondary)' }}
+            >
+              {theme === "light" ? "Dark" : "Light"}
+            </span>
+          </motion.button>
+        </div>
+      </motion.div>
+
+      {/* Main Background */}
+      <div 
+        className="min-h-screen p-5 md:p-6"
+        style={{ backgroundColor: 'var(--bg-primary)' }}
+      >
+        {/* Title Section */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="mb-8"
+        >
+          <h1 
+            className="text-3xl md:text-4xl font-bold"
+            style={{ color: 'var(--text-primary)' }}
+          >
             Select Your Appointment Time
           </h1>
           {(serviceName || providerName) && (
-            <p className="mt-2 text-lg text-gray-700 dark:text-gray-300">
+            <p 
+              className="mt-2 text-lg"
+              style={{ color: 'var(--text-secondary)' }}
+            >
               {serviceName}
               {providerName && ` with ${providerName}`}
               {duration && ` • ${duration} min`}
             </p>
           )}
-        </div>
-      </div>
+        </motion.div>
 
       {/* Main Content - Two Column Layout (Desktop) / Stacked (Mobile) */}
-      <div className="grid lg:grid-cols-[400px,1fr] gap-8 items-start">
+      <div className="grid lg:grid-cols-[400px,1fr] gap-6 md:gap-8 items-start">
         {/* Left Column: Calendar */}
         <div className="space-y-6">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="rounded-2xl backdrop-blur-sm p-6"
+            style={{ 
+              backgroundColor: 'var(--bg-elevated)',
+              border: '1px solid var(--border-default)'
+            }}
+          >
             <CalendarPanel
               selectedDate={selectedDate}
               displayMonth={displayMonth}
@@ -176,10 +278,19 @@ useEffect(() => {
               loading={loading}
               timeFormat={timeFormat}
             />
-          </div>
+          </motion.div>
 
           {/* Time Format Toggle */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="rounded-2xl backdrop-blur-sm p-6"
+            style={{ 
+              backgroundColor: 'var(--bg-elevated)',
+              border: '1px solid var(--border-default)'
+            }}
+          >
             <TimeFormatToggle
               value={timeFormat}
               onChange={onTimeFormatChange}
@@ -187,26 +298,44 @@ useEffect(() => {
             />
             
             {/* Timezone Info */}
-            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-              <div className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
-                <Info className="h-4 w-4 mt-0.5 flex-shrink-0" />
+            <div 
+              className="mt-4 pt-4"
+              style={{ borderTop: '1px solid var(--border-subtle)' }}
+            >
+              <div className="flex items-start gap-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                <Info className="h-4 w-4 mt-0.5 flex-shrink-0" style={{ color: 'var(--accent-primary)' }} />
                 <div>
                   <p className="font-medium">Timezone: {timezone}</p>
-                  <p className="text-xs mt-1 text-gray-600 dark:text-gray-400">All times shown in your local timezone</p>
+                  <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>All times shown in your local timezone</p>
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Right Column: Time Slots */}
         <div className="lg:sticky lg:top-8">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 min-h-[500px]">
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="rounded-2xl backdrop-blur-sm p-6 min-h-[500px]"
+            style={{ 
+              backgroundColor: 'var(--bg-elevated)',
+              border: '1px solid var(--border-default)'
+            }}
+          >
             {selectedDate ? (
               <>
                 {/* Selected Date Header */}
-                <div className="mb-6 pb-6 border-b border-gray-200 dark:border-gray-700">
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                <div 
+                  className="mb-6 pb-6"
+                  style={{ borderBottom: '1px solid var(--border-subtle)' }}
+                >
+                  <h2 
+                    className="text-2xl font-bold"
+                    style={{ color: 'var(--text-primary)' }}
+                  >
                     {formatDate(selectedDate, 'full')}
                   </h2>
                 </div>
@@ -214,12 +343,13 @@ useEffect(() => {
                 {/* Time Slots */}
                 {providers.length > 0 && (
                   <div className="mb-6">
-                    <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-300">
+                    <div className="flex items-center justify-between text-sm" style={{ color: 'var(--text-secondary)' }}>
                       <span>Filter by provider</span>
                       {shouldCollapseProviders && (
                         <button
                           type="button"
-                          className="text-primary-600 dark:text-primary-400 hover:underline"
+                          className="hover:underline transition-all"
+                          style={{ color: 'var(--accent-primary)' }}
                           onClick={() => setShowAllProviders(!showAllProviders)}
                         >
                           {showAllProviders ? "Show fewer" : "Show all"}
@@ -227,34 +357,59 @@ useEffect(() => {
                       )}
                     </div>
                     <div className="flex flex-wrap gap-2 mt-3">
-                      <button
+                      <motion.button
                         type="button"
                         onClick={() => setSelectedProviderId("all")}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
                         className={cn(
-                          "px-4 py-1.5 rounded-full text-sm font-medium transition-colors",
+                          "px-4 py-1.5 rounded-full text-sm font-medium transition-all backdrop-blur-sm",
                           selectedProviderId === "all"
-                            ? "border-2 border-primary-600 text-primary-700 dark:text-primary-200 bg-white dark:bg-gray-900 shadow-sm"
-                            : "border border-transparent text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-300"
+                            ? "shadow-sm"
+                            : ""
                         )}
+                        style={selectedProviderId === "all" ? {
+                          background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
+                          color: 'white',
+                          border: '1px solid transparent'
+                        } : {
+                          backgroundColor: 'var(--border-subtle)',
+                          color: 'var(--text-secondary)',
+                          border: '1px solid var(--border-default)'
+                        }}
                         aria-pressed={selectedProviderId === "all"}
                       >
                         All providers
-                      </button>
-                      {visibleProviders.map((provider) => (
-                        <button
+                      </motion.button>
+                      {visibleProviders.map((provider, index) => (
+                        <motion.button
                           key={provider.id}
                           type="button"
                           onClick={() => setSelectedProviderId(provider.id)}
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.1 + index * 0.05 }}
                           className={cn(
-                            "px-4 py-1.5 rounded-full text-sm font-medium transition-colors",
+                            "px-4 py-1.5 rounded-full text-sm font-medium transition-all backdrop-blur-sm",
                             selectedProviderId === provider.id
-                              ? "border-2 border-primary-600 text-primary-700 dark:text-primary-200 bg-white dark:bg-gray-900 shadow-sm"
-                              : "border border-transparent text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-300"
+                              ? "shadow-sm"
+                              : ""
                           )}
+                          style={selectedProviderId === provider.id ? {
+                            background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
+                            color: 'white',
+                            border: '1px solid transparent'
+                          } : {
+                            backgroundColor: 'var(--border-subtle)',
+                            color: 'var(--text-secondary)',
+                            border: '1px solid var(--border-default)'
+                          }}
                           aria-pressed={selectedProviderId === provider.id}
                         >
                           {provider.name}
-                        </button>
+                        </motion.button>
                       ))}
                     </div>
                   </div>
@@ -274,10 +429,22 @@ useEffect(() => {
               </>
             ) : (
               /* Empty State - No Date Selected */
-              <div className="flex flex-col items-center justify-center h-full py-12 text-center">
-                <div className="h-20 w-20 rounded-full bg-primary-100 dark:bg-primary-900/20 flex items-center justify-center mb-4">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3 }}
+                className="flex flex-col items-center justify-center h-full py-12 text-center"
+              >
+                <div 
+                  className="h-20 w-20 rounded-full flex items-center justify-center mb-4 backdrop-blur-sm"
+                  style={{ 
+                    background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
+                    opacity: 0.2
+                  }}
+                >
                   <svg
-                    className="h-10 w-10 text-primary-600 dark:text-primary-400"
+                    className="h-10 w-10"
+                    style={{ color: 'var(--accent-primary)' }}
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -290,33 +457,48 @@ useEffect(() => {
                     />
                   </svg>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                <h3 
+                  className="text-xl font-semibold mb-2"
+                  style={{ color: 'var(--text-primary)' }}
+                >
                   Select a date to see available times
                 </h3>
-                <p className="text-gray-700 dark:text-gray-300 max-w-sm">
+                <p 
+                  className="max-w-sm"
+                  style={{ color: 'var(--text-secondary)' }}
+                >
                   Choose a date from the calendar to view available appointment slots
                 </p>
-              </div>
+              </motion.div>
             )}
-          </div>
+          </motion.div>
         </div>
       </div>
 
       {/* Info Banner */}
-      <div className="mt-8 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+        className="mt-8 rounded-xl p-4 backdrop-blur-sm"
+        style={{ 
+          backgroundColor: 'var(--bg-elevated)',
+          border: '1px solid var(--border-default)'
+        }}
+      >
         <div className="flex items-start gap-3">
-          <Info className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-          <div className="text-sm text-blue-800 dark:text-blue-300">
-            <p className="font-medium mb-1">Booking Information</p>
-            <ul className="list-disc list-inside space-y-1 text-blue-700 dark:text-blue-400">
+          <Info className="h-5 w-5 mt-0.5 flex-shrink-0" style={{ color: 'var(--accent-primary)' }} />
+          <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+            <p className="font-medium mb-1" style={{ color: 'var(--text-primary)' }}>Booking Information</p>
+            <ul className="list-disc list-inside space-y-1" style={{ color: 'var(--text-muted)' }}>
               <li>All times are shown in your local timezone</li>
               <li>You'll receive a calendar invite with the meeting link</li>
               <li>You can reschedule or cancel up to 24 hours before</li>
             </ul>
           </div>
         </div>
+      </motion.div>
       </div>
-      
     </div>
   );
 }

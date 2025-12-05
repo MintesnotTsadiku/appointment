@@ -4,8 +4,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { format } from "date-fns";
-import { ArrowLeft, CircleAlert, Clock } from "lucide-react";
+import { ArrowLeft, CircleAlert, Clock, Moon, Sun } from "lucide-react";
 import { toast } from "sonner";
+import { motion, AnimatePresence } from "framer-motion";
+import { useTheme } from "@/components/theme-provider";
 
 /**
  * Internal dependencies
@@ -51,6 +53,12 @@ const GroupAppointment = () => {
   const event_token = searchParams.get("event_token") || "";
   const [timeFormat, setTimeFormat] = useState<TimeFormat>("12h");
   const [state, dispatch] = useMeetingReducer();
+  const { theme, setTheme } = useTheme();
+
+  // Theme toggle handler
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
 
   const {
     data,
@@ -268,227 +276,411 @@ const GroupAppointment = () => {
         //   state.meetingData.appointment_group_id
         // )}`}
       />
-      <div className="w-full flex justify-center items-center">
-        <div className="w-full xl:w-4/5 2xl:w-3/5 lg:py-16 p-6 px-4">
-          <div className="h-fit flex w-full max-lg:flex-col md:border md:rounded-lg md:p-6 md:px-4 max-lg:gap-5 ">
-            {/* Group Meet Details */}
-            {!state.meetingData.appointment_group_id ? (
-              <GroupMeetSkeleton />
-            ) : (
-              <div className="flex flex-col w-full lg:w-3/4 gap-3 ">
-                <Typography
-                  variant="h2"
-                  className="text-3xl font-semibold text-left w-full capitalize"
+      <div 
+        className="w-full min-h-screen relative"
+        style={{ backgroundColor: 'var(--bg-primary)' }}
+      >
+        {/* Ambient Background Glows */}
+        <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+          <div 
+            className="absolute top-1/4 -left-1/4 w-96 h-96 rounded-full blur-3xl opacity-30"
+            style={{ background: 'var(--glow-primary)' }}
+          />
+          <div 
+            className="absolute bottom-1/4 -right-1/4 w-96 h-96 rounded-full blur-3xl opacity-20"
+            style={{ background: 'var(--glow-secondary)' }}
+          />
+          <div 
+            className="absolute top-1/2 right-1/4 w-72 h-72 rounded-full blur-3xl opacity-15"
+            style={{ background: 'var(--glow-success)' }}
+          />
+        </div>
+
+        {/* Sticky Header with Back Button and Theme Toggle */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="sticky top-0 z-50 w-full backdrop-blur-xl"
+          style={{ 
+            backgroundColor: 'color-mix(in srgb, var(--bg-primary) 95%, transparent)',
+            borderBottom: '1px solid var(--border-subtle)'
+          }}
+        >
+          <div className="w-full max-w-7xl mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
+            {/* Back Button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate("/")}
+              className="backdrop-blur-sm"
+              style={{ 
+                color: 'var(--text-secondary)',
+                backgroundColor: 'var(--border-subtle)',
+                border: '1px solid var(--border-default)'
+              }}
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back
+            </Button>
+
+            {/* Theme Toggle */}
+            <motion.button
+              onClick={toggleTheme}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg backdrop-blur-sm transition-all"
+              style={{ 
+                backgroundColor: 'var(--border-subtle)',
+                border: '1px solid var(--border-default)'
+              }}
+              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.02 }}
+              aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+            >
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={theme + "-icon"}
+                  initial={{ opacity: 0, rotate: -90 }}
+                  animate={{ opacity: 1, rotate: 0 }}
+                  exit={{ opacity: 0, rotate: 90 }}
+                  transition={{ duration: 0.2 }}
                 >
-                  {validTitle(state.meetingData.title || state.meetingData.appointment_group_id)}
-                </Typography>
-                {state.meetingData && (
-                  <div className="w-full flex flex-col gap-2 mt-3">
-                    {state.meetingData.meeting_details &&
-                      Object.entries(state.meetingData.meeting_details).map(
-                        ([key, value]) => {
-                          const Icon = getIconForKey(key);
-                          return (
-                            <div
-                              key={key}
-                              className="flex cursor-default items-center gap-2 w-full "
-                            >
-                              <div className="w-full truncate text-gray-600 dark:text-gray-400 flex items-center justify-start gap-2">
-                                <Icon className="h-4 w-4 shrink-0" />
-                                <Tooltip>
-                                  <TooltipTrigger className="text-left truncate">
-                                    <Typography
-                                      className={cn(
-                                        "truncate font-medium text-gray-600 dark:text-gray-400",
-                                        key.includes("name") &&
-                                          "text-foreground",
-                                        key.includes("email")
-                                          ? ""
-                                          : "capitalize"
-                                      )}
-                                    >
-                                      {value}
-                                    </Typography>
-                                  </TooltipTrigger>
-                                  <TooltipContent className="capitalize">
-                                    <span className="text-blue-600">
-                                      {validTitle(key)}
-                                    </span>{" "}
-                                    : {value}
-                                  </TooltipContent>
-                                </Tooltip>
-                              </div>
-                            </div>
-                          );
-                        }
-                      )}
-                    <div className="flex cursor-default items-center gap-2 w-full ">
-                      <div className="w-full truncate text-gray-600 dark:text-gray-400 flex items-center justify-start gap-2">
-                        <Clock className="h-4 w-4 shrink-0" />
-                        <Tooltip>
-                          <TooltipTrigger className="text-left truncate">
-                            <Typography className="truncate font-medium text-gray-600 dark:text-gray-400">
+                  {theme === "light" ? (
+                    <Moon className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
+                  ) : (
+                    <Sun className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
+                  )}
+                </motion.div>
+              </AnimatePresence>
+              <span 
+                className="text-sm font-medium"
+                style={{ color: 'var(--text-secondary)' }}
+              >
+                {theme === "light" ? "Dark" : "Light"}
+              </span>
+            </motion.button>
+          </div>
+        </motion.div>
+
+        <div className="w-full flex justify-center items-center">
+          <div className="w-full max-w-7xl mx-auto p-5 md:p-6 lg:py-16">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="h-fit flex w-full max-lg:flex-col gap-6 md:gap-8"
+            >
+              {/* Group Meet Details */}
+              {!state.meetingData.appointment_group_id ? (
+                <GroupMeetSkeleton />
+              ) : (
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                  className="flex flex-col w-full lg:w-3/4 gap-4 rounded-2xl backdrop-blur-sm p-6"
+                  style={{ 
+                    backgroundColor: 'var(--bg-elevated)',
+                    border: '1px solid var(--border-default)'
+                  }}
+                >
+                  <Typography
+                    variant="h2"
+                    className="text-3xl font-semibold text-left w-full capitalize"
+                    style={{ color: 'var(--text-primary)' }}
+                  >
+                    {validTitle(state.meetingData.title || state.meetingData.appointment_group_id)}
+                  </Typography>
+                  {state.meetingData && (
+                    <div className="w-full flex flex-col gap-3 mt-2">
+                      {state.meetingData.meeting_details &&
+                        Object.entries(state.meetingData.meeting_details).map(
+                          ([key, value], index) => {
+                            const Icon = getIconForKey(key);
+                            return (
+                              <motion.div
+                                key={key}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.2 + index * 0.05 }}
+                                className="flex cursor-default items-center gap-2 w-full"
+                              >
+                                <div className="w-full truncate flex items-center justify-start gap-2" style={{ color: 'var(--text-secondary)' }}>
+                                  <div 
+                                    className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                                    style={{ 
+                                      background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
+                                      opacity: 0.2
+                                    }}
+                                  >
+                                    <Icon className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
+                                  </div>
+                                  <Tooltip>
+                                    <TooltipTrigger className="text-left truncate">
+                                      <Typography
+                                        className={cn(
+                                          "truncate font-medium",
+                                          key.includes("name") && "font-semibold"
+                                        )}
+                                        style={{ 
+                                          color: key.includes("name") 
+                                            ? 'var(--text-primary)' 
+                                            : 'var(--text-secondary)' 
+                                        }}
+                                      >
+                                        {value}
+                                      </Typography>
+                                    </TooltipTrigger>
+                                    <TooltipContent className="capitalize">
+                                      <span style={{ color: 'var(--accent-primary)' }}>
+                                        {validTitle(key)}
+                                      </span>{" "}
+                                      : {value}
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </div>
+                              </motion.div>
+                            );
+                          }
+                        )}
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                        className="flex cursor-default items-center gap-2 w-full"
+                      >
+                        <div className="w-full truncate flex items-center justify-start gap-2" style={{ color: 'var(--text-secondary)' }}>
+                          <div 
+                            className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                            style={{ 
+                              background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
+                              opacity: 0.2
+                            }}
+                          >
+                            <Clock className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
+                          </div>
+                          <Tooltip>
+                            <TooltipTrigger className="text-left truncate">
+                              <Typography className="truncate font-medium">
+                                {convertMinutesToTimeFormat(convertToMinutes(
+                                  state.meetingData.duration
+                                ).toString())}{" "}
+                                Meeting
+                              </Typography>
+                            </TooltipTrigger>
+                            <TooltipContent className="capitalize">
+                              <span style={{ color: 'var(--accent-primary)' }}>duration</span> :{" "}
                               {convertMinutesToTimeFormat(convertToMinutes(
                                 state.meetingData.duration
                               ).toString())}{" "}
                               Meeting
-                            </Typography>
-                          </TooltipTrigger>
-                          <TooltipContent className="capitalize">
-                            <span className="text-blue-600">duration</span> :{" "}
-                            {convertMinutesToTimeFormat(convertToMinutes(
-                              state.meetingData.duration
-                            ).toString())}{" "}
-                            Meeting
-                          </TooltipContent>
-                        </Tooltip>
+                            </TooltipContent>
+                          </Tooltip>
+                        </div>
+                      </motion.div>
+                    </div>
+                  )}
+                </motion.div>
+              )}
+              {(!state.isMobileView || !state.expanded) && (
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="flex flex-col w-full lg:max-w-96 gap-6"
+                >
+                  {/* Calendar View */}
+                  <div className="w-full rounded-2xl backdrop-blur-sm p-6" style={{ 
+                    backgroundColor: 'var(--bg-elevated)',
+                    border: '1px solid var(--border-default)'
+                  }}>
+                    <CalendarWrapper
+                      displayMonth={state.displayMonth}
+                      selectedDate={state.selectedDate}
+                      loading={loading}
+                      setDisplayMonth={(date) =>
+                        dispatch({ type: "SET_DISPLAY_MONTH", payload: date })
+                      }
+                      meetingData={{
+                        valid_start_date: state.meetingData.valid_start_date,
+                        valid_end_date: state.meetingData.valid_end_date,
+                        available_days: state.meetingData.available_days,
+                      }}
+                      setSelectedDate={(date) =>
+                        dispatch({ type: "SET_SELECTED_DATE", payload: date })
+                      }
+                      onDayClick={(date) => {
+                        dispatch({ type: "SET_SELECTED_DATE", payload: date });
+                        dispatch({ type: "SET_DISPLAY_MONTH", payload: date });
+                        dispatch({ type: "SET_EXPANDED", payload: true });
+                        dispatch({
+                          type: "SET_SELECTED_SLOT",
+                          payload: {
+                            start_time: "",
+                            end_time: "",
+                          },
+                        });
+                        updateDateQuery(date);
+                      }}
+                      className="rounded-md w-full flex lg:px-6 lg:p-2 p-0"
+                    />
+                  </div>
+                  <div className="w-full gap-4 flex flex-col rounded-2xl backdrop-blur-sm p-6" style={{ 
+                    backgroundColor: 'var(--bg-elevated)',
+                    border: '1px solid var(--border-default)'
+                  }}>
+                    {/* Time Format Selection */}
+                    <div className="flex items-center gap-3 flex-wrap">
+                      <Typography className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                        Time Format:
+                      </Typography>
+                      <div className="flex gap-2 flex-wrap">
+                        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                          <Button
+                            variant={timeFormat === "12h" ? "default" : "outline"}
+                            size="sm"
+                            onClick={() => setTimeFormat("12h")}
+                            className={cn(
+                              "h-8 px-3 text-xs backdrop-blur-sm transition-all",
+                              timeFormat === "12h" ? "shadow-sm" : ""
+                            )}
+                            style={timeFormat === "12h" ? {
+                              background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
+                              color: 'white',
+                              border: '1px solid transparent'
+                            } : {
+                              backgroundColor: 'var(--border-subtle)',
+                              color: 'var(--text-secondary)',
+                              border: '1px solid var(--border-default)'
+                            }}
+                          >
+                            AM/PM
+                          </Button>
+                        </motion.div>
+                        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                          <Button
+                            variant={timeFormat === "24h" ? "default" : "outline"}
+                            size="sm"
+                            onClick={() => setTimeFormat("24h")}
+                            className={cn(
+                              "h-8 px-3 text-xs backdrop-blur-sm transition-all",
+                              timeFormat === "24h" ? "shadow-sm" : ""
+                            )}
+                            style={timeFormat === "24h" ? {
+                              background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
+                              color: 'white',
+                              border: '1px solid transparent'
+                            } : {
+                              backgroundColor: 'var(--border-subtle)',
+                              color: 'var(--text-secondary)',
+                              border: '1px solid var(--border-default)'
+                            }}
+                          >
+                            24H
+                          </Button>
+                        </motion.div>
+                        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                          <Button
+                            variant={timeFormat === "ethiopian" ? "default" : "outline"}
+                            size="sm"
+                            onClick={() => setTimeFormat("ethiopian")}
+                            className={cn(
+                              "h-8 px-3 text-xs backdrop-blur-sm transition-all",
+                              timeFormat === "ethiopian" ? "shadow-sm" : ""
+                            )}
+                            style={timeFormat === "ethiopian" ? {
+                              background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
+                              color: 'white',
+                              border: '1px solid transparent'
+                            } : {
+                              backgroundColor: 'var(--border-subtle)',
+                              color: 'var(--text-secondary)',
+                              border: '1px solid var(--border-default)'
+                            }}
+                          >
+                            Local Time
+                          </Button>
+                        </motion.div>
                       </div>
                     </div>
+                    
+                    {/* Timezone */}
+                    <TimeZoneSelect
+                      timeZones={getAllSupportedTimeZones()}
+                      setTimeZone={(tz) =>
+                        dispatch({ type: "SET_TIMEZONE", payload: tz })
+                      }
+                      timeZone={state.timeZone}
+                      disable={loading}
+                    />
                   </div>
-                )}
-              </div>
-            )}
-            <hr className="w-full bg-muted md:hidden" />
-            {(!state.isMobileView || !state.expanded) && (
-              <div className="flex flex-col w-full lg:max-w-96">
-                {/* Calendar View */}
-                <div className="w-full">
-                  <CalendarWrapper
-                    displayMonth={state.displayMonth}
-                    selectedDate={state.selectedDate}
-                    loading={loading}
-                    setDisplayMonth={(date) =>
-                      dispatch({ type: "SET_DISPLAY_MONTH", payload: date })
-                    }
-                    meetingData={{
-                      valid_start_date: state.meetingData.valid_start_date,
-                      valid_end_date: state.meetingData.valid_end_date,
-                      available_days: state.meetingData.available_days,
-                    }}
-                    setSelectedDate={(date) =>
-                      dispatch({ type: "SET_SELECTED_DATE", payload: date })
-                    }
-                    onDayClick={(date) => {
-                      dispatch({ type: "SET_SELECTED_DATE", payload: date });
-                      dispatch({ type: "SET_DISPLAY_MONTH", payload: date });
-                      dispatch({ type: "SET_EXPANDED", payload: true });
-                      dispatch({
-                        type: "SET_SELECTED_SLOT",
-                        payload: {
-                          start_time: "",
-                          end_time: "",
-                        },
-                      });
-                      updateDateQuery(date);
-                    }}
-                    className="rounded-md md:border md:h-96 w-full flex lg:px-6 lg:p-2 p-0"
-                  />
-                </div>
-                <div className="w-full mt-4 gap-4 flex flex-col">
-                  {/* Time Format Selection */}
-                  <div className="flex items-center gap-3 flex-wrap">
-                    <Typography className="text-sm text-gray-700 dark:text-slate-300">
-                      Time Format:
-                    </Typography>
-                    <div className="flex gap-2 flex-wrap">
-                      <Button
-                        variant={timeFormat === "12h" ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => setTimeFormat("12h")}
-                        className={cn(
-                          "h-8 px-3 text-xs",
-                          timeFormat === "12h" 
-                            ? "bg-blue-500 dark:bg-blue-400 text-white hover:bg-blue-600 dark:hover:bg-blue-500"
-                            : "text-gray-700 dark:text-slate-300"
-                        )}
-                      >
-                        AM/PM
-                      </Button>
-                      <Button
-                        variant={timeFormat === "24h" ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => setTimeFormat("24h")}
-                        className={cn(
-                          "h-8 px-3 text-xs",
-                          timeFormat === "24h" 
-                            ? "bg-blue-500 dark:bg-blue-400 text-white hover:bg-blue-600 dark:hover:bg-blue-500"
-                            : "text-gray-700 dark:text-slate-300"
-                        )}
-                      >
-                        24H
-                      </Button>
-                      <Button
-                        variant={timeFormat === "ethiopian" ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => setTimeFormat("ethiopian")}
-                        className={cn(
-                          "h-8 px-3 text-xs",
-                          timeFormat === "ethiopian" 
-                            ? "bg-blue-500 dark:bg-blue-400 text-white hover:bg-blue-600 dark:hover:bg-blue-500"
-                            : "text-gray-700 dark:text-slate-300"
-                        )}
-                      >
-                        Local Time
-                      </Button>
-                    </div>
-                  </div>
-                  
-                  {/* Timezone */}
-                  <TimeZoneSelect
-                    timeZones={getAllSupportedTimeZones()}
-                    setTimeZone={(tz) =>
-                      dispatch({ type: "SET_TIMEZONE", payload: tz })
-                    }
-                    timeZone={state.timeZone}
-                    disable={loading}
-                  />
-                </div>
-              </div>
-            )}
-            {state.isMobileView && state.expanded && (
-              <div className="h-14 fixed bottom-0 left-0 w-screen border z-10 bg-background border-top flex items-center justify-between px-4">
-                <Button
-                  variant="link"
-                  className="text-blue-500 dark:text-blue-400 px-0"
-                  onClick={() =>
-                    dispatch({ type: "SET_EXPANDED", payload: false })
-                  }
-                  disabled={loading}
-                >
-                  <ArrowLeft className="h-4 w-4 " />
-                  Back
-                </Button>
-                <Button
-                  disabled={
-                    (state.selectedSlot?.start_time &&
-                    state.selectedSlot?.end_time
-                      ? false
-                      : true) || loading
-                  }
-                  className={cn(
-                    "bg-blue-500 dark:bg-blue-400 flex hover:bg-blue-500 dark:hover:bg-blue-400 w-fit px-10",
-                    "md:hidden"
-                  )}
-                  onClick={scheduleMeeting}
-                >
-                  {loading && <Spinner />}
-                  {reschedule && event_token ? "Reschedule" : "Schedule"}
-                </Button>
-              </div>
-            )}
-            {/* Available Slots */}
-            <div
-              className={cn(
-                "w-full flex flex-col lg:w-1/2 gap-2 lg:px-5",
-                !state.expanded && "max-md:hidden"
+                </motion.div>
               )}
-            >
-              <Typography
-                variant="h3"
-                className="text-sm font-semibold lg:w-full truncate"
+              {state.isMobileView && state.expanded && (
+                <motion.div
+                  initial={{ y: 100 }}
+                  animate={{ y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="h-14 fixed bottom-0 left-0 w-screen z-10 backdrop-blur-xl flex items-center justify-between px-4"
+                  style={{ 
+                    backgroundColor: 'color-mix(in srgb, var(--bg-primary) 95%, transparent)',
+                    borderTop: '1px solid var(--border-subtle)'
+                  }}
+                >
+                  <Button
+                    variant="link"
+                    className="px-0 backdrop-blur-sm"
+                    style={{ color: 'var(--accent-primary)' }}
+                    onClick={() =>
+                      dispatch({ type: "SET_EXPANDED", payload: false })
+                    }
+                    disabled={loading}
+                  >
+                    <ArrowLeft className="h-4 w-4 " />
+                    Back
+                  </Button>
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <Button
+                      disabled={
+                        (state.selectedSlot?.start_time &&
+                        state.selectedSlot?.end_time
+                          ? false
+                          : true) || loading
+                      }
+                      className="flex w-fit px-10 md:hidden backdrop-blur-sm shadow-sm"
+                      style={{
+                        background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
+                        color: 'white',
+                        border: '1px solid transparent'
+                      }}
+                      onClick={scheduleMeeting}
+                    >
+                      {loading && <Spinner />}
+                      {reschedule && event_token ? "Reschedule" : "Schedule"}
+                    </Button>
+                  </motion.div>
+                </motion.div>
+              )}
+              {/* Available Slots */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className={cn(
+                  "w-full flex flex-col lg:w-1/2 gap-4 rounded-2xl backdrop-blur-sm p-6",
+                  !state.expanded && "max-md:hidden"
+                )}
+                style={{ 
+                  backgroundColor: 'var(--bg-elevated)',
+                  border: '1px solid var(--border-default)'
+                }}
               >
-                {format(state.selectedDate, "EEEE, d MMMM yyyy")}
-              </Typography>
+                <Typography
+                  variant="h3"
+                  className="text-lg font-semibold lg:w-full truncate"
+                  style={{ color: 'var(--text-primary)' }}
+                >
+                  {format(state.selectedDate, "EEEE, d MMMM yyyy")}
+                </Typography>
 
               {dataIsLoading ? (
                 <div className="h-full flex flex-col w-full mb-3 overflow-y-auto no-scrollbar space-y-2">
@@ -498,15 +690,24 @@ const GroupAppointment = () => {
                 </div>
               ) : (
                 <>
-                  <div className="lg:h-[22rem] mb-3 overflow-y-auto no-scrollbar space-y-2">
-                    {state.meetingData.all_available_slots_for_data.length >
-                    0 ? (
-                      state.meetingData.all_available_slots_for_data.map(
-                        (slot, index) => {
-                          const isPast = isSlotInPast(slot.start_time);
-                          return (
+                <div className="lg:h-[22rem] mb-3 overflow-y-auto no-scrollbar space-y-2">
+                  {state.meetingData.all_available_slots_for_data.length >
+                  0 ? (
+                    state.meetingData.all_available_slots_for_data.map(
+                      (slot, index) => {
+                        const isPast = isSlotInPast(slot.start_time);
+                        const isSelected = state.selectedSlot?.start_time === slot.start_time &&
+                          state.selectedSlot?.end_time === slot.end_time && !isPast;
+                        return (
+                          <motion.div
+                            key={index}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.4 + index * 0.05 }}
+                            whileHover={!isPast && !isSelected ? { scale: 1.02 } : {}}
+                            whileTap={!isPast && !isSelected ? { scale: 0.98 } : {}}
+                          >
                             <Button
-                              key={index}
                               onClick={() => {
                                 if (isPast) {
                                   toast("Cannot book past time slots", {
@@ -534,48 +735,74 @@ const GroupAppointment = () => {
                               disabled={loading || isPast}
                               variant="outline"
                               className={cn(
-                                "w-full font-normal border transition-colors",
-                                isPast
-                                  ? "border-gray-300 dark:border-gray-600 text-gray-400 dark:text-gray-500 cursor-not-allowed opacity-50"
-                                  : "border-blue-500 dark:border-blue-400 text-blue-500 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-800/10",
-                                state.selectedSlot?.start_time ===
-                                  slot.start_time &&
-                                  state.selectedSlot?.end_time ===
-                                    slot.end_time &&
-                                  !isPast &&
-                                  "bg-blue-500 dark:bg-blue-400 text-background dark:text-background hover:bg-blue-500 dark:hover:bg-blue-400 hover:text-background dark:hover:text-background"
+                                "w-full font-normal border transition-all backdrop-blur-sm",
+                                isSelected && "shadow-sm"
                               )}
+                              style={isSelected ? {
+                                background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
+                                color: 'white',
+                                border: '1px solid transparent'
+                              } : isPast ? {
+                                backgroundColor: 'var(--bg-secondary)',
+                                color: 'var(--text-muted)',
+                                border: '1px solid var(--border-subtle)',
+                                opacity: 0.4
+                              } : {
+                                backgroundColor: 'var(--bg-elevated)',
+                                color: 'var(--text-primary)',
+                                border: '1px solid var(--border-default)'
+                              }}
                             >
                               {formatTimeSlot(new Date(slot.start_time))}
                             </Button>
-                          );
-                        }
-                      )
-                    ) : (
-                      <div className="h-full max-md:h-44 w-full flex justify-center items-center">
-                        <Typography className="text-center text-gray-500">
-                          No open-time slots
-                        </Typography>
-                      </div>
-                    )}
-                  </div>
+                          </motion.div>
+                        );
+                      }
+                    )
+                  ) : (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.3 }}
+                      className="h-full max-md:h-44 w-full flex justify-center items-center"
+                    >
+                      <Typography className="text-center" style={{ color: 'var(--text-muted)' }}>
+                        No open-time slots
+                      </Typography>
+                    </motion.div>
+                  )}
+                </div>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
                   <Button
                     disabled={loading}
                     className={cn(
-                      "bg-blue-500 dark:bg-blue-400 hover:bg-blue-500 dark:hover:bg-blue-400 lg:!mt-0 max-lg:w-full hidden",
+                      "lg:!mt-0 max-lg:w-full hidden backdrop-blur-sm shadow-sm",
                       state.selectedSlot?.start_time &&
                         state.selectedSlot.end_time &&
                         "flex",
                       "max-md:hidden"
                     )}
+                    style={{
+                      background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
+                      color: 'white',
+                      border: '1px solid transparent'
+                    }}
                     onClick={scheduleMeeting}
                   >
                     {loading && <Spinner />}
                     {reschedule && event_token ? "Reschedule" : "Schedule"}
                   </Button>
+                </motion.div>
                 </>
               )}
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </div>
       </div>

@@ -1,15 +1,25 @@
 /**
- * Organization Appointment V2 - Drop-in Replacement
+ * Organization Appointment V2 - Premium Design System
  * Uses new redesigned UI with exact same API integration as old version
  * Compatible with existing AppContext and URL structure
+ * 
+ * Design: Premium "100 Million Startup" aesthetic with:
+ * - Dark mode foundation with ambient background glows
+ * - Glass-morphism effects with backdrop-blur
+ * - Smooth Framer Motion animations
+ * - Gradient icons and cards
+ * - Dynamic CSS variables from theme system
  */
 
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useFrappeGetCall } from "frappe-react-sdk";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAppContext } from "@/context/app";
 import { getLocalTimezone } from "@/lib/utils";
-import { Info } from "lucide-react";
+import { Info, Moon, Sun, ArrowLeft } from "lucide-react";
+import { useTheme } from "@/components/theme-provider";
+import { Button } from "@/components/button";
 import MetaTags from "@/components/meta-tags";
 import PoweredBy from "@/components/powered-by";
 
@@ -52,6 +62,12 @@ const OrganizationAppointmentV2 = () => {
   const [displayMonth, setDisplayMonth] = useState(new Date());
   const [timeFormat, setTimeFormat] = useState<'12h' | '24h' | 'ethiopian'>('12h');
   const [bookingResponse, setBookingResponse] = useState<any>(null);
+  const { theme, setTheme } = useTheme();
+
+  // Theme toggle handler
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
   
   // Get type from URL (this is how old implementation works)
   const type = searchParams.get("type");
@@ -293,8 +309,27 @@ const OrganizationAppointmentV2 = () => {
   // Loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-        <div className="container mx-auto px-4 py-8">
+      <div 
+        className="min-h-screen text-[var(--text-primary)]"
+        style={{ backgroundColor: 'var(--bg-primary)' }}
+      >
+        {/* Ambient background effects */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none">
+          <div 
+            className="absolute -top-40 -right-40 w-80 h-80 rounded-full blur-[100px]"
+            style={{ backgroundColor: 'var(--glow-primary)' }}
+          />
+          <div 
+            className="absolute top-1/2 -left-40 w-80 h-80 rounded-full blur-[100px]"
+            style={{ backgroundColor: 'var(--glow-secondary)' }}
+          />
+          <div 
+            className="absolute -bottom-40 right-1/3 w-80 h-80 rounded-full blur-[100px]"
+            style={{ backgroundColor: 'var(--glow-success)' }}
+          />
+        </div>
+        
+        <div className="relative z-10 container mx-auto px-4 py-8">
           <ProfileSkeleton />
         </div>
       </div>
@@ -303,22 +338,60 @@ const OrganizationAppointmentV2 = () => {
 
   // Error state
   if (error || friendlyError) {
+    const errorMessage = typeof friendlyError === 'string' 
+      ? friendlyError 
+      : String(friendlyError || 'Page not found');
+    
     return (
       <>
         <MetaTags title="Error | Appointment" description="Error loading booking page" />
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4">
-          <div className="max-w-xl w-full bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 rounded-xl p-6">
+        <div 
+          className="min-h-screen text-[var(--text-primary)] flex items-center justify-center p-8"
+          style={{ backgroundColor: 'var(--bg-primary)' }}
+        >
+          {/* Ambient background effects */}
+          <div className="fixed inset-0 overflow-hidden pointer-events-none">
+            <div 
+              className="absolute -top-40 -right-40 w-80 h-80 rounded-full blur-[100px]"
+              style={{ backgroundColor: 'var(--glow-primary)' }}
+            />
+            <div 
+              className="absolute top-1/2 -left-40 w-80 h-80 rounded-full blur-[100px]"
+              style={{ backgroundColor: 'var(--glow-secondary)' }}
+            />
+            <div 
+              className="absolute -bottom-40 right-1/3 w-80 h-80 rounded-full blur-[100px]"
+              style={{ backgroundColor: 'var(--glow-success)' }}
+            />
+          </div>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="relative z-10 max-w-xl w-full rounded-2xl p-6 backdrop-blur-sm"
+            style={{ 
+              backgroundColor: 'var(--border-subtle)',
+              border: '1px solid var(--border-default)'
+            }}
+          >
             <div className="flex items-start space-x-3">
-              <Info className="w-5 h-5 mt-1 flex-shrink-0" />
+              <div className="inline-flex p-2 rounded-lg bg-gradient-primary">
+                <Info className="w-5 h-5 text-white" />
+              </div>
               <div>
-                <h2 className="font-semibold text-lg mb-1">Booking link not available</h2>
-                <p className="text-sm">{friendlyError || "Page not found"}</p>
+                <h2 className="font-semibold text-lg mb-1" style={{ color: 'var(--text-primary)' }}>
+                  Booking link not available
+                </h2>
+                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{errorMessage}</p>
                 <p className="text-sm mt-3">
-                  <a href="/" className="underline">Go to home</a>
+                  <a href="/" className="underline" style={{ color: 'var(--accent-primary)' }}>
+                    Go to home
+                  </a>
                 </p>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </>
     );
@@ -330,115 +403,217 @@ const OrganizationAppointmentV2 = () => {
         title={`${userInfo?.name || "Book Appointment"} | Scheduler`}
         description={`Schedule an appointment with ${userInfo?.name || "us"}`}
       />
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-16">
-        {/* Phase 1: Service Selection */}
-        {currentPhase === 'service' && organization && !serviceSlug && (
-          <div className="py-8 px-4">
-            <ServiceSelector
-              organization={organization}
-              services={organization.services}
-              onServiceSelect={handleServiceSelect}
-              loading={false}
-            />
-          </div>
-        )}
+      {/* Sticky Header with Back Button and Theme Toggle (only show in service phase, not datetime/form) */}
+      {currentPhase === 'service' && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="sticky top-0 z-50 w-full backdrop-blur-xl"
+          style={{ 
+            backgroundColor: 'color-mix(in srgb, var(--bg-primary) 95%, transparent)',
+            borderBottom: '1px solid var(--border-subtle)'
+          }}
+        >
+          <div className="w-full max-w-7xl mx-auto px-5 md:px-6 py-4 flex items-center justify-end">
+            {/* No back button in service phase - only theme toggle */}
 
-        {/* Phase 2: Date & Time Selection */}
-        {currentPhase === 'datetime' && currentService && (
-          <div className="py-8 px-4">
-            <DateTimeSelector
-              selectedDate={selectedDate}
-              displayMonth={displayMonth}
-              onDateSelect={handleDateSelect}
-              onMonthChange={setDisplayMonth}
-              availableDays={availableDaysNumbers}
-              minDate={validStartDate}
-              maxDate={validEndDate}
-              availableSlots={slots}
-              selectedSlot={selectedSlot ? {
-                id: "temp",
-                start_time: selectedSlot.start_time,
-                end_time: selectedSlot.end_time,
-                available: true,
-              } : null}
-              onSlotSelect={handleSlotSelect}
-              timeFormat={timeFormat}
-              onTimeFormatChange={setTimeFormat}
-              timezone={timeZone}
-              loading={slotsLoading}
-              serviceName={currentService.name}
-              duration={currentService.duration}
-              location={currentService.location}
-              onBack={() => {
-                if (organization?.services && organization.services.length > 1) {
-                  setCurrentPhase('service');
-                  navigate(`/schedule/org/${orgSlug}`);
-                } else {
-                  navigate("/");
-                }
+            {/* Theme Toggle */}
+            <motion.button
+              onClick={toggleTheme}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg backdrop-blur-sm transition-all"
+              style={{ 
+                backgroundColor: 'var(--border-subtle)',
+                border: '1px solid var(--border-default)'
               }}
-              rawApiData={rawApiData}
-              bookingConfig={bookingConfig}
-            />
+              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.02 }}
+              aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+            >
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={theme + "-icon"}
+                  initial={{ opacity: 0, rotate: -90 }}
+                  animate={{ opacity: 1, rotate: 0 }}
+                  exit={{ opacity: 0, rotate: 90 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {theme === "light" ? (
+                    <Moon className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
+                  ) : (
+                    <Sun className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
+                  )}
+                </motion.div>
+              </AnimatePresence>
+              <span 
+                className="text-sm font-medium"
+                style={{ color: 'var(--text-secondary)' }}
+              >
+                {theme === "light" ? "Dark" : "Light"}
+              </span>
+            </motion.button>
           </div>
-        )}
-
-        {/* Phase 3: Booking Form */}
-        {currentPhase === 'form' && currentService && selectedSlot && (
-          <div className="py-8 px-4">
-            <BookingForm
-              service={currentService}
-              selectedDate={selectedDate}
-              selectedSlot={{
-                id: "temp",
-                start_time: selectedSlot.start_time,
-                end_time: selectedSlot.end_time,
-                available: true,
-              }}
-              timeFormat={timeFormat}
-              timezone={timeZone}
-              onSubmit={handleBookingSubmit}
-              onBack={() => {
-                // Re-fetch slots when going back to datetime selection
-                if (refetchSlots) {
-                  refetchSlots();
-                }
-                setCurrentPhase('datetime');
-              }}
-              loading={bookingLoading}
-            />
-          </div>
-        )}
-
-        {/* Phase 4: Confirmation Modal */}
-        {currentPhase === 'success' && bookingResponse && currentService && selectedSlot && (
-          <ConfirmationModal
-            open={true}
-            onClose={() => {
-              // Go back to datetime phase and refetch slots to show updated availability
-              if (refetchSlots) {
-                refetchSlots();
-              }
-              setCurrentPhase('datetime');
-            }}
-            bookingResponse={bookingResponse}
-            service={currentService}
-            selectedDate={selectedDate}
-            selectedSlot={{
-              id: "temp",
-              start_time: selectedSlot.start_time,
-              end_time: selectedSlot.end_time,
-              available: true,
-            }}
-            timeFormat={timeFormat}
-            timezone={timeZone}
-            userEmail={bookingResponse.userEmail || ""}
+        </motion.div>
+      )}
+      <div 
+        className="min-h-screen text-[var(--text-primary)] pb-16"
+        style={{ backgroundColor: 'var(--bg-primary)' }}
+      >
+        {/* Ambient background effects */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none">
+          <div 
+            className="absolute -top-40 -right-40 w-80 h-80 rounded-full blur-[100px]"
+            style={{ backgroundColor: 'var(--glow-primary)' }}
           />
-        )}
+          <div 
+            className="absolute top-1/2 -left-40 w-80 h-80 rounded-full blur-[100px]"
+            style={{ backgroundColor: 'var(--glow-secondary)' }}
+          />
+          <div 
+            className="absolute -bottom-40 right-1/3 w-80 h-80 rounded-full blur-[100px]"
+            style={{ backgroundColor: 'var(--glow-success)' }}
+          />
+        </div>
 
-        {/* Powered By Footer */}
-        <div className="mt-8">
-          <PoweredBy />
+        <div className="relative z-10">
+          {/* Phase 1: Service Selection */}
+          <AnimatePresence mode="wait">
+            {currentPhase === 'service' && organization && !serviceSlug && (
+              <motion.div
+                key="service"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="py-8 px-4"
+              >
+                <ServiceSelector
+                  organization={organization}
+                  services={organization.services}
+                  onServiceSelect={handleServiceSelect}
+                  loading={false}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Phase 2: Date & Time Selection */}
+          <AnimatePresence mode="wait">
+            {currentPhase === 'datetime' && currentService && (
+              <motion.div
+                key="datetime"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+                className="py-8 px-4"
+              >
+                <DateTimeSelector
+                  selectedDate={selectedDate}
+                  displayMonth={displayMonth}
+                  onDateSelect={handleDateSelect}
+                  onMonthChange={setDisplayMonth}
+                  availableDays={availableDaysNumbers}
+                  minDate={validStartDate}
+                  maxDate={validEndDate}
+                  availableSlots={slots}
+                  selectedSlot={selectedSlot ? {
+                    id: "temp",
+                    start_time: selectedSlot.start_time,
+                    end_time: selectedSlot.end_time,
+                    available: true,
+                  } : null}
+                  onSlotSelect={handleSlotSelect}
+                  timeFormat={timeFormat}
+                  onTimeFormatChange={setTimeFormat}
+                  timezone={timeZone}
+                  loading={slotsLoading}
+                  serviceName={currentService.name}
+                  duration={currentService.duration}
+                  location={currentService.location}
+                  onBack={() => {
+                    if (organization?.services && organization.services.length > 1) {
+                      setCurrentPhase('service');
+                      navigate(`/schedule/org/${orgSlug}`);
+                    } else {
+                      navigate("/");
+                    }
+                  }}
+                  rawApiData={rawApiData}
+                  bookingConfig={bookingConfig}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Phase 3: Booking Form */}
+          <AnimatePresence mode="wait">
+            {currentPhase === 'form' && currentService && selectedSlot && (
+              <motion.div
+                key="form"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+                className="py-8 px-4"
+              >
+                <BookingForm
+                  service={currentService}
+                  selectedDate={selectedDate}
+                  selectedSlot={{
+                    id: "temp",
+                    start_time: selectedSlot.start_time,
+                    end_time: selectedSlot.end_time,
+                    available: true,
+                  }}
+                  timeFormat={timeFormat}
+                  timezone={timeZone}
+                  onSubmit={handleBookingSubmit}
+                  onBack={() => {
+                    // Re-fetch slots when going back to datetime selection
+                    if (refetchSlots) {
+                      refetchSlots();
+                    }
+                    setCurrentPhase('datetime');
+                  }}
+                  loading={bookingLoading}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Phase 4: Confirmation Modal */}
+          <AnimatePresence>
+            {currentPhase === 'success' && bookingResponse && currentService && selectedSlot && (
+              <ConfirmationModal
+                open={true}
+                onClose={() => {
+                  // Go back to datetime phase and refetch slots to show updated availability
+                  if (refetchSlots) {
+                    refetchSlots();
+                  }
+                  setCurrentPhase('datetime');
+                }}
+                bookingResponse={bookingResponse}
+                service={currentService}
+                selectedDate={selectedDate}
+                selectedSlot={{
+                  id: "temp",
+                  start_time: selectedSlot.start_time,
+                  end_time: selectedSlot.end_time,
+                  available: true,
+                }}
+                timeFormat={timeFormat}
+                timezone={timeZone}
+                userEmail={bookingResponse.userEmail || ""}
+              />
+            )}
+          </AnimatePresence>
+
+          {/* Powered By Footer */}
+          <div className="mt-8 relative z-10">
+            <PoweredBy />
+          </div>
         </div>
       </div>
     </>

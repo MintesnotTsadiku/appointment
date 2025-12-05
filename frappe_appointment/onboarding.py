@@ -3825,3 +3825,212 @@ def save_availability(level, id=None, opening_hours=None, use_default_hours=0, p
         frappe.log_error(str(e), "Save Availability Error")
         frappe.throw(_(f"Failed to save availability: {str(e)}"))
 
+
+@frappe.whitelist()
+def get_appointment_group_form_data():
+    """
+    Get form data for creating Appointment Groups
+    Returns available providers, Google Calendars, and user info
+    """
+    user = frappe.session.user
+    
+    try:
+        # Get user's provider
+        user_provider = frappe.db.get_value(
+            "Provider",
+            {"user": user},
+            ["name", "provider_name", "user", "organization"],
+            as_dict=True
+        )
+        
+        # Get user's organizations
+        organizations = frappe.get_all(
+            "Organization",
+            filters={"owner_user": user},
+            fields=["name", "organization_name", "slug"]
+        )
+        
+        # Get providers for organizations
+        org_providers = {}
+        if organizations:
+            for org in organizations:
+                providers = frappe.get_all(
+                    "Provider",
+                    filters={"organization": org.name, "is_active": 1},
+                    fields=["name", "provider_name", "user", "email"],
+                    order_by="creation asc"
+                )
+                org_providers[org.name] = providers
+        
+        # Get individual provider if exists
+        individual_providers = []
+        if user_provider and not user_provider.organization:
+            individual_providers.append({
+                "name": user_provider.name,
+                "provider_name": user_provider.provider_name,
+                "user": user_provider.user
+            })
+        
+        # Get Google Calendars
+        google_calendars = frappe.get_all(
+            "Google Calendar",
+            fields=["name"],
+            order_by="creation asc"
+        )
+        
+        frappe.response["message"] = {
+            "success": True,
+            "organizations": organizations,
+            "user_provider": user_provider,
+            "org_providers": org_providers,
+            "individual_providers": individual_providers,
+            "google_calendars": google_calendars,
+            "is_organization_user": len(organizations) > 0
+        }
+    except Exception as e:
+        frappe.log_error(str(e), "Get Appointment Group Form Data Error")
+        frappe.response["message"] = {
+            "success": False,
+            "error": str(e)
+        }
+
+
+@frappe.whitelist()
+def create_appointment_group(
+    group_name,
+    duration_minutes=30,
+    buffer_minutes=5,
+    event_creator=None,
+    event_organizer=None,
+    members=None,
+    meet_provider="Custom",
+    meet_link=None,
+    allow_rescheduling=1,
+    minimum_notice_for_reschedule_hours=2,
+    minimum_notice_before_event_days=1,
+    event_availability_window_days=30
+):
+    """
+    Create an Appointment Group
+    
+    Args:
+        group_name: Name of the group meeting
+        duration_minutes: Duration in minutes (default: 30)
+        buffer_minutes: Buffer time in minutes (default: 5)
+        event_creator: Google Calendar name (required)
+        event_organizer: User email for organizer (defaults to current user)
+        members: List of member objects with {user, is_mandatory}
+        meet_provider: Custom/Zoom/Google Meet (default: Custom)
+        meet_link: Meeting link if Custom provider
+        allow_rescheduling: 1 or 0 (default: 1)
+        minimum_notice_for_reschedule_hours: Hours before reschedule allowed (default: 2)
+        minimum_notice_before_event_days: Days notice before event (default: 1)
+        event_availability_window_days: Days ahead to show availability (default: 30)
+    """
+    user = frappe.session.user
+    
+    try:
+        # Validate required fields
+        if not group_name or not group_name.strip():
+            frappe.throw(_("Group name is required"))
+        
+        # Check if group name already exists
+        if frappe.db.exists("Appointment Group", {"group_name": group_name}):
+            frappe.throw(_("An appointment group with this name already exists"))
+        
+        # Get or validate Google Calendar
+        if not event_creator:
+            # Try to get first available Google Calendar
+            google_calendars = frappe.get_all("Google Calendar", fields=["name"], limit=1)
+            if not google_calendars:
+                frappe.throw(_("No Google Calendar found. Please create a Google Calendar first."))
+            event_creator = google_calendars[0].name
+        else:
+            # Validate Google Calendar exists
+            if not frappe.db.exists("Google Calendar", event_creator):
+                frappe.throw(_("Google Calendar not found"))
+        
+        # Set event organizer (default to current user)
+        if not event_organizer:
+            event_organizer = user
+        
+        # Validate event organizer is a valid user
+        if not frappe.db.exists("User", event_organizer):
+            frappe.throw(_("Event organizer must be a valid user"))
+        
+        # Parse members
+        if isinstance(members, str):
+            import json
+            try:
+                members = json.loads(members)
+            except:
+                frappe.throw(_("Invalid members format"))
+        
+        if not members or len(members) == 0:
+            frappe.throw(_("At least one member is required"))
+        
+        # Validate members and ensure at least one is mandatory
+        mandatory_count = 0
+        for member in members:
+            if not member.get("user"):
+                frappe.throw(_("Each member must have a user email"))
+            
+            # Validate user exists
+            if not frappe.db.exists("User", member.get("user")):
+                frappe.throw(_(f"User {member.get('user')} not found"))
+            
+            if member.get("is_mandatory"):
+                mandatory_count += 1
+        
+        if mandatory_count == 0:
+            frappe.throw(_("At least one member must be marked as mandatory"))
+        
+        # Create Appointment Group
+        appointment_group = frappe.new_doc("Appointment Group")
+        appointment_group.group_name = group_name.strip()
+        appointment_group.event_creator = event_creator
+        appointment_group.event_organizer = event_organizer
+        appointment_group.duration_for_event = int(duration_minutes) * 60  # Convert to seconds
+        appointment_group.minimum_buffer_time = int(buffer_minutes) * 60  # Convert to seconds
+        appointment_group.allow_rescheduling = int(allow_rescheduling)
+        appointment_group.minimum_notice_for_reschedule = int(minimum_notice_for_reschedule_hours) * 60 * 60  # Convert to seconds
+        appointment_group.minimum_notice_before_event = int(minimum_notice_before_event_days) * 24 * 60 * 60  # Convert to seconds
+        appointment_group.event_availability_window = int(event_availability_window_days)
+        appointment_group.meet_provider = meet_provider
+        
+        if meet_link:
+            appointment_group.meet_link = meet_link
+        elif meet_provider == "Custom":
+            # Set default meeting link for Custom provider
+            appointment_group.meet_link = "https://meet.example.com/group-meeting"
+        
+        # Add members
+        for member in members:
+            appointment_group.append("members", {
+                "user": member.get("user"),
+                "is_mandatory": 1 if member.get("is_mandatory") else 0
+            })
+        
+        appointment_group.insert(ignore_permissions=True)
+        
+        # Sync booking URLs
+        try:
+            from frappe_appointment.scheduler.booking_url_manager import sync_booking_urls_for_appointment_group
+            sync_booking_urls_for_appointment_group(appointment_group.name)
+            frappe.db.commit()
+        except Exception as e:
+            frappe.log_error(str(e), f"Sync Group {appointment_group.name} Booking URLs Error")
+        
+        frappe.response["message"] = {
+            "success": True,
+            "appointment_group": {
+                "name": appointment_group.name,
+                "group_name": appointment_group.group_name,
+                "booking_url": f"/schedule/gr/{appointment_group.name}"
+            }
+        }
+    except Exception as e:
+        frappe.db.rollback()
+        frappe.log_error(str(e), "Create Appointment Group Error")
+        frappe.throw(_(f"Failed to create appointment group: {str(e)}"))
+
