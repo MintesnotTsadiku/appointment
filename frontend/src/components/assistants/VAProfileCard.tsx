@@ -9,7 +9,33 @@ interface VAProfileCardProps {
   onEdit?: () => void;
 }
 
+const resolveAvatar = (url?: string) => {
+  if (!url) return '';
+  if (url.startsWith('http')) return url;
+  const backend =
+    (import.meta.env.VITE_BACKEND_URL as string | undefined)?.replace(/\/$/, '') ||
+    window.location.origin.replace(':5173', ':8000');
+  return `${backend}${url}`;
+};
+
 export const VAProfileCard = ({ vaProfile, onClick, onEdit }: VAProfileCardProps) => {
+  const rawAvatar =
+    vaProfile.avatar_url || vaProfile.image_url || vaProfile.profile_image || '';
+  const avatarUrl =
+    rawAvatar ||
+    `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
+      vaProfile.full_name || vaProfile.email
+    )}`;
+  const resolvedAvatar = resolveAvatar(rawAvatar) || avatarUrl;
+
+  const initials = (vaProfile.full_name || vaProfile.email || '?')
+    .split(' ')
+    .filter(Boolean)
+    .map((part) => part[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -26,7 +52,24 @@ export const VAProfileCard = ({ vaProfile, onClick, onEdit }: VAProfileCardProps
         onClick={onClick}
       >
         <div className="flex items-start justify-between mb-4">
-          <div className="flex-1">
+          <div className="flex items-start gap-3 flex-1">
+            <div
+              className="relative h-12 w-12 rounded-xl overflow-hidden border flex items-center justify-center text-sm font-semibold shrink-0"
+              style={{ borderColor: 'var(--border-subtle)', backgroundColor: 'var(--bg-secondary)' }}
+            >
+              {resolvedAvatar ? (
+                <img
+                  src={resolvedAvatar}
+                  alt={vaProfile.full_name}
+                  className="h-full w-full object-cover"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).style.display = 'none';
+                  }}
+                />
+              ) : null}
+              <span className="absolute text-[var(--text-primary)]">{initials}</span>
+            </div>
+            <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
               <h3
                 className="font-semibold text-lg"

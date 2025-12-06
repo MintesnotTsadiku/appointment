@@ -8,23 +8,23 @@ interface TaskStatusBadgeProps {
 }
 
 const statusConfig: Record<Task['status'], { gradient: [string, string]; glow: string }> = {
-  requested: {
+  'Requested': {
     gradient: ['#6b7280', '#4b5563'],
     glow: 'rgba(107, 114, 128, 0.3)',
   },
-  assigned: {
+  'Assigned': {
     gradient: ['#3b82f6', '#4f46e5'],
     glow: 'rgba(59, 130, 246, 0.3)',
   },
-  in_progress: {
+  'In Progress': {
     gradient: ['#eab308', '#f97316'],
     glow: 'rgba(234, 179, 8, 0.3)',
   },
-  completed: {
+  'Completed': {
     gradient: ['#22c55e', '#059669'],
     glow: 'rgba(16, 185, 129, 0.3)',
   },
-  cancelled: {
+  'Cancelled': {
     gradient: ['#ef4444', '#e11d48'],
     glow: 'rgba(239, 68, 68, 0.3)',
   },
@@ -32,7 +32,7 @@ const statusConfig: Record<Task['status'], { gradient: [string, string]; glow: s
 
 export const TaskStatusBadge = ({ status, className }: TaskStatusBadgeProps) => {
   const label = getStatusLabel(status);
-  const config = statusConfig[status];
+  const config = statusConfig[status] || statusConfig['Requested'];
   const [color1, color2] = config.gradient;
 
   return (

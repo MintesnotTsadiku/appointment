@@ -6,7 +6,7 @@
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
- "field_order": [
+  "field_order": [
   "naming_series",
   "assistant",
   "client_profile",
@@ -23,7 +23,8 @@
   "average_response_time",
   "satisfaction_rating",
   "section_break_notes",
-  "notes"
+  "notes",
+  "is_demo_data"
  ],
  "fields": [
   {
@@ -117,6 +118,7 @@
    "read_only": 1
   },
   {
+   "default": 0,
    "description": "Average response time in hours",
    "fieldname": "average_response_time",
    "fieldtype": "Float",
@@ -139,6 +141,13 @@
    "fieldname": "notes",
    "fieldtype": "Text Editor",
    "label": "Notes"
+  },
+  {
+   "default": 0,
+   "fieldname": "is_demo_data",
+   "fieldtype": "Check",
+   "label": "Is Demo Data",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,

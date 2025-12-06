@@ -100,11 +100,16 @@ export const EditClientProfileModal = ({ clientId, isOpen, onClose, onSave }: Ed
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto p-4" style={{
-        backgroundColor: 'var(--bg-elevated)',
-        border: '1px solid var(--border-default)',
-      }}>
-        <DialogHeader className="pb-4 border-b" style={{ borderColor: 'var(--border-subtle)' }}>
+      <DialogContent 
+        side="right"
+        className="max-w-2xl sm:max-w-xl sm:right-4 sm:left-auto sm:inset-y-auto sm:top-auto sm:bottom-4 sm:h-[85vh] sm:max-h-[85vh] sm:rounded-2xl overflow-hidden p-0"
+        style={{
+          backgroundColor: 'var(--bg-elevated)',
+          border: '1px solid var(--border-default)',
+        }}
+      >
+        <div className="flex flex-col h-full">
+          <DialogHeader className="p-6 pb-4 border-b" style={{ borderColor: 'var(--border-subtle)' }}>
           <DialogTitle 
             className="text-2xl font-bold"
             style={{
@@ -128,7 +133,7 @@ export const EditClientProfileModal = ({ clientId, isOpen, onClose, onSave }: Ed
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="py-6">
+          <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 pt-6">
             <div className="space-y-6">
               {/* Full Name */}
               <div className="space-y-2">
@@ -287,6 +292,7 @@ export const EditClientProfileModal = ({ clientId, isOpen, onClose, onSave }: Ed
             </DialogFooter>
           </form>
         )}
+        </div>
       </DialogContent>
     </Dialog>
   );

@@ -166,26 +166,26 @@ useEffect(() => {
         }}
       >
         <div className="w-full max-w-7xl mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-          {/* Back Button */}
+        {/* Back Button */}
           {onBack ? (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onBack}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onBack}
               className="backdrop-blur-sm"
               style={{ 
                 color: 'var(--text-secondary)',
                 backgroundColor: 'var(--border-subtle)',
                 border: '1px solid var(--border-default)'
               }}
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Services
-            </Button>
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Services
+          </Button>
           ) : (
             <div /> // Spacer when no back button
-          )}
-
+        )}
+        
           {/* Theme Toggle */}
           <motion.button
             onClick={toggleTheme}

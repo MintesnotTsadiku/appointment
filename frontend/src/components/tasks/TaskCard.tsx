@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Clock, Calendar, User, ChevronRight, Sparkles, AlertTriangle } from 'lucide-react';
+import { Clock, Calendar, User, ChevronRight, Sparkles, AlertTriangle, Briefcase, Link2 } from 'lucide-react';
 import { Card } from '@/components/card';
 import { TaskStatusBadge } from './TaskStatusBadge';
 import { TaskPriorityBadge } from './TaskPriorityBadge';
@@ -133,9 +133,38 @@ export const TaskCard = ({
               )}
 
               {/* Status and Priority Badges */}
-              <div className="flex items-center gap-2 mb-4 flex-wrap">
+              <div className="flex items-center gap-2 mb-2 flex-wrap">
                 <TaskStatusBadge status={task.status} />
                 <TaskPriorityBadge priority={task.priority} />
+              </div>
+
+              {/* Client / Assignee chips */}
+              <div className="flex flex-wrap gap-2 mb-4">
+                {showClient && task.client_profile && (
+                  <span
+                    className="px-2.5 py-1 text-xs rounded-lg border"
+                    style={{
+                      borderColor: 'var(--border-subtle)',
+                      backgroundColor: 'var(--bg-secondary)',
+                      color: 'var(--text-secondary)',
+                    }}
+                  >
+                    Client: {task.client_profile}
+                  </span>
+                )}
+                {showAssignee && task.assignee && (
+                  <span
+                    className="inline-flex items-center gap-1 px-2.5 py-1 text-xs rounded-lg border"
+                    style={{
+                      borderColor: 'var(--border-subtle)',
+                      backgroundColor: 'var(--bg-secondary)',
+                      color: 'var(--text-secondary)',
+                    }}
+                  >
+                    <User className="w-3 h-3" />
+                    {task.assignee}
+                  </span>
+                )}
               </div>
             </div>
 
@@ -204,13 +233,24 @@ export const TaskCard = ({
               </div>
             )}
             
-            {showAssignee && task.assignee && (
+            {task.project && (
               <div className="flex items-center gap-2.5 text-sm">
-                <div className="p-1.5 rounded-lg bg-green-500/10">
-                  <User className="w-4 h-4 text-green-500" />
+                <div className="p-1.5 rounded-lg bg-blue-500/10">
+                  <Briefcase className="w-4 h-4 text-blue-500" />
                 </div>
                 <span style={{ color: 'var(--text-secondary)' }}>
-                  Assigned to VA
+                  {task.project}
+                </span>
+              </div>
+            )}
+
+            {task.related_event && (
+              <div className="flex items-center gap-2.5 text-sm">
+                <div className="p-1.5 rounded-lg bg-amber-500/10">
+                  <Link2 className="w-4 h-4 text-amber-500" />
+                </div>
+                <span style={{ color: 'var(--text-secondary)' }}>
+                  {task.related_event}
                 </span>
               </div>
             )}

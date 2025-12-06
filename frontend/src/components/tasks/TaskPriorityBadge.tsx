@@ -8,19 +8,19 @@ interface TaskPriorityBadgeProps {
 }
 
 const priorityConfig: Record<Task['priority'], { gradient: [string, string]; glow: string }> = {
-  low: {
+  'Low': {
     gradient: ['#4ade80', '#10b981'],
     glow: 'rgba(16, 185, 129, 0.3)',
   },
-  medium: {
+  'Medium': {
     gradient: ['#facc15', '#f59e0b'],
     glow: 'rgba(234, 179, 8, 0.3)',
   },
-  high: {
+  'High': {
     gradient: ['#f97316', '#ef4444'],
     glow: 'rgba(249, 115, 22, 0.3)',
   },
-  urgent: {
+  'Urgent': {
     gradient: ['#dc2626', '#be123c'],
     glow: 'rgba(239, 68, 68, 0.4)',
   },
@@ -28,8 +28,9 @@ const priorityConfig: Record<Task['priority'], { gradient: [string, string]; glo
 
 export const TaskPriorityBadge = ({ priority, className }: TaskPriorityBadgeProps) => {
   const label = getPriorityLabel(priority);
-  const config = priorityConfig[priority];
-  const isUrgent = priority === 'urgent';
+  const config = priorityConfig[priority] || priorityConfig['Medium'];
+  const normalizedPriority = priority === 'Urgent' ? 'Urgent' : priority;
+  const isUrgent = normalizedPriority === 'Urgent';
   const [color1, color2] = config.gradient;
 
   return (

@@ -227,7 +227,7 @@ export const TasksHeader = ({
                 border: '1px solid var(--border-default)'
               }}
             >
-              {(['month', 'week', 'day', 'list', 'cards'] as ViewMode[]).map((mode) => (
+              {(['cards', 'kanban', 'day', 'week', 'month'] as ViewMode[]).map((mode) => (
                 <motion.button
                   key={mode}
                   whileTap={{ scale: 0.95 }}

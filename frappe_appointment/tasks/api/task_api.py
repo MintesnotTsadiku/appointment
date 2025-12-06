@@ -22,8 +22,8 @@ def create_task(data):
             {
                 "title": str (required),
                 "description": str (optional),
-                "status": str (optional, default: "requested"),
-                "priority": str (optional, default: "medium"),
+                "status": str (optional, default: "Requested"),
+                "priority": str (optional, default: "Medium"),
                 "deadline": str (optional, datetime string),
                 "assignee": str (optional, VA Profile name),
                 "client_profile": str (required),
@@ -50,8 +50,8 @@ def create_task(data):
         task = frappe.new_doc("Task")
         task.title = data.get("title")
         task.description = data.get("description", "")
-        task.status = data.get("status", "requested")
-        task.priority = data.get("priority", "medium")
+        task.status = data.get("status", "Requested")
+        task.priority = data.get("priority", "Medium")
         task.client_profile = data.get("client_profile")
         
         if data.get("deadline"):
@@ -279,7 +279,7 @@ def update_task_status(task_name, status):
     
     Args:
         task_name: Name of the task
-        status: New status (requested, assigned, in_progress, completed, cancelled)
+        status: New status (Requested, Assigned, In Progress, Completed, Cancelled)
     
     Returns:
         dict: Updated task data
@@ -288,7 +288,7 @@ def update_task_status(task_name, status):
         if not frappe.db.exists("Task", task_name):
             frappe.throw(_("Task not found"))
         
-        valid_statuses = ["requested", "assigned", "in_progress", "completed", "cancelled"]
+        valid_statuses = ["Requested", "Assigned", "In Progress", "Completed", "Cancelled"]
         if status not in valid_statuses:
             frappe.throw(_(f"Invalid status. Must be one of: {', '.join(valid_statuses)}"))
         
@@ -296,7 +296,7 @@ def update_task_status(task_name, status):
         task.status = status
         
         # Auto-set completion date
-        if status == "completed" and not task.actual_duration:
+        if status == "Completed" and not task.actual_duration:
             if task.estimated_duration:
                 task.actual_duration = task.estimated_duration
         
@@ -336,8 +336,8 @@ def assign_task(task_name, assignee):
         task = frappe.get_doc("Task", task_name)
         task.assignee = assignee
         
-        if assignee and task.status == "requested":
-            task.status = "assigned"
+        if assignee and task.status == "Requested":
+            task.status = "Assigned"
         
         task.save()
         frappe.db.commit()
@@ -497,7 +497,7 @@ def get_task_statistics(client_profile=None, assignee=None):
         if assignee:
             filters["assignee"] = assignee
         
-        statuses = ["requested", "assigned", "in_progress", "completed", "cancelled"]
+        statuses = ["Requested", "Assigned", "In Progress", "Completed", "Cancelled"]
         stats = {}
         
         for status in statuses:

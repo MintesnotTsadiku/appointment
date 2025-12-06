@@ -96,7 +96,7 @@ All doctypes created with full JSON definitions and Python controllers:
    - ✅ Categories and descriptions
    - ✅ Skill levels support
 
-5. **Activity Log** (`assistants/doctype/activity_log/`)
+5. **Assistant Activity Log** (`assistants/doctype/assistant_activity_log/`)
    - ✅ Audit trail for all assistant actions
    - ✅ References to any doctype (Dynamic Link)
    - ✅ Action types: created, updated, deleted, viewed, etc.

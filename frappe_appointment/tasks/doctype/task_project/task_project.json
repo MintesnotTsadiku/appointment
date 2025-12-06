@@ -70,12 +70,12 @@
    "label": "Status"
   },
   {
-   "default": "planning",
+   "default": "Planning",
    "fieldname": "status",
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Status",
-   "options": "planning\nin_progress\non_hold\ncompleted\ncancelled"
+   "options": "Planning\nIn Progress\nOn Hold\nCompleted\nCancelled"
   },
   {
    "default": 0,

@@ -14,7 +14,7 @@ class TaskProject(Document):
 		if not self.created_at:
 			self.created_at = datetime.now()
 		if not self.status:
-			self.status = "planning"
+			self.status = "Planning"
 	
 	def on_update(self):
 		"""Calculate progress when tasks are updated"""
@@ -32,13 +32,13 @@ class TaskProject(Document):
 			self.progress = 0
 			return
 		
-		completed = len([t for t in tasks if t.status == "completed"])
+		completed = len([t for t in tasks if t.status == "Completed"])
 		total = len(tasks)
 		self.progress = int((completed / total) * 100) if total > 0 else 0
 		
 		# Auto-update status based on progress
-		if self.progress == 100 and self.status != "completed":
-			self.status = "completed"
-		elif self.progress > 0 and self.status == "planning":
-			self.status = "in_progress"
+		if self.progress == 100 and self.status != "Completed":
+			self.status = "Completed"
+		elif self.progress > 0 and self.status == "Planning":
+			self.status = "In Progress"
 

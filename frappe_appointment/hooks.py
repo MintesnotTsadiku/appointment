@@ -145,21 +145,6 @@ fixtures = [
             ]
         ],
     },
-    # Doctypes for the multi-business system
-    {
-        "dt": "DocType",
-        "filters": [
-            [
-                "name",
-                "in",
-                [
-                    "Organization",
-                    "Organization Manager",
-                    "Provider Delegation",
-                ],
-            ]
-        ],
-    },
 ]
 
 # Installation

@@ -189,9 +189,9 @@ export function ServiceSelector({
                   transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
                 >
                   <ServiceCard
-                    service={service}
-                    onSelect={onServiceSelect}
-                  />
+                  service={service}
+                  onSelect={onServiceSelect}
+                />
                 </motion.div>
               ))}
             </div>
@@ -216,12 +216,12 @@ export function ServiceSelector({
                   transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
                 >
                   <ServiceCard
-                    service={service}
-                    onSelect={onServiceSelect}
-                    availableProviders={organization.providers.filter(p => 
-                      p.services?.some(ps => ps === service.name)
-                    )}
-                  />
+                  service={service}
+                  onSelect={onServiceSelect}
+                  availableProviders={organization.providers.filter(p => 
+                    p.services?.some(ps => ps === service.name)
+                  )}
+                />
                 </motion.div>
               ))}
             </div>
@@ -283,10 +283,10 @@ export function ServiceSelector({
                         transition={{ duration: 0.5, delay: 0.4 + providerIndex * 0.1 + serviceIndex * 0.05 }}
                       >
                         <ServiceCard
-                          service={service}
-                          onSelect={onServiceSelect}
-                          showProviderName={false}
-                        />
+                        service={service}
+                        onSelect={onServiceSelect}
+                        showProviderName={false}
+                      />
                       </motion.div>
                     ))}
                   </div>
@@ -314,9 +314,9 @@ export function ServiceSelector({
                   transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
                 >
                   <ServiceCard
-                    service={service}
-                    onSelect={onServiceSelect}
-                  />
+                  service={service}
+                  onSelect={onServiceSelect}
+                />
                 </motion.div>
               ))}
             </div>
@@ -389,48 +389,48 @@ function ServiceCard({ service, onSelect, availableProviders = [], showProviderN
         }}
       />
       <div className="relative">
-        {/* Service Type Badge */}
-        {service.type === "individual" && service.provider && (
+      {/* Service Type Badge */}
+      {service.type === "individual" && service.provider && (
           <div className="absolute top-0 right-0">
             <div className="flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium bg-gradient-primary text-white">
-              <User className="h-3 w-3" />
-              <span>Individual</span>
-            </div>
+            <User className="h-3 w-3" />
+            <span>Individual</span>
           </div>
-        )}
+        </div>
+      )}
 
-        {/* Service Name */}
+      {/* Service Name */}
         <h4 className="text-xl font-semibold mb-2 pr-16" style={{ color: 'var(--text-primary)' }}>
-          {service.name}
-        </h4>
+        {service.name}
+      </h4>
 
-        {/* Provider Name (for individual services) */}
-        {service.provider && showProviderName && (
+      {/* Provider Name (for individual services) */}
+      {service.provider && showProviderName && (
           <p className="text-sm mb-3 flex items-center gap-2" style={{ color: 'var(--text-secondary)' }}>
             <User className="h-3 w-3" style={{ color: 'var(--accent-primary)' }} />
-            {service.provider.name}
-          </p>
-        )}
-        
-        {/* Available Providers (for organization services) */}
-        {availableProviders.length > 0 && (
-          <div className="mb-3">
+          {service.provider.name}
+        </p>
+      )}
+      
+      {/* Available Providers (for organization services) */}
+      {availableProviders.length > 0 && (
+        <div className="mb-3">
             <p className="text-xs mb-2" style={{ color: 'var(--text-muted)' }}>Available providers:</p>
-            <div className="flex -space-x-2">
-              {availableProviders.slice(0, 3).map((provider) => (
+          <div className="flex -space-x-2">
+            {availableProviders.slice(0, 3).map((provider) => (
                 <Avatar 
                   key={`avatar-${provider.id}`} 
                   className="h-7 w-7 border-2" 
                   style={{ borderColor: 'var(--bg-primary)' }}
                   title={provider.name}
                 >
-                  <AvatarImage src={provider.avatar} alt={provider.name} />
+                <AvatarImage src={provider.avatar} alt={provider.name} />
                   <AvatarFallback className="text-xs bg-gradient-primary text-white">
-                    {provider.name.charAt(0).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-              ))}
-              {availableProviders.length > 3 && (
+                  {provider.name.charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+            ))}
+            {availableProviders.length > 3 && (
                 <div 
                   className="h-7 w-7 rounded-full border-2 flex items-center justify-center"
                   style={{ 
@@ -439,51 +439,51 @@ function ServiceCard({ service, onSelect, availableProviders = [], showProviderN
                   }}
                 >
                   <span className="text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>
-                    +{availableProviders.length - 3}
-                  </span>
-                </div>
-              )}
-            </div>
+                  +{availableProviders.length - 3}
+                </span>
+              </div>
+            )}
           </div>
-        )}
-
-        {/* Description */}
-        {service.description && (
-          <p className="text-sm mb-4 line-clamp-2" style={{ color: 'var(--text-secondary)' }}>
-            {service.description}
-          </p>
-        )}
-
-        {/* Service Details */}
-        <div className="flex flex-wrap items-center gap-3 text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
-          <div className="flex items-center gap-1">
-            <Clock className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
-            <span>{service.duration} min</span>
-          </div>
-          {service.price && service.price > 0 && (
-            <div className="flex items-center gap-1">
-              <DollarSign className="h-4 w-4" style={{ color: 'var(--accent-success)' }} />
-              <span>
-                {service.price} {service.currency || "ETB"}
-              </span>
-            </div>
-          )}
-          {service.providerCount && service.providerCount > 1 && (
-            <div className="flex items-center gap-1">
-              <Users className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
-              <span>{service.providerCount} providers</span>
-            </div>
-          )}
         </div>
+      )}
 
-        {/* CTA */}
+      {/* Description */}
+      {service.description && (
+          <p className="text-sm mb-4 line-clamp-2" style={{ color: 'var(--text-secondary)' }}>
+          {service.description}
+        </p>
+      )}
+
+      {/* Service Details */}
+        <div className="flex flex-wrap items-center gap-3 text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
+        <div className="flex items-center gap-1">
+            <Clock className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
+          <span>{service.duration} min</span>
+        </div>
+        {service.price && service.price > 0 && (
+          <div className="flex items-center gap-1">
+              <DollarSign className="h-4 w-4" style={{ color: 'var(--accent-success)' }} />
+            <span>
+              {service.price} {service.currency || "ETB"}
+            </span>
+          </div>
+        )}
+        {service.providerCount && service.providerCount > 1 && (
+          <div className="flex items-center gap-1">
+              <Users className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
+            <span>{service.providerCount} providers</span>
+          </div>
+        )}
+      </div>
+
+      {/* CTA */}
         <div 
           className="flex items-center justify-between pt-4"
           style={{ borderTop: '1px solid var(--border-default)' }}
         >
           <span className="text-sm font-medium" style={{ color: 'var(--accent-primary)' }}>
-            Book Appointment
-          </span>
+          Book Appointment
+        </span>
           <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" style={{ color: 'var(--accent-primary)' }} />
         </div>
       </div>

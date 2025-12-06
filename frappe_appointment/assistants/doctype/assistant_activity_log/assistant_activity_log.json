@@ -28,7 +28,7 @@
    "fieldname": "naming_series",
    "fieldtype": "Select",
    "label": "Naming Series",
-   "options": "ACT-.YYYY.-.#####",
+ "options": "AAL-.YYYY.-.#####",
    "reqd": 1
   },
   {
@@ -120,7 +120,7 @@
  "modified": "2025-01-25 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Assistants",
- "name": "Activity Log",
+ "name": "Assistant Activity Log",
  "naming_rule": "By \"Naming Series\"",
  "owner": "Administrator",
  "permissions": [

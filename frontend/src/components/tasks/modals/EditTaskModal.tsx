@@ -28,8 +28,8 @@ export const EditTaskModal = ({ taskId, isOpen, onClose, onSave }: EditTaskModal
   const [formData, setFormData] = useState<Partial<Task>>({
     title: '',
     description: '',
-    status: 'requested',
-    priority: 'medium',
+    status: 'Requested',
+    priority: 'Medium',
     client_profile: '',
     assignee: '',
     category: '',
@@ -54,8 +54,8 @@ export const EditTaskModal = ({ taskId, isOpen, onClose, onSave }: EditTaskModal
     setFormData({
       title: '',
       description: '',
-      status: 'requested',
-      priority: 'medium',
+      status: 'Requested',
+      priority: 'Medium',
       client_profile: '',
       assignee: '',
       category: '',
@@ -138,22 +138,26 @@ export const EditTaskModal = ({ taskId, isOpen, onClose, onSave }: EditTaskModal
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto p-4" style={{
-        backgroundColor: 'var(--bg-elevated)',
-        border: '1px solid var(--border-default)',
-      }}>
-        <DialogHeader className="pb-4 border-b" style={{ borderColor: 'var(--border-subtle)' }}>
-          <DialogTitle 
-            className="text-2xl font-bold"
-            style={{
-              background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-primary-hover))',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}
-          >
-            Edit Task
-          </DialogTitle>
-        </DialogHeader>
+      <DialogContent
+        side="right"
+        className="w-full sm:max-w-[900px] p-0 h-full overflow-hidden"
+        style={{
+          backgroundColor: 'var(--bg-elevated)',
+          borderLeft: '1px solid var(--border-default)',
+        }}
+      >
+        <div className="border-b px-6 py-4" style={{ backgroundColor: '#f4f4f5', borderColor: 'var(--border-subtle)' }}>
+          <DialogHeader className="pb-0 border-0">
+            <DialogTitle 
+              className="text-2xl font-bold"
+              style={{
+                color: 'var(--text-primary)',
+              }}
+            >
+              Edit Task
+            </DialogTitle>
+          </DialogHeader>
+        </div>
 
         {initialLoading ? (
           <div className="flex items-center justify-center py-20">
@@ -166,7 +170,7 @@ export const EditTaskModal = ({ taskId, isOpen, onClose, onSave }: EditTaskModal
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="py-6">
+          <form onSubmit={handleSubmit} className="p-6 space-y-6 overflow-y-auto h-[calc(100vh-80px)]">
             {/* Basic Information Section */}
             <div className="space-y-6 mb-8">
               <div>
@@ -230,11 +234,11 @@ export const EditTaskModal = ({ taskId, isOpen, onClose, onSave }: EditTaskModal
                           padding: '0.875rem 1.125rem',
                         }}
                       >
-                        <option value="requested">Requested</option>
-                        <option value="assigned">Assigned</option>
-                        <option value="in_progress">In Progress</option>
-                        <option value="completed">Completed</option>
-                        <option value="cancelled">Cancelled</option>
+                        <option value="Requested">Requested</option>
+                        <option value="Assigned">Assigned</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Cancelled">Cancelled</option>
                       </select>
                     </div>
 
@@ -254,10 +258,10 @@ export const EditTaskModal = ({ taskId, isOpen, onClose, onSave }: EditTaskModal
                           padding: '0.875rem 1.125rem',
                         }}
                       >
-                        <option value="low">Low</option>
-                        <option value="medium">Medium</option>
-                        <option value="high">High</option>
-                        <option value="urgent">Urgent</option>
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                        <option value="Urgent">Urgent</option>
                       </select>
                     </div>
                   </div>

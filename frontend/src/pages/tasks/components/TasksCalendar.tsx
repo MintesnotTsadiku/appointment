@@ -10,11 +10,15 @@ import { TaskCalendarCard } from './TaskCalendarCard';
 import { ViewMode, TimeSlotInterval } from '../types';
 import { isOverdue } from '@/lib/tasks-assistants/utils';
 
+const WORK_START_HOUR = 8;
+const WORK_END_HOUR = 20; // exclusive
+
 interface TasksCalendarProps {
   tasks: Task[];
   currentDate: Date;
   viewMode: ViewMode;
   timeSlotInterval: TimeSlotInterval;
+  dateField: 'deadline' | 'creation' | 'modified';
   isLoading?: boolean;
   onCreateTask?: (date: Date, time?: string) => void;
   onTaskClick?: (task: Task) => void;
@@ -26,33 +30,39 @@ export const TasksCalendar = ({
   currentDate,
   viewMode,
   timeSlotInterval,
+  dateField,
   isLoading,
   onCreateTask,
   onTaskClick,
   onNavigateToDay,
 }: TasksCalendarProps) => {
-  // Helper function to extract date from deadline
+  // Helper function to extract date from selected field (fallback to deadline/creation)
   const getTaskDate = (task: Task): Date | null => {
-    if (!task.deadline) return null;
+    const candidate =
+      (dateField === 'deadline' && task.deadline) ||
+      (dateField === 'creation' && task.creation) ||
+      (dateField === 'modified' && task.modified) ||
+      task.deadline ||
+      task.creation ||
+      task.modified;
+    if (!candidate) return null;
     try {
-      return parseISO(task.deadline);
+      return parseISO(candidate);
     } catch (e) {
       return null;
     }
   };
 
-  // Helper function to extract time from deadline
+  // Helper function to extract time from date; clamp into working window to keep tasks visible
   const getTaskTime = (task: Task): { hour: number; minute: number } | null => {
-    if (!task.deadline) return null;
-    try {
-      const deadline = parseISO(task.deadline);
-      return {
-        hour: deadline.getHours(),
-        minute: deadline.getMinutes(),
-      };
-    } catch (e) {
-      return null;
-    }
+    const date = getTaskDate(task);
+    if (!date) return null;
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+    if (isNaN(hour)) return null;
+    const clampedHour = Math.min(Math.max(hour, WORK_START_HOUR), WORK_END_HOUR - 1);
+    const clampedMinute = isNaN(minute) ? 0 : minute;
+    return { hour: clampedHour, minute: clampedMinute };
   };
 
   // Filter tasks for a specific date
@@ -61,26 +71,23 @@ export const TasksCalendar = ({
     return tasks.filter((task) => {
       const taskDate = getTaskDate(task);
       if (!taskDate) {
-        // Tasks without deadline - show at bottom or today based on preference
-        return isToday(date);
+        return false;
       }
       return format(taskDate, 'yyyy-MM-dd') === dateStr;
     });
   };
 
-  // Get tasks without deadlines
-  const tasksWithoutDeadline = useMemo(() => {
-    return tasks.filter((task) => !task.deadline);
-  }, [tasks]);
+  // Get tasks without usable date
+  const tasksWithoutDate = useMemo(() => {
+    return tasks.filter((task) => !getTaskDate(task));
+  }, [tasks, dateField]);
 
   // Generate time slots based on interval (8 AM - 8 PM)
   const timeSlots = useMemo(() => {
     const slots: { hour: number; minute: number }[] = [];
-    const startHour = 8;
-    const endHour = 20;
     const slotsPerHour = 60 / timeSlotInterval;
     
-    for (let hour = startHour; hour < endHour; hour++) {
+    for (let hour = WORK_START_HOUR; hour < WORK_END_HOUR; hour++) {
       for (let i = 0; i < slotsPerHour; i++) {
         slots.push({
           hour,
@@ -103,7 +110,7 @@ export const TasksCalendar = ({
     if (!time) return null;
 
     const startMinutes = time.hour * 60 + time.minute;
-    const startSlotMinutes = startMinutes - (8 * 60); // Offset from 8 AM
+    const startSlotMinutes = startMinutes - (WORK_START_HOUR * 60); // Offset from start hour
     
     // Default height: 1 hour (60 minutes)
     const duration = task.estimated_duration || 60;
@@ -276,101 +283,144 @@ export const TasksCalendar = ({
     const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
     return (
-      <div 
-        className="backdrop-blur-sm rounded-2xl overflow-hidden"
-        style={{ 
-          backgroundColor: 'var(--bg-elevated)',
-          border: '1px solid var(--border-default)'
-        }}
-      >
-        <div 
-          className="grid grid-cols-7 gap-px"
-          style={{ backgroundColor: 'var(--border-default)' }}
+      <div className="flex gap-4 h-full">
+        <div
+          className="flex-1 relative overflow-hidden rounded-3xl border backdrop-blur-xl w-full"
+          style={{
+            backgroundColor: 'color-mix(in srgb, var(--bg-elevated) 94%, transparent)',
+            borderColor: 'var(--border-default)',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.08)',
+            minHeight: '60vh',
+          }}
         >
-          {/* Week day headers */}
-          {weekDays.map(day => (
-            <div 
-              key={day} 
-              className="p-2 text-center text-sm font-semibold"
-              style={{ 
-                backgroundColor: 'var(--bg-elevated)',
-                color: 'var(--text-primary)'
-              }}
-            >
-              {day}
-            </div>
-          ))}
-          
-          {/* Calendar days */}
-          {days.map(day => {
-            const dayTasks = getTasksForDate(day);
-            const isCurrentMonth = isSameMonth(day, currentDate);
-            const isTodayDate = isToday(day);
-            
-            return (
+          {/* subtle glows for premium feel */}
+          <div className="pointer-events-none absolute inset-0">
+            <div className="absolute -top-24 -left-16 w-64 h-64 rounded-full blur-[110px]" style={{ backgroundColor: 'var(--glow-primary)' }} />
+            <div className="absolute -bottom-24 right-4 w-64 h-64 rounded-full blur-[110px]" style={{ backgroundColor: 'var(--glow-secondary)' }} />
+          </div>
+
+          <div
+            className="grid grid-cols-7 gap-px relative z-10 h-full"
+            style={{ backgroundColor: 'var(--border-default)' }}
+          >
+            {/* Week day headers */}
+            {weekDays.map(day => (
               <div
-                key={day.toString()}
-                className={`p-2 min-h-[100px] border-l border-t ${
-                  !isCurrentMonth ? 'opacity-50' : ''
-                } ${isTodayDate ? 'ring-2' : ''}`}
-                style={{ 
+                key={day}
+                className="p-3 text-center text-sm font-semibold uppercase tracking-wide"
+                style={{
                   backgroundColor: 'var(--bg-elevated)',
-                  borderColor: 'var(--border-default)',
-                  ...(isTodayDate ? { 
-                    ringColor: 'var(--accent-primary)',
-                    ringWidth: '2px'
-                  } : {})
+                  color: 'var(--text-subtle)',
                 }}
-                onClick={() => onNavigateToDay?.(day)}
               >
-                <div 
-                  className="text-sm font-medium mb-1 cursor-pointer hover:opacity-80 transition-opacity"
-                  style={{ 
-                    color: isTodayDate ? 'var(--accent-primary)' : 'var(--text-primary)'
-                  }}
-                >
-                  {format(day, 'd')}
-                </div>
-                <div className="space-y-1">
-                  {dayTasks.slice(0, 3).map(task => {
-                    const overdue = isOverdue(task);
-                    const priorityColor = task.priority === 'urgent' || overdue ? 'var(--status-cancelled)' : 
-                                        task.priority === 'high' ? 'var(--accent-secondary)' :
-                                        task.status === 'completed' ? 'var(--accent-success)' : 'var(--text-muted)';
-                    
-                    return (
-                      <button
-                        key={task.name}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onTaskClick?.(task);
-                        }}
-                        className="w-full text-left text-xs px-2 py-1 rounded border truncate hover:opacity-80 transition-opacity"
-                        style={{
-                          backgroundColor: `${priorityColor}20`,
-                          borderColor: `${priorityColor}50`,
-                          color: 'var(--text-primary)',
-                        }}
-                        title={`${task.title} - ${formatDateTime(task.deadline || '')}`}
-                      >
-                        <div className="font-medium truncate">{task.title}</div>
-                        {task.deadline && (
-                          <div className="text-[10px] opacity-75 truncate">
-                            {format(parseISO(task.deadline), 'HH:mm')}
-                          </div>
-                        )}
-                      </button>
-                    );
-                  })}
-                  {dayTasks.length > 3 && (
-                    <div className="text-xs px-2" style={{ color: 'var(--text-muted)' }}>
-                      +{dayTasks.length - 3} more
-                    </div>
-                  )}
-                </div>
+                {day}
               </div>
-            );
-          })}
+            ))}
+            
+            {/* Calendar days */}
+            {days.map(day => {
+              const dayTasks = getTasksForDate(day);
+              const isCurrentMonth = isSameMonth(day, currentDate);
+              const isTodayDate = isToday(day);
+              
+              return (
+                <div
+                  key={day.toString()}
+                  className={`p-3 min-h-[120px] border-l border-t transition-all duration-200 ${
+                    !isCurrentMonth ? 'opacity-60' : ''
+                  } ${isTodayDate ? 'ring-2' : ''}`}
+                  style={{ 
+                    backgroundColor: 'var(--bg-elevated)',
+                    borderColor: 'var(--border-default)',
+                    ...(isTodayDate ? { 
+                      ringColor: 'var(--accent-primary)',
+                      ringWidth: '2px'
+                    } : {})
+                  }}
+                  onClick={() => onNavigateToDay?.(day)}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div 
+                      className="text-base font-semibold flex items-center justify-center w-8 h-8 rounded-xl"
+                      style={{ 
+                        color: isTodayDate ? 'var(--accent-primary)' : 'var(--text-primary)',
+                        backgroundColor: isTodayDate ? 'var(--accent-primary-light)' : 'var(--bg-secondary)'
+                      }}
+                    >
+                      {format(day, 'd')}
+                    </div>
+                    {dayTasks.length > 0 && (
+                      <span
+                        className="text-[11px] px-2 py-1 rounded-full font-semibold"
+                        style={{
+                          backgroundColor: 'var(--border-subtle)',
+                          color: 'var(--text-muted)',
+                          border: '1px solid var(--border-default)',
+                        }}
+                      >
+                        {dayTasks.length} task{dayTasks.length > 1 ? 's' : ''}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    {dayTasks.slice(0, 3).map(task => {
+                      const overdue = isOverdue(task);
+                      const priorityColor = task.priority === 'Urgent' || overdue ? 'var(--status-cancelled)' : 
+                                          task.priority === 'High' ? 'var(--accent-secondary)' :
+                                          task.status === 'Completed' ? 'var(--accent-success)' : 'var(--accent-primary)';
+                      
+                      return (
+                        <button
+                          key={task.name}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onTaskClick?.(task);
+                          }}
+                          className="w-full text-left text-xs px-3 py-2 rounded-lg border truncate hover:-translate-y-0.5 hover:shadow-lg transition-all duration-200"
+                          style={{
+                            background: `linear-gradient(135deg, ${priorityColor}1a, ${priorityColor}0d)`,
+                            borderColor: `${priorityColor}40`,
+                            color: 'var(--text-primary)',
+                          }}
+                          title={`${task.title}${task.deadline ? ` - ${formatDateTime(task.deadline)}` : ''}`}
+                        >
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="font-semibold truncate">{task.title}</span>
+                            {task.deadline && (
+                              <span className="text-[11px] opacity-80 whitespace-nowrap">
+                                {format(parseISO(task.deadline), 'HH:mm')}
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-1 mt-1 text-[11px] opacity-80">
+                            <span
+                              className="inline-flex items-center gap-1 px-2 py-[2px] rounded-full"
+                              style={{
+                                backgroundColor: `${priorityColor}20`,
+                                color: priorityColor,
+                                border: `1px solid ${priorityColor}40`,
+                              }}
+                            >
+                              {task.status}
+                            </span>
+                            {task.client_profile && (
+                              <span className="truncate">{task.client_profile}</span>
+                            )}
+                          </div>
+                        </button>
+                      );
+                    })}
+                    {dayTasks.length > 3 && (
+                      <div className="text-xs px-2" style={{ color: 'var(--text-muted)' }}>
+                        +{dayTasks.length - 3} more
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     );
@@ -423,7 +473,9 @@ export const TasksCalendar = ({
           {weekDays.map(day => {
             const dayTasks = getTasksForDate(day);
             const isTodayDate = isToday(day);
-            const layouts = calculateTaskLayouts(dayTasks);
+            const dayScheduled = dayTasks.filter((t) => !!getTaskTime(t));
+            const dayAllDay = dayTasks.filter((t) => !getTaskTime(t));
+            const layouts = calculateTaskLayouts(dayScheduled);
 
             return (
               <div 
@@ -477,8 +529,30 @@ export const TasksCalendar = ({
                     />
                   ))}
 
+                  {/* All-day / unscheduled for this day */}
+                  {dayAllDay.length > 0 && (
+                    <div className="px-2 py-2 space-y-1">
+                      {dayAllDay.map((task) => (
+                        <motion.div
+                          key={task.name}
+                          initial={{ opacity: 0, y: -4 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          onClick={() => onTaskClick?.(task)}
+                          className="rounded-md border px-2 py-1 cursor-pointer text-xs"
+                          style={{
+                            backgroundColor: 'var(--bg-secondary)',
+                            borderColor: 'var(--border-default)',
+                            color: 'var(--text-primary)',
+                          }}
+                        >
+                          {task.title}
+                        </motion.div>
+                      ))}
+                    </div>
+                  )}
+
                   {/* Tasks */}
-                  {dayTasks.map((task) => {
+                  {dayScheduled.map((task) => {
                     const layout = layouts.get(task.name);
                     if (!layout) {
                       const position = getTaskPosition(task);
@@ -541,6 +615,43 @@ export const TasksCalendar = ({
             );
           })}
         </div>
+
+        {/* Unscheduled tasks (no date) as side rail */}
+        {tasksWithoutDate.length > 0 && (
+          <div className="border-t" style={{ borderColor: 'var(--border-subtle)' }}>
+            <div className="px-4 py-3 flex items-center justify-between">
+              <h3 className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+                Unscheduled (no {dateField} date)
+              </h3>
+              <span className="text-xs px-2 py-1 rounded-lg" style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-muted)' }}>
+                {tasksWithoutDate.length}
+              </span>
+            </div>
+            <div className="px-4 pb-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
+              {tasksWithoutDate.map((task) => (
+                <motion.div
+                  key={task.name}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  onClick={() => onTaskClick?.(task)}
+                  className="p-3 rounded-lg border cursor-pointer hover:opacity-80 transition-opacity"
+                  style={{
+                    backgroundColor: 'var(--bg-secondary)',
+                    borderColor: 'var(--border-default)',
+                    color: 'var(--text-primary)',
+                  }}
+                >
+                  <div className="text-sm font-semibold truncate">{task.title}</div>
+                  {task.client_profile && (
+                    <div className="text-[11px] mt-1" style={{ color: 'var(--text-muted)' }}>
+                      {task.client_profile}
+                    </div>
+                  )}
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -549,7 +660,9 @@ export const TasksCalendar = ({
   if (viewMode === 'day') {
     const dayTasks = getTasksForDate(currentDate);
     const isTodayDate = isToday(currentDate);
-    const layouts = calculateTaskLayouts(dayTasks);
+    const dayScheduled = dayTasks.filter((t) => !!getTaskTime(t));
+    const dayAllDay = dayTasks.filter((t) => !getTaskTime(t));
+    const layouts = calculateTaskLayouts(dayScheduled);
 
     return (
       <div 
@@ -630,8 +743,30 @@ export const TasksCalendar = ({
               />
             ))}
 
+            {/* All-day / unscheduled for this day */}
+            {dayAllDay.length > 0 && (
+              <div className="px-2 py-3 space-y-2">
+                {dayAllDay.map((task) => (
+                  <motion.div
+                    key={task.name}
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    onClick={() => onTaskClick?.(task)}
+                    className="rounded-md border px-3 py-2 cursor-pointer text-sm"
+                    style={{
+                      backgroundColor: 'var(--bg-secondary)',
+                      borderColor: 'var(--border-default)',
+                      color: 'var(--text-primary)',
+                    }}
+                  >
+                    {task.title}
+                  </motion.div>
+                ))}
+              </div>
+            )}
+
             {/* Tasks */}
-            {dayTasks.map((task) => {
+            {dayScheduled.map((task) => {
               const layout = layouts.get(task.name);
               if (!layout) {
                 const position = getTaskPosition(task);
@@ -690,41 +825,45 @@ export const TasksCalendar = ({
               );
             })}
 
-            {/* Tasks without deadline - show at bottom */}
-            {tasksWithoutDeadline.length > 0 && (
-              <div 
-                className="mt-4 p-4 border-t"
-                style={{ 
-                  borderColor: 'var(--border-subtle)',
-                  marginTop: `${(timeSlots.length * slotHeightPx) + 64}px`
-                }}
-              >
-                <h3 className="text-sm font-semibold mb-3" style={{ color: 'var(--text-primary)' }}>
-                  Tasks without Deadline
-                </h3>
-                <div className="space-y-2">
-                  {tasksWithoutDeadline.map(task => (
-                    <motion.div
-                      key={task.name}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      onClick={() => onTaskClick?.(task)}
-                      className="p-3 rounded-lg border cursor-pointer hover:opacity-80 transition-opacity"
-                      style={{
-                        backgroundColor: 'var(--bg-secondary)',
-                        borderColor: 'var(--border-default)',
-                      }}
-                    >
-                      <div className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>
-                        {task.title}
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
         </div>
+
+        {/* Unscheduled tasks (no date) keep visible */}
+        {tasksWithoutDate.length > 0 && (
+          <div className="border-t" style={{ borderColor: 'var(--border-subtle)' }}>
+            <div className="px-4 py-3 flex items-center justify-between">
+              <h3 className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+                Unscheduled (no {dateField} date)
+              </h3>
+              <span className="text-xs px-2 py-1 rounded-lg" style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-muted)' }}>
+                {tasksWithoutDate.length}
+              </span>
+            </div>
+            <div className="px-4 pb-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
+              {tasksWithoutDate.map((task) => (
+                <motion.div
+                  key={task.name}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  onClick={() => onTaskClick?.(task)}
+                  className="p-3 rounded-lg border cursor-pointer hover:opacity-80 transition-opacity"
+                  style={{
+                    backgroundColor: 'var(--bg-secondary)',
+                    borderColor: 'var(--border-default)',
+                    color: 'var(--text-primary)',
+                  }}
+                >
+                  <div className="text-sm font-semibold truncate">{task.title}</div>
+                  {task.client_profile && (
+                    <div className="text-[11px] mt-1" style={{ color: 'var(--text-muted)' }}>
+                      {task.client_profile}
+                    </div>
+                  )}
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     );
   }

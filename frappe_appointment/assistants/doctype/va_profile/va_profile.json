@@ -6,21 +6,49 @@
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
- "field_order": [
+  "field_order": [
   "user",
+  "headline",
   "assistant_tier",
+  "column_break_tier",
   "max_clients",
   "current_clients",
+  "section_break_ratings",
+  "rating",
+  "total_reviews",
+  "column_break_metrics",
+  "tasks_completed",
+  "success_rate",
+  "years_experience",
+  "section_break_availability",
+  "availability_status",
+  "available_hours_per_week",
+  "column_break_hours",
+  "working_hours_start",
+  "working_hours_end",
+  "response_time",
+  "section_break_pricing",
+  "hourly_rate",
   "section_break_contact",
   "timezone",
+  "work_style",
   "languages",
   "section_break_profile",
   "bio",
   "education",
   "section_break_skills",
   "skills",
+  "section_break_specializations",
+  "specializations",
+  "section_break_certifications",
+  "certifications",
+  "section_break_tools",
+  "tools",
   "section_break_status",
-  "is_active"
+  "is_active",
+  "featured",
+  "verified",
+  "is_demo_data"
  ],
  "fields": [
   {
@@ -33,6 +61,12 @@
    "unique": 1
   },
   {
+   "fieldname": "headline",
+   "fieldtype": "Data",
+   "label": "Headline",
+   "description": "Professional tagline (e.g., 'Executive Assistant with 5+ years in Tech')"
+  },
+  {
    "default": "standard",
    "fieldname": "assistant_tier",
    "fieldtype": "Select",
@@ -40,6 +74,10 @@
    "label": "Assistant Tier",
    "options": "junior\nstandard\nsenior",
    "reqd": 1
+  },
+  {
+   "fieldname": "column_break_tier",
+   "fieldtype": "Column Break"
   },
   {
    "default": 1,
@@ -57,6 +95,97 @@
    "read_only": 1
   },
   {
+   "fieldname": "section_break_ratings",
+   "fieldtype": "Section Break",
+   "label": "Ratings & Performance"
+  },
+  {
+   "default": "0",
+   "fieldname": "rating",
+   "fieldtype": "Float",
+   "label": "Rating",
+   "description": "Average rating (1.0 - 5.0)"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_reviews",
+   "fieldtype": "Int",
+   "label": "Total Reviews"
+  },
+  {
+   "fieldname": "column_break_metrics",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "tasks_completed",
+   "fieldtype": "Int",
+   "label": "Tasks Completed"
+  },
+  {
+   "default": "0",
+   "fieldname": "success_rate",
+   "fieldtype": "Percent",
+   "label": "Success Rate"
+  },
+  {
+   "default": "0",
+   "fieldname": "years_experience",
+   "fieldtype": "Int",
+   "label": "Years of Experience"
+  },
+  {
+   "fieldname": "section_break_availability",
+   "fieldtype": "Section Break",
+   "label": "Availability"
+  },
+  {
+   "default": "available",
+   "fieldname": "availability_status",
+   "fieldtype": "Select",
+   "label": "Availability Status",
+   "options": "available\nlimited\nbooked"
+  },
+  {
+   "default": "40",
+   "fieldname": "available_hours_per_week",
+   "fieldtype": "Int",
+   "label": "Available Hours Per Week"
+  },
+  {
+   "fieldname": "column_break_hours",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "working_hours_start",
+   "fieldtype": "Time",
+   "label": "Working Hours Start",
+   "default": "09:00:00"
+  },
+  {
+   "fieldname": "working_hours_end",
+   "fieldtype": "Time",
+   "label": "Working Hours End",
+   "default": "17:00:00"
+  },
+  {
+   "default": "within_1_hour",
+   "fieldname": "response_time",
+   "fieldtype": "Select",
+   "label": "Response Time",
+   "options": "immediate\nwithin_1_hour\nwithin_4_hours\nwithin_24_hours"
+  },
+  {
+   "fieldname": "section_break_pricing",
+   "fieldtype": "Section Break",
+   "label": "Pricing"
+  },
+  {
+   "fieldname": "hourly_rate",
+   "fieldtype": "Currency",
+   "label": "Hourly Rate"
+  },
+  {
    "fieldname": "section_break_contact",
    "fieldtype": "Section Break",
    "label": "Contact & Location"
@@ -67,6 +196,13 @@
    "fieldtype": "Select",
    "label": "Timezone",
    "options": "Africa/Addis_Ababa\nAfrica/Nairobi\nAfrica/Cairo\nAfrica/Lagos\nAfrica/Johannesburg"
+  },
+  {
+   "default": "remote_only",
+   "fieldname": "work_style",
+   "fieldtype": "Select",
+   "label": "Work Style",
+   "options": "remote_only\nhybrid\nflexible"
   },
   {
    "fieldname": "languages",
@@ -101,6 +237,39 @@
    "options": "Assistant Skill Assignment"
   },
   {
+   "fieldname": "section_break_specializations",
+   "fieldtype": "Section Break",
+   "label": "Specializations"
+  },
+  {
+   "fieldname": "specializations",
+   "fieldtype": "Table",
+   "label": "Specializations",
+   "options": "VA Specialization"
+  },
+  {
+   "fieldname": "section_break_certifications",
+   "fieldtype": "Section Break",
+   "label": "Certifications"
+  },
+  {
+   "fieldname": "certifications",
+   "fieldtype": "Table",
+   "label": "Certifications",
+   "options": "VA Certification"
+  },
+  {
+   "fieldname": "section_break_tools",
+   "fieldtype": "Section Break",
+   "label": "Tools & Software"
+  },
+  {
+   "fieldname": "tools",
+   "fieldtype": "Table",
+   "label": "Tools",
+   "options": "VA Tool"
+  },
+  {
    "fieldname": "section_break_status",
    "fieldtype": "Section Break",
    "label": "Status"
@@ -110,10 +279,29 @@
    "fieldname": "is_active",
    "fieldtype": "Check",
    "label": "Is Active"
+  },
+  {
+   "default": 0,
+   "fieldname": "featured",
+   "fieldtype": "Check",
+   "label": "Featured"
+  },
+  {
+   "default": 0,
+   "fieldname": "verified",
+   "fieldtype": "Check",
+   "label": "Verified"
+  },
+  {
+   "default": 0,
+   "fieldname": "is_demo_data",
+   "fieldtype": "Check",
+   "label": "Is Demo Data",
+   "read_only": 1
   }
  ],
  "links": [],
- "modified": "2025-01-25 00:00:00.000000",
+ "modified": "2025-12-06 10:48:00.000000",
  "modified_by": "Administrator",
  "module": "Assistants",
  "name": "VA Profile",
@@ -144,4 +332,3 @@
  "states": [],
  "track_changes": 1
 }
-

@@ -31,8 +31,8 @@ const getPriorityColor = (priority: Task['priority'], isOverdue: boolean) => {
 
 export const TaskCalendarCard = ({ task, compact, timeSlotInterval = 30, onClick }: TaskCalendarCardProps) => {
   const overdue = isOverdue(task);
-  const isUrgent = task.priority === 'urgent';
-  const isCompleted = task.status === 'completed';
+  const isUrgent = task.priority === 'Urgent';
+  const isCompleted = task.status === 'Completed';
   
   const priorityVars = getPriorityColor(task.priority, overdue);
   

@@ -39,11 +39,16 @@ const TasksDashboard = lazy(() => import("@/pages/tasks"));
 const AssistantsDashboard = lazy(() => import("@/pages/assistants"));
 const VAProfiles = lazy(() => import("@/pages/assistants/va-profiles"));
 const ClientProfiles = lazy(() => import("@/pages/assistants/client-profiles"));
+const Assignments = lazy(() => import("@/pages/assistants/assignments"));
+
+// Landing Pages
+const AssistantLanding = lazy(() => import("@/pages/assistant-landing"));
 
 const Router = () => {
   return (
     <>
       <Route path="/" element={<LandingPage />} errorElement={<ErrorFallback />}></Route>
+      <Route path="/assistant" element={<AssistantLanding />} errorElement={<ErrorFallback />}></Route>
       <Route path="/login" element={<Login />} errorElement={<ErrorFallback />}></Route>
       <Route path="/signup" element={<Signup />} errorElement={<ErrorFallback />}></Route>
       <Route path="/forgot-password" element={<ForgotPassword />} errorElement={<ErrorFallback />}></Route>
@@ -75,6 +80,7 @@ const Router = () => {
       <Route path="/assistants" element={<AssistantsDashboard />} errorElement={<ErrorFallback />}></Route>
       <Route path="/assistants/va-profiles" element={<VAProfiles />} errorElement={<ErrorFallback />}></Route>
       <Route path="/assistants/client-profiles" element={<ClientProfiles />} errorElement={<ErrorFallback />}></Route>
+      <Route path="/assistants/assignments" element={<Assignments />} errorElement={<ErrorFallback />}></Route>
       
       <Route path="*" element={<NotFound />} />
     </>

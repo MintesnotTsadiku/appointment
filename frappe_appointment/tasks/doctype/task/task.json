@@ -70,16 +70,16 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Status",
-   "options": "requested\nassigned\nin_progress\ncompleted\ncancelled",
-   "default": "requested"
+   "options": "Requested\nAssigned\nIn Progress\nCompleted\nCancelled",
+   "default": "Requested"
   },
   {
    "fieldname": "priority",
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Priority",
-   "options": "low\nmedium\nhigh\nurgent",
-   "default": "medium"
+   "options": "Low\nMedium\nHigh\nUrgent",
+   "default": "Medium"
   },
   {
    "fieldname": "column_break_status",

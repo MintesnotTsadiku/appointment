@@ -208,13 +208,13 @@ def create_tasks_from_template(template_name, client_profile, assignee=None):
             task = frappe.new_doc("Task")
             task.title = template_task.title
             task.description = template_task.description or ""
-            task.priority = template_task.priority or "medium"
+            task.priority = template_task.priority or "Medium"
             task.client_profile = client_profile
-            task.status = "requested"
+            task.status = "Requested"
             
             if assignee:
                 task.assignee = assignee
-                task.status = "assigned"
+                task.status = "Assigned"
             
             if template_task.estimated_duration:
                 task.estimated_duration = template_task.estimated_duration
@@ -374,7 +374,7 @@ def get_project_statistics(project_name):
         if not frappe.db.exists("Task Project", project_name):
             frappe.throw(_("Task Project not found"))
         
-        statuses = ["requested", "assigned", "in_progress", "completed", "cancelled"]
+        statuses = ["Requested", "Assigned", "In Progress", "Completed", "Cancelled"]
         stats = {}
         
         for status in statuses:

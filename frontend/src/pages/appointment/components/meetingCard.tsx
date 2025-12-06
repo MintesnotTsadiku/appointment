@@ -43,14 +43,14 @@ const MeetingCard = ({ title, duration, onClick }: MeetingCardProps) => {
         {/* Header with gradient icon */}
         <div className="flex items-start justify-between">
           <div className="flex-1">
-            <Tooltip>
+          <Tooltip>
               <TooltipTrigger>
                 <h3 className="text-xl font-semibold mb-3" style={{ color: 'var(--text-primary)' }}>
                   {title}
                 </h3>
               </TooltipTrigger>
-              <TooltipContent>{title}</TooltipContent>
-            </Tooltip>
+            <TooltipContent>{title}</TooltipContent>
+          </Tooltip>
             
             <div className="flex items-center gap-2 flex-wrap" style={{ color: 'var(--text-secondary)' }}>
               <div className="inline-flex items-center gap-1">
@@ -59,12 +59,12 @@ const MeetingCard = ({ title, duration, onClick }: MeetingCardProps) => {
                   {convertMinutesToTimeFormat(duration, true)}
                 </Typography>
               </div>
-              <span className="mx-1">•</span>
+          <span className="mx-1">•</span>
               <div className="inline-flex items-center gap-1">
                 <Video className="w-4 h-4" style={{ color: 'var(--accent-primary)' }} />
                 <Typography className="text-sm">
-                  {userInfo.meetingProvider}
-                </Typography>
+            {userInfo.meetingProvider}
+          </Typography>
               </div>
             </div>
           </div>

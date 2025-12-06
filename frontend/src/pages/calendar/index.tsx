@@ -293,16 +293,16 @@ const Calendar = () => {
                 {dayAppointments.slice(0, 3).map(apt => {
                   const statusColors = getStatusColor(apt.status);
                   return (
-                    <button
-                      key={apt.name}
-                      onClick={() => setSelectedAppointment(apt)}
+                  <button
+                    key={apt.name}
+                    onClick={() => setSelectedAppointment(apt)}
                       className="w-full text-left text-xs px-2 py-1 rounded border truncate hover:opacity-80 transition-opacity"
                       style={statusColors}
-                      title={`${apt.client_name} - ${apt.service_name} (${apt.start_time})`}
-                    >
-                      <div className="font-medium truncate">{apt.client_name}</div>
-                      <div className="text-[10px] opacity-75 truncate">{apt.start_time}</div>
-                    </button>
+                    title={`${apt.client_name} - ${apt.service_name} (${apt.start_time})`}
+                  >
+                    <div className="font-medium truncate">{apt.client_name}</div>
+                    <div className="text-[10px] opacity-75 truncate">{apt.start_time}</div>
+                  </button>
                   );
                 })}
                 {dayAppointments.length > 3 && (

@@ -189,7 +189,8 @@ def assign_skill_to_va(va_profile, skill_name, proficiency_level="intermediate")
         # Add skill
         va_profile_doc.append("skills", {
             "skill": skill_name,
-            "proficiency_level": proficiency_level
+            # DocType field is skill_level; keep API param name proficiency_level for compatibility
+            "skill_level": proficiency_level
         })
         
         va_profile_doc.save()
@@ -269,7 +270,7 @@ def get_va_skills(va_profile):
                 "skill_name": skill_doc.name,
                 "description": skill_doc.description,
                 "category": skill_doc.category,
-                "proficiency_level": skill_row.proficiency_level
+                "proficiency_level": getattr(skill_row, "proficiency_level", None) or getattr(skill_row, "skill_level", None)
             })
         
         return {
@@ -300,20 +301,28 @@ def get_vas_by_skill(skill_name, proficiency_level=None):
             frappe.throw(_("Assistant Skill not found"))
         
         # Get all VA Profiles
-        va_profiles = frappe.get_all("VA Profile", fields=["name", "full_name", "email", "status"])
+        va_profiles = frappe.get_all("VA Profile", fields=["name", "user", "is_active"])
         
         matching_vas = []
         for va in va_profiles:
             va_doc = frappe.get_doc("VA Profile", va.name)
+            user_info = frappe.db.get_value(
+                "User",
+                va.user,
+                ["full_name", "email", "mobile_no"],
+                as_dict=True,
+            ) or {}
+
             for skill_row in va_doc.skills:
                 if skill_row.skill == skill_name:
-                    if not proficiency_level or skill_row.proficiency_level == proficiency_level:
+                    row_level = getattr(skill_row, "proficiency_level", None) or getattr(skill_row, "skill_level", None)
+                    if not proficiency_level or row_level == proficiency_level:
                         matching_vas.append({
                             "va_profile": va.name,
-                            "full_name": va.full_name,
-                            "email": va.email,
-                            "status": va.status,
-                            "proficiency_level": skill_row.proficiency_level
+                            "full_name": user_info.get("full_name") or va.user,
+                            "email": user_info.get("email") or va.user,
+                            "status": "active" if va.is_active else "inactive",
+                            "proficiency_level": row_level
                         })
                     break
         

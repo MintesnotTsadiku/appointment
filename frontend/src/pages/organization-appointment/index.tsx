@@ -476,9 +476,9 @@ const OrganizationAppointmentV2 = () => {
         </div>
 
         <div className="relative z-10">
-          {/* Phase 1: Service Selection */}
+        {/* Phase 1: Service Selection */}
           <AnimatePresence mode="wait">
-            {currentPhase === 'service' && organization && !serviceSlug && (
+        {currentPhase === 'service' && organization && !serviceSlug && (
               <motion.div
                 key="service"
                 initial={{ opacity: 0 }}
@@ -487,19 +487,19 @@ const OrganizationAppointmentV2 = () => {
                 transition={{ duration: 0.3 }}
                 className="py-8 px-4"
               >
-                <ServiceSelector
-                  organization={organization}
-                  services={organization.services}
-                  onServiceSelect={handleServiceSelect}
-                  loading={false}
-                />
+            <ServiceSelector
+              organization={organization}
+              services={organization.services}
+              onServiceSelect={handleServiceSelect}
+              loading={false}
+            />
               </motion.div>
-            )}
+        )}
           </AnimatePresence>
 
-          {/* Phase 2: Date & Time Selection */}
+        {/* Phase 2: Date & Time Selection */}
           <AnimatePresence mode="wait">
-            {currentPhase === 'datetime' && currentService && (
+        {currentPhase === 'datetime' && currentService && (
               <motion.div
                 key="datetime"
                 initial={{ opacity: 0, x: 20 }}
@@ -508,47 +508,47 @@ const OrganizationAppointmentV2 = () => {
                 transition={{ duration: 0.3 }}
                 className="py-8 px-4"
               >
-                <DateTimeSelector
-                  selectedDate={selectedDate}
-                  displayMonth={displayMonth}
-                  onDateSelect={handleDateSelect}
-                  onMonthChange={setDisplayMonth}
-                  availableDays={availableDaysNumbers}
-                  minDate={validStartDate}
-                  maxDate={validEndDate}
-                  availableSlots={slots}
-                  selectedSlot={selectedSlot ? {
-                    id: "temp",
-                    start_time: selectedSlot.start_time,
-                    end_time: selectedSlot.end_time,
-                    available: true,
-                  } : null}
-                  onSlotSelect={handleSlotSelect}
-                  timeFormat={timeFormat}
-                  onTimeFormatChange={setTimeFormat}
-                  timezone={timeZone}
-                  loading={slotsLoading}
-                  serviceName={currentService.name}
-                  duration={currentService.duration}
-                  location={currentService.location}
-                  onBack={() => {
-                    if (organization?.services && organization.services.length > 1) {
-                      setCurrentPhase('service');
-                      navigate(`/schedule/org/${orgSlug}`);
-                    } else {
-                      navigate("/");
-                    }
-                  }}
-                  rawApiData={rawApiData}
-                  bookingConfig={bookingConfig}
-                />
+            <DateTimeSelector
+              selectedDate={selectedDate}
+              displayMonth={displayMonth}
+              onDateSelect={handleDateSelect}
+              onMonthChange={setDisplayMonth}
+              availableDays={availableDaysNumbers}
+              minDate={validStartDate}
+              maxDate={validEndDate}
+              availableSlots={slots}
+              selectedSlot={selectedSlot ? {
+                id: "temp",
+                start_time: selectedSlot.start_time,
+                end_time: selectedSlot.end_time,
+                available: true,
+              } : null}
+              onSlotSelect={handleSlotSelect}
+              timeFormat={timeFormat}
+              onTimeFormatChange={setTimeFormat}
+              timezone={timeZone}
+              loading={slotsLoading}
+              serviceName={currentService.name}
+              duration={currentService.duration}
+              location={currentService.location}
+              onBack={() => {
+                if (organization?.services && organization.services.length > 1) {
+                  setCurrentPhase('service');
+                  navigate(`/schedule/org/${orgSlug}`);
+                } else {
+                  navigate("/");
+                }
+              }}
+              rawApiData={rawApiData}
+              bookingConfig={bookingConfig}
+            />
               </motion.div>
-            )}
+        )}
           </AnimatePresence>
 
-          {/* Phase 3: Booking Form */}
+        {/* Phase 3: Booking Form */}
           <AnimatePresence mode="wait">
-            {currentPhase === 'form' && currentService && selectedSlot && (
+        {currentPhase === 'form' && currentService && selectedSlot && (
               <motion.div
                 key="form"
                 initial={{ opacity: 0, x: 20 }}
@@ -557,62 +557,62 @@ const OrganizationAppointmentV2 = () => {
                 transition={{ duration: 0.3 }}
                 className="py-8 px-4"
               >
-                <BookingForm
-                  service={currentService}
-                  selectedDate={selectedDate}
-                  selectedSlot={{
-                    id: "temp",
-                    start_time: selectedSlot.start_time,
-                    end_time: selectedSlot.end_time,
-                    available: true,
-                  }}
-                  timeFormat={timeFormat}
-                  timezone={timeZone}
-                  onSubmit={handleBookingSubmit}
-                  onBack={() => {
-                    // Re-fetch slots when going back to datetime selection
-                    if (refetchSlots) {
-                      refetchSlots();
-                    }
-                    setCurrentPhase('datetime');
-                  }}
-                  loading={bookingLoading}
-                />
+            <BookingForm
+              service={currentService}
+              selectedDate={selectedDate}
+              selectedSlot={{
+                id: "temp",
+                start_time: selectedSlot.start_time,
+                end_time: selectedSlot.end_time,
+                available: true,
+              }}
+              timeFormat={timeFormat}
+              timezone={timeZone}
+              onSubmit={handleBookingSubmit}
+              onBack={() => {
+                // Re-fetch slots when going back to datetime selection
+                if (refetchSlots) {
+                  refetchSlots();
+                }
+                setCurrentPhase('datetime');
+              }}
+              loading={bookingLoading}
+            />
               </motion.div>
-            )}
+        )}
           </AnimatePresence>
 
-          {/* Phase 4: Confirmation Modal */}
+        {/* Phase 4: Confirmation Modal */}
           <AnimatePresence>
-            {currentPhase === 'success' && bookingResponse && currentService && selectedSlot && (
-              <ConfirmationModal
-                open={true}
-                onClose={() => {
-                  // Go back to datetime phase and refetch slots to show updated availability
-                  if (refetchSlots) {
-                    refetchSlots();
-                  }
-                  setCurrentPhase('datetime');
-                }}
-                bookingResponse={bookingResponse}
-                service={currentService}
-                selectedDate={selectedDate}
-                selectedSlot={{
-                  id: "temp",
-                  start_time: selectedSlot.start_time,
-                  end_time: selectedSlot.end_time,
-                  available: true,
-                }}
-                timeFormat={timeFormat}
-                timezone={timeZone}
-                userEmail={bookingResponse.userEmail || ""}
-              />
-            )}
+        {currentPhase === 'success' && bookingResponse && currentService && selectedSlot && (
+          <ConfirmationModal
+            open={true}
+            onClose={() => {
+              // Go back to datetime phase and refetch slots to show updated availability
+              if (refetchSlots) {
+                refetchSlots();
+              }
+              setCurrentPhase('datetime');
+            }}
+            bookingResponse={bookingResponse}
+            service={currentService}
+            selectedDate={selectedDate}
+            selectedSlot={{
+              id: "temp",
+              start_time: selectedSlot.start_time,
+              end_time: selectedSlot.end_time,
+              available: true,
+            }}
+            timeFormat={timeFormat}
+            timezone={timeZone}
+            userEmail={bookingResponse.userEmail || ""}
+          />
+        )}
           </AnimatePresence>
 
-          {/* Powered By Footer */}
+        {/* Powered By Footer */}
           <div className="mt-8 relative z-10">
-            <PoweredBy />
+          <PoweredBy />
           </div>
         </div>
       </div>

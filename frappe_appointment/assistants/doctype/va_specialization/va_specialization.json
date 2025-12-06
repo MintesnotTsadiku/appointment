@@ -1,0 +1,38 @@
+{
+ "actions": [],
+ "creation": "2025-12-06 10:48:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "specialization",
+  "years_in_industry"
+ ],
+ "fields": [
+  {
+   "fieldname": "specialization",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Specialization",
+   "options": "Technology\nHealthcare\nFinance\nE-commerce\nReal Estate\nLegal\nMarketing\nConsulting\nNon-profit\nEducation\nMedia & Entertainment\nHospitality\nManufacturing\nRetail",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "years_in_industry",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Years in Industry"
+  }
+ ],
+ "istable": 1,
+ "modified": "2025-12-06 10:48:00.000000",
+ "modified_by": "Administrator",
+ "module": "Assistants",
+ "name": "VA Specialization",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

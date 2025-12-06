@@ -1,0 +1,48 @@
+{
+ "actions": [],
+ "creation": "2025-12-06 10:48:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "tool_name",
+  "proficiency_level",
+  "years_using"
+ ],
+ "fields": [
+  {
+   "fieldname": "tool_name",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Tool Name",
+   "options": "Notion\nAsana\nTrello\nSlack\nMicrosoft Teams\nZoom\nGoogle Workspace\nMicrosoft 365\nClickUp\nMonday.com\nAirtable\nHubSpot\nSalesforce\nQuickBooks\nXero\nCanva\nFigma\nAdobe Creative Suite\nMailchimp\nZapier\nCalendly\nDropbox\nEvernote\nTodoist\nLinear",
+   "reqd": 1
+  },
+  {
+   "default": "intermediate",
+   "fieldname": "proficiency_level",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Proficiency Level",
+   "options": "beginner\nintermediate\nadvanced\nexpert",
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "years_using",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Years Using"
+  }
+ ],
+ "istable": 1,
+ "modified": "2025-12-06 10:48:00.000000",
+ "modified_by": "Administrator",
+ "module": "Assistants",
+ "name": "VA Tool",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

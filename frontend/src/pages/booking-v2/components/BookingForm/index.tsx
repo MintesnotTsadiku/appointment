@@ -171,21 +171,21 @@ export function BookingForm({
         }}
       >
         <div className="w-full max-w-7xl mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onBack}
-            disabled={loading}
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={onBack}
+        disabled={loading}
             className="backdrop-blur-sm"
             style={{ 
               color: 'var(--text-secondary)',
               backgroundColor: 'var(--border-subtle)',
               border: '1px solid var(--border-default)'
             }}
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Change Date/Time
-          </Button>
+      >
+        <ArrowLeft className="h-4 w-4 mr-2" />
+        Change Date/Time
+      </Button>
 
           {/* Theme Toggle */}
           <motion.button
@@ -227,7 +227,7 @@ export function BookingForm({
       <div className="w-full max-w-7xl mx-auto px-5 md:px-6 py-8 md:py-16">
 
         <div className="grid lg:grid-cols-[1fr,400px] gap-6 md:gap-8">
-          {/* Form Section */}
+        {/* Form Section */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -238,20 +238,20 @@ export function BookingForm({
               border: '1px solid var(--border-default)'
             }}
           >
-            <div className="mb-6">
+          <div className="mb-6">
               <h1 
                 className="text-3xl md:text-4xl font-bold mb-2"
                 style={{ color: 'var(--text-primary)' }}
               >
-                Confirm Your Booking
-              </h1>
+              Confirm Your Booking
+            </h1>
               <p style={{ color: 'var(--text-secondary)' }}>
-                Enter your details to complete the appointment
-              </p>
-            </div>
+              Enter your details to complete the appointment
+            </p>
+          </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Name Field */}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Name Field */}
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -264,8 +264,8 @@ export function BookingForm({
                   style={{ color: 'var(--text-primary)' }}
                 >
                   Full Name <span style={{ color: 'var(--accent-primary)' }}>*</span>
-                </Label>
-                <div className="relative">
+              </Label>
+              <div className="relative">
                   <div 
                     className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
                     style={{ 
@@ -275,40 +275,40 @@ export function BookingForm({
                   >
                     <User className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
                   </div>
-                  <Input
-                    id="userName"
-                    type="text"
-                    placeholder="John Doe"
-                    value={formData.userName}
-                    onChange={(e) => handleChange("userName", e.target.value)}
-                    onBlur={() => handleBlur("userName")}
-                    disabled={loading}
-                    className={cn(
+                <Input
+                  id="userName"
+                  type="text"
+                  placeholder="John Doe"
+                  value={formData.userName}
+                  onChange={(e) => handleChange("userName", e.target.value)}
+                  onBlur={() => handleBlur("userName")}
+                  disabled={loading}
+                  className={cn(
                       "pl-12 h-12 text-base backdrop-blur-sm transition-all",
-                      errors.userName && touched.userName && "border-red-500 focus:border-red-500"
-                    )}
+                    errors.userName && touched.userName && "border-red-500 focus:border-red-500"
+                  )}
                     style={{
                       backgroundColor: 'var(--bg-secondary)',
                       color: 'var(--text-primary)',
                       border: `1px solid ${errors.userName && touched.userName ? 'var(--accent-primary)' : 'var(--border-default)'}`,
                       placeholder: 'var(--text-muted)'
                     }}
-                    aria-invalid={errors.userName && touched.userName ? "true" : "false"}
-                    aria-describedby={errors.userName ? "userName-error" : undefined}
-                  />
-                </div>
-                {errors.userName && touched.userName && (
+                  aria-invalid={errors.userName && touched.userName ? "true" : "false"}
+                  aria-describedby={errors.userName ? "userName-error" : undefined}
+                />
+              </div>
+              {errors.userName && touched.userName && (
                   <p 
                     id="userName-error" 
                     className="text-sm flex items-center gap-1"
                     style={{ color: 'var(--accent-primary)' }}
                   >
-                    <span className="text-xs">⚠</span> {errors.userName}
-                  </p>
-                )}
+                  <span className="text-xs">⚠</span> {errors.userName}
+                </p>
+              )}
               </motion.div>
 
-              {/* Email Field */}
+            {/* Email Field */}
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -321,8 +321,8 @@ export function BookingForm({
                   style={{ color: 'var(--text-primary)' }}
                 >
                   Email Address <span style={{ color: 'var(--accent-primary)' }}>*</span>
-                </Label>
-                <div className="relative">
+              </Label>
+              <div className="relative">
                   <div 
                     className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
                     style={{ 
@@ -332,43 +332,43 @@ export function BookingForm({
                   >
                     <Mail className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
                   </div>
-                  <Input
-                    id="userEmail"
-                    type="email"
-                    placeholder="john@example.com"
-                    value={formData.userEmail}
-                    onChange={(e) => handleChange("userEmail", e.target.value)}
-                    onBlur={() => handleBlur("userEmail")}
-                    disabled={loading}
-                    className={cn(
+                <Input
+                  id="userEmail"
+                  type="email"
+                  placeholder="john@example.com"
+                  value={formData.userEmail}
+                  onChange={(e) => handleChange("userEmail", e.target.value)}
+                  onBlur={() => handleBlur("userEmail")}
+                  disabled={loading}
+                  className={cn(
                       "pl-12 h-12 text-base backdrop-blur-sm transition-all",
-                      errors.userEmail && touched.userEmail && "border-red-500 focus:border-red-500"
-                    )}
+                    errors.userEmail && touched.userEmail && "border-red-500 focus:border-red-500"
+                  )}
                     style={{
                       backgroundColor: 'var(--bg-secondary)',
                       color: 'var(--text-primary)',
                       border: `1px solid ${errors.userEmail && touched.userEmail ? 'var(--accent-primary)' : 'var(--border-default)'}`,
                       placeholder: 'var(--text-muted)'
                     }}
-                    aria-invalid={errors.userEmail && touched.userEmail ? "true" : "false"}
-                    aria-describedby={errors.userEmail ? "userEmail-error" : undefined}
-                  />
-                </div>
-                {errors.userEmail && touched.userEmail && (
+                  aria-invalid={errors.userEmail && touched.userEmail ? "true" : "false"}
+                  aria-describedby={errors.userEmail ? "userEmail-error" : undefined}
+                />
+              </div>
+              {errors.userEmail && touched.userEmail && (
                   <p 
                     id="userEmail-error" 
                     className="text-sm flex items-center gap-1"
                     style={{ color: 'var(--accent-primary)' }}
                   >
-                    <span className="text-xs">⚠</span> {errors.userEmail}
-                  </p>
-                )}
-                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                  You'll receive a calendar invite at this email
+                  <span className="text-xs">⚠</span> {errors.userEmail}
                 </p>
+              )}
+                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                You'll receive a calendar invite at this email
+              </p>
               </motion.div>
 
-              {/* Phone Field */}
+            {/* Phone Field */}
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -381,8 +381,8 @@ export function BookingForm({
                   style={{ color: 'var(--text-primary)' }}
                 >
                   Phone Number <span style={{ color: 'var(--text-secondary)' }}>(optional)</span>
-                </Label>
-                <div className="relative">
+              </Label>
+              <div className="relative">
                   <div 
                     className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
                     style={{ 
@@ -392,40 +392,40 @@ export function BookingForm({
                   >
                     <Phone className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
                   </div>
-                  <Input
-                    id="userPhone"
-                    type="tel"
-                    placeholder="+251 91 234 5678"
-                    value={formData.userPhone}
-                    onChange={(e) => handleChange("userPhone", e.target.value)}
-                    onBlur={() => handleBlur("userPhone")}
-                    disabled={loading}
-                    className={cn(
+                <Input
+                  id="userPhone"
+                  type="tel"
+                  placeholder="+251 91 234 5678"
+                  value={formData.userPhone}
+                  onChange={(e) => handleChange("userPhone", e.target.value)}
+                  onBlur={() => handleBlur("userPhone")}
+                  disabled={loading}
+                  className={cn(
                       "pl-12 h-12 text-base backdrop-blur-sm transition-all",
-                      errors.userPhone && touched.userPhone && "border-red-500 focus:border-red-500"
-                    )}
+                    errors.userPhone && touched.userPhone && "border-red-500 focus:border-red-500"
+                  )}
                     style={{
                       backgroundColor: 'var(--bg-secondary)',
                       color: 'var(--text-primary)',
                       border: `1px solid ${errors.userPhone && touched.userPhone ? 'var(--accent-primary)' : 'var(--border-default)'}`,
                       placeholder: 'var(--text-muted)'
                     }}
-                    aria-invalid={errors.userPhone && touched.userPhone ? "true" : "false"}
-                    aria-describedby={errors.userPhone ? "userPhone-error" : undefined}
-                  />
-                </div>
-                {errors.userPhone && touched.userPhone && (
+                  aria-invalid={errors.userPhone && touched.userPhone ? "true" : "false"}
+                  aria-describedby={errors.userPhone ? "userPhone-error" : undefined}
+                />
+              </div>
+              {errors.userPhone && touched.userPhone && (
                   <p 
                     id="userPhone-error" 
                     className="text-sm flex items-center gap-1"
                     style={{ color: 'var(--accent-primary)' }}
                   >
-                    <span className="text-xs">⚠</span> {errors.userPhone}
-                  </p>
-                )}
+                  <span className="text-xs">⚠</span> {errors.userPhone}
+                </p>
+              )}
               </motion.div>
 
-              {/* Additional Participants */}
+            {/* Additional Participants */}
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -438,8 +438,8 @@ export function BookingForm({
                   style={{ color: 'var(--text-primary)' }}
                 >
                   Additional Participants <span style={{ color: 'var(--text-secondary)' }}>(optional)</span>
-                </Label>
-                <div className="relative">
+              </Label>
+              <div className="relative">
                   <div 
                     className="absolute left-3 top-3 w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
                     style={{ 
@@ -449,13 +449,13 @@ export function BookingForm({
                   >
                     <Users className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
                   </div>
-                  <Input
-                    id="otherParticipants"
-                    type="text"
-                    placeholder="name@example.com, another@example.com"
-                    value={formData.otherParticipants}
-                    onChange={(e) => handleChange("otherParticipants", e.target.value)}
-                    disabled={loading}
+                <Input
+                  id="otherParticipants"
+                  type="text"
+                  placeholder="name@example.com, another@example.com"
+                  value={formData.otherParticipants}
+                  onChange={(e) => handleChange("otherParticipants", e.target.value)}
+                  disabled={loading}
                     className="pl-12 h-12 text-base backdrop-blur-sm transition-all"
                     style={{
                       backgroundColor: 'var(--bg-secondary)',
@@ -463,14 +463,14 @@ export function BookingForm({
                       border: '1px solid var(--border-default)',
                       placeholder: 'var(--text-muted)'
                     }}
-                  />
-                </div>
+                />
+              </div>
                 <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                  Add emails separated by commas
-                </p>
+                Add emails separated by commas
+              </p>
               </motion.div>
 
-              {/* Notes */}
+            {/* Notes */}
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -483,8 +483,8 @@ export function BookingForm({
                   style={{ color: 'var(--text-primary)' }}
                 >
                   Notes or Special Requests <span style={{ color: 'var(--text-secondary)' }}>(optional)</span>
-                </Label>
-                <div className="relative">
+              </Label>
+              <div className="relative">
                   <div 
                     className="absolute left-3 top-3 w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
                     style={{ 
@@ -494,12 +494,12 @@ export function BookingForm({
                   >
                     <MessageSquare className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
                   </div>
-                  <Textarea
-                    id="notes"
-                    placeholder="Any specific requirements or topics you'd like to discuss..."
-                    value={formData.notes}
-                    onChange={(e) => handleChange("notes", e.target.value)}
-                    disabled={loading}
+                <Textarea
+                  id="notes"
+                  placeholder="Any specific requirements or topics you'd like to discuss..."
+                  value={formData.notes}
+                  onChange={(e) => handleChange("notes", e.target.value)}
+                  disabled={loading}
                     className="pl-12 min-h-[120px] text-base resize-none backdrop-blur-sm transition-all"
                     style={{
                       backgroundColor: 'var(--bg-secondary)',
@@ -507,12 +507,12 @@ export function BookingForm({
                       border: '1px solid var(--border-default)',
                       placeholder: 'var(--text-muted)'
                     }}
-                    rows={4}
-                  />
-                </div>
+                  rows={4}
+                />
+              </div>
               </motion.div>
 
-              {/* Submit Button */}
+            {/* Submit Button */}
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -521,9 +521,9 @@ export function BookingForm({
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <Button
-                  type="submit"
-                  disabled={loading}
+              <Button
+                type="submit"
+                disabled={loading}
                   className="w-full h-14 text-lg font-semibold backdrop-blur-sm shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{
                     background: loading 
@@ -532,24 +532,24 @@ export function BookingForm({
                     color: 'white',
                     border: '1px solid transparent'
                   }}
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="h-5 w-5 mr-2 animate-spin" />
-                      Confirming Booking...
-                    </>
-                  ) : (
-                    <>
-                      <CheckCircle2 className="h-5 w-5 mr-2" />
-                      Confirm Booking
-                    </>
-                  )}
-                </Button>
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                    Confirming Booking...
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle2 className="h-5 w-5 mr-2" />
+                    Confirm Booking
+                  </>
+                )}
+              </Button>
               </motion.div>
-            </form>
+          </form>
           </motion.div>
 
-          {/* Booking Summary Sidebar */}
+        {/* Booking Summary Sidebar */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -567,11 +567,11 @@ export function BookingForm({
                 className="text-lg font-semibold mb-4"
                 style={{ color: 'var(--text-primary)' }}
               >
-                Booking Summary
-              </h3>
+              Booking Summary
+            </h3>
 
-              <div className="space-y-4">
-                {/* Service */}
+            <div className="space-y-4">
+              {/* Service */}
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -587,21 +587,21 @@ export function BookingForm({
                     }}
                   >
                     <Calendar className="h-5 w-5" style={{ color: 'var(--accent-primary)' }} />
-                  </div>
-                  <div className="flex-1 min-w-0">
+                </div>
+                <div className="flex-1 min-w-0">
                     <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Service</p>
                     <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>
-                      {service.name}
-                    </p>
-                    {service.provider && (
+                    {service.name}
+                  </p>
+                  {service.provider && (
                       <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
-                        with {service.provider.name}
-                      </p>
-                    )}
-                  </div>
+                      with {service.provider.name}
+                    </p>
+                  )}
+                </div>
                 </motion.div>
 
-                {/* Date & Time */}
+              {/* Date & Time */}
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -617,23 +617,23 @@ export function BookingForm({
                     }}
                   >
                     <Clock className="h-5 w-5" style={{ color: 'var(--accent-primary)' }} />
-                  </div>
-                  <div className="flex-1 min-w-0">
+                </div>
+                <div className="flex-1 min-w-0">
                     <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Date & Time</p>
                     <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>
-                      {formatDate(selectedDate, 'full')}
-                    </p>
+                    {formatDate(selectedDate, 'full')}
+                  </p>
                     <p className="mt-1" style={{ color: 'var(--text-primary)' }}>
-                      {formattedTime}
-                    </p>
+                    {formattedTime}
+                  </p>
                     <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
-                      {service.duration} minutes
-                    </p>
-                  </div>
+                    {service.duration} minutes
+                  </p>
+                </div>
                 </motion.div>
 
-                {/* Location */}
-                {service.location && (
+              {/* Location */}
+              {service.location && (
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -649,37 +649,37 @@ export function BookingForm({
                       }}
                     >
                       <MapPin className="h-5 w-5" style={{ color: 'var(--accent-primary)' }} />
-                    </div>
-                    <div className="flex-1 min-w-0">
+                  </div>
+                  <div className="flex-1 min-w-0">
                       <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Location</p>
                       <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>
-                        {service.location.is_online ? (
-                          <span className="flex items-center gap-2">
+                      {service.location.is_online ? (
+                        <span className="flex items-center gap-2">
                             <span 
                               className="w-2 h-2 rounded-full"
                               style={{ backgroundColor: 'var(--accent-success)' }}
                             ></span>
-                            Online Meeting
-                          </span>
-                        ) : (
-                          service.location.location_name
-                        )}
+                          Online Meeting
+                        </span>
+                      ) : (
+                        service.location.location_name
+                      )}
+                    </p>
+                    {service.location.address && !service.location.is_online && (
+                        <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
+                        {service.location.address}
                       </p>
-                      {service.location.address && !service.location.is_online && (
+                    )}
+                    {service.location.phone && !service.location.is_online && (
                         <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
-                          {service.location.address}
-                        </p>
-                      )}
-                      {service.location.phone && !service.location.is_online && (
-                        <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
-                          {service.location.phone}
-                        </p>
-                      )}
-                    </div>
+                        {service.location.phone}
+                      </p>
+                    )}
+                  </div>
                   </motion.div>
-                )}
+              )}
 
-                {/* Timezone */}
+              {/* Timezone */}
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -687,12 +687,12 @@ export function BookingForm({
                   className="text-sm"
                   style={{ color: 'var(--text-secondary)' }}
                 >
-                  <p className="font-medium mb-1">Timezone</p>
-                  <p>{timezone}</p>
+                <p className="font-medium mb-1">Timezone</p>
+                <p>{timezone}</p>
                 </motion.div>
 
-                {/* Price (if applicable) */}
-                {service.price && service.price > 0 && (
+              {/* Price (if applicable) */}
+              {service.price && service.price > 0 && (
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -700,17 +700,17 @@ export function BookingForm({
                     className="pt-4"
                     style={{ borderTop: '1px solid var(--border-subtle)' }}
                   >
-                    <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between">
                       <span style={{ color: 'var(--text-secondary)' }}>Price</span>
                       <span className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>
-                        {service.price} {service.currency || "ETB"}
-                      </span>
-                    </div>
+                      {service.price} {service.currency || "ETB"}
+                    </span>
+                  </div>
                   </motion.div>
-                )}
-              </div>
+              )}
+            </div>
 
-              {/* Info Banner */}
+            {/* Info Banner */}
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -722,8 +722,8 @@ export function BookingForm({
                 }}
               >
                 <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                  You'll receive a calendar invite with the meeting link immediately after booking.
-                </p>
+                You'll receive a calendar invite with the meeting link immediately after booking.
+              </p>
               </motion.div>
             </div>
           </motion.div>

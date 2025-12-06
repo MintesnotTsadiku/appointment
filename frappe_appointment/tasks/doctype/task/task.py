@@ -14,9 +14,9 @@ class Task(Document):
 		if not self.created_at:
 			self.created_at = datetime.now()
 		if not self.status:
-			self.status = "requested"
+			self.status = "Requested"
 		if not self.priority:
-			self.priority = "medium"
+			self.priority = "Medium"
 	
 	def before_save(self):
 		"""Update timestamps and validate"""
@@ -51,19 +51,19 @@ class Task(Document):
 	
 	def check_dependency_completion(self):
 		"""Check if all dependencies are completed"""
-		if not self.dependencies or self.status == "completed":
+		if not self.dependencies or self.status == "Completed":
 			return
 		
 		incomplete_dependencies = []
 		for dep in self.dependencies:
 			if dep.depends_on_task:
 				dep_status = frappe.db.get_value("Task", dep.depends_on_task, "status")
-				if dep_status != "completed":
+				if dep_status != "Completed":
 					incomplete_dependencies.append(dep.depends_on_task)
 		
-		# If task is in_progress but has incomplete dependencies, reset to assigned
-		if incomplete_dependencies and self.status == "in_progress":
-			self.status = "assigned"
+		# If task is In Progress but has incomplete dependencies, reset to Assigned
+		if incomplete_dependencies and self.status == "In Progress":
+			self.status = "Assigned"
 			frappe.msgprint(
 				f"Cannot start task: {len(incomplete_dependencies)} dependency(ies) not completed",
 				indicator="orange"

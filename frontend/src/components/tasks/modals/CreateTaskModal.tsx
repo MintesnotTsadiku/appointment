@@ -48,8 +48,8 @@ export const CreateTaskModal = ({ isOpen, onClose, onSuccess }: CreateTaskModalP
     setFormData({
       title: '',
       description: '',
-      status: 'requested',
-      priority: 'medium',
+      status: 'Requested',
+      priority: 'Medium',
       client_profile: '',
       assignee: '',
       category: '',
@@ -103,9 +103,9 @@ export const CreateTaskModal = ({ isOpen, onClose, onSuccess }: CreateTaskModalP
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto p-4" style={{
+      <DialogContent side="right" className="w-full sm:max-w-[600px] overflow-y-auto p-4" style={{
         backgroundColor: 'var(--bg-elevated)',
-        border: '1px solid var(--border-default)',
+        borderLeft: '1px solid var(--border-default)',
       }}>
         <DialogHeader className="pb-4 border-b" style={{ borderColor: 'var(--border-subtle)' }}>
           <DialogTitle 
@@ -184,11 +184,11 @@ export const CreateTaskModal = ({ isOpen, onClose, onSuccess }: CreateTaskModalP
                         padding: '0.875rem 1.125rem',
                       }}
                     >
-                      <option value="requested">Requested</option>
-                      <option value="assigned">Assigned</option>
-                      <option value="in_progress">In Progress</option>
-                      <option value="completed">Completed</option>
-                      <option value="cancelled">Cancelled</option>
+                      <option value="Requested">Requested</option>
+                      <option value="Assigned">Assigned</option>
+                      <option value="In Progress">In Progress</option>
+                      <option value="Completed">Completed</option>
+                      <option value="Cancelled">Cancelled</option>
                     </select>
                   </div>
 
@@ -208,10 +208,10 @@ export const CreateTaskModal = ({ isOpen, onClose, onSuccess }: CreateTaskModalP
                         padding: '0.875rem 1.125rem',
                       }}
                     >
-                      <option value="low">Low</option>
-                      <option value="medium">Medium</option>
-                      <option value="high">High</option>
-                      <option value="urgent">Urgent</option>
+                      <option value="Low">Low</option>
+                      <option value="Medium">Medium</option>
+                      <option value="High">High</option>
+                      <option value="Urgent">Urgent</option>
                     </select>
                   </div>
                 </div>

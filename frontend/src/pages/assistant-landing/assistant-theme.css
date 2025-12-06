@@ -1,0 +1,283 @@
+/**
+ * Assistant Landing Page Theme - "Command Center"
+ * Dark sci-fi dashboard aesthetic with neon accents
+ * 
+ * Colors are set dynamically via Landing Page Settings backend.
+ * These are fallback defaults for the Command Center theme.
+ */
+
+/* ========================================
+   ASSISTANT LANDING - CSS VARIABLES
+   These integrate with the existing brand color system
+   ======================================== */
+
+:root {
+  /* ========================================
+     LIGHT MODE - Clean Professional Aesthetic
+     ======================================== */
+  
+  /* Surface Colors */
+  --ast-bg-void: #fafbfc;
+  --ast-bg-surface: #f0f2f5;
+  --ast-bg-elevated: #ffffff;
+  --ast-bg-panel: #f8f9fa;
+  
+  /* Accent Colors (Will be overridden by Landing Page Settings) */
+  --ast-accent-cyber: var(--brand-primary, #0ea5e9);
+  --ast-accent-signal: var(--brand-secondary, #ec4899);
+  --ast-accent-gold: var(--brand-accent-gold, #d97706);
+  
+  /* Text Colors */
+  --ast-text-bright: #0f172a;
+  --ast-text-dim: #475569;
+  --ast-text-muted: #94a3b8;
+  
+  /* Effects */
+  --ast-glow-cyber: rgba(14, 165, 233, 0.15);
+  --ast-glow-signal: rgba(236, 72, 153, 0.15);
+  --ast-grid-line: rgba(14, 165, 233, 0.04);
+  --ast-border-subtle: rgba(0, 0, 0, 0.06);
+  --ast-border-glow: rgba(14, 165, 233, 0.25);
+  
+  /* Button Colors for Light Mode */
+  --ast-btn-glow-bg: linear-gradient(135deg, var(--ast-accent-cyber) 0%, #0284c7 100%);
+  --ast-btn-glow-text: #ffffff;
+}
+
+.dark {
+  /* ========================================
+     DARK MODE - Command Center Aesthetic
+     ======================================== */
+  
+  /* Surface Colors */
+  --ast-bg-void: #05050a;
+  --ast-bg-surface: #0c0e16;
+  --ast-bg-elevated: #161b29;
+  --ast-bg-panel: #1c2235;
+  
+  /* Accent Colors (Command Center neon) */
+  --ast-accent-cyber: var(--brand-primary, #00ffd0);
+  --ast-accent-signal: var(--brand-secondary, #ff3d71);
+  --ast-accent-gold: var(--brand-accent-gold, #b8a060);
+  
+  /* Text Colors */
+  --ast-text-bright: #f0f4f8;
+  --ast-text-dim: #94a3b8;
+  --ast-text-muted: #475569;
+  
+  /* Effects - Enhanced for dark mode */
+  --ast-glow-cyber: rgba(0, 255, 208, 0.3);
+  --ast-glow-signal: rgba(255, 61, 113, 0.3);
+  --ast-grid-line: rgba(0, 255, 208, 0.03);
+  --ast-border-subtle: rgba(255, 255, 255, 0.05);
+  --ast-border-glow: rgba(0, 255, 208, 0.2);
+  
+  /* Button Colors for Dark Mode */
+  --ast-btn-glow-bg: linear-gradient(135deg, var(--ast-accent-cyber) 0%, #00ccaa 100%);
+  --ast-btn-glow-text: #05050a;
+}
+
+/* ========================================
+   TYPOGRAPHY - Google Fonts Import
+   JetBrains Mono for display, Space Grotesk for body
+   ======================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+.ast-font-display {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.ast-font-body {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+
+/* Scan line effect for futuristic feel */
+@keyframes ast-scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+/* Glow pulse for interactive elements */
+@keyframes ast-glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px var(--ast-glow-cyber),
+                0 0 40px rgba(0, 255, 208, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 30px var(--ast-glow-cyber),
+                0 0 60px rgba(0, 255, 208, 0.2);
+  }
+}
+
+/* Terminal cursor blink */
+@keyframes ast-cursor-blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+/* Data stream effect */
+@keyframes ast-data-stream {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 0% 100%;
+  }
+}
+
+/* Staggered reveal like terminal boot */
+@keyframes ast-boot-line {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Number counter effect */
+@keyframes ast-count-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+/* Backgrounds */
+.ast-bg-void { background-color: var(--ast-bg-void); }
+.ast-bg-surface { background-color: var(--ast-bg-surface); }
+.ast-bg-elevated { background-color: var(--ast-bg-elevated); }
+.ast-bg-panel { background-color: var(--ast-bg-panel); }
+
+/* Text colors */
+.ast-text-bright { color: var(--ast-text-bright); }
+.ast-text-dim { color: var(--ast-text-dim); }
+.ast-text-muted { color: var(--ast-text-muted); }
+.ast-text-cyber { color: var(--ast-accent-cyber); }
+.ast-text-signal { color: var(--ast-accent-signal); }
+
+/* Borders */
+.ast-border-subtle { border-color: var(--ast-border-subtle); }
+.ast-border-glow { border-color: var(--ast-border-glow); }
+
+/* Grid background pattern */
+.ast-grid-bg {
+  background-image: 
+    linear-gradient(var(--ast-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ast-grid-line) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Scan line overlay */
+.ast-scanline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--ast-glow-cyber),
+    transparent
+  );
+  animation: ast-scanline 8s linear infinite;
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+/* Glow button effect */
+.ast-btn-glow {
+  position: relative;
+  background: var(--ast-btn-glow-bg);
+  color: var(--ast-btn-glow-text);
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.ast-btn-glow:hover {
+  animation: ast-glow-pulse 2s ease-in-out infinite;
+  transform: translateY(-2px);
+}
+
+/* Panel with glow border */
+.ast-panel {
+  background: var(--ast-bg-elevated);
+  border: 1px solid var(--ast-border-subtle);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.ast-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 1px;
+  background: linear-gradient(135deg, var(--ast-border-glow) 0%, transparent 50%);
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Status indicator dot */
+.ast-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ast-accent-cyber);
+  box-shadow: 0 0 10px var(--ast-glow-cyber);
+  animation: ast-glow-pulse 2s ease-in-out infinite;
+}
+
+/* Terminal-style text */
+.ast-terminal-text {
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.02em;
+}
+
+/* Stat counter number */
+.ast-stat-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--ast-accent-cyber) 0%, #00ccaa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Gradient text */
+.ast-gradient-text {
+  background: linear-gradient(135deg, var(--ast-accent-cyber) 0%, var(--ast-accent-signal) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

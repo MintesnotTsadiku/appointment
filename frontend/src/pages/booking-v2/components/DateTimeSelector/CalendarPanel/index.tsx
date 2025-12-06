@@ -155,21 +155,21 @@ export function CalendarPanel({
       {/* Calendar Header */}
       <div className="flex items-center justify-between mb-6 px-2">
         <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={goToPreviousMonth}
-            disabled={loading}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={goToPreviousMonth}
+          disabled={loading}
             className="h-10 w-10 p-0 backdrop-blur-sm"
             style={{ 
               backgroundColor: 'var(--border-subtle)',
               border: '1px solid var(--border-default)',
               color: 'var(--text-secondary)'
             }}
-            aria-label="Previous month"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </Button>
+          aria-label="Previous month"
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </Button>
         </motion.div>
 
         <h2 
@@ -180,21 +180,21 @@ export function CalendarPanel({
         </h2>
 
         <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={goToNextMonth}
-            disabled={loading}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={goToNextMonth}
+          disabled={loading}
             className="h-10 w-10 p-0 backdrop-blur-sm"
             style={{ 
               backgroundColor: 'var(--border-subtle)',
               border: '1px solid var(--border-default)',
               color: 'var(--text-secondary)'
             }}
-            aria-label="Next month"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </Button>
+          aria-label="Next month"
+        >
+          <ChevronRight className="h-5 w-5" />
+        </Button>
         </motion.div>
       </div>
 
@@ -245,8 +245,8 @@ export function CalendarPanel({
               style={getDateButtonStyles(date)}
             >
               <span className="relative z-10" style={{ color: selected ? 'white' : undefined }}>
-                {date.getDate()}
-              </span>
+                  {date.getDate()}
+                </span>
 
               {/* Today badge */}
               {isCurrentDay && !selected && (
@@ -271,64 +271,64 @@ export function CalendarPanel({
       {/* Quick Jump Actions */}
       <div className="mt-6 flex gap-2 justify-center flex-wrap">
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              const today = new Date();
-              onDateSelect(today);
-              onMonthChange(today);
-            }}
-            disabled={loading || !isDateSelectable(today)}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            const today = new Date();
+            onDateSelect(today);
+            onMonthChange(today);
+          }}
+          disabled={loading || !isDateSelectable(today)}
             className="h-9 px-4 text-sm backdrop-blur-sm"
             style={{ 
               backgroundColor: 'var(--border-subtle)',
               border: '1px solid var(--border-default)',
               color: 'var(--text-secondary)'
             }}
-          >
-            Today
-          </Button>
+        >
+          Today
+        </Button>
         </motion.div>
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              const tomorrow = addDays(today, 1);
-              onDateSelect(tomorrow);
-              onMonthChange(tomorrow);
-            }}
-            disabled={loading || !isDateSelectable(addDays(today, 1))}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            const tomorrow = addDays(today, 1);
+            onDateSelect(tomorrow);
+            onMonthChange(tomorrow);
+          }}
+          disabled={loading || !isDateSelectable(addDays(today, 1))}
             className="h-9 px-4 text-sm backdrop-blur-sm"
             style={{ 
               backgroundColor: 'var(--border-subtle)',
               border: '1px solid var(--border-default)',
               color: 'var(--text-secondary)'
             }}
-          >
-            Tomorrow
-          </Button>
+        >
+          Tomorrow
+        </Button>
         </motion.div>
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              const nextWeek = addDays(today, 7);
-              onDateSelect(nextWeek);
-              onMonthChange(nextWeek);
-            }}
-            disabled={loading || !isDateSelectable(addDays(today, 7))}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            const nextWeek = addDays(today, 7);
+            onDateSelect(nextWeek);
+            onMonthChange(nextWeek);
+          }}
+          disabled={loading || !isDateSelectable(addDays(today, 7))}
             className="h-9 px-4 text-sm backdrop-blur-sm"
             style={{ 
               backgroundColor: 'var(--border-subtle)',
               border: '1px solid var(--border-default)',
               color: 'var(--text-secondary)'
             }}
-          >
-            Next Week
-          </Button>
+        >
+          Next Week
+        </Button>
         </motion.div>
       </div>
 

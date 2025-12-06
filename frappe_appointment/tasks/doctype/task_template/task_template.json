@@ -6,7 +6,7 @@
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
- "field_order": [
+  "field_order": [
   "template_name",
   "description",
   "category",
@@ -18,7 +18,8 @@
   "default_tags",
   "section_break_tasks",
   "template_tasks",
-  "is_active"
+  "is_active",
+  "is_demo_data"
  ],
  "fields": [
   {
@@ -89,6 +90,13 @@
    "fieldname": "is_active",
    "fieldtype": "Check",
    "label": "Is Active"
+  },
+  {
+   "default": 0,
+   "fieldname": "is_demo_data",
+   "fieldtype": "Check",
+   "label": "Is Demo Data",
+   "read_only": 1
   }
  ],
  "links": [],

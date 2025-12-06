@@ -7,8 +7,8 @@ export interface Task {
   name: string;
   title: string;
   description?: string;
-  status: 'requested' | 'assigned' | 'in_progress' | 'completed' | 'cancelled';
-  priority: 'low' | 'medium' | 'high' | 'urgent';
+  status: 'Requested' | 'Assigned' | 'In Progress' | 'Completed' | 'Cancelled';
+  priority: 'Low' | 'Medium' | 'High' | 'Urgent';
   deadline?: string;
   assignee?: string;
   client_profile: string;
@@ -44,7 +44,7 @@ export interface TaskTemplateTask {
   name?: string;
   title: string;
   description?: string;
-  priority: 'low' | 'medium' | 'high' | 'urgent';
+  priority: 'Low' | 'Medium' | 'High' | 'Urgent';
   estimated_duration?: number;
   sequence?: number;
 }
@@ -65,9 +65,55 @@ export interface VAProfile {
   email: string;
   phone?: string;
   status: 'active' | 'inactive';
+  
+  // Professional Identity
+  headline?: string;
+  bio?: string;
+  education?: string;
+  work_style?: 'remote_only' | 'hybrid' | 'flexible';
+  response_time?: 'immediate' | 'within_1_hour' | 'within_4_hours' | 'within_24_hours';
+  
+  // Tier & Capacity
+  assistant_tier?: 'junior' | 'standard' | 'senior';
+  max_clients?: number;
+  current_clients?: number;
+  
+  // Ratings & Performance
+  rating?: number;
+  total_reviews?: number;
+  tasks_completed?: number;
+  success_rate?: number;
+  years_experience?: number;
+  
+  // Availability
+  availability_status?: 'available' | 'limited' | 'booked';
+  available_hours_per_week?: number;
+  working_hours_start?: string;
+  working_hours_end?: string;
+  
+  // Pricing
+  hourly_rate?: number;
+  
+  // Location
   timezone?: string;
+  
+  // Badges
+  featured?: boolean;
+  verified?: boolean;
+  
+  // Child Tables
   languages?: VALanguage[];
   skills?: AssistantSkillAssignment[];
+  specializations?: VASpecialization[];
+  certifications?: VACertification[];
+  tools?: VATool[];
+  
+  // Images
+  avatar_url?: string;
+  image_url?: string;
+  profile_image?: string;
+  
+  // Metadata
   modified?: string;
   creation?: string;
 }
@@ -76,6 +122,27 @@ export interface VALanguage {
   name?: string;
   language: string;
   proficiency: 'basic' | 'intermediate' | 'fluent' | 'native';
+}
+
+export interface VASpecialization {
+  name?: string;
+  specialization: string;
+  years_in_industry?: number;
+}
+
+export interface VACertification {
+  name?: string;
+  certification_name: string;
+  issuing_organization?: string;
+  date_obtained?: string;
+  expiry_date?: string;
+}
+
+export interface VATool {
+  name?: string;
+  tool_name: string;
+  proficiency_level: 'beginner' | 'intermediate' | 'advanced' | 'expert';
+  years_using?: number;
 }
 
 export interface ClientProfile {
@@ -130,11 +197,11 @@ export interface PaginatedResponse<T> {
 }
 
 export interface TaskStatistics {
-  requested: number;
-  assigned: number;
-  in_progress: number;
-  completed: number;
-  cancelled: number;
+  'Requested': number;
+  'Assigned': number;
+  'In Progress': number;
+  'Completed': number;
+  'Cancelled': number;
   total: number;
 }
 
@@ -151,5 +218,6 @@ export interface AssignmentStatistics {
   };
   total: number;
 }
+
 
 

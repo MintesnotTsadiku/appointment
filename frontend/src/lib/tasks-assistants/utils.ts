@@ -46,55 +46,95 @@ export const formatDuration = (minutes?: number): string => {
 /**
  * Get status color for task status
  */
+const normalizeStatus = (status?: string): Task['status'] => {
+  if (!status) return 'Requested';
+  switch (status.toLowerCase()) {
+    case 'requested':
+      return 'Requested';
+    case 'assigned':
+      return 'Assigned';
+    case 'in_progress':
+    case 'in progress':
+      return 'In Progress';
+    case 'completed':
+      return 'Completed';
+    case 'cancelled':
+    case 'canceled':
+      return 'Cancelled';
+    default:
+      return status as Task['status'];
+  }
+};
+
 export const getStatusColor = (status: Task['status']): string => {
+  const normalized = normalizeStatus(status);
   const colors: Record<Task['status'], string> = {
-    requested: 'bg-gray-500',
-    assigned: 'bg-blue-500',
-    in_progress: 'bg-yellow-500',
-    completed: 'bg-green-500',
-    cancelled: 'bg-red-500',
+    'Requested': 'bg-gray-500',
+    'Assigned': 'bg-blue-500',
+    'In Progress': 'bg-yellow-500',
+    'Completed': 'bg-green-500',
+    'Cancelled': 'bg-red-500',
   };
-  return colors[status] || 'bg-gray-500';
+  return colors[normalized] || 'bg-gray-500';
 };
 
 /**
  * Get priority color
  */
+const normalizePriority = (priority?: string): Task['priority'] => {
+  if (!priority) return 'Medium';
+  switch (priority.toLowerCase()) {
+    case 'low':
+      return 'Low';
+    case 'medium':
+      return 'Medium';
+    case 'high':
+      return 'High';
+    case 'urgent':
+      return 'Urgent';
+    default:
+      return priority as Task['priority'];
+  }
+};
+
 export const getPriorityColor = (priority: Task['priority']): string => {
+  const normalized = normalizePriority(priority);
   const colors: Record<Task['priority'], string> = {
-    low: 'bg-green-500',
-    medium: 'bg-yellow-500',
-    high: 'bg-orange-500',
-    urgent: 'bg-red-500',
+    'Low': 'bg-green-500',
+    'Medium': 'bg-yellow-500',
+    'High': 'bg-orange-500',
+    'Urgent': 'bg-red-500',
   };
-  return colors[priority] || 'bg-gray-500';
+  return colors[normalized] || 'bg-gray-500';
 };
 
 /**
  * Get status label
  */
 export const getStatusLabel = (status: Task['status']): string => {
+  const normalized = normalizeStatus(status);
   const labels: Record<Task['status'], string> = {
-    requested: 'Requested',
-    assigned: 'Assigned',
-    in_progress: 'In Progress',
-    completed: 'Completed',
-    cancelled: 'Cancelled',
+    'Requested': 'Requested',
+    'Assigned': 'Assigned',
+    'In Progress': 'In Progress',
+    'Completed': 'Completed',
+    'Cancelled': 'Cancelled',
   };
-  return labels[status] || status;
+  return labels[normalized] || normalized;
 };
 
 /**
  * Get priority label
  */
 export const getPriorityLabel = (priority: Task['priority']): string => {
+  const normalized = normalizePriority(priority);
   const labels: Record<Task['priority'], string> = {
-    low: 'Low',
-    medium: 'Medium',
-    high: 'High',
-    urgent: 'Urgent',
+    'Low': 'Low',
+    'Medium': 'Medium',
+    'High': 'High',
+    'Urgent': 'Urgent',
   };
-  return labels[priority] || priority;
+  return labels[normalized] || normalized;
 };
 
 /**
@@ -104,21 +144,23 @@ export const isOverdue = (task: Task): boolean => {
   if (!task.deadline) return false;
   const deadline = new Date(task.deadline);
   const now = new Date();
-  return deadline < now && task.status !== 'completed' && task.status !== 'cancelled';
+  const status = normalizeStatus(task.status);
+  return deadline < now && status !== 'Completed' && status !== 'Cancelled';
 };
 
 /**
  * Calculate task progress percentage
  */
 export const calculateProgress = (task: Task): number => {
+  const status = normalizeStatus(task.status);
   const statusProgress: Record<Task['status'], number> = {
-    requested: 0,
-    assigned: 25,
-    in_progress: 50,
-    completed: 100,
-    cancelled: 0,
+    'Requested': 0,
+    'Assigned': 25,
+    'In Progress': 50,
+    'Completed': 100,
+    'Cancelled': 0,
   };
-  return statusProgress[task.status] || 0;
+  return statusProgress[status] || 0;
 };
 
 
