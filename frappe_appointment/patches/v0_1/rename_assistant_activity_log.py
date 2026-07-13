@@ -23,3 +23,4 @@ def execute():
     frappe.db.set_value("DocType", "Assistant Activity Log", "module", "Assistants")
 
 
+
