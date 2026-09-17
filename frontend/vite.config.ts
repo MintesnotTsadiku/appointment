@@ -5,6 +5,7 @@ import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
+  const isolated = process.env.FRAPPE_WORKTREE_SITE;
   let proxyConfig = {};
   if (env.VITE_SITE_NAME && env.VITE_SITE_PORT) {
     proxyConfig = {
@@ -16,6 +17,22 @@ export default defineConfig(({ command, mode }) => {
         router: function () {
           return `http://${env.VITE_SITE_NAME}:${env.VITE_SITE_PORT}`;
         },
+      },
+    };
+  }
+  if (isolated) {
+    const target = `http://127.0.0.1:${process.env.FRAPPE_WORKTREE_WEB_PORT}`;
+    proxyConfig = {
+      "^/(app|api|assets|files|private|login|logout)(/|$)": {
+        target,
+        changeOrigin: true,
+        headers: { "X-Frappe-Site-Name": isolated },
+      },
+      "/socket.io": {
+        target: `http://127.0.0.1:${process.env.FRAPPE_WORKTREE_SOCKETIO_PORT}`,
+        ws: true,
+        changeOrigin: true,
+        headers: { "X-Frappe-Site-Name": isolated },
       },
     };
   }
@@ -295,16 +312,18 @@ export default defineConfig(({ command, mode }) => {
         },
         
         devOptions: {
-          enabled: true, // Enable in development for testing
+          enabled: !isolated, // Keep isolated development sessions free of cached API responses
           type: "module"
         }
       })
     ],
     server: {
       host: '0.0.0.0', // Allow access from network (for iPhone testing)
-      port: 5173,
+      port: Number(process.env.FRAPPE_WORKTREE_FRONTEND_PORT || 5173),
+      strictPort: true,
       proxy: proxyConfig,
     },
+    cacheDir: process.env.VITE_CACHE_DIR || "node_modules/.vite",
     build: {
       outDir: "../frappe_appointment/public/frontend",
       emptyOutDir: true,

@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "app_name": "frappe_appointment",
+  "site_prefix": "meet-beta",
+  "dependency_apps": [],
+  "frontend": {
+    "directory": "frontend",
+    "command": [
+      "npm",
+      "run",
+      "dev"
+    ],
+    "install_command": [
+      "npm",
+      "ci"
+    ],
+    "health_path": "/",
+    "environment": {
+      "VITE_ENABLE_SOCKET": "true",
+      "VITE_SOCKET_PORT": "{frontend_port}",
+      "VITE_SITE_PORT": "{web_port}",
+      "VITE_BASE_URL": ""
+    }
+  },
+  "credentials": {},
+  "site_config": {
+    "mute_emails": 1,
+    "pause_scheduler": 1
+  },
+  "template": {
+    "enabled": true
+  }
+}
