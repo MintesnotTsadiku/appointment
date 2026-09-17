@@ -38,7 +38,9 @@ app_include_js = [
     "/assets/appointment/js/duration_override.js",
 ]
 
-before_install = "appointment.tasks.import_email_templates.import_email_templates"
+# Email templates are imported after the app's doctypes exist so that the
+# Appointment Settings Link fields resolve on a fresh install.
+after_install = "appointment.tasks.import_email_templates.import_email_templates"
 
 after_sync = [
     "appointment.tasks.setup_erpnext_fields.setup_erpnext_fields",

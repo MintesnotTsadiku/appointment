@@ -52,6 +52,36 @@ EMAIL_TEMPLATES = [
 ]
 
 
+DEFAULT_EMAIL_TEMPLATE_FIELDS = {
+    "default_personal_email_template": "[Default] Appointment Scheduled",
+    "default_group_email_template": "[Default] Appointment Scheduled",
+    "default_availability_alerts_email_template": "[Default] Appointment Group Availability",
+    "personal_organisers_email_template": "[Default] Appointment Scheduled - Organisers",
+}
+
+
+def _apply_default_email_templates():
+    """Point Appointment Settings at the default templates when still unset.
+
+    The DocType JSON no longer carries these Link defaults, because on a fresh
+    install ``init_singles`` runs before the templates exist and a dangling Link
+    default fails validation.  The defaults are applied here instead, after the
+    templates have been imported.
+    """
+    if not frappe.db.exists("DocType", "Appointment Settings"):
+        return
+
+    settings = frappe.get_single("Appointment Settings")
+    changed = False
+    for fieldname, template in DEFAULT_EMAIL_TEMPLATE_FIELDS.items():
+        if not settings.get(fieldname) and frappe.db.exists("Email Template", template):
+            settings.set(fieldname, template)
+            changed = True
+
+    if changed:
+        settings.save(ignore_permissions=True)
+
+
 def import_email_templates():
     for email_template in EMAIL_TEMPLATES:
         try:
@@ -61,4 +91,5 @@ def import_email_templates():
         except Exception as e:
             print(f"Error importing email template {email_template['name']}: {e}")
             continue
+    _apply_default_email_templates()
     print("Email Templates Imported")

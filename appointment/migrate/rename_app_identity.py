@@ -86,7 +86,7 @@ def _rename_installed_apps() -> dict:
         # site_config mirroring is best effort; the database global is canonical.
         pass
 
-    if frappe.db.exists("DocType", "System Settings"):
+    if _has_table_column("System Settings", "default_app"):
         current_default = frappe.db.get_single_value("System Settings", "default_app")
         if current_default == LEGACY_APP:
             frappe.db.set_single_value("System Settings", "default_app", CANONICAL_APP)
@@ -94,7 +94,7 @@ def _rename_installed_apps() -> dict:
 
 
 def _rename_installed_application_rows() -> dict:
-    if not frappe.db.exists("DocType", "Installed Application"):
+    if not _has_table_column("Installed Application", "app_name"):
         return {}
     updated = frappe.db.sql(
         "UPDATE `tabInstalled Application` SET app_name=%s WHERE app_name=%s",
@@ -104,7 +104,7 @@ def _rename_installed_application_rows() -> dict:
 
 
 def _rename_module_defs() -> dict:
-    if not frappe.db.exists("DocType", "Module Def"):
+    if not _has_table_column("Module Def", "app_name"):
         return {}
     updated = frappe.db.sql(
         "UPDATE `tabModule Def` SET app_name=%s WHERE app_name=%s",
@@ -114,7 +114,7 @@ def _rename_module_defs() -> dict:
 
 
 def _rename_scheduled_jobs() -> dict:
-    if not frappe.db.exists("DocType", "Scheduled Job Type"):
+    if not _has_table_column("Scheduled Job Type", "method"):
         return {}
     updated = frappe.db.sql(
         "UPDATE `tabScheduled Job Type` SET method=REPLACE(method,%s,%s) WHERE method LIKE %s",
@@ -124,7 +124,7 @@ def _rename_scheduled_jobs() -> dict:
 
 
 def _rename_workspaces() -> dict:
-    if not frappe.db.exists("DocType", "Workspace"):
+    if not _has_table_column("Workspace", "app"):
         return {}
     updated = frappe.db.sql(
         "UPDATE `tabWorkspace` SET app=%s WHERE app=%s",
@@ -134,7 +134,7 @@ def _rename_workspaces() -> dict:
 
 
 def _rename_default_apps() -> dict:
-    if not frappe.db.exists("DocType", "User"):
+    if not _has_table_column("User", "default_app"):
         return {}
     updated = frappe.db.sql(
         "UPDATE `tabUser` SET default_app=%s WHERE default_app=%s",
@@ -144,7 +144,7 @@ def _rename_default_apps() -> dict:
 
 
 def _rename_email_template_branding() -> dict:
-    if not frappe.db.exists("DocType", "Email Template"):
+    if not _has_table_column("Email Template", "subject"):
         return {}
     updated = frappe.db.sql(
         "UPDATE `tabEmail Template` SET subject=REPLACE(subject,%s,%s) WHERE subject LIKE %s",
@@ -153,12 +153,17 @@ def _rename_email_template_branding() -> dict:
     return {"Email Template.subject": updated} if updated else {}
 
 
+def _has_table_column(doctype: str, column: str) -> bool:
+    """True when the physical table and column exist (migration may run pre-sync)."""
+    if not frappe.db.table_exists(doctype):
+        return False
+    return frappe.db.has_column(doctype, column)
+
+
 def _rename_stored_dotted_paths() -> dict:
     changed = {}
     for doctype, column in DOTTED_PATH_COLUMNS:
-        if not frappe.db.exists("DocType", doctype):
-            continue
-        if not frappe.db.has_column(doctype, column):
+        if not _has_table_column(doctype, column):
             continue
         updated = frappe.db.sql(
             f"UPDATE `tab{doctype}` SET `{column}`=REPLACE(`{column}`,%s,%s) WHERE `{column}` LIKE %s",
