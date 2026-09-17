@@ -28,6 +28,6 @@
     "pause_scheduler": 1
   },
   "template": {
-    "enabled": true
+    "enabled": false
   }
 }
