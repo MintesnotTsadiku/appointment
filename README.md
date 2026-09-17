@@ -1,11 +1,11 @@
 <div align="center">
-<img src="appointment/public/frappe-appointment-logo.png" height="128" alt="Frappe Appointment">
-<h2>Frappe Appointment</h2>
-   Frappe app designed to streamline meeting scheduling with smart integrations.
+<img src="appointment/public/appointment-logo.png" height="128" alt="Appointment">
+<h2>Appointment</h2>
+   Frappe scheduling app for organizations, providers, locations and public booking.
 </div>
 <br>
 <div align="center">
-<img src="appointment/public/featured-image.png" width="1050" alt="Frappe Appointment">
+<img src="appointment/public/featured-image.png" width="1050" alt="Appointment">
 </div>
 
 ## Key Features

@@ -1,5 +1,9 @@
 # App Rename Migration Guide: frappe_appointment → scheduler
 
+> **SUPERSEDED.** This guide targets an earlier `scheduler` rename that was not
+> executed. Do not run it. Use `docs/rename/appointment-app-rename-implementation-plan.md`,
+> `docs/rename/reference-inventory.md` and `docs/rename/migration-and-rollback.md`.
+
 > **IMPORTANT**: This is a complex operation. Follow steps IN ORDER. Do NOT skip steps.
 > **Estimated Time**: 2-4 hours
 > **Risk Level**: HIGH - Make sure you have backups
