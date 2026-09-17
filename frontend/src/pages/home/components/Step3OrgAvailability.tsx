@@ -40,7 +40,7 @@ const Step3OrgAvailability = ({ onNext, onBack }: Step3OrgAvailabilityProps) => 
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const { call, loading } = useFrappePostCall('frappe_appointment.onboarding.save_organization_availability');
+  const { call, loading } = useFrappePostCall('appointment.onboarding.save_organization_availability');
 
   const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
   const dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];

@@ -24,7 +24,7 @@ const TeamManagement = () => {
       selected_organization?: { name: string; organization_name: string; slug: string } | null;
     }
   }>(
-    'frappe_appointment.onboarding.get_progress',
+    'appointment.onboarding.get_progress',
     undefined,
     'onboarding-progress'
   );

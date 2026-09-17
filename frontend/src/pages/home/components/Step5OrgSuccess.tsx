@@ -24,13 +24,13 @@ const Step5OrgSuccess = ({ onComplete }: Step5OrgSuccessProps) => {
     success: boolean;
     organization_url: string;
     services: ServiceUrl[];
-  }>('frappe_appointment.onboarding.get_organization_booking_urls');
+  }>('appointment.onboarding.get_organization_booking_urls');
   
   // Extract the actual data from the API response
   const orgUrl = data?.message?.organization_url || data?.organization_url;
   const services = data?.message?.services || data?.services || [];
 
-  const { call: completeOnboarding } = useFrappePostCall('frappe_appointment.onboarding.complete_organization_onboarding');
+  const { call: completeOnboarding } = useFrappePostCall('appointment.onboarding.complete_organization_onboarding');
 
   useEffect(() => {
     // Stop confetti after 5 seconds

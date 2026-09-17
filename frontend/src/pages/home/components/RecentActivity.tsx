@@ -24,7 +24,7 @@ const RecentActivity = () => {
   const { t } = useTranslation();
 
   const { data, isLoading, error, mutate } = useFrappeGetCall<{ message: { activities: Activity[] } }>(
-    'frappe_appointment.dashboard.recent_activity',
+    'appointment.dashboard.recent_activity',
     { limit: 10, offset: 0 },
     'recent-activity'
   );

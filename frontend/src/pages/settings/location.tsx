@@ -54,7 +54,7 @@ const LocationSettings = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const { data, isLoading, mutate } = useFrappeGetCall<{ message: { locations: Location[] } }>(
-    'frappe_appointment.onboarding.get_provider_locations',
+    'appointment.onboarding.get_provider_locations',
     undefined,
     'provider-locations'
   );
@@ -66,13 +66,13 @@ const LocationSettings = () => {
       services: Array<{ name: string; service_name: string; description?: string }>;
     } 
   }>(
-    'frappe_appointment.onboarding.get_location_options',
+    'appointment.onboarding.get_location_options',
     undefined,
     'location-options'
   );
 
-  const { call: createLocation, loading: creating } = useFrappePostCall('frappe_appointment.onboarding.create_location');
-  const { call: deleteLocation, loading: deleting } = useFrappePostCall('frappe_appointment.onboarding.delete_location');
+  const { call: createLocation, loading: creating } = useFrappePostCall('appointment.onboarding.create_location');
+  const { call: deleteLocation, loading: deleting } = useFrappePostCall('appointment.onboarding.delete_location');
 
   const availableProviders = optionsData?.message?.providers || [];
   const availableServices = optionsData?.message?.services || [];

@@ -34,13 +34,13 @@ export const AddWalkInModal = ({
   const [activeField, setActiveField] = useState<string | null>(null);
 
   const { data: servicesData } = useFrappeGetCall<{ message: { services: Service[] } }>(
-    'frappe_appointment.scheduler.api.desk.get_services_list',
+    'appointment.scheduler.api.desk.get_services_list',
     undefined,
     'services'
   );
 
   const { call: addWalkIn, loading: creating } = useFrappePostCall(
-    'frappe_appointment.scheduler.api.desk.add_walk_in'
+    'appointment.scheduler.api.desk.add_walk_in'
   );
 
   const services = servicesData?.message?.services || [];

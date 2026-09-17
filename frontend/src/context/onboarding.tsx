@@ -30,7 +30,7 @@ export const OnboardingProvider: React.FC<{ children: ReactNode }> = ({ children
 
   // Fetch onboarding progress
   const { data, error, isLoading, mutate } = useFrappeGetCall<{ message: OnboardingProgress }>(
-    'frappe_appointment.onboarding.get_progress',
+    'appointment.onboarding.get_progress',
     undefined,
     undefined,
     {
@@ -39,10 +39,10 @@ export const OnboardingProvider: React.FC<{ children: ReactNode }> = ({ children
     }
   );
 
-  const { call: updateCall } = useFrappePostCall('frappe_appointment.onboarding.update_step');
-  const { call: completeCall } = useFrappePostCall('frappe_appointment.onboarding.complete');
-  const { call: setTypeCall } = useFrappePostCall('frappe_appointment.onboarding.set_onboarding_type');
-  const { call: resetTypeCall } = useFrappePostCall('frappe_appointment.onboarding.reset_onboarding_type');
+  const { call: updateCall } = useFrappePostCall('appointment.onboarding.update_step');
+  const { call: completeCall } = useFrappePostCall('appointment.onboarding.complete');
+  const { call: setTypeCall } = useFrappePostCall('appointment.onboarding.set_onboarding_type');
+  const { call: resetTypeCall } = useFrappePostCall('appointment.onboarding.reset_onboarding_type');
 
   useEffect(() => {
     if (data?.message) {

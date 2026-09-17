@@ -23,9 +23,9 @@ interface EditItemModalProps {
 }
 
 export const EditItemModal = ({ isOpen, onClose, item, organization, onSuccess }: EditItemModalProps) => {
-  const { call, loading } = useFrappePostCall('frappe_appointment.api.manage.update_service');
-  const { call: updateLocation, loading: locationLoading } = useFrappePostCall('frappe_appointment.api.manage.update_location');
-  const { call: updateEventType, loading: eventTypeLoading } = useFrappePostCall('frappe_appointment.api.manage.update_event_type');
+  const { call, loading } = useFrappePostCall('appointment.api.manage.update_service');
+  const { call: updateLocation, loading: locationLoading } = useFrappePostCall('appointment.api.manage.update_location');
+  const { call: updateEventType, loading: eventTypeLoading } = useFrappePostCall('appointment.api.manage.update_event_type');
 
   const [formData, setFormData] = useState<any>({});
 

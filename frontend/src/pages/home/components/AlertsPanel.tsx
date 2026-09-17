@@ -29,7 +29,7 @@ const AlertsPanel = () => {
   const [dismissedAlerts, setDismissedAlerts] = useState<Set<string>>(new Set());
 
   const { data, isLoading, error, mutate } = useFrappeGetCall<{ message: { alerts: Alert[] } }>(
-    'frappe_appointment.dashboard.alerts',
+    'appointment.dashboard.alerts',
     undefined,
     'dashboard-alerts'
   );

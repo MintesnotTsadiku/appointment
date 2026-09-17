@@ -6,7 +6,7 @@
 
 ```bash
 bench get-app https://github.com/rtCamp/frappe-appointment
-bench --site [site-name] install-app frappe_appointment
+bench --site [site-name] install-app appointment
 ```
 
 2. Set up [pre-commit](https://pre-commit.com/) in the app.

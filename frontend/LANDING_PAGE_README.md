@@ -85,8 +85,8 @@ frontend/src/
 ## Frappe Integration
 
 ### Web Pages
-- `frappe_appointment/www/index.html` - Root route HTML
-- `frappe_appointment/www/index.py` - Context provider for root route
+- `appointment/www/index.html` - Root route HTML
+- `appointment/www/index.py` - Context provider for root route
 
 ### Hooks Configuration
 Updated `hooks.py` with website route rules for both root and schedule paths.
@@ -107,7 +107,7 @@ npm run build
 
 This will:
 1. Build the React app
-2. Copy assets to `/assets/frappe_appointment/frontend/`
+2. Copy assets to `/assets/appointment/frontend/`
 3. Update `www/schedule/index.html` with built assets
 
 ## Next Steps (Phase 2)

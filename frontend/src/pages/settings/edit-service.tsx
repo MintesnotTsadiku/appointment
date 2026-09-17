@@ -46,7 +46,7 @@ const EditService = () => {
   const { data: serviceData, isLoading: loadingService, mutate: refreshService } = useFrappeGetCall<{
     message: { success: boolean; service: ServiceDetails; providers: ServiceProvider[]; error?: string };
   }>(
-    'frappe_appointment.onboarding.get_service_details',
+    'appointment.onboarding.get_service_details',
     serviceId ? { service_id: serviceId } : undefined,
     `service-details-${serviceId}`,
     {
@@ -54,8 +54,8 @@ const EditService = () => {
     }
   );
 
-  const { call: updateService, loading: updating } = useFrappePostCall('frappe_appointment.onboarding.create_service');
-  const { call: removeProvider, loading: removingProvider } = useFrappePostCall('frappe_appointment.onboarding.remove_provider_from_service');
+  const { call: updateService, loading: updating } = useFrappePostCall('appointment.onboarding.create_service');
+  const { call: removeProvider, loading: removingProvider } = useFrappePostCall('appointment.onboarding.remove_provider_from_service');
 
   const service = serviceData?.message?.service;
   const providers = serviceData?.message?.providers || [];

@@ -23,9 +23,9 @@ export const HierarchyTree = ({ organization, provider, onRefresh }: HierarchyTr
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['services', 'locations', 'providers']));
   const [createModalOpen, setCreateModalOpen] = useState<{ type: string; parentId?: string } | null>(null);
   const [editItem, setEditItem] = useState<any>(null);
-  const { call: deleteService } = useFrappePostCall('frappe_appointment.api.manage.delete_service');
-  const { call: deleteLocation } = useFrappePostCall('frappe_appointment.api.manage.delete_location');
-  const { call: deleteEventType } = useFrappePostCall('frappe_appointment.api.manage.delete_event_type');
+  const { call: deleteService } = useFrappePostCall('appointment.api.manage.delete_service');
+  const { call: deleteLocation } = useFrappePostCall('appointment.api.manage.delete_location');
+  const { call: deleteEventType } = useFrappePostCall('appointment.api.manage.delete_event_type');
 
   const toggleSection = (section: string) => {
     const newExpanded = new Set(expandedSections);

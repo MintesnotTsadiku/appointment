@@ -26,7 +26,7 @@ const Step4Service = ({ onNext, onBack }: Step4ServiceProps) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [bookingUrl, setBookingUrl] = useState('');
 
-  const { call, loading } = useFrappePostCall('frappe_appointment.onboarding.create_service');
+  const { call, loading } = useFrappePostCall('appointment.onboarding.create_service');
 
   const durations = [
     { value: '15', label: '15 minutes' },

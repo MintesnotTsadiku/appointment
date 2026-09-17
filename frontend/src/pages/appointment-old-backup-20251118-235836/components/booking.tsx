@@ -127,7 +127,7 @@ const Booking = ({ type, banner, duration: durationProp, isOrganization, organiz
   // Frontend Debug: Log API call parameters
   useEffect(() => {
     console.log("[FRONTEND DEBUG] API Call Parameters:", {
-      endpoint: "frappe_appointment.api.personal_meet.get_time_slots",
+      endpoint: "appointment.api.personal_meet.get_time_slots",
       params: apiParams,
       type: type,
       durationId: durationId,
@@ -140,7 +140,7 @@ const Booking = ({ type, banner, duration: durationProp, isOrganization, organiz
   
   // Always make the API call - it will handle validation on the backend
   const { data, isLoading, error, mutate } = useFrappeGetCall(
-    "frappe_appointment.api.personal_meet.get_time_slots",
+    "appointment.api.personal_meet.get_time_slots",
     apiParams,
     undefined,
     {
@@ -219,7 +219,7 @@ const Booking = ({ type, banner, duration: durationProp, isOrganization, organiz
   };
 
   const { call: rescheduleMeeting, loading: rescheduleLoading } =
-    useFrappePostCall("frappe_appointment.api.personal_meet.book_time_slot");
+    useFrappePostCall("appointment.api.personal_meet.book_time_slot");
 
   const onReschedule = () => {
     const extraArgs: Record<string, string> = {};

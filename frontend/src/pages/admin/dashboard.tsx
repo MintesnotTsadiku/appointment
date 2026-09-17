@@ -67,7 +67,7 @@ interface AdminStats {
 
 const AdminDashboard = () => {
   const { data, isLoading, error, mutate } = useFrappeGetCall<{ message: AdminStats }>(
-    'frappe_appointment.dashboard.admin_stats',
+    'appointment.dashboard.admin_stats',
     undefined,
     'admin-dashboard-stats',
     {

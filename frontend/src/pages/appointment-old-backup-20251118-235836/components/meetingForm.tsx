@@ -60,7 +60,7 @@ const MeetingForm = ({
   const [isGuestsOpen, setIsGuestsOpen] = useState(false);
   const [guestInput, setGuestInput] = useState("");
   const { call: bookMeeting, loading } = useFrappePostCall(
-    `frappe_appointment.api.personal_meet.book_time_slot`
+    `appointment.api.personal_meet.book_time_slot`
   );
   const [searchParams] = useSearchParams();
 

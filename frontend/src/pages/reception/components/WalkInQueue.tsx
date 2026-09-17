@@ -19,7 +19,7 @@ export const WalkInQueue = ({ locationName, onAssignWalkIn, onCreateWalkIn }: Wa
   const { data: walkInsData, isLoading, mutate: refreshWalkIns } = useFrappeGetCall<{ 
     message: { walk_ins: WalkIn[]; count: number } 
   }>(
-    'frappe_appointment.scheduler.api.desk.get_walk_ins',
+    'appointment.scheduler.api.desk.get_walk_ins',
     locationName ? { location_name: locationName } : undefined,
     `walk-ins-${locationName || 'all'}`,
     {
@@ -28,7 +28,7 @@ export const WalkInQueue = ({ locationName, onAssignWalkIn, onCreateWalkIn }: Wa
     }
   );
 
-  const { call: assignWalkIn } = useFrappePostCall('frappe_appointment.scheduler.api.desk.assign_walk_in_to_slot');
+  const { call: assignWalkIn } = useFrappePostCall('appointment.scheduler.api.desk.assign_walk_in_to_slot');
 
   const walkIns = walkInsData?.message?.walk_ins || [];
 

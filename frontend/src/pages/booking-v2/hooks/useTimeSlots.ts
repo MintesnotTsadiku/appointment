@@ -1,6 +1,6 @@
 /**
  * Hook to fetch time slots from Frappe API
- * Connects to: frappe_appointment.api.personal_meet.get_time_slots
+ * Connects to: appointment.api.personal_meet.get_time_slots
  */
 
 import { useFrappeGetCall } from "frappe-react-sdk";
@@ -83,7 +83,7 @@ export function useTimeSlots({
   const { data, isLoading, error, mutate } = useFrappeGetCall<{
     message: TimeSlotsResponse;
   }>(
-    "frappe_appointment.api.personal_meet.get_time_slots",
+    "appointment.api.personal_meet.get_time_slots",
     apiParams,
     apiParams ? undefined : null, // Don't make call if params are null
     {

@@ -19,7 +19,7 @@ const Step5Success = () => {
   // Fetch the booking URL from the backend
   const { data: bookingData, isLoading: loadingBookingUrl } = useFrappeGetCall<{
     message: { success: boolean; booking_url: string; event_type_id?: string };
-  }>('frappe_appointment.onboarding.get_booking_url');
+  }>('appointment.onboarding.get_booking_url');
 
   useEffect(() => {
     if (bookingData?.message?.booking_url) {

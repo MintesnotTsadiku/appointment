@@ -25,10 +25,10 @@ import type {
 
 export const taskAPI = {
   create: (data: Partial<Task>): Promise<APIResponse<Task>> =>
-    gatewayPost('frappe_appointment.tasks.api.task_api.create_task', data),
+    gatewayPost('appointment.tasks.api.task_api.create_task', data),
 
   get: (taskName: string, fields?: string): Promise<APIResponse<Task>> =>
-    gatewayGet('frappe_appointment.tasks.api.task_api.get_task', {
+    gatewayGet('appointment.tasks.api.task_api.get_task', {
       task_name: taskName,
       fields,
     }),
@@ -40,51 +40,51 @@ export const taskAPI = {
     page_start?: number;
     order_by?: string;
   }): Promise<PaginatedResponse<Task>> =>
-    gatewayGet('frappe_appointment.tasks.api.task_api.list_tasks', params),
+    gatewayGet('appointment.tasks.api.task_api.list_tasks', params),
 
   update: (taskName: string, data: Partial<Task>): Promise<APIResponse<Task>> =>
-    gatewayPost('frappe_appointment.tasks.api.task_api.update_task', {
+    gatewayPost('appointment.tasks.api.task_api.update_task', {
       task_name: taskName,
       data,
     }),
 
   delete: (taskName: string): Promise<APIResponse<void>> =>
-    gatewayPost('frappe_appointment.tasks.api.task_api.delete_task', {
+    gatewayPost('appointment.tasks.api.task_api.delete_task', {
       task_name: taskName,
     }),
 
   updateStatus: (taskName: string, status: Task['status']): Promise<APIResponse<Task>> =>
-    gatewayPost('frappe_appointment.tasks.api.task_api.update_task_status', {
+    gatewayPost('appointment.tasks.api.task_api.update_task_status', {
       task_name: taskName,
       status,
     }),
 
   assign: (taskName: string, assignee: string): Promise<APIResponse<Task>> =>
-    gatewayPost('frappe_appointment.tasks.api.task_api.assign_task', {
+    gatewayPost('appointment.tasks.api.task_api.assign_task', {
       task_name: taskName,
       assignee,
     }),
 
   getByClient: (clientProfile: string, status?: string): Promise<APIResponse<Task[]>> =>
-    gatewayGet('frappe_appointment.tasks.api.task_api.get_tasks_by_client', {
+    gatewayGet('appointment.tasks.api.task_api.get_tasks_by_client', {
       client_profile: clientProfile,
       status,
     }),
 
   getByAssignee: (assignee: string, status?: string): Promise<APIResponse<Task[]>> =>
-    gatewayGet('frappe_appointment.tasks.api.task_api.get_tasks_by_assignee', {
+    gatewayGet('appointment.tasks.api.task_api.get_tasks_by_assignee', {
       assignee,
       status,
     }),
 
   getDailyBriefing: (clientProfile?: string, date?: string): Promise<APIResponse<Task[]>> =>
-    gatewayGet('frappe_appointment.tasks.api.task_api.get_daily_briefing_tasks', {
+    gatewayGet('appointment.tasks.api.task_api.get_daily_briefing_tasks', {
       client_profile: clientProfile,
       date,
     }),
 
   getStatistics: (clientProfile?: string, assignee?: string): Promise<APIResponse<TaskStatistics>> =>
-    gatewayGet('frappe_appointment.tasks.api.task_api.get_task_statistics', {
+    gatewayGet('appointment.tasks.api.task_api.get_task_statistics', {
       client_profile: clientProfile,
       assignee,
     }),
@@ -94,25 +94,25 @@ export const taskAPI = {
 export const taskMasterDataAPI = {
   categories: {
     create: (data: { name: string; description?: string }): Promise<APIResponse<TaskCategory>> =>
-      gatewayPost('frappe_appointment.tasks.api.task_master_data_api.create_task_category', data),
+      gatewayPost('appointment.tasks.api.task_master_data_api.create_task_category', data),
 
     list: (filters?: Record<string, any>): Promise<APIResponse<TaskCategory[]>> =>
-      gatewayGet('frappe_appointment.tasks.api.task_master_data_api.list_task_categories', {
+      gatewayGet('appointment.tasks.api.task_master_data_api.list_task_categories', {
         filters,
       }),
   },
 
   templates: {
     create: (data: Partial<TaskTemplate>): Promise<APIResponse<TaskTemplate>> =>
-      gatewayPost('frappe_appointment.tasks.api.task_master_data_api.create_task_template', data),
+      gatewayPost('appointment.tasks.api.task_master_data_api.create_task_template', data),
 
     get: (templateName: string): Promise<APIResponse<TaskTemplate>> =>
-      gatewayGet('frappe_appointment.tasks.api.task_master_data_api.get_task_template', {
+      gatewayGet('appointment.tasks.api.task_master_data_api.get_task_template', {
         template_name: templateName,
       }),
 
     list: (filters?: Record<string, any>): Promise<APIResponse<TaskTemplate[]>> =>
-      gatewayGet('frappe_appointment.tasks.api.task_master_data_api.list_task_templates', {
+      gatewayGet('appointment.tasks.api.task_master_data_api.list_task_templates', {
         filters,
       }),
 
@@ -121,7 +121,7 @@ export const taskMasterDataAPI = {
       clientProfile: string,
       assignee?: string
     ): Promise<APIResponse<{ tasks: string[]; count: number }>> =>
-      gatewayPost('frappe_appointment.tasks.api.task_master_data_api.create_tasks_from_template', {
+      gatewayPost('appointment.tasks.api.task_master_data_api.create_tasks_from_template', {
         template_name: templateName,
         client_profile: clientProfile,
         assignee,
@@ -130,10 +130,10 @@ export const taskMasterDataAPI = {
 
   projects: {
     create: (data: Partial<TaskProject>): Promise<APIResponse<TaskProject>> =>
-      gatewayPost('frappe_appointment.tasks.api.task_master_data_api.create_task_project', data),
+      gatewayPost('appointment.tasks.api.task_master_data_api.create_task_project', data),
 
     get: (projectName: string): Promise<APIResponse<TaskProject & { tasks: Task[]; tasks_count: number }>> =>
-      gatewayGet('frappe_appointment.tasks.api.task_master_data_api.get_task_project', {
+      gatewayGet('appointment.tasks.api.task_master_data_api.get_task_project', {
         project_name: projectName,
       }),
 
@@ -141,13 +141,13 @@ export const taskMasterDataAPI = {
       filters?: Record<string, any>,
       fields?: string
     ): Promise<APIResponse<TaskProject[]>> =>
-      gatewayGet('frappe_appointment.tasks.api.task_master_data_api.list_task_projects', {
+      gatewayGet('appointment.tasks.api.task_master_data_api.list_task_projects', {
         filters,
         fields,
       }),
 
     getStatistics: (projectName: string): Promise<APIResponse<TaskStatistics>> =>
-      gatewayGet('frappe_appointment.tasks.api.task_master_data_api.get_project_statistics', {
+      gatewayGet('appointment.tasks.api.task_master_data_api.get_project_statistics', {
         project_name: projectName,
       }),
   },
@@ -160,10 +160,10 @@ export const taskMasterDataAPI = {
 export const assistantAPI = {
   vaProfile: {
     create: (data: Partial<VAProfile>): Promise<APIResponse<VAProfile>> =>
-      gatewayPost('frappe_appointment.assistants.api.assistant_api.create_va_profile', data),
+      gatewayPost('appointment.assistants.api.assistant_api.create_va_profile', data),
 
     get: (vaName: string, fields?: string): Promise<APIResponse<VAProfile>> =>
-      gatewayGet('frappe_appointment.assistants.api.assistant_api.get_va_profile', {
+      gatewayGet('appointment.assistants.api.assistant_api.get_va_profile', {
         va_name: vaName,
         fields,
       }),
@@ -175,26 +175,26 @@ export const assistantAPI = {
       page_start?: number;
       order_by?: string;
     }): Promise<PaginatedResponse<VAProfile>> =>
-      gatewayGet('frappe_appointment.assistants.api.assistant_api.list_va_profiles', params),
+      gatewayGet('appointment.assistants.api.assistant_api.list_va_profiles', params),
 
     update: (vaName: string, data: Partial<VAProfile>): Promise<APIResponse<VAProfile>> =>
-      gatewayPost('frappe_appointment.assistants.api.assistant_api.update_va_profile', {
+      gatewayPost('appointment.assistants.api.assistant_api.update_va_profile', {
         va_name: vaName,
         data,
       }),
 
     delete: (vaName: string): Promise<APIResponse<void>> =>
-      gatewayPost('frappe_appointment.assistants.api.assistant_api.delete_va_profile', {
+      gatewayPost('appointment.assistants.api.assistant_api.delete_va_profile', {
         va_name: vaName,
       }),
   },
 
   clientProfile: {
     create: (data: Partial<ClientProfile>): Promise<APIResponse<ClientProfile>> =>
-      gatewayPost('frappe_appointment.assistants.api.assistant_api.create_client_profile', data),
+      gatewayPost('appointment.assistants.api.assistant_api.create_client_profile', data),
 
     get: (clientName: string, fields?: string): Promise<APIResponse<ClientProfile>> =>
-      gatewayGet('frappe_appointment.assistants.api.assistant_api.get_client_profile', {
+      gatewayGet('appointment.assistants.api.assistant_api.get_client_profile', {
         client_name: clientName,
         fields,
       }),
@@ -206,26 +206,26 @@ export const assistantAPI = {
       page_start?: number;
       order_by?: string;
     }): Promise<PaginatedResponse<ClientProfile>> =>
-      gatewayGet('frappe_appointment.assistants.api.assistant_api.list_client_profiles', params),
+      gatewayGet('appointment.assistants.api.assistant_api.list_client_profiles', params),
 
     update: (clientName: string, data: Partial<ClientProfile>): Promise<APIResponse<ClientProfile>> =>
-      gatewayPost('frappe_appointment.assistants.api.assistant_api.update_client_profile', {
+      gatewayPost('appointment.assistants.api.assistant_api.update_client_profile', {
         client_name: clientName,
         data,
       }),
 
     delete: (clientName: string): Promise<APIResponse<void>> =>
-      gatewayPost('frappe_appointment.assistants.api.assistant_api.delete_client_profile', {
+      gatewayPost('appointment.assistants.api.assistant_api.delete_client_profile', {
         client_name: clientName,
       }),
   },
 
   assignment: {
     create: (data: Partial<AssistantClientAssignment>): Promise<APIResponse<AssistantClientAssignment>> =>
-      gatewayPost('frappe_appointment.assistants.api.assistant_api.create_assignment', data),
+      gatewayPost('appointment.assistants.api.assistant_api.create_assignment', data),
 
     get: (assignmentName: string, fields?: string): Promise<APIResponse<AssistantClientAssignment>> =>
-      gatewayGet('frappe_appointment.assistants.api.assistant_api.get_assignment', {
+      gatewayGet('appointment.assistants.api.assistant_api.get_assignment', {
         assignment_name: assignmentName,
         fields,
       }),
@@ -237,24 +237,24 @@ export const assistantAPI = {
       page_start?: number;
       order_by?: string;
     }): Promise<PaginatedResponse<AssistantClientAssignment>> =>
-      gatewayGet('frappe_appointment.assistants.api.assistant_api.list_assignments', params),
+      gatewayGet('appointment.assistants.api.assistant_api.list_assignments', params),
 
     update: (
       assignmentName: string,
       data: Partial<AssistantClientAssignment>
     ): Promise<APIResponse<AssistantClientAssignment>> =>
-      gatewayPost('frappe_appointment.assistants.api.assistant_api.update_assignment', {
+      gatewayPost('appointment.assistants.api.assistant_api.update_assignment', {
         assignment_name: assignmentName,
         data,
       }),
 
     delete: (assignmentName: string): Promise<APIResponse<void>> =>
-      gatewayPost('frappe_appointment.assistants.api.assistant_api.delete_assignment', {
+      gatewayPost('appointment.assistants.api.assistant_api.delete_assignment', {
         assignment_name: assignmentName,
       }),
 
     getClientsForVA: (vaProfile: string, status?: string): Promise<APIResponse<AssistantClientAssignment[]>> =>
-      gatewayGet('frappe_appointment.assistants.api.assistant_api.get_clients_for_va', {
+      gatewayGet('appointment.assistants.api.assistant_api.get_clients_for_va', {
         va_profile: vaProfile,
         status,
       }),
@@ -263,28 +263,28 @@ export const assistantAPI = {
       clientProfile: string,
       status?: string
     ): Promise<APIResponse<AssistantClientAssignment[]>> =>
-      gatewayGet('frappe_appointment.assistants.api.assistant_api.get_vas_for_client', {
+      gatewayGet('appointment.assistants.api.assistant_api.get_vas_for_client', {
         client_profile: clientProfile,
         status,
       }),
 
     getStatistics: (): Promise<APIResponse<AssignmentStatistics>> =>
-      gatewayGet('frappe_appointment.assistants.api.assistant_api.get_assignment_statistics'),
+      gatewayGet('appointment.assistants.api.assistant_api.get_assignment_statistics'),
   },
 };
 
 // Assistant Skills APIs
 export const assistantSkillAPI = {
   create: (data: { name: string; description?: string; category?: string }): Promise<APIResponse<AssistantSkill>> =>
-    gatewayPost('frappe_appointment.assistants.api.assistant_skill_api.create_assistant_skill', data),
+    gatewayPost('appointment.assistants.api.assistant_skill_api.create_assistant_skill', data),
 
   get: (skillName: string): Promise<APIResponse<AssistantSkill>> =>
-    gatewayGet('frappe_appointment.assistants.api.assistant_skill_api.get_assistant_skill', {
+    gatewayGet('appointment.assistants.api.assistant_skill_api.get_assistant_skill', {
       skill_name: skillName,
     }),
 
   list: (filters?: Record<string, any>, fields?: string): Promise<APIResponse<AssistantSkill[]>> =>
-    gatewayGet('frappe_appointment.assistants.api.assistant_skill_api.list_assistant_skills', {
+    gatewayGet('appointment.assistants.api.assistant_skill_api.list_assistant_skills', {
       filters,
       fields,
     }),
@@ -293,13 +293,13 @@ export const assistantSkillAPI = {
     skillName: string,
     data: { description?: string; category?: string }
   ): Promise<APIResponse<AssistantSkill>> =>
-    gatewayPost('frappe_appointment.assistants.api.assistant_skill_api.update_assistant_skill', {
+    gatewayPost('appointment.assistants.api.assistant_skill_api.update_assistant_skill', {
       skill_name: skillName,
       data,
     }),
 
   delete: (skillName: string): Promise<APIResponse<void>> =>
-    gatewayPost('frappe_appointment.assistants.api.assistant_skill_api.delete_assistant_skill', {
+    gatewayPost('appointment.assistants.api.assistant_skill_api.delete_assistant_skill', {
       skill_name: skillName,
     }),
 
@@ -308,25 +308,25 @@ export const assistantSkillAPI = {
     skillName: string,
     proficiencyLevel?: string
   ): Promise<APIResponse<void>> =>
-    gatewayPost('frappe_appointment.assistants.api.assistant_skill_api.assign_skill_to_va', {
+    gatewayPost('appointment.assistants.api.assistant_skill_api.assign_skill_to_va', {
       va_profile: vaProfile,
       skill_name: skillName,
       proficiency_level: proficiencyLevel || 'intermediate',
     }),
 
   removeFromVA: (vaProfile: string, skillName: string): Promise<APIResponse<void>> =>
-    gatewayPost('frappe_appointment.assistants.api.assistant_skill_api.remove_skill_from_va', {
+    gatewayPost('appointment.assistants.api.assistant_skill_api.remove_skill_from_va', {
       va_profile: vaProfile,
       skill_name: skillName,
     }),
 
   getVASkills: (vaProfile: string): Promise<APIResponse<AssistantSkillAssignment[]>> =>
-    gatewayGet('frappe_appointment.assistants.api.assistant_skill_api.get_va_skills', {
+    gatewayGet('appointment.assistants.api.assistant_skill_api.get_va_skills', {
       va_profile: vaProfile,
     }),
 
   getVAsBySkill: (skillName: string, proficiencyLevel?: string): Promise<APIResponse<VAProfile[]>> =>
-    gatewayGet('frappe_appointment.assistants.api.assistant_skill_api.get_vas_by_skill', {
+    gatewayGet('appointment.assistants.api.assistant_skill_api.get_vas_by_skill', {
       skill_name: skillName,
       proficiency_level: proficiencyLevel,
     }),

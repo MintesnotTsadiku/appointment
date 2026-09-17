@@ -35,7 +35,7 @@ const Step3Availability = ({ onNext, onBack }: Step3AvailabilityProps) => {
     sunday: [],
   });
 
-  const { call, loading } = useFrappePostCall('frappe_appointment.onboarding.save_availability');
+  const { call, loading } = useFrappePostCall('appointment.onboarding.save_availability');
 
   const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
   const dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];

@@ -47,13 +47,13 @@ export const PolicyManager = ({ userType, entityId }: PolicyManagerProps) => {
   const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'inactive'>('all');
 
   const { data, isLoading, mutate } = useFrappeGetCall<{ message: { policies: Policy[]; count: number } }>(
-    'frappe_appointment.scheduler.api.policy_manager.get_user_policies',
+    'appointment.scheduler.api.policy_manager.get_user_policies',
     { user_type: userType, entity_id: entityId },
     `user-policies-${userType}-${entityId || ''}`
   );
 
-  const { call: deletePolicy, loading: deleting } = useFrappePostCall('frappe_appointment.scheduler.api.policy_manager.delete_policy');
-  const { call: updatePolicy, loading: updating } = useFrappePostCall('frappe_appointment.scheduler.api.policy_manager.update_policy');
+  const { call: deletePolicy, loading: deleting } = useFrappePostCall('appointment.scheduler.api.policy_manager.delete_policy');
+  const { call: updatePolicy, loading: updating } = useFrappePostCall('appointment.scheduler.api.policy_manager.update_policy');
 
   const policies = data?.message?.policies || [];
 

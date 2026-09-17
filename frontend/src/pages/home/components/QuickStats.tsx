@@ -14,7 +14,7 @@ const QuickStats = () => {
   const { t } = useTranslation();
 
   const { data, isLoading, error } = useFrappeGetCall<{ message: DashboardStats }>(
-    'frappe_appointment.dashboard.stats',
+    'appointment.dashboard.stats',
     { period: 'week' },
     'dashboard-stats',
     {

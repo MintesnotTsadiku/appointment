@@ -141,7 +141,7 @@ export function useThemeColors() {
         
         // Build the API URL
         const baseUrl = import.meta.env.VITE_BASE_URL || '';
-        const apiUrl = `${baseUrl}/api/method/frappe_appointment.scheduler.api.theme.get_theme_colors`;
+        const apiUrl = `${baseUrl}/api/method/appointment.scheduler.api.theme.get_theme_colors`;
         
         const response = await fetch(apiUrl, {
           method: 'GET',

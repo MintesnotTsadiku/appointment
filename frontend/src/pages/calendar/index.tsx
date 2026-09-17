@@ -106,7 +106,7 @@ const Calendar = () => {
 
   // Fetch appointments
   const { data: appointmentsData, isLoading: appointmentsLoading, mutate: refreshAppointments } = useFrappeGetCall<{ message: { appointments: Appointment[] } }>(
-    'frappe_appointment.dashboard.get_appointments',
+    'appointment.dashboard.get_appointments',
     {
       start_date: dateRange.start,
       end_date: dateRange.end,
@@ -122,7 +122,7 @@ const Calendar = () => {
 
   // Fetch calendar stats
   const { data: statsData } = useFrappeGetCall<{ message: CalendarStats }>(
-    'frappe_appointment.dashboard.get_calendar_stats',
+    'appointment.dashboard.get_calendar_stats',
     undefined,
     'calendar-stats',
     {

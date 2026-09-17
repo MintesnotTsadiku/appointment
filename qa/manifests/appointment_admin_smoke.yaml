@@ -1,10 +1,10 @@
-app: frappe_appointment
+app: appointment
 base_url: http://localhost:26300
 default_role: Administrator
 auth:
   type: frappe_session
   verify_path: /api/method/frappe.auth.get_logged_user
-artifact_root: /tmp/agent_browser_qa/frappe_appointment
+artifact_root: /tmp/agent_browser_qa/appointment
 capture_trace: true
 capture_video: false
 capture_instruction_timeline: false

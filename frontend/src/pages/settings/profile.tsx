@@ -84,7 +84,7 @@ const Profile = () => {
       organization_name?: string;
     }
   }>(
-    'frappe_appointment.onboarding.get_provider_profile',
+    'appointment.onboarding.get_provider_profile',
     undefined,
     'provider-profile'
   );
@@ -103,7 +103,7 @@ const Profile = () => {
       }>;
     }
   }>(
-    'frappe_appointment.api.manage.get_management_hierarchy',
+    'appointment.api.manage.get_management_hierarchy',
     undefined,
     'management-hierarchy'
   );
@@ -117,7 +117,7 @@ const Profile = () => {
   const isProvider = !providerError && providerData?.message?.name;
   const providerId = providerData?.message?.name;
 
-  const { call: updateProfile } = useFrappePostCall('frappe_appointment.onboarding.update_provider_profile');
+  const { call: updateProfile } = useFrappePostCall('appointment.onboarding.update_provider_profile');
 
   // Form state
   const [formData, setFormData] = useState({

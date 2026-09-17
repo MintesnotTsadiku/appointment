@@ -93,7 +93,7 @@ export function InstallPrompt() {
     // Track with your analytics tool
     if (window.frappe?.call) {
       window.frappe.call({
-        method: "frappe_appointment.api.analytics.track_pwa_event",
+        method: "appointment.api.analytics.track_pwa_event",
         args: {
           event: "pwa_install_prompt",
           action: action,

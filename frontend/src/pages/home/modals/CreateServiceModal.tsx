@@ -45,7 +45,7 @@ export const CreateServiceModal = ({ open, onOpenChange, onSuccess }: CreateServ
 
   // Fetch form data
   const { data: formData, isLoading: loadingFormData } = useFrappeGetCall<{ message: FormData }>(
-    'frappe_appointment.onboarding.get_service_form_data',
+    'appointment.onboarding.get_service_form_data',
     undefined,
     'service-form-data',
     {
@@ -81,7 +81,7 @@ export const CreateServiceModal = ({ open, onOpenChange, onSuccess }: CreateServ
     }
   }, [formDataResult?.organizations, selectedOrganization]);
 
-  const { call, loading } = useFrappePostCall('frappe_appointment.onboarding.create_service');
+  const { call, loading } = useFrappePostCall('appointment.onboarding.create_service');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

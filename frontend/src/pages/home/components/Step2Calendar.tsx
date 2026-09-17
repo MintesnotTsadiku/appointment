@@ -13,7 +13,7 @@ const Step2Calendar = ({ onNext, onBack }: Step2CalendarProps) => {
   const [selectedOption, setSelectedOption] = useState<'manual' | 'google' | null>(null);
   const [isConnected, setIsConnected] = useState(false);
 
-  const { call, loading } = useFrappePostCall('frappe_appointment.onboarding.connect_calendar');
+  const { call, loading } = useFrappePostCall('appointment.onboarding.connect_calendar');
   
   const handleConnect = async (calendar_provider: 'manual' | 'google') => {
     setSelectedOption(calendar_provider);

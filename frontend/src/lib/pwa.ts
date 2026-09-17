@@ -197,7 +197,7 @@ export async function syncOfflineQueue(): Promise<{
   
   try {
     // Call batch sync endpoint
-    const response = await fetch("/api/method/frappe_appointment.api.offline.sync_queue", {
+    const response = await fetch("/api/method/appointment.api.offline.sync_queue", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

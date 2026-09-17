@@ -1,11 +1,11 @@
 <div align="center">
-<img src="frappe_appointment/public/frappe-appointment-logo.png" height="128" alt="Frappe Appointment">
+<img src="appointment/public/frappe-appointment-logo.png" height="128" alt="Frappe Appointment">
 <h2>Frappe Appointment</h2>
    Frappe app designed to streamline meeting scheduling with smart integrations.
 </div>
 <br>
 <div align="center">
-<img src="frappe_appointment/public/featured-image.png" width="1050" alt="Frappe Appointment">
+<img src="appointment/public/featured-image.png" width="1050" alt="Frappe Appointment">
 </div>
 
 ## Key Features
@@ -22,7 +22,7 @@ Run the following command to install the app.
 
 ```bash
 bench get-app git@github.com:rtCamp/frappe-appointment.git
-bench --site [site-name] install-app frappe_appointment
+bench --site [site-name] install-app appointment
 bench --site [site-name] migrate
 bench restart
 ```

@@ -68,20 +68,20 @@ export const PolicyForm = ({
 
   // Fetch templates
   const { data: templatesData } = useFrappeGetCall<{ message: { templates: PolicyTemplate[] } }>(
-    'frappe_appointment.scheduler.api.policy_manager.get_policy_templates',
+    'appointment.scheduler.api.policy_manager.get_policy_templates',
     undefined,
     'policy-templates'
   );
 
   // Fetch organization services if organization
   const { data: servicesData } = useFrappeGetCall<{ message: { services: Array<{ name: string; service_name: string; duration?: number; price?: number }> } }>(
-    'frappe_appointment.scheduler.api.policy_manager.get_organization_services',
+    'appointment.scheduler.api.policy_manager.get_organization_services',
     userType === 'organization' ? { organization_id: entityId } : undefined,
     `org-services-${entityId || ''}`
   );
 
-  const { call: createPolicy, loading: creating } = useFrappePostCall('frappe_appointment.scheduler.api.policy_manager.create_policy_from_template');
-  const { call: updatePolicy, loading: updating } = useFrappePostCall('frappe_appointment.scheduler.api.policy_manager.update_policy');
+  const { call: createPolicy, loading: creating } = useFrappePostCall('appointment.scheduler.api.policy_manager.create_policy_from_template');
+  const { call: updatePolicy, loading: updating } = useFrappePostCall('appointment.scheduler.api.policy_manager.update_policy');
 
   const templates = templatesData?.message?.templates || [];
   const services = servicesData?.message?.services || [];

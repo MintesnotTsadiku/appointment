@@ -29,7 +29,7 @@ export const ShareLinkModal = ({ open, onOpenChange }: ShareLinkModalProps) => {
       booking_url: string; 
       event_type_id: string;
     } 
-  }>('frappe_appointment.onboarding.get_booking_url');
+  }>('appointment.onboarding.get_booking_url');
 
   const bookingData = data?.message;
   const bookingUrl = bookingData?.booking_url 
