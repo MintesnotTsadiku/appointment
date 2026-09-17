@@ -10,7 +10,7 @@ frappe.ui.form.on("User Appointment Availability", {
       frm.set_value("user", frappe.session.user);
       frappe.call({
         method:
-          "appointment.appointment.doctype.appointment_settings.appointment_settings.get_default_email_template",
+          "appointment.frappe_appointment.doctype.appointment_settings.appointment_settings.get_default_email_template",
         callback: function (r) {
           if (r.message?.personal) {
             frm.set_value("response_email_template", r.message.personal);
@@ -32,7 +32,7 @@ frappe.ui.form.on("User Appointment Availability", {
     } else {
       frappe.call({
         method:
-          "appointment.appointment.doctype.user_appointment_availability.user_appointment_availability.is_slug_available",
+          "appointment.frappe_appointment.doctype.user_appointment_availability.user_appointment_availability.is_slug_available",
         args: {
           slug: frm.doc.slug,
         },

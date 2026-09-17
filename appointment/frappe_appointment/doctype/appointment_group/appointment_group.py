@@ -17,7 +17,7 @@ from frappe.utils import (
 )
 
 from appointment.constants import APPOINTMENT_GROUP, APPOINTMENT_TIME_SLOT
-from appointment.appointment.doctype.appointment_time_slot.appointment_time_slot import (
+from appointment.frappe_appointment.doctype.appointment_time_slot.appointment_time_slot import (
     GoogleBadRequest,
     get_all_unavailable_google_calendar_slots_for_day,
 )

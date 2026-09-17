@@ -17,7 +17,7 @@ from appointment.constants import (
     APPOINTMENT_GROUP,
     USER_APPOINTMENT_AVAILABILITY,
 )
-from appointment.appointment.doctype.appointment_group.appointment_group import (
+from appointment.frappe_appointment.doctype.appointment_group.appointment_group import (
     hours_to_time_slot,
     is_valid_time_slots,
     vaild_date,

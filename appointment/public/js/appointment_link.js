@@ -241,7 +241,7 @@ $(document).on("form-refresh", function (event, frm) {
         }
         frappe.call({
           method:
-            "appointment.appointment.doctype.appointment_group.appointment_group.get_appointment_groups_from_doctype",
+            "appointment.frappe_appointment.doctype.appointment_group.appointment_group.get_appointment_groups_from_doctype",
           args: {
             doctype: doctype,
           },
@@ -465,7 +465,7 @@ $(document).on("form-refresh", function (event, frm) {
           if (dialog.fields_dict.appointment_group.$input.val()) {
             frappe.call({
               method:
-                "appointment.appointment.doctype.appointment_group.appointment_group.get_appointment_group_from_id",
+                "appointment.frappe_appointment.doctype.appointment_group.appointment_group.get_appointment_group_from_id",
               args: {
                 appointment_group_id: dialog.fields_dict.appointment_group.$input.val(),
               },

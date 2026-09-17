@@ -5,7 +5,7 @@ import frappe
 import frappe.utils
 import pytz
 
-from appointment.appointment.doctype.appointment_group.appointment_group import _get_time_slots_for_day
+from appointment.frappe_appointment.doctype.appointment_group.appointment_group import _get_time_slots_for_day
 from appointment.helpers.overrides import add_response_code
 from appointment.helpers.utils import duration_to_string
 from appointment.overrides.event_override import _create_event_for_appointment_group
