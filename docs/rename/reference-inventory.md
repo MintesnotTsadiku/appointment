@@ -1,97 +1,68 @@
-# Reference inventory: `frappe_appointment` → `appointment`
+# Appointment app reference inventory
 
-Captured against `beta/architecture-review` (`70c9ca6`) before the rename, on the
-cloned verified site `meet-beta-refactor-rename-to-appointment-4c34e9.localhost`.
+Canonical identity:
 
-## App identity and package metadata
+| Surface | Value |
+| --- | --- |
+| Display title | **Appointment** |
+| Frappe app identifier | `appointment` |
+| Python package | `appointment` |
+| Repository | existing `appointment` repository (history retained) |
 
-| Surface | Before | After |
-| --- | --- | --- |
-| Outer Python package | `frappe_appointment/` | `appointment/` |
-| `hooks.py app_name` | `"scheduler"` | `"appointment"` |
-| `hooks.py app_title` | `"Scheduler"` | `"Appointment"` |
-| App switcher `name` | `"frappe_appointment"` | `"appointment"` |
-| App switcher route | `app/appointment` (already) | `app/appointment` |
-| `pyproject.toml` name | `frappe_appointment` | `appointment` |
-| `.frappe-worktree.json app_name` | `frappe_appointment` | `appointment` |
-| Advisory app reference | `frappe_appointment` | `appointment` |
-| `.gitignore` build paths | `frappe_appointment/...` | `appointment/...` |
+The app was previously identified as `frappe_appointment` / `scheduler`, but it
+was never released under those names, so no compatibility shim, migration or
+legacy alias is retained. Everything below is canonical.
 
-Business DocType names and the inner module package names are intentionally
-unchanged: `appointment/frappe_appointment`, `appointment/scheduler`,
-`appointment/payments`, `appointment/channels`, `appointment/tasks`,
-`appointment/assistants`.
+## Package layout
 
-## Module Def ownership
+- App root: `appointment/` (contains `hooks.py`, `modules.txt`, `patches.txt`).
+- Inner module packages keep their historical names:
+  `appointment/frappe_appointment`, `appointment/scheduler`,
+  `appointment/payments`, `appointment/channels`, `appointment/tasks`,
+  `appointment/assistants`.
+- Business DocType names are unchanged.
 
-Six modules were owned by `frappe_appointment`; all now record
-`app_name = appointment`:
+## Hooks
 
-`Assistants`, `Channels`, `Frappe Appointment`, `Payments`, `Scheduler`, `Tasks`.
+- `app_name = "appointment"`, `app_title = "Appointment"`.
+- App switcher `name = "appointment"`, route `app/appointment`, logo
+  `/assets/appointment/appointment-logo.png`.
+- Scheduled jobs: `appointment.tasks.reminder_google_calendar_auth.send_reminder_mail`
+  and `appointment.tasks.verify_availability.verify_appointment_group_members_availabilty`.
+- `after_install` imports email templates (after doctypes exist);
+  `after_migrate` reconciles them and the `Appointment Settings` defaults.
+- `override_doctype_class`, `doc_events`, `has_permission` and
+  `override_whitelisted_methods` all point at `appointment.*`.
+
+## Modules
+
+`modules.txt` declares `Frappe Appointment`, `Scheduler`, `Payments`,
+`Channels`, `Tasks`, `Assistants`; `Module Def.app_name` is `appointment` for
+all six.
 
 ## Patches
 
-`appointment/patches.txt` preserves the five historical dotted paths exactly so
-existing `Patch Log` rows are never replayed:
+`appointment/patches.txt` lists only canonical paths:
 
-- `frappe_appointment.patches.v0_1.change_fieldtype_to_duration`
-- `frappe_appointment.patches.v0_1.rename_assistant_activity_log`
-- `frappe_appointment.patches.v0_1.add_appointment_manager_role`
-- `frappe_appointment.patches.v0_1.add_event_creator`
-- `frappe_appointment.patches.v0_1.update_route_appointment`
+- pre-model-sync: `appointment.patches.v0_1.change_fieldtype_to_duration`,
+  `appointment.patches.v0_1.rename_assistant_activity_log`
+- post-model-sync: `appointment.patches.v0_1.add_appointment_manager_role`,
+  `appointment.patches.v0_1.add_event_creator`,
+  `appointment.patches.v0_1.update_route_appointment`
 
-A new first `pre_model_sync` patch, `appointment.patches.v0_1.rename_app_identity`,
-rewrites stored identity on upgraded sites. It resolves through the
-`frappe_appointment` shim while a site is still on the legacy installed-app name.
+## APIs, frontend and assets
 
-## Scheduled jobs
-
-- `frappe_appointment.tasks.reminder_google_calendar_auth.send_reminder_mail`
-- `frappe_appointment.tasks.verify_availability.verify_appointment_group_members_availabilty`
-
-Both were migrated in the database and are emitted from `hooks.py` as
-`appointment.tasks...`.
-
-## Whitelisted dotted paths and frontend API strings
-
-- `appointment/api/gateway.py` maps ~150 public actions; all now
-  `appointment.*`.
-- All frontend `useFrappe*Call`, `frappe.call` and `fetch` API strings now use
-  `appointment.*`.
-- The PWA service worker and Vite proxy patterns now match
-  `/assets/appointment/...` and `/api/method/appointment.*`.
-
-## Assets
-
-- Asset namespace moved from `/assets/frappe_appointment/...` to
-  `/assets/appointment/...` (hooks `app_include_js`, app switcher logo,
-  `www/index.html`, `frontend/index.html`, vite base path, PWA icons).
-- `frappe-appointment-logo.png` renamed to `appointment-logo.png`.
-- The isolated runtime maps `sites/assets/appointment` to the app's `public/`
-  directory.
-
-## Database-backed references (pre-migration scan)
-
-A column-level scan of `_7a56dacebfb6a8ce` found literal `frappe_appointment`
-references in:
-
-- `tabDefaultValue.defvalue` (installed apps global, `__global`)
-- `tabModule Def.app_name`
-- `tabScheduled Job Type.method`
-- `tabWorkspace.app` (`Scheduler Appointment`, `Tasks and Assistants`)
-- `tabInstalled Application.app_name`
-- `tabPatch Log.patch` (historical, intentionally retained)
-- `tabEmail Template.subject` (`[Frappe Appointment]` prefix)
-
-All except the historical `Patch Log` rows are rewritten by the migration.
-Remaining matches for the string `Frappe Appointment` are the unchanged business
-module name.
+- `appointment/api/gateway.py` maps the public actions under `appointment.*`.
+- All frontend `frappe.call`/`useFrappe*Call`/`fetch` strings and the Vite proxy
+  patterns use `appointment.*` and `/assets/appointment/...`.
+- Asset namespace: `/assets/appointment/...` (built from
+  `appointment/public/`); the logo file is `appointment/appointment-logo.png`.
 
 ## Verification entry points
 
-- `appointment/tests/test_app_identity.py` — install, module ownership,
-  scheduled jobs, shim, data counts.
+- `appointment/tests/test_app_identity.py` — canonical install, app path, public
+  API import, module ownership, scheduled jobs, business-count preservation.
 - `qa/manifests/appointment_admin_smoke.yaml` — Desk + landing.
 - `qa/manifests/appointment_scheduling_smoke.yaml` — provider workspace,
   configuration, reception and booking routes.
-- `baseline:` `/home/minte/projects/appointment-clone-backups/rename-source-20260917`
+- `appointment/qa_runner.py` — Agent Plane browser QA entry point.

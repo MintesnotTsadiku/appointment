@@ -7,13 +7,13 @@ Guide for how the landing page brand/theme colors are stored in Frappe, exposed 
 ## Backend (Landing Page Settings Doctype)
 
 - **Fields** (singleton): brand colors (`brand_primary_color`, `brand_secondary_color`, `brand_accent_gold`, `brand_accent_teal`) plus full theme fields for dark/light backgrounds, text, borders/glows (rgba), status chips, gradients, etc. Colors use `Color` fieldtype when hex is enough; rgba strings use `Data`. Logos use `Attach Image`.
-- **Definition**: `frappe_appointment/scheduler/doctype/landing_page_settings/landing_page_settings.json`
+- **Definition**: `appointment/scheduler/doctype/landing_page_settings/landing_page_settings.json`
 - **Defaults**: `setup_theme_colors.setup_default_colors()` writes a canonical palette (hex + rgba + shadows) into the singleton.
 - **Presets**: `COLOR_PRESETS` in `landing_page_settings.py` and `apply_color_preset` let admins one-click apply curated palettes.
 
 ## Backend API
 
-- Public endpoint: `/api/method/frappe_appointment.scheduler.api.theme.get_theme_colors` (`allow_guest=True`).
+- Public endpoint: `/api/method/appointment.scheduler.api.theme.get_theme_colors` (`allow_guest=True`).
 - Returns structured colors with safe fallbacks:
   - `dark` / `light`: background, text, border, glow (dark), shadow (light)
   - `accent`: primary, secondary, success, warning (default/hover/light)
@@ -61,10 +61,10 @@ Guide for how the landing page brand/theme colors are stored in Frappe, exposed 
 
 ## Key code references
 
-- Backend fields: `frappe_appointment/scheduler/doctype/landing_page_settings/landing_page_settings.json`
-- Presets: `frappe_appointment/scheduler/doctype/landing_page_settings/landing_page_settings.py`
-- Defaults script: `frappe_appointment/scheduler/setup_theme_colors.py`
-- Theme API: `frappe_appointment/scheduler/api/theme.py`
+- Backend fields: `appointment/scheduler/doctype/landing_page_settings/landing_page_settings.json`
+- Presets: `appointment/scheduler/doctype/landing_page_settings/landing_page_settings.py`
+- Defaults script: `appointment/scheduler/setup_theme_colors.py`
+- Theme API: `appointment/scheduler/api/theme.py`
 - Frontend theme fetch/apply: `frontend/src/components/theme-provider/useThemeColors.ts`, `frontend/src/components/theme-provider/index.tsx`
 - Landing page brand variants: `frontend/src/lib/landingPageSettings.ts` (`useApplyBrandColors`)
 - CSS var consumers: `frontend/src/global.css`

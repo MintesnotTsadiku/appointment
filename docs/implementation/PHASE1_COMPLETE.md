@@ -293,7 +293,7 @@ Roles:
 
 1. **Organization Onboarding Backend APIs**
    ```python
-   # frappe_appointment/organization.py
+   # appointment/organization.py
    - create_organization()
    - add_provider_to_org()
    - invite_provider()
@@ -302,7 +302,7 @@ Roles:
 
 2. **Organization Booking APIs**
    ```python
-   # Update frappe_appointment/api/personal_meet.py
+   # Update appointment/api/personal_meet.py
    - Support organization slug lookup
    - Implement provider assignment (customer choice, round-robin)
    - Handle org-level availability
@@ -310,7 +310,7 @@ Roles:
 
 3. **Delegation APIs**
    ```python
-   # frappe_appointment/delegation.py
+   # appointment/delegation.py
    - invite_delegate()
    - accept_invitation()
    - revoke_access()
@@ -328,11 +328,11 @@ Roles:
 ## 📁 Files Changed/Created
 
 ### New Files:
-1. `frappe_appointment/frappe_appointment/doctype/organization/` - Organization doctype
-2. `frappe_appointment/frappe_appointment/doctype/organization_manager/` - Org Manager child
-3. `frappe_appointment/frappe_appointment/doctype/provider_delegation/` - Delegation child
-4. `frappe_appointment/fixtures/doctype.json` - Exported doctypes
-5. `frappe_appointment/fixtures/role.json` - Exported roles
+1. `appointment/appointment/doctype/organization/` - Organization doctype
+2. `appointment/appointment/doctype/organization_manager/` - Org Manager child
+3. `appointment/appointment/doctype/provider_delegation/` - Delegation child
+4. `appointment/fixtures/doctype.json` - Exported doctypes
+5. `appointment/fixtures/role.json` - Exported roles
 6. `docs/planning/MULTI_BUSINESS_IMPLEMENTATION.md` - Architecture doc
 7. `docs/testing/CURRENT_TESTING_GUIDE.md` - Testing guide
 8. `docs/technical/FIXTURES_GUIDE.md` - Fixtures how-to
@@ -340,10 +340,10 @@ Roles:
 10. `docs/implementation/PHASE1_COMPLETE.md` - THIS FILE
 
 ### Modified Files:
-1. `frappe_appointment/scheduler/doctype/provider/provider.json` - Added org & delegation fields
-2. `frappe_appointment/onboarding.py` - Added User Appointment Availability creation
-3. `frappe_appointment/api/personal_meet.py` - Enhanced error handling
-4. `frappe_appointment/hooks.py` - Added fixtures configuration
+1. `appointment/scheduler/doctype/provider/provider.json` - Added org & delegation fields
+2. `appointment/onboarding.py` - Added User Appointment Availability creation
+3. `appointment/api/personal_meet.py` - Enhanced error handling
+4. `appointment/hooks.py` - Added fixtures configuration
 5. `frontend/src/pages/appointment/index.tsx` - Improved error handling
 
 ---

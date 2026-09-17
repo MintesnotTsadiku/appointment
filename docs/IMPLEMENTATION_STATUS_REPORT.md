@@ -418,44 +418,44 @@
 ### API Endpoints ✅
 
 **Onboarding APIs** (✅ Complete):
-- `frappe_appointment.onboarding.get_progress`
-- `frappe_appointment.onboarding.save_profile`
-- `frappe_appointment.onboarding.connect_calendar`
-- `frappe_appointment.onboarding.save_availability`
-- `frappe_appointment.onboarding.create_service`
-- `frappe_appointment.onboarding.complete`
-- `frappe_appointment.onboarding.update_step`
-- `frappe_appointment.onboarding.save_organization_profile`
-- `frappe_appointment.onboarding.add_organization_provider`
-- `frappe_appointment.onboarding.get_organization_providers`
-- `frappe_appointment.onboarding.save_organization_availability`
-- `frappe_appointment.onboarding.create_organization_service`
-- `frappe_appointment.onboarding.get_organization_booking_urls`
-- `frappe_appointment.onboarding.get_organization_services`
-- `frappe_appointment.onboarding.set_onboarding_type`
-- `frappe_appointment.onboarding.reset_onboarding_type`
+- `appointment.onboarding.get_progress`
+- `appointment.onboarding.save_profile`
+- `appointment.onboarding.connect_calendar`
+- `appointment.onboarding.save_availability`
+- `appointment.onboarding.create_service`
+- `appointment.onboarding.complete`
+- `appointment.onboarding.update_step`
+- `appointment.onboarding.save_organization_profile`
+- `appointment.onboarding.add_organization_provider`
+- `appointment.onboarding.get_organization_providers`
+- `appointment.onboarding.save_organization_availability`
+- `appointment.onboarding.create_organization_service`
+- `appointment.onboarding.get_organization_booking_urls`
+- `appointment.onboarding.get_organization_services`
+- `appointment.onboarding.set_onboarding_type`
+- `appointment.onboarding.reset_onboarding_type`
 
 **Dashboard APIs** (✅ Complete):
-- `frappe_appointment.dashboard.stats`
-- `frappe_appointment.dashboard.recent_activity`
-- `frappe_appointment.dashboard.alerts`
+- `appointment.dashboard.stats`
+- `appointment.dashboard.recent_activity`
+- `appointment.dashboard.alerts`
 
 **Booking APIs** (✅ Complete):
-- `frappe_appointment.api.personal_meet.get_meeting_windows`
-- `frappe_appointment.api.personal_meet.get_time_slots`
-- `frappe_appointment.api.personal_meet.book_time_slot`
-- `frappe_appointment.api.personal_meet.get_organization_meeting_windows`
-- `frappe_appointment.api.personal_meet.get_organization_services`
-- `frappe_appointment.api.personal_meet.get_multi_provider_time_slots`
+- `appointment.api.personal_meet.get_meeting_windows`
+- `appointment.api.personal_meet.get_time_slots`
+- `appointment.api.personal_meet.book_time_slot`
+- `appointment.api.personal_meet.get_organization_meeting_windows`
+- `appointment.api.personal_meet.get_organization_services`
+- `appointment.api.personal_meet.get_multi_provider_time_slots`
 
 **Policy & Slot Engine APIs** (✅ Complete - Sprint 2):
-- `frappe_appointment.scheduler.api.quote.get_booking_quote`
-- `frappe_appointment.scheduler.api.policy_manager.get_policy_templates`
-- `frappe_appointment.scheduler.api.policy_manager.create_policy_from_template`
-- `frappe_appointment.scheduler.api.policy_manager.get_user_policies`
-- `frappe_appointment.scheduler.api.policy_manager.update_policy`
-- `frappe_appointment.scheduler.api.policy_manager.delete_policy`
-- `frappe_appointment.scheduler.api.policy_manager.get_organization_services`
+- `appointment.scheduler.api.quote.get_booking_quote`
+- `appointment.scheduler.api.policy_manager.get_policy_templates`
+- `appointment.scheduler.api.policy_manager.create_policy_from_template`
+- `appointment.scheduler.api.policy_manager.get_user_policies`
+- `appointment.scheduler.api.policy_manager.update_policy`
+- `appointment.scheduler.api.policy_manager.delete_policy`
+- `appointment.scheduler.api.policy_manager.get_organization_services`
 
 **Missing APIs** (⏳ Not Started):
 - Payment APIs (Sprint 3)

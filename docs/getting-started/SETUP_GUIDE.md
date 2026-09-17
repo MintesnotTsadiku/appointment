@@ -529,8 +529,8 @@ After completing this setup:
    - Test mobile responsiveness
 
 2. **Review Code**
-   - Check `frappe_appointment/helpers/availability.py`
-   - Review `frappe_appointment/api/` endpoints
+   - Check `appointment/helpers/availability.py`
+   - Review `appointment/api/` endpoints
    - Explore doctype structures
 
 3. **Read Documentation**

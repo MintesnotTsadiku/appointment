@@ -172,7 +172,7 @@ Both plans agree on:
 #### **AvailabilityManager (Orchestrator) - Expert's Approach**
 
 ```python
-# frappe_appointment/scheduler/helpers/availability_manager.py
+# appointment/scheduler/helpers/availability_manager.py
 
 class AvailabilityManager:
     """
@@ -187,19 +187,19 @@ class AvailabilityManager:
         """
         if service_doc.booking_mode == "Appointment":
             # Use existing Slot Engine (unchanged)
-            from frappe_appointment.scheduler.helpers.slot_engine import SlotEngine
+            from appointment.scheduler.helpers.slot_engine import SlotEngine
             return SlotEngine.get_slots(service_doc, start_date)
             
         elif service_doc.booking_mode == "Resource":
             # Use new Inventory Engine
-            from frappe_appointment.scheduler.helpers.inventory_engine import InventoryEngine
+            from appointment.scheduler.helpers.inventory_engine import InventoryEngine
             return InventoryEngine.get_stock_availability(
                 service_doc, start_date, end_date
             )
             
         elif service_doc.booking_mode == "Task":
             # Use new Task Engine
-            from frappe_appointment.scheduler.helpers.task_engine import TaskEngine
+            from appointment.scheduler.helpers.task_engine import TaskEngine
             return TaskEngine.get_capacity(service_doc, start_date)
     
     def validate_booking(self, service_doc, booking_data):
@@ -217,7 +217,7 @@ class AvailabilityManager:
 #### **Inventory Engine - Expert's Approach (Enhanced)**
 
 ```python
-# frappe_appointment/scheduler/helpers/inventory_engine.py
+# appointment/scheduler/helpers/inventory_engine.py
 
 def check_resource_conflict(
     resource_name, 

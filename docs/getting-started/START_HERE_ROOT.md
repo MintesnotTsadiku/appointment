@@ -114,7 +114,7 @@ Quick test to verify everything works:
 ### Simple 3-Step Swap
 
 ```bash
-cd /home/minte/projects/frappe-bench/apps/frappe_appointment/frontend/src/pages
+cd /home/minte/projects/frappe-bench/apps/appointment/frontend/src/pages
 
 # 1. Backup
 cp -r appointment appointment-backup

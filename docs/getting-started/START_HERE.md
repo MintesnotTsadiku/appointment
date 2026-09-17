@@ -42,7 +42,7 @@ I've set up your Ethiopian Scheduling Platform project with complete documentati
 ### Step 1: Quick Read (15 minutes)
 ```bash
 # Open in your favorite editor/browser
-cd /home/minte/projects/frappe-bench/apps/frappe_appointment/docs
+cd /home/minte/projects/frappe-bench/apps/appointment/docs
 
 # Read in this order:
 1. ../planning/PROJECT_SUMMARY.md          (10 min - overview)
@@ -121,7 +121,7 @@ exit()
 
 **Run exploration script:**
 ```bash
-bench --site appointment.com console < apps/frappe_appointment/scripts/explore_app.py
+bench --site appointment.com console < apps/appointment/scripts/explore_app.py
 ```
 
 ---
@@ -140,9 +140,9 @@ bench --site appointment.com console < apps/frappe_appointment/scripts/explore_a
 - ✅ Do the learning exercises
 - ✅ (Optional) Setup Google Calendar
 - ✅ Browse the codebase:
-  - `frappe_appointment/helpers/availability.py`
-  - `frappe_appointment/api/`
-  - `frappe_appointment/frappe_appointment/doctype/`
+  - `appointment/helpers/availability.py`
+  - `appointment/api/`
+  - `appointment/appointment/doctype/`
 
 **End of Day:**
 - ✅ Review ../planning/PROJECT_STATUS_TRACKER.md

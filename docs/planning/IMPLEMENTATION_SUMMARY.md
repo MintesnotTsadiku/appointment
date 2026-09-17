@@ -233,20 +233,20 @@ frontend/src/
 
 ### Onboarding APIs
 ```
-GET  /api/method/frappe_appointment.onboarding.get_progress
-POST /api/method/frappe_appointment.onboarding.save_profile
-POST /api/method/frappe_appointment.onboarding.connect_calendar
-POST /api/method/frappe_appointment.onboarding.save_availability
-POST /api/method/frappe_appointment.onboarding.create_service
-POST /api/method/frappe_appointment.onboarding.complete
-POST /api/method/frappe_appointment.onboarding.update_step
+GET  /api/method/appointment.onboarding.get_progress
+POST /api/method/appointment.onboarding.save_profile
+POST /api/method/appointment.onboarding.connect_calendar
+POST /api/method/appointment.onboarding.save_availability
+POST /api/method/appointment.onboarding.create_service
+POST /api/method/appointment.onboarding.complete
+POST /api/method/appointment.onboarding.update_step
 ```
 
 ### Dashboard APIs
 ```
-GET /api/method/frappe_appointment.dashboard.stats
-GET /api/method/frappe_appointment.dashboard.recent_activity
-GET /api/method/frappe_appointment.dashboard.alerts
+GET /api/method/appointment.dashboard.stats
+GET /api/method/appointment.dashboard.recent_activity
+GET /api/method/appointment.dashboard.alerts
 ```
 
 ### User Info API
@@ -259,12 +259,12 @@ GET /api/method/frappe.auth.get_logged_user
 ## Next Steps (Backend Implementation Needed)
 
 1. **Create Onboarding Module**
-   - `frappe_appointment/scheduler/api/onboarding.py`
+   - `appointment/scheduler/api/onboarding.py`
    - Implement all onboarding endpoints
    - Create OnboardingProgress doctype
 
 2. **Create Dashboard Module**
-   - `frappe_appointment/scheduler/api/dashboard.py`
+   - `appointment/scheduler/api/dashboard.py`
    - Implement stats calculation
    - Implement activity feed
    - Implement alerts logic

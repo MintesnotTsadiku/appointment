@@ -257,7 +257,7 @@ All components are **WCAG 2.1 AA compliant**:
 
 1. **Start the dev server** (if not running):
    ```bash
-   cd /home/minte/projects/frappe-bench/apps/frappe_appointment/frontend
+   cd /home/minte/projects/frappe-bench/apps/appointment/frontend
    npm run dev
    ```
 

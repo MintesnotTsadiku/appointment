@@ -115,7 +115,7 @@ Client → CDN/Edge Function → Frappe Backend
 ```javascript
 // edge-gateway.js (Cloudflare Worker)
 const ACTION_MAP = {
-  'a1b2c3d4': 'frappe_appointment.scheduler.doctype.landing_page_settings.api.get_landing_page_settings',
+  'a1b2c3d4': 'appointment.scheduler.doctype.landing_page_settings.api.get_landing_page_settings',
   // ... other mappings
 };
 

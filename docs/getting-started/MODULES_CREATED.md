@@ -7,7 +7,7 @@
 ## 📦 Created Modules
 
 ### 1. Scheduler Module ✅
-**Location**: `frappe_appointment/scheduler/`
+**Location**: `appointment/scheduler/`
 
 **Structure**:
 ```
@@ -23,7 +23,7 @@ scheduler/
 ---
 
 ### 2. Payments Module ✅
-**Location**: `frappe_appointment/payments/`
+**Location**: `appointment/payments/`
 
 **Structure**:
 ```
@@ -40,7 +40,7 @@ payments/
 ---
 
 ### 3. Channels Module ✅
-**Location**: `frappe_appointment/channels/`
+**Location**: `appointment/channels/`
 
 **Structure**:
 ```
@@ -64,7 +64,7 @@ All modules are:
 - ✅ `__init__.py` files present
 - ✅ Subdirectories (doctype/, api/, helpers/) created
 - ✅ Migrations completed
-- ✅ Can be imported: `import frappe_appointment.scheduler`
+- ✅ Can be imported: `import appointment.scheduler`
 
 ---
 
@@ -94,15 +94,15 @@ Now that modules are created, you can:
 
 **Import paths**:
 ```python
-import frappe_appointment.scheduler
-import frappe_appointment.payments
-import frappe_appointment.channels
+import appointment.scheduler
+import appointment.payments
+import appointment.channels
 ```
 
 **File paths**:
-- Scheduler: `/home/minte/projects/frappe-bench/apps/frappe_appointment/frappe_appointment/scheduler/`
-- Payments: `/home/minte/projects/frappe-bench/apps/frappe_appointment/frappe_appointment/payments/`
-- Channels: `/home/minte/projects/frappe-bench/apps/frappe_appointment/frappe_appointment/channels/`
+- Scheduler: `/home/minte/projects/frappe-bench/apps/appointment/appointment/scheduler/`
+- Payments: `/home/minte/projects/frappe-bench/apps/appointment/appointment/payments/`
+- Channels: `/home/minte/projects/frappe-bench/apps/appointment/appointment/channels/`
 
 ---
 
@@ -116,7 +116,7 @@ Payments
 Channels
 ```
 
-**Location**: `frappe_appointment/modules.txt`
+**Location**: `appointment/modules.txt`
 
 ---
 

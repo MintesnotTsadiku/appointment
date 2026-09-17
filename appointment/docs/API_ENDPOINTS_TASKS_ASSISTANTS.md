@@ -6,7 +6,7 @@ This document describes all API endpoints available for the Tasks and Assistants
 
 All endpoints use Frappe's standard API pattern:
 - Direct access: `/api/method/{module_path}.{function_name}`
-- Example: `/api/method/frappe_appointment.tasks.api.task_api.create_task`
+- Example: `/api/method/appointment.tasks.api.task_api.create_task`
 
 ## Authentication
 
@@ -21,7 +21,7 @@ All endpoints require authentication unless specified otherwise. Use Frappe's st
 ### Task CRUD Operations
 
 #### Create Task
-- **Endpoint**: `frappe_appointment.tasks.api.task_api.create_task`
+- **Endpoint**: `appointment.tasks.api.task_api.create_task`
 - **Method**: POST
 - **Description**: Create a new task
 - **Parameters**:
@@ -56,7 +56,7 @@ All endpoints require authentication unless specified otherwise. Use Frappe's st
   ```
 
 #### Get Task
-- **Endpoint**: `frappe_appointment.tasks.api.task_api.get_task`
+- **Endpoint**: `appointment.tasks.api.task_api.get_task`
 - **Method**: GET
 - **Description**: Get a single task by name
 - **Parameters**:
@@ -71,7 +71,7 @@ All endpoints require authentication unless specified otherwise. Use Frappe's st
   ```
 
 #### List Tasks
-- **Endpoint**: `frappe_appointment.tasks.api.task_api.list_tasks`
+- **Endpoint**: `appointment.tasks.api.task_api.list_tasks`
 - **Method**: GET
 - **Description**: List tasks with filtering and pagination
 - **Parameters**:
@@ -92,7 +92,7 @@ All endpoints require authentication unless specified otherwise. Use Frappe's st
   ```
 
 #### Update Task
-- **Endpoint**: `frappe_appointment.tasks.api.task_api.update_task`
+- **Endpoint**: `appointment.tasks.api.task_api.update_task`
 - **Method**: POST
 - **Description**: Update an existing task
 - **Parameters**:
@@ -108,7 +108,7 @@ All endpoints require authentication unless specified otherwise. Use Frappe's st
   ```
 
 #### Delete Task
-- **Endpoint**: `frappe_appointment.tasks.api.task_api.delete_task`
+- **Endpoint**: `appointment.tasks.api.task_api.delete_task`
 - **Method**: POST
 - **Description**: Delete a task
 - **Parameters**:
@@ -124,7 +124,7 @@ All endpoints require authentication unless specified otherwise. Use Frappe's st
 ### Task Workflow Operations
 
 #### Update Task Status
-- **Endpoint**: `frappe_appointment.tasks.api.task_api.update_task_status`
+- **Endpoint**: `appointment.tasks.api.task_api.update_task_status`
 - **Method**: POST
 - **Description**: Update task status with workflow validation
 - **Parameters**:
@@ -133,7 +133,7 @@ All endpoints require authentication unless specified otherwise. Use Frappe's st
 - **Response**: Updated task object
 
 #### Assign Task
-- **Endpoint**: `frappe_appointment.tasks.api.task_api.assign_task`
+- **Endpoint**: `appointment.tasks.api.task_api.assign_task`
 - **Method**: POST
 - **Description**: Assign a task to a VA Profile
 - **Parameters**:
@@ -144,7 +144,7 @@ All endpoints require authentication unless specified otherwise. Use Frappe's st
 ### Task Queries
 
 #### Get Tasks by Client
-- **Endpoint**: `frappe_appointment.tasks.api.task_api.get_tasks_by_client`
+- **Endpoint**: `appointment.tasks.api.task_api.get_tasks_by_client`
 - **Method**: GET
 - **Description**: Get all tasks for a specific client
 - **Parameters**:
@@ -153,7 +153,7 @@ All endpoints require authentication unless specified otherwise. Use Frappe's st
 - **Response**: List of tasks
 
 #### Get Tasks by Assignee
-- **Endpoint**: `frappe_appointment.tasks.api.task_api.get_tasks_by_assignee`
+- **Endpoint**: `appointment.tasks.api.task_api.get_tasks_by_assignee`
 - **Method**: GET
 - **Description**: Get all tasks assigned to a VA
 - **Parameters**:
@@ -162,7 +162,7 @@ All endpoints require authentication unless specified otherwise. Use Frappe's st
 - **Response**: List of tasks
 
 #### Get Daily Briefing Tasks
-- **Endpoint**: `frappe_appointment.tasks.api.task_api.get_daily_briefing_tasks`
+- **Endpoint**: `appointment.tasks.api.task_api.get_daily_briefing_tasks`
 - **Method**: GET
 - **Description**: Get tasks marked for daily briefing
 - **Parameters**:
@@ -171,7 +171,7 @@ All endpoints require authentication unless specified otherwise. Use Frappe's st
 - **Response**: List of daily briefing tasks
 
 #### Get Task Statistics
-- **Endpoint**: `frappe_appointment.tasks.api.task_api.get_task_statistics`
+- **Endpoint**: `appointment.tasks.api.task_api.get_task_statistics`
 - **Method**: GET
 - **Description**: Get task statistics (counts by status)
 - **Parameters**:
@@ -184,7 +184,7 @@ All endpoints require authentication unless specified otherwise. Use Frappe's st
 #### Task Categories
 
 ##### Create Task Category
-- **Endpoint**: `frappe_appointment.tasks.api.task_master_data_api.create_task_category`
+- **Endpoint**: `appointment.tasks.api.task_master_data_api.create_task_category`
 - **Method**: POST
 - **Parameters**:
   ```json
@@ -195,13 +195,13 @@ All endpoints require authentication unless specified otherwise. Use Frappe's st
   ```
 
 ##### List Task Categories
-- **Endpoint**: `frappe_appointment.tasks.api.task_master_data_api.list_task_categories`
+- **Endpoint**: `appointment.tasks.api.task_master_data_api.list_task_categories`
 - **Method**: GET
 
 #### Task Templates
 
 ##### Create Task Template
-- **Endpoint**: `frappe_appointment.tasks.api.task_master_data_api.create_task_template`
+- **Endpoint**: `appointment.tasks.api.task_master_data_api.create_task_template`
 - **Method**: POST
 - **Parameters**:
   ```json
@@ -221,15 +221,15 @@ All endpoints require authentication unless specified otherwise. Use Frappe's st
   ```
 
 ##### Get Task Template
-- **Endpoint**: `frappe_appointment.tasks.api.task_master_data_api.get_task_template`
+- **Endpoint**: `appointment.tasks.api.task_master_data_api.get_task_template`
 - **Method**: GET
 
 ##### List Task Templates
-- **Endpoint**: `frappe_appointment.tasks.api.task_master_data_api.list_task_templates`
+- **Endpoint**: `appointment.tasks.api.task_master_data_api.list_task_templates`
 - **Method**: GET
 
 ##### Create Tasks from Template
-- **Endpoint**: `frappe_appointment.tasks.api.task_master_data_api.create_tasks_from_template`
+- **Endpoint**: `appointment.tasks.api.task_master_data_api.create_tasks_from_template`
 - **Method**: POST
 - **Description**: Create multiple tasks from a template for a client
 - **Parameters**:
@@ -240,7 +240,7 @@ All endpoints require authentication unless specified otherwise. Use Frappe's st
 #### Task Projects
 
 ##### Create Task Project
-- **Endpoint**: `frappe_appointment.tasks.api.task_master_data_api.create_task_project`
+- **Endpoint**: `appointment.tasks.api.task_master_data_api.create_task_project`
 - **Method**: POST
 - **Parameters**:
   ```json
@@ -255,16 +255,16 @@ All endpoints require authentication unless specified otherwise. Use Frappe's st
   ```
 
 ##### Get Task Project
-- **Endpoint**: `frappe_appointment.tasks.api.task_master_data_api.get_task_project`
+- **Endpoint**: `appointment.tasks.api.task_master_data_api.get_task_project`
 - **Method**: GET
 - **Description**: Get project with all its tasks
 
 ##### List Task Projects
-- **Endpoint**: `frappe_appointment.tasks.api.task_master_data_api.list_task_projects`
+- **Endpoint**: `appointment.tasks.api.task_master_data_api.list_task_projects`
 - **Method**: GET
 
 ##### Get Project Statistics
-- **Endpoint**: `frappe_appointment.tasks.api.task_master_data_api.get_project_statistics`
+- **Endpoint**: `appointment.tasks.api.task_master_data_api.get_project_statistics`
 - **Method**: GET
 - **Description**: Get task counts by status for a project
 
@@ -275,7 +275,7 @@ All endpoints require authentication unless specified otherwise. Use Frappe's st
 ### VA Profile CRUD Operations
 
 #### Create VA Profile
-- **Endpoint**: `frappe_appointment.assistants.api.assistant_api.create_va_profile`
+- **Endpoint**: `appointment.assistants.api.assistant_api.create_va_profile`
 - **Method**: POST
 - **Parameters**:
   ```json
@@ -295,25 +295,25 @@ All endpoints require authentication unless specified otherwise. Use Frappe's st
   ```
 
 #### Get VA Profile
-- **Endpoint**: `frappe_appointment.assistants.api.assistant_api.get_va_profile`
+- **Endpoint**: `appointment.assistants.api.assistant_api.get_va_profile`
 - **Method**: GET
 
 #### List VA Profiles
-- **Endpoint**: `frappe_appointment.assistants.api.assistant_api.list_va_profiles`
+- **Endpoint**: `appointment.assistants.api.assistant_api.list_va_profiles`
 - **Method**: GET
 
 #### Update VA Profile
-- **Endpoint**: `frappe_appointment.assistants.api.assistant_api.update_va_profile`
+- **Endpoint**: `appointment.assistants.api.assistant_api.update_va_profile`
 - **Method**: POST
 
 #### Delete VA Profile
-- **Endpoint**: `frappe_appointment.assistants.api.assistant_api.delete_va_profile`
+- **Endpoint**: `appointment.assistants.api.assistant_api.delete_va_profile`
 - **Method**: POST
 
 ### Client Profile CRUD Operations
 
 #### Create Client Profile
-- **Endpoint**: `frappe_appointment.assistants.api.assistant_api.create_client_profile`
+- **Endpoint**: `appointment.assistants.api.assistant_api.create_client_profile`
 - **Method**: POST
 - **Parameters**:
   ```json
@@ -327,25 +327,25 @@ All endpoints require authentication unless specified otherwise. Use Frappe's st
   ```
 
 #### Get Client Profile
-- **Endpoint**: `frappe_appointment.assistants.api.assistant_api.get_client_profile`
+- **Endpoint**: `appointment.assistants.api.assistant_api.get_client_profile`
 - **Method**: GET
 
 #### List Client Profiles
-- **Endpoint**: `frappe_appointment.assistants.api.assistant_api.list_client_profiles`
+- **Endpoint**: `appointment.assistants.api.assistant_api.list_client_profiles`
 - **Method**: GET
 
 #### Update Client Profile
-- **Endpoint**: `frappe_appointment.assistants.api.assistant_api.update_client_profile`
+- **Endpoint**: `appointment.assistants.api.assistant_api.update_client_profile`
 - **Method**: POST
 
 #### Delete Client Profile
-- **Endpoint**: `frappe_appointment.assistants.api.assistant_api.delete_client_profile`
+- **Endpoint**: `appointment.assistants.api.assistant_api.delete_client_profile`
 - **Method**: POST
 
 ### Assignment CRUD Operations
 
 #### Create Assignment
-- **Endpoint**: `frappe_appointment.assistants.api.assistant_api.create_assignment`
+- **Endpoint**: `appointment.assistants.api.assistant_api.create_assignment`
 - **Method**: POST
 - **Parameters**:
   ```json
@@ -359,25 +359,25 @@ All endpoints require authentication unless specified otherwise. Use Frappe's st
   ```
 
 #### Get Assignment
-- **Endpoint**: `frappe_appointment.assistants.api.assistant_api.get_assignment`
+- **Endpoint**: `appointment.assistants.api.assistant_api.get_assignment`
 - **Method**: GET
 
 #### List Assignments
-- **Endpoint**: `frappe_appointment.assistants.api.assistant_api.list_assignments`
+- **Endpoint**: `appointment.assistants.api.assistant_api.list_assignments`
 - **Method**: GET
 
 #### Update Assignment
-- **Endpoint**: `frappe_appointment.assistants.api.assistant_api.update_assignment`
+- **Endpoint**: `appointment.assistants.api.assistant_api.update_assignment`
 - **Method**: POST
 
 #### Delete Assignment
-- **Endpoint**: `frappe_appointment.assistants.api.assistant_api.delete_assignment`
+- **Endpoint**: `appointment.assistants.api.assistant_api.delete_assignment`
 - **Method**: POST
 
 ### Assignment Queries
 
 #### Get Clients for VA
-- **Endpoint**: `frappe_appointment.assistants.api.assistant_api.get_clients_for_va`
+- **Endpoint**: `appointment.assistants.api.assistant_api.get_clients_for_va`
 - **Method**: GET
 - **Description**: Get all clients assigned to a VA
 - **Parameters**:
@@ -385,7 +385,7 @@ All endpoints require authentication unless specified otherwise. Use Frappe's st
   - `status`: Assignment status filter (default: "active")
 
 #### Get VAs for Client
-- **Endpoint**: `frappe_appointment.assistants.api.assistant_api.get_vas_for_client`
+- **Endpoint**: `appointment.assistants.api.assistant_api.get_vas_for_client`
 - **Method**: GET
 - **Description**: Get all VAs assigned to a client
 - **Parameters**:
@@ -393,7 +393,7 @@ All endpoints require authentication unless specified otherwise. Use Frappe's st
   - `status`: Assignment status filter (default: "active")
 
 #### Get Assignment Statistics
-- **Endpoint**: `frappe_appointment.assistants.api.assistant_api.get_assignment_statistics`
+- **Endpoint**: `appointment.assistants.api.assistant_api.get_assignment_statistics`
 - **Method**: GET
 - **Description**: Get assignment statistics (counts by model and status)
 
@@ -402,7 +402,7 @@ All endpoints require authentication unless specified otherwise. Use Frappe's st
 #### Assistant Skill CRUD Operations
 
 ##### Create Assistant Skill
-- **Endpoint**: `frappe_appointment.assistants.api.assistant_skill_api.create_assistant_skill`
+- **Endpoint**: `appointment.assistants.api.assistant_skill_api.create_assistant_skill`
 - **Method**: POST
 - **Parameters**:
   ```json
@@ -414,25 +414,25 @@ All endpoints require authentication unless specified otherwise. Use Frappe's st
   ```
 
 ##### Get Assistant Skill
-- **Endpoint**: `frappe_appointment.assistants.api.assistant_skill_api.get_assistant_skill`
+- **Endpoint**: `appointment.assistants.api.assistant_skill_api.get_assistant_skill`
 - **Method**: GET
 
 ##### List Assistant Skills
-- **Endpoint**: `frappe_appointment.assistants.api.assistant_skill_api.list_assistant_skills`
+- **Endpoint**: `appointment.assistants.api.assistant_skill_api.list_assistant_skills`
 - **Method**: GET
 
 ##### Update Assistant Skill
-- **Endpoint**: `frappe_appointment.assistants.api.assistant_skill_api.update_assistant_skill`
+- **Endpoint**: `appointment.assistants.api.assistant_skill_api.update_assistant_skill`
 - **Method**: POST
 
 ##### Delete Assistant Skill
-- **Endpoint**: `frappe_appointment.assistants.api.assistant_skill_api.delete_assistant_skill`
+- **Endpoint**: `appointment.assistants.api.assistant_skill_api.delete_assistant_skill`
 - **Method**: POST
 
 #### VA Skill Assignment Operations
 
 ##### Assign Skill to VA
-- **Endpoint**: `frappe_appointment.assistants.api.assistant_skill_api.assign_skill_to_va`
+- **Endpoint**: `appointment.assistants.api.assistant_skill_api.assign_skill_to_va`
 - **Method**: POST
 - **Parameters**:
   - `va_profile`: VA Profile name (required)
@@ -440,16 +440,16 @@ All endpoints require authentication unless specified otherwise. Use Frappe's st
   - `proficiency_level`: basic|intermediate|advanced|expert (optional, default: intermediate)
 
 ##### Remove Skill from VA
-- **Endpoint**: `frappe_appointment.assistants.api.assistant_skill_api.remove_skill_from_va`
+- **Endpoint**: `appointment.assistants.api.assistant_skill_api.remove_skill_from_va`
 - **Method**: POST
 
 ##### Get VA Skills
-- **Endpoint**: `frappe_appointment.assistants.api.assistant_skill_api.get_va_skills`
+- **Endpoint**: `appointment.assistants.api.assistant_skill_api.get_va_skills`
 - **Method**: GET
 - **Description**: Get all skills assigned to a VA Profile
 
 ##### Get VAs by Skill
-- **Endpoint**: `frappe_appointment.assistants.api.assistant_skill_api.get_vas_by_skill`
+- **Endpoint**: `appointment.assistants.api.assistant_skill_api.get_vas_by_skill`
 - **Method**: GET
 - **Description**: Get all VAs that have a specific skill
 - **Parameters**:
@@ -465,7 +465,7 @@ All endpoints require authentication unless specified otherwise. Use Frappe's st
 ```python
 import requests
 
-url = "http://localhost:8000/api/method/frappe_appointment.tasks.api.task_api.create_task"
+url = "http://localhost:8000/api/method/appointment.tasks.api.task_api.create_task"
 data = {
     "title": "Review monthly reports",
     "description": "Review and analyze monthly performance reports",
@@ -482,7 +482,7 @@ result = response.json()
 ### Example: Get Tasks for a Client
 
 ```python
-url = "http://localhost:8000/api/method/frappe_appointment.tasks.api.task_api.get_tasks_by_client"
+url = "http://localhost:8000/api/method/appointment.tasks.api.task_api.get_tasks_by_client"
 params = {
     "client_profile": "CLIENT-00001",
     "status": "in_progress"
@@ -495,7 +495,7 @@ result = response.json()
 ### Example: Create VA Profile
 
 ```python
-url = "http://localhost:8000/api/method/frappe_appointment.assistants.api.assistant_api.create_va_profile"
+url = "http://localhost:8000/api/method/appointment.assistants.api.assistant_api.create_va_profile"
 data = {
     "full_name": "John Doe",
     "email": "john.doe@example.com",
@@ -514,7 +514,7 @@ result = response.json()
 ### Example: Create Assignment
 
 ```python
-url = "http://localhost:8000/api/method/frappe_appointment.assistants.api.assistant_api.create_assignment"
+url = "http://localhost:8000/api/method/appointment.assistants.api.assistant_api.create_assignment"
 data = {
     "va_profile": "VA-00001",
     "client_profile": "CLIENT-00001",

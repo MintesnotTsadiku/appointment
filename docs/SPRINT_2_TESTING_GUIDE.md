@@ -93,9 +93,9 @@ else:
 ### 3.1 Test get_applicable_policies()
 
 ```bash
-cd /home/minte/projects/frappe_appointment && bench --site appointment.com console <<< "
+cd /home/minte/projects/appointment && bench --site appointment.com console <<< "
 import frappe
-from frappe_appointment.scheduler.helpers.policy_engine import get_applicable_policies
+from appointment.scheduler.helpers.policy_engine import get_applicable_policies
 
 # Get services, locations, providers
 services = frappe.get_all('Service', fields=['name'], limit=1)
@@ -123,7 +123,7 @@ else:
 ```bash
 cd /home/minte/projects/frappe-bench && bench --site appointment.com console <<< "
 import frappe
-from frappe_appointment.scheduler.helpers.policy_engine import calculate_booking_quote
+from appointment.scheduler.helpers.policy_engine import calculate_booking_quote
 from datetime import datetime, timedelta
 
 # Get test data
@@ -169,7 +169,7 @@ else:
 ```bash
 cd /home/minte/projects/frappe-bench && bench --site appointment.com console <<< "
 import frappe
-from frappe_appointment.scheduler.helpers.slot_engine import check_conflicts
+from appointment.scheduler.helpers.slot_engine import check_conflicts
 from datetime import datetime, timedelta
 
 # Get test data
@@ -210,7 +210,7 @@ else:
 Open your browser and navigate to:
 
 ```
-http://localhost:8000/api/method/frappe_appointment.scheduler.api.quote.get_booking_quote?service_name=SVC-00001
+http://localhost:8000/api/method/appointment.scheduler.api.quote.get_booking_quote?service_name=SVC-00001
 ```
 
 Replace `SVC-00001` with an actual service name from your database.
@@ -237,7 +237,7 @@ Replace `SVC-00001` with an actual service name from your database.
 ### 5.2 Test Quote API with All Parameters
 
 ```
-http://localhost:8000/api/method/frappe_appointment.scheduler.api.quote.get_booking_quote?service_name=SVC-00001&location_name=LOC-00001&provider_name=PROV-00001&appointment_date=2025-01-25
+http://localhost:8000/api/method/appointment.scheduler.api.quote.get_booking_quote?service_name=SVC-00001&location_name=LOC-00001&provider_name=PROV-00001&appointment_date=2025-01-25
 ```
 
 ## Step 6: Test Conflict Detection via UI
@@ -260,7 +260,7 @@ http://localhost:8000/api/method/frappe_appointment.scheduler.api.quote.get_book
 ```bash
 cd /home/minte/projects/frappe-bench && bench --site appointment.com console <<< "
 import frappe
-from frappe_appointment.scheduler.helpers.slot_engine import check_conflicts
+from appointment.scheduler.helpers.slot_engine import check_conflicts
 from datetime import datetime
 
 # Get a recent appointment
@@ -307,7 +307,7 @@ else:
 ```bash
 cd /home/minte/projects/frappe-bench && bench --site appointment.com console <<< "
 import frappe
-from frappe_appointment.scheduler.helpers.slot_engine import filter_by_working_hours
+from appointment.scheduler.helpers.slot_engine import filter_by_working_hours
 
 # Get test data
 locations = frappe.get_all('Location', fields=['name'], limit=1)
@@ -364,7 +364,7 @@ else:
 ```bash
 cd /home/minte/projects/frappe-bench && bench --site appointment.com console <<< "
 import frappe
-from frappe_appointment.scheduler.helpers.slot_engine import apply_buffer_times
+from appointment.scheduler.helpers.slot_engine import apply_buffer_times
 from datetime import datetime, timedelta
 
 # Get an existing appointment
@@ -440,8 +440,8 @@ else:
 ```bash
 cd /home/minte/projects/frappe-bench && bench --site appointment.com console <<< "
 import frappe
-from frappe_appointment.scheduler.helpers.policy_engine import get_applicable_policies, calculate_booking_quote
-from frappe_appointment.scheduler.helpers.slot_engine import check_conflicts
+from appointment.scheduler.helpers.policy_engine import get_applicable_policies, calculate_booking_quote
+from appointment.scheduler.helpers.slot_engine import check_conflicts
 from datetime import datetime, timedelta
 
 print('=== Sprint 2 Integration Test ===\n')

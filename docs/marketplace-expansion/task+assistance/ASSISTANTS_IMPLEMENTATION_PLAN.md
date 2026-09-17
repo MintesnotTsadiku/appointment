@@ -48,7 +48,7 @@ Build robust, full-featured task management module with Daily Briefing pattern (
 ### **Backend Tasks**
 
 #### **1.1 Create Tasks Module Structure**
-**Location**: `frappe_appointment/tasks/`
+**Location**: `appointment/tasks/`
 
 **Steps**:
 1. Create module directory structure
@@ -59,10 +59,10 @@ Build robust, full-featured task management module with Daily Briefing pattern (
 
 **Acceptance Criteria**:
 - ✅ Module appears in Frappe module list
-- ✅ Can import: `import frappe_appointment.tasks`
+- ✅ Can import: `import appointment.tasks`
 
 #### **1.2 Create Task Doctype**
-**Location**: `frappe_appointment/tasks/doctype/task/task.json`
+**Location**: `appointment/tasks/doctype/task/task.json`
 
 **Fields**:
 ```json
@@ -92,7 +92,7 @@ Build robust, full-featured task management module with Daily Briefing pattern (
 }
 ```
 
-**Controller**: `frappe_appointment/tasks/doctype/task/task.py`
+**Controller**: `appointment/tasks/doctype/task/task.py`
 
 **Validation Logic**:
 - Status transitions validated (can't go backwards)
@@ -105,7 +105,7 @@ Build robust, full-featured task management module with Daily Briefing pattern (
 - ✅ Priority and deadline validation works
 
 #### **1.3 Create Task Category Doctype**
-**Location**: `frappe_appointment/tasks/doctype/task_category/task_category.json`
+**Location**: `appointment/tasks/doctype/task_category/task_category.json`
 
 **Fields**:
 ```json
@@ -133,7 +133,7 @@ Build robust, full-featured task management module with Daily Briefing pattern (
 - ✅ Default categories created via fixtures or migration
 
 #### **1.4 Create Task Template Doctype**
-**Location**: `frappe_appointment/tasks/doctype/task_template/task_template.json`
+**Location**: `appointment/tasks/doctype/task_template/task_template.json`
 
 **Fields**:
 ```json
@@ -158,7 +158,7 @@ Build robust, full-featured task management module with Daily Briefing pattern (
 - ✅ Can create tasks from templates
 
 #### **1.5 Create Task Project Doctype** (Optional)
-**Location**: `frappe_appointment/tasks/doctype/task_project/task_project.json`
+**Location**: `appointment/tasks/doctype/task_project/task_project.json`
 
 **Fields**:
 ```json
@@ -179,7 +179,7 @@ Build robust, full-featured task management module with Daily Briefing pattern (
 - ✅ Progress calculation updates automatically
 
 #### **1.6 Create Task API Endpoints**
-**Location**: `frappe_appointment/tasks/api/task_api.py`
+**Location**: `appointment/tasks/api/task_api.py`
 
 **Endpoints**:
 ```python
@@ -220,7 +220,7 @@ def create_task_from_template(template_name, client_profile=None):
 - ✅ Pagination works for large task lists
 
 #### **1.7 Create Task Helpers**
-**Location**: `frappe_appointment/tasks/helpers/task_engine.py`
+**Location**: `appointment/tasks/helpers/task_engine.py`
 
 **Functions**:
 ```python
@@ -320,7 +320,7 @@ Build assistants module foundation, extend Provider to Virtual Assistant, create
 ### **Backend Tasks**
 
 #### **2.1 Create Assistants Module Structure**
-**Location**: `frappe_appointment/assistants/`
+**Location**: `appointment/assistants/`
 
 **Steps**:
 1. Create module directory structure
@@ -331,10 +331,10 @@ Build assistants module foundation, extend Provider to Virtual Assistant, create
 
 **Acceptance Criteria**:
 - ✅ Module appears in Frappe module list
-- ✅ Can import: `import frappe_appointment.assistants`
+- ✅ Can import: `import appointment.assistants`
 
 #### **2.2 Create Virtual Assistant Doctype**
-**Location**: `frappe_appointment/assistants/doctype/virtual_assistant/virtual_assistant.json`
+**Location**: `appointment/assistants/doctype/virtual_assistant/virtual_assistant.json`
 
 **Note**: Virtual Assistant extends Provider (reuses Provider doctype from scheduler module)
 
@@ -360,7 +360,7 @@ Build assistants module foundation, extend Provider to Virtual Assistant, create
 }
 ```
 
-**Controller**: `frappe_appointment/assistants/doctype/virtual_assistant/virtual_assistant.py`
+**Controller**: `appointment/assistants/doctype/virtual_assistant/virtual_assistant.py`
 
 **Validation Logic**:
 - `max_clients` must be 1, 2, or 3
@@ -373,7 +373,7 @@ Build assistants module foundation, extend Provider to Virtual Assistant, create
 - ✅ Client count validation works
 
 #### **2.3 Create Client Profile Doctype**
-**Location**: `frappe_appointment/assistants/doctype/client_profile/client_profile.json`
+**Location**: `appointment/assistants/doctype/client_profile/client_profile.json`
 
 **Fields**:
 ```json
@@ -395,7 +395,7 @@ Build assistants module foundation, extend Provider to Virtual Assistant, create
 }
 ```
 
-**Controller**: `frappe_appointment/assistants/doctype/client_profile/client_profile.py`
+**Controller**: `appointment/assistants/doctype/client_profile/client_profile.py`
 
 **Validation Logic**:
 - Email must be unique
@@ -407,7 +407,7 @@ Build assistants module foundation, extend Provider to Virtual Assistant, create
 - ✅ Subscription management works
 
 #### **2.4 Create Assistant Client Assignment Doctype**
-**Location**: `frappe_appointment/assistants/doctype/assistant_client_assignment/assistant_client_assignment.json`
+**Location**: `appointment/assistants/doctype/assistant_client_assignment/assistant_client_assignment.json`
 
 **Fields**:
 ```json
@@ -423,7 +423,7 @@ Build assistants module foundation, extend Provider to Virtual Assistant, create
 }
 ```
 
-**Controller**: `frappe_appointment/assistants/doctype/assistant_client_assignment/assistant_client_assignment.py`
+**Controller**: `appointment/assistants/doctype/assistant_client_assignment/assistant_client_assignment.py`
 
 **Validation Logic**:
 - Can't assign if assistant already at max_clients
@@ -436,7 +436,7 @@ Build assistants module foundation, extend Provider to Virtual Assistant, create
 - ✅ Status management works
 
 #### **2.5 Create Assistant Skill Doctype**
-**Location**: `frappe_appointment/assistants/doctype/assistant_skill/assistant_skill.json`
+**Location**: `appointment/assistants/doctype/assistant_skill/assistant_skill.json`
 
 **Fields**:
 ```json
@@ -453,7 +453,7 @@ Build assistants module foundation, extend Provider to Virtual Assistant, create
 - ✅ Skills can be linked to Virtual Assistant
 
 #### **2.6 Implement Basic Matching Algorithm**
-**Location**: `frappe_appointment/assistants/helpers/matching_engine.py`
+**Location**: `appointment/assistants/helpers/matching_engine.py`
 
 **Functions**:
 ```python
@@ -490,7 +490,7 @@ def assign_client_to_assistant(client_profile_name, assistant_name, assignment_t
 - ✅ Assignment creation updates counts correctly
 
 #### **2.7 Create Assistant API Endpoints**
-**Location**: `frappe_appointment/assistants/api/assistant_api.py`
+**Location**: `appointment/assistants/api/assistant_api.py`
 
 **Endpoints**:
 ```python
@@ -721,7 +721,7 @@ Enable assistants to manage 2-3 clients simultaneously with workload balancing, 
 ### **Backend Tasks**
 
 #### **3.1 Create Workload Distribution Doctype**
-**Location**: `frappe_appointment/assistants/doctype/workload_distribution/workload_distribution.json`
+**Location**: `appointment/assistants/doctype/workload_distribution/workload_distribution.json`
 
 **Fields**:
 ```json
@@ -742,7 +742,7 @@ Enable assistants to manage 2-3 clients simultaneously with workload balancing, 
 **Purpose**: Track daily workload distribution across clients
 
 #### **3.2 Implement Workload Balancer**
-**Location**: `frappe_appointment/assistants/helpers/workload_balancer.py`
+**Location**: `appointment/assistants/helpers/workload_balancer.py`
 
 **Functions**:
 ```python
@@ -769,7 +769,7 @@ def get_workload_summary(assistant_name, start_date, end_date):
 - Avoid overloading assistants
 
 #### **3.4 Create Workload API**
-**Location**: `frappe_appointment/assistants/api/workload_api.py`
+**Location**: `appointment/assistants/api/workload_api.py`
 
 **Endpoints**:
 ```python
@@ -836,7 +836,7 @@ Integrate AI tools to enhance assistant efficiency and productivity.
 ### **Backend Tasks**
 
 #### **4.1 Create AI Augmentation Layer**
-**Location**: `frappe_appointment/assistants/helpers/ai_augmentation.py`
+**Location**: `appointment/assistants/helpers/ai_augmentation.py`
 
 **Functions**:
 ```python
@@ -850,7 +850,7 @@ def check_ai_tools_enabled(assistant_name):
 ```
 
 #### **4.2 Implement Email Draft Generator**
-**Location**: `frappe_appointment/assistants/ai_tools/email_draft_generator.py`
+**Location**: `appointment/assistants/ai_tools/email_draft_generator.py`
 
 **Functions**:
 ```python
@@ -866,7 +866,7 @@ def refine_email_draft(draft, feedback):
 **Integration**: OpenAI API or similar
 
 #### **4.3 Implement Research Assistant**
-**Location**: `frappe_appointment/assistants/ai_tools/research_assistant.py`
+**Location**: `appointment/assistants/ai_tools/research_assistant.py`
 
 **Functions**:
 ```python
@@ -880,7 +880,7 @@ def compare_competitors(company_names):
 ```
 
 #### **4.4 Implement Calendar Optimizer**
-**Location**: `frappe_appointment/assistants/ai_tools/calendar_optimizer.py`
+**Location**: `appointment/assistants/ai_tools/calendar_optimizer.py`
 
 **Functions**:
 ```python
@@ -894,7 +894,7 @@ def suggest_meeting_times(constraints):
 ```
 
 #### **4.5 Implement Document Processor**
-**Location**: `frappe_appointment/assistants/ai_tools/document_processor.py`
+**Location**: `appointment/assistants/ai_tools/document_processor.py`
 
 **Functions**:
 ```python
@@ -912,7 +912,7 @@ def extract_key_points(document_path):
 ```
 
 #### **4.6 Create AI Tools API**
-**Location**: `frappe_appointment/assistants/api/ai_tools_api.py`
+**Location**: `appointment/assistants/api/ai_tools_api.py`
 
 **Endpoints**:
 ```python
@@ -971,7 +971,7 @@ Add advanced features: project management, performance analytics, quality contro
 - Machine learning integration (future)
 
 #### **5.2 Performance Analytics**
-**Location**: `frappe_appointment/assistants/helpers/performance_tracker.py`
+**Location**: `appointment/assistants/helpers/performance_tracker.py`
 
 **Functions**:
 ```python

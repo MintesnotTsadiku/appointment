@@ -10,13 +10,13 @@
 
 ### 1. Module Structure ✅
 
-**Tasks Module** (`frappe_appointment/tasks/`):
+**Tasks Module** (`appointment/tasks/`):
 - ✅ `doctype/` directory created
 - ✅ `api/` directory created  
 - ✅ `helpers/` directory created
 - ✅ `__init__.py` files created
 
-**Assistants Module** (`frappe_appointment/assistants/`):
+**Assistants Module** (`appointment/assistants/`):
 - ✅ `doctype/` directory created
 - ✅ `api/` directory created
 - ✅ `helpers/` directory created
@@ -144,7 +144,7 @@ All doctypes created with full JSON definitions and Python controllers:
 
 ### 5. Demo Data Generation ✅
 
-**File Created**: `frappe_appointment/demo_data_assistants_tasks.py`
+**File Created**: `appointment/demo_data_assistants_tasks.py`
 
 **Generation Functions**:
 1. ✅ `generate_assistant_skills(count)` - Creates skill catalog

@@ -167,7 +167,7 @@ This would require:
 ### Booking URL Generation
 - Created automatically when Appointment Group is saved
 - Format: `/schedule/gr/{group-name}`
-- Managed by: `frappe_appointment/scheduler/booking_url_manager.py`
+- Managed by: `appointment/scheduler/booking_url_manager.py`
 
 ### Who Can Access
 - **Create Groups**: System Managers, users with permissions

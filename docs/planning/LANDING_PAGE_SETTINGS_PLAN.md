@@ -329,7 +329,7 @@
 4. Add validation scripts
 
 ### Phase 2: Backend API
-Create Python file: `/frappe_appointment/scheduler/api/landing_page.py`
+Create Python file: `/appointment/scheduler/api/landing_page.py`
 
 ```python
 import frappe
@@ -440,7 +440,7 @@ export interface LandingPageSettings {
 
 export async function getLandingPageSettings(language: string = 'en'): Promise<LandingPageSettings> {
   const response = await frappe.call({
-    method: 'frappe_appointment.scheduler.api.landing_page.get_landing_page_settings',
+    method: 'appointment.scheduler.api.landing_page.get_landing_page_settings',
     args: { language }
   });
   
@@ -449,7 +449,7 @@ export async function getLandingPageSettings(language: string = 'en'): Promise<L
 
 export async function clearLandingPageCache(): Promise<void> {
   await frappe.call({
-    method: 'frappe_appointment.scheduler.api.landing_page.clear_cache'
+    method: 'appointment.scheduler.api.landing_page.clear_cache'
   });
 }
 ```
@@ -484,13 +484,13 @@ const Hero = () => {
 ```
 
 ### Phase 5: Cache Management
-Add hooks in `/frappe_appointment/hooks.py`:
+Add hooks in `/appointment/hooks.py`:
 
 ```python
 doc_events = {
     "Landing Page Settings": {
-        "on_update": "frappe_appointment.scheduler.api.landing_page.clear_cache",
-        "after_insert": "frappe_appointment.scheduler.api.landing_page.clear_cache"
+        "on_update": "appointment.scheduler.api.landing_page.clear_cache",
+        "after_insert": "appointment.scheduler.api.landing_page.clear_cache"
     }
 }
 ```
@@ -545,7 +545,7 @@ frappe.ui.form.on('Landing Page Settings', {
         
         frm.add_custom_button(__('Clear Cache'), function() {
             frappe.call({
-                method: 'frappe_appointment.scheduler.api.landing_page.clear_cache',
+                method: 'appointment.scheduler.api.landing_page.clear_cache',
                 callback: function(r) {
                     frappe.show_alert({
                         message: __('Cache Cleared Successfully'),

@@ -17,7 +17,7 @@
 import frappe
 
 # Set onboarding type to "organization"
-result = frappe.call("frappe_appointment.onboarding.set_onboarding_type", {
+result = frappe.call("appointment.onboarding.set_onboarding_type", {
     "onboarding_type": "organization"
 })
 print(result)
@@ -34,7 +34,7 @@ print(f"Provider: {provider.name}, Type: {provider.onboarding_type}")
 ### Step 1: Save Organization Profile
 
 ```python
-result = frappe.call("frappe_appointment.onboarding.save_organization_profile", {
+result = frappe.call("appointment.onboarding.save_organization_profile", {
     "organization_name": "Test Clinic",
     "organization_type": "Healthcare",
     "email": "contact@testclinic.et",
@@ -62,7 +62,7 @@ print(f"Current Step: {provider.onboarding_current_step}")
 
 ```python
 # Add Provider 1
-result = frappe.call("frappe_appointment.onboarding.add_organization_provider", {
+result = frappe.call("appointment.onboarding.add_organization_provider", {
     "provider_name": "Dr. Sarah Johnson",
     "email": "sarah@testclinic.et",
     "phone": "+251911111111",
@@ -73,7 +73,7 @@ print(result)
 # Expected: {"success": True, "provider_id": "Dr. Sarah Johnson", "provider_name": "Dr. Sarah Johnson"}
 
 # Add Provider 2
-result = frappe.call("frappe_appointment.onboarding.add_organization_provider", {
+result = frappe.call("appointment.onboarding.add_organization_provider", {
     "provider_name": "Dr. Michael Chen",
     "email": "michael@testclinic.et",
     "phone": "+251922222222",
@@ -83,7 +83,7 @@ result = frappe.call("frappe_appointment.onboarding.add_organization_provider", 
 print(result)
 
 # Add Provider 3
-result = frappe.call("frappe_appointment.onboarding.add_organization_provider", {
+result = frappe.call("appointment.onboarding.add_organization_provider", {
     "provider_name": "Dr. Emily Rodriguez",
     "email": "emily@testclinic.et",
     "phone": "+251933333333",
@@ -93,7 +93,7 @@ result = frappe.call("frappe_appointment.onboarding.add_organization_provider", 
 print(result)
 
 # List all providers
-result = frappe.call("frappe_appointment.onboarding.get_organization_providers")
+result = frappe.call("appointment.onboarding.get_organization_providers")
 print(f"Provider Count: {len(result['providers'])}")
 for p in result['providers']:
     print(f"  - {p['provider_name']} ({p['user']})")
@@ -110,7 +110,7 @@ print(f"Current Step: {provider.onboarding_current_step}")
 ### Step 3: Save Organization Availability
 
 ```python
-result = frappe.call("frappe_appointment.onboarding.save_organization_availability", {
+result = frappe.call("appointment.onboarding.save_organization_availability", {
     "location_name": "Test Clinic - Main Branch",
     "address": "123 Test Street, Addis Ababa",
     "weekly_schedule": {
@@ -148,7 +148,7 @@ print(f"Current Step: {owner_provider.onboarding_current_step}")
 ### Step 4: Create Organization Service
 
 ```python
-result = frappe.call("frappe_appointment.onboarding.create_organization_service", {
+result = frappe.call("appointment.onboarding.create_organization_service", {
     "service_name": "General Consultation",
     "duration": 30,
     "price": 500,
@@ -197,7 +197,7 @@ print(f"Current Step: {owner_provider.onboarding_current_step}")
 
 ```python
 # Get URLs
-result = frappe.call("frappe_appointment.onboarding.get_organization_booking_urls")
+result = frappe.call("appointment.onboarding.get_organization_booking_urls")
 print(result)
 print(f"Organization URL: {result['organization_url']}")
 print("Service URLs:")
@@ -206,7 +206,7 @@ for svc in result['services']:
 # Expected: /schedule/org/test-clinic and /schedule/org/test-clinic/general-consultation
 
 # Complete onboarding
-result = frappe.call("frappe_appointment.onboarding.complete_organization_onboarding")
+result = frappe.call("appointment.onboarding.complete_organization_onboarding")
 print(result)
 # Expected: {"success": True, "onboarding_complete": True}
 
@@ -229,7 +229,7 @@ print(f"Provider Onboarding Complete: {provider.onboarding_complete}")
 
 ```python
 result = frappe.call(
-    "frappe_appointment.api.personal_meet.get_organization_meeting_windows",
+    "appointment.api.personal_meet.get_organization_meeting_windows",
     {
         "org_slug": "test-clinic",
         "service_slug": "General Consultation"
@@ -262,7 +262,7 @@ tomorrow = add_days(today(), 1)
 print(f"Testing date: {tomorrow}")
 
 result = frappe.call(
-    "frappe_appointment.api.personal_meet.get_time_slots",
+    "appointment.api.personal_meet.get_time_slots",
     {
         "duration_id": duration_id,  # From previous test
         "date": str(tomorrow),
@@ -314,7 +314,7 @@ print(f"  Provider: {first_slot['provider_name']} ({first_slot['provider_id']})"
 ```python
 # Using first_slot from previous test
 result = frappe.call(
-    "frappe_appointment.api.personal_meet.book_time_slot",
+    "appointment.api.personal_meet.book_time_slot",
     {
         "duration_id": duration_id,
         "date": str(tomorrow),
@@ -358,7 +358,7 @@ wrong_provider_id = "PRV-WRONG"
 
 try:
     result = frappe.call(
-        "frappe_appointment.api.personal_meet.book_time_slot",
+        "appointment.api.personal_meet.book_time_slot",
         {
             "duration_id": duration_id,
             "date": str(tomorrow),
@@ -388,7 +388,7 @@ for i in range(1, 4):
     
     try:
         booking_result = frappe.call(
-            "frappe_appointment.api.personal_meet.book_time_slot",
+            "appointment.api.personal_meet.book_time_slot",
             {
                 "duration_id": duration_id,
                 "date": str(tomorrow),
@@ -432,20 +432,20 @@ for provider_name, count in provider_booking_counts.items():
 ### Test Organization Meeting Windows
 
 ```bash
-curl "http://localhost:8000/api/method/frappe_appointment.api.personal_meet.get_organization_meeting_windows?org_slug=test-clinic&service_slug=General%20Consultation"
+curl "http://localhost:8000/api/method/appointment.api.personal_meet.get_organization_meeting_windows?org_slug=test-clinic&service_slug=General%20Consultation"
 ```
 
 ### Test Multi-Provider Time Slots
 
 ```bash
 # Replace with actual IDs from previous test
-curl "http://localhost:8000/api/method/frappe_appointment.api.personal_meet.get_time_slots?duration_id=7rdb483q9a&date=2025-11-18&user_timezone_offset=180&organization_id=Test%20Clinic&service_id=SRV-00001"
+curl "http://localhost:8000/api/method/appointment.api.personal_meet.get_time_slots?duration_id=7rdb483q9a&date=2025-11-18&user_timezone_offset=180&organization_id=Test%20Clinic&service_id=SRV-00001"
 ```
 
 ### Test Booking
 
 ```bash
-curl -X POST "http://localhost:8000/api/method/frappe_appointment.api.personal_meet.book_time_slot" \
+curl -X POST "http://localhost:8000/api/method/appointment.api.personal_meet.book_time_slot" \
   -H "Content-Type: application/json" \
   -d '{
     "duration_id": "7rdb483q9a",

@@ -175,8 +175,8 @@ This allows flexibility while maintaining a sensible default.
 ## Files Modified
 
 ### Backend:
-- `frappe_appointment/onboarding.py` - API endpoints
-- `frappe_appointment/scheduler/doctype/provider/provider.json` - Added field
+- `appointment/onboarding.py` - API endpoints
+- `appointment/scheduler/doctype/provider/provider.json` - Added field
 
 ### Frontend:
 - `frontend/src/context/onboarding/types.ts` - Type definitions

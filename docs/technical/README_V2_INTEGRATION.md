@@ -85,11 +85,11 @@ http://localhost:5173/v2/schedule/org/clinic/consultation
 
 **API Endpoints** - 100% Identical:
 ```
-✅ frappe_appointment.api.personal_meet.get_meeting_windows
-✅ frappe_appointment.api.personal_meet.get_organization_services
-✅ frappe_appointment.api.personal_meet.get_organization_meeting_windows
-✅ frappe_appointment.api.personal_meet.get_time_slots
-✅ frappe_appointment.api.personal_meet.book_time_slot
+✅ appointment.api.personal_meet.get_meeting_windows
+✅ appointment.api.personal_meet.get_organization_services
+✅ appointment.api.personal_meet.get_organization_meeting_windows
+✅ appointment.api.personal_meet.get_time_slots
+✅ appointment.api.personal_meet.book_time_slot
 ```
 
 **Parameters** - Byte-for-Byte Match:
@@ -223,7 +223,7 @@ When you're confident V2 is working perfectly:
 
 ```bash
 # Navigate to pages directory
-cd /home/minte/projects/frappe-bench/apps/frappe_appointment/frontend/src/pages
+cd /home/minte/projects/frappe-bench/apps/appointment/frontend/src/pages
 
 # Step 1: Backup old versions
 echo "Creating backups..."
@@ -447,7 +447,7 @@ If anything goes wrong:
 
 ```bash
 # Quick rollback (if you did Option 1 swap):
-cd /home/minte/projects/frappe-bench/apps/frappe_appointment/frontend/src/pages
+cd /home/minte/projects/frappe-bench/apps/appointment/frontend/src/pages
 
 rm -rf appointment organization-appointment
 mv appointment-backup-YYYYMMDD appointment

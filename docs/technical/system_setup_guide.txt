@@ -55,7 +55,7 @@ Note: Use the same OAuth credentials for other Frappe integrations like Gmail Th
 2. Frappe Appointment Setup
 Install the App (using bench)
 bench get-app git@github.com:rtCamp/frappe-appointment.git
-bench --site {sitename} install-app frappe_appointment
+bench --site {sitename} install-app appointment
 Configure Google Settings
 Steps:
 Log in as Administrator in Frappe.

@@ -405,13 +405,13 @@ All API calls should use the API Gateway pattern:
 import { gatewayGet, gatewayPost } from '@/lib/apiGateway';
 
 // Example: Fetch tasks
-const tasks = await gatewayGet('frappe_appointment.tasks.api.task_api.list_tasks', {
+const tasks = await gatewayGet('appointment.tasks.api.task_api.list_tasks', {
   filters: { status: 'in_progress' },
   page_length: 20
 });
 
 // Example: Create task
-const newTask = await gatewayPost('frappe_appointment.tasks.api.task_api.create_task', {
+const newTask = await gatewayPost('appointment.tasks.api.task_api.create_task', {
   title: 'Task Title',
   client_profile: 'CLIENT-00001',
   // ...

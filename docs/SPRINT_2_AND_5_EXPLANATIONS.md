@@ -117,7 +117,7 @@ Sprint 5 creates a **visual scheduling dashboard** for front-desk staff to manag
 
 ### Sprint 2 (Backend)
 - **Language**: Python (Frappe Framework)
-- **Location**: `frappe_appointment/scheduler/` module
+- **Location**: `appointment/scheduler/` module
 - **Files**: 
   - `helpers/slot_engine.py` (new)
   - `helpers/policy_engine.py` (new)
@@ -129,5 +129,5 @@ Sprint 5 creates a **visual scheduling dashboard** for front-desk staff to manag
 - **Backend**: Python (Frappe Framework)
 - **Location**: 
   - Frontend: `frontend/src/pages/desk/`
-  - Backend: `frappe_appointment/scheduler/api/desk.py` (new)
+  - Backend: `appointment/scheduler/api/desk.py` (new)
 

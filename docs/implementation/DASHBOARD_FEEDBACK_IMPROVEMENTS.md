@@ -147,7 +147,7 @@ const { data: progressData } = useFrappeGetCall<{
     selected_organization?: { name: string; organization_name: string; slug: string } | null;
   }
 }>(
-  'frappe_appointment.onboarding.get_progress',
+  'appointment.onboarding.get_progress',
   undefined,
   'onboarding-progress'
 );
@@ -218,7 +218,7 @@ const { data: progressData } = useFrappeGetCall<{
 ## Technical Notes
 
 ### API Dependencies
-- `frappe_appointment.onboarding.get_progress` - Used to determine account type and organization context
+- `appointment.onboarding.get_progress` - Used to determine account type and organization context
 - Returns `onboarding_type` and `selected_organization`
 
 ### Component Patterns

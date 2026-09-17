@@ -30,7 +30,7 @@ A **scheduling platform** that lets:
 - Basic rescheduling
 
 ### Custom Layer (What We're Building)
-Three custom modules within `frappe_appointment` app:
+Three custom modules within `appointment` app:
 
 1. **scheduler** module
    - Provider, Location, Service management

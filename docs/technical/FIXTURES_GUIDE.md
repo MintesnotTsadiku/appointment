@@ -18,7 +18,7 @@ When you run `bench migrate` or install the app on a new site, Frappe automatica
 
 ## ✅ What We've Added to Fixtures
 
-### 1. Roles (`frappe_appointment/fixtures/role.json`)
+### 1. Roles (`appointment/fixtures/role.json`)
 - **Organization Manager** - Manages multi-provider organizations
 - **Front Desk** - Handles bookings for organizations
 - **Assistant** - Manages calendars on behalf of providers
@@ -38,7 +38,7 @@ fixtures = [
     {"dt": "Property Setter", "filters": [...]},
     
     # Roles
-    "frappe_appointment.fixtures.role",
+    "appointment.fixtures.role",
     
     # DocTypes
     {"dt": "DocType", "filters": [["name", "in", ["Organization", "Organization Manager"]]]},
@@ -66,7 +66,7 @@ for field in ['modified', 'modified_by', 'creation', 'owner']:
     doc_dict.pop(field, None)
 
 # Write to file
-fixture_path = f'/home/minte/projects/frappe-bench/apps/frappe_appointment/frappe_appointment/fixtures/{doctype_name.lower().replace(\" \", \"_\")}.json'
+fixture_path = f'/home/minte/projects/frappe-bench/apps/appointment/appointment/fixtures/{doctype_name.lower().replace(\" \", \"_\")}.json'
 with open(fixture_path, 'w') as f:
     json.dump([doc_dict], f, indent=4, sort_keys=True, default=str)
 
@@ -85,7 +85,7 @@ bench --site appointment.com export-fixtures
 # This will:
 # 1. Read the fixtures config from hooks.py
 # 2. Export data matching the filters
-# 3. Save to frappe_appointment/fixtures/
+# 3. Save to appointment/fixtures/
 ```
 
 ### Method 3: Export Multiple Records (Bulk)
@@ -109,7 +109,7 @@ for role_name in roles:
         roles_data.append(role_dict)
 
 # Save to file
-with open('/home/minte/projects/frappe-bench/apps/frappe_appointment/frappe_appointment/fixtures/role.json', 'w') as f:
+with open('/home/minte/projects/frappe-bench/apps/appointment/appointment/fixtures/role.json', 'w') as f:
     json.dump(roles_data, f, indent=4, sort_keys=True, default=str)
 
 print(f'✅ Exported {len(roles_data)} roles')
@@ -136,7 +136,7 @@ for field in ['modified', 'modified_by', 'creation', 'owner']:
     settings_dict.pop(field, None)
 
 # Save to file
-with open('/home/minte/projects/frappe-bench/apps/frappe_appointment/frappe_appointment/fixtures/website_settings.json', 'w') as f:
+with open('/home/minte/projects/frappe-bench/apps/appointment/appointment/fixtures/website_settings.json', 'w') as f:
     json.dump([settings_dict], f, indent=4, sort_keys=True, default=str)
 
 print('✅ Exported Website Settings')
@@ -147,7 +147,7 @@ Then add to `hooks.py`:
 ```python
 fixtures = [
     # ... existing fixtures ...
-    "frappe_appointment.fixtures.website_settings",
+    "appointment.fixtures.website_settings",
 ]
 ```
 
@@ -222,8 +222,8 @@ bench --site appointment.com export-fixtures
 ### 3. Example Flow:
 ```
 User: bench migrate
-Frappe: Reading frappe_appointment/hooks.py...
-Frappe: Found fixture: frappe_appointment.fixtures.role
+Frappe: Reading appointment/hooks.py...
+Frappe: Found fixture: appointment.fixtures.role
 Frappe: Loading /path/to/fixtures/role.json...
 Frappe: Importing 4 roles...
 Frappe: ✅ Organization Manager
@@ -256,8 +256,8 @@ Frappe: ✅ Provider
 
 ### DocType Fixture (auto-exported from JSON files)
 The DocType JSON files already exist in:
-- `frappe_appointment/frappe_appointment/doctype/organization/organization.json`
-- `frappe_appointment/frappe_appointment/doctype/organization_manager/organization_manager.json`
+- `appointment/appointment/doctype/organization/organization.json`
+- `appointment/appointment/doctype/organization_manager/organization_manager.json`
 
 These are automatically synced when you use the fixture filter in hooks.py.
 
@@ -273,7 +273,7 @@ cd /home/minte/projects/frappe-bench
 bench new-site test.com --admin-password admin
 
 # Install app (fixtures auto-import)
-bench --site test.com install-app frappe_appointment
+bench --site test.com install-app appointment
 
 # Verify roles created
 bench --site test.com console <<< "
@@ -293,7 +293,7 @@ cd /home/minte/projects/frappe-bench
 bench --site appointment.com migrate
 
 # Check logs for fixture imports
-# You should see: "Updating customizations for frappe_appointment"
+# You should see: "Updating customizations for appointment"
 ```
 
 ### Test 3: Re-export After Changes
@@ -303,7 +303,7 @@ bench --site appointment.com migrate
 bench --site appointment.com export-fixtures
 
 # Commit the updated JSON files
-git add frappe_appointment/fixtures/
+git add appointment/fixtures/
 git commit -m "feat: update fixtures"
 ```
 
@@ -314,8 +314,8 @@ git commit -m "feat: update fixtures"
 ### 1. **Version Control**
 Always commit fixture files to git:
 ```bash
-git add frappe_appointment/fixtures/*.json
-git add frappe_appointment/hooks.py
+git add appointment/fixtures/*.json
+git add appointment/hooks.py
 git commit -m "feat: add organization roles and doctypes to fixtures"
 ```
 
@@ -353,7 +353,7 @@ Run `bench export-fixtures` after:
 Periodically test your app installation on a fresh site:
 ```bash
 bench new-site fresh-test.com --admin-password admin
-bench --site fresh-test.com install-app frappe_appointment
+bench --site fresh-test.com install-app appointment
 # Verify everything works
 bench drop-site fresh-test.com
 ```
@@ -370,13 +370,13 @@ bench --site appointment.com export-fixtures
 bench --site appointment.com import-fixtures
 
 # Check what fixtures are configured
-cat apps/frappe_appointment/frappe_appointment/hooks.py | grep -A 50 "fixtures ="
+cat apps/appointment/appointment/hooks.py | grep -A 50 "fixtures ="
 
 # List fixture files
-ls -lh apps/frappe_appointment/frappe_appointment/fixtures/
+ls -lh apps/appointment/appointment/fixtures/
 
 # View a fixture
-cat apps/frappe_appointment/frappe_appointment/fixtures/role.json | python3 -m json.tool
+cat apps/appointment/appointment/fixtures/role.json | python3 -m json.tool
 ```
 
 ---
@@ -461,7 +461,7 @@ bench --site appointment.com migrate
 ---
 
 **Last Updated**: 2025-11-16  
-**Location**: `/home/minte/projects/frappe-bench/apps/frappe_appointment/docs/technical/FIXTURES_GUIDE.md`
+**Location**: `/home/minte/projects/frappe-bench/apps/appointment/docs/technical/FIXTURES_GUIDE.md`
 
 
 

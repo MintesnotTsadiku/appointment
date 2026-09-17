@@ -1,14 +1,14 @@
 # Module Structure Reference
 
-> **Quick reference** for the module structure within `frappe_appointment` app
+> **Quick reference** for the module structure within `appointment` app
 
 ---
 
 ## 📁 Current Module Structure
 
 ```
-frappe_appointment/
-├── frappe_appointment/              # Original module (upstream)
+appointment/
+├── appointment/              # Original module (upstream)
 │   ├── doctype/
 │   │   ├── appointment_group/
 │   │   ├── user_appointment_availability/
@@ -48,7 +48,7 @@ Payments
 Channels
 ```
 
-**Location**: `frappe_appointment/modules.txt`
+**Location**: `appointment/modules.txt`
 
 ---
 
@@ -56,7 +56,7 @@ Channels
 
 - **Module names**: Title case (Scheduler, Payments, Channels)
 - **Directory names**: Lowercase (scheduler/, payments/, channels/)
-- **Import paths**: `frappe_appointment.scheduler`, `frappe_appointment.payments`, `frappe_appointment.channels`
+- **Import paths**: `appointment.scheduler`, `appointment.payments`, `appointment.channels`
 
 ---
 
@@ -64,18 +64,18 @@ Channels
 
 ### Scheduler Module
 - **Doctypes**: Provider, Location, Service, EventType, Appointment, Policy
-- **APIs**: `/api/method/frappe_appointment.scheduler.api.*`
+- **APIs**: `/api/method/appointment.scheduler.api.*`
 - **Helpers**: Availability calculation, conflict detection, policy engine
 
 ### Payments Module
 - **Doctypes**: PaymentIntent
-- **APIs**: `/api/method/frappe_appointment.payments.webhook.*`
+- **APIs**: `/api/method/appointment.payments.webhook.*`
 - **Drivers**: Payment provider implementations
 - **Helpers**: Payment processing, signature verification
 
 ### Channels Module
 - **Doctypes**: Notification
-- **APIs**: `/api/method/frappe_appointment.channels.api.*`
+- **APIs**: `/api/method/appointment.channels.api.*`
 - **Helpers**: SMS/USSD providers, template rendering
 - **Templates**: Message templates for different channels
 
@@ -88,7 +88,7 @@ Modules are created and ready when:
 - [x] `modules.txt` contains all four modules
 - [x] Module directories exist with `__init__.py`
 - [x] Subdirectories created (doctype/, api/, helpers/)
-- [x] Can import: `import frappe_appointment.scheduler`
+- [x] Can import: `import appointment.scheduler`
 - [x] Migration completed successfully
 
 ---

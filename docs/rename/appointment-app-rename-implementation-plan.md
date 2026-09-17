@@ -69,9 +69,10 @@ Do not rename scheduling DocTypes in this phase. Their names are business contra
 
 ### 3. Preserve upgrade compatibility
 
-Keep a temporary `frappe_appointment` compatibility package that forwards supported imports and whitelisted methods to `appointment`. Inventory external callers first and document a removal release. Avoid open-ended aliases.
-
-Add a pre-model-sync patch or controlled site migration that updates the installed-app identity and any stored dotted paths at the correct point in Frappe's migration lifecycle. Preserve patch history so old patches are not replayed. Explicitly migrate Module Def ownership, scheduled jobs, hooks, fixtures, and any stored API paths. The migration must be idempotent and safe to resume.
+Not applicable. The app was never released under the old identifier, so no
+compatibility package, alias, stored-path migration or legacy patch path is
+retained. See "Finalization status" below. Existing-site transfer is explicitly
+out of scope.
 
 ### 4. Validate on cloned production-shaped data
 
@@ -103,77 +104,56 @@ Document backup and rollback commands, the minimum supported source version, and
 - The dedicated runtime passes Agent Harness dependency preflight before beta sign-off.
 - Rollback from the pre-migration backup is demonstrated.
 
-## Implementation status and evidence
+## Finalization status
+
+Decision update: the app was never released under `frappe_appointment` /
+`scheduler`, so no backward compatibility is retained. The `frappe_appointment`
+shim package, the site-identity migration and the legacy patch paths have been
+removed. `appointment` is the single canonical identity and testing targets a
+fresh install.
 
 Branch `refactor/rename-to-appointment`, worktree
-`/home/minte/projects/training-apps/.worktrees/frappe-appointment-rename`, cloned
-runtime `refactor-rename-to-appointment-4c34e9`, site
-`meet-beta-refactor-rename-to-appointment-4c34e9.localhost`. The verified
-`beta/architecture-review` worktree and runtime were left untouched.
-
-Commits:
-
-1. `refactor: rename app identity to appointment`
-2. `feat: preserve upgrade compatibility for renamed app`
-3. `fix: correct double-segment module paths after app rename`
-4. `fix: install cleanly on a fresh site`
-5. `test: add app-identity characterization checks and browser manifests`
-6. `docs: record reference inventory, migration and rollback evidence`
+`/home/minte/projects/training-apps/.worktrees/frappe-appointment-rename`,
+isolated runtime `refactor-rename-to-appointment-4c34e9`. The verified
+`beta/architecture-review` worktree, its runtime and the shared Python
+environment were left untouched.
 
 Reference inventory: `docs/rename/reference-inventory.md`.
-Runbook and rollback: `docs/rename/migration-and-rollback.md`.
+Testing guide: `docs/rename/testing-guide.md`.
 
-### Upgrade validation (cloned verified data)
+### What changed
 
-- Controlled pre-migrate (`frappe_appointment.migrate.rename_app_identity.rename_site_identity`)
-  rewrote installed apps to `frappe, appointment, agent_harness, agent_plane`.
-- Migrate pass 1 ran only `appointment.patches.v0_1.rename_app_identity`.
-- Migrate passes 2 and 3 executed **no patches**.
-- Record counts unchanged: Appointment 70, Organization 3, Provider 5, Service 79
-  (User 377 and File 17 include the Agent apps; Patch Log 292 → 293 for the new
-  patch).
-- `Module Def.app_name`, `Scheduled Job Type.method`, `Workspace.app`,
-  `Installed Application.app_name`, `installed_apps` global and `site_config.json`
-  all report `appointment`; `mute_emails`/`pause_scheduler` preserved.
-- Historical `Patch Log` rows (5) are retained intentionally.
+- Outer package and installer metadata moved to `appointment` / **Appointment**.
+- Imports, hooks, patches, scheduled jobs, fixtures, assets, build paths,
+  frontend API strings and docs use `appointment.*`.
+- `patches.txt` lists canonical `appointment.patches.v0_1.*` paths only.
+- Fresh install imports email templates from `after_install` and applies the
+  `Appointment Settings` Link defaults after the templates exist, so
+  `init_singles` cannot fail on a fresh site.
+- Business DocTypes and inner module package names are unchanged.
 
-### Fresh install validation
+### Validation performed
 
-`bench new-site --install-app appointment` plus two migrates install only
-`frappe, appointment`; business tables are empty; the three email templates and
-the `Appointment Settings` defaults are populated.
+- Fresh install: `bench new-site --install-app appointment` plus two migrates
+  installs only `frappe, appointment`; the second migrate is clean; the three
+  email templates and `Appointment Settings` defaults are populated.
+- Characterization tests: `appointment.tests.test_app_identity` pass on the
+  canonical site.
+- Browser QA executed through Agent Plane with `frappe_session`
+  (`BQA-2026-00028`, `BQA-2026-00029`) and produced screenshots and traces.
 
-### Characterization tests
+### Environment prerequisites (not app defects)
 
-`bench --site <clone> run-tests --module appointment.tests.test_app_identity`:
-6/6 pass (canonical install, app path, legacy shim, module ownership, scheduled
-jobs, preserved counts).
+- `bench install-app agent_plane` on a brand-new site still fails at
+  `init_singles` on the `Runtime Settings` Link default; seed the Agent Version
+  first or restore a prepared backup.
+- The shared training Python environment does not match the certified Agent
+  Harness foundation bundle; use a dedicated certified runtime for sign-off.
+- No outbound DNS in this environment: the landing page's `logo.clearbit.com`
+  images fail, and the browser run records engine.io upgrade polling `400`s plus
+  a pre-existing React `validateDOMNesting` warning from `HierarchyTree.tsx`.
 
-### Browser QA (Agent Plane, `frappe_session`)
+### Next steps
 
-Executed through `appointment.qa_runner` → `agent_plane.api.run_browser_qa_manifest`:
-
-- `BQA-2026-00028` (`appointment_admin_smoke`): 4 screenshots, 20 console / 20
-  network findings, all `logo.clearbit.com` DNS failures from the landing page.
-- `BQA-2026-00029` (`appointment_scheduling_smoke` + `appointment_provider_workspace`):
-  14 screenshots, traces retained, 4 console / 3 network findings — three
-  Socket.IO upgrade polling `400`s and one pre-existing React
-  `validateDOMNesting` warning.
-- The pre-rename baseline `BQA-2026-00007` was also `Failed` with zero
-  screenshots, so browser QA has never passed in this environment.
-
-### Rollback rehearsal
-
-Restored `20260917_232008-...-database.sql.gz` into a fresh
-`rollback-rehearsal.localhost`: installed app again `frappe_appointment` and
-counts match the baseline (70/3/5/79).
-
-### Remaining risks and next steps
-
-- Run Browser QA and the Agent Harness foundation preflight on a dedicated
-  certified runtime; the shared environment is explicitly out of spec.
-- Confirm and, if required, eliminate the engine.io polling `400` noise.
-- Remove the `frappe_appointment/` shim only in a separately announced release.
-- The branch is committed locally and not yet pushed.
-
-
+- Test on a fresh site (see `docs/rename/testing-guide.md`).
+- Push `refactor/rename-to-appointment` when ready.

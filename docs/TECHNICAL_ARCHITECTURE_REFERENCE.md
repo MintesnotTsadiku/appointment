@@ -9,7 +9,7 @@ This document provides comprehensive technical details extracted from the codeba
 
 ### 1.1 Service Doctype
 
-**File:** `frappe_appointment/scheduler/doctype/service/service.json`
+**File:** `appointment/scheduler/doctype/service/service.json`
 
 **Key Fields:**
 ```json
@@ -58,7 +58,7 @@ This document provides comprehensive technical details extracted from the codeba
 
 ### 1.2 Appointment Doctype
 
-**File:** `frappe_appointment/scheduler/doctype/appointment/appointment.json`
+**File:** `appointment/scheduler/doctype/appointment/appointment.json`
 
 **Key Fields:**
 ```json
@@ -106,7 +106,7 @@ This document provides comprehensive technical details extracted from the codeba
 
 ### 1.3 Provider Doctype
 
-**File:** `frappe_appointment/scheduler/doctype/provider/provider.json`
+**File:** `appointment/scheduler/doctype/provider/provider.json`
 
 **Key Fields:**
 ```json
@@ -163,7 +163,7 @@ This document provides comprehensive technical details extracted from the codeba
 
 ### 1.4 Location Doctype
 
-**File:** `frappe_appointment/scheduler/doctype/location/location.json`
+**File:** `appointment/scheduler/doctype/location/location.json`
 
 **Key Fields:**
 ```json
@@ -196,7 +196,7 @@ This document provides comprehensive technical details extracted from the codeba
 
 ### 1.5 Opening Hours (Child Table)
 
-**File:** `frappe_appointment/scheduler/doctype/opening_hours/opening_hours.json`
+**File:** `appointment/scheduler/doctype/opening_hours/opening_hours.json`
 
 **Fields:**
 ```json
@@ -219,7 +219,7 @@ This document provides comprehensive technical details extracted from the codeba
 
 ### 1.6 EventType Doctype
 
-**File:** `frappe_appointment/scheduler/doctype/eventtype/eventtype.json`
+**File:** `appointment/scheduler/doctype/eventtype/eventtype.json`
 
 **Purpose:** Links Service + Provider + Location combination (used for appointment routing)
 
@@ -247,7 +247,7 @@ This document provides comprehensive technical details extracted from the codeba
 
 ### 1.7 Configuration Settings
 
-**File:** `frappe_appointment/scheduler/doctype/configuration_settings/configuration_settings.json`
+**File:** `appointment/scheduler/doctype/configuration_settings/configuration_settings.json`
 
 **Type:** Single doctype (global settings)
 
@@ -261,7 +261,7 @@ This document provides comprehensive technical details extracted from the codeba
 
 ### 1.8 Appointment Settings
 
-**File:** `frappe_appointment/frappe_appointment/doctype/appointment_settings/appointment_settings.json`
+**File:** `appointment/appointment/doctype/appointment_settings/appointment_settings.json`
 
 **Type:** Single doctype (global settings)
 
@@ -288,7 +288,7 @@ This document provides comprehensive technical details extracted from the codeba
 
 ### 2.1 Availability Logic
 
-**File:** `frappe_appointment/scheduler/availability.py`
+**File:** `appointment/scheduler/availability.py`
 
 **Function: `get_availability_for_booking()`**
 ```python
@@ -328,7 +328,7 @@ def get_availability_for_booking(
 4. Returns final intersected time ranges
 
 **Slot Generation:**
-- Slot generation happens in `frappe_appointment/api/personal_meet.py::_get_time_slots_for_day()`
+- Slot generation happens in `appointment/api/personal_meet.py::_get_time_slots_for_day()`
 - Uses `Appointment Group` and `User Appointment Availability` for legacy calendar-based bookings
 - For new scheduler-based bookings, slots are generated from:
   1. Opening hours (from `get_availability_for_booking()`)
@@ -340,7 +340,7 @@ def get_availability_for_booking(
 
 ### 2.2 Conflict Detection
 
-**File:** `frappe_appointment/scheduler/helpers/slot_engine.py`
+**File:** `appointment/scheduler/helpers/slot_engine.py`
 
 **Function: `check_conflicts()`**
 ```python
@@ -401,7 +401,7 @@ def check_conflicts(
 
 ### 2.3 Buffer Time Enforcement
 
-**File:** `frappe_appointment/scheduler/helpers/slot_engine.py`
+**File:** `appointment/scheduler/helpers/slot_engine.py`
 
 **Function: `apply_buffer_times()`**
 ```python
@@ -442,7 +442,7 @@ def apply_buffer_times(
 
 ### 2.4 Booking Creation API
 
-**File:** `frappe_appointment/scheduler/api/desk.py`
+**File:** `appointment/scheduler/api/desk.py`
 
 **Endpoint: `create_desk_appointment()`**
 ```python
@@ -473,7 +473,7 @@ def create_desk_appointment(
     """
 ```
 
-**File:** `frappe_appointment/api/personal_meet.py`
+**File:** `appointment/api/personal_meet.py`
 
 **Endpoint: `book_time_slot()`**
 ```python
@@ -512,7 +512,7 @@ def book_time_slot(
 
 ### 3.1 GET Requests - Available Slots
 
-**Endpoint:** `frappe_appointment.api.personal_meet.get_time_slots`
+**Endpoint:** `appointment.api.personal_meet.get_time_slots`
 
 **Request Parameters:**
 ```typescript
@@ -603,7 +603,7 @@ def book_time_slot(
 
 ### 3.2 POST Payload - Create Appointment
 
-**Endpoint (Frontend Booking):** `frappe_appointment.api.personal_meet.book_time_slot`
+**Endpoint (Frontend Booking):** `appointment.api.personal_meet.book_time_slot`
 
 **Request Payload:**
 ```typescript
@@ -627,7 +627,7 @@ def book_time_slot(
 }
 ```
 
-**Endpoint (Front-Desk Console):** `frappe_appointment.scheduler.api.desk.create_desk_appointment`
+**Endpoint (Front-Desk Console):** `appointment.scheduler.api.desk.create_desk_appointment`
 
 **Request Payload:**
 ```typescript
@@ -764,18 +764,18 @@ def book_time_slot(
 ## 5. Key Code Locations
 
 ### 5.1 Doctype Definitions
-- Service: `frappe_appointment/scheduler/doctype/service/`
-- Appointment: `frappe_appointment/scheduler/doctype/appointment/`
-- Provider: `frappe_appointment/scheduler/doctype/provider/`
-- Location: `frappe_appointment/scheduler/doctype/location/`
-- EventType: `frappe_appointment/scheduler/doctype/eventtype/`
-- Opening Hours: `frappe_appointment/scheduler/doctype/opening_hours/`
+- Service: `appointment/scheduler/doctype/service/`
+- Appointment: `appointment/scheduler/doctype/appointment/`
+- Provider: `appointment/scheduler/doctype/provider/`
+- Location: `appointment/scheduler/doctype/location/`
+- EventType: `appointment/scheduler/doctype/eventtype/`
+- Opening Hours: `appointment/scheduler/doctype/opening_hours/`
 
 ### 5.2 Business Logic
-- Availability: `frappe_appointment/scheduler/availability.py`
-- Slot Engine (conflicts, buffers): `frappe_appointment/scheduler/helpers/slot_engine.py`
-- API Endpoints: `frappe_appointment/scheduler/api/desk.py` (front-desk), `frappe_appointment/api/personal_meet.py` (frontend)
-- Booking Logic: `frappe_appointment/api/personal_meet.py::book_time_slot()`
+- Availability: `appointment/scheduler/availability.py`
+- Slot Engine (conflicts, buffers): `appointment/scheduler/helpers/slot_engine.py`
+- API Endpoints: `appointment/scheduler/api/desk.py` (front-desk), `appointment/api/personal_meet.py` (frontend)
+- Booking Logic: `appointment/api/personal_meet.py::book_time_slot()`
 
 ### 5.3 Frontend
 - Slot Fetching: `frontend/src/pages/booking-v2/hooks/useTimeSlots.ts`

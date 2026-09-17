@@ -9,7 +9,7 @@
 ### Environment Configuration
 - **Site Name**: `appointment.com`
 - **Bench Path**: `/home/minte/projects/frappe-bench`
-- **App Path**: `/home/minte/projects/frappe-bench/apps/frappe_appointment`
+- **App Path**: `/home/minte/projects/frappe-bench/apps/appointment`
 - **Status**: ✅ Fully configured and ready
 
 ### Installed & Configured
@@ -35,8 +35,8 @@
 ## 🎯 Your Site Info
 - **Site Name**: `appointment.com`
 - **Bench Path**: `/home/minte/projects/frappe-bench`
-- **Backend App Path**: `/home/minte/projects/frappe-bench/apps/frappe_appointment`
-- **Frontend App Path**: `/home/minte/projects/frappe-bench/apps/frappe_appointment/frontend`
+- **Backend App Path**: `/home/minte/projects/frappe-bench/apps/appointment`
+- **Frontend App Path**: `/home/minte/projects/frappe-bench/apps/appointment/frontend`
 
 ---
 
@@ -85,7 +85,7 @@ for r in records:
 "
 
 # Run script file
-bench --site appointment.com console < apps/frappe_appointment/scripts/explore_app.py
+bench --site appointment.com console < apps/appointment/scripts/explore_app.py
 ```
 
 **For AI Agents**: Always use Method 2 (`<<<` syntax) when generating commands. This allows non-interactive execution.
@@ -136,7 +136,7 @@ bench --site appointment.com uninstall-app [app-name]
 bench build
 
 # Build specific app
-bench build --app frappe_appointment
+bench build --app appointment
 
 # Watch for changes (auto-rebuild)
 bench watch
@@ -485,8 +485,8 @@ print(frappe.conf)
 ```
 /home/minte/projects/frappe-bench/
 ├── apps/
-│   └── frappe_appointment/
-│       ├── frappe_appointment/          # Main Python code
+│   └── appointment/
+│       ├── appointment/          # Main Python code
 │       │   ├── doctype/                 # Doctype definitions
 │       │   ├── api/                     # API endpoints
 │       │   ├── helpers/                 # Utility functions
@@ -531,7 +531,7 @@ bench stop
 
 ### Issue: Assets not loading
 ```bash
-bench build --app frappe_appointment
+bench build --app appointment
 bench clear-cache
 bench restart
 ```
@@ -592,13 +592,13 @@ bench --site appointment.com console <<< "import frappe; print('OK')"
 3. Run: `bench --site appointment.com migrate`
 4. Add controller: `[doctype_name].py` in same folder
 
-### Adding New Module (within frappe_appointment)
-1. Add module name to: `frappe_appointment/modules.txt`
-2. Create directory: `frappe_appointment/[module_name]/`
+### Adding New Module (within appointment)
+1. Add module name to: `appointment/modules.txt`
+2. Create directory: `appointment/[module_name]/`
 3. Create `__init__.py` in module directory
 4. Create subdirectories: `doctype/`, `api/`, `helpers/` as needed
 5. Migrate: `bench --site appointment.com migrate`
-6. Develop in: `frappe_appointment/[module_name]/`
+6. Develop in: `appointment/[module_name]/`
 
 ---
 
@@ -610,11 +610,11 @@ bench --site appointment.com console <<< "import frappe; print('OK')"
 - **API**: https://frappeframework.com/docs/user/en/api
 
 ### frappe-appointment Specific
-- **README**: `apps/frappe_appointment/README.md`
-- **System Setup**: `apps/frappe_appointment/docs/technical/system_setup_guide.md`
-- **Setup Guide**: `apps/frappe_appointment/docs/getting-started/SETUP_GUIDE.md`
-- **Your PRD**: `apps/frappe_appointment/docs/planning/scheduling_platform_prd.md`
-- **Implementation Plan**: `apps/frappe_appointment/docs/planning/scheduling_platform_implementation_plan_sprint_board.md`
+- **README**: `apps/appointment/README.md`
+- **System Setup**: `apps/appointment/docs/technical/system_setup_guide.md`
+- **Setup Guide**: `apps/appointment/docs/getting-started/SETUP_GUIDE.md`
+- **Your PRD**: `apps/appointment/docs/planning/scheduling_platform_prd.md`
+- **Implementation Plan**: `apps/appointment/docs/planning/scheduling_platform_implementation_plan_sprint_board.md`
 
 ---
 
@@ -622,7 +622,7 @@ bench --site appointment.com console <<< "import frappe; print('OK')"
 
 ### Current Setup
 ```bash
-cd /home/minte/projects/frappe-bench/apps/frappe_appointment
+cd /home/minte/projects/frappe-bench/apps/appointment
 
 # Check current branch
 git branch
@@ -657,9 +657,9 @@ git merge feat/provider-doctype
 ## 🚀 Next Actions Checklist
 
 Sprint 0 - Familiarization:
-- [ ] Run exploration script: `bench --site appointment.com console < apps/frappe_appointment/scripts/explore_app.py`
+- [ ] Run exploration script: `bench --site appointment.com console < apps/appointment/scripts/explore_app.py`
 - [ ] Setup Google Calendar: Follow `docs/getting-started/SETUP_GUIDE.md`
-- [ ] Create test data: `bench --site appointment.com console < apps/frappe_appointment/scripts/create_test_data.py`
+- [ ] Create test data: `bench --site appointment.com console < apps/appointment/scripts/create_test_data.py`
 - [ ] Create test appointment group via UI
 - [ ] Book a test appointment
 - [ ] Review codebase structure

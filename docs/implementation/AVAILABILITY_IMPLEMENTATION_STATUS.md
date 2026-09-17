@@ -9,7 +9,7 @@
 - ✅ Location.opening_hours already exists (no changes needed)
 
 ### 2. Availability Resolution Module
-- ✅ Created `frappe_appointment/scheduler/availability.py` with:
+- ✅ Created `appointment/scheduler/availability.py` with:
   - `get_availability_for_booking()` - Intersects Provider ∩ Service ∩ Location
   - `get_available_booking_options()` - Returns all three booking levels
   - `intersect_time_ranges()` - Utility for merging time ranges

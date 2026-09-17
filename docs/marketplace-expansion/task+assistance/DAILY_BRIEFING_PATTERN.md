@@ -207,7 +207,7 @@ const CalendarView = () => {
 
 ### **Daily Briefing API Endpoint**
 
-**Location**: `frappe_appointment/tasks/api/task_api.py`
+**Location**: `appointment/tasks/api/task_api.py`
 
 ```python
 @frappe.whitelist()

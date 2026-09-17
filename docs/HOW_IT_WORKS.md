@@ -471,14 +471,14 @@ Provider: "Dr. Sarah"
 
 ### Get Locations
 ```
-GET frappe_appointment.onboarding.get_provider_locations
+GET appointment.onboarding.get_provider_locations
 Params: { organization?: string }
 Returns: { locations: [{ name, location_name }] }
 ```
 
 ### Get Services
 ```
-GET frappe_appointment.onboarding.get_provider_services
+GET appointment.onboarding.get_provider_services
 Params: { organization?: string, location?: string }
 Returns: { services: [{ name, service_name, organization }] }
 Note: Filters by EventType when location is provided
@@ -486,7 +486,7 @@ Note: Filters by EventType when location is provided
 
 ### Get Availability
 ```
-GET frappe_appointment.onboarding.get_availability
+GET appointment.onboarding.get_availability
 Params: { 
   level: 'location' | 'service' | 'provider',
   id?: string,              // For location/service
@@ -502,7 +502,7 @@ Returns: {
 
 ### Save Availability
 ```
-POST frappe_appointment.onboarding.save_availability
+POST appointment.onboarding.save_availability
 Body: {
   level: 'location' | 'service' | 'provider',
   id?: string,              // For location/service

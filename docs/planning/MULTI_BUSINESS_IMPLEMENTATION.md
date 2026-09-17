@@ -20,7 +20,7 @@
    - Fields: user, full_name, permissions (can_manage_providers, can_manage_services, can_view_financials)
    
 3. **✅ Created Organization Doctype**
-   - Location: `frappe_appointment/frappe_appointment/doctype/organization/`
+   - Location: `appointment/appointment/doctype/organization/`
    - Fields:
      - Basic: organization_name, organization_type, slug
      - Contact: email, phone, timezone, language
@@ -171,11 +171,11 @@ Priority:
 ### New Doctypes Created
 
 1. **Organization**
-   - Path: `frappe_appointment/frappe_appointment/doctype/organization/`
+   - Path: `appointment/appointment/doctype/organization/`
    - Naming: By organization_name
    
 2. **Organization Manager** (Child Table)
-   - Path: `frappe_appointment/frappe_appointment/doctype/organization_manager/`
+   - Path: `appointment/appointment/doctype/organization_manager/`
    - Parent: Organization
    
 3. **Provider Delegation** (To be created)
@@ -190,20 +190,20 @@ Priority:
 ### API Endpoints
 
 **Onboarding:**
-- `frappe_appointment.onboarding.get_progress` (update for org/individual)
-- `frappe_appointment.onboarding.save_profile` (branch by type)
-- `frappe_appointment.onboarding.create_organization`
-- `frappe_appointment.onboarding.add_provider_to_org`
+- `appointment.onboarding.get_progress` (update for org/individual)
+- `appointment.onboarding.save_profile` (branch by type)
+- `appointment.onboarding.create_organization`
+- `appointment.onboarding.add_provider_to_org`
 
 **Booking:**
-- `frappe_appointment.api.personal_meet.get_meeting_windows` (already updated)
-- `frappe_appointment.api.personal_meet.get_time_slots` (already updated)
-- Add: `frappe_appointment.api.organization_booking.*`
+- `appointment.api.personal_meet.get_meeting_windows` (already updated)
+- `appointment.api.personal_meet.get_time_slots` (already updated)
+- Add: `appointment.api.organization_booking.*`
 
 **Delegation:**
-- `frappe_appointment.delegation.invite_delegate`
-- `frappe_appointment.delegation.accept_invitation`
-- `frappe_appointment.delegation.revoke_access`
+- `appointment.delegation.invite_delegate`
+- `appointment.delegation.accept_invitation`
+- `appointment.delegation.revoke_access`
 
 ---
 

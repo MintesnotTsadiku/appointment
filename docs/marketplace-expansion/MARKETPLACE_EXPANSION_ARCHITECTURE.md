@@ -107,7 +107,7 @@ After analyzing your current architecture, expansion goals, and expert review, I
 **Current Problem:** Slot Engine assumes time-based slots  
 **Solution:** Abstract booking patterns into a unified interface
 
-**Create:** `frappe_appointment/marketplace/helpers/booking_engine.py`
+**Create:** `appointment/marketplace/helpers/booking_engine.py`
 
 ```python
 class BookingPattern:
@@ -179,7 +179,7 @@ class OnDemandPattern(BookingPattern):
 
 **AvailabilityManager (Orchestrator):**
 ```python
-# frappe_appointment/scheduler/helpers/availability_manager.py
+# appointment/scheduler/helpers/availability_manager.py
 
 class AvailabilityManager:
     """
@@ -190,19 +190,19 @@ class AvailabilityManager:
     def get_availability(self, service_doc, start_date, end_date=None):
         """Unified entry point - routes based on booking_mode"""
         if service_doc.booking_mode == "Appointment":
-            from frappe_appointment.scheduler.helpers.slot_engine import SlotEngine
+            from appointment.scheduler.helpers.slot_engine import SlotEngine
             return SlotEngine.get_slots(service_doc, start_date)
         elif service_doc.booking_mode == "Resource":
-            from frappe_appointment.scheduler.helpers.inventory_engine import InventoryEngine
+            from appointment.scheduler.helpers.inventory_engine import InventoryEngine
             return InventoryEngine.get_stock_availability(service_doc, start_date, end_date)
         elif service_doc.booking_mode == "Task":
-            from frappe_appointment.scheduler.helpers.task_engine import TaskEngine
+            from appointment.scheduler.helpers.task_engine import TaskEngine
             return TaskEngine.get_capacity(service_doc, start_date)
 ```
 
 **InventoryEngine (New):**
 ```python
-# frappe_appointment/scheduler/helpers/inventory_engine.py
+# appointment/scheduler/helpers/inventory_engine.py
 
 def check_resource_conflict(resource_name, pickup_datetime, return_datetime):
     """
@@ -302,11 +302,11 @@ def get_stock_availability(service_doc, start_date, end_date):
 1. ✅ **Use Strategy Pattern**: Booking patterns as separate classes (see Section 2)
 2. ✅ **Feature Flags**: Add `enable_marketplace` system setting to toggle new features
 3. ✅ **Phased Rollout**: Start with ONE resource type, validate, then expand
-4. ✅ **Clear Separation**: Marketplace logic in separate module (`frappe_appointment/marketplace/`)
+4. ✅ **Clear Separation**: Marketplace logic in separate module (`appointment/marketplace/`)
 
 **Code Organization:**
 ```
-frappe_appointment/
+appointment/
 ├── scheduler/           # Existing (unchanged)
 ├── marketplace/         # NEW module
 │   ├── doctype/
@@ -560,7 +560,7 @@ def get_availability(
 5. ✅ Add validation logic to Appointment.validate()
    - Validate based on service_type
 6. ✅ Create marketplace module structure
-   - `frappe_appointment/marketplace/` folder
+   - `appointment/marketplace/` folder
    - Basic doctype scaffolding
 
 **Success Criteria:**
@@ -974,14 +974,14 @@ Each business expansion is implemented as a **separate module** that can:
 
 #### **1. Scheduler Module** (Existing)
 - **Purpose**: Core appointment booking system
-- **Location**: `frappe_appointment/scheduler/`
+- **Location**: `appointment/scheduler/`
 - **Doctypes**: Provider, Location, Service, EventType, Appointment, Policy
 - **Landing Page**: `/scheduler` (moved from `/`)
 - **Status**: ✅ Production
 
 #### **2. Resources Module** (Planned)
 - **Purpose**: Physical resource bookings (parking, trucks, equipment)
-- **Location**: `frappe_appointment/resources/` (to be created)
+- **Location**: `appointment/resources/` (to be created)
 - **Key Features**:
   - Date-range bookings (vs time-based appointments)
   - Serialized vs Pool inventory tracking
@@ -993,7 +993,7 @@ Each business expansion is implemented as a **separate module** that can:
 
 #### **3. Tasks Module** (NEW)
 - **Purpose**: Core task management functionality
-- **Location**: `frappe_appointment/tasks/`
+- **Location**: `appointment/tasks/`
 - **Key Features**:
   - Task creation and management
   - Task templates and categories
@@ -1004,7 +1004,7 @@ Each business expansion is implemented as a **separate module** that can:
 
 #### **4. Assistants Module** (NEW)
 - **Purpose**: Virtual assistant marketplace platform
-- **Location**: `frappe_appointment/assistants/`
+- **Location**: `appointment/assistants/`
 - **Key Features**:
   - Client-assistant matching
   - Workload balancing (1:1, 1:2, 1:3 client models)

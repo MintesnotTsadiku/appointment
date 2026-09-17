@@ -14,24 +14,24 @@ Contains 4 roles for the multi-business system:
 - Assistant
 - Provider
 
-**Location**: `frappe_appointment/fixtures/role.json`
+**Location**: `appointment/fixtures/role.json`
 
 ### 2. **doctype.json** (2,081 lines, 52KB)
 Contains 2 DocTypes with complete structure:
 - Organization
 - Organization Manager (child table)
 
-**Location**: `frappe_appointment/fixtures/doctype.json`
+**Location**: `appointment/fixtures/doctype.json`
 
 ### 3. **custom_field.json** (913 lines, 24KB)
 Existing custom fields for Frappe Appointment module
 
-**Location**: `frappe_appointment/fixtures/custom_field.json`
+**Location**: `appointment/fixtures/custom_field.json`
 
 ### 4. **property_setter.json** (97 lines, 4KB)
 Existing property setters for Frappe Appointment module
 
-**Location**: `frappe_appointment/fixtures/property_setter.json`
+**Location**: `appointment/fixtures/property_setter.json`
 
 ---
 
@@ -69,7 +69,7 @@ fixtures = [
 ]
 ```
 
-**File**: `frappe_appointment/hooks.py` (lines 94-148)
+**File**: `appointment/hooks.py` (lines 94-148)
 
 ---
 
@@ -78,7 +78,7 @@ fixtures = [
 ### On Fresh Installation
 When someone runs:
 ```bash
-bench --site newsite.com install-app frappe_appointment
+bench --site newsite.com install-app appointment
 ```
 
 Frappe will automatically:
@@ -114,7 +114,7 @@ cd /home/minte/projects/frappe-bench
 bench new-site test-fixtures.com --admin-password admin
 
 # Install your app
-bench --site test-fixtures.com install-app frappe_appointment
+bench --site test-fixtures.com install-app appointment
 
 # Verify roles created
 bench --site test-fixtures.com console <<< "
@@ -248,7 +248,7 @@ for field in ['modified', 'modified_by', 'creation', 'owner']:
     settings_dict.pop(field, None)
 
 # Save
-fixture_path = '/home/minte/projects/frappe-bench/apps/frappe_appointment/frappe_appointment/fixtures/website_settings.json'
+fixture_path = '/home/minte/projects/frappe-bench/apps/appointment/appointment/fixtures/website_settings.json'
 with open(fixture_path, 'w') as f:
     json.dump([settings_dict], f, indent=4, sort_keys=True, default=str)
 
@@ -281,25 +281,25 @@ Then add to `hooks.py`:
 - No manual setup required for roles and doctypes
 
 **Files Modified**:
-- `frappe_appointment/hooks.py` - Added fixture configuration
-- `frappe_appointment/fixtures/role.json` - NEW (4 roles)
-- `frappe_appointment/fixtures/doctype.json` - NEW (2 doctypes)
-- `frappe_appointment/fixtures/custom_field.json` - Updated
-- `frappe_appointment/fixtures/property_setter.json` - Updated
+- `appointment/hooks.py` - Added fixture configuration
+- `appointment/fixtures/role.json` - NEW (4 roles)
+- `appointment/fixtures/doctype.json` - NEW (2 doctypes)
+- `appointment/fixtures/custom_field.json` - Updated
+- `appointment/fixtures/property_setter.json` - Updated
 
 ---
 
 ## 🚀 Ready to Commit
 
 ```bash
-cd /home/minte/projects/frappe-bench/apps/frappe_appointment
+cd /home/minte/projects/frappe-bench/apps/appointment
 
 # Check what changed
 git status
 
 # Add fixture files
-git add frappe_appointment/fixtures/*.json
-git add frappe_appointment/hooks.py
+git add appointment/fixtures/*.json
+git add appointment/hooks.py
 
 # Commit
 git commit -m "feat: add roles and organization doctypes to fixtures

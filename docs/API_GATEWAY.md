@@ -2,17 +2,17 @@
 
 ## Overview
 
-The API Gateway system provides a privacy-focused layer that obfuscates your internal API structure from end users. Instead of exposing endpoint paths like `frappe_appointment.api.manage.get_management_hierarchy`, all API calls are routed through a single gateway endpoint using obfuscated action codes.
+The API Gateway system provides a privacy-focused layer that obfuscates your internal API structure from end users. Instead of exposing endpoint paths like `appointment.api.manage.get_management_hierarchy`, all API calls are routed through a single gateway endpoint using obfuscated action codes.
 
 ## Architecture
 
-### Backend (`frappe_appointment/api/gateway.py`)
+### Backend (`appointment/api/gateway.py`)
 
 The gateway endpoint accepts:
 - **action**: An obfuscated 8-character code (e.g., `e5f6g7h8`)
 - **params**: All other parameters are passed directly to the target function
 
-**Endpoint**: `/api/method/frappe_appointment.api.gateway.route`
+**Endpoint**: `/api/method/appointment.api.gateway.route`
 
 ### Frontend (`frontend/src/lib/apiGateway.ts`)
 
@@ -28,15 +28,15 @@ Provides utility functions and React hooks:
 ```typescript
 // Users can see the full endpoint path in Network tab
 const response = await fetch(
-  '/api/method/frappe_appointment.api.manage.get_management_hierarchy'
+  '/api/method/appointment.api.manage.get_management_hierarchy'
 );
 ```
 
 ### After (Obfuscated)
 ```typescript
-// Only shows: /api/method/frappe_appointment.api.gateway.route?action=e5f6g7h8
+// Only shows: /api/method/appointment.api.gateway.route?action=e5f6g7h8
 const response = await gatewayGet(
-  'frappe_appointment.api.manage.get_management_hierarchy'
+  'appointment.api.manage.get_management_hierarchy'
 );
 ```
 
@@ -46,12 +46,12 @@ Action codes are 8-character alphanumeric strings that map to actual endpoints:
 
 | Endpoint | Action Code |
 |----------|-------------|
-| `frappe_appointment.api.manage.get_management_hierarchy` | `e5f6g7h8` |
-| `frappe_appointment.scheduler.doctype.landing_page_settings.api.get_landing_page_settings` | `a1b2c3d4` |
+| `appointment.api.manage.get_management_hierarchy` | `e5f6g7h8` |
+| `appointment.scheduler.doctype.landing_page_settings.api.get_landing_page_settings` | `a1b2c3d4` |
 | ... | ... |
 
 The mapping is defined in both:
-- Backend: `frappe_appointment/api/gateway.py` → `ACTION_MAP`
+- Backend: `appointment/api/gateway.py` → `ACTION_MAP`
 - Frontend: `frontend/src/lib/apiGateway.ts` → `ACTION_MAP`
 
 ## Usage Examples
@@ -62,7 +62,7 @@ import { gatewayGet } from '@/lib/apiGateway';
 
 // Get management hierarchy
 const hierarchy = await gatewayGet<ManagementHierarchy>(
-  'frappe_appointment.api.manage.get_management_hierarchy'
+  'appointment.api.manage.get_management_hierarchy'
 );
 ```
 
@@ -70,7 +70,7 @@ const hierarchy = await gatewayGet<ManagementHierarchy>(
 ```typescript
 // Get location availability
 const availability = await gatewayGet(
-  'frappe_appointment.availability.get_location_availability',
+  'appointment.availability.get_location_availability',
   {
     location_id: 'LOC-001',
     date: '2024-01-15'
@@ -84,7 +84,7 @@ import { gatewayPost } from '@/lib/apiGateway';
 
 // Create a service
 const result = await gatewayPost(
-  'frappe_appointment.api.manage.create_service',
+  'appointment.api.manage.create_service',
   {
     service_name: 'Consultation',
     duration: 30,
@@ -99,7 +99,7 @@ import { useGatewayGet } from '@/lib/apiGateway';
 
 function MyComponent() {
   const { data, isLoading, error } = useGatewayGet<ManagementHierarchy>(
-    'frappe_appointment.api.manage.get_management_hierarchy'
+    'appointment.api.manage.get_management_hierarchy'
   );
   
   if (isLoading) return <Spinner />;
@@ -115,7 +115,7 @@ import { useGatewayPost } from '@/lib/apiGateway';
 
 function MyComponent() {
   const { call, loading, error } = useGatewayPost(
-    'frappe_appointment.api.manage.create_service'
+    'appointment.api.manage.create_service'
   );
   
   const handleCreate = async () => {
@@ -142,11 +142,11 @@ function MyComponent() {
 
 To add a new endpoint to the gateway:
 
-1. **Add to Backend** (`frappe_appointment/api/gateway.py`):
+1. **Add to Backend** (`appointment/api/gateway.py`):
 ```python
 ACTION_MAP = {
     # ... existing mappings ...
-    'x9y0z1a2': ('frappe_appointment.new_module', 'new_function'),
+    'x9y0z1a2': ('appointment.new_module', 'new_function'),
 }
 ```
 
@@ -154,15 +154,15 @@ ACTION_MAP = {
 ```typescript
 const ACTION_MAP: Record<string, string> = {
   // ... existing mappings ...
-  'frappe_appointment.new_module.new_function': 'x9y0z1a2',
+  'appointment.new_module.new_function': 'x9y0z1a2',
 };
 ```
 
 3. **Generate Action Code** (optional):
 You can use the `_generate_action_code()` function in the backend to create consistent codes:
 ```python
-from frappe_appointment.api.gateway import _generate_action_code
-code = _generate_action_code('frappe_appointment.new_module', 'new_function')
+from appointment.api.gateway import _generate_action_code
+code = _generate_action_code('appointment.new_module', 'new_function')
 ```
 
 ## Security Considerations
@@ -194,12 +194,12 @@ To migrate existing code to use the gateway:
 ```typescript
 // Before
 const response = await fetch(
-  '/api/method/frappe_appointment.api.manage.get_management_hierarchy'
+  '/api/method/appointment.api.manage.get_management_hierarchy'
 );
 
 // After
 const response = await gatewayGet(
-  'frappe_appointment.api.manage.get_management_hierarchy'
+  'appointment.api.manage.get_management_hierarchy'
 );
 ```
 
@@ -207,22 +207,22 @@ const response = await gatewayGet(
 ```typescript
 // Before
 import { useFrappeGetCall } from 'frappe-react-sdk';
-const { data } = useFrappeGetCall('frappe_appointment.api.manage.get_management_hierarchy');
+const { data } = useFrappeGetCall('appointment.api.manage.get_management_hierarchy');
 
 // After
 import { useGatewayGet } from '@/lib/apiGateway';
-const { data } = useGatewayGet('frappe_appointment.api.manage.get_management_hierarchy');
+const { data } = useGatewayGet('appointment.api.manage.get_management_hierarchy');
 ```
 
 ### Replace Frappe Post Calls
 ```typescript
 // Before
 import { useFrappePostCall } from 'frappe-react-sdk';
-const { call } = useFrappePostCall('frappe_appointment.api.manage.create_service');
+const { call } = useFrappePostCall('appointment.api.manage.create_service');
 
 // After
 import { useGatewayPost } from '@/lib/apiGateway';
-const { call } = useGatewayPost('frappe_appointment.api.manage.create_service');
+const { call } = useGatewayPost('appointment.api.manage.create_service');
 ```
 
 ## Testing
@@ -231,10 +231,10 @@ Test the gateway endpoint directly:
 
 ```bash
 # GET request
-curl "http://localhost:8000/api/method/frappe_appointment.api.gateway.route?action=e5f6g7h8"
+curl "http://localhost:8000/api/method/appointment.api.gateway.route?action=e5f6g7h8"
 
 # POST request
-curl -X POST "http://localhost:8000/api/method/frappe_appointment.api.gateway.route" \
+curl -X POST "http://localhost:8000/api/method/appointment.api.gateway.route" \
   -H "Content-Type: application/json" \
   -d '{"action": "m3n4o5p6", "service_name": "Test", "duration": 30}'
 ```

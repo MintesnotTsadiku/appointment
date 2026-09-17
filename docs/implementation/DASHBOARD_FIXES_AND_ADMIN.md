@@ -41,7 +41,7 @@ Demo data exists in database but UI shows zeros. The API wasn't finding the prov
 3. Date filtering might not work correctly with Frappe's `db.count()`
 
 ### Fixes Applied
-**File**: `frappe_appointment/frappe_appointment/dashboard.py`
+**File**: `appointment/appointment/dashboard.py`
 
 #### A. Enhanced Provider Lookup
 ```python
@@ -114,9 +114,9 @@ Create a comprehensive admin dashboard that gives System Managers:
 ### Implementation
 
 #### A. Backend API
-**File**: `frappe_appointment/frappe_appointment/dashboard.py`
+**File**: `appointment/appointment/dashboard.py`
 
-**New Endpoint**: `frappe_appointment.dashboard.admin_stats`
+**New Endpoint**: `appointment.dashboard.admin_stats`
 
 **Features**:
 - ✅ System Manager permission check
@@ -301,7 +301,7 @@ def admin_stats():
 
 4. **Check API Response**:
    - Open browser DevTools → Network tab
-   - Call `/api/method/frappe_appointment.dashboard.stats`
+   - Call `/api/method/appointment.dashboard.stats`
    - Check response for `debug` field
 
 5. **Check Error Log**:
@@ -335,7 +335,7 @@ def admin_stats():
 ## 7. Files Modified
 
 ### Backend
-- ✅ `frappe_appointment/frappe_appointment/dashboard.py`
+- ✅ `appointment/appointment/dashboard.py`
   - Enhanced `stats()` function
   - Added `admin_stats()` function
 
