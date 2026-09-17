@@ -2,7 +2,10 @@
   "version": 1,
   "app_name": "frappe_appointment",
   "site_prefix": "meet-beta",
-  "dependency_apps": [],
+  "dependency_apps": [
+    "agent_harness",
+    "agent_plane"
+  ],
   "frontend": {
     "directory": "frontend",
     "command": [

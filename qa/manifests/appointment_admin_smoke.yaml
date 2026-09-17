@@ -1,0 +1,32 @@
+app: frappe_appointment
+base_url: http://localhost:26300
+default_role: Administrator
+auth:
+  type: frappe_session
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/frappe_appointment
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: false
+scenarios:
+  - id: appointment_admin_smoke
+    title: Open Appointment Desk and public landing pages
+    viewport:
+      width: 1440
+      height: 960
+    checks:
+      - no_console_errors
+      - no_failed_network_requests
+    routes:
+      - path: /app
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+          - type: screenshot_not_blank
+      - path: /
+        assertions:
+          - type: network_idle
+          - type: visible_text
+            value: Meet.et
+          - type: no_blank_page
+          - type: screenshot_not_blank
