@@ -160,4 +160,38 @@ Testing guide: `docs/rename/testing-guide.md`.
 ### Next steps
 
 - Test on a fresh site (see `docs/rename/testing-guide.md`).
-- Push `refactor/rename-to-appointment` when ready.
+
+## Module rename execution (final)
+
+The primary Frappe module was renamed: `Frappe Appointment` → `Appointment`,
+package `appointment/frappe_appointment/` → `appointment/appointment/`,
+`modules.txt`, DocType/Workspace/Form Tour metadata, fixtures, hooks fixture
+filters and all `appointment.frappe_appointment.*` dotted paths updated.
+`reload_doc("Frappe Appointment", ...)` is now `reload_doc("Appointment", ...)`.
+Business DocType names are unchanged. Checkpoint tag:
+`appointment-app-identity-before-module-rename`.
+
+Static gates (all pass): no `appointment.frappe_appointment`, no
+`"module": "Frappe Appointment"`, no `reload_doc("Frappe Appointment"`, no
+`^Frappe Appointment$` in `modules.txt`; Python compile, 59 app JSON files parse,
+`git diff --check` clean.
+
+Fresh install `fresh-appointment-module.localhost`: `frappe + appointment`,
+two clean migrates, `Module Def Appointment` owned by `appointment`, no
+`Frappe Appointment` module, the ten affected DocTypes owned by `Appointment`,
+templates/settings/scheduled jobs canonical. Characterization tests: 15/15 on
+the fresh site (one expected data skip) and 15/15 on the cloned data site
+(counts 70/3/5/79 preserved).
+
+Agent Plane Browser QA (frappe_session) after the rename:
+`BQA-2026-00042`, `BQA-2026-00044`, `BQA-2026-00045` (provider workspace +
+reception) and `BQA-2026-00046` (Desk + landing). All functional actions passed
+with screenshots and traces; the only findings are the documented offline DNS,
+engine.io upgrade polling `400`s and the pre-existing React warning.
+
+Rollback: checking out the checkpoint tag and creating a fresh site installs
+`Module Def "Frappe Appointment"` and `Appointment Group` under the old module,
+as before.
+
+Merged into `beta/architecture-review` as merge commit `5487141` and pushed;
+`refactor/rename-to-appointment` is pushed at `f37578d`.
