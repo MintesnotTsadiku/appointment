@@ -193,5 +193,27 @@ Rollback: checking out the checkpoint tag and creating a fresh site installs
 `Module Def "Frappe Appointment"` and `Appointment Group` under the old module,
 as before.
 
-Merged into `beta/architecture-review` as merge commit `5487141` and pushed;
-`refactor/rename-to-appointment` is pushed at `f37578d`.
+Merged into `beta/architecture-review` (merge commit `5487141`, docs merge
+`c1953ab`) and pushed; `refactor/rename-to-appointment` is pushed.
+
+## Follow-up completion
+
+- **Certified Agent Harness runtime:** a dedicated environment was provisioned
+  at `/home/minte/projects/appointment-foundation-runtime/venv` (Python 3.14,
+  `uv pip install --require-hashes -r constraints/foundation-py314.txt`). It
+  passes `python -m agent_plane.foundation_bundle check-installed`
+  (bundle `2026.07.2`). The Agent Harness worker preflight
+  `inspect_playwright_runtime()` passes with Node 24.12.0, Playwright 1.58.2 and
+  Chromium 145.0.7632.6 (with `AGENT_HARNESS_NODE` set).
+- **Automated fresh-site QA:** `appointment.qa_bootstrap.install` makes
+  `bench install-app agent_plane` work on a brand-new site by allowing the
+  dangling `Runtime Settings` link during `init_singles` and skipping Agent
+  Plane's deprecated `Workspace Sidebar`/`Desktop Icon` seed. On
+  `fresh-qa-ready.localhost` it installs `agent_harness` and `agent_plane`
+  cleanly (`errors: []`) and `migrate` seeds `Agent Version
+  "Public Web Research Agent-v1"` with the Runtime Settings link valid. This is
+  dev/QA tooling, not a supported installation path.
+- Browser QA sign-off remains the Agent Plane runs on the isolated runtime
+  (`BQA-2026-00042/00044/00045/00046`); adopting the dedicated site-packages for
+  the bench itself is a separate environment decision because the shared env
+  must not be mutated.
