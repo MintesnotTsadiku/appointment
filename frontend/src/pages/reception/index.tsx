@@ -19,6 +19,7 @@ const Reception = () => {
   const [selectedProvider, setSelectedProvider] = useState<string | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showWalkInModal, setShowWalkInModal] = useState(false);
+  const [walkInRefreshToken, setWalkInRefreshToken] = useState(0);
   const [createModalDefaultTime, setCreateModalDefaultTime] = useState<string | undefined>(undefined);
 
   // Calculate date range based on view mode
@@ -274,6 +275,7 @@ const Reception = () => {
                   locationName={selectedLocation}
                   onAssignWalkIn={handleAssignWalkIn}
                   onCreateWalkIn={handleCreateWalkIn}
+                  refreshToken={walkInRefreshToken}
                 />
               </div>
             </div>
@@ -306,6 +308,7 @@ const Reception = () => {
             onClose={() => setShowWalkInModal(false)}
             onSuccess={() => {
               setShowWalkInModal(false);
+              setWalkInRefreshToken((token) => token + 1);
             }}
             locations={locations}
             providers={providers}

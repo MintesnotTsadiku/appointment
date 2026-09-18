@@ -62,7 +62,7 @@ export function ConfirmationModal({
             </div>
 
             {/* Success Message */}
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-6 mb-2">
+            <h2 data-qa="booking-success" className="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-6 mb-2">
               Booking Confirmed!
             </h2>
             <p className="text-gray-600 dark:text-gray-400 text-lg">

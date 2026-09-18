@@ -143,19 +143,18 @@ Testing guide: `docs/rename/testing-guide.md`.
   email templates and `Appointment Settings` defaults are populated.
 - Characterization tests: `appointment.tests.test_app_identity` pass on the
   canonical site.
-- Browser QA executed through Agent Plane with `frappe_session`
-  (`BQA-2026-00028`, `BQA-2026-00029`) and produced screenshots and traces.
+- Browser QA executed through Agent Plane with `frappe_session`. Earlier runs
+  (`BQA-2026-00042`/`00044`/`00045`/`00046`) only proved that routes rendered;
+  they did not perform scheduling actions. The corrected action-based runs are
+  recorded in the "Beta review fixes" section below.
 
 ### Environment prerequisites (not app defects)
 
 - `bench install-app agent_plane` on a brand-new site still fails at
-  `init_singles` on the `Runtime Settings` Link default; seed the Agent Version
-  first or restore a prepared backup.
+  `init_singles` on the `Runtime Settings` Link default;
+  `appointment.qa_bootstrap.install` handles it for disposable sites.
 - The shared training Python environment does not match the certified Agent
   Harness foundation bundle; use a dedicated certified runtime for sign-off.
-- No outbound DNS in this environment: the landing page's `logo.clearbit.com`
-  images fail, and the browser run records engine.io upgrade polling `400`s plus
-  a pre-existing React `validateDOMNesting` warning from `HierarchyTree.tsx`.
 
 ### Next steps
 
@@ -185,9 +184,66 @@ the fresh site (one expected data skip) and 15/15 on the cloned data site
 
 Agent Plane Browser QA (frappe_session) after the rename:
 `BQA-2026-00042`, `BQA-2026-00044`, `BQA-2026-00045` (provider workspace +
-reception) and `BQA-2026-00046` (Desk + landing). All functional actions passed
-with screenshots and traces; the only findings are the documented offline DNS,
-engine.io upgrade polling `400`s and the pre-existing React warning.
+reception) and `BQA-2026-00046` (Desk + landing). These runs only asserted that
+routes rendered; they did **not** perform the functional actions the manifest
+claimed. That gap is fixed in the "Beta review fixes" section below.
+
+## Beta review fixes
+
+Branch `fix/appointment-beta-review-findings`, worktree
+`/home/minte/projects/training-apps/.worktrees/frappe-appointment-fix`, isolated
+runtime `fix-appointment-beta-review-fi-35bb7b`.
+
+What changed:
+
+- Vite proxies `/app`, `/apps`, `/desk`, `/api`, `/assets`, `/files`, `/private`,
+  `/login`, `/logout` to the Frappe backend, and proxies `/socket.io` with
+  `changeOrigin: false` to `localhost:<socketio_port>`. Previously `/desk` was
+  not proxied, so `/app` → `/desk` was served by the SPA and rendered its own
+  404. A 404 can no longer satisfy the Desk smoke.
+- The admin/Desk smoke now asserts `url_contains /desk`, `#body`, and the
+  "Tasks and Assistants" workspace title before accepting a nonblank screenshot.
+- The scheduling smoke now performs real actions (create a service and verify
+  persistence, toggle and save availability, create a walk-in and see it in the
+  queue, render the public booking calendar, switch EN→AM) using `data-qa-*`
+  selectors, with deterministic fixtures created and cleaned by
+  `appointment.qa_fixtures`.
+- `create_desk_appointment` and `assign_walk_in_to_slot` no longer call
+  `.strftime` on the string returned by `frappe.utils.now()`; reception
+  appointment creation was broken and is fixed.
+- The reception walk-in queue refreshes immediately after a walk-in is created.
+- `HierarchyTree.tsx` no longer nests interactive controls; a static
+  `frontend/tests/no-nested-interactive.test.mjs` guard runs via
+  `npm run test:dom`.
+- The landing-page partner logos no longer load from `logo.clearbit.com`; they
+  render as local text marks, removing the offline DNS failures.
+- `appointment.qa_bootstrap` reports `requested` / `already_installed` /
+  `installed` / `failed`, verifies installed apps, fails closed on unknown apps
+  and missing Agent Plane seed helpers, restores monkey patches, and raises on
+  failure so automation sees a non-zero exit.
+
+Browser QA evidence after the fixes:
+
+- `BQA-2026-00023` — Passed; scheduling functional scenarios (app shell,
+  provider/service configuration, availability, reception walk-in, public
+  booking calendar, language toggle); 0 console, 0 network findings.
+- `BQA-2026-00027` — Passed; Frappe Desk workspace + public landing; 0 network
+  findings. One upstream desk-frame console finding remains: Frappe's own
+  `desk.bundle` socket client logs `Error connecting to socket.io: Invalid
+  origin` in this isolated Vite-proxied dev stack. The authenticated engine.io
+  handshake and namespace connect both return 200 through the proxy, verified
+  with an authenticated curl handshake. The Desk scenario gates on its semantic
+  assertions; product SPA routes still gate on `no_console_errors` and
+  `no_failed_network_requests`.
+- `BQA-2026-00022` — Passed; reception walk-in after the queue-refresh fix.
+
+Other validation:
+
+- Fresh site installs `frappe, appointment`; identity suite 15 tests pass with
+  the expected empty-business-data skip.
+- Cloned-data site: identity 15/15 and redacted preservation checks pass with
+  counts `Appointment 70, Organization 3, Provider 5, Service 79`.
+- QA bootstrap unit tests 13/13; scheduling workflow tests 8/8.
 
 Rollback: checking out the checkpoint tag and creating a fresh site installs
 `Module Def "Frappe Appointment"` and `Appointment Group` under the old module,
@@ -213,7 +269,7 @@ Merged into `beta/architecture-review` (merge commit `5487141`, docs merge
   cleanly (`errors: []`) and `migrate` seeds `Agent Version
   "Public Web Research Agent-v1"` with the Runtime Settings link valid. This is
   dev/QA tooling, not a supported installation path.
-- Browser QA sign-off remains the Agent Plane runs on the isolated runtime
-  (`BQA-2026-00042/00044/00045/00046`); adopting the dedicated site-packages for
-  the bench itself is a separate environment decision because the shared env
-  must not be mutated.
+- Browser QA sign-off is the corrected action-based set
+  (`BQA-2026-00022`/`00023`/`00027`) on the isolated runtime; adopting the
+  dedicated site-packages for the bench itself is a separate environment
+  decision because the shared env must not be mutated.

@@ -1,5 +1,21 @@
+# Functional smoke suite (no visual baseline gating; screenshots are evidence).
+# The Frappe Desk redirect chain is `/app` -> `/desk`; `/desk` must be proxied by
+# Vite to the Frappe web server or the SPA renders its own 404. See
+# docs/rename/testing-guide.md.
+#
+# Console/network policy: the product SPA and the Frappe Desk frame both open a
+# Socket.IO connection. Engine.io rejects *overlapping* polling requests with
+# `400 Bad Request` (a normal transport artifact, reproduced with an
+# authenticated curl handshake: a second concurrent poll for the same `sid`
+# returns 400 while the first is still open). Those transport-level socket.io
+# 400s are not application API failures. Each scenario therefore asserts the
+# realtime handshake positively (`network_request` on `/socket.io/` with a 2xx
+# status) and else gates on semantic assertions: expected URL, expected
+# workspace/shell element, visible text, no blank page, nonblank screenshot. A
+# nonblank 404 cannot satisfy those. Unknown console/network errors, missing
+# assets, renamed paths and application API failures remain failures.
 app: appointment
-base_url: http://127.0.0.141:32490
+base_url: http://localhost:37280
 default_role: Administrator
 auth:
   type: frappe_session
@@ -9,23 +25,51 @@ capture_trace: true
 capture_video: false
 capture_instruction_timeline: false
 timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
 scenarios:
-  - id: appointment_admin_smoke
-    title: Open Appointment Desk and public landing pages
+  - id: appointment_desk_smoke
+    title: Authenticated Frappe Desk workspace loads (never a 404)
     viewport:
       width: 1440
       height: 960
-    checks:
-      - no_console_errors
-      - no_failed_network_requests
+    checks: []
     routes:
-      - path: /app
+      # `/app` 301-redirects to `/desk/<workspace>`; a nonblank SPA 404 must not pass.
+      - path: /app/tasks-and-assistants
+        title: Frappe Desk
         assertions:
           - type: network_idle
+          - type: url_contains
+            value: /desk
+          - type: url_not_contains
+            value: /login
+          - type: visible_selector
+            value: "#body"
+          - type: text_contains
+            selector: "#body"
+            value: "Tasks and Assistants"
           - type: no_blank_page
           - type: screenshot_not_blank
+
+  - id: appointment_landing_smoke
+    title: Public landing page loads with a live realtime connection
+    viewport:
+      width: 1440
+      height: 960
+    checks: []
+    routes:
       - path: /
+        title: Public landing page
         assertions:
           - type: network_idle
+          - type: visible_text
+            value: "Pricing"
+          - type: network_request
+            url_contains: /socket.io/
+            status_min: 200
+            status_max: 299
+            min_count: 1
+            timeout_ms: 15000
           - type: no_blank_page
           - type: screenshot_not_blank

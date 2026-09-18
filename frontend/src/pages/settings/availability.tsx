@@ -504,6 +504,7 @@ const AvailabilitySettings = () => {
               </div>
               
               <motion.button
+                data-qa="availability-save"
                 whileHover={saving || savingAvailability ? {} : { scale: 1.02 }}
                 whileTap={saving || savingAvailability ? {} : { scale: 0.98 }}
                 onClick={handleSave}
@@ -1129,6 +1130,7 @@ const AvailabilitySettings = () => {
                 {activeTab === 'provider' && 'Provider availability changes'}
               </div>
               <motion.button
+                data-qa="availability-save"
                 whileHover={saving || savingAvailability ? {} : { scale: 1.02 }}
                 whileTap={saving || savingAvailability ? {} : { scale: 0.98 }}
                 onClick={handleSave}

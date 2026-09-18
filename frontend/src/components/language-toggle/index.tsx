@@ -11,6 +11,7 @@ const LanguageToggle = () => {
 
   return (
     <button
+      data-qa="language-toggle"
       onClick={toggleLanguage}
       className="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
       aria-label="Toggle language"
@@ -24,7 +25,10 @@ const LanguageToggle = () => {
         transition={{ duration: 0.2 }}
         className="flex items-center space-x-1"
       >
-        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+        <span
+          data-qa="language-current"
+          className="text-sm font-medium text-gray-700 dark:text-gray-300"
+        >
           {language === 'en' ? 'EN' : 'አማ'}
         </span>
         <span className="text-xs text-gray-500 dark:text-gray-500">

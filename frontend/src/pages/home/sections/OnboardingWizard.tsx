@@ -137,7 +137,7 @@ const OnboardingWizard = () => {
       ];
 
   return (
-    <div className={gradientBackground}>
+    <div data-qa="app-shell" data-qa-state="onboarding-wizard" className={gradientBackground}>
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-10 lg:grid lg:grid-cols-[360px,1fr] lg:gap-10 space-y-8 lg:space-y-0">
         <WizardSidebar currentStep={currentStep} isOrganization={isOrganization} />
 

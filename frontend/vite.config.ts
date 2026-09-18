@@ -9,7 +9,7 @@ export default defineConfig(({ command, mode }) => {
   let proxyConfig = {};
   if (env.VITE_SITE_NAME && env.VITE_SITE_PORT) {
     proxyConfig = {
-      "^/(app|api|assets|files|private)": {
+      "^/(app|apps|desk|api|assets|files|private|login|logout)(/|$)": {
         target: `http://localhost:${env.VITE_SITE_PORT}`,
         ws: true,
         changeOrigin: true,
@@ -23,15 +23,17 @@ export default defineConfig(({ command, mode }) => {
   if (isolated) {
     const target = `http://127.0.0.1:${process.env.FRAPPE_WORKTREE_WEB_PORT}`;
     proxyConfig = {
-      "^/(app|api|assets|files|private|login|logout)(/|$)": {
+      "^/(app|apps|desk|api|assets|files|private|login|logout)(/|$)": {
         target,
         changeOrigin: true,
         headers: { "X-Frappe-Site-Name": isolated },
       },
       "/socket.io": {
-        target: `http://127.0.0.1:${process.env.FRAPPE_WORKTREE_SOCKETIO_PORT}`,
+        // Use `localhost` rather than `127.0.0.1` so the Host header matches
+        // the browser Origin host and Frappe's realtime origin check passes.
+        target: `http://localhost:${process.env.FRAPPE_WORKTREE_SOCKETIO_PORT}`,
         ws: true,
-        changeOrigin: true,
+        changeOrigin: false,
         headers: { "X-Frappe-Site-Name": isolated },
       },
     };

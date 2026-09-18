@@ -523,6 +523,7 @@ export function BookingForm({
               >
               <Button
                 type="submit"
+                data-qa="booking-confirm"
                 disabled={loading}
                   className="w-full h-14 text-lg font-semibold backdrop-blur-sm shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{

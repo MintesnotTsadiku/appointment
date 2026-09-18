@@ -4,32 +4,16 @@ import { useTranslation } from '@/lib/i18n';
 const LogoCloud = () => {
   const { t } = useTranslation();
 
-  // Partner logos - companies with verified working logo URLs
+  // Demonstration partner names rendered as local text marks. Loading remote
+  // logo services made the offline/isolated build depend on third-party DNS and
+  // produced console/network failures that are not app defects.
   const partners = [
-    { 
-      name: 'Ethiopian Airlines', 
-      logo: 'https://logo.clearbit.com/ethiopianairlines.com' 
-    },
-    { 
-      name: 'Safaricom', 
-      logo: 'https://logo.clearbit.com/safaricom.co.ke' 
-    },
-    { 
-      name: 'Ethio Telecom', 
-      logo: 'https://logo.clearbit.com/ethiotelecom.et' 
-    },
-    { 
-      name: 'Commercial Bank of Ethiopia', 
-      logo: 'https://logo.clearbit.com/combanketh.et' 
-    },
-    { 
-      name: 'Dashen Bank', 
-      logo: 'https://logo.clearbit.com/dashenbanksc.com' 
-    },
-    { 
-      name: 'Bank of Abyssinia', 
-      logo: 'https://logo.clearbit.com/bankofabyssinia.com' 
-    },
+    { name: 'Ethiopian Airlines' },
+    { name: 'Safaricom' },
+    { name: 'Ethio Telecom' },
+    { name: 'Commercial Bank of Ethiopia' },
+    { name: 'Dashen Bank' },
+    { name: 'Bank of Abyssinia' },
   ];
 
   return (
@@ -128,19 +112,13 @@ const LogoCloud = () => {
                   boxShadow: '0 10px 30px -10px rgba(0, 0, 0, 0.2)'
                 }}
               >
-                <img
-                  src={partner.logo}
-                  alt={`${partner.name} logo`}
-                  className="max-w-full max-h-full object-contain opacity-80 hover:opacity-100 transition-opacity"
-                  loading="lazy"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                    const parent = e.currentTarget.parentElement;
-                    if (parent) {
-                      parent.innerHTML = `<div class="text-center px-4"><span class="text-sm font-bold leading-tight" style="color: var(--text-primary)">${partner.name}</span></div>`;
-                    }
-                  }}
-                />
+                <span
+                  data-qa="partner-logo"
+                  className="text-center px-4 text-sm font-bold leading-tight"
+                  style={{ color: 'var(--text-primary)' }}
+                >
+                  {partner.name}
+                </span>
               </motion.div>
             ))}
           </motion.div>

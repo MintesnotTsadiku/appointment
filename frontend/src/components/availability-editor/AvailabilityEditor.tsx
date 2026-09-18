@@ -230,6 +230,7 @@ export const AvailabilityEditor = ({
                 <div className="flex items-center space-x-3 min-w-[140px]">
                   <Checkbox
                     id={`day-${day}`}
+                    data-qa={`availability-day-${day}`}
                     checked={daySchedule.isOpen}
                     onCheckedChange={() => handleDayToggle(day)}
                     disabled={disabled}

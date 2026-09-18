@@ -13,6 +13,127 @@ interface AddWalkInModalProps {
   providers: Provider[];
 }
 
+/**
+ * Field components live at module scope. Defining them inside the modal made
+ * React remount the controlled input on every keystroke, which dropped typed
+ * values (and QA `fill` events).
+ */
+interface InputFieldProps {
+  id: string;
+  label: string;
+  icon: React.ElementType;
+  type?: string;
+  required?: boolean;
+  value: string;
+  error?: string;
+  active: boolean;
+  onValueChange: (value: string) => void;
+  onFocus: () => void;
+  onBlur: () => void;
+  [key: string]: any;
+}
+
+const InputField = ({
+  id,
+  label,
+  icon: Icon,
+  type = "text",
+  required = false,
+  value,
+  error,
+  active,
+  onValueChange,
+  onFocus,
+  onBlur,
+  ...props
+}: InputFieldProps) => (
+  <div className="relative">
+    <label className="block text-xs font-medium text-gray-400 mb-1.5">
+      {label} {required && <span className="text-red-400">*</span>}
+    </label>
+    <div className="relative">
+      <div
+        className={`absolute left-3 top-1/2 -translate-y-1/2 transition-colors ${
+          active ? "text-orange-400" : "text-gray-500"
+        }`}
+      >
+        <Icon className="w-4 h-4" />
+      </div>
+      <input
+        id={id}
+        type={type}
+        value={value}
+        onChange={(e) => onValueChange(e.target.value)}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        className={`w-full pl-10 pr-4 py-2.5 bg-white/5 border rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 transition-all ${
+          error
+            ? "border-red-500/50 focus:ring-red-500/20"
+            : "border-white/10 focus:border-orange-500/50 focus:ring-orange-500/20"
+        }`}
+        {...props}
+      />
+    </div>
+    {error && <p className="text-xs text-red-400 mt-1">{error}</p>}
+  </div>
+);
+
+interface SelectFieldProps {
+  id: string;
+  label: string;
+  icon: React.ElementType;
+  options: any[];
+  displayKey: string;
+  value: string;
+  active: boolean;
+  onValueChange: (value: string) => void;
+  onFocus: () => void;
+  onBlur: () => void;
+}
+
+const SelectField = ({
+  id,
+  label,
+  icon: Icon,
+  options,
+  displayKey,
+  value,
+  active,
+  onValueChange,
+  onFocus,
+  onBlur,
+}: SelectFieldProps) => (
+  <div className="relative">
+    <label className="block text-xs font-medium text-gray-400 mb-1.5">{label}</label>
+    <div className="relative">
+      <div
+        className={`absolute left-3 top-1/2 -translate-y-1/2 transition-colors ${
+          active ? "text-orange-400" : "text-gray-500"
+        }`}
+      >
+        <Icon className="w-4 h-4" />
+      </div>
+      <select
+        id={id}
+        value={value}
+        onChange={(e) => onValueChange(e.target.value)}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm text-white appearance-none focus:outline-none focus:ring-2 focus:border-orange-500/50 focus:ring-orange-500/20 transition-all"
+      >
+        <option value="" className="bg-[#1a1a24]">
+          Select {label.toLowerCase()}
+        </option>
+        {options.map((opt) => (
+          <option key={opt.name} value={opt.name} className="bg-[#1a1a24]">
+            {opt[displayKey]}
+          </option>
+        ))}
+      </select>
+    </div>
+  </div>
+);
+
 export const AddWalkInModal = ({
   isOpen,
   onClose,
@@ -100,90 +221,6 @@ export const AddWalkInModal = ({
     }
   };
 
-  const InputField = ({ 
-    id, 
-    label, 
-    icon: Icon, 
-    type = 'text', 
-    required = false,
-    ...props 
-  }: { 
-    id: string; 
-    label: string; 
-    icon: React.ElementType; 
-    type?: string;
-    required?: boolean;
-    [key: string]: any;
-  }) => (
-    <div className="relative">
-      <label className="block text-xs font-medium text-gray-400 mb-1.5">
-        {label} {required && <span className="text-red-400">*</span>}
-      </label>
-      <div className="relative">
-        <div className={`absolute left-3 top-1/2 -translate-y-1/2 transition-colors ${
-          activeField === id ? 'text-orange-400' : 'text-gray-500'
-        }`}>
-          <Icon className="w-4 h-4" />
-        </div>
-        <input
-          type={type}
-          value={formData[id as keyof typeof formData]}
-          onChange={(e) => setFormData({ ...formData, [id]: e.target.value })}
-          onFocus={() => setActiveField(id)}
-          onBlur={() => setActiveField(null)}
-          className={`w-full pl-10 pr-4 py-2.5 bg-white/5 border rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 transition-all ${
-            errors[id] 
-              ? 'border-red-500/50 focus:ring-red-500/20' 
-              : 'border-white/10 focus:border-orange-500/50 focus:ring-orange-500/20'
-          }`}
-          {...props}
-        />
-      </div>
-      {errors[id] && (
-        <p className="text-xs text-red-400 mt-1">{errors[id]}</p>
-      )}
-    </div>
-  );
-
-  const SelectField = ({ 
-    id, 
-    label, 
-    icon: Icon, 
-    options, 
-    displayKey 
-  }: { 
-    id: string; 
-    label: string; 
-    icon: React.ElementType; 
-    options: any[];
-    displayKey: string;
-  }) => (
-    <div className="relative">
-      <label className="block text-xs font-medium text-gray-400 mb-1.5">{label}</label>
-      <div className="relative">
-        <div className={`absolute left-3 top-1/2 -translate-y-1/2 transition-colors ${
-          activeField === id ? 'text-orange-400' : 'text-gray-500'
-        }`}>
-          <Icon className="w-4 h-4" />
-        </div>
-        <select
-          value={formData[id as keyof typeof formData]}
-          onChange={(e) => setFormData({ ...formData, [id]: e.target.value })}
-          onFocus={() => setActiveField(id)}
-          onBlur={() => setActiveField(null)}
-          className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm text-white appearance-none focus:outline-none focus:ring-2 focus:border-orange-500/50 focus:ring-orange-500/20 transition-all"
-        >
-          <option value="" className="bg-[#1a1a24]">Select {label.toLowerCase()}</option>
-          {options.map((opt) => (
-            <option key={opt.name} value={opt.name} className="bg-[#1a1a24]">
-              {opt[displayKey]}
-            </option>
-          ))}
-        </select>
-      </div>
-    </div>
-  );
-
   if (!isOpen) return null;
 
   return (
@@ -241,19 +278,90 @@ export const AddWalkInModal = ({
           <form onSubmit={handleSubmit} className="p-6 space-y-4">
             {/* Client Info */}
             <div className="grid grid-cols-2 gap-4">
-              <InputField id="client_name" label="Client Name" icon={User} placeholder="John Doe" required />
-              <InputField id="client_phone" label="Phone" icon={Phone} placeholder="+251 9XX" required />
+              <InputField
+                id="client_name"
+                data-qa="walkin-client-name"
+                label="Client Name"
+                icon={User}
+                placeholder="John Doe"
+                required
+                value={formData.client_name}
+                error={errors.client_name}
+                active={activeField === "client_name"}
+                onValueChange={(value) => setFormData({ ...formData, client_name: value })}
+                onFocus={() => setActiveField("client_name")}
+                onBlur={() => setActiveField(null)}
+              />
+              <InputField
+                id="client_phone"
+                data-qa="walkin-client-phone"
+                label="Phone"
+                icon={Phone}
+                placeholder="+251 9XX"
+                required
+                value={formData.client_phone}
+                error={errors.client_phone}
+                active={activeField === "client_phone"}
+                onValueChange={(value) => setFormData({ ...formData, client_phone: value })}
+                onFocus={() => setActiveField("client_phone")}
+                onBlur={() => setActiveField(null)}
+              />
             </div>
 
-            <InputField id="client_email" label="Email" icon={Mail} type="email" placeholder="john@example.com" />
+            <InputField
+              id="client_email"
+              label="Email"
+              icon={Mail}
+              type="email"
+              placeholder="john@example.com"
+              value={formData.client_email}
+              error={errors.client_email}
+              active={activeField === "client_email"}
+              onValueChange={(value) => setFormData({ ...formData, client_email: value })}
+              onFocus={() => setActiveField("client_email")}
+              onBlur={() => setActiveField(null)}
+            />
 
             {/* Service & Location */}
             <div className="grid grid-cols-2 gap-4">
-              <SelectField id="service_requested" label="Service" icon={Briefcase} options={services} displayKey="service_name" />
-              <SelectField id="location_name" label="Location" icon={MapPin} options={locations} displayKey="location_name" />
+              <SelectField
+                id="service_requested"
+                label="Service"
+                icon={Briefcase}
+                options={services}
+                displayKey="service_name"
+                value={formData.service_requested}
+                active={activeField === "service_requested"}
+                onValueChange={(value) => setFormData({ ...formData, service_requested: value })}
+                onFocus={() => setActiveField("service_requested")}
+                onBlur={() => setActiveField(null)}
+              />
+              <SelectField
+                id="location_name"
+                label="Location"
+                icon={MapPin}
+                options={locations}
+                displayKey="location_name"
+                value={formData.location_name}
+                active={activeField === "location_name"}
+                onValueChange={(value) => setFormData({ ...formData, location_name: value })}
+                onFocus={() => setActiveField("location_name")}
+                onBlur={() => setActiveField(null)}
+              />
             </div>
 
-            <SelectField id="provider_preferred" label="Preferred Provider" icon={User} options={providers} displayKey="provider_name" />
+            <SelectField
+              id="provider_preferred"
+              label="Preferred Provider"
+              icon={User}
+              options={providers}
+              displayKey="provider_name"
+              value={formData.provider_preferred}
+              active={activeField === "provider_preferred"}
+              onValueChange={(value) => setFormData({ ...formData, provider_preferred: value })}
+              onFocus={() => setActiveField("provider_preferred")}
+              onBlur={() => setActiveField(null)}
+            />
 
             {/* Notes */}
             <div className="relative">
@@ -284,6 +392,7 @@ export const AddWalkInModal = ({
                 Cancel
               </motion.button>
               <motion.button
+                data-qa="walkin-submit"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 type="submit"

@@ -226,6 +226,7 @@ export function CalendarPanel({
             <motion.button
               key={index}
               role="gridcell"
+              data-qa="booking-date"
               onClick={() => handleDateClick(date)}
               disabled={!selectable || loading}
               whileHover={selectable && !selected ? { scale: 1.05 } : {}}
@@ -272,6 +273,7 @@ export function CalendarPanel({
       <div className="mt-6 flex gap-2 justify-center flex-wrap">
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
         <Button
+          data-qa="booking-today"
           variant="outline"
           size="sm"
           onClick={() => {

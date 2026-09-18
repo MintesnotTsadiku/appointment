@@ -114,7 +114,7 @@ const ServicesSettings = () => {
                     </div>
                   </div>
                   <div>
-                    <h1 className="text-xl lg:text-2xl font-bold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+                    <h1 data-qa="services-heading" className="text-xl lg:text-2xl font-bold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
                       Services & Appointment Types
                       <span
                         className="px-2 py-0.5 text-[10px] font-semibold rounded-full"
@@ -134,6 +134,7 @@ const ServicesSettings = () => {
                 </div>
               </div>
               <motion.button
+                data-qa="services-new"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setShowCreateModal(true)}
