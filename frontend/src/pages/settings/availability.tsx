@@ -309,6 +309,17 @@ const AvailabilitySettings = () => {
     }
   }, [providerAvailData]);
 
+  // Normalize whatever the editor/API produced (e.g. `8:30`, `8:30:`,
+  // `8:30:00`) into a strict `HH:MM:SS` so the server never sees
+  // `8:30::00`.
+  const normalizeTime = (value: string) => {
+    const parts = String(value || '').split(':');
+    const hours = (parts[0] || '00').padStart(2, '0');
+    const minutes = (parts[1] || '00').padStart(2, '0');
+    const seconds = (parts[2] || '00').padStart(2, '0');
+    return `${hours}:${minutes}:${seconds}`;
+  };
+
   const convertScheduleToOpeningHours = (schedule: DaySchedule[]) => {
     const openingHours: any[] = [];
     schedule.forEach((daySchedule) => {
@@ -316,8 +327,8 @@ const AvailabilitySettings = () => {
         daySchedule.ranges.forEach((range) => {
           openingHours.push({
             day_of_week: daySchedule.day,
-            start_time: `${range.start}:00`,
-            end_time: `${range.end}:00`,
+            start_time: normalizeTime(range.start),
+            end_time: normalizeTime(range.end),
             is_open: 1,
           });
         });
@@ -664,6 +675,7 @@ const AvailabilitySettings = () => {
                       Select Location
                     </label>
                     <select
+                      data-qa="availability-location-select"
                       value={selectedLocation || ''}
                       onChange={(e) => setSelectedLocation(e.target.value)}
                       className="w-full px-3 py-2 rounded-lg transition-all h-[42px]"
