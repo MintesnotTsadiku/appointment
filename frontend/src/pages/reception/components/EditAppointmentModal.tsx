@@ -358,6 +358,7 @@ export const EditAppointmentModal = ({
 
         {/* Modal */}
         <motion.div
+          data-qa="edit-appointment-modal"
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -482,6 +483,7 @@ export const EditAppointmentModal = ({
                 <Popover open={timePickerOpen} onOpenChange={setTimePickerOpen}>
                   <PopoverTrigger asChild>
                     <Button
+                      data-qa="edit-time-trigger"
                       variant="outline"
                       className="w-full justify-between font-normal"
                       style={{
@@ -512,6 +514,7 @@ export const EditAppointmentModal = ({
                             <button
                               key={hour}
                               type="button"
+                              data-qa={`edit-time-hour-${hour}`}
                               onClick={() => {
                                 setSelectedHour(hour);
                                 const time24 = formatTime24(hour, selectedMinute, selectedPeriod);
@@ -542,6 +545,7 @@ export const EditAppointmentModal = ({
                             <button
                               key={minute}
                               type="button"
+                              data-qa={`edit-time-minute-${minute}`}
                               onClick={() => {
                                 setSelectedMinute(minute);
                                 const time24 = formatTime24(selectedHour, minute, selectedPeriod);
@@ -572,6 +576,7 @@ export const EditAppointmentModal = ({
                             <button
                               key={period}
                               type="button"
+                              data-qa={`edit-time-period-${period}`}
                               onClick={() => {
                                 setSelectedPeriod(period);
                                 const time24 = formatTime24(selectedHour, selectedMinute, period);
@@ -627,7 +632,16 @@ export const EditAppointmentModal = ({
 
             {/* Status */}
             <div className="relative">
-              <label className="block text-xs font-medium mb-1.5" style={{ color: 'var(--text-muted)' }}>Status</label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-xs font-medium" style={{ color: 'var(--text-muted)' }}>Status</label>
+                <span
+                  data-qa="appointment-status-value"
+                  className="text-xs font-semibold"
+                  style={{ color: 'var(--accent-primary)' }}
+                >
+                  {formData.status}
+                </span>
+              </div>
               <select
                 data-qa="appointment-status"
                 value={formData.status}

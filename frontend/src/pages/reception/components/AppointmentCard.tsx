@@ -99,6 +99,8 @@ export const AppointmentCard = ({ appointment, isDragging, compact, timeSlotInte
     return (
       <div
         ref={setNodeRef}
+        data-qa="appointment-card"
+        data-qa-appointment-name={appointment.name}
         style={{
           ...style,
           background: `linear-gradient(135deg, ${statusVars.bg}, color-mix(in srgb, ${statusVars.bg} 85%, var(--bg-elevated)))`,
@@ -230,6 +232,8 @@ export const AppointmentCard = ({ appointment, isDragging, compact, timeSlotInte
   return (
     <div
       ref={setNodeRef}
+      data-qa="appointment-card"
+      data-qa-appointment-name={appointment.name}
       {...attributes}
       className={`rounded-xl border transition-all group hover:shadow-lg hover:shadow-black/20 overflow-hidden flex flex-col min-w-0 ${
         isDraggingState ? 'opacity-50 shadow-2xl scale-105' : ''
