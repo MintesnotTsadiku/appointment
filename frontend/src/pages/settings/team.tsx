@@ -88,7 +88,7 @@ const TeamManagement = () => {
                     </div>
                   </div>
                   <div>
-                    <h1 className="text-xl lg:text-2xl font-bold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+                    <h1 data-qa="team-heading" className="text-xl lg:text-2xl font-bold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
                       Team Management
                       <span 
                         className="px-2 py-0.5 text-[10px] font-semibold rounded-full"

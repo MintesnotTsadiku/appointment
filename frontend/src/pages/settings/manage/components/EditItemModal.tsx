@@ -174,6 +174,7 @@ export const EditItemModal = ({ isOpen, onClose, item, organization, onSuccess }
                   </label>
                   <input
                     type="text"
+                    data-qa="manage-service-name"
                     required
                     value={formData.service_name}
                     onChange={(e) => setFormData({ ...formData, service_name: e.target.value })}
@@ -493,6 +494,7 @@ export const EditItemModal = ({ isOpen, onClose, item, organization, onSuccess }
                 </motion.button>
                 <motion.button
                   type="submit"
+                  data-qa="manage-edit-submit"
                   whileHover={isLoading ? {} : { scale: 1.02 }}
                   whileTap={isLoading ? {} : { scale: 0.98 }}
                   disabled={isLoading}

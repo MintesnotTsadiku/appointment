@@ -54,7 +54,7 @@ export const DeskHeader = ({
                 </div>
               </div>
               <div className="hidden sm:block">
-                <h1 className="text-lg lg:text-xl font-bold tracking-tight flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+                <h1 data-qa="reception-heading" className="text-lg lg:text-xl font-bold tracking-tight flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
                   Reception
                   <span 
                     className="px-2 py-0.5 text-[10px] font-semibold rounded-full"
@@ -229,6 +229,7 @@ export const DeskHeader = ({
 
             {/* New Appointment Button */}
             <motion.button
+              data-qa="reception-new-appointment"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={onCreateAppointment}

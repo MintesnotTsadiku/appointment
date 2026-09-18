@@ -368,6 +368,8 @@ interface ServiceCardProps {
 function ServiceCard({ service, onSelect, availableProviders = [], showProviderName = true }: ServiceCardProps) {
   return (
     <motion.button
+      data-qa="booking-service"
+      data-qa-service-slug={service.slug}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       onClick={() => onSelect(service)}

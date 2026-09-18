@@ -252,6 +252,7 @@ export function TimeSlotsPanel({
                   return (
                   <motion.button
                     key={slot.id}
+                    data-qa="booking-slot"
                     onClick={() => !disabled && onSlotSelect(slot)}
                     disabled={disabled}
                     whileHover={!disabled && !selected ? { scale: 1.02 } : {}}

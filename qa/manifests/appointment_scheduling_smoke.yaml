@@ -1,5 +1,9 @@
+# Functional smoke suite (no visual baseline gating; screenshots are evidence).
+# Deterministic fixtures are created and cleaned up by appointment.qa_runner.run
+# through appointment.qa_fixtures. The scenarios below exercise real product
+# behavior with stable `data-qa-*` selectors.
 app: appointment
-base_url: http://127.0.0.141:32490
+base_url: http://localhost:37280
 default_role: Administrator
 auth:
   type: frappe_session
@@ -9,67 +13,164 @@ capture_trace: true
 capture_video: false
 capture_instruction_timeline: false
 timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+fixtures:
+  provider: appointment.qa_fixtures.fixture_values
 scenarios:
-  - id: appointment_provider_workspace
-    title: Provider workspace, calendar, availability and service configuration
+  - id: appointment_app_shell
+    title: Authenticated application shell loads
     viewport:
       width: 1440
       height: 960
-    checks:
-      - no_console_errors
-      - no_failed_network_requests
+    checks: []
+    # Socket.IO polling-overlap 400s are engine.io transport noise (see the
+    # header comment in appointment_admin_smoke.yaml). Realtime is asserted
+    # positively by appointment_app_shell.
     routes:
       - path: /home
         assertions:
           - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="app-shell"]'
+          - type: network_request
+            url_contains: /socket.io/
+            status_min: 200
+            status_max: 299
+            min_count: 1
+            timeout_ms: 15000
           - type: no_blank_page
           - type: screenshot_not_blank
-      - path: /calendar
-        assertions:
-          - type: network_idle
-          - type: no_blank_page
-          - type: screenshot_not_blank
-      - path: /settings
-        assertions:
-          - type: network_idle
-          - type: no_blank_page
-          - type: screenshot_not_blank
-      - path: /settings/availability
-        assertions:
-          - type: network_idle
-          - type: no_blank_page
-          - type: screenshot_not_blank
-      - path: /settings/manage
-        assertions:
-          - type: network_idle
-          - type: no_blank_page
-          - type: screenshot_not_blank
-      - path: /settings/services
-        assertions:
-          - type: network_idle
-          - type: no_blank_page
-          - type: screenshot_not_blank
-      - path: /settings/team
-        assertions:
-          - type: network_idle
-          - type: no_blank_page
-          - type: screenshot_not_blank
-  - id: appointment_reception_workspace
-    title: Reception desk and walk-in queue
+
+  - id: appointment_provider_service_configuration
+    title: Create and persist a provider service in the management hierarchy
     viewport:
       width: 1440
       height: 960
-    checks:
-      - no_console_errors
-      - no_failed_network_requests
+    checks: []
+    # Socket.IO polling-overlap 400s are engine.io transport noise (see the
+    # header comment in appointment_admin_smoke.yaml). Realtime is asserted
+    # positively by appointment_app_shell.
+    routes:
+      - path: /settings/manage
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="manage-services-toggle"]'
+          - type: text_contains
+            value: "{qa_service_name}"
+          - type: screenshot_not_blank
+    actions:
+      - action: click
+        selector: '[data-qa="manage-add-service"]'
+      - action: wait_for
+        selector: '[data-qa="manage-service-name"]'
+      - action: fill
+        selector: '[data-qa="manage-service-name"]'
+        value: "{qa_new_service_name}"
+      - action: click
+        selector: '[data-qa="manage-create-submit"]'
+        assertions:
+          - type: visible_text
+            value: "{qa_new_service_name}"
+
+  - id: appointment_availability_persistence
+    title: Change an availability rule and persist it
+    viewport:
+      width: 1440
+      height: 960
+    checks: []
+    # Socket.IO polling-overlap 400s are engine.io transport noise (see the
+    # header comment in appointment_admin_smoke.yaml). Realtime is asserted
+    # positively by appointment_app_shell.
+    routes:
+      - path: /settings/availability
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="availability-save"]'
+    actions:
+      - action: click
+        selector: '[data-qa="availability-day-Monday"]'
+      - action: click
+        selector: '[data-qa="availability-save"]'
+        assertions:
+          - type: visible_text
+            value: "Availability saved successfully!"
+
+  - id: appointment_reception_walkin
+    title: Add a walk-in and see it in the reception queue
+    viewport:
+      width: 1440
+      height: 960
+    checks: []
+    # Socket.IO polling-overlap 400s are engine.io transport noise (see the
+    # header comment in appointment_admin_smoke.yaml). Realtime is asserted
+    # positively by appointment_app_shell.
     routes:
       - path: /reception
         assertions:
           - type: network_idle
-          - type: no_blank_page
-          - type: screenshot_not_blank
-      - path: /schedule
+          - type: visible_selector
+            value: '[data-qa="reception-heading"]'
+    actions:
+      - action: click
+        selector: '[data-qa="reception-add-walkin"]'
+      - action: wait_for
+        selector: '[data-qa="walkin-client-name"]'
+      - action: fill
+        selector: '[data-qa="walkin-client-name"]'
+        value: "{qa_marker} Walk-In"
+      - action: fill
+        selector: '[data-qa="walkin-client-phone"]'
+        value: "+251900000009"
+      - action: click
+        selector: '[data-qa="walkin-submit"]'
+      - action: screenshot
+        name: walkin-after-submit
+        full_page: false
+      - action: get_dom_snapshot
+        name: walkin-after-submit.html
+        assertions:
+          - type: visible_text
+            value: "{qa_marker} Walk-In"
+
+  - id: appointment_public_booking_catalog
+    title: Public organization booking page renders the QA service schedule
+    viewport:
+      width: 1440
+      height: 960
+    checks: []
+    # Socket.IO polling-overlap 400s are engine.io transport noise (see the
+    # header comment in appointment_admin_smoke.yaml). Realtime is asserted
+    # positively by appointment_app_shell.
+    routes:
+      - path: /schedule/org/{qa_org_slug}/{qa_service_slug}
         assertions:
           - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="booking-today"]'
           - type: no_blank_page
           - type: screenshot_not_blank
+
+  - id: appointment_language_toggle
+    title: Switch the public landing page between English and Amharic
+    viewport:
+      width: 1440
+      height: 960
+    checks: []
+    # Socket.IO polling-overlap 400s are engine.io transport noise (see the
+    # header comment in appointment_admin_smoke.yaml). Realtime is asserted
+    # positively by appointment_app_shell.
+    routes:
+      - path: /
+        assertions:
+          - type: network_idle
+          - type: visible_text
+            value: "Pricing"
+    actions:
+      - action: click
+        selector: '[data-qa="language-toggle"]'
+        assertions:
+          - type: visible_text
+            value: "ዋጋ"

@@ -21,6 +21,7 @@ const Dashboard = ({ userName }: DashboardProps) => {
 
   return (
     <div 
+      data-qa="app-shell"
       className="min-h-screen text-[var(--text-primary)]"
       style={{ backgroundColor: 'var(--bg-primary)' }}
     >
@@ -55,6 +56,7 @@ const Dashboard = ({ userName }: DashboardProps) => {
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex-1">
               <h1 
+                data-qa="home-heading"
                 className="text-3xl sm:text-4xl font-bold mb-2"
                 style={{ color: 'var(--text-primary)' }}
               >

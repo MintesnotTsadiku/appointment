@@ -139,3 +139,31 @@ class TestModuleIdentity(unittest.TestCase):
             "appointment.appointment.doctype.appointment_settings.appointment_settings.get_default_email_template"
         )
         self.assertTrue(callable(fn))
+
+    def test_scheduled_job_methods_importable(self):
+        methods = frappe.get_all(
+            "Scheduled Job Type",
+            filters={"method": ["like", f"{CANONICAL_APP}.%"]},
+            pluck="method",
+        )
+        self.assertTrue(methods)
+        for method in methods:
+            self.assertTrue(callable(frappe.get_attr(method)), method)
+
+    def test_email_templates_are_imported(self):
+        from appointment.tasks.import_email_templates import (
+            DEFAULT_EMAIL_TEMPLATE_FIELDS,
+        )
+
+        for template in set(DEFAULT_EMAIL_TEMPLATE_FIELDS.values()):
+            self.assertTrue(frappe.db.exists("Email Template", template), template)
+
+    def test_appointment_settings_defaults_resolve(self):
+        from appointment.tasks.import_email_templates import (
+            DEFAULT_EMAIL_TEMPLATE_FIELDS,
+        )
+
+        settings = frappe.get_single("Appointment Settings")
+        for fieldname, fallback in DEFAULT_EMAIL_TEMPLATE_FIELDS.items():
+            value = settings.get(fieldname) or fallback
+            self.assertTrue(frappe.db.exists("Email Template", value), (fieldname, value))

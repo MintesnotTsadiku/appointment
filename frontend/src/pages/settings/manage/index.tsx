@@ -334,6 +334,7 @@ const Manage = () => {
               <span className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>View by:</span>
               <div className="flex gap-2">
                 <motion.button
+                  data-qa="manage-view-organization"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => setViewType('organization')}
@@ -351,6 +352,7 @@ const Manage = () => {
                   Organization
                 </motion.button>
                 <motion.button
+                  data-qa="manage-view-provider"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => setViewType('provider')}
@@ -385,6 +387,7 @@ const Manage = () => {
               Select Organization:
             </label>
             <select
+              data-qa="manage-org-select"
               value={selectedOrgIndex}
               onChange={(e) => setSelectedOrgIndex(Number(e.target.value))}
               className="w-full max-w-md px-3 py-2 rounded-lg transition-all"

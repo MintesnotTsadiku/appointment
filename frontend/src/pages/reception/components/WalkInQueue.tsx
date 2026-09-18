@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, RefreshCw, Users, Clock, ArrowRight, Sparkles } from 'lucide-react';
 import { WalkInCard } from './WalkInCard';
@@ -10,9 +10,10 @@ interface WalkInQueueProps {
   locationName: string | null;
   onAssignWalkIn: (walkInName: string) => void;
   onCreateWalkIn: () => void;
+  refreshToken?: number;
 }
 
-export const WalkInQueue = ({ locationName, onAssignWalkIn, onCreateWalkIn }: WalkInQueueProps) => {
+export const WalkInQueue = ({ locationName, onAssignWalkIn, onCreateWalkIn, refreshToken = 0 }: WalkInQueueProps) => {
   const [assigningWalkIn, setAssigningWalkIn] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -31,6 +32,12 @@ export const WalkInQueue = ({ locationName, onAssignWalkIn, onCreateWalkIn }: Wa
   const { call: assignWalkIn } = useFrappePostCall('appointment.scheduler.api.desk.assign_walk_in_to_slot');
 
   const walkIns = walkInsData?.message?.walk_ins || [];
+
+  useEffect(() => {
+    if (refreshToken > 0) {
+      refreshWalkIns();
+    }
+  }, [refreshToken, refreshWalkIns]);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
@@ -118,6 +125,7 @@ export const WalkInQueue = ({ locationName, onAssignWalkIn, onCreateWalkIn }: Wa
 
         {/* Add Walk-In Button */}
         <motion.button
+          data-qa="reception-add-walkin"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={onCreateWalkIn}

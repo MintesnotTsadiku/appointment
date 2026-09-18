@@ -54,7 +54,7 @@ const Card = ({
 
 export const OnboardingTypeSelection = ({ onSelect }: OnboardingTypeSelectionProps) => {
   return (
-    <div className={gradientBackground}>
+    <div data-qa="app-shell" data-qa-state="onboarding-type-selection" className={gradientBackground}>
       <div className="max-w-5xl mx-auto px-4 py-12 space-y-10">
         <div className="text-center space-y-4">
           <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-primary-50 text-primary-700">
