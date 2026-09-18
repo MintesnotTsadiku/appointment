@@ -314,7 +314,7 @@ import frappe
 # Create a new custom doctype
 doctype = frappe.new_doc('DocType')
 doctype.name = 'Test Doctype'
-doctype.module = 'Frappe Appointment'
+doctype.module = 'Appointment'
 doctype.custom = 1
 doctype.is_submittable = 0
 doctype.istable = 0

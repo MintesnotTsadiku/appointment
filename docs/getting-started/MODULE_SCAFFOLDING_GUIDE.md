@@ -95,7 +95,7 @@ After scaffolding, your structure will look like:
 appointment/
 ├── appointment/
 │   ├── __init__.py
-│   ├── modules.txt                    # Contains: Frappe Appointment, Scheduler, Payments, Channels
+│   ├── modules.txt                    # Contains: Appointment, Scheduler, Payments, Channels
 │   ├── appointment/           # Original module
 │   │   └── doctype/
 │   ├── scheduler/                     # NEW: Scheduler module

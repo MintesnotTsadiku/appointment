@@ -162,7 +162,7 @@ import frappe
 # Create Landing Page Settings doctype
 doctype = frappe.new_doc('DocType')
 doctype.name = 'Landing Page Settings'
-doctype.module = 'Frappe Appointment'
+doctype.module = 'Appointment'
 doctype.custom = 0
 doctype.is_single = 1  # Single doctype (like Website Settings)
 
@@ -332,7 +332,7 @@ Instead of hardcoding filenames, use filters:
 # Good: Automatically includes all Organization-related doctypes
 {
     "dt": "DocType",
-    "filters": [["module", "=", "Frappe Appointment"]]
+    "filters": [["module", "=", "Appointment"]]
 }
 
 # Also good: Specific list

@@ -42,12 +42,12 @@ fixtures = [
     # Custom Fields for Frappe Appointment module
     {
         "dt": "Custom Field",
-        "filters": [["module", "in", {"Frappe Appointment"}]],
+        "filters": [["module", "in", {"Appointment"}]],
     },
     # Property Setters for Frappe Appointment module
     {
         "dt": "Property Setter",
-        "filters": [["module", "in", {"Frappe Appointment"}]],
+        "filters": [["module", "in", {"Appointment"}]],
     },
     # Roles for the multi-business system  
     {
@@ -151,7 +151,7 @@ import frappe
 # Create Landing Page Settings doctype
 doctype = frappe.new_doc('DocType')
 doctype.name = 'Ethiopian Scheduler Settings'
-doctype.module = 'Frappe Appointment'
+doctype.module = 'Appointment'
 doctype.is_single = 1  # Single doctype like Website Settings
 doctype.custom = 0
 

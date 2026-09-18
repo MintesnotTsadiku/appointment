@@ -130,7 +130,11 @@ Testing guide: `docs/rename/testing-guide.md`.
 - Fresh install imports email templates from `after_install` and applies the
   `Appointment Settings` Link defaults after the templates exist, so
   `init_singles` cannot fail on a fresh site.
-- Business DocTypes and inner module package names are unchanged.
+- Primary Frappe module and package renamed: `Frappe Appointment` →
+  `Appointment`, `appointment/frappe_appointment/` → `appointment/appointment/`,
+  with all module metadata, fixtures and `appointment.appointment.*` dotted
+  paths updated.
+- Business DocType names are unchanged.
 
 ### Validation performed
 

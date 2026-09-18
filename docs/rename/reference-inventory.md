@@ -7,6 +7,8 @@ Canonical identity:
 | Display title | **Appointment** |
 | Frappe app identifier | `appointment` |
 | Python package | `appointment` |
+| Primary Frappe module | `Appointment` |
+| Primary module package | `appointment.appointment` |
 | Repository | existing `appointment` repository (history retained) |
 
 The app was previously identified as `frappe_appointment` / `scheduler`, but it
@@ -16,8 +18,8 @@ legacy alias is retained. Everything below is canonical.
 ## Package layout
 
 - App root: `appointment/` (contains `hooks.py`, `modules.txt`, `patches.txt`).
-- Inner module packages keep their historical names:
-  `appointment/frappe_appointment`, `appointment/scheduler`,
+- Primary module package: `appointment/appointment/` (module `Appointment`).
+- Other module packages are unchanged: `appointment/scheduler`,
   `appointment/payments`, `appointment/channels`, `appointment/tasks`,
   `appointment/assistants`.
 - Business DocType names are unchanged.
@@ -36,9 +38,13 @@ legacy alias is retained. Everything below is canonical.
 
 ## Modules
 
-`modules.txt` declares `Frappe Appointment`, `Scheduler`, `Payments`,
+`modules.txt` declares `Appointment`, `Scheduler`, `Payments`,
 `Channels`, `Tasks`, `Assistants`; `Module Def.app_name` is `appointment` for
-all six.
+all six. The ten DocTypes formerly owned by the `Frappe Appointment` module
+(`Appointment Group`, `Appointment Settings`, `Appointment Slot Duration`,
+`Appointment Time Slot`, `Event DocType Link`, `Members`, `Organization`,
+`Organization Manager`, `Provider Delegation`, `User Appointment Availability`)
+now report `module = Appointment`.
 
 ## Patches
 
@@ -61,7 +67,8 @@ all six.
 ## Verification entry points
 
 - `appointment/tests/test_app_identity.py` — canonical install, app path, public
-  API import, module ownership, scheduled jobs, business-count preservation.
+  API import, app/module ownership, module-package resolution, scheduled jobs,
+  business-count preservation.
 - `qa/manifests/appointment_admin_smoke.yaml` — Desk + landing.
 - `qa/manifests/appointment_scheduling_smoke.yaml` — provider workspace,
   configuration, reception and booking routes.
