@@ -114,6 +114,7 @@ export const VAProfileCard = ({ vaProfile, onClick, onEdit }: VAProfileCardProps
                 </div>
               )}
             </div>
+            </div>
           </div>
           {onEdit && (
             <div

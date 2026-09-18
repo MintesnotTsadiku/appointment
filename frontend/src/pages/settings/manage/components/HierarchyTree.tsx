@@ -120,8 +120,7 @@ export const HierarchyTree = ({ organization, provider, onRefresh }: HierarchyTr
             border: '1px solid var(--border-default)'
           }}
         >
-          <button
-            onClick={() => toggleSection('services')}
+          <div
             className="w-full px-4 py-3 flex items-center justify-between transition-colors rounded-t-xl"
             style={{
               backgroundColor: 'transparent',
@@ -134,7 +133,13 @@ export const HierarchyTree = ({ organization, provider, onRefresh }: HierarchyTr
               e.currentTarget.style.backgroundColor = 'transparent';
             }}
           >
-            <div className="flex items-center gap-2">
+            <button
+              type="button"
+              data-qa="manage-services-toggle"
+              aria-expanded={expandedSections.has('services')}
+              onClick={() => toggleSection('services')}
+              className="flex flex-1 items-center gap-2 text-left"
+            >
               {expandedSections.has('services') ? (
                 <ChevronDown className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
               ) : (
@@ -144,19 +149,17 @@ export const HierarchyTree = ({ organization, provider, onRefresh }: HierarchyTr
               <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>
                 Services ({organization.services?.length || 0})
               </span>
-            </div>
+            </button>
             <Button
               size="sm"
               variant="outline"
-              onClick={(e) => {
-                e.stopPropagation();
-                setCreateModalOpen({ type: 'service' });
-              }}
+              data-qa="manage-add-service"
+              onClick={() => setCreateModalOpen({ type: 'service' })}
             >
               <Plus className="w-4 h-4 mr-1" />
               Add Service
             </Button>
-          </button>
+          </div>
 
           {expandedSections.has('services') && (
             <div className="px-4 pb-4 space-y-2">
@@ -221,8 +224,7 @@ export const HierarchyTree = ({ organization, provider, onRefresh }: HierarchyTr
             border: '1px solid var(--border-default)'
           }}
         >
-          <button
-            onClick={() => toggleSection('locations')}
+          <div
             className="w-full px-4 py-3 flex items-center justify-between transition-colors rounded-t-xl"
             style={{
               backgroundColor: 'transparent',
@@ -235,7 +237,13 @@ export const HierarchyTree = ({ organization, provider, onRefresh }: HierarchyTr
               e.currentTarget.style.backgroundColor = 'transparent';
             }}
           >
-            <div className="flex items-center gap-2">
+            <button
+              type="button"
+              data-qa="manage-locations-toggle"
+              aria-expanded={expandedSections.has('locations')}
+              onClick={() => toggleSection('locations')}
+              className="flex flex-1 items-center gap-2 text-left"
+            >
               {expandedSections.has('locations') ? (
                 <ChevronDown className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
               ) : (
@@ -245,19 +253,17 @@ export const HierarchyTree = ({ organization, provider, onRefresh }: HierarchyTr
               <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>
                 Locations ({organization.locations?.length || 0})
               </span>
-            </div>
+            </button>
             <Button
               size="sm"
               variant="outline"
-              onClick={(e) => {
-                e.stopPropagation();
-                setCreateModalOpen({ type: 'location', parentId: organization.name });
-              }}
+              data-qa="manage-add-location"
+              onClick={() => setCreateModalOpen({ type: 'location', parentId: organization.name })}
             >
               <Plus className="w-4 h-4 mr-1" />
               Add Location
             </Button>
-          </button>
+          </div>
 
           {expandedSections.has('locations') && (
             <div className="px-4 pb-4 space-y-2">
@@ -289,6 +295,9 @@ export const HierarchyTree = ({ organization, provider, onRefresh }: HierarchyTr
           }}
         >
           <button
+            type="button"
+            data-qa="manage-providers-toggle"
+            aria-expanded={expandedSections.has('providers')}
             onClick={() => toggleSection('providers')}
             className="w-full px-4 py-3 flex items-center justify-between transition-colors rounded-t-xl"
             style={{
