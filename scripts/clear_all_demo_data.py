@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Script to clear all demo data from the Frappe Appointment system.
+Script to clear all demo data from the Appointment system.
 Run this via bench console for a non-interactive cleanup.
 
 Usage:

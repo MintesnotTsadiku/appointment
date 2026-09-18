@@ -1,4 +1,4 @@
-Frappe Appointment
+Appointment
 Scheduler
 Payments
 Channels

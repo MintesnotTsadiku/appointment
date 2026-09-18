@@ -1,5 +1,5 @@
 """
-Demo Data Generation for Frappe Appointment
+Demo Data Generation for Appointment
 Generates realistic Ethiopian-context demo data for testing and development
 """
 

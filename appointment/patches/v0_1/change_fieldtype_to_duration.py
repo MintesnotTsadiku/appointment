@@ -19,7 +19,7 @@ def execute():
             "duration_for_event": duration_for_event,
         }
 
-    frappe.reload_doc("Frappe Appointment", "doctype", "Appointment Group")
+    frappe.reload_doc("Appointment", "doctype", "Appointment Group")
 
     for appointment_group_doc in appointment_group_docs:
         appointment_group = frappe.get_doc("Appointment Group", appointment_group_doc)

@@ -49,7 +49,7 @@ def add_ics_file_in_attachment(event, ics_event_description=None):
     # Convert the calendar to a string
     ics_content = calendar_object.serialize()
     ics_content = ics_content.replace(
-        "PRODID:ics.py - http://git.io/lLljaA", "PRODID:-//Frappe Appointment//Frappe Appointment Events//EN"
+        "PRODID:ics.py - http://git.io/lLljaA", "PRODID:-//Appointment//Appointment Events//EN"
     )
 
     attached_file = frappe.get_doc(

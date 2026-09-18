@@ -4,7 +4,7 @@ from datetime import datetime
 import frappe
 import frappe.utils
 
-from appointment.frappe_appointment.doctype.appointment_group.appointment_group import (
+from appointment.appointment.doctype.appointment_group.appointment_group import (
     get_time_slots_for_given_date,
 )
 from appointment.helpers.email import send_email_template_mail

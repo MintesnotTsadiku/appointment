@@ -105,7 +105,7 @@ doctype_js = {
 # }
 
 fixtures = [
-    # Custom Fields for Frappe Appointment module
+    # Custom Fields for Appointment module
     {
         "dt": "Custom Field",
         "filters": [
@@ -113,12 +113,12 @@ fixtures = [
                 "module",
                 "in",
                 {
-                    "Frappe Appointment",
+                    "Appointment",
                 },
             ]
         ],
     },
-    # Property Setters for Frappe Appointment module
+    # Property Setters for Appointment module
     {
         "dt": "Property Setter",
         "filters": [
@@ -126,7 +126,7 @@ fixtures = [
                 "module",
                 "in",
                 {
-                    "Frappe Appointment",
+                    "Appointment",
                 },
             ]
         ],

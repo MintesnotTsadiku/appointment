@@ -375,8 +375,8 @@ def populate_all_defaults():
         "support_hours_am": "ሰኞ-ዓርብ: 9AM-6PM EAT",
         
         # SEO
-        "meta_title_en": "Frappe Appointment - Modern Scheduling Platform",
-        "meta_title_am": "Frappe Appointment - ዘመናዊ የቀጠሮ መድረክ",
+        "meta_title_en": "Appointment - Modern Scheduling Platform",
+        "meta_title_am": "Appointment - ዘመናዊ የቀጠሮ መድረክ",
         "meta_description_en": "The modern appointment scheduling platform for businesses. Book appointments, manage clients, and grow your business.",
         "meta_description_am": "ለንግዶች ዘመናዊ የቀጠሮ መያዣ መድረክ። ቀጠሮ ይያዙ፣ ደንበኞችን ያስተዳድሩ፣ ንግድዎን ያሳድጉ።",
         "keywords": "appointment, scheduling, booking, business, frappe, ethiopia, addis ababa",
