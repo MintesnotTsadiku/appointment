@@ -22,7 +22,8 @@
       "VITE_ENABLE_SOCKET": "true",
       "VITE_SOCKET_PORT": "{frontend_port}",
       "VITE_SITE_PORT": "{web_port}",
-      "VITE_BASE_URL": ""
+      "VITE_BASE_URL": "",
+      "VITE_DISABLE_STRICT_MODE": "true"
     }
   },
   "credentials": {},
