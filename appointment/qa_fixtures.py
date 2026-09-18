@@ -21,16 +21,20 @@ import frappe
 from frappe.utils import nowdate
 
 MARKER_PREFIX = "QA-BROWSER"
+# Deletion order matters: Booking Event / Appointment Group reference the
+# provider's User Appointment Availability, so they must go first or their
+# controllers raise on the missing link.
 _CREATED_DOCTYPES = (
     "Appointment",
     "Walk In",
+    "Booking Event",
+    "Appointment Group",
     "EventType",
     "Service",
     "User Appointment Availability",
     "Location",
     "Provider",
     "Organization",
-    "Booking Event",
     "User",
 )
 _SNAPSHOT_DOCTYPES = ("Appointment Group", "Booking Event")
@@ -313,11 +317,13 @@ def teardown() -> dict[str, Any]:
     leaks ambiguous production-like data.
     """
     removed: list[str] = []
+    # Run artifacts (Booking Event / Appointment Group) reference the fixture's
+    # User Appointment Availability, so remove them before the tracked records.
+    removed.extend(_cleanup_run_artifacts())
     if _STATE.get("marker"):
         for doctype, name in reversed(list(_STATE.get("created", []))):
             if frappe.db.exists(doctype, name) and _safe_delete(doctype, name):
                 removed.append(f"{doctype}:{name}")
-    removed.extend(_cleanup_run_artifacts())
     removed.extend(_cleanup_stale())
     _STATE.clear()
     frappe.db.commit()
@@ -374,6 +380,7 @@ def _cleanup_stale() -> list[str]:
         "Provider": {"provider_name": ["like", f"{MARKER_PREFIX}-%"]},
         "Organization": {"organization_name": ["like", f"{MARKER_PREFIX}-%"]},
         "Booking Event": {"subject": ["like", f"%{MARKER_PREFIX}-%"]},
+        "Appointment Group": {"linked_doctype": ["like", f"{MARKER_PREFIX.lower()}-%"]},
         "User": {"email": ["like", f"{MARKER_PREFIX.lower()}-%@qa.local"]},
     }
     removed: list[str] = []
