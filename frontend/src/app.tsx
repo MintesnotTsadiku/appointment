@@ -20,6 +20,7 @@ import { TooltipProvider } from "@/components/tooltip";
 import { AppProvider } from "./context/app";
 import { TranslationProvider } from "./context/translation";
 import { LandingPageSettingsProvider } from "./context/landingPageSettings";
+import { RealtimeProvider } from "./components/realtime/RealtimeProvider";
 import { Toaster } from "./components/sonner";
 import ModeToggle from "./components/theme-provider/components/modeToggle";
 import { InstallPrompt } from "./components/pwa/InstallPrompt";
@@ -39,22 +40,25 @@ const App = () => {
               <FrappeProvider
                 url={import.meta.env.VITE_BASE_URL ?? ""}
                 socketPort={import.meta.env.VITE_SOCKET_PORT}
-                enableSocket={
-                  import.meta.env.VITE_ENABLE_SOCKET === "true" ? true : false
-                }
+                // The SDK socket is created during render with no cleanup and
+                // leaks under StrictMode. This app owns its socket in
+                // RealtimeProvider instead; see that file for the upstream note.
+                enableSocket={false}
                 siteName={getSiteName()}
               >
-                <TooltipProvider>
-                  <Suspense fallback={<></>}>
-                    <RouterProvider router={router} />
-                    <Toaster />
-                    <ModeToggle/>
-                    {/* PWA Components */}
-                    <InstallPrompt />
-                    <UpdateNotification />
-                    <ConnectionStatus />
-                  </Suspense>
-                </TooltipProvider>
+                <RealtimeProvider>
+                  <TooltipProvider>
+                    <Suspense fallback={<></>}>
+                      <RouterProvider router={router} />
+                      <Toaster />
+                      <ModeToggle/>
+                      {/* PWA Components */}
+                      <InstallPrompt />
+                      <UpdateNotification />
+                      <ConnectionStatus />
+                    </Suspense>
+                  </TooltipProvider>
+                </RealtimeProvider>
               </FrappeProvider>
             </HelmetProvider>
           </LandingPageSettingsProvider>
