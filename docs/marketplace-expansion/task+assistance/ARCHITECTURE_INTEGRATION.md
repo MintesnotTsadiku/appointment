@@ -22,7 +22,7 @@ Each business expansion is implemented as a **separate module** that:
 ### **Module Structure**
 
 ```
-frappe_appointment/
+appointment/
 ├── scheduler/              # Existing: Core scheduling (Provider, Location, Service, Appointment)
 ├── payments/               # Existing: Payment processing
 ├── channels/               # Existing: Communication (SMS, email, notifications)
@@ -37,7 +37,7 @@ frappe_appointment/
 ### **1. Tasks Module**
 
 **Module Name**: `tasks`  
-**Location**: `frappe_appointment/tasks/`  
+**Location**: `appointment/tasks/`  
 **Purpose**: Standalone task management reusable by assistants module or independently
 
 **Structure**:
@@ -89,7 +89,7 @@ tasks/
 ### **2. Assistants Module**
 
 **Module Name**: `assistants`  
-**Location**: `frappe_appointment/assistants/`  
+**Location**: `appointment/assistants/`  
 **Purpose**: Virtual assistant marketplace platform  
 **Dependencies**: Tasks module (uses tasks for task management)
 

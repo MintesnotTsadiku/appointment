@@ -34,7 +34,7 @@ Look for "IPv4 Address" under your WiFi adapter.
 The Vite config is already updated to allow network access. Just start the dev server:
 
 ```bash
-cd /home/minte/projects/frappe-bench/apps/frappe_appointment/frontend
+cd /home/minte/projects/frappe-bench/apps/appointment/frontend
 npm run dev
 ```
 

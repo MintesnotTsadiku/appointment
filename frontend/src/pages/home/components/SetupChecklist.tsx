@@ -36,7 +36,7 @@ const SetupChecklist = () => {
       all_complete: boolean;
     } 
   }>(
-    'frappe_appointment.onboarding.get_detailed_checklist',
+    'appointment.onboarding.get_detailed_checklist',
     undefined,
     'checklist-detailed'
   );

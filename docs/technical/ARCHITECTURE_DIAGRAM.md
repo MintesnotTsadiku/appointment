@@ -8,11 +8,11 @@
 │                        (No Changes Needed!)                                  │
 │                                                                              │
 │  API Endpoints:                                                              │
-│  • frappe_appointment.api.personal_meet.get_meeting_windows                 │
-│  • frappe_appointment.api.personal_meet.get_organization_services           │
-│  • frappe_appointment.api.personal_meet.get_organization_meeting_windows    │
-│  • frappe_appointment.api.personal_meet.get_time_slots                      │
-│  • frappe_appointment.api.personal_meet.book_time_slot                      │
+│  • appointment.api.personal_meet.get_meeting_windows                 │
+│  • appointment.api.personal_meet.get_organization_services           │
+│  • appointment.api.personal_meet.get_organization_meeting_windows    │
+│  • appointment.api.personal_meet.get_time_slots                      │
+│  • appointment.api.personal_meet.book_time_slot                      │
 │                                                                              │
 └──────────────────────────────────┬──────────────────────────────────────────┘
                                    │

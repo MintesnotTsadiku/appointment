@@ -122,7 +122,7 @@ docs/
 
 | File | Description | Usage |
 |------|-------------|-------|
-| **[../scripts/explore_app.py](../scripts/explore_app.py)** | 🔍 Exploration script for console | `bench --site appointment.com console < apps/frappe_appointment/scripts/explore_app.py` |
+| **[../scripts/explore_app.py](../scripts/explore_app.py)** | 🔍 Exploration script for console | `bench --site appointment.com console < apps/appointment/scripts/explore_app.py` |
 
 ---
 

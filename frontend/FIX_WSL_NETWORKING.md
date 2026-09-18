@@ -55,7 +55,7 @@ Address         Port        Address         Port
 
 **In WSL:**
 ```bash
-cd /home/minte/projects/frappe-bench/apps/frappe_appointment/frontend
+cd /home/minte/projects/frappe-bench/apps/appointment/frontend
 npm run dev
 ```
 

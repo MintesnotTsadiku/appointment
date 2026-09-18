@@ -4,10 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "copy-html-entry": "cp ../frappe_appointment/public/frontend/index.html ../frappe_appointment/www/schedule/index.html",
-    "copy-pwa-assets": "mkdir -p ../frappe_appointment/public/frontend && cp -r public/offline.html ../frappe_appointment/public/frontend/ 2>/dev/null || true",
+    "copy-html-entry": "cp ../appointment/public/frontend/index.html ../appointment/www/schedule/index.html",
+    "copy-pwa-assets": "mkdir -p ../appointment/public/frontend && cp -r public/offline.html ../appointment/public/frontend/ 2>/dev/null || true",
     "dev": "vite",
-    "build": "npm install && vite build --base=/assets/frappe_appointment/frontend/ && npm run copy-html-entry && npm run copy-pwa-assets",
+    "build": "npm install && vite build --base=/assets/appointment/frontend/ && npm run copy-html-entry && npm run copy-pwa-assets",
     "lint": "eslint .  --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint .  --fix",
     "preview": "vite preview",

@@ -26,7 +26,7 @@ Follow the detailed guide: **[SETUP_GUIDE.md](SETUP_GUIDE.md#part-1-google-calen
 
 ```bash
 cd /home/minte/projects/frappe-bench
-bench --site appointment.com console < apps/frappe_appointment/scripts/create_test_data.py
+bench --site appointment.com console < apps/appointment/scripts/create_test_data.py
 ```
 
 This creates:

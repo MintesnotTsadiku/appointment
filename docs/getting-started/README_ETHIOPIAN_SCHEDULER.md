@@ -56,7 +56,7 @@ You are currently in **Sprint 0 - Familiarization Phase**.
 Ethiopian Scheduler = frappe-appointment (base) + 3 custom modules
 
 ┌─────────────────────────────────────────────────────────────┐
-│                  frappe_appointment App                      │
+│                  appointment App                      │
 ├─────────────────────────────────────────────────────────────┤
 │                                                              │
 │  ┌──────────────────┐  ┌──────────────┐  ┌───────────────┐ │
@@ -70,7 +70,7 @@ Ethiopian Scheduler = frappe-appointment (base) + 3 custom modules
 │  └──────────────────┘  └──────────────┘  └───────────────┘ │
 │                                                              │
 │  ┌────────────────────────────────────────────────────────┐ │
-│  │ frappe_appointment module (original/upstream)            │ │
+│  │ appointment module (original/upstream)            │ │
 │  │ • Appointment Group • Slot Engine • Google Calendar     │ │
 │  │ • Zoom/Meet Links • Rescheduling                         │ │
 │  └─────────────────────────────────────────────────────────┘ │
@@ -121,7 +121,7 @@ Ethiopian Scheduler = frappe-appointment (base) + 3 custom modules
 **Goal**: Create custom modules and core doctypes  
 **Duration**: 1 week  
 **Deliverables**:
-- `scheduler`, `payments`, `channels` modules (within frappe_appointment)
+- `scheduler`, `payments`, `channels` modules (within appointment)
 - Provider, Location, Service doctypes
 - Basic permissions and roles
 - Timezone/currency defaults (ETB, Africa/Addis_Ababa)
@@ -162,7 +162,7 @@ frappe.get_meta("Appointment Group")
 
 ### Run Full Exploration Script
 ```bash
-bench --site appointment.com console < apps/frappe_appointment/scripts/explore_app.py
+bench --site appointment.com console < apps/appointment/scripts/explore_app.py
 ```
 
 ---
@@ -197,7 +197,7 @@ bench --site appointment.com migrate
 
 ### Git Workflow
 ```bash
-cd /home/minte/projects/frappe-bench/apps/frappe_appointment
+cd /home/minte/projects/frappe-bench/apps/appointment
 
 # Create development branch
 git checkout -b develop

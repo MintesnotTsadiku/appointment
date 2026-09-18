@@ -1,0 +1,241 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:organization_name",
+ "creation": "2025-11-29 10:17:54.605197",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "organization_name",
+  "organization_type",
+  "slug",
+  "section_break_1",
+  "email",
+  "phone",
+  "column_break_1",
+  "timezone",
+  "language",
+  "section_break_2",
+  "owner_user",
+  "managers",
+  "section_break_3",
+  "booking_policy",
+  "allow_provider_selection",
+  "column_break_2",
+  "enable_public_booking",
+  "require_payment",
+  "section_break_howg",
+  "booking_urls",
+  "section_break_4",
+  "logo",
+  "primary_color",
+  "column_break_3",
+  "description",
+  "section_break_5",
+  "is_active",
+  "setup_complete"
+ ],
+ "fields": [
+  {
+   "fieldname": "organization_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Organization Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "organization_type",
+   "fieldtype": "Select",
+   "label": "Organization Type",
+   "options": "Healthcare\nSalon & Spa\nFitness & Wellness\nConsulting\nEducation\nLegal\nReal Estate\nOther",
+   "reqd": 1
+  },
+  {
+   "description": "URL-friendly identifier for booking page",
+   "fieldname": "slug",
+   "fieldtype": "Data",
+   "label": "Booking Slug",
+   "unique": 1
+  },
+  {
+   "fieldname": "booking_urls",
+   "fieldtype": "Table",
+   "label": "Booking URLS",
+   "options": "Booking URL"
+  },
+  {
+   "fieldname": "section_break_1",
+   "fieldtype": "Section Break",
+   "label": "Contact & Location"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Phone"
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Africa/Addis_Ababa",
+   "fieldname": "timezone",
+   "fieldtype": "Select",
+   "label": "Timezone",
+   "options": "Africa/Addis_Ababa\nAfrica/Nairobi\nAfrica/Cairo\nAfrica/Lagos\nAfrica/Johannesburg"
+  },
+  {
+   "default": "en",
+   "fieldname": "language",
+   "fieldtype": "Select",
+   "label": "Language",
+   "options": "en\nam"
+  },
+  {
+   "fieldname": "section_break_2",
+   "fieldtype": "Section Break",
+   "label": "Management"
+  },
+  {
+   "fieldname": "owner_user",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Owner",
+   "options": "User",
+   "reqd": 1
+  },
+  {
+   "fieldname": "managers",
+   "fieldtype": "Table",
+   "label": "Managers",
+   "options": "Organization Manager"
+  },
+  {
+   "fieldname": "section_break_3",
+   "fieldtype": "Section Break",
+   "label": "Booking Settings"
+  },
+  {
+   "default": "customer_choice",
+   "fieldname": "booking_policy",
+   "fieldtype": "Select",
+   "label": "Provider Assignment Policy",
+   "options": "customer_choice\nround_robin\navailability_based"
+  },
+  {
+   "default": "1",
+   "fieldname": "allow_provider_selection",
+   "fieldtype": "Check",
+   "label": "Allow Customer to Select Provider"
+  },
+  {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "enable_public_booking",
+   "fieldtype": "Check",
+   "label": "Enable Public Booking Page"
+  },
+  {
+   "default": "0",
+   "fieldname": "require_payment",
+   "fieldtype": "Check",
+   "label": "Require Payment for Booking"
+  },
+  {
+   "fieldname": "section_break_4",
+   "fieldtype": "Section Break",
+   "label": "Branding"
+  },
+  {
+   "fieldname": "logo",
+   "fieldtype": "Attach Image",
+   "label": "Logo"
+  },
+  {
+   "default": "#6366F1",
+   "fieldname": "primary_color",
+   "fieldtype": "Color",
+   "label": "Primary Color"
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "section_break_5",
+   "fieldtype": "Section Break",
+   "label": "Status"
+  },
+  {
+   "default": "1",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active"
+  },
+  {
+   "default": "0",
+   "fieldname": "setup_complete",
+   "fieldtype": "Check",
+   "label": "Setup Complete"
+  },
+  {
+   "fieldname": "section_break_howg",
+   "fieldtype": "Section Break"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-11-29 10:20:09.447200",
+ "modified_by": "Administrator",
+ "module": "Appointment",
+ "name": "Organization",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Organization Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "organization_name"
+}

@@ -66,7 +66,7 @@ const GroupAppointment = () => {
     error: fetchError,
     mutate,
   } = useFrappeGetCall(
-    "frappe_appointment.api.group_meet.get_time_slots",
+    "appointment.api.group_meet.get_time_slots",
     {
       ...Object.fromEntries(searchParams),
       appointment_group_id: groupId,
@@ -88,7 +88,7 @@ const GroupAppointment = () => {
   );
 
   const { call: bookMeeting, loading } = useFrappePostCall(
-    "frappe_appointment.api.group_meet.book_time_slot"
+    "appointment.api.group_meet.book_time_slot"
   );
 
   useEffect(() => {

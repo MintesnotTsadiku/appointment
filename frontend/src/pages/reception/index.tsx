@@ -43,7 +43,7 @@ const Reception = () => {
   const { data: appointmentsData, isLoading: appointmentsLoading, mutate: refreshAppointments } = useFrappeGetCall<{
     message: { appointments: Appointment[]; count: number };
   }>(
-    'frappe_appointment.scheduler.api.desk.get_desk_appointments',
+    'appointment.scheduler.api.desk.get_desk_appointments',
     {
       date: format(currentDate, 'yyyy-MM-dd'),
       location_name: selectedLocation || undefined,
@@ -58,13 +58,13 @@ const Reception = () => {
 
   // Fetch locations and providers for filters
   const { data: locationsData } = useFrappeGetCall<{ message: { locations: Location[] } }>(
-    'frappe_appointment.scheduler.api.desk.get_locations_list',
+    'appointment.scheduler.api.desk.get_locations_list',
     undefined,
     'locations'
   );
 
   const { data: providersData } = useFrappeGetCall<{ message: { providers: Provider[] } }>(
-    'frappe_appointment.scheduler.api.desk.get_providers_list',
+    'appointment.scheduler.api.desk.get_providers_list',
     undefined,
     'providers'
   );

@@ -9,7 +9,7 @@ This document specifies the organization onboarding flow, which allows organizat
 
 ### Step 0: Type Selection (Already exists)
 - User selects "Organization" option
-- API: `frappe_appointment.onboarding.set_onboarding_type("organization")`
+- API: `appointment.onboarding.set_onboarding_type("organization")`
 - Creates minimal Organization + Provider record
 
 ### Step 1: Organization Profile
@@ -24,7 +24,7 @@ This document specifies the organization onboarding flow, which allows organizat
 
 **API Endpoint:**
 ```
-POST frappe_appointment.onboarding.save_organization_profile
+POST appointment.onboarding.save_organization_profile
 {
   "organization_name": "Mahlet Clinic",
   "organization_type": "Healthcare Clinic",
@@ -62,7 +62,7 @@ POST frappe_appointment.onboarding.save_organization_profile
 
 **API Endpoint:**
 ```
-POST frappe_appointment.onboarding.add_organization_provider
+POST appointment.onboarding.add_organization_provider
 {
   "provider_name": "Dr. Sarah Johnson",
   "email": "sarah@mahletclinic.et",
@@ -87,7 +87,7 @@ POST frappe_appointment.onboarding.add_organization_provider
 
 **API Endpoint (Get Providers):**
 ```
-GET frappe_appointment.onboarding.get_organization_providers
+GET appointment.onboarding.get_organization_providers
 Response: [
   {
     "name": "PRV-001",
@@ -114,7 +114,7 @@ Response: [
 
 **API Endpoint:**
 ```
-POST frappe_appointment.onboarding.save_organization_availability
+POST appointment.onboarding.save_organization_availability
 {
   "location_name": "Mahlet Clinic - Main Branch",
   "address": "Bole Road, Addis Ababa",
@@ -158,7 +158,7 @@ POST frappe_appointment.onboarding.save_organization_availability
 
 **API Endpoint:**
 ```
-POST frappe_appointment.onboarding.create_organization_service
+POST appointment.onboarding.create_organization_service
 {
   "service_name": "General Consultation",
   "duration": 30,
@@ -207,7 +207,7 @@ POST frappe_appointment.onboarding.create_organization_service
 
 **API Endpoint:**
 ```
-GET frappe_appointment.onboarding.get_organization_booking_urls
+GET appointment.onboarding.get_organization_booking_urls
 Response: {
   "organization_url": "/schedule/org/mahlet-clinic",
   "services": [
@@ -229,7 +229,7 @@ Response: {
 
 **API Endpoint (Complete):**
 ```
-POST frappe_appointment.onboarding.complete_organization_onboarding
+POST appointment.onboarding.complete_organization_onboarding
 ```
 
 ---

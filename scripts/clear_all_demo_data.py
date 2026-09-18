@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """
-Script to clear all demo data from the Frappe Appointment system.
+Script to clear all demo data from the Appointment system.
 Run this via bench console for a non-interactive cleanup.
 
 Usage:
     bench --site <site-name> console < scripts/clear_all_demo_data.py
     OR
-    bench --site <site-name> console <<< "from frappe_appointment.demo_data import clear_all_demo_data; result = clear_all_demo_data(); print(result.get('message', 'Done'))"
+    bench --site <site-name> console <<< "from appointment.demo_data import clear_all_demo_data; result = clear_all_demo_data(); print(result.get('message', 'Done'))"
 """
 
-from frappe_appointment.demo_data import clear_all_demo_data
+from appointment.demo_data import clear_all_demo_data
 
 if __name__ == "__main__":
     result = clear_all_demo_data()

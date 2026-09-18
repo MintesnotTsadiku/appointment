@@ -30,9 +30,9 @@ interface CreateItemModalProps {
 }
 
 export const CreateItemModal = ({ isOpen, onClose, type, organizationId, organization, context, onSuccess }: CreateItemModalProps) => {
-  const { call: createService, loading } = useFrappePostCall('frappe_appointment.api.manage.create_service');
-  const { call: createLocation, loading: locationLoading } = useFrappePostCall('frappe_appointment.api.manage.create_location');
-  const { call: createEventType, loading: eventTypeLoading } = useFrappePostCall('frappe_appointment.api.manage.create_event_type');
+  const { call: createService, loading } = useFrappePostCall('appointment.api.manage.create_service');
+  const { call: createLocation, loading: locationLoading } = useFrappePostCall('appointment.api.manage.create_location');
+  const { call: createEventType, loading: eventTypeLoading } = useFrappePostCall('appointment.api.manage.create_event_type');
 
   const [formData, setFormData] = useState<any>({
     service_name: '',

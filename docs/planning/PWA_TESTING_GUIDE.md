@@ -25,7 +25,7 @@ Before testing, verify you have:
 Open your terminal and run:
 
 ```bash
-cd /home/minte/projects/frappe-bench/apps/frappe_appointment/frontend
+cd /home/minte/projects/frappe-bench/apps/appointment/frontend
 npm run build
 ```
 
@@ -51,16 +51,16 @@ npm run build
 The build script should copy icons, but let's verify and copy manually if needed:
 
 ```bash
-cd /home/minte/projects/frappe-bench/apps/frappe_appointment/frontend
+cd /home/minte/projects/frappe-bench/apps/appointment/frontend
 
 # Create icons directory in Frappe public folder
-mkdir -p ../frappe_appointment/public/frontend/icons
+mkdir -p ../appointment/public/frontend/icons
 
 # Copy all icons
-cp public/icons/*.png ../frappe_appointment/public/frontend/icons/
+cp public/icons/*.png ../appointment/public/frontend/icons/
 
 # Verify icons were copied
-ls -lh ../frappe_appointment/public/frontend/icons/*.png | wc -l
+ls -lh ../appointment/public/frontend/icons/*.png | wc -l
 # Should show: 12 (or more)
 ```
 
@@ -72,7 +72,7 @@ ls -lh ../frappe_appointment/public/frontend/icons/*.png | wc -l
 
 ```bash
 cd /home/minte/projects/frappe-bench
-bench build --app frappe_appointment
+bench build --app appointment
 ```
 
 **What this does**:
@@ -81,7 +81,7 @@ bench build --app frappe_appointment
 
 **Expected output**:
 ```
-Building frappe_appointment...
+Building appointment...
 ✓ Built assets
 ```
 
@@ -152,7 +152,7 @@ http://localhost:8000/manifest.webmanifest
 
 **Or**:
 ```
-http://localhost:8000/assets/frappe_appointment/frontend/manifest.webmanifest
+http://localhost:8000/assets/appointment/frontend/manifest.webmanifest
 ```
 
 **✅ Expected**: You should see JSON with:
@@ -202,7 +202,7 @@ http://localhost:8000/assets/frappe_appointment/frontend/manifest.webmanifest
 
 **❌ If icons missing**: 
 - Check file paths in manifest
-- Verify icons exist in `frappe_appointment/public/frontend/icons/`
+- Verify icons exist in `appointment/public/frontend/icons/`
 
 ---
 
@@ -364,8 +364,8 @@ http://localhost:8000/assets/frappe_appointment/frontend/manifest.webmanifest
 
 1. **Check icon files directly**:
    ```
-   http://localhost:8000/assets/frappe_appointment/frontend/icons/icon-192x192.png
-   http://localhost:8000/assets/frappe_appointment/frontend/icons/icon-512x512.png
+   http://localhost:8000/assets/appointment/frontend/icons/icon-192x192.png
+   http://localhost:8000/assets/appointment/frontend/icons/icon-512x512.png
    ```
 
 2. **Expected**: Icons display in browser
@@ -398,14 +398,14 @@ http://localhost:8000/assets/frappe_appointment/frontend/manifest.webmanifest
 **Solution**:
 ```bash
 # 1. Verify icons exist:
-ls -lh frappe_appointment/public/frontend/icons/*.png
+ls -lh appointment/public/frontend/icons/*.png
 
 # 2. If missing, copy them:
 cd frontend
-cp public/icons/*.png ../frappe_appointment/public/frontend/icons/
+cp public/icons/*.png ../appointment/public/frontend/icons/
 
 # 3. Rebuild:
-bench build --app frappe_appointment
+bench build --app appointment
 bench restart
 ```
 
@@ -425,7 +425,7 @@ bench restart
 # 1. Check service worker is registered (Test 2)
 # 2. Check cache in DevTools → Application → Cache Storage
 # 3. Verify offline.html exists:
-ls frappe_appointment/public/frontend/offline.html
+ls appointment/public/frontend/offline.html
 ```
 
 ### Problem: Update Notification Not Showing
@@ -459,29 +459,29 @@ Your PWA is working correctly if:
 
 **Full rebuild and restart**:
 ```bash
-cd /home/minte/projects/frappe-bench/apps/frappe_appointment/frontend
+cd /home/minte/projects/frappe-bench/apps/appointment/frontend
 npm run build
 cd ../..
-bench build --app frappe_appointment
+bench build --app appointment
 bench restart
 bench --site all clear-cache
 ```
 
 **Check if icons exist**:
 ```bash
-ls -lh frappe_appointment/public/frontend/icons/*.png | wc -l
+ls -lh appointment/public/frontend/icons/*.png | wc -l
 # Should show: 12
 ```
 
 **Check service worker file**:
 ```bash
-ls -lh frappe_appointment/public/frontend/sw.js
+ls -lh appointment/public/frontend/sw.js
 # Should exist
 ```
 
 **Check manifest**:
 ```bash
-cat frappe_appointment/public/frontend/manifest.webmanifest | head -20
+cat appointment/public/frontend/manifest.webmanifest | head -20
 ```
 
 ---

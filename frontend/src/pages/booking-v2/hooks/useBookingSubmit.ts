@@ -1,6 +1,6 @@
 /**
  * Hook to submit bookings to Frappe API
- * Connects to: frappe_appointment.api.personal_meet.book_time_slot
+ * Connects to: appointment.api.personal_meet.book_time_slot
  */
 
 import { useFrappePostCall } from "frappe-react-sdk";
@@ -34,7 +34,7 @@ interface BookingApiResponse {
 
 export function useBookingSubmit() {
   const { call: bookMeeting, loading, error, reset } = useFrappePostCall<BookingApiResponse>(
-    "frappe_appointment.api.personal_meet.book_time_slot"
+    "appointment.api.personal_meet.book_time_slot"
   );
 
   const submitBooking = async (

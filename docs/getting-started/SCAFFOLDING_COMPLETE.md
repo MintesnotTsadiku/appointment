@@ -1,6 +1,6 @@
 # ✅ Module Scaffolding Complete!
 
-> **All three modules have been successfully created within frappe_appointment app**
+> **All three modules have been successfully created within appointment app**
 
 ---
 
@@ -9,17 +9,17 @@
 ### ✅ Modules Created
 
 1. **Scheduler Module**
-   - Location: `frappe_appointment/scheduler/`
+   - Location: `appointment/scheduler/`
    - Directories: doctype/, api/, helpers/
    - Status: ✅ Ready
 
 2. **Payments Module**
-   - Location: `frappe_appointment/payments/`
+   - Location: `appointment/payments/`
    - Directories: doctype/, api/, helpers/, drivers/
    - Status: ✅ Ready
 
 3. **Channels Module**
-   - Location: `frappe_appointment/channels/`
+   - Location: `appointment/channels/`
    - Directories: doctype/, api/, helpers/, templates/
    - Status: ✅ Ready
 
@@ -34,8 +34,8 @@
 ## 📁 Module Structure
 
 ```
-frappe_appointment/
-├── frappe_appointment/          # Original module
+appointment/
+├── appointment/          # Original module
 │   └── doctype/                 # Appointment Group, etc.
 │
 ├── scheduler/                    # ✅ NEW
@@ -68,9 +68,9 @@ Run this to verify:
 ```bash
 cd /home/minte/projects/frappe-bench
 bench --site appointment.com console <<< "
-import frappe_appointment.scheduler
-import frappe_appointment.payments
-import frappe_appointment.channels
+import appointment.scheduler
+import appointment.payments
+import appointment.channels
 print('✅ All modules imported successfully')
 "
 ```

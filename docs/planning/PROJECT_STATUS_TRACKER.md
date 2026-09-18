@@ -60,11 +60,11 @@ We are building on top of `frappe-appointment` to create:
 
 ## 🏗️ Module Architecture Plan
 
-We will create modules within the existing `frappe_appointment` app to keep code organized:
+We will create modules within the existing `appointment` app to keep code organized:
 
 ```
-frappe_appointment/
-├── frappe_appointment/          # ✅ Original module (upstream features)
+appointment/
+├── appointment/          # ✅ Original module (upstream features)
 │   └── doctype/                 # Appointment Group, User Availability, etc.
 ├── scheduler/                   # 🔧 Core scheduling extensions (NEW MODULE)
 │   ├── doctype/
@@ -240,16 +240,16 @@ frappe_appointment/
 - ✅ Integration with global brand color system
 
 **API Endpoints Created** (Mock Data):
-- `frappe_appointment.onboarding.get_progress`
-- `frappe_appointment.onboarding.save_profile`
-- `frappe_appointment.onboarding.connect_calendar`
-- `frappe_appointment.onboarding.save_availability`
-- `frappe_appointment.onboarding.create_service`
-- `frappe_appointment.onboarding.complete`
-- `frappe_appointment.onboarding.update_step`
-- `frappe_appointment.dashboard.stats`
-- `frappe_appointment.dashboard.recent_activity`
-- `frappe_appointment.dashboard.alerts`
+- `appointment.onboarding.get_progress`
+- `appointment.onboarding.save_profile`
+- `appointment.onboarding.connect_calendar`
+- `appointment.onboarding.save_availability`
+- `appointment.onboarding.create_service`
+- `appointment.onboarding.complete`
+- `appointment.onboarding.update_step`
+- `appointment.dashboard.stats`
+- `appointment.dashboard.recent_activity`
+- `appointment.dashboard.alerts`
 
 **Files Created**:
 - `docs/planning/provider_dashboard_specification.md` (Complete spec)
@@ -268,8 +268,8 @@ frappe_appointment/
 - `frontend/src/pages/home/components/QuickActions.tsx`
 - `frontend/src/pages/home/components/RecentActivity.tsx`
 - `frontend/src/pages/home/components/AlertsPanel.tsx`
-- `frappe_appointment/onboarding.py` (Backend API stubs)
-- `frappe_appointment/dashboard.py` (Backend API stubs)
+- `appointment/onboarding.py` (Backend API stubs)
+- `appointment/dashboard.py` (Backend API stubs)
 
 **Documentation Created**:
 1. `provider_dashboard_specification.md` - Complete technical spec
@@ -334,14 +334,14 @@ frappe_appointment/
 - Added "builtin" option to Event doctype custom field
 
 **Files Modified**:
-- `frappe_appointment/onboarding.py` - Real doctype creation
-- `frappe_appointment/api/personal_meet.py` - Booking APIs with graceful error handling
-- `frappe_appointment/frappe_appointment/doctype/appointment_group/appointment_group.py` - Time slot generation fixes
-- `frappe_appointment/frappe_appointment/doctype/user_appointment_availability/user_appointment_availability.py` - Validation fixes
-- `frappe_appointment/frappe_appointment/doctype/user_appointment_availability/user_appointment_availability.json` - Schema updates
-- `frappe_appointment/fraxtures/custom_field.json` - Added "builtin" to Event options
-- `frappe_appointment/overrides/event_override.py` - Google Calendar conditional checks
-- `frappe_appointment/helpers/google_calendar.py` - Early return checks
+- `appointment/onboarding.py` - Real doctype creation
+- `appointment/api/personal_meet.py` - Booking APIs with graceful error handling
+- `appointment/appointment/doctype/appointment_group/appointment_group.py` - Time slot generation fixes
+- `appointment/appointment/doctype/user_appointment_availability/user_appointment_availability.py` - Validation fixes
+- `appointment/appointment/doctype/user_appointment_availability/user_appointment_availability.json` - Schema updates
+- `appointment/fraxtures/custom_field.json` - Added "builtin" to Event options
+- `appointment/overrides/event_override.py` - Google Calendar conditional checks
+- `appointment/helpers/google_calendar.py` - Early return checks
 - `frontend/src/pages/appointment/index.tsx` - Duration selection logic
 - `frontend/src/pages/appointment/components/booking.tsx` - Debug logging cleanup
 
@@ -400,12 +400,12 @@ frappe_appointment/
 - Navigation routing: Proper handling for individual vs organization bookings
 
 **Files Created/Modified**:
-- `frappe_appointment/onboarding.py` - Organization onboarding APIs
-- `frappe_appointment/api/personal_meet.py` - Multi-provider booking logic, date validation
-- `frappe_appointment/helpers/utils.py` - Ethiopian time formatting functions
-- `frappe_appointment/fixtures/custom_field.json` - Added `custom_time_format` field
-- `frappe_appointment/scheduler/doctype/service/service.json` - Added naming series, organization/provider fields
-- `frappe_appointment/scheduler/doctype/eventtype/eventtype.json` - Added naming series
+- `appointment/onboarding.py` - Organization onboarding APIs
+- `appointment/api/personal_meet.py` - Multi-provider booking logic, date validation
+- `appointment/helpers/utils.py` - Ethiopian time formatting functions
+- `appointment/fixtures/custom_field.json` - Added `custom_time_format` field
+- `appointment/scheduler/doctype/service/service.json` - Added naming series, organization/provider fields
+- `appointment/scheduler/doctype/eventtype/eventtype.json` - Added naming series
 - `frontend/src/pages/home/components/Step4OrgService.tsx` - Organization service creation
 - `frontend/src/pages/home/components/Step5OrgSuccess.tsx` - Organization success with booking URLs
 - `frontend/src/pages/organization-appointment/index.tsx` - Organization booking page
@@ -416,20 +416,20 @@ frappe_appointment/
 - `frontend/src/route.tsx` - Organization booking routes
 
 **API Endpoints Created/Modified**:
-- `frappe_appointment.onboarding.save_organization_profile`
-- `frappe_appointment.onboarding.add_organization_provider`
-- `frappe_appointment.onboarding.get_organization_providers`
-- `frappe_appointment.onboarding.save_organization_availability`
-- `frappe_appointment.onboarding.create_organization_service`
-- `frappe_appointment.onboarding.get_organization_booking_urls`
-- `frappe_appointment.onboarding.get_organization_services`
-- `frappe_appointment.onboarding.set_onboarding_type`
-- `frappe_appointment.onboarding.reset_onboarding_type`
-- `frappe_appointment.api.personal_meet.get_organization_meeting_windows`
-- `frappe_appointment.api.personal_meet.get_organization_services`
-- `frappe_appointment.api.personal_meet.get_multi_provider_time_slots`
-- `frappe_appointment.api.personal_meet.get_time_slots` - Added date validation
-- `frappe_appointment.api.personal_meet.book_time_slot` - Added time_format parameter, date validation
+- `appointment.onboarding.save_organization_profile`
+- `appointment.onboarding.add_organization_provider`
+- `appointment.onboarding.get_organization_providers`
+- `appointment.onboarding.save_organization_availability`
+- `appointment.onboarding.create_organization_service`
+- `appointment.onboarding.get_organization_booking_urls`
+- `appointment.onboarding.get_organization_services`
+- `appointment.onboarding.set_onboarding_type`
+- `appointment.onboarding.reset_onboarding_type`
+- `appointment.api.personal_meet.get_organization_meeting_windows`
+- `appointment.api.personal_meet.get_organization_services`
+- `appointment.api.personal_meet.get_multi_provider_time_slots`
+- `appointment.api.personal_meet.get_time_slots` - Added date validation
+- `appointment.api.personal_meet.book_time_slot` - Added time_format parameter, date validation
 
 **Documentation Created**:
 - Ethiopian time format implementation notes
@@ -495,7 +495,7 @@ frappe_appointment/
 **Agent Verification**:
 - [ ] Console: `frappe.get_meta("Provider")` returns fields
 - [ ] Console: Create sample Provider/Location/Service records
-- [ ] Console: Verify modules can be imported: `import frappe_appointment.scheduler`
+- [ ] Console: Verify modules can be imported: `import appointment.scheduler`
 - [ ] Browser: Public event URL renders placeholder slots
 
 ---
@@ -531,7 +531,7 @@ frappe_appointment/
 | Create **PaymentIntent** doctype | ⏳ Not Started | Amount, PSP, status, signatures |
 | Implement telebirr driver | ⏳ Not Started | Init payment, webhook verify |
 | Implement Chapa driver | ⏳ Not Started | Hosted checkout, webhook verify |
-| Webhook endpoints | ⏳ Not Started | `/api/method/frappe_appointment.payments.webhook.*` |
+| Webhook endpoints | ⏳ Not Started | `/api/method/appointment.payments.webhook.*` |
 | Update Appointment on payment | ⏳ Not Started | Status: Pending → Confirmed |
 | Refund endpoint | ⏳ Not Started | For host cancellations |
 | PSP secret management | ⏳ Not Started | Environment variables |
@@ -689,7 +689,7 @@ frappe_appointment/
    - Dashboard live at `/home`
    - 5-step onboarding wizard functional
    - Dashboard with stats, actions, activity, alerts
-   - Mock data working (toggle `SKIP_ONBOARDING` in `frappe_appointment/onboarding.py`)
+   - Mock data working (toggle `SKIP_ONBOARDING` in `appointment/onboarding.py`)
    - Responsive design and animations complete
    
 4. **✅ Booking System Complete** ✅ COMPLETED
@@ -737,7 +737,7 @@ frappe_appointment/
 - ✅ Keep ERPNext Leave integration (optional feature)
 
 ### Isolate Custom Code
-- 🔧 All Ethiopian-specific features in separate modules within frappe_appointment
+- 🔧 All Ethiopian-specific features in separate modules within appointment
 - 🔧 Use Frappe's override mechanism, not direct edits to upstream code
 - 🔧 Periodically merge upstream bug fixes
 - 🔧 Keep modules organized: scheduler/, payments/, channels/

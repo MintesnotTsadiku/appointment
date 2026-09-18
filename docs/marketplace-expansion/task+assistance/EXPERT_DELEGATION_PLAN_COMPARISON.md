@@ -345,7 +345,7 @@ api.get(`/api/resource/Appointment?clients=${selectedClients.join(',')}`);
 ### **1. Permission System: DelegationManager (Expert's)**
 
 ```python
-# frappe_appointment/core/delegation.py (from expert)
+# appointment/core/delegation.py (from expert)
 class DelegationManager:
     @staticmethod
     def get_accessible_clients(va_user):
@@ -442,7 +442,7 @@ if silent_mode and user_is_va:
 ### **Phase 1: Delegation Foundation (Week 1)**
 
 **Backend**:
-1. Create DelegationManager (`frappe_appointment/core/delegation.py`)
+1. Create DelegationManager (`appointment/core/delegation.py`)
 2. Create Service Relationship doctype (expert's + shared models)
 3. Create VA Profile doctype
 4. Create Client Profile doctype

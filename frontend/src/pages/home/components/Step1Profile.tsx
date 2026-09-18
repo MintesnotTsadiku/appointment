@@ -27,7 +27,7 @@ const Step1Profile = ({ onNext }: Step1ProfileProps) => {
   const [language, setLanguage] = useState('en');
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const { call, loading } = useFrappePostCall('frappe_appointment.onboarding.save_profile');
+  const { call, loading } = useFrappePostCall('appointment.onboarding.save_profile');
 
   const businessTypes = [
     { value: 'clinic', label: 'Clinic/Hospital' },

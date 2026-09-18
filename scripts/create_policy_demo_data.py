@@ -16,7 +16,7 @@ print("📋 CREATING POLICY DEMO DATA FOR SPRINT 2")
 print("="*80 + "\n")
 
 # Import the demo data functions
-from frappe_appointment.demo_data_policies import generate_policies_for_existing_data, generate_policies
+from appointment.demo_data_policies import generate_policies_for_existing_data, generate_policies
 
 # Step 1: Check existing data
 print("📊 Step 1: Checking existing data...")
@@ -31,7 +31,7 @@ print(f"  ✓ Providers: {len(providers)}\n")
 if not services and not locations and not providers:
     print("  ⚠ No services, locations, or providers found!")
     print("  → Please create demo data first using:")
-    print("     frappe.call('frappe_appointment.demo_data.generate_all_demo_data')\n")
+    print("     frappe.call('appointment.demo_data.generate_all_demo_data')\n")
     print("  → Or create policies manually via Desk UI\n")
 else:
     # Step 2: Generate policies linked to existing data
@@ -81,7 +81,7 @@ print("🧪 Step 5: Testing Policy Engine...")
 if services:
     service_name = services[0]["name"]
     try:
-        from frappe_appointment.scheduler.helpers.policy_engine import get_applicable_policies, calculate_booking_quote
+        from appointment.scheduler.helpers.policy_engine import get_applicable_policies, calculate_booking_quote
         
         # Test get_applicable_policies
         policies = get_applicable_policies(service_name)
@@ -112,7 +112,7 @@ print("="*80)
 print(f"\nTotal policies in system: {len(all_policies)}")
 print("\nNext steps:")
 print("  1. View policies in Desk: http://localhost:8000/app/policy")
-print("  2. Test Quote API: /api/method/frappe_appointment.scheduler.api.quote.get_booking_quote")
+print("  2. Test Quote API: /api/method/appointment.scheduler.api.quote.get_booking_quote")
 print("  3. Test booking flow with policies applied")
 print("  4. Verify conflict detection and buffer times")
 print()

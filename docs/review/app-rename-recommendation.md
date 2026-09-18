@@ -2,7 +2,7 @@
 
 Target display title: **Appointment**. Target internal app/package identifier: **appointment**.
 
-The present code is inconsistent: the Python package and installed app are `frappe_appointment`, `hooks.py` declares `app_name = "scheduler"` and `app_title = "Scheduler"`, and the app-switcher title is already `Appointment`. The older rename guide targets `scheduler`; do not execute it as a current runbook.
+The present code is inconsistent: the Python package and installed app are `appointment`, `hooks.py` declares `app_name = "scheduler"` and `app_title = "Scheduler"`, and the app-switcher title is already `Appointment`. The older rename guide targets `scheduler`; do not execute it as a current runbook.
 
 Keep this repository and Git history. A second independently installed app with the same DocTypes introduces ownership collisions and unnecessary transfer work. Do a controlled rename on the isolated clone after establishing a working baseline.
 

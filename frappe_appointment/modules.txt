@@ -1,6 +1,0 @@
-Frappe Appointment
-Scheduler
-Payments
-Channels
-Tasks
-Assistants

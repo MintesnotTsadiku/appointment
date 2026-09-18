@@ -33,11 +33,11 @@ const Step1OrgProfile = ({ onNext }: Step1OrgProfileProps) => {
   const [description, setDescription] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const { call, loading } = useFrappePostCall('frappe_appointment.onboarding.save_organization_profile');
+  const { call, loading } = useFrappePostCall('appointment.onboarding.save_organization_profile');
   const { data: orgsData, isLoading: loadingOrgs } = useFrappeGetCall<{ 
     success: boolean; 
     organizations: Organization[] 
-  }>('frappe_appointment.onboarding.get_user_organizations');
+  }>('appointment.onboarding.get_user_organizations');
 
   const organizationTypes = [
     { value: 'Healthcare', label: 'Healthcare Clinic' },

@@ -1,8 +1,8 @@
 /**
  * Hook to fetch organization data and services from Frappe API
  * Connects to: 
- * - frappe_appointment.api.personal_meet.get_organization_services (list services)
- * - frappe_appointment.api.personal_meet.get_organization_meeting_windows (specific service)
+ * - appointment.api.personal_meet.get_organization_services (list services)
+ * - appointment.api.personal_meet.get_organization_meeting_windows (specific service)
  */
 
 import { useFrappeGetCall } from "frappe-react-sdk";
@@ -75,8 +75,8 @@ export function useOrganizationData({
 
   // Determine which API endpoint to use
   const apiEndpoint = serviceSlug
-    ? "frappe_appointment.api.personal_meet.get_organization_meeting_windows"
-    : "frappe_appointment.api.personal_meet.get_organization_services";
+    ? "appointment.api.personal_meet.get_organization_meeting_windows"
+    : "appointment.api.personal_meet.get_organization_services";
 
   const apiParams = serviceSlug
     ? { org_slug: orgSlug, service_slug: serviceSlug }

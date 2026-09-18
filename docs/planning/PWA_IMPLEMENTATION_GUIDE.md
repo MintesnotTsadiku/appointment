@@ -198,7 +198,7 @@ This ensures:
 ### Step 1: Install Dependencies
 
 ```bash
-cd /home/minte/projects/frappe-bench/apps/frappe_appointment/frontend
+cd /home/minte/projects/frappe-bench/apps/appointment/frontend
 npm install -D vite-plugin-pwa
 npm install workbox-window
 ```
@@ -260,55 +260,55 @@ export default defineConfig(({ command, mode }) => {
           
           icons: [
             {
-              src: "/assets/frappe_appointment/frontend/icons/icon-72x72.png",
+              src: "/assets/appointment/frontend/icons/icon-72x72.png",
               sizes: "72x72",
               type: "image/png",
               purpose: "any"
             },
             {
-              src: "/assets/frappe_appointment/frontend/icons/icon-96x96.png",
+              src: "/assets/appointment/frontend/icons/icon-96x96.png",
               sizes: "96x96",
               type: "image/png",
               purpose: "any"
             },
             {
-              src: "/assets/frappe_appointment/frontend/icons/icon-128x128.png",
+              src: "/assets/appointment/frontend/icons/icon-128x128.png",
               sizes: "128x128",
               type: "image/png",
               purpose: "any"
             },
             {
-              src: "/assets/frappe_appointment/frontend/icons/icon-144x144.png",
+              src: "/assets/appointment/frontend/icons/icon-144x144.png",
               sizes: "144x144",
               type: "image/png",
               purpose: "any"
             },
             {
-              src: "/assets/frappe_appointment/frontend/icons/icon-152x152.png",
+              src: "/assets/appointment/frontend/icons/icon-152x152.png",
               sizes: "152x152",
               type: "image/png",
               purpose: "any"
             },
             {
-              src: "/assets/frappe_appointment/frontend/icons/icon-192x192.png",
+              src: "/assets/appointment/frontend/icons/icon-192x192.png",
               sizes: "192x192",
               type: "image/png",
               purpose: "any"
             },
             {
-              src: "/assets/frappe_appointment/frontend/icons/icon-384x384.png",
+              src: "/assets/appointment/frontend/icons/icon-384x384.png",
               sizes: "384x384",
               type: "image/png",
               purpose: "any"
             },
             {
-              src: "/assets/frappe_appointment/frontend/icons/icon-512x512.png",
+              src: "/assets/appointment/frontend/icons/icon-512x512.png",
               sizes: "512x512",
               type: "image/png",
               purpose: "any"
             },
             {
-              src: "/assets/frappe_appointment/frontend/icons/icon-512x512-maskable.png",
+              src: "/assets/appointment/frontend/icons/icon-512x512-maskable.png",
               sizes: "512x512",
               type: "image/png",
               purpose: "maskable"
@@ -332,7 +332,7 @@ export default defineConfig(({ command, mode }) => {
               url: "/schedule/?action=book",
               icons: [
                 {
-                  src: "/assets/frappe_appointment/frontend/icons/shortcut-book.png",
+                  src: "/assets/appointment/frontend/icons/shortcut-book.png",
                   sizes: "96x96"
                 }
               ]
@@ -344,7 +344,7 @@ export default defineConfig(({ command, mode }) => {
               url: "/schedule/home",
               icons: [
                 {
-                  src: "/assets/frappe_appointment/frontend/icons/shortcut-list.png",
+                  src: "/assets/appointment/frontend/icons/shortcut-list.png",
                   sizes: "96x96"
                 }
               ]
@@ -391,7 +391,7 @@ export default defineConfig(({ command, mode }) => {
             
             // App assets (JS, CSS)
             {
-              urlPattern: /\/assets\/frappe_appointment\/frontend\/.*/i,
+              urlPattern: /\/assets\/appointment\/frontend\/.*/i,
               handler: "CacheFirst",
               options: {
                 cacheName: "app-assets-cache",
@@ -417,7 +417,7 @@ export default defineConfig(({ command, mode }) => {
             
             // API calls - Network first with cache fallback
             {
-              urlPattern: /\/api\/method\/frappe_appointment\..*/i,
+              urlPattern: /\/api\/method\/appointment\..*/i,
               handler: "NetworkFirst",
               options: {
                 cacheName: "api-cache",
@@ -475,7 +475,7 @@ export default defineConfig(({ command, mode }) => {
     },
     
     build: {
-      outDir: "../frappe_appointment/public/frontend",
+      outDir: "../appointment/public/frontend",
       emptyOutDir: true,
       target: "es2015",
       
@@ -523,7 +523,7 @@ export default defineConfig(({ command, mode }) => {
     <link rel="manifest" href="/manifest.webmanifest" />
     
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/assets/frappe_appointment/frappe-appointment-logo.png" />
+    <link rel="icon" type="image/svg+xml" href="/assets/appointment/appointment-logo.png" />
     
     <!-- PWA Meta Tags -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -534,15 +534,15 @@ export default defineConfig(({ command, mode }) => {
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Scheduler" />
-    <link rel="apple-touch-icon" href="/assets/frappe_appointment/frontend/icons/apple-touch-icon-180x180.png" />
-    <link rel="apple-touch-startup-image" href="/assets/frappe_appointment/frontend/icons/splash-640x1136.png" media="(device-width: 320px) and (device-height: 568px)" />
-    <link rel="apple-touch-startup-image" href="/assets/frappe_appointment/frontend/icons/splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px)" />
-    <link rel="apple-touch-startup-image" href="/assets/frappe_appointment/frontend/icons/splash-1242x2208.png" media="(device-width: 414px) and (device-height: 736px)" />
-    <link rel="apple-touch-startup-image" href="/assets/frappe_appointment/frontend/icons/splash-1125x2436.png" media="(device-width: 375px) and (device-height: 812px)" />
+    <link rel="apple-touch-icon" href="/assets/appointment/frontend/icons/apple-touch-icon-180x180.png" />
+    <link rel="apple-touch-startup-image" href="/assets/appointment/frontend/icons/splash-640x1136.png" media="(device-width: 320px) and (device-height: 568px)" />
+    <link rel="apple-touch-startup-image" href="/assets/appointment/frontend/icons/splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px)" />
+    <link rel="apple-touch-startup-image" href="/assets/appointment/frontend/icons/splash-1242x2208.png" media="(device-width: 414px) and (device-height: 736px)" />
+    <link rel="apple-touch-startup-image" href="/assets/appointment/frontend/icons/splash-1125x2436.png" media="(device-width: 375px) and (device-height: 812px)" />
     
     <!-- Windows/Edge PWA Support -->
     <meta name="msapplication-TileColor" content="#4F46E5" />
-    <meta name="msapplication-TileImage" content="/assets/frappe_appointment/frontend/icons/icon-144x144.png" />
+    <meta name="msapplication-TileImage" content="/assets/appointment/frontend/icons/icon-144x144.png" />
     <meta name="msapplication-config" content="/browserconfig.xml" />
     
     <!-- Preconnect for performance -->
@@ -946,7 +946,7 @@ export function InstallPrompt() {
     // Track with your analytics tool
     if (window.frappe?.call) {
       window.frappe.call({
-        method: "frappe_appointment.api.analytics.track_pwa_event",
+        method: "appointment.api.analytics.track_pwa_event",
         args: {
           event: "pwa_install_prompt",
           action: action,
@@ -1199,10 +1199,10 @@ export function App() {
 ```json
 {
   "scripts": {
-    "copy-html-entry": "cp ../frappe_appointment/public/frontend/index.html ../frappe_appointment/www/schedule/index.html",
-    "copy-pwa-assets": "cp -r public/icons ../frappe_appointment/public/frontend/ && cp public/offline.html ../frappe_appointment/public/frontend/",
+    "copy-html-entry": "cp ../appointment/public/frontend/index.html ../appointment/www/schedule/index.html",
+    "copy-pwa-assets": "cp -r public/icons ../appointment/public/frontend/ && cp public/offline.html ../appointment/public/frontend/",
     "dev": "vite",
-    "build": "npm install && vite build --base=/assets/frappe_appointment/frontend/ && npm run copy-html-entry && npm run copy-pwa-assets",
+    "build": "npm install && vite build --base=/assets/appointment/frontend/ && npm run copy-html-entry && npm run copy-pwa-assets",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --fix",
     "preview": "vite preview",
@@ -1661,7 +1661,7 @@ workbox: {
   // Enable background sync
   runtimeCaching: [
     {
-      urlPattern: /\/api\/method\/frappe_appointment\.booking\.create/,
+      urlPattern: /\/api\/method\/appointment\.booking\.create/,
       handler: "NetworkOnly",
       options: {
         backgroundSync: {
@@ -1868,12 +1868,12 @@ cd frontend
 npm run build
 
 # 2. Copy to Frappe public folder (automated in build script)
-# frontend/public/icons → frappe_appointment/public/frontend/icons
-# frontend/public/offline.html → frappe_appointment/public/frontend/offline.html
+# frontend/public/icons → appointment/public/frontend/icons
+# frontend/public/offline.html → appointment/public/frontend/offline.html
 
 # 3. Build Frappe assets
 cd /home/minte/projects/frappe-bench
-bench build --app frappe_appointment
+bench build --app appointment
 
 # 4. Restart bench
 bench restart
@@ -1886,7 +1886,7 @@ bench --site appointment.com migrate
 ```
 
 **Post-Deploy**:
-- [ ] Verify manifest loads: https://yourdomain.com/assets/frappe_appointment/frontend/manifest.webmanifest
+- [ ] Verify manifest loads: https://yourdomain.com/assets/appointment/frontend/manifest.webmanifest
 - [ ] Verify service worker registers
 - [ ] Test install prompt appears
 - [ ] Check analytics for PWA events
@@ -1903,7 +1903,7 @@ window.addEventListener("appinstalled", (e) => {
   // Send to analytics
   if (window.frappe?.call) {
     window.frappe.call({
-      method: "frappe_appointment.api.analytics.track_pwa_event",
+      method: "appointment.api.analytics.track_pwa_event",
       args: {
         event: "pwa_installed",
         platform: /iPad|iPhone|iPod/.test(navigator.userAgent) ? "ios" : "android",
@@ -1925,7 +1925,7 @@ if (window.matchMedia("(display-mode: standalone)").matches) {
 
 **Backend Analytics Endpoint**:
 ```python
-# frappe_appointment/api/analytics.py
+# appointment/api/analytics.py
 
 @frappe.whitelist()
 def track_pwa_event(event, action=None, platform=None):
@@ -1971,7 +1971,7 @@ if ("serviceWorker" in navigator) {
     // Send to error tracking service
     if (window.frappe?.call) {
       frappe.call({
-        method: "frappe_appointment.api.errors.log_sw_error",
+        method: "appointment.api.errors.log_sw_error",
         args: {
           error: error.message,
           stack: error.stack,
@@ -2046,7 +2046,7 @@ caches.keys().then(keys => {
 curl -I https://yourdomain.com/schedule/
 
 # Check service worker file
-curl https://yourdomain.com/assets/frappe_appointment/frontend/sw.js
+curl https://yourdomain.com/assets/appointment/frontend/sw.js
 
 # Check console for errors
 # DevTools → Console → Filter by "service worker"
@@ -2100,16 +2100,16 @@ cat frontend/public/manifest.json | jq .
 **Solutions**:
 ```bash
 # Verify all icons exist
-ls -lh frappe_appointment/public/frontend/icons/
+ls -lh appointment/public/frontend/icons/
 
 # Check icon paths in manifest
 cat manifest.json | jq '.icons'
 
 # Verify image format
-file frappe_appointment/public/frontend/icons/icon-192x192.png
+file appointment/public/frontend/icons/icon-192x192.png
 
 # Test icon loading
-curl -I https://yourdomain.com/assets/frappe_appointment/frontend/icons/icon-192x192.png
+curl -I https://yourdomain.com/assets/appointment/frontend/icons/icon-192x192.png
 ```
 
 #### 4. Offline Mode Not Working

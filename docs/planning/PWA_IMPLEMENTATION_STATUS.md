@@ -59,7 +59,7 @@ All critical fixes from reviewer implemented:
 - ✅ Auto-reload when back online
 - ✅ Feature list for offline capabilities
 
-### 8. Backend API (`frappe_appointment/api/offline.py`)
+### 8. Backend API (`appointment/api/offline.py`)
 - ✅ **CRITICAL FIX #5A**: Batch sync endpoint (`sync_queue`)
 - ✅ Transactional integrity
 - ✅ Action handlers (book, cancel, reschedule, update_profile)
@@ -139,7 +139,7 @@ Before deploying to production:
 - `/app/*`, `/api/*`, etc. excluded
 
 ### ✅ Fix #5A: Batch Sync Endpoint
-- `frappe_appointment.api.offline.sync_queue` endpoint created
+- `appointment.api.offline.sync_queue` endpoint created
 - Transactional integrity for multiple actions
 - Frontend queue management implemented
 
@@ -166,7 +166,7 @@ Before deploying to production:
 3. **Build Frappe Assets**:
    ```bash
    cd /home/minte/projects/frappe-bench
-   bench build --app frappe_appointment
+   bench build --app appointment
    ```
 
 4. **Restart Bench**:
@@ -203,7 +203,7 @@ Before deploying to production:
 - Vite Config: `frontend/vite.config.ts`
 - PWA Components: `frontend/src/components/pwa/`
 - PWA Utilities: `frontend/src/lib/pwa.ts`
-- Offline API: `frappe_appointment/api/offline.py`
+- Offline API: `appointment/api/offline.py`
 - Icons README: `frontend/public/icons/README.md`
 
 ---

@@ -9,7 +9,7 @@ I've successfully connected your redesigned booking UI to the real Frappe backen
 ## 🎯 What's Been Integrated
 
 ### ✅ 1. Organization & Service Data
-**API**: `frappe_appointment.api.personal_meet.get_organization_services`  
+**API**: `appointment.api.personal_meet.get_organization_services`  
 **Hook**: `useOrganizationData`
 
 **Fetches**:
@@ -23,7 +23,7 @@ I've successfully connected your redesigned booking UI to the real Frappe backen
 ---
 
 ### ✅ 2. Time Slots
-**API**: `frappe_appointment.api.personal_meet.get_time_slots`  
+**API**: `appointment.api.personal_meet.get_time_slots`  
 **Hook**: `useTimeSlots`
 
 **Fetches**:
@@ -43,7 +43,7 @@ I've successfully connected your redesigned booking UI to the real Frappe backen
 ---
 
 ### ✅ 3. Booking Submission
-**API**: `frappe_appointment.api.personal_meet.book_time_slot`  
+**API**: `appointment.api.personal_meet.book_time_slot`  
 **Hook**: `useBookingSubmit`
 
 **Submits**:

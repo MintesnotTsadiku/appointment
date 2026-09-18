@@ -69,9 +69,10 @@ Do not rename scheduling DocTypes in this phase. Their names are business contra
 
 ### 3. Preserve upgrade compatibility
 
-Keep a temporary `frappe_appointment` compatibility package that forwards supported imports and whitelisted methods to `appointment`. Inventory external callers first and document a removal release. Avoid open-ended aliases.
-
-Add a pre-model-sync patch or controlled site migration that updates the installed-app identity and any stored dotted paths at the correct point in Frappe's migration lifecycle. Preserve patch history so old patches are not replayed. Explicitly migrate Module Def ownership, scheduled jobs, hooks, fixtures, and any stored API paths. The migration must be idempotent and safe to resume.
+Not applicable. The app was never released under the old identifier, so no
+compatibility package, alias, stored-path migration or legacy patch path is
+retained. See "Finalization status" below. Existing-site transfer is explicitly
+out of scope.
 
 ### 4. Validate on cloned production-shaped data
 
@@ -103,3 +104,60 @@ Document backup and rollback commands, the minimum supported source version, and
 - The dedicated runtime passes Agent Harness dependency preflight before beta sign-off.
 - Rollback from the pre-migration backup is demonstrated.
 
+## Finalization status
+
+Decision update: the app was never released under `frappe_appointment` /
+`scheduler`, so no backward compatibility is retained. The `frappe_appointment`
+shim package, the site-identity migration and the legacy patch paths have been
+removed. `appointment` is the single canonical identity and testing targets a
+fresh install.
+
+Branch `refactor/rename-to-appointment`, worktree
+`/home/minte/projects/training-apps/.worktrees/frappe-appointment-rename`,
+isolated runtime `refactor-rename-to-appointment-4c34e9`. The verified
+`beta/architecture-review` worktree, its runtime and the shared Python
+environment were left untouched.
+
+Reference inventory: `docs/rename/reference-inventory.md`.
+Testing guide: `docs/rename/testing-guide.md`.
+
+### What changed
+
+- Outer package and installer metadata moved to `appointment` / **Appointment**.
+- Imports, hooks, patches, scheduled jobs, fixtures, assets, build paths,
+  frontend API strings and docs use `appointment.*`.
+- `patches.txt` lists canonical `appointment.patches.v0_1.*` paths only.
+- Fresh install imports email templates from `after_install` and applies the
+  `Appointment Settings` Link defaults after the templates exist, so
+  `init_singles` cannot fail on a fresh site.
+- Primary Frappe module and package renamed: `Frappe Appointment` →
+  `Appointment`, `appointment/frappe_appointment/` → `appointment/appointment/`,
+  with all module metadata, fixtures and `appointment.appointment.*` dotted
+  paths updated.
+- Business DocType names are unchanged.
+
+### Validation performed
+
+- Fresh install: `bench new-site --install-app appointment` plus two migrates
+  installs only `frappe, appointment`; the second migrate is clean; the three
+  email templates and `Appointment Settings` defaults are populated.
+- Characterization tests: `appointment.tests.test_app_identity` pass on the
+  canonical site.
+- Browser QA executed through Agent Plane with `frappe_session`
+  (`BQA-2026-00028`, `BQA-2026-00029`) and produced screenshots and traces.
+
+### Environment prerequisites (not app defects)
+
+- `bench install-app agent_plane` on a brand-new site still fails at
+  `init_singles` on the `Runtime Settings` Link default; seed the Agent Version
+  first or restore a prepared backup.
+- The shared training Python environment does not match the certified Agent
+  Harness foundation bundle; use a dedicated certified runtime for sign-off.
+- No outbound DNS in this environment: the landing page's `logo.clearbit.com`
+  images fail, and the browser run records engine.io upgrade polling `400`s plus
+  a pre-existing React `validateDOMNesting` warning from `HierarchyTree.tsx`.
+
+### Next steps
+
+- Test on a fresh site (see `docs/rename/testing-guide.md`).
+- Push `refactor/rename-to-appointment` when ready.

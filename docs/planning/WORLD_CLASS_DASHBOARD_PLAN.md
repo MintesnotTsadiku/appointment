@@ -260,21 +260,21 @@ Create the **#1 scheduling dashboard experience in Africa** - a command center t
 **New endpoints**:
 ```python
 # Dashboard data
-frappe_appointment.dashboard.get_dashboard_data()  # Combined API
-frappe_appointment.dashboard.get_today_schedule()
-frappe_appointment.dashboard.get_recommendations()
-frappe_appointment.dashboard.get_customer_insights()
+appointment.dashboard.get_dashboard_data()  # Combined API
+appointment.dashboard.get_today_schedule()
+appointment.dashboard.get_recommendations()
+appointment.dashboard.get_customer_insights()
 
 # Quick actions
-frappe_appointment.services.create_service_quick()
-frappe_appointment.availability.get_availability_editor()
-frappe_appointment.availability.update_availability_quick()
-frappe_appointment.booking.get_booking_link()
-frappe_appointment.booking.track_link_share()
+appointment.services.create_service_quick()
+appointment.availability.get_availability_editor()
+appointment.availability.update_availability_quick()
+appointment.booking.get_booking_link()
+appointment.booking.track_link_share()
 
 # Checklist
-frappe_appointment.onboarding.get_detailed_checklist()
-frappe_appointment.onboarding.complete_checklist_item()
+appointment.onboarding.get_detailed_checklist()
+appointment.onboarding.complete_checklist_item()
 ```
 
 **Enhance existing**:

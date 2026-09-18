@@ -5,12 +5,12 @@
 
 ## Problem
 
-Initially created Configuration Settings in the wrong module (`frappe_appointment/frappe_appointment/doctype/`), but there was already an existing empty Configuration Settings in the `Scheduler` module. The old one was taking precedence.
+Initially created Configuration Settings in the wrong module (`appointment/appointment/doctype/`), but there was already an existing empty Configuration Settings in the `Scheduler` module. The old one was taking precedence.
 
 ## Solution
 
-1. **Deleted** the incorrectly placed Configuration Settings from `frappe_appointment/frappe_appointment/doctype/configuration_settings/`
-2. **Updated** the existing Configuration Settings in `frappe_appointment/scheduler/doctype/configuration_settings/` with all 42 fields
+1. **Deleted** the incorrectly placed Configuration Settings from `appointment/appointment/doctype/configuration_settings/`
+2. **Updated** the existing Configuration Settings in `appointment/scheduler/doctype/configuration_settings/` with all 42 fields
 3. **Ran migration** to apply changes to database
 
 ## Result

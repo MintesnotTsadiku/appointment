@@ -78,7 +78,7 @@ const AppointmentV2 = () => {
 
   // EXACT SAME API call as old implementation
   const { data, isLoading, error } = useFrappeGetCall(
-    "frappe_appointment.api.personal_meet.get_meeting_windows",
+    "appointment.api.personal_meet.get_meeting_windows",
     { slug: meetId },
     undefined,
     {

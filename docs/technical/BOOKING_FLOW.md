@@ -40,7 +40,7 @@ Reschedule (if needed)
   - Organization
 
 ### Step 1: Profile Setup
-- **API**: `frappe_appointment.onboarding.save_profile`
+- **API**: `appointment.onboarding.save_profile`
 - **Creates**: `Provider` doctype
 - **Fields**: 
   - Business name / Full name
@@ -50,13 +50,13 @@ Reschedule (if needed)
   - Language preference
 
 ### Step 2: Calendar Connection
-- **API**: `frappe_appointment.onboarding.connect_calendar`
+- **API**: `appointment.onboarding.connect_calendar`
 - **Options**:
   - Built-in calendar (no external integration)
   - Google Calendar (requires OAuth)
 
 ### Step 3: Availability Setup
-- **API**: `frappe_appointment.onboarding.save_availability`
+- **API**: `appointment.onboarding.save_availability`
 - **Creates**: 
   - `Location` doctype
   - `Opening Hours` child records
@@ -66,7 +66,7 @@ Reschedule (if needed)
   - Per-day availability windows
 
 ### Step 4: Service Creation
-- **API**: `frappe_appointment.onboarding.create_service`
+- **API**: `appointment.onboarding.create_service`
 - **Creates**:
   - `Service` doctype
   - `EventType` doctype
@@ -80,7 +80,7 @@ Reschedule (if needed)
   - Price (optional)
 
 ### Step 5: Success & Booking URL
-- **API**: `frappe_appointment.onboarding.get_booking_url`
+- **API**: `appointment.onboarding.get_booking_url`
 - **Returns**: Booking URL in format: `/schedule/in/{EventType.name}`
 - **Displays**: Confetti animation, shareable link
 
@@ -109,7 +109,7 @@ Where `slug` can be:
 ### 3.1 Initial Page Load
 - **Route**: `/schedule/in/:meetId`
 - **Component**: `AppointmentPage`
-- **API Call**: `frappe_appointment.api.personal_meet.get_meeting_windows`
+- **API Call**: `appointment.api.personal_meet.get_meeting_windows`
 - **Returns**:
   - Provider name
   - Available durations
@@ -122,7 +122,7 @@ Where `slug` can be:
 
 ### 3.3 Date & Time Selection
 - **Component**: `Booking`
-- **API Call**: `frappe_appointment.api.personal_meet.get_time_slots`
+- **API Call**: `appointment.api.personal_meet.get_time_slots`
 - **Parameters**:
   - `duration_id`: Selected duration ID
   - `date`: Selected date (YYYY-MM-DD)
@@ -141,7 +141,7 @@ Where `slug` can be:
   - Guests (optional, can add multiple)
 
 ### 3.5 Booking Confirmation
-- **API Call**: `frappe_appointment.api.personal_meet.book_time_slot`
+- **API Call**: `appointment.api.personal_meet.book_time_slot`
 - **Parameters**:
   - `duration_id`
   - `date`
@@ -227,7 +227,7 @@ Available Slots (filtered by conflicts, buffer times, etc.)
 
 ### 5.1 Reschedule Request
 - **Component**: Reschedule button (shown if `rescheduling_allowed=true`)
-- **API Call**: `frappe_appointment.api.personal_meet.reschedule_appointment`
+- **API Call**: `appointment.api.personal_meet.reschedule_appointment`
 - **Parameters**:
   - `appointment_id`: Existing appointment ID
   - `new_date`: New date
@@ -347,21 +347,21 @@ Available Slots (filtered by conflicts, buffer times, etc.)
 ## 8. API Endpoints
 
 ### 8.1 Onboarding APIs
-- `frappe_appointment.onboarding.get_progress`
-- `frappe_appointment.onboarding.set_onboarding_type`
-- `frappe_appointment.onboarding.save_profile`
-- `frappe_appointment.onboarding.connect_calendar`
-- `frappe_appointment.onboarding.save_availability`
-- `frappe_appointment.onboarding.create_service`
-- `frappe_appointment.onboarding.get_booking_url`
-- `frappe_appointment.onboarding.complete`
-- `frappe_appointment.onboarding.update_step`
+- `appointment.onboarding.get_progress`
+- `appointment.onboarding.set_onboarding_type`
+- `appointment.onboarding.save_profile`
+- `appointment.onboarding.connect_calendar`
+- `appointment.onboarding.save_availability`
+- `appointment.onboarding.create_service`
+- `appointment.onboarding.get_booking_url`
+- `appointment.onboarding.complete`
+- `appointment.onboarding.update_step`
 
 ### 8.2 Booking APIs
-- `frappe_appointment.api.personal_meet.get_meeting_windows`
-- `frappe_appointment.api.personal_meet.get_time_slots`
-- `frappe_appointment.api.personal_meet.book_time_slot`
-- `frappe_appointment.api.personal_meet.reschedule_appointment`
+- `appointment.api.personal_meet.get_meeting_windows`
+- `appointment.api.personal_meet.get_time_slots`
+- `appointment.api.personal_meet.book_time_slot`
+- `appointment.api.personal_meet.reschedule_appointment`
 
 ---
 

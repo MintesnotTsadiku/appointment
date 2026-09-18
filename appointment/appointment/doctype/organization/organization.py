@@ -1,0 +1,25 @@
+# Copyright (c) 2025, minte and contributors
+# For license information, please see license.txt
+
+import frappe
+from frappe.model.document import Document
+
+
+class Organization(Document):
+	def on_update(self):
+		"""Sync booking URLs when organization is updated"""
+		# Skip if we're already syncing to prevent recursion
+		if frappe.flags.syncing_booking_urls:
+			return
+		
+		# Skip during demo data generation to avoid link validation errors
+		# Booking URLs will be synced later after all services/providers are created
+		if getattr(frappe.flags, 'skip_booking_url_sync', False):
+			return
+		
+		try:
+			from appointment.scheduler.booking_url_manager import sync_booking_urls_for_organization
+			sync_booking_urls_for_organization(self.name)
+		except Exception as e:
+			# Don't fail the save if URL sync fails
+			frappe.log_error(str(e), "Organization: Sync Booking URLs Error")

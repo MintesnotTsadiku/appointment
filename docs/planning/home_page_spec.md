@@ -71,12 +71,12 @@ Each component detailed with:
 
 Define endpoints needed:
 
-- `POST /api/method/frappe_appointment.onboarding.get_progress` - Fetch user onboarding state
-- `POST /api/method/frappe_appointment.onboarding.update_step` - Save step progress
-- `GET /api/method/frappe_appointment.dashboard.stats` - Dashboard metrics
-- `GET /api/method/frappe_appointment.dashboard.recent_activity` - Activity feed
-- `POST /api/method/frappe_appointment.setup.connect_calendar` - Simplified OAuth
-- `POST /api/method/frappe_appointment.setup.save_availability` - Quick availability save
+- `POST /api/method/appointment.onboarding.get_progress` - Fetch user onboarding state
+- `POST /api/method/appointment.onboarding.update_step` - Save step progress
+- `GET /api/method/appointment.dashboard.stats` - Dashboard metrics
+- `GET /api/method/appointment.dashboard.recent_activity` - Activity feed
+- `POST /api/method/appointment.setup.connect_calendar` - Simplified OAuth
+- `POST /api/method/appointment.setup.save_availability` - Quick availability save
 - Request/response schemas for each
 
 ### 9. Data Model Extensions

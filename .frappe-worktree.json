@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "app_name": "frappe_appointment",
+  "app_name": "appointment",
   "site_prefix": "meet-beta",
   "dependency_apps": [
     "agent_harness",

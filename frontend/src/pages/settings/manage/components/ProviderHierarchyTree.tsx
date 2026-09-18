@@ -52,7 +52,7 @@ export const ProviderHierarchyTree = ({ providers, onRefresh }: ProviderHierarch
   const [expandedLocations, setExpandedLocations] = useState<Set<string>>(new Set());
   const [editItem, setEditItem] = useState<any>(null);
   const [createItem, setCreateItem] = useState<{ type: string; context?: any } | null>(null);
-  const { call: deleteEventType } = useFrappePostCall('frappe_appointment.api.manage.delete_event_type');
+  const { call: deleteEventType } = useFrappePostCall('appointment.api.manage.delete_event_type');
 
   const toggleProvider = (providerName: string) => {
     const newExpanded = new Set(expandedProviders);

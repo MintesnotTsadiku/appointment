@@ -17,7 +17,7 @@
 
 **Problem**: Booking URLs showed "No open-time slots" because User Appointment Availability wasn't created during onboarding.
 
-**Solution**: Updated `frappe_appointment.onboarding.create_service` to:
+**Solution**: Updated `appointment.onboarding.create_service` to:
 1. Create User Appointment Availability for the provider
 2. Create Appointment Slot Duration with service details
 3. Link everything properly for booking to work

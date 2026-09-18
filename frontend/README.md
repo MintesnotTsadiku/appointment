@@ -1,3 +1,3 @@
-## Frappe Appointment
+## Appointment
 
-It contains a React application for Frappe Appointment.
+It contains a React application for Appointment.

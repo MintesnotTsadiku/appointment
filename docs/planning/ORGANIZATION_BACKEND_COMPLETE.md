@@ -3,7 +3,7 @@
 ## Status: Backend APIs ✅ Complete
 
 **Date Completed**: 2025-11-17  
-**Location**: `/frappe_appointment/onboarding.py` (lines 652-1178)
+**Location**: `/appointment/onboarding.py` (lines 652-1178)
 
 ---
 
@@ -148,7 +148,7 @@ Organization Step Components:
 
 ```python
 # Test Step 1: Save Profile
-frappe.call("frappe_appointment.onboarding.save_organization_profile", {
+frappe.call("appointment.onboarding.save_organization_profile", {
     "organization_name": "Test Clinic",
     "organization_type": "Healthcare",
     "email": "test@clinic.et",
@@ -159,7 +159,7 @@ frappe.call("frappe_appointment.onboarding.save_organization_profile", {
 })
 
 # Test Step 2: Add Provider
-frappe.call("frappe_appointment.onboarding.add_organization_provider", {
+frappe.call("appointment.onboarding.add_organization_provider", {
     "provider_name": "Dr. Test",
     "email": "dr.test@clinic.et",
     "phone": "+251922222222",
@@ -168,10 +168,10 @@ frappe.call("frappe_appointment.onboarding.add_organization_provider", {
 })
 
 # Test Step 2: Get Providers
-frappe.call("frappe_appointment.onboarding.get_organization_providers")
+frappe.call("appointment.onboarding.get_organization_providers")
 
 # Test Step 3: Save Availability
-frappe.call("frappe_appointment.onboarding.save_organization_availability", {
+frappe.call("appointment.onboarding.save_organization_availability", {
     "location_name": "Test Clinic - Main",
     "address": "Bole, Addis Ababa",
     "weekly_schedule": {
@@ -184,7 +184,7 @@ frappe.call("frappe_appointment.onboarding.save_organization_availability", {
 })
 
 # Test Step 4: Create Service
-frappe.call("frappe_appointment.onboarding.create_organization_service", {
+frappe.call("appointment.onboarding.create_organization_service", {
     "service_name": "General Consultation",
     "duration": 30,
     "price": 500,
@@ -194,10 +194,10 @@ frappe.call("frappe_appointment.onboarding.create_organization_service", {
 })
 
 # Test Step 5: Get URLs
-frappe.call("frappe_appointment.onboarding.get_organization_booking_urls")
+frappe.call("appointment.onboarding.get_organization_booking_urls")
 
 # Test Step 5: Complete
-frappe.call("frappe_appointment.onboarding.complete_organization_onboarding")
+frappe.call("appointment.onboarding.complete_organization_onboarding")
 ```
 
 ### Frontend Testing (Once Implemented)
@@ -217,7 +217,7 @@ frappe.call("frappe_appointment.onboarding.complete_organization_onboarding")
 
 ### Round-Robin Implementation Plan
 
-Location: `frappe_appointment/api/personal_meet.py`
+Location: `appointment/api/personal_meet.py`
 
 **Modify `get_time_slots()` for organization URLs:**
 1. Detect organization booking URL pattern
@@ -243,7 +243,7 @@ Location: `frappe_appointment/api/personal_meet.py`
 
 ## Files Modified
 
-- ✅ `/frappe_appointment/onboarding.py` - Added 7 new APIs (527 lines added)
+- ✅ `/appointment/onboarding.py` - Added 7 new APIs (527 lines added)
 
 ---
 

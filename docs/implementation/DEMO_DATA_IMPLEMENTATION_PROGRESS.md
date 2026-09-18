@@ -22,7 +22,7 @@
 - Generation log for tracking
 
 **2. Demo Data Module** ✅
-- Created `frappe_appointment/demo_data.py`
+- Created `appointment/demo_data.py`
 - Ethiopian context data (names, locations, phone numbers)
 - Helper functions for data generation
 - Safety features (demo data marking)
@@ -78,23 +78,23 @@
 ## Technical Details
 
 ### Files Created
-- `frappe_appointment/frappe_appointment/doctype/configuration_settings/`
+- `appointment/appointment/doctype/configuration_settings/`
   - `configuration_settings.json` - Doctype definition
   - `configuration_settings.py` - Controller with button handlers
   - `__init__.py` - Module init
-- `frappe_appointment/demo_data.py` - All generation logic
+- `appointment/demo_data.py` - All generation logic
 
 ### Database Changes
 - ✅ Configuration Settings doctype migrated successfully
 - ✅ Organizations table populated with demo data
 
 ### API Endpoints
-- ✅ `frappe_appointment.demo_data.generate_organizations(count)`
-- ⏳ `frappe_appointment.demo_data.generate_providers(count)` - Placeholder
-- ⏳ `frappe_appointment.demo_data.generate_services(count)` - Placeholder
-- ⏳ `frappe_appointment.demo_data.generate_locations(count)` - Placeholder
-- ⏳ `frappe_appointment.demo_data.generate_appointments(count, days)` - Placeholder
-- ⏳ `frappe_appointment.demo_data.clear_all_demo_data()` - Partial
+- ✅ `appointment.demo_data.generate_organizations(count)`
+- ⏳ `appointment.demo_data.generate_providers(count)` - Placeholder
+- ⏳ `appointment.demo_data.generate_services(count)` - Placeholder
+- ⏳ `appointment.demo_data.generate_locations(count)` - Placeholder
+- ⏳ `appointment.demo_data.generate_appointments(count, days)` - Placeholder
+- ⏳ `appointment.demo_data.clear_all_demo_data()` - Partial
 
 ---
 

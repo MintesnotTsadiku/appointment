@@ -61,7 +61,7 @@ A **Group Meeting** (Appointment Group) is a meeting that requires **multiple pe
 
 ### Availability Calculation Algorithm
 
-**File**: `frappe_appointment/doctype/appointment_group/appointment_group.py`
+**File**: `appointment/doctype/appointment_group/appointment_group.py`
 
 1. **Get Mandatory Members**:
    ```python
@@ -98,7 +98,7 @@ A **Group Meeting** (Appointment Group) is a meeting that requires **multiple pe
 
 ### Booking Flow
 
-**File**: `frappe_appointment/overrides/event_override.py`
+**File**: `appointment/overrides/event_override.py`
 
 ```python
 def _create_event_for_appointment_group(...):
@@ -242,7 +242,7 @@ This will make the group meeting page match the premium "100 million startup" ae
 ```bash
 cd /home/minte/projects/frappe-bench && bench --site appointment.com console <<< "
 import frappe
-result = frappe.call('frappe_appointment.demo_data.generate_appointment_groups', count=3)
+result = frappe.call('appointment.demo_data.generate_appointment_groups', count=3)
 print(f'Created {result.get(\"count\")} groups')
 "
 ```
@@ -258,8 +258,8 @@ print(f'Created {result.get(\"count\")} groups')
 
 ## 📚 Related Files
 
-- **Backend Logic**: `frappe_appointment/doctype/appointment_group/appointment_group.py`
-- **Booking API**: `frappe_appointment/overrides/event_override.py`
+- **Backend Logic**: `appointment/doctype/appointment_group/appointment_group.py`
+- **Booking API**: `appointment/overrides/event_override.py`
 - **Frontend Page**: `frontend/src/pages/group-appointment/index.tsx`
 - **Premium Calendar**: `frontend/src/pages/booking-v2/components/DateTimeSelector/CalendarPanel/index.tsx`
 - **Premium Time Slots**: `frontend/src/pages/booking-v2/components/DateTimeSelector/TimeSlotsPanel/index.tsx`

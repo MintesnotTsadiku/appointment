@@ -121,7 +121,7 @@ define(['./workbox-e669759b'], (function (workbox) { 'use strict';
       statuses: [0, 200]
     })]
   }), 'GET');
-  workbox.registerRoute(/\/assets\/frappe_appointment\/frontend\/.*\.(js|css|woff|woff2|ttf|eot)$/i, new workbox.CacheFirst({
+  workbox.registerRoute(/\/assets\/appointment\/frontend\/.*\.(js|css|woff|woff2|ttf|eot)$/i, new workbox.CacheFirst({
     "cacheName": "app-assets-cache",
     plugins: [new workbox.ExpirationPlugin({
       maxEntries: 50,
@@ -135,8 +135,8 @@ define(['./workbox-e669759b'], (function (workbox) { 'use strict';
       maxAgeSeconds: 2592000
     })]
   }), 'GET');
-  workbox.registerRoute(/\/api\/method\/frappe_appointment\.(scheduler|booking|availability)\..*(slot|availability|time)/i, new workbox.NetworkOnly(), 'GET');
-  workbox.registerRoute(/\/api\/method\/frappe_appointment\.(scheduler|booking)\..*(service|location|provider|group)/i, new workbox.NetworkFirst({
+  workbox.registerRoute(/\/api\/method\/appointment\.(scheduler|booking|availability)\..*(slot|availability|time)/i, new workbox.NetworkOnly(), 'GET');
+  workbox.registerRoute(/\/api\/method\/appointment\.(scheduler|booking)\..*(service|location|provider|group)/i, new workbox.NetworkFirst({
     "cacheName": "static-data-cache",
     "networkTimeoutSeconds": 10,
     plugins: [new workbox.ExpirationPlugin({
@@ -146,7 +146,7 @@ define(['./workbox-e669759b'], (function (workbox) { 'use strict';
       statuses: [0, 200]
     })]
   }), 'GET');
-  workbox.registerRoute(/\/api\/method\/frappe_appointment\..*/i, new workbox.NetworkFirst({
+  workbox.registerRoute(/\/api\/method\/appointment\..*/i, new workbox.NetworkFirst({
     "cacheName": "api-cache",
     "networkTimeoutSeconds": 10,
     plugins: [new workbox.ExpirationPlugin({

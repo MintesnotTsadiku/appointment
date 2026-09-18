@@ -1,13 +1,13 @@
-# Module Scaffolding Guide - Creating Modules in frappe_appointment
+# Module Scaffolding Guide - Creating Modules in appointment
 
-> **Step-by-step guide** to create modules within the existing `frappe_appointment` app  
+> **Step-by-step guide** to create modules within the existing `appointment` app  
 > **Status**: ✅ Modules have been created! This guide documents what was done.
 
 ---
 
 ## 🎯 Overview
 
-Instead of creating separate apps, we're creating **modules** within the existing `frappe_appointment` app:
+Instead of creating separate apps, we're creating **modules** within the existing `appointment` app:
 
 1. **Scheduler** - Core scheduling extensions (Provider, Location, Service, Policies, Front-Desk)
 2. **Payments** - Payment integrations (telebirr, Chapa, M-PESA)
@@ -30,7 +30,7 @@ The modules have been successfully created. Here's what was done:
 
 ### Step 1: Updated modules.txt ✅
 
-Added three new modules to `frappe_appointment/modules.txt`:
+Added three new modules to `appointment/modules.txt`:
 ```
 Frappe Appointment
 Scheduler
@@ -41,9 +41,9 @@ Channels
 ### Step 2: Created Module Directories ✅
 
 Created directory structure for each module:
-- `frappe_appointment/scheduler/`
-- `frappe_appointment/payments/`
-- `frappe_appointment/channels/`
+- `appointment/scheduler/`
+- `appointment/payments/`
+- `appointment/channels/`
 
 ### Step 3: Created Module Structure ✅
 
@@ -64,14 +64,14 @@ Migrations completed successfully, modules are registered in Frappe.
 
 ### Update modules.txt
 ```bash
-cd /home/minte/projects/frappe-bench/apps/frappe_appointment
-# Edit frappe_appointment/modules.txt
+cd /home/minte/projects/frappe-bench/apps/appointment
+# Edit appointment/modules.txt
 # Add: Scheduler, Payments, Channels
 ```
 
 ### Create Directories
 ```bash
-cd frappe_appointment
+cd appointment
 mkdir -p scheduler payments channels
 touch scheduler/__init__.py payments/__init__.py channels/__init__.py
 mkdir -p scheduler/{doctype,api,helpers}
@@ -92,11 +92,11 @@ bench --site appointment.com migrate
 After scaffolding, your structure will look like:
 
 ```
-frappe_appointment/
-├── frappe_appointment/
+appointment/
+├── appointment/
 │   ├── __init__.py
-│   ├── modules.txt                    # Contains: Frappe Appointment, Scheduler, Payments, Channels
-│   ├── frappe_appointment/           # Original module
+│   ├── modules.txt                    # Contains: Appointment, Scheduler, Payments, Channels
+│   ├── appointment/           # Original module
 │   │   └── doctype/
 │   ├── scheduler/                     # NEW: Scheduler module
 │   │   ├── __init__.py
@@ -169,9 +169,9 @@ bench --site appointment.com clear-cache
 # Reload modules
 bench --site appointment.com console <<< "
 import frappe
-frappe.reload_doc('frappe_appointment', 'module', 'scheduler')
-frappe.reload_doc('frappe_appointment', 'module', 'payments')
-frappe.reload_doc('frappe_appointment', 'module', 'channels')
+frappe.reload_doc('appointment', 'module', 'scheduler')
+frappe.reload_doc('appointment', 'module', 'payments')
+frappe.reload_doc('appointment', 'module', 'channels')
 "
 
 # Restart bench
@@ -181,12 +181,12 @@ bench restart
 ### Issue: Import errors
 ```bash
 # Check __init__.py files exist
-ls frappe_appointment/scheduler/__init__.py
-ls frappe_appointment/payments/__init__.py
-ls frappe_appointment/channels/__init__.py
+ls appointment/scheduler/__init__.py
+ls appointment/payments/__init__.py
+ls appointment/channels/__init__.py
 
 # Verify modules.txt format
-cat frappe_appointment/modules.txt
+cat appointment/modules.txt
 ```
 
 ### Issue: Migration fails

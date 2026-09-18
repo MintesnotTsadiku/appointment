@@ -38,7 +38,7 @@ export const LinkProviderModal = ({
   const { data: providersData, mutate: refreshProviders, isLoading: loadingProviders } = useFrappeGetCall<{
     message: { success: boolean; providers: Provider[]; error?: string };
   }>(
-    'frappe_appointment.onboarding.get_available_providers_for_service',
+    'appointment.onboarding.get_available_providers_for_service',
     serviceId && organizationId ? { service_id: serviceId, organization_id: organizationId } : undefined,
     `available-providers-${serviceId}-${organizationId}`,
     {
@@ -47,7 +47,7 @@ export const LinkProviderModal = ({
     }
   );
 
-  const { call: linkProvider, loading: linking } = useFrappePostCall('frappe_appointment.onboarding.link_provider_to_service');
+  const { call: linkProvider, loading: linking } = useFrappePostCall('appointment.onboarding.link_provider_to_service');
 
   const providers = providersData?.message?.providers || [];
 

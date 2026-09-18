@@ -5,7 +5,7 @@
 Open your terminal and run:
 
 ```bash
-cd /home/minte/projects/frappe-bench/apps/frappe_appointment/frontend
+cd /home/minte/projects/frappe-bench/apps/appointment/frontend
 npm install -g pwa-asset-generator
 ```
 
@@ -24,7 +24,7 @@ added 1 package in Xs
 Run this command:
 
 ```bash
-cd /home/minte/projects/frappe-bench/apps/frappe_appointment/frontend
+cd /home/minte/projects/frappe-bench/apps/appointment/frontend
 pwa-asset-generator public/icons/logo.svg public/icons \
   --icon-only \
   --favicon \
@@ -87,7 +87,7 @@ ls -lh public/icons/
 The tool might not generate shortcut icons. Create them manually:
 
 ```bash
-cd /home/minte/projects/frappe-bench/apps/frappe_appointment/frontend/public/icons
+cd /home/minte/projects/frappe-bench/apps/appointment/frontend/public/icons
 
 # Create shortcut-book.png (96x96) - You can use icon-96x96.png as base
 cp icon-96x96.png shortcut-book.png
@@ -109,7 +109,7 @@ convert icon-96x96.png -resize 96x96 shortcut-list.png
 Ensure you have `apple-touch-icon-180x180.png`:
 
 ```bash
-cd /home/minte/projects/frappe-bench/apps/frappe_appointment/frontend/public/icons
+cd /home/minte/projects/frappe-bench/apps/appointment/frontend/public/icons
 
 # If the tool generated apple-touch-icon.png, rename it
 if [ -f "apple-touch-icon.png" ]; then
@@ -129,7 +129,7 @@ fi
 Run this checklist:
 
 ```bash
-cd /home/minte/projects/frappe-bench/apps/frappe_appointment/frontend/public/icons
+cd /home/minte/projects/frappe-bench/apps/appointment/frontend/public/icons
 
 # Check required files
 echo "Checking required icons..."
@@ -170,7 +170,7 @@ ls -lh public/icons/icon-*.png | head -5
 Once all icons are generated:
 
 ```bash
-cd /home/minte/projects/frappe-bench/apps/frappe_appointment/frontend
+cd /home/minte/projects/frappe-bench/apps/appointment/frontend
 npm run build
 ```
 
@@ -184,7 +184,7 @@ This will:
 ## 🎉 Done!
 
 Your PWA icons are now ready. The icons will be available at:
-- `/assets/frappe_appointment/frontend/icons/icon-*.png`
+- `/assets/appointment/frontend/icons/icon-*.png`
 
 ---
 

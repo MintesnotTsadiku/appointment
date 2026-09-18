@@ -30,7 +30,7 @@
 ### **1. Core Delegation Module**
 
 **Module Name**: `delegation` (NEW - Core functionality)  
-**Location**: `frappe_appointment/core/delegation.py` (not a separate module, core utility)
+**Location**: `appointment/core/delegation.py` (not a separate module, core utility)
 
 **Purpose**: Handles permission delegation and context management
 
@@ -44,7 +44,7 @@
 ### **2. Assistants Module (Revised)**
 
 **Module Name**: `assistants`  
-**Location**: `frappe_appointment/assistants/`
+**Location**: `appointment/assistants/`
 
 **Key Changes from Our Original Plan**:
 - ✅ Uses DelegationManager for permissions (not standard Frappe permissions)
@@ -79,7 +79,7 @@ assistants/
 ### **3. Tasks Module (Full-Featured + Daily Briefing)**
 
 **Module Name**: `tasks`  
-**Location**: `frappe_appointment/tasks/`
+**Location**: `appointment/tasks/`
 
 **Key Features** (Our Full Plan):
 - ✅ Full task management (projects, templates, categories)
@@ -126,7 +126,7 @@ assistants/
 
 ## 🔧 Core Implementation: DelegationManager
 
-### **File**: `frappe_appointment/core/delegation.py`
+### **File**: `appointment/core/delegation.py`
 
 ```python
 import frappe
@@ -229,7 +229,7 @@ class DelegationManager:
 
 ### **Service Relationship (Expert's + Our Enhancements)**
 
-**Location**: `frappe_appointment/assistants/doctype/service_relationship/service_relationship.json`
+**Location**: `appointment/assistants/doctype/service_relationship/service_relationship.json`
 
 **Fields**:
 ```json
@@ -263,7 +263,7 @@ class DelegationManager:
 
 ### **VA Profile (Expert's Approach)**
 
-**Location**: `frappe_appointment/assistants/doctype/va_profile/va_profile.json`
+**Location**: `appointment/assistants/doctype/va_profile/va_profile.json`
 
 **Fields**:
 ```json
@@ -287,7 +287,7 @@ class DelegationManager:
 
 ### **Task (Simplified - Expert's Approach)**
 
-**Location**: `frappe_appointment/tasks/doctype/task/task.json`
+**Location**: `appointment/tasks/doctype/task/task.json`
 
 **Simplified Fields**:
 ```json
@@ -311,25 +311,25 @@ class DelegationManager:
 
 ## 🔄 Permission Hooks (Expert's Approach)
 
-### **File**: `frappe_appointment/hooks.py`
+### **File**: `appointment/hooks.py`
 
 **Add to hooks**:
 ```python
 doc_events = {
     "Appointment": {
-        "before_insert": "frappe_appointment.core.delegation.set_owner_context",
-        "has_permission": "frappe_appointment.core.delegation.check_delegation_perm",
-        "on_update": "frappe_appointment.core.delegation.log_activity"
+        "before_insert": "appointment.core.delegation.set_owner_context",
+        "has_permission": "appointment.core.delegation.check_delegation_perm",
+        "on_update": "appointment.core.delegation.log_activity"
     },
     "Task": {
-        "before_insert": "frappe_appointment.core.delegation.set_owner_context",
-        "has_permission": "frappe_appointment.core.delegation.check_delegation_perm",
-        "on_update": "frappe_appointment.core.delegation.log_activity"
+        "before_insert": "appointment.core.delegation.set_owner_context",
+        "has_permission": "appointment.core.delegation.check_delegation_perm",
+        "on_update": "appointment.core.delegation.log_activity"
     }
 }
 ```
 
-### **File**: `frappe_appointment/core/delegation.py` (continued)
+### **File**: `appointment/core/delegation.py` (continued)
 
 ```python
 def set_owner_context(doc, method):
@@ -359,7 +359,7 @@ def check_delegation_perm(doc, user, permission_type):
     Check if user (VA) has permission to edit doc (owned by client).
     Expert's permission check.
     """
-    from frappe_appointment.core.delegation import DelegationManager
+    from appointment.core.delegation import DelegationManager
     
     # If user owns the doc, allow
     if doc.owner == user:
@@ -418,7 +418,7 @@ export const DelegationProvider = ({ children }) => {
   // Fetch clients assigned to this VA on login
   useEffect(() => {
     if (currentUser?.role === 'Virtual Assistant') {
-      api.get('/api/method/frappe_appointment.assistants.api.delegation_api.get_my_clients')
+      api.get('/api/method/appointment.assistants.api.delegation_api.get_my_clients')
         .then(response => {
           setAssignedClients(response.message);
         });
@@ -464,7 +464,7 @@ const ClientSwitcher = () => {
   const handleSwitch = (clientId: string | null) => {
     if (clientId) {
       // Set context on backend
-      api.post('/api/method/frappe_appointment.assistants.api.delegation_api.set_client_context', {
+      api.post('/api/method/appointment.assistants.api.delegation_api.set_client_context', {
         client_user: clientId
       }).then(() => {
         setActingAs(clientId);
@@ -473,7 +473,7 @@ const ClientSwitcher = () => {
       });
     } else {
       // Switch back to personal workspace
-      api.post('/api/method/frappe_appointment.assistants.api.delegation_api.clear_client_context')
+      api.post('/api/method/appointment.assistants.api.delegation_api.clear_client_context')
         .then(() => {
           setActingAs(null);
           window.location.reload();

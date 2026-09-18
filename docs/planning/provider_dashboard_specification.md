@@ -109,7 +109,7 @@ User logs in → Check onboarding status
 ### Onboarding Progress Check
 ```typescript
 const { data: progress } = useFrappeGetCall(
-  'frappe_appointment.onboarding.get_progress'
+  'appointment.onboarding.get_progress'
 );
 
 if (!progress?.onboarding_complete) {
@@ -156,7 +156,7 @@ return <Dashboard />;
 
 **API:**
 ```typescript
-POST /api/method/frappe_appointment.onboarding.save_profile
+POST /api/method/appointment.onboarding.save_profile
 Request: { business_name, business_type, timezone, language }
 Response: { success: true, profile_id: "..." }
 ```
@@ -197,7 +197,7 @@ Response: { success: true, profile_id: "..." }
 
 **API:**
 ```typescript
-POST /api/method/frappe_appointment.onboarding.connect_calendar
+POST /api/method/appointment.onboarding.connect_calendar
 Request: { provider: "google" | "manual" }
 Response: { oauth_url?: "https://...", success: true }
 ```
@@ -236,7 +236,7 @@ Quick Templates:
 
 **API:**
 ```typescript
-POST /api/method/frappe_appointment.onboarding.save_availability
+POST /api/method/appointment.onboarding.save_availability
 Request: {
   weekly_schedule: {
     monday: [{ start: "09:00", end: "17:00" }],
@@ -267,7 +267,7 @@ Price:         [500] ETB (optional)
 
 **API:**
 ```typescript
-POST /api/method/frappe_appointment.onboarding.create_service
+POST /api/method/appointment.onboarding.create_service
 Request: { name, duration, buffer_time, price, currency: "ETB" }
 Response: {
   success: true,
@@ -315,7 +315,7 @@ Response: {
 
 **API:**
 ```typescript
-POST /api/method/frappe_appointment.onboarding.complete
+POST /api/method/appointment.onboarding.complete
 Response: { success: true, completed_at: "2025-11-14T..." }
 ```
 
@@ -382,7 +382,7 @@ Response: { success: true, completed_at: "2025-11-14T..." }
 
 **API:**
 ```typescript
-GET /api/method/frappe_appointment.onboarding.get_progress
+GET /api/method/appointment.onboarding.get_progress
 Response: {
   completed_steps: [1, 2, 3, 4, 5],
   total_steps: 7,
@@ -414,7 +414,7 @@ Response: {
 
 **API:**
 ```typescript
-GET /api/method/frappe_appointment.dashboard.stats?period=week
+GET /api/method/appointment.dashboard.stats?period=week
 Response: {
   appointments_this_week: 24,
   upcoming_today: 3,
@@ -469,7 +469,7 @@ Response: {
 
 **API:**
 ```typescript
-GET /api/method/frappe_appointment.dashboard.recent_activity?limit=10
+GET /api/method/appointment.dashboard.recent_activity?limit=10
 Response: {
   activities: [
     {
@@ -506,7 +506,7 @@ Response: {
 
 **API:**
 ```typescript
-GET /api/method/frappe_appointment.dashboard.alerts
+GET /api/method/appointment.dashboard.alerts
 Response: {
   alerts: [
     {
@@ -532,19 +532,19 @@ Response: {
 ### Onboarding APIs
 | Endpoint | Method | Purpose |
 |----------|--------|---------|
-| `frappe_appointment.onboarding.get_progress` | GET | Fetch onboarding status |
-| `frappe_appointment.onboarding.save_profile` | POST | Save business profile (Step 1) |
-| `frappe_appointment.onboarding.connect_calendar` | POST | Connect Google/Manual (Step 2) |
-| `frappe_appointment.onboarding.save_availability` | POST | Save weekly schedule (Step 3) |
-| `frappe_appointment.onboarding.create_service` | POST | Create first service (Step 4) |
-| `frappe_appointment.onboarding.complete` | POST | Mark onboarding complete (Step 5) |
+| `appointment.onboarding.get_progress` | GET | Fetch onboarding status |
+| `appointment.onboarding.save_profile` | POST | Save business profile (Step 1) |
+| `appointment.onboarding.connect_calendar` | POST | Connect Google/Manual (Step 2) |
+| `appointment.onboarding.save_availability` | POST | Save weekly schedule (Step 3) |
+| `appointment.onboarding.create_service` | POST | Create first service (Step 4) |
+| `appointment.onboarding.complete` | POST | Mark onboarding complete (Step 5) |
 
 ### Dashboard APIs
 | Endpoint | Method | Purpose |
 |----------|--------|---------|
-| `frappe_appointment.dashboard.stats` | GET | Quick stats (week/month) |
-| `frappe_appointment.dashboard.recent_activity` | GET | Activity feed |
-| `frappe_appointment.dashboard.alerts` | GET | Alerts/notifications |
+| `appointment.dashboard.stats` | GET | Quick stats (week/month) |
+| `appointment.dashboard.recent_activity` | GET | Activity feed |
+| `appointment.dashboard.alerts` | GET | Alerts/notifications |
 
 ---
 
@@ -773,11 +773,11 @@ frontend/src/lib/i18n/          # Add translations
 
 ### Backend Files (Later Sprints)
 ```
-frappe_appointment/scheduler/api/
+appointment/scheduler/api/
 ├── onboarding.py
 └── dashboard.py
 
-frappe_appointment/scheduler/doctype/
+appointment/scheduler/doctype/
 ├── onboarding_progress/
 └── dashboard_settings/
 ```

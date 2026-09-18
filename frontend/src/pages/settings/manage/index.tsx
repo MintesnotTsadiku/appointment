@@ -138,8 +138,8 @@ const Manage = () => {
     message: ManagementHierarchy;
   }>(
     viewType === 'organization' 
-      ? 'frappe_appointment.api.manage.get_management_hierarchy'
-      : 'frappe_appointment.api.manage.get_provider_centric_hierarchy',
+      ? 'appointment.api.manage.get_management_hierarchy'
+      : 'appointment.api.manage.get_provider_centric_hierarchy',
     undefined,
     undefined,
     {

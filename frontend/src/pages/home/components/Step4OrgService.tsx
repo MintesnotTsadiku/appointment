@@ -27,7 +27,7 @@ const Step4OrgService = ({ onNext, onBack }: Step4OrgServiceProps) => {
   const [providerAssignment, setProviderAssignment] = useState('round_robin');
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const { call, loading } = useFrappePostCall('frappe_appointment.onboarding.create_organization_service');
+  const { call, loading } = useFrappePostCall('appointment.onboarding.create_organization_service');
 
   const durations = [
     { value: '15', label: '15 minutes' },

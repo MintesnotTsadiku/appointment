@@ -4,12 +4,12 @@
 You are implementing **Sprint 2: Slot Engine & Policies** for a Frappe-based appointment scheduling system. This sprint adds smart availability rules, conflict detection, buffer time enforcement, and a policy engine for deposits/cancellations.
 
 ## Project Structure
-- **App Path**: `/home/minte/projects/frappe-bench/apps/frappe_appointment`
-- **Backend Module**: `frappe_appointment/scheduler/`
+- **App Path**: `/home/minte/projects/frappe-bench/apps/appointment`
+- **Backend Module**: `appointment/scheduler/`
 - **Existing Files**:
-  - `frappe_appointment/scheduler/availability.py` - Availability resolution (already exists)
-  - `frappe_appointment/api/personal_meet.py` - Booking APIs (already exists)
-  - `frappe_appointment/frappe_appointment/doctype/appointment_group/appointment_group.py` - Slot generation (upstream)
+  - `appointment/scheduler/availability.py` - Availability resolution (already exists)
+  - `appointment/api/personal_meet.py` - Booking APIs (already exists)
+  - `appointment/appointment/doctype/appointment_group/appointment_group.py` - Slot generation (upstream)
 
 ## What Already Exists
 1. ✅ **Availability Model**: Location → Service → Provider hierarchy with opening hours
@@ -20,7 +20,7 @@ You are implementing **Sprint 2: Slot Engine & Policies** for a Frappe-based app
 ## What Needs to Be Built
 
 ### Task 1: Create Policy Doctype
-**Location**: `frappe_appointment/scheduler/doctype/policy/`
+**Location**: `appointment/scheduler/doctype/policy/`
 
 **Fields Required**:
 - `policy_name` (Data) - Name of policy
@@ -47,7 +47,7 @@ You are implementing **Sprint 2: Slot Engine & Policies** for a Frappe-based app
 - Validate dates (valid_from <= valid_to if both set)
 
 ### Task 2: Create Policy Engine Service
-**Location**: `frappe_appointment/scheduler/helpers/policy_engine.py`
+**Location**: `appointment/scheduler/helpers/policy_engine.py`
 
 **Functions to Implement**:
 
@@ -113,7 +113,7 @@ def validate_cancellation(appointment_name: str) -> Tuple[bool, str, Dict]:
 ```
 
 ### Task 3: Enhance Slot Engine with Conflict Detection
-**Location**: `frappe_appointment/scheduler/helpers/slot_engine.py`
+**Location**: `appointment/scheduler/helpers/slot_engine.py`
 
 **Functions to Implement**:
 
@@ -176,14 +176,14 @@ def filter_by_time_off(slots: List[Dict], provider_name: str) -> List[Dict]:
 ```
 
 ### Task 4: Create Booking Quote API
-**Location**: `frappe_appointment/scheduler/api/quote.py`
+**Location**: `appointment/scheduler/api/quote.py`
 
 **API Endpoint**:
 ```python
 @frappe.whitelist(allow_guest=True)
 def get_booking_quote(service_name: str, location_name: str = None, provider_name: str = None, appointment_date: str = None):
     """
-    GET /api/method/frappe_appointment.scheduler.api.quote.get_booking_quote
+    GET /api/method/appointment.scheduler.api.quote.get_booking_quote
     
     Returns booking quote with pricing and policies.
     
@@ -220,7 +220,7 @@ def get_booking_quote(service_name: str, location_name: str = None, provider_nam
 ```
 
 ### Task 5: Integrate Conflict Detection into Booking API
-**Location**: `frappe_appointment/api/personal_meet.py`
+**Location**: `appointment/api/personal_meet.py`
 
 **Modify `book_time_slot()` function**:
 - Before creating appointment, call `check_conflicts()`
@@ -230,7 +230,7 @@ def get_booking_quote(service_name: str, location_name: str = None, provider_nam
 - Validate against provider time-off
 
 ### Task 6: Update Time Slot Generation
-**Location**: `frappe_appointment/api/personal_meet.py`
+**Location**: `appointment/api/personal_meet.py`
 
 **Modify `get_time_slots()` function**:
 - After getting slots from upstream code, apply:
@@ -247,19 +247,19 @@ def get_booking_quote(service_name: str, location_name: str = None, provider_nam
    - Add validation in Python file
 
 2. **Create Policy Engine Module**
-   - Create `frappe_appointment/scheduler/helpers/policy_engine.py`
+   - Create `appointment/scheduler/helpers/policy_engine.py`
    - Implement all functions listed above
    - Test with console: `frappe.get_doc("Policy", "POL-00001")`
 
 3. **Create Slot Engine Module**
-   - Create `frappe_appointment/scheduler/helpers/slot_engine.py`
+   - Create `appointment/scheduler/helpers/slot_engine.py`
    - Implement conflict detection and buffer time functions
    - Integrate with existing availability.py
 
 4. **Create Quote API**
-   - Create `frappe_appointment/scheduler/api/quote.py`
+   - Create `appointment/scheduler/api/quote.py`
    - Implement `get_booking_quote()` endpoint
-   - Test via browser: `/api/method/frappe_appointment.scheduler.api.quote.get_booking_quote?service_name=SVC-00001`
+   - Test via browser: `/api/method/appointment.scheduler.api.quote.get_booking_quote?service_name=SVC-00001`
 
 5. **Integrate into Booking Flow**
    - Modify `book_time_slot()` in `personal_meet.py`
@@ -285,19 +285,19 @@ policy = frappe.get_doc({
 policy.insert()
 
 # Test 2: Get Applicable Policies
-from frappe_appointment.scheduler.helpers.policy_engine import get_applicable_policies
+from appointment.scheduler.helpers.policy_engine import get_applicable_policies
 policies = get_applicable_policies("SVC-00001", "LOC-00001", "PROV-00001")
 
 # Test 3: Calculate Quote
-from frappe_appointment.scheduler.helpers.policy_engine import calculate_booking_quote
+from appointment.scheduler.helpers.policy_engine import calculate_booking_quote
 quote = calculate_booking_quote("SVC-00001", 1000.0, "LOC-00001", "PROV-00001")
 
 # Test 4: Check Conflicts
-from frappe_appointment.scheduler.helpers.slot_engine import check_conflicts
+from appointment.scheduler.helpers.slot_engine import check_conflicts
 conflicts = check_conflicts("PROV-00001", "LOC-00001", datetime(2025, 1, 20, 14, 0), datetime(2025, 1, 20, 15, 0))
 
 # Test 5: Try to book conflicting slot (should fail)
-frappe.call("frappe_appointment.api.personal_meet.book_time_slot", {
+frappe.call("appointment.api.personal_meet.book_time_slot", {
     "provider_name": "PROV-00001",
     "start_time": "2025-01-20 14:00:00",
     "end_time": "2025-01-20 15:00:00"
@@ -309,7 +309,7 @@ frappe.call("frappe_appointment.api.personal_meet.book_time_slot", {
 1. Visit booking page, select service
 2. Check that slots respect working hours (no slots outside 9 AM - 5 PM)
 3. Try to book same slot twice → second booking should fail
-4. Check quote API: `/api/method/frappe_appointment.scheduler.api.quote.get_booking_quote?service_name=SVC-00001`
+4. Check quote API: `/api/method/appointment.scheduler.api.quote.get_booking_quote?service_name=SVC-00001`
 5. Verify buffer times are applied (15 min gap between slots)
 
 ## Acceptance Criteria
@@ -347,19 +347,19 @@ frappe.call("frappe_appointment.api.personal_meet.book_time_slot", {
 ## Files to Create/Modify
 
 **New Files**:
-1. `frappe_appointment/scheduler/doctype/policy/policy.json`
-2. `frappe_appointment/scheduler/doctype/policy/policy.py`
-3. `frappe_appointment/scheduler/helpers/policy_engine.py`
-4. `frappe_appointment/scheduler/helpers/slot_engine.py`
-5. `frappe_appointment/scheduler/api/quote.py`
+1. `appointment/scheduler/doctype/policy/policy.json`
+2. `appointment/scheduler/doctype/policy/policy.py`
+3. `appointment/scheduler/helpers/policy_engine.py`
+4. `appointment/scheduler/helpers/slot_engine.py`
+5. `appointment/scheduler/api/quote.py`
 
 **Modified Files**:
-1. `frappe_appointment/api/personal_meet.py` - Add conflict checks and filters
-2. `frappe_appointment/scheduler/doctype/policy/policy.json` - Add any missing fields
+1. `appointment/api/personal_meet.py` - Add conflict checks and filters
+2. `appointment/scheduler/doctype/policy/policy.json` - Add any missing fields
 
 ## Notes
 
-- Use existing `frappe_appointment/scheduler/availability.py` for working hours
+- Use existing `appointment/scheduler/availability.py` for working hours
 - Buffer times may already exist in upstream code - check `appointment_group.py`
 - Policy engine should handle multiple policies (most specific wins)
 - All datetime operations must respect timezones (Africa/Addis_Ababa default)

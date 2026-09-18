@@ -1,6 +1,6 @@
 """
 Script to clean up orphaned records in the database
-Run with: bench --site [sitename] execute frappe_appointment.scripts.cleanup_orphans.cleanup
+Run with: bench --site [sitename] execute appointment.scripts.cleanup_orphans.cleanup
 """
 
 import frappe

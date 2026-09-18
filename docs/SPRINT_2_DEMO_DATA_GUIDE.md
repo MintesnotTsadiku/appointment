@@ -8,7 +8,7 @@ This guide shows you how to create demo data for testing Sprint 2 features (Poli
 
 ```bash
 cd /home/minte/projects/frappe-bench
-bench --site appointment.com console < apps/frappe_appointment/scripts/create_policy_demo_data.py
+bench --site appointment.com console < apps/appointment/scripts/create_policy_demo_data.py
 ```
 
 This will:
@@ -22,7 +22,7 @@ This will:
 ```bash
 cd /home/minte/projects/frappe-bench && bench --site appointment.com console <<< "
 import frappe
-from frappe_appointment.demo_data_policies import generate_policies_for_existing_data
+from appointment.demo_data_policies import generate_policies_for_existing_data
 
 # Generate policies linked to existing Services, Locations, Providers
 result = generate_policies_for_existing_data()
@@ -77,7 +77,7 @@ If you don't have these, create demo data first:
 ```bash
 cd /home/minte/projects/frappe-bench && bench --site appointment.com console <<< "
 import frappe
-frappe.call('frappe_appointment.demo_data.generate_all_demo_data')
+frappe.call('appointment.demo_data.generate_all_demo_data')
 "
 ```
 
@@ -112,7 +112,7 @@ for p in policies:
 ```bash
 cd /home/minte/projects/frappe-bench && bench --site appointment.com console <<< "
 import frappe
-from frappe_appointment.scheduler.helpers.policy_engine import get_applicable_policies
+from appointment.scheduler.helpers.policy_engine import get_applicable_policies
 
 # Get a service
 services = frappe.get_all('Service', fields=['name'], limit=1)
@@ -130,7 +130,7 @@ if services:
 ```bash
 cd /home/minte/projects/frappe-bench && bench --site appointment.com console <<< "
 import frappe
-from frappe_appointment.scheduler.helpers.policy_engine import calculate_booking_quote
+from appointment.scheduler.helpers.policy_engine import calculate_booking_quote
 
 # Get a service with price
 services = frappe.get_all('Service', fields=['name', 'price'], limit=1)
@@ -152,7 +152,7 @@ if services:
 After creating policies, test the Quote API:
 
 ```
-http://localhost:8000/api/method/frappe_appointment.scheduler.api.quote.get_booking_quote?service_name=SVC-00001
+http://localhost:8000/api/method/appointment.scheduler.api.quote.get_booking_quote?service_name=SVC-00001
 ```
 
 Replace `SVC-00001` with an actual service name.
@@ -164,7 +164,7 @@ To delete all demo policies:
 ```bash
 cd /home/minte/projects/frappe-bench && bench --site appointment.com console <<< "
 import frappe
-from frappe_appointment.demo_data_policies import clear_policies
+from appointment.demo_data_policies import clear_policies
 
 result = clear_policies()
 print(result['message'])
@@ -184,14 +184,14 @@ For a complete setup with all Sprint 2 features:
 ```bash
 cd /home/minte/projects/frappe-bench && bench --site appointment.com console <<< "
 import frappe
-frappe.call('frappe_appointment.demo_data.generate_all_demo_data')
+frappe.call('appointment.demo_data.generate_all_demo_data')
 "
 ```
 
 2. **Create policies**:
 ```bash
 cd /home/minte/projects/frappe-bench
-bench --site appointment.com console < apps/frappe_appointment/scripts/create_policy_demo_data.py
+bench --site appointment.com console < apps/appointment/scripts/create_policy_demo_data.py
 ```
 
 3. **Verify everything works**:
@@ -227,7 +227,7 @@ bench --site appointment.com clear-cache
 ### Issue: "No services/locations/providers found"
 **Solution**: Create demo data first:
 ```bash
-frappe.call('frappe_appointment.demo_data.generate_all_demo_data')
+frappe.call('appointment.demo_data.generate_all_demo_data')
 ```
 
 ### Issue: Policies not showing in Quote API

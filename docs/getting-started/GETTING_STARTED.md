@@ -32,7 +32,7 @@ cd /home/minte/projects/frappe-bench
 bench --site [your-site-name] list-apps
 ```
 
-You should see `frappe_appointment` in the list.
+You should see `appointment` in the list.
 
 ### Step 2: Start Your Site
 
@@ -199,8 +199,8 @@ print(f"Booking URL: /schedule/appointment-group/{doc.name}")
 ## 📁 Codebase Structure Overview
 
 ```
-frappe_appointment/
-├── frappe_appointment/
+appointment/
+├── appointment/
 │   ├── doctype/
 │   │   ├── appointment_group/          # Main scheduling entity
 │   │   ├── appointment_settings/       # Global settings
@@ -228,25 +228,25 @@ frappe_appointment/
 
 ### 1. Slot Generation Logic
 ```bash
-# Location: frappe_appointment/helpers/availability.py
+# Location: appointment/helpers/availability.py
 # Contains logic for computing available time slots
 ```
 
 ### 2. Booking API
 ```bash
-# Location: frappe_appointment/api/
+# Location: appointment/api/
 # Public APIs for booking appointments
 ```
 
 ### 3. Google Calendar Integration
 ```bash
-# Location: frappe_appointment/overrides/google_calendar_override.py
+# Location: appointment/overrides/google_calendar_override.py
 # How Google Calendar sync works
 ```
 
 ### 4. Event Override
 ```bash
-# Location: frappe_appointment/overrides/event_override.py
+# Location: appointment/overrides/event_override.py
 # Custom behavior for Event doctype
 ```
 

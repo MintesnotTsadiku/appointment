@@ -37,7 +37,7 @@ export const DeskCalendar = ({
   const [overflowAppointments, setOverflowAppointments] = useState<{ date: Date; appointments: Appointment[] } | null>(null);
 
   const { call: rescheduleAppointment } = useFrappePostCall(
-    'frappe_appointment.scheduler.api.desk.reschedule_appointment'
+    'appointment.scheduler.api.desk.reschedule_appointment'
   );
 
   // Generate time slots based on interval (8 AM - 8 PM)

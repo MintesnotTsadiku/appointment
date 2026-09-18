@@ -34,7 +34,7 @@
 - `CreateServiceModal.tsx` - Full form for creating new services
   - Fields: service name, duration, buffer time, description
   - Validation and error handling
-  - Calls `frappe_appointment.onboarding.create_service`
+  - Calls `appointment.onboarding.create_service`
   
 - `ShareLinkModal.tsx` - Share booking link
   - Displays full booking URL
@@ -91,12 +91,12 @@
 ## Technical Notes
 
 ### APIs Implemented
-- ✅ `frappe_appointment.onboarding.get_detailed_checklist()`
-- ⏳ `frappe_appointment.onboarding.create_service()` (being called, needs verification)
-- ✅ `frappe_appointment.onboarding.get_booking_url()` (exists)
-- ⏳ `frappe_appointment.dashboard.stats()` (exists, needs enhancement)
-- ⏳ `frappe_appointment.dashboard.recent_activity()` (partial)
-- ⏳ `frappe_appointment.dashboard.alerts()` (partial)
+- ✅ `appointment.onboarding.get_detailed_checklist()`
+- ⏳ `appointment.onboarding.create_service()` (being called, needs verification)
+- ✅ `appointment.onboarding.get_booking_url()` (exists)
+- ⏳ `appointment.dashboard.stats()` (exists, needs enhancement)
+- ⏳ `appointment.dashboard.recent_activity()` (partial)
+- ⏳ `appointment.dashboard.alerts()` (partial)
 
 ### Components Created
 - ✅ `CreateServiceModal.tsx`
@@ -133,7 +133,7 @@
 ## Files Modified
 
 ### Backend
-- `frappe_appointment/onboarding.py` - Added `get_detailed_checklist()`
+- `appointment/onboarding.py` - Added `get_detailed_checklist()`
 
 ### Frontend Components
 - `frontend/src/pages/home/components/SetupChecklist.tsx` - Enhanced

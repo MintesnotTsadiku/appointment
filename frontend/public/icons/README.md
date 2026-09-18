@@ -96,7 +96,7 @@ Once icons are generated:
 
 1. Place all icon files in this directory (`frontend/public/icons/`)
 2. Run `npm run build` to copy them to the Frappe public folder
-3. Icons will be available at `/assets/frappe_appointment/frontend/icons/`
+3. Icons will be available at `/assets/appointment/frontend/icons/`
 
 ## Testing
 
@@ -104,7 +104,7 @@ After deployment, verify icons load correctly:
 
 ```bash
 # Check if icons are accessible
-curl https://yourdomain.com/assets/frappe_appointment/frontend/icons/icon-192x192.png
+curl https://yourdomain.com/assets/appointment/frontend/icons/icon-192x192.png
 
 # Check manifest
 curl https://yourdomain.com/manifest.webmanifest

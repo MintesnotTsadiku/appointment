@@ -3,7 +3,7 @@
 ## Status: Backend Logic ✅ Complete
 
 **Date Completed**: 2025-11-17  
-**Location**: `/frappe_appointment/api/personal_meet.py`
+**Location**: `/appointment/api/personal_meet.py`
 
 ---
 
@@ -208,13 +208,13 @@ Available for 10:00-10:30 slot:
 ### Individual Provider Booking (Current)
 
 ```
-1. GET /api/method/frappe_appointment.api.personal_meet.get_meeting_windows?slug=dr-sarah
+1. GET /api/method/appointment.api.personal_meet.get_meeting_windows?slug=dr-sarah
    Response: { full_name: "Dr. Sarah", durations: [...] }
 
-2. GET /api/method/frappe_appointment.api.personal_meet.get_time_slots?duration_id=xxx&date=2025-11-17
+2. GET /api/method/appointment.api.personal_meet.get_time_slots?duration_id=xxx&date=2025-11-17
    Response: { all_available_slots_for_data: [...] }
 
-3. POST /api/method/frappe_appointment.api.personal_meet.book_time_slot
+3. POST /api/method/appointment.api.personal_meet.book_time_slot
    Body: { duration_id, date, start_time, end_time, ... }
    Response: { success: true }
 ```
@@ -222,7 +222,7 @@ Available for 10:00-10:30 slot:
 ### Organization Booking (NEW)
 
 ```
-1. GET /api/method/frappe_appointment.api.personal_meet.get_organization_meeting_windows?org_slug=mahlet-clinic&service_slug=general-consultation
+1. GET /api/method/appointment.api.personal_meet.get_organization_meeting_windows?org_slug=mahlet-clinic&service_slug=general-consultation
    Response: {
      full_name: "Mahlet Clinic",
      organization_id: "ORG-001",
@@ -231,7 +231,7 @@ Available for 10:00-10:30 slot:
      durations: [...]
    }
 
-2. GET /api/method/frappe_appointment.api.personal_meet.get_time_slots?duration_id=xxx&date=2025-11-17&organization_id=ORG-001&service_id=SRV-001
+2. GET /api/method/appointment.api.personal_meet.get_time_slots?duration_id=xxx&date=2025-11-17&organization_id=ORG-001&service_id=SRV-001
    Response: {
      all_available_slots_for_data: [
        { start_time: "...", provider_id: "PRV-001", provider_name: "Dr. Sarah" },
@@ -242,7 +242,7 @@ Available for 10:00-10:30 slot:
      provider_count: 3
    }
 
-3. POST /api/method/frappe_appointment.api.personal_meet.book_time_slot
+3. POST /api/method/appointment.api.personal_meet.book_time_slot
    Body: {
      duration_id, date, start_time, end_time,
      provider_id: "PRV-001",  // From selected slot
@@ -264,7 +264,7 @@ Available for 10:00-10:30 slot:
 
 # Step 2: Test Organization Meeting Windows
 result = frappe.call(
-    "frappe_appointment.api.personal_meet.get_organization_meeting_windows",
+    "appointment.api.personal_meet.get_organization_meeting_windows",
     {
         "org_slug": "mahlet-clinic",
         "service_slug": "General Consultation"
@@ -275,7 +275,7 @@ print(result)
 
 # Step 3: Test Multi-Provider Time Slots
 result = frappe.call(
-    "frappe_appointment.api.personal_meet.get_time_slots",
+    "appointment.api.personal_meet.get_time_slots",
     {
         "duration_id": "7rdb483q9a",
         "date": "2025-11-18",
@@ -298,7 +298,7 @@ print(providers)
 
 # Step 4: Test Booking with Specific Provider
 result = frappe.call(
-    "frappe_appointment.api.personal_meet.book_time_slot",
+    "appointment.api.personal_meet.book_time_slot",
     {
         "duration_id": "7rdb483q9a",
         "date": "2025-11-18",
@@ -323,13 +323,13 @@ print(event.custom_user_calendar)  # Should be provider's user
 
 ```bash
 # Test organization meeting windows
-curl "http://localhost:8000/api/method/frappe_appointment.api.personal_meet.get_organization_meeting_windows?org_slug=mahlet-clinic&service_slug=general-consultation"
+curl "http://localhost:8000/api/method/appointment.api.personal_meet.get_organization_meeting_windows?org_slug=mahlet-clinic&service_slug=general-consultation"
 
 # Test multi-provider time slots
-curl "http://localhost:8000/api/method/frappe_appointment.api.personal_meet.get_time_slots?duration_id=7rdb483q9a&date=2025-11-18&user_timezone_offset=180&organization_id=ORG-001&service_id=SRV-001"
+curl "http://localhost:8000/api/method/appointment.api.personal_meet.get_time_slots?duration_id=7rdb483q9a&date=2025-11-18&user_timezone_offset=180&organization_id=ORG-001&service_id=SRV-001"
 
 # Test booking (POST)
-curl -X POST "http://localhost:8000/api/method/frappe_appointment.api.personal_meet.book_time_slot" \
+curl -X POST "http://localhost:8000/api/method/appointment.api.personal_meet.book_time_slot" \
   -H "Content-Type: application/json" \
   -d '{
     "duration_id": "7rdb483q9a",
@@ -348,7 +348,7 @@ curl -X POST "http://localhost:8000/api/method/frappe_appointment.api.personal_m
 
 ## 📝 Files Modified
 
-- ✅ `/frappe_appointment/api/personal_meet.py` - Added 310 lines
+- ✅ `/appointment/api/personal_meet.py` - Added 310 lines
   - New: `get_organization_meeting_windows` (whitelist API)
   - New: `get_multi_provider_time_slots` (internal)
   - New: `merge_slots_round_robin` (internal)

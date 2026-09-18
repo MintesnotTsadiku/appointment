@@ -134,7 +134,7 @@ const DebugPanel = ({ isOpen, onClose }: DebugPanelProps) => {
   const [copiedField, setCopiedField] = useState<string | null>(null);
   
   const { data, isLoading, error, mutate } = useFrappeGetCall<{ message: DebugInfo }>(
-    'frappe_appointment.onboarding.get_debug_info',
+    'appointment.onboarding.get_debug_info',
     undefined,
     'debug-info',
     {

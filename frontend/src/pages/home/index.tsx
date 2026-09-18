@@ -22,7 +22,7 @@ const HomeContent = () => {
 
   // Try to get provider profile as fallback (more reliable for full_name)
   const { data: providerData } = useFrappeGetCall<{ message: { full_name?: string; provider_name?: string } }>(
-    'frappe_appointment.onboarding.get_provider_profile',
+    'appointment.onboarding.get_provider_profile',
     undefined,
     'provider-profile-home',
     {

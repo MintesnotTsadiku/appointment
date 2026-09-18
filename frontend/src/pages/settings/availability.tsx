@@ -71,7 +71,7 @@ const AvailabilitySettings = () => {
       selected_organization?: { name: string; organization_name: string; slug: string } | null;
     }
   }>(
-    'frappe_appointment.onboarding.get_progress',
+    'appointment.onboarding.get_progress',
     undefined,
     'onboarding-progress-avail'
   );
@@ -83,7 +83,7 @@ const AvailabilitySettings = () => {
   const { data: locationsData } = useFrappeGetCall<{ 
     message: { locations: Array<{ name: string; location_name: string }> } 
   }>(
-    'frappe_appointment.onboarding.get_provider_locations',
+    'appointment.onboarding.get_provider_locations',
     locationsQuery,
     `provider-locations-avail-${activeTab}-${selectedOrganization || 'all'}`,
     {
@@ -123,7 +123,7 @@ const AvailabilitySettings = () => {
   const { data: servicesData } = useFrappeGetCall<{ 
     message: { services: Array<{ name: string; service_name: string; organization?: string }> } 
   }>(
-    'frappe_appointment.onboarding.get_provider_services',
+    'appointment.onboarding.get_provider_services',
     serviceParams,
     serviceCacheKey,
     {
@@ -145,7 +145,7 @@ const AvailabilitySettings = () => {
   const { data: locationAvailData, isLoading: loadingLocation } = useFrappeGetCall<{
     message: AvailabilityData;
   }>(
-    'frappe_appointment.onboarding.get_availability',
+    'appointment.onboarding.get_availability',
     locationIdForAvailability ? { level: 'location', id: locationIdForAvailability } : undefined,
     `location-availability-${locationIdForAvailability || 'none'}`,
     {
@@ -157,7 +157,7 @@ const AvailabilitySettings = () => {
   const { data: serviceAvailData, isLoading: loadingService } = useFrappeGetCall<{
     message: AvailabilityData;
   }>(
-    'frappe_appointment.onboarding.get_availability',
+    'appointment.onboarding.get_availability',
     selectedService ? { level: 'service', id: selectedService } : undefined,
     `service-availability-${selectedService}`,
     {
@@ -170,7 +170,7 @@ const AvailabilitySettings = () => {
   const { data: serviceProvidersData, mutate: refreshServiceProviders } = useFrappeGetCall<{
     message: { success: boolean; providers: Array<{ name: string; provider_name: string; email: string; is_primary: boolean }> }
   }>(
-    'frappe_appointment.onboarding.get_service_providers',
+    'appointment.onboarding.get_service_providers',
     selectedService ? { service_id: selectedService } : undefined,
     `service-providers-${selectedService || 'none'}`,
     {
@@ -185,7 +185,7 @@ const AvailabilitySettings = () => {
   const { data: providerAvailData, isLoading: loadingProvider } = useFrappeGetCall<{
     message: AvailabilityData;
   }>(
-    'frappe_appointment.onboarding.get_availability',
+    'appointment.onboarding.get_availability',
     selectedService && selectedProvider ? { level: 'provider', service_id: selectedService, location_id: selectedLocation, provider_id: selectedProvider } : undefined,
     `provider-availability-${selectedService || 'none'}-${selectedProvider || 'none'}-${selectedLocation || 'none'}`,
     {
@@ -195,11 +195,11 @@ const AvailabilitySettings = () => {
   );
 
   const { call: saveAvailability, loading: savingAvailability } = useFrappePostCall(
-    'frappe_appointment.onboarding.save_availability'
+    'appointment.onboarding.save_availability'
   );
 
   const { call: removeProvider } = useFrappePostCall(
-    'frappe_appointment.onboarding.remove_provider_from_service'
+    'appointment.onboarding.remove_provider_from_service'
   );
 
   const locations = locationsData?.message?.locations || [];
@@ -210,7 +210,7 @@ const AvailabilitySettings = () => {
   const { data: orgsData } = useFrappeGetCall<{
     message: { organizations: Array<{ name: string; organization_name: string }> }
   }>(
-    'frappe_appointment.onboarding.get_user_organizations',
+    'appointment.onboarding.get_user_organizations',
     undefined,
     'user-organizations-avail',
     {

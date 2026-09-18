@@ -47,25 +47,25 @@ export const EditAppointmentModal = ({
   const [selectedPeriod, setSelectedPeriod] = useState<'AM' | 'PM'>('AM');
 
   const { data: servicesData } = useFrappeGetCall<{ message: { services: Service[] } }>(
-    'frappe_appointment.scheduler.api.desk.get_services_list',
+    'appointment.scheduler.api.desk.get_services_list',
     undefined,
     'services'
   );
 
   const { data: providersData } = useFrappeGetCall<{ message: { providers: Provider[] } }>(
-    'frappe_appointment.scheduler.api.desk.get_providers_list',
+    'appointment.scheduler.api.desk.get_providers_list',
     undefined,
     'providers'
   );
 
   const { data: locationsData } = useFrappeGetCall<{ message: { locations: Location[] } }>(
-    'frappe_appointment.scheduler.api.desk.get_locations_list',
+    'appointment.scheduler.api.desk.get_locations_list',
     undefined,
     'locations'
   );
 
   const { call: updateAppointment, loading: updating } = useFrappePostCall(
-    'frappe_appointment.scheduler.api.desk.update_appointment'
+    'appointment.scheduler.api.desk.update_appointment'
   );
 
   // Initialize form data from appointment

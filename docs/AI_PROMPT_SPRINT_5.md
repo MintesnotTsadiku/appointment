@@ -4,13 +4,13 @@
 You are implementing **Sprint 5: Front-Desk Console** for a Frappe-based appointment scheduling system. This sprint creates a visual dashboard for front-desk staff to manage appointments, handle walk-ins, and reschedule bookings with drag-and-drop functionality.
 
 ## Project Structure
-- **App Path**: `/home/minte/projects/frappe-bench/apps/frappe_appointment`
+- **App Path**: `/home/minte/projects/frappe-bench/apps/appointment`
 - **Frontend Path**: `frontend/src/pages/desk/`
-- **Backend API**: `frappe_appointment/scheduler/api/desk.py`
+- **Backend API**: `appointment/scheduler/api/desk.py`
 - **Existing Files**:
   - `frontend/src/pages/home/` - Provider dashboard (reference for styling)
   - `frontend/src/pages/appointment/` - Booking page (reference for components)
-  - `frappe_appointment/api/personal_meet.py` - Booking APIs (reference)
+  - `appointment/api/personal_meet.py` - Booking APIs (reference)
 
 ## What Already Exists
 1. ✅ **Appointment Doctype**: Stores all appointment data
@@ -23,7 +23,7 @@ You are implementing **Sprint 5: Front-Desk Console** for a Frappe-based appoint
 ## What Needs to Be Built
 
 ### Task 1: Create Backend API for Front-Desk
-**Location**: `frappe_appointment/scheduler/api/desk.py`
+**Location**: `appointment/scheduler/api/desk.py`
 
 **API Endpoints to Implement**:
 
@@ -31,7 +31,7 @@ You are implementing **Sprint 5: Front-Desk Console** for a Frappe-based appoint
 @frappe.whitelist()
 def get_desk_appointments(date: str, location_name: str = None, provider_name: str = None, view: str = "day"):
     """
-    GET /api/method/frappe_appointment.scheduler.api.desk.get_desk_appointments
+    GET /api/method/appointment.scheduler.api.desk.get_desk_appointments
     
     Get appointments for front-desk view.
     
@@ -85,7 +85,7 @@ def create_desk_appointment(client_name: str, client_phone: str, client_email: s
                            service_name: str, provider_name: str = None, location_name: str = None,
                            start_time: str, duration: int = None, notes: str = None):
     """
-    POST /api/method/frappe_appointment.scheduler.api.desk.create_desk_appointment
+    POST /api/method/appointment.scheduler.api.desk.create_desk_appointment
     
     Create appointment from front-desk (on behalf of client).
     
@@ -100,7 +100,7 @@ def create_desk_appointment(client_name: str, client_phone: str, client_email: s
 @frappe.whitelist()
 def reschedule_appointment(appointment_name: str, new_start_time: str, new_end_time: str = None):
     """
-    POST /api/method/frappe_appointment.scheduler.api.desk.reschedule_appointment
+    POST /api/method/appointment.scheduler.api.desk.reschedule_appointment
     
     Reschedule appointment (drag-and-drop).
     
@@ -120,7 +120,7 @@ def reschedule_appointment(appointment_name: str, new_start_time: str, new_end_t
 @frappe.whitelist()
 def get_walk_ins(location_name: str = None):
     """
-    GET /api/method/frappe_appointment.scheduler.api.desk.get_walk_ins
+    GET /api/method/appointment.scheduler.api.desk.get_walk_ins
     
     Get list of walk-in clients waiting for assignment.
     
@@ -144,7 +144,7 @@ def get_walk_ins(location_name: str = None):
 @frappe.whitelist()
 def add_walk_in(client_name: str, client_phone: str, service_requested: str, notes: str = None):
     """
-    POST /api/method/frappe_appointment.scheduler.api.desk.add_walk_in
+    POST /api/method/appointment.scheduler.api.desk.add_walk_in
     
     Add client to walk-in queue.
     
@@ -159,7 +159,7 @@ def add_walk_in(client_name: str, client_phone: str, service_requested: str, not
 @frappe.whitelist()
 def assign_walk_in_to_slot(walk_in_name: str, provider_name: str = None, location_name: str = None, preferred_time: str = None):
     """
-    POST /api/method/frappe_appointment.scheduler.api.desk.assign_walk_in_to_slot
+    POST /api/method/appointment.scheduler.api.desk.assign_walk_in_to_slot
     
     Assign walk-in to next available slot (or specific time if preferred_time provided).
     
@@ -174,7 +174,7 @@ def assign_walk_in_to_slot(walk_in_name: str, provider_name: str = None, locatio
 ```
 
 ### Task 2: Create Walk-In Doctype (if needed)
-**Location**: `frappe_appointment/scheduler/doctype/walk_in/`
+**Location**: `appointment/scheduler/doctype/walk_in/`
 
 **Fields**:
 - `client_name` (Data)
@@ -360,9 +360,9 @@ Week View:
 ## Implementation Steps
 
 1. **Create Backend API**
-   - Create `frappe_appointment/scheduler/api/desk.py`
+   - Create `appointment/scheduler/api/desk.py`
    - Implement all 6 API endpoints
-   - Test via console: `frappe.call("frappe_appointment.scheduler.api.desk.get_desk_appointments", {"date": "2025-01-20"})`
+   - Test via console: `frappe.call("appointment.scheduler.api.desk.get_desk_appointments", {"date": "2025-01-20"})`
 
 2. **Create Walk-In Doctype** (if needed)
    - Use `bench new-doctype` or create manually
@@ -429,13 +429,13 @@ Week View:
 ### Console Tests
 ```python
 # Test 1: Get appointments
-frappe.call("frappe_appointment.scheduler.api.desk.get_desk_appointments", {
+frappe.call("appointment.scheduler.api.desk.get_desk_appointments", {
     "date": "2025-01-20",
     "view": "day"
 })
 
 # Test 2: Create desk appointment
-frappe.call("frappe_appointment.scheduler.api.desk.create_desk_appointment", {
+frappe.call("appointment.scheduler.api.desk.create_desk_appointment", {
     "client_name": "Test Client",
     "client_phone": "+251911234567",
     "service_name": "SVC-00001",
@@ -443,20 +443,20 @@ frappe.call("frappe_appointment.scheduler.api.desk.create_desk_appointment", {
 })
 
 # Test 3: Reschedule
-frappe.call("frappe_appointment.scheduler.api.desk.reschedule_appointment", {
+frappe.call("appointment.scheduler.api.desk.reschedule_appointment", {
     "appointment_name": "APT-00001",
     "new_start_time": "2025-01-20 16:00:00"
 })
 
 # Test 4: Add walk-in
-frappe.call("frappe_appointment.scheduler.api.desk.add_walk_in", {
+frappe.call("appointment.scheduler.api.desk.add_walk_in", {
     "client_name": "Walk-in Client",
     "client_phone": "+251922345678",
     "service_requested": "SVC-00001"
 })
 
 # Test 5: Assign walk-in
-frappe.call("frappe_appointment.scheduler.api.desk.assign_walk_in_to_slot", {
+frappe.call("appointment.scheduler.api.desk.assign_walk_in_to_slot", {
     "walk_in_name": "WALK-00001"
 })
 ```
@@ -519,9 +519,9 @@ frappe.call("frappe_appointment.scheduler.api.desk.assign_walk_in_to_slot", {
 ## Files to Create
 
 **Backend**:
-1. `frappe_appointment/scheduler/api/desk.py`
-2. `frappe_appointment/scheduler/doctype/walk_in/walk_in.json` (if needed)
-3. `frappe_appointment/scheduler/doctype/walk_in/walk_in.py` (if needed)
+1. `appointment/scheduler/api/desk.py`
+2. `appointment/scheduler/doctype/walk_in/walk_in.json` (if needed)
+3. `appointment/scheduler/doctype/walk_in/walk_in.py` (if needed)
 
 **Frontend**:
 1. `frontend/src/pages/desk/index.tsx`

@@ -13,7 +13,7 @@ This document confirms that V2 components make **identical** API calls to the ol
 **Old Implementation** (`pages/appointment/index.tsx:46-57`):
 ```typescript
 useFrappeGetCall(
-  "frappe_appointment.api.personal_meet.get_meeting_windows",
+  "appointment.api.personal_meet.get_meeting_windows",
   { slug: meetId },
   undefined,
   {
@@ -27,7 +27,7 @@ useFrappeGetCall(
 **V2 Implementation** (`pages/appointment-v2/index.tsx:66-77`):
 ```typescript
 useFrappeGetCall(
-  "frappe_appointment.api.personal_meet.get_meeting_windows",
+  "appointment.api.personal_meet.get_meeting_windows",
   { slug: meetId },
   undefined,
   {
@@ -47,7 +47,7 @@ useFrappeGetCall(
 **Old Implementation** (`pages/appointment/components/booking.tsx:55-73`):
 ```typescript
 useFrappeGetCall(
-  "frappe_appointment.api.personal_meet.get_time_slots",
+  "appointment.api.personal_meet.get_time_slots",
   {
     duration_id: type,
     date: format(selectedDate, "yyyy-MM-dd"),
@@ -67,7 +67,7 @@ useFrappeGetCall(
 **V2 Implementation** (`pages/booking-v2/hooks/useTimeSlots.ts:29-47`):
 ```typescript
 useFrappeGetCall(
-  "frappe_appointment.api.personal_meet.get_time_slots",
+  "appointment.api.personal_meet.get_time_slots",
   {
     duration_id: durationId,
     date: format(date, "yyyy-MM-dd"),
@@ -92,7 +92,7 @@ useFrappeGetCall(
 
 **Old Implementation** (`pages/appointment/components/meetingForm.tsx:89-104`):
 ```typescript
-useFrappePostCall("frappe_appointment.api.personal_meet.book_time_slot");
+useFrappePostCall("appointment.api.personal_meet.book_time_slot");
 
 // Call with:
 {
@@ -110,7 +110,7 @@ useFrappePostCall("frappe_appointment.api.personal_meet.book_time_slot");
 
 **V2 Implementation** (`pages/booking-v2/hooks/useBookingSubmit.ts:15-47`):
 ```typescript
-useFrappePostCall("frappe_appointment.api.personal_meet.book_time_slot");
+useFrappePostCall("appointment.api.personal_meet.book_time_slot");
 
 // Call with:
 {
@@ -140,7 +140,7 @@ useFrappePostCall("frappe_appointment.api.personal_meet.book_time_slot");
 ```typescript
 // When only orgSlug exists
 useFrappeGetCall(
-  "frappe_appointment.api.personal_meet.get_organization_services",
+  "appointment.api.personal_meet.get_organization_services",
   { org_slug: orgSlug },
   undefined,
   {
@@ -155,7 +155,7 @@ useFrappeGetCall(
 ```typescript
 // When only orgSlug exists
 useFrappeGetCall(
-  "frappe_appointment.api.personal_meet.get_organization_services",
+  "appointment.api.personal_meet.get_organization_services",
   { org_slug: orgSlug },
   undefined,
   {
@@ -176,7 +176,7 @@ useFrappeGetCall(
 ```typescript
 // When both orgSlug and serviceSlug exist
 useFrappeGetCall(
-  "frappe_appointment.api.personal_meet.get_organization_meeting_windows",
+  "appointment.api.personal_meet.get_organization_meeting_windows",
   { org_slug: orgSlug, service_slug: serviceSlug },
   undefined,
   {
@@ -191,7 +191,7 @@ useFrappeGetCall(
 ```typescript
 // When both orgSlug and serviceSlug exist
 useFrappeGetCall(
-  "frappe_appointment.api.personal_meet.get_organization_meeting_windows",
+  "appointment.api.personal_meet.get_organization_meeting_windows",
   { org_slug: orgSlug, service_slug: serviceSlug },
   undefined,
   {
@@ -211,7 +211,7 @@ useFrappeGetCall(
 **Old Implementation** (`pages/organization-appointment/components/booking.tsx`):
 ```typescript
 useFrappeGetCall(
-  "frappe_appointment.api.personal_meet.get_time_slots",
+  "appointment.api.personal_meet.get_time_slots",
   {
     duration_id: type,
     date: format(selectedDate, "yyyy-MM-dd"),
@@ -226,7 +226,7 @@ useFrappeGetCall(
 **V2 Implementation** (`pages/booking-v2/hooks/useTimeSlots.ts`):
 ```typescript
 useFrappeGetCall(
-  "frappe_appointment.api.personal_meet.get_time_slots",
+  "appointment.api.personal_meet.get_time_slots",
   {
     duration_id: durationId,
     date: format(date, "yyyy-MM-dd"),
@@ -246,14 +246,14 @@ useFrappeGetCall(
 
 **Old Implementation**:
 ```typescript
-useFrappePostCall("frappe_appointment.api.personal_meet.book_time_slot");
+useFrappePostCall("appointment.api.personal_meet.book_time_slot");
 
 // Call with same parameters as individual + org/service IDs
 ```
 
 **V2 Implementation**:
 ```typescript
-useFrappePostCall("frappe_appointment.api.personal_meet.book_time_slot");
+useFrappePostCall("appointment.api.personal_meet.book_time_slot");
 
 // Call with same parameters as individual + org/service IDs
 ```

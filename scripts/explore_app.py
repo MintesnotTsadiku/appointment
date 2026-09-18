@@ -173,7 +173,7 @@ doc.insert()
 print(f"Created: /schedule/appointment-group/{doc.name}")
 
 # Query available slots (if helpers exist):
-from frappe_appointment.helpers import availability
+from appointment.helpers import availability
 # ... (check availability.py for functions)
 
 # Check appointment group API:

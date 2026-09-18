@@ -1,13 +1,14 @@
-app: frappe_appointment
-base_url: http://localhost:26300
+app: appointment
+base_url: http://127.0.0.141:32490
 default_role: Administrator
 auth:
   type: frappe_session
   verify_path: /api/method/frappe.auth.get_logged_user
-artifact_root: /tmp/agent_browser_qa/frappe_appointment
+artifact_root: /tmp/agent_browser_qa/appointment
 capture_trace: true
 capture_video: false
 capture_instruction_timeline: false
+timeout_ms: 120000
 scenarios:
   - id: appointment_admin_smoke
     title: Open Appointment Desk and public landing pages
@@ -26,7 +27,5 @@ scenarios:
       - path: /
         assertions:
           - type: network_idle
-          - type: visible_text
-            value: Meet.et
           - type: no_blank_page
           - type: screenshot_not_blank

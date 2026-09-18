@@ -108,7 +108,7 @@ Create `get_available_booking_options(location_name, service_name=None)`:
   - Allow gaps between ranges (breaks are implicit)
 
 #### Step 2: Create Availability Resolution Functions
-- File: `frappe_appointment/scheduler/availability.py` (new)
+- File: `appointment/scheduler/availability.py` (new)
 - Function: `get_availability_for_booking(location_name, service_name=None, provider_name=None)`
   - Returns: Intersected availability (Provider ∩ Service ∩ Location)
   - Handles multiple time ranges per day (breaks are gaps between ranges)
@@ -190,15 +190,15 @@ Create `get_available_booking_options(location_name, service_name=None)`:
 ### 5. Files to Modify
 
 **Backend:**
-- `frappe_appointment/scheduler/doctype/provider/provider.json` - Add opening_hours child table
-- `frappe_appointment/scheduler/doctype/provider/provider.py` - Add validation for Provider ⊆ Service ⊆ Location
-- `frappe_appointment/scheduler/doctype/service/service.json` - Add opening_hours child table
-- `frappe_appointment/scheduler/doctype/service/service.py` - Add validation for Service ⊆ Location
-- `frappe_appointment/scheduler/availability.py` (new) - Core availability resolution functions
-- `frappe_appointment/api/personal_meet.py` - Update to use new resolution, add booking_level parameter
-- `frappe_appointment/scheduler/appointment_group.py` - Update availability checks to use intersection
-- `frappe_appointment/onboarding.py` - Update availability save functions to support all levels
-- `frappe_appointment/demo_data.py` - Update to delete and recreate with new structure
+- `appointment/scheduler/doctype/provider/provider.json` - Add opening_hours child table
+- `appointment/scheduler/doctype/provider/provider.py` - Add validation for Provider ⊆ Service ⊆ Location
+- `appointment/scheduler/doctype/service/service.json` - Add opening_hours child table
+- `appointment/scheduler/doctype/service/service.py` - Add validation for Service ⊆ Location
+- `appointment/scheduler/availability.py` (new) - Core availability resolution functions
+- `appointment/api/personal_meet.py` - Update to use new resolution, add booking_level parameter
+- `appointment/scheduler/appointment_group.py` - Update availability checks to use intersection
+- `appointment/onboarding.py` - Update availability save functions to support all levels
+- `appointment/demo_data.py` - Update to delete and recreate with new structure
 
 **Frontend:**
 - `frontend/src/pages/settings/availability.tsx` - Refactor to show all three levels with tabs

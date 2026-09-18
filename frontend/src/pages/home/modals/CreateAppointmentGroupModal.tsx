@@ -69,7 +69,7 @@ export const CreateAppointmentGroupModal = ({
 
   // Fetch form data
   const { data: formData, isLoading: loadingFormData } = useFrappeGetCall<{ message: FormData }>(
-    'frappe_appointment.onboarding.get_appointment_group_form_data',
+    'appointment.onboarding.get_appointment_group_form_data',
     undefined,
     'appointment-group-form-data',
     {
@@ -113,7 +113,7 @@ export const CreateAppointmentGroupModal = ({
 
   const availableProviders = getAvailableProviders();
 
-  const { call, loading } = useFrappePostCall('frappe_appointment.onboarding.create_appointment_group');
+  const { call, loading } = useFrappePostCall('appointment.onboarding.create_appointment_group');
 
   const handleAddMember = (provider: { name: string; provider_name: string; user: string }) => {
     // Check if already added

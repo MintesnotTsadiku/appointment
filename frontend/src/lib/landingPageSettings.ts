@@ -181,7 +181,7 @@ export function useLandingPageSettings(): UseLandingPageSettingsReturn {
     try {
       setLoading(true);
       const response = await fetch(
-        '/api/method/frappe_appointment.scheduler.doctype.landing_page_settings.api.get_landing_page_settings',
+        '/api/method/appointment.scheduler.doctype.landing_page_settings.api.get_landing_page_settings',
         {
           method: 'GET',
           headers: {

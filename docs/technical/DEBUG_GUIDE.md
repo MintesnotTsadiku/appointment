@@ -59,7 +59,7 @@ Look for these log messages:
 #### A. API Call Parameters
 ```
 [FRONTEND DEBUG] API Call Parameters: {
-  endpoint: "frappe_appointment.api.personal_meet.get_time_slots",
+  endpoint: "appointment.api.personal_meet.get_time_slots",
   params: { duration_id: "...", date: "...", user_timezone_offset: "..." },
   ...
 }
@@ -104,7 +104,7 @@ Look for these log messages:
 
 ### Step 6: Check Network Tab
 1. Go to "Network" tab in Developer Tools
-2. Find the request: `frappe_appointment.api.personal_meet.get_time_slots`
+2. Find the request: `appointment.api.personal_meet.get_time_slots`
 3. Click on it
 4. Go to "Response" tab
 5. Look for `debug_messages` array in the response
@@ -167,7 +167,7 @@ If you want to test the backend directly:
 ```bash
 cd /home/minte/projects/frappe-bench && bench --site appointment.com console <<< "
 import frappe
-from frappe_appointment.api.personal_meet import get_time_slots
+from appointment.api.personal_meet import get_time_slots
 
 frappe.set_user('Administrator')
 
@@ -205,7 +205,7 @@ Verify the data exists:
 ```bash
 cd /home/minte/projects/frappe-bench && bench --site appointment.com console <<< "
 import frappe
-from frappe_appointment.constants import APPOINTMENT_TIME_SLOT
+from appointment.constants import APPOINTMENT_TIME_SLOT
 
 frappe.set_user('Administrator')
 

@@ -60,55 +60,55 @@ export default defineConfig(({ command, mode }) => {
           
           icons: [
             {
-              src: "/assets/frappe_appointment/frontend/icons/icon-72x72.png",
+              src: "/assets/appointment/frontend/icons/icon-72x72.png",
               sizes: "72x72",
               type: "image/png",
               purpose: "any"
             },
             {
-              src: "/assets/frappe_appointment/frontend/icons/icon-96x96.png",
+              src: "/assets/appointment/frontend/icons/icon-96x96.png",
               sizes: "96x96",
               type: "image/png",
               purpose: "any"
             },
             {
-              src: "/assets/frappe_appointment/frontend/icons/icon-128x128.png",
+              src: "/assets/appointment/frontend/icons/icon-128x128.png",
               sizes: "128x128",
               type: "image/png",
               purpose: "any"
             },
             {
-              src: "/assets/frappe_appointment/frontend/icons/icon-144x144.png",
+              src: "/assets/appointment/frontend/icons/icon-144x144.png",
               sizes: "144x144",
               type: "image/png",
               purpose: "any"
             },
             {
-              src: "/assets/frappe_appointment/frontend/icons/icon-152x152.png",
+              src: "/assets/appointment/frontend/icons/icon-152x152.png",
               sizes: "152x152",
               type: "image/png",
               purpose: "any"
             },
             {
-              src: "/assets/frappe_appointment/frontend/icons/icon-192x192.png",
+              src: "/assets/appointment/frontend/icons/icon-192x192.png",
               sizes: "192x192",
               type: "image/png",
               purpose: "any"
             },
             {
-              src: "/assets/frappe_appointment/frontend/icons/icon-384x384.png",
+              src: "/assets/appointment/frontend/icons/icon-384x384.png",
               sizes: "384x384",
               type: "image/png",
               purpose: "any"
             },
             {
-              src: "/assets/frappe_appointment/frontend/icons/icon-512x512.png",
+              src: "/assets/appointment/frontend/icons/icon-512x512.png",
               sizes: "512x512",
               type: "image/png",
               purpose: "any"
             },
             {
-              src: "/assets/frappe_appointment/frontend/icons/icon-512x512-maskable.png",
+              src: "/assets/appointment/frontend/icons/icon-512x512-maskable.png",
               sizes: "512x512",
               type: "image/png",
               purpose: "maskable"
@@ -132,7 +132,7 @@ export default defineConfig(({ command, mode }) => {
               url: "/calendar",
               icons: [
                 {
-                  src: "/assets/frappe_appointment/frontend/icons/shortcut-book.png",
+                  src: "/assets/appointment/frontend/icons/shortcut-book.png",
                   sizes: "96x96"
                 }
               ]
@@ -144,7 +144,7 @@ export default defineConfig(({ command, mode }) => {
               url: "/home",
               icons: [
                 {
-                  src: "/assets/frappe_appointment/frontend/icons/shortcut-list.png",
+                  src: "/assets/appointment/frontend/icons/shortcut-list.png",
                   sizes: "96x96"
                 }
               ]
@@ -213,7 +213,7 @@ export default defineConfig(({ command, mode }) => {
             
             // App assets (JS, CSS) - Cache first for performance
             {
-              urlPattern: /\/assets\/frappe_appointment\/frontend\/.*\.(js|css|woff|woff2|ttf|eot)$/i,
+              urlPattern: /\/assets\/appointment\/frontend\/.*\.(js|css|woff|woff2|ttf|eot)$/i,
               handler: "CacheFirst",
               options: {
                 cacheName: "app-assets-cache",
@@ -239,7 +239,7 @@ export default defineConfig(({ command, mode }) => {
             
             // CRITICAL FIX #2: Volatile Data (Time Slots/Availability) - Network Only or very short cache
             {
-              urlPattern: /\/api\/method\/frappe_appointment\.(scheduler|booking|availability)\..*(slot|availability|time)/i,
+              urlPattern: /\/api\/method\/appointment\.(scheduler|booking|availability)\..*(slot|availability|time)/i,
               handler: "NetworkOnly",
               options: {
                 // No caching for availability slots to prevent double-booking
@@ -249,7 +249,7 @@ export default defineConfig(({ command, mode }) => {
             
             // Static Data (Services, Locations, Providers) - Can cache longer
             {
-              urlPattern: /\/api\/method\/frappe_appointment\.(scheduler|booking)\..*(service|location|provider|group)/i,
+              urlPattern: /\/api\/method\/appointment\.(scheduler|booking)\..*(service|location|provider|group)/i,
               handler: "NetworkFirst",
               options: {
                 cacheName: "static-data-cache",
@@ -266,7 +266,7 @@ export default defineConfig(({ command, mode }) => {
             
             // General API calls - Network first with cache fallback (short duration)
             {
-              urlPattern: /\/api\/method\/frappe_appointment\..*/i,
+              urlPattern: /\/api\/method\/appointment\..*/i,
               handler: "NetworkFirst",
               options: {
                 cacheName: "api-cache",
@@ -325,7 +325,7 @@ export default defineConfig(({ command, mode }) => {
     },
     cacheDir: process.env.VITE_CACHE_DIR || "node_modules/.vite",
     build: {
-      outDir: "../frappe_appointment/public/frontend",
+      outDir: "../appointment/public/frontend",
       emptyOutDir: true,
       target: "es2015",
       

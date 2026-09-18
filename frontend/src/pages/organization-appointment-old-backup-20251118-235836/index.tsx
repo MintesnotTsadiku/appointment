@@ -47,9 +47,9 @@ const OrganizationAppointment = () => {
   // If serviceSlug exists, get meeting windows for that service
   // Otherwise, get list of services
   const apiEndpoint = orgSlug && serviceSlug 
-    ? "frappe_appointment.api.personal_meet.get_organization_meeting_windows"
+    ? "appointment.api.personal_meet.get_organization_meeting_windows"
     : orgSlug 
-    ? "frappe_appointment.api.personal_meet.get_organization_services"
+    ? "appointment.api.personal_meet.get_organization_services"
     : null;
     
   const apiParams = orgSlug && serviceSlug

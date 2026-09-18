@@ -75,7 +75,7 @@
 
 ```bash
 bench get-app git@github.com:rtCamp/frappe-appointment.git
-bench --site {sitename} install-app frappe_appointment
+bench --site {sitename} install-app appointment
 ```
 
 ### Configure Google Settings

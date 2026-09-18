@@ -228,7 +228,7 @@ If you need to create more test data, use the demo data functions:
 ```python
 # In Frappe console
 import frappe
-from frappe_appointment.demo_data import (
+from appointment.demo_data import (
     generate_organizations,
     generate_providers,
     generate_services,
@@ -284,8 +284,8 @@ generate_appointments(50, days_back=14)
 
 3. **Verify API is working:**
    - Open browser DevTools → Network tab
-   - Check API calls to `frappe_appointment.onboarding.get_progress`
-   - Check API calls to `frappe_appointment.dashboard.stats`
+   - Check API calls to `appointment.onboarding.get_progress`
+   - Check API calls to `appointment.dashboard.stats`
 
 ### 404 Errors on Navigation
 
@@ -347,14 +347,14 @@ generate_appointments(50, days_back=14)
 To remove all test data:
 
 ```python
-from frappe_appointment.demo_data import clear_all_demo_data
+from appointment.demo_data import clear_all_demo_data
 clear_all_demo_data()
 ```
 
 Or remove specific types:
 
 ```python
-from frappe_appointment.demo_data import (
+from appointment.demo_data import (
     clear_appointments,
     clear_providers,
     clear_organizations,

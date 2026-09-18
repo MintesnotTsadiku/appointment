@@ -28,12 +28,12 @@ const ServicesSettings = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   const { data, isLoading, mutate } = useFrappeGetCall<{ message: { services: Service[] } }>(
-    'frappe_appointment.onboarding.get_provider_services',
+    'appointment.onboarding.get_provider_services',
     undefined,
     'provider-services'
   );
 
-  const { call: deleteService, loading: deleting } = useFrappePostCall('frappe_appointment.onboarding.delete_service');
+  const { call: deleteService, loading: deleting } = useFrappePostCall('appointment.onboarding.delete_service');
 
   const services = data?.message?.services || [];
 

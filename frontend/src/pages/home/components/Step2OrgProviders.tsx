@@ -34,9 +34,9 @@ const Step2OrgProviders = ({ onNext, onBack }: Step2OrgProvidersProps) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [successMessage, setSuccessMessage] = useState<string>('');
 
-  const { call: addProvider, loading: adding } = useFrappePostCall('frappe_appointment.onboarding.add_organization_provider');
+  const { call: addProvider, loading: adding } = useFrappePostCall('appointment.onboarding.add_organization_provider');
   const { data: providersData, mutate: refreshProviders, isLoading: loadingProviders } = useFrappeGetCall<{ success: boolean; providers: Provider[] }>(
-    'frappe_appointment.onboarding.get_organization_providers',
+    'appointment.onboarding.get_organization_providers',
     selectedOrgId ? { organization_id: selectedOrgId } : undefined,
     `org-providers-${selectedOrgId}`,
     {
@@ -46,12 +46,12 @@ const Step2OrgProviders = ({ onNext, onBack }: Step2OrgProvidersProps) => {
   
   // Get list of organizations for selection
   const { data: orgsData } = useFrappeGetCall<{ success: boolean; organizations: Organization[] }>(
-    'frappe_appointment.onboarding.get_user_organizations'
+    'appointment.onboarding.get_user_organizations'
   );
   
   // Get available providers to link
   const { data: availableProvidersData } = useFrappeGetCall<{ success: boolean; providers: Provider[] }>(
-    'frappe_appointment.onboarding.search_user_providers'
+    'appointment.onboarding.search_user_providers'
   );
   
   const organizations = orgsData?.message?.organizations || orgsData?.organizations || [];

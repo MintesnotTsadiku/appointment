@@ -74,9 +74,9 @@ const OrganizationAppointmentV2 = () => {
 
   // EXACT SAME API calls as old implementation
   const apiEndpoint = orgSlug && serviceSlug 
-    ? "frappe_appointment.api.personal_meet.get_organization_meeting_windows"
+    ? "appointment.api.personal_meet.get_organization_meeting_windows"
     : orgSlug 
-    ? "frappe_appointment.api.personal_meet.get_organization_services"
+    ? "appointment.api.personal_meet.get_organization_services"
     : null;
     
   const apiParams = orgSlug && serviceSlug
