@@ -14,7 +14,7 @@ export const WalkInCard = ({ walkIn, onAssign, isAssigning }: WalkInCardProps) =
   const waitTime = formatDistanceToNow(createdDate, { addSuffix: false });
   
   return (
-    <div className="relative group">
+    <div data-qa="walkin-card" data-qa-walkin-name={walkIn.name} className="relative group">
       {/* Glow effect on hover */}
       <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl blur opacity-0 group-hover:opacity-20 transition-opacity" />
       
@@ -71,6 +71,7 @@ export const WalkInCard = ({ walkIn, onAssign, isAssigning }: WalkInCardProps) =
 
         {/* Assign Button */}
         <motion.button
+          data-qa="walkin-assign"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => onAssign(walkIn.name)}

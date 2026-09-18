@@ -150,11 +150,12 @@ Testing guide: `docs/rename/testing-guide.md`.
 
 ### Environment prerequisites (not app defects)
 
-- `bench install-app agent_plane` on a brand-new site still fails at
-  `init_singles` on the `Runtime Settings` Link default;
-  `appointment.qa_bootstrap.install` handles it for disposable sites.
 - The shared training Python environment does not match the certified Agent
   Harness foundation bundle; use a dedicated certified runtime for sign-off.
+
+The Agent Plane fresh-install ordering and deprecated-navigation defects were
+fixed upstream (see "Beta readiness follow-up" below); `appointment.qa_bootstrap`
+has been removed.
 
 ### Next steps
 
@@ -217,11 +218,6 @@ What changed:
   `npm run test:dom`.
 - The landing-page partner logos no longer load from `logo.clearbit.com`; they
   render as local text marks, removing the offline DNS failures.
-- `appointment.qa_bootstrap` reports `requested` / `already_installed` /
-  `installed` / `failed`, verifies installed apps, fails closed on unknown apps
-  and missing Agent Plane seed helpers, restores monkey patches, and raises on
-  failure so automation sees a non-zero exit.
-
 Browser QA evidence after the fixes:
 
 - `BQA-2026-00023` — Passed; scheduling functional scenarios (app shell,
@@ -230,11 +226,8 @@ Browser QA evidence after the fixes:
 - `BQA-2026-00027` — Passed; Frappe Desk workspace + public landing; 0 network
   findings. One upstream desk-frame console finding remains: Frappe's own
   `desk.bundle` socket client logs `Error connecting to socket.io: Invalid
-  origin` in this isolated Vite-proxied dev stack. The authenticated engine.io
-  handshake and namespace connect both return 200 through the proxy, verified
-  with an authenticated curl handshake. The Desk scenario gates on its semantic
-  assertions; product SPA routes still gate on `no_console_errors` and
-  `no_failed_network_requests`.
+  origin` in this isolated Vite-proxied dev stack. The Desk scenario gates on
+  semantic assertions.
 - `BQA-2026-00022` — Passed; reception walk-in after the queue-refresh fix.
 
 Other validation:
@@ -261,15 +254,58 @@ Merged into `beta/architecture-review` (merge commit `5487141`, docs merge
   (bundle `2026.07.2`). The Agent Harness worker preflight
   `inspect_playwright_runtime()` passes with Node 24.12.0, Playwright 1.58.2 and
   Chromium 145.0.7632.6 (with `AGENT_HARNESS_NODE` set).
-- **Automated fresh-site QA:** `appointment.qa_bootstrap.install` makes
-  `bench install-app agent_plane` work on a brand-new site by allowing the
-  dangling `Runtime Settings` link during `init_singles` and skipping Agent
-  Plane's deprecated `Workspace Sidebar`/`Desktop Icon` seed. On
-  `fresh-qa-ready.localhost` it installs `agent_harness` and `agent_plane`
-  cleanly (`errors: []`) and `migrate` seeds `Agent Version
-  "Public Web Research Agent-v1"` with the Runtime Settings link valid. This is
-  dev/QA tooling, not a supported installation path.
-- Browser QA sign-off is the corrected action-based set
-  (`BQA-2026-00022`/`00023`/`00027`) on the isolated runtime; adopting the
-  dedicated site-packages for the bench itself is a separate environment
-  decision because the shared env must not be mutated.
+- Browser QA sign-off is the corrected action-based set on the isolated
+  runtime; adopting the dedicated site-packages for the bench itself is a
+  separate environment decision because the shared env must not be mutated.
+
+## Beta readiness follow-up
+
+Branch `fix/appointment-beta-readiness`, worktree
+`/home/minte/projects/training-apps/.worktrees/frappe-appointment-readiness`,
+isolated runtime `fix-appointment-beta-readiness-01dea7`.
+
+### Agent Plane installation fixed upstream
+
+- `agent-plane` branch `fix/fresh-site-deprecated-navigation` (commit `5889a58`,
+  merged to `develop` and pushed): `Workspace Sidebar` and `Desktop Icon` are
+  marked deprecated in current Frappe metadata; the seed helpers now skip them.
+  Unit tests cover deprecated, missing and supported doctypes.
+- The `Runtime Settings.public_web_research_agent_version` Link default had
+  already been removed upstream (`ecfe444 Defer research agent link until seed
+  completion`).
+- A brand-new site installed `frappe, appointment, agent_harness, agent_plane`
+  through the normal `frappe-worktree create` path with **no Appointment monkey
+  patch**; two migrates were clean, `Agent Version "Public Web Research
+  Agent-v1"` exists, the Runtime Settings link resolves, and there are no
+  deprecated navigation rows.
+- `appointment.qa_bootstrap` and its tests were removed.
+
+### Socket.IO lifecycle
+
+- The app now owns one socket in
+  `frontend/src/components/realtime/RealtimeProvider.tsx`; `FrappeProvider` is
+  rendered with `enableSocket={false}` because `frappe-react-sdk@1.11.0` creates
+  its socket during render with no cleanup. React StrictMode stays enabled.
+- `VITE_DISABLE_STRICT_MODE` was removed from `.frappe-worktree.json`.
+- `npm run test:realtime` guards the invariants; Agent Plane runs show 0 network
+  findings with the realtime handshake asserted positively.
+
+### Product defects found and fixed
+
+- `get_booking_configuration` read `Organization.override_provider_booking_settings`
+  (plus the other booking-config fields) that the Organization DocType did not
+  define, so public booking slots always failed on a fresh site. Added the four
+  fields to `Organization`.
+- The availability settings page sent malformed times (`8:30::00`), so saving
+  provider availability failed. `convertScheduleToOpeningHours` now normalizes to
+  `HH:MM:SS`.
+- `AppointmentCard` only exposed its test id on one of two render branches.
+
+### Browser workflows now covered end to end
+
+`BQA-2026-00056` (Passed, Stable Pass, 0 console / 0 network) runs eight
+scenarios: app shell, service survives reload, availability survives reload,
+public booking creates a confirmed appointment, reschedule persists after
+reload, cancel persists after reload, walk-in queues then assigns to a slot, and
+Amharic selection survives reload. `BQA-2026-00057` (Passed) covers Frappe Desk
+and the landing page.

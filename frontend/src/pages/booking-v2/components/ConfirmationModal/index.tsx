@@ -7,7 +7,12 @@ import { CheckCircle2, Calendar, Clock, Mail, MapPin, Copy, ExternalLink, X, Dow
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/button";
-import { Dialog, DialogContent, DialogHeader } from "@/components/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/dialog";
 import { formatDate, formatTime } from "../../utils/dateHelpers";
 import type { BookingResponse, Service, TimeSlot } from "../../types";
 
@@ -62,12 +67,15 @@ export function ConfirmationModal({
             </div>
 
             {/* Success Message */}
-            <h2 data-qa="booking-success" className="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-6 mb-2">
+            <DialogTitle
+              data-qa="booking-success"
+              className="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-6 mb-2"
+            >
               Booking Confirmed!
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400 text-lg">
+            </DialogTitle>
+            <DialogDescription className="text-gray-600 dark:text-gray-400 text-lg">
               Your appointment has been successfully scheduled
-            </p>
+            </DialogDescription>
           </div>
 
           {/* Close Button */}

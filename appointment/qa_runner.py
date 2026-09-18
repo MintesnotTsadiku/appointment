@@ -24,6 +24,7 @@ def run(
     from appointment import qa_fixtures
 
     qa_fixtures.setup()
+    cleanup: dict = {}
     try:
         result = run_browser_qa_manifest(
             manifest_name=manifest_name,
@@ -32,7 +33,9 @@ def run(
             update_baseline=update_baseline,
         )
     finally:
-        qa_fixtures.teardown()
+        cleanup = qa_fixtures.teardown()
+    if isinstance(result, dict):
+        result["fixture_cleanup"] = cleanup
     print(json.dumps(result, indent=2, default=str))
     return result
 
