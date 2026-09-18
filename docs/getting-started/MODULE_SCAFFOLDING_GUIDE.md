@@ -1,6 +1,6 @@
 # Module Scaffolding Guide - Creating Modules in appointment
 
-> **Step-by-step guide** to create modules within the existing `appointment` app  
+> **Step-by-step guide** to create modules within the existing `appointment` app
 > **Status**: ✅ Modules have been created! This guide documents what was done.
 
 ---
