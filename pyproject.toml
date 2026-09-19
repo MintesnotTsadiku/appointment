@@ -1,9 +1,9 @@
 [project]
 name = "appointment"
 authors = [
-    { name = "rtCamp", email = "sys@rtcamp.com"}
+    { name = "Mintesnot Tsadiku" }
 ]
-description = "The appointment scheduling app with team support in Frappe."
+description = "Scheduling platform for solo professionals and organizations, built on Frappe."
 requires-python = ">=3.10"
 readme = "README.md"
 dynamic = ["version"]

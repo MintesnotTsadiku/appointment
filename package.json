@@ -1,9 +1,9 @@
 {
-    "name": "frappe-appointment",
+    "name": "appointment",
     "version": "1.0.0",
     "main": "index.js",
-    "repository": "git@github.com:rtCamp/frappe-appointment.git",
-    "author": "rtCamp",
+    "repository": "https://github.com/MintesnotTsadiku/appointment.git",
+    "author": "Mintesnot Tsadiku",
     "license": "AGPLv3",
     "private": true,
     "scripts": {
