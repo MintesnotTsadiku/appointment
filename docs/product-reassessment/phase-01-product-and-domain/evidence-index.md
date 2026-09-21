@@ -33,11 +33,9 @@ $ bench/env/bin/python -c "import appointment, os; print(os.path.dirname(appoint
 
 `git diff 3c57fb4..7e233e6` shows only `README.md`,
 `docs/product-reassessment/README.md`, `package.json`, `pyproject.toml` — **no
-product code differs**. Browser findings therefore reflect product code equal to
-`origin/develop`; they are *labeled* with the declared runtime revision and this
-caveat rather than silently attributed to a single commit.
+product code differs**. The compared application source files match, but this alone does not verify the active frontend build or process source. Treat browser observations as evidence of this recorded runtime, with source equivalence qualified accordingly.
 
-## Executed checks (commands)
+## Recorded checks
 
 Preflight (read-only):
 
@@ -102,14 +100,15 @@ repository and will be removed with site cleanup.
 `recordings/` is empty: the run captured no video (`video_file: null`, capture
 policy `video: failure`). This is reported as a gap, not as a passing artifact.
 
-## Promise → evidence cross-reference
+## Finding → evidence cross-reference
 
-| Finding | Homepage claim | Observed/read evidence | Screenshot/URL |
-|---|---|---|---|
-| F1 (promise overreach) | Payments, SMS/USSD/WhatsApp, CRM, analytics | `en.json:52-76`; empty `payments/`, `channels/`; `analytics/index.tsx:16,18,258` | `phase01-homepage-desktop.png` |
-| F3 (`EventType` leaks into URL) | "Share your link" | Booking URL uses `evt-2026-000001`, not the service | `phase01-public-booking-first-screen.png`, URL above |
-| F6 (duration "0.5 min") | Service duration | Rendered "QA-BROWSER-cca404 Org • 0.5 min" for a 30-minute fixture | `phase01-public-booking-first-screen.png` |
-| F8 (runtime drift) | — | `.pth` resolves to the beta worktree | — |
+| Finding | Evidence |
+|---|---|
+| F1: delivery gaps | Homepage screenshots; promise table source references; marketing-delivery-requirements.md |
+| F2: duration label | `screenshots/phase01-public-booking-first-screen.png`; fixture Service duration 30; organization appointment frontend division by 60 |
+| F3: path consistency unverified | `appointment/scheduler/availability.py:21-68`; `appointment/scheduler/helpers/slot_engine.py:68-115,258`; public/reception API sources |
+| F4: legacy roles/ownership | Provider metadata, role fixture, Appointment DocPerm |
+| F5: duplicate metadata | Service and Location JSON field-name repetitions |
 
 ## Synthetic data cleanup
 
@@ -126,3 +125,17 @@ COUNT::Booking Event=0
 Retained on purpose: the `Browser QA Run BQA-2026-00060` record and its File
 artifacts (Agent Plane audit trail). No credentials, cookies, tokens, or
 passwords are recorded in this folder.
+
+
+## Scope of validation
+
+The booking screenshot and focused source references were inspected. The
+manifest uses `auth.type: none`, confirmed by the report's authenticate action;
+this differs from the required `frappe_session`. No video exists. These artifacts
+support static page observations only. Raw trace inspection, original preflight
+and original fixture cleanup are recorded results, not independently repeated
+checks. Historical manifests are retained unchanged to reflect what ran.
+
+Reusable QA identities were subsequently set up on the preserved site; see
+`../browser-qa-access.md`. They are intentionally retained and are not part of
+the original fixture counts above.

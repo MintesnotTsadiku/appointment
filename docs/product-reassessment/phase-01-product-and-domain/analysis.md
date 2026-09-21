@@ -1,273 +1,157 @@
 # Phase 1 — Product promise and domain model
 
-Status: assessment only. No product code, schema, dependency, or runtime
-configuration was changed. This phase does not complete the Phase 2 security and
-architecture assessment.
+Source baseline: `7e233e6cf240f57201a3b39b6b8279d10b0d599f`.
+This is a product/domain assessment, not a certification of completed workflows.
+Evidence and runtime qualifications are in [evidence-index.md](evidence-index.md).
 
-Reviewed baseline: `origin/develop` = `7e233e6cf240f57201a3b39b6b8279d10b0d599f`
-(`docs: establish Appointment repository identity`). Evidence folder:
-`docs/product-reassessment/phase-01-product-and-domain/`.
+## Product direction
 
-Runtime used for browser evidence: preserved isolated runtime
-`fix-appointment-beta-readiness-01dea7`, site
-`meet-beta-fix-appointment-beta-readiness-01dea7.localhost`, frontend
-`http://localhost:49510`. Declared runtime source
-`fix/appointment-beta-readiness @ 3c57fb4c6484218c41af6ee592de0960c1c69ad6`
-(clean). Browser QA Run `BQA-2026-00060`. See `evidence-index.md` for the
-runtime-revision caveat (the bench also loads the app from the clean
-`develop @ 7e233e6` beta worktree; product trees are identical between the two
-commits).
+Appointment should serve solo professionals through organizations on a shared
+site, revealing complexity gradually. Shared-site safety remains an assumption
+for Phase 2 to test. A solo professional or small one-location business is a
+reasonable first beta audience, but the owner has not narrowed the target market
+or committed to excluding organization workflows.
 
-Labels used below: **Observed** (I executed or read it in this phase),
-**Read** (source inspection), **Inference** (reasoning from observed facts),
-**Unverified** (could not establish).
+The complete job is to define a service and availability, publish a booking
+link, receive a confirmed booking, and manage rescheduling, cancellation,
+completion and no-shows with clear customer communication. This phase did not
+execute that lifecycle. Existing source, tests and schemas support parts of it.
 
----
+**Product-owner direction:** keep the aspirational marketing promises during
+prelaunch development. Missing capabilities become delivery requirements in
+[marketing-delivery-requirements.md](marketing-delivery-requirements.md), not
+instructions to remove copy. Before inviting actual customers, verify the
+promises offered to them. Aspirational capabilities and factual claims about
+customers, partners or uptime require different evidence.
 
-## 1. Who the product should serve first, and the complete job
+## Promise coverage
 
-**Recommendation (not an agreed decision).** The first beta customer should be a
-solo professional or a small one-location business with one to a few providers.
-Their complete job is one appointment lifecycle:
+“Source-supported” means inspected code or test definitions, not a passing test
+run. Absence of a dedicated DocType alone does not establish absent behavior.
 
-> Say what I offer (service, duration, price), say when I am available (weekly
-> hours plus exceptions), publish one bookable link, let a customer self-book a
-> real confirmed time, then see that appointment, reschedule, cancel, complete,
-> or mark a no-show it — with a reminder, and without me learning Frappe,
-> organizations, providers, or permissions.
+| Promise | Evidence | Assessment and remaining check |
+|---|---|---|
+| Scheduling, buffers, availability | `appointment/scheduler/availability.py:21-68`; `appointment/scheduler/helpers/slot_engine.py:258`; Service buffer fields | Source-supported intersection of location/service/provider hours; public/personal/reception consistency unverified. |
+| Public booking and confirmation | `appointment/api/personal_meet.py:457`; `qa/manifests/appointment_scheduling_smoke.yaml:134`; booking screenshot | First screen observed. The unit test at `appointment/tests/test_scheduling_workflows.py:216` checks catalog visibility only. Confirmation lifecycle unverified. |
+| Local and international payments | `frontend/src/lib/i18n/translations/en.json:52-56`; `appointment/onboarding.py:863-871`; `appointment/payments/__init__.py` | Payment onboarding is a placeholder; no collection integration identified in reviewed app. Policy calculations and amount-paid fields do not establish payment processing. |
+| Web, SMS, USSD, WhatsApp booking | `en.json:57-61`; `appointment/channels/__init__.py`; public booking screen | Web surface exists; listed non-web booking implementations not evidenced. Share links are not booking integrations. |
+| Teams and locations | Organization/Provider/Location schemas; `frontend/src/pages/settings/team.tsx:317,351,391` | Models exist; team UI includes Coming Soon. Organization lifecycle unverified. |
+| Customer profiles, history, follow-ups | `en.json:67-71`; `appointment/scheduler/doctype/appointment/appointment.json:77-95`; Walk In contact fields | Contact snapshots exist; dedicated Customer model not evidenced. Actual customer-management workflow unverified. |
+| Analytics | `frontend/src/pages/analytics/index.tsx:14-20`; `appointment/dashboard.py:9-109` | Analytics page has static values; dashboard has real calculations. Partial implementation, not universal absence. |
+| English, Amharic and local time presentation | Translation resources; booking screenshot | Language resources and time-format controls exist. Full translated journeys unverified. |
+| Google Calendar, Google Meet, Zoom | `appointment/helpers/google_calendar.py`; `appointment/helpers/zoom.py`; `frontend/src/pages/settings/calendar.tsx:183-196` | Backend helpers exist; settings connection control lacks a handler. Connection, sync and recovery unverified. |
+| Reception, walk-ins and appointment status changes | `appointment/scheduler/api/desk.py`; `appointment/tests/test_scheduling_workflows.py:149-214` | Source/test coverage exists; no role-specific journey executed here. |
 
-**Why this ordering.** The homepage and README advertise a much larger product
-(payments, SMS/USSD/WhatsApp, customer management, analytics, teams). The
-implemented core is the solo/appointment lifecycle. Serving the smaller,
-complete job first is the cheapest path to a trustworthy beta; organization
-structure should appear only when it is needed and understandable.
+Rendered branding is Meet.et while the canonical product identity is Appointment.
+The intended relationship needs an owner decision; a technical app name alone
+does not decide the customer-facing brand.
 
-**Already agreed vs recommendation.** The reassessment README and repository
-README set the *aspiration* to serve solo users through large organizations on
-one shared site, and that direction is an explicit assumption to test, not a
-conclusion. No reviewed artifact records an explicit, dated decision naming the
-*first* beta customer or the minimum complete job. The paragraph above is my
-recommendation for the product owner to accept or reject (Decision D4).
+## Current domain
 
----
+| Concept | Current representation | Interpretation / unresolved issue |
+|---|---|---|
+| Organization | `appointment/appointment/doctype/organization/organization.json` | Business ownership and management; tenant isolation needs verification. |
+| Provider | `appointment/scheduler/doctype/provider/provider.json` | Service delivery person; current organizations table and deprecated organization link coexist. Compatibility and access effects need checking. |
+| Customer | Appointment and Walk In contact snapshots | Stable organization-scoped identity may help repeat customers. Neither missing history nor the need for a new model is proven. |
+| Service | `appointment/scheduler/doctype/service/service.json` | What is offered: duration, price, buffers, provider links. |
+| Bookable offering / EventType | `appointment/scheduler/doctype/eventtype/eventtype.json:38-99` | Binds service/provider/location with price/duration overrides. This can be a legitimate responsibility, not simply a duplicate Service. |
+| Location | `appointment/scheduler/doctype/location/location.json` | Place, timezone and opening hours. Repeated metadata field names need inspection. |
+| Resource | No dedicated model identified | Relevant when shared rooms/equipment constrain capacity, not mandatory for every salon or clinic. |
+| Availability | Provider/Service/Location hours; personal availability and Appointment Group paths | Multiple constraints are reasonable. A hierarchy already intersects location/service/provider hours. Cross-path consistency is unverified. |
+| Appointment | Scheduler Appointment with lifecycle statuses | Visit management record with service/provider/location and optional event link. |
+| Event | Booking Event and Appointment Group | Public/calendar flow uses Booking Event. Slot engine checks both record types; lifecycle ownership and synchronization need tracing. |
+| Walk-in | Walk In with assigned appointment link | Unscheduled arrival and reception handoff; preserve this concept. |
+| Payment | Amount-paid field and Policy calculations | Money state and policy are not a verified transaction/receipt system. |
+| Communication channel | Email templates and calendar/meeting helpers; channels package | Customer communication and booking intake are distinct concerns. Delivery/retry behavior is unverified. |
 
-## 2. Promise-to-evidence table
+## Clean-start comparison
 
-Promises are taken from the rendered public homepage (Observed) and its
-translation source. Status: Implemented / Partial / Absent. "Executed" means I
-ran it in this phase, not merely read a test.
-
-| # | Homepage promise | Advertised at | Code / tests that support it | Executed or observed | Status | Remaining unverified |
-|---|---|---|---|---|---|---|
-| 1 | Scheduling for Ethiopia under the **Meet.et** brand | `frontend/src/lib/i18n/translations/en.json:12,32,213,241`; `frontend/src/components/layout/Footer.tsx:277` | — | Homepage + booking page rendered "Meet.et" (run `BQA-2026-00060`) | Implemented (but brand conflicts with canonical "Appointment") | Whether Meet.et is a separate product or legacy naming |
-| 2 | Smart scheduling: buffers, recurring slots, timezone | `en.json:47-51` | `Service.buffer_before/after` (`appointment/scheduler/doctype/service/service.json:66,73`), `Booking Event` repeat fields, timezone on `Location`/`Provider`/`Organization` | Booking page showed timezone + 12h/24h/Ethiopian format | Partial | Recurring booking not executed; buffer enforcement not executed |
-| 3 | Public booking + confirmation | `en.json:120-123` | `appointment/api/personal_meet.py:156,457,935`; `appointment/tests/test_scheduling_workflows.py:216`; `qa/manifests/appointment_scheduling_smoke.yaml:134` | First screen only (no booking completed in Phase 1) | Implemented per tests; unexecuted by me | End-to-end confirmation not executed in this phase |
-| 4 | Local payments (TeleBirr, Chapa, M-PESA, Stripe, PayPal) | `en.json:52-56,186`; `Footer.tsx:271-290` | `appointment/payments/__init__.py` is empty; no gateway code anywhere | None | **Absent** | `amount_paid` field and `Policy` deposit math exist but no collection |
-| 5 | Multi-channel booking (web, SMS, USSD, WhatsApp) | `en.json:57-61,172,186-190` | `appointment/channels/__init__.py` is empty; only WhatsApp/Telegram share links | None (existing manifest `ignore_baseline_drift` only shows "Pricing" text) | **Absent** (web only) | — |
-| 6 | Team & multi-location | `en.json:62-66` | Organization/Provider/Location/Service models exist | Homepage copy only | Partial | Team invite UI is "Coming Soon" (`frontend/src/pages/settings/team.tsx:317,351,391`) |
-| 7 | Customer management (profiles, history, follow-ups) | `en.json:67-71` | No `Customer` DocType; client fields denormalized on `Appointment` (`appointment/scheduler/doctype/appointment/appointment.json:77-95`) | Runtime check: `Customer` DocType absent | **Absent** | — |
-| 8 | Analytics & insights | `en.json:72-76` | `appointment/dashboard.py:9-109` computes some real stats; `/analytics` page is static | `frontend/src/pages/analytics/index.tsx:16,18,204,231,258` shows zeros and "Coming Soon" | Partial | Real dashboard numbers not exercised |
-| 9 | English + Amharic | README; `en.json`, `am.json` | Language toggle; browser showed Amharic time label "ሰዓት (Local)" | Booking page | Implemented | Full translation coverage unverified |
-| 10 | Google Calendar / Google Meet / Zoom | README | Real backend helpers (`appointment/helpers/google_calendar.py`, `zoom.py`); review-settings UI is a stub | None | Partial | Frontend "Connect Google Calendar" has no handler (`frontend/src/pages/settings/calendar.tsx:183-196`) |
-| 11 | Rescheduling and cancellation | README; booking page copy | `appointment/scheduler/api/desk.py:557`; `test_scheduling_workflows.py:172,182` | Booking page copy only | Implemented per tests; unexecuted by me | Full lifecycle reserved for Phases 3–5 |
-| 12 | Reception workflows and walk-in assignment | README | `Walk In` DocType (`walk_in.json:80`); `desk.py:644-889`; `test_scheduling_workflows.py:191` | None | Implemented per tests; unexecuted by me | Reserved for Phase 4 |
-
-Observed homepage copy also promises scale and social proof that are placeholders:
-"10,000+", "500K+", "2.5M+ ETB", "99.9%", partner names "Ethiopian Airlines,
-Safaricom, Ethio Telecom…" (`frontend/src/pages/landing/sections/LogoCloud.tsx`
-hardcodes them and calls them "Demonstration partner names"). This is marketing
-copy, not product capability (Finding F1).
-
----
-
-## 3. Domain map
-
-Concept-by-concept: user meaning, current implementation, ownership, ambiguity.
-
-| Concept | User meaning | Current implementation | Relationships / ownership | Material ambiguity |
-|---|---|---|---|---|
-| **Organization** | The business | `appointment/appointment/doctype/organization/organization.json` | `owner_user` (`:112`), `managers` child, `slug` (`:61`) | Added after `Provider`; only `Organization Manager` has DocPerm. Not required for solo. |
-| **Provider** | The person who delivers | `appointment/scheduler/doctype/provider/provider.json` | `user` link, `organizations` child (`:193`), **legacy** `organization` (`:204`), `locations`, `opening_hours`, delegations | Is Provider a person, a tenant, or a resource? Legacy fields labelled "Deprecated". |
-| **Customer** | The person booking | **No DocType.** `Appointment.client_name/client_email/client_phone` (`appointment.json:77-95`); same on `Walk In` | Denormalized per record; no ownership, no history | Duplicates, typos, no returning-customer identity. |
-| **Service** | What is sold | `service.json` | `organization` (`:84`), `service_providers` child (`:97`), duration/price/buffers | Overlaps `EventType`; duplicate `buffer_before/after` fields (`:66,73,115,122`). |
-| **Location** | Where it happens | `location.json` | `organization` (`:69`), `opening_hours`, `holidays` | Duplicate address/timezone fields (`:35/81`, `:46/92`, `:51/97`, `:58/108`). |
-| **Resource** | Room, chair, equipment, vehicle | **No model.** `EventType`/`Event DocType Link` are the only generic linkage | — | Absent; blocks clinics, salons with shared chairs, repair bays. |
-| **Availability** | When I can be booked | Scattered: `Provider.opening_hours`/`use_default_hours`, `Service.opening_hours`, `Location.opening_hours`, `User Appointment Availability.appointment_time_slot`, `Appointment Group` + `Appointment Slot Duration` | Multiple parents | No single authoritative source; precedence unclear. |
-| **Appointment** | A booked visit | `scheduler/doctype/appointment` | Links `event_type`, `provider`, `location`, `service`, optional `event` (`:46-70`); status Pending/Confirmed/Completed/Cancelled/No Show | Status lives here, but public booking creates a `Booking Event`, not an `Appointment` (Read: `appointment/overrides/event_override.py`). Two "appointment-like" records. |
-| **Event** | Calendar entry / meeting | `scheduler/doctype/booking_event` (renamed from Frappe Event) and `appointment_group` | Google Calendar fields, `meet_provider`, repeat rules | Also the record the public booking actually creates — not user-visible naming. |
-| **Walk-in** | Unbooked arrival | `walk_in.json` | client fields, `service_requested`, `provider_preferred`, `assigned_appointment` (`:80`), status waiting/assigned/cancelled | Good concept; only used by reception. |
-| **Payment** | Money for the booking | `Appointment.amount_paid` field; `Policy` deposit/refund math (`policy.json:120`) | `Policy` per service/provider/location/org | No gateway, no transactions, no receipts despite homepage. |
-| **Communication channel** | How the customer is reached | Email templates + Google Calendar/Zoom helpers only; `channels/` empty | — | SMS/USSD/WhatsApp absent; no channel abstraction. |
-
----
-
-## 4. Clean-start model I would choose today
+This is a conceptual model, not an approved schema or refactoring plan.
 
 ```mermaid
 flowchart LR
-  Account -->|owns or belongs to| Organization
-  Organization -->|employs| Provider
-  Organization -->|offers| Service
-  Organization -->|operates| Location
-  Provider -->|delivers| Service
-  Service -->|is available at| Location
-  Availability -->|generates| Slot
-  Customer -->|books| Booking
-  Slot -->|becomes| Booking
-  Booking -->|for| Service
-  Booking -->|with| Provider
-  Booking -->|at| Location
-  Booking -.->|may reserve| Resource
-  Booking -->|settled by| Payment
-  Booking -->|notifies via| Message
+  Organization --> Provider
+  Organization --> Service
+  Organization --> Location
+  Service --> Offering
+  Provider --> Offering
+  Location --> Offering
+  Constraints[Hours, exceptions and capacity] --> Decision[Availability decision]
+  Offering --> Decision
+  Decision --> Booking
+  Customer[Customer identity or contact snapshot] --> Booking
+  Booking -.-> Resource[Optional shared resource]
+  Booking --> Payment[Payment state when offered]
+  Booking --> Message[Customer communication]
 ```
 
-Design intent: one **Customer** entity; one **Booking** record that owns its
-status and its slot; one **Availability** source that generates **Slots**;
-**Service** is the only thing a customer books (no `EventType` in the customer
-path); **Resource** is optional; **Payment** and **Message** are separate,
-swappable concerns. Solo use creates an implicit personal Organization/Provider
-behind the scenes rather than asking the user to reason about them.
+A clean design gives each booking a clear lifecycle owner and combines relevant
+constraints in one decision contract. It need not store all availability in one
+place or remove a useful offering entity. Solo setup should hide unnecessary
+organization/provider configuration; this has not been tested yet.
 
-### Current model vs clean start
-
-| Clean-start idea | Current reality | Gap type |
+| Current choice | Clean-start preference | Least expensive safe next step |
 |---|---|---|
-| One Customer | Denormalized `client_*` on Appointment/Walk In | Missing entity |
-| One Booking with status | `Appointment` **and** `Booking Event` (public flow creates the latter) | Duplicate record |
-| Service is the bookable unit | `Service` and `EventType` both carry service/provider/location/price/duration; the public URL uses the `EventType` name (`/schedule/org/qa-browser-cca404/evt-2026-000001`, Observed) | Overlap + leaky name |
-| One Availability source | Five homes for hours | Fragmentation |
-| Optional Resource | No model | Missing |
-| Payment/Message as boundaries | Empty `payments/`, empty `channels/`; policy math only | Missing boundaries |
-| Implicit org for solo | Org/Provider records are first-class and visible | UX coupling |
+| Contact snapshots | Scoped identity when repeat-customer needs justify it; retain booking snapshots | Test needs before adding Customer. Define matching and ownership; do not merge people automatically by name/email/phone. |
+| EventType binding and overrides | Clear internal offering, understandable customer service labels | Preserve responsibilities; friendly URLs are independent of schema collapse. |
+| Several availability paths | One final decision contract with layered constraints | Trace existing calculators and consumers in Phase 2 before consolidation. |
+| Appointment and Booking Event | Explicit lifecycle ownership and calendar projection | Verify synchronization and conflicts; two record types alone do not prove a defect. |
+| Missing integrations | Separate payment and communication responsibilities | Deliver advertised capabilities incrementally with failure/retry checks. |
 
-**Least expensive safe transition (recommendation).** Do not rewrite. In order:
+No rewrite is justified by this evidence. No comparative rewrite cost has been
+established, and working behavior should be preserved while gaps are validated.
 
-1. Introduce a real `Customer` entity and link appointments/walk-ins to it,
-   backfilling from `client_*` (additive; keeps working data).
-2. Make **Service** the only customer-facing bookable unit; keep `EventType` as
-   an internal alias that is resolved server-side so existing links keep working.
-3. Declare one availability precedence rule and document it, then route every UI
-   through one calculator (Phase 2 item 3 already requires this).
-4. Stop advertising absent capabilities, or label them "coming soon" (Finding F1).
-5. Defer Resource, group/class capacity, and the `Booking Event`/`Appointment`
-   collapse to later phases unless a concrete beta customer needs them.
+## Five decisive findings
 
-A rewrite is **not** justified by this phase: the existing lifecycle records,
-tests, and bilingual UI are working assets, and the expensive gaps (customer
-entity, availability authority, channel boundaries) are additive changes.
+| Finding | Why it matters | Evidence | Action | Timing |
+|---|---|---|---|---|
+| F1. Marketing describes capabilities beyond demonstrated implementation. | Defines delivery work and launch acceptance, rather than proving current readiness. | Promise table; `marketing-delivery-requirements.md` | Keep aspirations; implement and verify gaps | Before customer launch for promises offered |
+| F2. A 30-minute fixture is displayed as “0.5 min”. | Customers need a trustworthy duration at booking. Saved booking duration was not checked. | Booking screenshot; `appointment/qa_fixtures.py:190-198`; `frontend/src/pages/organization-appointment/index.tsx:241` divides duration by 60 | Improve now in a separate implementation task | Before beta |
+| F3. Availability and booking lifecycle consistency across paths is unverified. | Different intake paths must respect the same capacity and lifecycle rules. | `availability.py:21-68`; `slot_engine.py:68-115,258`; public and reception APIs | Keep existing mechanisms; verify before prescribing change | Phase 2, before beta |
+| F4. Legacy organization fields and front-desk role spellings coexist. | They may be compatibility details or affect access. Harm and safe deferral are not established. | Provider schema; role fixture versus Appointment DocPerm; both role names present on QA site | Verify access effects; defer cosmetic cleanup only if safe | Phase 2, before beta safety decision |
+| F5. Service and Location schemas repeat field names. | Metadata interpretation can be ambiguous; repeated definitions are not separate database columns. | Service: buffer_before/after; Location: address_line_1/2, city, phone, timezone repeated in JSON | Improve after checking metadata/runtime/migration effects | Before beta impact assessment; fix timing depends on impact |
 
----
+## Strengths to preserve
 
-## 5. Industry fit (concrete scheduling/service requirements)
+- Appointment lifecycle statuses and the Walk In assignment concept (schema evidence).
+- Service duration, price, buffers and provider overrides (schema evidence).
+- Organization booking configuration, assignment policies and branding (schema evidence).
+- Existing availability intersection, cross-record conflict checks and Policy calculations (source evidence).
+- English/Amharic resources and selectable time presentation (source and screenshot evidence).
 
-Assessed from the schema and web/desk APIs; fit beyond what was executed is
-**Inference**.
+These are assets, not a claim that every associated journey passes.
 
-| Business | Concrete requirements | Verdict |
-|---|---|---|
-| Solo consultant | 1–3 services, weekly hours, buffer, booking link | **Good fit** (inferred). Core model matches. |
-| Salon | multiple services, several stylists, shared chairs, deposits | **Partial** (inferred). Services/providers/deposits exist; **no resource (chair)**; walk-ins yes. |
-| Clinic | patient identity/history, rooms, providers, no-show, reminders | **Partial** (inferred). No Customer entity/history, no room/resource, no reminders job. |
-| Repair service | travel time, asset/vehicle reference, job status, on-site vs workshop | **Weak** (inferred). Buffers can model travel; no asset/reference entity exposed; status vocabulary is visit-oriented. |
-| Class / workshop | group event, capacity, attendee list | **Weak** (inferred). `Appointment Group` exists but is legacy, and public booking creates `Booking Event`; capacity rules unclear and untested. |
-| Public-service office | walk-in queue, reception, counters/resources, no payment | **Partial** (inferred). Walk-in queue and reception exist; no counter/resource model. |
+## Industry fit and scope
 
-No single industry requires a *separate* code path if the three additive pieces
-(Customer, Resource, Availability authority) are introduced; without them each
-industry pulls toward its own exceptions.
+All fit judgments are inferences, not validated deployments. Solo consultants
+fit the basic service/time model. Salons may need shared capacity and deposits;
+clinics may need rooms and stable customer identity without Appointment becoming
+a clinical-record system. Repair services may need asset references and travel
+constraints; fixed buffers do not solve route-dependent travel. Classes need
+attendee/capacity behavior. Public offices need queues and possibly counter
+capacity. Three added entities cannot be assumed to solve every industry.
 
----
+Dedicated enterprise deployment, industry-specific records and advanced CRM are
+reasonable candidates for later scope, subject to actual promises and customer
+needs. Shared-site tenant isolation is not deferrable. Resource/class behavior is
+conditional on the selected beta workflow. Payments and advertised channels are
+delivery gaps, not blanket exclusions approved by this phase. Phase 6 must
+establish minimum recovery, reporting and export obligations.
 
-## 6. Explicitly outside the first beta (recommendation)
+## Five decisions needed
 
-- Payment collection, gateways, receipts, and deposit charging (keep `Policy`
-  configuration and the `amount_paid` field as data only).
-- SMS, USSD, and WhatsApp channels (keep email confirmation and share links).
-- Customer CRM features (follow-ups, marketing, segmentation). A minimal
-  Customer identity record may still be needed — see D1.
-- Advanced analytics/dashboards and exports.
-- Group/class capacity and recurring bookings, unless a named beta customer
-  requires them.
-- Resource/equipment scheduling.
-- Enterprise isolation, residency, and dedicated-site behavior (Phase 2/7).
-- The `/assistant` ("VA Command") and Tasks/Assistants modules, which are a
-  different product surface attached to this repository.
+1. Which first customer and complete workflow define beta acceptance?
+2. Which advertised capabilities must be ready for the first actual customer launch?
+3. Does that workflow need stable Customer identity, and with what organization scope and matching rules?
+4. What owns the final availability decision and booking lifecycle across existing paths? Retain EventType responsibilities until this is understood.
+5. Is Meet.et intended customer branding, or should it align with Appointment?
 
----
+## Evidence limits
 
-## 7. Findings
-
-| ID | Finding | Why it matters | Evidence | Action | Timing |
-|---|---|---|---|---|---|
-| F1 | The homepage advertises payments, SMS/USSD/WhatsApp, customer management, and analytics that are absent or placeholder. | Sets expectations the beta cannot meet; damages trust at first contact. | Observed homepage text (`en.json:52-76`); empty `appointment/payments/__init__.py`, `appointment/channels/__init__.py`; `analytics/index.tsx:16,18,258`; no `Customer` DocType | Improve now (align copy / label roadmap) | Before beta |
-| F2 | "Customer" is not a first-class entity; identities are duplicated across `Appointment` and `Walk In`. | No booking history, no returning-customer recognition, no reliable contact record. | `appointment.json:77-95`; `walk_in.json:31,46`; runtime `Customer` DocType = absent | Improve now (add entity, backfill) | Before beta (decision) |
-| F3 | `EventType` duplicates `Service`, and the public booking URL exposes the internal `EventType` name. | Two ways to say the same thing; customers see implementation vocabulary; harder to sell/route. | `eventtype.json:38,46,54,63`; Observed booking URL `/schedule/org/…/evt-2026-000001` | Improve now (route by Service; keep alias) | Before beta (URL), after beta (collapse) |
-| F4 | Availability is defined in at least five places with unclear precedence. | Wrong slots, double-booking, and per-screen inconsistencies. | `provider.json` (hours), `service.json` (hours), `location.json` (hours), `user_appointment_availability.json:59` (time slots), `appointment_group` | Improve now | Before beta |
-| F5 | Provider carries both current `organizations` and "Legacy - Deprecated" `organization` fields, and the role vocabulary is inconsistent. | Confuses the domain model and permissions; risk of wrong tenant scoping. | `provider.json:193,204`; `role.json:36` ("Front Desk") vs DocPerm role "Front-Desk" (`appointment.json:184`); runtime shows both roles exist, neither assigned | Accept temporarily (converge in Phase 2) | After beta |
-| F6 | The public booking page rendered a 30-minute service as "0.5 min". | A customer cannot trust the duration shown at the decision point. | Observed screenshot `screenshots/phase01-public-booking-first-screen.png` (run `BQA-2026-00060`); fixture `qa_fixtures.py:190-198` sets duration 30 / 1800 | Improve now (units bug) | Before beta |
-| F7 | `Location` and `Service` DocType JSON contain duplicate field names. | Schema hygiene; risk of data written to one field and read from another. | `location.json:35/81,46/92,51/97,58/108`; `service.json:66/73,115/122` | Improve now | Before beta |
-| F8 | The runtime bench loads the app package from a different worktree than declared. | Any browser/CLI claim must state which revision it exercised. | Bench `.pth` points to the beta worktree (`develop @ 7e233e6`), while the declared runtime source is readiness `@3c57fb4`; product trees identical | Accept temporarily (document) | Before beta (housekeeping) |
-
----
-
-## 8. Strengths (max 5)
-
-1. A coherent appointment lifecycle record exists: `Appointment` statuses
-   Pending/Confirmed/Completed/Cancelled/No Show (`appointment.json:16`) plus a
-   `Walk In` queue (`walk_in.json:66`). **Read/Observed.**
-2. Services carry duration, price, buffers, and per-provider overrides
-   (`service.json`, `service_provider.json:22`). **Read.**
-3. Organization booking configuration is meaningfully modelled: assignment
-   policy `customer_choice/round_robin/availability_based`, provider-selection
-   toggle, public-booking toggle, branding, timezone
-   (`organization.json:132` onward). **Read.**
-4. A policy engine computes deposits, cancellation windows, refunds, and late
-   fees from real `Policy` records (`policy.json:120`; engine read). **Read.**
-5. Bilingual English/Amharic presentation with 12h/24h/Ethiopian time
-   (`am.json`; Observed on the booking page). **Observed.**
-
-## 9. Weaknesses (max 5)
-
-1. **Promise overreach** — the marketing site sells a product several times
-   larger than the working core (F1).
-2. **No Customer identity** — appointments store text contacts only (F2).
-3. **Concept overlap** — `Service`/`EventType`/`Appointment Group`, and
-   `Appointment`/`Booking Event`, duplicate responsibilities (F3, F4).
-4. **Availability fragmentation** — no authoritative schedule (F4).
-5. **Legacy tenant vocabulary** — Provider/Organization dual core and the
-   `Front-Desk`/`Front Desk` role mismatch (F5).
-
-## 10. Decisions needed (max 5)
-
-- **D1. Is Customer a first-class record for beta?** (Recommend yes; additive.)
-- **D2. Collapse `EventType` into `Service`, or keep both?** (Recommend
-  Service-only customer path.)
-- **D3. Which availability source is authoritative, and what precedence?**
-- **D4. Is the first beta solo/small-business only, or org-inclusive?**
-  (Recommend solo/small first.)
-- **D5. Payment: remove from the beta promise, or ship one gateway
-  (TeleBirr/Chapa)?** (Recommend remove from promise; keep policy data.)
-
----
-
-## 11. Limitations and blocked checks
-
-- Phase 1 did not complete any booking/payment lifecycle; those belong to
-  Phases 3–5. Booking and confirmation are reported from tests/manifest **read**,
-  not executed here.
-- Browser evidence covered the public homepage (desktop + mobile) and the first
-  screen of a synthetic public booking page only. No authenticated role journey
-  was run.
-- Video capture was not produced: the run recorded capture policy
-  `video: failure` and `video_file: null`; `recordings/` therefore holds no
-  recording. Trace and raw artifacts remain in site storage (see
-  `evidence-index.md`); they were not copied into the repository.
-- Test suites were inventoried, not executed; "Implemented per tests" means the
-  test exists and asserts the behavior, not that I ran it in this phase.
-- Runtime revision differs from `origin/develop` in declared source
-  (`3c57fb4`), while the loaded Python package resolves to `develop @ 7e233e6`.
-  Only docs/README/package metadata differ between them; no product code differs.
-- Whether a `Customer` module already exists in a non-scheduling app (for
-  example CRM/ERPNext) on a real deployment is **Unverified**; this site has no
-  such app installed.
+Only homepage desktop/mobile and the public booking first screen were observed.
+No completed booking, payment or authenticated role lifecycle was tested in this
+phase. Referenced tests were read, not executed. Historical capture used
+`auth: none`, not required `frappe_session`, and produced no video. Preserve the
+artifacts as static page evidence; they do not certify protocol compliance.
+Runtime and artifact retention details are in the evidence index. Later QA
+account setup is documented separately in `../browser-qa-access.md`.

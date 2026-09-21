@@ -32,6 +32,19 @@ The present single-site direction is an assumption to test, not a conclusion to
 defend. The existing code is also not the definition of the product. Judge it
 against the clearest design we would choose today.
 
+## Current evaluation direction
+
+Keep aspirational marketing capabilities during prelaunch development, as directed
+by the product owner. Track missing implementation and required launch evidence
+in `phase-01-product-and-domain/marketing-delivery-requirements.md`; do not treat
+removing promises as the default remedy. Before customer launch, validate the
+capabilities actually offered and the factual basis of marketing statistics and
+partner claims. This direction does not certify current readiness.
+
+Use `browser-qa-access.md` for retained synthetic identities, explicit session
+authentication, the preserved runtime and fixture-cleanup constraints. The
+prepared next-phase prompt is `phase-02-opencode-prompt.md`.
+
 ## Rules for every reviewer
 
 1. Be candid. Do not protect past work and do not propose change merely to make
