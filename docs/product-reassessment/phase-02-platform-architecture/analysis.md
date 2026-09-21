@@ -4,6 +4,13 @@ Source baseline: `4d450ffe4c36270d55c406d5d29531e81da29c31`.
 See [evidence-index.md](evidence-index.md) for recorded probes, test results,
 source references and limitations. This assessment changes documentation only.
 
+## Compatibility constraint
+
+There are no real customers or customer data. Existing seed/demo/test data need
+not survive product changes. Prefer a fresh schema/site and regenerated fixtures
+over compatibility scaffolding when that is simpler. Preserve useful behavior,
+not legacy representations; follow the parent README's pre-customer policy.
+
 ## Verdict
 
 **The current implementation is unsafe for a shared-site customer beta.** A real
@@ -137,10 +144,10 @@ executed in this phase.
   Current provider membership and linked-record structures exist; export was not
   attempted. Creation/modified metadata is not a complete change history.
 - **Action: improve now.** Define unambiguous direct or enforced inherited
-  ownership, including legitimate shared-user/provider relationships. If adding
-  ownership fields, verify each candidate backfill, reject inconsistent linked
-  organizations and handle ambiguous/ownerless records explicitly. Do not infer
-  that a one-patch automatic backfill is safe. Define essential history and check
+  ownership, including legitimate shared-user/provider relationships. Reject inconsistent linked organizations and prevent unintended ownerless
+  records in the target model. No backfill of current seed/demo records is
+  required: use a fresh schema/site and recreate valid synthetic fixtures when
+  simpler than adapting existing data. Define essential history and check
   every write path; enabling track_changes alone does not guarantee complete audit.
 - **Timing:** ownership and essential accountability before beta. A documented
   export dependency closure and restore verification are required before offering

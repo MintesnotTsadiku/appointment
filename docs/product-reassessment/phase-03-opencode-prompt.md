@@ -19,6 +19,20 @@ Keep aspirational marketing capabilities. Record delivery gaps and truthful
 launch acceptance requirements; removing promises is not the owner's direction.
 Do not turn speculative Customer/EventType consolidation into a prerequisite.
 
+## Pre-customer compatibility constraint
+
+The owner confirms there are no real customers or customer data. Existing records
+are disposable seed/demo/test data. Do not recommend backfills, legacy aliases,
+dual-write paths or retaining old schema/API shapes solely for compatibility.
+A fresh site and regenerated fixtures are acceptable for later implementation.
+Update current callers/tests together and preserve useful behavior where justified.
+Assess effort and correctness without assigning migration risk to nonexistent
+customer data. Future real-customer operations remain relevant.
+
+This phase still assesses the current product without implementing changes or
+resetting its runtime. Preserve the reusable QA access and collected evidence for
+repeatability; they are assessment infrastructure, not compatibility obligations.
+
 ## Repository and branch
 
 Repository: https://github.com/MintesnotTsadiku/appointment.git

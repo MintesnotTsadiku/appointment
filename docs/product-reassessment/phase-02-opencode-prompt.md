@@ -19,6 +19,20 @@ needed; removing those promises is not the product owner's chosen direction.
 Aspirational capability copy does not establish current capability or substantiate
 factual partner, customer-count or uptime claims.
 
+## Pre-customer compatibility constraint
+
+The owner confirms there are no real customers or customer data. Existing records
+are disposable seed/demo/test data. Do not recommend backfills, legacy aliases,
+dual-write paths or retaining old schema/API shapes solely for compatibility.
+A fresh site and regenerated fixtures are acceptable for later implementation.
+Update current callers/tests together and preserve useful behavior where justified.
+Assess effort and correctness without assigning migration risk to nonexistent
+customer data. Future real-customer operations remain relevant.
+
+This phase still assesses the current product without implementing changes or
+resetting its runtime. Preserve the reusable QA access and collected evidence for
+repeatability; they are assessment infrastructure, not compatibility obligations.
+
 ## Repository and branch
 
 Repository: https://github.com/MintesnotTsadiku/appointment.git
@@ -136,7 +150,7 @@ Return a compact analysis containing:
   probe/browser observed and unresolved. Cite exact baseline file/line references,
   safe commands/results, run IDs and artifact locations.
 - Least expensive safe transition. No rewrite or microservices recommendation
-  without concrete comparison to incremental repair, migration risk and lost behavior.
+  without concrete comparison to incremental repair, verification effort and lost useful behavior.
 
 Commit and push the Phase 2 evidence branch. Return branch, baseline, final commit,
 files, checks actually executed, concise conclusions, unresolved decisions,

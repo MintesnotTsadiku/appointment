@@ -113,6 +113,15 @@ Run certified preflight before browser execution. Check effective capture policy
 and resulting artifacts: capture_video true alone did not produce video in the
 historical Phase 1 run. Preserve failures and report missing artifacts honestly.
 
+## Pre-customer data policy
+
+Current product data is disposable seed/demo/test data, with no customer-data
+backward-compatibility requirement. A fresh site and rebuilt fixtures may be used
+for subsequent implementation. Retention instructions here protect assessment
+access and evidence continuity, not old product schemas or seeded records as a
+migration obligation. Assessment agents should continue using this runtime
+without resetting it unless their task explicitly includes a reset.
+
 ## Fixture and credential preservation
 
 The existing runner invokes qa_fixtures.setup/teardown. Its fixtures are initially

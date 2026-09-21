@@ -4,6 +4,13 @@ Source baseline: `7e233e6cf240f57201a3b39b6b8279d10b0d599f`.
 This is a product/domain assessment, not a certification of completed workflows.
 Evidence and runtime qualifications are in [evidence-index.md](evidence-index.md).
 
+## Compatibility constraint
+
+There are no real customers or customer data. Existing seed/demo/test data need
+not survive product changes. Prefer a fresh schema/site and regenerated fixtures
+over compatibility scaffolding when that is simpler. Preserve useful behavior,
+not legacy representations; follow the parent README's pre-customer policy.
+
 ## Product direction
 
 Appointment should serve solo professionals through organizations on a shared
@@ -51,7 +58,7 @@ does not decide the customer-facing brand.
 | Concept | Current representation | Interpretation / unresolved issue |
 |---|---|---|
 | Organization | `appointment/appointment/doctype/organization/organization.json` | Business ownership and management; tenant isolation needs verification. |
-| Provider | `appointment/scheduler/doctype/provider/provider.json` | Service delivery person; current organizations table and deprecated organization link coexist. Compatibility and access effects need checking. |
+| Provider | `appointment/scheduler/doctype/provider/provider.json` | Service delivery person; current organizations table and deprecated organization link coexist. Access effects need checking; legacy fields need not be retained for compatibility. |
 | Customer | Appointment and Walk In contact snapshots | Stable organization-scoped identity may help repeat customers. Neither missing history nor the need for a new model is proven. |
 | Service | `appointment/scheduler/doctype/service/service.json` | What is offered: duration, price, buffers, provider links. |
 | Bookable offering / EventType | `appointment/scheduler/doctype/eventtype/eventtype.json:38-99` | Binds service/provider/location with price/duration overrides. This can be a legitimate responsibility, not simply a duplicate Service. |
@@ -108,7 +115,7 @@ established, and working behavior should be preserved while gaps are validated.
 | F1. Marketing describes capabilities beyond demonstrated implementation. | Defines delivery work and launch acceptance, rather than proving current readiness. | Promise table; `marketing-delivery-requirements.md` | Keep aspirations; implement and verify gaps | Before customer launch for promises offered |
 | F2. A 30-minute fixture is displayed as “0.5 min”. | Customers need a trustworthy duration at booking. Saved booking duration was not checked. | Booking screenshot; `appointment/qa_fixtures.py:190-198`; `frontend/src/pages/organization-appointment/index.tsx:241` divides duration by 60 | Improve now in a separate implementation task | Before beta |
 | F3. Availability and booking lifecycle consistency across paths is unverified. | Different intake paths must respect the same capacity and lifecycle rules. | `availability.py:21-68`; `slot_engine.py:68-115,258`; public and reception APIs | Keep existing mechanisms; verify before prescribing change | Phase 2, before beta |
-| F4. Legacy organization fields and front-desk role spellings coexist. | They may be compatibility details or affect access. Harm and safe deferral are not established. | Provider schema; role fixture versus Appointment DocPerm; both role names present on QA site | Verify access effects; defer cosmetic cleanup only if safe | Phase 2, before beta safety decision |
+| F4. Legacy organization fields and front-desk role spellings coexist. | They may affect access. No compatibility obligation requires retaining both forms; choose the correct model and update callers together. | Provider schema; role fixture versus Appointment DocPerm; both role names present on QA site | Verify access effects; defer cosmetic cleanup only if safe | Phase 2, before beta safety decision |
 | F5. Service and Location schemas repeat field names. | Metadata interpretation can be ambiguous; repeated definitions are not separate database columns. | Service: buffer_before/after; Location: address_line_1/2, city, phone, timezone repeated in JSON | Improve after checking metadata/runtime/migration effects | Before beta impact assessment; fix timing depends on impact |
 
 ## Strengths to preserve

@@ -48,6 +48,32 @@ reproduced application access failures that block shared-site customer launch;
 the remaining UX assessments may continue on isolated synthetic data. Accepted
 assessment evidence is not release approval.
 
+## Pre-customer compatibility policy
+
+The product owner confirms that Appointment has no real customers or customer
+data. Existing records are disposable seed, demo or test data. Recommendations
+and subsequent implementation must not carry a backward-compatibility or
+historical-data-migration requirement for the current app.
+
+- Prefer the clearest correct model and behavior. Legacy schema, internal APIs,
+  seeded identifiers and old booking links need not be retained solely for
+  compatibility; update current callers, tests and fixtures together.
+- Do not prescribe backfills, dual-read/write paths, compatibility aliases or
+  transitional adapters merely to preserve current test data. A fresh site and
+  regenerated deterministic fixtures are acceptable implementation strategies.
+- Compare incremental repair and larger changes by implementation effort,
+  verification, delivery time and useful behavior retained—not migration cost
+  or risk to nonexistent customer data. This does not make a rewrite automatically
+  preferable or remove the requirement for evidence.
+- Correct ownership, authorization and future identity matching still matter.
+  Future customer backup/restore, upgrades and enterprise separation remain
+  product/operational requirements once real data exists.
+- The ongoing assessment remains documentation/evidence work. Keep its current
+  runtime, reusable QA credentials and evidence intact for repeatable comparisons;
+  they are test infrastructure, not a legacy product-compatibility constraint.
+  This policy permits fresh-site implementation planning; it does not instruct
+  an assessment agent to reset the current site or implement fixes.
+
 ## Rules for every reviewer
 
 1. Be candid. Do not protect past work and do not propose change merely to make
@@ -384,8 +410,10 @@ Return only:
 
 Do not repeat long phase summaries. Link each conclusion to code, test, Browser
 QA Run, screenshot, recording, or operational drill. Do not recommend a rewrite
-unless you compare migration cost, lost working behavior, data risk, delivery
-time, and the incremental alternative. If evidence supports continuing with the
+unless you compare implementation and verification cost, lost useful behavior,
+delivery time, and the incremental alternative. The current pre-customer site
+has no data-migration or backward-compatibility requirement; follow the
+pre-customer compatibility policy above. If evidence supports continuing with the
 current foundation, say so directly.
 ```
 
