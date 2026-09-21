@@ -1,0 +1,86 @@
+# Phase 1 product/domain browser evidence (Appointment reassessment).
+# Focused checks only: what the public homepage promises and the terminology a
+# customer sees on the first screen of the public booking page. No booking
+# lifecycle is completed here (that belongs to Phases 3-5).
+#
+# Runtime observed: site meet-beta-fix-appointment-beta-readiness-01dea7.localhost
+# Runtime source worktree: fix/appointment-beta-readiness @ 3c57fb4
+# (product code identical to origin/develop 7e233e6; see evidence-index.md).
+app: appointment
+base_url: http://localhost:49510
+default_role: Guest
+auth:
+  type: none
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+artifact_root: /tmp/agent_browser_qa/appointment
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+fixtures:
+  provider: appointment.qa_fixtures.fixture_values
+scenarios:
+  - id: phase01_homepage_desktop
+    title: Public homepage promises and brand (desktop)
+    viewport:
+      width: 1440
+      height: 960
+    checks: []
+    routes:
+      - path: /
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+          - type: visible_text
+            value: "Meet.et"
+          - type: visible_text
+            value: "Pricing"
+          - type: visible_text
+            value: "TeleBirr"
+          - type: visible_text
+            value: "Chapa"
+          - type: visible_text
+            value: "WhatsApp"
+          - type: visible_text
+            value: "USSD"
+    actions:
+      - action: screenshot
+        name: phase01-homepage-desktop
+        full_page: true
+      - action: get_dom_snapshot
+        name: phase01-homepage-desktop.html
+
+  - id: phase01_homepage_mobile
+    title: Public homepage at narrow mobile width
+    viewport:
+      width: 390
+      height: 844
+    checks: []
+    routes:
+      - path: /
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+    actions:
+      - action: screenshot
+        name: phase01-homepage-mobile
+        full_page: true
+
+  - id: phase01_public_booking_terminology
+    title: Public booking first screen terminology (no booking completed)
+    viewport:
+      width: 1440
+      height: 960
+    checks: []
+    routes:
+      - path: /schedule/org/{qa_org_slug}/{qa_service_slug}
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+    actions:
+      - action: screenshot
+        name: phase01-public-booking-first-screen
+        full_page: true
+      - action: get_dom_snapshot
+        name: phase01-public-booking-first-screen.html
