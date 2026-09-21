@@ -21,15 +21,15 @@ evidence. No passwords, cookies, tokens or database credentials are included.
 | BQA-2026-00073 | `run-c-booking.txt` (superseded) | Guest anonymity proof | Failed by design (403 navigation) | `appointment-p3-guest-identity-check-20260921T095706Z` |
 | BQA-2026-00074 | `run-c-booking.txt` | Guest books a slot | Passed | `appointment-p3-customer-public-booking-20260921T095814Z` |
 | BQA-2026-00076 | `run-d2-diagnostic.txt` | status-only update (14:00) | Passed (control for F3) | `appointment-p3-provider-status-submit-diagnostic-20260921T100532Z` |
-| BQA-2026-00079 | `run-d-reception.txt` | provider day view + reschedule | Failed (F2, F3) | `appointment-p3-provider-day-view-20260921T101759Z`, `appointment-p3-provider-reschedule-complete-noshow-20260921T101812Z` |
+| BQA-2026-00079 | `run-d-reception.txt` | provider day view + reschedule | Failed; handoff observation invalidated by cleanup; edit failure observed | `appointment-p3-provider-day-view-20260921T101759Z`, `appointment-p3-provider-reschedule-complete-noshow-20260921T101812Z` |
 | BQA-2026-00080 | `run-e-status-availability.txt` | complete / cancel / availability change | Partial (F3, F4) | `appointment-p3-provider-complete-appointment-20260921T102333Z`, `appointment-p3-provider-cancel-appointment-20260921T102414Z`, `appointment-p3-provider-availability-change-20260921T102428Z` |
-| BQA-2026-00081 | `run-e-complete-retry.txt` | complete retry | Failed (F3) | `appointment-p3-provider-complete-appointment-20260921T102529Z` |
-| BQA-2026-00082 | `run-d3-noshow.txt` | No Show on the 09:00 appointment | Failed (F3) | `appointment-p3-provider-noshow-on-assefa-20260921T102721Z` |
+| BQA-2026-00081 | `run-e-complete-retry.txt` | complete retry | Failed update assertions (F3) | `appointment-p3-provider-complete-appointment-20260921T102529Z` |
+| BQA-2026-00082 | `run-d3-noshow.txt` | No Show on the 09:00 appointment | Failed update assertions (F3) | `appointment-p3-provider-noshow-on-assefa-20260921T102721Z` |
 | BQA-2026-00083 | `run-f-slots.txt` | customer slots after availability change | Failed (F4) | `appointment-p3-customer-slots-after-availability-change-20260921T102952Z` |
 | BQA-2026-00084 | `run-g-mobile-customer.txt` | mobile booking first screen | Passed | `appointment-p3-customer-booking-mobile-20260921T103128Z` |
 | BQA-2026-00085 | `run-h-mobile-provider.txt` | mobile provider day view | Failed assertion (heading hidden) | `appointment-p3-provider-reception-mobile-20260921T103200Z` |
 
-Every run recorded `video_file: null` (F5). Each run also produced `trace.zip` in
+Every recorded run lacks video; this is a tooling/evidence limitation. Each run also produced `trace.zip` in
 its artifact dir (1–12 MB, not committed).
 
 ## Manifests executed
@@ -53,54 +53,58 @@ because Agent Plane derives `Browser QA Run.app` from the manifest path/filename
 (both fields are limited to 140 chars). The committed file is the source of
 truth; staging is byte-identical.
 
-## Findings → evidence
+## Findings → evidence and limits
 
-### F1 — Onboarding blocked at Set Availability
+| Finding | Evidence | Qualification |
+|---|---|---|
+| F1: onboarding save | BQA-2026-00071; screenshot 08; b-onboarding console/network/report files; duplicate onboarding.py definitions and Step3Availability caller | Selected Continue path fails. Skip for now/other visible recovery not tested. |
+| F2: schedule trust/scope | BQA-2026-00079; screenshot 14; desk.py:107-136 demo fallback; Phase 2 permissions evidence | Mixed synthetic businesses observed; not proof the customer's still-existing booking is missing. |
+| F3: fixture update failures | BQA-2026-00079/81/82; screenshots 18/19; d-reschedule/e-complete/d3 reports | Morning fixture failed. Unpadded HTTP time and exact root cause remain unverified. |
+| F4: closed-day calendar inconsistency | BQA-2026-00080/83; screenshots 24/25; e-availability/f-slots reports and DOM | Save toast plus calendar availability mismatch. No committed persisted-state/slot-response output; no closed-day booking attempted. |
+| F5: service detail errors | BQA-2026-00074; screenshots 10/13; scenario bootstrap duration; organization-appointment/index.tsx:240-241 | Wrong displayed units/name; saved interval and price not verified. |
 
-- Role/scenario: solo provider, individual wizard. URL `/home`.
-- BQA-2026-00071; screenshot `screenshots/08-solo-onb-07-availability-submit-deadend.png`;
-  `traces/b-onboarding-console-errors.json`, `traces/b-onboarding-network-failures.json`,
-  `traces/b-onboarding-after-step3-dom.html`, `traces/b-onboarding-report.json`.
-- Source: `appointment/onboarding.py:1095` (shadowed) vs `:3752`;
-  `frontend/src/pages/home/components/Step3Availability.tsx:167`.
+### Booking handoff experiment was interrupted by cleanup
 
-### F2 — Customer booking never reaches the provider schedule
+The committed `probes/outputs/run-c-booking.txt` contains:
 
-- Guest: `screenshots/13-customer-booking-confirmation.png`; BQA-2026-00074
-  (`traces/c-booking-report.json`, `traces/c-booking-confirmation-dom.html`).
-- Provider: BQA-2026-00079; `screenshots/14-provider-reception-today.png` (shows
-  `QA-BROWSER-01d65f Client`), `screenshots/15-provider-reception-tomorrow-empty.png`
-  (empty day for the booked date); `traces/d-day-view-report.json`.
-- Source: `appointment/api/personal_meet.py:457`, `:759-775`;
-  `appointment/scheduler/api/desk.py:59-85`, `:107-125`.
+```json
+{"fixture_cleanup":{"removed":["Booking Event:BEV00005", "...other QA fixtures..."]}}
+```
 
-### F3 — Single-digit-hour appointments cannot be updated
+This is an abbreviated extract; the full exact removal list remains in the raw
+output. `appointment.qa_runner.run` invokes `qa_fixtures.teardown` in finally;
+`_cleanup_run_artifacts` removes newly created Booking Events relative to its
+snapshot, not only QA-BROWSER-prefixed events. The provider run occurred later.
+Therefore screenshot 15 cannot establish a live booking handoff defect. A
+follow-up must record the booking identifier, verify its existence and ownership
+before provider inspection, and defer its cleanup until that inspection completes.
+Do not silently preserve the original “never reaches the schedule” conclusion.
 
-- Failure (09:00): BQA-2026-00079/81/82; `screenshots/18-provider-reschedule-silent-noop.png`,
-  `screenshots/19-provider-complete-silent-noop.png`;
-  `traces/d-reschedule-report.json`, `traces/e-complete-report.json`,
-  `traces/d3-noshow-assefa-report.json`.
-- Control (14:00 works): BQA-2026-00076; `screenshots/20-provider-cancelled-ok.png`;
-  `traces/d2-status-submit-report.json`.
-- Mechanism: `probes/phase03_desk_time_format_probe.py` output (desk API returns
-  `datetime.timedelta`); `frontend/src/pages/reception/components/EditAppointmentModal.tsx:74,178-181`.
+### Probe output and update-control limits
 
-### F4 — Availability change does not reach customers; booking copy wrong
+The scripts phase03_desk_time_format_probe.py,
+phase03_availability_check_probe.py and phase03_appointment_check_probe.py are
+committed, but their captured outputs are not in probes/outputs. The only
+non-browser-run output there is phase03_post_cleanup_inventory.txt. The
+availability probe does not call get_time_slots. A script's existence is not
+execution evidence of its claimed result.
 
-- Change saved: BQA-2026-00080; `screenshots/24-availability-saved.png`;
-  `traces/e-availability-report.json`. Persisted state:
-  `probes/phase03_availability_check_probe.py`.
-- Customer non-response: BQA-2026-00083;
-  `screenshots/25-customer-slots-after-availability.png`; `traces/f-slots-report.json`,
-  `traces/f-slots-dom.html`.
-- Duration/label: `screenshots/10-customer-booking-first-screen.png` ("0.5 min"),
-  `screenshots/13-customer-booking-confirmation.png`; source
-  `frontend/src/pages/organization-appointment/index.tsx:241`.
+The 14:00 d2 diagnostic selects No Show. Its manifest does not assert the final
+stored status. The cancellation scenario does assert the update request and
+success toast. Neither establishes a successful Completed transition. Inspect
+persisted values before claiming a completed lifecycle. The source's submit
+catch displays an error toast, so a proposed date exception does not alone
+explain the silent no-op. A missing success request is a symptom, not a diagnosis.
 
-### F5 — Missing recording evidence
+### Authentication and capture limitations
 
-- `recordings/README.md`; `appointment/qa_runner.py:15-40`; `agent_plane/api.py:1000-1023`;
-  every run's `"video_file": null`.
+Solo reports record the explicit frappe_session identity. Customer manifests
+use auth:none, a deviation from the required protocol. The separate 403 Guest
+probe is supporting context, not a positive verification of every subsequent
+browser identity. Missing video is documented in recordings/README.md; d2
+explicitly disables capture, while most manifests request it. Current wrapper/API
+defaults explain why those requests do not yield recording through this path.
+No claim is made that all Agent Plane routes are incapable of video.
 
 ## Fixtures, ownership and cleanup
 
@@ -138,3 +142,11 @@ truth; staging is byte-identical.
   point used for browser work.
 - Local operator credentials were read only where required and never printed or
   committed. Site `site_config.json` secrets are not included.
+
+## Review scope and phase status
+
+Decisive screenshots 08, 13, 14, 18, 24 and 25 were visually inspected, with
+focused committed reports, manifests, cleanup output and current source. No
+new browser execution, site reset or product change occurred during this review.
+The phase remains open because handoff/lifecycle conclusions require the bounded
+follow-up in follow-up-opencode-prompt.md. Raw artifacts remain unchanged.
