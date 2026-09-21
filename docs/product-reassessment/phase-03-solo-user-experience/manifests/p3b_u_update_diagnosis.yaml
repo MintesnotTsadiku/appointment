@@ -1,0 +1,160 @@
+# Phase 3 follow-up — focused update diagnosis (provider session).
+# Scenario 1 changes Status only on the 09:00 morning fixture and captures the
+# edit-modal form values, any visible error toast, console and network.
+# Scenario 2 reschedules the 14:00 two-digit-hour control via the time picker.
+# Scenario 3 records No Show on the 09:45 morning fixture.
+# Appointments are dated Sep 22, so reception is advanced one day from browser
+# "today" (Sep 21 EAT).
+app: appointment
+base_url: http://localhost:49510
+default_role: p3b-solo-owner@example.test
+auth:
+  type: frappe_session
+  username: p3b-solo-owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: false
+options:
+  ignore_baseline_drift: true
+scenarios:
+  - id: p3b_update_morning_status
+    title: Status-only update on the 09:00 morning fixture
+    viewport:
+      width: 1440
+      height: 960
+    timeout_ms: 150000
+    checks: []
+    routes:
+      - path: /reception
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="reception-heading"]'
+    actions:
+      - action: click
+        selector: 'button:has(svg.lucide-chevron-right)'
+      - action: wait_for
+        selector: '[data-qa="appointment-card"][data-qa-appointment-name="P3B-APT-MORN1"]'
+      - action: click
+        selector: '[data-qa="appointment-card"][data-qa-appointment-name="P3B-APT-MORN1"]'
+      - action: wait_for
+        selector: '[data-qa="edit-appointment-modal"]'
+      - action: screenshot
+        name: p3b-upd-01-morning-modal.png
+        full_page: false
+      - action: get_dom_snapshot
+        name: p3b-upd-morning-modal-before.html
+      - action: select
+        selector: '[data-qa="appointment-status"]'
+        value: "Completed"
+      - action: click
+        selector: '[data-qa="appointment-update-submit"]'
+      - action: screenshot
+        name: p3b-upd-02-morning-after-submit.png
+        full_page: false
+        assertions:
+          - type: visible_text
+            value: "Update failed"
+            timeout_ms: 6000
+          - type: visible_text
+            value: "Appointment updated!"
+            timeout_ms: 6000
+      - action: get_dom_snapshot
+        name: p3b-upd-morning-modal-after.html
+      - action: get_console_errors
+      - action: get_network_errors
+
+  - id: p3b_update_afternoon_reschedule
+    title: Reschedule the 14:00 control through the time picker
+    viewport:
+      width: 1440
+      height: 960
+    timeout_ms: 150000
+    checks: []
+    routes:
+      - path: /reception
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="reception-heading"]'
+    actions:
+      - action: click
+        selector: 'button:has(svg.lucide-chevron-right)'
+      - action: wait_for
+        selector: '[data-qa="appointment-card"][data-qa-appointment-name="P3B-APT-AFT"]'
+      - action: click
+        selector: '[data-qa="appointment-card"][data-qa-appointment-name="P3B-APT-AFT"]'
+      - action: wait_for
+        selector: '[data-qa="edit-appointment-modal"]'
+      - action: click
+        selector: '[data-qa="edit-time-trigger"]'
+      - action: click
+        selector: '[data-qa="edit-time-hour-3"]'
+      - action: click
+        selector: '[data-qa="edit-time-minute-0"]'
+      - action: click
+        selector: '[data-qa="edit-time-period-PM"]'
+      - action: click
+        selector: 'text=Start Time'
+      - action: click
+        selector: '[data-qa="appointment-update-submit"]'
+        assertions:
+          - type: visible_text
+            value: "Appointment updated!"
+            timeout_ms: 8000
+          - type: network_request
+            url_contains: update_appointment
+            method: POST
+            status_min: 200
+            status_max: 299
+            timeout_ms: 20000
+      - action: screenshot
+        name: p3b-upd-03-afternoon-reschedule.png
+        full_page: false
+      - action: get_console_errors
+      - action: get_network_errors
+
+  - id: p3b_update_morning_noshow
+    title: No Show on the 09:45 morning fixture
+    viewport:
+      width: 1440
+      height: 960
+    timeout_ms: 150000
+    checks: []
+    routes:
+      - path: /reception
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="reception-heading"]'
+    actions:
+      - action: click
+        selector: 'button:has(svg.lucide-chevron-right)'
+      - action: wait_for
+        selector: '[data-qa="appointment-card"][data-qa-appointment-name="P3B-APT-MORN2"]'
+      - action: click
+        selector: '[data-qa="appointment-card"][data-qa-appointment-name="P3B-APT-MORN2"]'
+      - action: wait_for
+        selector: '[data-qa="edit-appointment-modal"]'
+      - action: select
+        selector: '[data-qa="appointment-status"]'
+        value: "No Show"
+      - action: click
+        selector: '[data-qa="appointment-update-submit"]'
+        assertions:
+          - type: visible_text
+            value: "Appointment updated!"
+            timeout_ms: 8000
+          - type: network_request
+            url_contains: update_appointment
+            method: POST
+            status_min: 200
+            status_max: 299
+            timeout_ms: 20000
+      - action: screenshot
+        name: p3b-upd-04-morning2-noshow.png
+        full_page: false
+      - action: get_console_errors
+      - action: get_network_errors

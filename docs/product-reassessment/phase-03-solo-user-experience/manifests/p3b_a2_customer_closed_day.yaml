@@ -1,0 +1,71 @@
+# Phase 3 follow-up — customer selects the closed Wednesday and attempts a booking.
+# Browser timezone is aligned to the server default so the public calendar is
+# usable (see analysis). auth: none is the harness's anonymous Guest mode;
+# frappe_session cannot authenticate Guest (p3b-g0-guest-session.txt).
+app: appointment
+base_url: http://localhost:49510
+default_role: p3b-solo-customer@example.test
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: false
+options:
+  ignore_baseline_drift: true
+  timezone_id: Asia/Kolkata
+scenarios:
+  - id: p3b_customer_closed_day
+    title: Customer slot response and booking attempt on the closed Wednesday
+    viewport:
+      width: 1440
+      height: 960
+    timeout_ms: 180000
+    checks: []
+    routes:
+      - path: /schedule/org/p3b-org/evt-2026-000001
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="booking-date"]'
+    actions:
+      - action: click
+        selector: '[data-qa="booking-date"][aria-label*="September 30, 2026"]'
+      - action: screenshot
+        name: p3b-closed-01-slot-panel.png
+        full_page: false
+        assertions:
+          - type: visible_selector
+            value: '[data-qa="booking-slot"]'
+      - action: click
+        selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+      - action: wait_for
+        selector: "#userName"
+      - action: fill
+        selector: "#userName"
+        value: "P3B Closed Day Customer"
+      - action: fill
+        selector: "#userEmail"
+        value: "p3b-closed@example.test"
+      - action: fill
+        selector: "#userPhone"
+        value: "+251900000888"
+      - action: click
+        selector: '[data-qa="booking-confirm"]'
+        assertions:
+          - type: visible_text
+            value: "Booking Confirmed!"
+            timeout_ms: 20000
+          - type: network_request
+            url_contains: book_time_slot
+            method: POST
+            status_min: 200
+            status_max: 299
+            timeout_ms: 20000
+      - action: screenshot
+        name: p3b-closed-02-booking-confirmed.png
+        full_page: false
+      - action: get_console_errors
+      - action: get_network_errors
+      - action: get_dom_snapshot
+        name: p3b-closed-02-confirmation.html

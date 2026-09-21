@@ -1,0 +1,57 @@
+# Phase 3 follow-up — No Show on the reachable two-digit-hour record.
+app: appointment
+base_url: http://localhost:49510
+default_role: p3b-solo-owner@example.test
+auth:
+  type: frappe_session
+  username: p3b-solo-owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: false
+options:
+  ignore_baseline_drift: true
+scenarios:
+  - id: p3b_update_afternoon_noshow
+    title: No Show on the 14:00/15:00 two-digit-hour record
+    viewport:
+      width: 1440
+      height: 960
+    timeout_ms: 150000
+    checks: []
+    routes:
+      - path: /reception
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="reception-heading"]'
+    actions:
+      - action: click
+        selector: 'button:has(svg.lucide-chevron-right)'
+      - action: wait_for
+        selector: '[data-qa="appointment-card"][data-qa-appointment-name="P3B-APT-AFT"]'
+      - action: click
+        selector: '[data-qa="appointment-card"][data-qa-appointment-name="P3B-APT-AFT"]'
+      - action: wait_for
+        selector: '[data-qa="edit-appointment-modal"]'
+      - action: select
+        selector: '[data-qa="appointment-status"]'
+        value: "No Show"
+      - action: click
+        selector: '[data-qa="appointment-update-submit"]'
+        assertions:
+          - type: visible_text
+            value: "Appointment updated!"
+            timeout_ms: 8000
+          - type: network_request
+            url_contains: update_appointment
+            method: POST
+            status_min: 200
+            status_max: 299
+            timeout_ms: 20000
+      - action: screenshot
+        name: p3b-upd-05-afternoon-noshow.png
+        full_page: false
+      - action: get_console_errors
+      - action: get_network_errors

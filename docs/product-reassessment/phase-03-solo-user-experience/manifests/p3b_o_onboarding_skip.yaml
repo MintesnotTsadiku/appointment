@@ -1,0 +1,81 @@
+# Phase 3 follow-up — first-use recovery: does "Skip for now" advance to service/link?
+# Runs as a bare solo user (p3b-onb@example.test) with no provider.
+app: appointment
+base_url: http://localhost:49510
+default_role: p3b-onb@example.test
+auth:
+  type: frappe_session
+  username: p3b-onb@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: false
+options:
+  ignore_baseline_drift: true
+scenarios:
+  - id: p3b_onboarding_skip_recovery
+    title: Skip availability and reach service/link steps
+    viewport:
+      width: 1440
+      height: 1100
+    timeout_ms: 240000
+    checks: []
+    routes:
+      - path: /home
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+          - type: text_contains
+            value: "Choose how you want to get started"
+    actions:
+      - action: click
+        selector: 'button:has-text("Continue")'
+      - action: wait_for
+        selector: "#businessName"
+      - action: fill
+        selector: "#businessName"
+        value: "P3B Recovery Studio"
+      - action: click
+        selector: '[role="combobox"]'
+      - action: click
+        selector: '[role="option"]:has-text("Other")'
+      - action: click
+        selector: 'button:has-text("Next: Connect Calendar")'
+      - action: wait_for
+        selector: 'h3:has-text("Built-in Calendar")'
+      - action: click
+        selector: 'h3:has-text("Built-in Calendar")'
+      - action: click
+        selector: 'button:has-text("Continue")'
+      - action: screenshot
+        name: p3b-onb-01-step3-availability.png
+        full_page: true
+        assertions:
+          - type: text_contains
+            value: "Set Availability"
+      - action: click
+        selector: 'button:has-text("Skip for now")'
+      - action: screenshot
+        name: p3b-onb-02-after-skip.png
+        full_page: true
+        assertions:
+          - type: text_contains
+            value: "Create Service"
+      - action: get_dom_snapshot
+        name: p3b-onb-02-after-skip.html
+      - action: fill
+        selector: "#serviceName"
+        value: "P3B Recovery Consult"
+      - action: click
+        selector: 'button:has-text("Create & Continue")'
+      - action: screenshot
+        name: p3b-onb-03-success.png
+        full_page: true
+        assertions:
+          - type: text_contains
+            value: "You're All Set"
+      - action: get_dom_snapshot
+        name: p3b-onb-03-success.html
+      - action: get_console_errors
+      - action: get_network_errors

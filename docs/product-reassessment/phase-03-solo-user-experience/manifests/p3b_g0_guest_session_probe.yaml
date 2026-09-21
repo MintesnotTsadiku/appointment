@@ -1,0 +1,44 @@
+# Phase 3 follow-up — Guest/session protocol probe.
+# Tests whether the harness's frappe_session path can represent the anonymous
+# public flow with username "Guest" and a Guest-safe verify endpoint, instead of
+# silently using auth:none.
+app: appointment
+base_url: http://localhost:49510
+default_role: Guest
+auth:
+  type: frappe_session
+  username: Guest
+  verify_path: /api/method/ping
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: false
+options:
+  ignore_baseline_drift: true
+scenarios:
+  - id: p3b_guest_session_check
+    title: frappe_session Guest reaches the public page and stays anonymous
+    viewport:
+      width: 1440
+      height: 960
+    timeout_ms: 120000
+    checks: []
+    routes:
+      - path: /api/method/frappe.auth.get_logged_user
+        assertions:
+          - type: text_contains
+            value: "Not Permitted"
+    actions:
+      - action: screenshot
+        name: p3b-guest-session-endpoint.png
+        full_page: false
+      - action: open_url
+        url: /schedule/org/p3b-org/evt-2026-000001
+        wait_until: load
+        timeout_ms: 60000
+      - action: screenshot
+        name: p3b-guest-session-public.png
+        full_page: false
+        assertions:
+          - type: visible_selector
+            value: '[data-qa="booking-tomorrow"]'

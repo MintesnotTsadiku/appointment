@@ -1,0 +1,10 @@
+System Settings time_zone: ''
+frappe get_system_timezone(): 'Asia/Kolkata'
+session user: p3b-solo-owner@example.test token_ready: True
+HTTP status: 200
+content-type: application/json
+appointment count: 3
+name=P3B-APT-MORN1 start_time='9:00:00' end_time='9:30:00' status='Confirmed'
+name=P3B-APT-MORN2 start_time='9:45:00' end_time='10:15:00' status='Confirmed'
+name=P3B-APT-AFT start_time='14:00:00' end_time='14:30:00' status='Confirmed'
+RAW_JSON_FIRST_APPOINTMENTS=[{"name": "P3B-APT-MORN1", "appointment_id": "P3B-APT-MORN1", "appointment_date": "2026-09-22", "start_time": "9:00:00", "end_time": "9:30:00", "client_name": "P3B Morning One", "client_email": "p3b-apt-morn1@example.test", "client_phone": "+251900000444", "service": "SRV-2026-0006", "provider": "P3B Solo Owner", "location": "P3B Studio", "status": "Confirmed", "amount_paid": 0.0, "notes": null, "event_type": "EVT-2026-000001", "event": null, "service_name": "P3B Consultation", "provider_name": "P3B Solo Owner", "location_name": "P3B Studio"}, {"name": "P3B-APT-MORN2", "appointment_id": "P3B-APT-MORN2", "appointment_date": "2026-09-22", "start_time": "9:45:00", "end_time": "10:15:00", "client_name": "P3B Morning Two", "client_email": "p3b-apt-morn2@example.test", "client_phone": "+251900000444", "service": "SRV-2026-0006", "provider": "P3B Solo Owner", "location": "P3B Studio", "status": "Confirmed", "amount_paid": 0.0, "notes": null, "event_type": "EVT-2026-000001", "event": null, "service_name": "P3B Consultation", "provider_name": "P3B Solo Owner", "location_name": "P3B Studio"}, {"name": "P3B-APT-AFT", "appointment_id": "P3B-APT-AFT", "appointment_date": "2026-09-22", "start_time": "14:00:00", "end_time": "14:30:00", "client_name": "P3B Afternoon", "client_email": "p3b-apt-aft@example.test", "client_phone": "+251900000444", "service": "SRV-2026-0006", "provider": "P3B Solo Owner", "location": "P3B Studio", "status": "Confirmed", "amount_paid": 0.0, "notes": null, "event_type": "EVT-2026-000001", "event": null, "service_name": "P3B Consultation", "provider_name": "P3B Solo Owner", "location_name": "P3B Studio"}]
