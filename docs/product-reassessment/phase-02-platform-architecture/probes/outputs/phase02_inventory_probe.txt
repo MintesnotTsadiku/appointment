@@ -1,0 +1,112 @@
+== roles in system (app-relevant) ==
+{'name': 'Assistant', 'disabled': 0}
+{'name': 'Front Desk', 'disabled': 0}
+{'name': 'Organization Manager', 'disabled': 0}
+{'name': 'Provider', 'disabled': 0}
+{'name': 'Front-Desk', 'disabled': 0}
+{'name': 'System Manager', 'disabled': 0}
+{'name': 'Desk User', 'disabled': 0}
+
+== users with app roles ==
+{'parent': 'appointment-review-reception@example.test', 'role': 'Front-Desk'}
+{'parent': 'appointment-review-provider@example.test', 'role': 'Provider'}
+{'parent': 'appointment-review-manager@example.test', 'role': 'Organization Manager'}
+{'parent': 'Administrator', 'role': 'Desk User'}
+
+== synthetic app users (example.test) ==
+{'name': 'appointment-review-customer@example.test', 'enabled': 1}
+{'name': 'appointment-review-reception@example.test', 'enabled': 1}
+{'name': 'appointment-review-provider@example.test', 'enabled': 1}
+{'name': 'appointment-review-manager@example.test', 'enabled': 1}
+
+== User Permission rows ==
+0
+
+== Browser Accounts / Sessions ==
+Browser Account 4
+    BACCT-0067
+    BACCT-0065
+    BACCT-0063
+    BACCT-0061
+Browser Session 4
+    BSESS-0068
+    BSESS-0066
+    BSESS-0064
+    BSESS-0062
+
+== DocPerm for Appointment ==
+{'role': 'System Manager', 'read': 1, 'write': 1, 'create': 1, 'delete': 1, 'export': 1, 'if_owner': 0}
+{'role': 'Provider', 'read': 1, 'write': 1, 'create': 1, 'delete': 0, 'export': 1, 'if_owner': 0}
+{'role': 'Front-Desk', 'read': 1, 'write': 1, 'create': 1, 'delete': 0, 'export': 1, 'if_owner': 0}
+
+== DocType quick check: Organization Manager child fields ==
+{'fieldname': 'can_manage_services', 'fieldtype': 'Check', 'options': None, 'label': 'Can Manage Services'}
+{'fieldname': 'can_view_financials', 'fieldtype': 'Check', 'options': None, 'label': 'Can View Financials'}
+{'fieldname': 'can_manage_providers', 'fieldtype': 'Check', 'options': None, 'label': 'Can Manage Providers'}
+{'fieldname': 'full_name', 'fieldtype': 'Data', 'options': None, 'label': 'Full Name'}
+{'fieldname': 'user', 'fieldtype': 'Link', 'options': 'User', 'label': 'User'}
+
+== scheduled jobs ==
+{'method': 'appointment.tasks.verify_availability.verify_appointment_group_members_availabililty', 'frequency': 'Daily', 'stopped': 0}
+{'method': 'appointment.tasks.reminder_google_calendar_auth.send_reminder_mail', 'frequency': 'Daily', 'stopped': 0}
+{'method': 'agent_plane.mcp.durable.cleanup_expired_records', 'frequency': 'Daily', 'stopped': 0}
+{'method': 'agent_plane.governed_workspace.ledger.tombstone_expired_raw_delta_events', 'frequency': 'Daily', 'stopped': 0}
+{'method': 'agent_plane.tasks.run_retention_cleanup', 'frequency': 'Daily', 'stopped': 0}
+{'method': 'agent_plane.tasks.run_due_experience_schedules', 'frequency': 'Hourly', 'stopped': 0}
+{'method': 'agent_plane.tasks.recover_stale_agent_runs', 'frequency': 'Hourly', 'stopped': 0}
+{'method': 'agent_plane.tasks.notify_unreviewed_drift_reviews', 'frequency': 'Hourly', 'stopped': 0}
+{'method': 'agent_plane.tasks.notify_stale_approvals', 'frequency': 'Hourly', 'stopped': 0}
+{'method': 'agent_plane.model_execution_policy.rollouts.recover_stale_shadow_invocations', 'frequency': 'Cron', 'stopped': 0}
+{'method': 'agent_plane.qa_workflows.browser_qa_service.enqueue_stale_browser_qa_recovery', 'frequency': 'Cron', 'stopped': 0}
+{'method': 'agent_plane.managed_browser.service.recover_stale_browser_sessions', 'frequency': 'Cron', 'stopped': 0}
+{'method': 'agent_plane.tasks.recover_dead_runtime_workers', 'frequency': 'Cron', 'stopped': 0}
+{'method': 'agent_plane.tasks.process_pending_memory_events', 'frequency': 'Cron', 'stopped': 0}
+{'method': 'agent_plane.runtime.domain_delivery.recover_and_enqueue_domain_run_deliveries', 'frequency': 'Cron', 'stopped': 0}
+{'method': 'agent_plane.governed_workspace.observability.project_operational_facts', 'frequency': 'Cron', 'stopped': 0}
+{'method': 'frappe.email.doctype.auto_email_report.auto_email_report.send_monthly', 'frequency': 'Monthly', 'stopped': 0}
+{'method': 'frappe.utils.change_log.check_for_update', 'frequency': 'Weekly Long', 'stopped': 0}
+{'method': 'frappe.desk.form.document_follow.send_weekly_updates', 'frequency': 'Weekly Long', 'stopped': 0}
+{'method': 'frappe.core.doctype.security_settings.security_settings_alert.check_security_txt_expiry', 'frequency': 'Daily Maintenance', 'stopped': 0}
+{'method': 'frappe.integrations.doctype.oauth_client.oauth_client.delete_unused_dynamic_clients', 'frequency': 'Daily Maintenance', 'stopped': 0}
+{'method': 'frappe.core.doctype.user_invitation.user_invitation.mark_expired_invitations', 'frequency': 'Daily Maintenance', 'stopped': 0}
+{'method': 'frappe.automation_engine.drainer.purge_queue', 'frequency': 'Daily Maintenance', 'stopped': 0}
+{'method': 'frappe.core.doctype.log_settings.log_settings.run_log_clean_up', 'frequency': 'Daily Maintenance', 'stopped': 0}
+{'method': 'frappe.automation.doctype.auto_repeat.auto_repeat.make_auto_repeat_entry', 'frequency': 'Daily Maintenance', 'stopped': 0}
+{'method': 'frappe.website.doctype.personal_data_deletion_request.personal_data_deletion_request.remove_unverified_record', 'frequency': 'Daily Maintenance', 'stopped': 0}
+{'method': 'frappe.sessions.clear_expired_sessions', 'frequency': 'Daily Maintenance', 'stopped': 0}
+{'method': 'frappe.desk.notifications.clear_notifications', 'frequency': 'Daily Maintenance', 'stopped': 0}
+{'method': 'frappe.email.doctype.auto_email_report.auto_email_report.send_daily', 'frequency': 'Daily Maintenance', 'stopped': 0}
+{'method': 'frappe.desk.form.document_follow.send_daily_updates', 'frequency': 'Daily', 'stopped': 0}
+{'method': 'frappe.email.doctype.notification.notification.trigger_daily_alerts', 'frequency': 'Daily', 'stopped': 0}
+{'method': 'frappe.desk.doctype.event.event.send_event_digest', 'frequency': 'Daily', 'stopped': 0}
+{'method': 'frappe.desk.utils.delete_old_exported_report_files', 'frequency': 'Hourly Maintenance', 'stopped': 0}
+{'method': 'frappe.website.doctype.web_page.web_page.check_publish_status', 'frequency': 'Hourly Maintenance', 'stopped': 0}
+{'method': 'frappe.oauth.delete_oauth2_data', 'frequency': 'Hourly Maintenance', 'stopped': 0}
+{'method': 'frappe.twofactor.delete_all_barcodes_for_users', 'frequency': 'Hourly Maintenance', 'stopped': 0}
+{'method': 'frappe.core.doctype.prepared_report.prepared_report.expire_stalled_report', 'frequency': 'Hourly Maintenance', 'stopped': 0}
+{'method': 'frappe.website.doctype.personal_data_deletion_request.personal_data_deletion_request.process_data_deletion_request', 'frequency': 'Hourly Maintenance', 'stopped': 0}
+{'method': 'frappe.desk.form.document_follow.send_hourly_updates', 'frequency': 'Hourly Maintenance', 'stopped': 0}
+{'method': 'frappe.desk.page.backups.backups.delete_downloadable_backups', 'frequency': 'Hourly Maintenance', 'stopped': 0}
+{'method': 'frappe.model.utils.user_settings.sync_user_settings', 'frequency': 'Hourly Maintenance', 'stopped': 0}
+{'method': 'frappe.automation_engine.scheduler.process_date_based', 'frequency': 'Hourly', 'stopped': 0}
+{'method': 'frappe.integrations.doctype.google_calendar.google_calendar.sync', 'frequency': 'All', 'stopped': 0}
+{'method': 'frappe.monitor.flush', 'frequency': 'All', 'stopped': 0}
+{'method': 'frappe.email.queue.retry_sending_emails', 'frequency': 'All', 'stopped': 0}
+{'method': 'frappe.email.queue.flush', 'frequency': 'All', 'stopped': 0}
+{'method': 'frappe.search.sqlite_search.build_index_if_not_exists', 'frequency': 'Cron', 'stopped': 0}
+{'method': 'frappe.email.doctype.email_account.email_account.pull', 'frequency': 'Cron', 'stopped': 0}
+{'method': 'frappe.utils.telemetry.pulse.client.send_queued_events', 'frequency': 'Cron', 'stopped': 0}
+{'method': 'frappe.model.utils.link_count.update_link_count', 'frequency': 'Cron', 'stopped': 0}
+{'method': 'frappe.automation.doctype.reminder.reminder.send_reminders', 'frequency': 'Cron', 'stopped': 0}
+{'method': 'frappe.deferred_insert.save_to_db', 'frequency': 'Cron', 'stopped': 0}
+{'method': 'frappe.utils.global_search.sync_global_search', 'frequency': 'Cron', 'stopped': 0}
+{'method': 'frappe.email.doctype.email_account.email_account.notify_unreplied', 'frequency': 'Cron', 'stopped': 0}
+{'method': 'frappe.automation_engine.drainer.drain_due', 'frequency': 'Cron', 'stopped': 0}
+{'method': 'frappe.automation_engine.scheduler.process_cron', 'frequency': 'Cron', 'stopped': 0}
+{'method': 'frappe.integrations.doctype.webhook.webhook.retry_failed_webhooks', 'frequency': 'Cron', 'stopped': 0}
+{'method': 'frappe.search.sqlite_search.index_docs_in_queue', 'frequency': 'Cron', 'stopped': 0}
+{'method': 'frappe.email.doctype.notification.notification.trigger_offset_alerts', 'frequency': 'Cron', 'stopped': 0}
+
+== System Settings time_zone / enable scheduler ==
+time_zone: ''
+scheduler paused in common_site_config: 1 mute_emails: 1

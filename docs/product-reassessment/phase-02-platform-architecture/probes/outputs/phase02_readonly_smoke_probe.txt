@@ -1,0 +1,13 @@
+session_user: Administrator
+count Appointment                      0
+count Organization                     0
+count Provider                         0
+count Service                          0
+count Location                         0
+count EventType                        0
+count Walk In                          0
+count Booking Event                    0
+count User Appointment Availability    0
+count Policy                           0
+db_user: 
+installed_apps: ['frappe', 'agent_harness', 'agent_plane', 'appointment']

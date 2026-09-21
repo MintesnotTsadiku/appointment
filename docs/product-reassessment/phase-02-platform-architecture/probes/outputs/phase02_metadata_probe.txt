@@ -1,0 +1,38 @@
+== Service duplicate metadata consequence ==
+meta buffer_before defs: 2 -> [('buffer_before', 'Int', 'Buffer Before (minutes)'), ('buffer_before', 'Int', 'Buffer Before (minutes)')]
+db column count buffer_before: ['buffer_before']
+
+== Location duplicate metadata consequence ==
+address_line_1 meta defs: 2 db cols: 1
+city meta defs: 2 db cols: 1
+timezone meta defs: 2 db cols: 1
+phone meta defs: 2 db cols: 1
+
+== audit / tracking metadata ==
+Appointment      track_changes=0 allow_rename=1 is_child=0
+Booking Event    track_changes=1 allow_rename=0 is_child=0
+Organization     track_changes=0 allow_rename=1 is_child=0
+Service          track_changes=0 allow_rename=1 is_child=0
+Location         track_changes=0 allow_rename=1 is_child=0
+Walk In          track_changes=0 allow_rename=1 is_child=0
+Provider         track_changes=0 allow_rename=1 is_child=0
+
+== user permission count ==
+0
+
+== role DocPerms that apply to Organization Manager on core records ==
+Appointment      ['System Manager', 'Provider', 'Front-Desk']
+Walk In          ['Front-Desk', 'Provider', 'System Manager']
+Booking Event    ['All', 'System Manager']
+Service          ['Provider', 'Front-Desk', 'System Manager']
+Location         ['System Manager', 'Front-Desk', 'Provider']
+Provider         ['Front-Desk', 'Provider', 'System Manager']
+EventType        ['Front-Desk', 'Provider', 'System Manager']
+Policy           ['Organization Manager', 'Provider', 'System Manager']
+
+== Appointment fields (no organization) ==
+['appointment_id', 'event', 'event_type', 'provider', 'location', 'service', 'client_name', 'client_email', 'client_phone', 'appointment_date', 'start_time', 'end_time', 'status', 'amount_paid', 'notes', 'cancellation_reason']
+== Booking Event fields (organization?) ==
+[]
+== Walk In fields ==
+['naming_series', 'client_name', 'client_phone', 'client_email', 'service_requested', 'location', 'provider_preferred', 'status', 'assigned_appointment', 'notes', 'created_at']

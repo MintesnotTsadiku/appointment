@@ -1,0 +1,4 @@
+retained QA users: ['appointment-review-customer@example.test', 'appointment-review-reception@example.test', 'appointment-review-provider@example.test', 'appointment-review-manager@example.test']
+browser accounts: 4 browser sessions: 4
+user count: 9
+business counts: {'Appointment': 0, 'Organization': 0, 'Provider': 0, 'Service': 0, 'Location': 0, 'EventType': 0, 'Walk In': 0, 'Booking Event': 0, 'Policy': 0, 'User Appointment Availability': 0}

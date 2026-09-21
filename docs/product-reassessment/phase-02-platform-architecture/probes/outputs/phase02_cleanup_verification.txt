@@ -1,0 +1,39 @@
+appointment.__file__ = /home/minte/projects/training-apps/.worktrees/frappe-appointment-beta/appointment/__init__.py
+
+== leftover P2ISO records ==
+Appointment count_all= 0
+Organization count_all= 0
+Provider count_all= 0
+Service count_all= 0
+Location count_all= 0
+EventType count_all= 0
+Walk In count_all= 0
+Booking Event count_all= 0
+
+== users P2ISO ==
+[]
+
+== Any P2ISO in Appointment/Service/Walk In (name like) ==
+Appointment []
+Service []
+Walk In []
+Booking Event []
+Location []
+Provider []
+Organization []
+
+== broad field scan ==
+scan done
+
+== total business counts ==
+Appointment 0
+Organization 0
+Provider 0
+Service 0
+Location 0
+EventType 0
+Walk In 0
+Booking Event 0
+User Appointment Availability 0
+Policy 0
+User count: 9

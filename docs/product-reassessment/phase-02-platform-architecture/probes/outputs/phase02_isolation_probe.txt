@@ -1,0 +1,38 @@
+RESULT | A.roles                                                 | ['Provider', 'All', 'Guest', 'Desk User']
+RESULT | A.get_list(Appointment).count                           | 2
+RESULT | A.get_list(Appointment).names                           | ['APT-P2ISO-A', 'APT-P2ISO-B']
+RESULT | A.get_list(Appointment).B_visible                       | True
+RESULT | A.get_list(Walk In).B_visible                           | True
+RESULT | A.get_list(Service).B_visible                           | True
+RESULT | A.get_list(Provider).B_visible                          | True
+RESULT | A.get_list(Location).B_visible                          | True
+RESULT | A.get_list(BookingEvent).B_visible                      | True
+RESULT | A.get_list(Organization).B_visible                      | EXC:PermissionError:Insufficient Permission for <strong>Organization</strong>
+RESULT | A.has_perm(Appointment,B,write)                         | True
+RESULT | A.has_perm(BookingEvent,A,read)                         | True
+RESULT | A.desk.get_desk_appointments.B_visible                  | {'keys': ['appointments', 'count'], 'B_visible': True}
+RESULT | A.desk.get_providers_list.count                         | 2
+RESULT | A.desk.get_services_list.count                          | 2
+RESULT | A.desk.get_locations_list.count                         | 2
+RESULT | A.desk.get_walk_ins.B_visible                           | True
+RESULT | A.desk.update_appointment(B,status=Cancelled)           | {'success': True, 'modified_by': 'p2iso-a-owner@example.invalid', 'status': 'Cancelled'}
+RESULT | A.status_after_update(B)                                | Cancelled
+RESULT | R.roles                                                 | ['Front-Desk', 'All', 'Guest', 'Desk User']
+RESULT | R.get_list(Appointment).B_visible                       | True
+RESULT | R.desk.create_cross_tenant(B service/provider/location) | {'success': True, 'created': 'APT-20260921134301618006'}
+RESULT | R.create_service_no_org                                 | {'success': True, 'service_id': 'SRV-2026-0008', 'message': "Service 'P2ISO Rogue Service' created successfully"}
+RESULT | C.roles                                                 | ['All', 'Guest']
+RESULT | C.get_list(Appointment).count                           | EXC:PermissionError:Insufficient Permission for <strong>Appointment</strong>
+RESULT | C.has_perm(Appointment,read)                            | False
+RESULT | C.desk.get_desk_appointments.B_visible                  | {'keys': ['appointments', 'count'], 'B_visible': True}
+RESULT | C.HTTP(apikey).desk.get_desk_appointments               | {'status': 401, 'B_visible': False, 'len': 35}
+RESULT | C.HTTP(apikey).frappe.client.get_list(Appointment)      | {'status': 401, 'body': {'exc_type': 'AuthenticationError'}}
+RESULT | C.HTTP(session).login+desk+walkins+get_list             | {'login_status': 200, 'desk_status': 200, 'desk_B_visible': True, 'walkins_status': 200, 'walkins_B_visible': True, 'get_list_status': 403}
+RESULT | M.roles                                                 | ['Organization Manager', 'All', 'Guest', 'Desk User']
+RESULT | M.get_list(Organization).count                          | 2
+RESULT | M.get_list(Organization).B_visible                      | True
+RESULT | M.has_perm(Organization,B,write)                        | True
+RESULT | M.has_perm(Organization,B,export)                       | True
+
+== SUMMARY ==
+created_records: 23
