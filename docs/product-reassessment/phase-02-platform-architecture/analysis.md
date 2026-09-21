@@ -1,324 +1,231 @@
 # Phase 2 — Platform architecture and shared-site safety
 
-Baseline: `4d450ffe4c36270d55c406d5d29531e81da29c31` (`origin/develop`, Phase 1 and
-`browser-qa-access.md` merged). Assessment branch:
-`review/phase-02-platform-architecture`. Loaded runtime package:
-`/home/minte/projects/training-apps/.worktrees/frappe-appointment-beta/appointment`
-— same commit as this evidence checkout, so source and runtime match at the
-baseline (see [evidence-index.md](evidence-index.md)).
-
-This is a platform-architecture assessment. It does not implement fixes, redesign
-screens, or certify completed user journeys. Source reads are qualified where
-they must be confirmed by execution; executed probes and tests are listed in the
-evidence index.
+Source baseline: `4d450ffe4c36270d55c406d5d29531e81da29c31`.
+See [evidence-index.md](evidence-index.md) for recorded probes, test results,
+source references and limitations. This assessment changes documentation only.
 
 ## Verdict
 
-**The shared-site approach is unsound as currently implemented.** Cross-tenant
-reads and writes are reproducible through the app's own permission model and its
-front-desk APIs. Evidence confidence: **high** for tenant isolation (reproduced
-on the isolated site); **medium** for concurrent-capacity and rule-consistency
-(source-supported, no race executed); **unverified** for payments, SMS, and
-calendar boundary behaviour (no integration exists to test).
+**The current implementation is unsafe for a shared-site customer beta.** A real
+HTTP session for a synthetic customer without staff roles received another
+business's appointments and walk-ins through the desk APIs. Standard Frappe list
+access for that customer returned 403. This is a demonstrated application access
+failure, not merely a missing field or a hypothetical risk.
 
-The single-site Frappe direction itself is recoverable and is the least expensive
-safe path. It becomes *conditionally sound* only when all five conditions below
-hold; none is a rewrite:
+**The shared-site Frappe direction remains a reasonable, conditionally viable
+architecture.** The evidence does not justify a rewrite or prove another platform
+would be cheaper. Correct server-side authorization and booking guarantees on the
+existing foundation, then verify them. Adding a field or permission hook alone
+will not establish safety.
 
-1. Every business record category has an explicit organization owner, including
-   records reached indirectly (appointments, booking events, walk-ins).
-2. Server-side scoping is enforced on every read and write path — not only on the
-   standard Desk UI — including the front-desk, management, offline, and gateway
-   APIs, reports, exports, search, and file access.
-3. Public, personal, reception, rescheduling, cancellation, and walk-in paths use
-   one authoritative availability and lifecycle rule set.
-4. Capacity reservation is atomic and booking requests are idempotent.
-5. A single timezone source of truth is honoured outside Africa/Addis_Ababa, and
-   core records carry an audit trail.
+Accepting this phase means accepting its findings and limits, not approving a
+release or a detailed implementation design. Continue the remaining assessments
+on the isolated synthetic site. A dedicated solo site is not certified safe or
+usable by this phase: a customer-to-staff access failure can matter even with one
+business, and no complete solo journey was executed.
 
-A solo user on a dedicated account is usable today; the failure is specifically
-about many tenants sharing one site.
+## Three most serious failure modes
 
-## The three most serious failure modes
+| Failure mode | Evidence level | Consequence |
+|---|---|---|
+| Unscoped application reads and writes cross business/role boundaries | Customer reads reproduced over HTTP; provider cancellation and reception creation reproduced by direct Python API calls under those users | Customer information disclosure and unauthorized booking changes; before-beta blocker |
+| Booking paths do not demonstrate consistent, atomic capacity and lifecycle enforcement | Different source paths inspected; no concurrent race or full constraint-bypass scenario executed | Overlaps, retries or different intake paths may produce inconsistent bookings; before-beta guarantee to verify |
+| Ownership resolution and historical accountability are incomplete or unverified | Missing direct organization fields on some records; several track_changes settings disabled; export not executed | Difficult authorization, incident reconstruction and later organization separation; ownership and minimum accountability before beta, export tooling when needed |
 
-| # | Failure mode | Type | Consequence |
-|---|---|---|---|
-| 1 | Any tenant's staff role (Provider, Front-Desk, Organization Manager) — and any authenticated Website User through the front-desk APIs — can read and modify other tenants' appointments, walk-ins, services, providers, locations, organizations, and booking events. | **Reproduced defect** | Total tenant isolation failure; PII disclosure and cross-tenant data mutation. |
-| 2 | Booking capacity and lifecycle rules diverge across paths and are enforced with a non-atomic read-then-write check. | **Supported risk** | Double-booking under concurrency; reception/organization paths ignore opening hours and buffers that the public single-provider path enforces. |
-| 3 | Core records have no organization ownership column and no change history, so a later dedicated-site move cannot be scoped or audited without reconstructing ownership from indirect links. | **Supported risk / unverified export** | Enterprise separation is fragile; safe export/import requirements are not satisfied by the current model. |
+A supported risk is a plausible failure mechanism in inspected code, not a
+reproduced outcome. Unverified behavior is neither a pass nor a failure.
 
-Reproduced means observed through an executed probe on the isolated site (see
-`probes/outputs/phase02_isolation_probe.txt`). Supported risk means the mechanism
-is present in source and would fail under the stated condition, but the condition
-was not exercised. Unverified means no evidence was produced either way.
+## What the isolation probe actually established
 
-Failure mode 1, reproduced in one probe run (probe run `P2-PROBE-ISO-01`):
+| Persona and method | Recorded result | Limit of the claim |
+|---|---|---|
+| Provider associated with A; permission-aware Python list | B's Appointment, Walk In, Service, Provider and Location visible; another user's private Booking Event appears in list results | Not every document-read/export path tested. Organization list was denied for this Provider. |
+| Provider A; direct `desk.update_appointment` call | B appointment changed to Cancelled; modified_by is A's user | Persisted mutation reproduced; not separately replayed through HTTP middleware. |
+| Reception role, not assigned to an organization; direct API | Appointment created using B service/provider/location; Service created without organization | Shows missing restriction for this role/account, not a tested membership transition from A to B. |
+| Website customer with All/Guest only; HTTP login session | Desk appointment and walk-in endpoints returned 200 and B record identifiers; `frappe.client.get_list(Appointment)` returned 403 | Customer read exposure demonstrated. Customer writes and anonymous Guest access were not tested. |
+| Organization Manager role, not assigned to either organization; Python checks | Organizations A/B listed; B write permission and DocType export permission returned true | Actual organization write and export were not performed. |
 
-- Provider of tenant A: `frappe.get_list("Appointment")` returns tenant A **and**
-  tenant B appointments (`APT-P2ISO-A`, `APT-P2ISO-B`).
-- Provider of tenant A: `desk.update_appointment(tenant_B_appointment,
-  status="Cancelled")` succeeds; `modified_by` becomes tenant A's user.
-- Front-Desk of tenant A: `desk.create_desk_appointment(...)` creates an
-  appointment for tenant B's service/provider/location.
-- Front-Desk of tenant A: `manage.create_service(service_name=...)` with no
-  organization succeeds (unguarded write).
-- Customer with **no staff role**: after logging into the site,
-  `GET /api/method/appointment.scheduler.api.desk.get_desk_appointments` returns
-  HTTP 200 with tenant B's appointment, and `.../get_walk_ins` returns tenant B's
-  walk-in — while the permission-aware
-  `GET /api/method/frappe.client.get_list?doctype=Appointment` correctly returns
-  HTTP 403. The tenant boundary exists in Frappe's permission layer but is bypassed
-  by the app's own whitelisted endpoints.
-- Organization Manager of tenant A: can list, write, and export all
-  organizations, including tenant B's.
+Source corroboration: `appointment/scheduler/api/desk.py:20-85` reads via
+`frappe.get_all` without role/organization checks; `:435-537` updates a fetched
+record and saves with `ignore_permissions=True`. The response decorator in
+`appointment/helpers/overrides.py` only maps HTTP status. The permission-aware
+customer list denial establishes a role restriction, not a working tenant filter
+for staff. The probe does not prove every role can mutate every record category.
 
 ## Current versus clean-start architecture
 
-The difference is not the entity list; it is where authorization and the
-authoritative booking decision live.
-
 ```mermaid
 flowchart TB
-  subgraph Current["Current: authorization is per-DocType and per-call"]
-    C1[Role-only DocPerms<br/>no org scope, no user permissions]
-    C2[permission_query_conditions<br/>absent for app DocTypes]
-    C3[Whitelisted APIs use get_all /<br/>ignore_permissions=True]
-    C4[Appointment / Booking Event / Walk In<br/>have no organization column]
-    C5[Separate availability sources:<br/>availability.py vs legacy Appointment Group]
-    C6[Read-then-write conflict check,<br/>no lock or unique reservation]
-    C1 --> C3
-    C2 --> C3
-    C4 --> C3
-    C5 --> C6
+  subgraph Current
+    C[Public and staff entry points] --> D[Different booking paths]
+    C --> P[Role permissions and some document hooks]
+    C --> U[Unscoped application queries and writes]
+    D --> H[Existing hours intersection and conflict checks]
+    H --> W[Separate check and insert paths]
   end
-  subgraph Clean["Clean start: ownership closure + single decision contract"]
-    O[Organization owns every<br/>business record directly]
-    P[Server-side scope guard<br/>one helper, all paths]
-    A[Availability decision contract:<br/>hours ∩ service ∩ provider ∩ buffers ∩ exceptions ∩ capacity]
-    R[Atomic reservation:<br/>DB lock or unique active-capacity key + idempotency key]
-    L[One booking lifecycle owner<br/>across public/staff/reschedule/cancel/walk-in]
-    O --> P
-    P --> A
-    A --> R
-    R --> L
+  subgraph Target[Clean-start responsibilities]
+    E[Public and staff entry points] --> A[Authorize actor, action and owned record]
+    O[Deterministic ownership and valid linked records] --> A
+    A --> B[Shared booking rules with explicit authorized overrides]
+    B --> R[Atomic capacity decision and retry identity]
+    R --> L[Persist lifecycle change and accountable history]
+    L --> I[Calendar, payment and communication work]
   end
 ```
 
-The clean-start model keeps the working assets (EventType binding, the
-location/service/provider intersection, the Desk API, statuses, walk-ins,
-buffers, Policy math) and adds the missing ownership and decision contracts.
-It does not require microservices or a new application.
+Keep useful Service/EventType binding, layered availability, statuses, walk-ins
+and existing integration helpers. The target describes responsibilities, not a
+requirement for one database column on every child, one timezone for every
+business, or a new framework around every integration.
 
-## Material findings
+## Five material findings and actions, ordered by risk
 
-Format: **Finding / Why it matters / Evidence / Action / Timing.**
+### F1. Application authorization permits demonstrated cross-business access
 
-### 1. Tenant isolation is not implemented at the data or permission layer
+- **Why it matters:** The confirmed customer read exposure is enough to block
+  shared-site customer launch. Recorded staff mutations increase the impact.
+- **Evidence:** `P2-PROBE-ISO-01`; `desk.py:20-85,435-537`;
+  `appointment/api/manage.py:880-901`; role metadata in inventory output;
+  `appointment/hooks.py:190-196` contains a Booking Event document permission
+  hook but no active app list-query hook in that section.
+- **Action: improve now.** Establish deterministic ownership and enforce actor,
+  membership, permitted action and linked-record scope on every relevant entry
+  point. Standard list/document permissions and custom APIs both need coverage;
+  `permission_query_conditions` cannot scope `get_all` automatically. Check
+  public response fields separately from staff access. Avoid leaking records in
+  conflict/error responses. Add focused positive and negative permission tests.
+- **Timing:** before customer beta. Files, exports, search, realtime, caches and
+  jobs remain verification requirements, not proven leaks in this report.
 
-- **Finding:** Core business records have no organization owner and no user
-  permissions, and the app's APIs bypass the permission layer, so one tenant's
-  staff can read and write another tenant's records.
-- **Why it matters:** This is the defining shared-site safety property. Its
-  failure exposes customer PII and lets one business alter another's bookings,
-  services, and configuration.
-- **Evidence:** `appointment/scheduler/doctype/appointment/appointment.json:151-188`
-  (Provider/Front-Desk role perms only; no `if_owner`, no organization field);
-  `appointment/scheduler/doctype/booking_event/booking_event.json:306-330`
-  (`All` role read/write); `appointment/hooks.py:190-196`
-  (`permission_query_conditions` absent; only `Booking Event` has `has_permission`);
-  `appointment/appointment/doctype/organization/organization.json:241-265`
-  (Organization Manager role unscoped); `appointment/scheduler/api/desk.py:75,418,473,537,571,624,662,737,867,872,900,919,938`
-  (`frappe.get_all` reads and `ignore_permissions=True` writes with no org guard
-  and no role guard). Reproduced by `P2-PROBE-ISO-01`
-  (`probes/outputs/phase02_isolation_probe.txt`). No `User Permission` rows exist
-  (`P2-PROBE-INV-01`).
-- **Action:** Improve now — add explicit organization ownership and enforce it
-  server-side on every path (see transition step 1). **Timing:** before beta.
+### F2. Booking consistency and atomic capacity are not established
 
-### 2. Booking constraints are not shared across paths, and capacity is not atomic
+- **Why it matters:** A correct slot display is insufficient if submission,
+  retries, rescheduling or another booking channel can violate the rules.
+- **Evidence:** `appointment/scheduler/availability.py:21-68` implements the
+  intersection; `appointment/api/personal_meet.py:319-442` applies filters in
+  the inspected single-provider read path, while `:1316-1463` assembles the
+  organization path differently. `appointment/scheduler/api/desk.py:369-418`
+  checks conflicts then inserts; `:435-537` supports direct field/status updates.
+  `appointment/scheduler/helpers/slot_engine.py:68-145` checks Appointment and
+  Booking Event, but Appointment filtering includes both provider and location.
+  The controller at `appointment/scheduler/doctype/appointment/appointment.py:10`
+  adds no validation. No atomic reservation was demonstrated.
+- **Action: improve now.** Define common write-time invariants and explicit,
+  authorized staff overrides. Confirm cancellation and rescheduling policies
+  cannot be bypassed through generic updates. Serialize/check overlapping capacity
+  inside a transaction, across both record types and every relevant write path;
+  verify rollback, concurrent requests and scoped idempotent retries.
+- **Timing:** before customer beta for supported booking paths. Do not require a
+  single rewritten calculator before proving the existing paths can be aligned.
 
-- **Finding:** The single-provider public slot path intersects location/service/
-  provider hours and applies buffers; the organization public path and the
-  front-desk path do not use the same rules; and all write paths use a
-  read-then-write conflict check with no lock, unique constraint, or idempotency.
-- **Why it matters:** Two realistic bookings can take the same capacity, and
-  reception/org bookings can be created outside the hours and buffers the public
-  calendar enforces, producing inconsistent availability and no-shows.
-- **Evidence:** `appointment/scheduler/availability.py:21-68` (intersection exists);
-  `appointment/scheduler/helpers/slot_engine.py:16-145` (`check_conflicts`,
-  no locking), `:177-304` (buffer/working-hour filters only used by callers);
-  `appointment/api/personal_meet.py:319-442` (single path applies
-  `filter_by_working_hours`, `filter_by_time_off`, `apply_buffer_times`,
-  `check_conflicts`), `:1316-1463` (multi-provider path merges legacy slots and
-  `mark_booked_slots`, no working-hour/buffer filters); `:455-717`
-  (`book_time_slot` checks conflicts then inserts with `ignore_permissions=True`);
-  `appointment/scheduler/api/desk.py:369-418,519-537,606-624,809-867`
-  (conflict check only; no hours/buffers/notice; `ignore_permissions=True`);
-  `appointment/appointment/doctype/appointment_group/appointment_group.py:140-161`
-  (write validation against the legacy Appointment Group slots);
-  `probes/outputs/phase02_metadata_probe.txt` and the isolation probe show no
-  unique reservation key. No `SELECT ... FOR UPDATE`, advisory lock, or
-  idempotency key exists (`recon`, section B).
-- **Action:** Improve now — one evaluator for availability/lifecycle plus an
-  atomic reservation and idempotency key. **Timing:** before beta.
+An exact unique key on `(provider, location, start, end)` is **not** an overlap
+solution: 09:00–09:30 and 09:15–09:45 have different keys. It also separates the
+same provider at different locations. Choose a lock/reservation strategy around
+the actual scarce capacity, with a transactionally consistent overlap decision.
+Staff booking outside normal public hours may be intentional; define and test
+that policy rather than treating every path difference as a defect. No race was
+executed in this phase.
 
-### 3. Enterprise separation is not currently exportable or auditable
+### F3. Ownership and accountability need a deliberate contract
 
-- **Finding:** `Appointment`, `Booking Event`, and `Walk In` carry no organization
-  column; `Appointment`, `Organization`, `Provider`, `Service`, `Location`, and
-  `Walk In` have `track_changes=0`; ownership is only inferable through a chain of
-  links, and users/slugs/identifiers are global.
-- **Why it matters:** A dedicated site for one organization needs its full
-  ownership closure, history, files, and identifiers. Today that would require
-  reconstructing ownership heuristically and would risk cross-tenant bleed.
-- **Evidence:** `appointment.json` field list (`P2-PROBE-META-01`), `:151-194`;
-  metadata probe (`track_changes=0`); `appointment/scheduler/doctype/booking_event/booking_event.json:10-48,295-341`;
-  `appointment/helpers/utils.py` and the naming rules (`EVT-.YYYY.-.######`,
-  `SRV-.YYYY.-.####`, `BEV.#####`) plus unique `slug` fields on
-  `Organization`/`User Appointment Availability`. `qa/preservation` snapshot code
-  and `appointment/qa_preservation.py:131` confirm there is no organization
-  partition to snapshot. Not executed: no export attempt (prohibited in-scope).
-- **Action:** Improve now as part of ownership closure (step 1); define export
-  acceptance later. **Timing:** before beta for ownership; later for export tooling.
+- **Why it matters:** Authorization and later enterprise separation need a
+  reliable way to identify one business's records and relationships. Support
+  also needs an adequate record of material booking and access changes.
+- **Evidence:** `P2-PROBE-META-01`: Appointment, Walk In and Booking Event lack
+  direct organization fields; Appointment/Organization/Provider/Service/Location/
+  Walk In have `track_changes=0`, while Booking Event has `track_changes=1`.
+  Current provider membership and linked-record structures exist; export was not
+  attempted. Creation/modified metadata is not a complete change history.
+- **Action: improve now.** Define unambiguous direct or enforced inherited
+  ownership, including legitimate shared-user/provider relationships. If adding
+  ownership fields, verify each candidate backfill, reject inconsistent linked
+  organizations and handle ambiguous/ownerless records explicitly. Do not infer
+  that a one-patch automatic backfill is safe. Define essential history and check
+  every write path; enabling track_changes alone does not guarantee complete audit.
+- **Timing:** ownership and essential accountability before beta. A documented
+  export dependency closure and restore verification are required before offering
+  enterprise migration; full export tooling need not block a shared-site beta.
 
-### 4. Timezone handling is not coherent outside the default zone
+Global identifiers and indirect links do not inherently prevent safe export.
+No executed export proves either success or failure here. Tenant-specific
+indexes should follow query shape and representative measurements, not an
+untested prescription. Duplicate JSON definitions still warrant cleanup review:
+one database column was observed per inspected field, but metadata/rendering and
+migration effects were not demonstrated to be harmless.
 
-- **Finding:** `Location.timezone`, `Provider.timezone`, and
-  `Appointment.custom_time_format` exist, but conflict, slot, desk, and policy
-  code all use the single `System Settings.time_zone` (default
-  `Africa/Addis_Ababa`); `pytz.localize` is used without DST `normalize`; and the
-  Ethiopian-time formatter is dead code.
-- **Why it matters:** A tenant in a DST-observing zone can book at the wrong
-  wall-clock time, and the Ethiopian-time presentation cannot currently appear.
-- **Evidence:** `appointment/scheduler/helpers/slot_engine.py:46-50`;
-  `appointment/scheduler/api/desk.py:39-43`;
-  `appointment/scheduler/helpers/policy_engine.py:42-47,212-216,302-306,354-358`;
-  `appointment/helpers/utils.py:161-232` (`format_ethiopian_time` defined;
-  `recon` shows no caller); `appointment/api/personal_meet.py:156-217`
-  (`user_timezone_offset` only for display translation in the legacy path).
-- **Action:** Improve now — choose one timezone source and thread it through;
-  accept temporarily for Addis-only launches. **Timing:** before claiming
-  non-Ethiopian timezones; after beta for Addis-only beta.
+### F4. Time interpretation needs validation; Ethiopian presentation exists
 
-### 5. Integration boundaries are absent, not merely missing implementations
+- **Why it matters:** Storage, conflict checks, business-local schedules and
+  customer presentation must agree on the same appointment instant.
+- **Evidence:** `slot_engine.py:46-65,155-174` uses the site timezone and strips
+  timezone information for comparisons. `desk.py:39-43` and policy helpers use
+  the site zone. The live organization page imports DateTimeSelector at
+  `frontend/src/pages/organization-appointment/index.tsx:28`; its TimeSlotsPanel
+  imports/calls `formatEthiopianTime` at `:16,43-48`, using
+  `frontend/src/pages/booking-v2/utils/ethiopianTime.ts:26-28` browser-local hours.
+- **Action: improve now.** Define conversion/storage boundaries, preserve the
+  appropriate business/location IANA timezone, and test a customer browser in a
+  different zone plus DST boundaries when supported. Preserve working Ethiopian
+  presentation; an unused Python formatter is not evidence the feature is absent.
+- **Timing:** consistent instants/display before beta. Additional business zones
+  may be deferred only by explicit launch scope; even an Addis-based business can
+  have customers browsing from another timezone. Absence of `pytz.normalize`
+  alone does not prove a DST defect. No timezone failure was executed here.
 
-- **Finding:** `appointment/payments/__init__.py` and `appointment/channels/__init__.py`
-  are empty; booking has no payment hold, no callback contract, no idempotency
-  key, and no durable work or retry ownership for SMS/email/calendar beyond
-  Frappe's generic `frappe.enqueue`.
-- **Why it matters:** When payments or messaging are added, callback safety,
-  duplicate prevention, retry ownership, and failure visibility must land on a
-  boundary that does not exist; building them inside booking logic would repeat
-  the current coupling.
-- **Evidence:** empty packages; `appointment/overrides/event_override.py:168-179`
-  (fire-and-forget email enqueue), `:496-498` (errors only logged);
-  `appointment/overrides/leave_application_override.py:17,34`; `recon` section D
-  (no payment/SMS code). **Callback safety: unverified** (nothing to test).
-- **Action:** Replace later — define an integration boundary when the first
-  capability is built; keep the marketing promises as delivery requirements per
-  `phase-01-product-and-domain/marketing-delivery-requirements.md`. **Timing:**
-  before offering each integration; not a beta blocker for unpaid booking.
+### F5. Integration reliability remains unverified, not wholly absent
 
-### 6. Secondary but real: role and API hygiene defects
+- **Why it matters:** Advertised integrations need scoped, observable outcomes,
+  including retries and duplicates, rather than merely successful booking saves.
+- **Evidence:** payments/channels packages have no reviewed implementation, but
+  calendar/Zoom helpers exist. `appointment/overrides/event_override.py:168-179`
+  enqueues mail after commit; later error handling logs failures. Framework job
+  and email facilities exist. Their reliability was not exercised with the QA
+  scheduler paused and email muted.
+- **Action: improve now when delivering each integration.** Build on existing
+  Frappe facilities where suitable; define delivery state, deduplication, retry
+  ownership, permission scope and visible recovery. No evidence establishes a
+  need to replace the job system or introduce another messaging platform.
+- **Timing:** before offering each integration. Retain marketing aspirations and
+  use Phase 1's delivery requirements; an unpaid beta is an owner decision, not
+  an exclusion silently approved here. Appointment-only request idempotency
+  remains part of F2 regardless of payment scope.
 
-- **`Front Desk` vs `Front-Desk`:** DocPerms use `Front-Desk` (hyphen) on
-  `appointment/service/provider/location/walk_in/eventtype`; hooks fixtures and
-  `provider_delegation.json` use `Front Desk` (space). On the QA site both role
-  records exist; the reception persona holds `Front-Desk`. A user granted the
-  seeded `Front Desk` spelling receives no appointment permissions.
-  Evidence: `hooks.py:142-143`, `fixtures/role.json:36`, `provider_delegation.json:41`,
-  DocPerm grep; `P2-PROBE-INV-01`. **Action:** improve now (before beta) — pick one.
-- **`Desk User` on `User Appointment Availability`:** duplicated DocPerm grants
-  every System User read of all providers' booking links/durations across tenants
-  (`user_appointment_availability.json:156,162`). **Action:** improve now.
-- **Management APIs ignore `Organization Manager` members:** `manage.py:891-896`
-  and siblings check only `org.owner_user != user`, while
-  `onboarding.py:48-54` also accepts managers. Conversely
-  `policy_manager.py:216-217,338-339,351-352` filter `Organization Manager` by a
-  `status` field that does not exist on the child table, so manager policy checks
-  can never match. **Action:** improve now (before beta).
-- **Offline sync:** `offline.py:171,185` imports a non-existent
-  `create_appointment` (offline booking is broken); `:235-236` writes
-  non-existent `appointment.date`/`appointment.time`; its
-  `frappe.has_permission` checks (`:204,231`) pass for any Provider/Front-Desk
-  because ownership is global. **Action:** improve now or disable the path.
-- **Gateway / routes:** `gateway.py:393-412` exposes the action map to any
-  authenticated user; `frontend/src/route.tsx:47-88` has no role guards, so
-  `/reception`, `/admin/dashboard`, and `/settings/*` are URL-reachable by any
-  logged-in user. UI hiding is not a control. **Action:** improve now.
+## Additional source observations, not extra architecture prescriptions
 
-## Cross-path booking constraint comparison
-
-| Path | Availability source | Hours/service/provider intersection | Buffers | Conflict check | Atomic | Writes |
-|---|---|---|---|---|---|---|
-| Public single provider (`book_time_slot`/`get_time_slots`) | legacy Appointment Slot Duration + `availability.py` filters on read | Yes on read | Yes on read | Yes (sequential) | No | Booking Event, `ignore_permissions=True` |
-| Public organization (`get_multi_provider_time_slots`) | legacy Appointment Slot Duration only | No | No | Marks booked by exact event match | No | Booking Event |
-| Front desk create (`create_desk_appointment`) | none | No | No | Yes (sequential) | No | Appointment, `ignore_permissions=True` |
-| Front desk reschedule | `validate_reschedule` policy | No | No | Yes (sequential) | No | Appointment |
-| Walk-in assign | none | No | No | Yes (sequential) | No | Appointment + Walk In |
-| Cancellation | `validate_cancellation` never called | — | — | — | — | Appointment status only |
-
-## Least expensive safe transition
-
-Do not rewrite. Extend the existing foundation:
-
-1. Add a required `organization` Link to `Appointment`, `Booking Event`, and
-   `Walk In`; backfill from `event_type→service/provider/location` and
-   `location→organization` in one patch. Add a single
-   `require_org_access(user, organization)` helper and a `permission_query_conditions`
-   + `has_permission` pair for each app DocType, then call the helper at the top
-   of every whitelisted API (desk, manage, onboarding, offline, gateway, policy).
-2. Replace read-then-write capacity with an atomic reservation: a lock (or a
-   unique key on `(provider, location, start, end)` for active statuses) plus an
-   idempotency key on booking requests, so duplicates and races are deterministic.
-3. Create one availability/lifecycle evaluator and route all six paths through
-   it, keeping `EventType`, `availability.py`, statuses, and buffers as inputs.
-4. Make `track_changes` on for core records and add indexes on
-   `Appointment(provider, location, appointment_date, status)` and
-   `Booking Event(starts_on, ends_on)`.
-5. Choose one timezone source; thread it through slots, conflicts, policy, and
-   presentation; wire the existing Ethiopian formatter or delete it.
-
-Steps 1–3 are beta blockers; 4–5 make the beta operable at the scale the product
-claims. None discards working behaviour.
+- `Front Desk` and `Front-Desk` coexist; Appointment DocPerm uses the latter.
+  Membership and policy checks also differ. Treat this as part of F1: verify
+  intended delegation and action-specific rights before changing role names.
+- A frontend route or action-code map being discoverable is not itself an
+  authorization vulnerability. Server-side access is the security boundary;
+  appropriate UI visibility is a later usability question.
+- Source suggests offline API inconsistencies; no offline journey was executed.
+  Assess that surface if it is reachable/offered, without expanding this phase
+  into repair work.
 
 ## Strengths to preserve
 
-- `EventType` binding of Service, Provider, and Location with overrides — a useful
-  responsibility, not a defect (`eventtype.json:1-101`).
-- The location→service→provider opening-hours intersection in `availability.py`.
-- Desk appointment/walk-in statuses and the walk-in assignment concept.
-- Buffer and duration/price fields on Service, with provider overrides.
-- Policy deposit/cancellation math and the `Appointment` + `Booking Event`
-  dual-record conflict check (consolidate lifecycle ownership later, not now).
-- Amharic/English resources and the time-format control.
+- EventType's service/provider/location binding and overrides.
+- Existing location/service/provider availability intersection and buffer fields.
+- Appointment statuses and the walk-in assignment concept.
+- Checks that consider both Appointment and Booking Event, plus Policy calculations.
+- English/Amharic presentation and existing calendar/mail integration facilities.
 
-## What Phase 2 established against Phase 1's corrections
+## Remaining coverage and decisions
 
-- The availability intersection **exists** but only the single-provider public
-  path honours it; the organization and front-desk paths do not. Constraint
-  plurality is not itself the defect; the missing shared evaluator is.
-- The slot engine checks both `Appointment` and `Booking Event`; lifecycle
-  synchronization was traced and is not the primary risk — authorization and
-  atomicity are.
-- `EventType` was preserved as legitimate; no evidence justifies collapsing it.
-- No dedicated `Customer` model: for shared-site beta this is acceptable; if
-  identity is added it must be organization-scoped, and auto-merging by
-  name/email/phone must be forbidden.
-- Legacy organization fields and the two Front-Desk spellings were checked at
-  runtime; the spelling split has a concrete authorization consequence.
-- Duplicate metadata fields create **no** independent database columns — one
-  column each is confirmed; the cost is metadata noise only.
+The tests establish the named administrator-level cases, not full journeys or
+isolation: scheduling ran 8 tests successfully; identity ran 18 total, with
+17 passing and 1 skipped. HTTP probes support access findings without requiring
+a browser replay. No browser UX, concurrent race, DST, export/import, payment
+callback or integration failure test was executed.
 
-## Limits and unresolved
+File access, realtime, search/export implementations, caches, background-job
+ownership, capacity at scale and migration/rollback behavior were not
+comprehensively audited. They remain release verification work. This assessment
+is sufficient to reject current shared-site readiness, not to certify all risks
+or prove the listed actions exhaustive. The next UX phase can proceed safely
+with synthetic data in the preserved isolated environment.
 
-- No browser UI journey was executed in Phase 2; cross-tenant access was proven
-  through the real HTTP endpoint with a synthetic session, which is stronger for
-  this claim than a UI walk-through. Phase 1's static browser evidence is reused
-  with its stated limitations.
-- No concurrency race was executed; atomicity is a source-supported risk.
-- No export/import was attempted, as required.
-- Unresolved for the coordinator: (a) which first customer workflow sets beta
-  acceptance, which decides how much of ownership/atomicity must land first;
-  (b) whether non-Ethiopian timezones are in the first beta; (c) which
-  advertised integration is built first and on what boundary.
+Owner decisions: first customer workflow and actual launch promises; supported
+business/customer timezone combinations; integration delivery order. These
+choices prioritize work but do not waive isolation, correct capacity or basic
+customer/staff authorization for the offered workflows.
