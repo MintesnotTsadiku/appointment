@@ -1,0 +1,89 @@
+# Phase 3 — solo individual onboarding journey (first-use through publish link).
+# Runs as the fresh solo identity p3-solo-owner@example.test with no provider yet.
+# Assertions are used instead of `wait_for` at expected transition points so a
+# blocked step does not abort the run before evidence is captured.
+app: appointment
+base_url: http://localhost:49510
+default_role: p3-solo-owner@example.test
+auth:
+  type: frappe_session
+  username: p3-solo-owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+options:
+  ignore_baseline_drift: true
+scenarios:
+  - id: p3_solo_onboarding_individual
+    title: Solo provider completes individual onboarding
+    viewport:
+      width: 1440
+      height: 960
+    timeout_ms: 180000
+    checks: []
+    routes:
+      - path: /home
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+          - type: text_contains
+            value: "Choose how you want to get started"
+    actions:
+      - action: screenshot
+        name: p3-onb-01-type-selection.png
+        full_page: false
+      - action: click
+        selector: 'button:has-text("Continue")'
+      - action: screenshot
+        name: p3-onb-02-step1-profile.png
+        full_page: false
+        assertions:
+          - type: text_contains
+            value: "Business Profile"
+      - action: fill
+        selector: "#businessName"
+        value: "P3 Solo Studio"
+      - action: click
+        selector: '[role="combobox"]'
+      - action: click
+        selector: '[role="option"]:has-text("Other")'
+      - action: screenshot
+        name: p3-onb-03-step1-filled.png
+        full_page: false
+      - action: click
+        selector: 'button:has-text("Next: Connect Calendar")'
+      - action: screenshot
+        name: p3-onb-04-step2-calendar.png
+        full_page: false
+        assertions:
+          - type: text_contains
+            value: "Connect Calendar"
+      - action: click
+        selector: 'text=Built-in Calendar'
+      - action: click
+        selector: 'button:has-text("Continue")'
+      - action: screenshot
+        name: p3-onb-05-step3-availability.png
+        full_page: false
+        assertions:
+          - type: text_contains
+            value: "Set Availability"
+      - action: click
+        selector: 'button:has-text("9-5 Mon-Fri")'
+      - action: screenshot
+        name: p3-onb-06-step3-filled.png
+        full_page: false
+      - action: click
+        selector: 'button:has-text("Continue")'
+      - action: screenshot
+        name: p3-onb-07-after-step3-submit.png
+        full_page: true
+        assertions:
+          - type: text_contains
+            value: "Create Service"
+      - action: get_console_errors
+      - action: get_network_errors
+      - action: get_dom_snapshot
+        name: p3-onb-07-after-step3-submit.html

@@ -1,0 +1,35 @@
+# Phase 3 — Guest anonymity proof (separate from the booking run).
+# Opening frappe.auth.get_logged_user with auth:none returns HTTP 403 / "Not
+# Permitted", proving the browser session is anonymous. Agent Harness classifies
+# a 403 navigation as a failed open_url, so this probe is expected to be marked
+# Failed by the runner even though it proves the Guest context. Kept separate so
+# the customer booking manifest can pass cleanly.
+app: appointment
+base_url: http://localhost:49510
+default_role: p3-solo-customer@example.test
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: false
+options:
+  ignore_baseline_drift: true
+scenarios:
+  - id: p3_guest_identity_check
+    title: Public context is an anonymous Guest (403 expected)
+    viewport:
+      width: 1440
+      height: 960
+    checks: []
+    routes:
+      - path: /api/method/frappe.auth.get_logged_user
+        assertions:
+          - type: text_contains
+            value: "Not Permitted"
+    actions:
+      - action: screenshot
+        name: p3-guest-identity.png
+        full_page: false
+      - action: get_dom_snapshot
+        name: p3-guest-identity.html

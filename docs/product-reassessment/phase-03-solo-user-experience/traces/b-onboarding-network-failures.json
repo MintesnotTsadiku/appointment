@@ -1,0 +1,7 @@
+[
+  {
+    "method": "POST",
+    "status": 500,
+    "url": "http://localhost:49510/api/method/appointment.onboarding.save_availability"
+  }
+]

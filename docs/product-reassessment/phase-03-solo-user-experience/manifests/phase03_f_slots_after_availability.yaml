@@ -1,0 +1,43 @@
+# Phase 3 — customer booking choices after the provider closes Monday.
+# After the solo provider removed Monday from the location hours and saved,
+# the public booking calendar should mark Monday (Sep 28) unavailable while a
+# still-open weekday (Tue Sep 22) remains selectable.
+app: appointment
+base_url: http://localhost:49510
+default_role: p3-solo-customer@example.test
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+options:
+  ignore_baseline_drift: true
+scenarios:
+  - id: p3_customer_slots_after_availability_change
+    title: Booking calendar responds to the closed Monday
+    viewport:
+      width: 1440
+      height: 960
+    timeout_ms: 180000
+    checks: []
+    routes:
+      - path: /schedule/org/p3solo-org/evt-2026-000001
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+          - type: visible_selector
+            value: '[data-qa="booking-date"]'
+    actions:
+      - action: screenshot
+        name: p3-slots-01-after-change.png
+        full_page: false
+        assertions:
+          - type: visible_selector
+            value: '[data-qa="booking-date"][aria-label*="September 28, 2026 (unavailable)"]'
+          - type: visible_selector
+            value: '[data-qa="booking-date"][aria-label*="September 22, 2026"]:not([disabled])'
+      - action: get_console_errors
+      - action: get_network_errors
+      - action: get_dom_snapshot
+        name: p3-slots-01-after-change.html

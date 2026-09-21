@@ -1,0 +1,45 @@
+== runtime ==
+site: meet-beta-fix-appointment-beta-readiness-01dea7.localhost
+installed_apps: ['frappe', 'agent_harness', 'agent_plane', 'appointment']
+time_zone: 
+developer_mode: 1
+mute_emails: 1
+pause_scheduler: 1
+== doctype counts ==
+count User                               9
+count Organization                       0
+count Provider                           0
+count Service                            0
+count Location                           0
+count EventType                          0
+count User Appointment Availability      0
+count Appointment                        0
+count Walk In                            0
+count Booking Event                      0
+count Appointment Group                  0
+count Browser Account                    4
+count Browser Session                    4
+count Browser QA Run                     37
+count Role                               39
+== phase-03 markers already present ==
+User: []
+Organization: []
+Provider: []
+Service: []
+== retained QA identities ==
+retained: appointment-review-manager@example.test roles: ['All', 'Desk User', 'Guest', 'Organization Manager'] enabled: 1
+retained: appointment-review-provider@example.test roles: ['All', 'Desk User', 'Guest', 'Provider'] enabled: 1
+retained: appointment-review-reception@example.test roles: ['All', 'Desk User', 'Front-Desk', 'Guest'] enabled: 1
+retained: appointment-review-customer@example.test roles: ['All', 'Guest'] enabled: 1
+== existing organizations (first 30) ==
+== existing providers (first 30) ==
+== existing users (last 30) ==
+{'name': 'appointment-review-customer@example.test', 'enabled': 1, 'user_type': 'Website User'}
+{'name': 'appointment-review-reception@example.test', 'enabled': 1, 'user_type': 'System User'}
+{'name': 'appointment-review-provider@example.test', 'enabled': 1, 'user_type': 'System User'}
+{'name': 'appointment-review-manager@example.test', 'enabled': 1, 'user_type': 'System User'}
+{'name': 'agent_harness.ai.deep_agent_demo@agent.local', 'enabled': 1, 'user_type': 'System User'}
+{'name': 'agent_plane.ai.browser_planner@agent.local', 'enabled': 1, 'user_type': 'System User'}
+{'name': 'agent_plane.ai.assistant@agent.local', 'enabled': 1, 'user_type': 'System User'}
+{'name': 'Guest', 'enabled': 1, 'user_type': 'Website User'}
+{'name': 'Administrator', 'enabled': 1, 'user_type': 'System User'}

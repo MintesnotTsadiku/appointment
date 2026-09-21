@@ -1,0 +1,1882 @@
+== source manifest: /home/minte/projects/training-apps/.worktrees/frappe-appointment-phase-03/docs/product-reassessment/phase-03-solo-user-experience/manifests/phase03_b_solo_onboarding.yaml
+== staged manifest: /tmp/p3qa/appointment_p3_phase03-b-solo-onboarding.yaml-
+== kwargs: {"manifest_name": "/tmp/p3qa/appointment_p3_phase03-b-solo-onboarding.yaml-", "base_url": "http://localhost:49510"}
+{
+  "name": "BQA-2026-00071",
+  "creation": "2026-09-21 15:21:56.404278",
+  "app": "appointment",
+  "manifest_name": "[redacted runtime path]",
+  "suite_id": null,
+  "suite_version": null,
+  "scenario": null,
+  "status": "Failed",
+  "lifecycle_phase": "Queued",
+  "outcome": null,
+  "execution_mode": "deterministic",
+  "requested_by": null,
+  "browser_account": null,
+  "browser_session": null,
+  "selection_source": "selected",
+  "retry_of": null,
+  "cancel_requested": false,
+  "cancel_requested_at": null,
+  "cancel_requested_by": null,
+  "update_baseline": false,
+  "base_url": "http://localhost:49510",
+  "target_site": null,
+  "environment_identity": null,
+  "source_version": null,
+  "cleanup_policy": "always",
+  "artifact_policy": "retain",
+  "capture": {
+    "screenshots": "on",
+    "trace": "failure",
+    "video": "failure"
+  },
+  "duration_ms": 19860,
+  "queue_duration_ms": 0,
+  "execution_duration_ms": 0,
+  "cleanup_duration_ms": 0,
+  "node_version": null,
+  "runner_version": null,
+  "browser_version": null,
+  "versions": {},
+  "artifact_availability": "available",
+  "artifact_expired_at": null,
+  "agent_run": null,
+  "run_step": null,
+  "tool_call": null,
+  "report_file": "/private/files/BQA-2026-00071-report-5f4dc95900-report.json",
+  "trace_file": "/private/files/BQA-2026-00071-trace-ff03d468bf-trace.zip",
+  "video_file": null,
+  "source": "manual",
+  "max_attempts": 1,
+  "attempt_count": 1,
+  "flake_status": "Failed After Retries",
+  "screenshot_count": 8,
+  "console_error_count": 2,
+  "network_error_count": 1,
+  "baseline_changed_count": 8,
+  "artifact_files": [
+    {
+      "file_url": "/private/files/BQA-2026-00071-screenshot-8e89db444f-home.png",
+      "kind": "screenshot",
+      "label": "http://localhost:49510/home",
+      "mime_type": "image/png"
+    },
+    {
+      "file_url": "/private/files/BQA-2026-00071-dom_snapshot-dd3081cf1d-home.html",
+      "kind": "dom_snapshot",
+      "label": "http://localhost:49510/home",
+      "mime_type": "text/html"
+    },
+    {
+      "file_url": "/private/files/BQA-2026-00071-screenshot-c6556b39ea-p3-onb-01-type-selection.png",
+      "kind": "screenshot",
+      "label": "http://localhost:49510/home",
+      "mime_type": "image/png"
+    },
+    {
+      "file_url": "/private/files/BQA-2026-00071-screenshot-b1eb31389a-p3-onb-02-step1-profile.png",
+      "kind": "screenshot",
+      "label": "http://localhost:49510/home",
+      "mime_type": "image/png"
+    },
+    {
+      "file_url": "/private/files/BQA-2026-00071-screenshot-72d6139a59-p3-onb-03-step1-filled.png",
+      "kind": "screenshot",
+      "label": "http://localhost:49510/home",
+      "mime_type": "image/png"
+    },
+    {
+      "file_url": "/private/files/BQA-2026-00071-screenshot-91f058c707-p3-onb-04-step2-calendar.png",
+      "kind": "screenshot",
+      "label": "http://localhost:49510/home",
+      "mime_type": "image/png"
+    },
+    {
+      "file_url": "/private/files/BQA-2026-00071-screenshot-a766242d56-p3-onb-05-step3-availability.png",
+      "kind": "screenshot",
+      "label": "http://localhost:49510/home",
+      "mime_type": "image/png"
+    },
+    {
+      "file_url": "/private/files/BQA-2026-00071-screenshot-7bdb7897a9-p3-onb-06-step3-filled.png",
+      "kind": "screenshot",
+      "label": "http://localhost:49510/home",
+      "mime_type": "image/png"
+    },
+    {
+      "file_url": "/private/files/BQA-2026-00071-screenshot-a0a53df279-p3-onb-07-after-step3-submit.png",
+      "kind": "screenshot",
+      "label": "http://localhost:49510/home",
+      "mime_type": "image/png"
+    },
+    {
+      "file_url": "/private/files/BQA-2026-00071-dom_snapshot-88d75846f0-p3-onb-07-after-step3-submit.html",
+      "kind": "dom_snapshot",
+      "label": "http://localhost:49510/home",
+      "mime_type": "text/html"
+    },
+    {
+      "file_url": "/private/files/BQA-2026-00071-trace-ff03d468bf-trace.zip",
+      "kind": "trace",
+      "label": null,
+      "mime_type": "application/zip"
+    },
+    {
+      "file_url": "/private/files/BQA-2026-00071-console_log-0816853d5a-console-errors.json",
+      "kind": "console_log",
+      "label": null,
+      "mime_type": "application/json"
+    },
+    {
+      "file_url": "/private/files/BQA-2026-00071-network_failures-8c19b18a9f-network-failures.json",
+      "kind": "network_failures",
+      "label": null,
+      "mime_type": "application/json"
+    },
+    {
+      "file_url": "/private/files/BQA-2026-00071-report-5f4dc95900-report.json",
+      "kind": "report",
+      "label": null,
+      "mime_type": "application/json"
+    }
+  ],
+  "scenario_summary": {},
+  "scenario_results": [],
+  "cleanup": {},
+  "audit": {},
+  "failure_category": null,
+  "failure_reason": null,
+  "suppressed_artifacts": [],
+  "report": {
+    "app": "appointment",
+    "manifest": "[redacted runtime path]",
+    "ok": false,
+    "reports": [
+      {
+        "actions": [
+          {
+            "action": "authenticate",
+            "after_artifact": null,
+            "after_url": null,
+            "aria_snapshot": null,
+            "artifacts": [],
+            "before_artifact": null,
+            "before_url": null,
+            "challenge": null,
+            "completed_at": null,
+            "console_delta": [],
+            "duration_ms": null,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": null,
+            "selector": null,
+            "semantic_label": null,
+            "sequence": null,
+            "started_at": null,
+            "target_box": null,
+            "target_metadata": null,
+            "title": null,
+            "url": null,
+            "value": {
+              "type": "frappe_session",
+              "user": "p3-solo-owner@example.test"
+            },
+            "video_end_ms": null,
+            "video_start_ms": null
+          },
+          {
+            "action": "open_url",
+            "after_artifact": null,
+            "after_url": "http://localhost:49510/home",
+            "aria_snapshot": null,
+            "artifacts": [],
+            "before_artifact": null,
+            "before_url": "about:blank",
+            "challenge": null,
+            "completed_at": "2026-09-21T09:51:59.851952+00:00",
+            "console_delta": [],
+            "duration_ms": 2743,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": "Scheduler - Scheduling Platform",
+            "selector": null,
+            "semantic_label": null,
+            "sequence": 1,
+            "started_at": "2026-09-21T09:51:57.108322+00:00",
+            "target_box": null,
+            "target_metadata": {},
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": {
+              "status": 200
+            },
+            "video_end_ms": 3339,
+            "video_start_ms": 595
+          },
+          {
+            "action": "assert:network_idle",
+            "after_artifact": null,
+            "after_url": null,
+            "aria_snapshot": null,
+            "artifacts": [],
+            "before_artifact": null,
+            "before_url": null,
+            "challenge": null,
+            "completed_at": null,
+            "console_delta": [],
+            "duration_ms": null,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": null,
+            "selector": null,
+            "semantic_label": null,
+            "sequence": null,
+            "started_at": null,
+            "target_box": null,
+            "target_metadata": null,
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": {
+              "max_count": null,
+              "method": null,
+              "min_count": null,
+              "request_body_contains": null,
+              "request_json_value": null,
+              "response_body_contains": null,
+              "response_json_value": null,
+              "selector": null,
+              "status": null,
+              "status_max": null,
+              "status_min": null,
+              "timeout_ms": 10000,
+              "type": "network_idle",
+              "url_contains": null,
+              "url_matches": null,
+              "value": ""
+            },
+            "video_end_ms": null,
+            "video_start_ms": null
+          },
+          {
+            "action": "assert:no_blank_page",
+            "after_artifact": null,
+            "after_url": null,
+            "aria_snapshot": null,
+            "artifacts": [],
+            "before_artifact": null,
+            "before_url": null,
+            "challenge": null,
+            "completed_at": null,
+            "console_delta": [],
+            "duration_ms": null,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": null,
+            "selector": null,
+            "semantic_label": null,
+            "sequence": null,
+            "started_at": null,
+            "target_box": null,
+            "target_metadata": null,
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": {
+              "max_count": null,
+              "method": null,
+              "min_count": null,
+              "request_body_contains": null,
+              "request_json_value": null,
+              "response_body_contains": null,
+              "response_json_value": null,
+              "selector": null,
+              "status": null,
+              "status_max": null,
+              "status_min": null,
+              "timeout_ms": 10000,
+              "type": "no_blank_page",
+              "url_contains": null,
+              "url_matches": null,
+              "value": ""
+            },
+            "video_end_ms": null,
+            "video_start_ms": null
+          },
+          {
+            "action": "assert:text_contains",
+            "after_artifact": null,
+            "after_url": null,
+            "aria_snapshot": null,
+            "artifacts": [],
+            "before_artifact": null,
+            "before_url": null,
+            "challenge": null,
+            "completed_at": null,
+            "console_delta": [],
+            "duration_ms": null,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": null,
+            "selector": null,
+            "semantic_label": null,
+            "sequence": null,
+            "started_at": null,
+            "target_box": null,
+            "target_metadata": null,
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": {
+              "max_count": null,
+              "method": null,
+              "min_count": null,
+              "request_body_contains": null,
+              "request_json_value": null,
+              "response_body_contains": null,
+              "response_json_value": null,
+              "selector": null,
+              "status": null,
+              "status_max": null,
+              "status_min": null,
+              "timeout_ms": 10000,
+              "type": "text_contains",
+              "url_contains": null,
+              "url_matches": null,
+              "value": "Choose how you want to get started"
+            },
+            "video_end_ms": null,
+            "video_start_ms": null
+          },
+          {
+            "action": "screenshot",
+            "after_artifact": null,
+            "after_url": "http://localhost:49510/home",
+            "aria_snapshot": null,
+            "artifacts": [
+              {
+                "kind": "screenshot",
+                "label": "http://localhost:49510/home",
+                "metadata": {}
+              }
+            ],
+            "before_artifact": null,
+            "before_url": "http://localhost:49510/home",
+            "challenge": null,
+            "completed_at": "2026-09-21T09:52:00.084232+00:00",
+            "console_delta": [],
+            "duration_ms": 192,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": "Scheduler - Scheduling Platform",
+            "selector": null,
+            "semantic_label": null,
+            "sequence": 2,
+            "started_at": "2026-09-21T09:51:59.891514+00:00",
+            "target_box": null,
+            "target_metadata": {},
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": null,
+            "video_end_ms": 3571,
+            "video_start_ms": 3378
+          },
+          {
+            "action": "get_dom_snapshot",
+            "after_artifact": null,
+            "after_url": "http://localhost:49510/home",
+            "aria_snapshot": null,
+            "artifacts": [
+              {
+                "kind": "dom_snapshot",
+                "label": "http://localhost:49510/home",
+                "metadata": {}
+              }
+            ],
+            "before_artifact": null,
+            "before_url": "http://localhost:49510/home",
+            "challenge": null,
+            "completed_at": "2026-09-21T09:52:00.111500+00:00",
+            "console_delta": [],
+            "duration_ms": 24,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": "Scheduler - Scheduling Platform",
+            "selector": null,
+            "semantic_label": null,
+            "sequence": 3,
+            "started_at": "2026-09-21T09:52:00.087060+00:00",
+            "target_box": null,
+            "target_metadata": {},
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": {
+              "bytes": 173647
+            },
+            "video_end_ms": 3598,
+            "video_start_ms": 3574
+          },
+          {
+            "action": "screenshot",
+            "after_artifact": null,
+            "after_url": "http://localhost:49510/home",
+            "aria_snapshot": null,
+            "artifacts": [
+              {
+                "kind": "screenshot",
+                "label": "http://localhost:49510/home",
+                "metadata": {}
+              }
+            ],
+            "before_artifact": null,
+            "before_url": "http://localhost:49510/home",
+            "challenge": null,
+            "completed_at": "2026-09-21T09:52:00.269155+00:00",
+            "console_delta": [],
+            "duration_ms": 154,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": "Scheduler - Scheduling Platform",
+            "selector": null,
+            "semantic_label": null,
+            "sequence": 4,
+            "started_at": "2026-09-21T09:52:00.115055+00:00",
+            "target_box": null,
+            "target_metadata": {},
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": null,
+            "video_end_ms": 3756,
+            "video_start_ms": 3602
+          },
+          {
+            "action": "click",
+            "after_artifact": null,
+            "after_url": "http://localhost:49510/home",
+            "aria_snapshot": "- button \"Continue\" [ref=e1] [cursor=pointer] [box=249,505,434,40]",
+            "artifacts": [],
+            "before_artifact": null,
+            "before_url": "http://localhost:49510/home",
+            "challenge": null,
+            "completed_at": "2026-09-21T09:52:01.040383+00:00",
+            "console_delta": [],
+            "duration_ms": 769,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": "Scheduler - Scheduling Platform",
+            "selector": "button:has-text(\"Continue\")",
+            "semantic_label": "Continue",
+            "sequence": 5,
+            "started_at": "2026-09-21T09:52:00.319754+00:00",
+            "target_box": {
+              "height": 40,
+              "width": 434,
+              "x": 249,
+              "y": 505
+            },
+            "target_metadata": {
+              "aria_label": null,
+              "aria_snapshot": "- button \"Continue\" [ref=e1] [cursor=pointer] [box=249,505,434,40]",
+              "box": {
+                "height": 40,
+                "width": 434,
+                "x": 249,
+                "y": 505
+              },
+              "label": "Continue",
+              "name": null,
+              "placeholder": null,
+              "role": null,
+              "selected_text": "",
+              "selector": "button:has-text(\"Continue\")",
+              "tag": "button",
+              "text": "Continue",
+              "title": null,
+              "type": null
+            },
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": null,
+            "video_end_ms": 4527,
+            "video_start_ms": 3758
+          },
+          {
+            "action": "screenshot",
+            "after_artifact": null,
+            "after_url": "http://localhost:49510/home",
+            "aria_snapshot": null,
+            "artifacts": [
+              {
+                "kind": "screenshot",
+                "label": "http://localhost:49510/home",
+                "metadata": {}
+              }
+            ],
+            "before_artifact": null,
+            "before_url": "http://localhost:49510/home",
+            "challenge": null,
+            "completed_at": "2026-09-21T09:52:01.414180+00:00",
+            "console_delta": [],
+            "duration_ms": 371,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": "Scheduler - Scheduling Platform",
+            "selector": null,
+            "semantic_label": null,
+            "sequence": 6,
+            "started_at": "2026-09-21T09:52:01.042511+00:00",
+            "target_box": null,
+            "target_metadata": {},
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": null,
+            "video_end_ms": 4901,
+            "video_start_ms": 4529
+          },
+          {
+            "action": "assert:text_contains",
+            "after_artifact": null,
+            "after_url": null,
+            "aria_snapshot": null,
+            "artifacts": [],
+            "before_artifact": null,
+            "before_url": null,
+            "challenge": null,
+            "completed_at": null,
+            "console_delta": [],
+            "duration_ms": null,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": null,
+            "selector": null,
+            "semantic_label": null,
+            "sequence": null,
+            "started_at": null,
+            "target_box": null,
+            "target_metadata": null,
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": {
+              "max_count": null,
+              "method": null,
+              "min_count": null,
+              "request_body_contains": null,
+              "request_json_value": null,
+              "response_body_contains": null,
+              "response_json_value": null,
+              "selector": null,
+              "status": null,
+              "status_max": null,
+              "status_min": null,
+              "timeout_ms": 10000,
+              "type": "text_contains",
+              "url_contains": null,
+              "url_matches": null,
+              "value": "Business Profile"
+            },
+            "video_end_ms": null,
+            "video_start_ms": null
+          },
+          {
+            "action": "fill",
+            "after_artifact": null,
+            "after_url": "http://localhost:49510/home",
+            "aria_snapshot": "- textbox \"Business Name *\" [ref=e2] [box=537,329,766,40]:\n  - /placeholder: e.g., Amara Clinic",
+            "artifacts": [],
+            "before_artifact": null,
+            "before_url": "http://localhost:49510/home",
+            "challenge": null,
+            "completed_at": "2026-09-21T09:52:02.151740+00:00",
+            "console_delta": [],
+            "duration_ms": 725,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": "Scheduler - Scheduling Platform",
+            "selector": "#businessName",
+            "semantic_label": "e.g., Amara Clinic",
+            "sequence": 7,
+            "started_at": "2026-09-21T09:52:01.467923+00:00",
+            "target_box": {
+              "height": 40,
+              "width": 766,
+              "x": 537,
+              "y": 329
+            },
+            "target_metadata": {
+              "aria_label": null,
+              "aria_snapshot": "- textbox \"Business Name *\" [ref=e2] [box=537,329,766,40]:\n  - /placeholder: e.g., Amara Clinic",
+              "box": {
+                "height": 40,
+                "width": 766,
+                "x": 537,
+                "y": 329
+              },
+              "label": "e.g., Amara Clinic",
+              "name": null,
+              "placeholder": "e.g., Amara Clinic",
+              "role": null,
+              "selected_text": "",
+              "selector": "#businessName",
+              "tag": "input",
+              "text": "",
+              "title": null,
+              "type": "text"
+            },
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": null,
+            "video_end_ms": 5639,
+            "video_start_ms": 4913
+          },
+          {
+            "action": "click",
+            "after_artifact": null,
+            "after_url": "http://localhost:49510/home",
+            "aria_snapshot": "- combobox [ref=e3] [cursor=pointer] [box=537,425,766,40]: Search business type",
+            "artifacts": [],
+            "before_artifact": null,
+            "before_url": "http://localhost:49510/home",
+            "challenge": null,
+            "completed_at": "2026-09-21T09:52:02.947679+00:00",
+            "console_delta": [],
+            "duration_ms": 792,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": "Scheduler - Scheduling Platform",
+            "selector": "[role=\"combobox\"]",
+            "semantic_label": "Search business type",
+            "sequence": 8,
+            "started_at": "2026-09-21T09:52:02.197662+00:00",
+            "target_box": {
+              "height": 40,
+              "width": 766,
+              "x": 537,
+              "y": 425
+            },
+            "target_metadata": {
+              "aria_label": null,
+              "aria_snapshot": "- combobox [ref=e3] [cursor=pointer] [box=537,425,766,40]: Search business type",
+              "box": {
+                "height": 40,
+                "width": 766,
+                "x": 537,
+                "y": 425
+              },
+              "label": "Search business type",
+              "name": null,
+              "placeholder": null,
+              "role": "combobox",
+              "selected_text": "",
+              "selector": "[role=\"combobox\"]",
+              "tag": "button",
+              "text": "Search business type",
+              "title": null,
+              "type": "button"
+            },
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": null,
+            "video_end_ms": 6435,
+            "video_start_ms": 5642
+          },
+          {
+            "action": "click",
+            "after_artifact": null,
+            "after_url": "http://localhost:49510/home",
+            "aria_snapshot": "- option \"Other\" [ref=e4] [box=545,642,272,31]",
+            "artifacts": [],
+            "before_artifact": null,
+            "before_url": "http://localhost:49510/home",
+            "challenge": null,
+            "completed_at": "2026-09-21T09:52:03.766238+00:00",
+            "console_delta": [],
+            "duration_ms": 815,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": "Scheduler - Scheduling Platform",
+            "selector": "[role=\"option\"]:has-text(\"Other\")",
+            "semantic_label": "Other",
+            "sequence": 9,
+            "started_at": "2026-09-21T09:52:02.991911+00:00",
+            "target_box": {
+              "height": 31.32281494140625,
+              "width": 272.11688232421875,
+              "x": 544.9415893554688,
+              "y": 642.1220703125
+            },
+            "target_metadata": {
+              "aria_label": null,
+              "aria_snapshot": "- option \"Other\" [ref=e4] [box=545,642,272,31]",
+              "box": {
+                "height": 31.32281494140625,
+                "width": 272.11688232421875,
+                "x": 544.9415893554688,
+                "y": 642.1220703125
+              },
+              "label": "Other",
+              "name": null,
+              "placeholder": null,
+              "role": "option",
+              "selected_text": "",
+              "selector": "[role=\"option\"]:has-text(\"Other\")",
+              "tag": "div",
+              "text": "Other",
+              "title": null,
+              "type": null
+            },
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": null,
+            "video_end_ms": 7253,
+            "video_start_ms": 6438
+          },
+          {
+            "action": "screenshot",
+            "after_artifact": null,
+            "after_url": "http://localhost:49510/home",
+            "aria_snapshot": null,
+            "artifacts": [
+              {
+                "kind": "screenshot",
+                "label": "http://localhost:49510/home",
+                "metadata": {}
+              }
+            ],
+            "before_artifact": null,
+            "before_url": "http://localhost:49510/home",
+            "challenge": null,
+            "completed_at": "2026-09-21T09:52:04.079913+00:00",
+            "console_delta": [],
+            "duration_ms": 311,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": "Scheduler - Scheduling Platform",
+            "selector": null,
+            "semantic_label": null,
+            "sequence": 10,
+            "started_at": "2026-09-21T09:52:03.768802+00:00",
+            "target_box": null,
+            "target_metadata": {},
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": null,
+            "video_end_ms": 7567,
+            "video_start_ms": 7256
+          },
+          {
+            "action": "click",
+            "after_artifact": null,
+            "after_url": "http://localhost:49510/home",
+            "aria_snapshot": "- 'button \"Next: Connect Calendar\" [ref=e5] [cursor=pointer] [box=537,709,207,40]'",
+            "artifacts": [],
+            "before_artifact": null,
+            "before_url": "http://localhost:49510/home",
+            "challenge": null,
+            "completed_at": "2026-09-21T09:52:04.890586+00:00",
+            "console_delta": [],
+            "duration_ms": 807,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": "Scheduler - Scheduling Platform",
+            "selector": "button:has-text(\"Next: Connect Calendar\")",
+            "semantic_label": "Next: Connect Calendar",
+            "sequence": 11,
+            "started_at": "2026-09-21T09:52:04.125913+00:00",
+            "target_box": {
+              "height": 40,
+              "width": 207,
+              "x": 537,
+              "y": 709
+            },
+            "target_metadata": {
+              "aria_label": null,
+              "aria_snapshot": "- 'button \"Next: Connect Calendar\" [ref=e5] [cursor=pointer] [box=537,709,207,40]'",
+              "box": {
+                "height": 40,
+                "width": 207,
+                "x": 537,
+                "y": 709
+              },
+              "label": "Next: Connect Calendar",
+              "name": null,
+              "placeholder": null,
+              "role": null,
+              "selected_text": "",
+              "selector": "button:has-text(\"Next: Connect Calendar\")",
+              "tag": "button",
+              "text": "Next: Connect Calendar",
+              "title": null,
+              "type": null
+            },
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": null,
+            "video_end_ms": 8377,
+            "video_start_ms": 7570
+          },
+          {
+            "action": "screenshot",
+            "after_artifact": null,
+            "after_url": "http://localhost:49510/home",
+            "aria_snapshot": null,
+            "artifacts": [
+              {
+                "kind": "screenshot",
+                "label": "http://localhost:49510/home",
+                "metadata": {}
+              }
+            ],
+            "before_artifact": null,
+            "before_url": "http://localhost:49510/home",
+            "challenge": null,
+            "completed_at": "2026-09-21T09:52:05.232407+00:00",
+            "console_delta": [],
+            "duration_ms": 339,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": "Scheduler - Scheduling Platform",
+            "selector": null,
+            "semantic_label": null,
+            "sequence": 12,
+            "started_at": "2026-09-21T09:52:04.893093+00:00",
+            "target_box": null,
+            "target_metadata": {},
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": null,
+            "video_end_ms": 8719,
+            "video_start_ms": 8380
+          },
+          {
+            "action": "assert:text_contains",
+            "after_artifact": null,
+            "after_url": null,
+            "aria_snapshot": null,
+            "artifacts": [],
+            "before_artifact": null,
+            "before_url": null,
+            "challenge": null,
+            "completed_at": null,
+            "console_delta": [],
+            "duration_ms": null,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": null,
+            "selector": null,
+            "semantic_label": null,
+            "sequence": null,
+            "started_at": null,
+            "target_box": null,
+            "target_metadata": null,
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": {
+              "max_count": null,
+              "method": null,
+              "min_count": null,
+              "request_body_contains": null,
+              "request_json_value": null,
+              "response_body_contains": null,
+              "response_json_value": null,
+              "selector": null,
+              "status": null,
+              "status_max": null,
+              "status_min": null,
+              "timeout_ms": 10000,
+              "type": "text_contains",
+              "url_contains": null,
+              "url_matches": null,
+              "value": "Connect Calendar"
+            },
+            "video_end_ms": null,
+            "video_start_ms": null
+          },
+          {
+            "action": "click",
+            "after_artifact": null,
+            "after_url": "http://localhost:49510/home",
+            "aria_snapshot": "- heading \"Built-in Calendar\" [level=3] [ref=e6] [cursor=pointer] [box=570,429,305,28]",
+            "artifacts": [],
+            "before_artifact": null,
+            "before_url": "http://localhost:49510/home",
+            "challenge": null,
+            "completed_at": "2026-09-21T09:52:06.095718+00:00",
+            "console_delta": [],
+            "duration_ms": 854,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": "Scheduler - Scheduling Platform",
+            "selector": "text=Built-in Calendar",
+            "semantic_label": "Built-in Calendar",
+            "sequence": 13,
+            "started_at": "2026-09-21T09:52:05.320481+00:00",
+            "target_box": {
+              "height": 28,
+              "width": 305,
+              "x": 570,
+              "y": 429.1793212890625
+            },
+            "target_metadata": {
+              "aria_label": null,
+              "aria_snapshot": "- heading \"Built-in Calendar\" [level=3] [ref=e6] [cursor=pointer] [box=570,429,305,28]",
+              "box": {
+                "height": 28,
+                "width": 305,
+                "x": 570,
+                "y": 429.1793212890625
+              },
+              "label": "Built-in Calendar",
+              "name": null,
+              "placeholder": null,
+              "role": null,
+              "selected_text": "",
+              "selector": "text=Built-in Calendar",
+              "tag": "h3",
+              "text": "Built-in Calendar",
+              "title": null,
+              "type": null
+            },
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": null,
+            "video_end_ms": 9583,
+            "video_start_ms": 8728
+          },
+          {
+            "action": "click",
+            "after_artifact": null,
+            "after_url": "http://localhost:49510/home",
+            "aria_snapshot": "- button \"Continue\" [ref=e7] [cursor=pointer] [box=1212,844,91,40]",
+            "artifacts": [],
+            "before_artifact": null,
+            "before_url": "http://localhost:49510/home",
+            "challenge": null,
+            "completed_at": "2026-09-21T09:52:06.939218+00:00",
+            "console_delta": [],
+            "duration_ms": 839,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": "Scheduler - Scheduling Platform",
+            "selector": "button:has-text(\"Continue\")",
+            "semantic_label": "Continue",
+            "sequence": 14,
+            "started_at": "2026-09-21T09:52:06.151772+00:00",
+            "target_box": {
+              "height": 40,
+              "width": 91,
+              "x": 1212,
+              "y": 844
+            },
+            "target_metadata": {
+              "aria_label": null,
+              "aria_snapshot": "- button \"Continue\" [ref=e7] [cursor=pointer] [box=1212,844,91,40]",
+              "box": {
+                "height": 40,
+                "width": 91,
+                "x": 1212,
+                "y": 844
+              },
+              "label": "Continue",
+              "name": null,
+              "placeholder": null,
+              "role": null,
+              "selected_text": "",
+              "selector": "button:has-text(\"Continue\")",
+              "tag": "button",
+              "text": "Continue",
+              "title": null,
+              "type": null
+            },
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": null,
+            "video_end_ms": 10426,
+            "video_start_ms": 9587
+          },
+          {
+            "action": "screenshot",
+            "after_artifact": null,
+            "after_url": "http://localhost:49510/home",
+            "aria_snapshot": null,
+            "artifacts": [
+              {
+                "kind": "screenshot",
+                "label": "http://localhost:49510/home",
+                "metadata": {}
+              }
+            ],
+            "before_artifact": null,
+            "before_url": "http://localhost:49510/home",
+            "challenge": null,
+            "completed_at": "2026-09-21T09:52:07.201860+00:00",
+            "console_delta": [],
+            "duration_ms": 259,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": "Scheduler - Scheduling Platform",
+            "selector": null,
+            "semantic_label": null,
+            "sequence": 15,
+            "started_at": "2026-09-21T09:52:06.942475+00:00",
+            "target_box": null,
+            "target_metadata": {},
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": null,
+            "video_end_ms": 10689,
+            "video_start_ms": 10429
+          },
+          {
+            "action": "assert:text_contains",
+            "after_artifact": null,
+            "after_url": null,
+            "aria_snapshot": null,
+            "artifacts": [],
+            "before_artifact": null,
+            "before_url": null,
+            "challenge": null,
+            "completed_at": null,
+            "console_delta": [],
+            "duration_ms": null,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": null,
+            "selector": null,
+            "semantic_label": null,
+            "sequence": null,
+            "started_at": null,
+            "target_box": null,
+            "target_metadata": null,
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": {
+              "max_count": null,
+              "method": null,
+              "min_count": null,
+              "request_body_contains": null,
+              "request_json_value": null,
+              "response_body_contains": null,
+              "response_json_value": null,
+              "selector": null,
+              "status": null,
+              "status_max": null,
+              "status_min": null,
+              "timeout_ms": 10000,
+              "type": "text_contains",
+              "url_contains": null,
+              "url_matches": null,
+              "value": "Set Availability"
+            },
+            "video_end_ms": null,
+            "video_start_ms": null
+          },
+          {
+            "action": "click",
+            "after_artifact": null,
+            "after_url": "http://localhost:49510/home",
+            "aria_snapshot": "- button \"9-5 Mon-Fri\" [ref=e8] [cursor=pointer] [box=562,385,170,40]",
+            "artifacts": [],
+            "before_artifact": null,
+            "before_url": "http://localhost:49510/home",
+            "challenge": null,
+            "completed_at": "2026-09-21T09:52:08.089367+00:00",
+            "console_delta": [],
+            "duration_ms": 876,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": "Scheduler - Scheduling Platform",
+            "selector": "button:has-text(\"9-5 Mon-Fri\")",
+            "semantic_label": "9-5 Mon-Fri",
+            "sequence": 16,
+            "started_at": "2026-09-21T09:52:07.340038+00:00",
+            "target_box": {
+              "height": 40,
+              "width": 170,
+              "x": 562,
+              "y": 385.2941589355469
+            },
+            "target_metadata": {
+              "aria_label": null,
+              "aria_snapshot": "- button \"9-5 Mon-Fri\" [ref=e8] [cursor=pointer] [box=562,385,170,40]",
+              "box": {
+                "height": 40,
+                "width": 170,
+                "x": 562,
+                "y": 385.2941589355469
+              },
+              "label": "9-5 Mon-Fri",
+              "name": null,
+              "placeholder": null,
+              "role": null,
+              "selected_text": "",
+              "selector": "button:has-text(\"9-5 Mon-Fri\")",
+              "tag": "button",
+              "text": "9-5 Mon-Fri",
+              "title": null,
+              "type": null
+            },
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": null,
+            "video_end_ms": 11576,
+            "video_start_ms": 10699
+          },
+          {
+            "action": "screenshot",
+            "after_artifact": null,
+            "after_url": "http://localhost:49510/home",
+            "aria_snapshot": null,
+            "artifacts": [
+              {
+                "kind": "screenshot",
+                "label": "http://localhost:49510/home",
+                "metadata": {}
+              }
+            ],
+            "before_artifact": null,
+            "before_url": "http://localhost:49510/home",
+            "challenge": null,
+            "completed_at": "2026-09-21T09:52:08.382986+00:00",
+            "console_delta": [],
+            "duration_ms": 290,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": "Scheduler - Scheduling Platform",
+            "selector": null,
+            "semantic_label": null,
+            "sequence": 17,
+            "started_at": "2026-09-21T09:52:08.092008+00:00",
+            "target_box": null,
+            "target_metadata": {},
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": null,
+            "video_end_ms": 11870,
+            "video_start_ms": 11579
+          },
+          {
+            "action": "click",
+            "after_artifact": null,
+            "after_url": "http://localhost:49510/home",
+            "aria_snapshot": "- button \"Continue\" [ref=e9] [cursor=pointer] [box=1212,1459,91,40]",
+            "artifacts": [],
+            "before_artifact": null,
+            "before_url": "http://localhost:49510/home",
+            "challenge": null,
+            "completed_at": "2026-09-21T09:52:09.189745+00:00",
+            "console_delta": [],
+            "duration_ms": 804,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": "Scheduler - Scheduling Platform",
+            "selector": "button:has-text(\"Continue\")",
+            "semantic_label": "Continue",
+            "sequence": 18,
+            "started_at": "2026-09-21T09:52:08.427451+00:00",
+            "target_box": {
+              "height": 40,
+              "width": 91,
+              "x": 1212,
+              "y": 1459
+            },
+            "target_metadata": {
+              "aria_label": null,
+              "aria_snapshot": "- button \"Continue\" [ref=e9] [cursor=pointer] [box=1212,1459,91,40]",
+              "box": {
+                "height": 40,
+                "width": 91,
+                "x": 1212,
+                "y": 1459
+              },
+              "label": "Continue",
+              "name": null,
+              "placeholder": null,
+              "role": null,
+              "selected_text": "",
+              "selector": "button:has-text(\"Continue\")",
+              "tag": "button",
+              "text": "Continue",
+              "title": null,
+              "type": null
+            },
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": null,
+            "video_end_ms": 12677,
+            "video_start_ms": 11872
+          },
+          {
+            "action": "screenshot",
+            "after_artifact": null,
+            "after_url": "http://localhost:49510/home",
+            "aria_snapshot": null,
+            "artifacts": [
+              {
+                "kind": "screenshot",
+                "label": "http://localhost:49510/home",
+                "metadata": {}
+              }
+            ],
+            "before_artifact": null,
+            "before_url": "http://localhost:49510/home",
+            "challenge": null,
+            "completed_at": "2026-09-21T09:52:09.539567+00:00",
+            "console_delta": [],
+            "duration_ms": 347,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": "Scheduler - Scheduling Platform",
+            "selector": null,
+            "semantic_label": null,
+            "sequence": 19,
+            "started_at": "2026-09-21T09:52:09.192251+00:00",
+            "target_box": null,
+            "target_metadata": {},
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": null,
+            "video_end_ms": 13026,
+            "video_start_ms": 12679
+          },
+          {
+            "action": "assert:text_contains",
+            "after_artifact": null,
+            "after_url": null,
+            "aria_snapshot": null,
+            "artifacts": [],
+            "before_artifact": null,
+            "before_url": null,
+            "challenge": null,
+            "completed_at": null,
+            "console_delta": [],
+            "duration_ms": null,
+            "error": "Text `Create Service` was not found in `body`.",
+            "network_delta": [],
+            "ok": false,
+            "page_title": null,
+            "selector": null,
+            "semantic_label": null,
+            "sequence": null,
+            "started_at": null,
+            "target_box": null,
+            "target_metadata": null,
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": {
+              "max_count": null,
+              "method": null,
+              "min_count": null,
+              "request_body_contains": null,
+              "request_json_value": null,
+              "response_body_contains": null,
+              "response_json_value": null,
+              "selector": null,
+              "status": null,
+              "status_max": null,
+              "status_min": null,
+              "timeout_ms": 10000,
+              "type": "text_contains",
+              "url_contains": null,
+              "url_matches": null,
+              "value": "Create Service"
+            },
+            "video_end_ms": null,
+            "video_start_ms": null
+          },
+          {
+            "action": "get_console_errors",
+            "after_artifact": null,
+            "after_url": null,
+            "aria_snapshot": null,
+            "artifacts": [],
+            "before_artifact": null,
+            "before_url": null,
+            "challenge": null,
+            "completed_at": null,
+            "console_delta": [],
+            "duration_ms": null,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": null,
+            "selector": null,
+            "semantic_label": null,
+            "sequence": null,
+            "started_at": null,
+            "target_box": null,
+            "target_metadata": null,
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": [
+              {
+                "line": 0,
+                "text": "Failed to load resource: the server responded with a status of 500 (INTERNAL SERVER ERROR)",
+                "type": "error",
+                "url": "http://localhost:49510/api/method/appointment.onboarding.save_availability"
+              },
+              {
+                "line": 139,
+                "text": "Failed to save availability: {exception: TypeError: save_availability() missing 1 required positional argument: 'level', exc_type: TypeError, exc: [\"Traceback (most recent call last):\\n  File \\\"/ho\u2026ssing 1 required positional argument: 'level'\\n\"], httpStatus: 500, httpStatusText: INTERNAL SERVER ERROR}",
+                "type": "error",
+                "url": "http://localhost:49510/src/pages/home/components/Step3Availability.tsx"
+              }
+            ],
+            "video_end_ms": null,
+            "video_start_ms": null
+          },
+          {
+            "action": "get_network_errors",
+            "after_artifact": null,
+            "after_url": null,
+            "aria_snapshot": null,
+            "artifacts": [],
+            "before_artifact": null,
+            "before_url": null,
+            "challenge": null,
+            "completed_at": null,
+            "console_delta": [],
+            "duration_ms": null,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": null,
+            "selector": null,
+            "semantic_label": null,
+            "sequence": null,
+            "started_at": null,
+            "target_box": null,
+            "target_metadata": null,
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": [
+              {
+                "method": "POST",
+                "status": 500,
+                "url": "http://localhost:49510/api/method/appointment.onboarding.save_availability"
+              }
+            ],
+            "video_end_ms": null,
+            "video_start_ms": null
+          },
+          {
+            "action": "get_dom_snapshot",
+            "after_artifact": null,
+            "after_url": "http://localhost:49510/home",
+            "aria_snapshot": null,
+            "artifacts": [
+              {
+                "kind": "dom_snapshot",
+                "label": "http://localhost:49510/home",
+                "metadata": {}
+              }
+            ],
+            "before_artifact": null,
+            "before_url": "http://localhost:49510/home",
+            "challenge": null,
+            "completed_at": "2026-09-21T09:52:12.587777+00:00",
+            "console_delta": [],
+            "duration_ms": 28,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": "Scheduler - Scheduling Platform",
+            "selector": null,
+            "semantic_label": null,
+            "sequence": 20,
+            "started_at": "2026-09-21T09:52:12.559752+00:00",
+            "target_box": null,
+            "target_metadata": {},
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": {
+              "bytes": 197558
+            },
+            "video_end_ms": 16075,
+            "video_start_ms": 16047
+          },
+          {
+            "action": "get_console_errors",
+            "after_artifact": null,
+            "after_url": null,
+            "aria_snapshot": null,
+            "artifacts": [],
+            "before_artifact": null,
+            "before_url": null,
+            "challenge": null,
+            "completed_at": null,
+            "console_delta": [],
+            "duration_ms": null,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": null,
+            "selector": null,
+            "semantic_label": null,
+            "sequence": null,
+            "started_at": null,
+            "target_box": null,
+            "target_metadata": null,
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": [
+              {
+                "line": 0,
+                "text": "Failed to load resource: the server responded with a status of 500 (INTERNAL SERVER ERROR)",
+                "type": "error",
+                "url": "http://localhost:49510/api/method/appointment.onboarding.save_availability"
+              },
+              {
+                "line": 139,
+                "text": "Failed to save availability: {exception: TypeError: save_availability() missing 1 required positional argument: 'level', exc_type: TypeError, exc: [\"Traceback (most recent call last):\\n  File \\\"/ho\u2026ssing 1 required positional argument: 'level'\\n\"], httpStatus: 500, httpStatusText: INTERNAL SERVER ERROR}",
+                "type": "error",
+                "url": "http://localhost:49510/src/pages/home/components/Step3Availability.tsx"
+              }
+            ],
+            "video_end_ms": null,
+            "video_start_ms": null
+          },
+          {
+            "action": "get_network_errors",
+            "after_artifact": null,
+            "after_url": null,
+            "aria_snapshot": null,
+            "artifacts": [],
+            "before_artifact": null,
+            "before_url": null,
+            "challenge": null,
+            "completed_at": null,
+            "console_delta": [],
+            "duration_ms": null,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": null,
+            "selector": null,
+            "semantic_label": null,
+            "sequence": null,
+            "started_at": null,
+            "target_box": null,
+            "target_metadata": null,
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": [
+              {
+                "method": "POST",
+                "status": 500,
+                "url": "http://localhost:49510/api/method/appointment.onboarding.save_availability"
+              }
+            ],
+            "video_end_ms": null,
+            "video_start_ms": null
+          },
+          {
+            "action": "save_trace",
+            "after_artifact": null,
+            "after_url": "http://localhost:49510/home",
+            "aria_snapshot": null,
+            "artifacts": [
+              {
+                "kind": "trace",
+                "label": null,
+                "metadata": {}
+              }
+            ],
+            "before_artifact": null,
+            "before_url": "http://localhost:49510/home",
+            "challenge": null,
+            "completed_at": "2026-09-21T09:52:16.275155+00:00",
+            "console_delta": [],
+            "duration_ms": 676,
+            "error": null,
+            "network_delta": [],
+            "ok": true,
+            "page_title": "Scheduler - Scheduling Platform",
+            "selector": null,
+            "semantic_label": null,
+            "sequence": 21,
+            "started_at": "2026-09-21T09:52:15.598580+00:00",
+            "target_box": null,
+            "target_metadata": {},
+            "title": null,
+            "url": "http://localhost:49510/home",
+            "value": null,
+            "video_end_ms": 19762,
+            "video_start_ms": 19085
+          }
+        ],
+        "app": "appointment",
+        "artifacts": [
+          {
+            "file_url": "/private/files/BQA-2026-00071-screenshot-8e89db444f-home.png",
+            "kind": "screenshot",
+            "label": "http://localhost:49510/home",
+            "metadata": {}
+          },
+          {
+            "file_url": "/private/files/BQA-2026-00071-dom_snapshot-dd3081cf1d-home.html",
+            "kind": "dom_snapshot",
+            "label": "http://localhost:49510/home",
+            "metadata": {}
+          },
+          {
+            "file_url": "/private/files/BQA-2026-00071-screenshot-c6556b39ea-p3-onb-01-type-selection.png",
+            "kind": "screenshot",
+            "label": "http://localhost:49510/home",
+            "metadata": {}
+          },
+          {
+            "file_url": "/private/files/BQA-2026-00071-screenshot-b1eb31389a-p3-onb-02-step1-profile.png",
+            "kind": "screenshot",
+            "label": "http://localhost:49510/home",
+            "metadata": {}
+          },
+          {
+            "file_url": "/private/files/BQA-2026-00071-screenshot-72d6139a59-p3-onb-03-step1-filled.png",
+            "kind": "screenshot",
+            "label": "http://localhost:49510/home",
+            "metadata": {}
+          },
+          {
+            "file_url": "/private/files/BQA-2026-00071-screenshot-91f058c707-p3-onb-04-step2-calendar.png",
+            "kind": "screenshot",
+            "label": "http://localhost:49510/home",
+            "metadata": {}
+          },
+          {
+            "file_url": "/private/files/BQA-2026-00071-screenshot-a766242d56-p3-onb-05-step3-availability.png",
+            "kind": "screenshot",
+            "label": "http://localhost:49510/home",
+            "metadata": {}
+          },
+          {
+            "file_url": "/private/files/BQA-2026-00071-screenshot-7bdb7897a9-p3-onb-06-step3-filled.png",
+            "kind": "screenshot",
+            "label": "http://localhost:49510/home",
+            "metadata": {}
+          },
+          {
+            "file_url": "/private/files/BQA-2026-00071-screenshot-a0a53df279-p3-onb-07-after-step3-submit.png",
+            "kind": "screenshot",
+            "label": "http://localhost:49510/home",
+            "metadata": {}
+          },
+          {
+            "file_url": "/private/files/BQA-2026-00071-dom_snapshot-88d75846f0-p3-onb-07-after-step3-submit.html",
+            "kind": "dom_snapshot",
+            "label": "http://localhost:49510/home",
+            "metadata": {}
+          },
+          {
+            "file_url": "/private/files/BQA-2026-00071-trace-ff03d468bf-trace.zip",
+            "kind": "trace",
+            "label": null,
+            "metadata": {}
+          },
+          {
+            "file_url": "/private/files/BQA-2026-00071-console_log-0816853d5a-console-errors.json",
+            "kind": "console_log",
+            "label": null,
+            "metadata": {}
+          },
+          {
+            "file_url": "/private/files/BQA-2026-00071-network_failures-8c19b18a9f-network-failures.json",
+            "kind": "network_failures",
+            "label": null,
+            "metadata": {}
+          },
+          {
+            "file_url": "/private/files/BQA-2026-00071-report-5f4dc95900-report.json",
+            "kind": "report",
+            "label": null,
+            "metadata": {}
+          }
+        ],
+        "base_url": "http://localhost:49510",
+        "console_errors": [
+          {
+            "line": 0,
+            "text": "Failed to load resource: the server responded with a status of 500 (INTERNAL SERVER ERROR)",
+            "type": "error",
+            "url": "http://localhost:49510/api/method/appointment.onboarding.save_availability"
+          },
+          {
+            "line": 139,
+            "text": "Failed to save availability: {exception: TypeError: save_availability() missing 1 required positional argument: 'level', exc_type: TypeError, exc: [\"Traceback (most recent call last):\\n  File \\\"/ho\u2026ssing 1 required positional argument: 'level'\\n\"], httpStatus: 500, httpStatusText: INTERNAL SERVER ERROR}",
+            "type": "error",
+            "url": "http://localhost:49510/src/pages/home/components/Step3Availability.tsx"
+          }
+        ],
+        "duration_ms": 19860,
+        "error": null,
+        "finished_at": "2026-09-21T09:52:16.372879+00:00",
+        "network_errors": [
+          {
+            "method": "POST",
+            "status": 500,
+            "url": "http://localhost:49510/api/method/appointment.onboarding.save_availability"
+          }
+        ],
+        "ok": false,
+        "scenario_id": "p3_solo_onboarding_individual",
+        "started_at": "2026-09-21T09:51:56.512055+00:00",
+        "title": "Solo provider completes individual onboarding"
+      }
+    ],
+    "scenario": null,
+    "selected_scenarios": [
+      "p3_solo_onboarding_individual"
+    ]
+  },
+  "triage": {
+    "artifacts": [
+      {
+        "file_url": "/private/files/BQA-2026-00071-screenshot-8e89db444f-home.png",
+        "kind": "screenshot",
+        "label": "http://localhost:49510/home",
+        "metadata": {}
+      },
+      {
+        "file_url": "/private/files/BQA-2026-00071-screenshot-c6556b39ea-p3-onb-01-type-selection.png",
+        "kind": "screenshot",
+        "label": "http://localhost:49510/home",
+        "metadata": {}
+      },
+      {
+        "file_url": "/private/files/BQA-2026-00071-screenshot-b1eb31389a-p3-onb-02-step1-profile.png",
+        "kind": "screenshot",
+        "label": "http://localhost:49510/home",
+        "metadata": {}
+      },
+      {
+        "file_url": "/private/files/BQA-2026-00071-screenshot-72d6139a59-p3-onb-03-step1-filled.png",
+        "kind": "screenshot",
+        "label": "http://localhost:49510/home",
+        "metadata": {}
+      },
+      {
+        "file_url": "/private/files/BQA-2026-00071-screenshot-91f058c707-p3-onb-04-step2-calendar.png",
+        "kind": "screenshot",
+        "label": "http://localhost:49510/home",
+        "metadata": {}
+      },
+      {
+        "file_url": "/private/files/BQA-2026-00071-screenshot-a766242d56-p3-onb-05-step3-availability.png",
+        "kind": "screenshot",
+        "label": "http://localhost:49510/home",
+        "metadata": {}
+      },
+      {
+        "file_url": "/private/files/BQA-2026-00071-screenshot-7bdb7897a9-p3-onb-06-step3-filled.png",
+        "kind": "screenshot",
+        "label": "http://localhost:49510/home",
+        "metadata": {}
+      },
+      {
+        "file_url": "/private/files/BQA-2026-00071-screenshot-a0a53df279-p3-onb-07-after-step3-submit.png",
+        "kind": "screenshot",
+        "label": "http://localhost:49510/home",
+        "metadata": {}
+      },
+      {
+        "file_url": "/private/files/BQA-2026-00071-trace-ff03d468bf-trace.zip",
+        "kind": "trace",
+        "label": null,
+        "metadata": {}
+      },
+      {
+        "file_url": "/private/files/BQA-2026-00071-report-5f4dc95900-report.json",
+        "kind": "report",
+        "label": null,
+        "metadata": {}
+      }
+    ],
+    "findings": [
+      {
+        "action": "assert:text_contains",
+        "message": "Text `Create Service` was not found in `body`.",
+        "scenario_id": "p3_solo_onboarding_individual",
+        "severity": "medium",
+        "type": "missing_selector_or_text",
+        "url": "http://localhost:49510/home",
+        "value": {
+          "max_count": null,
+          "method": null,
+          "min_count": null,
+          "request_body_contains": null,
+          "request_json_value": null,
+          "response_body_contains": null,
+          "response_json_value": null,
+          "selector": null,
+          "status": null,
+          "status_max": null,
+          "status_min": null,
+          "timeout_ms": 10000,
+          "type": "text_contains",
+          "url_contains": null,
+          "url_matches": null,
+          "value": "Create Service"
+        }
+      },
+      {
+        "line": 0,
+        "severity": "high",
+        "text": "Failed to load resource: the server responded with a status of 500 (INTERNAL SERVER ERROR)",
+        "type": "error",
+        "url": "http://localhost:49510/api/method/appointment.onboarding.save_availability"
+      },
+      {
+        "line": 139,
+        "severity": "high",
+        "text": "Failed to save availability: {exception: TypeError: save_availability() missing 1 required positional argument: 'level', exc_type: TypeError, exc: [\"Traceback (most recent call last):\\n  File \\\"/ho\u2026ssing 1 required positional argument: 'level'\\n\"], httpStatus: 500, httpStatusText: INTERNAL SERVER ERROR}",
+        "type": "error",
+        "url": "http://localhost:49510/src/pages/home/components/Step3Availability.tsx"
+      },
+      {
+        "method": "POST",
+        "severity": "high",
+        "status": 500,
+        "type": "network_failure",
+        "url": "http://localhost:49510/api/method/appointment.onboarding.save_availability"
+      },
+      {
+        "changes": [
+          {
+            "name": "appointment/appointment-p3-solo-onboarding-individual/home.png",
+            "sha256": "8680f0f987e86fff72967fe43111084b0fa840328a6e36de6ff91ace993c90d3",
+            "status": "new"
+          },
+          {
+            "name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-01-type-selection.png",
+            "sha256": "8680f0f987e86fff72967fe43111084b0fa840328a6e36de6ff91ace993c90d3",
+            "status": "new"
+          },
+          {
+            "name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-02-step1-profile.png",
+            "sha256": "6e0bac61e23ac8b565120619032fa3c27c0d927fd110288a28d950d6bfb3ee4a",
+            "status": "new"
+          },
+          {
+            "name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-03-step1-filled.png",
+            "sha256": "91d307da2420669185988b81e0252019f9efb56d06562cb3746cb4f998bc27d2",
+            "status": "new"
+          },
+          {
+            "name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-04-step2-calendar.png",
+            "sha256": "e0842db0033e8d1326dd1922194a4a9fcbd2a14b57fd7b00ac84599e806044f5",
+            "status": "new"
+          },
+          {
+            "name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-05-step3-availability.png",
+            "sha256": "f2b31414e094e79be2c338698afed9adcc48b03d5c6349bf43ebd99be5064f93",
+            "status": "new"
+          },
+          {
+            "name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-06-step3-filled.png",
+            "sha256": "85af26be6141d57c74dc31ed328faed17c29d41ba0b82288907a2a9245b888fd",
+            "status": "new"
+          },
+          {
+            "name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-07-after-step3-submit.png",
+            "sha256": "0ff1026c7ecfee593c7b15819487cf3ed7426a7fc708d5eb666bbb2b413d6248",
+            "status": "new"
+          }
+        ],
+        "ignored_for_status": true,
+        "message": "8 screenshot baseline change(s) detected.",
+        "severity": "review",
+        "type": "visual_baseline_drift"
+      }
+    ],
+    "ok": false,
+    "summary": "2 error, 1 missing selector or text, 1 network failure"
+  },
+  "baseline": {
+    "changes": [
+      {
+        "name": "appointment/appointment-p3-solo-onboarding-individual/home.png",
+        "sha256": "8680f0f987e86fff72967fe43111084b0fa840328a6e36de6ff91ace993c90d3",
+        "status": "new"
+      },
+      {
+        "name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-01-type-selection.png",
+        "sha256": "8680f0f987e86fff72967fe43111084b0fa840328a6e36de6ff91ace993c90d3",
+        "status": "new"
+      },
+      {
+        "name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-02-step1-profile.png",
+        "sha256": "6e0bac61e23ac8b565120619032fa3c27c0d927fd110288a28d950d6bfb3ee4a",
+        "status": "new"
+      },
+      {
+        "name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-03-step1-filled.png",
+        "sha256": "91d307da2420669185988b81e0252019f9efb56d06562cb3746cb4f998bc27d2",
+        "status": "new"
+      },
+      {
+        "name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-04-step2-calendar.png",
+        "sha256": "e0842db0033e8d1326dd1922194a4a9fcbd2a14b57fd7b00ac84599e806044f5",
+        "status": "new"
+      },
+      {
+        "name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-05-step3-availability.png",
+        "sha256": "f2b31414e094e79be2c338698afed9adcc48b03d5c6349bf43ebd99be5064f93",
+        "status": "new"
+      },
+      {
+        "name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-06-step3-filled.png",
+        "sha256": "85af26be6141d57c74dc31ed328faed17c29d41ba0b82288907a2a9245b888fd",
+        "status": "new"
+      },
+      {
+        "name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-07-after-step3-submit.png",
+        "sha256": "0ff1026c7ecfee593c7b15819487cf3ed7426a7fc708d5eb666bbb2b413d6248",
+        "status": "new"
+      }
+    ],
+    "ok": false,
+    "update_block_reason": null,
+    "update_blocked": false,
+    "updated": false
+  },
+  "fixture_cleanup": {
+    "removed": [
+      "Appointment:QA-APT-88A367D4",
+      "EventType:EVT-2026-000001",
+      "Service:SRV-2026-0006",
+      "User Appointment Availability:qa-browser-86955c@qa.local",
+      "Location:QA-BROWSER-86955c Admin Location",
+      "Provider:QA-BROWSER-86955c Admin Provider",
+      "Location:QA-BROWSER-86955c Location",
+      "Provider:QA-BROWSER-86955c Provider",
+      "Organization:QA-BROWSER-86955c Org",
+      "User:qa-browser-86955c@qa.local"
+    ]
+  }
+}
+{"name": "BQA-2026-00071", "creation": "2026-09-21 15:21:56.404278", "app": "appointment", "manifest_name": "[redacted runtime path]", "suite_id": null, "suite_version": null, "scenario": null, "status": "Failed", "lifecycle_phase": "Queued", "outcome": null, "execution_mode": "deterministic", "requested_by": null, "browser_account": null, "browser_session": null, "selection_source": "selected", "retry_of": null, "cancel_requested": false, "cancel_requested_at": null, "cancel_requested_by": null, "update_baseline": false, "base_url": "http://localhost:49510", "target_site": null, "environment_identity": null, "source_version": null, "cleanup_policy": "always", "artifact_policy": "retain", "capture": {"screenshots": "on", "trace": "failure", "video": "failure"}, "duration_ms": 19860, "queue_duration_ms": 0, "execution_duration_ms": 0, "cleanup_duration_ms": 0, "node_version": null, "runner_version": null, "browser_version": null, "versions": {}, "artifact_availability": "available", "artifact_expired_at": null, "agent_run": null, "run_step": null, "tool_call": null, "report_file": "/private/files/BQA-2026-00071-report-5f4dc95900-report.json", "trace_file": "/private/files/BQA-2026-00071-trace-ff03d468bf-trace.zip", "video_file": null, "source": "manual", "max_attempts": 1, "attempt_count": 1, "flake_status": "Failed After Retries", "screenshot_count": 8, "console_error_count": 2, "network_error_count": 1, "baseline_changed_count": 8, "artifact_files": [{"file_url": "/private/files/BQA-2026-00071-screenshot-8e89db444f-home.png", "kind": "screenshot", "label": "http://localhost:49510/home", "mime_type": "image/png"}, {"file_url": "/private/files/BQA-2026-00071-dom_snapshot-dd3081cf1d-home.html", "kind": "dom_snapshot", "label": "http://localhost:49510/home", "mime_type": "text/html"}, {"file_url": "/private/files/BQA-2026-00071-screenshot-c6556b39ea-p3-onb-01-type-selection.png", "kind": "screenshot", "label": "http://localhost:49510/home", "mime_type": "image/png"}, {"file_url": "/private/files/BQA-2026-00071-screenshot-b1eb31389a-p3-onb-02-step1-profile.png", "kind": "screenshot", "label": "http://localhost:49510/home", "mime_type": "image/png"}, {"file_url": "/private/files/BQA-2026-00071-screenshot-72d6139a59-p3-onb-03-step1-filled.png", "kind": "screenshot", "label": "http://localhost:49510/home", "mime_type": "image/png"}, {"file_url": "/private/files/BQA-2026-00071-screenshot-91f058c707-p3-onb-04-step2-calendar.png", "kind": "screenshot", "label": "http://localhost:49510/home", "mime_type": "image/png"}, {"file_url": "/private/files/BQA-2026-00071-screenshot-a766242d56-p3-onb-05-step3-availability.png", "kind": "screenshot", "label": "http://localhost:49510/home", "mime_type": "image/png"}, {"file_url": "/private/files/BQA-2026-00071-screenshot-7bdb7897a9-p3-onb-06-step3-filled.png", "kind": "screenshot", "label": "http://localhost:49510/home", "mime_type": "image/png"}, {"file_url": "/private/files/BQA-2026-00071-screenshot-a0a53df279-p3-onb-07-after-step3-submit.png", "kind": "screenshot", "label": "http://localhost:49510/home", "mime_type": "image/png"}, {"file_url": "/private/files/BQA-2026-00071-dom_snapshot-88d75846f0-p3-onb-07-after-step3-submit.html", "kind": "dom_snapshot", "label": "http://localhost:49510/home", "mime_type": "text/html"}, {"file_url": "/private/files/BQA-2026-00071-trace-ff03d468bf-trace.zip", "kind": "trace", "label": null, "mime_type": "application/zip"}, {"file_url": "/private/files/BQA-2026-00071-console_log-0816853d5a-console-errors.json", "kind": "console_log", "label": null, "mime_type": "application/json"}, {"file_url": "/private/files/BQA-2026-00071-network_failures-8c19b18a9f-network-failures.json", "kind": "network_failures", "label": null, "mime_type": "application/json"}, {"file_url": "/private/files/BQA-2026-00071-report-5f4dc95900-report.json", "kind": "report", "label": null, "mime_type": "application/json"}], "scenario_summary": {}, "scenario_results": [], "cleanup": {}, "audit": {}, "failure_category": null, "failure_reason": null, "suppressed_artifacts": [], "report": {"app": "appointment", "manifest": "[redacted runtime path]", "ok": false, "reports": [{"actions": [{"action": "authenticate", "after_artifact": null, "after_url": null, "aria_snapshot": null, "artifacts": [], "before_artifact": null, "before_url": null, "challenge": null, "completed_at": null, "console_delta": [], "duration_ms": null, "error": null, "network_delta": [], "ok": true, "page_title": null, "selector": null, "semantic_label": null, "sequence": null, "started_at": null, "target_box": null, "target_metadata": null, "title": null, "url": null, "value": {"type": "frappe_session", "user": "p3-solo-owner@example.test"}, "video_end_ms": null, "video_start_ms": null}, {"action": "open_url", "after_artifact": null, "after_url": "http://localhost:49510/home", "aria_snapshot": null, "artifacts": [], "before_artifact": null, "before_url": "about:blank", "challenge": null, "completed_at": "2026-09-21T09:51:59.851952+00:00", "console_delta": [], "duration_ms": 2743, "error": null, "network_delta": [], "ok": true, "page_title": "Scheduler - Scheduling Platform", "selector": null, "semantic_label": null, "sequence": 1, "started_at": "2026-09-21T09:51:57.108322+00:00", "target_box": null, "target_metadata": {}, "title": null, "url": "http://localhost:49510/home", "value": {"status": 200}, "video_end_ms": 3339, "video_start_ms": 595}, {"action": "assert:network_idle", "after_artifact": null, "after_url": null, "aria_snapshot": null, "artifacts": [], "before_artifact": null, "before_url": null, "challenge": null, "completed_at": null, "console_delta": [], "duration_ms": null, "error": null, "network_delta": [], "ok": true, "page_title": null, "selector": null, "semantic_label": null, "sequence": null, "started_at": null, "target_box": null, "target_metadata": null, "title": null, "url": "http://localhost:49510/home", "value": {"max_count": null, "method": null, "min_count": null, "request_body_contains": null, "request_json_value": null, "response_body_contains": null, "response_json_value": null, "selector": null, "status": null, "status_max": null, "status_min": null, "timeout_ms": 10000, "type": "network_idle", "url_contains": null, "url_matches": null, "value": ""}, "video_end_ms": null, "video_start_ms": null}, {"action": "assert:no_blank_page", "after_artifact": null, "after_url": null, "aria_snapshot": null, "artifacts": [], "before_artifact": null, "before_url": null, "challenge": null, "completed_at": null, "console_delta": [], "duration_ms": null, "error": null, "network_delta": [], "ok": true, "page_title": null, "selector": null, "semantic_label": null, "sequence": null, "started_at": null, "target_box": null, "target_metadata": null, "title": null, "url": "http://localhost:49510/home", "value": {"max_count": null, "method": null, "min_count": null, "request_body_contains": null, "request_json_value": null, "response_body_contains": null, "response_json_value": null, "selector": null, "status": null, "status_max": null, "status_min": null, "timeout_ms": 10000, "type": "no_blank_page", "url_contains": null, "url_matches": null, "value": ""}, "video_end_ms": null, "video_start_ms": null}, {"action": "assert:text_contains", "after_artifact": null, "after_url": null, "aria_snapshot": null, "artifacts": [], "before_artifact": null, "before_url": null, "challenge": null, "completed_at": null, "console_delta": [], "duration_ms": null, "error": null, "network_delta": [], "ok": true, "page_title": null, "selector": null, "semantic_label": null, "sequence": null, "started_at": null, "target_box": null, "target_metadata": null, "title": null, "url": "http://localhost:49510/home", "value": {"max_count": null, "method": null, "min_count": null, "request_body_contains": null, "request_json_value": null, "response_body_contains": null, "response_json_value": null, "selector": null, "status": null, "status_max": null, "status_min": null, "timeout_ms": 10000, "type": "text_contains", "url_contains": null, "url_matches": null, "value": "Choose how you want to get started"}, "video_end_ms": null, "video_start_ms": null}, {"action": "screenshot", "after_artifact": null, "after_url": "http://localhost:49510/home", "aria_snapshot": null, "artifacts": [{"kind": "screenshot", "label": "http://localhost:49510/home", "metadata": {}}], "before_artifact": null, "before_url": "http://localhost:49510/home", "challenge": null, "completed_at": "2026-09-21T09:52:00.084232+00:00", "console_delta": [], "duration_ms": 192, "error": null, "network_delta": [], "ok": true, "page_title": "Scheduler - Scheduling Platform", "selector": null, "semantic_label": null, "sequence": 2, "started_at": "2026-09-21T09:51:59.891514+00:00", "target_box": null, "target_metadata": {}, "title": null, "url": "http://localhost:49510/home", "value": null, "video_end_ms": 3571, "video_start_ms": 3378}, {"action": "get_dom_snapshot", "after_artifact": null, "after_url": "http://localhost:49510/home", "aria_snapshot": null, "artifacts": [{"kind": "dom_snapshot", "label": "http://localhost:49510/home", "metadata": {}}], "before_artifact": null, "before_url": "http://localhost:49510/home", "challenge": null, "completed_at": "2026-09-21T09:52:00.111500+00:00", "console_delta": [], "duration_ms": 24, "error": null, "network_delta": [], "ok": true, "page_title": "Scheduler - Scheduling Platform", "selector": null, "semantic_label": null, "sequence": 3, "started_at": "2026-09-21T09:52:00.087060+00:00", "target_box": null, "target_metadata": {}, "title": null, "url": "http://localhost:49510/home", "value": {"bytes": 173647}, "video_end_ms": 3598, "video_start_ms": 3574}, {"action": "screenshot", "after_artifact": null, "after_url": "http://localhost:49510/home", "aria_snapshot": null, "artifacts": [{"kind": "screenshot", "label": "http://localhost:49510/home", "metadata": {}}], "before_artifact": null, "before_url": "http://localhost:49510/home", "challenge": null, "completed_at": "2026-09-21T09:52:00.269155+00:00", "console_delta": [], "duration_ms": 154, "error": null, "network_delta": [], "ok": true, "page_title": "Scheduler - Scheduling Platform", "selector": null, "semantic_label": null, "sequence": 4, "started_at": "2026-09-21T09:52:00.115055+00:00", "target_box": null, "target_metadata": {}, "title": null, "url": "http://localhost:49510/home", "value": null, "video_end_ms": 3756, "video_start_ms": 3602}, {"action": "click", "after_artifact": null, "after_url": "http://localhost:49510/home", "aria_snapshot": "- button \"Continue\" [ref=e1] [cursor=pointer] [box=249,505,434,40]", "artifacts": [], "before_artifact": null, "before_url": "http://localhost:49510/home", "challenge": null, "completed_at": "2026-09-21T09:52:01.040383+00:00", "console_delta": [], "duration_ms": 769, "error": null, "network_delta": [], "ok": true, "page_title": "Scheduler - Scheduling Platform", "selector": "button:has-text(\"Continue\")", "semantic_label": "Continue", "sequence": 5, "started_at": "2026-09-21T09:52:00.319754+00:00", "target_box": {"height": 40, "width": 434, "x": 249, "y": 505}, "target_metadata": {"aria_label": null, "aria_snapshot": "- button \"Continue\" [ref=e1] [cursor=pointer] [box=249,505,434,40]", "box": {"height": 40, "width": 434, "x": 249, "y": 505}, "label": "Continue", "name": null, "placeholder": null, "role": null, "selected_text": "", "selector": "button:has-text(\"Continue\")", "tag": "button", "text": "Continue", "title": null, "type": null}, "title": null, "url": "http://localhost:49510/home", "value": null, "video_end_ms": 4527, "video_start_ms": 3758}, {"action": "screenshot", "after_artifact": null, "after_url": "http://localhost:49510/home", "aria_snapshot": null, "artifacts": [{"kind": "screenshot", "label": "http://localhost:49510/home", "metadata": {}}], "before_artifact": null, "before_url": "http://localhost:49510/home", "challenge": null, "completed_at": "2026-09-21T09:52:01.414180+00:00", "console_delta": [], "duration_ms": 371, "error": null, "network_delta": [], "ok": true, "page_title": "Scheduler - Scheduling Platform", "selector": null, "semantic_label": null, "sequence": 6, "started_at": "2026-09-21T09:52:01.042511+00:00", "target_box": null, "target_metadata": {}, "title": null, "url": "http://localhost:49510/home", "value": null, "video_end_ms": 4901, "video_start_ms": 4529}, {"action": "assert:text_contains", "after_artifact": null, "after_url": null, "aria_snapshot": null, "artifacts": [], "before_artifact": null, "before_url": null, "challenge": null, "completed_at": null, "console_delta": [], "duration_ms": null, "error": null, "network_delta": [], "ok": true, "page_title": null, "selector": null, "semantic_label": null, "sequence": null, "started_at": null, "target_box": null, "target_metadata": null, "title": null, "url": "http://localhost:49510/home", "value": {"max_count": null, "method": null, "min_count": null, "request_body_contains": null, "request_json_value": null, "response_body_contains": null, "response_json_value": null, "selector": null, "status": null, "status_max": null, "status_min": null, "timeout_ms": 10000, "type": "text_contains", "url_contains": null, "url_matches": null, "value": "Business Profile"}, "video_end_ms": null, "video_start_ms": null}, {"action": "fill", "after_artifact": null, "after_url": "http://localhost:49510/home", "aria_snapshot": "- textbox \"Business Name *\" [ref=e2] [box=537,329,766,40]:\n  - /placeholder: e.g., Amara Clinic", "artifacts": [], "before_artifact": null, "before_url": "http://localhost:49510/home", "challenge": null, "completed_at": "2026-09-21T09:52:02.151740+00:00", "console_delta": [], "duration_ms": 725, "error": null, "network_delta": [], "ok": true, "page_title": "Scheduler - Scheduling Platform", "selector": "#businessName", "semantic_label": "e.g., Amara Clinic", "sequence": 7, "started_at": "2026-09-21T09:52:01.467923+00:00", "target_box": {"height": 40, "width": 766, "x": 537, "y": 329}, "target_metadata": {"aria_label": null, "aria_snapshot": "- textbox \"Business Name *\" [ref=e2] [box=537,329,766,40]:\n  - /placeholder: e.g., Amara Clinic", "box": {"height": 40, "width": 766, "x": 537, "y": 329}, "label": "e.g., Amara Clinic", "name": null, "placeholder": "e.g., Amara Clinic", "role": null, "selected_text": "", "selector": "#businessName", "tag": "input", "text": "", "title": null, "type": "text"}, "title": null, "url": "http://localhost:49510/home", "value": null, "video_end_ms": 5639, "video_start_ms": 4913}, {"action": "click", "after_artifact": null, "after_url": "http://localhost:49510/home", "aria_snapshot": "- combobox [ref=e3] [cursor=pointer] [box=537,425,766,40]: Search business type", "artifacts": [], "before_artifact": null, "before_url": "http://localhost:49510/home", "challenge": null, "completed_at": "2026-09-21T09:52:02.947679+00:00", "console_delta": [], "duration_ms": 792, "error": null, "network_delta": [], "ok": true, "page_title": "Scheduler - Scheduling Platform", "selector": "[role=\"combobox\"]", "semantic_label": "Search business type", "sequence": 8, "started_at": "2026-09-21T09:52:02.197662+00:00", "target_box": {"height": 40, "width": 766, "x": 537, "y": 425}, "target_metadata": {"aria_label": null, "aria_snapshot": "- combobox [ref=e3] [cursor=pointer] [box=537,425,766,40]: Search business type", "box": {"height": 40, "width": 766, "x": 537, "y": 425}, "label": "Search business type", "name": null, "placeholder": null, "role": "combobox", "selected_text": "", "selector": "[role=\"combobox\"]", "tag": "button", "text": "Search business type", "title": null, "type": "button"}, "title": null, "url": "http://localhost:49510/home", "value": null, "video_end_ms": 6435, "video_start_ms": 5642}, {"action": "click", "after_artifact": null, "after_url": "http://localhost:49510/home", "aria_snapshot": "- option \"Other\" [ref=e4] [box=545,642,272,31]", "artifacts": [], "before_artifact": null, "before_url": "http://localhost:49510/home", "challenge": null, "completed_at": "2026-09-21T09:52:03.766238+00:00", "console_delta": [], "duration_ms": 815, "error": null, "network_delta": [], "ok": true, "page_title": "Scheduler - Scheduling Platform", "selector": "[role=\"option\"]:has-text(\"Other\")", "semantic_label": "Other", "sequence": 9, "started_at": "2026-09-21T09:52:02.991911+00:00", "target_box": {"height": 31.32281494140625, "width": 272.11688232421875, "x": 544.9415893554688, "y": 642.1220703125}, "target_metadata": {"aria_label": null, "aria_snapshot": "- option \"Other\" [ref=e4] [box=545,642,272,31]", "box": {"height": 31.32281494140625, "width": 272.11688232421875, "x": 544.9415893554688, "y": 642.1220703125}, "label": "Other", "name": null, "placeholder": null, "role": "option", "selected_text": "", "selector": "[role=\"option\"]:has-text(\"Other\")", "tag": "div", "text": "Other", "title": null, "type": null}, "title": null, "url": "http://localhost:49510/home", "value": null, "video_end_ms": 7253, "video_start_ms": 6438}, {"action": "screenshot", "after_artifact": null, "after_url": "http://localhost:49510/home", "aria_snapshot": null, "artifacts": [{"kind": "screenshot", "label": "http://localhost:49510/home", "metadata": {}}], "before_artifact": null, "before_url": "http://localhost:49510/home", "challenge": null, "completed_at": "2026-09-21T09:52:04.079913+00:00", "console_delta": [], "duration_ms": 311, "error": null, "network_delta": [], "ok": true, "page_title": "Scheduler - Scheduling Platform", "selector": null, "semantic_label": null, "sequence": 10, "started_at": "2026-09-21T09:52:03.768802+00:00", "target_box": null, "target_metadata": {}, "title": null, "url": "http://localhost:49510/home", "value": null, "video_end_ms": 7567, "video_start_ms": 7256}, {"action": "click", "after_artifact": null, "after_url": "http://localhost:49510/home", "aria_snapshot": "- 'button \"Next: Connect Calendar\" [ref=e5] [cursor=pointer] [box=537,709,207,40]'", "artifacts": [], "before_artifact": null, "before_url": "http://localhost:49510/home", "challenge": null, "completed_at": "2026-09-21T09:52:04.890586+00:00", "console_delta": [], "duration_ms": 807, "error": null, "network_delta": [], "ok": true, "page_title": "Scheduler - Scheduling Platform", "selector": "button:has-text(\"Next: Connect Calendar\")", "semantic_label": "Next: Connect Calendar", "sequence": 11, "started_at": "2026-09-21T09:52:04.125913+00:00", "target_box": {"height": 40, "width": 207, "x": 537, "y": 709}, "target_metadata": {"aria_label": null, "aria_snapshot": "- 'button \"Next: Connect Calendar\" [ref=e5] [cursor=pointer] [box=537,709,207,40]'", "box": {"height": 40, "width": 207, "x": 537, "y": 709}, "label": "Next: Connect Calendar", "name": null, "placeholder": null, "role": null, "selected_text": "", "selector": "button:has-text(\"Next: Connect Calendar\")", "tag": "button", "text": "Next: Connect Calendar", "title": null, "type": null}, "title": null, "url": "http://localhost:49510/home", "value": null, "video_end_ms": 8377, "video_start_ms": 7570}, {"action": "screenshot", "after_artifact": null, "after_url": "http://localhost:49510/home", "aria_snapshot": null, "artifacts": [{"kind": "screenshot", "label": "http://localhost:49510/home", "metadata": {}}], "before_artifact": null, "before_url": "http://localhost:49510/home", "challenge": null, "completed_at": "2026-09-21T09:52:05.232407+00:00", "console_delta": [], "duration_ms": 339, "error": null, "network_delta": [], "ok": true, "page_title": "Scheduler - Scheduling Platform", "selector": null, "semantic_label": null, "sequence": 12, "started_at": "2026-09-21T09:52:04.893093+00:00", "target_box": null, "target_metadata": {}, "title": null, "url": "http://localhost:49510/home", "value": null, "video_end_ms": 8719, "video_start_ms": 8380}, {"action": "assert:text_contains", "after_artifact": null, "after_url": null, "aria_snapshot": null, "artifacts": [], "before_artifact": null, "before_url": null, "challenge": null, "completed_at": null, "console_delta": [], "duration_ms": null, "error": null, "network_delta": [], "ok": true, "page_title": null, "selector": null, "semantic_label": null, "sequence": null, "started_at": null, "target_box": null, "target_metadata": null, "title": null, "url": "http://localhost:49510/home", "value": {"max_count": null, "method": null, "min_count": null, "request_body_contains": null, "request_json_value": null, "response_body_contains": null, "response_json_value": null, "selector": null, "status": null, "status_max": null, "status_min": null, "timeout_ms": 10000, "type": "text_contains", "url_contains": null, "url_matches": null, "value": "Connect Calendar"}, "video_end_ms": null, "video_start_ms": null}, {"action": "click", "after_artifact": null, "after_url": "http://localhost:49510/home", "aria_snapshot": "- heading \"Built-in Calendar\" [level=3] [ref=e6] [cursor=pointer] [box=570,429,305,28]", "artifacts": [], "before_artifact": null, "before_url": "http://localhost:49510/home", "challenge": null, "completed_at": "2026-09-21T09:52:06.095718+00:00", "console_delta": [], "duration_ms": 854, "error": null, "network_delta": [], "ok": true, "page_title": "Scheduler - Scheduling Platform", "selector": "text=Built-in Calendar", "semantic_label": "Built-in Calendar", "sequence": 13, "started_at": "2026-09-21T09:52:05.320481+00:00", "target_box": {"height": 28, "width": 305, "x": 570, "y": 429.1793212890625}, "target_metadata": {"aria_label": null, "aria_snapshot": "- heading \"Built-in Calendar\" [level=3] [ref=e6] [cursor=pointer] [box=570,429,305,28]", "box": {"height": 28, "width": 305, "x": 570, "y": 429.1793212890625}, "label": "Built-in Calendar", "name": null, "placeholder": null, "role": null, "selected_text": "", "selector": "text=Built-in Calendar", "tag": "h3", "text": "Built-in Calendar", "title": null, "type": null}, "title": null, "url": "http://localhost:49510/home", "value": null, "video_end_ms": 9583, "video_start_ms": 8728}, {"action": "click", "after_artifact": null, "after_url": "http://localhost:49510/home", "aria_snapshot": "- button \"Continue\" [ref=e7] [cursor=pointer] [box=1212,844,91,40]", "artifacts": [], "before_artifact": null, "before_url": "http://localhost:49510/home", "challenge": null, "completed_at": "2026-09-21T09:52:06.939218+00:00", "console_delta": [], "duration_ms": 839, "error": null, "network_delta": [], "ok": true, "page_title": "Scheduler - Scheduling Platform", "selector": "button:has-text(\"Continue\")", "semantic_label": "Continue", "sequence": 14, "started_at": "2026-09-21T09:52:06.151772+00:00", "target_box": {"height": 40, "width": 91, "x": 1212, "y": 844}, "target_metadata": {"aria_label": null, "aria_snapshot": "- button \"Continue\" [ref=e7] [cursor=pointer] [box=1212,844,91,40]", "box": {"height": 40, "width": 91, "x": 1212, "y": 844}, "label": "Continue", "name": null, "placeholder": null, "role": null, "selected_text": "", "selector": "button:has-text(\"Continue\")", "tag": "button", "text": "Continue", "title": null, "type": null}, "title": null, "url": "http://localhost:49510/home", "value": null, "video_end_ms": 10426, "video_start_ms": 9587}, {"action": "screenshot", "after_artifact": null, "after_url": "http://localhost:49510/home", "aria_snapshot": null, "artifacts": [{"kind": "screenshot", "label": "http://localhost:49510/home", "metadata": {}}], "before_artifact": null, "before_url": "http://localhost:49510/home", "challenge": null, "completed_at": "2026-09-21T09:52:07.201860+00:00", "console_delta": [], "duration_ms": 259, "error": null, "network_delta": [], "ok": true, "page_title": "Scheduler - Scheduling Platform", "selector": null, "semantic_label": null, "sequence": 15, "started_at": "2026-09-21T09:52:06.942475+00:00", "target_box": null, "target_metadata": {}, "title": null, "url": "http://localhost:49510/home", "value": null, "video_end_ms": 10689, "video_start_ms": 10429}, {"action": "assert:text_contains", "after_artifact": null, "after_url": null, "aria_snapshot": null, "artifacts": [], "before_artifact": null, "before_url": null, "challenge": null, "completed_at": null, "console_delta": [], "duration_ms": null, "error": null, "network_delta": [], "ok": true, "page_title": null, "selector": null, "semantic_label": null, "sequence": null, "started_at": null, "target_box": null, "target_metadata": null, "title": null, "url": "http://localhost:49510/home", "value": {"max_count": null, "method": null, "min_count": null, "request_body_contains": null, "request_json_value": null, "response_body_contains": null, "response_json_value": null, "selector": null, "status": null, "status_max": null, "status_min": null, "timeout_ms": 10000, "type": "text_contains", "url_contains": null, "url_matches": null, "value": "Set Availability"}, "video_end_ms": null, "video_start_ms": null}, {"action": "click", "after_artifact": null, "after_url": "http://localhost:49510/home", "aria_snapshot": "- button \"9-5 Mon-Fri\" [ref=e8] [cursor=pointer] [box=562,385,170,40]", "artifacts": [], "before_artifact": null, "before_url": "http://localhost:49510/home", "challenge": null, "completed_at": "2026-09-21T09:52:08.089367+00:00", "console_delta": [], "duration_ms": 876, "error": null, "network_delta": [], "ok": true, "page_title": "Scheduler - Scheduling Platform", "selector": "button:has-text(\"9-5 Mon-Fri\")", "semantic_label": "9-5 Mon-Fri", "sequence": 16, "started_at": "2026-09-21T09:52:07.340038+00:00", "target_box": {"height": 40, "width": 170, "x": 562, "y": 385.2941589355469}, "target_metadata": {"aria_label": null, "aria_snapshot": "- button \"9-5 Mon-Fri\" [ref=e8] [cursor=pointer] [box=562,385,170,40]", "box": {"height": 40, "width": 170, "x": 562, "y": 385.2941589355469}, "label": "9-5 Mon-Fri", "name": null, "placeholder": null, "role": null, "selected_text": "", "selector": "button:has-text(\"9-5 Mon-Fri\")", "tag": "button", "text": "9-5 Mon-Fri", "title": null, "type": null}, "title": null, "url": "http://localhost:49510/home", "value": null, "video_end_ms": 11576, "video_start_ms": 10699}, {"action": "screenshot", "after_artifact": null, "after_url": "http://localhost:49510/home", "aria_snapshot": null, "artifacts": [{"kind": "screenshot", "label": "http://localhost:49510/home", "metadata": {}}], "before_artifact": null, "before_url": "http://localhost:49510/home", "challenge": null, "completed_at": "2026-09-21T09:52:08.382986+00:00", "console_delta": [], "duration_ms": 290, "error": null, "network_delta": [], "ok": true, "page_title": "Scheduler - Scheduling Platform", "selector": null, "semantic_label": null, "sequence": 17, "started_at": "2026-09-21T09:52:08.092008+00:00", "target_box": null, "target_metadata": {}, "title": null, "url": "http://localhost:49510/home", "value": null, "video_end_ms": 11870, "video_start_ms": 11579}, {"action": "click", "after_artifact": null, "after_url": "http://localhost:49510/home", "aria_snapshot": "- button \"Continue\" [ref=e9] [cursor=pointer] [box=1212,1459,91,40]", "artifacts": [], "before_artifact": null, "before_url": "http://localhost:49510/home", "challenge": null, "completed_at": "2026-09-21T09:52:09.189745+00:00", "console_delta": [], "duration_ms": 804, "error": null, "network_delta": [], "ok": true, "page_title": "Scheduler - Scheduling Platform", "selector": "button:has-text(\"Continue\")", "semantic_label": "Continue", "sequence": 18, "started_at": "2026-09-21T09:52:08.427451+00:00", "target_box": {"height": 40, "width": 91, "x": 1212, "y": 1459}, "target_metadata": {"aria_label": null, "aria_snapshot": "- button \"Continue\" [ref=e9] [cursor=pointer] [box=1212,1459,91,40]", "box": {"height": 40, "width": 91, "x": 1212, "y": 1459}, "label": "Continue", "name": null, "placeholder": null, "role": null, "selected_text": "", "selector": "button:has-text(\"Continue\")", "tag": "button", "text": "Continue", "title": null, "type": null}, "title": null, "url": "http://localhost:49510/home", "value": null, "video_end_ms": 12677, "video_start_ms": 11872}, {"action": "screenshot", "after_artifact": null, "after_url": "http://localhost:49510/home", "aria_snapshot": null, "artifacts": [{"kind": "screenshot", "label": "http://localhost:49510/home", "metadata": {}}], "before_artifact": null, "before_url": "http://localhost:49510/home", "challenge": null, "completed_at": "2026-09-21T09:52:09.539567+00:00", "console_delta": [], "duration_ms": 347, "error": null, "network_delta": [], "ok": true, "page_title": "Scheduler - Scheduling Platform", "selector": null, "semantic_label": null, "sequence": 19, "started_at": "2026-09-21T09:52:09.192251+00:00", "target_box": null, "target_metadata": {}, "title": null, "url": "http://localhost:49510/home", "value": null, "video_end_ms": 13026, "video_start_ms": 12679}, {"action": "assert:text_contains", "after_artifact": null, "after_url": null, "aria_snapshot": null, "artifacts": [], "before_artifact": null, "before_url": null, "challenge": null, "completed_at": null, "console_delta": [], "duration_ms": null, "error": "Text `Create Service` was not found in `body`.", "network_delta": [], "ok": false, "page_title": null, "selector": null, "semantic_label": null, "sequence": null, "started_at": null, "target_box": null, "target_metadata": null, "title": null, "url": "http://localhost:49510/home", "value": {"max_count": null, "method": null, "min_count": null, "request_body_contains": null, "request_json_value": null, "response_body_contains": null, "response_json_value": null, "selector": null, "status": null, "status_max": null, "status_min": null, "timeout_ms": 10000, "type": "text_contains", "url_contains": null, "url_matches": null, "value": "Create Service"}, "video_end_ms": null, "video_start_ms": null}, {"action": "get_console_errors", "after_artifact": null, "after_url": null, "aria_snapshot": null, "artifacts": [], "before_artifact": null, "before_url": null, "challenge": null, "completed_at": null, "console_delta": [], "duration_ms": null, "error": null, "network_delta": [], "ok": true, "page_title": null, "selector": null, "semantic_label": null, "sequence": null, "started_at": null, "target_box": null, "target_metadata": null, "title": null, "url": "http://localhost:49510/home", "value": [{"line": 0, "text": "Failed to load resource: the server responded with a status of 500 (INTERNAL SERVER ERROR)", "type": "error", "url": "http://localhost:49510/api/method/appointment.onboarding.save_availability"}, {"line": 139, "text": "Failed to save availability: {exception: TypeError: save_availability() missing 1 required positional argument: 'level', exc_type: TypeError, exc: [\"Traceback (most recent call last):\\n  File \\\"/ho\u2026ssing 1 required positional argument: 'level'\\n\"], httpStatus: 500, httpStatusText: INTERNAL SERVER ERROR}", "type": "error", "url": "http://localhost:49510/src/pages/home/components/Step3Availability.tsx"}], "video_end_ms": null, "video_start_ms": null}, {"action": "get_network_errors", "after_artifact": null, "after_url": null, "aria_snapshot": null, "artifacts": [], "before_artifact": null, "before_url": null, "challenge": null, "completed_at": null, "console_delta": [], "duration_ms": null, "error": null, "network_delta": [], "ok": true, "page_title": null, "selector": null, "semantic_label": null, "sequence": null, "started_at": null, "target_box": null, "target_metadata": null, "title": null, "url": "http://localhost:49510/home", "value": [{"method": "POST", "status": 500, "url": "http://localhost:49510/api/method/appointment.onboarding.save_availability"}], "video_end_ms": null, "video_start_ms": null}, {"action": "get_dom_snapshot", "after_artifact": null, "after_url": "http://localhost:49510/home", "aria_snapshot": null, "artifacts": [{"kind": "dom_snapshot", "label": "http://localhost:49510/home", "metadata": {}}], "before_artifact": null, "before_url": "http://localhost:49510/home", "challenge": null, "completed_at": "2026-09-21T09:52:12.587777+00:00", "console_delta": [], "duration_ms": 28, "error": null, "network_delta": [], "ok": true, "page_title": "Scheduler - Scheduling Platform", "selector": null, "semantic_label": null, "sequence": 20, "started_at": "2026-09-21T09:52:12.559752+00:00", "target_box": null, "target_metadata": {}, "title": null, "url": "http://localhost:49510/home", "value": {"bytes": 197558}, "video_end_ms": 16075, "video_start_ms": 16047}, {"action": "get_console_errors", "after_artifact": null, "after_url": null, "aria_snapshot": null, "artifacts": [], "before_artifact": null, "before_url": null, "challenge": null, "completed_at": null, "console_delta": [], "duration_ms": null, "error": null, "network_delta": [], "ok": true, "page_title": null, "selector": null, "semantic_label": null, "sequence": null, "started_at": null, "target_box": null, "target_metadata": null, "title": null, "url": "http://localhost:49510/home", "value": [{"line": 0, "text": "Failed to load resource: the server responded with a status of 500 (INTERNAL SERVER ERROR)", "type": "error", "url": "http://localhost:49510/api/method/appointment.onboarding.save_availability"}, {"line": 139, "text": "Failed to save availability: {exception: TypeError: save_availability() missing 1 required positional argument: 'level', exc_type: TypeError, exc: [\"Traceback (most recent call last):\\n  File \\\"/ho\u2026ssing 1 required positional argument: 'level'\\n\"], httpStatus: 500, httpStatusText: INTERNAL SERVER ERROR}", "type": "error", "url": "http://localhost:49510/src/pages/home/components/Step3Availability.tsx"}], "video_end_ms": null, "video_start_ms": null}, {"action": "get_network_errors", "after_artifact": null, "after_url": null, "aria_snapshot": null, "artifacts": [], "before_artifact": null, "before_url": null, "challenge": null, "completed_at": null, "console_delta": [], "duration_ms": null, "error": null, "network_delta": [], "ok": true, "page_title": null, "selector": null, "semantic_label": null, "sequence": null, "started_at": null, "target_box": null, "target_metadata": null, "title": null, "url": "http://localhost:49510/home", "value": [{"method": "POST", "status": 500, "url": "http://localhost:49510/api/method/appointment.onboarding.save_availability"}], "video_end_ms": null, "video_start_ms": null}, {"action": "save_trace", "after_artifact": null, "after_url": "http://localhost:49510/home", "aria_snapshot": null, "artifacts": [{"kind": "trace", "label": null, "metadata": {}}], "before_artifact": null, "before_url": "http://localhost:49510/home", "challenge": null, "completed_at": "2026-09-21T09:52:16.275155+00:00", "console_delta": [], "duration_ms": 676, "error": null, "network_delta": [], "ok": true, "page_title": "Scheduler - Scheduling Platform", "selector": null, "semantic_label": null, "sequence": 21, "started_at": "2026-09-21T09:52:15.598580+00:00", "target_box": null, "target_metadata": {}, "title": null, "url": "http://localhost:49510/home", "value": null, "video_end_ms": 19762, "video_start_ms": 19085}], "app": "appointment", "artifacts": [{"file_url": "/private/files/BQA-2026-00071-screenshot-8e89db444f-home.png", "kind": "screenshot", "label": "http://localhost:49510/home", "metadata": {}}, {"file_url": "/private/files/BQA-2026-00071-dom_snapshot-dd3081cf1d-home.html", "kind": "dom_snapshot", "label": "http://localhost:49510/home", "metadata": {}}, {"file_url": "/private/files/BQA-2026-00071-screenshot-c6556b39ea-p3-onb-01-type-selection.png", "kind": "screenshot", "label": "http://localhost:49510/home", "metadata": {}}, {"file_url": "/private/files/BQA-2026-00071-screenshot-b1eb31389a-p3-onb-02-step1-profile.png", "kind": "screenshot", "label": "http://localhost:49510/home", "metadata": {}}, {"file_url": "/private/files/BQA-2026-00071-screenshot-72d6139a59-p3-onb-03-step1-filled.png", "kind": "screenshot", "label": "http://localhost:49510/home", "metadata": {}}, {"file_url": "/private/files/BQA-2026-00071-screenshot-91f058c707-p3-onb-04-step2-calendar.png", "kind": "screenshot", "label": "http://localhost:49510/home", "metadata": {}}, {"file_url": "/private/files/BQA-2026-00071-screenshot-a766242d56-p3-onb-05-step3-availability.png", "kind": "screenshot", "label": "http://localhost:49510/home", "metadata": {}}, {"file_url": "/private/files/BQA-2026-00071-screenshot-7bdb7897a9-p3-onb-06-step3-filled.png", "kind": "screenshot", "label": "http://localhost:49510/home", "metadata": {}}, {"file_url": "/private/files/BQA-2026-00071-screenshot-a0a53df279-p3-onb-07-after-step3-submit.png", "kind": "screenshot", "label": "http://localhost:49510/home", "metadata": {}}, {"file_url": "/private/files/BQA-2026-00071-dom_snapshot-88d75846f0-p3-onb-07-after-step3-submit.html", "kind": "dom_snapshot", "label": "http://localhost:49510/home", "metadata": {}}, {"file_url": "/private/files/BQA-2026-00071-trace-ff03d468bf-trace.zip", "kind": "trace", "label": null, "metadata": {}}, {"file_url": "/private/files/BQA-2026-00071-console_log-0816853d5a-console-errors.json", "kind": "console_log", "label": null, "metadata": {}}, {"file_url": "/private/files/BQA-2026-00071-network_failures-8c19b18a9f-network-failures.json", "kind": "network_failures", "label": null, "metadata": {}}, {"file_url": "/private/files/BQA-2026-00071-report-5f4dc95900-report.json", "kind": "report", "label": null, "metadata": {}}], "base_url": "http://localhost:49510", "console_errors": [{"line": 0, "text": "Failed to load resource: the server responded with a status of 500 (INTERNAL SERVER ERROR)", "type": "error", "url": "http://localhost:49510/api/method/appointment.onboarding.save_availability"}, {"line": 139, "text": "Failed to save availability: {exception: TypeError: save_availability() missing 1 required positional argument: 'level', exc_type: TypeError, exc: [\"Traceback (most recent call last):\\n  File \\\"/ho\u2026ssing 1 required positional argument: 'level'\\n\"], httpStatus: 500, httpStatusText: INTERNAL SERVER ERROR}", "type": "error", "url": "http://localhost:49510/src/pages/home/components/Step3Availability.tsx"}], "duration_ms": 19860, "error": null, "finished_at": "2026-09-21T09:52:16.372879+00:00", "network_errors": [{"method": "POST", "status": 500, "url": "http://localhost:49510/api/method/appointment.onboarding.save_availability"}], "ok": false, "scenario_id": "p3_solo_onboarding_individual", "started_at": "2026-09-21T09:51:56.512055+00:00", "title": "Solo provider completes individual onboarding"}], "scenario": null, "selected_scenarios": ["p3_solo_onboarding_individual"]}, "triage": {"artifacts": [{"file_url": "/private/files/BQA-2026-00071-screenshot-8e89db444f-home.png", "kind": "screenshot", "label": "http://localhost:49510/home", "metadata": {}}, {"file_url": "/private/files/BQA-2026-00071-screenshot-c6556b39ea-p3-onb-01-type-selection.png", "kind": "screenshot", "label": "http://localhost:49510/home", "metadata": {}}, {"file_url": "/private/files/BQA-2026-00071-screenshot-b1eb31389a-p3-onb-02-step1-profile.png", "kind": "screenshot", "label": "http://localhost:49510/home", "metadata": {}}, {"file_url": "/private/files/BQA-2026-00071-screenshot-72d6139a59-p3-onb-03-step1-filled.png", "kind": "screenshot", "label": "http://localhost:49510/home", "metadata": {}}, {"file_url": "/private/files/BQA-2026-00071-screenshot-91f058c707-p3-onb-04-step2-calendar.png", "kind": "screenshot", "label": "http://localhost:49510/home", "metadata": {}}, {"file_url": "/private/files/BQA-2026-00071-screenshot-a766242d56-p3-onb-05-step3-availability.png", "kind": "screenshot", "label": "http://localhost:49510/home", "metadata": {}}, {"file_url": "/private/files/BQA-2026-00071-screenshot-7bdb7897a9-p3-onb-06-step3-filled.png", "kind": "screenshot", "label": "http://localhost:49510/home", "metadata": {}}, {"file_url": "/private/files/BQA-2026-00071-screenshot-a0a53df279-p3-onb-07-after-step3-submit.png", "kind": "screenshot", "label": "http://localhost:49510/home", "metadata": {}}, {"file_url": "/private/files/BQA-2026-00071-trace-ff03d468bf-trace.zip", "kind": "trace", "label": null, "metadata": {}}, {"file_url": "/private/files/BQA-2026-00071-report-5f4dc95900-report.json", "kind": "report", "label": null, "metadata": {}}], "findings": [{"action": "assert:text_contains", "message": "Text `Create Service` was not found in `body`.", "scenario_id": "p3_solo_onboarding_individual", "severity": "medium", "type": "missing_selector_or_text", "url": "http://localhost:49510/home", "value": {"max_count": null, "method": null, "min_count": null, "request_body_contains": null, "request_json_value": null, "response_body_contains": null, "response_json_value": null, "selector": null, "status": null, "status_max": null, "status_min": null, "timeout_ms": 10000, "type": "text_contains", "url_contains": null, "url_matches": null, "value": "Create Service"}}, {"line": 0, "severity": "high", "text": "Failed to load resource: the server responded with a status of 500 (INTERNAL SERVER ERROR)", "type": "error", "url": "http://localhost:49510/api/method/appointment.onboarding.save_availability"}, {"line": 139, "severity": "high", "text": "Failed to save availability: {exception: TypeError: save_availability() missing 1 required positional argument: 'level', exc_type: TypeError, exc: [\"Traceback (most recent call last):\\n  File \\\"/ho\u2026ssing 1 required positional argument: 'level'\\n\"], httpStatus: 500, httpStatusText: INTERNAL SERVER ERROR}", "type": "error", "url": "http://localhost:49510/src/pages/home/components/Step3Availability.tsx"}, {"method": "POST", "severity": "high", "status": 500, "type": "network_failure", "url": "http://localhost:49510/api/method/appointment.onboarding.save_availability"}, {"changes": [{"name": "appointment/appointment-p3-solo-onboarding-individual/home.png", "sha256": "8680f0f987e86fff72967fe43111084b0fa840328a6e36de6ff91ace993c90d3", "status": "new"}, {"name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-01-type-selection.png", "sha256": "8680f0f987e86fff72967fe43111084b0fa840328a6e36de6ff91ace993c90d3", "status": "new"}, {"name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-02-step1-profile.png", "sha256": "6e0bac61e23ac8b565120619032fa3c27c0d927fd110288a28d950d6bfb3ee4a", "status": "new"}, {"name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-03-step1-filled.png", "sha256": "91d307da2420669185988b81e0252019f9efb56d06562cb3746cb4f998bc27d2", "status": "new"}, {"name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-04-step2-calendar.png", "sha256": "e0842db0033e8d1326dd1922194a4a9fcbd2a14b57fd7b00ac84599e806044f5", "status": "new"}, {"name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-05-step3-availability.png", "sha256": "f2b31414e094e79be2c338698afed9adcc48b03d5c6349bf43ebd99be5064f93", "status": "new"}, {"name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-06-step3-filled.png", "sha256": "85af26be6141d57c74dc31ed328faed17c29d41ba0b82288907a2a9245b888fd", "status": "new"}, {"name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-07-after-step3-submit.png", "sha256": "0ff1026c7ecfee593c7b15819487cf3ed7426a7fc708d5eb666bbb2b413d6248", "status": "new"}], "ignored_for_status": true, "message": "8 screenshot baseline change(s) detected.", "severity": "review", "type": "visual_baseline_drift"}], "ok": false, "summary": "2 error, 1 missing selector or text, 1 network failure"}, "baseline": {"changes": [{"name": "appointment/appointment-p3-solo-onboarding-individual/home.png", "sha256": "8680f0f987e86fff72967fe43111084b0fa840328a6e36de6ff91ace993c90d3", "status": "new"}, {"name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-01-type-selection.png", "sha256": "8680f0f987e86fff72967fe43111084b0fa840328a6e36de6ff91ace993c90d3", "status": "new"}, {"name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-02-step1-profile.png", "sha256": "6e0bac61e23ac8b565120619032fa3c27c0d927fd110288a28d950d6bfb3ee4a", "status": "new"}, {"name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-03-step1-filled.png", "sha256": "91d307da2420669185988b81e0252019f9efb56d06562cb3746cb4f998bc27d2", "status": "new"}, {"name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-04-step2-calendar.png", "sha256": "e0842db0033e8d1326dd1922194a4a9fcbd2a14b57fd7b00ac84599e806044f5", "status": "new"}, {"name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-05-step3-availability.png", "sha256": "f2b31414e094e79be2c338698afed9adcc48b03d5c6349bf43ebd99be5064f93", "status": "new"}, {"name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-06-step3-filled.png", "sha256": "85af26be6141d57c74dc31ed328faed17c29d41ba0b82288907a2a9245b888fd", "status": "new"}, {"name": "appointment/appointment-p3-solo-onboarding-individual/p3-onb-07-after-step3-submit.png", "sha256": "0ff1026c7ecfee593c7b15819487cf3ed7426a7fc708d5eb666bbb2b413d6248", "status": "new"}], "ok": false, "update_block_reason": null, "update_blocked": false, "updated": false}, "fixture_cleanup": {"removed": ["Appointment:QA-APT-88A367D4", "EventType:EVT-2026-000001", "Service:SRV-2026-0006", "User Appointment Availability:qa-browser-86955c@qa.local", "Location:QA-BROWSER-86955c Admin Location", "Provider:QA-BROWSER-86955c Admin Provider", "Location:QA-BROWSER-86955c Location", "Provider:QA-BROWSER-86955c Provider", "Organization:QA-BROWSER-86955c Org", "User:qa-browser-86955c@qa.local"]}}
