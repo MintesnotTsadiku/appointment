@@ -1,0 +1,276 @@
+# Phase 4 — reception lifecycle on the downstream P4 fixture.
+# Identity: appointment-review-reception@example.test (Front-Desk).
+# Creates a booking (the cross-role handoff record), handles/assigns a walk-in,
+# reschedules one appointment, cancels another and completes a visit.
+app: appointment
+base_url: http://localhost:49510
+default_role: appointment-review-reception@example.test
+auth:
+  type: frappe_session
+  username: appointment-review-reception@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+options:
+  ignore_baseline_drift: true
+scenarios:
+  - id: p4_rec_today
+    title: Reception day view
+    viewport: {width: 1440, height: 960}
+    timeout_ms: 30000
+    checks: []
+    routes:
+      - path: /reception
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="reception-heading"]'
+          - type: text_contains
+            value: "P4 Reschedule Client"
+    actions:
+      - action: screenshot
+        name: p4-rec-01-today.png
+        full_page: true
+      - action: get_dom_snapshot
+        name: p4-rec-01-today.html
+
+  - id: p4_rec_create_handoff
+    title: Reception creates the cross-role handoff booking
+    viewport: {width: 1440, height: 960}
+    timeout_ms: 45000
+    checks: []
+    routes:
+      - path: /reception
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="reception-new-appointment"]'
+    actions:
+      - action: click
+        selector: '[data-qa="reception-new-appointment"]'
+      - action: wait_for
+        selector: 'input[placeholder="John Doe"]'
+      - action: fill
+        selector: 'input[placeholder="John Doe"]'
+        value: "P4 Handoff Client"
+      - action: fill
+        selector: 'input[placeholder="+251 9XX XXX XXX"]'
+        value: "+251900000700"
+      - action: fill
+        selector: 'input[placeholder="john@example.com"]'
+        value: "p4-handoff@example.test"
+      - action: select
+        selector: ':nth-match(select, 1)'
+        value: "SRV-2026-0008"
+      - action: select
+        selector: ':nth-match(select, 2)'
+        value: "P4 Provider One"
+      - action: select
+        selector: ':nth-match(select, 3)'
+        value: "P4 Location Alpha"
+      - action: fill
+        selector: 'input[type="date"]'
+        value: "2026-09-22"
+      - action: fill
+        selector: 'input[type="time"]'
+        value: "16:30"
+      - action: screenshot
+        name: p4-rec-02-create-filled.png
+        full_page: false
+      - action: click
+        selector: 'button:has-text("Create Appointment")'
+        assertions:
+          - type: network_request
+            url_contains: create_desk_appointment
+            method: POST
+            status_min: 200
+            status_max: 299
+            timeout_ms: 20000
+      - action: screenshot
+        name: p4-rec-03-created.png
+        full_page: true
+      - action: get_dom_snapshot
+        name: p4-rec-03-created.html
+      - action: get_console_errors
+      - action: get_network_errors
+
+  - id: p4_rec_walkin
+    title: Reception adds and assigns a walk-in
+    viewport: {width: 1440, height: 960}
+    timeout_ms: 45000
+    checks: []
+    routes:
+      - path: /reception
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="reception-add-walkin"]'
+    actions:
+      - action: click
+        selector: '[data-qa="reception-add-walkin"]'
+      - action: wait_for
+        selector: '[data-qa="walkin-client-name"]'
+      - action: fill
+        selector: '[data-qa="walkin-client-name"]'
+        value: "P4 Walk-In Client"
+      - action: fill
+        selector: '[data-qa="walkin-client-phone"]'
+        value: "+251900000800"
+      - action: fill
+        selector: '#client_email'
+        value: "p4-walkin@example.test"
+      - action: select
+        selector: '#service_requested'
+        value: "SRV-2026-0008"
+      - action: select
+        selector: '#location_name'
+        value: "P4 Location Alpha"
+      - action: select
+        selector: '#provider_preferred'
+        value: "P4 Provider One"
+      - action: screenshot
+        name: p4-rec-04-walkin-filled.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="walkin-submit"]'
+      - action: wait_for
+        selector: ':nth-match([data-qa="walkin-card"], 1)'
+      - action: screenshot
+        name: p4-rec-05-walkin-queued.png
+        full_page: true
+      - action: click
+        selector: ':nth-match([data-qa="walkin-assign"], 1)'
+        assertions:
+          - type: network_request
+            url_contains: assign_walk_in_to_slot
+            method: POST
+            status_min: 200
+            status_max: 299
+            timeout_ms: 20000
+      - action: screenshot
+        name: p4-rec-06-walkin-assigned.png
+        full_page: true
+      - action: get_dom_snapshot
+        name: p4-rec-06-walkin-assigned.html
+      - action: get_console_errors
+      - action: get_network_errors
+
+  - id: p4_rec_reschedule
+    title: Reception reschedules an appointment
+    viewport: {width: 1440, height: 960}
+    timeout_ms: 45000
+    checks: []
+    routes:
+      - path: /reception
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="appointment-card"]:has-text("P4 Reschedule Client")'
+    actions:
+      - action: click
+        selector: '[data-qa="appointment-card"]:has-text("P4 Reschedule Client")'
+      - action: wait_for
+        selector: '[data-qa="edit-appointment-modal"]'
+      - action: click
+        selector: '[data-qa="edit-time-trigger"]'
+      - action: wait_for
+        selector: '[data-qa="edit-time-hour-3"]'
+      - action: click
+        selector: '[data-qa="edit-time-hour-3"]'
+      - action: click
+        selector: '[data-qa="edit-time-minute-0"]'
+      - action: click
+        selector: '[data-qa="edit-time-period-PM"]'
+      - action: screenshot
+        name: p4-rec-07-reschedule-form.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="appointment-update-submit"]'
+        assertions:
+          - type: network_request
+            url_contains: update_appointment
+            method: POST
+            status_min: 200
+            status_max: 299
+            request_json_path: start_time
+            request_json_value: "15:00:00"
+            timeout_ms: 20000
+      - action: screenshot
+        name: p4-rec-08-rescheduled.png
+        full_page: true
+      - action: get_console_errors
+      - action: get_network_errors
+
+  - id: p4_rec_cancel
+    title: Reception cancels an appointment
+    viewport: {width: 1440, height: 960}
+    timeout_ms: 45000
+    checks: []
+    routes:
+      - path: /reception
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="appointment-card"]:has-text("P4 Cancel Client")'
+    actions:
+      - action: click
+        selector: '[data-qa="appointment-card"]:has-text("P4 Cancel Client")'
+      - action: wait_for
+        selector: '[data-qa="edit-appointment-modal"]'
+      - action: select
+        selector: '[data-qa="appointment-status"]'
+        value: "Cancelled"
+      - action: click
+        selector: '[data-qa="appointment-update-submit"]'
+        assertions:
+          - type: network_request
+            url_contains: update_appointment
+            method: POST
+            status_min: 200
+            status_max: 299
+            request_json_path: status
+            request_json_value: "Cancelled"
+            timeout_ms: 20000
+      - action: screenshot
+        name: p4-rec-09-cancelled.png
+        full_page: true
+      - action: get_console_errors
+      - action: get_network_errors
+
+  - id: p4_rec_complete
+    title: Reception closes/completes a visit
+    viewport: {width: 1440, height: 960}
+    timeout_ms: 45000
+    checks: []
+    routes:
+      - path: /reception
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="appointment-card"]:has-text("P4 Complete Client")'
+    actions:
+      - action: click
+        selector: '[data-qa="appointment-card"]:has-text("P4 Complete Client")'
+      - action: wait_for
+        selector: '[data-qa="edit-appointment-modal"]'
+      - action: select
+        selector: '[data-qa="appointment-status"]'
+        value: "Completed"
+      - action: click
+        selector: '[data-qa="appointment-update-submit"]'
+        assertions:
+          - type: network_request
+            url_contains: update_appointment
+            method: POST
+            status_min: 200
+            status_max: 299
+            request_json_path: status
+            request_json_value: "Completed"
+            timeout_ms: 20000
+      - action: screenshot
+        name: p4-rec-10-completed.png
+        full_page: true
+      - action: get_console_errors
+      - action: get_network_errors

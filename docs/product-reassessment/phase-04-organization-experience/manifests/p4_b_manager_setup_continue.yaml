@@ -1,0 +1,140 @@
+# Phase 4 — organization manager completes organization setup through the wizard.
+# Identity: appointment-review-manager@example.test (Organization Manager).
+# Continues the persisted organization onboarding after p4_a: add two providers,
+# set business hours/location, create a service, reach booking links.
+# Assertions (not hard waits) at expected transitions so a blocked step still
+# yields screenshots and DOM evidence.
+app: appointment
+base_url: http://localhost:49510
+default_role: appointment-review-manager@example.test
+auth:
+  type: frappe_session
+  username: appointment-review-manager@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+options:
+  ignore_baseline_drift: true
+scenarios:
+  - id: p4_manager_setup_continue
+    title: Manager reloads saved state, adds providers, hours, service
+    viewport:
+      width: 1440
+      height: 960
+    timeout_ms: 240000
+    checks: []
+    routes:
+      - path: /home
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+    actions:
+      - action: screenshot
+        name: p4-mgr-05-reload-saved-state.png
+        full_page: false
+      - action: get_dom_snapshot
+        name: p4-mgr-05-reload-saved-state.html
+      - action: click
+        selector: 'button:has-text("Create New Provider")'
+        assertions:
+          - type: visible_selector
+            value: '#providerName'
+      - action: fill
+        selector: '#providerName'
+        value: "P4 Provider One"
+      - action: fill
+        selector: '#email'
+        value: "appointment-review-provider@example.test"
+      - action: fill
+        selector: '#phone'
+        value: "+251900000501"
+      - action: click
+        selector: 'button:has-text("Add Provider")'
+        assertions:
+          - type: network_request
+            url_contains: add_organization_provider
+            method: POST
+            status_min: 200
+            status_max: 299
+            timeout_ms: 20000
+      - action: screenshot
+        name: p4-mgr-06-provider-one-added.png
+        full_page: false
+      - action: click
+        selector: 'button:has-text("Create New Provider")'
+        assertions:
+          - type: visible_selector
+            value: '#providerName'
+      - action: fill
+        selector: '#providerName'
+        value: "P4 Provider Two"
+      - action: fill
+        selector: '#email'
+        value: "p4-provider-two@example.test"
+      - action: fill
+        selector: '#phone'
+        value: "+251900000502"
+      - action: click
+        selector: 'button:has-text("Add Provider")'
+      - action: screenshot
+        name: p4-mgr-07-provider-two-added.png
+        full_page: false
+      - action: click
+        selector: 'button:has-text("Next: Set Business Hours")'
+      - action: wait_for
+        selector: '#locationName'
+      - action: screenshot
+        name: p4-mgr-08-business-hours.png
+        full_page: false
+      - action: fill
+        selector: '#locationName'
+        value: "P4 Location Alpha"
+      - action: fill
+        selector: '#address'
+        value: "Bole Road, Addis Ababa"
+      - action: click
+        selector: 'button:has-text("9-5 (Mon-Fri)")'
+      - action: screenshot
+        name: p4-mgr-09-hours-filled.png
+        full_page: false
+      - action: click
+        selector: 'button:has-text("Next: Create Services")'
+        assertions:
+          - type: network_request
+            url_contains: save_organization_availability
+            method: POST
+            status_min: 200
+            status_max: 299
+            timeout_ms: 20000
+      - action: wait_for
+        selector: '#serviceName'
+      - action: screenshot
+        name: p4-mgr-10-create-service.png
+        full_page: false
+      - action: fill
+        selector: '#serviceName'
+        value: "P4 Service Alpha"
+      - action: fill
+        selector: '#price'
+        value: "400"
+      - action: screenshot
+        name: p4-mgr-11-service-filled.png
+        full_page: false
+      - action: click
+        selector: 'button:has-text("Next: Get Booking Links")'
+        assertions:
+          - type: network_request
+            url_contains: create_organization_service
+            method: POST
+            status_min: 200
+            status_max: 299
+            timeout_ms: 20000
+      - action: screenshot
+        name: p4-mgr-12-booking-links.png
+        full_page: true
+      - action: get_dom_snapshot
+        name: p4-mgr-12-booking-links.html
+      - action: get_console_errors
+      - action: get_network_errors

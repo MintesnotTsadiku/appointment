@@ -1,0 +1,3 @@
+== source manifest: /home/minte/projects/training-apps/.worktrees/frappe-appointment-phase-04/docs/product-reassessment/phase-04-organization-experience/manifests/p4_b_manager_setup_continue.yaml
+== staged manifest: /tmp/p4qa/appointment_p4_p4-b-manager-setup-continue.yaml-
+== kwargs: {"manifest_name": "/tmp/p4qa/appointment_p4_p4-b-manager-setup-continue.yaml-", "base_url": "http://localhost:49510"}

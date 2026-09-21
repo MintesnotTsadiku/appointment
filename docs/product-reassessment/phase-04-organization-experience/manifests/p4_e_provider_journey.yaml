@@ -1,0 +1,119 @@
+# Phase 4 — provider journey on the downstream P4 fixture.
+# Identity: appointment-review-provider@example.test (Provider).
+# Finds assigned work, inspects customer context, opens availability, and
+# attempts to complete an appointment (no provider-scoped completion exists).
+app: appointment
+base_url: http://localhost:49510
+default_role: appointment-review-provider@example.test
+auth:
+  type: frappe_session
+  username: appointment-review-provider@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+options:
+  ignore_baseline_drift: true
+scenarios:
+  - id: p4_prov_calendar
+    title: Provider calendar shows assigned work including the handoff booking
+    viewport: {width: 1440, height: 960}
+    timeout_ms: 30000
+    checks: []
+    routes:
+      - path: /calendar
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+          - type: network_request
+            url_contains: dashboard.get_appointments
+            status_min: 200
+            status_max: 299
+            min_count: 1
+            timeout_ms: 20000
+          - type: text_contains
+            value: "P4 Reschedule Client"
+    actions:
+      - action: screenshot
+        name: p4-prov-01-calendar.png
+        full_page: true
+      - action: get_dom_snapshot
+        name: p4-prov-01-calendar.html
+
+  - id: p4_prov_context
+    title: Provider opens an appointment to read customer context
+    viewport: {width: 1440, height: 960}
+    timeout_ms: 30000
+    checks: []
+    routes:
+      - path: /calendar
+        assertions:
+          - type: network_idle
+          - type: text_contains
+            value: "P4 Reschedule Client"
+    actions:
+      - action: click
+        selector: 'text=P4 Reschedule Client'
+      - action: screenshot
+        name: p4-prov-02-context.png
+        full_page: false
+      - action: get_dom_snapshot
+        name: p4-prov-02-context.html
+      - action: get_console_errors
+      - action: get_network_errors
+
+  - id: p4_prov_availability
+    title: Provider availability surface
+    viewport: {width: 1440, height: 960}
+    timeout_ms: 30000
+    checks: []
+    routes:
+      - path: /settings/availability
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+    actions:
+      - action: screenshot
+        name: p4-prov-03-availability.png
+        full_page: true
+      - action: get_dom_snapshot
+        name: p4-prov-03-availability.html
+
+  - id: p4_prov_reception_complete
+    title: Provider completes an appointment via the shared reception surface
+    viewport: {width: 1440, height: 960}
+    timeout_ms: 45000
+    checks: []
+    routes:
+      - path: /reception
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="appointment-card"]:has-text("P4 Workload Client")'
+    actions:
+      - action: click
+        selector: '[data-qa="appointment-card"]:has-text("P4 Workload Client")'
+      - action: wait_for
+        selector: '[data-qa="edit-appointment-modal"]'
+      - action: select
+        selector: '[data-qa="appointment-status"]'
+        value: "Completed"
+      - action: click
+        selector: '[data-qa="appointment-update-submit"]'
+        assertions:
+          - type: network_request
+            url_contains: update_appointment
+            method: POST
+            status_min: 200
+            status_max: 299
+            request_json_path: status
+            request_json_value: "Completed"
+            timeout_ms: 20000
+      - action: screenshot
+        name: p4-prov-04-completed-via-reception.png
+        full_page: true
+      - action: get_dom_snapshot
+        name: p4-prov-04-completed-via-reception.html
+      - action: get_console_errors
+      - action: get_network_errors
