@@ -1,0 +1,209 @@
+[
+  {
+    "run": "handoff_booking",
+    "trace": "/tmp/agent_browser_qa/appointment/appointment-p3b-handoff-booking-20260921T201938Z/trace.zip",
+    "endpoint": "appointment.api.personal_meet.book_time_slot",
+    "started_at": "2026-09-21T20:19:53.875Z",
+    "http_status": 200,
+    "response_fields": [
+      "message",
+      "event_id",
+      "meeting_provider",
+      "meet_link",
+      "reschedule_url",
+      "google_calendar_event_url"
+    ],
+    "event_id": "BEV00005",
+    "message": "Event has been created",
+    "appointment": {},
+    "exc_type": null
+  },
+  {
+    "run": "handoff_exists",
+    "trace": "/tmp/agent_browser_qa/appointment/appointment-p3b-handoff-exists-before-inspection-20260921T201959Z/trace.zip",
+    "endpoint": "appointment.overrides.event_override.get_events_from_doc",
+    "started_at": "2026-09-21T20:20:00.611Z",
+    "http_status": 200,
+    "response_fields": [
+      "upcoming",
+      "ongoing",
+      "past"
+    ],
+    "appointment": {},
+    "event_groups": {
+      "upcoming": [],
+      "ongoing": [],
+      "past": []
+    },
+    "exc_type": null
+  },
+  {
+    "run": "handoff_reception",
+    "trace": "/tmp/agent_browser_qa/appointment/appointment-p3b-handoff-provider-reception-20260921T202005Z/trace.zip",
+    "endpoint": "appointment.scheduler.api.desk.get_desk_appointments",
+    "started_at": "2026-09-21T20:20:08.405Z",
+    "http_status": 200,
+    "response_fields": [
+      "appointments",
+      "count"
+    ],
+    "appointment": {},
+    "row_count": 4,
+    "handoff_customer_present": false,
+    "afternoon_control": [
+      {
+        "name": "P3B-APT-AFT",
+        "status": "No Show",
+        "appointment_date": "2026-09-22",
+        "start_time": "15:00:00",
+        "end_time": "15:30:00"
+      }
+    ],
+    "exc_type": null
+  },
+  {
+    "run": "handoff_reception",
+    "trace": "/tmp/agent_browser_qa/appointment/appointment-p3b-handoff-provider-reception-20260921T202005Z/trace.zip",
+    "endpoint": "appointment.scheduler.api.desk.get_desk_appointments",
+    "started_at": "2026-09-21T20:20:12.176Z",
+    "http_status": 200,
+    "response_fields": [
+      "appointments",
+      "count"
+    ],
+    "appointment": {},
+    "row_count": 6,
+    "handoff_customer_present": false,
+    "afternoon_control": [],
+    "exc_type": null
+  },
+  {
+    "run": "handoff_calendar",
+    "trace": "/tmp/agent_browser_qa/appointment/appointment-p3b-handoff-provider-calendar-20260921T202016Z/trace.zip",
+    "endpoint": "appointment.dashboard.get_appointments",
+    "started_at": "2026-09-21T20:20:18.664Z",
+    "http_status": 200,
+    "response_fields": [
+      "appointments"
+    ],
+    "appointment": {},
+    "row_count": 0,
+    "handoff_customer_present": false,
+    "afternoon_control": [],
+    "exc_type": null
+  },
+  {
+    "run": "no_show",
+    "trace": "/tmp/agent_browser_qa/appointment/appointment-p3b-update-afternoon-noshow-20260921T200659Z/trace.zip",
+    "endpoint": "appointment.scheduler.api.desk.get_desk_appointments",
+    "started_at": "2026-09-21T20:07:01.882Z",
+    "http_status": 200,
+    "response_fields": [
+      "appointments",
+      "count"
+    ],
+    "appointment": {},
+    "row_count": 4,
+    "handoff_customer_present": false,
+    "afternoon_control": [
+      {
+        "name": "P3B-APT-AFT",
+        "status": "Confirmed",
+        "appointment_date": "2026-09-22",
+        "start_time": "15:00:00",
+        "end_time": "15:30:00"
+      }
+    ],
+    "exc_type": null
+  },
+  {
+    "run": "no_show",
+    "trace": "/tmp/agent_browser_qa/appointment/appointment-p3b-update-afternoon-noshow-20260921T200659Z/trace.zip",
+    "endpoint": "appointment.scheduler.api.desk.get_desk_appointments",
+    "started_at": "2026-09-21T20:07:11.381Z",
+    "http_status": 200,
+    "response_fields": [
+      "appointments",
+      "count"
+    ],
+    "appointment": {},
+    "row_count": 4,
+    "handoff_customer_present": false,
+    "afternoon_control": [
+      {
+        "name": "P3B-APT-AFT",
+        "status": "Confirmed",
+        "appointment_date": "2026-09-22",
+        "start_time": "15:00:00",
+        "end_time": "15:30:00"
+      }
+    ],
+    "exc_type": null
+  },
+  {
+    "run": "no_show",
+    "trace": "/tmp/agent_browser_qa/appointment/appointment-p3b-update-afternoon-noshow-20260921T200659Z/trace.zip",
+    "endpoint": "appointment.scheduler.api.desk.update_appointment",
+    "started_at": "2026-09-21T20:07:14.743Z",
+    "http_status": 200,
+    "response_fields": [
+      "success",
+      "appointment",
+      "message"
+    ],
+    "success": "True",
+    "message": "Appointment updated successfully",
+    "appointment": {
+      "name": "P3B-APT-AFT",
+      "status": "No Show",
+      "appointment_date": "2026-09-22",
+      "start_time": "15:00:00",
+      "end_time": "15:30:00",
+      "modified_by": "p3b-solo-owner@example.test"
+    },
+    "exc_type": null
+  },
+  {
+    "run": "no_show",
+    "trace": "/tmp/agent_browser_qa/appointment/appointment-p3b-update-afternoon-noshow-20260921T200659Z/trace.zip",
+    "endpoint": "appointment.scheduler.api.desk.get_desk_appointments",
+    "started_at": "2026-09-21T20:07:14.804Z",
+    "http_status": 200,
+    "response_fields": [
+      "appointments",
+      "count"
+    ],
+    "appointment": {},
+    "row_count": 4,
+    "handoff_customer_present": false,
+    "afternoon_control": [
+      {
+        "name": "P3B-APT-AFT",
+        "status": "No Show",
+        "appointment_date": "2026-09-22",
+        "start_time": "15:00:00",
+        "end_time": "15:30:00"
+      }
+    ],
+    "exc_type": null
+  },
+  {
+    "run": "closed_day",
+    "trace": "/tmp/agent_browser_qa/appointment/appointment-p3b-customer-closed-day-20260921T202404Z/trace.zip",
+    "endpoint": "appointment.api.personal_meet.book_time_slot",
+    "started_at": "2026-09-21T20:24:14.461Z",
+    "http_status": 200,
+    "response_fields": [
+      "message",
+      "event_id",
+      "meeting_provider",
+      "meet_link",
+      "reschedule_url",
+      "google_calendar_event_url"
+    ],
+    "event_id": "BEV00005",
+    "message": "Event has been created",
+    "appointment": {},
+    "exc_type": null
+  }
+]

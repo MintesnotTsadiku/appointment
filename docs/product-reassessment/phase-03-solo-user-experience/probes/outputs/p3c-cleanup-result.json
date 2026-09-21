@@ -1,0 +1,298 @@
+{
+  "site": "meet-beta-fix-appointment-beta-readiness-01dea7.localhost",
+  "before": {
+    "orphan_children": [
+      {
+        "doctype": "Organization Manager",
+        "name": "n5d1l9r1sq",
+        "parent": "P3B Org",
+        "parenttype": "Organization",
+        "parentfield": "managers"
+      },
+      {
+        "doctype": "Booking URL",
+        "name": "dgga6s9518",
+        "parent": "P3B Org",
+        "parenttype": "Organization",
+        "parentfield": "booking_urls"
+      },
+      {
+        "doctype": "Booking URL",
+        "name": "dggl9heq8d",
+        "parent": "P3B Org",
+        "parenttype": "Organization",
+        "parentfield": "booking_urls"
+      },
+      {
+        "doctype": "Booking URL",
+        "name": "dggte6ft6b",
+        "parent": "P3B Org",
+        "parenttype": "Organization",
+        "parentfield": "booking_urls"
+      },
+      {
+        "doctype": "Booking URL",
+        "name": "n5es6mnsbv",
+        "parent": "P3B Org",
+        "parenttype": "Organization",
+        "parentfield": "booking_urls"
+      },
+      {
+        "doctype": "Booking URL",
+        "name": "n5fb0lm4ee",
+        "parent": "P3B Org",
+        "parenttype": "Organization",
+        "parentfield": "booking_urls"
+      },
+      {
+        "doctype": "Booking URL",
+        "name": "n5fglb9s9b",
+        "parent": "P3B Org",
+        "parenttype": "Organization",
+        "parentfield": "booking_urls"
+      },
+      {
+        "doctype": "Booking URL",
+        "name": "n5fvv120lt",
+        "parent": "P3B Org",
+        "parenttype": "Organization",
+        "parentfield": "booking_urls"
+      },
+      {
+        "doctype": "Booking URL",
+        "name": "n5g9fjv199",
+        "parent": "P3B Org",
+        "parenttype": "Organization",
+        "parentfield": "booking_urls"
+      },
+      {
+        "doctype": "Booking URL",
+        "name": "n5g9q28p5j",
+        "parent": "P3B Org",
+        "parenttype": "Organization",
+        "parentfield": "booking_urls"
+      },
+      {
+        "doctype": "Booking URL",
+        "name": "n5gafkl35s",
+        "parent": "P3B Org",
+        "parenttype": "Organization",
+        "parentfield": "booking_urls"
+      },
+      {
+        "doctype": "Booking URL",
+        "name": "n5gm9qofrl",
+        "parent": "P3B Org",
+        "parenttype": "Organization",
+        "parentfield": "booking_urls"
+      },
+      {
+        "doctype": "Provider Location",
+        "name": "n5eq88tq35",
+        "parent": "P3B Solo Owner",
+        "parenttype": "Provider",
+        "parentfield": "locations"
+      },
+      {
+        "doctype": "Provider Organization",
+        "name": "n5e5l6elc1",
+        "parent": "P3B Solo Owner",
+        "parenttype": "Provider",
+        "parentfield": "organizations"
+      },
+      {
+        "doctype": "Opening Hours",
+        "name": "dgf1sqa48c",
+        "parent": "P3B Studio",
+        "parenttype": "Location",
+        "parentfield": "opening_hours"
+      },
+      {
+        "doctype": "Opening Hours",
+        "name": "dgf39sqr3n",
+        "parent": "P3B Studio",
+        "parenttype": "Location",
+        "parentfield": "opening_hours"
+      },
+      {
+        "doctype": "Opening Hours",
+        "name": "dgf9hcgsha",
+        "parent": "P3B Studio",
+        "parenttype": "Location",
+        "parentfield": "opening_hours"
+      },
+      {
+        "doctype": "Opening Hours",
+        "name": "dgfgps9obi",
+        "parent": "P3B Studio",
+        "parenttype": "Location",
+        "parentfield": "opening_hours"
+      },
+      {
+        "doctype": "Opening Hours",
+        "name": "dgfinjeln4",
+        "parent": "P3B Studio",
+        "parenttype": "Location",
+        "parentfield": "opening_hours"
+      },
+      {
+        "doctype": "Opening Hours",
+        "name": "dgfj8rn8c2",
+        "parent": "P3B Studio",
+        "parenttype": "Location",
+        "parentfield": "opening_hours"
+      },
+      {
+        "doctype": "Opening Hours",
+        "name": "dgfohsdv2h",
+        "parent": "P3B Studio",
+        "parenttype": "Location",
+        "parentfield": "opening_hours"
+      },
+      {
+        "doctype": "Service Provider",
+        "name": "n5fua7l5aq",
+        "parent": "SRV-2026-0006",
+        "parenttype": "Service",
+        "parentfield": "service_providers"
+      },
+      {
+        "doctype": "Appointment Time Slot",
+        "name": "n5f2s8gl8b",
+        "parent": "p3b-solo-owner@example.test",
+        "parenttype": "User Appointment Availability",
+        "parentfield": "appointment_time_slot"
+      },
+      {
+        "doctype": "Appointment Time Slot",
+        "name": "n5f79qgid2",
+        "parent": "p3b-solo-owner@example.test",
+        "parenttype": "User Appointment Availability",
+        "parentfield": "appointment_time_slot"
+      },
+      {
+        "doctype": "Appointment Time Slot",
+        "name": "n5f81bqna0",
+        "parent": "p3b-solo-owner@example.test",
+        "parenttype": "User Appointment Availability",
+        "parentfield": "appointment_time_slot"
+      },
+      {
+        "doctype": "Appointment Time Slot",
+        "name": "n5fct7q7s8",
+        "parent": "p3b-solo-owner@example.test",
+        "parenttype": "User Appointment Availability",
+        "parentfield": "appointment_time_slot"
+      },
+      {
+        "doctype": "Appointment Time Slot",
+        "name": "n5fdc2d0is",
+        "parent": "p3b-solo-owner@example.test",
+        "parenttype": "User Appointment Availability",
+        "parentfield": "appointment_time_slot"
+      },
+      {
+        "doctype": "Appointment Slot Duration",
+        "name": "n5fjsql7uf",
+        "parent": "p3b-solo-owner@example.test",
+        "parenttype": "User Appointment Availability",
+        "parentfield": "available_durations"
+      },
+      {
+        "doctype": "Booking URL",
+        "name": "n5f3mhkrgt",
+        "parent": "p3b-solo-owner@example.test",
+        "parenttype": "User Appointment Availability",
+        "parentfield": "booking_urls"
+      },
+      {
+        "doctype": "Booking URL",
+        "name": "n5fdhkmab3",
+        "parent": "p3b-solo-owner@example.test",
+        "parenttype": "User Appointment Availability",
+        "parentfield": "booking_urls"
+      },
+      {
+        "doctype": "Booking URL",
+        "name": "n5golla5kk",
+        "parent": "p3b-solo-owner@example.test",
+        "parenttype": "User Appointment Availability",
+        "parentfield": "booking_urls"
+      },
+      {
+        "doctype": "User Social Login",
+        "name": "n5akva38aq",
+        "parent": "p3b-solo-owner@example.test",
+        "parenttype": "User",
+        "parentfield": "social_logins"
+      },
+      {
+        "doctype": "User Social Login",
+        "name": "n5drqj8i67",
+        "parent": "p3b-solo-customer@example.test",
+        "parenttype": "User",
+        "parentfield": "social_logins"
+      },
+      {
+        "doctype": "User Social Login",
+        "name": "ect60u0lsv",
+        "parent": "p3b-onb@example.test",
+        "parenttype": "User",
+        "parentfield": "social_logins"
+      }
+    ],
+    "auxiliary_counts": {
+      "auth": 1,
+      "sessions": 15,
+      "defaults": 3
+    },
+    "retained_users": [
+      "appointment-review-manager@example.test",
+      "appointment-review-provider@example.test",
+      "appointment-review-reception@example.test",
+      "appointment-review-customer@example.test"
+    ],
+    "browser_accounts": 4,
+    "browser_sessions": 4,
+    "business_counts": {
+      "Organization": 0,
+      "Provider": 0,
+      "Service": 0,
+      "Location": 0,
+      "EventType": 0,
+      "Appointment": 0,
+      "Booking Event": 0,
+      "Appointment Group": 0
+    },
+    "email_muted": 1,
+    "scheduler_paused": 1
+  },
+  "after": {
+    "orphan_children": [],
+    "auxiliary_counts": {
+      "auth": 0,
+      "sessions": 0,
+      "defaults": 0
+    },
+    "retained_users": [
+      "appointment-review-manager@example.test",
+      "appointment-review-provider@example.test",
+      "appointment-review-reception@example.test",
+      "appointment-review-customer@example.test"
+    ],
+    "browser_accounts": 4,
+    "browser_sessions": 4,
+    "business_counts": {
+      "Organization": 0,
+      "Provider": 0,
+      "Service": 0,
+      "Location": 0,
+      "EventType": 0,
+      "Appointment": 0,
+      "Booking Event": 0,
+      "Appointment Group": 0
+    },
+    "email_muted": 1,
+    "scheduler_paused": 1
+  }
+}
