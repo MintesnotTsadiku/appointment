@@ -13,6 +13,9 @@ const Login = lazy(() => import("@/pages/auth/login"));
 const Signup = lazy(() => import("@/pages/auth/signup"));
 const ForgotPassword = lazy(() => import("@/pages/auth/forgot-password"));
 const Home = lazy(() => import("@/pages/home"));
+const Workspaces = lazy(() => import("@/pages/workspaces"));
+const Onboarding = lazy(() => import("@/pages/onboarding"));
+const NoAccess = lazy(() => import("@/pages/no-access"));
 const Calendar = lazy(() => import("@/pages/calendar"));
 const Analytics = lazy(() => import("@/pages/analytics"));
 const AvailabilitySettings = lazy(() => import("@/pages/settings/availability"));
@@ -54,6 +57,9 @@ const Router = () => {
       <Route path="/signup" element={<Signup />} errorElement={<ErrorFallback />}></Route>
       <Route path="/forgot-password" element={<ForgotPassword />} errorElement={<ErrorFallback />}></Route>
       <Route path="/home" element={<Home />} errorElement={<ErrorFallback />}></Route>
+      <Route path="/workspaces" element={<Workspaces />} errorElement={<ErrorFallback />}></Route>
+      <Route path="/onboarding" element={<Onboarding />} errorElement={<ErrorFallback />}></Route>
+      <Route path="/no-access" element={<NoAccess />} errorElement={<ErrorFallback />}></Route>
       <Route path="/calendar" element={<Calendar />} errorElement={<ErrorFallback />}></Route>
       <Route path="/analytics" element={<Analytics />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings" element={<Settings />} errorElement={<ErrorFallback />}></Route>

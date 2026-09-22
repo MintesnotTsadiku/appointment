@@ -4,18 +4,20 @@ import { useFrappeAuth } from 'frappe-react-sdk';
 import { motion } from 'framer-motion';
 import { Calendar, Mail, Lock, AlertCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/button';
+import { isAllowedDestination, useSession } from '@/context/session';
 
 const Login = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { login } = useFrappeAuth();
+  const { reload } = useSession();
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const redirectTo = searchParams.get('redirect-to') || '/home';
+  const redirectTo = searchParams.get('redirect-to');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,10 +26,15 @@ const Login = () => {
 
     try {
       await login({ username: email, password });
-      // Redirect to the intended page or home
-      navigate(redirectTo);
-    } catch (err: any) {
-      setError(err?.message || 'Invalid email or password. Please try again.');
+      // Resolve the authorized landing on the server, then restore an intended
+      // destination only when the resolved context permits it.
+      const context = await reload();
+      const target = isAllowedDestination(redirectTo, context ?? null)
+        ? (redirectTo as string)
+        : context?.landing || '/home';
+      navigate(target, { replace: true });
+    } catch (err) {
+      setError((err as { message?: string })?.message || 'Invalid email or password. Please try again.');
     } finally {
       setLoading(false);
     }

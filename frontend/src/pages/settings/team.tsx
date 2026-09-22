@@ -1,403 +1,272 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { 
-  Users, 
-  ChevronLeft,
-  Plus,
-  Mail,
-  Shield,
-  MoreVertical,
-  Building2,
-  User
-} from 'lucide-react';
+import { FormEvent, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useFrappeGetCall, useFrappePostCall } from 'frappe-react-sdk';
+import { Info, Plus, ShieldCheck, Trash2, UserPlus, Users } from 'lucide-react';
+import AppTopNav from '@/components/workspace/AppTopNav';
 import { Button } from '@/components/button';
-import { Card } from '@/components/card';
-import { useFrappeGetCall } from 'frappe-react-sdk';
+import { Input } from '@/components/input';
+import { Label } from '@/components/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/select';
+import { useSession } from '@/context/session';
+import { parseFrappeErrorMsg } from '@/lib/utils';
 
-const TeamManagement = () => {
-  const [showInviteModal, setShowInviteModal] = useState(false);
-  
-  // Get onboarding progress to determine context
-  const { data: progressData } = useFrappeGetCall<{
-    message: {
-      onboarding_type: 'individual' | 'organization' | null;
-      selected_organization?: { name: string; organization_name: string; slug: string } | null;
-    }
-  }>(
-    'appointment.onboarding.get_progress',
-    undefined,
-    'onboarding-progress'
+interface Member {
+  name: string;
+  user: string;
+  full_name: string;
+  enabled: boolean;
+  membership_role: string;
+  status: string;
+  provider: string | null;
+  provider_name: string | null;
+  locations: Array<{ name: string; label: string }>;
+  assigned_at: string | null;
+}
+
+interface Options {
+  message: Array<{ name: string; provider_name?: string }>;
+}
+
+const ROLE_OPTIONS = [
+  { value: 'Manager', label: 'Manager', help: 'Business setup, publication, team and oversight.' },
+  { value: 'Provider', label: 'Provider', help: 'Sees and manages appointments permitted by their scope.' },
+  { value: 'Receptionist', label: 'Receptionist', help: 'Manages permitted appointments for assigned scope.' },
+];
+
+export default function TeamManagement() {
+  const { session } = useSession();
+  const managerWorkspaces = useMemo(
+    () => (session?.workspaces ?? []).filter((workspace) => workspace.is_manager),
+    [session]
+  );
+  const [organization, setOrganization] = useState<string>('');
+  const activeOrg = organization || managerWorkspaces[0]?.organization || '';
+
+  const [problem, setProblem] = useState('');
+  const [notice, setNotice] = useState('');
+  const [form, setForm] = useState({ email: '', full_name: '', role: 'Receptionist', provider: '', password: '' });
+  const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
+
+  const membersCall = useFrappeGetCall<{ message: { members: Member[]; owner: string } }>(
+    'appointment.scheduler.membership.members',
+    activeOrg ? { organization: activeOrg } : undefined,
+    activeOrg ? `members-${activeOrg}` : null
+  );
+  const providersCall = useFrappeGetCall<Options>(
+    'appointment.scheduler.api.desk.get_providers_list',
+    activeOrg ? { organization: activeOrg } : undefined,
+    activeOrg ? `team-providers-${activeOrg}` : null
+  );
+  const locationsCall = useFrappeGetCall<{ message: Array<{ name: string; location_name: string }> }>(
+    'appointment.scheduler.membership.location_options',
+    { organization: activeOrg },
+    activeOrg ? `team-locations-${activeOrg}` : null
   );
 
-  const onboardingType = progressData?.message?.onboarding_type;
-  const selectedOrg = progressData?.message?.selected_organization;
-  
-  return (
-    <div 
-      className="min-h-screen text-[var(--text-primary)]"
-      style={{ backgroundColor: 'var(--bg-primary)' }}
-    >
-      {/* Ambient background effects */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div 
-          className="absolute -top-40 -right-40 w-96 h-96 rounded-full blur-[120px]"
-          style={{ backgroundColor: 'var(--glow-primary)' }}
-        />
-        <div 
-          className="absolute top-1/3 -left-40 w-96 h-96 rounded-full blur-[120px]"
-          style={{ backgroundColor: 'var(--glow-secondary)' }}
-        />
-        <div 
-          className="absolute -bottom-40 right-1/4 w-96 h-96 rounded-full blur-[120px]"
-          style={{ backgroundColor: 'var(--glow-success)' }}
-        />
-      </div>
+  const { call: assign, loading: assigning } = useFrappePostCall('appointment.scheduler.membership.assign_member');
+  const { call: revoke } = useFrappePostCall('appointment.scheduler.membership.revoke_member');
 
-      <div className="relative z-10">
-        {/* Header */}
-        <header 
-          className="sticky top-0 z-50 backdrop-blur-xl"
-          style={{ 
-            backgroundColor: 'color-mix(in srgb, var(--bg-primary) 80%, transparent)',
-            borderBottom: '1px solid var(--border-subtle)'
-          }}
-        >
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => window.history.back()}
-                  className="p-2 rounded-lg transition-all"
-                  style={{ 
-                    backgroundColor: 'var(--border-subtle)',
-                    border: '1px solid var(--border-default)',
-                    color: 'var(--text-muted)'
-                  }}
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </motion.button>
-                <div className="flex items-center gap-3">
-                  <div className="relative">
-                    <div 
-                      className="absolute inset-0 rounded-xl blur-lg opacity-50 bg-gradient-primary"
-                    />
-                    <div className="relative bg-gradient-primary p-2.5 rounded-xl">
-                      <Users className="w-5 h-5 text-white" />
-                    </div>
-                  </div>
-                  <div>
-                    <h1 data-qa="team-heading" className="text-xl lg:text-2xl font-bold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
-                      Team Management
-                      <span 
-                        className="px-2 py-0.5 text-[10px] font-semibold rounded-full"
-                        style={{ 
-                          background: 'var(--accent-primary-light)',
-                          color: 'var(--accent-primary)',
-                          border: '1px solid var(--accent-primary-light)'
-                        }}
-                      >
-                        PRO
-                      </span>
-                    </h1>
-                    <div className="flex items-center gap-2 mt-1">
-                      {onboardingType === 'organization' && selectedOrg ? (
-                        <>
-                          <Building2 className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
-                          <p className="text-xs lg:text-sm" style={{ color: 'var(--text-subtle)' }}>
-                            {selectedOrg.organization_name}
-                          </p>
-                        </>
-                      ) : (
-                        <>
-                          <User className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
-                          <p className="text-xs lg:text-sm" style={{ color: 'var(--text-subtle)' }}>
-                            Individual Provider
-                          </p>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setShowInviteModal(true)}
-                className="relative group flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-white overflow-hidden"
-              >
-                <div className="absolute inset-0 bg-gradient-primary group-hover:opacity-90 transition-opacity" />
-                <Plus className="relative z-10 w-4 h-4" />
-                <span className="relative z-10">Invite Member</span>
-              </motion.button>
-            </div>
+  const members = membersCall.data?.message?.members ?? [];
+  const providerOptions = providersCall.data?.message ?? [];
+  const locationOptions = locationsCall.data?.message ?? [];
+
+  async function submit(event: FormEvent) {
+    event.preventDefault();
+    setProblem('');
+    setNotice('');
+    try {
+      const result = await assign({
+        organization: activeOrg,
+        email: form.email,
+        membership_role: form.role,
+        provider: form.provider || undefined,
+        locations: JSON.stringify(selectedLocations),
+        full_name: form.full_name || undefined,
+        password: form.password || undefined,
+      });
+      const payload = result?.message;
+      setNotice(
+        payload?.created_user
+          ? `Account created locally and assigned as ${form.role}. No email was sent.`
+          : `Existing account assigned as ${form.role}. No email was sent.`
+      );
+      setForm({ email: '', full_name: '', role: form.role, provider: '', password: '' });
+      setSelectedLocations([]);
+      membersCall.mutate();
+    } catch (error) {
+      setProblem(parseFrappeErrorMsg(error as Parameters<typeof parseFrappeErrorMsg>[0]));
+    }
+  }
+
+  async function onRevoke(member: Member) {
+    setProblem('');
+    setNotice('');
+    try {
+      await revoke({ membership: member.name });
+      setNotice(`${member.full_name} can no longer access this business.`);
+      membersCall.mutate();
+    } catch (error) {
+      setProblem(parseFrappeErrorMsg(error as Parameters<typeof parseFrappeErrorMsg>[0]));
+    }
+  }
+
+  const inputStyle = { borderColor: 'var(--border-default)', backgroundColor: 'var(--bg-elevated)', color: 'var(--text-primary)' } as const;
+
+  if (!session?.authenticated) {
+    return <main className="min-h-screen p-8" style={{ backgroundColor: 'var(--bg-primary)' }}>Please sign in.</main>;
+  }
+
+  return (
+    <main className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
+      <AppTopNav active="settings" />
+      <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
+        <header className="mb-6 flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <h1 data-qa="team-heading" className="font-heading text-3xl font-bold">Team access</h1>
+            <p className="mt-2 max-w-2xl" style={{ color: 'var(--text-secondary)' }}>
+              Assign existing accounts to a business and scope. This is local account assignment; no invitation email is
+              sent and global roles alone never grant access to another business.
+            </p>
           </div>
+          {managerWorkspaces.length > 1 && (
+            <div className="min-w-[220px]">
+              <Label className="mb-1.5 block" style={{ color: 'var(--text-secondary)' }}>Business</Label>
+              <Select
+                value={activeOrg}
+                onValueChange={(value) => {
+                  setOrganization(value);
+                  setSelectedLocations([]);
+                }}
+              >
+                <SelectTrigger data-qa="team-business-select"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {managerWorkspaces.map((workspace) => (
+                    <SelectItem key={workspace.organization} value={workspace.organization}>
+                      {workspace.business_name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
         </header>
 
-        {/* Main Content */}
-        <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="relative group"
-            >
-              <div 
-                className="relative backdrop-blur-sm rounded-2xl p-5 hover:scale-[1.02] transition-all duration-300"
-                style={{ 
-                  backgroundColor: 'var(--border-subtle)',
-                  border: '1px solid var(--border-default)'
-                }}
-              >
-                <div className="flex items-center gap-3">
-                  <div className="inline-flex p-2.5 rounded-xl bg-gradient-primary">
-                    <Users className="w-5 h-5 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-2xl lg:text-3xl font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>
-                      1
-                    </div>
-                    <div className="text-xs lg:text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>
-                      Total Members
-                    </div>
-                    <div className="text-xs mt-1" style={{ color: 'var(--text-subtle)' }}>
-                      Owner only
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+        {!activeOrg && (
+          <p role="alert" className="rounded-lg p-4" style={{ backgroundColor: 'var(--border-subtle)' }}>
+            You do not manage a business yet. <Link to="/onboarding" className="underline">Set one up</Link>.
+          </p>
+        )}
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="relative group"
-            >
-              <div 
-                className="relative backdrop-blur-sm rounded-2xl p-5 hover:scale-[1.02] transition-all duration-300"
-                style={{ 
-                  backgroundColor: 'var(--border-subtle)',
-                  border: '1px solid var(--border-default)'
-                }}
-              >
-                <div className="flex items-center gap-3">
-                  <div className="inline-flex p-2.5 rounded-xl bg-gradient-success">
-                    <Shield className="w-5 h-5 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-2xl lg:text-3xl font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>
-                      1
-                    </div>
-                    <div className="text-xs lg:text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>
-                      Active Providers
-                    </div>
-                    <div className="text-xs mt-1" style={{ color: 'var(--text-subtle)' }}>
-                      Accepting bookings
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+        {problem && <p role="alert" data-qa="team-error" className="mb-4 rounded-lg p-3" style={{ backgroundColor: 'var(--status-cancelled-bg, #fee2e2)', color: 'var(--status-cancelled, #b91c1c)' }}>{problem}</p>}
+        {notice && <p role="status" data-qa="team-notice" className="mb-4 rounded-lg p-3" style={{ backgroundColor: 'var(--status-confirmed-bg, #dcfce7)', color: 'var(--status-confirmed, #166534)' }}>{notice}</p>}
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="relative group"
-            >
-              <div 
-                className="relative backdrop-blur-sm rounded-2xl p-5 hover:scale-[1.02] transition-all duration-300"
-                style={{ 
-                  backgroundColor: 'var(--border-subtle)',
-                  border: '1px solid var(--border-default)'
-                }}
-              >
-                <div className="flex items-center gap-3">
-                  <div className="inline-flex p-2.5 rounded-xl bg-gradient-secondary">
-                    <Mail className="w-5 h-5 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-2xl lg:text-3xl font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>
-                      0
-                    </div>
-                    <div className="text-xs lg:text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>
-                      Pending Invites
-                    </div>
-                    <div className="text-xs mt-1" style={{ color: 'var(--text-subtle)' }}>
-                      Waiting response
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
-        {/* Team Members List */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <Card className="overflow-hidden">
-            <div className="p-6 border-b border-gray-200 dark:border-gray-800">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                Team Members
+        {activeOrg && (
+          <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
+            <section aria-label="Members" className="rounded-2xl border" style={{ borderColor: 'var(--border-default)', backgroundColor: 'var(--bg-elevated)' }}>
+              <h2 className="flex items-center gap-2 border-b px-5 py-3 font-semibold" style={{ borderColor: 'var(--border-subtle)' }}>
+                <Users className="h-4 w-4" /> Members
               </h2>
-            </div>
-
-            {/* Sample Team Member */}
-            <div className="p-6">
-              <div className="flex items-center justify-between p-4 rounded-lg border border-gray-200 dark:border-gray-800 hover:border-indigo-300 dark:hover:border-indigo-700 transition-colors">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-semibold">
-                    U
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white">You</h3>
-                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                      <Mail className="w-3 h-3" />
-                      <span>Administrator</span>
+              <ul data-qa="team-members">
+                {membersCall.isLoading && <li className="p-5" role="status">Loading members…</li>}
+                {!membersCall.isLoading && members.length === 0 && (
+                  <li className="p-5" style={{ color: 'var(--text-muted)' }}>No members yet.</li>
+                )}
+                {members.map((member) => (
+                  <li key={member.name} data-qa="team-member" className="flex flex-wrap items-center justify-between gap-3 border-b px-5 py-4 last:border-b-0" style={{ borderColor: 'var(--border-subtle)' }}>
+                    <div>
+                      <p className="font-medium">
+                        {member.full_name}
+                        {!member.enabled && <span className="ml-2 text-xs" style={{ color: 'var(--status-cancelled, #b91c1c)' }}>disabled</span>}
+                        {member.status !== 'Active' && <span className="ml-2 text-xs" style={{ color: 'var(--text-muted)' }}>({member.status})</span>}
+                      </p>
+                      <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{member.user}</p>
+                      <p className="mt-1 flex flex-wrap items-center gap-2 text-xs">
+                        <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5" style={{ backgroundColor: 'var(--accent-primary-light)', color: 'var(--accent-primary)' }}>
+                          <ShieldCheck className="h-3 w-3" /> {member.membership_role}
+                        </span>
+                        {member.provider_name && <span style={{ color: 'var(--text-muted)' }}>· {member.provider_name}</span>}
+                        {member.locations.length > 0 && <span style={{ color: 'var(--text-muted)' }}>· {member.locations.map((loc) => loc.label).join(', ')}</span>}
+                      </p>
                     </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 text-sm font-medium">
-                    <Shield className="w-3 h-3" />
-                    Owner
-                  </div>
-                  <Button variant="ghost" size="icon">
-                    <MoreVertical className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-
-            {/* Empty State for Additional Members */}
-            <div className="p-12 text-center border-t border-dashed border-gray-300 dark:border-gray-700">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full mb-4">
-                <Users className="w-8 h-8 text-gray-400" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                No team members yet
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-4">
-                {onboardingType === 'organization' 
-                  ? 'Invite team members to collaborate and manage bookings together'
-                  : 'Team management is available for organization accounts. Upgrade to add team members.'
-                }
-              </p>
-              <Button 
-                style={{ background: 'var(--brand-primary)' }} 
-                className="text-white"
-                onClick={() => setShowInviteModal(true)}
-                disabled={onboardingType !== 'organization'}
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                Invite Your First Team Member
-              </Button>
-            </div>
-          </Card>
-        </motion.div>
-
-        {/* Info Box */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="mt-6"
-        >
-          <Card className="p-6 bg-indigo-50 dark:bg-indigo-900/20 border-indigo-200 dark:border-indigo-800">
-            <h4 className="text-sm font-semibold text-indigo-900 dark:text-indigo-300 mb-2">
-              {onboardingType === 'organization' 
-                ? '💡 Team Management Features Coming Soon'
-                : 'ℹ️ Individual Provider Account'
-              }
-            </h4>
-            {onboardingType === 'organization' ? (
-              <ul className="text-sm text-indigo-800 dark:text-indigo-400 space-y-1">
-                <li>• Invite team members via email</li>
-                <li>• Assign roles and permissions</li>
-                <li>• Track team performance</li>
-                <li>• Manage provider schedules</li>
-                <li>• Team collaboration tools</li>
+                    <Button variant="ghost" size="sm" onClick={() => void onRevoke(member)} disabled={member.status !== 'Active'}>
+                      <Trash2 className="mr-1 h-4 w-4" /> Revoke
+                    </Button>
+                  </li>
+                ))}
               </ul>
-            ) : (
-              <p className="text-sm text-indigo-800 dark:text-indigo-400">
-                You're currently using an individual provider account. Team management features are available for organization accounts. 
-                To add team members, consider creating an organization during onboarding or contact support to upgrade your account.
-              </p>
-            )}
-          </Card>
-        </motion.div>
-      </main>
+            </section>
 
-      {/* Invite Modal */}
-      {showInviteModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl max-w-md w-full p-6"
-          >
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-              Invite Team Member
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
-              This feature is coming soon! Team invitations will be available in the next update.
-            </p>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  placeholder="colleague@example.com"
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                  disabled
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Role
-                </label>
-                <select 
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                  disabled
-                >
-                  <option>Provider</option>
-                  <option>Manager</option>
-                  <option>Admin</option>
-                </select>
-              </div>
-            </div>
-            <div className="mt-6 flex justify-end gap-3">
-              <Button 
-                variant="outline"
-                onClick={() => setShowInviteModal(false)}
-              >
-                Close
-              </Button>
-              <Button 
-                style={{ background: 'var(--brand-primary)' }}
-                className="text-white"
-                disabled
-              >
-                Send Invite (Coming Soon)
-              </Button>
-            </div>
-          </motion.div>
-        </div>
-      )}
+            <section aria-label="Assign staff" className="rounded-2xl border p-5" style={{ borderColor: 'var(--border-default)', backgroundColor: 'var(--bg-elevated)' }}>
+              <h2 className="mb-4 flex items-center gap-2 font-semibold"><UserPlus className="h-4 w-4" /> Assign staff</h2>
+              <form onSubmit={submit} className="space-y-4">
+                <div>
+                  <Label htmlFor="team-email" className="mb-1.5 block" style={{ color: 'var(--text-secondary)' }}>Account email</Label>
+                  <Input id="team-email" data-qa="team-email" type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} style={inputStyle} />
+                </div>
+                <div>
+                  <Label htmlFor="team-name" className="mb-1.5 block" style={{ color: 'var(--text-secondary)' }}>Full name (for new accounts)</Label>
+                  <Input id="team-name" type="text" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} style={inputStyle} />
+                </div>
+                <div>
+                  <Label className="mb-1.5 block" style={{ color: 'var(--text-secondary)' }}>Role</Label>
+                  <Select value={form.role} onValueChange={(value) => setForm({ ...form, role: value, provider: '' })}>
+                    <SelectTrigger data-qa="team-role"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      {ROLE_OPTIONS.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="mt-1 text-xs" style={{ color: 'var(--text-muted)' }}>{ROLE_OPTIONS.find((option) => option.value === form.role)?.help}</p>
+                </div>
+                {(form.role === 'Provider' || form.role === 'Receptionist') && providerOptions.length > 0 && (
+                  <div>
+                    <Label className="mb-1.5 block" style={{ color: 'var(--text-secondary)' }}>Provider scope (optional)</Label>
+                    <Select value={form.provider || '__all__'} onValueChange={(value) => setForm({ ...form, provider: value === '__all__' ? '' : value })}>
+                      <SelectTrigger data-qa="team-provider"><SelectValue placeholder="All providers" /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="__all__">All providers</SelectItem>
+                        {providerOptions.map((provider) => (
+                          <SelectItem key={provider.name} value={provider.name}>{provider.provider_name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+                {locationOptions.length > 0 && (
+                  <fieldset>
+                    <legend className="mb-1.5 text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>Location scope</legend>
+                    <div className="space-y-1">
+                      {locationOptions.map((location) => (
+                        <label key={location.name} className="flex items-center gap-2 text-sm">
+                          <input
+                            type="checkbox"
+                            checked={selectedLocations.includes(location.name)}
+                            onChange={(e) => setSelectedLocations(e.target.checked ? [...selectedLocations, location.name] : selectedLocations.filter((name) => name !== location.name))}
+                          />
+                          {location.location_name}
+                        </label>
+                      ))}
+                    </div>
+                    <p className="mt-1 text-xs" style={{ color: 'var(--text-muted)' }}>Empty means every location in this business.</p>
+                  </fieldset>
+                )}
+                <div>
+                  <Label htmlFor="team-password" className="mb-1.5 block" style={{ color: 'var(--text-secondary)' }}>Local password (new accounts only)</Label>
+                  <Input id="team-password" data-qa="team-password" type="password" autoComplete="new-password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} style={inputStyle} />
+                  <p className="mt-1 flex items-start gap-1 text-xs" style={{ color: 'var(--text-muted)' }}>
+                    <Info className="mt-0.5 h-3 w-3 shrink-0" /> Set a password for local sign-in. No email is delivered in
+                    this environment; production invitations need separate delivery.
+                  </p>
+                </div>
+                <Button type="submit" data-qa="team-assign" disabled={assigning || !form.email}>
+                  <Plus className="mr-1 h-4 w-4" /> {assigning ? 'Assigning…' : 'Assign'}
+                </Button>
+              </form>
+            </section>
+          </div>
+        )}
       </div>
-    </div>
+    </main>
   );
-};
-
-export default TeamManagement;
-
+}

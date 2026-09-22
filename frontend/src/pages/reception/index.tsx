@@ -7,12 +7,16 @@ import { DeskCalendar } from './components/DeskCalendar';
 import { WalkInQueue } from './components/WalkInQueue';
 import { CreateAppointmentModal } from './components/CreateAppointmentModal';
 import { AddWalkInModal } from './components/AddWalkInModal';
+import AppTopNav from '@/components/workspace/AppTopNav';
+import { useSession } from '@/context/session';
 import { useFrappeGetCall } from 'frappe-react-sdk';
 import { format, startOfWeek, endOfWeek } from 'date-fns';
 import { ViewMode, Appointment, Location, Provider, TimeSlotInterval } from './types';
-import { Calendar, Users, Clock, TrendingUp } from 'lucide-react';
+import { Calendar, Users, Clock, TrendingUp, AlertTriangle, CalendarClock, RotateCcw } from 'lucide-react';
 
 const Reception = () => {
+  const { session } = useSession();
+  const organization = session?.selected?.organization;
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<ViewMode>('day');
   const [timeSlotInterval, setTimeSlotInterval] = useState<TimeSlotInterval>(30);
@@ -43,7 +47,14 @@ const Reception = () => {
 
   // Fetch appointments
   const { data: appointmentsData, isLoading: appointmentsLoading, error: appointmentsError, mutate: refreshAppointments } = useFrappeGetCall<{
-    message: { appointments: Appointment[]; count: number };
+    message: {
+      appointments: Appointment[];
+      count: number;
+      unfiltered_count: number;
+      timezone: string;
+      next_date: string | null;
+      scope: { organization: string | null; organization_name: string | null; is_manager: boolean; receptionist: boolean };
+    };
   }>(
     'appointment.scheduler.api.desk.get_desk_appointments',
     {
@@ -51,8 +62,9 @@ const Reception = () => {
       location_name: selectedLocation || undefined,
       provider_name: selectedProvider || undefined,
       view: viewMode,
+      organization: organization || undefined,
     },
-    `appointments-${dateRange.start}-${dateRange.end}-${selectedLocation || 'all'}-${selectedProvider || 'all'}-${viewMode}`,
+    `appointments-${dateRange.start}-${dateRange.end}-${selectedLocation || 'all'}-${selectedProvider || 'all'}-${viewMode}-${organization || 'all'}`,
     {
       revalidateOnFocus: true,
     }
@@ -61,17 +73,22 @@ const Reception = () => {
   // Fetch locations and providers for filters
   const { data: locationsData } = useFrappeGetCall<{ message: { locations: Location[] } }>(
     'appointment.scheduler.api.desk.get_locations_list',
-    undefined,
-    'locations'
+    organization ? { organization } : undefined,
+    `locations-${organization || 'all'}`
   );
 
   const { data: providersData } = useFrappeGetCall<{ message: { providers: Provider[] } }>(
     'appointment.scheduler.api.desk.get_providers_list',
-    undefined,
-    'providers'
+    organization ? { organization } : undefined,
+    `providers-${organization || 'all'}`
   );
 
   const appointments = appointmentsData?.message?.appointments || [];
+  const unfilteredCount = appointmentsData?.message?.unfiltered_count ?? appointments.length;
+  const deskScope = appointmentsData?.message?.scope;
+  const deskTimezone = appointmentsData?.message?.timezone;
+  const nextDate = appointmentsData?.message?.next_date;
+  const filtersActive = Boolean(selectedLocation || selectedProvider);
   const locations = locationsData?.message?.locations || [];
   const providers = providersData?.message?.providers || [];
 
@@ -120,7 +137,19 @@ const Reception = () => {
     },
   ];
 
-  if (appointmentsError) return <div role="alert">Unable to load appointments. Please reload to try again.</div>;
+  // No authorized staff context: explain instead of showing a blank calendar.
+  if (session && !session.authenticated) {
+    return <div role="alert" className="p-8">Please sign in to open reception.</div>;
+  }
+  if (session && session.state === 'no_assignment') {
+    return (
+      <div role="alert" className="p-8" style={{ color: 'var(--text-primary)' }}>
+        <h1 className="text-xl font-semibold">Reception is not assigned to you</h1>
+        <p className="mt-2" style={{ color: 'var(--text-secondary)' }}>Ask a manager to assign you a reception scope.</p>
+        <Link className="mt-4 inline-block underline" to="/workspaces">Choose a business</Link>
+      </div>
+    );
+  }
 
   return (
     <div 
@@ -144,15 +173,42 @@ const Reception = () => {
       </div>
 
       <div className="relative z-10">
+        <AppTopNav active="reception" />
         {/* Sticky Top Section: Header + Stats + Filters */}
         <div 
-          className="sticky top-0 z-50"
+          className="sticky top-0 z-40"
           style={{ 
             backgroundColor: 'var(--bg-primary)',
           }}
         >
-          {/* Header */}
-          <nav className="px-6 py-2"><Link to="/settings/business" className="underline">Business booking setup</Link></nav>
+          {/* Active scope bar: business, date, time zone and filters */}
+          <div
+            data-qa="reception-scope"
+            className="mx-auto flex max-w-[1800px] flex-wrap items-center gap-x-4 gap-y-1 px-6 pt-3 text-xs"
+            style={{ color: 'var(--text-muted)' }}
+          >
+            <span className="font-medium" style={{ color: 'var(--text-primary)' }}>
+              {deskScope?.organization_name || session?.selected?.business_name || 'All authorized businesses'}
+            </span>
+            <span>Date: {format(currentDate, 'EEE, dd MMM yyyy')}</span>
+            <span>Time zone: {deskTimezone || 'Africa/Addis_Ababa'}</span>
+            <span>
+              Filters: {selectedLocation ? `location ${locations.find((loc) => loc.name === selectedLocation)?.location_name || selectedLocation}` : 'all locations'}
+              {selectedProvider ? ` · provider ${providers.find((prov) => prov.name === selectedProvider)?.provider_name || selectedProvider}` : ''}
+            </span>
+            {(selectedLocation || selectedProvider) && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedLocation(null);
+                  setSelectedProvider(null);
+                }}
+                className="underline"
+              >
+                Reset filters
+              </button>
+            )}
+          </div>
       <DeskHeader
             currentDate={currentDate}
             viewMode={viewMode}
@@ -240,6 +296,40 @@ const Reception = () => {
         </div>
 
         <div className="px-6 pb-8 max-w-[1800px] mx-auto">
+
+          {/* Loading / error / empty state, distinguished from a blank calendar */}
+          {appointmentsError && (
+            <div role="alert" data-qa="reception-error" className="mb-4 flex flex-wrap items-center gap-3 rounded-xl p-4" style={{ backgroundColor: 'var(--status-cancelled-bg, #fee2e2)', color: 'var(--status-cancelled, #b91c1c)' }}>
+              <AlertTriangle className="h-5 w-5" />
+              <span>Unable to load appointments. This may be a connection problem, not an empty day.</span>
+              <button className="underline" onClick={() => void refreshAppointments()}>
+                <RotateCcw className="mr-1 inline h-3.5 w-3.5" /> Retry
+              </button>
+            </div>
+          )}
+          {!appointmentsError && !appointmentsLoading && appointments.length === 0 && (
+            <div data-qa="reception-empty" className="mb-4 flex flex-wrap items-center gap-3 rounded-xl p-4" style={{ backgroundColor: 'var(--border-subtle)', color: 'var(--text-secondary)' }}>
+              <CalendarClock className="h-5 w-5" />
+              {filtersActive && unfilteredCount > 0 ? (
+                <>
+                  <span>{unfilteredCount} appointment(s) exist here but are filtered out.</span>
+                  <button className="underline" onClick={() => { setSelectedLocation(null); setSelectedProvider(null); }}>
+                    Reset filters
+                  </button>
+                </>
+              ) : (
+                <>
+                  <span>No bookings on {format(currentDate, 'dd MMM yyyy')}.</span>
+                  {nextDate && (
+                    <button className="underline" onClick={() => setCurrentDate(new Date(nextDate))}>
+                      Jump to next booking ({nextDate})
+                    </button>
+                  )}
+                  <Link className="underline" to="/settings/business">Publish a booking page</Link>
+                </>
+              )}
+            </div>
+          )}
 
           {/* Main Content */}
           <motion.div 

@@ -21,6 +21,7 @@ import { AppProvider } from "./context/app";
 import { TranslationProvider } from "./context/translation";
 import { LandingPageSettingsProvider } from "./context/landingPageSettings";
 import { RealtimeProvider } from "./components/realtime/RealtimeProvider";
+import { SessionProvider } from "./context/session";
 import { Toaster } from "./components/sonner";
 import ModeToggle from "./components/theme-provider/components/modeToggle";
 import { InstallPrompt } from "./components/pwa/InstallPrompt";
@@ -47,17 +48,19 @@ const App = () => {
                 siteName={getSiteName()}
               >
                 <RealtimeProvider>
-                  <TooltipProvider>
-                    <Suspense fallback={<></>}>
-                      <RouterProvider router={router} />
-                      <Toaster />
-                      <ModeToggle/>
-                      {/* PWA Components */}
-                      <InstallPrompt />
-                      <UpdateNotification />
-                      <ConnectionStatus />
-                    </Suspense>
-                  </TooltipProvider>
+                  <SessionProvider>
+                    <TooltipProvider>
+                      <Suspense fallback={<></>}>
+                        <RouterProvider router={router} />
+                        <Toaster />
+                        <ModeToggle/>
+                        {/* PWA Components */}
+                        <InstallPrompt />
+                        <UpdateNotification />
+                        <ConnectionStatus />
+                      </Suspense>
+                    </TooltipProvider>
+                  </SessionProvider>
                 </RealtimeProvider>
               </FrappeProvider>
             </HelmetProvider>

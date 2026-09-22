@@ -12,6 +12,7 @@ interface TimeInputProps {
   disabled?: boolean;
   className?: string;
   placeholder?: string;
+  id?: string;
 }
 
 /**
@@ -164,21 +165,34 @@ const formatForDisplay = (time24: string, format: TimeFormat): string => {
  */
 const parseInput = (input: string, format: TimeFormat): string => {
   if (!input || input === '') return '';
-  
+
+  // Forgiving fallback: accept a bare 24-hour HH:MM regardless of the display
+  // format, so staff can type the stored value without a period suffix.
+  const bare = input.trim().match(/^(\d{1,2}):(\d{2})$/);
+  if (bare) {
+    const hours = parseInt(bare[1], 10);
+    const minutes = parseInt(bare[2], 10);
+    if (hours >= 0 && hours < 24 && minutes >= 0 && minutes < 60) {
+      return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+    }
+  }
+
   switch (format) {
     case '12h':
       return from12Hour(input);
     case '24h':
       // Validate 24-hour format
-      const match24 = input.match(/^(\d{1,2}):(\d{2})$/);
-      if (match24) {
-        const hours = parseInt(match24[1], 10);
-        const minutes = parseInt(match24[2], 10);
-        if (hours >= 0 && hours < 24 && minutes >= 0 && minutes < 60) {
-          return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+      {
+        const match24 = input.match(/^(\d{1,2}):(\d{2})$/);
+        if (match24) {
+          const hours = parseInt(match24[1], 10);
+          const minutes = parseInt(match24[2], 10);
+          if (hours >= 0 && hours < 24 && minutes >= 0 && minutes < 60) {
+            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+          }
         }
+        return '';
       }
-      return '';
     case 'ethiopian':
       return fromEthiopian(input);
     default:
@@ -193,6 +207,7 @@ export const TimeInput = ({
   disabled = false,
   className = '',
   placeholder,
+  id,
 }: TimeInputProps) => {
   const [displayValue, setDisplayValue] = useState<string>('');
 
@@ -243,6 +258,7 @@ export const TimeInput = ({
   return (
     <Input
       type="text"
+      id={id}
       value={displayValue}
       onChange={handleChange}
       onBlur={handleBlur}

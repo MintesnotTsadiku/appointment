@@ -21,21 +21,29 @@ const initialState: ThemeProviderState = {
   setTheme: () => null,
   colors: null,
   isLoadingColors: true,
-  resolvedTheme: "dark",
+  resolvedTheme: "light",
 }
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 
+function systemTheme(): "dark" | "light" {
+  if (typeof window === "undefined" || !window.matchMedia) return "light"
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+}
+
 export function ThemeProvider({
   children,
   defaultTheme = "system",
-  storageKey = "frappe-appointment-theme",
+  storageKey = "vite-ui-theme",
   ...props
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(
     () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
   )
-  const [resolvedTheme, setResolvedTheme] = useState<"dark" | "light">("dark")
+  // Resolve the first paint from the actual preference to avoid a flash.
+  const [resolvedTheme, setResolvedTheme] = useState<"dark" | "light">(() =>
+    theme === "system" ? systemTheme() : (theme as "dark" | "light")
+  )
   
   // Fetch theme colors from backend - gracefully handle errors
   const { colors, isLoading: isLoadingColors } = useThemeColors()

@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { OnboardingProvider, useOnboarding } from '@/context/onboarding';
+import { useSession } from '@/context/session';
 import { useFrappeAuth, useFrappeGetCall } from 'frappe-react-sdk';
 import Spinner from '@/components/spinner';
 import OnboardingWizard from './sections/OnboardingWizard';
@@ -232,7 +234,51 @@ const HomeContent = () => {
   return <Dashboard userName={userName} />;
 };
 
-const Home = () => {
+const Pending = () => (
+  <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--bg-primary)' }}>
+    <Spinner className="mb-4" />
+  </div>
+);
+
+/**
+ * Role-aware entry. The server-resolved context decides whether this user sees
+ * the manager overview, a business selector, guided setup, or an explanatory
+ * state. Nothing here is inferred from the URL.
+ */
+const RoleGate = () => {
+  const { session, loading } = useSession();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (loading || !session) return;
+    if (!session.authenticated) {
+      window.location.href = '/login?redirect-to=%2Fhome';
+      return;
+    }
+    if (session.state === 'selection') {
+      navigate('/workspaces', { replace: true });
+    } else if (session.state === 'owner_setup') {
+      navigate('/onboarding', { replace: true });
+    } else if (session.state === 'no_assignment' || session.state === 'disabled') {
+      navigate('/no-access', { replace: true });
+    } else if (
+      session.state === 'workspace' &&
+      session.selected &&
+      session.selected.role !== 'Owner' &&
+      session.selected.role !== 'Manager'
+    ) {
+      navigate(session.selected.landing, { replace: true });
+    }
+  }, [loading, session, navigate]);
+
+  if (loading || !session || !session.authenticated) return <Pending />;
+  if (session.state === 'selection' || session.state === 'owner_setup' || session.state === 'no_assignment' || session.state === 'disabled') {
+    return <Pending />;
+  }
+  if (session.state === 'workspace' && session.selected && session.selected.role !== 'Owner' && session.selected.role !== 'Manager') {
+    return <Pending />;
+  }
+
   return (
     <OnboardingProvider>
       <HomeContent />
@@ -240,4 +286,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default RoleGate;
