@@ -1,0 +1,44 @@
+app: appointment
+base_url: http://127.0.0.20:25310
+default_role: Provider
+auth:
+  type: frappe_session
+  username: '{qa_provider_user}'
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+fixtures:
+  provider: appointment.tests.owned_booking_fixtures.browser_values
+scenarios:
+  - id: owned_provider_handoff
+    title: Assigned provider sees the retained Guest booking in a separate session
+    viewport: {width: 1440, height: 960}
+    checks: []
+    routes:
+      - path: /reception
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="desk-next-day"]'
+    actions:
+      - action: click
+        selector: '[data-qa="desk-next-day"]'
+        assertions:
+          - type: visible_text
+            value: Owned Browser Customer
+          - type: network_request
+            url_contains: get_desk_appointments
+            response_body_contains: Owned Browser Customer
+            status: 200
+      - action: screenshot
+        name: owned-provider-handoff.png
+        full_page: true
+      - action: get_dom_snapshot
+        name: owned-provider-handoff.html
+      - action: get_console_errors
+      - action: get_network_errors

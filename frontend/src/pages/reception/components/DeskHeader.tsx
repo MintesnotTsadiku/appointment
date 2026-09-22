@@ -77,6 +77,7 @@ export const DeskHeader = ({
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={goToPrev}
+                aria-label="Previous day"
                 className="p-1.5 lg:p-2 rounded-lg transition-all"
                 style={{ 
                   backgroundColor: 'var(--border-subtle)',
@@ -104,6 +105,8 @@ export const DeskHeader = ({
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={goToNext}
+                aria-label="Next day"
+                data-qa="desk-next-day"
                 className="p-1.5 lg:p-2 rounded-lg transition-all"
                 style={{ 
                   backgroundColor: 'var(--border-subtle)',

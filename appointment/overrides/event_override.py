@@ -40,6 +40,8 @@ class BookingEventOverride(BookingEvent):
 
     def before_insert(self):
         """Handle the Appointment Group in Event"""
+        from appointment.scheduler.booking import guard_calendar_capacity
+        guard_calendar_capacity(self)
         if self.custom_appointment_group:
             self.appointment_group = frappe.get_doc(APPOINTMENT_GROUP, self.custom_appointment_group)
             self.custom_meeting_provider = self.appointment_group.meet_provider

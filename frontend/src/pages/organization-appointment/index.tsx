@@ -237,8 +237,8 @@ const OrganizationAppointmentV2 = () => {
   const currentService: Service | null = serviceSlug && data && !data?.message?.error ? {
     id: data.message.service_id || serviceSlug,
     slug: serviceSlug,
-    name: userInfo.name || serviceSlug,
-    duration: meetingDurationCards[0]?.duration / 60 || 30,
+    name: data.message.service_name || serviceSlug,
+    duration: meetingDurationCards[0]?.duration || 30,
     type: "organization",
     providerCount: data.message.provider_count,
     location: data.message.location, // Add location information
@@ -299,7 +299,7 @@ const OrganizationAppointmentV2 = () => {
         await refetchSlots();
       }
 
-      setBookingResponse(response);
+      setBookingResponse({ ...response, userEmail: formData.userEmail });
       setCurrentPhase('success');
     } catch (error) {
       console.error("Booking error:", error);

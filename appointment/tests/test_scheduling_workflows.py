@@ -33,6 +33,7 @@ class TestSchedulingWorkflows(unittest.TestCase):
         frappe.set_user("Administrator")
         cls.marker = f"{MARKER_PREFIX}-{frappe.generate_hash(length=6)}"
         cls.created: list[tuple[str, str]] = []
+        frappe.flags.syncing_booking_urls = True
         cls._build_fixture()
 
     @classmethod
@@ -61,10 +62,14 @@ class TestSchedulingWorkflows(unittest.TestCase):
                 }
             ],
         )
+        cls.user = cls._insert("User", email=f"{cls.marker.lower()}-provider@example.test",
+                               first_name="Regression provider", enabled=1, send_welcome_email=0)
         cls.provider = cls._insert(
             "Provider",
             provider_name=f"{cls.marker} Provider",
             full_name="QA Provider",
+            user=cls.user.name,
+            organizations=[{"organization":cls.org.name,"status":"Active","accept_org_bookings":1}],
             is_active=1,
             organization=cls.org.name,
             organization_status="Active",
@@ -72,6 +77,9 @@ class TestSchedulingWorkflows(unittest.TestCase):
         cls.location = cls._insert(
             "Location",
             location_name=f"{cls.marker} Location",
+            timezone="Africa/Addis_Ababa",
+            opening_hours=[{"day_of_week":day,"start_time":"08:00:00","end_time":"18:00:00","is_open":1}
+                           for day in ("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")],
             organization=cls.org.name,
             is_active=1,
         )
@@ -110,6 +118,7 @@ class TestSchedulingWorkflows(unittest.TestCase):
             except Exception:  # best-effort cleanup of disposable QA rows
                 frappe.db.rollback()
         frappe.db.commit()
+        frappe.flags.syncing_booking_urls = False
 
     # ------------------------------------------------------------------
     # Scenarios
@@ -149,7 +158,7 @@ class TestSchedulingWorkflows(unittest.TestCase):
     def test_reception_booking_creates_confirmed_appointment(self):
         from appointment.scheduler.api.desk import create_desk_appointment
 
-        appointment_date = nowdate()
+        appointment_date = add_days(nowdate(),1)
         result = create_desk_appointment(
             client_name=f"{self.marker} Client",
             client_phone="+251900000001",
@@ -220,7 +229,7 @@ class TestSchedulingWorkflows(unittest.TestCase):
         catalog = get_organization_services(self.org.slug)
         self.assertNotIn("error", catalog, catalog)
         slugs = {entry["slug"] for entry in catalog["services"]}
-        self.assertIn(make_slug(self.event_type.name), slugs)
+        self.assertIn(self.event_type.name, slugs)
 
     def test_english_and_amharic_translations_available(self):
         repo_root = Path(frappe.get_app_path("appointment")).parent

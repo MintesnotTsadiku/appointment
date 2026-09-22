@@ -41,7 +41,7 @@ const Reception = () => {
   }, [currentDate, viewMode]);
 
   // Fetch appointments
-  const { data: appointmentsData, isLoading: appointmentsLoading, mutate: refreshAppointments } = useFrappeGetCall<{
+  const { data: appointmentsData, isLoading: appointmentsLoading, error: appointmentsError, mutate: refreshAppointments } = useFrappeGetCall<{
     message: { appointments: Appointment[]; count: number };
   }>(
     'appointment.scheduler.api.desk.get_desk_appointments',
@@ -118,6 +118,8 @@ const Reception = () => {
       customGradient: 'from-blue-500 to-indigo-600' // Keep original for variety
     },
   ];
+
+  if (appointmentsError) return <div role="alert">Unable to load appointments. Please reload to try again.</div>;
 
   return (
     <div 

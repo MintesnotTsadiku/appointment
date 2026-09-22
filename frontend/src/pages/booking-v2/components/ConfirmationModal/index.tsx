@@ -96,10 +96,10 @@ export function ConfirmationModal({
               <Mail className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-1">
-                  Calendar Invite Sent
+                  Booking Saved
                 </p>
                 <p className="text-sm text-blue-700 dark:text-blue-300">
-                  A calendar invitation has been sent to{" "}
+                  Keep your booking reference. Delivery has not been confirmed.{" "}
                   <span className="font-semibold">{userEmail}</span>
                 </p>
               </div>
@@ -276,7 +276,7 @@ export function ConfirmationModal({
             <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
               <li className="flex items-start gap-2">
                 <span className="text-primary-600 dark:text-primary-400 mt-0.5">•</span>
-                <span>Check your email for the calendar invitation</span>
+                <span>Save your booking reference for contacting the business</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-primary-600 dark:text-primary-400 mt-0.5">•</span>

@@ -1,0 +1,43 @@
+[
+  {
+    "scenario": "appointment-owned-guest-booking-20260922T134058Z",
+    "endpoint": "appointment.api.personal_meet.book_time_slot",
+    "http_status": 200,
+    "booking_id": "APT-094b258d84ff1600163a"
+  },
+  {
+    "scenario": "appointment-owned-provider-handoff-20260922T134252Z",
+    "endpoint": "frappe.auth.get_logged_user",
+    "http_status": 200,
+    "identity": "own-cef41323-a@example.test"
+  },
+  {
+    "scenario": "appointment-owned-provider-handoff-20260922T134252Z",
+    "endpoint": "appointment.scheduler.api.desk.get_desk_appointments",
+    "http_status": 200,
+    "appointments": []
+  },
+  {
+    "scenario": "appointment-owned-provider-handoff-20260922T134252Z",
+    "endpoint": "appointment.scheduler.api.desk.get_desk_appointments",
+    "http_status": 200,
+    "appointments": [
+      {
+        "name": "APT-094b258d84ff1600163a",
+        "appointment_date": "2026-09-23",
+        "start_time": "09:00:00",
+        "end_time": "09:30:00",
+        "client_name": "Owned Browser Customer",
+        "service": "SRV-2026-0001",
+        "provider": "OWN-cef41323 Provider A",
+        "status": "Confirmed"
+      }
+    ]
+  },
+  {
+    "scenario": "appointment-owned-mobile-booking-20260922T134421Z",
+    "endpoint": "appointment.api.personal_meet.book_time_slot",
+    "http_status": 200,
+    "booking_id": "APT-eb0210b1cf953e606816"
+  }
+]

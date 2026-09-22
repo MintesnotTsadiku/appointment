@@ -3,6 +3,7 @@
  * Connects to: appointment.api.personal_meet.book_time_slot
  */
 
+import { useRef } from "react";
 import { useFrappePostCall } from "frappe-react-sdk";
 import { getTimeZoneOffsetFromTimeZoneString, parseFrappeErrorMsg } from "@/lib/utils";
 import type { BookingFormData, BookingResponse, TimeSlot } from "../types";
@@ -33,6 +34,7 @@ interface BookingApiResponse {
 }
 
 export function useBookingSubmit() {
+  const attempt = useRef<{ payload: string; key: string }>();
   const { call: bookMeeting, loading, error, reset } = useFrappePostCall<BookingApiResponse>(
     "appointment.api.personal_meet.book_time_slot"
   );
@@ -102,6 +104,11 @@ export function useBookingSubmit() {
       meetingData.event_token = eventToken;
     }
 
+    const payloadIdentity = JSON.stringify(meetingData);
+    if (!attempt.current || attempt.current.payload !== payloadIdentity) {
+      attempt.current = { payload: payloadIdentity, key: crypto.randomUUID() };
+    }
+    meetingData.request_id = attempt.current.key;
     try {
       // Submit booking
       const response = await bookMeeting(meetingData);

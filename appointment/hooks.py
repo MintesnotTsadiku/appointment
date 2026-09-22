@@ -307,3 +307,21 @@ override_whitelisted_methods = {
 # auth_hooks = [
 # 	"appointment.auth.validate"
 # ]
+
+# The booking controller and list predicate enforce the same actor scope.
+permission_query_conditions = {
+    "Appointment": "appointment.scheduler.booking_access.appointment_query",
+}
+has_permission["Appointment"] = "appointment.scheduler.booking_access.appointment_permission"
+for _doctype, _query in {
+    "Service": "service",
+    "Location": "location",
+    "EventType": "eventtype",
+    "Provider": "provider",
+    "Organization": "organization",
+    "Walk In": "walkin",
+}.items():
+    permission_query_conditions[_doctype] = f"appointment.scheduler.booking_access.{_query}_query"
+    has_permission[_doctype] = "appointment.scheduler.booking_access.config_permission"
+    doc_events.setdefault(_doctype, {})["validate"] = "appointment.scheduler.booking_access.validate_config"
+doc_events.setdefault("Booking Event", {})["validate"] = "appointment.scheduler.booking.guard_calendar_capacity"

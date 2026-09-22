@@ -364,7 +364,7 @@ export function BookingForm({
                 </p>
               )}
                 <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                You'll receive a calendar invite at this email
+                Use an email address where the business can reach you
               </p>
               </motion.div>
 
@@ -723,7 +723,7 @@ export function BookingForm({
                 }}
               >
                 <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                You'll receive a calendar invite with the meeting link immediately after booking.
+                Save your booking reference after confirmation. Message delivery is shown separately.
               </p>
               </motion.div>
             </div>

@@ -1,0 +1,105 @@
+# Guest uses a new anonymous context. Harness rejects Guest as an authenticated session.
+app: appointment
+base_url: http://127.0.0.20:25310
+default_role: "anonymous-customer"
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+fixtures:
+  provider: appointment.tests.owned_booking_fixtures.browser_values
+scenarios:
+  - id: owned_guest_catalog
+    title: Bookable business is reachable without a privileged session
+    viewport:
+      width: 1440
+      height: 960
+    checks: []
+    routes:
+      - path: /schedule/org/{qa_org_slug}
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+          - type: visible_selector
+            value: '[data-qa="booking-service"]'
+    actions:
+      - action: screenshot
+        name: owned-guest-0-org-services-desktop.png
+        full_page: true
+      - action: get_dom_snapshot
+        name: owned-guest-0-org-services-desktop.html
+      - action: get_console_errors
+      - action: get_network_errors
+
+  - id: owned_guest_booking
+    title: Anonymous customer books a service slot end to end
+    viewport:
+      width: 1440
+      height: 960
+    checks: []
+    routes:
+      - path: /schedule/org/{qa_org_slug}/{qa_service_slug}
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+          - type: visible_selector
+            value: '[data-qa="booking-tomorrow"]'
+    actions:
+      - action: screenshot
+        name: owned-guest-1-datetime-first-screen.png
+        full_page: true
+      - action: click
+        selector: '[data-qa="booking-tomorrow"]'
+      - action: wait_for
+        selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+      - action: screenshot
+        name: owned-guest-1-slots-tomorrow.png
+        full_page: true
+      - action: click
+        selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+      - action: wait_for
+        selector: '#userName'
+      - action: get_text
+        selector: 'body'
+        name: owned-guest-1-form-body-text.txt
+      - action: screenshot
+        name: owned-guest-1-booking-form.png
+        full_page: true
+      - action: fill
+        selector: '#userName'
+        value: 'Owned Browser Customer'
+      - action: fill
+        selector: '#userEmail'
+        value: 'owned-browser@example.test'
+      - action: fill
+        selector: '#userPhone'
+        value: '+251900000555'
+      - action: screenshot
+        name: owned-guest-1-details-filled.png
+        full_page: true
+      - action: click
+        selector: '[data-qa="booking-confirm"]'
+        assertions:
+          - type: visible_text
+            value: 'Booking Confirmed!'
+          - type: network_request
+            url_contains: book_time_slot
+            method: POST
+            status_min: 200
+            status_max: 299
+            timeout_ms: 25000
+      - action: screenshot
+        name: owned-guest-1-confirmation.png
+        full_page: true
+      - action: get_dom_snapshot
+        name: owned-guest-1-confirmation.html
+      - action: observe_accessibility_tree
+        selector: '[role="dialog"]'
+        name: owned-guest-1-confirmation-a11y.json
+      - action: get_console_errors
+      - action: get_network_errors

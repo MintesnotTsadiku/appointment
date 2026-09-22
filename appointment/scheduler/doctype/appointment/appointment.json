@@ -1,6 +1,6 @@
 {
  "actions": [],
- "allow_rename": 1,
+ "allow_rename": 0,
  "autoname": "field:appointment_id",
  "creation": "2025-11-16 01:34:55.052429",
  "doctype": "DocType",
@@ -22,7 +22,16 @@
   "status",
   "amount_paid",
   "notes",
-  "cancellation_reason"
+  "cancellation_reason",
+  "organization",
+  "starts_at",
+  "ends_at",
+  "occupied_from",
+  "occupied_until",
+  "booking_timezone",
+  "request_key",
+  "request_hash",
+  "request_result"
  ],
  "fields": [
   {
@@ -91,7 +100,7 @@
    "fieldtype": "Data",
    "label": "Client Phone",
    "options": "Phone",
-   "reqd": 1
+   "reqd": 0
   },
   {
    "fieldname": "appointment_date",
@@ -137,10 +146,72 @@
    "fieldtype": "Small Text",
    "label": "Cancellation Reason",
    "length": 500
+  },
+  {
+   "fieldname": "organization",
+   "fieldtype": "Link",
+   "label": "Organization",
+   "read_only": 1,
+   "options": "Organization"
+  },
+  {
+   "fieldname": "starts_at",
+   "fieldtype": "Datetime",
+   "label": "Starts At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ends_at",
+   "fieldtype": "Datetime",
+   "label": "Ends At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "occupied_from",
+   "fieldtype": "Datetime",
+   "label": "Occupied From",
+   "read_only": 1
+  },
+  {
+   "fieldname": "occupied_until",
+   "fieldtype": "Datetime",
+   "label": "Occupied Until",
+   "read_only": 1
+  },
+  {
+   "fieldname": "booking_timezone",
+   "fieldtype": "Data",
+   "label": "Booking Timezone",
+   "read_only": 1
+  },
+  {
+   "fieldname": "request_key",
+   "fieldtype": "Data",
+   "label": "Request Key",
+   "read_only": 1,
+   "unique": 1,
+   "hidden": 1,
+   "permlevel": 1
+  },
+  {
+   "fieldname": "request_hash",
+   "fieldtype": "Data",
+   "label": "Request Hash",
+   "read_only": 1,
+   "hidden": 1,
+   "permlevel": 1
+  },
+  {
+   "fieldname": "request_result",
+   "fieldtype": "Long Text",
+   "label": "Request Result",
+   "read_only": 1,
+   "hidden": 1,
+   "permlevel": 1
   }
  ],
  "grid_page_length": 50,
- "index_web_pages_for_search": 1,
+ "index_web_pages_for_search": 0,
  "links": [],
  "modified": "2025-11-16 01:34:55.052429",
  "modified_by": "Administrator",
@@ -190,5 +261,6 @@
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
- "title_field": "appointment_id"
+ "title_field": "appointment_id",
+ "track_changes": 1
 }

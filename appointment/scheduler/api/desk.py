@@ -31,6 +31,8 @@ def get_desk_appointments(date: str = None, location_name: str = None, provider_
     Returns:
         List of appointments with full details
     """
+    from appointment.scheduler.booking_access import require_staff
+    require_staff()
     # Default to today if not provided
     if not date:
         date = getdate().strftime("%Y-%m-%d")
@@ -57,13 +59,9 @@ def get_desk_appointments(date: str = None, location_name: str = None, provider_
 
     # Build filters
     filters = {
-        "appointment_date": [">=", start_date.strftime("%Y-%m-%d")],
+        "appointment_date": ["between", [start_date, end_date]],
         "status": ["in", ["Pending", "Confirmed", "Completed", "Cancelled", "No Show"]]
     }
-
-    if view == "week":
-        filters["appointment_date"].append("<=")
-        filters["appointment_date"].append(end_date.strftime("%Y-%m-%d"))
 
     if location_name:
         filters["location"] = location_name
@@ -72,7 +70,7 @@ def get_desk_appointments(date: str = None, location_name: str = None, provider_
         filters["provider"] = provider_name
 
     # Get appointments (only select fields that exist in Appointment doctype)
-    appointments = frappe.get_all(
+    appointments = frappe.get_list(
         "Appointment",
         filters=filters,
         fields=[
@@ -86,6 +84,8 @@ def get_desk_appointments(date: str = None, location_name: str = None, provider_
 
     # Enrich with service, provider, and location names
     for apt in appointments:
+        apt["start_time"] = get_time(apt.start_time).strftime("%H:%M:%S")
+        apt["end_time"] = get_time(apt.end_time).strftime("%H:%M:%S")
         # Get service name
         if apt.get("service"):
             apt["service_name"] = frappe.db.get_value("Service", apt.get("service"), "service_name") or ""
@@ -103,196 +103,6 @@ def get_desk_appointments(date: str = None, location_name: str = None, provider_
             apt["location_name"] = frappe.db.get_value("Location", apt.get("location"), "location_name") or ""
         else:
             apt["location_name"] = ""
-
-    # If no appointments, return time-aware mock data for ALL providers/locations
-    # Generate comprehensive demo data: past (2 weeks), today, tomorrow for EVERY provider
-    if len(appointments) == 0:
-        from frappe.utils import now_datetime, add_days, get_time
-        from datetime import time
-
-        # Get ALL locations, providers, and services for comprehensive demo data
-        all_locations = frappe.get_all("Location", fields=["name", "location_name"], limit=20)
-        all_providers = frappe.get_all("Provider", fields=["name", "provider_name"], limit=20)
-        all_services = frappe.get_all("Service", fields=["name", "service_name"], limit=20)
-
-        # If none exist, create generic demo data
-        if not all_locations:
-            all_locations = [{"name": "DEMO-LOCATION", "location_name": "Demo Location"}]
-        if not all_providers:
-            all_providers = [{"name": "DEMO-PROVIDER", "provider_name": "Demo Provider"}]
-        if not all_services:
-            all_services = [{"name": "DEMO-SERVICE", "service_name": "General Consultation"}]
-
-        if all_locations and all_providers and all_services:
-            now = now_datetime()
-            today = getdate(date)
-            tomorrow = add_days(today, 1)
-            current_hour = now.hour
-
-            mock_appointments = []
-
-            # Generate appointments for EACH provider/location combination
-            # This ensures ALL providers have data regardless of which account is tested
-            # If filters are applied, only generate for those providers/locations
-            providers_to_use = all_providers
-            locations_to_use = all_locations
-
-            if provider_name:
-                providers_to_use = [p for p in all_providers if p["name"] == provider_name or p["provider_name"] == provider_name]
-                if not providers_to_use:
-                    providers_to_use = all_providers  # Fallback if filter doesn't match
-
-            if location_name:
-                locations_to_use = [l for l in all_locations if l["name"] == location_name or l["location_name"] == location_name]
-                if not locations_to_use:
-                    locations_to_use = all_locations  # Fallback if filter doesn't match
-
-            provider_idx = 0
-            location_idx = 0
-            service_idx = 0
-
-            # TODAY - Generate appointments for each provider
-            for provider in providers_to_use:
-                location = locations_to_use[location_idx % len(locations_to_use)]
-                service = all_services[service_idx % len(all_services)]
-                location_idx += 1
-                service_idx += 1
-
-                # Morning appointments (if before 9 AM or viewing today)
-                if current_hour < 9 or getdate(date) == getdate():
-                    # Generate valid email (sanitize name)
-                    email_name = f"sarah{provider_idx}".replace('-', '').replace('.', '').replace(' ', '')
-                    mock_appointments.append({
-                        "name": f"APT-DEMO-{provider['name']}-TODAY-AM1",
-                        "appointment_id": f"APT-DEMO-{provider['name']}-TODAY-AM1",
-                        "appointment_date": today.strftime("%Y-%m-%d"),
-                        "start_time": "09:00:00",
-                        "end_time": "09:30:00",
-                        "client_name": f"Sarah {provider['provider_name']}",
-                        "client_email": f"{email_name}@example.com",
-                        "client_phone": f"+251911{provider_idx:04d}",
-                        "service": service["name"],
-                        "service_name": service["service_name"],
-                        "provider": provider["name"],
-                        "provider_name": provider["provider_name"],
-                        "location": location["name"],
-                        "location_name": location["location_name"],
-                        "status": "Confirmed",
-                        "amount_paid": 500.0,
-                        "notes": f"Morning appointment with {provider['provider_name']}",
-                        "event_type": "",
-                        "event": ""
-                    })
-
-                # Afternoon appointments (if viewing today)
-                if getdate(date) == getdate() and current_hour < 14:
-                    # Generate valid email (sanitize name)
-                    email_name = f"michael{provider_idx}".replace('-', '').replace('.', '').replace(' ', '')
-                    mock_appointments.append({
-                        "name": f"APT-DEMO-{provider['name']}-TODAY-PM1",
-                        "appointment_id": f"APT-DEMO-{provider['name']}-TODAY-PM1",
-                        "appointment_date": today.strftime("%Y-%m-%d"),
-                        "start_time": "14:00:00",
-                        "end_time": "14:30:00",
-                        "client_name": f"Michael {provider['provider_name']}",
-                        "client_email": f"{email_name}@example.com",
-                        "client_phone": f"+251922{provider_idx:04d}",
-                        "service": service["name"],
-                        "service_name": service["service_name"],
-                        "provider": provider["name"],
-                        "provider_name": provider["provider_name"],
-                        "location": location["name"],
-                        "location_name": location["location_name"],
-                        "status": "Pending",
-                        "amount_paid": 0.0,
-                        "notes": f"Afternoon appointment with {provider['provider_name']}",
-                        "event_type": "",
-                        "event": ""
-                    })
-
-            # TOMORROW - Generate appointments for each provider
-            if view == "week" or getdate(date) <= tomorrow:
-                provider_idx = 0
-                location_idx = 0
-                service_idx = 0
-
-                for provider in providers_to_use:
-                    location = locations_to_use[location_idx % len(locations_to_use)]
-                    service = all_services[service_idx % len(all_services)]
-                    location_idx += 1
-                    service_idx += 1
-
-                    # Generate valid email
-                    email_name = f"emily{provider_idx}".replace('-', '').replace('.', '')
-                    mock_appointments.append({
-                        "name": f"APT-DEMO-{provider['name']}-TOMORROW-1",
-                        "appointment_id": f"APT-DEMO-{provider['name']}-TOMORROW-1",
-                        "appointment_date": tomorrow.strftime("%Y-%m-%d"),
-                        "start_time": "10:00:00",
-                        "end_time": "10:30:00",
-                        "client_name": f"Emily {provider['provider_name']}",
-                        "client_email": f"{email_name}@example.com",
-                        "client_phone": f"+251933{provider_idx:04d}",
-                        "service": service["name"],
-                        "service_name": service["service_name"],
-                        "provider": provider["name"],
-                        "provider_name": provider["provider_name"],
-                        "location": location["name"],
-                        "location_name": location["location_name"],
-                        "status": "Confirmed",
-                        "amount_paid": 500.0,
-                        "notes": f"Tomorrow's appointment with {provider['provider_name']}",
-                        "event_type": "",
-                        "event": ""
-                    })
-                    provider_idx += 1
-
-            # PAST - Spread back 2 weeks for ALL providers
-            if view == "week":
-                for days_ago in range(1, 15):  # Last 14 days
-                    past_date = add_days(today, -days_ago)
-                    if start_date <= past_date <= end_date:
-                        provider_idx = 0
-                        location_idx = 0
-                        service_idx = 0
-
-                        # Generate 1-2 appointments per day, rotating through providers
-                        for provider in providers_to_use[:min(3, len(providers_to_use))]:  # 3 providers per day
-                            location = locations_to_use[location_idx % len(locations_to_use)]
-                            service = all_services[service_idx % len(all_services)]
-                            location_idx += 1
-                            service_idx += 1
-
-                            hour = 10 + (provider_idx * 2)  # Stagger times: 10, 12, 14
-                            # Generate valid email
-                            email_name = f"pastclient{days_ago}{provider_idx}".replace('-', '').replace('.', '')
-                            mock_appointments.append({
-                                "name": f"APT-DEMO-{provider['name']}-PAST-{days_ago:02d}",
-                                "appointment_id": f"APT-DEMO-{provider['name']}-PAST-{days_ago:02d}",
-                                "appointment_date": past_date.strftime("%Y-%m-%d"),
-                                "start_time": f"{hour:02d}:00:00",
-                                "end_time": f"{hour:02d}:30:00",
-                                "client_name": f"Past Client {days_ago}-{provider_idx}",
-                                "client_email": f"{email_name}@example.com",
-                                "client_phone": f"+2519{days_ago:02d}{provider_idx:04d}",
-                                "service": service["name"],
-                                "service_name": service["service_name"],
-                                "provider": provider["name"],
-                                "provider_name": provider["provider_name"],
-                                "location": location["name"],
-                                "location_name": location["location_name"],
-                                "status": "Completed",
-                                "amount_paid": 500.0,
-                                "notes": f"Past appointment {days_ago} days ago with {provider['provider_name']}",
-                                "event_type": "",
-                                "event": ""
-                            })
-                            provider_idx += 1
-
-            # Sort by date and time
-            mock_appointments.sort(key=lambda x: (x["appointment_date"], x["start_time"]))
-
-            return {"appointments": mock_appointments, "count": len(mock_appointments)}, 200
 
     return {"appointments": appointments, "count": len(appointments)}, 200
 
@@ -329,6 +139,9 @@ def create_desk_appointment(
     Returns:
         Created appointment
     """
+    from appointment.scheduler.booking_access import require_access
+    org = frappe.db.get_value("Service", service_name, "organization")
+    require_access(frappe._dict(organization=org, provider=provider_name))
     try:
         # Validate required fields
         if not all([client_name, client_phone, service_name, provider_name, location_name, start_time]):
@@ -385,6 +198,7 @@ def create_desk_appointment(
             filters={
                 "service": service_name,
                 "provider": provider_name,
+                "location": location_name,
                 "is_active": 1
             },
             fields=["name"],
@@ -468,6 +282,8 @@ def update_appointment(
     Returns:
         Updated appointment
     """
+    from appointment.scheduler.booking_access import require_access
+    require_access(frappe.get_doc("Appointment", appointment_name))
     try:
         # Get appointment
         appointment = frappe.get_doc("Appointment", appointment_name)
@@ -566,6 +382,8 @@ def reschedule_appointment(appointment_name: str, new_start_time: str, new_end_t
     Returns:
         Updated appointment
     """
+    from appointment.scheduler.booking_access import require_access
+    require_access(frappe.get_doc("Appointment", appointment_name))
     try:
         # Get appointment
         appointment = frappe.get_doc("Appointment", appointment_name)
@@ -659,7 +477,7 @@ def get_walk_ins(location_name: str = None):
         filters["location"] = location_name
 
     # Get walk-ins (only select fields that exist in Walk In doctype)
-    walk_ins = frappe.get_all(
+    walk_ins = frappe.get_list(
         "Walk In",
         filters=filters,
         fields=[
@@ -765,6 +583,10 @@ def assign_walk_in_to_slot(walk_in_name: str, provider_name: str, location_name:
     Returns:
         Created appointment
     """
+    from appointment.scheduler.booking_access import config_permission
+    walk_in_doc = frappe.get_doc("Walk In", walk_in_name)
+    if not config_permission(walk_in_doc, permission_type="write"):
+        frappe.throw("Not permitted to assign this walk-in", frappe.PermissionError)
     try:
         # Get walk-in
         walk_in = frappe.get_doc("Walk In", walk_in_name)
@@ -836,6 +658,7 @@ def assign_walk_in_to_slot(walk_in_name: str, provider_name: str, location_name:
             filters={
                 "service": service_name,
                 "provider": provider_name,
+                "location": location_name,
                 "is_active": 1
             },
             fields=["name"],
@@ -897,7 +720,7 @@ def get_services_list():
     Returns:
         List of services
     """
-    services = frappe.get_all(
+    services = frappe.get_list(
         "Service",
         filters={"is_active": 1},
         fields=["name", "service_name", "duration", "price"],
@@ -916,7 +739,7 @@ def get_providers_list():
     Returns:
         List of providers
     """
-    providers = frappe.get_all(
+    providers = frappe.get_list(
         "Provider",
         filters={"is_active": 1},
         fields=["name", "provider_name"],
@@ -935,7 +758,7 @@ def get_locations_list():
     Returns:
         List of locations
     """
-    locations = frappe.get_all(
+    locations = frappe.get_list(
         "Location",
         filters={"is_active": 1},
         fields=["name", "location_name"],
