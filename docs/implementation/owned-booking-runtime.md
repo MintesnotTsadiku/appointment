@@ -149,3 +149,13 @@ the full record. Summary:
 - Automated: `bench --site <site> execute appointment.tests.test_membership.run`
   (7/7 pass, exact cleanup).
 
+Extended verification (same increment): `appointment.tests.test_owned_booking.run`
+(17/17) and `test_scheduling_workflows` (8/8) pass with exact cleanup;
+`test_app_identity` is 17/18, the single failure being the hardcoded clone
+baseline that now sees the retained demo data. Browser journeys beyond the role
+manifests: provider schedule, receptionist booking recovery, manager staff
+assignment, public and authenticated dark theme, and the owned-booking guest and
+staff lifecycle, all with zero console/network errors. The setup boundary keeps
+customer (Website User) accounts out of `workspace.create`. Evidence under
+`docs/implementation/evidence/roles`; commits `3c692da` and `0ebe403`.
+
