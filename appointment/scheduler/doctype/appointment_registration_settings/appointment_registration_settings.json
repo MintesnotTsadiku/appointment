@@ -1,0 +1,90 @@
+{
+ "actions": [],
+ "creation": "2026-09-22 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "self_signup_section",
+  "self_signup_mode",
+  "allow_self_service_business_creation",
+  "require_admin_approval",
+  "self_signup_help",
+  "provisioning_section",
+  "allow_invite_provisioning",
+  "provisioning_help"
+ ],
+ "fields": [
+  {
+   "fieldname": "self_signup_section",
+   "fieldtype": "Section Break",
+   "label": "Public self sign-up"
+  },
+  {
+   "default": "Open",
+   "description": "Open: anyone may create an account. Verified: the account must verify its email before it can be used. Disabled: the public sign-up form is turned off; owners are provisioned by an administrator or manager instead.",
+   "fieldname": "self_signup_mode",
+   "fieldtype": "Select",
+   "label": "Self sign-up mode",
+   "options": "Open\nVerified\nDisabled",
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "description": "When on, a self-signed-up account may create its own business through guided setup. When off, only invited/admin-provisioned accounts can create a business.",
+   "fieldname": "allow_self_service_business_creation",
+   "fieldtype": "Check",
+   "label": "Allow self-service business creation"
+  },
+  {
+   "default": "0",
+   "description": "When on, a self-signed-up account is created disabled and waits for an administrator to approve it. Ignored when self sign-up is Disabled.",
+   "fieldname": "require_admin_approval",
+   "fieldtype": "Check",
+   "label": "Require administrator approval"
+  },
+  {
+   "fieldname": "self_signup_help",
+   "fieldtype": "HTML",
+   "options": "<div class=\"text-muted small\">Guest booking is unaffected by these settings. Invited/admin provisioning (Team access) stays available unless it is turned off below.</div>"
+  },
+  {
+   "fieldname": "provisioning_section",
+   "fieldtype": "Section Break",
+   "label": "Invited / admin provisioning"
+  },
+  {
+   "default": "1",
+   "description": "When on, a business manager may assign existing or new accounts through Team access. When off, only an Administrator may provision accounts.",
+   "fieldname": "allow_invite_provisioning",
+   "fieldtype": "Check",
+   "label": "Allow manager invite/provisioning"
+  },
+  {
+   "fieldname": "provisioning_help",
+   "fieldtype": "HTML",
+   "options": "<div class=\"text-muted small\">Invited/admin provisioning never sends real email in this environment; accounts are assigned locally.</div>"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-09-22 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Scheduler",
+ "name": "Appointment Registration Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

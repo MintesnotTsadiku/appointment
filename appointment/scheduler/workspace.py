@@ -18,25 +18,27 @@ DAYS = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sun
 
 
 def require_provider_account():
-    """A staff or owner-capable account may create its own business.
+    """A staff, owner-capable or permitted self-service account may set up a business.
 
     Owners are granted the Provider and Organization Manager capabilities when
-    the business is created. Customer (Website User) accounts and unstarted
-    signups are refused so the setup surface never becomes customer access; a
-    prospective owner first records an onboarding type and is then allowed.
+    the business is created. Customer (Website User) accounts, unstarted signups
+    and self-service accounts blocked by configuration are refused so the setup
+    surface never becomes customer access.
     """
     user = frappe.session.user
     if user == "Guest":
         frappe.throw(_("Sign in to set up a business."), frappe.PermissionError)
-    account = frappe.db.get_value("User", user, ["enabled", "user_type"], as_dict=True)
+    account = frappe.db.get_value("User", user, ["enabled"], as_dict=True)
     if not account or not account.enabled:
         frappe.throw(_("Sign in to set up a business."), frappe.PermissionError)
-    roles = frappe.get_roles(user)
-    if account.user_type == "System User" or any(role in membership.STAFF_ROLES for role in roles):
-        return user
-    if frappe.db.get_value("Provider", {"user": user}, "onboarding_type"):
-        return user
-    frappe.throw(_("Sign in with a staff account to set up a business."), frappe.PermissionError)
+    from appointment.scheduler import registration
+
+    if not registration.may_start_business(user):
+        frappe.throw(
+            _("Self-service business setup is turned off. Ask an administrator to provision your account."),
+            frappe.PermissionError,
+        )
+    return user
 
 
 @frappe.whitelist()

@@ -906,7 +906,12 @@ def set_onboarding_type(onboarding_type):
     """
     user = frappe.session.user
     is_administrator = user == "Administrator"
-    
+
+    if not is_administrator:
+        from appointment.scheduler import registration
+
+        registration.require_may_start_business(user)
+
     if onboarding_type not in ['individual', 'organization']:
         frappe.throw(_("Invalid onboarding type. Must be 'individual' or 'organization'."))
     

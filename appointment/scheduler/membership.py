@@ -283,16 +283,17 @@ def resolve_landing(spaces, selected):
 def _is_prospective_owner(user):
     """A user who should see guided setup rather than a no-assignment screen.
 
-    New signups (no staff role) and users mid-onboarding (type chosen, not
-    complete) are prospective owners. Revoked staff keep their capability role
-    but are pointed at the explanatory no-assignment state.
+    Provider accounts already onboarding are prospective; unassigned staff (a
+    capability role but no membership) are not; a plain account is prospective
+    only while self-service business creation is enabled.
     """
-    if not has_staff_role(user):
+    if frappe.db.get_value("Provider", {"user": user}, "onboarding_type"):
         return True
-    row = frappe.db.get_value(
-        "Provider", {"user": user}, ["onboarding_type", "onboarding_complete"], as_dict=True
-    )
-    return bool(row and row.onboarding_type and not row.onboarding_complete)
+    if has_staff_role(user):
+        return False
+    from appointment.scheduler import registration
+
+    return registration.self_service_business_creation_allowed()
 
 
 @frappe.whitelist(allow_guest=True)
@@ -515,6 +516,9 @@ def assign_member(
     an administrator. ``delivery`` in the response makes that distinction clear.
     """
     actor = require_manager(organization)
+    from appointment.scheduler import registration
+
+    registration.require_invite_provisioning()
     if membership_role not in ASSIGNABLE_ROLES:
         frappe.throw(_("Choose a role of Manager, Provider or Receptionist."))
 
