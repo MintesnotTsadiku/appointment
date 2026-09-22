@@ -3,21 +3,39 @@
 import frappe
 from frappe import _
 
+from appointment.scheduler import membership
+
 
 def managed_organizations(user=None):
-    user = user or frappe.session.user
-    if user == "Guest":
-        return []
-    owned = frappe.get_all("Organization", filters={"owner_user": user, "is_active": 1}, pluck="name")
-    delegated = frappe.get_all(
-        "Organization Manager", filters={"user": user, "parenttype": "Organization"}, pluck="parent"
-    )
-    return list(set(owned + [n for n in delegated if frappe.db.get_value("Organization", n, "is_active")]))
+    return membership.manager_organizations(user)
+
+
+def reception_scope(user=None):
+    return membership.reception_scopes(user)
+
+
+def receptionist_organizations(user=None):
+    return membership.receptionist_organizations(user)
+
+
+def _within_reception_scope(doc, scopes, organization, provider=None, location=None):
+    """True when a receptionist's location/provider scope covers this record."""
+    provider = provider or doc.get("provider")
+    location = location or doc.get("location")
+    for scope in scopes:
+        if scope["organization"] != organization:
+            continue
+        if scope["locations"] and location not in scope["locations"]:
+            continue
+        if scope["provider"] and provider != scope["provider"]:
+            continue
+        return True
+    return False
 
 
 def providers(user=None):
     user = user or frappe.session.user
-    if user == "Guest":
+    if user == "Guest" or not frappe.db.get_value("User", user, "enabled"):
         return []
     return frappe.get_all("Provider", filters={"user": user, "is_active": 1}, pluck="name")
 
@@ -30,6 +48,8 @@ def can_access(doc, user=None):
         return False
     org = doc.get("organization") or frappe.db.get_value("Service", doc.get("service"), "organization")
     if org in managed_organizations(user):
+        return True
+    if _within_reception_scope(doc, reception_scope(user), org):
         return True
     return bool(
         doc.get("provider") in providers(user)
@@ -64,6 +84,15 @@ def appointment_query(user=None):
     parts = []
     if orgs:
         parts.append("`tabAppointment`.organization in (" + ",".join(frappe.db.escape(x) for x in orgs) + ")")
+    for scope in reception_scope(user):
+        condition = "`tabAppointment`.organization = " + frappe.db.escape(scope["organization"])
+        if scope["locations"]:
+            condition += " and `tabAppointment`.location in (" + ",".join(
+                frappe.db.escape(x) for x in scope["locations"]
+            ) + ")"
+        if scope["provider"]:
+            condition += " and `tabAppointment`.provider = " + frappe.db.escape(scope["provider"])
+        parts.append("(" + condition + ")")
     own = providers(user)
     if own:
         parts.append(
@@ -78,7 +107,12 @@ def appointment_query(user=None):
 
 
 def require_staff():
-    if frappe.session.user != "Administrator" and not (providers() or managed_organizations()):
+    user = frappe.session.user
+    if user == "Administrator":
+        return
+    if not frappe.db.get_value("User", user, "enabled"):
+        frappe.throw(_("Staff access is required."), frappe.PermissionError)
+    if not (providers() or managed_organizations() or reception_scope()):
         frappe.throw(_("Staff access is required."), frappe.PermissionError)
 
 
@@ -92,6 +126,7 @@ def business_scope(user=None):
             filters={"parent": ["in", own], "parenttype": "Provider", "status": "Active"},
             pluck="organization",
         )
+    orgs += receptionist_organizations(user)
     return list(set(orgs))
 
 

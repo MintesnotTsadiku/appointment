@@ -18,7 +18,7 @@ from appointment.helpers.overrides import add_response_code
 
 @frappe.whitelist()
 @add_response_code
-def get_desk_appointments(date: str = None, location_name: str = None, provider_name: str = None, view: str = "day"):
+def get_desk_appointments(date: str = None, location_name: str = None, provider_name: str = None, view: str = "day", organization: str = None):
     """
     Get appointments for day/week view with filters.
 
@@ -27,20 +27,37 @@ def get_desk_appointments(date: str = None, location_name: str = None, provider_
         location_name: Filter by location (optional)
         provider_name: Filter by provider (optional)
         view: "day" or "week". Defaults to "day"
+        organization: Active business. Validated against membership every call.
 
     Returns:
-        List of appointments with full details
+        Appointments plus the authorized scope, so the UI can distinguish
+        "no bookings" from "filtered out" and "no access".
     """
-    from appointment.scheduler.booking_access import require_staff
+    from appointment.scheduler.booking_access import (
+        require_staff,
+        business_scope,
+        reception_scope,
+        managed_organizations,
+    )
     require_staff()
+    user = frappe.session.user
+    authorized = business_scope(user)
+    if organization and user != "Administrator" and organization not in authorized:
+        frappe.throw(_("You do not have access to this business."), frappe.PermissionError)
+    if not organization and len(authorized) == 1:
+        organization = authorized[0]
+    scopes = reception_scope(user)
+
     # Default to today if not provided
     if not date:
         date = getdate().strftime("%Y-%m-%d")
 
-    # Get system timezone
-    system_timezone = frappe.db.get_single_value("System Settings", "time_zone") or "Africa/Addis_Ababa"
+    # Range calculations use the business time zone when known, else system.
+    tz_name = (
+        frappe.db.get_value("Organization", organization, "timezone") if organization else None
+    ) or frappe.db.get_single_value("System Settings", "time_zone") or "Africa/Addis_Ababa"
     try:
-        tz = pytz.timezone(system_timezone)
+        tz = pytz.timezone(tz_name)
     except pytz.UnknownTimeZoneError:
         tz = pytz.timezone("Africa/Addis_Ababa")
 
@@ -58,18 +75,22 @@ def get_desk_appointments(date: str = None, location_name: str = None, provider_
         end_date = start_date
 
     # Build filters
-    filters = {
+    statuses = ["Pending", "Confirmed", "Completed", "Cancelled", "No Show"]
+    base_filters = {
         "appointment_date": ["between", [start_date, end_date]],
-        "status": ["in", ["Pending", "Confirmed", "Completed", "Cancelled", "No Show"]]
+        "status": ["in", statuses],
     }
+    if organization:
+        base_filters["organization"] = organization
 
+    filters = dict(base_filters)
     if location_name:
         filters["location"] = location_name
-
     if provider_name:
         filters["provider"] = provider_name
 
-    # Get appointments (only select fields that exist in Appointment doctype)
+    # Get appointments (only select fields that exist in Appointment doctype).
+    # get_list applies the record-level appointment_query in addition to filters.
     appointments = frappe.get_list(
         "Appointment",
         filters=filters,
@@ -81,30 +102,62 @@ def get_desk_appointments(date: str = None, location_name: str = None, provider_
         ],
         order_by="appointment_date, start_time"
     )
+    unfiltered_count = len(
+        frappe.get_list("Appointment", filters=base_filters, fields=["name"], limit_page_length=0)
+    )
 
-    # Enrich with service, provider, and location names
+    # Enrich with service, provider, location and business display names.
     for apt in appointments:
         apt["start_time"] = get_time(apt.start_time).strftime("%H:%M:%S")
         apt["end_time"] = get_time(apt.end_time).strftime("%H:%M:%S")
-        # Get service name
-        if apt.get("service"):
-            apt["service_name"] = frappe.db.get_value("Service", apt.get("service"), "service_name") or ""
-        else:
-            apt["service_name"] = ""
+        apt["service_name"] = (
+            frappe.db.get_value("Service", apt.get("service"), "service_name") if apt.get("service") else ""
+        ) or ""
+        apt["provider_name"] = (
+            frappe.db.get_value("Provider", apt.get("provider"), "provider_name") if apt.get("provider") else ""
+        ) or ""
+        apt["location_name"] = (
+            frappe.db.get_value("Location", apt.get("location"), "location_name") if apt.get("location") else ""
+        ) or ""
+        apt["organization_name"] = (
+            frappe.db.get_value("Organization", apt.get("organization"), "organization_name")
+            if apt.get("organization")
+            else ""
+        ) or ""
 
-        # Get provider name
-        if apt.get("provider"):
-            apt["provider_name"] = frappe.db.get_value("Provider", apt.get("provider"), "provider_name") or ""
-        else:
-            apt["provider_name"] = ""
+    # Next day with a booking inside the authorized scope, to guide recovery.
+    upcoming = frappe.get_list(
+        "Appointment",
+        filters={"appointment_date": [">=", getdate()], "status": ["in", statuses]},
+        fields=["appointment_date"],
+        order_by="appointment_date asc",
+        limit_page_length=1,
+    )
 
-        # Get location name
-        if apt.get("location"):
-            apt["location_name"] = frappe.db.get_value("Location", apt.get("location"), "location_name") or ""
-        else:
-            apt["location_name"] = ""
+    scope = {
+        "organization": organization,
+        "organization_name": frappe.db.get_value("Organization", organization, "organization_name")
+        if organization
+        else None,
+        "organizations": authorized,
+        "is_manager": organization in managed_organizations(user) if organization else False,
+        "receptionist": bool(scopes),
+        "locations": list(
+            dict.fromkeys(loc for item in scopes for loc in item["locations"])
+        ),
+        "providers": list(dict.fromkeys(item["provider"] for item in scopes if item["provider"])),
+    }
 
-    return {"appointments": appointments, "count": len(appointments)}, 200
+    return {
+        "appointments": appointments,
+        "count": len(appointments),
+        "unfiltered_count": unfiltered_count,
+        "scope": scope,
+        "date": getdate(date).isoformat(),
+        "view": view,
+        "timezone": tz_name,
+        "next_date": upcoming[0].appointment_date.isoformat() if upcoming else None,
+    }, 200
 
 
 @frappe.whitelist()
@@ -713,17 +766,17 @@ def assign_walk_in_to_slot(walk_in_name: str, provider_name: str, location_name:
 
 @frappe.whitelist()
 @add_response_code
-def get_services_list():
+def get_services_list(organization: str = None):
     """
-    Get list of all active services.
-
-    Returns:
-        List of services
+    Get list of active services, optionally scoped to one business.
     """
+    filters = {"is_active": 1}
+    if organization:
+        filters["organization"] = organization
     services = frappe.get_list(
         "Service",
-        filters={"is_active": 1},
-        fields=["name", "service_name", "duration", "price"],
+        filters=filters,
+        fields=["name", "service_name", "duration", "price", "organization"],
         order_by="service_name"
     )
 
@@ -732,17 +785,22 @@ def get_services_list():
 
 @frappe.whitelist()
 @add_response_code
-def get_providers_list():
+def get_providers_list(organization: str = None):
     """
-    Get list of all active providers.
-
-    Returns:
-        List of providers
+    Get list of active providers, optionally scoped to one business.
     """
+    filters = {"is_active": 1}
+    if organization:
+        provider_names = frappe.get_all(
+            "Provider Organization",
+            filters={"organization": organization, "parenttype": "Provider", "status": "Active"},
+            pluck="parent",
+        )
+        filters["name"] = ["in", provider_names or [""]]
     providers = frappe.get_list(
         "Provider",
-        filters={"is_active": 1},
-        fields=["name", "provider_name"],
+        filters=filters,
+        fields=["name", "provider_name", "full_name", "user"],
         order_by="provider_name"
     )
 
@@ -751,17 +809,17 @@ def get_providers_list():
 
 @frappe.whitelist()
 @add_response_code
-def get_locations_list():
+def get_locations_list(organization: str = None):
     """
-    Get list of all active locations.
-
-    Returns:
-        List of locations
+    Get list of active locations, optionally scoped to one business.
     """
+    filters = {"is_active": 1}
+    if organization:
+        filters["organization"] = organization
     locations = frappe.get_list(
         "Location",
-        filters={"is_active": 1},
-        fields=["name", "location_name"],
+        filters=filters,
+        fields=["name", "location_name", "organization", "timezone"],
         order_by="location_name"
     )
 

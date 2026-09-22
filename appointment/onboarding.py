@@ -949,7 +949,13 @@ def set_onboarding_type(onboarding_type):
             provider.onboarding_current_step = 1
             provider.onboarding_organization = None
             provider.insert(ignore_permissions=True)
-        
+
+        # A prospective owner becomes provider-capable when they choose a type.
+        # Membership scope still decides which businesses they can act on.
+        from appointment.scheduler import membership
+
+        membership.grant_roles(user, ("Provider",))
+
         frappe.db.commit()
         
         # Return updated progress

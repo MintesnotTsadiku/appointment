@@ -40,6 +40,12 @@ def run(
         require_target()
         if not state_path().exists():
             frappe.throw("Prepare the exact owned-booking fixture first.")
+    elif fixture_scope == "acceptance_demo":
+        from appointment.tests.acceptance_demo import demo_path, require_target
+
+        require_target()
+        if not demo_path().exists():
+            frappe.throw("Provision the retained acceptance demo first.")
     elif fixture_scope == "legacy":
         qa_fixtures.setup()
     else:
@@ -57,6 +63,11 @@ def run(
     finally:
         if fixture_scope == "legacy":
             cleanup = qa_fixtures.teardown()
+        elif fixture_scope == "acceptance_demo":
+            cleanup = {
+                "retained_acceptance_demo": True,
+                "finish": "appointment.tests.acceptance_demo.reset",
+            }
         else:
             cleanup = {
                 "retained_exact_fixture": True,

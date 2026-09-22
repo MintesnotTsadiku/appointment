@@ -9,6 +9,7 @@ import pytz
 from frappe import _
 from frappe.utils import get_time
 
+from appointment.scheduler import membership
 from appointment.scheduler.booking import lock_provider, offering
 from appointment.scheduler.booking_access import managed_organizations
 
@@ -17,9 +18,15 @@ DAYS = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sun
 
 
 def require_provider_account():
+    """Any enabled signed-in account may create its own business.
+
+    Owners are granted the Provider and Organization Manager capabilities when
+    the business is created, so a brand new signup can complete setup without a
+    manual role change.
+    """
     user = frappe.session.user
-    if user == "Guest" or not frappe.db.get_value("User", user, "enabled") or "Provider" not in frappe.get_roles(user):
-        frappe.throw(_("Sign in with a provider account to set up a business."), frappe.PermissionError)
+    if user == "Guest" or not frappe.db.get_value("User", user, "enabled"):
+        frappe.throw(_("Sign in to set up a business."), frappe.PermissionError)
     return user
 
 
@@ -157,6 +164,7 @@ def create(business_name, location_name, service_name, timezone, duration, opens
             )
         ).insert(ignore_permissions=True)
         offering(event.name)
+        membership.grant_roles(user, ("Provider", "Organization Manager"))
         result = next(row for row in overview() if row["organization"] == org.name)
         org.setup_request_result = json.dumps(result)
         org.save(ignore_permissions=True)
