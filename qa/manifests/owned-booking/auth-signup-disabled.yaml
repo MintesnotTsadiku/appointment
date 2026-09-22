@@ -1,0 +1,29 @@
+app: appointment
+base_url: http://127.0.0.20:25310
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+scenarios:
+  - id: signup_disabled_message
+    title: Self sign-up is hidden when the registration setting is Disabled
+    viewport: {width: 1440, height: 960}
+    checks: []
+    routes:
+      - path: /signup
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="signup-disabled"]'
+    actions:
+      - action: screenshot
+        name: signup-disabled.png
+        full_page: true
+      - action: get_console_errors
+      - action: get_network_errors

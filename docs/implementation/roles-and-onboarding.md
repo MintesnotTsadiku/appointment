@@ -214,12 +214,63 @@ and the automated QA fixtures are untouched.
   `appointment.qa_runner.run` with the `qa/manifests/owned-booking/role-*.yaml`
   manifests and `fixture_scope='acceptance_demo'`.
 
-## 8. Evidence and known limitations
+## 8. Tenant provisioning configuration
+
+A single Single DocType, `Appointment Registration Settings`, turns every
+provisioning modality on or off. It is the one place an administrator changes
+this behaviour.
+
+| Field | Default | Effect |
+|---|---|---|
+| `self_signup_mode` (Open / Verified / Disabled) | Open | Open: public self sign-up. Verified: the account is created disabled until it verifies its email. Disabled: the public sign-up form and endpoint are off. |
+| `allow_self_service_business_creation` | On | When off, only invited/admin-provisioned accounts start onboarding or create a business. |
+| `require_admin_approval` | Off | When on, a self-signed-up account is created disabled and waits for an administrator. |
+| `allow_invite_provisioning` | On | When off, only an Administrator creates or assigns accounts; managers cannot. |
+
+Enforcement is server-side, not only in the UI: `registration.signup` refuses
+when Disabled; `registration.may_start_business` gates `workspace.create` and
+`onboarding.set_onboarding_type`; `registration.require_invite_provisioning`
+gates `membership.assign_member`. `registration.public_settings` is the
+guest-safe read used by the sign-up page. Guest booking is never affected.
+
+Invited/admin provisioning (option B) is always available by default and is not
+gated behind self sign-up. Verified/administrator-approval (option C) are built
+but cannot complete locally while email delivery is muted; an administrator
+enables the account, and the delivery channel is turned on when email is.
+
+## 9. Translation standardization
+
+User-facing strings are English source texts and translations live in the
+framework's `Translation` DocType:
+
+- Backend strings use `_()`.
+- The React app resolves a key to its English source string, then applies the
+  active language's `Translation` records via
+  `appointment.scheduler.translation.messages`.
+- `appointment.scheduler.translation.languages` returns only languages the app
+  ships translations for (plus `en`), so the switcher stays meaningful instead
+  of listing every Frappe language.
+- `appointment.scheduler.translation.set_language` persists the signed-in user's
+  Frappe `language` (guests keep a local choice; the call is guest-safe).
+- A one-time patch (`appointment.patches.v0_1.import_frontend_translations`)
+  converted the old bundled JSON dictionary into `Translation` records for
+  Amharic, which are now editable in Desk.
+
+Adding a language means adding `Translation` records for it; there is no second
+dictionary store and no code change. A human review is still required before
+Amharic is advertised as supported.
+
+## 10. Evidence and known limitations
 
 Backend and static checks:
 
 - [Membership/scope/time acceptance](evidence/roles/membership-acceptance.txt) —
   7/7 pass with exact cleanup.
+- [Registration acceptance](evidence/roles/registration-acceptance.txt) — 6/6
+  pass: sign-up modes, self-service creation gating, invite provisioning gating
+  and Translation-DocType messages, restoring the registration Single.
+- [Registration and translation HTTP](evidence/roles/registration-and-translation-http.txt)
+  — public settings, language list `[en, am]` and 217 Amharic messages.
 - [Owned-booking acceptance](evidence/roles/owned-booking-acceptance.txt) —
   17/17 pass with exact cleanup (no regression from this increment).
 - [Scheduling workflows](evidence/roles/scheduling-workflows.txt) — 8/8 pass.
@@ -243,13 +294,20 @@ zero network errors — see [browser summary](evidence/roles/browser-summary.jso
 - Themes: public dark (BQA-00078) and authenticated dark (BQA-00074).
 - Owned-booking guest booking (BQA-00079) and staff reschedule/cancel lifecycle
   (BQA-00080) with stored 11:00 Cancelled and released capacity.
+- Self sign-up disabled (BQA-00089) and the Amharic language switch
+  (BQA-00090); self sign-up open (BQA-00091) assertions pass but the capture is
+  redacted because the form has a password field.
 - Screenshots `evidence/roles/*.png`, the scoped reception DOM snapshot, and the
   sanitized report JSON files.
 
 Limitations:
 
-- The Harness redacts login screenshots/traces (sensitive-screen policy); the
-  login scenario's page assertions passed but its capture actions report false.
+- The Harness redacts login and sign-up screenshots/traces (they contain
+  credential fields); those scenarios' page assertions pass but their capture
+  actions report false.
+- The Verified sign-up mode and administrator approval are built and gated, but
+  they cannot complete locally while email delivery is muted; an administrator
+  enables the account instead.
 - Authenticated journeys use impersonated `frappe_session`, not a typed
   password; `/login` rendering is covered separately.
 - The setup boundary denies customer (Website User) and unstarted accounts;

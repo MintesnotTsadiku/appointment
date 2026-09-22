@@ -159,3 +159,23 @@ staff lifecycle, all with zero console/network errors. The setup boundary keeps
 customer (Website User) accounts out of `workspace.create`. Evidence under
 `docs/implementation/evidence/roles`; commits `3c692da` and `0ebe403`.
 
+
+## Tenant provisioning and Translation-doctype i18n (2026-09-22)
+
+- `bench --site <site> migrate` added the `Appointment Registration Settings`
+  Single and ran
+  `appointment.patches.v0_1.import_frontend_translations`, which seeded 217
+  Amharic `Translation` records from the old bundled JSON dictionary.
+- `Appointment Registration Settings` (System Manager only) controls
+  `self_signup_mode` (Open/Verified/Disabled), self-service business creation,
+  administrator approval and manager invite provisioning. Enforcement is
+  server-side in `registration.signup`, `workspace.create`,
+  `onboarding.set_onboarding_type` and `membership.assign_member`.
+- New endpoints: `appointment.scheduler.registration.public_settings`, `.signup`,
+  and `appointment.scheduler.translation.messages`, `.languages`, `.set_language`.
+- Browser: self sign-up disabled (BQA-00089), Amharic language switch
+  (BQA-00090), self sign-up open (BQA-00091; assertions pass, capture redacted
+  because the form has a password field). `appointment.tests.test_registration.run`
+  is 6/6. See [roles and onboarding](roles-and-onboarding.md) sections 8-10.
+
+

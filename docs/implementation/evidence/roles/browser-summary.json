@@ -112,6 +112,33 @@
       "console_errors": 0,
       "network_errors": 0,
       "ok": true
+    },
+    {
+      "manifest": "auth-signup-disabled.yaml",
+      "report": "BQA-2026-00089",
+      "persona": "Guest",
+      "assertion": "With the registration Single set to Disabled, /signup shows the signup-disabled state and no public form.",
+      "console_errors": 0,
+      "network_errors": 0,
+      "ok": true
+    },
+    {
+      "manifest": "language-am.yaml",
+      "report": "BQA-2026-00090",
+      "persona": "Guest",
+      "assertion": "Switching language fetches appointment.scheduler.translation.messages?language=am (200) and renders the Amharic translation from the Translation DocType.",
+      "console_errors": 0,
+      "network_errors": 0,
+      "ok": true
+    },
+    {
+      "manifest": "auth-signup-open.yaml",
+      "report": "BQA-2026-00091",
+      "persona": "Guest",
+      "assertion": "With the registration Single set to Open, /signup renders the public form (signup-heading and signup-submit assertions pass). The page contains a password input, so the Harness redacts the automatic capture and the report is false for capture actions only.",
+      "console_errors": 0,
+      "network_errors": 0,
+      "ok": false
     }
   ],
   "evidence": {
@@ -120,19 +147,22 @@
     "role-multi-business.png": "BQA-2026-00068 synthetic screenshot",
     "role-unassigned.png": "BQA-2026-00069 synthetic screenshot",
     "role-provider.png": "BQA-2026-00070 synthetic screenshot",
-    "role-manager-assign.png": "BQA-2026-00075 synthetic screenshot",
+    "role-manager-assign.png": "BQA-2026-00077 synthetic screenshot",
     "role-receptionist-booking.png": "BQA-2026-00072 synthetic screenshot",
-    "theme-public-dark.png": "BQA-2026-00076 synthetic screenshot",
+    "theme-public-dark.png": "BQA-2026-00078 synthetic screenshot",
     "theme-app-dark.png": "BQA-2026-00074 synthetic screenshot",
     "owned-guest.png": "BQA-2026-00079 synthetic screenshot",
     "owned-lifecycle-rescheduled.png": "BQA-2026-00080 synthetic screenshot",
     "owned-lifecycle-history.png": "BQA-2026-00080 synthetic screenshot",
     "owned-lifecycle-cancelled.png": "BQA-2026-00080 synthetic screenshot",
+    "signup-disabled.png": "BQA-2026-00089 synthetic screenshot",
+    "language-amharic.png": "BQA-2026-00090 synthetic screenshot",
     "role-receptionist-scope-dom.html": "BQA-2026-00067 captured DOM of the scoped reception page",
+    "signup-open.html": "BQA-2026-00091 captured DOM of the open sign-up form",
     "reports": "Sanitized BQA report JSON files (no console/network errors)"
   },
   "limitations": [
-    "Harness redacts login screenshots/traces; the login scenario's page assertions passed but its capture actions are reported false.",
+    "Harness redacts login and sign-up screenshots/traces because they contain credential fields; page assertions passed on those pages but capture actions are reported false.",
     "Authenticated journeys start from an impersonated frappe_session, not a typed password; /login rendering is covered separately by the entry-pages scenario.",
     "Raw trace/video/session material was not committed.",
     "The team page no longer contains a password input, so its captures are not redacted; local account creation is documented as password-set-by-administrator."

@@ -1,0 +1,30 @@
+app: appointment
+base_url: http://127.0.0.20:25310
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+scenarios:
+  - id: signup_open_form
+    title: Self sign-up is shown when the registration setting is Open
+    viewport: {width: 1440, height: 960}
+    checks: []
+    routes:
+      - path: /signup
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="signup-heading"]'
+          - type: visible_selector
+            value: '[data-qa="signup-submit"]'
+    actions:
+      - action: get_dom_snapshot
+        name: signup-open.html
+      - action: get_console_errors
+      - action: get_network_errors

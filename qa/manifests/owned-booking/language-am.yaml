@@ -1,0 +1,38 @@
+app: appointment
+base_url: http://127.0.0.20:25310
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+scenarios:
+  - id: language_switch_amharic
+    title: Switching language uses the Translation DocType for Amharic
+    viewport: {width: 1440, height: 960}
+    checks: []
+    routes:
+      - path: /
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="language-toggle"]'
+    actions:
+      - action: press
+        selector: '[data-qa="language-toggle"]'
+        key: Enter
+        assertions:
+          - type: visible_text
+            value: 'ምርት'
+          - type: network_request
+            url_contains: appointment.scheduler.translation.messages
+            status: 200
+      - action: screenshot
+        name: language-amharic.png
+        full_page: true
+      - action: get_console_errors
+      - action: get_network_errors
