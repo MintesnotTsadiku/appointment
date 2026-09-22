@@ -1,10 +1,17 @@
 # Recordings
 
-No video was produced for Phase 4. `appointment.qa_runner.run` does not forward
-`capture_video`/`capture_instruction_timeline`, and
-`agent_plane.api.run_browser_qa_manifest` defaults both to false, overriding the
-manifest. Every run therefore reports `video: failure` and `video_file: None`.
+No video was produced for Phase 4. The manifests request video/timeline capture,
+but `appointment.qa_runner.run` does not forward those arguments and the installed
+Agent Plane API's false defaults override the manifest. A reported `video: failure`
+is a capture policy, not by itself proof of a recording-engine error; the null
+video artifact establishes that no recording is available.
 
-This is a QA-tooling limitation, not a product defect. Screenshots, DOM
-snapshots, report JSON and Playwright traces are the durable evidence in this
-phase; see `../evidence-index.md`.
+This is an invocation limitation, not a product defect or proof that Agent Plane
+cannot record. No product source was changed to work around it. The original
+recording requirement remains unmet and is an explicit assessment limitation.
+
+Committed screenshots, compact reports, console/network failures and the redacted
+`../probes/outputs/p4c-trace-summary.json` preserve the evidence used in the review.
+Raw trace archives and private DOM snapshots remain in ephemeral `/tmp` storage;
+they are neither committed durable evidence nor videos. Exact artifact paths and
+run identifiers are in `../evidence-index.md`.

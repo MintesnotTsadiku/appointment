@@ -1,0 +1,296 @@
+{
+  "loaded_source": "/home/minte/projects/training-apps/.worktrees/frappe-appointment-beta/appointment/__init__.py",
+  "orphans": [
+    {
+      "doctype": "Booking URL",
+      "name": "a72buo00pm",
+      "parent": "P4 Organization",
+      "parenttype": "Organization",
+      "parentfield": "booking_urls"
+    },
+    {
+      "doctype": "Booking URL",
+      "name": "kcgcdhppkg",
+      "parent": "P4 Organization",
+      "parenttype": "Organization",
+      "parentfield": "booking_urls"
+    },
+    {
+      "doctype": "Booking URL",
+      "name": "kcgs37uppm",
+      "parent": "P4 Organization",
+      "parenttype": "Organization",
+      "parentfield": "booking_urls"
+    },
+    {
+      "doctype": "Booking URL",
+      "name": "kci12a0l3r",
+      "parent": "P4 Organization",
+      "parenttype": "Organization",
+      "parentfield": "booking_urls"
+    },
+    {
+      "doctype": "Booking URL",
+      "name": "kcj004ba4h",
+      "parent": "P4 Organization",
+      "parenttype": "Organization",
+      "parentfield": "booking_urls"
+    },
+    {
+      "doctype": "Provider Location",
+      "name": "kcf70l5og0",
+      "parent": "P4 Provider One",
+      "parenttype": "Provider",
+      "parentfield": "locations"
+    },
+    {
+      "doctype": "Provider Organization",
+      "name": "kcfvepuqk1",
+      "parent": "P4 Provider One",
+      "parenttype": "Provider",
+      "parentfield": "organizations"
+    },
+    {
+      "doctype": "Provider Location",
+      "name": "kcfsansaga",
+      "parent": "P4 Provider Two",
+      "parenttype": "Provider",
+      "parentfield": "locations"
+    },
+    {
+      "doctype": "Provider Organization",
+      "name": "kcf5hkpv0s",
+      "parent": "P4 Provider Two",
+      "parenttype": "Provider",
+      "parentfield": "organizations"
+    },
+    {
+      "doctype": "Opening Hours",
+      "name": "kce59lj7i5",
+      "parent": "P4 Location Alpha",
+      "parenttype": "Location",
+      "parentfield": "opening_hours"
+    },
+    {
+      "doctype": "Opening Hours",
+      "name": "kcebjmvf6v",
+      "parent": "P4 Location Alpha",
+      "parenttype": "Location",
+      "parentfield": "opening_hours"
+    },
+    {
+      "doctype": "Opening Hours",
+      "name": "kcefqvrcbe",
+      "parent": "P4 Location Alpha",
+      "parenttype": "Location",
+      "parentfield": "opening_hours"
+    },
+    {
+      "doctype": "Opening Hours",
+      "name": "kcei4pf2s0",
+      "parent": "P4 Location Alpha",
+      "parenttype": "Location",
+      "parentfield": "opening_hours"
+    },
+    {
+      "doctype": "Opening Hours",
+      "name": "kcenv1un8q",
+      "parent": "P4 Location Alpha",
+      "parenttype": "Location",
+      "parentfield": "opening_hours"
+    },
+    {
+      "doctype": "Opening Hours",
+      "name": "kceq0p7ibk",
+      "parent": "P4 Location Alpha",
+      "parenttype": "Location",
+      "parentfield": "opening_hours"
+    },
+    {
+      "doctype": "Opening Hours",
+      "name": "kcesatc41j",
+      "parent": "P4 Location Alpha",
+      "parenttype": "Location",
+      "parentfield": "opening_hours"
+    },
+    {
+      "doctype": "Opening Hours",
+      "name": "kce024dp1t",
+      "parent": "P4 Location Beta",
+      "parenttype": "Location",
+      "parentfield": "opening_hours"
+    },
+    {
+      "doctype": "Opening Hours",
+      "name": "kce1lqjb5t",
+      "parent": "P4 Location Beta",
+      "parenttype": "Location",
+      "parentfield": "opening_hours"
+    },
+    {
+      "doctype": "Opening Hours",
+      "name": "kce9pdh557",
+      "parent": "P4 Location Beta",
+      "parenttype": "Location",
+      "parentfield": "opening_hours"
+    },
+    {
+      "doctype": "Opening Hours",
+      "name": "kce9qsi84l",
+      "parent": "P4 Location Beta",
+      "parenttype": "Location",
+      "parentfield": "opening_hours"
+    },
+    {
+      "doctype": "Opening Hours",
+      "name": "kcechkbjs6",
+      "parent": "P4 Location Beta",
+      "parenttype": "Location",
+      "parentfield": "opening_hours"
+    },
+    {
+      "doctype": "Opening Hours",
+      "name": "kced9eik7e",
+      "parent": "P4 Location Beta",
+      "parenttype": "Location",
+      "parentfield": "opening_hours"
+    },
+    {
+      "doctype": "Opening Hours",
+      "name": "kcenhge6ev",
+      "parent": "P4 Location Beta",
+      "parenttype": "Location",
+      "parentfield": "opening_hours"
+    },
+    {
+      "doctype": "Service Provider",
+      "name": "kcg3ojqtac",
+      "parent": "SRV-2026-0008",
+      "parenttype": "Service",
+      "parentfield": "service_providers"
+    },
+    {
+      "doctype": "Service Provider",
+      "name": "kcga1cpgrs",
+      "parent": "SRV-2026-0008",
+      "parenttype": "Service",
+      "parentfield": "service_providers"
+    },
+    {
+      "doctype": "Service Provider",
+      "name": "kchhb956i2",
+      "parent": "SRV-2026-0009",
+      "parenttype": "Service",
+      "parentfield": "service_providers"
+    },
+    {
+      "doctype": "Appointment Time Slot",
+      "name": "kcj4lb9hi6",
+      "parent": "appointment-review-provider@example.test",
+      "parenttype": "User Appointment Availability",
+      "parentfield": "appointment_time_slot"
+    },
+    {
+      "doctype": "Appointment Time Slot",
+      "name": "kcj73r98e1",
+      "parent": "appointment-review-provider@example.test",
+      "parenttype": "User Appointment Availability",
+      "parentfield": "appointment_time_slot"
+    },
+    {
+      "doctype": "Appointment Time Slot",
+      "name": "kcja4m1el3",
+      "parent": "appointment-review-provider@example.test",
+      "parenttype": "User Appointment Availability",
+      "parentfield": "appointment_time_slot"
+    },
+    {
+      "doctype": "Appointment Time Slot",
+      "name": "kcjbh6ffvr",
+      "parent": "appointment-review-provider@example.test",
+      "parenttype": "User Appointment Availability",
+      "parentfield": "appointment_time_slot"
+    },
+    {
+      "doctype": "Appointment Time Slot",
+      "name": "kcjjk0j472",
+      "parent": "appointment-review-provider@example.test",
+      "parenttype": "User Appointment Availability",
+      "parentfield": "appointment_time_slot"
+    },
+    {
+      "doctype": "Appointment Time Slot",
+      "name": "kcjnran5ed",
+      "parent": "appointment-review-provider@example.test",
+      "parenttype": "User Appointment Availability",
+      "parentfield": "appointment_time_slot"
+    },
+    {
+      "doctype": "Appointment Time Slot",
+      "name": "kcjp794qnh",
+      "parent": "appointment-review-provider@example.test",
+      "parenttype": "User Appointment Availability",
+      "parentfield": "appointment_time_slot"
+    },
+    {
+      "doctype": "Appointment Slot Duration",
+      "name": "kcj6jgb230",
+      "parent": "appointment-review-provider@example.test",
+      "parenttype": "User Appointment Availability",
+      "parentfield": "available_durations"
+    },
+    {
+      "doctype": "Booking URL",
+      "name": "kck6nc82f3",
+      "parent": "appointment-review-provider@example.test",
+      "parenttype": "User Appointment Availability",
+      "parentfield": "booking_urls"
+    },
+    {
+      "doctype": "Booking URL",
+      "name": "kckfjtbept",
+      "parent": "appointment-review-provider@example.test",
+      "parenttype": "User Appointment Availability",
+      "parentfield": "booking_urls"
+    },
+    {
+      "doctype": "Booking URL",
+      "name": "kckhk1lrjl",
+      "parent": "appointment-review-provider@example.test",
+      "parenttype": "User Appointment Availability",
+      "parentfield": "booking_urls"
+    },
+    {
+      "doctype": "Booking URL",
+      "name": "kckt3god7j",
+      "parent": "appointment-review-provider@example.test",
+      "parenttype": "User Appointment Availability",
+      "parentfield": "booking_urls"
+    }
+  ],
+  "auth": 0,
+  "sessions": 0,
+  "defaults": 1,
+  "business_counts": {
+    "Organization": 0,
+    "Provider": 0,
+    "Service": 0,
+    "Location": 0,
+    "EventType": 0,
+    "Appointment": 0,
+    "Walk In": 0,
+    "Booking Event": 0,
+    "Appointment Group": 0,
+    "User Appointment Availability": 0
+  },
+  "retained_users": [
+    "appointment-review-customer@example.test",
+    "appointment-review-reception@example.test",
+    "appointment-review-provider@example.test",
+    "appointment-review-manager@example.test"
+  ],
+  "browser_accounts": 4,
+  "browser_sessions": 4,
+  "email_muted": 1,
+  "scheduler_paused": 1
+}

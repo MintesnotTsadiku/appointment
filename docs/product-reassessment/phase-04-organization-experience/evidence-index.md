@@ -6,9 +6,10 @@ Branch `review/phase-04-organization-experience`.
 Runtime: preserved site
 `meet-beta-fix-appointment-beta-readiness-01dea7.localhost`, frontend
 `http://localhost:49510`, bench `/home/minte/projects/appointment-worktree-runtimes/fix-appointment-beta-readiness-01dea7/bench`.
-Loaded app source: the bench `appointment` symlink resolves to
-`.../.worktrees/frappe-appointment-readiness` @ `3c57fb4` (checked, unchanged);
-no migration or reset was performed; email muted, scheduler paused.
+The bench symlink targets readiness at `3c57fb4`; coordinator inspection of
+`appointment.__file__` loads the beta worktree at `edaccef`. No differences exist
+in `appointment/` or `frontend/` between these commits. The symlink was not proof
+of the imported source. No migration/reset; email muted, scheduler paused.
 
 Raw Agent Plane artifacts live under
 `/tmp/agent_browser_qa/appointment/appointment-<scenario>-<UTC>/`. Multi-megabyte
@@ -53,11 +54,11 @@ BQA id but produces one artifact directory per scenario.
 
 | Finding | Runs / screenshots | Report / probe evidence | Source |
 |---|---|---|---|
-| F1 organization setup self-completes | BQA-2026-00096; BQA-2026-00098 `p4-mgr-13-home-dashboard.png`; BQA-2026-00097 `p4-mgr-05-reload-saved-state.png` | `p4-c-manager-surfaces.txt` (home dashboard after org creation) | `appointment/onboarding.py:189-214` |
-| F2 provider calendar empty | BQA-2026-00103 `p4-prov-01-calendar.png`; BQA-2026-00105 `p4-prov-mobile-01-calendar.png` | `probes/outputs/p4-e-provider-journey.txt`; `probes/p4_provider_check_probe.py` output; Error Log `Calendar: Get Appointments Error` | `appointment/dashboard.py:424-429,515-519` |
+| F1 setup transition and checklist contract | BQA-2026-00096; BQA-2026-00098 `p4-mgr-13-home-dashboard.png`; BQA-2026-00097 `p4-mgr-05-reload-saved-state.png` | `p4-c-manager-surfaces.txt` (home dashboard after org creation) | `appointment/onboarding.py:189-214`; `SetupChecklist.tsx:22,305-314` |
+| F2 provider calendar empty | BQA-2026-00103 `p4-prov-01-calendar.png`; BQA-2026-00105 `p4-prov-mobile-01-calendar.png` | `probes/outputs/p4-e-provider-journey.txt`; coordinator `probes/outputs/p4c-filter-result.json` (the original provider-probe output/Error Log was not copied into this folder) | `appointment/dashboard.py:424-429,515-519` |
 | F3 booking not created | BQA-2026-00100 `p4-rec-02-create-filled.png`, `p4-rec-03-created.png`; BQA-2026-00099 `p4-rec-01-today.png` | `probes/outputs/p4-d-reception-create.txt` | `frontend/.../CreateAppointmentModal.tsx:140-179` |
 | F4 walk-in assignment 500 + crash | BQA-2026-00101/00102 `p4-rec-05-walkin-queued.png`, `p4-rec-06-walkin-assigned.png`; BQA-2026-00104 `p4-rec-mobile-01-today.png` | `probes/outputs/p4-d-reception-walkin.txt`; `network-failures.json`/`console-errors.json`; Error Log `Desk API: Assign Walk-In Error` | `appointment/scheduler/api/desk.py:854`; `Appointment.client_email reqd`; `AddWalkInModal.tsx:174-190` |
-| F5 no staff/audit/role separation | BQA-2026-00098 `p4-mgr-15-settings-team.png`; BQA-2026-00103 `p4-prov-04-completed-via-reception.png` | `probes/outputs/p4-c-manager-surfaces.txt`, `p4-e-provider-journey.txt` | `frontend/.../pages/settings/team.tsx`; `appointment/hooks.py`; DocType `track_changes` |
+| F5 incomplete staff lifecycle | BQA-2026-00098 `p4-mgr-15-settings-team.png`; BQA-2026-00103 `p4-prov-04-completed-via-reception.png` | `probes/outputs/p4-c-manager-surfaces.txt`, `p4-e-provider-journey.txt` | `frontend/.../pages/settings/team.tsx`; `appointment/hooks.py`; DocType `track_changes` |
 
 ## Working-evidence pointers
 
@@ -65,7 +66,8 @@ BQA id but produces one artifact directory per scenario.
   `p4-mgr-14-settings-manage.png`; location list `p4-mgr-16-settings-location.png`.
 - Reception lifecycle saved outcomes: `p4-rec-08-rescheduled.png`,
   `p4-rec-09-cancelled.png`, `p4-rec-10-completed.png` with
-  `request_json_value` `15:00:00` / `Cancelled` / `Completed` in BQA-2026-00099.
+  response records and later reads preserved in `probes/outputs/p4c-trace-summary.json`.
+  Request-payload assertions alone are not proof of persistence.
 - Out-of-authority refusals: `p4-mgr-18-admin-denied.png`,
   `p4-rec-11-admin-denied.png`, `p4-prov-05-admin-denied.png` — all HTTP 403 on
   `appointment.dashboard.admin_stats`.
@@ -88,9 +90,10 @@ BQA id but produces one artifact directory per scenario.
   removed 3 providers, 1 organization + its manager child, 2 services,
   2 locations, 2 event types, 1 availability, 4 appointments, 3 walk-ins, and
   the disposable user (`p4-provider-two@example.test`) with 4 `Has Role` and 1
-  social-login row. No broad prefix sweep, no job-queue purge, no scheduler
-  change. Post-cleanup all business tables are 0 and the four retained users and
-  four Browser Accounts / four Browser Sessions remain.
+  social-login row. The script actually uses prefix filters and direct parent deletes; its normal
+  deletion helper is not called. Parent totals were zero, but child/default cleanup
+  was incomplete. See the coordinator audit below. No job queue or scheduler
+  changes were made.
 - `P4` records were created for this phase only; the retained `appointment-review-*`
   users were never renamed or given new credentials.
 
@@ -107,11 +110,41 @@ BQA id but produces one artifact directory per scenario.
    snapshot; an Appointment created via the reception UI (client name not
    `QA-BROWSER-%`) survives, which is why the fixture/reception-and-provider
    check uses clearly labelled records.
-4. `assign_walk_in_to_slot` returns 500 for email-less walk-ins and the SPA
-   crashes before a usable error state is shown.
+Walk-in assignment/error rendering is a product finding (F4), not a tooling blocker.
 
 ## Preservation of raw evidence
 
 Failed runs and their blank/error screenshots are preserved. BQA-2026-00097 is
 a stale `Running` run from an early attempt; it is retained as raw evidence and
 is not counted as a pass.
+
+## Verified evidence and final cleanup
+
+- `probes/outputs/p4c-trace-summary.json` exports selected saved response fields:
+  successful update records and subsequent reads, walk-in email validation
+  failures, calendar responses, and the manager checklist's `action_url` contract.
+  `probes/p4c_trace_extract.py` reproduces a broader allowlisted response extract
+  from the exact `/tmp` trace paths; the committed summary selects decisive
+  records. Headers, cookies and tokens are not exported.
+- The checklist response says 3/7 complete and returns snake-case `action_url`.
+  The screenshot confirms the checklist exists. The current component expects
+  camel-case `actionUrl`; it does not render those action buttons. This is a
+  source-supported mechanism, not a new coordinator browser run.
+- `probes/p4c_filter_check.py` and `outputs/p4c-filter-result.json` independently
+  reproduce the invalid date-range query, with a supported `between` control.
+  This read-only check used the empty preserved QA site and created no fixtures.
+- `probes/p4c_audit.py` audited only known P4 parent identities and the disposable
+  user. `outputs/p4c-before-cleanup.json` lists 38 orphan children plus one user
+  default; there were no authentication or session records for that user.
+- `probes/p4c_complete_cleanup.py` consumed that exact audit manifest (copied to
+  `/tmp/p4-audit.json` for execution), asserted each parent remained absent and
+  deleted only matching child identities and the disposable user's default.
+  `outputs/p4c-after-cleanup.json` verifies zero targeted leftovers, ten empty
+  business tables, four retained users, four Browser Accounts and four Browser
+  Sessions, with email muted and scheduler paused. It also records the actually
+  imported Python app path.
+- The original evidence is preserved. Unsupported claims in raw reports and
+  script docstrings are qualified by this index and the single current analysis.
+- Coverage gaps remain: manager correction/full setup, staff revocation,
+  multi-organization switching, provider availability save and complete mobile
+  operations. Site-admin 403 checks are not tenant-isolation certification.
