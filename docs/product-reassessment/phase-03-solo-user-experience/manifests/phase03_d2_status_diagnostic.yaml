@@ -1,0 +1,49 @@
+# Phase 3 diagnostic — is the reception "Update Appointment" submit a silent no-op?
+# Opens one appointment, changes only Status, submits, and captures DOM/console.
+app: appointment
+base_url: http://localhost:49510
+default_role: p3-solo-owner@example.test
+auth:
+  type: frappe_session
+  username: p3-solo-owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: false
+options:
+  ignore_baseline_drift: true
+scenarios:
+  - id: p3_provider_status_submit_diagnostic
+    title: Status-only update submit diagnostic
+    viewport:
+      width: 1440
+      height: 960
+    timeout_ms: 120000
+    checks: []
+    routes:
+      - path: /reception
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="appointment-card"][data-qa-appointment-name="P3-APT-B9AB7966"]'
+    actions:
+      - action: click
+        selector: '[data-qa="appointment-card"][data-qa-appointment-name="P3-APT-B9AB7966"]'
+      - action: wait_for
+        selector: '[data-qa="edit-appointment-modal"]'
+      - action: select
+        selector: '[data-qa="appointment-status"]'
+        value: "No Show"
+      - action: screenshot
+        name: p3-diag-01-before-submit.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="appointment-update-submit"]'
+      - action: screenshot
+        name: p3-diag-02-after-submit.png
+        full_page: false
+      - action: get_dom_snapshot
+        name: p3-diag-02-after-submit.html
+      - action: get_console_errors
+      - action: get_network_errors

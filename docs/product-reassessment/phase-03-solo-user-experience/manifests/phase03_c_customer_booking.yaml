@@ -1,0 +1,79 @@
+# Phase 3 — customer (Guest) public booking on the scenario booking link.
+# auth: none means no session cookie is installed: the browser is an anonymous
+# Guest. A first route proves no privileged session (get_logged_user is not
+# whitelisted for Guest and returns PermissionError). Uses the labelled
+# P3SOLO scenario link because the solo wizard could not publish a link.
+app: appointment
+base_url: http://localhost:49510
+default_role: p3-solo-customer@example.test
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+scenarios:
+  - id: p3_customer_public_booking
+    title: Guest customer books a slot on the solo booking link
+    viewport:
+      width: 1440
+      height: 960
+    timeout_ms: 180000
+    checks: []
+    routes:
+      - path: /schedule/org/p3solo-org/evt-2026-000001
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+          - type: visible_selector
+            value: '[data-qa="booking-tomorrow"]'
+    actions:
+      - action: screenshot
+        name: p3-book-01-first-screen.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="booking-tomorrow"]'
+      - action: click
+        selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+      - action: screenshot
+        name: p3-book-02-slot-selected.png
+        full_page: false
+        assertions:
+          - type: visible_selector
+            value: "#userName"
+      - action: fill
+        selector: "#userName"
+        value: "P3 Customer Guest"
+      - action: fill
+        selector: "#userEmail"
+        value: "p3-customer-guest@example.test"
+      - action: fill
+        selector: "#userPhone"
+        value: "+251900000555"
+      - action: screenshot
+        name: p3-book-03-details-filled.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="booking-confirm"]'
+        assertions:
+          - type: visible_text
+            value: "Booking Confirmed!"
+          - type: network_request
+            url_contains: book_time_slot
+            method: POST
+            status_min: 200
+            status_max: 299
+            timeout_ms: 20000
+      - action: screenshot
+        name: p3-book-04-confirmation.png
+        full_page: false
+        assertions:
+          - type: visible_selector
+            value: '[data-qa="booking-success"]'
+      - action: get_console_errors
+      - action: get_network_errors
+      - action: get_dom_snapshot
+        name: p3-book-04-confirmation.html

@@ -1,0 +1,69 @@
+# Phase 3 follow-up — mobile (390x844) booking through confirmation.
+app: appointment
+base_url: http://localhost:49510
+default_role: p3b-solo-customer@example.test
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: false
+options:
+  ignore_baseline_drift: true
+  timezone_id: Asia/Kolkata
+scenarios:
+  - id: p3b_mobile_booking
+    title: Complete a customer booking at mobile width
+    viewport:
+      width: 390
+      height: 844
+    timeout_ms: 240000
+    checks: []
+    routes:
+      - path: /schedule/org/p3b-org/evt-2026-000001
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="booking-date"]'
+    actions:
+      - action: click
+        selector: '[data-qa="booking-date"][aria-label*="September 24, 2026"]'
+      - action: screenshot
+        name: p3b-mobile-01-slots.png
+        full_page: false
+        assertions:
+          - type: visible_selector
+            value: '[data-qa="booking-slot"]'
+      - action: click
+        selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+      - action: wait_for
+        selector: "#userName"
+      - action: screenshot
+        name: p3b-mobile-02-form.png
+        full_page: false
+      - action: fill
+        selector: "#userName"
+        value: "P3B Mobile Customer"
+      - action: fill
+        selector: "#userEmail"
+        value: "p3b-mobile@example.test"
+      - action: fill
+        selector: "#userPhone"
+        value: "+251900000999"
+      - action: click
+        selector: '[data-qa="booking-confirm"]'
+        assertions:
+          - type: visible_text
+            value: "Booking Confirmed!"
+            timeout_ms: 20000
+          - type: network_request
+            url_contains: book_time_slot
+            method: POST
+            status_min: 200
+            status_max: 299
+            timeout_ms: 20000
+      - action: screenshot
+        name: p3b-mobile-03-confirmed.png
+        full_page: false
+      - action: get_console_errors
+      - action: get_network_errors

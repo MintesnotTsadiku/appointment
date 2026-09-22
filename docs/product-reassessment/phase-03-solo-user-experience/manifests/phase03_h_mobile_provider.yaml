@@ -1,0 +1,35 @@
+# Phase 3 — narrow mobile repeat of the provider day view (solo identity).
+app: appointment
+base_url: http://localhost:49510
+default_role: p3-solo-owner@example.test
+auth:
+  type: frappe_session
+  username: p3-solo-owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: false
+options:
+  ignore_baseline_drift: true
+scenarios:
+  - id: p3_provider_reception_mobile
+    title: Provider reception day view at mobile width
+    viewport:
+      width: 390
+      height: 844
+    timeout_ms: 150000
+    checks: []
+    routes:
+      - path: /reception
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+          - type: visible_selector
+            value: '[data-qa="reception-heading"]'
+    actions:
+      - action: screenshot
+        name: p3-mobile-reception.png
+        full_page: false
+      - action: get_console_errors
+      - action: get_network_errors

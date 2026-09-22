@@ -1,0 +1,149 @@
+# Phase 3 — solo provider reception/day view and appointment lifecycle.
+# Runs as p3-solo-owner@example.test on the labelled P3SOLO scenario. Scenario 1
+# checks whether the customer's Guest booking (created in run C) is visible in
+# the provider's day view. Scenario 2 reschedules/completes one appointment and
+# records a no-show on another.
+app: appointment
+base_url: http://localhost:49510
+default_role: p3-solo-owner@example.test
+auth:
+  type: frappe_session
+  username: p3-solo-owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+options:
+  ignore_baseline_drift: true
+scenarios:
+  - id: p3_provider_day_view
+    title: Solo provider reviews the day and looks for the customer booking
+    viewport:
+      width: 1440
+      height: 960
+    timeout_ms: 180000
+    checks: []
+    routes:
+      - path: /reception
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+          - type: visible_selector
+            value: '[data-qa="reception-heading"]'
+    actions:
+      - action: screenshot
+        name: p3-reception-01-today.png
+        full_page: false
+        assertions:
+          - type: text_contains
+            value: "P3 Assefa Bekele"
+      - action: click
+        selector: 'button:has(svg.lucide-chevron-right)'
+      - action: screenshot
+        name: p3-reception-02-tomorrow.png
+        full_page: false
+        assertions:
+          - type: text_contains
+            value: "P3 Customer Guest"
+      - action: get_console_errors
+      - action: get_network_errors
+      - action: get_dom_snapshot
+        name: p3-reception-02-tomorrow.html
+
+  - id: p3_provider_reschedule_complete_noshow
+    title: Solo provider reschedules, completes and no-shows appointments
+    viewport:
+      width: 1440
+      height: 960
+    timeout_ms: 180000
+    checks: []
+    routes:
+      - path: /reception
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="appointment-card"][data-qa-appointment-name="P3-APT-AF46C99F"]'
+    actions:
+      - action: click
+        selector: '[data-qa="appointment-card"][data-qa-appointment-name="P3-APT-AF46C99F"]'
+      - action: wait_for
+        selector: '[data-qa="edit-appointment-modal"]'
+      - action: screenshot
+        name: p3-reception-03-edit-modal.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="edit-time-trigger"]'
+      - action: click
+        selector: '[data-qa="edit-time-hour-3"]'
+      - action: click
+        selector: '[data-qa="edit-time-minute-0"]'
+      - action: click
+        selector: '[data-qa="edit-time-period-PM"]'
+      - action: click
+        selector: 'text=Start Time'
+      - action: screenshot
+        name: p3-reception-04-reschedule-time.png
+        full_page: false
+      - action: press
+        selector: '[data-qa="appointment-update-submit"]'
+        key: "Enter"
+        assertions:
+          - type: visible_text
+            value: "Appointment updated!"
+          - type: network_request
+            url_contains: update_appointment
+            method: POST
+            status_min: 200
+            status_max: 299
+            request_json_path: start_time
+            request_json_value: "15:00:00"
+            timeout_ms: 20000
+      - action: screenshot
+        name: p3-reception-05-after-reschedule.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="appointment-card"][data-qa-appointment-name="P3-APT-AF46C99F"]'
+      - action: wait_for
+        selector: '[data-qa="edit-appointment-modal"]'
+      - action: select
+        selector: '[data-qa="appointment-status"]'
+        value: "Completed"
+      - action: click
+        selector: '[data-qa="appointment-update-submit"]'
+        assertions:
+          - type: visible_text
+            value: "Appointment updated!"
+      - action: screenshot
+        name: p3-reception-06-completed.png
+        full_page: false
+      - action: wait_for
+        selector: '[data-qa="edit-appointment-modal"]'
+        state: hidden
+      - action: click
+        selector: '[data-qa="appointment-card"][data-qa-appointment-name="P3-APT-B9AB7966"]'
+      - action: wait_for
+        selector: '[data-qa="edit-appointment-modal"]'
+      - action: select
+        selector: '[data-qa="appointment-status"]'
+        value: "No Show"
+      - action: screenshot
+        name: p3-reception-07-noshow.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="appointment-update-submit"]'
+        assertions:
+          - type: visible_text
+            value: "Appointment updated!"
+          - type: network_request
+            url_contains: update_appointment
+            method: POST
+            status_min: 200
+            status_max: 299
+            request_json_path: status
+            request_json_value: "No Show"
+            timeout_ms: 20000
+      - action: get_console_errors
+      - action: get_network_errors
+      - action: get_dom_snapshot
+        name: p3-reception-07-noshow.html

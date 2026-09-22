@@ -1,0 +1,134 @@
+# Phase 3 — solo provider status lifecycle and availability change (solo identity).
+# Status changes only (no time picker) because the reschedule path silently
+# no-ops (see run D). Completes one appointment and cancels another, then changes
+# the location's normal hours through Settings -> Availability to test whether
+# later customer choices respond.
+app: appointment
+base_url: http://localhost:49510
+default_role: p3-solo-owner@example.test
+auth:
+  type: frappe_session
+  username: p3-solo-owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+options:
+  ignore_baseline_drift: true
+scenarios:
+  - id: p3_provider_complete_appointment
+    title: Solo provider completes an appointment
+    viewport:
+      width: 1440
+      height: 960
+    timeout_ms: 150000
+    checks: []
+    routes:
+      - path: /reception
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="appointment-card"][data-qa-appointment-name="P3-APT-AF46C99F"]'
+    actions:
+      - action: click
+        selector: '[data-qa="appointment-card"][data-qa-appointment-name="P3-APT-AF46C99F"]'
+      - action: wait_for
+        selector: '[data-qa="edit-appointment-modal"]'
+      - action: select
+        selector: '[data-qa="appointment-status"]'
+        value: "Completed"
+      - action: click
+        selector: '[data-qa="appointment-update-submit"]'
+        assertions:
+          - type: visible_text
+            value: "Appointment updated!"
+          - type: network_request
+            url_contains: update_appointment
+            method: POST
+            status_min: 200
+            status_max: 299
+            timeout_ms: 20000
+      - action: screenshot
+        name: p3-status-01-completed.png
+        full_page: false
+
+  - id: p3_provider_cancel_appointment
+    title: Solo provider records a cancellation on another appointment
+    viewport:
+      width: 1440
+      height: 960
+    timeout_ms: 150000
+    checks: []
+    routes:
+      - path: /reception
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="appointment-card"][data-qa-appointment-name="P3-APT-B9AB7966"]'
+    actions:
+      - action: click
+        selector: '[data-qa="appointment-card"][data-qa-appointment-name="P3-APT-B9AB7966"]'
+      - action: wait_for
+        selector: '[data-qa="edit-appointment-modal"]'
+      - action: select
+        selector: '[data-qa="appointment-status"]'
+        value: "Cancelled"
+      - action: click
+        selector: '[data-qa="appointment-update-submit"]'
+        assertions:
+          - type: visible_text
+            value: "Appointment updated!"
+          - type: network_request
+            url_contains: update_appointment
+            method: POST
+            status_min: 200
+            status_max: 299
+            timeout_ms: 20000
+      - action: screenshot
+        name: p3-status-02-cancelled.png
+        full_page: false
+      - action: get_console_errors
+      - action: get_network_errors
+      - action: get_dom_snapshot
+        name: p3-status-02-cancelled.html
+
+  - id: p3_provider_availability_change
+    title: Solo provider changes normal availability in settings
+    viewport:
+      width: 1440
+      height: 1200
+    timeout_ms: 150000
+    checks: []
+    routes:
+      - path: /settings/availability
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+          - type: visible_selector
+            value: '[data-qa="availability-location-select"]'
+    actions:
+      - action: screenshot
+        name: p3-availability-01-before.png
+        full_page: true
+      - action: select
+        selector: '[data-qa="availability-location-select"]'
+        value: "P3SOLO Studio"
+      - action: screenshot
+        name: p3-availability-02-location-selected.png
+        full_page: true
+      - action: click
+        selector: '[data-qa="availability-day-Monday"]'
+      - action: screenshot
+        name: p3-availability-03-monday-closed.png
+        full_page: true
+      - action: click
+        selector: '[data-qa="availability-save"]'
+        assertions:
+          - type: visible_text
+            value: "Availability saved successfully!"
+      - action: screenshot
+        name: p3-availability-04-saved.png
+        full_page: true
+      - action: get_console_errors
+      - action: get_network_errors

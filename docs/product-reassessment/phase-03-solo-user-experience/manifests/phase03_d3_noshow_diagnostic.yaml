@@ -1,0 +1,55 @@
+# Phase 3 diagnostic — is the "Completed" status option specifically a no-op?
+app: appointment
+base_url: http://localhost:49510
+default_role: p3-solo-owner@example.test
+auth:
+  type: frappe_session
+  username: p3-solo-owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: false
+options:
+  ignore_baseline_drift: true
+scenarios:
+  - id: p3_provider_noshow_on_assefa
+    title: Set No Show on the same appointment that Complete failed on
+    viewport:
+      width: 1440
+      height: 960
+    timeout_ms: 120000
+    checks: []
+    routes:
+      - path: /reception
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="appointment-card"][data-qa-appointment-name="P3-APT-AF46C99F"]'
+    actions:
+      - action: click
+        selector: '[data-qa="appointment-card"][data-qa-appointment-name="P3-APT-AF46C99F"]'
+      - action: wait_for
+        selector: '[data-qa="edit-appointment-modal"]'
+      - action: select
+        selector: '[data-qa="appointment-status"]'
+        value: "No Show"
+      - action: screenshot
+        name: p3-diag-noshow-assefa-before.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="appointment-update-submit"]'
+        assertions:
+          - type: visible_text
+            value: "Appointment updated!"
+          - type: network_request
+            url_contains: update_appointment
+            method: POST
+            status_min: 200
+            status_max: 299
+            timeout_ms: 20000
+      - action: screenshot
+        name: p3-diag-noshow-assefa-after.png
+        full_page: false
+      - action: get_console_errors
+      - action: get_network_errors

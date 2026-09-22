@@ -1,0 +1,14 @@
+[
+  {
+    "line": 0,
+    "text": "Failed to load resource: the server responded with a status of 500 (INTERNAL SERVER ERROR)",
+    "type": "error",
+    "url": "http://localhost:49510/api/method/appointment.onboarding.save_availability"
+  },
+  {
+    "line": 139,
+    "text": "Failed to save availability: {exception: TypeError: save_availability() missing 1 required positional argument: 'level', exc_type: TypeError, exc: [\"Traceback (most recent call last):\\n  File \\\"/ho\u2026ssing 1 required positional argument: 'level'\\n\"], httpStatus: 500, httpStatusText: INTERNAL SERVER ERROR}",
+    "type": "error",
+    "url": "http://localhost:49510/src/pages/home/components/Step3Availability.tsx"
+  }
+]

@@ -1,0 +1,64 @@
+# Phase 3 follow-up — close a future weekday through Settings -> Availability.
+app: appointment
+base_url: http://localhost:49510
+default_role: p3b-solo-owner@example.test
+auth:
+  type: frappe_session
+  username: p3b-solo-owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: false
+options:
+  ignore_baseline_drift: true
+scenarios:
+  - id: p3b_availability_close_wednesday
+    title: Close Wednesday at the location level and save
+    viewport:
+      width: 1440
+      height: 1300
+    timeout_ms: 180000
+    checks: []
+    routes:
+      - path: /settings/availability
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+          - type: visible_selector
+            value: '[data-qa="availability-location-select"]'
+    actions:
+      - action: select
+        selector: '[data-qa="availability-location-select"]'
+        value: "P3B Studio"
+      - action: screenshot
+        name: p3b-avail-01-location.png
+        full_page: true
+      - action: click
+        selector: '[data-qa="availability-day-Wednesday"]'
+      - action: screenshot
+        name: p3b-avail-02-wednesday-closed.png
+        full_page: true
+      - action: click
+        selector: '[data-qa="availability-save"]'
+        assertions:
+          - type: visible_text
+            value: "Availability saved successfully!"
+            timeout_ms: 15000
+      - action: screenshot
+        name: p3b-avail-03-saved.png
+        full_page: true
+      - action: open_url
+        url: /settings/availability
+        wait_until: load
+        timeout_ms: 60000
+      - action: select
+        selector: '[data-qa="availability-location-select"]'
+        value: "P3B Studio"
+      - action: screenshot
+        name: p3b-avail-04-after-reload.png
+        full_page: true
+      - action: get_dom_snapshot
+        name: p3b-avail-04-after-reload.html
+      - action: get_console_errors
+      - action: get_network_errors

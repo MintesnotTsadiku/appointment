@@ -1,0 +1,228 @@
+== source manifest: /home/minte/projects/training-apps/.worktrees/frappe-appointment-phase-03/docs/product-reassessment/phase-03-solo-user-experience/manifests/p3b_g0_guest_session_probe.yaml
+== staged manifest: /tmp/p3qa/appointment_p3_p3b-g0-guest-session-probe.yaml-
+== kwargs: {"manifest_name": "/tmp/p3qa/appointment_p3_p3b-g0-guest-session-probe.yaml-", "base_url": "http://localhost:49510"}
+{
+  "name": "BQA-2026-00086",
+  "creation": "2026-09-22 01:15:20.461469",
+  "app": "appointment",
+  "manifest_name": "[redacted runtime path]",
+  "suite_id": null,
+  "suite_version": null,
+  "scenario": null,
+  "status": "Failed",
+  "lifecycle_phase": "Queued",
+  "outcome": null,
+  "execution_mode": "deterministic",
+  "requested_by": null,
+  "browser_account": null,
+  "browser_session": null,
+  "selection_source": "selected",
+  "retry_of": null,
+  "cancel_requested": false,
+  "cancel_requested_at": null,
+  "cancel_requested_by": null,
+  "update_baseline": false,
+  "base_url": "http://localhost:49510",
+  "target_site": null,
+  "environment_identity": null,
+  "source_version": null,
+  "cleanup_policy": "always",
+  "artifact_policy": "retain",
+  "capture": {
+    "screenshots": "on",
+    "trace": "failure",
+    "video": "failure"
+  },
+  "duration_ms": 1019,
+  "queue_duration_ms": 0,
+  "execution_duration_ms": 0,
+  "cleanup_duration_ms": 0,
+  "node_version": null,
+  "runner_version": null,
+  "browser_version": null,
+  "versions": {},
+  "artifact_availability": "available",
+  "artifact_expired_at": null,
+  "agent_run": null,
+  "run_step": null,
+  "tool_call": null,
+  "report_file": "/private/files/BQA-2026-00086-report-ace06cb44c-report.json",
+  "trace_file": null,
+  "video_file": null,
+  "source": "manual",
+  "max_attempts": 1,
+  "attempt_count": 1,
+  "flake_status": "Failed After Retries",
+  "screenshot_count": 0,
+  "console_error_count": 0,
+  "network_error_count": 0,
+  "baseline_changed_count": 0,
+  "artifact_files": [
+    {
+      "file_url": "/private/files/BQA-2026-00086-report-ace06cb44c-report.json",
+      "kind": "report",
+      "label": null,
+      "mime_type": "application/json"
+    }
+  ],
+  "scenario_summary": {},
+  "scenario_results": [],
+  "cleanup": {},
+  "audit": {},
+  "failure_category": null,
+  "failure_reason": null,
+  "suppressed_artifacts": [],
+  "report": {
+    "app": "appointment",
+    "manifest": "[redacted runtime path]",
+    "ok": false,
+    "reports": [
+      {
+        "actions": [
+          {
+            "action": "authenticate",
+            "after_artifact": null,
+            "after_url": null,
+            "aria_snapshot": null,
+            "artifacts": [],
+            "before_artifact": null,
+            "before_url": null,
+            "challenge": null,
+            "completed_at": null,
+            "console_delta": [],
+            "duration_ms": null,
+            "error": "Frappe did not create an authenticated sid.",
+            "network_delta": [],
+            "ok": false,
+            "page_title": null,
+            "selector": null,
+            "semantic_label": null,
+            "sequence": null,
+            "started_at": null,
+            "target_box": null,
+            "target_metadata": null,
+            "title": null,
+            "url": null,
+            "value": null,
+            "video_end_ms": null,
+            "video_start_ms": null
+          },
+          {
+            "action": "run_spec",
+            "after_artifact": null,
+            "after_url": null,
+            "aria_snapshot": null,
+            "artifacts": [],
+            "before_artifact": null,
+            "before_url": null,
+            "challenge": null,
+            "completed_at": null,
+            "console_delta": [],
+            "duration_ms": null,
+            "error": "Frappe did not create an authenticated sid.",
+            "network_delta": [],
+            "ok": false,
+            "page_title": null,
+            "selector": null,
+            "semantic_label": null,
+            "sequence": null,
+            "started_at": null,
+            "target_box": null,
+            "target_metadata": null,
+            "title": null,
+            "url": null,
+            "value": null,
+            "video_end_ms": null,
+            "video_start_ms": null
+          }
+        ],
+        "app": "appointment",
+        "artifacts": [
+          {
+            "file_url": "/private/files/BQA-2026-00086-report-ace06cb44c-report.json",
+            "kind": "report",
+            "label": null,
+            "metadata": {}
+          }
+        ],
+        "base_url": "http://localhost:49510",
+        "console_errors": [],
+        "duration_ms": 1019,
+        "error": "Frappe did not create an authenticated sid.",
+        "finished_at": "2026-09-21T19:45:21.605821+00:00",
+        "network_errors": [],
+        "ok": false,
+        "scenario_id": "p3b_guest_session_check",
+        "started_at": "2026-09-21T19:45:20.586713+00:00",
+        "title": "frappe_session Guest reaches the public page and stays anonymous"
+      }
+    ],
+    "scenario": null,
+    "selected_scenarios": [
+      "p3b_guest_session_check"
+    ]
+  },
+  "triage": {
+    "artifacts": [
+      {
+        "file_url": "/private/files/BQA-2026-00086-report-ace06cb44c-report.json",
+        "kind": "report",
+        "label": null,
+        "metadata": {}
+      }
+    ],
+    "findings": [
+      {
+        "action": null,
+        "message": "Frappe did not create an authenticated sid.",
+        "scenario_id": "p3b_guest_session_check",
+        "severity": "high",
+        "type": "runner_error",
+        "url": null,
+        "value": null
+      },
+      {
+        "action": "authenticate",
+        "message": "Frappe did not create an authenticated sid.",
+        "scenario_id": "p3b_guest_session_check",
+        "severity": "high",
+        "type": "auth_failure",
+        "url": null,
+        "value": null
+      },
+      {
+        "action": "run_spec",
+        "message": "Frappe did not create an authenticated sid.",
+        "scenario_id": "p3b_guest_session_check",
+        "severity": "medium",
+        "type": "browser_action_failure",
+        "url": null,
+        "value": null
+      }
+    ],
+    "ok": false,
+    "summary": "1 auth failure, 1 browser action failure, 1 runner error"
+  },
+  "baseline": {
+    "changes": [],
+    "ok": true,
+    "update_block_reason": null,
+    "update_blocked": false,
+    "updated": false
+  },
+  "fixture_cleanup": {
+    "removed": [
+      "Appointment:QA-APT-46438AFF",
+      "EventType:EVT-2026-000002",
+      "Service:SRV-2026-0007",
+      "User Appointment Availability:qa-browser-cd2bda@qa.local",
+      "Location:QA-BROWSER-cd2bda Admin Location",
+      "Provider:QA-BROWSER-cd2bda Admin Provider",
+      "Location:QA-BROWSER-cd2bda Location",
+      "Provider:QA-BROWSER-cd2bda Provider",
+      "Organization:QA-BROWSER-cd2bda Org",
+      "User:qa-browser-cd2bda@qa.local"
+    ]
+  }
+}
+{"name": "BQA-2026-00086", "creation": "2026-09-22 01:15:20.461469", "app": "appointment", "manifest_name": "[redacted runtime path]", "suite_id": null, "suite_version": null, "scenario": null, "status": "Failed", "lifecycle_phase": "Queued", "outcome": null, "execution_mode": "deterministic", "requested_by": null, "browser_account": null, "browser_session": null, "selection_source": "selected", "retry_of": null, "cancel_requested": false, "cancel_requested_at": null, "cancel_requested_by": null, "update_baseline": false, "base_url": "http://localhost:49510", "target_site": null, "environment_identity": null, "source_version": null, "cleanup_policy": "always", "artifact_policy": "retain", "capture": {"screenshots": "on", "trace": "failure", "video": "failure"}, "duration_ms": 1019, "queue_duration_ms": 0, "execution_duration_ms": 0, "cleanup_duration_ms": 0, "node_version": null, "runner_version": null, "browser_version": null, "versions": {}, "artifact_availability": "available", "artifact_expired_at": null, "agent_run": null, "run_step": null, "tool_call": null, "report_file": "/private/files/BQA-2026-00086-report-ace06cb44c-report.json", "trace_file": null, "video_file": null, "source": "manual", "max_attempts": 1, "attempt_count": 1, "flake_status": "Failed After Retries", "screenshot_count": 0, "console_error_count": 0, "network_error_count": 0, "baseline_changed_count": 0, "artifact_files": [{"file_url": "/private/files/BQA-2026-00086-report-ace06cb44c-report.json", "kind": "report", "label": null, "mime_type": "application/json"}], "scenario_summary": {}, "scenario_results": [], "cleanup": {}, "audit": {}, "failure_category": null, "failure_reason": null, "suppressed_artifacts": [], "report": {"app": "appointment", "manifest": "[redacted runtime path]", "ok": false, "reports": [{"actions": [{"action": "authenticate", "after_artifact": null, "after_url": null, "aria_snapshot": null, "artifacts": [], "before_artifact": null, "before_url": null, "challenge": null, "completed_at": null, "console_delta": [], "duration_ms": null, "error": "Frappe did not create an authenticated sid.", "network_delta": [], "ok": false, "page_title": null, "selector": null, "semantic_label": null, "sequence": null, "started_at": null, "target_box": null, "target_metadata": null, "title": null, "url": null, "value": null, "video_end_ms": null, "video_start_ms": null}, {"action": "run_spec", "after_artifact": null, "after_url": null, "aria_snapshot": null, "artifacts": [], "before_artifact": null, "before_url": null, "challenge": null, "completed_at": null, "console_delta": [], "duration_ms": null, "error": "Frappe did not create an authenticated sid.", "network_delta": [], "ok": false, "page_title": null, "selector": null, "semantic_label": null, "sequence": null, "started_at": null, "target_box": null, "target_metadata": null, "title": null, "url": null, "value": null, "video_end_ms": null, "video_start_ms": null}], "app": "appointment", "artifacts": [{"file_url": "/private/files/BQA-2026-00086-report-ace06cb44c-report.json", "kind": "report", "label": null, "metadata": {}}], "base_url": "http://localhost:49510", "console_errors": [], "duration_ms": 1019, "error": "Frappe did not create an authenticated sid.", "finished_at": "2026-09-21T19:45:21.605821+00:00", "network_errors": [], "ok": false, "scenario_id": "p3b_guest_session_check", "started_at": "2026-09-21T19:45:20.586713+00:00", "title": "frappe_session Guest reaches the public page and stays anonymous"}], "scenario": null, "selected_scenarios": ["p3b_guest_session_check"]}, "triage": {"artifacts": [{"file_url": "/private/files/BQA-2026-00086-report-ace06cb44c-report.json", "kind": "report", "label": null, "metadata": {}}], "findings": [{"action": null, "message": "Frappe did not create an authenticated sid.", "scenario_id": "p3b_guest_session_check", "severity": "high", "type": "runner_error", "url": null, "value": null}, {"action": "authenticate", "message": "Frappe did not create an authenticated sid.", "scenario_id": "p3b_guest_session_check", "severity": "high", "type": "auth_failure", "url": null, "value": null}, {"action": "run_spec", "message": "Frappe did not create an authenticated sid.", "scenario_id": "p3b_guest_session_check", "severity": "medium", "type": "browser_action_failure", "url": null, "value": null}], "ok": false, "summary": "1 auth failure, 1 browser action failure, 1 runner error"}, "baseline": {"changes": [], "ok": true, "update_block_reason": null, "update_blocked": false, "updated": false}, "fixture_cleanup": {"removed": ["Appointment:QA-APT-46438AFF", "EventType:EVT-2026-000002", "Service:SRV-2026-0007", "User Appointment Availability:qa-browser-cd2bda@qa.local", "Location:QA-BROWSER-cd2bda Admin Location", "Provider:QA-BROWSER-cd2bda Admin Provider", "Location:QA-BROWSER-cd2bda Location", "Provider:QA-BROWSER-cd2bda Provider", "Organization:QA-BROWSER-cd2bda Org", "User:qa-browser-cd2bda@qa.local"]}}
