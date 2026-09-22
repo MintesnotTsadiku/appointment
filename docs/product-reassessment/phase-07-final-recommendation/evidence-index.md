@@ -86,6 +86,22 @@ materially changed the decision, so no external research was needed.
   discovery. Synthetic history and retained QA access remain preserved. No Phase 7
   fixture creation, cleanup, browser run, service change or secret access occurred.
 
+## Coordinator verification
+
+Read the Codex task **Complete Phase 7 recommendation** and checked the submitted
+report against its instructions. Independently re-read the Phase 2 customer HTTP
+isolation output and Phase 5 stored duplicate-booking JSON, and spot-checked desk
+query scoping, slot conflict filtering and management submission arguments. These
+confirm the decisive access/capacity findings and preserve the distinction between
+sequential duplication and an unexecuted concurrency race. The product-source diff
+from `edaccef` to the accepted baseline is empty. No new runtime tests were run.
+
+The final recommendation requires an early repair-versus-replacement scope check;
+module replacement is not a proven cost saving. Material booking history belongs
+in the first working slice, with staff/configuration coverage extended afterward.
+The assessment deliverables are complete; implementation and release gates remain
+open. This is the consolidated recommendation, not a second assessment.
+
 ## Documentation validation and disposition
 
 Phase 7 adds only `analysis.md` and this index. Validation checks local Markdown

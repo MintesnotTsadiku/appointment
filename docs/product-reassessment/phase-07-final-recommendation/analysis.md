@@ -11,7 +11,7 @@ or engineering choice requiring review, not an implemented change.
 ## 1. Five-sentence verdict
 
 Appointment's service, provider and location concepts fit the intended progression from solo professional to organization, but complete product fit remains unproven by the fixture-assisted journeys.
-The safest economical direction is **option 2: retain Frappe and useful UI/framework facilities, replace selected ownership and booking modules with clear contracts on a fresh implementation site**, and treat shared-site operation as conditional on verified isolation.
+The recommended direction is **bounded option 2: retain Frappe and useful UI/framework facilities, unify ownership and booking rules, and selectively replace only the internals needed to meet verified contracts on a fresh implementation site**, with shared-site operation conditional on verified isolation and comparative cost still unmeasured.
 The existing customer progression and staff updates are useful, but broken setup, unreliable schedules and unsuccessful customer management prevent a complete trustworthy experience.
 Operational readiness is unverified for recovery, real delivery/retry and cohort load, while partial audit and framework facilities offer a starting point rather than release evidence.
 **Customer beta should not proceed** until the chosen complete workflow and its safety, data-handling and operating gates pass; this assessment grants no release approval.
@@ -63,12 +63,18 @@ both booking types. Therefore replacement should be limited to responsibility
 boundaries: first prove one vertical booking slice. If integrating existing modules
 meets the same contract more simply, use option 1 inside that boundary. There is no
 basis for discarding working code to satisfy a rewrite label. No precise staffing,
-cost, throughput or completion-date estimate is supported.
+cost, throughput or completion-date estimate is supported. Before extending the
+first slice, compare the affected callers, duplicated rules that remain, retained
+behavior and acceptance-test results for integration versus replacement. Record
+the smaller safe scope and its remaining verification work. The observed defects
+justify correcting responsibility boundaries; they do not independently prove
+that replacing an entire module is cheaper. This checkpoint is part of subsequent
+implementation planning, not missing assessment execution.
 
 | Disposition | Clean-start choice | Practical pre-customer action / condition |
 |---|---|---|
 | **Keep** | Frappe, usable forms, offering semantics, layered-hour calculations, lifecycle statuses and walk-ins. | Retain behavior under regression checks; keep the [marketing delivery ledger](../phase-01-product-and-domain/marketing-delivery-requirements.md) and aspirations. |
-| **Improve now** | Option 2's ownership and booking authority, connected read models and honest UX. | Replace selected internals on a fresh implementation site; update all current callers and deterministic fixtures. No backfills, compatibility aliases, adapters or preservation of old test links/IDs. Preserve the assessment site and QA identities separately. |
+| **Improve now** | Option 2's ownership and booking authority, connected read models and honest UX. | Prove the smallest common-contract slice first, then replace only internals whose integration cannot meet that contract more simply; update all current callers and deterministic fixtures on a fresh implementation site. No backfills, compatibility aliases, adapters or preservation of old test links/IDs. Preserve the assessment site and QA identities separately. |
 | **Improve now** | Minimum accountable operations. | Verify material history, scoped support/data requests, failure visibility and recovery using existing Frappe facilities; implement offered integrations against the booking authority. |
 | **Accept temporarily** | Manual but verified support/data-request handling; deferred advanced analytics and automated enterprise export. | Only if the initial cohort's volume, promises and response expectations permit it; assign an operator and prove the process. Never defer access safety, capacity or a necessary lifecycle step. Languages, payments and organizations are not silently excluded. |
 | **Replace later** | Integration-specific code, duplicated read models or infrastructure only where measured needs demand it. | After evidence of maintenance or operating limits, replace the smallest constrained module. Neither a second framework nor a universal resource/CRM model is a default roadmap item. |
@@ -118,10 +124,10 @@ are authorized by this report.
 
 | Window | Small testable changes in order | Dependency and acceptance evidence |
 |---|---|---|
-| Days 1–15 | Decide envelope/topology/time policy; define ownership and booking commands; establish a fresh implementation installation and exact fixtures. Repair the QA path needed to retain bookings across distinct personas and capture required evidence. | Owner decisions below first. Demonstrate one owned service/provider/location, allowed/denied access and safe fixture retention/cleanup through mandated Agent Plane/Harness. Preserve the assessment environment. |
-| Days 16–30 | Implement scoped public creation and provider read of the same booking; then sequential capacity rejection, serialized competing writes and retry identity; connect layered hours/time conversion. | Ownership contract precedes writes. Stored-result assertions for overlaps, closures, buffers, retries and rollback; an identity-correct public-to-provider slice. Compare integration versus selective replacement at this checkpoint; retain the simpler safe implementation. |
+| Days 1–15 | Decide envelope/topology/time policy; define ownership, booking history and booking commands; establish a fresh implementation installation and exact fixtures. Compare integration and replacement for the first bounded slice before expanding its scope. Repair the QA path needed to retain bookings across distinct personas and capture required evidence. | Owner decisions below first. Demonstrate one owned service/provider/location, allowed/denied access and safe fixture retention/cleanup through mandated Agent Plane/Harness. Preserve the assessment environment. Record the selected scope, affected callers and acceptance criteria before broader replacement. |
+| Days 16–30 | Implement scoped public creation and provider read of the same booking; then sequential capacity rejection, serialized competing writes and retry identity; connect layered hours/time conversion. | Ownership contract precedes writes. Stored-result assertions for overlaps, closures, buffers, retries and rollback; an identity-correct public-to-provider slice. Confirm the early integration-versus-replacement choice against this working slice; retain the simpler safe implementation and record material changes with it. |
 | Days 31–45 | Add reschedule/cancel on the same lifecycle; fix management identity/origin and confirmation mappings; normalize morning times; repair range query, real empty states and setup contracts. | Booking core first. Fresh solo setup through later management, completion/no-show; original identity retained on reschedule, released capacity correct, unauthorized changes denied. |
-| Days 46–60 | Extend setup and lifecycle to staff, second provider/location, reception and walk-ins; implement revocation and essential history. Translate offered journeys and repair input/focus errors in small slices. | Core lifecycle and ownership proven. Manager correction/reload, reception keyboard create, email-less walk-in policy, correct provider work, revocation and scoped history; mobile and keyboard acceptance with language review. |
+| Days 46–60 | Extend setup and lifecycle to staff, second provider/location, reception and walk-ins; extend revocation and essential history to staff/configuration changes. Translate offered journeys and repair input/focus errors in small slices. | Core lifecycle and ownership proven. Manager correction/reload, reception keyboard create, email-less walk-in policy, correct provider work, revocation and scoped history; mobile and keyboard acceptance with language review. |
 | Days 61–75 | Integrate each selected notification/payment/calendar/channel separately; finish data-request and support procedures, privacy comprehension and truthful delivery status. | Integrations consume the booking contract; purpose/market decisions precede privacy process. Safe sinks/sandboxes prove retry, duplicate/failure handling and customer discovery; data-request manifest proves bounded results. Scope may require extending this window. |
 | Days 76–90 | On separately approved targets rehearse backup/restore and upgrade recovery; measure agreed cohort load/abuse controls; close remaining full-journey regressions and prepare a release decision. | Approved targets/objectives and a candidate release required. Versioned drill report, restored ownership/files, measured limits, alerts/escalation and complete gate record. Any unresolved blocker means continue internal testing, not automatic beta at day 90. |
 
@@ -188,11 +194,17 @@ These conditions follow [Phase 6's gate and recovery scope](../phase-06-release-
    work; dedicated operation repeats maintenance and still needs role safety.
    No evidence supports precise cost or recovery promises yet.
 3. **How much internal replacement is authorized before inviting customers?**
-   Approve option 2 with the day-30 vertical-slice checkpoint, or option 1 against
+   Approve bounded option 2 with an early scope checkpoint and a working-slice
+   review by the proposed day 30, or option 1 against
    exactly the same gates. A broader rebuild needs comparative evidence of lower
    total implementation/verification/operating cost or an unavoidable framework
    constraint. Fund the verification alongside the implementation; lack of rewrite
    evidence does not make incremental repair small or the current model sound.
 
-Stop for coordinator review. This phase neither merges earlier work nor approves
+The assessment is complete; acceptance and merge remain pending. There is no
+Phase 8. After acceptance, record the three owner decisions and prepare a bounded
+implementation brief with the first slice, acceptance tests and verification
+responsibility before starting product work.
+
+This phase neither merges earlier work nor approves
 implementation, recovery/load execution, real dispatch or customer release.
