@@ -9,3 +9,4 @@ appointment.patches.v0_1.rename_assistant_activity_log
 appointment.patches.v0_1.add_appointment_manager_role
 appointment.patches.v0_1.add_event_creator
 appointment.patches.v0_1.update_route_appointment
+appointment.patches.v0_1.import_frontend_translations
