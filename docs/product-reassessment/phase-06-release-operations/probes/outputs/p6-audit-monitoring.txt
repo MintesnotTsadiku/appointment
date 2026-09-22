@@ -1,0 +1,274 @@
+{
+  "version_counts_by_doctype": {
+    "Appointment": 0,
+    "Organization": 0,
+    "Provider": 0,
+    "Service": 0,
+    "Location": 0,
+    "EventType": 0,
+    "Walk In": 0,
+    "Booking Event": 0,
+    "User Appointment Availability": 158,
+    "Policy": 0,
+    "Appointment Group": 0
+  },
+  "total_version_rows": 898,
+  "error_log_methods": [
+    {
+      "method": "Get Provider Locations Debug",
+      "n": 43
+    },
+    {
+      "method": "Provider profile not found. Please complete onboarding first.",
+      "n": 7
+    },
+    {
+      "method": "too many values to unpack (expected 2, got 4)",
+      "n": 6
+    },
+    {
+      "method": "Browser QA file attachment failed",
+      "n": 6
+    },
+    {
+      "method": "(1054, \"Unknown column 'override_provider_booking_settings' in 'SELECT'\")",
+      "n": 5
+    },
+    {
+      "method": "(1292, \"Incorrect time value: '8:30::00' for column `_1205cb9962758bfa`.`tabOpening Hours`.`start_time` at row 1\")",
+      "n": 3
+    },
+    {
+      "method": "No EventType found. Please create a service first.",
+      "n": 3
+    },
+    {
+      "method": "cannot import name 'add_hours' from 'frappe.utils' (/home/minte/projects/training-apps/apps/frappe/frappe/utils/__init__.py)",
+      "n": 3
+    },
+    {
+      "method": "You don't have access to this service",
+      "n": 2
+    },
+    {
+      "method": "builtins.ValueError: invalid literal for int() with base 10: '3.0'",
+      "n": 2
+    },
+    {
+      "method": "Provider not found. Please complete onboarding first.",
+      "n": 1
+    },
+    {
+      "method": "[Appointment, APT-20260922030841292416]: client_email",
+      "n": 1
+    },
+    {
+      "method": "Failed to save availability: (1292, \"Incorrect time value: '9:00::00' for column `_1205cb9962758bfa`.`tabOpening Hours`.`start_time` at row ",
+      "n": 1
+    },
+    {
+      "method": "(1292, \"Incorrect time value: '9:00::00' for column `_1205cb9962758bfa`.`tabOpening Hours`.`start_time` at row 1\")",
+      "n": 1
+    },
+    {
+      "method": "Location not found. Please add a location first.",
+      "n": 1
+    },
+    {
+      "method": "Invalid level. Must be 'location', 'service', or 'provider'",
+      "n": 1
+    },
+    {
+      "method": "[Appointment, APT-20260922031539363387]: client_email",
+      "n": 1
+    },
+    {
+      "method": "Onboarding: Update Step Error",
+      "n": 1
+    }
+  ],
+  "error_log_oldest_newest": [
+    {
+      "oldest": "2026-09-18 20:11:38.854168",
+      "newest": "2026-09-22 14:11:15.978331"
+    }
+  ],
+  "personal_data_deletion_request_exists": "Personal Data Deletion Request",
+  "personal_data_deletion_request_count": 0,
+  "consent_doctype_exists": null,
+  "data_export_doctype_exists": "Data Export",
+  "privacy_settings_exists": null,
+  "email_template_count": 3,
+  "notification_count": 2,
+  "notification_log_count": 0,
+  "appointment_settings_email_fields": [
+    "default_email_templates_section",
+    "default_personal_email_template",
+    "default_group_email_template",
+    "default_availability_alerts_email_template",
+    "email_template_for_organisers_section",
+    "personal_organisers_email_template"
+  ],
+  "web_forms": [
+    {
+      "name": "edit-profile",
+      "route": "update-profile",
+      "is_standard": 1,
+      "login_required": 1,
+      "allow_multiple": 0
+    },
+    {
+      "name": "request-data",
+      "route": "request-data",
+      "is_standard": 1,
+      "login_required": 0,
+      "allow_multiple": 0
+    },
+    {
+      "name": "request-to-delete-data",
+      "route": "request-for-account-deletion",
+      "is_standard": 1,
+      "login_required": 0,
+      "allow_multiple": 0
+    }
+  ],
+  "roles": [
+    [
+      "Accounts Manager"
+    ],
+    [
+      "Accounts User"
+    ],
+    [
+      "Administrator"
+    ],
+    [
+      "Agent Plane Auditor"
+    ],
+    [
+      "Agent Plane Browser Runner"
+    ],
+    [
+      "Agent Plane Builder"
+    ],
+    [
+      "Agent Plane Operator"
+    ],
+    [
+      "Agent Plane Runtime"
+    ],
+    [
+      "All"
+    ],
+    [
+      "Assistant"
+    ],
+    [
+      "Client"
+    ],
+    [
+      "Dashboard Manager"
+    ],
+    [
+      "Desk User"
+    ],
+    [
+      "Front Desk"
+    ],
+    [
+      "Front-Desk"
+    ],
+    [
+      "Guest"
+    ],
+    [
+      "Inbox User"
+    ],
+    [
+      "Knowledge Base Contributor"
+    ],
+    [
+      "Knowledge Base Editor"
+    ],
+    [
+      "Maintenance Manager"
+    ],
+    [
+      "Maintenance User"
+    ],
+    [
+      "Marketing Manager"
+    ],
+    [
+      "Newsletter Manager"
+    ],
+    [
+      "Organization Manager"
+    ],
+    [
+      "Prepared Report User"
+    ],
+    [
+      "Provider"
+    ],
+    [
+      "Purchase Manager"
+    ],
+    [
+      "Purchase Master Manager"
+    ],
+    [
+      "Purchase User"
+    ],
+    [
+      "Report Manager"
+    ],
+    [
+      "Sales Manager"
+    ],
+    [
+      "Sales Master Manager"
+    ],
+    [
+      "Sales User"
+    ],
+    [
+      "Script Manager"
+    ],
+    [
+      "System Manager"
+    ],
+    [
+      "Translator"
+    ],
+    [
+      "Virtual Assistant"
+    ],
+    [
+      "Website Manager"
+    ],
+    [
+      "Workspace Manager"
+    ]
+  ],
+  "appointment_fields": [
+    "appointment_id",
+    "event",
+    "event_type",
+    "provider",
+    "location",
+    "service",
+    "client_name",
+    "client_email",
+    "client_phone",
+    "appointment_date",
+    "start_time",
+    "end_time",
+    "status",
+    "amount_paid",
+    "notes",
+    "cancellation_reason"
+  ],
+  "booking_event_status_options": "Open\nCompleted\nClosed\nCancelled",
+  "default_outgoing_account": null
+}

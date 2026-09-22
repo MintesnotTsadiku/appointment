@@ -1,0 +1,39 @@
+Phase 6 baseline and runtime verification (read-only)
+====================================================
+
+Date (UTC): 2026-09-22 (assessment run)
+Branch: review/phase-06-release-operations
+Accepted source baseline (origin/develop): c1cc1c06346bc6cccf657f34e6a853c2fa8b7571
+  "docs: accept and merge reviewed Phase 5 assessment"
+Evidence worktree: /home/minte/projects/training-apps/.worktrees/frappe-appointment-phase-06
+Preserved runtime root: /home/minte/projects/appointment-worktree-runtimes
+Runtime: fix-appointment-beta-readiness-01dea7
+Bench: /home/minte/projects/appointment-worktree-runtimes/fix-appointment-beta-readiness-01dea7/bench
+Site: meet-beta-fix-appointment-beta-readiness-01dea7.localhost
+Browser frontend: http://localhost:49510
+Desk: http://localhost:49510/app
+
+Imported Python package (reported by frappe.get_module("appointment").__file__):
+  /home/minte/projects/training-apps/.worktrees/frappe-appointment-beta/appointment/__init__.py
+Beta worktree HEAD: edaccef62bb082b3ef02833eaca00f2505f5ed00 (branch develop)
+Readiness worktree HEAD (bench symlink target): 3c57fb4c6484218c41af6ee592de0960c1c69ad6
+
+Source equivalence (git diff --stat, appointment/ and frontend/ trees):
+  readiness 3c57fb4 vs baseline c1cc1c0 -> no differences
+  beta edaccef      vs baseline c1cc1c0 -> no differences
+Therefore the imported Python and frontend source trees match the accepted
+Phase 6 baseline for product source. The bench symlink was not relied on alone.
+
+Framework: Frappe 17.0.0-dev. Installed apps: frappe, agent_harness, agent_plane,
+appointment. DB: mariadb.
+
+Safety controls observed (preserved, not changed):
+  site_config mute_emails = 1
+  site_config pause_scheduler = 1
+  System Settings enable_scheduler = 0; frappe.utils.scheduler status = inactive
+No site reset, migration, dependency install, queue purge or product source edit
+was performed during this phase.
+
+Note: site_config.json contains local database credentials and an encryption key.
+It was read only to confirm the mute/pause flags and is deliberately NOT copied
+into this repository.

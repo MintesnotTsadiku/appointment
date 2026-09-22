@@ -1,0 +1,120 @@
+{
+  "business_counts": {
+    "Appointment": 0,
+    "Walk In": 0,
+    "Booking Event": 0,
+    "Appointment Group": 0,
+    "EventType": 0,
+    "Service": 0,
+    "User Appointment Availability": 0,
+    "Location": 0,
+    "Provider": 0,
+    "Organization": 0,
+    "Policy": 0
+  },
+  "disposable_user_counts": {
+    "qa-browser-": 0,
+    "p3b-": 0,
+    "p4-": 0,
+    "p5-": 0,
+    "P3B": 0,
+    "P4": 0,
+    "P5": 0
+  },
+  "leftovers": {
+    "qa-browser-": {
+      "defaults": 0,
+      "has_role": 0,
+      "sessions": 0,
+      "auth": 0,
+      "comment": 0,
+      "file": 0
+    },
+    "p3b-": {
+      "defaults": 0,
+      "has_role": 0,
+      "sessions": 0,
+      "auth": 0,
+      "comment": 0,
+      "file": 0
+    },
+    "p4-": {
+      "defaults": 0,
+      "has_role": 0,
+      "sessions": 0,
+      "auth": 0,
+      "comment": 0,
+      "file": 0
+    },
+    "p5-": {
+      "defaults": 0,
+      "has_role": 0,
+      "sessions": 0,
+      "auth": 0,
+      "comment": 0,
+      "file": 0
+    }
+  },
+  "retained_users": {
+    "appointment-review-manager@example.test": {
+      "exists": true,
+      "enabled": 1,
+      "roles": [
+        "Organization Manager",
+        "All",
+        "Guest",
+        "Desk User"
+      ]
+    },
+    "appointment-review-provider@example.test": {
+      "exists": true,
+      "enabled": 1,
+      "roles": [
+        "Provider",
+        "All",
+        "Guest",
+        "Desk User"
+      ]
+    },
+    "appointment-review-reception@example.test": {
+      "exists": true,
+      "enabled": 1,
+      "roles": [
+        "Front-Desk",
+        "All",
+        "Guest",
+        "Desk User"
+      ]
+    },
+    "appointment-review-customer@example.test": {
+      "exists": true,
+      "enabled": 1,
+      "roles": [
+        "All",
+        "Guest"
+      ]
+    }
+  },
+  "browser_accounts_present": {
+    "BACCT-0061": true,
+    "BACCT-0063": true,
+    "BACCT-0065": true,
+    "BACCT-0067": true
+  },
+  "browser_sessions_present": {
+    "BSESS-0062": true,
+    "BSESS-0064": true,
+    "BSESS-0066": true,
+    "BSESS-0068": true
+  },
+  "residual_synthetic": {
+    "Comment_total": 1731,
+    "Communication_total": 4,
+    "Error_Log_total": 88,
+    "Email_Queue_total": 0,
+    "File_total": 520
+  },
+  "mute_emails": 1,
+  "pause_scheduler": 1,
+  "enable_scheduler": 0
+}
