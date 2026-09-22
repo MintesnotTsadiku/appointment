@@ -1,0 +1,43 @@
+{
+  "mail_server_configured": false,
+  "site_rate_limit_configured": false,
+  "email_muted": 1,
+  "scheduler_paused": 1,
+  "unique_indexes": {
+    "Appointment": [
+      {
+        "key": "PRIMARY",
+        "column": "name",
+        "sequence": 1
+      },
+      {
+        "key": "appointment_id",
+        "column": "appointment_id",
+        "sequence": 1
+      }
+    ],
+    "Booking Event": [
+      {
+        "key": "PRIMARY",
+        "column": "name",
+        "sequence": 1
+      }
+    ]
+  },
+  "framework_doctypes_present": {
+    "Email Queue": true,
+    "Data Import": true,
+    "Personal Data Download Request": true,
+    "Personal Data Deletion Request": true,
+    "Version": true
+  },
+  "business_counts": {
+    "Appointment": 0,
+    "Booking Event": 0,
+    "Organization": 0,
+    "Provider": 0,
+    "Location": 0,
+    "Service": 0,
+    "Walk In": 0
+  }
+}

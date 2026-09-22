@@ -1,102 +1,98 @@
 # Phase 6 — Evidence index
 
-Baseline `c1cc1c06346bc6cccf657f34e6a853c2fa8b7571` (`origin/develop`). Branch
-`review/phase-06-release-operations`. Runtime and source-equivalence checks:
-`probes/outputs/p6-baseline.txt`.
+Baseline `c1cc1c06346bc6cccf657f34e6a853c2fa8b7571`.
+Branch `review/phase-06-release-operations`.
+The current `analysis.md` is the single reviewed recommendation. Original probe
+outputs remain unchanged and must be read within the scope of their queries.
 
-This index separates executed evidence (probes/prior browser runs) from source
-inspection and from untested requirements. Phase 6 ran **no browser journey**; it
-reused reviewed Phases 2–5 browser evidence and added read-only backend probes,
-because operational readiness is largely non-visual. No credentials, cookies,
-tokens, database credentials, backup contents or customer-management links are
-committed.
+## Runtime and execution
 
-## Runtime and environment
+Preserved site `meet-beta-fix-appointment-beta-readiness-01dea7.localhost`;
+frontend `http://localhost:49510`; runtime
+`/home/minte/projects/appointment-worktree-runtimes/fix-appointment-beta-readiness-01dea7`.
+Imported Python is the beta worktree at `edaccef`; bench symlink targets readiness
+at `3c57fb4`. Both product source trees match `c1cc1c0`, confirmed by git comparison.
+Framework reports Frappe 17.0.0-dev. Email muted; scheduler paused. No browser runs,
+fixtures, migrations, delivery, load tests or restore drills were performed here.
 
-| Item | Recorded value |
-|---|---|
-| Accepted baseline | `c1cc1c0` — "docs: accept and merge reviewed Phase 5 assessment" |
-| Evidence worktree | `/home/minte/projects/training-apps/.worktrees/frappe-appointment-phase-06` |
-| Runtime root | `/home/minte/projects/appointment-worktree-runtimes` |
-| Runtime | `fix-appointment-beta-readiness-01dea7` |
-| Bench | `.../fix-appointment-beta-readiness-01dea7/bench` |
-| Site | `meet-beta-fix-appointment-beta-readiness-01dea7.localhost` |
-| Browser frontend / Desk | `http://localhost:49510` / `http://localhost:49510/app` |
-| Imported Python package | `.../.worktrees/frappe-appointment-beta/appointment/__init__.py` (`edaccef`) |
-| Source equivalence | `appointment/`+`frontend/` at `edaccef` and `3c57fb4` identical to `c1cc1c0` |
-| Framework | Frappe 17.0.0-dev; apps: frappe, agent_harness, agent_plane, appointment |
-| Safety controls | `mute_emails=1`, `pause_scheduler=1`, scheduler inactive (unchanged) |
-
-## Phase 6 executed probes (read-only)
-
-Paths are relative to this phase folder. None creates or deletes records.
-
-| ID | Script | Output | What it establishes |
-|---|---|---|---|
-| P6-INV-01 | `probes/p6_inventory_probe.py` | `probes/outputs/p6-inventory.txt` | Loaded app path; installed apps; operational toggles; business counts; `track_changes`; hooks; email accounts/queues; abuse-control presence |
-| P6-AUD-01 | `probes/p6_audit_monitoring_probe.py` | `probes/outputs/p6-audit-monitoring.txt` | Version-history counts; Error Log discoverability; privacy/deletion/web-form presence; roles; Appointment fields; Booking Event statuses |
-| P6-RET-01 | `probes/p6_retained_audit_probe.py` | `probes/outputs/p6-retained-audit.txt` | Retained QA identities/accounts/sessions; exact disposable-prefix child/default/session/auth leftovers; residual synthetic artifacts |
-| P6-BASE-01 | git + filesystem checks | `probes/outputs/p6-baseline.txt` | Accepted baseline, imported source equality, empty backups directory, mute/pause flags |
-
-## Findings mapped to evidence
-
-| Finding | Executed evidence | Source / config evidence | Browser Run IDs (prior phases) | What remains unverified |
-|---|---|---|---|---|
-| F1 Tenant authorization | Phase 2 `P2-PROBE-ISO-01` (`phase-02.../outputs/phase02_isolation_probe.txt`); P6-INV-01 hooks | `appointment/hooks.py:190-196`; `scheduler/api/desk.py:20-85,435-537` | BQA-2026-00106 (customer, anonymous); Phase 2 customer HTTP session | Files, exports, search, realtime, caches, jobs, full write matrix |
-| F2 Audit history | P6-INV-01 `track_changes`; P6-AUD-01 Version rows = 0 | `hooks.py` (no Version/audit hook); Phase 2 `P2-PROBE-META-01` | — | Which changes are "essential"; completeness of any future history |
-| F3 Communication/integrations | P6-INV-01 Email Account 0; P6-AUD-01 templates/notifications | `event_override.py:168-179,329-330,706`; `helpers/zoom.py:59,107`; empty payments/channels; `google_calendar_override.py:22-41` | BQA-2026-00106 (confirmation UI); Phase 5 F1 | Real delivery, retry, dedup, failure/cancel; calendar connect/revoke |
-| F4 Capacity correctness | Phase 5 `p5c-verification.json`, `p5-conflict-probe.txt` | no `for_update`/lock/idempotency in `appointment/`; `event_override.py:706`; mixed timezone defaults | BQA-2026-00113 (competing booking); BQA-2026-00111 | Exact concurrent race; realistic throughput |
-| F5 Privacy/reporting | P6-AUD-01 (Consent absent; deletion request 0; web forms; Error Log groups); P6-INV-01 `user_data_fields` | `Footer.tsx:33-35,262-267`; `pages/analytics/index.tsx:14-20,258`; `dashboard.py:284-386` | Phase 5 privacy/comprehension limit | Legal adequacy; retention policy; failed-booking/no-show reporting |
-
-## Prior-phase Browser QA evidence reused
-
-Phase 6 adds no new runs. Browser evidence is the reviewed Phases 3–5:
-
-| Phase | Representative runs | Reused for |
+| Check | Script / output | What it proves and does not prove |
 |---|---|---|
-| Phase 3 | BQA-2026-00087/88/90/91/92/94/95 | Solo setup failure, unpadded-hour edit, closed-day booking, handoff, mobile booking |
-| Phase 4 | BQA-2026-00096/98/99/102/103 | Org setup transition, staff lifecycle, walk-in 500, calendar empty |
-| Phase 5 | BQA-2026-00106/109/110/111/112/113 | Confirmation details, management route, recovery, no availability, Amharic, conflict |
+| P6-INV-01 | `probes/p6_inventory_probe.py`; `outputs/p6-inventory.txt` | Metadata, hook/account/configuration snapshot; not executed delivery or framework absence |
+| P6-AUD-01 | `probes/p6_audit_monitoring_probe.py`; `outputs/p6-audit-monitoring.txt` | Version/log counts, forms and selected DocType presence; not completeness of history, privacy adequacy or monitoring effectiveness |
+| P6-RET-01 | `probes/p6_retained_audit_probe.py`; `outputs/p6-retained-audit.txt` | Retained accounts and selected prefix-based counts; not every child/reference or every prior fixture prefix |
+| P6-BASE-01 | `probes/outputs/p6-baseline.txt` | Baseline/source equivalence and safety settings; local backup-directory observation does not inventory external backups |
+| P6C-VERIFY | `probes/p6c_verify.py`; `outputs/p6c-verification.json` | Read-only mail/rate-limit configuration-presence flags, unique index columns and framework DocType availability; no secret values or network delivery |
 
-Full run IDs, screenshots and traces remain in each phase's own `evidence-index.md`
-under `docs/product-reassessment/`.
+All `outputs/` entries above reside under `probes/`. Inspection runs use
+Administrator for metadata, not as evidence of customer/staff permissions.
 
-## Beta gate classifications
+## Reviewed findings and primary evidence
 
-| Requirement | Status | Primary evidence |
+| Finding | Executed evidence | Source support / boundary |
 |---|---|---|
-| Tenant authorization/isolation | fail | Phase 2 ISO-01; P6-INV-01 hooks |
-| Audit history | fail | P6-INV-01; P6-AUD-01 |
-| Backup/restore/recovery | unverified | P6-BASE-01 empty backups; `proposed-recovery-drill.md` |
-| Upgrade/rollback | unverified | `.github/workflows` (build-test only); no rollback doc |
-| Email delivery/retry/status | fail | P6-INV-01 Email Account 0; Phase 5 F1 |
-| Payments/SMS/USSD/WhatsApp/calendar | not implemented | Phase 1 promise table; empty packages |
-| Capacity correctness | fail | Phase 5 `p5c-verification.json` |
-| Throughput | unverified | no load evidence |
-| Privacy/consent/data-rights/retention | fail | P6-AUD-01; `user_data_fields` |
-| Import/onboarding | fail | Phase 3 F1 |
-| Monitoring/reporting | unverified | `dashboard.py:284-386`; static analytics |
-| Subscription/abuse controls | not implemented | no Subscription; `gateway.py:184-204` only |
-| Enterprise separation triggers | not applicable (decision) | README product goal |
-| Factual marketing claims | unverified | `Footer.tsx:262-267`; Phase 1 |
+| F1 Tenant access | Phase 2 `P2-PROBE-ISO-01`, reviewed analysis and isolation probe output | Unchanged affected desk API paths; missing hooks alone are not proof |
+| F2 Capacity | Phase 5 `probes/outputs/p5c-verification.json`, browser BQA-2026-00113 and original conflict probe | Two sequential Guest writes stored on the same calendar/interval; current indexes do not constrain capacity; concurrency/load not executed |
+| F3 History | P6-INV/P6-AUD | Eight DocTypes disable tracking, three booking/availability DocTypes enable it; availability has 158 Version rows. Empty/deleted fixture counts cannot prove universal absence |
+| F4 Communication | Phase 5 F1 and BQA-2026-00106; P6C configuration flags | `event_override.py:168-179`; Frappe `email_account.py:493-539` supports site-config fallback; `background_jobs.py:98,120-130` exposes explicit deduplication; delivery/retry untested |
+| F5 Data handling / visibility | P6 hook/form/log inventory | Footer placeholder links; framework `personal_data_download_request.py:insert,get_user_data` expects User and hook mappings. No appointment mapping shown; legal/privacy adequacy and complete deletion not tested |
 
-## Tooling and verification blockers
+Framework sources were inspected locally at
+`/home/minte/projects/training-apps/apps/frappe/frappe/`.
 
-1. No safe disposable restoration target exists in this environment; restoring
-   over the assessment site is forbidden, so the recovery drill is deferred to
-   owner approval (`proposed-recovery-drill.md`).
-2. Email is muted and the scheduler paused per the phase boundary, so scheduled
-   reminders, availability emails and Email Queue retry are not executable here.
-3. Video/timeline capture remains unavailable through `appointment.qa_runner.run`
-   (Phase 3–5 finding); Phase 6 produced no recordings.
-4. `frappe.set_user("Administrator")` is used by read-only probes to read
-   metadata; this is inspection, not a customer/staff journey and is not used as
-   evidence of role behavior.
+Additional source checks:
 
-## Preservation of raw evidence
+- `appointment/overrides/google_calendar_override.py` implements authorization
+  callback behavior; Booking Event and framework hooks contain calendar sync.
+  This is implementation presence, not verified connect/revoke/retry behavior.
+- `frappe/rate_limiter.py:16-18` supports a site-wide limiter; the preserved site's
+  setting is absent. `appointment/api/gateway.py:184-204` has a separate limiter.
+  Reverse-proxy/deployment controls were not surveyed.
+- Framework Data Import and personal-data request DocTypes exist. Their presence
+  does not prove organization import or accountless-customer requests work.
+- `docs/technical/ARCHITECTURE_DIAGRAM.md` and older integration/rename documents
+  discuss backups/rollback. These are historical context, not an approved and
+  rehearsed production recovery runbook. “No document mentions rollback” was too
+  broad; “no verified recovery procedure in this evidence” is supported.
 
-Probe scripts and outputs are preserved unchanged. Prior-phase screenshots,
-traces and reports are not copied here; they remain in their own phase folders as
-the durable evidence. Zero business-table counts do not imply the whole database
-is free of QA history; residual synthetic artifacts are disclosed in
-`analysis.md` and `p6-retained-audit.txt`.
+## Reused browser evidence
+
+No Phase 6 browser runs were added. Relevant prior evidence remains in its phase:
+
+- Phase 3: BQA-00087/88/90/91/92/94/95, with reviewed identity/cleanup limits.
+- Phase 4: BQA-00096/98/99/102/103, setup, reception updates, walk-in failure and calendar.
+- Phase 5: BQA-00106/109/110/111/112/113, confirmation, management, bounded recovery,
+  language/mobile and competing booking. These are full IDs prefixed `BQA-2026-`.
+
+The Phase 2 isolation proof is its actual HTTP probe; unrelated anonymous booking
+runs are not evidence of cross-tenant access. Likewise the no-availability browser
+run is not capacity/concurrency proof. Full run paths and artifacts are in the
+respective phase indexes.
+
+## Release gate and blocked verification
+
+The authoritative gate is in `analysis.md`. Confirmed access/capacity/UX failures
+remain failures. Recovery, deployment, throughput and relevant framework behavior
+remain unverified until exercised. Audit/data handling have identified coverage
+gaps; payments/messaging differ from partial calendar implementation.
+
+No safe restoration target was established; restoring over the assessment site
+is prohibited. The revised `proposed-recovery-drill.md` defines a separate bounded
+verification without destroying its synthetic source. No claim is made that a
+safe target could not be provisioned with authorization.
+
+Email mute/pause controls intentionally prevent real dispatch in this assessment.
+They do not establish that retry logic is absent or that a future isolated mail
+sink test is impossible. Video capture remains a known wrapper limitation, but
+no Phase 6 recording was attempted.
+
+## Retained evidence and privacy
+
+P6-RET reports eleven empty business tables and four retained enabled QA users,
+with their four Browser Accounts/Sessions. Selected user-prefix defaults, roles,
+sessions/auth and owner-based Comment/File matches are zero. It does not inspect
+all business children, reference fields or original `p3-` identities. Raw totals
+are retained records, not individually classified synthetic records. No cleanup
+was needed for these read-only probes or performed against unrelated history.
+
+No passwords, cookies, tokens, mail configuration values, backup contents or
+customer-management links are included in the added coordinator evidence.

@@ -43,8 +43,8 @@ partner claims. This direction does not certify current readiness.
 
 Use `browser-qa-access.md` for retained synthetic identities, explicit session
 authentication, the preserved runtime and fixture-cleanup constraints. The
-prepared next-phase prompt is `phase-06-opencode-prompt.md`; use it only after
-Phase 5 is accepted and merged. Phase 2 found
+prepared next-phase prompt is `phase-07-opencode-prompt.md`; use it only after
+Phase 6 is accepted and merged. Phase 2 found
 reproduced application access failures that block shared-site customer launch;
 the remaining UX assessments may continue on isolated synthetic data. Accepted
 assessment evidence is not release approval.
