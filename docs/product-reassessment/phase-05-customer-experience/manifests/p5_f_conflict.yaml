@@ -1,0 +1,76 @@
+# Phase 5 — bounded conflict/availability check.
+#
+# The provider prepares a competing booking for the earliest tomorrow slot
+# before the customer loads the page. The customer must still choose and submit
+# through the visible UI. This demonstrates display-level conflict handling; the
+# narrower "slot taken between selection and submission" race is not exercised
+# here (see analysis: no safe mid-scenario write injection through the runner).
+app: appointment
+base_url: http://localhost:49510
+default_role: "anonymous-customer"
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+fixtures:
+  provider: p5_fixtures:values_conflict
+scenarios:
+  - id: p5_f1_competing_booking
+    title: A prepared competing booking is not offered to the customer
+    viewport:
+      width: 1440
+      height: 960
+    checks: []
+    routes:
+      - path: /schedule/org/{qa_org_slug}/{qa_service_slug}
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+          - type: visible_selector
+            value: '[data-qa="booking-tomorrow"]'
+    actions:
+      - action: click
+        selector: '[data-qa="booking-tomorrow"]'
+        timeout_ms: 15000
+      - action: wait_for
+        selector: ':nth-match([data-qa="booking-slot"], 1)'
+      - action: observe_accessibility_tree
+        name: p5-f1-slots-a11y.json
+      - action: screenshot
+        name: p5-f1-slots-with-conflict.png
+        full_page: true
+      - action: click
+        selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+        timeout_ms: 15000
+      - action: wait_for
+        selector: '#userEmail'
+      - action: fill
+        selector: '#userName'
+        value: 'P5 Conflict Customer'
+      - action: fill
+        selector: '#userEmail'
+        value: 'p5-conflict@example.test'
+      - action: fill
+        selector: '#userPhone'
+        value: '+251900003333'
+      - action: click
+        selector: '[data-qa="booking-confirm"]'
+        assertions:
+          - type: visible_text
+            value: 'Booking Confirmed!'
+          - type: network_request
+            url_contains: book_time_slot
+            method: POST
+            status_min: 200
+            status_max: 299
+            timeout_ms: 25000
+      - action: screenshot
+        name: p5-f1-confirmation.png
+        full_page: true
+      - action: get_console_errors
+      - action: get_network_errors
