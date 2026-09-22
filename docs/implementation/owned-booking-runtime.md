@@ -51,23 +51,48 @@ Runtime common_site_config requires `webserver_host=http://127.0.0.1` alongside
 `webserver_port=25311`: the backend binds 127.0.0.1, so Socket.IO's default
 callback through 127.0.0.20 failed. Set with site-scoped Bench `set-config -g
 webserver_host http://127.0.0.1` in this isolated Bench, then restart. Do not apply
-the value to another runtime. The corrected namespace handshake passed.
+the value to another runtime. The corrected namespace handshake passed. Site `host_name` is now
+`http://127.0.0.20:25310`; the long internal site hostname exceeded Frappe
+Connected App redirect-URI field length in legacy test setup. This frontend
+URL also matches the verified Windows/browser entry point.
 
 Agent Plane's allowed domains on this site are `localhost`, `127.0.0.20` and the
 exact site hostname. Test users are least-privileged synthetic providers;
 no Administrator Browser Account was created for these checks.
 
-Windows status found localhost:25310 reachable, but the unique 127.0.0.20 host
-unreachable from Windows. No forwarding rule was installed. Thus Windows unique
-host access remains unverified; Linux browser acceptance is complete. If Windows
-access is needed, run the same launcher command with `windows-forward` after
-explaining its UAC prompt, then `windows-status`. Do not expose 0.0.0.0 or replace
-an unowned rule. After successful forwarding, Windows opening commands are:
+Windows forwarding installed on 2026-09-22 for the exact `127.0.0.20:25310`
+endpoint. `windows-status` confirms unique-host reachability; Windows PowerShell
+HTTP checks returned 200 for React `/` and Frappe Desk `/app`. The initial WSL
+interop/UAC attempt timed out; after verifying PowerShell interop, the retry
+succeeded. The launcher records ownership of the rule in this runtime's manifest.
+Re-run `windows-forward` after the WSL VM address changes and verify with
+`windows-status`. Windows PowerShell also authenticated the retained synthetic Provider, verified
+its identity, and loaded setup and Desk with HTTP200. Verification sessions were
+cleared server-side after GET logout was rejected by the method guard. WebSocket
+acceptance was exercised by the Linux HTTP/browser suites.
+Windows opening commands:
 
 ```powershell
 Start-Process 'http://127.0.0.20:25310'
 Start-Process 'http://127.0.0.20:25310/app'
 ```
 
-The running site/database are retained for follow-up; fixture records and sessions
-were removed. No site, database, worktree or assessment resource was deleted.
+The running site/database are retained for follow-up. Acceptance fixtures and
+known legacy test seeds were removed. A separate synthetic review demo is retained
+intentionally. No site, database, worktree or assessment resource was deleted.
+
+
+## Retained owner walkthrough
+
+Open `http://127.0.0.20:25310/login`. The synthetic Provider username is
+`review-aad7aa1a@example.test`. Its random password and exact cleanup manifest are
+in this private mode-600 file (never copy it into committed evidence):
+
+`/home/minte/projects/appointment-worktree-runtimes/implement-owned-booking-slice-a95902/bench/sites/meet-beta-implement-owned-booking-slice-a95902.localhost/private/review-demo.json`
+
+Visit `/settings/business` to inspect the published synthetic business. Open
+`/reception` on September 23, 2026 to inspect the 10:00 Africa/Addis_Ababa booking
+`APT-125ce3b1a4be8002a754`, reschedule it, inspect history or cancel it. Public page:
+`http://127.0.0.20:25310/schedule/org/business-d96788ef03698ba03c9aa65e/EVT-2026-000001`.
+The demo remains for review and is separate from cleaned acceptance fixtures.
+Remove it only when no longer needed, using its exact cleanup state.

@@ -77,7 +77,7 @@ def get_desk_appointments(date: str = None, location_name: str = None, provider_
             "name", "appointment_id", "appointment_date", "start_time", "end_time",
             "client_name", "client_email", "client_phone", "service",
             "provider", "location", "status",
-            "amount_paid", "notes", "event_type", "event"
+            "amount_paid", "notes", "event_type", "event", "organization", "booking_timezone", "modified"
         ],
         order_by="appointment_date, start_time"
     )

@@ -20,6 +20,7 @@ const TeamManagement = lazy(() => import("@/pages/settings/team"));
 const Profile = lazy(() => import("@/pages/settings/profile"));
 const LocationSettings = lazy(() => import("@/pages/settings/location"));
 const CalendarSettings = lazy(() => import("@/pages/settings/calendar"));
+const BusinessSettings = lazy(() => import("@/pages/settings/business"));
 const ServicesSettings = lazy(() => import("@/pages/settings/services"));
 const EditService = lazy(() => import("@/pages/settings/edit-service"));
 const Manage = lazy(() => import("@/pages/settings/manage"));
@@ -61,6 +62,7 @@ const Router = () => {
       <Route path="/settings/profile" element={<Profile />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/location" element={<LocationSettings />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/calendar" element={<CalendarSettings />} errorElement={<ErrorFallback />}></Route>
+      <Route path="/settings/business" element={<BusinessSettings />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/services" element={<ServicesSettings />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/services/:serviceId" element={<EditService />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/edit-service/:serviceId" element={<EditService />} errorElement={<ErrorFallback />}></Route>

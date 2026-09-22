@@ -110,6 +110,7 @@ def setup():
 
 def cleanup(state):
     require_target()
+    frappe.db.rollback()  # Refresh after independent HTTP commits before discovering owned rows.
     frappe.set_user("Administrator")
     frappe.flags.syncing_booking_urls = True
     orgs = [b["org"] for b in state["businesses"]]
@@ -170,7 +171,9 @@ def browser_values(manifest=None):
         "qa_org_slug": b["slug"],
         "qa_service_slug": b["offering"],
         "qa_provider_user": b["user"],
-        "qa_service_name": state["marker"] + " Consultation A",
+        "qa_service_name": frappe.db.get_value("Service", b["service"], "service_name"),
+        "qa_business_name": state["marker"] + " Visible business",
+        "qa_location_name": state["marker"] + " Visible location",
     }
 
 
@@ -184,7 +187,7 @@ def finish_browser():
 def verify_browser():
     require_target()
     state = json.loads(state_path().read_text())
-    a, b = state["businesses"]
+    a, b = state["businesses"][0], state["businesses"][-1]
     records = frappe.get_all(
         "Appointment",
         filters={
@@ -215,3 +218,150 @@ def verify_browser():
         row["history_count"] = frappe.db.count("Version", {"ref_doctype": "Appointment", "docname": row.name})
         assert row["history_count"] >= 1
     return {"stored": records, "provider_user": a["user"], "foreign_user": b["user"], "source": __file__}
+
+
+def adopt_visible_workspace():
+    """Record only records owned by the exact synthetic user after visible setup."""
+    require_target()
+    state = json.loads(state_path().read_text())
+    user = state["businesses"][0]["user"]
+    orgs = frappe.get_all("Organization", filters={"owner_user": user}, pluck="name")
+    assert len(orgs) == 1, orgs
+    org = frappe.get_doc("Organization", orgs[0])
+    services = frappe.get_all("Service", filters={"organization": org.name}, pluck="name")
+    events = frappe.get_all(
+        "EventType", filters={"service": ["in", services]}, fields=["name", "service", "provider", "location"]
+    )
+    assert len(events) == 1
+    event = events[0]
+    row = dict(
+        user=user,
+        org=org.name,
+        slug=org.slug,
+        service=event.service,
+        provider=event.provider,
+        location=event.location,
+        offering=event.name,
+    )
+    state["businesses"].insert(0, row)
+    state["created"].extend(
+        [
+            ["Organization", org.name],
+            ["Provider", event.provider],
+            ["Location", event.location],
+            ["Service", event.service],
+            ["EventType", event.name],
+        ]
+    )
+    state_path().write_text(json.dumps(state))
+    return row
+
+
+def verify_visible_lifecycle():
+    result = verify_browser()
+    from appointment.scheduler.booking import slots
+
+    for row in result["stored"]:
+        doc = frappe.get_doc("Appointment", row.name)
+        assert doc.status == "Cancelled" and str(doc.start_time) == "11:00:00"
+        assert row["history_count"] >= 3
+        available = slots(doc.event_type, doc.appointment_date)["all_available_slots_for_data"]
+        for hour in (6, 8):
+            assert any(s["available"] and s["start_time"].endswith(f"T{hour:02}:00:00Z") for s in available)
+    result["released_original_and_rescheduled_capacity"] = True
+    return result
+
+
+def prepare_review_demo():
+    """Retain a separate synthetic walkthrough; credentials never enter tool output."""
+    require_target()
+    path = Path(frappe.get_site_path("private", "review-demo.json"))
+    if path.exists():
+        frappe.throw("The retained review demo already exists. Reuse its private credentials file.")
+    from frappe.utils.password import update_password
+
+    from appointment.scheduler import booking, workspace
+
+    marker = "REVIEW-" + frappe.generate_hash(length=8)
+    user = frappe.get_doc(
+        dict(
+            doctype="User",
+            email=marker.lower() + "@example.test",
+            first_name="Appointment Review",
+            user_type="System User",
+            enabled=1,
+            send_welcome_email=0,
+            time_zone="Africa/Addis_Ababa",
+            roles=[{"role": "Provider"}],
+        )
+    ).insert(ignore_permissions=True)
+    password = frappe.generate_hash(length=32)
+    update_password(user.name, password)
+    frappe.set_user(user.name)
+    row = workspace.create(
+        marker + " Business",
+        marker + " Location",
+        "Review consultation",
+        "Africa/Addis_Ababa",
+        30,
+        "09:00",
+        "17:00",
+        list(workspace.DAYS),
+        frappe.generate_hash(length=32),
+    )
+    workspace.publish(row["organization"], 1)
+    day = add_days(nowdate(), 1)
+    frappe.set_user("Guest")
+    result = booking.book(
+        row["offering"],
+        day + "T10:00:00+03:00",
+        day + "T10:30:00+03:00",
+        "Synthetic Review Customer",
+        "review-customer@example.test",
+        frappe.generate_hash(length=32),
+    )
+    frappe.set_user("Administrator")
+    frappe.db.commit()
+    event = frappe.get_doc("EventType", row["offering"])
+    state = {
+        "created": [
+            ["User", user.name],
+            ["Organization", row["organization"]],
+            ["Provider", event.provider],
+            ["Location", event.location],
+            ["Service", event.service],
+            ["EventType", event.name],
+        ],
+        "businesses": [{"org": row["organization"]}],
+    }
+    import os
+
+    fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    with os.fdopen(fd, "w") as output:
+        json.dump(
+            dict(
+                username=user.name,
+                password=password,
+                base_url="http://127.0.0.20:25310",
+                business=row,
+                booking=result["booking_id"],
+                date=day,
+                cleanup_state=state,
+            ),
+            output,
+        )
+    return {
+        "credentials_path": str(path.resolve()),
+        "username": user.name,
+        "booking_id": result["booking_id"],
+        "date": day,
+        "public_path": row["public_path"],
+        "retained_for_owner_walkthrough": True,
+    }
+
+
+def full_suite_preflight():
+    require_target()
+    assert not state_path().exists(), "Clean the exact browser acceptance fixture first."
+    assert not frappe.db.count("Booking Event"), "Legacy suite clears Booking Event; refuse a nonempty target."
+    return {"legacy_event_table_empty": True, "target": frappe.local.site}

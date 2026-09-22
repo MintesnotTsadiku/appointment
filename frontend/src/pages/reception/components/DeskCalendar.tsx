@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, useDroppable } from '@dnd-kit/core';
 import { AppointmentCard } from './AppointmentCard';
+import { OwnedBookingActions } from './OwnedBookingActions';
 import { EditAppointmentModal } from './EditAppointmentModal';
 import { OverflowAppointmentsModal } from './OverflowAppointmentsModal';
 import { Appointment, ViewMode, TimeSlotInterval } from '../types';
@@ -841,7 +842,7 @@ export const DeskCalendar = ({
       )}
 
       {/* Edit Appointment Modal */}
-      {editingAppointment && (
+      {editingAppointment?.organization ? <OwnedBookingActions appointment={editingAppointment} onClose={() => setEditingAppointment(null)} onSuccess={onAppointmentUpdate} /> : editingAppointment && (
         <EditAppointmentModal
           isOpen={!!editingAppointment}
           onClose={() => setEditingAppointment(null)}

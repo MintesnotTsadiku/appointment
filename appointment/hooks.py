@@ -310,6 +310,7 @@ override_whitelisted_methods = {
 
 # The booking controller and list predicate enforce the same actor scope.
 permission_query_conditions = {
+    "Booking Event": "appointment.scheduler.doctype.booking_event.booking_event.get_permission_query_conditions",
     "Appointment": "appointment.scheduler.booking_access.appointment_query",
 }
 has_permission["Appointment"] = "appointment.scheduler.booking_access.appointment_permission"

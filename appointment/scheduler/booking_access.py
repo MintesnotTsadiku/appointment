@@ -126,7 +126,20 @@ def config_permission(doc, user=None, permission_type="read", ptype=None, **kwar
 def validate_config(doc, method=None):
     if frappe.session.user == "Administrator":
         return
+    if doc.doctype == "Organization" and doc.is_new():
+        from appointment.scheduler.workspace import _SETUP_CREATE
+
+        if doc.flags.workspace_setup is _SETUP_CREATE and doc.owner_user == frappe.session.user:
+            return
     old = doc.get_doc_before_save()
+    if old and doc.doctype == "Organization":
+        from appointment.scheduler.workspace import _SETUP_CREATE
+
+        if doc.flags.workspace_setup is not _SETUP_CREATE and any(
+            doc.get(field) != old.get(field)
+            for field in ("setup_request_key", "setup_request_hash", "setup_request_result")
+        ):
+            frappe.throw(_("Setup retry identity cannot be edited."), frappe.PermissionError)
     for target in (old, doc):
         if target and not config_permission(target, permission_type="write"):
             frappe.throw(_("Only a business manager may change this configuration."), frappe.PermissionError)

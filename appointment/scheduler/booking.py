@@ -4,10 +4,12 @@ import hashlib
 import json
 import re
 from datetime import datetime, timedelta, timezone
+from typing import NamedTuple
 
 import frappe
 import pytz
 from frappe import _
+from frappe.rate_limiter import rate_limit
 from frappe.utils import get_time, getdate
 
 from appointment.scheduler.booking_access import require_access
@@ -17,7 +19,15 @@ _PUBLIC_CREATE = object()
 ACTIVE = ("Pending", "Confirmed", "Completed", "No Show")
 
 
-def offering(name, public=False):
+class ResolvedOffering(NamedTuple):
+    event: object
+    service: object
+    location: object
+    provider: object
+    business: object
+
+
+def offering(name, public=False, require_active=True):
     event = frappe.get_doc("EventType", name)
     service = frappe.get_doc("Service", event.service)
     location = frappe.get_doc("Location", event.location)
@@ -26,28 +36,33 @@ def offering(name, public=False):
     if (
         not org
         or location.organization != org
-        or not frappe.db.exists(
-            "Provider Organization",
-            {
-                "parent": provider.name,
-                "parenttype": "Provider",
-                "organization": org,
-                "status": "Active",
-                **({"accept_org_bookings": 1} if public else {}),
-            },
+        or (
+            require_active
+            and not frappe.db.exists(
+                "Provider Organization",
+                {
+                    "parent": provider.name,
+                    "parenttype": "Provider",
+                    "organization": org,
+                    "status": "Active",
+                    **({"accept_org_bookings": 1} if public else {}),
+                },
+            )
         )
     ):
         frappe.throw(_("Offering must belong to one business."), frappe.PermissionError)
     business = frappe.get_doc("Organization", org)
-    if not all((event.is_active, service.is_active, location.is_active, provider.is_active, business.is_active)):
+    if require_active and not all(
+        (event.is_active, service.is_active, location.is_active, provider.is_active, business.is_active)
+    ):
         frappe.throw(_("This offering is unavailable."))
     if public and not business.enable_public_booking:
         frappe.throw(_("Public booking is unavailable."), frappe.PermissionError)
     if not provider.user:
         frappe.throw(_("The provider needs a linked user."))
-    if not frappe.db.get_value("User", provider.user, "enabled"):
+    if require_active and not frappe.db.get_value("User", provider.user, "enabled"):
         frappe.throw(_("This provider is unavailable."))
-    return event, service, location, provider, business
+    return ResolvedOffering(event, service, location, provider, business)
 
 
 def utc(value):
@@ -120,18 +135,22 @@ def check_hours(parts, start, end):
     return local_start, local_end, occupied_from, occupied_until
 
 
-def check_capacity(provider, start, end, exclude=None):
-    # Locking read sees the latest committed result even under repeatable read.
+def check_canonical_capacity(user, start, end, exclude=None):
     conflicts = frappe.db.sql(
         """select a.name from `tabAppointment` a
         inner join `tabProvider` p on p.name=a.provider
-        where p.user=%s and a.status in ('Pending','Confirmed','Completed','No Show')
+        where p.user=%s and a.status in %s
         and a.occupied_from < %s and a.occupied_until > %s and a.name != %s
         limit 1 for update""",
-        (provider.user, end, start, exclude or ""),
+        (user, ACTIVE, end, start, exclude or ""),
     )
     if conflicts:
         frappe.throw(_("This time is no longer available."))
+
+
+def check_capacity(provider, start, end, exclude=None):
+    # Locking read sees the latest committed result even under repeatable read.
+    check_canonical_capacity(provider.user, start, end, exclude)
     # Retained personal/calendar behavior must not bypass the same person's capacity.
     zone = frappe.utils.get_system_timezone()
     system_start = pytz.UTC.localize(start).astimezone(pytz.timezone(zone)).replace(tzinfo=None)
@@ -153,7 +172,7 @@ def check_capacity(provider, start, end, exclude=None):
 def validate_document(doc):
     old = doc.get_doc_before_save()
     public = doc.flags.public_booking is _PUBLIC_CREATE and doc.is_new()
-    parts = offering(doc.event_type, public=public)
+    parts = offering(doc.event_type, public=public, require_active=not bool(old))
     _event, service, location, provider, business = parts
     for field, expected in [("service", service.name), ("provider", provider.name), ("location", location.name)]:
         if doc.get(field) != expected:
@@ -182,18 +201,27 @@ def validate_document(doc):
         current = frappe.db.sql("select modified from `tabAppointment` where name=%s for update", doc.name)
         if current and str(current[0][0]) != str(old.modified):
             frappe.throw(_("This booking changed. Reload before editing."), frappe.TimestampMismatchError)
-    start = local_instant(doc.appointment_date, doc.start_time, location.timezone)
-    end = local_instant(doc.appointment_date, doc.end_time, location.timezone)
+    # Existing bookings retain their recorded wall-time zone across configuration edits.
+    zone = old.booking_timezone if old else location.timezone
+    location.timezone = zone
+    start = local_instant(doc.appointment_date, doc.start_time, zone)
+    end = local_instant(doc.appointment_date, doc.end_time, zone)
     time_changed = not old or any(
         str(doc.get(f)) != str(old.get(f)) for f in ("appointment_date", "start_time", "end_time")
     )
     if time_changed or (old and old.status == "Cancelled" and doc.status != "Cancelled"):
+        if not all(
+            (parts.event.is_active, service.is_active, location.is_active, provider.is_active, business.is_active)
+        ):
+            frappe.throw(_("This offering is unavailable for a new time."))
+        offering(doc.event_type)  # Recheck active membership/user for time changes.
         _local_start, _local_end, occupied_from, occupied_until = check_hours(parts, start, end)
     else:
+        start, end = old.starts_at, old.ends_at
         occupied_from, occupied_until = old.occupied_from, old.occupied_until
     doc.starts_at, doc.ends_at = start, end
     doc.occupied_from, doc.occupied_until = occupied_from, occupied_until
-    doc.booking_timezone = location.timezone
+    doc.booking_timezone = zone
     if doc.status in ACTIVE:
         check_capacity(provider, occupied_from, occupied_until, doc.name)
     if not doc.client_name or not doc.client_email:
@@ -234,14 +262,15 @@ def creation_history(doc):
 
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])
+@rate_limit(limit=60, seconds=60, methods=["POST"])
 def book(
     offering_id, start_time, end_time, user_name, user_email, request_id, user_phone="", notes="", organization_id=None
 ):
     if not re.fullmatch(r"[A-Za-z0-9_-]{16,100}", request_id or ""):
         frappe.throw(_("A valid booking request identity is required."))
-    parts = offering(offering_id, public=True)
-    event, service, location, provider, business = parts
-    if organization_id and organization_id != business.name:
+    event = frappe.get_doc("EventType", offering_id)
+    business_name = frappe.db.get_value("Service", event.service, "organization")
+    if organization_id and organization_id != business_name:
         frappe.throw(_("Offering does not belong to this business."), frappe.PermissionError)
     start, end = utc(start_time), utc(end_time)
     payload = dict(
@@ -254,7 +283,8 @@ def book(
         notes=notes or "",
     )
     digest = hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
-    key = hashlib.sha256((business.name + "\0" + frappe.session.user + "\0" + request_id).encode()).hexdigest()
+    key = hashlib.sha256((business_name + "\0" + frappe.session.user + "\0" + request_id).encode()).hexdigest()
+    provider = frappe.get_doc("Provider", event.provider)
     lock_provider(provider)
     existing = frappe.db.sql(
         "select name, request_hash, request_result from `tabAppointment` where request_key=%s for update",
@@ -265,6 +295,8 @@ def book(
         if existing[0].request_hash != digest:
             frappe.throw(_("This request identity was already used for different booking details."))
         return json.loads(existing[0].request_result)
+    parts = offering(offering_id, public=True)
+    event, service, location, provider, business = parts
     zone = pytz.timezone(location.timezone)
     local_start, local_end = (pytz.UTC.localize(x).astimezone(zone) for x in (start, end))
     reference = "APT-" + frappe.generate_hash(length=20)
@@ -299,6 +331,7 @@ def book(
 
 
 @frappe.whitelist(allow_guest=True)
+@rate_limit(limit=120, seconds=60)
 def slots(offering_id, date, organization_id=None):
     parts = offering(offering_id, public=True)
     event, service, location, provider, business = parts
@@ -380,11 +413,39 @@ def guard_calendar_capacity(doc, method=None):
     end = zone.localize(frappe.utils.get_datetime(doc.ends_on), is_dst=None).astimezone(pytz.UTC).replace(tzinfo=None)
     for user in users:
         lock_provider(frappe._dict(user=user))
-        conflicts = frappe.db.sql(
-            """select a.name from `tabAppointment` a inner join `tabProvider` p on p.name=a.provider
-            where p.user=%s and a.status in ('Pending','Confirmed','Completed','No Show')
-            and a.occupied_from < %s and a.occupied_until > %s limit 1 for update""",
-            (user, end, start),
-        )
-        if conflicts:
-            frappe.throw(_("This time is no longer available."))
+        check_canonical_capacity(user, start, end)
+
+
+@frappe.whitelist(methods=["POST"])
+def change(booking_id, action, expected_modified, date=None, start_time=None):
+    """Staff lifecycle command; preserves identity, checks stale edits, records Version."""
+    doc = frappe.get_doc("Appointment", booking_id)
+    require_access(doc)
+    provider = frappe.get_doc("Provider", doc.provider)
+    lock_provider(provider)
+    doc.reload()
+    require_access(doc)
+    if str(doc.modified) != str(expected_modified):
+        frappe.throw(_("This booking changed. Reload before editing."), frappe.TimestampMismatchError)
+    if doc.status not in ("Pending", "Confirmed"):
+        frappe.throw(_("Only pending or confirmed bookings can be changed."))
+    if action == "cancel":
+        doc.status = "Cancelled"
+    elif action == "reschedule":
+        if not date or not start_time:
+            frappe.throw(_("Choose a date and start time."))
+        duration = frappe.utils.get_datetime(doc.ends_at) - frappe.utils.get_datetime(doc.starts_at)
+        start = local_instant(date, start_time, doc.booking_timezone)
+        end = pytz.UTC.localize(start + duration).astimezone(pytz.timezone(doc.booking_timezone))
+        if end.date() != getdate(date):
+            frappe.throw(_("The booking must fit within one operating day."))
+        doc.appointment_date, doc.start_time, doc.end_time = date, start_time, end.time().replace(tzinfo=None)
+    else:
+        frappe.throw(_("Choose reschedule or cancel."))
+    doc.save(ignore_permissions=True)
+    return {
+        "booking_id": doc.name,
+        "status": doc.status,
+        "modified": str(doc.modified),
+        "notification_status": "not_sent",
+    }

@@ -1,5 +1,9 @@
 # Owned booking foundation — implementation handoff
 
+Follow-up: [visible workflow, review resolutions and launch progress](launch-progress.md).
+This document records the initial foundation checkpoint; the follow-up supersedes
+its Windows-access and staff-lifecycle limitations.
+
 Implemented 2026-09-22 on `implement/owned-booking-slice`, based on develop
 `0035948769856a85baa676bc3a37d6d7d164ac28`. Commit and push are authorized; merge,
 beta approval, real dispatch, payments and production changes are not.

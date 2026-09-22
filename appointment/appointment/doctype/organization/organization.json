@@ -23,14 +23,14 @@
   "booking_policy",
   "allow_provider_selection",
   "column_break_2",
-   "enable_public_booking",
-   "require_payment",
-   "override_provider_booking_settings",
-   "disable_past_slots_by",
-   "minimum_booking_notice",
-   "show_booked_slots",
-   "section_break_howg",
-   "booking_urls",
+  "enable_public_booking",
+  "require_payment",
+  "override_provider_booking_settings",
+  "disable_past_slots_by",
+  "minimum_booking_notice",
+  "show_booked_slots",
+  "section_break_howg",
+  "booking_urls",
   "section_break_4",
   "logo",
   "primary_color",
@@ -38,7 +38,10 @@
   "description",
   "section_break_5",
   "is_active",
-  "setup_complete"
+  "setup_complete",
+  "setup_request_key",
+  "setup_request_hash",
+  "setup_request_result"
  ],
  "fields": [
   {
@@ -227,6 +230,31 @@
   {
    "fieldname": "section_break_howg",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "setup_request_key",
+   "fieldtype": "Data",
+   "label": "Setup Request Key",
+   "read_only": 1,
+   "hidden": 1,
+   "permlevel": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "setup_request_hash",
+   "fieldtype": "Data",
+   "label": "Setup Request Hash",
+   "read_only": 1,
+   "hidden": 1,
+   "permlevel": 1
+  },
+  {
+   "fieldname": "setup_request_result",
+   "fieldtype": "Long Text",
+   "label": "Setup Request Result",
+   "read_only": 1,
+   "hidden": 1,
+   "permlevel": 1
   }
  ],
  "grid_page_length": 50,

@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DeskHeader } from './components/DeskHeader';
 import { DeskFilters } from './components/DeskFilters';
@@ -151,7 +152,8 @@ const Reception = () => {
           }}
         >
           {/* Header */}
-          <DeskHeader
+          <nav className="px-6 py-2"><Link to="/settings/business" className="underline">Business booking setup</Link></nav>
+      <DeskHeader
             currentDate={currentDate}
             viewMode={viewMode}
             timeSlotInterval={timeSlotInterval}

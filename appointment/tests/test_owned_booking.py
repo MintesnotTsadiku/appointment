@@ -1,6 +1,7 @@
 """Database and separate HTTP-session acceptance; only on the designated disposable site."""
 
 import json
+import re
 import subprocess
 import time
 import unittest
@@ -48,12 +49,25 @@ class OwnedBookingAcceptance(unittest.TestCase):
         cls.cleanup = fixtures.cleanup(cls.state)
 
     def setUp(self):
+        self.rate_key = frappe.cache.make_key("rl:appointment.scheduler.booking.book:192.0.2.77") + b":60"
+        self.rate_previous = (frappe.cache.get(self.rate_key), frappe.cache.ttl(self.rate_key))
+        frappe.cache.setex(self.rate_key, 60, 0)
+        frappe.db.rollback()  # Refresh the snapshot after independent HTTP commits.
         frappe.set_user("Administrator")
         for name in frappe.get_all(
-            "Appointment", filters={"organization": ["in", [self.a["org"], self.b["org"]]]}, pluck="name"
+            "Appointment",
+            filters={"organization": ["in", [business["org"] for business in self.state["businesses"]]]},
+            pluck="name",
         ):
             frappe.delete_doc("Appointment", name, force=True, ignore_permissions=True)
         frappe.db.commit()
+
+    def tearDown(self):
+        previous, ttl = self.rate_previous
+        if previous is None:
+            frappe.cache.delete(self.rate_key)
+        else:
+            frappe.cache.setex(self.rate_key, max(1, ttl), previous)
 
     def payload(self, hour=10, minute=0, **changes):
         start = f"{self.day}T{hour:02}:{minute:02}:00+03:00"
@@ -72,7 +86,12 @@ class OwnedBookingAcceptance(unittest.TestCase):
         # Each request gets a genuinely anonymous client, not a provider session.
         with requests.Session() as s:
             s.trust_env = False
-            return s.post(BASE + "/api/method/appointment.scheduler.booking.book", json=payload, timeout=30)
+            return s.post(
+                BASE + "/api/method/appointment.scheduler.booking.book",
+                json=payload,
+                headers={"X-Forwarded-For": "192.0.2.77"},
+                timeout=30,
+            )
 
     def test_01_handoff_and_isolation(self):
         result = self.post(self.payload())
@@ -296,7 +315,11 @@ class OwnedBookingAcceptance(unittest.TestCase):
     def test_09_runtime_surfaces_and_realtime(self):
         session = self.sessions[0]
         self.assertEqual(session.get(BASE + "/", timeout=20).status_code, 200)
-        self.assertEqual(session.get(BASE + "/app", timeout=20).status_code, 200)
+        desk = session.get(BASE + "/app", timeout=20)
+        self.assertEqual(desk.status_code, 200)
+        token = re.search(r'frappe.csrf_token = "([^"]+)"', desk.text)
+        self.assertIsNotNone(token)
+        session.headers["X-Frappe-CSRF-Token"] = token.group(1)
         repo = Path(frappe.get_app_path("appointment")).parent
         result = subprocess.run(
             ["/home/minte/.nvm/versions/node/v24.12.0/bin/node", str(repo / "qa/check-owned-runtime.mjs")],
@@ -313,6 +336,258 @@ class OwnedBookingAcceptance(unittest.TestCase):
         )
         self.assertEqual(result.returncode, 0, result.stderr[:400])
         self.assertEqual(json.loads(result.stdout)["transport"], "websocket")
+
+    def test_10_frozen_instant_and_unpublished_replay(self):
+        payload = self.payload()
+        first = self.post(payload)
+        self.assertEqual(first.status_code, 200, first.text[:200])
+        name = first.json()["message"]["booking_id"]
+        frappe.db.rollback()
+        before = frappe.get_doc("Appointment", name)
+        frappe.db.set_value("Location", self.a["location"], "timezone", "Asia/Kolkata")
+        frappe.db.set_value("Organization", self.a["org"], "enable_public_booking", 0)
+        frappe.db.commit()
+        try:
+            replay = self.post(payload)
+            self.assertEqual(replay.status_code, 200, replay.text[:200])
+            self.assertEqual(replay.json(), first.json())
+            self.assertEqual(self.post(self.payload(hour=11)).status_code, 403)
+            edited = self.sessions[0].put(
+                BASE + "/api/resource/Appointment/" + name, json={"notes": "Timezone configuration changed"}, timeout=20
+            )
+            self.assertEqual(edited.status_code, 200, edited.text[:200])
+            frappe.db.rollback()
+            after = frappe.get_doc("Appointment", name)
+            for field in ("starts_at", "ends_at", "occupied_from", "occupied_until", "booking_timezone"):
+                self.assertEqual(before.get(field), after.get(field), field)
+        finally:
+            frappe.db.set_value("Location", self.a["location"], "timezone", "Africa/Addis_Ababa")
+            frappe.db.set_value("Organization", self.a["org"], "enable_public_booking", 1)
+            frappe.db.commit()
+        self.assertEqual(self.post(self.payload()).status_code, 417)
+
+    def test_11_staff_lifecycle_and_capacity_release(self):
+        created = self.post(self.payload())
+        name = created.json()["message"]["booking_id"]
+        frappe.db.rollback()
+        original = frappe.get_doc("Appointment", name)
+        command = dict(
+            booking_id=name,
+            expected_modified=str(original.modified),
+            action="reschedule",
+            date=self.day,
+            start_time="11:00:00",
+        )
+        endpoint = BASE + "/api/method/appointment.scheduler.booking.change"
+        denied = self.sessions[1].post(endpoint, json=command, timeout=20)
+        self.assertEqual(denied.status_code, 403)
+        changed = self.sessions[0].post(endpoint, json=command, timeout=20)
+        self.assertEqual(changed.status_code, 200, changed.text[:300])
+        self.assertEqual(changed.json()["message"]["booking_id"], name)
+        stale = self.sessions[0].post(endpoint, json=command, timeout=20)
+        self.assertEqual(stale.status_code, 417, stale.text[:250])
+        self.assertEqual(self.post(self.payload()).status_code, 200)
+        self.assertEqual(self.post(self.payload(hour=11)).status_code, 417)
+        command.update(action="cancel", expected_modified=changed.json()["message"]["modified"])
+        cancelled = self.sessions[0].post(endpoint, json=command, timeout=20)
+        self.assertEqual(cancelled.status_code, 200, cancelled.text[:300])
+        self.assertEqual(self.post(self.payload(hour=11)).status_code, 200)
+        history = self.sessions[0].get(
+            BASE + "/api/method/appointment.scheduler.booking.history", params={"booking_id": name}, timeout=20
+        )
+        self.assertIn("Cancelled", history.text)
+        self.assertIn("start_time", history.text)
+
+    def test_12_visible_workspace_api_and_publication(self):
+        payload = dict(
+            business_name=self.state["marker"] + " Workspace",
+            location_name=self.state["marker"] + " Workspace location",
+            service_name="First consultation",
+            timezone="Africa/Addis_Ababa",
+            duration=30,
+            opens_at="09:00",
+            closes_at="17:00",
+            weekdays=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+            request_id=frappe.generate_hash(length=32),
+        )
+        endpoint = BASE + "/api/method/appointment.scheduler.workspace."
+        denied = self.sessions[2].post(endpoint + "create", json=payload, timeout=20)
+        self.assertEqual(denied.status_code, 403)
+
+        def submit_setup():
+            with requests.Session() as session:
+                session.trust_env = False
+                session.cookies.update(self.sessions[0].cookies)
+                session.headers.update(self.sessions[0].headers)
+                return session.post(endpoint + "create", json=payload, timeout=20)
+
+        booking.lock_provider(frappe._dict(user=self.a["user"]))
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            futures = [pool.submit(submit_setup) for _ in range(2)]
+            time.sleep(0.3)
+            self.assertFalse(any(future.done() for future in futures))
+            frappe.db.commit()
+            results = [future.result() for future in futures]
+        result = results[0]
+        self.assertEqual(result.status_code, 200, result.text[:400])
+        self.assertEqual(results[1].status_code, 200, results[1].text[:400])
+        self.assertEqual(result.json(), results[1].json())
+        row = result.json()["message"]
+        frappe.db.rollback()
+        event = frappe.get_doc("EventType", row["offering"])
+        self.state["businesses"].append(dict(org=row["organization"]))
+        self.state["created"].extend(
+            [
+                ["Organization", row["organization"]],
+                ["Provider", event.provider],
+                ["Location", event.location],
+                ["Service", event.service],
+                ["EventType", event.name],
+            ]
+        )
+        replay = self.sessions[0].post(endpoint + "create", json=payload, timeout=20)
+        self.assertEqual(replay.json(), result.json())
+        mismatch = self.sessions[0].post(endpoint + "create", json={**payload, "duration": 45}, timeout=20)
+        self.assertEqual(mismatch.status_code, 417)
+        booking_payload = self.payload()
+        booking_payload["offering_id"] = event.name
+        self.assertEqual(self.post(booking_payload).status_code, 403)
+        foreign = self.sessions[1].post(
+            endpoint + "publish", json=dict(organization=row["organization"], published=1), timeout=20
+        )
+        self.assertEqual(foreign.status_code, 403)
+        published = self.sessions[0].post(
+            endpoint + "publish", json=dict(organization=row["organization"], published=1), timeout=20
+        )
+        self.assertEqual(published.status_code, 200, published.text[:400])
+        booked = self.post(booking_payload)
+        self.assertEqual(booked.status_code, 200, booked.text[:1000])
+
+    def test_13_scoped_support_export(self):
+        created = self.post(self.payload())
+        self.assertEqual(created.status_code, 200, created.text[:300])
+        name = created.json()["message"]["booking_id"]
+        endpoint = BASE + "/api/method/appointment.scheduler.support.customer_record"
+        params = dict(organization=self.a["org"], email="booking@example.test")
+        for session in self.sessions:
+            response = session.get(endpoint, params=params, timeout=20)
+            self.assertEqual(response.status_code, 403)
+        frappe.db.rollback()
+        frappe.db.set_value("Organization", self.a["org"], "owner_user", self.a["user"])
+        frappe.db.commit()
+        try:
+            own = self.sessions[0].get(endpoint, params=params, timeout=20)
+            self.assertEqual(own.status_code, 200, own.text[:300])
+            self.assertEqual([row["name"] for row in own.json()["message"]["bookings"]], [name])
+            for private in ("request_key", "request_hash", "request_result"):
+                self.assertNotIn(private, own.text)
+            params["organization"] = self.b["org"]
+            self.assertEqual(self.sessions[0].get(endpoint, params=params, timeout=20).status_code, 403)
+        finally:
+            frappe.db.set_value("Organization", self.a["org"], "owner_user", "Administrator")
+            frappe.db.commit()
+
+    def test_14_request_limits(self):
+        # Isolated target only: set the exact endpoint/IP bucket to its limit,
+        # exercise HTTP rejection, and restore its original value/TTL.
+        key = self.rate_key
+        previous, ttl = frappe.cache.get(key), frappe.cache.ttl(key)
+        frappe.cache.setex(key, 60, 60)
+        try:
+            response = self.post(self.payload())
+            self.assertEqual(response.status_code, 429, response.text[:250])
+        finally:
+            if previous is None:
+                frappe.cache.delete(key)
+            else:
+                frappe.cache.setex(key, max(1, ttl), previous)
+
+    def test_15_manager_cancellation_after_provider_revocation(self):
+        names = []
+        for hour in (10, 11):
+            response = self.post(self.payload(hour=hour))
+            self.assertEqual(response.status_code, 200, response.text[:300])
+            names.append(response.json()["message"]["booking_id"])
+        frappe.db.rollback()
+        frappe.db.set_value("Organization", self.a["org"], "owner_user", self.b["user"])
+        frappe.db.commit()
+        try:
+            for name, mode in zip(names, ("membership", "disabled"), strict=True):
+                if mode == "membership":
+                    frappe.db.set_value(
+                        "Provider Organization",
+                        {"parent": self.a["provider"], "organization": self.a["org"]},
+                        "status",
+                        "Inactive",
+                    )
+                else:
+                    frappe.db.set_value("User", self.a["user"], "enabled", 0)
+                doc = frappe.get_doc("Appointment", name)
+                frappe.db.commit()
+                response = self.sessions[1].post(
+                    BASE + "/api/method/appointment.scheduler.booking.change",
+                    json=dict(booking_id=name, action="cancel", expected_modified=str(doc.modified)),
+                    timeout=20,
+                )
+                self.assertEqual(response.status_code, 200, response.text[:400])
+                self.assertEqual(response.json()["message"]["status"], "Cancelled")
+                frappe.db.set_value(
+                    "Provider Organization",
+                    {"parent": self.a["provider"], "organization": self.a["org"]},
+                    "status",
+                    "Active",
+                )
+                frappe.db.commit()
+        finally:
+            frappe.db.set_value("User", self.a["user"], "enabled", 1)
+            frappe.db.set_value(
+                "Provider Organization",
+                {"parent": self.a["provider"], "organization": self.a["org"]},
+                "status",
+                "Active",
+            )
+            frappe.db.set_value("Organization", self.a["org"], "owner_user", "Administrator")
+            frappe.db.commit()
+
+    def test_16_legacy_calendar_rejects_impersonation(self):
+        response = self.sessions[0].get(
+            BASE + "/api/method/appointment.scheduler.doctype.booking_event.booking_event.get_events",
+            params={"start": self.day, "end": self.day, "user": "Administrator"},
+            timeout=20,
+        )
+        self.assertEqual(response.status_code, 403, response.text[:300])
+
+    def test_17_linked_private_legacy_calendar_scope(self):
+        event = frappe.get_doc(
+            dict(
+                doctype="Booking Event",
+                subject="Owned linked calendar event",
+                owner="Guest",
+                event_type="Private",
+                status="Open",
+                starts_on=f"{self.day} 14:00:00",
+                ends_on=f"{self.day} 14:30:00",
+                send_reminder=0,
+                custom_doctype_link_with_event=[dict(reference_doctype="Service", reference_docname=self.a["service"])],
+            )
+        ).insert(ignore_permissions=True)
+        self.state["created"].append(["Booking Event", event.name])
+        frappe.db.commit()
+        for index, expected in [(0, True), (1, False)]:
+            listing = self.sessions[index].get(
+                BASE + "/api/resource/Booking Event",
+                params={"filters": json.dumps([["name", "=", event.name]])},
+                timeout=20,
+            )
+            self.assertEqual(listing.status_code, 200, listing.text[:300])
+            self.assertEqual(bool(listing.json()["data"]), expected)
+            calendar = self.sessions[index].get(
+                BASE + "/api/method/appointment.scheduler.doctype.booking_event.booking_event.get_events",
+                params={"start": self.day, "end": self.day},
+                timeout=20,
+            )
+            self.assertEqual(calendar.status_code, 200, calendar.text[:300])
+            self.assertEqual(event.name in calendar.text, expected)
 
 
 def run():

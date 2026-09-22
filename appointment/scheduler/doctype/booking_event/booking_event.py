@@ -227,10 +227,26 @@ def delete_communication(event, reference_doctype, reference_docname):
 		frappe.delete_doc("Communication", comm)
 
 
-def get_permission_query_conditions(user):
-	if not user:
-		user = frappe.session.user
-	return f"""(`tabEvent`.`event_type`='Public' or `tabEvent`.`owner`={frappe.db.escape(user)})"""
+def get_permission_query_conditions(user=None):
+	user = user or frappe.session.user
+	if user == "Administrator":
+		return "1=1"
+	# Preserve the document hook's linked-record grant without exposing unrelated
+	# private bookings. Evaluate each unique linked reference once per query.
+	allowed = set()
+	decisions = {}
+	for link in frappe.get_all("Event DocType Link", filters={"parenttype": "Booking Event"}, fields=["parent", "reference_doctype", "reference_docname"]):
+		key = (link.reference_doctype, link.reference_docname)
+		if not all(key):
+			continue
+		if key not in decisions:
+			decisions[key] = frappe.has_permission(key[0], "read", key[1], user=user)
+		if decisions[key]:
+			allowed.add(link.parent)
+	condition = f"(`tabBooking Event`.`event_type`='Public' or `tabBooking Event`.`owner`={frappe.db.escape(user)}"
+	if allowed:
+		condition += " or `tabBooking Event`.name in (" + ",".join(frappe.db.escape(name) for name in sorted(allowed)) + ")"
+	return condition + ")"
 
 
 def has_permission(doc, user):
@@ -276,74 +292,76 @@ def send_event_digest():
 def get_events(
 	start: date, end: date, user: str | None = None, for_reminder: bool = False, filters=None
 ) -> list[frappe._dict]:
+	if user and user != frappe.session.user and frappe.session.user != "Administrator":
+		frappe.throw(_("Cannot read another user’s calendar."), frappe.PermissionError)
 	user = user or frappe.session.user
-	EventLikeDict: TypeAlias = Event | frappe._dict
+	EventLikeDict: TypeAlias = BookingEvent | frappe._dict
 	resolved_events: list[EventLikeDict] = []
 
 	if isinstance(filters, str):
 		filters = json.loads(filters)
 
-	filter_condition = get_filters_cond("Event", filters, [])
+	filter_condition = get_filters_cond("Booking Event", filters, [])
 
-	tables = ["`tabEvent`"]
+	tables = ["`tabBooking Event`"]
 	if "`tabEvent Participants`" in filter_condition:
 		tables.append("`tabEvent Participants`")
 
 	event_candidates: list[EventLikeDict] = frappe.db.sql(
 		"""
-		SELECT `tabEvent`.name,
-				`tabEvent`.subject,
-				`tabEvent`.description,
-				`tabEvent`.color,
-				`tabEvent`.starts_on,
-				`tabEvent`.ends_on,
-				`tabEvent`.owner,
-				`tabEvent`.all_day,
-				`tabEvent`.event_type,
-				`tabEvent`.repeat_this_event,
-				`tabEvent`.repeat_on,
-				`tabEvent`.repeat_till,
-				`tabEvent`.monday,
-				`tabEvent`.tuesday,
-				`tabEvent`.wednesday,
-				`tabEvent`.thursday,
-				`tabEvent`.friday,
-				`tabEvent`.saturday,
-				`tabEvent`.sunday
+		SELECT `tabBooking Event`.name,
+				`tabBooking Event`.subject,
+				`tabBooking Event`.description,
+				`tabBooking Event`.color,
+				`tabBooking Event`.starts_on,
+				`tabBooking Event`.ends_on,
+				`tabBooking Event`.owner,
+				`tabBooking Event`.all_day,
+				`tabBooking Event`.event_type,
+				`tabBooking Event`.repeat_this_event,
+				`tabBooking Event`.repeat_on,
+				`tabBooking Event`.repeat_till,
+				`tabBooking Event`.monday,
+				`tabBooking Event`.tuesday,
+				`tabBooking Event`.wednesday,
+				`tabBooking Event`.thursday,
+				`tabBooking Event`.friday,
+				`tabBooking Event`.saturday,
+				`tabBooking Event`.sunday
 		FROM {tables}
 		WHERE (
 				(
-					(date(`tabEvent`.starts_on) BETWEEN date(%(start)s) AND date(%(end)s))
-					OR (date(`tabEvent`.ends_on) BETWEEN date(%(start)s) AND date(%(end)s))
+					(date(`tabBooking Event`.starts_on) BETWEEN date(%(start)s) AND date(%(end)s))
+					OR (date(`tabBooking Event`.ends_on) BETWEEN date(%(start)s) AND date(%(end)s))
 					OR (
-						date(`tabEvent`.starts_on) <= date(%(start)s)
-						AND date(`tabEvent`.ends_on) >= date(%(end)s)
+						date(`tabBooking Event`.starts_on) <= date(%(start)s)
+						AND date(`tabBooking Event`.ends_on) >= date(%(end)s)
 					)
 				)
 				OR (
-					date(`tabEvent`.starts_on) <= date(%(start)s)
-					AND `tabEvent`.repeat_this_event=1
-					AND coalesce(`tabEvent`.repeat_till, '3000-01-01') > date(%(start)s)
+					date(`tabBooking Event`.starts_on) <= date(%(start)s)
+					AND `tabBooking Event`.repeat_this_event=1
+					AND coalesce(`tabBooking Event`.repeat_till, '3000-01-01') > date(%(start)s)
 				)
 			)
 		{reminder_condition}
 		{filter_condition}
 		AND (
-				`tabEvent`.event_type='Public'
-				OR `tabEvent`.owner=%(user)s
+				{visibility_condition}
 				OR EXISTS(
 					SELECT `tabDocShare`.name
 					FROM `tabDocShare`
-					WHERE `tabDocShare`.share_doctype='Event'
-						AND `tabDocShare`.share_name=`tabEvent`.name
+					WHERE `tabDocShare`.share_doctype='Booking Event'
+						AND `tabDocShare`.share_name=`tabBooking Event`.name
 						AND `tabDocShare`.user=%(user)s
 				)
 			)
-		AND `tabEvent`.status='Open'
-		ORDER BY `tabEvent`.starts_on""".format(
+		AND `tabBooking Event`.status='Open'
+		ORDER BY `tabBooking Event`.starts_on""".format(
 			tables=", ".join(tables),
 			filter_condition=filter_condition,
-			reminder_condition="AND `tabEvent`.send_reminder = 1" if for_reminder else "",
+			visibility_condition=get_permission_query_conditions(user),
+			reminder_condition="AND `tabBooking Event`.send_reminder = 1" if for_reminder else "",
 		),
 		{
 			"start": start,

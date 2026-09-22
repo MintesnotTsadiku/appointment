@@ -439,7 +439,7 @@ def has_permission(doc, user):
     for doctype_link in doctype_links:
         reference_doctype = doctype_link.reference_doctype
         reference_docname = doctype_link.reference_docname
-        if frappe.has_permission(reference_doctype, "read", reference_docname):
+        if frappe.has_permission(reference_doctype, "read", reference_docname, user=user):
             return True
     return False
 
