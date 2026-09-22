@@ -1,0 +1,40 @@
+app: appointment
+base_url: http://127.0.0.20:25310
+default_role: Receptionist
+auth:
+  type: frappe_session
+  username: '{qa_reception_user}'
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+fixtures:
+  provider: appointment.tests.acceptance_demo.browser_values
+scenarios:
+  - id: theme_app_dark
+    title: The authenticated surface honours the same dark theme choice
+    viewport: {width: 1440, height: 960}
+    checks: []
+    routes:
+      - path: /reception
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="topnav-theme"]'
+    actions:
+      - action: click
+        selector: '[data-qa="topnav-theme"]'
+      - action: click
+        selector: '[data-qa="topnav-theme"]'
+        assertions:
+          - type: visible_selector
+            value: 'html.dark'
+      - action: screenshot
+        name: theme-app-dark.png
+        full_page: true
+      - action: get_console_errors
+      - action: get_network_errors

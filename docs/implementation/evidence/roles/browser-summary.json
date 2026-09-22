@@ -3,20 +3,20 @@
   "runtime": "implement-owned-booking-slice-a95902",
   "base_url": "http://127.0.0.20:25310",
   "path": "appointment.qa_runner.run -> Agent Plane run_browser_qa_manifest -> Agent Harness",
-  "fixture_scope": "acceptance_demo (retained) and legacy (entry pages)",
+  "fixture_scope": "acceptance_demo (retained), owned_booking (exact fixture) and legacy (entry pages)",
   "results": [
     {
       "manifest": "entry-pages.yaml",
       "report": "BQA-2026-00065",
       "scenarios": {
-        "guest_login_entry": "assertions passed (network_idle, login-heading visible). Screenshot and trace were redacted by the Harness sensitive-screen policy, so capture actions are reported false.",
+        "guest_login_entry": "assertions passed (network_idle, login-heading visible). Screenshot and trace redacted by the Harness sensitive-screen policy, so capture actions are reported false.",
         "guest_home_entry": "passed with zero console and zero network errors after membership.context was made guest-safe."
       },
       "ok": true
     },
     {
       "manifest": "role-newowner.yaml",
-      "report": "BQA-2026-00066",
+      "report": "BQA-2026-00081 (re-run after the setup permission boundary)",
       "persona": "demo.newowner@example.test (no business)",
       "assertion": "/home resolved to guided setup: [data-qa=onboarding-heading] visible",
       "console_errors": 0,
@@ -49,6 +49,69 @@
       "console_errors": 0,
       "network_errors": 0,
       "ok": true
+    },
+    {
+      "manifest": "role-provider.yaml",
+      "report": "BQA-2026-00070",
+      "persona": "demo.provider@example.test",
+      "assertion": "/home resolved to the schedule: url_contains /calendar",
+      "console_errors": 0,
+      "network_errors": 0,
+      "ok": true
+    },
+    {
+      "manifest": "role-manager-team.yaml",
+      "report": "BQA-2026-00077",
+      "persona": "demo.owner@example.test",
+      "assertion": "Settings -> Team access shows members; the manager assigns a scoped receptionist and sees the local-assignment notice. The created membership was removed exactly after the run.",
+      "console_errors": 0,
+      "network_errors": 0,
+      "ok": true
+    },
+    {
+      "manifest": "role-reception-bookings.yaml",
+      "report": "BQA-2026-00072",
+      "persona": "demo.reception@example.test",
+      "assertion": "Reception recovers to the next booking date and shows the seeded customer with a 200 get_desk_appointments response.",
+      "console_errors": 0,
+      "network_errors": 0,
+      "ok": true
+    },
+    {
+      "manifest": "theme-public.yaml",
+      "report": "BQA-2026-00078",
+      "persona": "Guest",
+      "assertion": "The public surface applies html.dark after an explicit choice.",
+      "console_errors": 0,
+      "network_errors": 0,
+      "ok": true
+    },
+    {
+      "manifest": "theme-app.yaml",
+      "report": "BQA-2026-00074",
+      "persona": "demo.reception@example.test",
+      "assertion": "The authenticated surface applies html.dark with the same theme state.",
+      "console_errors": 0,
+      "network_errors": 0,
+      "ok": true
+    },
+    {
+      "manifest": "guest.yaml",
+      "report": "BQA-2026-00079",
+      "persona": "Guest (owned_booking exact fixture)",
+      "assertion": "Anonymous catalog and end-to-end booking pass with zero errors.",
+      "console_errors": 0,
+      "network_errors": 0,
+      "ok": true
+    },
+    {
+      "manifest": "lifecycle.yaml",
+      "report": "BQA-2026-00080",
+      "persona": "owned_booking provider",
+      "assertion": "Staff reschedule, history and cancel pass; the stored result is 11:00 Cancelled with released capacity; the exact fixture was removed.",
+      "console_errors": 0,
+      "network_errors": 0,
+      "ok": true
     }
   ],
   "evidence": {
@@ -56,13 +119,22 @@
     "role-receptionist-scope.png": "BQA-2026-00067 synthetic screenshot",
     "role-multi-business.png": "BQA-2026-00068 synthetic screenshot",
     "role-unassigned.png": "BQA-2026-00069 synthetic screenshot",
+    "role-provider.png": "BQA-2026-00070 synthetic screenshot",
+    "role-manager-assign.png": "BQA-2026-00075 synthetic screenshot",
+    "role-receptionist-booking.png": "BQA-2026-00072 synthetic screenshot",
+    "theme-public-dark.png": "BQA-2026-00076 synthetic screenshot",
+    "theme-app-dark.png": "BQA-2026-00074 synthetic screenshot",
+    "owned-guest.png": "BQA-2026-00079 synthetic screenshot",
+    "owned-lifecycle-rescheduled.png": "BQA-2026-00080 synthetic screenshot",
+    "owned-lifecycle-history.png": "BQA-2026-00080 synthetic screenshot",
+    "owned-lifecycle-cancelled.png": "BQA-2026-00080 synthetic screenshot",
     "role-receptionist-scope-dom.html": "BQA-2026-00067 captured DOM of the scoped reception page",
     "reports": "Sanitized BQA report JSON files (no console/network errors)"
   },
   "limitations": [
     "Harness redacts login screenshots/traces; the login scenario's page assertions passed but its capture actions are reported false.",
-    "Authenticated role journeys start from an impersonated frappe_session, not a typed password; /login rendering is covered separately by the entry-pages scenario.",
-    "Provider /calendar landing and multi-workspace switching were verified by authenticated HTTP probes and the receptionist/multi browser scenarios; a dedicated provider browser scenario was not run.",
-    "Raw trace/video/session material was not committed."
+    "Authenticated journeys start from an impersonated frappe_session, not a typed password; /login rendering is covered separately by the entry-pages scenario.",
+    "Raw trace/video/session material was not committed.",
+    "The team page no longer contains a password input, so its captures are not redacted; local account creation is documented as password-set-by-administrator."
   ]
 }

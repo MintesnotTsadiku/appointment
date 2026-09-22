@@ -313,7 +313,7 @@ const Reception = () => {
               {filtersActive && unfilteredCount > 0 ? (
                 <>
                   <span>{unfilteredCount} appointment(s) exist here but are filtered out.</span>
-                  <button className="underline" onClick={() => { setSelectedLocation(null); setSelectedProvider(null); }}>
+                  <button className="underline" data-qa="reception-reset-filters" onClick={() => { setSelectedLocation(null); setSelectedProvider(null); }}>
                     Reset filters
                   </button>
                 </>
@@ -321,7 +321,7 @@ const Reception = () => {
                 <>
                   <span>No bookings on {format(currentDate, 'dd MMM yyyy')}.</span>
                   {nextDate && (
-                    <button className="underline" onClick={() => setCurrentDate(new Date(nextDate))}>
+                    <button className="underline" data-qa="reception-next-booking" onClick={() => setCurrentDate(new Date(nextDate))}>
                       Jump to next booking ({nextDate})
                     </button>
                   )}

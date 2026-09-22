@@ -44,7 +44,7 @@ export default function TeamManagement() {
 
   const [problem, setProblem] = useState('');
   const [notice, setNotice] = useState('');
-  const [form, setForm] = useState({ email: '', full_name: '', role: 'Receptionist', provider: '', password: '' });
+  const [form, setForm] = useState({ email: '', full_name: '', role: 'Receptionist', provider: '' });
   const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
 
   const membersCall = useFrappeGetCall<{ message: { members: Member[]; owner: string } }>(
@@ -82,15 +82,14 @@ export default function TeamManagement() {
         provider: form.provider || undefined,
         locations: JSON.stringify(selectedLocations),
         full_name: form.full_name || undefined,
-        password: form.password || undefined,
       });
       const payload = result?.message;
       setNotice(
         payload?.created_user
-          ? `Account created locally and assigned as ${form.role}. No email was sent.`
+          ? `Account created locally and assigned as ${form.role}. No email was sent; an administrator sets its password locally.`
           : `Existing account assigned as ${form.role}. No email was sent.`
       );
-      setForm({ email: '', full_name: '', role: form.role, provider: '', password: '' });
+      setForm({ email: '', full_name: '', role: form.role, provider: '' });
       setSelectedLocations([]);
       membersCall.mutate();
     } catch (error) {
@@ -241,6 +240,7 @@ export default function TeamManagement() {
                         <label key={location.name} className="flex items-center gap-2 text-sm">
                           <input
                             type="checkbox"
+                            data-qa={`team-location-${location.name}`}
                             checked={selectedLocations.includes(location.name)}
                             onChange={(e) => setSelectedLocations(e.target.checked ? [...selectedLocations, location.name] : selectedLocations.filter((name) => name !== location.name))}
                           />
@@ -252,11 +252,9 @@ export default function TeamManagement() {
                   </fieldset>
                 )}
                 <div>
-                  <Label htmlFor="team-password" className="mb-1.5 block" style={{ color: 'var(--text-secondary)' }}>Local password (new accounts only)</Label>
-                  <Input id="team-password" data-qa="team-password" type="password" autoComplete="new-password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} style={inputStyle} />
-                  <p className="mt-1 flex items-start gap-1 text-xs" style={{ color: 'var(--text-muted)' }}>
-                    <Info className="mt-0.5 h-3 w-3 shrink-0" /> Set a password for local sign-in. No email is delivered in
-                    this environment; production invitations need separate delivery.
+                  <p className="flex items-start gap-1 text-xs" style={{ color: 'var(--text-muted)' }}>
+                    <Info className="mt-0.5 h-3 w-3 shrink-0" /> Local account assignment only. No email is delivered in this
+                    environment; new accounts are created without a password and an administrator sets one locally.
                   </p>
                 </div>
                 <Button type="submit" data-qa="team-assign" disabled={assigning || !form.email}>

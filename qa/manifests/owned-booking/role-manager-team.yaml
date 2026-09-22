@@ -1,0 +1,49 @@
+app: appointment
+base_url: http://127.0.0.20:25310
+default_role: Manager
+auth:
+  type: frappe_session
+  username: '{qa_owner_user}'
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+fixtures:
+  provider: appointment.tests.acceptance_demo.browser_values
+scenarios:
+  - id: role_manager_assigns_staff
+    title: A manager assigns an existing account as a scoped receptionist
+    viewport: {width: 1440, height: 960}
+    checks: []
+    routes:
+      - path: /settings/team
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="team-heading"]'
+          - type: visible_selector
+            value: '[data-qa="team-member"]'
+    actions:
+      - action: fill
+        selector: '#team-email'
+        value: demo.unassigned@example.test
+      - action: click
+        selector: '[data-qa="team-location-Bole Studio"]'
+      - action: click
+        selector: '[data-qa="team-assign"]'
+        assertions:
+          - type: visible_selector
+            value: '[data-qa="team-notice"]'
+          - type: visible_text
+            value: No email was sent
+      - action: wait_for
+        selector: '[data-qa="team-notice"]'
+      - action: screenshot
+        name: role-manager-assign.png
+        full_page: true
+      - action: get_console_errors
+      - action: get_network_errors

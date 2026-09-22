@@ -7,7 +7,7 @@ test_06_multi_business_switch_and_precedence (appointment.tests.test_membership.
 test_07_disabled_user_is_consistent (appointment.tests.test_membership.MembershipAcceptance.test_07_disabled_user_is_consistent) ... ok
 
 ----------------------------------------------------------------------
-Ran 7 tests in 3.344s
+Ran 7 tests in 3.806s
 
 OK
 {"tests": 7, "failures": 0, "errors": 0, "cleanup": {"removed_count": 26, "remaining_exact_records": []}}

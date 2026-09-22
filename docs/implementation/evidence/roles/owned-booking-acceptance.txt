@@ -1,0 +1,24 @@
+test_01_handoff_and_isolation (appointment.tests.test_owned_booking.OwnedBookingAcceptance.test_01_handoff_and_isolation) ... ok
+test_02_retry_and_capacity (appointment.tests.test_owned_booking.OwnedBookingAcceptance.test_02_retry_and_capacity) ... ok
+test_03_controlled_competition_and_retry (appointment.tests.test_owned_booking.OwnedBookingAcceptance.test_03_controlled_competition_and_retry) ... ok
+test_04_hours_exception_and_buffers (appointment.tests.test_owned_booking.OwnedBookingAcceptance.test_04_hours_exception_and_buffers) ... ok
+test_05_linked_ownership_and_cross_location (appointment.tests.test_owned_booking.OwnedBookingAcceptance.test_05_linked_ownership_and_cross_location) ... ok
+test_06_rollback_and_revoke (appointment.tests.test_owned_booking.OwnedBookingAcceptance.test_06_rollback_and_revoke) ... ok
+test_07_timezone_and_dst (appointment.tests.test_owned_booking.OwnedBookingAcceptance.test_07_timezone_and_dst) ... ok
+test_08_generic_document_boundary_and_history (appointment.tests.test_owned_booking.OwnedBookingAcceptance.test_08_generic_document_boundary_and_history) ... ok
+test_09_runtime_surfaces_and_realtime (appointment.tests.test_owned_booking.OwnedBookingAcceptance.test_09_runtime_surfaces_and_realtime) ... ok
+test_10_frozen_instant_and_unpublished_replay (appointment.tests.test_owned_booking.OwnedBookingAcceptance.test_10_frozen_instant_and_unpublished_replay) ... ok
+test_11_staff_lifecycle_and_capacity_release (appointment.tests.test_owned_booking.OwnedBookingAcceptance.test_11_staff_lifecycle_and_capacity_release) ... ok
+test_12_visible_workspace_api_and_publication (appointment.tests.test_owned_booking.OwnedBookingAcceptance.test_12_visible_workspace_api_and_publication) ... ok
+test_13_scoped_support_export (appointment.tests.test_owned_booking.OwnedBookingAcceptance.test_13_scoped_support_export) ... ok
+test_14_request_limits (appointment.tests.test_owned_booking.OwnedBookingAcceptance.test_14_request_limits) ... ok
+test_15_manager_cancellation_after_provider_revocation (appointment.tests.test_owned_booking.OwnedBookingAcceptance.test_15_manager_cancellation_after_provider_revocation) ... ok
+test_16_legacy_calendar_rejects_impersonation (appointment.tests.test_owned_booking.OwnedBookingAcceptance.test_16_legacy_calendar_rejects_impersonation) ... ok
+test_17_linked_private_legacy_calendar_scope (appointment.tests.test_owned_booking.OwnedBookingAcceptance.test_17_linked_private_legacy_calendar_scope) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 11.986s
+
+OK
+{"tests": 17, "failures": 0, "errors": 0, "cleanup": {"removed_count": 21, "remaining_exact_records": [], "remaining_exact_children": []}}
+{"tests": 17, "failures": 0, "errors": 0, "cleanup": {"removed_count": 21, "remaining_exact_records": [], "remaining_exact_children": []}}

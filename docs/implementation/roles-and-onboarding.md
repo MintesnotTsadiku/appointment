@@ -106,6 +106,11 @@ Rules:
   `expected_modified` guard on booking changes.
 - Existing users need no reset: owner/manager/provider links are merged into the
   resolver, and first-time setup appears only for `owner_setup`.
+- Setup permission boundary: `workspace.create` accepts a System User, a user
+  with a staff capability, or a prospective owner who has recorded an onboarding
+  type. Customer (Website User) accounts and unstarted signups are refused, so
+  the setup surface never becomes customer access. The guided setup page records
+  the onboarding type before creating the business.
 
 Visible navigation: `AppTopNav` shows the active business, a workspace switcher
 when more than one business is present, role-appropriate links, a
@@ -211,27 +216,53 @@ and the automated QA fixtures are untouched.
 
 ## 8. Evidence and known limitations
 
-- [Membership/scope/time acceptance log](evidence/roles/membership-acceptance.txt)
-  — 7/7 pass with exact cleanup.
-- [Role landing HTTP probe](evidence/roles/role-landings.txt) — resolved
-  state and landing per demo account, plus reception scope counts.
-- [Browser summary](evidence/roles/browser-summary.json) — BQA-2026-00066/67/68/69
-  role journeys all pass with zero console/network errors; entry pages
-  BQA-2026-00065.
-- Screenshots: `evidence/roles/role-*.png` and the reception DOM snapshot.
+Backend and static checks:
+
+- [Membership/scope/time acceptance](evidence/roles/membership-acceptance.txt) —
+  7/7 pass with exact cleanup.
+- [Owned-booking acceptance](evidence/roles/owned-booking-acceptance.txt) —
+  17/17 pass with exact cleanup (no regression from this increment).
+- [Scheduling workflows](evidence/roles/scheduling-workflows.txt) — 8/8 pass.
+- [App identity](evidence/roles/app-identity.txt) — 17/18; the single failure is
+  `test_business_records_preserved`, which compares against the hardcoded
+  assessment clone baseline and now sees the retained demo data. It is an
+  environment-specific preservation assertion, not a product regression, and no
+  data was deleted to satisfy it.
+- [Role landing HTTP probe](evidence/roles/role-landings.txt) — resolved state
+  and landing per demo account, plus reception scope counts.
+- Production Vite build passed; DOM and realtime lifecycle tests pass.
+
+Browser (QA runner → Agent Plane → Agent Harness), all with zero console and
+zero network errors — see [browser summary](evidence/roles/browser-summary.json):
+
+- Entry pages BQA-2026-00065 (login redaction is a Harness policy).
+- Role journeys: new owner (BQA-00066, re-run BQA-00081), receptionist scope
+  (BQA-00067), multi-business selection (BQA-00068), unassigned (BQA-00069),
+  provider schedule (BQA-00070), receptionist recovers to the booking
+  (BQA-00072), manager assigns a scoped receptionist (BQA-00077).
+- Themes: public dark (BQA-00078) and authenticated dark (BQA-00074).
+- Owned-booking guest booking (BQA-00079) and staff reschedule/cancel lifecycle
+  (BQA-00080) with stored 11:00 Cancelled and released capacity.
+- Screenshots `evidence/roles/*.png`, the scoped reception DOM snapshot, and the
+  sanitized report JSON files.
 
 Limitations:
 
 - The Harness redacts login screenshots/traces (sensitive-screen policy); the
   login scenario's page assertions passed but its capture actions report false.
-- Authenticated role journeys use impersonated `frappe_session`, not a typed
+- Authenticated journeys use impersonated `frappe_session`, not a typed
   password; `/login` rendering is covered separately.
-- A dedicated provider `/calendar` browser scenario was not run; provider
-  landing was verified by authenticated HTTP probe.
-- The legacy QA fixture `qa_fixtures` was made date-robust (seeds tomorrow) so
-  browser QA works in the evening; this is disposable QA tooling.
+- The setup boundary denies customer (Website User) and unstarted accounts;
+  `test_owned_booking.test_12` verifies the customer denial. A retained staff
+  account can still create a *new* business it owns, which does not grant access
+  to any other business.
+- The team page no longer collects a password, so its captures are not redacted;
+  new accounts are created without a password and an administrator sets one
+  locally. The API still accepts a `password` for local tooling and seeding.
+- The legacy QA fixture `qa_fixtures` seeds tomorrow's date so browser QA works
+  in the evening; this is disposable QA tooling.
 - TypeScript diagnostics remain at the repository baseline; no clean global
   typecheck is claimed. `npm run lint` still reports pre-existing warnings
-  across the repository; the touched files were checked individually.
+  across the repository; touched files were checked individually.
 - Self-signup, delegated production invitations with real delivery, overnight
   hours, and group/room capacity remain out of scope.
