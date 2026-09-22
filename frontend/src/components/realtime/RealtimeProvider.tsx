@@ -64,10 +64,14 @@ function acquireRealtimeSocket(): Socket {
 
 function releaseRealtimeSocket(): void {
   consumers = Math.max(0, consumers - 1);
-  if (consumers === 0 && singleton) {
-    singleton.disconnect();
-    singleton = null;
-  }
+  // StrictMode immediately mounts again after its development cleanup. Let
+  // that consumer reclaim the socket before closing an in-flight handshake.
+  queueMicrotask(() => {
+    if (consumers === 0 && singleton) {
+      singleton.disconnect();
+      singleton = null;
+    }
+  });
 }
 
 const RealtimeContext = createContext<Socket | null>(null);

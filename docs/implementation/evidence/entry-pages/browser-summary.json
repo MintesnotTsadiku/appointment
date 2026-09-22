@@ -1,0 +1,53 @@
+[
+  {
+    "scenario": "guest_home_entry",
+    "overall_ok": true,
+    "console_errors": [],
+    "network_errors": [],
+    "assertions": [
+      {
+        "action": "assert:network_idle",
+        "ok": true
+      },
+      {
+        "action": "assert:visible_selector",
+        "ok": true
+      }
+    ],
+    "capture_limitations": [],
+    "report_path": "/tmp/agent_browser_qa/appointment/appointment-guest-home-entry-20260922T150902Z/report.json",
+    "report_sha256": "82b2786c9d4b447e235420a0cd272204b5f76b01ab2181533bb039ef2f87d3a0"
+  },
+  {
+    "scenario": "guest_login_entry",
+    "overall_ok": false,
+    "console_errors": [],
+    "network_errors": [],
+    "assertions": [
+      {
+        "action": "assert:network_idle",
+        "ok": true
+      },
+      {
+        "action": "assert:visible_selector",
+        "ok": true
+      }
+    ],
+    "capture_limitations": [
+      {
+        "action": "screenshot",
+        "error": "Capture redacted because a login, MFA, CAPTCHA, security, permission, or payment screen is visible."
+      },
+      {
+        "action": "screenshot",
+        "error": "Capture redacted because a login, MFA, CAPTCHA, security, permission, or payment screen is visible."
+      },
+      {
+        "action": "save_trace",
+        "error": "Trace capture redacted because a sensitive auth/challenge screen is visible."
+      }
+    ],
+    "report_path": "/tmp/agent_browser_qa/appointment/appointment-guest-login-entry-20260922T150848Z/report.json",
+    "report_sha256": "f782d4a79914f5e3c3d2fa0d2a6a1ed97707a3e5b90e7582394517eb48ff97dd"
+  }
+]

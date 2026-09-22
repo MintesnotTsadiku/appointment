@@ -96,3 +96,27 @@ Visit `/settings/business` to inspect the published synthetic business. Open
 `http://127.0.0.20:25310/schedule/org/business-d96788ef03698ba03c9aa65e/EVT-2026-000001`.
 The demo remains for review and is separate from cleaned acceptance fixtures.
 Remove it only when no longer needed, using its exact cleanup state.
+
+
+## Entry-page regression fix (2026-09-22)
+
+Direct `/login` must stay on Vite's React router. Proxying it to Frappe served an
+old HTML entry referencing missing built JavaScript (returned as text/html).
+`/app`, APIs and backend assets retain their backend proxy. During Vite serve,
+the server-only boot script is replaced with a minimal namespace; production
+builds retain the Frappe template. Let vite-plugin-pwa inject the manifest only
+when available, instead of requesting a disabled development manifest.
+
+Realtime cleanup now waits one microtask so StrictMode's immediate remount keeps
+the same connection; actual unmount still disconnects. The behavior regression
+test and existing DOM checks pass, focused ESLint passes, production build passes.
+Fresh Guest browser visits passed login-form and home visibility assertions with
+no reported console/network errors. Home's raw trace has no HTTP failures or
+page errors; Socket.IO polling returned200 and upgraded with101. Login capture
+was redacted by Harness's sensitive-screen policy, so its overall report is
+false for capture actions despite passing page assertions. Raw login artifacts
+are not committed. See `evidence/entry-pages/browser-summary.json`.
+
+Windows HTTP verification also confirms both entry pages serve Vite without
+unrendered templates or a missing manifest link; `/src/main.tsx` returns200
+with JavaScript MIME type. Regression fixtures were cleaned; the owner demo remains.

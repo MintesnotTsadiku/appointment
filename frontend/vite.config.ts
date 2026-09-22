@@ -9,7 +9,7 @@ export default defineConfig(({ command, mode }) => {
   let proxyConfig = {};
   if (env.VITE_SITE_NAME && env.VITE_SITE_PORT) {
     proxyConfig = {
-      "^/(app|apps|desk|api|assets|files|private|login|logout)(/|$)": {
+      "^/(app|apps|desk|api|assets|files|private|logout)(/|$)": {
         target: `http://localhost:${env.VITE_SITE_PORT}`,
         ws: true,
         changeOrigin: true,
@@ -23,7 +23,7 @@ export default defineConfig(({ command, mode }) => {
   if (isolated) {
     const target = `http://127.0.0.1:${process.env.FRAPPE_WORKTREE_WEB_PORT}`;
     proxyConfig = {
-      "^/(app|apps|desk|api|assets|files|private|login|logout)(/|$)": {
+      "^/(app|apps|desk|api|assets|files|private|logout)(/|$)": {
         target,
         changeOrigin: true,
         headers: { "X-Frappe-Site-Name": isolated },
@@ -41,6 +41,18 @@ export default defineConfig(({ command, mode }) => {
   return {
     plugins: [
       react(),
+      {
+        name: "frappe-development-entry",
+        apply: "serve",
+        transformIndexHtml(html) {
+          // Frappe renders this block in production; Vite must not serve Jinja
+          // expressions as JavaScript. Auth in development uses the API session.
+          return html.replace(
+            /<script data-frappe-boot>[\s\S]*?<\/script>/,
+            '<script>window.frappe = window.frappe || {};</script>',
+          );
+        },
+      },
       VitePWA({
         registerType: "autoUpdate",
         includeAssets: ["favicon.ico", "apple-touch-icon.png", "masked-icon.svg"],

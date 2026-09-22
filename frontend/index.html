@@ -3,8 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="/manifest.webmanifest" />
+    <!-- vite-plugin-pwa injects the manifest only when it is served. -->
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/assets/appointment/appointment-logo.png" />
@@ -42,7 +41,7 @@
   </head>
   <body>
     <div id="root"></div>
-    <script>
+    <script data-frappe-boot>
       // Load everything from the page context to window object
       // This will allow us to access frappe boot in our react app.
       // CRITICAL FIX: Safe offline handling - check if Frappe boot data exists
