@@ -76,7 +76,9 @@ def membership_rows(user=None, roles=None, organization=None, status="Active"):
     Callers must supply the user scope. This is the single place that reads the
     membership table so query and single-record checks stay consistent.
     """
-    filters = {"status": status}
+    filters = {}
+    if status:
+        filters["status"] = status
     if user:
         filters["user"] = user
     if roles:
