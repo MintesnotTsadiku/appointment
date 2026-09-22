@@ -2,6 +2,15 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      // Apply the same preference before CSS and React paint the page.
+      try {
+        var theme = localStorage.getItem('vite-ui-theme') || 'system';
+        var dark = theme === 'dark' || (theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.classList.add(dark ? 'dark' : 'light');
+        document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+      } catch (_) { /* Storage may be unavailable; the provider resolves System. */ }
+    </script>
     
     <!-- vite-plugin-pwa injects the manifest only when it is served. -->
     

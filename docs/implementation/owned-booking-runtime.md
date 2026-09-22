@@ -151,8 +151,10 @@ the full record. Summary:
 
 Extended verification (same increment): `appointment.tests.test_owned_booking.run`
 (17/17) and `test_scheduling_workflows` (8/8) pass with exact cleanup;
-`test_app_identity` is 17/18, the single failure being the hardcoded clone
-baseline that now sees the retained demo data. Browser journeys beyond the role
+`test_app_identity` originally failed on a hardcoded clone count once the retained
+demo was added. That assertion now requires an explicit clone baseline; the
+isolated implementation site uses a private, exact-record preservation snapshot.
+Browser journeys beyond the role
 manifests: provider schedule, receptionist booking recovery, manager staff
 assignment, public and authenticated dark theme, and the owned-booking guest and
 staff lifecycle, all with zero console/network errors. The setup boundary keeps
@@ -176,6 +178,29 @@ customer (Website User) accounts out of `workspace.create`. Evidence under
 - Browser: self sign-up disabled (BQA-00089), Amharic language switch
   (BQA-00090), self sign-up open (BQA-00091; assertions pass, capture redacted
   because the form has a password field). `appointment.tests.test_registration.run`
-  is 6/6. See [roles and onboarding](roles-and-onboarding.md) sections 8-10.
+  is 8/8. See [roles and onboarding](roles-and-onboarding.md) sections 8-10.
 
+## Acceptance repair check (2026-09-22)
 
+- A new owner completed password login, onboarding, business creation, the owner
+  overview, publication and opening the public booking URL through Agent Plane's
+  protected browser flow (`BLOG-2026-00160`). The temporary user and all seven
+  exact fixture records were removed.
+- Password entry and expected landing were verified for all seven retained demo
+  roles. Browser Accounts keep their audit logs but no longer store those test
+  passwords after the run. See the private `acceptance-demo.json` for test logins.
+- Desktop and mobile time input, invalid-entry feedback, picker controls and
+  light/dark rendering passed browser run `BQA-2026-00161`, with zero console or
+  network errors. System dark/light override journeys passed `BQA-2026-00153`
+  and `BQA-2026-00154`. Representative captures:
+  [desktop light](evidence/acceptance/business-setup-desktop-light.png),
+  [desktop dark](evidence/acceptance/business-setup-desktop-dark.png), and
+  [mobile picker](evidence/acceptance/time-picker-mobile-dark.png).
+- Frontend DOM tests and production build pass. Python membership (7/7),
+  registration (8/8), owned booking (17/17) and identity (17 pass, 1 baseline
+  skip) suites pass. The pre-existing site snapshot still matches all 5
+  Organizations, 6 Providers, 6 Services, 6 Locations, 5 Appointments and 4
+  Business Memberships by content hash, excluding audit timestamps.
+- `Verified` signup is explicitly unavailable until email verification is
+  implemented. Open signup and administrator approval have separate enforcement
+  and tests. This is a product limitation, not an enabled verification path.

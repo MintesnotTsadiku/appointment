@@ -14,6 +14,10 @@ import { useTheme } from "..";
 // These routes should hide the global ModeToggle and use their own integrated toggle
 const ROUTES_WITH_INTEGRATED_TOGGLE = [
   '/reception',
+  '/home',
+  '/onboarding',
+  '/settings/business',
+  '/settings/team',
   '/schedule', // All booking pages have integrated toggles
 ];
 

@@ -14,18 +14,10 @@ import {
   MapPin,
   Briefcase,
   Settings as SettingsIcon,
-  FileText,
   ChevronRight,
   ChevronLeft,
   Building2,
-  Video,
-  Globe,
-  Shield,
-  Bell,
-  Palette,
-  Link as LinkIcon,
 } from 'lucide-react';
-import { useFrappeGetCall } from 'frappe-react-sdk';
 
 interface SettingsCategory {
   id: string;
@@ -40,17 +32,16 @@ interface SettingsCategory {
 const Settings = () => {
   const navigate = useNavigate();
 
-  // Fetch user info to determine available settings
-  const { data: userData } = useFrappeGetCall<{ message: { full_name: string } }>(
-    'frappe.auth.get_logged_user',
-    undefined,
-    'user-info'
-  );
-
-  const userName = userData?.message?.full_name || 'User';
-
   // Settings categories
   const categories: SettingsCategory[] = [
+    {
+      id: 'business',
+      title: 'Business booking setup',
+      description: 'Review your services, publish booking pages and share customer links',
+      icon: Building2,
+      route: '/settings/business',
+      gradient: 'primary',
+    },
     {
       id: 'profile',
       title: 'Profile Settings',
@@ -194,6 +185,7 @@ const Settings = () => {
             return (
               <motion.button
                 key={category.id}
+              data-qa={`settings-${category.id}`}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -340,4 +332,3 @@ const Settings = () => {
 };
 
 export default Settings;
-

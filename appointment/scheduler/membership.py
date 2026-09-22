@@ -392,10 +392,18 @@ def grant_roles(user, roles):
         frappe.flags.ignore_permissions = True
         try:
             doc = frappe.get_doc("User", user)
+            previous_type = doc.user_type
             doc.flags.ignore_permissions = True
             for role in missing:
                 doc.append("roles", {"role": role})
             doc.save(ignore_permissions=True)
+            # Frappe revokes all sessions when a Website User becomes a System
+            # User. Rotate only the authenticated caller's session after this
+            # authorized self-upgrade; never revive another user's sessions.
+            if (previous_type != doc.user_type and user == frappe.session.user
+                    and user != "Guest" and frappe.request
+                    and getattr(frappe.local, "login_manager", None)):
+                frappe.local.login_manager.login_as(user)
         finally:
             frappe.flags.ignore_permissions = previous
     return missing

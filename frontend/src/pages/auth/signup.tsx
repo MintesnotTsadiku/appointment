@@ -10,6 +10,7 @@ interface PublicSettings {
   self_signup_mode: string;
   requires_verification: boolean;
   admin_approval: boolean;
+  unavailable_reason?: string;
 }
 
 const Signup = () => {
@@ -22,7 +23,7 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [status, setStatus] = useState<'active' | 'pending_verification' | 'pending_approval' | null>(null);
+  const [status, setStatus] = useState<'active' | 'pending_approval' | null>(null);
 
   useEffect(() => {
     fetch('/api/method/appointment.scheduler.registration.public_settings', { credentials: 'include' })
@@ -51,9 +52,7 @@ const Signup = () => {
 
   if (status) {
     const message =
-      status === 'pending_verification'
-        ? 'Your account was created and needs email verification. Verification delivery is turned off in this environment, so an administrator must enable it.'
-        : status === 'pending_approval'
+      status === 'pending_approval'
           ? 'Your account was created and is waiting for administrator approval.'
           : 'Your account was created. Redirecting to sign in…';
     return (
@@ -77,7 +76,7 @@ const Signup = () => {
     );
   }
 
-  const disabled = settings ? !settings.signup_enabled : false;
+  const disabled = !settings?.signup_enabled;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-gray-900 flex items-center justify-center p-4">
@@ -123,7 +122,7 @@ const Signup = () => {
             <div role="alert" data-qa="signup-disabled" className="space-y-4 text-center">
               <AlertCircle className="w-8 h-8 text-amber-500 mx-auto" />
               <p className="text-gray-700 dark:text-gray-300">
-                Public sign-up is turned off. Ask an administrator to create your account.
+                {settings ? (settings.unavailable_reason || 'Public sign-up is turned off. Ask an administrator to create your account.') : 'Loading registration options. If this persists, reload the page.'}
               </p>
               <Button asChild variant="outline">
                 <Link to="/login">Back to sign in</Link>

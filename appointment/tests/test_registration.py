@@ -45,9 +45,12 @@ class RegistrationAcceptance(unittest.TestCase):
             "require_admin_approval",
             "allow_invite_provisioning",
         ):
-            frappe.db.set_single_value(SETTINGS_DOCTYPE, key, cls.original.get(key) or registration.DEFAULTS[key])
+            frappe.db.set_single_value(SETTINGS_DOCTYPE, key, cls.original.get(key, registration.DEFAULTS[key]))
         frappe.db.commit()
         frappe.clear_cache()
+
+    def setUp(self):
+        frappe.set_user("Administrator")
 
     def _set(self, **values):
         for key, value in values.items():
@@ -97,12 +100,14 @@ class RegistrationAcceptance(unittest.TestCase):
         self.assertEqual(result["status"], "active")
         self.assertTrue(frappe.db.get_value("User", result["email"], "enabled"))
 
-    def test_03_verified_and_approval_hold_the_account(self):
+    def test_03_unimplemented_verification_is_blocked_and_approval_holds_account(self):
         self._set(self_signup_mode="Verified", require_admin_approval=0)
-        verified = registration.signup(f"{self.marker.lower()}-verified@example.test", "Verified Signup", self.strong_password)
-        self.created.append(("User", verified["email"]))
-        self.assertEqual(verified["status"], "pending_verification")
-        self.assertFalse(frappe.db.get_value("User", verified["email"], "enabled"))
+        email = f"{self.marker.lower()}-verified@example.test"
+        self.assertFalse(registration.public_settings()["signup_enabled"])
+        self.assertFalse(registration.public_settings()["verification_available"])
+        with self.assertRaises(frappe.PermissionError):
+            registration.signup(email, "Verified Signup", self.strong_password)
+        self.assertFalse(frappe.db.exists("User", email))
 
         self._set(self_signup_mode="Open", require_admin_approval=1)
         approval = registration.signup(f"{self.marker.lower()}-approval@example.test", "Approval Signup", self.strong_password)
@@ -122,6 +127,12 @@ class RegistrationAcceptance(unittest.TestCase):
         self._set(allow_self_service_business_creation=1)
         frappe.set_user(plain)
         self.assertTrue(registration.may_start_business(plain))
+        with self.assertRaises(frappe.PermissionError):
+            workspace.require_provider_account()
+        from appointment.onboarding import set_onboarding_type
+        set_onboarding_type("organization")
+        provider = frappe.db.get_value("Provider", {"user": plain}, "name")
+        self.created.append(("Provider", provider))
         self.assertEqual(workspace.require_provider_account(), plain)
         frappe.set_user("Administrator")
 
@@ -164,6 +175,46 @@ class RegistrationAcceptance(unittest.TestCase):
         self.assertIn("am", languages)
         # Only languages the app ships are offered, not every Frappe language.
         self.assertLess(len(languages), 12)
+
+    def test_07_real_login_survives_authorized_owner_upgrade(self):
+        import requests
+        self._set(self_signup_mode="Open", allow_self_service_business_creation=1, require_admin_approval=0)
+        email = f"{self.marker.lower()}-session@example.test"
+        registration.signup(email, "Session Owner", self.strong_password)
+        self.created.append(("User", email))
+        base = "http://127.0.0.20:25310/api/method/"
+        with requests.Session() as session:
+            session.trust_env = False
+            login = session.post(base + "login", json={"usr": email, "pwd": self.strong_password}, timeout=20)
+            self.assertEqual(login.status_code, 200)
+            old_sid = session.cookies.get("sid")
+            upgrade = session.post(base + "appointment.onboarding.set_onboarding_type", json={"onboarding_type": "organization"}, timeout=20)
+            frappe.db.rollback()
+            provider = frappe.db.get_value("Provider", {"user": email}, "name")
+            if provider:
+                self.created.append(("Provider", provider))
+            self.assertEqual(upgrade.status_code, 200, upgrade.text[:200])
+            self.assertTrue(session.cookies.get("sid") != old_sid, "Authorized self-upgrade must rotate the session")
+            identity = session.get(base + "frappe.auth.get_logged_user", timeout=20)
+            self.assertEqual(identity.status_code, 200)
+            self.assertEqual(identity.json()["message"], email)
+            context = session.get(base + "appointment.scheduler.membership.context", timeout=20)
+            self.assertEqual(context.json()["message"]["user"], email)
+
+    def test_08_other_user_upgrade_does_not_restore_their_session(self):
+        import requests
+        email = f"{self.marker.lower()}-other-session@example.test"
+        self._set(self_signup_mode="Open", require_admin_approval=0)
+        registration.signup(email, "Other Session", self.strong_password)
+        self.created.append(("User", email))
+        base = "http://127.0.0.20:25310/api/method/"
+        with requests.Session() as session:
+            session.trust_env = False
+            self.assertEqual(session.post(base + "login", json={"usr": email, "pwd": self.strong_password}, timeout=20).status_code, 200)
+            frappe.db.rollback()  # See the session committed by the independent login request.
+            membership.grant_roles(email, ("Provider",))
+            frappe.db.commit()
+            self.assertIn(session.get(base + "frappe.auth.get_logged_user", timeout=20).status_code, (401, 403))
 
 
 def run():

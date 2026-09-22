@@ -67,6 +67,7 @@ export function ThemeProvider({
     }
 
     root.classList.add(actualTheme)
+    root.style.colorScheme = actualTheme
     setResolvedTheme(actualTheme)
   }, [theme])
 
@@ -90,6 +91,7 @@ export function ThemeProvider({
       const root = window.document.documentElement
       root.classList.remove("light", "dark")
       root.classList.add(newTheme)
+      root.style.colorScheme = newTheme
       
       if (safeColors) {
         applyThemeColors(safeColors, newTheme)

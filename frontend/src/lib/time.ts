@@ -122,3 +122,28 @@ export function validateWindow(opensAt: string, closesAt: string): string | null
   }
   return null;
 }
+
+/** Strict display-to-storage conversion. A period is required outside 24h. */
+export function parseDisplayTime(input: string, format: ClockFormat): string | null {
+  const text = input.trim();
+  const stored = (hour: number, minute: number) => `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+  if (format === '24h') {
+    const parts = parseWallTime(text);
+    return parts ? stored(parts.hour, parts.minute) : null;
+  }
+  if (format === '12h') {
+    const match = /^(\d{1,2}):(\d{2})\s*(AM|PM)$/i.exec(text);
+    if (!match || +match[1] < 1 || +match[1] > 12 || +match[2] > 59) return null;
+    return stored((+match[1] % 12) + (match[3].toUpperCase() === 'PM' ? 12 : 0), +match[2]);
+  }
+  const match = /^(?:ሰዓት\s*)?(\d{1,2}):(\d{2})\s+(ጠዋት|ከሰዓት|ምሽት|ማታ|ሌሊት|ለሊት)$/.exec(text);
+  if (!match || +match[1] < 1 || +match[1] > 12 || +match[2] > 59) return null;
+  const period = match[3].replace('ማታ', 'ምሽት').replace('ለሊት', 'ሌሊት');
+  // Match the same display mapping used for output; impossible hour/period
+  // combinations are rejected rather than guessed into another part of day.
+  for (let hour = 0; hour < 24; hour++) {
+    const local = toEthiopian(hour, +match[2]);
+    if (local.hour === +match[1] && local.period === period) return stored(hour, +match[2]);
+  }
+  return null;
+}

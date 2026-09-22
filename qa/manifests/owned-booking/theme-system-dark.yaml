@@ -1,0 +1,52 @@
+app: appointment
+base_url: http://127.0.0.20:25310
+default_role: Provider
+auth:
+  type: frappe_session
+  username: demo.owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: dark
+scenarios:
+- id: theme_system_dark
+  title: System default and persisted explicit theme dark
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /settings/business
+    assertions:
+    - type: visible_selector
+      value: html.dark
+  actions:
+  - action: click
+    selector: '[data-qa="topnav-theme"]'
+    assertions:
+    - type: visible_selector
+      value: html.light
+  - action: open_url
+    url: /settings/business
+    assertions:
+    - type: visible_selector
+      value: html.light
+  - action: click
+    selector: '[data-qa="topnav-theme"]'
+    assertions:
+    - type: visible_selector
+      value: html.dark
+  - action: click
+    selector: '[data-qa="topnav-theme"]'
+    assertions:
+    - type: visible_selector
+      value: html.dark
+  - action: screenshot
+    name: system-dark.png
+  - action: get_console_errors
+  - action: get_network_errors

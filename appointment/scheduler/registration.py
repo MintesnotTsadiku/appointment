@@ -1,9 +1,9 @@
 """Tenant provisioning configuration and public sign-up.
 
-Every provisioning modality is built in and toggled from the single
+Supported provisioning modalities are configured in the single
 ``Appointment Registration Settings`` DocType:
 
-- public self sign-up: Open, Verified or Disabled,
+- public self sign-up: Open or Disabled (Verified is reserved and fails closed),
 - self-service business creation for a self-signed-up account,
 - administrator approval for self sign-ups,
 - manager invite/admin provisioning.
@@ -45,7 +45,7 @@ def self_signup_mode():
 
 
 def self_signup_enabled():
-    return self_signup_mode() != "Disabled"
+    return self_signup_mode() == "Open"
 
 
 def requires_verification():
@@ -78,6 +78,8 @@ def _is_freely_provisioned(user):
 
 def may_start_business(user=None):
     user = user or frappe.session.user
+    if user == "Guest" or not frappe.db.get_value("User", user, "enabled"):
+        return False
     if _is_freely_provisioned(user):
         return True
     return self_service_business_creation_allowed()
@@ -106,7 +108,9 @@ def require_invite_provisioning():
 def public_settings():
     current = settings()
     return {
-        "signup_enabled": current["self_signup_mode"] != "Disabled",
+        "signup_enabled": current["self_signup_mode"] == "Open",
+        "verification_available": False,
+        "unavailable_reason": (_("Email verification is not implemented. Ask an administrator to create your account.") if current["self_signup_mode"] == "Verified" else None),
         "self_signup_mode": current["self_signup_mode"],
         "requires_verification": current["self_signup_mode"] == "Verified",
         "self_service_business_creation": bool(current["allow_self_service_business_creation"]),
@@ -117,6 +121,8 @@ def public_settings():
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])
 def signup(email, full_name=None, password=None, redirect_to=None):
+    if requires_verification():
+        frappe.throw(_("Email verification is not implemented. Use Open signup with administrator approval, or administrator provisioning."), frappe.PermissionError)
     if not self_signup_enabled():
         frappe.throw(
             _("Public sign-up is turned off. Ask an administrator to create your account."),
@@ -128,9 +134,8 @@ def signup(email, full_name=None, password=None, redirect_to=None):
     if frappe.db.exists("User", email):
         frappe.throw(_("An account already exists for this email address."))
 
-    verification = requires_verification()
     approval = requires_admin_approval()
-    pending = verification or approval
+    pending = approval
     parts = (full_name or email.split("@")[0]).strip().split(" ", 1)
     doc = frappe.get_doc(
         {
@@ -143,14 +148,13 @@ def signup(email, full_name=None, password=None, redirect_to=None):
             "send_welcome_email": 0,
         }
     )
-    if password:
-        doc.new_password = password
+    if not password:
+        frappe.throw(_("A password is required."))
+    doc.new_password = password
     doc.insert(ignore_permissions=True)
     frappe.db.commit()
 
-    if verification:
-        status = "pending_verification"
-    elif approval:
+    if approval:
         status = "pending_approval"
     else:
         status = "active"

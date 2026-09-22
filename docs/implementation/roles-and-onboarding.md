@@ -162,8 +162,10 @@ Time:
 - Ethiopian local time counts from 06:00 (06:00 → 12:00 ጠዋት) and labels the
   period (ሌሊት/ጠዋት/ከሰዓት/ምሽት). Switching format never changes the represented
   instant; canonical storage stays in the booking time zone.
-- `TimeInput` accepts a bare 24-hour `HH:MM` in any format (forgiving parse) and
-  reformats on blur; `TimeZoneSelect` is searchable with Addis Ababa first;
+- `TimeInput` has a keyboard-friendly text field and a popover with hour, minute
+  and common-minute controls. It validates the selected 12-hour, 24-hour or
+  Ethiopian format strictly, shows an inline error and blocks invalid form
+  submissions. `TimeZoneSelect` is searchable with Addis Ababa first;
   `ClockFormatToggle` switches the display format. All three are used in
   business setup; `TimeInput`/`ClockFormatToggle` are used in the reschedule
   dialog.
@@ -222,21 +224,22 @@ this behaviour.
 
 | Field | Default | Effect |
 |---|---|---|
-| `self_signup_mode` (Open / Verified / Disabled) | Open | Open: public self sign-up. Verified: the account is created disabled until it verifies its email. Disabled: the public sign-up form and endpoint are off. |
+| `self_signup_mode` (Open / Verified / Disabled) | Open | Open: public self sign-up. Verified: signup is unavailable until a verification delivery and completion flow exists. Disabled: the public sign-up form and endpoint are off. |
 | `allow_self_service_business_creation` | On | When off, only invited/admin-provisioned accounts start onboarding or create a business. |
 | `require_admin_approval` | Off | When on, a self-signed-up account is created disabled and waits for an administrator. |
 | `allow_invite_provisioning` | On | When off, only an Administrator creates or assigns accounts; managers cannot. |
 
 Enforcement is server-side, not only in the UI: `registration.signup` refuses
-when Disabled; `registration.may_start_business` gates `workspace.create` and
+when Verified or Disabled; `registration.may_start_business` gates `workspace.create` and
 `onboarding.set_onboarding_type`; `registration.require_invite_provisioning`
 gates `membership.assign_member`. `registration.public_settings` is the
 guest-safe read used by the sign-up page. Guest booking is never affected.
 
-Invited/admin provisioning (option B) is always available by default and is not
-gated behind self sign-up. Verified/administrator-approval (option C) are built
-but cannot complete locally while email delivery is muted; an administrator
-enables the account, and the delivery channel is turned on when email is.
+Invited/admin provisioning (option B) is available by default and is not gated
+behind self sign-up. Administrator approval (option C) creates a disabled
+account for an administrator to enable. Verified signup is visibly unavailable
+and fails closed; it must not be described as working until the application has
+a verification delivery and completion flow.
 
 ## 9. Translation standardization
 

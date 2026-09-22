@@ -1,271 +1,85 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
+import { Clock } from 'lucide-react';
 import { Input } from '@/components/input';
-import { formatEthiopianTime } from '@/pages/booking-v2/utils/ethiopianTime';
-import type { TimeFormat } from '@/pages/booking-v2/types';
+import { Button } from '@/components/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/popover';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/select';
+import { formatWallTime, parseDisplayTime, parseWallTime, type ClockFormat } from '@/lib/time';
 
-export type { TimeFormat };
-
+export type TimeFormat = ClockFormat;
 interface TimeInputProps {
-  value: string; // Always in 24-hour format (HH:MM) for storage
-  onChange: (value: string) => void; // Returns 24-hour format (HH:MM)
-  timeFormat: TimeFormat;
+  value: string;
+  onChange: (value: string) => void;
+  timeFormat: ClockFormat;
   disabled?: boolean;
   className?: string;
   placeholder?: string;
   id?: string;
+  onValidityChange?: (valid: boolean) => void;
 }
 
-/**
- * Convert 24-hour format (HH:MM) to 12-hour format (HH:MM AM/PM)
- */
-const to12Hour = (time24: string): string => {
-  if (!time24 || time24 === '') return '';
-  const [hours, minutes] = time24.split(':').map(Number);
-  if (isNaN(hours) || isNaN(minutes)) return '';
-  
-  const period = hours >= 12 ? 'PM' : 'AM';
-  const hours12 = hours === 0 ? 12 : hours > 12 ? hours - 12 : hours;
-  return `${hours12.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} ${period}`;
-};
+export function TimeInput({ value, onChange, timeFormat, disabled, className, placeholder, id, onValidityChange }: TimeInputProps) {
+  const generatedId = useId();
+  const inputId = id || generatedId;
+  const input = useRef<HTMLInputElement>(null);
+  const validityChanged = useRef(onValidityChange);
+  validityChanged.current = onValidityChange;
+  const [draft, setDraft] = useState(formatWallTime(value, timeFormat));
+  const [error, setError] = useState('');
+  const [open, setOpen] = useState(false);
+  const parts = parseWallTime(value) || { hour: 9, minute: 0 };
+  const example = formatWallTime('19:30', timeFormat);
+  const help = timeFormat === 'ethiopian' ? 'Include the period: ጠዋት, ከሰዓት, ምሽት or ሌሊት.' : timeFormat === '12h' ? 'Include AM or PM.' : 'Use hours 00–23 and minutes 00–59.';
 
-/**
- * Convert 12-hour format (HH:MM AM/PM) to 24-hour format (HH:MM)
- */
-const from12Hour = (time12: string): string => {
-  if (!time12 || time12 === '') return '';
-  
-  // Remove extra spaces and parse
-  const cleaned = time12.trim().toUpperCase();
-  const match = cleaned.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/);
-  
-  if (!match) return '';
-  
-  let hours = parseInt(match[1], 10);
-  const minutes = parseInt(match[2], 10);
-  const period = match[3];
-  
-  if (period === 'PM' && hours !== 12) {
-    hours += 12;
-  } else if (period === 'AM' && hours === 12) {
-    hours = 0;
-  }
-  
-  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-};
-
-/**
- * Convert 24-hour format (HH:MM) to Ethiopian format
- */
-const toEthiopian = (time24: string): string => {
-  if (!time24 || time24 === '') return '';
-  const [hours, minutes] = time24.split(':').map(Number);
-  if (isNaN(hours) || isNaN(minutes)) return '';
-  
-  const date = new Date();
-  date.setHours(hours, minutes, 0, 0);
-  return formatEthiopianTime(date);
-};
-
-/**
- * Convert Ethiopian format to 24-hour format (HH:MM)
- * Ethiopian time: 6 AM standard = 12:00 Ethiopian
- */
-const fromEthiopian = (timeEth: string): string => {
-  if (!timeEth || timeEth === '') return '';
-  
-  // Parse Ethiopian time format: "hour:minute period" or "ሰዓት hour:minute period"
-  // Example: "3:00 ጠዋት" or "ሰዓት 3:00 ጠዋት" or "8:30 ከሰዓት"
-  const cleaned = timeEth.trim();
-  
-  // Try to match pattern: optional "ሰዓት" number:number period
-  const match = cleaned.match(/(?:ሰዓት\s*)?(\d{1,2}):(\d{2})\s*([ጠዋትከሰዓትማታለሊት]+)/);
-  if (!match) return '';
-  
-  const ethiopianHour = parseInt(match[1], 10);
-  const minutes = parseInt(match[2], 10);
-  const period = match[3];
-  
-  // Convert Ethiopian hour to standard hour
-  // Ethiopian time calculation: standardHour = ethiopianHour + 6 (with wraparound)
-  // Ethiopian periods:
-  // ጠዋት (morning): 6 AM - 12 PM standard (Ethiopian 12-6)
-  // ከሰዓት (day): 12 PM - 6 PM standard (Ethiopian 6-12)
-  // ማታ (evening): 6 PM - 12 AM standard (Ethiopian 12-6)
-  // ለሊት (night): 12 AM - 6 AM standard (Ethiopian 6-12)
-  
-  let standardHour = 0;
-  
-  if (period.includes('ጠዋት')) {
-    // Morning: 6 AM - 12 PM
-    // Ethiopian 12 = 6 AM, Ethiopian 1-6 = 7 AM - 12 PM
-    if (ethiopianHour === 12) {
-      standardHour = 6;
-    } else {
-      standardHour = ethiopianHour + 6;
-    }
-  } else if (period.includes('ከሰዓት')) {
-    // Day: 12 PM - 6 PM
-    // Ethiopian 6 = 12 PM, Ethiopian 7-12 = 1 PM - 6 PM
-    if (ethiopianHour === 12) {
-      standardHour = 18; // 6 PM
-    } else if (ethiopianHour >= 6) {
-      standardHour = ethiopianHour + 6;
-    } else {
-      standardHour = ethiopianHour + 6;
-    }
-  } else if (period.includes('ማታ')) {
-    // Evening: 6 PM - 12 AM
-    // Ethiopian 12 = 6 PM, Ethiopian 1-6 = 7 PM - 12 AM
-    if (ethiopianHour === 12) {
-      standardHour = 18; // 6 PM
-    } else {
-      standardHour = ethiopianHour + 6;
-      if (standardHour >= 24) standardHour -= 12;
-    }
-  } else if (period.includes('ለሊት')) {
-    // Night: 12 AM - 6 AM
-    // Ethiopian 6 = 12 AM, Ethiopian 7-12 = 1 AM - 6 AM
-    if (ethiopianHour === 12) {
-      standardHour = 0; // 12 AM (midnight)
-    } else if (ethiopianHour >= 6) {
-      standardHour = ethiopianHour - 6;
-    } else {
-      standardHour = ethiopianHour + 6;
-      if (standardHour >= 6) standardHour -= 12;
-    }
-  }
-  
-  // Ensure valid hour range
-  if (standardHour < 0) standardHour += 24;
-  if (standardHour >= 24) standardHour -= 24;
-  
-  return `${standardHour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-};
-
-/**
- * Format time for display based on user's preferred format
- */
-const formatForDisplay = (time24: string, format: TimeFormat): string => {
-  if (!time24 || time24 === '') return '';
-  
-  switch (format) {
-    case '12h':
-      return to12Hour(time24);
-    case '24h':
-      return time24;
-    case 'ethiopian':
-      return toEthiopian(time24);
-    default:
-      return time24;
-  }
-};
-
-/**
- * Parse user input and convert to 24-hour format
- */
-const parseInput = (input: string, format: TimeFormat): string => {
-  if (!input || input === '') return '';
-
-  // Forgiving fallback: accept a bare 24-hour HH:MM regardless of the display
-  // format, so staff can type the stored value without a period suffix.
-  const bare = input.trim().match(/^(\d{1,2}):(\d{2})$/);
-  if (bare) {
-    const hours = parseInt(bare[1], 10);
-    const minutes = parseInt(bare[2], 10);
-    if (hours >= 0 && hours < 24 && minutes >= 0 && minutes < 60) {
-      return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-    }
-  }
-
-  switch (format) {
-    case '12h':
-      return from12Hour(input);
-    case '24h':
-      // Validate 24-hour format
-      {
-        const match24 = input.match(/^(\d{1,2}):(\d{2})$/);
-        if (match24) {
-          const hours = parseInt(match24[1], 10);
-          const minutes = parseInt(match24[2], 10);
-          if (hours >= 0 && hours < 24 && minutes >= 0 && minutes < 60) {
-            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-          }
-        }
-        return '';
-      }
-    case 'ethiopian':
-      return fromEthiopian(input);
-    default:
-      return '';
-  }
-};
-
-export const TimeInput = ({
-  value, // 24-hour format (HH:MM)
-  onChange,
-  timeFormat,
-  disabled = false,
-  className = '',
-  placeholder,
-  id,
-}: TimeInputProps) => {
-  const [displayValue, setDisplayValue] = useState<string>('');
-
-  // Update display value when value or format changes
   useEffect(() => {
-    setDisplayValue(formatForDisplay(value, timeFormat));
+    setDraft(formatWallTime(value, timeFormat));
+    setError('');
+    input.current?.setCustomValidity('');
+    validityChanged.current?.(true);
   }, [value, timeFormat]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-    setDisplayValue(inputValue);
-    
-    // Parse and convert to 24-hour format
-    const time24 = parseInput(inputValue, timeFormat);
-    if (time24) {
-      onChange(time24);
+  function edit(text: string, commit: boolean) {
+    setDraft(text);
+    const parsed = parseDisplayTime(text, timeFormat);
+    const message = parsed ? '' : `Enter a valid time, for example ${example}. ${help}`;
+    setError(message);
+    input.current?.setCustomValidity(message);
+    onValidityChange?.(!!parsed);
+    if (commit && parsed) {
+      onChange(parsed);
+      setDraft(formatWallTime(parsed, timeFormat));
     }
-  };
-
-  const handleBlur = () => {
-    // Validate and reformat on blur
-    const time24 = parseInput(displayValue, timeFormat);
-    if (time24) {
-      setDisplayValue(formatForDisplay(time24, timeFormat));
-      onChange(time24);
-    } else if (displayValue) {
-      // If invalid, revert to last valid value
-      setDisplayValue(formatForDisplay(value, timeFormat));
-    }
-  };
-
-  // Determine placeholder based on format
-  const getPlaceholder = (): string => {
-    if (placeholder) return placeholder;
-    
-    switch (timeFormat) {
-      case '12h':
-        return '08:00 AM';
-      case '24h':
-        return '08:00';
-      case 'ethiopian':
-        return 'ሰዓት 2:00 ጠዋት';
-      default:
-        return '08:00';
-    }
-  };
-
-  return (
-    <Input
-      type="text"
-      id={id}
-      value={displayValue}
-      onChange={handleChange}
-      onBlur={handleBlur}
-      disabled={disabled}
-      placeholder={getPlaceholder()}
-      className={className}
-    />
-  );
-};
-
+  }
+  function choose(hour: number, minute: number) {
+    const next = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+    edit(formatWallTime(next, timeFormat), true);
+  }
+  return <div className={className}>
+    <div className="flex gap-2">
+      <Input ref={input} id={inputId} value={draft} disabled={disabled} required autoComplete="off"
+        placeholder={placeholder || example} aria-invalid={!!error} aria-describedby={`${inputId}-help`}
+        onChange={event => edit(event.target.value, false)} onBlur={() => edit(draft, true)}
+        onKeyDown={event => { if (event.key === 'Enter') edit(draft, true); }} />
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild><Button type="button" variant="outline" disabled={disabled} aria-label="Choose time" data-qa={`${inputId}-picker`}><Clock className="h-4 w-4" /></Button></PopoverTrigger>
+        <PopoverContent align="end" className="w-80 max-w-[calc(100vw-2rem)] space-y-4 rounded-xl p-4" aria-label="Choose time">
+          <div><p className="font-semibold">Choose time</p><p className="text-xs text-muted-foreground">{help}</p></div>
+          <div className="grid grid-cols-[2fr_1fr] gap-3">
+            <div><p id={`${inputId}-hour-label`} className="mb-1 text-sm">Hour</p><Select value={String(parts.hour)} onValueChange={hour => choose(+hour, parts.minute)}>
+              <SelectTrigger aria-labelledby={`${inputId}-hour-label`}><SelectValue /></SelectTrigger><SelectContent>
+                {Array.from({ length: 24 }, (_, hour) => <SelectItem key={hour} value={String(hour)}>{formatWallTime(`${String(hour).padStart(2, '0')}:00`, timeFormat)}</SelectItem>)}
+              </SelectContent></Select></div>
+            <div><p id={`${inputId}-minute-label`} className="mb-1 text-sm">Minute</p><Select value={String(parts.minute)} onValueChange={minute => choose(parts.hour, +minute)}>
+              <SelectTrigger aria-labelledby={`${inputId}-minute-label`}><SelectValue /></SelectTrigger><SelectContent>
+                {Array.from({ length: 60 }, (_, minute) => <SelectItem key={minute} value={String(minute)}>{String(minute).padStart(2, '0')}</SelectItem>)}
+              </SelectContent></Select></div>
+          </div>
+          <div className="flex flex-wrap gap-2" aria-label="Common minutes">{[0, 15, 30, 45].map(minute => <Button type="button" size="sm" variant={parts.minute === minute ? 'default' : 'outline'} key={minute} onClick={() => choose(parts.hour, minute)}>:{String(minute).padStart(2, '0')}</Button>)}</div>
+          <p className="text-sm" aria-live="polite">{formatWallTime(value, timeFormat)} · {value} (24-hour)</p>
+          <Button type="button" className="w-full" onClick={() => setOpen(false)}>Done</Button>
+        </PopoverContent>
+      </Popover>
+    </div>
+    <p id={`${inputId}-help`} className={`mt-1.5 text-xs ${error ? 'text-destructive' : 'text-muted-foreground'}`} role={error ? 'alert' : undefined}>{error || help}</p>
+  </div>;
+}

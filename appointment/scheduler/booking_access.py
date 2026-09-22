@@ -159,6 +159,15 @@ def config_permission(doc, user=None, permission_type="read", ptype=None, **kwar
 
 
 def validate_config(doc, method=None):
+    from appointment.onboarding import _ONBOARDING_UPDATE
+
+    # Only the self-onboarding endpoint can supply this in-memory capability.
+    # It controls all changed fields and cannot assign business membership.
+    if (doc.doctype == "Provider" and doc.flags.get("onboarding_update") is _ONBOARDING_UPDATE
+            and doc.user == frappe.session.user and frappe.session.user != "Guest"
+            and frappe.db.get_value("User", doc.user, "enabled")):
+        return
+
     if frappe.session.user == "Administrator":
         return
     if doc.doctype == "Organization" and doc.is_new():

@@ -28,7 +28,7 @@ def require_provider_account():
     user = frappe.session.user
     if user == "Guest":
         frappe.throw(_("Sign in to set up a business."), frappe.PermissionError)
-    account = frappe.db.get_value("User", user, ["enabled"], as_dict=True)
+    account = frappe.db.get_value("User", user, ["enabled", "user_type"], as_dict=True)
     if not account or not account.enabled:
         frappe.throw(_("Sign in to set up a business."), frappe.PermissionError)
     from appointment.scheduler import registration
@@ -38,6 +38,10 @@ def require_provider_account():
             _("Self-service business setup is turned off. Ask an administrator to provision your account."),
             frappe.PermissionError,
         )
+    is_staff = account.user_type == "System User" or any(role in registration.STAFF_ROLES for role in frappe.get_roles(user))
+    started = frappe.db.get_value("Provider", {"user": user}, "onboarding_type")
+    if not is_staff and not started:
+        frappe.throw(_("Start owner onboarding before creating a business."), frappe.PermissionError)
     return user
 
 

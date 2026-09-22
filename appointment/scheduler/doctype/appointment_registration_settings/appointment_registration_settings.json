@@ -21,7 +21,7 @@
   },
   {
    "default": "Open",
-   "description": "Open: anyone may create an account. Verified: the account must verify its email before it can be used. Disabled: the public sign-up form is turned off; owners are provisioned by an administrator or manager instead.",
+   "description": "Open: anyone may create an account. Verified: unavailable; registration is blocked because email verification is not implemented. Use Open with administrator approval if needed. Disabled: the public sign-up form is turned off; owners are provisioned by an administrator or manager instead.",
    "fieldname": "self_signup_mode",
    "fieldtype": "Select",
    "label": "Self sign-up mode",

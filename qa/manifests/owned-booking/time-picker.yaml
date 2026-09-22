@@ -1,0 +1,94 @@
+app: appointment
+base_url: http://127.0.0.20:25310
+default_role: Provider
+auth:
+  type: frappe_session
+  username: demo.owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+timeout_ms: 20000
+options:
+  ignore_baseline_drift: true
+scenarios:
+- id: time_picker_desktop
+  title: Strict time input and keyboard picker desktop
+  viewport:
+    width: 1440
+    height: 960
+  checks: []
+  routes:
+  - path: /settings/business
+    assertions:
+    - type: visible_selector
+      value: '#opens_at'
+  actions: &id001
+  - action: click
+    selector: '[data-qa="clock-format-ethiopian"]'
+  - action: fill
+    selector: '#opens_at'
+    value: 1:00 ማታ
+  - action: click
+    selector: '#business_name'
+  - action: wait_for
+    selector: '#opens_at[value="ሰዓት 1:00 ምሽት"]'
+  - action: click
+    selector: '[data-qa="clock-format-24h"]'
+  - action: wait_for
+    selector: '#opens_at[value="19:00"]'
+  - action: click
+    selector: '[data-qa="clock-format-12h"]'
+  - action: fill
+    selector: '#opens_at'
+    value: 13:99 PM
+  - action: click
+    selector: '#business_name'
+  - action: wait_for
+    selector: '#opens_at[aria-invalid="true"]'
+  - action: click
+    selector: '[data-qa="opens_at-picker"]'
+  - action: click
+    selector: '[aria-labelledby="opens_at-hour-label"]'
+  - action: press
+    selector: '[role="listbox"]'
+    key: Home
+  - action: press
+    selector: '[role="option"]:has-text("12:00 AM")'
+    key: Enter
+  - action: click
+    selector: '[role="dialog"] button:text-is(":30")'
+  - action: click
+    selector: button:has-text("Done")
+  - action: wait_for
+    selector: '#opens_at[value="12:30 AM"][aria-invalid="false"]'
+  - action: screenshot
+    name: time-picker-light.png
+  - action: click
+    selector: '[data-qa="topnav-theme"]'
+  - action: click
+    selector: '[data-qa="topnav-theme"]'
+  - action: wait_for
+    selector: html.dark
+  - action: click
+    selector: '[data-qa="opens_at-picker"]'
+  - action: screenshot
+    name: time-picker-dark.png
+  - action: press
+    selector: '[role="dialog"]'
+    key: Escape
+  - action: get_console_errors
+  - action: get_network_errors
+- id: time_picker_mobile
+  title: Strict time input and keyboard picker mobile
+  viewport:
+    width: 390
+    height: 960
+  checks: []
+  routes:
+  - path: /settings/business
+    assertions:
+    - type: visible_selector
+      value: '#opens_at'
+  actions: *id001

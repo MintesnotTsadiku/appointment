@@ -28,6 +28,15 @@ export function ClockFormatToggle({ value, onChange, label = 'Clock format' }: C
               type="button"
               role="radio"
               aria-checked={selected}
+              tabIndex={selected ? 0 : -1}
+              onKeyDown={(event) => {
+                const index = OPTIONS.findIndex(item => item.value === value);
+                const next = event.key === 'Home' ? 0 : event.key === 'End' ? OPTIONS.length - 1 : ['ArrowRight', 'ArrowDown'].includes(event.key) ? (index + 1) % OPTIONS.length : ['ArrowLeft', 'ArrowUp'].includes(event.key) ? (index + OPTIONS.length - 1) % OPTIONS.length : null;
+                if (next === null) return;
+                event.preventDefault();
+                onChange(OPTIONS[next].value);
+                event.currentTarget.parentElement?.querySelector<HTMLButtonElement>(`[data-qa="clock-format-${OPTIONS[next].value}"]`)?.focus();
+              }}
               data-qa={`clock-format-${option.value}`}
               onClick={() => onChange(option.value)}
               className="rounded-lg px-3 py-1.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2"

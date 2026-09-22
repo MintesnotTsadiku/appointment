@@ -14,6 +14,7 @@ export function OwnedBookingActions({appointment, onClose, onSuccess}: {appointm
   const [date, setDate] = useState(appointment.appointment_date);
   const [time, setTime] = useState(appointment.start_time.slice(0,5));
   const [clockFormat, setClockFormat] = useState<ClockFormat>('12h');
+  const [timeValid, setTimeValid] = useState(true);
   const [problem,setProblem] = useState('');
   const [confirmCancel,setConfirmCancel] = useState(false);
   const {call,loading} = useFrappePostCall('appointment.scheduler.booking.change');
@@ -42,11 +43,11 @@ export function OwnedBookingActions({appointment, onClose, onSuccess}: {appointm
         <div>
           <ClockFormatToggle value={clockFormat} onChange={setClockFormat} />
           <Label htmlFor="booking-change-time" className="mb-1.5 mt-3 block" style={{ color: 'var(--text-secondary)' }}>Start time</Label>
-          <TimeInput id="booking-change-time" timeFormat={clockFormat} value={time} onChange={setTime} />
+          <TimeInput id="booking-change-time" timeFormat={clockFormat} value={time} onChange={setTime} onValidityChange={setTimeValid} />
         </div>
       </div>
       <div className="flex flex-wrap gap-3">
-        <Button data-qa="booking-reschedule" disabled={loading || !date || !time} onClick={()=>change('reschedule')}>Save new time</Button>
+        <Button data-qa="booking-reschedule" disabled={loading || !date || !time || !timeValid} onClick={()=>change('reschedule')}>Save new time</Button>
         {!confirmCancel ? <Button variant="outline" data-qa="booking-cancel" disabled={loading} onClick={()=>setConfirmCancel(true)}>Cancel booking…</Button> : <div className="w-full space-y-3 rounded border p-3"><p>Cancel this booking and release its time?</p><Button data-qa="booking-confirm-cancel" disabled={loading} onClick={()=>change('cancel')}>Confirm cancellation</Button><Button variant="ghost" onClick={()=>setConfirmCancel(false)}>Keep booking</Button></div>}
       </div>
     </>}
