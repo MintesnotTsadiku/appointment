@@ -21,6 +21,7 @@ export default function Onboarding() {
   const { logout } = useFrappeAuth();
   const { theme, setTheme } = useTheme();
   const { call: create, loading } = useFrappePostCall('appointment.scheduler.workspace.create');
+  const { call: setOnboardingType } = useFrappePostCall('appointment.onboarding.set_onboarding_type');
   const request = useRef<{ payload: string; key: string }>();
   const [clockFormat, setClockFormat] = useState<ClockFormat>('12h');
   const [selectedDays, setSelectedDays] = useState(DAYS.slice(0, 5));
@@ -55,6 +56,9 @@ export default function Onboarding() {
       request.current = { payload: serialized, key: crypto.randomUUID() };
     }
     try {
+      // Record the onboarding type first so a new signup is treated as a
+      // prospective owner (creates the provider record and capability).
+      await setOnboardingType({ onboarding_type: 'organization' });
       const result = await create({ ...payload, request_id: request.current.key });
       setDone(result?.message ?? null);
       const next = await reload();
