@@ -1,0 +1,66 @@
+{
+  "business_counts": {
+    "Appointment": 0,
+    "Walk In": 0,
+    "Booking Event": 0,
+    "Appointment Group": 0,
+    "EventType": 0,
+    "Service": 0,
+    "User Appointment Availability": 0,
+    "Location": 0,
+    "Provider": 0,
+    "Organization": 0,
+    "Policy": 0
+  },
+  "qa_browser_users": [],
+  "qa_browser_defaults": [],
+  "qa_browser_has_role": [],
+  "qa_browser_sessions": [
+    {
+      "n": 0
+    }
+  ],
+  "marker_booking_events": [],
+  "marker_appointment_groups": [],
+  "misc_user_tables": {
+    "Activity Log": 0,
+    "Access Log": 0,
+    "Comment": 77,
+    "File": 0,
+    "Notification Log": 0,
+    "Email Queue": 0
+  },
+  "retained_users": {
+    "appointment-review-manager@example.test": {
+      "exists": true,
+      "enabled": 1
+    },
+    "appointment-review-provider@example.test": {
+      "exists": true,
+      "enabled": 1
+    },
+    "appointment-review-reception@example.test": {
+      "exists": true,
+      "enabled": 1
+    },
+    "appointment-review-customer@example.test": {
+      "exists": true,
+      "enabled": 1
+    }
+  },
+  "browser_accounts": [
+    "BACCT-0067",
+    "BACCT-0065",
+    "BACCT-0063",
+    "BACCT-0061"
+  ],
+  "browser_sessions": [
+    "BSESS-0068",
+    "BSESS-0066",
+    "BSESS-0064",
+    "BSESS-0062"
+  ],
+  "mute_emails": 1,
+  "pause_scheduler": 1,
+  "enable_scheduler": 0
+}

@@ -1,0 +1,86 @@
+{
+  "selected_slot": {
+    "start_time": "2026-09-23 03:30:00+00:00",
+    "end_time": "2026-09-23 04:00:00+00:00",
+    "provider": null,
+    "booked": false,
+    "available": true
+  },
+  "time_configuration": {
+    "site": "",
+    "fixture_user": "Asia/Kolkata",
+    "location": "Africa/Addis_Ababa"
+  },
+  "attempts": [
+    {
+      "identity": "Guest",
+      "event_id": "BEV00005",
+      "error": null,
+      "same_slot_after": [
+        {
+          "start_time": "2026-09-23 03:30:00+00:00",
+          "end_time": "2026-09-23 04:00:00+00:00",
+          "booked": false,
+          "available": true
+        }
+      ]
+    },
+    {
+      "identity": "Guest",
+      "event_id": "BEV00006",
+      "error": null,
+      "same_slot_after": [
+        {
+          "start_time": "2026-09-23 03:30:00+00:00",
+          "end_time": "2026-09-23 04:00:00+00:00",
+          "booked": false,
+          "available": true
+        }
+      ]
+    }
+  ],
+  "stored_events": [
+    {
+      "name": "BEV00006",
+      "starts_on": "2026-09-23 09:00:00",
+      "ends_on": "2026-09-23 09:30:00",
+      "status": "Open",
+      "custom_user_calendar": "qa-browser-76e2e3@qa.local"
+    },
+    {
+      "name": "BEV00005",
+      "starts_on": "2026-09-23 09:00:00",
+      "ends_on": "2026-09-23 09:30:00",
+      "status": "Open",
+      "custom_user_calendar": "qa-browser-76e2e3@qa.local"
+    }
+  ],
+  "cleanup": {
+    "removed": [
+      "Booking Event:BEV00006",
+      "Booking Event:BEV00005",
+      "Appointment:QA-APT-E3FDC106",
+      "EventType:EVT-2026-000005",
+      "Service:SRV-2026-0010",
+      "User Appointment Availability:qa-browser-76e2e3@qa.local",
+      "Location:QA-BROWSER-76e2e3 Admin Location",
+      "Provider:QA-BROWSER-76e2e3 Admin Provider",
+      "Location:QA-BROWSER-76e2e3 Location",
+      "Provider:QA-BROWSER-76e2e3 Provider",
+      "Organization:QA-BROWSER-76e2e3 Org",
+      "User:qa-browser-76e2e3@qa.local"
+    ]
+  },
+  "extra_default_cleanup": 1,
+  "final_business_counts": {
+    "Organization": 0,
+    "Provider": 0,
+    "Location": 0,
+    "Service": 0,
+    "EventType": 0,
+    "Appointment": 0,
+    "Booking Event": 0,
+    "Appointment Group": 0,
+    "User Appointment Availability": 0
+  }
+}
