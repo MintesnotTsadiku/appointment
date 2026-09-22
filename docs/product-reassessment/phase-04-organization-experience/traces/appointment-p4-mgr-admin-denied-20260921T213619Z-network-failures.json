@@ -1,0 +1,7 @@
+[
+  {
+    "method": "GET",
+    "status": 403,
+    "url": "http://localhost:49510/api/method/appointment.dashboard.admin_stats"
+  }
+]

@@ -1,0 +1,90 @@
+# Phase 4 — reception at narrow mobile width plus one bounded out-of-authority action.
+# Identity: appointment-review-reception@example.test (Front-Desk).
+app: appointment
+base_url: http://localhost:49510
+default_role: appointment-review-reception@example.test
+auth:
+  type: frappe_session
+  username: appointment-review-reception@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+options:
+  ignore_baseline_drift: true
+scenarios:
+  - id: p4_rec_mobile_today
+    title: Reception day view at 390x844
+    viewport: {width: 390, height: 844}
+    timeout_ms: 30000
+    checks: []
+    routes:
+      - path: /reception
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+          - type: visible_selector
+            value: '[data-qa="reception-heading"]'
+    actions:
+      - action: screenshot
+        name: p4-rec-mobile-01-today.png
+        full_page: true
+      - action: get_dom_snapshot
+        name: p4-rec-mobile-01-today.html
+
+  - id: p4_rec_mobile_manage_appointment
+    title: Reception opens an appointment editor at 390x844
+    viewport: {width: 390, height: 844}
+    timeout_ms: 30000
+    checks: []
+    routes:
+      - path: /reception
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="reception-heading"]'
+    actions:
+      - action: click
+        selector: ':nth-match([data-qa="appointment-card"], 1)'
+      - action: screenshot
+        name: p4-rec-mobile-02-editor.png
+        full_page: false
+      - action: get_dom_snapshot
+        name: p4-rec-mobile-02-editor.html
+      - action: get_console_errors
+      - action: get_network_errors
+
+  - id: p4_rec_admin_denied
+    title: Reception attempts a System-Manager-only surface (out of authority)
+    viewport: {width: 1440, height: 960}
+    timeout_ms: 30000
+    checks: []
+    routes:
+      - path: /admin/dashboard
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+    actions:
+      - action: screenshot
+        name: p4-rec-11-admin-denied.png
+        full_page: true
+      - action: get_dom_snapshot
+        name: p4-rec-11-admin-denied.html
+
+  - id: p4_rec_manage_org_attempt
+    title: Reception attempts organization management (out of authority)
+    viewport: {width: 1440, height: 960}
+    timeout_ms: 30000
+    checks: []
+    routes:
+      - path: /settings/manage
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+    actions:
+      - action: screenshot
+        name: p4-rec-12-manage-attempt.png
+        full_page: true
+      - action: get_dom_snapshot
+        name: p4-rec-12-manage-attempt.html

@@ -1,0 +1,136 @@
+# Phase 4 — organization manager: reachable management surfaces and authority.
+# Identity: appointment-review-manager@example.test (Organization Manager).
+# Small scenarios, assertions only (no hard waits on uncertain selectors) so a
+# missing control is recorded instead of silently timing out.
+app: appointment
+base_url: http://localhost:49510
+default_role: appointment-review-manager@example.test
+auth:
+  type: frappe_session
+  username: appointment-review-manager@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+options:
+  ignore_baseline_drift: true
+scenarios:
+  - id: p4_mgr_home
+    title: Manager home dashboard after organization creation
+    viewport: {width: 1440, height: 960}
+    timeout_ms: 30000
+    checks: []
+    routes:
+      - path: /home
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+    actions:
+      - action: screenshot
+        name: p4-mgr-13-home-dashboard.png
+        full_page: true
+      - action: get_dom_snapshot
+        name: p4-mgr-13-home-dashboard.html
+
+  - id: p4_mgr_manage
+    title: Manager organization management surface
+    viewport: {width: 1440, height: 960}
+    timeout_ms: 30000
+    checks: []
+    routes:
+      - path: /settings/manage
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+    actions:
+      - action: screenshot
+        name: p4-mgr-14-settings-manage.png
+        full_page: true
+      - action: get_dom_snapshot
+        name: p4-mgr-14-settings-manage.html
+
+  - id: p4_mgr_team
+    title: Manager staff access surface (Team)
+    viewport: {width: 1440, height: 960}
+    timeout_ms: 30000
+    checks: []
+    routes:
+      - path: /settings/team
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+    actions:
+      - action: screenshot
+        name: p4-mgr-15-settings-team.png
+        full_page: true
+      - action: get_dom_snapshot
+        name: p4-mgr-15-settings-team.html
+
+  - id: p4_mgr_location
+    title: Manager location management surface
+    viewport: {width: 1440, height: 960}
+    timeout_ms: 30000
+    checks: []
+    routes:
+      - path: /settings/location
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+    actions:
+      - action: screenshot
+        name: p4-mgr-16-settings-location.png
+        full_page: true
+      - action: get_dom_snapshot
+        name: p4-mgr-16-settings-location.html
+
+  - id: p4_mgr_availability
+    title: Manager availability surface
+    viewport: {width: 1440, height: 960}
+    timeout_ms: 30000
+    checks: []
+    routes:
+      - path: /settings/availability
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+    actions:
+      - action: screenshot
+        name: p4-mgr-17-settings-availability.png
+        full_page: true
+      - action: get_dom_snapshot
+        name: p4-mgr-17-settings-availability.html
+
+  - id: p4_mgr_admin_denied
+    title: Manager attempts a System-Manager-only surface (out of authority)
+    viewport: {width: 1440, height: 960}
+    timeout_ms: 30000
+    checks: []
+    routes:
+      - path: /admin/dashboard
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+    actions:
+      - action: screenshot
+        name: p4-mgr-18-admin-denied.png
+        full_page: true
+      - action: get_dom_snapshot
+        name: p4-mgr-18-admin-denied.html
+
+  - id: p4_mgr_reception_denied
+    title: Manager opens the reception desk surface (not a manager capability)
+    viewport: {width: 1440, height: 960}
+    timeout_ms: 30000
+    checks: []
+    routes:
+      - path: /reception
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+    actions:
+      - action: screenshot
+        name: p4-mgr-19-reception.png
+        full_page: true
+      - action: get_dom_snapshot
+        name: p4-mgr-19-reception.html

@@ -1,0 +1,14 @@
+[
+  {
+    "line": 0,
+    "text": "Failed to load resource: the server responded with a status of 500 (INTERNAL SERVER ERROR)",
+    "type": "error",
+    "url": "http://localhost:49510/api/method/appointment.scheduler.api.desk.assign_walk_in_to_slot"
+  },
+  {
+    "line": 14079,
+    "text": "The above error occurred in the <div> component:\n\n    at div\n    at div\n    at li\n    at ve (http://localhost:49510/@fs/home/minte/projects/appointment-worktree-runtimes/fix-appointment-beta-readiness-01dea7/vite-cache/deps/sonner.js?v=44e11c62:147:17)\n    at ol\n    at section\n    at http://localhost:49510/@fs/home/minte/projects/appointment-worktree-runtimes/fix-appointment-beta-readiness-01dea7/vite-cache/deps/sonner.js?v=44e11c62:269:17\n    at Toaster (http://localhost:49510/src/components/sonner/index.tsx:20:23)\n    at Suspense\n    at Provider (http://localhost:49510/@fs/home/minte/projects/appointment-worktree-runtimes/fix-appointment-beta-readiness-01dea7/vite-cache/deps/chunk-YVUTTMHS.js?v=44e11c62:38:15)\n    at TooltipProvider (http://localhost:49510/@fs/home/minte/projects/appointment-worktree-runtimes/fix-appointment-beta-readiness-01dea7/vite-cache/deps/@radix-ui_react-tooltip.js?v=44e11c62:59:5)\n    at RealtimeProvider (http://localhost:49510/src/components/realtime/RealtimeProvider.tsx:57:36)\n    at Ji (http://localhost:49510/@fs/home/minte/projects/appointment-worktree-runtimes/fix-appointment-beta-readiness-01dea7/vite-cache/deps/frappe-react-sdk.js?v=44e11c62:2804:18)\n    at la (http://localhost:49510/@fs/home/minte/projects/appointment-worktree-runtimes/fix-appointment-beta-readiness-01dea7/vite-cache/deps/frappe-react-sdk.js?v=44e11c62:5562:18)\n    at _a (http://localhost:49510/@fs/home/minte/projects/appointment-worktree-runtimes/fix-appointment-beta-readiness-01dea7/vite-cache/deps/react-helmet-async.js?v=44e11c62:624:5)\n    at LandingPageSettingsProvider (http://localhost:49510/src/context/landingPageSettings.tsx:26:47)\n    at TranslationProvider (http://localhost:49510/src/context/translation.tsx:20:39)\n    at ThemeProvider (http://localhost:49510/src/components/theme-provider/index.tsx:29:3)\n    at AppProvider (http://localhost:49510/src/context/app.tsx:59:3)\n    at App\n\nConsider adding an error boundary to your tree to customize error handling behavior.\nVisit https://reactjs.org/link/error-boundaries to learn more about error boundaries.",
+    "type": "error",
+    "url": "http://localhost:49510/@fs/home/minte/projects/appointment-worktree-runtimes/fix-appointment-beta-readiness-01dea7/vite-cache/deps/chunk-EPKXWZP5.js?v=44e11c62"
+  }
+]

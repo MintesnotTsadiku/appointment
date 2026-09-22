@@ -1,0 +1,29 @@
+{
+  "loaded_source": "/home/minte/projects/training-apps/.worktrees/frappe-appointment-beta/appointment/__init__.py",
+  "orphans": [],
+  "auth": 0,
+  "sessions": 0,
+  "defaults": 0,
+  "business_counts": {
+    "Organization": 0,
+    "Provider": 0,
+    "Service": 0,
+    "Location": 0,
+    "EventType": 0,
+    "Appointment": 0,
+    "Walk In": 0,
+    "Booking Event": 0,
+    "Appointment Group": 0,
+    "User Appointment Availability": 0
+  },
+  "retained_users": [
+    "appointment-review-customer@example.test",
+    "appointment-review-reception@example.test",
+    "appointment-review-provider@example.test",
+    "appointment-review-manager@example.test"
+  ],
+  "browser_accounts": 4,
+  "browser_sessions": 4,
+  "email_muted": 1,
+  "scheduler_paused": 1
+}

@@ -1,0 +1,314 @@
+[
+  {
+    "trace": "/tmp/agent_browser_qa/appointment/appointment-p4-prov-calendar-20260921T214701Z/trace.zip",
+    "started_at": "2026-09-21T21:47:04.188Z",
+    "endpoint": "appointment.dashboard.get_appointments",
+    "http_status": 200,
+    "fields": [
+      "appointments"
+    ],
+    "appointments": []
+  },
+  {
+    "trace": "/tmp/agent_browser_qa/appointment/appointment-p4-prov-context-20260921T214710Z/trace.zip",
+    "started_at": "2026-09-21T21:47:12.966Z",
+    "endpoint": "appointment.dashboard.get_appointments",
+    "http_status": 200,
+    "fields": [
+      "appointments"
+    ],
+    "appointments": []
+  },
+  {
+    "trace": "/tmp/agent_browser_qa/appointment/appointment-p4-prov-mobile-calendar-20260921T215119Z/trace.zip",
+    "started_at": "2026-09-21T21:51:21.178Z",
+    "endpoint": "appointment.dashboard.get_appointments",
+    "http_status": 200,
+    "fields": [
+      "appointments"
+    ],
+    "appointments": []
+  },
+  {
+    "trace": "/tmp/agent_browser_qa/appointment/appointment-p4-prov-reception-complete-20260921T214810Z/trace.zip",
+    "started_at": "2026-09-21T21:48:20.680Z",
+    "endpoint": "appointment.scheduler.api.desk.update_appointment",
+    "http_status": 200,
+    "fields": [
+      "success",
+      "appointment",
+      "message"
+    ],
+    "success": true,
+    "appointment": {
+      "name": "P4-APT-WORKLOAD",
+      "appointment_id": "P4-APT-WORKLOAD",
+      "provider": "P4 Provider One",
+      "client_name": "P4 Workload Client",
+      "status": "Completed",
+      "start_time": "14:00:00",
+      "end_time": "14:30:00",
+      "appointment_date": "2026-09-22",
+      "modified_by": "appointment-review-provider@example.test",
+      "service": "SRV-2026-0008"
+    }
+  },
+  {
+    "trace": "/tmp/agent_browser_qa/appointment/appointment-p4-rec-cancel-20260921T213929Z/trace.zip",
+    "started_at": "2026-09-21T21:39:40.607Z",
+    "endpoint": "appointment.scheduler.api.desk.update_appointment",
+    "http_status": 200,
+    "fields": [
+      "success",
+      "appointment",
+      "message"
+    ],
+    "success": true,
+    "appointment": {
+      "name": "P4-APT-CANCEL",
+      "appointment_id": "P4-APT-CANCEL",
+      "provider": "P4 Provider One",
+      "client_name": "P4 Cancel Client",
+      "status": "Cancelled",
+      "start_time": "12:00:00",
+      "end_time": "12:30:00",
+      "appointment_date": "2026-09-22",
+      "modified_by": "appointment-review-reception@example.test",
+      "service": "SRV-2026-0008"
+    }
+  },
+  {
+    "trace": "/tmp/agent_browser_qa/appointment/appointment-p4-rec-complete-20260921T213948Z/trace.zip",
+    "started_at": "2026-09-21T21:39:58.330Z",
+    "endpoint": "appointment.scheduler.api.desk.update_appointment",
+    "http_status": 200,
+    "fields": [
+      "success",
+      "appointment",
+      "message"
+    ],
+    "success": true,
+    "appointment": {
+      "name": "P4-APT-COMPLETE",
+      "appointment_id": "P4-APT-COMPLETE",
+      "provider": "P4 Provider One",
+      "client_name": "P4 Complete Client",
+      "status": "Completed",
+      "start_time": "13:00:00",
+      "end_time": "13:30:00",
+      "appointment_date": "2026-09-22",
+      "modified_by": "appointment-review-reception@example.test",
+      "service": "SRV-2026-0008"
+    }
+  },
+  {
+    "trace": "/tmp/agent_browser_qa/appointment/appointment-p4-rec-reschedule-20260921T213908Z/trace.zip",
+    "started_at": "2026-09-21T21:39:20.731Z",
+    "endpoint": "appointment.scheduler.api.desk.update_appointment",
+    "http_status": 200,
+    "fields": [
+      "success",
+      "appointment",
+      "message"
+    ],
+    "success": true,
+    "appointment": {
+      "name": "P4-APT-RESCHED",
+      "appointment_id": "P4-APT-RESCHED",
+      "provider": "P4 Provider One",
+      "client_name": "P4 Reschedule Client",
+      "status": "Confirmed",
+      "start_time": "15:00:00",
+      "end_time": "15:30:00",
+      "appointment_date": "2026-09-22",
+      "modified_by": "appointment-review-reception@example.test",
+      "service": "SRV-2026-0008"
+    }
+  },
+  {
+    "trace": "/tmp/agent_browser_qa/appointment/appointment-p4-rec-walkin-20260921T213827Z/trace.zip",
+    "started_at": "2026-09-21T21:38:41.259Z",
+    "endpoint": "appointment.scheduler.api.desk.assign_walk_in_to_slot",
+    "http_status": 500,
+    "fields": [
+      "error"
+    ],
+    "error": "Failed to assign walk-in: [Appointment, APT-20260922030841292416]: client_email"
+  },
+  {
+    "trace": "/tmp/agent_browser_qa/appointment/appointment-p4-rec-walkin-20260921T214443Z/trace.zip",
+    "started_at": "2026-09-21T21:45:39.341Z",
+    "endpoint": "appointment.scheduler.api.desk.assign_walk_in_to_slot",
+    "http_status": 500,
+    "fields": [
+      "error"
+    ],
+    "error": "Failed to assign walk-in: [Appointment, APT-20260922031539363387]: client_email"
+  },
+  {
+    "trace": "/tmp/agent_browser_qa/appointment/appointment-p4-manager-org-setup-20260921T211202Z/trace.zip",
+    "started_at": "2026-09-21T21:12:16.377Z",
+    "endpoint": "appointment.onboarding.get_detailed_checklist",
+    "http_status": 200,
+    "fields": [
+      "items",
+      "completed_count",
+      "total_count",
+      "progress_percent",
+      "all_complete"
+    ],
+    "checklist": {
+      "items": [
+        {
+          "id": "org_profile",
+          "title": "Complete organization profile",
+          "description": "Add name, email, and phone",
+          "completed": true,
+          "action_url": "/settings/organization",
+          "priority": 1
+        },
+        {
+          "id": "org_providers",
+          "title": "Add providers to organization",
+          "description": "0 provider(s) added",
+          "completed": false,
+          "action_url": "/settings/providers",
+          "priority": 2
+        },
+        {
+          "id": "org_locations",
+          "title": "Set up organization locations",
+          "description": "0 location(s) configured",
+          "completed": false,
+          "action_url": "/settings/locations",
+          "priority": 3
+        },
+        {
+          "id": "org_services",
+          "title": "Create organization services",
+          "description": "1 service(s) available",
+          "completed": true,
+          "action_url": "/settings/services",
+          "priority": 4
+        },
+        {
+          "id": "org_availability",
+          "title": "Set organization availability",
+          "description": "No locations added yet",
+          "completed": false,
+          "action_url": "/settings/availability",
+          "priority": 5
+        },
+        {
+          "id": "org_booking_link",
+          "title": "Share organization booking link",
+          "description": "Enable public booking for your organization",
+          "completed": true,
+          "action_url": "/settings/booking-link",
+          "booking_url": "/schedule/org/p4-organization",
+          "priority": 6
+        },
+        {
+          "id": "org_first_booking",
+          "title": "Receive first organization booking",
+          "description": "0 booking(s) received",
+          "completed": false,
+          "action_url": "/schedule/org/p4-organization",
+          "priority": 7
+        }
+      ],
+      "completed_count": 3,
+      "total_count": 7,
+      "progress_percent": 43,
+      "all_complete": false
+    }
+  },
+  {
+    "trace": "/tmp/agent_browser_qa/appointment/appointment-p4-rec-walkin-20260921T214443Z/trace.zip",
+    "started_at": "2026-09-21T21:45:06.145Z",
+    "endpoint": "appointment.scheduler.api.desk.get_desk_appointments",
+    "http_status": 200,
+    "fields": [
+      "appointments",
+      "count"
+    ],
+    "verified_fixture": {
+      "name": "P4-APT-RESCHED",
+      "appointment_id": "P4-APT-RESCHED",
+      "provider": "P4 Provider One",
+      "client_name": "P4 Reschedule Client",
+      "status": "Confirmed",
+      "start_time": "15:00:00",
+      "end_time": "15:30:00",
+      "appointment_date": "2026-09-22",
+      "modified_by": null,
+      "service": "SRV-2026-0008"
+    }
+  },
+  {
+    "trace": "/tmp/agent_browser_qa/appointment/appointment-p4-rec-walkin-20260921T214443Z/trace.zip",
+    "started_at": "2026-09-21T21:45:06.145Z",
+    "endpoint": "appointment.scheduler.api.desk.get_desk_appointments",
+    "http_status": 200,
+    "fields": [
+      "appointments",
+      "count"
+    ],
+    "verified_fixture": {
+      "name": "P4-APT-CANCEL",
+      "appointment_id": "P4-APT-CANCEL",
+      "provider": "P4 Provider One",
+      "client_name": "P4 Cancel Client",
+      "status": "Cancelled",
+      "start_time": "12:00:00",
+      "end_time": "12:30:00",
+      "appointment_date": "2026-09-22",
+      "modified_by": null,
+      "service": "SRV-2026-0008"
+    }
+  },
+  {
+    "trace": "/tmp/agent_browser_qa/appointment/appointment-p4-rec-walkin-20260921T214443Z/trace.zip",
+    "started_at": "2026-09-21T21:45:06.145Z",
+    "endpoint": "appointment.scheduler.api.desk.get_desk_appointments",
+    "http_status": 200,
+    "fields": [
+      "appointments",
+      "count"
+    ],
+    "verified_fixture": {
+      "name": "P4-APT-COMPLETE",
+      "appointment_id": "P4-APT-COMPLETE",
+      "provider": "P4 Provider One",
+      "client_name": "P4 Complete Client",
+      "status": "Completed",
+      "start_time": "13:00:00",
+      "end_time": "13:30:00",
+      "appointment_date": "2026-09-22",
+      "modified_by": null,
+      "service": "SRV-2026-0008"
+    }
+  },
+  {
+    "trace": "/tmp/agent_browser_qa/appointment/appointment-p4-rec-mobile-today-20260921T214949Z/trace.zip",
+    "started_at": "2026-09-21T21:49:52.191Z",
+    "endpoint": "appointment.scheduler.api.desk.get_desk_appointments",
+    "http_status": 200,
+    "fields": [
+      "appointments",
+      "count"
+    ],
+    "verified_fixture": {
+      "name": "P4-APT-WORKLOAD",
+      "appointment_id": "P4-APT-WORKLOAD",
+      "provider": "P4 Provider One",
+      "client_name": "P4 Workload Client",
+      "status": "Completed",
+      "start_time": "14:00:00",
+      "end_time": "14:30:00",
+      "appointment_date": "2026-09-22",
+      "modified_by": null,
+      "service": "SRV-2026-0008"
+    }
+  }
+]

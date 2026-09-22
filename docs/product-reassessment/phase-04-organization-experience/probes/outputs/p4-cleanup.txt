@@ -1,0 +1,43 @@
+== removed ==
+Appointment 4
+EventType 2
+Has Role 4
+Location 2
+Organization 1
+Organization Manager 1
+Provider 3
+Service 2
+User 1
+User Appointment Availability 1
+User Social Login 1
+Walk In 3
+== errors ==
+== retained users ==
+appointment-review-manager@example.test exists ['All', 'Desk User', 'Guest', 'Organization Manager']
+appointment-review-provider@example.test exists ['All', 'Desk User', 'Guest', 'Provider']
+appointment-review-reception@example.test exists ['All', 'Desk User', 'Front-Desk', 'Guest']
+appointment-review-customer@example.test exists ['All', 'Guest']
+== browser accounts/sessions ==
+accounts ['BACCT-0067', 'BACCT-0065', 'BACCT-0063', 'BACCT-0061']
+sessions ['BSESS-0068', 'BSESS-0066', 'BSESS-0064', 'BSESS-0062']
+== residual P4 counts ==
+Organization 0
+Provider 0
+Service 0
+Location 0
+EventType 0
+Appointment 0
+Walk In 0
+User Appointment Availability 0
+User 0
+== business table totals ==
+Organization 0
+Provider 0
+Service 0
+Location 0
+EventType 0
+Appointment 0
+Walk In 0
+Booking Event 0
+Appointment Group 0
+User Appointment Availability 0

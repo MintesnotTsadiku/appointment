@@ -1,0 +1,7 @@
+[
+  {
+    "method": "GET",
+    "status": 400,
+    "url": "http://localhost:49510/socket.io/?EIO=4&transport=polling&t=Q35vTx4&sid=PIs8zwnKOJvNeH4uAAAT"
+  }
+]

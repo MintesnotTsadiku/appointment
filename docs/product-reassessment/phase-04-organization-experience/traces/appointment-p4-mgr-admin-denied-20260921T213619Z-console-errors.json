@@ -1,0 +1,8 @@
+[
+  {
+    "line": 0,
+    "text": "Failed to load resource: the server responded with a status of 403 (FORBIDDEN)",
+    "type": "error",
+    "url": "http://localhost:49510/api/method/appointment.dashboard.admin_stats"
+  }
+]

@@ -1,0 +1,11 @@
+BQA-2026-00096 | Passed | 21088 | None | a/appointment_p4_p4-a-manager-org-setup.yaml- | video= None
+BQA-2026-00097 | Running | 0 | None | ointment_p4_p4-b-manager-setup-continue.yaml- | video= None
+BQA-2026-00098 | Passed | 63980 | None | qa/appointment_p4_p4-c-manager-surfaces.yaml- | video= None
+BQA-2026-00099 | Failed | 133596 | None | appointment_p4_p4-d-reception-lifecycle.yaml- | video= None
+BQA-2026-00100 | Failed | 45423 | p4_rec_create_handoff | appointment_p4_p4-d-reception-lifecycle.yaml- | video= None
+BQA-2026-00101 | Failed | 15171 | p4_rec_walkin | appointment_p4_p4-d-reception-lifecycle.yaml- | video= None
+BQA-2026-00102 | Failed | 83219 | p4_rec_walkin | appointment_p4_p4-d-reception-lifecycle.yaml- | video= None
+BQA-2026-00103 | Failed | 87177 | None | qa/appointment_p4_p4-e-provider-journey.yaml- | video= None
+BQA-2026-00104 | Failed | 55248 | None | qa/appointment_p4_p4-f-reception-mobile.yaml- | video= None
+BQA-2026-00105 | Passed | 26926 | None | 4qa/appointment_p4_p4-g-provider-mobile.yaml- | video= None
+count 10
