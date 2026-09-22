@@ -201,7 +201,9 @@ These conditions follow [Phase 6's gate and recovery scope](../phase-06-release-
    constraint. Fund the verification alongside the implementation; lack of rewrite
    evidence does not make incremental repair small or the current model sound.
 
-The assessment is complete; acceptance and merge remain pending. There is no
+The product owner accepted the consolidated assessment on 2026-09-22 for merge
+into develop. This accepts the recommendation, not customer release or an
+unselected launch scope. Actual implementation belongs in a separate chat. There is no
 Phase 8. After acceptance, record the three owner decisions and prepare a bounded
 implementation brief with the first slice, acceptance tests and verification
 responsibility before starting product work.

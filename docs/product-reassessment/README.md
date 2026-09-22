@@ -42,9 +42,11 @@ capabilities actually offered and the factual basis of marketing statistics and
 partner claims. This direction does not certify current readiness.
 
 Use `browser-qa-access.md` for retained synthetic identities, explicit session
-authentication, the preserved runtime and fixture-cleanup constraints. The
-prepared next-phase prompt is `phase-07-opencode-prompt.md`; use it only after
-Phase 6 is accepted and merged. Phase 2 found
+authentication, the preserved runtime and fixture-cleanup constraints. All seven assessment phases are complete and accepted. The
+[final recommendation](phase-07-final-recommendation/analysis.md) is the starting
+point for implementation planning in a separate chat. There is no Phase 8; launch
+scope, operating commitments and the first bounded implementation slice must be
+recorded before broader product work. Phase 2 found
 reproduced application access failures that block shared-site customer launch;
 the remaining UX assessments may continue on isolated synthetic data. Accepted
 assessment evidence is not release approval.
