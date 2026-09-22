@@ -1,0 +1,481 @@
+{
+  "frappe_version": "17.0.0-dev",
+  "appointment_module_file": "/home/minte/projects/training-apps/.worktrees/frappe-appointment-beta/appointment/__init__.py",
+  "appointment_version": "0.0.1",
+  "installed_apps": [
+    "frappe",
+    "agent_harness",
+    "agent_plane",
+    "appointment"
+  ],
+  "db_type": "mariadb",
+  "session_user": "Administrator",
+  "conf_mute_emails": 1,
+  "conf_pause_scheduler": 1,
+  "conf_developer_mode": 1,
+  "conf_maintenance_mode": null,
+  "conf_backup_limit": null,
+  "system_settings_time_zone": "",
+  "system_settings_enable_scheduler": 0,
+  "scheduler_disabled": true,
+  "scheduler_status": {
+    "status": "inactive"
+  },
+  "business_counts": {
+    "Appointment": 0,
+    "Organization": 0,
+    "Provider": 0,
+    "Service": 0,
+    "Location": 0,
+    "EventType": 0,
+    "Walk In": 0,
+    "Booking Event": 0,
+    "User Appointment Availability": 0,
+    "Policy": 0,
+    "Appointment Group": 0
+  },
+  "track_changes": {
+    "Appointment": {
+      "track_changes": 0
+    },
+    "Organization": {
+      "track_changes": 0
+    },
+    "Provider": {
+      "track_changes": 0
+    },
+    "Service": {
+      "track_changes": 0
+    },
+    "Location": {
+      "track_changes": 0
+    },
+    "EventType": {
+      "track_changes": 0
+    },
+    "Walk In": {
+      "track_changes": 0
+    },
+    "Booking Event": {
+      "track_changes": 1
+    },
+    "User Appointment Availability": {
+      "track_changes": 1
+    },
+    "Policy": {
+      "track_changes": 0
+    },
+    "Appointment Group": {
+      "track_changes": 1
+    }
+  },
+  "user_data_fields_hook": [
+    {
+      "doctype": "Access Log",
+      "strict": true
+    },
+    {
+      "doctype": "Activity Log",
+      "strict": true
+    },
+    {
+      "doctype": "Comment",
+      "strict": true
+    },
+    {
+      "doctype": "Contact",
+      "filter_by": "email_id",
+      "redact_fields": [
+        "first_name",
+        "last_name",
+        "phone",
+        "mobile_no"
+      ],
+      "rename": true
+    },
+    {
+      "doctype": "Contact Email",
+      "filter_by": "email_id"
+    },
+    {
+      "doctype": "Address",
+      "filter_by": "email_id",
+      "redact_fields": [
+        "address_title",
+        "address_line1",
+        "address_line2",
+        "city",
+        "county",
+        "state",
+        "pincode",
+        "phone",
+        "fax"
+      ]
+    },
+    {
+      "doctype": "Communication",
+      "filter_by": "sender",
+      "redact_fields": [
+        "sender_full_name",
+        "phone_no",
+        "content"
+      ]
+    },
+    {
+      "doctype": "Communication",
+      "filter_by": "recipients"
+    },
+    {
+      "doctype": "Email Group Member",
+      "filter_by": "email"
+    },
+    {
+      "doctype": "Email Unsubscribe",
+      "filter_by": "email",
+      "partial": true
+    },
+    {
+      "doctype": "Email Queue",
+      "filter_by": "sender"
+    },
+    {
+      "doctype": "Email Queue Recipient",
+      "filter_by": "recipient"
+    },
+    {
+      "doctype": "File",
+      "filter_by": "attached_to_name",
+      "redact_fields": [
+        "file_name",
+        "file_url"
+      ]
+    },
+    {
+      "doctype": "User",
+      "filter_by": "name",
+      "redact_fields": [
+        "email",
+        "username",
+        "first_name",
+        "middle_name",
+        "last_name",
+        "full_name",
+        "birth_date",
+        "user_image",
+        "phone",
+        "mobile_no",
+        "location",
+        "interest",
+        "bio",
+        "email_signature"
+      ]
+    },
+    {
+      "doctype": "Version",
+      "strict": true
+    }
+  ],
+  "scheduler_events_hook": {
+    "cron": {
+      "0/5 * * * *": [
+        "frappe.email.doctype.notification.notification.trigger_offset_alerts",
+        "frappe.search.sqlite_search.index_docs_in_queue",
+        "frappe.integrations.doctype.webhook.webhook.retry_failed_webhooks",
+        "frappe.automation_engine.scheduler.process_cron",
+        "frappe.automation_engine.drainer.drain_due"
+      ],
+      "0/15 * * * *": [
+        "frappe.email.doctype.email_account.email_account.notify_unreplied",
+        "frappe.utils.global_search.sync_global_search",
+        "frappe.deferred_insert.save_to_db",
+        "frappe.automation.doctype.reminder.reminder.send_reminders",
+        "frappe.model.utils.link_count.update_link_count",
+        "frappe.utils.telemetry.pulse.client.send_queued_events"
+      ],
+      "0/10 * * * *": [
+        "frappe.email.doctype.email_account.email_account.pull"
+      ],
+      "30 * * * *": [],
+      "45 0 * * *": [],
+      "0 */3 * * *": [
+        "frappe.search.sqlite_search.build_index_if_not_exists"
+      ],
+      "* * * * *": [
+        "agent_plane.governed_workspace.observability.project_operational_facts",
+        "agent_plane.runtime.domain_delivery.recover_and_enqueue_domain_run_deliveries",
+        "agent_plane.tasks.process_pending_memory_events",
+        "agent_plane.tasks.recover_dead_runtime_workers",
+        "agent_plane.managed_browser.service.recover_stale_browser_sessions",
+        "agent_plane.qa_workflows.browser_qa_service.enqueue_stale_browser_qa_recovery",
+        "agent_plane.model_execution_policy.rollouts.recover_stale_shadow_invocations"
+      ]
+    },
+    "all": [
+      "frappe.email.queue.flush",
+      "frappe.email.queue.retry_sending_emails",
+      "frappe.monitor.flush",
+      "frappe.integrations.doctype.google_calendar.google_calendar.sync"
+    ],
+    "hourly": [
+      "frappe.automation_engine.scheduler.process_date_based",
+      "agent_plane.tasks.notify_stale_approvals",
+      "agent_plane.tasks.notify_unreviewed_drift_reviews",
+      "agent_plane.tasks.recover_stale_agent_runs",
+      "agent_plane.tasks.run_due_experience_schedules"
+    ],
+    "hourly_maintenance": [
+      "frappe.model.utils.user_settings.sync_user_settings",
+      "frappe.desk.page.backups.backups.delete_downloadable_backups",
+      "frappe.desk.form.document_follow.send_hourly_updates",
+      "frappe.website.doctype.personal_data_deletion_request.personal_data_deletion_request.process_data_deletion_request",
+      "frappe.core.doctype.prepared_report.prepared_report.expire_stalled_report",
+      "frappe.twofactor.delete_all_barcodes_for_users",
+      "frappe.oauth.delete_oauth2_data",
+      "frappe.website.doctype.web_page.web_page.check_publish_status",
+      "frappe.desk.utils.delete_old_exported_report_files"
+    ],
+    "daily": [
+      "frappe.desk.doctype.event.event.send_event_digest",
+      "frappe.email.doctype.notification.notification.trigger_daily_alerts",
+      "frappe.desk.form.document_follow.send_daily_updates",
+      "agent_plane.tasks.run_retention_cleanup",
+      "agent_plane.governed_workspace.ledger.tombstone_expired_raw_delta_events",
+      "agent_plane.mcp.durable.cleanup_expired_records",
+      "appointment.tasks.reminder_google_calendar_auth.send_reminder_mail",
+      "appointment.tasks.verify_availability.verify_appointment_group_members_availabililty"
+    ],
+    "daily_long": [],
+    "daily_maintenance": [
+      "frappe.email.doctype.auto_email_report.auto_email_report.send_daily",
+      "frappe.desk.notifications.clear_notifications",
+      "frappe.sessions.clear_expired_sessions",
+      "frappe.website.doctype.personal_data_deletion_request.personal_data_deletion_request.remove_unverified_record",
+      "frappe.automation.doctype.auto_repeat.auto_repeat.make_auto_repeat_entry",
+      "frappe.core.doctype.log_settings.log_settings.run_log_clean_up",
+      "frappe.automation_engine.drainer.purge_queue",
+      "frappe.core.doctype.user_invitation.user_invitation.mark_expired_invitations",
+      "frappe.integrations.doctype.oauth_client.oauth_client.delete_unused_dynamic_clients",
+      "frappe.core.doctype.security_settings.security_settings_alert.check_security_txt_expiry"
+    ],
+    "weekly_long": [
+      "frappe.desk.form.document_follow.send_weekly_updates",
+      "frappe.utils.change_log.check_for_update"
+    ],
+    "monthly": [
+      "frappe.email.doctype.auto_email_report.auto_email_report.send_monthly"
+    ]
+  },
+  "has_permission_hook": {
+    "Report": [
+      "frappe.core.doctype.report.report.has_permission"
+    ],
+    "Event": [
+      "frappe.desk.doctype.event.event.has_permission"
+    ],
+    "ToDo": [
+      "frappe.desk.doctype.todo.todo.has_permission"
+    ],
+    "Note": [
+      "frappe.desk.doctype.note.note.has_permission"
+    ],
+    "User": [
+      "frappe.core.doctype.user.user.has_permission",
+      "agent_plane.setup.security_roles.managed_service_user_has_permission"
+    ],
+    "Dashboard Chart": [
+      "frappe.desk.doctype.dashboard_chart.dashboard_chart.has_permission"
+    ],
+    "Number Card": [
+      "frappe.desk.doctype.number_card.number_card.has_permission"
+    ],
+    "Kanban Board": [
+      "frappe.desk.doctype.kanban_board.kanban_board.has_permission"
+    ],
+    "Contact": [
+      "frappe.contacts.address_and_contact.has_permission"
+    ],
+    "Address": [
+      "frappe.contacts.address_and_contact.has_permission"
+    ],
+    "Comment": [
+      "frappe.core.doctype.comment.comment.has_permission"
+    ],
+    "Communication": [
+      "frappe.core.doctype.communication.communication.has_permission"
+    ],
+    "Workflow Action": [
+      "frappe.workflow.doctype.workflow_action.workflow_action.has_permission"
+    ],
+    "File": [
+      "frappe.core.doctype.file.file.has_permission"
+    ],
+    "Prepared Report": [
+      "frappe.core.doctype.prepared_report.prepared_report.has_permission"
+    ],
+    "Notification Settings": [
+      "frappe.desk.doctype.notification_settings.notification_settings.has_permission"
+    ],
+    "Dashboard Settings": [
+      "frappe.desk.doctype.dashboard_settings.dashboard_settings.has_permission"
+    ],
+    "Notification Log": [
+      "frappe.desk.doctype.notification_log.notification_log.has_permission"
+    ],
+    "User Invitation": [
+      "frappe.core.doctype.user_invitation.user_invitation.has_permission"
+    ],
+    "Document Template": [
+      "frappe.desk.doctype.document_template.document_template.has_permission"
+    ],
+    "Document Follow": [
+      "frappe.email.doctype.document_follow.document_follow.has_permission"
+    ],
+    "Custom Sidebar": [
+      "frappe.desk.doctype.custom_sidebar.custom_sidebar.has_permission"
+    ],
+    "Dock": [
+      "frappe.desk.doctype.dock.dock.has_permission"
+    ],
+    "Booking Event": [
+      "appointment.overrides.event_override.has_permission"
+    ]
+  },
+  "permission_query_conditions_hook": {
+    "Report": [
+      "frappe.core.doctype.report.report.get_permission_query_conditions",
+      "frappe.app_state.get_module_permission_query_conditions"
+    ],
+    "Event": [
+      "frappe.desk.doctype.event.event.get_permission_query_conditions"
+    ],
+    "ToDo": [
+      "frappe.desk.doctype.todo.todo.get_permission_query_conditions"
+    ],
+    "User": [
+      "frappe.core.doctype.user.user.get_permission_query_conditions",
+      "agent_plane.setup.security_roles.managed_service_user_query_condition"
+    ],
+    "Dashboard Settings": [
+      "frappe.desk.doctype.dashboard_settings.dashboard_settings.get_permission_query_conditions"
+    ],
+    "Notification Log": [
+      "frappe.desk.doctype.notification_log.notification_log.get_permission_query_conditions"
+    ],
+    "Dashboard": [
+      "frappe.desk.doctype.dashboard.dashboard.get_permission_query_conditions",
+      "frappe.app_state.get_module_permission_query_conditions"
+    ],
+    "Dashboard Chart": [
+      "frappe.desk.doctype.dashboard_chart.dashboard_chart.get_permission_query_conditions",
+      "frappe.app_state.get_module_permission_query_conditions"
+    ],
+    "Number Card": [
+      "frappe.desk.doctype.number_card.number_card.get_permission_query_conditions",
+      "frappe.app_state.get_module_permission_query_conditions"
+    ],
+    "Notification Settings": [
+      "frappe.desk.doctype.notification_settings.notification_settings.get_permission_query_conditions"
+    ],
+    "Note": [
+      "frappe.desk.doctype.note.note.get_permission_query_conditions"
+    ],
+    "Kanban Board": [
+      "frappe.desk.doctype.kanban_board.kanban_board.get_permission_query_conditions"
+    ],
+    "Contact": [
+      "frappe.contacts.address_and_contact.get_permission_query_conditions_for_contact"
+    ],
+    "Address": [
+      "frappe.contacts.address_and_contact.get_permission_query_conditions_for_address"
+    ],
+    "Comment": [
+      "frappe.core.doctype.comment.comment.get_permission_query_conditions"
+    ],
+    "Communication": [
+      "frappe.core.doctype.communication.communication.get_permission_query_conditions_for_communication"
+    ],
+    "Workflow Action": [
+      "frappe.workflow.doctype.workflow_action.workflow_action.get_permission_query_conditions"
+    ],
+    "Prepared Report": [
+      "frappe.core.doctype.prepared_report.prepared_report.get_permission_query_condition"
+    ],
+    "File": [
+      "frappe.core.doctype.file.file.get_permission_query_conditions"
+    ],
+    "User Invitation": [
+      "frappe.core.doctype.user_invitation.user_invitation.get_permission_query_conditions"
+    ],
+    "Document Template": [
+      "frappe.desk.doctype.document_template.document_template.get_permission_query_conditions"
+    ],
+    "Tag Link": [
+      "frappe.desk.doctype.tag_link.tag_link.get_permission_query_conditions"
+    ],
+    "Document Follow": [
+      "frappe.email.doctype.document_follow.document_follow.get_permission_query_conditions"
+    ],
+    "Scheduled Job Type": [
+      "frappe.core.doctype.scheduled_job_type.scheduled_job_type.get_permission_query_conditions"
+    ],
+    "Custom Sidebar": [
+      "frappe.desk.doctype.custom_sidebar.custom_sidebar.get_permission_query_conditions"
+    ],
+    "Dock": [
+      "frappe.desk.doctype.dock.dock.get_permission_query_conditions"
+    ],
+    "DocType": [
+      "frappe.app_state.get_module_permission_query_conditions"
+    ],
+    "Page": [
+      "frappe.app_state.get_module_permission_query_conditions"
+    ],
+    "Workspace": [
+      "frappe.app_state.get_module_permission_query_conditions"
+    ],
+    "Workspace Sidebar": [
+      "frappe.app_state.get_module_permission_query_conditions"
+    ],
+    "Print Format": [
+      "frappe.app_state.get_module_permission_query_conditions"
+    ],
+    "Notification": [
+      "frappe.app_state.get_module_permission_query_conditions"
+    ],
+    "Web Form": [
+      "frappe.app_state.get_module_permission_query_conditions"
+    ],
+    "Client Script": [
+      "frappe.app_state.get_module_permission_query_conditions"
+    ],
+    "Server Script": [
+      "frappe.app_state.get_module_permission_query_conditions"
+    ],
+    "Desktop Icon": [
+      "frappe.app_state.get_app_permission_query_conditions"
+    ]
+  },
+  "queue_counts": {
+    "Email Queue": 0,
+    "Email Queue Recipient": 0,
+    "Communication": 4,
+    "Error Log": 88,
+    "Scheduled Job Type": 59,
+    "Scheduled Job Log": 0
+  },
+  "email_queue_by_status": [],
+  "error_log_recent": [
+    {
+      "count(*)": 88
+    }
+  ],
+  "email_account_count": 0,
+  "outgoing_email_accounts": [],
+  "doctype_subscription_exists": null,
+  "web_form_count": 3,
+  "api_key_user_count": [
+    {
+      "count(*)": 0
+    }
+  ]
+}
