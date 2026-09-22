@@ -1,0 +1,129 @@
+# Phase 5 — customer management journey (find / reschedule / cancel).
+#
+# Fixture-assisted: the provider module `p5_fixtures` prepares one synthetic
+# booking and returns both the exact product-supplied management link and a
+# customer-host variant. The evaluated customer opens the link and resubmits
+# through the visible UI. The product-supplied link is NOT visibly received by
+# an email recipient here (email is muted); discoverability is assessed
+# separately from the confirmation screen in p5_a. Any token used is rotated by
+# teardown and is not published.
+app: appointment
+base_url: http://localhost:49510
+default_role: "anonymous-customer"
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+fixtures:
+  provider: p5_fixtures:values
+scenarios:
+  - id: p5_d1_product_link_as_supplied
+    title: Product-supplied management link opened exactly as returned
+    viewport:
+      width: 1440
+      height: 960
+    timeout_ms: 30000
+    checks: []
+    routes:
+      - path: "{p5_product_reschedule_url}"
+        assertions:
+          - type: no_blank_page
+    actions:
+      - action: screenshot
+        name: p5-d1-product-link.png
+        full_page: true
+      - action: get_dom_snapshot
+        name: p5-d1-product-link.html
+      - action: get_console_errors
+      - action: get_network_errors
+
+  - id: p5_d2_management_link_behavior
+    title: Customer follows the management link and submits the visible form
+    viewport:
+      width: 1440
+      height: 960
+    timeout_ms: 60000
+    checks: []
+    routes:
+      - path: "{p5_customer_reschedule_url}"
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+    actions:
+      - action: screenshot
+        name: p5-d2-management-link-first-screen.png
+        full_page: true
+      - action: get_dom_snapshot
+        name: p5-d2-management-link-first-screen.html
+      - action: click
+        selector: 'button:has-text("Tomorrow")'
+        timeout_ms: 15000
+      - action: wait_for
+        selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+        timeout_ms: 20000
+      - action: click
+        selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+        timeout_ms: 15000
+      - action: wait_for
+        selector: '#userName'
+        timeout_ms: 20000
+      - action: get_text
+        selector: 'body'
+        name: p5-d2-management-form-body.txt
+      - action: screenshot
+        name: p5-d2-management-form.png
+        full_page: true
+      - action: fill
+        selector: '#userName'
+        value: 'P5 Managed Customer'
+      - action: fill
+        selector: '#userEmail'
+        value: 'p5-managed-customer@example.test'
+      - action: fill
+        selector: '#userPhone'
+        value: '+251900000777'
+      - action: click
+        selector: '[data-qa="booking-confirm"]'
+        timeout_ms: 15000
+        assertions:
+          - type: network_request
+            url_contains: book_time_slot
+            method: POST
+            status_min: 200
+            status_max: 299
+            timeout_ms: 25000
+      - action: screenshot
+        name: p5-d2-management-after-submit.png
+        full_page: true
+      - action: get_dom_snapshot
+        name: p5-d2-management-after-submit.html
+      - action: get_text
+        selector: 'body'
+        name: p5-d2-management-after-submit-body.txt
+      - action: get_console_errors
+      - action: get_network_errors
+
+  - id: p5_d3_cancel_discoverability
+    title: Look for any customer cancellation control
+    viewport:
+      width: 1440
+      height: 960
+    timeout_ms: 40000
+    checks: []
+    routes:
+      - path: "{p5_customer_reschedule_url}"
+        assertions:
+          - type: no_blank_page
+    actions:
+      - action: observe_accessibility_tree
+        name: p5-d3-management-a11y.json
+      - action: get_text
+        selector: 'body'
+        name: p5-d3-management-body.txt
+      - action: get_console_errors
+      - action: get_network_errors

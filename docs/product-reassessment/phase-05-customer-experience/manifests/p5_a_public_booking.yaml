@@ -1,0 +1,116 @@
+# Phase 5 — anonymous customer discovers the business and books a slot.
+#
+# Auth is `none`: the browser carries no session cookie, so the journey runs as
+# an anonymous Guest. This is the supported anonymous auth mode; it is an
+# explicit protocol exception to the `frappe_session` default because
+# `frappe_session` cannot authenticate Guest on this runtime (BQA-2026-00086).
+# The first scenario records whether any privileged session is present.
+#
+# The bookable business is supplied by the deterministic QA fixture
+# (appointment.qa_fixtures.fixture_values), used because solo self-onboarding
+# cannot finish (Phase 3 F1). This is fixture-assisted evaluation, not
+# successful product onboarding.
+app: appointment
+base_url: http://localhost:49510
+default_role: "anonymous-customer"
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+fixtures:
+  provider: appointment.qa_fixtures.fixture_values
+scenarios:
+  - id: p5_a0_anonymity_check
+    title: Bookable business is reachable without a privileged session
+    viewport:
+      width: 1440
+      height: 960
+    checks: []
+    routes:
+      - path: /schedule/org/{qa_org_slug}
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+          - type: visible_selector
+            value: '[data-qa="booking-service"]'
+    actions:
+      - action: screenshot
+        name: p5-a0-org-services-desktop.png
+        full_page: true
+      - action: get_dom_snapshot
+        name: p5-a0-org-services-desktop.html
+      - action: get_console_errors
+      - action: get_network_errors
+
+  - id: p5_a1_public_booking
+    title: Anonymous customer books a service slot end to end
+    viewport:
+      width: 1440
+      height: 960
+    checks: []
+    routes:
+      - path: /schedule/org/{qa_org_slug}/{qa_service_slug}
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+          - type: visible_selector
+            value: '[data-qa="booking-tomorrow"]'
+    actions:
+      - action: screenshot
+        name: p5-a1-datetime-first-screen.png
+        full_page: true
+      - action: click
+        selector: '[data-qa="booking-tomorrow"]'
+      - action: wait_for
+        selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+      - action: screenshot
+        name: p5-a1-slots-tomorrow.png
+        full_page: true
+      - action: click
+        selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+      - action: wait_for
+        selector: '#userName'
+      - action: get_text
+        selector: 'body'
+        name: p5-a1-form-body-text.txt
+      - action: screenshot
+        name: p5-a1-booking-form.png
+        full_page: true
+      - action: fill
+        selector: '#userName'
+        value: 'P5 Anonymous Customer'
+      - action: fill
+        selector: '#userEmail'
+        value: 'p5-customer-anon@example.test'
+      - action: fill
+        selector: '#userPhone'
+        value: '+251900000555'
+      - action: screenshot
+        name: p5-a1-details-filled.png
+        full_page: true
+      - action: click
+        selector: '[data-qa="booking-confirm"]'
+        assertions:
+          - type: visible_text
+            value: 'Booking Confirmed!'
+          - type: network_request
+            url_contains: book_time_slot
+            method: POST
+            status_min: 200
+            status_max: 299
+            timeout_ms: 25000
+      - action: screenshot
+        name: p5-a1-confirmation.png
+        full_page: true
+      - action: get_dom_snapshot
+        name: p5-a1-confirmation.html
+      - action: observe_accessibility_tree
+        selector: '[role="dialog"]'
+        name: p5-a1-confirmation-a11y.json
+      - action: get_console_errors
+      - action: get_network_errors

@@ -1,0 +1,166 @@
+# Phase 5 — booking recovery and returning-customer checks (anonymous).
+#
+# Fixture-assisted bookable business (Phase 3 self-onboarding cannot finish).
+# Scenario p5_b1 asserts the invalid-email state is identified in the UI and no
+# booking request is sent; p5_b2 corrects it; p5_b3 books again as the same
+# returning email.
+app: appointment
+base_url: http://localhost:49510
+default_role: "anonymous-customer"
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+fixtures:
+  provider: appointment.qa_fixtures.fixture_values
+scenarios:
+  - id: p5_b1_invalid_contact
+    title: Invalid email is identified and no booking is sent
+    viewport:
+      width: 1440
+      height: 960
+    checks: []
+    routes:
+      - path: /schedule/org/{qa_org_slug}/{qa_service_slug}
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+          - type: visible_selector
+            value: '[data-qa="booking-tomorrow"]'
+    actions:
+      - action: click
+        selector: '[data-qa="booking-tomorrow"]'
+      - action: wait_for
+        selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+      - action: click
+        selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+      - action: wait_for
+        selector: '#userName'
+      - action: fill
+        selector: '#userName'
+        value: 'P5 Recovery Customer'
+      - action: fill
+        selector: '#userEmail'
+        value: 'not-an-email'
+      - action: fill
+        selector: '#userPhone'
+        value: '+251900000888'
+      - action: click
+        selector: '[data-qa="booking-confirm"]'
+        assertions:
+          - type: visible_selector
+            value: '#userEmail-error'
+          - type: network_request
+            url_contains: book_time_slot
+            method: POST
+            max_count: 0
+            timeout_ms: 8000
+      - action: screenshot
+        name: p5-b1-invalid-email.png
+        full_page: true
+      - action: observe_accessibility_tree
+        name: p5-b1-invalid-email-a11y.json
+      - action: get_text
+        selector: 'body'
+        name: p5-b1-invalid-email-body.txt
+      - action: get_console_errors
+      - action: get_network_errors
+
+  - id: p5_b2_corrected_contact
+    title: Corrected email completes the booking
+    viewport:
+      width: 1440
+      height: 960
+    checks: []
+    routes:
+      - path: /schedule/org/{qa_org_slug}/{qa_service_slug}
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+    actions:
+      - action: click
+        selector: '[data-qa="booking-tomorrow"]'
+      - action: wait_for
+        selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+      - action: click
+        selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+      - action: wait_for
+        selector: '#userEmail'
+      - action: fill
+        selector: '#userName'
+        value: 'P5 Returning Customer'
+      - action: fill
+        selector: '#userEmail'
+        value: 'p5-returning@example.test'
+      - action: fill
+        selector: '#userPhone'
+        value: '+251900000999'
+      - action: click
+        selector: '[data-qa="booking-confirm"]'
+        assertions:
+          - type: visible_text
+            value: 'Booking Confirmed!'
+          - type: network_request
+            url_contains: book_time_slot
+            method: POST
+            status_min: 200
+            status_max: 299
+            timeout_ms: 25000
+      - action: screenshot
+        name: p5-b2-corrected-confirmation.png
+        full_page: true
+      - action: get_console_errors
+      - action: get_network_errors
+
+  - id: p5_b3_returning_customer
+    title: Same returning email books again with no recognition
+    viewport:
+      width: 1440
+      height: 960
+    checks: []
+    routes:
+      - path: /schedule/org/{qa_org_slug}/{qa_service_slug}
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+    actions:
+      - action: click
+        selector: '[data-qa="booking-tomorrow"]'
+      - action: wait_for
+        selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+      - action: click
+        selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 2)'
+      - action: wait_for
+        selector: '#userEmail'
+      - action: fill
+        selector: '#userName'
+        value: 'P5 Returning Customer'
+      - action: fill
+        selector: '#userEmail'
+        value: 'p5-returning@example.test'
+      - action: fill
+        selector: '#userPhone'
+        value: '+251900000999'
+      - action: click
+        selector: '[data-qa="booking-confirm"]'
+        assertions:
+          - type: visible_text
+            value: 'Booking Confirmed!'
+          - type: network_request
+            url_contains: book_time_slot
+            method: POST
+            status_min: 200
+            status_max: 299
+            timeout_ms: 25000
+      - action: screenshot
+        name: p5-b3-returning-confirmation.png
+        full_page: true
+      - action: get_dom_snapshot
+        name: p5-b3-returning-confirmation.html
+      - action: get_console_errors
+      - action: get_network_errors

@@ -1,0 +1,66 @@
+{
+  "note": "Allowlisted fields only; cookies, headers, event_token redacted.",
+  "public_booking": [
+    {
+      "label": "BQA-2026-00106 p5_a1_public_booking",
+      "url": "http://localhost:49510/api/method/appointment.api.personal_meet.book_time_slot",
+      "status": 200,
+      "request_body": {
+        "duration_id": "kphb2rmspf",
+        "date": "2026-09-23",
+        "user_timezone_offset": "180",
+        "start_time": "2026-09-23 03:30:00+00:00",
+        "end_time": "2026-09-23 04:00:00+00:00",
+        "user_name": "P5 Anonymous Customer",
+        "user_email": "p5-customer-anon@example.test",
+        "other_participants": "",
+        "notes": "",
+        "time_format": "12h",
+        "user_phone": "+251900000555",
+        "organization_id": "QA-BROWSER-19b42a Org",
+        "service_id": "SRV-2026-0010",
+        "provider_id": "QA-BROWSER-19b42a Provider"
+      },
+      "response_body": {
+        "message": {
+          "message": "Event has been created",
+          "event_id": "BEV00005",
+          "meeting_provider": "builtin",
+          "meet_link": null,
+          "reschedule_url": "http://127.0.0.1:49511/schedule/in/qa-browser-19b42a?type=kphb2rmspf&reschedule=1&event_token=[REDACTED]",
+          "google_calendar_event_url": null
+        }
+      }
+    }
+  ],
+  "management_link_submit": [
+    {
+      "label": "BQA-2026-00109 p5_d2_management_link_behavior",
+      "url": "http://localhost:49510/api/method/appointment.api.personal_meet.book_time_slot",
+      "status": 200,
+      "request_body": {
+        "duration_id": "ti89576f5o",
+        "date": "2026-09-23",
+        "user_timezone_offset": "180",
+        "start_time": "2026-09-23 09:00:00+00:00",
+        "end_time": "2026-09-23 09:30:00+00:00",
+        "user_name": "P5 Managed Customer",
+        "user_email": "p5-managed-customer@example.test",
+        "other_participants": "",
+        "notes": "",
+        "time_format": "12h",
+        "user_phone": "+251900000777"
+      },
+      "response_body": {
+        "message": {
+          "message": "Event has been created",
+          "event_id": "BEV00006",
+          "meeting_provider": "builtin",
+          "meet_link": null,
+          "reschedule_url": "http://127.0.0.1:49511/schedule/in/qa-browser-dac923?type=ti89576f5o&reschedule=1&event_token=[REDACTED]",
+          "google_calendar_event_url": null
+        }
+      }
+    }
+  ]
+}

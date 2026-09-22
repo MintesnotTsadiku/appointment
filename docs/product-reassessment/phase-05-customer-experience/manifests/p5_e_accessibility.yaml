@@ -1,0 +1,180 @@
+# Phase 5 — mobile width, keyboard navigation, and Amharic comparison.
+#
+# Fixture-assisted bookable business. Mobile uses a 390x844 viewport. The
+# keyboard scenario records focus order via accessibility snapshots and submits
+# with the Enter key. The Amharic scenario toggles the public landing language
+# and then opens the booking page to compare coverage.
+app: appointment
+base_url: http://localhost:49510
+default_role: "anonymous-customer"
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+fixtures:
+  provider: appointment.qa_fixtures.fixture_values
+scenarios:
+  - id: p5_e1_mobile_booking
+    title: Anonymous customer books at 390x844
+    viewport:
+      width: 390
+      height: 844
+    checks: []
+    routes:
+      - path: /schedule/org/{qa_org_slug}/{qa_service_slug}
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+          - type: visible_selector
+            value: '[data-qa="booking-tomorrow"]'
+    actions:
+      - action: screenshot
+        name: p5-e1-mobile-first-screen.png
+        full_page: true
+      - action: click
+        selector: '[data-qa="booking-tomorrow"]'
+      - action: wait_for
+        selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+      - action: click
+        selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+      - action: wait_for
+        selector: '#userName'
+      - action: screenshot
+        name: p5-e1-mobile-form.png
+        full_page: true
+      - action: fill
+        selector: '#userName'
+        value: 'P5 Mobile Customer'
+      - action: fill
+        selector: '#userEmail'
+        value: 'p5-mobile@example.test'
+      - action: fill
+        selector: '#userPhone'
+        value: '+251900001111'
+      - action: click
+        selector: '[data-qa="booking-confirm"]'
+        assertions:
+          - type: visible_text
+            value: 'Booking Confirmed!'
+          - type: network_request
+            url_contains: book_time_slot
+            method: POST
+            status_min: 200
+            status_max: 299
+            timeout_ms: 25000
+      - action: screenshot
+        name: p5-e1-mobile-confirmation.png
+        full_page: true
+      - action: get_console_errors
+      - action: get_network_errors
+
+  - id: p5_e2_keyboard_booking
+    title: Keyboard focus order, labels, and Enter submission
+    viewport:
+      width: 1440
+      height: 960
+    checks: []
+    routes:
+      - path: /schedule/org/{qa_org_slug}/{qa_service_slug}
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+          - type: visible_selector
+            value: '[data-qa="booking-tomorrow"]'
+    actions:
+      - action: click
+        selector: '[data-qa="booking-tomorrow"]'
+      - action: wait_for
+        selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+      - action: press
+        selector: 'body'
+        key: 'Tab'
+      - action: observe_accessibility_tree
+        name: p5-e2-focus-step1-a11y.json
+      - action: click
+        selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+      - action: wait_for
+        selector: '#userName'
+      - action: extract_form_schema
+        name: p5-e2-form-schema.json
+      - action: observe_accessibility_tree
+        name: p5-e2-form-a11y.json
+      - action: press
+        selector: '#userName'
+        key: 'Tab'
+      - action: screenshot
+        name: p5-e2-name-tab-focus.png
+        full_page: false
+      - action: fill
+        selector: '#userName'
+        value: 'P5 Keyboard Customer'
+      - action: fill
+        selector: '#userEmail'
+        value: 'p5-keyboard@example.test'
+      - action: fill
+        selector: '#userPhone'
+        value: '+251900002222'
+      - action: press
+        selector: '[data-qa="booking-confirm"]'
+        key: 'Enter'
+        assertions:
+          - type: visible_text
+            value: 'Booking Confirmed!'
+          - type: network_request
+            url_contains: book_time_slot
+            method: POST
+            status_min: 200
+            status_max: 299
+            timeout_ms: 25000
+      - action: screenshot
+        name: p5-e2-keyboard-confirmation.png
+        full_page: true
+      - action: observe_accessibility_tree
+        name: p5-e2-confirmation-a11y.json
+      - action: get_console_errors
+      - action: get_network_errors
+
+  - id: p5_e3_amharic_comparison
+    title: Landing language toggle versus booking-page language
+    viewport:
+      width: 1440
+      height: 960
+    checks: []
+    routes:
+      - path: /
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+          - type: visible_selector
+            value: '[data-qa="language-toggle"]'
+    actions:
+      - action: screenshot
+        name: p5-e3-landing-english.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="language-toggle"]'
+        assertions:
+          - type: visible_text
+            value: 'ዋጋ'
+      - action: screenshot
+        name: p5-e3-landing-amharic.png
+        full_page: false
+      - action: open_url
+        url: /schedule/org/{qa_org_slug}/{qa_service_slug}
+        wait_until: load
+        timeout_ms: 60000
+      - action: wait_for
+        selector: '[data-qa="booking-tomorrow"]'
+      - action: get_text
+        selector: 'body'
+        name: p5-e3-booking-after-amharic-body.txt
+      - action: screenshot
+        name: p5-e3-booking-after-amharic.png
+        full_page: true
+      - action: get_console_errors
+      - action: get_network_errors
