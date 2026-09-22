@@ -1,0 +1,68 @@
+{
+  "run_date": "2026-09-22",
+  "runtime": "implement-owned-booking-slice-a95902",
+  "base_url": "http://127.0.0.20:25310",
+  "path": "appointment.qa_runner.run -> Agent Plane run_browser_qa_manifest -> Agent Harness",
+  "fixture_scope": "acceptance_demo (retained) and legacy (entry pages)",
+  "results": [
+    {
+      "manifest": "entry-pages.yaml",
+      "report": "BQA-2026-00065",
+      "scenarios": {
+        "guest_login_entry": "assertions passed (network_idle, login-heading visible). Screenshot and trace were redacted by the Harness sensitive-screen policy, so capture actions are reported false.",
+        "guest_home_entry": "passed with zero console and zero network errors after membership.context was made guest-safe."
+      },
+      "ok": true
+    },
+    {
+      "manifest": "role-newowner.yaml",
+      "report": "BQA-2026-00066",
+      "persona": "demo.newowner@example.test (no business)",
+      "assertion": "/home resolved to guided setup: [data-qa=onboarding-heading] visible",
+      "console_errors": 0,
+      "network_errors": 0,
+      "ok": true
+    },
+    {
+      "manifest": "role-reception.yaml",
+      "report": "BQA-2026-00067",
+      "persona": "demo.reception@example.test (Receptionist, Bole Studio scope)",
+      "assertion": "/home resolved to scoped reception: [data-qa=reception-scope] visible with business name Bole Bloom Studio",
+      "console_errors": 0,
+      "network_errors": 0,
+      "ok": true
+    },
+    {
+      "manifest": "role-multi.yaml",
+      "report": "BQA-2026-00068",
+      "persona": "demo.multi@example.test (two businesses)",
+      "assertion": "/home resolved to the workspace selector: [data-qa=workspaces-heading] and [data-qa=workspace-card] visible",
+      "console_errors": 0,
+      "network_errors": 0,
+      "ok": true
+    },
+    {
+      "manifest": "role-unassigned.yaml",
+      "report": "BQA-2026-00069",
+      "persona": "demo.unassigned@example.test (Front Desk role, no membership)",
+      "assertion": "/home resolved to the explanatory state: [data-qa=no-access-heading] visible",
+      "console_errors": 0,
+      "network_errors": 0,
+      "ok": true
+    }
+  ],
+  "evidence": {
+    "role-new-owner-setup.png": "BQA-2026-00066 synthetic screenshot",
+    "role-receptionist-scope.png": "BQA-2026-00067 synthetic screenshot",
+    "role-multi-business.png": "BQA-2026-00068 synthetic screenshot",
+    "role-unassigned.png": "BQA-2026-00069 synthetic screenshot",
+    "role-receptionist-scope-dom.html": "BQA-2026-00067 captured DOM of the scoped reception page",
+    "reports": "Sanitized BQA report JSON files (no console/network errors)"
+  },
+  "limitations": [
+    "Harness redacts login screenshots/traces; the login scenario's page assertions passed but its capture actions are reported false.",
+    "Authenticated role journeys start from an impersonated frappe_session, not a typed password; /login rendering is covered separately by the entry-pages scenario.",
+    "Provider /calendar landing and multi-workspace switching were verified by authenticated HTTP probes and the receptionist/multi browser scenarios; a dedicated provider browser scenario was not run.",
+    "Raw trace/video/session material was not committed."
+  ]
+}

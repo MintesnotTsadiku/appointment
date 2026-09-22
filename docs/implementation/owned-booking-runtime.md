@@ -120,3 +120,32 @@ are not committed. See `evidence/entry-pages/browser-summary.json`.
 Windows HTTP verification also confirms both entry pages serve Vite without
 unrendered templates or a missing manifest link; `/src/main.tsx` returns200
 with JavaScript MIME type. Regression fixtures were cleaned; the owner demo remains.
+
+
+## Role-aware onboarding increment (2026-09-22)
+
+See [roles, membership, onboarding, theme and time](roles-and-onboarding.md) for
+the full record. Summary:
+
+- `bench --site meet-beta-implement-owned-booking-slice-a95902.localhost migrate`
+  added `Business Membership` + `Membership Location` and synced the DocPerm
+  role rename `Front-Desk` -> `Front Desk`. Applied only to this isolated site.
+- Runtime was restarted (`frappe-worktree stop` then `up`) because Python/hook
+  changes required it; ordinary startup must not migrate. `common_site_config`
+  and the site hostname are unchanged.
+- New endpoints: `appointment.scheduler.membership.context`,
+  `select_workspace`, `assign_member`, `revoke_member`, `members`, `directory`,
+  `provider_options`, `location_options`. `get_desk_appointments` now accepts
+  `organization` and returns scope/timezone/next-date metadata.
+- Retained acceptance demo: businesses **Bole Bloom Studio** and **Kazanchis
+  Dental Care** with new-owner, owner, provider, receptionist, second-business,
+  multi-business and unassigned accounts. Credentials and the exact cleanup
+  manifest are in the mode-600 private file `private/acceptance-demo.json`;
+  clean with `bench --site <site> execute appointment.tests.acceptance_demo.reset`.
+  The owner's `Minte cafe` / `CMC` / `Best Cafe` data is preserved.
+- Browser QA: `appointment.qa_runner.run` with `fixture_scope='acceptance_demo'`
+  and `qa/manifests/owned-booking/role-*.yaml`; BQA-2026-00066/67/68/69 passed
+  with zero console/network errors. Evidence under `docs/implementation/evidence/roles`.
+- Automated: `bench --site <site> execute appointment.tests.test_membership.run`
+  (7/7 pass, exact cleanup).
+

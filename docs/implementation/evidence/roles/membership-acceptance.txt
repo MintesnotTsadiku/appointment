@@ -1,0 +1,14 @@
+test_01_time_conversion_boundaries (appointment.tests.test_membership.MembershipAcceptance.test_01_time_conversion_boundaries) ... ok
+test_02_unassigned_staff_has_explanatory_state (appointment.tests.test_membership.MembershipAcceptance.test_02_unassigned_staff_has_explanatory_state) ... ok
+test_03_manager_assigns_receptionist_with_location_scope (appointment.tests.test_membership.MembershipAcceptance.test_03_manager_assigns_receptionist_with_location_scope) ... ok
+test_04_provider_scope_narrows_reception (appointment.tests.test_membership.MembershipAcceptance.test_04_provider_scope_narrows_reception) ... ok
+test_05_revoked_membership_removes_access (appointment.tests.test_membership.MembershipAcceptance.test_05_revoked_membership_removes_access) ... ok
+test_06_multi_business_switch_and_precedence (appointment.tests.test_membership.MembershipAcceptance.test_06_multi_business_switch_and_precedence) ... ok
+test_07_disabled_user_is_consistent (appointment.tests.test_membership.MembershipAcceptance.test_07_disabled_user_is_consistent) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 2.328s
+
+OK
+{"tests": 7, "failures": 0, "errors": 0, "cleanup": {"removed_count": 26, "remaining_exact_records": []}}
+{"tests": 7, "failures": 0, "errors": 0, "cleanup": {"removed_count": 26, "remaining_exact_records": []}}
