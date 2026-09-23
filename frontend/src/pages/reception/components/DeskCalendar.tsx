@@ -558,7 +558,10 @@ export const DeskCalendar = ({
                           right: '12px',
                           minWidth: 0,
                           maxWidth: '100%',
-                          padding: '4px'
+                          paddingTop: '4px',
+                          paddingRight: '4px',
+                          paddingBottom: '4px',
+                          paddingLeft: '4px'
                         }}
                       >
                         <AppointmentCard 
@@ -740,7 +743,10 @@ export const DeskCalendar = ({
                                 right: '8px',
                                 minWidth: 0,
                                 maxWidth: '100%',
-                                padding: '4px',
+                                paddingTop: '4px',
+                          paddingRight: '4px',
+                          paddingBottom: '4px',
+                          paddingLeft: '4px',
                                 boxSizing: 'border-box'
                               }}
                             >
