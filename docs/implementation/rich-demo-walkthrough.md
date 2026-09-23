@@ -1,5 +1,48 @@
 # Rich Appointment demo walkthrough
 
+## Analytics operations validation
+
+The `feat/analytics-operations` implementation is running on the isolated site
+`meet-beta-feat-analytics-operations-f2ca8e.localhost`. Use the unique React/Vite
+URL `http://127.0.0.84:44430` and the proxied Desk URL
+`http://127.0.0.84:44430/app`. Its mode-600 credential and fixture manifest is:
+
+`/home/minte/.local/state/frappe-worktree-stack/feat-analytics-operations-f2ca8e/bench/sites/meet-beta-feat-analytics-operations-f2ca8e.localhost/private/rich-demo-v1.json`
+
+No-show rate is `No Show / (Completed + No Show)` for appointments whose end
+time has elapsed in the business timezone. Cancelled and unresolved bookings are
+excluded; a zero denominator is reported as unavailable rather than 0%.
+Provider utilization is the union of occupied provider intervals divided by the
+union of eligible provider working windows. Pending, Confirmed, Completed and No
+Show consume capacity, cancellations do not, and service buffers count. Capacity
+uses active services, offerings, providers, organization assignments, locations,
+effective hours and location holidays. Overlapping services and locations are
+unioned per provider before providers are summed.
+
+The current schema does not retain schedule or status snapshots. Historical
+capacity is therefore an estimate using current hours, holidays, offerings and
+assignments, and no-show classification uses the latest recorded status. These
+limits appear in the API, UI and CSV export. The export contains aggregate scope,
+summary, trend, service, provider and location rows; it contains no appointment
+or customer identifiers. It uses UTF-8 CSV quoting, formula-injection protection,
+and includes financial estimates only for owner/manager scopes.
+
+Focused verification on 2026-09-23 passed the deterministic analytics math suite
+(7 tests), the rich-demo integration suite (7/30/90-day periods, role scoping,
+tenant denial, export policy and empty-state semantics), the 18-check rich fixture
+roundtrip, the frontend DOM contract suite, and the production frontend build.
+Agent Plane runs `BQA-2026-00015` (owner/mobile/export), `BQA-2026-00016`
+(provider/dark), `BQA-2026-00017` (reception/mobile), and `BQA-2026-00018`
+(multi-business role switching) all passed with zero console and network errors.
+The authenticated API and Socket.IO WebSocket were also verified through the
+frontend origin. The raw reports, screenshots and traces remain private in the
+isolated site because they may contain session material.
+
+Useful synthetic accounts are `bloom.owner@example.test`,
+`bloom.manager@example.test`, `bloom.provider1@example.test`,
+`bloom.reception@example.test`, and `multi.manager@example.test`. Read passwords
+locally from the private manifest; never paste them into notes or recordings.
+
 This local demonstration runs from `feat/persona-analytics` (based on `demo/rich-appointment`) on the isolated site
 `meet-beta-demo-rich-appointment-344c1b.localhost`. Open
 `http://127.0.0.174:41960` in the Windows browser. The mode-600 private manifest

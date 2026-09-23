@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useFrappeGetCall } from 'frappe-react-sdk';
-import { ArrowUpRight, CalendarDays, Clock3, Users, CircleCheck, CircleX, BarChart3, MapPin } from 'lucide-react';
+import { ArrowUpRight, CalendarDays, Clock3, Users, CircleCheck, CircleX, BarChart3, MapPin, Download } from 'lucide-react';
 import { useSession } from '@/context/session';
 import Spinner from '@/components/spinner';
 
-type Trend = { date: string; bookings: number; completed: number; cancelled: number };
+type Trend = { date: string; bookings: number; completed: number; cancelled: number; no_show: number };
 type Mix = { name: string; count: number };
-type Rollup = { total: number; active: number; completed: number; confirmed: number; cancelled: number; no_show: number; unique_customers: number; repeat_customers: number; booked_hours: number; catalog_value?: number; recorded_payments?: number; trend: Trend[]; services: Mix[]; providers: Mix[]; locations: Mix[]; heatmap: { weekday: number; hour: number; count: number }[] };
-type Report = { business_name: string; role: string; timezone: string; period: number; start: string; end: string; today: string; current: Rollup; previous: Pick<Rollup, 'total' | 'active' | 'completed' | 'cancelled' | 'no_show' | 'booked_hours'>; today_confirmed: number; next_seven_days: number; financial_note?: string };
+type Rate = { available: boolean; numerator: number; denominator: number; rate: number | null };
+type Utilization = { available: boolean; booked_minutes: number; capacity_minutes: number; booked_hours: number; available_hours: number; rate: number | null; statuses: string[]; includes_buffers: boolean; schedule_basis: "current" };
+type Rollup = { total: number; active: number; completed: number; confirmed: number; cancelled: number; no_show: number; unique_customers: number; repeat_customers: number; booked_hours: number; no_show_rate: Rate; utilization: Utilization; catalog_value?: number; recorded_payments?: number; trend: Trend[]; services: Mix[]; providers: Mix[]; locations: Mix[]; heatmap: { weekday: number; hour: number; count: number }[] };
+type Report = { business_name: string; role: string; timezone: string; period: number; start: string; end: string; today: string; current: Rollup; previous: Pick<Rollup, "total" | "active" | "completed" | "cancelled" | "no_show" | "booked_hours" | "no_show_rate" | "utilization">; today_confirmed: number; next_seven_days: number; definitions: { no_show: string; utilization: string; schedule_limit: string }; financial_note?: string };
 
 const number = new Intl.NumberFormat();
 const money = new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 });
@@ -29,6 +31,19 @@ function Kpi({ title, value, detail, Icon }: { title: string; value: string; det
   </div>;
 }
 
+function RateCard({ title, value, detail, comparison, qa }: { title: string; value: string; detail: string; comparison?: string; qa: string }) {
+  return <section data-qa={qa} className={card} style={surface} aria-label={`${title}: ${value}. ${detail}`}>
+    <p className="text-sm font-medium" style={muted}>{title}</p><p className="mt-3 font-heading text-3xl font-bold tabular-nums">{value}</p>
+    <p className="mt-2 text-sm" style={muted}>{detail}</p>{comparison && <p className="mt-1 text-xs font-medium" style={{ color: "var(--accent-primary)" }}>{comparison}</p>}
+  </section>;
+}
+
+function validComparison(current: number | null, previous: number | null, available: boolean) {
+  if (!available || current === null || previous === null) return undefined;
+  const change = Math.round((current - previous) * 10) / 10;
+  return `${change > 0 ? '+' : ''}${change} percentage points vs prior period`;
+}
+
 function MixPanel({ title, rows, empty }: { title: string; rows: Mix[]; empty: string }) {
   const largest = Math.max(1, ...rows.map(row => row.count));
   return <section className={card} style={surface}><h3 className="font-heading text-lg font-semibold">{title}</h3>
@@ -43,7 +58,7 @@ function TrendPanel({ trend, period }: { trend: Trend[]; period: number }) {
   const weekly = period === 90;
   const buckets = weekly ? trend.reduce<Trend[]>((acc, row, index) => {
     if (index % 7 === 0) acc.push({ ...row });
-    else { const bucket = acc[acc.length - 1]; bucket.bookings += row.bookings; bucket.completed += row.completed; bucket.cancelled += row.cancelled; }
+    else { const bucket = acc[acc.length - 1]; bucket.bookings += row.bookings; bucket.completed += row.completed; bucket.cancelled += row.cancelled; bucket.no_show += row.no_show; }
     return acc;
   }, []) : trend;
   const max = Math.max(1, ...buckets.map(row => row.bookings));
@@ -56,7 +71,7 @@ function TrendPanel({ trend, period }: { trend: Trend[]; period: number }) {
       </div>)}
     </div>
     <div className="mt-2 flex justify-between text-xs" style={label}><span>{trend[0]?.date}</span><span>{trend[trend.length - 1]?.date}</span></div>
-    <details className="mt-4 text-sm"><summary className="cursor-pointer font-medium" style={{ color: 'var(--accent-primary)' }}>View booking data</summary><div className="mt-3 max-h-64 overflow-auto"><table className="w-full text-left"><thead><tr><th className="py-1">Date</th><th>Bookings</th><th>Completed</th><th>Cancelled</th></tr></thead><tbody>{trend.map(row => <tr key={row.date} className="border-t" style={{ borderColor: 'var(--border-subtle)' }}><td className="py-1">{row.date}</td><td>{row.bookings}</td><td>{row.completed}</td><td>{row.cancelled}</td></tr>)}</tbody></table></div></details>
+    <details className="mt-4 text-sm"><summary className="cursor-pointer font-medium" style={{ color: 'var(--accent-primary)' }}>View booking data</summary><div className="mt-3 max-h-64 overflow-auto"><table className="w-full text-left"><thead><tr><th className="py-1">Date</th><th>Bookings</th><th>Completed</th><th>Cancelled</th><th>No show</th></tr></thead><tbody>{trend.map(row => <tr key={row.date} className="border-t" style={{ borderColor: 'var(--border-subtle)' }}><td className="py-1">{row.date}</td><td>{row.bookings}</td><td>{row.completed}</td><td>{row.cancelled}</td><td>{row.no_show}</td></tr>)}</tbody></table></div></details>
   </section>;
 }
 
@@ -81,6 +96,8 @@ export function InsightBrief({ kind }: { kind: 'provider' | 'reception' }) {
     <span><b className="tabular-nums">{report.today_confirmed}</b> confirmed today</span>
     <span><b className="tabular-nums">{report.next_seven_days}</b> upcoming</span>
     <span><b className="tabular-nums">{report.current.completed}</b> completed this week</span>
+    <span><b className="tabular-nums">{report.current.no_show_rate.available ? `${report.current.no_show_rate.rate}%` : '—'}</b> no-show rate</span>
+    <span><b className="tabular-nums">{report.current.utilization.available ? `${report.current.utilization.rate}%` : '—'}</b> utilization</span>
     <Link to="/analytics" className="ml-auto inline-flex items-center gap-1 font-semibold" style={{ color: 'var(--accent-primary)' }}>View insights <ArrowUpRight className="h-4 w-4" /></Link>
   </section>;
 }
@@ -98,10 +115,18 @@ export default function WorkspaceDashboard({ embedded = false }: { embedded?: bo
   const manager = report.role === 'Owner' || report.role === 'Manager';
   const change = current.total - report.previous.total;
   const appointmentLabel = manager ? 'business appointments' : report.role === 'Provider' ? 'your appointments' : 'appointments in your reception scope';
+  const exportUrl = `/api/method/appointment.scheduler.analytics.export_csv?organization=${encodeURIComponent(organization)}&period=${period}`;
+  const noShowComparison = validComparison(current.no_show_rate.rate, report.previous.no_show_rate.rate, current.no_show_rate.available && report.previous.no_show_rate.available);
+  const utilizationComparison = validComparison(current.utilization.rate, report.previous.utilization.rate, current.utilization.available && report.previous.utilization.available);
   return <div data-qa="workspace-analytics" className="space-y-6">
-    <div className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[.18em]" style={{ color: 'var(--accent-primary)' }}>{manager ? 'Business intelligence' : report.role === 'Provider' ? 'Personal insights' : 'Reception insights'}</p><h2 className="mt-1 font-heading text-2xl font-bold sm:text-3xl">{embedded ? 'Your business at a glance' : report.business_name}</h2><p className="mt-1 text-sm" style={muted}>Showing {appointmentLabel} · {report.start} to {report.end} · {report.timezone?.replaceAll('_', ' ') || 'UTC'}</p></div><label className="flex items-center gap-2 text-sm font-medium">Period<select data-qa="analytics-period" value={period} onChange={event => setPeriod(Number(event.target.value))} className="rounded-xl border px-3 py-2" style={{ ...surface, color: 'var(--text-primary)' }}><option value={7}>Last 7 days</option><option value={30}>Last 30 days</option><option value={90}>Last 90 days</option></select></label></div>
+    <div className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[.18em]" style={{ color: "var(--accent-primary)" }}>{manager ? "Business intelligence" : report.role === "Provider" ? "Personal insights" : "Reception insights"}</p><h2 className="mt-1 font-heading text-2xl font-bold sm:text-3xl">{embedded ? "Your business at a glance" : report.business_name}</h2><p className="mt-1 text-sm" style={muted}>Showing {appointmentLabel} · {report.start} to {report.end} · {report.timezone?.replace(/_/g, " ") || "UTC"}</p></div><div className="flex flex-wrap items-center gap-2"><a data-qa="analytics-export" href={exportUrl} download className="inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-sm font-semibold" style={surface} aria-label={`Download ${period}-day aggregate insights as CSV`}><Download className="h-4 w-4" aria-hidden="true" />Export CSV</a><label className="flex items-center gap-2 text-sm font-medium">Period<select data-qa="analytics-period" value={period} onChange={event => setPeriod(Number(event.target.value))} className="rounded-xl border px-3 py-2" style={{ ...surface, color: "var(--text-primary)" }}><option value={7}>Last 7 days</option><option value={30}>Last 30 days</option><option value={90}>Last 90 days</option></select></label></div></div>
     <section className="grid gap-3 sm:grid-cols-3"><Kpi title="Confirmed today" value={number.format(report.today_confirmed)} detail={`As of ${report.today}`} Icon={CircleCheck} /><Kpi title="Next seven days" value={number.format(report.next_seven_days)} detail="Pending and confirmed bookings" Icon={CalendarDays} /><Kpi title="Booked time" value={`${current.booked_hours} h`} detail="Pending, confirmed and completed" Icon={Clock3} /></section>
     <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4"><Kpi title="All bookings" value={number.format(current.total)} detail={`${change >= 0 ? '+' : ''}${change} versus prior ${period} days`} Icon={BarChart3} /><Kpi title="Completed" value={number.format(current.completed)} detail="Appointments marked completed" Icon={CircleCheck} /><Kpi title="Cancelled" value={number.format(current.cancelled)} detail={`${current.no_show} no-shows`} Icon={CircleX} /><Kpi title="Customers" value={number.format(current.unique_customers)} detail={`${current.repeat_customers} booked more than once`} Icon={Users} /></section>
+    <section className="grid gap-3 lg:grid-cols-2">
+      <RateCard qa="analytics-no-show" title="No-show rate" value={current.no_show_rate.available ? `${current.no_show_rate.rate}%` : "Unavailable"} detail={`${current.no_show_rate.numerator} No Show ÷ ${current.no_show_rate.denominator} Completed + No Show · elapsed appointments only`} comparison={noShowComparison} />
+      <RateCard qa="analytics-utilization" title="Provider utilization" value={current.utilization.available ? `${current.utilization.rate}%` : "Unavailable"} detail={`${current.utilization.booked_hours} booked hours ÷ ${current.utilization.available_hours} available hours · buffers included`} comparison={utilizationComparison} />
+    </section>
+    <details className={card} style={surface}><summary className="cursor-pointer text-sm font-semibold">How these rates are calculated</summary><div className="mt-3 space-y-2 text-sm" style={muted}><p>{report.definitions.no_show}</p><p>{report.definitions.utilization}</p><p><strong>Current-schedule estimate:</strong> {report.definitions.schedule_limit}</p></div></details>
     {manager && <section className="grid gap-3 sm:grid-cols-2"><Kpi title="Booking value at catalog prices" value={`${money.format(current.catalog_value || 0)} ETB`} detail="Estimate using current service prices" Icon={ArrowUpRight} /><Kpi title="Recorded payments" value={`${money.format(current.recorded_payments || 0)} ETB`} detail="Only payments explicitly recorded on bookings" Icon={ArrowUpRight} /></section>}
     {manager && <p className="text-xs" style={label}>{report.financial_note} Recorded payments stay at zero until amounts are entered on bookings.</p>}
     <div className="grid gap-5 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,1fr)]"><TrendPanel trend={current.trend} period={period} /><MixPanel title="Most booked services" rows={current.services} empty="No services booked in this period." /></div>
