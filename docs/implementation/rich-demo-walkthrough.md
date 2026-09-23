@@ -1,16 +1,16 @@
 # Rich Appointment demo walkthrough
 
-This local demonstration runs from `demo/rich-appointment` on the isolated site
+This local demonstration runs from `feat/persona-analytics` (based on `demo/rich-appointment`) on the isolated site
 `meet-beta-demo-rich-appointment-344c1b.localhost`. Open
 `http://127.0.0.174:41960` in the Windows browser. The mode-600 private manifest
 with passwords, persona URLs, business URLs and exact created-record inventory is:
 
 `/home/minte/projects/appointment-worktree-runtimes/demo-rich-appointment-344c1b/bench/sites/meet-beta-demo-rich-appointment-344c1b.localhost/private/rich-demo-v1.json`
 
-The anchor date is 2026-09-23, in `Africa/Addis_Ababa`. The site has five
-fictional businesses, 14 login personas and 399 appointments after a clean
-reseed: 223 confirmed, 131 completed, 31 cancelled and 14 no-shows. It also has
-one rescheduled booking with history. Customer names and contacts are synthetic;
+The anchor date is 2026-09-23, in `Africa/Addis_Ababa`. The fixture spans 89 days before the anchor and 30 days after it, with both returning regulars and occasional customers. The site has five
+fictional businesses, 14 login personas and 1,429 appointments after a clean
+reseed: 447 confirmed, 797 completed, 110 cancelled and 75 no-shows. It also has
+rescheduled bookings with history. Customer names and contacts are synthetic;
 email is muted and the scheduler is paused. The clinic contains no real patient
 records. The application uses provider capacity, with rooms represented as
 locations; it does not claim group or equipment capacity.
@@ -41,22 +41,22 @@ the expected landing URL for every persona. Useful accounts are
    actual recording, then register that booking in the demo inventory if it
    needs exact cleanup.
 2. **Owner and setup, 1–2 minutes.** Log in as `bloom.owner@example.test`.
-   Show the owner overview, business settings, published services and customer
+   Show the owner analytics overview, switch the reporting period from 30 to 90 days, then open business settings, published services and customer
    links. Explain that publication and team access are managed in the business
    workspace.
 3. **Reception day, 2–3 minutes.** Log in as
-   `bloom.reception@example.test`, open Reception, and show realistic busy and
-   quiet dates, names, filters and location scope. Open one appointment and
+   `bloom.reception@example.test`, open Reception and its operational brief, then show realistic busy and
+   quiet dates, names, filters and location scope. Open Insights to see the same location-limited reporting scope. Open one appointment and
    demonstrate its history. The seeded lifecycle evidence includes a
    rescheduled and a cancelled booking.
 4. **Provider and solo work, 1–2 minutes each.** Use
-   `bloom.provider1@example.test` for the stylist calendar, then
+   `bloom.provider1@example.test` for the stylist calendar, personal brief and Insights, then
    `selam.owner@example.test` for a solo practitioner's overview and booking
    page. Note the different team and location complexity.
 5. **Manager, clinic and multi-business, 2–3 minutes.** Use
    `bloom.manager@example.test` for team access,
    `tena.reception@example.test` for the clinic's rooms, and
-   `multi.manager@example.test` to switch between authorized businesses.
+   `multi.manager@example.test` to switch between authorized businesses. Its role changes with the selected business: receptionist at Bole Bloom and manager at Tena.
 
 The seed is versioned and guarded to this explicitly enabled `.localhost` site.
 Its journal owns every record it may remove. From the isolated runtime Bench,
@@ -72,7 +72,7 @@ bench --site meet-beta-demo-rich-appointment-344c1b.localhost execute appointmen
 preservation, collision refusal and reseeding, and leaves a fresh site. For an
 intentional removal use `appointment.tests.rich_demo.cleanup` on this site only.
 Dates are anchored to the manifest date; rerun the exact cleanup and seed to
-refresh upcoming activity when the current date has moved on. A rerun writes
+refresh upcoming activity when the current date has moved on. The period control offers 7, 30 and 90 days. Owner and manager views include current-price catalog estimates and explicitly recorded payments; neither figure is labeled revenue. Provider and reception reports contain only appointments within their authorized scope and omit financial amounts. A rerun writes
 new passwords to the private manifest.
 
 ## Browser evidence
@@ -94,3 +94,9 @@ Representative synthetic captures: [public light](evidence/rich-demo/public-bloo
 
 This is a walkthrough environment, not a production launch or a claim that
 notifications, payments, medical workflows, or group capacity are enabled.
+
+## Analytics checks
+
+Run `bench --site meet-beta-demo-rich-appointment-344c1b.localhost execute appointment.tests.test_analytics.verify` from this isolated Bench with this worktree on `PYTHONPATH`. It checks nonempty 7/30/90-day data, repeat customers, manager-only money, provider and reception scopes, cross-business denial and invalid periods. The owner dashboard is `/home` and the full report is `/analytics`. Providers land on `/calendar` with a brief; receptionists land on `/reception` with a brief. Both have an Insights link.
+
+Agent Plane browser manifests are in `qa/manifests/analytics/`. The accepted owner run `BQA-2026-00044` selected 90 days on a mobile viewport; provider dark-mode run `BQA-2026-00045` reception run `BQA-2026-00040`, and multi-business role-switch run `BQA-2026-00043` passed with zero console and network errors. Raw traces and private login material stay in the local runtime.

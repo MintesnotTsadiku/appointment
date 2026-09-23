@@ -23,6 +23,8 @@ import { Button } from '@/components/button';
 import { Input } from '@/components/input';
 import { Card } from '@/components/card';
 import Spinner from '@/components/spinner';
+import AppTopNav from '@/components/workspace/AppTopNav';
+import { InsightBrief } from '@/components/analytics/WorkspaceDashboard';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, 
   startOfWeek, endOfWeek, addMonths, subMonths, addWeeks, subWeeks,
   addDays, subDays, isSameDay, isSameMonth, isToday, parseISO,
@@ -608,6 +610,8 @@ const Calendar = () => {
       </div>
 
       <div className="relative z-10">
+        <AppTopNav active="calendar" />
+        <div className="px-4 sm:px-6"><InsightBrief kind="provider" /></div>
         {/* Header */}
         <header 
           className="sticky top-0 z-50 backdrop-blur-xl"

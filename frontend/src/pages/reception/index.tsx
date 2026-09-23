@@ -8,6 +8,7 @@ import { WalkInQueue } from './components/WalkInQueue';
 import { CreateAppointmentModal } from './components/CreateAppointmentModal';
 import { AddWalkInModal } from './components/AddWalkInModal';
 import AppTopNav from '@/components/workspace/AppTopNav';
+import { InsightBrief } from '@/components/analytics/WorkspaceDashboard';
 import { useSession } from '@/context/session';
 import { useFrappeGetCall } from 'frappe-react-sdk';
 import { format, startOfWeek, endOfWeek } from 'date-fns';
@@ -173,6 +174,7 @@ const Reception = () => {
 
       <div className="relative z-10">
         <AppTopNav active="reception" />
+        <div className="px-4 sm:px-6"><InsightBrief kind="reception" /></div>
         {/* Sticky Top Section: Header + Stats + Filters */}
         <div 
           className="sticky top-0 z-40"

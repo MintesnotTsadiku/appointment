@@ -1,6 +1,6 @@
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useFrappeAuth } from 'frappe-react-sdk';
-import { Building2, CalendarDays, Home, LogOut, Monitor, Moon, Settings, Sun, Users } from 'lucide-react';
+import { BarChart3, Building2, CalendarDays, Home, LogOut, Monitor, Moon, Settings, Sun, Users } from 'lucide-react';
 import { useSession } from '@/context/session';
 import { useTheme } from '@/components/theme-provider';
 import { Button } from '@/components/button';
@@ -12,7 +12,7 @@ const ROLE_LABEL: Record<string, string> = {
   Provider: 'Provider',
 };
 
-export function AppTopNav({ active }: { active?: 'home' | 'reception' | 'calendar' | 'settings' | 'team' }) {
+export function AppTopNav({ active }: { active?: 'home' | 'analytics' | 'reception' | 'calendar' | 'settings' | 'team' }) {
   const { session, selectWorkspace } = useSession();
   const { logout } = useFrappeAuth();
   const { theme, setTheme } = useTheme();
@@ -29,6 +29,7 @@ export function AppTopNav({ active }: { active?: 'home' | 'reception' | 'calenda
 
   const links: Array<{ key: string; label: string; to: string; icon: typeof Home; show: boolean }> = [
     { key: 'home', label: 'Overview', to: '/home', icon: Home, show: isManager },
+    { key: 'analytics', label: 'Insights', to: '/analytics', icon: BarChart3, show: Boolean(selected) },
     { key: 'reception', label: 'Reception', to: '/reception', icon: Users, show: isManager || isReceptionist },
     { key: 'calendar', label: 'Schedule', to: '/calendar', icon: CalendarDays, show: !isManager },
     { key: 'settings', label: 'Settings', to: '/settings', icon: Settings, show: isManager },

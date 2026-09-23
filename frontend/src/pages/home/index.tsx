@@ -1,5 +1,6 @@
 import { Navigate, Link } from 'react-router-dom';
 import { Building2, CalendarDays, Settings, Users } from 'lucide-react';
+import WorkspaceDashboard from '@/components/analytics/WorkspaceDashboard';
 import { useSession } from '@/context/session';
 import AppTopNav from '@/components/workspace/AppTopNav';
 import { Button } from '@/components/button';
@@ -23,7 +24,7 @@ export default function Home() {
   ];
   return <main data-qa="app-shell" className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
     <AppTopNav active="home" />
-    <div className="mx-auto max-w-5xl space-y-8 px-4 py-10 sm:px-6">
+    <div className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6">
       <header className="space-y-3">
         <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Welcome, {session.full_name || 'back'}</p>
         <h1 data-qa="business-overview-heading" className="font-heading text-3xl font-bold">{admin ? 'Administration' : business?.business_name}</h1>
@@ -33,7 +34,8 @@ export default function Home() {
         {!business?.published && <section data-qa="business-draft-next-step" className="rounded-2xl border p-6" style={{ backgroundColor: 'var(--bg-elevated)', borderColor: 'var(--border-default)' }}>
           <h2 className="text-xl font-semibold">Your business is ready to review</h2><p className="my-3" style={{ color: 'var(--text-secondary)' }}>Your booking page stays private until you publish it.</p><Button asChild><Link to="/settings/business">Review and publish</Link></Button>
         </section>}
-        <div className="grid gap-4 sm:grid-cols-2">{actions.map(({ title, description, href, icon: Icon }) => <Link key={href} to={href} className="rounded-2xl border p-6 transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" style={{ backgroundColor: 'var(--bg-elevated)', borderColor: 'var(--border-default)' }}><Icon className="mb-4 h-6 w-6" style={{ color: 'var(--accent-primary)' }} /><h2 className="text-lg font-semibold">{title}</h2><p className="mt-2 text-sm" style={{ color: 'var(--text-secondary)' }}>{description}</p></Link>)}</div>
+        <nav aria-label="Workspace actions" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{actions.map(({ title, description, href, icon: Icon }) => <Link key={href} to={href} className="rounded-2xl border p-4 transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" style={{ backgroundColor: 'var(--bg-elevated)', borderColor: 'var(--border-default)' }}><Icon className="mb-2 h-5 w-5" style={{ color: 'var(--accent-primary)' }} /><h2 className="text-base font-semibold">{title}</h2><p className="mt-1 text-xs" style={{ color: 'var(--text-secondary)' }}>{description}</p></Link>)}</nav>
+        <WorkspaceDashboard embedded />
       </>}
     </div>
   </main>;

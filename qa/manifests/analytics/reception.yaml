@@ -1,0 +1,60 @@
+app: appointment
+base_url: http://127.0.0.174:41960
+default_role: Staff
+auth:
+  type: frappe_session
+  username: bloom.reception@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment-analytics
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.rich_demo.browser_values
+scenarios:
+- id: analytics_reception_0
+  title: reception analytics /reception
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /reception
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-qa="reception-insight-brief"]'
+  actions:
+  - action: screenshot
+    name: reception-0.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: reception-0.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: analytics_reception_1
+  title: reception analytics /analytics
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /analytics
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-qa="workspace-analytics"]'
+  actions:
+  - action: screenshot
+    name: reception-1.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: reception-1.html
+  - action: get_console_errors
+  - action: get_network_errors

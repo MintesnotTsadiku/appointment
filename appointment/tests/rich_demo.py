@@ -43,6 +43,12 @@ CLIENTS = [
     "Samuel Ayele",
     "Blen Yared",
 ]
+# Expand the cast beyond recurring regulars, while keeping every contact synthetic.
+CLIENTS = list(dict.fromkeys(CLIENTS + [
+    f"{given} {family}"
+    for given in ("Aster", "Birtukan", "Daniel", "Eden", "Fikir", "Genet", "Kidan", "Lemlem", "Mulu", "Rediet", "Robel", "Yared")
+    for family in ("Abate", "Alemu", "Bekele", "Demissie", "Girma", "Haile", "Kebede", "Mekonnen", "Tadesse", "Tesfaye")
+]))
 # key, business, owner, category, copy, hours, closed days, services, extra providers, rooms
 BUSINESSES = [
     (
@@ -401,14 +407,14 @@ def appointments(state):
     class HistoricalClock(datetime):
         @classmethod
         def now(cls, tz=None):
-            instant = datetime.combine(anchor - timedelta(days=30), datetime.min.time()).replace(tzinfo=timezone.utc)
+            instant = datetime.combine(anchor - timedelta(days=100), datetime.min.time()).replace(tzinfo=timezone.utc)
             return instant.astimezone(tz) if tz else instant.replace(tzinfo=None)
 
     counter = 0
     with patch.object(booking, "datetime", HistoricalClock):
         for business in state["businesses"].values():
             frappe.set_user(business["owner"])
-            for offset in range(-14, 15):
+            for offset in range(-89, 31):
                 day = anchor + timedelta(days=offset)
                 if day.strftime("%A") not in business["days"] or offset in (-9, 6):
                     continue
@@ -424,13 +430,14 @@ def appointments(state):
                         end = start + timedelta(minutes=offering["duration"])
                         if end.hour > business["closes"] or (end.hour == business["closes"] and end.minute):
                             continue
-                        customer = CLIENTS[counter % len(CLIENTS)]
+                        customer_index = (counter // 3) % 20 if counter % 3 == 0 else counter % len(CLIENTS)
+                        customer = CLIENTS[customer_index]
                         result = booking.book(
                             offering["id"],
                             start.isoformat() + "+03:00",
                             end.isoformat() + "+03:00",
                             customer,
-                            f"guest{counter % len(CLIENTS) + 1}@example.test",
+                            f"guest{customer_index + 1}@example.test",
                             f"rich-demo-v1-booking-{counter:06}",
                             notes="",
                         )
@@ -438,7 +445,10 @@ def appointments(state):
                         doc = frappe.get_doc("Appointment", name)
                         if counter % 13 == 0:
                             booking.change(name, "cancel", str(doc.modified))
-                        elif counter % 17 == 0:
+                        elif (
+                            counter % 17 == 0
+                            and end + timedelta(minutes=30) <= datetime.combine(day, datetime.min.time()) + timedelta(hours=business["closes"])
+                        ):
                             booking.change(
                                 name,
                                 "reschedule",
