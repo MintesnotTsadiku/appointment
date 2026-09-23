@@ -1,0 +1,60 @@
+app: appointment
+base_url: http://127.0.0.174:41960
+default_role: Staff
+auth:
+  type: frappe_session
+  username: multi.manager@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment-rich-demo
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.rich_demo.browser_values
+scenarios:
+- id: multi_desktop
+  title: multi desktop
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /workspaces
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-qa="workspace-card"]'
+  actions:
+  - action: screenshot
+    name: multi_desktop.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: multi_desktop.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: multi_mobile
+  title: multi mobile
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /workspaces
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-qa="workspace-card"]'
+  actions:
+  - action: screenshot
+    name: multi_mobile.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: multi_mobile.html
+  - action: get_console_errors
+  - action: get_network_errors

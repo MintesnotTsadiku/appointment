@@ -582,10 +582,12 @@ export const DeskCalendar = ({
                         height: `${layout.height}px`,
                         left: `calc(${layout.left}% + 0px)`,
                         width: `calc(${layout.width}% - ${layout.totalColumns > 1 ? '0.5%' : '0px'})`,
-                        paddingRight: layout.totalColumns > 1 ? '0.5%' : '0',
+                        paddingRight: layout.totalColumns > 1 ? '0.5%' : '4px',
+                        paddingTop: '4px',
+                        paddingBottom: '4px',
+                        paddingLeft: '4px',
                         minWidth: 0,
                         maxWidth: '100%',
-                        padding: '4px',
                         boxSizing: 'border-box'
                       }}
                     >
@@ -767,10 +769,12 @@ export const DeskCalendar = ({
                               height: `${layout.height}px`,
                               left: `calc(${layout.left}% + 0px)`,
                               width: `calc(${layout.width}% - ${layout.totalColumns > 1 ? '0.5%' : '0px'})`,
-                              paddingRight: layout.totalColumns > 1 ? '0.5%' : '0',
+                              paddingRight: layout.totalColumns > 1 ? '0.5%' : '4px',
+                              paddingTop: '4px',
+                              paddingBottom: '4px',
+                              paddingLeft: '4px',
                               minWidth: 0,
                               maxWidth: '100%',
-                              padding: '4px',
                               boxSizing: 'border-box'
                             }}
                           >

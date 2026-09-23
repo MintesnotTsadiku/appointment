@@ -1,0 +1,121 @@
+app: appointment
+base_url: http://127.0.0.174:41960
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-rich-demo
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.rich_demo.browser_values
+scenarios:
+- id: public_selam_light
+  title: public selam light
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_selam}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-qa="booking-service"]'
+  actions:
+  - action: screenshot
+    name: public_selam_light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: public_selam_light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: public_meron_light
+  title: public meron light
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_meron}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-qa="booking-service"]'
+  actions:
+  - action: screenshot
+    name: public_meron_light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: public_meron_light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: public_bloom_light
+  title: public bloom light
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_bloom}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-qa="booking-service"]'
+  actions:
+  - action: screenshot
+    name: public_bloom_light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: public_bloom_light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: public_tena_light
+  title: public tena light
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_tena}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-qa="booking-service"]'
+  actions:
+  - action: screenshot
+    name: public_tena_light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: public_tena_light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: public_abugida_light
+  title: public abugida light
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_abugida}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-qa="booking-service"]'
+  actions:
+  - action: screenshot
+    name: public_abugida_light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: public_abugida_light.html
+  - action: get_console_errors
+  - action: get_network_errors

@@ -280,15 +280,15 @@ export function ConfirmationModal({
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-primary-600 dark:text-primary-400 mt-0.5">•</span>
-                <span>Add the event to your calendar</span>
+                <span>Keep the date, time and location with your booking reference</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-primary-600 dark:text-primary-400 mt-0.5">•</span>
-                <span>Join the meeting at the scheduled time using the link</span>
+                <span>{bookingResponse.meetLink ? "Use the meeting link at the scheduled time" : "Arrive at the chosen location a few minutes before your appointment"}</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-primary-600 dark:text-primary-400 mt-0.5">•</span>
-                <span>You can reschedule or cancel up to 24 hours before</span>
+                <span>Contact the business if you need to change or cancel</span>
               </li>
             </ul>
           </div>

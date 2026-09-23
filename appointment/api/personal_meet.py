@@ -853,11 +853,15 @@ def update_last_assigned_provider(service_name, provider_name):
 @add_response_code
 def get_organization_services(org_slug):
     from appointment.scheduler.booking import offering
-    org_name = frappe.db.get_value("Organization", {"slug": org_slug, "is_active": 1, "enable_public_booking": 1}, "name")
+
+    org_name = frappe.db.get_value(
+        "Organization", {"slug": org_slug, "is_active": 1, "enable_public_booking": 1}, "name"
+    )
     if not org_name:
         frappe.throw("Business not found", frappe.DoesNotExistError)
     org = frappe.get_doc("Organization", org_name)
     services = []
+    providers = {}
     for row in frappe.get_all("EventType", filters={"is_active": 1}, fields=["name", "service"]):
         if frappe.db.get_value("Service", row.service, "organization") != org_name:
             continue
@@ -866,12 +870,30 @@ def get_organization_services(org_slug):
         except (frappe.PermissionError, frappe.ValidationError):
             frappe.clear_messages()
             continue
-        services.append({"name": service.service_name, "slug": event.name, "service_id": service.name,
-                         "description": event.description, "duration": event.duration_override or service.duration,
-                         "price": event.price_override or service.price, "type": "organization",
-                         "provider_id": provider.name, "provider_name": provider.provider_name})
-    return {"full_name": org.organization_name, "company": org.organization_name,
-            "profile_pic": org.logo, "services": services, "organization_id": org.name, "is_organization": True}
+        display_name = provider.display_name or provider.full_name or provider.provider_name
+        providers[provider.name] = {"id": provider.name, "name": display_name}
+        services.append({
+            "name": service.service_name,
+            "slug": event.name,
+            "service_id": service.name,
+            "description": event.description or service.description,
+            "duration": event.duration_override or service.duration,
+            "price": event.price_override or service.price,
+            "type": "organization",
+            "provider_id": provider.name,
+            "provider_name": display_name,
+        })
+    return {
+        "full_name": org.organization_name,
+        "company": org.organization_name,
+        "description": org.description,
+        "profile_pic": org.logo,
+        "services": services,
+        "providers": list(providers.values()),
+        "provider_count": len(providers),
+        "organization_id": org.name,
+        "is_organization": True,
+    }
 
 
 @frappe.whitelist(allow_guest=True)

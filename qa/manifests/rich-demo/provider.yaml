@@ -1,0 +1,60 @@
+app: appointment
+base_url: http://127.0.0.174:41960
+default_role: Staff
+auth:
+  type: frappe_session
+  username: bloom.provider1@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment-rich-demo
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: dark
+fixtures:
+  provider: appointment.tests.rich_demo.browser_values
+scenarios:
+- id: provider_desktop
+  title: provider desktop
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /home
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: body
+  actions:
+  - action: screenshot
+    name: provider_desktop.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: provider_desktop.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: provider_mobile
+  title: provider mobile
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /home
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: body
+  actions:
+  - action: screenshot
+    name: provider_mobile.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: provider_mobile.html
+  - action: get_console_errors
+  - action: get_network_errors

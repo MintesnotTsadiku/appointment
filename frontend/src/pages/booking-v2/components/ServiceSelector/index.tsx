@@ -183,7 +183,7 @@ export function ServiceSelector({
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {individualServices.map((service, index) => (
                 <motion.div
-                  key={service.id}
+                  key={service.slug || service.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
@@ -210,7 +210,7 @@ export function ServiceSelector({
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {organizationServices.map((service, index) => (
                 <motion.div
-                  key={service.id}
+                  key={service.slug || service.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
@@ -277,7 +277,7 @@ export function ServiceSelector({
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {providerServices.map((service, serviceIndex) => (
                       <motion.div
-                        key={service.id}
+                        key={service.slug || service.id}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.4 + providerIndex * 0.1 + serviceIndex * 0.05 }}
@@ -308,7 +308,7 @@ export function ServiceSelector({
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {groupServices.map((service, index) => (
                 <motion.div
-                  key={service.id}
+                  key={service.slug || service.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}

@@ -306,7 +306,7 @@ useEffect(() => {
                 <Info className="h-4 w-4 mt-0.5 flex-shrink-0" style={{ color: 'var(--accent-primary)' }} />
                 <div>
                   <p className="font-medium">Timezone: {timezone}</p>
-                  <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>All times shown in your local timezone</p>
+                  <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>All times shown in the booking time zone</p>
                 </div>
               </div>
             </div>
@@ -491,9 +491,9 @@ useEffect(() => {
           <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>
             <p className="font-medium mb-1" style={{ color: 'var(--text-primary)' }}>Booking Information</p>
             <ul className="list-disc list-inside space-y-1" style={{ color: 'var(--text-muted)' }}>
-              <li>All times are shown in your local timezone</li>
-              <li>You'll receive a calendar invite with the meeting link</li>
-              <li>You can reschedule or cancel up to 24 hours before</li>
+              <li>Times are shown in {timezone}</li>
+              <li>Save the selected time and location for your visit</li>
+              <li>Contact the business if you need to change your booking</li>
             </ul>
           </div>
         </div>

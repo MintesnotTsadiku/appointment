@@ -1,0 +1,44 @@
+app: appointment
+base_url: http://127.0.0.174:41960
+default_role: Provider
+auth:
+  type: frappe_session
+  username: bloom.owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment-rich-demo
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+fixtures:
+  provider: appointment.tests.rich_demo.browser_values
+scenarios:
+- id: rich_cancelled_history
+  title: Owner sees cancelled appointment and its change history
+  viewport:
+    width: 1440
+    height: 960
+  checks: []
+  routes:
+  - path: /reception
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="desk-next-day"]'
+  actions:
+  - action: click
+    selector: '[data-qa="desk-next-day"]'
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{demo_lifecycle_booking}"]'
+  - action: click
+    selector: '[data-qa-appointment-name="{demo_lifecycle_booking}"]'
+    assertions:
+    - type: visible_text
+      value: 'Status: Cancelled'
+  - action: screenshot
+    name: cancelled-history.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors

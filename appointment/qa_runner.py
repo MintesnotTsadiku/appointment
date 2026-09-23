@@ -46,6 +46,11 @@ def run(
         require_target()
         if not demo_path().exists():
             frappe.throw("Provision the retained acceptance demo first.")
+    elif fixture_scope == "rich_demo":
+        from appointment.tests.rich_demo import load_state, require_target
+
+        require_target()
+        load_state()
     elif fixture_scope == "legacy":
         qa_fixtures.setup()
     else:
@@ -53,7 +58,7 @@ def run(
     cleanup: dict = {}
     try:
         result = run_browser_qa_manifest(
-            manifest_name=manifest_name,
+            manifest_name=str(manifest_path.resolve()),
             base_url=base_url,
             scenario=scenario,
             update_baseline=update_baseline,
@@ -63,6 +68,8 @@ def run(
     finally:
         if fixture_scope == "legacy":
             cleanup = qa_fixtures.teardown()
+        elif fixture_scope == "rich_demo":
+            cleanup = {"retained_rich_demo": True, "finish": "appointment.tests.rich_demo.cleanup"}
         elif fixture_scope == "acceptance_demo":
             cleanup = {
                 "retained_acceptance_demo": True,

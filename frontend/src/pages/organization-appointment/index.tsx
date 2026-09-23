@@ -230,7 +230,7 @@ const OrganizationAppointmentV2 = () => {
         id: s.provider_id,
         name: s.provider_name,
       } : undefined,
-      providerCount: data.message.provider_count,
+      providerCount: s.provider_id ? 1 : data.message.provider_count,
     })) || [],
   } : null;
 

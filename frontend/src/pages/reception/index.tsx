@@ -93,7 +93,6 @@ const Reception = () => {
   const providers = providersData?.message?.providers || [];
 
   // Calculate stats
-  const todayAppointments = appointments.filter(apt => apt.appointment_date === format(new Date(), 'yyyy-MM-dd'));
   const confirmedCount = appointments.filter(apt => apt.status === 'Confirmed').length;
   const pendingCount = appointments.filter(apt => apt.status === 'Pending').length;
 
@@ -112,8 +111,8 @@ const Reception = () => {
   // Stats with dynamic theme colors via CSS variables
   const stats = [
     { 
-      label: "Today's Appointments", 
-      value: todayAppointments.length, 
+      label: "Visible appointments",
+      value: appointments.length,
       icon: Calendar, 
       gradient: 'bg-gradient-primary' // Uses --gradient-primary-from/to
     },
