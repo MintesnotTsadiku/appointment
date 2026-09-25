@@ -3,14 +3,16 @@ const path = require("path");
 const { chromium } = require("/home/minte/projects/develop-bench/apps/agent_harness/node_modules/playwright");
 
 const baseURL = process.env.PUBLIC_EXPERIENCE_BASE_URL || "http://127.0.0.84:44430";
-const outputDir = path.resolve(__dirname, "evidence/public-experience-independent-v1");
-const sites = [
+const outputDir = process.env.PUBLIC_EXPERIENCE_OUTPUT_DIR || path.resolve(__dirname, "evidence/public-experience-independent-v1");
+const allSites = [
   ["selam", "selam-studio", "selam-movement"],
   ["bloom", "bloom-studio", "bloom-hair"],
   ["meron", "meron-studio", "meron-atelier"],
   ["abugida", "abugida-studio", "abugida-language"],
   ["tena", "tena-studio", "tena-clinic"],
 ];
+const requestedSiteKeys = new Set((process.env.PUBLIC_EXPERIENCE_SITE_KEYS || "").split(",").filter(Boolean));
+const sites = requestedSiteKeys.size ? allSites.filter(([key]) => requestedSiteKeys.has(key)) : allSites;
 
 async function capture(page, key, slug, recipe, suffix) {
   const consoleErrors = [];

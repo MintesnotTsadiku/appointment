@@ -52,7 +52,7 @@ export function SelamSite({ snapshot, locale, applicationName, publicRoot, rootS
       <section className="selam-offerings">
         <p className="selam-overline">Our offerings</p><h2>{localized(services.title, locale)}</h2>
         <div className="selam-photo-grid">{records(services.items).map((item, index) => <article key={index}>
-          <img src={supportAsset("selam", (index % 3) + 1)} alt="" /><span>{["↗", "✿", "◉"][index % 3]}</span>
+          <div className="selam-photo"><img src={supportAsset("selam", (index % 3) + 1)} alt="" /><span>{["↗", "✿", "◉"][index % 3]}</span></div>
           <h3>{localized(item.name, locale)}</h3><p>{localized(item.summary, locale)}</p>{primary ? <a href={primary.href}>Explore →</a> : null}
         </article>)}</div>
       </section>
