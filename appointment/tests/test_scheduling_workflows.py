@@ -231,6 +231,12 @@ class TestSchedulingWorkflows(unittest.TestCase):
         slugs = {entry["slug"] for entry in catalog["services"]}
         self.assertIn(self.event_type.name, slugs)
 
+    def test_public_booking_catalog_rejects_complex_slug_filters(self):
+        from appointment.api.personal_meet import get_organization_services
+
+        with self.assertRaises(frappe.ValidationError):
+            get_organization_services(["!=", ""])
+
     def test_english_and_amharic_translations_available(self):
         repo_root = Path(frappe.get_app_path("appointment")).parent
         translations = repo_root / "frontend" / "src" / "lib" / "i18n" / "translations"

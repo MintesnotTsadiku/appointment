@@ -61,6 +61,7 @@ def verify():
             assert provider.bio == detail["provider_bios"][index]
             assert provider.display_name == provider.full_name
             assert provider.email.endswith("@example.test")
+            assert frappe.db.get_value("User", provider.user, "user_image") == rich_demo.PROVIDER_PORTRAITS[provider.display_name]
         for index, location_id in enumerate(business["locations"]):
             location = frappe.get_doc("Location", location_id)
             location_detail = detail["locations"][index]
@@ -79,6 +80,10 @@ def verify():
             assert service.description == expected["description"]
 
         assert frappe.db.exists("Brand Profile", business["brand_profile"])
+        brand_profile = frappe.get_doc("Brand Profile", business["brand_profile"])
+        assert brand_profile.logo_primary == rich_demo.DEMO_BRAND_RECIPES[key]["logo"]
+        assert brand_profile.logo_compact == rich_demo.DEMO_BRAND_RECIPES[key]["logo"]
+        assert brand_profile.favicon == rich_demo.DEMO_BRAND_RECIPES[key]["favicon"]
         assert frappe.db.exists("Public Site", business["public_site"])
         assert frappe.db.exists("Experience Release", business["experience_release"])
         assert frappe.db.get_value("Public Site", business["public_site"], "current_release") == business["experience_release"]
@@ -87,11 +92,19 @@ def verify():
         catalog = get_organization_services(frappe.db.get_value("Organization", business["organization"], "slug"))
         assert catalog["provider_count"] == len(business["providers"])
         assert len(catalog["providers"]) == len(business["providers"])
+        assert {row["avatar"] for row in catalog["providers"]} == {
+            rich_demo.PROVIDER_PORTRAITS[frappe.db.get_value("Provider", provider_id, "display_name")]
+            for provider_id in business["providers"]
+        }
         assert catalog["description"] == business["description"]
 
         release = frappe.get_doc("Experience Release", business["experience_release"])
         snapshot = json.loads(release.normalized_json)
         sections = {section["type"]: section["content"] for section in snapshot["sections"]}
+        identity = snapshot["compiledDesign"]["identity"]
+        assert identity["logoPrimary"] == rich_demo.DEMO_BRAND_RECIPES[key]["logo"]
+        assert identity["logoCompact"] == rich_demo.DEMO_BRAND_RECIPES[key]["logo"]
+        assert identity["favicon"] == rich_demo.DEMO_BRAND_RECIPES[key]["favicon"]
         expected_sections = {"hero", "services", "providers", "process", "benefits", "testimonials", "proof", "locations", "about", "faq", "contact", "booking_cta", "footer"}
         assert expected_sections <= set(sections)
         assert sections["hero"]["title"]["en"] == detail["headline"]
@@ -104,6 +117,7 @@ def verify():
         assert all("ETB" in item["summary"]["en"] and "minutes" in item["summary"]["en"] for item in sections["services"]["items"])
         assert [item["name"]["en"] for item in sections["providers"]["items"]] == [frappe.db.get_value("Provider", provider_id, "display_name") for provider_id in business["providers"]]
         assert all(item["specialties"] and item["credentials"] for item in sections["providers"]["items"])
+        assert [item["image"] for item in sections["providers"]["items"]] == [rich_demo.PROVIDER_PORTRAITS[frappe.db.get_value("Provider", provider_id, "display_name")] for provider_id in business["providers"]]
         assert detail["trust"] in sections["about"]["body"]["en"]
         assert len(sections["footer"]["items"]) == 2
         assert len(sections["faq"]["items"]) == 3

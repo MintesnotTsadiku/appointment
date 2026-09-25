@@ -105,6 +105,9 @@ class BrandProfile(Document):
                     **inputs,
                     "application_name": self.application_name,
                     "short_name": self.short_name or self.application_name,
+                    "logo_primary": self.logo_primary,
+                    "logo_compact": self.logo_compact,
+                    "favicon": self.favicon,
                 },
                 {"sections": list(recipe.required_sections), "locales": list(recipe.supported_locales), "content_richness": "rich"},
             )

@@ -1,0 +1,873 @@
+{
+  "baseURL": "http://127.0.0.84:44430",
+  "results": [
+    {
+      "key": "selam",
+      "viewport": "desktop",
+      "mode": "light",
+      "contrast": [],
+      "icons": [
+        {
+          "selector": "span.selam-mark",
+          "text": "✳",
+          "x": 58,
+          "y": 25,
+          "width": 34,
+          "height": 34,
+          "lineHeight": "28px",
+          "display": "grid"
+        },
+        {
+          "selector": "span.",
+          "text": "↗",
+          "x": 73,
+          "y": 1698,
+          "width": 62,
+          "height": 62,
+          "lineHeight": "27px",
+          "display": "grid"
+        },
+        {
+          "selector": "span.",
+          "text": "✿",
+          "x": 522,
+          "y": 1698,
+          "width": 62,
+          "height": 62,
+          "lineHeight": "27px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "♧",
+          "x": 58,
+          "y": 2237,
+          "width": 52,
+          "height": 52,
+          "lineHeight": "34px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "♡",
+          "x": 511,
+          "y": 2237,
+          "width": 52,
+          "height": 52,
+          "lineHeight": "34px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "◇",
+          "x": 964,
+          "y": 2237,
+          "width": 52,
+          "height": 52,
+          "lineHeight": "34px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "01",
+          "x": 771,
+          "y": 3237,
+          "width": 46,
+          "height": 46,
+          "lineHeight": "24px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "02",
+          "x": 771,
+          "y": 3347,
+          "width": 46,
+          "height": 46,
+          "lineHeight": "24px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "03",
+          "x": 771,
+          "y": 3457,
+          "width": 46,
+          "height": 46,
+          "lineHeight": "24px",
+          "display": "grid"
+        },
+        {
+          "selector": "span.selam-mark",
+          "text": "✳",
+          "x": 72,
+          "y": 5157,
+          "width": 34,
+          "height": 34,
+          "lineHeight": "28px",
+          "display": "grid"
+        }
+      ],
+      "toggleVerified": true
+    },
+    {
+      "key": "bloom",
+      "viewport": "desktop",
+      "mode": "light",
+      "contrast": [],
+      "icons": [],
+      "toggleVerified": true
+    },
+    {
+      "key": "meron",
+      "viewport": "desktop",
+      "mode": "light",
+      "contrast": [],
+      "icons": [],
+      "toggleVerified": true
+    },
+    {
+      "key": "abugida",
+      "viewport": "desktop",
+      "mode": "light",
+      "contrast": [],
+      "icons": [
+        {
+          "selector": "b.",
+          "text": "አ",
+          "x": 58,
+          "y": 21,
+          "width": 42,
+          "height": 42,
+          "lineHeight": "24px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "1",
+          "x": 792,
+          "y": 1815,
+          "width": 40,
+          "height": 40,
+          "lineHeight": "16px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "2",
+          "x": 792,
+          "y": 1927,
+          "width": 40,
+          "height": 40,
+          "lineHeight": "16px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "3",
+          "x": 792,
+          "y": 2039,
+          "width": 40,
+          "height": 40,
+          "lineHeight": "16px",
+          "display": "grid"
+        },
+        {
+          "selector": "span.",
+          "text": "↘",
+          "x": 1354,
+          "y": 3803,
+          "width": 28,
+          "height": 28,
+          "lineHeight": "16px",
+          "display": "grid"
+        },
+        {
+          "selector": "span.",
+          "text": "↘",
+          "x": 1354,
+          "y": 3871,
+          "width": 28,
+          "height": 28,
+          "lineHeight": "16px",
+          "display": "grid"
+        },
+        {
+          "selector": "span.",
+          "text": "↘",
+          "x": 1354,
+          "y": 3939,
+          "width": 28,
+          "height": 28,
+          "lineHeight": "16px",
+          "display": "grid"
+        }
+      ],
+      "toggleVerified": true
+    },
+    {
+      "key": "tena",
+      "viewport": "desktop",
+      "mode": "light",
+      "contrast": [],
+      "icons": [],
+      "toggleVerified": true
+    },
+    {
+      "key": "selam",
+      "viewport": "desktop",
+      "mode": "dark",
+      "contrast": [],
+      "icons": [
+        {
+          "selector": "span.selam-mark",
+          "text": "✳",
+          "x": 58,
+          "y": 25,
+          "width": 34,
+          "height": 34,
+          "lineHeight": "28px",
+          "display": "grid"
+        },
+        {
+          "selector": "span.",
+          "text": "↗",
+          "x": 73,
+          "y": 1698,
+          "width": 62,
+          "height": 62,
+          "lineHeight": "27px",
+          "display": "grid"
+        },
+        {
+          "selector": "span.",
+          "text": "✿",
+          "x": 522,
+          "y": 1698,
+          "width": 62,
+          "height": 62,
+          "lineHeight": "27px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "♧",
+          "x": 58,
+          "y": 2237,
+          "width": 52,
+          "height": 52,
+          "lineHeight": "34px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "♡",
+          "x": 511,
+          "y": 2237,
+          "width": 52,
+          "height": 52,
+          "lineHeight": "34px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "◇",
+          "x": 964,
+          "y": 2237,
+          "width": 52,
+          "height": 52,
+          "lineHeight": "34px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "01",
+          "x": 771,
+          "y": 3237,
+          "width": 46,
+          "height": 46,
+          "lineHeight": "24px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "02",
+          "x": 771,
+          "y": 3347,
+          "width": 46,
+          "height": 46,
+          "lineHeight": "24px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "03",
+          "x": 771,
+          "y": 3457,
+          "width": 46,
+          "height": 46,
+          "lineHeight": "24px",
+          "display": "grid"
+        },
+        {
+          "selector": "span.selam-mark",
+          "text": "✳",
+          "x": 72,
+          "y": 5157,
+          "width": 34,
+          "height": 34,
+          "lineHeight": "28px",
+          "display": "grid"
+        }
+      ],
+      "toggleVerified": true
+    },
+    {
+      "key": "bloom",
+      "viewport": "desktop",
+      "mode": "dark",
+      "contrast": [],
+      "icons": [],
+      "toggleVerified": true
+    },
+    {
+      "key": "meron",
+      "viewport": "desktop",
+      "mode": "dark",
+      "contrast": [],
+      "icons": [],
+      "toggleVerified": true
+    },
+    {
+      "key": "abugida",
+      "viewport": "desktop",
+      "mode": "dark",
+      "contrast": [],
+      "icons": [
+        {
+          "selector": "b.",
+          "text": "አ",
+          "x": 58,
+          "y": 21,
+          "width": 42,
+          "height": 42,
+          "lineHeight": "24px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "1",
+          "x": 792,
+          "y": 1815,
+          "width": 40,
+          "height": 40,
+          "lineHeight": "16px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "2",
+          "x": 792,
+          "y": 1927,
+          "width": 40,
+          "height": 40,
+          "lineHeight": "16px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "3",
+          "x": 792,
+          "y": 2039,
+          "width": 40,
+          "height": 40,
+          "lineHeight": "16px",
+          "display": "grid"
+        },
+        {
+          "selector": "span.",
+          "text": "↘",
+          "x": 1354,
+          "y": 3803,
+          "width": 28,
+          "height": 28,
+          "lineHeight": "16px",
+          "display": "grid"
+        },
+        {
+          "selector": "span.",
+          "text": "↘",
+          "x": 1354,
+          "y": 3871,
+          "width": 28,
+          "height": 28,
+          "lineHeight": "16px",
+          "display": "grid"
+        },
+        {
+          "selector": "span.",
+          "text": "↘",
+          "x": 1354,
+          "y": 3939,
+          "width": 28,
+          "height": 28,
+          "lineHeight": "16px",
+          "display": "grid"
+        }
+      ],
+      "toggleVerified": true
+    },
+    {
+      "key": "tena",
+      "viewport": "desktop",
+      "mode": "dark",
+      "contrast": [
+        {
+          "selector": "p.tena-label",
+          "text": "Illustrative patient story",
+          "foreground": "rgb(231, 154, 124)",
+          "background": "rgb(59, 85, 67)",
+          "ratio": 3.63,
+          "threshold": 4.5,
+          "fontSize": 10
+        }
+      ],
+      "icons": [],
+      "toggleVerified": true
+    },
+    {
+      "key": "selam",
+      "viewport": "mobile",
+      "mode": "light",
+      "contrast": [],
+      "icons": [
+        {
+          "selector": "span.selam-mark",
+          "text": "✳",
+          "x": 18,
+          "y": 25,
+          "width": 34,
+          "height": 34,
+          "lineHeight": "28px",
+          "display": "grid"
+        },
+        {
+          "selector": "span.",
+          "text": "↗",
+          "x": 39,
+          "y": 2488,
+          "width": 62,
+          "height": 62,
+          "lineHeight": "27px",
+          "display": "grid"
+        },
+        {
+          "selector": "span.",
+          "text": "✿",
+          "x": 39,
+          "y": 3072,
+          "width": 62,
+          "height": 62,
+          "lineHeight": "27px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "♧",
+          "x": 24,
+          "y": 3624,
+          "width": 52,
+          "height": 52,
+          "lineHeight": "34px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "♡",
+          "x": 24,
+          "y": 3791,
+          "width": 52,
+          "height": 52,
+          "lineHeight": "34px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "◇",
+          "x": 24,
+          "y": 3957,
+          "width": 52,
+          "height": 52,
+          "lineHeight": "34px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "01",
+          "x": 30,
+          "y": 5592,
+          "width": 46,
+          "height": 46,
+          "lineHeight": "24px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "02",
+          "x": 30,
+          "y": 5726,
+          "width": 46,
+          "height": 46,
+          "lineHeight": "24px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "03",
+          "x": 30,
+          "y": 5860,
+          "width": 46,
+          "height": 46,
+          "lineHeight": "24px",
+          "display": "grid"
+        },
+        {
+          "selector": "span.selam-mark",
+          "text": "✳",
+          "x": 26,
+          "y": 8618,
+          "width": 34,
+          "height": 34,
+          "lineHeight": "28px",
+          "display": "grid"
+        }
+      ],
+      "toggleVerified": true
+    },
+    {
+      "key": "bloom",
+      "viewport": "mobile",
+      "mode": "light",
+      "contrast": [],
+      "icons": [],
+      "toggleVerified": true
+    },
+    {
+      "key": "meron",
+      "viewport": "mobile",
+      "mode": "light",
+      "contrast": [],
+      "icons": [],
+      "toggleVerified": true
+    },
+    {
+      "key": "abugida",
+      "viewport": "mobile",
+      "mode": "light",
+      "contrast": [],
+      "icons": [
+        {
+          "selector": "b.",
+          "text": "አ",
+          "x": 17,
+          "y": 21,
+          "width": 42,
+          "height": 42,
+          "lineHeight": "24px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "1",
+          "x": 20,
+          "y": 3023,
+          "width": 40,
+          "height": 40,
+          "lineHeight": "16px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "2",
+          "x": 20,
+          "y": 3159,
+          "width": 40,
+          "height": 40,
+          "lineHeight": "16px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "3",
+          "x": 20,
+          "y": 3295,
+          "width": 40,
+          "height": 40,
+          "lineHeight": "16px",
+          "display": "grid"
+        },
+        {
+          "selector": "span.",
+          "text": "↘",
+          "x": 346,
+          "y": 6575,
+          "width": 28,
+          "height": 28,
+          "lineHeight": "16px",
+          "display": "grid"
+        },
+        {
+          "selector": "span.",
+          "text": "↘",
+          "x": 346,
+          "y": 6643,
+          "width": 28,
+          "height": 28,
+          "lineHeight": "16px",
+          "display": "grid"
+        },
+        {
+          "selector": "span.",
+          "text": "↘",
+          "x": 346,
+          "y": 6711,
+          "width": 28,
+          "height": 28,
+          "lineHeight": "16px",
+          "display": "grid"
+        }
+      ],
+      "toggleVerified": true
+    },
+    {
+      "key": "tena",
+      "viewport": "mobile",
+      "mode": "light",
+      "contrast": [],
+      "icons": [],
+      "toggleVerified": true
+    },
+    {
+      "key": "selam",
+      "viewport": "mobile",
+      "mode": "dark",
+      "contrast": [],
+      "icons": [
+        {
+          "selector": "span.selam-mark",
+          "text": "✳",
+          "x": 18,
+          "y": 25,
+          "width": 34,
+          "height": 34,
+          "lineHeight": "28px",
+          "display": "grid"
+        },
+        {
+          "selector": "span.",
+          "text": "↗",
+          "x": 39,
+          "y": 2488,
+          "width": 62,
+          "height": 62,
+          "lineHeight": "27px",
+          "display": "grid"
+        },
+        {
+          "selector": "span.",
+          "text": "✿",
+          "x": 39,
+          "y": 3072,
+          "width": 62,
+          "height": 62,
+          "lineHeight": "27px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "♧",
+          "x": 24,
+          "y": 3624,
+          "width": 52,
+          "height": 52,
+          "lineHeight": "34px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "♡",
+          "x": 24,
+          "y": 3791,
+          "width": 52,
+          "height": 52,
+          "lineHeight": "34px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "◇",
+          "x": 24,
+          "y": 3957,
+          "width": 52,
+          "height": 52,
+          "lineHeight": "34px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "01",
+          "x": 30,
+          "y": 5592,
+          "width": 46,
+          "height": 46,
+          "lineHeight": "24px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "02",
+          "x": 30,
+          "y": 5726,
+          "width": 46,
+          "height": 46,
+          "lineHeight": "24px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "03",
+          "x": 30,
+          "y": 5860,
+          "width": 46,
+          "height": 46,
+          "lineHeight": "24px",
+          "display": "grid"
+        },
+        {
+          "selector": "span.selam-mark",
+          "text": "✳",
+          "x": 26,
+          "y": 8618,
+          "width": 34,
+          "height": 34,
+          "lineHeight": "28px",
+          "display": "grid"
+        }
+      ],
+      "toggleVerified": true
+    },
+    {
+      "key": "bloom",
+      "viewport": "mobile",
+      "mode": "dark",
+      "contrast": [],
+      "icons": [],
+      "toggleVerified": true
+    },
+    {
+      "key": "meron",
+      "viewport": "mobile",
+      "mode": "dark",
+      "contrast": [],
+      "icons": [],
+      "toggleVerified": true
+    },
+    {
+      "key": "abugida",
+      "viewport": "mobile",
+      "mode": "dark",
+      "contrast": [],
+      "icons": [
+        {
+          "selector": "b.",
+          "text": "አ",
+          "x": 17,
+          "y": 21,
+          "width": 42,
+          "height": 42,
+          "lineHeight": "24px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "1",
+          "x": 20,
+          "y": 3023,
+          "width": 40,
+          "height": 40,
+          "lineHeight": "16px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "2",
+          "x": 20,
+          "y": 3159,
+          "width": 40,
+          "height": 40,
+          "lineHeight": "16px",
+          "display": "grid"
+        },
+        {
+          "selector": "b.",
+          "text": "3",
+          "x": 20,
+          "y": 3295,
+          "width": 40,
+          "height": 40,
+          "lineHeight": "16px",
+          "display": "grid"
+        },
+        {
+          "selector": "span.",
+          "text": "↘",
+          "x": 346,
+          "y": 6575,
+          "width": 28,
+          "height": 28,
+          "lineHeight": "16px",
+          "display": "grid"
+        },
+        {
+          "selector": "span.",
+          "text": "↘",
+          "x": 346,
+          "y": 6643,
+          "width": 28,
+          "height": 28,
+          "lineHeight": "16px",
+          "display": "grid"
+        },
+        {
+          "selector": "span.",
+          "text": "↘",
+          "x": 346,
+          "y": 6711,
+          "width": 28,
+          "height": 28,
+          "lineHeight": "16px",
+          "display": "grid"
+        }
+      ],
+      "toggleVerified": true
+    },
+    {
+      "key": "tena",
+      "viewport": "mobile",
+      "mode": "dark",
+      "contrast": [
+        {
+          "selector": "p.tena-label",
+          "text": "Illustrative patient story",
+          "foreground": "rgb(231, 154, 124)",
+          "background": "rgb(59, 85, 67)",
+          "ratio": 3.63,
+          "threshold": 4.5,
+          "fontSize": 10
+        }
+      ],
+      "icons": [],
+      "toggleVerified": true
+    }
+  ]
+}

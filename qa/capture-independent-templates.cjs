@@ -36,6 +36,13 @@ async function capture(page, key, slug, recipe, suffix, mode) {
   const modeSelector = mode ? `[data-pe-mode="${mode}"]` : "";
   const selector = suffix ? `[data-pe-booking][data-pe-recipe="${recipe}"]${modeSelector}` : `[data-pe-root][data-pe-recipe="${recipe}"]${modeSelector}`;
   await page.locator(selector).waitFor({ state: "visible", timeout: 20_000 });
+  const logo = page.locator(".pe-brand-logo").first();
+  await logo.waitFor({ state: "visible", timeout: 20_000 });
+  const logoSrc = await logo.getAttribute("src");
+  const logoLoaded = await logo.evaluate((image) => image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0);
+  if (!logoLoaded || !logoSrc?.endsWith("/" + key + "-logo.webp")) throw new Error(key + " logo did not load");
+  await page.waitForFunction((siteKey) => document.querySelector(`link[rel~="icon"][data-public-experience]`)?.getAttribute("href")?.endsWith("/" + siteKey + "-favicon.png"), key);
+  const faviconHref = await page.locator(`link[rel~="icon"][data-public-experience]`).getAttribute("href");
   await page.waitForTimeout(900);
   const surface = suffix ? "book" : "landing";
   const viewport = page.viewportSize().width < 600 ? "mobile" : "desktop";
@@ -45,7 +52,7 @@ async function capture(page, key, slug, recipe, suffix, mode) {
   page.off("requestfailed", onRequestFailed);
   page.off("response", onResponse);
   if (consoleErrors.length || networkErrors.length) throw new Error(JSON.stringify({ key, surface, viewport, consoleErrors, networkErrors, badResponses }));
-  return { key, surface, viewport, mode: mode || "resolved", consoleErrors, networkErrors, badResponses };
+  return { key, surface, viewport, mode: mode || "resolved", logoSrc, faviconHref, consoleErrors, networkErrors, badResponses };
 }
 
 (async () => {
@@ -59,6 +66,7 @@ async function capture(page, key, slug, recipe, suffix, mode) {
           const context = await browser.newContext({ viewport });
           const page = await context.newPage();
           results.push(await capture(page, key, slug, recipe, suffix, mode));
+          fs.writeFileSync(path.join(outputDir, "validation-summary.json"), JSON.stringify({ baseURL, results }, null, 2));
           await page.close();
           await context.close();
         }

@@ -38,6 +38,19 @@ export function asset(design: CompiledDesign, role: string) {
   return design.assets[role] || design.assets["section.detail"] || design.assets["hero.primary"];
 }
 
+export function brandLogo(design: CompiledDesign): string | undefined {
+  const value = design.identity.logoCompact || design.identity.logoPrimary;
+  return typeof value === "string" && value.startsWith("/assets/appointment/") && !value.includes("..")
+    ? value
+    : undefined;
+}
+
+export function localAsset(value: unknown, fallback: string): string {
+  return typeof value === "string"
+    && value.startsWith("/assets/appointment/")
+    && !value.includes("..") ? value : fallback;
+}
+
 export function supportAsset(site: string, scene: number): string {
   return `/assets/appointment/brand-experience/support/${site}/scene-${scene}.webp`;
 }

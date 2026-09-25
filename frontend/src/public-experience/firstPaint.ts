@@ -79,6 +79,9 @@ export function mergeConfig(raw: unknown, fallback: PublicUIConfig): PublicUICon
     identity: {
       applicationName: typeof identity.applicationName === "string" ? identity.applicationName : design.identity.applicationName,
       shortName: typeof identity.shortName === "string" ? identity.shortName : design.identity.shortName,
+      logoPrimary: typeof identity.logoPrimary === "string" ? identity.logoPrimary : design.identity.logoPrimary,
+      logoCompact: typeof identity.logoCompact === "string" ? identity.logoCompact : design.identity.logoCompact,
+      favicon: typeof identity.favicon === "string" ? identity.favicon : design.identity.favicon,
     },
     booking: isPlainObject(source.booking) ? source.booking as Record<string, unknown> : {},
     cache: isPlainObject(source.cache) ? source.cache as Record<string, unknown> : {},

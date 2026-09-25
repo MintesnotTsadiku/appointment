@@ -25,6 +25,8 @@ class TestShowcaseCatalog(unittest.TestCase):
             self.assertEqual(assignment["recipe"], catalog[key]["recipe"])
             self.assertEqual(assignment["hero"], catalog[key]["heroRole"])
             self.assertEqual(assignment["detail"], catalog[key]["detailRole"])
+            self.assertEqual(assignment["logo"], catalog[key]["logoAsset"])
+            self.assertEqual(assignment["favicon"], catalog[key]["faviconAsset"])
 
     def test_design_reference_manifest_matches_files(self):
         root = REPO_ROOT / "docs" / "design-references" / "public-experience" / "v1"

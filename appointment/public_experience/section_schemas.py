@@ -49,6 +49,14 @@ def _string(value: object, field: str, *, required: bool = True, max_length: int
         return [_issue(field, "safe_text", value, f"plain text of at most {max_length} characters", "Use plain text only.")]
     return []
 
+def _asset(value: object, field: str) -> list[ValidationIssue]:
+    issues = _string(value, field, max_length=255)
+    if issues:
+        return issues
+    if not str(value).startswith("/assets/appointment/") or ".." in str(value):
+        return [_issue(field, "local_asset", value, "a packaged appointment asset path", "Use a trusted local asset.")]
+    return []
+
 
 def _closed(value: Mapping[str, object], field: str, allowed: set[str]) -> list[ValidationIssue]:
     return [
@@ -132,7 +140,7 @@ def _services(content: Mapping[str, object], allowed: Iterable[str]) -> list[Val
 
 def _providers(content: Mapping[str, object], allowed: Iterable[str]) -> list[ValidationIssue]:
     issues = _common(content, {"title", "intro", "items"})
-    issues.extend(_record_list(content, "items", {"id", "name", "role", "specialties", "credentials", "imageRole", "action"}, max_items=24))
+    issues.extend(_record_list(content, "items", {"id", "name", "role", "specialties", "credentials", "imageRole", "image", "action"}, max_items=24))
     values = content.get("items")
     if isinstance(values, list):
         for index, item in enumerate(values):
@@ -150,6 +158,8 @@ def _providers(content: Mapping[str, object], allowed: Iterable[str]) -> list[Va
                         issues.extend(_localized(entry, f"items[{index}].{key}[{entry_index}]"))
             if item.get("imageRole") is not None:
                 issues.extend(_string(item.get("imageRole"), f"items[{index}].imageRole", max_length=64))
+            if item.get("image") is not None:
+                issues.extend(_asset(item.get("image"), f"items[{index}].image"))
             issues.extend(_action(item, "action", allowed))
     return issues
 

@@ -11,3 +11,163 @@
 [data-booking-branded="true"] h3 { font-family: var(--booking-font-display); }
 [data-booking-branded="true"] .rounded-2xl { border-radius: var(--booking-radius); }
 [data-booking-branded="true"] :focus-visible { outline-color: var(--accent-primary); }
+
+
+/* Release-scoped booking continuity. The scheduler keeps one interaction model
+   while inheriting the active public experience typography, color, and shape. */
+.meron-nav > a:first-child,
+.meron-footer > a:first-child,
+.bloom-nav > a:first-child,
+.bloom-footer > a:first-child {
+  display: inline-flex;
+  align-items: center;
+}
+
+.pe-brand-logo {
+  width: 2.4rem;
+  height: 2.4rem;
+  margin-inline-end: 0.55rem;
+  object-fit: contain;
+  vertical-align: middle;
+  flex: 0 0 auto;
+}
+
+.booking-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.booking-step {
+  color: var(--text-muted);
+  font-family: var(--booking-font-body);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.booking-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 2.5rem;
+  padding: 0 0.75rem;
+  color: var(--text-secondary);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: calc(var(--booking-radius) * 0.45);
+  font: 600 0.875rem/1 var(--booking-font-body);
+  transition: border-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.booking-back:hover {
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+  transform: translateX(-2px);
+}
+
+.booking-stage > [data-framer-component-type],
+.booking-stage > div {
+  position: relative;
+}
+
+/* Child screens predate the branded shell and include duplicate sticky bars.
+   The shell owns navigation and mode selection across the full flow. */
+.booking-stage .sticky.top-0 {
+  display: none;
+}
+
+.booking-experience {
+  position: relative;
+  isolation: isolate;
+  background-image:
+    linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px),
+    linear-gradient(var(--border-subtle) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.booking-experience::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(circle at 88% 8%, var(--accent-primary-light), transparent 35%);
+}
+
+.booking-experience .backdrop-blur-sm,
+.booking-experience .backdrop-blur-xl {
+  backdrop-filter: none;
+}
+
+.booking-experience .rounded-2xl,
+.booking-experience .rounded-xl {
+  box-shadow: var(--shadow-sm);
+}
+
+.booking-experience input,
+.booking-experience textarea,
+.booking-experience button {
+  font-family: var(--booking-font-body);
+}
+
+.booking-experience [role="dialog"] {
+  color: var(--text-primary);
+  background: var(--bg-elevated);
+  border-color: var(--border-default);
+}
+
+.booking-experience[data-pe-recipe="selam-movement"] {
+  background-size: 36px 36px;
+}
+
+.booking-experience[data-pe-recipe="meron-atelier"],
+.booking-experience[data-pe-recipe="bloom-hair"] {
+  background-image: linear-gradient(110deg, transparent 0 72%, var(--border-subtle) 72% 72.2%, transparent 72.2%);
+}
+
+.booking-experience[data-pe-recipe="tena-clinic"] {
+  background-image: radial-gradient(circle at 1px 1px, var(--border-subtle) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+.booking-experience[data-pe-recipe="abugida-language"] {
+  background-image: linear-gradient(135deg, var(--border-subtle) 0 1px, transparent 1px 32px);
+  background-size: 32px 32px;
+}
+
+@media (max-width: 720px) {
+  .booking-step { display: none; }
+  .booking-back span { display: none; }
+}
+
+
+[data-booking-confirmation="true"] {
+  color: var(--text-primary) !important;
+  background: var(--bg-elevated) !important;
+  border: 1px solid var(--border-default) !important;
+  border-radius: var(--booking-radius) !important;
+  font-family: var(--booking-font-body);
+}
+
+[data-booking-confirmation="true"] h2,
+[data-booking-confirmation="true"] h3,
+[data-booking-confirmation="true"] .text-gray-900,
+[data-booking-confirmation="true"] .dark\:text-gray-100 {
+  color: var(--text-primary) !important;
+}
+
+[data-booking-confirmation="true"] .text-gray-600,
+[data-booking-confirmation="true"] .text-gray-500,
+[data-booking-confirmation="true"] .dark\:text-gray-400 {
+  color: var(--text-secondary) !important;
+}
+
+[data-booking-confirmation="true"] .bg-white,
+[data-booking-confirmation="true"] .dark\:bg-gray-800,
+[data-booking-confirmation="true"] .bg-blue-50,
+[data-booking-confirmation="true"] .dark\:bg-blue-900\/20 {
+  background: var(--bg-secondary) !important;
+  border-color: var(--border-default) !important;
+}

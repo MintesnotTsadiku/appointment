@@ -30,6 +30,8 @@ def recipe_assignments() -> dict[str, dict[str, str]]:
             "recipe": site["recipe"],
             "hero": site["heroRole"],
             "detail": site["detailRole"],
+            "logo": site["logoAsset"],
+            "favicon": site["faviconAsset"],
             "density": "spacious" if key in {"bloom", "abugida"} else "comfortable",
         }
     return assignments
@@ -39,12 +41,14 @@ def validate_showcase_catalog() -> dict[str, Any]:
     catalog = load_showcase_catalog()
     seen_slugs: set[str] = set()
     for key, site in catalog["sites"].items():
-        _require_text(site, key, "slug", "recipe", "heroRole", "detailRole", "heroAsset", "heroChecksum", "benchmark")
+        _require_text(site, key, "slug", "recipe", "heroRole", "detailRole", "heroAsset", "heroChecksum", "logoAsset", "logoChecksum", "faviconAsset", "faviconChecksum", "benchmark")
         if site["slug"] in seen_slugs:
             raise ValueError(f"Duplicate showcase slug: {site['slug']}")
         seen_slugs.add(site["slug"])
         asset = _asset_path(site["heroAsset"])
         _verify_checksum(asset, site["heroChecksum"])
+        _verify_checksum(_asset_path(site["logoAsset"]), site["logoChecksum"])
+        _verify_checksum(_asset_path(site["faviconAsset"]), site["faviconChecksum"])
         support_assets = site.get("supportAssets")
         if not isinstance(support_assets, list) or len(support_assets) != 3:
             raise ValueError(f"Showcase site {key} requires three support assets")
@@ -53,6 +57,14 @@ def validate_showcase_catalog() -> dict[str, Any]:
                 raise ValueError(f"Invalid support asset for {key}")
             _require_text(support, key, "asset", "checksum")
             _verify_checksum(_asset_path(support["asset"]), support["checksum"])
+        provider_assets = site.get("providerAssets")
+        if not isinstance(provider_assets, list) or not provider_assets:
+            raise ValueError(f"Showcase site {key} requires provider assets")
+        for provider in provider_assets:
+            if not isinstance(provider, dict):
+                raise ValueError(f"Invalid provider asset for {key}")
+            _require_text(provider, key, "name", "asset", "checksum")
+            _verify_checksum(_asset_path(provider["asset"]), provider["checksum"])
         benchmark = REPO_ROOT / site["benchmark"]
         if not benchmark.is_file():
             raise ValueError(f"Missing benchmark for {key}: {site['benchmark']}")

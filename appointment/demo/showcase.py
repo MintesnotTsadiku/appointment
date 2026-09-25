@@ -23,10 +23,23 @@ from appointment.public_experience.showcase_catalog import recipe_assignments, v
 from appointment.public_experience.publisher import publish_experience
 
 VERSION = 1
-CONTENT_VERSION = 3
-PUBLIC_EXPERIENCE_VERSION = 8
+CONTENT_VERSION = 4
+PUBLIC_EXPERIENCE_VERSION = 11
 TZ = "Africa/Addis_Ababa"
 DEMO_BRAND_RECIPES = recipe_assignments()
+
+PROVIDER_PORTRAITS = {
+    "Selam Bekele": "/assets/appointment/brand-experience/providers/selam-bekele.webp",
+    "Meron Alemu": "/assets/appointment/brand-experience/providers/meron-alemu.webp",
+    "Hanna Tesfaye": "/assets/appointment/brand-experience/providers/hanna-tesfaye.webp",
+    "Rahel Girma": "/assets/appointment/brand-experience/providers/rahel-girma.webp",
+    "Eden Tadesse": "/assets/appointment/brand-experience/providers/eden-tadesse.webp",
+    "Dawit Haile": "/assets/appointment/brand-experience/providers/dawit-haile.webp",
+    "Saron Mekonnen": "/assets/appointment/brand-experience/providers/saron-mekonnen.webp",
+    "Yonas Assefa": "/assets/appointment/brand-experience/providers/yonas-assefa.webp",
+    "Kalkidan Getachew": "/assets/appointment/brand-experience/providers/kalkidan-getachew.webp",
+    "Abel Fikru": "/assets/appointment/brand-experience/providers/abel-fikru.webp",
+}
 
 CLIENTS = [
     "Liya Tadesse",
@@ -543,6 +556,9 @@ def enrich_business_records(key, business):
             }
         )
         provider.save(ignore_permissions=True)
+        if not provider.user:
+            raise ValueError(f"Seeded provider {provider.name} has no linked user")
+        frappe.db.set_value("User", provider.user, "user_image", PROVIDER_PORTRAITS[name_map[key][index]])
 
     for index, location_id in enumerate(business["locations"]):
         location = frappe.get_doc("Location", location_id)
@@ -659,6 +675,7 @@ def _public_section_rows(key, business):
             "specialties": [_localized(value) for value in provider_specialties],
             "credentials": [_localized("Provider profile available before booking")],
             "imageRole": "section.detail",
+            "image": PROVIDER_PORTRAITS[provider.display_name or provider.full_name or provider.provider_name],
             "action": _action("Choose this provider", "provider_selection"),
         }
         for provider in providers
@@ -768,6 +785,9 @@ def configure_public_experience(state):
             "profile_name": f"{business['name']} brand",
             "application_name": business["name"],
             "short_name": business["name"].split()[0],
+            "logo_primary": brand["logo"],
+            "logo_compact": brand["logo"],
+            "favicon": brand["favicon"],
             "owner_type": "Organization",
             "organization": organization,
             "provider": None,

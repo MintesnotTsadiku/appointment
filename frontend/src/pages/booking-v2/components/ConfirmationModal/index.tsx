@@ -3,9 +3,8 @@
  * Beautiful success confirmation with actions
  */
 
-import { CheckCircle2, Calendar, Clock, Mail, MapPin, Copy, ExternalLink, X, Download } from "lucide-react";
-import { useState } from "react";
-import { cn } from "@/lib/utils";
+import { CheckCircle2, Calendar, Clock, Mail, MapPin, Copy, ExternalLink, X } from "lucide-react";
+import { useState, type CSSProperties } from "react";
 import { Button } from "@/components/button";
 import {
   Dialog,
@@ -26,6 +25,7 @@ interface ConfirmationModalProps {
   timeFormat: '12h' | '24h' | 'ethiopian';
   timezone: string;
   userEmail: string;
+  brandStyle?: CSSProperties;
 }
 
 export function ConfirmationModal({
@@ -38,6 +38,7 @@ export function ConfirmationModal({
   timeFormat,
   timezone,
   userEmail,
+  brandStyle,
 }: ConfirmationModalProps) {
   const [copied, setCopied] = useState<string | null>(null);
 
@@ -54,7 +55,7 @@ export function ConfirmationModal({
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent data-booking-confirmation="true" style={brandStyle} className="max-w-2xl max-h-[90vh] overflow-y-auto">
         {/* Success Animation Header */}
         <div className="relative">
           <div className="flex flex-col items-center text-center pt-6 pb-4">
@@ -306,23 +307,4 @@ export function ConfirmationModal({
     </Dialog>
   );
 }
-
-// Add animation CSS (can be added to global.css)
-const styles = `
-@keyframes scale-in {
-  0% {
-    transform: scale(0);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-.animate-scale-in {
-  animation: scale-in 0.5s ease-out;
-}
-`;
 

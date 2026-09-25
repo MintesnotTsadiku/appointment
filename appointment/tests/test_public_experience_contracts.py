@@ -37,19 +37,21 @@ class TestRecipeCompiler(unittest.TestCase):
         first = compile_design(
             recipe.key,
             recipe.version,
-            {"applicationName": "Tena Family Clinic", "shortName": "Tena", "motion": "calm"},
+            {"applicationName": "Tena Family Clinic", "shortName": "Tena", "motion": "calm", "logoPrimary": "/assets/appointment/brand-experience/brands/tena-logo.webp", "logoCompact": "/assets/appointment/brand-experience/brands/tena-logo.webp", "favicon": "/assets/appointment/brand-experience/brands/tena-favicon.png"},
             {"sections": list(recipe.required_sections), "locales": ["en", "am"], "content_richness": "rich"},
         )
         second = compile_design(
             recipe.key,
             recipe.version,
-            {"applicationName": "Tena Family Clinic", "shortName": "Tena", "motion": "calm"},
+            {"applicationName": "Tena Family Clinic", "shortName": "Tena", "motion": "calm", "logoPrimary": "/assets/appointment/brand-experience/brands/tena-logo.webp", "logoCompact": "/assets/appointment/brand-experience/brands/tena-logo.webp", "favicon": "/assets/appointment/brand-experience/brands/tena-favicon.png"},
             {"sections": list(recipe.required_sections), "locales": ["en", "am"], "content_richness": "rich"},
         )
         self.assertEqual(first.content_hash, second.content_hash)
         artifact = first.as_dict()
         self.assertEqual(artifact["contract"], "appointment-compiled-design.v1")
         self.assertEqual(artifact["identity"]["applicationName"], "Tena Family Clinic")
+        self.assertEqual(artifact["identity"]["logoCompact"], "/assets/appointment/brand-experience/brands/tena-logo.webp")
+        self.assertEqual(artifact["identity"]["favicon"], "/assets/appointment/brand-experience/brands/tena-favicon.png")
         self.assertEqual(artifact["layout"]["contentSchemaVersion"], 2)
         self.assertEqual(set(artifact["tokens"]), {"light", "dark"})
         self.assertTrue(artifact["validation"]["ok"])
@@ -59,6 +61,8 @@ class TestRecipeCompiler(unittest.TestCase):
             get_recipe("not-certified")
         with self.assertRaises(DesignCompilationError):
             compile_design(brand_inputs={"accentColor": "javascript:bad"})
+        with self.assertRaises(DesignCompilationError):
+            compile_design(brand_inputs={"logoPrimary": "https://evil.example/logo.png"})
 
 
 class TestTypedContentAndActions(unittest.TestCase):

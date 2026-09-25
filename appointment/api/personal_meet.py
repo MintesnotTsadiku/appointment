@@ -11,9 +11,26 @@ from appointment.helpers.utils import duration_to_string
 from appointment.overrides.event_override import _create_event_for_appointment_group
 
 
+def _public_user_image(user: str | None) -> str | None:
+    """Return a same-origin public user image, never an external URL."""
+    if not user:
+        return None
+    value = frappe.db.get_value("User", user, "user_image")
+    if not isinstance(value, str) or ".." in value:
+        return None
+    return value if value.startswith(("/assets/", "/files/")) else None
+
+
+def _public_identifier(value: object, field: str, pattern: str) -> str:
+    if not isinstance(value, str) or not re.fullmatch(pattern, value):
+        frappe.throw(f"Invalid {field}", frappe.ValidationError)
+    return value
+
+
 @frappe.whitelist(allow_guest=True)
 @add_response_code
 def get_meeting_windows(slug):
+    slug = _public_identifier(slug, "meeting slug", r"[A-Za-z0-9][A-Za-z0-9._-]{0,139}")
     user_availability = frappe.get_all(
         "User Appointment Availability", filters={"slug": slug, "enable_scheduling": 1}, fields=["*"]
     )
@@ -854,6 +871,8 @@ def update_last_assigned_provider(service_name, provider_name):
 def get_organization_services(org_slug):
     from appointment.scheduler.booking import offering
 
+    org_slug = _public_identifier(org_slug, "organization slug", r"[a-z0-9][a-z0-9-]{0,139}")
+
     org_name = frappe.db.get_value(
         "Organization", {"slug": org_slug, "is_active": 1, "enable_public_booking": 1}, "name"
     )
@@ -862,16 +881,29 @@ def get_organization_services(org_slug):
     org = frappe.get_doc("Organization", org_name)
     services = []
     providers = {}
-    for row in frappe.get_all("EventType", filters={"is_active": 1}, fields=["name", "service"]):
-        if frappe.db.get_value("Service", row.service, "organization") != org_name:
-            continue
+    service_names = frappe.get_all("Service", filters={"organization": org_name}, pluck="name")
+    rows = (
+        frappe.get_all(
+            "EventType",
+            filters={"is_active": 1, "service": ["in", service_names]},
+            fields=["name", "service"],
+        )
+        if service_names
+        else []
+    )
+    for row in rows:
         try:
             event, service, location, provider, business = offering(row.name, public=True)
         except (frappe.PermissionError, frappe.ValidationError):
             frappe.clear_messages()
             continue
         display_name = provider.display_name or provider.full_name or provider.provider_name
-        providers[provider.name] = {"id": provider.name, "name": display_name}
+        if provider.name not in providers:
+            providers[provider.name] = {
+                "id": provider.name,
+                "name": display_name,
+                "avatar": _public_user_image(provider.user),
+            }
         services.append({
             "name": service.service_name,
             "slug": event.name,
@@ -900,6 +932,9 @@ def get_organization_services(org_slug):
 @add_response_code
 def get_organization_meeting_windows(org_slug, service_slug):
     from appointment.scheduler.booking import offering
+
+    org_slug = _public_identifier(org_slug, "organization slug", r"[a-z0-9][a-z0-9-]{0,139}")
+    service_slug = _public_identifier(service_slug, "service slug", r"[A-Za-z0-9][A-Za-z0-9._-]{0,139}")
     event, service, location, provider, org = offering(service_slug, public=True)
     if org.slug != org_slug:
         frappe.throw("Offering does not belong to this business", frappe.PermissionError)
@@ -910,7 +945,11 @@ def get_organization_meeting_windows(org_slug, service_slug):
         "service_name": service.service_name,
         "durations": [{"id": event.name, "label": f"{duration} min", "duration": duration}],
         "is_organization": True, "organization_id": org.name, "service_id": service.name,
-        "provider_count": 1, "providers": [{"id": provider.name, "name": provider.provider_name}],
+        "provider_count": 1, "providers": [{
+            "id": provider.name,
+            "name": provider.display_name or provider.full_name or provider.provider_name,
+            "avatar": _public_user_image(provider.user),
+        }],
         "location": {"name": location.name, "location_name": location.location_name,
                      "timezone": location.timezone, "city": location.city, "is_online": False},
     }

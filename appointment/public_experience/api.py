@@ -77,7 +77,7 @@ def list_brand_profiles():
         "profiles": frappe.get_list(
             "Brand Profile",
             fields=[
-                "name", "profile_name", "application_name", "short_name",
+                "name", "profile_name", "application_name", "short_name", "logo_primary", "logo_compact", "favicon",
                 "owner_type", "organization", "provider", "recipe_key",
                 "recipe_version", "brand_inputs_json", "lifecycle",
                 "active_revision", "draft_version", "modified",

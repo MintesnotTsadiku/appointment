@@ -87,6 +87,19 @@ export const PublicExperienceProvider = ({
     }
   }, []);
 
+  useEffect(() => {
+    const favicon = config.identity.favicon;
+    if (typeof document === "undefined" || typeof favicon !== "string" || !favicon.startsWith("/assets/appointment/") || favicon.includes("..")) return;
+    let link = document.querySelector<HTMLLinkElement>("link[rel~=icon][data-public-experience]");
+    if (!link) {
+      link = document.createElement("link");
+      link.rel = "icon";
+      link.dataset.publicExperience = "true";
+      document.head.appendChild(link);
+    }
+    link.href = favicon;
+  }, [config.identity.favicon]);
+
   const theme = useMemo(
     () => buildThemeAttributes(config, preference, dark),
     [config, preference, dark],

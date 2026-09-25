@@ -94,6 +94,9 @@ def compile_brand(profile, expected_draft_version: int) -> BrandCompilationResul
                 **_inputs(doc),
                 "application_name": doc.application_name,
                 "short_name": doc.short_name or doc.application_name,
+                "logo_primary": doc.logo_primary,
+                "logo_compact": doc.logo_compact,
+                "favicon": doc.favicon,
             },
             {
                 "sections": list(recipe.required_sections),

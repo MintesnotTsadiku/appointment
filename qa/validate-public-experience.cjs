@@ -21,7 +21,9 @@ async function assertPublicSite(page, slug, expectedText) {
   if (!response || !response.ok()) throw new Error(`${slug} returned ${response && response.status()}`);
   await settle(page);
   const body = await page.locator('body').innerText();
-  if (!body.includes(expectedText)) throw new Error(`${slug} did not render ${expectedText}`);
+  if (!body.toLocaleLowerCase().includes(expectedText.toLocaleLowerCase())) {
+    throw new Error(slug + ' did not render ' + expectedText);
+  }
 }
 
 (async () => {

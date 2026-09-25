@@ -50,7 +50,7 @@ export interface CompiledDesign {
   actionIntents: string[];
   contentCapabilities: Record<string, unknown>;
   localeCapabilities: Record<string, unknown>;
-  identity: { applicationName: string; shortName: string };
+  identity: { applicationName: string; shortName: string; logoPrimary?: string | null; logoCompact?: string | null; favicon?: string | null };
   validation: { ok: boolean; issues?: unknown[]; protectedStateRoles?: string[] };
   contentHash: string;
 }
@@ -58,6 +58,9 @@ export interface CompiledDesign {
 export interface PublicIdentity {
   applicationName: string;
   shortName: string;
+  logoPrimary?: string | null;
+  logoCompact?: string | null;
+  favicon?: string | null;
 }
 
 export interface PublicUIConfig {

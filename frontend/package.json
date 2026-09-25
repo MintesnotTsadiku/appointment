@@ -31,21 +31,18 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
     "framer-motion": "^12.4.10",
-    "frappe-react-sdk": "^1.11.0",
-    "i": "^0.3.7",
+    "frappe-react-sdk": "^1.17.1",
     "lucide-react": "^0.474.0",
     "next-themes": "^0.4.4",
-    "npm": "^11.1.0",
     "react": "^18.3.1",
     "react-confetti": "^6.4.0",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18.3.1",
     "react-helmet-async": "^2.0.5",
     "react-hook-form": "^7.54.2",
-    "react-router-dom": "^7.1.3",
+    "react-router-dom": "^7.18.4",
     "sonner": "^1.7.4",
     "tailwind-merge": "^2.6.0",
-    "tailwindcss-animate": "^1.0.7",
     "zod": "^3.24.1"
   },
   "devDependencies": {
@@ -60,12 +57,28 @@
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.14.0",
     "postcss": "^8.4.39",
-    "sharp": "^0.34.5",
+    "sharp": "^0.35.4",
     "tailwindcss": "^3.4.6",
+    "tailwindcss-animate": "^1.0.7",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.2",
     "vite": "^6.0.5",
     "vite-plugin-pwa": "^1.2.0",
     "workbox-window": "^7.4.0"
+  },
+  "overrides": {
+    "socket.io-client": "^4.8.4",
+    "engine.io-client": "^6.6.7",
+    "socket.io-parser": "^4.2.7",
+    "ws": "^8.21.3",
+    "anymatch": {
+      "picomatch": "^2.3.2"
+    },
+    "readdirp": {
+      "picomatch": "^2.3.2"
+    },
+    "micromatch": {
+      "picomatch": "^2.3.2"
+    }
   }
 }

@@ -17,7 +17,7 @@ MAX_DIMENSION = 6000
 MAX_ASSETS_PER_BUSINESS = 50
 MAX_BYTES_PER_BUSINESS = 50 * 1024 * 1024
 
-_ASSET_FIELDS = ("logo_primary", "logo_compact", "logo_light", "logo_dark", "favicon", "social_image")
+_ASSET_FIELDS = ("logo_primary", "logo_compact", "favicon")
 
 
 class MediaError(frappe.ValidationError):

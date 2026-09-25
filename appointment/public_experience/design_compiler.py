@@ -31,6 +31,9 @@ _ALLOWED_INPUTS = frozenset(
         "presentation_density",
         "hero_asset",
         "detail_asset",
+        "logo_primary",
+        "logo_compact",
+        "favicon",
     }
 )
 _ALLOWED_CAPABILITIES = frozenset({"sections", "locales", "content_richness"})
@@ -322,6 +325,8 @@ def _inputs(recipe, brand_inputs: Mapping[str, object] | None) -> dict[str, obje
         "accentColor": "accent_color",
         "applicationName": "application_name",
         "shortName": "short_name",
+        "logoPrimary": "logo_primary",
+        "logoCompact": "logo_compact",
     }
     raw = {aliases.get(key, key): value for key, value in raw.items()}
     unknown = sorted(set(raw) - _ALLOWED_INPUTS)
@@ -350,6 +355,10 @@ def _inputs(recipe, brand_inputs: Mapping[str, object] | None) -> dict[str, obje
     for field in ("application_name", "short_name"):
         if result.get(field) is not None:
             result[field] = _safe_text(result[field], field)
+    for field in ("logo_primary", "logo_compact", "favicon"):
+        value = result.get(field)
+        if value is not None and (not isinstance(value, str) or not value.startswith("/assets/appointment/") or ".." in value or any(character in value for character in "?#<>\"'")):
+            raise _error(f"{field} must be a local appointment asset", field=field, observed=value)
     for field, adjustment in (("hero_asset", "heroAsset"), ("detail_asset", "detailAsset")):
         allowed = set(recipe.adjustments.get(adjustment, {}).get("choices") or [])
         if not allowed or result.get(field) not in allowed:
@@ -448,6 +457,9 @@ def compile_design(
     identity = {
         "applicationName": input_values.get("application_name") or "Appointment",
         "shortName": input_values.get("short_name") or "Appointment",
+        "logoPrimary": input_values.get("logo_primary"),
+        "logoCompact": input_values.get("logo_compact") or input_values.get("logo_primary"),
+        "favicon": input_values.get("favicon"),
     }
     artifact = {
         "contract": COMPILED_DESIGN_CONTRACT,
