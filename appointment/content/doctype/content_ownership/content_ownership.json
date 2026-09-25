@@ -16,6 +16,7 @@
   "public_site",
   "capability",
   "status",
+  "last_release",
   "created_by_user",
   "notes"
  ],
@@ -30,6 +31,7 @@
   {"fieldname": "public_site", "fieldtype": "Link", "label": "Public Site", "options": "Public Site"},
   {"fieldname": "capability", "fieldtype": "Select", "in_list_view": 1, "label": "Capability", "options": "blog\ngallery\nnewsletter", "reqd": 1},
   {"default": "Draft", "fieldname": "status", "fieldtype": "Select", "in_list_view": 1, "label": "Status", "options": "Draft\nScheduled\nPublished\nWithdrawn\nArchived", "reqd": 1},
+  {"fieldname": "last_release", "fieldtype": "Link", "label": "Last Release", "options": "Published Content Release", "read_only": 1},
   {"fieldname": "created_by_user", "fieldtype": "Link", "label": "Created By", "options": "User", "read_only": 1},
   {"fieldname": "notes", "fieldtype": "Small Text", "label": "Notes"}
  ],

@@ -67,6 +67,23 @@ def content_ownership_permission(doc, user=None, permission_type="read", ptype=N
     return tenancy.can_manage_business(doc.owner_type, doc.organization, doc.provider, actor)
 
 
+def published_content_release_query(user=None) -> str:
+    return tenancy.owner_query_condition("tabPublished Content Release", user)
+
+
+def published_content_release_permission(doc, user=None, permission_type="read", ptype=None, **kwargs) -> bool:
+    permission_type = ptype or permission_type
+    actor = _actor(user)
+    if actor == "Administrator":
+        return True
+    if permission_type in ("read", "report", "export", "print", "email", None):
+        return tenancy.can_manage_business(doc.owner_type, doc.organization, doc.provider, actor)
+    if permission_type == "create":
+        return "System Manager" in frappe.get_roles(actor)
+    # Releases are immutable: no write, delete or share.
+    return False
+
+
 def _owned_source_condition(source_doctype: str, table: str, user=None) -> str:
     actor = _actor(user)
     condition = tenancy.owner_query_condition("tabContent Ownership", actor)

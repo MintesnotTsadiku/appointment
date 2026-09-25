@@ -364,8 +364,10 @@ permission_query_conditions["Business Entitlement"] = "appointment.content.acces
 permission_query_conditions["Content Ownership"] = "appointment.content.access.content_ownership_query"
 permission_query_conditions["Blog Post"] = "appointment.content.access.blog_post_query"
 permission_query_conditions["Newsletter"] = "appointment.content.access.newsletter_query"
+permission_query_conditions["Published Content Release"] = "appointment.content.access.published_content_release_query"
 
 has_permission["Business Entitlement"] = "appointment.content.access.business_entitlement_permission"
 has_permission["Content Ownership"] = "appointment.content.access.content_ownership_permission"
 has_permission["Blog Post"] = "appointment.content.access.blog_post_permission"
 has_permission["Newsletter"] = "appointment.content.access.newsletter_permission"
+has_permission["Published Content Release"] = "appointment.content.access.published_content_release_permission"
