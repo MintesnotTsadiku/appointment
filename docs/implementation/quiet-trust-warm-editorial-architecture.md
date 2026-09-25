@@ -94,7 +94,7 @@ The isolated site was backed up before schema migration:
 
 `/home/minte/.local/state/frappe-worktree-stack/feat-analytics-operations-f2ca8e/bench/sites/meet-beta-feat-analytics-operations-f2ca8e.localhost/private/backups/20260925_050332-meet-beta-feat-analytics-operations-f2ca8e_localhost-site_config_backup.json` plus the matching SQL/public/private backup archives.
 
-The obsolete `Theme Template` DocType and exact synthetic rehearsal records were removed after inventory. The five rich-demo businesses and their booking records were retained and reseeded against the new recipe/release contracts. Git history and the site backup are the recovery mechanisms; no customer-data migration path is required.
+The obsolete `Theme Template` DocType and exact synthetic rehearsal records were removed after inventory. The retired branding, logo, color-preset, and runtime-theme fields were also removed from `Landing Page Settings`; that singleton now contains only platform marketing-page content, SEO, and cache settings. Platform application colors are code-owned defaults, while tenant landing, booking, and scheduler surfaces read only published Experience Releases. The five rich-demo businesses and their booking records were retained and reseeded against the new recipe/release contracts. Git history and the site backup are the recovery mechanisms; no customer-data migration path is required.
 
 ## Verification
 

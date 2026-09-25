@@ -1,13 +1,7 @@
-/**
- * Hook for fetching and managing theme colors from Landing Page Settings
- * 
- * NOTE: This hook uses plain fetch instead of useFrappeGetCall because
- * ThemeProvider is rendered OUTSIDE of FrappeProvider in the component tree.
- */
-import { useState, useEffect } from 'react';
+/** Platform-owned application theme tokens. */
 import { ThemeColors } from './types';
 
-// Default theme colors - matches the backend defaults
+// Code-owned platform theme defaults
 export const defaultThemeColors: ThemeColors = {
   dark: {
     background: {
@@ -126,59 +120,6 @@ export const defaultThemeColors: ThemeColors = {
     teal: "#14B8A6",
   },
 };
-
-export function useThemeColors() {
-  const [colors, setColors] = useState<ThemeColors>(defaultThemeColors);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    // Fetch theme colors using plain fetch (not useFrappeGetCall)
-    // This works outside of FrappeProvider context
-    const fetchThemeColors = async () => {
-      try {
-        setIsLoading(true);
-        
-        // Build the API URL
-        const baseUrl = import.meta.env.VITE_BASE_URL || '';
-        const apiUrl = `${baseUrl}/api/method/appointment.scheduler.api.theme.get_theme_colors`;
-        
-        const response = await fetch(apiUrl, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include', // Include cookies for authentication
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        
-        if (data.message) {
-          setColors(data.message);
-        }
-      } catch (err) {
-        // Don't crash on error - just use defaults
-        console.warn('Failed to fetch theme colors, using defaults:', err);
-        setError(err instanceof Error ? err : new Error('Unknown error'));
-        setColors(defaultThemeColors);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchThemeColors();
-  }, []); // Only fetch once on mount
-
-  return {
-    colors,
-    isLoading,
-    error,
-  };
-}
 
 /**
  * Generates CSS custom properties from theme colors

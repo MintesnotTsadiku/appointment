@@ -4,11 +4,7 @@
  */
 
 import React, { createContext, useContext, ReactNode } from 'react';
-import {
-  useLandingPageSettings,
-  useApplyBrandColors,
-  LandingPageSettings,
-} from '@/lib/landingPageSettings';
+import { LandingPageSettings, useLandingPageSettings } from '@/lib/landingPageSettings';
 
 interface LandingPageSettingsContextValue {
   settings: LandingPageSettings | null;
@@ -23,9 +19,6 @@ const LandingPageSettingsContext = createContext<LandingPageSettingsContextValue
 
 export function LandingPageSettingsProvider({ children }: { children: ReactNode }) {
   const { settings, loading, error, getText } = useLandingPageSettings();
-
-  // Apply brand colors to CSS variables when settings load
-  useApplyBrandColors(settings);
 
   return (
     <LandingPageSettingsContext.Provider value={{ settings, loading, error, getText }}>
@@ -43,7 +36,3 @@ export function useLandingPageSettingsContext() {
   }
   return context;
 }
-
-
-
-

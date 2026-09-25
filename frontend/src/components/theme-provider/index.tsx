@@ -3,12 +3,11 @@
  * 
  * This provider:
  * 1. Handles light/dark/system theme switching
- * 2. Fetches theme colors from Landing Page Settings
- * 3. Applies colors as CSS custom properties
+ * 2. Applies the platform-owned color system as CSS custom properties
  */
 import { createContext, useContext, useEffect, useState, useMemo } from "react"
 import { Theme, ThemeProviderState, ThemeColors } from "./types"
-import { useThemeColors, applyThemeColors, defaultThemeColors } from "./useThemeColors"
+import { applyThemeColors, defaultThemeColors } from "./useThemeColors"
 
 type ThemeProviderProps = {
   children: React.ReactNode
@@ -19,8 +18,8 @@ type ThemeProviderProps = {
 const initialState: ThemeProviderState = {
   theme: "system",
   setTheme: () => null,
-  colors: null,
-  isLoadingColors: true,
+  colors: defaultThemeColors,
+  isLoadingColors: false,
   resolvedTheme: "light",
 }
 
@@ -45,11 +44,7 @@ export function ThemeProvider({
     theme === "system" ? systemTheme() : (theme as "dark" | "light")
   )
   
-  // Fetch theme colors from backend - gracefully handle errors
-  const { colors, isLoading: isLoadingColors } = useThemeColors()
-  
-  // Ensure colors is never null - use defaults if needed
-  const safeColors = colors || defaultThemeColors
+  const safeColors = defaultThemeColors
 
   // Resolve the actual theme (handle system preference)
   useEffect(() => {
@@ -109,9 +104,9 @@ export function ThemeProvider({
       setTheme(newTheme)
     },
     colors: safeColors,
-    isLoadingColors,
+    isLoadingColors: false,
     resolvedTheme,
-  }), [theme, safeColors, isLoadingColors, resolvedTheme, storageKey])
+  }), [theme, safeColors, resolvedTheme, storageKey])
 
   return (
     <ThemeProviderContext.Provider {...props} value={value}>

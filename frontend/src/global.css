@@ -5,9 +5,9 @@
 @layer base {
   :root {
     /* ========================================
-       THEME COLORS - DYNAMIC FROM BACKEND
-       These are set dynamically via JavaScript
-       from Landing Page Settings
+       PLATFORM THEME COLORS
+       Fixed application defaults; tenant public experiences use
+       release-scoped compiled design tokens
        ======================================== */
     
     /* Background Colors (Light Mode Defaults) */

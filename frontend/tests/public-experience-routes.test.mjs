@@ -39,6 +39,10 @@ assert.equal(routesModule.publicRootForSlug("settings"), "/");
 const app = read("src/app.tsx");
 assert.ok(app.includes("isPublicExperiencePath"), "app shell must detect public paths");
 assert.ok(app.includes("{standalone ? null : <ModeToggle />}"), "app shell must hide the toggle on public paths");
+assert.ok(
+  app.includes('usesPlatformLandingSettings = pathname === "/"'),
+  "only the platform homepage may load platform landing settings",
+);
 
 const routes = read("src/route.tsx");
 for (const expected of ['path="/:slug"', 'path="/:slug/book"', 'path="/:slug/:locale"', 'path="/settings/public-experience"']) {

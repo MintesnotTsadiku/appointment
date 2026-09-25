@@ -33,46 +33,45 @@ const App = () => {
   const router = createBrowserRouter(createRoutesFromElements(Router()), {
     basename: BASE_ROUTE,
   });
-  // Public sites render standalone: hide authenticated chrome (theme toggle,
-  // PWA prompts) so a tenant website never shows management UI.
-  const standalone =
-    typeof window !== "undefined" && isPublicExperiencePath(window.location.pathname);
+  const pathname = typeof window === "undefined" ? "/" : window.location.pathname;
+  const standalone = isPublicExperiencePath(pathname);
+  const usesPlatformLandingSettings = pathname === "/";
+  const runtime = (
+    <HelmetProvider>
+      <FrappeProvider
+        url={import.meta.env.VITE_BASE_URL ?? ""}
+        socketPort={import.meta.env.VITE_SOCKET_PORT}
+        // The SDK socket is created during render with no cleanup and leaks under
+        // StrictMode. RealtimeProvider owns the application socket instead.
+        enableSocket={false}
+        siteName={getSiteName()}
+      >
+        <RealtimeProvider>
+          <SessionProvider>
+            <TooltipProvider>
+              <Suspense fallback={<></>}>
+                <RouterProvider router={router} />
+                <Toaster />
+                {standalone ? null : <ModeToggle />}
+                {standalone ? null : <InstallPrompt />}
+                <UpdateNotification />
+                {standalone ? null : <ConnectionStatus />}
+              </Suspense>
+            </TooltipProvider>
+          </SessionProvider>
+        </RealtimeProvider>
+      </FrappeProvider>
+    </HelmetProvider>
+  );
+
   return (
-    <>
-      <AppProvider>
-        <TranslationProvider>
-          <LandingPageSettingsProvider>
-            <HelmetProvider>
-              <FrappeProvider
-                url={import.meta.env.VITE_BASE_URL ?? ""}
-                socketPort={import.meta.env.VITE_SOCKET_PORT}
-                // The SDK socket is created during render with no cleanup and
-                // leaks under StrictMode. This app owns its socket in
-                // RealtimeProvider instead; see that file for the upstream note.
-                enableSocket={false}
-                siteName={getSiteName()}
-              >
-                <RealtimeProvider>
-                  <SessionProvider>
-                    <TooltipProvider>
-                      <Suspense fallback={<></>}>
-                        <RouterProvider router={router} />
-                        <Toaster />
-                        {standalone ? null : <ModeToggle />}
-                        {/* PWA Components */}
-                        {standalone ? null : <InstallPrompt />}
-                        <UpdateNotification />
-                        {standalone ? null : <ConnectionStatus />}
-                      </Suspense>
-                    </TooltipProvider>
-                  </SessionProvider>
-                </RealtimeProvider>
-              </FrappeProvider>
-            </HelmetProvider>
-          </LandingPageSettingsProvider>
-        </TranslationProvider>
-      </AppProvider>
-    </>
+    <AppProvider>
+      <TranslationProvider>
+        {usesPlatformLandingSettings ? (
+          <LandingPageSettingsProvider>{runtime}</LandingPageSettingsProvider>
+        ) : runtime}
+      </TranslationProvider>
+    </AppProvider>
   );
 };
 
