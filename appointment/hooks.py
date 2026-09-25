@@ -4,7 +4,11 @@ app_publisher = "minte"
 app_description = "The appointment scheduling app with team support in Frappe."
 app_email = "mtsadiku@gmail.com"
 app_license = "GNU AFFERO GENERAL PUBLIC LICENSE (v3)"
-# required_apps = []
+# Blog and Newsletter were split out of the framework in Frappe v16+. They are
+# pinned in docs/operations/content-dependencies.md. required_apps installs apps
+# already present on a Bench; the deployment manifest must fetch the pinned Git
+# repositories before installing Appointment.
+required_apps = ["blog", "newsletter"]
 
 # App Switcher Configuration
 # --------------------------
