@@ -15,6 +15,9 @@ for (const template of templates) {
   assert.equal(source.length, 1, `${template} must own one template component`);
   assert.equal(styles.length, 1, `${template} must own one stylesheet`);
   const component = fs.readFileSync(path.join(directory, source[0]), "utf8");
+  assert.ok(component.includes("data-pe-mode={mode}"), `${template} must expose its resolved mode`);
+  assert.ok(component.includes("toggleMode"), `${template} must own a mode switch`);
+  assert.ok(component.includes("Switch to ${mode === \"dark\" ? \"light\" : \"dark\"} mode"), `${template} switch must have an accessible label`);
   assert.ok(!component.includes("renderSection"), `${template} cannot use the shared visual renderer`);
   assert.ok(!component.includes("dangerouslySetInnerHTML"), `${template} cannot render arbitrary HTML`);
   assert.ok(registry.includes(`./${template}/`), `${template} must be registered explicitly`);

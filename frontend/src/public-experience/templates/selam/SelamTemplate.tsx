@@ -4,7 +4,7 @@ import "./selam.css";
 
 const Mark = () => <span className="selam-mark" aria-hidden="true">✳</span>;
 
-export function SelamSite({ snapshot, locale, applicationName, publicRoot, rootStyle }: TemplateProps) {
+export function SelamSite({ snapshot, locale, applicationName, publicRoot, rootStyle, mode, toggleMode }: TemplateProps) {
   const hero = section(snapshot.sections, "hero");
   const services = section(snapshot.sections, "services");
   const benefits = section(snapshot.sections, "benefits");
@@ -18,11 +18,12 @@ export function SelamSite({ snapshot, locale, applicationName, publicRoot, rootS
   const secondary = action(hero.secondaryAction, locale);
   const heroAsset = asset(snapshot.compiledDesign, "hero.primary");
 
-  return <div data-pe-root data-pe-recipe={snapshot.recipeKey} className="selam-site" data-template="selam-movement-v1" style={rootStyle}>
+  return <div data-pe-root data-pe-recipe={snapshot.recipeKey} data-pe-mode={mode} className="selam-site" data-template="selam-movement-v1" style={rootStyle}>
     <header className="selam-nav">
       <a className="selam-logo" href={publicRoot}><Mark /> <strong>{applicationName}</strong></a>
       <nav><a href="#sessions">Move</a><a href="#people">Learn</a><a href="#space">Our space</a></nav>
       {primary ? <a className="selam-pill" href={primary.href}>Book a session <span>→</span></a> : null}
+      <button type="button" className="selam-mode" onClick={toggleMode} aria-label={`Switch to ${mode === "dark" ? "light" : "dark"} mode`}><span aria-hidden="true">{mode === "dark" ? "☀" : "☾"}</span><span>{mode === "dark" ? "Light" : "Dark"}</span></button>
     </header>
     <main>
       <section className="selam-hero">
@@ -68,7 +69,7 @@ export function SelamSite({ snapshot, locale, applicationName, publicRoot, rootS
   </div>;
 }
 
-export function SelamBooking({ snapshot, locale, applicationName, publicRoot, rootStyle, bookingPath }: BookingTemplateProps) {
+export function SelamBooking({ snapshot, locale, applicationName, publicRoot, rootStyle, bookingPath, mode, toggleMode }: BookingTemplateProps) {
   const hero = section(snapshot.sections, "hero");
-  return <main data-pe-booking data-pe-recipe={snapshot.recipeKey} className="selam-site selam-booking" style={rootStyle}><header className="selam-nav"><a className="selam-logo" href={publicRoot}><Mark /> <strong>{applicationName}</strong></a><a href={publicRoot}>Back to site</a></header><section><div><p className="selam-overline">Choose your appointment</p><h1>{localized(hero.title, locale)}</h1><p>{localized(hero.subtitle, locale)}</p>{bookingPath ? <a className="selam-pill" href={bookingPath}>Continue to booking →</a> : null}</div><img src={supportAsset("selam", 1)} alt="Movement session" /></section></main>;
+  return <main data-pe-booking data-pe-recipe={snapshot.recipeKey} data-pe-mode={mode} className="selam-site selam-booking" style={rootStyle}><header className="selam-nav"><a className="selam-logo" href={publicRoot}><Mark /> <strong>{applicationName}</strong></a><button type="button" className="selam-mode" onClick={toggleMode} aria-label={`Switch to ${mode === "dark" ? "light" : "dark"} mode`}><span aria-hidden="true">{mode === "dark" ? "☀" : "☾"}</span><span>{mode === "dark" ? "Light" : "Dark"}</span></button><a href={publicRoot}>Back to site</a></header><section><div><p className="selam-overline">Choose your appointment</p><h1>{localized(hero.title, locale)}</h1><p>{localized(hero.subtitle, locale)}</p>{bookingPath ? <a className="selam-pill" href={bookingPath}>Continue to booking →</a> : null}</div><img src={supportAsset("selam", 1)} alt="Movement session" /></section></main>;
 }

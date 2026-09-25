@@ -13,8 +13,9 @@ const allSites = [
 ];
 const requestedSiteKeys = new Set((process.env.PUBLIC_EXPERIENCE_SITE_KEYS || "").split(",").filter(Boolean));
 const sites = requestedSiteKeys.size ? allSites.filter(([key]) => requestedSiteKeys.has(key)) : allSites;
+const modes = (process.env.PUBLIC_EXPERIENCE_MODES || "").split(",").filter(Boolean);
 
-async function capture(page, key, slug, recipe, suffix) {
+async function capture(page, key, slug, recipe, suffix, mode) {
   const consoleErrors = [];
   const networkErrors = [];
   const badResponses = [];
@@ -28,20 +29,23 @@ async function capture(page, key, slug, recipe, suffix) {
   page.on("console", onConsole);
   page.on("requestfailed", onRequestFailed);
   page.on("response", onResponse);
+  if (mode) await page.addInitScript((preference) => localStorage.setItem("pe-display-mode", preference), mode);
   const response = await page.goto(`${baseURL}/${slug}${suffix}`, { waitUntil: "domcontentloaded" });
   if (!response?.ok()) throw new Error(`${slug}${suffix} returned ${response?.status()}`);
   await page.waitForLoadState("networkidle").catch(() => {});
-  const selector = suffix ? `[data-pe-booking][data-pe-recipe="${recipe}"]` : `[data-pe-root][data-pe-recipe="${recipe}"]`;
+  const modeSelector = mode ? `[data-pe-mode="${mode}"]` : "";
+  const selector = suffix ? `[data-pe-booking][data-pe-recipe="${recipe}"]${modeSelector}` : `[data-pe-root][data-pe-recipe="${recipe}"]${modeSelector}`;
   await page.locator(selector).waitFor({ state: "visible", timeout: 20_000 });
   await page.waitForTimeout(900);
   const surface = suffix ? "book" : "landing";
   const viewport = page.viewportSize().width < 600 ? "mobile" : "desktop";
-  await page.screenshot({ path: path.join(outputDir, `${key}-${surface}-${viewport}.png`), fullPage: !suffix });
+  const modeSuffix = mode ? `-${mode}` : "";
+  await page.screenshot({ path: path.join(outputDir, `${key}-${surface}${modeSuffix}-${viewport}.png`), fullPage: !suffix });
   page.off("console", onConsole);
   page.off("requestfailed", onRequestFailed);
   page.off("response", onResponse);
   if (consoleErrors.length || networkErrors.length) throw new Error(JSON.stringify({ key, surface, viewport, consoleErrors, networkErrors, badResponses }));
-  return { key, surface, viewport, consoleErrors, networkErrors, badResponses };
+  return { key, surface, viewport, mode: mode || "resolved", consoleErrors, networkErrors, badResponses };
 }
 
 (async () => {
@@ -49,15 +53,17 @@ async function capture(page, key, slug, recipe, suffix) {
   const browser = await chromium.launch({ headless: true });
   const results = [];
   for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
-    const context = await browser.newContext({ viewport });
     for (const [key, slug, recipe] of sites) {
-      for (const suffix of ["", "/book"]) {
-        const page = await context.newPage();
-        results.push(await capture(page, key, slug, recipe, suffix));
-        await page.close();
+      for (const mode of modes.length ? modes : [null]) {
+        for (const suffix of ["", "/book"]) {
+          const context = await browser.newContext({ viewport });
+          const page = await context.newPage();
+          results.push(await capture(page, key, slug, recipe, suffix, mode));
+          await page.close();
+          await context.close();
+        }
       }
     }
-    await context.close();
   }
   await browser.close();
   fs.writeFileSync(path.join(outputDir, "validation-summary.json"), JSON.stringify({ baseURL, results }, null, 2));

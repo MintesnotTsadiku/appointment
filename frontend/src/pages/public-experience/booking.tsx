@@ -9,7 +9,7 @@ import type { PublishedSnapshot } from "@/public-experience/types";
 import "@/public-experience/platform.css";
 
 function BookingHandoff({ snapshot, slug }: { snapshot: PublishedSnapshot; slug?: string }) {
-  const { config, theme } = usePublicExperience();
+  const { config, theme, setPreference } = usePublicExperience();
   const rootStyle = theme.variables as CSSProperties;
   const publicRoot = publicRootForSlug(slug);
   const template = getTemplatePackage(snapshot.compiledDesign.layout.rendererKey);
@@ -22,6 +22,8 @@ function BookingHandoff({ snapshot, slug }: { snapshot: PublishedSnapshot; slug?
     publicRoot={publicRoot}
     rootStyle={rootStyle}
     bookingPath={snapshot.bookingPath}
+    mode={theme.mode}
+    toggleMode={() => setPreference(theme.mode === "dark" ? "light" : "dark")}
   />;
 }
 

@@ -1,5 +1,6 @@
 import type { ComponentType, CSSProperties } from "react";
 
+import type { ResolvedMode } from "../firstPaint";
 import type { PublishedSnapshot } from "../types";
 
 export interface TemplateProps {
@@ -8,6 +9,8 @@ export interface TemplateProps {
   applicationName: string;
   publicRoot: string;
   rootStyle: CSSProperties;
+  mode: ResolvedMode;
+  toggleMode: () => void;
 }
 
 export interface BookingTemplateProps extends TemplateProps {

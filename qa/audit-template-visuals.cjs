@@ -5,12 +5,17 @@ const { chromium } = require("/home/minte/projects/develop-bench/apps/agent_harn
 const baseURL = process.env.PUBLIC_EXPERIENCE_BASE_URL || "http://127.0.0.84:44430";
 const targets = [
   ["selam", "selam-studio"],
+  ["bloom", "bloom-studio"],
+  ["meron", "meron-studio"],
   ["abugida", "abugida-studio"],
+  ["tena", "tena-studio"],
 ];
 
-async function auditPage(page, key, slug, viewport) {
+async function auditPage(page, key, slug, viewport, mode) {
+  await page.addInitScript((preference) => localStorage.setItem("pe-display-mode", preference), mode);
   await page.goto(`${baseURL}/${slug}`, { waitUntil: "networkidle" });
-  await page.locator("[data-pe-root]").waitFor({ state: "visible" });
+  const root = page.locator(`[data-pe-root][data-pe-mode="${mode}"]`);
+  await root.waitFor({ state: "visible" });
   const contrast = await page.evaluate(() => {
     const parse = (value) => {
       const channels = value.match(/[\d.]+/g)?.map(Number) || [];
@@ -86,7 +91,13 @@ async function auditPage(page, key, slug, viewport) {
       display: style.display,
     };
   }));
-  return { key, viewport, contrast, icons };
+  const nextMode = mode === "dark" ? "light" : "dark";
+  const toggle = page.getByRole("button", { name: `Switch to ${nextMode} mode` });
+  await toggle.click();
+  await page.locator(`[data-pe-root][data-pe-mode="${nextMode}"]`).waitFor({ state: "visible" });
+  const storedMode = await page.evaluate(() => localStorage.getItem("pe-display-mode"));
+  if (storedMode !== nextMode) throw new Error(`${key} did not persist ${nextMode} mode`);
+  return { key, viewport, mode, contrast, icons, toggleVerified: true };
 }
 
 (async () => {
@@ -94,14 +105,17 @@ async function auditPage(page, key, slug, viewport) {
   const results = [];
   for (const viewport of [{ name: "desktop", width: 1440, height: 900 }, { name: "mobile", width: 390, height: 844 }]) {
     const context = await browser.newContext({ viewport });
-    for (const [key, slug] of targets) {
-      const page = await context.newPage();
-      results.push(await auditPage(page, key, slug, viewport.name));
-      await page.close();
+    for (const mode of ["light", "dark"]) {
+      for (const [key, slug] of targets) {
+        const page = await context.newPage();
+        results.push(await auditPage(page, key, slug, viewport.name, mode));
+        await page.close();
+      }
     }
     await context.close();
   }
-  const reportPath = process.env.PUBLIC_EXPERIENCE_AUDIT_PATH || path.resolve(__dirname, "evidence/public-experience-polish-v2/visual-audit.json");
+  const reportPath = process.env.PUBLIC_EXPERIENCE_AUDIT_PATH || path.resolve(__dirname, "evidence/public-experience-theme-modes-v1/visual-audit.json");
+  fs.mkdirSync(path.dirname(reportPath), { recursive: true });
   fs.writeFileSync(reportPath, JSON.stringify({ baseURL, results }, null, 2));
   await browser.close();
   console.log(JSON.stringify(results, null, 2));

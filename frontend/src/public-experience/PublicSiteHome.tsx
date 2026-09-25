@@ -7,7 +7,7 @@ import type { PublishedSnapshot } from "./types";
 import "./platform.css";
 
 export const PublicSiteHome = ({ snapshot }: { snapshot: PublishedSnapshot }) => {
-  const { config, theme } = usePublicExperience();
+  const { config, theme, setPreference } = usePublicExperience();
   const locale = snapshot.locale || config.locale;
   const design = snapshot.compiledDesign;
   const applicationName = design.identity.applicationName || config.identity.applicationName;
@@ -16,6 +16,7 @@ export const PublicSiteHome = ({ snapshot }: { snapshot: PublishedSnapshot }) =>
     ...(theme.variables as CSSProperties),
     "--pe-surface-focus-ring": String((design.surface.shape as Record<string, unknown>)?.focusRing || "3px"),
   } as CSSProperties;
+  const toggleMode = () => setPreference(theme.mode === "dark" ? "light" : "dark");
 
   if (!template) {
     return (
@@ -32,6 +33,8 @@ export const PublicSiteHome = ({ snapshot }: { snapshot: PublishedSnapshot }) =>
     applicationName={applicationName}
     publicRoot={publicRootFromPath(typeof window === "undefined" ? "/" : window.location.pathname)}
     rootStyle={rootStyle}
+    mode={theme.mode}
+    toggleMode={toggleMode}
   />;
 };
 
