@@ -17,7 +17,7 @@ def setup_demo_site():
     first = next(iter(state["businesses"].values()))
     return {
         "site": state["site"],
-        "recipe": "quiet-trust-warm-editorial",
+        "recipe": "tena-clinic",
         "public_site": first["public_site"],
         "release": first["experience_release"],
     }
@@ -34,7 +34,7 @@ def run_release_rehearsal():
     snapshot = json.loads(release.normalized_json)
     ok = (
         context.public_site == first["public_site"]
-        and snapshot["recipeKey"] == "quiet-trust-warm-editorial"
+        and snapshot["recipeKey"] == "tena-clinic"
         and len(snapshot["sections"]) == 13
     )
     return {"ok": ok, "setup": setup, "recipe": snapshot["recipeKey"], "section_count": len(snapshot["sections"])}

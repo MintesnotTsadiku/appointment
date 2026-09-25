@@ -54,8 +54,8 @@ const booking = read("src/pages/public-experience/booking.tsx");
 assert.ok(!booking.includes("landingPageSettings"), "booking entry must not read legacy settings");
 assert.ok(booking.includes("PublicExperienceProvider"), "booking entry must use the public provider");
 assert.ok(booking.includes("publicRootForSlug"), "booking entry must link back to its tenant site");
-assert.ok(booking.includes("hero?.content.title"), "booking title must use editable hero copy, not the combined SEO title");
-assert.ok(booking.includes("pe-booking-media"), "booking entry must preserve recipe imagery");
+assert.ok(booking.includes("getTemplatePackage"), "booking entry must delegate to the published template package");
+assert.ok(booking.includes("BookingTemplate"), "booking entry must use the template-owned booking handoff");
 
 const bookingTheme = read("src/public-experience/bookingTheme.ts");
 assert.ok(bookingTheme.includes("fetchPublicConfig(undefined, publicRootForSlug(orgSlug))"), "scheduler must resolve the organization public release");

@@ -1,12 +1,12 @@
 {
   "kind": "recipe",
   "contract": "appointment-curated-recipe.v1",
-  "key": "warm-vitality-studio",
+  "key": "bloom-hair",
   "version": 1,
-  "label": "Warm Vitality",
-  "description": "An immersive, optimistic visual system with generous photography, rounded surfaces and a confident path into booking.",
-  "audience": "Movement, beauty and energetic personal services.",
-  "mood": "warm-vitality",
+  "label": "Bloom Hair",
+  "description": "Bloom Hair is an independently implemented, art-directed public template package.",
+  "audience": "Natural hair studios and beauty practices.",
+  "mood": "editorial-beauty",
   "supportedLocales": [
     "en",
     "am"
@@ -18,7 +18,7 @@
   },
   "primitives": {
     "palette": {
-      "key": "warm-vitality",
+      "key": "bloom-hair",
       "version": 1
     },
     "typography": {
@@ -30,7 +30,7 @@
       "version": 1
     },
     "layout": {
-      "key": "warm-vitality-studio",
+      "key": "bloom-hair",
       "version": 1
     },
     "surface": {
@@ -71,8 +71,8 @@
   "defaultInputs": {
     "motion": "calm",
     "presentationDensity": "comfortable",
-    "heroAsset": "hero.selam",
-    "detailAsset": "detail.selam"
+    "heroAsset": "hero.bloom",
+    "detailAsset": "detail.bloom"
   },
   "adjustments": {
     "accentColor": {
@@ -99,7 +99,6 @@
     "heroAsset": {
       "type": "asset-role",
       "choices": [
-        "hero.selam",
         "hero.bloom"
       ],
       "optional": true
@@ -107,7 +106,6 @@
     "detailAsset": {
       "type": "asset-role",
       "choices": [
-        "detail.selam",
         "detail.bloom"
       ],
       "optional": true

@@ -45,6 +45,14 @@ def validate_showcase_catalog() -> dict[str, Any]:
         seen_slugs.add(site["slug"])
         asset = _asset_path(site["heroAsset"])
         _verify_checksum(asset, site["heroChecksum"])
+        support_assets = site.get("supportAssets")
+        if not isinstance(support_assets, list) or len(support_assets) != 3:
+            raise ValueError(f"Showcase site {key} requires three support assets")
+        for support in support_assets:
+            if not isinstance(support, dict):
+                raise ValueError(f"Invalid support asset for {key}")
+            _require_text(support, key, "asset", "checksum")
+            _verify_checksum(_asset_path(support["asset"]), support["checksum"])
         benchmark = REPO_ROOT / site["benchmark"]
         if not benchmark.is_file():
             raise ValueError(f"Missing benchmark for {key}: {site['benchmark']}")

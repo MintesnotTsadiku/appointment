@@ -4,62 +4,25 @@ import { useParams } from "react-router-dom";
 import { fetchPublishedSnapshot } from "@/public-experience/api";
 import { PublicExperienceProvider, usePublicExperience } from "@/public-experience/PublicExperienceProvider";
 import { publicRootForSlug } from "@/public-experience/routes";
-import { localized } from "@/public-experience/sections";
+import { getTemplatePackage } from "@/public-experience/templates/registry";
 import type { PublishedSnapshot } from "@/public-experience/types";
-import "@/public-experience/quiet-trust.css";
+import "@/public-experience/platform.css";
 
 function BookingHandoff({ snapshot, slug }: { snapshot: PublishedSnapshot; slug?: string }) {
   const { config, theme } = usePublicExperience();
-  const hero = snapshot.sections.find((section) => section.type === "hero");
-  const title = localized(hero?.content.title, snapshot.locale) || config.identity.applicationName;
-  const subtitle = localized(hero?.content.subtitle, snapshot.locale);
-  const asset = snapshot.compiledDesign.assets["hero.primary"];
   const rootStyle = theme.variables as CSSProperties;
   const publicRoot = publicRootForSlug(slug);
-
-  return (
-    <main
-      className="pe-page pe-booking-page"
-      data-pe-booking
-      data-pe-recipe={snapshot.recipeKey}
-      data-pe-mode={theme.mode}
-      style={rootStyle}
-    >
-      <div className="pe-topline">
-        <header className="pe-nav pe-container">
-          <a className="pe-brand" href={publicRoot} aria-label={`Back to ${config.identity.applicationName}`}>
-            <span className="pe-brand-mark" aria-hidden="true">✦</span>
-            <span>{config.identity.applicationName}</span>
-          </a>
-          <div className="pe-nav-meta"><span>{snapshot.locale}</span><a href={publicRoot}>Back to site</a></div>
-        </header>
-      </div>
-      <section className="pe-container pe-booking-bridge">
-        <div className="pe-booking-copy">
-          <p className="pe-kicker">Choose your appointment</p>
-          <h1>{title}</h1>
-          {subtitle ? <p className="pe-booking-lead">{subtitle}</p> : null}
-          <p className="pe-booking-note">Next, choose the service, provider and time that work for you.</p>
-          {snapshot.bookingPath ? (
-            <a data-cta="primary" href={snapshot.bookingPath} className="pe-button pe-button-primary">
-              Continue to booking ↗
-            </a>
-          ) : (
-            <p className="pe-booking-error">Booking is not available for this release.</p>
-          )}
-        </div>
-        {asset ? (
-          <div className="pe-booking-media">
-            <img
-              src={asset.src}
-              alt={asset.alt}
-              style={{ objectPosition: asset.focalPoint ? `${asset.focalPoint.x * 100}% ${asset.focalPoint.y * 100}%` : undefined }}
-            />
-          </div>
-        ) : null}
-      </section>
-    </main>
-  );
+  const template = getTemplatePackage(snapshot.compiledDesign.layout.rendererKey);
+  if (!template) return <main data-pe-unsupported className="p-8">Unsupported public template</main>;
+  const BookingTemplate = template.Booking;
+  return <BookingTemplate
+    snapshot={snapshot}
+    locale={snapshot.locale}
+    applicationName={config.identity.applicationName}
+    publicRoot={publicRoot}
+    rootStyle={rootStyle}
+    bookingPath={snapshot.bookingPath}
+  />;
 }
 
 const PublicBookingPage = () => {

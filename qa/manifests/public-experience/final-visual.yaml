@@ -26,7 +26,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-pe-root][data-pe-recipe="warm-vitality-studio"]'
+      value: '[data-pe-root][data-pe-recipe="selam-movement"]'
   actions:
   - action: screenshot
     name: selam-landing-desktop.png
@@ -47,7 +47,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-pe-booking][data-pe-recipe="warm-vitality-studio"]'
+      value: '[data-pe-booking][data-pe-recipe="selam-movement"]'
   actions:
   - action: screenshot
     name: selam-book-desktop.png
@@ -66,7 +66,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-booking-branded="true"][data-pe-recipe="warm-vitality-studio"]'
+      value: '[data-booking-branded="true"][data-pe-recipe="selam-movement"]'
   actions:
   - action: screenshot
     name: selam-scheduler-desktop.png
@@ -85,7 +85,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-pe-root][data-pe-recipe="crafted-editorial-atelier"]'
+      value: '[data-pe-root][data-pe-recipe="meron-atelier"]'
   actions:
   - action: screenshot
     name: meron-landing-desktop.png
@@ -106,7 +106,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-pe-booking][data-pe-recipe="crafted-editorial-atelier"]'
+      value: '[data-pe-booking][data-pe-recipe="meron-atelier"]'
   actions:
   - action: screenshot
     name: meron-book-desktop.png
@@ -125,7 +125,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-booking-branded="true"][data-pe-recipe="crafted-editorial-atelier"]'
+      value: '[data-booking-branded="true"][data-pe-recipe="meron-atelier"]'
   actions:
   - action: screenshot
     name: meron-scheduler-desktop.png
@@ -144,7 +144,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-pe-root][data-pe-recipe="warm-vitality-studio"]'
+      value: '[data-pe-root][data-pe-recipe="bloom-hair"]'
   actions:
   - action: screenshot
     name: bloom-landing-desktop.png
@@ -165,7 +165,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-pe-booking][data-pe-recipe="warm-vitality-studio"]'
+      value: '[data-pe-booking][data-pe-recipe="bloom-hair"]'
   actions:
   - action: screenshot
     name: bloom-book-desktop.png
@@ -184,7 +184,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-booking-branded="true"][data-pe-recipe="warm-vitality-studio"]'
+      value: '[data-booking-branded="true"][data-pe-recipe="bloom-hair"]'
   actions:
   - action: screenshot
     name: bloom-scheduler-desktop.png
@@ -203,7 +203,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-pe-root][data-pe-recipe="quiet-trust-warm-editorial"]'
+      value: '[data-pe-root][data-pe-recipe="tena-clinic"]'
   actions:
   - action: screenshot
     name: tena-landing-desktop.png
@@ -224,7 +224,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-pe-booking][data-pe-recipe="quiet-trust-warm-editorial"]'
+      value: '[data-pe-booking][data-pe-recipe="tena-clinic"]'
   actions:
   - action: screenshot
     name: tena-book-desktop.png
@@ -243,7 +243,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-booking-branded="true"][data-pe-recipe="quiet-trust-warm-editorial"]'
+      value: '[data-booking-branded="true"][data-pe-recipe="tena-clinic"]'
   actions:
   - action: screenshot
     name: tena-scheduler-desktop.png
@@ -262,7 +262,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-pe-root][data-pe-recipe="crafted-editorial-atelier"]'
+      value: '[data-pe-root][data-pe-recipe="abugida-language"]'
   actions:
   - action: screenshot
     name: abugida-landing-desktop.png
@@ -283,7 +283,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-pe-booking][data-pe-recipe="crafted-editorial-atelier"]'
+      value: '[data-pe-booking][data-pe-recipe="abugida-language"]'
   actions:
   - action: screenshot
     name: abugida-book-desktop.png
@@ -302,7 +302,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-booking-branded="true"][data-pe-recipe="crafted-editorial-atelier"]'
+      value: '[data-booking-branded="true"][data-pe-recipe="abugida-language"]'
   actions:
   - action: screenshot
     name: abugida-scheduler-desktop.png
@@ -321,7 +321,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-pe-root][data-pe-recipe="warm-vitality-studio"]'
+      value: '[data-pe-root][data-pe-recipe="selam-movement"]'
   actions:
   - action: screenshot
     name: selam-landing-mobile.png
@@ -340,7 +340,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-pe-booking][data-pe-recipe="warm-vitality-studio"]'
+      value: '[data-pe-booking][data-pe-recipe="selam-movement"]'
   actions:
   - action: screenshot
     name: selam-book-mobile.png
@@ -359,7 +359,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-booking-branded="true"][data-pe-recipe="warm-vitality-studio"]'
+      value: '[data-booking-branded="true"][data-pe-recipe="selam-movement"]'
   actions:
   - action: screenshot
     name: selam-scheduler-mobile.png
@@ -378,7 +378,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-pe-root][data-pe-recipe="crafted-editorial-atelier"]'
+      value: '[data-pe-root][data-pe-recipe="meron-atelier"]'
   actions:
   - action: screenshot
     name: meron-landing-mobile.png
@@ -397,7 +397,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-pe-booking][data-pe-recipe="crafted-editorial-atelier"]'
+      value: '[data-pe-booking][data-pe-recipe="meron-atelier"]'
   actions:
   - action: screenshot
     name: meron-book-mobile.png
@@ -416,7 +416,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-booking-branded="true"][data-pe-recipe="crafted-editorial-atelier"]'
+      value: '[data-booking-branded="true"][data-pe-recipe="meron-atelier"]'
   actions:
   - action: screenshot
     name: meron-scheduler-mobile.png
@@ -435,7 +435,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-pe-root][data-pe-recipe="warm-vitality-studio"]'
+      value: '[data-pe-root][data-pe-recipe="bloom-hair"]'
   actions:
   - action: screenshot
     name: bloom-landing-mobile.png
@@ -454,7 +454,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-pe-booking][data-pe-recipe="warm-vitality-studio"]'
+      value: '[data-pe-booking][data-pe-recipe="bloom-hair"]'
   actions:
   - action: screenshot
     name: bloom-book-mobile.png
@@ -473,7 +473,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-booking-branded="true"][data-pe-recipe="warm-vitality-studio"]'
+      value: '[data-booking-branded="true"][data-pe-recipe="bloom-hair"]'
   actions:
   - action: screenshot
     name: bloom-scheduler-mobile.png
@@ -492,7 +492,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-pe-root][data-pe-recipe="quiet-trust-warm-editorial"]'
+      value: '[data-pe-root][data-pe-recipe="tena-clinic"]'
   actions:
   - action: screenshot
     name: tena-landing-mobile.png
@@ -511,7 +511,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-pe-booking][data-pe-recipe="quiet-trust-warm-editorial"]'
+      value: '[data-pe-booking][data-pe-recipe="tena-clinic"]'
   actions:
   - action: screenshot
     name: tena-book-mobile.png
@@ -530,7 +530,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-booking-branded="true"][data-pe-recipe="quiet-trust-warm-editorial"]'
+      value: '[data-booking-branded="true"][data-pe-recipe="tena-clinic"]'
   actions:
   - action: screenshot
     name: tena-scheduler-mobile.png
@@ -549,7 +549,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-pe-root][data-pe-recipe="crafted-editorial-atelier"]'
+      value: '[data-pe-root][data-pe-recipe="abugida-language"]'
   actions:
   - action: screenshot
     name: abugida-landing-mobile.png
@@ -568,7 +568,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-pe-booking][data-pe-recipe="crafted-editorial-atelier"]'
+      value: '[data-pe-booking][data-pe-recipe="abugida-language"]'
   actions:
   - action: screenshot
     name: abugida-book-mobile.png
@@ -587,7 +587,7 @@ scenarios:
     - type: network_idle
     - type: no_blank_page
     - type: visible_selector
-      value: '[data-booking-branded="true"][data-pe-recipe="crafted-editorial-atelier"]'
+      value: '[data-booking-branded="true"][data-pe-recipe="abugida-language"]'
   actions:
   - action: screenshot
     name: abugida-scheduler-mobile.png

@@ -21,9 +21,11 @@ RECIPE_CONTRACT = "appointment-curated-recipe.v1"
 COMPILED_DESIGN_CONTRACT = "appointment-compiled-design.v1"
 COMPILER_POLICY_VERSION = "curated-brand-policy.v1"
 RECIPE_MANIFESTS = {
-    "quiet-trust-warm-editorial": "public_experience/manifest/design/recipes/quiet-trust-warm-editorial.v1.json",
-    "crafted-editorial-atelier": "public_experience/manifest/design/recipes/crafted-editorial-atelier.v1.json",
-    "warm-vitality-studio": "public_experience/manifest/design/recipes/warm-vitality-studio.v1.json",
+    "selam-movement": "public_experience/manifest/design/recipes/selam-movement.v1.json",
+    "bloom-hair": "public_experience/manifest/design/recipes/bloom-hair.v1.json",
+    "meron-atelier": "public_experience/manifest/design/recipes/meron-atelier.v1.json",
+    "abugida-language": "public_experience/manifest/design/recipes/abugida-language.v1.json",
+    "tena-clinic": "public_experience/manifest/design/recipes/tena-clinic.v1.json",
 }
 PRIMITIVE_MANIFESTS = {
     "palette": "public_experience/manifest/design/palettes/{key}.v{version}.json",

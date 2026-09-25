@@ -1,0 +1,13 @@
+@font-face { font-family: "Crafted Editorial Display"; src: url("/assets/appointment/quiet-trust/fonts/dejavu-serif-bold.ttf") format("truetype"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "Crafted Editorial Body"; src: url("/assets/appointment/quiet-trust/fonts/noto-sans-ethiopic.ttf") format("truetype"); font-weight: 400 700; font-display: swap; }
+@font-face { font-family: "Crafted Editorial UI"; src: url("/assets/appointment/quiet-trust/fonts/noto-sans-ethiopic.ttf") format("truetype"); font-weight: 400 700; font-display: swap; }
+@font-face { font-family: "Warm Vitality Body"; src: url("/assets/appointment/quiet-trust/fonts/noto-sans-ethiopic.ttf") format("truetype"); font-weight: 400 700; font-display: swap; }
+@font-face { font-family: "Quiet Trust Display"; src: url("/assets/appointment/quiet-trust/fonts/dejavu-serif.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Quiet Trust Display"; src: url("/assets/appointment/quiet-trust/fonts/dejavu-serif-bold.ttf") format("truetype"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Quiet Trust Body"; src: url("/assets/appointment/quiet-trust/fonts/noto-sans-ethiopic.ttf") format("truetype"); font-weight: 400 700; font-style: normal; font-display: swap; }
+
+[data-booking-branded="true"] h1,
+[data-booking-branded="true"] h2,
+[data-booking-branded="true"] h3 { font-family: var(--booking-font-display); }
+[data-booking-branded="true"] .rounded-2xl { border-radius: var(--booking-radius); }
+[data-booking-branded="true"] :focus-visible { outline-color: var(--accent-primary); }

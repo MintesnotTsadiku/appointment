@@ -4,48 +4,118 @@
   "sites": {
     "selam": {
       "slug": "selam-studio",
-      "recipe": "warm-vitality-studio",
+      "recipe": "selam-movement",
       "heroRole": "hero.selam",
       "detailRole": "detail.selam",
       "heroAsset": "/assets/appointment/brand-experience/heroes/selam-movement.webp",
       "heroChecksum": "f15852ba4b8a7baaa17d9d46b1a64137b22ff00dabee79bf7eeb0209c5e46cd6",
-      "benchmark": "docs/design-references/public-experience/v1/warm-vitality/full-page-03.webp"
+      "benchmark": "docs/design-references/public-experience/v1/warm-vitality/full-page-03.webp",
+      "supportAssets": [
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam/scene-1.webp",
+          "checksum": "ff0c303628f6789359754f12250ec5226176730165d85237f9df1c6de7b66169"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam/scene-2.webp",
+          "checksum": "f6a59d1f6228944f7b883b2848f6e468591edd9ce5213b29ed7f9f2fd1e0abe7"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam/scene-3.webp",
+          "checksum": "c1636e2d0c5709e5d5fb06960fc2963fccc1f2fdae5584d69ac1460b0ae1c575"
+        }
+      ]
     },
     "meron": {
       "slug": "meron-studio",
-      "recipe": "crafted-editorial-atelier",
+      "recipe": "meron-atelier",
       "heroRole": "hero.meron",
       "detailRole": "detail.meron",
       "heroAsset": "/assets/appointment/brand-experience/heroes/meron-tailoring.webp",
       "heroChecksum": "763240df7adba76c94416db3a196692d0ff44ea84828cb2a9f2c94f55df07b56",
-      "benchmark": "docs/design-references/public-experience/v1/crafted-editorial/full-page-01.webp"
+      "benchmark": "docs/design-references/public-experience/v1/crafted-editorial/full-page-01.webp",
+      "supportAssets": [
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron/scene-1.webp",
+          "checksum": "dc842a7a524568cab86407ff347112471fa78bffd3176bc47bf9cd57b10ea91a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron/scene-2.webp",
+          "checksum": "78b2331409e483f5a1a0d62018e008cfaaf625564473ad4315b1e6e7e56821ff"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron/scene-3.webp",
+          "checksum": "6c3435190ded11001b30798482098bfd996d86730bdf212049baf96a2c06f480"
+        }
+      ]
     },
     "bloom": {
       "slug": "bloom-studio",
-      "recipe": "warm-vitality-studio",
+      "recipe": "bloom-hair",
       "heroRole": "hero.bloom",
       "detailRole": "detail.bloom",
       "heroAsset": "/assets/appointment/brand-experience/heroes/bloom-hair.webp",
       "heroChecksum": "6afcd83ce024de66dbdd2c37394eadc4d1f5aad1be36119ce93b0cd767315994",
-      "benchmark": "docs/design-references/public-experience/v1/warm-vitality/full-page-01.webp"
+      "benchmark": "docs/design-references/public-experience/v1/warm-vitality/full-page-01.webp",
+      "supportAssets": [
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom/scene-1.webp",
+          "checksum": "fd1e1c4d1e195acbe32e4bb55630f3ffe84e3a48509c56558c1011816c56f439"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom/scene-2.webp",
+          "checksum": "fb932f935d2efc148a9c29dcca6db4d2595af4f842262b893e8cbc78d04948b5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom/scene-3.webp",
+          "checksum": "6f6b49890dd51d82d1d27eb9a75cd7641733b3848cfee6081d76eed08217dcd7"
+        }
+      ]
     },
     "tena": {
       "slug": "tena-studio",
-      "recipe": "quiet-trust-warm-editorial",
+      "recipe": "tena-clinic",
       "heroRole": "hero.tena",
       "detailRole": "detail.tena",
       "heroAsset": "/assets/appointment/brand-experience/heroes/tena-clinic.webp",
       "heroChecksum": "b5d10927b488561c609db00486bb16106c697ecfd8952ea1c21a1764e455652b",
-      "benchmark": "docs/design-references/public-experience/v1/quiet-trust/full-page-01.webp"
+      "benchmark": "docs/design-references/public-experience/v1/quiet-trust/full-page-01.webp",
+      "supportAssets": [
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena/scene-1.webp",
+          "checksum": "45673e46c00d11d169f93f829efa4fcb6355b588c9d314ca4d249fb5623e498f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena/scene-2.webp",
+          "checksum": "2756d429bbe348c010454388452c84897a283f0eb15ae97c5b9753a3c0fa63d8"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena/scene-3.webp",
+          "checksum": "725b8c948ab47407ce3f7c6a53e54885831052253962c70f056cd031c1c78a2f"
+        }
+      ]
     },
     "abugida": {
       "slug": "abugida-studio",
-      "recipe": "crafted-editorial-atelier",
+      "recipe": "abugida-language",
       "heroRole": "hero.abugida",
       "detailRole": "detail.abugida",
       "heroAsset": "/assets/appointment/brand-experience/heroes/abugida-language.webp",
       "heroChecksum": "ce8e849c911911c8b61c4c8c0cf09dbce2ac88e65e2ff995ec3500219fd46832",
-      "benchmark": "docs/design-references/public-experience/v1/crafted-editorial/full-page-01.webp"
+      "benchmark": "docs/design-references/public-experience/v1/crafted-editorial/full-page-01.webp",
+      "supportAssets": [
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida/scene-1.webp",
+          "checksum": "6a8909e56bd9bfad16468c2221d698d40f3cc57ff904d11574860d272b54b57b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida/scene-2.webp",
+          "checksum": "b535733a89d724dc0dee2411a3f6aedee6c41fd6603e7cbbb45ee9d2c09c2e9a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida/scene-3.webp",
+          "checksum": "1c7ce9e880872d2d2b7f267dcdd109483e2a5e0e8506cd76ff493c76cb9fbafb"
+        }
+      ]
     }
   }
 }

@@ -114,7 +114,7 @@ class TestDeploymentApi(unittest.TestCase):
                 "slug": f"{MARKER}site".lower(),
                 "owner_type": "Organization",
                 "organization": org,
-                "recipe_key": "quiet-trust-warm-editorial",
+                "recipe_key": "tena-clinic",
                 "recipe_version": 1,
                 "content_schema_version": 2,
             }

@@ -47,7 +47,7 @@
   {"fieldname": "platform_url", "fieldtype": "Data", "label": "Platform URL", "read_only": 1},
   {"default": "Draft", "fieldname": "status", "fieldtype": "Select", "in_list_view": 1, "label": "Status", "options": "Draft\nPublished\nSuspended\nArchived", "reqd": 1},
   {"fieldname": "section_break_recipe", "fieldtype": "Section Break", "label": "Curated Recipe"},
-  {"default": "quiet-trust-warm-editorial", "fieldname": "recipe_key", "fieldtype": "Data", "label": "Recipe Key", "reqd": 1},
+  {"default": "tena-clinic", "fieldname": "recipe_key", "fieldtype": "Data", "label": "Recipe Key", "reqd": 1},
   {"default": "1", "fieldname": "recipe_version", "fieldtype": "Int", "label": "Recipe Version", "read_only": 1},
   {"default": "2", "fieldname": "content_schema_version", "fieldtype": "Int", "label": "Content Schema Version", "read_only": 1},
   {"fieldname": "section_break_locales", "fieldtype": "Section Break", "label": "Locales"},

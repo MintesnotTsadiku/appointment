@@ -88,7 +88,8 @@ _Avoid_: Temporary fixture, manually configured demo
 
 ## Product boundary
 
-- The public landing page may vary significantly by recipe. The booking handoff and scheduler share the same tokens and identity but retain a stable interaction structure.
+- Each certified design is an independent template package. It owns its visible hierarchy, layout, responsive behavior, CSS, assets, and booking handoff; visual components are not shared across template packages.
+- Templates may share palette, typography, asset, publishing, content, security, and booking contracts. The scheduler keeps one trusted interaction model while adopting the selected template identity and tokens.
 - The first release exposes a few guided adjustments. Advanced bespoke work is designer-assisted service work, not an unbounded self-service controller.
 - The new public-experience model is the source of truth. Because there is no customer production data, do not build old-to-new synchronization or migration machinery.
 - Code defaults keep the product usable when optional seed records or files are unavailable. Published releases remain deterministic and cacheable.
@@ -97,4 +98,4 @@ _Avoid_: Temporary fixture, manually configured demo
 
 ## Visual quality boundary
 
-Generated design boards are references, not rasterized websites. Text, actions, content, layout, and accessibility remain native HTML and CSS. Acceptance requires side-by-side comparison of the reference board with a real browser capture at desktop and mobile widths.
+Generated design boards are visual acceptance targets, not rasterized websites. Text, actions, content, layout, and accessibility remain native HTML and CSS. Acceptance requires side-by-side comparison of the reference board with a real browser capture at desktop and mobile widths.

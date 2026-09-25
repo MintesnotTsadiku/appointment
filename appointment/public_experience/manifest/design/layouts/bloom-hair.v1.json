@@ -1,9 +1,9 @@
 {
   "kind": "layout",
   "contract": "appointment-layout.v1",
-  "key": "quiet-trust-warm-editorial",
+  "key": "bloom-hair",
   "version": 1,
-  "rendererKey": "quiet-trust-warm-editorial",
+  "rendererKey": "bloom-hair",
   "contentSchemaVersion": 2,
   "sections": [
     "hero",
@@ -36,14 +36,21 @@
     "footer"
   ],
   "responsive": {
-    "desktop": "split-hero-editorial",
-    "tablet": "stacked-hero-rail",
-    "mobile": "single-column-sections",
-    "maxContentWidth": 1180
+    "desktop": "bloom-hair-desktop",
+    "tablet": "bloom-hair-tablet",
+    "mobile": "bloom-hair-mobile",
+    "maxContentWidth": 1440
   },
   "density": {
-    "content": ["compact", "standard", "rich"],
-    "presentation": ["comfortable", "spacious"],
+    "content": [
+      "compact",
+      "standard",
+      "rich"
+    ],
+    "presentation": [
+      "comfortable",
+      "spacious"
+    ],
     "defaultContent": "rich",
     "defaultPresentation": "comfortable"
   }

@@ -36,7 +36,7 @@ const rejected = firstExports.mergeConfig(
   { contract: "appointment-public-ui.v2", compiledDesign: { contract: "not-certified" } },
   fallback,
 );
-assert.equal(rejected.compiledDesign.recipeKey, "quiet-trust-warm-editorial");
+assert.equal(rejected.compiledDesign.recipeKey, "tena-clinic");
 
 const provider = read("src/public-experience/PublicExperienceProvider.tsx");
 assert.ok(provider.includes("fetchPublicConfig"));

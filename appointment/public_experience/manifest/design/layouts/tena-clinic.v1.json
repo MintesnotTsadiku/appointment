@@ -1,9 +1,9 @@
 {
   "kind": "layout",
   "contract": "appointment-layout.v1",
-  "key": "warm-vitality-studio",
+  "key": "tena-clinic",
   "version": 1,
-  "rendererKey": "warm-vitality-studio",
+  "rendererKey": "tena-clinic",
   "contentSchemaVersion": 2,
   "sections": [
     "hero",
@@ -36,10 +36,10 @@
     "footer"
   ],
   "responsive": {
-    "desktop": "immersive-image-card",
-    "tablet": "stacked-vitality-card",
-    "mobile": "single-column-sections",
-    "maxContentWidth": 1180
+    "desktop": "tena-clinic-desktop",
+    "tablet": "tena-clinic-tablet",
+    "mobile": "tena-clinic-mobile",
+    "maxContentWidth": 1440
   },
   "density": {
     "content": [

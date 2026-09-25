@@ -405,7 +405,7 @@ def _derive_tokens(palette: dict[str, dict[str, str]], accent: object) -> dict[s
 
 
 def compile_design(
-    recipe_key: str = "quiet-trust-warm-editorial",
+    recipe_key: str = "tena-clinic",
     recipe_version: int | None = None,
     brand_inputs: Mapping[str, object] | None = None,
     content_capabilities: Mapping[str, object] | None = None,

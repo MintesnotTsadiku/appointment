@@ -15,14 +15,14 @@ class TestRecipeCompiler(unittest.TestCase):
         recipes = list_recipes()
         self.assertEqual(
             [recipe.key for recipe in recipes],
-            ["quiet-trust-warm-editorial", "crafted-editorial-atelier", "warm-vitality-studio"],
+            ["selam-movement", "bloom-hair", "meron-atelier", "abugida-language", "tena-clinic"],
         )
         for recipe in recipes:
             self.assertEqual(recipe.required_sections[0], "hero")
             self.assertEqual(len(recipe.required_sections), 13)
 
     def test_business_specific_asset_is_projected_to_canonical_slots(self):
-        recipe = get_recipe("crafted-editorial-atelier")
+        recipe = get_recipe("abugida-language")
         result = compile_design(
             recipe.key,
             recipe.version,
@@ -33,7 +33,7 @@ class TestRecipeCompiler(unittest.TestCase):
         self.assertTrue(result["assets"]["section.detail"]["src"].endswith("abugida-language.webp"))
 
     def test_compiled_design_is_deterministic_and_identity_aware(self):
-        recipe = get_recipe("quiet-trust-warm-editorial")
+        recipe = get_recipe("tena-clinic")
         first = compile_design(
             recipe.key,
             recipe.version,

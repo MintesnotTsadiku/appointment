@@ -1,11 +1,11 @@
 {
   "kind": "recipe",
   "contract": "appointment-curated-recipe.v1",
-  "key": "quiet-trust-warm-editorial",
+  "key": "tena-clinic",
   "version": 1,
-  "label": "Quiet Trust — Clinical Calm",
-  "description": "A clear, reassuring public experience with humane healthcare imagery, measured spacing and an immediate path to a scheduled visit.",
-  "audience": "Clinics, wellness practices and careful professional services.",
+  "label": "Tena Clinic",
+  "description": "Tena Clinic is an independently implemented, art-directed public template package.",
+  "audience": "Clinics and careful professional services.",
   "mood": "clinical-calm",
   "supportedLocales": [
     "en",
@@ -18,7 +18,7 @@
   },
   "primitives": {
     "palette": {
-      "key": "quiet-trust-warm",
+      "key": "tena-clinic",
       "version": 1
     },
     "typography": {
@@ -30,7 +30,7 @@
       "version": 1
     },
     "layout": {
-      "key": "quiet-trust-warm-editorial",
+      "key": "tena-clinic",
       "version": 1
     },
     "surface": {

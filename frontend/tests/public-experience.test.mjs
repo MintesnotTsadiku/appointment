@@ -19,7 +19,7 @@ vm.runInNewContext(source, { exports, require: () => ({}), console });
 
 const design = exports.PACKAGED_COMPILED_DESIGN;
 assert.equal(design.contract, "appointment-compiled-design.v1");
-assert.equal(design.recipeKey, "quiet-trust-warm-editorial");
+assert.equal(design.recipeKey, "tena-clinic");
 assert.equal(design.layout.contentSchemaVersion, 2);
 assert.ok(design.layout.requiredSections.includes("testimonials"));
 assert.equal(design.tokens.light.canvas, "#fbf7f1");
@@ -29,13 +29,13 @@ assert.ok(design.assets["hero.primary"].src.startsWith("/assets/appointment/quie
 
 const fallback = exports.getFallbackPublicUIConfig("am");
 assert.equal(fallback.contract, "appointment-public-ui.v2");
-assert.equal(fallback.recipeKey, "quiet-trust-warm-editorial");
+assert.equal(fallback.recipeKey, "tena-clinic");
 assert.equal(fallback.locale, "am");
 assert.deepEqual(Array.from(fallback.supportedLocales), ["en", "am"]);
 assert.equal(fallback.identity.applicationName, "Appointment");
 
-const sections = read("src/public-experience/sections.tsx");
-assert.ok(!sections.includes("dangerouslySetInnerHTML"));
-assert.ok(sections.includes("safeHref"));
-assert.ok(sections.includes("booking_cta"));
+const content = read("src/public-experience/templates/content.ts");
+assert.ok(!content.includes("dangerouslySetInnerHTML"));
+assert.ok(content.includes("safeHref"));
+assert.ok(content.includes("supportAsset"));
 console.log("PASS: packaged compiled design and safe renderer contract");

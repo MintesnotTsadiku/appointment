@@ -12,7 +12,7 @@
     "lint:fix": "eslint .  --fix",
     "preview": "vite preview",
     "pwa:test": "vite build && vite preview",
-    "test:dom": "node tests/no-nested-interactive.test.mjs && node tests/realtime-lifecycle.test.mjs && node tests/time-input.test.mjs && node tests/theme.test.mjs && node tests/analytics-dashboard.test.mjs && node tests/public-experience.test.mjs && node tests/public-experience-provider.test.mjs && node tests/public-experience-routes.test.mjs",
+    "test:dom": "node tests/no-nested-interactive.test.mjs && node tests/realtime-lifecycle.test.mjs && node tests/time-input.test.mjs && node tests/theme.test.mjs && node tests/analytics-dashboard.test.mjs && node tests/public-experience.test.mjs && node tests/public-experience-provider.test.mjs && node tests/public-experience-routes.test.mjs && node tests/public-template-packages.test.mjs",
     "test:realtime": "node tests/realtime-lifecycle.test.mjs"
   },
   "dependencies": {

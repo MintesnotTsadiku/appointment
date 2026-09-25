@@ -1,9 +1,9 @@
 {
   "kind": "layout",
   "contract": "appointment-layout.v1",
-  "key": "crafted-editorial-atelier",
+  "key": "abugida-language",
   "version": 1,
-  "rendererKey": "crafted-editorial-atelier",
+  "rendererKey": "abugida-language",
   "contentSchemaVersion": 2,
   "sections": [
     "hero",
@@ -36,10 +36,10 @@
     "footer"
   ],
   "responsive": {
-    "desktop": "image-left-craft-editorial",
-    "tablet": "stacked-craft-editorial",
-    "mobile": "single-column-sections",
-    "maxContentWidth": 1180
+    "desktop": "abugida-language-desktop",
+    "tablet": "abugida-language-tablet",
+    "mobile": "abugida-language-mobile",
+    "maxContentWidth": 1440
   },
   "density": {
     "content": [

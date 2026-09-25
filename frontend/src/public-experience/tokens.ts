@@ -1,7 +1,7 @@
 import type { CompiledDesign, DesignTokenValue, PublicUIConfig } from "./types";
 
-export const QUIET_TRUST_RECIPE_KEY = "quiet-trust-warm-editorial";
-export const QUIET_TRUST_RECIPE_VERSION = 1;
+export const TENA_CLINIC_RECIPE_KEY = "tena-clinic";
+export const TENA_CLINIC_RECIPE_VERSION = 1;
 
 const requiredSections = [
   "hero",
@@ -76,9 +76,9 @@ const dark: Record<string, string> = {
 export const PACKAGED_COMPILED_DESIGN: CompiledDesign = {
   contract: "appointment-compiled-design.v1",
   compilerPolicyVersion: "quiet-trust-policy.v1",
-  recipeKey: QUIET_TRUST_RECIPE_KEY,
-  recipeVersion: QUIET_TRUST_RECIPE_VERSION,
-  recipeHash: "packaged-quiet-trust-recipe-v1",
+  recipeKey: TENA_CLINIC_RECIPE_KEY,
+  recipeVersion: TENA_CLINIC_RECIPE_VERSION,
+  recipeHash: "packaged-tena-clinic-recipe-v1",
   primitiveManifest: {},
   tokens: { light, dark },
   typography: {
@@ -102,7 +102,7 @@ export const PACKAGED_COMPILED_DESIGN: CompiledDesign = {
     },
   },
   layout: {
-    rendererKey: QUIET_TRUST_RECIPE_KEY,
+    rendererKey: TENA_CLINIC_RECIPE_KEY,
     rendererVersion: 1,
     contentSchemaVersion: 2,
     sections: requiredSections,
@@ -164,8 +164,8 @@ export function getFallbackPublicUIConfig(locale = "en"): PublicUIConfig {
     releaseHash: null,
     locale,
     supportedLocales: ["en", "am"],
-    recipeKey: QUIET_TRUST_RECIPE_KEY,
-    recipeVersion: QUIET_TRUST_RECIPE_VERSION,
+    recipeKey: TENA_CLINIC_RECIPE_KEY,
+    recipeVersion: TENA_CLINIC_RECIPE_VERSION,
     compiledDesign: PACKAGED_COMPILED_DESIGN,
     identity: PACKAGED_COMPILED_DESIGN.identity,
     booking: { locale, supportedLocales: ["en", "am"] },

@@ -24,7 +24,7 @@ from appointment.public_experience.publisher import publish_experience
 
 VERSION = 1
 CONTENT_VERSION = 3
-PUBLIC_EXPERIENCE_VERSION = 6
+PUBLIC_EXPERIENCE_VERSION = 8
 TZ = "Africa/Addis_Ababa"
 DEMO_BRAND_RECIPES = recipe_assignments()
 

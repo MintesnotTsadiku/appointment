@@ -31,7 +31,7 @@ import { useTimeSlots } from "@/pages/booking-v2/hooks/useTimeSlots";
 import { useBookingSubmit } from "@/pages/booking-v2/hooks/useBookingSubmit";
 import type { Organization, Service, TimeSlot as V2TimeSlot, BookingFormData } from "@/pages/booking-v2/types";
 import { useBookingBrand } from "@/public-experience/bookingTheme";
-import "@/public-experience/quiet-trust.css";
+import "@/public-experience/platform.css";
 
 // Import old components for fallback
 import { ProfileSkeleton } from "@/pages/appointment/components/skeletons";

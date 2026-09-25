@@ -1,12 +1,12 @@
 {
   "kind": "recipe",
   "contract": "appointment-curated-recipe.v1",
-  "key": "crafted-editorial-atelier",
+  "key": "meron-atelier",
   "version": 1,
-  "label": "Crafted Editorial",
-  "description": "A precise image-led editorial system with tailored proportions, restrained surfaces and a strong sense of craft.",
-  "audience": "Ateliers, educators and expertise-led independent practices.",
-  "mood": "crafted-editorial",
+  "label": "Meron Atelier",
+  "description": "Meron Atelier is an independently implemented, art-directed public template package.",
+  "audience": "Bespoke ateliers and craft-led services.",
+  "mood": "bespoke-craft",
   "supportedLocales": [
     "en",
     "am"
@@ -18,7 +18,7 @@
   },
   "primitives": {
     "palette": {
-      "key": "crafted-editorial",
+      "key": "meron-atelier",
       "version": 1
     },
     "typography": {
@@ -30,7 +30,7 @@
       "version": 1
     },
     "layout": {
-      "key": "crafted-editorial-atelier",
+      "key": "meron-atelier",
       "version": 1
     },
     "surface": {
@@ -99,16 +99,14 @@
     "heroAsset": {
       "type": "asset-role",
       "choices": [
-        "hero.meron",
-        "hero.abugida"
+        "hero.meron"
       ],
       "optional": true
     },
     "detailAsset": {
       "type": "asset-role",
       "choices": [
-        "detail.meron",
-        "detail.abugida"
+        "detail.meron"
       ],
       "optional": true
     }
