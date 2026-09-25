@@ -27,11 +27,16 @@ import ModeToggle from "./components/theme-provider/components/modeToggle";
 import { InstallPrompt } from "./components/pwa/InstallPrompt";
 import { UpdateNotification } from "./components/pwa/UpdateNotification";
 import { ConnectionStatus } from "./components/pwa/ConnectionStatus";
+import { isPublicExperiencePath } from "./public-experience/routes";
 
 const App = () => {
   const router = createBrowserRouter(createRoutesFromElements(Router()), {
     basename: BASE_ROUTE,
   });
+  // Public sites render standalone: hide authenticated chrome (theme toggle,
+  // PWA prompts) so a tenant website never shows management UI.
+  const standalone =
+    typeof window !== "undefined" && isPublicExperiencePath(window.location.pathname);
   return (
     <>
       <AppProvider>
@@ -53,11 +58,11 @@ const App = () => {
                       <Suspense fallback={<></>}>
                         <RouterProvider router={router} />
                         <Toaster />
-                        <ModeToggle/>
+                        {standalone ? null : <ModeToggle />}
                         {/* PWA Components */}
-                        <InstallPrompt />
+                        {standalone ? null : <InstallPrompt />}
                         <UpdateNotification />
-                        <ConnectionStatus />
+                        {standalone ? null : <ConnectionStatus />}
                       </Suspense>
                     </TooltipProvider>
                   </SessionProvider>

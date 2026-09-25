@@ -63,3 +63,38 @@ _Avoid_: Availability, capacity
 **Resource-only Booking**:
 A booking fulfilled entirely by resource capacity and therefore requiring no provider.
 _Avoid_: Unstaffed appointment
+
+## Public Experience
+
+**Public Site**:
+The one public web presence owned by a business or independent provider. The first release does not support several brands or domains for one business.
+_Avoid_: Brand microsite, arbitrary tenant page
+
+**Curated Recipe**:
+A reviewed combination of palette, typography, imagery roles, layout, surface treatment, density, and motion. A recipe is a safe starting point, not a free-form theme engine.
+_Avoid_: Unlimited theme, custom CSS preset
+
+**Experience Release**:
+An immutable published snapshot of validated content and a compiled design. Public traffic reads a release instead of mutable draft documents.
+_Avoid_: Live draft, theme settings blob
+
+**Compiled Design**:
+The deterministic, validated output produced from a curated recipe and its allowed adjustments. It is the only design input trusted by public renderers.
+_Avoid_: User stylesheet, runtime template
+
+**Showcase Site**:
+A realistic business owned by the explicit demo seeder. Its content, recipe, asset roles, and runtime files are reproducible from this repository.
+_Avoid_: Temporary fixture, manually configured demo
+
+## Product boundary
+
+- The public landing page may vary significantly by recipe. The booking handoff and scheduler share the same tokens and identity but retain a stable interaction structure.
+- The first release exposes a few guided adjustments. Advanced bespoke work is designer-assisted service work, not an unbounded self-service controller.
+- The new public-experience model is the source of truth. Because there is no customer production data, do not build old-to-new synchronization or migration machinery.
+- Code defaults keep the product usable when optional seed records or files are unavailable. Published releases remain deterministic and cacheable.
+- Database documents hold editable and published state. Versioned repository manifests and assets must be sufficient to recreate every shipped showcase site on a clean server.
+- Public rendering rejects arbitrary HTML, JavaScript, CSS, unsafe links, and unknown remote assets. Tenant authorization applies to every draft and publication operation.
+
+## Visual quality boundary
+
+Generated design boards are references, not rasterized websites. Text, actions, content, layout, and accessibility remain native HTML and CSS. Acceptance requires side-by-side comparison of the reference board with a real browser capture at desktop and mobile widths.

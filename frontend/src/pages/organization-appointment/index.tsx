@@ -17,9 +17,8 @@ import { useFrappeGetCall } from "frappe-react-sdk";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAppContext } from "@/context/app";
 import { getLocalTimezone } from "@/lib/utils";
-import { Info, Moon, Sun, ArrowLeft } from "lucide-react";
+import { Info, Moon, Sun } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
-import { Button } from "@/components/button";
 import MetaTags from "@/components/meta-tags";
 import PoweredBy from "@/components/powered-by";
 
@@ -31,6 +30,8 @@ import { ConfirmationModal } from "@/pages/booking-v2/components/ConfirmationMod
 import { useTimeSlots } from "@/pages/booking-v2/hooks/useTimeSlots";
 import { useBookingSubmit } from "@/pages/booking-v2/hooks/useBookingSubmit";
 import type { Organization, Service, TimeSlot as V2TimeSlot, BookingFormData } from "@/pages/booking-v2/types";
+import { useBookingBrand } from "@/public-experience/bookingTheme";
+import "@/public-experience/quiet-trust.css";
 
 // Import old components for fallback
 import { ProfileSkeleton } from "@/pages/appointment/components/skeletons";
@@ -45,7 +46,6 @@ const OrganizationAppointmentV2 = () => {
     setMeetingId,
     setUserInfo,
     userInfo,
-    setDuration,
     setTimeZone,
     timeZone,
     selectedDate,
@@ -63,6 +63,10 @@ const OrganizationAppointmentV2 = () => {
   const [timeFormat, setTimeFormat] = useState<'12h' | '24h' | 'ethiopian'>('12h');
   const [bookingResponse, setBookingResponse] = useState<any>(null);
   const { theme, setTheme } = useTheme();
+  const bookingMode = theme === "dark" || (theme === "system" && typeof document !== "undefined" && document.documentElement.classList.contains("dark"))
+    ? "dark"
+    : "light";
+  const bookingBrand = useBookingBrand(orgSlug, bookingMode);
 
   // Theme toggle handler
   const toggleTheme = () => {
@@ -311,7 +315,7 @@ const OrganizationAppointmentV2 = () => {
     return (
       <div 
         className="min-h-screen text-[var(--text-primary)]"
-        style={{ backgroundColor: 'var(--bg-primary)' }}
+        style={{ ...bookingBrand.style, backgroundColor: 'var(--bg-primary)' }}
       >
         {/* Ambient background effects */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
@@ -347,7 +351,7 @@ const OrganizationAppointmentV2 = () => {
         <MetaTags title="Error | Appointment" description="Error loading booking page" />
         <div 
           className="min-h-screen text-[var(--text-primary)] flex items-center justify-center p-8"
-          style={{ backgroundColor: 'var(--bg-primary)' }}
+          style={{ ...bookingBrand.style, backgroundColor: 'var(--bg-primary)' }}
         >
           {/* Ambient background effects */}
           <div className="fixed inset-0 overflow-hidden pointer-events-none">
@@ -410,13 +414,27 @@ const OrganizationAppointmentV2 = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
           className="sticky top-0 z-50 w-full backdrop-blur-xl"
-          style={{ 
+          data-booking-branded={bookingBrand.config ? "true" : "false"}
+          data-pe-recipe={bookingBrand.config?.recipeKey}
+          style={{ ...bookingBrand.style,
             backgroundColor: 'color-mix(in srgb, var(--bg-primary) 95%, transparent)',
             borderBottom: '1px solid var(--border-subtle)'
           }}
         >
-          <div className="w-full max-w-7xl mx-auto px-5 md:px-6 py-4 flex items-center justify-end">
-            {/* No back button in service phase - only theme toggle */}
+          <div className="w-full max-w-7xl mx-auto px-5 md:px-6 py-4 flex items-center justify-between gap-5">
+            <a
+              href={bookingBrand.publicRoot}
+              className="flex min-w-0 items-center gap-3 no-underline"
+              aria-label={`Back to ${bookingBrand.config?.identity.applicationName || userInfo?.organizationName || "public site"}`}
+            >
+              <span className="pe-brand-mark shrink-0" aria-hidden="true">✦</span>
+              <span
+                className="truncate text-base font-semibold"
+                style={{ color: "var(--text-primary)", fontFamily: "var(--booking-font-display)" }}
+              >
+                {bookingBrand.config?.identity.applicationName || userInfo?.organizationName || "Appointments"}
+              </span>
+            </a>
 
             {/* Theme Toggle */}
             <motion.button
@@ -457,7 +475,9 @@ const OrganizationAppointmentV2 = () => {
       )}
       <div 
         className="min-h-screen text-[var(--text-primary)] pb-16"
-        style={{ backgroundColor: 'var(--bg-primary)' }}
+        data-booking-branded={bookingBrand.config ? "true" : "false"}
+        data-pe-recipe={bookingBrand.config?.recipeKey}
+        style={{ ...bookingBrand.style, backgroundColor: 'var(--bg-primary)' }}
       >
         {/* Ambient background effects */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">

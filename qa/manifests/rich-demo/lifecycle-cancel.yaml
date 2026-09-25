@@ -13,7 +13,7 @@ timeout_ms: 120000
 options:
   ignore_baseline_drift: true
 fixtures:
-  provider: appointment.tests.rich_demo.browser_values
+  provider: appointment.demo.showcase.browser_values
 scenarios:
 - id: rich_staff_cancel
   title: Salon owner cancels the rescheduled booking

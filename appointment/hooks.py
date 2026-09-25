@@ -47,10 +47,18 @@ after_sync = [
     "appointment.tasks.import_form_tour_google_calendar.import_doc",
 ]
 
+# Security headers for public-experience API responses (CSP with a nonce,
+# nosniff, preview no-store/noindex).
+after_request = [
+    "appointment.public_experience.csp.after_request",
+]
+
 after_migrate = [
     "appointment.tasks.setup_erpnext_fields.setup_erpnext_fields",
     "appointment.tasks.import_form_tour_google_calendar.import_doc",
     "appointment.tasks.import_email_templates.import_email_templates",
+    # recipe manifests are code-owned; no database registry is reconciled.
+    "appointment.public_experience.reconcile.ensure_public_site_unique_indexes",
 ]
 
 # include js, css files in header of web template
@@ -228,6 +236,9 @@ scheduler_events = {
         "appointment.tasks.reminder_google_calendar_auth.send_reminder_mail",
         "appointment.tasks.verify_availability.verify_appointment_group_members_availabililty",
     ],
+    "hourly": [
+        "appointment.public_experience.hardening.process_pending_outbox",
+    ],
     # "hourly": [
     # 	"appointment.tasks.hourly"
     # ],
@@ -326,3 +337,18 @@ for _doctype, _query in {
     has_permission[_doctype] = "appointment.scheduler.booking_access.config_permission"
     doc_events.setdefault(_doctype, {})["validate"] = "appointment.scheduler.booking_access.validate_config"
 doc_events.setdefault("Booking Event", {})["validate"] = "appointment.scheduler.booking.guard_calendar_capacity"
+
+# Brand and Public Experience persistence. Query and single-record checks share
+# appointment.public_experience.access so lists and direct reads agree.
+
+permission_query_conditions["Brand Profile"] = "appointment.public_experience.access.brand_profile_query"
+permission_query_conditions["Brand Revision"] = "appointment.public_experience.access.brand_revision_query"
+
+has_permission["Brand Profile"] = "appointment.public_experience.access.brand_profile_permission"
+has_permission["Brand Revision"] = "appointment.public_experience.access.brand_revision_permission"
+permission_query_conditions["Public Site"] = "appointment.public_experience.access.public_site_query"
+permission_query_conditions["Public Site Domain"] = "appointment.public_experience.access.public_site_domain_query"
+permission_query_conditions["Experience Release"] = "appointment.public_experience.access.experience_release_query"
+has_permission["Public Site"] = "appointment.public_experience.access.public_site_permission"
+has_permission["Public Site Domain"] = "appointment.public_experience.access.public_site_domain_permission"
+has_permission["Experience Release"] = "appointment.public_experience.access.experience_release_permission"

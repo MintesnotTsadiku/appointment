@@ -1,0 +1,140 @@
+{
+  "kind": "recipe",
+  "contract": "appointment-curated-recipe.v1",
+  "key": "crafted-editorial-atelier",
+  "version": 1,
+  "label": "Crafted Editorial",
+  "description": "A precise image-led editorial system with tailored proportions, restrained surfaces and a strong sense of craft.",
+  "audience": "Ateliers, educators and expertise-led independent practices.",
+  "mood": "crafted-editorial",
+  "supportedLocales": [
+    "en",
+    "am"
+  ],
+  "accessibility": {
+    "level": "AA",
+    "focusVisible": true,
+    "reducedMotion": true
+  },
+  "primitives": {
+    "palette": {
+      "key": "crafted-editorial",
+      "version": 1
+    },
+    "typography": {
+      "key": "crafted-editorial",
+      "version": 1
+    },
+    "imagery": {
+      "key": "crafted-editorial-places",
+      "version": 1
+    },
+    "layout": {
+      "key": "crafted-editorial-atelier",
+      "version": 1
+    },
+    "surface": {
+      "key": "crafted-editorial",
+      "version": 1
+    }
+  },
+  "supportedSections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "benefits",
+    "testimonials",
+    "proof",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "requiredSections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "benefits",
+    "testimonials",
+    "proof",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "defaultInputs": {
+    "motion": "calm",
+    "presentationDensity": "comfortable",
+    "heroAsset": "hero.meron",
+    "detailAsset": "detail.meron"
+  },
+  "adjustments": {
+    "accentColor": {
+      "type": "hex-color",
+      "optional": true,
+      "protected": false
+    },
+    "motion": {
+      "type": "enum",
+      "choices": [
+        "calm",
+        "standard"
+      ],
+      "optional": true
+    },
+    "presentationDensity": {
+      "type": "enum",
+      "choices": [
+        "comfortable",
+        "spacious"
+      ],
+      "optional": true
+    },
+    "heroAsset": {
+      "type": "asset-role",
+      "choices": [
+        "hero.meron",
+        "hero.abugida"
+      ],
+      "optional": true
+    },
+    "detailAsset": {
+      "type": "asset-role",
+      "choices": [
+        "detail.meron",
+        "detail.abugida"
+      ],
+      "optional": true
+    }
+  },
+  "actionIntents": [
+    "booking_start",
+    "service_selection",
+    "provider_selection",
+    "call",
+    "directions",
+    "contact",
+    "faq_jump",
+    "back_to_site"
+  ],
+  "contentRichness": {
+    "default": "rich",
+    "choices": [
+      "compact",
+      "standard",
+      "rich"
+    ],
+    "requiredForCertification": [
+      "process",
+      "benefits",
+      "testimonials",
+      "proof"
+    ]
+  }
+}

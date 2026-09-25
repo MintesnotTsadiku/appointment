@@ -1,0 +1,596 @@
+app: appointment
+base_url: http://127.0.0.84:44430
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-public-experience-final
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.demo.showcase.browser_values
+scenarios:
+- id: pe_selam_landing_desktop
+  title: selam landing desktop
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_selam}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-root][data-pe-recipe="warm-vitality-studio"]'
+  actions:
+  - action: screenshot
+    name: selam-landing-desktop.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: selam-landing-desktop.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_selam_book_desktop
+  title: selam book desktop
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_selam_book}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-booking][data-pe-recipe="warm-vitality-studio"]'
+  actions:
+  - action: screenshot
+    name: selam-book-desktop.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_selam_scheduler_desktop
+  title: selam scheduler desktop
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_selam_scheduler}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-booking-branded="true"][data-pe-recipe="warm-vitality-studio"]'
+  actions:
+  - action: screenshot
+    name: selam-scheduler-desktop.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_meron_landing_desktop
+  title: meron landing desktop
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_meron}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-root][data-pe-recipe="crafted-editorial-atelier"]'
+  actions:
+  - action: screenshot
+    name: meron-landing-desktop.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: meron-landing-desktop.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_meron_book_desktop
+  title: meron book desktop
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_meron_book}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-booking][data-pe-recipe="crafted-editorial-atelier"]'
+  actions:
+  - action: screenshot
+    name: meron-book-desktop.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_meron_scheduler_desktop
+  title: meron scheduler desktop
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_meron_scheduler}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-booking-branded="true"][data-pe-recipe="crafted-editorial-atelier"]'
+  actions:
+  - action: screenshot
+    name: meron-scheduler-desktop.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_bloom_landing_desktop
+  title: bloom landing desktop
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_bloom}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-root][data-pe-recipe="warm-vitality-studio"]'
+  actions:
+  - action: screenshot
+    name: bloom-landing-desktop.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: bloom-landing-desktop.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_bloom_book_desktop
+  title: bloom book desktop
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_bloom_book}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-booking][data-pe-recipe="warm-vitality-studio"]'
+  actions:
+  - action: screenshot
+    name: bloom-book-desktop.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_bloom_scheduler_desktop
+  title: bloom scheduler desktop
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_bloom_scheduler}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-booking-branded="true"][data-pe-recipe="warm-vitality-studio"]'
+  actions:
+  - action: screenshot
+    name: bloom-scheduler-desktop.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_tena_landing_desktop
+  title: tena landing desktop
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_tena}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-root][data-pe-recipe="quiet-trust-warm-editorial"]'
+  actions:
+  - action: screenshot
+    name: tena-landing-desktop.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: tena-landing-desktop.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_tena_book_desktop
+  title: tena book desktop
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_tena_book}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-booking][data-pe-recipe="quiet-trust-warm-editorial"]'
+  actions:
+  - action: screenshot
+    name: tena-book-desktop.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_tena_scheduler_desktop
+  title: tena scheduler desktop
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_tena_scheduler}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-booking-branded="true"][data-pe-recipe="quiet-trust-warm-editorial"]'
+  actions:
+  - action: screenshot
+    name: tena-scheduler-desktop.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_abugida_landing_desktop
+  title: abugida landing desktop
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_abugida}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-root][data-pe-recipe="crafted-editorial-atelier"]'
+  actions:
+  - action: screenshot
+    name: abugida-landing-desktop.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: abugida-landing-desktop.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_abugida_book_desktop
+  title: abugida book desktop
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_abugida_book}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-booking][data-pe-recipe="crafted-editorial-atelier"]'
+  actions:
+  - action: screenshot
+    name: abugida-book-desktop.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_abugida_scheduler_desktop
+  title: abugida scheduler desktop
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_abugida_scheduler}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-booking-branded="true"][data-pe-recipe="crafted-editorial-atelier"]'
+  actions:
+  - action: screenshot
+    name: abugida-scheduler-desktop.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_selam_landing_mobile
+  title: selam landing mobile
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_selam}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-root][data-pe-recipe="warm-vitality-studio"]'
+  actions:
+  - action: screenshot
+    name: selam-landing-mobile.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_selam_book_mobile
+  title: selam book mobile
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_selam_book}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-booking][data-pe-recipe="warm-vitality-studio"]'
+  actions:
+  - action: screenshot
+    name: selam-book-mobile.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_selam_scheduler_mobile
+  title: selam scheduler mobile
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_selam_scheduler}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-booking-branded="true"][data-pe-recipe="warm-vitality-studio"]'
+  actions:
+  - action: screenshot
+    name: selam-scheduler-mobile.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_meron_landing_mobile
+  title: meron landing mobile
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_meron}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-root][data-pe-recipe="crafted-editorial-atelier"]'
+  actions:
+  - action: screenshot
+    name: meron-landing-mobile.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_meron_book_mobile
+  title: meron book mobile
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_meron_book}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-booking][data-pe-recipe="crafted-editorial-atelier"]'
+  actions:
+  - action: screenshot
+    name: meron-book-mobile.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_meron_scheduler_mobile
+  title: meron scheduler mobile
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_meron_scheduler}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-booking-branded="true"][data-pe-recipe="crafted-editorial-atelier"]'
+  actions:
+  - action: screenshot
+    name: meron-scheduler-mobile.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_bloom_landing_mobile
+  title: bloom landing mobile
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_bloom}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-root][data-pe-recipe="warm-vitality-studio"]'
+  actions:
+  - action: screenshot
+    name: bloom-landing-mobile.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_bloom_book_mobile
+  title: bloom book mobile
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_bloom_book}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-booking][data-pe-recipe="warm-vitality-studio"]'
+  actions:
+  - action: screenshot
+    name: bloom-book-mobile.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_bloom_scheduler_mobile
+  title: bloom scheduler mobile
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_bloom_scheduler}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-booking-branded="true"][data-pe-recipe="warm-vitality-studio"]'
+  actions:
+  - action: screenshot
+    name: bloom-scheduler-mobile.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_tena_landing_mobile
+  title: tena landing mobile
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_tena}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-root][data-pe-recipe="quiet-trust-warm-editorial"]'
+  actions:
+  - action: screenshot
+    name: tena-landing-mobile.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_tena_book_mobile
+  title: tena book mobile
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_tena_book}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-booking][data-pe-recipe="quiet-trust-warm-editorial"]'
+  actions:
+  - action: screenshot
+    name: tena-book-mobile.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_tena_scheduler_mobile
+  title: tena scheduler mobile
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_tena_scheduler}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-booking-branded="true"][data-pe-recipe="quiet-trust-warm-editorial"]'
+  actions:
+  - action: screenshot
+    name: tena-scheduler-mobile.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_abugida_landing_mobile
+  title: abugida landing mobile
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_abugida}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-root][data-pe-recipe="crafted-editorial-atelier"]'
+  actions:
+  - action: screenshot
+    name: abugida-landing-mobile.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_abugida_book_mobile
+  title: abugida book mobile
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_abugida_book}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-booking][data-pe-recipe="crafted-editorial-atelier"]'
+  actions:
+  - action: screenshot
+    name: abugida-book-mobile.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: pe_abugida_scheduler_mobile
+  title: abugida scheduler mobile
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_abugida_scheduler}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-booking-branded="true"][data-pe-recipe="crafted-editorial-atelier"]'
+  actions:
+  - action: screenshot
+    name: abugida-scheduler-mobile.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

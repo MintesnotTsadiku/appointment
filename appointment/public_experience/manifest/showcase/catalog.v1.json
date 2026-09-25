@@ -1,0 +1,51 @@
+{
+  "contract": "appointment-showcase-catalog.v1",
+  "version": 1,
+  "sites": {
+    "selam": {
+      "slug": "selam-studio",
+      "recipe": "warm-vitality-studio",
+      "heroRole": "hero.selam",
+      "detailRole": "detail.selam",
+      "heroAsset": "/assets/appointment/brand-experience/heroes/selam-movement.webp",
+      "heroChecksum": "f15852ba4b8a7baaa17d9d46b1a64137b22ff00dabee79bf7eeb0209c5e46cd6",
+      "benchmark": "docs/design-references/public-experience/v1/warm-vitality/full-page-03.webp"
+    },
+    "meron": {
+      "slug": "meron-studio",
+      "recipe": "crafted-editorial-atelier",
+      "heroRole": "hero.meron",
+      "detailRole": "detail.meron",
+      "heroAsset": "/assets/appointment/brand-experience/heroes/meron-tailoring.webp",
+      "heroChecksum": "763240df7adba76c94416db3a196692d0ff44ea84828cb2a9f2c94f55df07b56",
+      "benchmark": "docs/design-references/public-experience/v1/crafted-editorial/full-page-01.webp"
+    },
+    "bloom": {
+      "slug": "bloom-studio",
+      "recipe": "warm-vitality-studio",
+      "heroRole": "hero.bloom",
+      "detailRole": "detail.bloom",
+      "heroAsset": "/assets/appointment/brand-experience/heroes/bloom-hair.webp",
+      "heroChecksum": "6afcd83ce024de66dbdd2c37394eadc4d1f5aad1be36119ce93b0cd767315994",
+      "benchmark": "docs/design-references/public-experience/v1/warm-vitality/full-page-01.webp"
+    },
+    "tena": {
+      "slug": "tena-studio",
+      "recipe": "quiet-trust-warm-editorial",
+      "heroRole": "hero.tena",
+      "detailRole": "detail.tena",
+      "heroAsset": "/assets/appointment/brand-experience/heroes/tena-clinic.webp",
+      "heroChecksum": "b5d10927b488561c609db00486bb16106c697ecfd8952ea1c21a1764e455652b",
+      "benchmark": "docs/design-references/public-experience/v1/quiet-trust/full-page-01.webp"
+    },
+    "abugida": {
+      "slug": "abugida-studio",
+      "recipe": "crafted-editorial-atelier",
+      "heroRole": "hero.abugida",
+      "detailRole": "detail.abugida",
+      "heroAsset": "/assets/appointment/brand-experience/heroes/abugida-language.webp",
+      "heroChecksum": "ce8e849c911911c8b61c4c8c0cf09dbce2ac88e65e2ff995ec3500219fd46832",
+      "benchmark": "docs/design-references/public-experience/v1/crafted-editorial/full-page-01.webp"
+    }
+  }
+}

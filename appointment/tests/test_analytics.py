@@ -3,7 +3,7 @@
 import frappe
 
 from appointment.scheduler import analytics
-from appointment.tests import rich_demo
+from appointment.demo import showcase as rich_demo
 
 
 def denied(call):

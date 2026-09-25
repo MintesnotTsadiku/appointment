@@ -1,0 +1,138 @@
+{
+  "kind": "recipe",
+  "contract": "appointment-curated-recipe.v1",
+  "key": "quiet-trust-warm-editorial",
+  "version": 1,
+  "label": "Quiet Trust — Clinical Calm",
+  "description": "A clear, reassuring public experience with humane healthcare imagery, measured spacing and an immediate path to a scheduled visit.",
+  "audience": "Clinics, wellness practices and careful professional services.",
+  "mood": "clinical-calm",
+  "supportedLocales": [
+    "en",
+    "am"
+  ],
+  "accessibility": {
+    "level": "AA",
+    "focusVisible": true,
+    "reducedMotion": true
+  },
+  "primitives": {
+    "palette": {
+      "key": "quiet-trust-warm",
+      "version": 1
+    },
+    "typography": {
+      "key": "quiet-trust-editorial",
+      "version": 1
+    },
+    "imagery": {
+      "key": "quiet-trust-clinic",
+      "version": 1
+    },
+    "layout": {
+      "key": "quiet-trust-warm-editorial",
+      "version": 1
+    },
+    "surface": {
+      "key": "quiet-trust-editorial",
+      "version": 1
+    }
+  },
+  "supportedSections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "benefits",
+    "testimonials",
+    "proof",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "requiredSections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "benefits",
+    "testimonials",
+    "proof",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "defaultInputs": {
+    "motion": "calm",
+    "presentationDensity": "comfortable",
+    "heroAsset": "hero.tena",
+    "detailAsset": "detail.tena"
+  },
+  "adjustments": {
+    "accentColor": {
+      "type": "hex-color",
+      "optional": true,
+      "protected": false
+    },
+    "motion": {
+      "type": "enum",
+      "choices": [
+        "calm",
+        "standard"
+      ],
+      "optional": true
+    },
+    "presentationDensity": {
+      "type": "enum",
+      "choices": [
+        "comfortable",
+        "spacious"
+      ],
+      "optional": true
+    },
+    "heroAsset": {
+      "type": "asset-role",
+      "choices": [
+        "hero.tena"
+      ],
+      "optional": true
+    },
+    "detailAsset": {
+      "type": "asset-role",
+      "choices": [
+        "detail.tena"
+      ],
+      "optional": true
+    }
+  },
+  "actionIntents": [
+    "booking_start",
+    "service_selection",
+    "provider_selection",
+    "call",
+    "directions",
+    "contact",
+    "faq_jump",
+    "back_to_site"
+  ],
+  "contentRichness": {
+    "default": "rich",
+    "choices": [
+      "compact",
+      "standard",
+      "rich"
+    ],
+    "requiredForCertification": [
+      "process",
+      "benefits",
+      "testimonials",
+      "proof"
+    ]
+  }
+}

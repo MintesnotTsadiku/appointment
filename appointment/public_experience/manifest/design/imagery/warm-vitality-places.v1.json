@@ -1,0 +1,88 @@
+{
+  "kind": "imagery",
+  "contract": "appointment-imagery.v1",
+  "key": "warm-vitality-places",
+  "version": 1,
+  "assets": {
+    "hero.selam": {
+      "src": "/assets/appointment/brand-experience/heroes/selam-movement.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/heroes/selam-movement.webp",
+      "alt": "An Ethiopian movement coach guides a client through a calm mobility exercise in a light-filled Gerji studio.",
+      "focalPoint": {
+        "x": 0.57,
+        "y": 0.48
+      },
+      "fit": "cover",
+      "width": 1672,
+      "height": 941,
+      "mime": "image/webp",
+      "checksum": "sha256:f15852ba4b8a7baaa17d9d46b1a64137b22ff00dabee79bf7eeb0209c5e46cd6",
+      "provenance": {
+        "source": "generated",
+        "role": "business-specific hero",
+        "license": "project-generated",
+        "review": "Ethiopian context; no text, logos or interface elements."
+      }
+    },
+    "detail.selam": {
+      "src": "/assets/appointment/brand-experience/heroes/selam-movement.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/heroes/selam-movement.webp",
+      "alt": "An Ethiopian movement coach guides a client through a calm mobility exercise in a light-filled Gerji studio.",
+      "focalPoint": {
+        "x": 0.57,
+        "y": 0.48
+      },
+      "fit": "cover",
+      "width": 1672,
+      "height": 941,
+      "mime": "image/webp",
+      "checksum": "sha256:f15852ba4b8a7baaa17d9d46b1a64137b22ff00dabee79bf7eeb0209c5e46cd6",
+      "provenance": {
+        "source": "generated",
+        "role": "business-specific hero",
+        "license": "project-generated",
+        "review": "Ethiopian context; no text, logos or interface elements."
+      }
+    },
+    "hero.bloom": {
+      "src": "/assets/appointment/brand-experience/heroes/bloom-hair.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/heroes/bloom-hair.webp",
+      "alt": "An Ethiopian natural-hair stylist shapes a client’s textured hair in a luminous Bole salon.",
+      "focalPoint": {
+        "x": 0.55,
+        "y": 0.44
+      },
+      "fit": "cover",
+      "width": 1672,
+      "height": 941,
+      "mime": "image/webp",
+      "checksum": "sha256:6afcd83ce024de66dbdd2c37394eadc4d1f5aad1be36119ce93b0cd767315994",
+      "provenance": {
+        "source": "generated",
+        "role": "business-specific hero",
+        "license": "project-generated",
+        "review": "Ethiopian context; no text, logos or interface elements."
+      }
+    },
+    "detail.bloom": {
+      "src": "/assets/appointment/brand-experience/heroes/bloom-hair.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/heroes/bloom-hair.webp",
+      "alt": "An Ethiopian natural-hair stylist shapes a client’s textured hair in a luminous Bole salon.",
+      "focalPoint": {
+        "x": 0.55,
+        "y": 0.44
+      },
+      "fit": "cover",
+      "width": 1672,
+      "height": 941,
+      "mime": "image/webp",
+      "checksum": "sha256:6afcd83ce024de66dbdd2c37394eadc4d1f5aad1be36119ce93b0cd767315994",
+      "provenance": {
+        "source": "generated",
+        "role": "business-specific hero",
+        "license": "project-generated",
+        "review": "Ethiopian context; no text, logos or interface elements."
+      }
+    }
+  }
+}

@@ -47,7 +47,7 @@ def run(
         if not demo_path().exists():
             frappe.throw("Provision the retained acceptance demo first.")
     elif fixture_scope == "rich_demo":
-        from appointment.tests.rich_demo import load_state, require_target
+        from appointment.demo.showcase import load_state, require_target
 
         require_target()
         load_state()
@@ -69,7 +69,7 @@ def run(
         if fixture_scope == "legacy":
             cleanup = qa_fixtures.teardown()
         elif fixture_scope == "rich_demo":
-            cleanup = {"retained_rich_demo": True, "finish": "appointment.tests.rich_demo.cleanup"}
+            cleanup = {"retained_rich_demo": True, "finish": "appointment.demo.showcase.cleanup"}
         elif fixture_scope == "acceptance_demo":
             cleanup = {
                 "retained_acceptance_demo": True,

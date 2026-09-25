@@ -14,7 +14,7 @@ options:
   ignore_baseline_drift: true
   color_scheme: light
 fixtures:
-  provider: appointment.tests.rich_demo.browser_values
+  provider: appointment.demo.showcase.browser_values
 scenarios:
 - id: reception_desktop
   title: reception desktop

@@ -106,14 +106,14 @@ Its journal owns every record it may remove. From the isolated runtime Bench,
 with the feature worktree on `PYTHONPATH`, use:
 
 ```bash
-bench --site meet-beta-demo-rich-appointment-344c1b.localhost execute appointment.tests.rich_demo.seed
+bench --site meet-beta-demo-rich-appointment-344c1b.localhost execute appointment.demo.showcase.seed
 bench --site meet-beta-demo-rich-appointment-344c1b.localhost execute appointment.tests.test_rich_demo.verify
 bench --site meet-beta-demo-rich-appointment-344c1b.localhost execute appointment.tests.test_rich_demo.roundtrip
 ```
 
 `seed` is idempotent. `roundtrip` proves exact cleanup, unrelated-record
 preservation, collision refusal and reseeding, and leaves a fresh site. For an
-intentional removal use `appointment.tests.rich_demo.cleanup` on this site only.
+intentional removal use `appointment.demo.showcase.cleanup` on this site only.
 Dates are anchored to the manifest date; rerun the exact cleanup and seed to
 refresh upcoming activity when the current date has moved on. The period control offers 7, 30 and 90 days. Owner and manager views include current-price catalog estimates and explicitly recorded payments; neither figure is labeled revenue. Provider and reception reports contain only appointments within their authorized scope and omit financial amounts. A rerun writes
 new passwords to the private manifest.

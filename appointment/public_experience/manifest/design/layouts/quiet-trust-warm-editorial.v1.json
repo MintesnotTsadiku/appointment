@@ -1,0 +1,50 @@
+{
+  "kind": "layout",
+  "contract": "appointment-layout.v1",
+  "key": "quiet-trust-warm-editorial",
+  "version": 1,
+  "rendererKey": "quiet-trust-warm-editorial",
+  "contentSchemaVersion": 2,
+  "sections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "benefits",
+    "testimonials",
+    "proof",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "requiredSections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "benefits",
+    "testimonials",
+    "proof",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "responsive": {
+    "desktop": "split-hero-editorial",
+    "tablet": "stacked-hero-rail",
+    "mobile": "single-column-sections",
+    "maxContentWidth": 1180
+  },
+  "density": {
+    "content": ["compact", "standard", "rich"],
+    "presentation": ["comfortable", "spacious"],
+    "defaultContent": "rich",
+    "defaultPresentation": "comfortable"
+  }
+}

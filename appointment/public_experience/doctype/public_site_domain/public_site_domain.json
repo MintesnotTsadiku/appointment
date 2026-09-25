@@ -1,0 +1,237 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "hash",
+ "creation": "2026-09-24 13:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "public_site",
+  "hostname_display",
+  "hostname_ascii",
+  "domain_type",
+  "is_primary",
+  "lifecycle_status",
+  "section_break_verification",
+  "verification_method",
+  "verification_token",
+  "expected_dns_json",
+  "observed_dns_json",
+  "verified_at",
+  "last_checked_at",
+  "section_break_tls",
+  "certificate_status",
+  "certificate_expires_at",
+  "edge_reference",
+  "section_break_lifecycle",
+  "activated_at",
+  "suspended_at",
+  "removed_at",
+  "last_error_category",
+  "last_error_message",
+  "quarantine_expires_at"
+ ],
+ "fields": [
+  {
+   "fieldname": "public_site",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Public Site",
+   "options": "Public Site",
+   "reqd": 1
+  },
+  {
+   "fieldname": "hostname_display",
+   "fieldtype": "Data",
+   "label": "Hostname",
+   "reqd": 1
+  },
+  {
+   "fieldname": "hostname_ascii",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Normalized Hostname",
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "default": "Custom Subdomain",
+   "fieldname": "domain_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Domain Type",
+   "options": "Platform Path\nPlatform Subdomain\nCustom Subdomain\nCustom Apex",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_primary",
+   "fieldtype": "Check",
+   "label": "Primary"
+  },
+  {
+   "default": "Draft",
+   "fieldname": "lifecycle_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Lifecycle Status",
+   "options": "Draft\nAwaiting DNS\nVerifying\nVerified\nCertificate Pending\nActivating\nActive\nError\nSuspended\nRemoving\nQuarantined\nRemoved",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_verification",
+   "fieldtype": "Section Break",
+   "label": "Verification"
+  },
+  {
+   "default": "TXT",
+   "fieldname": "verification_method",
+   "fieldtype": "Select",
+   "label": "Verification Method",
+   "options": "TXT\nCNAME"
+  },
+  {
+   "fieldname": "verification_token",
+   "fieldtype": "Data",
+   "label": "Verification Token",
+   "read_only": 1
+  },
+  {
+   "fieldname": "expected_dns_json",
+   "fieldtype": "Code",
+   "label": "Expected DNS Records",
+   "options": "JSON",
+   "read_only": 1
+  },
+  {
+   "fieldname": "observed_dns_json",
+   "fieldtype": "Code",
+   "label": "Observed DNS Results",
+   "options": "JSON",
+   "read_only": 1
+  },
+  {
+   "fieldname": "verified_at",
+   "fieldtype": "Datetime",
+   "label": "Verified At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_checked_at",
+   "fieldtype": "Datetime",
+   "label": "Last Checked At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_tls",
+   "fieldtype": "Section Break",
+   "label": "TLS"
+  },
+  {
+   "default": "None",
+   "fieldname": "certificate_status",
+   "fieldtype": "Select",
+   "label": "Certificate Status",
+   "options": "None\nPending\nActive\nFailed\nExpired"
+  },
+  {
+   "fieldname": "certificate_expires_at",
+   "fieldtype": "Datetime",
+   "label": "Certificate Expires At",
+   "read_only": 1
+  },
+  {
+   "description": "Opaque provider reference only. Certificate private keys are never stored.",
+   "fieldname": "edge_reference",
+   "fieldtype": "Data",
+   "label": "Edge Reference",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_lifecycle",
+   "fieldtype": "Section Break",
+   "label": "Lifecycle Audit"
+  },
+  {
+   "fieldname": "activated_at",
+   "fieldtype": "Datetime",
+   "label": "Activated At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "suspended_at",
+   "fieldtype": "Datetime",
+   "label": "Suspended At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "removed_at",
+   "fieldtype": "Datetime",
+   "label": "Removed At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_error_category",
+   "fieldtype": "Data",
+   "label": "Last Error Category",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_error_message",
+   "fieldtype": "Small Text",
+   "label": "Last Error",
+   "read_only": 1
+  },
+  {
+   "fieldname": "quarantine_expires_at",
+   "fieldtype": "Datetime",
+   "label": "Quarantine Expires At",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-24 13:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Public Experience",
+ "name": "Public Site Domain",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Organization Manager",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Provider",
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

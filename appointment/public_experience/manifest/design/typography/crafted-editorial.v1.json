@@ -1,0 +1,108 @@
+{
+  "kind": "typography",
+  "contract": "appointment-typography.v1",
+  "key": "crafted-editorial",
+  "version": 1,
+  "supportedScripts": [
+    "latin",
+    "ethiopic"
+  ],
+  "weights": [
+    400,
+    500,
+    600,
+    700
+  ],
+  "roles": {
+    "display": {
+      "family": "Crafted Editorial Display",
+      "assetKey": "crafted-editorial-display-bold",
+      "weight": 700,
+      "sizeScale": "editorial",
+      "lineHeight": 0.94,
+      "letterSpacing": "-0.035em"
+    },
+    "body": {
+      "family": "Crafted Editorial Body",
+      "assetKey": "crafted-editorial-body",
+      "weight": 400,
+      "sizeScale": "comfortable",
+      "lineHeight": 1.62,
+      "letterSpacing": "0"
+    },
+    "ui": {
+      "family": "Crafted Editorial UI",
+      "assetKey": "crafted-editorial-body",
+      "weight": 600,
+      "sizeScale": "compact",
+      "lineHeight": 1.25,
+      "letterSpacing": "0.01em"
+    },
+    "numeric": {
+      "family": "Crafted Editorial UI",
+      "assetKey": "crafted-editorial-body",
+      "weight": 600,
+      "sizeScale": "compact",
+      "lineHeight": 1.2,
+      "letterSpacing": "0"
+    }
+  },
+  "fontAssets": [
+    {
+      "key": "crafted-editorial-display",
+      "family": "Crafted Editorial Display",
+      "src": "/assets/appointment/quiet-trust/fonts/dejavu-serif.ttf",
+      "weight": 400,
+      "format": "truetype",
+      "scripts": [
+        "latin"
+      ],
+      "license": "Bitstream Vera / DejaVu license"
+    },
+    {
+      "key": "crafted-editorial-display-bold",
+      "family": "Crafted Editorial Display",
+      "src": "/assets/appointment/quiet-trust/fonts/dejavu-serif-bold.ttf",
+      "weight": 700,
+      "format": "truetype",
+      "scripts": [
+        "latin"
+      ],
+      "license": "Bitstream Vera / DejaVu license"
+    },
+    {
+      "key": "crafted-editorial-body",
+      "family": "Crafted Editorial Body",
+      "src": "/assets/appointment/quiet-trust/fonts/noto-sans-ethiopic.ttf",
+      "weight": 400,
+      "format": "truetype",
+      "scripts": [
+        "latin",
+        "ethiopic"
+      ],
+      "license": "SIL Open Font License 1.1"
+    }
+  ],
+  "fallbacks": {
+    "display": [
+      "Georgia",
+      "Times New Roman",
+      "serif"
+    ],
+    "body": [
+      "Arial",
+      "DejaVu Sans",
+      "sans-serif"
+    ],
+    "ui": [
+      "Arial",
+      "DejaVu Sans",
+      "sans-serif"
+    ],
+    "numeric": [
+      "Arial",
+      "DejaVu Sans",
+      "sans-serif"
+    ]
+  }
+}

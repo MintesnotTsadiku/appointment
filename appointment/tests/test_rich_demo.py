@@ -9,7 +9,7 @@ import frappe
 from frappe.utils import getdate
 
 from appointment.scheduler import booking, booking_access, membership
-from appointment.tests import rich_demo
+from appointment.demo import showcase as rich_demo
 
 
 def fingerprint(records):
@@ -23,6 +23,7 @@ def verify():
     assert len(state["businesses"]) == 5
     assert len(state["appointments"]) >= 300
     assert state_path_mode() == 0o600
+    assert state["public_experience_version"] == rich_demo.PUBLIC_EXPERIENCE_VERSION
     rows = [frappe.get_doc("Appointment", name) for name in state["appointments"]]
     for row in rows:
         event = frappe.get_doc("EventType", row.event_type)
@@ -44,18 +45,90 @@ def verify():
     assert state["rescheduled"]
     from appointment.api.personal_meet import get_organization_services
 
-    for business in state["businesses"].values():
+    assert state["content_version"] == rich_demo.CONTENT_VERSION
+    published_headlines = set()
+    published_ctas = set()
+    for key, business in state["businesses"].items():
+        detail = rich_demo.DEMO_CONTENT[key]
+        organization = frappe.get_doc("Organization", business["organization"])
+        assert organization.description == detail["description"]
+        assert organization.email == detail["contact"]["email"]
+        assert organization.phone == detail["contact"]["phone"]
+        assert organization.email.endswith("@example.test")
+        assert organization.phone.startswith("000 ")
+        for index, provider_id in enumerate(business["providers"]):
+            provider = frappe.get_doc("Provider", provider_id)
+            assert provider.bio == detail["provider_bios"][index]
+            assert provider.display_name == provider.full_name
+            assert provider.email.endswith("@example.test")
+        for index, location_id in enumerate(business["locations"]):
+            location = frappe.get_doc("Location", location_id)
+            location_detail = detail["locations"][index]
+            assert location.address_line_1 == location_detail["address_line_1"]
+            assert location.address_line_2 == location_detail["address_line_2"]
+            assert location.phone == location_detail["phone"]
+            assert {row.day_of_week for row in location.opening_hours if row.is_open} == set(business["days"])
+        service_ids = []
+        for offering in business["offerings"]:
+            if offering["service"] not in service_ids:
+                service_ids.append(offering["service"])
+        for index, service_id in enumerate(service_ids):
+            service = frappe.get_doc("Service", service_id)
+            expected = detail["services"][index]
+            assert (service.service_name, service.duration, int(service.price)) == (expected["name"], expected["duration"], expected["price"])
+            assert service.description == expected["description"]
+
+        assert frappe.db.exists("Brand Profile", business["brand_profile"])
+        assert frappe.db.exists("Public Site", business["public_site"])
+        assert frappe.db.exists("Experience Release", business["experience_release"])
+        assert frappe.db.get_value("Public Site", business["public_site"], "current_release") == business["experience_release"]
+        assert frappe.db.get_value("Brand Profile", business["brand_profile"], "active_revision")
+        assert business["public_experience_path"].startswith("/")
         catalog = get_organization_services(frappe.db.get_value("Organization", business["organization"], "slug"))
         assert catalog["provider_count"] == len(business["providers"])
         assert len(catalog["providers"]) == len(business["providers"])
         assert catalog["description"] == business["description"]
-        day = getdate(state["anchor_date"]) + timedelta(days=1)
+
+        release = frappe.get_doc("Experience Release", business["experience_release"])
+        snapshot = json.loads(release.normalized_json)
+        sections = {section["type"]: section["content"] for section in snapshot["sections"]}
+        expected_sections = {"hero", "services", "providers", "process", "benefits", "testimonials", "proof", "locations", "about", "faq", "contact", "booking_cta", "footer"}
+        assert expected_sections <= set(sections)
+        assert sections["hero"]["title"]["en"] == detail["headline"]
+        assert sections["hero"]["primaryAction"]["label"]["en"] == detail["cta"]["hero_primary"]
+        assert sections["hero"]["primaryAction"]["href"] == f"/{business['public_experience_path'].strip('/')}/book"
+        assert sections["booking_cta"]["action"]["label"]["en"] == detail["cta"]["booking_primary"]
+        assert sections["booking_cta"]["action"]["href"] == f"/{business['public_experience_path'].strip('/')}/book"
+        assert len(sections["services"]["items"]) == len(service_ids)
+        assert [item["name"]["en"] for item in sections["services"]["items"]] == [frappe.db.get_value("Service", service_id, "service_name") for service_id in service_ids]
+        assert all("ETB" in item["summary"]["en"] and "minutes" in item["summary"]["en"] for item in sections["services"]["items"])
+        assert [item["name"]["en"] for item in sections["providers"]["items"]] == [frappe.db.get_value("Provider", provider_id, "display_name") for provider_id in business["providers"]]
+        assert all(item["specialties"] and item["credentials"] for item in sections["providers"]["items"])
+        assert detail["trust"] in sections["about"]["body"]["en"]
+        assert len(sections["footer"]["items"]) == 2
+        assert len(sections["faq"]["items"]) == 3
+        assert sections["contact"]["email"] == detail["contact"]["email"]
+        assert sections["contact"]["phone"] == detail["contact"]["phone"]
+        assert sections["contact"]["action"]["intent"] == "call"
+        published_headlines.add(detail["headline"])
+        published_ctas.add(detail["cta"]["booking_primary"])
+        if key == "tena":
+            snapshot_text = json.dumps(snapshot).lower()
+            assert "guaranteed cure" not in snapshot_text
+            assert "board-certified" not in snapshot_text
+            assert "specialist physician" not in snapshot_text
+        # The seed anchor can be yesterday when a long-lived stack crosses
+        # midnight; always exercise a future date that is still inside the
+        # seeded 30-day horizon.
+        day = max(getdate(state["anchor_date"]), getdate()) + timedelta(days=1)
         while day.strftime("%A") not in business["days"]:
             day += timedelta(days=1)
         slot_result = booking.slots(business["offerings"][0]["id"], str(day), business["organization"])
         assert slot_result["total_slots_for_day"] > 0
         assert any(slot["available"] for slot in slot_result["all_available_slots_for_data"])
         assert any(slot["booked"] for slot in slot_result["all_available_slots_for_data"])
+    assert len(published_headlines) == 5
+    assert len(published_ctas) == 5
     bloom = state["businesses"]["bloom"]
     scoped = [r for r in rows if booking_access.can_access(r, "bloom.reception@example.test")]
     assert scoped and all(
@@ -92,6 +165,8 @@ def verify():
             "provider scope",
             "guest isolation",
             "role landings",
+            "published brand and public site per business",
+            "differentiated service/provider/location/public copy",
             "idempotent inventory and credentials",
             "mode 600",
         ],

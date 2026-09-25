@@ -12,7 +12,7 @@ options:
   ignore_baseline_drift: true
   color_scheme: dark
 fixtures:
-  provider: appointment.tests.rich_demo.browser_values
+  provider: appointment.demo.showcase.browser_values
 scenarios:
 - id: public_selam_dark
   title: public selam dark

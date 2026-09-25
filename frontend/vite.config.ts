@@ -25,7 +25,9 @@ export default defineConfig(({ command, mode }) => {
     proxyConfig = {
       "^/(app|apps|desk|api|assets|files|private|logout)(/|$)": {
         target,
-        changeOrigin: true,
+        // Preserve the browser Host so public-experience resolution exercises
+        // the same trusted-host contract as the production reverse proxy.
+        changeOrigin: false,
         headers: { "X-Frappe-Site-Name": isolated },
       },
       "/socket.io": {

@@ -27,6 +27,7 @@ const BusinessSettings = lazy(() => import("@/pages/settings/business"));
 const ServicesSettings = lazy(() => import("@/pages/settings/services"));
 const EditService = lazy(() => import("@/pages/settings/edit-service"));
 const Manage = lazy(() => import("@/pages/settings/manage"));
+const PublicExperienceEditor = lazy(() => import("@/pages/settings/public-experience"));
 const Settings = lazy(() => import("@/pages/settings"));
 const AdminDashboard = lazy(() => import("@/pages/admin/dashboard"));
 const Appointment = lazy(() => import("@/pages/appointment"));
@@ -47,6 +48,10 @@ const Assignments = lazy(() => import("@/pages/assistants/assignments"));
 
 // Landing Pages
 const AssistantLanding = lazy(() => import("@/pages/assistant-landing"));
+
+// Public experience (tenant website + booking entry)
+const PublicSitePage = lazy(() => import("@/pages/public-experience/site"));
+const PublicBookingPage = lazy(() => import("@/pages/public-experience/booking"));
 
 const Router = () => {
   return (
@@ -73,6 +78,7 @@ const Router = () => {
       <Route path="/settings/services/:serviceId" element={<EditService />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/edit-service/:serviceId" element={<EditService />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/manage" element={<Manage />} errorElement={<ErrorFallback />}></Route>
+      <Route path="/settings/public-experience" element={<PublicExperienceEditor />} errorElement={<ErrorFallback />}></Route>
       <Route path="/admin/dashboard" element={<AdminDashboard />} errorElement={<ErrorFallback />}></Route>
       <Route path="/schedule/in/:meetId" element={<Appointment />} errorElement={<ErrorFallback />}></Route>
       <Route path="/schedule/gr/:groupId" element={<GroupAppointment />} errorElement={<ErrorFallback />}></Route>
@@ -90,6 +96,12 @@ const Router = () => {
       <Route path="/assistants/client-profiles" element={<ClientProfiles />} errorElement={<ErrorFallback />}></Route>
       <Route path="/assistants/assignments" element={<Assignments />} errorElement={<ErrorFallback />}></Route>
       
+      {/* Tenant public website and booking entry. Static routes above win; the
+          resolver fails closed for unknown slugs. */}
+      <Route path="/:slug/book" element={<PublicBookingPage />} errorElement={<ErrorFallback />}></Route>
+      <Route path="/:slug/:locale" element={<PublicSitePage />} errorElement={<ErrorFallback />}></Route>
+      <Route path="/:slug" element={<PublicSitePage />} errorElement={<ErrorFallback />}></Route>
+
       <Route path="*" element={<NotFound />} />
     </>
   );
