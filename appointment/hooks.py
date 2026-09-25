@@ -356,3 +356,16 @@ permission_query_conditions["Experience Release"] = "appointment.public_experien
 has_permission["Public Site"] = "appointment.public_experience.access.public_site_permission"
 has_permission["Public Site Domain"] = "appointment.public_experience.access.public_site_domain_permission"
 has_permission["Experience Release"] = "appointment.public_experience.access.experience_release_permission"
+
+# Content tenancy: entitlements, ownership, and upstream authoring isolation.
+# The same ownership rule answers lists and direct reads; a global Frappe role
+# never grants access to another business.
+permission_query_conditions["Business Entitlement"] = "appointment.content.access.business_entitlement_query"
+permission_query_conditions["Content Ownership"] = "appointment.content.access.content_ownership_query"
+permission_query_conditions["Blog Post"] = "appointment.content.access.blog_post_query"
+permission_query_conditions["Newsletter"] = "appointment.content.access.newsletter_query"
+
+has_permission["Business Entitlement"] = "appointment.content.access.business_entitlement_permission"
+has_permission["Content Ownership"] = "appointment.content.access.content_ownership_permission"
+has_permission["Blog Post"] = "appointment.content.access.blog_post_permission"
+has_permission["Newsletter"] = "appointment.content.access.newsletter_permission"
