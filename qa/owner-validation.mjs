@@ -2,13 +2,24 @@ import { expect } from "playwright/test";
 import { execFileSync } from "node:child_process";
 import { writeFileSync } from "node:fs";
 
-export async function stableScreenshot(page, options) {
+export async function settlePage(page) {
   await page.evaluate(() => document.fonts.ready);
   await page.mouse.move(0, 0);
   await page.evaluate(() => document.activeElement?.blur());
-  await page.waitForFunction(() => Array.from(document.querySelectorAll("main [style]"))
-    .filter(element => element.getClientRects().length && element.style.opacity && element.style.transform)
-    .every(element => Number(element.style.opacity) === 1));
+  try {
+    await page.waitForFunction(() => Array.from(document.querySelectorAll('main [style], [data-qa="theme-toggle"] [style]'))
+      .filter(element => element.getClientRects().length && element.style.opacity && element.style.transform)
+      .every(element => Number(element.style.opacity) === 1));
+  } catch {
+    const unsettled = await page.evaluate(() => Array.from(document.querySelectorAll('main [style], [data-qa="theme-toggle"] [style]'))
+      .filter(element => element.getClientRects().length && element.style.opacity && element.style.transform && Number(element.style.opacity) !== 1)
+      .map(element => ({ tag: element.tagName, class: element.className, style: element.getAttribute("style") })));
+    throw new Error("Unsettled visual elements: " + JSON.stringify(unsettled));
+  }
+}
+
+export async function stableScreenshot(page, options) {
+  await settlePage(page);
   return page.screenshot({ ...options, animations: "disabled" });
 }
 
@@ -45,7 +56,8 @@ export async function articleHistory(page, guest, testInfo, { root, title, route
   await page.getByRole("button", { name: "Preview saved article", exact: true }).click();
   const preview = page.getByRole("region", { name: "Article preview", exact: true });
   await expect(preview).toContainText(draft);
-  await preview.screenshot({ path: testInfo.outputPath(`${prefix}-saved-private-article.png`) });
+  await settlePage(page);
+  await preview.screenshot({ path: testInfo.outputPath(`${prefix}-saved-private-article.png`), animations: "disabled" });
   await page.getByRole("button", { name: "Publish article", exact: true }).click();
   await expect(page.getByRole("status").filter({ hasText: "Article published" })).toContainText("Article published");
   await guest.reload({ waitUntil: "networkidle" });

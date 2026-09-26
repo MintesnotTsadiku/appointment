@@ -54,6 +54,9 @@ test("website-owner-journey", async ({ page }, testInfo) => {
   expect(profile.roles).toContain("Front Desk");
   expect(profile.roles).not.toContain("Organization Manager");
   managedStaff = await page.context().browser().newContext({ baseURL: process.env.PLAYWRIGHT_BASE_URL, storageState: profile.storage_state });
+  const staffClock = new Date();
+  staffClock.setUTCHours(9, 0, 0, 0);
+  await managedStaff.clock.setFixedTime(staffClock);
   const receptionist = await managedStaff.newPage();
   const signedInStaff = await receptionist.request.get("/api/method/frappe.auth.get_logged_user");
   expect((await signedInStaff.json()).message).toBe(profile.user);

@@ -129,3 +129,53 @@ otherwise restore the matching database and media backup into a replacement
 runtime. Switch traffic only after the restored public routes and consent paths
 pass managed browser acceptance. The current progress record must identify any
 remaining compatibility or manual accessibility checks.
+
+## Production browser and cache qualification
+
+Build from the selected checkout with installed, pinned frontend dependencies:
+`npm run build`. The entry and service worker use
+`/assets/appointment/frontend/`. Frappe renders the compiled entry through the
+shared website and schedule controllers. Every inline boot script requires the
+response's nonce. Boot JSON must escape HTML parser delimiters; do not add raw
+script or iframe authoring.
+
+Serve `sw.js` with `Cache-Control: no-cache` and
+`Service-Worker-Allowed: /`. The worker controls the application root. Navigation
+and all API requests stay on the network; they must not cache session boot data,
+drafts, audience records, consent links, or booking availability. Worker upgrades
+remove the four exact legacy private caches. Keep unrelated applications' caches
+and the public asset caches. Missing network access must not return another
+session's response.
+
+The isolated acceptance gateway is an operator-only test helper:
+`appointment.tests.content_production_gateway.start(site=...)`. It accepts only
+the implementation or restored site in this Bench. It replaces the isolated
+frontend with Frappe production HTML and compiled assets; it does not support
+private realtime journeys. Run it only after all active browser jobs finish.
+`stop()` restores the recorded development frontend. Neither operation changes
+business records, Bench asset links, or the reference runtime.
+
+Run the managed `content-production` suite against that gateway. It checks all
+five compiled public entries, matching script nonces, guest isolation, private
+API denial, root worker control, exact legacy cache deletion, and preservation
+of an unrelated cache. The template and accessibility suites must also use the
+production gateway for release qualification. Retain public PNG and approved
+report artifacts, never browser storage state or authentication traces.
+
+## Reversible code drill on the restored target
+
+The reserved restored site is `meet-beta-content-restore.localhost`. Restore the
+recorded SQL, public files, private files, and encryption key before qualification.
+The recovery fixture checks exact immutable release and media digests and
+synthetic consent states. Its guest journey opens the five restored websites and
+unsubscribes the restored address through the normal public control.
+
+`appointment.tests.content_code_drill.prepare()` archives the committed rollback
+revision and builds its assets with existing dependencies. It leaves the current
+checkout, untracked files, installed dependency revisions, and database untouched.
+`rollback()` switches only the restored backend import path and gateway assets.
+`upgrade()` restores the exact recorded candidate commands. Run strict managed
+`content-recovery` acceptance at candidate, rollback, and upgrade, then stop the
+gateway and restore the normal isolated runtime. Keep each stage's evidence and
+the archive checksum separately. A successful code drill does not authorize a
+schema downgrade or production deployment.

@@ -5,7 +5,7 @@ export default defineConfig({
   use: { reducedMotion: "reduce", actionTimeout: 15000, navigationTimeout: 30000,
     baseURL: process.env.PLAYWRIGHT_BASE_URL,
     storageState: process.env.PLAYWRIGHT_STORAGE_STATE,
-    launchOptions: { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE },
+    launchOptions: { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE, args: ["--disable-gpu", "--disable-lcd-text"] },
     screenshot: "only-on-failure", trace: "on", video: "off",
     viewport: { width: 1440, height: 900 },
   },

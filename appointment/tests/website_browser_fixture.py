@@ -118,6 +118,7 @@ class WebsiteBrowserFixture:
             self._delete("Location", frappe.get_all("Location", filters={"organization": organization}, pluck="name"))
             self._delete("Business Membership", frappe.get_all("Business Membership", filters={"organization": organization}, pluck="name"))
             self._delete("Organization Workbook Import", frappe.get_all("Organization Workbook Import", filters={"organization": organization}, pluck="name"))
+            self._delete("Business Entitlement", frappe.get_all("Business Entitlement", filters={"organization": organization}, pluck="name"))
             # The workspace factory labels only its newly created provider with this exact business name.
             providers = frappe.get_all("Provider", filters={"user": USER,
                 "provider_name": ["like", fixture_identity["marker"] + " — %"]}, pluck="name")
@@ -157,6 +158,7 @@ class WebsiteBrowserFixture:
         marker = fixture_identity["marker"]
         scope = [marker, marker + " Workbook", marker + " Isolation"]
         counts = {"Organization": len(remaining),
+                  "Business Entitlement": frappe.db.count("Business Entitlement", {"organization": ["in", scope]}),
                   "Organization Workbook Import": frappe.db.count("Organization Workbook Import", {"organization": ["in", scope]}),
                   "Imported Locations": frappe.db.count("Location", {"organization": ["in", scope]}),
                   "Imported Services": frappe.db.count("Service", {"organization": ["in", scope]}),

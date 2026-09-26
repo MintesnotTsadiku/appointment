@@ -5,7 +5,7 @@ export default defineConfig({
   use: {
     baseURL: process.env.PLAYWRIGHT_BASE_URL,
     storageState: process.env.PLAYWRIGHT_STORAGE_STATE,
-    launchOptions: { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE },
+    launchOptions: { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE, args: ["--disable-gpu", "--disable-lcd-text"] },
     screenshot: "only-on-failure", trace: "on", video: "off",
   },
   outputDir: process.env.PLAYWRIGHT_OUTPUT_DIR,

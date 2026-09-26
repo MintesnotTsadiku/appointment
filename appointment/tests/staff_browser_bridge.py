@@ -78,3 +78,21 @@ def set_test_entitlement(capability, state, limits=None):
                                        limits=limits, source_reference="Exact managed browser acceptance")
     frappe.db.commit()
     return {"capability": capability, "state": state, "entitlement": name}
+
+
+def purge_orphaned_test_entitlements():
+    """Repair exact test plan rows left by older fixture cleanup, never live plans."""
+    if frappe.session.user != "Administrator" or frappe.local.site not in {
+        "meet-beta-content-fresh-b.localhost", "meet-beta-content-fresh-c.localhost"
+    } or not frappe.conf.get("worktree_development"):
+        raise RuntimeError("Only the reserved seedless acceptance operator may repair test cleanup")
+    organization = "WQA-websiteacceptance"
+    if frappe.db.exists("Organization", organization):
+        raise RuntimeError("Preserve the live acceptance business and its plans")
+    filters = {"organization": organization, "owner_type": "Organization",
+               "source_reference": "Exact managed browser acceptance",
+               "capability": ["in", ["blog", "gallery", "newsletter"]]}
+    count = frappe.db.count("Business Entitlement", filters)
+    frappe.db.delete("Business Entitlement", filters)
+    frappe.db.commit()
+    return {"orphaned_exact_test_plans_removed": count, "live_businesses_changed": 0}

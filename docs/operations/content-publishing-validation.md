@@ -676,3 +676,29 @@ BSESS-4002. The first normal user has only Provider among application roles; no
 business was created by the operator. Credentials remain in private runtime files.
 Final fresh-site journeys, the stable template matrix, accessibility review, and
 production recovery/code rollback remain pending.
+
+### Final fresh-install independent owner accepted
+
+Fresh C strict run `04009` passed the complete fourteen-capture independent-owner
+journey with zero screenshot changes. It began without a Provider or Organization
+and used a Provider-only normal user. The audit reports no organization proxy and
+zero remaining operational, website, publication, media, sender, audience, or
+campaign records. Evidence is retained under
+`qa/evidence/fresh-site/meet-beta-content-fresh-c.localhost/independent-owner`.
+
+Organization run `02047` passed all functional checks. Strict repeat `02051` also
+passed functionally but found four visual changes. Two were the receptionist's
+moving current-time line. Two exposed three exact synthetic entitlement rows
+that older cleanup had omitted. Cleanup now removes those rows and counts
+Business Entitlement in its audit. The operator repair removed only the three
+marked orphan rows, after confirming the synthetic organization no longer existed.
+It changed no live business or plan. Receptionist captures use a fixed browser
+Date while normal timers and backend time remain real.
+
+The fresh independent repeat exposed a theme icon stuck in its entrance state.
+The global theme control now renders its icon on first paint and honors reduced
+motion for theme changes. Captures wait for page and theme animations to settle;
+the browser uses software rendering. Exact PNG comparison and functional
+assertions remain unchanged. Final baseline `04008` and strict `04009` passed.
+The full organization journey on Fresh C is running at `04010`. Template,
+production accessibility, and recovery/code drills remain pending.
