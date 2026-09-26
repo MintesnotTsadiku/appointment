@@ -10,6 +10,7 @@ from __future__ import annotations
 import frappe
 from frappe import _
 
+from appointment.content import gallery as gallery_module
 from appointment.content import releases
 
 _MAX_PAGE_SIZE = 50
@@ -47,6 +48,28 @@ def get_article_detail(site: str, route: str, locale: str | None = None):
     if not article:
         frappe.throw(_("This article is not published."), frappe.DoesNotExistError)
     return article
+
+
+@frappe.whitelist(allow_guest=True, methods=["GET"])
+def get_gallery_index(site: str, locale: str | None = None, page: int = 1, page_size: int = 20):
+    site_name = _published_site(site)
+    page = max(1, int(page or 1))
+    page_size = min(_MAX_PAGE_SIZE, max(1, int(page_size or 20)))
+    result = releases.list_public_galleries(site_name, locale, page_size, (page - 1) * page_size)
+    result["page"] = page
+    result["pageSize"] = page_size
+    return result
+
+
+@frappe.whitelist(allow_guest=True, methods=["GET"])
+def get_gallery_detail(site: str, route: str, locale: str | None = None):
+    site_name = _published_site(site)
+    if not route or not route.startswith(gallery_module.GALLERY_ROUTE_PREFIX) or ".." in route:
+        frappe.throw(_("The gallery route is not valid."), frappe.DoesNotExistError)
+    gallery = releases.get_public_gallery(site_name, route, locale)
+    if not gallery:
+        frappe.throw(_("This gallery is not published."), frappe.DoesNotExistError)
+    return gallery
 
 
 @frappe.whitelist(methods=["GET"])

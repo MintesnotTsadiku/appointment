@@ -148,14 +148,8 @@ def publish_article(ownership, expected_modified: str | None = None, locale: str
 
     own = frappe.get_doc("Content Ownership", ownership) if isinstance(ownership, str) else ownership
     tenancy.require_manage_business(own.owner_type, own.organization, own.provider)
-    entitlements.require_capability(own.owner_type, own.organization, own.provider, "blog")
     if own.source_doctype != "Blog Post":
         raise ContentPublishError("this ownership record is not an article")
-    if not own.public_site:
-        raise ContentPublishError("the content is not linked to a public site")
-    site = _site_meta(own.public_site)
-    if not site:
-        raise ContentPublishError("the public site does not exist")
     post = frappe.get_doc("Blog Post", own.source_name)
     if expected_modified is not None and str(expected_modified) != str(post.get("modified")):
         raise StaleContentError(
@@ -166,26 +160,66 @@ def publish_article(ownership, expected_modified: str | None = None, locale: str
     projection = built["projection"]
     if not projection["blocks"]:
         raise ContentPublishError("the article has no publishable content")
-    route = article_route(projection["slug"])
+    return publish_projection(
+        own,
+        capability="blog",
+        content_type="article",
+        source_doctype="Blog Post",
+        source_name=own.source_name,
+        projection=projection,
+        route=article_route(projection["slug"]),
+        locale=locale,
+        media={"hero": built["hero"]},
+        source_modified=post.get("modified"),
+        limit_key="articles",
+        route_label="article",
+    )
+
+
+def publish_projection(
+    ownership,
+    *,
+    capability: str,
+    content_type: str,
+    source_doctype: str,
+    source_name: str,
+    projection: dict,
+    route: str,
+    locale: str | None,
+    media: dict,
+    source_modified=None,
+    limit_key: str | None = None,
+    route_label: str = "item",
+):
+    """Create an immutable release for an already-sanitized projection.
+
+    The single place that supersedes a route owner and emits the cache event.
+    """
+
+    own = frappe.get_doc("Content Ownership", ownership) if isinstance(ownership, str) else ownership
+    entitlements.require_capability(own.owner_type, own.organization, own.provider, capability)
+    if not own.public_site:
+        raise ContentPublishError("the content is not linked to a public site")
+    site = _site_meta(own.public_site)
+    if not site:
+        raise ContentPublishError("the public site does not exist")
     locale = locale or site.default_locale or "en"
 
     _lock_site(own.public_site)
     existing = _active_release(own.public_site, locale, route)
-    if existing and existing.source_name != own.source_name:
-        raise RouteConflictError("that public route is already owned by another article")
-    if not existing:
+    if existing and existing.source_name != source_name:
+        raise RouteConflictError(f"that public route is already owned by another {route_label}")
+    if not existing and limit_key:
         active_count = frappe.db.count(
             "Published Content Release",
-            {
-                "active_owner_key": own.active_owner_key,
-                "content_type": "article",
-                "status": "Active",
-            },
+            {"active_owner_key": own.active_owner_key, "content_type": content_type, "status": "Active"},
         )
         entitlements.enforce_limit(
-            own.owner_type, own.organization, own.provider, "blog", "articles", active_count + 1
+            own.owner_type, own.organization, own.provider, capability, limit_key, active_count + 1
         )
-    content_hash = hash_document(_release_document(own.public_site, "article", route, locale, projection, built["hero"]))
+    content_hash = hash_document(
+        _release_document(own.public_site, content_type, route, locale, projection, media)
+    )
     release = frappe.get_doc(
         {
             "doctype": "Published Content Release",
@@ -193,17 +227,17 @@ def publish_article(ownership, expected_modified: str | None = None, locale: str
             "owner_type": own.owner_type,
             "organization": own.organization,
             "provider": own.provider,
-            "content_type": "article",
-            "source_doctype": "Blog Post",
-            "source_name": own.source_name,
+            "content_type": content_type,
+            "source_doctype": source_doctype,
+            "source_name": source_name,
             "route": route,
             "locale": locale,
             "template_compat_version": TEMPLATE_COMPAT_VERSION,
-            "source_modified": post.get("modified"),
+            "source_modified": source_modified,
             "content_hash": content_hash,
             "content_json": json.dumps(projection, sort_keys=True),
-            "media_json": json.dumps({"hero": built["hero"]}, sort_keys=True),
-            "seo_json": json.dumps(projection["seo"], sort_keys=True),
+            "media_json": json.dumps(media, sort_keys=True),
+            "seo_json": json.dumps(projection.get("seo") or {}, sort_keys=True),
             "status": "Active",
             "supersedes": existing.name if existing else None,
         }
@@ -224,6 +258,36 @@ def publish_article(ownership, expected_modified: str | None = None, locale: str
     own.save()
     _after_publish(own.public_site)
     return release
+
+
+def publish_gallery_collection(ownership, locale: str | None = None):
+    """Publish an immutable gallery-collection release."""
+
+    from appointment.content import gallery as gallery_module
+
+    own = frappe.get_doc("Content Ownership", ownership) if isinstance(ownership, str) else ownership
+    tenancy.require_manage_business(own.owner_type, own.organization, own.provider)
+    if own.source_doctype != "Gallery Collection":
+        raise ContentPublishError("this ownership record is not a gallery collection")
+    collection = frappe.get_doc("Gallery Collection", own.source_name)
+    built = gallery_module.build_gallery_projection(collection)
+    projection = built["projection"]
+    if not projection["items"]:
+        raise ContentPublishError("the collection has no items")
+    return publish_projection(
+        own,
+        capability="gallery",
+        content_type="gallery_collection",
+        source_doctype="Gallery Collection",
+        source_name=own.source_name,
+        projection=projection,
+        route=gallery_module.gallery_route(projection["slug"]),
+        locale=locale,
+        media={"cover": built["cover"]},
+        source_modified=collection.get("modified"),
+        limit_key="collections",
+        route_label="collection",
+    )
 
 
 def withdraw_release(release, reason: str | None = None):
@@ -347,6 +411,40 @@ def preview_article(ownership, locale: str | None = None) -> dict:
     return {"token": token, "expiresAt": str(expires_at), "route": route, "projection": projection}
 
 
+def preview_gallery_collection(ownership, locale: str | None = None) -> dict:
+    """Build a session-bound preview of a gallery collection draft."""
+
+    from appointment.content import gallery as gallery_module
+
+    own = frappe.get_doc("Content Ownership", ownership) if isinstance(ownership, str) else ownership
+    tenancy.require_manage_business(own.owner_type, own.organization, own.provider)
+    entitlements.require_capability(own.owner_type, own.organization, own.provider, "gallery")
+    if own.source_doctype != "Gallery Collection":
+        raise ContentPublishError("this ownership record is not a gallery collection")
+    collection = frappe.get_doc("Gallery Collection", own.source_name)
+    built = gallery_module.build_gallery_projection(collection)
+    route = gallery_module.gallery_route(built["projection"]["slug"])
+    token = frappe.generate_hash(length=40)
+    expires_at = now_datetime() + timedelta(seconds=PREVIEW_TTL_SECONDS)
+    payload = {
+        "ownerType": own.owner_type,
+        "organization": own.organization,
+        "provider": own.provider,
+        "activeOwnerKey": own.active_owner_key,
+        "publicSite": own.public_site,
+        "route": route,
+        "locale": locale or "en",
+        "projection": built["projection"],
+        "user": frappe.session.user,
+        "expiresAt": str(expires_at),
+    }
+    try:
+        frappe.cache.set_value(f"{_PREVIEW_PREFIX}{token}", payload, expires_in_sec=PREVIEW_TTL_SECONDS)
+    except Exception:
+        pass
+    return {"token": token, "expiresAt": str(expires_at), "route": route, "projection": built["projection"]}
+
+
 def consume_article_preview(token: str, user: str | None = None) -> dict | None:
     if not token:
         return None
@@ -430,5 +528,63 @@ def get_public_article(site: str, route: str, locale: str | None = None) -> dict
         "publishedAt": str(row.published_at or ""),
         "projection": _parse(row.content_json),
         "hero": _parse(row.media_json).get("hero"),
+        "seo": _parse(row.seo_json),
+    }
+
+
+def list_public_galleries(site: str, locale: str | None = None, limit: int = 20, offset: int = 0) -> dict:
+    filters = {"public_site": site, "content_type": "gallery_collection", "status": "Active"}
+    if locale:
+        filters["locale"] = locale
+    rows = frappe.get_all(
+        "Published Content Release",
+        filters=filters,
+        fields=["name", "route", "locale", "content_hash", "published_at", "content_json", "media_json", "seo_json"],
+        order_by="published_at desc",
+        limit_start=int(offset),
+        limit_page_length=int(limit),
+        ignore_permissions=True,
+    )
+    galleries = []
+    for row in rows:
+        projection = _parse(row.content_json)
+        galleries.append(
+            {
+                "route": row.route,
+                "locale": row.locale,
+                "releaseHash": row.content_hash,
+                "publishedAt": str(row.published_at or ""),
+                "title": projection.get("title"),
+                "slug": projection.get("slug"),
+                "summary": projection.get("summary"),
+                "grouping": projection.get("grouping"),
+                "tags": projection.get("tags"),
+                "itemCount": len(projection.get("items") or []),
+                "cover": _parse(row.media_json).get("cover"),
+                "seo": _parse(row.seo_json),
+            }
+        )
+    return {"site": site, "galleries": galleries, "count": len(galleries), "offset": int(offset)}
+
+
+def get_public_gallery(site: str, route: str, locale: str | None = None) -> dict | None:
+    filters = {"public_site": site, "content_type": "gallery_collection", "status": "Active", "route": route}
+    if locale:
+        filters["locale"] = locale
+    row = frappe.db.get_value(
+        "Published Content Release",
+        filters,
+        ["name", "route", "locale", "content_hash", "published_at", "content_json", "media_json", "seo_json"],
+        as_dict=True,
+    )
+    if not row:
+        return None
+    return {
+        "route": row.route,
+        "locale": row.locale,
+        "releaseHash": row.content_hash,
+        "publishedAt": str(row.published_at or ""),
+        "projection": _parse(row.content_json),
+        "cover": _parse(row.media_json).get("cover"),
         "seo": _parse(row.seo_json),
     }

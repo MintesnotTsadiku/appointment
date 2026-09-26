@@ -76,6 +76,22 @@ def preview_article(ownership: str, locale: str | None = None):
 
 
 @frappe.whitelist(methods=["POST"])
+def preview_gallery_collection(ownership: str, locale: str | None = None):
+    return releases.preview_gallery_collection(ownership, locale)
+
+
+@frappe.whitelist(methods=["POST"])
+def publish_gallery_collection(ownership: str, locale: str | None = None):
+    release = releases.publish_gallery_collection(ownership, locale)
+    return {
+        "release": release.name,
+        "releaseNumber": release.release_number,
+        "hash": release.content_hash,
+        "route": release.route,
+    }
+
+
+@frappe.whitelist(methods=["POST"])
 def withdraw_release(release: str, reason: str | None = None):
     doc = releases.withdraw_release(release, reason)
     return {"release": doc.name, "status": doc.status}

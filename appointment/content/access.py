@@ -67,6 +67,24 @@ def content_ownership_permission(doc, user=None, permission_type="read", ptype=N
     return tenancy.can_manage_business(doc.owner_type, doc.organization, doc.provider, actor)
 
 
+def gallery_collection_query(user=None) -> str:
+    return tenancy.owner_query_condition("tabGallery Collection", user)
+
+
+def gallery_collection_permission(doc, user=None, permission_type="read", ptype=None, **kwargs) -> bool:
+    permission_type = ptype or permission_type
+    actor = _actor(user)
+    if actor == "Administrator":
+        return True
+    if not _enabled(actor):
+        return False
+    if permission_type == "delete":
+        return False
+    if permission_type == "create":
+        return _has_any_business(actor)
+    return tenancy.can_manage_business(doc.owner_type, doc.organization, doc.provider, actor)
+
+
 def published_content_release_query(user=None) -> str:
     return tenancy.owner_query_condition("tabPublished Content Release", user)
 
