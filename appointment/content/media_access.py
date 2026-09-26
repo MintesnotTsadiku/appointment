@@ -6,6 +6,8 @@ from contextlib import contextmanager
 import frappe
 from frappe import _
 
+from appointment.content.sanitize import image_sources
+
 
 class WebsiteFile:
     def before_insert(self):
@@ -73,4 +75,6 @@ def _contains(value, url):
         return any(_contains(child, url) for child in value.values())
     if isinstance(value, list):
         return any(_contains(child, url) for child in value)
-    return value == url
+    if value == url:
+        return True
+    return isinstance(value, str) and "<img" in value.lower() and url in image_sources(value)

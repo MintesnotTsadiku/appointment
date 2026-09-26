@@ -164,6 +164,18 @@ class GalleryAcceptance(unittest.TestCase):
         with self.assertRaises(MediaSafetyError):
             releases.build_article_projection(post, self.state["sites"]["B"])
 
+    def test_nested_article_images_require_exact_site_owned_decoded_files(self):
+        image = '<img src="' + self.state["image_url"] + '" alt="Article image">'
+        for shape in ("<p>{}</p>", "<ul><li>{}</li></ul>", "<blockquote>{}</blockquote>",
+                      "<figure>{}</figure>", "<table><tr><td>{}</td></tr></table>"):
+            with self.subTest(shape=shape):
+                post = frappe._dict(name="nested-article-image", title="Article", content_type="HTML",
+                                    content=shape.format(image))
+                built = releases.build_article_projection(post, self.state["sites"]["A"])
+                self.assertTrue(built["projection"]["blocks"])
+                with self.assertRaises(MediaSafetyError):
+                    releases.build_article_projection(post, self.state["sites"]["B"])
+
     def test_public_media_metadata_remains_owner_scoped(self):
         from appointment.content import access
 
@@ -206,6 +218,29 @@ class GalleryAcceptance(unittest.TestCase):
         ownership = self._ownership(collection)
         frappe.set_user(self.state["owners"]["A"])
         published = releases.publish_gallery_collection(ownership.name)
+        releases.withdraw_release(published.name)
+        file = frappe.get_doc("File", {"file_url": self.state["image_url"]})
+        with self.assertRaises(frappe.ValidationError):
+            frappe.delete_doc("File", file.name)
+        self.assertTrue(Path(file.get_full_path()).is_file())
+        frappe.set_user("Administrator")
+
+    def test_nested_published_article_keeps_its_physical_image_after_withdrawal(self):
+        frappe.set_user("Administrator")
+        site = self.state["sites"]["A"]
+        scope = {"owner_type": "Organization", "organization": self.state["orgs"]["A"],
+                 "public_site": site, "capability": "blog"}
+        category = _insert(self.state, "Blog Category", title=self.state["marker"] + " Nested images")
+        blogger = _insert(self.state, "Blogger", short_name=self.state["marker"] + "-nested",
+                          full_name="Synthetic article author", user=self.state["owners"]["A"])
+        for doctype, name in (("Blog Category", category.name), ("Blogger", blogger.name)):
+            _insert(self.state, "Content Ownership", **scope, source_doctype=doctype, source_name=name)
+        post = _insert(self.state, "Blog Post", title=self.state["marker"] + " Nested article",
+                       blog_category=category.name, blogger=blogger.name, published=0, content_type="HTML",
+                       content='<figure><img src="' + self.state["image_url"] + '" alt="Owned image"></figure>')
+        own = _insert(self.state, "Content Ownership", **scope, source_doctype="Blog Post", source_name=post.name)
+        frappe.set_user(self.state["owners"]["A"])
+        published = releases.publish_article(own.name)
         releases.withdraw_release(published.name)
         file = frappe.get_doc("File", {"file_url": self.state["image_url"]})
         with self.assertRaises(frappe.ValidationError):

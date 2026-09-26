@@ -869,3 +869,24 @@ descenders. Selam now owns an 18-pixel gap. The managed matrix checks separate
 rendered text bounds for that heading and introduction at all four combinations.
 No other template imports its layout or style. The final baseline and strict
 repeat remain pending after the focused spacing capture.
+
+Template run `00162` passed all four focused Selam combinations. Eight captures
+changed after the owned team-heading spacing correction. Native desktop and
+mobile review confirmed separate rendered text bounds. Full baseline run `00163`
+then passed twenty scenarios, with 24 reviewed changes: twenty scheduler captures
+and four Selam landing captures. A strict repeat is required before export.
+
+A read-only security probe found that nested article images could skip site-owned
+image validation and historical file retention. All five nested HTML shapes were
+affected. Article publication now walks the same sanitized HTML tree for image
+sources. File retention parses exact image sources in structured HTML strings,
+including withdrawn releases. Two regressions cover five nesting shapes and an
+actual owner publication, withdrawal, and blocked physical-file deletion.
+Gallery (18), releases (14), entitlements (13), and website setup (12) all passed.
+The seven synthetic marker counts were zero after cleanup.
+
+The final broad TypeScript check reports 272 existing diagnostics. The touched
+service selector still contains its pre-existing `ringColor` style diagnostic;
+that property is identical at the Phase 0–3 checkpoint. No new diagnostic was
+introduced by the content changes. Earlier unrelated reception lint failures
+remain recorded separately.

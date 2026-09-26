@@ -228,6 +228,21 @@ def _inline_children(node):
     return [child for child in node.children if not isinstance(child, str) or child.strip()]
 
 
+def image_sources(raw: object) -> list[str]:
+    """Collect sanitized image references at every rich-text nesting level."""
+    pending = [_parse(raw)]
+    sources = []
+    while pending:
+        node = pending.pop()
+        if isinstance(node, str):
+            continue
+        source = node.attrs.get("src") if node.tag == "img" else None
+        if source and source not in sources:
+            sources.append(source)
+        pending.extend(reversed(node.children))
+    return sources
+
+
 def html_to_blocks(raw: object) -> list[dict]:
     """Project sanitized HTML into a closed list of structured blocks."""
 

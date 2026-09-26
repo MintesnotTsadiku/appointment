@@ -20,6 +20,7 @@ from appointment.content.canonical import hash_document
 from appointment.content.sanitize import (
     excerpt,
     html_to_blocks,
+    image_sources,
     markdown_to_html,
     safe_url,
 )
@@ -107,7 +108,7 @@ def build_article_projection(post, public_site=None) -> dict:
     slug = normalize_slug(candidate) or normalize_slug(title) or normalize_slug(post.name)
     summary = (post.get("blog_intro") or "").strip() or excerpt(blocks)
     hero = safe_media(post.get("meta_image"))
-    images = [block.get("src") for block in blocks if block.get("type") == "image"]
+    images = image_sources(html)
     if post.get("meta_image") and not hero:
         raise ContentPublishError("Choose a safe public article image.")
     if hero or images:
