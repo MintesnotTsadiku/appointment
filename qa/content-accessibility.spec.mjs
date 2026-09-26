@@ -66,7 +66,12 @@ for (const key of ["selam", "bloom", "meron", "abugida", "tena"]) {
             };
           });
           const keyboard = [];
-          for (let tab = 0; tab < 5; tab += 1) {
+          const keyboardSteps = await page.locator('a[href], button, input, select, textarea, [tabindex]').evaluateAll(elements =>
+            Math.min(5, elements.filter(element => element.tabIndex >= 0 && !element.disabled &&
+              element.getClientRects().length && getComputedStyle(element).visibility !== "hidden" &&
+              !element.closest("[inert]")).length));
+          expect(keyboardSteps).toBeGreaterThan(0);
+          for (let tab = 0; tab < keyboardSteps; tab += 1) {
             await page.keyboard.press("Tab");
             const focus = await page.evaluate(() => {
               const element = document.activeElement;
@@ -79,6 +84,8 @@ for (const key of ["selam", "bloom", "meron", "abugida", "tena"]) {
             });
             expect(focus.tag).not.toBe("BODY");
             expect(focus.visible).toBe(true);
+            expect((focus.outline !== "none" && Number.parseFloat(focus.outlineWidth) > 0) ||
+              focus.shadow !== "none", `${key} ${surface} visible keyboard focus treatment`).toBe(true);
             keyboard.push(focus);
           }
           let inlineLinkReview;

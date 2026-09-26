@@ -20,3 +20,6 @@
 .meron-content-brand img { width: 120px; max-width: 30vw; height: 36px; object-fit: contain; }
 
 .meron-content-article a { text-decoration: underline; }
+
+.meron-site :focus-visible { outline: 3px solid var(--pe-color-focus); outline-offset: 4px; }
+.meron-site .meron-newsletter :focus-visible { outline-color: currentColor; }

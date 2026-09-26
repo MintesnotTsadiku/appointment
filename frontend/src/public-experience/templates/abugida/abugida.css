@@ -99,3 +99,6 @@
 .abugida-content-brand img { width: 120px; max-width: 30vw; height: 36px; object-fit: contain; }
 
 .abugida-content-article a { text-decoration: underline; }
+
+.abugida-site :focus-visible { outline: 3px solid var(--pe-color-focus); outline-offset: 4px; }
+.abugida-site .abugida-newsletter :focus-visible { outline-color: currentColor; }

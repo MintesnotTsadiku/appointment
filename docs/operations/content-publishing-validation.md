@@ -786,3 +786,13 @@ styles for incomplete gradient/link checks, keyboard focus details, local larges
 paint and layout stability measurements, and a clearly marked transient inline
 link style probe. That probe changes only the browser DOM and no stored release.
 Final strict template comparison and accessibility review remain pending.
+
+Accessibility run `00155` exposed a traversal-test assumption: booking has four
+focusable controls, so a fifth Tab correctly leaves the document. The test now
+checks up to five visible, enabled controls and requires an actual focus treatment.
+Each independent template also defines a visible focus ring for its landing and
+booking controls; newsletter controls retain their contrast-safe current-color
+ring. Initial production measurements were below one second for Selam's largest
+paint with layout movement below 0.004. These partial measurements are not final
+acceptance. Cooperative cancellation of `00155` ended with an upstream Browser
+QA timestamp-conflict error; that run is not retained as passing evidence.

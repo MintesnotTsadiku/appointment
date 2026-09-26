@@ -22,3 +22,6 @@
 .tena-content-brand img { width: 120px; max-width: 30vw; height: 36px; object-fit: contain; }
 
 .tena-content-article a { text-decoration: underline; }
+
+.tena-site :focus-visible { outline: 3px solid var(--pe-color-focus); outline-offset: 4px; }
+.tena-site .tena-newsletter :focus-visible { outline-color: currentColor; }
