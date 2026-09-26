@@ -400,3 +400,37 @@ using a normal organization owner and Tena. The full five-template matrix,
 expanded website/import requirements, fresh-site journeys, and upgrade/restore
 gates remain pending. See `docs/operations/content-newsletter.md` for transport,
 token, queue, and retry behavior.
+
+## Phase 8 content expansion and acceptance work in progress
+
+The primary isolated site is now explicitly seeded. It no longer counts as a
+fresh-site acceptance target. The reference runtime remains unchanged.
+
+The version 1 content manifest creates fifteen articles, ten collections, five
+newsletter drafts, and five unsent local previews across all certified templates.
+Its checksum is `14ef94a251e780ca6dc4a82c8394db63d71e7f5424a2011ae4fff9e86e50a53b`.
+The content inventory verifies all canonical release hashes and zero showcase
+audience members or delivery campaigns. Explicit seed replay creates no duplicates.
+`appointment.tests.test_rich_demo.verify` passes relationships, booking capacity,
+tenant scopes, and byte-identical inventory and private journal replay.
+
+Managed run `BQA-2026-00113` failed before browser execution because the new
+read-only fixture used `release_hash` instead of `content_hash`. The corrected
+full matrix `BQA-2026-00114` passed eighteen scenarios and exposed mobile overflow
+in the Tena landing headline. Both corrected mobile cases pass in
+`BQA-2026-00121`. The full matrix and strict repeat remain pending.
+
+Seedless site A, `meet-beta-content-fresh-a.localhost`, installs exactly Frappe,
+Blog, Newsletter, Appointment, Agent Harness, and Agent Plane. Before the first
+normal owner journey, all eight checked business/content table counts were zero.
+Managed profile `BACCT-1001` and session `BSESS-1002` use a separate private
+credential file. Disjoint harness counters prevent cross-site storage collisions.
+Fresh-site acceptance is still in progress. Do not treat failed or partial runs
+as acceptance evidence.
+
+New workbook tests pass eleven cases, including validated contact text, retained
+starter text before Website setup, and transactional rollback. Private template
+previews now include article and gallery surfaces. Fresh-site browser validation
+found missing upstream role grants. Install and migration hooks now reconcile
+Custom DocPerm so upstream metadata sync cannot remove the content grants.
+These expanded setup and installation changes await a passing strict journey.

@@ -929,6 +929,8 @@ def summary(state):
 
 
 def seed(base_url="http://127.0.0.174:41960", anchor_date=None):
+    from appointment.demo.content_world import configure as configure_published_content
+
     validate_showcase_catalog()
     with locked():
         if state_path().exists():
@@ -945,7 +947,8 @@ def seed(base_url="http://127.0.0.174:41960", anchor_date=None):
                 enrich_seeded_records(state)
             if needs_public_upgrade or needs_content_upgrade:
                 configure_public_experience(state)
-            if needs_phase_write or needs_content_upgrade or needs_public_upgrade:
+            needs_published_content = configure_published_content(state)
+            if needs_phase_write or needs_content_upgrade or needs_public_upgrade or needs_published_content:
                 for dt, name in list(state["created"]):
                     for version in frappe.get_all("Version", filters={"ref_doctype": dt, "docname": name}, pluck="name"):
                         remember(state, "Version", version)
@@ -983,6 +986,7 @@ def seed(base_url="http://127.0.0.174:41960", anchor_date=None):
         try:
             configure(state)
             configure_public_experience(state)
+            configure_published_content(state)
             appointments(state)
             for persona in state["personas"]:
                 frappe.set_user(persona["email"])
@@ -1008,6 +1012,17 @@ def cleanup():
         state = load_state()
         # Link checks intentionally remain enabled: later user-created dependents block cleanup.
         priority = {
+            "Published Content Release": -8,
+            "Local Email Message": -7,
+            "Business Newsletter Campaign": -6,
+            "Newsletter Audience Member": -5,
+            "Newsletter Sender Identity": -4,
+            "Content Ownership": -3,
+            "Newsletter": -2,
+            "Gallery Collection": -2,
+            "Blog Post": -2,
+            "Email Group": -1,
+            "Blog Category": -1,
             "Version": 0,
             "Public Experience Outbox": 1,
             "Experience Release": 2,
@@ -1028,7 +1043,12 @@ def cleanup():
                 if frappe.db.exists(dt, name):
                     if dt == "Version":
                         frappe.db.delete("Version", {"name": name})
-                    elif dt in {"Public Experience Outbox", "Experience Release", "Brand Revision"}:
+                    elif dt in {"Public Experience Outbox", "Experience Release", "Brand Revision", "Published Content Release",
+                                "Local Email Message", "Business Newsletter Campaign", "Newsletter Audience Member", "Newsletter Sender Identity"}:
+                        if dt == "Newsletter Audience Member":
+                            from frappe.utils.password import delete_all_passwords_for
+
+                            delete_all_passwords_for(dt, name)
                         frappe.db.delete(dt, {"name": name})
                     else:
                         frappe.delete_doc(dt, name, ignore_permissions=True, delete_permanently=True)

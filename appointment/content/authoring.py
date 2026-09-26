@@ -60,7 +60,8 @@ def create_gallery(site, title, slug, summary="", items=None):
     allowed = {"media_type", "image", "video_provider", "video_id", "caption", "alt_text", "credit",
                "display_date", "focal_x", "focal_y", "consent_status", "consent_evidence", "thumbnail", "poster"}
     gallery = frappe.get_doc({"doctype": "Gallery Collection", **scope, "public_site": site,
-                              "title": title, "slug": _address(slug), "summary": summary})
+                              "title": title, "slug": _address(slug), "summary": summary,
+                              "cover": next((item.get("image") for item in items if isinstance(item, dict) and item.get("media_type", "image") == "image"), None)})
     for index, item in enumerate(items):
         if not isinstance(item, dict) or set(item) - allowed:
             frappe.throw("Gallery items must use supported media fields.")
