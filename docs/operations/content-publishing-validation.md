@@ -168,7 +168,8 @@ Managed browser preflight on this isolated site returned no Browser QA worker
 and no Browser Accounts. The referenced
 `docs/dev/agent-plane-browser-validation.md` is absent from this checkout.
 Installed Agent Plane instructions are available in its browser operations
-runbook. A request to bootstrap the isolated browser runtime is pending.
+runbook. The user authorized browser bootstrap after this checkpoint. See the
+bootstrap record below.
 
 Remaining Phase 4 gates:
 
@@ -182,3 +183,52 @@ Remaining Phase 4 gates:
 
 No showcase data was seeded. No reference-runtime state was changed. No schema
 migration was needed. Phases 5–10 remain pending.
+
+
+## Authorized managed browser bootstrap — 2026-09-26
+
+The user authorized development Browser Account and worker bootstrap.
+
+- Created `content-browser-owner@example.test` with Provider and Organization
+  Manager roles. It has no platform administrator roles.
+- Created Browser Account `BACCT-0057` and primary session `BSESS-0058`.
+  Agent Plane stores the login credential encrypted. The runtime also holds a
+  private `browser-credentials.json` file with mode 0600.
+- Split the original combined worker into `short,default` and `long` workers.
+  Both use the pinned Harness environment. Topology reports one browser worker
+  and one agent worker.
+- Reused Node 24.12.0, Playwright 1.58.2, and Chromium 145.0.7632.6.
+- Added an app-owned, development-only managed browser smoke suite and guide.
+  It checks normal-user React and Desk access at desktop/mobile sizes.
+- The stricter smoke also checks an authenticated Socket.IO namespace over
+  WebSocket, through the frontend origin.
+
+Two runtime details needed correction:
+
+1. Export `FRAPPE_BENCH_ROOT` as well as `PYTHONPATH`. The earlier preflight
+   checked the source Bench queue namespace, which explains its missing-worker
+   result. The actual isolated worker initially consumed all three queues.
+2. Set isolated common config `webserver_host=127.0.0.1`, with port 34341.
+   Socket.IO otherwise calls the browser loopback host, where the backend does
+   not listen. Restart only the isolated Socket.IO service after this change.
+
+Browser run history:
+
+- `BQA-2026-00059`: all four browser assertions passed. The durable result failed
+  because the new suite had eight new screenshot baselines.
+- `BQA-2026-00060`: all four scenarios passed and established the reviewed
+  initial runtime-smoke baseline.
+- `BQA-2026-00061` and `BQA-2026-00062`: React and Desk authentication worked.
+  The added WebSocket checks exposed the callback-host problem. Run 62 also
+  overlapped the Socket.IO restart. These failed runs remain recorded.
+- `BQA-2026-00063`: strict repeat passed 4/4, with zero failures, flakes, or
+  screenshot baseline changes. Authenticated WebSocket checks passed. Captures
+  and their hashes are under `qa/evidence/content-runtime/`.
+
+Windows unique-host forwarding was attempted. Windows reported canceled
+administrative elevation. No forwarding success is claimed. The managed WSL
+browser can reach the isolated frontend directly.
+
+No business or showcase data was seeded during bootstrap. No schema migration
+was needed. These smoke captures do not approve Phase 4 public content surfaces.
+The public template, content, mode, and viewport acceptance matrix remains open.

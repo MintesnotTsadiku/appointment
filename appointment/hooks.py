@@ -373,3 +373,6 @@ has_permission["Blog Post"] = "appointment.content.access.blog_post_permission"
 has_permission["Newsletter"] = "appointment.content.access.newsletter_permission"
 has_permission["Published Content Release"] = "appointment.content.access.published_content_release_permission"
 has_permission["Gallery Collection"] = "appointment.content.access.gallery_collection_permission"
+
+# App-owned managed browser validation, restricted to the isolated content site.
+agent_plane_browser_qa_suites = ["appointment.tests.content_browser_suite.suites"]
