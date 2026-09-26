@@ -9,7 +9,7 @@ import frappe
 
 from appointment.content import entitlements, tenancy
 from appointment.public_experience import brand_compiler, publisher
-from appointment.public_experience.errors import StaleDraftError
+from appointment.public_experience.errors import BrandExperienceError, StaleDraftError
 from appointment.public_experience.recipes import get_recipe, list_recipes
 
 STEPS = ("template", "brand", "content", "features", "readiness", "published", "skipped")
@@ -141,6 +141,33 @@ def publish(site, expected_version):
     doc.website_setup_json = json.dumps(setup)
     doc.save()
     return {**state(doc), "release": release.name}
+
+
+def readiness(site, expected_version):
+    """Validate the same draft that the guided publisher will compile."""
+    doc = _locked_site(site, expected_version)
+    checks = []
+    try:
+        preview(site, expected_version)
+        checks.append({"check": "website_draft", "ok": True, "remediation": None})
+    except (BrandExperienceError, frappe.ValidationError) as error:
+        checks.append({"check": "website_draft", "ok": False, "remediation": str(error)})
+    business = frappe.get_doc(doc.owner_type, doc.organization or doc.provider)
+    if doc.organization:
+        from appointment.scheduler import workspace
+
+        offerings = [row for row in workspace.overview() if row["organization"] == doc.organization]
+        booking_ready = bool(business.enable_public_booking and any(row["published"] for row in offerings))
+    else:
+        booking_ready = bool(frappe.db.exists("EventType", {"provider": doc.provider, "is_active": 1}))
+    checks.append({"check": "booking", "ok": booking_ready,
+                   "remediation": None if booking_ready else "Create and publish an appointment offering in Business settings."})
+    for capability in json.loads(doc.website_setup_json or "{}").get("features", []):
+        entitlement = entitlements.resolve_entitlement(doc.owner_type, doc.organization, doc.provider, capability)
+        active = bool(entitlement and entitlement["active"])
+        checks.append({"check": capability, "ok": active,
+                       "remediation": None if active else "Restore this website feature before publishing."})
+    return {"ready": all(check["ok"] for check in checks), "checks": checks}
 
 
 def preview(site, expected_version):

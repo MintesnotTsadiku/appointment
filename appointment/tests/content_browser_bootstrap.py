@@ -161,7 +161,7 @@ def export_website(name):
         target = destination / source.name
         shutil.copyfile(source, target)
         inventory.append({'file': source.name, 'sha256': hashlib.sha256(target.read_bytes()).hexdigest()})
-    if len(inventory) != 11:
+    if len(inventory) != 13:
         raise RuntimeError('Website journey screenshot inventory is incomplete')
     result = {'run': name, 'status': doc.status, 'source_version': doc.source_version,
         'scenario_summary': json.loads(doc.scenario_summary_json or '{}'),

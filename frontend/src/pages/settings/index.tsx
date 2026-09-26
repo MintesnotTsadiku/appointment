@@ -35,6 +35,14 @@ const Settings = () => {
   // Settings categories
   const categories: SettingsCategory[] = [
     {
+      id: 'organization-import',
+      title: 'Organization workbook',
+      description: 'Review and import locations, staff, services and website content',
+      icon: Building2,
+      route: '/settings/organization-import',
+      gradient: 'primary',
+    },
+    {
       id: 'website',
       title: 'Website setup',
       description: 'Create, preview and publish your business website',

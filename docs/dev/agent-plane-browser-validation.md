@@ -57,3 +57,20 @@ plan. Keep captures and comparisons under `qa/evidence/`.
 For a new suite, review its captures before establishing the first baseline.
 Use `enqueue_smoke(update_baseline=1)` only for reviewed baseline changes.
 Repeat without that flag to prove the strict comparison passes.
+
+## Owner website and workbook journey
+
+Submit `enqueue_smoke` with `--kwargs '{"suite":"website-setup"}'`. This suite
+uses the same normal owner account, creates a business through the onboarding
+UI, publishes a website and content, then corrects and confirms a workbook.
+The temporary workbook files contain only the synthetic business and browser
+owner email. Cleanup removes the exact fixture records and temporary files.
+
+Review new captures before updating a baseline. Require a passing strict repeat
+with zero baseline changes. Export it with `export_website`, using the returned
+run name. The current suite retains thirteen captures. It is one organization
+owner with Tena, not the complete five-template or fresh-site acceptance matrix.
+
+The isolated site's `brand_public_experience_platform_hosts` must allow its site
+hostname and `127.0.0.11`. This is separate from Browser Account allowed domains;
+without it, a public website through Vite returns unavailable even after publish.

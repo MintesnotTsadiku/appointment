@@ -2,6 +2,7 @@
 
 import json
 from pathlib import Path
+import tempfile
 
 import frappe
 
@@ -15,11 +16,32 @@ class WebsiteBrowserFixture:
         marker = "WQA-websiteacceptance"
         if frappe.db.exists("Organization", {"organization_name": marker}) or frappe.db.exists("Public Site", {"slug": marker.lower()}):
             return {"ok": False, "error": "The acceptance identity already exists; preserve it and investigate.", "fixture_identity": {}}
-        return {"ok": True, "fixture_identity": {"marker": marker, "user": USER, "site": SITE}}
+        directory = tempfile.mkdtemp(prefix="appointment-workbook-qa-")
+        return {"ok": True, "fixture_identity": {"marker": marker, "user": USER, "site": SITE, "workbook_directory": directory}}
 
     def provide_execution_context(self, *, fixture_identity, request):
+        from io import BytesIO
+        from openpyxl import load_workbook
+        from appointment.organization_import.workbook import template
+
         source = Path(frappe.get_app_path("appointment")) / "public/brand-experience/support/tena/scene-1.webp"
-        return {"environment": {"WEBSITE_QA_MARKER": fixture_identity["marker"], "WEBSITE_QA_IMAGE": str(source)}}
+        directory = Path(fixture_identity["workbook_directory"])
+        book = load_workbook(BytesIO(template()))
+        book["Organization"].append(["clinic", fixture_identity["marker"], "Africa/Addis_Ababa", USER])
+        book["Providers"].append(["owner", "Workbook owner", USER, "Synthetic owner"])
+        book["Team"].append(["owner", USER, "Workbook owner", "Provider", "owner", "main,branch"])
+        for key, label in (("main", "Workbook main"), ("branch", "Workbook branch")):
+            book["Locations"].append([key, label, "Africa/Addis_Ababa", "Synthetic address", ""])
+            book["Availability"].append([key + "-mon", key, "Monday", "09:00", "17:00", "Africa/Addis_Ababa"])
+            book["Services"].append([key + "-visit", label + " consultation", 30, 0, key, "owner", 1, 0])
+        valid = directory / "valid.xlsx"
+        invalid = directory / "invalid.xlsx"
+        book.save(valid)
+        book["Services"]["C2"] = "not a duration"
+        book.save(invalid)
+        book.close()
+        return {"environment": {"WEBSITE_QA_MARKER": fixture_identity["marker"], "WEBSITE_QA_IMAGE": str(source),
+                                "WEBSITE_QA_WORKBOOK": str(valid), "WEBSITE_QA_BAD_WORKBOOK": str(invalid)}}
 
     def _organizations(self, identity):
         self._require_identity(identity)
@@ -68,18 +90,31 @@ class WebsiteBrowserFixture:
             self._delete("Service", services)
             self._delete("Location", frappe.get_all("Location", filters={"organization": organization}, pluck="name"))
             self._delete("Business Membership", frappe.get_all("Business Membership", filters={"organization": organization}, pluck="name"))
+            self._delete("Organization Workbook Import", frappe.get_all("Organization Workbook Import", filters={"organization": organization}, pluck="name"))
             # The workspace factory labels only its newly created provider with this exact business name.
             providers = frappe.get_all("Provider", filters={"user": USER,
                 "provider_name": ["like", fixture_identity["marker"] + " — %"]}, pluck="name")
             self._delete("Provider", providers)
+            self._delete("Provider", frappe.get_all("Provider", filters={"user": USER,
+                         "provider_name": organization + " — Workbook owner"}, pluck="name"))
             self._delete("Organization", [organization])
         frappe.db.commit()
+        directory = Path(fixture_identity.get("workbook_directory", ""))
+        if directory.parent != Path(tempfile.gettempdir()) or not directory.name.startswith("appointment-workbook-qa-"):
+            raise RuntimeError("Workbook fixture directory is outside the owned temporary scope")
+        for name in ("valid.xlsx", "invalid.xlsx"):
+            (directory / name).unlink(missing_ok=True)
+        directory.rmdir()
         return {"ok": True, "deleted_businesses": len(organizations)}
 
     def audit(self, *, fixture_identity, request):
         remaining = self._organizations(fixture_identity)
         marker = fixture_identity["marker"]
         counts = {"Organization": len(remaining),
+                  "Organization Workbook Import": frappe.db.count("Organization Workbook Import", {"organization": marker}),
+                  "Imported Locations": frappe.db.count("Location", {"organization": marker}),
+                  "Imported Services": frappe.db.count("Service", {"organization": marker}),
+                  "Imported Memberships": frappe.db.count("Business Membership", {"organization": marker}),
                   "Public Site": frappe.db.count("Public Site", {"slug": marker.lower()}),
                   "Brand Profile": frappe.db.count("Brand Profile", {"profile_name": marker}),
                   "Location": frappe.db.count("Location", {"location_name": marker + " Main"}),

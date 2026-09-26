@@ -376,3 +376,8 @@ has_permission["Gallery Collection"] = "appointment.content.access.gallery_colle
 
 # App-owned managed browser validation, restricted to the isolated content site.
 agent_plane_browser_qa_suites = ["appointment.tests.content_browser_suite.suites"]
+
+permission_query_conditions["Organization Workbook Import"] = "appointment.organization_import.access.query"
+has_permission["Organization Workbook Import"] = "appointment.organization_import.access.permission"
+permission_query_conditions["Business Membership"] = "appointment.organization_import.access.membership_query"
+has_permission["Business Membership"] = "appointment.organization_import.access.membership_permission"

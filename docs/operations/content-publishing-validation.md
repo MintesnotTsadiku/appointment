@@ -1,6 +1,6 @@
 # Content publishing, gallery and onboarding — progress and validation
 
-**Status:** Phases 0–3 implemented and verified; Phase 4 full browser acceptance pending; Phase 5 core owner journey implemented, broader acceptance pending; Phases 6–10 pending
+**Status:** Phases 0–3 implemented and verified; Phase 4 full browser acceptance pending; Phase 5 core owner journey implemented, broader acceptance pending; Phase 6 core import in progress; Phases 7–10 pending
 **Date:** 2026-09-26
 **Branch:** `feat/content-publishing-gallery-onboarding`
 **Head at recording:** `6e450cbeb639828db53841f39ae09d66092e35fa`
@@ -280,3 +280,55 @@ and content editing, complete media management and previews, and all Phase
 6–10 exit gates. The existing readiness endpoint requires a published brand;
 the guided flow needs readiness checks for the draft that Publish will compile.
 Newsletter signup remains unavailable until Phase 7.
+
+## Draft readiness and workbook import checkpoint — 2026-09-26
+
+The guided readiness service compiles the draft without creating published brand
+or experience records. It checks booking availability and selected entitlements.
+The save-and-return action saves progress and returns to Home. Backend tests
+passed 9/9. Managed browser run 00081 passed the expanded journey. Run 00082
+caught a new package shadowing the existing `appointment.onboarding` module.
+The package was renamed to `appointment.organization_import`, the isolated
+backend was restarted, and strict repeat 00083 passed with zero visual changes.
+That failure was retained rather than accepted or hidden.
+
+Phase 6 now has the versioned workbook template at
+`docs/import-templates/organization.v1.xlsx`, a bounded parser, authenticated
+review and confirmation APIs, and a Settings import screen. Parsing does not
+write records. It reports sheet and cell errors, validates stable references,
+and rejects formulas, unsupported columns, passwords, macros, external links,
+unsafe XML, duplicate entries, excessive archive expansion, and oversized row
+ranges. XML preflight permits UTF-8 only so alternate encodings cannot hide a
+DTD or entity declaration. `openpyxl~=3.1.5` matches the installed Frappe pin.
+
+Confirmed imports use normal document insert/save permissions and one controlled
+transaction. An immutable Organization Workbook Import audit stores the checksum,
+actor, summary, and stable-key mapping. Exact retries return the prior audit;
+corrected workbooks update mapped records. Missing rows never delete records.
+Location, provider, service, offering, and team records remain business scoped.
+Scoped Organization Manager membership DocPerms and controller validation allow
+normal owner assignment without granting access to another business. Role
+assignment still uses the existing trusted membership service.
+
+Validation:
+
+- Workbook parser: 10/10 tests passed, including alternate-encoding entities.
+- Normal-owner confirmation: 6/6 tests passed for two locations, retry,
+  correction, explicit confirmation, hash binding, isolation, audit protection,
+  and rollback after a failed application.
+- Entitlement regressions: 13/13; website setup: 9/9.
+- Focused frontend lint and direct production Vite build passed.
+- Full app TypeScript checking still reports 273 existing errors, with no errors
+  in the new website or workbook screens.
+- A site-scoped migrate applied the new audit DocType and membership DocPerms.
+- Managed browser run 00090 passed the owner journey plus workbook cell
+  correction, confirmation, and duplicate-free retry. Two new workbook captures
+  were reviewed. Strict repeat 00091 passed with zero failed or flaky scenarios,
+  zero visual changes, and zero remaining fixture records. Its thirteen captures
+  and audit are retained under `qa/evidence/website-setup/`.
+
+Phase 6 is not complete: the UI currently imports into an existing owned
+organization, staff must already have enabled accounts, and capacity is limited
+to individual appointments. Invitation acceptance, direct new-organization
+creation from a workbook, full website-text dry-run validation, and broader
+large-file/performance acceptance remain. Phases 7–10 are still pending.

@@ -1,5 +1,5 @@
 import { useEffect, useState, type CSSProperties } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { callGet, callMethod } from "@/public-experience/api";
 import { buildThemeAttributes } from "@/public-experience/firstPaint";
@@ -24,6 +24,7 @@ const steps = ["brand", "content", "features", "readiness"];
 const api = "appointment.public_experience.api.";
 
 export default function WebsiteSetup() {
+  const navigate = useNavigate();
   const [context, setContext] = useState<Context>({ owners: [], catalog: [], sites: [] });
   const [owner, setOwner] = useState("");
   const [industry, setIndustry] = useState("");
@@ -117,10 +118,10 @@ export default function WebsiteSetup() {
         {step === "content" && sections.map((row, index) => <fieldset key={row.type} className="space-y-3 rounded-xl border p-4"><legend>{row.type.replace(/_/g, " ")}</legend>{["title", "subtitle", "body"].filter((key) => row.content[key]).map((key) => <label className="block" key={key}>{key}<textarea className={field} value={String((row.content[key] as Record<string, string>)?.en || "")} onChange={(event) => editText(index, key, event.target.value)} /></label>)}{Array.isArray(row.content.items) && <p>{row.content.items.length} items from your business profile. Add factual details before publication.</p>}</fieldset>)}
         {step === "features" && <fieldset><legend>Website features</legend>{["blog", "gallery", "newsletter"].map((value) => <label key={value} className="block p-2"><input type="checkbox" checked={features.includes(value)} disabled={!site.capabilities.some((row) => row.capability === value && row.active)} onChange={(event) => setFeatures((current) => event.target.checked ? [...current, value] : current.filter((item) => item !== value))} /> {value}</label>)}</fieldset>}
         {(step === "readiness" || step === "published") && <><button className={button} disabled={busy} onClick={() => void run(async () => {
-          const result = await callGet<{ checks: typeof readiness }>(api + "site_readiness", { site: site.site }); setReadiness(result.checks);
+          const result = await callMethod<{ checks: typeof readiness }>(api + "website_setup_readiness", { site: site.site, expected_version: site.draftVersion }); setReadiness(result.checks);
         })}>Check readiness</button><ul>{readiness.map((row) => <li key={row.check}>{row.ok ? "Ready" : "Needs attention"}: {row.check.replace(/_/g, " ")} {row.remediation}</li>)}</ul><button className={button} disabled={busy} onClick={() => void run(async () => { adopt(await callMethod<Website>(api + "publish_website_setup", { site: site.site, expected_version: site.draftVersion })); setNotice("Your website is published."); })}>Publish website</button></>}
       </section>
-      <div className="flex flex-wrap gap-3"><button className={button} disabled={busy} onClick={() => void run(() => save(step))}>Save draft</button><button className={button} disabled={busy} onClick={() => void run(async () => { await save(step); })}>Save and return later</button><button className={button} disabled={busy} onClick={() => void run(async () => { setSnapshot(await callMethod<PublishedSnapshot>(api + "preview_website_setup", { site: site.site, expected_version: site.draftVersion })); })}>Live preview of saved draft</button><Link className={button} to="/settings/public-experience">Publication history and brand settings</Link></div>
+      <div className="flex flex-wrap gap-3"><button className={button} disabled={busy} onClick={() => void run(() => save(step))}>Save draft</button><button className={button} disabled={busy} onClick={() => void run(async () => { await save(step); navigate("/home"); })}>Save and return later</button><button className={button} disabled={busy} onClick={() => void run(async () => { setSnapshot(await callMethod<PublishedSnapshot>(api + "preview_website_setup", { site: site.site, expected_version: site.draftVersion })); })}>Live preview of saved draft</button><Link className={button} to="/settings/public-experience">Publication history and brand settings</Link></div>
     </>}
     {snapshot && template && theme && <section aria-label="Website live preview"><div className="flex flex-wrap gap-3"><button className={button} onClick={() => setMode(mode === "light" ? "dark" : "light")}>Preview {mode === "light" ? "dark" : "light"} mode</button><button className={button} onClick={() => setMobile(!mobile)}>Preview {mobile ? "desktop" : "mobile"}</button><label>Surface<select className={field} value={surface} onChange={(event) => setSurface(event.target.value)}><option value="landing">Landing page</option><option value="booking">Booking handoff</option></select></label></div><div className="mx-auto mt-4 overflow-auto border" style={{ maxWidth: mobile ? 390 : undefined, maxHeight: 750 }}>{surface === "landing" ? <template.Site snapshot={snapshot} locale="en" applicationName={snapshot.compiledDesign.identity.applicationName} publicRoot={site?.url || "/website-preview"} mode={mode} toggleMode={() => setMode(mode === "light" ? "dark" : "light")} rootStyle={theme.variables as CSSProperties} /> : <template.Booking snapshot={snapshot} locale="en" applicationName={snapshot.compiledDesign.identity.applicationName} publicRoot={site?.url || "/website-preview"} mode={mode} toggleMode={() => setMode(mode === "light" ? "dark" : "light")} rootStyle={theme.variables as CSSProperties} bookingPath={null} />}</div></section>}
   </main>;

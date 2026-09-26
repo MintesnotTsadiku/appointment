@@ -103,6 +103,7 @@
  "name": "Business Membership",
  "owner": "Administrator",
  "permissions": [
+  {"role": "Organization Manager", "create": 1, "read": 1, "write": 1, "report": 1},
   {
    "create": 1,
    "delete": 1,

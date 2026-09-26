@@ -66,6 +66,16 @@ class WebsiteSetupTests(unittest.TestCase):
             self.assertTrue(recipe["thumbnail"].startswith("/assets/appointment/"))
         self.assertEqual(frappe.db.count("Public Site", {"organization": owner}), before)
 
+    def test_readiness_compiles_unpublished_brand_and_reports_booking_fix(self):
+        draft = self.start()
+        result = setup.readiness(draft["site"], draft["draftVersion"])
+        checks = {row["check"]: row for row in result["checks"]}
+        self.assertTrue(checks["website_draft"]["ok"])
+        self.assertFalse(checks["booking"]["ok"])
+        self.assertIn("Business settings", checks["booking"]["remediation"])
+        self.assertFalse(frappe.db.get_value("Brand Profile", draft["profile"], "active_revision"))
+        self.assertEqual(frappe.db.count("Experience Release", {"public_site": draft["site"]}), 0)
+
     def test_foreign_owner_cannot_resume_save_preview_or_publish(self):
         draft = self.start()
         frappe.set_user(self.fixture["owners"]["B"])

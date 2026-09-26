@@ -1,7 +1,7 @@
 {
-  "run": "BQA-2026-00080",
+  "run": "BQA-2026-00091",
   "status": "Passed",
-  "source_version": "94bd96d+source-290ed4e2eef4+qa-46ecb0f42590",
+  "source_version": "9791022+source-ee4f3a4e5d75+qa-b6c65203869a",
   "scenario_summary": {
     "failed": 0,
     "flaky": 0,
@@ -19,8 +19,12 @@
     "remaining": {
       "Blog Post": 0,
       "Brand Profile": 0,
+      "Imported Locations": 0,
+      "Imported Memberships": 0,
+      "Imported Services": 0,
       "Location": 0,
       "Organization": 0,
+      "Organization Workbook Import": 0,
       "Provider": 0,
       "Public Site": 0,
       "Service": 0
@@ -69,15 +73,23 @@
     },
     {
       "file": "website-preview-desktop.png",
-      "sha256": "52311f85f3eb8a543b51de64cb71bf2530c55c31434a350d9c931bf403702f0e"
+      "sha256": "77a6d4340bceaf5709c4d44d6fb52d812359724bacc307071c2ba551d820f553"
     },
     {
       "file": "website-published-desktop.png",
-      "sha256": "e2d55a9d0750f84917e93ed444695f82cd3dc6d03b90013264430964dd2da463"
+      "sha256": "13c56fcd7eb7a856e0f3d516d69326b72f167d0f4f459b5fc7521769ff2117a6"
     },
     {
       "file": "website-published-mobile.png",
-      "sha256": "1e558f5d7a5386d1611d9307395cb58b48a0a8b0b3160e59650db01062e62459"
+      "sha256": "ab8a57b2a890e714129ef59264d54b1ca740d5dde5362ca278ba5043651e76c6"
+    },
+    {
+      "file": "website-workbook-applied.png",
+      "sha256": "44236f125f42c9a443bdd28b3d86af6e8325da4489d83b92b52191b639732566"
+    },
+    {
+      "file": "website-workbook-correction.png",
+      "sha256": "73107af11cbf8f009d46dd05c6d355dafa891126758a757fc89048861e2289f2"
     }
   ],
   "scope": "One normal organization owner and the Tena template only. Full Phase 4/5 and Phases 6-10 are not accepted."

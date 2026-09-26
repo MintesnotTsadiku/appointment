@@ -60,6 +60,13 @@ def preview_website_setup(site: str, expected_version: int):
 
 
 @frappe.whitelist(methods=["POST"])
+def website_setup_readiness(site: str, expected_version: int):
+    from appointment.public_experience import setup
+
+    return setup.readiness(site, expected_version)
+
+
+@frappe.whitelist(methods=["POST"])
 def publish_website_setup(site: str, expected_version: int):
     from appointment.public_experience import setup
 
