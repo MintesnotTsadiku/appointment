@@ -1,12 +1,21 @@
 """Keep published media available throughout publication history."""
 
 import json
+from contextlib import contextmanager
 
 import frappe
 from frappe import _
 
 
 class WebsiteFile:
+    def before_insert(self):
+        if (self.attached_to_doctype == "Public Site" and frappe.session.user != "Administrator"
+                and (not self.attached_to_name
+                     or frappe.flags.appointment_website_image_upload_site != self.attached_to_name)):
+            frappe.throw(_("Use the website image upload controls and confirm public display consent."),
+                         frappe.PermissionError)
+        super().before_insert()
+
     def validate(self):
         validate(self)
         super().validate()
@@ -14,6 +23,16 @@ class WebsiteFile:
     def on_trash(self):
         on_trash(self)
         super().on_trash()
+
+
+@contextmanager
+def permit_upload(site):
+    previous = frappe.flags.appointment_website_image_upload_site
+    frappe.flags.appointment_website_image_upload_site = site
+    try:
+        yield
+    finally:
+        frappe.flags.appointment_website_image_upload_site = previous
 
 
 def governed_file(doc):

@@ -117,12 +117,12 @@ for (const key of ["selam", "bloom", "meron", "abugida", "tena"]) {
           await writeFile(testInfo.outputPath(`${key}-${width}-${mode}-gates.json`), JSON.stringify({
             engine: "axe-core 4.11.0", viewport: width, mode, scope: "Automated WCAG A/AA checks, keyboard traversal, and local compiled-production navigation budget; manual accessibility review remains separate.", reports,
           }, null, 2));
-          expect(audit.violations, `${key} ${surface} accessibility`).toEqual([]);
-          expect(audit.externalResources, `${key} ${surface} external resource requests`).toEqual([]);
-          expect(audit.navigationMs, `${key} ${surface} local DOM load budget`).toBeLessThan(15000);
-          expect(audit.lcpMs, `${key} ${surface} local largest paint budget`).toBeGreaterThan(0);
-          expect(audit.lcpMs, `${key} ${surface} local largest paint budget`).toBeLessThan(2500);
-          expect(audit.cls, `${key} ${surface} local layout stability budget`).toBeLessThanOrEqual(0.1);
+          expect.soft(audit.violations, `${key} ${surface} accessibility`).toEqual([]);
+          expect.soft(audit.externalResources, `${key} ${surface} external resource requests`).toEqual([]);
+          expect.soft(audit.navigationMs, `${key} ${surface} local DOM load budget`).toBeLessThan(15000);
+          expect.soft(audit.lcpMs, `${key} ${surface} local largest paint budget`).toBeGreaterThan(0);
+          expect.soft(audit.lcpMs, `${key} ${surface} local largest paint budget`).toBeLessThan(2500);
+          expect.soft(audit.cls, `${key} ${surface} local layout stability budget`).toBeLessThanOrEqual(0.1);
         }
         await page.keyboard.press("Tab");
         expect(await page.evaluate(() => document.activeElement?.tagName !== "BODY")).toBe(true);

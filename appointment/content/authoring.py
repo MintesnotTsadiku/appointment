@@ -90,8 +90,11 @@ def upload_image(site, content_base64, public_consent):
     ceiling = entitlements.effective_limits(doc.owner_type, doc.organization, doc.provider, "gallery").get("storage_mb")
     if ceiling is not None and sum(int(row.file_size or 0) for row in files) + len(sanitized) > int(ceiling) * 1024 * 1024:
         frappe.throw("The image would exceed your gallery storage limit.")
-    file = save_file("gallery-" + frappe.generate_hash(length=16) + "." + extension, sanitized,
-                     "Public Site", site, is_private=0)
+    from appointment.content.media_access import permit_upload
+
+    with permit_upload(site):
+        file = save_file("gallery-" + frappe.generate_hash(length=16) + "." + extension, sanitized,
+                         "Public Site", site, is_private=0)
     return {"name": file.name, "url": file.file_url}
 
 

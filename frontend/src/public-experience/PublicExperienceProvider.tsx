@@ -60,7 +60,11 @@ export const PublicExperienceProvider = ({
     let active = true;
     setLoading(true);
     fetchPublicConfig(locale)
-      .then((next) => {
+      .then(async (next) => {
+        if (typeof document !== "undefined" && document.fonts) {
+          await Promise.allSettled(Object.values(next.compiledDesign.typography.roles).map(role =>
+            document.fonts.load(`${role.weight} 16px ${JSON.stringify(role.family)}`)));
+        }
         if (!active) return;
         setConfig(next);
         setError(null);

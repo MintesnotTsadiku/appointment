@@ -192,6 +192,15 @@ class GalleryAcceptance(unittest.TestCase):
                 validate(candidate)
         self.assertTrue(Path(file.get_full_path()).is_file())
 
+    def test_generic_website_file_insert_cannot_skip_governed_upload(self):
+        frappe.set_user(self.state["owners"]["A"])
+        with self.assertRaises(frappe.PermissionError):
+            frappe.get_doc({"doctype": "File", "file_name": "inert-image-policy-probe.html",
+                            "attached_to_doctype": "Public Site", "attached_to_name": self.state["sites"]["A"],
+                            "is_private": 0, "content": _png_bytes((15, 25, 35)),
+                            "flags": {"appointment_website_image_upload_site": self.state["sites"]["A"]}}).insert(ignore_permissions=True)
+        frappe.set_user("Administrator")
+
     def test_published_image_delete_is_denied_after_withdrawal(self):
         collection = self._collection()
         ownership = self._ownership(collection)

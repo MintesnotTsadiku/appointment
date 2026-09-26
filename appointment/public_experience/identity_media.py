@@ -38,8 +38,11 @@ def upload(site, expected_version, kind, content_base64, public_consent):
     from frappe.utils.file_manager import save_file
 
     extension = {"image/png": "png", "image/jpeg": "jpg", "image/webp": "webp"}[mime]
-    file = save_file("identity-" + frappe.generate_hash(length=16) + "." + extension,
-                     sanitized, "Public Site", site, is_private=0)
+    from appointment.content.media_access import permit_upload
+
+    with permit_upload(site):
+        file = save_file("identity-" + frappe.generate_hash(length=16) + "." + extension,
+                         sanitized, "Public Site", site, is_private=0)
     profile = frappe.get_doc("Brand Profile", doc.brand_profile)
     profile.set(kind, file.file_url)
     profile.save()

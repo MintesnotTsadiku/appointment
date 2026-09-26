@@ -796,3 +796,24 @@ ring. Initial production measurements were below one second for Selam's largest
 paint with layout movement below 0.004. These partial measurements are not final
 acceptance. Cooperative cancellation of `00155` ended with an upstream Browser
 QA timestamp-conflict error; that run is not retained as passing evidence.
+
+Production audit `00156` found layout movement above 0.1 while fetched headings,
+content, and signup replaced the loading state. Each template now keeps its main
+content and footer in its own loading treatment until the release is ready.
+Gallery covers reserve decoded dimensions when they match a collection image.
+Approved local fonts load before the provider exposes the public configuration.
+The scheduler focus check also found controls with no outline or shadow; its
+release-scoped focus rule now defines the complete ring, not only its color.
+The thresholds remain unchanged. Soft assertions collect all surface findings
+but still fail a run with any violation or exceeded budget.
+
+A scoped safety probe confirmed that a normal owner could create a Public Site
+File with inert PNG bytes named as HTML, bypassing governed uploads. It created
+no executable content and removed all its exact fixtures. New website attachments
+now require the server's request-scoped upload context. Gallery and identity
+services enter that context only after scope, consent, decoding, and quota checks.
+Client document flags cannot grant it. Sixteen gallery tests passed, including
+a forged-flag and ignore-permissions attempt; the website suite passed twelve.
+Frontend DOM checks passed and focused content/provider lint reported zero errors.
+The production and final normal-owner upload journeys must be repeated after these
+fixes before completion.
