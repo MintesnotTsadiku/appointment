@@ -890,3 +890,72 @@ service selector still contains its pre-existing `ringColor` style diagnostic;
 that property is identical at the Phase 0–3 checkpoint. No new diagnostic was
 introduced by the content changes. Earlier unrelated reception lint failures
 remain recorded separately.
+
+## Final production public acceptance
+
+Source `4918e47` has no uncommitted application changes. Strict template run
+`BQA-2026-00164` passed twenty scenarios, zero flaky or failed cases, and zero
+baseline changes. It retained 280 screenshots for all five certified templates,
+desktop/mobile, light/dark, and all fourteen public/empty/unavailable surfaces.
+Checksums are in `qa/evidence/content-templates/validation.json`. The source and
+browser comparison is `qa/evidence/content-design-review/comparison.html`.
+All comparison links resolve to retained boards, captures, and reports.
+
+Native review covered the five desktop landing and scheduler layouts, Selam's
+corrected desktop/mobile team spacing, mobile dark gallery and collection layouts,
+Abugida's article, and Tena's mobile scheduler. Captions, consent copy, clamped
+service descriptions, card badges, and booking labels remain within their own
+layout. The existing seventy-surface color and focus review remains applicable;
+the subsequent Selam spacing correction has its four-combination rendered-text
+bounds assertion in the accepted matrix.
+
+Strict production run `BQA-2026-00165` also passed with zero baseline changes.
+Its retained report qualifies actual compiled Frappe HTML, script nonces, guest
+isolation, root service-worker control, private request denial, and exact legacy
+cache removal. It changed no publication inventory. The showcase integrity check
+still reports valid release hashes, 160 owned journal records, three articles and
+two collections per template, and zero external sends.
+
+Fresh C run `04034` passed the complete normal-owner journey. Its strict comparison
+found two changed private example-cover crops. Native before/after review and the
+`a1710af` diff traced both to reserved cover dimensions, introduced after the
+previous fresh-site acceptance. Text, controls, and identity were unchanged.
+Baseline run `04038` passed with exactly those two reviewed changes. No application
+change or tolerance adjustment was made. A complete strict repeat is required.
+
+## Final fresh-site normal-owner acceptance
+
+Strict Fresh C run `BQA-2026-04042` passed the complete 39-capture journey with
+zero baseline changes, failed cases, or flaky cases. Source is `4918e47`.
+All 24 audit counters are zero after exact cleanup. The retained account has
+Provider and Organization Manager, with no Administrator or System Manager role.
+Managed staff acceptance, role/location scope, second-business isolation, nine
+cross-business denials, five expired-capability denials, enforced limits, and
+immutable release preservation are recorded in the approved proof files.
+Workbook error review, confirmation and idempotent retry, governed identity and
+gallery uploads, private previews, publication and rollback, verified local
+newsletter capture, guest unsubscribe, and suppression passed through the UI.
+The separate Fresh C independent-owner run `04009` remains retained and passed
+before the organization journey. No showcase seeder populated Fresh C.
+Evidence: `qa/evidence/fresh-site/meet-beta-content-fresh-c.localhost/`.
+
+## Production recovery CSRF correction
+
+Restored candidate run `03003` loaded the fifteen website/content routes and
+actual media, but guest unsubscribe returned Frappe's `Invalid Request`.
+The domain audit failed because consent did not change; its generic residue
+label reported zero residual records. This failed run is not acceptance.
+Production HTML creates a CSRF token, while the public POST helper omitted its
+header. The helper now sends the existing session token for state-changing
+requests. CSRF protection, token checks, and consent rules remain enabled.
+The recovery browser also checks the POST succeeds and carries that exact token
+without retaining the token in its public report.
+
+The maintained rollback revision is `1ae60d37c95ba50d81e3b7e7a00af44f7585d22a`,
+parent `ef9c42a`. Its sole changed file backports the same CSRF-header correction.
+It is preserved at `refs/qa/content-publishing-rollback` and will be archived and
+built exactly. The original unpatched rollback revision cannot pass production
+unsubscribe and is not an accepted fallback. No checkout, index, database,
+subscriber token, or media was reset or repaired. Frontend focused lint and all
+twelve DOM contract groups passed; a new compiled build and recovery repeat are
+required before qualification.

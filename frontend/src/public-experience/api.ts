@@ -77,10 +77,12 @@ export async function callGet<T>(method: string, params?: Record<string, string 
 }
 
 export async function callMethod<T>(method: string, payload?: Record<string, unknown>): Promise<T> {
+  const csrfToken = window.frappe?.csrf_token;
   const response = await fetch("/api/method/" + method, {
     method: payload ? "POST" : "GET",
     credentials: "same-origin",
-    headers: { Accept: "application/json", "Content-Type": "application/json" },
+    headers: { Accept: "application/json", "Content-Type": "application/json",
+      ...(payload && csrfToken ? { "X-Frappe-CSRF-Token": csrfToken } : {}) },
     body: payload ? JSON.stringify(payload) : undefined,
   });
   const body = (await response.json()) as unknown;

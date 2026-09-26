@@ -10,7 +10,7 @@ import tarfile
 
 from appointment.tests.content_fresh_site import CHECKOUT, RESTORE_SITE, RUNTIME, SESSION
 
-ROLLBACK_REF = "ef9c42a"
+ROLLBACK_REF = "1ae60d3"
 DIRECTORY = RUNTIME / "code-drill"
 STATE = DIRECTORY / "launch-state.json"
 

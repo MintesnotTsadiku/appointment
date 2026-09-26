@@ -27,7 +27,12 @@ test("recovered-public-routes-and-consent", async ({ browser }, testInfo) => {
       }
     }
     await page.goto(process.env.RECOVERY_QA_UNSUBSCRIBE_PATH, { waitUntil: "networkidle" });
+    const preferenceResponse = page.waitForResponse(response => response.url().endsWith("/api/method/appointment.content.newsletter.public_api.unsubscribe") && response.request().method() === "POST");
     await page.getByRole("button", { name: "Unsubscribe from newsletter", exact: true }).click();
+    const response = await preferenceResponse;
+    expect(response.ok()).toBe(true);
+    const sentToken = response.request().headers()["x-frappe-csrf-token"];
+    expect(Boolean(sentToken) && await page.evaluate(value => value === window.frappe?.csrf_token, sentToken)).toBe(true);
     await expect(page.getByRole("status")).toContainText("unsubscribed");
     await page.screenshot({ path: testInfo.outputPath("recovered-guest-unsubscribe.png"), fullPage: true, animations: "disabled" });
   } finally { await context.close(); }
