@@ -17,14 +17,16 @@ export function bookingBrandVariables(config: PublicUIConfig, mode: BookingMode)
   const primary = value("primary", "#713b2e");
   const accent = value("accent", primary);
   const success = value("success", "#247553");
+  // Translucent cards can overlap the shell's decorative pattern.
+  const secondaryText = `color-mix(in srgb, ${value("text", "#111827")} 35%, ${value("textMuted", "#4b5563")})`;
   return {
     "--bg-primary": value("canvas", "#ffffff"),
     "--bg-secondary": value("surfaceMuted", "#f7f7f7"),
     "--bg-tertiary": value("surfaceStrong", "#eeeeee"),
     "--bg-elevated": value("surface", "#ffffff"),
     "--text-primary": value("text", "#111827"),
-    "--text-secondary": value("textMuted", "#4b5563"),
-    "--text-muted": value("textMuted", "#6b7280"),
+    "--text-secondary": secondaryText,
+    "--text-muted": secondaryText,
     "--text-subtle": value("disabled", "#9ca3af"),
     "--border-subtle": `color-mix(in srgb, ${value("border", "#e5e7eb")} 45%, transparent)`,
     "--border-default": value("border", "#e5e7eb"),

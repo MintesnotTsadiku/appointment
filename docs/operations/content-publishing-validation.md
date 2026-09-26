@@ -827,3 +827,15 @@ Four scheduler focus checks read the first frame of an animated ring; their
 screenshots showed the ring. The check now waits up to one second for that actual
 visible outline or shadow, then records its computed style. The focus requirement
 and performance thresholds are unchanged. This failed run is not acceptance.
+
+Production run `00158` passed ten scenarios and all seventy surface audits.
+It reported zero automated violations and zero layout shift, with largest paints
+between 164 and 836 milliseconds on this local compiled runtime. It also passed
+keyboard traversal. These results do not resolve the audit's manual findings.
+Rendered-style review found muted scheduler text below 4.5 against overlapping
+translucent cards and patterns, a light-blue footer link on light canvases, and
+white avatar initials on bright gradients. Selam's small hero note used a weaker
+hard-coded color. The scheduler now strengthens secondary text, uses the approved
+primary/on-primary pair for action backgrounds, and underlines its branded footer
+link with the main text color. Selam's note uses its own muted-text token.
+These corrections require a fresh production audit and reviewed template baseline.
