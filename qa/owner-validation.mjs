@@ -75,6 +75,7 @@ export async function businessIsolation(page, second, testInfo, marker) {
   await expect(second.getByRole("button", { name: "Save draft", exact: true })).toBeVisible();
   await second.getByRole("button", { name: "features", exact: true }).click();
   await second.getByLabel("blog", { exact: true }).check();
+  await second.getByRole("button", { name: "readiness", exact: true }).click();
   await second.getByRole("button", { name: "Publish website", exact: true }).click();
   await expect(second.getByRole("status")).toContainText("published");
   await second.goto("/settings/website/content", { waitUntil: "networkidle" });

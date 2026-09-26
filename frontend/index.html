@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <script>
+    <script nonce="{{ content_shell_nonce }}">
       // Apply the same preference before CSS and React paint the page.
       try {
         var theme = localStorage.getItem('vite-ui-theme') || 'system';
@@ -45,7 +45,7 @@
   </head>
   <body>
     <div id="root"></div>
-    <script data-frappe-boot>
+    <script data-frappe-boot nonce="{{ content_shell_nonce }}">
       // Load everything from the page context to window object
       // This will allow us to access frappe boot in our react app.
       // CRITICAL FIX: Safe offline handling - check if Frappe boot data exists

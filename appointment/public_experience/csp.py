@@ -22,6 +22,15 @@ def generate_nonce() -> str:
     return secrets.token_urlsafe(16)
 
 
+def shell_nonce() -> str:
+    """Keep the HTML nonce and its response policy identical for this request."""
+    import frappe
+
+    nonce = generate_nonce()
+    frappe.local.content_shell_nonce = nonce
+    return nonce
+
+
 def build_csp(nonce: str | None = None) -> str:
     script = "script-src 'self'" + (f" 'nonce-{nonce}'" if nonce else "")
     return (
@@ -57,6 +66,17 @@ def after_request(response=None, request=None):
     if response is None or request is None:
         return response
     path = getattr(request, "path", "") or ""
+    import frappe
+
+    nonce = getattr(frappe.local, "content_shell_nonce", None)
+    if nonce and getattr(response, "mimetype", None) == "text/html":
+        private = (frappe.session.user != "Guest" or path.startswith(("/newsletter/", "/team/invitation/", "/login", "/signup", "/settings", "/calendar")))
+        headers = security_headers(nonce, preview=private)
+        if path.startswith(("/newsletter/", "/team/invitation/")):
+            headers["Referrer-Policy"] = "no-referrer"
+        for key, value in headers.items():
+            response.headers[key] = value
+        return response
     token_page = path.startswith(("/newsletter/", "/team/invitation/"))
     if not token_page and not path.startswith(API_PREFIXES):
         return response

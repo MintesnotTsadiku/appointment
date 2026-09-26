@@ -94,11 +94,11 @@ export function isAllowedDestination(path: string | null | undefined, session: S
   return role === 'Provider';
 }
 
-export const SessionProvider = ({ children }: { children: ReactNode }) => {
+export const SessionProvider = ({ children, enabled = true }: { children: ReactNode; enabled?: boolean }) => {
   const { data, error, isLoading, mutate } = useFrappeGetCall<{ message: SessionState }>(
     'appointment.scheduler.membership.context',
     undefined,
-    'session-context',
+    enabled ? 'session-context' : null,
     { revalidateOnFocus: true, revalidateOnReconnect: true }
   );
   const { call: selectCall } = useFrappePostCall('appointment.scheduler.membership.select_workspace');

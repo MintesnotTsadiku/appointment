@@ -10,6 +10,9 @@ CLOSING_SCRIPT_TAG_PATTERN = re.compile(r"</script\>")
 
 
 def get_context(context):
+    from appointment.public_experience.csp import shell_nonce
+
+    context["content_shell_nonce"] = shell_nonce()
     csrf_token = frappe.sessions.get_csrf_token()
     # nosemgrep
     frappe.db.commit()

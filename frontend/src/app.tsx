@@ -35,6 +35,7 @@ const App = () => {
   });
   const pathname = typeof window === "undefined" ? "/" : window.location.pathname;
   const standalone = isPublicExperiencePath(pathname);
+  const publicOnly = standalone || pathname.startsWith("/schedule/");
   const usesPlatformLandingSettings = pathname === "/";
   const runtime = (
     <HelmetProvider>
@@ -46,8 +47,8 @@ const App = () => {
         enableSocket={false}
         siteName={getSiteName()}
       >
-        <RealtimeProvider>
-          <SessionProvider>
+        <RealtimeProvider enabled={!publicOnly}>
+          <SessionProvider enabled={!publicOnly}>
             <TooltipProvider>
               <Suspense fallback={<></>}>
                 <RouterProvider router={router} />

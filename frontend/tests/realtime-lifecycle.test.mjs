@@ -30,7 +30,7 @@ check(
 
 const app = read("src/app.tsx");
 check("app.tsx must disable the SDK socket", /enableSocket=\{false\}/.test(app));
-check("app.tsx must render <RealtimeProvider>", app.includes("<RealtimeProvider>"));
+check("app.tsx must render <RealtimeProvider>", /<RealtimeProvider(?:\s|>)/.test(app));
 
 const provider = read("src/components/realtime/RealtimeProvider.tsx");
 check(
@@ -105,4 +105,7 @@ assert.equal(disconnected, 0, "StrictMode cleanup must not abort the handshake")
 finalCleanup();
 while (microtasks.length) microtasks.shift()();
 assert.equal(disconnected, 1, "Last real unmount must close the connection");
+exports.RealtimeProvider({ children: null, enabled: false });
+assert.equal(effect(), undefined, "Public pages must not acquire a realtime connection");
+assert.equal(created, 1, "Disabled realtime must create no additional socket");
 console.log("OK: StrictMode remount reuses one socket and real unmount closes it");

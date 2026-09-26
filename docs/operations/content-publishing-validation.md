@@ -576,3 +576,27 @@ retention, tenant denial, expired capabilities, and server-enforced limits. Thes
 new browser checks remain pending. Recovery code-drill tooling archives the
 committed `facd02d` candidate without resetting the working checkout. The actual
 rollback and upgrade browser drill has not run yet.
+
+### Production shell and cache qualification in progress
+
+The production entry now includes the current Vite build instead of a stale list
+of hashed bundles. Both website and scheduler entry points pass a request nonce
+to the inline boot scripts and the response CSP. Guest pages skip private
+workspace and realtime connections. The custom-domain adapter exposes exact
+published-content, consent, and canonical booking endpoints while denying owner
+APIs and previews. PWA navigation and API requests use NetworkOnly; the raw Jinja
+entry is excluded from precaching and has no cached navigation fallback.
+
+The production build passed with existing installed dependencies. Eleven focused
+response/compiler tests passed. The PWA policy regression checks sensitive
+navigation, consent links, draft/audience APIs, slot reads, and static asset
+caching. Frontend DOM checks passed; focused lint has zero errors and the two
+existing session fast-refresh warnings. Production browser qualification remains
+pending. Strict template run `00145` is still executing; no final acceptance is
+claimed from an in-progress run.
+
+Run `00145` ended with 17 passing and three failed template scenarios. The failures
+were development-server connection refusal/reset and a detached element during
+Vite configuration restarts. Its 31 screenshot differences are not accepted.
+A final stable matrix will follow the owner workflow fixes. Fresh B is the next
+normal-owner acceptance target; the reference runtime remains untouched.

@@ -76,17 +76,18 @@ function releaseRealtimeSocket(): void {
 
 const RealtimeContext = createContext<Socket | null>(null);
 
-export const RealtimeProvider = ({ children }: PropsWithChildren) => {
+export const RealtimeProvider = ({ children, enabled = true }: PropsWithChildren<{ enabled?: boolean }>) => {
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
+    if (!enabled) return;
     const active = acquireRealtimeSocket();
     setSocket(active);
     return () => {
       setSocket(null);
       releaseRealtimeSocket();
     };
-  }, []);
+  }, [enabled]);
 
   return (
     <RealtimeContext.Provider value={socket}>{children}</RealtimeContext.Provider>

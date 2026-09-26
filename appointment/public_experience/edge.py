@@ -64,24 +64,37 @@ def _server_block(server_name: str, options: EdgeOptions, *, public_only: bool =
         proxy_set_header X-Frappe-Site-Name $frappe_site;
     }}"""
     )
-    public_api = (
-        f"""
-    # Only the two read-only public projections are exposed on customer hosts.
-    location = /api/method/appointment.public_experience.api.get_public_ui_config {{
+    public_api = ""
+    if public_only:
+        methods = (
+            "appointment.public_experience.api.get_public_ui_config",
+            "appointment.public_experience.api.get_public_experience_snapshot",
+            "appointment.content.public_api.get_article_index",
+            "appointment.content.public_api.get_article_detail",
+            "appointment.content.public_api.get_gallery_index",
+            "appointment.content.public_api.get_gallery_detail",
+            "appointment.content.newsletter.public_api.signup_status",
+            "appointment.content.newsletter.public_api.subscribe",
+            "appointment.content.newsletter.public_api.confirm",
+            "appointment.content.newsletter.public_api.unsubscribe",
+            "appointment.content.newsletter.public_api.verify_sender",
+            "appointment.scheduler.independent.public_offering",
+            "appointment.scheduler.booking.slots",
+            "appointment.scheduler.booking.book",
+            "appointment.api.personal_meet.get_organization_services",
+            "appointment.api.personal_meet.get_organization_meeting_windows",
+            "appointment.api.personal_meet.get_time_slots",
+            "appointment.api.personal_meet.book_time_slot",
+        )
+        public_api = "\n    # Exact guest publication, consent, and booking APIs only.\n"
+        for method in methods:
+            public_api += f"""    location = /api/method/{method} {{
         proxy_set_header X-Frappe-Site-Name $frappe_site;
         proxy_set_header Host $host;
         proxy_pass http://127.0.0.1:{options.web_port};
     }}
-    location = /api/method/appointment.public_experience.api.get_public_experience_snapshot {{
-        proxy_set_header X-Frappe-Site-Name $frappe_site;
-        proxy_set_header Host $host;
-        proxy_pass http://127.0.0.1:{options.web_port};
-    }}
-    location ~ ^/(app|login|logout|api|private|desk)(/|$) {{ return 404; }}
 """
-        if public_only
-        else ""
-    )
+        public_api += "    location ~ ^/(app|login|logout|api|private|desk)(/|$) { return 404; }\n"
     return f"""server {{
     {listen}
     server_name {server_name};{tls_lines}

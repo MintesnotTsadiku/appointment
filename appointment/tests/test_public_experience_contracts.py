@@ -9,10 +9,38 @@ from appointment.public_experience.design_compiler import compile_design
 from appointment.public_experience.errors import DesignCompilationError, UnknownRecipeError, UnsafeActionIntentError
 from appointment.public_experience.recipes import get_recipe, list_recipes
 from appointment.public_experience.section_schemas import validate_typed_section
-from appointment.public_experience.csp import after_request
+from appointment.public_experience.csp import after_request, shell_nonce
 
 
 class TestResponsePrivacy(unittest.TestCase):
+    def test_html_nonce_matches_policy_and_token_pages_remain_private(self):
+        import frappe
+
+        previous = getattr(frappe.local, "content_shell_nonce", None)
+        try:
+            nonce = shell_nonce()
+            response = after_request(SimpleNamespace(headers={}, mimetype="text/html"),
+                SimpleNamespace(path="/newsletter/confirm/opaque-token"))
+            self.assertIn(f"'nonce-{nonce}'", response.headers["Content-Security-Policy"])
+            self.assertEqual(response.headers["Cache-Control"], "no-store")
+            self.assertEqual(response.headers["Referrer-Policy"], "no-referrer")
+        finally:
+            frappe.local.content_shell_nonce = previous
+
+    def test_custom_domain_allows_exact_guest_content_apis_only(self):
+        from appointment.public_experience.edge import EdgeOptions, _server_block
+
+        config = _server_block("public.example.test", EdgeOptions(frappe_site="test.localhost"), public_only=True)
+        for method in ("appointment.content.public_api.get_article_detail",
+                       "appointment.content.newsletter.public_api.subscribe",
+                       "appointment.scheduler.booking.book"):
+            self.assertIn(f"location = /api/method/{method}", config)
+        for method in ("appointment.content.api.publish_article",
+                       "appointment.content.public_api.get_content_preview",
+                       "frappe.client.get"):
+            self.assertNotIn(f"location = /api/method/{method}", config)
+        self.assertIn("location ~ ^/(app|login|logout|api|private|desk)(/|$) { return 404; }", config)
+
     def test_preview_and_newsletter_actions_cannot_be_cached_or_indexed(self):
         for path in (
             "/api/method/appointment.content.public_api.get_content_preview",

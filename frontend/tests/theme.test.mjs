@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import { strict as assert } from 'node:assert';
 const html = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
-const script = html.match(/<script>([\s\S]*?)<\/script>/)[1];
+const script = html.match(/<script\b[^>]*>([\s\S]*?)<\/script>/)[1];
 for (const preference of [null, 'system', 'dark', 'light']) for (const systemDark of [true, false]) {
   let applied;
   const style = {};
