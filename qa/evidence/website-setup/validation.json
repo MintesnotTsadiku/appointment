@@ -1,0 +1,84 @@
+{
+  "run": "BQA-2026-00080",
+  "status": "Passed",
+  "source_version": "94bd96d+source-290ed4e2eef4+qa-46ecb0f42590",
+  "scenario_summary": {
+    "failed": 0,
+    "flaky": 0,
+    "passed": 1,
+    "skipped": 0,
+    "total": 1
+  },
+  "baseline_changed_count": 0,
+  "cleanup": {
+    "deleted_businesses": 1,
+    "ok": true
+  },
+  "audit": {
+    "ok": true,
+    "remaining": {
+      "Blog Post": 0,
+      "Brand Profile": 0,
+      "Location": 0,
+      "Organization": 0,
+      "Provider": 0,
+      "Public Site": 0,
+      "Service": 0
+    },
+    "remaining_record_count": 0
+  },
+  "roles": [
+    "All",
+    "Desk User",
+    "Guest",
+    "Organization Manager",
+    "Provider"
+  ],
+  "artifacts": [
+    {
+      "file": "website-article-workspace.png",
+      "sha256": "46813aead3041f1f4de442b5876d9042386a88ca1ceb92b1718f7cb296c9ad1a"
+    },
+    {
+      "file": "website-guest-article.png",
+      "sha256": "9ceaaddba471c2c2bfacd7e46f1358f1ae5e71428370767a8ed87997b6b04b77"
+    },
+    {
+      "file": "website-guest-blog.png",
+      "sha256": "6429434d75b5f0a96a396b34e4ab113d4f4f3ef8a9864c534ee1d91b16e47349"
+    },
+    {
+      "file": "website-guest-book.png",
+      "sha256": "9063baf21bff76ecc5f18c1d0ccf46860531ffd5bd3e90b902a10875de091aa4"
+    },
+    {
+      "file": "website-guest-collection-desktop.png",
+      "sha256": "1c091322e06745e6107e99977bd7b25c000b67de048b9ca79d9971f6540ce223"
+    },
+    {
+      "file": "website-guest-collection-mobile-dark.png",
+      "sha256": "129a5fa3bcfcabc24ebadeac8441ca61840257abf97f1d0d3481564b0d096164"
+    },
+    {
+      "file": "website-guest-gallery.png",
+      "sha256": "4ba3a71c08ac80e1d77201892c2306019186bcb66801693451120c527ab7f0a8"
+    },
+    {
+      "file": "website-guest-landing.png",
+      "sha256": "b7e27351db41eeaccd4547fbb3244347b791f933447e10147ba2409d792a8f05"
+    },
+    {
+      "file": "website-preview-desktop.png",
+      "sha256": "52311f85f3eb8a543b51de64cb71bf2530c55c31434a350d9c931bf403702f0e"
+    },
+    {
+      "file": "website-published-desktop.png",
+      "sha256": "e2d55a9d0750f84917e93ed444695f82cd3dc6d03b90013264430964dd2da463"
+    },
+    {
+      "file": "website-published-mobile.png",
+      "sha256": "1e558f5d7a5386d1611d9307395cb58b48a0a8b0b3160e59650db01062e62459"
+    }
+  ],
+  "scope": "One normal organization owner and the Tena template only. Full Phase 4/5 and Phases 6-10 are not accepted."
+}

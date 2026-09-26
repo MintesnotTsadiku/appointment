@@ -64,26 +64,31 @@ def run():
     return {'site':SITE, 'browser_account':name, 'browser_session':name_session,
         'username':USER, 'roles':sorted(roles), 'credentials_file':str(private)}
 
-def enqueue_smoke(update_baseline=0):
+def enqueue_smoke(update_baseline=0, suite='content-runtime'):
     if frappe.local.site != SITE or not frappe.conf.get('worktree_development'):
         raise RuntimeError('This smoke test is restricted to the isolated content site')
     from frappe.utils import get_bench_path
     if Path(get_bench_path()) != RUNTIME / 'bench':
         raise RuntimeError('Export FRAPPE_BENCH_ROOT for the isolated queue namespace')
     from agent_plane.qa_workflows.browser_qa_service import enqueue_browser_qa_request
+    if suite not in ('content-runtime', 'website-setup'):
+        raise RuntimeError('Unsupported development suite')
     account = frappe.db.get_value('Browser Account', {'account_label':LABEL}, 'name')
     if not account:
         raise RuntimeError('Bootstrap the managed browser account first')
     checkout = Path(frappe.get_app_path('appointment', '..')).resolve()
     revision = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'], cwd=checkout).decode().strip()
+    changes = subprocess.check_output(['git', 'diff', 'HEAD', '--', 'appointment', 'frontend/src', 'frontend/index.html'], cwd=checkout)
+    untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', 'appointment', 'frontend/src'], cwd=checkout).decode().splitlines()
+    source_hash = hashlib.sha256(changes + b''.join((checkout / path).read_bytes() for path in sorted(untracked))).hexdigest()[:12]
     suite_hash = hashlib.sha256(b''.join((checkout / path).read_bytes() for path in
-        ('qa/content-runtime.spec.mjs', 'qa/content-runtime.config.mjs', 'appointment/tests/content_browser_suite.py'))).hexdigest()[:12]
-    request = {'schema_version':'browser-qa-run/v1', 'app':'appointment', 'suite':'content-runtime',
+        (f'qa/{suite}.spec.mjs', f'qa/{suite}.config.mjs', 'appointment/tests/content_browser_suite.py'))).hexdigest()[:12]
+    request = {'schema_version':'browser-qa-run/v1', 'app':'appointment', 'suite':suite,
         'target':{'site':SITE, 'base_url':'http://127.0.0.11:34340', 'environment':'development'},
         'scenarios':[], 'mode':'deterministic', 'cleanup_policy':'always', 'artifact_policy':'retain',
         'capture':{'screenshots':'on', 'trace':'on', 'video':'off'},
-        'browser_account':account, 'timeout_seconds':180, 'request_source':'bench',
-        'update_baseline':bool(int(update_baseline)), 'source_version':f'{revision}+qa-{suite_hash}'}
+        'browser_account':account, 'timeout_seconds':360, 'request_source':'bench',
+        'update_baseline':bool(int(update_baseline)), 'source_version':f'{revision}+source-{source_hash}+qa-{suite_hash}'}
     return enqueue_browser_qa_request(request)
 
 def diagnose_workers():
@@ -95,9 +100,16 @@ def diagnose_workers():
     return {'bench':get_bench_path(), 'queue':queue.name,
         'workers':[{'name':w.name, 'queues':[q.name for q in w.queues]} for w in workers]}
 
+def diagnose_public_host():
+    from appointment.public_experience.resolver import _platform_hosts
+    return {'platform_hosts': sorted(_platform_hosts())}
+
 def smoke_status(name):
     doc = frappe.get_doc('Browser QA Run', name)
     return {key:doc.get(key) for key in ('name','status','lifecycle_phase','outcome','failure_category','failure_reason','scenario_summary_json','baseline_changed_count')}
+
+def baseline_status(name):
+    return json.loads(frappe.get_doc('Browser QA Run', name).baseline_json or '{}')
 
 def export_smoke(name):
     import shutil
@@ -129,3 +141,33 @@ def export_smoke(name):
         'scope':'Runtime smoke only. Public content acceptance is pending.'}
     (destination / 'validation.json').write_text(json.dumps(result, indent=2)+'\n')
     return result
+
+def export_website(name):
+    import shutil
+    if frappe.local.site != SITE:
+        raise RuntimeError('Evidence export requires the isolated content site')
+    doc = frappe.get_doc('Browser QA Run', name)
+    if doc.suite_id != 'website-setup' or doc.status != 'Passed' or doc.baseline_changed_count:
+        raise RuntimeError('Only strict passing website journey evidence can be exported')
+    destination = Path(frappe.get_app_path('appointment', '..')).resolve() / 'qa/evidence/website-setup'
+    destination.mkdir(parents=True, exist_ok=True)
+    inventory = []
+    for artifact in json.loads(doc.artifact_files_json or '[]'):
+        source = Path(artifact.get('path', '')).resolve()
+        if artifact.get('kind') != 'screenshot' or not source.name.startswith('website-'):
+            continue
+        if (Path('/tmp/agent_browser_qa') / name) not in source.parents:
+            raise RuntimeError('Screenshot is outside the exact managed run')
+        target = destination / source.name
+        shutil.copyfile(source, target)
+        inventory.append({'file': source.name, 'sha256': hashlib.sha256(target.read_bytes()).hexdigest()})
+    if len(inventory) != 11:
+        raise RuntimeError('Website journey screenshot inventory is incomplete')
+    result = {'run': name, 'status': doc.status, 'source_version': doc.source_version,
+        'scenario_summary': json.loads(doc.scenario_summary_json or '{}'),
+        'baseline_changed_count': doc.baseline_changed_count,
+        'cleanup': json.loads(doc.cleanup_json or '{}'), 'audit': json.loads(doc.audit_json or '{}'),
+        'roles': sorted(frappe.get_roles(USER)), 'artifacts': inventory,
+        'scope': 'One normal organization owner and the Tena template only. Full Phase 4/5 and Phases 6-10 are not accepted.'}
+    (destination / 'validation.json').write_text(json.dumps(result, indent=2)+'\n')
+    return {'run': name, 'screenshots': len(inventory), 'destination': str(destination), 'audit': result['audit']}

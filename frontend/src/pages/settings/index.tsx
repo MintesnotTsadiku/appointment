@@ -35,6 +35,14 @@ const Settings = () => {
   // Settings categories
   const categories: SettingsCategory[] = [
     {
+      id: 'website',
+      title: 'Website setup',
+      description: 'Create, preview and publish your business website',
+      icon: Building2,
+      route: '/settings/website',
+      gradient: 'primary',
+    },
+    {
       id: 'business',
       title: 'Business booking setup',
       description: 'Review your services, publish booking pages and share customer links',

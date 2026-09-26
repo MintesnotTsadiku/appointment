@@ -103,14 +103,18 @@ def build_article_projection(post) -> dict:
     slug = normalize_slug(candidate) or normalize_slug(title) or normalize_slug(post.name)
     summary = (post.get("blog_intro") or "").strip() or excerpt(blocks)
     hero = safe_media(post.get("meta_image"))
+    category = frappe.db.get_value("Blog Category", post.get("blog_category"), "title") if post.get("blog_category") else None
+    # Factory categories identify a website internally; they are not editorial labels.
+    if category and category.startswith("Website "):
+        category = None
     projection = {
         "type": "article",
         "title": title,
         "slug": slug,
         "excerpt": summary,
         "blocks": blocks,
-        "author": post.get("blogger") or None,
-        "category": post.get("blog_category") or None,
+        "author": frappe.db.get_value("Blogger", post.get("blogger"), "full_name") if post.get("blogger") else None,
+        "category": category,
         "publishedOn": str(post.get("published_on") or post.get("creation") or ""),
         "seo": {
             "title": post.get("meta_title") or title,

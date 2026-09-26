@@ -1,6 +1,6 @@
 # Content publishing, gallery and onboarding — progress and validation
 
-**Status:** Phases 0–3 implemented and verified; Phase 4 code checkpoint, browser acceptance pending; Phases 5–10 not started
+**Status:** Phases 0–3 implemented and verified; Phase 4 full browser acceptance pending; Phase 5 core owner journey implemented, broader acceptance pending; Phases 6–10 pending
 **Date:** 2026-09-26
 **Branch:** `feat/content-publishing-gallery-onboarding`
 **Head at recording:** `6e450cbeb639828db53841f39ae09d66092e35fa`
@@ -232,3 +232,51 @@ browser can reach the isolated frontend directly.
 No business or showcase data was seeded during bootstrap. No schema migration
 was needed. These smoke captures do not approve Phase 4 public content surfaces.
 The public template, content, mode, and viewport acceptance matrix remains open.
+
+## Phase 5 core owner journey checkpoint — 2026-09-26
+
+Phase 5 is in progress. The new owner service ranks certified recipes, creates
+or resumes one business website, saves typed drafts with optimistic version
+checks, compiles private previews, and publishes through the existing brand and
+experience publishers. The Settings website workspace creates and edits article
+drafts, uploads validated consented images, publishes gallery collections, and
+shows release history. Owner requests use business permissions and entitlement
+checks. Public article bylines and editorial labels are captured in immutable
+releases; generated category identifiers are not public labels.
+
+Validation performed on the isolated site:
+
+- Existing entitlement, release, and gallery suites passed 35/35 before edits.
+- The normal-owner website suite passed 8/8, including foreign-owner denial,
+  stale writes, entitlement denial, unpublished previews, immutable article
+  labels, and tenant-bound image uploads.
+- Release tests passed 13/13; public route tests passed 5/5.
+- Frontend DOM guards, focused ESLint, and direct Vite production build passed.
+- The package build wrapper failed while contacting the package registry
+  (`EAI_AGAIN`). The direct Vite build used the installed dependencies.
+- App TypeScript checking still reports 273 existing errors outside the new
+  website files. This checkpoint does not claim a green full-project typecheck.
+
+The runtime's platform-host allowlist now contains the isolated site hostname
+and `127.0.0.11`; otherwise public requests through Vite could not resolve a
+published website. This setting must be part of fresh-runtime provisioning.
+The shared HTML entry no longer requests Google Fonts. Certified template fonts
+are packaged locally; the remote font request caused a browser capture timeout.
+
+Managed Browser QA uses the normal Provider / Organization Manager account and
+creates its business through the onboarding UI. Its fixture refuses preexisting
+marker records and removes only records created by that journey. The shared
+browser account predates the journey; this is not Phase 9 fresh-site evidence.
+Runs 00070–00078 retained their failures, including selector, host routing,
+font timeout, and visual drift. Run 00079 passed the owner journey and updated
+one reviewed blog capture after removing an internal category identifier.
+Strict repeat `BQA-2026-00080` passed 1/1 with zero failed or flaky scenarios,
+zero baseline changes, and zero remaining fixture records. Its eleven captures
+and validation metadata are retained under `qa/evidence/website-setup/`.
+This accepts the recorded Tena owner journey only.
+
+Remaining work includes the full five-template browser matrix, broader brand
+and content editing, complete media management and previews, and all Phase
+6–10 exit gates. The existing readiness endpoint requires a published brand;
+the guided flow needs readiness checks for the draft that Publish will compile.
+Newsletter signup remains unavailable until Phase 7.

@@ -14,6 +14,58 @@ from appointment.public_experience.recipes import list_recipes
 from appointment.public_experience.reserved import normalize_slug
 
 
+@frappe.whitelist(methods=["GET"])
+def website_setup_context(industry: str = "", mood: str = ""):
+    from appointment.public_experience import setup
+
+    organizations = access.membership.manager_organizations()
+    providers = [name for name in access.owned_providers()
+                 if frappe.db.get_value("Provider", name, "organization_status") == "Independent"]
+    owners = [{"type": "Organization", "name": name,
+               "label": frappe.db.get_value("Organization", name, "organization_name")} for name in organizations]
+    owners += [{"type": "Provider", "name": name,
+                "label": frappe.db.get_value("Provider", name, "provider_name")} for name in providers]
+    sites = frappe.get_list("Public Site", filters={"status": ["!=", "Archived"]}, pluck="name")
+    return {"owners": owners, "catalog": setup.ranked_catalog(industry, mood),
+            "sites": [setup.state(setup.require_site(name)) for name in sites]}
+
+
+@frappe.whitelist(methods=["POST"])
+def preview_website_template(owner_type: str, owner: str, recipe_key: str):
+    from appointment.public_experience import setup
+
+    return setup.preview_template(owner_type, owner, recipe_key)
+
+
+@frappe.whitelist(methods=["POST"])
+def start_website_setup(owner_type: str, owner: str, title: str, slug: str, recipe_key: str):
+    from appointment.public_experience import setup
+
+    return setup.start(owner_type, owner, title, slug, recipe_key)
+
+
+@frappe.whitelist(methods=["POST"])
+def save_website_setup(site: str, expected_version: int, step: str, title=None,
+                       sections=None, features=None, brand_inputs=None):
+    from appointment.public_experience import setup
+
+    return setup.save(site, expected_version, step, title, sections, features, brand_inputs)
+
+
+@frappe.whitelist(methods=["POST"])
+def preview_website_setup(site: str, expected_version: int):
+    from appointment.public_experience import setup
+
+    return setup.preview(site, expected_version)
+
+
+@frappe.whitelist(methods=["POST"])
+def publish_website_setup(site: str, expected_version: int):
+    from appointment.public_experience import setup
+
+    return setup.publish(site, expected_version)
+
+
 def _request_host() -> str:
     request = getattr(frappe.local, "request", None)
     host = getattr(request, "host", None) if request is not None else None

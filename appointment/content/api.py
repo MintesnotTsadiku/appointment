@@ -11,6 +11,41 @@ import frappe
 from appointment.content import entitlements, releases, tenancy
 
 
+@frappe.whitelist(methods=["POST"])
+def upload_gallery_image(public_site: str, content_base64: str, public_consent=0):
+    from appointment.content import authoring
+
+    return authoring.upload_image(public_site, content_base64, public_consent)
+
+
+@frappe.whitelist(methods=["POST"])
+def create_article(public_site: str, title: str, slug: str, body: str, summary: str = ""):
+    from appointment.content import authoring
+
+    return authoring.create_article(public_site, title, slug, body, summary)
+
+
+@frappe.whitelist(methods=["POST"])
+def create_gallery(public_site: str, title: str, slug: str, summary: str = "", items=None):
+    from appointment.content import authoring
+
+    return authoring.create_gallery(public_site, title, slug, summary, items)
+
+
+@frappe.whitelist(methods=["GET"])
+def get_content_draft(ownership: str):
+    from appointment.content import authoring
+
+    return authoring.get_draft(ownership)
+
+
+@frappe.whitelist(methods=["POST"])
+def save_article_draft(ownership: str, expected_modified: str, title: str, body: str, summary: str = ""):
+    from appointment.content import authoring
+
+    return authoring.save_article(ownership, expected_modified, title, body, summary)
+
+
 @frappe.whitelist(methods=["GET"])
 def content_capabilities(owner_type: str, organization: str | None = None, provider: str | None = None):
     tenancy.require_manage_business(owner_type, organization, provider)
@@ -36,6 +71,12 @@ def list_owned_content(public_site: str | None = None):
         order_by="modified desc",
         limit_page_length=0,
     )
+    for row in rows:
+        row["title"] = (
+            frappe.db.get_value(row.source_doctype, row.source_name, "title")
+            if row.source_doctype in {"Blog Post", "Gallery Collection"}
+            else "Newsletter draft"
+        )
     return {"items": rows}
 
 

@@ -28,6 +28,8 @@ const ServicesSettings = lazy(() => import("@/pages/settings/services"));
 const EditService = lazy(() => import("@/pages/settings/edit-service"));
 const Manage = lazy(() => import("@/pages/settings/manage"));
 const PublicExperienceEditor = lazy(() => import("@/pages/settings/public-experience"));
+const WebsiteSetup = lazy(() => import("@/pages/settings/website-setup"));
+const WebsiteContent = lazy(() => import("@/pages/settings/website-content"));
 const Settings = lazy(() => import("@/pages/settings"));
 const AdminDashboard = lazy(() => import("@/pages/admin/dashboard"));
 const Appointment = lazy(() => import("@/pages/appointment"));
@@ -79,6 +81,8 @@ const Router = () => {
       <Route path="/settings/edit-service/:serviceId" element={<EditService />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/manage" element={<Manage />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/public-experience" element={<PublicExperienceEditor />} errorElement={<ErrorFallback />}></Route>
+      <Route path="/settings/website" element={<WebsiteSetup />} errorElement={<ErrorFallback />}></Route>
+      <Route path="/settings/website/content" element={<WebsiteContent />} errorElement={<ErrorFallback />}></Route>
       <Route path="/admin/dashboard" element={<AdminDashboard />} errorElement={<ErrorFallback />}></Route>
       <Route path="/schedule/in/:meetId" element={<Appointment />} errorElement={<ErrorFallback />}></Route>
       <Route path="/schedule/gr/:groupId" element={<GroupAppointment />} errorElement={<ErrorFallback />}></Route>
