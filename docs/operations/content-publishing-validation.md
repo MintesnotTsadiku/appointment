@@ -1,9 +1,9 @@
 # Content publishing, gallery and onboarding — progress and validation
 
-**Status:** Phases 0–3 preserved and verified. Phases 5–9 have retained normal-user and seeder evidence. The final Phase 4 production matrix and latest normal-upload repeat are in progress. Phase 10 production security/accessibility and backup data integrity passed; restored-route and code rollback/upgrade browser stages remain pending.
+**Status:** Phases 0–3 preserved and verified. Phases 5–9 have retained normal-user and seeder acceptance. Phase 4 has a strict production matrix; its post-CSRF compiled repeat is running. Phase 10 accessibility, backup/restore, and strict candidate/rollback/upgrade recovery passed. The final production privacy repeat and runtime restoration remain.
 **Date:** 2026-09-26
 **Branch:** `feat/content-publishing-gallery-onboarding`
-**Head at recording:** `6e450cbeb639828db53841f39ae09d66092e35fa`
+**Historical Phase 0–3 head at recording:** `6e450cbeb639828db53841f39ae09d66092e35fa`
 **Plan:** `docs/features/CONTENT_PUBLISHING_GALLERY_AND_GUIDED_WEBSITE_SETUP_IMPLEMENTATION_PLAN.md`
 
 This file records the isolated runtime and the tests that were run. It is not a
@@ -29,8 +29,9 @@ frontend health 200, `bench --site list-apps` matches the list above, worktree
 import path resolved, authenticated API returned `Administrator`, and the
 Socket.IO handshake through the frontend origin returned 200.
 
-Windows unique-address forwarding (`frappe-worktree windows-forward`) was **not**
-run; browser acceptance through the unique `127.0.0.11` address remains pending.
+Windows unique-address forwarding (`frappe-worktree windows-forward`) was not
+run. Subsequent Agent Plane managed Chromium acceptance used the unique
+`127.0.0.11` address directly from this Linux/WSL runtime; see the final gates below.
 
 ## Dependency lock
 
@@ -112,7 +113,7 @@ validation, spoofed upload rejection and consent gating.
 Backup drill: `bench --site <site> backup --with-files` completed successfully
 with database, public and private file archives.
 
-## Not implemented (Phases 4–10)
+## Historical Phase 0–3 handoff: work then outstanding
 
 - **Phase 4** independent blog and gallery surfaces inside every certified
   template package, with browser evidence.
@@ -980,3 +981,33 @@ banner check. Recovery capture now awaits actual worker readiness and two paint
 frames, uses the normal Close control, checks the banner is hidden, and moves the
 pointer away. It does not block the worker, alter DOM content, mask pixels, or
 relax comparison. A repeat must pass before rollback evidence is accepted.
+
+Strict maintained rollback run `03008` passed sixteen captures with zero baseline
+changes. Its audit retained all release/media digests and suppression and passed
+CSRF-protected guest unsubscribe. The exact archived backend and asset selection
+were verified. Upgrade restored the recorded candidate launch commands and
+removed the private rollback launch state. Upgrade baseline `03009` passed;
+its sixteen PNG checksums exactly match the original candidate captures.
+The one baseline change restores Selam's corrected candidate landing styling.
+Runtime selection and archive/entry checksums are in
+`qa/evidence/content-recovery/code-drill.json`. Strict upgrade repeat is required
+before the final recovery gate can be marked accepted.
+
+Strict upgrade `BQA-2026-03010` passed all sixteen captures with zero baseline
+changes. All three strict recovery stages retain unchanged 35-release/15-file
+inventories and successful protected unsubscribe with suppression preserved.
+The candidate and upgraded sixteen PNGs are byte-for-byte identical.
+Evidence: `qa/evidence/content-recovery/{candidate,rollback,upgrade}/`.
+The gateway was stopped on Restore and the isolated stack returned to the primary
+site. A final compiled-template repeat is running there after the CSRF correction.
+No reference runtime, working checkout, untracked file, or restored business
+record was reset, cleaned, or repaired.
+
+Post-CSRF compiled matrix `00166` passed twenty functional scenarios but found
+one screenshot difference. Native review and decoded-pixel comparison localized
+it to 21 antialiased pixels around Meron's mobile/light rounded theme-button
+edge; all text, layout, colors inside the button, and the rest of the page match.
+The scheduler capture now requires two consecutive byte-identical native browser
+frames, with at most eight attempts. It writes an unchanged browser PNG and
+fails if rendering cannot settle. No masking, image editing, baseline update,
+threshold, or product change is used. Strict acceptance must be repeated.

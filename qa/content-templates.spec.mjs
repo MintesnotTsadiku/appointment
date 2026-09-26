@@ -1,4 +1,19 @@
 import { test, expect } from "playwright/test";
+import { writeFile } from "node:fs/promises";
+
+async function captureSettledScheduler(page, path) {
+  let previous;
+  for (let attempt = 0; attempt < 8; attempt++) {
+    const current = await page.screenshot({ fullPage: true, animations: "disabled" });
+    if (previous?.equals(current)) {
+      await writeFile(path, current);
+      return;
+    }
+    previous = current;
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  }
+  throw new Error("Scheduler did not produce two identical settled frames.");
+}
 
 const world = JSON.parse(process.env.SHOWCASE_QA_WORLD || "{}");
 for (const key of ["selam", "bloom", "meron", "abugida", "tena"]) {
@@ -48,7 +63,9 @@ for (const key of ["selam", "bloom", "meron", "abugida", "tena"]) {
         if (surface === "scheduler") await page.waitForFunction(() => Array.from(document.querySelectorAll('[data-booking-branded="true"] [style], [data-booking-branded="true"]')).every(element => !element.style.opacity || Number(element.style.opacity) === 1));
         await page.mouse.move(0, 0);
         await page.evaluate(() => document.activeElement?.blur());
-        await page.screenshot({ path: testInfo.outputPath(`${key}-${width}-${mode}-${surface}.png`), fullPage: true, animations: "disabled" });
+        const capturePath = testInfo.outputPath(`${key}-${width}-${mode}-${surface}.png`);
+        if (surface === "scheduler") await captureSettledScheduler(page, capturePath);
+        else await page.screenshot({ path: capturePath, fullPage: true, animations: "disabled" });
       }
       await page.goto(row.root + "/blog", { waitUntil: "networkidle" });
       const signup = page.locator(`[data-newsletter-template="${key}"]`);
