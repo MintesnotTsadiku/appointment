@@ -959,3 +959,24 @@ unsubscribe and is not an accepted fallback. No checkout, index, database,
 subscriber token, or media was reset or repaired. Frontend focused lint and all
 twelve DOM contract groups passed; a new compiled build and recovery repeat are
 required before qualification.
+
+Restored candidate baseline `03004` and strict repeat `03005` passed all sixteen
+captures after the CSRF correction. The audit confirms unchanged 35 releases and
+15 media files, successful guest unsubscribe, and retained suppression.
+Candidate evidence is in `qa/evidence/content-recovery/candidate/`.
+The maintained rollback archive checksum is
+`7feb8dff75406db35fc69ec0cfed39c2ac5d7dfc5bd3da3adba2cf2f896bcd19`.
+The runtime switched both backend import and production asset selection to that
+exact archive. Baseline `03006` passed all routes and protected unsubscribe.
+Its one visual difference is Selam's older landing note/team spacing, reviewed
+at native resolution. This stage tests code compatibility against retained data;
+it does not qualify the older build's visual or security posture for deployment.
+A strict rollback repeat and return-to-candidate repeat remain required.
+
+Strict rollback `03007` passed routes, media and consent but found one screenshot
+difference. Native comparison showed the older build's asset-ready banner on
+Abugida. Service-worker installation completed after the previous immediate
+banner check. Recovery capture now awaits actual worker readiness and two paint
+frames, uses the normal Close control, checks the banner is hidden, and moves the
+pointer away. It does not block the worker, alter DOM content, mask pixels, or
+relax comparison. A repeat must pass before rollback evidence is accepted.

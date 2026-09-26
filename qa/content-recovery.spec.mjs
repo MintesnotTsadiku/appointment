@@ -16,12 +16,18 @@ test("recovered-public-routes-and-consent", async ({ browser }, testInfo) => {
           await expect.poll(() => image.evaluate(element => element.complete && element.naturalWidth > 0)).toBe(true);
         }
         await page.evaluate(() => document.fonts.ready);
+        await page.evaluate(async () => {
+          await navigator.serviceWorker.ready;
+          await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+        });
         // The older rollback build has a dismissible asset-ready banner.
         // Exercise its public Close control if present, without masking pixels.
         const legacyBanner = page.getByText("App ready to work offline", { exact: true });
         if (await legacyBanner.isVisible()) {
           await legacyBanner.locator("../../..").getByRole("button", { name: "Close", exact: true }).click();
         }
+        await expect(legacyBanner).toBeHidden();
+        await page.mouse.move(0, 0);
         await page.evaluate(() => scrollTo(0, 0));
         await page.screenshot({ path: testInfo.outputPath(`recovered-${row.recipe}-${surface}.png`), fullPage: true, animations: "disabled" });
       }
