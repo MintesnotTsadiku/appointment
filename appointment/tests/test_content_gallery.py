@@ -43,6 +43,15 @@ def _cleanup(state):
     sites = list(state.get("sites", {}).values())
     if sites:
         frappe.db.delete("Published Content Release", {"public_site": ["in", sites]})
+    for membership in frappe.get_all(
+        "Business Membership",
+        filters={"user": ["in", state.get("users", []) or ["__none__"]]},
+        pluck="name",
+    ):
+        try:
+            frappe.delete_doc("Business Membership", membership, force=True, ignore_permissions=True)
+        except Exception:
+            frappe.log_error(frappe.get_traceback(), f"gallery cleanup membership: {membership}")
     for doctype, name in reversed(state["created"]):
         try:
             if frappe.db.exists(doctype, name):

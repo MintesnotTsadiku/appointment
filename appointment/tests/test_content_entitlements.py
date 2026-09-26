@@ -34,6 +34,23 @@ def _insert(state, doctype, **values):
 def _cleanup(state):
     frappe.set_user("Administrator")
     frappe.flags.ignore_permissions = True
+    # Memberships reference both users and organizations; remove them first so an
+    # organization delete is not blocked by a link.
+    orgs = list(state.get("orgs", {}).values())
+    users = state.get("users", [])
+    for membership in frappe.get_all(
+        "Business Membership",
+        filters={"user": ["in", users or ["__none__"]]},
+        pluck="name",
+    ) + (
+        frappe.get_all("Business Membership", filters={"organization": ["in", orgs]}, pluck="name")
+        if orgs
+        else []
+    ):
+        try:
+            frappe.delete_doc("Business Membership", membership, force=True, ignore_permissions=True)
+        except Exception:
+            frappe.log_error(frappe.get_traceback(), f"content entitlement cleanup membership: {membership}")
     # Delete in dependency order, ignoring anything already gone.
     for doctype, name in reversed(state["created"]):
         try:
@@ -283,6 +300,63 @@ def reset_module_cache():
     frappe.cache.delete_value(["app_modules", "installed_app_modules"])
     frappe.clear_cache()
     return {"cleared": True}
+
+
+def leftover_counts():
+    """Count any records left behind by the synthetic content suites."""
+
+    markers = ("CNT-", "REL-", "GAL-")
+    checks = {}
+    for doctype, field in (
+        ("Business Entitlement", "active_owner_key"),
+        ("Content Ownership", "ownership_key"),
+        ("Gallery Collection", "title"),
+        ("Blog Post", "title"),
+        ("Public Site", "site_title"),
+        ("Organization", "organization_name"),
+        ("User", "email"),
+    ):
+        total = 0
+        for marker in markers:
+            total += frappe.db.count(doctype, {field: ["like", f"%{marker}%"]})
+        checks[doctype] = total
+    return checks
+
+
+def purge_markers():
+    """Remove any synthetic content-suite records left behind by earlier runs."""
+
+    frappe.set_user("Administrator")
+    frappe.flags.ignore_permissions = True
+    markers = ("CNT-", "REL-", "GAL-")
+    users: list[str] = []
+    orgs: list[str] = []
+    for marker in markers:
+        users += frappe.get_all("User", filters={"email": ["like", f"%{marker}%"]}, pluck="name")
+        orgs += frappe.get_all(
+            "Organization", filters={"organization_name": ["like", f"%{marker}%"]}, pluck="name"
+        )
+    memberships = frappe.get_all(
+        "Business Membership", filters={"user": ["in", users or ["__none__"]]}, pluck="name"
+    )
+    if orgs:
+        memberships += frappe.get_all(
+            "Business Membership", filters={"organization": ["in", orgs]}, pluck="name"
+        )
+    for membership in memberships:
+        frappe.delete_doc("Business Membership", membership, force=True, ignore_permissions=True)
+    for org in orgs:
+        try:
+            frappe.delete_doc("Organization", org, force=True, ignore_permissions=True)
+        except Exception:
+            frappe.log_error(frappe.get_traceback(), f"purge organization {org}")
+    for user in users:
+        try:
+            frappe.delete_doc("User", user, force=True, ignore_permissions=True)
+        except Exception:
+            frappe.log_error(frappe.get_traceback(), f"purge user {user}")
+    frappe.db.commit()
+    return leftover_counts()
 
 
 def run():
