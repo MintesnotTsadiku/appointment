@@ -1,13 +1,43 @@
 # Content publishing, gallery and onboarding — progress and validation
 
-**Status:** Phases 0–3 preserved and verified. Phases 5–9 have retained normal-user and seeder acceptance. Phase 4 has a strict production matrix; its post-CSRF compiled repeat is running. Phase 10 accessibility, backup/restore, and strict candidate/rollback/upgrade recovery passed. The final production privacy repeat and runtime restoration remain.
+**Status:** Phases 0–3 preserved. Phases 4–10 implemented and accepted within the approved isolated/local-sink scope. Complete strict public, normal-owner, production privacy, and restored candidate/rollback/upgrade evidence is retained. The primary development runtime is restored.
 **Date:** 2026-09-26
 **Branch:** `feat/content-publishing-gallery-onboarding`
 **Historical Phase 0–3 head at recording:** `6e450cbeb639828db53841f39ae09d66092e35fa`
 **Plan:** `docs/features/CONTENT_PUBLISHING_GALLERY_AND_GUIDED_WEBSITE_SETUP_IMPLEMENTATION_PLAN.md`
 
-This file records the isolated runtime and the tests that were run. It is not a
-release approval. The plan's completion criteria are not yet met.
+This file records implementation and acceptance against the approved plan.
+Earlier checkpoints below preserve failed and pending states as history. The
+current acceptance inventory is authoritative. No deployment, push, merge, or
+pull request was performed.
+
+## Current acceptance inventory
+
+Application correction: `a836ea3`. Final QA revision: `a810c2b`.
+Evidence-only commits do not change application behavior.
+
+| Phase | Delivered and accepted | Evidence |
+| --- | --- | --- |
+| 0–3 | Pinned dependencies, tenant entitlements, immutable releases, governed gallery | Preserved checkpoints; final 13 entitlement, 14 release and 18 gallery tests pass |
+| 4 | Five independent content packages; all public, empty and unavailable surfaces; desktop/mobile and light/dark | Strict `00173`: 20 scenarios, 280 captures, zero changes; `qa/evidence/content-templates/` and source comparison |
+| 5 | Ranked catalog, private live previews, resumable setup, readiness/publish and owner workspace | Fresh C strict `04042`: 39 captures; independent owner `04009`: 14 captures |
+| 6 | Versioned workbook, named-cell dry-run errors, confirmation, stable-key retry, audit and invitations | Fresh C import UI, 11 application and 10 parser regressions |
+| 7 | Scoped consent/suppression, opaque unsubscribe, verified sender, quotas, local background capture and theme signup | Fresh C newsletter UI, 12 regressions, protected restored unsubscribe at all three stages |
+| 8 | Explicit idempotent showcase seeder with checksummed local assets | Five businesses, three articles and two collections each, one draft/unsent preview each, valid release hashes, 160 journal records, zero external sends |
+| 9 | Seedless individual and organization journeys, managed staff, foreign-business denial, expired capabilities and limits | Fresh C strict runs above; nine cross-business and five capability denials; all 24 cleanup counters zero |
+| 10 | Monitoring, support/runbook, backup/restore, maintained code rollback/upgrade, production privacy, accessibility and local performance | Strict recovery `03005`/`03008`/`03010`: 48 captures; privacy `00174`; accessibility `00160`: 70 surfaces, zero automated violations/CLS; 603 reviewed color findings pass |
+
+All 127 focused backend/parser regressions and all twelve frontend DOM contract
+groups pass. The compiled production build and focused API lint pass.
+The full TypeScript baseline still has 272 diagnostics, with zero introduced by
+the final correction; seven pre-existing reception lint findings remain separate.
+See `qa/evidence/content-regressions/validation.json`.
+
+Newsletter delivery is local only. Paint measurements are unthrottled local
+measurements; complete screen-reader certification and remote load testing were
+not performed. The maintained older code drill proves retained-schema recovery
+compatibility; it does not approve that older build's security/visual posture for
+deployment. Preserve the current security controls in a production fallback.
 
 ## Isolated runtime
 
@@ -1011,3 +1041,59 @@ The scheduler capture now requires two consecutive byte-identical native browser
 frames, with at most eight attempts. It writes an unchanged browser PNG and
 fails if rendering cannot settle. No masking, image editing, baseline update,
 threshold, or product change is used. Strict acceptance must be repeated.
+
+Focused scheduler `00167` passed its scenario and required identical frames, but
+strict comparison found 30 antialiased pixels on a rounded service-card edge.
+Native review showed unchanged text, geometry, and colors away from that edge.
+Focused baseline `00168` passed with one reviewed scheduler capture update.
+The complete strict matrix is required again; neither partial run is exported
+as final template acceptance.
+
+Full settled-frame run `00169` passed twenty scenarios. It compared all 280
+captures and found eight mobile scheduler differences. Decoded RGB comparison
+found 8–32 pixels per image, confined to rounded control/card edges. Dimensions,
+all text pixels, and the rest of each page are identical. Representative native
+Abugida light and Meron dark pages were reviewed with the retained contrast and
+geometry evidence. The eight affected scenarios have a reviewed baseline run;
+all other baseline keys are retained. A full strict repeat remains mandatory.
+
+Reviewed settled-frame baseline `00170` passed the eight selected scenarios and
+updated exactly eight scheduler captures. The complete strict matrix uses the
+remaining baseline keys unchanged. The post-CSRF TypeScript comparison reports
+exactly the same 272 diagnostics, with zero introduced or removed diagnostics
+and none in `public-experience/api.ts`. The pure workbook parser rerun passed all
+ten malformed-input tests. These results do not replace full browser acceptance.
+
+Full strict `00171` passed twenty scenarios and 279 of 280 comparisons. The
+remaining legacy Tena mobile/dark scheduler baseline differed at fourteen pixels
+on the rounded control edge (x=16–17, y=622–746). All nine previously normalized
+mobile scheduler captures matched. Native layout and decoded RGB review found
+no text or geometry change. Focused baseline `00172` passed and updated that
+one reviewed capture. Full strict acceptance is required again, with no further
+application or browser-rendering change.
+
+## Final complete template gate
+
+Strict `BQA-2026-00173` passed all twenty scenarios and 280 captures, with zero
+failed or flaky cases and zero baseline changes. Application changes are clean;
+source is `a810c2b+source-e3b0c44298fc+qa-0fcc957b6e35`.
+All retained PNG checksums match `qa/evidence/content-templates/validation.json`.
+This final compiled run includes the production CSRF correction. Failed drift
+runs remain recorded above; no partial or baseline-update run is final evidence.
+
+## Final production and runtime restoration
+
+Strict `BQA-2026-00174` passed the compiled production privacy/cache gate with
+zero baseline changes. All five entries retain matching script nonces, no page
+errors or unsolicited guest private requests, root worker scope, network-only
+private APIs, exact legacy cache removal, and unrelated cache preservation.
+Final evidence is in `qa/evidence/content-production/`.
+
+The final regression sweep passed 117 site tests plus ten pure workbook parser
+tests. All seven synthetic marker counters and the extra `cnt-%` site query are
+zero. Showcase hashes and 160 journal records remain unchanged, with zero
+external sends. The development frontend was restored on the primary site;
+frontend, backend and browser worker are alive and the proxied backend ping
+returns pong. Temporary production and rollback launch states are removed.
+`qa/evidence/content-regressions/runtime-restoration.json` retains safe proof.
+The reference runtime and all existing checkouts/sites were preserved.

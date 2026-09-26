@@ -21,12 +21,17 @@
     "exact_synthetic_audience_removed": 2,
     "showcase_records_preserved": true
   },
-  "scope": "Operator backup/restore data integrity. Browser public-route recovery and code upgrade/rollback qualification remain pending.",
+  "scope": "Operator backup/restore data integrity, followed by strict restored candidate, maintained rollback, and upgraded-candidate public routes/media/consent acceptance. See stage validation reports and code-drill.json.",
   "commands": [
     "appointment.tests.content_recovery.prepare",
     "bench backup --with-files",
     "appointment/tests/content_fresh_site.py restore 20260926_163236",
     "appointment.tests.content_recovery.verify_restore",
     "appointment.tests.content_recovery.cleanup_source"
-  ]
+  ],
+  "strict_browser_stages": {
+    "candidate": "BQA-2026-03005",
+    "rollback": "BQA-2026-03008",
+    "upgrade": "BQA-2026-03010"
+  }
 }

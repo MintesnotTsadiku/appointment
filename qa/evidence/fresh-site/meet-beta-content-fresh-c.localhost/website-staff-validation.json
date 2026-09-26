@@ -1,6 +1,6 @@
 {
-  "managed_browser_account": "BACCT-4031",
-  "managed_browser_session": "BSESS-4032",
+  "managed_browser_account": "BACCT-4043",
+  "managed_browser_session": "BSESS-4044",
   "roles": [
     "All",
     "Desk User",

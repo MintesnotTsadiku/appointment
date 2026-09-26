@@ -1,8 +1,8 @@
 {
-  "run": "BQA-2026-04030",
+  "run": "BQA-2026-04042",
   "site": "meet-beta-content-fresh-c.localhost",
   "status": "Passed",
-  "source_version": "7cc7bb3+source-b68716e1152c+qa-57f344b27b86",
+  "source_version": "4918e47+source-e3b0c44298fc+qa-57f344b27b86",
   "scenario_summary": {
     "failed": 0,
     "flaky": 0,
@@ -122,7 +122,7 @@
     },
     {
       "file": "website-private-preview-article.png",
-      "sha256": "f753dae86aeb4c59041a934fc82830beeb37309b391594b9dc939e180c248a02"
+      "sha256": "554b7b8ac604a1254357fd968a8aa9f2fd4c1be06a76651b268918278cab6aea"
     },
     {
       "file": "website-private-preview-blog.png",
@@ -134,7 +134,7 @@
     },
     {
       "file": "website-private-preview-collection.png",
-      "sha256": "80cc1de426e5e8b044d8166c8466dad272a79cea5b8ffec2d7c2381ad901fe99"
+      "sha256": "d5e8023b2e8efdb92d30352706cd70a61ec2f790dcbb112b4a7acd1f966bcd3f"
     },
     {
       "file": "website-private-preview-gallery.png",

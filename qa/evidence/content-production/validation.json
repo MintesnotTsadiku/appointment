@@ -1,6 +1,6 @@
 {
-  "run": "BQA-2026-00153",
-  "source_version": "1832bea+source-e3b0c44298fc+qa-0915670ce750",
+  "run": "BQA-2026-00174",
+  "source_version": "a810c2b+source-e3b0c44298fc+qa-0915670ce750",
   "baseline_changed_count": 0,
   "scenario_summary": {
     "failed": 0,

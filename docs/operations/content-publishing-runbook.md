@@ -1,8 +1,8 @@
 # Content publishing operations
 
 This runbook covers the tenant-owned publication, website, media, workbook, and
-local newsletter services. The release candidate remains in validation. Use the
-progress record for accepted and pending gates.
+local newsletter services. Use the progress record for accepted gates, exact source revisions, and retained
+browser evidence. Newsletter delivery remains restricted to the local sink.
 
 ## Runtime and dependency checks
 
@@ -113,8 +113,11 @@ route recovery.
 
 The recorded drill restored backup `20260926_163236` into
 `meet-beta-content-restore.localhost`. The data inventory matched for 35 content
-releases, 15 media files, and two synthetic consent records. Public-route recovery
-and code rollback evidence must be recorded separately before staging.
+releases, 15 media files, and two synthetic consent records. Strict browser runs
+`03005`, `03008`, and `03010` passed restored candidate, maintained code rollback,
+and upgrade. Each retained sixteen captures with zero differences, unchanged
+release/media digests, protected guest unsubscribe, and preserved suppression.
+Candidate and upgraded captures are identical. See `qa/evidence/content-recovery/`.
 
 ## Upgrade and rollback gate
 
@@ -179,3 +182,17 @@ checkout, untracked files, installed dependency revisions, and database untouche
 gateway and restore the normal isolated runtime. Keep each stage's evidence and
 the archive checksum separately. A successful code drill does not authorize a
 schema downgrade or production deployment.
+
+
+The maintained rollback revision is `1ae60d37c95ba50d81e3b7e7a00af44f7585d22a`,
+parent `ef9c42a`, with a one-file CSRF-header backport. Preserve the local Git
+reference `refs/qa/content-publishing-rollback` and its exact archive with the
+private recovery package. The unpatched revision fails production unsubscribe.
+The code drill proves retained-schema compatibility; older visual and security
+controls are not qualified for deployment. A production fallback must retain the
+current security controls or restore the verified candidate code and matching
+backup. Never disable CSRF or rewrite audience tokens to make recovery pass.
+
+The browser tests measure local unthrottled paint and layout behavior. They are
+not remote-network load tests or a complete screen-reader certification. Keep
+those deployment-specific checks separate from the recorded local release gates.

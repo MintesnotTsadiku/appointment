@@ -58,3 +58,20 @@ clamped descriptions, and mobile layout. Source comparison is retained in
 `../content-design-review/comparison.html` after the strict template export.
 Screen-reader certification and remote performance testing are outside this
 recorded browser gate.
+
+## Final template follow-up
+
+Strict matrix `BQA-2026-00164`, source `4918e47`, passed twenty combinations and
+280 captures with zero differences from the reviewed production baseline.
+The only subsequent visual correction after this accessibility audit separated
+Selam's team heading and introduction. Four rendered-text bounds checks passed
+at desktop/mobile and light/dark. No color token changed in that correction.
+Native scheduler and content review checked badges, clamped descriptions, image
+captions, consent copy, and mobile wrapping. The retained source comparison now
+resolves all approved-board and final-browser links.
+
+Final compiled matrix `BQA-2026-00173` at QA revision `a810c2b` passed the
+complete 280-capture strict comparison after the CSRF-header correction. The
+application introduced no further visual or color change. Scheduler capture
+requires two identical native frames; its reviewed edge-antialiasing baseline
+updates and failed comparisons remain in the operations record.
