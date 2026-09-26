@@ -2,7 +2,7 @@
   "engine": "axe-core 4.11.0",
   "viewport": "mobile",
   "mode": "dark",
-  "scope": "Automated WCAG A/AA checks and local development navigation budget; manual accessibility review remains separate.",
+  "scope": "Automated WCAG A/AA checks, keyboard traversal, and local compiled-production navigation budget; manual accessibility review remains separate.",
   "reports": [
     {
       "surface": "landing",
@@ -15,6 +15,25 @@
               "target": [
                 "header > .selam-logo[href$=\"selam-studio\"] > strong"
               ],
+              "reviewStyles": {
+                "tag": "STRONG",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "18px",
+                "fontWeight": "700",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -33,6 +52,30 @@
               "target": [
                 ".selam-pill[href$=\"book\"] > span"
               ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "rgb(42, 16, 34)",
+                "decoration": "none",
+                "fontSize": "11px",
+                "fontWeight": "700",
+                "backgrounds": [
+                  {
+                    "tag": "A",
+                    "color": "rgb(241, 166, 200)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -47,6 +90,25 @@
               "target": [
                 ".selam-hero-copy > .selam-overline"
               ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "rgb(216, 237, 105)",
+                "decoration": "none",
+                "fontSize": "11px",
+                "fontWeight": "800",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -65,6 +127,25 @@
               "target": [
                 "h1"
               ],
+              "reviewStyles": {
+                "tag": "H1",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "56px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -83,6 +164,25 @@
               "target": [
                 ".selam-hero-copy > p:nth-child(3)"
               ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "20px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -101,6 +201,25 @@
               "target": [
                 ".selam-link"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "700",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -119,6 +238,25 @@
               "target": [
                 ".selam-hero-copy > small"
               ],
+              "reviewStyles": {
+                "tag": "SMALL",
+                "color": "rgb(222, 200, 220)",
+                "decoration": "none",
+                "fontSize": "12.8px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -137,6 +275,25 @@
               "target": [
                 ".selam-offerings > .selam-overline"
               ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "rgb(216, 237, 105)",
+                "decoration": "none",
+                "fontSize": "11px",
+                "fontWeight": "800",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -155,6 +312,25 @@
               "target": [
                 ".selam-offerings > h2"
               ],
+              "reviewStyles": {
+                "tag": "H2",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "36px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -173,6 +349,25 @@
               "target": [
                 ".selam-photo-grid > article:nth-child(1) > h3"
               ],
+              "reviewStyles": {
+                "tag": "H3",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "25px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -191,6 +386,25 @@
               "target": [
                 ".selam-photo-grid > article:nth-child(1) > p"
               ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -209,6 +423,25 @@
               "target": [
                 "article:nth-child(1) > a[href$=\"book\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -227,6 +460,30 @@
               "target": [
                 "article:nth-child(2) > .selam-photo > span"
               ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "27px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "SPAN",
+                    "color": "rgb(83, 48, 90)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -241,6 +498,25 @@
               "target": [
                 ".selam-photo-grid > article:nth-child(2) > h3"
               ],
+              "reviewStyles": {
+                "tag": "H3",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "25px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -259,6 +535,25 @@
               "target": [
                 ".selam-photo-grid > article:nth-child(2) > p"
               ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -277,6 +572,25 @@
               "target": [
                 ".selam-photo-grid > article:nth-child(2) > a[href$=\"book\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -295,6 +609,30 @@
               "target": [
                 "article:nth-child(1) > b"
               ],
+              "reviewStyles": {
+                "tag": "B",
+                "color": "rgb(216, 237, 105)",
+                "decoration": "none",
+                "fontSize": "34px",
+                "fontWeight": "700",
+                "backgrounds": [
+                  {
+                    "tag": "SECTION",
+                    "color": "rgb(83, 48, 90)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -309,6 +647,30 @@
               "target": [
                 "article:nth-child(2) > b"
               ],
+              "reviewStyles": {
+                "tag": "B",
+                "color": "rgb(216, 237, 105)",
+                "decoration": "none",
+                "fontSize": "34px",
+                "fontWeight": "700",
+                "backgrounds": [
+                  {
+                    "tag": "SECTION",
+                    "color": "rgb(83, 48, 90)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -323,6 +685,30 @@
               "target": [
                 ".selam-belong > div > article:nth-child(3) > b"
               ],
+              "reviewStyles": {
+                "tag": "B",
+                "color": "rgb(216, 237, 105)",
+                "decoration": "none",
+                "fontSize": "34px",
+                "fontWeight": "700",
+                "backgrounds": [
+                  {
+                    "tag": "SECTION",
+                    "color": "rgb(83, 48, 90)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -342,6 +728,25 @@
               "target": [
                 "article:nth-child(1) > a[href$=\"book\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "link-in-text-block",
@@ -356,6 +761,25 @@
               "target": [
                 ".selam-photo-grid > article:nth-child(2) > a[href$=\"book\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "link-in-text-block",
@@ -369,8 +793,62 @@
           ]
         }
       ],
-      "navigationMs": 410,
-      "externalResources": []
+      "navigationMs": 122,
+      "lcpMs": 360,
+      "cls": 0,
+      "externalResources": [],
+      "keyboard": [
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "none",
+          "name": "Selam Movement Practice"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(42, 16, 34)",
+          "shadow": "none",
+          "name": "Book a session \u2192"
+        },
+        {
+          "tag": "BUTTON",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "none",
+          "name": "Switch to light mode"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(42, 16, 34)",
+          "shadow": "none",
+          "name": "Start with a consultation \u2192"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "none",
+          "name": "See the two session options \u2192"
+        }
+      ]
     },
     {
       "surface": "book",
@@ -383,6 +861,25 @@
               "target": [
                 "strong"
               ],
+              "reviewStyles": {
+                "tag": "STRONG",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "18px",
+                "fontWeight": "700",
+                "backgrounds": [
+                  {
+                    "tag": "MAIN",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -401,6 +898,25 @@
               "target": [
                 "a:nth-child(3)"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "13px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "MAIN",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -419,6 +935,25 @@
               "target": [
                 ".selam-overline"
               ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "rgb(216, 237, 105)",
+                "decoration": "none",
+                "fontSize": "11px",
+                "fontWeight": "800",
+                "backgrounds": [
+                  {
+                    "tag": "MAIN",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -437,6 +972,25 @@
               "target": [
                 "h1"
               ],
+              "reviewStyles": {
+                "tag": "H1",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "58px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "MAIN",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -455,6 +1009,25 @@
               "target": [
                 "p:nth-child(3)"
               ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "MAIN",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -472,8 +1045,52 @@
           ]
         }
       ],
-      "navigationMs": 241.40000000596046,
-      "externalResources": []
+      "navigationMs": 85,
+      "lcpMs": 292,
+      "cls": 0,
+      "externalResources": [],
+      "keyboard": [
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "none",
+          "name": "Selam Movement Practice"
+        },
+        {
+          "tag": "BUTTON",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "none",
+          "name": "Switch to light mode"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "none",
+          "name": "Back to site"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(42, 16, 34)",
+          "shadow": "none",
+          "name": "Continue to booking \u2192"
+        }
+      ]
     },
     {
       "surface": "scheduler",
@@ -486,6 +1103,35 @@
               "target": [
                 ".h-full.text-2xl.bg-gradient-primary"
               ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "rgb(42, 16, 34)",
+                "decoration": "none",
+                "fontSize": "24px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "SPAN",
+                    "color": "rgb(241, 166, 200)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "color(srgb 0.462745 0.32549 0.45098 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(90deg, color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -504,6 +1150,30 @@
               "target": [
                 "h1"
               ],
+              "reviewStyles": {
+                "tag": "H1",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "30px",
+                "fontWeight": "700",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "color(srgb 0.462745 0.32549 0.45098 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(90deg, color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -522,6 +1192,30 @@
               "target": [
                 ".text-lg.mb-3"
               ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "color(srgb 0.915882 0.848824 0.886078)",
+                "decoration": "none",
+                "fontSize": "18px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "color(srgb 0.462745 0.32549 0.45098 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(90deg, color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -540,6 +1234,30 @@
               "target": [
                 ".gap-2.items-center.flex:nth-child(1) > span"
               ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.915882 0.848824 0.886078)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "color(srgb 0.462745 0.32549 0.45098 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(90deg, color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -558,6 +1276,30 @@
               "target": [
                 ".flex-wrap.gap-4.text-sm > .gap-2.items-center.flex:nth-child(2) > span"
               ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.915882 0.848824 0.886078)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "color(srgb 0.462745 0.32549 0.45098 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(90deg, color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -576,6 +1318,25 @@
               "target": [
                 "h2"
               ],
+              "reviewStyles": {
+                "tag": "H2",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "24px",
+                "fontWeight": "700",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(90deg, color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -594,6 +1355,25 @@
               "target": [
                 ".md\\:justify-between > div > p"
               ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "color(srgb 0.915882 0.848824 0.886078)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(90deg, color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -612,6 +1392,25 @@
               "target": [
                 ".space-y-4 > h3"
               ],
+              "reviewStyles": {
+                "tag": "H3",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "18px",
+                "fontWeight": "600",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(90deg, color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -630,6 +1429,30 @@
               "target": [
                 "button[data-qa-service-slug=\"EVT-2026-000056\"] > .relative > .text-xl.pr-16"
               ],
+              "reviewStyles": {
+                "tag": "H4",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "20px",
+                "fontWeight": "600",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.462745 0.32549 0.45098 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(90deg, color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -648,6 +1471,30 @@
               "target": [
                 "button[data-qa-service-slug=\"EVT-2026-000056\"] > .relative > .mb-3.gap-2"
               ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "color(srgb 0.915882 0.848824 0.886078)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.462745 0.32549 0.45098 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(90deg, color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -666,6 +1513,30 @@
               "target": [
                 "button[data-qa-service-slug=\"EVT-2026-000056\"] > .relative > .line-clamp-2.mb-4"
               ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "color(srgb 0.915882 0.848824 0.886078)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.462745 0.32549 0.45098 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(90deg, color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -684,6 +1555,30 @@
               "target": [
                 "button[data-qa-service-slug=\"EVT-2026-000056\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(1) > span"
               ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.915882 0.848824 0.886078)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.462745 0.32549 0.45098 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(90deg, color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -702,6 +1597,30 @@
               "target": [
                 "button[data-qa-service-slug=\"EVT-2026-000056\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(2) > span"
               ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.915882 0.848824 0.886078)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.462745 0.32549 0.45098 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(90deg, color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -720,6 +1639,30 @@
               "target": [
                 "button[data-qa-service-slug=\"EVT-2026-000056\"] > .relative > .pt-4.justify-between.items-center > .font-medium.text-sm"
               ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.967059 0.778039 0.842353)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "500",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.462745 0.32549 0.45098 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(90deg, color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -738,6 +1681,30 @@
               "target": [
                 "button[data-qa-service-slug=\"EVT-2026-000055\"] > .relative > .text-xl.pr-16"
               ],
+              "reviewStyles": {
+                "tag": "H4",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "20px",
+                "fontWeight": "600",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.462745 0.32549 0.45098 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(90deg, color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -756,6 +1723,30 @@
               "target": [
                 "button[data-qa-service-slug=\"EVT-2026-000055\"] > .relative > .mb-3.gap-2"
               ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "color(srgb 0.915882 0.848824 0.886078)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.462745 0.32549 0.45098 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(90deg, color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -774,6 +1765,30 @@
               "target": [
                 "button[data-qa-service-slug=\"EVT-2026-000055\"] > .relative > .line-clamp-2.mb-4"
               ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "color(srgb 0.915882 0.848824 0.886078)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.462745 0.32549 0.45098 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(90deg, color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -792,6 +1807,30 @@
               "target": [
                 "button[data-qa-service-slug=\"EVT-2026-000055\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(1) > span"
               ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.915882 0.848824 0.886078)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.462745 0.32549 0.45098 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(90deg, color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -810,6 +1849,30 @@
               "target": [
                 "button[data-qa-service-slug=\"EVT-2026-000055\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(2) > span"
               ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.915882 0.848824 0.886078)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.462745 0.32549 0.45098 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(90deg, color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -828,6 +1891,30 @@
               "target": [
                 "button[data-qa-service-slug=\"EVT-2026-000055\"] > .relative > .pt-4.justify-between.items-center > .font-medium.text-sm"
               ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.967059 0.778039 0.842353)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "500",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.462745 0.32549 0.45098 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(90deg, color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -846,33 +1933,39 @@
               "target": [
                 ".p-6.backdrop-blur-sm.rounded-xl > h3"
               ],
+              "reviewStyles": {
+                "tag": "H3",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "18px",
+                "fontWeight": "600",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "color(srgb 0.462745 0.32549 0.45098 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(90deg, color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
-                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "message": "Element's background color could not be determined due to a background gradient",
                   "data": {
                     "contrastRatio": 0,
                     "fontSize": "13.5pt (18px)",
                     "fontWeight": "normal",
-                    "messageKey": "bgOverlap",
-                    "expectedContrastRatio": "4.5:1"
-                  }
-                }
-              ]
-            },
-            {
-              "target": [
-                ".flex-1.min-w-0 > .truncate"
-              ],
-              "checks": [
-                {
-                  "id": "color-contrast",
-                  "message": "Element's background color could not be determined because it is overlapped by another element",
-                  "data": {
-                    "contrastRatio": 0,
-                    "fontSize": "12.0pt (16px)",
-                    "fontWeight": "normal",
-                    "messageKey": "bgOverlap",
+                    "messageKey": "bgGradient",
                     "expectedContrastRatio": "4.5:1"
                   }
                 }
@@ -882,6 +1975,25 @@
               "target": [
                 ".font-normal.text-primary:nth-child(1)"
               ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "rgb(250, 250, 250)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(90deg, color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -900,6 +2012,25 @@
               "target": [
                 ".hover\\:underline"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "underline",
+                "fontSize": "14px",
+                "fontWeight": "600",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(90deg, color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(color(srgb 0.462745 0.32549 0.45098 / 0.45) 1px, rgba(0, 0, 0, 0) 1px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -917,8 +2048,62 @@
           ]
         }
       ],
-      "navigationMs": 171.80000001192093,
-      "externalResources": []
+      "navigationMs": 86.40000000596046,
+      "lcpMs": 716,
+      "cls": 0,
+      "externalResources": [],
+      "keyboard": [
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(241, 166, 200)",
+          "color": "rgb(242, 242, 242)",
+          "shadow": "none",
+          "name": "Back to Selam Movement Practice"
+        },
+        {
+          "tag": "BUTTON",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(241, 166, 200)",
+          "color": "rgb(242, 242, 242)",
+          "shadow": "none",
+          "name": "Switch to light mode"
+        },
+        {
+          "tag": "BUTTON",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "1px",
+          "outlineColor": "rgb(255, 246, 237)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "rgba(25, 65, 48, 0.14) 0px 24px 60px 0px",
+          "name": "Guided mobility sessionSelam BekeleA spacious one-to-one session with simple mobility work, pacing and a short take-home sequence.60 min1200 ETBBook Appointment"
+        },
+        {
+          "tag": "BUTTON",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "0px",
+          "outlineColor": "rgb(255, 247, 237)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "rgba(25, 65, 48, 0.14) 0px 24px 60px 0px",
+          "name": "Movement consultationSelam BekeleA 45-minute conversation and movement check-in to understand your routine, goals and a comfortable place to begin.45 min900 ETBBook Appointment"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(241, 166, 200)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "none",
+          "name": "Meet.et"
+        }
+      ]
     },
     {
       "surface": "blog",
@@ -931,6 +2116,25 @@
               "target": [
                 "strong"
               ],
+              "reviewStyles": {
+                "tag": "STRONG",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "700",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -949,6 +2153,25 @@
               "target": [
                 "nav[aria-label=\"Public site\"] > a[href$=\"selam-studio\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -967,6 +2190,25 @@
               "target": [
                 "a[href$=\"blog\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -985,6 +2227,25 @@
               "target": [
                 "a[href$=\"gallery\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1003,6 +2264,25 @@
               "target": [
                 "nav[aria-label=\"Public site\"] > a[href$=\"book\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1021,6 +2301,25 @@
               "target": [
                 ".selam-content-heading > p"
               ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1039,6 +2338,25 @@
               "target": [
                 "h1"
               ],
+              "reviewStyles": {
+                "tag": "H1",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "40px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1057,6 +2375,25 @@
               "target": [
                 "footer > a[href$=\"selam-studio\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1075,6 +2412,25 @@
               "target": [
                 "footer > a[href$=\"book\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1098,6 +2454,30 @@
               "target": [
                 "a[aria-label=\"What to expect in the studio\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "ARTICLE",
+                    "color": "rgb(45, 24, 49)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "link-in-text-block",
@@ -1112,6 +2492,30 @@
               "target": [
                 "article:nth-child(2) > a"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "ARTICLE",
+                    "color": "rgb(45, 24, 49)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "link-in-text-block",
@@ -1126,6 +2530,30 @@
               "target": [
                 "article:nth-child(3) > a"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "ARTICLE",
+                    "color": "rgb(45, 24, 49)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "link-in-text-block",
@@ -1139,8 +2567,62 @@
           ]
         }
       ],
-      "navigationMs": 197.2999999821186,
-      "externalResources": []
+      "navigationMs": 112.5,
+      "lcpMs": 228,
+      "cls": 0,
+      "externalResources": [],
+      "keyboard": [
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "none",
+          "name": "Skip to content"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "none",
+          "name": "Selam Movement Practice"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "none",
+          "name": "Home"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "none",
+          "name": "Journal"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "none",
+          "name": "Gallery"
+        }
+      ]
     },
     {
       "surface": "article",
@@ -1153,6 +2635,25 @@
               "target": [
                 "strong"
               ],
+              "reviewStyles": {
+                "tag": "STRONG",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "700",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1171,6 +2672,25 @@
               "target": [
                 "nav > a[href$=\"selam-studio\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1189,6 +2709,25 @@
               "target": [
                 "nav > a[href$=\"blog\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1207,6 +2746,25 @@
               "target": [
                 "a[href$=\"gallery\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1225,6 +2783,25 @@
               "target": [
                 "nav > a[href$=\"book\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1243,6 +2820,25 @@
               "target": [
                 ".selam-content-heading > p:nth-child(1)"
               ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1261,6 +2857,25 @@
               "target": [
                 "h1"
               ],
+              "reviewStyles": {
+                "tag": "H1",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "40px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1279,6 +2894,25 @@
               "target": [
                 ".selam-content-heading > p:nth-child(3)"
               ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1297,6 +2931,25 @@
               "target": [
                 "article > p"
               ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "18px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1315,6 +2968,25 @@
               "target": [
                 "time"
               ],
+              "reviewStyles": {
+                "tag": "TIME",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1333,6 +3005,25 @@
               "target": [
                 "div:nth-child(2) > h2"
               ],
+              "reviewStyles": {
+                "tag": "H2",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "32px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1351,6 +3042,25 @@
               "target": [
                 "div:nth-child(3) > p"
               ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "18px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1369,6 +3079,25 @@
               "target": [
                 "div:nth-child(4) > p"
               ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "18px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1387,6 +3116,25 @@
               "target": [
                 "#published-content > a[href$=\"blog\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1405,6 +3153,25 @@
               "target": [
                 "footer > a[href$=\"selam-studio\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1423,6 +3190,25 @@
               "target": [
                 "footer > a[href$=\"book\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1446,6 +3232,25 @@
               "target": [
                 "#published-content > a[href$=\"blog\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "link-in-text-block",
@@ -1459,8 +3264,67 @@
           ]
         }
       ],
-      "navigationMs": 194.7999999821186,
-      "externalResources": []
+      "navigationMs": 126.19999998807907,
+      "lcpMs": 260,
+      "cls": 0,
+      "externalResources": [],
+      "keyboard": [
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "none",
+          "name": "Skip to content"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "none",
+          "name": "Selam Movement Practice"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "none",
+          "name": "Home"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "none",
+          "name": "Journal"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "none",
+          "name": "Gallery"
+        }
+      ],
+      "inlineLinkReview": {
+        "decoration": "underline",
+        "focused": true,
+        "outline": "solid"
+      }
     },
     {
       "surface": "gallery",
@@ -1473,6 +3337,25 @@
               "target": [
                 "strong"
               ],
+              "reviewStyles": {
+                "tag": "STRONG",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "700",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1491,6 +3374,25 @@
               "target": [
                 "nav[aria-label=\"Public site\"] > a[href$=\"selam-studio\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1509,6 +3411,25 @@
               "target": [
                 "a[href$=\"blog\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1527,6 +3448,25 @@
               "target": [
                 "a[href$=\"gallery\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1545,6 +3485,25 @@
               "target": [
                 "nav[aria-label=\"Public site\"] > a[href$=\"book\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1563,6 +3522,25 @@
               "target": [
                 ".selam-content-heading > p"
               ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1581,6 +3559,25 @@
               "target": [
                 "h1"
               ],
+              "reviewStyles": {
+                "tag": "H1",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "40px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1599,6 +3596,25 @@
               "target": [
                 "footer > a[href$=\"selam-studio\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1617,6 +3633,25 @@
               "target": [
                 "footer > a[href$=\"book\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1640,6 +3675,30 @@
               "target": [
                 "a[aria-label=\"Inside the movement studio\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "ARTICLE",
+                    "color": "rgb(45, 24, 49)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "link-in-text-block",
@@ -1654,6 +3713,30 @@
               "target": [
                 "a[aria-label=\"A quieter kind of practice\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "ARTICLE",
+                    "color": "rgb(45, 24, 49)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "link-in-text-block",
@@ -1667,8 +3750,62 @@
           ]
         }
       ],
-      "navigationMs": 166.40000000596046,
-      "externalResources": []
+      "navigationMs": 117,
+      "lcpMs": 276,
+      "cls": 0,
+      "externalResources": [],
+      "keyboard": [
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "none",
+          "name": "Skip to content"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "none",
+          "name": "Selam Movement Practice"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "none",
+          "name": "Home"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "none",
+          "name": "Journal"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "none",
+          "name": "Gallery"
+        }
+      ]
     },
     {
       "surface": "collection",
@@ -1681,6 +3818,25 @@
               "target": [
                 "strong"
               ],
+              "reviewStyles": {
+                "tag": "STRONG",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "700",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1699,6 +3855,25 @@
               "target": [
                 "nav > a[href$=\"selam-studio\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1717,6 +3892,25 @@
               "target": [
                 "a[href$=\"blog\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1735,6 +3929,25 @@
               "target": [
                 "nav > a[href$=\"gallery\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1753,6 +3966,25 @@
               "target": [
                 "nav > a[href$=\"book\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1771,6 +4003,25 @@
               "target": [
                 ".selam-content-heading > p:nth-child(1)"
               ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1789,6 +4040,25 @@
               "target": [
                 "h1"
               ],
+              "reviewStyles": {
+                "tag": "H1",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "40px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1807,6 +4077,25 @@
               "target": [
                 ".selam-content-heading > p:nth-child(3)"
               ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1825,6 +4114,25 @@
               "target": [
                 "figure:nth-child(1) > figcaption"
               ],
+              "reviewStyles": {
+                "tag": "FIGCAPTION",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1843,6 +4151,25 @@
               "target": [
                 "figure:nth-child(1) > figcaption > small"
               ],
+              "reviewStyles": {
+                "tag": "SMALL",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "12.8px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1861,6 +4188,25 @@
               "target": [
                 "a[target=\"_blank\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1879,6 +4225,25 @@
               "target": [
                 "figure:nth-child(2) > figcaption"
               ],
+              "reviewStyles": {
+                "tag": "FIGCAPTION",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1897,6 +4262,25 @@
               "target": [
                 "figure:nth-child(2) > figcaption > small"
               ],
+              "reviewStyles": {
+                "tag": "SMALL",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "12.8px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1915,6 +4299,25 @@
               "target": [
                 "#published-content > a[href$=\"gallery\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1933,6 +4336,25 @@
               "target": [
                 "footer > a[href$=\"selam-studio\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1951,6 +4373,25 @@
               "target": [
                 "footer > a[href$=\"book\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "color-contrast",
@@ -1974,6 +4415,25 @@
               "target": [
                 "a[target=\"_blank\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "link-in-text-block",
@@ -1988,6 +4448,25 @@
               "target": [
                 "#published-content > a[href$=\"gallery\"]"
               ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(255, 247, 237)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(33, 18, 37)",
+                    "image": "linear-gradient(rgb(33, 18, 37), rgb(45, 24, 49) 28%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
               "checks": [
                 {
                   "id": "link-in-text-block",
@@ -2001,8 +4480,62 @@
           ]
         }
       ],
-      "navigationMs": 171.7999999821186,
-      "externalResources": []
+      "navigationMs": 116,
+      "lcpMs": 260,
+      "cls": 0,
+      "externalResources": [],
+      "keyboard": [
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "none",
+          "name": "Skip to content"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "none",
+          "name": "Selam Movement Practice"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "none",
+          "name": "Home"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "none",
+          "name": "Journal"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(125, 211, 252)",
+          "color": "rgb(255, 247, 237)",
+          "shadow": "none",
+          "name": "Gallery"
+        }
+      ]
     }
   ]
 }

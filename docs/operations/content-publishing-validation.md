@@ -830,7 +830,7 @@ and performance thresholds are unchanged. This failed run is not acceptance.
 
 Production run `00158` passed ten scenarios and all seventy surface audits.
 It reported zero automated violations and zero layout shift, with largest paints
-between 164 and 836 milliseconds on this local compiled runtime. It also passed
+between 172 and 836 milliseconds on this local compiled runtime. It also passed
 keyboard traversal. These results do not resolve the audit's manual findings.
 Rendered-style review found muted scheduler text below 4.5 against overlapping
 translucent cards and patterns, a light-blue footer link on light canvases, and
@@ -849,3 +849,13 @@ color. Icons and the approved primary/on-primary action background remain separa
 The recovery capture also waits for local fonts and disables capture animations.
 It uses the older build's normal Close control if its asset-ready banner appears.
 It does not mask or remove browser elements.
+
+Production accessibility run `00160` passed ten scenarios with zero baseline
+changes. All seventy surfaces passed automated WCAG A/AA, keyboard, local paint,
+layout, and external-resource checks. Largest paints ranged from 176 to 1,036
+milliseconds, with zero layout shift. The separate color review resolved all
+603 findings against the unchanged small/large text thresholds. Ten retained
+article-link probes show underlines and visible focus at both tested viewports.
+Evidence is in `qa/evidence/content-accessibility/`; its manual review states the
+scope and limits. The reproducible review script is `qa/contrast-review.py`.
+Final template comparison and restored-runtime browser stages remain pending.
