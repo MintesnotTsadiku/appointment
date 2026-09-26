@@ -37,10 +37,24 @@ for (const key of ["selam", "bloom", "meron", "abugida", "tena"]) {
           const audit = await page.evaluate(async () => {
             const result = await axe.run(document, { runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"] } });
             const navigation = performance.getEntriesByType("navigation")[0];
+            const reviewStyles = target => {
+              const element = document.querySelector(target[0]);
+              if (!element) return null;
+              const style = getComputedStyle(element);
+              const backgrounds = [];
+              for (let parent = element; parent; parent = parent.parentElement) {
+                const ancestor = getComputedStyle(parent);
+                if (ancestor.backgroundImage !== "none" || ancestor.backgroundColor !== "rgba(0, 0, 0, 0)") {
+                  backgrounds.push({ tag: parent.tagName, color: ancestor.backgroundColor, image: ancestor.backgroundImage });
+                }
+              }
+              return { tag: element.tagName, color: style.color, decoration: style.textDecorationLine,
+                fontSize: style.fontSize, fontWeight: style.fontWeight, backgrounds };
+            };
             return { violations: result.violations.map(row => ({ id: row.id, impact: row.impact,
               description: row.description, nodes: row.nodes.map(node => ({ target: node.target, failureSummary: node.failureSummary })) })),
               incomplete: result.incomplete.map(row => ({ id: row.id, nodes: row.nodes.map(node => ({
-                target: node.target, checks: [...node.any, ...node.all, ...node.none].map(check => ({
+                target: node.target, reviewStyles: reviewStyles(node.target), checks: [...node.any, ...node.all, ...node.none].map(check => ({
                   id: check.id, message: check.message, data: check.data,
                 })),
               })) })),
@@ -60,13 +74,39 @@ for (const key of ["selam", "bloom", "meron", "abugida", "tena"]) {
               const style = element && getComputedStyle(element);
               return { tag: element?.tagName, visible: Boolean(bounds?.width && bounds?.height),
                 outline: style?.outlineStyle, outlineWidth: style?.outlineWidth,
+                outlineColor: style?.outlineColor, color: style?.color,
                 shadow: style?.boxShadow, name: element?.getAttribute("aria-label") || element?.textContent?.trim() || element?.getAttribute("placeholder") };
             });
             expect(focus.tag).not.toBe("BODY");
             expect(focus.visible).toBe(true);
             keyboard.push(focus);
           }
-          reports.push({ surface, ...audit, keyboard });
+          let inlineLinkReview;
+          if (surface === "article") {
+            // Probe the rendered stylesheet without altering a stored release.
+            await page.locator(`article.${key}-content-article`).evaluate((article, href) => {
+              const paragraph = document.createElement("p");
+              paragraph.dataset.qaInlineLinkReview = "true";
+              paragraph.append("Style review: ");
+              const link = document.createElement("a");
+              link.href = href;
+              link.textContent = "Read the booking information";
+              paragraph.append(link);
+              article.append(paragraph);
+              link.focus();
+            }, row.root + "/book");
+            const probe = page.locator('[data-qa-inline-link-review="true"]');
+            inlineLinkReview = await probe.locator("a").evaluate(link => ({
+              decoration: getComputedStyle(link).textDecorationLine,
+              focused: document.activeElement === link,
+              outline: getComputedStyle(link).outlineStyle,
+            }));
+            expect(inlineLinkReview.decoration).toContain("underline");
+            expect(inlineLinkReview.focused).toBe(true);
+            await probe.screenshot({ path: testInfo.outputPath(`${key}-${width}-${mode}-inline-link-review.png`) });
+            await probe.evaluate(element => element.remove());
+          }
+          reports.push({ surface, ...audit, keyboard, inlineLinkReview });
           await writeFile(testInfo.outputPath(`${key}-${width}-${mode}-gates.json`), JSON.stringify({
             engine: "axe-core 4.11.0", viewport: width, mode, scope: "Automated WCAG A/AA checks, keyboard traversal, and local compiled-production navigation budget; manual accessibility review remains separate.", reports,
           }, null, 2));

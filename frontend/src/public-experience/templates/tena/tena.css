@@ -20,3 +20,5 @@
 
 .tena-content-brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .tena-content-brand img { width: 120px; max-width: 30vw; height: 36px; object-fit: contain; }
+
+.tena-content-article a { text-decoration: underline; }

@@ -18,3 +18,5 @@
 
 .bloom-content-brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .bloom-content-brand img { width: 120px; max-width: 30vw; height: 36px; object-fit: contain; }
+
+.bloom-content-article a { text-decoration: underline; }

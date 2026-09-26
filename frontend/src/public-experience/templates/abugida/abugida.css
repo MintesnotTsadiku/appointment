@@ -97,3 +97,5 @@
 
 .abugida-content-brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .abugida-content-brand img { width: 120px; max-width: 30vw; height: 36px; object-fit: contain; }
+
+.abugida-content-article a { text-decoration: underline; }

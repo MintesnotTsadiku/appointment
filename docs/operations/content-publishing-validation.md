@@ -755,3 +755,34 @@ next preference test to reuse the prior draft. Cleanup now removes exact
 publication rows for the uploaded test sites first. The repeat passed all 12
 website tests. This correction changes test cleanup, not owner or publication
 permissions.
+
+### Compiled production privacy accepted
+
+Strict run `00153` passed with zero visual changes. It used actual Frappe HTML,
+the compiled entry, and the root-scoped service worker. All five entries had
+rendered HTML, matching CSP nonces, no unsafe-eval, and nosniff headers. Guest
+pages made no unsolicited workspace, content-authoring, or socket requests.
+The worker upgrade removed four exact private cache names, preserved an unrelated
+application cache, denied the owner API with no-store, and cached no private API
+or newsletter path. Public proof and its screenshot are retained under
+`qa/evidence/content-production`.
+
+An additional orphan-reference check found two exact sites from the failed
+website test savepoint. The cleanup verified their identities and missing
+synthetic organizations before deleting their owned records in dependency order.
+The synthetic site count is now zero. It changed no showcase or normal-owner
+acceptance business. The earlier seven marker counters also remain zero.
+
+The complete compiled template matrix is running at `00154`. Its controlled
+empty/error scenarios block service workers so Playwright can supply the exact
+API response. Actual service-worker behavior is qualified separately at `00153`.
+Accessibility, layout stability, restored public routes, and code rollback remain
+pending. No staging or external email action has been taken.
+
+The complete production template baseline `00154` passed all twenty scenarios
+and produced 280 authored captures. Inline article links now have a visible
+underline in each template's own CSS. The accessibility suite retains computed
+styles for incomplete gradient/link checks, keyboard focus details, local largest
+paint and layout stability measurements, and a clearly marked transient inline
+link style probe. That probe changes only the browser DOM and no stored release.
+Final strict template comparison and accessibility review remain pending.

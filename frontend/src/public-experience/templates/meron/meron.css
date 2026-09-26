@@ -18,3 +18,5 @@
 
 .meron-content-brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .meron-content-brand img { width: 120px; max-width: 30vw; height: 36px; object-fit: contain; }
+
+.meron-content-article a { text-decoration: underline; }
