@@ -5,6 +5,8 @@ import json
 import re
 
 import frappe
+
+from appointment.content.monitoring import observed
 from frappe.utils import get_datetime, now_datetime
 
 from appointment.content import entitlements
@@ -87,6 +89,7 @@ def queue(site, ownership, sender, request_id, scheduled_at=None, locale="en"):
     return {"campaign": campaign.name, "replayed": False, "delivery": "local-email-sink"}
 
 
+@observed("newsletter.worker", scope="campaign")
 def deliver(name):
     from appointment.content.newsletter.delivery import deliver_campaign
 

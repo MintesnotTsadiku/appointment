@@ -6,6 +6,8 @@ import json
 
 import frappe
 
+from appointment.content.monitoring import observed
+
 from appointment.public_experience import access, brand_compiler, publisher
 from appointment.public_experience import public_config
 from appointment.public_experience import resolver as resolver_module
@@ -15,7 +17,7 @@ from appointment.public_experience.reserved import normalize_slug
 
 
 @frappe.whitelist(methods=["GET"])
-def website_setup_context(industry: str = "", mood: str = ""):
+def website_setup_context(industry: str = "", mood: str = "", audience: str = "", density: str = ""):
     from appointment.public_experience import setup
 
     organizations = access.membership.manager_organizations()
@@ -26,22 +28,30 @@ def website_setup_context(industry: str = "", mood: str = ""):
     owners += [{"type": "Provider", "name": name,
                 "label": frappe.db.get_value("Provider", name, "provider_name")} for name in providers]
     sites = frappe.get_list("Public Site", filters={"status": ["!=", "Archived"]}, pluck="name")
-    return {"owners": owners, "catalog": setup.ranked_catalog(industry, mood),
+    return {"owners": owners, "catalog": setup.ranked_catalog(industry, mood, audience, density),
             "sites": [setup.state(setup.require_site(name)) for name in sites]}
 
 
 @frappe.whitelist(methods=["POST"])
-def preview_website_template(owner_type: str, owner: str, recipe_key: str):
-    from appointment.public_experience import setup
+@observed("identity.upload", scope="site")
+def upload_website_identity(site: str, expected_version: int, kind: str, content_base64: str, public_consent: int):
+    from appointment.public_experience.identity_media import upload
 
-    return setup.preview_template(owner_type, owner, recipe_key)
+    return upload(site, expected_version, kind, content_base64, public_consent)
 
 
 @frappe.whitelist(methods=["POST"])
-def start_website_setup(owner_type: str, owner: str, title: str, slug: str, recipe_key: str):
+def preview_website_template(owner_type: str, owner: str, recipe_key: str, preferences=None):
     from appointment.public_experience import setup
 
-    return setup.start(owner_type, owner, title, slug, recipe_key)
+    return setup.preview_template(owner_type, owner, recipe_key, preferences)
+
+
+@frappe.whitelist(methods=["POST"])
+def start_website_setup(owner_type: str, owner: str, title: str, slug: str, recipe_key: str, preferences=None):
+    from appointment.public_experience import setup
+
+    return setup.start(owner_type, owner, title, slug, recipe_key, preferences)
 
 
 @frappe.whitelist(methods=["POST"])
@@ -53,6 +63,7 @@ def save_website_setup(site: str, expected_version: int, step: str, title=None,
 
 
 @frappe.whitelist(methods=["POST"])
+@observed("website.preview", scope="site")
 def preview_website_setup(site: str, expected_version: int):
     from appointment.public_experience import setup
 
@@ -67,6 +78,7 @@ def website_setup_readiness(site: str, expected_version: int):
 
 
 @frappe.whitelist(methods=["POST"])
+@observed("website.publish", scope="site")
 def publish_website_setup(site: str, expected_version: int):
     from appointment.public_experience import setup
 

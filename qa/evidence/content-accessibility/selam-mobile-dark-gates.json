@@ -1,0 +1,2008 @@
+{
+  "engine": "axe-core 4.11.0",
+  "viewport": "mobile",
+  "mode": "dark",
+  "scope": "Automated WCAG A/AA checks and local development navigation budget; manual accessibility review remains separate.",
+  "reports": [
+    {
+      "surface": "landing",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                "header > .selam-logo[href$=\"selam-studio\"] > strong"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "13.5pt (18px)",
+                    "fontWeight": "bold",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".selam-pill[href$=\"book\"] > span"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content contains only non-text characters",
+                  "data": {
+                    "messageKey": "nonBmp"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".selam-hero-copy > .selam-overline"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "8.3pt (11px)",
+                    "fontWeight": "bold",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "h1"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "42.0pt (56px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "3:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".selam-hero-copy > p:nth-child(3)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "15.0pt (20px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".selam-link"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "bold",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".selam-hero-copy > small"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "9.6pt (12.8px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".selam-offerings > .selam-overline"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "8.3pt (11px)",
+                    "fontWeight": "bold",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".selam-offerings > h2"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "27.0pt (36px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "3:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".selam-photo-grid > article:nth-child(1) > h3"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "18.8pt (25px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "3:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".selam-photo-grid > article:nth-child(1) > p"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "article:nth-child(1) > a[href$=\"book\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "article:nth-child(2) > .selam-photo > span"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content contains only non-text characters",
+                  "data": {
+                    "messageKey": "nonBmp"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".selam-photo-grid > article:nth-child(2) > h3"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "18.8pt (25px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "3:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".selam-photo-grid > article:nth-child(2) > p"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".selam-photo-grid > article:nth-child(2) > a[href$=\"book\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "article:nth-child(1) > b"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content contains only non-text characters",
+                  "data": {
+                    "messageKey": "nonBmp"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "article:nth-child(2) > b"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content contains only non-text characters",
+                  "data": {
+                    "messageKey": "nonBmp"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".selam-belong > div > article:nth-child(3) > b"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content contains only non-text characters",
+                  "data": {
+                    "messageKey": "nonBmp"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "link-in-text-block",
+          "nodes": [
+            {
+              "target": [
+                "article:nth-child(1) > a[href$=\"book\"]"
+              ],
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".selam-photo-grid > article:nth-child(2) > a[href$=\"book\"]"
+              ],
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 410,
+      "externalResources": []
+    },
+    {
+      "surface": "book",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                "strong"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "13.5pt (18px)",
+                    "fontWeight": "bold",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "a:nth-child(3)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "9.8pt (13px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".selam-overline"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "8.3pt (11px)",
+                    "fontWeight": "bold",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "h1"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "43.5pt (58px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "3:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "p:nth-child(3)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 241.40000000596046,
+      "externalResources": []
+    },
+    {
+      "surface": "scheduler",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                ".h-full.text-2xl.bg-gradient-primary"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content is too short to determine if it is actual text content",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "18.0pt (24px)",
+                    "fontWeight": "normal",
+                    "messageKey": "shortTextContent",
+                    "expectedContrastRatio": "3:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "h1"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "22.5pt (30px)",
+                    "fontWeight": "bold",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "3:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".text-lg.mb-3"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "13.5pt (18px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".gap-2.items-center.flex:nth-child(1) > span"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".flex-wrap.gap-4.text-sm > .gap-2.items-center.flex:nth-child(2) > span"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "h2"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "18.0pt (24px)",
+                    "fontWeight": "bold",
+                    "messageKey": "elmPartiallyObscured",
+                    "expectedContrastRatio": "3:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".md\\:justify-between > div > p"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".space-y-4 > h3"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "13.5pt (18px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscured",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000056\"] > .relative > .text-xl.pr-16"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "15.0pt (20px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscured",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000056\"] > .relative > .mb-3.gap-2"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000056\"] > .relative > .line-clamp-2.mb-4"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscured",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000056\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(1) > span"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000056\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(2) > span"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000056\"] > .relative > .pt-4.justify-between.items-center > .font-medium.text-sm"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000055\"] > .relative > .text-xl.pr-16"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "15.0pt (20px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000055\"] > .relative > .mb-3.gap-2"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000055\"] > .relative > .line-clamp-2.mb-4"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000055\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(1) > span"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000055\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(2) > span"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000055\"] > .relative > .pt-4.justify-between.items-center > .font-medium.text-sm"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".p-6.backdrop-blur-sm.rounded-xl > h3"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "13.5pt (18px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".flex-1.min-w-0 > .truncate"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".font-normal.text-primary:nth-child(1)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".hover\\:underline"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 171.80000001192093,
+      "externalResources": []
+    },
+    {
+      "surface": "blog",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                "strong"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "bold",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "nav[aria-label=\"Public site\"] > a[href$=\"selam-studio\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "a[href$=\"blog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "a[href$=\"gallery\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "nav[aria-label=\"Public site\"] > a[href$=\"book\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".selam-content-heading > p"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "h1"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "30.0pt (40px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "3:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "footer > a[href$=\"selam-studio\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "footer > a[href$=\"book\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "link-in-text-block",
+          "nodes": [
+            {
+              "target": [
+                "a[aria-label=\"What to expect in the studio\"]"
+              ],
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "article:nth-child(2) > a"
+              ],
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "article:nth-child(3) > a"
+              ],
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 197.2999999821186,
+      "externalResources": []
+    },
+    {
+      "surface": "article",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                "strong"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "bold",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "nav > a[href$=\"selam-studio\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "nav > a[href$=\"blog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "a[href$=\"gallery\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "nav > a[href$=\"book\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".selam-content-heading > p:nth-child(1)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "h1"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "30.0pt (40px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "3:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".selam-content-heading > p:nth-child(3)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "article > p"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "13.5pt (18px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "time"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "div:nth-child(2) > h2"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "24.0pt (32px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "3:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "div:nth-child(3) > p"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "13.5pt (18px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "div:nth-child(4) > p"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "13.5pt (18px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "#published-content > a[href$=\"blog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "footer > a[href$=\"selam-studio\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "footer > a[href$=\"book\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "link-in-text-block",
+          "nodes": [
+            {
+              "target": [
+                "#published-content > a[href$=\"blog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 194.7999999821186,
+      "externalResources": []
+    },
+    {
+      "surface": "gallery",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                "strong"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "bold",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "nav[aria-label=\"Public site\"] > a[href$=\"selam-studio\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "a[href$=\"blog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "a[href$=\"gallery\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "nav[aria-label=\"Public site\"] > a[href$=\"book\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".selam-content-heading > p"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "h1"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "30.0pt (40px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "3:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "footer > a[href$=\"selam-studio\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "footer > a[href$=\"book\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "link-in-text-block",
+          "nodes": [
+            {
+              "target": [
+                "a[aria-label=\"Inside the movement studio\"]"
+              ],
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "a[aria-label=\"A quieter kind of practice\"]"
+              ],
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 166.40000000596046,
+      "externalResources": []
+    },
+    {
+      "surface": "collection",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                "strong"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "bold",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "nav > a[href$=\"selam-studio\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "a[href$=\"blog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "nav > a[href$=\"gallery\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "nav > a[href$=\"book\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".selam-content-heading > p:nth-child(1)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "h1"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "30.0pt (40px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "3:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".selam-content-heading > p:nth-child(3)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "figure:nth-child(1) > figcaption"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "figure:nth-child(1) > figcaption > small"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "9.6pt (12.8px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "a[target=\"_blank\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "figure:nth-child(2) > figcaption"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "figure:nth-child(2) > figcaption > small"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "9.6pt (12.8px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "#published-content > a[href$=\"gallery\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "footer > a[href$=\"selam-studio\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "footer > a[href$=\"book\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "link-in-text-block",
+          "nodes": [
+            {
+              "target": [
+                "a[target=\"_blank\"]"
+              ],
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "#published-content > a[href$=\"gallery\"]"
+              ],
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 171.7999999821186,
+      "externalResources": []
+    }
+  ]
+}

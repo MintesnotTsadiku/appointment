@@ -151,6 +151,18 @@ class GalleryAcceptance(unittest.TestCase):
     def tearDownClass(cls):
         _cleanup(cls.state)
 
+    def test_article_hero_and_inline_images_require_exact_site_owned_decoded_files(self):
+        post = frappe._dict(name="article-image-test", title="Article", content_type="HTML",
+                            content="<p>Article</p>", meta_image=self.state["image_url"])
+        built = releases.build_article_projection(post, self.state["sites"]["A"])
+        self.assertEqual(built["hero"], self.state["image_url"])
+        with self.assertRaises(MediaSafetyError):
+            releases.build_article_projection(post, self.state["sites"]["B"])
+        post.meta_image = None
+        post.content = '<img src="' + self.state["image_url"] + '" alt="Article image">'
+        with self.assertRaises(MediaSafetyError):
+            releases.build_article_projection(post, self.state["sites"]["B"])
+
     def _collection(self, suffix="A", status="Draft", video_id="dQw4w9WgXcQ", consent="Not Required"):
         seq = self.state.get("seq", 0) + 1
         self.state["seq"] = seq

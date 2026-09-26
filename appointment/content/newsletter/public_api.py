@@ -1,6 +1,8 @@
 """Guest consent actions accept only site identifiers and opaque tokens."""
 
 import frappe
+
+from appointment.content.monitoring import observed
 from frappe.rate_limiter import rate_limit
 
 from appointment.content.newsletter import audience, senders
@@ -23,17 +25,20 @@ def subscribe(site, email, consent, locale="en"):
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])
 @rate_limit(limit=30, seconds=60)
+@observed("newsletter.confirm", scope="site")
 def confirm(token):
     return audience.confirm(token)
 
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])
 @rate_limit(limit=30, seconds=60)
+@observed("newsletter.unsubscribe", scope="site")
 def unsubscribe(token):
     return audience.unsubscribe(token)
 
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])
 @rate_limit(limit=20, seconds=60)
+@observed("newsletter.verify_sender", scope="site")
 def verify_sender(token):
     return senders.verify(token)

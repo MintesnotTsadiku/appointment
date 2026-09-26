@@ -5,6 +5,8 @@ import binascii
 
 import frappe
 
+from appointment.content.monitoring import observed
+
 from appointment.content.tenancy import require_manage_business
 from appointment.organization_import import workbook
 from appointment.scheduler.workspace import require_provider_account
@@ -46,6 +48,7 @@ def decode_upload(content_base64):
 
 
 @frappe.whitelist(methods=["POST"])
+@observed("workbook.review", scope="organization")
 def preview_import(content_base64, organization=None):
     from appointment.organization_import.service import preview
 
@@ -54,6 +57,7 @@ def preview_import(content_base64, organization=None):
 
 
 @frappe.whitelist(methods=["POST"])
+@observed("workbook.confirm", scope="organization")
 def confirm_import(content_base64, organization, expected_hash, confirmed):
     from appointment.organization_import.service import confirm
 

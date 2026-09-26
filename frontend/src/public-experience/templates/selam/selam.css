@@ -111,3 +111,6 @@
 @media(max-width:720px){.selam-content-nav{flex-wrap:wrap;padding:20px}.selam-content-nav nav{order:3;width:100%;gap:14px;font-size:14px}.selam-content-grid,.selam-content-media{grid-template-columns:1fr}.selam-content-heading{padding:20px 0 35px}.selam-content-signup{padding:24px}}
 
 .selam-content h1,.selam-content h2{font-family:var(--pe-font-display)}
+
+.selam-content-brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.selam-content-brand img { width: 120px; max-width: 30vw; height: 36px; object-fit: contain; }

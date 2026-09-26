@@ -6,7 +6,7 @@ import json
 import frappe
 
 from appointment.content.tenancy import require_manage_business
-from appointment.organization_import import workbook
+from appointment.organization_import import workbook, website
 from appointment.scheduler import membership
 
 _IMPORT_WRITE = object()
@@ -20,11 +20,11 @@ def preview(content, organization):
     proposed = workbook.dry_run(content)
     if not proposed["valid"]:
         return proposed
-    errors = _business_errors(proposed["rows"])
-    if errors:
-        return {**proposed, "valid": False, "errors": errors}
     namespace = proposed["rows"]["Organization"][0]["key"]
     organization = organization or business.existing(namespace)
+    errors = _business_errors(proposed["rows"], organization)
+    if errors:
+        return {**proposed, "valid": False, "errors": errors}
     if not organization:
         proposed["changes"] = {sheet: {"create": len(proposed["rows"][sheet]), "update": 0}
                                 for sheet in ("Locations", "Providers", "Services")}
@@ -78,7 +78,7 @@ def confirm(content, organization, expected_hash, confirmed):
     repeated = frappe.db.get_value("Organization Workbook Import", {"idempotency_key": identity}, "name")
     if repeated:
         return {"valid": True, "audit": repeated, "replayed": True, "organization": organization}
-    errors = _business_errors(proposed["rows"])
+    errors = _business_errors(proposed["rows"], organization)
     if errors:
         return {**proposed, "valid": False, "errors": errors}
     previous = frappe.db.get_value("Organization Workbook Import", {"organization": organization, "namespace": namespace},
@@ -93,7 +93,9 @@ def confirm(content, organization, expected_hash, confirmed):
         audit = frappe.get_doc({"doctype": "Organization Workbook Import", "organization": organization,
                                 "namespace": namespace, "source_hash": expected_hash, "schema_version": workbook.VERSION,
                                 "idempotency_key": identity, "mapping_json": json.dumps(mapping),
-                                "summary_json": json.dumps(proposed["summary"]), "imported_by": frappe.session.user})
+                                "summary_json": json.dumps(proposed["summary"]),
+                                "website_content_json": json.dumps(proposed["rows"]["Website Content"]),
+                                "imported_by": frappe.session.user})
         audit.flags.workbook_factory = _IMPORT_WRITE
         audit.insert()
         return {"valid": True, "audit": audit.name, "replayed": False, "summary": proposed["summary"], "organization": organization}
@@ -104,8 +106,8 @@ def confirm(content, organization, expected_hash, confirmed):
         frappe.flags.syncing_booking_urls = syncing
 
 
-def _business_errors(rows):
-    errors = []
+def _business_errors(rows, organization=None):
+    errors = website.errors(rows["Website Content"], organization)
     for sheet in ("Team", "Providers"):
         for row in rows[sheet]:
             if not frappe.db.exists("User", {"name": row["email"].lower(), "enabled": 1}):
@@ -202,23 +204,4 @@ def _apply(rows, organization, mapping):
             member.append("locations", {"location": mapping["Locations"][key]})
         member.save() if existing else member.insert()
     if rows["Website Content"]:
-        _website_text(rows["Website Content"], organization)
-
-
-def _website_text(rows, organization):
-    from appointment.public_experience import setup
-
-    site = frappe.db.get_value("Public Site", {"organization": organization, "status": ["!=", "Archived"]}, "name")
-    if not site:
-        frappe.throw("Create a website draft in Website setup before importing website text. No changes were saved.")
-    doc = setup.require_site(site)
-    sections = setup.state(doc)["sections"]
-    fields = {"hero_title": ("hero", "title"), "hero_subtitle": ("hero", "subtitle"),
-              "about_body": ("about", "body"), "contact_email": ("contact", "email"), "contact_phone": ("contact", "phone")}
-    for row in rows:
-        kind, field = fields[row["field"]]
-        target = next((section for section in sections if section["type"] == kind), None)
-        if not target:
-            frappe.throw(f"This template has no {kind} section. Remove that website text row and try again.")
-        target["content"][field] = row["text"] if field in {"email", "phone"} else {"en": row["text"]}
-    setup.save(site, doc.draft_version, "content", sections=sections)
+        website.apply(rows["Website Content"], organization)

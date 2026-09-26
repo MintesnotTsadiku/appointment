@@ -16,6 +16,44 @@ VERSION = 1
 MANIFEST = Path(__file__).with_name("content.v1.json")
 
 
+def bind_owned_support():
+    """Explicit governance upgrade for the seeder's existing journal-owned support records."""
+    from appointment.demo import showcase
+    from appointment.content.support_records import bind
+
+    with showcase.locked():
+        state = showcase.load_state()
+        content = state.get("published_content")
+        if not content or state.get("phase") != "ready":
+            frappe.throw("Seed the owned showcases before upgrading their article support records.")
+        owned = {tuple(row) for row in state["created"]}
+        created = []
+        for business in state["businesses"].values():
+            site = frappe.get_doc("Public Site", business["public_site"])
+            frappe.set_user(business["owner"])
+            posts = frappe.get_all("Content Ownership", filters={"public_site": site.name,
+                                   "source_doctype": "Blog Post"}, pluck="source_name")
+            for field, doctype in (("blog_category", "Blog Category"), ("blogger", "Blogger")):
+                names = {frappe.db.get_value("Blog Post", post, field) for post in posts}
+                if len(names) != 1 or not all((doctype, name) in owned for name in names):
+                    frappe.throw("Only exact journal-owned article support can be upgraded.")
+                name = next(iter(names))
+                existing = frappe.db.get_value("Content Ownership", {"source_doctype": doctype, "source_name": name},
+                                              ["name", "public_site"], as_dict=True)
+                if existing:
+                    if existing.public_site != site.name or ("Content Ownership", existing.name) not in owned:
+                        frappe.throw("Refusing to adopt article support ownership outside the journal.")
+                    continue
+                mapping = bind(site, doctype, name)
+                showcase.remember(state, "Content Ownership", mapping.name)
+                content["records"].append(["Content Ownership", mapping.name])
+                created.append(mapping.name)
+        content["support_ownership_version"] = 1
+        showcase.write_state(state)
+        frappe.db.commit()
+        return {"created_owned_mappings": len(created), "published_releases_changed": 0}
+
+
 def load_content():
     content = json.loads(MANIFEST.read_text())
     catalog = validate_showcase_catalog()
@@ -64,6 +102,9 @@ def configure(state):
             article_rows.append(draft)
             showcase.remember(state, "Blog Post", draft["source"])
             showcase.remember(state, "Content Ownership", draft["ownership"])
+        for mapping in frappe.get_all("Content Ownership", filters={"public_site": site.name,
+                "source_doctype": ["in", ["Blog Category", "Blogger"]]}, pluck="name"):
+            showcase.remember(state, "Content Ownership", mapping)
         category = frappe.get_doc("Blog Category", frappe.db.get_value("Blog Post", article_rows[0]["source"], "blog_category"))
         if not prior_blogger:
             blogger = frappe.db.get_value("Blogger", {"short_name": "website-" + site.name}, "name")

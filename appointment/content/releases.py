@@ -90,9 +90,13 @@ def _parse(raw):
     return data if isinstance(data, dict) else {}
 
 
-def build_article_projection(post) -> dict:
+def build_article_projection(post, public_site=None) -> dict:
     """Project a Blog Post into a safe, structured article snapshot."""
 
+    if public_site:
+        from appointment.content.support_records import validate_article
+
+        validate_article(post, public_site)
     content_type = (post.get("content_type") or "Markdown").strip().lower()
     raw = post.get("content") or ""
     html = markdown_to_html(raw) if content_type == "markdown" else str(raw)
@@ -103,6 +107,17 @@ def build_article_projection(post) -> dict:
     slug = normalize_slug(candidate) or normalize_slug(title) or normalize_slug(post.name)
     summary = (post.get("blog_intro") or "").strip() or excerpt(blocks)
     hero = safe_media(post.get("meta_image"))
+    images = [block.get("src") for block in blocks if block.get("type") == "image"]
+    if post.get("meta_image") and not hero:
+        raise ContentPublishError("Choose a safe public article image.")
+    if hero or images:
+        from appointment.content.gallery import validate_image_asset
+
+        if not public_site:
+            raise ContentPublishError("Article images require their owning website.")
+        for image in [hero, *images]:
+            if image:
+                validate_image_asset(image, public_site)
     category = frappe.db.get_value("Blog Category", post.get("blog_category"), "title") if post.get("blog_category") else None
     # Factory categories identify a website internally; they are not editorial labels.
     if category and category.startswith("Website "):
@@ -160,7 +175,7 @@ def publish_article(ownership, expected_modified: str | None = None, locale: str
             "the article changed since it was loaded",
             details={"expected": str(expected_modified), "stored": str(post.get("modified"))},
         )
-    built = build_article_projection(post)
+    built = build_article_projection(post, own.public_site)
     projection = built["projection"]
     if not projection["blocks"]:
         raise ContentPublishError("the article has no publishable content")
@@ -391,7 +406,7 @@ def preview_article(ownership, locale: str | None = None) -> dict:
     if own.source_doctype != "Blog Post":
         raise ContentPublishError("this ownership record is not an article")
     post = frappe.get_doc("Blog Post", own.source_name)
-    built = build_article_projection(post)
+    built = build_article_projection(post, own.public_site)
     projection = built["projection"]
     route = article_route(projection["slug"])
     token = frappe.generate_hash(length=40)

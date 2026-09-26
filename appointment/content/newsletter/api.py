@@ -4,6 +4,8 @@ import json
 
 import frappe
 
+from appointment.content.monitoring import observed
+
 from appointment.content.newsletter import audience, campaigns, core, senders
 
 
@@ -44,11 +46,13 @@ def preview_draft(site, ownership, sender):
 
 
 @frappe.whitelist(methods=["POST"])
+@observed("newsletter.queue", scope="site")
 def queue_campaign(site, ownership, sender, request_id, scheduled_at=None, locale="en"):
     return campaigns.queue(site, ownership, sender, request_id, scheduled_at, locale)
 
 
 @frappe.whitelist(methods=["POST"])
+@observed("newsletter.retry", scope="campaign")
 def retry_campaign(campaign):
     return campaigns.retry(campaign)
 

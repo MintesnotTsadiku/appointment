@@ -324,6 +324,11 @@ def context():
 
     spaces = workspaces(user)
     if not spaces:
+        independent = frappe.db.exists("Provider", {"user": user, "is_active": 1,
+            "organization_status": "Independent", "onboarding_type": "individual", "onboarding_complete": 1})
+        if independent:
+            return {**base, "state": "individual_owner", "workspaces": [], "selected": None,
+                    "landing": "/settings/website"}
         if _is_prospective_owner(user):
             state, landing = "owner_setup", "/onboarding"
         else:
@@ -527,6 +532,8 @@ def assign_member(
     from appointment.scheduler import registration
 
     registration.require_invite_provisioning()
+    if actor != "Administrator" and not frappe.db.exists("User", str(email or "").strip().lower()):
+        frappe.throw(_("Invite this staff member and wait for acceptance before assigning business access."))
     if membership_role not in ASSIGNABLE_ROLES:
         frappe.throw(_("Choose a role of Manager, Provider or Receptionist."))
 

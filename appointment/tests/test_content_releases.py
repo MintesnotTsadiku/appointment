@@ -174,6 +174,9 @@ class ContentReleaseAcceptance(unittest.TestCase):
                 published=0,
             )
             cls.state["posts"][suffix] = post.name
+            for source_doctype, source_name in (("Blog Category", category.name), ("Blogger", blogger.name)):
+                _insert(cls.state, "Content Ownership", source_doctype=source_doctype, source_name=source_name,
+                        owner_type="Organization", organization=org.name, public_site=site.name, capability="blog")
             ownership = _insert(
                 cls.state,
                 "Content Ownership",
@@ -205,6 +208,19 @@ class ContentReleaseAcceptance(unittest.TestCase):
         self.assertEqual(release.route, f"/blog/{expected_slug}")
         own = frappe.db.get_value("Content Ownership", self.state["ownership"]["A"], "status")
         self.assertEqual(own, "Published")
+
+    def test_foreign_category_or_author_cannot_be_published(self):
+        self._as("A")
+        post = frappe.get_doc("Blog Post", self.state["posts"]["A"])
+        other = frappe.get_doc("Blog Post", self.state["posts"]["B"])
+        for field in ("blog_category", "blogger"):
+            original = post.get(field)
+            post.set(field, other.get(field))
+            try:
+                with self.assertRaises(frappe.PermissionError):
+                    releases.build_article_projection(post, public_site=self.state["sites"]["A"])
+            finally:
+                post.set(field, original)
 
     def test_release_projection_is_sanitized(self):
         self._as("A")

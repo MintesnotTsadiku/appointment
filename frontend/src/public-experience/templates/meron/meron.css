@@ -15,3 +15,6 @@
 @media(max-width:720px){.meron-content-nav{flex-wrap:wrap;padding:20px}.meron-content-nav nav{order:3;width:100%;gap:14px;font-size:14px}.meron-content-grid,.meron-content-media{grid-template-columns:1fr}.meron-content-heading{padding:20px 0 35px}.meron-content-signup{padding:24px}}
 
 .meron-content h1,.meron-content h2{font-family:var(--pe-font-display)}
+
+.meron-content-brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.meron-content-brand img { width: 120px; max-width: 30vw; height: 36px; object-fit: contain; }

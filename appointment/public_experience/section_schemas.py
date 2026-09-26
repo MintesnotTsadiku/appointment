@@ -151,8 +151,8 @@ def _providers(content: Mapping[str, object], allowed: Iterable[str]) -> list[Va
             issues.extend(_string(item.get("id"), f"items[{index}].id", required=False, max_length=64))
             for key in ("specialties", "credentials"):
                 entries = item.get(key)
-                if not isinstance(entries, list) or not entries:
-                    issues.append(_issue(f"items[{index}].{key}", "array", entries, "a non-empty list of localized strings", "Provide canonical provider facts."))
+                if not isinstance(entries, list):
+                    issues.append(_issue(f"items[{index}].{key}", "array", entries, "a list of localized strings", "Provide canonical facts or an empty list. Never invent credentials."))
                 else:
                     for entry_index, entry in enumerate(entries):
                         issues.extend(_localized(entry, f"items[{index}].{key}[{entry_index}]"))

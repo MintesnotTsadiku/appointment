@@ -32,17 +32,9 @@ def create_article(site, title, slug, body, summary=""):
         frappe.throw("Write an article of at most 100,000 characters.")
     count = frappe.db.count("Content Ownership", {"public_site": site, "source_doctype": "Blog Post"})
     entitlements.enforce_limit(doc.owner_type, doc.organization, doc.provider, "blog", "articles", count + 1)
-    category_title = "Website " + doc.name
-    category = frappe.db.get_value("Blog Category", {"title": category_title}, "name")
-    if not category:
-        # Upstream support records are created only by this authorized factory;
-        # editors cannot supply categories or bloggers from another business.
-        category = frappe.get_doc({"doctype": "Blog Category", "title": category_title}).insert(ignore_permissions=True).name
-    blogger_key = "website-" + doc.name
-    blogger = frappe.db.get_value("Blogger", {"user": frappe.session.user}, "name") or frappe.db.get_value("Blogger", {"short_name": blogger_key}, "name")
-    if not blogger:
-        blogger = frappe.get_doc({"doctype": "Blogger", "short_name": blogger_key,
-                                  "full_name": doc.site_title}).insert(ignore_permissions=True).name
+    from appointment.content.support_records import article_support
+
+    category, blogger = article_support(doc)
     post = frappe.get_doc({"doctype": "Blog Post", "title": title, "blog_category": category,
                            "blogger": blogger, "route": f"content-draft/{doc.name}/{slug}",
                            "content_type": "Markdown", "content": body, "content_md": body,

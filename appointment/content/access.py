@@ -157,6 +157,28 @@ def newsletter_query(user=None) -> str:
     return _owned_source_condition("Newsletter", "tabNewsletter", user)
 
 
+def blog_category_query(user=None):
+    return _owned_source_condition("Blog Category", "tabBlog Category", user)
+
+
+def blogger_query(user=None):
+    return _owned_source_condition("Blogger", "tabBlogger", user)
+
+
+def article_support_permission(doc, user=None, permission_type="read", ptype=None, **kwargs):
+    operation = ptype or permission_type
+    actor = _actor(user)
+    if actor == "Administrator":
+        return True
+    if not _enabled(actor):
+        return False
+    if doc is None:
+        return True
+    if operation == "create":
+        return _has_any_business(actor)
+    return _owns_source(doc.doctype, doc.name, actor)
+
+
 def newsletter_permission(doc, user=None, permission_type="read", ptype=None, **kwargs) -> bool:
     permission_type = ptype or permission_type
     actor = _actor(user)

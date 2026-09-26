@@ -1,0 +1,1077 @@
+{
+  "engine": "axe-core 4.11.0",
+  "viewport": "desktop",
+  "mode": "light",
+  "scope": "Automated WCAG A/AA checks and local development navigation budget; manual accessibility review remains separate.",
+  "reports": [
+    {
+      "surface": "landing",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                "span[aria-hidden=\"true\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content contains only non-text characters",
+                  "data": {
+                    "messageKey": "nonBmp"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "i:nth-child(2)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content contains only non-text characters",
+                  "data": {
+                    "messageKey": "nonBmp"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "i:nth-child(4)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content contains only non-text characters",
+                  "data": {
+                    "messageKey": "nonBmp"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "i:nth-child(6)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content contains only non-text characters",
+                  "data": {
+                    "messageKey": "nonBmp"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 309.69999998807907,
+      "externalResources": []
+    },
+    {
+      "surface": "book",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                "span[aria-hidden=\"true\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content contains only non-text characters",
+                  "data": {
+                    "messageKey": "nonBmp"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 282.7999999821186,
+      "externalResources": []
+    },
+    {
+      "surface": "scheduler",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                ".text-2xl.h-full.justify-center"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content is too short to determine if it is actual text content",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "18.0pt (24px)",
+                    "fontWeight": "normal",
+                    "messageKey": "shortTextContent",
+                    "expectedContrastRatio": "3:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "h1"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "27.0pt (36px)",
+                    "fontWeight": "bold",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "3:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".text-lg.mb-3"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "13.5pt (18px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".gap-2.items-center.flex:nth-child(1) > span"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".gap-4.flex-wrap.text-sm > .gap-2.items-center.flex:nth-child(2) > span"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "h2"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "18.0pt (24px)",
+                    "fontWeight": "bold",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "3:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "div:nth-child(1) > p"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".shadow-sm"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".hover\\:bg-\\[var\\(--border-default\\)\\]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".space-y-4 > h3"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "13.5pt (18px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000080\"] > .relative > .text-xl.pr-16"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "15.0pt (20px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000080\"] > .relative > .mb-3.gap-2"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000080\"] > .relative > .line-clamp-2.mb-4"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000080\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(1) > span"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000080\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(2) > span"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000080\"] > .relative > .pt-4.justify-between.items-center > .font-medium"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000079\"] > .relative > .text-xl.pr-16"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "15.0pt (20px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000079\"] > .relative > .mb-3.gap-2"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000079\"] > .relative > .line-clamp-2.mb-4"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000079\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(1) > span"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000079\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(2) > span"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000079\"] > .relative > .pt-4.justify-between.items-center > .font-medium"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000078\"] > .relative > .text-xl.pr-16"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "15.0pt (20px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000078\"] > .relative > .mb-3.gap-2"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000078\"] > .relative > .line-clamp-2.mb-4"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000078\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(1) > span"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000078\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(2) > span"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000078\"] > .relative > .pt-4.justify-between.items-center > .font-medium"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000077\"] > .relative > .text-xl.pr-16"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "15.0pt (20px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000077\"] > .relative > .mb-3.gap-2"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000077\"] > .relative > .line-clamp-2.mb-4"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000077\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(1) > span"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000077\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(2) > span"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000077\"] > .relative > .pt-4.justify-between.items-center > .font-medium"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".p-6.backdrop-blur-sm.rounded-xl > h3"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "13.5pt (18px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "div:nth-child(1) > .p-4.rounded-lg.backdrop-blur-sm > .items-start.gap-3.flex > .flex-1.min-w-0 > .truncate"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "div:nth-child(2) > .p-4.rounded-lg.backdrop-blur-sm > .items-start.gap-3.flex > .flex-1.min-w-0 > .truncate"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it is overlapped by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgOverlap",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".font-normal.text-primary:nth-child(1)"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".hover\\:underline"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 181.80000001192093,
+      "externalResources": []
+    },
+    {
+      "surface": "blog",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                "span[aria-hidden=\"true\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content contains only non-text characters",
+                  "data": {
+                    "messageKey": "nonBmp"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "link-in-text-block",
+          "nodes": [
+            {
+              "target": [
+                "a[aria-label=\"Learning in a welcoming space\"]"
+              ],
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "a[aria-label=\"Practice between appointments\"]"
+              ],
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "article:nth-child(3) > a"
+              ],
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 214.69999998807907,
+      "externalResources": []
+    },
+    {
+      "surface": "article",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                "span[aria-hidden=\"true\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content contains only non-text characters",
+                  "data": {
+                    "messageKey": "nonBmp"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "div:nth-child(4) > p"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "13.5pt (18px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "link-in-text-block",
+          "nodes": [
+            {
+              "target": [
+                "#published-content > a[href$=\"blog\"]"
+              ],
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 283.2000000178814,
+      "externalResources": []
+    },
+    {
+      "surface": "gallery",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                "span[aria-hidden=\"true\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content contains only non-text characters",
+                  "data": {
+                    "messageKey": "nonBmp"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "link-in-text-block",
+          "nodes": [
+            {
+              "target": [
+                "a[aria-label=\"Around the language house\"]"
+              ],
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "a[aria-label=\"Places to practise together\"]"
+              ],
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 212.80000001192093,
+      "externalResources": []
+    },
+    {
+      "surface": "collection",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                "span[aria-hidden=\"true\"]"
+              ],
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content contains only non-text characters",
+                  "data": {
+                    "messageKey": "nonBmp"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "link-in-text-block",
+          "nodes": [
+            {
+              "target": [
+                "a[target=\"_blank\"]"
+              ],
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "#published-content > a[href$=\"gallery\"]"
+              ],
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 241.40000000596046,
+      "externalResources": []
+    }
+  ]
+}

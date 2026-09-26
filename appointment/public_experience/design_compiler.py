@@ -357,8 +357,8 @@ def _inputs(recipe, brand_inputs: Mapping[str, object] | None) -> dict[str, obje
             result[field] = _safe_text(result[field], field)
     for field in ("logo_primary", "logo_compact", "favicon"):
         value = result.get(field)
-        if value is not None and (not isinstance(value, str) or not value.startswith("/assets/appointment/") or ".." in value or any(character in value for character in "?#<>\"'")):
-            raise _error(f"{field} must be a local appointment asset", field=field, observed=value)
+        if value is not None and (not isinstance(value, str) or not value.startswith(("/assets/appointment/", "/files/")) or ".." in value or any(character in value for character in "\\?#<>\"'") or any(ord(character) <= 32 for character in value)):
+            raise _error(f"{field} must be a validated local image asset", field=field, observed=value)
     for field, adjustment in (("hero_asset", "heroAsset"), ("detail_asset", "detailAsset")):
         allowed = set(recipe.adjustments.get(adjustment, {}).get("choices") or [])
         if not allowed or result.get(field) not in allowed:

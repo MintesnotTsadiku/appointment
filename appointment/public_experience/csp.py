@@ -9,7 +9,13 @@ from __future__ import annotations
 
 import secrets
 
-PUBLIC_API_MARKER = "/api/method/appointment.public_experience.api.get_public"
+API_PREFIXES = (
+    "/api/method/appointment.public_experience.api.",
+    "/api/method/appointment.content.public_api.",
+    "/api/method/appointment.content.api.",
+    "/api/method/appointment.content.newsletter.",
+    "/api/method/appointment.content.staff_invitations.",
+)
 
 
 def generate_nonce() -> str:
@@ -51,11 +57,19 @@ def after_request(response=None, request=None):
     if response is None or request is None:
         return response
     path = getattr(request, "path", "") or ""
-    if not path.startswith(PUBLIC_API_MARKER):
+    token_page = path.startswith(("/newsletter/", "/team/invitation/"))
+    if not token_page and not path.startswith(API_PREFIXES):
         return response
-    for key, value in security_headers(generate_nonce()).items():
-        try:
-            response.headers[key] = value
-        except Exception:
-            pass
+    private = token_page or path.endswith(".get_content_preview") or not path.startswith((
+        "/api/method/appointment.public_experience.api.get_public",
+        "/api/method/appointment.content.public_api.",
+    ))
+    headers = security_headers(generate_nonce(), preview=private)
+    if token_page:
+        # The application shell owns its script policy; token pages add privacy.
+        headers.pop("Content-Security-Policy")
+        headers.pop("X-Public-Experience-Nonce")
+        headers["Referrer-Policy"] = "no-referrer"
+    for key, value in headers.items():
+        response.headers[key] = value
     return response

@@ -40,7 +40,7 @@ export function asset(design: CompiledDesign, role: string) {
 
 export function brandLogo(design: CompiledDesign): string | undefined {
   const value = design.identity.logoCompact || design.identity.logoPrimary;
-  return typeof value === "string" && value.startsWith("/assets/appointment/") && !value.includes("..")
+  return typeof value === "string" && (value.startsWith("/assets/appointment/") || value.startsWith("/files/")) && !value.includes("..") && !/[\\\s?#<>"']/.test(value)
     ? value
     : undefined;
 }

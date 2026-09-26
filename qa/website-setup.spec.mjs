@@ -1,4 +1,10 @@
 import { test, expect } from "playwright/test";
+import { writeFileSync } from "node:fs";
+import { join } from "node:path";
+import { execFileSync } from "node:child_process";
+
+let managedStaff;
+test.afterEach(async () => { await managedStaff?.close(); managedStaff = undefined; });
 
 test("website-owner-journey", async ({ page }, testInfo) => {
   page.setDefaultTimeout(20000);
@@ -16,15 +22,72 @@ test("website-owner-journey", async ({ page }, testInfo) => {
   await page.goto("/settings/business", { waitUntil: "networkidle" });
   await page.locator('[data-qa="business-offering"]').filter({ hasText: marker }).getByRole("button", { name: "Publish booking page", exact: true }).click();
   await expect(page.getByRole("status")).toContainText("published");
+  await page.goto("/settings/team", { waitUntil: "networkidle" });
+  const invitations = page.getByRole("region", { name: "Staff invitations" });
+  await invitations.getByLabel("Name", { exact: true }).fill("Workbook invited staff");
+  await invitations.getByLabel("Email", { exact: true }).fill(`${marker.toLowerCase()}-staff@example.test`);
+  await invitations.getByRole("button", { name: "Confirm local invitation", exact: true }).click();
+  const invitationLink = invitations.getByRole("link", { name: "Open local invitation", exact: true });
+  await expect(invitationLink).toBeVisible();
+  await page.screenshot({ path: testInfo.outputPath("website-staff-invitation-inbox.png"), fullPage: true });
+  const staffPassword = `Staff own password 2026! ${crypto.randomUUID()}`;
+  const staffContext = await page.context().browser().newContext();
+  try {
+    const staffPage = await staffContext.newPage();
+    await staffPage.goto(new URL(await invitationLink.getAttribute("href"), page.url()).href, { waitUntil: "networkidle" });
+    await staffPage.getByLabel("New account password", { exact: true }).fill(staffPassword);
+    await staffPage.getByRole("button", { name: "Accept invitation", exact: true }).click();
+    await expect(staffPage.getByRole("status")).toContainText("Your account is ready");
+    await staffPage.screenshot({ path: testInfo.outputPath("website-staff-invitation-accepted.png"), fullPage: true });
+  } finally { await staffContext.close(); }
+  await page.getByLabel("Account email", { exact: true }).fill(`${marker.toLowerCase()}-staff@example.test`);
+  await page.getByRole("checkbox", { name: `${marker} Main`, exact: true }).check();
+  await page.getByRole("button", { name: "Assign", exact: true }).click();
+  await expect(page.getByRole("status")).toContainText("assigned as Receptionist");
+  const credentialFile = join(process.env.WEBSITE_QA_PRIVATE_DIRECTORY, "staff-credentials.json");
+  writeFileSync(credentialFile, JSON.stringify({ username: `${marker.toLowerCase()}-staff@example.test`, password: staffPassword }), { mode: 0o600 });
+  const rawProfile = execFileSync("/usr/local/bin/bench", ["--site", process.env.WEBSITE_QA_SITE, "execute", "appointment.tests.staff_browser_bridge.login", "--kwargs", JSON.stringify({ credential_file: credentialFile })], {
+    cwd: process.env.FRAPPE_BENCH_ROOT, encoding: "utf8", timeout: 60000,
+  });
+  const profile = JSON.parse(rawProfile.trim().split("\n").at(-1));
+  expect(profile.roles).toContain("Receptionist");
+  expect(profile.roles).not.toContain("Organization Manager");
+  managedStaff = await page.context().browser().newContext({ baseURL: process.env.PLAYWRIGHT_BASE_URL, storageState: profile.storage_state });
+  const receptionist = await managedStaff.newPage();
+  const signedInStaff = await receptionist.request.get("/api/method/frappe.auth.get_logged_user");
+  expect((await signedInStaff.json()).message).toBe(profile.user);
+  await receptionist.goto("/reception", { waitUntil: "networkidle" });
+  await expect(receptionist).toHaveURL(/\/reception/);
+  await receptionist.screenshot({ path: testInfo.outputPath("website-receptionist-managed-session.png"), fullPage: true });
   await page.goto("/settings/website", { waitUntil: "networkidle" });
   await expect(page.getByRole("heading", { name: "Website setup", exact: true })).toBeVisible();
   await page.getByRole("combobox", { name: "Business", exact: true }).selectOption({ label: marker });
   await page.getByRole("combobox", { name: "Business focus", exact: true }).selectOption("health");
   await page.getByRole("combobox", { name: "Feeling", exact: true }).selectOption("calm");
+  await page.getByRole("combobox", { name: "Primary audience", exact: true }).selectOption("patients");
+  await page.getByRole("combobox", { name: "Preferred content density", exact: true }).selectOption("comfortable");
+  await page.getByRole("button", { name: "Preview selected template", exact: true }).click();
+  await expect(page.getByRole("region", { name: "Website live preview" })).toBeVisible();
+  await page.waitForLoadState("networkidle");
+  await page.evaluate(() => scrollTo(0, 0));
+  await page.mouse.move(0, 0);
+  await page.evaluate(() => document.activeElement?.blur());
+  await page.screenshot({ path: testInfo.outputPath("website-template-comparison-desktop.png"), fullPage: true, animations: "disabled" });
   await page.getByLabel("Website name", { exact: true }).fill(marker);
   await page.getByLabel("Website address", { exact: true }).fill(marker.toLowerCase());
   await page.getByRole("button", { name: "Create website draft", exact: true }).click();
   await expect(page.getByRole("button", { name: "Save draft", exact: true })).toBeVisible();
+  await page.getByLabel("Logo or favicon image", { exact: true }).setInputFiles(process.env.WEBSITE_QA_IMAGE);
+  await page.getByLabel("I have permission to display this identity image publicly.", { exact: true }).check();
+  await page.getByRole("button", { name: "Upload identity image", exact: true }).click();
+  await expect(page.getByRole("status")).toContainText("identity image is saved");
+  await expect(page.getByAltText("logo primary preview", { exact: true })).toBeVisible();
+  await page.getByRole("combobox", { name: "Identity image type", exact: true }).selectOption("favicon");
+  await page.getByLabel("Logo or favicon image", { exact: true }).setInputFiles(process.env.WEBSITE_QA_IMAGE);
+  await page.getByLabel("I have permission to display this identity image publicly.", { exact: true }).check();
+  await page.getByRole("button", { name: "Upload identity image", exact: true }).click();
+  await expect(page.getByRole("status")).toContainText("identity image is saved");
+  await expect(page.getByAltText("favicon preview", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "content", exact: true }).click();
   await expect(page.getByRole("status")).toContainText("saved");
   await page.reload({ waitUntil: "networkidle" });
@@ -44,6 +107,20 @@ test("website-owner-journey", async ({ page }, testInfo) => {
   await page.getByRole("button", { name: "Live preview of saved draft", exact: true }).click();
   await expect(page.getByRole("region", { name: "Website live preview" })).toBeVisible();
   await page.screenshot({ path: testInfo.outputPath("website-preview-desktop.png"), fullPage: true });
+  const preview = page.getByRole("region", { name: "Website live preview" });
+  for (const surface of ["booking", "blog", "article", "gallery", "collection"]) {
+    await preview.getByRole("combobox", { name: "Surface", exact: true }).selectOption(surface);
+    await expect(preview.locator("[data-pe-recipe]")).toBeVisible();
+    if (["article", "collection"].includes(surface)) await expect(preview).toContainText("Example");
+    await preview.screenshot({ path: testInfo.outputPath(`website-private-preview-${surface}.png`) });
+  }
+  await preview.getByRole("button", { name: "Preview mobile", exact: true }).click();
+  await preview.getByRole("button", { name: "Preview dark mode", exact: true }).click();
+  await expect(preview.locator('[data-pe-mode="dark"]')).toBeVisible();
+  await preview.screenshot({ path: testInfo.outputPath("website-private-preview-mobile-dark.png") });
+  await preview.getByRole("combobox", { name: "Surface", exact: true }).selectOption("landing");
+  await preview.getByRole("button", { name: "Preview desktop", exact: true }).click();
+  await preview.getByRole("button", { name: "Preview light mode", exact: true }).click();
   await page.getByRole("button", { name: "Publish website", exact: true }).click();
   await expect(page.getByRole("status")).toContainText("published");
   await page.screenshot({ path: testInfo.outputPath("website-published-desktop.png"), fullPage: true });
@@ -184,4 +261,27 @@ test("website-owner-journey", async ({ page }, testInfo) => {
   await expect(page.getByRole("status")).toContainText("Workbook applied");
   await expect(page.getByRole("combobox", { name: "Organization", exact: true })).toHaveValue(marker + " Workbook");
   await page.screenshot({ path: testInfo.outputPath("website-workbook-new-business.png"), fullPage: true });
+  const staffSession = await receptionist.request.get("/api/method/appointment.scheduler.membership.context");
+  const staffState = (await staffSession.json()).message;
+  expect(staffState.selected.role).toBe("Receptionist");
+  expect(staffState.selected.location_names).toEqual([`${marker} Main`]);
+  expect(staffState.workspaces).toHaveLength(1);
+  await receptionist.goto("/settings/website/content", { waitUntil: "networkidle" });
+  await expect(receptionist).toHaveURL(/\/reception/);
+  const ownerContent = await page.request.get("/api/method/appointment.content.api.list_owned_content");
+  const ownedArticle = (await ownerContent.json()).message.items.find(row => row.source_doctype === "Blog Post" && row.title === `${marker} Preparing for your visit`);
+  expect(ownedArticle).toBeTruthy();
+  const denied = await receptionist.request.post("/api/method/appointment.content.api.publish_article", { data: { ownership: ownedArticle.name } });
+  expect(denied.status()).toBe(403);
+  const deniedBody = await denied.json();
+  expect(deniedBody.exc_type).toBe("PermissionError");
+  expect(JSON.stringify(deniedBody)).not.toContain(`${marker} Preparing for your visit`);
+  await receptionist.screenshot({ path: testInfo.outputPath("website-receptionist-publishing-denied.png"), fullPage: true });
+  writeFileSync(testInfo.outputPath("website-staff-validation.json"), JSON.stringify({
+    managed_browser_account: profile.browser_account, managed_browser_session: profile.browser_session,
+    roles: profile.roles, user: profile.user, scope: staffState.selected.location_names,
+    cross_business_workspace_count: staffState.workspaces.length, publication_denied: true,
+    account_created_by: "Guest invitation acceptance", role_assigned_by: "Normal owner Team UI",
+  }, null, 2));
+
 });

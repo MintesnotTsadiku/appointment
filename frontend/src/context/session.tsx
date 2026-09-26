@@ -31,6 +31,7 @@ export type SessionStateName =
   | 'workspace'
   | 'selection'
   | 'owner_setup'
+  | 'individual_owner'
   | 'no_assignment';
 
 export interface SessionState {
@@ -81,6 +82,7 @@ export function isAllowedDestination(path: string | null | undefined, session: S
     return false;
   }
   const clean = path.split('?')[0];
+  if (session.state === 'individual_owner') return clean === '/settings/website' || clean.startsWith('/settings/website/');
   if (!ALLOWED_PREFIXES.some((prefix) => clean === prefix || clean.startsWith(prefix + '/'))) return false;
   if (session.state === 'administrator') return true;
   const role = session.selected?.role;
@@ -127,7 +129,7 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
       reload,
       selectWorkspace,
       isManager: Boolean(
-        session?.is_administrator || session?.selected?.is_manager || session?.state === 'owner_setup'
+        session?.is_administrator || session?.selected?.is_manager || session?.state === 'owner_setup' || session?.state === 'individual_owner'
       ),
       isStaff,
     };

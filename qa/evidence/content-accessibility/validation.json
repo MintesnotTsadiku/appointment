@@ -1,0 +1,95 @@
+{
+  "run": "BQA-2026-00138",
+  "source_version": "467b40b+source-2187787bc46d+qa-ce71a5ba459d",
+  "scenario_summary": {
+    "failed": 0,
+    "flaky": 0,
+    "passed": 10,
+    "skipped": 0,
+    "total": 10
+  },
+  "artifacts": [
+    {
+      "file": "abugida-desktop-light-gates.json",
+      "sha256": "48b775371a41bae82045908060fe72e317040a9832ddabd2cda0eb78d19a0c61"
+    },
+    {
+      "file": "selam-mobile-dark-gates.json",
+      "sha256": "ad2990012872cd24fbc2b180f0cb5b45dbcab72baaec4e0d0d5de23f910f2fe5"
+    },
+    {
+      "file": "tena-desktop-light-gates.json",
+      "sha256": "d6abfa7d4278cbf8e7f2186e11b45e73f6464df2774f06ae587135beea25b422"
+    },
+    {
+      "file": "bloom-mobile-dark-gates.json",
+      "sha256": "ba9dd274b4634461cb7c65554c1403b5a1a88aa89e0ca33987d9331aa5804752"
+    },
+    {
+      "file": "selam-desktop-light-gates.json",
+      "sha256": "2fe7a250877f7db37ff8944296eda39ed646c17313aa42d12a734eea3ed4021e"
+    },
+    {
+      "file": "meron-mobile-dark-gates.json",
+      "sha256": "c71f95faa7f962d5739bc085b6c6aba07f765a21d5a8cd232894b4fe142d9443"
+    },
+    {
+      "file": "meron-desktop-light-gates.json",
+      "sha256": "4fedd863844bf519bb4e8804d71b023730b762cbb6a970083affd9b0f27dc565"
+    },
+    {
+      "file": "tena-mobile-dark-gates.json",
+      "sha256": "183214a48f8cd3f14d40308fa0530c9e85243314caf68b4644d4cc30ce062156"
+    },
+    {
+      "file": "bloom-desktop-light-gates.json",
+      "sha256": "00bb93aa4418d31596b5cc3267fde9b1fb5136fda998f3249d5d6a340d5b94b8"
+    },
+    {
+      "file": "abugida-mobile-dark-gates.json",
+      "sha256": "771d8a1ef31b140c7c0fa74def9bdc21486630cbc227cc9fcfd9c01b13eecdab"
+    },
+    {
+      "file": "content-accessibility-gates-abugida-desktop-light/abugida-desktop-light-gates.png",
+      "sha256": "ae375b3fc1fe1a95ce649685c8154811583a1ef11705bcd510e4d59bdb13a78c"
+    },
+    {
+      "file": "content-accessibility-gates-abugida-mobile-dark/abugida-mobile-dark-gates.png",
+      "sha256": "125ce2c147867f7dc67defd7189b1c6f9ac44b611ed78263f4123101141c5817"
+    },
+    {
+      "file": "content-accessibility-gates-bloom-desktop-light/bloom-desktop-light-gates.png",
+      "sha256": "9542e771a07da417778ceb5c5eefebea2f0dcd796705cb76f2e9d56683509c5e"
+    },
+    {
+      "file": "content-accessibility-gates-bloom-mobile-dark/bloom-mobile-dark-gates.png",
+      "sha256": "49a19f8fd56662e2a5d7690b358047f0320c97796d4ea19def34a6ffd686c1a0"
+    },
+    {
+      "file": "content-accessibility-gates-meron-desktop-light/meron-desktop-light-gates.png",
+      "sha256": "5ee18822aa39dba35d5c5cffcbd6e516c4ca5401607a32d926c0384259baf69a"
+    },
+    {
+      "file": "content-accessibility-gates-meron-mobile-dark/meron-mobile-dark-gates.png",
+      "sha256": "f1c32fb145a5febd06ebff63dce737d5af63775d1c85f77d1ea5b1d19d2f9949"
+    },
+    {
+      "file": "content-accessibility-gates-selam-desktop-light/selam-desktop-light-gates.png",
+      "sha256": "471caee575d55d5c7339e6a9d9a4a90a9c8c60a8e039922b691efa647ac67e30"
+    },
+    {
+      "file": "content-accessibility-gates-selam-mobile-dark/selam-mobile-dark-gates.png",
+      "sha256": "9814f777134d9e88879f09d03eb4651bcf78b54cee4ff5ddc7c173668fde5de6"
+    },
+    {
+      "file": "content-accessibility-gates-tena-desktop-light/tena-desktop-light-gates.png",
+      "sha256": "29c4f3fa14b51b22adf8f4e68d7755cfb74aec93d4cbf7594133248c1098231a"
+    },
+    {
+      "file": "content-accessibility-gates-tena-mobile-dark/tena-mobile-dark-gates.png",
+      "sha256": "be4a8a83311e59958d931dd89d984381aab46b22ffe3b105bfb0c6730b053dc3"
+    }
+  ],
+  "engine": "axe-core 4.11.0",
+  "scope": "Seventy public surfaces: automated WCAG A/AA violations and local development navigation budget. Incomplete checks require manual review; this does not certify full accessibility or production performance."
+}

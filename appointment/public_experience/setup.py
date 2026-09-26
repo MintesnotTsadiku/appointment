@@ -11,6 +11,7 @@ from appointment.content import entitlements, tenancy
 from appointment.public_experience import brand_compiler, publisher
 from appointment.public_experience.errors import BrandExperienceError, StaleDraftError
 from appointment.public_experience.recipes import get_recipe, list_recipes
+from appointment.public_experience.setup_preview import content_examples
 
 STEPS = ("template", "brand", "content", "features", "readiness", "published", "skipped")
 CATALOG = {
@@ -22,14 +23,36 @@ CATALOG = {
 }
 
 
-def ranked_catalog(industry="", mood=""):
+def validated_preferences(value):
+    if value is None:
+        return {}
+    allowed = {
+        "industry": {"", "wellness", "beauty", "creative", "education", "health"},
+        "mood": {"", "warm", "bold", "editorial", "friendly", "calm"},
+        "audience": {"", "clients", "learners", "patients"},
+        "density": {"", "comfortable", "spacious", "expressive"},
+        "main_action": {"booking", "contact"},
+    }
+    if not isinstance(value, dict) or set(value) - set(allowed):
+        frappe.throw("Choose supported website preferences.")
+    if any(not isinstance(choice, str) or choice not in allowed[key] for key, choice in value.items()):
+        frappe.throw("Choose supported website preferences.")
+    return dict(value)
+
+
+def ranked_catalog(industry="", mood="", audience="", preferred_density=""):
     catalog = json.loads(files("appointment").joinpath("public_experience/manifest/showcase/catalog.v1.json").read_text())
     rows = []
     for recipe in list_recipes():
         sector, feeling, density = CATALOG[recipe.key]
-        score = (4 if sector == industry else 0) + (2 if feeling == mood else 0)
+        target = {"health": "patients", "education": "learners"}.get(sector, "clients")
+        score = (4 if sector == industry else 0) + (2 if feeling == mood else 0) + (2 if target == audience else 0) + (1 if density == preferred_density else 0)
         rows.append({**recipe.as_summary(), "industry": sector, "density": density,
-                     "score": score, "surfaces": ["landing", "book", "scheduler", "blog", "gallery", "newsletter"],
+                     "score": score, "audienceAttributes": [target], "imageryIntensity": "high",
+                     "rankingReasons": [label for value, match, label in ((sector, industry, "Business focus"), (feeling, mood, "Feeling"), (target, audience, "Audience"), (density, preferred_density, "Content density")) if match and value == match],
+                     "fontPairing": recipe.primitives["typography"].key.replace("-", " "),
+                     "requiredAssetRoles": ["heroAsset", "detailAsset"], "lightDarkSupport": ["light", "dark"],
+                     "surfaces": ["landing", "book", "scheduler", "blog", "article", "gallery", "collection", "newsletter"],
                      "businessModels": ["individual", "organization"], "scripts": ["Latin", "Ethiopic"],
                      "imagery": dict(recipe.default_inputs), "certificationVersion": recipe.version,
                      "thumbnail": next(row["heroAsset"] for row in catalog["sites"].values() if row["recipe"] == recipe.key)})
@@ -65,13 +88,15 @@ def state(doc):
             "draftVersion": doc.draft_version, "recipeKey": doc.recipe_key,
             "profile": profile.name, "brandVersion": profile.draft_version,
             "brandInputs": json.loads(profile.brand_inputs_json or "{}"),
+            "identityAssets": {field: profile.get(field) for field in ("logo_primary", "logo_compact", "favicon")},
             "setup": json.loads(doc.website_setup_json or "{}"),
             "sections": [{"type": row.section_type, "content": json.loads(row.content_json)} for row in doc.sections],
             "status": doc.status, "url": doc.platform_url,
             "capabilities": list(entitlements.list_entitlements(doc.owner_type, doc.organization, doc.provider).values())}
 
 
-def start(owner_type, owner, title, slug, recipe_key):
+def start(owner_type, owner, title, slug, recipe_key, preferences=None):
+    preferences = validated_preferences(preferences)
     scope = owner_scope(owner_type, owner)
     # Serialize concurrent starts on the business; a single active site/profile is authoritative.
     frappe.db.sql(f"select name from `tab{owner_type}` where name=%s for update", owner)
@@ -89,8 +114,8 @@ def start(owner_type, owner, title, slug, recipe_key):
                                   "brand_inputs_json": json.dumps(dict(recipe.default_inputs))}).insert()
     doc = frappe.get_doc({"doctype": "Public Site", **scope, "site_title": title, "slug": slug,
                           "brand_profile": profile.name, "recipe_key": recipe.key,
-                          "website_setup_json": json.dumps({"step": "brand", "features": []})})
-    for row in prefill_sections(scope, title, recipe):
+                          "website_setup_json": json.dumps({"step": "brand", "features": [], "preferences": preferences})})
+    for row in prefill_sections(scope, title, recipe, preferences):
         doc.append("sections", row)
     doc.insert()
     return state(doc)
@@ -180,10 +205,12 @@ def preview(site, expected_version):
     return {"contract": "appointment-public-snapshot.v2", "recipeKey": recipe.key,
             "recipeVersion": recipe.version, "compiledDesign": design, "sections": sections,
             "locale": doc.default_locale, "routeKind": "site", "availableLocales": [doc.default_locale],
-            "seo": json.loads(doc.seo_json or "{}"), "booking": json.loads(doc.booking_json or "{}")}
+            "seo": json.loads(doc.seo_json or "{}"), "booking": json.loads(doc.booking_json or "{}"),
+            "previewContent": content_examples(recipe)}
 
 
-def preview_template(owner_type, owner, recipe_key):
+def preview_template(owner_type, owner, recipe_key, preferences=None):
+    preferences = validated_preferences(preferences)
     scope = owner_scope(owner_type, owner)
     recipe = get_recipe(recipe_key)
     business = frappe.get_doc(owner_type, owner)
@@ -194,17 +221,20 @@ def preview_template(owner_type, owner, recipe_key):
     design = brand_compiler.compile_brand(profile, 1).as_dict()["compiledDesign"]
     doc = frappe.get_doc({"doctype": "Public Site", **scope, "slug": "website-preview", "site_title": title,
                           "recipe_key": recipe.key, "recipe_version": recipe.version, "default_locale": "en"})
-    for row in prefill_sections(scope, title, recipe):
+    for row in prefill_sections(scope, title, recipe, preferences):
         doc.append("sections", row)
     return {"contract": "appointment-public-snapshot.v2", "recipeKey": recipe.key,
             "recipeVersion": recipe.version, "compiledDesign": design,
             "sections": publisher._compose_sections(doc, recipe, public_path="/website-preview"),
-            "locale": "en", "routeKind": "site", "availableLocales": ["en"], "seo": {}, "booking": {}}
+            "locale": "en", "routeKind": "site", "availableLocales": ["en"], "seo": {}, "booking": {},
+            "previewContent": content_examples(recipe)}
 
 
-def prefill_sections(scope, title, recipe):
+def prefill_sections(scope, title, recipe, preferences=None):
     text = lambda value: {"en": value}
-    action = {"intent": "booking_start", "label": text("Book an appointment"), "placement": "primary"}
+    contact = (preferences or {}).get("main_action") == "contact"
+    action = {"intent": "contact" if contact else "booking_start",
+              "label": text("Contact us" if contact else "Book an appointment"), "placement": "primary"}
     list_types = {"services", "providers", "process", "benefits", "testimonials", "proof", "locations", "faq"}
     headings = {"services": "Services", "providers": "Our team", "process": "Your visit", "benefits": "What to expect",
                 "testimonials": "Client stories", "proof": "Our work", "locations": "Visit us", "faq": "Questions"}
@@ -215,7 +245,8 @@ def prefill_sections(scope, title, recipe):
     content.update({"hero": {"title": text(title), "subtitle": text(description[:1000]), "primaryAction": action},
                     "about": {"title": text(f"About {title}"), "body": text(description[:2400])},
                     "contact": {"title": text("Contact us")},
-                    "booking_cta": {"title": text("Plan your appointment"), "action": action},
+                    "booking_cta": {"title": text("Plan your appointment"), "action": {
+                        "intent": "booking_start", "label": text("Book an appointment"), "placement": "primary"}},
                     "footer": {"body": text(title), "items": []}})
     for field in ("phone", "email"):
         if business.get(field):
@@ -226,6 +257,32 @@ def prefill_sections(scope, title, recipe):
         content["services"]["items"] = [{"id": row.name, "name": text(row.service_name),
                                           "durationMinutes": row.duration, "price": row.price, "currency": "ETB",
                                           **({"summary": text(row.description)} if row.description else {})} for row in services]
+        locations = frappe.get_all("Location", filters={"organization": scope["organization"], "is_active": 1},
+                                   fields=["name", "location_name", "address_line_1", "phone"], order_by="location_name", limit=12)
+        for location in locations:
+            if not location.address_line_1:
+                continue
+            hours = frappe.get_doc("Location", location.name).opening_hours
+            description = "; ".join(f"{row.day_of_week}: {frappe.utils.get_time(row.start_time).strftime('%H:%M')}–{frappe.utils.get_time(row.end_time).strftime('%H:%M')}"
+                                    for row in hours if row.is_open)
+            content["locations"]["items"].append({"id": location.name[:64], "name": text(location.location_name),
+                                                  "address": text(location.address_line_1),
+                                                  **({"hours": text(description)} if description else {}),
+                                                  **({"phone": location.phone} if location.phone else {})})
+        names = frappe.get_all("Provider Organization", filters={"organization": scope["organization"], "status": "Active"},
+                               pluck="parent", limit=24)
+    else:
+        names = [scope["provider"]]
+    if names:
+        providers = frappe.get_all("Provider", filters={"name": ["in", names], "is_active": 1}, fields=["name", "provider_name"], limit=24)
+        content["providers"]["items"] = [{"id": row.name[:64], "name": text(row.provider_name),
+                                           "role": text("Provider"), "specialties": [], "credentials": []} for row in providers]
+    if scope["organization"]:
+        from appointment.organization_import import website
+
+        merged = website.merge([{"type": kind, "content": value} for kind, value in content.items()],
+                               website.pending(scope["organization"]))
+        content = {row["type"]: row["content"] for row in merged}
     return [{"section_id": kind, "section_type": kind, "enabled": 1, "order_index": index,
              "schema_version": 2, "content_json": json.dumps(content[kind])}
             for index, kind in enumerate(recipe.required_sections)]

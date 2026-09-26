@@ -94,3 +94,6 @@
 @media(max-width:720px){.abugida-content-nav{flex-wrap:wrap;padding:20px}.abugida-content-nav nav{order:3;width:100%;gap:14px;font-size:14px}.abugida-content-grid,.abugida-content-media{grid-template-columns:1fr}.abugida-content-heading{padding:20px 0 35px}.abugida-content-signup{padding:24px}}
 
 .abugida-content h1,.abugida-content h2{font-family:var(--pe-font-display)}
+
+.abugida-content-brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.abugida-content-brand img { width: 120px; max-width: 30vw; height: 36px; object-fit: contain; }

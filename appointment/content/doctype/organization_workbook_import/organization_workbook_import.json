@@ -4,7 +4,7 @@
  "module": "Content",
  "autoname": "hash",
  "engine": "InnoDB",
- "field_order": ["organization", "namespace", "source_hash", "schema_version", "idempotency_key", "mapping_json", "summary_json", "imported_by"],
+ "field_order": ["organization", "namespace", "source_hash", "schema_version", "idempotency_key", "mapping_json", "summary_json", "website_content_json", "imported_by"],
  "fields": [
   {"fieldname": "organization", "fieldtype": "Link", "options": "Organization", "label": "Organization", "reqd": 1, "read_only": 1},
   {"fieldname": "namespace", "fieldtype": "Data", "label": "Workbook Key", "reqd": 1, "read_only": 1},
@@ -13,6 +13,7 @@
   {"fieldname": "idempotency_key", "fieldtype": "Data", "label": "Retry Identity", "reqd": 1, "unique": 1, "read_only": 1},
   {"fieldname": "mapping_json", "fieldtype": "Code", "options": "JSON", "label": "Imported Records", "read_only": 1},
   {"fieldname": "summary_json", "fieldtype": "Code", "options": "JSON", "label": "Import Summary", "read_only": 1},
+  {"fieldname": "website_content_json", "fieldtype": "Code", "options": "JSON", "label": "Reviewed Website Starter Text", "read_only": 1},
   {"fieldname": "imported_by", "fieldtype": "Link", "options": "User", "label": "Imported By", "reqd": 1, "read_only": 1}
  ],
  "permissions": [

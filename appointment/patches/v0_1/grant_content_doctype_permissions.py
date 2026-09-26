@@ -7,14 +7,14 @@ business member can reach the list. Appointment's
 ``permission_query_conditions`` and document-level ``has_permission`` hooks then
 restrict every row and document to the member's own business.
 
-These roles are not managed by the upstream apps, so the grants are stable
-across upstream upgrades. The patch is idempotent.
+Use Custom DocPerm so upstream metadata sync cannot remove the grants. Install
+and migration hooks also run this idempotent reconciliation on fresh sites.
 """
 
 import frappe
 
 ROLES = ("Organization Manager", "Provider")
-TARGETS = ("Blog Post", "Newsletter")
+TARGETS = ("Blog Post", "Newsletter", "Blog Category", "Blogger")
 PERMISSION_FLAGS = {
     "read": 1,
     "write": 1,
@@ -27,14 +27,18 @@ PERMISSION_FLAGS = {
 
 
 def execute():
+    from frappe.permissions import setup_custom_perms
+
     changed = False
     for doctype in TARGETS:
         if not frappe.db.exists("DocType", doctype):
             continue
+        changed = bool(setup_custom_perms(doctype)) or changed
         for role in ROLES:
-            if frappe.db.exists("DocPerm", {"parent": doctype, "role": role, "permlevel": 0}):
+            name = frappe.db.get_value("Custom DocPerm", {"parent": doctype, "role": role, "permlevel": 0, "if_owner": 0}, "name")
+            doc = frappe.get_doc("Custom DocPerm", name) if name else frappe.new_doc("Custom DocPerm")
+            if name and all(doc.get(flag) == value for flag, value in PERMISSION_FLAGS.items()):
                 continue
-            doc = frappe.new_doc("DocPerm")
             doc.parent = doctype
             doc.parenttype = "DocType"
             doc.parentfield = "permissions"
@@ -43,7 +47,7 @@ def execute():
             for flag, value in PERMISSION_FLAGS.items():
                 setattr(doc, flag, value)
             doc.flags.ignore_permissions = True
-            doc.insert()
+            doc.save()
             changed = True
     if changed:
         frappe.clear_cache()

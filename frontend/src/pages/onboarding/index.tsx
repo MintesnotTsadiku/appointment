@@ -12,6 +12,7 @@ import { useTheme } from '@/components/theme-provider';
 import { useSession } from '@/context/session';
 import { parseFrappeErrorMsg } from '@/lib/utils';
 import { validateWindow, formatWallTime, type ClockFormat } from '@/lib/time';
+import SoloSetup from './solo-setup';
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -26,6 +27,7 @@ export default function Onboarding() {
   const [clockFormat, setClockFormat] = useState<ClockFormat>('12h');
   const [selectedDays, setSelectedDays] = useState(DAYS.slice(0, 5));
   const [problem, setProblem] = useState('');
+  const [structure, setStructure] = useState('organization');
   const [done, setDone] = useState<{ business_name: string; public_path: string } | null>(null);
   const [form, setForm] = useState({
     business_name: '',
@@ -142,7 +144,8 @@ export default function Onboarding() {
               </p>
             )}
 
-            <form onSubmit={submit} className="mt-6 space-y-6 rounded-2xl border p-6" style={{ borderColor: 'var(--border-default)', backgroundColor: 'var(--bg-elevated)' }}>
+            <label className="mt-5 block">Business structure<select className="ml-3 rounded border p-2" value={structure} onChange={event => setStructure(event.target.value)}><option value="organization">Organization with a team</option><option value="individual">Independent provider</option></select></label>
+            {structure === 'individual' ? <SoloSetup /> : <form onSubmit={submit} className="mt-6 space-y-6 rounded-2xl border p-6" style={{ borderColor: 'var(--border-default)', backgroundColor: 'var(--bg-elevated)' }}>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   {fieldLabel('business_name', 'Business name')}
@@ -210,7 +213,7 @@ export default function Onboarding() {
               <Button type="submit" data-qa="onboarding-submit" disabled={loading || Boolean(windowError)}>
                 {loading ? 'Creating…' : 'Create business'}
               </Button>
-            </form>
+            </form>}
           </>
         )}
       </div>

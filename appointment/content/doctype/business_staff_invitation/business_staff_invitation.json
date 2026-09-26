@@ -1,0 +1,89 @@
+{
+ "doctype": "DocType",
+ "name": "Business Staff Invitation",
+ "module": "Content",
+ "autoname": "hash",
+ "engine": "InnoDB",
+ "field_order": [
+  "organization",
+  "email",
+  "full_name",
+  "invited_by",
+  "status",
+  "token_hash",
+  "local_token",
+  "expires_at",
+  "accepted_at"
+ ],
+ "fields": [
+  {
+   "fieldname": "organization",
+   "fieldtype": "Link",
+   "label": "Organization",
+   "read_only": 1,
+   "options": "Organization"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email",
+   "read_only": 1
+  },
+  {
+   "fieldname": "full_name",
+   "fieldtype": "Data",
+   "label": "Full Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "invited_by",
+   "fieldtype": "Link",
+   "label": "Invited By",
+   "read_only": 1,
+   "options": "User"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "read_only": 1,
+   "options": "Pending\nAccepted\nRevoked"
+  },
+  {
+   "fieldname": "token_hash",
+   "fieldtype": "Data",
+   "label": "Token Hash",
+   "read_only": 1
+  },
+  {
+   "fieldname": "local_token",
+   "fieldtype": "Password",
+   "label": "Local Token",
+   "read_only": 1
+  },
+  {
+   "fieldname": "expires_at",
+   "fieldtype": "Datetime",
+   "label": "Expires At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "accepted_at",
+   "fieldtype": "Datetime",
+   "label": "Accepted At",
+   "read_only": 1
+  }
+ ],
+ "permissions": [
+  {
+   "role": "Organization Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1
+  }
+ ]
+}

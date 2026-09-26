@@ -55,6 +55,36 @@ class WebsiteSetupTests(unittest.TestCase):
         self.assertEqual(published["status"], "Published")
         self.assertEqual(published["setup"]["step"], "published")
 
+    def test_main_action_and_rank_preferences_resume_without_inventing_business_facts(self):
+        preferences = {"industry": "health", "audience": "patients", "main_action": "contact"}
+        draft = setup.start("Organization", self.fixture["orgs"]["A"], "Preference test",
+                            "preference-" + frappe.generate_hash(length=8), "tena-clinic", preferences)
+        self.assertEqual(setup.state(setup.require_site(draft["site"]))["setup"]["preferences"], preferences)
+        hero = next(row for row in draft["sections"] if row["type"] == "hero")
+        self.assertEqual(hero["content"]["primaryAction"]["intent"], "contact")
+        before = frappe.db.count("Public Site")
+        with self.assertRaises(frappe.ValidationError):
+            setup.start("Organization", self.fixture["orgs"]["A"], "Unsafe", "unsafe-preference",
+                        "tena-clinic", {"main_action": "javascript:bad()"})
+        self.assertEqual(frappe.db.count("Public Site"), before)
+
+    def test_independent_owner_publishes_without_creating_an_organization(self):
+        from appointment.public_experience import solo_setup
+        from appointment.scheduler import membership
+
+        before = frappe.db.count("Organization")
+        solo = solo_setup.create(self.fixture["marker"] + " Independent website")
+        self.assertEqual(membership.context()["state"], "workspace")  # This fixture also owns an organization.
+        draft = setup.start("Provider", solo["provider"], solo["business_name"],
+                            "solo-" + frappe.generate_hash(length=8), "selam-movement", {"main_action": "contact"})
+        published = setup.publish(draft["site"], draft["draftVersion"])
+        self.assertEqual(published["status"], "Published")
+        self.assertEqual(frappe.db.count("Organization"), before)
+        self.assertEqual(frappe.db.get_value("Public Site", draft["site"], "owner_type"), "Provider")
+        frappe.set_user(self.fixture["owners"]["B"])
+        with self.assertRaises(frappe.PermissionError):
+            setup.require_site(draft["site"])
+
     def test_ranked_templates_have_private_preview_without_creating_records(self):
         owner = self.fixture["orgs"]["A"]
         before = frappe.db.count("Public Site", {"organization": owner})
@@ -64,6 +94,8 @@ class WebsiteSetupTests(unittest.TestCase):
             preview = setup.preview_template("Organization", owner, recipe["key"])
             self.assertEqual(preview["compiledDesign"]["recipeKey"], recipe["key"])
             self.assertTrue(recipe["thumbnail"].startswith("/assets/appointment/"))
+            self.assertEqual(set(preview["previewContent"]), {"article", "gallery"})
+            self.assertIn("Private layout example", preview["previewContent"]["article"]["excerpt"])
         self.assertEqual(frappe.db.count("Public Site", {"organization": owner}), before)
 
     def test_readiness_compiles_unpublished_brand_and_reports_booking_fix(self):
@@ -110,6 +142,27 @@ class WebsiteSetupTests(unittest.TestCase):
         saved = setup.save(draft["site"], draft["draftVersion"], "skipped")
         self.assertEqual(saved["setup"]["step"], "skipped")
         self.assertEqual(saved["status"], "Draft")
+
+    def test_identity_upload_without_gallery_and_foreign_asset_denial(self):
+        from appointment.public_experience import identity_media
+
+        draft = self.start()
+        frappe.set_user("Administrator")
+        entitlements.set_capability("Organization", self.fixture["orgs"]["A"], None, "gallery", "Expired")
+        frappe.set_user(self.fixture["owners"]["A"])
+        image = Path(frappe.get_app_path("appointment")) / "public/brand-experience/support/tena/scene-1.webp"
+        result = identity_media.upload(draft["site"], draft["draftVersion"], "logo_primary", base64.b64encode(image.read_bytes()).decode(), 1)
+        url = result["identityAssets"]["logo_primary"]
+        self.uploads.append(frappe.db.get_value("File", {"file_url": url}, "name"))
+        self.assertTrue(url.startswith("/files/"))
+        preview = setup.preview(result["site"], result["draftVersion"])
+        self.assertEqual(preview["compiledDesign"]["identity"]["logoPrimary"], url)
+        frappe.set_user(self.fixture["owners"]["B"])
+        foreign = setup.start("Organization", self.fixture["orgs"]["B"], "Foreign website", "identity-foreign-test", "tena-clinic")
+        profile = frappe.get_doc("Brand Profile", foreign["profile"])
+        profile.logo_primary = url
+        with self.assertRaises(frappe.ValidationError):
+            profile.save()
 
     def test_owner_can_author_publish_and_edit_without_changing_public_release(self):
         from appointment.content import authoring, releases

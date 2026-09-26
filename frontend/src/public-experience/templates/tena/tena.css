@@ -15,3 +15,8 @@
 @media(max-width:720px){.tena-content-nav{flex-wrap:wrap;padding:20px}.tena-content-nav nav{order:3;width:100%;gap:14px;font-size:14px}.tena-content-grid,.tena-content-media{grid-template-columns:1fr}.tena-content-heading{padding:20px 0 35px}.tena-content-signup{padding:24px}}
 
 .tena-content h1,.tena-content h2{font-family:var(--pe-font-display)}
+
+@media(max-width:800px){.tena-hero{grid-template-columns:minmax(0,1fr)}.tena-hero>div{min-width:0}.tena-hero h1{font-size:clamp(40px,12vw,56px);overflow-wrap:anywhere}}
+
+.tena-content-brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.tena-content-brand img { width: 120px; max-width: 30vw; height: 36px; object-fit: contain; }

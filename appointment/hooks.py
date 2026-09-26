@@ -44,7 +44,10 @@ app_include_js = [
 
 # Email templates are imported after the app's doctypes exist so that the
 # Appointment Settings Link fields resolve on a fresh install.
-after_install = "appointment.tasks.import_email_templates.import_email_templates"
+after_install = [
+    "appointment.tasks.import_email_templates.import_email_templates",
+    "appointment.patches.v0_1.grant_content_doctype_permissions.execute",
+]
 
 after_sync = [
     "appointment.tasks.setup_erpnext_fields.setup_erpnext_fields",
@@ -63,6 +66,7 @@ after_migrate = [
     "appointment.tasks.import_email_templates.import_email_templates",
     # recipe manifests are code-owned; no database registry is reconciled.
     "appointment.public_experience.reconcile.ensure_public_site_unique_indexes",
+    "appointment.patches.v0_1.grant_content_doctype_permissions.execute",
 ]
 
 # include js, css files in header of web template
@@ -376,6 +380,10 @@ permission_query_conditions["Gallery Collection"] = "appointment.content.access.
 has_permission["Business Entitlement"] = "appointment.content.access.business_entitlement_permission"
 has_permission["Content Ownership"] = "appointment.content.access.content_ownership_permission"
 has_permission["Blog Post"] = "appointment.content.access.blog_post_permission"
+permission_query_conditions["Blog Category"] = "appointment.content.access.blog_category_query"
+permission_query_conditions["Blogger"] = "appointment.content.access.blogger_query"
+has_permission["Blog Category"] = "appointment.content.access.article_support_permission"
+has_permission["Blogger"] = "appointment.content.access.article_support_permission"
 has_permission["Newsletter"] = "appointment.content.access.newsletter_permission"
 has_permission["Published Content Release"] = "appointment.content.access.published_content_release_permission"
 has_permission["Gallery Collection"] = "appointment.content.access.gallery_collection_permission"
@@ -384,6 +392,8 @@ has_permission["Gallery Collection"] = "appointment.content.access.gallery_colle
 agent_plane_browser_qa_suites = ["appointment.tests.content_browser_suite.suites"]
 
 permission_query_conditions["Organization Workbook Import"] = "appointment.organization_import.access.query"
+permission_query_conditions["Business Staff Invitation"] = "appointment.content.staff_invitations.query"
+has_permission["Business Staff Invitation"] = "appointment.content.staff_invitations.permission"
 has_permission["Organization Workbook Import"] = "appointment.organization_import.access.permission"
 permission_query_conditions["Business Membership"] = "appointment.organization_import.access.membership_query"
 has_permission["Business Membership"] = "appointment.organization_import.access.membership_permission"

@@ -19,6 +19,7 @@ class NewsletterTests(unittest.TestCase):
     def setUp(self):
         EntitlementIsolationTests.setUpClass()
         self.fixture = EntitlementIsolationTests.state
+        frappe.flags.ignore_permissions = False
         self.sites = {}
         for suffix in ("A", "B"):
             frappe.set_user(self.fixture["owners"][suffix])
@@ -231,10 +232,16 @@ class NewsletterTests(unittest.TestCase):
             campaigns.queue(site, draft["ownership"], sender, "fifth-request-identity")
 
     def test_foreign_owner_cannot_read_sink_or_suppress_or_queue(self):
+        from appointment.content.diagnostics import business_health
+
         member, sender, draft, name = self.campaign()
+        health = business_health(self.sites["A"].name)
+        self.assertEqual(health["audience"], {"Confirmed": 1})
+        self.assertFalse(health["externalDeliveryEnabled"])
+        self.assertNotIn(member.email, json.dumps(health))
         message = frappe.db.get_value("Local Email Message", {"public_site": self.sites["A"].name}, "name")
         self.owner("B")
-        for operation in (lambda: api.workspace(self.sites["A"].name), lambda: api.get_local_message(message),
+        for operation in (lambda: business_health(self.sites["A"].name), lambda: api.workspace(self.sites["A"].name), lambda: api.get_local_message(message),
                           lambda: audience.suppress(member.name, "Foreign action"), lambda: campaigns.retry(name),
                           lambda: campaigns.queue(self.sites["B"].name, draft["ownership"], sender, "foreign-request-identity")):
             with self.assertRaises(frappe.PermissionError):

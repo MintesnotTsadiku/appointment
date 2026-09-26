@@ -9,21 +9,26 @@ import frappe
 from frappe.utils.password import update_password
 
 SITE = 'meet-beta-feat-content-publishing-galler-5839d4.localhost'
+ALLOWED_SITES = (SITE, 'meet-beta-content-fresh-a.localhost', 'meet-beta-content-fresh-b.localhost', 'meet-beta-content-restore.localhost')
 RUNTIME = Path('/home/minte/.local/state/frappe-worktree-stack/feat-content-publishing-galler-5839d4')
 USER = 'content-browser-owner@example.test'
 LABEL = 'Appointment content development owner'
 
+def account_label(site):
+    return LABEL if site == SITE else f'{LABEL} — {site}'
+
 def run():
-    if frappe.local.site != SITE or not frappe.conf.get('worktree_development'):
+    site = frappe.local.site
+    if site not in ALLOWED_SITES or not frappe.conf.get('worktree_development'):
         raise RuntimeError('This bootstrap is restricted to the isolated content site')
     frappe.set_user('Administrator')
-    private = RUNTIME / 'browser-credentials.json'
+    private = RUNTIME / ('browser-credentials.json' if site == SITE else f'{site}-browser-credentials.json')
     if private.exists():
         credentials = json.loads(private.read_text())
-        if credentials.get('username') != USER or credentials.get('site') != SITE:
+        if credentials.get('username') != USER or credentials.get('site') != site:
             raise RuntimeError('Private bootstrap identity does not match')
     else:
-        credentials = {'site': SITE, 'username': USER, 'password': secrets.token_urlsafe(32)}
+        credentials = {'site': site, 'username': USER, 'password': secrets.token_urlsafe(32)}
         descriptor = os.open(private, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
         with os.fdopen(descriptor, 'w') as stream:
             json.dump(credentials, stream)
@@ -36,18 +41,19 @@ def run():
     if forbidden & roles:
         raise RuntimeError('Browser identity has forbidden platform roles')
     update_password(USER, credentials['password'], logout_all_sessions=False)
-    name = frappe.db.get_value('Browser Account', {'account_label':LABEL}, 'name')
+    label = account_label(site)
+    name = frappe.db.get_value('Browser Account', {'account_label':label}, 'name')
     if not name:
         from agent_plane.managed_browser.service import create_browser_profile
-        name = create_browser_profile(account_label=LABEL, owner_user=USER,
-            base_domains=[SITE, '127.0.0.11'], runtime_provider_key='')['browser_account']
+        name = create_browser_profile(account_label=label, owner_user=USER,
+            base_domains=[site, '127.0.0.11'], runtime_provider_key='')['browser_account']
     account = frappe.get_doc('Browser Account', name)
     if account.owner_user != USER:
         raise RuntimeError('Existing browser profile belongs to another identity')
     account.update({'status':'Active', 'session_health':'Healthy', 'allow_stored_login_credentials':1,
         'credential_username':USER, 'credential_password':credentials['password'],
         'login_strategy':'Direct HTTP Credential Login', 'login_start_url':'/login',
-        'login_success_url_contains':'/onboarding', 'base_domains_json':json.dumps([SITE, '127.0.0.11'])})
+        'login_success_url_contains':'/onboarding', 'base_domains_json':json.dumps([site, '127.0.0.11'])})
     account.save(ignore_permissions=True)
     name_session = frappe.db.get_value('Browser Session', {'browser_account':name, 'session_label':'primary'}, 'name')
     session = frappe.get_doc('Browser Session', name_session)
@@ -57,23 +63,24 @@ def run():
     session.save(ignore_permissions=True)
     settings = frappe.get_single('Runtime Settings')
     domains = set(str(settings.browser_allowed_domains or '').replace('\n', ',').split(',')) - {''}
-    domains.update([SITE, '127.0.0.11'])
+    domains.update([site, '127.0.0.11'])
     settings.browser_allowed_domains = ','.join(sorted(domains))
     settings.save(ignore_permissions=True)
     frappe.db.commit()
-    return {'site':SITE, 'browser_account':name, 'browser_session':name_session,
+    return {'site':site, 'browser_account':name, 'browser_session':name_session,
         'username':USER, 'roles':sorted(roles), 'credentials_file':str(private)}
 
-def enqueue_smoke(update_baseline=0, suite='content-runtime'):
-    if frappe.local.site != SITE or not frappe.conf.get('worktree_development'):
+def enqueue_smoke(update_baseline=0, suite='content-runtime', scenarios=None):
+    site = frappe.local.site
+    if site not in ALLOWED_SITES or not frappe.conf.get('worktree_development'):
         raise RuntimeError('This smoke test is restricted to the isolated content site')
     from frappe.utils import get_bench_path
     if Path(get_bench_path()) != RUNTIME / 'bench':
         raise RuntimeError('Export FRAPPE_BENCH_ROOT for the isolated queue namespace')
     from agent_plane.qa_workflows.browser_qa_service import enqueue_browser_qa_request
-    if suite not in ('content-runtime', 'website-setup'):
+    if suite not in ('content-runtime', 'website-setup', 'content-templates', 'content-accessibility', 'individual-owner', 'content-recovery'):
         raise RuntimeError('Unsupported development suite')
-    account = frappe.db.get_value('Browser Account', {'account_label':LABEL}, 'name')
+    account = frappe.db.get_value('Browser Account', {'account_label':account_label(site)}, 'name')
     if not account:
         raise RuntimeError('Bootstrap the managed browser account first')
     checkout = Path(frappe.get_app_path('appointment', '..')).resolve()
@@ -84,10 +91,10 @@ def enqueue_smoke(update_baseline=0, suite='content-runtime'):
     suite_hash = hashlib.sha256(b''.join((checkout / path).read_bytes() for path in
         (f'qa/{suite}.spec.mjs', f'qa/{suite}.config.mjs', 'appointment/tests/content_browser_suite.py'))).hexdigest()[:12]
     request = {'schema_version':'browser-qa-run/v1', 'app':'appointment', 'suite':suite,
-        'target':{'site':SITE, 'base_url':'http://127.0.0.11:34340', 'environment':'development'},
-        'scenarios':[], 'mode':'deterministic', 'cleanup_policy':'always', 'artifact_policy':'retain',
+        'target':{'site':site, 'base_url':'http://127.0.0.11:34340', 'environment':'development'},
+        'scenarios':scenarios or [], 'mode':'deterministic', 'cleanup_policy':'always', 'artifact_policy':'retain',
         'capture':{'screenshots':'on', 'trace':'on', 'video':'off'},
-        'browser_account':account, 'timeout_seconds':360, 'request_source':'bench',
+        'browser_account':account, 'timeout_seconds':1800 if suite in ('content-templates', 'content-accessibility') else 360, 'request_source':'bench',
         'update_baseline':bool(int(update_baseline)), 'source_version':f'{revision}+source-{source_hash}+qa-{suite_hash}'}
     return enqueue_browser_qa_request(request)
 
@@ -144,12 +151,13 @@ def export_smoke(name):
 
 def export_website(name):
     import shutil
-    if frappe.local.site != SITE:
+    if frappe.local.site not in ALLOWED_SITES:
         raise RuntimeError('Evidence export requires the isolated content site')
     doc = frappe.get_doc('Browser QA Run', name)
     if doc.suite_id != 'website-setup' or doc.status != 'Passed' or doc.baseline_changed_count:
         raise RuntimeError('Only strict passing website journey evidence can be exported')
-    destination = Path(frappe.get_app_path('appointment', '..')).resolve() / 'qa/evidence/website-setup'
+    folder = 'website-setup' if frappe.local.site == SITE else f'fresh-site/{frappe.local.site}'
+    destination = Path(frappe.get_app_path('appointment', '..')).resolve() / 'qa/evidence' / folder
     destination.mkdir(parents=True, exist_ok=True)
     inventory = []
     for artifact in json.loads(doc.artifact_files_json or '[]'):
@@ -161,9 +169,9 @@ def export_website(name):
         target = destination / source.name
         shutil.copyfile(source, target)
         inventory.append({'file': source.name, 'sha256': hashlib.sha256(target.read_bytes()).hexdigest()})
-    if len(inventory) != 18:
+    if len(inventory) != 29:
         raise RuntimeError('Website journey screenshot inventory is incomplete')
-    result = {'run': name, 'status': doc.status, 'source_version': doc.source_version,
+    result = {'run': name, 'site': frappe.local.site, 'status': doc.status, 'source_version': doc.source_version,
         'scenario_summary': json.loads(doc.scenario_summary_json or '{}'),
         'baseline_changed_count': doc.baseline_changed_count,
         'cleanup': json.loads(doc.cleanup_json or '{}'), 'audit': json.loads(doc.audit_json or '{}'),
@@ -171,3 +179,83 @@ def export_website(name):
         'scope': 'Core website setup, workbook creation/import, and local newsletter journey for one normal organization owner using Tena. Full template, expanded setup/import, fresh-site, and release-readiness gates remain pending.'}
     (destination / 'validation.json').write_text(json.dumps(result, indent=2)+'\n')
     return {'run': name, 'screenshots': len(inventory), 'destination': str(destination), 'audit': result['audit']}
+
+
+def export_templates(name):
+    import shutil
+
+    if frappe.local.site != SITE:
+        raise RuntimeError('Template evidence requires the isolated showcase site')
+    doc = frappe.get_doc('Browser QA Run', name)
+    summary = json.loads(doc.scenario_summary_json or '{}')
+    if (doc.suite_id != 'content-templates' or doc.status != 'Passed'
+            or doc.baseline_changed_count or summary.get('passed') != 20
+            or summary.get('failed') or summary.get('flaky')):
+        raise RuntimeError('Only the complete strict twenty-scenario matrix can be exported')
+    destination = Path(frappe.get_app_path('appointment', '..')).resolve() / 'qa/evidence/content-templates'
+    artifacts = []
+    root = (Path('/tmp/agent_browser_qa') / name).resolve()
+    for artifact in json.loads(doc.artifact_files_json or '[]'):
+        if artifact.get('kind') != 'screenshot':
+            continue
+        source = Path(artifact.get('path', '')).resolve()
+        if root not in source.parents or source.suffix != '.png':
+            raise RuntimeError('Screenshot is outside the exact managed run')
+        artifacts.append(source)
+    if len(artifacts) != 280 or len({(path.parent.name, path.name) for path in artifacts}) != 280:
+        raise RuntimeError('Template capture inventory is incomplete or ambiguous')
+    inventory = []
+    for source in artifacts:
+        target = destination / source.parent.name / source.name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source, target)
+        inventory.append({'file': str(target.relative_to(destination)),
+                          'sha256': hashlib.sha256(target.read_bytes()).hexdigest()})
+    result = {'run': name, 'site': SITE, 'status': doc.status, 'outcome': doc.outcome,
+              'scenario_summary': summary, 'source_version': doc.source_version,
+              'baseline_changed_count': 0, 'artifacts': inventory,
+              'scope': 'Seeded template rendering; empty and unavailable states use controlled API responses. Fresh owner acceptance is recorded separately.'}
+    (destination / 'validation.json').write_text(json.dumps(result, indent=2) + '\n')
+    return {'run': name, 'screenshots': len(inventory), 'destination': str(destination)}
+
+
+def export_accessibility(name):
+    """Export public-only gate reports; keep managed authentication artifacts private."""
+    import shutil
+
+    if frappe.local.site != SITE:
+        raise RuntimeError('Public gate evidence requires the isolated showcase site')
+    doc = frappe.get_doc('Browser QA Run', name)
+    summary = json.loads(doc.scenario_summary_json or '{}')
+    if doc.suite_id != 'content-accessibility' or doc.status != 'Passed' or summary.get('passed') != 10 or summary.get('failed') or summary.get('flaky'):
+        raise RuntimeError('All ten public gate scenarios must pass before export')
+    root = (Path('/tmp/agent_browser_qa') / name).resolve()
+    destination = Path(frappe.get_app_path('appointment', '..')).resolve() / 'qa/evidence/content-accessibility'
+    reports = list(root.rglob('*-gates.json'))
+    if len(reports) != 10:
+        raise RuntimeError('Public gate report inventory is incomplete')
+    inventory = []
+    for source in reports:
+        if source.is_symlink():
+            raise RuntimeError('Refusing a linked gate artifact')
+        report = json.loads(source.read_text())
+        if len(report.get('reports', [])) != 7 or any(row.get('violations') for row in report['reports']):
+            raise RuntimeError('Public gate report contains missing surfaces or violations')
+        destination.mkdir(parents=True, exist_ok=True)
+        target = destination / source.name
+        target.write_text(json.dumps(report, indent=2) + '\n')
+        inventory.append({'file': target.name, 'sha256': hashlib.sha256(target.read_bytes()).hexdigest()})
+    for artifact in json.loads(doc.artifact_files_json or '[]'):
+        if artifact.get('kind') == 'screenshot':
+            source = Path(artifact['path']).resolve()
+            if root not in source.parents or source.suffix != '.png':
+                raise RuntimeError('Screenshot is outside the managed public gate run')
+            target = destination / source.parent.name / source.name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(source, target)
+            inventory.append({'file': str(target.relative_to(destination)), 'sha256': hashlib.sha256(target.read_bytes()).hexdigest()})
+    result = {'run': name, 'source_version': doc.source_version, 'scenario_summary': summary,
+              'artifacts': inventory, 'engine': 'axe-core 4.11.0',
+              'scope': 'Seventy public surfaces: automated WCAG A/AA violations and local development navigation budget. Incomplete checks require manual review; this does not certify full accessibility or production performance.'}
+    (destination / 'validation.json').write_text(json.dumps(result, indent=2) + '\n')
+    return {'run': name, 'public_reports': len(reports), 'destination': str(destination)}

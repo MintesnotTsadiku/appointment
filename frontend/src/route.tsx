@@ -33,6 +33,7 @@ const WebsiteContent = lazy(() => import("@/pages/settings/website-content"));
 const OrganizationImport = lazy(() => import("@/pages/settings/organization-import"));
 const NewsletterWorkspace = lazy(() => import("@/pages/settings/website-newsletter"));
 const NewsletterAction = lazy(() => import("@/pages/public-experience/newsletter-action"));
+const StaffInvitation = lazy(() => import("@/pages/public-experience/staff-invitation"));
 const Settings = lazy(() => import("@/pages/settings"));
 const AdminDashboard = lazy(() => import("@/pages/admin/dashboard"));
 const Appointment = lazy(() => import("@/pages/appointment"));
@@ -89,6 +90,7 @@ const Router = () => {
       <Route path="/settings/organization-import" element={<OrganizationImport />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/website/newsletter" element={<NewsletterWorkspace />} errorElement={<ErrorFallback />} />
       <Route path="/newsletter/:action/:token" element={<NewsletterAction />} errorElement={<ErrorFallback />} />
+      <Route path="/team/invitation/:token" element={<StaffInvitation />} errorElement={<ErrorFallback />} />
       <Route path="/admin/dashboard" element={<AdminDashboard />} errorElement={<ErrorFallback />}></Route>
       <Route path="/schedule/in/:meetId" element={<Appointment />} errorElement={<ErrorFallback />}></Route>
       <Route path="/schedule/gr/:groupId" element={<GroupAppointment />} errorElement={<ErrorFallback />}></Route>

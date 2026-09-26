@@ -13,11 +13,13 @@ from frappe.model.document import Document
 
 from appointment.content import tenancy
 
-SOURCE_DOCTYPES = ("Blog Post", "Newsletter", "Gallery Collection")
+SOURCE_DOCTYPES = ("Blog Post", "Newsletter", "Gallery Collection", "Blog Category", "Blogger")
 SOURCE_CAPABILITY = {
     "Blog Post": "blog",
     "Newsletter": "newsletter",
     "Gallery Collection": "gallery",
+    "Blog Category": "blog",
+    "Blogger": "blog",
 }
 
 

@@ -434,3 +434,106 @@ previews now include article and gallery surfaces. Fresh-site browser validation
 found missing upstream role grants. Install and migration hooks now reconcile
 Custom DocPerm so upstream metadata sync cannot remove the content grants.
 These expanded setup and installation changes await a passing strict journey.
+
+## Continued fresh-site and recovery work — 2026-09-26
+
+These changes are in progress after checkpoint `467b40b`. Phases 5–10 are not
+complete. No reference-runtime data was changed.
+
+- Added private template comparisons and six owner preview surfaces. The
+  ranking catalog explains audience, industry, feeling, density, and font
+  choices. Website drafts retain these preferences and the main visitor action.
+- Added owner logo and favicon upload controls. Images require public-display
+  consent, decoded image validation, and exact Public Site ownership. Favicon
+  uploads generate a square 256-pixel PNG. Re-selecting the same file works.
+- Fresh-site installation exposed missing upstream draft permissions. The
+  install and migration hooks now maintain tenant-governed Custom DocPerm rows;
+  normal owners no longer require Administrator to create an article.
+- Workbook website starter text survives import before website creation. Invalid
+  contact cells fail dry-run before writes. The workbook still links enabled
+  accounts after staff accept their invitations.
+- Added a local staff invitation inbox and explicit acceptance page. Acceptance
+  creates an account with its own password and no business membership. Existing
+  accounts must accept while signed in with the invited email. Tokens expire,
+  can be revoked, and are one-use. No external email is sent.
+- Article hero and inline images now use the same exact-site decoded-image gate
+  as gallery media. Private previews and newsletter actions return no-store and
+  noindex headers.
+
+Focused results: website setup 11 tests; staff invitations 4 tests plus 9
+entitlement regression tests; gallery and article media 11 tests; immutable
+releases 13 tests; public contracts and response privacy 9 tests. All passed.
+The focused frontend lint and installed Vite build passed. The previously
+recorded unrelated TypeScript failures remain separate.
+
+Fresh site A began without business or content data. Managed run
+`BQA-2026-01023` passed the expanded normal-owner journey, including local staff
+acceptance, with 27 captures. Run `01024` passed all functional steps but failed
+one screenshot comparison. Run `01025` passed after the comparison capture moved
+the pointer away from native controls and removed focus. These runs establish
+baselines; they are not strict final acceptance. A strict repeat of the final
+wizard remains required. No authentication trace or invitation token is exported.
+
+The full five-template matrix is running as `BQA-2026-00134`. The previous
+Tena mobile overflow fix remains in its own template package. An accessibility
+and local navigation-budget suite uses pinned axe-core 4.11.0. Its results are
+pending; automated checks do not replace manual accessibility review.
+
+A fresh second acceptance site, `meet-beta-content-fresh-b.localhost`, was
+provisioned without seeding. Browser validation on this site remains pending.
+
+### Recovery data-integrity result
+
+Backup `20260926_163236` restored only into the new isolated site
+`meet-beta-content-restore.localhost`. The recovery target retained the source
+credential encryption key privately, with muted email and paused scheduling.
+The source and restored inventory hashes match:
+`a396c5d73c81673fe8844ccd33bc54852db5b89483fc6ca244d7f576c9e471be`.
+
+Verification covered 35 publication releases, 15 actual media files, upstream
+record counts, two consent records, encrypted unsubscribe tokens, consent audit,
+and confirmed/suppressed states. Only the two explicit recovery consent fixtures
+and their captured messages were removed from the source after verification.
+The recovery target retains them. See `qa/evidence/content-recovery/validation.json`.
+Public-route browser recovery, code upgrade/rollback, remaining owner/staff and
+isolation journeys, monitoring/runbooks, and final accessibility/performance
+qualification are still pending.
+
+
+### Continued acceptance and operational checks
+
+Managed accessibility run `BQA-2026-00137` passed nine scenarios and rejected the
+Abugida mobile home link without an accessible name. Its own template now names
+the link. Repeat `00138` passed all ten scenarios across 70 public surfaces, with
+zero automated WCAG A/AA violations, no external resource requests, and the
+local 15-second navigation budget. Public reports and ten captures are retained
+under `qa/evidence/content-accessibility`. Incomplete contrast and link checks
+remain for manual review; this does not certify complete accessibility or
+production performance.
+
+Template baseline `00139` passed all twenty scenarios. Strict comparison `00140`
+is in progress. These captures include each template's own content-header logo.
+
+Website setup passed 12 tests, entitlement isolation 13, immutable publication
+14 (including foreign category/author rejection), newsletter 12, and monitoring
+5. The upstream global Blogger restriction initially blocked new site-owned
+authors. A proposed global property setter was rejected by automatic approval
+review and was not applied. The scoped fix retains user-permission enforcement
+and grants only the managed website's own author link for Blog Post.
+
+The explicit journal-owned support upgrade created ten category/author ownership
+mappings. A repeat created zero. All 35 release hashes remain valid and the five
+showcases retain zero audiences and campaigns. The journal owns 160 records.
+Exact repair removed the known interrupted synthetic independent-provider and
+diagnostic fixtures. The seven synthetic record counters returned zero.
+
+The organization browser journey now includes a separate managed receptionist
+profile configured only after guest invitation acceptance and normal-owner Team
+assignment. Its final browser run is pending. The second fresh-site independent
+owner run, full isolation/entitlement journeys, restored public-route checks,
+code upgrade/rollback, and manual accessibility qualification also remain pending.
+Monitoring and the operations runbook are implemented; their focused regression
+checks are recorded above. The final focused batch also passed staff invitations
+14, gallery/media 11, workbook import 11, response privacy 9, and upstream draft
+protection 6. Frontend lint passed with the two existing session fast-refresh
+warnings and no errors. No external email or reference-runtime changes occurred.

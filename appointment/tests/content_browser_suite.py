@@ -1,10 +1,11 @@
 """Managed browser smoke suite for the isolated content runtime."""
 import frappe
-from appointment.tests.content_browser_bootstrap import SITE
+from appointment.tests.content_browser_bootstrap import SITE, ALLOWED_SITES
 
 
 def suites():
-    if frappe.local.site != SITE or not frappe.conf.get('worktree_development'):
+    site = frappe.local.site
+    if site not in ALLOWED_SITES or not frappe.conf.get('worktree_development'):
         return []
     runtime = {
         'schema_version':'browser-qa-suite/v2', 'suite_id':'content-runtime', 'app':'appointment',
@@ -17,7 +18,7 @@ def suites():
             'playwright_pattern':name, 'required_artifacts':['screenshot']} for name in
             ('react-desktop', 'react-mobile', 'desk-desktop', 'desk-mobile')],
         'default_cleanup_policy':'always', 'required_capabilities':[],
-        'environment':{'allowed_sites':[SITE], 'allowed_base_urls':['http://127.0.0.11:34340'],
+        'environment':{'allowed_sites':[site], 'allowed_base_urls':['http://127.0.0.11:34340'],
             'requires_developer_mode':True, 'allows_credentials':True,
             'allowed_modes':['deterministic']},
     }
@@ -28,4 +29,37 @@ def suites():
             'page_family':'website-setup', 'credential_capability':'frappe.role:Provider',
             'mutation_level':'exact-cleanup', 'playwright_pattern':'website-owner-journey',
             'required_artifacts':['screenshot']}]}
-    return [runtime, website]
+    templates = {**runtime, 'suite_id':'content-templates', 'title':'Certified content template matrix',
+        'spec_path':'qa/content-templates.spec.mjs', 'config_path':'qa/content-templates.config.mjs',
+        'fixture_adapter':'appointment.tests.showcase_browser_fixture.adapter',
+        'scenarios':[{'scenario_id':f'certified-{key}-{width}-{mode}',
+            'title':f'{key} {width} {mode}', 'page_family':'content-templates',
+            'credential_capability':'frappe.role:Provider', 'mutation_level':'read-only',
+            'playwright_pattern':f'certified-{key}-{width}-{mode}', 'required_artifacts':['screenshot']}
+            for key in ('selam','bloom','meron','abugida','tena')
+            for width in ('desktop','mobile') for mode in ('light','dark')]}
+    accessibility = {**templates, 'suite_id': 'content-accessibility', 'title': 'Public accessibility and performance gates',
+        'spec_path': 'qa/content-accessibility.spec.mjs', 'config_path': 'qa/content-accessibility.config.mjs',
+        'scenarios': [{'scenario_id': f'gates-{key}-{width}-{mode}', 'title': f'{key} {width} {mode}',
+            'page_family': 'content-gates', 'credential_capability': 'frappe.role:Provider',
+            'mutation_level': 'read-only', 'playwright_pattern': f'gates-{key}-{width}-{mode}',
+            'required_artifacts': ['screenshot']}
+            for key in ('selam', 'bloom', 'meron', 'abugida', 'tena')
+            for width, mode in (('desktop', 'light'), ('mobile', 'dark'))]}
+    individual = {**website, 'suite_id': 'individual-owner', 'title': 'Independent owner website setup',
+        'spec_path': 'qa/individual-owner.spec.mjs', 'config_path': 'qa/individual-owner.config.mjs',
+        'fixture_adapter': 'appointment.tests.solo_browser_fixture.adapter',
+        'scenarios': [{'scenario_id': 'independent-owner-journey', 'title': 'Independent owner journey',
+            'page_family': 'website-setup', 'credential_capability': 'frappe.role:Provider',
+            'mutation_level': 'exact-cleanup', 'playwright_pattern': 'independent-owner-journey',
+            'required_artifacts': ['screenshot']}]}
+    if site == "meet-beta-content-restore.localhost":
+        recovery = {**website, 'suite_id': 'content-recovery', 'title': 'Restored public routes and consent',
+            'spec_path': 'qa/content-recovery.spec.mjs', 'config_path': 'qa/content-recovery.config.mjs',
+            'fixture_adapter': 'appointment.tests.recovery_browser_fixture.adapter',
+            'scenarios': [{'scenario_id': 'recovered-public-routes-and-consent', 'title': 'Recovered public routes and consent',
+                'page_family': 'content-recovery', 'credential_capability': 'frappe.role:Provider',
+                'mutation_level': 'consent', 'playwright_pattern': 'recovered-public-routes-and-consent',
+                'required_artifacts': ['screenshot']}]}
+        return [recovery]
+    return [runtime, website, templates, accessibility] if site == SITE else [runtime, website, individual]

@@ -9,6 +9,7 @@ import { Label } from '@/components/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/select';
 import { useSession } from '@/context/session';
 import { parseFrappeErrorMsg } from '@/lib/utils';
+import TeamInvitations from './team-invitations';
 
 interface Member {
   name: string;
@@ -123,8 +124,8 @@ export default function TeamManagement() {
           <div>
             <h1 data-qa="team-heading" className="font-heading text-3xl font-bold">Team access</h1>
             <p className="mt-2 max-w-2xl" style={{ color: 'var(--text-secondary)' }}>
-              Assign existing accounts to a business and scope. This is local account assignment; no invitation email is
-              sent and global roles alone never grant access to another business.
+              Invite staff below, then assign accepted accounts to a business role and scope.
+              Global roles alone never grant access to another business.
             </p>
           </div>
           {managerWorkspaces.length > 1 && (
@@ -159,6 +160,7 @@ export default function TeamManagement() {
         {problem && <p role="alert" data-qa="team-error" className="mb-4 rounded-lg p-3" style={{ backgroundColor: 'var(--status-cancelled-bg, #fee2e2)', color: 'var(--status-cancelled, #b91c1c)' }}>{problem}</p>}
         {notice && <p role="status" data-qa="team-notice" className="mb-4 rounded-lg p-3" style={{ backgroundColor: 'var(--status-confirmed-bg, #dcfce7)', color: 'var(--status-confirmed, #166534)' }}>{notice}</p>}
 
+        {activeOrg && <TeamInvitations organization={activeOrg} />}
         {activeOrg && (
           <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
             <section aria-label="Members" className="rounded-2xl border" style={{ borderColor: 'var(--border-default)', backgroundColor: 'var(--bg-elevated)' }}>
@@ -203,7 +205,7 @@ export default function TeamManagement() {
                   <Input id="team-email" data-qa="team-email" type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} style={inputStyle} />
                 </div>
                 <div>
-                  <Label htmlFor="team-name" className="mb-1.5 block" style={{ color: 'var(--text-secondary)' }}>Full name (for new accounts)</Label>
+                  <Label htmlFor="team-name" className="mb-1.5 block" style={{ color: 'var(--text-secondary)' }}>Full name</Label>
                   <Input id="team-name" type="text" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} style={inputStyle} />
                 </div>
                 <div>
@@ -253,8 +255,7 @@ export default function TeamManagement() {
                 )}
                 <div>
                   <p className="flex items-start gap-1 text-xs" style={{ color: 'var(--text-muted)' }}>
-                    <Info className="mt-0.5 h-3 w-3 shrink-0" /> Local account assignment only. No email is delivered in this
-                    environment; new accounts are created without a password and an administrator sets one locally.
+                    <Info className="mt-0.5 h-3 w-3 shrink-0" /> Invite staff to choose their own password first. Assign the accepted account to its role and scope. No external email is delivered.
                   </p>
                 </div>
                 <Button type="submit" data-qa="team-assign" disabled={assigning || !form.email}>

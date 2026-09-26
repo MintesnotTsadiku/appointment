@@ -2,12 +2,33 @@
 
 import sys
 import unittest
+from types import SimpleNamespace
 
 from appointment.public_experience.actions import project_action, validate_action
 from appointment.public_experience.design_compiler import compile_design
 from appointment.public_experience.errors import DesignCompilationError, UnknownRecipeError, UnsafeActionIntentError
 from appointment.public_experience.recipes import get_recipe, list_recipes
 from appointment.public_experience.section_schemas import validate_typed_section
+from appointment.public_experience.csp import after_request
+
+
+class TestResponsePrivacy(unittest.TestCase):
+    def test_preview_and_newsletter_actions_cannot_be_cached_or_indexed(self):
+        for path in (
+            "/api/method/appointment.content.public_api.get_content_preview",
+            "/api/method/appointment.public_experience.api.preview_website",
+            "/api/method/appointment.content.newsletter.api.get_local_message",
+            "/newsletter/confirm/opaque-token",
+        ):
+            response = after_request(SimpleNamespace(headers={}), SimpleNamespace(path=path))
+            self.assertEqual(response.headers["Cache-Control"], "no-store")
+            self.assertEqual(response.headers["X-Robots-Tag"], "noindex, nofollow")
+
+    def test_public_release_reads_get_security_headers_without_private_cache_policy(self):
+        response = after_request(SimpleNamespace(headers={}), SimpleNamespace(
+            path="/api/method/appointment.content.public_api.get_article_detail"))
+        self.assertEqual(response.headers["X-Content-Type-Options"], "nosniff")
+        self.assertNotIn("Cache-Control", response.headers)
 
 
 class TestRecipeCompiler(unittest.TestCase):

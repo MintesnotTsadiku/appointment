@@ -6,18 +6,18 @@ import tempfile
 
 import frappe
 
-from appointment.tests.content_browser_bootstrap import SITE, USER
+from appointment.tests.content_browser_bootstrap import ALLOWED_SITES, USER
 
 
 class WebsiteBrowserFixture:
     def prepare(self, *, request):
-        if frappe.local.site != SITE or not frappe.conf.get("worktree_development"):
+        if frappe.local.site not in ALLOWED_SITES or not frappe.conf.get("worktree_development"):
             raise RuntimeError("Website browser fixtures require the isolated development site")
         marker = "WQA-websiteacceptance"
         if frappe.db.exists("Organization", {"organization_name": ["in", [marker, marker + " Workbook"]]}) or frappe.db.exists("Public Site", {"slug": marker.lower()}):
             return {"ok": False, "error": "The acceptance identity already exists; preserve it and investigate.", "fixture_identity": {}}
         directory = tempfile.mkdtemp(prefix="appointment-workbook-qa-")
-        return {"ok": True, "fixture_identity": {"marker": marker, "user": USER, "site": SITE, "workbook_directory": directory}}
+        return {"ok": True, "fixture_identity": {"marker": marker, "user": USER, "site": frappe.local.site, "workbook_directory": directory}}
 
     def provide_execution_context(self, *, fixture_identity, request):
         from io import BytesIO
@@ -47,7 +47,8 @@ class WebsiteBrowserFixture:
         book.close()
         return {"environment": {"WEBSITE_QA_MARKER": fixture_identity["marker"], "WEBSITE_QA_IMAGE": str(source),
                                 "WEBSITE_QA_WORKBOOK": str(valid), "WEBSITE_QA_BAD_WORKBOOK": str(invalid),
-                                "WEBSITE_QA_NEW_WORKBOOK": str(created)}}
+                                "WEBSITE_QA_NEW_WORKBOOK": str(created), "WEBSITE_QA_SITE": frappe.local.site,
+                                "WEBSITE_QA_PRIVATE_DIRECTORY": str(directory)}}
 
     def _organizations(self, identity):
         self._require_identity(identity)
@@ -55,12 +56,14 @@ class WebsiteBrowserFixture:
                                                        "owner_user": USER}, pluck="name")
 
     def _require_identity(self, identity):
-        if identity.get("site") != SITE or identity.get("user") != USER or not identity.get("marker", "").startswith("WQA-"):
+        if frappe.local.site not in ALLOWED_SITES or identity.get("site") != frappe.local.site or identity.get("user") != USER or identity.get("marker") != "WQA-websiteacceptance":
             raise RuntimeError("Invalid website browser fixture identity")
 
     def _delete(self, doctype, names):
         if not names:
             return
+        if doctype == "Blogger":
+            frappe.db.delete("User Permission", {"allow": "Blogger", "for_value": ["in", names]})
         meta = frappe.get_meta(doctype)
         for field in meta.get_table_fields():
             frappe.db.delete(field.options, {"parenttype": doctype, "parent": ["in", names]})
@@ -69,6 +72,11 @@ class WebsiteBrowserFixture:
     def cleanup(self, *, fixture_identity, request):
         organizations = self._organizations(fixture_identity)
         for organization in organizations:
+            from frappe.utils.password import delete_all_passwords_for
+            invitation_names = frappe.get_all("Business Staff Invitation", filters={"organization": organization}, pluck="name")
+            for invitation_name in invitation_names:
+                delete_all_passwords_for("Business Staff Invitation", invitation_name)
+            self._delete("Business Staff Invitation", invitation_names)
             sites = frappe.get_all("Public Site", filters={"organization": organization}, pluck="name")
             profiles = frappe.get_all("Brand Profile", filters={"organization": organization}, pluck="name")
             from appointment.content.newsletter.core import TYPES
@@ -113,11 +121,25 @@ class WebsiteBrowserFixture:
             self._delete("Provider", frappe.get_all("Provider", filters={"user": USER,
                          "provider_name": organization + " — Workbook owner"}, pluck="name"))
             self._delete("Organization", [organization])
+        staff_email = fixture_identity["marker"].lower() + "-staff@example.test"
+        accounts = frappe.get_all("Browser Account", filters={"owner_user": staff_email, "account_label": "Acceptance receptionist — " + frappe.local.site}, pluck="name")
+        from agent_harness.browser.governed_runtime import is_storage_state_ref, storage_state_path_for_ref
+        for account in accounts:
+            sessions = frappe.get_all("Browser Session", filters={"browser_account": account}, fields=["name", "encrypted_profile_ref"])
+            for session in sessions:
+                if is_storage_state_ref(session.encrypted_profile_ref):
+                    storage_state_path_for_ref(session.encrypted_profile_ref).unlink(missing_ok=True)
+            self._delete("Browser Session", [row.name for row in sessions])
+            from frappe.utils.password import delete_all_passwords_for
+            delete_all_passwords_for("Browser Account", account)
+        self._delete("Browser Account", accounts)
+        if frappe.db.exists("User", staff_email):
+            frappe.delete_doc("User", staff_email, force=True, ignore_permissions=True)
         frappe.db.commit()
         directory = Path(fixture_identity.get("workbook_directory", ""))
         if directory.parent != Path(tempfile.gettempdir()) or not directory.name.startswith("appointment-workbook-qa-"):
             raise RuntimeError("Workbook fixture directory is outside the owned temporary scope")
-        for name in ("valid.xlsx", "invalid.xlsx", "new.xlsx"):
+        for name in ("valid.xlsx", "invalid.xlsx", "new.xlsx", "staff-credentials.json"):
             (directory / name).unlink(missing_ok=True)
         directory.rmdir()
         return {"ok": True, "deleted_businesses": len(organizations)}
@@ -145,6 +167,8 @@ class WebsiteBrowserFixture:
         from appointment.content.newsletter.core import TYPES
 
         counts.update({doctype: frappe.db.count(doctype, {"organization": ["in", scope]}) for doctype in TYPES})
+        counts["Staff Invitations"] = frappe.db.count("Business Staff Invitation", {"organization": ["in", scope]})
+        counts["Invited Staff"] = int(bool(frappe.db.exists("User", marker.lower() + "-staff@example.test")))
         count = sum(counts.values())
         return {"ok": count == 0, "remaining_record_count": count, "remaining": counts}
 

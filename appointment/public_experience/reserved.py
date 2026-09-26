@@ -39,6 +39,7 @@ RESERVED_ROOT_PATHS = frozenset(
         "blog",
         "blog-category",
         "newsletter",
+        "team",
         "rss",
         "rss.xml",
         ".well-known",

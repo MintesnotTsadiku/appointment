@@ -88,6 +88,7 @@ export interface PublicSection {
 }
 
 export interface PublishedSnapshot {
+  previewContent?: { article: import("./contentContract").ContentDetail; gallery: import("./contentContract").ContentDetail };
   siteSlug?: string;
   features?: string[];
   contract: string;

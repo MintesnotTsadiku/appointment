@@ -5,6 +5,7 @@ import json
 import re
 import sys
 import unittest
+from unittest.mock import patch
 
 import frappe
 from openpyxl import load_workbook
@@ -130,10 +131,31 @@ class OrganizationImportTests(unittest.TestCase):
     def test_failed_application_rolls_back_all_created_rows(self):
         content = self.content(lambda book: book["Website Content"].append(["hero", "hero_title", "Synthetic headline"]))
         before = frappe.db.count("Location", {"organization": self.fixture["orgs"]["A"]})
-        with self.assertRaises(frappe.ValidationError):
-            self.confirm(content)
+        with patch("appointment.organization_import.website.apply", side_effect=frappe.ValidationError("Synthetic application failure")):
+            with self.assertRaises(frappe.ValidationError):
+                self.confirm(content)
         self.assertEqual(frappe.db.count("Location", {"organization": self.fixture["orgs"]["A"]}), before)
         self.assertEqual(frappe.db.count("Organization Workbook Import", {"organization": self.fixture["orgs"]["A"]}), 0)
+
+    def test_website_starter_text_survives_import_before_website_setup(self):
+        from appointment.public_experience import setup
+
+        content = self.content(lambda book: book["Website Content"].append(["hero", "hero_title", "Reviewed imported headline"]))
+        self.assertTrue(service.preview(content, self.fixture["orgs"]["A"])["valid"])
+        result = self.confirm(content)
+        audit = frappe.get_doc("Organization Workbook Import", result["audit"])
+        self.assertEqual(json.loads(audit.website_content_json)[0]["text"], "Reviewed imported headline")
+        draft = setup.start("Organization", self.fixture["orgs"]["A"], "Workbook website", "workbook-pending-test", "tena-clinic")
+        hero = next(row for row in draft["sections"] if row["type"] == "hero")
+        self.assertEqual(hero["content"]["title"]["en"], "Reviewed imported headline")
+
+    def test_invalid_contact_text_is_reported_without_writes(self):
+        content = self.content(lambda book: book["Website Content"].append(["contact", "contact_email", "not an email"]))
+        before = frappe.db.count("Location")
+        result = service.preview(content, self.fixture["orgs"]["A"])
+        self.assertFalse(result["valid"])
+        self.assertEqual(result["errors"][0]["cell"], "C2")
+        self.assertEqual(frappe.db.count("Location"), before)
 
     def test_import_audit_cannot_be_edited_or_forged(self):
         result = self.confirm(self.content())

@@ -8,10 +8,13 @@ from __future__ import annotations
 
 import frappe
 
+from appointment.content.monitoring import observed
+
 from appointment.content import entitlements, releases, tenancy
 
 
 @frappe.whitelist(methods=["POST"])
+@observed("media.upload", scope="site")
 def upload_gallery_image(public_site: str, content_base64: str, public_consent=0):
     from appointment.content import authoring
 
@@ -19,6 +22,7 @@ def upload_gallery_image(public_site: str, content_base64: str, public_consent=0
 
 
 @frappe.whitelist(methods=["POST"])
+@observed("article.create", scope="site")
 def create_article(public_site: str, title: str, slug: str, body: str, summary: str = ""):
     from appointment.content import authoring
 
@@ -26,6 +30,7 @@ def create_article(public_site: str, title: str, slug: str, body: str, summary: 
 
 
 @frappe.whitelist(methods=["POST"])
+@observed("gallery.create", scope="site")
 def create_gallery(public_site: str, title: str, slug: str, summary: str = "", items=None):
     from appointment.content import authoring
 
@@ -54,7 +59,9 @@ def content_capabilities(owner_type: str, organization: str | None = None, provi
 
 @frappe.whitelist(methods=["GET"])
 def list_owned_content(public_site: str | None = None):
-    filters = {"public_site": public_site} if public_site else {}
+    filters = {"source_doctype": ["in", ["Blog Post", "Newsletter", "Gallery Collection"]]}
+    if public_site:
+        filters["public_site"] = public_site
     rows = frappe.get_list(
         "Content Ownership",
         filters=filters,
@@ -106,22 +113,26 @@ def list_releases(public_site: str):
 
 
 @frappe.whitelist(methods=["POST"])
+@observed("article.publish", scope="ownership")
 def publish_article(ownership: str, expected_modified: str | None = None, locale: str | None = None):
     release = releases.publish_article(ownership, expected_modified, locale)
     return {"release": release.name, "releaseNumber": release.release_number, "hash": release.content_hash, "route": release.route}
 
 
 @frappe.whitelist(methods=["POST"])
+@observed("article.preview", scope="ownership")
 def preview_article(ownership: str, locale: str | None = None):
     return releases.preview_article(ownership, locale)
 
 
 @frappe.whitelist(methods=["POST"])
+@observed("gallery.preview", scope="ownership")
 def preview_gallery_collection(ownership: str, locale: str | None = None):
     return releases.preview_gallery_collection(ownership, locale)
 
 
 @frappe.whitelist(methods=["POST"])
+@observed("gallery.publish", scope="ownership")
 def publish_gallery_collection(ownership: str, locale: str | None = None):
     release = releases.publish_gallery_collection(ownership, locale)
     return {
@@ -133,12 +144,14 @@ def publish_gallery_collection(ownership: str, locale: str | None = None):
 
 
 @frappe.whitelist(methods=["POST"])
+@observed("content.withdraw", scope="release")
 def withdraw_release(release: str, reason: str | None = None):
     doc = releases.withdraw_release(release, reason)
     return {"release": doc.name, "status": doc.status}
 
 
 @frappe.whitelist(methods=["POST"])
+@observed("content.rollback", scope="release")
 def rollback_release(release: str, locale: str | None = None):
     doc = releases.rollback_release(release, locale)
     return {"release": doc.name, "releaseNumber": doc.release_number, "hash": doc.content_hash}

@@ -1,17 +1,19 @@
 import { createElement, type ReactNode } from "react";
 import type { ContentTemplateProps } from "../types";
+import { brandLogo } from "../content";
 import { richNodes, safeContentMedia, videoLink, type RichNode, type ContentBlock } from "../../contentContract";
 import "./bloom.css";
 import { BloomNewsletter } from "./BloomNewsletter";
 
 export function BloomContent({ snapshot, applicationName, publicRoot, rootStyle, mode, toggleMode, content, contentRoot }: ContentTemplateProps) {
+  const logo = brandLogo(snapshot.compiledDesign);
   const release = content.release;
   const projection = release?.projection;
   const heading = projection?.title || (content.kind === "blog" ? "The beauty edit" : "Inside the studio");
   return <div data-pe-root data-pe-recipe={snapshot.recipeKey} data-pe-mode={mode} data-content-template="bloom" className="bloom-site bloom-content" style={rootStyle}>
     <a className="bloom-content-skip" href="#published-content">Skip to content</a>
     <header className="bloom-content-nav">
-      <a href={publicRoot}><strong>{applicationName}</strong></a>
+      <a className="bloom-content-brand" href={publicRoot}>{logo && <img src={logo} alt="" width={120} height={36} />}<strong>{applicationName}</strong></a>
       <nav aria-label="Public site"><a href={publicRoot}>Home</a><a href={`${publicRoot}/blog`}>Journal</a><a href={`${publicRoot}/gallery`}>Gallery</a><a href={`${publicRoot}/book`}>Book an appointment</a></nav>
       <button type="button" onClick={toggleMode} aria-label={`Switch to ${mode === "dark" ? "light" : "dark"} mode`}>{mode === "dark" ? "Light" : "Dark"}</button>
     </header>
