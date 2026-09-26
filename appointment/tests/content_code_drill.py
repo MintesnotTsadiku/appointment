@@ -10,7 +10,7 @@ import tarfile
 
 from appointment.tests.content_fresh_site import CHECKOUT, RESTORE_SITE, RUNTIME, SESSION
 
-ROLLBACK_REF = "facd02d"
+ROLLBACK_REF = "5987d6f"
 DIRECTORY = RUNTIME / "code-drill"
 STATE = DIRECTORY / "launch-state.json"
 
@@ -35,8 +35,28 @@ def prepare():
         (tree / "frontend/node_modules").symlink_to(CHECKOUT / "frontend/node_modules", target_is_directory=True)
     if not archive.is_file() or not (tree / "appointment/content/releases.py").is_file():
         raise RuntimeError("The exact committed rollback archive is incomplete")
+    _build_archive(tree, revision)
     return {"rollback_revision": revision, "archive_sha256": hashlib.sha256(archive.read_bytes()).hexdigest(),
-            "retains_database_schema": True, "working_checkout_preserved": True}
+            "retains_database_schema": True, "working_checkout_preserved": True, "production_assets_built": True}
+
+
+def _build_archive(tree, revision):
+    marker = tree / "production-build.json"
+    entry = tree / "appointment/public/frontend/index.html"
+    if marker.exists():
+        recorded = json.loads(marker.read_text())
+        if recorded.get("revision") != revision or not entry.is_file() or recorded.get("entry_sha256") != hashlib.sha256(entry.read_bytes()).hexdigest():
+            raise RuntimeError("The archived production entry differs from its recorded build")
+        return
+    node = Path("/home/minte/.nvm/versions/node/v24.12.0/bin/node")
+    environment = {**os.environ, "VITE_SITE_NAME": RESTORE_SITE, "VITE_BASE_URL": ""}
+    log_path = tree / "production-build.log"
+    with os.fdopen(os.open(log_path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600), "w") as log:
+        subprocess.run([str(node), str(tree / "frontend/node_modules/vite/bin/vite.js"),
+                        "build", "--base=/assets/appointment/frontend/"],
+                       cwd=tree / "frontend", env=environment, stdout=log, stderr=log, check=True)
+    with os.fdopen(os.open(marker, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600), "w") as stream:
+        json.dump({"revision": revision, "entry_sha256": hashlib.sha256(entry.read_bytes()).hexdigest()}, stream)
 
 
 def rollback():
@@ -49,6 +69,7 @@ def rollback():
     if str(CHECKOUT) not in commands["backend"]:
         raise RuntimeError("The candidate backend import contract changed")
     state = {"site": RESTORE_SITE, "commands": commands,
+             "frontend_assets": str(DIRECTORY / ROLLBACK_REF / "appointment/public/frontend"),
              "frontend_directory": subprocess.check_output(["tmux", "display-message", "-p", "-t", SESSION + ":frontend", "#{pane_current_path}"], text=True).strip()}
     descriptor = os.open(STATE, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
     with os.fdopen(descriptor, "w") as stream:
@@ -56,8 +77,10 @@ def rollback():
     archived = DIRECTORY / ROLLBACK_REF
     subprocess.run(["tmux", "respawn-pane", "-k", "-t", SESSION + ":backend",
                     commands["backend"].replace(str(CHECKOUT), str(archived))], check=True)
-    subprocess.run(["tmux", "respawn-pane", "-k", "-c", str(archived / "frontend"), "-t", SESSION + ":frontend", commands["frontend"]], check=True)
-    return {"site": RESTORE_SITE, "code": ROLLBACK_REF, "schema_unchanged": True}
+    if "content_production_gateway.py" not in commands["frontend"]:
+        subprocess.run(["tmux", "respawn-pane", "-k", "-c", str(archived / "frontend"), "-t", SESSION + ":frontend", commands["frontend"]], check=True)
+    return {"site": RESTORE_SITE, "code": ROLLBACK_REF, "schema_unchanged": True,
+            "production_html": "content_production_gateway.py" in commands["frontend"]}
 
 
 def upgrade():

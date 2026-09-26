@@ -57,6 +57,7 @@ export default defineConfig(({ mode }) => {
       },
       VitePWA({
         registerType: "autoUpdate",
+        scope: "/",
         includeAssets: ["favicon.ico", "apple-touch-icon.png", "masked-icon.svg"],
         
         // Web App Manifest
@@ -172,6 +173,7 @@ export default defineConfig(({ mode }) => {
         workbox: {
           // Frappe renders session-specific HTML; no cached app-shell fallback.
           navigateFallback: null,
+          importScripts: ["privacy-cache-cleanup.js"],
           
           // Caching strategies
           runtimeCaching: [

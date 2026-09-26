@@ -34,3 +34,17 @@ assert.equal(policy.navigateFallback, null);
 assert(policy.globIgnores.includes("index.html"));
 assert.equal(handler("/assets/appointment/frontend/assets/entry.js"), "CacheFirst");
 console.log("PASS: private HTML, consent tokens, drafts, and API responses cannot enter PWA caches");
+
+let activation;
+let completion;
+const deleted = [];
+runInNewContext(readFileSync(new URL("../public/privacy-cache-cleanup.js", import.meta.url), "utf8"), {
+  self: { addEventListener: (name, callback) => { assert.equal(name, "activate"); activation = callback; } },
+  caches: { keys: async () => ["html-cache", "api-cache", "static-data-cache", "schedule-pages-cache", "app-assets-cache", "images-cache", "other-application-cache"],
+    delete: async name => { deleted.push(name); return true; } },
+});
+activation({ waitUntil: promise => { completion = promise; } });
+await completion;
+assert.deepEqual(deleted.sort(), ["api-cache", "html-cache", "schedule-pages-cache", "static-data-cache"]);
+assert(policy.importScripts.includes("privacy-cache-cleanup.js"));
+console.log("PASS: worker upgrades remove legacy private caches and preserve public assets and other applications");

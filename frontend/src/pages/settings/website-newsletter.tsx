@@ -77,7 +77,7 @@ export default function NewsletterWorkspace() {
       </section>
       <section className="space-y-3" aria-label="Newsletter draft"><h2>New newsletter</h2>
         <label>Newsletter subject<input className={field} value={subject} onChange={(event) => setSubject(event.target.value)} /></label>
-        <label>Newsletter text<textarea className={field} rows={8} value={body} onChange={(event) => setBody(event.target.value)} /></label>
+        <label>Newsletter text<textarea aria-label="Newsletter text" className={field} rows={8} value={body} onChange={(event) => setBody(event.target.value)} /></label>
         <p>Use simple Markdown. Drafts are private until you confirm a campaign.</p>
         <button className={button} disabled={busy || !enabled || !sender || !subject || !body} onClick={() => void run(async () => {
           const result = await callMethod<{ ownership: string }>(api + "create_draft", { site, sender, subject, body });

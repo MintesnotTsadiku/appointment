@@ -638,3 +638,41 @@ now remains stable when the textarea contains imported text. The repeat is
 running. The private preview also fails closed for missing template packages;
 there are no TypeScript diagnostics in the touched content/setup/independent
 surfaces. The full application still reports 272 unrelated existing diagnostics.
+
+### Owner access and production privacy qualification checkpoint
+
+The independent journey remains accepted at strict run `02021`. The expanded
+organization journey now reaches workbook-created businesses and staff publication
+denial. Runs `02038` and `02042` exposed assumptions that creating a second
+business immediately selects it. The browser now uses the visible business
+chooser for each owner. Run `02046` stopped at staff assignment with a generic
+request error; it is not acceptance evidence. A repeat with stable source and
+services is required.
+
+Owner website routes now follow the selected business scope. A global manager
+role cannot grant a receptionist publishing controls in another workspace.
+Article fields remain disabled while a draft loads or saves, preventing typed
+changes from being overwritten by the load response. Textarea names remain
+stable after loading content.
+
+Production boot data escapes all HTML parser delimiters, including mixed-case
+closing script tags. The worker upgrade deletes four exact legacy private caches
+and preserves public assets and other applications. The root worker scope is
+explicit; generated edge configuration serves the worker with no-cache and
+Service-Worker-Allowed headers. These changes passed focused response, frontend
+DOM, and privacy regressions. The offline production build passed. Managed
+production browser qualification remains pending.
+
+The final focused regressions passed: entitlements 13, releases 14, gallery/media
+12, website setup 12, monitoring 5, staff invitations 14, upstream protection 6,
+newsletter 12, workbook application 11, workbook parser 10, and response contracts
+12. Focused lint has zero errors and two existing session fast-refresh warnings.
+The full application TypeScript baseline remains separately recorded above.
+
+Fresh C, `meet-beta-content-fresh-c.localhost`, was installed without seeding in
+the existing isolated Bench. It has the six required apps and zero records in all
+eight business/content counters. Its disjoint managed profile is BACCT-4001 with
+BSESS-4002. The first normal user has only Provider among application roles; no
+business was created by the operator. Credentials remain in private runtime files.
+Final fresh-site journeys, the stable template matrix, accessibility review, and
+production recovery/code rollback remain pending.

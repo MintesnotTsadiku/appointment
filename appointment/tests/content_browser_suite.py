@@ -62,4 +62,10 @@ def suites():
                 'mutation_level': 'fixture-only', 'playwright_pattern': 'recovered-public-routes-and-consent',
                 'required_artifacts': ['screenshot']}]}
         return [recovery]
-    return [runtime, website, templates, accessibility] if site == SITE else [runtime, website, individual]
+    production = {**templates, 'suite_id': 'content-production', 'title': 'Production public security and worker upgrade',
+        'spec_path': 'qa/content-production.spec.mjs', 'config_path': 'qa/content-production.config.mjs',
+        'scenarios': [{'scenario_id': 'production-security-and-cache-upgrade',
+            'title': 'Production security and cache upgrade', 'page_family': 'content-production',
+            'credential_capability': 'frappe.role:Provider', 'mutation_level': 'read-only',
+            'playwright_pattern': 'production-security-and-cache-upgrade', 'required_artifacts': ['screenshot']}]}
+    return [runtime, website, templates, accessibility, production] if site == SITE else [runtime, website, individual]

@@ -279,6 +279,11 @@ test("website-owner-journey", async ({ page }, testInfo) => {
   await expect(page.getByRole("status")).toContainText("Workbook applied");
   await expect(page.getByRole("combobox", { name: "Organization", exact: true })).toHaveValue(marker + " Workbook");
   await page.screenshot({ path: testInfo.outputPath("website-workbook-new-business.png"), fullPage: true });
+  await page.goto("/workspaces", { waitUntil: "networkidle" });
+  await page.locator('[data-qa="workspace-card"]').filter({
+    has: page.getByRole("heading", { name: marker, exact: true }),
+  }).getByRole("button", { name: "Open", exact: true }).click();
+  await expect(page).toHaveURL(/\/home/);
   await page.goto("/settings/website", { waitUntil: "networkidle" });
   await page.getByRole("button", { name: `Resume ${marker}`, exact: true }).click();
   await page.getByRole("button", { name: "content", exact: true }).click();

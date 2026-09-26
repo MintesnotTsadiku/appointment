@@ -14,7 +14,7 @@ import sys
 
 RUNTIME = Path("/home/minte/.local/state/frappe-worktree-stack/feat-content-publishing-galler-5839d4")
 CHECKOUT = Path("/home/minte/projects/training-apps/.worktrees/frappe-appointment-beta")
-SITES = ("meet-beta-content-fresh-a.localhost", "meet-beta-content-fresh-b.localhost")
+SITES = ("meet-beta-content-fresh-a.localhost", "meet-beta-content-fresh-b.localhost", "meet-beta-content-fresh-c.localhost")
 RESTORE_SITE = "meet-beta-content-restore.localhost"
 APPS = ("blog", "newsletter", "appointment", "agent_harness", "agent_plane")
 PRIMARY_SITE = "meet-beta-feat-content-publishing-galler-5839d4.localhost"
@@ -147,7 +147,7 @@ def bootstrap():
 
     before = inventory()
     label = content_browser_bootstrap.account_label(frappe.local.site)
-    offset = 1000 if frappe.local.site == SITES[0] else 2000
+    offset = {SITES[0]: 1000, SITES[1]: 2000, SITES[2]: 4000}[frappe.local.site]
     existing = frappe.db.get_value("Browser Account", {"account_label": label}, "name")
     if existing and int(existing.rsplit("-", 1)[1]) < offset:
         account = frappe.get_doc("Browser Account", existing)
@@ -168,8 +168,8 @@ def minimize_first_owner():
     import frappe
     from appointment.tests.content_browser_bootstrap import USER
 
-    if frappe.local.site != SITES[1]:
-        raise RuntimeError("This role qualification is restricted to the second fresh site.")
+    if frappe.local.site not in SITES[1:]:
+        raise RuntimeError("This role qualification is restricted to the reserved fresh sites.")
     inventory()
     doc = frappe.get_doc("User", USER)
     doc.set("roles", [row for row in doc.roles if row.role != "Organization Manager"])

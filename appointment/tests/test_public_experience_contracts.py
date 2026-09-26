@@ -9,10 +9,20 @@ from appointment.public_experience.design_compiler import compile_design
 from appointment.public_experience.errors import DesignCompilationError, UnknownRecipeError, UnsafeActionIntentError
 from appointment.public_experience.recipes import get_recipe, list_recipes
 from appointment.public_experience.section_schemas import validate_typed_section
-from appointment.public_experience.csp import after_request, shell_nonce
+from appointment.public_experience.csp import after_request, encode_boot_data, shell_nonce
 
 
 class TestResponsePrivacy(unittest.TestCase):
+    def test_boot_data_cannot_close_a_script_tag(self):
+        import json
+
+        value = {"name": '</ScRiPt><script src="/files/untrusted.js"></script>&', "locale": "አማርኛ"}
+        encoded = encode_boot_data(value)
+        self.assertNotIn("<", encoded)
+        self.assertNotIn(">", encoded)
+        self.assertNotIn("&", encoded)
+        self.assertEqual(json.loads(json.loads(encoded)), value)
+
     def test_html_nonce_matches_policy_and_token_pages_remain_private(self):
         import frappe
 
@@ -40,6 +50,9 @@ class TestResponsePrivacy(unittest.TestCase):
                        "frappe.client.get"):
             self.assertNotIn(f"location = /api/method/{method}", config)
         self.assertIn("location ~ ^/(app|login|logout|api|private|desk)(/|$) { return 404; }", config)
+        self.assertIn("location = /assets/appointment/frontend/sw.js", config)
+        self.assertIn('add_header Service-Worker-Allowed "/";', config)
+        self.assertIn('add_header Cache-Control "no-cache";', config)
 
     def test_preview_and_newsletter_actions_cannot_be_cached_or_indexed(self):
         for path in (

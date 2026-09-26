@@ -8,6 +8,7 @@ only for previews.
 from __future__ import annotations
 
 import secrets
+import json
 
 API_PREFIXES = (
     "/api/method/appointment.public_experience.api.",
@@ -29,6 +30,14 @@ def shell_nonce() -> str:
     nonce = generate_nonce()
     frappe.local.content_shell_nonce = nonce
     return nonce
+
+
+def encode_boot_data(boot: dict) -> str:
+    """Encode boot data without allowing any HTML parser closing-tag variant."""
+    import frappe
+
+    encoded = json.dumps(frappe.as_json(boot, indent=None, separators=(",", ":")))
+    return encoded.replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026")
 
 
 def build_csp(nonce: str | None = None) -> str:

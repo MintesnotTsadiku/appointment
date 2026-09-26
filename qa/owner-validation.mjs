@@ -35,6 +35,7 @@ async function denied(page, method, parameters, verb = "post", type = "Permissio
 
 export async function articleHistory(page, guest, testInfo, { root, title, route, prefix, original, draft }) {
   await page.getByRole("button", { name: `Edit article ${title}`, exact: true }).click();
+  await expect(page.getByLabel("Article text", { exact: true })).toHaveValue(new RegExp(original));
   await page.getByLabel("Article text", { exact: true }).fill(draft);
   await page.getByRole("button", { name: "Save article draft", exact: true }).click();
   await expect(page.getByRole("status").filter({ hasText: "draft saved" })).toContainText("draft saved");
@@ -73,6 +74,11 @@ export async function businessIsolation(page, second, testInfo, marker) {
   await second.getByLabel("Location name", { exact: true }).fill(marker + " Isolation Main");
   await second.getByLabel("First service name", { exact: true }).fill(marker + " Isolation Consultation");
   await second.getByRole("button", { name: "Create business", exact: true }).click();
+  await expect(second.getByRole("heading", { name: "Your business is saved as a draft", exact: true })).toBeVisible();
+  await second.goto("/workspaces", { waitUntil: "networkidle" });
+  await second.locator('[data-qa="workspace-card"]').filter({
+    has: second.getByRole("heading", { name: marker + " Isolation", exact: true }),
+  }).getByRole("button", { name: "Open", exact: true }).click();
   await expect(second).toHaveURL(/\/home/);
   await second.goto("/settings/business", { waitUntil: "networkidle" });
   await second.locator('[data-qa="business-offering"]').filter({ hasText: marker + " Isolation" })

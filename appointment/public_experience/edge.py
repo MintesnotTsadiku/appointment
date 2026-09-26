@@ -108,6 +108,12 @@ def _server_block(server_name: str, options: EdgeOptions, *, public_only: bool =
 
     {socket_location}
 
+    location = /assets/appointment/frontend/sw.js {{
+        alias {options.assets_root}/appointment/frontend/sw.js;
+        add_header Cache-Control "no-cache";
+        add_header Service-Worker-Allowed "/";
+    }}
+
     location /assets/ {{
         alias {options.assets_root}/;
         add_header Cache-Control "public, max-age=31536000, immutable";

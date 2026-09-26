@@ -9,7 +9,7 @@ import frappe
 from frappe.utils.password import update_password
 
 SITE = 'meet-beta-feat-content-publishing-galler-5839d4.localhost'
-ALLOWED_SITES = (SITE, 'meet-beta-content-fresh-a.localhost', 'meet-beta-content-fresh-b.localhost', 'meet-beta-content-restore.localhost')
+ALLOWED_SITES = (SITE, 'meet-beta-content-fresh-a.localhost', 'meet-beta-content-fresh-b.localhost', 'meet-beta-content-fresh-c.localhost', 'meet-beta-content-restore.localhost')
 RUNTIME = Path('/home/minte/.local/state/frappe-worktree-stack/feat-content-publishing-galler-5839d4')
 USER = 'content-browser-owner@example.test'
 LABEL = 'Appointment content development owner'
@@ -78,15 +78,15 @@ def enqueue_smoke(update_baseline=0, suite='content-runtime', scenarios=None):
     if Path(get_bench_path()) != RUNTIME / 'bench':
         raise RuntimeError('Export FRAPPE_BENCH_ROOT for the isolated queue namespace')
     from agent_plane.qa_workflows.browser_qa_service import enqueue_browser_qa_request
-    if suite not in ('content-runtime', 'website-setup', 'content-templates', 'content-accessibility', 'individual-owner', 'content-recovery'):
+    if suite not in ('content-runtime', 'website-setup', 'content-templates', 'content-accessibility', 'individual-owner', 'content-recovery', 'content-production'):
         raise RuntimeError('Unsupported development suite')
     account = frappe.db.get_value('Browser Account', {'account_label':account_label(site)}, 'name')
     if not account:
         raise RuntimeError('Bootstrap the managed browser account first')
     checkout = Path(frappe.get_app_path('appointment', '..')).resolve()
     revision = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'], cwd=checkout).decode().strip()
-    changes = subprocess.check_output(['git', 'diff', 'HEAD', '--', 'appointment', 'frontend/src', 'frontend/index.html'], cwd=checkout)
-    untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', 'appointment', 'frontend/src'], cwd=checkout).decode().splitlines()
+    changes = subprocess.check_output(['git', 'diff', 'HEAD', '--', 'appointment', 'frontend'], cwd=checkout)
+    untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', 'appointment', 'frontend'], cwd=checkout).decode().splitlines()
     source_hash = hashlib.sha256(changes + b''.join((checkout / path).read_bytes() for path in sorted(untracked))).hexdigest()[:12]
     suite_hash = hashlib.sha256(b''.join((checkout / path).read_bytes() for path in
         (f'qa/{suite}.spec.mjs', f'qa/{suite}.config.mjs', 'qa/owner-validation.mjs', 'appointment/tests/content_browser_suite.py'))).hexdigest()[:12]
@@ -274,8 +274,39 @@ def export_accessibility(name):
 
 
 def export_individual(name):
+    folder = "fresh-site/independent-owner" if frappe.local.site != "meet-beta-content-fresh-c.localhost" else "fresh-site/meet-beta-content-fresh-c.localhost/independent-owner"
     return _export_exact_journey(name, "individual-owner", "solo-", 14,
-        "fresh-site/independent-owner", "Independent owner: scheduling before Website setup, explicit publication, guest booking, article and gallery publication, saved preview, and rollback.")
+        folder, "Independent owner: scheduling before Website setup, explicit publication, guest booking, article and gallery publication, saved preview, and rollback.")
+
+
+def export_production(name):
+    import shutil
+
+    if frappe.local.site != SITE:
+        raise RuntimeError("Production public qualification requires the isolated showcase site")
+    doc = frappe.get_doc("Browser QA Run", name)
+    if doc.suite_id != "content-production" or doc.status != "Passed" or doc.baseline_changed_count:
+        raise RuntimeError("Only strict passing production gates can be exported")
+    root = Path("/tmp/agent_browser_qa") / name / "attempt-1/playwright"
+    destination = Path(frappe.get_app_path("appointment", "..")).resolve() / "qa/evidence/content-production"
+    destination.mkdir(parents=True, exist_ok=True)
+    inventory = []
+    for filename in ("production-public-security.png", "production-gates.json"):
+        matches = list(root.rglob(filename))
+        if len(matches) != 1 or matches[0].is_symlink():
+            raise RuntimeError("The production gate artifact is missing or linked")
+        target = destination / filename
+        shutil.copyfile(matches[0], target)
+        inventory.append({"file": filename, "sha256": hashlib.sha256(target.read_bytes()).hexdigest()})
+    report = json.loads((destination / "production-gates.json").read_text())
+    if len(report.get("production_entries", [])) != 5 or report.get("cached_private_paths") or report.get("page_errors"):
+        raise RuntimeError("Production public qualification is incomplete")
+    result = {"run": name, "source_version": doc.source_version,
+              "baseline_changed_count": doc.baseline_changed_count,
+              "scenario_summary": json.loads(doc.scenario_summary_json or "{}"),
+              "audit": json.loads(doc.audit_json or "{}"), "artifacts": inventory}
+    (destination / "validation.json").write_text(json.dumps(result, indent=2) + "\n")
+    return {"run": name, "destination": str(destination)}
 
 
 def export_recovery(name, stage="candidate"):

@@ -1,5 +1,5 @@
 import { test, expect } from "playwright/test";
-import { writeFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 
 const world = JSON.parse(process.env.SHOWCASE_QA_WORLD || "{}");
 for (const key of ["selam", "bloom", "meron", "abugida", "tena"]) {
@@ -24,7 +24,9 @@ for (const key of ["selam", "bloom", "meron", "abugida", "tena"]) {
           await page.goto(path, { waitUntil: "networkidle" });
           await expect(page.locator("h1").first()).toBeVisible();
           if (surface === "scheduler") await page.waitForFunction(() => Array.from(document.querySelectorAll('[data-booking-branded="true"] [style], [data-booking-branded="true"]')).every(element => !element.style.opacity || Number(element.style.opacity) === 1));
-          await page.addScriptTag({ path: process.env.CONTENT_QA_AXE_PATH });
+          // DevTools evaluates the pinned audit engine without changing the
+          // application's production script policy.
+          await page.evaluate(await readFile(process.env.CONTENT_QA_AXE_PATH, "utf8"));
           const audit = await page.evaluate(async () => {
             const result = await axe.run(document, { runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"] } });
             const navigation = performance.getEntriesByType("navigation")[0];
@@ -40,7 +42,22 @@ for (const key of ["selam", "bloom", "meron", "abugida", "tena"]) {
                 /^https?:/.test(row.name) && new URL(row.name).origin !== location.origin).map(row => row.name),
             };
           });
-          reports.push({ surface, ...audit });
+          const keyboard = [];
+          for (let tab = 0; tab < 5; tab += 1) {
+            await page.keyboard.press("Tab");
+            const focus = await page.evaluate(() => {
+              const element = document.activeElement;
+              const bounds = element?.getBoundingClientRect();
+              const style = element && getComputedStyle(element);
+              return { tag: element?.tagName, visible: Boolean(bounds?.width && bounds?.height),
+                outline: style?.outlineStyle, outlineWidth: style?.outlineWidth,
+                shadow: style?.boxShadow, name: element?.getAttribute("aria-label") || element?.textContent?.trim() || element?.getAttribute("placeholder") };
+            });
+            expect(focus.tag).not.toBe("BODY");
+            expect(focus.visible).toBe(true);
+            keyboard.push(focus);
+          }
+          reports.push({ surface, ...audit, keyboard });
           await writeFile(testInfo.outputPath(`${key}-${width}-${mode}-gates.json`), JSON.stringify({
             engine: "axe-core 4.11.0", viewport: width, mode, scope: "Automated WCAG A/AA checks and local development navigation budget; manual accessibility review remains separate.", reports,
           }, null, 2));

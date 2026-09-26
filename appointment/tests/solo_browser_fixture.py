@@ -11,7 +11,7 @@ from appointment.tests.website_browser_fixture import WebsiteBrowserFixture
 
 class SoloBrowserFixture(WebsiteBrowserFixture):
     def prepare(self, *, request):
-        if frappe.local.site != "meet-beta-content-fresh-b.localhost" or not frappe.conf.get("worktree_development"):
+        if frappe.local.site not in ("meet-beta-content-fresh-b.localhost", "meet-beta-content-fresh-c.localhost") or not frappe.conf.get("worktree_development"):
             raise RuntimeError("Independent acceptance requires the second fresh isolated site")
         marker = "WQA-independentacceptance"
         if frappe.db.exists("Provider", {"user": USER}) or frappe.db.count("Organization"):

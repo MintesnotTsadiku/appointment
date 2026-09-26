@@ -65,14 +65,14 @@ export default function WebsiteContent() {
   return <main className="mx-auto max-w-5xl space-y-6 p-6" data-page="website-content">
     <header><h1 className="text-3xl font-semibold">Website content</h1><p>Save drafts, review them, then publish a version for your visitors.</p><Link to="/settings/website">Website setup</Link> · <Link to="/settings/website/newsletter">Newsletters and audience</Link></header>
     {error && <p role="alert">{error}</p>}{notice && <p role="status">{notice}</p>}
-    <label className="block">Website<select aria-label="Website" className={field} value={site} onChange={(event) => setSite(event.target.value)}>{sites.map((row) => <option key={row.name} value={row.name}>{row.site_title}</option>)}</select></label>
+    <label className="block">Website<select disabled={busy} aria-label="Website" className={field} value={site} onChange={(event) => setSite(event.target.value)}>{sites.map((row) => <option key={row.name} value={row.name}>{row.site_title}</option>)}</select></label>
     {!sites.length && <p>Create your website in <Link to="/settings/website">Website setup</Link>.</p>}
     <section aria-label="Content drafts"><h2>Drafts</h2>{drafts.length ? drafts.map((row) => <div className="flex gap-3 border-b py-3" key={row.name}><span>{row.title} · {row.status}</span>{row.source_doctype === "Blog Post" && <button className={button} disabled={busy} onClick={() => void run(async () => { adopt(await callGet<Article>(api + "get_content_draft", { ownership: row.name })); })}>Edit article {row.title}</button>}</div>) : <p>No drafts yet.</p>}</section>
-    <section className="space-y-3" aria-label="Article editor"><h2>{article ? "Edit article" : "New article"}</h2>
-      <label className="block">Article title<input className={field} value={title} onChange={(event) => setTitle(event.target.value)} /></label>
-      {!article && <label className="block">Article address<input className={field} value={slug} onChange={(event) => setSlug(event.target.value)} placeholder="preparing-for-your-visit" /></label>}
-      <label className="block">Summary<textarea className={field} value={summary} onChange={(event) => setSummary(event.target.value)} /></label>
-      <label className="block">Article text<textarea className={field} rows={12} value={body} onChange={(event) => setBody(event.target.value)} /></label>
+    <section className="space-y-3" aria-label="Article editor" aria-busy={busy}><h2>{article ? "Edit article" : "New article"}</h2>
+      <label className="block">Article title<input disabled={busy} className={field} value={title} onChange={(event) => setTitle(event.target.value)} /></label>
+      {!article && <label className="block">Article address<input disabled={busy} className={field} value={slug} onChange={(event) => setSlug(event.target.value)} placeholder="preparing-for-your-visit" /></label>}
+      <label className="block">Summary<textarea aria-label="Summary" disabled={busy} className={field} value={summary} onChange={(event) => setSummary(event.target.value)} /></label>
+      <label className="block">Article text<textarea aria-label="Article text" disabled={busy} className={field} rows={12} value={body} onChange={(event) => setBody(event.target.value)} /></label>
       <p>You can use simple Markdown headings, emphasis, and lists.</p>
       <div className="flex flex-wrap gap-3"><button className={button} disabled={busy || !site || !title || !body || (!article && !slug)} onClick={() => void run(async () => {
         if (article) adopt(await callMethod<Article>(api + "save_article_draft", { ownership: article.ownership, expected_modified: article.modified, title, body, summary }));

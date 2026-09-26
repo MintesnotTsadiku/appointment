@@ -4,6 +4,7 @@
 import { lazy } from "react";
 import { Route } from "react-router-dom";
 import ErrorFallback from "./components/error-fallback";
+import BusinessOwnerRoute from "./components/workspace/BusinessOwnerRoute";
 
 /**
  * Lazy load components.
@@ -88,11 +89,13 @@ const Router = () => {
       <Route path="/settings/services/:serviceId" element={<EditService />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/edit-service/:serviceId" element={<EditService />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/manage" element={<Manage />} errorElement={<ErrorFallback />}></Route>
+      <Route element={<BusinessOwnerRoute />}>
       <Route path="/settings/public-experience" element={<PublicExperienceEditor />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/website" element={<WebsiteSetup />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/website/content" element={<WebsiteContent />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/organization-import" element={<OrganizationImport />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/website/newsletter" element={<NewsletterWorkspace />} errorElement={<ErrorFallback />} />
+      </Route>
       <Route path="/newsletter/:action/:token" element={<NewsletterAction />} errorElement={<ErrorFallback />} />
       <Route path="/team/invitation/:token" element={<StaffInvitation />} errorElement={<ErrorFallback />} />
       <Route path="/admin/dashboard" element={<AdminDashboard />} errorElement={<ErrorFallback />}></Route>
