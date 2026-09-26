@@ -483,7 +483,7 @@ function ServiceCard({ service, onSelect, availableProviders = [], showProviderN
           className="flex items-center justify-between pt-4"
           style={{ borderTop: '1px solid var(--border-default)' }}
         >
-          <span className="text-sm font-medium" style={{ color: 'var(--accent-primary)' }}>
+          <span className="text-sm font-medium" style={{ color: 'var(--booking-action-text, var(--accent-primary))' }}>
           Book Appointment
         </span>
           <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" style={{ color: 'var(--accent-primary)' }} />
@@ -568,4 +568,3 @@ function ServiceSelectorLoading() {
     </div>
   );
 }
-

@@ -32,6 +32,7 @@ export function bookingBrandVariables(config: PublicUIConfig, mode: BookingMode)
     "--border-default": value("border", "#e5e7eb"),
     "--border-strong": value("surfaceStrong", "#d1d5db"),
     "--accent-primary": primary,
+    "--booking-action-text": `color-mix(in srgb, ${value("text", "#111827")} 40%, ${primary})`,
     "--accent-primary-hover": value("selected", primary),
     "--accent-primary-light": `color-mix(in srgb, ${primary} 18%, transparent)`,
     "--accent-secondary": accent,

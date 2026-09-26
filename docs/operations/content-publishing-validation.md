@@ -839,3 +839,13 @@ hard-coded color. The scheduler now strengthens secondary text, uses the approve
 primary/on-primary pair for action backgrounds, and underlines its branded footer
 link with the main text color. Selam's note uses its own muted-text token.
 These corrections require a fresh production audit and reviewed template baseline.
+
+Run `00159` passed ten production audit scenarios and all seventy automated
+surface checks. A separate rendered-style calculation covered 603 contrast
+findings, including gradient stops and translucent ancestors. It narrowed the
+remaining small-text failures to seventeen service-card action labels in Abugida
+and Bloom. Those labels now mix their own primary color with their main text
+color. Icons and the approved primary/on-primary action background remain separate.
+The recovery capture also waits for local fonts and disables capture animations.
+It uses the older build's normal Close control if its asset-ready banner appears.
+It does not mask or remove browser elements.

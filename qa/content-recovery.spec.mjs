@@ -15,13 +15,20 @@ test("recovered-public-routes-and-consent", async ({ browser }, testInfo) => {
           await image.scrollIntoViewIfNeeded();
           await expect.poll(() => image.evaluate(element => element.complete && element.naturalWidth > 0)).toBe(true);
         }
+        await page.evaluate(() => document.fonts.ready);
+        // The older rollback build has a dismissible asset-ready banner.
+        // Exercise its public Close control if present, without masking pixels.
+        const legacyBanner = page.getByText("App ready to work offline", { exact: true });
+        if (await legacyBanner.isVisible()) {
+          await legacyBanner.locator("../../..").getByRole("button", { name: "Close", exact: true }).click();
+        }
         await page.evaluate(() => scrollTo(0, 0));
-        await page.screenshot({ path: testInfo.outputPath(`recovered-${row.recipe}-${surface}.png`), fullPage: true });
+        await page.screenshot({ path: testInfo.outputPath(`recovered-${row.recipe}-${surface}.png`), fullPage: true, animations: "disabled" });
       }
     }
     await page.goto(process.env.RECOVERY_QA_UNSUBSCRIBE_PATH, { waitUntil: "networkidle" });
     await page.getByRole("button", { name: "Unsubscribe from newsletter", exact: true }).click();
     await expect(page.getByRole("status")).toContainText("unsubscribed");
-    await page.screenshot({ path: testInfo.outputPath("recovered-guest-unsubscribe.png"), fullPage: true });
+    await page.screenshot({ path: testInfo.outputPath("recovered-guest-unsubscribe.png"), fullPage: true, animations: "disabled" });
   } finally { await context.close(); }
 });
