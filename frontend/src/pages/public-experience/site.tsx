@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 import { fetchPublishedSnapshot } from "@/public-experience/api";
 import { PublicExperienceProvider } from "@/public-experience/PublicExperienceProvider";
@@ -7,6 +7,7 @@ import { PublicSiteHome } from "@/public-experience/PublicSiteHome";
 import type { PublishedSnapshot } from "@/public-experience/types";
 
 const PublicSitePage = () => {
+  const { pathname } = useLocation();
   const { locale } = useParams<{ slug: string; locale?: string }>();
   const [snapshot, setSnapshot] = useState<PublishedSnapshot | null>(null);
   const [resolved, setResolved] = useState(false);
@@ -23,7 +24,7 @@ const PublicSitePage = () => {
     return () => {
       active = false;
     };
-  }, [locale]);
+  }, [locale, pathname]);
 
   useEffect(() => {
     const title = snapshot?.seo?.title;
@@ -44,7 +45,7 @@ const PublicSitePage = () => {
   }
 
   return (
-    <PublicExperienceProvider locale={snapshot.locale}>
+    <PublicExperienceProvider key={pathname} locale={snapshot.locale}>
       <PublicSiteHome snapshot={snapshot} />
     </PublicExperienceProvider>
   );

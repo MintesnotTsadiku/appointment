@@ -98,6 +98,10 @@ const Router = () => {
       
       {/* Tenant public website and booking entry. Static routes above win; the
           resolver fails closed for unknown slugs. */}
+      <Route path="/:slug/blog" element={<PublicSitePage />} errorElement={<ErrorFallback />} />
+      <Route path="/:slug/blog/:contentSlug" element={<PublicSitePage />} errorElement={<ErrorFallback />} />
+      <Route path="/:slug/gallery" element={<PublicSitePage />} errorElement={<ErrorFallback />} />
+      <Route path="/:slug/gallery/:contentSlug" element={<PublicSitePage />} errorElement={<ErrorFallback />} />
       <Route path="/:slug/book" element={<PublicBookingPage />} errorElement={<ErrorFallback />}></Route>
       <Route path="/:slug/:locale" element={<PublicSitePage />} errorElement={<ErrorFallback />}></Route>
       <Route path="/:slug" element={<PublicSitePage />} errorElement={<ErrorFallback />}></Route>

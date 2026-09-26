@@ -5,6 +5,7 @@ import { publicRootFromPath } from "./routes";
 import { getTemplatePackage } from "./templates/registry";
 import type { PublishedSnapshot } from "./types";
 import "./platform.css";
+import { PublicContentPage } from "./PublicContentPage";
 
 export const PublicSiteHome = ({ snapshot }: { snapshot: PublishedSnapshot }) => {
   const { config, theme, setPreference } = usePublicExperience();
@@ -26,6 +27,7 @@ export const PublicSiteHome = ({ snapshot }: { snapshot: PublishedSnapshot }) =>
       </main>
     );
   }
+  if (snapshot.routeKind.startsWith("blog_") || snapshot.routeKind.startsWith("gallery_")) return <PublicContentPage snapshot={snapshot} />;
   const Template = template.Site;
   return <Template
     snapshot={snapshot}

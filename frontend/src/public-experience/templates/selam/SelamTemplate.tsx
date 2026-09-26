@@ -21,7 +21,7 @@ export function SelamSite({ snapshot, locale, applicationName, publicRoot, rootS
   return <div data-pe-root data-pe-recipe={snapshot.recipeKey} data-pe-mode={mode} className="selam-site" data-template="selam-movement-v1" style={rootStyle}>
     <header className="selam-nav">
       <a className="selam-logo" href={publicRoot}>{brandLogo(snapshot.compiledDesign) ? <img className="pe-brand-logo" src={brandLogo(snapshot.compiledDesign)} alt="" /> : <Mark />} <strong>{applicationName}</strong></a>
-      <nav><a href="#sessions">Move</a><a href="#people">Learn</a><a href="#space">Our space</a></nav>
+      <nav><a href={`${publicRoot}/blog`}>Journal</a><a href={`${publicRoot}/gallery`}>Gallery</a><a href="#sessions">Move</a><a href="#people">Learn</a><a href="#space">Our space</a></nav>
       {primary ? <a className="selam-pill" href={primary.href}>Book a session <span>→</span></a> : null}
       <button type="button" className="selam-mode" onClick={toggleMode} aria-label={`Switch to ${mode === "dark" ? "light" : "dark"} mode`}><span aria-hidden="true">{mode === "dark" ? "☀" : "☾"}</span><span>{mode === "dark" ? "Light" : "Dark"}</span></button>
     </header>

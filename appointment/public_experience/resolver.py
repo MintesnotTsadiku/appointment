@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import json
+import re
 
 import frappe
 
@@ -119,6 +120,9 @@ def _route_kind(remaining: str) -> str:
         return WEBSITE
     if remaining == "/book" or remaining.startswith("/book/"):
         return BOOKING
+    parts = remaining.strip("/").split("/")
+    if parts[0] in ("blog", "gallery") and len(parts) <= 2 and all(parts) and (len(parts) == 1 or re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", parts[1])):
+        return parts[0] + ("_detail" if len(parts) == 2 else "_index")
     if remaining in _ASSET_PATHS:
         return ASSET
     return NOT_FOUND
@@ -254,6 +258,7 @@ def resolve_public_experience(trusted_host: str, normalized_path: str, locale: s
             "releaseHash": release.release_hash,
             "locale": chosen,
             "routeKind": route_kind,
+            "path": path,
         }
     )
     return PublishedExperienceContext(

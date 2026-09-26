@@ -1,6 +1,6 @@
 # Content publishing, gallery and onboarding — progress and validation
 
-**Status:** Phases 0–3 implemented and verified; Phases 4–10 not started
+**Status:** Phases 0–3 implemented and verified; Phase 4 code checkpoint, browser acceptance pending; Phases 5–10 not started
 **Date:** 2026-09-26
 **Branch:** `feat/content-publishing-gallery-onboarding`
 **Head at recording:** `6e450cbeb639828db53841f39ae09d66092e35fa`
@@ -127,6 +127,58 @@ with database, public and private file archives.
 - **Phase 10** release readiness: upgrade/rollback, restore drills, monitoring
   runbooks and security/accessibility/performance gates.
 
-No frontend surface is wired to the new owner or public APIs yet, so the feature
-is not usable end to end by a normal owner. No browser acceptance evidence
+Phase 4 now wires public content surfaces to the public APIs. Owner content
+authoring and Website Setup remain pending. No browser acceptance evidence
 exists for the new content surfaces. There is no payment integration, by design.
+
+
+## Phase 4 implementation checkpoint — 2026-09-26
+
+**Status:** Code exists. Phase 4 is not accepted or complete.
+
+- Each certified template owns a content component and its styles. Packages do
+  not import visual components from another package.
+- Blog indexes, articles, gallery indexes, and collections use the guest content
+  APIs. Public reads still use Active immutable releases.
+- Public responses now include `templateCompatVersion`. Detail rendering rejects
+  incompatible versions, mismatched routes, and mismatched locales.
+- The public resolver and React routes accept site-scoped blog and gallery paths.
+  Resolver cache identity now includes the path.
+- Each package includes loading, empty, unavailable, and newsletter-unavailable
+  treatments. Newsletter subscription stays unavailable until Phase 7.
+- Article blocks become native elements from a closed parser contract. No
+  template inserts raw HTML. Video items link to validated provider URLs.
+- Content pages include pagination, canonical metadata, a skip link, focus
+  styles, responsive layouts, and light/dark tokens.
+
+Validation:
+
+- Before edits: existing isolated-site suites passed 35/35 tests.
+- After edits: those suites and `test_public_content_routes.run` passed 40/40.
+- `npm run test:dom` passed, including the new public-content contract checks.
+- Focused ESLint checks passed for new content files.
+- `npx vite build` passed. Existing font asset resolution and bundle-size
+  warnings remain.
+- Full-project TypeScript checking fails outside the changed public content
+  files. Errors include availability templates, task components, missing PWA
+  declarations, and API types. This checkpoint does not repair those failures.
+- `git diff --check` passed.
+
+Managed browser preflight on this isolated site returned no Browser QA worker
+and no Browser Accounts. The referenced
+`docs/dev/agent-plane-browser-validation.md` is absent from this checkout.
+Installed Agent Plane instructions are available in its browser operations
+runbook. A request to bootstrap the isolated browser runtime is pending.
+
+Remaining Phase 4 gates:
+
+1. Establish least-privileged managed Browser Accounts and Browser QA workers.
+2. Create and approve each template's blog and gallery design references.
+3. Validate real releases, pagination, typed rich text, images, video fallbacks,
+   empty/error states, keyboard behavior, accessibility, and performance.
+4. Capture landing, booking, scheduler, blog, article, gallery, collection, and
+   newsletter treatment for every template at desktop/mobile and light/dark.
+5. Store browser captures and source comparisons under `qa/evidence/`.
+
+No showcase data was seeded. No reference-runtime state was changed. No schema
+migration was needed. Phases 5–10 remain pending.
