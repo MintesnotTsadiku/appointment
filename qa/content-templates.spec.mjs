@@ -35,6 +35,16 @@ for (const key of ["selam", "bloom", "meron", "abugida", "tena"]) {
         }
         await page.evaluate(() => scrollTo(0, 0));
         await page.evaluate(() => document.fonts.ready);
+        if (surface === "landing" && key === "selam") {
+          const gap = await page.locator(".selam-people h2").evaluate(heading => {
+            const title = document.createRange();
+            title.selectNodeContents(heading);
+            const introduction = document.createRange();
+            introduction.selectNodeContents(heading.nextElementSibling);
+            return introduction.getBoundingClientRect().top - title.getBoundingClientRect().bottom;
+          });
+          expect(gap, "team heading and introduction have separate rendered text bounds").toBeGreaterThanOrEqual(0);
+        }
         if (surface === "scheduler") await page.waitForFunction(() => Array.from(document.querySelectorAll('[data-booking-branded="true"] [style], [data-booking-branded="true"]')).every(element => !element.style.opacity || Number(element.style.opacity) === 1));
         await page.mouse.move(0, 0);
         await page.evaluate(() => document.activeElement?.blur());

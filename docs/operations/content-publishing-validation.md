@@ -1,6 +1,6 @@
 # Content publishing, gallery and onboarding — progress and validation
 
-**Status:** Phases 0–3 implemented and verified; Phase 4 full browser matrix pending; Phases 5–6 core owner journeys implemented, broader acceptance pending; Phase 7 core local newsletter journey in validation; Phase 8 expansion in progress; Phases 9–10 pending
+**Status:** Phases 0–3 preserved and verified. Phases 5–9 have retained normal-user and seeder evidence. The final Phase 4 production matrix and latest normal-upload repeat are in progress. Phase 10 production security/accessibility and backup data integrity passed; restored-route and code rollback/upgrade browser stages remain pending.
 **Date:** 2026-09-26
 **Branch:** `feat/content-publishing-gallery-onboarding`
 **Head at recording:** `6e450cbeb639828db53841f39ae09d66092e35fa`
@@ -859,3 +859,13 @@ article-link probes show underlines and visible focus at both tested viewports.
 Evidence is in `qa/evidence/content-accessibility/`; its manual review states the
 scope and limits. The reproducible review script is `qa/contrast-review.py`.
 Final template comparison and restored-runtime browser stages remain pending.
+
+Template run `00161` passed all twenty browser scenarios and captured 280 PNGs.
+Its strict comparison reported 22 changes: the twenty corrected scheduler
+captures and two Selam light-mode hero-note captures. Those corrections were
+reviewed against the previous images. This comparison run is not final acceptance.
+Full-size review also found Selam's team introduction directly against the heading
+descenders. Selam now owns an 18-pixel gap. The managed matrix checks separate
+rendered text bounds for that heading and introduction at all four combinations.
+No other template imports its layout or style. The final baseline and strict
+repeat remain pending after the focused spacing capture.

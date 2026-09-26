@@ -48,6 +48,7 @@
 .selam-belong p{line-height:1.5}
 .selam-people{display:grid;grid-template-columns:.75fr 1.65fr;gap:60px;padding:74px clamp(24px,4vw,58px);background:#eee0ff}
 .selam-people>div:first-child{align-self:center}
+.selam-people h2+p{margin-top:18px}
 .selam-team{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 .selam-team img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px}
 .selam-team h3,.selam-team p{margin:7px 0 0}
