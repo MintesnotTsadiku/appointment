@@ -2,6 +2,7 @@
 
 from io import BytesIO
 import json
+import re
 import sys
 import unittest
 
@@ -80,6 +81,42 @@ class OrganizationImportTests(unittest.TestCase):
                 self.confirm(content, confirmed, digest)
         self.assertEqual(frappe.db.count("Organization Workbook Import", {"organization": self.fixture["orgs"]["A"]}), 0)
 
+    def test_new_business_creation_and_retry_use_normal_permissions(self):
+        label = "Workbook-new-" + frappe.generate_hash(length=8)
+        content = self.content(lambda book: setattr(book["Organization"]["B2"], "value", label))
+        before = frappe.db.count("Organization", {"owner_user": frappe.session.user})
+        proposed = service.preview(content, None)
+        self.assertTrue(proposed["valid"])
+        self.assertEqual(frappe.db.count("Organization", {"owner_user": frappe.session.user}), before)
+        result = service.confirm(content, None, proposed["sha256"], 1)
+        self.assertEqual(result["organization"], label)
+        self.assertEqual(frappe.db.get_value("Organization", label, "owner_user"), frappe.session.user)
+        self.assertTrue(service.confirm(content, None, proposed["sha256"], 1)["replayed"])
+        self.assertEqual(frappe.db.count("Organization", {"owner_user": frappe.session.user}), before + 1)
+
+    def test_untrusted_organization_insert_cannot_supply_factory_capability(self):
+        with self.assertRaises(frappe.PermissionError):
+            frappe.get_doc({"doctype": "Organization", "organization_name": "Untrusted-workbook",
+                            "owner_user": frappe.session.user, "is_active": 1}).insert()
+
+    def test_failed_new_business_import_rolls_back_without_adopting_foreign_location(self):
+        label = "Workbook-new-" + frappe.generate_hash(length=8)
+        location_name = label + " — Main"
+        frappe.set_user("Administrator")
+        syncing = frappe.flags.syncing_booking_urls
+        try:
+            frappe.flags.syncing_booking_urls = True
+            frappe.get_doc({"doctype": "Location", "location_name": location_name,
+                            "organization": self.fixture["orgs"]["B"], "timezone": "Africa/Addis_Ababa"}).insert()
+        finally:
+            frappe.flags.syncing_booking_urls = syncing
+        frappe.set_user(self.fixture["owners"]["A"])
+        content = self.content(lambda book: setattr(book["Organization"]["B2"], "value", label))
+        with self.assertRaises(frappe.DuplicateEntryError):
+            service.confirm(content, None, workbook.dry_run(content)["sha256"], 1)
+        self.assertFalse(frappe.db.exists("Organization", label))
+        self.assertEqual(frappe.db.get_value("Location", location_name, "organization"), self.fixture["orgs"]["B"])
+
     def test_foreign_owner_cannot_confirm_or_read_audit(self):
         content = self.content()
         result = self.confirm(content)
@@ -118,3 +155,36 @@ def run():
     if not result.wasSuccessful():
         raise RuntimeError(json.dumps(report))
     return report
+
+
+def failed_new_businesses():
+    require_target()
+    rows = frappe.get_all("Organization", filters={"name": ["like", "Workbook-new-%"]}, fields=["name", "owner_user"])
+    return [row for row in rows if re.fullmatch(r"cnt-[a-z0-9]{8}-owner-a@example\.test", row.owner_user or "")]
+
+
+def purge_failed_business(name, user):
+    require_target()
+    if {"name": name, "owner_user": user} not in failed_new_businesses():
+        raise RuntimeError("This is not an exact reserved failed workbook fixture")
+    frappe.set_user("Administrator")
+    if frappe.db.exists("Public Site", {"organization": name}):
+        raise RuntimeError("Preserve this business: it has an unexpected public site")
+    audits = frappe.get_all("Organization Workbook Import", filters={"organization": name}, fields=["name", "mapping_json", "imported_by"])
+    if len(audits) != 1 or audits[0].imported_by != user:
+        raise RuntimeError("The failed workbook audit does not match its synthetic owner")
+    mapping = json.loads(audits[0].mapping_json)
+    if set(mapping.get("Locations", {})) != {"main", "branch"} or set(mapping.get("Providers", {})) != {"owner"}:
+        raise RuntimeError("The failed workbook records do not match the exact test")
+    from appointment.tests.website_browser_fixture import WebsiteBrowserFixture
+
+    delete = WebsiteBrowserFixture()._delete
+    for sheet in ("Offerings", "Services", "Locations", "Providers"):
+        delete(service.TYPES[sheet], list(mapping.get(sheet, {}).values()))
+    delete("Business Membership", frappe.get_all("Business Membership", filters={"organization": name}, pluck="name"))
+    delete("Organization Workbook Import", [audits[0].name])
+    delete("Organization", [name])
+    if not frappe.db.exists("Organization", {"owner_user": user}):
+        frappe.delete_doc("User", user, force=True, ignore_permissions=True)
+    frappe.db.commit()
+    return {"removed_business": name, "remaining_businesses": frappe.db.count("Organization", {"name": name})}

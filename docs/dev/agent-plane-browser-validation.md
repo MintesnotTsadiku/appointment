@@ -68,7 +68,7 @@ owner email. Cleanup removes the exact fixture records and temporary files.
 
 Review new captures before updating a baseline. Require a passing strict repeat
 with zero baseline changes. Export it with `export_website`, using the returned
-run name. The current suite retains thirteen captures. It is one organization
+run name. The current suite retains fourteen captures. It is one organization
 owner with Tena, not the complete five-template or fresh-site acceptance matrix.
 
 The isolated site's `brand_public_experience_platform_hosts` must allow its site

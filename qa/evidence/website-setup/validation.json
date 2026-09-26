@@ -1,7 +1,7 @@
 {
-  "run": "BQA-2026-00091",
+  "run": "BQA-2026-00099",
   "status": "Passed",
-  "source_version": "9791022+source-ee4f3a4e5d75+qa-b6c65203869a",
+  "source_version": "854c8cb+source-b03689fe34bd+qa-75f961e9ba42",
   "scenario_summary": {
     "failed": 0,
     "flaky": 0,
@@ -11,7 +11,7 @@
   },
   "baseline_changed_count": 0,
   "cleanup": {
-    "deleted_businesses": 1,
+    "deleted_businesses": 2,
     "ok": true
   },
   "audit": {
@@ -19,14 +19,19 @@
     "remaining": {
       "Blog Post": 0,
       "Brand Profile": 0,
+      "Content Ownership": 0,
+      "Gallery Collection": 0,
       "Imported Locations": 0,
       "Imported Memberships": 0,
+      "Imported Offerings": 0,
+      "Imported Providers": 0,
       "Imported Services": 0,
       "Location": 0,
       "Organization": 0,
       "Organization Workbook Import": 0,
       "Provider": 0,
       "Public Site": 0,
+      "Published Content Release": 0,
       "Service": 0
     },
     "remaining_record_count": 0
@@ -90,6 +95,10 @@
     {
       "file": "website-workbook-correction.png",
       "sha256": "73107af11cbf8f009d46dd05c6d355dafa891126758a757fc89048861e2289f2"
+    },
+    {
+      "file": "website-workbook-new-business.png",
+      "sha256": "15f1118e4c69a6aa1584eb615f0666bafd1764c584f2c27ca1b54cd173d8c8f3"
     }
   ],
   "scope": "One normal organization owner and the Tena template only. Full Phase 4/5 and Phases 6-10 are not accepted."

@@ -119,4 +119,13 @@ test("website-owner-journey", async ({ page }, testInfo) => {
   await page.getByRole("checkbox").check();
   await page.getByRole("button", { name: "Confirm import", exact: true }).click();
   await expect(page.getByRole("status")).toContainText("No duplicate records");
+  await page.getByRole("combobox", { name: "Organization", exact: true }).selectOption("");
+  await page.getByLabel("Organization workbook", { exact: true }).setInputFiles(process.env.WEBSITE_QA_NEW_WORKBOOK);
+  await page.getByRole("button", { name: "Review workbook", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Ready for confirmation" })).toBeVisible();
+  await page.getByRole("checkbox").check();
+  await page.getByRole("button", { name: "Confirm import", exact: true }).click();
+  await expect(page.getByRole("status")).toContainText("Workbook applied");
+  await expect(page.getByRole("combobox", { name: "Organization", exact: true })).toHaveValue(marker + " Workbook");
+  await page.screenshot({ path: testInfo.outputPath("website-workbook-new-business.png"), fullPage: true });
 });

@@ -58,10 +58,9 @@ export default function OrganizationImport() {
     {notice && <p role="status">{notice}</p>}
     <a className={button} href={"/api/method/" + api + "download_template"}>Download workbook template</a>
     <p>The workbook includes instructions and example rows. Examples are never imported. Do not enter passwords, formulas, or external links. Staff accounts must accept their invitations before you link them.</p>
-    {!businesses.length && <p>Create your organization through <Link to="/onboarding">business setup</Link> first.</p>}
-    <label className="block">Organization<select className={field} value={organization} onChange={(event) => { setOrganization(event.target.value); setReview(null); setConfirmed(false); }}>{businesses.map((business) => <option key={business.name} value={business.name}>{business.label}</option>)}</select></label>
+    <label className="block">Organization<select className={field} value={organization} onChange={(event) => { setOrganization(event.target.value); setReview(null); setConfirmed(false); }}><option value="">Create a new organization from this workbook</option>{businesses.map((business) => <option key={business.name} value={business.name}>{business.label}</option>)}</select></label>
     <label className="block">Organization workbook<input className={field} type="file" accept=".xlsx" onChange={(event) => void run(() => chooseFile(event.target.files?.[0]))} /></label>
-    <button className={button} disabled={busy || !content || !organization} onClick={() => void run(async () => {
+    <button className={button} disabled={busy || !content} onClick={() => void run(async () => {
       setConfirmed(false); setReview(await callMethod<Review>(api + "preview_import", { organization, content_base64: content }));
       setNotice("Review complete. No business records were changed.");
     })}>Review workbook</button>
@@ -69,9 +68,10 @@ export default function OrganizationImport() {
       <h2 className="text-xl font-semibold">{review.valid ? "Ready for confirmation" : "Correct these cells and upload again"}</h2>
       {review.errors.length > 0 && <table className="w-full"><thead><tr><th>Sheet</th><th>Cell</th><th>Correction</th></tr></thead><tbody>{review.errors.map((item, index) => <tr key={index}><td>{item.sheet}</td><td>{item.cell}</td><td>{item.message}</td></tr>)}</tbody></table>}
       {review.valid && <><table className="w-full"><thead><tr><th>Records</th><th>Create</th><th>Update</th></tr></thead><tbody>{Object.entries(review.changes).map(([sheet, changes]) => <tr key={sheet}><td>{sheet}</td><td>{changes.create}</td><td>{changes.update}</td></tr>)}</tbody></table><p>Organization facts, team assignments, availability, and approved website text will also be applied. Missing rows do not delete existing records. This import does not send email.</p><label className="block"><input type="checkbox" checked={confirmed} onChange={(event) => setConfirmed(event.target.checked)} /> I reviewed these changes and want to apply them to this organization.</label><button className={button} disabled={busy || !confirmed} onClick={() => void run(async () => {
-        const result = await callMethod<{ valid: boolean; audit: string; replayed: boolean; errors?: CellError[] }>(api + "confirm_import", { organization, content_base64: content, expected_hash: review.sha256, confirmed: 1 });
+        const result = await callMethod<{ valid: boolean; audit: string; replayed: boolean; organization: string; errors?: CellError[] }>(api + "confirm_import", { organization, content_base64: content, expected_hash: review.sha256, confirmed: 1 });
         if (!result.valid) { setReview({ ...review, valid: false, errors: result.errors || [] }); return; }
         setNotice(result.replayed ? "This workbook was already applied. No duplicate records were created." : "Workbook applied. The import audit was saved.");
+        if (!organization) { setBusinesses((rows) => [...rows, { name: result.organization, label: result.organization }]); setOrganization(result.organization); }
         setReview(null); setConfirmed(false);
       })}>Confirm import</button></>}
     </section>}

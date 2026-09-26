@@ -41,9 +41,11 @@
   "setup_complete",
   "setup_request_key",
   "setup_request_hash",
-  "setup_request_result"
+  "setup_request_result",
+  "workbook_creation_key"
  ],
  "fields": [
+  {"fieldname": "workbook_creation_key", "fieldtype": "Data", "label": "Workbook Creation Key", "hidden": 1, "read_only": 1, "unique": 1},
   {
    "fieldname": "organization_name",
    "fieldtype": "Data",

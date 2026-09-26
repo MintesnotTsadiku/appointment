@@ -14,7 +14,9 @@ TYPES = {"Locations": "Location", "Providers": "Provider", "Services": "Service"
 
 
 def preview(content, organization):
-    require_manage_business("Organization", organization)
+    from appointment.organization_import import business
+
+    require_manage_business("Organization", organization) if organization else business.require_creation()
     proposed = workbook.dry_run(content)
     if not proposed["valid"]:
         return proposed
@@ -22,6 +24,11 @@ def preview(content, organization):
     if errors:
         return {**proposed, "valid": False, "errors": errors}
     namespace = proposed["rows"]["Organization"][0]["key"]
+    organization = organization or business.existing(namespace)
+    if not organization:
+        proposed["changes"] = {sheet: {"create": len(proposed["rows"][sheet]), "update": 0}
+                                for sheet in ("Locations", "Providers", "Services")}
+        return proposed
     previous = frappe.db.get_value("Organization Workbook Import", {"organization": organization, "namespace": namespace},
                                    "mapping_json", order_by="creation desc")
     mapping = json.loads(previous or "{}")
@@ -33,6 +40,30 @@ def preview(content, organization):
 
 
 def confirm(content, organization, expected_hash, confirmed):
+    from appointment.organization_import import business
+
+    if not organization:
+        business.require_creation()
+        if str(confirmed) not in {"1", "True", "true"}:
+            frappe.throw("Review the proposed changes and confirm the import.")
+        proposed = workbook.dry_run(content)
+        if not proposed["valid"]:
+            return proposed
+        if proposed["sha256"] != expected_hash:
+            frappe.throw("The workbook changed. Review a new dry run before confirming.")
+        errors = _business_errors(proposed["rows"])
+        if errors:
+            return {**proposed, "valid": False, "errors": errors}
+        frappe.db.savepoint("workbook_new_business")
+        try:
+            organization = business.create(proposed["rows"]["Organization"][0])
+            result = confirm(content, organization, expected_hash, confirmed)
+            if not result["valid"]:
+                frappe.db.rollback(save_point="workbook_new_business")
+            return result
+        except Exception:
+            frappe.db.rollback(save_point="workbook_new_business")
+            raise
     require_manage_business("Organization", organization)
     if str(confirmed) not in {"1", "True", "true"}:
         frappe.throw("Review the proposed changes and confirm the import.")
@@ -46,7 +77,7 @@ def confirm(content, organization, expected_hash, confirmed):
     identity = hashlib.sha256((organization + "\0" + namespace + "\0" + expected_hash).encode()).hexdigest()
     repeated = frappe.db.get_value("Organization Workbook Import", {"idempotency_key": identity}, "name")
     if repeated:
-        return {"valid": True, "audit": repeated, "replayed": True}
+        return {"valid": True, "audit": repeated, "replayed": True, "organization": organization}
     errors = _business_errors(proposed["rows"])
     if errors:
         return {**proposed, "valid": False, "errors": errors}
@@ -65,7 +96,7 @@ def confirm(content, organization, expected_hash, confirmed):
                                 "summary_json": json.dumps(proposed["summary"]), "imported_by": frappe.session.user})
         audit.flags.workbook_factory = _IMPORT_WRITE
         audit.insert()
-        return {"valid": True, "audit": audit.name, "replayed": False, "summary": proposed["summary"]}
+        return {"valid": True, "audit": audit.name, "replayed": False, "summary": proposed["summary"], "organization": organization}
     except Exception:
         frappe.db.rollback(save_point="organization_workbook")
         raise

@@ -145,6 +145,11 @@ def config_permission(doc, user=None, permission_type="read", ptype=None, **kwar
     user = user or frappe.session.user
     if user == "Administrator":
         return True
+    if doc.doctype == "Organization" and doc.is_new() and permission_type == "create":
+        from appointment.scheduler.workspace import _SETUP_CREATE
+
+        return (doc.flags.workspace_setup is _SETUP_CREATE and doc.owner_user == user
+                and "Organization Manager" in frappe.get_roles(user))
     org = config_organization(doc)
     if permission_type in ("read", "select", "print", "export", "report"):
         if doc.doctype == "Provider":
@@ -181,7 +186,7 @@ def validate_config(doc, method=None):
 
         if doc.flags.workspace_setup is not _SETUP_CREATE and any(
             doc.get(field) != old.get(field)
-            for field in ("setup_request_key", "setup_request_hash", "setup_request_result")
+            for field in ("setup_request_key", "setup_request_hash", "setup_request_result", "workbook_creation_key")
         ):
             frappe.throw(_("Setup retry identity cannot be edited."), frappe.PermissionError)
     for target in (old, doc):

@@ -167,6 +167,12 @@ def _read_sheet(sheet, fields, rows, errors):
 
 
 def _validate(field, value, sheet):
+    if any(character in value for character in "<>"):
+        return "Use plain text without HTML markup."
+    if field == "name" and len(value) > 100:
+        return "Keep names to at most 100 characters."
+    if field == "description" and len(value) > 500:
+        return "Keep descriptions to at most 500 characters."
     if field.endswith("key") and not re.fullmatch(r"[a-zA-Z0-9_-]{1,64}", value):
         return "Use a stable key with 1–64 letters, digits, underscores, or hyphens."
     if field == "email" and not re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]+", value):
@@ -199,6 +205,8 @@ def _validate(field, value, sheet):
 
 def _references(data, errors):
     keys = {name: {row["key"] for row in rows} for name, rows in data.items()}
+    days = set()
+    text_fields = set()
     for sheet, rows in data.items():
         for row in rows:
             for field, target in (("location_key", "Locations"), ("provider_key", "Providers")):
@@ -211,3 +219,16 @@ def _references(data, errors):
                         errors.append(_error(sheet, row["_row"], "F", "Use comma-separated keys from Locations."))
             if sheet == "Availability" and row["opens_at"] >= row["closes_at"]:
                 errors.append(_error(sheet, row["_row"], "E", "Closing time must follow opening time on the same day."))
+            if sheet == "Availability":
+                identity = (row["location_key"], row["weekday"])
+                if identity in days:
+                    errors.append(_error(sheet, row["_row"], "C", "Provide one hours row per location and weekday."))
+                days.add(identity)
+            if sheet == "Website Content":
+                field = row["field"]
+                if field in text_fields:
+                    errors.append(_error(sheet, row["_row"], "B", "Provide one row per website text field."))
+                text_fields.add(field)
+                limit = {"hero_title": 1000, "hero_subtitle": 1000, "about_body": 2400, "contact_email": 160, "contact_phone": 32}.get(field, 2400)
+                if len(row["text"]) > limit:
+                    errors.append(_error(sheet, row["_row"], "C", f"Keep this text to at most {limit} characters."))

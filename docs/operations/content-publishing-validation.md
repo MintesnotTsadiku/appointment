@@ -332,3 +332,30 @@ organization, staff must already have enabled accounts, and capacity is limited
 to individual appointments. Invitation acceptance, direct new-organization
 creation from a workbook, full website-text dry-run validation, and broader
 large-file/performance acceptance remain. Phases 7–10 are still pending.
+
+## Direct workbook business creation — 2026-09-26
+
+An organization owner can now choose to create a new organization directly from
+the workbook. The owner service uses a normal Organization insert with a server
+factory capability. Raw inserts cannot forge that capability. A protected
+workbook creation key at normal field permission level binds retries to the
+original owner and workbook namespace; it does not adopt existing organizations.
+
+The first new-business regression exposed an internal commit in the legacy
+booking URL sync and a retry field that normal owners could not write. Creation
+now suppresses that sync for the whole transaction and uses the new protected
+key. The exact failed synthetic business and its audit-mapped records were
+purged; the reserved failed-fixture check returned no remaining businesses.
+Nine workbook confirmation tests pass, including full rollback when a foreign
+location name collides. Parser tests remain 10/10 after additional plain-text,
+length, duplicate-day, and duplicate-website-field checks.
+
+Managed run 00098 created the second business directly from its workbook.
+Strict repeat 00099 passed with zero failed or flaky scenarios and zero visual
+changes. Fourteen captures and the expanded cleanup audit are retained under
+`qa/evidence/website-setup/`. This is still the shared normal organization owner
+on the existing isolated site, not the Phase 9 fresh-install journeys.
+
+Phase 6 still needs invitation acceptance, broader capacity handling, and full
+website-text dry-run validation. The full template matrix and Phases 7–10 remain
+pending.

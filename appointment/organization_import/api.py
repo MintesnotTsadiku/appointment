@@ -50,8 +50,6 @@ def preview_import(content_base64, organization=None):
     from appointment.organization_import.service import preview
 
     require_scope(organization)
-    if not organization:
-        frappe.throw("Choose the organization for this workbook.")
     return preview(decode_upload(content_base64), organization)
 
 
