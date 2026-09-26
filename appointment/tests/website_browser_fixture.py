@@ -17,7 +17,7 @@ class WebsiteBrowserFixture:
         if frappe.db.exists("Organization", {"organization_name": ["in", [marker, marker + " Workbook"]]}) or frappe.db.exists("Public Site", {"slug": marker.lower()}):
             return {"ok": False, "error": "The acceptance identity already exists; preserve it and investigate.", "fixture_identity": {}}
         directory = tempfile.mkdtemp(prefix="appointment-workbook-qa-")
-        return {"ok": True, "fixture_identity": {"marker": marker, "user": USER, "site": frappe.local.site, "workbook_directory": directory}}
+        return {"ok": True, "fixture_identity": {"marker": marker, "user": USER, "site": frappe.local.site, "workbook_directory": directory, "providers_before": frappe.get_all("Provider", filters={"user": USER}, pluck="name")}}
 
     def provide_execution_context(self, *, fixture_identity, request):
         from io import BytesIO
@@ -34,6 +34,7 @@ class WebsiteBrowserFixture:
             book["Locations"].append([key, label, "Africa/Addis_Ababa", "Synthetic address", ""])
             book["Availability"].append([key + "-mon", key, "Monday", "09:00", "17:00", "Africa/Addis_Ababa"])
             book["Services"].append([key + "-visit", fixture_identity["marker"] + " " + label + " consultation", 30, 0, key, "owner", 1, 0])
+        book["Website Content"].append(["intro", "hero_subtitle", "Reviewed workbook website introduction."])
         valid = directory / "valid.xlsx"
         invalid = directory / "invalid.xlsx"
         book.save(valid)
@@ -52,8 +53,11 @@ class WebsiteBrowserFixture:
 
     def _organizations(self, identity):
         self._require_identity(identity)
-        return frappe.get_all("Organization", filters={"organization_name": ["in", [identity["marker"], identity["marker"] + " Workbook"]],
-                                                       "owner_user": USER}, pluck="name")
+        primary = frappe.get_all("Organization", filters={"organization_name": ["in", [identity["marker"], identity["marker"] + " Workbook"]],
+                                 "owner_user": USER}, pluck="name")
+        secondary = frappe.get_all("Organization", filters={"organization_name": identity["marker"] + " Isolation",
+                                   "owner_user": identity["marker"].lower() + "-staff@example.test"}, pluck="name")
+        return primary + secondary
 
     def _require_identity(self, identity):
         if frappe.local.site not in ALLOWED_SITES or identity.get("site") != frappe.local.site or identity.get("user") != USER or identity.get("marker") != "WQA-websiteacceptance":
@@ -122,6 +126,10 @@ class WebsiteBrowserFixture:
                          "provider_name": organization + " — Workbook owner"}, pluck="name"))
             self._delete("Organization", [organization])
         staff_email = fixture_identity["marker"].lower() + "-staff@example.test"
+        new_owner_providers = [name for name in frappe.get_all("Provider", filters={"user": USER}, pluck="name")
+                               if name not in fixture_identity.get("providers_before", [])]
+        self._delete("Provider", new_owner_providers)
+        self._delete("Provider", frappe.get_all("Provider", filters={"user": staff_email}, pluck="name"))
         accounts = frappe.get_all("Browser Account", filters={"owner_user": staff_email, "account_label": "Acceptance receptionist — " + frappe.local.site}, pluck="name")
         from agent_harness.browser.governed_runtime import is_storage_state_ref, storage_state_path_for_ref
         for account in accounts:
@@ -147,7 +155,7 @@ class WebsiteBrowserFixture:
     def audit(self, *, fixture_identity, request):
         remaining = self._organizations(fixture_identity)
         marker = fixture_identity["marker"]
-        scope = [marker, marker + " Workbook"]
+        scope = [marker, marker + " Workbook", marker + " Isolation"]
         counts = {"Organization": len(remaining),
                   "Organization Workbook Import": frappe.db.count("Organization Workbook Import", {"organization": ["in", scope]}),
                   "Imported Locations": frappe.db.count("Location", {"organization": ["in", scope]}),
@@ -158,8 +166,8 @@ class WebsiteBrowserFixture:
                   "Content Ownership": frappe.db.count("Content Ownership", {"organization": ["in", scope]}),
                   "Gallery Collection": frappe.db.count("Gallery Collection", {"organization": ["in", scope]}),
                   "Published Content Release": frappe.db.count("Published Content Release", {"organization": ["in", scope]}),
-                  "Public Site": frappe.db.count("Public Site", {"slug": marker.lower()}),
-                  "Brand Profile": frappe.db.count("Brand Profile", {"profile_name": marker}),
+                  "Public Site": frappe.db.count("Public Site", {"organization": ["in", scope]}),
+                  "Brand Profile": frappe.db.count("Brand Profile", {"organization": ["in", scope]}),
                   "Location": frappe.db.count("Location", {"location_name": marker + " Main"}),
                   "Service": frappe.db.count("Service", {"service_name": marker + " Consultation"}),
                   "Blog Post": frappe.db.count("Blog Post", {"title": marker + " Preparing for your visit"}),

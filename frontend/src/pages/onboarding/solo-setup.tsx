@@ -16,7 +16,7 @@ export default function SoloSetup() {
   const navigate = useNavigate();
   async function submit(event: FormEvent) {
     event.preventDefault(); setError('');
-    try { await call({ business_name: name, timezone }); await reload(); navigate('/settings/website'); }
+    try { await call({ business_name: name, timezone }); await reload(); navigate('/settings/independent-booking'); }
     catch (reason) { setError(parseFrappeErrorMsg(reason as Parameters<typeof parseFrappeErrorMsg>[0])); }
   }
   return <form onSubmit={submit} className="mt-6 space-y-5 rounded-2xl border p-6">

@@ -1,4 +1,5 @@
 import { test, expect } from "playwright/test";
+import { articleHistory, businessIsolation } from "./owner-validation.mjs";
 import { writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { execFileSync } from "node:child_process";
@@ -50,7 +51,7 @@ test("website-owner-journey", async ({ page }, testInfo) => {
     cwd: process.env.FRAPPE_BENCH_ROOT, encoding: "utf8", timeout: 60000,
   });
   const profile = JSON.parse(rawProfile.trim().split("\n").at(-1));
-  expect(profile.roles).toContain("Receptionist");
+  expect(profile.roles).toContain("Front Desk");
   expect(profile.roles).not.toContain("Organization Manager");
   managedStaff = await page.context().browser().newContext({ baseURL: process.env.PLAYWRIGHT_BASE_URL, storageState: profile.storage_state });
   const receptionist = await managedStaff.newPage();
@@ -231,9 +232,26 @@ test("website-owner-journey", async ({ page }, testInfo) => {
   await publicPage.screenshot({ path: testInfo.outputPath("website-newsletter-unsubscribe.png"), fullPage: true });
   await page.getByRole("button", { name: "Refresh delivery status", exact: true }).click();
   await expect(page.getByRole("region", { name: "Newsletter audience", exact: true })).toContainText("Unsubscribed");
+  await page.getByRole("button", { name: "Suppress reader@example.test", exact: true }).click();
+  await expect(page.getByRole("region", { name: "Newsletter audience", exact: true })).toContainText("Suppressed");
+  await publicPage.goto(`/${marker.toLowerCase()}/blog`, { waitUntil: "networkidle" });
+  const repeatedSignup = publicPage.locator('[data-newsletter-template="tena"]');
+  await repeatedSignup.getByLabel("Email address", { exact: true }).fill("reader@example.test");
+  await repeatedSignup.getByRole("checkbox").check();
+  await repeatedSignup.getByRole("button", { name: "Receive care updates", exact: true }).click();
+  await page.getByRole("button", { name: "Refresh delivery status", exact: true }).click();
+  await expect(page.getByRole("region", { name: "Newsletter audience", exact: true })).toContainText("Suppressed");
+  await page.screenshot({ path: testInfo.outputPath("website-newsletter-suppression-preserved.png"), fullPage: true });
+  await page.goto("/settings/website/content", { waitUntil: "networkidle" });
+  await page.getByRole("combobox", { name: "Website", exact: true }).selectOption({ label: marker });
+  await publicPage.setViewportSize({ width: 1440, height: 900 });
+  await articleHistory(page, publicPage, testInfo, { root: `/${marker.toLowerCase()}`, title: `${marker} Preparing for your visit`, route: "/blog/preparing-for-your-visit", prefix: "website", original: "Bring your questions", draft: "A revised private guide for this consultation." });
   await guest.close();
   await page.goto("/settings/organization-import", { waitUntil: "networkidle" });
   await page.getByRole("combobox", { name: "Organization", exact: true }).selectOption({ label: marker });
+  const templateDownload = page.waitForEvent("download");
+  await page.getByRole("link", { name: "Download workbook template", exact: true }).click();
+  expect((await templateDownload).suggestedFilename()).toMatch(/\.xlsx$/);
   await page.getByLabel("Organization workbook", { exact: true }).setInputFiles(process.env.WEBSITE_QA_BAD_WORKBOOK);
   await page.getByRole("button", { name: "Review workbook", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Correct these cells and upload again" })).toBeVisible();
@@ -261,6 +279,19 @@ test("website-owner-journey", async ({ page }, testInfo) => {
   await expect(page.getByRole("status")).toContainText("Workbook applied");
   await expect(page.getByRole("combobox", { name: "Organization", exact: true })).toHaveValue(marker + " Workbook");
   await page.screenshot({ path: testInfo.outputPath("website-workbook-new-business.png"), fullPage: true });
+  await page.goto("/settings/website", { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: `Resume ${marker}`, exact: true }).click();
+  await page.getByRole("button", { name: "content", exact: true }).click();
+  await expect(page.getByRole("group", { name: "hero", exact: true }).getByLabel("subtitle", { exact: true })).toHaveValue("Reviewed workbook website introduction.");
+  await page.screenshot({ path: testInfo.outputPath("website-workbook-draft-content.png"), fullPage: true });
+  await page.goto("/settings/website", { waitUntil: "networkidle" });
+  await page.getByRole("combobox", { name: "Business", exact: true }).selectOption({ label: marker + " Workbook" });
+  await page.getByLabel("Website name", { exact: true }).fill(marker + " Workbook");
+  await page.getByLabel("Website address", { exact: true }).fill(marker.toLowerCase() + "-workbook");
+  await page.getByRole("button", { name: "Create website draft", exact: true }).click();
+  await page.getByRole("button", { name: "content", exact: true }).click();
+  await expect(page.getByRole("group", { name: "hero", exact: true }).getByLabel("subtitle", { exact: true })).toHaveValue("Reviewed workbook website introduction.");
+  await page.screenshot({ path: testInfo.outputPath("website-workbook-starter-content.png"), fullPage: true });
   const staffSession = await receptionist.request.get("/api/method/appointment.scheduler.membership.context");
   const staffState = (await staffSession.json()).message;
   expect(staffState.selected.role).toBe("Receptionist");
@@ -284,4 +315,5 @@ test("website-owner-journey", async ({ page }, testInfo) => {
     account_created_by: "Guest invitation acceptance", role_assigned_by: "Normal owner Team UI",
   }, null, 2));
 
+  await businessIsolation(page, receptionist, testInfo, marker);
 });

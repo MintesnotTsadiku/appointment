@@ -328,7 +328,7 @@ def context():
             "organization_status": "Independent", "onboarding_type": "individual", "onboarding_complete": 1})
         if independent:
             return {**base, "state": "individual_owner", "workspaces": [], "selected": None,
-                    "landing": "/settings/website"}
+                    "landing": "/settings/independent-booking"}
         if _is_prospective_owner(user):
             state, landing = "owner_setup", "/onboarding"
         else:

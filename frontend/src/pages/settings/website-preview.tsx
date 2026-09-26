@@ -8,10 +8,10 @@ import type { PublishedSnapshot } from "@/public-experience/types";
 
 const button = "rounded-lg border px-4 py-2";
 
-export function WebsitePreview({ snapshot }: { snapshot: PublishedSnapshot }) {
+export function WebsitePreview({ snapshot, initialSurface = "landing", savedArticle = false }: { snapshot: PublishedSnapshot; initialSurface?: string; savedArticle?: boolean }) {
   const [mode, setMode] = useState<"light" | "dark">("light");
   const [mobile, setMobile] = useState(false);
-  const [surface, setSurface] = useState("landing");
+  const [surface, setSurface] = useState(initialSurface);
   const template = getTemplatePackage(snapshot.compiledDesign.layout.rendererKey);
   const theme = buildThemeAttributes({ ...getFallbackPublicUIConfig("en"), compiledDesign: snapshot.compiledDesign }, mode, false);
   const kind = ["blog", "article"].includes(surface) ? "blog" : "gallery";
@@ -23,7 +23,7 @@ export function WebsitePreview({ snapshot }: { snapshot: PublishedSnapshot }) {
     rootStyle: theme.variables as CSSProperties };
 
   return <section aria-label="Website live preview" className="space-y-4">
-    <p>Private preview. Article and gallery examples show the layout and are never published. Booking and signup remain inactive here.</p>
+    <p>{savedArticle ? "Private preview of your saved article. Other surfaces show layout examples. Booking and signup remain inactive here." : "Private preview. Article and gallery examples show the layout and are never published. Booking and signup remain inactive here."}</p>
     <div className="flex flex-wrap gap-3">
       <button className={button} onClick={() => setMode(mode === "light" ? "dark" : "light")}>Preview {mode === "light" ? "dark" : "light"} mode</button>
       <button className={button} onClick={() => setMobile(!mobile)}>Preview {mobile ? "desktop" : "mobile"}</button>

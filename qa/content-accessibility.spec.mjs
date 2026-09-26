@@ -23,6 +23,7 @@ for (const key of ["selam", "bloom", "meron", "abugida", "tena"]) {
         ]) {
           await page.goto(path, { waitUntil: "networkidle" });
           await expect(page.locator("h1").first()).toBeVisible();
+          if (surface === "scheduler") await page.waitForFunction(() => Array.from(document.querySelectorAll('[data-booking-branded="true"] [style], [data-booking-branded="true"]')).every(element => !element.style.opacity || Number(element.style.opacity) === 1));
           await page.addScriptTag({ path: process.env.CONTENT_QA_AXE_PATH });
           const audit = await page.evaluate(async () => {
             const result = await axe.run(document, { runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"] } });

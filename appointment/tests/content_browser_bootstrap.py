@@ -89,12 +89,12 @@ def enqueue_smoke(update_baseline=0, suite='content-runtime', scenarios=None):
     untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '--', 'appointment', 'frontend/src'], cwd=checkout).decode().splitlines()
     source_hash = hashlib.sha256(changes + b''.join((checkout / path).read_bytes() for path in sorted(untracked))).hexdigest()[:12]
     suite_hash = hashlib.sha256(b''.join((checkout / path).read_bytes() for path in
-        (f'qa/{suite}.spec.mjs', f'qa/{suite}.config.mjs', 'appointment/tests/content_browser_suite.py'))).hexdigest()[:12]
+        (f'qa/{suite}.spec.mjs', f'qa/{suite}.config.mjs', 'qa/owner-validation.mjs', 'appointment/tests/content_browser_suite.py'))).hexdigest()[:12]
     request = {'schema_version':'browser-qa-run/v1', 'app':'appointment', 'suite':suite,
         'target':{'site':site, 'base_url':'http://127.0.0.11:34340', 'environment':'development'},
         'scenarios':scenarios or [], 'mode':'deterministic', 'cleanup_policy':'always', 'artifact_policy':'retain',
         'capture':{'screenshots':'on', 'trace':'on', 'video':'off'},
-        'browser_account':account, 'timeout_seconds':1800 if suite in ('content-templates', 'content-accessibility') else 360, 'request_source':'bench',
+        'browser_account':account, 'timeout_seconds':1800 if suite in ('content-templates', 'content-accessibility') else 720, 'request_source':'bench',
         'update_baseline':bool(int(update_baseline)), 'source_version':f'{revision}+source-{source_hash}+qa-{suite_hash}'}
     return enqueue_browser_qa_request(request)
 
@@ -169,14 +169,26 @@ def export_website(name):
         target = destination / source.name
         shutil.copyfile(source, target)
         inventory.append({'file': source.name, 'sha256': hashlib.sha256(target.read_bytes()).hexdigest()})
-    if len(inventory) != 29:
+    if len(inventory) != 39:
         raise RuntimeError('Website journey screenshot inventory is incomplete')
+    proof_keys = {
+        "website-staff-validation.json": {"managed_browser_account", "managed_browser_session", "roles", "user", "scope", "cross_business_workspace_count", "publication_denied", "account_created_by", "role_assigned_by"},
+        "website-isolation-validation.json": {"separate_managed_owner_profile", "business_created_by", "denied_cross_business_requests", "denied_entitlement_requests", "limits_enforced", "immutable_releases_preserved", "entitlement_changes_by"},
+    }
+    for filename, keys in proof_keys.items():
+        paths = list((Path('/tmp/agent_browser_qa') / name / 'attempt-1/playwright').rglob(filename))
+        if len(paths) != 1:
+            raise RuntimeError('The managed staff or isolation proof is missing')
+        proof = json.loads(paths[0].read_text())
+        if set(proof) != keys:
+            raise RuntimeError('The public proof contains unexpected fields')
+        (destination / filename).write_text(json.dumps(proof, indent=2) + '\n')
     result = {'run': name, 'site': frappe.local.site, 'status': doc.status, 'source_version': doc.source_version,
         'scenario_summary': json.loads(doc.scenario_summary_json or '{}'),
         'baseline_changed_count': doc.baseline_changed_count,
         'cleanup': json.loads(doc.cleanup_json or '{}'), 'audit': json.loads(doc.audit_json or '{}'),
         'roles': sorted(frappe.get_roles(USER)), 'artifacts': inventory,
-        'scope': 'Core website setup, workbook creation/import, and local newsletter journey for one normal organization owner using Tena. Full template, expanded setup/import, fresh-site, and release-readiness gates remain pending.'}
+        'scope': 'Normal owner setup and workbook import, managed receptionist scope, second-business isolation, expired entitlements and limits, private preview/publish/rollback, local newsletter delivery and suppression. Template and recovery journeys are recorded separately.'}
     (destination / 'validation.json').write_text(json.dumps(result, indent=2)+'\n')
     return {'run': name, 'screenshots': len(inventory), 'destination': str(destination), 'audit': result['audit']}
 
@@ -259,3 +271,53 @@ def export_accessibility(name):
               'scope': 'Seventy public surfaces: automated WCAG A/AA violations and local development navigation budget. Incomplete checks require manual review; this does not certify full accessibility or production performance.'}
     (destination / 'validation.json').write_text(json.dumps(result, indent=2) + '\n')
     return {'run': name, 'public_reports': len(reports), 'destination': str(destination)}
+
+
+def export_individual(name):
+    return _export_exact_journey(name, "individual-owner", "solo-", 14,
+        "fresh-site/independent-owner", "Independent owner: scheduling before Website setup, explicit publication, guest booking, article and gallery publication, saved preview, and rollback.")
+
+
+def export_recovery(name, stage="candidate"):
+    if stage not in {"candidate", "rollback", "upgrade"} or frappe.local.site != "meet-beta-content-restore.localhost":
+        raise RuntimeError("Choose an isolated recovery drill stage")
+    return _export_exact_journey(name, "content-recovery", "recovered-", 16,
+        "content-recovery/" + stage, "Restored public routes, actual media delivery, and retained guest unsubscribe/suppression state.")
+
+
+def _export_exact_journey(name, suite, prefix, count, folder, scope):
+    import shutil
+
+    if frappe.local.site not in ALLOWED_SITES:
+        raise RuntimeError("Evidence export requires the isolated acceptance runtime")
+    doc = frappe.get_doc("Browser QA Run", name)
+    summary = json.loads(doc.scenario_summary_json or "{}")
+    audit = json.loads(doc.audit_json or "{}")
+    if (doc.suite_id != suite or doc.status != "Passed" or doc.baseline_changed_count
+            or summary.get("failed") or summary.get("flaky") or summary.get("passed") != 1):
+        raise RuntimeError("Only a complete strict passing journey can be exported")
+    root = Path("/tmp/agent_browser_qa") / name
+    sources = []
+    for artifact in json.loads(doc.artifact_files_json or "[]"):
+        source = Path(artifact.get("path", "")).resolve()
+        if artifact.get("kind") != "screenshot" or not source.name.startswith(prefix):
+            continue
+        if root not in source.parents or source.suffix != ".png":
+            raise RuntimeError("Capture is outside the exact managed run")
+        sources.append(source)
+    if len(sources) != count or len({source.name for source in sources}) != count:
+        raise RuntimeError("The authored journey capture inventory is incomplete")
+    destination = Path(frappe.get_app_path("appointment", "..")).resolve() / "qa/evidence" / folder
+    destination.mkdir(parents=True, exist_ok=True)
+    inventory = []
+    for source in sources:
+        target = destination / source.name
+        shutil.copyfile(source, target)
+        inventory.append({"file": source.name, "sha256": hashlib.sha256(target.read_bytes()).hexdigest()})
+    result = {"run": name, "site": frappe.local.site, "status": doc.status,
+              "source_version": doc.source_version, "scenario_summary": summary,
+              "baseline_changed_count": doc.baseline_changed_count, "audit": audit,
+              "cleanup": json.loads(doc.cleanup_json or "{}"), "roles": sorted(frappe.get_roles(USER)),
+              "scope": scope, "artifacts": inventory}
+    (destination / "validation.json").write_text(json.dumps(result, indent=2) + "\n")
+    return {"run": name, "screenshots": count, "destination": str(destination), "audit": audit}

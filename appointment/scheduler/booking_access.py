@@ -47,6 +47,11 @@ def can_access(doc, user=None):
     if user == "Guest" or not frappe.db.get_value("User", user, "enabled"):
         return False
     org = doc.get("organization") or frappe.db.get_value("Service", doc.get("service"), "organization")
+    if not org and doc.get("provider") in providers(user):
+        from appointment.scheduler.independent import matches
+
+        return matches(frappe.get_doc("Service", doc.service), frappe.get_doc("Location", doc.location),
+                       frappe.get_doc("Provider", doc.provider))
     if org in managed_organizations(user):
         return True
     if _within_reception_scope(doc, reception_scope(user), org):
@@ -103,6 +108,9 @@ def appointment_query(user=None):
             where membership.parent=`tabAppointment`.provider and membership.parenttype='Provider'
             and membership.organization=`tabAppointment`.organization and membership.status='Active'))"""
         )
+    if own:
+        own_names = ",".join(frappe.db.escape(x) for x in own)
+        parts.append(f"(coalesce(`tabAppointment`.organization, '')='' and `tabAppointment`.provider in ({own_names}) and exists (select 1 from `tabService` s where s.name=`tabAppointment`.service and s.independent_provider=`tabAppointment`.provider and coalesce(s.organization, '')='') and exists (select 1 from `tabLocation` l where l.name=`tabAppointment`.location and l.independent_provider=`tabAppointment`.provider and coalesce(l.organization, '')=''))")
     return "(" + " or ".join(parts) + ")" if parts else "1=0"
 
 
@@ -150,6 +158,10 @@ def config_permission(doc, user=None, permission_type="read", ptype=None, **kwar
 
         return (doc.flags.workspace_setup is _SETUP_CREATE and doc.owner_user == user
                 and "Organization Manager" in frappe.get_roles(user))
+    from appointment.scheduler.independent import permits
+
+    if permits(doc, user):
+        return True
     org = config_organization(doc)
     if permission_type in ("read", "select", "print", "export", "report"):
         if doc.doctype == "Provider":
@@ -165,6 +177,11 @@ def config_permission(doc, user=None, permission_type="read", ptype=None, **kwar
 
 def validate_config(doc, method=None):
     from appointment.onboarding import _ONBOARDING_UPDATE
+    from appointment.scheduler import independent
+
+    independent.validate(doc)
+    if doc.flags.get("independent_setup") is independent._SETUP and independent.permits(doc, frappe.session.user):
+        return
 
     # Only the self-onboarding endpoint can supply this in-memory capability.
     # It controls all changed fields and cannot assign business membership.
@@ -199,13 +216,13 @@ def config_query(doctype, user=None):
     if user == "Administrator":
         return ""
     orgs = business_scope(user)
-    if not orgs:
-        return "1=0"
-    names = ",".join(frappe.db.escape(x) for x in orgs)
+    own = providers(user)
+    names = ",".join(frappe.db.escape(x) for x in orgs) or "NULL"
     if doctype == "Organization":
         return f"`tabOrganization`.name in ({names})"
+    independent = ",".join(frappe.db.escape(x) for x in own) or "NULL"
     if doctype == "EventType":
-        return f"`tabEventType`.service in (select name from `tabService` where organization in ({names}))"
+        return f"(`tabEventType`.service in (select name from `tabService` where organization in ({names})) or exists (select 1 from `tabService` s inner join `tabLocation` l on l.name=`tabEventType`.location where s.name=`tabEventType`.service and coalesce(s.organization, '')='' and coalesce(l.organization, '')='' and s.independent_provider in ({independent}) and s.independent_provider=`tabEventType`.provider and l.independent_provider=s.independent_provider))"
     if doctype == "Walk In":
         return f"`tabWalk In`.location in (select name from `tabLocation` where organization in ({names}))"
     if doctype == "Provider":
@@ -221,6 +238,8 @@ def config_query(doctype, user=None):
                 + "))"
             )
         return "(" + " or ".join(pieces) + ")"
+    if doctype in ("Service", "Location"):
+        return f"(`tab{doctype}`.organization in ({names}) or (coalesce(`tab{doctype}`.organization, '')='' and `tab{doctype}`.independent_provider in ({independent})))"
     return f"`tab{doctype}`.organization in ({names})"
 
 

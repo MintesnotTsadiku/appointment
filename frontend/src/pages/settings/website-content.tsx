@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 
 import { callGet, callMethod } from "@/public-experience/api";
 import WebsiteGallery from "./website-gallery";
+import { WebsitePreview } from "./website-preview";
+import type { ContentDetail } from "@/public-experience/contentContract";
+import type { PublishedSnapshot } from "@/public-experience/types";
 
 interface Site { name: string; site_title: string; slug: string }
 interface Draft { name: string; source_doctype: string; source_name: string; title: string; status: string; last_release?: string }
@@ -25,7 +28,7 @@ export default function WebsiteContent() {
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [busy, setBusy] = useState(false);
-  const [preview, setPreview] = useState("");
+  const [preview, setPreview] = useState<PublishedSnapshot | null>(null);
 
   useEffect(() => {
     callGet<{ sites: Site[] }>("appointment.public_experience.api.list_public_sites").then((result) => {
@@ -55,7 +58,7 @@ export default function WebsiteContent() {
   }
 
   function adopt(next: Article) {
-    setArticle(next); setTitle(next.title); setBody(next.body); setSummary(next.summary); setPreview("");
+    setArticle(next); setTitle(next.title); setBody(next.body); setSummary(next.summary); setPreview(null);
   }
 
   const root = sites.find((row) => row.name === site)?.slug;
@@ -77,13 +80,17 @@ export default function WebsiteContent() {
         setNotice("Article draft saved.");
       })}>Save article draft</button>
       {article && <><button className={button} disabled={busy} onClick={() => void run(async () => {
-        const result = await callMethod<{ projection: { blocks?: unknown[] }; content?: { blocks?: unknown[] } }>(api + "preview_article", { ownership: article.ownership });
-        const blocks = result.projection?.blocks || result.content?.blocks || [];
-        setPreview(blocks.map((block) => { const row = block as { text?: string; html?: string; items?: string[] }; return row.text || row.html?.replace(/<[^>]+>/g, "") || row.items?.join("\n") || ""; }).join("\n\n"));
+        const result = await callMethod<{ detail: ContentDetail }>(api + "preview_article", { ownership: article.ownership });
+        const context = await callGet<{ sites: Array<{ site: string; draftVersion: number }> }>("appointment.public_experience.api.website_setup_context");
+        const draft = context.sites.find((row) => row.site === site);
+        if (!draft) throw new Error("Reload your website before previewing its article.");
+        const snapshot = await callMethod<PublishedSnapshot>("appointment.public_experience.api.preview_website_setup", { site, expected_version: draft.draftVersion });
+        if (!snapshot.previewContent) throw new Error("This website preview is unavailable. Reload before retrying.");
+        setPreview({ ...snapshot, previewContent: { ...snapshot.previewContent, article: result.detail } });
       })}>Preview saved article</button><button className={button} disabled={busy} onClick={() => void run(async () => {
         await callMethod(api + "publish_article", { ownership: article.ownership, expected_modified: article.modified }); setNotice("Article published.");
       })}>Publish article</button><button className={button} disabled={busy} onClick={() => { setArticle(null); setTitle(""); setSlug(""); setBody(""); setSummary(""); }}>New article</button></>}
-      </div>{preview && <section aria-label="Article preview"><h3>Saved article preview</h3><pre className="whitespace-pre-wrap rounded-xl border p-4">{preview}</pre></section>}
+      </div>{preview && <section aria-label="Article preview"><h3>Saved article preview</h3><WebsitePreview snapshot={preview} initialSurface="article" savedArticle /></section>}
     </section>
     {site && <WebsiteGallery key={site} site={site} onSaved={refresh} />}
     <section aria-label="Publication history"><h2>Publication history</h2>{releases.map((row) => <div key={row.name} className="flex flex-wrap items-center gap-3 border-b py-3"><a href={`/${root}${row.route}`}>{row.route}</a><span>{row.status} · <time dateTime={row.published_at}>{row.published_at}</time></span><button className={button} disabled={busy || row.status !== "Active"} onClick={() => void run(async () => { await callMethod(api + "withdraw_release", { release: row.name }); setNotice("Publication withdrawn."); })}>Withdraw {row.route}</button><button className={button} disabled={busy || row.status === "Active"} onClick={() => void run(async () => { await callMethod(api + "rollback_release", { release: row.name }); setNotice("Previous publication restored."); })}>Restore {row.route}</button></div>)}</section>

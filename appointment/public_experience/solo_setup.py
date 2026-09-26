@@ -38,4 +38,4 @@ def create(business_name, timezone="Africa/Addis_Ababa"):
     finally:
         frappe.flags.syncing_booking_urls = previous
     membership.grant_roles(user, ("Provider",))
-    return {"provider": provider.name, "business_name": provider.provider_name, "landing": "/settings/website"}
+    return {"provider": provider.name, "business_name": provider.provider_name, "landing": "/settings/independent-booking"}

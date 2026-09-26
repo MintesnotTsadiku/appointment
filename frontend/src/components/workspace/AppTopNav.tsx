@@ -19,6 +19,15 @@ export function AppTopNav({ active }: { active?: 'home' | 'analytics' | 'recepti
   const navigate = useNavigate();
   const location = useLocation();
 
+  if (session?.authenticated && session.state === 'individual_owner') {
+    return <header className="flex flex-wrap items-center gap-6 border-b px-5 py-4" aria-label="Independent business navigation">
+      <Link to="/settings/independent-booking">Booking setup</Link><Link to="/calendar">Schedule</Link>
+      <Link to="/settings/website">Website setup</Link><Link to="/settings/website/content">Website content</Link>
+      <Link to="/settings/website/newsletter">Newsletter</Link>
+      <Button variant="ghost" onClick={() => void logout().then(() => navigate('/login', { replace: true }))}>Sign out</Button>
+    </header>;
+  }
+
   if (!session?.authenticated || (session.state !== 'workspace' && session.state !== 'administrator')) {
     return null;
   }

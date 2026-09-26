@@ -1,6 +1,7 @@
 """Exact cleanup for a new independent owner's managed browser journey."""
 
 import json
+from pathlib import Path
 
 import frappe
 
@@ -18,7 +19,7 @@ class SoloBrowserFixture(WebsiteBrowserFixture):
         return {"ok": True, "fixture_identity": {"marker": marker, "user": USER, "site": frappe.local.site}}
 
     def provide_execution_context(self, *, fixture_identity, request):
-        return {"environment": {"SOLO_QA_MARKER": fixture_identity["marker"]}}
+        return {"environment": {"SOLO_QA_MARKER": fixture_identity["marker"], "SOLO_QA_IMAGE": str(Path(frappe.get_app_path("appointment")) / "public/brand-experience/support/selam/scene-1.webp")}}
 
     def cleanup(self, *, fixture_identity, request):
         from frappe.utils.password import delete_all_passwords_for
@@ -46,6 +47,14 @@ class SoloBrowserFixture(WebsiteBrowserFixture):
             for outbox in frappe.get_all("Public Experience Outbox", fields=["name", "payload_json"]):
                 if json.loads(outbox.payload_json or "{}").get("site") in sites:
                     self._delete("Public Experience Outbox", [outbox.name])
+            for file in frappe.get_all("File", filters={"attached_to_doctype": "Public Site", "attached_to_name": ["in", sites or ["__none__"]]}, pluck="name"):
+                frappe.delete_doc("File", file, force=True, ignore_permissions=True)
+            appointments = frappe.get_all("Appointment", filters={"provider": provider}, pluck="name")
+            self._delete("Version", frappe.get_all("Version", filters={"ref_doctype": "Appointment", "docname": ["in", appointments or ["__none__"]]}, pluck="name"))
+            self._delete("Appointment", appointments)
+            self._delete("EventType", frappe.get_all("EventType", filters={"provider": provider}, pluck="name"))
+            self._delete("Service", frappe.get_all("Service", filters={"independent_provider": provider}, pluck="name"))
+            self._delete("Location", frappe.get_all("Location", filters={"independent_provider": provider}, pluck="name"))
             self._delete("Public Site", sites)
             self._delete("Brand Revision", frappe.get_all("Brand Revision", filters={"brand_profile": ["in", profiles or ["__none__"]]}, pluck="name"))
             self._delete("Brand Profile", profiles)
@@ -60,6 +69,9 @@ class SoloBrowserFixture(WebsiteBrowserFixture):
             "Newsletter Sender Identity", "Business Newsletter Campaign", "Local Email Message", "Brand Profile")}
         counts["Provider"] = frappe.db.count("Provider", {"user": USER, "provider_name": marker})
         counts["Public Site"] = frappe.db.count("Public Site", {"slug": marker.lower()})
+        counts.update({doctype: frappe.db.count(doctype, {"independent_provider": marker}) for doctype in ("Service", "Location")})
+        counts["Appointment"] = frappe.db.count("Appointment", {"provider": marker})
+        counts["EventType"] = frappe.db.count("EventType", {"provider": marker})
         counts["Organization"] = frappe.db.count("Organization")
         count = sum(counts.values())
         return {"ok": count == 0, "remaining_record_count": count, "remaining": counts,

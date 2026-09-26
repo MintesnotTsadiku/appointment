@@ -59,7 +59,7 @@ def suites():
             'fixture_adapter': 'appointment.tests.recovery_browser_fixture.adapter',
             'scenarios': [{'scenario_id': 'recovered-public-routes-and-consent', 'title': 'Recovered public routes and consent',
                 'page_family': 'content-recovery', 'credential_capability': 'frappe.role:Provider',
-                'mutation_level': 'consent', 'playwright_pattern': 'recovered-public-routes-and-consent',
+                'mutation_level': 'fixture-only', 'playwright_pattern': 'recovered-public-routes-and-consent',
                 'required_artifacts': ['screenshot']}]}
         return [recovery]
     return [runtime, website, templates, accessibility] if site == SITE else [runtime, website, individual]

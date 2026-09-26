@@ -23,7 +23,7 @@ REQUIRED_SITE_FRAGMENT = "feat-content-publishing"
 
 
 def require_target():
-    if not frappe.conf.get("worktree_development") or REQUIRED_SITE_FRAGMENT not in frappe.local.site:
+    if not frappe.conf.get("worktree_development") or (REQUIRED_SITE_FRAGMENT not in frappe.local.site and frappe.local.site != "meet-beta-content-fresh-b.localhost"):
         frappe.throw("This suite is restricted to the isolated content-publishing implementation site.")
 
 
@@ -309,8 +309,13 @@ class ContentReleaseAcceptance(unittest.TestCase):
 
     def test_preview_is_session_bound(self):
         self._as("A")
+        before = frappe.db.count("Published Content Release")
         preview = releases.preview_article(self.state["ownership"]["A"])
         self.assertTrue(preview["token"])
+        self.assertEqual(preview["detail"]["projection"], preview["projection"])
+        self.assertEqual(preview["detail"]["publishedAt"], "")
+        self.assertEqual(preview["detail"]["releaseHash"], "private-draft")
+        self.assertEqual(frappe.db.count("Published Content Release"), before)
         self._as("A")
         served = releases.consume_article_preview(preview["token"])
         self.assertIsNotNone(served)

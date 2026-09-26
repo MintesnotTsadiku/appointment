@@ -31,7 +31,11 @@ for (const key of ["selam", "bloom", "meron", "abugida", "tena"]) {
           await expect.poll(() => image.evaluate((element) => element.complete && element.naturalWidth > 0)).toBe(true);
         }
         await page.evaluate(() => scrollTo(0, 0));
-        await page.screenshot({ path: testInfo.outputPath(`${key}-${width}-${mode}-${surface}.png`), fullPage: true });
+        await page.evaluate(() => document.fonts.ready);
+        if (surface === "scheduler") await page.waitForFunction(() => Array.from(document.querySelectorAll('[data-booking-branded="true"] [style], [data-booking-branded="true"]')).every(element => !element.style.opacity || Number(element.style.opacity) === 1));
+        await page.mouse.move(0, 0);
+        await page.evaluate(() => document.activeElement?.blur());
+        await page.screenshot({ path: testInfo.outputPath(`${key}-${width}-${mode}-${surface}.png`), fullPage: true, animations: "disabled" });
       }
       await page.goto(row.root + "/blog", { waitUntil: "networkidle" });
       const signup = page.locator(`[data-newsletter-template="${key}"]`);
@@ -40,7 +44,7 @@ for (const key of ["selam", "bloom", "meron", "abugida", "tena"]) {
       await signup.screenshot({ path: testInfo.outputPath(`${key}-${width}-${mode}-newsletter.png`) });
       await page.goto(row.root + "/blog/this-article-does-not-exist", { waitUntil: "networkidle" });
       await expect(page.getByRole("heading", { name: "Content unavailable", exact: true })).toBeVisible();
-      await page.screenshot({ path: testInfo.outputPath(`${key}-${width}-${mode}-unavailable.png`), fullPage: true });
+      await page.screenshot({ path: testInfo.outputPath(`${key}-${width}-${mode}-unavailable.png`), fullPage: true, animations: "disabled" });
       // Controlled API empty/error responses validate template states without changing seeded publications.
       await page.route("**/api/method/appointment.content.public_api.get_article_index?*", (route) => route.fulfill({
         status: 200, contentType: "application/json", body: JSON.stringify({ message: { articles: [] } }),
@@ -48,25 +52,25 @@ for (const key of ["selam", "bloom", "meron", "abugida", "tena"]) {
       await page.goto(row.root + "/blog", { waitUntil: "networkidle" });
       await expect(page.locator(`[data-content-template="${key}"]`)).toBeVisible();
       await expect(page.locator("main")).toContainText("Check back");
-      await page.screenshot({ path: testInfo.outputPath(`${key}-${width}-${mode}-simulated-empty.png`), fullPage: true });
+      await page.screenshot({ path: testInfo.outputPath(`${key}-${width}-${mode}-simulated-empty.png`), fullPage: true, animations: "disabled" });
       await page.unroute("**/api/method/appointment.content.public_api.get_article_index?*");
       await page.route("**/api/method/appointment.content.public_api.get_gallery_index?*", (route) => route.fulfill({
         status: 200, contentType: "application/json", body: JSON.stringify({ message: { galleries: [] } }),
       }));
       await page.goto(row.root + "/gallery", { waitUntil: "networkidle" });
       await expect(page.locator("main")).toContainText("Check back");
-      await page.screenshot({ path: testInfo.outputPath(`${key}-${width}-${mode}-simulated-gallery-empty.png`), fullPage: true });
+      await page.screenshot({ path: testInfo.outputPath(`${key}-${width}-${mode}-simulated-gallery-empty.png`), fullPage: true, animations: "disabled" });
       await page.unroute("**/api/method/appointment.content.public_api.get_gallery_index?*");
       await page.route("**/api/method/appointment.content.public_api.get_gallery_index?*", (route) => route.fulfill({
         status: 503, contentType: "application/json", body: JSON.stringify({ message: "Synthetic unavailable response" }),
       }));
       await page.goto(row.root + "/gallery", { waitUntil: "networkidle" });
       await expect(page.getByRole("heading", { name: "Content unavailable", exact: true })).toBeVisible();
-      await page.screenshot({ path: testInfo.outputPath(`${key}-${width}-${mode}-simulated-error.png`), fullPage: true });
+      await page.screenshot({ path: testInfo.outputPath(`${key}-${width}-${mode}-simulated-error.png`), fullPage: true, animations: "disabled" });
       await page.unroute("**/api/method/appointment.content.public_api.get_gallery_index?*");
       await page.goto(row.root + "/gallery/this-collection-does-not-exist", { waitUntil: "networkidle" });
       await expect(page.getByRole("heading", { name: "Content unavailable", exact: true })).toBeVisible();
-      await page.screenshot({ path: testInfo.outputPath(`${key}-${width}-${mode}-collection-unavailable.png`), fullPage: true });
+      await page.screenshot({ path: testInfo.outputPath(`${key}-${width}-${mode}-collection-unavailable.png`), fullPage: true, animations: "disabled" });
       await page.route("**/api/method/appointment.content.newsletter.public_api.signup_status?*", (route) => route.fulfill({
         status: 200, contentType: "application/json", body: JSON.stringify({ message: { available: false } }),
       }));

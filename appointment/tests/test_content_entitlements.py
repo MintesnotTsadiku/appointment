@@ -19,7 +19,7 @@ REQUIRED_SITE_FRAGMENT = "feat-content-publishing"
 
 
 def require_target():
-    if not frappe.conf.get("worktree_development") or REQUIRED_SITE_FRAGMENT not in frappe.local.site:
+    if not frappe.conf.get("worktree_development") or (REQUIRED_SITE_FRAGMENT not in frappe.local.site and frappe.local.site not in ("meet-beta-content-fresh-a.localhost", "meet-beta-content-fresh-b.localhost")):
         frappe.throw(
             "This suite is restricted to the isolated content-publishing implementation site."
         )

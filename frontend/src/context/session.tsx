@@ -82,7 +82,7 @@ export function isAllowedDestination(path: string | null | undefined, session: S
     return false;
   }
   const clean = path.split('?')[0];
-  if (session.state === 'individual_owner') return clean === '/settings/website' || clean.startsWith('/settings/website/');
+  if (session.state === 'individual_owner') return ['/settings/independent-booking', '/calendar'].includes(clean) || clean === '/settings/website' || clean.startsWith('/settings/website/');
   if (!ALLOWED_PREFIXES.some((prefix) => clean === prefix || clean.startsWith(prefix + '/'))) return false;
   if (session.state === 'administrator') return true;
   const role = session.selected?.role;

@@ -123,6 +123,14 @@ def get_public_experience_snapshot(locale: str | None = None, public_path: str |
         slug = frappe.db.get_value("Organization", context.organization, "slug")
         if slug:
             booking_path = f"/schedule/org/{slug}"
+    elif context.provider:
+        if frappe.db.get_value("Provider", context.provider, "enable_public_booking"):
+            event = frappe.db.get_value("EventType", {"provider": context.provider, "is_active": 1}, "name")
+            if event:
+                from appointment.scheduler.booking import offering
+
+                offering(event, public=True)
+                booking_path = f"/schedule/individual/{event}"
     return {
         "contract": "appointment-public-snapshot.v2",
         "releaseHash": context.release_hash,

@@ -184,7 +184,7 @@ def readiness(site, expected_version):
         offerings = [row for row in workspace.overview() if row["organization"] == doc.organization]
         booking_ready = bool(business.enable_public_booking and any(row["published"] for row in offerings))
     else:
-        booking_ready = bool(frappe.db.exists("EventType", {"provider": doc.provider, "is_active": 1}))
+        booking_ready = bool(frappe.db.get_value("Provider", doc.provider, "enable_public_booking") and frappe.db.exists("EventType", {"provider": doc.provider, "is_active": 1}))
     checks.append({"check": "booking", "ok": booking_ready,
                    "remediation": None if booking_ready else "Create and publish an appointment offering in Business settings."})
     for capability in json.loads(doc.website_setup_json or "{}").get("features", []):
@@ -251,13 +251,14 @@ def prefill_sections(scope, title, recipe, preferences=None):
     for field in ("phone", "email"):
         if business.get(field):
             content["contact"][field] = business.get(field)
-    if scope["organization"]:
-        services = frappe.get_all("Service", filters={"organization": scope["organization"], "is_active": 1},
+    operational_owner = {"organization": scope["organization"]} if scope["organization"] else {"independent_provider": scope["provider"], "organization": ["is", "not set"]}
+    if scope["organization"] or scope["provider"]:
+        services = frappe.get_all("Service", filters={**operational_owner, "is_active": 1},
                                   fields=["name", "service_name", "description", "duration", "price"], limit=24)
         content["services"]["items"] = [{"id": row.name, "name": text(row.service_name),
                                           "durationMinutes": row.duration, "price": row.price, "currency": "ETB",
                                           **({"summary": text(row.description)} if row.description else {})} for row in services]
-        locations = frappe.get_all("Location", filters={"organization": scope["organization"], "is_active": 1},
+        locations = frappe.get_all("Location", filters={**operational_owner, "is_active": 1},
                                    fields=["name", "location_name", "address_line_1", "phone"], order_by="location_name", limit=12)
         for location in locations:
             if not location.address_line_1:

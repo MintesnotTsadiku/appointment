@@ -6,7 +6,7 @@
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
-  "field_order": [
+ "field_order": [
   "provider_name",
   "full_name",
   "display_name",
@@ -47,7 +47,8 @@
   "locations",
   "Section Break-6",
   "use_default_hours",
-  "opening_hours"
+  "opening_hours",
+  "enable_public_booking"
  ],
  "fields": [
   {
@@ -311,6 +312,13 @@
    "label": "Opening Hours",
    "options": "Opening Hours",
    "description": "Provider-specific availability. Multiple time ranges per day allowed (for breaks). Must be within Service and Location hours."
+  },
+  {
+   "fieldname": "enable_public_booking",
+   "fieldtype": "Check",
+   "label": "Enable independent public booking",
+   "default": "0",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,

@@ -427,7 +427,10 @@ def preview_article(ownership, locale: str | None = None) -> dict:
         frappe.cache.set_value(f"{_PREVIEW_PREFIX}{token}", payload, expires_in_sec=PREVIEW_TTL_SECONDS)
     except Exception:
         pass
-    return {"token": token, "expiresAt": str(expires_at), "route": route, "projection": projection}
+    detail = {"route": route, "locale": locale or "en", "releaseHash": "private-draft",
+              "templateCompatVersion": TEMPLATE_COMPAT_VERSION, "publishedAt": "",
+              "projection": projection, "hero": built["hero"], "seo": projection.get("seo") or {}}
+    return {"token": token, "expiresAt": str(expires_at), "route": route, "projection": projection, "detail": detail}
 
 
 def preview_gallery_collection(ownership, locale: str | None = None) -> dict:

@@ -10,6 +10,7 @@
   "location_name",
   "is_active",
   "organization",
+  "independent_provider",
   "Section Break-1",
   "address_line_1",
   "address_line_2",
@@ -130,6 +131,14 @@
    "fieldtype": "Table",
    "label": "Holidays",
    "options": "Location Holiday"
+  },
+  {
+   "fieldname": "independent_provider",
+   "fieldtype": "Link",
+   "options": "Provider",
+   "label": "Independent business owner",
+   "description": "Exclusive provider business owner. Must be empty for organization records.",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,

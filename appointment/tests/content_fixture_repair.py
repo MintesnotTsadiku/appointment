@@ -43,3 +43,46 @@ def run():
     adapter._delete("Provider", providers)
     frappe.db.commit()
     return {"known_fixture_sites_removed": len(sites), "known_fixture_providers_removed": len(providers), "remaining": purge_markers()}
+
+
+
+def repair_owned_booking():
+    """Remove the exact failed HTTP fixture; refuse any booking activity."""
+    from appointment.tests import owned_booking_fixtures
+
+    if (frappe.local.site != "meet-beta-content-fresh-b.localhost"
+            or not frappe.conf.worktree_development or frappe.session.user != "Administrator"):
+        raise RuntimeError("Only the isolated Fresh B operator may repair this fixture")
+    organizations = frappe.get_all("Organization", filters={
+        "organization_name": ["like", "OWN-% Business A"], "owner_user": "Administrator"},
+        fields=["name", "organization_name"])
+    for organization in organizations:
+        marker = organization.organization_name.removesuffix(" Business A")
+        if not re.fullmatch(r"OWN-[A-Za-z0-9]{8}", marker):
+            raise RuntimeError("Unexpected fixture marker")
+        state = {"created": [], "businesses": []}
+        for suffix in ("A", "B"):
+            user = f"{marker.lower()}-{suffix.lower()}@example.test"
+            name = marker + " Business " + suffix
+            if frappe.db.get_value("Organization", name, "owner_user") != "Administrator":
+                raise RuntimeError("Unexpected fixture owner")
+            provider = frappe.db.get_value("Provider", {"provider_name": marker + " Provider " + suffix,
+                                                       "user": user}, "name")
+            service = frappe.db.get_value("Service", {"service_name": marker + " Consultation " + suffix,
+                                                     "organization": name}, "name")
+            event = frappe.db.get_value("EventType", {"service": service, "provider": provider,
+                                                     "event_type_name": marker + " Offering " + suffix}, "name")
+            location = marker + " Location " + suffix
+            if not all((provider, service, event)):
+                raise RuntimeError("The exact fixture is incomplete")
+            if frappe.db.count("Appointment", {"organization": name}):
+                raise RuntimeError("Preserve the fixture's booking activity for investigation")
+            state["businesses"].append({"org": name})
+            state["created"].extend([["User", user], ["Organization", name], ["Provider", provider],
+                                     ["Location", location], ["Service", service], ["EventType", event]])
+        customer = marker.lower() + "-customer@example.test"
+        if frappe.db.get_value("User", customer, "first_name") != "Synthetic Customer":
+            raise RuntimeError("Unexpected fixture customer")
+        state["created"].append(["User", customer])
+        owned_booking_fixtures.cleanup(state)
+    return {"exact_interrupted_fixtures_removed": len(organizations)}

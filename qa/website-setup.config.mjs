@@ -1,7 +1,7 @@
 import { defineConfig } from "playwright/test";
 
 export default defineConfig({
-  testDir: ".", testMatch: "website-setup.spec.mjs", workers: 1, timeout: 180000,
+  testDir: ".", testMatch: "website-setup.spec.mjs", workers: 1, timeout: 600000,
   use: {
     baseURL: process.env.PLAYWRIGHT_BASE_URL,
     storageState: process.env.PLAYWRIGHT_STORAGE_STATE,

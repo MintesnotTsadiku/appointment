@@ -58,3 +58,23 @@ def login(credential_file):
     state.chmod(0o600)
     return {"browser_account": account.name, "browser_session": session.name, "roles": sorted(roles),
             "user": user, "storage_state": str(state)}
+
+
+def set_test_entitlement(capability, state, limits=None):
+    """Platform-owned plan changes for the exact UI-created acceptance business."""
+    if frappe.session.user != "Administrator" or frappe.local.site not in ALLOWED_SITES or not frappe.conf.get("worktree_development"):
+        raise RuntimeError("Only the isolated browser operator may change test entitlements")
+    organization = "WQA-websiteacceptance"
+    if frappe.db.get_value("Organization", organization, "owner_user") != USER:
+        raise RuntimeError("The exact normal-owner acceptance business is absent")
+    if capability not in {"blog", "gallery", "newsletter"} or state not in {"Active", "Expired"}:
+        raise RuntimeError("Unsupported acceptance plan change")
+    allowed = {"blog": {"articles"}, "gallery": {"collections"}, "newsletter": {"monthly_sends"}}
+    if limits is not None and (not isinstance(limits, dict) or set(limits) - allowed[capability] or any(value != 1 for value in limits.values())):
+        raise RuntimeError("Only a one-record ceiling may be used in limit acceptance")
+    from appointment.content import entitlements
+
+    name = entitlements.set_capability("Organization", organization, None, capability, state,
+                                       limits=limits, source_reference="Exact managed browser acceptance")
+    frappe.db.commit()
+    return {"capability": capability, "state": state, "entitlement": name}

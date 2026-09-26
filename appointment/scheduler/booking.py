@@ -33,8 +33,9 @@ def offering(name, public=False, require_active=True):
     location = frappe.get_doc("Location", event.location)
     provider = frappe.get_doc("Provider", event.provider)
     org = service.organization
-    if (
-        not org
+    if org and (
+        service.get("independent_provider")
+        or location.get("independent_provider")
         or location.organization != org
         or (
             require_active
@@ -51,7 +52,14 @@ def offering(name, public=False, require_active=True):
         )
     ):
         frappe.throw(_("Offering must belong to one business."), frappe.PermissionError)
-    business = frappe.get_doc("Organization", org)
+    if org:
+        business = frappe.get_doc("Organization", org)
+    else:
+        from appointment.scheduler.independent import matches
+
+        if not matches(service, location, provider):
+            frappe.throw(_("Offering must belong to one independent business."), frappe.PermissionError)
+        business = provider
     if require_active and not all(
         (event.is_active, service.is_active, location.is_active, provider.is_active, business.is_active)
     ):
@@ -177,9 +185,9 @@ def validate_document(doc):
     for field, expected in [("service", service.name), ("provider", provider.name), ("location", location.name)]:
         if doc.get(field) != expected:
             frappe.throw(_("Booking links must match the offering."), frappe.PermissionError)
-    if doc.organization and doc.organization != business.name:
+    if doc.organization and doc.organization != service.organization:
         frappe.throw(_("Booking business does not match the offering."), frappe.PermissionError)
-    doc.organization = business.name
+    doc.organization = service.organization
     if old:
         require_access(old)
         for field in (
@@ -269,7 +277,7 @@ def book(
     if not re.fullmatch(r"[A-Za-z0-9_-]{16,100}", request_id or ""):
         frappe.throw(_("A valid booking request identity is required."))
     event = frappe.get_doc("EventType", offering_id)
-    business_name = frappe.db.get_value("Service", event.service, "organization")
+    business_name = frappe.db.get_value("Service", event.service, "organization") or ("Provider:" + event.provider)
     if organization_id and organization_id != business_name:
         frappe.throw(_("Offering does not belong to this business."), frappe.PermissionError)
     start, end = utc(start_time), utc(end_time)
@@ -305,7 +313,7 @@ def book(
         dict(
             doctype="Appointment",
             appointment_id=reference,
-            organization=business.name,
+            organization=service.organization,
             event_type=event.name,
             service=service.name,
             provider=provider.name,

@@ -6,7 +6,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Clock, User, Users, DollarSign, ChevronRight, Building2, Star } from "lucide-react";
+import { Clock, User, Users, DollarSign, ChevronRight, Building2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 import type { Service, Organization, Provider } from "../../types";
@@ -47,7 +47,7 @@ export function ServiceSelector({
   }));
 
   return (
-    <div className={cn("w-full max-w-6xl mx-auto space-y-8", className)}>
+    <div role="region" aria-label="Available appointment services" className={cn("w-full max-w-6xl mx-auto space-y-8", className)}>
       {/* Organization Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}

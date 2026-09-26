@@ -537,3 +537,42 @@ checks are recorded above. The final focused batch also passed staff invitations
 14, gallery/media 11, workbook import 11, response privacy 9, and upstream draft
 protection 6. Frontend lint passed with the two existing session fast-refresh
 warnings and no errors. No external email or reference-runtime changes occurred.
+
+### Independent operational onboarding and continued browser qualification
+
+The new independent setup creates an explicit provider-owned Service and Location.
+Their `independent_provider` links cannot coexist with organization ownership or
+change after creation. The EventType must resolve to those same owners. Public
+booking remains disabled until the normal owner publishes it. Guest bookings
+reuse the canonical transaction, hours, shared-user capacity lock, retry identity,
+and appointment lifecycle. Appointments retain their provider owner with an empty
+organization; no organization proxy is created. Scheduling is available before
+Website setup, and the owner can return through visible navigation.
+
+Fresh B received the additive schema migration. Four focused independent booking
+tests passed, including normal-user list filtering, foreign-owner denial, private
+publication, guest booking, retry, occupied-slot refusal, and unpublication.
+Website setup repeated with 12 passing tests. The focused frontend lint and Vite
+build passed. Managed independent UI validation is still pending.
+
+The existing organization booking HTTP suite could not start because it targeted
+its historical runtime port. No tests ran. Its interrupted synthetic fixture was
+removed through exact guarded cleanup; Fresh B again reports zero businesses,
+providers, sites, drafts, releases, audiences, and campaigns. The suite now uses
+the designated content runtime for these two explicitly allowed isolated sites,
+and registers cleanup before attempting HTTP login. Its regression repeat remains
+pending until the backend and frontend target Fresh B together.
+
+Template baseline `00141` passed 20 scenarios. Strict `00142` passed every
+functional scenario, with two screenshot differences limited to nine pixels each
+at rounded scheduler theme-button edges. The redundant nested backdrop filter was
+removed, and capture waits now require completed header and card opacity.
+Focused baseline `00143` passed both affected scenarios. Full baseline `00144` is
+running. No strict final template acceptance is claimed yet.
+
+The expanded owner suite includes a managed receptionist, a second business owner,
+saved article previews in the selected template, publish and rollback, suppression
+retention, tenant denial, expired capabilities, and server-enforced limits. These
+new browser checks remain pending. Recovery code-drill tooling archives the
+committed `facd02d` candidate without resetting the working checkout. The actual
+rollback and upgrade browser drill has not run yet.

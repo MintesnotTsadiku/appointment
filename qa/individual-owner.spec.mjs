@@ -1,4 +1,5 @@
 import { test, expect } from "playwright/test";
+import { articleHistory } from "./owner-validation.mjs";
 
 test("independent-owner-journey", async ({ page }, testInfo) => {
   const marker = process.env.SOLO_QA_MARKER;
@@ -6,7 +7,21 @@ test("independent-owner-journey", async ({ page }, testInfo) => {
   await page.getByLabel("Business structure", { exact: true }).selectOption("individual");
   await page.getByLabel("Independent business name", { exact: true }).fill(marker);
   await page.getByRole("button", { name: "Continue as independent provider", exact: true }).click();
-  await expect(page).toHaveURL(/\/settings\/website$/);
+  await expect(page).toHaveURL(/\/settings\/independent-booking$/);
+  await page.getByLabel("Location name", { exact: true }).fill(`${marker} Studio`);
+  await page.getByLabel("Service name", { exact: true }).fill(`${marker} Consultation`);
+  for (const day of ["Saturday", "Sunday"]) await page.getByRole("checkbox", { name: day, exact: true }).check();
+  await page.getByRole("button", { name: "Save independent offering", exact: true }).click();
+  await expect(page.getByRole("status")).toContainText("offering is saved");
+  await page.screenshot({ path: testInfo.outputPath("solo-operational-private.png"), fullPage: true });
+  await page.getByRole("button", { name: "Publish booking", exact: true }).click();
+  await expect(page.getByRole("status")).toContainText("Booking is published");
+  const bookingPath = await page.getByRole("link", { name: "Open guest booking", exact: true }).getAttribute("href");
+  await page.screenshot({ path: testInfo.outputPath("solo-operational-published.png"), fullPage: true });
+  await page.getByRole("link", { name: "View schedule", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "My Calendar", exact: true })).toBeVisible();
+  await page.screenshot({ path: testInfo.outputPath("solo-schedule-without-website.png"), fullPage: true });
+  await page.goto("/settings/website", { waitUntil: "networkidle" });
   await expect(page.getByRole("combobox", { name: "Business", exact: true })).toHaveValue(marker);
   await page.getByLabel("Main visitor action", { exact: true }).selectOption("contact");
   await page.getByLabel("Website name", { exact: true }).fill(marker);
@@ -20,7 +35,7 @@ test("independent-owner-journey", async ({ page }, testInfo) => {
   await page.getByLabel("newsletter", { exact: true }).check();
   await page.getByRole("button", { name: "readiness", exact: true }).click();
   await page.getByRole("button", { name: "Check readiness", exact: true }).click();
-  await expect(page.locator("main")).toContainText("Needs attention: booking");
+  await expect(page.locator("main")).toContainText("Ready: booking");
   await page.getByRole("button", { name: "Publish website", exact: true }).click();
   await expect(page.getByRole("status")).toContainText("Your website is published");
   await page.screenshot({ path: testInfo.outputPath("solo-owner-published.png"), fullPage: true });
@@ -41,8 +56,37 @@ test("independent-owner-journey", async ({ page }, testInfo) => {
     await visitor.goto(`/${marker.toLowerCase()}/blog/independent-notes`, { waitUntil: "networkidle" });
     await expect(visitor.getByRole("heading", { name: "Independent business notes", exact: true })).toBeVisible();
     await visitor.screenshot({ path: testInfo.outputPath("solo-guest-article.png"), fullPage: true });
+    await visitor.goto(bookingPath, { waitUntil: "networkidle" });
+    const day = new Date(); day.setUTCDate(day.getUTCDate() + 2);
+    await visitor.getByLabel("Appointment date", { exact: true }).fill(day.toISOString().slice(0, 10));
+    await visitor.getByRole("radio").first().check();
+    await visitor.getByLabel("Your name", { exact: true }).fill("Synthetic independent guest");
+    await visitor.getByLabel("Your email", { exact: true }).fill("independent-guest@example.test");
+    await visitor.getByRole("button", { name: "Confirm appointment", exact: true }).click();
+    await expect(visitor.getByRole("status")).toContainText("Booking confirmed");
+    await visitor.screenshot({ path: testInfo.outputPath("solo-guest-booking-confirmed.png"), fullPage: true, mask: [visitor.getByRole("status").locator("p").filter({ hasText: "Reference:" })] });
+    await page.goto("/calendar", { waitUntil: "networkidle" });
+    const schedule = await page.request.get("/api/method/appointment.dashboard.get_appointments", { params: { start_date: day.toISOString().slice(0, 10), end_date: day.toISOString().slice(0, 10) } });
+    expect(schedule.ok()).toBe(true);
+    expect((await schedule.json()).message.appointments.some(row => row.client_name === "Synthetic independent guest")).toBe(true);
+    await page.screenshot({ path: testInfo.outputPath("solo-owner-booked-schedule.png"), fullPage: true });
+    await page.goto("/settings/website/content", { waitUntil: "networkidle" });
     await visitor.goto(`/${marker.toLowerCase()}/gallery`, { waitUntil: "networkidle" });
     await expect(visitor.locator("main")).toContainText("Check back");
     await visitor.screenshot({ path: testInfo.outputPath("solo-guest-empty-gallery.png"), fullPage: true });
+    const editor = page.getByRole("region", { name: "Gallery editor", exact: true });
+    await editor.getByLabel("Collection title", { exact: true }).fill("Independent studio");
+    await editor.getByLabel("Collection address", { exact: true }).fill("independent-studio");
+    await editor.getByLabel("Gallery image", { exact: true }).setInputFiles(process.env.SOLO_QA_IMAGE);
+    await editor.getByLabel("Image description", { exact: true }).fill("A synthetic independent studio image");
+    await editor.getByRole("checkbox").check();
+    await editor.getByRole("button", { name: "Save gallery draft", exact: true }).click();
+    await expect(editor.getByRole("status")).toContainText("draft saved");
+    await editor.getByRole("button", { name: "Publish gallery", exact: true }).click();
+    await expect(editor.getByRole("status")).toContainText("published");
+    await visitor.goto(`/${marker.toLowerCase()}/gallery/independent-studio`, { waitUntil: "networkidle" });
+    await expect(visitor.getByRole("img", { name: "A synthetic independent studio image", exact: true })).toBeVisible();
+    await visitor.screenshot({ path: testInfo.outputPath("solo-guest-gallery.png"), fullPage: true });
+    await articleHistory(page, visitor, testInfo, { root: `/${marker.toLowerCase()}`, title: "Independent business notes", route: "/blog/independent-notes", prefix: "solo", original: "A factual introduction", draft: "Updated independent business information." });
   } finally { await guest.close(); }
 });
