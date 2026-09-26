@@ -140,6 +140,8 @@ class GalleryAcceptance(unittest.TestCase):
             cls.state,
             "File",
             file_name=f"{marker}-image.png",
+            attached_to_doctype="Public Site",
+            attached_to_name=cls.state["sites"]["A"],
             is_private=0,
             content=_png_bytes(),
         ).file_url
@@ -202,7 +204,8 @@ class GalleryAcceptance(unittest.TestCase):
         self.assertEqual(collection.items[1].video_id, "dQw4w9WgXcQ")
 
     def test_spoofed_image_is_rejected_by_content(self):
-        spoof = _insert(self.state, "File", file_name="spoof.png", is_private=0, content=b"not an image")
+        spoof = _insert(self.state, "File", file_name="spoof.png", is_private=0, content=b"not an image",
+                        attached_to_doctype="Public Site", attached_to_name=self.state["sites"]["A"])
         with self.assertRaises(frappe.ValidationError):
             _insert(
                 self.state,
@@ -263,6 +266,21 @@ class GalleryAcceptance(unittest.TestCase):
                 public_site=self.state["sites"]["B"],
                 items=[{"media_type": "image", "image": self.state["image_url"], "alt_text": "x", "sort_order": 1}],
             )
+        frappe.set_user("Administrator")
+
+    def test_direct_document_write_refuses_another_websites_file(self):
+        foreign = _insert(self.state, "File", file_name=self.state["marker"] + "-foreign.png",
+                          is_private=0, attached_to_doctype="Public Site", attached_to_name=self.state["sites"]["B"],
+                          content=_png_bytes((20, 40, 180)))
+        frappe.set_user(self.state["owners"]["A"])
+        for media in ({"media_type": "image", "image": foreign.file_url, "alt_text": "Foreign image"},
+                      {"media_type": "video", "video_provider": "youtube", "video_id": "aqz-KE-bpKQ",
+                       "thumbnail": foreign.file_url, "alt_text": "Foreign thumbnail"}):
+            with self.assertRaises(MediaSafetyError):
+                frappe.get_doc({"doctype": "Gallery Collection", "title": "Foreign media denied",
+                                "slug": "foreign-media-denied", "owner_type": "Organization",
+                                "organization": self.state["orgs"]["A"], "public_site": self.state["sites"]["A"],
+                                "items": [media]}).insert()
         frappe.set_user("Administrator")
 
 

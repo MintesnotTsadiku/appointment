@@ -1,0 +1,129 @@
+{
+ "doctype": "DocType",
+ "name": "Local Email Message",
+ "module": "Content",
+ "autoname": "hash",
+ "engine": "InnoDB",
+ "field_order": [
+  "owner_type",
+  "organization",
+  "provider",
+  "public_site",
+  "kind",
+  "recipient",
+  "subject",
+  "campaign",
+  "audience_member",
+  "payload_json",
+  "delivery_key"
+ ],
+ "fields": [
+  {
+   "fieldname": "owner_type",
+   "fieldtype": "Select",
+   "label": "Owner Type",
+   "read_only": 1,
+   "options": "Organization\nProvider",
+   "reqd": 1
+  },
+  {
+   "fieldname": "organization",
+   "fieldtype": "Link",
+   "label": "Organization",
+   "read_only": 1,
+   "options": "Organization"
+  },
+  {
+   "fieldname": "provider",
+   "fieldtype": "Link",
+   "label": "Provider",
+   "read_only": 1,
+   "options": "Provider"
+  },
+  {
+   "fieldname": "public_site",
+   "fieldtype": "Link",
+   "label": "Public Site",
+   "read_only": 1,
+   "options": "Public Site",
+   "reqd": 1
+  },
+  {
+   "fieldname": "kind",
+   "fieldtype": "Select",
+   "label": "Kind",
+   "read_only": 1,
+   "options": "Audience Confirmation\nSender Verification\nCampaign Preview\nCampaign Delivery\nStaff Invitation",
+   "reqd": 1
+  },
+  {
+   "fieldname": "recipient",
+   "fieldtype": "Data",
+   "label": "Recipient",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "subject",
+   "fieldtype": "Small Text",
+   "label": "Subject",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "campaign",
+   "fieldtype": "Link",
+   "label": "Campaign",
+   "read_only": 1,
+   "options": "Business Newsletter Campaign"
+  },
+  {
+   "fieldname": "audience_member",
+   "fieldtype": "Link",
+   "label": "Audience Member",
+   "read_only": 1,
+   "options": "Newsletter Audience Member"
+  },
+  {
+   "fieldname": "payload_json",
+   "fieldtype": "Code",
+   "label": "Payload Json",
+   "read_only": 1,
+   "options": "JSON",
+   "reqd": 1
+  },
+  {
+   "fieldname": "delivery_key",
+   "fieldtype": "Data",
+   "label": "Delivery Key",
+   "read_only": 1,
+   "reqd": 1,
+   "unique": 1
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "report": 1
+  },
+  {
+   "role": "Organization Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "report": 1
+  },
+  {
+   "role": "Provider",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "report": 1
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC"
+}

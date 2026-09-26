@@ -71,6 +71,14 @@ class WebsiteBrowserFixture:
         for organization in organizations:
             sites = frappe.get_all("Public Site", filters={"organization": organization}, pluck="name")
             profiles = frappe.get_all("Brand Profile", filters={"organization": organization}, pluck="name")
+            from appointment.content.newsletter.core import TYPES
+            from frappe.utils.password import delete_all_passwords_for
+
+            members = frappe.get_all("Newsletter Audience Member", filters={"organization": organization}, pluck="name")
+            for member in members:
+                delete_all_passwords_for("Newsletter Audience Member", member)
+            for doctype in TYPES:
+                self._delete(doctype, frappe.get_all(doctype, filters={"organization": organization}, pluck="name"))
             ownerships = frappe.get_all("Content Ownership", filters={"organization": organization},
                                        fields=["name", "source_doctype", "source_name"])
             for own in ownerships:
@@ -80,6 +88,7 @@ class WebsiteBrowserFixture:
                                                        "attached_to_name": ["in", sites or ["__none__"]]}, pluck="name"):
                 frappe.delete_doc("File", file, force=True, ignore_permissions=True)
             for site in sites:
+                self._delete("Email Group", frappe.get_all("Email Group", filters={"title": "Website newsletter " + site}, pluck="name"))
                 self._delete("Blog Category", frappe.get_all("Blog Category", filters={"title": "Website " + site}, pluck="name"))
                 self._delete("Blogger", frappe.get_all("Blogger", filters={"short_name": "website-" + site}, pluck="name"))
             for doctype in ("Published Content Release", "Experience Release"):
@@ -133,6 +142,9 @@ class WebsiteBrowserFixture:
                   "Service": frappe.db.count("Service", {"service_name": marker + " Consultation"}),
                   "Blog Post": frappe.db.count("Blog Post", {"title": marker + " Preparing for your visit"}),
                   "Provider": frappe.db.count("Provider", {"user": USER, "provider_name": ["like", marker + " — %"]})}
+        from appointment.content.newsletter.core import TYPES
+
+        counts.update({doctype: frappe.db.count(doctype, {"organization": ["in", scope]}) for doctype in TYPES})
         count = sum(counts.values())
         return {"ok": count == 0, "remaining_record_count": count, "remaining": counts}
 

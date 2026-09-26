@@ -193,6 +193,7 @@ def _snapshot(site, recipe, design, sections) -> dict:
         "sections": sections,
         "seo": _parse_json(site.seo_json),
         "booking": _parse_json(site.booking_json),
+        "features": sorted(set(_parse_json(site.get("website_setup_json")).get("features", [])) & {"blog", "gallery", "newsletter"}),
     }
 
 

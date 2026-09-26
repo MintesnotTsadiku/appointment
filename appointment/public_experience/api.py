@@ -127,6 +127,8 @@ def get_public_experience_snapshot(locale: str | None = None, public_path: str |
         "sections": snapshot.get("sections", []),
         "seo": snapshot.get("seo", {}),
         "booking": snapshot.get("booking", {}),
+        "features": snapshot.get("features", []),
+        "siteSlug": frappe.db.get_value("Public Site", context.public_site, "slug"),
     }
 
 

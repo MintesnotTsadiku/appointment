@@ -8,7 +8,7 @@ import "./platform.css";
 import { PublicContentPage } from "./PublicContentPage";
 
 export const PublicSiteHome = ({ snapshot }: { snapshot: PublishedSnapshot }) => {
-  const { config, theme, setPreference } = usePublicExperience();
+  const { config, theme, setPreference, isLoading, error } = usePublicExperience();
   const locale = snapshot.locale || config.locale;
   const design = snapshot.compiledDesign;
   const applicationName = design.identity.applicationName || config.identity.applicationName;
@@ -18,6 +18,9 @@ export const PublicSiteHome = ({ snapshot }: { snapshot: PublishedSnapshot }) =>
     "--pe-surface-focus-ring": String((design.surface.shape as Record<string, unknown>)?.focusRing || "3px"),
   } as CSSProperties;
   const toggleMode = () => setPreference(theme.mode === "dark" ? "light" : "dark");
+
+  if (isLoading) return <div data-pe-loading role="status" className="p-8">Loading published design…</div>;
+  if (error) return <main data-pe-unavailable className="p-8"><h1>Public experience unavailable</h1><p>Please try again later.</p></main>;
 
   if (!template) {
     return (

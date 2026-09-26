@@ -1,0 +1,133 @@
+{
+ "doctype": "DocType",
+ "name": "Newsletter Sender Identity",
+ "module": "Content",
+ "autoname": "hash",
+ "engine": "InnoDB",
+ "field_order": [
+  "owner_type",
+  "organization",
+  "provider",
+  "public_site",
+  "sender_email",
+  "sender_name",
+  "sender_key",
+  "status",
+  "verification_hash",
+  "verification_expires",
+  "verified_at",
+  "verification_method"
+ ],
+ "fields": [
+  {
+   "fieldname": "owner_type",
+   "fieldtype": "Select",
+   "label": "Owner Type",
+   "read_only": 1,
+   "options": "Organization\nProvider",
+   "reqd": 1
+  },
+  {
+   "fieldname": "organization",
+   "fieldtype": "Link",
+   "label": "Organization",
+   "read_only": 1,
+   "options": "Organization"
+  },
+  {
+   "fieldname": "provider",
+   "fieldtype": "Link",
+   "label": "Provider",
+   "read_only": 1,
+   "options": "Provider"
+  },
+  {
+   "fieldname": "public_site",
+   "fieldtype": "Link",
+   "label": "Public Site",
+   "read_only": 1,
+   "options": "Public Site",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sender_email",
+   "fieldtype": "Data",
+   "label": "Sender Email",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "sender_name",
+   "fieldtype": "Data",
+   "label": "Sender Name",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "sender_key",
+   "fieldtype": "Data",
+   "label": "Sender Key",
+   "read_only": 1,
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "read_only": 1,
+   "options": "Pending\nVerified Local\nRevoked",
+   "default": "Pending",
+   "reqd": 1
+  },
+  {
+   "fieldname": "verification_hash",
+   "fieldtype": "Data",
+   "label": "Verification Hash",
+   "read_only": 1
+  },
+  {
+   "fieldname": "verification_expires",
+   "fieldtype": "Datetime",
+   "label": "Verification Expires",
+   "read_only": 1
+  },
+  {
+   "fieldname": "verified_at",
+   "fieldtype": "Datetime",
+   "label": "Verified At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "verification_method",
+   "fieldtype": "Data",
+   "label": "Verification Method",
+   "read_only": 1
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "report": 1
+  },
+  {
+   "role": "Organization Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "report": 1
+  },
+  {
+   "role": "Provider",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "report": 1
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC"
+}

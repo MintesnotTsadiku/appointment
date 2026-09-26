@@ -1,6 +1,6 @@
 # Content publishing, gallery and onboarding — progress and validation
 
-**Status:** Phases 0–3 implemented and verified; Phase 4 full browser acceptance pending; Phase 5 core owner journey implemented, broader acceptance pending; Phase 6 core import in progress; Phases 7–10 pending
+**Status:** Phases 0–3 implemented and verified; Phase 4 full browser matrix pending; Phases 5–6 core owner journeys implemented, broader acceptance pending; Phase 7 core local newsletter journey in validation; Phase 8 expansion in progress; Phases 9–10 pending
 **Date:** 2026-09-26
 **Branch:** `feat/content-publishing-gallery-onboarding`
 **Head at recording:** `6e450cbeb639828db53841f39ae09d66092e35fa`
@@ -359,3 +359,44 @@ on the existing isolated site, not the Phase 9 fresh-install journeys.
 Phase 6 still needs invitation acceptance, broader capacity handling, and full
 website-text dry-run validation. The full template matrix and Phases 7–10 remain
 pending.
+
+## Local newsletter core and browser journey — 2026-09-26
+
+The newsletter workspace now uses business-scoped consent records, opaque
+confirmation and unsubscribe tokens, local sender verification, immutable
+campaign snapshots, entitlement quotas, scheduling, throttles, bounded retries,
+and idempotent background capture. Delivery writes only to the local email sink.
+It does not invoke SMTP or the upstream Newsletter send/test-send paths.
+Each certified template owns its signup form and styles; only the signup hook
+is shared. Signup availability is checked against published feature snapshots.
+
+Focused results: newsletter 12/12, upstream draft/legacy-route guards 6/6,
+gallery 10/10, website setup 9/9, and entitlements 13/13. The newsletter suite
+covers explicit consent, single-use and expired links, audience and monthly
+quotas, sender verification, immutable content, request replay, suppression,
+unsubscribe after queueing, expired access, throttle/retry, and tenant isolation.
+Gallery document validation now checks website ownership for images, covers,
+posters, and thumbnails; raw inserts cannot bypass the media-library boundary.
+The spoofed-image regression still tests decoding with a correctly bound File.
+Focused frontend lint and the direct Vite build pass. The previously recorded
+repository TypeScript and npm registry failures remain separate open issues.
+
+Managed run 00109 passed the normal-owner sender, consent, confirmation, unsent
+preview, local campaign delivery, and guest unsubscribe journey. Strict repeat
+00110 caught two capture races and a public design/signup loading flicker.
+Those states were corrected rather than masking the changed area. Reviewed
+baseline 00111 passed; strict run **00112 passed with zero visual changes, failed
+scenarios, or flakes**. Eighteen captures are retained under
+`qa/evidence/website-setup/`, with the exact cleanup audit in `validation.json`.
+
+Retained failed runs document the fixes: 00106 exposed an incorrect resolver
+field in the public snapshot API; 00107 followed the previous inbox message
+before the new one opened; 00108 waited on a short-queue delivery while its
+only worker was occupied by browser QA. The isolated stack now has a dedicated
+`newsletter` short-queue worker. No external messages were sent.
+
+This accepts the core local newsletter journey on the existing isolated site
+using a normal organization owner and Tena. The full five-template matrix,
+expanded website/import requirements, fresh-site journeys, and upgrade/restore
+gates remain pending. See `docs/operations/content-newsletter.md` for transport,
+token, queue, and retry behavior.

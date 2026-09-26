@@ -1,0 +1,204 @@
+{
+ "doctype": "DocType",
+ "name": "Business Newsletter Campaign",
+ "module": "Content",
+ "autoname": "hash",
+ "engine": "InnoDB",
+ "field_order": [
+  "owner_type",
+  "organization",
+  "provider",
+  "public_site",
+  "newsletter",
+  "sender_identity",
+  "subject",
+  "sender_email",
+  "content_json",
+  "audience_json",
+  "idempotency_key",
+  "business_month",
+  "status",
+  "scheduled_at",
+  "cursor",
+  "delivered_count",
+  "skipped_count",
+  "retry_count",
+  "last_error",
+  "created_by"
+ ],
+ "fields": [
+  {
+   "fieldname": "owner_type",
+   "fieldtype": "Select",
+   "label": "Owner Type",
+   "read_only": 1,
+   "options": "Organization\nProvider",
+   "reqd": 1
+  },
+  {
+   "fieldname": "organization",
+   "fieldtype": "Link",
+   "label": "Organization",
+   "read_only": 1,
+   "options": "Organization"
+  },
+  {
+   "fieldname": "provider",
+   "fieldtype": "Link",
+   "label": "Provider",
+   "read_only": 1,
+   "options": "Provider"
+  },
+  {
+   "fieldname": "public_site",
+   "fieldtype": "Link",
+   "label": "Public Site",
+   "read_only": 1,
+   "options": "Public Site",
+   "reqd": 1
+  },
+  {
+   "fieldname": "newsletter",
+   "fieldtype": "Link",
+   "label": "Newsletter",
+   "read_only": 1,
+   "options": "Newsletter",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sender_identity",
+   "fieldtype": "Link",
+   "label": "Sender Identity",
+   "read_only": 1,
+   "options": "Newsletter Sender Identity",
+   "reqd": 1
+  },
+  {
+   "fieldname": "subject",
+   "fieldtype": "Small Text",
+   "label": "Subject",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "sender_email",
+   "fieldtype": "Data",
+   "label": "Sender Email",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "content_json",
+   "fieldtype": "Code",
+   "label": "Content Json",
+   "read_only": 1,
+   "options": "JSON",
+   "reqd": 1
+  },
+  {
+   "fieldname": "audience_json",
+   "fieldtype": "Code",
+   "label": "Audience Json",
+   "read_only": 1,
+   "options": "JSON",
+   "reqd": 1
+  },
+  {
+   "fieldname": "idempotency_key",
+   "fieldtype": "Data",
+   "label": "Idempotency Key",
+   "read_only": 1,
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "business_month",
+   "fieldtype": "Data",
+   "label": "Business Month",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "read_only": 1,
+   "options": "Scheduled\nQueued\nRunning\nDelivered\nError\nCancelled\nHeld",
+   "default": "Queued",
+   "reqd": 1
+  },
+  {
+   "fieldname": "scheduled_at",
+   "fieldtype": "Datetime",
+   "label": "Scheduled At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cursor",
+   "fieldtype": "Int",
+   "label": "Cursor",
+   "read_only": 1,
+   "default": 0
+  },
+  {
+   "fieldname": "delivered_count",
+   "fieldtype": "Int",
+   "label": "Delivered Count",
+   "read_only": 1,
+   "default": 0
+  },
+  {
+   "fieldname": "skipped_count",
+   "fieldtype": "Int",
+   "label": "Skipped Count",
+   "read_only": 1,
+   "default": 0
+  },
+  {
+   "fieldname": "retry_count",
+   "fieldtype": "Int",
+   "label": "Retry Count",
+   "read_only": 1,
+   "default": 0
+  },
+  {
+   "fieldname": "last_error",
+   "fieldtype": "Small Text",
+   "label": "Last Error",
+   "read_only": 1
+  },
+  {
+   "fieldname": "created_by",
+   "fieldtype": "Link",
+   "label": "Created By",
+   "read_only": 1,
+   "options": "User",
+   "reqd": 1
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "report": 1
+  },
+  {
+   "role": "Organization Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "report": 1
+  },
+  {
+   "role": "Provider",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "report": 1
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC"
+}

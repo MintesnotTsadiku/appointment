@@ -161,13 +161,13 @@ def export_website(name):
         target = destination / source.name
         shutil.copyfile(source, target)
         inventory.append({'file': source.name, 'sha256': hashlib.sha256(target.read_bytes()).hexdigest()})
-    if len(inventory) != 14:
+    if len(inventory) != 18:
         raise RuntimeError('Website journey screenshot inventory is incomplete')
     result = {'run': name, 'status': doc.status, 'source_version': doc.source_version,
         'scenario_summary': json.loads(doc.scenario_summary_json or '{}'),
         'baseline_changed_count': doc.baseline_changed_count,
         'cleanup': json.loads(doc.cleanup_json or '{}'), 'audit': json.loads(doc.audit_json or '{}'),
         'roles': sorted(frappe.get_roles(USER)), 'artifacts': inventory,
-        'scope': 'One normal organization owner and the Tena template only. Full Phase 4/5 and Phases 6-10 are not accepted.'}
+        'scope': 'Core website setup, workbook creation/import, and local newsletter journey for one normal organization owner using Tena. Full template, expanded setup/import, fresh-site, and release-readiness gates remain pending.'}
     (destination / 'validation.json').write_text(json.dumps(result, indent=2)+'\n')
     return {'run': name, 'screenshots': len(inventory), 'destination': str(destination), 'audit': result['audit']}

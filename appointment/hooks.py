@@ -212,6 +212,8 @@ has_permission = {
 # Override standard doctype classes
 
 override_doctype_class = {
+    "Blog Post": "appointment.content.upstream.GovernedBlogPost",
+    "Newsletter": "appointment.content.upstream.GovernedNewsletter",
     "Booking Event": "appointment.overrides.event_override.BookingEventOverride",
     "Google Calendar": "appointment.overrides.google_calendar_override.GoogleCalendarOverride",
     "Customize Form": "appointment.overrides.customize_form_override.AppointmentOverrideCustomizeForm",
@@ -233,6 +235,7 @@ doc_events = {
 # ---------------
 
 scheduler_events = {
+    "cron": {"* * * * *": ["appointment.content.newsletter.campaigns.run_due"]},
     # "all": [
     # 	"appointment.tasks.all"
     # ],
@@ -263,7 +266,10 @@ scheduler_events = {
 # ------------------------------
 #
 override_whitelisted_methods = {
-    "frappe.integrations.doctype.google_calendar.google_calendar.google_callback": "appointment.overrides.google_calendar_override.google_callback"
+    "frappe.integrations.doctype.google_calendar.google_calendar.google_callback": "appointment.overrides.google_calendar_override.google_callback",
+    "newsletter.newsletter.doctype.newsletter.newsletter.subscribe": "appointment.content.upstream.legacy_subscription_unavailable",
+    "newsletter.newsletter.doctype.newsletter.newsletter.confirm_subscription": "appointment.content.upstream.legacy_subscription_unavailable",
+    "newsletter.newsletter.doctype.newsletter.newsletter.newsletter_email_read": "appointment.content.upstream.legacy_subscription_unavailable"
 }
 #
 # each overriding function accepts a `data` argument;
@@ -284,7 +290,7 @@ override_whitelisted_methods = {
 
 # Request Events
 # ----------------
-# before_request = ["appointment.utils.before_request"]
+before_request = ["appointment.content.upstream.block_legacy_public_routes"]
 # after_request = ["appointment.utils.after_request"]
 
 # Job Events
@@ -381,3 +387,12 @@ permission_query_conditions["Organization Workbook Import"] = "appointment.organ
 has_permission["Organization Workbook Import"] = "appointment.organization_import.access.permission"
 permission_query_conditions["Business Membership"] = "appointment.organization_import.access.membership_query"
 has_permission["Business Membership"] = "appointment.organization_import.access.membership_permission"
+
+for _newsletter_type, _newsletter_query in {
+    "Newsletter Audience Member": "audience_query",
+    "Newsletter Sender Identity": "sender_query",
+    "Business Newsletter Campaign": "campaign_query",
+    "Local Email Message": "sink_query",
+}.items():
+    permission_query_conditions[_newsletter_type] = f"appointment.content.newsletter.core.{_newsletter_query}"
+    has_permission[_newsletter_type] = "appointment.content.newsletter.core.permission"

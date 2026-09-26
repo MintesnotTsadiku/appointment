@@ -1,6 +1,7 @@
 import type { BookingTemplateProps, TemplateProps } from "../types";
 import { action, asset, brandLogo, localAsset, localized, records, section, supportAsset } from "../content";
 import "./bloom.css";
+import { BloomNewsletter } from "./BloomNewsletter";
 
 export function BloomSite({ snapshot, locale, applicationName, publicRoot, rootStyle, mode, toggleMode }: TemplateProps) {
   const hero = section(snapshot.sections, "hero"); const services = section(snapshot.sections, "services");
@@ -22,7 +23,7 @@ export function BloomSite({ snapshot, locale, applicationName, publicRoot, rootS
       <section className="bloom-faq"><div><p className="bloom-label">Frequently asked questions</p><h2>You ask,<br/>we answer.</h2></div><div>{records(faq.items).map((item,index)=><details key={index}><summary>{localized(item.question,locale)}</summary><p>{localized(item.answer,locale)}</p></details>)}</div></section>
       <section className="bloom-studio" id="studio"><img src={supportAsset("bloom",3)} alt="The studio interior"/><div><p className="bloom-label">Visit our studio</p><h2>{localized(locations.title,locale)}</h2>{records(locations.items).slice(0,1).map((item,index)=><address key={index}>{localized(item.address,locale)}<br/>{localized(item.hours,locale)}<br/>{String(item.phone||"")}</address>)}</div><img src={supportAsset("bloom",2)} alt="Natural hair detail"/></section>
       <section className="bloom-final"><div><p className="bloom-label">Ready for your next feel-good moment?</p><h2>{localized(booking.title,locale)}</h2></div>{action(booking.action,locale)?<a href={action(booking.action,locale)?.href}>{action(booking.action,locale)?.label} →</a>:null}</section>
-    </main><footer className="bloom-footer"><a href={publicRoot}>{brandLogo(snapshot.compiledDesign) ? <img className="pe-brand-logo" src={brandLogo(snapshot.compiledDesign)} alt="" /> : null}{applicationName}</a><nav>Services&nbsp;&nbsp;&nbsp; Our people&nbsp;&nbsp;&nbsp; The studio</nav><small>© {new Date().getFullYear()} {applicationName}</small></footer>
+    <BloomNewsletter snapshot={snapshot} applicationName={applicationName} locale={locale} publicRoot={publicRoot} /></main><footer className="bloom-footer"><a href={publicRoot}>{brandLogo(snapshot.compiledDesign) ? <img className="pe-brand-logo" src={brandLogo(snapshot.compiledDesign)} alt="" /> : null}{applicationName}</a><nav>Services&nbsp;&nbsp;&nbsp; Our people&nbsp;&nbsp;&nbsp; The studio</nav><small>© {new Date().getFullYear()} {applicationName}</small></footer>
   </div>;
 }
 

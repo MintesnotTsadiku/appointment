@@ -1,6 +1,7 @@
 import type { BookingTemplateProps, TemplateProps } from "../types";
 import { action, asset, brandLogo, localAsset, localized, records, section, supportAsset } from "../content";
 import "./selam.css";
+import { SelamNewsletter } from "./SelamNewsletter";
 
 const Mark = () => <span className="selam-mark" aria-hidden="true">✳</span>;
 
@@ -64,7 +65,7 @@ export function SelamSite({ snapshot, locale, applicationName, publicRoot, rootS
       <section className="selam-community"><img src={supportAsset("selam", 3)} alt="A welcoming studio community" /><div><p className="selam-overline">Our community</p><h2>Good things happen together.</h2><p>{localized(hero.body, locale)}</p></div><div className="selam-faq"><p className="selam-overline">Frequently asked questions</p>{records(faq.items).map((item, index) => <details key={index}><summary>{localized(item.question, locale)}</summary><p>{localized(item.answer, locale)}</p></details>)}</div></section>
       <section className="selam-location" id="space"><div><p className="selam-overline">Our location</p><h2>{localized(locations.title, locale)}</h2>{records(locations.items).slice(0, 1).map((item, index) => <address key={index}>{localized(item.address, locale)}<br />{localized(item.hours, locale)}<br />{String(item.phone || "")}</address>)}</div><img src={supportAsset("selam", 2)} alt="The Gerji studio" /></section>
       <section className="selam-final"><h2>{localized(booking.title, locale)}</h2>{action(booking.action, locale) ? <a className="selam-pill" href={action(booking.action, locale)?.href}>{action(booking.action, locale)?.label} →</a> : null}</section>
-    </main>
+    <SelamNewsletter snapshot={snapshot} applicationName={applicationName} locale={locale} publicRoot={publicRoot} /></main>
     <footer className="selam-footer"><a className="selam-logo" href={publicRoot}>{brandLogo(snapshot.compiledDesign) ? <img className="pe-brand-logo" src={brandLogo(snapshot.compiledDesign)} alt="" /> : <Mark />} <strong>{applicationName}</strong></a><span>Move. Learn. Belong.</span><small>© {new Date().getFullYear()} {applicationName}</small></footer>
   </div>;
 }

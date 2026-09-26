@@ -161,7 +161,7 @@ class EntitlementIsolationTests(unittest.TestCase):
                 blogger=blogger.name,
                 content_type="Markdown",
                 content=f"# {marker} {suffix}",
-                published=1,
+                published=0,
             )
             cls.state["posts"][suffix] = post.name
             ownership = _insert(

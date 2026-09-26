@@ -31,6 +31,11 @@ const RESERVED_FIRST_SEGMENTS = new Set([
   "no-access",
   "assistant",
   "book",
+  "blog",
+  "blog-category",
+  "newsletter",
+  "rss",
+  "rss.xml",
   ".well-known",
   "robots.txt",
   "sitemap.xml",
@@ -41,6 +46,7 @@ const LOCALES = new Set(["en", "am"]);
 
 export function isPublicExperiencePath(pathname: string): boolean {
   const segments = String(pathname || "/").split("/").filter(Boolean);
+  if (segments[0] === "newsletter") return segments.length === 3 && ["confirm", "unsubscribe", "sender"].includes(segments[1]) && /^[A-Za-z0-9_-]{40,100}$/.test(segments[2]);
   if (segments.length === 0 || segments.length > 3) return false;
   const first = segments[0].toLowerCase();
   if (RESERVED_FIRST_SEGMENTS.has(first)) return false;

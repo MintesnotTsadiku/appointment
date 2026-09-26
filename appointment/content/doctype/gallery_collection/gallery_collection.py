@@ -41,7 +41,7 @@ class GalleryCollection(Document):
 
     def _validate_site(self):
         if not self.public_site:
-            return
+            frappe.throw(_("Choose this business's Public Site before creating a gallery."))
         site = frappe.db.get_value(
             "Public Site", self.public_site, ["owner_type", "organization", "provider"], as_dict=True
         )

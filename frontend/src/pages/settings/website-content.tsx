@@ -60,7 +60,7 @@ export default function WebsiteContent() {
 
   const root = sites.find((row) => row.name === site)?.slug;
   return <main className="mx-auto max-w-5xl space-y-6 p-6" data-page="website-content">
-    <header><h1 className="text-3xl font-semibold">Website content</h1><p>Save drafts, review them, then publish a version for your visitors.</p><Link to="/settings/website">Website setup</Link></header>
+    <header><h1 className="text-3xl font-semibold">Website content</h1><p>Save drafts, review them, then publish a version for your visitors.</p><Link to="/settings/website">Website setup</Link> · <Link to="/settings/website/newsletter">Newsletters and audience</Link></header>
     {error && <p role="alert">{error}</p>}{notice && <p role="status">{notice}</p>}
     <label className="block">Website<select className={field} value={site} onChange={(event) => setSite(event.target.value)}>{sites.map((row) => <option key={row.name} value={row.name}>{row.site_title}</option>)}</select></label>
     {!sites.length && <p>Create your website in <Link to="/settings/website">Website setup</Link>.</p>}

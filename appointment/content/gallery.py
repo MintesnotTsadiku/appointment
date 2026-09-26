@@ -67,15 +67,18 @@ def safe_local_media(path: object) -> str | None:
     return url
 
 
-def validate_image_asset(file_url: object) -> dict:
+def validate_image_asset(file_url: object, public_site=None) -> dict:
     """Decode a local File's bytes and return its verified metadata."""
 
     url = safe_local_media(file_url)
     if not url:
         raise MediaSafetyError("an image must be a site-local public file")
-    file_name = frappe.db.get_value("File", {"file_url": url}, "name")
+    filters = {"file_url": url, "is_private": 0}
+    if public_site:
+        filters.update({"attached_to_doctype": "Public Site", "attached_to_name": public_site})
+    file_name = frappe.db.get_value("File", filters, "name")
     if not file_name:
-        raise MediaSafetyError("the referenced image file does not exist")
+        raise MediaSafetyError("choose a public image from this website's media library")
     content = frappe.get_doc("File", file_name).get_content()
     from appointment.public_experience.media import inspect_image
 
@@ -89,12 +92,12 @@ def validate_image_asset(file_url: object) -> dict:
     }
 
 
-def validate_item(item) -> dict:
+def validate_item(item, public_site=None) -> dict:
     """Validate one gallery item and return its derived media metadata."""
 
     media_type = (item.media_type or "image").strip()
     if media_type == "image":
-        meta = validate_image_asset(item.image)
+        meta = validate_image_asset(item.image, public_site)
         if not (item.alt_text or "").strip():
             raise MediaSafetyError("every gallery image requires alt text")
         item.checksum = meta["checksum"]
@@ -112,11 +115,13 @@ def validate_item(item) -> dict:
             if not thumbnail_url:
                 raise MediaSafetyError("a video thumbnail must be a site-local public image")
             item.thumbnail = thumbnail_url
+            validate_image_asset(item.thumbnail, public_site)
         if item.poster:
             poster_url = safe_local_media(item.poster)
             if not poster_url:
                 raise MediaSafetyError("a video poster must be a site-local public image")
             item.poster = poster_url
+            validate_image_asset(item.poster, public_site)
         item.image = None
         item.checksum = None
         return {"provider": item.video_provider, "id": item.video_id}
@@ -139,10 +144,11 @@ def validate_collection(collection) -> dict:
         if not cover:
             raise MediaSafetyError("the cover must be a site-local public image")
         collection.cover = cover
+        validate_image_asset(collection.cover, collection.public_site)
     seen_orders: set[int] = set()
     pending_consent = False
     for index, item in enumerate(collection.items):
-        validate_item(item)
+        validate_item(item, collection.public_site)
         if item.sort_order in seen_orders:
             raise MediaSafetyError("each gallery item needs a unique sort order")
         seen_orders.add(item.sort_order)

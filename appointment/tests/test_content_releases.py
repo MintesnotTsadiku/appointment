@@ -166,11 +166,12 @@ class ContentReleaseAcceptance(unittest.TestCase):
                 cls.state,
                 "Blog Post",
                 title=f"{marker} Article {suffix}",
+                route=f"content-draft/{marker.lower()}-article-{suffix.lower()}",
                 blog_category=category.name,
                 blogger=blogger.name,
                 content_type="Markdown",
                 content="# Hello\n\nA **bold** start.\n\n- one\n- two\n\n[bad](javascript:alert(1)) [ok](https://example.test)",
-                published=1,
+                published=0,
             )
             cls.state["posts"][suffix] = post.name
             ownership = _insert(
@@ -239,7 +240,7 @@ class ContentReleaseAcceptance(unittest.TestCase):
             blogger=blogger,
             content_type="Markdown",
             content="# duplicate",
-            published=1,
+            published=0,
         )
         own = _insert(
             self.state,

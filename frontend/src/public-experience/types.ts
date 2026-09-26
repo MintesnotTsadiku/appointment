@@ -88,6 +88,8 @@ export interface PublicSection {
 }
 
 export interface PublishedSnapshot {
+  siteSlug?: string;
+  features?: string[];
   contract: string;
   releaseHash: string | null;
   locale: string;

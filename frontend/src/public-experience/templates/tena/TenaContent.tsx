@@ -2,6 +2,7 @@ import { createElement, type ReactNode } from "react";
 import type { ContentTemplateProps } from "../types";
 import { richNodes, safeContentMedia, videoLink, type RichNode, type ContentBlock } from "../../contentContract";
 import "./tena.css";
+import { TenaNewsletter } from "./TenaNewsletter";
 
 export function TenaContent({ snapshot, applicationName, publicRoot, rootStyle, mode, toggleMode, content, contentRoot }: ContentTemplateProps) {
   const release = content.release;
@@ -30,7 +31,7 @@ export function TenaContent({ snapshot, applicationName, publicRoot, rootStyle, 
         </article>)}</div>
         <nav className="tena-content-pagination" aria-label="Content pages">{content.page > 1 ? <a href={`${contentRoot}?page=${content.page - 1}`}>Previous page</a> : null}{content.hasNext ? <a href={`${contentRoot}?page=${content.page + 1}`}>Next page</a> : null}</nav>
       </> : <section className="tena-content-state"><h2>{content.kind === "blog" ? "Stories are on their way" : "New moments coming soon"}</h2><p>Check back for our next update.</p><a href={`${publicRoot}/book`}>Book an appointment</a></section>}
-      <aside className="tena-content-signup" aria-labelledby="newsletter-title"><h2 id="newsletter-title">Keep in touch with {applicationName}</h2><p>Newsletter signup is not available yet. Please check back soon.</p></aside>
+      <TenaNewsletter snapshot={snapshot} applicationName={applicationName} locale={snapshot.locale} publicRoot={publicRoot} />
     </main>
     <footer className="tena-content-footer"><a href={publicRoot}>{applicationName}</a><a href={`${publicRoot}/book`}>Plan your visit →</a></footer>
   </div>;

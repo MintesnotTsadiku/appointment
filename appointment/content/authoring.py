@@ -58,7 +58,7 @@ def create_gallery(site, title, slug, summary="", items=None):
     if not isinstance(items, list) or not items or len(items) > 200:
         frappe.throw("Add between one and 200 gallery items.")
     allowed = {"media_type", "image", "video_provider", "video_id", "caption", "alt_text", "credit",
-               "display_date", "focal_x", "focal_y", "consent_status", "consent_evidence"}
+               "display_date", "focal_x", "focal_y", "consent_status", "consent_evidence", "thumbnail", "poster"}
     gallery = frappe.get_doc({"doctype": "Gallery Collection", **scope, "public_site": site,
                               "title": title, "slug": _address(slug), "summary": summary})
     for index, item in enumerate(items):
