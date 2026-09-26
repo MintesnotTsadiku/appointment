@@ -2,7 +2,7 @@ import { defineConfig } from "playwright/test";
 
 export default defineConfig({
   testDir: ".", testMatch: "website-setup.spec.mjs", workers: 1, timeout: 600000,
-  use: {
+  use: { reducedMotion: "reduce", actionTimeout: 15000, navigationTimeout: 30000,
     baseURL: process.env.PLAYWRIGHT_BASE_URL,
     storageState: process.env.PLAYWRIGHT_STORAGE_STATE,
     launchOptions: { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE },

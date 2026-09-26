@@ -40,6 +40,26 @@ def business_entitlement_query(user=None) -> str:
     return tenancy.owner_query_condition("tabBusiness Entitlement", user)
 
 
+def file_query(user=None) -> str:
+    """Public image bytes do not grant access to their private File metadata."""
+    condition = public_access.public_site_query(user)
+    if not condition:
+        return ""
+    return ("(coalesce(`tabFile`.attached_to_doctype, '') != 'Public Site' or "
+            "`tabFile`.attached_to_name in (select name from `tabPublic Site` "
+            f"where {condition}))")
+
+
+def file_permission(doc, user=None, **kwargs):
+    if doc.attached_to_doctype != "Public Site":
+        return None
+    site = frappe.db.get_value("Public Site", doc.attached_to_name,
+                               ["owner_type", "organization", "provider"], as_dict=True)
+    if not site:
+        return False
+    return tenancy.can_manage_business(site.owner_type, site.organization, site.provider, _actor(user))
+
+
 def business_entitlement_permission(doc, user=None, permission_type="read", ptype=None, **kwargs) -> bool:
     permission_type = ptype or permission_type
     actor = _actor(user)

@@ -62,7 +62,7 @@ export default function NewsletterWorkspace() {
   return <main className="mx-auto max-w-5xl space-y-6 p-6" data-page="website-newsletter">
     <header><h1 className="text-3xl font-semibold">Business newsletters</h1><p>Messages are captured in the local email sink. External email delivery is disabled.</p><Link to="/settings/website/content">Website content</Link></header>
     {error && <p role="alert">{error}</p>}{notice && <p role="status">{notice}</p>}
-    <label>Website<select className={field} value={site} onChange={(event) => setSite(event.target.value)}>{sites.map((row) => <option key={row.name} value={row.name}>{row.site_title}</option>)}</select></label>
+    <label>Website<select aria-label="Website" className={field} value={site} onChange={(event) => setSite(event.target.value)}>{sites.map((row) => <option key={row.name} value={row.name}>{row.site_title}</option>)}</select></label>
     {!sites.length && <p>Create a website in <Link to="/settings/website">Website setup</Link>.</p>}
     {workspace && <>
       <p>Newsletter access: {workspace.entitlement.state}. Audience limit: {workspace.entitlement.limits.audience ?? "Unlimited"}. Monthly campaign limit: {workspace.entitlement.limits.monthly_sends ?? "Unlimited"}.</p>
@@ -73,7 +73,7 @@ export default function NewsletterWorkspace() {
           const result = await callMethod<{ sender: string }>(api + "request_sender", { site, email: senderEmail, name: senderName });
           setSender(result.sender); setNotice("Open the verification message in the local email inbox below.");
         })}>Request sender verification</button>
-        <label>Campaign sender<select className={field} value={sender} onChange={(event) => setSender(event.target.value)}><option value="">Choose sender</option>{workspace.senders.map((row) => <option key={row.name} value={row.name}>{row.sender_email} · {row.status}</option>)}</select></label>
+        <label>Campaign sender<select aria-label="Campaign sender" className={field} value={sender} onChange={(event) => setSender(event.target.value)}><option value="">Choose sender</option>{workspace.senders.map((row) => <option key={row.name} value={row.name}>{row.sender_email} · {row.status}</option>)}</select></label>
       </section>
       <section className="space-y-3" aria-label="Newsletter draft"><h2>New newsletter</h2>
         <label>Newsletter subject<input className={field} value={subject} onChange={(event) => setSubject(event.target.value)} /></label>
@@ -85,7 +85,7 @@ export default function NewsletterWorkspace() {
         })}>Save newsletter draft</button>
       </section>
       <section className="space-y-3" aria-label="Newsletter campaign"><h2>Review and capture a campaign</h2>
-        <label>Saved newsletter<select className={field} value={draft} onChange={(event) => { setDraft(event.target.value); setConfirmed(false); setRequestId(crypto.randomUUID()); }}><option value="">Choose draft</option>{workspace.drafts.map((row) => <option key={row.ownership} value={row.ownership}>{row.subject}</option>)}</select></label>
+        <label>Saved newsletter<select aria-label="Saved newsletter" className={field} value={draft} onChange={(event) => { setDraft(event.target.value); setConfirmed(false); setRequestId(crypto.randomUUID()); }}><option value="">Choose draft</option>{workspace.drafts.map((row) => <option key={row.ownership} value={row.ownership}>{row.subject}</option>)}</select></label>
         <button className={button} disabled={busy || !enabled || !sender || !draft} onClick={() => void run(async () => {
           const result = await callMethod<{ message: string }>(api + "preview_draft", { site, ownership: draft, sender });
           setMessage(await callGet<Message>(api + "get_local_message", { message: result.message }));

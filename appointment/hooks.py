@@ -372,6 +372,8 @@ has_permission["Experience Release"] = "appointment.public_experience.access.exp
 # never grants access to another business.
 permission_query_conditions["Business Entitlement"] = "appointment.content.access.business_entitlement_query"
 permission_query_conditions["Content Ownership"] = "appointment.content.access.content_ownership_query"
+permission_query_conditions["File"] = "appointment.content.access.file_query"
+has_permission["File"] = "appointment.content.access.file_permission"
 permission_query_conditions["Blog Post"] = "appointment.content.access.blog_post_query"
 permission_query_conditions["Newsletter"] = "appointment.content.access.newsletter_query"
 permission_query_conditions["Published Content Release"] = "appointment.content.access.published_content_release_query"

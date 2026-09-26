@@ -22,12 +22,14 @@ export function WebsitePreview({ snapshot, initialSurface = "landing", savedArti
     publicRoot: "/website-preview", mode, toggleMode: () => setMode(mode === "light" ? "dark" : "light"),
     rootStyle: theme.variables as CSSProperties };
 
+  if (!template) return <section aria-label="Website live preview"><p>Preview unavailable for this template.</p></section>;
+
   return <section aria-label="Website live preview" className="space-y-4">
     <p>{savedArticle ? "Private preview of your saved article. Other surfaces show layout examples. Booking and signup remain inactive here." : "Private preview. Article and gallery examples show the layout and are never published. Booking and signup remain inactive here."}</p>
     <div className="flex flex-wrap gap-3">
       <button className={button} onClick={() => setMode(mode === "light" ? "dark" : "light")}>Preview {mode === "light" ? "dark" : "light"} mode</button>
       <button className={button} onClick={() => setMobile(!mobile)}>Preview {mobile ? "desktop" : "mobile"}</button>
-      <label>Surface<select className="block rounded-lg border p-3 dark:bg-slate-900" value={surface} onChange={(event) => setSurface(event.target.value)}>
+      <label>Surface<select aria-label="Surface" className="block rounded-lg border p-3 dark:bg-slate-900" value={surface} onChange={(event) => setSurface(event.target.value)}>
         <option value="landing">Landing page</option><option value="booking">Booking handoff</option>
         <option value="blog">Blog index</option><option value="article">Article</option>
         <option value="gallery">Gallery index</option><option value="collection">Gallery collection</option>

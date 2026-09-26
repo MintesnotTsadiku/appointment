@@ -65,7 +65,7 @@ export default function WebsiteContent() {
   return <main className="mx-auto max-w-5xl space-y-6 p-6" data-page="website-content">
     <header><h1 className="text-3xl font-semibold">Website content</h1><p>Save drafts, review them, then publish a version for your visitors.</p><Link to="/settings/website">Website setup</Link> · <Link to="/settings/website/newsletter">Newsletters and audience</Link></header>
     {error && <p role="alert">{error}</p>}{notice && <p role="status">{notice}</p>}
-    <label className="block">Website<select className={field} value={site} onChange={(event) => setSite(event.target.value)}>{sites.map((row) => <option key={row.name} value={row.name}>{row.site_title}</option>)}</select></label>
+    <label className="block">Website<select aria-label="Website" className={field} value={site} onChange={(event) => setSite(event.target.value)}>{sites.map((row) => <option key={row.name} value={row.name}>{row.site_title}</option>)}</select></label>
     {!sites.length && <p>Create your website in <Link to="/settings/website">Website setup</Link>.</p>}
     <section aria-label="Content drafts"><h2>Drafts</h2>{drafts.length ? drafts.map((row) => <div className="flex gap-3 border-b py-3" key={row.name}><span>{row.title} · {row.status}</span>{row.source_doctype === "Blog Post" && <button className={button} disabled={busy} onClick={() => void run(async () => { adopt(await callGet<Article>(api + "get_content_draft", { ownership: row.name })); })}>Edit article {row.title}</button>}</div>) : <p>No drafts yet.</p>}</section>
     <section className="space-y-3" aria-label="Article editor"><h2>{article ? "Edit article" : "New article"}</h2>

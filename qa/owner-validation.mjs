@@ -2,6 +2,16 @@ import { expect } from "playwright/test";
 import { execFileSync } from "node:child_process";
 import { writeFileSync } from "node:fs";
 
+export async function stableScreenshot(page, options) {
+  await page.evaluate(() => document.fonts.ready);
+  await page.mouse.move(0, 0);
+  await page.evaluate(() => document.activeElement?.blur());
+  await page.waitForFunction(() => Array.from(document.querySelectorAll("main [style]"))
+    .filter(element => element.getClientRects().length && element.style.opacity && element.style.transform)
+    .every(element => Number(element.style.opacity) === 1));
+  return page.screenshot({ ...options, animations: "disabled" });
+}
+
 function plan(capability, state, limits) {
   execFileSync("/usr/local/bin/bench", ["--site", process.env.WEBSITE_QA_SITE, "execute", "appointment.tests.staff_browser_bridge.set_test_entitlement", "--kwargs", JSON.stringify({ capability, state, limits })], {
     cwd: process.env.FRAPPE_BENCH_ROOT, encoding: "utf8", timeout: 30000,
@@ -27,7 +37,7 @@ export async function articleHistory(page, guest, testInfo, { root, title, route
   await page.getByRole("button", { name: `Edit article ${title}`, exact: true }).click();
   await page.getByLabel("Article text", { exact: true }).fill(draft);
   await page.getByRole("button", { name: "Save article draft", exact: true }).click();
-  await expect(page.getByRole("status")).toContainText("draft saved");
+  await expect(page.getByRole("status").filter({ hasText: "draft saved" })).toContainText("draft saved");
   await guest.goto(root + route, { waitUntil: "networkidle" });
   await expect(guest.locator("main")).toContainText(original);
   await expect(guest.locator("main")).not.toContainText(draft);
@@ -36,17 +46,17 @@ export async function articleHistory(page, guest, testInfo, { root, title, route
   await expect(preview).toContainText(draft);
   await preview.screenshot({ path: testInfo.outputPath(`${prefix}-saved-private-article.png`) });
   await page.getByRole("button", { name: "Publish article", exact: true }).click();
-  await expect(page.getByRole("status")).toContainText("Article published");
+  await expect(page.getByRole("status").filter({ hasText: "Article published" })).toContainText("Article published");
   await guest.reload({ waitUntil: "networkidle" });
   await expect(guest.locator("main")).toContainText(draft);
-  await guest.screenshot({ path: testInfo.outputPath(`${prefix}-updated-public-article.png`), fullPage: true });
+  await stableScreenshot(guest, { path: testInfo.outputPath(`${prefix}-updated-public-article.png`), fullPage: true });
   const history = page.getByRole("region", { name: "Publication history", exact: true });
   await history.locator("button:not([disabled])").filter({ hasText: `Restore ${route}` }).click();
-  await expect(page.getByRole("status")).toContainText("Previous publication restored");
+  await expect(page.getByRole("status").filter({ hasText: "Previous publication restored" })).toContainText("Previous publication restored");
   await guest.reload({ waitUntil: "networkidle" });
   await expect(guest.locator("main")).toContainText(original);
   await expect(guest.locator("main")).not.toContainText(draft);
-  await guest.screenshot({ path: testInfo.outputPath(`${prefix}-rolled-back-public-article.png`), fullPage: true });
+  await stableScreenshot(guest, { path: testInfo.outputPath(`${prefix}-rolled-back-public-article.png`), fullPage: true });
 }
 
 export async function businessIsolation(page, second, testInfo, marker) {
@@ -64,6 +74,10 @@ export async function businessIsolation(page, second, testInfo, marker) {
   await second.getByLabel("First service name", { exact: true }).fill(marker + " Isolation Consultation");
   await second.getByRole("button", { name: "Create business", exact: true }).click();
   await expect(second).toHaveURL(/\/home/);
+  await second.goto("/settings/business", { waitUntil: "networkidle" });
+  await second.locator('[data-qa="business-offering"]').filter({ hasText: marker + " Isolation" })
+    .getByRole("button", { name: "Publish booking page", exact: true }).click();
+  await expect(second.getByRole("status")).toContainText("published");
   await second.goto("/settings/website", { waitUntil: "networkidle" });
   await second.getByRole("combobox", { name: "Business", exact: true }).selectOption({ label: marker + " Isolation" });
   await second.getByLabel("Website name", { exact: true }).fill(marker + " Isolation");

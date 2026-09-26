@@ -178,6 +178,21 @@ def minimize_first_owner():
     return {"user": USER, "roles": sorted(frappe.get_roles(USER)), "business_records_created": 0}
 
 
+def bootstrap_recovery():
+    """Reserve distinct managed profile and artifact identities on the restored site."""
+    import frappe
+    from frappe.model.naming import NamingSeries
+    from appointment.tests import content_browser_bootstrap
+
+    if frappe.local.site != RESTORE_SITE or not frappe.conf.get("worktree_development"):
+        raise RuntimeError("Recovery browser bootstrap requires the reserved restored site")
+    label = content_browser_bootstrap.account_label(RESTORE_SITE)
+    if not frappe.db.exists("Browser Account", {"account_label": label}):
+        NamingSeries("#####").update_counter(3000)
+        frappe.db.commit()
+    return content_browser_bootstrap.run()
+
+
 def _private_json(path, value, exclusive=False):
     flags = os.O_WRONLY | os.O_CREAT | (os.O_EXCL if exclusive else os.O_TRUNC)
     with os.fdopen(os.open(path, flags, 0o600), "w") as stream:

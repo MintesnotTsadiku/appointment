@@ -8,6 +8,7 @@ import io
 import json
 import sys
 import unittest
+from pathlib import Path
 
 import frappe
 
@@ -162,6 +163,21 @@ class GalleryAcceptance(unittest.TestCase):
         post.content = '<img src="' + self.state["image_url"] + '" alt="Article image">'
         with self.assertRaises(MediaSafetyError):
             releases.build_article_projection(post, self.state["sites"]["B"])
+
+    def test_public_media_metadata_remains_owner_scoped(self):
+        from appointment.content import access
+
+        file = frappe.get_doc("File", {"file_url": self.state["image_url"]})
+        for suffix, expected in (("A", True), ("B", False)):
+            actor = self.state["owners"][suffix]
+            self.assertEqual(access.file_permission(file, user=actor), expected)
+            self.assertEqual(frappe.has_permission("File", "read", doc=file, user=actor), expected)
+            frappe.set_user(actor)
+            rows = frappe.get_list("File", filters={"name": file.name}, pluck="name")
+            self.assertEqual(rows, [file.name] if expected else [])
+        self.assertFalse(access.file_permission(file, user="Guest"))
+        self.assertTrue(Path(file.get_full_path()).is_file())
+        frappe.set_user("Administrator")
 
     def _collection(self, suffix="A", status="Draft", video_id="dQw4w9WgXcQ", consent="Not Required"):
         seq = self.state.get("seq", 0) + 1

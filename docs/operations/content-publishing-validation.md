@@ -600,3 +600,41 @@ were development-server connection refusal/reset and a detached element during
 Vite configuration restarts. Its 31 screenshot differences are not accepted.
 A final stable matrix will follow the owner workflow fixes. Fresh B is the next
 normal-owner acceptance target; the reference runtime remains untouched.
+
+### Independent owner managed-browser baseline
+
+Fresh B began with zero records in the eight business/content counters. Runs
+`02015` and `02016` exposed inaccessible exact labels on native selectors; the
+selectors now keep names independent of their option text. The calendar assertion
+was corrected to include its existing PRO badge. Run `02017` reached guest booking
+confirmation, the owner schedule, and published gallery delivery, then failed
+because the article assertion also matched the gallery status message. Status
+assertions now select the operation they verify.
+
+Run `02018` passed the complete independent-owner journey with fourteen authored
+captures: private operational setup, explicit booking publication, scheduling
+before Website setup, website publication, public article and collection, guest
+booking, saved template preview, public update, and publication rollback. Cleanup
+returned all eight counters to zero. Its strict repeat is pending. The original
+three backend suites also repeated successfully: entitlements 13, releases 14,
+and gallery 11, with zero marker records after cleanup.
+
+Independent strict run `02021` passed with zero screenshot changes across all
+fourteen authored captures. Its exact audit reports zero remaining operational,
+publication, sender, audience, campaign, and media ownership records. Evidence is
+retained in `qa/evidence/fresh-site/independent-owner`. The file metadata regression
+now has twelve passing gallery/media tests: public image bytes remain available,
+while File list and document metadata require management of the attached website.
+
+The existing organization booking HTTP and realtime suite repeated on Fresh B:
+17 tests passed; 21 exact synthetic records were removed and no exact parent or
+child records remained. Independent and organization regression both passed;
+expanded organization/staff/workbook/newsletter browser acceptance is pending.
+
+The expanded organization run `02022` verified managed receptionist login,
+newsletter capture/unsubscribe/suppression, article history, and workbook review
+and application before stopping at an inaccessible draft text label. That label
+now remains stable when the textarea contains imported text. The repeat is
+running. The private preview also fails closed for missing template packages;
+there are no TypeScript diagnostics in the touched content/setup/independent
+surfaces. The full application still reports 272 unrelated existing diagnostics.

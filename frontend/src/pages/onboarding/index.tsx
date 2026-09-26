@@ -144,7 +144,7 @@ export default function Onboarding() {
               </p>
             )}
 
-            <label className="mt-5 block">Business structure<select className="ml-3 rounded border p-2" value={structure} onChange={event => setStructure(event.target.value)}><option value="organization">Organization with a team</option><option value="individual">Independent provider</option></select></label>
+            <label className="mt-5 block">Business structure<select aria-label="Business structure" className="ml-3 rounded border p-2" value={structure} onChange={event => setStructure(event.target.value)}><option value="organization">Organization with a team</option><option value="individual">Independent provider</option></select></label>
             {structure === 'individual' ? <SoloSetup /> : <form onSubmit={submit} className="mt-6 space-y-6 rounded-2xl border p-6" style={{ borderColor: 'var(--border-default)', backgroundColor: 'var(--bg-elevated)' }}>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
