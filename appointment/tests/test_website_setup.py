@@ -32,6 +32,11 @@ class WebsiteSetupTests(unittest.TestCase):
 
     def tearDown(self):
         frappe.set_user("Administrator")
+        sites = {frappe.db.get_value("File", name, "attached_to_name") for name in self.uploads}
+        sites.discard(None)
+        if sites:
+            for doctype in ("Published Content Release", "Experience Release"):
+                frappe.db.delete(doctype, {"public_site": ["in", sorted(sites)]})
         for name in self.uploads:
             if frappe.db.exists("File", name):
                 frappe.delete_doc("File", name, force=True, ignore_permissions=True)

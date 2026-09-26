@@ -745,3 +745,13 @@ Production public pages register their worker without a generic platform update
 banner over the independently owned template. The private workspace's asset-ready
 message now states that booking and account pages require a connection.
 Production and recovery qualification remain pending.
+
+The compiled production security baseline `00152` passed the five entry, CSP,
+service-worker, and cache privacy checks. A separate strict repeat is required.
+The release regressions passed 14 tests after media protection. The website
+suite initially stopped because its synthetic cleanup tried to delete an image
+before its test release. That prevented its savepoint rollback and caused the
+next preference test to reuse the prior draft. Cleanup now removes exact
+publication rows for the uploaded test sites first. The repeat passed all 12
+website tests. This correction changes test cleanup, not owner or publication
+permissions.
