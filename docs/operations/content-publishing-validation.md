@@ -817,3 +817,13 @@ a forged-flag and ignore-permissions attempt; the website suite passed twelve.
 Frontend DOM checks passed and focused content/provider lint reported zero errors.
 The production and final normal-owner upload journeys must be repeated after these
 fixes before completion.
+
+Production run `00157` passed five of ten scenarios. Content surfaces now had
+zero layout movement in the completed measurements. Meron's mobile booking
+handoff still showed 0.128 movement because it rendered the provider's fallback
+identity before its published configuration. The handoff now waits for the
+published configuration and exposes an unavailable state on failure.
+Four scheduler focus checks read the first frame of an animated ring; their
+screenshots showed the ring. The check now waits up to one second for that actual
+visible outline or shadow, then records its computed style. The focus requirement
+and performance thresholds are unchanged. This failed run is not acceptance.

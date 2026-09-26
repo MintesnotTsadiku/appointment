@@ -9,10 +9,12 @@ import type { PublishedSnapshot } from "@/public-experience/types";
 import "@/public-experience/platform.css";
 
 function BookingHandoff({ snapshot, slug }: { snapshot: PublishedSnapshot; slug?: string }) {
-  const { config, theme, setPreference } = usePublicExperience();
+  const { config, theme, setPreference, isLoading, error } = usePublicExperience();
   const rootStyle = theme.variables as CSSProperties;
   const publicRoot = publicRootForSlug(slug);
   const template = getTemplatePackage(snapshot.compiledDesign.layout.rendererKey);
+  if (isLoading) return <div data-pe-loading role="status" className="p-8">Loading published design…</div>;
+  if (error) return <main data-pe-unavailable className="p-8"><h1>Booking unavailable</h1><p>Please try again later.</p></main>;
   if (!template) return <main data-pe-unsupported className="p-8">Unsupported public template</main>;
   const BookingTemplate = template.Booking;
   return <BookingTemplate

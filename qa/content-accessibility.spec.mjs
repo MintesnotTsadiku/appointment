@@ -73,6 +73,13 @@ for (const key of ["selam", "bloom", "meron", "abugida", "tena"]) {
           expect(keyboardSteps).toBeGreaterThan(0);
           for (let tab = 0; tab < keyboardSteps; tab += 1) {
             await page.keyboard.press("Tab");
+            // Existing scheduler controls animate their focus ring. Check the
+            // visible result after that transition, rather than its first frame.
+            await expect.poll(() => page.evaluate(() => {
+              const style = getComputedStyle(document.activeElement);
+              return (style.outlineStyle !== "none" && Number.parseFloat(style.outlineWidth) > 0) ||
+                style.boxShadow !== "none";
+            }), { timeout: 1000, message: `${key} ${surface} visible keyboard focus treatment` }).toBe(true);
             const focus = await page.evaluate(() => {
               const element = document.activeElement;
               const bounds = element?.getBoundingClientRect();
