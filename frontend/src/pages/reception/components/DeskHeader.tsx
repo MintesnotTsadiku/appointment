@@ -270,7 +270,7 @@ export const DeskHeader = ({
               <AnimatePresence mode="wait">
                 <motion.div
                   key={theme + "-icon"}
-                  initial={{ opacity: 0, rotate: -90 }}
+                  initial={false}
                   animate={{ opacity: 1, rotate: 0 }}
                   exit={{ opacity: 0, rotate: 90 }}
                   transition={{ duration: 0.2 }}

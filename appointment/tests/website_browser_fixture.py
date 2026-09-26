@@ -96,6 +96,8 @@ class WebsiteBrowserFixture:
             for own in ownerships:
                 self._delete(own.source_doctype, [own.source_name])
             self._delete("Content Ownership", [row.name for row in ownerships])
+            for doctype in ("Published Content Release", "Experience Release"):
+                self._delete(doctype, frappe.get_all(doctype, filters={"public_site": ["in", sites or ["__none__"]]}, pluck="name"))
             for file in frappe.get_all("File", filters={"attached_to_doctype": "Public Site",
                                                        "attached_to_name": ["in", sites or ["__none__"]]}, pluck="name"):
                 frappe.delete_doc("File", file, force=True, ignore_permissions=True)
@@ -103,8 +105,6 @@ class WebsiteBrowserFixture:
                 self._delete("Email Group", frappe.get_all("Email Group", filters={"title": "Website newsletter " + site}, pluck="name"))
                 self._delete("Blog Category", frappe.get_all("Blog Category", filters={"title": "Website " + site}, pluck="name"))
                 self._delete("Blogger", frappe.get_all("Blogger", filters={"short_name": "website-" + site}, pluck="name"))
-            for doctype in ("Published Content Release", "Experience Release"):
-                self._delete(doctype, frappe.get_all(doctype, filters={"public_site": ["in", sites or ["__none__"]]}, pluck="name"))
             for outbox in frappe.get_all("Public Experience Outbox", fields=["name", "payload_json"]):
                 if json.loads(outbox.payload_json or "{}").get("site") in sites:
                     self._delete("Public Experience Outbox", [outbox.name])

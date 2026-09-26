@@ -1,5 +1,5 @@
 import { test, expect } from "playwright/test";
-import { articleHistory, businessIsolation } from "./owner-validation.mjs";
+import { articleHistory, businessIsolation, stableScreenshot } from "./owner-validation.mjs";
 import { writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { execFileSync } from "node:child_process";
@@ -62,7 +62,7 @@ test("website-owner-journey", async ({ page }, testInfo) => {
   expect((await signedInStaff.json()).message).toBe(profile.user);
   await receptionist.goto("/reception", { waitUntil: "networkidle" });
   await expect(receptionist).toHaveURL(/\/reception/);
-  await receptionist.screenshot({ path: testInfo.outputPath("website-receptionist-managed-session.png"), fullPage: true });
+  await stableScreenshot(receptionist, { path: testInfo.outputPath("website-receptionist-managed-session.png"), fullPage: true });
   await page.goto("/settings/website", { waitUntil: "networkidle" });
   await expect(page.getByRole("heading", { name: "Website setup", exact: true })).toBeVisible();
   await page.getByRole("combobox", { name: "Business", exact: true }).selectOption({ label: marker });
@@ -315,7 +315,7 @@ test("website-owner-journey", async ({ page }, testInfo) => {
   const deniedBody = await denied.json();
   expect(deniedBody.exc_type).toBe("PermissionError");
   expect(JSON.stringify(deniedBody)).not.toContain(`${marker} Preparing for your visit`);
-  await receptionist.screenshot({ path: testInfo.outputPath("website-receptionist-publishing-denied.png"), fullPage: true });
+  await stableScreenshot(receptionist, { path: testInfo.outputPath("website-receptionist-publishing-denied.png"), fullPage: true });
   writeFileSync(testInfo.outputPath("website-staff-validation.json"), JSON.stringify({
     managed_browser_account: profile.browser_account, managed_browser_session: profile.browser_session,
     roles: profile.roles, user: profile.user, scope: staffState.selected.location_names,

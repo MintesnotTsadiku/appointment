@@ -268,7 +268,7 @@ def export_accessibility(name):
             inventory.append({'file': str(target.relative_to(destination)), 'sha256': hashlib.sha256(target.read_bytes()).hexdigest()})
     result = {'run': name, 'source_version': doc.source_version, 'scenario_summary': summary,
               'artifacts': inventory, 'engine': 'axe-core 4.11.0',
-              'scope': 'Seventy public surfaces: automated WCAG A/AA violations and local development navigation budget. Incomplete checks require manual review; this does not certify full accessibility or production performance.'}
+              'scope': 'Seventy compiled-production public surfaces: automated WCAG A/AA checks, keyboard traversal, local largest paint and layout stability budgets. Incomplete checks require manual review; this does not certify full accessibility or remote network performance.'}
     (destination / 'validation.json').write_text(json.dumps(result, indent=2) + '\n')
     return {'run': name, 'public_reports': len(reports), 'destination': str(destination)}
 

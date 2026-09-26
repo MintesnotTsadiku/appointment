@@ -702,3 +702,46 @@ the browser uses software rendering. Exact PNG comparison and functional
 assertions remain unchanged. Final baseline `04008` and strict `04009` passed.
 The full organization journey on Fresh C is running at `04010`. Template,
 production accessibility, and recovery/code drills remain pending.
+
+### Publication media and receptionist qualification
+
+The final review found that upstream File deletion removes physical bytes before
+ordinary document event hooks run. Website files now use a Frappe controller
+extension. It checks publication references before upstream deletion and checks
+attachment, URL, and privacy changes before upstream file movement. Published,
+superseded, and withdrawn history retain their media. Owners can still delete an
+unused image. Metadata write permission also rejects changes to an existing
+website attachment. Fifteen gallery tests passed, including normal-owner delete
+denial after withdrawal, file ownership and privacy changes, and unused cleanup.
+
+Receptionist entrance fades could leave content invisible with reduced motion
+and a fixed browser Date. Static workspace content now renders immediately.
+Visual captures wait for visible animated elements to settle. The frontend DOM
+regressions passed. Fresh C organization repeat `04022` is in progress; it must
+pass a separate strict comparison before acceptance.
+
+### Fresh-install organization owner accepted
+
+Fresh C baseline `04026` passed. Strict repeat `04030` passed all 39 authored
+captures with zero screenshot changes. All 24 cleanup counters are zero.
+Retained evidence includes the normal owner's resumable setup, all private
+surface previews, content publication and rollback, versioned workbook correction,
+application and exact retry, a workbook-created business, local newsletter
+sender verification, consent, confirmed delivery, unsubscribe and suppression.
+The receptionist account was created through its guest invitation and assigned
+by the normal owner through Team. It retained one location workspace and could
+not access publishing controls or APIs. Two separate managed identities created
+their own businesses. Nine cross-business requests and five expired-entitlement
+requests were denied; collection, article and send limits preserved releases.
+
+The browser checks both legitimate post-creation screens before choosing the
+second business through the visible workspace chooser. This corrects a test
+assumption without changing business creation behavior. Receptionist focused
+lint reports seven existing errors; running lint on the committed baseline
+reports the same seven errors. No new lint error was introduced by the entrance
+visibility changes. Full TypeScript still has the recorded unrelated baseline.
+
+Production public pages register their worker without a generic platform update
+banner over the independently owned template. The private workspace's asset-ready
+message now states that booking and account pages require a connection.
+Production and recovery qualification remain pending.

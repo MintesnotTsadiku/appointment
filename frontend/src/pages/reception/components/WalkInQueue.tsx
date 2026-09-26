@@ -146,7 +146,7 @@ export const WalkInQueue = ({ locationName, onAssignWalkIn, onCreateWalkIn, refr
           </div>
         ) : walkIns.length === 0 ? (
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             className="text-center py-12"
           >
@@ -161,7 +161,7 @@ export const WalkInQueue = ({ locationName, onAssignWalkIn, onCreateWalkIn, refr
             {walkIns.map((walkIn, index) => (
               <motion.div
                 key={walkIn.name}
-                initial={{ opacity: 0, x: -20 }}
+                initial={false}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20, scale: 0.95 }}
                 transition={{ delay: index * 0.05 }}

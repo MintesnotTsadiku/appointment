@@ -227,6 +227,8 @@ override_doctype_class = {
 # ---------------
 # Hook on document methods and events
 
+extend_doctype_class = {"File": ["appointment.content.media_access.WebsiteFile"]}
+
 doc_events = {
     "Leave Application": {  # Leave Application is a doctype in HR module, which is not a requirement for this app
         "on_submit": "appointment.overrides.leave_application_override.on_submit",

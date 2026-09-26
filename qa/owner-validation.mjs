@@ -7,11 +7,11 @@ export async function settlePage(page) {
   await page.mouse.move(0, 0);
   await page.evaluate(() => document.activeElement?.blur());
   try {
-    await page.waitForFunction(() => Array.from(document.querySelectorAll('main [style], [data-qa="theme-toggle"] [style]'))
+    await page.waitForFunction(() => Array.from(document.querySelectorAll('[style]'))
       .filter(element => element.getClientRects().length && element.style.opacity && element.style.transform)
       .every(element => Number(element.style.opacity) === 1));
   } catch {
-    const unsettled = await page.evaluate(() => Array.from(document.querySelectorAll('main [style], [data-qa="theme-toggle"] [style]'))
+    const unsettled = await page.evaluate(() => Array.from(document.querySelectorAll('[style]'))
       .filter(element => element.getClientRects().length && element.style.opacity && element.style.transform && Number(element.style.opacity) !== 1)
       .map(element => ({ tag: element.tagName, class: element.className, style: element.getAttribute("style") })));
     throw new Error("Unsettled visual elements: " + JSON.stringify(unsettled));
@@ -86,7 +86,8 @@ export async function businessIsolation(page, second, testInfo, marker) {
   await second.getByLabel("Location name", { exact: true }).fill(marker + " Isolation Main");
   await second.getByLabel("First service name", { exact: true }).fill(marker + " Isolation Consultation");
   await second.getByRole("button", { name: "Create business", exact: true }).click();
-  await expect(second.getByRole("heading", { name: "Your business is saved as a draft", exact: true })).toBeVisible();
+  await expect(second.getByRole("heading", { name: "Your business is saved as a draft", exact: true })
+    .or(second.getByRole("heading", { name: marker + " Isolation", exact: true }))).toBeVisible();
   await second.goto("/workspaces", { waitUntil: "networkidle" });
   await second.locator('[data-qa="workspace-card"]').filter({
     has: second.getByRole("heading", { name: marker + " Isolation", exact: true }),

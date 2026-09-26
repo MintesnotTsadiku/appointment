@@ -401,7 +401,7 @@ export const DeskCalendar = ({
         )}
         {isOver && (
           <motion.div
-            initial={{ opacity: 0 }}
+            initial={false}
             animate={{ opacity: 1 }}
             className="absolute inset-1 border-2 border-dashed rounded-lg"
             style={{ borderColor: 'var(--accent-primary)' }}
@@ -509,7 +509,7 @@ export const DeskCalendar = ({
                 const topPosition = 64 + (startSlotMinutes / timeSlotInterval) * slotHeightPx;
                 return (
                   <motion.div
-                    initial={{ opacity: 0 }}
+                    initial={false}
                     animate={{ opacity: 1 }}
                     className="absolute left-0 right-0 z-20 pointer-events-none"
                     style={{
@@ -548,7 +548,7 @@ export const DeskCalendar = ({
                     return (
                       <motion.div
                         key={appointment.name}
-                        initial={{ opacity: 0, x: -10 }}
+                        initial={false}
                         animate={{ opacity: 1, x: 0 }}
                         className="absolute z-10"
                         style={{ 
@@ -577,7 +577,7 @@ export const DeskCalendar = ({
                   return (
                     <motion.div
                       key={appointment.name}
-                      initial={{ opacity: 0, scale: 0.95 }}
+                      initial={false}
                       animate={{ opacity: 1, scale: 1 }}
                       className="absolute z-10"
                       style={{ 
@@ -733,7 +733,7 @@ export const DeskCalendar = ({
                           return (
                             <motion.div
                               key={appointment.name}
-                              initial={{ opacity: 0, scale: 0.95 }}
+                              initial={false}
                               animate={{ opacity: 1, scale: 1 }}
                               className="absolute z-10"
                               style={{ 
@@ -767,7 +767,7 @@ export const DeskCalendar = ({
                         return (
                           <motion.div
                             key={appointment.name}
-                            initial={{ opacity: 0, scale: 0.95 }}
+                            initial={false}
                             animate={{ opacity: 1, scale: 1 }}
                             className="absolute z-10"
                             style={{ 
@@ -794,7 +794,7 @@ export const DeskCalendar = ({
                             {/* "+X more" button */}
                             {layout.overflowCount && layout.overflowCount > 0 && layout.overflowAppointments && (
                               <motion.button
-                                initial={{ opacity: 0 }}
+                                initial={false}
                                 animate={{ opacity: 1 }}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}

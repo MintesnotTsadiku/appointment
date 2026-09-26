@@ -229,7 +229,7 @@ const Reception = () => {
             }}
           >
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               className="grid grid-cols-2 lg:grid-cols-4 gap-3"
@@ -237,7 +237,7 @@ const Reception = () => {
               {stats.map((stat, index) => (
                 <motion.div
                   key={stat.label}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={false}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   className="relative group"
@@ -280,7 +280,7 @@ const Reception = () => {
             }}
           >
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
@@ -334,7 +334,7 @@ const Reception = () => {
 
           {/* Main Content */}
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
             className="grid grid-cols-1 lg:grid-cols-4 gap-6"

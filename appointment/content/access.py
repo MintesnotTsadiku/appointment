@@ -51,9 +51,14 @@ def file_query(user=None) -> str:
 
 
 def file_permission(doc, user=None, **kwargs):
-    if doc.attached_to_doctype != "Public Site":
+    from appointment.content.media_access import governed_file
+
+    stored = governed_file(doc)
+    if not stored:
         return None
-    site = frappe.db.get_value("Public Site", doc.attached_to_name,
+    if (kwargs.get("ptype") or kwargs.get("permission_type")) == "write" and not doc.is_new():
+        return False
+    site = frappe.db.get_value("Public Site", stored.attached_to_name,
                                ["owner_type", "organization", "provider"], as_dict=True)
     if not site:
         return False

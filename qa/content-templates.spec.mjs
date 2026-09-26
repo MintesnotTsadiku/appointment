@@ -7,7 +7,10 @@ for (const key of ["selam", "bloom", "meron", "abugida", "tena"]) {
       const row = world[key];
       expect(row?.recipe).toBeTruthy();
       const context = await browser.newContext({ baseURL: process.env.PLAYWRIGHT_BASE_URL,
-        viewport: width === "desktop" ? { width: 1440, height: 900 } : { width: 390, height: 844 }, colorScheme: mode, reducedMotion: "reduce" });
+        viewport: width === "desktop" ? { width: 1440, height: 900 } : { width: 390, height: 844 }, colorScheme: mode, reducedMotion: "reduce",
+        // Controlled empty/error API responses must reach Playwright routing.
+        // The separate production suite qualifies the actual service worker.
+        serviceWorkers: "block" });
       await context.addInitScript((preference) => {
         localStorage.setItem("pe-display-mode", preference);
         localStorage.setItem("vite-ui-theme", preference);

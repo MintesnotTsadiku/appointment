@@ -1,7 +1,7 @@
 import { RefreshCw } from "lucide-react";
 import { useRegisterSW } from "virtual:pwa-register/react";
 
-export function UpdateNotification() {
+export function UpdateNotification({ showNotifications = true }: { showNotifications?: boolean }) {
   const {
     offlineReady: [offlineReady, setOfflineReady],
     needRefresh: [needRefresh, setNeedRefresh],
@@ -27,7 +27,7 @@ export function UpdateNotification() {
     }
   };
 
-  if (!offlineReady && !needRefresh) return null;
+  if (!showNotifications || !offlineReady && !needRefresh) return null;
 
   return (
     <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 max-w-md w-full mx-4">
@@ -36,7 +36,7 @@ export function UpdateNotification() {
           <RefreshCw className="w-5 h-5" />
           <div>
             {offlineReady ? (
-              <p className="font-medium">App ready to work offline</p>
+              <p className="font-medium">App assets saved. Booking and account pages require a connection.</p>
             ) : (
               <p className="font-medium">New version available!</p>
             )}
@@ -63,7 +63,6 @@ export function UpdateNotification() {
     </div>
   );
 }
-
 
 
 

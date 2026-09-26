@@ -55,7 +55,7 @@ const App = () => {
                 <Toaster />
                 {standalone ? null : <ModeToggle />}
                 {standalone ? null : <InstallPrompt />}
-                <UpdateNotification />
+                <UpdateNotification showNotifications={!publicOnly} />
                 {standalone ? null : <ConnectionStatus />}
               </Suspense>
             </TooltipProvider>

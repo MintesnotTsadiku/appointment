@@ -30,6 +30,7 @@ test("production-security-and-cache-upgrade", async ({ browser }, testInfo) => {
     }
     expect(errors).toEqual([]);
     expect(privateRequests).toEqual([]);
+    const unsolicitedPrivateRequests = [...privateRequests];
     await page.evaluate(async () => {
       for (const registration of await navigator.serviceWorker.getRegistrations()) await registration.unregister();
       for (const name of ["html-cache", "api-cache", "static-data-cache", "schedule-pages-cache"]) {
@@ -65,7 +66,7 @@ test("production-security-and-cache-upgrade", async ({ browser }, testInfo) => {
     expect(cachedPrivatePaths).toEqual([]);
     await stableScreenshot(page, { path: testInfo.outputPath("production-public-security.png"), fullPage: true });
     await writeFile(testInfo.outputPath("production-gates.json"), JSON.stringify({
-      production_entries: checks, page_errors: errors, guest_private_requests: privateRequests,
+      production_entries: checks, page_errors: errors, guest_private_requests: unsolicitedPrivateRequests,
       worker_root_scope: true, legacy_private_caches_removed: true,
       other_application_cache_preserved: true, private_api_denied: true,
       private_api_network_only: true, cached_private_paths: cachedPrivatePaths,

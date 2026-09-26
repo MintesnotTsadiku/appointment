@@ -12,6 +12,13 @@ for (const key of ["selam", "bloom", "meron", "abugida", "tena"]) {
       await context.addInitScript(preference => {
         localStorage.setItem("pe-display-mode", preference);
         localStorage.setItem("vite-ui-theme", preference);
+        window.__contentVitals = { lcp: 0, cls: 0 };
+        new PerformanceObserver(list => {
+          for (const entry of list.getEntries()) window.__contentVitals.lcp = entry.startTime;
+        }).observe({ type: "largest-contentful-paint", buffered: true });
+        new PerformanceObserver(list => {
+          for (const entry of list.getEntries()) if (!entry.hadRecentInput) window.__contentVitals.cls += entry.value;
+        }).observe({ type: "layout-shift", buffered: true });
       }, mode);
       const page = await context.newPage();
       const reports = [];
@@ -38,6 +45,8 @@ for (const key of ["selam", "bloom", "meron", "abugida", "tena"]) {
                 })),
               })) })),
               navigationMs: navigation?.domContentLoadedEventEnd,
+              lcpMs: window.__contentVitals.lcp,
+              cls: window.__contentVitals.cls,
               externalResources: performance.getEntriesByType("resource").filter(row =>
                 /^https?:/.test(row.name) && new URL(row.name).origin !== location.origin).map(row => row.name),
             };
@@ -59,11 +68,14 @@ for (const key of ["selam", "bloom", "meron", "abugida", "tena"]) {
           }
           reports.push({ surface, ...audit, keyboard });
           await writeFile(testInfo.outputPath(`${key}-${width}-${mode}-gates.json`), JSON.stringify({
-            engine: "axe-core 4.11.0", viewport: width, mode, scope: "Automated WCAG A/AA checks and local development navigation budget; manual accessibility review remains separate.", reports,
+            engine: "axe-core 4.11.0", viewport: width, mode, scope: "Automated WCAG A/AA checks, keyboard traversal, and local compiled-production navigation budget; manual accessibility review remains separate.", reports,
           }, null, 2));
           expect(audit.violations, `${key} ${surface} accessibility`).toEqual([]);
           expect(audit.externalResources, `${key} ${surface} external resource requests`).toEqual([]);
           expect(audit.navigationMs, `${key} ${surface} local DOM load budget`).toBeLessThan(15000);
+          expect(audit.lcpMs, `${key} ${surface} local largest paint budget`).toBeGreaterThan(0);
+          expect(audit.lcpMs, `${key} ${surface} local largest paint budget`).toBeLessThan(2500);
+          expect(audit.cls, `${key} ${surface} local layout stability budget`).toBeLessThanOrEqual(0.1);
         }
         await page.keyboard.press("Tab");
         expect(await page.evaluate(() => document.activeElement?.tagName !== "BODY")).toBe(true);

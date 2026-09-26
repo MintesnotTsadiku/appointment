@@ -179,6 +179,40 @@ class GalleryAcceptance(unittest.TestCase):
         self.assertTrue(Path(file.get_full_path()).is_file())
         frappe.set_user("Administrator")
 
+    def test_saved_website_image_cannot_be_detached_or_made_private(self):
+        file = frappe.get_doc("File", {"file_url": self.state["image_url"]})
+        owner = self.state["owners"]["A"]
+        self.assertFalse(frappe.has_permission("File", "write", doc=file, user=owner))
+        for field, value in (("attached_to_doctype", ""), ("attached_to_name", self.state["sites"]["B"]),
+                             ("is_private", 1)):
+            candidate = frappe.get_doc("File", file.name)
+            candidate.set(field, value)
+            from appointment.content.media_access import validate
+            with self.assertRaises(frappe.ValidationError):
+                validate(candidate)
+        self.assertTrue(Path(file.get_full_path()).is_file())
+
+    def test_published_image_delete_is_denied_after_withdrawal(self):
+        collection = self._collection()
+        ownership = self._ownership(collection)
+        frappe.set_user(self.state["owners"]["A"])
+        published = releases.publish_gallery_collection(ownership.name)
+        releases.withdraw_release(published.name)
+        file = frappe.get_doc("File", {"file_url": self.state["image_url"]})
+        with self.assertRaises(frappe.ValidationError):
+            frappe.delete_doc("File", file.name)
+        self.assertTrue(Path(file.get_full_path()).is_file())
+        frappe.set_user("Administrator")
+
+    def test_unpublished_website_image_can_be_deleted_by_owner(self):
+        file = _insert(self.state, "File", file_name=self.state["marker"] + "-unused.png",
+                       attached_to_doctype="Public Site", attached_to_name=self.state["sites"]["A"],
+                       is_private=0, content=_png_bytes((10, 20, 30)))
+        frappe.set_user(self.state["owners"]["A"])
+        frappe.delete_doc("File", file.name)
+        self.assertFalse(frappe.db.exists("File", file.name))
+        frappe.set_user("Administrator")
+
     def _collection(self, suffix="A", status="Draft", video_id="dQw4w9WgXcQ", consent="Not Required"):
         seq = self.state.get("seq", 0) + 1
         self.state["seq"] = seq

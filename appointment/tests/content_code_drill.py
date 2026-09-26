@@ -75,6 +75,7 @@ def rollback():
     with os.fdopen(descriptor, "w") as stream:
         json.dump(state, stream)
     archived = DIRECTORY / ROLLBACK_REF
+    _clear_site_cache(archived)
     subprocess.run(["tmux", "respawn-pane", "-k", "-t", SESSION + ":backend",
                     commands["backend"].replace(str(CHECKOUT), str(archived))], check=True)
     if "content_production_gateway.py" not in commands["frontend"]:
@@ -89,8 +90,15 @@ def upgrade():
     state = json.loads(STATE.read_text())
     if state.get("site") != RESTORE_SITE or state.get("frontend_directory") != str(CHECKOUT / "frontend"):
         raise RuntimeError("The preserved candidate launch state differs from the isolated contract")
+    _clear_site_cache(CHECKOUT)
     for window in ("backend", "frontend"):
         subprocess.run(["tmux", "respawn-pane", "-k", "-c", state["frontend_directory"] if window == "frontend" else str(RUNTIME / "bench"),
                         "-t", SESSION + ":" + window, state["commands"][window]], check=True)
     STATE.unlink()
     return {"site": RESTORE_SITE, "candidate_restored": True, "schema_unchanged": True}
+
+
+def _clear_site_cache(checkout):
+    environment = {**os.environ, "PYTHONPATH": str(checkout), "FRAPPE_BENCH_ROOT": str(RUNTIME / "bench")}
+    subprocess.run(["bench", "--site", RESTORE_SITE, "clear-cache"],
+                   cwd=RUNTIME / "bench", env=environment, check=True)
