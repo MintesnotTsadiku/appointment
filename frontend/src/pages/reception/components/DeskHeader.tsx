@@ -40,7 +40,7 @@ export const DeskHeader = ({
       }}
     >
       <div className="px-4 lg:px-6 py-3 max-w-[1800px] mx-auto">
-        <div className="flex items-center justify-between gap-4">
+        <div data-internal-toolbar className="flex flex-wrap items-center justify-between gap-4">
           {/* Left side - Title & Navigation */}
           <div className="flex items-center gap-4 lg:gap-6 flex-shrink min-w-0">
             {/* Logo & Title */}

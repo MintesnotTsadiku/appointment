@@ -25,7 +25,7 @@ export function InsightBrief({ kind }: { kind: 'provider' | 'reception' }) {
     <span><b className="tabular-nums">{report.current.completed}</b> completed this week</span>
     <span><b className="tabular-nums">{report.current.no_show_rate.available ? `${report.current.no_show_rate.rate}%` : '—'}</b> no-show rate</span>
     <span><b className="tabular-nums">{report.metrics.utilization.value!==null ? `${report.metrics.utilization.value}%` : 'unavailable'}</b> current schedule estimate</span>
-    <Link to="/analytics" className="ml-auto inline-flex items-center gap-1 font-semibold" style={{ color: 'var(--accent-primary)' }}>View insights <ArrowUpRight className="h-4 w-4" /></Link>
+    <Link to="/analytics" className="ml-auto inline-flex items-center gap-1 font-semibold" style={{ color: 'var(--accent-primary-text, var(--accent-primary))' }}>View insights <ArrowUpRight className="h-4 w-4" /></Link>
   </section>;
 }
 

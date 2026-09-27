@@ -398,8 +398,8 @@ button[role="gridcell"][aria-selected="true"] span {
 }
 
 @media (min-width: 768px) {
-  html[data-workspace-navigation="sidebar"] body { padding-left: 240px; }
-  html[data-workspace-navigation="sidebar"][data-workspace-collapsed="true"] body { padding-left: 80px; }
+  html[data-workspace-navigation="sidebar"] body { padding-left: 288px; }
+  html[data-workspace-navigation="sidebar"][data-workspace-collapsed="true"] body { padding-left: 64px; }
 }
 
 [data-qa="workspace-analytics"] button[aria-label^="Move "],

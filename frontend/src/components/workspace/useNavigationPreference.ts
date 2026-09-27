@@ -12,7 +12,7 @@ export function useNavigationPreference() {
     const post = useFrappePostCall<{
         message: NavigationPreference;
     }>('appointment.scheduler.dashboard_config.save_navigation');
-    const value = query.data?.message || { placement: 'top' as const, collapsed: false };
+    const value = query.data?.message || { placement: 'sidebar' as const, collapsed: false };
     const update = async (next: NavigationPreference) => { const result = await post.call(next); await query.mutate(result, false); };
     return { value, update, error: post.error };
 }

@@ -55,6 +55,6 @@ export default function IndependentBookingSettings() {
       <Button disabled={loading || !workspace} type="submit">Save independent offering</Button>
     </form>}
     {workspace?.offerings.map(row => <section key={row.offering} aria-label="Independent offering" className="space-y-3 rounded-xl border p-5"><h2>{row.service}</h2><p>{row.published ? 'Published' : 'Private draft'}</p><Button disabled={publishing} onClick={() => void toggle(row)}>{row.published ? 'Unpublish booking' : 'Publish booking'}</Button>{row.published && <Link className="ml-4 underline" to={row.public_path}>Open guest booking</Link>}</section>)}
-    <nav className="flex gap-6"><Link className="underline" to="/calendar">View schedule</Link><Link className="underline" to="/settings/website">Start Website setup</Link></nav>
+    <nav className="flex flex-wrap gap-6"><Link className="underline" to="/settings/appearance">Appearance</Link><Link className="underline" to="/calendar">View schedule</Link><Link className="underline" to="/settings/website">Start Website setup</Link></nav>
   </main></>;
 }

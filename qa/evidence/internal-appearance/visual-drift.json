@@ -1,0 +1,50 @@
+{
+  "baseline_run": "BQA-2026-00290",
+  "strict_run": "BQA-2026-00291",
+  "differences": [
+    {
+      "file": "internal-reception-mobile-ocean-compact.png",
+      "bounds": [
+        38,
+        697,
+        352,
+        2891
+      ],
+      "changed_pixels": 11331,
+      "max_channel_delta": 238
+    },
+    {
+      "file": "internal-reception-ocean-compact.png",
+      "bounds": [
+        27,
+        107,
+        1413,
+        623
+      ],
+      "changed_pixels": 272,
+      "max_channel_delta": 2
+    },
+    {
+      "file": "internal-schedule-mobile-ocean-compact.png",
+      "bounds": [
+        147,
+        793,
+        183,
+        821
+      ],
+      "changed_pixels": 8,
+      "max_channel_delta": 11
+    },
+    {
+      "file": "internal-schedule-ocean-compact.png",
+      "bounds": [
+        27,
+        107,
+        1413,
+        1471
+      ],
+      "changed_pixels": 184,
+      "max_channel_delta": 2
+    }
+  ]
+}

@@ -316,6 +316,7 @@ def context():
 
     roles = frappe.get_roles(user)
     base["roles"] = roles
+    base["user_image"] = frappe.db.get_value("User", user, "user_image")
     base["full_name"] = frappe.db.get_value("User", user, "full_name") or user
     base["has_staff_role"] = has_staff_role(user)
 

@@ -1,0 +1,20 @@
+
+> frontend@0.0.0 test:dom
+> node tests/no-nested-interactive.test.mjs && node tests/realtime-lifecycle.test.mjs && node tests/pwa-privacy.test.mjs && node tests/business-owner-route.test.mjs && node tests/time-input.test.mjs && node tests/theme.test.mjs && node tests/analytics-dashboard.test.mjs && node tests/public-experience.test.mjs && node tests/public-experience-provider.test.mjs && node tests/public-experience-routes.test.mjs && node tests/public-template-packages.test.mjs && node tests/public-content.test.mjs
+
+OK: no nested interactive controls in /home/minte/projects/training-apps/.worktrees/frappe-appointment-beta/frontend/src/pages/settings/manage/components/HierarchyTree.tsx
+OK: no nested interactive controls in /home/minte/projects/training-apps/.worktrees/frappe-appointment-beta/frontend/src/pages/settings/manage/components/ItemCard.tsx
+OK: realtime lifecycle invariants hold
+OK: StrictMode remount reuses one socket and real unmount closes it
+PASS: private HTML, consent tokens, drafts, and API responses cannot enter PWA caches
+PASS: worker upgrades remove legacy private caches and preserve public assets and other applications
+PASS: owner workspaces follow the selected business scope and fail closed for staff, guests, and session errors
+PASS: 4,320 minute/format round trips, evening/midnight aliases and invalid/ambiguous input rejection
+PASS: identity-scoped first paint and public route independence
+PASS: live System changes, preview/cancel/save, save errors, identity changes and logout
+PASS: 176 unique widget contracts, permission-safe industry presets, complete All, separate dashboards and shared exports
+PASS: packaged compiled design and safe renderer contract
+PASS: compiled-design first paint, strict config fallback and provider containment
+PASS: public routes wired and public/editor surfaces contained
+PASS: five independent, fail-closed public template packages
+PASS: content paths, safe media/video contracts, independent template boundaries

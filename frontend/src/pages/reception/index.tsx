@@ -234,7 +234,7 @@ const Reception = () => {
               initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="grid grid-cols-2 lg:grid-cols-4 gap-3"
+              data-internal-grid className="grid grid-cols-2 lg:grid-cols-4 gap-3"
             >
               {stats.map((stat, index) => (
                 <motion.div
@@ -246,7 +246,7 @@ const Reception = () => {
                 >
                   <div className="absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl blur-xl" />
                   <div 
-                    className="relative backdrop-blur-sm rounded-xl p-4 hover:bg-[var(--border-subtle)] transition-all duration-300"
+                    data-internal-panel="small" className="relative backdrop-blur-sm rounded-xl p-4 hover:bg-[var(--border-subtle)] transition-all duration-300"
                     style={{ 
                       backgroundColor: 'var(--border-subtle)',
                       border: '1px solid var(--border-default)'
@@ -339,7 +339,7 @@ const Reception = () => {
             initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="grid grid-cols-1 lg:grid-cols-4 gap-6"
+            data-internal-grid className="grid grid-cols-1 lg:grid-cols-4 gap-6"
           >
             {/* Calendar */}
             <div className="lg:col-span-3 min-h-[600px]">

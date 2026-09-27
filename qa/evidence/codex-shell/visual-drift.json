@@ -1,0 +1,17 @@
+{
+  "baseline_run": "BQA-2026-00294",
+  "final_run": "BQA-2026-00296",
+  "differences": [
+    {
+      "file": "codex-profile-light.png",
+      "bounds": [
+        516,
+        358,
+        518,
+        719
+      ],
+      "changed_pixels": 12,
+      "maximum_channel_difference": 1
+    }
+  ]
+}

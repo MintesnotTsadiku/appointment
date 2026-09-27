@@ -86,4 +86,15 @@ def suites():
         'scenarios':[{'scenario_id':'seeded-homepage','title':'Seeded homepage','page_family':'homepage',
             'credential_capability':'frappe.role:Provider','mutation_level':'exact-cleanup',
             'playwright_pattern':'seeded-homepage','required_artifacts':['screenshot']}]}
-    return [homepage_demo, homepage, homepage_independent, runtime, website, templates, accessibility, production] if site == SITE else [runtime, website, individual]
+    internal = {**homepage_demo, 'suite_id':'internal-appearance', 'title':'Personal internal application appearance',
+        'spec_path':'qa/internal-appearance.spec.mjs', 'config_path':'qa/internal-appearance.config.mjs',
+        'fixture_adapter':'appointment.tests.internal_appearance_fixture.adapter',
+        'scenarios':[{'scenario_id':'internal-appearance','title':'Internal appearance matrix','page_family':'settings',
+            'credential_capability':'frappe.role:Provider','mutation_level':'exact-cleanup',
+            'playwright_pattern':'internal-appearance','required_artifacts':['screenshot']}]}
+    shell = {**internal, 'suite_id':'codex-shell', 'title':'Codex palette, workspace shell and profile',
+        'spec_path':'qa/codex-shell.spec.mjs', 'config_path':'qa/codex-shell.config.mjs',
+        'scenarios':[{'scenario_id':'codex-shell','title':'Codex shell matrix','page_family':'settings',
+            'credential_capability':'frappe.role:Provider','mutation_level':'exact-cleanup',
+            'playwright_pattern':'codex-shell','required_artifacts':['screenshot']}]}
+    return [shell, internal, homepage_demo, homepage, homepage_independent, runtime, website, templates, accessibility, production] if site == SITE else [runtime, website, individual]

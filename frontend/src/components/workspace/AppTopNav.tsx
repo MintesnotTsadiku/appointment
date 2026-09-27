@@ -1,175 +1,90 @@
 import { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { PanelLeftClose, PanelLeftOpen, Menu, BarChart3, Building2, CalendarDays, Home, Monitor, Moon, Settings, Sun, Users } from 'lucide-react';
 import { Dialog, DialogContent, DialogTitle } from '@/components/dialog';
-import { useNavigationPreference } from './useNavigationPreference';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { useFrappeAuth } from 'frappe-react-sdk';
-import { PanelLeftClose, PanelLeftOpen, Menu, BarChart3, Building2, CalendarDays, Home, LogOut, Monitor, Moon, Settings, Sun, Users } from 'lucide-react';
-import { useSession } from '@/context/session';
-import { useTheme } from '@/components/theme-provider';
 import { Button } from '@/components/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/select';
-
-const ROLE_LABEL: Record<string, string> = {
-  Owner: 'Owner',
-  Manager: 'Manager',
-  Receptionist: 'Receptionist',
-  Provider: 'Provider',
-};
+import { useSession } from '@/context/session';
+import { useTheme } from '@/components/theme-provider';
+import { useNavigationPreference } from './useNavigationPreference';
+import AccountMenu from './AccountMenu';
+import './workspace-shell.css';
 
 export function AppTopNav({ active }: { active?: 'home' | 'analytics' | 'reception' | 'calendar' | 'settings' | 'team' }) {
   const { session, selectWorkspace } = useSession();
-  const { logout } = useFrappeAuth();
-  const { theme, setTheme } = useTheme();
-  const navigate = useNavigate();
+  const { theme, setTheme, appearanceError, saving, isLoadingColors } = useTheme();
+  const { value: preference, update, error } = useNavigationPreference();
   const location = useLocation();
-  const { value: preference, update: updatePreference } = useNavigationPreference();
+  const navigate = useNavigate();
   const [drawer, setDrawer] = useState(false);
+  const workspaceVisible = Boolean(session?.authenticated && ['workspace','administrator','individual_owner'].includes(session.state));
   useEffect(() => {
+    if (!workspaceVisible) return;
     document.documentElement.dataset.workspaceNavigation = preference.placement;
     document.documentElement.dataset.workspaceCollapsed = String(preference.collapsed);
     return () => { delete document.documentElement.dataset.workspaceNavigation; delete document.documentElement.dataset.workspaceCollapsed; };
-  }, [preference.placement, preference.collapsed]);
+  }, [workspaceVisible, preference.placement, preference.collapsed]);
   useEffect(() => { setDrawer(false); }, [location.pathname]);
-
-  if (!session?.authenticated || (session.state !== 'workspace' && session.state !== 'administrator' && session.state !== 'individual_owner')) {
-    return null;
-  }
-
+  if (!workspaceVisible || !session) return null;
   const selected = session.selected;
-  const independent = session.state === 'individual_owner';
-  const isManager = Boolean(session.is_administrator || selected?.is_manager || independent);
-  const isReceptionist = selected?.role === 'Receptionist';
-
-  const links: Array<{ key: string; label: string; to: string; icon: typeof Home; show: boolean }> = [
-    { key: 'home', label: 'Overview', to: '/home', icon: Home, show: Boolean(selected) || isManager },
-    { key: 'analytics', label: 'Insights', to: '/analytics', icon: BarChart3, show: Boolean(selected) || independent },
-    { key: 'reception', label: 'Reception', to: '/reception', icon: Users, show: isManager || isReceptionist },
-    { key: 'calendar', label: 'Schedule', to: '/calendar', icon: CalendarDays, show: Boolean(selected) || independent },
-    { key: 'settings', label: 'Settings', to: independent ? '/settings/independent-booking' : '/settings', icon: Settings, show: isManager },
-  ];
-
-  const cycleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : theme === 'dark' ? 'system' : 'light');
-  };
-
-  const onSwitch = async (organization: string) => {
-    if (!organization || organization === selected?.organization) return;
+  const manager = Boolean(session.is_administrator || selected?.is_manager || session.state === 'individual_owner');
+  const links = [
+    { key: 'home', label: 'Overview', to: '/home', icon: Home, show: Boolean(selected) || manager },
+    { key: 'analytics', label: 'Insights', to: '/analytics', icon: BarChart3, show: Boolean(selected) || manager },
+    { key: 'reception', label: 'Reception', to: '/reception', icon: Users, show: manager || selected?.role === 'Receptionist' },
+    { key: 'calendar', label: 'Schedule', to: '/calendar', icon: CalendarDays, show: Boolean(selected) || manager },
+    { key: 'settings', label: 'Settings', to: '/settings', icon: Settings, show: true },
+  ].filter(link=>link.show);
+  const title = location.pathname === '/settings/profile' ? 'Your profile' : location.pathname === '/settings/appearance' ? 'Appearance' : links.find(link=>active === link.key)?.label || 'Workspace';
+  const business = selected?.business_name || (session.state === 'individual_owner' ? 'Independent business' : 'Administration');
+  const switchWorkspace = async (organization: string) => {
+    if (organization === selected?.organization) return;
     const next = await selectWorkspace(organization);
-    const target = next?.selected?.landing;
-    if (target) navigate(target);
+    if (next?.selected?.landing) navigate(next.selected.landing);
   };
-
-  const handleLogout = async () => {
-    await logout();
-    navigate('/login', { replace: true });
-  };
-
-  const renderLinks = (iconsOnly = false) => links.filter(link => link.show).map(link => {
-    const selectedRoute = active === link.key || location.pathname.startsWith(link.to);
-    return <Link key={link.key} to={link.to} aria-label={link.label} aria-current={selectedRoute ? 'page' : undefined}
-      title={iconsOnly ? link.label : undefined} className="flex min-h-11 items-center gap-3 rounded-xl px-3 py-2 text-sm"
-      style={{ background: selectedRoute ? 'var(--accent-primary-light)' : undefined, color: selectedRoute ? 'var(--text-primary)' : 'var(--text-secondary)' }}>
-      <link.icon size={19} aria-hidden="true" />{!iconsOnly && link.label}
+  const renderLinks = (iconsOnly = false) => links.map(link=>{
+    const current = active === link.key || location.pathname.startsWith(link.to);
+    return <Link key={link.key} className="workspace-link" to={link.to} aria-label={link.label} aria-current={current ? 'page' : undefined} title={iconsOnly ? link.label : undefined}>
+      <link.icon size={18} aria-hidden="true"/>{!iconsOnly && link.label}
     </Link>;
   });
-  return (<>
-    {preference.placement === 'sidebar' && <aside className="workspace-sidebar fixed inset-y-0 left-0 z-40 hidden flex-col border-r p-4 md:flex" style={{width:preference.collapsed?80:240, background:'var(--bg-elevated)',borderColor:'var(--border-default)'}}>
-      <Link to="/home" aria-label="Scheduler home" className="mb-8 flex items-center gap-3 px-2 font-heading font-semibold"><CalendarDays size={22} style={{color:'var(--accent-primary)'}}/>{!preference.collapsed && 'Scheduler'}</Link>
-      <nav aria-label="Sidebar navigation" className="space-y-2">{renderLinks(preference.collapsed)}</nav>
-      <Button className="mt-auto" variant="ghost" aria-label={preference.collapsed?'Expand sidebar':'Collapse sidebar'} title={preference.collapsed?'Expand sidebar':'Collapse sidebar'} onClick={()=>void updatePreference({...preference,collapsed:!preference.collapsed})}>{preference.collapsed?<PanelLeftOpen size={20}/>:<><PanelLeftClose size={20}/><span className="ml-2">Collapse</span></>}</Button>
+  return <>
+    {preference.placement === 'sidebar' && <aside className="workspace-sidebar" data-collapsed={preference.collapsed}>
+      <div className="workspace-rail">
+        <Link to="/home" className="workspace-link" aria-label="Scheduler home" title="Scheduler"><CalendarDays size={21}/></Link>
+        <nav aria-label={preference.collapsed ? "Sidebar navigation" : "Workspace shortcuts"}>{renderLinks(true)}</nav>
+        <button type="button" className="workspace-link" aria-label={preference.collapsed ? 'Expand sidebar' : 'Collapse sidebar'} title={preference.collapsed ? 'Expand sidebar' : 'Collapse sidebar'} onClick={()=>void update({...preference,collapsed:!preference.collapsed})}>{preference.collapsed ? <PanelLeftOpen size={18}/> : <PanelLeftClose size={18}/>}</button>
+        <div className="workspace-rail-bottom"><AccountMenu/></div>
+      </div>
+      <div className="workspace-panel">
+        <div className="workspace-brand"><Link to="/home">Scheduler</Link><span aria-hidden="true">⌄</span></div>
+        <p className="workspace-section-label">Workspace</p>
+        <nav aria-label="Sidebar navigation">{renderLinks()}</nav>
+        <div className="workspace-business"><strong>{business}</strong><small>{selected?.role || 'Personal workspace'}</small></div>
+      </div>
     </aside>}
-    <Dialog open={drawer} onOpenChange={setDrawer}><DialogContent side="right" className="p-6"><DialogTitle>Workspace navigation</DialogTitle><nav aria-label="Mobile navigation" className="mt-6 space-y-2">{renderLinks()}</nav></DialogContent></Dialog>
-    <header
-      className="sticky top-0 z-40 backdrop-blur-xl"
-      style={{ backgroundColor: 'color-mix(in srgb, var(--bg-primary) 88%, transparent)', borderBottom: '1px solid var(--border-subtle)' }}
-    >
-      <div className="mx-auto flex max-w-[1800px] flex-wrap items-center gap-3 px-4 py-3 sm:px-6">
-        <Button variant="ghost" size="icon" className="min-h-11 min-w-11 md:hidden" aria-label="Open navigation drawer" onClick={()=>setDrawer(true)}><Menu size={20}/></Button>
-        <Link to="/home" className="flex items-center gap-2 font-heading text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
-          <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-primary">
-            <CalendarDays className="h-4 w-4 text-white" />
-          </span>
-          <span className="hidden sm:inline">Scheduler</span>
-        </Link>
-
-        <div className="flex min-w-0 items-center gap-2">
-          <Building2 className="h-4 w-4 shrink-0" style={{ color: 'var(--text-muted)' }} />
-          {session.workspaces.length > 1 ? (
-            <label className="sr-only" htmlFor="workspace-switcher">
-              Active business
-            </label>
-          ) : null}
-          {session.workspaces.length > 1 ? (
-            <Select value={selected?.organization} onValueChange={value => void onSwitch(value)}>
-              <SelectTrigger id="workspace-switcher" data-qa="workspace-switcher" className="h-8 max-w-[220px] border-0 bg-transparent px-2 shadow-none">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {session.workspaces.map((workspace) => (
-                  <SelectItem key={workspace.organization} value={workspace.organization}>
-                    {workspace.business_name} · {ROLE_LABEL[workspace.role] ?? workspace.role}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          ) : (
-            <span data-qa="active-business" className="truncate text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
-              {selected?.business_name ?? (independent ? 'Independent business' : 'Administration')}
-              {selected ? <span style={{ color: 'var(--text-muted)' }}> · {ROLE_LABEL[selected.role] ?? selected.role}</span> : null}
-            </span>
-          )}
+    <Dialog open={drawer} onOpenChange={setDrawer}><DialogContent side="left" className="p-6"><DialogTitle>Workspace navigation</DialogTitle><nav aria-label="Mobile navigation" className="mt-6 space-y-2">{renderLinks()}</nav><div className="mt-6"><AccountMenu/></div></DialogContent></Dialog>
+    <header className="workspace-header" data-placement={preference.placement}>
+      <div className="workspace-header-inner">
+        <Button variant="ghost" size="icon" className="workspace-mobile-menu min-h-11 min-w-11" aria-label="Open navigation drawer" onClick={()=>setDrawer(true)}><Menu size={19}/></Button>
+        <span className="workspace-page-title">{title}</span>
+        <div className="workspace-header-business">
+          <Building2 size={15} aria-hidden="true"/>
+          {session.workspaces.length > 1 ? <Select value={selected?.organization} onValueChange={value=>void switchWorkspace(value)}>
+            <SelectTrigger aria-label="Active business" data-qa="workspace-switcher" className="max-w-[240px] border-0 bg-transparent shadow-none"><SelectValue/></SelectTrigger>
+            <SelectContent>{session.workspaces.map(workspace=><SelectItem key={workspace.organization} value={workspace.organization}>{workspace.business_name} · {workspace.role}</SelectItem>)}</SelectContent>
+          </Select> : <span data-qa="active-business">{business}{selected && ` · ${selected.role}`}</span>}
         </div>
-
-        <nav aria-label="Top navigation" className={`order-last hidden w-full items-center gap-1 overflow-x-auto md:order-none md:w-auto md:flex-1 ${preference.placement === 'sidebar' ? '' : 'md:flex'}`}>
-          {links
-            .filter((link) => link.show)
-            .map((link) => {
-              const isActive = active === link.key || location.pathname.startsWith(link.to);
-              return (
-                <Link
-                  key={link.key}
-                  to={link.to}
-                  className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors"
-                  style={{
-                    backgroundColor: isActive ? 'var(--accent-primary-light)' : 'transparent',
-                    color: isActive ? 'var(--accent-primary)' : 'var(--text-secondary)',
-                  }}
-                >
-                  <link.icon className="h-4 w-4" />
-                  {link.label}
-                </Link>
-              );
-            })}
-        </nav>
-
-        <div className="ml-auto flex items-center gap-1">
-          <Select value={preference.placement} onValueChange={value => void updatePreference({ ...preference, placement: value as 'top' | 'sidebar' })}>
-            <SelectTrigger id="navigation-placement" aria-label="Navigation placement" className="h-8 w-[9.75rem]">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="top">Top navigation</SelectItem>
-              <SelectItem value="sidebar">Left sidebar</SelectItem>
-            </SelectContent>
-          </Select>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            onClick={cycleTheme}
-            aria-label={`Theme: ${theme}. Switch theme`}
-            data-qa="topnav-theme"
-            title={`Theme: ${theme}`}
-          >
-            {theme === 'light' ? <Sun className="h-4 w-4" /> : theme === 'dark' ? <Moon className="h-4 w-4" /> : <Monitor className="h-4 w-4" />}
+        {preference.placement === 'top' && <nav aria-label="Top navigation" className="workspace-top-links">{renderLinks()}</nav>}
+        <div className="workspace-header-actions">
+          {(error || appearanceError) && <Link role="alert" to="/settings/appearance" className="text-xs underline">Review preferences</Link>}
+          <Button type="button" variant="ghost" size="icon" disabled={saving || isLoadingColors} onClick={()=>setTheme(theme === 'light' ? 'dark' : theme === 'dark' ? 'system' : 'light')} aria-label={`Theme: ${theme}. Switch theme`} data-qa="topnav-theme" title={`Theme: ${theme}`}>
+            {theme === 'light' ? <Sun size={17}/> : theme === 'dark' ? <Moon size={17}/> : <Monitor size={17}/>}
           </Button>
-          <Button type="button" variant="ghost" size="icon" onClick={() => void handleLogout()} aria-label="Sign out" data-qa="topnav-logout">
-            <LogOut className="h-4 w-4" />
-          </Button>
+          <div className="workspace-header-account"><AccountMenu/></div>
         </div>
       </div>
     </header>
-  </>);
+  </>;
 }
-
 export default AppTopNav;

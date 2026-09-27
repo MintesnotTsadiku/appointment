@@ -15,6 +15,9 @@ import { useTheme } from "..";
 const ROUTES_WITH_INTEGRATED_TOGGLE = [
   '/reception',
   '/home',
+  '/settings',
+  '/analytics',
+  '/calendar',
   '/onboarding',
   '/settings/business',
   '/settings/team',

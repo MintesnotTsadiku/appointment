@@ -3,13 +3,35 @@
   <head>
     <meta charset="UTF-8" />
     <script nonce="{{ content_shell_nonce }}">
-      // Apply the same preference before CSS and React paint the page.
+      // Apply identity-scoped cached choices before CSS. The server revalidates them.
       try {
         var theme = localStorage.getItem('vite-ui-theme') || 'system';
+        var root = document.documentElement;
+        var internal = /^\/(home|analytics|reception|calendar|settings|workspaces|onboarding)(\/|$)/.test(location.pathname);
+        var user = decodeURIComponent((document.cookie.split('; ').find(function(row) { return row.indexOf('user_id=') === 0; }) || '').slice(8)).replace(/^"|"$/g, '');
+        var value = internal && user && user !== 'Guest' ? JSON.parse(localStorage.getItem('appointment:appearance:' + user) || 'null') : null;
+        if (internal && user && user !== 'Guest' && !value) value = {version:1,palette:'codex',mode:'system',typography:'system',text_size:'standard',density:'comfortable'};
+        if (value && value.version === 1 && ['codex','violet','ocean','forest'].includes(value.palette) && ['light','dark','system'].includes(value.mode) && ['system','noto','serif'].includes(value.typography) && ['standard','large'].includes(value.text_size) && ['comfortable','compact'].includes(value.density)) {
+          theme = value.mode;
+          root.dataset.internalAppearance = value.density;
+          root.dataset.internalPalette = value.palette;
+          root.dataset.internalTextSize = value.text_size;
+          var fonts = {system:'Inter, "Noto Sans Ethiopic", -apple-system, BlinkMacSystemFont, "Segoe UI", "Internal Ethiopic", sans-serif',noto:'"Internal Ethiopic", ui-sans-serif, system-ui, sans-serif',serif:'"Internal Serif", "Internal Ethiopic", Georgia, serif'};
+          root.style.setProperty('--internal-font', fonts[value.typography]);
+        } else { value = null; }
         var dark = theme === 'dark' || (theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
-        document.documentElement.classList.add(dark ? 'dark' : 'light');
-        document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
-      } catch (_) { /* Storage may be unavailable; the provider resolves System. */ }
+        root.classList.add(dark ? 'dark' : 'light');
+        root.style.colorScheme = dark ? 'dark' : 'light';
+        if (value && value.palette !== 'violet') {
+          var tokens = value.palette === 'codex' ? ['#ffffff','#181818',dark ? '#3b3b3b' : '#181818',dark ? '#4b4b4b' : '#333333',dark ? '#2f2f2f' : '#eeeeee'] : value.palette === 'ocean' ? ['#f4f9fc','#08151f','#0369a1','#075985','rgba(3,105,161,.15)'] : ['#f4faf6','#0a1812','#047857','#065f46','rgba(4,120,87,.15)'];
+          root.style.setProperty('--bg-primary', tokens[dark ? 1 : 0]);
+          root.style.setProperty('--accent-primary', tokens[2]);
+          root.style.setProperty('--accent-primary-hover', tokens[3]);
+          root.style.setProperty('--accent-primary-light', tokens[4]);
+          root.style.setProperty('--gradient-primary-from', tokens[2]);
+          root.style.setProperty('--gradient-primary-to', tokens[3]);
+        }
+      } catch (_) { /* Storage is optional; the provider resolves System. */ }
     </script>
     
     <!-- vite-plugin-pwa injects the manifest only when it is served. -->

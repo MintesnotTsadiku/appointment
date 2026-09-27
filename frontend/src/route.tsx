@@ -21,6 +21,7 @@ const Calendar = lazy(() => import("@/pages/calendar"));
 const Analytics = lazy(() => import("@/pages/analytics"));
 const AvailabilitySettings = lazy(() => import("@/pages/settings/availability"));
 const TeamManagement = lazy(() => import("@/pages/settings/team"));
+const ProviderProfile = lazy(() => import("@/pages/settings/provider-profile"));
 const Profile = lazy(() => import("@/pages/settings/profile"));
 const LocationSettings = lazy(() => import("@/pages/settings/location"));
 const CalendarSettings = lazy(() => import("@/pages/settings/calendar"));
@@ -37,6 +38,7 @@ const OrganizationImport = lazy(() => import("@/pages/settings/organization-impo
 const NewsletterWorkspace = lazy(() => import("@/pages/settings/website-newsletter"));
 const NewsletterAction = lazy(() => import("@/pages/public-experience/newsletter-action"));
 const StaffInvitation = lazy(() => import("@/pages/public-experience/staff-invitation"));
+const InternalAppearance = lazy(() => import("@/pages/settings/internal-appearance"));
 const Settings = lazy(() => import("@/pages/settings"));
 const AdminDashboard = lazy(() => import("@/pages/admin/dashboard"));
 const Appointment = lazy(() => import("@/pages/appointment"));
@@ -76,9 +78,11 @@ const Router = () => {
       <Route path="/no-access" element={<NoAccess />} errorElement={<ErrorFallback />}></Route>
       <Route path="/calendar" element={<Calendar />} errorElement={<ErrorFallback />}></Route>
       <Route path="/analytics" element={<Analytics />} errorElement={<ErrorFallback />}></Route>
+      <Route path="/settings/appearance" element={<InternalAppearance />} errorElement={<ErrorFallback />} />
       <Route path="/settings" element={<Settings />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/availability" element={<AvailabilitySettings />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/team" element={<TeamManagement />} errorElement={<ErrorFallback />}></Route>
+      <Route path="/settings/profile/details" element={<ProviderProfile />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/profile" element={<Profile />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/location" element={<LocationSettings />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/calendar" element={<CalendarSettings />} errorElement={<ErrorFallback />}></Route>

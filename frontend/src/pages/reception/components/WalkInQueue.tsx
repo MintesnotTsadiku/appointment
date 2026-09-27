@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, RefreshCw, Users, Clock, ArrowRight, Sparkles } from 'lucide-react';
+import { Plus, RefreshCw, Users, Clock, Sparkles } from 'lucide-react';
 import { WalkInCard } from './WalkInCard';
 import { WalkIn } from '../types';
 import { useFrappeGetCall, useFrappePostCall } from 'frappe-react-sdk';
@@ -93,9 +93,9 @@ export const WalkInQueue = ({ locationName, onAssignWalkIn, onCreateWalkIn, refr
   };
 
   return (
-    <div className="h-full flex flex-col bg-white/[0.02] backdrop-blur-sm border border-white/5 rounded-2xl overflow-hidden">
+    <div className="h-full flex flex-col bg-[var(--bg-elevated)] backdrop-blur-sm border border-[var(--border-default)] rounded-2xl overflow-hidden">
       {/* Header */}
-      <div className="p-4 border-b border-white/5">
+      <div className="p-4 border-b border-[var(--border-default)]">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-3">
             <div className="relative">
@@ -105,8 +105,8 @@ export const WalkInQueue = ({ locationName, onAssignWalkIn, onCreateWalkIn, refr
               </div>
             </div>
             <div>
-              <h2 className="text-sm font-semibold text-white">Walk-In Queue</h2>
-              <p className="text-xs text-gray-500">
+              <h2 className="text-sm font-semibold text-[var(--text-primary)]">Walk-In Queue</h2>
+              <p className="text-xs text-[var(--text-muted)]">
                 {walkIns.length} waiting
               </p>
             </div>
@@ -117,9 +117,9 @@ export const WalkInQueue = ({ locationName, onAssignWalkIn, onCreateWalkIn, refr
             whileTap={{ scale: 0.95 }}
             onClick={handleRefresh}
             disabled={isRefreshing}
-            className="p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 transition-all"
+            className="p-2 rounded-lg bg-[var(--bg-tertiary)] hover:bg-[var(--bg-tertiary)] border border-[var(--border-default)] transition-all"
           >
-            <RefreshCw className={`w-4 h-4 text-gray-400 ${isRefreshing ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 text-[var(--text-secondary)] ${isRefreshing ? 'animate-spin' : ''}`} />
           </motion.button>
         </div>
 
@@ -129,7 +129,7 @@ export const WalkInQueue = ({ locationName, onAssignWalkIn, onCreateWalkIn, refr
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={onCreateWalkIn}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-orange-500/20 to-amber-500/20 hover:from-orange-500/30 hover:to-amber-500/30 border border-orange-500/30 rounded-xl text-sm font-medium text-orange-300 transition-all group"
+          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-orange-500/20 to-amber-500/20 hover:from-orange-500/30 hover:to-amber-500/30 border border-orange-500/30 rounded-xl text-sm font-medium text-[var(--accent-secondary-text)] transition-all group"
         >
           <Plus className="w-4 h-4" />
           <span>Add Walk-In</span>
@@ -142,7 +142,7 @@ export const WalkInQueue = ({ locationName, onAssignWalkIn, onCreateWalkIn, refr
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-12">
             <div className="w-8 h-8 border-2 border-orange-500/30 border-t-orange-500 rounded-full animate-spin mb-3" />
-            <p className="text-gray-500 text-sm">Loading queue...</p>
+            <p className="text-[var(--text-muted)] text-sm">Loading queue...</p>
           </div>
         ) : walkIns.length === 0 ? (
           <motion.div
@@ -150,11 +150,11 @@ export const WalkInQueue = ({ locationName, onAssignWalkIn, onCreateWalkIn, refr
             animate={{ opacity: 1, y: 0 }}
             className="text-center py-12"
           >
-            <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-white/5 flex items-center justify-center">
-              <Clock className="w-8 h-8 text-gray-600" />
+            <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-[var(--bg-tertiary)] flex items-center justify-center">
+              <Clock className="w-8 h-8 text-[var(--text-muted)]" />
             </div>
-            <p className="text-gray-400 text-sm font-medium">No walk-ins waiting</p>
-            <p className="text-gray-600 text-xs mt-1">Add one to get started</p>
+            <p className="text-[var(--text-secondary)] text-sm font-medium">No walk-ins waiting</p>
+            <p className="text-[var(--text-muted)] text-xs mt-1">Add one to get started</p>
           </motion.div>
         ) : (
           <AnimatePresence mode="popLayout">
@@ -179,9 +179,9 @@ export const WalkInQueue = ({ locationName, onAssignWalkIn, onCreateWalkIn, refr
 
       {/* Queue Status Bar */}
       {walkIns.length > 0 && (
-        <div className="p-4 border-t border-white/5 bg-white/[0.02]">
+        <div className="p-4 border-t border-[var(--border-default)] bg-[var(--bg-elevated)]">
           <div className="flex items-center justify-between text-xs">
-            <span className="text-gray-500">Auto-refresh: 30s</span>
+            <span className="text-[var(--text-muted)]">Auto-refresh: 30s</span>
             <div className="flex items-center gap-1 text-orange-400">
               <div className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
               <span>Live</span>

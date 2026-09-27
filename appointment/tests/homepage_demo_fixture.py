@@ -12,6 +12,7 @@ class HomepageDemoFixture(ShowcaseBrowserFixture):
         users = [business['owner'] for business in state['businesses'].values()]
         preferences = {user: frappe.defaults.get_user_default('appointment:navigation:v1', user=user) for user in users}
         result['fixture_identity']['navigation'] = preferences
+        result['fixture_identity']['appearance'] = {user: frappe.defaults.get_user_default('appointment:appearance:v1', user=user) for user in users}
         return result
 
     def provide_execution_context(self, *, fixture_identity, request):
@@ -28,8 +29,13 @@ class HomepageDemoFixture(ShowcaseBrowserFixture):
             frappe.defaults.clear_default(key='appointment:navigation:v1', parent=user)
             if value:
                 frappe.defaults.set_user_default('appointment:navigation:v1', value, user=user)
+        for user, value in fixture_identity.get('appearance', {}).items():
+            frappe.defaults.clear_default(key='appointment:appearance:v1', parent=user)
+            if value is not None:
+                frappe.defaults.set_user_default('appointment:appearance:v1', value, user=user)
+            frappe.clear_cache(user=user)
         frappe.db.commit()
-        return dict(ok=True, message='Only navigation preferences changed; exact originals restored.')
+        return dict(ok=True, message='Exact navigation and appearance preferences restored.')
 
 
 adapter = HomepageDemoFixture()

@@ -38,6 +38,7 @@ export interface SessionState {
   authenticated: boolean;
   user: string;
   full_name?: string;
+  user_image?: string;
   is_administrator: boolean;
   roles: string[];
   has_staff_role?: boolean;
@@ -82,6 +83,7 @@ export function isAllowedDestination(path: string | null | undefined, session: S
     return false;
   }
   const clean = path.split('?')[0];
+  if (clean === '/settings/appearance' || clean === '/settings/profile' || clean.startsWith('/settings/profile/') || clean === '/settings') return true;
   if (session.state === 'individual_owner') return ['/home', '/analytics', '/reception', '/settings/independent-booking', '/calendar'].includes(clean) || clean === '/settings/website' || clean.startsWith('/settings/website/');
   if (!ALLOWED_PREFIXES.some((prefix) => clean === prefix || clean.startsWith(prefix + '/'))) return false;
   if (session.state === 'administrator') return true;

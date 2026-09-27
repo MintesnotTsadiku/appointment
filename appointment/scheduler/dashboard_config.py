@@ -94,7 +94,7 @@ def validate(value,workspace):
 def navigation():
     _signed_in()
     value=frappe.parse_json(frappe.defaults.get_user_default('appointment:navigation:v1') or '{}')
-    return dict(placement=value.get('placement','top'),collapsed=bool(value.get('collapsed',False)))
+    return dict(placement=value.get('placement','sidebar'),collapsed=bool(value.get('collapsed',False)))
 
 
 @frappe.whitelist(methods=['POST'])
