@@ -22,28 +22,27 @@ export function TimeFormatToggle({
   return (
     <div className={cn("space-y-2", className)}>
       {showLabels && (
-        <label className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+        <label className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
           Time Format
         </label>
       )}
       
-      <div className="inline-flex items-center bg-gray-100 dark:bg-gray-800 rounded-xl p-1 gap-1">
+      <div className="inline-flex items-center rounded-xl p-1 gap-1" style={{ backgroundColor: "var(--bg-secondary)", border: "1px solid var(--border-subtle)" }}>
         {formats.map((format) => (
           <button
             key={format.value}
             onClick={() => onChange(format.value)}
             className={cn(
               "relative px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200",
-              "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2",
-              "hover:bg-white/50 dark:hover:bg-gray-700/50",
-              value === format.value
-                ? [
-                    "bg-white dark:bg-gray-700",
-                    "text-primary-600 dark:text-primary-400",
-                    "shadow-sm",
-                  ]
-                : "text-gray-700 dark:text-gray-300"
+              "focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] focus:ring-offset-2",
+              value === format.value && "shadow-sm"
             )}
+            style={{
+              color: value === format.value ? "var(--pe-color-on-primary)" : "var(--text-secondary)",
+              background: value === format.value
+                ? "linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))"
+                : "transparent",
+            }}
             aria-label={`Select ${format.label} time format`}
             aria-pressed={value === format.value}
           >

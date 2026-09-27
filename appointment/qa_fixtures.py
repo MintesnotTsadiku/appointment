@@ -18,7 +18,7 @@ from __future__ import annotations
 from typing import Any
 
 import frappe
-from frappe.utils import nowdate
+from frappe.utils import add_days, nowdate
 
 MARKER_PREFIX = "QA-BROWSER"
 # Deletion order matters: Booking Event / Appointment Group reference the
@@ -216,7 +216,7 @@ def setup() -> dict[str, Any]:
         client_name=f"{marker} Client",
         client_email=f"{lower_marker}-client@qa.local",
         client_phone="+251900000111",
-        appointment_date=nowdate(),
+        appointment_date=add_days(nowdate(), 1),
         start_time="10:00:00",
         end_time="10:30:00",
         status="Confirmed",

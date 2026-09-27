@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "providers": 10,
+  "authored_original_bookings": 1387,
+  "older_cohort_bookings": 40,
+  "walk_ins": 30,
+  "first_use_insights_dashboards": 15,
+  "math_checks": 9,
+  "capture_checks": "8 unique workflow events; immutable snapshots and failed-write rollback",
+  "scoped_contracts": 176,
+  "seed_idempotent": true,
+  "existing_saved_dashboards_preserved": true,
+  "user_recorded_amount_preservation": "Passed rollback-only upgrade test",
+  "unsupported_dependencies": "Remain unavailable or partial"
+}

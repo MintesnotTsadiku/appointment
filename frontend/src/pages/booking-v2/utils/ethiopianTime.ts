@@ -1,3 +1,5 @@
+import { toEthiopian } from '@/lib/time';
+
 /**
  * Ethiopian time conversion utilities
  * Ethiopian time is 6 hours behind/ahead of standard time
@@ -24,40 +26,9 @@ export interface EthiopianTime {
  * - ለሊት (lelit): Midnight onwards (12 AM - 6 AM standard)
  */
 export const toEthiopianTime = (date: Date): EthiopianTime => {
-  let hour = date.getHours();
-  const minute = date.getMinutes();
-  
-  // Convert hour to Ethiopian time (shift by 6 hours)
-  let ethiopianHour = hour - 6;
-  if (ethiopianHour < 0) ethiopianHour += 12;
-  if (ethiopianHour === 0) ethiopianHour = 12;
-  if (ethiopianHour > 12) ethiopianHour -= 12;
-  
-  // Determine period based on Ethiopian hour
-  let period: 'ጠዋት' | 'ከሰዓት' | 'ማታ' | 'ለሊት';
-  
-  if (hour >= 6 && hour < 12) {
-    // 6 AM - 12 PM standard = Ethiopian morning (before 6 ሰዓት)
-    period = 'ጠዋት';
-  } else if (hour >= 12 && hour < 18) {
-    // 12 PM - 6 PM standard = Ethiopian day (6-12 ሰዓት)
-    period = 'ከሰዓት';
-  } else if (hour >= 18 && hour < 24) {
-    // 6 PM - 12 AM standard = Ethiopian evening (after 12 ሰዓት)
-    period = 'ማታ';
-  } else {
-    // 12 AM - 6 AM standard = Ethiopian night
-    period = 'ለሊት';
-  }
-  
-  const formatted = `${ethiopianHour}:${minute.toString().padStart(2, '0')} ${period}`;
-  
-  return {
-    hour: ethiopianHour,
-    minute,
-    period,
-    formatted,
-  };
+  const value = toEthiopian(date.getHours(), date.getMinutes());
+  const period = value.period.replace('ምሽት', 'ማታ').replace('ሌሊት', 'ለሊት') as EthiopianTime['period'];
+  return { hour: value.hour, minute: value.minute, period, formatted: `${value.hour}:${String(value.minute).padStart(2, '0')} ${period}` };
 };
 
 /**

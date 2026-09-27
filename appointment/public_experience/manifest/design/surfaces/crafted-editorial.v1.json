@@ -1,0 +1,22 @@
+{
+  "kind": "surface",
+  "contract": "appointment-surface.v1",
+  "key": "crafted-editorial",
+  "version": 1,
+  "shape": {
+    "cardRadius": "6px",
+    "controlRadius": "4px",
+    "borderWidth": "1px",
+    "focusRing": "3px"
+  },
+  "elevation": {
+    "card": "0 16px 40px rgba(8, 18, 40, 0.12)",
+    "raised": "0 10px 24px rgba(8, 18, 40, 0.14)"
+  },
+  "motion": {
+    "default": "calm",
+    "reduced": "none",
+    "duration": "180ms"
+  },
+  "iconStyle": "fine-line"
+}

@@ -402,6 +402,8 @@ def get_appointments(start_date=None, end_date=None, status=None, service=None, 
     - provider: Filter by provider ID (defaults to user's provider)
     - search: Search term (searches client name, service, appointment_id)
     """
+    from appointment.scheduler.booking_access import require_staff
+    require_staff()
     user = frappe.session.user
     
     try:
@@ -422,7 +424,7 @@ def get_appointments(start_date=None, end_date=None, status=None, service=None, 
         
         # Date range filter
         if start_date and end_date:
-            filters["appointment_date"] = [">=", start_date, "<=", end_date]
+            filters["appointment_date"] = ["between", [start_date, end_date]]
         elif start_date:
             filters["appointment_date"] = [">=", start_date]
         elif end_date:
@@ -437,7 +439,7 @@ def get_appointments(start_date=None, end_date=None, status=None, service=None, 
             filters["service"] = service
         
         # Get appointments
-        appointments = frappe.get_all("Appointment",
+        appointments = frappe.get_list("Appointment",
             filters=filters,
             fields=["name", "appointment_id", "appointment_date", "start_time", "end_time",
                    "client_name", "client_email", "client_phone", "service", "provider",
@@ -461,7 +463,7 @@ def get_appointments(start_date=None, end_date=None, status=None, service=None, 
             # Get service name
             service_name = apt.get("service", "")
             if apt.get("service"):
-                service_doc = frappe.db.get_value("Service", apt.service, ["service_name", "currency"], as_dict=True, cache=True)
+                service_doc = frappe.db.get_value("Service", apt.service, ["service_name"], as_dict=True, cache=True)
                 if service_doc:
                     service_name = service_doc.service_name or apt.service
             
@@ -481,17 +483,12 @@ def get_appointments(start_date=None, end_date=None, status=None, service=None, 
             
             # Format currency
             currency = "ETB"
-            if apt.get("service"):
-                service_doc = frappe.db.get_value("Service", apt.service, "currency", cache=True)
-                if service_doc:
-                    currency = service_doc or "ETB"
-            
             formatted_appointments.append({
                 "name": apt.name,
                 "appointment_id": apt.appointment_id or apt.name,
                 "appointment_date": apt.appointment_date.isoformat() if apt.appointment_date else None,
-                "start_time": str(apt.start_time) if apt.start_time else None,
-                "end_time": str(apt.end_time) if apt.end_time else None,
+                "start_time": frappe.utils.get_time(apt.start_time).strftime("%H:%M:%S") if apt.start_time else None,
+                "end_time": frappe.utils.get_time(apt.end_time).strftime("%H:%M:%S") if apt.end_time else None,
                 "client_name": apt.client_name or "",
                 "client_email": apt.client_email or "",
                 "client_phone": apt.client_phone or "",
@@ -514,9 +511,7 @@ def get_appointments(start_date=None, end_date=None, status=None, service=None, 
         }
     except Exception as e:
         frappe.log_error(str(e), "Calendar: Get Appointments Error")
-        frappe.response["message"] = {
-            "appointments": []
-        }
+        raise
 
 
 @frappe.whitelist()
@@ -595,6 +590,8 @@ def get_appointment_details(appointment_id):
     """
     Get full details of a specific appointment
     """
+    from appointment.scheduler.booking_access import require_access
+    require_access(frappe.get_doc("Appointment", {"appointment_id": appointment_id}))
     user = frappe.session.user
     
     try:

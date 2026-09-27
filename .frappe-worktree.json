@@ -3,6 +3,8 @@
   "app_name": "appointment",
   "site_prefix": "meet-beta",
   "dependency_apps": [
+    "blog",
+    "newsletter",
     "agent_harness",
     "agent_plane"
   ],

@@ -2,8 +2,7 @@
  * Assistant Landing Page Theme - "Command Center"
  * Dark sci-fi dashboard aesthetic with neon accents
  * 
- * Colors are set dynamically via Landing Page Settings backend.
- * These are fallback defaults for the Command Center theme.
+ * Colors derive from the platform-owned application theme tokens.
  */
 
 /* ========================================
@@ -22,7 +21,7 @@
   --ast-bg-elevated: #ffffff;
   --ast-bg-panel: #f8f9fa;
   
-  /* Accent Colors (Will be overridden by Landing Page Settings) */
+  /* Accent Colors */
   --ast-accent-cyber: var(--brand-primary, #0ea5e9);
   --ast-accent-signal: var(--brand-secondary, #ec4899);
   --ast-accent-gold: var(--brand-accent-gold, #d97706);

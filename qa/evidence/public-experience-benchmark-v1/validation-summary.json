@@ -1,0 +1,237 @@
+{
+  "contract": "appointment-public-experience-visual-evidence.v1",
+  "generatedOn": "2026-09-25",
+  "baseUrl": "http://127.0.0.84:44430",
+  "runs": [
+    {
+      "id": "BQA-2026-00102",
+      "scope": "30 landing, handoff and scheduler scenarios; initial comprehensive capture",
+      "status": "Passed",
+      "note": "One transient Socket.IO polling 400 appeared in Abugida mobile scheduler."
+    },
+    {
+      "id": "BQA-2026-00103",
+      "scope": "10 final scheduler desktop/mobile scenarios after final styling and clean reseed",
+      "status": "Passed",
+      "consoleErrors": 0,
+      "networkErrors": 0,
+      "note": "The prior Socket.IO transport error did not recur."
+    }
+  ],
+  "scenarioCount": 30,
+  "allScenariosPassed": true,
+  "finalConsoleErrors": 0,
+  "finalNetworkErrors": 0,
+  "scenarios": [
+    {
+      "run": "BQA-2026-00102",
+      "scenario": "pe_selam_landing_desktop",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00102",
+      "scenario": "pe_selam_book_desktop",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00103",
+      "scenario": "pe_selam_scheduler_desktop",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00102",
+      "scenario": "pe_meron_landing_desktop",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00102",
+      "scenario": "pe_meron_book_desktop",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00103",
+      "scenario": "pe_meron_scheduler_desktop",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00102",
+      "scenario": "pe_bloom_landing_desktop",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00102",
+      "scenario": "pe_bloom_book_desktop",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00103",
+      "scenario": "pe_bloom_scheduler_desktop",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00102",
+      "scenario": "pe_tena_landing_desktop",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00102",
+      "scenario": "pe_tena_book_desktop",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00103",
+      "scenario": "pe_tena_scheduler_desktop",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00102",
+      "scenario": "pe_abugida_landing_desktop",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00102",
+      "scenario": "pe_abugida_book_desktop",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00103",
+      "scenario": "pe_abugida_scheduler_desktop",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00102",
+      "scenario": "pe_selam_landing_mobile",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00102",
+      "scenario": "pe_selam_book_mobile",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00103",
+      "scenario": "pe_selam_scheduler_mobile",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00102",
+      "scenario": "pe_meron_landing_mobile",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00102",
+      "scenario": "pe_meron_book_mobile",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00103",
+      "scenario": "pe_meron_scheduler_mobile",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00102",
+      "scenario": "pe_bloom_landing_mobile",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00102",
+      "scenario": "pe_bloom_book_mobile",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00103",
+      "scenario": "pe_bloom_scheduler_mobile",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00102",
+      "scenario": "pe_tena_landing_mobile",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00102",
+      "scenario": "pe_tena_book_mobile",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00103",
+      "scenario": "pe_tena_scheduler_mobile",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00102",
+      "scenario": "pe_abugida_landing_mobile",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00102",
+      "scenario": "pe_abugida_book_mobile",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    },
+    {
+      "run": "BQA-2026-00103",
+      "scenario": "pe_abugida_scheduler_mobile",
+      "ok": true,
+      "consoleErrors": 0,
+      "networkErrors": 0
+    }
+  ]
+}

@@ -6,6 +6,8 @@ import frappe
 from frappe import _
 from datetime import datetime
 
+_ONBOARDING_UPDATE = object()
+
 
 def make_slug(value: str) -> str:
     """
@@ -906,7 +908,12 @@ def set_onboarding_type(onboarding_type):
     """
     user = frappe.session.user
     is_administrator = user == "Administrator"
-    
+
+    if not is_administrator:
+        from appointment.scheduler import registration
+
+        registration.require_may_start_business(user)
+
     if onboarding_type not in ['individual', 'organization']:
         frappe.throw(_("Invalid onboarding type. Must be 'individual' or 'organization'."))
     
@@ -932,6 +939,7 @@ def set_onboarding_type(onboarding_type):
             if onboarding_type != "organization":
                 provider.onboarding_organization = None
             
+            provider.flags.onboarding_update = _ONBOARDING_UPDATE
             provider.save(ignore_permissions=True)
         else:
             # Create a minimal Provider record with just the type set
@@ -948,8 +956,15 @@ def set_onboarding_type(onboarding_type):
             provider.onboarding_type = onboarding_type
             provider.onboarding_current_step = 1
             provider.onboarding_organization = None
+            provider.flags.onboarding_update = _ONBOARDING_UPDATE
             provider.insert(ignore_permissions=True)
-        
+
+        # A prospective owner becomes provider-capable when they choose a type.
+        # Membership scope still decides which businesses they can act on.
+        from appointment.scheduler import membership
+
+        membership.grant_roles(user, ("Provider",))
+
         frappe.db.commit()
         
         # Return updated progress

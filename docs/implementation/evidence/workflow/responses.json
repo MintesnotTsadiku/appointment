@@ -1,0 +1,115 @@
+[
+  {
+    "run": "BQA-2026-00036",
+    "scenario": "owned_visible_setup",
+    "method": "get_logged_user",
+    "status": 200,
+    "result": "own-106cd119-a@example.test"
+  },
+  {
+    "run": "BQA-2026-00036",
+    "scenario": "owned_visible_setup",
+    "method": "workspace.create",
+    "status": 200,
+    "result": {
+      "organization": "OWN-106cd119 Visible business",
+      "business_name": "OWN-106cd119 Visible business",
+      "published": false,
+      "offering": "EVT-2026-000003",
+      "service": "Visible consultation",
+      "timezone": "Africa/Addis_Ababa",
+      "public_path": "/schedule/org/business-0d72954072b3902a1c3a2df9/EVT-2026-000003"
+    }
+  },
+  {
+    "run": "BQA-2026-00036",
+    "scenario": "owned_visible_setup",
+    "method": "workspace.publish",
+    "status": 200,
+    "result": {
+      "published": true
+    }
+  },
+  {
+    "run": "BQA-2026-00037",
+    "scenario": "owned_guest_booking",
+    "method": "book_time_slot",
+    "status": 200,
+    "result": {
+      "booking_id": "APT-70f795b95cc7329e09be",
+      "notification_status": "not_sent"
+    }
+  },
+  {
+    "run": "BQA-2026-00038",
+    "scenario": "owned_staff_lifecycle",
+    "method": "get_logged_user",
+    "status": 200,
+    "result": "own-106cd119-a@example.test"
+  },
+  {
+    "run": "BQA-2026-00038",
+    "scenario": "owned_staff_lifecycle",
+    "method": "booking.change",
+    "status": 200,
+    "result": {
+      "booking_id": "APT-70f795b95cc7329e09be",
+      "status": "Confirmed",
+      "modified": "2026-09-22 20:06:25.200755",
+      "notification_status": "not_sent"
+    }
+  },
+  {
+    "run": "BQA-2026-00038",
+    "scenario": "owned_staff_lifecycle",
+    "method": "booking.change",
+    "status": 200,
+    "result": {
+      "booking_id": "APT-70f795b95cc7329e09be",
+      "status": "Cancelled",
+      "modified": "2026-09-22 20:06:31.413262",
+      "notification_status": "not_sent"
+    }
+  },
+  {
+    "run": "BQA-2026-00039",
+    "scenario": "owned_guest_booking",
+    "method": "book_time_slot",
+    "status": 200,
+    "result": {
+      "booking_id": "APT-17ac402a047260e60388",
+      "notification_status": "not_sent"
+    }
+  },
+  {
+    "run": "BQA-2026-00040",
+    "scenario": "owned_staff_lifecycle",
+    "method": "get_logged_user",
+    "status": 200,
+    "result": "own-46f2e6f0-a@example.test"
+  },
+  {
+    "run": "BQA-2026-00040",
+    "scenario": "owned_staff_lifecycle",
+    "method": "booking.change",
+    "status": 200,
+    "result": {
+      "booking_id": "APT-17ac402a047260e60388",
+      "status": "Confirmed",
+      "modified": "2026-09-22 20:13:01.739371",
+      "notification_status": "not_sent"
+    }
+  },
+  {
+    "run": "BQA-2026-00040",
+    "scenario": "owned_staff_lifecycle",
+    "method": "booking.change",
+    "status": 200,
+    "result": {
+      "booking_id": "APT-17ac402a047260e60388",
+      "status": "Cancelled",
+      "modified": "2026-09-22 20:13:12.267764",
+      "notification_status": "not_sent"
+    }
+  }
+]

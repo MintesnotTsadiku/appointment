@@ -1,0 +1,20 @@
+Starting test run with parameters: site=meet-beta-implement-owned-booking-slice-a95902.localhost, module=appointment.tests.test_scheduling_workflows, verbose=False, tests=(), force=False, profile=False, failfast=False, skip_before_tests=True, debug=False, selected_categories=[]
+View detailed logs (using --verbose): /home/minte/projects/appointment-worktree-runtimes/implement-owned-booking-slice-a95902/bench/logs/frappe.testing.log
+
+Running 8 unspecified-category tests for appointment
+
+appointment.tests.test_scheduling_workflows.TestSchedulingWorkflows
+   [32m ✔ [0m test_availability_rule_persists
+   [32m ✔ [0m test_cancellation_updates_status
+   [32m ✔ [0m test_english_and_amharic_translations_available
+   [32m ✔ [0m test_provider_service_location_configuration_persists
+   [32m ✔ [0m test_public_booking_catalog_exposes_qa_service
+   [32m ✔ [0m test_reception_booking_creates_confirmed_appointment
+   [32m ✔ [0m test_reschedule_updates_persisted_time
+   [32m ✔ [0m test_walk_in_queue_and_status_transition
+
+
+----------------------------------------------------------------------
+Ran 8 tests in 2.498s
+
+OK

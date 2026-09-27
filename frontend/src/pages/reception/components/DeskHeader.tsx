@@ -40,7 +40,7 @@ export const DeskHeader = ({
       }}
     >
       <div className="px-4 lg:px-6 py-3 max-w-[1800px] mx-auto">
-        <div className="flex items-center justify-between gap-4">
+        <div data-internal-toolbar className="flex flex-wrap items-center justify-between gap-4">
           {/* Left side - Title & Navigation */}
           <div className="flex items-center gap-4 lg:gap-6 flex-shrink min-w-0">
             {/* Logo & Title */}
@@ -77,6 +77,7 @@ export const DeskHeader = ({
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={goToPrev}
+                aria-label="Previous day"
                 className="p-1.5 lg:p-2 rounded-lg transition-all"
                 style={{ 
                   backgroundColor: 'var(--border-subtle)',
@@ -104,6 +105,8 @@ export const DeskHeader = ({
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={goToNext}
+                aria-label="Next day"
+                data-qa="desk-next-day"
                 className="p-1.5 lg:p-2 rounded-lg transition-all"
                 style={{ 
                   backgroundColor: 'var(--border-subtle)',
@@ -267,7 +270,7 @@ export const DeskHeader = ({
               <AnimatePresence mode="wait">
                 <motion.div
                   key={theme + "-icon"}
-                  initial={{ opacity: 0, rotate: -90 }}
+                  initial={false}
                   animate={{ opacity: 1, rotate: 0 }}
                   exit={{ opacity: 0, rotate: 90 }}
                   transition={{ duration: 0.2 }}

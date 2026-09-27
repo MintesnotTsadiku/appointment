@@ -1,0 +1,88 @@
+{
+  "kind": "imagery",
+  "contract": "appointment-imagery.v1",
+  "key": "crafted-editorial-places",
+  "version": 1,
+  "assets": {
+    "hero.meron": {
+      "src": "/assets/appointment/brand-experience/heroes/meron-tailoring.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/heroes/meron-tailoring.webp",
+      "alt": "An Ethiopian tailor carefully fits an elegant garment on a client in a Kazanchis atelier.",
+      "focalPoint": {
+        "x": 0.58,
+        "y": 0.48
+      },
+      "fit": "cover",
+      "width": 1672,
+      "height": 941,
+      "mime": "image/webp",
+      "checksum": "sha256:763240df7adba76c94416db3a196692d0ff44ea84828cb2a9f2c94f55df07b56",
+      "provenance": {
+        "source": "generated",
+        "role": "Made with attention",
+        "license": "project-generated",
+        "review": "Ethiopian context; no text, logos or interface elements."
+      }
+    },
+    "detail.meron": {
+      "src": "/assets/appointment/brand-experience/heroes/meron-tailoring.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/heroes/meron-tailoring.webp",
+      "alt": "An Ethiopian tailor carefully fits an elegant garment on a client in a Kazanchis atelier.",
+      "focalPoint": {
+        "x": 0.58,
+        "y": 0.48
+      },
+      "fit": "cover",
+      "width": 1672,
+      "height": 941,
+      "mime": "image/webp",
+      "checksum": "sha256:763240df7adba76c94416db3a196692d0ff44ea84828cb2a9f2c94f55df07b56",
+      "provenance": {
+        "source": "generated",
+        "role": "Made with attention",
+        "license": "project-generated",
+        "review": "Ethiopian context; no text, logos or interface elements."
+      }
+    },
+    "hero.abugida": {
+      "src": "/assets/appointment/brand-experience/heroes/abugida-language.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/heroes/abugida-language.webp",
+      "alt": "An Ethiopian language coach and adult learner practise a conversation in a bright Arat Kilo studio.",
+      "focalPoint": {
+        "x": 0.52,
+        "y": 0.46
+      },
+      "fit": "cover",
+      "width": 1672,
+      "height": 941,
+      "mime": "image/webp",
+      "checksum": "sha256:ce8e849c911911c8b61c4c8c0cf09dbce2ac88e65e2ff995ec3500219fd46832",
+      "provenance": {
+        "source": "generated",
+        "role": "Practice for real conversations",
+        "license": "project-generated",
+        "review": "Ethiopian context; no text, logos or interface elements."
+      }
+    },
+    "detail.abugida": {
+      "src": "/assets/appointment/brand-experience/heroes/abugida-language.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/heroes/abugida-language.webp",
+      "alt": "An Ethiopian language coach and adult learner practise a conversation in a bright Arat Kilo studio.",
+      "focalPoint": {
+        "x": 0.52,
+        "y": 0.46
+      },
+      "fit": "cover",
+      "width": 1672,
+      "height": 941,
+      "mime": "image/webp",
+      "checksum": "sha256:ce8e849c911911c8b61c4c8c0cf09dbce2ac88e65e2ff995ec3500219fd46832",
+      "provenance": {
+        "source": "generated",
+        "role": "Practice for real conversations",
+        "license": "project-generated",
+        "review": "Ethiopian context; no text, logos or interface elements."
+      }
+    }
+  }
+}

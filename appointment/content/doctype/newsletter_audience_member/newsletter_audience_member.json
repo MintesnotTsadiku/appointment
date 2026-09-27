@@ -1,0 +1,185 @@
+{
+ "doctype": "DocType",
+ "name": "Newsletter Audience Member",
+ "module": "Content",
+ "autoname": "hash",
+ "engine": "InnoDB",
+ "field_order": [
+  "owner_type",
+  "organization",
+  "provider",
+  "public_site",
+  "email",
+  "audience_key",
+  "status",
+  "locale",
+  "consent_source",
+  "consent_at",
+  "confirmed_at",
+  "unsubscribed_at",
+  "suppression_reason",
+  "confirmation_hash",
+  "confirmation_expires",
+  "last_confirmation_at",
+  "unsubscribe_hash",
+  "unsubscribe_token",
+  "audit_json"
+ ],
+ "fields": [
+  {
+   "fieldname": "owner_type",
+   "fieldtype": "Select",
+   "label": "Owner Type",
+   "read_only": 1,
+   "options": "Organization\nProvider",
+   "reqd": 1
+  },
+  {
+   "fieldname": "organization",
+   "fieldtype": "Link",
+   "label": "Organization",
+   "read_only": 1,
+   "options": "Organization"
+  },
+  {
+   "fieldname": "provider",
+   "fieldtype": "Link",
+   "label": "Provider",
+   "read_only": 1,
+   "options": "Provider"
+  },
+  {
+   "fieldname": "public_site",
+   "fieldtype": "Link",
+   "label": "Public Site",
+   "read_only": 1,
+   "options": "Public Site",
+   "reqd": 1
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "audience_key",
+   "fieldtype": "Data",
+   "label": "Audience Key",
+   "read_only": 1,
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "read_only": 1,
+   "options": "Pending\nConfirmed\nUnsubscribed\nSuppressed",
+   "default": "Pending",
+   "reqd": 1
+  },
+  {
+   "fieldname": "locale",
+   "fieldtype": "Select",
+   "label": "Locale",
+   "read_only": 1,
+   "options": "en\nam",
+   "default": "en"
+  },
+  {
+   "fieldname": "consent_source",
+   "fieldtype": "Data",
+   "label": "Consent Source",
+   "read_only": 1
+  },
+  {
+   "fieldname": "consent_at",
+   "fieldtype": "Datetime",
+   "label": "Consent At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "confirmed_at",
+   "fieldtype": "Datetime",
+   "label": "Confirmed At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "unsubscribed_at",
+   "fieldtype": "Datetime",
+   "label": "Unsubscribed At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "suppression_reason",
+   "fieldtype": "Small Text",
+   "label": "Suppression Reason",
+   "read_only": 1
+  },
+  {
+   "fieldname": "confirmation_hash",
+   "fieldtype": "Data",
+   "label": "Confirmation Hash",
+   "read_only": 1
+  },
+  {
+   "fieldname": "confirmation_expires",
+   "fieldtype": "Datetime",
+   "label": "Confirmation Expires",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_confirmation_at",
+   "fieldtype": "Datetime",
+   "label": "Last Confirmation At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "unsubscribe_hash",
+   "fieldtype": "Data",
+   "label": "Unsubscribe Hash",
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "unsubscribe_token",
+   "fieldtype": "Password",
+   "label": "Unsubscribe Token",
+   "read_only": 1
+  },
+  {
+   "fieldname": "audit_json",
+   "fieldtype": "Code",
+   "label": "Audit Json",
+   "read_only": 1,
+   "options": "JSON"
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "report": 1
+  },
+  {
+   "role": "Organization Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "report": 1
+  },
+  {
+   "role": "Provider",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "report": 1
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC"
+}

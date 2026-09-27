@@ -1,0 +1,42 @@
+{
+  "kind": "imagery",
+  "contract": "appointment-imagery.v1",
+  "key": "quiet-trust-addis",
+  "version": 1,
+  "assets": {
+    "hero.primary": {
+      "src": "/assets/appointment/quiet-trust/hero-addis.jpg",
+      "mobileSrc": "/assets/appointment/quiet-trust/hero-addis.jpg",
+      "alt": "A calm Addis Ababa consultation room with a clinician preparing a warm, welcoming appointment space.",
+      "focalPoint": {"x": 0.62, "y": 0.44},
+      "fit": "cover",
+      "width": 1672,
+      "height": 941,
+      "mime": "image/jpeg",
+      "checksum": "sha256:f185425f8e8576b7c56dbd093059ed37ec260cac50e1b5df27335fca5853724f",
+      "provenance": {
+        "source": "generated",
+        "role": "hero",
+        "license": "project-generated",
+        "review": "No text, logos or interface elements."
+      }
+    },
+    "section.detail": {
+      "src": "/assets/appointment/quiet-trust/detail-addis.jpg",
+      "mobileSrc": "/assets/appointment/quiet-trust/detail-addis.jpg",
+      "alt": "Natural light on a small Ethiopian wellness studio table with folded linen and a ceramic cup.",
+      "focalPoint": {"x": 0.52, "y": 0.5},
+      "fit": "cover",
+      "width": 1254,
+      "height": 1254,
+      "mime": "image/jpeg",
+      "checksum": "sha256:17d9e1f340f400cb3c322fa76dbf734074939d8ae155b6cdbd4537405ec7578e",
+      "provenance": {
+        "source": "generated",
+        "role": "editorial-detail",
+        "license": "project-generated",
+        "review": "No text, logos or interface elements."
+      }
+    }
+  }
+}

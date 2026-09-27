@@ -1,0 +1,1138 @@
+{
+  "run": "BQA-2026-00173",
+  "site": "meet-beta-feat-content-publishing-galler-5839d4.localhost",
+  "status": "Passed",
+  "outcome": "passed",
+  "scenario_summary": {
+    "failed": 0,
+    "flaky": 0,
+    "passed": 20,
+    "skipped": 0,
+    "total": 20
+  },
+  "source_version": "a810c2b+source-e3b0c44298fc+qa-0fcc957b6e35",
+  "baseline_changed_count": 0,
+  "artifacts": [
+    {
+      "file": "content-templates-certified-abugida-desktop-dark/abugida-desktop-dark-article.png",
+      "sha256": "614cf67f7492f980ce13fa5cda8e800a20730c267854c968dd33d8b609e0bff5"
+    },
+    {
+      "file": "content-templates-certified-abugida-desktop-dark/abugida-desktop-dark-blog.png",
+      "sha256": "265c99b5d88c5d2d2aed6f1bcfe514eb3a0b43c4cdfc7a31dec5012b22578513"
+    },
+    {
+      "file": "content-templates-certified-abugida-desktop-dark/abugida-desktop-dark-book.png",
+      "sha256": "8f3bda63f0dffdb72cb1dda4114c0f45a8800fe1cd6db83d8081660c5056a2f8"
+    },
+    {
+      "file": "content-templates-certified-abugida-desktop-dark/abugida-desktop-dark-collection-unavailable.png",
+      "sha256": "fadabd255f47d2398c4f54d9eed1fb93e9945772a9f9d19f6c7dcccea624003f"
+    },
+    {
+      "file": "content-templates-certified-abugida-desktop-dark/abugida-desktop-dark-collection.png",
+      "sha256": "b63a8071c7eb302bbb73702db2945d365c267b96d2262c523e5d24b9516dd366"
+    },
+    {
+      "file": "content-templates-certified-abugida-desktop-dark/abugida-desktop-dark-gallery.png",
+      "sha256": "975da4e3273f97f1b130270042e59935236b3d40c9d338e699d0526f2e839412"
+    },
+    {
+      "file": "content-templates-certified-abugida-desktop-dark/abugida-desktop-dark-landing.png",
+      "sha256": "cf673af7b5a77830507a4aabe4214d47057e8c03d03bac29cbb6d8e0254e05e1"
+    },
+    {
+      "file": "content-templates-certified-abugida-desktop-dark/abugida-desktop-dark-newsletter.png",
+      "sha256": "b4d294ff0070d53f1e038ebb7d8f3ea39ed8c3455b41eee558bf6e78289bdb2c"
+    },
+    {
+      "file": "content-templates-certified-abugida-desktop-dark/abugida-desktop-dark-scheduler.png",
+      "sha256": "87ecdef35fc3b639140bfcc54e98a73cc5f8e014c4774f300470286caf442bfe"
+    },
+    {
+      "file": "content-templates-certified-abugida-desktop-dark/abugida-desktop-dark-signup-unavailable.png",
+      "sha256": "a970da612f93cccf1bdbd60a2672af5b3a21f0e5fac4afa9c3314d3af2638d48"
+    },
+    {
+      "file": "content-templates-certified-abugida-desktop-dark/abugida-desktop-dark-simulated-empty.png",
+      "sha256": "4dfbb8b929e3f6b23cdf751587642183a83e43316e308832e4f3a1cc8432fc58"
+    },
+    {
+      "file": "content-templates-certified-abugida-desktop-dark/abugida-desktop-dark-simulated-error.png",
+      "sha256": "fadabd255f47d2398c4f54d9eed1fb93e9945772a9f9d19f6c7dcccea624003f"
+    },
+    {
+      "file": "content-templates-certified-abugida-desktop-dark/abugida-desktop-dark-simulated-gallery-empty.png",
+      "sha256": "92103f6c9faf1029572ca9e3e75953c670955548f3b54ffbd05394d32e963c5c"
+    },
+    {
+      "file": "content-templates-certified-abugida-desktop-dark/abugida-desktop-dark-unavailable.png",
+      "sha256": "0796c420027a9c9edb08fcf7347d34eb38e14e4f07791ce8c4ea56be2ecaa0d3"
+    },
+    {
+      "file": "content-templates-certified-abugida-desktop-light/abugida-desktop-light-article.png",
+      "sha256": "be7ecf823347523ea563bdfc15ddc8ba13863dd3fbe72606f32eddd1f7d8418a"
+    },
+    {
+      "file": "content-templates-certified-abugida-desktop-light/abugida-desktop-light-blog.png",
+      "sha256": "319f3239d4c80362704ed40d3afa40adbf2cd3f62dc781007218628cb67ff5dc"
+    },
+    {
+      "file": "content-templates-certified-abugida-desktop-light/abugida-desktop-light-book.png",
+      "sha256": "fe48b76ecdd4907768a87f37e2099dbca1eaa2102ddb803d6f9931fb0e4369fa"
+    },
+    {
+      "file": "content-templates-certified-abugida-desktop-light/abugida-desktop-light-collection-unavailable.png",
+      "sha256": "065368b30ae025134e48c835aac2370f6d6fa81b759f1bff9812b88f28ffd9bb"
+    },
+    {
+      "file": "content-templates-certified-abugida-desktop-light/abugida-desktop-light-collection.png",
+      "sha256": "7381cadaf93af3de3da366e2d912fa053af72e92ff59a10f1d1fce313c8d30b9"
+    },
+    {
+      "file": "content-templates-certified-abugida-desktop-light/abugida-desktop-light-gallery.png",
+      "sha256": "9a7fd878c89c8a57f85d747595772837ef74e244a477e4dbb1f84b61c2e62c95"
+    },
+    {
+      "file": "content-templates-certified-abugida-desktop-light/abugida-desktop-light-landing.png",
+      "sha256": "1a72d48988c81e35de504589eba888cb795ebf860f141f65b22c113b8abe5163"
+    },
+    {
+      "file": "content-templates-certified-abugida-desktop-light/abugida-desktop-light-newsletter.png",
+      "sha256": "2dbe157db938c3ca3308d973e9a8f185e61dcd68ce7f78ee45bf48b4ab52bc30"
+    },
+    {
+      "file": "content-templates-certified-abugida-desktop-light/abugida-desktop-light-scheduler.png",
+      "sha256": "ce123da4f82fecd80b07bd28b9c5c8598a8ee66e58743b4f35ad76b5e7889af8"
+    },
+    {
+      "file": "content-templates-certified-abugida-desktop-light/abugida-desktop-light-signup-unavailable.png",
+      "sha256": "61543250e700f998a9aeec804028fb78ada3f02a68d8e75c01b269f6dee10281"
+    },
+    {
+      "file": "content-templates-certified-abugida-desktop-light/abugida-desktop-light-simulated-empty.png",
+      "sha256": "90ab031b3d73525f24d648b54e1e7ff4f35f9811520382624bdea83cedc419fb"
+    },
+    {
+      "file": "content-templates-certified-abugida-desktop-light/abugida-desktop-light-simulated-error.png",
+      "sha256": "065368b30ae025134e48c835aac2370f6d6fa81b759f1bff9812b88f28ffd9bb"
+    },
+    {
+      "file": "content-templates-certified-abugida-desktop-light/abugida-desktop-light-simulated-gallery-empty.png",
+      "sha256": "92c804855941a303a3cf577d2181fac4054ec7f38d3fd091e47277ffa1bcb854"
+    },
+    {
+      "file": "content-templates-certified-abugida-desktop-light/abugida-desktop-light-unavailable.png",
+      "sha256": "1cdb4f4a464e80afa83fe30dd3b4de421353a725092854c449c3cc8b8a663b1a"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-dark/abugida-mobile-dark-article.png",
+      "sha256": "9fdb31ccb1e4ae59bbeefd72c5aa26fb35309fe3174e83a6f8a25e6bc23248aa"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-dark/abugida-mobile-dark-blog.png",
+      "sha256": "c4316ba17041e7825fceb4870681392b5548e1c57654bd898a9fc57f8434013a"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-dark/abugida-mobile-dark-book.png",
+      "sha256": "91cebbf0ca3d156f805a397db2edd383b10f8d7bdaf30425a27030acdd416354"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-dark/abugida-mobile-dark-collection-unavailable.png",
+      "sha256": "87b5c081e71815454e7cd2087f5728c953bc1a23714c3dc47dadd13a32498f75"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-dark/abugida-mobile-dark-collection.png",
+      "sha256": "6be37e08e6193669c11719695ba1419b340af0ce4185bf2612ab95a680c62980"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-dark/abugida-mobile-dark-gallery.png",
+      "sha256": "53df2d1860ea653ef82dc816d3906769d2f96a87c69577cd69bef66908776cd9"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-dark/abugida-mobile-dark-landing.png",
+      "sha256": "e26452f43ae334899ad49b747cdb7026800fd4d425b61bf2e08e391fc49a1bc3"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-dark/abugida-mobile-dark-newsletter.png",
+      "sha256": "bd7740672de7c5a8766fcc1e0fad1abc7803e3186f969821c75138984151acdc"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-dark/abugida-mobile-dark-scheduler.png",
+      "sha256": "99f9e4d8e7441048322fcb72fdfc93ca678bf3c229c029e7c747318dbef87888"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-dark/abugida-mobile-dark-signup-unavailable.png",
+      "sha256": "24e157841ce1abfb5b48d8a21e4f2a5e3ba40fb7f0de182ed8269aebc71853c0"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-dark/abugida-mobile-dark-simulated-empty.png",
+      "sha256": "6f741bfd2b5a72c8cf558809a3aa8a684b45ff91ff22347a3752bf536e120eba"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-dark/abugida-mobile-dark-simulated-error.png",
+      "sha256": "87b5c081e71815454e7cd2087f5728c953bc1a23714c3dc47dadd13a32498f75"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-dark/abugida-mobile-dark-simulated-gallery-empty.png",
+      "sha256": "1ceed557c5ebef01bd1afae35a30c014e2fa6f410e0f97b63081f4ff98bad86b"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-dark/abugida-mobile-dark-unavailable.png",
+      "sha256": "af9742019350416a2003c59841a47c0f146e2be35c26dee05010c58b4cb210b0"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-light/abugida-mobile-light-article.png",
+      "sha256": "f7d2f03f85ab753249eaa51029c06d8262d736166cee9d827955b50de094b7fd"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-light/abugida-mobile-light-blog.png",
+      "sha256": "10fb73a4d75beb9f567cc52726ca3b5b5054f7d77bf47cca6cf5bbd8bbd7ef50"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-light/abugida-mobile-light-book.png",
+      "sha256": "bb8739b74204b24d14959062177510c8bab20d0ca80dbca082806dc79655ace3"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-light/abugida-mobile-light-collection-unavailable.png",
+      "sha256": "c4b7a47ad0300637a3ce4f6febed77ba9734b0deae53e3747220f0fc593c5905"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-light/abugida-mobile-light-collection.png",
+      "sha256": "b4fd8edf33a50403aaef5ba69865c8ae0ed4105e5a3c1a1b2322ab49f92720d7"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-light/abugida-mobile-light-gallery.png",
+      "sha256": "28c6ad801eb02e3a28ad86dbb487ae1738f38cbe40c3188643783edc8852ef6a"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-light/abugida-mobile-light-landing.png",
+      "sha256": "33cb3ea8e6b04c99009b97ab8799de0b79d8b7da619528541621d511e2dbfc3c"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-light/abugida-mobile-light-newsletter.png",
+      "sha256": "e071e16c1825301c0ba889671abbee9a9b1313322ccdcba478bde280dc372c51"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-light/abugida-mobile-light-scheduler.png",
+      "sha256": "f0f36bc0f2bd46e4aac9a3b9a0cf805276b52edbdfbea3139ae6735f8645ba3f"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-light/abugida-mobile-light-signup-unavailable.png",
+      "sha256": "28c8407cc2673ccfc196fe886deba9fa78f888f54aeb8b052ea701f2d2362d09"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-light/abugida-mobile-light-simulated-empty.png",
+      "sha256": "25317f3d81dc2fabec0d343dd32e38e727babffd366cfade118d0b0d87408dee"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-light/abugida-mobile-light-simulated-error.png",
+      "sha256": "c4b7a47ad0300637a3ce4f6febed77ba9734b0deae53e3747220f0fc593c5905"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-light/abugida-mobile-light-simulated-gallery-empty.png",
+      "sha256": "6fbed7015ac029360ff7961671d5dc34c90f8dd79c6fa7c308f631851e4711ad"
+    },
+    {
+      "file": "content-templates-certified-abugida-mobile-light/abugida-mobile-light-unavailable.png",
+      "sha256": "49f47f596f8a0cf7d243b93f29d5e99376ab86f8da773aeaa9c470ed9e4788c6"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-dark/bloom-desktop-dark-article.png",
+      "sha256": "4c2fba681ae1aabd79591d082bafbbb63f52cbd601d551125042b548feb96aaa"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-dark/bloom-desktop-dark-blog.png",
+      "sha256": "e3fdb9084adbd979c0f13c9acfb37826859f36497bd80e53d18db53df72b7fee"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-dark/bloom-desktop-dark-book.png",
+      "sha256": "76daf13a2b788ae4a9b2b47aceb8ba53cb71ac7f95bfec2d25f3064e6870c4cd"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-dark/bloom-desktop-dark-collection-unavailable.png",
+      "sha256": "cb3aaa273569b1f91564f8154344631478a983e2efd5ca36b1c2fd16aeb0bda6"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-dark/bloom-desktop-dark-collection.png",
+      "sha256": "a6df0b2ffab3afb544285b55519e342abe57fc498fa846b5c4a0077a43248e8e"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-dark/bloom-desktop-dark-gallery.png",
+      "sha256": "f141ef93fccb8b3596076b5e4dae28725532208dc6f52e1cf77f66b4bfc71539"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-dark/bloom-desktop-dark-landing.png",
+      "sha256": "df8b6a2ce946a88a5acd00343c140f27c079e90768de9029f633ecae14618601"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-dark/bloom-desktop-dark-newsletter.png",
+      "sha256": "ca2ded9fedf17ea2fb00b9d03e0c0cc344dcd72514c57779f6b2bb93c2a4bf84"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-dark/bloom-desktop-dark-scheduler.png",
+      "sha256": "37d3b17cd8c96bf0762731371baa39d89cbb596da00c2594bb0532fc31be9467"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-dark/bloom-desktop-dark-signup-unavailable.png",
+      "sha256": "b3224876e6ad9508b8bc60061b2b172cd37ebf84ca0f73e21d27f4d001b6d905"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-dark/bloom-desktop-dark-simulated-empty.png",
+      "sha256": "ea4ab1d290fb2ce1cf265f4b22459bc30432a4264b4e39b189731dd6d44b53c9"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-dark/bloom-desktop-dark-simulated-error.png",
+      "sha256": "cb3aaa273569b1f91564f8154344631478a983e2efd5ca36b1c2fd16aeb0bda6"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-dark/bloom-desktop-dark-simulated-gallery-empty.png",
+      "sha256": "f88f887069252421970b80225bca62a6b31b3136e7a11e5c7c66fdadbe1ccb07"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-dark/bloom-desktop-dark-unavailable.png",
+      "sha256": "e4a3a9e3dd2b678399024867d5faae03391168c3a603cecf6e6ff1bc0477f85d"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-light/bloom-desktop-light-article.png",
+      "sha256": "886b07e5d9e91090a428ffa87dc1632faf61988f22aa51faeb48155721f87e98"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-light/bloom-desktop-light-blog.png",
+      "sha256": "6303ae10524a940528bdc67a8b2a7c5adc0c7deb0e64247c79c572d5ee2942e1"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-light/bloom-desktop-light-book.png",
+      "sha256": "2ca9127dd55a8187bcaa29eb31fb89773a11981ff86ad0a17cace7d14ff4e40a"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-light/bloom-desktop-light-collection-unavailable.png",
+      "sha256": "8c12d303a627b64670b1ac1265a1107f00121a87fd5d898d35e8db94adb46c48"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-light/bloom-desktop-light-collection.png",
+      "sha256": "bc791cd9d227cdf8429e152f9ebfd206e1566d04e889643195873b4209989f73"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-light/bloom-desktop-light-gallery.png",
+      "sha256": "550aacf5c00899169a704bbc7717f65dfc2bb1369a243a50ac2a801cd63a4a64"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-light/bloom-desktop-light-landing.png",
+      "sha256": "730394bf0fc0c15396d7e8068db3669a13ed8130d49eff50e57ca872cc4caece"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-light/bloom-desktop-light-newsletter.png",
+      "sha256": "ad04f9141bc1567dd10c1abe1d383140603dfbc1e93e807f2e8eb7f3eebe083c"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-light/bloom-desktop-light-scheduler.png",
+      "sha256": "22b8a869a8134228d5c551de52af6c140ec2503859a391e55e157b6cb7c1d442"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-light/bloom-desktop-light-signup-unavailable.png",
+      "sha256": "39e1a83f5f1e4ff4d6325f4b66d0483a5f00c8d14312b8b9943ba72a23036759"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-light/bloom-desktop-light-simulated-empty.png",
+      "sha256": "b5014f7417f9161eb94a056f81a2f59d1fd4de7d4c85163dffe2630ec1fab342"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-light/bloom-desktop-light-simulated-error.png",
+      "sha256": "8c12d303a627b64670b1ac1265a1107f00121a87fd5d898d35e8db94adb46c48"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-light/bloom-desktop-light-simulated-gallery-empty.png",
+      "sha256": "638ca16a4f0d4a1a60bc48739871768b700a2dc6c9a19a103668ca2d865dd3df"
+    },
+    {
+      "file": "content-templates-certified-bloom-desktop-light/bloom-desktop-light-unavailable.png",
+      "sha256": "c89bddff7c62489948129b5e98ca1c7365ecca1ca06409e199acada58a8a2127"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-dark/bloom-mobile-dark-article.png",
+      "sha256": "170c7c8ecb40ec2a5415643e719f2ecffb96e5291fca569642ae5bce178b06d9"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-dark/bloom-mobile-dark-blog.png",
+      "sha256": "a2afa01c66c6649d0f37c5675f35e1eb9b6bd9769c4b88f3d27684caa84337f5"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-dark/bloom-mobile-dark-book.png",
+      "sha256": "c997856a5c379ca53bbc812552c40516323a450e56e297e5c413a187dd038cf4"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-dark/bloom-mobile-dark-collection-unavailable.png",
+      "sha256": "e71b389c6d423f145488337c1351f970c0a10feec989c62798494906166cb735"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-dark/bloom-mobile-dark-collection.png",
+      "sha256": "9147189bfc760457c63c0d503209c855432fc744881c7631d522460464c5fdec"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-dark/bloom-mobile-dark-gallery.png",
+      "sha256": "bdaf9ba2c94f90651f2af4c846cef33756c23f863283ea2e80c5abe30e9d1fa7"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-dark/bloom-mobile-dark-landing.png",
+      "sha256": "9a44ce8362b6e743c7b2cadc66b680cc4df017dc448443fb91c6366b5999dbd8"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-dark/bloom-mobile-dark-newsletter.png",
+      "sha256": "def39ea62afab28e9ba53555a7616013af6cb899fdd37bd1fc12c919b25148bf"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-dark/bloom-mobile-dark-scheduler.png",
+      "sha256": "12b3e4f99ca1fb5205eaf9338cf6f98815a18de3c19a72fb14acd340bbd8b91e"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-dark/bloom-mobile-dark-signup-unavailable.png",
+      "sha256": "99e16bf5ba28a7465e55b9171c54dc6ae871e29099897f0f2a2f2b6105a17846"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-dark/bloom-mobile-dark-simulated-empty.png",
+      "sha256": "95f48a856918ad409ae60f265398473d9300238ce23a248353e0c55c0a7644c7"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-dark/bloom-mobile-dark-simulated-error.png",
+      "sha256": "e71b389c6d423f145488337c1351f970c0a10feec989c62798494906166cb735"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-dark/bloom-mobile-dark-simulated-gallery-empty.png",
+      "sha256": "3c7ca370840318dfd85bdfe3c731fe648576d7cb5f58ca494589e7eb0b756098"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-dark/bloom-mobile-dark-unavailable.png",
+      "sha256": "88f8dfdc7a02b409daac389c0fc8d89bfb2d92c7981273f934da09514e5d2ad1"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-light/bloom-mobile-light-article.png",
+      "sha256": "674cdfa5407809157abd629f411587d33fea9289452348417a642ab7dceef099"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-light/bloom-mobile-light-blog.png",
+      "sha256": "9ca1b0d29b7ec1072dfcfdb003b7988f1833ffdc173c87e9b437e19545304b0f"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-light/bloom-mobile-light-book.png",
+      "sha256": "bdb9b59e04993851828aabf636e38a8016df063a95bc2396401499c40532abc4"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-light/bloom-mobile-light-collection-unavailable.png",
+      "sha256": "b9689696371e16ad56d198b4fb0f98446fb3e307b2b51a23b8788d174a79043a"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-light/bloom-mobile-light-collection.png",
+      "sha256": "6dd9699b9f56da374237331ffaa0def4c29ddec837980852264eba67fd10ba40"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-light/bloom-mobile-light-gallery.png",
+      "sha256": "4c5f1004862cea17925d088ddca0042d3e19479531ccf03a20b630233b213255"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-light/bloom-mobile-light-landing.png",
+      "sha256": "eecd99296ec8bf6df2e608191a784757b9ef173c73ff48cf7c8823bdbd098b72"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-light/bloom-mobile-light-newsletter.png",
+      "sha256": "206a7967d37c8fd5129bba9b705cef076c56e52ad01fc31238bb40a5b0ac69ca"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-light/bloom-mobile-light-scheduler.png",
+      "sha256": "bbb53c7d8429962ec344ef7eeff330454977f9fcb67368086afc23f8ebe52569"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-light/bloom-mobile-light-signup-unavailable.png",
+      "sha256": "78c5a8d343885eb25e9a384ef52b4c716f16bd8ffde903a1657a4c5f4ce144ce"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-light/bloom-mobile-light-simulated-empty.png",
+      "sha256": "1083e5891f1739ac62146d85916a4bf5e740338735bee543869391d19c36d22a"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-light/bloom-mobile-light-simulated-error.png",
+      "sha256": "b9689696371e16ad56d198b4fb0f98446fb3e307b2b51a23b8788d174a79043a"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-light/bloom-mobile-light-simulated-gallery-empty.png",
+      "sha256": "559dcf362b122066043721d378f7ef76ec8ca746e2f3dfd67f585cd222b96b3a"
+    },
+    {
+      "file": "content-templates-certified-bloom-mobile-light/bloom-mobile-light-unavailable.png",
+      "sha256": "409ab5e7da96c9c40751ecef069137700609508bd19f615dcfdeffa22294dd18"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-dark/meron-desktop-dark-article.png",
+      "sha256": "260362481a25c05507c3af5aaf3ebc980962036cdac9e6cda25de7df3f510e10"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-dark/meron-desktop-dark-blog.png",
+      "sha256": "a575ce8aa60baecbcc7383717000f1be7c18cfb35d9dda42969917f954373cd3"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-dark/meron-desktop-dark-book.png",
+      "sha256": "73d08b50d52891ad9c138ba85f50b755c85361ad0a772434493891438c85e976"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-dark/meron-desktop-dark-collection-unavailable.png",
+      "sha256": "5ff5f73dd01f5087ea49de74ff0909b14b95b2614ec5b8cc7a63504d9e3103b9"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-dark/meron-desktop-dark-collection.png",
+      "sha256": "a1daa75410853ac4ed9e8cfd862c34f3e3631c4abc22e5c1ab2a463e59873ce4"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-dark/meron-desktop-dark-gallery.png",
+      "sha256": "3f1a725a4764201c58a5a8cd744461e799cbd5bf74d344e7dd5cb82d62cbec39"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-dark/meron-desktop-dark-landing.png",
+      "sha256": "03bef3e11071e1dc8b4e4198f396bb30cb09b82a4d764366bb2fd03eacbd8d38"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-dark/meron-desktop-dark-newsletter.png",
+      "sha256": "f58e7aa1344113b6fcb2fe3f498538b618864a758b44a23c208f1d564c603a48"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-dark/meron-desktop-dark-scheduler.png",
+      "sha256": "cafd20be3f44db22d4477bf883ad0b6de05a1fcfa05fb30f0e20efe5b28d0f18"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-dark/meron-desktop-dark-signup-unavailable.png",
+      "sha256": "dbbc2f267ff30382f8aa5e676af47ed4e687e095e56f64bf28c8be43291f6cdb"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-dark/meron-desktop-dark-simulated-empty.png",
+      "sha256": "51abe9179d2562d5f2d75acc9a4e3e07a35fe0883c95f9e705ed92e32ed10f5a"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-dark/meron-desktop-dark-simulated-error.png",
+      "sha256": "5ff5f73dd01f5087ea49de74ff0909b14b95b2614ec5b8cc7a63504d9e3103b9"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-dark/meron-desktop-dark-simulated-gallery-empty.png",
+      "sha256": "ebf52b6722a9be449d661f77010ff190104d33e6e3413d41719216886ac17540"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-dark/meron-desktop-dark-unavailable.png",
+      "sha256": "dff2b48c240eef7ef903f87da8a1d1a667378b3ece7fb8dff21698b1b344e22c"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-light/meron-desktop-light-article.png",
+      "sha256": "a4645b98fb9bc2de61bd36ef9f3ead49e3c5e734bc8698a2a8f9216852665791"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-light/meron-desktop-light-blog.png",
+      "sha256": "e8052341700c69bd262f86f57280e19362ff5f5301c0172c8636948c35b8ebf7"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-light/meron-desktop-light-book.png",
+      "sha256": "24b8d32f6036e063fe3f8c34adc32454fa18ab0cca7f907e845205141988c4bf"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-light/meron-desktop-light-collection-unavailable.png",
+      "sha256": "8bde17e3c1740aa7eedb6afdae158ed232fc0e1ffa578fe586317f5a5b97de04"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-light/meron-desktop-light-collection.png",
+      "sha256": "32bc6a0b9adb903cd18f4c5d60bf01394a06faa7463c8d7d4376ffb8324402b7"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-light/meron-desktop-light-gallery.png",
+      "sha256": "7a528d30509f1cd47c5abc97f64f2135e27131edca9364bff650cf57d7d07aa8"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-light/meron-desktop-light-landing.png",
+      "sha256": "b667edd7c70501300f45cb48f60f908a1d05bd9deffe733dec5b474d571eb9c2"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-light/meron-desktop-light-newsletter.png",
+      "sha256": "52f9165207f40b4947205eaff0b7be59f6acb405c3b43fcdd2add41e0494d08b"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-light/meron-desktop-light-scheduler.png",
+      "sha256": "6e6c1dcf5094a5891067a03fe829c69860c1afed48275158ae0b526031a13ed3"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-light/meron-desktop-light-signup-unavailable.png",
+      "sha256": "c6d1d63bbee2450735f0deb46d4631411f597c852453de20b6cb9d43dbe428e1"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-light/meron-desktop-light-simulated-empty.png",
+      "sha256": "30c472579d63113fea02f3752425a6d034ad400c4909feb8acfcaf6e60925448"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-light/meron-desktop-light-simulated-error.png",
+      "sha256": "8bde17e3c1740aa7eedb6afdae158ed232fc0e1ffa578fe586317f5a5b97de04"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-light/meron-desktop-light-simulated-gallery-empty.png",
+      "sha256": "d7c67652d67a5e3c77f91fd2ddf1e98c4566879835436bcaf917aef551bdc21b"
+    },
+    {
+      "file": "content-templates-certified-meron-desktop-light/meron-desktop-light-unavailable.png",
+      "sha256": "3dc06552bd7ab33262c80ec2b68307659c3301a75bb419e37864e34af7cf8c0f"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-dark/meron-mobile-dark-article.png",
+      "sha256": "e476f6e0d6dda5ac40c2bc034020b8801dddeeb0cb0eb08c94c3a7bb5b06934b"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-dark/meron-mobile-dark-blog.png",
+      "sha256": "4bfb29c28610b5ba370a4208456bfcfd252d1c86c4e027f514ebf908c3f7f16d"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-dark/meron-mobile-dark-book.png",
+      "sha256": "860212a29b27d0b81586bbd0513a229e57ccdca16b8686e7dab54ca2a8c8c185"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-dark/meron-mobile-dark-collection-unavailable.png",
+      "sha256": "b041e93e11165aebbbf6c733e3b65d467edf13b018fea977df6e172378f1e26d"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-dark/meron-mobile-dark-collection.png",
+      "sha256": "2d1fb6624b208fe5b1e6f462f925311c3aa1b587ef696d0d29b3bb73077c814a"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-dark/meron-mobile-dark-gallery.png",
+      "sha256": "8bb6e98c3cae6e190b4b0718bcfee5c9cdcf02deebe36e82cdab48e2458c7f43"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-dark/meron-mobile-dark-landing.png",
+      "sha256": "9f1eab925eea68e12a607afc2d72d91a3a3a1587fbaa52cbd2a1d94c6a97653f"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-dark/meron-mobile-dark-newsletter.png",
+      "sha256": "6d99ca936066529e36ef9fa94fda2ea82a79bd3e4e60c76ca2f7e1ddf0c8e8bf"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-dark/meron-mobile-dark-scheduler.png",
+      "sha256": "d8c8ce65bdae9349562e331093d8e4dc746e110ca3076fb77d4b36f8be018290"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-dark/meron-mobile-dark-signup-unavailable.png",
+      "sha256": "a54bfcd8ee52b48bf7deffa47bc233548cc57bd25bb83043b5e868636e812f73"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-dark/meron-mobile-dark-simulated-empty.png",
+      "sha256": "2801dcfcb9fd03dbf0f02eae5724bd224f4ea07f8f70c9519a908379edb748cf"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-dark/meron-mobile-dark-simulated-error.png",
+      "sha256": "b041e93e11165aebbbf6c733e3b65d467edf13b018fea977df6e172378f1e26d"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-dark/meron-mobile-dark-simulated-gallery-empty.png",
+      "sha256": "78e5042be881be0b51715b7c76203d16de097fba8a83101168e4b1bfdcfb153b"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-dark/meron-mobile-dark-unavailable.png",
+      "sha256": "c63de8b61a508be368afbe4ff4a44a2cdeba6dc915d50fe8439d20ced46d5689"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-light/meron-mobile-light-article.png",
+      "sha256": "ba81af19e87ea87fa9ab8e3af53fd2f2e0a62227866cac0428453527156dabcf"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-light/meron-mobile-light-blog.png",
+      "sha256": "acbc1a81eb03a444ee86372af713a234e7b53c1a37e40d60e13fddfde2a187db"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-light/meron-mobile-light-book.png",
+      "sha256": "a73b6999e952f7865d5ab3f3eaddb82e9722d0bce5841510c0c9e9af73193ac6"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-light/meron-mobile-light-collection-unavailable.png",
+      "sha256": "1544723044ded9a8225fb0b6ae096ae031e25527002e731126430c1d94303c56"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-light/meron-mobile-light-collection.png",
+      "sha256": "dbf5186edccf374e7de0c438c10ea288a5f1cb9ba208b48f562ff111a9e7f325"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-light/meron-mobile-light-gallery.png",
+      "sha256": "38a90fabe522ae514f11d4f43582c3a691c8c36dd129f57b78188108f7240b42"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-light/meron-mobile-light-landing.png",
+      "sha256": "da6d94dfbdd3734d1c639f56d22312621849c12fc2afb05c86d7a9e64a067fde"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-light/meron-mobile-light-newsletter.png",
+      "sha256": "f738bb56bb53d1835ccdb5e492986894c17f3fa363f1147f47608c2a3fdce946"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-light/meron-mobile-light-scheduler.png",
+      "sha256": "bcdfd98f702cbe6290782f313c857862a39f0677c8ddea27bd937fc5549c11d3"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-light/meron-mobile-light-signup-unavailable.png",
+      "sha256": "3405b776ce37175a0d704556dcd2391d1089e4e4d64f3fa1677166ca88b434b0"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-light/meron-mobile-light-simulated-empty.png",
+      "sha256": "f123e6796d925affc8d20072c9965e5f0c0fec3cea8bfff72ca49025daa8d24a"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-light/meron-mobile-light-simulated-error.png",
+      "sha256": "1544723044ded9a8225fb0b6ae096ae031e25527002e731126430c1d94303c56"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-light/meron-mobile-light-simulated-gallery-empty.png",
+      "sha256": "ec8354424b3a4a696a4951e8d32e27099ea1fa3981fb894e664a68ef9f3e7f6f"
+    },
+    {
+      "file": "content-templates-certified-meron-mobile-light/meron-mobile-light-unavailable.png",
+      "sha256": "3f71131d1a1625bcb33e656e5849b8ccb3e97097a3b9ef6766c8aca557c07a01"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-dark/selam-desktop-dark-article.png",
+      "sha256": "0fb2c7382620274e677c334333e2beb379ee1d3d3c6a95ddd6891ecfc854960d"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-dark/selam-desktop-dark-blog.png",
+      "sha256": "2f9805f18286a218a556414f052ec8523ac22a141e3faa95f108d26c3412aa59"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-dark/selam-desktop-dark-book.png",
+      "sha256": "ce1f617a8f944da5c8121751d242d4c887f1468756c4c18052f7fb1d48689251"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-dark/selam-desktop-dark-collection-unavailable.png",
+      "sha256": "914eee2add98670e4100e8532f931ae04d3c0fd0e2925536e77dec998b1d889a"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-dark/selam-desktop-dark-collection.png",
+      "sha256": "973f74ac7b0d9ff8bec55d367fa9873e52a6d9e6319a4d92ada2e2aa39185631"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-dark/selam-desktop-dark-gallery.png",
+      "sha256": "6ff1898f6d062ac51dc19bca60241c441a68b5a5cba08f163244e9db24bbfe01"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-dark/selam-desktop-dark-landing.png",
+      "sha256": "b06840a80157314367f70d6bccfcbb7bf5c82d4f18fb55757b55908f756bd01b"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-dark/selam-desktop-dark-newsletter.png",
+      "sha256": "dc2fab0def135b22b7e687acd691dbe54f4c04a1a1a4468dd8f32bb86516afae"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-dark/selam-desktop-dark-scheduler.png",
+      "sha256": "fde9eef073063ba33a6b1d9c88e3c65343de84ece2e0f0b066b084adeb70a77f"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-dark/selam-desktop-dark-signup-unavailable.png",
+      "sha256": "5ec2d2c06a01d0d561e1157360a62b69c2f685b5c8961db8ea9eb3a608758217"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-dark/selam-desktop-dark-simulated-empty.png",
+      "sha256": "f05afcd887faced1818acf2b1a8d5213dfa02574679adf2aca13b10beb3adc3b"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-dark/selam-desktop-dark-simulated-error.png",
+      "sha256": "914eee2add98670e4100e8532f931ae04d3c0fd0e2925536e77dec998b1d889a"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-dark/selam-desktop-dark-simulated-gallery-empty.png",
+      "sha256": "917b31b9a4d37db7c9db1be97cd97f71dc38bcaf0e558f7a67bafc34f8f331bd"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-dark/selam-desktop-dark-unavailable.png",
+      "sha256": "f8f590d9dbf605bcebef7768f3acf72b6040a4786dbf8818a86bbe6902e8af21"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-light/selam-desktop-light-article.png",
+      "sha256": "1c7fc1d47115178d616ff45445c6abefd332905f46e05bc991b7a8e0735014c9"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-light/selam-desktop-light-blog.png",
+      "sha256": "ff5955f44bcc3eebce6984d4b2740bb7b9b67ebe88b689add02b7272edba5a37"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-light/selam-desktop-light-book.png",
+      "sha256": "1b8259cb8ffcaf87f260b71f7a397c744f1a2735658cdc5ce0891eb3b6423821"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-light/selam-desktop-light-collection-unavailable.png",
+      "sha256": "7e689705d657a66bf9eb3a9ca8224b615cb6f4f47742bb74cc5a5e73bae1b193"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-light/selam-desktop-light-collection.png",
+      "sha256": "3826f8af56d6e9bc3d51e68b888c9261848ff3b5872e39a57ac86ab8b894d9bf"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-light/selam-desktop-light-gallery.png",
+      "sha256": "d29631404274c910d776162c75d76199be3cf0b68a6becfefa4a1ef8e949b17d"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-light/selam-desktop-light-landing.png",
+      "sha256": "a3df8d18f4e1f3923789246828a5f08a8771fc5194983a6171dfe7a05aaa39e9"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-light/selam-desktop-light-newsletter.png",
+      "sha256": "e1160063f548c8cbe071c1eab9024987d741710e2b601ca48893556903e5b1c2"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-light/selam-desktop-light-scheduler.png",
+      "sha256": "f6fcda4007f39e50526d944f7d8fa0d7a8f83f63e96bea71c4304f16e5e951b9"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-light/selam-desktop-light-signup-unavailable.png",
+      "sha256": "3228c0a8d35849068d229938472a35e4f80714de5133237cd8ae5989a235a45d"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-light/selam-desktop-light-simulated-empty.png",
+      "sha256": "27fdb4cbe86ff0bdcbbb6439371b4cfca118d70a2af80ea8f4b71fe06133a586"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-light/selam-desktop-light-simulated-error.png",
+      "sha256": "7e689705d657a66bf9eb3a9ca8224b615cb6f4f47742bb74cc5a5e73bae1b193"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-light/selam-desktop-light-simulated-gallery-empty.png",
+      "sha256": "eac04805b80ced02a2a261fcf3ddaf6fe388a507be287a34cd4c892436ffa2b6"
+    },
+    {
+      "file": "content-templates-certified-selam-desktop-light/selam-desktop-light-unavailable.png",
+      "sha256": "a0699c4b174d1c6aec7e6c101807eda632f8032e300369165a53948c0d18d5ca"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-dark/selam-mobile-dark-article.png",
+      "sha256": "649dd7d80ef2574ef92c32d95ec1cb6bd9add8a4f8b9527d1510987d62873fa2"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-dark/selam-mobile-dark-blog.png",
+      "sha256": "327c4d53795728660d7dbd3759c8e439e92a3ae5c3dac1fd9f1e1ecebdcb3eeb"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-dark/selam-mobile-dark-book.png",
+      "sha256": "26249d5cbfe971a08ca17783ca4840e22e9ca17cd06a02f1230d1c0456cef5a2"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-dark/selam-mobile-dark-collection-unavailable.png",
+      "sha256": "dd7c4c45ad99f52bfdb50f1a0c2f98d57d1d1c3f4e9c73824fa8d2916cb6dcf9"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-dark/selam-mobile-dark-collection.png",
+      "sha256": "60dbd12035a4c10482e633a48900144c7ac718cee140d44c0b24a5d726dbd293"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-dark/selam-mobile-dark-gallery.png",
+      "sha256": "5755e758e1604571a2530edb59109bd015692668cd74cfd961ad8efa00dd13aa"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-dark/selam-mobile-dark-landing.png",
+      "sha256": "da77b05d7712a1bee2cd563b5e5a3419945e6e5e686269d53a6a3c7252237fa6"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-dark/selam-mobile-dark-newsletter.png",
+      "sha256": "6d9bbdfc30ebdd4fdee68df039d8e05a8470cc4af33fd418e0509d612658fbb5"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-dark/selam-mobile-dark-scheduler.png",
+      "sha256": "a7918abe3e66c4ecd48df73959a56ba23ad02d684074caf03795804ec841a2fe"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-dark/selam-mobile-dark-signup-unavailable.png",
+      "sha256": "91242fbc54285b14838db97500ffb365a4655a02a04e17b76e1777a72c0c365f"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-dark/selam-mobile-dark-simulated-empty.png",
+      "sha256": "766f853a791a669e3481797ab81a01ddc4708e317b56bd81c36150c55cac7550"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-dark/selam-mobile-dark-simulated-error.png",
+      "sha256": "dd7c4c45ad99f52bfdb50f1a0c2f98d57d1d1c3f4e9c73824fa8d2916cb6dcf9"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-dark/selam-mobile-dark-simulated-gallery-empty.png",
+      "sha256": "68c81ca4a1a9004a2dd4b6575671de252356a33a8631b7c4a61b75c8ea33a680"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-dark/selam-mobile-dark-unavailable.png",
+      "sha256": "034a2c8afef2125476775d1ea22d53cf4e4b2897c5888c522bd270107b0f90b8"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-light/selam-mobile-light-article.png",
+      "sha256": "366825ece09d27cf7fdaa2ff1cb724182d8dc74bfc008ab65cd7fa9b2e21d331"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-light/selam-mobile-light-blog.png",
+      "sha256": "e2c088c767433368dd381371f4550f6ff974f78d4f39e38d6bdd74feee966b6b"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-light/selam-mobile-light-book.png",
+      "sha256": "f4f5f7d372755d9de785ba20bc2f517dce1d12ccbad544a0c1e8b2678e3210a6"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-light/selam-mobile-light-collection-unavailable.png",
+      "sha256": "758e65b3c1360a0d316dbf387dd2815c67592e339b638f1266f35860c6e1b318"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-light/selam-mobile-light-collection.png",
+      "sha256": "1859a46680a3639ab398c5f2493fee1e068d078d1362b3fc7cd693e903867891"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-light/selam-mobile-light-gallery.png",
+      "sha256": "0274ccbb2b9c9554a923279b9824c72804004aae0d54eb51957cb9285d37cbaa"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-light/selam-mobile-light-landing.png",
+      "sha256": "3351e9d48bc5a2358a9d10bab18cc011861178bbd477a6c371ba2a29f974a538"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-light/selam-mobile-light-newsletter.png",
+      "sha256": "a4321a44d54359c222bcdb81b66a6dc0227556458b4d085d1383382e51822a3e"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-light/selam-mobile-light-scheduler.png",
+      "sha256": "b601cc0c3f211c341a78a864f028589a01be44b1f2aac1077590f83ef6a7f2d7"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-light/selam-mobile-light-signup-unavailable.png",
+      "sha256": "fbba5825084240315599a55fe80e115c1a41ad1996231c0dedcbb0bc38a4b53a"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-light/selam-mobile-light-simulated-empty.png",
+      "sha256": "53c9209740c01995d930a7b417c565c1d9e73180a76c65c1e830da2cebb62ffc"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-light/selam-mobile-light-simulated-error.png",
+      "sha256": "758e65b3c1360a0d316dbf387dd2815c67592e339b638f1266f35860c6e1b318"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-light/selam-mobile-light-simulated-gallery-empty.png",
+      "sha256": "f5b4ea22b3c9fe376ede52c63524f97a30df956ca768d7600700d86577f8322f"
+    },
+    {
+      "file": "content-templates-certified-selam-mobile-light/selam-mobile-light-unavailable.png",
+      "sha256": "c815e2953936eb2902d63ca004f61a09bf59a416dffa045daefce8e126422068"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-dark/tena-desktop-dark-article.png",
+      "sha256": "e2a1c8635ec22c8c6225ab8e42d58a94a2032e31f15dbeffa850491f3b242c83"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-dark/tena-desktop-dark-blog.png",
+      "sha256": "27bc353bffd3f9e9fdf92951d7cbac5a3454940aecc4282f46ce3f373ea871cf"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-dark/tena-desktop-dark-book.png",
+      "sha256": "67dcf54fb7e8f18d60c838c840772eb367b5023d810a1127f40bef48b4426565"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-dark/tena-desktop-dark-collection-unavailable.png",
+      "sha256": "ac386a180e11747b9b5dc1a41aee60ae5fc6b2c49f4afe2b39a018440b891d0f"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-dark/tena-desktop-dark-collection.png",
+      "sha256": "43e0a815ed481195076477bfe77e28bbba1297330da51c9f25b1f5063fb9a6ec"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-dark/tena-desktop-dark-gallery.png",
+      "sha256": "844cf0967707461b3d21163edaadeaf0cb931d8b5c03d2561bf42d9ffae06e18"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-dark/tena-desktop-dark-landing.png",
+      "sha256": "ae560f28e638c2414c7c2ab1178c33a3e3e4b6ad9a4e46c858b2129633fd4fe1"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-dark/tena-desktop-dark-newsletter.png",
+      "sha256": "afa020ec31da173cfd3cd0ecdb2359b6b41faf733068317b6fa14fc8a0e0a318"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-dark/tena-desktop-dark-scheduler.png",
+      "sha256": "c1fa4b436e9828e8f4b319284449e4c22c23d1d5acddc8ba6dcef8bc150e023c"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-dark/tena-desktop-dark-signup-unavailable.png",
+      "sha256": "4a31c6ce904b06420f6fad2a1b7923b526320836e8160e697af4d080238e9cc0"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-dark/tena-desktop-dark-simulated-empty.png",
+      "sha256": "64f7f8a0a4e9f1029962f3052d02f85ab05b23a9b2431dfd55395cc889300b62"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-dark/tena-desktop-dark-simulated-error.png",
+      "sha256": "ac386a180e11747b9b5dc1a41aee60ae5fc6b2c49f4afe2b39a018440b891d0f"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-dark/tena-desktop-dark-simulated-gallery-empty.png",
+      "sha256": "c3f0d737c7102a84b9453dc1658d25c37b91bc320281ee54ef2110f2c012587a"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-dark/tena-desktop-dark-unavailable.png",
+      "sha256": "6023fabac94a536ef6585b34fb2c61cf6268d7888359af2898e2c17468e6aaad"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-light/tena-desktop-light-article.png",
+      "sha256": "1718649f80d36449291402f9def67e9b08686faf2d16e155df770e53149e0426"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-light/tena-desktop-light-blog.png",
+      "sha256": "469754c673c21743f7f48f01d394c24a47710fde8b73e9b3be4e98bd72d92787"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-light/tena-desktop-light-book.png",
+      "sha256": "851b5740a42d73fc1e8ce87b68b741b7a106ec50748755e7aac97a20ca4c56a6"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-light/tena-desktop-light-collection-unavailable.png",
+      "sha256": "4bb92e6c9cc375a0d67e515e5889d660a627a1618443d2a2ed553c83492920c5"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-light/tena-desktop-light-collection.png",
+      "sha256": "d0ae10034233a667a7dc470f7add10fda33a18334d6941dee56fa7cf2c823b12"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-light/tena-desktop-light-gallery.png",
+      "sha256": "ff8e86d58e243dfa467b799a88f1e8c0879a6a8af17680ef439cda4f4a172244"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-light/tena-desktop-light-landing.png",
+      "sha256": "5250d51f45c38e1844f41aa457a7a22332c91b224c7ca2151c1854baa13d27ad"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-light/tena-desktop-light-newsletter.png",
+      "sha256": "fea00faa2335c8ab7a3a4aea63addb90bc57ca40ee5c46f4d7b036b578de232d"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-light/tena-desktop-light-scheduler.png",
+      "sha256": "a421bfbdfdfbd999f22d734ecf377666b2a2f5bad6b96fa70077165fea61ce14"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-light/tena-desktop-light-signup-unavailable.png",
+      "sha256": "43d1afbb39ac35c3339e814c00f926805c7551495cc46537bbaf9371271472de"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-light/tena-desktop-light-simulated-empty.png",
+      "sha256": "bc01f1a1f49675d3c1471821530e746980517e346c764e484bf21fd77f7874cd"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-light/tena-desktop-light-simulated-error.png",
+      "sha256": "4bb92e6c9cc375a0d67e515e5889d660a627a1618443d2a2ed553c83492920c5"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-light/tena-desktop-light-simulated-gallery-empty.png",
+      "sha256": "7ef440b4a9ab67cfc52a9e4858ec1b4701943c71c6fd155ba271911631558278"
+    },
+    {
+      "file": "content-templates-certified-tena-desktop-light/tena-desktop-light-unavailable.png",
+      "sha256": "c28394661b06ba05a1f2ac5d28828207f54423c5b375d277a0cf1e6c2d471755"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-dark/tena-mobile-dark-article.png",
+      "sha256": "eee887b8fbe9bd25505bed49266559dcff3d874d5bd01c49f04854a30ce9da45"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-dark/tena-mobile-dark-blog.png",
+      "sha256": "94e5fd839af3e560cd7dbfd949320350ebbb64e927afc0839931085b4f7bcadf"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-dark/tena-mobile-dark-book.png",
+      "sha256": "f9a53b6f6c3f4f18c548da62946954bd7087929fe9bc6e983189ede258f07ac9"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-dark/tena-mobile-dark-collection-unavailable.png",
+      "sha256": "877f361ec52e469415bf3fddcefdef0500153dd0ca0ddf70906acfe87ae4faeb"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-dark/tena-mobile-dark-collection.png",
+      "sha256": "aceeaf70ad33564005e4f9a2633078ea54460c3639d2bcbedc7a137fd4dfa3ac"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-dark/tena-mobile-dark-gallery.png",
+      "sha256": "aabcb0c41fb54b955539f9188d24b844e2bfdb0d7aca9675e78aa59956db0883"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-dark/tena-mobile-dark-landing.png",
+      "sha256": "5d7ceec33ce50e26f84132172de183dae240eec65214480de75cc328b7752953"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-dark/tena-mobile-dark-newsletter.png",
+      "sha256": "83212513cc5fb4267c762335a0cb20d4418598e26cf8c38667f16039581f07b6"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-dark/tena-mobile-dark-scheduler.png",
+      "sha256": "cd8e9dbf7b750c7417a739b30588b96faa172cc6a1d86b0127daf99fed2c8d80"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-dark/tena-mobile-dark-signup-unavailable.png",
+      "sha256": "2ac72c5fadd25c5e5f2964381fecc013730049ec229474cbf0b9b32f7616f2d2"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-dark/tena-mobile-dark-simulated-empty.png",
+      "sha256": "f76d5d34e553f5c9396aefc2e830cec796f7c408e45ca575d1b965aa2930e0c0"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-dark/tena-mobile-dark-simulated-error.png",
+      "sha256": "877f361ec52e469415bf3fddcefdef0500153dd0ca0ddf70906acfe87ae4faeb"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-dark/tena-mobile-dark-simulated-gallery-empty.png",
+      "sha256": "38b8dc58c9d46cb4ff064e9be66cd3e734032541b5f3b65331cecf1d92fc3e85"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-dark/tena-mobile-dark-unavailable.png",
+      "sha256": "f5bdebf56bfb572da5ac2b48b55796a6d8e06580fcd9a7ddbcf488de4b76148d"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-light/tena-mobile-light-article.png",
+      "sha256": "acc438715f1e0fb025e718a8bd50c58ab1f62e32e00ac45dacd2db1e669204de"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-light/tena-mobile-light-blog.png",
+      "sha256": "cfe973c61ea1dd8c32cb02e4bf4b48522dd2a2870c6ac5b70627da36a3c221b0"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-light/tena-mobile-light-book.png",
+      "sha256": "cda43073e7821d21942caabaec9b97ce15e9b1e0c963abb9a0bd044e64d39e75"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-light/tena-mobile-light-collection-unavailable.png",
+      "sha256": "6c1f1395c5531778964cd585c82f3e0906118ecb6ab0ce3893503b48767b2f05"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-light/tena-mobile-light-collection.png",
+      "sha256": "1b2b6d544f6ee84c4e181e0d0e5876bd4f8d2999d83d43f6569c87a3c4d48bc5"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-light/tena-mobile-light-gallery.png",
+      "sha256": "d26025613fdc7dce9f88fabeeaff270814f1778f039ae1739ccd8ee64e997fc0"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-light/tena-mobile-light-landing.png",
+      "sha256": "ae576ef9e66225473d7acc5a2a403c8498f95cb966173381a66f5d9500b2d195"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-light/tena-mobile-light-newsletter.png",
+      "sha256": "010022773a013d0a00c8804d41e99249df48b210b97626030865cce674129119"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-light/tena-mobile-light-scheduler.png",
+      "sha256": "7489dbb9b0e1c5ae112212604ac70f8cbe3e242b2fa2084810d0c52199e67bfe"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-light/tena-mobile-light-signup-unavailable.png",
+      "sha256": "7da1cfb671413648f5d8e8b18a374607e0cab5d15106e5bcc67d3c32284d7c20"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-light/tena-mobile-light-simulated-empty.png",
+      "sha256": "b3989b03334ca07e1198c4c671c4b0c4f001dceb6e6d963fb567dc81a1ac62c9"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-light/tena-mobile-light-simulated-error.png",
+      "sha256": "6c1f1395c5531778964cd585c82f3e0906118ecb6ab0ce3893503b48767b2f05"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-light/tena-mobile-light-simulated-gallery-empty.png",
+      "sha256": "6f3fc1a424bc66a6144e8013c741a3c6899c75bcb11575f71a9ef8748bd25fcf"
+    },
+    {
+      "file": "content-templates-certified-tena-mobile-light/tena-mobile-light-unavailable.png",
+      "sha256": "8bf8793f80913e845b90a0669052bec2929b5628d786dbb47348b141d9406d72"
+    }
+  ],
+  "scope": "Seeded template rendering; empty and unavailable states use controlled API responses. Fresh owner acceptance is recorded separately."
+}

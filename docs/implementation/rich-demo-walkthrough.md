@@ -1,0 +1,145 @@
+# Rich Appointment demo walkthrough
+
+## Analytics operations validation
+
+The `feat/analytics-operations` implementation is running on the isolated site
+`meet-beta-feat-analytics-operations-f2ca8e.localhost`. Use the unique React/Vite
+URL `http://127.0.0.84:44430` and the proxied Desk URL
+`http://127.0.0.84:44430/app`. Its mode-600 credential and fixture manifest is:
+
+`/home/minte/.local/state/frappe-worktree-stack/feat-analytics-operations-f2ca8e/bench/sites/meet-beta-feat-analytics-operations-f2ca8e.localhost/private/rich-demo-v1.json`
+
+No-show rate is `No Show / (Completed + No Show)` for appointments whose end
+time has elapsed in the business timezone. Cancelled and unresolved bookings are
+excluded; a zero denominator is reported as unavailable rather than 0%.
+Provider utilization is the union of occupied provider intervals divided by the
+union of eligible provider working windows. Pending, Confirmed, Completed and No
+Show consume capacity, cancellations do not, and service buffers count. Capacity
+uses active services, offerings, providers, organization assignments, locations,
+effective hours and location holidays. Overlapping services and locations are
+unioned per provider before providers are summed.
+
+The current schema does not retain schedule or status snapshots. Historical
+capacity is therefore an estimate using current hours, holidays, offerings and
+assignments, and no-show classification uses the latest recorded status. These
+limits appear in the API, UI and CSV export. The export contains aggregate scope,
+summary, trend, service, provider and location rows; it contains no appointment
+or customer identifiers. It uses UTF-8 CSV quoting, formula-injection protection,
+and includes financial estimates only for owner/manager scopes.
+
+Focused verification on 2026-09-23 passed the deterministic analytics math suite
+(7 tests), the rich-demo integration suite (7/30/90-day periods, role scoping,
+tenant denial, export policy and empty-state semantics), the 18-check rich fixture
+roundtrip, the frontend DOM contract suite, and the production frontend build.
+Agent Plane runs `BQA-2026-00015` (owner/mobile/export), `BQA-2026-00016`
+(provider/dark), `BQA-2026-00017` (reception/mobile), and `BQA-2026-00018`
+(multi-business role switching) all passed with zero console and network errors.
+The authenticated API and Socket.IO WebSocket were also verified through the
+frontend origin. The raw reports, screenshots and traces remain private in the
+isolated site because they may contain session material.
+
+Useful synthetic accounts are `bloom.owner@example.test`,
+`bloom.manager@example.test`, `bloom.provider1@example.test`,
+`bloom.reception@example.test`, and `multi.manager@example.test`. Read passwords
+locally from the private manifest; never paste them into notes or recordings.
+
+This local demonstration runs from `feat/persona-analytics` (based on `demo/rich-appointment`) on the isolated site
+`meet-beta-demo-rich-appointment-344c1b.localhost`. Open
+`http://127.0.0.174:41960` in the Windows browser. The mode-600 private manifest
+with passwords, persona URLs, business URLs and exact created-record inventory is:
+
+`/home/minte/projects/appointment-worktree-runtimes/demo-rich-appointment-344c1b/bench/sites/meet-beta-demo-rich-appointment-344c1b.localhost/private/rich-demo-v1.json`
+
+The anchor date is 2026-09-23, in `Africa/Addis_Ababa`. The fixture spans 89 days before the anchor and 30 days after it, with both returning regulars and occasional customers. The site has five
+fictional businesses, 14 login personas and 1,429 appointments after a clean
+reseed: 447 confirmed, 797 completed, 110 cancelled and 75 no-shows. It also has
+rescheduled bookings with history. Customer names and contacts are synthetic;
+email is muted and the scheduler is paused. The clinic contains no real patient
+records. The application uses provider capacity, with rooms represented as
+locations; it does not claim group or equipment capacity.
+
+| Business | Model | Public URL |
+|---|---|---|
+| Selam Movement Practice | solo wellness practitioner | `/schedule/org/selam-studio` |
+| Meron Tailoring Atelier | solo business owner | `/schedule/org/meron-studio` |
+| Bole Bloom Hair Studio | salon with several stylists and reception | `/schedule/org/bloom-studio` |
+| Tena Family Clinic | small clinic with multiple clinicians and rooms | `/schedule/org/tena-studio` |
+| Abugida Language Studio | education business with several coaches | `/schedule/org/abugida-studio` |
+
+Use `http://127.0.0.174:41960/login` for authenticated clips. Read each password
+from the private manifest; never include it in a recording. The manifest lists
+the expected landing URL for every persona. Useful accounts are
+`bloom.owner@example.test`, `bloom.reception@example.test`,
+`bloom.provider1@example.test`, `bloom.manager@example.test`,
+`multi.manager@example.test`, `selam.owner@example.test`, and
+`tena.reception@example.test`.
+
+## Recording order
+
+1. **Public booking, 2–3 minutes.** Open Bole Bloom's public URL as a guest.
+   Show the business description, named stylists, service choice, available
+   dates and times. Book with a clearly fictional `example.test` customer and
+   show the confirmation. For a contrasting service, open Selam Movement
+   Practice or Tena Family Clinic. Use a fresh synthetic customer email for an
+   actual recording, then register that booking in the demo inventory if it
+   needs exact cleanup.
+2. **Owner and setup, 1–2 minutes.** Log in as `bloom.owner@example.test`.
+   Show the owner analytics overview, switch the reporting period from 30 to 90 days, then open business settings, published services and customer
+   links. Explain that publication and team access are managed in the business
+   workspace.
+3. **Reception day, 2–3 minutes.** Log in as
+   `bloom.reception@example.test`, open Reception and its operational brief, then show realistic busy and
+   quiet dates, names, filters and location scope. Open Insights to see the same location-limited reporting scope. Open one appointment and
+   demonstrate its history. The seeded lifecycle evidence includes a
+   rescheduled and a cancelled booking.
+4. **Provider and solo work, 1–2 minutes each.** Use
+   `bloom.provider1@example.test` for the stylist calendar, personal brief and Insights, then
+   `selam.owner@example.test` for a solo practitioner's overview and booking
+   page. Note the different team and location complexity.
+5. **Manager, clinic and multi-business, 2–3 minutes.** Use
+   `bloom.manager@example.test` for team access,
+   `tena.reception@example.test` for the clinic's rooms, and
+   `multi.manager@example.test` to switch between authorized businesses. Its role changes with the selected business: receptionist at Bole Bloom and manager at Tena.
+
+The seed is versioned and guarded to this explicitly enabled `.localhost` site.
+Its journal owns every record it may remove. From the isolated runtime Bench,
+with the feature worktree on `PYTHONPATH`, use:
+
+```bash
+bench --site meet-beta-demo-rich-appointment-344c1b.localhost execute appointment.demo.showcase.seed
+bench --site meet-beta-demo-rich-appointment-344c1b.localhost execute appointment.tests.test_rich_demo.verify
+bench --site meet-beta-demo-rich-appointment-344c1b.localhost execute appointment.tests.test_rich_demo.roundtrip
+```
+
+`seed` is idempotent. `roundtrip` proves exact cleanup, unrelated-record
+preservation, collision refusal and reseeding, and leaves a fresh site. For an
+intentional removal use `appointment.demo.showcase.cleanup` on this site only.
+Dates are anchored to the manifest date; rerun the exact cleanup and seed to
+refresh upcoming activity when the current date has moved on. The period control offers 7, 30 and 90 days. Owner and manager views include current-price catalog estimates and explicitly recorded payments; neither figure is labeled revenue. Provider and reception reports contain only appointments within their authorized scope and omit financial amounts. A rerun writes
+new passwords to the private manifest.
+
+## Browser evidence
+
+The product QA runner used Agent Plane and Agent Harness browser sessions. The
+accepted runs include public booking `BQA-2026-00024`, owner `00017`, provider
+`00021`, manager `00022`, clinic mobile `00019`, multi-business switching
+`00032`, reschedule `00037`, cancellation `00034`, final reception `00036`, and
+public light/dark `00029`/`00030`. Focused failures during development were
+fixed and rerun; the accepted runs above passed with zero console and network
+errors. Windows forwarding confirms the unique browser URL is reachable. The private raw browser traces
+remain in the local runtime because they may contain session material.
+
+Representative synthetic captures: [public light](evidence/rich-demo/public-bloom-light.png),
+[public dark](evidence/rich-demo/public-bloom-dark.png),
+[reception desktop](evidence/rich-demo/reception-desktop.png),
+[clinic mobile](evidence/rich-demo/clinic-mobile.png), and
+[solo mobile](evidence/rich-demo/solo-mobile.png).
+
+This is a walkthrough environment, not a production launch or a claim that
+notifications, payments, medical workflows, or group capacity are enabled.
+
+## Analytics checks
+
+Run `bench --site meet-beta-demo-rich-appointment-344c1b.localhost execute appointment.tests.test_analytics.verify` from this isolated Bench with this worktree on `PYTHONPATH`. It checks nonempty 7/30/90-day data, repeat customers, manager-only money, provider and reception scopes, cross-business denial and invalid periods. The owner dashboard is `/home` and the full report is `/analytics`. Providers land on `/calendar` with a brief; receptionists land on `/reception` with a brief. Both have an Insights link.
+
+Agent Plane browser manifests are in `qa/manifests/analytics/`. The accepted owner run `BQA-2026-00044` selected 90 days on a mobile viewport; provider dark-mode run `BQA-2026-00045` reception run `BQA-2026-00040`, and multi-business role-switch run `BQA-2026-00043` passed with zero console and network errors. Raw traces and private login material stay in the local runtime.

@@ -1,0 +1,40 @@
+{
+  "run": "BQA-2026-00063",
+  "status": "Passed",
+  "outcome": "passed",
+  "scenario_summary": {
+    "failed": 0,
+    "flaky": 0,
+    "passed": 4,
+    "skipped": 0,
+    "total": 4
+  },
+  "baseline_changed_count": 0,
+  "source_version": "0907f85+qa-e266a7f5618e",
+  "roles": [
+    "All",
+    "Desk User",
+    "Guest",
+    "Organization Manager",
+    "Provider"
+  ],
+  "artifacts": [
+    {
+      "file": "desk-desktop.png",
+      "sha256": "5002e79b8c8fb74cf3bbf48520725f040bb3010e2c23faadc40b839fd573634b"
+    },
+    {
+      "file": "desk-mobile.png",
+      "sha256": "33584f7b359ad33ede21a6a72674cc74eba9c3cacc3640a4f41594ef2f7aa1b5"
+    },
+    {
+      "file": "react-desktop.png",
+      "sha256": "f27d9df6ae2e1f26b44ec91a37e69735ab073c5cf140056417ad79bb18376a36"
+    },
+    {
+      "file": "react-mobile.png",
+      "sha256": "c1bd736d7e435ae05d07740b89c63091c14f5a469bf5c94dc4968681226b8487"
+    }
+  ],
+  "scope": "Runtime smoke only. Public content acceptance is pending."
+}

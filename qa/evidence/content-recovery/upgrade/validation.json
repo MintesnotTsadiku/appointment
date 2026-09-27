@@ -1,0 +1,101 @@
+{
+  "run": "BQA-2026-03010",
+  "site": "meet-beta-content-restore.localhost",
+  "status": "Passed",
+  "source_version": "f4260d0+source-e3b0c44298fc+qa-9fb052a7dcb5",
+  "scenario_summary": {
+    "failed": 0,
+    "flaky": 0,
+    "passed": 1,
+    "skipped": 0,
+    "total": 1
+  },
+  "baseline_changed_count": 0,
+  "audit": {
+    "guest_unsubscribe_worked_after_restore": true,
+    "ok": true,
+    "publication_and_media_unchanged": true,
+    "remaining_record_count": 0,
+    "restored_media_count": 15,
+    "restored_release_count": 35
+  },
+  "cleanup": {
+    "consent_change": "The restored synthetic confirmed address retains its guest-requested unsubscribe audit.",
+    "ok": true,
+    "restored_businesses_preserved": true
+  },
+  "roles": [
+    "All",
+    "Desk User",
+    "Guest",
+    "Organization Manager",
+    "Provider"
+  ],
+  "scope": "Restored public routes, actual media delivery, and retained guest unsubscribe/suppression state.",
+  "artifacts": [
+    {
+      "file": "recovered-abugida-language-article.png",
+      "sha256": "9db929a4194a79fc94b8d116ee19ff22b0321b27a59a436db1d51b52702f2b2d"
+    },
+    {
+      "file": "recovered-abugida-language-collection.png",
+      "sha256": "eca8253a70179ae7877e7b394a9e52f4977d3c84770cb090aadfe09a7f7e1203"
+    },
+    {
+      "file": "recovered-abugida-language-landing.png",
+      "sha256": "1a72d48988c81e35de504589eba888cb795ebf860f141f65b22c113b8abe5163"
+    },
+    {
+      "file": "recovered-bloom-hair-article.png",
+      "sha256": "aab169923e68ba612a3e129af2de376fe52c3637f37e85d3298c91281d0c06f0"
+    },
+    {
+      "file": "recovered-bloom-hair-collection.png",
+      "sha256": "bba066c9e14b999e69396c9dbbe02df3351d10b27afc79ef73e9becd3598b3d5"
+    },
+    {
+      "file": "recovered-bloom-hair-landing.png",
+      "sha256": "730394bf0fc0c15396d7e8068db3669a13ed8130d49eff50e57ca872cc4caece"
+    },
+    {
+      "file": "recovered-guest-unsubscribe.png",
+      "sha256": "1416867b68b431af75bf81321d65cd1582ab5e97ee9684e7d03afa88f7cfa021"
+    },
+    {
+      "file": "recovered-meron-atelier-article.png",
+      "sha256": "108a2b7afe0ed12fd2359a56e7beb616922739037b3be39ab7f43aeae82cfca7"
+    },
+    {
+      "file": "recovered-meron-atelier-collection.png",
+      "sha256": "deb7f2432f023995bc48be19923c7ba64cfea9a15f5d77df91854036cc5ea62f"
+    },
+    {
+      "file": "recovered-meron-atelier-landing.png",
+      "sha256": "b667edd7c70501300f45cb48f60f908a1d05bd9deffe733dec5b474d571eb9c2"
+    },
+    {
+      "file": "recovered-selam-movement-article.png",
+      "sha256": "13f69efff9e032924662c8332772170d80e1fe987201bef412a341cc4e8db254"
+    },
+    {
+      "file": "recovered-selam-movement-collection.png",
+      "sha256": "4a10a93e02ada605d95977259e6275ffdca1050f56a9017d4c920168a7f7ca6d"
+    },
+    {
+      "file": "recovered-selam-movement-landing.png",
+      "sha256": "a3df8d18f4e1f3923789246828a5f08a8771fc5194983a6171dfe7a05aaa39e9"
+    },
+    {
+      "file": "recovered-tena-clinic-article.png",
+      "sha256": "90c16364322209d3f346b199975e7ce46f98701975548ae78088f2656d2dfd01"
+    },
+    {
+      "file": "recovered-tena-clinic-collection.png",
+      "sha256": "fd72cd3110f751a4c47fbb1af587f0f6db70056299563072cf29b093be441f56"
+    },
+    {
+      "file": "recovered-tena-clinic-landing.png",
+      "sha256": "5250d51f45c38e1844f41aa457a7a22332c91b224c7ca2151c1854baa13d27ad"
+    }
+  ]
+}

@@ -64,25 +64,30 @@ function acquireRealtimeSocket(): Socket {
 
 function releaseRealtimeSocket(): void {
   consumers = Math.max(0, consumers - 1);
-  if (consumers === 0 && singleton) {
-    singleton.disconnect();
-    singleton = null;
-  }
+  // StrictMode immediately mounts again after its development cleanup. Let
+  // that consumer reclaim the socket before closing an in-flight handshake.
+  queueMicrotask(() => {
+    if (consumers === 0 && singleton) {
+      singleton.disconnect();
+      singleton = null;
+    }
+  });
 }
 
 const RealtimeContext = createContext<Socket | null>(null);
 
-export const RealtimeProvider = ({ children }: PropsWithChildren) => {
+export const RealtimeProvider = ({ children, enabled = true }: PropsWithChildren<{ enabled?: boolean }>) => {
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
+    if (!enabled) return;
     const active = acquireRealtimeSocket();
     setSocket(active);
     return () => {
       setSocket(null);
       releaseRealtimeSocket();
     };
-  }, []);
+  }, [enabled]);
 
   return (
     <RealtimeContext.Provider value={socket}>{children}</RealtimeContext.Provider>

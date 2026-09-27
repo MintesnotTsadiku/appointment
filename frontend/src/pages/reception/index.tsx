@@ -1,17 +1,24 @@
 import { useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ReceptionState } from './components/ReceptionState';
 import { DeskHeader } from './components/DeskHeader';
 import { DeskFilters } from './components/DeskFilters';
 import { DeskCalendar } from './components/DeskCalendar';
 import { WalkInQueue } from './components/WalkInQueue';
 import { CreateAppointmentModal } from './components/CreateAppointmentModal';
 import { AddWalkInModal } from './components/AddWalkInModal';
+import AppTopNav from '@/components/workspace/AppTopNav';
+import { InsightBrief } from '@/components/analytics/WorkspaceDashboard';
+import { useSession } from '@/context/session';
 import { useFrappeGetCall } from 'frappe-react-sdk';
 import { format, startOfWeek, endOfWeek } from 'date-fns';
 import { ViewMode, Appointment, Location, Provider, TimeSlotInterval } from './types';
-import { Calendar, Users, Clock, TrendingUp } from 'lucide-react';
+import { Calendar, Users, Clock, TrendingUp, AlertTriangle, CalendarClock, RotateCcw } from 'lucide-react';
 
 const Reception = () => {
+  const { session } = useSession();
+  const organization = session?.selected?.organization;
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<ViewMode>('day');
   const [timeSlotInterval, setTimeSlotInterval] = useState<TimeSlotInterval>(30);
@@ -41,8 +48,15 @@ const Reception = () => {
   }, [currentDate, viewMode]);
 
   // Fetch appointments
-  const { data: appointmentsData, isLoading: appointmentsLoading, mutate: refreshAppointments } = useFrappeGetCall<{
-    message: { appointments: Appointment[]; count: number };
+  const { data: appointmentsData, isLoading: appointmentsLoading, error: appointmentsError, mutate: refreshAppointments } = useFrappeGetCall<{
+    message: {
+      appointments: Appointment[];
+      count: number;
+      unfiltered_count: number;
+      timezone: string;
+      next_date: string | null;
+      scope: { organization: string | null; organization_name: string | null; is_manager: boolean; receptionist: boolean };
+    };
   }>(
     'appointment.scheduler.api.desk.get_desk_appointments',
     {
@@ -50,32 +64,37 @@ const Reception = () => {
       location_name: selectedLocation || undefined,
       provider_name: selectedProvider || undefined,
       view: viewMode,
+      organization: organization || undefined,
     },
-    `appointments-${dateRange.start}-${dateRange.end}-${selectedLocation || 'all'}-${selectedProvider || 'all'}-${viewMode}`,
+    `appointments-${dateRange.start}-${dateRange.end}-${selectedLocation || 'all'}-${selectedProvider || 'all'}-${viewMode}-${organization || 'all'}`,
     {
       revalidateOnFocus: true,
     }
   );
 
   // Fetch locations and providers for filters
-  const { data: locationsData } = useFrappeGetCall<{ message: { locations: Location[] } }>(
+  const { data: locationsData, mutate: refreshLocations } = useFrappeGetCall<{ message: { locations: Location[] } }>(
     'appointment.scheduler.api.desk.get_locations_list',
-    undefined,
-    'locations'
+    organization ? { organization } : undefined,
+    `locations-${organization || 'all'}`
   );
 
   const { data: providersData } = useFrappeGetCall<{ message: { providers: Provider[] } }>(
     'appointment.scheduler.api.desk.get_providers_list',
-    undefined,
-    'providers'
+    organization ? { organization } : undefined,
+    `providers-${organization || 'all'}`
   );
 
   const appointments = appointmentsData?.message?.appointments || [];
+  const unfilteredCount = appointmentsData?.message?.unfiltered_count ?? appointments.length;
+  const deskScope = appointmentsData?.message?.scope;
+  const deskTimezone = appointmentsData?.message?.timezone;
+  const nextDate = appointmentsData?.message?.next_date;
+  const filtersActive = Boolean(selectedLocation || selectedProvider);
   const locations = locationsData?.message?.locations || [];
   const providers = providersData?.message?.providers || [];
 
   // Calculate stats
-  const todayAppointments = appointments.filter(apt => apt.appointment_date === format(new Date(), 'yyyy-MM-dd'));
   const confirmedCount = appointments.filter(apt => apt.status === 'Confirmed').length;
   const pendingCount = appointments.filter(apt => apt.status === 'Pending').length;
 
@@ -94,8 +113,8 @@ const Reception = () => {
   // Stats with dynamic theme colors via CSS variables
   const stats = [
     { 
-      label: "Today's Appointments", 
-      value: todayAppointments.length, 
+      label: "Visible appointments",
+      value: appointments.length,
       icon: Calendar, 
       gradient: 'bg-gradient-primary' // Uses --gradient-primary-from/to
     },
@@ -119,6 +138,20 @@ const Reception = () => {
     },
   ];
 
+  // No authorized staff context: explain instead of showing a blank calendar.
+  if (session && !session.authenticated) {
+    return <div role="alert" className="p-8">Please sign in to open reception.</div>;
+  }
+  if (session && session.state === 'no_assignment') {
+    return (
+      <div role="alert" className="p-8" style={{ color: 'var(--text-primary)' }}>
+        <h1 className="text-xl font-semibold">Reception is not assigned to you</h1>
+        <p className="mt-2" style={{ color: 'var(--text-secondary)' }}>Ask a manager to assign you a reception scope.</p>
+        <Link className="mt-4 inline-block underline" to="/workspaces">Choose a business</Link>
+      </div>
+    );
+  }
+
   return (
     <div 
       className="min-h-screen text-[var(--text-primary)]"
@@ -141,15 +174,45 @@ const Reception = () => {
       </div>
 
       <div className="relative z-10">
+        <AppTopNav active="reception" />
+        <div className="px-4 sm:px-6"><InsightBrief kind="reception" /></div>
         {/* Sticky Top Section: Header + Stats + Filters */}
         <div 
-          className="sticky top-0 z-50"
+          className="sticky top-0 z-40"
           style={{ 
             backgroundColor: 'var(--bg-primary)',
           }}
         >
-          {/* Header */}
-          <DeskHeader
+          {/* Active scope bar: business, date, time zone and filters */}
+          <div
+            data-qa="reception-scope"
+            className="mx-auto flex max-w-[1800px] flex-wrap items-center gap-x-4 gap-y-1 px-6 pt-3 text-xs"
+            style={{ color: 'var(--text-muted)' }}
+          >
+            <span className="font-medium" style={{ color: 'var(--text-primary)' }}>
+              {deskScope?.organization_name || session?.selected?.business_name || 'All authorized businesses'}
+            </span>
+            {selectedLocation && (deskScope?.is_manager || deskScope?.receptionist) && <ReceptionState location={selectedLocation} state={(locations.find(location=>location.name===selectedLocation) as Location & {reception_state?:string})?.reception_state} refresh={()=>void refreshLocations()}/>}
+            <span>Date: {format(currentDate, 'EEE, dd MMM yyyy')}</span>
+            <span>Time zone: {deskTimezone || 'Africa/Addis_Ababa'}</span>
+            <span>
+              Filters: {selectedLocation ? `location ${locations.find((loc) => loc.name === selectedLocation)?.location_name || selectedLocation}` : 'all locations'}
+              {selectedProvider ? ` · provider ${providers.find((prov) => prov.name === selectedProvider)?.provider_name || selectedProvider}` : ''}
+            </span>
+            {(selectedLocation || selectedProvider) && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedLocation(null);
+                  setSelectedProvider(null);
+                }}
+                className="underline"
+              >
+                Reset filters
+              </button>
+            )}
+          </div>
+      <DeskHeader
             currentDate={currentDate}
             viewMode={viewMode}
             timeSlotInterval={timeSlotInterval}
@@ -168,22 +231,22 @@ const Reception = () => {
             }}
           >
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="grid grid-cols-2 lg:grid-cols-4 gap-3"
+              data-internal-grid className="grid grid-cols-2 lg:grid-cols-4 gap-3"
             >
               {stats.map((stat, index) => (
                 <motion.div
                   key={stat.label}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={false}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   className="relative group"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl blur-xl" />
                   <div 
-                    className="relative backdrop-blur-sm rounded-xl p-4 hover:bg-[var(--border-subtle)] transition-all duration-300"
+                    data-internal-panel="small" className="relative backdrop-blur-sm rounded-xl p-4 hover:bg-[var(--border-subtle)] transition-all duration-300"
                     style={{ 
                       backgroundColor: 'var(--border-subtle)',
                       border: '1px solid var(--border-default)'
@@ -219,7 +282,7 @@ const Reception = () => {
             }}
           >
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
@@ -237,12 +300,46 @@ const Reception = () => {
 
         <div className="px-6 pb-8 max-w-[1800px] mx-auto">
 
+          {/* Loading / error / empty state, distinguished from a blank calendar */}
+          {appointmentsError && (
+            <div role="alert" data-qa="reception-error" className="mb-4 flex flex-wrap items-center gap-3 rounded-xl p-4" style={{ backgroundColor: 'var(--status-cancelled-bg, #fee2e2)', color: 'var(--status-cancelled, #b91c1c)' }}>
+              <AlertTriangle className="h-5 w-5" />
+              <span>Unable to load appointments. This may be a connection problem, not an empty day.</span>
+              <button className="underline" onClick={() => void refreshAppointments()}>
+                <RotateCcw className="mr-1 inline h-3.5 w-3.5" /> Retry
+              </button>
+            </div>
+          )}
+          {!appointmentsError && !appointmentsLoading && appointments.length === 0 && (
+            <div data-qa="reception-empty" className="mb-4 flex flex-wrap items-center gap-3 rounded-xl p-4" style={{ backgroundColor: 'var(--border-subtle)', color: 'var(--text-secondary)' }}>
+              <CalendarClock className="h-5 w-5" />
+              {filtersActive && unfilteredCount > 0 ? (
+                <>
+                  <span>{unfilteredCount} appointment(s) exist here but are filtered out.</span>
+                  <button className="underline" data-qa="reception-reset-filters" onClick={() => { setSelectedLocation(null); setSelectedProvider(null); }}>
+                    Reset filters
+                  </button>
+                </>
+              ) : (
+                <>
+                  <span>No bookings on {format(currentDate, 'dd MMM yyyy')}.</span>
+                  {nextDate && (
+                    <button className="underline" data-qa="reception-next-booking" onClick={() => setCurrentDate(new Date(nextDate))}>
+                      Jump to next booking ({nextDate})
+                    </button>
+                  )}
+                  <Link className="underline" to="/settings/business">Publish a booking page</Link>
+                </>
+              )}
+            </div>
+          )}
+
           {/* Main Content */}
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="grid grid-cols-1 lg:grid-cols-4 gap-6"
+            data-internal-grid className="grid grid-cols-1 lg:grid-cols-4 gap-6"
           >
             {/* Calendar */}
             <div className="lg:col-span-3 min-h-[600px]">

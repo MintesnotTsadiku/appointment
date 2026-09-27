@@ -1,30 +1,40 @@
-# Copyright (c) 2025, minte and Contributors
-# See license.txt
+"""Tests for platform marketing-page settings containment."""
 
-# import frappe
-from frappe.tests import IntegrationTestCase, UnitTestCase
+import json
+from pathlib import Path
+
+from frappe.tests import UnitTestCase
+
+from appointment.scheduler.doctype.landing_page_settings.api import get_landing_page_settings
 
 
-# On IntegrationTestCase, the doctype test records and all
-# link-field test record dependencies are recursively loaded
-# Use these module variables to add/remove to/from that list
-EXTRA_TEST_RECORD_DEPENDENCIES = []  # eg. ["User"]
-IGNORE_TEST_RECORD_DEPENDENCIES = []  # eg. ["User"]
+RETIRED_DESIGN_FIELDS = {
+    "brand_tab",
+    "brand_primary_color",
+    "logo_light",
+    "logo_dark",
+    "favicon",
+    "theme_tab",
+    "dark_bg_primary",
+    "accent_primary",
+    "status_pending",
+    "gradient_primary_from",
+}
 
 
 class UnitTestLandingPageSettings(UnitTestCase):
-	"""
-	Unit tests for LandingPageSettings.
-	Use this class for testing individual functions and methods.
-	"""
+    def test_schema_has_no_brand_or_theme_authority(self):
+        schema_path = Path(__file__).with_name("landing_page_settings.json")
+        schema = json.loads(schema_path.read_text(encoding="utf-8"))
+        field_names = set(schema["field_order"])
 
-	pass
+        self.assertFalse(RETIRED_DESIGN_FIELDS & field_names)
 
 
-class IntegrationTestLandingPageSettings(IntegrationTestCase):
-	"""
-	Integration tests for LandingPageSettings.
-	Use this class for testing interactions between multiple components.
-	"""
+class UnitTestLandingPageSettingsApi(UnitTestCase):
+    def test_platform_content_response_has_no_brand_payload(self):
+        response = get_landing_page_settings()
 
-	pass
+        self.assertTrue(response["success"])
+        self.assertIn("hero", response["data"])
+        self.assertNotIn("brand", response["data"])

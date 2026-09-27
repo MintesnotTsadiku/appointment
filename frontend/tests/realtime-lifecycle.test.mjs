@@ -30,7 +30,7 @@ check(
 
 const app = read("src/app.tsx");
 check("app.tsx must disable the SDK socket", /enableSocket=\{false\}/.test(app));
-check("app.tsx must render <RealtimeProvider>", app.includes("<RealtimeProvider>"));
+check("app.tsx must render <RealtimeProvider>", /<RealtimeProvider(?:\s|>)/.test(app));
 
 const provider = read("src/components/realtime/RealtimeProvider.tsx");
 check(
@@ -62,3 +62,50 @@ if (failures.length > 0) {
   process.exit(1);
 }
 console.log("OK: realtime lifecycle invariants hold");
+
+// Exercise the actual effect cleanup/remount rather than just checking source.
+const { default: ts } = await import("typescript");
+const { runInNewContext } = await import("node:vm");
+const { strict: assert } = await import("node:assert");
+let effect;
+let created = 0;
+let disconnected = 0;
+const microtasks = [];
+const exports = {};
+const compiled = ts.transpileModule(
+  provider.replaceAll("import.meta.env", "({})"),
+  { compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX } },
+).outputText;
+runInNewContext(compiled, {
+  exports,
+  window: { location: { protocol: "http:", hostname: "localhost", port: "5173" } },
+  queueMicrotask: (callback) => microtasks.push(callback),
+  require: (name) => {
+    if (name === "react") return {
+      createContext: () => ({ Provider: {} }),
+      useState: () => [null, () => {}],
+      useEffect: (callback) => { effect = callback; },
+    };
+    if (name === "react/jsx-runtime") return { jsx: () => null };
+    if (name === "@/lib/utils") return { getSiteName: () => "test.localhost" };
+    if (name === "socket.io-client") return { io: () => {
+      created++;
+      return { disconnect: () => { disconnected++; } };
+    } };
+    throw new Error(`Unexpected import: ${name}`);
+  },
+});
+exports.RealtimeProvider({ children: null });
+const firstCleanup = effect();
+firstCleanup();
+const finalCleanup = effect();
+while (microtasks.length) microtasks.shift()();
+assert.equal(created, 1, "StrictMode remount must reuse the in-flight connection");
+assert.equal(disconnected, 0, "StrictMode cleanup must not abort the handshake");
+finalCleanup();
+while (microtasks.length) microtasks.shift()();
+assert.equal(disconnected, 1, "Last real unmount must close the connection");
+exports.RealtimeProvider({ children: null, enabled: false });
+assert.equal(effect(), undefined, "Public pages must not acquire a realtime connection");
+assert.equal(created, 1, "Disabled realtime must create no additional socket");
+console.log("OK: StrictMode remount reuses one socket and real unmount closes it");

@@ -1,15 +1,11 @@
-import json
-import re
-
 import frappe
 
 no_cache = 1
 
-SCRIPT_TAG_PATTERN = re.compile(r"\<script[^<]*\</script\>")
-CLOSING_SCRIPT_TAG_PATTERN = re.compile(r"</script\>")
-
-
 def get_context(context):
+    from appointment.public_experience.csp import encode_boot_data, shell_nonce
+
+    context["content_shell_nonce"] = shell_nonce()
     csrf_token = frappe.sessions.get_csrf_token()
     # nosemgrep
     frappe.db.commit()
@@ -28,11 +24,7 @@ def get_context(context):
     else:
         enabled = True
     boot["server_script_enabled"] = enabled
-    boot_json = frappe.as_json(boot, indent=None, separators=(",", ":"))
-    boot_json = SCRIPT_TAG_PATTERN.sub("", boot_json)
-
-    boot_json = CLOSING_SCRIPT_TAG_PATTERN.sub("", boot_json)
-    boot_json = json.dumps(boot_json)
+    boot_json = encode_boot_data(boot)
 
     context.update(
         {

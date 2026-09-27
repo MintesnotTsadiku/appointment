@@ -1,0 +1,225 @@
+{
+  "baseURL": "http://127.0.0.84:44430",
+  "results": [
+    {
+      "key": "selam",
+      "surface": "landing",
+      "viewport": "desktop",
+      "mode": "light",
+      "logoSrc": "/assets/appointment/brand-experience/brands/selam-logo.webp",
+      "faviconHref": "/assets/appointment/brand-experience/brands/selam-favicon.png",
+      "consoleErrors": [],
+      "networkErrors": [],
+      "badResponses": []
+    },
+    {
+      "key": "selam",
+      "surface": "book",
+      "viewport": "desktop",
+      "mode": "light",
+      "logoSrc": "/assets/appointment/brand-experience/brands/selam-logo.webp",
+      "faviconHref": "/assets/appointment/brand-experience/brands/selam-favicon.png",
+      "consoleErrors": [],
+      "networkErrors": [],
+      "badResponses": []
+    },
+    {
+      "key": "bloom",
+      "surface": "landing",
+      "viewport": "desktop",
+      "mode": "light",
+      "logoSrc": "/assets/appointment/brand-experience/brands/bloom-logo.webp",
+      "faviconHref": "/assets/appointment/brand-experience/brands/bloom-favicon.png",
+      "consoleErrors": [],
+      "networkErrors": [],
+      "badResponses": []
+    },
+    {
+      "key": "bloom",
+      "surface": "book",
+      "viewport": "desktop",
+      "mode": "light",
+      "logoSrc": "/assets/appointment/brand-experience/brands/bloom-logo.webp",
+      "faviconHref": "/assets/appointment/brand-experience/brands/bloom-favicon.png",
+      "consoleErrors": [],
+      "networkErrors": [],
+      "badResponses": []
+    },
+    {
+      "key": "meron",
+      "surface": "landing",
+      "viewport": "desktop",
+      "mode": "light",
+      "logoSrc": "/assets/appointment/brand-experience/brands/meron-logo.webp",
+      "faviconHref": "/assets/appointment/brand-experience/brands/meron-favicon.png",
+      "consoleErrors": [],
+      "networkErrors": [],
+      "badResponses": []
+    },
+    {
+      "key": "meron",
+      "surface": "book",
+      "viewport": "desktop",
+      "mode": "light",
+      "logoSrc": "/assets/appointment/brand-experience/brands/meron-logo.webp",
+      "faviconHref": "/assets/appointment/brand-experience/brands/meron-favicon.png",
+      "consoleErrors": [],
+      "networkErrors": [],
+      "badResponses": []
+    },
+    {
+      "key": "abugida",
+      "surface": "landing",
+      "viewport": "desktop",
+      "mode": "light",
+      "logoSrc": "/assets/appointment/brand-experience/brands/abugida-logo.webp",
+      "faviconHref": "/assets/appointment/brand-experience/brands/abugida-favicon.png",
+      "consoleErrors": [],
+      "networkErrors": [],
+      "badResponses": []
+    },
+    {
+      "key": "abugida",
+      "surface": "book",
+      "viewport": "desktop",
+      "mode": "light",
+      "logoSrc": "/assets/appointment/brand-experience/brands/abugida-logo.webp",
+      "faviconHref": "/assets/appointment/brand-experience/brands/abugida-favicon.png",
+      "consoleErrors": [],
+      "networkErrors": [],
+      "badResponses": []
+    },
+    {
+      "key": "tena",
+      "surface": "landing",
+      "viewport": "desktop",
+      "mode": "light",
+      "logoSrc": "/assets/appointment/brand-experience/brands/tena-logo.webp",
+      "faviconHref": "/assets/appointment/brand-experience/brands/tena-favicon.png",
+      "consoleErrors": [],
+      "networkErrors": [],
+      "badResponses": []
+    },
+    {
+      "key": "tena",
+      "surface": "book",
+      "viewport": "desktop",
+      "mode": "light",
+      "logoSrc": "/assets/appointment/brand-experience/brands/tena-logo.webp",
+      "faviconHref": "/assets/appointment/brand-experience/brands/tena-favicon.png",
+      "consoleErrors": [],
+      "networkErrors": [],
+      "badResponses": []
+    },
+    {
+      "key": "selam",
+      "surface": "landing",
+      "viewport": "mobile",
+      "mode": "light",
+      "logoSrc": "/assets/appointment/brand-experience/brands/selam-logo.webp",
+      "faviconHref": "/assets/appointment/brand-experience/brands/selam-favicon.png",
+      "consoleErrors": [],
+      "networkErrors": [],
+      "badResponses": []
+    },
+    {
+      "key": "selam",
+      "surface": "book",
+      "viewport": "mobile",
+      "mode": "light",
+      "logoSrc": "/assets/appointment/brand-experience/brands/selam-logo.webp",
+      "faviconHref": "/assets/appointment/brand-experience/brands/selam-favicon.png",
+      "consoleErrors": [],
+      "networkErrors": [],
+      "badResponses": []
+    },
+    {
+      "key": "bloom",
+      "surface": "landing",
+      "viewport": "mobile",
+      "mode": "light",
+      "logoSrc": "/assets/appointment/brand-experience/brands/bloom-logo.webp",
+      "faviconHref": "/assets/appointment/brand-experience/brands/bloom-favicon.png",
+      "consoleErrors": [],
+      "networkErrors": [],
+      "badResponses": []
+    },
+    {
+      "key": "bloom",
+      "surface": "book",
+      "viewport": "mobile",
+      "mode": "light",
+      "logoSrc": "/assets/appointment/brand-experience/brands/bloom-logo.webp",
+      "faviconHref": "/assets/appointment/brand-experience/brands/bloom-favicon.png",
+      "consoleErrors": [],
+      "networkErrors": [],
+      "badResponses": []
+    },
+    {
+      "key": "meron",
+      "surface": "landing",
+      "viewport": "mobile",
+      "mode": "light",
+      "logoSrc": "/assets/appointment/brand-experience/brands/meron-logo.webp",
+      "faviconHref": "/assets/appointment/brand-experience/brands/meron-favicon.png",
+      "consoleErrors": [],
+      "networkErrors": [],
+      "badResponses": []
+    },
+    {
+      "key": "meron",
+      "surface": "book",
+      "viewport": "mobile",
+      "mode": "light",
+      "logoSrc": "/assets/appointment/brand-experience/brands/meron-logo.webp",
+      "faviconHref": "/assets/appointment/brand-experience/brands/meron-favicon.png",
+      "consoleErrors": [],
+      "networkErrors": [],
+      "badResponses": []
+    },
+    {
+      "key": "abugida",
+      "surface": "landing",
+      "viewport": "mobile",
+      "mode": "light",
+      "logoSrc": "/assets/appointment/brand-experience/brands/abugida-logo.webp",
+      "faviconHref": "/assets/appointment/brand-experience/brands/abugida-favicon.png",
+      "consoleErrors": [],
+      "networkErrors": [],
+      "badResponses": []
+    },
+    {
+      "key": "abugida",
+      "surface": "book",
+      "viewport": "mobile",
+      "mode": "light",
+      "logoSrc": "/assets/appointment/brand-experience/brands/abugida-logo.webp",
+      "faviconHref": "/assets/appointment/brand-experience/brands/abugida-favicon.png",
+      "consoleErrors": [],
+      "networkErrors": [],
+      "badResponses": []
+    },
+    {
+      "key": "tena",
+      "surface": "landing",
+      "viewport": "mobile",
+      "mode": "light",
+      "logoSrc": "/assets/appointment/brand-experience/brands/tena-logo.webp",
+      "faviconHref": "/assets/appointment/brand-experience/brands/tena-favicon.png",
+      "consoleErrors": [],
+      "networkErrors": [],
+      "badResponses": []
+    },
+    {
+      "key": "tena",
+      "surface": "book",
+      "viewport": "mobile",
+      "mode": "light",
+      "logoSrc": "/assets/appointment/brand-experience/brands/tena-logo.webp",
+      "faviconHref": "/assets/appointment/brand-experience/brands/tena-favicon.png",
+      "consoleErrors": [],
+      "networkErrors": [],
+      "badResponses": []
+    }
+  ]
+}

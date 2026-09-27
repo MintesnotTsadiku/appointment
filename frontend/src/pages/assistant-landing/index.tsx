@@ -16,8 +16,7 @@ import './assistant-theme.css';
  * Virtual Assistant business case. Separate from the appointment
  * scheduling landing page.
  * 
- * Theme colors integrate with Landing Page Settings backend for
- * dynamic updates via the CMS.
+ * Theme colors use the platform-owned application token system.
  */
 const AssistantLanding = () => {
   return (

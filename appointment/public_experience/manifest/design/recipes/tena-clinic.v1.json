@@ -1,0 +1,138 @@
+{
+  "kind": "recipe",
+  "contract": "appointment-curated-recipe.v1",
+  "key": "tena-clinic",
+  "version": 1,
+  "label": "Tena Clinic",
+  "description": "Tena Clinic is an independently implemented, art-directed public template package.",
+  "audience": "Clinics and careful professional services.",
+  "mood": "clinical-calm",
+  "supportedLocales": [
+    "en",
+    "am"
+  ],
+  "accessibility": {
+    "level": "AA",
+    "focusVisible": true,
+    "reducedMotion": true
+  },
+  "primitives": {
+    "palette": {
+      "key": "tena-clinic",
+      "version": 1
+    },
+    "typography": {
+      "key": "quiet-trust-editorial",
+      "version": 1
+    },
+    "imagery": {
+      "key": "quiet-trust-clinic",
+      "version": 1
+    },
+    "layout": {
+      "key": "tena-clinic",
+      "version": 1
+    },
+    "surface": {
+      "key": "quiet-trust-editorial",
+      "version": 1
+    }
+  },
+  "supportedSections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "benefits",
+    "testimonials",
+    "proof",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "requiredSections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "benefits",
+    "testimonials",
+    "proof",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "defaultInputs": {
+    "motion": "calm",
+    "presentationDensity": "comfortable",
+    "heroAsset": "hero.tena",
+    "detailAsset": "detail.tena"
+  },
+  "adjustments": {
+    "accentColor": {
+      "type": "hex-color",
+      "optional": true,
+      "protected": false
+    },
+    "motion": {
+      "type": "enum",
+      "choices": [
+        "calm",
+        "standard"
+      ],
+      "optional": true
+    },
+    "presentationDensity": {
+      "type": "enum",
+      "choices": [
+        "comfortable",
+        "spacious"
+      ],
+      "optional": true
+    },
+    "heroAsset": {
+      "type": "asset-role",
+      "choices": [
+        "hero.tena"
+      ],
+      "optional": true
+    },
+    "detailAsset": {
+      "type": "asset-role",
+      "choices": [
+        "detail.tena"
+      ],
+      "optional": true
+    }
+  },
+  "actionIntents": [
+    "booking_start",
+    "service_selection",
+    "provider_selection",
+    "call",
+    "directions",
+    "contact",
+    "faq_jump",
+    "back_to_site"
+  ],
+  "contentRichness": {
+    "default": "rich",
+    "choices": [
+      "compact",
+      "standard",
+      "rich"
+    ],
+    "requiredForCertification": [
+      "process",
+      "benefits",
+      "testimonials",
+      "proof"
+    ]
+  }
+}

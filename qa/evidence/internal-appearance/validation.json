@@ -1,0 +1,109 @@
+{
+  "status": "Failed",
+  "cleanup": {
+    "message": "Exact appearance and navigation preferences restored; public releases unchanged.",
+    "ok": true
+  },
+  "audit": {
+    "ok": true,
+    "publication_inventory_unchanged": true,
+    "read_only": true,
+    "remaining_record_count": 0
+  },
+  "session": {
+    "status": "Active",
+    "lock_status": "Free",
+    "locked_by_browser_qa_run": null
+  },
+  "run": "BQA-2026-00291",
+  "site": "meet-beta-feat-content-publishing-galler-5839d4.localhost",
+  "outcome": "baseline_drift",
+  "source_version": "89bb48f+source-6f5a68ce806b+qa-9dcddd157bbd",
+  "scenario_summary": {
+    "failed": 0,
+    "flaky": 0,
+    "passed": 1,
+    "skipped": 0,
+    "total": 1
+  },
+  "baseline_changed_count": 4,
+  "strict_visual_pass": false,
+  "artifacts": [
+    {
+      "file": "internal-desktop-default.png",
+      "sha256": "5a60420ee4c1bc96a58197c8a2bf8ecdd23e8085860937a4134f61ce0e7a2229"
+    },
+    {
+      "file": "internal-desktop-ocean-dark.png",
+      "sha256": "cfd902c46cda4bad99c9663627b63d7424ea8a869b5046cc8310eab011c689c1"
+    },
+    {
+      "file": "internal-desktop-ocean-serif-compact.png",
+      "sha256": "d39a186b09cdb3d6eafb4676589a67a249f769a69ac5bddc0e5437ea2aee36a5"
+    },
+    {
+      "file": "internal-home-mobile-ocean-compact.png",
+      "sha256": "253942da603ad248f1ec7e47bce96712f818c8a1188ffe98ee50c4854c0ffc5d"
+    },
+    {
+      "file": "internal-home-ocean-compact.png",
+      "sha256": "d03675e4c48af77385432e25083cb4e7452883478c9dca6783d8dfd5a046adf2"
+    },
+    {
+      "file": "internal-insights-mobile-ocean-compact.png",
+      "sha256": "3f9664a5ff43bc6a2efdd21fb38e591d1347c8ac40b395f06b63e084515caebb"
+    },
+    {
+      "file": "internal-insights-ocean-compact.png",
+      "sha256": "ad00b5a4e7c5d7cd1573f2dee505472adfee7deec2335b9fbe9bbc3853632775"
+    },
+    {
+      "file": "internal-mobile-forest-dark.png",
+      "sha256": "266005a279aed048bd00805d2954d505870688e3c5b15ded3bb974a8c1763527"
+    },
+    {
+      "file": "internal-mobile-ocean-light.png",
+      "sha256": "b266fb2936e85d85faaa9e05ebb2b3d730bb2f772bd41a5ea4ed62e1901d35b5"
+    },
+    {
+      "file": "internal-provider-forest.png",
+      "sha256": "0e4c9b37665989e5208174dc3cd427f233ed5c16e1d45419cf608d7486b6c642"
+    },
+    {
+      "file": "internal-public-independent.png",
+      "sha256": "1c2752ea8c13588d9b149f02b2371a216a4c58ee973a7363b2e904974fdb2fca"
+    },
+    {
+      "file": "internal-reception-mobile-ocean-compact.png",
+      "sha256": "5dbd8f183e2f77b61e64641bed91e97b958c39021de27435c5fe969fb166f103"
+    },
+    {
+      "file": "internal-reception-ocean-compact.png",
+      "sha256": "7da188a45f31f3c33d760cdc828b26042496b0fa83ff1f184287a40d47c8a076"
+    },
+    {
+      "file": "internal-schedule-mobile-ocean-compact.png",
+      "sha256": "e9b2348b833ba09b1b2034bb688dec52d34264be688c67c0427007651a4d6ca5"
+    },
+    {
+      "file": "internal-schedule-ocean-compact.png",
+      "sha256": "a3a747ee44f5b57eb772023198c16c35273e1c9ebc383f94a92236b9ad5dfa83"
+    },
+    {
+      "file": "internal-settings-mobile-ocean-compact.png",
+      "sha256": "feb17bdc7332b06162cf7cf4f04616025eb388040b6687b1d6accf1ed14bf8c5"
+    },
+    {
+      "file": "internal-settings-ocean-compact.png",
+      "sha256": "bbeb10e476ffbe6ffb119ebd7b5e0f448ea2c3f597a5847ad489123f961a245e"
+    },
+    {
+      "file": "internal-workspace-manager.png",
+      "sha256": "9bac7fe1a63ccca4313f7eb118352baed4722520cf3e6a7e8d99d2fd6a349e47"
+    },
+    {
+      "file": "internal-workspace-receptionist.png",
+      "sha256": "32613fdb0cd1586f0d7d50a35fe016a7d7d1b9e6043ec00928cc9c245c66bc70"
+    }
+  ]
+}

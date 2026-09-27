@@ -1,0 +1,104 @@
+.abugida-site{--blue:var(--pe-color-primary,#113db5);--orange:var(--pe-color-surface-strong,#f05b2d);--orange-ink:#b33113;--paper:var(--pe-color-canvas,#f4efe2);--ink:var(--pe-color-text,#151515);color:var(--ink);background:var(--paper);font-family:"Crafted Editorial Body",Arial,sans-serif}
+.abugida-site *{box-sizing:border-box}
+.abugida-site a{color:inherit}
+.abugida-nav{height:86px;display:flex;align-items:center;gap:38px;padding:0 4vw;border-bottom:2px solid var(--ink)}
+.abugida-nav>a:first-child{display:flex;align-items:center;gap:13px;margin-right:auto;text-decoration:none;font-weight:800}
+.abugida-nav>a:first-child b{display:grid;place-items:center;width:42px;height:42px;flex:0 0 42px;color:white;background:var(--blue);font-size:24px;line-height:1}
+.abugida-nav nav{display:flex;gap:28px}
+.abugida-nav nav a{text-decoration:none}
+.abugida-nav>a:last-child{padding:12px 19px;color:var(--ink);background:var(--orange);font-weight:800;text-decoration:none}
+.abugida-label{margin:0 0 18px;color:var(--orange-ink);font-size:11px;font-weight:800;letter-spacing:.2em;text-transform:uppercase}
+.abugida-hero{display:grid;grid-template-columns:70px .82fr 1.18fr;min-height:660px;padding-left:4vw;border-bottom:2px solid var(--ink)}
+.abugida-number{padding-top:70px;color:var(--blue);font-weight:800;writing-mode:vertical-rl}
+.abugida-hero>div:nth-child(2){align-self:center;padding:55px 55px 55px 0}
+.abugida-hero h1{margin:0;font-family:"Crafted Editorial Display",Georgia,serif;font-size:clamp(60px,6.2vw,100px);line-height:.9;letter-spacing:-.05em}
+.abugida-hero>div>p:not(.abugida-label){max-width:540px;font-size:18px;line-height:1.55}
+.abugida-button{display:inline-flex;margin-top:20px;padding:15px 23px;color:white!important;background:var(--blue);font-weight:800;text-decoration:none}
+.abugida-hero figure{position:relative;margin:0;border-left:2px solid var(--ink)}
+.abugida-hero figure img{width:100%;height:100%;object-fit:cover}
+.abugida-hero figcaption{position:absolute;right:0;bottom:0;padding:23px 30px;color:white;background:var(--blue);font:800 14px/1.4 Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase}
+.abugida-marquee{display:flex;gap:35px;align-items:center;overflow:hidden;padding:18px 4vw;color:white;background:var(--blue);font-size:13px;font-weight:800;letter-spacing:.14em;white-space:nowrap}
+.abugida-marquee i{color:var(--paper)}
+.abugida-practice{display:grid;grid-template-columns:.72fr 1.28fr;gap:65px;padding:85px 4vw;border-bottom:2px solid var(--ink)}
+.abugida-practice h2,.abugida-method h2,.abugida-coaches h2,.abugida-questions h2,.abugida-rooms h2{margin:0;font-family:"Crafted Editorial Display",Georgia,serif;font-size:clamp(44px,5vw,76px);line-height:.95}
+.abugida-practice header>p:last-child{max-width:420px;line-height:1.55}
+.abugida-practice>div article{display:grid;grid-template-columns:65px 1fr;gap:0 22px;padding:24px 0;border-top:2px solid var(--ink)}
+.abugida-practice article>span{grid-row:1/4;color:var(--orange-ink);font-size:30px;font-weight:800}
+.abugida-practice h3{margin:0;font-size:27px}
+.abugida-practice article p{line-height:1.5}
+.abugida-practice article footer{display:flex;gap:25px;color:var(--blue)}
+.abugida-method{display:grid;grid-template-columns:1fr 1fr;min-height:650px;background:white;border-bottom:2px solid var(--ink)}
+.abugida-method figure{position:relative;margin:0}
+.abugida-method figure img{width:100%;height:100%;object-fit:cover}
+.abugida-method figcaption{position:absolute;left:0;bottom:0;max-width:400px;padding:24px;color:var(--ink);background:var(--orange);font-family:Georgia,serif;font-size:24px}
+.abugida-method>div{padding:75px 5vw}
+.abugida-method article{display:flex;gap:22px;margin-top:28px}
+.abugida-method article>b{display:grid;place-items:center;width:40px;height:40px;flex:none;border:2px solid var(--blue);color:var(--blue);line-height:1}
+.abugida-method article h3,.abugida-method article p{margin:0 0 6px}
+.abugida-coaches{display:grid;grid-template-columns:.65fr 1.35fr;gap:55px;padding:78px 4vw;background:var(--blue);color:white}
+.abugida-coaches .abugida-label{color:#ffad94}
+.abugida-coaches>div:last-child{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.abugida-coaches article img{width:100%;height:340px;object-fit:cover}
+.abugida-coaches article span{display:flex;flex-direction:column;gap:4px;padding:13px 0}
+.abugida-process{padding:70px 4vw;border-bottom:2px solid var(--ink)}
+.abugida-process>div{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+.abugida-process article{padding:25px;border:2px solid var(--ink);margin-left:-2px}
+.abugida-process article>b{color:var(--orange-ink);font-size:30px}
+.abugida-process article h3{font-size:24px}
+.abugida-process article p{line-height:1.5}
+.abugida-quote{display:grid;grid-template-columns:1fr .8fr;align-items:stretch;background:var(--orange);color:var(--ink)}
+.abugida-quote blockquote{align-self:center;margin:0;padding:70px 6vw;font-family:Georgia,serif;font-size:clamp(35px,4.5vw,67px);line-height:1.06}
+.abugida-quote cite{display:block;margin-top:27px;font:14px Arial,sans-serif}
+.abugida-quote img{width:100%;height:520px;object-fit:cover}
+.abugida-questions{display:grid;grid-template-columns:.65fr 1.35fr;gap:55px;padding:80px 4vw;border-bottom:2px solid var(--ink)}
+.abugida-questions details{padding:19px 0;border-top:2px solid var(--ink)}
+.abugida-questions summary{display:flex;align-items:center;justify-content:space-between;gap:18px;font-weight:800}
+.abugida-questions summary span{display:grid;place-items:center;width:28px;height:28px;flex:0 0 28px;border:1px solid currentColor;line-height:1}
+.abugida-rooms{display:grid;grid-template-columns:1.2fr .8fr;align-items:center;background:white}
+.abugida-rooms img{width:100%;height:520px;object-fit:cover}
+.abugida-rooms>div{padding:60px 5vw}
+.abugida-rooms address{margin-top:24px;font-style:normal;line-height:1.8}
+.abugida-footer{display:grid;grid-template-columns:1fr 1fr;gap:22px;padding:42px 4vw;color:white;background:var(--ink)}
+.abugida-footer>a{font-size:21px;text-decoration:none}
+.abugida-footer>a b{color:#ff7851}
+.abugida-footer small{grid-column:1/-1}
+.abugida-booking{min-height:100vh}
+.abugida-booking>section{display:grid;grid-template-columns:1fr 1fr;min-height:calc(100vh - 86px)}
+.abugida-booking section>div{align-self:center;padding:55px 5vw}
+.abugida-booking h1{font-family:Georgia,serif;font-size:clamp(58px,6vw,96px);line-height:.9}
+.abugida-booking section>img{width:100%;height:calc(100vh - 86px);object-fit:cover}
+
+@media(max-width:800px){.abugida-nav nav{display:none}
+.abugida-nav>a:first-child span{display:none}
+.abugida-nav{padding:0 17px}
+.abugida-nav>a:last-child{font-size:11px}
+.abugida-hero{grid-template-columns:38px 1fr;padding-left:18px}
+.abugida-hero figure{grid-column:1/-1;height:440px;border-left:0}
+.abugida-hero h1{font-size:55px}
+.abugida-practice,.abugida-method,.abugida-coaches,.abugida-quote,.abugida-questions,.abugida-rooms,.abugida-booking>section{grid-template-columns:1fr}
+.abugida-coaches>div:last-child,.abugida-process>div{grid-template-columns:1fr}
+.abugida-method figure,.abugida-quote img,.abugida-rooms img{height:380px}
+.abugida-booking section>img{height:50vh}
+}
+.abugida-mode{display:inline-flex;align-items:center;gap:7px;padding:10px 12px;border:2px solid var(--ink);color:var(--ink);background:transparent;font:800 10px/1 Arial,sans-serif;letter-spacing:.12em;cursor:pointer}.abugida-mode:focus-visible{outline:var(--pe-surface-focus-ring,3px) solid var(--pe-color-focus);outline-offset:3px}.abugida-button{color:var(--pe-color-on-primary,#fff)!important}.abugida-site[data-pe-mode=dark]{--orange-ink:var(--pe-color-accent);color-scheme:dark}.abugida-site[data-pe-mode=dark] .abugida-nav>a:first-child b,.abugida-site[data-pe-mode=dark] .abugida-button,.abugida-site[data-pe-mode=dark] .abugida-hero figcaption,.abugida-site[data-pe-mode=dark] .abugida-marquee,.abugida-site[data-pe-mode=dark] .abugida-coaches{color:var(--pe-color-on-primary)}.abugida-site[data-pe-mode=dark] .abugida-nav>a:last-child,.abugida-site[data-pe-mode=dark] .abugida-method figcaption,.abugida-site[data-pe-mode=dark] .abugida-quote{color:var(--pe-color-text);background:var(--pe-color-surface-strong)}.abugida-site[data-pe-mode=dark] .abugida-method,.abugida-site[data-pe-mode=dark] .abugida-rooms{background:var(--pe-color-surface)}.abugida-site[data-pe-mode=dark] .abugida-footer{color:var(--pe-color-text);background:var(--pe-color-surface-strong)}.abugida-site[data-pe-mode=dark] .abugida-coaches .abugida-label{color:var(--pe-color-on-primary)}.abugida-site[data-pe-mode=dark] .abugida-nav,.abugida-site[data-pe-mode=dark] .abugida-hero,.abugida-site[data-pe-mode=dark] .abugida-practice,.abugida-site[data-pe-mode=dark] .abugida-method,.abugida-site[data-pe-mode=dark] .abugida-process,.abugida-site[data-pe-mode=dark] .abugida-questions,.abugida-site[data-pe-mode=dark] .abugida-practice>div article,.abugida-site[data-pe-mode=dark] .abugida-process article,.abugida-site[data-pe-mode=dark] .abugida-questions details{border-color:var(--pe-color-border)}@media(max-width:800px){.abugida-mode{padding:9px;font-size:0}.abugida-mode span{font-size:15px}.abugida-nav{gap:10px}.abugida-nav>a:last-child{padding:10px 12px}}
+
+.abugida-content{min-height:100vh;color:var(--pe-color-text);background:var(--pe-color-canvas);font-family:var(--pe-font-body)}
+.abugida-content a{color:inherit;text-underline-offset:4px}.abugida-content button{padding:10px 16px;border:1px solid var(--pe-color-border);background:var(--pe-color-surface);color:var(--pe-color-text);border-radius:8px}
+.abugida-content :focus-visible{outline:3px solid var(--pe-color-focus);outline-offset:4px}.abugida-content-skip{position:absolute;top:-100px;padding:12px;background:var(--pe-color-surface);z-index:10}.abugida-content-skip:focus{top:8px}
+.abugida-content-nav{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:24px 5vw;border-bottom:1px solid var(--pe-color-border)}.abugida-content-nav nav{display:flex;flex-wrap:wrap;gap:20px}
+.abugida-content main{max-width:1280px;margin:auto;padding:40px 5vw}.abugida-content-heading{padding:40px 0 60px;text-align:left}.abugida-content-heading h1{font-size:clamp(40px,6vw,88px);line-height:1.05;letter-spacing:-.04em;margin:20px 0}.abugida-content-heading p{max-width:650px;line-height:1.7;margin:12px 0}
+.abugida-content-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}.abugida-content-grid article{border:2px solid var(--pe-color-border);border-radius:6px;padding:24px;background:var(--pe-color-surface)}.abugida-content-grid h2{font-size:28px;line-height:1.2;margin:20px 0 12px}.abugida-content-grid p{line-height:1.6}.abugida-content-grid img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.abugida-content-cover{width:100%;max-height:600px;object-fit:cover}.abugida-content-article{max-width:760px;margin:40px auto;font-size:18px;line-height:1.8;overflow-wrap:anywhere}.abugida-content-article time{display:block;font-size:14px}.abugida-content-article h2{font-size:32px;margin-top:40px}.abugida-content-article img{max-width:100%;height:auto}.abugida-content-article pre{overflow:auto;padding:20px;background:var(--pe-color-surface-muted)}.abugida-content-article table{display:block;overflow:auto}.abugida-content-article blockquote{border-left:3px solid var(--pe-color-primary);padding-left:24px}
+.abugida-content-media{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:40px}.abugida-content-media figure{margin:0}.abugida-content-media img{width:100%;height:auto;max-height:650px;object-fit:cover}.abugida-content-media figcaption{padding:16px 0;line-height:1.6}.abugida-content-media small{display:block}
+.abugida-content-state{padding:50px 24px;border:2px solid var(--pe-color-border);border-radius:6px;background:var(--pe-color-surface-muted)}.abugida-content-signup{margin:64px 0 20px;padding:40px;border:2px solid var(--pe-color-border);border-radius:6px;background:var(--pe-color-surface-muted)}.abugida-content-signup h2{font-size:30px}.abugida-content-pagination,.abugida-content-footer{display:flex;justify-content:space-between;gap:20px;padding:32px 0}.abugida-content-footer{padding:32px 5vw;border-top:1px solid var(--pe-color-border)}
+@media(max-width:720px){.abugida-content-nav{flex-wrap:wrap;padding:20px}.abugida-content-nav nav{order:3;width:100%;gap:14px;font-size:14px}.abugida-content-grid,.abugida-content-media{grid-template-columns:1fr}.abugida-content-heading{padding:20px 0 35px}.abugida-content-signup{padding:24px}}
+
+.abugida-content h1,.abugida-content h2{font-family:var(--pe-font-display)}
+
+.abugida-content-brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.abugida-content-brand img { width: 120px; max-width: 30vw; height: 36px; object-fit: contain; }
+
+.abugida-content-article a { text-decoration: underline; }
+
+.abugida-site :focus-visible { outline: 3px solid var(--pe-color-focus); outline-offset: 4px; }
+.abugida-site .abugida-newsletter :focus-visible { outline-color: currentColor; }

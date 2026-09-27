@@ -1,0 +1,57 @@
+{
+  "kind": "layout",
+  "contract": "appointment-layout.v1",
+  "key": "meron-atelier",
+  "version": 1,
+  "rendererKey": "meron-atelier",
+  "contentSchemaVersion": 2,
+  "sections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "benefits",
+    "testimonials",
+    "proof",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "requiredSections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "benefits",
+    "testimonials",
+    "proof",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "responsive": {
+    "desktop": "meron-atelier-desktop",
+    "tablet": "meron-atelier-tablet",
+    "mobile": "meron-atelier-mobile",
+    "maxContentWidth": 1440
+  },
+  "density": {
+    "content": [
+      "compact",
+      "standard",
+      "rich"
+    ],
+    "presentation": [
+      "comfortable",
+      "spacious"
+    ],
+    "defaultContent": "rich",
+    "defaultPresentation": "comfortable"
+  }
+}

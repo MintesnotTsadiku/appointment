@@ -1,0 +1,138 @@
+{
+  "kind": "recipe",
+  "contract": "appointment-curated-recipe.v1",
+  "key": "selam-movement",
+  "version": 1,
+  "label": "Selam Movement",
+  "description": "Selam Movement is an independently implemented, art-directed public template package.",
+  "audience": "Independent movement and wellness practices.",
+  "mood": "optimistic-movement",
+  "supportedLocales": [
+    "en",
+    "am"
+  ],
+  "accessibility": {
+    "level": "AA",
+    "focusVisible": true,
+    "reducedMotion": true
+  },
+  "primitives": {
+    "palette": {
+      "key": "selam-movement",
+      "version": 1
+    },
+    "typography": {
+      "key": "warm-vitality",
+      "version": 1
+    },
+    "imagery": {
+      "key": "warm-vitality-places",
+      "version": 1
+    },
+    "layout": {
+      "key": "selam-movement",
+      "version": 1
+    },
+    "surface": {
+      "key": "warm-vitality",
+      "version": 1
+    }
+  },
+  "supportedSections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "benefits",
+    "testimonials",
+    "proof",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "requiredSections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "benefits",
+    "testimonials",
+    "proof",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "defaultInputs": {
+    "motion": "calm",
+    "presentationDensity": "comfortable",
+    "heroAsset": "hero.selam",
+    "detailAsset": "detail.selam"
+  },
+  "adjustments": {
+    "accentColor": {
+      "type": "hex-color",
+      "optional": true,
+      "protected": false
+    },
+    "motion": {
+      "type": "enum",
+      "choices": [
+        "calm",
+        "standard"
+      ],
+      "optional": true
+    },
+    "presentationDensity": {
+      "type": "enum",
+      "choices": [
+        "comfortable",
+        "spacious"
+      ],
+      "optional": true
+    },
+    "heroAsset": {
+      "type": "asset-role",
+      "choices": [
+        "hero.selam"
+      ],
+      "optional": true
+    },
+    "detailAsset": {
+      "type": "asset-role",
+      "choices": [
+        "detail.selam"
+      ],
+      "optional": true
+    }
+  },
+  "actionIntents": [
+    "booking_start",
+    "service_selection",
+    "provider_selection",
+    "call",
+    "directions",
+    "contact",
+    "faq_jump",
+    "back_to_site"
+  ],
+  "contentRichness": {
+    "default": "rich",
+    "choices": [
+      "compact",
+      "standard",
+      "rich"
+    ],
+    "requiredForCertification": [
+      "process",
+      "benefits",
+      "testimonials",
+      "proof"
+    ]
+  }
+}

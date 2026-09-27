@@ -1,0 +1,35 @@
+app: appointment
+base_url: http://127.0.0.20:25310
+default_role: Manager
+auth:
+  type: frappe_session
+  username: '{qa_multi_user}'
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+fixtures:
+  provider: appointment.tests.acceptance_demo.browser_values
+scenarios:
+  - id: role_multi_business_selection
+    title: A user in two businesses is sent to the workspace selector
+    viewport: {width: 1440, height: 960}
+    checks: []
+    routes:
+      - path: /home
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="workspaces-heading"]'
+          - type: visible_selector
+            value: '[data-qa="workspace-card"]'
+    actions:
+      - action: screenshot
+        name: role-multi-business.png
+        full_page: true
+      - action: get_console_errors
+      - action: get_network_errors

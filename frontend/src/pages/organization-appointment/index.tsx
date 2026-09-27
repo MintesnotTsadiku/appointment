@@ -17,9 +17,8 @@ import { useFrappeGetCall } from "frappe-react-sdk";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAppContext } from "@/context/app";
 import { getLocalTimezone } from "@/lib/utils";
-import { Info, Moon, Sun, ArrowLeft } from "lucide-react";
+import { ArrowLeft, Info, Moon, Sun } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
-import { Button } from "@/components/button";
 import MetaTags from "@/components/meta-tags";
 import PoweredBy from "@/components/powered-by";
 
@@ -30,7 +29,29 @@ import { BookingForm } from "@/pages/booking-v2/components/BookingForm";
 import { ConfirmationModal } from "@/pages/booking-v2/components/ConfirmationModal";
 import { useTimeSlots } from "@/pages/booking-v2/hooks/useTimeSlots";
 import { useBookingSubmit } from "@/pages/booking-v2/hooks/useBookingSubmit";
-import type { Organization, Service, TimeSlot as V2TimeSlot, BookingFormData } from "@/pages/booking-v2/types";
+import type { Organization, Service, TimeSlot as V2TimeSlot, BookingFormData, BookingResponse } from "@/pages/booking-v2/types";
+
+interface BookingApiProvider {
+  id?: string;
+  name: string;
+  avatar?: string;
+  services?: string[];
+}
+
+interface BookingApiService {
+  service_id?: string;
+  slug: string;
+  name: string;
+  description?: string;
+  duration: number;
+  price?: number;
+  type: Service["type"];
+  provider_id?: string;
+  provider_name?: string;
+}
+import { useBookingBrand } from "@/public-experience/bookingTheme";
+import { brandLogo } from "@/public-experience/templates/content";
+import "@/public-experience/platform.css";
 
 // Import old components for fallback
 import { ProfileSkeleton } from "@/pages/appointment/components/skeletons";
@@ -45,7 +66,6 @@ const OrganizationAppointmentV2 = () => {
     setMeetingId,
     setUserInfo,
     userInfo,
-    setDuration,
     setTimeZone,
     timeZone,
     selectedDate,
@@ -61,8 +81,12 @@ const OrganizationAppointmentV2 = () => {
   const [currentPhase, setCurrentPhase] = useState<'service' | 'datetime' | 'form' | 'success'>('service');
   const [displayMonth, setDisplayMonth] = useState(new Date());
   const [timeFormat, setTimeFormat] = useState<'12h' | '24h' | 'ethiopian'>('12h');
-  const [bookingResponse, setBookingResponse] = useState<any>(null);
+  const [bookingResponse, setBookingResponse] = useState<(BookingResponse & { userEmail?: string }) | null>(null);
   const { theme, setTheme } = useTheme();
+  const bookingMode = theme === "dark" || (theme === "system" && typeof document !== "undefined" && document.documentElement.classList.contains("dark"))
+    ? "dark"
+    : "light";
+  const bookingBrand = useBookingBrand(orgSlug, bookingMode);
 
   // Theme toggle handler
   const toggleTheme = () => {
@@ -102,7 +126,7 @@ const OrganizationAppointmentV2 = () => {
       setMeetingId(`${orgSlug}/${serviceSlug}`);
     }
     setTimeZone(getLocalTimezone());
-  }, [orgSlug, serviceSlug]);
+  }, [orgSlug, serviceSlug, setMeetingId, setTimeZone]);
 
   // Process API response (same as old implementation)
   useEffect(() => {
@@ -150,7 +174,7 @@ const OrganizationAppointmentV2 = () => {
       
       setFriendlyError("");
     }
-  }, [data, serviceSlug, type]);
+  }, [data, serviceSlug, type, setMeetingDurationCards, setSearchParams, setUserInfo]);
 
   useEffect(() => {
     if (error) {
@@ -211,13 +235,14 @@ const OrganizationAppointmentV2 = () => {
     logo: data.message.profile_pic,
     banner: data.message.banner_image,
     description: data.message.description || "",
-    providers: data.message.providers?.map((p: any) => ({
+    providers: data.message.providers?.map((p: BookingApiProvider) => ({
       id: p.id || p.name,
       name: p.name,
+      avatar: p.avatar,
       designation: data.message.position,
       services: p.services,
     })) || [],
-    services: data.message.services?.map((s: any) => ({
+    services: data.message.services?.map((s: BookingApiService) => ({
       id: s.service_id || s.slug || s.name, // Use slug or name as fallback
       slug: s.slug,
       name: s.name,
@@ -229,16 +254,17 @@ const OrganizationAppointmentV2 = () => {
       provider: s.provider_id ? {
         id: s.provider_id,
         name: s.provider_name,
+        avatar: data.message.providers?.find((provider: BookingApiProvider) => provider.id === s.provider_id)?.avatar,
       } : undefined,
-      providerCount: data.message.provider_count,
+      providerCount: s.provider_id ? 1 : data.message.provider_count,
     })) || [],
   } : null;
 
   const currentService: Service | null = serviceSlug && data && !data?.message?.error ? {
     id: data.message.service_id || serviceSlug,
     slug: serviceSlug,
-    name: userInfo.name || serviceSlug,
-    duration: meetingDurationCards[0]?.duration / 60 || 30,
+    name: data.message.service_name || serviceSlug,
+    duration: meetingDurationCards[0]?.duration || 30,
     type: "organization",
     providerCount: data.message.provider_count,
     location: data.message.location, // Add location information
@@ -257,6 +283,20 @@ const OrganizationAppointmentV2 = () => {
   const handleServiceSelect = (service: Service) => {
     // Navigate with service slug (same as old implementation)
     navigate(`/schedule/org/${orgSlug}/${service.slug}`);
+  };
+
+  const handlePhaseBack = () => {
+    if (currentPhase === "form") {
+      refetchSlots?.();
+      setCurrentPhase("datetime");
+      return;
+    }
+    if (currentPhase === "datetime" && organization?.services.length > 1) {
+      setCurrentPhase("service");
+      navigate("/schedule/org/" + orgSlug);
+      return;
+    }
+    navigate(bookingBrand.publicRoot);
   };
 
   const handleDateSelect = (date: Date) => {
@@ -299,7 +339,7 @@ const OrganizationAppointmentV2 = () => {
         await refetchSlots();
       }
 
-      setBookingResponse(response);
+      setBookingResponse({ ...response, userEmail: formData.userEmail });
       setCurrentPhase('success');
     } catch (error) {
       console.error("Booking error:", error);
@@ -311,7 +351,7 @@ const OrganizationAppointmentV2 = () => {
     return (
       <div 
         className="min-h-screen text-[var(--text-primary)]"
-        style={{ backgroundColor: 'var(--bg-primary)' }}
+        style={{ ...bookingBrand.style, backgroundColor: 'var(--bg-primary)' }}
       >
         {/* Ambient background effects */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
@@ -347,7 +387,7 @@ const OrganizationAppointmentV2 = () => {
         <MetaTags title="Error | Appointment" description="Error loading booking page" />
         <div 
           className="min-h-screen text-[var(--text-primary)] flex items-center justify-center p-8"
-          style={{ backgroundColor: 'var(--bg-primary)' }}
+          style={{ ...bookingBrand.style, backgroundColor: 'var(--bg-primary)' }}
         >
           {/* Ambient background effects */}
           <div className="fixed inset-0 overflow-hidden pointer-events-none">
@@ -403,25 +443,52 @@ const OrganizationAppointmentV2 = () => {
         title={`${userInfo?.name || "Book Appointment"} | Scheduler`}
         description={`Schedule an appointment with ${userInfo?.name || "us"}`}
       />
-      {/* Sticky Header with Back Button and Theme Toggle (only show in service phase, not datetime/form) */}
-      {currentPhase === 'service' && (
+      {/* Persistent branded booking header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
           className="sticky top-0 z-50 w-full backdrop-blur-xl"
-          style={{ 
+          data-booking-branded={bookingBrand.config ? "true" : "false"}
+          data-pe-recipe={bookingBrand.config?.recipeKey}
+          style={{ ...bookingBrand.style,
             backgroundColor: 'color-mix(in srgb, var(--bg-primary) 95%, transparent)',
             borderBottom: '1px solid var(--border-subtle)'
           }}
         >
-          <div className="w-full max-w-7xl mx-auto px-5 md:px-6 py-4 flex items-center justify-end">
-            {/* No back button in service phase - only theme toggle */}
+          <div className="w-full max-w-7xl mx-auto px-5 md:px-6 py-4 flex items-center justify-between gap-5">
+            <div className="flex min-w-0 items-center gap-3">
+              {currentPhase !== "service" && (
+                <button type="button" onClick={handlePhaseBack} className="booking-back" aria-label="Go to the previous booking step">
+                  <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+                  <span>Back</span>
+                </button>
+              )}
+            <a
+              href={bookingBrand.publicRoot}
+              className="flex min-w-0 items-center gap-3 no-underline"
+              aria-label={`Back to ${bookingBrand.config?.identity.applicationName || userInfo?.organizationName || "public site"}`}
+            >
+              {bookingBrand.config && brandLogo(bookingBrand.config.compiledDesign) ? (
+                <img className="pe-brand-logo shrink-0" src={brandLogo(bookingBrand.config.compiledDesign)} alt="" />
+              ) : (
+                <span className="pe-brand-mark shrink-0" aria-hidden="true">✦</span>
+              )}
+              <span
+                className="truncate text-base font-semibold"
+                style={{ color: "var(--text-primary)", fontFamily: "var(--booking-font-display)" }}
+              >
+                {bookingBrand.config?.identity.applicationName || userInfo?.organizationName || "Appointments"}
+              </span>
+            </a>
+            </div>
+            <div className="booking-header-actions">
+              <span className="booking-step" aria-live="polite">{currentPhase === "service" ? "Choose a service" : currentPhase === "datetime" ? "Choose a time" : currentPhase === "form" ? "Your details" : "Confirmed"}</span>
 
             {/* Theme Toggle */}
             <motion.button
               onClick={toggleTheme}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg backdrop-blur-sm transition-all"
+              className="flex items-center gap-2 px-3 py-2 rounded-lg transition-colors"
               style={{ 
                 backgroundColor: 'var(--border-subtle)',
                 border: '1px solid var(--border-default)'
@@ -452,12 +519,14 @@ const OrganizationAppointmentV2 = () => {
                 {theme === "light" ? "Dark" : "Light"}
               </span>
             </motion.button>
+            </div>
           </div>
         </motion.div>
-      )}
       <div 
-        className="min-h-screen text-[var(--text-primary)] pb-16"
-        style={{ backgroundColor: 'var(--bg-primary)' }}
+        className="booking-experience min-h-screen text-[var(--text-primary)] pb-16"
+        data-booking-branded={bookingBrand.config ? "true" : "false"}
+        data-pe-recipe={bookingBrand.config?.recipeKey}
+        style={{ ...bookingBrand.style, backgroundColor: 'var(--bg-primary)' }}
       >
         {/* Ambient background effects */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
@@ -475,7 +544,7 @@ const OrganizationAppointmentV2 = () => {
           />
         </div>
 
-        <div className="relative z-10">
+        <div className="booking-stage relative z-10">
         {/* Phase 1: Service Selection */}
           <AnimatePresence mode="wait">
         {currentPhase === 'service' && organization && !serviceSlug && (
@@ -531,14 +600,6 @@ const OrganizationAppointmentV2 = () => {
               serviceName={currentService.name}
               duration={currentService.duration}
               location={currentService.location}
-              onBack={() => {
-                if (organization?.services && organization.services.length > 1) {
-                  setCurrentPhase('service');
-                  navigate(`/schedule/org/${orgSlug}`);
-                } else {
-                  navigate("/");
-                }
-              }}
               rawApiData={rawApiData}
               bookingConfig={bookingConfig}
             />
@@ -569,13 +630,7 @@ const OrganizationAppointmentV2 = () => {
               timeFormat={timeFormat}
               timezone={timeZone}
               onSubmit={handleBookingSubmit}
-              onBack={() => {
-                // Re-fetch slots when going back to datetime selection
-                if (refetchSlots) {
-                  refetchSlots();
-                }
-                setCurrentPhase('datetime');
-              }}
+              onBack={handlePhaseBack}
               loading={bookingLoading}
             />
               </motion.div>
@@ -606,6 +661,7 @@ const OrganizationAppointmentV2 = () => {
             timeFormat={timeFormat}
             timezone={timeZone}
             userEmail={bookingResponse.userEmail || ""}
+            brandStyle={bookingBrand.style}
           />
         )}
           </AnimatePresence>

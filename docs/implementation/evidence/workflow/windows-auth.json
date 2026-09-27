@@ -1,0 +1,7 @@
+{
+  "origin": "http://127.0.0.20:25310",
+  "authenticated_identity": "review-aad7aa1a@example.test",
+  "react_status": 200,
+  "desk_status": 200,
+  "session_cleanup": "GET logout rejected by method guard; synthetic user sessions subsequently cleared server-side."
+}

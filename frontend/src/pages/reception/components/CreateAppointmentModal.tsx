@@ -4,6 +4,7 @@ import { X, Calendar, Clock, User, MapPin, Briefcase, Phone, Mail, FileText, Loa
 import { useFrappeGetCall, useFrappePostCall } from 'frappe-react-sdk';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
+import { Input } from '@/components/input';
 import { Service, Provider, Location } from '../types';
 
 interface CreateAppointmentModalProps {
@@ -158,7 +159,7 @@ export const CreateAppointmentModal = ({
         }`}>
           <Icon className="w-4 h-4" />
         </div>
-        <input
+        <Input
           type={type}
           value={formData[id as keyof typeof formData]}
           onChange={(e) => setFormData({ ...formData, [id]: e.target.value })}

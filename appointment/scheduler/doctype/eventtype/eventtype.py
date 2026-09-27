@@ -27,6 +27,11 @@ class EventType(Document):
 		if self.location and not frappe.db.exists("Location", self.location):
 			frappe.throw(f"EventType {self.name} has invalid location: {self.location}. Location does not exist.")
 	
+		if self.service and self.location and self.provider:
+			org = frappe.db.get_value("Service", self.service, "organization")
+			if org and (frappe.db.get_value("Location", self.location, "organization") != org or not frappe.db.exists("Provider Organization", {"parent": self.provider, "parenttype": "Provider", "organization": org, "status": "Active"})):
+				frappe.throw("Offering links must belong to the same business", frappe.PermissionError)
+
 	def on_update(self):
 		"""Sync booking URLs when event types change"""
 		# Skip if we're already syncing to prevent recursion

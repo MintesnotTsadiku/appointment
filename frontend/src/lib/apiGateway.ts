@@ -5,9 +5,6 @@
 
 // Action code mapping - matches backend gateway.py
 const ACTION_MAP: Record<string, string> = {
-  // Landing page settings
-  'appointment.scheduler.doctype.landing_page_settings.api.get_landing_page_settings': 'a1b2c3d4',
-  
   // Management APIs
   'appointment.api.manage.get_management_hierarchy': 'e5f6g7h8',
   'appointment.api.manage.get_provider_centric_hierarchy': 'i9j0k1l2',

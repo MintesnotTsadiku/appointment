@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useFrappeGetCall } from 'frappe-react-sdk';
 import { 
@@ -14,21 +14,14 @@ import {
   CalendarDays,
   Clock,
   X,
-  CheckCircle,
-  XCircle,
-  AlertCircle,
-  User
+  CheckCircle
 } from 'lucide-react';
-import { Button } from '@/components/button';
-import { Input } from '@/components/input';
-import { Card } from '@/components/card';
 import Spinner from '@/components/spinner';
+import AppTopNav from '@/components/workspace/AppTopNav';
+import { InsightBrief } from '@/components/analytics/WorkspaceDashboard';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, 
   startOfWeek, endOfWeek, addMonths, subMonths, addWeeks, subWeeks,
-  addDays, subDays, isSameDay, isSameMonth, isToday, parseISO,
-  startOfDay, addHours, setHours, setMinutes, isSameWeek, 
-  getWeek, differenceInDays, startOfYear, getDay, eachWeekOfInterval,
-  isWithinInterval, getHours, getMinutes } from 'date-fns';
+  addDays, subDays, isSameDay, isSameMonth, isToday, parseISO } from 'date-fns';
 
 type ViewMode = 'month' | 'week' | 'day' | 'list';
 
@@ -66,7 +59,7 @@ const Calendar = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('month');
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('All');
-  const [serviceFilter, setServiceFilter] = useState<string>('All');
+  const [serviceFilter] = useState<string>('All');
   const [showFilters, setShowFilters] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
 
@@ -105,7 +98,7 @@ const Calendar = () => {
   }, [currentDate, viewMode]);
 
   // Fetch appointments
-  const { data: appointmentsData, isLoading: appointmentsLoading, mutate: refreshAppointments } = useFrappeGetCall<{ message: { appointments: Appointment[] } }>(
+  const { data: appointmentsData, isLoading: appointmentsLoading } = useFrappeGetCall<{ message: { appointments: Appointment[] } }>(
     'appointment.dashboard.get_appointments',
     {
       start_date: dateRange.start,
@@ -608,6 +601,8 @@ const Calendar = () => {
       </div>
 
       <div className="relative z-10">
+        <AppTopNav active="calendar" />
+        <div className="px-4 sm:px-6"><InsightBrief kind="provider" /></div>
         {/* Header */}
         <header 
           className="sticky top-0 z-50 backdrop-blur-xl"
@@ -617,7 +612,7 @@ const Calendar = () => {
           }}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div className="flex items-center justify-between mb-4">
+            <div data-internal-toolbar className="flex flex-wrap items-center justify-between gap-3 mb-4">
               <div className="flex items-center space-x-4">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -693,7 +688,7 @@ const Calendar = () => {
             </div>
 
             {/* View Mode Switcher */}
-            <div className="flex items-center justify-between">
+            <div data-internal-toolbar className="flex flex-wrap items-center justify-between gap-3">
               <div 
                 className="flex items-center gap-1 p-1 rounded-xl"
                 style={{ 
@@ -859,13 +854,13 @@ const Calendar = () => {
               border: '1px solid var(--border-default)'
             }}
           >
-            <div className="p-6">
+            <div data-internal-panel className="p-6">
               {renderView()}
             </div>
           </motion.div>
 
           {/* Quick Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+          <div data-internal-grid className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
             {[
               { label: 'This Week', value: stats.this_week, subtitle: 'appointments', icon: CalendarIcon, gradient: 'bg-gradient-primary' },
               { label: 'Upcoming', value: stats.upcoming, subtitle: 'in next 7 days', icon: Clock, gradient: 'bg-gradient-to-br from-blue-500 to-indigo-600' },
@@ -879,7 +874,7 @@ const Calendar = () => {
                 className="relative group"
               >
                 <div 
-                  className="relative backdrop-blur-sm rounded-2xl p-5 hover:scale-[1.02] transition-all duration-300"
+                  data-internal-panel className="relative backdrop-blur-sm rounded-2xl p-5 hover:scale-[1.02] transition-all duration-300"
                   style={{ 
                     backgroundColor: 'var(--border-subtle)',
                     border: '1px solid var(--border-default)'

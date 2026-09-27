@@ -5,9 +5,9 @@
 @layer base {
   :root {
     /* ========================================
-       THEME COLORS - DYNAMIC FROM BACKEND
-       These are set dynamically via JavaScript
-       from Landing Page Settings
+       PLATFORM THEME COLORS
+       Fixed application defaults; tenant public experiences use
+       release-scoped compiled design tokens
        ======================================== */
     
     /* Background Colors (Light Mode Defaults) */
@@ -395,4 +395,18 @@ button[role="gridcell"][aria-selected="true"] span {
 :root:not(.dark) button[role="gridcell"][aria-selected="true"] span {
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
+}
+
+@media (min-width: 768px) {
+  html[data-workspace-navigation="sidebar"] body { padding-left: 288px; }
+  html[data-workspace-navigation="sidebar"][data-workspace-collapsed="true"] body { padding-left: 64px; }
+}
+
+[data-qa="workspace-analytics"] button[aria-label^="Move "],
+[data-qa="workspace-analytics"] button[aria-label^="Remove "] {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }

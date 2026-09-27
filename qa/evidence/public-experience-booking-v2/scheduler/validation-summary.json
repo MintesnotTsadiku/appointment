@@ -1,0 +1,132 @@
+[
+  {
+    "key": "selam",
+    "mode": "light",
+    "recipe": "selam-movement",
+    "providerNames": [
+      "Selam Bekele"
+    ],
+    "visibleToggles": 1,
+    "duplicateHeaders": 0,
+    "phase": "CHOOSE A TIME",
+    "service": "Guided mobility session"
+  },
+  {
+    "key": "meron",
+    "mode": "light",
+    "recipe": "meron-atelier",
+    "providerNames": [
+      "Meron Alemu"
+    ],
+    "visibleToggles": 1,
+    "duplicateHeaders": 0,
+    "phase": "CHOOSE A TIME",
+    "service": "Occasion wear consultation"
+  },
+  {
+    "key": "bloom",
+    "mode": "light",
+    "recipe": "bloom-hair",
+    "providerNames": [
+      "Eden Tadesse",
+      "Rahel Girma",
+      "Hanna Tesfaye"
+    ],
+    "visibleToggles": 1,
+    "duplicateHeaders": 0,
+    "phase": "CHOOSE A TIME",
+    "service": "Scalp care consultation"
+  },
+  {
+    "key": "tena",
+    "mode": "light",
+    "recipe": "tena-clinic",
+    "providerNames": [
+      "Yonas Assefa",
+      "Saron Mekonnen",
+      "Dawit Haile"
+    ],
+    "visibleToggles": 1,
+    "duplicateHeaders": 0,
+    "phase": "CHOOSE A TIME",
+    "service": "Wellness consultation"
+  },
+  {
+    "key": "abugida",
+    "mode": "light",
+    "recipe": "abugida-language",
+    "providerNames": [
+      "Abel Fikru",
+      "Kalkidan Getachew"
+    ],
+    "visibleToggles": 1,
+    "duplicateHeaders": 0,
+    "phase": "CHOOSE A TIME",
+    "service": "Amharic starter session"
+  },
+  {
+    "key": "selam",
+    "mode": "dark",
+    "recipe": "selam-movement",
+    "providerNames": [
+      "Selam Bekele"
+    ],
+    "visibleToggles": 1,
+    "duplicateHeaders": 0,
+    "phase": "CHOOSE A TIME",
+    "service": "Guided mobility session"
+  },
+  {
+    "key": "meron",
+    "mode": "dark",
+    "recipe": "meron-atelier",
+    "providerNames": [
+      "Meron Alemu"
+    ],
+    "visibleToggles": 1,
+    "duplicateHeaders": 0,
+    "phase": "CHOOSE A TIME",
+    "service": "Occasion wear consultation"
+  },
+  {
+    "key": "bloom",
+    "mode": "dark",
+    "recipe": "bloom-hair",
+    "providerNames": [
+      "Eden Tadesse",
+      "Rahel Girma",
+      "Hanna Tesfaye"
+    ],
+    "visibleToggles": 1,
+    "duplicateHeaders": 0,
+    "phase": "CHOOSE A TIME",
+    "service": "Scalp care consultation"
+  },
+  {
+    "key": "tena",
+    "mode": "dark",
+    "recipe": "tena-clinic",
+    "providerNames": [
+      "Yonas Assefa",
+      "Saron Mekonnen",
+      "Dawit Haile"
+    ],
+    "visibleToggles": 1,
+    "duplicateHeaders": 0,
+    "phase": "CHOOSE A TIME",
+    "service": "Wellness consultation"
+  },
+  {
+    "key": "abugida",
+    "mode": "dark",
+    "recipe": "abugida-language",
+    "providerNames": [
+      "Abel Fikru",
+      "Kalkidan Getachew"
+    ],
+    "visibleToggles": 1,
+    "duplicateHeaders": 0,
+    "phase": "CHOOSE A TIME",
+    "service": "Amharic starter session"
+  }
+]

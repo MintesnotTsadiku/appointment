@@ -1,0 +1,57 @@
+{
+  "kind": "layout",
+  "contract": "appointment-layout.v1",
+  "key": "abugida-language",
+  "version": 1,
+  "rendererKey": "abugida-language",
+  "contentSchemaVersion": 2,
+  "sections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "benefits",
+    "testimonials",
+    "proof",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "requiredSections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "benefits",
+    "testimonials",
+    "proof",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "responsive": {
+    "desktop": "abugida-language-desktop",
+    "tablet": "abugida-language-tablet",
+    "mobile": "abugida-language-mobile",
+    "maxContentWidth": 1440
+  },
+  "density": {
+    "content": [
+      "compact",
+      "standard",
+      "rich"
+    ],
+    "presentation": [
+      "comfortable",
+      "spacious"
+    ],
+    "defaultContent": "rich",
+    "defaultPresentation": "comfortable"
+  }
+}

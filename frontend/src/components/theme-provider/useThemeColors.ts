@@ -1,13 +1,7 @@
-/**
- * Hook for fetching and managing theme colors from Landing Page Settings
- * 
- * NOTE: This hook uses plain fetch instead of useFrappeGetCall because
- * ThemeProvider is rendered OUTSIDE of FrappeProvider in the component tree.
- */
-import { useState, useEffect } from 'react';
+/** Platform-owned application theme tokens. */
 import { ThemeColors } from './types';
 
-// Default theme colors - matches the backend defaults
+// Code-owned platform theme defaults
 export const defaultThemeColors: ThemeColors = {
   dark: {
     background: {
@@ -127,59 +121,6 @@ export const defaultThemeColors: ThemeColors = {
   },
 };
 
-export function useThemeColors() {
-  const [colors, setColors] = useState<ThemeColors>(defaultThemeColors);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    // Fetch theme colors using plain fetch (not useFrappeGetCall)
-    // This works outside of FrappeProvider context
-    const fetchThemeColors = async () => {
-      try {
-        setIsLoading(true);
-        
-        // Build the API URL
-        const baseUrl = import.meta.env.VITE_BASE_URL || '';
-        const apiUrl = `${baseUrl}/api/method/appointment.scheduler.api.theme.get_theme_colors`;
-        
-        const response = await fetch(apiUrl, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include', // Include cookies for authentication
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        
-        if (data.message) {
-          setColors(data.message);
-        }
-      } catch (err) {
-        // Don't crash on error - just use defaults
-        console.warn('Failed to fetch theme colors, using defaults:', err);
-        setError(err instanceof Error ? err : new Error('Unknown error'));
-        setColors(defaultThemeColors);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchThemeColors();
-  }, []); // Only fetch once on mount
-
-  return {
-    colors,
-    isLoading,
-    error,
-  };
-}
-
 /**
  * Generates CSS custom properties from theme colors
  */
@@ -207,6 +148,7 @@ export function generateCSSVariables(colors: ThemeColors, mode: 'dark' | 'light'
 
     // Accent colors - Primary
     '--accent-primary': accent.primary.default,
+    '--chart-primary': mode === 'dark' && accent.primary.default === '#3b3b3b' ? '#bcbcbc' : accent.primary.default,
     '--accent-primary-hover': accent.primary.hover,
     '--accent-primary-light': accent.primary.light,
 
@@ -299,6 +241,11 @@ export function applyThemeColors(colors: ThemeColors, mode: 'dark' | 'light'): v
 
   // Accent colors - Primary (Violet/Purple)
   root.style.setProperty('--accent-primary', accent.primary.default);
+  root.style.setProperty('--chart-primary', mode === 'dark' && accent.primary.default === '#3b3b3b' ? '#bcbcbc' : accent.primary.default);
+  root.style.setProperty('--accent-primary-text', mode === 'dark' && accent.primary.default === '#3b3b3b' ? '#f5f5f5' : mode === 'dark' && accent.primary.default === '#0369a1' ? '#7dd3fc' : mode === 'dark' && accent.primary.default === '#047857' ? '#6ee7b7' : accent.primary.default);
+  root.style.setProperty('--status-confirmed-text', mode === 'dark' ? '#6ee7b7' : '#047857');
+  root.style.setProperty('--accent-secondary-text', mode === 'dark' ? '#fdba74' : '#9a3412');
+  root.style.setProperty('--accent-success-action', '#047857');
   root.style.setProperty('--accent-primary-hover', accent.primary.hover);
   root.style.setProperty('--accent-primary-light', accent.primary.light);
 

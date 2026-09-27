@@ -1,0 +1,13 @@
+test_01_defaults_are_open (appointment.tests.test_registration.RegistrationAcceptance.test_01_defaults_are_open) ... ok
+test_02_disabled_blocks_and_open_allows_signup (appointment.tests.test_registration.RegistrationAcceptance.test_02_disabled_blocks_and_open_allows_signup) ... ok
+test_03_verified_and_approval_hold_the_account (appointment.tests.test_registration.RegistrationAcceptance.test_03_verified_and_approval_hold_the_account) ... ok
+test_04_self_service_business_creation_is_gated (appointment.tests.test_registration.RegistrationAcceptance.test_04_self_service_business_creation_is_gated) ... ok
+test_05_invite_provisioning_is_gated (appointment.tests.test_registration.RegistrationAcceptance.test_05_invite_provisioning_is_gated) ... ok
+test_06_translations_come_from_the_translation_doctype (appointment.tests.test_registration.RegistrationAcceptance.test_06_translations_come_from_the_translation_doctype) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 4.354s
+
+OK
+{'tests': 6, 'failures': 0, 'errors': 0}
+{"tests": 6, "failures": 0, "errors": 0}

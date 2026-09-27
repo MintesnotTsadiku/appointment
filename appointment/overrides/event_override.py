@@ -40,6 +40,8 @@ class BookingEventOverride(BookingEvent):
 
     def before_insert(self):
         """Handle the Appointment Group in Event"""
+        from appointment.scheduler.booking import guard_calendar_capacity
+        guard_calendar_capacity(self)
         if self.custom_appointment_group:
             self.appointment_group = frappe.get_doc(APPOINTMENT_GROUP, self.custom_appointment_group)
             self.custom_meeting_provider = self.appointment_group.meet_provider
@@ -437,7 +439,7 @@ def has_permission(doc, user):
     for doctype_link in doctype_links:
         reference_doctype = doctype_link.reference_doctype
         reference_docname = doctype_link.reference_docname
-        if frappe.has_permission(reference_doctype, "read", reference_docname):
+        if frappe.has_permission(reference_doctype, "read", reference_docname, user=user):
             return True
     return False
 

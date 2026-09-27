@@ -1,0 +1,49 @@
+{
+  "baseURL": "http://127.0.0.84:44430",
+  "results": [
+    {
+      "key": "bloom",
+      "surface": "landing",
+      "viewport": "desktop",
+      "mode": "light",
+      "logoSrc": "/assets/appointment/brand-experience/brands/bloom-logo.webp",
+      "faviconHref": "/assets/appointment/brand-experience/brands/bloom-favicon.png",
+      "consoleErrors": [],
+      "networkErrors": [],
+      "badResponses": []
+    },
+    {
+      "key": "bloom",
+      "surface": "book",
+      "viewport": "desktop",
+      "mode": "light",
+      "logoSrc": "/assets/appointment/brand-experience/brands/bloom-logo.webp",
+      "faviconHref": "/assets/appointment/brand-experience/brands/bloom-favicon.png",
+      "consoleErrors": [],
+      "networkErrors": [],
+      "badResponses": []
+    },
+    {
+      "key": "bloom",
+      "surface": "landing",
+      "viewport": "mobile",
+      "mode": "light",
+      "logoSrc": "/assets/appointment/brand-experience/brands/bloom-logo.webp",
+      "faviconHref": "/assets/appointment/brand-experience/brands/bloom-favicon.png",
+      "consoleErrors": [],
+      "networkErrors": [],
+      "badResponses": []
+    },
+    {
+      "key": "bloom",
+      "surface": "book",
+      "viewport": "mobile",
+      "mode": "light",
+      "logoSrc": "/assets/appointment/brand-experience/brands/bloom-logo.webp",
+      "faviconHref": "/assets/appointment/brand-experience/brands/bloom-favicon.png",
+      "consoleErrors": [],
+      "networkErrors": [],
+      "badResponses": []
+    }
+  ]
+}

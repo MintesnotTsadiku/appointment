@@ -1,0 +1,9 @@
+{
+  "run": "BQA-2026-00212",
+  "status": "Passed",
+  "suite": "homepage-analytics",
+  "failed": 0,
+  "flaky": 0,
+  "cleanup": "Complete",
+  "scope": "Navigation, customization, filters, exports, permissions, workspace switching and reception regression"
+}

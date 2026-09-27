@@ -1,0 +1,84 @@
+{
+  "contract": "appointment-design-reference-manifest.v1",
+  "version": 1,
+  "files": [
+    {
+      "path": "crafted-editorial/full-page-01.webp",
+      "sha256": "b0af0b00829158a25339567a41fbd241105fdc7a3d94575ad5222b672bdcf0bd",
+      "width": 726,
+      "height": 2167
+    },
+    {
+      "path": "crafted-editorial/full-page-02.webp",
+      "sha256": "c1ba6647419b84e0e8fdc72af5857806e70ea642575f16df8f9a0b10f0b67243",
+      "width": 724,
+      "height": 2172
+    },
+    {
+      "path": "crafted-editorial/hero-01.webp",
+      "sha256": "b99c6b9a12992bf89b7eec3caad67760757e05eced943f56f320c845abe71008",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "path": "crafted-editorial/hero-02.webp",
+      "sha256": "1e70dbfc68ad4b5ef737e3a3ddab94d8b10819726520a73a57c6c8a950d71bdc",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "path": "quiet-trust/full-page-01.webp",
+      "sha256": "0aaf708b6155f95e8afcd18004a647828f41c72c40ea3cdc49155c20f4bb5119",
+      "width": 724,
+      "height": 2172
+    },
+    {
+      "path": "quiet-trust/full-page-02.webp",
+      "sha256": "4bf6784b1138532762e9bf5891c4eafea90ffe15536d30d540036e8c5fd0d4e6",
+      "width": 724,
+      "height": 2172
+    },
+    {
+      "path": "quiet-trust/hero-01.webp",
+      "sha256": "acdbb9353fc6575364816dec94ed075a9e9ac73b7abfdc7dbb0f07e023ff17d5",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "path": "quiet-trust/hero-02.webp",
+      "sha256": "7584a23ea588628661a81437ef811235cc37a1ed0c2668d8671a313d39f1c9e9",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "path": "warm-vitality/full-page-01.webp",
+      "sha256": "9daf99818ad9bb0b5b1c9583baeba081daf68122d230cfd42e9e4e7e9e49e316",
+      "width": 759,
+      "height": 2072
+    },
+    {
+      "path": "warm-vitality/full-page-02.webp",
+      "sha256": "6f828b9a6fb89eb67a5c4d733da585c99463b730e8479efe27f83fbbe88bf07b",
+      "width": 759,
+      "height": 2073
+    },
+    {
+      "path": "warm-vitality/full-page-03.webp",
+      "sha256": "9c714076cd2cde655b201de93a47cd9abf74f56f80fd73c5a22f9aa0f0a338d5",
+      "width": 746,
+      "height": 2108
+    },
+    {
+      "path": "warm-vitality/hero-01.webp",
+      "sha256": "e69037c70306d9915c38477fdf6d1ceaa66559ffef008d4b6d9c25dc7649030f",
+      "width": 1536,
+      "height": 1024
+    },
+    {
+      "path": "warm-vitality/hero-02.webp",
+      "sha256": "0aeb9d105210ec8d364d0764481935c2659a356dbc30cb1fbd6e4ad303d3c929",
+      "width": 1536,
+      "height": 1024
+    }
+  ]
+}

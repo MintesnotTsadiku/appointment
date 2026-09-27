@@ -1,0 +1,98 @@
+Starting test run with parameters: site=meet-beta-implement-owned-booking-slice-a95902.localhost, app=appointment, verbose=False, tests=(), force=False, profile=False, failfast=False, skip_before_tests=True, debug=False, selected_categories=[]
+View detailed logs (using --verbose): /home/minte/projects/appointment-worktree-runtimes/implement-owned-booking-slice-a95902/bench/logs/frappe.testing.log
+
+Running 12 integration tests for appointment
+
+appointment.scheduler.doctype.booking_event.test_booking_event.TestEvent
+  Test Records created: Booking Event (3), Appointment Slot Duration (0), Appointment Group (0), User Appointment Availability (0), Provider (0), Organization (0), Location (0), Service (0), Google Calendar (0), User (9), Email Account (2), Connected App (1), Email Domain (3), User Type (0), Workspace (0), Custom HTML Block (0), Country (0), DocType Layout (0), Kanban Board (0), Module Onboarding (0), Onboarding Step (0), Form Tour (0), Page (0), Dashboard (0), Number Card (0), Dashboard Chart (0), Currency (0), Dashboard Chart Source (0), Report (1), Print Format (1), Letter Head (0), DocType (0), Email Template (0), Module Def (0), Package (0), Gender (0), Module Profile (0), Role Profile (0), Role (4), Domain (0), Language (0)
+/home/minte/projects/training-apps/apps/frappe/frappe/model/qb_query.py:163: V17FrappeDeprecationWarning: This codepath was marked (DATE: 2024-01-01) deprecated for removal (from v17 onwards); note:
+ The 'limit_page_length' parameter is deprecated. Use 'limit' instead.
+
+  deprecation_warning(
+    ✔  test_allowed_private_if_in_event_user
+    ✔  test_allowed_public
+ERROR	Property: Invalid value for "CSS Level 2.1" property: flex [63:3: display]
+WARNING	Property: Unknown Property name. [64:3: align-items]
+WARNING	Property: Unknown Property name. [586:3: word-break]
+ERROR	Property: Invalid value for "CSS Level 2.1" property: flex [1:1: display]
+WARNING	Property: Unknown Property name. [1:14: align-items]
+    ✔  test_assign
+    ✔  test_daily_repeat
+    ✔  test_event_list
+    ✔  test_half_yearly_repeat
+    ✔  test_monthly_repeat
+    ✔  test_not_allowed_private
+    ✔  test_quaterly_repeat
+    ✔  test_revert_logic
+    ✔  test_weekly_repeat
+    ✔  test_yearly_repeat
+
+
+----------------------------------------------------------------------
+Ran 12 tests in 2.643s
+
+OK
+
+Running 46 unspecified-category tests for appointment
+
+appointment.tests.test_owned_booking.OwnedBookingAcceptance
+    ✔  test_01_handoff_and_isolation
+    ✔  test_02_retry_and_capacity
+    ✔  test_03_controlled_competition_and_retry
+    ✔  test_04_hours_exception_and_buffers
+    ✔  test_05_linked_ownership_and_cross_location
+    ✔  test_06_rollback_and_revoke
+    ✔  test_07_timezone_and_dst
+    ✔  test_08_generic_document_boundary_and_history
+    ✔  test_09_runtime_surfaces_and_realtime
+    ✔  test_10_frozen_instant_and_unpublished_replay
+    ✔  test_11_staff_lifecycle_and_capacity_release
+    ✔  test_12_visible_workspace_api_and_publication
+    ✔  test_13_scoped_support_export
+    ✔  test_14_request_limits
+    ✔  test_15_manager_cancellation_after_provider_revocation
+    ✔  test_16_legacy_calendar_rejects_impersonation
+    ✔  test_17_linked_private_legacy_calendar_scope
+
+appointment.tests.test_app_identity.TestAppIdentity
+    ✔  test_app_path_resolves_to_canonical_package
+    =  test_business_records_preserved
+    ✔  test_canonical_app_is_installed
+    ✔  test_public_api_modules_import_from_canonical_package
+    ✔  test_scheduled_jobs_use_canonical_dotted_paths
+
+appointment.tests.test_app_identity.TestModuleIdentity
+    ✔  test_all_app_modules_are_owned_by_app
+    ✔  test_appointment_settings_defaults_resolve
+    ✔  test_business_doctypes_are_unchanged
+    ✔  test_email_templates_are_imported
+    ✔  test_important_whitelisted_paths_resolve
+    ✔  test_module_owned_doctypes_use_new_module
+    ✔  test_module_path_resolves_to_new_folder
+    ✔  test_new_module_is_owned_by_app
+    ✔  test_old_module_is_not_registered
+    ✔  test_old_module_package_is_gone
+    ✔  test_primary_module_package_imports
+    ✔  test_scheduled_job_methods_importable
+    ✔  test_scheduled_jobs_have_no_old_module_path
+
+appointment.tests.test_data_preservation.TestDataPreservation
+    =  test_business_counts_and_relationships_are_preserved
+    =  test_organization_ownership_and_permissions_are_preserved
+    =  test_product_owned_files_are_reported_separately_from_agent_files
+
+appointment.tests.test_scheduling_workflows.TestSchedulingWorkflows
+    ✔  test_availability_rule_persists
+    ✔  test_cancellation_updates_status
+    ✔  test_english_and_amharic_translations_available
+    ✔  test_provider_service_location_configuration_persists
+    ✔  test_public_booking_catalog_exposes_qa_service
+    ✔  test_reception_booking_creates_confirmed_appointment
+    ✔  test_reschedule_updates_persisted_time
+    ✔  test_walk_in_queue_and_status_transition
+
+
+----------------------------------------------------------------------
+Ran 46 tests in 6.636s
+
+OK (skipped=4)

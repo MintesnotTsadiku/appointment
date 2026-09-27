@@ -1,0 +1,172 @@
+[
+  {
+    "name": "BQA-2026-00036",
+    "status": "Passed",
+    "scenarios": [
+      {
+        "id": "owned_visible_setup",
+        "ok": true,
+        "console_errors": 0,
+        "network_errors": 0,
+        "artifacts": [
+          {
+            "path": "/tmp/agent_browser_qa/appointment/appointment-owned-visible-setup-20260922T143323Z/report.json",
+            "sha256": "aa2de79cedef40d6eb33dcbc54d708b057468d010c73b9d28117c89de36cde23"
+          },
+          {
+            "path": "/tmp/agent_browser_qa/appointment/appointment-owned-visible-setup-20260922T143323Z/trace.zip",
+            "sha256": "b2f2bfb1490556a5714a411771943ee55f27e691e204c25a0f9f0bb194acf224"
+          },
+          {
+            "path": "/tmp/agent_browser_qa/appointment/appointment-owned-visible-setup-20260922T143323Z/session.webm",
+            "sha256": "68f113b95e2632cf551e02c638c5c094a5ec56e700b18dcfdf81663d4212a297"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "BQA-2026-00037",
+    "status": "Passed",
+    "scenarios": [
+      {
+        "id": "owned_guest_catalog",
+        "ok": true,
+        "console_errors": 0,
+        "network_errors": 0,
+        "artifacts": [
+          {
+            "path": "/tmp/agent_browser_qa/appointment/appointment-owned-guest-catalog-20260922T143452Z/report.json",
+            "sha256": "bc9252b4ac732af784b9a74e3a42251f3a31b3d30b9da527229ab975eb2f1dfe"
+          },
+          {
+            "path": "/tmp/agent_browser_qa/appointment/appointment-owned-guest-catalog-20260922T143452Z/trace.zip",
+            "sha256": "f25fb38f3353d631ac0720a5800d7a5efa2391604f9428ce419a6b6e14dbe46b"
+          },
+          {
+            "path": "/tmp/agent_browser_qa/appointment/appointment-owned-guest-catalog-20260922T143452Z/session.webm",
+            "sha256": "f0704238d5624997bd4456b64a7cb1ff44c48b0a79d9bbef402279244dabd3ae"
+          }
+        ]
+      },
+      {
+        "id": "owned_guest_booking",
+        "ok": true,
+        "console_errors": 0,
+        "network_errors": 0,
+        "artifacts": [
+          {
+            "path": "/tmp/agent_browser_qa/appointment/appointment-owned-guest-booking-20260922T143510Z/report.json",
+            "sha256": "137384bb333f3fce1800ffdd22421571e1bcfc44367c675248cd5a1ee6d17d83"
+          },
+          {
+            "path": "/tmp/agent_browser_qa/appointment/appointment-owned-guest-booking-20260922T143510Z/trace.zip",
+            "sha256": "ee305c14b70ecf86bf62d4877e33bca39b7d1210c434b44c47558047965612e9"
+          },
+          {
+            "path": "/tmp/agent_browser_qa/appointment/appointment-owned-guest-booking-20260922T143510Z/session.webm",
+            "sha256": "daa210823155a1e5b613a4aefcf0e5d39a93aec1ff8dec366dade03f0f052f0d"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "BQA-2026-00038",
+    "status": "Passed",
+    "scenarios": [
+      {
+        "id": "owned_staff_lifecycle",
+        "ok": true,
+        "console_errors": 0,
+        "network_errors": 0,
+        "artifacts": [
+          {
+            "path": "/tmp/agent_browser_qa/appointment/appointment-owned-staff-lifecycle-20260922T143615Z/report.json",
+            "sha256": "ab74ff213ef62bb9756edefd6115f1b3da59e9036df3b2169c3771ae1a959369"
+          },
+          {
+            "path": "/tmp/agent_browser_qa/appointment/appointment-owned-staff-lifecycle-20260922T143615Z/trace.zip",
+            "sha256": "9fe0990cca8fb3ede7e6cb8e8284500f12231add5fe7a4922077de7c8789b38a"
+          },
+          {
+            "path": "/tmp/agent_browser_qa/appointment/appointment-owned-staff-lifecycle-20260922T143615Z/session.webm",
+            "sha256": "6b0f19fd198600d4f61e778e217cef6edce8bffe189fcc2e07e87dd0cc34c480"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "BQA-2026-00039",
+    "status": "Passed",
+    "scenarios": [
+      {
+        "id": "owned_guest_catalog",
+        "ok": true,
+        "console_errors": 0,
+        "network_errors": 0,
+        "artifacts": [
+          {
+            "path": "/tmp/agent_browser_qa/appointment/appointment-owned-guest-catalog-20260922T144101Z/report.json",
+            "sha256": "8d1500d4062912929303365123f216d548aa58adbafb731bacf4f7f7948e6ae0"
+          },
+          {
+            "path": "/tmp/agent_browser_qa/appointment/appointment-owned-guest-catalog-20260922T144101Z/trace.zip",
+            "sha256": "b7cc1e34ecf52ed903ce515f41b6ecb422900dc74dae7712b1da9d7128a7e764"
+          },
+          {
+            "path": "/tmp/agent_browser_qa/appointment/appointment-owned-guest-catalog-20260922T144101Z/session.webm",
+            "sha256": "42ce12aa1de829182dd0c80ea4e7c65df5578bb8214cf0433f4db6bcd081a279"
+          }
+        ]
+      },
+      {
+        "id": "owned_guest_booking",
+        "ok": true,
+        "console_errors": 0,
+        "network_errors": 0,
+        "artifacts": [
+          {
+            "path": "/tmp/agent_browser_qa/appointment/appointment-owned-guest-booking-20260922T144123Z/report.json",
+            "sha256": "5a546f8143aff36277c6b717380bd6914ef27fc9021b65a6d243ac66a600ddee"
+          },
+          {
+            "path": "/tmp/agent_browser_qa/appointment/appointment-owned-guest-booking-20260922T144123Z/trace.zip",
+            "sha256": "0e0c806cf578ea7cb9037500cf171969db14e28ec788839dce86d81629ba83bb"
+          },
+          {
+            "path": "/tmp/agent_browser_qa/appointment/appointment-owned-guest-booking-20260922T144123Z/session.webm",
+            "sha256": "23f7050c947fa3b8c6a8e59d84d788c922dde14f8ab5e3c7033eea724a25ba9b"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "BQA-2026-00040",
+    "status": "Passed",
+    "scenarios": [
+      {
+        "id": "owned_staff_lifecycle",
+        "ok": true,
+        "console_errors": 0,
+        "network_errors": 0,
+        "artifacts": [
+          {
+            "path": "/tmp/agent_browser_qa/appointment/appointment-owned-staff-lifecycle-20260922T144249Z/report.json",
+            "sha256": "409082697d8e3d66b00e53f8f0f7e4a45e258ee5b56b3d443d931d9bb3ba1cd3"
+          },
+          {
+            "path": "/tmp/agent_browser_qa/appointment/appointment-owned-staff-lifecycle-20260922T144249Z/trace.zip",
+            "sha256": "647c3195d5555c20f1739dc6adaca61ed619a8ca892d3e46602ef4f618e90033"
+          },
+          {
+            "path": "/tmp/agent_browser_qa/appointment/appointment-owned-staff-lifecycle-20260922T144249Z/session.webm",
+            "sha256": "21093958513cc505af376dc0b66bf74c558d27482caf599418484179addb157b"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -2,8 +2,8 @@
  * Theme Utilities for Reception Console
  * 
  * This file provides helper functions and constants for using theme CSS variables
- * in React components. All colors are defined in global.css and fetched from
- * Landing Page Settings via the ThemeProvider.
+ * in React components. All colors are platform-owned defaults defined in
+ * global.css and applied by ThemeProvider.
  */
 
 // Status color mappings using CSS variables

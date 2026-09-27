@@ -1,6 +1,9 @@
 export interface Appointment {
   name: string;
   appointment_id: string;
+  organization?: string;
+  booking_timezone?: string;
+  modified?: string;
   appointment_date: string;
   start_time: string;
   end_time: string;

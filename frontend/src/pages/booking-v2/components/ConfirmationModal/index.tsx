@@ -3,9 +3,8 @@
  * Beautiful success confirmation with actions
  */
 
-import { CheckCircle2, Calendar, Clock, Mail, MapPin, Copy, ExternalLink, X, Download } from "lucide-react";
-import { useState } from "react";
-import { cn } from "@/lib/utils";
+import { CheckCircle2, Calendar, Clock, Mail, MapPin, Copy, ExternalLink, X } from "lucide-react";
+import { useState, type CSSProperties } from "react";
 import { Button } from "@/components/button";
 import {
   Dialog,
@@ -26,6 +25,7 @@ interface ConfirmationModalProps {
   timeFormat: '12h' | '24h' | 'ethiopian';
   timezone: string;
   userEmail: string;
+  brandStyle?: CSSProperties;
 }
 
 export function ConfirmationModal({
@@ -38,6 +38,7 @@ export function ConfirmationModal({
   timeFormat,
   timezone,
   userEmail,
+  brandStyle,
 }: ConfirmationModalProps) {
   const [copied, setCopied] = useState<string | null>(null);
 
@@ -54,7 +55,7 @@ export function ConfirmationModal({
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent data-booking-confirmation="true" style={brandStyle} className="max-w-2xl max-h-[90vh] overflow-y-auto">
         {/* Success Animation Header */}
         <div className="relative">
           <div className="flex flex-col items-center text-center pt-6 pb-4">
@@ -96,10 +97,10 @@ export function ConfirmationModal({
               <Mail className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-1">
-                  Calendar Invite Sent
+                  Booking Saved
                 </p>
                 <p className="text-sm text-blue-700 dark:text-blue-300">
-                  A calendar invitation has been sent to{" "}
+                  Keep your booking reference. Delivery has not been confirmed.{" "}
                   <span className="font-semibold">{userEmail}</span>
                 </p>
               </div>
@@ -276,19 +277,19 @@ export function ConfirmationModal({
             <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
               <li className="flex items-start gap-2">
                 <span className="text-primary-600 dark:text-primary-400 mt-0.5">•</span>
-                <span>Check your email for the calendar invitation</span>
+                <span>Save your booking reference for contacting the business</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-primary-600 dark:text-primary-400 mt-0.5">•</span>
-                <span>Add the event to your calendar</span>
+                <span>Keep the date, time and location with your booking reference</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-primary-600 dark:text-primary-400 mt-0.5">•</span>
-                <span>Join the meeting at the scheduled time using the link</span>
+                <span>{bookingResponse.meetLink ? "Use the meeting link at the scheduled time" : "Arrive at the chosen location a few minutes before your appointment"}</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-primary-600 dark:text-primary-400 mt-0.5">•</span>
-                <span>You can reschedule or cancel up to 24 hours before</span>
+                <span>Contact the business if you need to change or cancel</span>
               </li>
             </ul>
           </div>
@@ -306,23 +307,4 @@ export function ConfirmationModal({
     </Dialog>
   );
 }
-
-// Add animation CSS (can be added to global.css)
-const styles = `
-@keyframes scale-in {
-  0% {
-    transform: scale(0);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-.animate-scale-in {
-  animation: scale-in 0.5s ease-out;
-}
-`;
 

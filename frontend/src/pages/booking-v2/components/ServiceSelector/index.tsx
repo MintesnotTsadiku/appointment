@@ -6,7 +6,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Clock, User, Users, DollarSign, ChevronRight, Building2, Star } from "lucide-react";
+import { Clock, User, Users, DollarSign, ChevronRight, Building2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 import type { Service, Organization, Provider } from "../../types";
@@ -47,7 +47,7 @@ export function ServiceSelector({
   }));
 
   return (
-    <div className={cn("w-full max-w-6xl mx-auto space-y-8", className)}>
+    <div role="region" aria-label="Available appointment services" className={cn("w-full max-w-6xl mx-auto space-y-8", className)}>
       {/* Organization Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -183,7 +183,7 @@ export function ServiceSelector({
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {individualServices.map((service, index) => (
                 <motion.div
-                  key={service.id}
+                  key={service.slug || service.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
@@ -210,7 +210,7 @@ export function ServiceSelector({
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {organizationServices.map((service, index) => (
                 <motion.div
-                  key={service.id}
+                  key={service.slug || service.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
@@ -277,7 +277,7 @@ export function ServiceSelector({
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {providerServices.map((service, serviceIndex) => (
                       <motion.div
-                        key={service.id}
+                        key={service.slug || service.id}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.4 + providerIndex * 0.1 + serviceIndex * 0.05 }}
@@ -308,7 +308,7 @@ export function ServiceSelector({
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {groupServices.map((service, index) => (
                 <motion.div
-                  key={service.id}
+                  key={service.slug || service.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
@@ -483,7 +483,7 @@ function ServiceCard({ service, onSelect, availableProviders = [], showProviderN
           className="flex items-center justify-between pt-4"
           style={{ borderTop: '1px solid var(--border-default)' }}
         >
-          <span className="text-sm font-medium" style={{ color: 'var(--accent-primary)' }}>
+          <span className="text-sm font-medium" style={{ color: 'var(--booking-action-text, var(--accent-primary))' }}>
           Book Appointment
         </span>
           <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" style={{ color: 'var(--accent-primary)' }} />
@@ -568,4 +568,3 @@ function ServiceSelectorLoading() {
     </div>
   );
 }
-

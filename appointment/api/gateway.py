@@ -23,9 +23,6 @@ _module_cache = {}
 # Action code mapping - uses consistent hashing for privacy
 # Format: hash(module.function) -> (module_path, function_name)
 ACTION_MAP = {
-    # Landing page settings
-    'a1b2c3d4': ('appointment.scheduler.doctype.landing_page_settings.api', 'get_landing_page_settings'),
-    
     # Management APIs
     'e5f6g7h8': ('appointment.api.manage', 'get_management_hierarchy'),
     'i9j0k1l2': ('appointment.api.manage', 'get_provider_centric_hierarchy'),

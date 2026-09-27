@@ -1,0 +1,11 @@
+{
+  "frontend_alive": true,
+  "backend_alive": true,
+  "browser-qa_alive": true,
+  "primary_site_restored": true,
+  "development_frontend_restored": true,
+  "production_gateway_state_removed": true,
+  "rollback_state_removed": true,
+  "backend_ping": true,
+  "extra_synthetic_site_count": 0
+}

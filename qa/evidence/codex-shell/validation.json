@@ -1,0 +1,69 @@
+{
+  "status": "Failed",
+  "cleanup": {
+    "message": "Exact account, appearance, navigation and workspace preferences restored; public releases unchanged.",
+    "ok": true
+  },
+  "audit": {
+    "ok": true,
+    "publication_inventory_unchanged": true,
+    "read_only": true,
+    "remaining_record_count": 0
+  },
+  "session": {
+    "status": "Active",
+    "lock_status": "Free",
+    "locked_by_browser_qa_run": null
+  },
+  "run": "BQA-2026-00296",
+  "site": "meet-beta-feat-content-publishing-galler-5839d4.localhost",
+  "outcome": "baseline_drift",
+  "source_version": "89bb48f+source-f7bad56b793a+qa-1bd97faac8b4",
+  "scenario_summary": {
+    "failed": 0,
+    "flaky": 0,
+    "passed": 1,
+    "skipped": 0,
+    "total": 1
+  },
+  "baseline_changed_count": 1,
+  "strict_visual_pass": false,
+  "artifacts": [
+    {
+      "file": "codex-account-menu-dark.png",
+      "sha256": "a8be8bd092b841a7705baceb7781d694a43e3d5d723d0e68663d640c505906a1"
+    },
+    {
+      "file": "codex-home-dark.png",
+      "sha256": "99bfd9d8a156247246391d97153b330e9a5de0e58c107c821b70f52ffeb353fe"
+    },
+    {
+      "file": "codex-home-light.png",
+      "sha256": "1b5b1c1037ad2b215d166cb4826b78e478b2a983bd5e831c7ee8803da1fc3648"
+    },
+    {
+      "file": "codex-mobile-navigation-dark.png",
+      "sha256": "089525ede9f106dc2ea4146732e88f65d04b158c99e274d5ddeb6b76d58c2e75"
+    },
+    {
+      "file": "codex-profile-light.png",
+      "sha256": "87f344f1174b86e7d4af858e9d5665438fa2d06d902858900576a0e3530873a9"
+    },
+    {
+      "file": "codex-profile-mobile-dark.png",
+      "sha256": "f1081be455c14f3756068f17b21325452c40f188c8d813135b15a78d770d98ac"
+    },
+    {
+      "file": "codex-settings-dark.png",
+      "sha256": "6e6714a9b10cbaef1660cdcd02838ee398e5b957575d20ee59f3942798399387"
+    },
+    {
+      "file": "codex-settings-light.png",
+      "sha256": "68ce1a738a50f2a0abcfdaeee5e49da738800a31014256df634d0d4b46435632"
+    },
+    {
+      "file": "codex-sidebar-collapsed-dark.png",
+      "sha256": "584bbb4bea7cade6320d5f1a901b6044045560eea762e57473bb84d1fc02451f"
+    }
+  ]
+}

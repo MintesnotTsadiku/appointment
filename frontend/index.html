@@ -2,9 +2,39 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script nonce="{{ content_shell_nonce }}">
+      // Apply identity-scoped cached choices before CSS. The server revalidates them.
+      try {
+        var theme = localStorage.getItem('vite-ui-theme') || 'system';
+        var root = document.documentElement;
+        var internal = /^\/(home|analytics|reception|calendar|settings|workspaces|onboarding)(\/|$)/.test(location.pathname);
+        var user = decodeURIComponent((document.cookie.split('; ').find(function(row) { return row.indexOf('user_id=') === 0; }) || '').slice(8)).replace(/^"|"$/g, '');
+        var value = internal && user && user !== 'Guest' ? JSON.parse(localStorage.getItem('appointment:appearance:' + user) || 'null') : null;
+        if (internal && user && user !== 'Guest' && !value) value = {version:1,palette:'codex',mode:'system',typography:'system',text_size:'standard',density:'comfortable'};
+        if (value && value.version === 1 && ['codex','violet','ocean','forest'].includes(value.palette) && ['light','dark','system'].includes(value.mode) && ['system','noto','serif'].includes(value.typography) && ['standard','large'].includes(value.text_size) && ['comfortable','compact'].includes(value.density)) {
+          theme = value.mode;
+          root.dataset.internalAppearance = value.density;
+          root.dataset.internalPalette = value.palette;
+          root.dataset.internalTextSize = value.text_size;
+          var fonts = {system:'Inter, "Noto Sans Ethiopic", -apple-system, BlinkMacSystemFont, "Segoe UI", "Internal Ethiopic", sans-serif',noto:'"Internal Ethiopic", ui-sans-serif, system-ui, sans-serif',serif:'"Internal Serif", "Internal Ethiopic", Georgia, serif'};
+          root.style.setProperty('--internal-font', fonts[value.typography]);
+        } else { value = null; }
+        var dark = theme === 'dark' || (theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+        root.classList.add(dark ? 'dark' : 'light');
+        root.style.colorScheme = dark ? 'dark' : 'light';
+        if (value && value.palette !== 'violet') {
+          var tokens = value.palette === 'codex' ? ['#ffffff','#181818',dark ? '#3b3b3b' : '#181818',dark ? '#4b4b4b' : '#333333',dark ? '#2f2f2f' : '#eeeeee'] : value.palette === 'ocean' ? ['#f4f9fc','#08151f','#0369a1','#075985','rgba(3,105,161,.15)'] : ['#f4faf6','#0a1812','#047857','#065f46','rgba(4,120,87,.15)'];
+          root.style.setProperty('--bg-primary', tokens[dark ? 1 : 0]);
+          root.style.setProperty('--accent-primary', tokens[2]);
+          root.style.setProperty('--accent-primary-hover', tokens[3]);
+          root.style.setProperty('--accent-primary-light', tokens[4]);
+          root.style.setProperty('--gradient-primary-from', tokens[2]);
+          root.style.setProperty('--gradient-primary-to', tokens[3]);
+        }
+      } catch (_) { /* Storage is optional; the provider resolves System. */ }
+    </script>
     
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="/manifest.webmanifest" />
+    <!-- vite-plugin-pwa injects the manifest only when it is served. -->
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/assets/appointment/appointment-logo.png" />
@@ -24,12 +54,7 @@
     <meta name="msapplication-TileColor" content="#4F46E5" />
     <meta name="msapplication-TileImage" content="/assets/appointment/frontend/icons/icon-144x144.png" />
     
-    <!-- Preconnect for performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+Ethiopic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Certified public templates load their packaged fonts locally. -->
     
     <title>Scheduler - Scheduling Platform</title>
     <meta name="description" content="Scheduler is a platform for scheduling appointments. It is a platform for scheduling appointments for businesses and organizations. It is a platform for scheduling appointments for businesses and organizations.">
@@ -42,7 +67,7 @@
   </head>
   <body>
     <div id="root"></div>
-    <script>
+    <script data-frappe-boot nonce="{{ content_shell_nonce }}">
       // Load everything from the page context to window object
       // This will allow us to access frappe boot in our react app.
       // CRITICAL FIX: Safe offline handling - check if Frappe boot data exists

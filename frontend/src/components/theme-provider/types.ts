@@ -93,6 +93,13 @@ export interface ThemeColors {
 }
 
 export type ThemeProviderState = {
+  appearance: import("./appearance").Appearance
+  savedAppearance: import("./appearance").Appearance
+  previewAppearance: (value: import("./appearance").Appearance) => void
+  cancelAppearance: () => void
+  saveAppearance: () => Promise<void>
+  saving: boolean
+  appearanceError: string | null
   theme: Theme
   setTheme: (theme: Theme) => void
   colors: ThemeColors | null

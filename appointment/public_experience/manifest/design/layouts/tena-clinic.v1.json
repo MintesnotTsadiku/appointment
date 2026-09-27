@@ -1,0 +1,57 @@
+{
+  "kind": "layout",
+  "contract": "appointment-layout.v1",
+  "key": "tena-clinic",
+  "version": 1,
+  "rendererKey": "tena-clinic",
+  "contentSchemaVersion": 2,
+  "sections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "benefits",
+    "testimonials",
+    "proof",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "requiredSections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "benefits",
+    "testimonials",
+    "proof",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "responsive": {
+    "desktop": "tena-clinic-desktop",
+    "tablet": "tena-clinic-tablet",
+    "mobile": "tena-clinic-mobile",
+    "maxContentWidth": 1440
+  },
+  "density": {
+    "content": [
+      "compact",
+      "standard",
+      "rich"
+    ],
+    "presentation": [
+      "comfortable",
+      "spacious"
+    ],
+    "defaultContent": "rich",
+    "defaultPresentation": "comfortable"
+  }
+}

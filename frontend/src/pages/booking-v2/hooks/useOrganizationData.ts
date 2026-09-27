@@ -134,7 +134,7 @@ export function useOrganizationData({
               name: s.provider_name || "",
             }
           : undefined,
-        providerCount: response.provider_count,
+        providerCount: s.provider_id ? 1 : response.provider_count,
       }));
 
       setServices(transformedServices);

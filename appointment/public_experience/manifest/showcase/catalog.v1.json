@@ -1,0 +1,201 @@
+{
+  "contract": "appointment-showcase-catalog.v1",
+  "version": 1,
+  "sites": {
+    "selam": {
+      "slug": "selam-studio",
+      "recipe": "selam-movement",
+      "heroRole": "hero.selam",
+      "detailRole": "detail.selam",
+      "heroAsset": "/assets/appointment/brand-experience/heroes/selam-movement.webp",
+      "heroChecksum": "f15852ba4b8a7baaa17d9d46b1a64137b22ff00dabee79bf7eeb0209c5e46cd6",
+      "benchmark": "docs/design-references/public-experience/v1/warm-vitality/full-page-03.webp",
+      "supportAssets": [
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam/scene-1.webp",
+          "checksum": "ff0c303628f6789359754f12250ec5226176730165d85237f9df1c6de7b66169"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam/scene-2.webp",
+          "checksum": "f6a59d1f6228944f7b883b2848f6e468591edd9ce5213b29ed7f9f2fd1e0abe7"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam/scene-3.webp",
+          "checksum": "c1636e2d0c5709e5d5fb06960fc2963fccc1f2fdae5584d69ac1460b0ae1c575"
+        }
+      ],
+      "providerAssets": [
+        {
+          "name": "Selam Bekele",
+          "asset": "/assets/appointment/brand-experience/providers/selam-bekele.webp",
+          "checksum": "a9e753e3f319d5e59ae58f3f2e6104fad353bcd294f37f01d88b55a0e2b13012"
+        }
+      ],
+      "logoAsset": "/assets/appointment/brand-experience/brands/selam-logo.webp",
+      "logoChecksum": "49c0d52766957affdb4744644eb5f74dc1e14b41b694effbf3881d4a588516bb",
+      "faviconAsset": "/assets/appointment/brand-experience/brands/selam-favicon.png",
+      "faviconChecksum": "61fb0e5708910ee02173f4e69114972aede076d152e335702ec4471a5be86624"
+    },
+    "meron": {
+      "slug": "meron-studio",
+      "recipe": "meron-atelier",
+      "heroRole": "hero.meron",
+      "detailRole": "detail.meron",
+      "heroAsset": "/assets/appointment/brand-experience/heroes/meron-tailoring.webp",
+      "heroChecksum": "763240df7adba76c94416db3a196692d0ff44ea84828cb2a9f2c94f55df07b56",
+      "benchmark": "docs/design-references/public-experience/v1/crafted-editorial/full-page-01.webp",
+      "supportAssets": [
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron/scene-1.webp",
+          "checksum": "dc842a7a524568cab86407ff347112471fa78bffd3176bc47bf9cd57b10ea91a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron/scene-2.webp",
+          "checksum": "78b2331409e483f5a1a0d62018e008cfaaf625564473ad4315b1e6e7e56821ff"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron/scene-3.webp",
+          "checksum": "6c3435190ded11001b30798482098bfd996d86730bdf212049baf96a2c06f480"
+        }
+      ],
+      "providerAssets": [
+        {
+          "name": "Meron Alemu",
+          "asset": "/assets/appointment/brand-experience/providers/meron-alemu.webp",
+          "checksum": "b5925137690ac060561fa2370f0ff752d13c5ff3e0d011721d092e845c8b4702"
+        }
+      ],
+      "logoAsset": "/assets/appointment/brand-experience/brands/meron-logo.webp",
+      "logoChecksum": "ff01f2c7e5d1e1d54017260ac1c52119ba707f3c946e6d63a90a8c1cb251272e",
+      "faviconAsset": "/assets/appointment/brand-experience/brands/meron-favicon.png",
+      "faviconChecksum": "99cf34eae9b7cc9952fa2e002fd3d4df069c0a2ec873f4a0b634ce778c1667ac"
+    },
+    "bloom": {
+      "slug": "bloom-studio",
+      "recipe": "bloom-hair",
+      "heroRole": "hero.bloom",
+      "detailRole": "detail.bloom",
+      "heroAsset": "/assets/appointment/brand-experience/heroes/bloom-hair.webp",
+      "heroChecksum": "6afcd83ce024de66dbdd2c37394eadc4d1f5aad1be36119ce93b0cd767315994",
+      "benchmark": "docs/design-references/public-experience/v1/warm-vitality/full-page-01.webp",
+      "supportAssets": [
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom/scene-1.webp",
+          "checksum": "fd1e1c4d1e195acbe32e4bb55630f3ffe84e3a48509c56558c1011816c56f439"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom/scene-2.webp",
+          "checksum": "fb932f935d2efc148a9c29dcca6db4d2595af4f842262b893e8cbc78d04948b5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom/scene-3.webp",
+          "checksum": "6f6b49890dd51d82d1d27eb9a75cd7641733b3848cfee6081d76eed08217dcd7"
+        }
+      ],
+      "providerAssets": [
+        {
+          "name": "Hanna Tesfaye",
+          "asset": "/assets/appointment/brand-experience/providers/hanna-tesfaye.webp",
+          "checksum": "f3fb9afbae2a79acdcecd824c38229132e3eedcf8061f3f31632e83ccb92d8f0"
+        },
+        {
+          "name": "Rahel Girma",
+          "asset": "/assets/appointment/brand-experience/providers/rahel-girma.webp",
+          "checksum": "7bae656bc236ae89517e72d19cc9e827339f14b62a3753f75cedcd514397bf03"
+        },
+        {
+          "name": "Eden Tadesse",
+          "asset": "/assets/appointment/brand-experience/providers/eden-tadesse.webp",
+          "checksum": "69d7146ad62d6eb8d1a1e8f9c0c2905fe1a42f42eb221102e7bdd2ea76fa0da2"
+        }
+      ],
+      "logoAsset": "/assets/appointment/brand-experience/brands/bloom-logo.webp",
+      "logoChecksum": "5c9e470d131246266fa31497dccdd7ec80fb7da287b855cd56144af5840f70dc",
+      "faviconAsset": "/assets/appointment/brand-experience/brands/bloom-favicon.png",
+      "faviconChecksum": "b7041926f13608e3bfcce6e791314f23ef57f1c36a0688a9d0ff7bf2b93a8d87"
+    },
+    "tena": {
+      "slug": "tena-studio",
+      "recipe": "tena-clinic",
+      "heroRole": "hero.tena",
+      "detailRole": "detail.tena",
+      "heroAsset": "/assets/appointment/brand-experience/heroes/tena-clinic.webp",
+      "heroChecksum": "b5d10927b488561c609db00486bb16106c697ecfd8952ea1c21a1764e455652b",
+      "benchmark": "docs/design-references/public-experience/v1/quiet-trust/full-page-01.webp",
+      "supportAssets": [
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena/scene-1.webp",
+          "checksum": "45673e46c00d11d169f93f829efa4fcb6355b588c9d314ca4d249fb5623e498f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena/scene-2.webp",
+          "checksum": "2756d429bbe348c010454388452c84897a283f0eb15ae97c5b9753a3c0fa63d8"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena/scene-3.webp",
+          "checksum": "725b8c948ab47407ce3f7c6a53e54885831052253962c70f056cd031c1c78a2f"
+        }
+      ],
+      "providerAssets": [
+        {
+          "name": "Dawit Haile",
+          "asset": "/assets/appointment/brand-experience/providers/dawit-haile.webp",
+          "checksum": "eb650cd0488fff3c83cf59fc66f414564354eeb3745a0769617bcdbe93ffba56"
+        },
+        {
+          "name": "Saron Mekonnen",
+          "asset": "/assets/appointment/brand-experience/providers/saron-mekonnen.webp",
+          "checksum": "31c604c89c91a76cb1b9e7f71a2096d95b444f7d99a3d30d1ff414299e863459"
+        },
+        {
+          "name": "Yonas Assefa",
+          "asset": "/assets/appointment/brand-experience/providers/yonas-assefa.webp",
+          "checksum": "cefe58aa0da04e7f81d8949834c0979fcc64c459c8e879d23ef8da63853e1e13"
+        }
+      ],
+      "logoAsset": "/assets/appointment/brand-experience/brands/tena-logo.webp",
+      "logoChecksum": "35ad2219f5c3c58ace48ec1c0c9c3162c7555a5ad2fdb922b1ce8c7fd02369b2",
+      "faviconAsset": "/assets/appointment/brand-experience/brands/tena-favicon.png",
+      "faviconChecksum": "d7c2476f690591244bef0c7eae5efda3745091dac5bb28682fa1e0359f06182c"
+    },
+    "abugida": {
+      "slug": "abugida-studio",
+      "recipe": "abugida-language",
+      "heroRole": "hero.abugida",
+      "detailRole": "detail.abugida",
+      "heroAsset": "/assets/appointment/brand-experience/heroes/abugida-language.webp",
+      "heroChecksum": "ce8e849c911911c8b61c4c8c0cf09dbce2ac88e65e2ff995ec3500219fd46832",
+      "benchmark": "docs/design-references/public-experience/v1/crafted-editorial/full-page-01.webp",
+      "supportAssets": [
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida/scene-1.webp",
+          "checksum": "6a8909e56bd9bfad16468c2221d698d40f3cc57ff904d11574860d272b54b57b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida/scene-2.webp",
+          "checksum": "b535733a89d724dc0dee2411a3f6aedee6c41fd6603e7cbbb45ee9d2c09c2e9a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida/scene-3.webp",
+          "checksum": "1c7ce9e880872d2d2b7f267dcdd109483e2a5e0e8506cd76ff493c76cb9fbafb"
+        }
+      ],
+      "providerAssets": [
+        {
+          "name": "Kalkidan Getachew",
+          "asset": "/assets/appointment/brand-experience/providers/kalkidan-getachew.webp",
+          "checksum": "212ec3e7ed8f1479dabbc22d20308f09732981e40cbe416b5a81dc4db05aa083"
+        },
+        {
+          "name": "Abel Fikru",
+          "asset": "/assets/appointment/brand-experience/providers/abel-fikru.webp",
+          "checksum": "8e691a340165e1c5c222b278144d5f29aa995cb9e49cbc5473a6a3f470ab4f1e"
+        }
+      ],
+      "logoAsset": "/assets/appointment/brand-experience/brands/abugida-logo.webp",
+      "logoChecksum": "08e2686f04776a07ccc19796a8642fb1ca16b5d9142633b88fb6c5957665de23",
+      "faviconAsset": "/assets/appointment/brand-experience/brands/abugida-favicon.png",
+      "faviconChecksum": "2cbb69eef30c974e4623a254ab561dd8a1d49704c0678dd6b94956062879e06d"
+    }
+  }
+}

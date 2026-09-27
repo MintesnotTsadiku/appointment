@@ -1,0 +1,21 @@
+[
+  {
+    "vite_entry": true,
+    "path": "/login",
+    "status": 200,
+    "unavailable_manifest_link": false,
+    "unrendered_template": false
+  },
+  {
+    "vite_entry": true,
+    "path": "/",
+    "status": 200,
+    "unavailable_manifest_link": false,
+    "unrendered_template": false
+  },
+  {
+    "path": "/src/main.tsx",
+    "content_type": "text/javascript",
+    "status": 200
+  }
+]

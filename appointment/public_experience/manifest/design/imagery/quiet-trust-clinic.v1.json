@@ -1,0 +1,48 @@
+{
+  "kind": "imagery",
+  "contract": "appointment-imagery.v1",
+  "key": "quiet-trust-clinic",
+  "version": 1,
+  "assets": {
+    "hero.tena": {
+      "src": "/assets/appointment/brand-experience/heroes/tena-clinic.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/heroes/tena-clinic.webp",
+      "alt": "An Ethiopian family doctor welcomes a mother and young child into a calm consultation room.",
+      "focalPoint": {
+        "x": 0.48,
+        "y": 0.48
+      },
+      "fit": "cover",
+      "width": 1672,
+      "height": 941,
+      "mime": "image/webp",
+      "checksum": "sha256:b5d10927b488561c609db00486bb16106c697ecfd8952ea1c21a1764e455652b",
+      "provenance": {
+        "source": "generated",
+        "role": "Clear care for the family",
+        "license": "project-generated",
+        "review": "Ethiopian context; no text, logos or interface elements."
+      }
+    },
+    "detail.tena": {
+      "src": "/assets/appointment/brand-experience/heroes/tena-clinic.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/heroes/tena-clinic.webp",
+      "alt": "An Ethiopian family doctor welcomes a mother and young child into a calm consultation room.",
+      "focalPoint": {
+        "x": 0.48,
+        "y": 0.48
+      },
+      "fit": "cover",
+      "width": 1672,
+      "height": 941,
+      "mime": "image/webp",
+      "checksum": "sha256:b5d10927b488561c609db00486bb16106c697ecfd8952ea1c21a1764e455652b",
+      "provenance": {
+        "source": "generated",
+        "role": "Clear care for the family",
+        "license": "project-generated",
+        "review": "Ethiopian context; no text, logos or interface elements."
+      }
+    }
+  }
+}

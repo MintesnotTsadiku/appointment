@@ -1,0 +1,13 @@
+{
+  "separate_managed_owner_profile": true,
+  "business_created_by": "Normal invitee onboarding UI",
+  "denied_cross_business_requests": 9,
+  "denied_entitlement_requests": 5,
+  "limits_enforced": [
+    "articles",
+    "collections",
+    "monthly_sends"
+  ],
+  "immutable_releases_preserved": true,
+  "entitlement_changes_by": "Isolated platform operator, canonical entitlement service, exact synthetic business only"
+}

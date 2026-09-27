@@ -2,7 +2,6 @@
 API endpoints for Landing Page Settings
 """
 import frappe
-from frappe import _
 
 
 @frappe.whitelist(allow_guest=True)
@@ -301,21 +300,6 @@ def get_landing_page_settings():
                     }
                     for link in doc.footer_links
                 ]
-            },
-            
-            # Brand
-            "brand": {
-                "colors": {
-                    "primary": doc.brand_primary_color,
-                    "secondary": doc.brand_secondary_color,
-                    "accentGold": doc.brand_accent_gold,
-                    "accentTeal": doc.brand_accent_teal
-                },
-                "logos": {
-                    "light": doc.logo_light,
-                    "dark": doc.logo_dark,
-                    "favicon": doc.favicon
-                }
             },
             
             # SEO

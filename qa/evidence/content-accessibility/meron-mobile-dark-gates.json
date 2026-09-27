@@ -1,0 +1,1919 @@
+{
+  "engine": "axe-core 4.11.0",
+  "viewport": "mobile",
+  "mode": "dark",
+  "scope": "Automated WCAG A/AA checks, keyboard traversal, and local compiled-production navigation budget; manual accessibility review remains separate.",
+  "reports": [
+    {
+      "surface": "landing",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                "figcaption"
+              ],
+              "reviewStyles": {
+                "tag": "FIGCAPTION",
+                "color": "rgb(255, 255, 255)",
+                "decoration": "none",
+                "fontSize": "8px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "FIGCAPTION",
+                    "color": "rgba(0, 0, 0, 0.68)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because element contains an image node",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "6.0pt (8px)",
+                    "fontWeight": "normal",
+                    "messageKey": "imgNode",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "link-in-text-block",
+          "nodes": [
+            {
+              "target": [
+                "#story > div > .meron-button[href$=\"book\"]"
+              ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(43, 17, 19)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "A",
+                    "color": "rgb(228, 160, 162)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 140.90000000596046,
+      "lcpMs": 400,
+      "cls": 0,
+      "externalResources": [],
+      "keyboard": [
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "none",
+          "name": "MERON TAILORING ATELIER"
+        },
+        {
+          "tag": "BUTTON",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "none",
+          "name": "Switch to light mode"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(43, 17, 19)",
+          "shadow": "none",
+          "name": "Book a fitting \u2197"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(43, 17, 19)",
+          "shadow": "none",
+          "name": "Reserve a fitting \u2197"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(43, 17, 19)",
+          "shadow": "none",
+          "name": "Our approach \u2197"
+        }
+      ]
+    },
+    {
+      "surface": "book",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "link-in-text-block",
+          "nodes": [
+            {
+              "target": [
+                ".meron-button"
+              ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(43, 17, 19)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "A",
+                    "color": "rgb(228, 160, 162)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "MAIN",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 102.09999999403954,
+      "lcpMs": 380,
+      "cls": 0,
+      "externalResources": [],
+      "keyboard": [
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "none",
+          "name": "MERON TAILORING ATELIER"
+        },
+        {
+          "tag": "BUTTON",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "none",
+          "name": "Switch to light mode"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "none",
+          "name": "Back to atelier"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(43, 17, 19)",
+          "shadow": "none",
+          "name": "Continue to appointments \u2197"
+        }
+      ]
+    },
+    {
+      "surface": "scheduler",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                ".h-full.text-2xl.bg-gradient-primary"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "rgb(43, 17, 19)",
+                "decoration": "none",
+                "fontSize": "24px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "SPAN",
+                    "color": "rgb(228, 160, 162)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "color(srgb 0.388235 0.337255 0.290196 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "linear-gradient(110deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72.2%, rgba(0, 0, 0, 0) 72.2%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content is too short to determine if it is actual text content",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "18.0pt (24px)",
+                    "fontWeight": "normal",
+                    "messageKey": "shortTextContent",
+                    "expectedContrastRatio": "3:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "h1"
+              ],
+              "reviewStyles": {
+                "tag": "H1",
+                "color": "rgb(250, 245, 233)",
+                "decoration": "none",
+                "fontSize": "30px",
+                "fontWeight": "700",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "color(srgb 0.388235 0.337255 0.290196 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "linear-gradient(110deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72.2%, rgba(0, 0, 0, 0) 72.2%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "22.5pt (30px)",
+                    "fontWeight": "bold",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "3:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".text-lg.mb-3"
+              ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "color(srgb 0.878431 0.843529 0.788824)",
+                "decoration": "none",
+                "fontSize": "18px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "color(srgb 0.388235 0.337255 0.290196 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "linear-gradient(110deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72.2%, rgba(0, 0, 0, 0) 72.2%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "13.5pt (18px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".gap-2.items-center.flex:nth-child(1) > span"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.878431 0.843529 0.788824)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "color(srgb 0.388235 0.337255 0.290196 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "linear-gradient(110deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72.2%, rgba(0, 0, 0, 0) 72.2%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".flex-wrap.gap-4.text-sm > .gap-2.items-center.flex:nth-child(2) > span"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.878431 0.843529 0.788824)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "color(srgb 0.388235 0.337255 0.290196 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "linear-gradient(110deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72.2%, rgba(0, 0, 0, 0) 72.2%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "h2"
+              ],
+              "reviewStyles": {
+                "tag": "H2",
+                "color": "rgb(250, 245, 233)",
+                "decoration": "none",
+                "fontSize": "24px",
+                "fontWeight": "700",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "linear-gradient(110deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72.2%, rgba(0, 0, 0, 0) 72.2%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "18.0pt (24px)",
+                    "fontWeight": "bold",
+                    "messageKey": "elmPartiallyObscured",
+                    "expectedContrastRatio": "3:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".md\\:justify-between > div > p"
+              ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "color(srgb 0.878431 0.843529 0.788824)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "linear-gradient(110deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72.2%, rgba(0, 0, 0, 0) 72.2%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".space-y-4 > h3"
+              ],
+              "reviewStyles": {
+                "tag": "H3",
+                "color": "rgb(250, 245, 233)",
+                "decoration": "none",
+                "fontSize": "18px",
+                "fontWeight": "600",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "linear-gradient(110deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72.2%, rgba(0, 0, 0, 0) 72.2%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "13.5pt (18px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscured",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000058\"] > .relative > .text-xl.pr-16"
+              ],
+              "reviewStyles": {
+                "tag": "H4",
+                "color": "rgb(250, 245, 233)",
+                "decoration": "none",
+                "fontSize": "20px",
+                "fontWeight": "600",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.388235 0.337255 0.290196 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "linear-gradient(110deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72.2%, rgba(0, 0, 0, 0) 72.2%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "15.0pt (20px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000058\"] > .relative > .mb-3.gap-2"
+              ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "color(srgb 0.878431 0.843529 0.788824)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.388235 0.337255 0.290196 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "linear-gradient(110deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72.2%, rgba(0, 0, 0, 0) 72.2%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000058\"] > .relative > .line-clamp-2.mb-4"
+              ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "color(srgb 0.878431 0.843529 0.788824)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.388235 0.337255 0.290196 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "linear-gradient(110deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72.2%, rgba(0, 0, 0, 0) 72.2%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it's partially obscured by another element",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscured",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000058\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(1) > span"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.878431 0.843529 0.788824)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.388235 0.337255 0.290196 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "linear-gradient(110deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72.2%, rgba(0, 0, 0, 0) 72.2%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000058\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(2) > span"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.878431 0.843529 0.788824)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.388235 0.337255 0.290196 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "linear-gradient(110deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72.2%, rgba(0, 0, 0, 0) 72.2%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000058\"] > .relative > .pt-4.justify-between.items-center > .font-medium.text-sm"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.928627 0.760784 0.746667)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "500",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.388235 0.337255 0.290196 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "linear-gradient(110deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72.2%, rgba(0, 0, 0, 0) 72.2%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000057\"] > .relative > .text-xl.pr-16"
+              ],
+              "reviewStyles": {
+                "tag": "H4",
+                "color": "rgb(250, 245, 233)",
+                "decoration": "none",
+                "fontSize": "20px",
+                "fontWeight": "600",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.388235 0.337255 0.290196 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "linear-gradient(110deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72.2%, rgba(0, 0, 0, 0) 72.2%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "15.0pt (20px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000057\"] > .relative > .mb-3.gap-2"
+              ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "color(srgb 0.878431 0.843529 0.788824)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.388235 0.337255 0.290196 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "linear-gradient(110deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72.2%, rgba(0, 0, 0, 0) 72.2%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000057\"] > .relative > .line-clamp-2.mb-4"
+              ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "color(srgb 0.878431 0.843529 0.788824)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.388235 0.337255 0.290196 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "linear-gradient(110deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72.2%, rgba(0, 0, 0, 0) 72.2%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000057\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(1) > span"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.878431 0.843529 0.788824)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.388235 0.337255 0.290196 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "linear-gradient(110deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72.2%, rgba(0, 0, 0, 0) 72.2%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000057\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(2) > span"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.878431 0.843529 0.788824)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.388235 0.337255 0.290196 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "linear-gradient(110deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72.2%, rgba(0, 0, 0, 0) 72.2%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000057\"] > .relative > .pt-4.justify-between.items-center > .font-medium.text-sm"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.928627 0.760784 0.746667)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "500",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.388235 0.337255 0.290196 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "linear-gradient(110deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72.2%, rgba(0, 0, 0, 0) 72.2%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".p-6.backdrop-blur-sm.rounded-xl > h3"
+              ],
+              "reviewStyles": {
+                "tag": "H3",
+                "color": "rgb(250, 245, 233)",
+                "decoration": "none",
+                "fontSize": "18px",
+                "fontWeight": "600",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "color(srgb 0.388235 0.337255 0.290196 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "linear-gradient(110deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72.2%, rgba(0, 0, 0, 0) 72.2%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "13.5pt (18px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".font-normal.text-primary:nth-child(1)"
+              ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "rgb(250, 250, 250)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "linear-gradient(110deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72.2%, rgba(0, 0, 0, 0) 72.2%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".hover\\:underline"
+              ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(250, 245, 233)",
+                "decoration": "underline",
+                "fontSize": "14px",
+                "fontWeight": "600",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "linear-gradient(110deg, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72%, color(srgb 0.388235 0.337255 0.290196 / 0.45) 72.2%, rgba(0, 0, 0, 0) 72.2%)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 94.40000000596046,
+      "lcpMs": 756,
+      "cls": 0,
+      "externalResources": [],
+      "keyboard": [
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(228, 160, 162)",
+          "color": "rgb(242, 242, 242)",
+          "shadow": "none",
+          "name": "Back to Meron Tailoring Atelier"
+        },
+        {
+          "tag": "BUTTON",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(228, 160, 162)",
+          "color": "rgb(242, 242, 242)",
+          "shadow": "none",
+          "name": "Switch to light mode"
+        },
+        {
+          "tag": "BUTTON",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "1px",
+          "outlineColor": "rgb(250, 244, 232)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "rgba(8, 18, 40, 0.12) 0px 16px 40px 0px",
+          "name": "Occasion wear consultationMeron AlemuA longer atelier conversation for an occasion outfit, covering silhouette, fabric choices, timing and the next fitting.60 min700 ETBBook Appointment"
+        },
+        {
+          "tag": "BUTTON",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "1px",
+          "outlineColor": "rgb(250, 244, 232)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "rgba(8, 18, 40, 0.12) 0px 16px 40px 0px",
+          "name": "First fittingMeron AlemuA focused fitting appointment to review the garment, take measurements and agree the alteration plan before work begins.30 min350 ETBBook Appointment"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(228, 160, 162)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "none",
+          "name": "Meet.et"
+        }
+      ]
+    },
+    {
+      "surface": "blog",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                "article:nth-child(2) > a > h2"
+              ],
+              "reviewStyles": {
+                "tag": "H2",
+                "color": "rgb(250, 245, 233)",
+                "decoration": "none",
+                "fontSize": "28px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "ARTICLE",
+                    "color": "rgb(38, 32, 28)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "21.0pt (28px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "3:1"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "link-in-text-block",
+          "nodes": [
+            {
+              "target": [
+                "article:nth-child(1) > a"
+              ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(250, 245, 233)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "ARTICLE",
+                    "color": "rgb(38, 32, 28)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "article:nth-child(2) > a"
+              ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(250, 245, 233)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "ARTICLE",
+                    "color": "rgb(38, 32, 28)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "article:nth-child(3) > a"
+              ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(250, 245, 233)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "ARTICLE",
+                    "color": "rgb(38, 32, 28)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 137.5,
+      "lcpMs": 340,
+      "cls": 0,
+      "externalResources": [],
+      "keyboard": [
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "none",
+          "name": "Skip to content"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "none",
+          "name": "Meron Tailoring Atelier"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "none",
+          "name": "Home"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "none",
+          "name": "Journal"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "none",
+          "name": "Gallery"
+        }
+      ]
+    },
+    {
+      "surface": "article",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                "div:nth-child(3) > p"
+              ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "rgb(250, 245, 233)",
+                "decoration": "none",
+                "fontSize": "18px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "13.5pt (18px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "link-in-text-block",
+          "nodes": [
+            {
+              "target": [
+                "#published-content > a[href$=\"blog\"]"
+              ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(250, 245, 233)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 95.90000000596046,
+      "lcpMs": 256,
+      "cls": 0,
+      "externalResources": [],
+      "keyboard": [
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "none",
+          "name": "Skip to content"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "none",
+          "name": "Meron Tailoring Atelier"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "none",
+          "name": "Home"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "none",
+          "name": "Journal"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "none",
+          "name": "Gallery"
+        }
+      ],
+      "inlineLinkReview": {
+        "decoration": "underline",
+        "focused": true,
+        "outline": "solid"
+      }
+    },
+    {
+      "surface": "gallery",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "link-in-text-block",
+          "nodes": [
+            {
+              "target": [
+                "a[aria-label=\"At the fitting table\"]"
+              ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(250, 245, 233)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "ARTICLE",
+                    "color": "rgb(38, 32, 28)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "a[aria-label=\"Tools and thoughtful details\"]"
+              ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(250, 245, 233)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "ARTICLE",
+                    "color": "rgb(38, 32, 28)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 101.09999999403954,
+      "lcpMs": 244,
+      "cls": 0,
+      "externalResources": [],
+      "keyboard": [
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "none",
+          "name": "Skip to content"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "none",
+          "name": "Meron Tailoring Atelier"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "none",
+          "name": "Home"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "none",
+          "name": "Journal"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "none",
+          "name": "Gallery"
+        }
+      ]
+    },
+    {
+      "surface": "collection",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "link-in-text-block",
+          "nodes": [
+            {
+              "target": [
+                "a[target=\"_blank\"]"
+              ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(250, 245, 233)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "#published-content > a[href$=\"gallery\"]"
+              ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(250, 245, 233)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(27, 23, 20)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(19, 19, 21)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 93.7999999821186,
+      "lcpMs": 228,
+      "cls": 0,
+      "externalResources": [],
+      "keyboard": [
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "none",
+          "name": "Skip to content"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "none",
+          "name": "Meron Tailoring Atelier"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "none",
+          "name": "Home"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "none",
+          "name": "Journal"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(143, 216, 255)",
+          "color": "rgb(250, 245, 233)",
+          "shadow": "none",
+          "name": "Gallery"
+        }
+      ]
+    }
+  ]
+}

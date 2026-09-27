@@ -14,7 +14,6 @@ import React, {
  */
 import { Profile } from "@/pages/appointment/components/socialProfiles";
 import NetworkDisconnect from "@/components/network-disconnect";
-import { ThemeProvider } from "@/components/theme-provider";
 
 // Define the types for the userInfo and MeetingProviderTypes
 type MeetingProviderTypes = "Google Meet" | "Zoom";
@@ -156,9 +155,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
         setMeetingDurationCards,
       }}
     >
-      <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
-        {children}
-      </ThemeProvider>
+      {children}
     </AppContext.Provider>
   );
 };

@@ -1,0 +1,9 @@
+{"account": "newowner", "state": "owner_setup", "landing": "/onboarding", "workspaces": [], "selected": null}
+{"account": "owner", "state": "workspace", "landing": "/home?organization=Bole Bloom Studio", "workspaces": [["Bole Bloom Studio", "Owner"]], "selected": "Owner"}
+{"account": "provider", "state": "workspace", "landing": "/calendar?organization=Bole Bloom Studio", "workspaces": [["Bole Bloom Studio", "Provider"]], "selected": "Provider"}
+{"account": "reception", "state": "workspace", "landing": "/reception?organization=Bole Bloom Studio", "workspaces": [["Bole Bloom Studio", "Receptionist"]], "selected": "Receptionist"}
+{"account": "other", "state": "workspace", "landing": "/home?organization=Kazanchis Dental Care", "workspaces": [["Kazanchis Dental Care", "Owner"]], "selected": "Owner"}
+{"account": "multi", "state": "selection", "landing": "/workspaces", "workspaces": [["Bole Bloom Studio", "Receptionist"], ["Kazanchis Dental Care", "Manager"]], "selected": null}
+{"account": "unassigned", "state": "no_assignment", "landing": "/no-access", "workspaces": [], "selected": null}
+{"reception_date": "2026-09-23", "count": 2, "names": ["APT-92876ce47ba87d110dd5", "APT-e515930b1f5be99369dc"], "locations": ["Bole Studio"], "scope": {"organization": "Bole Bloom Studio", "organization_name": "Bole Bloom Studio", "organizations": ["Bole Bloom Studio"], "is_manager": false, "receptionist": true, "locations": ["Bole Studio"], "providers": []}}
+{"reception_date": "2026-09-24", "count": 0, "names": [], "locations": [], "scope": {"organization": "Bole Bloom Studio", "organization_name": "Bole Bloom Studio", "organizations": ["Bole Bloom Studio"], "is_manager": false, "receptionist": true, "locations": ["Bole Studio"], "providers": []}}

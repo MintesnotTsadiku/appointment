@@ -1,6 +1,6 @@
 {
  "actions": [],
- "allow_rename": 1,
+ "allow_rename": 0,
  "autoname": "field:appointment_id",
  "creation": "2025-11-16 01:34:55.052429",
  "doctype": "DocType",
@@ -22,7 +22,33 @@
   "status",
   "amount_paid",
   "notes",
-  "cancellation_reason"
+  "cancellation_reason",
+  "organization",
+  "starts_at",
+  "ends_at",
+  "occupied_from",
+  "occupied_until",
+  "booking_timezone",
+  "request_key",
+  "request_hash",
+  "request_result",
+  "booking_source",
+  "referral_source",
+  "referral_code",
+  "agreed_price",
+  "agreed_currency",
+  "discount_amount",
+  "discount_code",
+  "price_basis",
+  "price_captured_at",
+  "workflow_events",
+  "confirmed_at",
+  "cancelled_at",
+  "arrived_at",
+  "checked_in_at",
+  "actual_start",
+  "actual_end",
+  "recovered_from"
  ],
  "fields": [
   {
@@ -91,7 +117,7 @@
    "fieldtype": "Data",
    "label": "Client Phone",
    "options": "Phone",
-   "reqd": 1
+   "reqd": 0
   },
   {
    "fieldname": "appointment_date",
@@ -137,10 +163,184 @@
    "fieldtype": "Small Text",
    "label": "Cancellation Reason",
    "length": 500
+  },
+  {
+   "fieldname": "organization",
+   "fieldtype": "Link",
+   "label": "Organization",
+   "read_only": 1,
+   "options": "Organization"
+  },
+  {
+   "fieldname": "starts_at",
+   "fieldtype": "Datetime",
+   "label": "Starts At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ends_at",
+   "fieldtype": "Datetime",
+   "label": "Ends At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "occupied_from",
+   "fieldtype": "Datetime",
+   "label": "Occupied From",
+   "read_only": 1
+  },
+  {
+   "fieldname": "occupied_until",
+   "fieldtype": "Datetime",
+   "label": "Occupied Until",
+   "read_only": 1
+  },
+  {
+   "fieldname": "booking_timezone",
+   "fieldtype": "Data",
+   "label": "Booking Timezone",
+   "read_only": 1
+  },
+  {
+   "fieldname": "request_key",
+   "fieldtype": "Data",
+   "label": "Request Key",
+   "read_only": 1,
+   "unique": 1,
+   "hidden": 1,
+   "permlevel": 1
+  },
+  {
+   "fieldname": "request_hash",
+   "fieldtype": "Data",
+   "label": "Request Hash",
+   "read_only": 1,
+   "hidden": 1,
+   "permlevel": 1
+  },
+  {
+   "fieldname": "request_result",
+   "fieldtype": "Long Text",
+   "label": "Request Result",
+   "read_only": 1,
+   "hidden": 1,
+   "permlevel": 1
+  },
+  {
+   "fieldname": "booking_source",
+   "fieldtype": "Select",
+   "label": "Booking source",
+   "options": "unknown\nonline\nstaff\nwalk-in\nimport",
+   "read_only": 1
+  },
+  {
+   "fieldname": "referral_source",
+   "fieldtype": "Data",
+   "label": "Referral source",
+   "read_only": 1
+  },
+  {
+   "fieldname": "referral_code",
+   "fieldtype": "Data",
+   "label": "Referral code",
+   "read_only": 1
+  },
+  {
+   "fieldname": "agreed_price",
+   "fieldtype": "Currency",
+   "label": "Original agreed value",
+   "read_only": 1,
+   "permlevel": 1
+  },
+  {
+   "fieldname": "agreed_currency",
+   "fieldtype": "Data",
+   "label": "Agreed currency",
+   "read_only": 1,
+   "permlevel": 1
+  },
+  {
+   "fieldname": "discount_amount",
+   "fieldtype": "Currency",
+   "label": "Agreed discount",
+   "read_only": 1,
+   "permlevel": 1
+  },
+  {
+   "fieldname": "discount_code",
+   "fieldtype": "Data",
+   "label": "Discount code",
+   "read_only": 1,
+   "permlevel": 1
+  },
+  {
+   "fieldname": "price_basis",
+   "fieldtype": "Data",
+   "label": "Price basis",
+   "read_only": 1,
+   "permlevel": 1
+  },
+  {
+   "fieldname": "price_captured_at",
+   "fieldtype": "Datetime",
+   "label": "Price captured at UTC",
+   "read_only": 1,
+   "permlevel": 1
+  },
+  {
+   "fieldname": "workflow_events",
+   "fieldtype": "Long Text",
+   "label": "Workflow events",
+   "read_only": 1,
+   "hidden": 1,
+   "permlevel": 1
+  },
+  {
+   "fieldname": "confirmed_at",
+   "fieldtype": "Datetime",
+   "label": "Confirmed at UTC",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cancelled_at",
+   "fieldtype": "Datetime",
+   "label": "Cancelled at UTC",
+   "read_only": 1
+  },
+  {
+   "fieldname": "arrived_at",
+   "fieldtype": "Datetime",
+   "label": "Arrival UTC",
+   "read_only": 1
+  },
+  {
+   "fieldname": "checked_in_at",
+   "fieldtype": "Datetime",
+   "label": "Check in UTC",
+   "read_only": 1
+  },
+  {
+   "fieldname": "actual_start",
+   "fieldtype": "Datetime",
+   "label": "Actual start UTC",
+   "read_only": 1
+  },
+  {
+   "fieldname": "actual_end",
+   "fieldtype": "Datetime",
+   "label": "Actual end UTC",
+   "read_only": 1
+  },
+  {
+   "fieldname": "recovered_from",
+   "fieldtype": "Link",
+   "label": "Verified released booking",
+   "options": "Appointment",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
- "index_web_pages_for_search": 1,
+ "index_web_pages_for_search": 0,
  "links": [],
  "modified": "2025-11-16 01:34:55.052429",
  "modified_by": "Administrator",
@@ -181,7 +381,7 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Front-Desk",
+   "role": "Front Desk",
    "share": 0,
    "write": 1
   }
@@ -190,5 +390,6 @@
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
- "title_field": "appointment_id"
+ "title_field": "appointment_id",
+ "track_changes": 1
 }

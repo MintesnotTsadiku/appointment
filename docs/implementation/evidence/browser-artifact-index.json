@@ -1,0 +1,102 @@
+[
+  {
+    "scenario": "appointment-owned-guest-catalog-20260922T134045Z",
+    "ok": true,
+    "console_error_count": 0,
+    "network_error_count": 0,
+    "artifacts": [
+      {
+        "path": "/tmp/agent_browser_qa/appointment/appointment-owned-guest-catalog-20260922T134045Z/report.json",
+        "sha256": "2956febd9ccbe8ac499fe2b8479b1268222e4ebccb1796b1c7d3abad9fa47598"
+      },
+      {
+        "path": "/tmp/agent_browser_qa/appointment/appointment-owned-guest-catalog-20260922T134045Z/trace.zip",
+        "sha256": "1a29274b27eae961d5da8fe94869cddabfc86ea83125a03ca17e272571e877c4"
+      },
+      {
+        "path": "/tmp/agent_browser_qa/appointment/appointment-owned-guest-catalog-20260922T134045Z/session.webm",
+        "sha256": "bdab8455771b7a60e746bd7627993d5374033f808274cdd70b5771022cf62819"
+      }
+    ]
+  },
+  {
+    "scenario": "appointment-owned-guest-booking-20260922T134058Z",
+    "ok": true,
+    "console_error_count": 0,
+    "network_error_count": 0,
+    "artifacts": [
+      {
+        "path": "/tmp/agent_browser_qa/appointment/appointment-owned-guest-booking-20260922T134058Z/report.json",
+        "sha256": "ebda546a68899bcf113f9a04d80cdc125a84b3fa59eecfc27861f4bfdae27c3d"
+      },
+      {
+        "path": "/tmp/agent_browser_qa/appointment/appointment-owned-guest-booking-20260922T134058Z/trace.zip",
+        "sha256": "fd7364a406a61c39159088154d8934905d41ffc349280e114801d13ba9a8c0e2"
+      },
+      {
+        "path": "/tmp/agent_browser_qa/appointment/appointment-owned-guest-booking-20260922T134058Z/session.webm",
+        "sha256": "36ba22c8cccddbd720fba1e318a3acf9b3f5d9c48e6c5c8dde90895b80dd4a9c"
+      }
+    ]
+  },
+  {
+    "scenario": "appointment-owned-provider-handoff-20260922T134252Z",
+    "ok": true,
+    "console_error_count": 0,
+    "network_error_count": 0,
+    "artifacts": [
+      {
+        "path": "/tmp/agent_browser_qa/appointment/appointment-owned-provider-handoff-20260922T134252Z/report.json",
+        "sha256": "64d3f3f4e9d3d94049bfeda62da7fada0a35260198c25bd4a707575509daab20"
+      },
+      {
+        "path": "/tmp/agent_browser_qa/appointment/appointment-owned-provider-handoff-20260922T134252Z/trace.zip",
+        "sha256": "03620cdf602feda8c31cb2837feaa112c0353b90079d2507b5d5639360aa3e7a"
+      },
+      {
+        "path": "/tmp/agent_browser_qa/appointment/appointment-owned-provider-handoff-20260922T134252Z/session.webm",
+        "sha256": "53aba38de5e69ab296079c9f52ebf1d04fd1b4fb6561d955e31f47c8675995ad"
+      }
+    ]
+  },
+  {
+    "scenario": "appointment-owned-mobile-catalog-20260922T134410Z",
+    "ok": true,
+    "console_error_count": 0,
+    "network_error_count": 0,
+    "artifacts": [
+      {
+        "path": "/tmp/agent_browser_qa/appointment/appointment-owned-mobile-catalog-20260922T134410Z/report.json",
+        "sha256": "fcb70a16efeff1e1163937a10f61c051e6bfb5a40635d1929fd2eee0400ba245"
+      },
+      {
+        "path": "/tmp/agent_browser_qa/appointment/appointment-owned-mobile-catalog-20260922T134410Z/trace.zip",
+        "sha256": "834c32137d5faee748fbd1784d23ffc0a95bd75b50ae950dea59c51b1de063f2"
+      },
+      {
+        "path": "/tmp/agent_browser_qa/appointment/appointment-owned-mobile-catalog-20260922T134410Z/session.webm",
+        "sha256": "093642b083d16f4cfd97cb4b4711e5759742917dbd008f58bd9f0fc5a0930164"
+      }
+    ]
+  },
+  {
+    "scenario": "appointment-owned-mobile-booking-20260922T134421Z",
+    "ok": true,
+    "console_error_count": 0,
+    "network_error_count": 0,
+    "artifacts": [
+      {
+        "path": "/tmp/agent_browser_qa/appointment/appointment-owned-mobile-booking-20260922T134421Z/report.json",
+        "sha256": "865236526827f85aa4c87ae23973b9e14ebb91372cf42f050b607146a8f60ce1"
+      },
+      {
+        "path": "/tmp/agent_browser_qa/appointment/appointment-owned-mobile-booking-20260922T134421Z/trace.zip",
+        "sha256": "f70d22542f8f54b18f8f2d08d9a93c7b7d9103d2000d2fb67a13b820a4569aa8"
+      },
+      {
+        "path": "/tmp/agent_browser_qa/appointment/appointment-owned-mobile-booking-20260922T134421Z/session.webm",
+        "sha256": "68c9d1ce16eb82af29f5f4578368ccc95a0c3fbf281992e7dbeb399654e99e7d"
+      }
+    ]
+  }
+]
