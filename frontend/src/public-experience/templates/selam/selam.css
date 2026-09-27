@@ -1,4 +1,4 @@
-.selam-site{--ink:var(--pe-color-text,#361044);--plum:var(--pe-color-primary,#521348);--peach:var(--pe-color-canvas,#f8ded0);--cream:var(--pe-color-surface,#fffaf1);--lime:var(--pe-color-surface-strong,#e8fb5f);color:var(--ink);background:linear-gradient(180deg,var(--peach),var(--cream) 28%);font-family:"Warm Vitality Body",Arial,sans-serif}
+.selam-site{--ink:var(--pe-color-text,#361044);--plum:var(--pe-color-primary,#521348);--peach:var(--pe-color-canvas,#f8ded0);--cream:var(--pe-color-surface,#fffaf1);--lime:var(--pe-color-surface-strong,#e8fb5f);color:var(--ink);background:linear-gradient(180deg,var(--peach),var(--cream) 28%);font-family:var(--pe-selected-font-body,"Warm Vitality Body",Arial,sans-serif)}
 .selam-site *{box-sizing:border-box}
 .selam-site a{color:inherit}
 .selam-nav{height:84px;display:flex;align-items:center;gap:42px;padding:0 clamp(24px,4vw,68px);font-size:13px}
@@ -120,3 +120,6 @@
 
 .selam-site :focus-visible { outline: 3px solid var(--pe-color-focus); outline-offset: 4px; }
 .selam-site .selam-newsletter :focus-visible { outline-color: currentColor; }
+
+.selam-site[style*="--pe-selected-font-display"] :is(h1,h2,h3),.selam-booking[style*="--pe-selected-font-display"] :is(h1,h2,h3){font-family:var(--pe-selected-font-display,inherit)}
+.selam-site[style*="--pe-selected-font-body"] :is(p,li,address),.selam-booking[style*="--pe-selected-font-body"] p{font-family:var(--pe-selected-font-body)}

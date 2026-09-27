@@ -84,7 +84,9 @@ def _locked_site(site, expected_version):
 
 def state(doc):
     profile = frappe.get_doc("Brand Profile", doc.brand_profile)
-    return {"site": doc.name, "title": doc.site_title, "slug": doc.slug,
+    from appointment.public_experience.appearance import options
+
+    return {"appearanceOptions": options(get_recipe(doc.recipe_key)), "owner": doc.organization or doc.provider, "site": doc.name, "title": doc.site_title, "slug": doc.slug,
             "draftVersion": doc.draft_version, "recipeKey": doc.recipe_key,
             "profile": profile.name, "brandVersion": profile.draft_version,
             "brandInputs": json.loads(profile.brand_inputs_json or "{}"),
@@ -195,9 +197,19 @@ def readiness(site, expected_version):
     return {"ready": all(check["ok"] for check in checks), "checks": checks}
 
 
-def preview(site, expected_version):
+def preview(site, expected_version, brand_inputs=None):
     doc = _locked_site(site, expected_version)
     profile = frappe.get_doc("Brand Profile", doc.brand_profile)
+    if brand_inputs is not None:
+        if isinstance(brand_inputs, str):
+            brand_inputs = json.loads(brand_inputs)
+        allowed = {"paletteChoice", "fontChoice", "accentColor", "presentationDensity"}
+        if not isinstance(brand_inputs, dict) or set(brand_inputs) - allowed:
+            frappe.throw("Choose supported appearance adjustments.")
+        inputs = json.loads(profile.brand_inputs_json or "{}")
+        for key in ("palette_choice", "font_choice", "accent_color", "presentation_density"):
+            inputs.pop(key, None)
+        profile.brand_inputs_json = json.dumps({**inputs, **brand_inputs})
     # Compile drafts without publishing a brand revision or experience release.
     design = brand_compiler.compile_brand(profile, profile.draft_version).as_dict()["compiledDesign"]
     recipe = get_recipe(doc.recipe_key)

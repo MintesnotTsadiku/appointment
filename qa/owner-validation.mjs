@@ -24,7 +24,7 @@ export async function stableScreenshot(page, options) {
 }
 
 export async function chooseSelect(page, label, option) {
-  await page.getByLabel(label, { exact: true }).click();
+  await page.getByRole('combobox', { name: label, exact: true }).click();
   await page.getByRole('option', { name: option, exact: true }).click();
 }
 
@@ -60,7 +60,7 @@ export async function articleHistory(page, guest, testInfo, { root, title, route
   await expect(guest.locator("main")).not.toContainText(draft);
   await page.getByRole("button", { name: "Preview saved article", exact: true }).click();
   const preview = page.getByRole("region", { name: "Article preview", exact: true });
-  await expect(preview).toContainText(draft);
+  await expect(preview.frameLocator('iframe[title="Website design preview"]').locator("body")).toContainText(draft);
   await settlePage(page);
   await preview.screenshot({ path: testInfo.outputPath(`${prefix}-saved-private-article.png`), animations: "disabled" });
   await page.getByRole("button", { name: "Publish article", exact: true }).click();
@@ -102,7 +102,7 @@ export async function businessIsolation(page, second, testInfo, marker) {
     .getByRole("button", { name: "Publish booking page", exact: true }).click();
   await expect(second.getByRole("status")).toContainText("published");
   await second.goto("/settings/website", { waitUntil: "networkidle" });
-  await second.getByRole("combobox", { name: "Business", exact: true }).selectOption({ label: marker + " Isolation" });
+  await chooseSelect(second, "Business", marker + " Isolation");
   await second.getByLabel("Website name", { exact: true }).fill(marker + " Isolation");
   await second.getByLabel("Website address", { exact: true }).fill(marker.toLowerCase());
   await second.getByRole("button", { name: "Create website draft", exact: true }).click();

@@ -86,7 +86,13 @@ def suites():
         'scenarios':[{'scenario_id':'seeded-homepage','title':'Seeded homepage','page_family':'homepage',
             'credential_capability':'frappe.role:Provider','mutation_level':'exact-cleanup',
             'playwright_pattern':'seeded-homepage','required_artifacts':['screenshot']}]}
-    internal = {**homepage_demo, 'suite_id':'internal-appearance', 'title':'Personal internal application appearance',
+    appearance = {**homepage_demo, 'suite_id':'template-appearance', 'title':'Template palette and font choices',
+        'spec_path':'qa/template-appearance.spec.mjs', 'config_path':'qa/template-appearance.config.mjs',
+        'fixture_adapter':'appointment.tests.template_appearance_fixture.adapter',
+        'scenarios':[{'scenario_id':'template-appearance','title':'Template appearance matrix','page_family':'website-setup',
+            'credential_capability':'frappe.role:Provider','mutation_level':'exact-cleanup',
+            'playwright_pattern':'template-appearance','required_artifacts':['screenshot']}]}
+    internal = {**appearance, 'suite_id':'internal-appearance', 'title':'Personal internal application appearance',
         'spec_path':'qa/internal-appearance.spec.mjs', 'config_path':'qa/internal-appearance.config.mjs',
         'fixture_adapter':'appointment.tests.internal_appearance_fixture.adapter',
         'scenarios':[{'scenario_id':'internal-appearance','title':'Internal appearance matrix','page_family':'settings',
@@ -97,4 +103,4 @@ def suites():
         'scenarios':[{'scenario_id':'codex-shell','title':'Codex shell matrix','page_family':'settings',
             'credential_capability':'frappe.role:Provider','mutation_level':'exact-cleanup',
             'playwright_pattern':'codex-shell','required_artifacts':['screenshot']}]}
-    return [shell, internal, homepage_demo, homepage, homepage_independent, runtime, website, templates, accessibility, production] if site == SITE else [runtime, website, individual]
+    return [shell, internal, appearance, homepage_demo, homepage, homepage_independent, runtime, website, templates, accessibility, production] if site == SITE else [runtime, website, individual]

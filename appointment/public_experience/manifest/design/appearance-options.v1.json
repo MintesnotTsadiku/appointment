@@ -1,0 +1,157 @@
+{
+  "selam-movement": {
+    "palettes": [
+      {
+        "key": "default",
+        "label": "Template original",
+        "primitive": "selam-movement"
+      },
+      {
+        "key": "soft",
+        "label": "Soft canvas",
+        "primitive": "selam-movement-soft"
+      },
+      {
+        "key": "paper",
+        "label": "Paper & ink",
+        "primitive": "selam-movement-paper"
+      }
+    ],
+    "fonts": [
+      {
+        "key": "default",
+        "label": "Template original",
+        "primitive": "warm-vitality"
+      },
+      {
+        "key": "alternate",
+        "label": "Editorial contrast",
+        "primitive": "selam-movement-alternate"
+      }
+    ]
+  },
+  "meron-atelier": {
+    "palettes": [
+      {
+        "key": "default",
+        "label": "Template original",
+        "primitive": "meron-atelier"
+      },
+      {
+        "key": "soft",
+        "label": "Soft canvas",
+        "primitive": "meron-atelier-soft"
+      },
+      {
+        "key": "paper",
+        "label": "Paper & ink",
+        "primitive": "meron-atelier-paper"
+      }
+    ],
+    "fonts": [
+      {
+        "key": "default",
+        "label": "Template original",
+        "primitive": "crafted-editorial"
+      },
+      {
+        "key": "alternate",
+        "label": "Clear sans",
+        "primitive": "meron-atelier-alternate"
+      }
+    ]
+  },
+  "bloom-hair": {
+    "palettes": [
+      {
+        "key": "default",
+        "label": "Template original",
+        "primitive": "bloom-hair"
+      },
+      {
+        "key": "soft",
+        "label": "Soft canvas",
+        "primitive": "bloom-hair-soft"
+      },
+      {
+        "key": "paper",
+        "label": "Paper & ink",
+        "primitive": "bloom-hair-paper"
+      }
+    ],
+    "fonts": [
+      {
+        "key": "default",
+        "label": "Template original",
+        "primitive": "warm-vitality"
+      },
+      {
+        "key": "alternate",
+        "label": "Editorial contrast",
+        "primitive": "bloom-hair-alternate"
+      }
+    ]
+  },
+  "tena-clinic": {
+    "palettes": [
+      {
+        "key": "default",
+        "label": "Template original",
+        "primitive": "tena-clinic"
+      },
+      {
+        "key": "soft",
+        "label": "Soft canvas",
+        "primitive": "tena-clinic-soft"
+      },
+      {
+        "key": "paper",
+        "label": "Paper & ink",
+        "primitive": "tena-clinic-paper"
+      }
+    ],
+    "fonts": [
+      {
+        "key": "default",
+        "label": "Template original",
+        "primitive": "quiet-trust-editorial"
+      },
+      {
+        "key": "alternate",
+        "label": "Clear sans",
+        "primitive": "tena-clinic-alternate"
+      }
+    ]
+  },
+  "abugida-language": {
+    "palettes": [
+      {
+        "key": "default",
+        "label": "Template original",
+        "primitive": "abugida-language"
+      },
+      {
+        "key": "soft",
+        "label": "Soft canvas",
+        "primitive": "abugida-language-soft"
+      },
+      {
+        "key": "paper",
+        "label": "Paper & ink",
+        "primitive": "abugida-language-paper"
+      }
+    ],
+    "fonts": [
+      {
+        "key": "default",
+        "label": "Template original",
+        "primitive": "crafted-editorial"
+      },
+      {
+        "key": "alternate",
+        "label": "Clear sans",
+        "primitive": "abugida-language-alternate"
+      }
+    ]
+  }
+}

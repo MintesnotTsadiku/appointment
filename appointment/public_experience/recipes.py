@@ -1,9 +1,8 @@
 """Pure, code-owned registry for curated Brand Recipes v1.
 
 The registry deliberately keeps palettes, typography, imagery, layout and surface
-definitions separate. Providers never select those primitives independently;
-recipes pin an exact compatible set and the compiler is the only composition
-seam.
+definitions separate. Recipes pin compatible defaults. The versioned appearance catalog allows
+approved palette and typography alternatives through the compiler.
 """
 
 from __future__ import annotations

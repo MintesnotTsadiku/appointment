@@ -1,0 +1,278 @@
+src/components/availability-editor/AvailabilityEditor.tsx(2,18): error TS6133: 'AnimatePresence' is declared but its value is never read.
+src/components/availability-editor/AvailabilityEditor.tsx(3,10): error TS6133: 'Clock' is declared but its value is never read.
+src/components/availability-editor/AvailabilityEditor.tsx(3,31): error TS6133: 'X' is declared but its value is never read.
+src/components/availability-templates/AvailabilityTemplates.tsx(348,49): error TS2365: Operator '>=' cannot be applied to types '{ value: Duration; label: string; }' and 'number'.
+src/components/availability-templates/ProviderAvailabilityTemplates.tsx(151,10): error TS6133: 'isOffsetOpen' is declared but its value is never read.
+src/components/availability-templates/ProviderAvailabilityTemplates.tsx(151,24): error TS6133: 'setIsOffsetOpen' is declared but its value is never read.
+src/components/icons/index.tsx(54,6): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ zoom: Element; googleMeet: Element; }'.
+  No index signature with a parameter of type 'string' was found on type '{ zoom: Element; googleMeet: Element; }'.
+src/components/pwa/UpdateNotification.tsx(2,31): error TS2307: Cannot find module 'virtual:pwa-register/react' or its corresponding type declarations.
+src/components/pwa/UpdateNotification.tsx(10,18): error TS7006: Parameter 'r' implicitly has an 'any' type.
+src/components/pwa/UpdateNotification.tsx(13,21): error TS7006: Parameter 'error' implicitly has an 'any' type.
+src/components/tasks/TaskCard.tsx(6,10): error TS6133: 'formatDate' is declared but its value is never read.
+src/components/tasks/TaskCard.tsx(21,3): error TS6133: 'onEdit' is declared but its value is never read.
+src/components/tasks/TaskCard.tsx(22,3): error TS6133: 'onDelete' is declared but its value is never read.
+src/components/tasks/TaskCard.tsx(27,20): error TS2367: This comparison appears to be unintentional because the types '"Low" | "Medium" | "High" | "Urgent"' and '"urgent"' have no overlap.
+src/components/tasks/TaskCard.tsx(28,23): error TS2367: This comparison appears to be unintentional because the types '"Completed" | "Cancelled" | "In Progress" | "Requested" | "Assigned"' and '"completed"' have no overlap.
+src/components/tasks/modals/CreateTaskModal.tsx(28,5): error TS2820: Type '"requested"' is not assignable to type '"Completed" | "Cancelled" | "In Progress" | "Requested" | "Assigned" | undefined'. Did you mean '"Requested"'?
+src/components/tasks/modals/CreateTaskModal.tsx(29,5): error TS2820: Type '"medium"' is not assignable to type '"Low" | "Medium" | "High" | "Urgent" | undefined'. Did you mean '"Medium"'?
+src/components/tasks/modals/TaskDetailModal.tsx(3,10): error TS6133: 'X' is declared but its value is never read.
+src/components/tasks/modals/TaskDetailModal.tsx(63,20): error TS2367: This comparison appears to be unintentional because the types '"Low" | "Medium" | "High" | "Urgent" | undefined' and '"urgent"' have no overlap.
+src/components/tasks/modals/TaskDetailModal.tsx(64,23): error TS2367: This comparison appears to be unintentional because the types '"Completed" | "Cancelled" | "In Progress" | "Requested" | "Assigned" | undefined' and '"completed"' have no overlap.
+src/components/tasks/modals/TaskDetailModal.tsx(67,9): error TS6133: 'getHeaderGradient' is declared but its value is never read.
+src/components/tasks/modals/TaskDetailModal.tsx(532,78): error TS2551: Property 'replaceAll' does not exist on type '"finish_to_start" | "start_to_start" | "finish_to_finish" | "start_to_finish"'. Did you mean 'replace'?
+  Property 'replaceAll' does not exist on type '"finish_to_start"'.
+src/context/landingPageSettings.tsx(6,8): error TS6133: 'React' is declared but its value is never read.
+src/context/onboarding.tsx(126,16): error TS2352: Conversion of type 'Error | undefined' to type 'Error | null' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Property 'name' is missing in type 'import("/home/minte/projects/training-apps/.worktrees/frappe-appointment-beta/frontend/node_modules/frappe-js-sdk/lib/frappe_app/types").Error' but required in type 'Error'.
+src/lib/apiGateway.ts(303,44): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
+  Type 'null' is not assignable to type 'string'.
+src/lib/tasks-assistants/api.ts(323,57): error TS2552: Cannot find name 'AssistantSkillAssignment'. Did you mean 'AssistantClientAssignment'?
+src/lib/utils.ts(6,10): error TS2866: Import 'Error' conflicts with global value used in this file, so must be declared with a type-only import when 'isolatedModules' is enabled.
+src/lib/utils.ts(14,3): error TS2578: Unused '@ts-expect-error' directive.
+src/lib/utils.ts(108,15): error TS2339: Property 'supportedValuesOf' does not exist on type 'typeof Intl'.
+src/pages/admin/dashboard.tsx(21,1): error TS6133: 'Button' is declared but its value is never read.
+src/pages/admin/dashboard.tsx(86,18): error TS2322: Type '{ size: string; }' is not assignable to type 'IntrinsicAttributes & SpinnerProp'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & SpinnerProp'.
+src/pages/appointment-old-backup-20251118-235836/components/booking.tsx(23,1): error TS6133: 'Switch' is declared but its value is never read.
+src/pages/appointment-old-backup-20251118-235836/components/booking.tsx(97,21): error TS2345: Argument of type '{ date: string; type: string | undefined; }' is not assignable to parameter of type 'URLSearchParamsInit | ((prev: URLSearchParams) => URLSearchParamsInit) | undefined'.
+  Type '{ date: string; type: string | undefined; }' is not assignable to type 'undefined'.
+src/pages/appointment-old-backup-20251118-235836/components/booking.tsx(172,59): error TS6133: 'idx' is declared but its value is never read.
+src/pages/appointment-old-backup-20251118-235836/components/booking.tsx(186,31): error TS2339: Property 'response' does not exist on type 'Error'.
+src/pages/appointment-old-backup-20251118-235836/components/booking.tsx(394,51): error TS2345: Argument of type 'number | { id: string; label: string; duration: number; }' is not assignable to parameter of type 'string | number'.
+  Type '{ id: string; label: string; duration: number; }' is not assignable to type 'string | number'.
+src/pages/appointment-old-backup-20251118-235836/components/booking.tsx(742,23): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/pages/appointment-old-backup-20251118-235836/components/socialProfiles.tsx(196,11): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ LinkedIn: Element; X: Element; GitHub: Element; Instagram: Element; WordPress: Element; Skype: Element; }'.
+  No index signature with a parameter of type 'string' was found on type '{ LinkedIn: Element; X: Element; GitHub: Element; Instagram: Element; WordPress: Element; Skype: Element; }'.
+src/pages/appointment-old-backup-20251118-235836/components/socialProfiles.tsx(204,18): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ LinkedIn: Element; X: Element; GitHub: Element; Instagram: Element; WordPress: Element; Skype: Element; }'.
+  No index signature with a parameter of type 'string' was found on type '{ LinkedIn: Element; X: Element; GitHub: Element; Instagram: Element; WordPress: Element; Skype: Element; }'.
+src/pages/appointment-old-backup-20251118-235836/index.tsx(35,9): error TS6133: 'navigate' is declared but its value is never read.
+src/pages/appointment-old-backup-20251118-235836/index.tsx(95,13): error TS6133: 'durations' is declared but its value is never read.
+src/pages/appointment/components/booking.tsx(23,1): error TS6133: 'Switch' is declared but its value is never read.
+src/pages/appointment/components/booking.tsx(47,35): error TS2307: Cannot find module '../reducer' or its corresponding type declarations.
+src/pages/appointment/components/booking.tsx(97,21): error TS2345: Argument of type '{ date: string; type: string | undefined; }' is not assignable to parameter of type 'URLSearchParamsInit | ((prev: URLSearchParams) => URLSearchParamsInit) | undefined'.
+  Type '{ date: string; type: string | undefined; }' is not assignable to type 'undefined'.
+src/pages/appointment/components/booking.tsx(172,59): error TS6133: 'idx' is declared but its value is never read.
+src/pages/appointment/components/booking.tsx(186,31): error TS2339: Property 'response' does not exist on type 'Error'.
+src/pages/appointment/components/booking.tsx(394,51): error TS2345: Argument of type 'number | { id: string; label: string; duration: number; }' is not assignable to parameter of type 'string | number'.
+  Type '{ id: string; label: string; duration: number; }' is not assignable to type 'string | number'.
+src/pages/appointment/components/booking.tsx(635,34): error TS7006: Parameter 'slot' implicitly has an 'any' type.
+src/pages/appointment/components/booking.tsx(635,40): error TS7006: Parameter 'index' implicitly has an 'any' type.
+src/pages/appointment/components/booking.tsx(742,23): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/pages/appointment/components/socialProfiles.tsx(196,11): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ LinkedIn: Element; X: Element; GitHub: Element; Instagram: Element; WordPress: Element; Skype: Element; }'.
+  No index signature with a parameter of type 'string' was found on type '{ LinkedIn: Element; X: Element; GitHub: Element; Instagram: Element; WordPress: Element; Skype: Element; }'.
+src/pages/appointment/components/socialProfiles.tsx(204,18): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ LinkedIn: Element; X: Element; GitHub: Element; Instagram: Element; WordPress: Element; Skype: Element; }'.
+  No index signature with a parameter of type 'string' was found on type '{ LinkedIn: Element; X: Element; GitHub: Element; Instagram: Element; WordPress: Element; Skype: Element; }'.
+src/pages/appointment/index.tsx(13,27): error TS6133: 'ArrowLeft' is declared but its value is never read.
+src/pages/appointment/index.tsx(16,1): error TS6133: 'Button' is declared but its value is never read.
+src/pages/appointment/index.tsx(125,13): error TS6133: 'durations' is declared but its value is never read.
+src/pages/appointment/index.tsx(132,29): error TS2339: Property 'response' does not exist on type 'Error'.
+src/pages/appointment/index.tsx(175,15): error TS2532: Object is possibly 'undefined'.
+src/pages/assistants/client-profiles/index.tsx(10,3): error TS6133: 'Mail' is declared but its value is never read.
+src/pages/assistants/client-profiles/index.tsx(14,3): error TS6133: 'Briefcase' is declared but its value is never read.
+src/pages/assistants/client-profiles/index.tsx(99,20): error TS2339: Property 'company' does not exist on type 'ClientProfile'.
+src/pages/assistants/client-profiles/index.tsx(218,65): error TS2339: Property 'avatar_url' does not exist on type 'ClientProfile'.
+src/pages/assistants/client-profiles/index.tsx(218,87): error TS2339: Property 'image_url' does not exist on type 'ClientProfile'.
+src/pages/assistants/client-profiles/index.tsx(218,108): error TS2339: Property 'profile_image' does not exist on type 'ClientProfile'.
+src/pages/assistants/client-profiles/index.tsx(264,42): error TS2339: Property 'company' does not exist on type 'ClientProfile'.
+src/pages/assistants/client-profiles/index.tsx(267,86): error TS2339: Property 'company' does not exist on type 'ClientProfile'.
+src/pages/assistants/client-profiles/index.tsx(346,42): error TS2339: Property 'preferred_language' does not exist on type 'ClientProfile'.
+src/pages/assistants/client-profiles/index.tsx(348,49): error TS2339: Property 'preferred_language' does not exist on type 'ClientProfile'.
+src/pages/assistants/client-profiles/index.tsx(348,99): error TS2339: Property 'preferred_language' does not exist on type 'ClientProfile'.
+src/pages/assistants/client-profiles/index.tsx(348,149): error TS2339: Property 'preferred_language' does not exist on type 'ClientProfile'.
+src/pages/assistants/client-profiles/index.tsx(351,42): error TS2339: Property 'city' does not exist on type 'ClientProfile'.
+src/pages/assistants/client-profiles/index.tsx(353,49): error TS2339: Property 'city' does not exist on type 'ClientProfile'.
+src/pages/assistants/client-profiles/index.tsx(396,69): error TS2339: Property 'avatar_url' does not exist on type 'ClientProfile'.
+src/pages/assistants/client-profiles/index.tsx(396,91): error TS2339: Property 'image_url' does not exist on type 'ClientProfile'.
+src/pages/assistants/client-profiles/index.tsx(396,112): error TS2339: Property 'profile_image' does not exist on type 'ClientProfile'.
+src/pages/assistants/client-profiles/index.tsx(429,44): error TS2339: Property 'company' does not exist on type 'ClientProfile'.
+src/pages/assistants/client-profiles/index.tsx(452,44): error TS2339: Property 'city' does not exist on type 'ClientProfile'.
+src/pages/assistants/client-profiles/index.tsx(452,62): error TS2339: Property 'city' does not exist on type 'ClientProfile'.
+src/pages/assistants/client-profiles/index.tsx(452,77): error TS2339: Property 'country' does not exist on type 'ClientProfile'.
+src/pages/assistants/client-profiles/index.tsx(452,100): error TS2339: Property 'country' does not exist on type 'ClientProfile'.
+src/pages/assistants/components/AssistantsHeader.tsx(3,34): error TS6133: 'Sparkles' is declared but its value is never read.
+src/pages/assistants/components/FilterBar.tsx(2,18): error TS6133: 'Filter' is declared but its value is never read.
+src/pages/assistants/components/FilterBar.tsx(2,44): error TS6133: 'ChevronDown' is declared but its value is never read.
+src/pages/assistants/index.tsx(2,18): error TS6133: 'AnimatePresence' is declared but its value is never read.
+src/pages/assistants/index.tsx(36,10): error TS6133: 'assignments' is declared but its value is never read.
+src/pages/booking-v2/components/BookingForm/index.tsx(294,23): error TS2353: Object literal may only specify known properties, and 'placeholder' does not exist in type 'Properties<string | number, string & {}>'.
+src/pages/booking-v2/components/BookingForm/index.tsx(351,23): error TS2353: Object literal may only specify known properties, and 'placeholder' does not exist in type 'Properties<string | number, string & {}>'.
+src/pages/booking-v2/components/BookingForm/index.tsx(411,23): error TS2353: Object literal may only specify known properties, and 'placeholder' does not exist in type 'Properties<string | number, string & {}>'.
+src/pages/booking-v2/components/BookingForm/index.tsx(464,23): error TS2353: Object literal may only specify known properties, and 'placeholder' does not exist in type 'Properties<string | number, string & {}>'.
+src/pages/booking-v2/components/BookingForm/index.tsx(508,23): error TS2353: Object literal may only specify known properties, and 'placeholder' does not exist in type 'Properties<string | number, string & {}>'.
+src/pages/booking-v2/components/BookingForm/index.tsx(637,24): error TS2339: Property 'location' does not exist on type 'Service'.
+src/pages/booking-v2/components/BookingForm/index.tsx(657,32): error TS2339: Property 'location' does not exist on type 'Service'.
+src/pages/booking-v2/components/BookingForm/index.tsx(666,33): error TS2339: Property 'location' does not exist on type 'Service'.
+src/pages/booking-v2/components/BookingForm/index.tsx(669,30): error TS2339: Property 'location' does not exist on type 'Service'.
+src/pages/booking-v2/components/BookingForm/index.tsx(669,59): error TS2339: Property 'location' does not exist on type 'Service'.
+src/pages/booking-v2/components/BookingForm/index.tsx(671,34): error TS2339: Property 'location' does not exist on type 'Service'.
+src/pages/booking-v2/components/BookingForm/index.tsx(674,30): error TS2339: Property 'location' does not exist on type 'Service'.
+src/pages/booking-v2/components/BookingForm/index.tsx(674,57): error TS2339: Property 'location' does not exist on type 'Service'.
+src/pages/booking-v2/components/BookingForm/index.tsx(676,34): error TS2339: Property 'location' does not exist on type 'Service'.
+src/pages/booking-v2/components/ConfirmationModal/index.tsx(154,22): error TS2339: Property 'location' does not exist on type 'Service'.
+src/pages/booking-v2/components/ConfirmationModal/index.tsx(162,30): error TS2339: Property 'location' does not exist on type 'Service'.
+src/pages/booking-v2/components/ConfirmationModal/index.tsx(168,31): error TS2339: Property 'location' does not exist on type 'Service'.
+src/pages/booking-v2/components/ConfirmationModal/index.tsx(171,28): error TS2339: Property 'location' does not exist on type 'Service'.
+src/pages/booking-v2/components/ConfirmationModal/index.tsx(171,57): error TS2339: Property 'location' does not exist on type 'Service'.
+src/pages/booking-v2/components/ConfirmationModal/index.tsx(173,32): error TS2339: Property 'location' does not exist on type 'Service'.
+src/pages/booking-v2/components/ConfirmationModal/index.tsx(176,28): error TS2339: Property 'location' does not exist on type 'Service'.
+src/pages/booking-v2/components/ConfirmationModal/index.tsx(176,55): error TS2339: Property 'location' does not exist on type 'Service'.
+src/pages/booking-v2/components/ConfirmationModal/index.tsx(178,35): error TS2339: Property 'location' does not exist on type 'Service'.
+src/pages/booking-v2/components/DateTimeSelector/CalendarPanel/index.tsx(11,3): error TS6133: 'getDayName' is declared but its value is never read.
+src/pages/booking-v2/components/DateTimeSelector/CalendarPanel/index.tsx(16,3): error TS6133: 'isPast' is declared but its value is never read.
+src/pages/booking-v2/components/DateTimeSelector/CalendarPanel/index.tsx(226,14): error TS2322: Type '{ children: (false | Element)[]; key: number; role: "gridcell"; "data-qa": string; onClick: () => void; disabled: boolean; whileHover: { scale: number; } | {}; whileTap: { scale: number; } | {}; ... 7 more ...; style: { ...; } | ... 1 more ... | { ...; }; }' is not assignable to type 'Omit<HTMLMotionProps<"button">, "ref">'.
+  Types of property '"aria-selected"' are incompatible.
+    Type 'boolean | null' is not assignable to type 'Booleanish | undefined'.
+      Type 'null' is not assignable to type 'Booleanish | undefined'.
+src/pages/booking-v2/components/DateTimeSelector/TimeSlotsPanel/index.tsx(8,1): error TS6133: 'Button' is declared but its value is never read.
+src/pages/booking-v2/components/ServiceSelector/index.tsx(74,24): error TS2353: Object literal may only specify known properties, and 'ringColor' does not exist in type 'Properties<string | number, string & {}>'.
+src/pages/booking-v2/hooks/useBookingSubmit.ts(130,48): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Error'.
+src/pages/booking-v2/hooks/useTimeSlots.ts(52,3): error TS6133: 'enabled' is declared but its value is never read.
+src/pages/booking-v2/hooks/useTimeSlots.ts(87,5): error TS2345: Argument of type '{ organization_id?: string | undefined; service_id?: string | undefined; duration_id: string; date: string; user_timezone_offset: string; } | null' is not assignable to parameter of type 'Record<string, any> | undefined'.
+  Type 'null' is not assignable to type 'Record<string, any> | undefined'.
+src/pages/booking-v2/index.tsx(56,5): error TS6133: 'setFormData' is declared but its value is never read.
+src/pages/booking-v2/index.tsx(95,15): error TS6133: 'slots' is declared but its value is never read.
+src/pages/booking-v2/preview.tsx(157,63): error TS6133: 'goToPhase' is declared but its value is never read.
+src/pages/booking-v2/real-booking.tsx(16,1): error TS6133: 'getTimeOfDay' is declared but its value is never read.
+src/pages/booking-v2/utils/dateHelpers.ts(152,9): error TS2322: Type '{ month: string; day: string; } | { weekday: string; month: string; day: string; } | { weekday: string; month: string; day: string; year: string; }' is not assignable to type 'DateTimeFormatOptions'.
+  Type '{ month: string; day: string; }' is not assignable to type 'DateTimeFormatOptions'.
+    Types of property 'month' are incompatible.
+      Type 'string' is not assignable to type '"short" | "long" | "numeric" | "2-digit" | "narrow" | undefined'.
+src/pages/group-appointment/index.tsx(32,28): error TS2307: Cannot find module '../appointment/types' or its corresponding type declarations.
+src/pages/group-appointment/index.tsx(35,1): error TS6133: 'Switch' is declared but its value is never read.
+src/pages/home/components/AlertsPanel.tsx(27,9): error TS6133: 't' is declared but its value is never read.
+src/pages/home/components/AlertsPanel.tsx(31,35): error TS6133: 'mutate' is declared but its value is never read.
+src/pages/home/components/DebugPanel.tsx(8,3): error TS6133: 'Info' is declared but its value is never read.
+src/pages/home/components/DebugPanel.tsx(14,3): error TS6133: 'Settings' is declared but its value is never read.
+src/pages/home/components/DebugPanel.tsx(648,33): error TS2322: Type '{ className: string; style: { color: string; }; }' is not assignable to type 'IntrinsicAttributes & { className?: string | undefined; }'.
+  Property 'style' does not exist on type 'IntrinsicAttributes & { className?: string | undefined; }'.
+src/pages/home/components/QuickActions.tsx(23,9): error TS6133: 't' is declared but its value is never read.
+src/pages/home/components/QuickStats.tsx(14,9): error TS6133: 't' is declared but its value is never read.
+src/pages/home/components/RecentActivity.tsx(24,9): error TS6133: 't' is declared but its value is never read.
+src/pages/home/components/SetupChecklist.tsx(26,9): error TS6133: 't' is declared but its value is never read.
+src/pages/home/components/Step1OrgProfile.tsx(37,38): error TS6133: 'loadingOrgs' is declared but its value is never read.
+src/pages/home/components/Step1OrgProfile.tsx(59,35): error TS2339: Property 'message' does not exist on type '{ success: boolean; organizations: Organization[]; }'.
+src/pages/home/components/Step1OrgProfile.tsx(71,38): error TS7006: Parameter 'o' implicitly has an 'any' type.
+src/pages/home/components/Step1OrgProfile.tsx(164,37): error TS7006: Parameter 'org' implicitly has an 'any' type.
+src/pages/home/components/Step1Profile.tsx(23,9): error TS6133: 't' is declared but its value is never read.
+src/pages/home/components/Step2OrgProviders.tsx(57,35): error TS2339: Property 'message' does not exist on type '{ success: boolean; organizations: Organization[]; }'.
+src/pages/home/components/Step2OrgProviders.tsx(58,54): error TS2339: Property 'message' does not exist on type '{ success: boolean; providers: Provider[]; }'.
+src/pages/home/components/Step2OrgProviders.tsx(61,55): error TS7006: Parameter 'p' implicitly has an 'any' type.
+src/pages/home/components/Step2OrgProviders.tsx(71,24): error TS2339: Property 'message' does not exist on type '{ success: boolean; providers: Provider[]; }'.
+src/pages/home/components/Step2OrgProviders.tsx(72,34): error TS2339: Property 'message' does not exist on type '{ success: boolean; providers: Provider[]; }'.
+src/pages/home/components/Step2OrgProviders.tsx(113,50): error TS7006: Parameter 'p' implicitly has an 'any' type.
+src/pages/home/components/Step2OrgProviders.tsx(195,37): error TS7006: Parameter 'org' implicitly has an 'any' type.
+src/pages/home/components/Step2OrgProviders.tsx(273,45): error TS7006: Parameter 'prov' implicitly has an 'any' type.
+src/pages/home/components/Step3Availability.tsx(101,11): error TS6133: 'hourStr' is declared but its value is never read.
+src/pages/home/components/Step4Service.tsx(27,10): error TS6133: 'bookingUrl' is declared but its value is never read.
+src/pages/home/components/Step5OrgSuccess.tsx(4,51): error TS6133: 'QrCode' is declared but its value is never read.
+src/pages/home/components/Step5OrgSuccess.tsx(30,24): error TS2339: Property 'message' does not exist on type '{ success: boolean; organization_url: string; services: ServiceUrl[]; }'.
+src/pages/home/components/Step5OrgSuccess.tsx(31,26): error TS2339: Property 'message' does not exist on type '{ success: boolean; organization_url: string; services: ServiceUrl[]; }'.
+src/pages/home/components/Step5OrgSuccess.tsx(44,7): error TS2554: Expected 1 arguments, but got 0.
+src/pages/home/components/Step5OrgSuccess.tsx(160,32): error TS7006: Parameter 'service' implicitly has an 'any' type.
+src/pages/home/components/Step5Success.tsx(5,23): error TS6133: 'Share2' is declared but its value is never read.
+src/pages/home/components/Step5Success.tsx(11,9): error TS6133: 'navigate' is declared but its value is never read.
+src/pages/home/components/WizardSidebar.tsx(3,1): error TS6133: 'cn' is declared but its value is never read.
+src/pages/home/index.tsx(35,141): error TS2345: Argument of type 'string | null | undefined' is not assignable to parameter of type 'string | undefined'.
+  Type 'null' is not assignable to type 'string | undefined'.
+src/pages/home/modals/CreateAppointmentGroupModal.tsx(9,3): error TS6133: 'Clock' is declared but its value is never read.
+src/pages/home/modals/CreateAppointmentGroupModal.tsx(10,3): error TS6133: 'Calendar' is declared but its value is never read.
+src/pages/home/modals/CreateAppointmentGroupModal.tsx(11,3): error TS6133: 'Video' is declared but its value is never read.
+src/pages/home/modals/CreateAppointmentGroupModal.tsx(12,11): error TS6133: 'LinkIcon' is declared but its value is never read.
+src/pages/home/modals/CreateAppointmentGroupModal.tsx(15,3): error TS6133: 'Plus' is declared but its value is never read.
+src/pages/home/modals/CreateServiceModal.tsx(14,3): error TS6133: 'Users' is declared but its value is never read.
+src/pages/home/sections/Dashboard.tsx(18,9): error TS6133: 't' is declared but its value is never read.
+src/pages/landing/index.tsx(1,1): error TS6133: 'motion' is declared but its value is never read.
+src/pages/landing/sections/Hero.tsx(9,30): error TS6133: 'loading' is declared but its value is never read.
+src/pages/organization-appointment-old-backup-20251118-235836/index.tsx(20,1): error TS6192: All imports in import declaration are unused.
+src/pages/organization-appointment-old-backup-20251118-235836/index.tsx(40,5): error TS6133: 'setDuration' is declared but its value is never read.
+src/pages/organization-appointment-old-backup-20251118-235836/index.tsx(62,5): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
+  Type 'null' is not assignable to type 'string'.
+src/pages/organization-appointment-old-backup-20251118-235836/index.tsx(107,15): error TS6133: 'durations' is declared but its value is never read.
+src/pages/organization-appointment-old-backup-20251118-235836/index.tsx(287,21): error TS2322: Type 'durationCard' is not assignable to type 'number'.
+src/pages/organization-appointment/index.tsx(113,5): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
+  Type 'null' is not assignable to type 'string'.
+src/pages/organization-appointment/index.tsx(270,5): error TS2322: Type '{ id: any; slug: string; name: any; duration: number; type: "organization"; providerCount: any; location: any; } | null' is not assignable to type 'Service | null'.
+  Object literal may only specify known properties, and 'location' does not exist in type 'Service'.
+src/pages/organization-appointment/index.tsx(294,40): error TS18048: 'organization.services.length' is possibly 'undefined'.
+src/pages/organization-appointment/index.tsx(602,40): error TS2339: Property 'location' does not exist on type 'Service'.
+src/pages/organization-appointment/index.tsx(603,15): error TS2322: Type '{ selectedDate: Date; displayMonth: Date; onDateSelect: (date: Date) => void; onMonthChange: Dispatch<SetStateAction<Date>>; availableDays: number[]; ... 13 more ...; bookingConfig: { ...; }; }' is not assignable to type 'IntrinsicAttributes & DateTimeSelectorProps'.
+  Property 'rawApiData' does not exist on type 'IntrinsicAttributes & DateTimeSelectorProps'.
+src/pages/reception/components/AppointmentCard.tsx(30,48): error TS6133: 'isDragging' is declared but its value is never read.
+src/pages/reception/components/DeskCalendar.tsx(2,18): error TS6133: 'AnimatePresence' is declared but its value is never read.
+src/pages/reception/components/DeskCalendar.tsx(67,9): error TS6133: 'slotHeight' is declared but its value is never read.
+src/pages/reception/components/DeskCalendar.tsx(261,15): error TS6133: 'visibleCount' is declared but its value is never read.
+src/pages/reception/components/DeskCalendar.tsx(343,26): error TS6133: 'e' is declared but its value is never read.
+src/pages/reception/components/EditAppointmentModal.tsx(75,13): error TS6133: 'endTime' is declared but its value is never read.
+src/pages/reception/components/OverflowAppointmentsModal.tsx(4,18): error TS6133: 'parseISO' is declared but its value is never read.
+src/pages/settings/availability.tsx(16,1): error TS6133: 'Button' is declared but its value is never read.
+src/pages/settings/availability.tsx(17,1): error TS6133: 'Card' is declared but its value is never read.
+src/pages/settings/calendar.tsx(4,1): error TS6133: 'Button' is declared but its value is never read.
+src/pages/settings/components/PolicyForm.tsx(200,11): error TS2783: 'policy_name' is specified more than once, so this usage will be overwritten.
+src/pages/settings/edit-service.tsx(4,48): error TS6133: 'X' is declared but its value is never read.
+src/pages/settings/edit-service.tsx(4,51): error TS6133: 'Check' is declared but its value is never read.
+src/pages/settings/edit-service.tsx(5,1): error TS6133: 'Button' is declared but its value is never read.
+src/pages/settings/edit-service.tsx(11,1): error TS6133: 'Checkbox' is declared but its value is never read.
+src/pages/settings/location.tsx(108,17): error TS2345: Argument of type '{ location_name: string; address_line_1: string; address_line_2: string; city: string; phone: string; timezone: string; }' is not assignable to parameter of type 'SetStateAction<{ location_name: string; address_line_1: string; address_line_2: string; city: string; phone: string; timezone: string; provider_id: string; service_ids: string[]; }>'.
+  Type '{ location_name: string; address_line_1: string; address_line_2: string; city: string; phone: string; timezone: string; }' is missing the following properties from type '{ location_name: string; address_line_1: string; address_line_2: string; city: string; phone: string; timezone: string; provider_id: string; service_ids: string[]; }': provider_id, service_ids
+src/pages/settings/manage/components/CreateItemModal.tsx(9,1): error TS6133: 'Button' is declared but its value is never read.
+src/pages/settings/manage/components/EditItemModal.tsx(9,1): error TS6133: 'Button' is declared but its value is never read.
+src/pages/settings/manage/components/HierarchyTree.tsx(7,43): error TS6133: 'Edit' is declared but its value is never read.
+src/pages/settings/manage/components/HierarchyTree.tsx(7,49): error TS6133: 'Trash2' is declared but its value is never read.
+src/pages/settings/manage/components/HierarchyTree.tsx(352,13): error TS2322: Type 'string' is not assignable to type '"location" | "service" | "event_type"'.
+src/pages/settings/manage/components/ItemCard.tsx(20,58): error TS6133: 'onRefresh' is declared but its value is never read.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(7,62): error TS6133: 'Calendar' is declared but its value is never read.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(7,105): error TS6133: 'Plus' is declared but its value is never read.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(109,8): error TS2304: Cannot find name 'Card'.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(113,9): error TS2304: Cannot find name 'Card'.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(301,47): error TS2339: Property 'validation' does not exist on type '{ name: string; location_name: string; address?: string | undefined; services: { name: string; service_name: string; event_types: any[]; }[]; }'.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(302,73): error TS2339: Property 'validation' does not exist on type '{ name: string; location_name: string; address?: string | undefined; services: { name: string; service_name: string; event_types: any[]; }[]; }'.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(308,65): error TS2339: Property 'validation' does not exist on type '{ name: string; location_name: string; address?: string | undefined; services: { name: string; service_name: string; event_types: any[]; }[]; }'.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(308,88): error TS2339: Property 'validation' does not exist on type '{ name: string; location_name: string; address?: string | undefined; services: { name: string; service_name: string; event_types: any[]; }[]; }'.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(308,118): error TS2339: Property 'validation' does not exist on type '{ name: string; location_name: string; address?: string | undefined; services: { name: string; service_name: string; event_types: any[]; }[]; }'.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(318,55): error TS2339: Property 'validation' does not exist on type '{ name: string; location_name: string; address?: string | undefined; services: { name: string; service_name: string; event_types: any[]; }[]; }'.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(331,84): error TS2339: Property 'address_line_1' does not exist on type '{ name: string; location_name: string; address?: string | undefined; services: { name: string; service_name: string; event_types: any[]; }[]; }'.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(332,84): error TS2339: Property 'address_line_2' does not exist on type '{ name: string; location_name: string; address?: string | undefined; services: { name: string; service_name: string; event_types: any[]; }[]; }'.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(333,74): error TS2339: Property 'city' does not exist on type '{ name: string; location_name: string; address?: string | undefined; services: { name: string; service_name: string; event_types: any[]; }[]; }'.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(334,75): error TS2339: Property 'phone' does not exist on type '{ name: string; location_name: string; address?: string | undefined; services: { name: string; service_name: string; event_types: any[]; }[]; }'.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(335,78): error TS2339: Property 'timezone' does not exist on type '{ name: string; location_name: string; address?: string | undefined; services: { name: string; service_name: string; event_types: any[]; }[]; }'.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(351,84): error TS2339: Property 'address_line_1' does not exist on type '{ name: string; location_name: string; address?: string | undefined; services: { name: string; service_name: string; event_types: any[]; }[]; }'.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(352,84): error TS2339: Property 'address_line_2' does not exist on type '{ name: string; location_name: string; address?: string | undefined; services: { name: string; service_name: string; event_types: any[]; }[]; }'.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(353,74): error TS2339: Property 'city' does not exist on type '{ name: string; location_name: string; address?: string | undefined; services: { name: string; service_name: string; event_types: any[]; }[]; }'.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(354,75): error TS2339: Property 'phone' does not exist on type '{ name: string; location_name: string; address?: string | undefined; services: { name: string; service_name: string; event_types: any[]; }[]; }'.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(355,78): error TS2339: Property 'timezone' does not exist on type '{ name: string; location_name: string; address?: string | undefined; services: { name: string; service_name: string; event_types: any[]; }[]; }'.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(370,82): error TS2339: Property 'address_line_1' does not exist on type '{ name: string; location_name: string; address?: string | undefined; services: { name: string; service_name: string; event_types: any[]; }[]; }'.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(371,82): error TS2339: Property 'address_line_2' does not exist on type '{ name: string; location_name: string; address?: string | undefined; services: { name: string; service_name: string; event_types: any[]; }[]; }'.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(372,72): error TS2339: Property 'city' does not exist on type '{ name: string; location_name: string; address?: string | undefined; services: { name: string; service_name: string; event_types: any[]; }[]; }'.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(373,73): error TS2339: Property 'phone' does not exist on type '{ name: string; location_name: string; address?: string | undefined; services: { name: string; service_name: string; event_types: any[]; }[]; }'.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(374,76): error TS2339: Property 'timezone' does not exist on type '{ name: string; location_name: string; address?: string | undefined; services: { name: string; service_name: string; event_types: any[]; }[]; }'.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(425,50): error TS2339: Property 'validation' does not exist on type '{ name: string; service_name: string; event_types: any[]; }'.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(425,72): error TS2339: Property 'validation' does not exist on type '{ name: string; service_name: string; event_types: any[]; }'.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(425,101): error TS2339: Property 'validation' does not exist on type '{ name: string; service_name: string; event_types: any[]; }'.
+src/pages/settings/manage/components/ProviderHierarchyTree.tsx(435,62): error TS2339: Property 'validation' does not exist on type '{ name: string; service_name: string; event_types: any[]; }'.
+src/pages/settings/manage/index.tsx(9,23): error TS6133: 'Loader2' is declared but its value is never read.
+src/pages/settings/manage/index.tsx(9,45): error TS6133: 'CheckCircle2' is declared but its value is never read.
+src/pages/settings/manage/index.tsx(11,1): error TS6133: 'Button' is declared but its value is never read.
+src/pages/settings/manage/index.tsx(12,1): error TS6133: 'Card' is declared but its value is never read.
+src/pages/settings/modals/LinkProviderModal.tsx(3,32): error TS6133: 'Check' is declared but its value is never read.
+src/pages/settings/services.tsx(4,1): error TS6133: 'Button' is declared but its value is never read.
+src/pages/tasks/components/TaskCalendarCard.tsx(23,5): error TS2561: Object literal may only specify known properties, but 'low' does not exist in type 'Record<"Low" | "Medium" | "High" | "Urgent", { color: string; bg: string; }>'. Did you mean to write 'Low'?
+src/pages/tasks/components/TaskCalendarCard.tsx(29,47): error TS2551: Property 'medium' does not exist on type 'Record<"Low" | "Medium" | "High" | "Urgent", { color: string; bg: string; }>'. Did you mean 'Medium'?
+src/pages/tasks/components/TaskCalendarCard.tsx(34,9): error TS6133: 'isUrgent' is declared but its value is never read.
+src/pages/tasks/components/TaskCalendarCard.tsx(35,9): error TS6133: 'isCompleted' is declared but its value is never read.
+src/pages/tasks/components/TasksCalendar.tsx(1,10): error TS6133: 'useState' is declared but its value is never read.
+src/pages/tasks/components/TasksCalendar.tsx(5,21): error TS6133: 'isSameDay' is declared but its value is never read.
+src/pages/tasks/components/TasksCalendar.tsx(6,57): error TS6133: 'addWeeks' is declared but its value is never read.
+src/pages/tasks/components/TasksCalendar.tsx(6,67): error TS6133: 'addMonths' is declared but its value is never read.
+src/pages/tasks/components/TasksHeader.tsx(3,102): error TS6133: 'startOfMonth' is declared but its value is never read.
+src/pages/tasks/index.tsx(6,15): error TS6133: 'CalendarIcon' is declared but its value is never read.
+src/pages/tasks/index.tsx(12,1): error TS6133: 'Button' is declared but its value is never read.
+src/pages/tasks/index.tsx(13,16): error TS6133: 'CardContent' is declared but its value is never read.
+src/pages/tasks/index.tsx(27,1): error TS6133: 'Spinner' is declared but its value is never read.
+src/pages/tasks/index.tsx(29,1): error TS6133: 'format' is declared but its value is never read.
+src/pages/tasks/index.tsx(50,10): error TS6133: 'selectedTask' is declared but its value is never read.
+src/pages/tasks/index.tsx(54,10): error TS6133: 'createModalDefaultDate' is declared but its value is never read.
+src/pages/tasks/index.tsx(55,10): error TS6133: 'createModalDefaultTime' is declared but its value is never read.
+src/pages/tasks/index.tsx(266,9): error TS6133: 'handleTaskRefresh' is declared but its value is never read.

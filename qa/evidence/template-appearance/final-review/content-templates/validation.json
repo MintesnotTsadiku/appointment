@@ -1,0 +1,317 @@
+{
+  "run": "BQA-2026-00300",
+  "status": "Failed",
+  "outcome": "baseline_drift",
+  "source_version": "dd7ba60+source-887bce25282d+qa-53c0e006a45e",
+  "summary": {
+    "failed": 0,
+    "flaky": 0,
+    "passed": 20,
+    "skipped": 0,
+    "total": 20
+  },
+  "cleanup": {
+    "message": "Read-only visual suite; no business or content records were created.",
+    "ok": true
+  },
+  "audit": {
+    "ok": true,
+    "publication_inventory_unchanged": true,
+    "read_only": true,
+    "remaining_record_count": 0
+  },
+  "baseline_changed_count": 12,
+  "baseline_changes": [
+    {
+      "name": "content-templates-certified-meron-desktop-dark/meron-desktop-dark-landing.png",
+      "status": "changed"
+    },
+    {
+      "name": "content-templates-certified-meron-desktop-light/meron-desktop-light-landing.png",
+      "status": "changed"
+    },
+    {
+      "name": "content-templates-certified-meron-mobile-dark/meron-mobile-dark-landing.png",
+      "status": "changed"
+    },
+    {
+      "name": "content-templates-certified-meron-mobile-light/meron-mobile-light-landing.png",
+      "status": "changed"
+    },
+    {
+      "name": "content-templates-certified-tena-desktop-dark/tena-desktop-dark-book.png",
+      "status": "changed"
+    },
+    {
+      "name": "content-templates-certified-tena-desktop-dark/tena-desktop-dark-landing.png",
+      "status": "changed"
+    },
+    {
+      "name": "content-templates-certified-tena-desktop-light/tena-desktop-light-book.png",
+      "status": "changed"
+    },
+    {
+      "name": "content-templates-certified-tena-desktop-light/tena-desktop-light-landing.png",
+      "status": "changed"
+    },
+    {
+      "name": "content-templates-certified-tena-mobile-dark/tena-mobile-dark-book.png",
+      "status": "changed"
+    },
+    {
+      "name": "content-templates-certified-tena-mobile-dark/tena-mobile-dark-landing.png",
+      "status": "changed"
+    },
+    {
+      "name": "content-templates-certified-tena-mobile-light/tena-mobile-light-book.png",
+      "status": "changed"
+    },
+    {
+      "name": "content-templates-certified-tena-mobile-light/tena-mobile-light-landing.png",
+      "status": "changed"
+    }
+  ],
+  "strict_visual_pass": false,
+  "artifacts": [
+    {
+      "file": "abugida-desktop-dark-book.png",
+      "sha256": "8f3bda63f0dffdb72cb1dda4114c0f45a8800fe1cd6db83d8081660c5056a2f8"
+    },
+    {
+      "file": "abugida-desktop-dark-landing.png",
+      "sha256": "cf673af7b5a77830507a4aabe4214d47057e8c03d03bac29cbb6d8e0254e05e1"
+    },
+    {
+      "file": "abugida-desktop-dark-scheduler.png",
+      "sha256": "87ecdef35fc3b639140bfcc54e98a73cc5f8e014c4774f300470286caf442bfe"
+    },
+    {
+      "file": "abugida-desktop-light-book.png",
+      "sha256": "fe48b76ecdd4907768a87f37e2099dbca1eaa2102ddb803d6f9931fb0e4369fa"
+    },
+    {
+      "file": "abugida-desktop-light-landing.png",
+      "sha256": "1a72d48988c81e35de504589eba888cb795ebf860f141f65b22c113b8abe5163"
+    },
+    {
+      "file": "abugida-desktop-light-scheduler.png",
+      "sha256": "ce123da4f82fecd80b07bd28b9c5c8598a8ee66e58743b4f35ad76b5e7889af8"
+    },
+    {
+      "file": "abugida-mobile-dark-book.png",
+      "sha256": "91cebbf0ca3d156f805a397db2edd383b10f8d7bdaf30425a27030acdd416354"
+    },
+    {
+      "file": "abugida-mobile-dark-landing.png",
+      "sha256": "e26452f43ae334899ad49b747cdb7026800fd4d425b61bf2e08e391fc49a1bc3"
+    },
+    {
+      "file": "abugida-mobile-dark-scheduler.png",
+      "sha256": "99f9e4d8e7441048322fcb72fdfc93ca678bf3c229c029e7c747318dbef87888"
+    },
+    {
+      "file": "abugida-mobile-light-book.png",
+      "sha256": "bb8739b74204b24d14959062177510c8bab20d0ca80dbca082806dc79655ace3"
+    },
+    {
+      "file": "abugida-mobile-light-landing.png",
+      "sha256": "33cb3ea8e6b04c99009b97ab8799de0b79d8b7da619528541621d511e2dbfc3c"
+    },
+    {
+      "file": "abugida-mobile-light-scheduler.png",
+      "sha256": "f0f36bc0f2bd46e4aac9a3b9a0cf805276b52edbdfbea3139ae6735f8645ba3f"
+    },
+    {
+      "file": "bloom-desktop-dark-book.png",
+      "sha256": "76daf13a2b788ae4a9b2b47aceb8ba53cb71ac7f95bfec2d25f3064e6870c4cd"
+    },
+    {
+      "file": "bloom-desktop-dark-landing.png",
+      "sha256": "df8b6a2ce946a88a5acd00343c140f27c079e90768de9029f633ecae14618601"
+    },
+    {
+      "file": "bloom-desktop-dark-scheduler.png",
+      "sha256": "37d3b17cd8c96bf0762731371baa39d89cbb596da00c2594bb0532fc31be9467"
+    },
+    {
+      "file": "bloom-desktop-light-book.png",
+      "sha256": "2ca9127dd55a8187bcaa29eb31fb89773a11981ff86ad0a17cace7d14ff4e40a"
+    },
+    {
+      "file": "bloom-desktop-light-landing.png",
+      "sha256": "730394bf0fc0c15396d7e8068db3669a13ed8130d49eff50e57ca872cc4caece"
+    },
+    {
+      "file": "bloom-desktop-light-scheduler.png",
+      "sha256": "22b8a869a8134228d5c551de52af6c140ec2503859a391e55e157b6cb7c1d442"
+    },
+    {
+      "file": "bloom-mobile-dark-book.png",
+      "sha256": "c997856a5c379ca53bbc812552c40516323a450e56e297e5c413a187dd038cf4"
+    },
+    {
+      "file": "bloom-mobile-dark-landing.png",
+      "sha256": "9a44ce8362b6e743c7b2cadc66b680cc4df017dc448443fb91c6366b5999dbd8"
+    },
+    {
+      "file": "bloom-mobile-dark-scheduler.png",
+      "sha256": "12b3e4f99ca1fb5205eaf9338cf6f98815a18de3c19a72fb14acd340bbd8b91e"
+    },
+    {
+      "file": "bloom-mobile-light-book.png",
+      "sha256": "bdb9b59e04993851828aabf636e38a8016df063a95bc2396401499c40532abc4"
+    },
+    {
+      "file": "bloom-mobile-light-landing.png",
+      "sha256": "eecd99296ec8bf6df2e608191a784757b9ef173c73ff48cf7c8823bdbd098b72"
+    },
+    {
+      "file": "bloom-mobile-light-scheduler.png",
+      "sha256": "bbb53c7d8429962ec344ef7eeff330454977f9fcb67368086afc23f8ebe52569"
+    },
+    {
+      "file": "meron-desktop-dark-book.png",
+      "sha256": "73d08b50d52891ad9c138ba85f50b755c85361ad0a772434493891438c85e976"
+    },
+    {
+      "file": "meron-desktop-dark-landing.png",
+      "sha256": "b588696d807f8b7658d7b39744f357146d5685e0147f77e3cd66b3435996e06c"
+    },
+    {
+      "file": "meron-desktop-dark-scheduler.png",
+      "sha256": "cafd20be3f44db22d4477bf883ad0b6de05a1fcfa05fb30f0e20efe5b28d0f18"
+    },
+    {
+      "file": "meron-desktop-light-book.png",
+      "sha256": "24b8d32f6036e063fe3f8c34adc32454fa18ab0cca7f907e845205141988c4bf"
+    },
+    {
+      "file": "meron-desktop-light-landing.png",
+      "sha256": "c376710ba2e49420af9dda3dccaf9075bbb615093a577c79f633b5f046ac792f"
+    },
+    {
+      "file": "meron-desktop-light-scheduler.png",
+      "sha256": "6e6c1dcf5094a5891067a03fe829c69860c1afed48275158ae0b526031a13ed3"
+    },
+    {
+      "file": "meron-mobile-dark-book.png",
+      "sha256": "860212a29b27d0b81586bbd0513a229e57ccdca16b8686e7dab54ca2a8c8c185"
+    },
+    {
+      "file": "meron-mobile-dark-landing.png",
+      "sha256": "128b18f6b1bdc84c807727ab8602835330472c8939c91e4706402b720b9afabf"
+    },
+    {
+      "file": "meron-mobile-dark-scheduler.png",
+      "sha256": "d8c8ce65bdae9349562e331093d8e4dc746e110ca3076fb77d4b36f8be018290"
+    },
+    {
+      "file": "meron-mobile-light-book.png",
+      "sha256": "a73b6999e952f7865d5ab3f3eaddb82e9722d0bce5841510c0c9e9af73193ac6"
+    },
+    {
+      "file": "meron-mobile-light-landing.png",
+      "sha256": "71ce477ab8d0d407c80815a9a7d8d3bb84dc2eaef498aba9e6689781cc5cdd4f"
+    },
+    {
+      "file": "meron-mobile-light-scheduler.png",
+      "sha256": "bcdfd98f702cbe6290782f313c857862a39f0677c8ddea27bd937fc5549c11d3"
+    },
+    {
+      "file": "selam-desktop-dark-book.png",
+      "sha256": "ce1f617a8f944da5c8121751d242d4c887f1468756c4c18052f7fb1d48689251"
+    },
+    {
+      "file": "selam-desktop-dark-landing.png",
+      "sha256": "b06840a80157314367f70d6bccfcbb7bf5c82d4f18fb55757b55908f756bd01b"
+    },
+    {
+      "file": "selam-desktop-dark-scheduler.png",
+      "sha256": "fde9eef073063ba33a6b1d9c88e3c65343de84ece2e0f0b066b084adeb70a77f"
+    },
+    {
+      "file": "selam-desktop-light-book.png",
+      "sha256": "1b8259cb8ffcaf87f260b71f7a397c744f1a2735658cdc5ce0891eb3b6423821"
+    },
+    {
+      "file": "selam-desktop-light-landing.png",
+      "sha256": "a3df8d18f4e1f3923789246828a5f08a8771fc5194983a6171dfe7a05aaa39e9"
+    },
+    {
+      "file": "selam-desktop-light-scheduler.png",
+      "sha256": "f6fcda4007f39e50526d944f7d8fa0d7a8f83f63e96bea71c4304f16e5e951b9"
+    },
+    {
+      "file": "selam-mobile-dark-book.png",
+      "sha256": "26249d5cbfe971a08ca17783ca4840e22e9ca17cd06a02f1230d1c0456cef5a2"
+    },
+    {
+      "file": "selam-mobile-dark-landing.png",
+      "sha256": "da77b05d7712a1bee2cd563b5e5a3419945e6e5e686269d53a6a3c7252237fa6"
+    },
+    {
+      "file": "selam-mobile-dark-scheduler.png",
+      "sha256": "a7918abe3e66c4ecd48df73959a56ba23ad02d684074caf03795804ec841a2fe"
+    },
+    {
+      "file": "selam-mobile-light-book.png",
+      "sha256": "f4f5f7d372755d9de785ba20bc2f517dce1d12ccbad544a0c1e8b2678e3210a6"
+    },
+    {
+      "file": "selam-mobile-light-landing.png",
+      "sha256": "3351e9d48bc5a2358a9d10bab18cc011861178bbd477a6c371ba2a29f974a538"
+    },
+    {
+      "file": "selam-mobile-light-scheduler.png",
+      "sha256": "b601cc0c3f211c341a78a864f028589a01be44b1f2aac1077590f83ef6a7f2d7"
+    },
+    {
+      "file": "tena-desktop-dark-book.png",
+      "sha256": "71969b16aba6f232d83dfb050d5243cd8c7df9b6e0f0d141d1f3cabe19ccce98"
+    },
+    {
+      "file": "tena-desktop-dark-landing.png",
+      "sha256": "02cbe0035fe6cd915b12d843d9e13164d5a3bccf3333546d072d347148e82fef"
+    },
+    {
+      "file": "tena-desktop-dark-scheduler.png",
+      "sha256": "c1fa4b436e9828e8f4b319284449e4c22c23d1d5acddc8ba6dcef8bc150e023c"
+    },
+    {
+      "file": "tena-desktop-light-book.png",
+      "sha256": "c89403315870cf9ebaad94ac6ba0618f239272516088b1db9adb085537182684"
+    },
+    {
+      "file": "tena-desktop-light-landing.png",
+      "sha256": "c1158d20512344ce1a9a3b451eb5ab2d4a28ef0e07fb4ef654283d3ddb6605d3"
+    },
+    {
+      "file": "tena-desktop-light-scheduler.png",
+      "sha256": "a421bfbdfdfbd999f22d734ecf377666b2a2f5bad6b96fa70077165fea61ce14"
+    },
+    {
+      "file": "tena-mobile-dark-book.png",
+      "sha256": "86b760e7ca723147d7ff54487dffecc4ad82fa774f303dc09a12520e72c9892a"
+    },
+    {
+      "file": "tena-mobile-dark-landing.png",
+      "sha256": "b825593f0d91c8fd5dd202b36fafa96d65dd348e770bbf059d779a06cd4eeb58"
+    },
+    {
+      "file": "tena-mobile-dark-scheduler.png",
+      "sha256": "cd8e9dbf7b750c7417a739b30588b96faa172cc6a1d86b0127daf99fed2c8d80"
+    },
+    {
+      "file": "tena-mobile-light-book.png",
+      "sha256": "50804065abda2d6cc5a9e3808ff9f8ad40cddf3d06c11382e6e9054cd927b456"
+    },
+    {
+      "file": "tena-mobile-light-landing.png",
+      "sha256": "d58aebd0eb5d651389d1f9b2c86fa923112e0be061273fdc19a0549d0ea6393f"
+    },
+    {
+      "file": "tena-mobile-light-scheduler.png",
+      "sha256": "7489dbb9b0e1c5ae112212604ac70f8cbe3e242b2fa2084810d0c52199e67bfe"
+    }
+  ]
+}

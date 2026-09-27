@@ -28,7 +28,11 @@ def website_setup_context(industry: str = "", mood: str = "", audience: str = ""
     owners += [{"type": "Provider", "name": name,
                 "label": frappe.db.get_value("Provider", name, "provider_name")} for name in providers]
     sites = frappe.get_list("Public Site", filters={"status": ["!=", "Archived"]}, pluck="name")
-    return {"owners": owners, "catalog": setup.ranked_catalog(industry, mood, audience, density),
+    selected = access.membership.context().get("selected") or {}
+    selected_owner = selected.get("organization")
+    if selected_owner not in {row["name"] for row in owners}:
+        selected_owner = owners[0]["name"] if len(owners) == 1 else None
+    return {"selectedOwner": selected_owner, "owners": owners, "catalog": setup.ranked_catalog(industry, mood, audience, density),
             "sites": [setup.state(setup.require_site(name)) for name in sites]}
 
 
@@ -64,10 +68,10 @@ def save_website_setup(site: str, expected_version: int, step: str, title=None,
 
 @frappe.whitelist(methods=["POST"])
 @observed("website.preview", scope="site")
-def preview_website_setup(site: str, expected_version: int):
+def preview_website_setup(site: str, expected_version: int, brand_inputs=None):
     from appointment.public_experience import setup
 
-    return setup.preview(site, expected_version)
+    return setup.preview(site, expected_version, brand_inputs)
 
 
 @frappe.whitelist(methods=["POST"])

@@ -1,4 +1,4 @@
-.abugida-site{--blue:var(--pe-color-primary,#113db5);--orange:var(--pe-color-surface-strong,#f05b2d);--orange-ink:#b33113;--paper:var(--pe-color-canvas,#f4efe2);--ink:var(--pe-color-text,#151515);color:var(--ink);background:var(--paper);font-family:"Crafted Editorial Body",Arial,sans-serif}
+.abugida-site{--blue:var(--pe-color-primary,#113db5);--orange:var(--pe-color-surface-strong,#f05b2d);--orange-ink:#b33113;--paper:var(--pe-color-canvas,#f4efe2);--ink:var(--pe-color-text,#151515);color:var(--ink);background:var(--paper);font-family:var(--pe-selected-font-body,"Crafted Editorial Body",Arial,sans-serif)}
 .abugida-site *{box-sizing:border-box}
 .abugida-site a{color:inherit}
 .abugida-nav{height:86px;display:flex;align-items:center;gap:38px;padding:0 4vw;border-bottom:2px solid var(--ink)}
@@ -102,3 +102,6 @@
 
 .abugida-site :focus-visible { outline: 3px solid var(--pe-color-focus); outline-offset: 4px; }
 .abugida-site .abugida-newsletter :focus-visible { outline-color: currentColor; }
+
+.abugida-site[style*="--pe-selected-font-display"] :is(h1,h2,h3),.abugida-booking[style*="--pe-selected-font-display"] :is(h1,h2,h3){font-family:var(--pe-selected-font-display,inherit)}
+.abugida-site[style*="--pe-selected-font-body"] :is(p,li,address),.abugida-booking[style*="--pe-selected-font-body"] p{font-family:var(--pe-selected-font-body)}
