@@ -82,7 +82,7 @@ export function isAllowedDestination(path: string | null | undefined, session: S
     return false;
   }
   const clean = path.split('?')[0];
-  if (session.state === 'individual_owner') return ['/settings/independent-booking', '/calendar'].includes(clean) || clean === '/settings/website' || clean.startsWith('/settings/website/');
+  if (session.state === 'individual_owner') return ['/home', '/analytics', '/reception', '/settings/independent-booking', '/calendar'].includes(clean) || clean === '/settings/website' || clean.startsWith('/settings/website/');
   if (!ALLOWED_PREFIXES.some((prefix) => clean === prefix || clean.startsWith(prefix + '/'))) return false;
   if (session.state === 'administrator') return true;
   const role = session.selected?.role;
@@ -90,7 +90,7 @@ export function isAllowedDestination(path: string | null | undefined, session: S
   if (MANAGER_ONLY_PREFIXES.some((prefix) => clean.startsWith(prefix))) return false;
   if (clean.startsWith('/reception')) return role === 'Receptionist';
   if (clean.startsWith('/analytics')) return role === 'Provider' || role === 'Receptionist';
-  if (clean.startsWith('/home')) return false;
+  if (clean === '/home') return true;
   return role === 'Provider';
 }
 

@@ -1,10 +1,11 @@
 import * as React from "react";
+import { CalendarInput } from "@/components/datetime-picker/CalendarInput";
 
 import { cn } from "@/lib/utils";
 
 const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
   ({ className, type, ...props }, ref) => {
-    return (
+    const input = (
       <input
         type={type}
         className={cn(
@@ -15,6 +16,7 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
         {...props}
       />
     );
+    return type === "date" ? <CalendarInput disabled={props.disabled}>{input}</CalendarInput> : input;
   }
 );
 Input.displayName = "Input";

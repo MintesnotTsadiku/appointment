@@ -1,0 +1,7 @@
+{
+  "run": "BQA-2026-00214",
+  "status": "Passed",
+  "suite": "homepage-independent",
+  "cleanup": "Complete",
+  "scope": "Independent signup, setup, public booking and revised Home/Insights in light/dark desktop/mobile"
+}

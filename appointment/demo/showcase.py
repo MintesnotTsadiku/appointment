@@ -930,6 +930,8 @@ def summary(state):
 
 def seed(base_url="http://127.0.0.174:41960", anchor_date=None):
     from appointment.demo.content_world import configure as configure_published_content
+    from appointment.demo.analytics_world import configure as configure_analytics
+    from appointment.demo.dashboard_world import configure as configure_dashboards
 
     validate_showcase_catalog()
     with locked():
@@ -948,7 +950,9 @@ def seed(base_url="http://127.0.0.174:41960", anchor_date=None):
             if needs_public_upgrade or needs_content_upgrade:
                 configure_public_experience(state)
             needs_published_content = configure_published_content(state)
-            if needs_phase_write or needs_content_upgrade or needs_public_upgrade or needs_published_content:
+            needs_analytics = configure_analytics(state)
+            needs_dashboards = configure_dashboards(state)
+            if needs_phase_write or needs_content_upgrade or needs_public_upgrade or needs_published_content or needs_analytics or needs_dashboards:
                 for dt, name in list(state["created"]):
                     for version in frappe.get_all("Version", filters={"ref_doctype": dt, "docname": name}, pluck="name"):
                         remember(state, "Version", version)
@@ -988,6 +992,8 @@ def seed(base_url="http://127.0.0.174:41960", anchor_date=None):
             configure_public_experience(state)
             configure_published_content(state)
             appointments(state)
+            configure_analytics(state, fresh=True)
+            configure_dashboards(state)
             for persona in state["personas"]:
                 frappe.set_user(persona["email"])
                 context = membership.context()

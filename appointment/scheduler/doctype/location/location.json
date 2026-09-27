@@ -21,7 +21,9 @@
   "Section Break-3",
   "opening_hours",
   "Section Break-4",
-  "holidays"
+  "holidays",
+  "reception_state",
+  "reception_events"
  ],
  "fields": [
   {
@@ -139,6 +141,20 @@
    "label": "Independent business owner",
    "description": "Exclusive provider business owner. Must be empty for organization records.",
    "read_only": 1
+  },
+  {
+   "fieldname": "reception_state",
+   "fieldtype": "Select",
+   "label": "Reception state",
+   "options": "Unconfigured\nOpen\nClosed",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reception_events",
+   "fieldtype": "Long Text",
+   "label": "Reception workflow events",
+   "read_only": 1,
+   "hidden": 1
   }
  ],
  "grid_page_length": 50,

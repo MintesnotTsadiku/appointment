@@ -23,6 +23,11 @@ export async function stableScreenshot(page, options) {
   return page.screenshot({ ...options, animations: "disabled" });
 }
 
+export async function chooseSelect(page, label, option) {
+  await page.getByLabel(label, { exact: true }).click();
+  await page.getByRole('option', { name: option, exact: true }).click();
+}
+
 function plan(capability, state, limits) {
   execFileSync("/usr/local/bin/bench", ["--site", process.env.WEBSITE_QA_SITE, "execute", "appointment.tests.staff_browser_bridge.set_test_entitlement", "--kwargs", JSON.stringify({ capability, state, limits })], {
     cwd: process.env.FRAPPE_BENCH_ROOT, encoding: "utf8", timeout: 30000,
@@ -86,8 +91,7 @@ export async function businessIsolation(page, second, testInfo, marker) {
   await second.getByLabel("Location name", { exact: true }).fill(marker + " Isolation Main");
   await second.getByLabel("First service name", { exact: true }).fill(marker + " Isolation Consultation");
   await second.getByRole("button", { name: "Create business", exact: true }).click();
-  await expect(second.getByRole("heading", { name: "Your business is saved as a draft", exact: true })
-    .or(second.getByRole("heading", { name: marker + " Isolation", exact: true }))).toBeVisible();
+  await expect(second.locator('[data-qa="business-overview-heading"]')).toContainText(marker + " Isolation");
   await second.goto("/workspaces", { waitUntil: "networkidle" });
   await second.locator('[data-qa="workspace-card"]').filter({
     has: second.getByRole("heading", { name: marker + " Isolation", exact: true }),

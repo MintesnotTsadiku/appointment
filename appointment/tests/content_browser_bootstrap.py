@@ -78,7 +78,7 @@ def enqueue_smoke(update_baseline=0, suite='content-runtime', scenarios=None):
     if Path(get_bench_path()) != RUNTIME / 'bench':
         raise RuntimeError('Export FRAPPE_BENCH_ROOT for the isolated queue namespace')
     from agent_plane.qa_workflows.browser_qa_service import enqueue_browser_qa_request
-    if suite not in ('content-runtime', 'website-setup', 'content-templates', 'content-accessibility', 'individual-owner', 'content-recovery', 'content-production'):
+    if suite not in ('content-runtime', 'website-setup', 'content-templates', 'content-accessibility', 'individual-owner', 'content-recovery', 'content-production', 'homepage-analytics', 'homepage-independent', 'homepage-demo'):
         raise RuntimeError('Unsupported development suite')
     account = frappe.db.get_value('Browser Account', {'account_label':account_label(site)}, 'name')
     if not account:

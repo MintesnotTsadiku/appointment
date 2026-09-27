@@ -1,3 +1,5 @@
+import AppTopNav from '@/components/workspace/AppTopNav';
+import { NavigationPreferences } from '@/components/workspace/NavigationPreferences';
 /**
  * Consolidated Settings Page
  * Premium Design System - All settings in one place
@@ -125,6 +127,7 @@ const Settings = () => {
       className="min-h-screen text-[var(--text-primary)]"
       style={{ backgroundColor: 'var(--bg-primary)' }}
     >
+      <AppTopNav active="settings" />
       {/* Ambient Background Glows */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
         <div 
@@ -192,6 +195,7 @@ const Settings = () => {
         {/* Main Content */}
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
+          <NavigationPreferences />
           {/* Settings Categories Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
           {categories.map((category, index) => {

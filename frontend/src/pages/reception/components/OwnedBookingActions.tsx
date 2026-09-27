@@ -15,14 +15,20 @@ export function OwnedBookingActions({appointment, onClose, onSuccess}: {appointm
   const [time, setTime] = useState(appointment.start_time.slice(0,5));
   const [clockFormat, setClockFormat] = useState<ClockFormat>('12h');
   const [timeValid, setTimeValid] = useState(true);
+  const [reason,setReason]=useState('');
+  const [released,setReleased]=useState('');
+  const recovery=useFrappePostCall('appointment.scheduler.analytics_capture.link_recovery');
+  const candidates=useFrappeGetCall<{message:{name:string;date:string;time:string}[]}>('appointment.scheduler.analytics_capture.recovery_candidates',{booking_id:appointment.name});
   const [problem,setProblem] = useState('');
   const [confirmCancel,setConfirmCancel] = useState(false);
+  const stages = useFrappePostCall('appointment.scheduler.analytics_capture.reception_stage');
+  const [stageMessage,setStageMessage] = useState('');
   const {call,loading} = useFrappePostCall('appointment.scheduler.booking.change');
   const {data,error} = useFrappeGetCall<{message: {name:string;owner:string;creation:string;data:string}[]}>('appointment.scheduler.booking.history',{booking_id:appointment.name});
   async function change(action: 'reschedule'|'cancel') {
     setProblem('');
     try {
-      await call({booking_id:appointment.name, action, expected_modified:appointment.modified, date, start_time:time});
+      await call({booking_id:appointment.name, action, expected_modified:appointment.modified, date, start_time:time, reason});
       onSuccess(); onClose();
     } catch(e) {setProblem(parseFrappeErrorMsg(e as Parameters<typeof parseFrappeErrorMsg>[0]));}
   }
@@ -34,6 +40,7 @@ export function OwnedBookingActions({appointment, onClose, onSuccess}: {appointm
     <p data-qa="booking-current-status">Status: {appointment.status}</p>
     <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Times are in {appointment.booking_timezone || 'Africa/Addis_Ababa'}. Changes keep this booking reference. Customer messages are not sent.</p>
     {problem && <p role="alert" style={{ color: 'var(--status-cancelled, #b91c1c)' }}>{problem}</p>}
+    {editable && <section className="rounded-xl border p-3"><h3 className="text-sm font-semibold">Reception stages</h3><p className="my-2 text-xs">Record each stage when it happens. These stages stay separate from booking outcomes.</p><div className="flex flex-wrap gap-2">{[['arrive','Arrival'],['check-in','Check in'],['start','Start service'],['end','End service']].map(([stage,label])=><Button key={stage} size="sm" variant="outline" disabled={stages.loading} onClick={async()=>{try{await stages.call({booking_id:appointment.name,stage,expected_modified:appointment.modified});setStageMessage(`${label} recorded.`);onSuccess();onClose();}catch(e){setProblem(parseFrappeErrorMsg(e as Parameters<typeof parseFrappeErrorMsg>[0]));}}}>{label}</Button>)}</div><p role="status" className="mt-2 text-xs">{stageMessage}</p></section>}
     {editable && <>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
@@ -46,6 +53,8 @@ export function OwnedBookingActions({appointment, onClose, onSuccess}: {appointm
           <TimeInput id="booking-change-time" timeFormat={clockFormat} value={time} onChange={setTime} onValidityChange={setTimeValid} />
         </div>
       </div>
+      <div><Label htmlFor="booking-change-reason">Reason (optional)</Label><Input id="booking-change-reason" value={reason} maxLength={500} onChange={event=>setReason(event.target.value)}/></div>
+      {Boolean(candidates.data?.message.length)&&<section className="space-y-2 rounded border p-3"><label className="text-sm">Verified released slot<select aria-label="Verified released slot" value={released} onChange={event=>setReleased(event.target.value)} className="ml-2 bg-transparent"><option value="">Choose a captured cancellation</option>{candidates.data?.message.map(row=><option value={row.name} key={row.name}>{row.date} {row.time} · {row.name}</option>)}</select></label><p className="text-xs">Record this link only when this booking replaced the released slot.</p><Button disabled={!released||recovery.loading} variant="outline" onClick={async()=>{try{await recovery.call({booking_id:appointment.name,released_booking:released});onSuccess();onClose();}catch(e){setProblem(parseFrappeErrorMsg(e as Parameters<typeof parseFrappeErrorMsg>[0]));}}}>Record verified recovery</Button></section>}
       <div className="flex flex-wrap gap-3">
         <Button data-qa="booking-reschedule" disabled={loading || !date || !time || !timeValid} onClick={()=>change('reschedule')}>Save new time</Button>
         {!confirmCancel ? <Button variant="outline" data-qa="booking-cancel" disabled={loading} onClick={()=>setConfirmCancel(true)}>Cancel booking…</Button> : <div className="w-full space-y-3 rounded border p-3"><p>Cancel this booking and release its time?</p><Button data-qa="booking-confirm-cancel" disabled={loading} onClick={()=>change('cancel')}>Confirm cancellation</Button><Button variant="ghost" onClick={()=>setConfirmCancel(false)}>Keep booking</Button></div>}

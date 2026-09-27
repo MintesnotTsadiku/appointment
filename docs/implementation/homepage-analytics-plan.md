@@ -1,6 +1,6 @@
 # Homepage and analytics implementation plan
 
-Status: approved direction, implementation pending. Created 2026-09-26.
+Status: implemented in the isolated worktree. Final browser evidence and regression checks are in progress. Created 2026-09-26.
 
 ## Objective and approved decisions
 
@@ -304,3 +304,76 @@ Do not claim visual completion from code inspection or a generated image alone.
 8. Complete browser validation and record evidence.
 
 Track larger features through their LF IDs. Deliver them through separate implementation scopes.
+
+
+## Implementation progress — 2026-09-26
+
+The implementation uses the specified worktree, Bench, site, and React runtime.
+No reference runtime changes, push, merge, or deployment are part of this delivery.
+
+| Checkpoint | State | Evidence |
+| --- | --- | --- |
+| Installed schemas and write paths | Complete | Appointment, Walk In, Location, invitations, content releases, and newsletter schemas inspected |
+| Shared filters and small capture | Complete | UTC workflow ledger, immutable price/source snapshots, reception stages/state, assignment timestamps, validated recovery links |
+| Calculations and authorization | Complete, with declared coverage limits | Permission-scoped contracts, exports, matching record pages, five-role checks, reconciliation tests |
+| Registry and preferences | Complete | Home and Insights saved separately per user/business; presets, All, search, order, size, charts, local filters |
+| Composite and layout | Complete | `../design-references/homepage/final-composite.png`; native React layout uses application theme tokens |
+| Navigation | Complete | Shared top/sidebar routes, collapse preferences, keyboard controls, mobile drawer |
+| Browser acceptance | Complete | Final organization run BQA-2026-00208, independent run BQA-2026-00201 and publishing regression BQA-2026-00204 passed; screenshots and comparison evidence saved |
+
+### Data limits retained in the interface
+
+- Historical agreed prices, sources, and workflow timestamps remain unknown. The implementation does not backfill them.
+- Current catalog estimates, original agreed snapshots, and recorded amounts have separate contracts.
+- Default zero recorded amounts cannot distinguish missing entries from unpaid bookings. Reliable balances remain LF-02.
+- Current schedule estimates disclose LF-09. Missing historical occupied intervals are excluded, rather than rebuilt from current buffers.
+- Future slot counts represent offering choices. Several service choices can share the same capacity.
+- Customer identity uses same-business email. Duplicate candidates do not merge customers. Reliable customer identity remains LF-01.
+- Referral totals do not establish visitor conversion or campaign ROI. Those denominators remain LF-05/LF-06.
+- Newsletter counters describe local captures. They do not establish inbox delivery or engagement. These remain LF-16/LF-17.
+- Workbook import records contain successful committed results. Pending and failed attempts have no persisted lifecycle and show unavailable coverage.
+- Publishing errors have no persisted business-scoped error lifecycle. The widget shows unavailable coverage.
+- Overdue booking resolution uses committed outcome timestamps. It does not claim availability or setup issue resolution.
+
+### Validation progress
+
+Focused capture checks verify immutable snapshots, retry uniqueness, reschedule history, and failed-write rollback.
+Analytics checks verify scoped filters, denominators, record projections, ranking totals, separate preferences, and financial permissions.
+Independent booking checks cover ownership, foreign access rejection, publishing, guest booking, retries, and shared capacity.
+Frontend DOM checks and focused lint pass. Production assets build into `/tmp`, without replacing runtime assets.
+The full TypeScript check has existing errors in unrelated availability, task, calendar, and settings modules.
+Changed analytics and navigation files are checked separately in the diagnostics.
+
+A 90-day owner report over 318 bookings measured 145 SQL queries and approximately 0.37 seconds.
+The response contains aggregate contracts and permission-scoped references. Private contact fields are excluded from exports and record tables.
+
+### Completed acceptance work
+
+The final managed browser run passed, including reception stages/state, mobile customization, permissions, exports, and workspace switching.
+The registry contains 176 implemented metric contracts. All shows every widget permitted for the current user, with pagination.
+Saved screenshots, validation summaries and visual comparison are available in `qa/evidence/homepage-analytics/README.md` and `comparison.html`.
+The focused backend and frontend checks pass. The unrelated full TypeScript failures remain documented in the evidence report.
+The larger-feature dependencies above remain separate delivery scopes. No push, merge or deployment was performed.
+
+
+## Follow-up: reference composition and complete demo scenarios
+
+The user's actual Selam screenshot showed that the first generic widget composition did not match the reference closely enough.
+The default general Home now groups the timeline, seven-day preview, popular services, business summary/chart and indicator strip in the reference hierarchy.
+The seeder now supplies capture and mature-cohort scenarios across all ten fictional providers, plus 30 walk-ins and 15 first-use Insights configurations.
+Imported original prices and unsupported dependencies remain unknown. User-created records, browser actions and saved dashboards are preserved.
+See `docs/implementation/homepage-demo-data.md` for seed ownership, coverage and date-range details.
+Revised organization acceptance BQA-2026-00212 and seeded-business acceptance BQA-2026-00213 passed. The reference/before/after viewer and 25 demo screenshots are saved under `qa/evidence/homepage-analytics/`. Independent composition regression BQA-2026-00214 passed. Focused checks also verify seed idempotency, mature cohort totals and preservation of user-entered recorded amounts during later seed upgrades. All follow-up acceptance work is complete.
+
+### Follow-up: workspace controls and dashboard discovery
+
+Shared theme-based controls now style workspace date fields, checkboxes, selects and popovers. Public templates retain independent styling. Calendar selection follows the configured accent. Controlled date clearing and checkbox callback forwarding are corrected.
+Browse widgets and Appearance are visible on Home and Insights. Each dashboard explains its separate saved layout. Appearance offers explicit Light, Dark and Match device choices with navigation preferences.
+Focused lint and isolated Vite build pass. Managed homepage regression: BQA-2026-00215.
+Native select popup surfaces remain browser-owned. Shared calendar popups supplement native date entry, and Radix select/popover surfaces are themed centrally. The control inventory records the audited callers. Appearance/library and booking interactions are covered by the browser runs below.
+
+Control follow-up validation: expanded homepage BQA-2026-00216 passed. Independent BQA-2026-00222 passed calendar selection against the controlled booking form, required-date preservation, booking confirmation and desktop/mobile light/dark checks. Shared Input date callers now use the same calendar popup; raw assistant/reception date fields migrated to shared Input. The native input stays registered for keyboard editing, form validation and min/max enforcement. Calendar days use 44px targets and the configured accent. Control inventory and evidence: `qa/evidence/homepage-analytics/controls/`.
+Native select menus intentionally retain OS keyboard behavior; their workspace field styling is centralized. Radix popup surfaces are themed centrally. Arbitrary palette/font editing is not added: configured platform tokens remain authoritative.
+Publishing run BQA-2026-00217 reached an obsolete Home business-name heading assertion. The assertion now checks the business subtitle; corrected rerun BQA-2026-00223 passed. The earlier reception optimistic-lock failure was not repeated in BQA-2026-00216. Required-date reselect failure BQA-2026-00221 was corrected before the passing independent run.
+
+Final homepage control acceptance BQA-2026-00227 passed, including category checkbox filtering. Final Appearance/calendar/library screenshots were inspected and saved. Independent booking BQA-2026-00222 and publishing BQA-2026-00223 passed. The centralized control styling and discovery follow-up is complete with the native-select popup and code-owned palette limitations documented above. No push, merge or deployment.

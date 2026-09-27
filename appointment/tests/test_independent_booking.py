@@ -90,6 +90,21 @@ class IndependentBookingTests(unittest.TestCase):
         with self.assertRaises(frappe.PermissionError):
             independent.validate(service)
 
+    def test_analytics_and_preferences_follow_independent_ownership(self):
+        from appointment.scheduler import analytics, dashboard_config
+        report = analytics.overview('Provider:' + self.owner, 30)
+        self.assertEqual(report['role'], 'Owner')
+        self.assertEqual(report['current']['total'], 0)
+        self.assertTrue(report['metrics']['utilization']['coverage'] in ('partial', 'unavailable'))
+        configuration = {'version':1,'preset':'freelancer','widgets':[{'id':'total','chart':'value','span':1}]}
+        dashboard_config.save('Provider:' + self.owner, 'home', json.dumps(configuration))
+        self.assertEqual(dashboard_config.load('Provider:' + self.owner,'home'),configuration)
+        frappe.set_user(self.fixture['owners']['B'])
+        with self.assertRaises(frappe.PermissionError):
+            analytics.overview('Provider:' + self.owner, 30)
+        with self.assertRaises(frappe.PermissionError):
+            dashboard_config.load('Provider:' + self.owner, 'home')
+
 
 def run():
     require_target()

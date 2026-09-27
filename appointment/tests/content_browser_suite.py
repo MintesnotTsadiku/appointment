@@ -68,4 +68,22 @@ def suites():
             'title': 'Production security and cache upgrade', 'page_family': 'content-production',
             'credential_capability': 'frappe.role:Provider', 'mutation_level': 'read-only',
             'playwright_pattern': 'production-security-and-cache-upgrade', 'required_artifacts': ['screenshot']}]}
-    return [runtime, website, templates, accessibility, production] if site == SITE else [runtime, website, individual]
+    homepage = {**runtime, 'suite_id':'homepage-analytics', 'title':'Configurable homepage and navigation',
+        'spec_path':'qa/homepage-analytics.spec.mjs', 'config_path':'qa/homepage-analytics.config.mjs',
+        'fixture_adapter':'appointment.tests.homepage_browser_fixture.adapter',
+        'scenarios':[{'scenario_id':'homepage-matrix','title':'Homepage matrix','page_family':'homepage',
+            'credential_capability':'frappe.role:Provider','mutation_level':'exact-cleanup',
+            'playwright_pattern':'homepage-matrix','required_artifacts':['screenshot']}]}
+    homepage_independent = {**homepage, 'suite_id':'homepage-independent', 'title':'Independent homepage and booking regression',
+        'spec_path':'qa/homepage-independent.spec.mjs','config_path':'qa/homepage-independent.config.mjs',
+        'fixture_adapter':'appointment.tests.homepage_independent_fixture.adapter',
+        'scenarios':[{'scenario_id':'independent-homepage','title':'Independent homepage','page_family':'homepage',
+            'credential_capability':'frappe.role:Provider','mutation_level':'exact-cleanup',
+            'playwright_pattern':'independent-homepage','required_artifacts':['screenshot']}]}
+    homepage_demo = {**homepage, 'suite_id':'homepage-demo', 'title':'Seeded homepage visual comparison',
+        'spec_path':'qa/homepage-demo.spec.mjs','config_path':'qa/homepage-demo.config.mjs',
+        'fixture_adapter':'appointment.tests.homepage_demo_fixture.adapter',
+        'scenarios':[{'scenario_id':'seeded-homepage','title':'Seeded homepage','page_family':'homepage',
+            'credential_capability':'frappe.role:Provider','mutation_level':'exact-cleanup',
+            'playwright_pattern':'seeded-homepage','required_artifacts':['screenshot']}]}
+    return [homepage_demo, homepage, homepage_independent, runtime, website, templates, accessibility, production] if site == SITE else [runtime, website, individual]

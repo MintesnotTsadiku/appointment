@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ReceptionState } from './components/ReceptionState';
 import { DeskHeader } from './components/DeskHeader';
 import { DeskFilters } from './components/DeskFilters';
 import { DeskCalendar } from './components/DeskCalendar';
@@ -72,7 +73,7 @@ const Reception = () => {
   );
 
   // Fetch locations and providers for filters
-  const { data: locationsData } = useFrappeGetCall<{ message: { locations: Location[] } }>(
+  const { data: locationsData, mutate: refreshLocations } = useFrappeGetCall<{ message: { locations: Location[] } }>(
     'appointment.scheduler.api.desk.get_locations_list',
     organization ? { organization } : undefined,
     `locations-${organization || 'all'}`
@@ -191,6 +192,7 @@ const Reception = () => {
             <span className="font-medium" style={{ color: 'var(--text-primary)' }}>
               {deskScope?.organization_name || session?.selected?.business_name || 'All authorized businesses'}
             </span>
+            {selectedLocation && (deskScope?.is_manager || deskScope?.receptionist) && <ReceptionState location={selectedLocation} state={(locations.find(location=>location.name===selectedLocation) as Location & {reception_state?:string})?.reception_state} refresh={()=>void refreshLocations()}/>}
             <span>Date: {format(currentDate, 'EEE, dd MMM yyyy')}</span>
             <span>Time zone: {deskTimezone || 'Africa/Addis_Ababa'}</span>
             <span>

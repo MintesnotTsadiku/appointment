@@ -1,0 +1,18 @@
+{
+  "run": "BQA-2026-00213",
+  "status": "Passed",
+  "businesses": 5,
+  "providers_checked_in_backend": 10,
+  "screenshots": 25,
+  "authentication": "Normal demo owner login",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "sizes": [
+    "desktop",
+    "mobile"
+  ],
+  "publication_inventory_unchanged": true,
+  "navigation_preferences_restored": true
+}

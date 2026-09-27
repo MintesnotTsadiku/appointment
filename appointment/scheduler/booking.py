@@ -27,11 +27,18 @@ class ResolvedOffering(NamedTuple):
     business: object
 
 
-def offering(name, public=False, require_active=True):
-    event = frappe.get_doc("EventType", name)
-    service = frappe.get_doc("Service", event.service)
-    location = frappe.get_doc("Location", event.location)
-    provider = frappe.get_doc("Provider", event.provider)
+def offering(name, public=False, require_active=True, documents=None):
+    def resolve(doctype, identity):
+        if documents is None:
+            return frappe.get_doc(doctype, identity)
+        key = (doctype, identity)
+        if key not in documents:
+            documents[key] = frappe.get_doc(doctype, identity)
+        return documents[key]
+    event = resolve("EventType", name)
+    service = resolve("Service", event.service)
+    location = resolve("Location", event.location)
+    provider = resolve("Provider", event.provider)
     org = service.organization
     if org and (
         service.get("independent_provider")
@@ -53,7 +60,7 @@ def offering(name, public=False, require_active=True):
     ):
         frappe.throw(_("Offering must belong to one business."), frappe.PermissionError)
     if org:
-        business = frappe.get_doc("Organization", org)
+        business = resolve("Organization", org)
     else:
         from appointment.scheduler.independent import matches
 
@@ -272,10 +279,12 @@ def creation_history(doc):
 @frappe.whitelist(allow_guest=True, methods=["POST"])
 @rate_limit(limit=60, seconds=60, methods=["POST"])
 def book(
-    offering_id, start_time, end_time, user_name, user_email, request_id, user_phone="", notes="", organization_id=None
+    offering_id, start_time, end_time, user_name, user_email, request_id, user_phone="", notes="", organization_id=None, referral_source="", referral_code=""
 ):
     if not re.fullmatch(r"[A-Za-z0-9_-]{16,100}", request_id or ""):
         frappe.throw(_("A valid booking request identity is required."))
+    if any(not isinstance(value, str) or len(value)>140 for value in (referral_source, referral_code)):
+        frappe.throw("Referral values must be text of at most 140 characters.")
     event = frappe.get_doc("EventType", offering_id)
     business_name = frappe.db.get_value("Service", event.service, "organization") or ("Provider:" + event.provider)
     if organization_id and organization_id != business_name:
@@ -290,6 +299,8 @@ def book(
         phone=user_phone or "",
         notes=notes or "",
     )
+    if referral_source or referral_code:
+        payload.update(referral_source=referral_source,referral_code=referral_code)
     digest = hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
     key = hashlib.sha256((business_name + "\0" + frappe.session.user + "\0" + request_id).encode()).hexdigest()
     provider = frappe.get_doc("Provider", event.provider)
@@ -333,6 +344,7 @@ def book(
     )
     # This narrow server-owned flag authorizes only public creation of the fully
     # resolved offering. The controller still enforces ownership/hours/capacity.
+    doc.flags.analytics_terms = dict(source="online", referral_source=referral_source, referral_code=referral_code)
     doc.flags.public_booking = _PUBLIC_CREATE
     doc.insert(ignore_permissions=True)
     return result
@@ -425,7 +437,7 @@ def guard_calendar_capacity(doc, method=None):
 
 
 @frappe.whitelist(methods=["POST"])
-def change(booking_id, action, expected_modified, date=None, start_time=None):
+def change(booking_id, action, expected_modified, date=None, start_time=None, reason=None):
     """Staff lifecycle command; preserves identity, checks stale edits, records Version."""
     doc = frappe.get_doc("Appointment", booking_id)
     require_access(doc)
@@ -437,8 +449,12 @@ def change(booking_id, action, expected_modified, date=None, start_time=None):
         frappe.throw(_("This booking changed. Reload before editing."), frappe.TimestampMismatchError)
     if doc.status not in ("Pending", "Confirmed"):
         frappe.throw(_("Only pending or confirmed bookings can be changed."))
+    if reason is not None and (not isinstance(reason,str) or len(reason)>500):
+        frappe.throw("Enter a reason of at most 500 characters.")
+    doc.flags.analytics_reason=reason or ""
     if action == "cancel":
         doc.status = "Cancelled"
+        if reason is not None:doc.cancellation_reason=reason
     elif action == "reschedule":
         if not date or not start_time:
             frappe.throw(_("Choose a date and start time."))

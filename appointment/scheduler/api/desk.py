@@ -736,6 +736,7 @@ def assign_walk_in_to_slot(walk_in_name: str, provider_name: str, location_name:
         appointment.start_time = start_time_str
         appointment.end_time = end_time_str
         appointment.status = "Confirmed"
+        appointment.flags.analytics_terms = {"source": "walk-in"}
         if walk_in.notes:
             appointment.notes = f"Walk-in: {walk_in.notes}"
 
@@ -819,9 +820,8 @@ def get_locations_list(organization: str = None):
     locations = frappe.get_list(
         "Location",
         filters=filters,
-        fields=["name", "location_name", "organization", "timezone"],
+        fields=["name", "location_name", "organization", "timezone", "reception_state"],
         order_by="location_name"
     )
 
     return {"locations": locations}, 200
-

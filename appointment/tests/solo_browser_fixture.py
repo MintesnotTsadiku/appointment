@@ -10,13 +10,14 @@ from appointment.tests.website_browser_fixture import WebsiteBrowserFixture
 
 
 class SoloBrowserFixture(WebsiteBrowserFixture):
+    user = USER
     def prepare(self, *, request):
         if frappe.local.site not in ("meet-beta-content-fresh-b.localhost", "meet-beta-content-fresh-c.localhost") or not frappe.conf.get("worktree_development"):
             raise RuntimeError("Independent acceptance requires the second fresh isolated site")
         marker = "WQA-independentacceptance"
-        if frappe.db.exists("Provider", {"user": USER}) or frappe.db.count("Organization"):
+        if frappe.db.exists("Provider", {"user": self.user}) or frappe.db.count("Organization"):
             raise RuntimeError("Independent acceptance must begin without a provider or organization")
-        return {"ok": True, "fixture_identity": {"marker": marker, "user": USER, "site": frappe.local.site}}
+        return {"ok": True, "fixture_identity": {"marker": marker, "user": self.user, "site": frappe.local.site}}
 
     def provide_execution_context(self, *, fixture_identity, request):
         return {"environment": {"SOLO_QA_MARKER": fixture_identity["marker"], "SOLO_QA_IMAGE": str(Path(frappe.get_app_path("appointment")) / "public/brand-experience/support/selam/scene-1.webp")}}
@@ -25,7 +26,7 @@ class SoloBrowserFixture(WebsiteBrowserFixture):
         from frappe.utils.password import delete_all_passwords_for
         from appointment.content.newsletter.core import TYPES
 
-        providers = frappe.get_all("Provider", filters={"user": USER, "provider_name": fixture_identity["marker"]}, pluck="name")
+        providers = frappe.get_all("Provider", filters={"user": self.user, "provider_name": fixture_identity["marker"]}, pluck="name")
         for provider in providers:
             sites = frappe.get_all("Public Site", filters={"owner_type": "Provider", "provider": provider}, pluck="name")
             profiles = frappe.get_all("Brand Profile", filters={"owner_type": "Provider", "provider": provider}, pluck="name")
@@ -67,7 +68,7 @@ class SoloBrowserFixture(WebsiteBrowserFixture):
         counts = {doctype: frappe.db.count(doctype, {"provider": marker}) for doctype in (
             "Content Ownership", "Gallery Collection", "Published Content Release", "Newsletter Audience Member",
             "Newsletter Sender Identity", "Business Newsletter Campaign", "Local Email Message", "Brand Profile")}
-        counts["Provider"] = frappe.db.count("Provider", {"user": USER, "provider_name": marker})
+        counts["Provider"] = frappe.db.count("Provider", {"user": self.user, "provider_name": marker})
         counts["Public Site"] = frappe.db.count("Public Site", {"slug": marker.lower()})
         counts.update({doctype: frappe.db.count(doctype, {"independent_provider": marker}) for doctype in ("Service", "Location")})
         counts["Appointment"] = frappe.db.count("Appointment", {"provider": marker})

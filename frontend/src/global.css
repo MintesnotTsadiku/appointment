@@ -396,3 +396,17 @@ button[role="gridcell"][aria-selected="true"] span {
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
 }
+
+@media (min-width: 768px) {
+  html[data-workspace-navigation="sidebar"] body { padding-left: 240px; }
+  html[data-workspace-navigation="sidebar"][data-workspace-collapsed="true"] body { padding-left: 80px; }
+}
+
+[data-qa="workspace-analytics"] button[aria-label^="Move "],
+[data-qa="workspace-analytics"] button[aria-label^="Remove "] {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}

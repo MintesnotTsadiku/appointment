@@ -1,9 +1,13 @@
+import { useEffect, useState } from 'react';
+import { Dialog, DialogContent, DialogTitle } from '@/components/dialog';
+import { useNavigationPreference } from './useNavigationPreference';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useFrappeAuth } from 'frappe-react-sdk';
-import { BarChart3, Building2, CalendarDays, Home, LogOut, Monitor, Moon, Settings, Sun, Users } from 'lucide-react';
+import { PanelLeftClose, PanelLeftOpen, Menu, BarChart3, Building2, CalendarDays, Home, LogOut, Monitor, Moon, Settings, Sun, Users } from 'lucide-react';
 import { useSession } from '@/context/session';
 import { useTheme } from '@/components/theme-provider';
 import { Button } from '@/components/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/select';
 
 const ROLE_LABEL: Record<string, string> = {
   Owner: 'Owner',
@@ -18,30 +22,30 @@ export function AppTopNav({ active }: { active?: 'home' | 'analytics' | 'recepti
   const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
+  const { value: preference, update: updatePreference } = useNavigationPreference();
+  const [drawer, setDrawer] = useState(false);
+  useEffect(() => {
+    document.documentElement.dataset.workspaceNavigation = preference.placement;
+    document.documentElement.dataset.workspaceCollapsed = String(preference.collapsed);
+    return () => { delete document.documentElement.dataset.workspaceNavigation; delete document.documentElement.dataset.workspaceCollapsed; };
+  }, [preference.placement, preference.collapsed]);
+  useEffect(() => { setDrawer(false); }, [location.pathname]);
 
-  if (session?.authenticated && session.state === 'individual_owner') {
-    return <header className="flex flex-wrap items-center gap-6 border-b px-5 py-4" aria-label="Independent business navigation">
-      <Link to="/settings/independent-booking">Booking setup</Link><Link to="/calendar">Schedule</Link>
-      <Link to="/settings/website">Website setup</Link><Link to="/settings/website/content">Website content</Link>
-      <Link to="/settings/website/newsletter">Newsletter</Link>
-      <Button variant="ghost" onClick={() => void logout().then(() => navigate('/login', { replace: true }))}>Sign out</Button>
-    </header>;
-  }
-
-  if (!session?.authenticated || (session.state !== 'workspace' && session.state !== 'administrator')) {
+  if (!session?.authenticated || (session.state !== 'workspace' && session.state !== 'administrator' && session.state !== 'individual_owner')) {
     return null;
   }
 
   const selected = session.selected;
-  const isManager = Boolean(session.is_administrator || selected?.is_manager);
+  const independent = session.state === 'individual_owner';
+  const isManager = Boolean(session.is_administrator || selected?.is_manager || independent);
   const isReceptionist = selected?.role === 'Receptionist';
 
   const links: Array<{ key: string; label: string; to: string; icon: typeof Home; show: boolean }> = [
-    { key: 'home', label: 'Overview', to: '/home', icon: Home, show: isManager },
-    { key: 'analytics', label: 'Insights', to: '/analytics', icon: BarChart3, show: Boolean(selected) },
+    { key: 'home', label: 'Overview', to: '/home', icon: Home, show: Boolean(selected) || isManager },
+    { key: 'analytics', label: 'Insights', to: '/analytics', icon: BarChart3, show: Boolean(selected) || independent },
     { key: 'reception', label: 'Reception', to: '/reception', icon: Users, show: isManager || isReceptionist },
-    { key: 'calendar', label: 'Schedule', to: '/calendar', icon: CalendarDays, show: !isManager },
-    { key: 'settings', label: 'Settings', to: '/settings', icon: Settings, show: isManager },
+    { key: 'calendar', label: 'Schedule', to: '/calendar', icon: CalendarDays, show: Boolean(selected) || independent },
+    { key: 'settings', label: 'Settings', to: independent ? '/settings/independent-booking' : '/settings', icon: Settings, show: isManager },
   ];
 
   const cycleTheme = () => {
@@ -60,12 +64,27 @@ export function AppTopNav({ active }: { active?: 'home' | 'analytics' | 'recepti
     navigate('/login', { replace: true });
   };
 
-  return (
+  const renderLinks = (iconsOnly = false) => links.filter(link => link.show).map(link => {
+    const selectedRoute = active === link.key || location.pathname.startsWith(link.to);
+    return <Link key={link.key} to={link.to} aria-label={link.label} aria-current={selectedRoute ? 'page' : undefined}
+      title={iconsOnly ? link.label : undefined} className="flex min-h-11 items-center gap-3 rounded-xl px-3 py-2 text-sm"
+      style={{ background: selectedRoute ? 'var(--accent-primary-light)' : undefined, color: selectedRoute ? 'var(--text-primary)' : 'var(--text-secondary)' }}>
+      <link.icon size={19} aria-hidden="true" />{!iconsOnly && link.label}
+    </Link>;
+  });
+  return (<>
+    {preference.placement === 'sidebar' && <aside className="workspace-sidebar fixed inset-y-0 left-0 z-40 hidden flex-col border-r p-4 md:flex" style={{width:preference.collapsed?80:240, background:'var(--bg-elevated)',borderColor:'var(--border-default)'}}>
+      <Link to="/home" aria-label="Scheduler home" className="mb-8 flex items-center gap-3 px-2 font-heading font-semibold"><CalendarDays size={22} style={{color:'var(--accent-primary)'}}/>{!preference.collapsed && 'Scheduler'}</Link>
+      <nav aria-label="Sidebar navigation" className="space-y-2">{renderLinks(preference.collapsed)}</nav>
+      <Button className="mt-auto" variant="ghost" aria-label={preference.collapsed?'Expand sidebar':'Collapse sidebar'} title={preference.collapsed?'Expand sidebar':'Collapse sidebar'} onClick={()=>void updatePreference({...preference,collapsed:!preference.collapsed})}>{preference.collapsed?<PanelLeftOpen size={20}/>:<><PanelLeftClose size={20}/><span className="ml-2">Collapse</span></>}</Button>
+    </aside>}
+    <Dialog open={drawer} onOpenChange={setDrawer}><DialogContent side="right" className="p-6"><DialogTitle>Workspace navigation</DialogTitle><nav aria-label="Mobile navigation" className="mt-6 space-y-2">{renderLinks()}</nav></DialogContent></Dialog>
     <header
       className="sticky top-0 z-40 backdrop-blur-xl"
       style={{ backgroundColor: 'color-mix(in srgb, var(--bg-primary) 88%, transparent)', borderBottom: '1px solid var(--border-subtle)' }}
     >
       <div className="mx-auto flex max-w-[1800px] flex-wrap items-center gap-3 px-4 py-3 sm:px-6">
+        <Button variant="ghost" size="icon" className="min-h-11 min-w-11 md:hidden" aria-label="Open navigation drawer" onClick={()=>setDrawer(true)}><Menu size={20}/></Button>
         <Link to="/home" className="flex items-center gap-2 font-heading text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
           <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-primary">
             <CalendarDays className="h-4 w-4 text-white" />
@@ -81,29 +100,27 @@ export function AppTopNav({ active }: { active?: 'home' | 'analytics' | 'recepti
             </label>
           ) : null}
           {session.workspaces.length > 1 ? (
-            <select
-              id="workspace-switcher"
-              data-qa="workspace-switcher"
-              value={selected?.organization ?? ''}
-              onChange={(event) => void onSwitch(event.target.value)}
-              className="max-w-[220px] truncate rounded-lg border px-2 py-1 text-sm"
-              style={{ borderColor: 'var(--border-default)', backgroundColor: 'var(--bg-elevated)', color: 'var(--text-primary)' }}
-            >
-              {session.workspaces.map((workspace) => (
-                <option key={workspace.organization} value={workspace.organization}>
-                  {workspace.business_name} · {ROLE_LABEL[workspace.role] ?? workspace.role}
-                </option>
-              ))}
-            </select>
+            <Select value={selected?.organization} onValueChange={value => void onSwitch(value)}>
+              <SelectTrigger id="workspace-switcher" data-qa="workspace-switcher" className="h-8 max-w-[220px] border-0 bg-transparent px-2 shadow-none">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {session.workspaces.map((workspace) => (
+                  <SelectItem key={workspace.organization} value={workspace.organization}>
+                    {workspace.business_name} · {ROLE_LABEL[workspace.role] ?? workspace.role}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           ) : (
             <span data-qa="active-business" className="truncate text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
-              {selected?.business_name ?? 'Administration'}
+              {selected?.business_name ?? (independent ? 'Independent business' : 'Administration')}
               {selected ? <span style={{ color: 'var(--text-muted)' }}> · {ROLE_LABEL[selected.role] ?? selected.role}</span> : null}
             </span>
           )}
         </div>
 
-        <nav className="order-last flex w-full items-center gap-1 overflow-x-auto sm:order-none sm:w-auto sm:flex-1">
+        <nav aria-label="Top navigation" className={`order-last hidden w-full items-center gap-1 overflow-x-auto md:order-none md:w-auto md:flex-1 ${preference.placement === 'sidebar' ? '' : 'md:flex'}`}>
           {links
             .filter((link) => link.show)
             .map((link) => {
@@ -126,6 +143,15 @@ export function AppTopNav({ active }: { active?: 'home' | 'analytics' | 'recepti
         </nav>
 
         <div className="ml-auto flex items-center gap-1">
+          <Select value={preference.placement} onValueChange={value => void updatePreference({ ...preference, placement: value as 'top' | 'sidebar' })}>
+            <SelectTrigger id="navigation-placement" aria-label="Navigation placement" className="h-8 w-[9.75rem]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="top">Top navigation</SelectItem>
+              <SelectItem value="sidebar">Left sidebar</SelectItem>
+            </SelectContent>
+          </Select>
           <Button
             type="button"
             variant="ghost"
@@ -143,7 +169,7 @@ export function AppTopNav({ active }: { active?: 'home' | 'analytics' | 'recepti
         </div>
       </div>
     </header>
-  );
+  </>);
 }
 
 export default AppTopNav;
