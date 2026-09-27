@@ -1,0 +1,914 @@
+{
+  "config": {
+    "configFile": "/tmp/agent-harness-playwright-otwpidjx/qa/content-templates.config.mjs",
+    "rootDir": "/tmp/agent-harness-playwright-otwpidjx/qa",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/tmp/agent_browser_qa/BQA-2026-00255/attempt-1/playwright",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/tmp/agent-harness-playwright-otwpidjx/qa",
+        "testIgnore": [],
+        "testMatch": [
+          "content-templates.spec.mjs"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/tmp/agent_browser_qa/BQA-2026-00255/attempt-1/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "runAgents": "none",
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.58.2",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "content-templates.spec.mjs",
+      "file": "content-templates.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "certified-selam-desktop-light",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 21670,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-27T11:54:50.425Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/tmp/agent_browser_qa/BQA-2026-00255/attempt-1/playwright/content-templates-certified-selam-desktop-light/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2178641f6021fccd8f85-dd06e6d4506e146b095e",
+          "file": "content-templates.spec.mjs",
+          "line": 21,
+          "column": 5
+        },
+        {
+          "title": "certified-selam-desktop-dark",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 20899,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-27T11:55:12.993Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/tmp/agent_browser_qa/BQA-2026-00255/attempt-1/playwright/content-templates-certified-selam-desktop-dark/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2178641f6021fccd8f85-39336e229aba122d14f7",
+          "file": "content-templates.spec.mjs",
+          "line": 21,
+          "column": 5
+        },
+        {
+          "title": "certified-selam-mobile-light",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 18040,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-27T11:55:34.511Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/tmp/agent_browser_qa/BQA-2026-00255/attempt-1/playwright/content-templates-certified-selam-mobile-light/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2178641f6021fccd8f85-0acf95836c231968aec2",
+          "file": "content-templates.spec.mjs",
+          "line": 21,
+          "column": 5
+        },
+        {
+          "title": "certified-selam-mobile-dark",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 17605,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-27T11:55:53.097Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/tmp/agent_browser_qa/BQA-2026-00255/attempt-1/playwright/content-templates-certified-selam-mobile-dark/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2178641f6021fccd8f85-c0f762e3ce0224920137",
+          "file": "content-templates.spec.mjs",
+          "line": 21,
+          "column": 5
+        },
+        {
+          "title": "certified-bloom-desktop-light",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 26334,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-27T11:56:11.212Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/tmp/agent_browser_qa/BQA-2026-00255/attempt-1/playwright/content-templates-certified-bloom-desktop-light/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2178641f6021fccd8f85-726ef9f69c69fba08079",
+          "file": "content-templates.spec.mjs",
+          "line": 21,
+          "column": 5
+        },
+        {
+          "title": "certified-bloom-desktop-dark",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 24130,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-27T11:56:38.514Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/tmp/agent_browser_qa/BQA-2026-00255/attempt-1/playwright/content-templates-certified-bloom-desktop-dark/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2178641f6021fccd8f85-d679eac6f7c046497aa1",
+          "file": "content-templates.spec.mjs",
+          "line": 21,
+          "column": 5
+        },
+        {
+          "title": "certified-bloom-mobile-light",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 20010,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-27T11:57:03.152Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/tmp/agent_browser_qa/BQA-2026-00255/attempt-1/playwright/content-templates-certified-bloom-mobile-light/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2178641f6021fccd8f85-c1634546220d55df4d51",
+          "file": "content-templates.spec.mjs",
+          "line": 21,
+          "column": 5
+        },
+        {
+          "title": "certified-bloom-mobile-dark",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 18915,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-27T11:57:23.575Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/tmp/agent_browser_qa/BQA-2026-00255/attempt-1/playwright/content-templates-certified-bloom-mobile-dark/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2178641f6021fccd8f85-ef19adb3a004d4ef03f2",
+          "file": "content-templates.spec.mjs",
+          "line": 21,
+          "column": 5
+        },
+        {
+          "title": "certified-meron-desktop-light",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 19023,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-27T11:57:42.822Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/tmp/agent_browser_qa/BQA-2026-00255/attempt-1/playwright/content-templates-certified-meron-desktop-light/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2178641f6021fccd8f85-eca9b25e933239bdf53a",
+          "file": "content-templates.spec.mjs",
+          "line": 21,
+          "column": 5
+        },
+        {
+          "title": "certified-meron-desktop-dark",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 19732,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-27T11:58:02.518Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/tmp/agent_browser_qa/BQA-2026-00255/attempt-1/playwright/content-templates-certified-meron-desktop-dark/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2178641f6021fccd8f85-5781a8c02bc8853e2568",
+          "file": "content-templates.spec.mjs",
+          "line": 21,
+          "column": 5
+        },
+        {
+          "title": "certified-meron-mobile-light",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5546,
+                  "error": {
+                    "message": "Error: Scheduler did not produce two identical settled frames.",
+                    "stack": "Error: Scheduler did not produce two identical settled frames.\n    at captureSettledScheduler (/tmp/agent-harness-playwright-otwpidjx/qa/content-templates.spec.mjs:15:9)\n    at /tmp/agent-harness-playwright-otwpidjx/qa/content-templates.spec.mjs:67:38",
+                    "location": {
+                      "file": "/tmp/agent-harness-playwright-otwpidjx/qa/content-templates.spec.mjs",
+                      "column": 9,
+                      "line": 15
+                    },
+                    "snippet": "  13 |     await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));\n  14 |   }\n> 15 |   throw new Error(\"Scheduler did not produce two identical settled frames.\");\n     |         ^\n  16 | }\n  17 |\n  18 | const world = JSON.parse(process.env.SHOWCASE_QA_WORLD || \"{}\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/tmp/agent-harness-playwright-otwpidjx/qa/content-templates.spec.mjs",
+                        "column": 9,
+                        "line": 15
+                      },
+                      "message": "Error: Scheduler did not produce two identical settled frames.\n\n  13 |     await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));\n  14 |   }\n> 15 |   throw new Error(\"Scheduler did not produce two identical settled frames.\");\n     |         ^\n  16 | }\n  17 |\n  18 | const world = JSON.parse(process.env.SHOWCASE_QA_WORLD || \"{}\");\n    at captureSettledScheduler (/tmp/agent-harness-playwright-otwpidjx/qa/content-templates.spec.mjs:15:9)\n    at /tmp/agent-harness-playwright-otwpidjx/qa/content-templates.spec.mjs:67:38"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-27T11:58:22.649Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/tmp/agent_browser_qa/BQA-2026-00255/attempt-1/playwright/content-templates-certified-meron-mobile-light/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/tmp/agent_browser_qa/BQA-2026-00255/attempt-1/playwright/content-templates-certified-meron-mobile-light/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/tmp/agent_browser_qa/BQA-2026-00255/attempt-1/playwright/content-templates-certified-meron-mobile-light/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/tmp/agent-harness-playwright-otwpidjx/qa/content-templates.spec.mjs",
+                    "column": 9,
+                    "line": 15
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "2178641f6021fccd8f85-accc72f44873b7f8e812",
+          "file": "content-templates.spec.mjs",
+          "line": 21,
+          "column": 5
+        },
+        {
+          "title": "certified-meron-mobile-dark",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 19418,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-27T11:58:59.639Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/tmp/agent_browser_qa/BQA-2026-00255/attempt-1/playwright/content-templates-certified-meron-mobile-dark/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2178641f6021fccd8f85-c5040424f0e5b4d16a85",
+          "file": "content-templates.spec.mjs",
+          "line": 21,
+          "column": 5
+        },
+        {
+          "title": "certified-abugida-desktop-light",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 19187,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-27T11:59:19.804Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/tmp/agent_browser_qa/BQA-2026-00255/attempt-1/playwright/content-templates-certified-abugida-desktop-light/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2178641f6021fccd8f85-2ce8ec68bf245d2c20a1",
+          "file": "content-templates.spec.mjs",
+          "line": 21,
+          "column": 5
+        },
+        {
+          "title": "certified-abugida-desktop-dark",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 21337,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-27T11:59:39.437Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/tmp/agent_browser_qa/BQA-2026-00255/attempt-1/playwright/content-templates-certified-abugida-desktop-dark/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2178641f6021fccd8f85-1f1552f28cb6a1db5796",
+          "file": "content-templates.spec.mjs",
+          "line": 21,
+          "column": 5
+        },
+        {
+          "title": "certified-abugida-mobile-light",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 23162,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-27T12:00:01.842Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/tmp/agent_browser_qa/BQA-2026-00255/attempt-1/playwright/content-templates-certified-abugida-mobile-light/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2178641f6021fccd8f85-cf29ddeeb11bceb523ee",
+          "file": "content-templates.spec.mjs",
+          "line": 21,
+          "column": 5
+        },
+        {
+          "title": "certified-abugida-mobile-dark",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 19150,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-27T12:00:25.863Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/tmp/agent_browser_qa/BQA-2026-00255/attempt-1/playwright/content-templates-certified-abugida-mobile-dark/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2178641f6021fccd8f85-88196b02116db063d1aa",
+          "file": "content-templates.spec.mjs",
+          "line": 21,
+          "column": 5
+        },
+        {
+          "title": "certified-tena-desktop-light",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 22548,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-27T12:00:45.550Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/tmp/agent_browser_qa/BQA-2026-00255/attempt-1/playwright/content-templates-certified-tena-desktop-light/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2178641f6021fccd8f85-25d230cfb70b7e8f8087",
+          "file": "content-templates.spec.mjs",
+          "line": 21,
+          "column": 5
+        },
+        {
+          "title": "certified-tena-desktop-dark",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 22308,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-27T12:01:08.895Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/tmp/agent_browser_qa/BQA-2026-00255/attempt-1/playwright/content-templates-certified-tena-desktop-dark/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2178641f6021fccd8f85-68568765719eb106349b",
+          "file": "content-templates.spec.mjs",
+          "line": 21,
+          "column": 5
+        },
+        {
+          "title": "certified-tena-mobile-light",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 21443,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-27T12:01:32.201Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/tmp/agent_browser_qa/BQA-2026-00255/attempt-1/playwright/content-templates-certified-tena-mobile-light/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2178641f6021fccd8f85-4ea5650311d0729b1c2e",
+          "file": "content-templates.spec.mjs",
+          "line": 21,
+          "column": 5
+        },
+        {
+          "title": "certified-tena-mobile-dark",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 19528,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-27T12:01:54.125Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/tmp/agent_browser_qa/BQA-2026-00255/attempt-1/playwright/content-templates-certified-tena-mobile-dark/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2178641f6021fccd8f85-3744565dd58c7cb8d6e3",
+          "file": "content-templates.spec.mjs",
+          "line": 21,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-27T11:54:48.427Z",
+    "duration": 475825.56100000005,
+    "expected": 19,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

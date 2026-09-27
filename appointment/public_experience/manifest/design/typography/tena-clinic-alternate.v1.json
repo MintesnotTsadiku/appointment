@@ -1,0 +1,108 @@
+{
+  "kind": "typography",
+  "contract": "appointment-typography.v1",
+  "key": "tena-clinic-alternate",
+  "version": 1,
+  "supportedScripts": [
+    "latin",
+    "ethiopic"
+  ],
+  "weights": [
+    400,
+    500,
+    600,
+    700
+  ],
+  "roles": {
+    "display": {
+      "family": "Quiet Trust Body",
+      "assetKey": "quiet-trust-body",
+      "weight": 400,
+      "sizeScale": "editorial",
+      "lineHeight": 1.12,
+      "letterSpacing": "-0.02em"
+    },
+    "body": {
+      "family": "Quiet Trust Body",
+      "assetKey": "quiet-trust-body",
+      "weight": 400,
+      "sizeScale": "comfortable",
+      "lineHeight": 1.62,
+      "letterSpacing": "0"
+    },
+    "ui": {
+      "family": "Quiet Trust UI",
+      "assetKey": "quiet-trust-body",
+      "weight": 600,
+      "sizeScale": "compact",
+      "lineHeight": 1.25,
+      "letterSpacing": "0.01em"
+    },
+    "numeric": {
+      "family": "Quiet Trust UI",
+      "assetKey": "quiet-trust-body",
+      "weight": 600,
+      "sizeScale": "compact",
+      "lineHeight": 1.2,
+      "letterSpacing": "0"
+    }
+  },
+  "fontAssets": [
+    {
+      "key": "quiet-trust-display",
+      "family": "Quiet Trust Display",
+      "src": "/assets/appointment/quiet-trust/fonts/dejavu-serif.ttf",
+      "weight": 400,
+      "format": "truetype",
+      "scripts": [
+        "latin"
+      ],
+      "license": "Bitstream Vera / DejaVu license"
+    },
+    {
+      "key": "quiet-trust-display-bold",
+      "family": "Quiet Trust Display",
+      "src": "/assets/appointment/quiet-trust/fonts/dejavu-serif-bold.ttf",
+      "weight": 700,
+      "format": "truetype",
+      "scripts": [
+        "latin"
+      ],
+      "license": "Bitstream Vera / DejaVu license"
+    },
+    {
+      "key": "quiet-trust-body",
+      "family": "Quiet Trust Body",
+      "src": "/assets/appointment/quiet-trust/fonts/noto-sans-ethiopic.ttf",
+      "weight": 400,
+      "format": "truetype",
+      "scripts": [
+        "latin",
+        "ethiopic"
+      ],
+      "license": "SIL Open Font License 1.1"
+    }
+  ],
+  "fallbacks": {
+    "display": [
+      "Georgia",
+      "Times New Roman",
+      "serif"
+    ],
+    "body": [
+      "Arial",
+      "DejaVu Sans",
+      "sans-serif"
+    ],
+    "ui": [
+      "Arial",
+      "DejaVu Sans",
+      "sans-serif"
+    ],
+    "numeric": [
+      "Arial",
+      "DejaVu Sans",
+      "sans-serif"
+    ]
+  }
+}

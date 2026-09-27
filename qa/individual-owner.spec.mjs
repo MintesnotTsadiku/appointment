@@ -1,5 +1,5 @@
 import { test, expect } from "playwright/test";
-import { articleHistory, stableScreenshot } from "./owner-validation.mjs";
+import { articleHistory, chooseSelect, stableScreenshot } from "./owner-validation.mjs";
 
 test("independent-owner-journey", async ({ page }, testInfo) => {
   const marker = process.env.SOLO_QA_MARKER;
@@ -22,8 +22,8 @@ test("independent-owner-journey", async ({ page }, testInfo) => {
   await expect(page.getByRole("heading", { name: /^My Calendar(?: PRO)?$/ })).toBeVisible();
   await stableScreenshot(page, { path: testInfo.outputPath("solo-schedule-without-website.png"), fullPage: true });
   await page.goto("/settings/website", { waitUntil: "networkidle" });
-  await expect(page.getByRole("combobox", { name: "Business", exact: true })).toHaveValue(marker);
-  await page.getByLabel("Main visitor action", { exact: true }).selectOption("contact");
+  await expect(page.getByRole("combobox", { name: "Business", exact: true })).toContainText(marker);
+  await chooseSelect(page, "Main visitor action", "Contact the business");
   await page.getByLabel("Website name", { exact: true }).fill(marker);
   await page.getByLabel("Website address", { exact: true }).fill(marker.toLowerCase());
   await page.getByRole("button", { name: "Create website draft", exact: true }).click();

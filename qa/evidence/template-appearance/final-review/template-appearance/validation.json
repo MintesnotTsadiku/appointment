@@ -1,0 +1,409 @@
+{
+  "run": "BQA-2026-00305",
+  "status": "Failed",
+  "outcome": "baseline_drift",
+  "source_version": "dd7ba60+source-6172b5edf26e+qa-915a8bfb2528",
+  "summary": {
+    "failed": 0,
+    "flaky": 0,
+    "passed": 1,
+    "skipped": 0,
+    "total": 1
+  },
+  "cleanup": {
+    "message": "Exact demo website and brand draft fields and sections restored.",
+    "ok": true
+  },
+  "audit": {
+    "ok": true,
+    "publication_inventory_unchanged": true,
+    "read_only": true,
+    "remaining_record_count": 0
+  },
+  "baseline_changed_count": 50,
+  "baseline_changes": [
+    {
+      "name": "template-appearance-template-appearance/abugida-dark-desktop-fullscreen.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/abugida-dark-desktop.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/abugida-dark-mobile-preview.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/abugida-dark-mobile.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/abugida-light-desktop-fullscreen.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/abugida-light-desktop.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/abugida-light-mobile-preview.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/abugida-light-mobile.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/abugida-unsaved-palette.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/bloom-dark-desktop-fullscreen.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/bloom-dark-desktop.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/bloom-dark-mobile-preview.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/bloom-dark-mobile.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/bloom-light-desktop-fullscreen.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/bloom-light-desktop.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/bloom-light-mobile-preview.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/bloom-light-mobile.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/bloom-unsaved-palette.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/meron-dark-desktop-fullscreen.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/meron-dark-desktop.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/meron-dark-mobile-preview.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/meron-dark-mobile.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/meron-light-desktop-fullscreen.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/meron-light-desktop.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/meron-light-mobile-preview.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/meron-light-mobile.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/meron-unsaved-palette.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/selam-dark-desktop-fullscreen.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/selam-dark-desktop.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/selam-dark-mobile-preview.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/selam-dark-mobile.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/selam-light-desktop-fullscreen.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/selam-light-desktop.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/selam-light-mobile-preview.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/selam-light-mobile.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/selam-unsaved-palette.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/tena-dark-desktop-fullscreen.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/tena-dark-desktop.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/tena-dark-mobile-preview.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/tena-dark-mobile.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/tena-light-desktop-fullscreen.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/tena-light-desktop.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/tena-light-mobile-preview.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/tena-light-mobile.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/tena-unsaved-palette.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/test-finished-1.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/test-finished-2.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/test-finished-3.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/test-finished-4.png",
+      "status": "changed"
+    },
+    {
+      "name": "template-appearance-template-appearance/test-finished-5.png",
+      "status": "changed"
+    }
+  ],
+  "strict_visual_pass": false,
+  "artifacts": [
+    {
+      "file": "abugida-dark-desktop-fullscreen.png",
+      "sha256": "e55e5aaab3eaf9179aa76fb552bf4be78f484261e83c301cf5ae183272128672"
+    },
+    {
+      "file": "abugida-dark-desktop.png",
+      "sha256": "69b09da1cee09345588954e4957cd7a3ef045b49643c0b7ba6eb498ade42d2b0"
+    },
+    {
+      "file": "abugida-dark-mobile-preview.png",
+      "sha256": "b25d26c6217d566c847e97e2b2730505dc33954f83f085baa62a322136891050"
+    },
+    {
+      "file": "abugida-dark-mobile.png",
+      "sha256": "d45201053d7daa54980ba0c028ea6a3eb55921f8837455fe6bfef3fc848acfbe"
+    },
+    {
+      "file": "abugida-light-desktop-fullscreen.png",
+      "sha256": "e77e633ca95cbca2d842ef6e9f0e874e6fc656461930876307eff0bd6ccc0a09"
+    },
+    {
+      "file": "abugida-light-desktop.png",
+      "sha256": "7ed6dc94922ed2d5d8f61c1b9f33721711a997a0c71e77e4b204679d97ed7404"
+    },
+    {
+      "file": "abugida-light-mobile-preview.png",
+      "sha256": "0d581764477f23dbe36fb7267b307c4d105ba3797d4a3c8eea612b00422f5720"
+    },
+    {
+      "file": "abugida-light-mobile.png",
+      "sha256": "e690d2b9175b73d2ac97ff75d86e2504e0fe3de3cc38d0be7a03a508d3cdcaf6"
+    },
+    {
+      "file": "abugida-unsaved-palette.png",
+      "sha256": "85b43f3b108d4dd189bffced89f6ff506b1f7207e0eac2b8a41baa605e0594d7"
+    },
+    {
+      "file": "bloom-dark-desktop-fullscreen.png",
+      "sha256": "5e794ab9e279091ca6d871dfca8d61ee6fdf159f11894c86254f0c2cbce6fdd1"
+    },
+    {
+      "file": "bloom-dark-desktop.png",
+      "sha256": "4964a6b04fe02b074d03834e217f3bd7f26511035a4b6bbca3f720b144387485"
+    },
+    {
+      "file": "bloom-dark-mobile-preview.png",
+      "sha256": "8821aa637418bf3458cf094228dc2dc2fdd78d048c52fdce8f9c2f73850a8204"
+    },
+    {
+      "file": "bloom-dark-mobile.png",
+      "sha256": "6db5d6a3dc455478378b6430c4c278671d2030bdafae6917c0a150116a1b2bef"
+    },
+    {
+      "file": "bloom-light-desktop-fullscreen.png",
+      "sha256": "2900fa1242b79cbee729ef29c7276c775cab22a46a7abb3bd9cc2d985a2e5cc7"
+    },
+    {
+      "file": "bloom-light-desktop.png",
+      "sha256": "a86a56125cfe190f770fecd0fbe06ea5a6463248c6c143156263b5d5aaa72bdd"
+    },
+    {
+      "file": "bloom-light-mobile-preview.png",
+      "sha256": "e61c8d23d7f04e69dc0309e58da635afe07ac4dfd833df3df869c5f0a68e3245"
+    },
+    {
+      "file": "bloom-light-mobile.png",
+      "sha256": "dbda5bcb7ca266ef7abafab63875b87ec2e2617b8f7967f58dcc2a4705900baa"
+    },
+    {
+      "file": "bloom-unsaved-palette.png",
+      "sha256": "b966ffb8ab8d99b56dd297ce3990ea0dd88d0113bdfec3f39431a5b4ff5d984a"
+    },
+    {
+      "file": "meron-dark-desktop-fullscreen.png",
+      "sha256": "411e774d62b77fac26b2b825a86868440b72f0c5f890726b123cd220ae91347e"
+    },
+    {
+      "file": "meron-dark-desktop.png",
+      "sha256": "7a21b5f59319da858c70cd4243b18d1129acb36c58dcc04c9019e4b5b14c9bd2"
+    },
+    {
+      "file": "meron-dark-mobile-preview.png",
+      "sha256": "7d0d15cae4856a143847d0cdc0c0d06a86cd5407390ff833479fe16602831edc"
+    },
+    {
+      "file": "meron-dark-mobile.png",
+      "sha256": "a4eb47be1d9d6b8273b14149743c6793a1f377f3d06c546add3efff3a9af9ad3"
+    },
+    {
+      "file": "meron-light-desktop-fullscreen.png",
+      "sha256": "5a9920021e1065ff76985cde7e27cff97ea25ed40727a0de2d5e91a0961c9daa"
+    },
+    {
+      "file": "meron-light-desktop.png",
+      "sha256": "8efa1d4c19d063c17fc6fe3cd82d3daf48bdcd39f5c9ef918cad728462950eb5"
+    },
+    {
+      "file": "meron-light-mobile-preview.png",
+      "sha256": "8ef1bcf6e6ad688e9b6b0bd6c83a74d7fa58289fc028f8449354066d1c05ae74"
+    },
+    {
+      "file": "meron-light-mobile.png",
+      "sha256": "0cf3bd964c4ab8c22adbd3efe46e07fe1a65ebc03a1b42f67ac6017b0cd96475"
+    },
+    {
+      "file": "meron-unsaved-palette.png",
+      "sha256": "7b92588a6f380de28a76c4c79c2cfe7b275655e0d483c2177769b57b39eb0dce"
+    },
+    {
+      "file": "selam-dark-desktop-fullscreen.png",
+      "sha256": "9c842bc83e2b98e47cfee2884e6847c27d94269f74644f9068a3a3acad89cae2"
+    },
+    {
+      "file": "selam-dark-desktop.png",
+      "sha256": "5c8ac41a61bac29c62021c493e1a5521b1a24e291949782075d05511cf1d6d86"
+    },
+    {
+      "file": "selam-dark-mobile-preview.png",
+      "sha256": "e84fcf0782003f721adaea814580e558289c4138be622a3a517816be7115e7f5"
+    },
+    {
+      "file": "selam-dark-mobile.png",
+      "sha256": "92e927ec17a4b20e750e3f6eb3e7bdb9aef885bde8acfec2e791c4813a2c933f"
+    },
+    {
+      "file": "selam-light-desktop-fullscreen.png",
+      "sha256": "267541e76c4d8aa58e3b7045b1104ca8083bf1ca5d918f244195a99abb05a4a7"
+    },
+    {
+      "file": "selam-light-desktop.png",
+      "sha256": "f0b49c2a895d3f8d796b3cc711f68a030f2792ce5565b8ab42253e236107d23f"
+    },
+    {
+      "file": "selam-light-mobile-preview.png",
+      "sha256": "3e349a3be2dadf4c2f9b1f42d2028226f82df35dc69313ec8f20a9c3ce21984d"
+    },
+    {
+      "file": "selam-light-mobile.png",
+      "sha256": "6bf8361a0364149b1beed9b5bce05d1d1d551fea5190eb95763a8332c7b26427"
+    },
+    {
+      "file": "selam-unsaved-palette.png",
+      "sha256": "29af75d25a179a7c0798efbb5f1b73c01e54c90b5980b26f51353571f22dee4b"
+    },
+    {
+      "file": "tena-dark-desktop-fullscreen.png",
+      "sha256": "0474adad58b23f876b4dd22b2f99fd761083558b455e1cc2401423d889fb5eef"
+    },
+    {
+      "file": "tena-dark-desktop.png",
+      "sha256": "afbd6c83101149922d1a3bd710e1c1ea2056b080137e8ad8e1cb907e5545fce1"
+    },
+    {
+      "file": "tena-dark-mobile-preview.png",
+      "sha256": "6f265a0833d28e6fa7b03eb1c8ddfa7ebf83be888a90cb0fb4a0512a7fbd0219"
+    },
+    {
+      "file": "tena-dark-mobile.png",
+      "sha256": "ee59e467b8e0742e6c7f7f2246eeca74f7c25afd4a7e6178ceb5b36105dc39c7"
+    },
+    {
+      "file": "tena-light-desktop-fullscreen.png",
+      "sha256": "01dbf89f48bcb1def95f95c4badf4b9dbc1faee867987cd93cb002b09d2e18e5"
+    },
+    {
+      "file": "tena-light-desktop.png",
+      "sha256": "78e3ea4f6e988eea6617f5c6ff8f816d1e22913d29bc7fa5390e699270fbc4b0"
+    },
+    {
+      "file": "tena-light-mobile-preview.png",
+      "sha256": "158f44240d2072ce4fc85749746edc70cc6c00ba5273dd103021ac18fbfa3c1e"
+    },
+    {
+      "file": "tena-light-mobile.png",
+      "sha256": "3bf58ab9d12f572e8770c718927fc324b6a849a616d03f4dfcf17d80761477c1"
+    },
+    {
+      "file": "tena-unsaved-palette.png",
+      "sha256": "a4149a1152dbb5366ee501a50215ca564bbdabfe7a12d0944c0c44868aafe05f"
+    }
+  ]
+}

@@ -27,6 +27,11 @@ function mapVariables(design: CompiledDesign, mode: ResolvedMode): Record<string
     variables["--pe-weight-" + role] = String(definition.weight);
     variables["--pe-tracking-" + role] = definition.letterSpacing;
   }
+  const typographyKey = (design.primitiveManifest.typography as { key?: string } | undefined)?.key;
+  if (typographyKey?.endsWith("-alternate")) {
+    variables["--pe-selected-font-display"] = variables["--pe-font-display"];
+    variables["--pe-selected-font-body"] = variables["--pe-font-body"];
+  }
   variables["--pe-page-width"] = String((design.layout.responsive?.maxContentWidth as number | undefined) || 1180) + "px";
   variables["--pe-card-radius"] = String((design.surface.shape as Record<string, unknown>)?.cardRadius || "22px");
   variables["--pe-control-radius"] = String((design.surface.shape as Record<string, unknown>)?.controlRadius || "999px");

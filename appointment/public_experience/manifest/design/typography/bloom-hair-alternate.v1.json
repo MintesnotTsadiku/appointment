@@ -1,0 +1,108 @@
+{
+  "kind": "typography",
+  "contract": "appointment-typography.v1",
+  "key": "bloom-hair-alternate",
+  "version": 1,
+  "supportedScripts": [
+    "latin",
+    "ethiopic"
+  ],
+  "weights": [
+    400,
+    500,
+    600,
+    700
+  ],
+  "roles": {
+    "display": {
+      "family": "Warm Vitality Display",
+      "assetKey": "warm-vitality-display",
+      "weight": 400,
+      "sizeScale": "editorial",
+      "lineHeight": 1.12,
+      "letterSpacing": "-0.02em"
+    },
+    "body": {
+      "family": "Warm Vitality Body",
+      "assetKey": "warm-vitality-body",
+      "weight": 400,
+      "sizeScale": "comfortable",
+      "lineHeight": 1.62,
+      "letterSpacing": "0"
+    },
+    "ui": {
+      "family": "Warm Vitality UI",
+      "assetKey": "warm-vitality-body",
+      "weight": 600,
+      "sizeScale": "compact",
+      "lineHeight": 1.25,
+      "letterSpacing": "0.01em"
+    },
+    "numeric": {
+      "family": "Warm Vitality UI",
+      "assetKey": "warm-vitality-body",
+      "weight": 600,
+      "sizeScale": "compact",
+      "lineHeight": 1.2,
+      "letterSpacing": "0"
+    }
+  },
+  "fontAssets": [
+    {
+      "key": "warm-vitality-display",
+      "family": "Warm Vitality Display",
+      "src": "/assets/appointment/quiet-trust/fonts/dejavu-serif.ttf",
+      "weight": 400,
+      "format": "truetype",
+      "scripts": [
+        "latin"
+      ],
+      "license": "Bitstream Vera / DejaVu license"
+    },
+    {
+      "key": "warm-vitality-display-bold",
+      "family": "Warm Vitality Display",
+      "src": "/assets/appointment/quiet-trust/fonts/dejavu-serif-bold.ttf",
+      "weight": 700,
+      "format": "truetype",
+      "scripts": [
+        "latin"
+      ],
+      "license": "Bitstream Vera / DejaVu license"
+    },
+    {
+      "key": "warm-vitality-body",
+      "family": "Warm Vitality Body",
+      "src": "/assets/appointment/quiet-trust/fonts/noto-sans-ethiopic.ttf",
+      "weight": 400,
+      "format": "truetype",
+      "scripts": [
+        "latin",
+        "ethiopic"
+      ],
+      "license": "SIL Open Font License 1.1"
+    }
+  ],
+  "fallbacks": {
+    "display": [
+      "Georgia",
+      "Times New Roman",
+      "serif"
+    ],
+    "body": [
+      "Arial",
+      "DejaVu Sans",
+      "sans-serif"
+    ],
+    "ui": [
+      "Arial",
+      "DejaVu Sans",
+      "sans-serif"
+    ],
+    "numeric": [
+      "Arial",
+      "DejaVu Sans",
+      "sans-serif"
+    ]
+  }
+}

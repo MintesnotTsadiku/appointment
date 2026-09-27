@@ -60,6 +60,18 @@ for (const key of ["selam", "bloom", "meron", "abugida", "tena"]) {
           });
           expect(gap, "team heading and introduction have separate rendered text bounds").toBeGreaterThanOrEqual(0);
         }
+        if (surface === "landing" && key === "meron" && width === "desktop") {
+          const copy = await page.locator('.meron-hero>div>p:not(.meron-label)').boundingBox();
+          const detail = await page.locator('.meron-hero figure>img:nth-child(2)').boundingBox();
+          expect(copy.x + copy.width).toBeLessThanOrEqual(detail.x);
+          await expect(page.locator('.meron-nav nav').getByRole('link', { name: 'Journal', exact: true })).toHaveCount(1);
+        }
+        if (surface === "landing" && key === "tena") {
+          const backgrounds = await page.locator('.tena-nav>.tena-button, .tena-hero .tena-button').evaluateAll(elements => elements.map(element => getComputedStyle(element).backgroundColor));
+          expect(backgrounds).toHaveLength(2);
+          expect(backgrounds[1]).toBe(backgrounds[0]);
+          expect(backgrounds[1]).not.toBe('rgba(0, 0, 0, 0)');
+        }
         if (surface === "scheduler") await page.waitForFunction(() => Array.from(document.querySelectorAll('[data-booking-branded="true"] [style], [data-booking-branded="true"]')).every(element => !element.style.opacity || Number(element.style.opacity) === 1));
         await page.mouse.move(0, 0);
         await page.evaluate(() => document.activeElement?.blur());
