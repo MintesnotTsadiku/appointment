@@ -59,6 +59,7 @@ def overview():
             },
             fields=["name", "service", "provider", "location", "is_active"],
         ):
+            location = frappe.db.get_value("Location", event.location, ["location_name", "timezone"], as_dict=True) or {}
             rows.append(
                 dict(
                     organization=name,
@@ -66,7 +67,9 @@ def overview():
                     published=bool(org.enable_public_booking and event.is_active),
                     offering=event.name,
                     service=frappe.db.get_value("Service", event.service, "service_name"),
-                    timezone=frappe.db.get_value("Location", event.location, "timezone"),
+                    location_name=location.get("location_name"),
+                    provider_name=frappe.db.get_value("Provider", event.provider, "full_name"),
+                    timezone=location.get("timezone"),
                     public_path=f"/schedule/org/{org.slug}/{event.name}",
                 )
             )

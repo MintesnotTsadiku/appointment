@@ -1,0 +1,144 @@
+# Phase 1 staff fixes: edit a booking policy by record ID, and tell same-service offerings apart.
+# The policy scenario creates, renames, deactivates and deletes its own "QA edit" policy.
+app: appointment
+base_url: http://127.0.0.84:44430
+default_role: Staff
+auth:
+  type: frappe_session
+  username: bloom.owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment-staff-fixes
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.demo.showcase.browser_values
+scenarios:
+- id: policy_edit_desktop
+  title: Owner renames, deactivates and deletes a booking policy
+  viewport: &desktop
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /settings/manage
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="policy-create"]'
+    - type: no_blank_page
+  actions:
+  - action: click
+    selector: '[data-qa="policy-create"]'
+  - action: wait_for
+    selector: '#policy_name'
+  - action: fill
+    selector: '#policy_name'
+    value: 'QA edit original'
+  - action: click
+    selector: 'button[type="submit"][form="policy-form"]'
+    assertions:
+    - type: network_request
+      url_contains: create_policy_from_template
+      method: POST
+      status_min: 200
+      status_max: 299
+      timeout_ms: 20000
+    - type: visible_selector
+      value: 'button[aria-label="Edit this policy: QA edit original"]'
+  - action: click
+    selector: 'button[aria-label="Edit this policy: QA edit original"]'
+  - action: wait_for
+    selector: '#policy_name'
+  - action: fill
+    selector: '#policy_name'
+    value: 'QA edit renamed'
+  - action: screenshot
+    name: policy-edit-form.png
+  - action: click
+    selector: 'button[type="submit"][form="policy-form"]'
+    assertions:
+    - type: network_request
+      url_contains: update_policy
+      method: POST
+      status_min: 200
+      status_max: 299
+      timeout_ms: 20000
+    - type: visible_selector
+      value: 'button[aria-label="Edit this policy: QA edit renamed"]'
+  - action: screenshot
+    name: policy-renamed.png
+    full_page: true
+  - action: click
+    selector: '[aria-label="Deactivate: QA edit renamed"]'
+    assertions:
+    - type: network_request
+      url_contains: update_policy
+      method: POST
+      status_min: 200
+      status_max: 299
+      timeout_ms: 20000
+    - type: visible_selector
+      value: '[aria-label="Activate: QA edit renamed"]'
+  - action: click
+    selector: 'button[aria-label="Delete policy: QA edit renamed"]'
+  - action: wait_for
+    selector: '[role="alertdialog"]'
+  - action: click
+    selector: '[data-qa="policy-delete-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: delete_policy
+      method: POST
+      status_min: 200
+      status_max: 299
+      timeout_ms: 20000
+  - action: screenshot
+    name: policy-deleted.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: business_offerings_desktop
+  title: Same service at two locations shows location and provider
+  viewport: *desktop
+  checks: []
+  routes:
+  - path: /settings/business
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_text
+      value: 'Bole quiet styling room · Rahel Girma'
+    - type: visible_text
+      value: 'Bole main studio · Eden Tadesse'
+  actions:
+  - action: screenshot
+    name: business-offerings-desktop.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: business-offerings-desktop.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: business_offerings_mobile
+  title: Offering rows stay distinguishable on mobile
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /settings/business
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_text
+      value: 'Bole quiet styling room · Rahel Girma'
+  actions:
+  - action: screenshot
+    name: business-offerings-mobile.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors

@@ -219,8 +219,8 @@ API method names, request payloads, permissions, routes, realtime behavior and a
 
 - The Agent Plane runner's default `legacy` fixture scope failed during this work. It enqueues background jobs into the Redis queue `rq:queue:home-minte-projects-training-apps:default`, but the stack's worker listens on a queue named after the state bench path. The 550 orphaned jobs (`delete_dynamic_links`, `create_contact`) exceed Frappe's queue limit, so new enqueues raise `QueueOverloaded`. One aborted legacy run left the fixture set `QA-BROWSER-2c2b8b` (a user and an organization). `qa_fixtures._cleanup_stale()` removes it on the next successful legacy run. Nothing was deleted by hand.
 - `demo.unassigned@example.test` is disabled, so `/no-access` has no browser evidence.
-- The business page shows one row per offering. The `workspace.overview` API returns no location name, so rows for the same service at different locations look the same.
-- Updating an existing policy may fail: the page sends the display name as `policy_name`, and the backend loads the document by that value. The payload was kept as it was.
+- Fixed in round 4: offering rows on the business page now show the location and provider.
+- Fixed in round 4: policy create and policy update.
 - Dates use English month and weekday names. There is no Amharic date-fns locale.
 - Reception appointments can be dragged with a pointer only, as before.
 - The shared `Button` still hard-codes a blue focus ring for public pages. Staff pages map it to the ring token in `global.css`. The shared native `Checkbox` keeps its gray and indigo defaults, and staff pages override them with classes.
@@ -347,3 +347,37 @@ Evidence: `qa/evidence/staff-ui-v2/design-gallery/` and `qa/evidence/staff-ui-v2
 
 - The draft preview API (`preview_experience`) creates a signed token, but no public route consumes it. Owners cannot preview unpublished design changes on their own content. Wiring it touches the public renderer and needs its own acceptance pass.
 - Choosing a design and saving does not change the live site until the owner selects **Publish brand** and then **Publish website**. The steps now say this.
+
+## Round 4: policy update and offering rows
+
+### Policy update
+
+Policy documents use the naming series `POL-.YYYY.-.####`, so the label is not the record name.
+
+- `update_policy(policy_id, **fields)` loads the policy by its record name. `policy_name` is now only the editable label. The form and the active toggle in `PolicyManager.tsx` send `policy_id`.
+- `update_policy` changes only the fields in `EDITABLE_POLICY_FIELDS`. A caller can no longer change `created_by_organization`, `created_by_provider` or the template fields.
+- A user who does not own or manage the policy's business gets a `frappe.PermissionError`. A policy with no creator is refused. The form and the toggle show the server message through `serverErrorMessage()` in `lib/utils.ts`.
+- A scope change (`applies_to`, `service`, `location`, `provider`) is checked again with `validate_policy_creation_permission`. Links that `applies_to` does not use are cleared, as in create.
+- The form no longer fills `provider` with the business ID for business owners.
+- `create_policy_from_template` read `organization` and `organization_id` without declaring them. Every policy create from the staff page failed with `UnboundLocalError`. Both are now arguments.
+
+`delete_policy` still returns `({"error": ...}, 403)` tuples. It was not part of this change.
+
+### Offering rows
+
+`workspace.overview` returns `location_name` and `provider_name` for each offering. Each row on `/settings/business` shows "location · provider · time zone". In Bloom, two "Cut and shape" rows share a location and differ only by provider, so the location alone was not enough.
+
+### Round 4 verification
+
+- `bench run-tests --module appointment.tests.test_policy_manager`: 5 tests passed (label update by record ID, full form payload, ownership fields kept, other owner refused, business-wide create).
+- `bench run-tests --module appointment.tests.test_workspace_overview`: 1 test passed.
+- `npm run -s test:dom` passed. `tsc` and `eslint` show no errors in the changed files. `lib/utils.ts` has three type errors from before this change.
+- Agent Plane, `qa/manifests/staff-fixes/owner.yaml` as `bloom.owner@example.test`:
+
+| Run | Result |
+|---|---|
+| BQA-2026-00333 | Failed. Policy create returned 500 (`UnboundLocalError`). This found the create bug. |
+| BQA-2026-00334 | Failed. Update returned 417: the form sent the business ID as `provider`. |
+| BQA-2026-00335 | Passed. Create, rename, deactivate and delete a policy at 1440×900, and the business page at 1440×900 and 390×844. 0 console errors, 0 network errors. |
+
+The policy scenario deletes the policy it creates. After run 00335 the site has no Policy records.

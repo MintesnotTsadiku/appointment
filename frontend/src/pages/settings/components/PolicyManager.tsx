@@ -3,6 +3,7 @@ import { Loader2, Plus, ShieldCheck } from 'lucide-react';
 import { useFrappeGetCall, useFrappePostCall } from 'frappe-react-sdk';
 import { toast } from 'sonner';
 import { useTranslation } from '@/lib/i18n';
+import { serverErrorMessage } from '@/lib/utils';
 import { Button, buttonVariants } from '@/components/button';
 import { Label } from '@/components/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/select';
@@ -74,15 +75,15 @@ export const PolicyManager = ({ userType, entityId }: PolicyManagerProps) => {
 
   const handleToggleActive = async (policy: Policy) => {
     try {
-      await updatePolicy({ policy_name: policy.name, is_active: policy.is_active === 1 ? 0 : 1 });
+      await updatePolicy({ policy_id: policy.name, is_active: policy.is_active === 1 ? 0 : 1 });
       mutate();
     } catch (err) {
-      toast.error((err as { message?: string })?.message || t('staff.policies.updateFailed'));
+      toast.error(serverErrorMessage(err) || t('staff.policies.updateFailed'));
     }
   };
 
   const createButton = (
-    <Button size="sm" onClick={() => openForm(null)}>
+    <Button data-qa="policy-create" size="sm" onClick={() => openForm(null)}>
       <Plus aria-hidden="true" />
       {t('staff.policies.create')}
     </Button>
@@ -158,6 +159,7 @@ export const PolicyManager = ({ userType, entityId }: PolicyManagerProps) => {
           <AlertDialogFooter>
             <AlertDialogCancel disabled={deleting}>{t('staff.form.cancel')}</AlertDialogCancel>
             <AlertDialogAction
+              data-qa="policy-delete-confirm"
               className={buttonVariants({ variant: 'destructive' })}
               disabled={deleting}
               onClick={(event) => {

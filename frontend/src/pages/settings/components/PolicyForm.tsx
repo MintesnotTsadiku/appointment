@@ -2,6 +2,7 @@ import { Loader2, Save } from 'lucide-react';
 import { useFrappeGetCall, useFrappePostCall } from 'frappe-react-sdk';
 import { toast } from 'sonner';
 import { useTranslation } from '@/lib/i18n';
+import { serverErrorMessage } from '@/lib/utils';
 import { Button } from '@/components/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/dialog';
 import { usePolicyForm } from './policy/usePolicyForm';
@@ -57,10 +58,8 @@ export const PolicyForm = ({ isOpen, onClose, onSuccess, userType, entityId, edi
     if (!form.validate()) return;
     try {
       if (editingPolicy) {
-        // Unchanged legacy payload: formData.policy_name (the display name) is what gets sent
-        // as `policy_name`, not editingPolicy.name. Policy docs use a naming series, so this
-        // looks like a backend-contract bug; left as-is pending a decision.
-        await updatePolicy({ ...formData });
+        // `policy_id` is the record name (naming series); `policy_name` is the editable label.
+        await updatePolicy({ ...formData, policy_id: editingPolicy.name });
       } else {
         await createPolicy(buildCreatePayload());
       }
@@ -68,7 +67,7 @@ export const PolicyForm = ({ isOpen, onClose, onSuccess, userType, entityId, edi
       onClose();
     } catch (error) {
       console.error('Policy operation failed:', error);
-      toast.error((error as { message?: string })?.message || t('staff.policies.saveFailed'));
+      toast.error(serverErrorMessage(error) || t('staff.policies.saveFailed'));
     }
   };
 

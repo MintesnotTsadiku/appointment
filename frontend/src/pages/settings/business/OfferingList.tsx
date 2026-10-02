@@ -9,7 +9,9 @@ export interface Offering {
   organization: string;
   business_name: string;
   service: string;
-  timezone: string;
+  location_name: string | null;
+  provider_name: string | null;
+  timezone: string | null;
   public_path: string;
   published: boolean;
   offering: string;
@@ -55,7 +57,9 @@ function OfferingRow({ row, publishing, onTogglePublish }: { row: Offering; publ
             {row.published ? t('staff.business.published') : t('staff.business.draft')}
           </Badge>
         </p>
-        <p className="mt-0.5 text-xs text-muted-foreground">{row.timezone.replace(/_/g, ' ')}</p>
+        <p data-qa="business-offering-meta" className="mt-0.5 text-xs text-muted-foreground">
+          {[row.location_name, row.provider_name, row.timezone?.replace(/_/g, ' ')].filter(Boolean).join(' · ')}
+        </p>
       </div>
       <div className="flex flex-wrap items-center gap-1.5">
         {row.published && (

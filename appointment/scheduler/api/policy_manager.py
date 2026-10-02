@@ -55,6 +55,8 @@ def create_policy_from_template(
     provider: str = None,
     valid_from: str = None,
     valid_to: str = None,
+    organization: str = None,
+    organization_id: str = None,
     **kwargs
 ):
     """
@@ -70,6 +72,8 @@ def create_policy_from_template(
         provider: Provider name (if applies_to = "Specific Provider")
         valid_from: Start date (defaults to today)
         valid_to: End date (optional)
+        organization: Organization for an "All Services" policy
+        organization_id: Organization the caller acts for (owners of several businesses)
         **kwargs: Additional overrides for template values
     
     Returns:
@@ -444,60 +448,75 @@ def validate_policy_creation_permission(
     }
 
 
-@frappe.whitelist()
-@add_response_code
-def update_policy(policy_name: str, **kwargs):
+# Fields a policy owner may change. Ownership and template tracking stay fixed.
+EDITABLE_POLICY_FIELDS = (
+    "policy_name", "description", "is_active", "applies_to", "service", "location", "provider",
+    "deposit_percentage", "deposit_amount", "cancellation_window_hours", "reschedule_window_hours",
+    "late_cancellation_fee_percentage", "late_cancellation_fee_amount", "no_show_fee_percentage",
+    "refund_policy", "valid_from", "valid_to",
+)
+SCOPE_FIELDS = ("applies_to", "service", "location", "provider")
+
+
+@frappe.whitelist(methods=["POST"])
+def update_policy(policy_id: str, **fields):
     """
     Update an existing policy.
-    
+
     Args:
-        policy_name: Policy name to update
-        **kwargs: Fields to update
-    
+        policy_id: Policy document name (for example POL-2026-0001)
+        **fields: Editable fields to change; `policy_name` is the display label
+
     Returns:
         Updated policy
     """
-    try:
-        policy = frappe.get_doc("Policy", policy_name)
-        
-        # Check permissions
-        user = frappe.session.user
-        user_provider = frappe.db.get_value("Provider", {"user": user}, "name")
-        user_org = frappe.db.get_value("Organization", {"owner_user": user}, "name")
-        
-        # Verify ownership
-        if policy.created_by_provider and policy.created_by_provider != user_provider:
-            return {"error": "You don't have permission to edit this policy"}, 403
-        
-        if policy.created_by_organization and policy.created_by_organization != user_org:
-            # Check if user is a manager
-            is_manager = frappe.db.exists(
-                "Organization Manager",
-                {"user": user, "parent": policy.created_by_organization, "status": "Active"}
-            )
-            if not is_manager:
-                return {"error": "You don't have permission to edit this policy"}, 403
-        
-        # Update fields
-        for key, value in kwargs.items():
-            if hasattr(policy, key):
-                setattr(policy, key, value)
-        
-        policy.save(ignore_permissions=True)
-        frappe.db.commit()
-        
-        return {
-            "success": True,
-            "policy": policy.as_dict(),
-            "message": "Policy updated successfully"
-        }, 200
-    
-    except frappe.DoesNotExistError:
-        return {"error": "Policy not found"}, 404
-    except Exception as e:
-        frappe.db.rollback()
-        frappe.log_error(str(e), "Policy Manager: Update Policy Error")
-        return {"error": f"Failed to update policy: {str(e)}"}, 500
+    policy = frappe.get_doc("Policy", policy_id)
+    user = frappe.session.user
+    _check_policy_owner(policy, user)
+
+    for key in EDITABLE_POLICY_FIELDS:
+        if key in fields:
+            policy.set(key, fields[key])
+    _clear_unused_scope_links(policy)
+
+    if any(key in fields for key in SCOPE_FIELDS):
+        scope = validate_policy_creation_permission(
+            user, policy.applies_to,
+            service=policy.service, location=policy.location, provider=policy.provider,
+            organization_id=policy.created_by_organization or policy.organization,
+        )
+        if not scope["allowed"]:
+            frappe.throw(_(scope["message"]), frappe.PermissionError)
+
+    policy.save(ignore_permissions=True)
+    return {
+        "success": True,
+        "policy": policy.as_dict(),
+        "message": "Policy updated successfully"
+    }
+
+
+def _clear_unused_scope_links(policy):
+    """Keep only the link that `applies_to` uses, as create_policy_from_template does."""
+    used = {"Specific Service": "service", "Specific Location": "location", "Specific Provider": "provider"}.get(policy.applies_to)
+    for field in ("service", "location", "provider"):
+        if field != used:
+            policy.set(field, None)
+
+
+def _check_policy_owner(policy, user: str):
+    """Raise PermissionError unless the user owns or manages the policy's creator."""
+    if policy.created_by_provider:
+        allowed = policy.created_by_provider == frappe.db.get_value("Provider", {"user": user}, "name")
+    elif policy.created_by_organization:
+        org = policy.created_by_organization
+        allowed = frappe.db.get_value("Organization", org, "owner_user") == user or bool(
+            frappe.db.exists("Organization Manager", {"user": user, "parent": org, "status": "Active"})
+        )
+    else:
+        allowed = False
+    if not allowed:
+        frappe.throw(_("You don't have permission to edit this policy"), frappe.PermissionError)
 
 
 @frappe.whitelist()

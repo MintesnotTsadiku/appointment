@@ -55,6 +55,12 @@ export const getErrorMessages = (error: Error) => {
   return eMessages;
 };
 
+/** First server message of a failed Frappe call (for example a PermissionError), as plain text. */
+export function serverErrorMessage(error: unknown): string {
+  const message = getErrorMessages(error as Error)[0]?.message;
+  return typeof message === "string" ? removeHtmlString(message) : "";
+}
+
 export function removeHtmlString(data: string) {
   return data.replace(/<\/?[^>]+(>|$)/g, "");
 }
