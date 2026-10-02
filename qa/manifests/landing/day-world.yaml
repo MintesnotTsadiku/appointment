@@ -1,0 +1,414 @@
+app: appointment
+base_url: http://127.0.0.84:44430
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-landing-day-world
+capture_trace: true
+capture_video: true
+capture_instruction_timeline: true
+timeout_ms: 240000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+scenarios:
+  - id: landing_day_desktop
+    title: Landing day world desktop journey and interactions
+    viewport: {width: 1440, height: 900}
+    checks: []
+    routes:
+      - path: /
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+          - type: visible_selector
+            value: '[data-qa="landing-world"][data-world="dawn"]'
+          - type: visible_selector
+            value: '[data-qa="landing-timetable"]'
+    actions:
+      - action: screenshot
+        name: desktop-dawn.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="landing-timetable"] a[href="#solo"]'
+        assertions:
+          - type: visible_selector
+            value: '[data-qa="landing-world"][data-world="solo"]'
+      - action: scroll
+        delta_y: 1
+      - action: scroll
+        delta_y: 1
+      - action: screenshot
+        name: desktop-solo.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="landing-timetable"] a[href="#team"]'
+        assertions:
+          - type: visible_selector
+            value: '[data-qa="landing-world"][data-world="team"]'
+      - action: scroll
+        delta_y: 1
+      - action: scroll
+        delta_y: 1
+      - action: screenshot
+        name: desktop-team.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="landing-team-liya"]'
+        assertions:
+          - type: visible_text
+            value: "Liya's morning: 3 bookings"
+      - action: screenshot
+        name: desktop-team-liya.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="landing-timetable"] a[href="#care"]'
+        assertions:
+          - type: visible_selector
+            value: '[data-qa="landing-world"][data-world="care"]'
+      - action: scroll
+        delta_y: 1
+      - action: scroll
+        delta_y: 1
+      - action: screenshot
+        name: desktop-care.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="landing-timetable"] a[href="#desk"]'
+        assertions:
+          - type: visible_selector
+            value: '[data-qa="landing-world"][data-world="desk"]'
+      - action: scroll
+        delta_y: 1
+      - action: scroll
+        delta_y: 1
+      - action: screenshot
+        name: desktop-desk.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="landing-desk-braids"]'
+        assertions:
+          - type: text_contains
+            selector: '[data-qa="landing-desk-next"]'
+            value: "with"
+      - action: click
+        selector: '[data-qa="landing-desk-book"]'
+        assertions:
+          - type: text_contains
+            selector: '[data-qa="landing-desk-ticket"]'
+            value: "APT-"
+      - action: screenshot
+        name: desktop-desk-booked.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="landing-timetable"] a[href="#moves"]'
+        assertions:
+          - type: visible_selector
+            value: '[data-qa="landing-world"][data-world="moves"]'
+      - action: scroll
+        delta_y: 1
+      - action: scroll
+        delta_y: 1
+      - action: screenshot
+        name: desktop-moves.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="landing-moves-earlier"]'
+        assertions:
+          - type: text_contains
+            selector: '[data-qa="landing-moves-history"]'
+            value: "Moved to 16:30"
+      - action: click
+        selector: '[data-qa="landing-moves-earlier"]'
+        assertions:
+          - type: text_contains
+            selector: '[data-qa="landing-moves-history"]'
+            value: "already booked"
+      - action: click
+        selector: '[data-qa="landing-moves-colleague"]'
+      - action: click
+        selector: '[data-qa="landing-moves-later"]'
+        assertions:
+          - type: text_contains
+            selector: '[data-qa="landing-moves-history"]'
+            value: "Reload first"
+      - action: click
+        selector: '[data-qa="landing-moves-reload"]'
+      - action: screenshot
+        name: desktop-moves-history.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="landing-timetable"] a[href="#insights"]'
+        assertions:
+          - type: visible_selector
+            value: '[data-qa="landing-world"][data-world="insights"]'
+      - action: scroll
+        delta_y: 1
+      - action: scroll
+        delta_y: 1
+      - action: screenshot
+        name: desktop-insights.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="landing-insights-90"]'
+        assertions:
+          - type: text_contains
+            selector: '[data-qa="landing-insights-figures"]'
+            value: "1,410"
+      - action: screenshot
+        name: desktop-insights-90.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="landing-timetable"] a[href="#grow"]'
+        assertions:
+          - type: visible_selector
+            value: '[data-qa="landing-world"][data-world="grow"]'
+      - action: scroll
+        delta_y: 1
+      - action: scroll
+        delta_y: 1
+      - action: screenshot
+        name: desktop-grow.png
+        full_page: false
+      - action: scroll
+        delta_y: 4000
+      - action: scroll
+        delta_y: 4000
+      - action: wait_for
+        selector: '[data-qa="landing-doors"]'
+        timeout_ms: 15000
+        assertions:
+          - type: visible_selector
+            value: '[data-qa="landing-world"][data-world="night"]'
+      - action: scroll
+        delta_y: 1
+      - action: screenshot
+        name: desktop-night.png
+        full_page: false
+      - action: get_dom_snapshot
+        name: desktop-landing.html
+      - action: get_console_errors
+      - action: get_network_errors
+
+  - id: landing_day_mobile
+    title: Landing day world mobile journey
+    viewport: {width: 390, height: 844}
+    checks: []
+    routes:
+      - path: /
+        assertions:
+          - type: network_idle
+          - type: no_blank_page
+          - type: visible_selector
+            value: '[data-qa="landing-world"][data-world="dawn"]'
+          - type: visible_selector
+            value: '[data-qa="landing-timetable"]'
+    actions:
+      - action: screenshot
+        name: mobile-dawn.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="landing-timetable"] a[href="#solo"]'
+        assertions:
+          - type: visible_selector
+            value: '[data-qa="landing-world"][data-world="solo"]'
+      - action: scroll
+        delta_y: 1
+      - action: scroll
+        delta_y: 1
+      - action: screenshot
+        name: mobile-solo.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="landing-timetable"] a[href="#team"]'
+        assertions:
+          - type: visible_selector
+            value: '[data-qa="landing-world"][data-world="team"]'
+      - action: scroll
+        delta_y: 1
+      - action: scroll
+        delta_y: 1
+      - action: screenshot
+        name: mobile-team.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="landing-timetable"] a[href="#care"]'
+        assertions:
+          - type: visible_selector
+            value: '[data-qa="landing-world"][data-world="care"]'
+      - action: scroll
+        delta_y: 1
+      - action: scroll
+        delta_y: 1
+      - action: screenshot
+        name: mobile-care.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="landing-timetable"] a[href="#desk"]'
+        assertions:
+          - type: visible_selector
+            value: '[data-qa="landing-world"][data-world="desk"]'
+      - action: scroll
+        delta_y: 1
+      - action: scroll
+        delta_y: 1
+      - action: screenshot
+        name: mobile-desk.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="landing-timetable"] a[href="#moves"]'
+        assertions:
+          - type: visible_selector
+            value: '[data-qa="landing-world"][data-world="moves"]'
+      - action: scroll
+        delta_y: 1
+      - action: scroll
+        delta_y: 1
+      - action: screenshot
+        name: mobile-moves.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="landing-timetable"] a[href="#insights"]'
+        assertions:
+          - type: visible_selector
+            value: '[data-qa="landing-world"][data-world="insights"]'
+      - action: scroll
+        delta_y: 1
+      - action: scroll
+        delta_y: 1
+      - action: screenshot
+        name: mobile-insights.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="landing-timetable"] a[href="#grow"]'
+        assertions:
+          - type: visible_selector
+            value: '[data-qa="landing-world"][data-world="grow"]'
+      - action: scroll
+        delta_y: 1
+      - action: scroll
+        delta_y: 1
+      - action: screenshot
+        name: mobile-grow.png
+        full_page: false
+      - action: scroll
+        delta_y: 4000
+      - action: scroll
+        delta_y: 4000
+      - action: wait_for
+        selector: '[data-qa="landing-doors"]'
+        timeout_ms: 15000
+        assertions:
+          - type: visible_selector
+            value: '[data-qa="landing-world"][data-world="night"]'
+      - action: scroll
+        delta_y: 1
+      - action: screenshot
+        name: mobile-night.png
+        full_page: false
+      - action: get_dom_snapshot
+        name: mobile-landing.html
+      - action: get_console_errors
+      - action: get_network_errors
+
+  - id: landing_handoff_booking
+    title: Showcase door hands off to a published booking entry
+    viewport: {width: 1440, height: 900}
+    checks: []
+    routes:
+      - path: /
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="landing-world"]'
+    actions:
+      - action: scroll
+        delta_y: 5000
+      - action: scroll
+        delta_y: 5000
+      - action: scroll
+        delta_y: 5000
+      - action: scroll
+        delta_y: 5000
+      - action: wait_for
+        selector: '[data-qa="landing-door"] a[href="/bloom-studio/book"]'
+        timeout_ms: 15000
+      - action: click
+        selector: '[data-qa="landing-door"] a[href="/bloom-studio/book"]'
+        assertions:
+          - type: url_contains
+            value: /bloom-studio/book
+          - type: visible_selector
+            value: '[data-pe-booking]'
+      - action: screenshot
+        name: handoff-bloom-book.png
+        full_page: false
+      - action: get_console_errors
+      - action: get_network_errors
+  - id: landing_handoff_auth
+    title: Primary call to action hands off to sign-up and sign-in
+    viewport: {width: 1440, height: 900}
+    checks: []
+    routes:
+      - path: /
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="landing-start"]'
+    actions:
+      - action: click
+        selector: '[data-qa="landing-start"]'
+        assertions:
+          - type: url_contains
+            value: /signup
+      - action: open_url
+        url: /
+      - action: click
+        selector: '[data-qa="landing-bar"] a[href="/login"]'
+        assertions:
+          - type: url_contains
+            value: /login
+          - type: visible_selector
+            value: '[data-qa="login-heading"]'
+      - action: open_url
+        url: /
+        assertions:
+          - type: visible_selector
+            value: '[data-qa="landing-world"]'
+      - action: get_console_errors
+      - action: get_network_errors
+  - id: landing_amharic
+    title: Landing story switches to Amharic
+    viewport: {width: 1440, height: 900}
+    checks: []
+    routes:
+      - path: /
+        assertions:
+          - type: network_idle
+          - type: visible_selector
+            value: '[data-qa="language-toggle"]'
+    actions:
+      - action: press
+        selector: '[data-qa="language-toggle"]'
+        key: Enter
+        assertions:
+          - type: visible_text
+            value: 'ቀኑን ይጀምሩ'
+          - type: network_request
+            url_contains: appointment.scheduler.translation.messages
+            status: 200
+      - action: screenshot
+        name: amharic-dawn.png
+        full_page: false
+      - action: click
+        selector: '[data-qa="landing-timetable"] a[href="#moves"]'
+        assertions:
+          - type: visible_text
+            value: 'ዕቅድ ይለወጣል'
+      - action: scroll
+        delta_y: 1
+      - action: screenshot
+        name: amharic-moves.png
+        full_page: false
+      - action: get_console_errors
+      - action: get_network_errors

@@ -368,13 +368,13 @@ scenarios:
         assertions:
           - type: network_idle
           - type: visible_text
-            value: "Pricing"
+            value: "Every hour of your business,"
     actions:
       - action: click
         selector: '[data-qa="language-toggle"]'
         assertions:
           - type: visible_text
-            value: "ዋጋ"
+            value: "ቀኑን ይጀምሩ"
       - action: screenshot
         name: language-amharic
         full_page: false
@@ -389,4 +389,4 @@ scenarios:
         full_page: false
         assertions:
           - type: visible_text
-            value: "ዋጋ"
+            value: "ቀኑን ይጀምሩ"

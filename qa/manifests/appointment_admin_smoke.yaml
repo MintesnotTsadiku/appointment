@@ -64,7 +64,7 @@ scenarios:
         assertions:
           - type: network_idle
           - type: visible_text
-            value: "Pricing"
+            value: "Every hour of your business,"
           - type: network_request
             url_contains: /socket.io/
             status_min: 200

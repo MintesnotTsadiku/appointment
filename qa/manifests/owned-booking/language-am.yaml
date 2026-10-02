@@ -27,7 +27,7 @@ scenarios:
         key: Enter
         assertions:
           - type: visible_text
-            value: 'ምርት'
+            value: 'ቀኑን ይጀምሩ'
           - type: network_request
             url_contains: appointment.scheduler.translation.messages
             status: 200
