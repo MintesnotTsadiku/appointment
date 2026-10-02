@@ -65,11 +65,11 @@ export const PolicyManager = ({ userType, entityId }: PolicyManagerProps) => {
   const confirmDelete = async () => {
     if (!pendingDelete) return;
     try {
-      await deletePolicy({ policy_name: pendingDelete.name });
+      await deletePolicy({ policy_id: pendingDelete.name });
       setPendingDelete(null);
       mutate();
     } catch (err) {
-      toast.error((err as { message?: string })?.message || t('staff.policies.deleteFailed'));
+      toast.error(serverErrorMessage(err) || t('staff.policies.deleteFailed'));
     }
   };
 

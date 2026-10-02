@@ -18,7 +18,8 @@
   "dedupe_key",
   "error",
   "message",
-  "provider_message_id"
+  "provider_message_id",
+  "sms_parts"
  ],
  "fields": [
   {
@@ -77,7 +78,7 @@
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
-   "options": "Queued\nSent\nFailed\nSkipped",
+   "options": "Queued\nSent\nDelivered\nFailed\nSkipped",
    "default": "Queued",
    "reqd": 1,
    "in_list_view": 1,
@@ -119,6 +120,13 @@
    "fieldtype": "Data",
    "label": "Provider Message ID",
    "read_only": 1
+  },
+  {
+   "fieldname": "sms_parts",
+   "fieldtype": "Int",
+   "label": "SMS Parts",
+   "read_only": 1,
+   "description": "Billed message parts reported by the SMS gateway."
   }
  ],
  "index_web_pages_for_search": 0,

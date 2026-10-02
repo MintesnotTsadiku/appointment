@@ -280,11 +280,15 @@ Database proof (email is muted): each QA booking has one Appointment Notificatio
 ### Left open
 
 - SMS: see "SMS" below.
-- The public confirmation dialog shows other English text in Amharic, for example "Booking Confirmed!". Only the email notice is translated.
-- The QA runs left these Confirmed bookings for 2026-10-03 at Bloom: `qa-notify-*@example.test` from the first guest run, and one rescheduled English desktop booking at 18:30. They were not deleted by hand.
-- Email links use the site host name. On this stack that is the backend port (`:44431`), not the Vite URL.
-- `bloom.manager@example.test` had no stored language. The Amharic scenarios switch back to English at the end, so it is now `en`.
-- Jobs enqueued from the bench CLI (tests and the QA runner) go to the wrongly named Redis queue noted in the audit. Jobs from web requests reach the worker.
+Closed on 2026-10-03:
+
+- The whole public confirmation dialog is translated (`customerBooking.*`). Dates still use English month and weekday names, as noted in the staff UI audit.
+- The QA bookings (11 `qa-notify-*@example.test` appointments) and their 23 Email Queue rows were deleted through `frappe.delete_doc`, which also removed their notification rows. They were QA records, not demo-seeder records.
+- This site now has `host_name = http://127.0.0.84:44430`, so `get_url()` in background jobs builds links to the app instead of the backend port. Production sites set their own `host_name`.
+- `bloom.manager@example.test` has its original empty language again.
+- The bench CLI resolved the bench path through the `apps/frappe` symlink and used the Redis queue prefix `home-minte-projects-training-apps`. The worker uses the real bench path. This site now sets `bench_id` to the worker's prefix, so CLI jobs (tests, the QA runner) reach the worker. A `frappe.ping` job from the console ran on the worker. About 550 stale jobs stay in the old queue name. Nothing reads that queue.
+- Amharic copy still needs a native speaker's review.
+- Verification of this round: Agent Plane BQA-2026-00366 (policy create, rename, deactivate and delete through `policy_id`), BQA-2026-00367 (Amharic desktop booking with the translated dialog) and BQA-2026-00368 (English desktop booking). All passed with 0 console and 0 network errors. Their two QA bookings were deleted afterwards.
 
 ## SMS
 
@@ -313,12 +317,12 @@ Decided on 2026-10-02: one platform AfroMessage account, SMS off until each busi
 
 ### Verification
 
-- `appointment.tests.test_customer_sms`: 7 passed. The tests cover number normalization, the switch staying off by default, refusal without a gateway, muted recording with Amharic text, a missing phone number, and gateway success and error replies (mocked HTTP; nothing reaches AfroMessage).
+- `appointment.tests.test_customer_sms`: 12 passed (7 send and setup tests, 5 delivery-status and length tests). The tests cover number normalization, the switch staying off by default, refusal without a gateway, muted recording with Amharic text, a missing phone number, and gateway success and error replies (mocked HTTP; nothing reaches AfroMessage).
 - Agent Plane BQA-2026-00359, `customer-notifications/settings.yaml`: passed, 4 of 4 (1440×900 and 390×844, English and Amharic), 0 console and 0 network errors. The SMS switch is disabled with the "not set up" message, because this site has no gateway.
 
 ### Left open for SMS
 
 - No real message has been sent. This needs the token, a test phone number and `mute_sms: 0`.
-- Delivery status stops at "Sent" (accepted by AfroMessage). AfroMessage's delivery callback is tried only once, so a later change could poll `GET /status?id=` for rows with a `provider_message_id`.
-- Amharic SMS uses Unicode, so one message holds fewer characters and may bill as several parts. The texts are short, but the cost per message was not measured.
+- Delivery status: `notification_sms.poll_delivery` runs every 15 minutes. It asks `GET /status?id=` about up to 25 SMS rows in "Sent" from the last 48 hours, and stores `sms_parts`. `DELIVERED` or `DELIVRD` becomes "Delivered". `UNDELIV`, `UNDELIVERED`, `FAILED`, `REJECTED` or `EXPIRED` becomes "Failed" with the description. Any other value stays "Sent". AfroMessage documents only `QUEUED`, `UNDELIV` and `UNKNOWN`, so check the delivered spelling on the first real message.
+- Length: for a Bloom booking, the English texts are 98 to 102 characters (one GSM-7 part). The Amharic texts are 90 to 92 characters (two UCS-2 parts of 67). `test_texts_fit_two_parts` keeps them within two parts. Real billed parts are stored in `sms_parts`.
 - No sender name is approved yet. Until then, AfroMessage sends as "AfroMessage" on the beta plan (100 messages a day).

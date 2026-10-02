@@ -7,12 +7,12 @@ export interface CustomerMessage {
   appointment?: string;
   event: 'Confirmation' | 'Reschedule' | 'Cancellation' | 'Reminder';
   channel: string;
-  status: 'Queued' | 'Sent' | 'Failed' | 'Skipped';
+  status: 'Queued' | 'Sent' | 'Delivered' | 'Failed' | 'Skipped';
   skip_reason?: string | null;
   creation: string;
 }
 
-const STATUS_VARIANT = { Queued: 'info', Sent: 'success', Failed: 'destructive', Skipped: 'muted' } as const;
+const STATUS_VARIANT = { Queued: 'info', Sent: 'success', Delivered: 'success', Failed: 'destructive', Skipped: 'muted' } as const;
 
 /** One line per customer message: event, time, channel and delivery status. */
 export function MessageRows({ rows, showBooking = false }: { rows: CustomerMessage[]; showBooking?: boolean }) {

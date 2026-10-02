@@ -137,7 +137,7 @@ def _skip_reason(doc, event, channel, recipient):
 
 def _over_limit(organization, recipient, event, channel):
     day_ago, hour_ago = datetime.now() - timedelta(days=1), datetime.now() - timedelta(hours=1)
-    sent = {"status": ["in", ["Queued", "Sent"]], "channel": channel}
+    sent = {"status": ["in", ["Queued", "Sent", "Delivered"]], "channel": channel}
     if frappe.db.count("Appointment Notification", {**sent, "organization": organization, "creation": [">", hour_ago]}) >= LIMIT_BUSINESS_PER_HOUR:
         return True
     if event != "Confirmation":

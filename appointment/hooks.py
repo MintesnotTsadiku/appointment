@@ -242,6 +242,7 @@ scheduler_events = {
     "cron": {
         "*/15 * * * *": [
             "appointment.scheduler.notifications.send_due_reminders",
+            "appointment.scheduler.notification_sms.poll_delivery",
         ],
     },
     # "hourly": [

@@ -103,3 +103,60 @@ class TestCustomerSms(BloomBookingCase):
         with patch("appointment.scheduler.notification_sms.requests.post", return_value=gateway_reply(reply)):
             with self.assertRaises(frappe.ValidationError):
                 notification_sms.deliver("+251911234567", "Hello")
+
+
+class TestSmsDeliveryAndLength(BloomBookingCase):
+    def _sent_row(self, message_id="abc-123"):
+        booking_id = self._book(phone="0911234567")["booking_id"]
+        frappe.set_user("Administrator")
+        return frappe.get_doc(dict(
+            doctype="Appointment Notification", appointment=booking_id, organization=self.org, event="Confirmation",
+            channel="SMS", recipient="+251911234567", status="Sent", provider_message_id=message_id,
+            dedupe_key=f"qa-poll-{message_id}",
+        )).insert(ignore_permissions=True)
+
+    def _poll(self, report):
+        configure_gateway()
+        reply = gateway_reply({"acknowledge": "success", "response": report})
+        with patch("appointment.scheduler.notification_sms.is_muted", return_value=False), \
+                patch("appointment.scheduler.notification_sms.requests.get", return_value=reply) as get:
+            notification_sms.poll_delivery()
+        return get
+
+    def test_delivered_report_updates_status_and_parts(self):
+        row = self._sent_row()
+        get = self._poll({"messageId": "abc-123", "status": "DELIVERED", "parts": 2, "cost": 0.4})
+
+        self.assertEqual(get.call_args.args[0], "https://sms-gateway.invalid/api/status")
+        self.assertEqual(get.call_args.kwargs["params"], {"id": "abc-123"})
+        saved = frappe.db.get_value("Appointment Notification", row.name, ["status", "sms_parts"], as_dict=True)
+        self.assertEqual((saved.status, saved.sms_parts), ("Delivered", 2))
+
+    def test_undelivered_report_marks_failure(self):
+        row = self._sent_row("def-456")
+        self._poll({"messageId": "def-456", "status": "UNDELIV", "parts": 1, "description": "Handset off"})
+
+        saved = frappe.db.get_value("Appointment Notification", row.name, ["status", "error"], as_dict=True)
+        self.assertEqual((saved.status, saved.error), ("Failed", "Handset off"))
+
+    def test_unknown_report_keeps_sent(self):
+        row = self._sent_row("ghi-789")
+        self._poll({"messageId": "ghi-789", "status": "QUEUED", "parts": 1})
+
+        self.assertEqual(frappe.db.get_value("Appointment Notification", row.name, "status"), "Sent")
+
+    def test_muted_site_does_not_poll(self):
+        self._sent_row("jkl-000")
+        configure_gateway()
+        with patch("appointment.scheduler.notification_sms.requests.get") as get:
+            self.assertEqual(notification_sms.poll_delivery(), 0)
+        get.assert_not_called()
+
+    def test_texts_fit_two_parts(self):
+        """Amharic uses UCS-2 (67 characters a part). English uses GSM-7 (160 for one part)."""
+        booking_id = self._book()["booking_id"]
+        frappe.set_user("Administrator")
+        doc = frappe.get_doc("Appointment", booking_id)
+        for event in notification_sms.COPY:
+            self.assertLessEqual(len(notification_sms.render(event, doc, "en")), 160, event)
+            self.assertLessEqual(len(notification_sms.render(event, doc, "am")), 2 * 67, event)

@@ -8,7 +8,7 @@ import unittest
 
 import frappe
 
-from appointment.scheduler.api.policy_manager import create_policy_from_template, update_policy
+from appointment.scheduler.api.policy_manager import create_policy_from_template, delete_policy, update_policy
 
 OWNER = "bloom.owner@example.test"
 OTHER_OWNER = "tena.owner@example.test"
@@ -34,7 +34,8 @@ class TestUpdatePolicy(unittest.TestCase):
 
     def tearDown(self):
         frappe.set_user("Administrator")
-        frappe.delete_doc("Policy", self.policy.name, ignore_permissions=True, force=True)
+        if frappe.db.exists("Policy", self.policy.name):
+            frappe.delete_doc("Policy", self.policy.name, ignore_permissions=True, force=True)
 
     def test_owner_updates_label_by_record_id(self):
         frappe.set_user(OWNER)
@@ -67,6 +68,19 @@ class TestUpdatePolicy(unittest.TestCase):
             update_policy(policy_id=self.policy.name, policy_name="Hijacked")
 
         self.assertEqual(frappe.db.get_value("Policy", self.policy.name, "policy_name"), "QA policy label")
+
+    def test_other_business_owner_cannot_delete(self):
+        frappe.set_user(OTHER_OWNER)
+        with self.assertRaises(frappe.PermissionError):
+            delete_policy(policy_id=self.policy.name)
+
+        self.assertTrue(frappe.db.exists("Policy", self.policy.name))
+
+    def test_owner_deletes_by_record_id(self):
+        frappe.set_user(OWNER)
+        delete_policy(policy_id=self.policy.name)
+
+        self.assertFalse(frappe.db.exists("Policy", self.policy.name))
 
 
 class TestCreatePolicy(unittest.TestCase):

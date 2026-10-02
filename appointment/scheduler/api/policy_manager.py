@@ -516,56 +516,24 @@ def _check_policy_owner(policy, user: str):
     else:
         allowed = False
     if not allowed:
-        frappe.throw(_("You don't have permission to edit this policy"), frappe.PermissionError)
+        frappe.throw(_("You don't have permission to change this policy"), frappe.PermissionError)
 
 
-@frappe.whitelist()
-@add_response_code
-def delete_policy(policy_name: str):
+@frappe.whitelist(methods=["POST"])
+def delete_policy(policy_id: str):
     """
     Delete a policy.
-    
+
     Args:
-        policy_name: Policy name to delete
-    
+        policy_id: Policy document name (for example POL-2026-0001)
+
     Returns:
         Success message
     """
-    try:
-        policy = frappe.get_doc("Policy", policy_name)
-        
-        # Check permissions
-        user = frappe.session.user
-        user_provider = frappe.db.get_value("Provider", {"user": user}, "name")
-        user_org = frappe.db.get_value("Organization", {"owner_user": user}, "name")
-        
-        # Verify ownership
-        if policy.created_by_provider and policy.created_by_provider != user_provider:
-            return {"error": "You don't have permission to delete this policy"}, 403
-        
-        if policy.created_by_organization and policy.created_by_organization != user_org:
-            # Check if user is a manager
-            is_manager = frappe.db.exists(
-                "Organization Manager",
-                {"user": user, "parent": policy.created_by_organization, "status": "Active"}
-            )
-            if not is_manager:
-                return {"error": "You don't have permission to delete this policy"}, 403
-        
-        policy.delete(ignore_permissions=True)
-        frappe.db.commit()
-        
-        return {
-            "success": True,
-            "message": "Policy deleted successfully"
-        }, 200
-    
-    except frappe.DoesNotExistError:
-        return {"error": "Policy not found"}, 404
-    except Exception as e:
-        frappe.db.rollback()
-        frappe.log_error(str(e), "Policy Manager: Delete Policy Error")
-        return {"error": f"Failed to delete policy: {str(e)}"}, 500
+    policy = frappe.get_doc("Policy", policy_id)
+    _check_policy_owner(policy, frappe.session.user)
+    policy.delete(ignore_permissions=True)
+    return {"success": True, "message": "Policy deleted successfully"}
 
 
 @frappe.whitelist()

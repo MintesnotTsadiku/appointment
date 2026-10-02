@@ -9,6 +9,7 @@ bearer token so the secret can stay out of the database.
 """
 
 import re
+from datetime import datetime, timedelta
 
 import frappe
 import pytz
@@ -19,6 +20,13 @@ from frappe.utils import get_datetime
 from appointment.helpers.utils import format_ethiopian_time
 
 TIMEOUT_SECONDS = 15
+# AfroMessage allows 30 status requests a minute; one run stays below that.
+STATUS_BATCH = 25
+STATUS_WINDOW = timedelta(hours=48)
+# Documented values are QUEUED, UNDELIV and UNKNOWN. The delivered spelling is
+# not documented, so both common forms count. Anything else stays "Sent".
+DELIVERED = {"DELIVERED", "DELIVRD"}
+UNDELIVERED = {"UNDELIV", "UNDELIVERED", "FAILED", "REJECTED", "EXPIRED"}
 
 COPY = {
     "Confirmation": "{0}: your booking for {1} on {2} is confirmed.",
@@ -124,3 +132,55 @@ def deliver(phone, text):
         errors = (body.get("response") or {}).get("errors") or body
         raise frappe.ValidationError(f"SMS gateway refused the message: {errors}")
     return (body.get("response") or {}).get("message_id")
+
+
+def poll_delivery():
+    """Scheduler job: ask the gateway what happened to recently sent SMS."""
+    if is_muted() or not available():
+        return 0
+    rows = frappe.get_all(
+        "Appointment Notification",
+        filters={
+            "channel": "SMS",
+            "status": "Sent",
+            "provider_message_id": ["is", "set"],
+            "creation": [">", datetime.now() - STATUS_WINDOW],
+        },
+        fields=["name", "provider_message_id"],
+        order_by="creation asc",
+        limit=STATUS_BATCH,
+    )
+    for row in rows:
+        try:
+            report = delivery_status(row.provider_message_id)
+        except Exception:
+            frappe.log_error(title="Customer SMS status check failed", reference_doctype="Appointment Notification", reference_name=row.name)
+            continue
+        update = {"sms_parts": report.get("parts") or 0}
+        status = str(report.get("status") or "").upper()
+        if status in DELIVERED:
+            update["status"] = "Delivered"
+        elif status in UNDELIVERED:
+            update.update(status="Failed", error=str(report.get("description") or status)[:500])
+        frappe.db.set_value("Appointment Notification", row.name, update)
+    return len(rows)
+
+
+def delivery_status(message_id):
+    """GET /status?id= next to the send URL. Returns the gateway's `response` object."""
+    settings = frappe.get_single("SMS Settings")
+    url = re.sub(r"/send/?$", "/status", settings.sms_gateway_url or "")
+    if not url.endswith("/status"):
+        raise frappe.ValidationError("The SMS gateway URL does not end in /send.")
+    headers = {"Accept": "application/json"}
+    for parameter in settings.parameters:
+        if parameter.header:
+            headers[parameter.parameter] = parameter.value
+    if frappe.conf.get("afromessage_token"):
+        headers["Authorization"] = f"Bearer {frappe.conf.afromessage_token}"
+    response = requests.get(url, headers=headers, params={"id": message_id}, timeout=TIMEOUT_SECONDS)
+    response.raise_for_status()
+    body = response.json()
+    if body.get("acknowledge") != "success":
+        raise frappe.ValidationError(f"SMS status check refused: {body.get('response')}")
+    return body.get("response") or {}

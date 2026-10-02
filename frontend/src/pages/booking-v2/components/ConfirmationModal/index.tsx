@@ -75,10 +75,10 @@ export function ConfirmationModal({
               data-qa="booking-success"
               className="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-6 mb-2"
             >
-              Booking Confirmed!
+              {t("customerBooking.title")}
             </DialogTitle>
             <DialogDescription className="text-gray-600 dark:text-gray-400 text-lg">
-              Your appointment has been successfully scheduled
+              {t("customerBooking.subtitle")}
             </DialogDescription>
           </div>
 
@@ -86,7 +86,7 @@ export function ConfirmationModal({
           <button
             onClick={onClose}
             className="absolute top-4 right-4 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-            aria-label="Close"
+            aria-label={t("customerBooking.close")}
           >
             <X className="h-5 w-5 text-gray-500" />
           </button>
@@ -113,7 +113,7 @@ export function ConfirmationModal({
           {/* Appointment Details Card */}
           <div className="bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl p-6 space-y-4">
             <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-lg mb-4">
-              Appointment Details
+              {t("customerBooking.details")}
             </h3>
 
             {/* Service */}
@@ -122,13 +122,13 @@ export function ConfirmationModal({
                 <Calendar className="h-5 w-5 text-primary-600 dark:text-primary-400" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm text-gray-600 dark:text-gray-400">Service</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{t("customerBooking.service")}</p>
                 <p className="font-semibold text-gray-900 dark:text-gray-100 text-lg">
                   {service.name}
                 </p>
                 {service.provider && (
                   <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                    with {service.provider.name}
+                    {t("customerBooking.withProvider").replace("{0}", service.provider.name)}
                   </p>
                 )}
               </div>
@@ -140,12 +140,12 @@ export function ConfirmationModal({
                 <Clock className="h-5 w-5 text-primary-600 dark:text-primary-400" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm text-gray-600 dark:text-gray-400">Date & Time</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{t("customerBooking.dateTime")}</p>
                 <p className="font-semibold text-gray-900 dark:text-gray-100 text-lg">
                   {formatDate(selectedDate, 'full')}
                 </p>
                 <p className="text-gray-900 dark:text-gray-100 mt-1">
-                  {formattedTime} • {service.duration} minutes
+                  {formattedTime} • {service.duration} {t("customerBooking.minutes")}
                 </p>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                   {timezone}
@@ -160,12 +160,12 @@ export function ConfirmationModal({
                   <MapPin className="h-5 w-5 text-primary-600 dark:text-primary-400" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Location</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{t("customerBooking.location")}</p>
                   <p className="font-semibold text-gray-900 dark:text-gray-100 text-lg">
                     {service.location.is_online ? (
                       <span className="flex items-center gap-2">
                         <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                        Online Meeting
+                        {t("customerBooking.online")}
                       </span>
                     ) : (
                       service.location.location_name
@@ -193,7 +193,7 @@ export function ConfirmationModal({
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                    {bookingResponse.meetingProvider || "Meeting"} Link
+                    {bookingResponse.meetingProvider ? `${bookingResponse.meetingProvider} · ` : ""}{t("customerBooking.meetingLink")}
                   </p>
                   <div className="flex items-center gap-2">
                     <code className="flex-1 text-sm bg-gray-100 dark:bg-gray-700 px-3 py-2 rounded-lg truncate">
@@ -208,12 +208,12 @@ export function ConfirmationModal({
                       {copied === "meetLink" ? (
                         <>
                           <CheckCircle2 className="h-4 w-4 mr-1 text-green-600" />
-                          Copied
+                          {t("customerBooking.copied")}
                         </>
                       ) : (
                         <>
                           <Copy className="h-4 w-4 mr-1" />
-                          Copy
+                          {t("customerBooking.copy")}
                         </>
                       )}
                     </Button>
@@ -225,7 +225,7 @@ export function ConfirmationModal({
             {/* Booking ID */}
             {bookingResponse.bookingId && (
               <div className="text-xs text-gray-500 dark:text-gray-400 pt-4 border-t border-gray-200 dark:border-gray-700">
-                Booking ID: <span className="font-mono">{bookingResponse.bookingId}</span>
+                {t("customerBooking.bookingId")}: <span className="font-mono">{bookingResponse.bookingId}</span>
               </div>
             )}
           </div>
@@ -239,7 +239,7 @@ export function ConfirmationModal({
                 className="w-full h-12 bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 text-white"
               >
                 <Calendar className="h-5 w-5 mr-2" />
-                Add to Calendar
+                {t("customerBooking.addCalendar")}
               </Button>
             )}
 
@@ -251,7 +251,7 @@ export function ConfirmationModal({
                 className="w-full h-12 border-2"
               >
                 <ExternalLink className="h-5 w-5 mr-2" />
-                Join Meeting
+                {t("customerBooking.join")}
               </Button>
             )}
           </div>
@@ -260,14 +260,14 @@ export function ConfirmationModal({
           {bookingResponse.rescheduleUrl && (
             <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                Need to make changes?
+                {t("customerBooking.needChanges")}
               </p>
               <Button
                 onClick={() => window.open(bookingResponse.rescheduleUrl, "_blank")}
                 variant="ghost"
                 className="w-full justify-start text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
               >
-                Reschedule or Cancel Appointment →
+                {t("customerBooking.rescheduleOrCancel")} →
               </Button>
             </div>
           )}
@@ -275,24 +275,24 @@ export function ConfirmationModal({
           {/* Info Box */}
           <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
             <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2 text-sm">
-              What's Next?
+              {t("customerBooking.whatsNext")}
             </h4>
             <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
               <li className="flex items-start gap-2">
                 <span className="text-primary-600 dark:text-primary-400 mt-0.5">•</span>
-                <span>Save your booking reference for contacting the business</span>
+                <span>{t("customerBooking.next1")}</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-primary-600 dark:text-primary-400 mt-0.5">•</span>
-                <span>Keep the date, time and location with your booking reference</span>
+                <span>{t("customerBooking.next2")}</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-primary-600 dark:text-primary-400 mt-0.5">•</span>
-                <span>{bookingResponse.meetLink ? "Use the meeting link at the scheduled time" : "Arrive at the chosen location a few minutes before your appointment"}</span>
+                <span>{t(bookingResponse.meetLink ? "customerBooking.next3Online" : "customerBooking.next3Place")}</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-primary-600 dark:text-primary-400 mt-0.5">•</span>
-                <span>Contact the business if you need to change or cancel</span>
+                <span>{t("customerBooking.next4")}</span>
               </li>
             </ul>
           </div>
@@ -303,7 +303,7 @@ export function ConfirmationModal({
             variant="outline"
             className="w-full h-12 mt-4"
           >
-            Done
+            {t("customerBooking.done")}
           </Button>
         </div>
       </DialogContent>

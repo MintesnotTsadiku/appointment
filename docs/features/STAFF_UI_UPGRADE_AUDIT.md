@@ -361,7 +361,7 @@ Policy documents use the naming series `POL-.YYYY.-.####`, so the label is not t
 - The form no longer fills `provider` with the business ID for business owners.
 - `create_policy_from_template` read `organization` and `organization_id` without declaring them. Every policy create from the staff page failed with `UnboundLocalError`. Both are now arguments.
 
-`delete_policy` still returns `({"error": ...}, 403)` tuples. It was not part of this change.
+`delete_policy(policy_id)` now uses the same ownership check and raises `frappe.PermissionError` (closing round). The delete dialog shows the server message.
 
 ### Offering rows
 

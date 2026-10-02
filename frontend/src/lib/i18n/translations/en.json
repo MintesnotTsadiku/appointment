@@ -1713,7 +1713,8 @@
         "Queued": "Queued",
         "Sent": "Sent",
         "Failed": "Failed",
-        "Skipped": "Not sent"
+        "Skipped": "Not sent",
+        "Delivered": "Delivered"
       },
       "reason": {
         "disabled": "Turned off",
@@ -1788,7 +1789,32 @@
     "emailQueuedTitle": "Confirmation email on its way",
     "emailQueuedBody": "We are sending the booking details to this address:",
     "savedTitle": "Booking saved",
-    "notSentBody": "Keep your booking reference. We did not send an email to this address:"
+    "notSentBody": "Keep your booking reference. We did not send an email to this address:",
+    "title": "Booking Confirmed!",
+    "subtitle": "Your appointment has been successfully scheduled",
+    "close": "Close",
+    "details": "Appointment details",
+    "service": "Service",
+    "withProvider": "With {0}",
+    "dateTime": "Date & Time",
+    "minutes": "minutes",
+    "location": "Location",
+    "online": "Online Meeting",
+    "meetingLink": "Meeting link",
+    "copy": "Copy",
+    "copied": "Copied",
+    "bookingId": "Booking ID",
+    "addCalendar": "Add to Calendar",
+    "join": "Join Meeting",
+    "needChanges": "Need to make changes?",
+    "rescheduleOrCancel": "Reschedule or cancel the appointment",
+    "whatsNext": "What's next?",
+    "next1": "Save your booking reference for contacting the business",
+    "next2": "Keep the date, time and location with your booking reference",
+    "next3Online": "Use the meeting link at the scheduled time",
+    "next3Place": "Arrive at the chosen location a few minutes before your appointment",
+    "next4": "Contact the business if you need to change or cancel",
+    "done": "Done"
   },
   "customerSms": {
     "confirmation": "{0}: your booking for {1} on {2} is confirmed.",
