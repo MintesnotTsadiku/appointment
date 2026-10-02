@@ -13,6 +13,7 @@ import { leadTimeValid } from './leadTime';
 
 interface SettingsResponse {
   settings: NotificationSettings;
+  sms_available: boolean;
   recent: CustomerMessage[];
 }
 
@@ -54,7 +55,7 @@ export default function NotificationSettingsPage() {
           <ErrorState onRetry={() => mutate()} />
         ) : (
           <SettingsSection title={t('staff.notifications.eventsTitle')} description={t('staff.notifications.eventsDescription')}>
-            {isLoading || !form ? <ListSkeleton count={4} /> : <EventSettings value={form} onChange={setForm} />}
+            {isLoading || !form ? <ListSkeleton count={4} /> : <EventSettings value={form} onChange={setForm} smsAvailable={Boolean(data?.message?.sms_available)} />}
           </SettingsSection>
         )}
         <SettingsSection title={t('staff.notifications.recentTitle')} description={t('staff.notifications.recentDescription')}>

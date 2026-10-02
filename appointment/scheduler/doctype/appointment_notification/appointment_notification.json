@@ -16,7 +16,9 @@
   "skip_reason",
   "email_queue",
   "dedupe_key",
-  "error"
+  "error",
+  "message",
+  "provider_message_id"
  ],
  "fields": [
   {
@@ -56,7 +58,8 @@
   {
    "fieldname": "recipient",
    "fieldtype": "Data",
-   "label": "Recipient"
+   "label": "Recipient",
+   "description": "Email address, or phone number in +251 form for SMS."
   },
   {
    "fieldname": "language",
@@ -84,7 +87,7 @@
    "fieldname": "skip_reason",
    "fieldtype": "Select",
    "label": "Skip Reason",
-   "options": "\ndisabled\nopted_out\nrate_limited\nno_recipient\nstale"
+   "options": "\ndisabled\nopted_out\nrate_limited\nno_recipient\nstale\nmuted"
   },
   {
    "fieldname": "email_queue",
@@ -104,6 +107,18 @@
    "fieldname": "error",
    "fieldtype": "Small Text",
    "label": "Error"
+  },
+  {
+   "fieldname": "message",
+   "fieldtype": "Small Text",
+   "label": "SMS Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "provider_message_id",
+   "fieldtype": "Data",
+   "label": "Provider Message ID",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 0,

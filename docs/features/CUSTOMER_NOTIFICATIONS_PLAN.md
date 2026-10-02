@@ -1,7 +1,7 @@
 ---
 tags: [plan, appointment, notifications]
 created: 2026-10-02
-status: decided 2026-10-02, email in build
+status: email and SMS built 2026-10-02; real SMS send pending an API key
 ---
 
 # Customer notifications plan
@@ -279,26 +279,46 @@ Database proof (email is muted): each QA booking has one Appointment Notificatio
 
 ### Left open
 
-- SMS through AfroMessage: needs the decisions in "SMS next".
+- SMS: see "SMS" below.
 - The public confirmation dialog shows other English text in Amharic, for example "Booking Confirmed!". Only the email notice is translated.
 - The QA runs left these Confirmed bookings for 2026-10-03 at Bloom: `qa-notify-*@example.test` from the first guest run, and one rescheduled English desktop booking at 18:30. They were not deleted by hand.
 - Email links use the site host name. On this stack that is the backend port (`:44431`), not the Vite URL.
 - `bloom.manager@example.test` had no stored language. The Amharic scenarios switch back to English at the end, so it is now `en`.
 - Jobs enqueued from the bench CLI (tests and the QA runner) go to the wrongly named Redis queue noted in the audit. Jobs from web requests reach the worker.
 
-## SMS next
+## SMS
 
-AfroMessage facts (from https://www.afromessage.com/developers):
+Decided on 2026-10-02: one platform AfroMessage account, SMS off until each business turns it on, and no sender name yet. The platform owner supplies the API key.
 
-- `POST https://api.afromessage.com/api/send` with `Authorization: Bearer <token>`.
-- A sender name must be approved first.
-- Errors return HTTP 200 with `acknowledge: "error"`.
-- Delivery status comes from a one-shot callback or from `GET /status`.
-- There is no sandbox. The free plan allows 100 messages a day.
+### How it works
 
-Decisions needed before the build:
+- Each business has one switch, "Also send SMS" (`sms_enabled`, default off). When it is on, every customer email event also queues an SMS row with the same deduplication key plus `:sms`, the same opt-out, and the same abuse limits.
+- The switch stays disabled until Frappe's `SMS Settings` has a gateway URL. `save_settings` refuses `sms_enabled=1` without one.
+- The phone number comes from `client_phone`. `notification_sms.normalize_phone` turns Ethiopian numbers (`09…`, `07…`, `9…`, `2519…`) into `+251…`. A number it cannot read is recorded as `no_recipient`.
+- `notification_sms.send_notification` renders a short text in the booking language, then posts it with the URL, parameters and headers from `SMS Settings`. It stores the text and the AfroMessage `message_id` on the row.
+- Frappe's `send_sms` is not used. It counts any HTTP 200 as sent, but AfroMessage answers 200 with `acknowledge: "error"` for rejected messages. It also returns no message ID and ignores muting.
+- Muting: `mute_sms` in site config decides. Without it, SMS follows `mute_emails`. A muted site records the row as Skipped with reason `muted` and the rendered text.
 
-1. One platform AfroMessage account, or one token for each business.
-2. Whether SMS is off by default for each business, because each message costs money.
-3. The approved sender name.
-4. Where the token lives (site config, never the repository).
+### Setup (platform owner)
+
+1. In Desk, open **SMS Settings** and set:
+   - SMS Gateway URL: `https://api.afromessage.com/api/send`
+   - Message Parameter: `message`
+   - Receiver Parameter: `to`
+   - Use POST: on
+   - Parameters: `Content-Type` = `application/json` (Header on). Add `sender` = the approved sender name when there is one. Add `from` = the identifier ID if AfroMessage gave one.
+2. Put the token in site config, not in the database: `bench --site <site> set-config afromessage_token <token>`. The SMS Parameter value field holds only 255 characters, so a long token would be cut.
+3. To send real SMS from a site that keeps `mute_emails=1`, set `mute_sms` to 0: `bench --site <site> set-config -p mute_sms 0`.
+4. Turn on "Also send SMS" for one business at `/settings/notifications`.
+
+### Verification
+
+- `appointment.tests.test_customer_sms`: 7 passed. The tests cover number normalization, the switch staying off by default, refusal without a gateway, muted recording with Amharic text, a missing phone number, and gateway success and error replies (mocked HTTP; nothing reaches AfroMessage).
+- Agent Plane BQA-2026-00359, `customer-notifications/settings.yaml`: passed, 4 of 4 (1440×900 and 390×844, English and Amharic), 0 console and 0 network errors. The SMS switch is disabled with the "not set up" message, because this site has no gateway.
+
+### Left open for SMS
+
+- No real message has been sent. This needs the token, a test phone number and `mute_sms: 0`.
+- Delivery status stops at "Sent" (accepted by AfroMessage). AfroMessage's delivery callback is tried only once, so a later change could poll `GET /status?id=` for rows with a `provider_message_id`.
+- Amharic SMS uses Unicode, so one message holds fewer characters and may bill as several parts. The texts are short, but the cost per message was not measured.
+- No sender name is approved yet. Until then, AfroMessage sends as "AfroMessage" on the beta plan (100 messages a day).

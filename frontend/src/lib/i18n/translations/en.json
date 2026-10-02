@@ -1720,7 +1720,8 @@
         "opted_out": "Customer opted out",
         "rate_limited": "Limit reached",
         "no_recipient": "No email address",
-        "stale": "Booking changed"
+        "stale": "Booking changed",
+        "muted": "Muted on this site"
       },
       "event": {
         "Confirmation": "Confirmation",
@@ -1732,7 +1733,10 @@
         "queued": "Customer email queued.",
         "disabled": "Customer email is turned off for this business.",
         "skipped": "No customer email was sent."
-      }
+      },
+      "sms": "Also send SMS",
+      "smsHint": "Sends the same messages to the customer's phone. Each SMS costs money.",
+      "smsUnavailable": "SMS is not set up for this site yet."
     }
   },
   "publicSite": {
@@ -1785,5 +1789,12 @@
     "emailQueuedBody": "We are sending the booking details to this address:",
     "savedTitle": "Booking saved",
     "notSentBody": "Keep your booking reference. We did not send an email to this address:"
+  },
+  "customerSms": {
+    "confirmation": "{0}: your booking for {1} on {2} is confirmed.",
+    "reschedule": "{0}: your booking for {1} is moved to {2}.",
+    "cancellation": "{0}: your booking for {1} on {2} is cancelled.",
+    "reminder": "{0}: reminder of your booking for {1} on {2}.",
+    "notSetUp": "SMS is not set up for this site."
   }
 }

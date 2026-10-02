@@ -11,7 +11,7 @@ from frappe.utils import escape_html, get_datetime, get_url
 from frappe.utils.verified_command import get_signed_params
 
 from appointment.helpers.utils import format_ethiopian_time
-from appointment.scheduler.notifications import OPEN_STATUSES
+from appointment.scheduler.notifications import is_stale
 
 TEMPLATE = "appointment/templates/emails/customer_notification.html"
 NAME_LIMIT = 80
@@ -48,7 +48,7 @@ def send_notification(notification):
     if row.status != "Queued" or row.email_queue:
         return
     doc = frappe.get_doc("Appointment", row.appointment)
-    if _is_stale(row.event, doc):
+    if is_stale(row.event, doc):
         row.db_set({"status": "Skipped", "skip_reason": "stale"})
         return
     try:
@@ -67,13 +67,6 @@ def send_notification(notification):
         frappe.log_error(title="Customer notification failed", reference_doctype="Appointment", reference_name=doc.name)
         return
     row.db_set("email_queue", queue.name if queue else None)
-
-
-def _is_stale(event, doc):
-    """The booking changed again before the job ran."""
-    if event == "Cancellation":
-        return doc.status != "Cancelled"
-    return doc.status not in OPEN_STATUSES
 
 
 def render(event, doc, language, recipient):

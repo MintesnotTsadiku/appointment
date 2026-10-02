@@ -13,7 +13,7 @@ import pytz
 from frappe import _
 from frappe.utils import get_datetime, get_system_timezone, validate_email_address
 
-from appointment.scheduler import membership
+from appointment.scheduler import membership, notification_sms
 from appointment.scheduler.booking_access import require_access
 
 EVENT_SETTING = {
@@ -22,7 +22,14 @@ EVENT_SETTING = {
     "Cancellation": "send_cancellation",
     "Reminder": "send_reminder",
 }
-DEFAULT_SETTINGS = dict(send_confirmation=1, send_reschedule=1, send_cancellation=1, send_reminder=1, reminder_lead_hours=24)
+DEFAULT_SETTINGS = dict(
+    sms_enabled=0, send_confirmation=1, send_reschedule=1, send_cancellation=1, send_reminder=1, reminder_lead_hours=24
+)
+CHECK_SETTINGS = ("sms_enabled", *EVENT_SETTING.values())
+JOBS = {
+    "Email": "appointment.scheduler.notification_email.send_notification",
+    "SMS": "appointment.scheduler.notification_sms.send_notification",
+}
 LEAD_HOURS_RANGE = (1, 72)
 OPEN_STATUSES = ("Pending", "Confirmed")
 
@@ -70,20 +77,32 @@ def _event_for(doc):
 # Decide and record
 # ---------------------------------------------------------------------------
 def queue_notification(doc, event):
-    """Record one message for `event` and enqueue it. Returns the notification status."""
-    key = _dedupe_key(doc, event)
+    """Record and enqueue `event` on each channel. Returns the notification status.
+
+    Email always runs. SMS runs when the business turned it on and the site has
+    an SMS gateway. The status is "queued" when any channel queued a message.
+    """
+    statuses = [_queue_channel(doc, event, "Email")]
+    if business_settings(doc.organization).sms_enabled and notification_sms.available():
+        statuses.append(_queue_channel(doc, event, "SMS"))
+    return "queued" if "queued" in statuses else statuses[0]
+
+
+def _queue_channel(doc, event, channel):
+    key = _dedupe_key(doc, event) + ("" if channel == "Email" else ":sms")
     if frappe.db.exists("Appointment Notification", {"dedupe_key": key}):
         return "queued"
-    recipient = validate_email_address(doc.client_email or "")
-    reason = _skip_reason(doc, event, recipient)
+    raw = doc.client_email if channel == "Email" else doc.client_phone
+    recipient = validate_email_address(raw or "") if channel == "Email" else notification_sms.normalize_phone(raw)
+    reason = _skip_reason(doc, event, channel, recipient)
     row = frappe.get_doc(
         dict(
             doctype="Appointment Notification",
             appointment=doc.name,
             organization=doc.organization,
             event=event,
-            channel="Email",
-            recipient=recipient or (doc.client_email or "")[:140],
+            channel=channel,
+            recipient=recipient or (raw or "")[:140],
             language=customer_language(doc),
             status="Skipped" if reason else "Queued",
             skip_reason=reason,
@@ -92,30 +111,33 @@ def queue_notification(doc, event):
     ).insert(ignore_permissions=True)
     if reason:
         return reason
-    frappe.enqueue(
-        "appointment.scheduler.notification_email.send_notification",
-        queue="short",
-        enqueue_after_commit=True,
-        notification=row.name,
-    )
+    frappe.enqueue(JOBS[channel], queue="short", enqueue_after_commit=True, notification=row.name)
     return "queued"
 
 
-def _skip_reason(doc, event, recipient):
+def is_stale(event, doc):
+    """The booking changed again before the job ran."""
+    if event == "Cancellation":
+        return doc.status != "Cancelled"
+    return doc.status not in OPEN_STATUSES
+
+
+def _skip_reason(doc, event, channel, recipient):
     if not business_settings(doc.organization)[EVENT_SETTING[event]]:
         return "disabled"
     if not recipient:
         return "no_recipient"
-    if event == "Reminder" and is_opted_out(doc.organization, recipient):
+    # The opt-out link is in the reminder email; it stops reminders on every channel.
+    if event == "Reminder" and is_opted_out(doc.organization, doc.client_email or ""):
         return "opted_out"
-    if _over_limit(doc.organization, recipient, event):
+    if _over_limit(doc.organization, recipient, event, channel):
         return "rate_limited"
     return None
 
 
-def _over_limit(organization, recipient, event):
+def _over_limit(organization, recipient, event, channel):
     day_ago, hour_ago = datetime.now() - timedelta(days=1), datetime.now() - timedelta(hours=1)
-    sent = {"status": ["in", ["Queued", "Sent"]], "channel": "Email"}
+    sent = {"status": ["in", ["Queued", "Sent"]], "channel": channel}
     if frappe.db.count("Appointment Notification", {**sent, "organization": organization, "creation": [">", hour_ago]}) >= LIMIT_BUSINESS_PER_HOUR:
         return True
     if event != "Confirmation":
@@ -219,16 +241,22 @@ def get_settings(organization):
         order_by="creation desc",
         limit=20,
     )
-    return {"settings": business_settings(organization), "recent": [_with_delivery(row) for row in recent]}
+    return {
+        "settings": business_settings(organization),
+        "sms_available": notification_sms.available(),
+        "recent": [_with_delivery(row) for row in recent],
+    }
 
 
 @frappe.whitelist(methods=["POST"])
 def save_settings(organization, **values):
     _require_manager(organization)
     clean = {key: int(frappe.utils.cint(values[key])) for key in DEFAULT_SETTINGS if key in values}
-    for key in EVENT_SETTING.values():
+    for key in CHECK_SETTINGS:
         if key in clean:
             clean[key] = 1 if clean[key] else 0
+    if clean.get("sms_enabled") and not notification_sms.available():
+        frappe.throw(_("SMS is not set up for this site."))
     lead = clean.get("reminder_lead_hours")
     if lead is not None and not LEAD_HOURS_RANGE[0] <= lead <= LEAD_HOURS_RANGE[1]:
         frappe.throw(_("Choose a reminder lead time from 1 to 72 hours."))

@@ -21,7 +21,9 @@ OTHER_OWNER = "tena.owner@example.test"
 OFFERING = "EVT-2026-000109"  # Cut and shape, Rahel Girma, Bole quiet styling room
 
 
-class TestCustomerNotifications(unittest.TestCase):
+class BloomBookingCase(unittest.TestCase):
+    """Books free Bloom slots as a guest and rolls everything back after each test."""
+
     @classmethod
     def setUpClass(cls):
         frappe.set_user("Administrator")
@@ -45,20 +47,24 @@ class TestCustomerNotifications(unittest.TestCase):
         frappe.set_user("Administrator")
         frappe.db.rollback()
 
-    def _book(self, slot=0, email=None, language=None, name="Selam Test"):
+    def _book(self, slot=0, email=None, language=None, name="Selam Test", phone=""):
         start = self.slots[slot]
         return booking.book(
             OFFERING, start["start_time"], start["end_time"], name,
             email or f"qa-{frappe.generate_hash(length=8)}@example.test",
-            frappe.generate_hash(length=24), organization_id=self.org, language=language,
+            frappe.generate_hash(length=24), user_phone=phone, organization_id=self.org, language=language,
         )
 
-    def _rows(self, booking_id):
+    def _rows(self, booking_id, channel="Email"):
         return frappe.get_all(
-            "Appointment Notification", filters={"appointment": booking_id},
-            fields=["name", "event", "status", "skip_reason"], order_by="creation asc",
+            "Appointment Notification", filters={"appointment": booking_id, "channel": channel},
+            fields=["name", "event", "status", "skip_reason", "recipient", "message", "provider_message_id"],
+            order_by="creation asc",
         )
 
+
+
+class TestCustomerNotifications(BloomBookingCase):
     def test_booking_queues_one_confirmation_email(self):
         result = self._book()
         self.assertEqual(result["notification_status"], "queued")

@@ -6,6 +6,7 @@
  "engine": "InnoDB",
  "field_order": [
   "organization",
+  "sms_enabled",
   "send_confirmation",
   "send_reschedule",
   "send_cancellation",
@@ -20,6 +21,13 @@
    "options": "Organization",
    "reqd": 1,
    "unique": 1
+  },
+  {
+   "fieldname": "sms_enabled",
+   "fieldtype": "Check",
+   "label": "Also send SMS",
+   "default": "0",
+   "description": "Off by default. Needs SMS Settings for this site."
   },
   {
    "fieldname": "send_confirmation",
