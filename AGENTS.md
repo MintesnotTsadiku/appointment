@@ -18,7 +18,7 @@ Read [CONTEXT.md](CONTEXT.md) before changing the scheduling or public-experienc
 
 - Verify public changes in a real browser at desktop and mobile sizes.
 - Capture the landing page, `/book`, and scheduler for every seeded business.
-- Store final evidence under `qa/evidence/`; include source-versus-browser comparisons for design work.
+- Keep browser screenshots, DOM snapshots and traces in the Agent Plane run artifacts. Do not commit screenshots; record the run IDs and results in the relevant doc instead.
 - Run focused frontend and Frappe tests before broad suites. Report unrelated existing failures separately.
 - Do not claim visual completion from code inspection alone.
 
