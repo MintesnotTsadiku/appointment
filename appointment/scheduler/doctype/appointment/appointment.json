@@ -16,6 +16,7 @@
   "client_name",
   "client_email",
   "client_phone",
+  "customer_language",
   "appointment_date",
   "start_time",
   "end_time",
@@ -101,6 +102,13 @@
    "label": "Client Phone",
    "options": "Phone",
    "reqd": 0
+  },
+  {
+   "fieldname": "customer_language",
+   "fieldtype": "Select",
+   "label": "Customer Language",
+   "options": "\nen\nam",
+   "description": "Language for customer messages. Empty uses the business language."
   },
   {
    "fieldname": "appointment_date",
@@ -213,7 +221,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2025-11-16 01:34:55.052429",
+ "modified": "2026-10-02 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Scheduler",
  "name": "Appointment",

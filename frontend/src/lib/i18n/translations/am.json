@@ -523,7 +523,11 @@
         "title": "የቀን መቁጠሪያ ማመሳሰል",
         "description": "ድርብ ቀጠሮን ለማስወገድ ውጫዊ የቀን መቁጠሪያዎችን ያገናኙ።"
       },
-      "hubDescription": "ንግድዎን፣ ቡድንዎን እና የራስዎን ምርጫዎች ያስተዳድሩ።"
+      "hubDescription": "ንግድዎን፣ ቡድንዎን እና የራስዎን ምርጫዎች ያስተዳድሩ።",
+      "notifications": {
+        "title": "የደንበኛ መልዕክቶች",
+        "description": "ለደንበኞች የቀጠሮ ኢሜይሎች እና ማስታወሻዎች"
+      }
     },
     "status": {
       "pending": "በመጠባበቅ ላይ",
@@ -722,7 +726,7 @@
       }
     },
     "business": {
-      "description": "ለአገልግሎቶችዎ የቀጠሮ ገጾችን ያትሙ እና አዳዲስ ንግዶችን ያዘጋጁ። ገጾች እስኪያትሟቸው ድረስ የግል ሆነው ይቆያሉ፣ ለደንበኞችም መልእክት አይላክም።",
+      "description": "ለአገልግሎቶችዎ የቀጠሮ ገጾችን ያትሙ እና አዳዲስ ንግዶችን ያዘጋጁ። ገጾች እስኪያትሟቸው ድረስ የግል ሆነው ይቆያሉ።",
       "pagesTitle": "የእርስዎ የቀጠሮ ገጾች",
       "pagesDescription": "ለእያንዳንዱ አገልግሎት እና ቅርንጫፍ አንድ ገጽ። ቀጠሮ መቀበል ለመጀመር ገጹን ያትሙ።",
       "noPages": "እስካሁን የቀጠሮ ገጾች የሉም",
@@ -743,7 +747,7 @@
       "closesAt": "የሚዘጋበት ሰዓት",
       "stored24": "በ24 ሰዓት ቅርጸት ይቀመጣል",
       "operatingDays": "የሥራ ቀናት",
-      "firstProvider": "እርስዎ የመጀመሪያው አገልግሎት ሰጪ ይሆናሉ። ይህ ዝግጅት ክፍያ መሰብሰብን እና የደንበኛ መልእክቶችን አያነቃም።",
+      "firstProvider": "እርስዎ የመጀመሪያው አገልግሎት ሰጪ ይሆናሉ። ይህ ዝግጅት ክፍያ መሰብሰብን አያነቃም።",
       "saveDraft": "ንግዱን በረቂቅ አስቀምጥ"
     },
     "receptionDesk": {
@@ -799,7 +803,7 @@
       "manageBooking": "ቀጠሮ ያስተዳድሩ",
       "bookingReference": "የቀጠሮ መለያ ቁጥር",
       "timesIn": "ሰዓቶቹ በዚህ የሰዓት ቀጠና ናቸው፦",
-      "ownedNote": "ለውጦች ይህን የቀጠሮ ማጣቀሻ ይይዛሉ። ለደንበኛው መልእክት አይላክም።",
+      "ownedNote": "ለውጦች ይህን የቀጠሮ ማጣቀሻ ይይዛሉ። ንግዱ ካላጠፋው በስተቀር ደንበኛው ለእያንዳንዱ ለውጥ ኢሜይል ይደርሰዋል።",
       "changeTime": "ሰዓት ቀይር",
       "saveNewTime": "አዲሱን ሰዓት አስቀምጥ",
       "cancelBooking": "ቀጠሮ ሰርዝ…",
@@ -1473,7 +1477,7 @@
     "onboarding": {
       "eyebrow": "አዲስ ንግድ",
       "title": "ንግድዎን ያዋቅሩ",
-      "description": "ቦታዎን እና የመጀመሪያ አገልግሎትዎን ይፍጠሩ። እስኪያትሙት ድረስ ገጽዎ የግል ሆኖ ይቆያል፤ ለደንበኞችም ምንም መልዕክት አይላክም።",
+      "description": "ቦታዎን እና የመጀመሪያ አገልግሎትዎን ይፍጠሩ። እስኪያትሙት ድረስ ገጽዎ የግል ሆኖ ይቆያል።",
       "businessTitle": "ንግድ እና ቦታ",
       "businessDescription": "ደንበኞች እርስዎን የሚያውቁበት መንገድ።",
       "businessNameHint": "በቀጠሮ ገጽዎ ላይ ይታያል። እስከ 100 ፊደላት።",
@@ -1683,6 +1687,52 @@
       "saveLayout": "አቀማመጥ አስቀምጥ",
       "customize": "አብጅ",
       "editingHint": "ካርዶቹን በመያዣቸው ይጎትቱ፣ ከታችኛው ቀኝ ጥግ መጠናቸውን ይቀይሩ፣ ወይም የእያንዳንዱን ካርድ ምናሌ ይጠቀሙ። ሲጨርሱ ያስቀምጡ።"
+    },
+    "notifications": {
+      "eventsTitle": "ለደንበኞች የሚላኩ ኢሜይሎች",
+      "eventsDescription": "እያንዳንዱ ኢሜይል ደንበኛው ቀጠሮ ሲይዝ ወደሰጠው አድራሻ ይላካል።",
+      "confirmation": "የቀጠሮ ማረጋገጫ",
+      "confirmationHint": "ቀጠሮ ሲያዝ ይላካል።",
+      "reschedule": "አዲስ ሰዓት",
+      "rescheduleHint": "ሠራተኞች ቀጠሮን ሲያዛውሩ ይላካል።",
+      "cancellation": "ስረዛ",
+      "cancellationHint": "ሠራተኞች ቀጠሮን ሲሰርዙ ይላካል።",
+      "reminder": "ማስታወሻ",
+      "reminderHint": "ከቀጠሮው በፊት ይላካል። ደንበኞች ማስታወሻዎችን ማጥፋት ይችላሉ።",
+      "leadTime": "ከቀጠሮው በፊት ያሉ ሰዓቶች",
+      "leadTimeHint": "ከ1 እስከ 72 ሰዓት።",
+      "save": "የመልዕክት ቅንብሮችን አስቀምጥ",
+      "saved": "የመልዕክት ቅንብሮች ተቀምጠዋል።",
+      "saveFailed": "የመልዕክት ቅንብሮችን ማስቀመጥ አልተቻለም።",
+      "recentTitle": "የቅርብ ጊዜ መልዕክቶች",
+      "recentDescription": "የዚህ ንግድ የመጨረሻዎቹ 20 መልዕክቶች።",
+      "empty": "እስካሁን የደንበኛ መልዕክት የለም።",
+      "loadError": "የደንበኛ መልዕክቶችን መጫን አልተቻለም።",
+      "business": "ንግድ",
+      "status": {
+        "Queued": "ተሰልፏል",
+        "Sent": "ተልኳል",
+        "Failed": "አልተሳካም",
+        "Skipped": "አልተላከም"
+      },
+      "reason": {
+        "disabled": "ጠፍቷል",
+        "opted_out": "ደንበኛው አቋርጧል",
+        "rate_limited": "ገደቡ ደርሷል",
+        "no_recipient": "የኢሜይል አድራሻ የለም",
+        "stale": "ቀጠሮው ተቀይሯል"
+      },
+      "event": {
+        "Confirmation": "ማረጋገጫ",
+        "Reschedule": "አዲስ ሰዓት",
+        "Cancellation": "ስረዛ",
+        "Reminder": "ማስታወሻ"
+      },
+      "toast": {
+        "queued": "የደንበኛ ኢሜይል ተሰልፏል።",
+        "disabled": "ለዚህ ንግድ የደንበኛ ኢሜይል ጠፍቷል።",
+        "skipped": "ለደንበኛው ኢሜይል አልተላከም።"
+      }
     }
   },
   "publicSite": {
@@ -1705,5 +1755,35 @@
     "hours": "የሥራ ሰዓት",
     "address": "አድራሻ",
     "step": "ደረጃ {count}"
+  },
+  "customerEmail": {
+    "subjectConfirmation": "ከ{0} ጋር ያለዎት ቀጠሮ ተረጋግጧል",
+    "headingConfirmation": "ቀጠሮ ተረጋግጧል",
+    "introConfirmation": "ሰላም {0}፣ ቀጠሮዎ ተረጋግጧል።",
+    "subjectReschedule": "ከ{0} ጋር ያለዎት ቀጠሮ አዲስ ሰዓት አለው",
+    "headingReschedule": "ቀጠሮ ተዛውሯል",
+    "introReschedule": "ሰላም {0}፣ {1} ቀጠሮዎን አዛውሯል። አዲሱ ሰዓት ከዚህ በታች ነው።",
+    "subjectCancellation": "ከ{0} ጋር ያለዎት ቀጠሮ ተሰርዟል",
+    "headingCancellation": "ቀጠሮ ተሰርዟል",
+    "introCancellation": "ሰላም {0}፣ {1} ቀጠሮዎን ሰርዟል።",
+    "subjectReminder": "ማስታወሻ፦ ከ{0} ጋር ያለዎት ቀጠሮ",
+    "headingReminder": "የሚመጣ ቀጠሮ",
+    "introReminder": "ሰላም {0}፣ ይህ የቀጠሮዎ ማስታወሻ ነው።",
+    "service": "አገልግሎት",
+    "provider": "አገልግሎት ሰጪ",
+    "location": "አድራሻ",
+    "when": "ቀን እና ሰዓት",
+    "bookingPage": "የቀጠሮ ገጹን ይክፈቱ",
+    "contact": "ጥያቄ አለዎት? {0} ያግኙ።",
+    "footer": "ይህን ኢሜይል የተቀበሉት ከ{0} ጋር ቀጠሮ ስለያዙ ነው።",
+    "optOut": "ከዚህ ንግድ ማስታወሻዎችን አቁም",
+    "optOutTitle": "ማስታወሻዎች ጠፍተዋል",
+    "optOutMessage": "ከእንግዲህ ከ{0} የቀጠሮ ማስታወሻዎች አይደርሱዎትም። የቀጠሮ ማረጋገጫዎች እና ለውጦች ግን ይደርሳሉ።"
+  },
+  "customerBooking": {
+    "emailQueuedTitle": "የማረጋገጫ ኢሜይል እየተላከ ነው",
+    "emailQueuedBody": "የቀጠሮውን ዝርዝር ወደዚህ አድራሻ እየላክን ነው፦",
+    "savedTitle": "ቀጠሮው ተቀምጧል",
+    "notSentBody": "የቀጠሮ ማጣቀሻዎን ያስቀምጡ። ወደዚህ አድራሻ ኢሜይል አልላክንም፦"
   }
 }

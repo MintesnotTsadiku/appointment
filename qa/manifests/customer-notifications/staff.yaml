@@ -1,0 +1,316 @@
+# Run after guest.yaml. The manager reschedules and cancels each guest booking.
+app: appointment
+base_url: http://127.0.0.84:44430
+default_role: Staff
+auth:
+  type: frappe_session
+  username: bloom.manager@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment-customer-notifications
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.notification_qa_fixtures.browser_values
+scenarios:
+- id: notify_staff_en_desktop
+  title: Manager reschedules and cancels a guest booking (en, desktop); customer messages show their status
+  viewport: &id005
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /reception
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="desk-next-day"]'
+  actions:
+  - action: click
+    selector: '[data-qa="desk-next-day"]'
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{qa_notify_en_desktop_booking}"]'
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_notify_en_desktop_booking}"]'
+    key: Enter
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="owned-booking-dialog"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="customer-message"], 1)
+  - action: fill
+    selector: '#booking-change-time'
+    value: '{qa_notify_en_desktop_new_time}'
+  - action: press
+    selector: '[data-qa="booking-reschedule"]'
+    key: Enter
+    assertions:
+    - &id001
+      type: network_request
+      url_contains: appointment.scheduler.booking.change
+      method: POST
+      status: 200
+  - action: screenshot
+    name: notify_staff_en_desktop-1-rescheduled-toast.png
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{qa_notify_en_desktop_booking}"]'
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_notify_en_desktop_booking}"]'
+    key: Enter
+    assertions:
+    - type: visible_selector
+      value: :nth-match([data-qa="customer-message"], 2)
+  - action: screenshot
+    name: notify_staff_en_desktop-2-status-after-reschedule.png
+  - action: press
+    selector: '[data-qa="booking-cancel"]'
+    key: Enter
+  - action: press
+    selector: '[data-qa="booking-confirm-cancel"]'
+    key: Enter
+    assertions:
+    - *id001
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{qa_notify_en_desktop_booking}"]'
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_notify_en_desktop_booking}"]'
+    key: Enter
+    assertions:
+    - type: visible_selector
+      value: :nth-match([data-qa="customer-message"], 3)
+  - action: screenshot
+    name: notify_staff_en_desktop-3-status-after-cancel.png
+  - action: press
+    selector: '[data-qa="owned-booking-dialog"]'
+    key: Escape
+  - &id003
+    action: get_console_errors
+  - &id004
+    action: get_network_errors
+- id: notify_staff_en_mobile
+  title: Manager reschedules and cancels a guest booking (en, mobile); customer messages show their status
+  viewport: &id008
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /reception
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="desk-next-day"]'
+  actions:
+  - action: click
+    selector: '[data-qa="desk-next-day"]'
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{qa_notify_en_mobile_booking}"]'
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_notify_en_mobile_booking}"]'
+    key: Enter
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="owned-booking-dialog"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="customer-message"], 1)
+  - action: fill
+    selector: '#booking-change-time'
+    value: '{qa_notify_en_mobile_new_time}'
+  - action: press
+    selector: '[data-qa="booking-reschedule"]'
+    key: Enter
+    assertions:
+    - &id002
+      type: network_request
+      url_contains: appointment.scheduler.booking.change
+      method: POST
+      status: 200
+  - action: screenshot
+    name: notify_staff_en_mobile-1-rescheduled-toast.png
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{qa_notify_en_mobile_booking}"]'
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_notify_en_mobile_booking}"]'
+    key: Enter
+    assertions:
+    - type: visible_selector
+      value: :nth-match([data-qa="customer-message"], 2)
+  - action: screenshot
+    name: notify_staff_en_mobile-2-status-after-reschedule.png
+  - action: press
+    selector: '[data-qa="booking-cancel"]'
+    key: Enter
+  - action: press
+    selector: '[data-qa="booking-confirm-cancel"]'
+    key: Enter
+    assertions:
+    - *id002
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{qa_notify_en_mobile_booking}"]'
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_notify_en_mobile_booking}"]'
+    key: Enter
+    assertions:
+    - type: visible_selector
+      value: :nth-match([data-qa="customer-message"], 3)
+  - action: screenshot
+    name: notify_staff_en_mobile-3-status-after-cancel.png
+  - action: press
+    selector: '[data-qa="owned-booking-dialog"]'
+    key: Escape
+  - *id003
+  - *id004
+- id: notify_staff_am_desktop
+  title: Manager reschedules and cancels a guest booking (am, desktop); customer messages show their status
+  viewport: *id005
+  checks: []
+  routes:
+  - path: /reception
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="desk-next-day"]'
+  actions:
+  - &id007
+    action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation
+      status: 200
+  - action: click
+    selector: '[data-qa="desk-next-day"]'
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{qa_notify_am_desktop_booking}"]'
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_notify_am_desktop_booking}"]'
+    key: Enter
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="owned-booking-dialog"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="customer-message"], 1)
+  - action: fill
+    selector: '#booking-change-time'
+    value: '{qa_notify_am_desktop_new_time}'
+  - action: press
+    selector: '[data-qa="booking-reschedule"]'
+    key: Enter
+    assertions:
+    - &id006
+      type: network_request
+      url_contains: appointment.scheduler.booking.change
+      method: POST
+      status: 200
+  - action: screenshot
+    name: notify_staff_am_desktop-1-rescheduled-toast.png
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{qa_notify_am_desktop_booking}"]'
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_notify_am_desktop_booking}"]'
+    key: Enter
+    assertions:
+    - type: visible_selector
+      value: :nth-match([data-qa="customer-message"], 2)
+  - action: screenshot
+    name: notify_staff_am_desktop-2-status-after-reschedule.png
+  - action: press
+    selector: '[data-qa="booking-cancel"]'
+    key: Enter
+  - action: press
+    selector: '[data-qa="booking-confirm-cancel"]'
+    key: Enter
+    assertions:
+    - *id006
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{qa_notify_am_desktop_booking}"]'
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_notify_am_desktop_booking}"]'
+    key: Enter
+    assertions:
+    - type: visible_selector
+      value: :nth-match([data-qa="customer-message"], 3)
+  - action: screenshot
+    name: notify_staff_am_desktop-3-status-after-cancel.png
+  - action: press
+    selector: '[data-qa="owned-booking-dialog"]'
+    key: Escape
+  - *id007
+  - *id003
+  - *id004
+- id: notify_staff_am_mobile
+  title: Manager reschedules and cancels a guest booking (am, mobile); customer messages show their status
+  viewport: *id008
+  checks: []
+  routes:
+  - path: /reception
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="desk-next-day"]'
+  actions:
+  - *id007
+  - action: click
+    selector: '[data-qa="desk-next-day"]'
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{qa_notify_am_mobile_booking}"]'
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_notify_am_mobile_booking}"]'
+    key: Enter
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="owned-booking-dialog"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="customer-message"], 1)
+  - action: fill
+    selector: '#booking-change-time'
+    value: '{qa_notify_am_mobile_new_time}'
+  - action: press
+    selector: '[data-qa="booking-reschedule"]'
+    key: Enter
+    assertions:
+    - &id009
+      type: network_request
+      url_contains: appointment.scheduler.booking.change
+      method: POST
+      status: 200
+  - action: screenshot
+    name: notify_staff_am_mobile-1-rescheduled-toast.png
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{qa_notify_am_mobile_booking}"]'
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_notify_am_mobile_booking}"]'
+    key: Enter
+    assertions:
+    - type: visible_selector
+      value: :nth-match([data-qa="customer-message"], 2)
+  - action: screenshot
+    name: notify_staff_am_mobile-2-status-after-reschedule.png
+  - action: press
+    selector: '[data-qa="booking-cancel"]'
+    key: Enter
+  - action: press
+    selector: '[data-qa="booking-confirm-cancel"]'
+    key: Enter
+    assertions:
+    - *id009
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{qa_notify_am_mobile_booking}"]'
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_notify_am_mobile_booking}"]'
+    key: Enter
+    assertions:
+    - type: visible_selector
+      value: :nth-match([data-qa="customer-message"], 3)
+  - action: screenshot
+    name: notify_staff_am_mobile-3-status-after-cancel.png
+  - action: press
+    selector: '[data-qa="owned-booking-dialog"]'
+    key: Escape
+  - *id007
+  - *id003
+  - *id004

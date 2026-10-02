@@ -14,6 +14,7 @@ import pytz
 from appointment.scheduler.helpers.policy_engine import validate_reschedule, get_applicable_policies
 from appointment.scheduler.helpers.slot_engine import check_conflicts
 from appointment.helpers.overrides import add_response_code
+from appointment.scheduler import notifications
 
 
 @frappe.whitelist()
@@ -286,11 +287,13 @@ def create_desk_appointment(
         frappe.db.commit()
 
         # Return full appointment details
+        notification_status = notifications.status_of(appointment)
         appointment.reload()
         return {
             "success": True,
             "appointment": appointment.as_dict(),
-            "message": "Appointment created successfully"
+            "message": "Appointment created successfully",
+            "notification_status": notification_status,
         }, 200
 
     except Exception as e:
@@ -406,11 +409,13 @@ def update_appointment(
         appointment.save(ignore_permissions=True)
         frappe.db.commit()
 
+        notification_status = notifications.status_of(appointment)
         appointment.reload()
         return {
             "success": True,
             "appointment": appointment.as_dict(),
-            "message": "Appointment updated successfully"
+            "message": "Appointment updated successfully",
+            "notification_status": notification_status,
         }, 200
 
     except frappe.DoesNotExistError:
@@ -495,11 +500,13 @@ def reschedule_appointment(appointment_name: str, new_start_time: str, new_end_t
         appointment.save(ignore_permissions=True)
         frappe.db.commit()
 
+        notification_status = notifications.status_of(appointment)
         appointment.reload()
         return {
             "success": True,
             "appointment": appointment.as_dict(),
-            "message": "Appointment rescheduled successfully"
+            "message": "Appointment rescheduled successfully",
+            "notification_status": notification_status,
         }, 200
 
     except frappe.DoesNotExistError:
@@ -740,6 +747,7 @@ def assign_walk_in_to_slot(walk_in_name: str, provider_name: str, location_name:
             appointment.notes = f"Walk-in: {walk_in.notes}"
 
         appointment.appointment_id = f"APT-{now_datetime().strftime('%Y%m%d%H%M%S%f')}"
+        appointment.flags.skip_customer_notification = True  # The customer is at the desk.
         appointment.insert(ignore_permissions=True)
 
         # Update walk-in

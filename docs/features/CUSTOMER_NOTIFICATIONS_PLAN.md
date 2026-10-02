@@ -1,7 +1,7 @@
 ---
 tags: [plan, appointment, notifications]
 created: 2026-10-02
-status: draft, waiting for decisions
+status: decided 2026-10-02, email in build
 ---
 
 # Customer notifications plan
@@ -10,7 +10,7 @@ status: draft, waiting for decisions
 
 A booking is confirmed at once, but the customer gets no message. `booking.book()` and `booking.change()` return `notification_status: "not_sent"`. The only scheduled emails go to staff: the Google Calendar authorization reminder and the unregistered `send_event_digest()`.
 
-This plan adds email to the customer of an Appointment. SMS waits for a decision (see "Decisions").
+This plan adds email and SMS for the customer of an Appointment. Email is built first. SMS uses AfroMessage (see "Decisions").
 
 ## What exists now
 
@@ -40,7 +40,7 @@ This plan adds email to the customer of an Appointment. SMS waits for a decision
 
 These do not send a message:
 
-- A walk-in placed with `assign_walk_in_to_slot`, because the customer is present.
+- A walk-in placed with `assign_walk_in_to_slot`, because the customer is present. It sets `doc.flags.skip_customer_notification`.
 - Completed and No Show status changes.
 - Records that the demo seeder inserts. The seeder books through `book()`, so it sets the request-wide `frappe.flags.skip_customer_notification`.
 
@@ -108,12 +108,12 @@ The API returns one of these values:
 
 - `queued`: a row was inserted and the job was enqueued.
 - `disabled`: the business turned the event off.
-- `opted_out`: the customer opted out (only if opt-out is allowed, see "Decisions").
+- `opted_out`: the customer opted out of reminders from this business.
 - `rate_limited`: an abuse limit stopped the message.
 - `no_recipient`: the Appointment has no valid email.
 - `not_applicable`: the change has no customer event, for example a notes edit or a walk-in.
 
-The delivery status (Sent or Failed) is known later. It comes from the row, which the job updates from `Email Queue.status`.
+The delivery status is known later. `for_appointment` and `get_settings` read it from the linked `Email Queue` row: Not Sent and Sending show as Queued, Sent shows as Sent, and Error or Expired show as Failed. The row stores Failed itself only when rendering or queueing fails.
 
 ### Per-business settings
 
@@ -125,8 +125,7 @@ New DocType `Customer Notification Settings`, named by `organization` (one per b
 | `send_reschedule` | On |
 | `send_cancellation` | On |
 | `send_reminder` | On |
-| `reminder_lead_hours` | Decision (24 is proposed) |
-| `allow_opt_out` | Decision |
+| `reminder_lead_hours` | 24 |
 
 If a business has no record, code defaults apply. Nothing is seeded.
 
@@ -150,12 +149,12 @@ If the scheduler stops for a while, the next run still sends every reminder whos
 
 ### Templates
 
-Four Jinja files in `appointment/templates/emails/`: `customer_confirmation.html`, `customer_reschedule.html`, `customer_cancellation.html` and `customer_reminder.html`. They share one base layout.
+One Jinja file, `appointment/templates/emails/customer_notification.html`. `notification_email.COPY` holds the subject, heading and first line for each event. Rendering is in `appointment/scheduler/notification_email.py`.
 
 The content has these parts:
 
 - Business identity: `organization_name`, and `logo` only if it is a public file on this site.
-- Booking facts: service name, provider name, location name, and date and time in `booking_timezone`. Times use the existing formatters in `helpers/utils.py`, including Ethiopian time for Amharic.
+- Booking facts: service, provider, location, and date and time in `booking_timezone`. The labels are "Service", "Provider", "Location" and "Date and time". Translation records apply to the whole site, so the email does not translate one-word labels such as "With". Times use the existing formatters in `helpers/utils.py`, including Ethiopian time for Amharic.
 - Contact: business phone and email as text. The business email is also the `reply_to`.
 - One link: the business booking page, `get_url(f"/{slug}/book")`. The plan does not invent a manage link, because none exists.
 
@@ -176,7 +175,7 @@ Language: add `customer_language` (Select `en`/`am`) to Appointment. `book_time_
 
 ### Opt-out
 
-If opt-out is allowed, each reminder email contains a signed link to the guest method `notifications.unsubscribe`. Frappe `get_signed_params` and `verify_request` sign and check the link. The link adds a `Customer Notification Opt Out` row (organization, email). The opt-out stops messages from that business only. Confirmation, reschedule and cancellation emails are transactional. The proposal is that the opt-out stops reminders only (see "Decisions").
+Each reminder email contains a signed link to the guest method `notifications.unsubscribe`. Frappe `get_signed_params` and `verify_request` sign and check the link. The link adds a `Customer Notification Opt Out` row (organization, email). The opt-out stops reminders from that business only. Confirmation, reschedule and cancellation emails still go out.
 
 ### Tenant isolation
 
@@ -189,7 +188,7 @@ If opt-out is allowed, each reminder email contains a signed link to the guest m
 A guest can type any email address in a public booking. Without limits, the confirmation could be used to send mail to a stranger.
 
 - The existing `rate_limit` on `book()` stays: 60 requests per IP per minute.
-- At most 5 customer emails to one address per business per day, and 20 to one address across all businesses per day. A message over a limit is recorded as `rate_limited` and is not sent.
+- At most 5 confirmations to one address per business per day, and 20 to one address across all businesses per day. Only confirmations count, because only guests start them. Staff reschedules and cancellations are not limited per address, so a customer always hears about a change. A message over a limit is recorded as `rate_limited` and is not sent.
 - At most 500 customer emails per business per hour.
 - The email contains no text that the guest typed, except the escaped and cut name.
 
@@ -216,9 +215,11 @@ Browser QA through Agent Plane, `qa/manifests/customer-notifications/`, at 1440�
 
 ## Decisions
 
-1. **SMS provider.** Options: email only for now, or a named provider (for example Africa's Talking or Twilio). Email only keeps this slice small. The `channel` field leaves room for SMS.
-2. **Default reminder lead time.** Proposal: 24 hours. Businesses can change it from 1 to 72 hours.
-3. **Customer opt-out per business.** Options: (a) no opt-out, (b) opt-out per business that stops reminders only, (c) opt-out per business that stops all customer email. Proposal: (b).
+Decided on 2026-10-02:
+
+1. **Channels:** email and SMS. SMS goes through [AfroMessage](https://www.afromessage.com/). Email is built and verified first. SMS follows in this slice after its API and credentials are confirmed.
+2. **Default reminder lead time:** 24 hours. Businesses can set 1 to 72 hours.
+3. **Opt-out:** per business, reminders only. Confirmation, reschedule and cancellation messages still go out.
 
 ## Risks
 
@@ -229,8 +230,75 @@ Browser QA through Agent Plane, `qa/manifests/customer-notifications/`, at 1440�
 
 ## Out of scope
 
-SMS delivery (until decided), a customer manage page, customer profiles, group or shared capacity, and resources.
+A customer manage page, customer profiles, group or shared capacity, and resources.
 
 ## Run record
 
-Filled in after the build.
+Email was built and verified on 2026-10-02. SMS is not built yet.
+
+### What was built
+
+- Schema: `Appointment Notification`, `Customer Notification Settings`, `Customer Notification Opt Out`, and `Appointment.customer_language`. Site backup `20261002_194124` was taken before the migrate.
+- `appointment/scheduler/notifications.py` decides and records each message. It also holds the reminder job, the staff APIs and the opt-out endpoint. `notification_email.py` and `templates/emails/customer_notification.html` render and queue the email.
+- `book()`, `change()` and the desk create, update and reschedule APIs return the real `notification_status`. Walk-ins and the demo seeder do not notify.
+- Staff UI: `/settings/notifications` (managers only), the "Customer messages" list and a toast in the reception booking dialog. The public confirmation dialog says when the confirmation email is queued.
+- Strings are in `en.json` and `am.json`. The patch `import_customer_notification_translations` imports the Amharic text, which the email job also reads.
+
+### Found and fixed during QA
+
+- The per-address limit counted staff reschedules and cancellations. A customer whose booking changed several times in one day lost the cancellation email (run BQA-2026-00349 shows "Not sent · Limit reached"). Per-address limits now count confirmations only. `test_staff_changes_are_not_limited_per_address` covers this.
+- The public confirmation dialog said "Delivery has not been confirmed" after a queued email. It now reads `notification_status`.
+- Three staff texts still said that customer messages are not sent. They are updated in English and Amharic.
+- Sonner toasts used a system font stack without Ethiopic glyphs, so Amharic toasts showed empty boxes. Toasts now use `font-sans`.
+
+### Tests
+
+| Suite | Result |
+|---|---|
+| `appointment.tests.test_customer_notifications` | 13 passed |
+| `appointment.tests.test_policy_manager` | 5 passed |
+| `appointment.tests.test_workspace_overview` | 1 passed |
+| `appointment.tests.test_scheduling_workflows` | 9 passed |
+| `npm run -s test:dom` | passed |
+
+### Agent Plane runs
+
+All runs use `http://127.0.0.84:44430`. Each manifest covers 1440×900 and 390×844, in English and Amharic.
+
+| Run | Manifest | Result |
+|---|---|---|
+| BQA-2026-00342 | `customer-notifications/guest.yaml` | Passed, 4 of 4. 0 console, 0 network errors. |
+| BQA-2026-00343 | `guest.yaml`, with the queued-notice assertion | Passed, 4 of 4. 0 console, 0 network errors. |
+| BQA-2026-00345 | `staff.yaml` | 3 of 4. The English desktop scenario hit a booking that an earlier stopped run had already rescheduled (selector matched 2 rows). |
+| BQA-2026-00346, 00347 | `guest.yaml` and `staff.yaml`, English desktop | Passed. The cancellation was rate-limited, which found the limit bug. |
+| BQA-2026-00348, 00349 | English desktop guest and staff, after the limit fix | Passed. Confirmation, reschedule and cancellation queued. |
+| BQA-2026-00350 | `settings.yaml` | Passed, 4 of 4. Saved 48 hours, showed the 1 to 72 hour error, then restored 24. |
+| BQA-2026-00351, 00352 | Amharic mobile guest and staff, after the toast font fix | Passed. 0 console, 0 network errors. |
+
+Database proof (email is muted): each QA booking has one Appointment Notification per event. Each row links an `Email Queue` row with `reference_doctype = Appointment`, the booking as `reference_name`, and status "Not Sent". The Amharic confirmation subject is "ከBole Bloom Hair Studio ጋር ያለዎት ቀጠሮ ተረጋግጧል". Its body shows Ethiopian clock time, and its only link is `/bloom-studio/book`.
+
+### Left open
+
+- SMS through AfroMessage: needs the decisions in "SMS next".
+- The public confirmation dialog shows other English text in Amharic, for example "Booking Confirmed!". Only the email notice is translated.
+- The QA runs left these Confirmed bookings for 2026-10-03 at Bloom: `qa-notify-*@example.test` from the first guest run, and one rescheduled English desktop booking at 18:30. They were not deleted by hand.
+- Email links use the site host name. On this stack that is the backend port (`:44431`), not the Vite URL.
+- `bloom.manager@example.test` had no stored language. The Amharic scenarios switch back to English at the end, so it is now `en`.
+- Jobs enqueued from the bench CLI (tests and the QA runner) go to the wrongly named Redis queue noted in the audit. Jobs from web requests reach the worker.
+
+## SMS next
+
+AfroMessage facts (from https://www.afromessage.com/developers):
+
+- `POST https://api.afromessage.com/api/send` with `Authorization: Bearer <token>`.
+- A sender name must be approved first.
+- Errors return HTTP 200 with `acknowledge: "error"`.
+- Delivery status comes from a one-shot callback or from `GET /status`.
+- There is no sandbox. The free plan allows 100 messages a day.
+
+Decisions needed before the build:
+
+1. One platform AfroMessage account, or one token for each business.
+2. Whether SMS is off by default for each business, because each message costs money.
+3. The approved sender name.
+4. Where the token lives (site config, never the repository).

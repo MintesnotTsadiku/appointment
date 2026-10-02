@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useFrappePostCall } from 'frappe-react-sdk';
+import { toast } from 'sonner';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/dialog';
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
@@ -12,6 +13,8 @@ import { parseFrappeErrorMsg } from '@/lib/utils';
 import type { ClockFormat } from '@/lib/time';
 import { Appointment } from '../types';
 import { BookingHistory } from './BookingHistory';
+import { CustomerMessages } from './CustomerMessages';
+import { notificationNotice } from './notificationNotice';
 
 interface OwnedBookingActionsProps {
   appointment: Appointment;
@@ -33,7 +36,9 @@ export function OwnedBookingActions({ appointment, onClose, onSuccess }: OwnedBo
   async function change(action: 'reschedule' | 'cancel') {
     setProblem('');
     try {
-      await call({ booking_id: appointment.name, action, expected_modified: appointment.modified, date, start_time: time });
+      const result = await call({ booking_id: appointment.name, action, expected_modified: appointment.modified, date, start_time: time });
+      const notice = notificationNotice(result?.message?.notification_status);
+      if (notice) toast.info(t(notice));
       onSuccess();
       onClose();
     } catch (e) {
@@ -113,6 +118,7 @@ export function OwnedBookingActions({ appointment, onClose, onSuccess }: OwnedBo
             </section>
           )}
 
+          <CustomerMessages bookingId={appointment.name} />
           <BookingHistory bookingId={appointment.name} />
         </div>
       </DialogContent>

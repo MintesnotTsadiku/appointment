@@ -1,0 +1,61 @@
+{
+ "actions": [],
+ "autoname": "hash",
+ "creation": "2026-10-02 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "organization",
+  "email",
+  "opt_out_key"
+ ],
+ "fields": [
+  {
+   "fieldname": "organization",
+   "fieldtype": "Link",
+   "label": "Organization",
+   "options": "Organization",
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email",
+   "options": "Email",
+   "reqd": 1
+  },
+  {
+   "fieldname": "opt_out_key",
+   "fieldtype": "Data",
+   "label": "Opt Out Key",
+   "unique": 1,
+   "reqd": 1,
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-10-02 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Scheduler",
+ "name": "Customer Notification Opt Out",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0,
+ "in_create": 1
+}

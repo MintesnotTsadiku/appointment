@@ -12,6 +12,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/dialog";
+import { useTranslation } from "@/lib/i18n";
 import { formatDate, formatTime } from "../../utils/dateHelpers";
 import type { BookingResponse, Service, TimeSlot } from "../../types";
 
@@ -40,7 +41,9 @@ export function ConfirmationModal({
   userEmail,
   brandStyle,
 }: ConfirmationModalProps) {
+  const { t } = useTranslation();
   const [copied, setCopied] = useState<string | null>(null);
+  const emailQueued = bookingResponse.notificationStatus === "queued";
 
   const startTime = new Date(selectedSlot.start_time);
   const formattedTime = timeFormat === '24h' 
@@ -96,11 +99,11 @@ export function ConfirmationModal({
             <div className="flex items-start gap-3">
               <Mail className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-1">
-                  Booking Saved
+                <p data-qa="booking-email-notice" data-qa-state={emailQueued ? "queued" : "not-sent"} className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-1">
+                  {emailQueued ? t("customerBooking.emailQueuedTitle") : t("customerBooking.savedTitle")}
                 </p>
                 <p className="text-sm text-blue-700 dark:text-blue-300">
-                  Keep your booking reference. Delivery has not been confirmed.{" "}
+                  {emailQueued ? t("customerBooking.emailQueuedBody") : t("customerBooking.notSentBody")}{" "}
                   <span className="font-semibold">{userEmail}</span>
                 </p>
               </div>

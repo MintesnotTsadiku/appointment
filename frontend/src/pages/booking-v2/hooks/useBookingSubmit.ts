@@ -6,6 +6,7 @@
 import { useRef } from "react";
 import { useFrappePostCall } from "frappe-react-sdk";
 import { getTimeZoneOffsetFromTimeZoneString, parseFrappeErrorMsg } from "@/lib/utils";
+import { useTranslation } from "@/lib/i18n";
 import type { BookingFormData, BookingResponse, TimeSlot } from "../types";
 
 interface SubmitBookingParams {
@@ -30,11 +31,13 @@ interface BookingApiResponse {
     google_calendar_event_url?: string;
     reschedule_url?: string;
     meeting_provider?: string;
+    notification_status?: string;
   };
 }
 
 export function useBookingSubmit() {
   const attempt = useRef<{ payload: string; key: string }>();
+  const { language } = useTranslation();
   const { call: bookMeeting, loading, error, reset } = useFrappePostCall<BookingApiResponse>(
     "appointment.api.personal_meet.book_time_slot"
   );
@@ -86,6 +89,8 @@ export function useBookingSubmit() {
     // Add organization/service info if provided
     if (organizationId) {
       meetingData.organization_id = organizationId;
+      // Customer emails use the language the customer booked in.
+      meetingData.language = language;
     }
     if (serviceId) {
       meetingData.service_id = serviceId;
@@ -122,6 +127,7 @@ export function useBookingSubmit() {
         calendarEventUrl: response.message.google_calendar_event_url,
         rescheduleUrl: response.message.reschedule_url,
         meetingProvider: response.message.meeting_provider,
+        notificationStatus: response.message.notification_status,
       };
 
       return bookingResponse;

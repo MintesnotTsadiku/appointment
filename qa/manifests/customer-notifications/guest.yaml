@@ -1,0 +1,281 @@
+# Guests book on /bloom-studio/book. Each scenario uses its own QA address so the staff manifest can find it.
+app: appointment
+base_url: http://127.0.0.84:44430
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-customer-notifications
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.demo.showcase.browser_values
+scenarios:
+- id: notify_guest_en_desktop
+  title: Guest books on /bloom-studio/book (en, desktop) and a confirmation is queued
+  viewport: &id003
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /bloom-studio/book
+    assertions:
+    - type: network_idle
+  actions:
+  - action: wait_for
+    selector: '[data-pe-booking]'
+  - action: screenshot
+    name: notify_guest_en_desktop-1-book.png
+  - action: click
+    selector: :nth-match([data-pe-booking] a.bl-btn, 1)
+    assertions:
+    - type: url_contains
+      value: /schedule/org/
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: click
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: wait_for
+    selector: '#userName'
+  - action: fill
+    selector: '#userName'
+    value: QA Notify EN desktop
+  - action: fill
+    selector: '#userEmail'
+    value: qa-notify-en-desktop@example.test
+  - action: screenshot
+    name: notify_guest_en_desktop-2-details.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: book_time_slot
+      method: POST
+      status_min: 200
+      status_max: 299
+      timeout_ms: 25000
+    - type: visible_selector
+      value: '[data-qa="booking-email-notice"][data-qa-state="queued"]'
+    - type: visible_text
+      value: Booking Confirmed!
+  - action: screenshot
+    name: notify_guest_en_desktop-3-confirmed.png
+    full_page: true
+  - &id001
+    action: get_console_errors
+  - &id002
+    action: get_network_errors
+- id: notify_guest_en_mobile
+  title: Guest books on /bloom-studio/book (en, mobile) and a confirmation is queued
+  viewport: &id004
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /bloom-studio/book
+    assertions:
+    - type: network_idle
+  actions:
+  - action: wait_for
+    selector: '[data-pe-booking]'
+  - action: screenshot
+    name: notify_guest_en_mobile-1-book.png
+  - action: click
+    selector: :nth-match([data-pe-booking] a.bl-btn, 1)
+    assertions:
+    - type: url_contains
+      value: /schedule/org/
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: click
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: wait_for
+    selector: '#userName'
+  - action: fill
+    selector: '#userName'
+    value: QA Notify EN mobile
+  - action: fill
+    selector: '#userEmail'
+    value: qa-notify-en-mobile@example.test
+  - action: screenshot
+    name: notify_guest_en_mobile-2-details.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: book_time_slot
+      method: POST
+      status_min: 200
+      status_max: 299
+      timeout_ms: 25000
+    - type: visible_selector
+      value: '[data-qa="booking-email-notice"][data-qa-state="queued"]'
+    - type: visible_text
+      value: Booking Confirmed!
+  - action: screenshot
+    name: notify_guest_en_mobile-3-confirmed.png
+    full_page: true
+  - *id001
+  - *id002
+- id: notify_guest_am_desktop
+  title: Guest books on /bloom-studio/book (am, desktop) and a confirmation is queued
+  viewport: *id003
+  checks: []
+  routes:
+  - path: /
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="language-toggle"]'
+  actions:
+  - action: press
+    selector: '[data-qa="language-toggle"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation.messages
+      status: 200
+  - action: open_url
+    url: /bloom-studio/book
+  - action: wait_for
+    selector: '[data-pe-booking]'
+  - action: screenshot
+    name: notify_guest_am_desktop-1-book.png
+  - action: click
+    selector: :nth-match([data-pe-booking] a.bl-btn, 1)
+    assertions:
+    - type: url_contains
+      value: /schedule/org/
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: click
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: wait_for
+    selector: '#userName'
+  - action: fill
+    selector: '#userName'
+    value: QA Notify AM desktop
+  - action: fill
+    selector: '#userEmail'
+    value: qa-notify-am-desktop@example.test
+  - action: screenshot
+    name: notify_guest_am_desktop-2-details.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: book_time_slot
+      method: POST
+      status_min: 200
+      status_max: 299
+      timeout_ms: 25000
+    - type: visible_selector
+      value: '[data-qa="booking-email-notice"][data-qa-state="queued"]'
+    - type: visible_selector
+      value: '[role="dialog"]'
+  - action: screenshot
+    name: notify_guest_am_desktop-3-confirmed.png
+    full_page: true
+  - *id001
+  - *id002
+- id: notify_guest_am_mobile
+  title: Guest books on /bloom-studio/book (am, mobile) and a confirmation is queued
+  viewport: *id004
+  checks: []
+  routes:
+  - path: /
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="language-toggle"]'
+  actions:
+  - action: press
+    selector: '[data-qa="language-toggle"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation.messages
+      status: 200
+  - action: open_url
+    url: /bloom-studio/book
+  - action: wait_for
+    selector: '[data-pe-booking]'
+  - action: screenshot
+    name: notify_guest_am_mobile-1-book.png
+  - action: click
+    selector: :nth-match([data-pe-booking] a.bl-btn, 1)
+    assertions:
+    - type: url_contains
+      value: /schedule/org/
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: click
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: wait_for
+    selector: '#userName'
+  - action: fill
+    selector: '#userName'
+    value: QA Notify AM mobile
+  - action: fill
+    selector: '#userEmail'
+    value: qa-notify-am-mobile@example.test
+  - action: screenshot
+    name: notify_guest_am_mobile-2-details.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: book_time_slot
+      method: POST
+      status_min: 200
+      status_max: 299
+      timeout_ms: 25000
+    - type: visible_selector
+      value: '[data-qa="booking-email-notice"][data-qa-state="queued"]'
+    - type: visible_selector
+      value: '[role="dialog"]'
+  - action: screenshot
+    name: notify_guest_am_mobile-3-confirmed.png
+    full_page: true
+  - *id001
+  - *id002

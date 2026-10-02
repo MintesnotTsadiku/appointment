@@ -1,0 +1,80 @@
+{
+ "actions": [],
+ "autoname": "field:organization",
+ "creation": "2026-10-02 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "organization",
+  "send_confirmation",
+  "send_reschedule",
+  "send_cancellation",
+  "send_reminder",
+  "reminder_lead_hours"
+ ],
+ "fields": [
+  {
+   "fieldname": "organization",
+   "fieldtype": "Link",
+   "label": "Organization",
+   "options": "Organization",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "send_confirmation",
+   "fieldtype": "Check",
+   "label": "Send confirmation",
+   "default": "1"
+  },
+  {
+   "fieldname": "send_reschedule",
+   "fieldtype": "Check",
+   "label": "Send reschedule notice",
+   "default": "1"
+  },
+  {
+   "fieldname": "send_cancellation",
+   "fieldtype": "Check",
+   "label": "Send cancellation notice",
+   "default": "1"
+  },
+  {
+   "fieldname": "send_reminder",
+   "fieldtype": "Check",
+   "label": "Send reminder",
+   "default": "1"
+  },
+  {
+   "fieldname": "reminder_lead_hours",
+   "fieldtype": "Int",
+   "label": "Reminder lead time (hours)",
+   "default": "24",
+   "non_negative": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-10-02 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Scheduler",
+ "name": "Customer Notification Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0,
+ "naming_rule": "By fieldname"
+}

@@ -523,7 +523,11 @@
         "title": "Calendar sync",
         "description": "Connect external calendars to avoid double bookings."
       },
-      "hubDescription": "Manage your business, your team and your own preferences."
+      "hubDescription": "Manage your business, your team and your own preferences.",
+      "notifications": {
+        "title": "Customer messages",
+        "description": "Booking emails and reminders for customers"
+      }
     },
     "status": {
       "pending": "Pending",
@@ -722,7 +726,7 @@
       }
     },
     "business": {
-      "description": "Publish booking pages for your services and set up new businesses. Pages stay private until you publish them, and no customer messages are sent.",
+      "description": "Publish booking pages for your services and set up new businesses. Pages stay private until you publish them.",
       "pagesTitle": "Your booking pages",
       "pagesDescription": "One page per service and location. Publish a page to start accepting bookings.",
       "noPages": "No booking pages yet",
@@ -743,7 +747,7 @@
       "closesAt": "Closes at",
       "stored24": "stored in 24-hour time",
       "operatingDays": "Operating days",
-      "firstProvider": "You will be the first provider. Payment collection and customer messages are not enabled by this setup.",
+      "firstProvider": "You will be the first provider. Payment collection is not enabled by this setup.",
       "saveDraft": "Save draft business"
     },
     "receptionDesk": {
@@ -799,7 +803,7 @@
       "manageBooking": "Manage booking",
       "bookingReference": "Booking reference",
       "timesIn": "Times are in",
-      "ownedNote": "Changes keep this booking reference. Customer messages are not sent.",
+      "ownedNote": "Changes keep this booking reference. The customer gets an email for each change unless the business turns it off.",
       "changeTime": "Change time",
       "saveNewTime": "Save new time",
       "cancelBooking": "Cancel booking…",
@@ -1473,7 +1477,7 @@
     "onboarding": {
       "eyebrow": "New business",
       "title": "Set up your business",
-      "description": "Create your location and first service. Your page stays private until you publish it, and no customer messages are sent.",
+      "description": "Create your location and first service. Your page stays private until you publish it.",
       "businessTitle": "Business and location",
       "businessDescription": "How customers will recognise you.",
       "businessNameHint": "Shown on your booking page. Up to 100 characters.",
@@ -1683,6 +1687,52 @@
       "saveLayout": "Save layout",
       "customize": "Customize",
       "editingHint": "Drag cards by their handle, resize from the bottom-right corner, or use each card's menu. Save when you are done."
+    },
+    "notifications": {
+      "eventsTitle": "Emails to customers",
+      "eventsDescription": "Each email goes to the address the customer gave when booking.",
+      "confirmation": "Booking confirmation",
+      "confirmationHint": "Sent when a booking is made.",
+      "reschedule": "New time",
+      "rescheduleHint": "Sent when staff move a booking.",
+      "cancellation": "Cancellation",
+      "cancellationHint": "Sent when staff cancel a booking.",
+      "reminder": "Reminder",
+      "reminderHint": "Sent before the appointment. Customers can turn reminders off.",
+      "leadTime": "Hours before the appointment",
+      "leadTimeHint": "From 1 to 72 hours.",
+      "save": "Save message settings",
+      "saved": "Message settings saved.",
+      "saveFailed": "Could not save the message settings.",
+      "recentTitle": "Recent messages",
+      "recentDescription": "The last 20 messages for this business.",
+      "empty": "No customer messages yet.",
+      "loadError": "Could not load customer messages.",
+      "business": "Business",
+      "status": {
+        "Queued": "Queued",
+        "Sent": "Sent",
+        "Failed": "Failed",
+        "Skipped": "Not sent"
+      },
+      "reason": {
+        "disabled": "Turned off",
+        "opted_out": "Customer opted out",
+        "rate_limited": "Limit reached",
+        "no_recipient": "No email address",
+        "stale": "Booking changed"
+      },
+      "event": {
+        "Confirmation": "Confirmation",
+        "Reschedule": "New time",
+        "Cancellation": "Cancellation",
+        "Reminder": "Reminder"
+      },
+      "toast": {
+        "queued": "Customer email queued.",
+        "disabled": "Customer email is turned off for this business.",
+        "skipped": "No customer email was sent."
+      }
     }
   },
   "publicSite": {
@@ -1705,5 +1755,35 @@
     "hours": "Opening hours",
     "address": "Address",
     "step": "Step {count}"
+  },
+  "customerEmail": {
+    "subjectConfirmation": "Your booking with {0} is confirmed",
+    "headingConfirmation": "Booking confirmed",
+    "introConfirmation": "Hello {0}, your booking is confirmed.",
+    "subjectReschedule": "Your booking with {0} has a new time",
+    "headingReschedule": "Booking moved",
+    "introReschedule": "Hello {0}, {1} moved your booking. The new time is below.",
+    "subjectCancellation": "Your booking with {0} is cancelled",
+    "headingCancellation": "Booking cancelled",
+    "introCancellation": "Hello {0}, {1} cancelled your booking.",
+    "subjectReminder": "Reminder: your booking with {0}",
+    "headingReminder": "Upcoming booking",
+    "introReminder": "Hello {0}, this is a reminder of your booking.",
+    "service": "Service",
+    "provider": "Provider",
+    "location": "Location",
+    "when": "Date and time",
+    "bookingPage": "Open the booking page",
+    "contact": "Questions? Contact {0}.",
+    "footer": "You get this email because you booked with {0}.",
+    "optOut": "Stop reminders from this business",
+    "optOutTitle": "Reminders turned off",
+    "optOutMessage": "You will no longer get appointment reminders from {0}. Booking confirmations and changes still arrive."
+  },
+  "customerBooking": {
+    "emailQueuedTitle": "Confirmation email on its way",
+    "emailQueuedBody": "We are sending the booking details to this address:",
+    "savedTitle": "Booking saved",
+    "notSentBody": "Keep your booking reference. We did not send an email to this address:"
   }
 }

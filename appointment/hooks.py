@@ -239,6 +239,11 @@ scheduler_events = {
     "hourly": [
         "appointment.public_experience.hardening.process_pending_outbox",
     ],
+    "cron": {
+        "*/15 * * * *": [
+            "appointment.scheduler.notifications.send_due_reminders",
+        ],
+    },
     # "hourly": [
     # 	"appointment.tasks.hourly"
     # ],

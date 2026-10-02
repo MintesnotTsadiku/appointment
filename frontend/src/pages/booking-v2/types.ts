@@ -114,6 +114,8 @@ export interface BookingResponse {
   calendarEventUrl?: string;
   rescheduleUrl?: string;
   meetingProvider?: string;
+  /** Customer email state from the booking API, for example "queued". */
+  notificationStatus?: string;
 }
 
 export interface BookingState {

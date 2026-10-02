@@ -972,6 +972,8 @@ def summary(state):
 
 def seed(base_url="http://127.0.0.174:41960", anchor_date=None):
     validate_showcase_catalog()
+    # Synthetic customers never get messages. The flag lasts for this request only.
+    frappe.flags.skip_customer_notification = True
     with locked():
         if state_path().exists():
             state = load_state()

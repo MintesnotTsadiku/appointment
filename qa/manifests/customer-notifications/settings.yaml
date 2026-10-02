@@ -1,0 +1,132 @@
+# The owner opens the settings page. The desktop English scenario saves 48 hours, then restores 24.
+app: appointment
+base_url: http://127.0.0.84:44430
+default_role: Staff
+auth:
+  type: frappe_session
+  username: bloom.owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment-customer-notifications
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.demo.showcase.browser_values
+scenarios:
+- id: notify_settings_en_desktop
+  title: Owner opens customer message settings (en, desktop)
+  viewport: &id004
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /settings/notifications
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="notify-reminder"]'
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: notify_settings_en_desktop-1-page.png
+    full_page: true
+  - action: fill
+    selector: '[data-qa="notify-lead-hours"]'
+    value: '48'
+  - action: press
+    selector: '[data-qa="notification-settings-save"]'
+    key: Enter
+    assertions:
+    - &id001
+      type: network_request
+      url_contains: notifications.save_settings
+      method: POST
+      status: 200
+  - action: screenshot
+    name: notify_settings_en_desktop-2-saved-48.png
+    full_page: true
+  - action: fill
+    selector: '[data-qa="notify-lead-hours"]'
+    value: '0'
+  - action: screenshot
+    name: notify_settings_en_desktop-3-invalid-lead-time.png
+  - action: fill
+    selector: '[data-qa="notify-lead-hours"]'
+    value: '24'
+  - action: press
+    selector: '[data-qa="notification-settings-save"]'
+    key: Enter
+    assertions:
+    - *id001
+  - &id002
+    action: get_console_errors
+  - &id003
+    action: get_network_errors
+- id: notify_settings_en_mobile
+  title: Owner opens customer message settings (en, mobile)
+  viewport: &id006
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /settings/notifications
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="notify-reminder"]'
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: notify_settings_en_mobile-1-page.png
+    full_page: true
+  - *id002
+  - *id003
+- id: notify_settings_am_desktop
+  title: Owner opens customer message settings (am, desktop)
+  viewport: *id004
+  checks: []
+  routes:
+  - path: /settings/notifications
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="notify-reminder"]'
+    - type: no_blank_page
+  actions:
+  - &id005
+    action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation
+      status: 200
+  - action: screenshot
+    name: notify_settings_am_desktop-1-page.png
+    full_page: true
+  - *id005
+  - *id002
+  - *id003
+- id: notify_settings_am_mobile
+  title: Owner opens customer message settings (am, mobile)
+  viewport: *id006
+  checks: []
+  routes:
+  - path: /settings/notifications
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="notify-reminder"]'
+    - type: no_blank_page
+  actions:
+  - *id005
+  - action: screenshot
+    name: notify_settings_am_mobile-1-page.png
+    full_page: true
+  - *id005
+  - *id002
+  - *id003

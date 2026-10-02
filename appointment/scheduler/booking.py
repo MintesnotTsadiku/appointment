@@ -12,6 +12,7 @@ from frappe import _
 from frappe.rate_limiter import rate_limit
 from frappe.utils import get_time, getdate
 
+from appointment.scheduler import notifications
 from appointment.scheduler.booking_access import require_access
 
 _PUBLIC_CREATE = object()
@@ -264,7 +265,16 @@ def creation_history(doc):
 @frappe.whitelist(allow_guest=True, methods=["POST"])
 @rate_limit(limit=60, seconds=60, methods=["POST"])
 def book(
-    offering_id, start_time, end_time, user_name, user_email, request_id, user_phone="", notes="", organization_id=None
+    offering_id,
+    start_time,
+    end_time,
+    user_name,
+    user_email,
+    request_id,
+    user_phone="",
+    notes="",
+    organization_id=None,
+    language=None,
 ):
     if not re.fullmatch(r"[A-Za-z0-9_-]{16,100}", request_id or ""):
         frappe.throw(_("A valid booking request identity is required."))
@@ -316,6 +326,7 @@ def book(
             client_name=user_name,
             client_email=user_email,
             client_phone=user_phone,
+            customer_language=language if language in ("en", "am") else None,
             notes=notes,
             status="Confirmed",
             request_key=key,
@@ -327,6 +338,8 @@ def book(
     # resolved offering. The controller still enforces ownership/hours/capacity.
     doc.flags.public_booking = _PUBLIC_CREATE
     doc.insert(ignore_permissions=True)
+    result["notification_status"] = notifications.status_of(doc)
+    frappe.db.set_value("Appointment", doc.name, "request_result", json.dumps(result), update_modified=False)
     return result
 
 
@@ -447,5 +460,5 @@ def change(booking_id, action, expected_modified, date=None, start_time=None):
         "booking_id": doc.name,
         "status": doc.status,
         "modified": str(doc.modified),
-        "notification_status": "not_sent",
+        "notification_status": notifications.status_of(doc),
     }
