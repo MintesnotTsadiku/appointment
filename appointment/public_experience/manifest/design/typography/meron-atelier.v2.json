@@ -1,0 +1,95 @@
+{
+  "kind": "typography",
+  "contract": "appointment-typography.v1",
+  "key": "meron-atelier",
+  "version": 2,
+  "supportedScripts": [
+    "latin",
+    "ethiopic"
+  ],
+  "weights": [
+    400,
+    500,
+    600
+  ],
+  "roles": {
+    "display": {
+      "family": "Meron Garamond",
+      "assetKey": "meron-garamond",
+      "weight": 500,
+      "sizeScale": "editorial",
+      "lineHeight": 1.04,
+      "letterSpacing": "-0.01em"
+    },
+    "body": {
+      "family": "Meron Garamond",
+      "assetKey": "meron-garamond",
+      "weight": 400,
+      "sizeScale": "comfortable",
+      "lineHeight": 1.6,
+      "letterSpacing": "0"
+    },
+    "ui": {
+      "family": "Meron Garamond",
+      "assetKey": "meron-garamond",
+      "weight": 600,
+      "sizeScale": "compact",
+      "lineHeight": 1.3,
+      "letterSpacing": "0"
+    },
+    "numeric": {
+      "family": "Meron Garamond",
+      "assetKey": "meron-garamond",
+      "weight": 600,
+      "sizeScale": "compact",
+      "lineHeight": 1.2,
+      "letterSpacing": "0"
+    }
+  },
+  "fontAssets": [
+    {
+      "key": "meron-garamond",
+      "family": "Meron Garamond",
+      "src": "/assets/appointment/fonts/meron/eb-garamond.woff2",
+      "weight": 400,
+      "format": "woff2",
+      "scripts": [
+        "latin"
+      ],
+      "license": "SIL Open Font License 1.1 (EB Garamond, Georg Duffner and Octavio Pardo)"
+    },
+    {
+      "key": "meron-ethiopic",
+      "family": "Meron Garamond",
+      "src": "/assets/appointment/fonts/meron/noto-serif-ethiopic.woff2",
+      "weight": 400,
+      "format": "woff2",
+      "scripts": [
+        "ethiopic"
+      ],
+      "license": "SIL Open Font License 1.1 (Noto Serif Ethiopic, Google)"
+    }
+  ],
+  "fallbacks": {
+    "display": [
+      "Noto Sans Ethiopic",
+      "DejaVu Sans",
+      "sans-serif"
+    ],
+    "body": [
+      "Noto Sans Ethiopic",
+      "DejaVu Sans",
+      "sans-serif"
+    ],
+    "ui": [
+      "Noto Sans Ethiopic",
+      "DejaVu Sans",
+      "sans-serif"
+    ],
+    "numeric": [
+      "Noto Sans Ethiopic",
+      "DejaVu Sans",
+      "sans-serif"
+    ]
+  }
+}

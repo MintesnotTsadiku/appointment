@@ -6,7 +6,7 @@ import unittest
 from appointment.public_experience.actions import project_action, validate_action
 from appointment.public_experience.design_compiler import compile_design
 from appointment.public_experience.errors import DesignCompilationError, UnknownRecipeError, UnsafeActionIntentError
-from appointment.public_experience.recipes import get_recipe, list_recipes
+from appointment.public_experience.recipes import get_recipe, list_recipes, recipe_versions
 from appointment.public_experience.section_schemas import validate_typed_section
 
 
@@ -56,6 +56,34 @@ class TestRecipeCompiler(unittest.TestCase):
         self.assertEqual(set(artifact["tokens"]), {"light", "dark"})
         self.assertTrue(artifact["validation"]["ok"])
 
+    def test_published_recipe_versions_stay_loadable_and_the_gallery_offers_the_latest(self):
+        for recipe in list_recipes():
+            versions = recipe_versions(recipe.key)
+            self.assertEqual(versions, (1, 2), recipe.key)
+            self.assertEqual(recipe.version, 2, "the gallery offers the Taste v1 version")
+            pinned = get_recipe(recipe.key, 1)
+            self.assertEqual(pinned.version, 1)
+            self.assertNotEqual(pinned.content_hash, recipe.content_hash)
+            for version in versions:
+                design = compile_design(recipe.key, version, {"motion": "calm"}, None, ["en", "am"]).as_dict()
+                self.assertEqual(design["layout"]["rendererVersion"], version, f"{recipe.key} v{version} renders with its own package")
+            self.assertNotIn("independently implemented", recipe.description)
+        with self.assertRaises(UnknownRecipeError):
+            get_recipe("tena-clinic", 3)
+
+    def test_taste_v1_typography_is_distinct_and_bundled(self):
+        display_faces = set()
+        for recipe in list_recipes():
+            design = compile_design(recipe.key, recipe.version, {"motion": "calm"}, None, ["en", "am"]).as_dict()
+            typography = design["typography"]
+            display_faces.add(typography["roles"]["display"]["family"])
+            scripts = {script for asset in typography["fontAssets"] for script in asset["scripts"]}
+            self.assertEqual(scripts, {"latin", "ethiopic"}, recipe.key)
+            for asset in typography["fontAssets"]:
+                self.assertTrue(asset["src"].startswith(f"/assets/appointment/fonts/{recipe.key.split('-')[0]}/"), asset["src"])
+                self.assertIn("Open Font License", asset["license"])
+        self.assertEqual(len(display_faces), 5, "no two templates share a display face")
+
     def test_unknown_or_unsafe_adjustments_fail_closed(self):
         with self.assertRaises(UnknownRecipeError):
             get_recipe("not-certified")
@@ -86,6 +114,22 @@ class TestTypedContentAndActions(unittest.TestCase):
         self.assertTrue(valid.ok, valid.issues)
         invalid = validate_typed_section("hero", {"title": {"en": "Hello"}, "primaryAction": {"label": {"en": "Go"}, "link": "https://evil.example"}})
         self.assertFalse(invalid.ok)
+
+    def test_owner_photos_are_optional_local_assets_with_localized_alt(self):
+        photo = {"image": "/assets/appointment/brand-experience/support/tena/scene-3.webp", "imageAlt": {"en": "The clinic reception.", "am": "የክሊኒኩ መቀበያ።"}}
+        about = {"title": {"en": "About"}, "body": {"en": "A small clinic."}}
+        self.assertTrue(validate_typed_section("about", about).ok, "content published before photos existed stays valid")
+        self.assertTrue(validate_typed_section("about", {**about, **photo}).ok)
+        service = {"id": "s1", "name": {"en": "Consultation"}, "durationMinutes": 30}
+        services = validate_typed_section("services", {"title": {"en": "Services"}, "items": [{**service, **photo}]})
+        self.assertTrue(services.ok, services.issues)
+        location = {"id": "l1", "name": {"en": "Reception"}, "address": {"en": "CMC"}}
+        locations = validate_typed_section("locations", {"title": {"en": "Visit"}, "items": [{**location, **photo}]})
+        self.assertTrue(locations.ok, locations.issues)
+        remote = validate_typed_section("about", {**about, "image": "https://cdn.example/photo.jpg"})
+        self.assertIn("local_asset", {issue.rule for issue in remote.issues})
+        markup = validate_typed_section("about", {**about, **photo, "imageAlt": {"en": "<img onerror=x>"}})
+        self.assertFalse(markup.ok)
 
 
 def run():

@@ -1,0 +1,94 @@
+{
+  "kind": "typography",
+  "contract": "appointment-typography.v1",
+  "key": "tena-clinic",
+  "version": 2,
+  "supportedScripts": [
+    "latin",
+    "ethiopic"
+  ],
+  "weights": [
+    400,
+    600,
+    700
+  ],
+  "roles": {
+    "display": {
+      "family": "Tena Hyperlegible",
+      "assetKey": "tena-hyperlegible",
+      "weight": 700,
+      "sizeScale": "editorial",
+      "lineHeight": 1.05,
+      "letterSpacing": "-0.015em"
+    },
+    "body": {
+      "family": "Tena Hyperlegible",
+      "assetKey": "tena-hyperlegible",
+      "weight": 400,
+      "sizeScale": "comfortable",
+      "lineHeight": 1.6,
+      "letterSpacing": "0"
+    },
+    "ui": {
+      "family": "Tena Hyperlegible",
+      "assetKey": "tena-hyperlegible",
+      "weight": 600,
+      "sizeScale": "compact",
+      "lineHeight": 1.3,
+      "letterSpacing": "0"
+    },
+    "numeric": {
+      "family": "Tena Hyperlegible",
+      "assetKey": "tena-hyperlegible",
+      "weight": 600,
+      "sizeScale": "compact",
+      "lineHeight": 1.2,
+      "letterSpacing": "0"
+    }
+  },
+  "fontAssets": [
+    {
+      "key": "tena-hyperlegible",
+      "family": "Tena Hyperlegible",
+      "src": "/assets/appointment/fonts/tena/atkinson-hyperlegible-next.woff2",
+      "weight": 400,
+      "format": "woff2",
+      "scripts": [
+        "latin"
+      ],
+      "license": "SIL Open Font License 1.1 (Atkinson Hyperlegible Next, Braille Institute of America)"
+    },
+    {
+      "key": "tena-ethiopic",
+      "family": "Tena Hyperlegible",
+      "src": "/assets/appointment/fonts/tena/noto-sans-ethiopic.woff2",
+      "weight": 400,
+      "format": "woff2",
+      "scripts": [
+        "ethiopic"
+      ],
+      "license": "SIL Open Font License 1.1 (Noto Sans Ethiopic, Google)"
+    }
+  ],
+  "fallbacks": {
+    "display": [
+      "Noto Sans Ethiopic",
+      "DejaVu Sans",
+      "sans-serif"
+    ],
+    "body": [
+      "Noto Sans Ethiopic",
+      "DejaVu Sans",
+      "sans-serif"
+    ],
+    "ui": [
+      "Noto Sans Ethiopic",
+      "DejaVu Sans",
+      "sans-serif"
+    ],
+    "numeric": [
+      "DejaVu Sans",
+      "sans-serif"
+    ]
+  }
+}

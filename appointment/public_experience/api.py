@@ -104,7 +104,24 @@ def list_public_sites():
 
 @frappe.whitelist(methods=["GET"])
 def list_curated_recipes():
-    return {"recipes": [recipe.as_summary() for recipe in list_recipes()]}
+    showcases = _recipe_showcases()
+    return {"recipes": [{**recipe.as_summary(), "showcase": showcases.get(recipe.key)} for recipe in list_recipes()]}
+
+
+def _recipe_showcases() -> dict[str, dict]:
+    """Gallery imagery per recipe; the example link is offered only once that showcase is live."""
+    from appointment.public_experience.showcase_catalog import recipe_showcases
+
+    result = {}
+    for recipe_key, showcase in recipe_showcases().items():
+        site = frappe.db.get_value("Public Site", {"slug": showcase["slug"], "status": "Published"}, "site_title")
+        result[recipe_key] = {
+            "heroAsset": showcase["heroAsset"],
+            "logoAsset": showcase["logoAsset"],
+            "title": site,
+            "path": f"/{showcase['slug']}" if site else None,
+        }
+    return result
 
 
 @frappe.whitelist(methods=["GET"])

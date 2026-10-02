@@ -58,6 +58,21 @@ def _asset(value: object, field: str) -> list[ValidationIssue]:
     return []
 
 
+def _image(content: Mapping[str, object], field: str) -> list[ValidationIssue]:
+    """Optional owner photo: a packaged asset plus its localized alt text.
+
+    Releases published before these fields existed simply omit them, so the
+    template hides the image instead of borrowing another business's photo.
+    """
+    prefix = f"{field}." if field else ""
+    issues: list[ValidationIssue] = []
+    if content.get("image") is not None:
+        issues.extend(_asset(content.get("image"), f"{prefix}image"))
+    if content.get("imageAlt") is not None:
+        issues.extend(_localized(content.get("imageAlt"), f"{prefix}imageAlt", required=False, max_length=240))
+    return issues
+
+
 def _closed(value: Mapping[str, object], field: str, allowed: set[str]) -> list[ValidationIssue]:
     return [
         _issue(f"{field}.{key}", "unknown_key", key, "a field in the section schema", "Remove the unsupported field.")
@@ -118,7 +133,7 @@ def _hero(content: Mapping[str, object], allowed: Iterable[str]) -> list[Validat
 
 def _services(content: Mapping[str, object], allowed: Iterable[str]) -> list[ValidationIssue]:
     issues = _common(content, {"title", "intro", "items"})
-    issues.extend(_record_list(content, "items", {"id", "name", "summary", "durationMinutes", "price", "currency", "action"}, max_items=24))
+    issues.extend(_record_list(content, "items", {"id", "name", "summary", "durationMinutes", "price", "currency", "action", "image", "imageAlt"}, max_items=24))
     values = content.get("items")
     if isinstance(values, list):
         for index, item in enumerate(values):
@@ -135,12 +150,13 @@ def _services(content: Mapping[str, object], allowed: Iterable[str]) -> list[Val
             if item.get("currency") is not None:
                 issues.extend(_string(item.get("currency"), f"items[{index}].currency", max_length=8))
             issues.extend(_action(item, "action", allowed))
+            issues.extend(_image(item, f"items[{index}]"))
     return issues
 
 
 def _providers(content: Mapping[str, object], allowed: Iterable[str]) -> list[ValidationIssue]:
     issues = _common(content, {"title", "intro", "items"})
-    issues.extend(_record_list(content, "items", {"id", "name", "role", "specialties", "credentials", "imageRole", "image", "action"}, max_items=24))
+    issues.extend(_record_list(content, "items", {"id", "name", "role", "specialties", "credentials", "imageRole", "image", "imageAlt", "action"}, max_items=24))
     values = content.get("items")
     if isinstance(values, list):
         for index, item in enumerate(values):
@@ -158,8 +174,7 @@ def _providers(content: Mapping[str, object], allowed: Iterable[str]) -> list[Va
                         issues.extend(_localized(entry, f"items[{index}].{key}[{entry_index}]"))
             if item.get("imageRole") is not None:
                 issues.extend(_string(item.get("imageRole"), f"items[{index}].imageRole", max_length=64))
-            if item.get("image") is not None:
-                issues.extend(_asset(item.get("image"), f"items[{index}].image"))
+            issues.extend(_image(item, f"items[{index}]"))
             issues.extend(_action(item, "action", allowed))
     return issues
 
@@ -226,7 +241,7 @@ def _proof(content: Mapping[str, object]) -> list[ValidationIssue]:
 
 def _locations(content: Mapping[str, object], allowed: Iterable[str]) -> list[ValidationIssue]:
     issues = _common(content, {"title", "intro", "items"})
-    issues.extend(_record_list(content, "items", {"id", "name", "address", "phone", "hours", "directionsAction"}, max_items=12))
+    issues.extend(_record_list(content, "items", {"id", "name", "address", "phone", "hours", "directionsAction", "image", "imageAlt"}, max_items=12))
     values = content.get("items")
     if isinstance(values, list):
         for index, item in enumerate(values):
@@ -239,11 +254,12 @@ def _locations(content: Mapping[str, object], allowed: Iterable[str]) -> list[Va
             if item.get("phone") is not None:
                 issues.extend(_string(item.get("phone"), f"items[{index}].phone", max_length=32))
             issues.extend(_action(item, "directionsAction", allowed))
+            issues.extend(_image(item, f"items[{index}]"))
     return issues
 
 
 def _about(content: Mapping[str, object]) -> list[ValidationIssue]:
-    issues = _common(content, {"title", "body", "highlights", "imageRole"})
+    issues = _common(content, {"title", "body", "highlights", "imageRole", "image", "imageAlt"})
     issues.extend(_localized(content.get("body"), "body", max_length=2400))
     highlights = content.get("highlights")
     if highlights is not None:
@@ -254,6 +270,7 @@ def _about(content: Mapping[str, object]) -> list[ValidationIssue]:
                 issues.extend(_localized(item, f"highlights[{index}]"))
     if content.get("imageRole") is not None:
         issues.extend(_string(content.get("imageRole"), "imageRole", max_length=64))
+    issues.extend(_image(content, ""))
     return issues
 
 

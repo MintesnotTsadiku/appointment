@@ -20,12 +20,29 @@ from appointment.public_experience.errors import DesignManifestError, UnknownRec
 RECIPE_CONTRACT = "appointment-curated-recipe.v1"
 COMPILED_DESIGN_CONTRACT = "appointment-compiled-design.v1"
 COMPILER_POLICY_VERSION = "curated-brand-policy.v1"
+# Every published version stays loadable: releases pin a version and fingerprint
+# its primitives. New sites and the design gallery get the latest version.
 RECIPE_MANIFESTS = {
-    "selam-movement": "public_experience/manifest/design/recipes/selam-movement.v1.json",
-    "bloom-hair": "public_experience/manifest/design/recipes/bloom-hair.v1.json",
-    "meron-atelier": "public_experience/manifest/design/recipes/meron-atelier.v1.json",
-    "abugida-language": "public_experience/manifest/design/recipes/abugida-language.v1.json",
-    "tena-clinic": "public_experience/manifest/design/recipes/tena-clinic.v1.json",
+    "selam-movement": {
+        1: "public_experience/manifest/design/recipes/selam-movement.v1.json",
+        2: "public_experience/manifest/design/recipes/selam-movement.v2.json",
+    },
+    "bloom-hair": {
+        1: "public_experience/manifest/design/recipes/bloom-hair.v1.json",
+        2: "public_experience/manifest/design/recipes/bloom-hair.v2.json",
+    },
+    "meron-atelier": {
+        1: "public_experience/manifest/design/recipes/meron-atelier.v1.json",
+        2: "public_experience/manifest/design/recipes/meron-atelier.v2.json",
+    },
+    "abugida-language": {
+        1: "public_experience/manifest/design/recipes/abugida-language.v1.json",
+        2: "public_experience/manifest/design/recipes/abugida-language.v2.json",
+    },
+    "tena-clinic": {
+        1: "public_experience/manifest/design/recipes/tena-clinic.v1.json",
+        2: "public_experience/manifest/design/recipes/tena-clinic.v2.json",
+    },
 }
 PRIMITIVE_MANIFESTS = {
     "palette": "public_experience/manifest/design/palettes/{key}.v{version}.json",
@@ -249,20 +266,28 @@ def get_recipe(recipe_key: str, recipe_version: int | None = None) -> RecipeDefi
     if not isinstance(recipe_key, str) or not recipe_key.strip():
         raise UnknownRecipeError("a certified recipe key is required")
     key = recipe_key.strip()
-    path = RECIPE_MANIFESTS.get(key)
-    if path is None:
+    versions = RECIPE_MANIFESTS.get(key)
+    if versions is None:
         raise UnknownRecipeError(f"unknown curated recipe: {key}", details={"recipeKey": key})
-    document = _read(path)
-    definition = _recipe(document, path)
-    if recipe_version is not None and recipe_version != definition.version:
+    version = max(versions) if recipe_version is None else recipe_version
+    path = versions.get(version)
+    if path is None:
         raise UnknownRecipeError(
             f"recipe {key} has no version {recipe_version}",
-            details={"recipeKey": key, "requested": recipe_version, "available": definition.version},
+            details={"recipeKey": key, "requested": recipe_version, "available": sorted(versions)},
         )
+    definition = _recipe(_read(path), path)
+    if definition.version != version or definition.key != key:
+        raise DesignManifestError(f"recipe manifest {path} does not declare {key} v{version}")
     return definition
 
 
+def recipe_versions(recipe_key: str) -> tuple[int, ...]:
+    return tuple(sorted(RECIPE_MANIFESTS.get(recipe_key, {})))
+
+
 def list_recipes() -> tuple[RecipeDefinition, ...]:
+    """The latest version of every certified recipe, as the gallery offers them."""
     return tuple(get_recipe(key) for key in RECIPE_MANIFESTS)
 
 

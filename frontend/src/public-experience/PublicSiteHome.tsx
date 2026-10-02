@@ -6,12 +6,14 @@ import { getTemplatePackage } from "./templates/registry";
 import type { PublishedSnapshot } from "./types";
 import "./platform.css";
 
+const localizedRoot = (root: string, locale: string) => (locale && locale !== "en" && root !== "/" ? `${root}/${locale}` : root);
+
 export const PublicSiteHome = ({ snapshot }: { snapshot: PublishedSnapshot }) => {
   const { config, theme, setPreference } = usePublicExperience();
   const locale = snapshot.locale || config.locale;
   const design = snapshot.compiledDesign;
   const applicationName = design.identity.applicationName || config.identity.applicationName;
-  const template = getTemplatePackage(design.layout.rendererKey);
+  const template = getTemplatePackage(design.layout.rendererKey, design.layout.rendererVersion);
   const rootStyle = {
     ...(theme.variables as CSSProperties),
     "--pe-surface-focus-ring": String((design.surface.shape as Record<string, unknown>)?.focusRing || "3px"),
@@ -31,7 +33,7 @@ export const PublicSiteHome = ({ snapshot }: { snapshot: PublishedSnapshot }) =>
     snapshot={snapshot}
     locale={locale}
     applicationName={applicationName}
-    publicRoot={publicRootFromPath(typeof window === "undefined" ? "/" : window.location.pathname)}
+    publicRoot={localizedRoot(publicRootFromPath(typeof window === "undefined" ? "/" : window.location.pathname), locale)}
     rootStyle={rootStyle}
     mode={theme.mode}
     toggleMode={toggleMode}

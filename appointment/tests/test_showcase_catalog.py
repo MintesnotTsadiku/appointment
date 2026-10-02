@@ -8,6 +8,7 @@ import unittest
 from appointment.public_experience.showcase_catalog import (
     REPO_ROOT,
     recipe_assignments,
+    recipe_showcases,
     validate_showcase_catalog,
 )
 
@@ -37,6 +38,14 @@ class TestShowcaseCatalog(unittest.TestCase):
             path = root / item["path"]
             self.assertTrue(path.is_file(), path)
             self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), item["sha256"])
+
+    def test_every_recipe_has_one_gallery_showcase(self):
+        catalog = validate_showcase_catalog()["sites"]
+        showcases = recipe_showcases()
+        self.assertEqual(set(showcases), {site["recipe"] for site in catalog.values()})
+        for recipe, showcase in showcases.items():
+            source = next(site for site in catalog.values() if site["recipe"] == recipe)
+            self.assertEqual(showcase, {"slug": source["slug"], "heroAsset": source["heroAsset"], "logoAsset": source["logoAsset"]})
 
 
 if __name__ == "__main__":

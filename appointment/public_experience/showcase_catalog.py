@@ -37,6 +37,14 @@ def recipe_assignments() -> dict[str, dict[str, str]]:
     return assignments
 
 
+def recipe_showcases() -> dict[str, dict[str, str]]:
+    """Platform-owned example per recipe for the design gallery (never tenant data)."""
+    showcases = {}
+    for site in load_showcase_catalog()["sites"].values():
+        showcases.setdefault(site["recipe"], {"slug": site["slug"], "heroAsset": site["heroAsset"], "logoAsset": site["logoAsset"]})
+    return showcases
+
+
 def validate_showcase_catalog() -> dict[str, Any]:
     catalog = load_showcase_catalog()
     seen_slugs: set[str] = set()

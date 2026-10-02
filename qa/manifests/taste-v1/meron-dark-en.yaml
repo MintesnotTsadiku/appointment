@@ -1,0 +1,170 @@
+app: appointment
+base_url: http://127.0.0.84:44430
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-taste-v1-meron-dark-en
+capture_trace: false
+capture_video: false
+capture_instruction_timeline: false
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+  color_scheme: dark
+  reduced_motion: reduce
+  show_action_labels: false
+  show_cursor: false
+  show_zoom_spotlight: false
+fixtures:
+  provider: appointment.demo.showcase.browser_values
+scenarios:
+- id: meron_landing_desktop_dark_en
+  title: meron landing desktop dark en
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_meron}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-root][data-pe-recipe="meron-atelier"]'
+    - type: network_request
+      url_contains: fonts/meron/eb-garamond
+      min_count: 1
+  actions:
+  - action: screenshot
+    name: meron-landing-desktop-dark-en-first-view.png
+    full_page: false
+  - action: screenshot
+    name: meron-landing-desktop-dark-en.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: meron_landing_phone_dark_en
+  title: meron landing phone dark en
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_meron}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-root][data-pe-recipe="meron-atelier"]'
+    - type: network_request
+      url_contains: fonts/meron/eb-garamond
+      min_count: 1
+  actions:
+  - action: screenshot
+    name: meron-landing-phone-dark-en-first-view.png
+    full_page: false
+  - action: screenshot
+    name: meron-landing-phone-dark-en.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: meron_book_desktop_dark_en
+  title: meron book desktop dark en
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_meron}/book'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-booking][data-pe-recipe="meron-atelier"]'
+  actions:
+  - action: screenshot
+    name: meron-book-desktop-dark-en-first-view.png
+    full_page: false
+  - action: screenshot
+    name: meron-book-desktop-dark-en.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: meron_book_phone_dark_en
+  title: meron book phone dark en
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_meron}/book'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-booking][data-pe-recipe="meron-atelier"]'
+  actions:
+  - action: screenshot
+    name: meron-book-phone-dark-en-first-view.png
+    full_page: false
+  - action: screenshot
+    name: meron-book-phone-dark-en.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: meron_scheduler_desktop_dark_en
+  title: meron scheduler desktop dark en
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_meron_scheduler}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-booking-branded="true"][data-pe-recipe="meron-atelier"]'
+  actions:
+  - action: screenshot
+    name: meron-scheduler-desktop-dark-en-first-view.png
+    full_page: false
+  - action: screenshot
+    name: meron-scheduler-desktop-dark-en.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: meron_scheduler_phone_dark_en
+  title: meron scheduler phone dark en
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_meron_scheduler}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-booking-branded="true"][data-pe-recipe="meron-atelier"]'
+  actions:
+  - action: screenshot
+    name: meron-scheduler-phone-dark-en-first-view.png
+    full_page: false
+  - action: screenshot
+    name: meron-scheduler-phone-dark-en.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors

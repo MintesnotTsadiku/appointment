@@ -316,6 +316,20 @@ def _validate_surface(surface: Mapping[str, object]) -> dict[str, object]:
     return dict(surface)
 
 
+def _require_offered_adjustments(recipe, raw: Mapping[str, object], defaults: Mapping[str, object]) -> None:
+    """A recipe offers only the adjustments it declares; anything else must equal its default."""
+    for field, adjustment in (("accent_color", "accentColor"), ("motion", "motion"), ("presentation_density", "presentationDensity")):
+        value = raw.get(field)
+        if value is None:
+            continue
+        definition = recipe.adjustments.get(adjustment)
+        if definition is None:
+            if value != defaults.get(field):
+                raise _error(f"{adjustment} is not offered by this recipe", field=field, observed=value)
+        elif definition.get("type") == "enum" and value not in (definition.get("choices") or []):
+            raise _error(f"{adjustment} is not a recipe-approved choice", field=field, observed=value)
+
+
 def _inputs(recipe, brand_inputs: Mapping[str, object] | None) -> dict[str, object]:
     raw = dict(brand_inputs or {})
     aliases = {
@@ -336,6 +350,7 @@ def _inputs(recipe, brand_inputs: Mapping[str, object] | None) -> dict[str, obje
     for source, target in aliases.items():
         if source in result and target not in result:
             result[target] = result.pop(source)
+    _require_offered_adjustments(recipe, raw, result)
     result.update(raw)
     if result.get("accent_color") is not None:
         value = result["accent_color"]

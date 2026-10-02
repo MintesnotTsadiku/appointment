@@ -1,0 +1,95 @@
+{
+  "kind": "typography",
+  "contract": "appointment-typography.v1",
+  "key": "abugida-language",
+  "version": 2,
+  "supportedScripts": [
+    "latin",
+    "ethiopic"
+  ],
+  "weights": [
+    400,
+    600,
+    700
+  ],
+  "roles": {
+    "display": {
+      "family": "Abugida Alegreya",
+      "assetKey": "abugida-alegreya",
+      "weight": 700,
+      "sizeScale": "editorial",
+      "lineHeight": 1.05,
+      "letterSpacing": "-0.01em"
+    },
+    "body": {
+      "family": "Abugida Alegreya",
+      "assetKey": "abugida-alegreya",
+      "weight": 400,
+      "sizeScale": "comfortable",
+      "lineHeight": 1.6,
+      "letterSpacing": "0"
+    },
+    "ui": {
+      "family": "Abugida Alegreya",
+      "assetKey": "abugida-alegreya",
+      "weight": 600,
+      "sizeScale": "compact",
+      "lineHeight": 1.3,
+      "letterSpacing": "0"
+    },
+    "numeric": {
+      "family": "Abugida Alegreya",
+      "assetKey": "abugida-alegreya",
+      "weight": 600,
+      "sizeScale": "compact",
+      "lineHeight": 1.2,
+      "letterSpacing": "0"
+    }
+  },
+  "fontAssets": [
+    {
+      "key": "abugida-alegreya",
+      "family": "Abugida Alegreya",
+      "src": "/assets/appointment/fonts/abugida/alegreya.woff2",
+      "weight": 400,
+      "format": "woff2",
+      "scripts": [
+        "latin"
+      ],
+      "license": "SIL Open Font License 1.1 (Alegreya, Juan Pablo del Peral)"
+    },
+    {
+      "key": "abugida-abyssinica",
+      "family": "Abugida Alegreya",
+      "src": "/assets/appointment/fonts/abugida/abyssinica-sil.woff2",
+      "weight": 400,
+      "format": "woff2",
+      "scripts": [
+        "ethiopic"
+      ],
+      "license": "SIL Open Font License 1.1 (Abyssinica SIL, SIL International)"
+    }
+  ],
+  "fallbacks": {
+    "display": [
+      "Noto Sans Ethiopic",
+      "DejaVu Sans",
+      "sans-serif"
+    ],
+    "body": [
+      "Noto Sans Ethiopic",
+      "DejaVu Sans",
+      "sans-serif"
+    ],
+    "ui": [
+      "Noto Sans Ethiopic",
+      "DejaVu Sans",
+      "sans-serif"
+    ],
+    "numeric": [
+      "Noto Sans Ethiopic",
+      "DejaVu Sans",
+      "sans-serif"
+    ]
+  }
+}

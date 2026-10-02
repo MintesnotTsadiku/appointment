@@ -1,0 +1,116 @@
+{
+  "kind": "typography",
+  "contract": "appointment-typography.v1",
+  "key": "bloom-hair",
+  "version": 2,
+  "supportedScripts": [
+    "latin",
+    "ethiopic"
+  ],
+  "weights": [
+    400,
+    700
+  ],
+  "roles": {
+    "display": {
+      "family": "Bloom Poster",
+      "assetKey": "bloom-anton",
+      "weight": 400,
+      "sizeScale": "editorial",
+      "lineHeight": 1.0,
+      "letterSpacing": "0"
+    },
+    "body": {
+      "family": "Bloom Text",
+      "assetKey": "bloom-karla",
+      "weight": 400,
+      "sizeScale": "comfortable",
+      "lineHeight": 1.6,
+      "letterSpacing": "0"
+    },
+    "ui": {
+      "family": "Bloom Text",
+      "assetKey": "bloom-karla",
+      "weight": 700,
+      "sizeScale": "compact",
+      "lineHeight": 1.3,
+      "letterSpacing": "0"
+    },
+    "numeric": {
+      "family": "Bloom Text",
+      "assetKey": "bloom-karla",
+      "weight": 700,
+      "sizeScale": "compact",
+      "lineHeight": 1.2,
+      "letterSpacing": "0"
+    }
+  },
+  "fontAssets": [
+    {
+      "key": "bloom-anton",
+      "family": "Bloom Poster",
+      "src": "/assets/appointment/fonts/bloom/anton.woff2",
+      "weight": 400,
+      "format": "woff2",
+      "scripts": [
+        "latin"
+      ],
+      "license": "SIL Open Font License 1.1 (Anton, Vernon Adams)"
+    },
+    {
+      "key": "bloom-ethiopic-condensed",
+      "family": "Bloom Poster",
+      "src": "/assets/appointment/fonts/bloom/noto-sans-ethiopic-condensed.woff2",
+      "weight": 400,
+      "format": "woff2",
+      "scripts": [
+        "ethiopic"
+      ],
+      "license": "SIL Open Font License 1.1 (Noto Sans Ethiopic Condensed, Google)"
+    },
+    {
+      "key": "bloom-karla",
+      "family": "Bloom Text",
+      "src": "/assets/appointment/fonts/bloom/karla.woff2",
+      "weight": 400,
+      "format": "woff2",
+      "scripts": [
+        "latin"
+      ],
+      "license": "SIL Open Font License 1.1 (Karla, Jonny Pinhorn)"
+    },
+    {
+      "key": "bloom-ethiopic",
+      "family": "Bloom Text",
+      "src": "/assets/appointment/fonts/bloom/noto-sans-ethiopic.woff2",
+      "weight": 400,
+      "format": "woff2",
+      "scripts": [
+        "ethiopic"
+      ],
+      "license": "SIL Open Font License 1.1 (Noto Sans Ethiopic, Google)"
+    }
+  ],
+  "fallbacks": {
+    "display": [
+      "Noto Sans Ethiopic",
+      "DejaVu Sans",
+      "sans-serif"
+    ],
+    "body": [
+      "Noto Sans Ethiopic",
+      "DejaVu Sans",
+      "sans-serif"
+    ],
+    "ui": [
+      "Noto Sans Ethiopic",
+      "DejaVu Sans",
+      "sans-serif"
+    ],
+    "numeric": [
+      "Noto Sans Ethiopic",
+      "DejaVu Sans",
+      "sans-serif"
+    ]
+  }
+}

@@ -6,6 +6,26 @@
 @font-face { font-family: "Quiet Trust Display"; src: url("/assets/appointment/quiet-trust/fonts/dejavu-serif-bold.ttf") format("truetype"); font-weight: 700; font-style: normal; font-display: swap; }
 @font-face { font-family: "Quiet Trust Body"; src: url("/assets/appointment/quiet-trust/fonts/noto-sans-ethiopic.ttf") format("truetype"); font-weight: 400 700; font-style: normal; font-display: swap; }
 
+/* Taste v1 template faces. One family per template; Latin and Ethiopic files are
+   joined by unicode-range so Amharic never falls back to a system face.
+   Faces of one family must share the same weight descriptor: Chrome groups faces by
+   weight before it applies unicode-range, and a mismatch drops Latin to the fallback.
+   Files, licenses and subsets: appointment/public/fonts/<template>/, scripts/build_public_fonts.py. */
+@font-face { font-family: "Tena Hyperlegible"; src: url("/assets/appointment/fonts/tena/atkinson-hyperlegible-next.woff2") format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+0000-02FF, U+2000-206F, U+20AC, U+2122, U+2190-2193, U+2212, U+2215; }
+@font-face { font-family: "Tena Hyperlegible"; src: url("/assets/appointment/fonts/tena/noto-sans-ethiopic.woff2") format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+1200-139F, U+2D80-2DDF, U+AB00-AB2F; }
+@font-face { font-family: "Selam Figtree"; src: url("/assets/appointment/fonts/selam/figtree.woff2") format("woff2"); font-weight: 100 550; font-display: swap; unicode-range: U+0000-02FF, U+2000-206F, U+20AC, U+2122, U+2190-2193, U+2212, U+2215; }
+@font-face { font-family: "Selam Figtree"; src: url("/assets/appointment/fonts/selam/menbere-regular.woff2") format("woff2"); font-weight: 100 550; font-display: swap; unicode-range: U+1200-137F; }
+@font-face { font-family: "Selam Figtree"; src: url("/assets/appointment/fonts/selam/figtree.woff2") format("woff2"); font-weight: 551 900; font-display: swap; unicode-range: U+0000-02FF, U+2000-206F, U+20AC, U+2122, U+2190-2193, U+2212, U+2215; }
+@font-face { font-family: "Selam Figtree"; src: url("/assets/appointment/fonts/selam/menbere-bold.woff2") format("woff2"); font-weight: 551 900; font-display: swap; unicode-range: U+1200-137F; }
+@font-face { font-family: "Bloom Poster"; src: url("/assets/appointment/fonts/bloom/anton.woff2") format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+0000-02FF, U+2000-206F, U+20AC, U+2122, U+2190-2193, U+2212, U+2215; }
+@font-face { font-family: "Bloom Poster"; src: url("/assets/appointment/fonts/bloom/noto-sans-ethiopic-condensed.woff2") format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+1200-139F, U+2D80-2DDF, U+AB00-AB2F; }
+@font-face { font-family: "Bloom Text"; src: url("/assets/appointment/fonts/bloom/karla.woff2") format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+0000-02FF, U+2000-206F, U+20AC, U+2122, U+2190-2193, U+2212, U+2215; }
+@font-face { font-family: "Bloom Text"; src: url("/assets/appointment/fonts/bloom/noto-sans-ethiopic.woff2") format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+1200-139F, U+2D80-2DDF, U+AB00-AB2F; }
+@font-face { font-family: "Meron Garamond"; src: url("/assets/appointment/fonts/meron/eb-garamond.woff2") format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+0000-02FF, U+2000-206F, U+20AC, U+2122, U+2190-2193, U+2212, U+2215; }
+@font-face { font-family: "Meron Garamond"; src: url("/assets/appointment/fonts/meron/noto-serif-ethiopic.woff2") format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+1200-139F, U+2D80-2DDF, U+AB00-AB2F; }
+@font-face { font-family: "Abugida Alegreya"; src: url("/assets/appointment/fonts/abugida/alegreya.woff2") format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+0000-02FF, U+2000-206F, U+20AC, U+2122, U+2190-2193, U+2212, U+2215; }
+@font-face { font-family: "Abugida Alegreya"; src: url("/assets/appointment/fonts/abugida/abyssinica-sil.woff2") format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+1200-139F, U+2D80-2DDF, U+AB00-AB2F; }
+
 [data-booking-branded="true"] h1,
 [data-booking-branded="true"] h2,
 [data-booking-branded="true"] h3 { font-family: var(--booking-font-display); }

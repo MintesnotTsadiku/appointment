@@ -1,0 +1,358 @@
+app: appointment
+base_url: http://127.0.0.84:44430
+default_role: Staff
+auth:
+  type: frappe_session
+  username: bloom.owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment-taste-v1-staff-dark
+capture_trace: false
+capture_video: false
+capture_instruction_timeline: false
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+  color_scheme: dark
+  reduced_motion: reduce
+  show_action_labels: false
+  show_cursor: false
+  show_zoom_spotlight: false
+fixtures:
+  provider: appointment.demo.showcase.browser_values
+scenarios:
+- id: staff_home_desktop_dark
+  title: staff home desktop dark
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /home
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: h1
+  actions:
+  - action: screenshot
+    name: staff-home-desktop-dark-first-view.png
+    full_page: false
+  - action: screenshot
+    name: staff-home-desktop-dark.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: staff_home_phone_dark
+  title: staff home phone dark
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /home
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: h1
+  actions:
+  - action: screenshot
+    name: staff-home-phone-dark-first-view.png
+    full_page: false
+  - action: screenshot
+    name: staff-home-phone-dark.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: staff_calendar_desktop_dark
+  title: staff calendar desktop dark
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /calendar
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: h1
+  actions:
+  - action: screenshot
+    name: staff-calendar-desktop-dark-first-view.png
+    full_page: false
+  - action: screenshot
+    name: staff-calendar-desktop-dark.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: staff_calendar_phone_dark
+  title: staff calendar phone dark
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /calendar
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: h1
+  actions:
+  - action: screenshot
+    name: staff-calendar-phone-dark-first-view.png
+    full_page: false
+  - action: screenshot
+    name: staff-calendar-phone-dark.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: staff_reception_desktop_dark
+  title: staff reception desktop dark
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /reception
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: h1
+  actions:
+  - action: screenshot
+    name: staff-reception-desktop-dark-first-view.png
+    full_page: false
+  - action: screenshot
+    name: staff-reception-desktop-dark.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: staff_reception_phone_dark
+  title: staff reception phone dark
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /reception
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: h1
+  actions:
+  - action: screenshot
+    name: staff-reception-phone-dark-first-view.png
+    full_page: false
+  - action: screenshot
+    name: staff-reception-phone-dark.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: staff_analytics_desktop_dark
+  title: staff analytics desktop dark
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /analytics
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: h1
+  actions:
+  - action: screenshot
+    name: staff-analytics-desktop-dark-first-view.png
+    full_page: false
+  - action: screenshot
+    name: staff-analytics-desktop-dark.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: staff_analytics_phone_dark
+  title: staff analytics phone dark
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /analytics
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: h1
+  actions:
+  - action: screenshot
+    name: staff-analytics-phone-dark-first-view.png
+    full_page: false
+  - action: screenshot
+    name: staff-analytics-phone-dark.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: staff_settings_desktop_dark
+  title: staff settings desktop dark
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /settings
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: h1
+  actions:
+  - action: screenshot
+    name: staff-settings-desktop-dark-first-view.png
+    full_page: false
+  - action: screenshot
+    name: staff-settings-desktop-dark.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: staff_settings_phone_dark
+  title: staff settings phone dark
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /settings
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: h1
+  actions:
+  - action: screenshot
+    name: staff-settings-phone-dark-first-view.png
+    full_page: false
+  - action: screenshot
+    name: staff-settings-phone-dark.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: staff_settings_team_desktop_dark
+  title: staff settings team desktop dark
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /settings/team
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: h1
+  actions:
+  - action: screenshot
+    name: staff-settings-team-desktop-dark-first-view.png
+    full_page: false
+  - action: screenshot
+    name: staff-settings-team-desktop-dark.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: staff_settings_team_phone_dark
+  title: staff settings team phone dark
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /settings/team
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: h1
+  actions:
+  - action: screenshot
+    name: staff-settings-team-phone-dark-first-view.png
+    full_page: false
+  - action: screenshot
+    name: staff-settings-team-phone-dark.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: staff_settings_public_experience_desktop_dark
+  title: staff settings public experience desktop dark
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /settings/public-experience
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: h1
+  actions:
+  - action: screenshot
+    name: staff-settings-public-experience-desktop-dark-first-view.png
+    full_page: false
+  - action: screenshot
+    name: staff-settings-public-experience-desktop-dark.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: staff_settings_public_experience_phone_dark
+  title: staff settings public experience phone dark
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /settings/public-experience
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: h1
+  actions:
+  - action: screenshot
+    name: staff-settings-public-experience-phone-dark-first-view.png
+    full_page: false
+  - action: screenshot
+    name: staff-settings-public-experience-phone-dark.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors

@@ -37,5 +37,6 @@ assert.equal(fallback.identity.applicationName, "Appointment");
 const content = read("src/public-experience/templates/content.ts");
 assert.ok(!content.includes("dangerouslySetInnerHTML"));
 assert.ok(content.includes("safeHref"));
-assert.ok(content.includes("supportAsset"));
+assert.ok(content.includes("contentImage"), "owner photos come from release content");
+assert.ok(!content.includes("brand-experience/support"), "templates cannot borrow a showcase business's photos");
 console.log("PASS: packaged compiled design and safe renderer contract");

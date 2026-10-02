@@ -1,0 +1,176 @@
+app: appointment
+base_url: http://127.0.0.84:44430
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-taste-v1-tena-dark-am
+capture_trace: false
+capture_video: false
+capture_instruction_timeline: false
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+  color_scheme: dark
+  reduced_motion: reduce
+  show_action_labels: false
+  show_cursor: false
+  show_zoom_spotlight: false
+fixtures:
+  provider: appointment.demo.showcase.browser_values
+scenarios:
+- id: tena_landing_desktop_dark_am
+  title: tena landing desktop dark am
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_tena}/am'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-root][data-pe-recipe="tena-clinic"]'
+    - type: network_request
+      url_contains: fonts/tena/atkinson-hyperlegible-next
+      min_count: 1
+    - type: network_request
+      url_contains: fonts/tena/noto-sans-ethiopic
+      min_count: 1
+  actions:
+  - action: screenshot
+    name: tena-landing-desktop-dark-am-first-view.png
+    full_page: false
+  - action: screenshot
+    name: tena-landing-desktop-dark-am.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: tena_landing_phone_dark_am
+  title: tena landing phone dark am
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_tena}/am'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-root][data-pe-recipe="tena-clinic"]'
+    - type: network_request
+      url_contains: fonts/tena/atkinson-hyperlegible-next
+      min_count: 1
+    - type: network_request
+      url_contains: fonts/tena/noto-sans-ethiopic
+      min_count: 1
+  actions:
+  - action: screenshot
+    name: tena-landing-phone-dark-am-first-view.png
+    full_page: false
+  - action: screenshot
+    name: tena-landing-phone-dark-am.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: tena_book_desktop_dark_am
+  title: tena book desktop dark am
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_tena}/book?locale=am'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-booking][data-pe-recipe="tena-clinic"]'
+  actions:
+  - action: screenshot
+    name: tena-book-desktop-dark-am-first-view.png
+    full_page: false
+  - action: screenshot
+    name: tena-book-desktop-dark-am.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: tena_book_phone_dark_am
+  title: tena book phone dark am
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_tena}/book?locale=am'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-booking][data-pe-recipe="tena-clinic"]'
+  actions:
+  - action: screenshot
+    name: tena-book-phone-dark-am-first-view.png
+    full_page: false
+  - action: screenshot
+    name: tena-book-phone-dark-am.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: tena_scheduler_desktop_dark_am
+  title: tena scheduler desktop dark am
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_tena_scheduler}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-booking-branded="true"][data-pe-recipe="tena-clinic"]'
+  actions:
+  - action: screenshot
+    name: tena-scheduler-desktop-dark-am-first-view.png
+    full_page: false
+  - action: screenshot
+    name: tena-scheduler-desktop-dark-am.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: tena_scheduler_phone_dark_am
+  title: tena scheduler phone dark am
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_tena_scheduler}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-booking-branded="true"][data-pe-recipe="tena-clinic"]'
+  actions:
+  - action: screenshot
+    name: tena-scheduler-phone-dark-am-first-view.png
+    full_page: false
+  - action: screenshot
+    name: tena-scheduler-phone-dark-am.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors

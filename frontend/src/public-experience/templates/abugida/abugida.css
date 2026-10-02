@@ -62,11 +62,11 @@
 .abugida-footer>a{font-size:21px;text-decoration:none}
 .abugida-footer>a b{color:#ff7851}
 .abugida-footer small{grid-column:1/-1}
-.abugida-booking{min-height:100vh}
-.abugida-booking>section{display:grid;grid-template-columns:1fr 1fr;min-height:calc(100vh - 86px)}
+.abugida-booking{min-height:100dvh}
+.abugida-booking>section{display:grid;grid-template-columns:1fr 1fr;min-height:calc(100dvh - 86px)}
 .abugida-booking section>div{align-self:center;padding:55px 5vw}
 .abugida-booking h1{font-family:Georgia,serif;font-size:clamp(58px,6vw,96px);line-height:.9}
-.abugida-booking section>img{width:100%;height:calc(100vh - 86px);object-fit:cover}
+.abugida-booking section>img{width:100%;height:calc(100dvh - 86px);object-fit:cover}
 
 @media(max-width:800px){.abugida-nav nav{display:none}
 .abugida-nav>a:first-child span{display:none}
@@ -81,3 +81,5 @@
 .abugida-booking section>img{height:50vh}
 }
 .abugida-mode{display:inline-flex;align-items:center;gap:7px;padding:10px 12px;border:2px solid var(--ink);color:var(--ink);background:transparent;font:800 10px/1 Arial,sans-serif;letter-spacing:.12em;cursor:pointer}.abugida-mode:focus-visible{outline:var(--pe-surface-focus-ring,3px) solid var(--pe-color-focus);outline-offset:3px}.abugida-button{color:var(--pe-color-on-primary,#fff)!important}.abugida-site[data-pe-mode=dark]{--orange-ink:var(--pe-color-accent);color-scheme:dark}.abugida-site[data-pe-mode=dark] .abugida-nav>a:first-child b,.abugida-site[data-pe-mode=dark] .abugida-button,.abugida-site[data-pe-mode=dark] .abugida-hero figcaption,.abugida-site[data-pe-mode=dark] .abugida-marquee,.abugida-site[data-pe-mode=dark] .abugida-coaches{color:var(--pe-color-on-primary)}.abugida-site[data-pe-mode=dark] .abugida-nav>a:last-child,.abugida-site[data-pe-mode=dark] .abugida-method figcaption,.abugida-site[data-pe-mode=dark] .abugida-quote{color:var(--pe-color-text);background:var(--pe-color-surface-strong)}.abugida-site[data-pe-mode=dark] .abugida-method,.abugida-site[data-pe-mode=dark] .abugida-rooms{background:var(--pe-color-surface)}.abugida-site[data-pe-mode=dark] .abugida-footer{color:var(--pe-color-text);background:var(--pe-color-surface-strong)}.abugida-site[data-pe-mode=dark] .abugida-coaches .abugida-label{color:var(--pe-color-on-primary)}.abugida-site[data-pe-mode=dark] .abugida-nav,.abugida-site[data-pe-mode=dark] .abugida-hero,.abugida-site[data-pe-mode=dark] .abugida-practice,.abugida-site[data-pe-mode=dark] .abugida-method,.abugida-site[data-pe-mode=dark] .abugida-process,.abugida-site[data-pe-mode=dark] .abugida-questions,.abugida-site[data-pe-mode=dark] .abugida-practice>div article,.abugida-site[data-pe-mode=dark] .abugida-process article,.abugida-site[data-pe-mode=dark] .abugida-questions details{border-color:var(--pe-color-border)}@media(max-width:800px){.abugida-mode{padding:9px;font-size:0}.abugida-mode span{font-size:15px}.abugida-nav{gap:10px}.abugida-nav>a:last-child{padding:10px 12px}}
+/* Phones: a 1fr track grows to the longest hero word; cap it so the page never scrolls sideways. */
+@media(max-width:800px){.abugida-hero{grid-template-columns:38px minmax(0,1fr)}.abugida-hero h1{font-size:clamp(40px,12vw,55px);overflow-wrap:break-word}}

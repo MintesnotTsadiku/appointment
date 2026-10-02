@@ -1,0 +1,170 @@
+app: appointment
+base_url: http://127.0.0.84:44430
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-taste-v1-selam-light-en
+capture_trace: false
+capture_video: false
+capture_instruction_timeline: false
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+  reduced_motion: reduce
+  show_action_labels: false
+  show_cursor: false
+  show_zoom_spotlight: false
+fixtures:
+  provider: appointment.demo.showcase.browser_values
+scenarios:
+- id: selam_landing_desktop_light_en
+  title: selam landing desktop light en
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_selam}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-root][data-pe-recipe="selam-movement"]'
+    - type: network_request
+      url_contains: fonts/selam/figtree
+      min_count: 1
+  actions:
+  - action: screenshot
+    name: selam-landing-desktop-light-en-first-view.png
+    full_page: false
+  - action: screenshot
+    name: selam-landing-desktop-light-en.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: selam_landing_phone_light_en
+  title: selam landing phone light en
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_selam}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-root][data-pe-recipe="selam-movement"]'
+    - type: network_request
+      url_contains: fonts/selam/figtree
+      min_count: 1
+  actions:
+  - action: screenshot
+    name: selam-landing-phone-light-en-first-view.png
+    full_page: false
+  - action: screenshot
+    name: selam-landing-phone-light-en.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: selam_book_desktop_light_en
+  title: selam book desktop light en
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_selam}/book'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-booking][data-pe-recipe="selam-movement"]'
+  actions:
+  - action: screenshot
+    name: selam-book-desktop-light-en-first-view.png
+    full_page: false
+  - action: screenshot
+    name: selam-book-desktop-light-en.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: selam_book_phone_light_en
+  title: selam book phone light en
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_selam}/book'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-booking][data-pe-recipe="selam-movement"]'
+  actions:
+  - action: screenshot
+    name: selam-book-phone-light-en-first-view.png
+    full_page: false
+  - action: screenshot
+    name: selam-book-phone-light-en.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: selam_scheduler_desktop_light_en
+  title: selam scheduler desktop light en
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_selam_scheduler}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-booking-branded="true"][data-pe-recipe="selam-movement"]'
+  actions:
+  - action: screenshot
+    name: selam-scheduler-desktop-light-en-first-view.png
+    full_page: false
+  - action: screenshot
+    name: selam-scheduler-desktop-light-en.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: selam_scheduler_phone_light_en
+  title: selam scheduler phone light en
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_selam_scheduler}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-booking-branded="true"][data-pe-recipe="selam-movement"]'
+  actions:
+  - action: screenshot
+    name: selam-scheduler-phone-light-en-first-view.png
+    full_page: false
+  - action: screenshot
+    name: selam-scheduler-phone-light-en.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors

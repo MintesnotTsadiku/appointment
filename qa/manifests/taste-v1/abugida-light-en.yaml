@@ -1,0 +1,170 @@
+app: appointment
+base_url: http://127.0.0.84:44430
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-taste-v1-abugida-light-en
+capture_trace: false
+capture_video: false
+capture_instruction_timeline: false
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+  reduced_motion: reduce
+  show_action_labels: false
+  show_cursor: false
+  show_zoom_spotlight: false
+fixtures:
+  provider: appointment.demo.showcase.browser_values
+scenarios:
+- id: abugida_landing_desktop_light_en
+  title: abugida landing desktop light en
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_abugida}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-root][data-pe-recipe="abugida-language"]'
+    - type: network_request
+      url_contains: fonts/abugida/alegreya
+      min_count: 1
+  actions:
+  - action: screenshot
+    name: abugida-landing-desktop-light-en-first-view.png
+    full_page: false
+  - action: screenshot
+    name: abugida-landing-desktop-light-en.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: abugida_landing_phone_light_en
+  title: abugida landing phone light en
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_abugida}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-root][data-pe-recipe="abugida-language"]'
+    - type: network_request
+      url_contains: fonts/abugida/alegreya
+      min_count: 1
+  actions:
+  - action: screenshot
+    name: abugida-landing-phone-light-en-first-view.png
+    full_page: false
+  - action: screenshot
+    name: abugida-landing-phone-light-en.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: abugida_book_desktop_light_en
+  title: abugida book desktop light en
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_abugida}/book'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-booking][data-pe-recipe="abugida-language"]'
+  actions:
+  - action: screenshot
+    name: abugida-book-desktop-light-en-first-view.png
+    full_page: false
+  - action: screenshot
+    name: abugida-book-desktop-light-en.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: abugida_book_phone_light_en
+  title: abugida book phone light en
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_abugida}/book'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-pe-booking][data-pe-recipe="abugida-language"]'
+  actions:
+  - action: screenshot
+    name: abugida-book-phone-light-en-first-view.png
+    full_page: false
+  - action: screenshot
+    name: abugida-book-phone-light-en.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: abugida_scheduler_desktop_light_en
+  title: abugida scheduler desktop light en
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_abugida_scheduler}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-booking-branded="true"][data-pe-recipe="abugida-language"]'
+  actions:
+  - action: screenshot
+    name: abugida-scheduler-desktop-light-en-first-view.png
+    full_page: false
+  - action: screenshot
+    name: abugida-scheduler-desktop-light-en.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors
+- id: abugida_scheduler_phone_light_en
+  title: abugida scheduler phone light en
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_abugida_scheduler}'
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-booking-branded="true"][data-pe-recipe="abugida-language"]'
+  actions:
+  - action: screenshot
+    name: abugida-scheduler-phone-light-en-first-view.png
+    full_page: false
+  - action: screenshot
+    name: abugida-scheduler-phone-light-en.png
+    full_page: true
+  - action: scroll
+    delta_y: 0
+  - action: get_console_errors
+  - action: get_network_errors

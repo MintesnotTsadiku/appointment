@@ -1496,5 +1496,26 @@
       "customize": "Customize",
       "editingHint": "Drag cards by their handle, resize from the bottom-right corner, or use each card's menu. Save when you are done."
     }
+  },
+  "publicSite": {
+    "navLabel": "Site sections",
+    "services": "Services",
+    "team": "Team",
+    "visit": "Visit",
+    "questions": "Questions",
+    "backToSite": "Back to site",
+    "dark": "Dark",
+    "light": "Light",
+    "switchToDark": "Switch to dark mode",
+    "switchToLight": "Switch to light mode",
+    "skip": "Skip to content",
+    "minutes": "{count} min",
+    "duration": "Duration",
+    "price": "Price",
+    "phone": "Phone",
+    "email": "Email",
+    "hours": "Opening hours",
+    "address": "Address",
+    "step": "Step {count}"
   }
 }

@@ -11,8 +11,9 @@ import "@/public-experience/platform.css";
 function BookingHandoff({ snapshot, slug }: { snapshot: PublishedSnapshot; slug?: string }) {
   const { config, theme, setPreference } = usePublicExperience();
   const rootStyle = theme.variables as CSSProperties;
-  const publicRoot = publicRootForSlug(slug);
-  const template = getTemplatePackage(snapshot.compiledDesign.layout.rendererKey);
+  const siteRoot = publicRootForSlug(slug);
+  const publicRoot = snapshot.locale && snapshot.locale !== "en" ? `${siteRoot}/${snapshot.locale}` : siteRoot;
+  const template = getTemplatePackage(snapshot.compiledDesign.layout.rendererKey, snapshot.compiledDesign.layout.rendererVersion);
   if (!template) return <main data-pe-unsupported className="p-8">Unsupported public template</main>;
   const BookingTemplate = template.Booking;
   return <BookingTemplate
@@ -28,7 +29,9 @@ function BookingHandoff({ snapshot, slug }: { snapshot: PublishedSnapshot; slug?
 }
 
 const PublicBookingPage = () => {
-  const { slug, locale } = useParams<{ slug: string; locale?: string }>();
+  const { slug, locale: pathLocale } = useParams<{ slug: string; locale?: string }>();
+  // The handoff keeps the landing page's language; see localeHref in the template content contract.
+  const locale = pathLocale || new URLSearchParams(window.location.search).get("locale") || undefined;
   const [snapshot, setSnapshot] = useState<PublishedSnapshot | null>(null);
   const [resolved, setResolved] = useState(false);
 

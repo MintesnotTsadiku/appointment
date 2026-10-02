@@ -1,0 +1,106 @@
+{
+  "kind": "typography",
+  "contract": "appointment-typography.v1",
+  "key": "selam-movement",
+  "version": 2,
+  "supportedScripts": [
+    "latin",
+    "ethiopic"
+  ],
+  "weights": [
+    400,
+    600,
+    800
+  ],
+  "roles": {
+    "display": {
+      "family": "Selam Figtree",
+      "assetKey": "selam-figtree",
+      "weight": 800,
+      "sizeScale": "editorial",
+      "lineHeight": 0.98,
+      "letterSpacing": "-0.03em"
+    },
+    "body": {
+      "family": "Selam Figtree",
+      "assetKey": "selam-figtree",
+      "weight": 400,
+      "sizeScale": "comfortable",
+      "lineHeight": 1.6,
+      "letterSpacing": "0"
+    },
+    "ui": {
+      "family": "Selam Figtree",
+      "assetKey": "selam-figtree",
+      "weight": 600,
+      "sizeScale": "compact",
+      "lineHeight": 1.3,
+      "letterSpacing": "0"
+    },
+    "numeric": {
+      "family": "Selam Figtree",
+      "assetKey": "selam-figtree",
+      "weight": 600,
+      "sizeScale": "compact",
+      "lineHeight": 1.2,
+      "letterSpacing": "0"
+    }
+  },
+  "fontAssets": [
+    {
+      "key": "selam-figtree",
+      "family": "Selam Figtree",
+      "src": "/assets/appointment/fonts/selam/figtree.woff2",
+      "weight": 400,
+      "format": "woff2",
+      "scripts": [
+        "latin"
+      ],
+      "license": "SIL Open Font License 1.1 (Figtree, Erik Kennedy)"
+    },
+    {
+      "key": "selam-menbere",
+      "family": "Selam Figtree",
+      "src": "/assets/appointment/fonts/selam/menbere-regular.woff2",
+      "weight": 400,
+      "format": "woff2",
+      "scripts": [
+        "ethiopic"
+      ],
+      "license": "SIL Open Font License 1.1 (Menbere, Ethiopic Unicode)"
+    },
+    {
+      "key": "selam-menbere-bold",
+      "family": "Selam Figtree",
+      "src": "/assets/appointment/fonts/selam/menbere-bold.woff2",
+      "weight": 700,
+      "format": "woff2",
+      "scripts": [
+        "ethiopic"
+      ],
+      "license": "SIL Open Font License 1.1 (Menbere, Ethiopic Unicode)"
+    }
+  ],
+  "fallbacks": {
+    "display": [
+      "Noto Sans Ethiopic",
+      "DejaVu Sans",
+      "sans-serif"
+    ],
+    "body": [
+      "Noto Sans Ethiopic",
+      "DejaVu Sans",
+      "sans-serif"
+    ],
+    "ui": [
+      "Noto Sans Ethiopic",
+      "DejaVu Sans",
+      "sans-serif"
+    ],
+    "numeric": [
+      "Noto Sans Ethiopic",
+      "DejaVu Sans",
+      "sans-serif"
+    ]
+  }
+}

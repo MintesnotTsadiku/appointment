@@ -1,18 +1,99 @@
 import type { BookingTemplateProps, TemplateProps } from "../types";
-import { action, asset, brandLogo, localAsset, localized, records, section, supportAsset } from "../content";
+import { action, brandLogo, contentImage, designImage, localized, records, section, sectionImage } from "../content";
+import { usePublicChrome } from "../chrome";
 import "./tena.css";
 
-const Leaf=()=> <span className="tena-leaf" aria-hidden="true">❧</span>;
-export function TenaSite({snapshot,locale,applicationName,publicRoot,rootStyle,mode,toggleMode}:TemplateProps){const hero=section(snapshot.sections,"hero"),services=section(snapshot.sections,"services"),benefits=section(snapshot.sections,"benefits"),providers=section(snapshot.sections,"providers"),process=section(snapshot.sections,"process"),testimonials=section(snapshot.sections,"testimonials"),faq=section(snapshot.sections,"faq"),locations=section(snapshot.sections,"locations"),booking=section(snapshot.sections,"booking_cta");const primary=action(hero.primaryAction,locale),heroAsset=asset(snapshot.compiledDesign,"hero.primary");return <div data-pe-root data-pe-recipe={snapshot.recipeKey} data-pe-mode={mode} className="tena-site" data-template="tena-clinic-v1" style={rootStyle}><header className="tena-nav"><a href={publicRoot}>{brandLogo(snapshot.compiledDesign) ? <img className="pe-brand-logo" src={brandLogo(snapshot.compiledDesign)} alt="" /> : <Leaf/>}<span>{applicationName}<small>Health &amp; wellness</small></span></a><nav><a href="#care">Our care</a><a href="#team">Our team</a><a href="#visit">Your first visit</a></nav><button type="button" className="tena-mode" onClick={toggleMode} aria-label={`Switch to ${mode === "dark" ? "light" : "dark"} mode`}><span aria-hidden="true">{mode === "dark" ? "☀" : "☾"}</span>{mode === "dark" ? "Light" : "Dark"}</button>{primary?<a className="tena-button" href={primary.href}>Book an appointment</a>:null}<small>A healthier<br/>tomorrow<br/>together</small></header><main>
-<section className="tena-hero"><div><p className="tena-label">Care that starts with listening</p><h1>{localized(hero.title,locale)}</h1><p>{localized(hero.subtitle||hero.body,locale)}</p><div>{primary?<a className="tena-button" href={primary.href}>{primary.label}</a>:null}<a href="#team">Meet your care team →</a></div><small>People<br/>conversations<br/>better days</small></div>{heroAsset?<img src={heroAsset.src} alt={heroAsset.alt}/>:null}</section>
-<section className="tena-trust"><span><Leaf/>New patients welcome</span><span><Leaf/>Clear, upfront fees</span><span><Leaf/>In-person and online</span></section>
-<section className="tena-care" id="care"><header><h2>{localized(services.title,locale)}</h2><small>Same care.<br/>A brighter you.</small></header><div>{records(services.items).map((item,index)=><article key={index}><h3>{localized(item.name,locale)}</h3><p>{localized(item.summary,locale)}</p>{primary ? <a href={primary.href}>→</a> : null}</article>)}</div></section>
-<section className="tena-understand"><img src={supportAsset("tena",1)} alt="A clinician listening to a patient"/><div><h2>{localized(benefits.title,locale)}</h2><p>{localized(benefits.intro,locale)}</p>{records(benefits.items).map((item,index)=><article key={index}><b>{["◌","♧","▤"][index%3]}</b><div><h3>{localized(item.title,locale)}</h3><p>{localized(item.description,locale)}</p></div></article>)}</div></section>
-<section className="tena-team" id="team"><header><h2>{localized(providers.title,locale)}</h2><small>Compassionate care<br/>real people<br/>brighter days</small></header><div>{records(providers.items).map((item,index)=><article key={index}><img src={localAsset(item.image,supportAsset("tena",index===0?1:2))} alt={localized(item.name,locale)}/><h3>{localized(item.name,locale)}</h3><p>{localized(item.role,locale)}</p><a href="#visit">View profile →</a></article>)}</div></section>
-<section className="tena-process" id="visit"><h2>{localized(process.title,locale)}</h2><div>{records(process.items).map((item,index)=><article key={index}><b>0{index+1}</b><div><h3>{localized(item.title,locale)}</h3><p>{localized(item.description,locale)}</p></div></article>)}</div></section>
-<section className="tena-story"><img src={supportAsset("tena",1)} alt="A calm clinic conversation"/>{records(testimonials.items).slice(0,1).map((item,index)=><blockquote key={index}><p className="tena-label">Illustrative patient story</p>“{localized(item.quote,locale)}”<cite>{localized(item.attribution,locale)}</cite></blockquote>)}</section>
-<section className="tena-faq"><div><h2>Frequently asked<br/>questions.</h2><p>Still have a question?<br/>We’re here to help.</p></div><div>{records(faq.items).map((item,index)=><details key={index}><summary><Leaf/>{localized(item.question,locale)}<span>⌄</span></summary><p>{localized(item.answer,locale)}</p></details>)}</div></section>
-<section className="tena-visit"><div><h2>Visit us.</h2><p>{localized(locations.intro,locale)}</p></div><img src={supportAsset("tena",3)} alt="The clinic reception"/>{records(locations.items).slice(0,1).map((item,index)=><address key={index}><span>Sample clinic location</span><b>Addis Ababa, Ethiopia</b>{localized(item.hours,locale)}<br/>{String(item.phone||"")}</address>)}</section>
-<section className="tena-final"><Leaf/><div><p className="tena-label">Same care. A brighter you.</p><h2>{localized(booking.title,locale)}</h2></div>{action(booking.action,locale)?<a href={action(booking.action,locale)?.href}>{action(booking.action,locale)?.label}</a>:null}</section>
-</main><footer className="tena-footer"><a href={publicRoot}>{brandLogo(snapshot.compiledDesign) ? <img className="pe-brand-logo" src={brandLogo(snapshot.compiledDesign)} alt="" /> : <Leaf/>}<span>{applicationName}</span></a><p>Thoughtful healthcare for real life.<br/>People, conversations, better days.</p><nav>Care<br/>Visit<br/>Information</nav><small>© {new Date().getFullYear()} {applicationName}</small></footer></div>}
-export function TenaBooking({snapshot,locale,applicationName,publicRoot,rootStyle,bookingPath,mode,toggleMode}:BookingTemplateProps){const hero=section(snapshot.sections,"hero");return <main data-pe-booking data-pe-recipe={snapshot.recipeKey} data-pe-mode={mode} className="tena-site tena-booking" style={rootStyle}><header className="tena-nav"><a href={publicRoot}>{brandLogo(snapshot.compiledDesign) ? <img className="pe-brand-logo" src={brandLogo(snapshot.compiledDesign)} alt="" /> : <Leaf/>}<span>{applicationName}</span></a><button type="button" className="tena-mode" onClick={toggleMode} aria-label={`Switch to ${mode === "dark" ? "light" : "dark"} mode`}><span aria-hidden="true">{mode === "dark" ? "☀" : "☾"}</span>{mode === "dark" ? "Light" : "Dark"}</button><a href={publicRoot}>Back to clinic</a></header><section><div><p className="tena-label">Your appointment, clearly explained</p><h1>{localized(hero.title,locale)}</h1><p>{localized(hero.subtitle,locale)}</p>{bookingPath?<a className="tena-button" href={bookingPath}>Choose a consultation</a>:null}</div><img src={supportAsset("tena",1)} alt="Clinic consultation"/></section></main>}
+const Leaf = () => <span className="tena-leaf" aria-hidden="true">❧</span>;
+
+export function TenaSite({ snapshot, locale, applicationName, publicRoot, rootStyle, mode, toggleMode }: TemplateProps) {
+  const chrome = usePublicChrome(locale);
+  const design = snapshot.compiledDesign;
+  const hero = section(snapshot.sections, "hero");
+  const services = section(snapshot.sections, "services");
+  const benefits = section(snapshot.sections, "benefits");
+  const providers = section(snapshot.sections, "providers");
+  const process = section(snapshot.sections, "process");
+  const testimonials = section(snapshot.sections, "testimonials");
+  const proof = section(snapshot.sections, "proof");
+  const faq = section(snapshot.sections, "faq");
+  const locations = section(snapshot.sections, "locations");
+  const booking = section(snapshot.sections, "booking_cta");
+  const footer = section(snapshot.sections, "footer");
+  const primary = action(hero.primaryAction, locale);
+  const secondary = action(hero.secondaryAction, locale);
+  const finalAction = action(booking.action, locale);
+  const heroImage = designImage(design, "hero.primary");
+  const detailImage = designImage(design, "section.detail");
+  const logo = brandLogo(design);
+  const location = records(locations.items)[0];
+  const locationImage = location ? sectionImage(location, locale, design) : null;
+  const story = records(testimonials.items)[0];
+
+  return <div data-pe-root data-pe-recipe={snapshot.recipeKey} data-pe-mode={mode} className="tena-site" data-template="tena-clinic-v1" style={rootStyle}>
+    <header className="tena-nav">
+      <a href={publicRoot}>{logo ? <img className="pe-brand-logo" src={logo} alt="" /> : <Leaf />}<span>{applicationName}</span></a>
+      <nav aria-label={chrome.t("navLabel")}><a href="#care">{chrome.t("services")}</a><a href="#team">{chrome.t("team")}</a><a href="#contact">{chrome.t("visit")}</a></nav>
+      <button type="button" className="tena-mode" onClick={toggleMode} aria-label={chrome.modeSwitchLabel(mode)}><span aria-hidden="true">{mode === "dark" ? "☀" : "☾"}</span>{chrome.modeName(mode)}</button>
+      {primary ? <a className="tena-button" href={primary.href}>{primary.label}</a> : null}
+    </header>
+    <main>
+      <section className="tena-hero">
+        <div>
+          {localized(hero.eyebrow, locale) ? <p className="tena-label">{localized(hero.eyebrow, locale)}</p> : null}
+          <h1>{localized(hero.title, locale)}</h1>
+          <p>{localized(hero.subtitle || hero.body, locale)}</p>
+          <div>{primary ? <a className="tena-button" href={primary.href}>{primary.label}</a> : null}{secondary ? <a href={secondary.href}>{secondary.label}</a> : null}</div>
+        </div>
+        {heroImage ? <img src={heroImage.src} alt={heroImage.alt} /> : null}
+      </section>
+      {records(proof.items).length ? <section className="tena-trust">{records(proof.items).slice(0, 3).map((item, index) => <span key={index}><Leaf />{localized(item.value, locale)} {localized(item.label, locale)}</span>)}</section> : null}
+      <section className="tena-care" id="care">
+        <header><h2>{localized(services.title, locale)}</h2></header>
+        {localized(services.intro, locale) ? <p>{localized(services.intro, locale)}</p> : null}
+        <div>{records(services.items).map((item, index) => <article key={index}><h3>{localized(item.name, locale)}</h3><p>{localized(item.summary, locale)}</p></article>)}</div>
+      </section>
+      <section className="tena-understand">
+        {detailImage ? <img src={detailImage.src} alt={detailImage.alt} /> : null}
+        <div><h2>{localized(benefits.title, locale)}</h2>{localized(benefits.intro, locale) ? <p>{localized(benefits.intro, locale)}</p> : null}{records(benefits.items).map((item, index) => <article key={index}><b aria-hidden="true">{["◌", "♧", "▤"][index % 3]}</b><div><h3>{localized(item.title, locale)}</h3><p>{localized(item.description, locale)}</p></div></article>)}</div>
+      </section>
+      <section className="tena-team" id="team">
+        <header><h2>{localized(providers.title, locale)}</h2></header>
+        <div>{records(providers.items).map((item, index) => {
+          const photo = contentImage(item, locale);
+          return <article key={index}>{photo ? <img src={photo.src} alt={photo.alt || localized(item.name, locale)} /> : null}<h3>{localized(item.name, locale)}</h3><p>{localized(item.role, locale)}</p></article>;
+        })}</div>
+      </section>
+      <section className="tena-process"><h2>{localized(process.title, locale)}</h2><div>{records(process.items).map((item, index) => <article key={index}><b>{String(item.step || index + 1).padStart(2, "0")}</b><div><h3>{localized(item.title, locale)}</h3><p>{localized(item.description, locale)}</p></div></article>)}</div></section>
+      {story ? <section className="tena-story">
+        {detailImage ? <img src={detailImage.src} alt="" /> : null}
+        <blockquote>{localized(testimonials.intro, locale) ? <p className="tena-label">{localized(testimonials.intro, locale)}</p> : null}“{localized(story.quote, locale)}”<cite>{localized(story.attribution, locale)}</cite></blockquote>
+      </section> : null}
+      <section className="tena-faq" id="faq"><div><h2>{localized(faq.title, locale)}</h2></div><div>{records(faq.items).map((item, index) => <details key={index}><summary><Leaf />{localized(item.question, locale)}<span aria-hidden="true">⌄</span></summary><p>{localized(item.answer, locale)}</p></details>)}</div></section>
+      <section className="tena-visit" id="contact">
+        <div><h2>{localized(locations.title, locale)}</h2>{localized(locations.intro, locale) ? <p>{localized(locations.intro, locale)}</p> : null}</div>
+        {locationImage ? <img src={locationImage.src} alt={locationImage.alt} /> : null}
+        {location ? <address><span>{localized(location.name, locale)}</span><b>{localized(location.address, locale)}</b>{localized(location.hours, locale)}{location.phone ? <a href={`tel:${String(location.phone)}`}>{String(location.phone)}</a> : null}</address> : null}
+      </section>
+      <section className="tena-final"><Leaf /><div><h2>{localized(booking.title, locale)}</h2>{localized(booking.body, locale) ? <p>{localized(booking.body, locale)}</p> : null}</div>{finalAction ? <a href={finalAction.href}>{finalAction.label}</a> : null}</section>
+    </main>
+    <footer className="tena-footer">
+      <a href={publicRoot}>{logo ? <img className="pe-brand-logo" src={logo} alt="" /> : <Leaf />}<span>{applicationName}</span></a>
+      {localized(footer.body, locale) ? <p>{localized(footer.body, locale)}</p> : null}
+      <nav aria-label={chrome.t("navLabel")}><a href="#care">{chrome.t("services")}</a><a href="#contact">{chrome.t("visit")}</a><a href="#faq">{chrome.t("questions")}</a></nav>
+      <small>© {new Date().getFullYear()} {applicationName}</small>
+    </footer>
+  </div>;
+}
+
+export function TenaBooking({ snapshot, locale, applicationName, publicRoot, rootStyle, bookingPath, mode, toggleMode }: BookingTemplateProps) {
+  const chrome = usePublicChrome(locale);
+  const design = snapshot.compiledDesign;
+  const booking = section(snapshot.sections, "booking_cta");
+  const cta = action(booking.action, locale);
+  const image = designImage(design, "section.detail");
+  const logo = brandLogo(design);
+  return <main data-pe-booking data-pe-recipe={snapshot.recipeKey} data-pe-mode={mode} className="tena-site tena-booking" style={rootStyle}>
+    <header className="tena-nav"><a href={publicRoot}>{logo ? <img className="pe-brand-logo" src={logo} alt="" /> : <Leaf />}<span>{applicationName}</span></a><button type="button" className="tena-mode" onClick={toggleMode} aria-label={chrome.modeSwitchLabel(mode)}><span aria-hidden="true">{mode === "dark" ? "☀" : "☾"}</span>{chrome.modeName(mode)}</button><a href={publicRoot}>{chrome.t("backToSite")}</a></header>
+    <section><div><h1>{localized(booking.title, locale)}</h1><p>{localized(booking.body, locale)}</p>{bookingPath && cta ? <a className="tena-button" href={bookingPath}>{cta.label}</a> : null}</div>{image ? <img src={image.src} alt={image.alt} /> : null}</section>
+  </main>;
+}

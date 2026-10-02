@@ -19,12 +19,14 @@ from frappe.utils.password import update_password
 
 from appointment.scheduler import booking, membership, workspace
 from appointment.public_experience import publish_brand
+from appointment.public_experience.recipes import get_recipe
 from appointment.public_experience.showcase_catalog import recipe_assignments, validate_showcase_catalog
+from appointment.demo import showcase_public as public_copy
 from appointment.public_experience.publisher import publish_experience
 
 VERSION = 1
-CONTENT_VERSION = 4
-PUBLIC_EXPERIENCE_VERSION = 11
+CONTENT_VERSION = 5
+PUBLIC_EXPERIENCE_VERSION = 15
 TZ = "Africa/Addis_Ababa"
 DEMO_BRAND_RECIPES = recipe_assignments()
 
@@ -39,6 +41,10 @@ PROVIDER_PORTRAITS = {
     "Yonas Assefa": "/assets/appointment/brand-experience/providers/yonas-assefa.webp",
     "Kalkidan Getachew": "/assets/appointment/brand-experience/providers/kalkidan-getachew.webp",
     "Abel Fikru": "/assets/appointment/brand-experience/providers/abel-fikru.webp",
+    "Yared Mesfin": "/assets/appointment/brand-experience/providers/yared-mesfin.webp",
+    "Bethel Asrat": "/assets/appointment/brand-experience/providers/bethel-asrat.webp",
+    "Hiwot Alemayehu": "/assets/appointment/brand-experience/providers/hiwot-alemayehu.webp",
+    "Mikiyas Tadele": "/assets/appointment/brand-experience/providers/mikiyas-tadele.webp",
 }
 
 CLIENTS = [
@@ -343,8 +349,10 @@ def hours(days, opens, closes):
     ]
 
 
-def configure(state):
+def configure(state, keys=None):
     for key, title, owner, category, description, (opens, closes), closed, services, staff, rooms in BUSINESSES:
+        if keys is not None and key not in keys:
+            continue
         days = [d for d in workspace.DAYS if d not in closed]
         email = user(state, f"{key}.owner", owner, "Solo practitioner" if key == "selam" else "Business owner")
         membership.grant_roles(email, ("Provider", "Organization Manager"))
@@ -489,6 +497,8 @@ def configure(state):
         )
         enrich_business_records(key, state["businesses"][key])
         frappe.set_user("Administrator")
+    if keys is not None:
+        return
     for key, name, persona, assignments in [
         ("bloom.reception", "Mekdes Abebe", "Location-scoped receptionist", [("bloom", "Receptionist", True)]),
         ("tena.reception", "Tigist Worku", "Clinic receptionist", [("tena", "Receptionist", False)]),
@@ -614,7 +624,7 @@ def enrich_seeded_records(state):
 
 
 def _localized(text):
-    return {"en": text}
+    return public_copy.localized(text)
 
 
 def _action(label, intent, placement="inline"):
@@ -634,23 +644,21 @@ def _public_section_rows(key, business):
     services = [frappe.get_doc("Service", service_id) for service_id in service_ids]
     providers = [frappe.get_doc("Provider", provider_id) for provider_id in business["providers"]]
     locations = [frappe.get_doc("Location", location_id) for location_id in business["locations"]]
-    days = ", ".join(business["days"])
-    closed = ", ".join(day for day in workspace.DAYS if day not in business["days"])
-    hours_text = f"Open {days}, {business['opens']:02}:00–{business['closes']:02}:00 East Africa Time; closed {closed}."
+    closed = [day for day in workspace.DAYS if day not in business["days"]]
+    opening_hours = public_copy.hours(business["days"], closed, business["opens"], business["closes"])
+    scenes = public_copy.SCENE_USE[key]
     service_items = []
     for index, service in enumerate(services):
-        service_detail = detail["services"][index]
         service_items.append(
             {
                 "id": service.name,
                 "name": _localized(service.service_name),
-                "summary": _localized(
-                    f"{service.description} {service.duration} minutes · ETB {int(service.price):,}. Preparation: {service_detail['preparation']}"
-                ),
+                "summary": _localized(service.description),
                 "durationMinutes": int(service.duration),
                 "price": float(service.price),
                 "currency": "ETB",
-                "action": _action(f"Choose {service.service_name}", "service_selection"),
+                "action": _action("Book an appointment", "service_selection"),
+                **public_copy.scene(key, scenes["services"][index]),
             }
         )
     provider_role = {
@@ -689,14 +697,21 @@ def _public_section_rows(key, business):
                 "name": _localized(location.location_name),
                 "address": _localized(address),
                 "phone": location.phone,
-                "hours": _localized(f"{hours_text} {detail['locations'][index]['arrival']}"),
+                "hours": public_copy.joined(opening_hours, _localized(detail["locations"][index]["arrival"])),
                 "directionsAction": _action("Get directions", "directions"),
+                **public_copy.scene(key, scenes["locations"][index]),
             }
         )
     process_items = [
+        {"step": index, "title": _localized(title), "description": _localized(description)}
+        for index, (title, description) in enumerate(detail["process"], start=1)
+    ] if "process" in detail else [
+        {"step": index, "title": public_copy.localized(*title), "description": public_copy.localized(*description)}
+        for index, (title, description) in enumerate(public_copy.PROCESS_STEPS[key], start=1)
+    ] if key in public_copy.PROCESS_STEPS else [
         {"step": 1, "title": _localized("Choose an appointment"), "description": _localized("Start with the service that best matches the question, goal or visit you have in mind.")},
         {"step": 2, "title": _localized("Share what you need"), "description": _localized("Use the appointment notes and the first conversation to give your provider useful context.")},
-        {"step": 3, "title": _localized("Arrive with a clear next step"), "description": _localized(detail["trust"] + " The visit ends with a practical next step to carry forward.")},
+        {"step": 3, "title": _localized("Leave with a clear next step"), "description": _localized("The visit ends with a practical next step to carry forward.")},
     ]
     benefit_items = [
         {"title": _localized(title), "description": _localized(description), "icon": f"benefit-{index + 1}"}
@@ -704,11 +719,11 @@ def _public_section_rows(key, business):
     ]
     faq_items = [{"question": _localized(question), "answer": _localized(answer)} for question, answer in detail["faq"]]
     testimonial_attribution = {
-        "selam": "Liya Tadesse · fictional demo client",
-        "meron": "Mimi Kebede · fictional demo client",
-        "bloom": "Rahel Alemu · fictional demo client",
-        "tena": "Abel Girma · fictional demo client",
-        "abugida": "Sara Yilma · fictional demo client",
+        "selam": "Liya Tadesse",
+        "meron": "Mimi Kebede",
+        "bloom": "Rahel Alemu",
+        "tena": "Abel Girma",
+        "abugida": "Sara Yilma",
     }[key]
     testimonial_quote = {
         "selam": "The first visit gave me one small routine I could actually return to.",
@@ -718,24 +733,29 @@ def _public_section_rows(key, business):
         "abugida": "Practising a situation I was about to face made the next conversation feel possible.",
     }[key]
     proof_items = [
+        {"label": _localized(label), "value": _localized(value), "detail": _localized(note)}
+        for label, value, note in detail["proof"]
+    ] if "proof" in detail else [
         {"label": _localized("Appointment style"), "value": _localized("One-to-one"), "detail": _localized("A focused visit with a named provider.")},
-        {"label": _localized("Service menu"), "value": _localized(f"{len(service_items)} options"), "detail": _localized("A small menu that is easier to compare.")},
+        {"label": _localized("Service menu"), "value": public_copy.localized(f"{len(service_items)} options", f"{len(service_items)} አማራጮች"), "detail": _localized("A small menu that is easier to compare.")},
         {"label": _localized("Addis locations"), "value": _localized(str(len(location_items))), "detail": _localized("Arrival details are shown before you book.")},
     ]
+    # One label per booking intent; sites published before this rule keep their footer label.
+    footer_book = detail["cta"].get("footer", "Book an appointment")
     section_rows = [
-        ("hero", {"eyebrow": _localized(business["name"]), "title": _localized(detail["headline"]), "subtitle": _localized(detail["description"]), "primaryAction": _action(detail["cta"]["hero_primary"], "booking_start", "primary"), "secondaryAction": _action(detail["cta"]["hero_secondary"], "faq_jump", "secondary"), "imageRole": "hero.primary"}),
+        ("hero", {"title": _localized(detail["headline"]), "subtitle": _localized(detail["description"]), "primaryAction": _action(detail["cta"]["hero_primary"], "booking_start", "primary"), "secondaryAction": _action(detail["cta"]["hero_secondary"], "faq_jump", "secondary"), "imageRole": "hero.primary"}),
         ("services", {"title": _localized({"selam": "Choose a pace that fits your week", "meron": "Start with the right atelier conversation", "bloom": "Pick the kind of hair day you want", "tena": "Select the appointment that fits the question", "abugida": "Choose a useful place to practise"}[key]), "intro": _localized(detail["audience"]), "items": service_items}),
-        ("providers", {"title": _localized({"selam": "Your movement guide", "meron": "The person at the fitting table", "bloom": "Meet the Bole Bloom team", "tena": "The scheduled consultation team", "abugida": "Your language practice partners"}[key]), "intro": _localized("Meet the people who hold the appointment with you."), "items": provider_items}),
-        ("process", {"title": _localized("A clear path into the visit"), "intro": _localized("The public site explains the shape of the appointment before the scheduler takes over."), "items": process_items}),
-        ("benefits", {"title": _localized("Small details that make the visit easier"), "items": benefit_items}),
-        ("testimonials", {"title": _localized("What the experience is meant to feel like"), "intro": _localized("Fictional demonstration feedback, included to show the complete recipe surface."), "items": [{"quote": _localized(testimonial_quote), "attribution": _localized(testimonial_attribution), "role": _localized("Fictional demonstration"), "consent": True}]}),
-        ("proof", {"title": _localized("The useful facts, at a glance"), "items": proof_items}),
-        ("locations", {"title": _localized({"selam": "A private Gerji studio", "meron": "Find the Kazanchis atelier", "bloom": "Choose your Bole room", "tena": "Arrive at CMC", "abugida": "Find the Arat Kilo rooms"}[key]), "intro": _localized("Know where to go and what to expect when you arrive."), "items": location_items}),
-        ("about", {"title": _localized({"selam": "Movement that belongs in real life", "meron": "The atelier approach", "bloom": "A calmer salon appointment", "tena": "How Tena appointments work", "abugida": "Practice for real situations"}[key]), "body": _localized(f"{detail['story']} {detail['audience']} {detail['trust']}"), "highlights": [_localized(title) for title, _ in detail["benefits"]], "imageRole": "section.detail"}),
+        ("providers", {"title": _localized({"selam": "Your movement guide", "meron": "The person at the fitting table", "bloom": "Meet the Bole Bloom team", "tena": "The scheduled consultation team", "abugida": "Your language practice partners"}[key]), "intro": public_copy.section_copy(key, "providers_intro", "Meet the people who hold the appointment with you."), "items": provider_items}),
+        ("process", {"title": public_copy.section_copy(key, "process_title", "How a visit works"), "intro": public_copy.section_copy(key, "process_intro", "What happens from booking to the end of your visit."), "items": process_items}),
+        ("benefits", {"title": public_copy.section_copy(key, "benefits_title", "Small details that make the visit easier"), "items": benefit_items}),
+        ("testimonials", {"title": public_copy.section_copy(key, "testimonials_title", "Reviews"), "intro": _localized("Fictional feedback for this demonstration site."), "items": [{"quote": _localized(testimonial_quote), "attribution": _localized(testimonial_attribution), "role": _localized("Fictional demo client"), "consent": True}]}),
+        ("proof", {"title": public_copy.section_copy(key, "proof_title", "At a glance"), "items": proof_items}),
+        ("locations", {"title": _localized({"selam": "A private Gerji studio", "meron": "Find the Kazanchis atelier", "bloom": "Choose your Bole room", "tena": "Arrive at CMC", "abugida": "Find the Arat Kilo rooms"}[key]), "intro": public_copy.section_copy(key, "locations_intro", "Know where to go and what to expect when you arrive."), "items": location_items}),
+        ("about", {"title": _localized({"selam": "Movement that belongs in real life", "meron": "The atelier approach", "bloom": "A calmer salon appointment", "tena": "How Tena appointments work", "abugida": "Practice for real situations"}[key]), "body": public_copy.joined(_localized(detail["story"]), _localized(detail["trust"])), "highlights": [_localized(title) for title, _ in detail["benefits"]], "imageRole": "section.detail", **public_copy.scene(key, scenes["about"])}),
         ("faq", {"title": _localized({"selam": "Before your first movement visit", "meron": "Before you come to the atelier", "bloom": "Before your Bole appointment", "tena": "Before a clinic consultation", "abugida": "Before your first practice"}[key]), "items": faq_items}),
-        ("contact", {"title": _localized({"selam": "Plan a quieter arrival", "meron": "Plan your fitting visit", "bloom": "Plan your studio visit", "tena": "Know before you arrive", "abugida": "Make the room easy to find"}[key]), "body": _localized(f"{detail['locations'][0]['arrival']} {hours_text} {detail['audience']}"), "phone": detail["contact"]["phone"], "email": detail["contact"]["email"], "action": _action("Call to ask a question", "call", "primary")}),
+        ("contact", {"title": _localized({"selam": "Plan a quieter arrival", "meron": "Plan your fitting visit", "bloom": "Plan your studio visit", "tena": "Know before you arrive", "abugida": "Make the room easy to find"}[key]), "body": public_copy.joined(_localized(detail["locations"][0]["arrival"]), opening_hours), "phone": detail["contact"]["phone"], "email": detail["contact"]["email"], "action": _action("Call to ask a question", "call", "primary")}),
         ("booking_cta", {"title": _localized(detail["cta"]["booking_title"]), "body": _localized(detail["cta"]["booking_subtitle"]), "action": _action(detail["cta"]["booking_primary"], "booking_start", "primary")}),
-        ("footer", {"title": _localized(business["name"]), "body": _localized(f"{detail['trust']} All demonstration details are fictional and appointments are scheduled in {TZ}."), "items": [{"label": _localized("Book an appointment"), "action": _action("Book an appointment", "booking_start", "tertiary")}, {"label": _localized("Contact the team"), "action": _action("Contact the team", "contact", "tertiary")}]}),
+        ("footer", {"title": _localized(business["name"]), "body": public_copy.joined(_localized(detail["trust"]), _localized("All details on this demonstration site are fictional.")), "items": [{"label": _localized(footer_book), "action": _action(footer_book, "booking_start", "tertiary")}, {"label": _localized("Contact the team"), "action": _action("Contact the team", "contact", "tertiary")}]}),
     ]
     return _section_rows(section_rows)
 
@@ -760,15 +780,23 @@ def _rich_release_for(site, headline, recipe_key):
         return None
     if snapshot.get("contentSchemaVersion") != 2 or len(snapshot.get("sections", [])) != 13:
         return None
+    # Releases from before the content-ownership pass lack owner photos and Amharic copy.
+    if snapshot.get("recipeVersion") != get_recipe(recipe_key).version or not sections.get("about", {}).get("image"):
+        return None
     return release
 
 
-def configure_public_experience(state):
-    """Create or upgrade one realistic, published site per seeded Business."""
+def configure_public_experience(state, keys=None, force=False):
+    """Create or upgrade one realistic, published site per seeded Business.
 
-    if state.get("public_experience_version") == PUBLIC_EXPERIENCE_VERSION and state.get("content_version") == CONTENT_VERSION:
+    With `keys`, publish only those businesses; the version markers stay as they are.
+    """
+
+    if not force and keys is None and state.get("public_experience_version") == PUBLIC_EXPERIENCE_VERSION and state.get("content_version") == CONTENT_VERSION:
         return
     for key, business in state["businesses"].items():
+        if keys is not None and key not in keys:
+            continue
         owner = business["owner"]
         organization = business["organization"]
         slug = frappe.db.get_value("Organization", organization, "slug")
@@ -792,7 +820,7 @@ def configure_public_experience(state):
             "organization": organization,
             "provider": None,
             "recipe_key": brand["recipe"],
-            "recipe_version": 1,
+            "recipe_version": get_recipe(brand["recipe"]).version,
             "brand_inputs_json": json.dumps({"motion": "calm", "presentationDensity": brand["density"], "heroAsset": brand["hero"], "detailAsset": brand["detail"]}, sort_keys=True),
             "lifecycle": "Draft",
         }
@@ -824,10 +852,13 @@ def configure_public_experience(state):
             "organization": organization,
             "brand_profile": profile.name,
             "recipe_key": brand["recipe"],
-            "recipe_version": 1,
+            "recipe_version": get_recipe(brand["recipe"]).version,
             "content_schema_version": 2,
             "default_locale": "en",
-            "enabled_locales": [{"locale": "en", "enabled": 1, "is_default": 1, "translation_status": "Complete"}],
+            "enabled_locales": [
+                {"locale": "en", "enabled": 1, "is_default": 1, "translation_status": "Complete"},
+                {"locale": "am", "enabled": 1, "is_default": 0, "translation_status": "Partial"},
+            ],
             "seo_json": json.dumps({"title": f"{business['name']} | {DEMO_CONTENT[key]['headline']}", "description": business["description"]}),
             "booking_json": json.dumps({"showPrices": True, "currency": "ETB", "timezone": TZ, "arrivalNote": DEMO_CONTENT[key]["locations"][0]["arrival"]}),
             "public_booking_enabled": 1,
@@ -848,11 +879,14 @@ def configure_public_experience(state):
         business["experience_release"] = release.name
         business["public_experience_path"] = f"/{slug}"
         frappe.set_user("Administrator")
-    state["content_version"] = CONTENT_VERSION
-    state["public_experience_version"] = PUBLIC_EXPERIENCE_VERSION
+    if keys is None:
+        state["content_version"] = CONTENT_VERSION
+        state["public_experience_version"] = PUBLIC_EXPERIENCE_VERSION
 
-def appointments(state):
+def appointments(state, keys=None):
     anchor = getdate(state["anchor_date"])
+    # Request ids must stay unique in the journal, so added businesses get their own series.
+    series = "rich-demo-v1-booking" if keys is None else "rich-demo-v1-added-booking"
 
     # A process-local clock recreates historical bookings through the same validators.
     # No HTTP handler, site clock or product rule is changed.
@@ -864,7 +898,9 @@ def appointments(state):
 
     counter = 0
     with patch.object(booking, "datetime", HistoricalClock):
-        for business in state["businesses"].values():
+        for key, business in state["businesses"].items():
+            if keys is not None and key not in keys:
+                continue
             frappe.set_user(business["owner"])
             for offset in range(-89, 31):
                 day = anchor + timedelta(days=offset)
@@ -874,6 +910,8 @@ def appointments(state):
                     choices = [e for e in business["offerings"] if e["provider"] == provider]
                     # Busy anchor days, quieter afternoons and intentionally empty days.
                     count = 4 if offset in (-1, 0, 1, 2) else (1 if offset % 3 else 2)
+                    # Sessions longer than the two-hour slot spacing must not overlap the next one.
+                    busy_until = None
                     for slot in range(count):
                         offering = choices[(slot + offset) % len(choices)]
                         start = datetime.combine(day, datetime.min.time()) + timedelta(
@@ -882,6 +920,9 @@ def appointments(state):
                         end = start + timedelta(minutes=offering["duration"])
                         if end.hour > business["closes"] or (end.hour == business["closes"] and end.minute):
                             continue
+                        if busy_until and start < busy_until:
+                            continue
+                        busy_until = end
                         customer_index = (counter // 3) % 20 if counter % 3 == 0 else counter % len(CLIENTS)
                         customer = CLIENTS[customer_index]
                         result = booking.book(
@@ -890,7 +931,7 @@ def appointments(state):
                             end.isoformat() + "+03:00",
                             customer,
                             f"guest{customer_index + 1}@example.test",
-                            f"rich-demo-v1-booking-{counter:06}",
+                            f"{series}-{counter:06}",
                             notes="",
                         )
                         name = remember(state, "Appointment", result["booking_id"])
@@ -909,6 +950,7 @@ def appointments(state):
                                 (start + timedelta(minutes=30)).strftime("%H:%M"),
                             )
                             state["rescheduled"].append(name)
+                            busy_until = end + timedelta(minutes=30)
                         elif offset < 0:
                             doc.status = "No Show" if counter % 11 == 0 else "Completed"
                             doc.save(ignore_permissions=True)
@@ -944,8 +986,10 @@ def seed(base_url="http://127.0.0.174:41960", anchor_date=None):
             if needs_content_upgrade:
                 enrich_seeded_records(state)
             if needs_public_upgrade or needs_content_upgrade:
-                configure_public_experience(state)
-            if needs_phase_write or needs_content_upgrade or needs_public_upgrade:
+                # enrich_seeded_records already marked the content current; republish regardless.
+                configure_public_experience(state, force=True)
+            added = add_missing_businesses(state, base_url)
+            if needs_phase_write or needs_content_upgrade or needs_public_upgrade or added:
                 for dt, name in list(state["created"]):
                     for version in frappe.get_all("Version", filters={"ref_doctype": dt, "docname": name}, pluck="name"):
                         remember(state, "Version", version)
@@ -953,11 +997,7 @@ def seed(base_url="http://127.0.0.174:41960", anchor_date=None):
                 frappe.db.commit()
             return summary(state)
         # Refuse collisions before any role/password or business changes.
-        for key, title, *_ in BUSINESSES:
-            if frappe.db.exists("Organization", {"organization_name": title}) or frappe.db.exists(
-                "Organization", {"slug": f"{key}-studio"}
-            ):
-                frappe.throw(f"Pre-existing demo business {title}; refusing to adopt it.")
+        refuse_collisions([key for key, *_ in BUSINESSES])
         state = dict(
             version=VERSION,
             content_version=CONTENT_VERSION,
@@ -984,12 +1024,7 @@ def seed(base_url="http://127.0.0.174:41960", anchor_date=None):
             configure(state)
             configure_public_experience(state)
             appointments(state)
-            for persona in state["personas"]:
-                frappe.set_user(persona["email"])
-                context = membership.context()
-                persona["landing"] = context["landing"]
-                persona["url"] = base_url + context["landing"]
-            frappe.set_user("Administrator")
+            record_landings(state["personas"], base_url)
             for dt, name in list(state["created"]):
                 for version in frappe.get_all("Version", filters={"ref_doctype": dt, "docname": name}, pluck="name"):
                     remember(state, "Version", version)
@@ -1003,35 +1038,156 @@ def seed(base_url="http://127.0.0.174:41960", anchor_date=None):
         return summary(state)
 
 
+def add_missing_businesses(state, base_url):
+    """Add businesses that joined BUSINESSES after this journal was written.
+
+    Only the missing keys are created, published and given history; the
+    businesses already in the journal are not touched. Returns the added keys.
+    """
+    keys = [key for key, *_ in BUSINESSES if key not in state["businesses"]]
+    if not keys:
+        return []
+    refuse_collisions(keys)
+    known = len(state["personas"])
+    try:
+        configure(state, keys)
+        configure_public_experience(state, keys)
+        appointments(state, keys)
+        record_landings(state["personas"][known:], base_url)
+    except Exception:
+        frappe.db.rollback()
+        raise
+    return keys
+
+
+def refuse_collisions(keys):
+    for key, title, *_ in BUSINESSES:
+        if key not in keys:
+            continue
+        if frappe.db.exists("Organization", {"organization_name": title}) or frappe.db.exists(
+            "Organization", {"slug": f"{key}-studio"}
+        ):
+            frappe.throw(f"Pre-existing demo business {title}; refusing to adopt it.")
+
+
+def record_landings(personas, base_url):
+    for persona in personas:
+        frappe.set_user(persona["email"])
+        context = membership.context()
+        persona["landing"] = context["landing"]
+        persona["url"] = base_url + context["landing"]
+    frappe.set_user("Administrator")
+
+
+def retire_businesses(keys, dry_run=True):
+    """Remove whole demo businesses that this journal created.
+
+    Only journal-owned records are touched: a record is retired when it is the
+    business's organization or user, or links to an already retired record.
+    Link checks stay enabled, so anything outside the journal that depends on a
+    retired record blocks the removal. Run with ``dry_run=True`` first.
+    """
+    if isinstance(keys, str):
+        keys = json.loads(keys) if keys.startswith("[") else [keys]
+    with locked():
+        state = load_state()
+        unknown = [key for key in keys if key not in state["businesses"]]
+        if unknown:
+            frappe.throw(f"Not in this journal: {', '.join(unknown)}")
+        retired = _retired_entries(state, keys)
+        counts = {}
+        for dt, _name in retired:
+            counts[dt] = counts.get(dt, 0) + 1
+        if dry_run:
+            return {"dry_run": True, "keys": keys, "records": counts}
+        try:
+            _delete_journal_entries(retired)
+            _forget_businesses(state, keys, retired)
+            frappe.db.commit()
+        except Exception:
+            frappe.db.rollback()
+            raise
+        write_state(state)
+        return {"dry_run": False, "keys": keys, "records": counts}
+
+
+def _retired_entries(state, keys):
+    """Journal entries reachable from the businesses' organizations and users."""
+    marks = set()
+    for key in keys:
+        business = state["businesses"][key]
+        marks.update({business["organization"], business["owner"]})
+    marks.update(p["email"] for p in state["personas"] if p["email"].split(".", 1)[0] in keys)
+    pending = [entry for entry in state["created"] if frappe.db.exists(entry[0], entry[1])]
+    rows = {tuple(entry): _field_values(*entry) for entry in pending}
+    retired = set()
+    grew = True
+    while grew:
+        grew = False
+        for entry, values in rows.items():
+            if entry not in retired and (entry[1] in marks or values & marks):
+                retired.add(entry)
+                marks.add(entry[1])
+                grew = True
+    return [list(entry) for entry in retired]
+
+
+def _field_values(doctype, name):
+    row = frappe.db.get_value(doctype, name, "*", as_dict=True) or {}
+    skip = {"name", "owner", "modified_by", "creation", "modified"}
+    return {value for field, value in row.items() if field not in skip and isinstance(value, str) and value}
+
+
+def _delete_journal_entries(entries):
+    for dt, name in sorted(entries, key=lambda item: CLEANUP_PRIORITY.get(item[0], 4)):
+        if not frappe.db.exists(dt, name):
+            continue
+        if dt in {"Version", "Public Experience Outbox", "Experience Release", "Brand Revision"}:
+            frappe.db.delete(dt, {"name": name})
+        else:
+            frappe.delete_doc(dt, name, ignore_permissions=True, delete_permanently=True)
+
+
+def _forget_businesses(state, keys, retired):
+    gone = {tuple(entry) for entry in retired}
+    names = {name for _dt, name in retired}
+    state["created"] = [entry for entry in state["created"] if tuple(entry) not in gone]
+    state["personas"] = [p for p in state["personas"] if p["email"] not in names]
+    for key in keys:
+        state["businesses"].pop(key, None)
+    for field in ("appointments", "rescheduled"):
+        if isinstance(state.get(field), list):
+            state[field] = [row for row in state[field] if _row_name(row) not in names]
+
+
+def _row_name(row):
+    return row.get("name") if isinstance(row, dict) else row
+
+
+# Link checks intentionally remain enabled: later user-created dependents block cleanup.
+CLEANUP_PRIORITY = {
+    "Version": 0,
+    "Public Experience Outbox": 1,
+    "Experience Release": 2,
+    "Public Site": 3,
+    "Brand Revision": 4,
+    "Brand Profile": 5,
+    "Appointment": 6,
+    "Business Membership": 7,
+    "EventType": 8,
+    "Service": 9,
+    "Provider": 10,
+    "Location": 11,
+    "Organization": 12,
+    "User": 13,
+}
+
+
 def cleanup():
     with locked():
         state = load_state()
-        # Link checks intentionally remain enabled: later user-created dependents block cleanup.
-        priority = {
-            "Version": 0,
-            "Public Experience Outbox": 1,
-            "Experience Release": 2,
-            "Public Site": 3,
-            "Brand Revision": 4,
-            "Brand Profile": 5,
-            "Appointment": 6,
-            "Business Membership": 7,
-            "EventType": 8,
-            "Service": 9,
-            "Provider": 10,
-            "Location": 11,
-            "Organization": 12,
-            "User": 13,
-        }
         try:
-            for dt, name in sorted(state["created"], key=lambda item: priority.get(item[0], 4)):
-                if frappe.db.exists(dt, name):
-                    if dt == "Version":
-                        frappe.db.delete("Version", {"name": name})
-                    elif dt in {"Public Experience Outbox", "Experience Release", "Brand Revision"}:
-                        frappe.db.delete(dt, {"name": name})
-                    else:
-                        frappe.delete_doc(dt, name, ignore_permissions=True, delete_permanently=True)
+            _delete_journal_entries(state["created"])
             frappe.db.commit()
         except Exception:
             frappe.db.rollback()

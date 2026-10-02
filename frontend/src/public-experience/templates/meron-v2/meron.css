@@ -1,0 +1,214 @@
+/* Meron Atelier v2. Chalk grey and navy wool; a garment label over three swatches.
+   Radius system: 0 everywhere. Chalk blue fills the fitting slips only. */
+.mr {
+  --mr-ink: var(--pe-color-text, #1f2126);
+  --mr-muted: var(--pe-color-text-muted, #555861);
+  --mr-canvas: var(--pe-color-canvas, #f1f1ef);
+  --mr-surface: var(--pe-color-surface, #fbfbfa);
+  --mr-line: var(--pe-color-border, #cfd1d4);
+  --mr-navy: var(--pe-color-primary, #1f2e4d);
+  --mr-on-navy: var(--pe-color-on-primary, #ffffff);
+  --mr-chalk: var(--pe-color-accent, #c9d6ea);
+  --mr-chalk-ink: #1f2126;
+  --mr-focus: var(--pe-color-focus, #2b6cb0);
+  --mr-gutter: clamp(16px, 4vw, 56px);
+  --mr-bar: 76px;
+  min-height: 100dvh;
+  color: var(--mr-ink);
+  background: var(--mr-canvas);
+  font-family: var(--pe-font-body, "Meron Garamond", serif);
+  font-size: 1.1875rem;
+  line-height: 1.6;
+}
+.mr[data-pe-mode="dark"] { color-scheme: dark; }
+.mr *, .mr *::before, .mr *::after { box-sizing: border-box; border-radius: 0; }
+.mr img { display: block; max-width: 100%; }
+.mr a:not(.mr-btn) { color: inherit; }
+.mr h1, .mr h2, .mr h3 { margin: 0; font-family: var(--pe-font-display, "Meron Garamond", serif); font-weight: 500; text-wrap: balance; }
+.mr h1 { font-size: clamp(2.5rem, 1.4rem + 3.4vw, 4.5rem); line-height: 1.04; letter-spacing: -0.01em; }
+.mr h2 { font-size: clamp(2rem, 1.3rem + 1.9vw, 3.125rem); line-height: 1.08; }
+.mr h3 { font-size: 1.5rem; line-height: 1.2; }
+.mr p { margin: 0; }
+.mr :focus-visible { outline: var(--pe-surface-focus-ring, 3px) solid var(--mr-focus); outline-offset: 3px; }
+.mr-wrap { width: 100%; max-width: var(--pe-page-width, 1200px); margin-inline: auto; padding-inline: var(--mr-gutter); }
+.mr-muted { color: var(--mr-muted); }
+.mr-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.mr-skip { position: absolute; left: 16px; top: -80px; z-index: 10; padding: 10px 16px; color: var(--mr-on-navy); background: var(--mr-navy); }
+.mr-skip:focus { top: 12px; }
+
+.mr-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 50px; padding: 0 26px; color: var(--mr-on-navy); background: var(--mr-navy); font-size: 1.0625rem; font-weight: 600; text-decoration: none; white-space: nowrap; }
+.mr-btn:hover { background: color-mix(in srgb, var(--mr-navy) 85%, var(--mr-ink)); }
+.mr-link { font-weight: 600; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; }
+.mr-mode { min-height: 40px; padding: 0 14px; border: 1px solid var(--mr-line); color: var(--mr-ink); background: transparent; font: inherit; font-size: 1rem; cursor: pointer; }
+.mr-mode:hover { border-color: var(--mr-ink); }
+
+.mr-bar { border-bottom: 1px solid var(--mr-line); }
+.mr-bar-inner { display: flex; align-items: center; gap: 28px; min-height: var(--mr-bar); }
+.mr-brand { display: inline-flex; align-items: center; gap: 10px; margin-right: auto; min-width: 0; font-family: var(--pe-font-display, inherit); font-size: 1.375rem; font-weight: 500; text-decoration: none; }
+.mr-brand img { width: 36px; height: 36px; object-fit: contain; }
+.mr-nav { display: flex; gap: 28px; }
+.mr-nav a { text-decoration: none; }
+.mr-nav a:hover, .mr-back:hover { text-decoration: underline; text-underline-offset: 6px; }
+.mr-bar-book { min-height: 44px; padding: 0 18px; }
+
+/* Hero: centered label over a triptych, inside the first view */
+.mr-hero { display: flex; flex-direction: column; gap: clamp(24px, 4vh, 48px); min-height: calc(100dvh - var(--mr-bar)); padding-block: clamp(28px, 5vh, 64px) clamp(24px, 4vh, 48px); }
+.mr-hero-copy { display: grid; gap: 20px; justify-items: center; text-align: center; }
+.mr-hero-copy h1 { max-width: 22ch; }
+.mr-lede { max-width: 56ch; color: var(--mr-muted); }
+.mr-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px 28px; margin-top: 6px; }
+.mr-triptych { flex: 1 1 auto; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.7fr) minmax(0, 1fr); gap: clamp(12px, 1.6vw, 24px); min-height: 240px; }
+.mr-triptych img { width: 100%; height: 100%; min-height: 240px; max-height: 480px; object-fit: cover; }
+.mr-triptych-single { grid-template-columns: minmax(0, 1fr); }
+
+.mr-section { padding-block: clamp(64px, 9vw, 120px); border-top: 1px solid var(--mr-line); }
+.mr-head { display: grid; gap: 14px; max-width: 60ch; margin-bottom: 40px; }
+.mr-head p { color: var(--mr-muted); }
+
+/* Services: fitting slips */
+.mr-slips { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: clamp(16px, 2vw, 28px); }
+.mr-slip { display: grid; gap: 16px; align-content: start; padding: clamp(24px, 3vw, 40px); color: var(--mr-chalk-ink); background: var(--mr-chalk); }
+.mr-slip h3 { font-size: 1.75rem; }
+.mr-slip h3 a { text-decoration: none; }
+.mr-slip h3 a:hover { text-decoration: underline; text-underline-offset: 6px; }
+.mr-slip dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 8px 0 0; padding-top: 16px; border-top: 1px solid color-mix(in srgb, var(--mr-chalk-ink) 30%, transparent); font-variant-numeric: tabular-nums; }
+.mr-slip dt { font-size: 0.9375rem; }
+.mr-slip dd { margin: 0; font-size: 1.375rem; font-weight: 600; }
+
+/* Story: a text split */
+.mr-story-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 32px clamp(32px, 6vw, 96px); align-items: start; }
+.mr-story-text { display: grid; gap: 22px; }
+.mr-notes { display: grid; margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--mr-ink); }
+.mr-notes li { display: grid; gap: 6px; padding: 20px 0; border-bottom: 1px solid var(--mr-line); }
+.mr-notes h3 { font-size: 1.3125rem; font-weight: 600; }
+.mr-notes p { color: var(--mr-muted); font-size: 1.0625rem; }
+
+/* Founder: portrait and text */
+.mr-maker { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 96px); align-items: center; }
+.mr-maker + .mr-maker { margin-top: 56px; }
+.mr-maker img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+.mr-maker > div { display: grid; gap: 16px; }
+.mr-maker h3 { font-size: 2rem; }
+.mr-role { font-style: italic; }
+
+/* Process: a measuring tape */
+.mr-tape { position: relative; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: 32px; margin: 0; padding: 28px 0 0; list-style: none; }
+.mr-tape::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 14px; border-top: 1px solid var(--mr-ink); background: repeating-linear-gradient(90deg, var(--mr-ink) 0 1px, transparent 1px 12px) top / 100% 7px no-repeat, repeating-linear-gradient(90deg, var(--mr-ink) 0 1px, transparent 1px 60px) top / 100% 14px no-repeat; }
+.mr-tape li { display: grid; gap: 10px; align-content: start; }
+.mr-tape-mark { font-family: var(--pe-font-display, inherit); font-size: 2.25rem; line-height: 1; font-variant-numeric: tabular-nums; color: var(--mr-navy); }
+.mr-tape p { color: var(--mr-muted); font-size: 1.0625rem; }
+
+/* Review: one italic quote, set wide */
+.mr-review figure { margin: 0; }
+.mr-review blockquote { max-width: 28ch; margin: 0; font-family: var(--pe-font-display, inherit); font-size: clamp(2rem, 1.2rem + 2.6vw, 3.75rem); font-style: italic; line-height: 1.12; }
+.mr-review blockquote p::before { content: "\201C"; }
+.mr-review blockquote p::after { content: "\201D"; }
+.mr-review figcaption { display: grid; gap: 2px; margin-top: 28px; }
+.mr-review figcaption span { color: var(--mr-muted); }
+
+/* Questions: one column */
+.mr-faq { max-width: 860px; }
+.mr-faq h2 { margin-bottom: 28px; }
+.mr-faq details { border-top: 1px solid var(--mr-line); }
+.mr-faq details:last-child { border-bottom: 1px solid var(--mr-line); }
+.mr-faq summary { padding: 20px 0; font-size: 1.25rem; cursor: pointer; }
+.mr-faq details p { max-width: 64ch; padding-bottom: 22px; color: var(--mr-muted); }
+
+/* Visit: a label block over a wide photograph */
+.mr-label { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 24px clamp(32px, 6vw, 96px); margin-bottom: 40px; }
+.mr-label dl { margin: 0; border-top: 1px solid var(--mr-ink); }
+.mr-label dl > div { display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--mr-line); }
+.mr-label dt { color: var(--mr-muted); font-size: 1rem; }
+.mr-label dd { display: grid; gap: 4px; margin: 0; overflow-wrap: anywhere; }
+.mr-label dd a { text-decoration: underline; text-underline-offset: 5px; }
+.mr-visit-photo { width: 100%; aspect-ratio: 21 / 9; object-fit: cover; }
+
+.mr-band { padding-block: clamp(56px, 8vw, 104px); border-top: 1px solid var(--mr-line); background: var(--mr-surface); }
+.mr-band-inner { display: grid; gap: 18px; justify-items: center; text-align: center; }
+.mr-band-inner h2 { max-width: 24ch; }
+.mr-band-inner p { max-width: 56ch; color: var(--mr-muted); }
+
+.mr-footer { padding-block: 40px; border-top: 1px solid var(--mr-line); }
+.mr-footer-inner { display: grid; gap: 10px; }
+.mr-footer-name { font-family: var(--pe-font-display, inherit); font-size: 1.5rem; }
+.mr-footer small { color: var(--mr-muted); }
+
+.mr-handoff-main { display: grid; gap: clamp(32px, 5vw, 56px); padding-block: clamp(32px, 6vw, 80px); }
+
+@media (max-width: 1024px) {
+  .mr-nav { display: none; }
+  .mr-story-grid, .mr-maker, .mr-label { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 720px) {
+  .mr { font-size: 1.0625rem; --mr-bar: 60px; }
+  .mr-bar-inner { gap: 12px; }
+  .mr-brand { font-size: 1.125rem; }
+  .mr-brand span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mr-bar-book { display: none; }
+  .mr-actions .mr-btn { width: 100%; }
+  .mr-triptych { grid-template-columns: minmax(0, 1fr); }
+  .mr-triptych:not(.mr-triptych-single) img:not(:nth-child(2)) { display: none; }
+  .mr-triptych-single img, .mr-triptych img { max-height: 300px; }
+  .mr-label dl > div { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .mr-visit-photo { aspect-ratio: 4 / 3; }
+  .mr-band-inner .mr-btn { width: 100%; white-space: normal; }
+}
+
+/* Motion (design-taste v2). Character: measured, like a fitting.
+   Entrance: the headline settles; the triptych unfolds from the centre panel.
+   Reveal: a chalk line draws over each heading, then the content fades in.
+   Signature: the measuring tape ticks out from left to right and the marks drop in order.
+   Slips answer the pointer with a tailor's tacking stitch. */
+.mr { --mr-ease: cubic-bezier(.4, 0, .2, 1); --mr-dur: 520ms; }
+.mr[data-motion="calm"] { --mr-dur: 300ms; }
+
+.mr-bar { position: sticky; top: 0; z-index: 20; background: var(--mr-canvas); transition: box-shadow 260ms var(--mr-ease); }
+.mr-bar-inner { transition: min-height 260ms var(--mr-ease); }
+.mr-bar[data-scrolled="true"] { box-shadow: 0 6px 18px color-mix(in srgb, var(--mr-navy) 10%, transparent); }
+.mr-bar[data-scrolled="true"] .mr-bar-inner { min-height: calc(var(--mr-bar) - 16px); }
+
+@keyframes mr-settle { from { opacity: 0; transform: translateY(10px); } }
+@keyframes mr-unfold { from { opacity: 0; transform: translateX(calc(var(--side, 0) * -40%)) scale(0.96); } }
+.mr-hero-copy > * { animation: mr-settle var(--mr-dur) var(--mr-ease) both; }
+.mr-hero-copy > :nth-child(2) { animation-delay: 90ms; }
+.mr-hero-copy > :nth-child(3) { animation-delay: 180ms; }
+.mr-triptych img { animation: mr-unfold calc(var(--mr-dur) * 1.6) var(--mr-ease) both; animation-delay: calc(240ms + (var(--side, 0) * var(--side, 0)) * 220ms); }
+.mr-triptych img:nth-child(2) { position: relative; z-index: 1; }
+.mr[data-motion="calm"] .mr-triptych img { animation-name: mr-settle; }
+
+.mr [data-reveal] { transition: opacity var(--mr-dur) var(--mr-ease), transform var(--mr-dur) var(--mr-ease); transition-delay: calc(var(--i, 0) * 100ms); }
+.mr[data-motion-ready] [data-reveal]:not([data-revealed]) { opacity: 0; transform: translateY(12px); }
+.mr-head { position: relative; padding-top: 18px; }
+.mr-head::before { content: ""; position: absolute; top: 0; left: 0; width: 72px; height: 2px; background: var(--mr-navy); transform-origin: left; transition: transform calc(var(--mr-dur) * 1.4) var(--mr-ease) 120ms; }
+.mr[data-motion-ready] .mr-head:not([data-revealed])::before { transform: scaleX(0); }
+.mr[data-motion-ready] .mr-head[data-reveal]:not([data-revealed]) { opacity: 1; transform: none; }
+.mr[data-motion-ready] .mr-head:not([data-revealed]) > * { opacity: 0; }
+.mr-head > * { transition: opacity var(--mr-dur) var(--mr-ease) 220ms; }
+
+/* Signature: the tape measures out, then the step marks drop in turn */
+.mr-tape::before { transform-origin: left; transition: transform calc(var(--mr-dur) * 2.2) var(--mr-ease); }
+.mr-tape li { transition: opacity var(--mr-dur) var(--mr-ease), transform var(--mr-dur) var(--mr-ease); transition-delay: calc(400ms + var(--i, 0) * 180ms); }
+.mr[data-motion-ready] .mr-tape[data-reveal]:not([data-revealed]) { opacity: 1; transform: none; }
+.mr[data-motion-ready] .mr-tape:not([data-revealed])::before { transform: scaleX(0); }
+.mr[data-motion-ready] .mr-tape:not([data-revealed]) li { opacity: 0; transform: translateY(-10px); }
+
+/* Micro-interactions */
+.mr .mr-slip { outline: 2px dashed transparent; outline-offset: -14px; transition: outline-color 240ms var(--mr-ease), outline-offset 240ms var(--mr-ease), opacity var(--mr-dur) var(--mr-ease) calc(var(--i, 0) * 100ms), transform var(--mr-dur) var(--mr-ease) calc(var(--i, 0) * 100ms); }
+.mr-slip:hover, .mr-slip:focus-within { outline-color: color-mix(in srgb, var(--mr-chalk-ink) 55%, transparent); outline-offset: -10px; }
+.mr-btn { position: relative; transition: background-color 200ms var(--mr-ease), transform 140ms var(--mr-ease), letter-spacing 200ms var(--mr-ease); }
+.mr-btn:active { transform: scale(0.97); }
+.mr-link, .mr-slip h3 a, .mr-label a { text-decoration: none; background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat; padding-bottom: 3px; transition: background-size 300ms var(--mr-ease); }
+.mr-link:hover, .mr-slip h3 a:hover, .mr-label a:hover, .mr-link:focus-visible { background-size: 40% 1px; }
+.mr-nav a { background: linear-gradient(currentColor, currentColor) 50% 100% / 0 1px no-repeat; padding-bottom: 4px; transition: background-size 300ms var(--mr-ease); }
+.mr-nav a:hover, .mr-nav a:focus-visible { text-decoration: none; background-size: 100% 1px; }
+.mr-mode { transition: border-color 200ms var(--mr-ease), transform 140ms var(--mr-ease); }
+.mr-mode:active { transform: scale(0.96); }
+.mr-faq summary { transition: color 200ms var(--mr-ease); }
+.mr-faq summary:hover { color: var(--mr-navy); }
+.mr-faq details[open] p { animation: mr-settle 320ms var(--mr-ease) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mr *, .mr *::before, .mr *::after { animation: none !important; transition: none !important; }
+  .mr [data-reveal], .mr [data-reveal] *, .mr-tape li { opacity: 1 !important; transform: none !important; }
+  .mr-head::before, .mr-tape::before { transform: none !important; }
+}

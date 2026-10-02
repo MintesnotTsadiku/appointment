@@ -1496,5 +1496,26 @@
       "customize": "አብጅ",
       "editingHint": "ካርዶቹን በመያዣቸው ይጎትቱ፣ ከታችኛው ቀኝ ጥግ መጠናቸውን ይቀይሩ፣ ወይም የእያንዳንዱን ካርድ ምናሌ ይጠቀሙ። ሲጨርሱ ያስቀምጡ።"
     }
+  },
+  "publicSite": {
+    "navLabel": "የድረ-ገጹ ክፍሎች",
+    "services": "አገልግሎቶች",
+    "team": "ቡድን",
+    "visit": "ይጎብኙ",
+    "questions": "ጥያቄዎች",
+    "backToSite": "ወደ ድረ-ገጹ ይመለሱ",
+    "dark": "ጨለማ",
+    "light": "ብሩህ",
+    "switchToDark": "ወደ ጨለማ ገጽታ ይቀይሩ",
+    "switchToLight": "ወደ ብሩህ ገጽታ ይቀይሩ",
+    "skip": "ወደ ይዘቱ ይዝለሉ",
+    "minutes": "{count} ደቂቃ",
+    "duration": "ቆይታ",
+    "price": "ዋጋ",
+    "phone": "ስልክ",
+    "email": "ኢሜይል",
+    "hours": "የሥራ ሰዓት",
+    "address": "አድራሻ",
+    "step": "ደረጃ {count}"
   }
 }
