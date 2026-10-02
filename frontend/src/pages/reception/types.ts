@@ -10,6 +10,8 @@ export interface Appointment {
   client_name: string;
   client_email: string;
   client_phone: string;
+  /** Customer Profile ID, when the booking is linked. */
+  customer?: string | null;
   service: string;
   service_name: string;
   provider: string;

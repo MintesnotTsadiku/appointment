@@ -1,0 +1,262 @@
+# Manager: list, search, profile. Desktop English also creates two QA customers, merges them and books the survivor through the picker.
+app: appointment
+base_url: http://127.0.0.84:44430
+default_role: Staff
+auth:
+  type: frappe_session
+  username: bloom.manager@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment-customer-profiles
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.customer_qa_fixtures.browser_values
+scenarios:
+- id: cp_manager_en_desktop
+  title: Manager works with customers (en, desktop)
+  viewport: &id004
+    width: 1440
+    height: 900
+  checks: []
+  routes: &id001
+  - path: /customers
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="customers-list"]'
+    - type: no_blank_page
+  actions:
+  - action: fill
+    selector: '[data-qa="customers-search"]'
+    value: '{qa_cp_search}'
+  - action: wait_for
+    selector: :nth-match([data-qa="customer-row"], 1)
+  - action: screenshot
+    name: cp_manager_en_desktop-1-list.png
+    full_page: true
+  - action: click
+    selector: :nth-match([data-qa="customer-row"], 1)
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="customer-history"]'
+  - action: screenshot
+    name: cp_manager_en_desktop-2-profile.png
+    full_page: true
+  - action: open_url
+    url: /customers
+  - action: click
+    selector: '[data-qa="customers-new"]'
+  - action: fill
+    selector: '[data-qa="new-customer-name"]'
+    value: QA Merge Target
+  - action: fill
+    selector: '[data-qa="new-customer-phone"]'
+    value: 0911 000 201
+  - action: click
+    selector: '[data-qa="customer-new-submit"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.customers.save
+      method: POST
+      status: 200
+    - type: url_contains
+      value: /customers/CUS-
+    - type: text_contains
+      selector: '[data-qa="customer-heading"]'
+      value: QA Merge Target
+  - action: open_url
+    url: /customers
+  - action: click
+    selector: '[data-qa="customers-new"]'
+  - action: fill
+    selector: '[data-qa="new-customer-name"]'
+    value: QA Merge Source
+  - action: fill
+    selector: '[data-qa="new-customer-phone"]'
+    value: 0911 000 202
+  - action: click
+    selector: '[data-qa="customer-new-submit"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.customers.save
+      method: POST
+      status: 200
+    - type: url_contains
+      value: /customers/CUS-
+    - type: text_contains
+      selector: '[data-qa="customer-heading"]'
+      value: QA Merge Source
+  - action: fill
+    selector: '[data-qa="customer-notes"]'
+    value: 'QA note: prefers mornings'
+  - action: click
+    selector: '[data-qa="customer-save"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.customers.save
+      method: POST
+      status: 200
+  - action: click
+    selector: '[data-qa="customer-merge"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="customer-merge-dialog"]'
+  - action: fill
+    selector: '[data-qa="customer-merge-target-search"]'
+    value: QA Merge Target
+  - action: wait_for
+    selector: :nth-match([data-qa="customer-merge-target-option"], 1)
+  - action: click
+    selector: :nth-match([data-qa="customer-merge-target-option"], 1)
+  - action: wait_for
+    selector: '[data-qa="customer-merge-count"]'
+  - action: screenshot
+    name: cp_manager_en_desktop-3-merge.png
+  - action: click
+    selector: '[data-qa="customer-merge-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.customers.merge
+      method: POST
+      status: 200
+    - type: text_contains
+      selector: '[data-qa="customer-heading"]'
+      value: QA Merge Target
+  - action: screenshot
+    name: cp_manager_en_desktop-4-merged.png
+    full_page: true
+  - action: open_url
+    url: /reception
+  - action: wait_for
+    selector: '[data-qa="desk-next-day"]'
+  - action: click
+    selector: '[data-qa="desk-next-day"]'
+  - action: click
+    selector: '[data-qa="reception-new-appointment"]'
+  - action: fill
+    selector: '[data-qa="create-customer-picker-search"]'
+    value: QA Merge Target
+  - action: wait_for
+    selector: :nth-match([data-qa="create-customer-picker-option"], 1)
+  - action: click
+    selector: :nth-match([data-qa="create-customer-picker-option"], 1)
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="create-customer-picker-linked"]'
+  - action: select
+    selector: '#create-appointment-service'
+    value: '{qa_cp_service}'
+  - action: select
+    selector: '#create-appointment-provider'
+    value: '{qa_cp_provider}'
+  - action: select
+    selector: '#create-appointment-location'
+    value: '{qa_cp_location}'
+  - action: fill
+    selector: '[data-qa="create-time-input"]'
+    value: '{qa_cp_time}'
+  - action: screenshot
+    name: cp_manager_en_desktop-5-booking-picker.png
+  - action: click
+    selector: '[data-qa="appointment-create-submit"]'
+    assertions:
+    - type: network_request
+      url_contains: create_desk_appointment
+      method: POST
+      status: 200
+  - action: screenshot
+    name: cp_manager_en_desktop-6-booked.png
+  - &id002
+    action: get_console_errors
+  - &id003
+    action: get_network_errors
+- id: cp_manager_en_mobile
+  title: Manager works with customers (en, mobile)
+  viewport: &id006
+    width: 390
+    height: 844
+  checks: []
+  routes: *id001
+  actions:
+  - action: fill
+    selector: '[data-qa="customers-search"]'
+    value: '{qa_cp_search}'
+  - action: wait_for
+    selector: :nth-match([data-qa="customer-row"], 1)
+  - action: screenshot
+    name: cp_manager_en_mobile-1-list.png
+    full_page: true
+  - action: click
+    selector: :nth-match([data-qa="customer-row"], 1)
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="customer-history"]'
+  - action: screenshot
+    name: cp_manager_en_mobile-2-profile.png
+    full_page: true
+  - *id002
+  - *id003
+- id: cp_manager_am_desktop
+  title: Manager works with customers (am, desktop)
+  viewport: *id004
+  checks: []
+  routes: *id001
+  actions:
+  - &id005
+    action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation
+      status: 200
+  - action: fill
+    selector: '[data-qa="customers-search"]'
+    value: '{qa_cp_search}'
+  - action: wait_for
+    selector: :nth-match([data-qa="customer-row"], 1)
+  - action: screenshot
+    name: cp_manager_am_desktop-1-list.png
+    full_page: true
+  - action: click
+    selector: :nth-match([data-qa="customer-row"], 1)
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="customer-history"]'
+  - action: screenshot
+    name: cp_manager_am_desktop-2-profile.png
+    full_page: true
+  - *id005
+  - *id002
+  - *id003
+- id: cp_manager_am_mobile
+  title: Manager works with customers (am, mobile)
+  viewport: *id006
+  checks: []
+  routes: *id001
+  actions:
+  - *id005
+  - action: fill
+    selector: '[data-qa="customers-search"]'
+    value: '{qa_cp_search}'
+  - action: wait_for
+    selector: :nth-match([data-qa="customer-row"], 1)
+  - action: screenshot
+    name: cp_manager_am_mobile-1-list.png
+    full_page: true
+  - action: click
+    selector: :nth-match([data-qa="customer-row"], 1)
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="customer-history"]'
+  - action: screenshot
+    name: cp_manager_am_mobile-2-profile.png
+    full_page: true
+  - *id005
+  - *id002
+  - *id003

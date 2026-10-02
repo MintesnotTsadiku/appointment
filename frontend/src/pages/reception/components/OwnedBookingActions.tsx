@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useFrappePostCall } from 'frappe-react-sdk';
 import { toast } from 'sonner';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/dialog';
@@ -67,6 +68,11 @@ export function OwnedBookingActions({ appointment, onClose, onSuccess }: OwnedBo
             <p className="text-muted-foreground">
               {t('staff.receptionDesk.bookingReference')}: <span data-qa="booking-reference" className="font-medium tabular-nums text-foreground">{appointment.appointment_id || appointment.name}</span>
             </p>
+            {appointment.customer && (
+              <Link data-qa="booking-open-customer" to={`/customers/${appointment.customer}`} className="inline-block text-sm font-medium text-primary underline-offset-4 hover:underline">
+                {t('staff.customers.openCustomer')}
+              </Link>
+            )}
             <p className="text-xs text-muted-foreground">
               {t('staff.receptionDesk.timesIn')} {appointment.booking_timezone || 'Africa/Addis_Ababa'}. {t('staff.receptionDesk.ownedNote')}
             </p>

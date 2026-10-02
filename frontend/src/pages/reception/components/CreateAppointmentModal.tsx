@@ -2,7 +2,11 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { useFrappePostCall } from 'frappe-react-sdk';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
+import { useSession } from '@/context/session';
 import { useTranslation } from '@/lib/i18n';
+import { serverErrorMessage } from '@/lib/utils';
+import { CustomerPicker } from '@/pages/customers/CustomerPicker';
+import type { CustomerSummary } from '@/pages/customers/types';
 import { BookingFields } from '../appointment-form/BookingFields';
 import { FormDialog } from '../appointment-form/FormDialog';
 import { scheduleWindow, validateBooking, type BookingDraft, type FieldErrors } from '../appointment-form/model';
@@ -40,6 +44,8 @@ export const CreateAppointmentModal = ({
     notes: '',
   });
   const [errors, setErrors] = useState<FieldErrors>({});
+  const [customer, setCustomer] = useState<CustomerSummary | null>(null);
+  const organization = useSession().session?.selected?.organization;
   const { call: createAppointment, loading: creating } = useFrappePostCall('appointment.scheduler.api.desk.create_desk_appointment');
 
   // Follow the slot/filters the desk opened the dialog with.
@@ -73,6 +79,7 @@ export const CreateAppointmentModal = ({
         start_time: `${draft.start_time}:00`,
         end_time: endTime,
         notes: draft.notes,
+        customer: customer?.name,
       });
 
       if (result?.message?.success) {
@@ -83,7 +90,7 @@ export const CreateAppointmentModal = ({
         toast.error('Creation failed', { description: result?.message?.error });
       }
     } catch (error) {
-      toast.error('Creation failed', { description: (error as { message?: string } | undefined)?.message });
+      toast.error('Creation failed', { description: serverErrorMessage(error) || undefined });
     }
   };
 
@@ -107,6 +114,25 @@ export const CreateAppointmentModal = ({
         draft={draft}
         errors={errors}
         onChange={(patch) => setDraft((current) => ({ ...current, ...patch }))}
+        customerSlot={
+          <CustomerPicker
+            organization={organization}
+            value={customer}
+            qa="create-customer-picker"
+            hint={t('staff.customers.pickerHint')}
+            onChange={(picked) => {
+              setCustomer(picked);
+              if (picked) {
+                setDraft((current) => ({
+                  ...current,
+                  client_name: picked.display_name,
+                  client_phone: picked.primary_phone ?? '',
+                  client_email: picked.primary_email ?? '',
+                }));
+              }
+            }}
+          />
+        }
       />
     </FormDialog>
   );

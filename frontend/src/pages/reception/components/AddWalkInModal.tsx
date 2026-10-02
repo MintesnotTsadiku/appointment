@@ -1,7 +1,11 @@
 import { useState, type FormEvent } from 'react';
 import { useFrappeGetCall, useFrappePostCall } from 'frappe-react-sdk';
 import { toast } from 'sonner';
+import { useSession } from '@/context/session';
 import { useTranslation } from '@/lib/i18n';
+import { serverErrorMessage } from '@/lib/utils';
+import { CustomerPicker } from '@/pages/customers/CustomerPicker';
+import type { CustomerSummary } from '@/pages/customers/types';
 import type { Location, Provider, Service } from '../types';
 import { NotesField, OptionField, TextField } from '../appointment-form/fields';
 import { FormDialog } from '../appointment-form/FormDialog';
@@ -32,6 +36,8 @@ export const AddWalkInModal = ({ isOpen, onClose, onSuccess, locations, provider
   const { t } = useTranslation();
   const [draft, setDraft] = useState<WalkInDraft>(EMPTY);
   const [errors, setErrors] = useState<Partial<WalkInDraft>>({});
+  const [customer, setCustomer] = useState<CustomerSummary | null>(null);
+  const organization = useSession().session?.selected?.organization;
   const { data: servicesData } = useFrappeGetCall<{ message: { services: Service[] } }>(
     'appointment.scheduler.api.desk.get_services_list',
     undefined,
@@ -63,6 +69,7 @@ export const AddWalkInModal = ({ isOpen, onClose, onSuccess, locations, provider
         location_name: draft.location_name || undefined,
         provider_preferred: draft.provider_preferred || undefined,
         notes: draft.notes || undefined,
+        customer: customer?.name,
       });
 
       if (result?.message?.success) {
@@ -70,11 +77,12 @@ export const AddWalkInModal = ({ isOpen, onClose, onSuccess, locations, provider
         onSuccess();
         onClose();
         setDraft(EMPTY);
+        setCustomer(null);
       } else {
         toast.error('Failed to add walk-in', { description: result?.message?.error });
       }
     } catch (error) {
-      toast.error('Failed to add walk-in', { description: (error as { message?: string } | undefined)?.message });
+      toast.error('Failed to add walk-in', { description: serverErrorMessage(error) || undefined });
     }
   };
 
@@ -92,6 +100,22 @@ export const AddWalkInModal = ({ isOpen, onClose, onSuccess, locations, provider
       pending={creating}
       onSubmit={handleSubmit}
     >
+      <CustomerPicker
+        organization={organization}
+        value={customer}
+        qa="walkin-customer-picker"
+        onChange={(picked) => {
+          setCustomer(picked);
+          if (picked) {
+            setDraft((current) => ({
+              ...current,
+              client_name: picked.display_name,
+              client_phone: picked.primary_phone ?? current.client_phone,
+              client_email: picked.primary_email ?? '',
+            }));
+          }
+        }}
+      />
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <TextField id="client_name" data-qa="walkin-client-name" label={t('staff.receptionDesk.clientName')} required autoComplete="off" value={draft.client_name} error={errors.client_name} onValueChange={set('client_name')} />
         <TextField id="client_phone" data-qa="walkin-client-phone" label={t('staff.receptionDesk.phone')} required type="tel" placeholder="+251 9XX" value={draft.client_phone} error={errors.client_phone} onValueChange={set('client_phone')} />

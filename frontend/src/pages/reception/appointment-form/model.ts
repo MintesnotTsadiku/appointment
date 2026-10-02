@@ -67,15 +67,16 @@ export interface BookingDraft {
   start_time: string;
   duration: string;
   notes: string;
+  /** Customer Profile picked at the desk; empty lets the server match or create one. */
+  customer?: string;
 }
 
 export type FieldErrors = Partial<Record<keyof BookingDraft, string>>;
 
-/** Required contact and assignment fields plus a loose email check. */
+/** Name and assignment are required; phone and email are optional (email is checked when present). */
 export function validateBooking(draft: BookingDraft, messages: { required: string; email: string }): FieldErrors {
   const errors: FieldErrors = {};
   if (!draft.client_name.trim()) errors.client_name = messages.required;
-  if (!draft.client_phone.trim()) errors.client_phone = messages.required;
   if (draft.client_email.trim() && !EMAIL_PATTERN.test(draft.client_email.trim())) errors.client_email = messages.email;
   if (!draft.service_name) errors.service_name = messages.required;
   if (!draft.provider_name) errors.provider_name = messages.required;

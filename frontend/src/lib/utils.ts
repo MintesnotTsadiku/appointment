@@ -57,6 +57,11 @@ export const getErrorMessages = (error: Error) => {
 
 /** First server message of a failed Frappe call (for example a PermissionError), as plain text. */
 export function serverErrorMessage(error: unknown): string {
+  // Desk APIs answer with ({"error": "..."}, status), which the SDK puts in `message`.
+  const body = (error as { message?: unknown } | undefined)?.message;
+  if (body && typeof body === "object" && typeof (body as { error?: unknown }).error === "string") {
+    return (body as { error: string }).error;
+  }
   const message = getErrorMessages(error as Error)[0]?.message;
   return typeof message === "string" ? removeHtmlString(message) : "";
 }

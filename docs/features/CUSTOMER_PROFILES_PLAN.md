@@ -1,7 +1,7 @@
 ---
 tags: [plan, appointment, customers]
 created: 2026-10-03
-status: draft, waiting for decisions
+status: built and verified 2026-10-03
 ---
 
 # Customer profiles plan
@@ -82,7 +82,7 @@ The unique keys make one profile per email and one per phone inside a business. 
 | `save(customer_id=None, **fields)` | Manager, Receptionist | Create or edit. Same-business checks on every link. |
 | `merge_preview(source, target)`, `merge(source, target)` | Manager | Shows what moves, then merges. |
 
-Permissions use `has_permission` and `permission_query_conditions` like Appointment, so the REST API cannot read another business's customers. `private_notes` and contact details go through role projections (see "Decisions").
+The DocType grants permissions to System Manager only, so the REST API gives staff and guests nothing. Staff reach profiles only through these methods, which check the role in the business and return a role projection. Receptionists see every customer of their business, because a customer belongs to the business, not to one location.
 
 ### Staff UI
 
@@ -95,7 +95,7 @@ Permissions use `has_permission` and `permission_query_conditions` like Appointm
 
 - Analytics: repeat customers are counted by `customer`, with the email count as fallback for unlinked rows.
 - Support export: also accepts a customer ID.
-- Notifications: `customer_language` reads the profile first. The opt-out also marks the profile.
+- Notifications: `customer_language` uses the booking language, then the profile's preferred language, then the business language. The reminder opt-out stays keyed by business plus email.
 
 ### Linking existing bookings
 
@@ -112,13 +112,67 @@ An idempotent patch, with a dry-run report first (see "Decisions"). It groups bo
 
 ## Decisions
 
-1. **Linking existing bookings.** (a) Link them now by business plus email, after a dry-run report. (b) Link only new bookings.
-2. **Bookings without email.** (a) Staff may save a booking with name and phone, or name only. (b) Keep email required everywhere.
-3. **Public booking matching.** (a) Link silently to an exact email or phone match inside the business. (b) Always create a new profile for public bookings; staff merge later.
-4. **What providers see.** (a) Name and booking history of their own customers, without contact details or notes. (b) Name and contact details, without notes. (c) Everything managers see.
+Decided on 2026-10-03:
+
+1. **Existing bookings:** link them by business plus email, after a dry-run report.
+2. **Bookings without email:** staff may save a booking with name and phone, or name only. Public bookings still require email.
+3. **Public booking matching:** link silently to an exact email or phone match inside the business.
+4. **Providers:** name and booking history of their own customers. No contact details, no notes.
 
 Customer self-service (customers viewing or editing their own profile) is not in this slice. Staff manage profiles.
 
 ## Run record
 
-Filled in after the build.
+### What was built
+
+- Schema: `Customer Profile` (random `CUS-` IDs), `Customer Preferred Provider`, `Appointment.customer`, `Walk In.customer`. `Appointment.client_email` is no longer mandatory in the schema. Backup `20261003_015934` was taken before the migrate.
+- `customer_identity.py`: normalization, hashed per-business match keys, exact matching, `resolve_for_booking`, `merge`.
+- `booking.validate_document`: a name is always required, and email only for public bookings. Every new booking links to a profile, or creates one.
+- `customers.py`: `search`, `get`, `save`, `merge_preview` and `merge`, with role projections.
+- Desk: `create_desk_appointment` and `add_walk_in` accept `customer`, and phone is optional on desk bookings.
+- Analytics counts repeat customers by profile, with an email fallback. The support export accepts a customer ID.
+- Staff UI: `/customers`, `/customers/:id` (edit, preferred providers, history, merge), the customer picker in the create-appointment and walk-in forms, and "Open customer" in the reception booking dialog.
+- Strings are in English and Amharic. Patch `import_customer_profile_translations` imports them.
+
+### Existing bookings
+
+`link_customer_profiles.report()` (dry run) found 1,430 unlinked bookings and 612 customers, all grouped by email. None had only a phone, and none had no contact. The patch ran during migrate: 612 profiles, 0 unlinked bookings.
+
+### Found and fixed during the build
+
+- Every staff and walk-in booking needed an email, through both the validation code and the schema. Name-only and name-and-phone desk bookings now save.
+- The desk form kept a 30-minute duration whatever the service, so the server refused a 45-minute service ("Booking duration does not match the offering"). Choosing a service now sets its duration.
+- The desk create and walk-in toasts crashed React when the API returned `{"error": ...}`. `serverErrorMessage` now reads that shape.
+- Test and QA fixtures (`QA-WF-*`, `QA-BROWSER-*`) left orphan profiles when they deleted their business. Both cleanups now remove their profiles. The showcase seeder journals the profiles its bookings create, so its cleanup removes them.
+
+### Tests
+
+| Suite | Result |
+|---|---|
+| `appointment.tests.test_customer_profiles` | 19 passed |
+| `appointment.tests.test_customer_notifications` | 13 passed |
+| `appointment.tests.test_customer_sms` | 12 passed |
+| `appointment.tests.test_policy_manager` | 7 passed |
+| `appointment.tests.test_workspace_overview` | 1 passed |
+| `appointment.tests.test_scheduling_workflows` | 9 passed |
+| `npm run -s test:dom` | passed |
+
+`appointment.tests.test_analytics.verify` fails at line 82: the owner's and the receptionist's 30-day utilization rates both round to 11.8% (11.76% and 11.83%). The check compares rounded rates in a window that ends today, and utilization does not read customer fields. This is not caused by this slice.
+
+### Agent Plane runs
+
+| Run | Manifest | Result |
+|---|---|---|
+| BQA-2026-00381 | `customer-profiles/manager.yaml` | 3 of 4. The English desktop booking step failed on the desk duration bug above. |
+| BQA-2026-00382 | `customer-profiles/provider.yaml` | Passed, 4 of 4 (1440×900 and 390×844, English and Amharic). 0 console, 0 network errors. The provider sees only their own bookings and no contact details. |
+| BQA-2026-00383 | `manager.yaml`, English desktop, after the fixes | Passed. List and search, profile, two new customers, notes edit, merge, and a desk booking through the picker. 0 console, 0 network errors. |
+
+Database check after run 00383: the source customer was Archived with `merged_into` set, and its phone was released. Its note moved to the target. The desk booking had no email and linked to the target. The QA customers and booking were deleted afterwards. The site has 612 profiles.
+
+### Left open
+
+- Customers cannot see or manage their own profile. Staff manage profiles (this slice's decision).
+- Profile anonymization and a privacy export per profile are not built.
+- Dates in the profile history use ISO dates. The staff audit already notes that there is no Amharic date locale.
+- The receptionist sees a customer's whole booking history in the business, including bookings at other locations.
+- Amharic copy needs a native speaker's review.

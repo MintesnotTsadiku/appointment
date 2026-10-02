@@ -65,6 +65,7 @@ const ALLOWED_PREFIXES = [
   '/home',
   '/calendar',
   '/reception',
+  '/customers',
   '/settings',
   '/analytics',
   '/workspaces',
@@ -89,6 +90,7 @@ export function isAllowedDestination(path: string | null | undefined, session: S
   if (role === 'Owner' || role === 'Manager') return true;
   if (MANAGER_ONLY_PREFIXES.some((prefix) => clean.startsWith(prefix))) return false;
   if (clean.startsWith('/reception')) return role === 'Receptionist';
+  if (clean.startsWith('/customers')) return role === 'Receptionist' || role === 'Provider';
   if (clean.startsWith('/analytics')) return role === 'Provider' || role === 'Receptionist';
   if (clean.startsWith('/home')) return false;
   return role === 'Provider';

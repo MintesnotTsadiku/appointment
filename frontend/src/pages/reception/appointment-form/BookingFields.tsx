@@ -17,10 +17,12 @@ interface BookingFieldsProps {
   formatEmail?: (value: string) => string;
   /** Rendered between the schedule row and notes (e.g. the status field). */
   extra?: ReactNode;
+  /** Rendered above the contact inputs (the customer picker on create). */
+  customerSlot?: ReactNode;
 }
 
 /** Client, assignment, schedule and notes sections of the desk booking form. */
-export function BookingFields({ idPrefix, timeQaPrefix, freeTime, draft, errors, onChange, formatEmail, extra }: BookingFieldsProps) {
+export function BookingFields({ idPrefix, timeQaPrefix, freeTime, draft, errors, onChange, formatEmail, extra, customerSlot }: BookingFieldsProps) {
   const { t } = useTranslation();
   const { services, providers, locations } = useDeskOptions();
   const id = (field: string) => `${idPrefix}-${field}`;
@@ -28,9 +30,10 @@ export function BookingFields({ idPrefix, timeQaPrefix, freeTime, draft, errors,
   return (
     <>
       <Section title={t('staff.receptionDesk.client')}>
+        {customerSlot}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <TextField id={id('client-name')} label={t('staff.receptionDesk.clientName')} required autoComplete="off" value={draft.client_name} error={errors.client_name} onValueChange={(client_name) => onChange({ client_name })} />
-          <TextField id={id('client-phone')} label={t('staff.receptionDesk.phone')} required type="tel" placeholder="+251 9XX XXX XXX" value={draft.client_phone} error={errors.client_phone} onValueChange={(client_phone) => onChange({ client_phone })} />
+          <TextField id={id('client-phone')} label={t('staff.receptionDesk.phone')} type="tel" placeholder="+251 9XX XXX XXX" value={draft.client_phone} error={errors.client_phone} onValueChange={(client_phone) => onChange({ client_phone })} />
         </div>
         <TextField
           id={id('client-email')}
@@ -45,7 +48,7 @@ export function BookingFields({ idPrefix, timeQaPrefix, freeTime, draft, errors,
 
       <Section title={t('staff.receptionDesk.booking')}>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <OptionField id={id('service')} label={t('staff.receptionDesk.service')} required placeholder={t('staff.receptionDesk.selectService')} value={draft.service_name} options={services} optionLabel={(s) => s.service_name} error={errors.service_name} onValueChange={(service_name) => onChange({ service_name })} />
+          <OptionField id={id('service')} label={t('staff.receptionDesk.service')} required placeholder={t('staff.receptionDesk.selectService')} value={draft.service_name} options={services} optionLabel={(s) => s.service_name} error={errors.service_name} onValueChange={(service_name) => onChange({ service_name, ...serviceDuration(services, service_name) })} />
           <OptionField id={id('provider')} label={t('staff.reception.provider')} required placeholder={t('staff.receptionDesk.selectProvider')} value={draft.provider_name} options={providers} optionLabel={(p) => p.provider_name} error={errors.provider_name} onValueChange={(provider_name) => onChange({ provider_name })} />
           <OptionField id={id('location')} label={t('staff.receptionDesk.location')} required placeholder={t('staff.receptionDesk.selectLocation')} value={draft.location_name} options={locations} optionLabel={(l) => l.location_name} error={errors.location_name} onValueChange={(location_name) => onChange({ location_name })} />
         </div>
@@ -56,6 +59,12 @@ export function BookingFields({ idPrefix, timeQaPrefix, freeTime, draft, errors,
       <NotesField id={id('notes')} label={t('staff.receptionDesk.notes')} placeholder={t('staff.receptionDesk.notesPlaceholder')} value={draft.notes} onValueChange={(notes) => onChange({ notes })} />
     </>
   );
+}
+
+/** The offering only accepts its own length, so picking a service sets the duration. */
+function serviceDuration(services: { name: string; duration?: number }[], name: string): Partial<BookingDraft> {
+  const duration = services.find((service) => service.name === name)?.duration;
+  return duration ? { duration: String(duration) } : {};
 }
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
