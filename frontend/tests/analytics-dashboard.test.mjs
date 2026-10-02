@@ -1,11 +1,16 @@
 import { readFileSync } from 'node:fs';
 import { strict as assert } from 'node:assert';
 
-const source = readFileSync(new URL('../src/components/analytics/WorkspaceDashboard.tsx', import.meta.url), 'utf8');
+// The dashboard frame owns export; rate widgets own the formulas and "Unavailable" states.
+const source = [
+  '../src/components/analytics/WorkspaceDashboard.tsx',
+  '../src/components/dashboard/widgets/metrics.tsx',
+  '../src/components/dashboard/registry.ts',
+].map((path) => readFileSync(new URL(path, import.meta.url), 'utf8')).join('\n');
 
-assert.match(source, /qa="analytics-no-show"/);
+assert.match(source, /qa(=|: )["']analytics-no-show["']/);
 assert.match(source, /No Show ÷.*Completed \+ No Show/);
-assert.match(source, /qa="analytics-utilization"/);
+assert.match(source, /qa(=|: )["']analytics-utilization["']/);
 assert.match(source, /booked hours ÷.*available hours/);
 assert.match(source, /data-qa="analytics-export"/);
 assert.match(source, /appointment\.scheduler\.analytics\.export_csv/);

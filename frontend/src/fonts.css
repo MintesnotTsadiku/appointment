@@ -1,0 +1,5 @@
+/* App faces, served from this app. The public CSP is default-src 'self', and no
+   page should wait on a font CDN. Files and licenses: appointment/public/fonts/app/. */
+@font-face { font-family: "Inter"; src: url("/assets/appointment/fonts/app/inter.woff2") format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+0000-02FF, U+2000-206F, U+20AC, U+2122, U+2190-2193, U+2212, U+2215; }
+@font-face { font-family: "Plus Jakarta Sans"; src: url("/assets/appointment/fonts/app/plus-jakarta-sans.woff2") format("woff2"); font-weight: 200 800; font-display: swap; unicode-range: U+0000-02FF, U+2000-206F, U+20AC, U+2122, U+2190-2193, U+2212, U+2215; }
+@font-face { font-family: "Noto Sans Ethiopic"; src: url("/assets/appointment/fonts/app/noto-sans-ethiopic.woff2") format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+1200-139F, U+2D80-2DDF, U+AB00-AB2F; }

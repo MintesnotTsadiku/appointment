@@ -1,53 +1,23 @@
-/**
- * Validation Badge Component
- * Shows validation status with appropriate icon and color
- */
+import { AlertTriangle, CheckCircle2, XCircle } from 'lucide-react';
+import { Badge } from '@/components/badge';
+import { useTranslation } from '@/lib/i18n';
+import type { ValidationStatus } from '../types';
 
-import { CheckCircle2, AlertTriangle, XCircle } from 'lucide-react';
+const VARIANTS = {
+  complete: { variant: 'success', icon: CheckCircle2, key: 'staff.manage.validation.complete' },
+  warning: { variant: 'warning', icon: AlertTriangle, key: 'staff.manage.validation.warning' },
+  error: { variant: 'destructive', icon: XCircle, key: 'staff.manage.validation.error' },
+} as const;
 
-interface ValidationBadgeProps {
-  status: 'complete' | 'warning' | 'error';
-  size?: 'sm' | 'md' | 'lg';
-}
-
-export const ValidationBadge = ({ status, size = 'md' }: ValidationBadgeProps) => {
-  const sizeClasses = {
-    sm: 'w-4 h-4',
-    md: 'w-5 h-5',
-    lg: 'w-6 h-6'
-  };
-
-  const iconSize = sizeClasses[size];
-
-  if (status === 'complete') {
-    return (
-      <span className="inline-flex items-center gap-1" style={{ color: 'var(--accent-success)' }} title="Complete">
-        <CheckCircle2 className={iconSize} />
-        <span className="text-sm font-medium">Complete</span>
-      </span>
-    );
-  }
-
-  if (status === 'warning') {
-    return (
-      <span className="inline-flex items-center gap-1" style={{ color: 'var(--accent-secondary)' }} title="Warning">
-        <AlertTriangle className={iconSize} />
-        <span className="text-sm font-medium">Warning</span>
-      </span>
-    );
-  }
-
+/** Setup-completeness pill; icon plus text so colour is never the only signal. */
+export const ValidationBadge = ({ status }: { status?: ValidationStatus }) => {
+  const { t } = useTranslation();
+  const config = VARIANTS[status ?? 'complete'] ?? VARIANTS.error;
+  const Icon = config.icon;
   return (
-    <span className="inline-flex items-center gap-1" style={{ color: 'var(--status-cancelled)' }} title="Error">
-      <XCircle className={iconSize} />
-      <span className="text-sm font-medium">Error</span>
-    </span>
+    <Badge variant={config.variant} className="shrink-0">
+      <Icon aria-hidden="true" />
+      {t(config.key)}
+    </Badge>
   );
 };
-
-
-
-
-
-
-

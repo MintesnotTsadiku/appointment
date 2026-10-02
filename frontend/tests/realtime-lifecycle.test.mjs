@@ -34,6 +34,10 @@ check("app.tsx must render <RealtimeProvider>", app.includes("<RealtimeProvider>
 
 const provider = read("src/components/realtime/RealtimeProvider.tsx");
 check(
+  "RealtimeProvider must not open a socket on guest public surfaces",
+  provider.includes("isGuestSurface(window.location.pathname)") && provider.includes('pathname.startsWith("/schedule/")'),
+);
+check(
   "RealtimeProvider must build the socket with socket.io-client",
   provider.includes('from "socket.io-client"'),
 );
@@ -68,6 +72,7 @@ const { default: ts } = await import("typescript");
 const { runInNewContext } = await import("node:vm");
 const { strict: assert } = await import("node:assert");
 let effect;
+const win = { location: { protocol: "http:", hostname: "localhost", port: "5173", pathname: "/home" } };
 let created = 0;
 let disconnected = 0;
 const microtasks = [];
@@ -78,7 +83,7 @@ const compiled = ts.transpileModule(
 ).outputText;
 runInNewContext(compiled, {
   exports,
-  window: { location: { protocol: "http:", hostname: "localhost", port: "5173" } },
+  window: win,
   queueMicrotask: (callback) => microtasks.push(callback),
   require: (name) => {
     if (name === "react") return {
@@ -88,6 +93,7 @@ runInNewContext(compiled, {
     };
     if (name === "react/jsx-runtime") return { jsx: () => null };
     if (name === "@/lib/utils") return { getSiteName: () => "test.localhost" };
+    if (name === "@/public-experience/routes") return { isPublicExperiencePath: (path) => path === "/tena-studio" };
     if (name === "socket.io-client") return { io: () => {
       created++;
       return { disconnect: () => { disconnected++; } };
@@ -105,4 +111,9 @@ assert.equal(disconnected, 0, "StrictMode cleanup must not abort the handshake")
 finalCleanup();
 while (microtasks.length) microtasks.shift()();
 assert.equal(disconnected, 1, "Last real unmount must close the connection");
-console.log("OK: StrictMode remount reuses one socket and real unmount closes it");
+for (const guestPath of ["/tena-studio", "/schedule/org/tena-studio"]) {
+  win.location.pathname = guestPath;
+  assert.equal(effect(), undefined, `${guestPath} must not open a socket`);
+}
+assert.equal(created, 1, "guest public surfaces never create a connection");
+console.log("OK: StrictMode remount reuses one socket, real unmount closes it, guest pages open none");

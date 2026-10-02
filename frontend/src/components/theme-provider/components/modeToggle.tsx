@@ -13,11 +13,16 @@ import { useTheme } from "..";
 // Routes that have their own integrated theme toggle
 // These routes should hide the global ModeToggle and use their own integrated toggle
 const ROUTES_WITH_INTEGRATED_TOGGLE = [
+  // Staff pages render the theme control in StaffShell's top bar.
   '/reception',
   '/home',
   '/onboarding',
-  '/settings/business',
-  '/settings/team',
+  '/settings',
+  '/calendar',
+  '/analytics',
+  '/workspaces',
+  '/no-access',
+  '/admin',
   '/schedule', // All booking pages have integrated toggles
 ];
 

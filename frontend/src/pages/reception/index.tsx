@@ -1,22 +1,27 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useFrappeGetCall } from 'frappe-react-sdk';
+import { format, startOfWeek, endOfWeek } from 'date-fns';
+import { AlertTriangle, CalendarClock, RotateCcw } from 'lucide-react';
 import { DeskHeader } from './components/DeskHeader';
 import { DeskFilters } from './components/DeskFilters';
 import { DeskCalendar } from './components/DeskCalendar';
 import { WalkInQueue } from './components/WalkInQueue';
 import { CreateAppointmentModal } from './components/CreateAppointmentModal';
 import { AddWalkInModal } from './components/AddWalkInModal';
-import AppTopNav from '@/components/workspace/AppTopNav';
+import { DeskStats } from './components/DeskStats';
+import { StaffShell } from '@/components/staff-shell';
 import { InsightBrief } from '@/components/analytics/WorkspaceDashboard';
+import { Alert, AlertDescription } from '@/components/alert';
+import { Button } from '@/components/button';
+import { EmptyState } from '@/components/states';
 import { useSession } from '@/context/session';
-import { useFrappeGetCall } from 'frappe-react-sdk';
-import { format, startOfWeek, endOfWeek } from 'date-fns';
+import { useTranslation } from '@/lib/i18n';
 import { ViewMode, Appointment, Location, Provider, TimeSlotInterval } from './types';
-import { Calendar, Users, Clock, TrendingUp, AlertTriangle, CalendarClock, RotateCcw } from 'lucide-react';
 
 const Reception = () => {
   const { session } = useSession();
+  const { t } = useTranslation();
   const organization = session?.selected?.organization;
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<ViewMode>('day');
@@ -93,124 +98,37 @@ const Reception = () => {
   const locations = locationsData?.message?.locations || [];
   const providers = providersData?.message?.providers || [];
 
-  // Calculate stats
-  const confirmedCount = appointments.filter(apt => apt.status === 'Confirmed').length;
-  const pendingCount = appointments.filter(apt => apt.status === 'Pending').length;
-
-  const handleAppointmentUpdate = () => {
-    refreshAppointments();
+  const confirmedCount = appointments.filter((apt) => apt.status === 'Confirmed').length;
+  const pendingCount = appointments.filter((apt) => apt.status === 'Pending').length;
+  const resetFilters = () => {
+    setSelectedLocation(null);
+    setSelectedProvider(null);
   };
 
-  const handleCreateWalkIn = () => {
-    setShowWalkInModal(true);
-  };
-
-  const handleAssignWalkIn = () => {
-    refreshAppointments();
-  };
-
-  // Stats with dynamic theme colors via CSS variables
-  const stats = [
-    { 
-      label: "Visible appointments",
-      value: appointments.length,
-      icon: Calendar, 
-      gradient: 'bg-gradient-primary' // Uses --gradient-primary-from/to
-    },
-    { 
-      label: 'Confirmed', 
-      value: confirmedCount, 
-      icon: TrendingUp, 
-      gradient: 'bg-gradient-success' // Uses --gradient-success-from/to
-    },
-    { 
-      label: 'Pending', 
-      value: pendingCount, 
-      icon: Clock, 
-      gradient: 'bg-gradient-secondary' // Uses --gradient-secondary-from/to
-    },
-    { 
-      label: 'Providers Active', 
-      value: providers.length, 
-      icon: Users, 
-      customGradient: 'from-blue-500 to-indigo-600' // Keep original for variety
-    },
-  ];
-
-  // No authorized staff context: explain instead of showing a blank calendar.
   if (session && !session.authenticated) {
     return <div role="alert" className="p-8">Please sign in to open reception.</div>;
   }
   if (session && session.state === 'no_assignment') {
     return (
-      <div role="alert" className="p-8" style={{ color: 'var(--text-primary)' }}>
-        <h1 className="text-xl font-semibold">Reception is not assigned to you</h1>
-        <p className="mt-2" style={{ color: 'var(--text-secondary)' }}>Ask a manager to assign you a reception scope.</p>
-        <Link className="mt-4 inline-block underline" to="/workspaces">Choose a business</Link>
-      </div>
+      <StaffShell width="default">
+        <EmptyState
+          icon={CalendarClock}
+          title={t('staff.reception.notAssigned')}
+          description={t('staff.reception.notAssignedHint')}
+          action={<Button asChild variant="outline" size="sm"><Link to="/workspaces">{t('staff.reception.chooseBusiness')}</Link></Button>}
+        />
+      </StaffShell>
     );
   }
 
-  return (
-    <div 
-      className="min-h-screen text-[var(--text-primary)]"
-      style={{ backgroundColor: 'var(--bg-primary)' }}
-    >
-      {/* Ambient background effects using theme glows */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div 
-          className="absolute -top-40 -right-40 w-80 h-80 rounded-full blur-[100px]"
-          style={{ backgroundColor: 'var(--glow-primary)' }}
-        />
-        <div 
-          className="absolute top-1/2 -left-40 w-80 h-80 rounded-full blur-[100px]"
-          style={{ backgroundColor: 'var(--glow-secondary)' }}
-        />
-        <div 
-          className="absolute -bottom-40 right-1/3 w-80 h-80 rounded-full blur-[100px]"
-          style={{ backgroundColor: 'var(--glow-success)' }}
-        />
-      </div>
+  const locationLabel = selectedLocation ? locations.find((loc) => loc.name === selectedLocation)?.location_name || selectedLocation : null;
+  const providerLabel = selectedProvider ? providers.find((prov) => prov.name === selectedProvider)?.provider_name || selectedProvider : null;
 
-      <div className="relative z-10">
-        <AppTopNav active="reception" />
-        <div className="px-4 sm:px-6"><InsightBrief kind="reception" /></div>
-        {/* Sticky Top Section: Header + Stats + Filters */}
-        <div 
-          className="sticky top-0 z-40"
-          style={{ 
-            backgroundColor: 'var(--bg-primary)',
-          }}
-        >
-          {/* Active scope bar: business, date, time zone and filters */}
-          <div
-            data-qa="reception-scope"
-            className="mx-auto flex max-w-[1800px] flex-wrap items-center gap-x-4 gap-y-1 px-6 pt-3 text-xs"
-            style={{ color: 'var(--text-muted)' }}
-          >
-            <span className="font-medium" style={{ color: 'var(--text-primary)' }}>
-              {deskScope?.organization_name || session?.selected?.business_name || 'All authorized businesses'}
-            </span>
-            <span>Date: {format(currentDate, 'EEE, dd MMM yyyy')}</span>
-            <span>Time zone: {deskTimezone || 'Africa/Addis_Ababa'}</span>
-            <span>
-              Filters: {selectedLocation ? `location ${locations.find((loc) => loc.name === selectedLocation)?.location_name || selectedLocation}` : 'all locations'}
-              {selectedProvider ? ` · provider ${providers.find((prov) => prov.name === selectedProvider)?.provider_name || selectedProvider}` : ''}
-            </span>
-            {(selectedLocation || selectedProvider) && (
-              <button
-                type="button"
-                onClick={() => {
-                  setSelectedLocation(null);
-                  setSelectedProvider(null);
-                }}
-                className="underline"
-              >
-                Reset filters
-              </button>
-            )}
-          </div>
-      <DeskHeader
+  return (
+    <StaffShell width="full">
+      <div className="space-y-3">
+        <section className="space-y-3 rounded-xl border bg-card p-3 shadow-card sm:p-4">
+          <DeskHeader
             currentDate={currentDate}
             viewMode={viewMode}
             timeSlotInterval={timeSlotInterval}
@@ -219,198 +137,125 @@ const Reception = () => {
             onTimeSlotIntervalChange={setTimeSlotInterval}
             onCreateAppointment={() => setShowCreateModal(true)}
           />
-
-          {/* Stats Row - Now part of sticky section */}
-          <div 
-            className="px-6 pt-4 pb-2 max-w-[1800px] mx-auto"
-            style={{ 
-              backgroundColor: 'color-mix(in srgb, var(--bg-primary) 98%, transparent)',
-              backdropFilter: 'blur(12px)',
-            }}
-          >
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="grid grid-cols-2 lg:grid-cols-4 gap-3"
-            >
-              {stats.map((stat, index) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="relative group"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl blur-xl" />
-                  <div 
-                    className="relative backdrop-blur-sm rounded-xl p-4 hover:bg-[var(--border-subtle)] transition-all duration-300"
-                    style={{ 
-                      backgroundColor: 'var(--border-subtle)',
-                      border: '1px solid var(--border-default)'
-                    }}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className={`inline-flex p-2 rounded-lg ${stat.gradient || ''} ${stat.customGradient ? `bg-gradient-to-br ${stat.customGradient}` : ''}`}>
-                        <stat.icon className="w-4 h-4 text-white" />
-                      </div>
-                      <div>
-                        <div className="text-2xl font-bold tracking-tight">{stat.value}</div>
-                        <div 
-                          className="text-xs"
-                          style={{ color: 'var(--text-muted)' }}
-                        >
-                          {stat.label}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
+          <div className="flex flex-col gap-3 border-t pt-3 xl:flex-row xl:items-center xl:justify-between">
+            <DeskFilters
+              locations={locations}
+              providers={providers}
+              selectedLocation={selectedLocation}
+              selectedProvider={selectedProvider}
+              onLocationChange={setSelectedLocation}
+              onProviderChange={setSelectedProvider}
+            />
+            <DeskStats visible={appointments.length} confirmed={confirmedCount} pending={pendingCount} providers={providers.length} />
           </div>
+          <p data-qa="reception-scope" className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+            <span className="font-medium text-foreground">{deskScope?.organization_name || session?.selected?.business_name || t('staff.reception.allBusinesses')}</span>
+            <span>{t('staff.reception.date')}: {format(currentDate, 'EEE, dd MMM yyyy')}</span>
+            <span>{t('staff.reception.timezone')}: {deskTimezone || 'Africa/Addis_Ababa'}</span>
+            <span>
+              {t('staff.reception.filters')}: {locationLabel ? `${t('staff.reception.location')} ${locationLabel}` : t('staff.reception.allLocations')}
+              {providerLabel ? ` · ${t('staff.reception.provider')} ${providerLabel}` : ''}
+            </span>
+          </p>
+        </section>
 
-          {/* Filters - Now part of sticky section */}
-          <div 
-            className="px-6 py-3 max-w-[1800px] mx-auto"
-            style={{ 
-              backgroundColor: 'color-mix(in srgb, var(--bg-primary) 98%, transparent)',
-              backdropFilter: 'blur(12px)',
-              borderBottom: '1px solid var(--border-subtle)'
-            }}
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <DeskFilters
-                locations={locations}
-                providers={providers}
-                selectedLocation={selectedLocation}
-                selectedProvider={selectedProvider}
-                onLocationChange={setSelectedLocation}
-                onProviderChange={setSelectedProvider}
-              />
-            </motion.div>
+        <InsightBrief kind="reception" />
+
+        {appointmentsError && (
+          <Alert variant="destructive" data-qa="reception-error" className="flex flex-wrap items-center gap-3 [&>svg]:static [&>svg~*]:pl-0">
+            <AlertTriangle />
+            <AlertDescription className="flex-1 text-foreground">{t('staff.reception.loadError')}</AlertDescription>
+            <Button type="button" size="sm" variant="outline" onClick={() => void refreshAppointments()}>
+              <RotateCcw />
+              {t('staff.states.retry')}
+            </Button>
+          </Alert>
+        )}
+        {!appointmentsError && !appointmentsLoading && appointments.length === 0 && (
+          <Alert data-qa="reception-empty" variant="info" className="flex flex-wrap items-center gap-x-3 gap-y-2 [&>svg]:static [&>svg]:shrink-0 [&>svg~*]:pl-0">
+            <CalendarClock />
+            {filtersActive && unfilteredCount > 0 ? (
+              <>
+                <AlertDescription className="text-foreground">{unfilteredCount} {t('staff.reception.filteredOut')}</AlertDescription>
+                <Button type="button" size="sm" variant="outline" data-qa="reception-reset-filters" onClick={resetFilters}>
+                  {t('staff.reception.clearFilters')}
+                </Button>
+              </>
+            ) : (
+              <>
+                <AlertDescription className="text-foreground">{t('staff.reception.noBookingsOn')} {format(currentDate, 'dd MMM yyyy')}.</AlertDescription>
+                {nextDate && (
+                  <Button type="button" size="sm" variant="outline" data-qa="reception-next-booking" onClick={() => setCurrentDate(new Date(nextDate))}>
+                    {t('staff.reception.jumpNext')} ({nextDate})
+                  </Button>
+                )}
+                <Button asChild size="sm" variant="ghost">
+                  <Link to="/settings/business">{t('staff.reception.publishPage')}</Link>
+                </Button>
+              </>
+            )}
+          </Alert>
+        )}
+
+        <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_320px]">
+          <div className="min-h-[600px] min-w-0">
+            <DeskCalendar
+              appointments={appointments}
+              currentDate={currentDate}
+              viewMode={viewMode}
+              timeSlotInterval={timeSlotInterval}
+              onAppointmentUpdate={refreshAppointments}
+              isLoading={appointmentsLoading}
+              onCreateAppointment={(date, time) => {
+                setCurrentDate(date);
+                setCreateModalDefaultTime(time);
+                if (viewMode === 'week') setViewMode('day');
+                setShowCreateModal(true);
+              }}
+              onNavigateToDay={(date) => {
+                setCurrentDate(date);
+                setViewMode('day');
+              }}
+            />
           </div>
-        </div>
-
-        <div className="px-6 pb-8 max-w-[1800px] mx-auto">
-
-          {/* Loading / error / empty state, distinguished from a blank calendar */}
-          {appointmentsError && (
-            <div role="alert" data-qa="reception-error" className="mb-4 flex flex-wrap items-center gap-3 rounded-xl p-4" style={{ backgroundColor: 'var(--status-cancelled-bg, #fee2e2)', color: 'var(--status-cancelled, #b91c1c)' }}>
-              <AlertTriangle className="h-5 w-5" />
-              <span>Unable to load appointments. This may be a connection problem, not an empty day.</span>
-              <button className="underline" onClick={() => void refreshAppointments()}>
-                <RotateCcw className="mr-1 inline h-3.5 w-3.5" /> Retry
-              </button>
-            </div>
-          )}
-          {!appointmentsError && !appointmentsLoading && appointments.length === 0 && (
-            <div data-qa="reception-empty" className="mb-4 flex flex-wrap items-center gap-3 rounded-xl p-4" style={{ backgroundColor: 'var(--border-subtle)', color: 'var(--text-secondary)' }}>
-              <CalendarClock className="h-5 w-5" />
-              {filtersActive && unfilteredCount > 0 ? (
-                <>
-                  <span>{unfilteredCount} appointment(s) exist here but are filtered out.</span>
-                  <button className="underline" data-qa="reception-reset-filters" onClick={() => { setSelectedLocation(null); setSelectedProvider(null); }}>
-                    Reset filters
-                  </button>
-                </>
-              ) : (
-                <>
-                  <span>No bookings on {format(currentDate, 'dd MMM yyyy')}.</span>
-                  {nextDate && (
-                    <button className="underline" data-qa="reception-next-booking" onClick={() => setCurrentDate(new Date(nextDate))}>
-                      Jump to next booking ({nextDate})
-                    </button>
-                  )}
-                  <Link className="underline" to="/settings/business">Publish a booking page</Link>
-                </>
-              )}
-            </div>
-          )}
-
-          {/* Main Content */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="grid grid-cols-1 lg:grid-cols-4 gap-6"
-          >
-            {/* Calendar */}
-            <div className="lg:col-span-3 min-h-[600px]">
-              <DeskCalendar
-                appointments={appointments}
-                currentDate={currentDate}
-                viewMode={viewMode}
-                timeSlotInterval={timeSlotInterval}
-                onAppointmentUpdate={handleAppointmentUpdate}
-                isLoading={appointmentsLoading}
-                onCreateAppointment={(date, time) => {
-                  setCurrentDate(date);
-                  setCreateModalDefaultTime(time);
-                  if (viewMode === 'week') {
-                    setViewMode('day');
-                  }
-                  setShowCreateModal(true);
-                }}
-                onNavigateToDay={(date) => {
-                  setCurrentDate(date);
-                  setViewMode('day');
-                }}
-              />
-            </div>
-
-            {/* Walk-in Queue Sidebar */}
-            <div className="lg:col-span-1">
-              <div className="h-[600px]">
-                <WalkInQueue
-                  locationName={selectedLocation}
-                  onAssignWalkIn={handleAssignWalkIn}
-                  onCreateWalkIn={handleCreateWalkIn}
-                  refreshToken={walkInRefreshToken}
-                />
-              </div>
-            </div>
-          </motion.div>
+          <aside className="xl:sticky xl:top-16 xl:h-[calc(100dvh-6rem)]">
+            <WalkInQueue
+              locationName={selectedLocation}
+              onAssignWalkIn={() => refreshAppointments()}
+              onCreateWalkIn={() => setShowWalkInModal(true)}
+              refreshToken={walkInRefreshToken}
+            />
+          </aside>
         </div>
       </div>
 
-      {/* Modals */}
-      <AnimatePresence>
-        {showCreateModal && (
-          <CreateAppointmentModal
-            isOpen={showCreateModal}
-            onClose={() => {
-              setShowCreateModal(false);
-              setCreateModalDefaultTime(undefined);
-            }}
-            onSuccess={handleAppointmentUpdate}
-            defaultDate={currentDate}
-            defaultTime={createModalDefaultTime}
-            defaultProvider={selectedProvider || undefined}
-            defaultLocation={selectedLocation || undefined}
-          />
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {showWalkInModal && (
-          <AddWalkInModal
-            isOpen={showWalkInModal}
-            onClose={() => setShowWalkInModal(false)}
-            onSuccess={() => {
-              setShowWalkInModal(false);
-              setWalkInRefreshToken((token) => token + 1);
-            }}
-            locations={locations}
-            providers={providers}
-          />
-        )}
-      </AnimatePresence>
-    </div>
+      {showCreateModal && (
+        <CreateAppointmentModal
+          isOpen={showCreateModal}
+          onClose={() => {
+            setShowCreateModal(false);
+            setCreateModalDefaultTime(undefined);
+          }}
+          onSuccess={() => refreshAppointments()}
+          defaultDate={currentDate}
+          defaultTime={createModalDefaultTime}
+          defaultProvider={selectedProvider || undefined}
+          defaultLocation={selectedLocation || undefined}
+        />
+      )}
+      {showWalkInModal && (
+        <AddWalkInModal
+          isOpen={showWalkInModal}
+          onClose={() => setShowWalkInModal(false)}
+          onSuccess={() => {
+            setShowWalkInModal(false);
+            setWalkInRefreshToken((token) => token + 1);
+          }}
+          locations={locations}
+          providers={providers}
+        />
+      )}
+    </StaffShell>
   );
 };
 

@@ -19,6 +19,9 @@ const here = dirname(fileURLToPath(import.meta.url));
 const DEFAULT_TARGETS = [
   resolve(here, "../src/pages/settings/manage/components/HierarchyTree.tsx"),
   resolve(here, "../src/pages/settings/manage/components/ItemCard.tsx"),
+  resolve(here, "../src/pages/settings/manage/components/TreeSection.tsx"),
+  resolve(here, "../src/pages/settings/manage/components/ProviderTreeNodes.tsx"),
+  resolve(here, "../src/pages/settings/manage/components/IssueList.tsx"),
 ];
 const TARGETS = process.argv.slice(2).length
   ? process.argv.slice(2)

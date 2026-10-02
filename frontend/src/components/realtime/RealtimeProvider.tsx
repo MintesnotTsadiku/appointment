@@ -34,6 +34,7 @@ import {
 import { io, type Socket } from "socket.io-client";
 
 import { getSiteName } from "@/lib/utils";
+import { isPublicExperiencePath } from "@/public-experience/routes";
 
 let singleton: Socket | null = null;
 let consumers = 0;
@@ -52,6 +53,12 @@ function buildSocket(): Socket {
     withCredentials: true,
     secure: protocol === "https",
   });
+}
+
+/** Guest surfaces (public sites, the booking handoff and the public scheduler) have
+ * no realtime consumers, so they never open a socket or poll the server. */
+function isGuestSurface(pathname: string): boolean {
+  return isPublicExperiencePath(pathname) || pathname.startsWith("/schedule/");
 }
 
 function acquireRealtimeSocket(): Socket {
@@ -80,6 +87,7 @@ export const RealtimeProvider = ({ children }: PropsWithChildren) => {
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
+    if (isGuestSurface(window.location.pathname)) return;
     const active = acquireRealtimeSocket();
     setSocket(active);
     return () => {

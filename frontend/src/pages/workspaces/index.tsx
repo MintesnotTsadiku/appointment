@@ -1,21 +1,18 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Building2, Globe, MapPin, ShieldCheck } from 'lucide-react';
-import { useSession } from '@/context/session';
+import { ArrowRight, Globe, Loader2, MapPin } from 'lucide-react';
+import { useSession, type Workspace } from '@/context/session';
 import { Button } from '@/components/button';
-import { useTheme } from '@/components/theme-provider';
-
-const ROLE_LABEL: Record<string, string> = {
-  Owner: 'Owner',
-  Manager: 'Manager',
-  Receptionist: 'Receptionist',
-  Provider: 'Provider',
-};
+import { Badge } from '@/components/badge';
+import { BusinessMark, StaffShell, useRoleLabel } from '@/components/staff-shell';
+import { Bone } from '@/components/states';
+import { useTranslation } from '@/lib/i18n';
 
 export default function Workspaces() {
   const { session, loading, selectWorkspace } = useSession();
-  const { setTheme, theme } = useTheme();
+  const { t } = useTranslation();
   const navigate = useNavigate();
+  const [opening, setOpening] = useState<string | null>(null);
 
   useEffect(() => {
     if (loading || !session) return;
@@ -31,74 +28,98 @@ export default function Workspaces() {
   }, [loading, session, navigate]);
 
   const open = async (organization: string, landing: string) => {
-    const next = await selectWorkspace(organization);
-    navigate(next?.selected?.landing ?? landing);
+    setOpening(organization);
+    try {
+      const next = await selectWorkspace(organization);
+      navigate(next?.selected?.landing ?? landing);
+    } finally {
+      setOpening(null);
+    }
   };
 
-  if (loading || !session) {
-    return (
-      <main className="flex min-h-screen items-center justify-center" style={{ backgroundColor: 'var(--bg-primary)' }}>
-        <p role="status" style={{ color: 'var(--text-secondary)' }}>
-          Loading your businesses…
-        </p>
-      </main>
-    );
-  }
-
+  const count = session?.workspaces.length ?? 0;
   return (
-    <main className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
-      <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
-        <div className="mb-8 flex items-start justify-between gap-4">
-          <div>
-            <h1 data-qa="workspaces-heading" className="font-heading text-3xl font-bold">
-              Choose a business
-            </h1>
-            <p className="mt-2" style={{ color: 'var(--text-secondary)' }}>
-              You belong to {session.workspaces.length} businesses. Your access is scoped to each one.
-            </p>
-          </div>
-          <Button variant="ghost" onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')} aria-label="Toggle theme">
-            Theme
-          </Button>
-        </div>
-
-        <ul className="grid gap-4 sm:grid-cols-2" data-qa="workspace-list">
+    <StaffShell
+      width="default"
+      title={t('staff.workspaces.title')}
+      description={loading || !session ? t('staff.workspaces.loading') : t('staff.workspaces.count').replace('{count}', String(count))}
+      headingQa="workspaces-heading"
+    >
+      {loading || !session ? (
+        <CardsSkeleton />
+      ) : (
+        <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2" data-qa="workspace-list">
           {session.workspaces.map((workspace) => (
-            <li
+            <WorkspaceCard
               key={workspace.organization}
-              data-qa="workspace-card"
-              className="flex flex-col gap-3 rounded-2xl border p-5"
-              style={{ borderColor: 'var(--border-default)', backgroundColor: 'var(--bg-elevated)' }}
-            >
-              <div className="flex items-center gap-3">
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-primary">
-                  <Building2 className="h-5 w-5 text-white" />
-                </span>
-                <div className="min-w-0">
-                  <h2 className="truncate font-semibold">{workspace.business_name}</h2>
-                  <span className="inline-flex items-center gap-1 text-xs" style={{ color: 'var(--accent-primary)' }}>
-                    <ShieldCheck className="h-3 w-3" />
-                    {ROLE_LABEL[workspace.role] ?? workspace.role}
-                  </span>
-                </div>
-              </div>
-              <dl className="space-y-1 text-sm" style={{ color: 'var(--text-muted)' }}>
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-3.5 w-3.5" />
-                  <span>{workspace.location_names.length ? workspace.location_names.join(', ') : 'All locations'}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Globe className="h-3.5 w-3.5" />
-                  <span>{workspace.timezone ?? 'Africa/Addis Ababa'}</span>
-                </div>
-              </dl>
-              <Button className="mt-auto w-fit" onClick={() => void open(workspace.organization, workspace.landing)}>
-                Open <ArrowRight className="ml-1 h-4 w-4" />
-              </Button>
-            </li>
+              workspace={workspace}
+              busy={opening === workspace.organization}
+              disabled={opening !== null}
+              onOpen={() => void open(workspace.organization, workspace.landing)}
+            />
           ))}
         </ul>
+      )}
+    </StaffShell>
+  );
+}
+
+interface CardProps {
+  workspace: Workspace;
+  busy: boolean;
+  disabled: boolean;
+  onOpen: () => void;
+}
+
+/** QA clicks the card's only <button>; keep any extra controls as links or spans. */
+function WorkspaceCard({ workspace, busy, disabled, onOpen }: CardProps) {
+  const { t } = useTranslation();
+  const roleLabel = useRoleLabel();
+  const locations = workspace.location_names.length ? workspace.location_names.join(', ') : t('staff.workspaces.allLocations');
+
+  return (
+    <li data-qa="workspace-card" className="flex min-w-0 flex-col gap-4 rounded-xl border bg-card p-5 shadow-card">
+      <div className="flex min-w-0 items-start gap-3">
+        <BusinessMark name={workspace.business_name} />
+        <div className="min-w-0 flex-1">
+          <h2 className="truncate text-base font-semibold" title={workspace.business_name}>{workspace.business_name}</h2>
+          <div className="mt-1 flex flex-wrap gap-1.5">
+            <Badge variant="secondary">{roleLabel(workspace.role)}</Badge>
+            {!workspace.published && <Badge variant="muted">{t('staff.workspaces.draft')}</Badge>}
+          </div>
+        </div>
       </div>
-    </main>
+      <dl className="space-y-1.5 text-sm text-muted-foreground">
+        <div className="flex min-w-0 items-start gap-2">
+          <dt className="shrink-0 pt-0.5">
+            <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
+            <span className="sr-only">{t('staff.workspaces.locations')}</span>
+          </dt>
+          <dd className="min-w-0 break-words">{locations}</dd>
+        </div>
+        <div className="flex min-w-0 items-start gap-2">
+          <dt className="shrink-0 pt-0.5">
+            <Globe className="h-3.5 w-3.5" aria-hidden="true" />
+            <span className="sr-only">{t('staff.workspaces.timezone')}</span>
+          </dt>
+          <dd className="min-w-0 truncate">{workspace.timezone ?? 'Africa/Addis Ababa'}</dd>
+        </div>
+      </dl>
+      <Button className="mt-auto w-full sm:w-fit" onClick={onOpen} disabled={disabled} aria-label={`${t('staff.workspaces.open')} ${workspace.business_name}`}>
+        {busy ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : null}
+        {t('staff.workspaces.open')}
+        {!busy && <ArrowRight className="h-4 w-4" aria-hidden="true" />}
+      </Button>
+    </li>
+  );
+}
+
+function CardsSkeleton() {
+  return (
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2" aria-busy="true">
+      {Array.from({ length: 2 }, (_, i) => (
+        <Bone key={i} className="h-44 rounded-xl" />
+      ))}
+    </div>
   );
 }

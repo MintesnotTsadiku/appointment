@@ -19,6 +19,8 @@ export interface Workspace {
   locations: string[];
   location_names: string[];
   timezone: string | null;
+  /** Business logo, else the active brand's compact logo. */
+  logo?: string | null;
   published: boolean;
   landing: string;
   is_manager: boolean;

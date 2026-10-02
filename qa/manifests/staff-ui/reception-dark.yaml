@@ -1,0 +1,95 @@
+app: appointment
+base_url: http://127.0.0.84:44430
+default_role: Staff
+auth:
+  type: frappe_session
+  username: bloom.reception@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment-staff-ui
+capture_trace: false
+capture_video: false
+capture_instruction_timeline: false
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: dark
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.demo.showcase.browser_values
+scenarios:
+- id: reception_reception_desktop_dark
+  title: reception /reception desktop dark
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /reception
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: reception-reception-desktop-dark.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: reception-reception-desktop-dark.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: reception_reception_mobile_dark
+  title: reception /reception mobile dark
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /reception
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: reception-reception-mobile-dark.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: reception-reception-mobile-dark.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: reception_analytics_desktop_dark
+  title: reception /analytics desktop dark
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /analytics
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: reception-analytics-desktop-dark.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: reception-analytics-desktop-dark.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: reception_analytics_mobile_dark
+  title: reception /analytics mobile dark
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /analytics
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: reception-analytics-mobile-dark.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: reception-analytics-mobile-dark.html
+  - action: get_console_errors
+  - action: get_network_errors

@@ -263,6 +263,7 @@ def workspaces(user=None):
                 "locations": locations,
                 "location_names": _location_names(locations),
                 "timezone": org.timezone,
+                "logo": workspace_logo(organization, provider),
                 "published": bool(org.enable_public_booking),
                 "landing": f"{route}?organization={organization}",
                 "is_manager": role in (ROLE_OWNER, ROLE_MANAGER),
@@ -270,6 +271,30 @@ def workspaces(user=None):
         )
     result.sort(key=lambda item: (item["business_name"] or "").lower())
     return result
+
+
+def workspace_logo(organization, provider=None):
+    """Logo for the staff sidebar: the business logo, else the active brand's compact logo.
+
+    A solo provider's brand can belong to the provider rather than the business.
+    """
+    logo = frappe.db.get_value("Organization", organization, "logo")
+    if logo:
+        return logo
+    owners = [{"organization": organization}]
+    if provider:
+        owners.append({"provider": provider})
+    for owner in owners:
+        brand = frappe.db.get_value(
+            "Brand Profile",
+            {**owner, "lifecycle": ["!=", "Archived"]},
+            ["logo_compact", "logo_primary"],
+            as_dict=True,
+            order_by="modified desc",
+        )
+        if brand and (brand.logo_compact or brand.logo_primary):
+            return brand.logo_compact or brand.logo_primary
+    return None
 
 
 def resolve_landing(spaces, selected):

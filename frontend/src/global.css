@@ -160,6 +160,15 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+    --success: 158 72% 26%;
+    --success-foreground: 0 0% 100%;
+    --warning: 30 92% 34%;
+    --warning-foreground: 0 0% 100%;
+    --info: 212 80% 42%;
+    --info-foreground: 0 0% 100%;
+    --sidebar: 0 0% 100%;
+    --sidebar-foreground: 0 0% 25%;
+    --sidebar-accent: 0 0% 96.1%;
   }
   
   .dark {
@@ -217,6 +226,167 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --success: 156 60% 55%;
+    --success-foreground: 156 60% 8%;
+    --warning: 38 92% 60%;
+    --warning-foreground: 38 80% 9%;
+    --info: 210 90% 70%;
+    --info-foreground: 210 60% 10%;
+    --sidebar: 240 6% 9%;
+    --sidebar-foreground: 0 0% 80%;
+    --sidebar-accent: 0 0% 14.9%;
+  }
+}
+
+/* ========================================
+   STAFF SURFACE TOKENS
+   One semantic system for signed-in staff pages. StaffShell sets
+   html[data-surface="staff"], so Radix portals inherit it while the public
+   landing, auth and tenant sites keep their own palettes. Legacy names
+   (--bg-*, --text-*, --accent-*) are aliases of the semantic tokens.
+   ======================================== */
+@layer base {
+  :root[data-surface="staff"] {
+    --background: 220 23% 97.5%;
+    --foreground: 224 24% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 224 24% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 24% 11%;
+    --primary: 252 62% 52%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 16% 93%;
+    --secondary-foreground: 224 24% 14%;
+    --muted: 220 16% 94.5%;
+    --muted-foreground: 220 9% 38%;
+    --accent: 250 70% 96%;
+    --accent-foreground: 252 48% 32%;
+    --destructive: 0 70% 46%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 158 72% 26%;
+    --success-foreground: 0 0% 100%;
+    --warning: 30 92% 34%;
+    --warning-foreground: 0 0% 100%;
+    --info: 212 80% 42%;
+    --info-foreground: 0 0% 100%;
+    --border: 220 14% 89%;
+    --input: 220 13% 84%;
+    --ring: 252 62% 52%;
+    --sidebar: 0 0% 100%;
+    --sidebar-foreground: 224 18% 26%;
+    --sidebar-accent: 220 16% 95%;
+    --chart-1: 252 62% 55%;
+    --chart-2: 173 58% 36%;
+    --chart-3: 32 92% 48%;
+    --chart-4: 340 70% 52%;
+    --chart-5: 212 80% 48%;
+    --radius: 0.625rem;
+    --shadow-xs: 0 1px 2px hsl(224 30% 20% / 0.05);
+    --shadow-card: 0 1px 2px hsl(224 30% 20% / 0.04), 0 1px 3px hsl(224 30% 20% / 0.06);
+    --shadow-pop: 0 10px 30px -10px hsl(224 30% 20% / 0.25);
+
+  }
+
+  :root[data-surface="staff"].dark {
+    --background: 228 16% 6.5%;
+    --foreground: 220 16% 94%;
+    --card: 228 14% 9.5%;
+    --card-foreground: 220 16% 94%;
+    --popover: 228 14% 11%;
+    --popover-foreground: 220 16% 94%;
+    --primary: 252 92% 78%;
+    --primary-foreground: 252 45% 12%;
+    --secondary: 228 11% 15%;
+    --secondary-foreground: 220 16% 94%;
+    --muted: 228 11% 13.5%;
+    --muted-foreground: 220 10% 66%;
+    --accent: 252 26% 19%;
+    --accent-foreground: 252 92% 90%;
+    --destructive: 0 80% 68%;
+    --destructive-foreground: 0 40% 10%;
+    --success: 156 60% 55%;
+    --success-foreground: 156 60% 8%;
+    --warning: 38 92% 60%;
+    --warning-foreground: 38 80% 9%;
+    --info: 210 90% 70%;
+    --info-foreground: 210 60% 10%;
+    --border: 228 10% 17%;
+    --input: 228 10% 23%;
+    --ring: 252 92% 78%;
+    --sidebar: 228 15% 8%;
+    --sidebar-foreground: 220 12% 78%;
+    --sidebar-accent: 228 11% 14%;
+    --chart-1: 252 92% 76%;
+    --chart-2: 170 60% 52%;
+    --chart-3: 36 92% 60%;
+    --chart-4: 340 80% 70%;
+    --chart-5: 210 90% 68%;
+    --shadow-xs: 0 1px 2px hsl(0 0% 0% / 0.4);
+    --shadow-card: 0 1px 2px hsl(0 0% 0% / 0.35), 0 0 0 1px hsl(0 0% 100% / 0.02);
+    --shadow-pop: 0 16px 40px -12px hsl(0 0% 0% / 0.7);
+  }
+
+  /* Legacy aliases live on body: ThemeProvider writes the old names inline on
+     <html>, and body-level declarations win for everything rendered below it. */
+  :root[data-surface="staff"] body {
+    --bg-primary: hsl(var(--background));
+    --bg-secondary: hsl(var(--muted));
+    --bg-tertiary: hsl(var(--secondary));
+    --bg-elevated: hsl(var(--card));
+    --text-primary: hsl(var(--foreground));
+    --text-secondary: hsl(var(--foreground) / 0.78);
+    --text-muted: hsl(var(--muted-foreground));
+    --text-subtle: hsl(var(--muted-foreground));
+    --border-subtle: hsl(var(--border) / 0.7);
+    --border-default: hsl(var(--border));
+    --border-strong: hsl(var(--input));
+    --shadow-sm: var(--shadow-xs);
+    --shadow-md: var(--shadow-card);
+    --shadow-lg: var(--shadow-pop);
+    --accent-primary: hsl(var(--primary));
+    --accent-primary-hover: hsl(var(--primary) / 0.9);
+    --accent-primary-light: hsl(var(--primary) / 0.12);
+    --accent-secondary: hsl(var(--warning));
+    --accent-secondary-hover: hsl(var(--warning) / 0.9);
+    --accent-secondary-light: hsl(var(--warning) / 0.14);
+    --accent-success: hsl(var(--success));
+    --accent-success-hover: hsl(var(--success) / 0.9);
+    --accent-success-light: hsl(var(--success) / 0.12);
+    --accent-warning: hsl(var(--warning));
+    --accent-warning-hover: hsl(var(--warning) / 0.9);
+    --accent-warning-light: hsl(var(--warning) / 0.14);
+    --status-pending: hsl(var(--info));
+    --status-pending-bg: hsl(var(--info) / 0.12);
+    --status-confirmed: hsl(var(--success));
+    --status-confirmed-bg: hsl(var(--success) / 0.12);
+    --status-completed: hsl(var(--muted-foreground));
+    --status-completed-bg: hsl(var(--muted-foreground) / 0.14);
+    --status-cancelled: hsl(var(--destructive));
+    --status-cancelled-bg: hsl(var(--destructive) / 0.1);
+    --status-no-show: hsl(var(--warning));
+    --status-no-show-bg: hsl(var(--warning) / 0.14);
+    --status-in-progress: hsl(var(--primary));
+    --status-in-progress-bg: hsl(var(--primary) / 0.12);
+    --gradient-primary-from: hsl(var(--primary));
+    --gradient-primary-to: hsl(var(--primary) / 0.85);
+    --glow-primary: transparent;
+    --glow-secondary: transparent;
+    --glow-success: transparent;
+    --primary-color: hsl(var(--primary));
+    --primary-color-hover: hsl(var(--primary) / 0.9);
+    font-feature-settings: "cv11", "ss01";
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-surface="staff"] *,
+  :root[data-surface="staff"] *::before,
+  :root[data-surface="staff"] *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
@@ -395,4 +565,34 @@ button[role="gridcell"][aria-selected="true"] span {
 :root:not(.dark) button[role="gridcell"][aria-selected="true"] span {
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Staff pages share the primary token for day-picker selection. */
+:root[data-surface="staff"] button[role="gridcell"][aria-selected="true"],
+:root[data-surface="staff"] button[role="gridcell"][aria-selected="true"] span {
+  background-color: hsl(var(--primary)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+  -webkit-text-fill-color: hsl(var(--primary-foreground)) !important;
+}
+:root[data-surface="staff"] button[role="gridcell"][aria-selected="true"] span {
+  background-color: transparent !important;
+}
+
+/* The shared Button hard-codes a blue ring for public pages; staff pages use the ring token. */
+:root[data-surface="staff"] .focus-visible\:ring-blue-400:focus-visible,
+:root[data-surface="staff"] .active\:ring-blue-400:active {
+  --tw-ring-color: hsl(var(--ring));
+}
+
+/* Dashboard grid (react-grid-layout) themed with staff tokens. */
+.staff-dashboard .react-grid-placeholder {
+  background: hsl(var(--primary));
+  opacity: 0.12;
+  border-radius: 0.75rem;
+}
+.staff-dashboard .react-grid-item > .react-resizable-handle::after {
+  border-color: hsl(var(--muted-foreground));
+}
+.staff-dashboard[data-editing] .react-grid-item > .react-resizable-handle {
+  opacity: 1;
 }

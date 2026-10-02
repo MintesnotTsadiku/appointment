@@ -1,67 +1,19 @@
 import { useEffect, useMemo, useState } from "react";
+import { Loader2 } from "lucide-react";
 
 import { callGet, callMethod } from "@/public-experience/api";
-
-interface Recipe {
-  key: string;
-  version: number;
-  label: string;
-  description: string;
-  audience: string;
-  mood: string;
-  supportedLocales: string[];
-  requiredSections: string[];
-  adjustments: Record<string, { type: string; choices?: string[]; optional?: boolean }>;
-  accessibility: Record<string, unknown>;
-}
-
-interface Profile {
-  name: string;
-  profile_name: string;
-  application_name: string;
-  short_name?: string;
-  owner_type: string;
-  organization?: string;
-  provider?: string;
-  recipe_key: string;
-  recipe_version: number;
-  brand_inputs_json?: string;
-  lifecycle: string;
-  active_revision?: string;
-  draft_version: number;
-}
-
-interface Site {
-  name: string;
-  site_title: string;
-  slug: string;
-  status: string;
-  brand_profile?: string;
-  recipe_key: string;
-  recipe_version: number;
-  current_release?: string;
-  draft_version: number;
-}
-
-interface CompileResult {
-  contentHash: string;
-  compiledDesign: { identity?: { applicationName?: string }; layout?: { rendererKey?: string }; validation?: { ok?: boolean } };
-  valid: boolean;
-}
-
-const card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900";
-const input = "mt-1 block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm dark:border-slate-600 dark:bg-slate-950";
-const button = "rounded-lg px-4 py-2 text-sm font-medium transition hover:-translate-y-px disabled:cursor-not-allowed disabled:opacity-50";
-
-function parseInputs(raw: string | undefined): Record<string, string> {
-  if (!raw) return {};
-  try {
-    const value = JSON.parse(raw);
-    return value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, string> : {};
-  } catch {
-    return {};
-  }
-}
+import { Button } from "@/components/button";
+import { Input } from "@/components/input";
+import { Label } from "@/components/label";
+import { NativeSelect } from "@/components/native-select";
+import { SettingsPage, SettingsSection } from "@/components/settings-layout";
+import { ErrorState } from "@/components/states";
+import { useTranslation } from "@/lib/i18n";
+import { humanize, parseInputs, type CompileResult, type Profile, type Recipe, type Site } from "./public-experience-editor/types";
+import { ChoiceSelect, EditorSkeleton, Field, StatusMessages } from "./public-experience-editor/EditorParts";
+import { DesignGallery } from "./public-experience-editor/DesignGallery";
+import { SelectedDesign } from "./public-experience-editor/SelectedDesign";
+import { Readiness, type ReadinessCheck } from "./public-experience-editor/Readiness";
 
 const PublicExperienceEditor = () => {
   const [profiles, setProfiles] = useState<Profile[]>([]);
@@ -82,8 +34,15 @@ const PublicExperienceEditor = () => {
   const [compile, setCompile] = useState<CompileResult | null>(null);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [checks, setChecks] = useState<ReadinessCheck[]>([]);
+  const [initialLoad, setInitialLoad] = useState<"loading" | "failed" | "done">("loading");
+  const { t } = useTranslation();
 
   const recipe = useMemo(() => recipes.find((item) => item.key === recipeKey) || recipes[0], [recipes, recipeKey]);
+  // A recipe offers only the adjustments it declares.
+  const offers = (name: string) => Boolean(recipe?.adjustments[name]);
+  const choices = (name: string) => recipe?.adjustments[name]?.choices ?? [];
 
   const load = async () => {
     try {
@@ -97,8 +56,10 @@ const PublicExperienceEditor = () => {
       setRecipes(recipeResult.recipes || []);
       if (!selectedProfile && profileResult.profiles?.[0]) setSelectedProfile(profileResult.profiles[0].name);
       if (!selectedSite && siteResult.sites?.[0]) setSelectedSite(siteResult.sites[0].name);
+      setInitialLoad("done");
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "Unable to load public experience settings.");
+      setInitialLoad((state) => (state === "loading" ? "failed" : state));
     }
   };
 
@@ -130,15 +91,19 @@ const PublicExperienceEditor = () => {
 
   useEffect(() => {
     setSite(sites.find((item) => item.name === selectedSite) || null);
+    setChecks([]);
   }, [sites, selectedSite]);
 
   const run = async (operation: () => Promise<void>) => {
     setError("");
     setMessage("");
+    setBusy(true);
     try {
       await operation();
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "Request failed.");
+    } finally {
+      setBusy(false);
     }
   };
 
@@ -152,9 +117,10 @@ const PublicExperienceEditor = () => {
       application_name: applicationName,
       short_name: shortName,
       brand_inputs_json: JSON.stringify({
-        accentColor: accentColor || undefined,
-        motion,
-        presentationDensity: density,
+        // Send only what the recipe offers; the compiler rejects anything else.
+        accentColor: offers("accentColor") ? accentColor || undefined : undefined,
+        motion: offers("motion") ? motion : undefined,
+        presentationDensity: offers("presentationDensity") ? density : undefined,
         heroAsset: heroAsset || undefined,
         detailAsset: detailAsset || undefined,
       }),
@@ -193,101 +159,146 @@ const PublicExperienceEditor = () => {
     await load();
   });
 
+  const checkReadiness = () => run(async () => {
+    if (!site) return;
+    const result = await callGet<{ ready: boolean; checks: ReadinessCheck[] }>("appointment.public_experience.api.site_readiness", { site: site.name });
+    setChecks(result.checks);
+    setMessage(result.ready ? t("staff.publicExperience.readyMessage") : t("staff.publicExperience.notReadyMessage"));
+  });
+
+  const retryInitial = () => {
+    setError("");
+    setInitialLoad("loading");
+    void load();
+  };
+
+  const heroChoices = recipe?.adjustments.heroAsset?.choices ?? [];
+  const detailChoices = recipe?.adjustments.detailAsset?.choices ?? [];
+
   return (
-    <div className="mx-auto max-w-6xl space-y-6 p-6" data-page="public-experience-editor">
-      <header>
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-700">Public Experience</p>
-        <h1 className="mt-2 text-3xl font-semibold">Curated public presence</h1>
-        <p className="mt-2 max-w-2xl text-sm text-slate-500">
-          Choose a certified recipe, adjust its safe inputs, compile the design, then publish one immutable release.
-        </p>
-      </header>
+    <SettingsPage
+      title={t("staff.settings.publicExperience.title")}
+      eyebrow={t("staff.publicExperience.eyebrow")}
+      description={t("staff.publicExperience.description")}
+      headingQa="public-experience-heading"
+    >
+      <div className="space-y-6" data-page="public-experience-editor">
+        {initialLoad === "loading" ? <EditorSkeleton /> : initialLoad === "failed" ? (
+          <ErrorState description={error || undefined} onRetry={retryInitial} />
+        ) : (
+          <>
+            <StatusMessages error={error} message={message} />
 
-      {error ? <p data-status="error" className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800">{error}</p> : null}
-      {message ? <p data-status="ok" className="rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800">{message}</p> : null}
+            <SettingsSection title={t("staff.publicExperience.brandTitle")} description={t("staff.publicExperience.brandDescription")}>
+              <div className="max-w-xl space-y-1.5">
+                <Label htmlFor="pe-brand-profile">{t("staff.publicExperience.brandProfile")}</Label>
+                <NativeSelect id="pe-brand-profile" data-qa="public-experience-profile" value={selectedProfile} onChange={(event) => setSelectedProfile(event.target.value)}>
+                  <option value="">{t("staff.publicExperience.selectProfile")}</option>
+                  {profiles.map((item) => <option key={item.name} value={item.name}>{item.profile_name} · {item.lifecycle}</option>)}
+                </NativeSelect>
+              </div>
 
-      <section className={card}>
-        <label className="block text-sm font-medium">Brand Profile
-          <select className={input} value={selectedProfile} onChange={(event) => setSelectedProfile(event.target.value)}>
-            <option value="">Select a profile…</option>
-            {profiles.map((item) => <option key={item.name} value={item.name}>{item.profile_name} · {item.lifecycle}</option>)}
-          </select>
-        </label>
-
-        {profile ? (
-          <div className="mt-5 grid gap-5 lg:grid-cols-[1.25fr_.75fr]">
-            <div>
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h2 className="text-lg font-semibold">Recipe and identity</h2>
-                  <p className="mt-1 text-xs text-slate-500">Draft {profile.draft_version}{profile.active_revision ? " · live revision " + profile.active_revision : ""}</p>
+              {profile ? (
+                <div className="mt-6 space-y-6">
+                  <div className="space-y-3">
+                    <StepTitle step={1} title={t("staff.publicExperience.galleryTitle")} hint={t("staff.publicExperience.galleryHint")} />
+                    <DesignGallery recipes={recipes} selected={recipeKey} current={profile.recipe_key} onSelect={setRecipeKey} />
+                  </div>
+                  <div className="grid grid-cols-1 gap-6 border-t pt-6 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,.75fr)]">
+                    <div className="min-w-0 space-y-4">
+                      <StepTitle
+                        step={2}
+                        title={t("staff.publicExperience.adjustTitle")}
+                        hint={`${t("staff.publicExperience.draftVersion")} ${profile.draft_version} · ${profile.active_revision ? t("staff.publicExperience.brandLive") : t("staff.publicExperience.brandNotLive")}`}
+                      />
+                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                      <Field id="pe-app-name" label={t("staff.publicExperience.applicationName")}>
+                        <Input id="pe-app-name" value={applicationName} onChange={(event) => setApplicationName(event.target.value)} />
+                      </Field>
+                      <Field id="pe-short-name" label={t("staff.publicExperience.shortName")}>
+                        <Input id="pe-short-name" value={shortName} onChange={(event) => setShortName(event.target.value)} />
+                      </Field>
+                      {offers("accentColor") ? (
+                        <Field id="pe-accent" label={t("staff.publicExperience.accentColor")}>
+                          {/* Fallback is the recipe's default accent, a brand value rather than UI styling. */}
+                          <Input id="pe-accent" className="h-10 cursor-pointer p-1" type="color" value={accentColor || "#aa6a43"} onChange={(event) => setAccentColor(event.target.value)} />
+                        </Field>
+                      ) : null}
+                      {offers("motion") ? (
+                        <Field id="pe-motion" label={t("staff.publicExperience.motion")}>
+                          <ChoiceSelect id="pe-motion" value={motion} onChange={setMotion} options={choices("motion").map((value) => ({ value, label: t(value === "standard" ? "staff.publicExperience.motionStandard" : "staff.publicExperience.motionCalm") }))} />
+                        </Field>
+                      ) : null}
+                      {offers("presentationDensity") ? (
+                        <Field id="pe-density" label={t("staff.publicExperience.density")}>
+                          <ChoiceSelect id="pe-density" value={density} onChange={setDensity} options={choices("presentationDensity").map((value) => ({ value, label: t(value === "spacious" ? "staff.publicExperience.densitySpacious" : "staff.publicExperience.densityComfortable") }))} />
+                        </Field>
+                      ) : null}
+                      {heroChoices.length ? (
+                        <Field id="pe-hero" label={t("staff.publicExperience.heroImagery")}>
+                          <ChoiceSelect id="pe-hero" value={heroAsset} onChange={setHeroAsset} options={heroChoices.map((choice) => ({ value: choice, label: humanize(choice) }))} />
+                        </Field>
+                      ) : null}
+                      {detailChoices.length ? (
+                        <Field id="pe-detail" label={t("staff.publicExperience.detailImagery")}>
+                          <ChoiceSelect id="pe-detail" value={detailAsset} onChange={setDetailAsset} options={detailChoices.map((choice) => ({ value: choice, label: humanize(choice) }))} />
+                        </Field>
+                      ) : null}
+                      </div>
+                      <div className="space-y-3 border-t pt-4">
+                        <StepTitle step={3} title={t("staff.publicExperience.saveTitle")} hint={t("staff.publicExperience.saveHint")} />
+                        <div className="flex flex-wrap gap-2">
+                          <Button onClick={save} disabled={busy} data-qa="public-experience-save">{busy && <Loader2 className="animate-spin" aria-hidden="true" />}{t("staff.publicExperience.saveDraft")}</Button>
+                          <Button variant="outline" onClick={compileDraft} disabled={busy} data-qa="public-experience-compile">{t("staff.publicExperience.compile")}</Button>
+                          <Button variant="secondary" onClick={publishBrand} disabled={busy} data-qa="public-experience-publish-brand">{t("staff.publicExperience.publishBrand")}</Button>
+                        </div>
+                      </div>
+                    </div>
+                    <SelectedDesign recipe={recipe} site={site} contentHash={compile?.contentHash} />
+                  </div>
                 </div>
-                <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-900">{recipe?.mood || "certified"}</span>
+              ) : <p className="mt-4 text-sm text-muted-foreground">{profiles.length ? t("staff.publicExperience.chooseProfile") : t("staff.publicExperience.noProfiles")}</p>}
+            </SettingsSection>
+
+            <SettingsSection
+              title={`4. ${t("staff.publicExperience.releaseTitle")}`}
+              description={t("staff.publicExperience.releaseDescription")}
+              aside={site ? <span className="max-w-full truncate rounded-full bg-muted px-2.5 py-0.5 text-xs text-muted-foreground">{site.status} · /{site.slug}</span> : undefined}
+            >
+              <div className="max-w-xl space-y-1.5">
+                <Label htmlFor="pe-site">{t("staff.publicExperience.publicSite")}</Label>
+                <NativeSelect id="pe-site" data-qa="public-experience-site" value={selectedSite} onChange={(event) => setSelectedSite(event.target.value)}>
+                  <option value="">{t("staff.publicExperience.selectSite")}</option>
+                  {sites.map((item) => <option key={item.name} value={item.name}>{item.site_title} · {item.status}</option>)}
+                </NativeSelect>
               </div>
-
-              <label className="mt-4 block text-sm">Certified recipe
-                <select className={input} value={recipeKey} onChange={(event) => setRecipeKey(event.target.value)}>
-                  {recipes.map((item) => <option key={item.key} value={item.key}>{item.label} · v{item.version}</option>)}
-                </select>
-              </label>
-              {recipe ? <p className="mt-2 text-sm text-slate-500">{recipe.description}</p> : null}
-
-              <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                <label className="text-sm">Application name<input className={input} value={applicationName} onChange={(event) => setApplicationName(event.target.value)} /></label>
-                <label className="text-sm">Short name<input className={input} value={shortName} onChange={(event) => setShortName(event.target.value)} /></label>
-                <label className="text-sm">Accent color<input className={input + " h-10 p-1"} type="color" value={accentColor || "#aa6a43"} onChange={(event) => setAccentColor(event.target.value)} /></label>
-                <label className="text-sm">Motion
-                  <select className={input} value={motion} onChange={(event) => setMotion(event.target.value)}><option value="calm">Calm</option><option value="standard">Standard</option></select>
-                </label>
-                <label className="text-sm">Presentation density
-                  <select className={input} value={density} onChange={(event) => setDensity(event.target.value)}><option value="comfortable">Comfortable</option><option value="spacious">Spacious</option></select>
-                </label>
-                {recipe?.adjustments.heroAsset?.choices?.length ? <label className="text-sm">Hero imagery
-                  <select className={input} value={heroAsset} onChange={(event) => setHeroAsset(event.target.value)}>{recipe.adjustments.heroAsset.choices.map((choice) => <option key={choice} value={choice}>{choice.replace("hero.", "").split("-").join(" ")}</option>)}</select>
-                </label> : null}
-                {recipe?.adjustments.detailAsset?.choices?.length ? <label className="text-sm">Detail imagery
-                  <select className={input} value={detailAsset} onChange={(event) => setDetailAsset(event.target.value)}>{recipe.adjustments.detailAsset.choices.map((choice) => <option key={choice} value={choice}>{choice.replace("detail.", "").split("-").join(" ")}</option>)}</select>
-                </label> : null}
-              </div>
-
-              <div className="mt-5 flex flex-wrap gap-2">
-                <button className={button + " bg-slate-900 text-white"} onClick={save}>Save draft</button>
-                <button className={button + " border border-slate-300"} onClick={compileDraft}>Compile design</button>
-                <button className={button + " bg-amber-700 text-white"} onClick={publishBrand}>Publish brand revision</button>
-              </div>
-            </div>
-
-            <aside className="rounded-xl bg-[#fbf7f1] p-5 text-[#332821]">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#aa6a43]">Quiet Trust</p>
-              <h3 className="mt-3 font-serif text-2xl">Warm editorial</h3>
-              <p className="mt-3 text-sm leading-6">A quiet hierarchy, generous rhythm and a direct path to booking—designed for clinics and thoughtful services.</p>
-              <ul className="mt-5 space-y-2 text-xs text-[#6c5b4f]">
-                <li>✓ Local Latin + Ethiopic font coverage</li>
-                <li>✓ Protected booking and state tokens</li>
-                <li>✓ Structured content only</li>
-                <li>✓ Contrast and focus checks at compile time</li>
-              </ul>
-              {compile ? <p className="mt-5 break-all border-t border-[#d9c9b8] pt-4 font-mono text-[10px]">Compiled {compile.contentHash}</p> : null}
-            </aside>
-          </div>
-        ) : <p className="mt-4 text-sm text-slate-500">Choose a profile to edit its certified design.</p>}
-      </section>
-
-      <section className={card}>
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div><h2 className="text-lg font-semibold">Experience Release</h2><p className="mt-1 text-sm text-slate-500">The release pins the brand revision, recipe, compiled design and typed site content.</p></div>
-          {site ? <span className="rounded-full bg-slate-100 px-3 py-1 text-xs">{site.status} · {site.slug}</span> : null}
-        </div>
-        <label className="mt-4 block max-w-xl text-sm font-medium">Public Site
-          <select className={input} value={selectedSite} onChange={(event) => setSelectedSite(event.target.value)}>
-            <option value="">Select a site…</option>
-            {sites.map((item) => <option key={item.name} value={item.name}>{item.site_title} · {item.status}</option>)}
-          </select>
-        </label>
-        {site ? <div className="mt-4 flex flex-wrap items-center gap-3"><button className={button + " bg-slate-900 text-white"} onClick={() => void run(async () => { const result = await callGet<{ ready: boolean; checks: Array<{ check: string; ok: boolean; remediation?: string }> }>("appointment.public_experience.api.site_readiness", { site: site.name }); setMessage(result.ready ? "Site is ready." : result.checks.filter((item) => !item.ok).map((item) => item.check + ": " + (item.remediation || "not ready")).join(" · ")); })}>Check readiness</button><button className={button + " bg-emerald-700 text-white"} onClick={publishSite}>Publish Experience Release</button></div> : null}
-      </section>
-    </div>
+              {site ? (
+                <>
+                  <div className="mt-4 flex flex-wrap items-center gap-2">
+                    <Button variant="outline" onClick={() => void checkReadiness()} disabled={busy} data-qa="public-experience-readiness">{t("staff.publicExperience.checkReadiness")}</Button>
+                    <Button onClick={publishSite} disabled={busy} data-qa="public-experience-publish-site">{t("staff.publicExperience.publishRelease")}</Button>
+                  </div>
+                  {checks.length ? <Readiness checks={checks} /> : null}
+                </>
+              ) : null}
+            </SettingsSection>
+          </>
+        )}
+      </div>
+    </SettingsPage>
   );
 };
 
 export default PublicExperienceEditor;
+
+function StepTitle({ step, title, hint }: { step: number; title: string; hint?: string }) {
+  return (
+    <div className="flex items-start gap-3">
+      <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground" aria-hidden="true">{step}</span>
+      <div className="min-w-0">
+        <h3 className="text-sm font-semibold text-foreground">{title}</h3>
+        {hint ? <p className="mt-0.5 text-xs text-muted-foreground">{hint}</p> : null}
+      </div>
+    </div>
+  );
+}

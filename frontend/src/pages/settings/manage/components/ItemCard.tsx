@@ -1,135 +1,84 @@
 /**
- * Item Card Component
- * Displays an item (Service, Location, Provider, EventType) with validation and actions
+ * One row in the structure tree (service, location, provider or event type).
+ * Action buttons sit beside the content, never inside another control.
  */
-
-import { Edit, Trash2, Link as LinkIcon } from 'lucide-react';
+import type { ReactNode } from 'react';
+import { Pencil, Trash2 } from 'lucide-react';
 import { Button } from '@/components/button';
+import { useTranslation } from '@/lib/i18n';
+import { cn } from '@/lib/utils';
 import { ValidationBadge } from './ValidationBadge';
+import { BookingUrlList } from './BookingUrlList';
+import type { ItemType, Row } from '../types';
 
 interface ItemCardProps {
-  type: 'service' | 'location' | 'provider' | 'event_type';
-  item: any;
+  type: ItemType;
+  item: Row;
   onEdit?: () => void;
   onDelete?: () => void;
-  onRefresh?: () => void;
   nested?: boolean;
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
-export const ItemCard = ({ type, item, onEdit, onDelete, onRefresh, nested = false, children }: ItemCardProps) => {
-  const getItemName = () => {
-    switch (type) {
-      case 'service':
-        return item.service_name;
-      case 'location':
-        return item.location_name;
-      case 'provider':
-        return item.provider_name;
-      case 'event_type':
-        return item.event_type_name;
-      default:
-        return 'Unknown';
-    }
-  };
+function itemName(type: ItemType, item: Row): string {
+  const field = { service: 'service_name', location: 'location_name', provider: 'provider_name', event_type: 'event_type_name' }[type];
+  return item[field] ?? '';
+}
 
-  const getItemDescription = () => {
-    switch (type) {
-      case 'service':
-        return item.description || `${item.duration} min • ${item.price} ${item.currency || 'ETB'}`;
-      case 'location':
-        return item.address || 'No address set';
-      case 'provider':
-        return item.email || 'No email';
-      case 'event_type':
-        return item.description || 'No description';
-      default:
-        return '';
-    }
-  };
+function useItemDescription(type: ItemType, item: Row): string {
+  const { t } = useTranslation();
+  if (type === 'service') {
+    return item.description || `${item.duration} ${t('staff.manage.minutesShort')} • ${item.price} ${item.currency || 'ETB'}`;
+  }
+  if (type === 'location') return item.address || t('staff.manage.noAddress');
+  if (type === 'provider') return item.email || t('staff.manage.noEmail');
+  return item.description || t('staff.manage.noDescription');
+}
 
-  const validation = item.validation || { status: 'complete', issues: [] };
+export const ItemCard = ({ type, item, onEdit, onDelete, nested = false, children }: ItemCardProps) => {
+  const { t } = useTranslation();
+  const name = itemName(type, item);
+  const description = useItemDescription(type, item);
+  const issues: string[] = item.validation?.issues ?? [];
 
   return (
-    <div 
-      className={`rounded-xl p-4 backdrop-blur-sm ${nested ? 'ml-4' : ''}`}
-      style={{
-        backgroundColor: 'var(--bg-elevated)',
-        border: '1px solid var(--border-default)'
-      }}
-    >
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <div className="flex items-center gap-2 mb-1">
-            <h3 className="font-semibold" style={{ color: 'var(--text-primary)' }}>
-              {getItemName()}
-            </h3>
-            <ValidationBadge status={validation.status} size="sm" />
+    <div className={cn('min-w-0 rounded-lg border bg-card p-3 sm:p-4', nested && 'bg-muted/40')}>
+      <div className="flex items-start gap-2 sm:gap-3">
+        <div className="min-w-0 flex-1 space-y-1">
+          <div className="flex min-w-0 flex-wrap items-center gap-2">
+            <h3 className="min-w-0 break-words text-sm font-semibold text-foreground">{name}</h3>
+            <ValidationBadge status={item.validation?.status} />
           </div>
-          <p className="text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>
-            {getItemDescription()}
-          </p>
-          
-          {validation.issues && validation.issues.length > 0 && (
-            <div className="text-xs mb-2" style={{ color: 'var(--accent-secondary)' }}>
-              {validation.issues.join(', ')}
+          <p className="line-clamp-2 break-words text-sm text-muted-foreground sm:line-clamp-3" title={description}>{description}</p>
+          {issues.length > 0 && <p className="break-words text-xs text-warning">{issues.join(', ')}</p>}
+          {type === 'provider' && item.booking_urls?.length > 0 && (
+            <div className="border-t pt-2">
+              <BookingUrlList urls={item.booking_urls} />
             </div>
           )}
-
-          {/* Booking URLs for Provider */}
-          {type === 'provider' && item.booking_urls && item.booking_urls.length > 0 && (
-            <div className="mt-2 pt-2" style={{ borderTop: '1px solid var(--border-subtle)' }}>
-              <div className="flex items-center gap-1 mb-1">
-                <LinkIcon className="w-3 h-3" style={{ color: 'var(--text-muted)' }} />
-                <span className="text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>Booking URLs:</span>
-              </div>
-              <div className="space-y-1">
-                {item.booking_urls.map((url: any, idx: number) => (
-                  <div key={idx} className="flex items-center gap-2 text-xs">
-                    <a
-                      href={url.full_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:underline flex items-center gap-1"
-                      style={{ color: 'var(--accent-primary)' }}
-                    >
-                      <LinkIcon className="w-3 h-3" />
-                      {url.description || url.url_type || url.full_url}
-                    </a>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
           {children}
         </div>
-
-        <div className="flex items-center gap-2 ml-4">
-          {onEdit && (
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={onEdit}
-              title="Edit"
-            >
-              <Edit className="w-4 h-4" />
-            </Button>
-          )}
-          {onDelete && (
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={onDelete}
-              title="Delete"
-              className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
-            >
-              <Trash2 className="w-4 h-4" />
-            </Button>
-          )}
-        </div>
+        {(onEdit || onDelete) && (
+          <div className="flex shrink-0 items-center gap-1">
+            {onEdit && (
+              <Button size="icon" variant="ghost" className="h-8 w-8" onClick={onEdit} aria-label={`${t('staff.manage.editAction')} ${name}`}>
+                <Pencil aria-hidden="true" />
+              </Button>
+            )}
+            {onDelete && (
+              <Button
+                size="icon"
+                variant="ghost"
+                className="h-8 w-8 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                onClick={onDelete}
+                aria-label={`${t('staff.manage.deleteAction')} ${name}`}
+              >
+                <Trash2 aria-hidden="true" />
+              </Button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
 };
-

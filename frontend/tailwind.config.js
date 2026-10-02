@@ -40,6 +40,23 @@ export default {
   				DEFAULT: 'hsl(var(--destructive))',
   				foreground: 'hsl(var(--destructive-foreground))'
   			},
+  			success: {
+  				DEFAULT: 'hsl(var(--success))',
+  				foreground: 'hsl(var(--success-foreground))'
+  			},
+  			warning: {
+  				DEFAULT: 'hsl(var(--warning))',
+  				foreground: 'hsl(var(--warning-foreground))'
+  			},
+  			info: {
+  				DEFAULT: 'hsl(var(--info))',
+  				foreground: 'hsl(var(--info-foreground))'
+  			},
+  			sidebar: {
+  				DEFAULT: 'hsl(var(--sidebar))',
+  				foreground: 'hsl(var(--sidebar-foreground))',
+  				accent: 'hsl(var(--sidebar-accent))'
+  			},
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
@@ -64,6 +81,10 @@ export default {
   				gold: 'var(--brand-accent-gold)',
   				teal: 'var(--brand-accent-teal)'
   			}
+  		},
+  		boxShadow: {
+  			card: 'var(--shadow-card, 0 1px 3px rgb(0 0 0 / 0.08))',
+  			pop: 'var(--shadow-pop, 0 10px 30px -10px rgb(0 0 0 / 0.25))'
   		},
   		backgroundImage: {
   			'gradient-hero': 'linear-gradient(135deg, var(--gradient-hero-start) 0%, var(--gradient-hero-end) 100%)',

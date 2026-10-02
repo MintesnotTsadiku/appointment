@@ -1,0 +1,627 @@
+app: appointment
+base_url: http://127.0.0.84:44430
+default_role: Staff
+auth:
+  type: frappe_session
+  username: bloom.owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment-staff-ui
+capture_trace: false
+capture_video: false
+capture_instruction_timeline: false
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.demo.showcase.browser_values
+scenarios:
+- id: owner_home_desktop_light
+  title: owner /home desktop light
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /home
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-home-desktop-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-home-desktop-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_home_mobile_light
+  title: owner /home mobile light
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /home
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-home-mobile-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-home-mobile-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_calendar_desktop_light
+  title: owner /calendar desktop light
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /calendar
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-calendar-desktop-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-calendar-desktop-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_calendar_mobile_light
+  title: owner /calendar mobile light
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /calendar
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-calendar-mobile-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-calendar-mobile-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_reception_desktop_light
+  title: owner /reception desktop light
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /reception
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-reception-desktop-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-reception-desktop-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_reception_mobile_light
+  title: owner /reception mobile light
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /reception
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-reception-mobile-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-reception-mobile-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_analytics_desktop_light
+  title: owner /analytics desktop light
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /analytics
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-analytics-desktop-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-analytics-desktop-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_analytics_mobile_light
+  title: owner /analytics mobile light
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /analytics
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-analytics-mobile-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-analytics-mobile-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_settings_desktop_light
+  title: owner /settings desktop light
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /settings
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-settings-desktop-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-settings-desktop-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_settings_mobile_light
+  title: owner /settings mobile light
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /settings
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-settings-mobile-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-settings-mobile-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_settings_availability_desktop_light
+  title: owner /settings/availability desktop light
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /settings/availability
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-settings-availability-desktop-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-settings-availability-desktop-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_settings_availability_mobile_light
+  title: owner /settings/availability mobile light
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /settings/availability
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-settings-availability-mobile-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-settings-availability-mobile-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_settings_team_desktop_light
+  title: owner /settings/team desktop light
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /settings/team
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-settings-team-desktop-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-settings-team-desktop-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_settings_team_mobile_light
+  title: owner /settings/team mobile light
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /settings/team
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-settings-team-mobile-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-settings-team-mobile-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_settings_profile_desktop_light
+  title: owner /settings/profile desktop light
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /settings/profile
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-settings-profile-desktop-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-settings-profile-desktop-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_settings_profile_mobile_light
+  title: owner /settings/profile mobile light
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /settings/profile
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-settings-profile-mobile-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-settings-profile-mobile-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_settings_location_desktop_light
+  title: owner /settings/location desktop light
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /settings/location
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-settings-location-desktop-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-settings-location-desktop-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_settings_location_mobile_light
+  title: owner /settings/location mobile light
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /settings/location
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-settings-location-mobile-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-settings-location-mobile-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_settings_calendar_desktop_light
+  title: owner /settings/calendar desktop light
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /settings/calendar
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-settings-calendar-desktop-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-settings-calendar-desktop-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_settings_calendar_mobile_light
+  title: owner /settings/calendar mobile light
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /settings/calendar
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-settings-calendar-mobile-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-settings-calendar-mobile-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_settings_business_desktop_light
+  title: owner /settings/business desktop light
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /settings/business
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-settings-business-desktop-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-settings-business-desktop-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_settings_business_mobile_light
+  title: owner /settings/business mobile light
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /settings/business
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-settings-business-mobile-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-settings-business-mobile-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_settings_services_desktop_light
+  title: owner /settings/services desktop light
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /settings/services
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-settings-services-desktop-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-settings-services-desktop-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_settings_services_mobile_light
+  title: owner /settings/services mobile light
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /settings/services
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-settings-services-mobile-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-settings-services-mobile-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_settings_manage_desktop_light
+  title: owner /settings/manage desktop light
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /settings/manage
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-settings-manage-desktop-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-settings-manage-desktop-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_settings_manage_mobile_light
+  title: owner /settings/manage mobile light
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /settings/manage
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-settings-manage-mobile-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-settings-manage-mobile-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_settings_public_experience_desktop_light
+  title: owner /settings/public-experience desktop light
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /settings/public-experience
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-settings-public-experience-desktop-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-settings-public-experience-desktop-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_settings_public_experience_mobile_light
+  title: owner /settings/public-experience mobile light
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /settings/public-experience
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-settings-public-experience-mobile-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-settings-public-experience-mobile-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_onboarding_desktop_light
+  title: owner /onboarding desktop light
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /onboarding
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-onboarding-desktop-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-onboarding-desktop-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_onboarding_mobile_light
+  title: owner /onboarding mobile light
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /onboarding
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-onboarding-mobile-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-onboarding-mobile-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_workspaces_desktop_light
+  title: owner /workspaces desktop light
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /workspaces
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-workspaces-desktop-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-workspaces-desktop-light.html
+  - action: get_console_errors
+  - action: get_network_errors
+- id: owner_workspaces_mobile_light
+  title: owner /workspaces mobile light
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /workspaces
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: screenshot
+    name: owner-workspaces-mobile-light.png
+    full_page: true
+  - action: get_dom_snapshot
+    name: owner-workspaces-mobile-light.html
+  - action: get_console_errors
+  - action: get_network_errors
