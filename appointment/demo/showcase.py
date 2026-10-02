@@ -936,6 +936,9 @@ def appointments(state, keys=None):
                         )
                         name = remember(state, "Appointment", result["booking_id"])
                         doc = frappe.get_doc("Appointment", name)
+                        # The booking created this profile only when it is the profile's first booking.
+                        if doc.customer and frappe.db.count("Appointment", {"customer": doc.customer}) == 1:
+                            remember(state, "Customer Profile", doc.customer)
                         if counter % 13 == 0:
                             booking.change(name, "cancel", str(doc.modified))
                         elif (
@@ -1175,6 +1178,7 @@ CLEANUP_PRIORITY = {
     "Brand Revision": 4,
     "Brand Profile": 5,
     "Appointment": 6,
+    "Customer Profile": 6.5,
     "Business Membership": 7,
     "EventType": 8,
     "Service": 9,

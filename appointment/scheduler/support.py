@@ -17,6 +17,7 @@ BOOKING_FIELDS = (
     "client_name",
     "client_email",
     "client_phone",
+    "customer",
     "appointment_date",
     "start_time",
     "end_time",
@@ -29,13 +30,20 @@ BOOKING_FIELDS = (
 
 
 @frappe.whitelist()
-def customer_record(organization, email):
+def customer_record(organization, email=None, customer=None):
+    """Bookings for one customer, found by profile ID or by email."""
     if organization not in managed_organizations():
         frappe.throw(_("Only this business's manager may prepare a customer data export."), frappe.PermissionError)
-    frappe.utils.validate_email_address(email, throw=True)
+    if customer:
+        if frappe.db.get_value("Customer Profile", customer, "organization") != organization:
+            frappe.throw(_("Only this business's manager may prepare a customer data export."), frappe.PermissionError)
+        filters = {"organization": organization, "customer": customer}
+    else:
+        frappe.utils.validate_email_address(email, throw=True)
+        filters = {"organization": organization, "client_email": email}
     rows = frappe.get_all(
         "Appointment",
-        filters={"organization": organization, "client_email": email},
+        filters=filters,
         fields=list(BOOKING_FIELDS),
         order_by="creation asc",
     )
@@ -59,6 +67,7 @@ def customer_record(organization, email):
     return {
         "organization": organization,
         "email": email,
+        "customer": customer,
         "bookings": rows,
-        "scope": "Canonical bookings matching this email in this business; verify requester identity before sharing.",
+        "scope": "Canonical bookings for this customer in this business; verify requester identity before sharing.",
     }

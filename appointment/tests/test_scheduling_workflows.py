@@ -117,6 +117,9 @@ class TestSchedulingWorkflows(unittest.TestCase):
                 frappe.delete_doc(doctype, name, force=True, ignore_permissions=True)
             except Exception:  # best-effort cleanup of disposable QA rows
                 frappe.db.rollback()
+        # Bookings created customer profiles for the QA business; their bookings are gone now.
+        for name in frappe.get_all("Customer Profile", filters={"organization": cls.org.name}, pluck="name"):
+            frappe.delete_doc("Customer Profile", name, force=True, ignore_permissions=True)
         frappe.db.commit()
         frappe.flags.syncing_booking_urls = False
 

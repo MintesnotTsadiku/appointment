@@ -12,3 +12,5 @@ appointment.patches.v0_1.update_route_appointment
 appointment.patches.v0_1.import_frontend_translations
 appointment.patches.v0_1.import_landing_world_translations
 appointment.patches.v0_1.import_customer_notification_translations
+appointment.patches.v0_1.link_customer_profiles
+appointment.patches.v0_1.import_customer_profile_translations

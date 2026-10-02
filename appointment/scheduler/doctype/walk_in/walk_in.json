@@ -8,6 +8,7 @@
  "engine": "InnoDB",
  "field_order": [
   "naming_series",
+  "customer",
   "client_name",
   "client_phone",
   "client_email",
@@ -26,6 +27,12 @@
    "fieldtype": "Select",
    "label": "Naming Series",
    "options": "WI-"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer Profile"
   },
   {
    "fieldname": "client_name",
@@ -148,9 +155,3 @@
  "states": [],
  "title_field": "client_name"
 }
-
-
-
-
-
-

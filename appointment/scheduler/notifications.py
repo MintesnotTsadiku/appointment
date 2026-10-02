@@ -160,7 +160,11 @@ def _dedupe_key(doc, event):
 
 
 def customer_language(doc):
-    language = doc.get("customer_language") or frappe.db.get_value("Organization", doc.organization, "language")
+    language = (
+        doc.get("customer_language")
+        or (doc.get("customer") and frappe.db.get_value("Customer Profile", doc.customer, "preferred_language"))
+        or frappe.db.get_value("Organization", doc.organization, "language")
+    )
     return language if language in ("en", "am") else "en"
 
 

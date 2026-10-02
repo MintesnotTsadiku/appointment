@@ -88,7 +88,8 @@ def _rollup(rows, start, end, local_now, names, prices, provider_names, location
     selected = [row for row in rows if start <= row.appointment_date <= end]
     statuses = Counter(row.status for row in selected)
     booked = [row for row in selected if row.status in BOOKED]
-    customers = Counter(row.client_email.lower() for row in booked if row.client_email)
+    # A linked customer profile identifies the customer; unlinked rows fall back to the email.
+    customers = Counter(row.customer or row.client_email.lower() for row in booked if row.customer or row.client_email)
     daily = defaultdict(lambda: {"bookings": 0, "completed": 0, "cancelled": 0, "no_show": 0})
     services, providers, locations, heatmap = Counter(), Counter(), Counter(), Counter()
     catalog = payments = booked_minutes = 0
@@ -226,7 +227,7 @@ def _report(organization, period):
     rows = []
     while True:
         page = frappe.get_all("Appointment", filters={"organization": organization, "appointment_date": ["between", [previous_start, future_end]]},
-            fields=["organization", "appointment_date", "start_time", "end_time", "status", "client_email", "service", "provider", "location", "amount_paid", "occupied_from", "occupied_until", "booking_timezone"],
+            fields=["organization", "appointment_date", "start_time", "end_time", "status", "client_email", "customer", "service", "provider", "location", "amount_paid", "occupied_from", "occupied_until", "booking_timezone"],
             order_by="appointment_date asc, name asc", start=len(rows), limit_page_length=1000)
         rows.extend(page)
         if len(page) < 1000:

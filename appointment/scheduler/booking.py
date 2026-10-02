@@ -12,7 +12,7 @@ from frappe import _
 from frappe.rate_limiter import rate_limit
 from frappe.utils import get_time, getdate
 
-from appointment.scheduler import notifications
+from appointment.scheduler import customer_identity, notifications
 from appointment.scheduler.booking_access import require_access
 
 _PUBLIC_CREATE = object()
@@ -225,9 +225,20 @@ def validate_document(doc):
     doc.booking_timezone = zone
     if doc.status in ACTIVE:
         check_capacity(provider, occupied_from, occupied_until, doc.name)
-    if not doc.client_name or not doc.client_email:
+    _validate_contact(doc, public)
+    if doc.is_new() or not doc.customer:
+        customer_identity.resolve_for_booking(doc)
+
+
+def _validate_contact(doc, public):
+    """Name always. Email for public bookings, which confirm by email; optional for staff."""
+    doc.client_name = (doc.client_name or "").strip()
+    if not doc.client_name:
+        frappe.throw(_("A customer name is required."))
+    if public and not doc.client_email:
         frappe.throw(_("Customer name and email are required."))
-    frappe.utils.validate_email_address(doc.client_email, throw=True)
+    if doc.client_email:
+        frappe.utils.validate_email_address(doc.client_email, throw=True)
 
 
 def creation_history(doc):

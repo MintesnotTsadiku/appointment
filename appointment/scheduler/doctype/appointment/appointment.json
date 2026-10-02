@@ -13,6 +13,7 @@
   "provider",
   "location",
   "service",
+  "customer",
   "client_name",
   "client_email",
   "client_phone",
@@ -84,6 +85,15 @@
    "reqd": 1
   },
   {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer Profile",
+   "search_index": 1,
+   "read_only": 1,
+   "description": "Business-owned customer profile. The contact fields below keep the booking's own copy."
+  },
+  {
    "fieldname": "client_name",
    "fieldtype": "Data",
    "label": "Client Name",
@@ -94,7 +104,8 @@
    "fieldtype": "Data",
    "label": "Client Email",
    "options": "Email",
-   "reqd": 1
+   "reqd": 0,
+   "description": "Required for public bookings, which confirm by email. Optional for staff bookings."
   },
   {
    "fieldname": "client_phone",
@@ -221,7 +232,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-10-02 00:00:00.000000",
+ "modified": "2026-10-03 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Scheduler",
  "name": "Appointment",

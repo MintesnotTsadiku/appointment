@@ -27,6 +27,8 @@ MARKER_PREFIX = "QA-BROWSER"
 _CREATED_DOCTYPES = (
     "Appointment",
     "Walk In",
+    # Bookings create customer profiles; remove them once their bookings are gone.
+    "Customer Profile",
     "Booking Event",
     "Appointment Group",
     "EventType",
@@ -373,6 +375,7 @@ def _cleanup_stale() -> list[str]:
     filters_by_doctype: dict[str, dict] = {
         "Appointment": {"client_name": ["like", f"{MARKER_PREFIX}-%"]},
         "Walk In": {"client_name": ["like", f"{MARKER_PREFIX}-%"]},
+        "Customer Profile": {"display_name": ["like", f"{MARKER_PREFIX}-%"]},
         "EventType": {"event_type_name": ["like", f"{MARKER_PREFIX}-%"]},
         "Service": {"service_name": ["like", f"{MARKER_PREFIX}-%"]},
         "User Appointment Availability": {"slug": ["like", f"{MARKER_PREFIX.lower()}-%"]},

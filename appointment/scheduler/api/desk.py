@@ -97,7 +97,7 @@ def get_desk_appointments(date: str = None, location_name: str = None, provider_
         filters=filters,
         fields=[
             "name", "appointment_id", "appointment_date", "start_time", "end_time",
-            "client_name", "client_email", "client_phone", "service",
+            "client_name", "client_email", "client_phone", "customer", "service",
             "provider", "location", "status",
             "amount_paid", "notes", "event_type", "event", "organization", "booking_timezone", "modified"
         ],
@@ -165,15 +165,16 @@ def get_desk_appointments(date: str = None, location_name: str = None, provider_
 @add_response_code
 def create_desk_appointment(
     client_name: str,
-    client_phone: str,
-    client_email: str,
-    service_name: str,
-    provider_name: str,
-    location_name: str,
-    start_time: str,
+    client_phone: str = None,
+    client_email: str = None,
+    service_name: str = None,
+    provider_name: str = None,
+    location_name: str = None,
+    start_time: str = None,
     end_time: str = None,
     notes: str = None,
-    appointment_date: str = None
+    appointment_date: str = None,
+    customer: str = None,
 ):
     """
     Create appointment on behalf of client.
@@ -181,7 +182,7 @@ def create_desk_appointment(
     Args:
         client_name: Client name
         client_phone: Client phone
-        client_email: Client email
+        client_email: Client email (optional)
         service_name: Service name
         provider_name: Provider name
         location_name: Location name
@@ -189,6 +190,7 @@ def create_desk_appointment(
         end_time: End time (HH:MM:SS or datetime string). If not provided, calculated from service duration
         notes: Optional notes
         appointment_date: Appointment date (YYYY-MM-DD). Defaults to today
+        customer: Customer Profile to link. Without it, the server matches or creates one.
 
     Returns:
         Created appointment
@@ -198,7 +200,7 @@ def create_desk_appointment(
     require_access(frappe._dict(organization=org, provider=provider_name))
     try:
         # Validate required fields
-        if not all([client_name, client_phone, service_name, provider_name, location_name, start_time]):
+        if not all([client_name, service_name, provider_name, location_name, start_time]):
             return {"error": "Missing required fields"}, 400
 
         # Get appointment date
@@ -267,8 +269,9 @@ def create_desk_appointment(
         # Create appointment
         appointment = frappe.new_doc("Appointment")
         appointment.client_name = client_name
-        appointment.client_phone = client_phone
+        appointment.client_phone = client_phone or ""
         appointment.client_email = client_email or ""
+        appointment.customer = customer or None
         appointment.service = service_name
         appointment.provider = provider_name
         appointment.location = location_name
@@ -575,7 +578,8 @@ def add_walk_in(
     service_requested: str = None,
     location_name: str = None,
     provider_preferred: str = None,
-    notes: str = None
+    notes: str = None,
+    customer: str = None,
 ):
     """
     Add walk-in to queue.
@@ -588,6 +592,7 @@ def add_walk_in(
         location_name: Location name (optional)
         provider_preferred: Provider name (optional)
         notes: Optional notes
+        customer: Customer Profile picked at the desk (optional)
 
     Returns:
         Created walk-in
@@ -602,6 +607,14 @@ def add_walk_in(
         walk_in.client_phone = client_phone
         if client_email:
             walk_in.client_email = client_email
+        if customer:
+            from appointment.scheduler.booking_access import business_scope
+
+            business = frappe.db.get_value("Customer Profile", customer, "organization")
+            location_business = frappe.db.get_value("Location", location_name, "organization") if location_name else business
+            if business not in business_scope() or location_business != business:
+                return {"error": "The customer belongs to another business"}, 403
+            walk_in.customer = customer
         if service_requested:
             walk_in.service_requested = service_requested
         if location_name:
@@ -735,6 +748,7 @@ def assign_walk_in_to_slot(walk_in_name: str, provider_name: str, location_name:
         appointment.client_name = walk_in.client_name
         appointment.client_phone = walk_in.client_phone
         appointment.client_email = walk_in.client_email or ""
+        appointment.customer = walk_in.customer or None
         appointment.service = service_name
         appointment.provider = provider_name
         appointment.location = location_name
