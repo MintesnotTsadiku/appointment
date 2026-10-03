@@ -6,7 +6,7 @@
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
-  "field_order": [
+ "field_order": [
   "naming_series",
   "service_name",
   "description",
@@ -22,7 +22,9 @@
   "buffer_after",
   "Section Break-2",
   "use_default_hours",
-  "opening_hours"
+  "opening_hours",
+  "resources_section",
+  "resource_needs"
  ],
  "fields": [
   {
@@ -141,12 +143,24 @@
    "label": "Opening Hours",
    "options": "Opening Hours",
    "description": "Service-specific availability. Multiple time ranges per day allowed (for breaks like lunch). Must be within Location hours."
+  },
+  {
+   "fieldname": "resources_section",
+   "fieldtype": "Section Break",
+   "label": "Rooms and Equipment"
+  },
+  {
+   "fieldname": "resource_needs",
+   "fieldtype": "Table",
+   "label": "Needs",
+   "options": "Service Resource Need",
+   "description": "Each booking also reserves one free resource of each listed type at its location."
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-17 00:00:00.000000",
+ "modified": "2026-10-03 21:00:00.000000",
  "modified_by": "Administrator",
  "module": "Scheduler",
  "name": "Service",

@@ -12,7 +12,7 @@ from frappe import _
 from frappe.rate_limiter import rate_limit
 from frappe.utils import cint, get_datetime, get_time, getdate
 
-from appointment.scheduler import customer_identity, notifications
+from appointment.scheduler import customer_identity, notifications, resources
 from appointment.scheduler.booking_access import require_access
 
 _PUBLIC_CREATE = object()
@@ -241,6 +241,10 @@ def validate_document(doc):
             doc.last_changed_by = "Customer" if customer else "Staff"
     if doc.status in ACTIVE:
         check_capacity(provider, occupied_from, occupied_until, doc.name)
+        # Rooms and equipment: strict when the booking takes a new time or a staff choice.
+        reactivated = old and old.status not in ACTIVE
+        strict = bool(not old or time_changed or reactivated or doc.flags.resource_choice)
+        resources.allocate(doc, service, location, occupied_from, occupied_until, strict=strict)
     _validate_contact(doc, public)
     if doc.is_new() or not doc.customer:
         customer_identity.resolve_for_booking(doc)
@@ -396,6 +400,7 @@ def slots(offering_id, date, organization_id=None):
     if duration <= 0:
         frappe.throw(_("The offering duration is invalid."))
     result = []
+    wanted = resources.needs(service)
     for h in effective_hours(service, location, provider, day):
         start = local_instant(day, h["start_time"], location.timezone) + timedelta(
             minutes=int(service.buffer_before or 0)
@@ -407,6 +412,8 @@ def slots(offering_id, date, organization_id=None):
             try:
                 _local_start, _local_end, begin, stop = check_hours(parts, start, end)
                 check_capacity(provider, begin, stop)
+                if wanted and not resources.available(wanted, location.name, business.name, begin, stop):
+                    available = False
             except frappe.ValidationError:
                 frappe.clear_messages()
                 available = False

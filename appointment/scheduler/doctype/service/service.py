@@ -10,6 +10,9 @@ from appointment.scheduler.availability import validate_availability_hierarchy
 class Service(Document):
 	def validate(self):
 		"""Validate service data including duplicate name check."""
+		from appointment.scheduler.resources import validate_service_needs
+
+		validate_service_needs(self)
 		# Check for duplicate service names within the same organization
 		if self.organization and self.service_name:
 			existing_service = frappe.db.get_value(
