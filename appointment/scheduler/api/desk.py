@@ -108,8 +108,12 @@ def get_desk_appointments(date: str = None, location_name: str = None, provider_
         frappe.get_list("Appointment", filters=base_filters, fields=["name"], limit_page_length=0)
     )
 
-    # Enrich with service, provider, location and business display names.
+    # Enrich with service, provider, location, resource and business display names.
+    from appointment.scheduler.resources import names_for
+
+    resource_names = names_for([apt.name for apt in appointments])
     for apt in appointments:
+        apt["resource_names"] = resource_names.get(apt.name, [])
         apt["start_time"] = get_time(apt.start_time).strftime("%H:%M:%S")
         apt["end_time"] = get_time(apt.end_time).strftime("%H:%M:%S")
         apt["service_name"] = (

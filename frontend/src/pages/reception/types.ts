@@ -22,6 +22,8 @@ export interface Appointment {
   provider_name: string;
   location: string;
   location_name: string;
+  /** Rooms or equipment the booking holds. */
+  resource_names?: string[];
   status: 'Pending' | 'Confirmed' | 'Completed' | 'Cancelled' | 'No Show';
   amount_paid?: number;
   currency?: string;

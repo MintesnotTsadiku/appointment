@@ -1,0 +1,269 @@
+# Run appointment.tests.resources_qa_fixtures.setup first and cleanup afterwards.
+# en desktop adds Chair 3 and moves the reception booking to quiet chair B; am desktop moves it back to A.
+# am desktop checks the block conflict on quiet chair B, which then holds the booking.
+app: appointment
+base_url: http://127.0.0.84:44430
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.resources_qa_fixtures.browser_values
+default_role: Staff
+auth:
+  type: frappe_session
+  username: bloom.owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment-resources
+scenarios:
+- id: res_owner_en_desktop
+  title: 'Owner: rooms and equipment, service needs and reception move (en, desktop)'
+  viewport: &id003
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /settings/resources
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="resource-settings"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="resource-card"][data-qa-name="Quiet chair A"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="resource-block-row"]'
+  - action: screenshot
+    name: res_owner_en_desktop-1-resources.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="resource-location"][data-qa-location="Bole main studio"]
+      [data-qa="resource-add"]'
+  - action: fill
+    selector: '[data-qa="resource-name"]'
+    value: Chair 3
+  - action: click
+    selector: '[data-qa="resource-save"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="resource-card"][data-qa-name="Chair 3"]'
+  - action: click
+    selector: '[data-qa="resource-card"][data-qa-name="Quiet chair A"] [data-qa="resource-block"]'
+  - action: fill
+    selector: '[data-qa="block-start"]'
+    value: '{qa_res_block_start}'
+  - action: fill
+    selector: '[data-qa="block-end"]'
+    value: '{qa_res_block_end}'
+  - action: click
+    selector: '[data-qa="block-save"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="resource-conflict-row"]'
+  - action: screenshot
+    name: res_owner_en_desktop-2-block-conflict.png
+  - action: press
+    selector: '[data-qa="resource-block-dialog"]'
+    key: Escape
+  - action: open_url
+    url: /settings/services/SRV-2026-0050
+  - action: wait_for
+    selector: '[data-qa="service-need"]'
+  - action: screenshot
+    name: res_owner_en_desktop-3-service-needs.png
+    full_page: true
+  - action: open_url
+    url: /reception?date={qa_res_day}
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{qa_res_booking_id}"]'
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_res_booking_id}"]'
+    key: Enter
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-resource"][data-qa-state="assigned"]'
+  - action: select
+    selector: '[data-qa="booking-resource-move"]'
+    value: '{qa_res_chair_b}'
+    assertions:
+    - type: visible_text
+      value: Booking moved to Quiet chair B
+  - action: screenshot
+    name: res_owner_en_desktop-4-reception.png
+  - action: press
+    selector: '[data-qa="owned-booking-dialog"]'
+    key: Escape
+  - &id001
+    action: get_console_errors
+  - &id002
+    action: get_network_errors
+- id: res_owner_en_mobile
+  title: 'Owner: rooms and equipment, service needs and reception move (en, mobile)'
+  viewport: &id005
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /settings/resources
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="resource-settings"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="resource-card"][data-qa-name="Quiet chair A"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="resource-block-row"]'
+  - action: screenshot
+    name: res_owner_en_mobile-1-resources.png
+    full_page: true
+  - action: open_url
+    url: /settings/services/SRV-2026-0050
+  - action: wait_for
+    selector: '[data-qa="service-need"]'
+  - action: screenshot
+    name: res_owner_en_mobile-3-service-needs.png
+    full_page: true
+  - action: open_url
+    url: /reception?date={qa_res_day}
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{qa_res_booking_id}"]'
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_res_booking_id}"]'
+    key: Enter
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-resource"][data-qa-state="assigned"]'
+  - action: screenshot
+    name: res_owner_en_mobile-4-reception.png
+  - action: press
+    selector: '[data-qa="owned-booking-dialog"]'
+    key: Escape
+  - *id001
+  - *id002
+- id: res_owner_am_desktop
+  title: 'Owner: rooms and equipment, service needs and reception move (am, desktop)'
+  viewport: *id003
+  checks: []
+  routes:
+  - path: /settings/resources
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="resource-settings"]'
+  actions:
+  - &id004
+    action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="resource-card"][data-qa-name="Quiet chair A"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="resource-block-row"]'
+  - action: screenshot
+    name: res_owner_am_desktop-1-resources.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="resource-card"][data-qa-name="Quiet chair B"] [data-qa="resource-block"]'
+  - action: fill
+    selector: '[data-qa="block-start"]'
+    value: '{qa_res_block_start}'
+  - action: fill
+    selector: '[data-qa="block-end"]'
+    value: '{qa_res_block_end}'
+  - action: click
+    selector: '[data-qa="block-save"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="resource-conflict-row"]'
+  - action: screenshot
+    name: res_owner_am_desktop-2-block-conflict.png
+  - action: press
+    selector: '[data-qa="resource-block-dialog"]'
+    key: Escape
+  - action: open_url
+    url: /settings/services/SRV-2026-0050
+  - action: wait_for
+    selector: '[data-qa="service-need"]'
+  - action: screenshot
+    name: res_owner_am_desktop-3-service-needs.png
+    full_page: true
+  - action: open_url
+    url: /reception?date={qa_res_day}
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{qa_res_booking_id}"]'
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_res_booking_id}"]'
+    key: Enter
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-resource"][data-qa-state="assigned"]'
+  - action: select
+    selector: '[data-qa="booking-resource-move"]'
+    value: '{qa_res_chair_a}'
+    assertions:
+    - type: visible_text
+      value: ቀጠሮው ወደ Quiet chair A ተዛውሯል
+  - action: screenshot
+    name: res_owner_am_desktop-4-reception.png
+  - action: press
+    selector: '[data-qa="owned-booking-dialog"]'
+    key: Escape
+  - *id004
+  - *id001
+  - *id002
+- id: res_owner_am_mobile
+  title: 'Owner: rooms and equipment, service needs and reception move (am, mobile)'
+  viewport: *id005
+  checks: []
+  routes:
+  - path: /settings/resources
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="resource-settings"]'
+  actions:
+  - *id004
+  - action: wait_for
+    selector: '[data-qa="resource-card"][data-qa-name="Quiet chair A"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="resource-block-row"]'
+  - action: screenshot
+    name: res_owner_am_mobile-1-resources.png
+    full_page: true
+  - action: open_url
+    url: /settings/services/SRV-2026-0050
+  - action: wait_for
+    selector: '[data-qa="service-need"]'
+  - action: screenshot
+    name: res_owner_am_mobile-3-service-needs.png
+    full_page: true
+  - action: open_url
+    url: /reception?date={qa_res_day}
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{qa_res_booking_id}"]'
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_res_booking_id}"]'
+    key: Enter
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-resource"][data-qa-state="assigned"]'
+  - action: screenshot
+    name: res_owner_am_mobile-4-reception.png
+  - action: press
+    selector: '[data-qa="owned-booking-dialog"]'
+    key: Escape
+  - *id004
+  - *id001
+  - *id002

@@ -1,7 +1,7 @@
 ---
 tags: [plan, appointment, scheduling, resources]
 created: 2026-10-03
-status: decided 2026-10-03; building
+status: built and verified 2026-10-03
 ---
 
 # Rooms and equipment capacity plan
@@ -88,3 +88,45 @@ Buffers already widen `occupied_from`/`occupied_until`, so resources get the ser
 ## Out of scope
 
 Counted pools (10 dryers), resource-only bookings, customer choice of resource, scheduled classes and routes, opening hours per resource, resource analytics, seeding resources into the showcase demo.
+
+## Run record
+
+### What was built
+
+- DocTypes `Resource Type`, `Resource`, `Resource Block`, `Service Resource Need` (Service `resource_needs`) and `Appointment Resource` (Appointment `resources`). Backup `20261004_010553` was taken before the migrate.
+- `resources.py`: allocation inside `booking.validate_document`, after the provider lock and check. It is strict for a new booking, a new time, a reactivation or a staff choice. Any other edit only fills missing needs and never fails, so staff can still edit an unassigned booking. Resources are locked in name order after the provider. `booking.slots` hides a slot when any need has no free resource.
+- Staff APIs: overview, types, resources (turning one off or moving it is refused while upcoming bookings hold it), blocks (refused with the clashing bookings listed), service needs (saving assigns upcoming bookings and lists the rest), the reception view and move, and resource names on the reception cards.
+- `/settings/resources` (owners and managers): types with the services that need them, resources per location, blocks, and "Bookings that need a resource". The service edit page has a "Needs a room or equipment" section. The reception booking dialog shows the room or equipment with a "Move to" list, where busy ones are marked and disabled.
+- Reception accepts `?date=YYYY-MM-DD`. The date picker's day cells carry `data-qa-date`, and the slots panel carries `data-qa-open`.
+- Patch `import_resource_translations` imports the Amharic copy, including the server messages.
+
+### Found and fixed during the build
+
+- `Service.on_update` syncs booking URLs and calls `frappe.db.commit()`. Saving needs skips that sync (`resources._save_needs`) because needs do not change booking URLs, so a needs change no longer commits in the middle of a request. Other service saves still commit as before (existing behavior).
+- The slots header counted every slot, including unavailable ones ("13 slots available" with none open). It now counts open slots, and says "No available time slots" when none are open.
+- QA runs that add a resource assign it to upcoming demo bookings, as the feature does. The fixture cleanup releases them through the normal booking save before deleting the QA resources. Those demo bookings keep the Version entries of those saves. No email was queued.
+
+### Tests
+
+| Suite | Result |
+|---|---|
+| `appointment.tests.test_resources` | 14 passed, including a race over HTTP: two guests book the last chair with different stylists while the chair is locked, both wait, exactly one wins |
+| Payments, Chapa, payments admin, self-service, notifications, SMS, profiles, scheduling workflows, policies, overview | passed |
+| `npm run -s test:dom` | passed |
+
+### Agent Plane runs
+
+`appointment.tests.resources_qa_fixtures.setup` gives Bloom a "Styling chair (QA)" type needed by Cut and shape: chairs 1 and 2 at the main studio, both blocked all of the QA day (the first day Rahel has open times, 2026-10-06), and quiet chairs A and B at the quiet room. It books Rahel that day (quiet chair A). `cleanup` removes everything.
+
+| Run | Manifest | Result |
+|---|---|---|
+| BQA-2026-00441 | `resources/guest.yaml` | Passed, 4 of 4 (1440×900 and 390×844, English and Amharic). Eden's Cut and shape on the QA day has 0 open times; Rahel's has open times at the quiet room. |
+| BQA-2026-00442 | `resources/owner.yaml` (bloom.owner) | Passed, 4 of 4. English desktop adds Chair 3, sees a block over the booking refused with the booking listed, sees the service needs, and moves the booking to quiet chair B in reception. Amharic desktop moves it back to A. |
+
+Both runs had 0 console and 0 network errors. Database check: the booking held quiet chair A at the end, Chair 3 existed, and only the fixture's two blocks existed. Earlier runs 00438–00440 found a fixture day that fell on the closed Monday, a test-order mistake in the manifest, and the cleanup problem above.
+
+### Left open
+
+- The showcase demo has no resources. Seeding them belongs in the explicit showcase seeder, if the demo should show them.
+- Counted pools, resource-only bookings, customer choice, and per-resource opening hours are later slices.
+- The empty-slots panel still has untranslated "Try:" hints and English slot `aria-label` suffixes ("(Booked)"). This is an older gap.

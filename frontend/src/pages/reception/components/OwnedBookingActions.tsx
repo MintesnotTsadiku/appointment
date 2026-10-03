@@ -16,6 +16,7 @@ import { Appointment } from '../types';
 import { BookingHistory } from './BookingHistory';
 import { CustomerMessages } from './CustomerMessages';
 import { PaymentSection } from './PaymentSection';
+import { ResourceSection } from './ResourceSection';
 import { notificationNotice } from './notificationNotice';
 
 interface OwnedBookingActionsProps {
@@ -137,6 +138,7 @@ export function OwnedBookingActions({ appointment, onClose, onSuccess }: OwnedBo
             </section>
           )}
 
+          <ResourceSection appointment={appointment.name} onChanged={onSuccess} />
           <PaymentSection appointment={appointment.name} onChanged={onSuccess} />
           <CustomerMessages bookingId={appointment.name} />
           <BookingHistory bookingId={appointment.name} />

@@ -135,8 +135,10 @@ export function TimeSlotsPanel({
     return <EmptySlots date={date} />;
   }
 
+  const openCount = slots.filter((slot) => !slot.isPast && !slot.booked && slot.available !== false).length;
+
   return (
-    <div className={cn("w-full space-y-6", className)}>
+    <div className={cn("w-full space-y-6", className)} data-qa="booking-slots" data-qa-open={openCount}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -150,7 +152,7 @@ export function TimeSlotsPanel({
             className="text-sm mt-1"
             style={{ color: 'var(--text-secondary)' }}
           >
-            {slots.length === 1 ? t("bookingPicker.oneSlot") : t("bookingPicker.slotsAvailable").replace("{0}", String(slots.length))}
+            {openCount === 0 ? t("bookingPicker.noSlots") : openCount === 1 ? t("bookingPicker.oneSlot") : t("bookingPicker.slotsAvailable").replace("{0}", String(openCount))}
           </p>
         </div>
         <div 

@@ -230,6 +230,7 @@ export function CalendarPanel({
               key={index}
               role="gridcell"
               data-qa="booking-date"
+              data-qa-date={`${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`}
               onClick={() => handleDateClick(date)}
               disabled={!selectable || loading}
               whileHover={selectable && !selected ? { scale: 1.05 } : {}}

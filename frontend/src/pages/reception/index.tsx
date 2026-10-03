@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useFrappeGetCall } from 'frappe-react-sdk';
 import { format, startOfWeek, endOfWeek } from 'date-fns';
 import { AlertTriangle, CalendarClock, RotateCcw } from 'lucide-react';
@@ -23,7 +23,12 @@ const Reception = () => {
   const { session } = useSession();
   const { t } = useTranslation();
   const organization = session?.selected?.organization;
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [searchParams] = useSearchParams();
+  // `?date=YYYY-MM-DD` opens reception on that day (local midnight).
+  const [currentDate, setCurrentDate] = useState(() => {
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(searchParams.get('date') || '');
+    return match ? new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3])) : new Date();
+  });
   const [viewMode, setViewMode] = useState<ViewMode>('day');
   const [timeSlotInterval, setTimeSlotInterval] = useState<TimeSlotInterval>(30);
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);

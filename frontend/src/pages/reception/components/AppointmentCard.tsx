@@ -105,7 +105,10 @@ export const AppointmentCard = ({ appointment, isDragging: overlay, compact, tim
             </p>
             {appointment.service_name && <p className="truncate text-xs text-muted-foreground">{appointment.service_name}</p>}
             {density === 'full' && appointment.provider_name && (
-              <p className="truncate text-xs text-muted-foreground">{appointment.provider_name}</p>
+              <p className="truncate text-xs text-muted-foreground">
+                {appointment.provider_name}
+                {appointment.resource_names?.length ? ` · ${appointment.resource_names.join(', ')}` : ''}
+              </p>
             )}
           </>
         )}

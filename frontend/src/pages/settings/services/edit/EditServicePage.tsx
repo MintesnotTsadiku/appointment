@@ -13,6 +13,7 @@ import { errorMessage, type ServiceDetails, type ServiceProvider } from '../type
 import { useServiceForm } from './useServiceForm';
 import { ServiceDetailsSection, ServicePricingSection } from './ServiceFormSections';
 import { ServiceProvidersSection } from './ServiceProvidersSection';
+import { ServiceNeedsSection } from './ServiceNeedsSection';
 import { RemoveProviderDialog } from './RemoveProviderDialog';
 
 interface ServiceDetailsResponse {
@@ -131,6 +132,7 @@ const EditService = () => {
           onLink={() => setLinkProviderModalOpen(true)}
           onRemove={setPendingRemoval}
         />
+        {serviceId && <ServiceNeedsSection serviceId={serviceId} />}
         <PoliciesPointer />
       </div>
 

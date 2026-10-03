@@ -1,0 +1,221 @@
+# Run appointment.tests.resources_qa_fixtures.setup first and cleanup afterwards.
+app: appointment
+base_url: http://127.0.0.84:44430
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.resources_qa_fixtures.browser_values
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-resources
+scenarios:
+- id: res_guest_en_desktop
+  title: 'Guest: no Cut and shape time with Eden on the QA day (main studio chairs
+    blocked), open times with Rahel (en, desktop)'
+  viewport: &id003
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /schedule/org/bloom-studio
+    assertions:
+    - type: network_idle
+  actions:
+  - action: wait_for
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Eden
+      Tadesse")'
+  - action: click
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Eden
+      Tadesse")'
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_res_day}"]'
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_res_day}"]'
+  - action: wait_for
+    selector: '[data-qa="booking-slots"][data-qa-open="0"]'
+  - action: screenshot
+    name: res_guest_en_desktop-1-eden-closed.png
+    full_page: true
+  - action: open_url
+    url: /schedule/org/bloom-studio
+  - action: wait_for
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Rahel
+      Girma")'
+  - action: click
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Rahel
+      Girma")'
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_res_day}"]'
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_res_day}"]'
+  - action: wait_for
+    selector: '[data-qa="booking-slots"]:not([data-qa-open="0"])'
+  - action: screenshot
+    name: res_guest_en_desktop-2-rahel-open.png
+    full_page: true
+  - &id001
+    action: get_console_errors
+  - &id002
+    action: get_network_errors
+- id: res_guest_en_mobile
+  title: 'Guest: no Cut and shape time with Eden on the QA day (main studio chairs
+    blocked), open times with Rahel (en, mobile)'
+  viewport: &id004
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /schedule/org/bloom-studio
+    assertions:
+    - type: network_idle
+  actions:
+  - action: wait_for
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Eden
+      Tadesse")'
+  - action: click
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Eden
+      Tadesse")'
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_res_day}"]'
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_res_day}"]'
+  - action: wait_for
+    selector: '[data-qa="booking-slots"][data-qa-open="0"]'
+  - action: screenshot
+    name: res_guest_en_mobile-1-eden-closed.png
+    full_page: true
+  - action: open_url
+    url: /schedule/org/bloom-studio
+  - action: wait_for
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Rahel
+      Girma")'
+  - action: click
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Rahel
+      Girma")'
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_res_day}"]'
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_res_day}"]'
+  - action: wait_for
+    selector: '[data-qa="booking-slots"]:not([data-qa-open="0"])'
+  - action: screenshot
+    name: res_guest_en_mobile-2-rahel-open.png
+    full_page: true
+  - *id001
+  - *id002
+- id: res_guest_am_desktop
+  title: 'Guest: no Cut and shape time with Eden on the QA day (main studio chairs
+    blocked), open times with Rahel (am, desktop)'
+  viewport: *id003
+  checks: []
+  routes:
+  - path: /
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="language-toggle"]'
+  actions:
+  - action: press
+    selector: '[data-qa="language-toggle"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation.messages
+      status: 200
+  - action: open_url
+    url: /schedule/org/bloom-studio
+  - action: wait_for
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Eden
+      Tadesse")'
+  - action: click
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Eden
+      Tadesse")'
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_res_day}"]'
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_res_day}"]'
+  - action: wait_for
+    selector: '[data-qa="booking-slots"][data-qa-open="0"]'
+  - action: screenshot
+    name: res_guest_am_desktop-1-eden-closed.png
+    full_page: true
+  - action: open_url
+    url: /schedule/org/bloom-studio
+  - action: wait_for
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Rahel
+      Girma")'
+  - action: click
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Rahel
+      Girma")'
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_res_day}"]'
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_res_day}"]'
+  - action: wait_for
+    selector: '[data-qa="booking-slots"]:not([data-qa-open="0"])'
+  - action: screenshot
+    name: res_guest_am_desktop-2-rahel-open.png
+    full_page: true
+  - *id001
+  - *id002
+- id: res_guest_am_mobile
+  title: 'Guest: no Cut and shape time with Eden on the QA day (main studio chairs
+    blocked), open times with Rahel (am, mobile)'
+  viewport: *id004
+  checks: []
+  routes:
+  - path: /
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="language-toggle"]'
+  actions:
+  - action: press
+    selector: '[data-qa="language-toggle"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation.messages
+      status: 200
+  - action: open_url
+    url: /schedule/org/bloom-studio
+  - action: wait_for
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Eden
+      Tadesse")'
+  - action: click
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Eden
+      Tadesse")'
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_res_day}"]'
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_res_day}"]'
+  - action: wait_for
+    selector: '[data-qa="booking-slots"][data-qa-open="0"]'
+  - action: screenshot
+    name: res_guest_am_mobile-1-eden-closed.png
+    full_page: true
+  - action: open_url
+    url: /schedule/org/bloom-studio
+  - action: wait_for
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Rahel
+      Girma")'
+  - action: click
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Rahel
+      Girma")'
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_res_day}"]'
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_res_day}"]'
+  - action: wait_for
+    selector: '[data-qa="booking-slots"]:not([data-qa-open="0"])'
+  - action: screenshot
+    name: res_guest_am_mobile-2-rahel-open.png
+    full_page: true
+  - *id001
+  - *id002
