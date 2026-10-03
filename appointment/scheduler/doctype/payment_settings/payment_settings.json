@@ -1,0 +1,94 @@
+{
+ "actions": [],
+ "autoname": "",
+ "creation": "2026-10-03 18:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "collection_mode",
+  "platform_fee_type",
+  "platform_fee_value",
+  "free_bookings",
+  "section_platform_accounts",
+  "platform_bank_accounts",
+  "chapa_secret_key",
+  "chapa_webhook_secret"
+ ],
+ "fields": [
+  {
+   "fieldname": "collection_mode",
+   "fieldtype": "Select",
+   "label": "Who Collects Payments",
+   "options": "Business collects\nPlatform collects",
+   "default": "Business collects",
+   "reqd": 1,
+   "description": "Default for every business. A business can be overridden in its Business Payment Settings."
+  },
+  {
+   "fieldname": "platform_fee_type",
+   "fieldtype": "Select",
+   "label": "Platform Fee",
+   "options": "None\nFixed\nPercent",
+   "default": "None"
+  },
+  {
+   "fieldname": "platform_fee_value",
+   "fieldtype": "Float",
+   "label": "Platform Fee Value",
+   "default": "0",
+   "description": "ETB for Fixed, percent of the paid amount for Percent."
+  },
+  {
+   "fieldname": "free_bookings",
+   "fieldtype": "Int",
+   "label": "Free Paid Bookings per Business",
+   "default": "0",
+   "description": "Paid bookings per business before the platform fee applies."
+  },
+  {
+   "fieldname": "section_platform_accounts",
+   "fieldtype": "Section Break",
+   "label": "Platform Accounts",
+   "description": "Used when the platform collects."
+  },
+  {
+   "fieldname": "platform_bank_accounts",
+   "fieldtype": "Table",
+   "label": "Platform Bank Accounts",
+   "options": "Payment Bank Account"
+  },
+  {
+   "fieldname": "chapa_secret_key",
+   "fieldtype": "Password",
+   "label": "Platform Chapa Secret Key"
+  },
+  {
+   "fieldname": "chapa_webhook_secret",
+   "fieldtype": "Password",
+   "label": "Platform Chapa Webhook Secret"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-10-03 18:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Scheduler",
+ "name": "Payment Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "issingle": 1
+}

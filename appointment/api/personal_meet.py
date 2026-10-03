@@ -494,7 +494,7 @@ def book_time_slot(
             frappe.throw(_("Use the booking management workflow to change an existing appointment."))
         return book(duration_id, start_time, end_time, user_name, user_email,
                     args.get("request_id"), args.get("user_phone", ""), args.get("notes", ""), organization_id,
-                    language=args.get("language"))
+                    language=args.get("language"), payment_method=args.get("payment_method"))
     # Validate date is not in the past
     from frappe.utils import get_datetime, now_datetime
     requested_date = get_datetime(date)

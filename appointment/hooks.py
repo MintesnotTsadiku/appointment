@@ -240,6 +240,9 @@ scheduler_events = {
         "appointment.public_experience.hardening.process_pending_outbox",
     ],
     "cron": {
+        "*/5 * * * *": [
+            "appointment.scheduler.payments.process_holds",
+        ],
         "*/15 * * * *": [
             "appointment.scheduler.notifications.send_due_reminders",
             "appointment.scheduler.notification_sms.poll_delivery",

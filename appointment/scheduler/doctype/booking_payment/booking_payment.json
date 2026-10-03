@@ -1,0 +1,239 @@
+{
+ "actions": [],
+ "autoname": "hash",
+ "creation": "2026-10-03 18:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "appointment",
+  "organization",
+  "customer",
+  "method",
+  "collector",
+  "status",
+  "column_break_amounts",
+  "amount",
+  "service_price",
+  "balance_due",
+  "currency",
+  "hold_expires_at",
+  "reminder_sent",
+  "section_customer",
+  "reference",
+  "proof",
+  "submitted_at",
+  "section_chapa",
+  "tx_ref",
+  "checkout_url",
+  "provider_reference",
+  "section_review",
+  "paid_at",
+  "reviewed_by",
+  "reject_reason",
+  "section_refund",
+  "refund_amount",
+  "refund_reference",
+  "refund_proof",
+  "refunded_at"
+ ],
+ "fields": [
+  {
+   "fieldname": "appointment",
+   "fieldtype": "Link",
+   "label": "Booking",
+   "options": "Appointment",
+   "reqd": 1,
+   "search_index": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "organization",
+   "fieldtype": "Link",
+   "label": "Business",
+   "options": "Organization",
+   "reqd": 1,
+   "search_index": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer Profile"
+  },
+  {
+   "fieldname": "method",
+   "fieldtype": "Select",
+   "label": "Method",
+   "options": "Bank transfer\nChapa",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "collector",
+   "fieldtype": "Select",
+   "label": "Collected By",
+   "options": "Business\nPlatform",
+   "reqd": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Awaiting payment\nSubmitted\nPaid\nRejected\nExpired\nRefunded",
+   "default": "Awaiting payment",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "column_break_amounts",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "label": "Amount Due Now",
+   "reqd": 1
+  },
+  {
+   "fieldname": "service_price",
+   "fieldtype": "Currency",
+   "label": "Service Price"
+  },
+  {
+   "fieldname": "balance_due",
+   "fieldtype": "Currency",
+   "label": "Balance at Visit"
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Data",
+   "label": "Currency",
+   "default": "ETB"
+  },
+  {
+   "fieldname": "hold_expires_at",
+   "fieldtype": "Datetime",
+   "label": "Hold Expires At (UTC)"
+  },
+  {
+   "fieldname": "reminder_sent",
+   "fieldtype": "Check",
+   "label": "Reminder Sent",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_customer",
+   "fieldtype": "Section Break",
+   "label": "Customer Submission"
+  },
+  {
+   "fieldname": "reference",
+   "fieldtype": "Data",
+   "label": "Payment Reference"
+  },
+  {
+   "fieldname": "proof",
+   "fieldtype": "Attach",
+   "label": "Proof of Payment"
+  },
+  {
+   "fieldname": "submitted_at",
+   "fieldtype": "Datetime",
+   "label": "Submitted At"
+  },
+  {
+   "fieldname": "section_chapa",
+   "fieldtype": "Section Break",
+   "label": "Chapa"
+  },
+  {
+   "fieldname": "tx_ref",
+   "fieldtype": "Data",
+   "label": "Transaction Reference",
+   "unique": 1
+  },
+  {
+   "fieldname": "checkout_url",
+   "fieldtype": "Small Text",
+   "label": "Checkout URL"
+  },
+  {
+   "fieldname": "provider_reference",
+   "fieldtype": "Data",
+   "label": "Provider Reference"
+  },
+  {
+   "fieldname": "section_review",
+   "fieldtype": "Section Break",
+   "label": "Review"
+  },
+  {
+   "fieldname": "paid_at",
+   "fieldtype": "Datetime",
+   "label": "Paid At"
+  },
+  {
+   "fieldname": "reviewed_by",
+   "fieldtype": "Link",
+   "label": "Reviewed By",
+   "options": "User"
+  },
+  {
+   "fieldname": "reject_reason",
+   "fieldtype": "Small Text",
+   "label": "Reject Reason"
+  },
+  {
+   "fieldname": "section_refund",
+   "fieldtype": "Section Break",
+   "label": "Refund"
+  },
+  {
+   "fieldname": "refund_amount",
+   "fieldtype": "Currency",
+   "label": "Refund Amount"
+  },
+  {
+   "fieldname": "refund_reference",
+   "fieldtype": "Data",
+   "label": "Refund Reference"
+  },
+  {
+   "fieldname": "refund_proof",
+   "fieldtype": "Attach",
+   "label": "Refund Proof"
+  },
+  {
+   "fieldname": "refunded_at",
+   "fieldtype": "Datetime",
+   "label": "Refunded At"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-10-03 18:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Scheduler",
+ "name": "Booking Payment",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "appointment",
+ "track_changes": 1
+}

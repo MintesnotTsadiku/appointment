@@ -22,6 +22,7 @@ from frappe.rate_limiter import rate_limit
 from frappe.utils import cint, flt, get_datetime, get_url
 from frappe.utils.password import get_encryption_key
 
+from appointment.scheduler import payments
 from appointment.scheduler.booking import CUSTOMER_CHANGE
 from appointment.scheduler.helpers.policy_engine import get_applicable_policies
 
@@ -227,4 +228,5 @@ def _projection(doc):
         ),
         "rules": decide(doc),
         "currency": "ETB",
+        "payment": payments.public_view(payments.latest_payment(doc.name)),
     }

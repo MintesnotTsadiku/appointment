@@ -18,6 +18,8 @@ from appointment.scheduler.booking_access import require_access
 _PUBLIC_CREATE = object()
 # Set by self_service.py on a booking whose manage link it has verified.
 CUSTOMER_CHANGE = object()
+# Set by payments.py when a verified payment confirms or an unpaid hold expires.
+PAYMENT_CHANGE = object()
 
 ACTIVE = ("Pending", "Confirmed", "Completed", "No Show")
 
@@ -177,6 +179,7 @@ def validate_document(doc):
     public = doc.flags.public_booking is _PUBLIC_CREATE and doc.is_new()
     # A customer change through a verified manage link (self_service.py) skips only the staff access check.
     customer = doc.flags.customer_change is CUSTOMER_CHANGE and bool(old)
+    payment = doc.flags.payment_change is PAYMENT_CHANGE and bool(old)
     parts = offering(doc.event_type, public=public, require_active=not bool(old))
     _event, service, location, provider, business = parts
     for field, expected in [("service", service.name), ("provider", provider.name), ("location", location.name)]:
@@ -186,7 +189,7 @@ def validate_document(doc):
         frappe.throw(_("Booking business does not match the offering."), frappe.PermissionError)
     doc.organization = business.name
     if old:
-        if not customer:
+        if not (customer or payment):
             require_access(old)
         for field in (
             "organization",
@@ -200,7 +203,7 @@ def validate_document(doc):
         ):
             if doc.get(field) != old.get(field):
                 frappe.throw(_("Change the booking through its authorized lifecycle; ownership is immutable."))
-    if not public and not customer:
+    if not public and not customer and not payment:
         require_access(doc)
     lock_provider(provider)
     if old:
@@ -228,10 +231,14 @@ def validate_document(doc):
     doc.starts_at, doc.ends_at = start, end
     doc.occupied_from, doc.occupied_until = occupied_from, occupied_until
     doc.booking_timezone = zone
-    if old and (str(get_datetime(start)) != str(get_datetime(old.starts_at)) or doc.status != old.status):
+    time_moved = old and str(get_datetime(start)) != str(get_datetime(old.starts_at))
+    # Paying confirms a held booking; its manage link stays valid.
+    paid = old and old.status == "Pending" and doc.status == "Confirmed"
+    if old and (time_moved or (doc.status != old.status and not paid)):
         # A new time or status retires earlier manage links.
         doc.manage_version = cint(old.manage_version) + 1
-        doc.last_changed_by = "Customer" if customer else "Staff"
+        if not payment:
+            doc.last_changed_by = "Customer" if customer else "Staff"
     if doc.status in ACTIVE:
         check_capacity(provider, occupied_from, occupied_until, doc.name)
     _validate_contact(doc, public)
@@ -295,6 +302,7 @@ def book(
     notes="",
     organization_id=None,
     language=None,
+    payment_method=None,
 ):
     if not re.fullmatch(r"[A-Za-z0-9_-]{16,100}", request_id or ""):
         frappe.throw(_("A valid booking request identity is required."))
@@ -357,7 +365,18 @@ def book(
     # This narrow server-owned flag authorizes only public creation of the fully
     # resolved offering. The controller still enforces ownership/hours/capacity.
     doc.flags.public_booking = _PUBLIC_CREATE
+    from appointment.scheduler import payments, self_service
+
+    quote = payments.prepare_booking(doc, payment_method)
     doc.insert(ignore_permissions=True)
+    if quote:
+        payment = payments.create_for_booking(doc, payment_method, quote)
+        result.update(
+            status="Pending",
+            message=_("Booking held until payment."),
+            payment=payments.public_view(payment),
+            manage_path=self_service.manage_url(doc).replace(frappe.utils.get_url(), ""),
+        )
     result["notification_status"] = notifications.status_of(doc)
     frappe.db.set_value("Appointment", doc.name, "request_result", json.dumps(result), update_modified=False)
     return result

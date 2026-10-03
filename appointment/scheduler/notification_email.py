@@ -44,8 +44,19 @@ CUSTOMER_INTRO = {
     "Reschedule": "Hello {0}, you moved your booking. The new time is below.",
     "Cancellation": "Hello {0}, you cancelled your booking.",
 }
+COPY["Payment request"] = dict(
+    subject="Complete your booking with {0}",
+    heading="Payment needed",
+    intro="Hello {0}, your booking is held until {1}. Pay {2} to confirm it.",
+)
+COPY["Payment reminder"] = dict(
+    subject="Reminder: pay to keep your booking with {0}",
+    heading="Payment still needed",
+    intro="Hello {0}, we have not received your payment yet. Your booking is held until {1}.",
+)
+UNPAID_INTRO = "Hello {0}, your booking was released because the payment was not received."
 # Events whose booking is still open, so the email carries the manage link.
-MANAGEABLE = ("Confirmation", "Reschedule", "Reminder")
+MANAGEABLE = ("Confirmation", "Reschedule", "Reminder", "Payment request", "Payment reminder")
 
 
 def send_notification(notification):
@@ -84,6 +95,8 @@ def render(event, doc, language, recipient):
     customer = (doc.client_name or "").strip()[:NAME_LIMIT]
     copy = COPY[event]
     by_customer = doc.get("last_changed_by") == "Customer" and event in CUSTOMER_INTRO
+    unpaid = event == "Cancellation" and doc.get("cancellation_reason") in ("Payment not received", _("Payment not received"))
+    payment = _payment_facts(doc, language)
 
     def t(text, *args):
         return _(text, lang=language).format(*(escape_html(str(arg)) for arg in args))
@@ -92,7 +105,8 @@ def render(event, doc, language, recipient):
         lang=language,
         subject=_(copy["subject"], lang=language).format(business_name),
         heading=t(copy["heading"]),
-        intro=t(CUSTOMER_INTRO[event] if by_customer else copy["intro"], customer, business_name),
+        intro=t(UNPAID_INTRO if unpaid else CUSTOMER_INTRO[event] if by_customer else copy["intro"],
+                customer, *(payment["intro_args"] if event in ("Payment request", "Payment reminder") else [business_name])),
         business_name=escape_html(business_name),
         logo_url=_public_logo(business.logo),
         details=[
@@ -101,6 +115,7 @@ def render(event, doc, language, recipient):
             (t("Location"), escape_html(_value("Location", doc.location, "location_name"))),
             (t("Date and time"), escape_html(when(doc, language))),
             *_fee_rows(doc, t),
+            *(payment["rows"] if event != "Cancellation" else []),
         ],
         manage_label=t("Manage your booking"),
         manage_url=escape_html(self_service.manage_url(doc)) if event in MANAGEABLE else "",
@@ -112,6 +127,31 @@ def render(event, doc, language, recipient):
         opt_out_url=escape_html(opt_out_url(doc.organization, recipient)) if event == "Reminder" else "",
     )
     return {"subject": context["subject"], "html": frappe.render_template(TEMPLATE, context)}
+
+
+def _payment_facts(doc, language):
+    """Amounts and deadline from the booking's latest payment, for payment emails and the confirmation."""
+    from appointment.scheduler import payments
+
+    payment = payments.latest_payment(doc.name)
+    if not payment:
+        return {"rows": [], "intro_args": ["", ""]}
+
+    def t(text):
+        return _(text, lang=language)
+
+    zone = pytz.timezone(doc.booking_timezone or "Africa/Addis_Ababa")
+    deadline = pytz.UTC.localize(get_datetime(payment.hold_expires_at)).astimezone(zone) if payment.hold_expires_at else None
+    deadline_text = f"{deadline:%Y-%m-%d %H:%M}" if deadline else ""
+    money = lambda value: f"{payment.currency} {flt(value):,.2f}"  # noqa: E731
+    rows = [(escape_html(t("Paid") if payment.status == "Paid" else t("Due now")), escape_html(money(payment.amount)))]
+    if flt(payment.balance_due):
+        rows.append((escape_html(t("Balance at the visit")), escape_html(money(payment.balance_due))))
+    if payment.method == payments.BANK and payment.status in ("Awaiting payment", "Rejected"):
+        for account in payments.bank_accounts(payment.organization, payment.collector):
+            rows.append((escape_html(t("Pay to")), escape_html(f"{account['bank']} · {account['account_name']} · {account['account_number']}")))
+        rows.append((escape_html(t("Payment reference")), escape_html(doc.appointment_id or doc.name)))
+    return {"rows": rows, "intro_args": [deadline_text, money(payment.amount)]}
 
 
 def _fee_rows(doc, t):

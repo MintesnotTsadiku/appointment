@@ -21,6 +21,9 @@ EVENT_SETTING = {
     "Reschedule": "send_reschedule",
     "Cancellation": "send_cancellation",
     "Reminder": "send_reminder",
+    # Payment emails are part of confirming the booking.
+    "Payment request": "send_confirmation",
+    "Payment reminder": "send_confirmation",
 }
 DEFAULT_SETTINGS = dict(
     sms_enabled=0, send_confirmation=1, send_reschedule=1, send_cancellation=1, send_reminder=1, reminder_lead_hours=24
@@ -68,6 +71,8 @@ def _event_for(doc):
         return None
     if doc.status == "Cancelled" and before.status != "Cancelled":
         return "Cancellation"
+    if doc.status == "Confirmed" and before.status == "Pending":
+        return "Confirmation"
     if doc.status in OPEN_STATUSES and _instant(before.starts_at) != _instant(doc.starts_at):
         return "Reschedule"
     return None
@@ -152,7 +157,7 @@ def _over_limit(organization, recipient, event, channel):
 def _dedupe_key(doc, event):
     """Confirmation once per booking, a reminder once per start time, changes once per write."""
     start = _instant(doc.starts_at).isoformat() if doc.starts_at else ""
-    if event == "Confirmation":
+    if event in ("Confirmation", "Payment request"):
         return f"{doc.name}:{event}"
     if event == "Reminder":
         return f"{doc.name}:{event}:{start}"

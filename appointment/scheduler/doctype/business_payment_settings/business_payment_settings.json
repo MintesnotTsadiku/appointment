@@ -1,0 +1,105 @@
+{
+ "actions": [],
+ "autoname": "field:organization",
+ "creation": "2026-10-03 18:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "organization",
+  "accept_bank_transfer",
+  "bank_accounts",
+  "accept_chapa",
+  "chapa_secret_key",
+  "chapa_webhook_secret",
+  "section_platform",
+  "collection_override",
+  "override_platform_fee",
+  "platform_fee_override"
+ ],
+ "fields": [
+  {
+   "fieldname": "organization",
+   "fieldtype": "Link",
+   "label": "Business",
+   "options": "Organization",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "accept_bank_transfer",
+   "fieldtype": "Check",
+   "label": "Accept Bank Transfer",
+   "default": "1"
+  },
+  {
+   "fieldname": "bank_accounts",
+   "fieldtype": "Table",
+   "label": "Bank Accounts",
+   "options": "Payment Bank Account"
+  },
+  {
+   "fieldname": "accept_chapa",
+   "fieldtype": "Check",
+   "label": "Accept Chapa",
+   "default": "0"
+  },
+  {
+   "fieldname": "chapa_secret_key",
+   "fieldtype": "Password",
+   "label": "Chapa Secret Key"
+  },
+  {
+   "fieldname": "chapa_webhook_secret",
+   "fieldtype": "Password",
+   "label": "Chapa Webhook Secret"
+  },
+  {
+   "fieldname": "section_platform",
+   "fieldtype": "Section Break",
+   "label": "Platform Administrator"
+  },
+  {
+   "fieldname": "collection_override",
+   "fieldtype": "Select",
+   "label": "Who Collects Payments",
+   "options": "Platform default\nBusiness collects\nPlatform collects",
+   "default": "Platform default"
+  },
+  {
+   "fieldname": "override_platform_fee",
+   "fieldtype": "Check",
+   "label": "Override Platform Fee",
+   "default": "0"
+  },
+  {
+   "fieldname": "platform_fee_override",
+   "fieldtype": "Float",
+   "label": "Platform Fee Override",
+   "description": "Used when Override Platform Fee is on. Same unit as the platform fee (ETB or percent). 0 waives the fee.",
+   "depends_on": "override_platform_fee"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-10-03 18:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Scheduler",
+ "name": "Business Payment Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "naming_rule": "By fieldname"
+}
