@@ -2,7 +2,7 @@
  * Public-experience path detection.
  *
  * A public site path is a single non-reserved first segment, optionally
- * followed by `book` or a locale. Everything else (application, API, auth,
+ * followed by `book`, a locale, or `booking/<token>` (the manage-booking page). Everything else (application, API, auth,
  * infrastructure) is not a public experience path.
  */
 const RESERVED_FIRST_SEGMENTS = new Set([
@@ -41,9 +41,11 @@ const LOCALES = new Set(["en", "am"]);
 
 export function isPublicExperiencePath(pathname: string): boolean {
   const segments = String(pathname || "/").split("/").filter(Boolean);
-  if (segments.length === 0 || segments.length > 2) return false;
+  if (segments.length === 0 || segments.length > 3) return false;
   const first = segments[0].toLowerCase();
   if (RESERVED_FIRST_SEGMENTS.has(first)) return false;
+  // `/<slug>/booking/<token>`: the customer's manage-booking page.
+  if (segments.length === 3) return segments[1].toLowerCase() === "booking";
   if (segments.length === 2) {
     const second = segments[1].toLowerCase();
     return second === "book" || LOCALES.has(second);

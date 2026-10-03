@@ -811,7 +811,9 @@
       "confirmCancel": "Confirm cancellation",
       "keepBooking": "Keep booking",
       "history": "Booking history",
-      "historyError": "History could not be loaded."
+      "historyError": "History could not be loaded.",
+      "changedByCustomer": "Last changed by the customer",
+      "feeLine": "Late cancellation fee: {0} · Refund due: {1}"
     },
     "calendar": {
       "title": "My schedule",
@@ -1871,5 +1873,44 @@
     "cancellation": "{0}: your booking for {1} on {2} is cancelled.",
     "reminder": "{0}: reminder of your booking for {1} on {2}.",
     "notSetUp": "SMS is not set up for this site."
+  },
+  "customerManage": {
+    "title": "Manage your booking",
+    "reference": "Booking reference",
+    "reschedule": "Reschedule",
+    "rescheduleHint": "Pick a new date and time. Your booking keeps its length.",
+    "rescheduleConfirm": "Move my booking",
+    "rescheduled": "Your booking is moved. We sent you an email with the new time.",
+    "reschedulesLeft": "You can move this booking online {0} more times.",
+    "blockWindow": "Online changes close {0} hours before the appointment. Contact the business to move it.",
+    "blockLimit": "This booking was already moved online twice. Contact the business to move it again.",
+    "cancel": "Cancel booking",
+    "cancelFree": "You can cancel now at no cost.",
+    "cancelLate": "This is a late cancellation: less than {0} hours before the appointment. A fee of {1} applies.",
+    "refundLine": "You paid {0}. The business owes you {1}.",
+    "refundNone": "You paid {0}. Under this business's policy, nothing is returned.",
+    "acceptFee": "I accept the late cancellation fee.",
+    "cancelConfirm": "Cancel my booking",
+    "keep": "Keep my booking",
+    "cancelled": "Your booking is cancelled.",
+    "cancelledFee": "A late cancellation fee of {0} was recorded. Refund due: {1}.",
+    "invalidTitle": "This link no longer works",
+    "invalidBody": "Use the link in your latest email, or contact the business.",
+    "contact": "Contact {0}",
+    "policyNote": "Changes follow {0}'s booking policy.",
+    "bookAgain": "Book again",
+    "failed": "Something went wrong. Try again or contact the business.",
+    "statusPending": "Waiting for the business to confirm"
+  },
+  "customerManageServer": {
+    "invalid": "This link no longer works. Use the link in your latest email, or contact the business.",
+    "noMove": "This booking can no longer be moved online. Contact the business.",
+    "future": "Choose a time in the future.",
+    "acceptFee": "Confirm the late cancellation fee to cancel.",
+    "reason": "Cancelled by the customer",
+    "introMoved": "Hello {0}, you moved your booking. The new time is below.",
+    "introCancelled": "Hello {0}, you cancelled your booking.",
+    "fee": "Late cancellation fee",
+    "refund": "Refund due"
   }
 }

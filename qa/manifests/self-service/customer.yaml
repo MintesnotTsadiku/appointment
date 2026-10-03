@@ -1,0 +1,416 @@
+# Run appointment.tests.self_service_qa_fixtures.setup first and cleanup afterwards.
+# Late booking: reschedule blocked, cancel with fee. Free booking: reschedule, then free cancel. Then an invalid link.
+app: appointment
+base_url: http://127.0.0.84:44430
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-self-service
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.self_service_qa_fixtures.browser_values
+scenarios:
+- id: manage_en_desktop
+  title: Customer manages bookings from the email link (en, desktop)
+  viewport: &id001
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{qa_manage_late_en_desktop}'
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="manage-summary"]'
+    - type: no_blank_page
+  actions:
+  - action: wait_for
+    selector: '[data-qa="manage-reschedule-blocked"]'
+  - action: screenshot
+    name: manage_en_desktop-1-late-overview.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="manage-start-cancel"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="manage-cancel-terms"][data-qa-state="late"]'
+  - action: click
+    selector: '[data-qa="manage-accept-fee"]'
+  - action: screenshot
+    name: manage_en_desktop-2-late-terms.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="manage-cancel-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.self_service.cancel
+      method: POST
+      status: 200
+    - type: visible_selector
+      value: '[data-qa="manage-cancelled-fee"]'
+  - action: screenshot
+    name: manage_en_desktop-3-late-cancelled.png
+    full_page: true
+  - action: open_url
+    url: '{qa_manage_free_en_desktop}'
+  - action: wait_for
+    selector: '[data-qa="manage-start-reschedule"]'
+  - action: click
+    selector: '[data-qa="manage-start-reschedule"]'
+  - action: click
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: screenshot
+    name: manage_en_desktop-4-free-picked.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="manage-reschedule-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.self_service.reschedule
+      method: POST
+      status: 200
+    - type: visible_selector
+      value: '[data-qa="manage-moved"]'
+    - type: url_contains
+      value: /booking/
+  - action: screenshot
+    name: manage_en_desktop-5-free-moved.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="manage-start-cancel"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="manage-cancel-terms"][data-qa-state="free"]'
+  - action: click
+    selector: '[data-qa="manage-cancel-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.self_service.cancel
+      method: POST
+      status: 200
+    - type: visible_selector
+      value: '[data-qa="manage-cancelled"]'
+  - action: screenshot
+    name: manage_en_desktop-6-free-cancelled.png
+    full_page: true
+  - action: open_url
+    url: '{qa_manage_invalid}'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="manage-invalid"]'
+  - action: screenshot
+    name: manage_en_desktop-7-invalid.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: manage_en_mobile
+  title: Customer manages bookings from the email link (en, mobile)
+  viewport: &id002
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{qa_manage_late_en_mobile}'
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="manage-summary"]'
+    - type: no_blank_page
+  actions:
+  - action: wait_for
+    selector: '[data-qa="manage-reschedule-blocked"]'
+  - action: screenshot
+    name: manage_en_mobile-1-late-overview.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="manage-start-cancel"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="manage-cancel-terms"][data-qa-state="late"]'
+  - action: click
+    selector: '[data-qa="manage-accept-fee"]'
+  - action: screenshot
+    name: manage_en_mobile-2-late-terms.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="manage-cancel-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.self_service.cancel
+      method: POST
+      status: 200
+    - type: visible_selector
+      value: '[data-qa="manage-cancelled-fee"]'
+  - action: screenshot
+    name: manage_en_mobile-3-late-cancelled.png
+    full_page: true
+  - action: open_url
+    url: '{qa_manage_free_en_mobile}'
+  - action: wait_for
+    selector: '[data-qa="manage-start-reschedule"]'
+  - action: click
+    selector: '[data-qa="manage-start-reschedule"]'
+  - action: click
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: screenshot
+    name: manage_en_mobile-4-free-picked.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="manage-reschedule-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.self_service.reschedule
+      method: POST
+      status: 200
+    - type: visible_selector
+      value: '[data-qa="manage-moved"]'
+    - type: url_contains
+      value: /booking/
+  - action: screenshot
+    name: manage_en_mobile-5-free-moved.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="manage-start-cancel"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="manage-cancel-terms"][data-qa-state="free"]'
+  - action: click
+    selector: '[data-qa="manage-cancel-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.self_service.cancel
+      method: POST
+      status: 200
+    - type: visible_selector
+      value: '[data-qa="manage-cancelled"]'
+  - action: screenshot
+    name: manage_en_mobile-6-free-cancelled.png
+    full_page: true
+  - action: open_url
+    url: '{qa_manage_invalid}'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="manage-invalid"]'
+  - action: screenshot
+    name: manage_en_mobile-7-invalid.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: manage_am_desktop
+  title: Customer manages bookings from the email link (am, desktop)
+  viewport: *id001
+  checks: []
+  routes:
+  - path: '{qa_manage_late_am_desktop}'
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="manage-summary"]'
+    - type: no_blank_page
+  actions:
+  - action: press
+    selector: '[data-qa="language-toggle"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation.messages
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="manage-reschedule-blocked"]'
+  - action: screenshot
+    name: manage_am_desktop-1-late-overview.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="manage-start-cancel"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="manage-cancel-terms"][data-qa-state="late"]'
+  - action: click
+    selector: '[data-qa="manage-accept-fee"]'
+  - action: screenshot
+    name: manage_am_desktop-2-late-terms.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="manage-cancel-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.self_service.cancel
+      method: POST
+      status: 200
+    - type: visible_selector
+      value: '[data-qa="manage-cancelled-fee"]'
+  - action: screenshot
+    name: manage_am_desktop-3-late-cancelled.png
+    full_page: true
+  - action: open_url
+    url: '{qa_manage_free_am_desktop}'
+  - action: wait_for
+    selector: '[data-qa="manage-start-reschedule"]'
+  - action: click
+    selector: '[data-qa="manage-start-reschedule"]'
+  - action: click
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: screenshot
+    name: manage_am_desktop-4-free-picked.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="manage-reschedule-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.self_service.reschedule
+      method: POST
+      status: 200
+    - type: visible_selector
+      value: '[data-qa="manage-moved"]'
+    - type: url_contains
+      value: /booking/
+  - action: screenshot
+    name: manage_am_desktop-5-free-moved.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="manage-start-cancel"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="manage-cancel-terms"][data-qa-state="free"]'
+  - action: click
+    selector: '[data-qa="manage-cancel-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.self_service.cancel
+      method: POST
+      status: 200
+    - type: visible_selector
+      value: '[data-qa="manage-cancelled"]'
+  - action: screenshot
+    name: manage_am_desktop-6-free-cancelled.png
+    full_page: true
+  - action: open_url
+    url: '{qa_manage_invalid}'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="manage-invalid"]'
+  - action: screenshot
+    name: manage_am_desktop-7-invalid.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: manage_am_mobile
+  title: Customer manages bookings from the email link (am, mobile)
+  viewport: *id002
+  checks: []
+  routes:
+  - path: '{qa_manage_late_am_mobile}'
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="manage-summary"]'
+    - type: no_blank_page
+  actions:
+  - action: press
+    selector: '[data-qa="language-toggle"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation.messages
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="manage-reschedule-blocked"]'
+  - action: screenshot
+    name: manage_am_mobile-1-late-overview.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="manage-start-cancel"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="manage-cancel-terms"][data-qa-state="late"]'
+  - action: click
+    selector: '[data-qa="manage-accept-fee"]'
+  - action: screenshot
+    name: manage_am_mobile-2-late-terms.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="manage-cancel-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.self_service.cancel
+      method: POST
+      status: 200
+    - type: visible_selector
+      value: '[data-qa="manage-cancelled-fee"]'
+  - action: screenshot
+    name: manage_am_mobile-3-late-cancelled.png
+    full_page: true
+  - action: open_url
+    url: '{qa_manage_free_am_mobile}'
+  - action: wait_for
+    selector: '[data-qa="manage-start-reschedule"]'
+  - action: click
+    selector: '[data-qa="manage-start-reschedule"]'
+  - action: click
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: screenshot
+    name: manage_am_mobile-4-free-picked.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="manage-reschedule-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.self_service.reschedule
+      method: POST
+      status: 200
+    - type: visible_selector
+      value: '[data-qa="manage-moved"]'
+    - type: url_contains
+      value: /booking/
+  - action: screenshot
+    name: manage_am_mobile-5-free-moved.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="manage-start-cancel"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="manage-cancel-terms"][data-qa-state="free"]'
+  - action: click
+    selector: '[data-qa="manage-cancel-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.self_service.cancel
+      method: POST
+      status: 200
+    - type: visible_selector
+      value: '[data-qa="manage-cancelled"]'
+  - action: screenshot
+    name: manage_am_mobile-6-free-cancelled.png
+    full_page: true
+  - action: open_url
+    url: '{qa_manage_invalid}'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="manage-invalid"]'
+  - action: screenshot
+    name: manage_am_mobile-7-invalid.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors

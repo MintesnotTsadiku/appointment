@@ -1,0 +1,85 @@
+# Run after customer.yaml: the manager sees the customer's late cancel, its fee and refund.
+app: appointment
+base_url: http://127.0.0.84:44430
+default_role: Staff
+auth:
+  type: frappe_session
+  username: bloom.manager@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment-self-service
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.self_service_qa_fixtures.browser_values
+scenarios:
+- id: manage_staff_view_desktop
+  title: Reception shows a customer's late cancel with its fee (desktop)
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /reception
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="desk-next-day"]'
+  actions:
+  - action: click
+    selector: '[data-qa="desk-next-day"]'
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{qa_manage_late_en_desktop_id}"]'
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_manage_late_en_desktop_id}"]'
+    key: Enter
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-changed-by-customer"]'
+    - type: text_contains
+      selector: '[data-qa="booking-fee"]'
+      value: ETB 100.00
+  - action: screenshot
+    name: manage-staff-desktop.png
+  - action: press
+    selector: '[data-qa="owned-booking-dialog"]'
+    key: Escape
+  - action: get_console_errors
+  - action: get_network_errors
+- id: manage_staff_view_mobile
+  title: Reception shows a customer's late cancel with its fee (mobile)
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /reception
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="desk-next-day"]'
+  actions:
+  - action: click
+    selector: '[data-qa="desk-next-day"]'
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{qa_manage_late_en_mobile_id}"]'
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_manage_late_en_mobile_id}"]'
+    key: Enter
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-changed-by-customer"]'
+    - type: text_contains
+      selector: '[data-qa="booking-fee"]'
+      value: ETB 100.00
+  - action: screenshot
+    name: manage-staff-mobile.png
+  - action: press
+    selector: '[data-qa="owned-booking-dialog"]'
+    key: Escape
+  - action: get_console_errors
+  - action: get_network_errors

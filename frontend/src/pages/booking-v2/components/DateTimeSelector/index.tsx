@@ -51,6 +51,9 @@ interface DateTimeSelectorProps {
   
   // Navigation
   onBack?: () => void;
+
+  /** Inside another page (manage booking): no sticky header, title, glows or info box. */
+  embedded?: boolean;
 }
 
 export function DateTimeSelector({
@@ -73,6 +76,7 @@ export function DateTimeSelector({
   duration,
   location,
   onBack,
+  embedded = false,
 }: DateTimeSelectorProps) {
   const MAX_VISIBLE_PROVIDERS = 4;
   const providers = useMemo(() => {
@@ -139,6 +143,7 @@ useEffect(() => {
   return (
     <div className="w-full max-w-7xl mx-auto relative">
       {/* Ambient Background Glows */}
+      {!embedded && (
       <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
         <div 
           className="absolute top-1/4 -left-1/4 w-96 h-96 rounded-full blur-3xl opacity-30"
@@ -153,8 +158,10 @@ useEffect(() => {
           style={{ background: 'var(--glow-success)' }}
         />
       </div>
+      )}
 
       {/* Sticky Header with Back Button and Theme Toggle */}
+      {!embedded && (
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -222,13 +229,15 @@ useEffect(() => {
           </motion.button>
         </div>
       </motion.div>
+      )}
 
       {/* Main Background */}
       <div 
-        className="min-h-screen p-5 md:p-6"
-        style={{ backgroundColor: 'var(--bg-primary)' }}
+        className={embedded ? "" : "min-h-screen p-5 md:p-6"}
+        style={embedded ? undefined : { backgroundColor: 'var(--bg-primary)' }}
       >
         {/* Title Section */}
+      {!embedded && (
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -252,6 +261,7 @@ useEffect(() => {
             </p>
           )}
         </motion.div>
+      )}
 
       {/* Main Content - Two Column Layout (Desktop) / Stacked (Mobile) */}
       <div className="grid lg:grid-cols-[400px,1fr] gap-6 md:gap-8 items-start">
@@ -476,6 +486,7 @@ useEffect(() => {
       </div>
 
       {/* Info Banner */}
+      {!embedded && (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -498,6 +509,7 @@ useEffect(() => {
           </div>
         </div>
       </motion.div>
+      )}
       </div>
     </div>
   );

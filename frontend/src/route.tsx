@@ -27,6 +27,7 @@ const BusinessSettings = lazy(() => import("@/pages/settings/business"));
 const NotificationSettings = lazy(() => import("@/pages/settings/notifications"));
 const Customers = lazy(() => import("@/pages/customers"));
 const CustomerPage = lazy(() => import("@/pages/customers/detail"));
+const ManageBooking = lazy(() => import("@/pages/manage-booking"));
 const ServicesSettings = lazy(() => import("@/pages/settings/services"));
 const EditService = lazy(() => import("@/pages/settings/edit-service"));
 const Manage = lazy(() => import("@/pages/settings/manage"));
@@ -105,6 +106,7 @@ const Router = () => {
       {/* Tenant public website and booking entry. Static routes above win; the
           resolver fails closed for unknown slugs. */}
       <Route path="/:slug/book" element={<PublicBookingPage />} errorElement={<ErrorFallback />}></Route>
+      <Route path="/:slug/booking/:token" element={<ManageBooking />} errorElement={<ErrorFallback />}></Route>
       <Route path="/:slug/:locale" element={<PublicSitePage />} errorElement={<ErrorFallback />}></Route>
       <Route path="/:slug" element={<PublicSitePage />} errorElement={<ErrorFallback />}></Route>
 

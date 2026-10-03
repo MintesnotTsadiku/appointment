@@ -1,7 +1,7 @@
 ---
 tags: [plan, appointment, customers, self-service]
 created: 2026-10-03
-status: decided 2026-10-03, in build
+status: built and verified 2026-10-03
 ---
 
 # Customer self-service plan
@@ -109,4 +109,54 @@ Payment collection and refunds, waiting lists, customer accounts, SMS links.
 
 ## Run record
 
-Filled in after the build.
+### What was built
+
+- Appointment fields `manage_version`, `self_reschedules`, `last_changed_by`, `cancellation_fee`, `refund_due`. Backup `20261003_160613` was taken before the migrate.
+- `self_service.py`: signed tokens, `decide()` (policy windows, reschedule limit, fee, refund), and the guest methods `view`, `reschedule` and `cancel`. `view` allows 30 requests a minute; the two writes allow 10.
+- `booking.validate_document`: the `CUSTOMER_CHANGE` flag skips only the staff access check. A new time or status raises `manage_version` and sets `last_changed_by`.
+- Emails: "Manage your booking" in confirmation, reschedule and reminder emails. Customer wording ("you moved", "you cancelled"), and fee and refund rows on a late cancel.
+- Public page `/:slug/booking/:token`: the business brand, English and Amharic, the booking summary, reschedule through the scheduler's `DateTimeSelector` (new `embedded` mode), cancel with the fee preview and a consent box, invalid-link and result states. `isPublicExperiencePath` treats the page as a standalone public page.
+- Reception booking dialog: "Last changed by the customer" and the fee and refund line.
+- Patch `import_self_service_translations` imports the Amharic copy.
+
+### Found and fixed during QA
+
+- The reused date picker brought its own sticky header with a theme toggle, a page title and an info box that said "contact the business to change your booking". The `embedded` mode leaves these out on the manage page.
+- Test and QA fixture bookings queued confirmation emails to synthetic addresses, and their cleanup left 15 Email Queue rows. Both fixtures now set `skip_customer_notification`, and the 15 rows were deleted.
+
+### Tests
+
+| Suite | Result |
+|---|---|
+| `appointment.tests.test_self_service` | 12 passed |
+| `appointment.tests.test_customer_profiles` | 19 passed |
+| `appointment.tests.test_customer_notifications` | 13 passed (link checks updated for the manage link) |
+| `appointment.tests.test_customer_sms` | 12 passed |
+| `appointment.tests.test_policy_manager` | 7 passed |
+| `appointment.tests.test_workspace_overview` | 1 passed |
+| `appointment.tests.test_scheduling_workflows` | 9 passed |
+| `npm run -s test:dom` | passed, with new route cases in `public-experience-routes.test.mjs` |
+
+### Agent Plane runs
+
+`appointment.tests.self_service_qa_fixtures.setup` makes the QA bookings, and `cleanup` removes them. "Late" bookings fall inside a temporary 72-hour Scalp care policy (100 ETB fee, 300 ETB paid). "Free" bookings have no policy.
+
+| Run | Manifest | Result |
+|---|---|---|
+| BQA-2026-00390 | `self-service/customer.yaml` | Passed, 4 of 4 (1440×900 and 390×844, English and Amharic). Late booking: reschedule blocked, cancel with consent. Free booking: reschedule, then free cancel. Invalid link. 0 console, 0 network errors. |
+| BQA-2026-00391 | `customer.yaml`, after the `embedded` picker change | Passed, 4 of 4. 0 console, 0 network errors. |
+| BQA-2026-00392 | `self-service/staff.yaml` (bloom.manager) | Passed, 2 of 2. Reception shows "Last changed by the customer" and "Late cancellation fee: ETB 100.00 · Refund due: ETB 200.00". |
+
+Database check after run 00391:
+- Late booking: Cancelled, `last_changed_by` Customer, fee 100, refund 200, `manage_version` 1.
+- Free booking: `self_reschedules` 1, then Cancelled, `manage_version` 2.
+- Each event queued one email. The late-cancel email reads "you cancelled your booking" with both fee rows.
+
+Fixture cleanup left no QA bookings, policies, extra profiles or emails.
+
+### Left open
+
+- No payment collection. The fee and refund are records for staff.
+- The date picker's own labels (weekdays, "Morning", "Available Times") stay in English, as on the booking page.
+- The staff booking history shows the customer's change as "Guest".
+- SMS has no manage link (pinned with the rest of SMS).

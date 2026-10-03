@@ -68,6 +68,18 @@ export function OwnedBookingActions({ appointment, onClose, onSuccess }: OwnedBo
             <p className="text-muted-foreground">
               {t('staff.receptionDesk.bookingReference')}: <span data-qa="booking-reference" className="font-medium tabular-nums text-foreground">{appointment.appointment_id || appointment.name}</span>
             </p>
+            {appointment.last_changed_by === 'Customer' && (
+              <p data-qa="booking-changed-by-customer" className="font-medium text-foreground">
+                {t('staff.receptionDesk.changedByCustomer')}
+              </p>
+            )}
+            {Boolean(appointment.cancellation_fee || appointment.refund_due) && (
+              <p data-qa="booking-fee" className="text-muted-foreground tabular-nums">
+                {t('staff.receptionDesk.feeLine')
+                  .replace('{0}', `ETB ${Number(appointment.cancellation_fee || 0).toFixed(2)}`)
+                  .replace('{1}', `ETB ${Number(appointment.refund_due || 0).toFixed(2)}`)}
+              </p>
+            )}
             {appointment.customer && (
               <Link data-qa="booking-open-customer" to={`/customers/${appointment.customer}`} className="inline-block text-sm font-medium text-primary underline-offset-4 hover:underline">
                 {t('staff.customers.openCustomer')}

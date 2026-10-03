@@ -12,6 +12,10 @@ export interface Appointment {
   client_phone: string;
   /** Customer Profile ID, when the booking is linked. */
   customer?: string | null;
+  /** Set when the customer changed the booking through their manage link. */
+  last_changed_by?: 'Staff' | 'Customer' | '' | null;
+  cancellation_fee?: number;
+  refund_due?: number;
   service: string;
   service_name: string;
   provider: string;

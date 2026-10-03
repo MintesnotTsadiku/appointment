@@ -28,6 +28,9 @@ vm.runInNewContext(
 assert.equal(routesModule.isPublicExperiencePath("/demo-clinic"), true);
 assert.equal(routesModule.isPublicExperiencePath("/demo-clinic/book"), true);
 assert.equal(routesModule.isPublicExperiencePath("/demo-clinic/am"), true);
+assert.equal(routesModule.isPublicExperiencePath("/demo-clinic/booking/APT-1.0.abc"), true);
+assert.equal(routesModule.isPublicExperiencePath("/demo-clinic/other/APT-1.0.abc"), false);
+assert.equal(routesModule.isPublicExperiencePath("/settings/booking/x"), false);
 assert.equal(routesModule.isPublicExperiencePath("/settings/public-experience"), false);
 assert.equal(routesModule.isPublicExperiencePath("/app"), false);
 assert.equal(routesModule.isPublicExperiencePath("/"), false);
