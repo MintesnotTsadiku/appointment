@@ -53,6 +53,7 @@ export function primaryNav(session: SessionState | null): NavItem[] {
     { key: 'analytics', labelKey: 'staff.nav.insights', to: '/analytics', icon: BarChart3, qa: 'nav-analytics', show: Boolean(selected) },
     { key: 'settings', labelKey: 'staff.nav.settings', to: '/settings', icon: Settings, qa: 'nav-settings', show: isManager || settingsNav(session).length > 0 },
     { key: 'admin', labelKey: 'staff.nav.admin', to: '/admin/dashboard', icon: ShieldCheck, qa: 'nav-admin', show: session.is_administrator },
+    { key: 'admin-payments', labelKey: 'staff.adminPayments.title', to: '/admin/payments', icon: Wallet, qa: 'nav-admin-payments', show: session.is_administrator },
   ];
   return items.filter((item) => item.show);
 }

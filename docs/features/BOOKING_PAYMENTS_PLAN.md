@@ -104,7 +104,7 @@ Payment is required when `Organization.require_payment` is on. The amount due no
 
 - `/settings/payments` (owner/manager): require payment, accepted methods, bank accounts, Chapa keys. It also shows who collects, read-only.
 - Reception booking dialog: a payment section with the status, amounts, proof, confirm, reject, and the refund record.
-- Platform settings and per-business overrides are in Desk for the administrator.
+- `/admin/payments` (System Managers): balances per business, the ledger, settling, the platform settings, and per-business exceptions.
 
 ### Security
 
@@ -174,9 +174,15 @@ All runs had 0 console and 0 network errors. Database check: the two confirmed p
 
 - Chapa has not been called for real. It needs the keys (test keys work) and the webhook set up in the Chapa dashboard. The URL is shown on the settings page.
 - Automatic refunds and payouts through the Chapa API are not built.
-- The platform ledger has no admin page yet. Entries are visible in Desk.
 
 ### Closed after the first build
 
 - The public scheduler is translated: the service list (`serviceSelector.*`), the header step, back and theme labels (`schedulerPage.*`), and the details form with its validation messages and booking summary (`bookingForm.*`). The summary date follows the page language. Patch `import_booking_form_translations` imports the Amharic copy.
+- Platform administrators have an **Administration › Payments and ledger** page (`/admin/payments`, `payments_admin.py`, System Manager only):
+  - Totals and balances per business: fees due, payouts due, settled, who collects, and an "Exception" badge when a business differs from the platform default. On phones the balances and the ledger are cards.
+  - The ledger, newest first (up to 200), filtered by business, status and type. Due entries can be selected and marked settled with a reference. A business's "Settle all due" does the same for all its due entries. The note records who settled and when, always in English, because it is a stored record.
+  - Platform settings: who collects, the fee type and value, the free allowance, platform bank accounts, and the platform Chapa keys (inputs appear only while keys are added or replaced).
+  - Per-business rules: who collects (platform default, business, or platform) and an own fee. The platform must have a bank account before it collects for a business.
+  - Tests: `appointment.tests.test_payments_admin`, 5 passed, with or without QA data on the site. Patch `import_admin_payments_translations` imports the Amharic copy.
+  - Verification: BQA-2026-00429 (`admin-payments/admin.yaml`, Administrator) passed 4 of 4 at 1440×900 and 390×844 in English and Amharic, with 0 console and 0 network errors. English desktop set a fixed 25 ETB fee with 2 free bookings and settled one entry from the ledger; Amharic desktop gave Bloom its own 10 ETB fee and settled the rest from the balances table. The database matched: both entries Settled with their references, the platform fee Fixed 25, and free bookings 2. Earlier runs 00426–00428 fixed manifest selectors; 00428 showed that the settle note took the page language and that the mobile table hid its actions, both fixed. `admin_payments_qa_fixtures.cleanup` removed the QA entries and reset the settings.
 - Verification: BQA-2026-00425 (`booking-form/guest.yaml`) passed 4 of 4 at 1440×900 and 390×844 in English and Amharic, with 0 console and 0 network errors. Each scenario submits the empty form and sees the translated errors; nothing is booked. BQA-2026-00423 and 00424 found one hidden duplicate label in the assertion and the untranslated Back button, both fixed.

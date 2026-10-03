@@ -1,0 +1,254 @@
+# Run appointment.tests.admin_payments_qa_fixtures.setup first and cleanup afterwards.
+# en desktop settles one of Bloom's two due fees; am desktop settles the other.
+app: appointment
+base_url: http://127.0.0.84:44430
+default_role: Administrator
+auth:
+  type: frappe_session
+  username: Administrator
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment-admin-payments
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.admin_payments_qa_fixtures.browser_values
+scenarios:
+- id: admin_pay_en_desktop
+  title: Administrator payments page (en, desktop)
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /admin/payments
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="admin-balances"]'
+    - type: visible_text
+      value: ETB 80.00
+  actions:
+  - action: wait_for
+    selector: '[data-qa="admin-payments-totals"]'
+    assertions:
+    - type: visible_text
+      value: Platform fees, payouts to businesses, and who collects booking payments.
+  - action: screenshot
+    name: admin_pay_en_desktop-1-balances.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="admin-tab-settings"]'
+  - action: wait_for
+    selector: '[data-qa="admin-platform-fee-type"]'
+  - action: select
+    selector: '[data-qa="admin-platform-fee-type"]'
+    value: Fixed
+  - action: fill
+    selector: '[data-qa="admin-platform-fee-value"]'
+    value: '25'
+  - action: fill
+    selector: '[data-qa="admin-platform-free"]'
+    value: '2'
+  - action: screenshot
+    name: admin_pay_en_desktop-2-settings.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="admin-platform-save"]'
+    assertions:
+    - type: visible_text
+      value: Payment rules saved
+  - action: click
+    selector: '[data-qa="admin-tab-ledger"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="admin-ledger-row"][data-qa-state="Due"] input[type="checkbox"],
+      1)
+  - action: click
+    selector: :nth-match([data-qa="admin-ledger-row"][data-qa-state="Due"] input[type="checkbox"],
+      1)
+  - action: click
+    selector: '[data-qa="admin-ledger-settle"]'
+  - action: fill
+    selector: '[data-qa="admin-settle-note"]'
+    value: QA transfer 001
+  - action: click
+    selector: '[data-qa="admin-settle-confirm"]'
+    assertions:
+    - type: visible_text
+      value: 'Entries settled: 1'
+  - action: screenshot
+    name: admin_pay_en_desktop-3-ledger.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: admin_pay_en_mobile
+  title: Administrator payments page (en, mobile)
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /admin/payments
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="admin-balances"]'
+    - type: visible_selector
+      value: '[data-qa="admin-balance-card"][data-qa-org="Bole Bloom Hair Studio"]
+        [data-qa="admin-balance-settle"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="admin-payments-totals"]'
+    assertions:
+    - type: visible_text
+      value: Platform fees, payouts to businesses, and who collects booking payments.
+  - action: screenshot
+    name: admin_pay_en_mobile-1-balances.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="admin-tab-ledger"]'
+  - action: select
+    selector: '[data-qa="admin-ledger-status"]'
+    value: Waived
+  - action: wait_for
+    selector: '[data-qa="admin-ledger-card"][data-qa-state="Waived"]'
+    assertions:
+    - type: visible_text
+      value: Ledger entries
+  - action: screenshot
+    name: admin_pay_en_mobile-2-ledger.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="admin-tab-settings"]'
+  - action: wait_for
+    selector: '[data-qa="admin-platform-settings"]'
+  - action: screenshot
+    name: admin_pay_en_mobile-3-settings.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: admin_pay_am_desktop
+  title: Administrator payments page (am, desktop)
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /admin/payments
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="admin-balances"]'
+  actions:
+  - &id001
+    action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="admin-payments-totals"]'
+    assertions:
+    - type: visible_text
+      value: የመድረክ ክፍያዎች፣ ለንግዶች የሚከፈሉ ገንዘቦች እና የቀጠሮ ክፍያዎችን ማን እንደሚሰበስብ።
+  - action: screenshot
+    name: admin_pay_am_desktop-1-balances.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="admin-balance-row"][data-qa-org="Bole Bloom Hair Studio"]
+      [data-qa="admin-balance-edit"]'
+  - action: wait_for
+    selector: '[data-qa="admin-business-collects"]'
+  - action: click
+    selector: '[data-qa="admin-business-own-fee"]'
+  - action: fill
+    selector: '[data-qa="admin-business-fee"]'
+    value: '10'
+  - action: screenshot
+    name: admin_pay_am_desktop-2-rules.png
+  - action: click
+    selector: '[data-qa="admin-business-save"]'
+    assertions:
+    - type: visible_text
+      value: የክፍያ ደንቦች ተቀምጠዋል
+  - action: click
+    selector: '[data-qa="admin-balance-row"][data-qa-org="Bole Bloom Hair Studio"]
+      [data-qa="admin-balance-settle"]'
+  - action: fill
+    selector: '[data-qa="admin-settle-note"]'
+    value: QA transfer 002
+  - action: click
+    selector: '[data-qa="admin-settle-confirm"]'
+    assertions:
+    - type: visible_text
+      value: እንደተከፈሉ የተመዘገቡ ግቤቶች፦ 1
+  - action: click
+    selector: '[data-qa="admin-tab-ledger"]'
+  - action: select
+    selector: '[data-qa="admin-ledger-status"]'
+    value: Settled
+  - action: wait_for
+    selector: :nth-match([data-qa="admin-ledger-row"][data-qa-state="Settled"], 2)
+    assertions:
+    - type: visible_text
+      value: የመዝገብ ግቤቶች
+  - action: screenshot
+    name: admin_pay_am_desktop-3-ledger.png
+    full_page: true
+  - *id001
+  - action: get_console_errors
+  - action: get_network_errors
+- id: admin_pay_am_mobile
+  title: Administrator payments page (am, mobile)
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /admin/payments
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="admin-balances"]'
+    - type: visible_selector
+      value: '[data-qa="admin-balance-card"][data-qa-org="Bole Bloom Hair Studio"]
+        [data-qa="admin-balance-settle"]'
+  actions:
+  - *id001
+  - action: wait_for
+    selector: '[data-qa="admin-payments-totals"]'
+    assertions:
+    - type: visible_text
+      value: የመድረክ ክፍያዎች፣ ለንግዶች የሚከፈሉ ገንዘቦች እና የቀጠሮ ክፍያዎችን ማን እንደሚሰበስብ።
+  - action: screenshot
+    name: admin_pay_am_mobile-1-balances.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="admin-tab-ledger"]'
+  - action: select
+    selector: '[data-qa="admin-ledger-status"]'
+    value: Waived
+  - action: wait_for
+    selector: '[data-qa="admin-ledger-card"][data-qa-state="Waived"]'
+    assertions:
+    - type: visible_text
+      value: የመዝገብ ግቤቶች
+  - action: screenshot
+    name: admin_pay_am_mobile-2-ledger.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="admin-tab-settings"]'
+  - action: wait_for
+    selector: '[data-qa="admin-platform-settings"]'
+  - action: screenshot
+    name: admin_pay_am_mobile-3-settings.png
+    full_page: true
+  - *id001
+  - action: get_console_errors
+  - action: get_network_errors
