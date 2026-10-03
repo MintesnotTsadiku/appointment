@@ -4,6 +4,7 @@
  */
 
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/lib/i18n";
 import { getTimeFormatExample } from "../../../utils/ethiopianTime";
 import type { TimeFormatToggleProps } from "../../../types";
 
@@ -13,9 +14,10 @@ export function TimeFormatToggle({
   showLabels = true,
   className,
 }: TimeFormatToggleProps) {
+  const { t } = useTranslation();
   const formats: Array<{ value: '12h' | '24h' | 'ethiopian'; label: string; example: string }> = [
-    { value: '12h', label: '12-Hour', example: getTimeFormatExample('12h') },
-    { value: '24h', label: '24-Hour', example: getTimeFormatExample('24h') },
+    { value: '12h', label: t('bookingPicker.h12'), example: getTimeFormatExample('12h') },
+    { value: '24h', label: t('bookingPicker.h24'), example: getTimeFormatExample('24h') },
     { value: 'ethiopian', label: 'ሰዓት (Local)', example: getTimeFormatExample('ethiopian') },
   ];
 
@@ -23,7 +25,7 @@ export function TimeFormatToggle({
     <div className={cn("space-y-2", className)}>
       {showLabels && (
         <label className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
-          Time Format
+          {t("bookingPicker.timeFormat")}
         </label>
       )}
       

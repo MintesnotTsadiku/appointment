@@ -9,6 +9,7 @@ import { CalendarPanel } from "./CalendarPanel";
 import { TimeSlotsPanel } from "./TimeSlotsPanel";
 import { TimeFormatToggle } from "../shared/TimeFormatToggle";
 import { cn } from "@/lib/utils";
+import { intlLocale, useTranslation } from "@/lib/i18n";
 import { ArrowLeft, Info, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/button";
 import { motion, AnimatePresence } from "framer-motion";
@@ -78,6 +79,7 @@ export function DateTimeSelector({
   onBack,
   embedded = false,
 }: DateTimeSelectorProps) {
+  const { t, language } = useTranslation();
   const MAX_VISIBLE_PROVIDERS = 4;
   const providers = useMemo(() => {
     const map = new Map<string, { id: string; name: string }>();
@@ -187,7 +189,7 @@ useEffect(() => {
               }}
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Services
+            {t("bookingPicker.backToServices")}
           </Button>
           ) : (
             <div /> // Spacer when no back button
@@ -203,7 +205,7 @@ useEffect(() => {
             }}
             whileTap={{ scale: 0.95 }}
             whileHover={{ scale: 1.02 }}
-            aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+            aria-label={t("bookingPicker.switchTheme")}
           >
             <AnimatePresence mode="wait">
               <motion.div
@@ -224,7 +226,7 @@ useEffect(() => {
               className="text-sm font-medium"
               style={{ color: 'var(--text-secondary)' }}
             >
-              {theme === "light" ? "Dark" : "Light"}
+              {theme === "light" ? t("bookingPicker.dark") : t("bookingPicker.light")}
             </span>
           </motion.button>
         </div>
@@ -248,7 +250,7 @@ useEffect(() => {
             className="text-3xl md:text-4xl font-bold"
             style={{ color: 'var(--text-primary)' }}
           >
-            Select Your Appointment Time
+            {t("bookingPicker.selectTime")}
           </h1>
           {(serviceName || providerName) && (
             <p 
@@ -256,8 +258,8 @@ useEffect(() => {
               style={{ color: 'var(--text-secondary)' }}
             >
               {serviceName}
-              {providerName && ` with ${providerName}`}
-              {duration && ` • ${duration} min`}
+              {providerName && ` · ${t("bookingPicker.with").replace("{0}", providerName)}`}
+              {duration && ` • ${t("bookingPicker.minutes").replace("{0}", String(duration))}`}
             </p>
           )}
         </motion.div>
@@ -315,8 +317,8 @@ useEffect(() => {
               <div className="flex items-start gap-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
                 <Info className="h-4 w-4 mt-0.5 flex-shrink-0" style={{ color: 'var(--accent-primary)' }} />
                 <div>
-                  <p className="font-medium">Timezone: {timezone}</p>
-                  <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>All times shown in the booking time zone</p>
+                  <p className="font-medium">{t("bookingPicker.timezoneLine").replace("{0}", timezone)}</p>
+                  <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>{t("bookingPicker.timezoneHint")}</p>
                 </div>
               </div>
             </div>
@@ -346,7 +348,7 @@ useEffect(() => {
                     className="text-2xl font-bold"
                     style={{ color: 'var(--text-primary)' }}
                   >
-                    {formatDate(selectedDate, 'full')}
+                    {formatDate(selectedDate, 'full', intlLocale(language))}
                   </h2>
                 </div>
 
@@ -354,7 +356,7 @@ useEffect(() => {
                 {providers.length > 0 && (
                   <div className="mb-6">
                     <div className="flex items-center justify-between text-sm" style={{ color: 'var(--text-secondary)' }}>
-                      <span>Filter by provider</span>
+                      <span>{t("bookingPicker.filterProvider")}</span>
                       {shouldCollapseProviders && (
                         <button
                           type="button"
@@ -362,7 +364,7 @@ useEffect(() => {
                           style={{ color: 'var(--accent-primary)' }}
                           onClick={() => setShowAllProviders(!showAllProviders)}
                         >
-                          {showAllProviders ? "Show fewer" : "Show all"}
+                          {showAllProviders ? t("bookingPicker.showFewer") : t("bookingPicker.showAll")}
                         </button>
                       )}
                     </div>
@@ -389,7 +391,7 @@ useEffect(() => {
                         }}
                         aria-pressed={selectedProviderId === "all"}
                       >
-                        All providers
+                        {t("bookingPicker.allProviders")}
                       </motion.button>
                       {visibleProviders.map((provider, index) => (
                         <motion.button
@@ -471,13 +473,13 @@ useEffect(() => {
                   className="text-xl font-semibold mb-2"
                   style={{ color: 'var(--text-primary)' }}
                 >
-                  Select a date to see available times
+                  {t("bookingPicker.pickDate")}
                 </h3>
                 <p 
                   className="max-w-sm"
                   style={{ color: 'var(--text-secondary)' }}
                 >
-                  Choose a date from the calendar to view available appointment slots
+                  {t("bookingPicker.pickDateHint")}
                 </p>
               </motion.div>
             )}
@@ -500,11 +502,11 @@ useEffect(() => {
         <div className="flex items-start gap-3">
           <Info className="h-5 w-5 mt-0.5 flex-shrink-0" style={{ color: 'var(--accent-primary)' }} />
           <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-            <p className="font-medium mb-1" style={{ color: 'var(--text-primary)' }}>Booking Information</p>
+            <p className="font-medium mb-1" style={{ color: 'var(--text-primary)' }}>{t("bookingPicker.infoTitle")}</p>
             <ul className="list-disc list-inside space-y-1" style={{ color: 'var(--text-muted)' }}>
-              <li>Times are shown in {timezone}</li>
-              <li>Save the selected time and location for your visit</li>
-              <li>Contact the business if you need to change your booking</li>
+              <li>{t("bookingPicker.infoTimezone").replace("{0}", timezone)}</li>
+              <li>{t("bookingPicker.infoSave")}</li>
+              <li>{t("bookingPicker.infoContact")}</li>
             </ul>
           </div>
         </div>

@@ -154,9 +154,13 @@ Database check after run 00391:
 
 Fixture cleanup left no QA bookings, policies, extra profiles or emails.
 
+### Closed after the first build
+
+- The date picker is translated (`bookingPicker.*`): the month and weekday names follow the page language (`intlLocale`), as do the shortcut buttons, the time-of-day groups, the slot counts and the time-format toggle. This also translates the public booking page, which uses the same picker.
+- The staff booking history shows "Customer (online)" for changes made through the manage link. Its labels are translated.
+- Verification: BQA-2026-00393 (self-service customer, 4 of 4), BQA-2026-00394 (staff view, 2 of 2) and BQA-2026-00395 (Amharic guest booking on the public page) passed with 0 console and 0 network errors. The QA data was removed afterwards.
+
 ### Left open
 
 - No payment collection. The fee and refund are records for staff.
-- The date picker's own labels (weekdays, "Morning", "Available Times") stay in English, as on the booking page.
-- The staff booking history shows the customer's change as "Guest".
 - SMS has no manage link (pinned with the rest of SMS).

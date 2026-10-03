@@ -51,3 +51,6 @@ export const getTranslation = (
   if (language === 'en') return source;
   return messages[source] ?? source;
 };
+
+/** The Intl locale for dates and numbers in the given app language. */
+export const intlLocale = (language: Language): string => (language === 'am' ? 'am-ET' : 'en-US');

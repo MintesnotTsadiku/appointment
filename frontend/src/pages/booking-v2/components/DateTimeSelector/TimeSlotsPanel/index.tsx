@@ -5,7 +5,7 @@
 
 import { Clock, Star, User, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/button";
+import { intlLocale, useTranslation } from "@/lib/i18n";
 import { motion } from "framer-motion";
 import {
   getTimeOfDay,
@@ -28,6 +28,7 @@ export function TimeSlotsPanel({
   className,
   location,
 }: TimeSlotsProps) {
+  const { t } = useTranslation();
   // Group slots by time of day
   const groupedSlots: TimeSlotGroup[] = groupByTimeOfDay
     ? groupSlotsByTimeOfDay(slots)
@@ -143,13 +144,13 @@ export function TimeSlotsPanel({
             className="text-lg font-semibold"
             style={{ color: 'var(--text-primary)' }}
           >
-            Available Times
+            {t("bookingPicker.availableTimes")}
           </h3>
           <p 
             className="text-sm mt-1"
             style={{ color: 'var(--text-secondary)' }}
           >
-            {slots.length} slot{slots.length !== 1 ? "s" : ""} available
+            {slots.length === 1 ? t("bookingPicker.oneSlot") : t("bookingPicker.slotsAvailable").replace("{0}", String(slots.length))}
           </p>
         </div>
         <div 
@@ -193,7 +194,7 @@ export function TimeSlotsPanel({
                     className="w-2 h-2 rounded-full"
                     style={{ backgroundColor: 'var(--accent-success)' }}
                   />
-                  Online Meeting
+                  {t("bookingPicker.online")}
                 </span>
               ) : (
                 location.location_name
@@ -230,7 +231,7 @@ export function TimeSlotsPanel({
                   className="text-base font-semibold"
                   style={{ color: 'var(--text-primary)' }}
                 >
-                  {group.label}
+                  {groupByTimeOfDay ? t(`bookingPicker.${group.timeOfDay}`) : t("bookingPicker.allSlots")}
                 </h4>
                 <span 
                   className="text-xs"
@@ -260,8 +261,8 @@ export function TimeSlotsPanel({
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: (groupIndex * 0.1) + (slotIndex * 0.05) }}
-                    aria-label={`Time slot ${formatSlotTime(slot.start_time)}${
-                      slot.provider ? ` with ${slot.provider.name}` : ""
+                    aria-label={`${t("bookingPicker.slotLabel").replace("{0}", formatSlotTime(slot.start_time))}${
+                      slot.provider ? ` · ${t("bookingPicker.with").replace("{0}", slot.provider.name)}` : ""
                     }${slot.recommended ? " (Recommended)" : ""}${
                       slot.isPast ? " (Past)" : ""
                     }${slot.booked ? " (Booked)" : ""}`}
@@ -302,7 +303,7 @@ export function TimeSlotsPanel({
                           }}
                         >
                           <Star className="h-3 w-3 fill-current" />
-                          <span>Best</span>
+                          <span>{t("bookingPicker.best")}</span>
                         </div>
                       )}
                     </div>
@@ -382,6 +383,8 @@ function TimeSlotsLoading() {
 
 // Empty state component
 function EmptySlots({ date }: { date: Date }) {
+  const { t, language } = useTranslation();
+  const day = date.toLocaleDateString(intlLocale(language), { weekday: "long", month: "long", day: "numeric" });
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -403,18 +406,13 @@ function EmptySlots({ date }: { date: Date }) {
           className="text-lg font-semibold"
           style={{ color: 'var(--text-primary)' }}
         >
-          No available time slots
+          {t("bookingPicker.noSlots")}
         </h3>
         <p 
           className="text-sm max-w-xs"
           style={{ color: 'var(--text-secondary)' }}
         >
-          There are no available appointments for{" "}
-          {date.toLocaleDateString("en-US", {
-            weekday: "long",
-            month: "long",
-            day: "numeric",
-          })}
+          {t("bookingPicker.noSlotsFor").replace("{0}", day)}
         </p>
       </div>
       <div className="flex flex-col gap-2 mt-4">

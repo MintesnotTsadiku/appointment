@@ -5,21 +5,21 @@
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { intlLocale, useTranslation } from "@/lib/i18n";
 import { Button } from "@/components/button";
 import { motion } from "framer-motion";
 import {
-  getDayName,
-  getMonthName,
   getCalendarDates,
   isToday,
   isSameDay,
-  isPast,
   startOfDay,
   addDays,
 } from "../../../utils/dateHelpers";
 import type { CalendarProps } from "../../../types";
 
-const WEEKDAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+// 2023-01-01 was a Sunday; seven days from it give the weekday names in any locale.
+const weekdayLabels = (locale: string) =>
+  Array.from({ length: 7 }, (_, day) => new Intl.DateTimeFormat(locale, { weekday: "short" }).format(new Date(2023, 0, 1 + day)));
 
 export function CalendarPanel({
   selectedDate,
@@ -32,6 +32,9 @@ export function CalendarPanel({
   loading = false,
   className,
 }: CalendarProps) {
+  const { t, language } = useTranslation();
+  const locale = intlLocale(language);
+  const monthLabel = new Intl.DateTimeFormat(locale, { month: "long", year: "numeric" }).format(displayMonth);
   const calendarDates = getCalendarDates(displayMonth);
   const today = startOfDay(new Date());
   const effectiveMinDate = minDate && minDate > today ? minDate : today;
@@ -166,7 +169,7 @@ export function CalendarPanel({
               border: '1px solid var(--border-default)',
               color: 'var(--text-secondary)'
             }}
-          aria-label="Previous month"
+          aria-label={t("bookingPicker.previousMonth")}
         >
           <ChevronLeft className="h-5 w-5" />
         </Button>
@@ -176,7 +179,7 @@ export function CalendarPanel({
           className="text-xl font-semibold"
           style={{ color: 'var(--text-primary)' }}
         >
-          {getMonthName(displayMonth)} {displayMonth.getFullYear()}
+          {monthLabel}
         </h2>
 
         <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
@@ -191,7 +194,7 @@ export function CalendarPanel({
               border: '1px solid var(--border-default)',
               color: 'var(--text-secondary)'
             }}
-          aria-label="Next month"
+          aria-label={t("bookingPicker.nextMonth")}
         >
           <ChevronRight className="h-5 w-5" />
         </Button>
@@ -200,7 +203,7 @@ export function CalendarPanel({
 
       {/* Weekday Headers */}
       <div className="grid grid-cols-7 gap-1 mb-3">
-        {WEEKDAY_LABELS.map((day) => (
+        {weekdayLabels(locale).map((day) => (
           <div
             key={day}
             className="h-10 flex items-center justify-center text-sm font-medium"
@@ -214,7 +217,7 @@ export function CalendarPanel({
       {/* Calendar Grid */}
       <div
         role="grid"
-        aria-label={`Calendar for ${getMonthName(displayMonth)} ${displayMonth.getFullYear()}`}
+        aria-label={t("bookingPicker.calendarFor").replace("{0}", monthLabel)}
         className="grid grid-cols-7 gap-1"
       >
         {calendarDates.map((date, index) => {
@@ -234,7 +237,7 @@ export function CalendarPanel({
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.01 }}
-              aria-label={`${date.toLocaleDateString('en-US', { 
+              aria-label={`${date.toLocaleDateString(locale, { 
                 month: 'long', 
                 day: 'numeric', 
                 year: 'numeric',
@@ -289,7 +292,7 @@ export function CalendarPanel({
               color: 'var(--text-secondary)'
             }}
         >
-          Today
+          {t("bookingPicker.today")}
         </Button>
         </motion.div>
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
@@ -310,7 +313,7 @@ export function CalendarPanel({
               color: 'var(--text-secondary)'
             }}
         >
-          Tomorrow
+          {t("bookingPicker.tomorrow")}
         </Button>
         </motion.div>
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
@@ -330,7 +333,7 @@ export function CalendarPanel({
               color: 'var(--text-secondary)'
             }}
         >
-          Next Week
+          {t("bookingPicker.nextWeek")}
         </Button>
         </motion.div>
       </div>
@@ -346,14 +349,14 @@ export function CalendarPanel({
               className="h-3 w-3 rounded-full border-2"
               style={{ borderColor: 'var(--accent-primary)' }}
             />
-            <span>Today</span>
+            <span>{t("bookingPicker.today")}</span>
           </div>
           <div className="flex items-center gap-2">
             <div 
               className="h-2 w-2 rounded-full"
               style={{ backgroundColor: 'var(--accent-success)' }}
             />
-            <span>Available</span>
+            <span>{t("bookingPicker.available")}</span>
           </div>
         </div>
       </div>

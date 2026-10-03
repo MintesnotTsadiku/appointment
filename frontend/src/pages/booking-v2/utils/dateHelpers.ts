@@ -148,14 +148,14 @@ export const getCalendarDates = (date: Date): Date[] => {
 /**
  * Format date for display
  */
-export const formatDate = (date: Date, format: 'short' | 'long' | 'full' = 'short'): string => {
+export const formatDate = (date: Date, format: 'short' | 'long' | 'full' = 'short', locale = 'en-US'): string => {
   const options: Intl.DateTimeFormatOptions = {
     short: { month: 'short', day: 'numeric' },
     long: { weekday: 'short', month: 'short', day: 'numeric' },
     full: { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' },
   }[format];
   
-  return new Intl.DateTimeFormat('en-US', options).format(date);
+  return new Intl.DateTimeFormat(locale, options).format(date);
 };
 
 /**

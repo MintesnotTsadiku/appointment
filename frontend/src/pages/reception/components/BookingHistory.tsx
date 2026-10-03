@@ -9,14 +9,14 @@ interface HistoryRow {
 }
 
 const FIELD_LABELS: Record<string, string> = {
-  appointment_date: 'Date',
-  start_time: 'Start time',
-  end_time: 'End time',
-  status: 'Status',
-  client_name: 'Customer name',
-  client_email: 'Email',
-  client_phone: 'Phone',
-  notes: 'Notes',
+  appointment_date: 'staff.receptionDesk.fieldDate',
+  start_time: 'staff.receptionDesk.fieldStart',
+  end_time: 'staff.receptionDesk.fieldEnd',
+  status: 'staff.receptionDesk.fieldStatus',
+  client_name: 'staff.receptionDesk.fieldName',
+  client_email: 'staff.receptionDesk.fieldEmail',
+  client_phone: 'staff.receptionDesk.fieldPhone',
+  notes: 'staff.receptionDesk.fieldNotes',
 };
 
 /** Version log of an owned booking, newest entries as the API returns them. */
@@ -37,9 +37,9 @@ export function BookingHistory({ bookingId }: { bookingId: string }) {
         <ol className="divide-y rounded-lg border text-sm">
           {rows.map((row) => (
             <li key={row.name} className="space-y-0.5 px-3 py-2.5">
-              <p className="text-foreground">{describe(row.data)}</p>
+              <p className="text-foreground">{describe(row.data, t)}</p>
               <p className="text-xs text-muted-foreground tabular-nums">
-                {row.owner} · {row.creation}
+                {row.owner === 'Guest' ? t('staff.receptionDesk.customerActor') : row.owner} · {row.creation}
               </p>
             </li>
           ))}
@@ -49,14 +49,15 @@ export function BookingHistory({ bookingId }: { bookingId: string }) {
   );
 }
 
-function describe(raw: string) {
-  const fallback = 'Booking updated';
+/** Changes come through the manage link as Guest; staff changes keep the staff user. */
+function describe(raw: string, t: (key: string) => string) {
+  const fallback = t('staff.receptionDesk.historyUpdated');
   try {
     const detail = JSON.parse(raw);
-    if (detail.operation === 'created') return 'Booking created';
+    if (detail.operation === 'created') return t('staff.receptionDesk.historyCreated');
     const changes = (detail.changed || [])
       .filter((item: unknown[]) => String(item[0]) in FIELD_LABELS)
-      .map((item: unknown[]) => `${FIELD_LABELS[String(item[0])]}: ${item[1]} → ${item[2]}`)
+      .map((item: unknown[]) => `${t(FIELD_LABELS[String(item[0])])}: ${item[1]} → ${item[2]}`)
       .join('; ');
     return changes || fallback;
   } catch {
