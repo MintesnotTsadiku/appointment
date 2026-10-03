@@ -34,11 +34,14 @@ class TestSchedulingWorkflows(unittest.TestCase):
         cls.marker = f"{MARKER_PREFIX}-{frappe.generate_hash(length=6)}"
         cls.created: list[tuple[str, str]] = []
         frappe.flags.syncing_booking_urls = True
+        # Fixture customers never get messages.
+        frappe.flags.skip_customer_notification = True
         cls._build_fixture()
 
     @classmethod
     def tearDownClass(cls):
         cls._cleanup()
+        frappe.flags.skip_customer_notification = False
 
     # ------------------------------------------------------------------
     # Fixture construction / teardown

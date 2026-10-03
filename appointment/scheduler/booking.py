@@ -10,12 +10,14 @@ import frappe
 import pytz
 from frappe import _
 from frappe.rate_limiter import rate_limit
-from frappe.utils import get_time, getdate
+from frappe.utils import cint, get_datetime, get_time, getdate
 
 from appointment.scheduler import customer_identity, notifications
 from appointment.scheduler.booking_access import require_access
 
 _PUBLIC_CREATE = object()
+# Set by self_service.py on a booking whose manage link it has verified.
+CUSTOMER_CHANGE = object()
 
 ACTIVE = ("Pending", "Confirmed", "Completed", "No Show")
 
@@ -173,6 +175,8 @@ def check_capacity(provider, start, end, exclude=None):
 def validate_document(doc):
     old = doc.get_doc_before_save()
     public = doc.flags.public_booking is _PUBLIC_CREATE and doc.is_new()
+    # A customer change through a verified manage link (self_service.py) skips only the staff access check.
+    customer = doc.flags.customer_change is CUSTOMER_CHANGE and bool(old)
     parts = offering(doc.event_type, public=public, require_active=not bool(old))
     _event, service, location, provider, business = parts
     for field, expected in [("service", service.name), ("provider", provider.name), ("location", location.name)]:
@@ -182,7 +186,8 @@ def validate_document(doc):
         frappe.throw(_("Booking business does not match the offering."), frappe.PermissionError)
     doc.organization = business.name
     if old:
-        require_access(old)
+        if not customer:
+            require_access(old)
         for field in (
             "organization",
             "provider",
@@ -195,7 +200,7 @@ def validate_document(doc):
         ):
             if doc.get(field) != old.get(field):
                 frappe.throw(_("Change the booking through its authorized lifecycle; ownership is immutable."))
-    if not public:
+    if not public and not customer:
         require_access(doc)
     lock_provider(provider)
     if old:
@@ -223,6 +228,10 @@ def validate_document(doc):
     doc.starts_at, doc.ends_at = start, end
     doc.occupied_from, doc.occupied_until = occupied_from, occupied_until
     doc.booking_timezone = zone
+    if old and (str(get_datetime(start)) != str(get_datetime(old.starts_at)) or doc.status != old.status):
+        # A new time or status retires earlier manage links.
+        doc.manage_version = cint(old.manage_version) + 1
+        doc.last_changed_by = "Customer" if customer else "Staff"
     if doc.status in ACTIVE:
         check_capacity(provider, occupied_from, occupied_until, doc.name)
     _validate_contact(doc, public)

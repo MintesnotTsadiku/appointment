@@ -97,7 +97,8 @@ def get_desk_appointments(date: str = None, location_name: str = None, provider_
         filters=filters,
         fields=[
             "name", "appointment_id", "appointment_date", "start_time", "end_time",
-            "client_name", "client_email", "client_phone", "customer", "service",
+            "client_name", "client_email", "client_phone", "customer", "last_changed_by",
+            "cancellation_fee", "refund_due", "service",
             "provider", "location", "status",
             "amount_paid", "notes", "event_type", "event", "organization", "booking_timezone", "modified"
         ],

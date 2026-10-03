@@ -14,3 +14,4 @@ appointment.patches.v0_1.import_landing_world_translations
 appointment.patches.v0_1.import_customer_notification_translations
 appointment.patches.v0_1.link_customer_profiles
 appointment.patches.v0_1.import_customer_profile_translations
+appointment.patches.v0_1.import_self_service_translations

@@ -208,6 +208,8 @@ def setup() -> dict[str, Any]:
         is_active=1,
     )
 
+    # The fixture's synthetic customer never gets messages.
+    frappe.flags.skip_customer_notification = True
     appointment = _insert(
         "Appointment",
         appointment_id=f"QA-APT-{frappe.generate_hash(length=8).upper()}",
@@ -223,6 +225,7 @@ def setup() -> dict[str, Any]:
         end_time="10:30:00",
         status="Confirmed",
     )
+    frappe.flags.skip_customer_notification = False
     frappe.db.commit()
 
     from appointment.onboarding import make_slug

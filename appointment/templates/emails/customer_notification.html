@@ -23,10 +23,11 @@
         </table>
       </td>
     </tr>
-    {% if booking_url %}
+    {% if manage_url or booking_url %}
     <tr>
       <td style="padding:0 24px 20px;">
-        <a href="{{ booking_url }}" style="display:inline-block;padding:10px 16px;border-radius:8px;background:#1f2328;color:#ffffff;text-decoration:none;font-size:14px;">{{ booking_label }}</a>
+        {% if manage_url %}<a href="{{ manage_url }}" style="display:inline-block;margin:0 8px 8px 0;padding:10px 16px;border-radius:8px;background:#1f2328;color:#ffffff;text-decoration:none;font-size:14px;">{{ manage_label }}</a>{% endif %}
+        {% if booking_url %}<a href="{{ booking_url }}" style="display:inline-block;margin:0 0 8px;padding:10px 16px;border-radius:8px;border:1px solid #1f2328;color:#1f2328;text-decoration:none;font-size:14px;">{{ booking_label }}</a>{% endif %}
       </td>
     </tr>
     {% endif %}

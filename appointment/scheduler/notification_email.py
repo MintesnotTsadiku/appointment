@@ -7,10 +7,11 @@ The only link is the business booking page, plus a signed reminder opt-out.
 import frappe
 import pytz
 from frappe import _
-from frappe.utils import escape_html, get_datetime, get_url
+from frappe.utils import escape_html, flt, get_datetime, get_url
 from frappe.utils.verified_command import get_signed_params
 
 from appointment.helpers.utils import format_ethiopian_time
+from appointment.scheduler import self_service
 from appointment.scheduler.notifications import is_stale
 
 TEMPLATE = "appointment/templates/emails/customer_notification.html"
@@ -38,6 +39,13 @@ COPY = {
         intro="Hello {0}, this is a reminder of your booking.",
     ),
 }
+# The customer made the change through their manage link.
+CUSTOMER_INTRO = {
+    "Reschedule": "Hello {0}, you moved your booking. The new time is below.",
+    "Cancellation": "Hello {0}, you cancelled your booking.",
+}
+# Events whose booking is still open, so the email carries the manage link.
+MANAGEABLE = ("Confirmation", "Reschedule", "Reminder")
 
 
 def send_notification(notification):
@@ -75,6 +83,7 @@ def render(event, doc, language, recipient):
     business_name = business.organization_name
     customer = (doc.client_name or "").strip()[:NAME_LIMIT]
     copy = COPY[event]
+    by_customer = doc.get("last_changed_by") == "Customer" and event in CUSTOMER_INTRO
 
     def t(text, *args):
         return _(text, lang=language).format(*(escape_html(str(arg)) for arg in args))
@@ -83,7 +92,7 @@ def render(event, doc, language, recipient):
         lang=language,
         subject=_(copy["subject"], lang=language).format(business_name),
         heading=t(copy["heading"]),
-        intro=t(copy["intro"], customer, business_name),
+        intro=t(CUSTOMER_INTRO[event] if by_customer else copy["intro"], customer, business_name),
         business_name=escape_html(business_name),
         logo_url=_public_logo(business.logo),
         details=[
@@ -91,7 +100,10 @@ def render(event, doc, language, recipient):
             (t("Provider"), escape_html(_value("Provider", doc.provider, "full_name"))),
             (t("Location"), escape_html(_value("Location", doc.location, "location_name"))),
             (t("Date and time"), escape_html(when(doc, language))),
+            *_fee_rows(doc, t),
         ],
+        manage_label=t("Manage your booking"),
+        manage_url=escape_html(self_service.manage_url(doc)) if event in MANAGEABLE else "",
         booking_label=t("Open the booking page"),
         booking_url=escape_html(get_url(f"/{business.slug}/book")) if business.slug else "",
         contact=t("Questions? Contact {0}.", " · ".join(filter(None, [business.phone, business.email]))) if (business.phone or business.email) else "",
@@ -100,6 +112,16 @@ def render(event, doc, language, recipient):
         opt_out_url=escape_html(opt_out_url(doc.organization, recipient)) if event == "Reminder" else "",
     )
     return {"subject": context["subject"], "html": frappe.render_template(TEMPLATE, context)}
+
+
+def _fee_rows(doc, t):
+    """A late cancel records a fee and a refund; the customer sees both."""
+    if doc.status != "Cancelled" or not (flt(doc.cancellation_fee) or flt(doc.refund_due)):
+        return []
+    return [
+        (t("Late cancellation fee"), escape_html(f"ETB {flt(doc.cancellation_fee):,.2f}")),
+        (t("Refund due"), escape_html(f"ETB {flt(doc.refund_due):,.2f}")),
+    ]
 
 
 def when(doc, language):

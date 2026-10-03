@@ -25,6 +25,12 @@
   "amount_paid",
   "notes",
   "cancellation_reason",
+  "self_service_section",
+  "last_changed_by",
+  "self_reschedules",
+  "cancellation_fee",
+  "refund_due",
+  "manage_version",
   "organization",
   "starts_at",
   "ends_at",
@@ -167,6 +173,46 @@
    "length": 500
   },
   {
+   "fieldname": "self_service_section",
+   "fieldtype": "Section Break",
+   "label": "Customer Self-Service",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "last_changed_by",
+   "fieldtype": "Select",
+   "label": "Last Changed By",
+   "options": "\nStaff\nCustomer",
+   "read_only": 1
+  },
+  {
+   "fieldname": "self_reschedules",
+   "fieldtype": "Int",
+   "label": "Customer Reschedules",
+   "default": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cancellation_fee",
+   "fieldtype": "Currency",
+   "label": "Late Cancellation Fee",
+   "read_only": 1
+  },
+  {
+   "fieldname": "refund_due",
+   "fieldtype": "Currency",
+   "label": "Refund Due",
+   "read_only": 1
+  },
+  {
+   "fieldname": "manage_version",
+   "fieldtype": "Int",
+   "label": "Manage Link Version",
+   "default": "0",
+   "hidden": 1,
+   "read_only": 1
+  },
+  {
    "fieldname": "organization",
    "fieldtype": "Link",
    "label": "Organization",
@@ -232,7 +278,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-10-03 00:00:00.000000",
+ "modified": "2026-10-03 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "Scheduler",
  "name": "Appointment",

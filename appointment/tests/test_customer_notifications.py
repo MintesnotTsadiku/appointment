@@ -202,8 +202,11 @@ class TestCustomerNotifications(BloomBookingCase):
                 self.assertNotIn("<script>", html)
                 self.assertIn("&lt;script&gt;", html)
                 links = [part.split('"', 1)[0] for part in html.split('href="')[1:]]
-                self.assertTrue(links[0].endswith(f"/{slug}/book"), links)
-                self.assertEqual(len(links), 2 if event == "Reminder" else 1)
+                # Open bookings link to their manage page first; every email links to the booking page.
+                self.assertTrue(any(link.endswith(f"/{slug}/book") for link in links), links)
+                manage = [link for link in links if f"/{slug}/booking/" in link]
+                self.assertEqual(len(manage), 0 if event == "Cancellation" else 1, links)
+                self.assertEqual(len(links), {"Reminder": 3, "Cancellation": 1}.get(event, 2), links)
         amharic = render("Confirmation", doc, "am", doc.client_email)
         self.assertIn("ሰዓት", amharic["html"])
         if frappe.db.exists("Translation", {"language": "am", "source_text": "Booking confirmed"}):
