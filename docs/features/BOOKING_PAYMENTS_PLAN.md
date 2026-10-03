@@ -175,4 +175,8 @@ All runs had 0 console and 0 network errors. Database check: the two confirmed p
 - Chapa has not been called for real. It needs the keys (test keys work) and the webhook set up in the Chapa dashboard. The URL is shown on the settings page.
 - Automatic refunds and payouts through the Chapa API are not built.
 - The platform ledger has no admin page yet. Entries are visible in Desk.
-- The scheduler's details form and its sidebar text are not yet translated (an existing limitation).
+
+### Closed after the first build
+
+- The public scheduler is translated: the service list (`serviceSelector.*`), the header step, back and theme labels (`schedulerPage.*`), and the details form with its validation messages and booking summary (`bookingForm.*`). The summary date follows the page language. Patch `import_booking_form_translations` imports the Amharic copy.
+- Verification: BQA-2026-00425 (`booking-form/guest.yaml`) passed 4 of 4 at 1440×900 and 390×844 in English and Amharic, with 0 console and 0 network errors. Each scenario submits the empty form and sees the translated errors; nothing is booked. BQA-2026-00423 and 00424 found one hidden duplicate label in the assertion and the untranslated Back button, both fixed.

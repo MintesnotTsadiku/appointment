@@ -19,6 +19,7 @@ import { useAppContext } from "@/context/app";
 import { getLocalTimezone } from "@/lib/utils";
 import { ArrowLeft, Info, Moon, Sun } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
+import { useTranslation } from "@/lib/i18n";
 import MetaTags from "@/components/meta-tags";
 import PoweredBy from "@/components/powered-by";
 
@@ -84,6 +85,7 @@ const OrganizationAppointmentV2 = () => {
   const [timeFormat, setTimeFormat] = useState<'12h' | '24h' | 'ethiopian'>('12h');
   const [bookingResponse, setBookingResponse] = useState<(BookingResponse & { userEmail?: string }) | null>(null);
   const { theme, setTheme } = useTheme();
+  const { t } = useTranslation();
   const bookingMode = theme === "dark" || (theme === "system" && typeof document !== "undefined" && document.documentElement.classList.contains("dark"))
     ? "dark"
     : "light";
@@ -483,15 +485,15 @@ const OrganizationAppointmentV2 = () => {
           <div className="w-full max-w-7xl mx-auto px-5 md:px-6 py-4 flex items-center justify-between gap-5">
             <div className="flex min-w-0 items-center gap-3">
               {currentPhase !== "service" && (
-                <button type="button" onClick={handlePhaseBack} className="booking-back" aria-label="Go to the previous booking step">
+                <button type="button" onClick={handlePhaseBack} className="booking-back" aria-label={t("schedulerPage.previousStep")}>
                   <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-                  <span>Back</span>
+                  <span>{t("schedulerPage.back")}</span>
                 </button>
               )}
             <a
               href={bookingBrand.publicRoot}
               className="flex min-w-0 items-center gap-3 no-underline"
-              aria-label={`Back to ${bookingBrand.config?.identity.applicationName || userInfo?.organizationName || "public site"}`}
+              aria-label={bookingBrand.config?.identity.applicationName || userInfo?.organizationName ? t("schedulerPage.backTo").replace("{0}", bookingBrand.config?.identity.applicationName || userInfo?.organizationName || "") : t("publicSite.backToSite")}
             >
               {bookingBrand.config && brandLogo(bookingBrand.config.compiledDesign) ? (
                 <img className="pe-brand-logo shrink-0" src={brandLogo(bookingBrand.config.compiledDesign)} alt="" />
@@ -502,12 +504,12 @@ const OrganizationAppointmentV2 = () => {
                 className="truncate text-base font-semibold"
                 style={{ color: "var(--text-primary)", fontFamily: "var(--booking-font-display)" }}
               >
-                {bookingBrand.config?.identity.applicationName || userInfo?.organizationName || "Appointments"}
+                {bookingBrand.config?.identity.applicationName || userInfo?.organizationName || t("schedulerPage.appointments")}
               </span>
             </a>
             </div>
             <div className="booking-header-actions">
-              <span className="booking-step" aria-live="polite">{currentPhase === "service" ? "Choose a service" : currentPhase === "datetime" ? "Choose a time" : currentPhase === "form" ? "Your details" : "Confirmed"}</span>
+              <span className="booking-step" aria-live="polite">{t(currentPhase === "service" ? "schedulerPage.stepService" : currentPhase === "datetime" ? "schedulerPage.stepTime" : currentPhase === "form" ? "schedulerPage.stepDetails" : "schedulerPage.stepDone")}</span>
 
             {/* Theme Toggle */}
             <motion.button
@@ -519,7 +521,7 @@ const OrganizationAppointmentV2 = () => {
               }}
               whileTap={{ scale: 0.95 }}
               whileHover={{ scale: 1.02 }}
-              aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+              aria-label={t("bookingPicker.switchTheme")}
             >
               <AnimatePresence mode="wait">
                 <motion.div
@@ -540,7 +542,7 @@ const OrganizationAppointmentV2 = () => {
                 className="text-sm font-medium"
                 style={{ color: 'var(--text-secondary)' }}
               >
-                {theme === "light" ? "Dark" : "Light"}
+                {theme === "light" ? t("bookingPicker.dark") : t("bookingPicker.light")}
               </span>
             </motion.button>
             </div>

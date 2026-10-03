@@ -17,3 +17,4 @@ appointment.patches.v0_1.import_customer_profile_translations
 appointment.patches.v0_1.import_self_service_translations
 appointment.patches.v0_1.import_booking_picker_translations
 appointment.patches.v0_1.import_payment_translations
+appointment.patches.v0_1.import_booking_form_translations

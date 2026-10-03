@@ -1,0 +1,263 @@
+# Guests open the Bloom scheduler, reach the details form and submit it empty. Nothing is booked.
+app: appointment
+base_url: http://127.0.0.84:44430
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-booking-form
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.demo.showcase.browser_values
+scenarios:
+- id: form_en_desktop
+  title: Service list and details form are in English (desktop); empty submit shows
+    translated errors, nothing is booked
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /bloom-studio/book
+    assertions:
+    - type: network_idle
+  actions:
+  - action: wait_for
+    selector: '[data-pe-booking]'
+  - action: click
+    selector: :nth-match([data-pe-booking] a.bl-btn, 1)
+    assertions:
+    - type: url_contains
+      value: /schedule/org/
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+    assertions:
+    - type: visible_text
+      value: Choose the type of appointment you'd like to book
+  - action: screenshot
+    name: form_en_desktop-1-services.png
+    full_page: true
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: click
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: wait_for
+    selector: '#userName'
+    assertions:
+    - type: visible_text
+      value: Confirm Your Booking
+    - type: visible_text
+      value: Booking Summary
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+    assertions:
+    - type: visible_text
+      value: Name is required
+    - type: visible_text
+      value: Email is required
+  - action: screenshot
+    name: form_en_desktop-2-details.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: form_en_mobile
+  title: Service list and details form are in English (mobile); empty submit shows
+    translated errors, nothing is booked
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /bloom-studio/book
+    assertions:
+    - type: network_idle
+  actions:
+  - action: wait_for
+    selector: '[data-pe-booking]'
+  - action: click
+    selector: :nth-match([data-pe-booking] a.bl-btn, 1)
+    assertions:
+    - type: url_contains
+      value: /schedule/org/
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+    assertions:
+    - type: visible_text
+      value: Choose the type of appointment you'd like to book
+  - action: screenshot
+    name: form_en_mobile-1-services.png
+    full_page: true
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: click
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: wait_for
+    selector: '#userName'
+    assertions:
+    - type: visible_text
+      value: Confirm Your Booking
+    - type: visible_text
+      value: Booking Summary
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+    assertions:
+    - type: visible_text
+      value: Name is required
+    - type: visible_text
+      value: Email is required
+  - action: screenshot
+    name: form_en_mobile-2-details.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: form_am_desktop
+  title: Service list and details form are in Amharic (desktop); empty submit shows
+    translated errors, nothing is booked
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="language-toggle"]'
+  actions:
+  - action: press
+    selector: '[data-qa="language-toggle"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation.messages
+      status: 200
+  - action: open_url
+    url: /bloom-studio/book
+  - action: wait_for
+    selector: '[data-pe-booking]'
+  - action: click
+    selector: :nth-match([data-pe-booking] a.bl-btn, 1)
+    assertions:
+    - type: url_contains
+      value: /schedule/org/
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+    assertions:
+    - type: visible_text
+      value: ሊይዙት የሚፈልጉትን የቀጠሮ ዓይነት ይምረጡ
+  - action: screenshot
+    name: form_am_desktop-1-services.png
+    full_page: true
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: click
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: wait_for
+    selector: '#userName'
+    assertions:
+    - type: visible_text
+      value: ቀጠሮዎን ያረጋግጡ
+    - type: visible_text
+      value: የቀጠሮ ማጠቃለያ
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+    assertions:
+    - type: visible_text
+      value: ስም ያስፈልጋል
+    - type: visible_text
+      value: ኢሜይል ያስፈልጋል
+  - action: screenshot
+    name: form_am_desktop-2-details.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: form_am_mobile
+  title: Service list and details form are in Amharic (mobile); empty submit shows
+    translated errors, nothing is booked
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="language-toggle"]'
+  actions:
+  - action: press
+    selector: '[data-qa="language-toggle"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation.messages
+      status: 200
+  - action: open_url
+    url: /bloom-studio/book
+  - action: wait_for
+    selector: '[data-pe-booking]'
+  - action: click
+    selector: :nth-match([data-pe-booking] a.bl-btn, 1)
+    assertions:
+    - type: url_contains
+      value: /schedule/org/
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+    assertions:
+    - type: visible_text
+      value: ሊይዙት የሚፈልጉትን የቀጠሮ ዓይነት ይምረጡ
+  - action: screenshot
+    name: form_am_mobile-1-services.png
+    full_page: true
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: click
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: wait_for
+    selector: '#userName'
+    assertions:
+    - type: visible_text
+      value: ቀጠሮዎን ያረጋግጡ
+    - type: visible_text
+      value: የቀጠሮ ማጠቃለያ
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+    assertions:
+    - type: visible_text
+      value: ስም ያስፈልጋል
+    - type: visible_text
+      value: ኢሜይል ያስፈልጋል
+  - action: screenshot
+    name: form_am_mobile-2-details.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors

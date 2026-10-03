@@ -6,8 +6,9 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Clock, User, Users, DollarSign, ChevronRight, Building2, Star } from "lucide-react";
+import { Clock, User, Users, DollarSign, ChevronRight, Building2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/lib/i18n";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
 import type { Service, Organization, Provider } from "../../types";
 
@@ -27,6 +28,7 @@ export function ServiceSelector({
   className,
 }: ServiceSelectorProps) {
   const [viewMode, setViewMode] = useState<'services' | 'providers'>('services');
+  const { t } = useTranslation();
   
   if (loading) {
     return <ServiceSelectorLoading />;
@@ -96,8 +98,7 @@ export function ServiceSelector({
                   <Users className="h-4 w-4 text-white" />
                 </div>
                 <span>
-                  {organization.providers.length} provider
-                  {organization.providers.length !== 1 ? "s" : ""}
+                  {countLabel(t, "provider", organization.providers.length)}
                 </span>
               </div>
               <div className="flex items-center gap-2" style={{ color: 'var(--text-secondary)' }}>
@@ -105,7 +106,7 @@ export function ServiceSelector({
                   <Building2 className="h-4 w-4 text-white" />
                 </div>
                 <span>
-                  {services.length} service{services.length !== 1 ? "s" : ""}
+                  {countLabel(t, "service", services.length)}
                 </span>
               </div>
             </div>
@@ -123,10 +124,10 @@ export function ServiceSelector({
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <h2 className="text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
-              Select a Service
+              {t("serviceSelector.title")}
             </h2>
             <p style={{ color: 'var(--text-secondary)' }}>
-              Choose the type of appointment you'd like to book
+              {t("serviceSelector.subtitle")}
             </p>
           </div>
           
@@ -151,7 +152,7 @@ export function ServiceSelector({
                   color: viewMode === 'services' ? 'white' : 'var(--text-secondary)'
                 }}
               >
-                View by Services
+                {t("serviceSelector.byServices")}
               </button>
               <button
                 onClick={() => setViewMode('providers')}
@@ -165,7 +166,7 @@ export function ServiceSelector({
                   color: viewMode === 'providers' ? 'white' : 'var(--text-secondary)'
                 }}
               >
-                View by Providers
+                {t("serviceSelector.byProviders")}
               </button>
             </div>
           )}
@@ -178,7 +179,7 @@ export function ServiceSelector({
               <div className="inline-flex p-1.5 rounded-lg bg-gradient-primary">
                 <User className="h-5 w-5 text-white" />
               </div>
-              Individual Appointments
+              {t("serviceSelector.individualTitle")}
             </h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {individualServices.map((service, index) => (
@@ -205,7 +206,7 @@ export function ServiceSelector({
               <div className="inline-flex p-1.5 rounded-lg bg-gradient-secondary">
                 <Building2 className="h-5 w-5 text-white" />
               </div>
-              General Services
+              {t("serviceSelector.generalTitle")}
             </h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {organizationServices.map((service, index) => (
@@ -235,7 +236,7 @@ export function ServiceSelector({
               <div className="inline-flex p-1.5 rounded-lg bg-gradient-primary">
                 <Users className="h-5 w-5 text-white" />
               </div>
-              Services by Provider
+              {t("serviceSelector.byProviderTitle")}
             </h3>
             {servicesByProvider.map(({ provider, services: providerServices }, providerIndex) => {
               if (providerServices.length === 0) return null;
@@ -303,7 +304,7 @@ export function ServiceSelector({
               <div className="inline-flex p-1.5 rounded-lg bg-gradient-success">
                 <Users className="h-5 w-5 text-white" />
               </div>
-              Group Sessions
+              {t("serviceSelector.groupTitle")}
             </h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {groupServices.map((service, index) => (
@@ -337,7 +338,7 @@ export function ServiceSelector({
           }}
         >
           <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>
-            Our Providers
+            {t("serviceSelector.ourProviders")}
           </h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {organization.providers.map((provider, index) => (
@@ -366,6 +367,7 @@ interface ServiceCardProps {
 }
 
 function ServiceCard({ service, onSelect, availableProviders = [], showProviderName = true }: ServiceCardProps) {
+  const { t } = useTranslation();
   return (
     <motion.button
       data-qa="booking-service"
@@ -396,7 +398,7 @@ function ServiceCard({ service, onSelect, availableProviders = [], showProviderN
           <div className="absolute top-0 right-0">
             <div className="flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium bg-gradient-primary text-white">
             <User className="h-3 w-3" />
-            <span>Individual</span>
+            <span>{t("serviceSelector.individual")}</span>
           </div>
         </div>
       )}
@@ -417,7 +419,7 @@ function ServiceCard({ service, onSelect, availableProviders = [], showProviderN
       {/* Available Providers (for organization services) */}
       {availableProviders.length > 0 && (
         <div className="mb-3">
-            <p className="text-xs mb-2" style={{ color: 'var(--text-muted)' }}>Available providers:</p>
+            <p className="text-xs mb-2" style={{ color: 'var(--text-muted)' }}>{t("serviceSelector.availableProviders")}</p>
           <div className="flex -space-x-2">
             {availableProviders.slice(0, 3).map((provider) => (
                 <Avatar 
@@ -460,7 +462,7 @@ function ServiceCard({ service, onSelect, availableProviders = [], showProviderN
         <div className="flex flex-wrap items-center gap-3 text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
         <div className="flex items-center gap-1">
             <Clock className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
-          <span>{service.duration} min</span>
+          <span>{t("bookingPicker.minutes").replace("{0}", String(service.duration))}</span>
         </div>
         {service.price && service.price > 0 && (
           <div className="flex items-center gap-1">
@@ -473,7 +475,7 @@ function ServiceCard({ service, onSelect, availableProviders = [], showProviderN
         {service.providerCount && service.providerCount > 1 && (
           <div className="flex items-center gap-1">
               <Users className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
-            <span>{service.providerCount} providers</span>
+            <span>{countLabel(t, "provider", service.providerCount)}</span>
           </div>
         )}
       </div>
@@ -484,7 +486,7 @@ function ServiceCard({ service, onSelect, availableProviders = [], showProviderN
           style={{ borderTop: '1px solid var(--border-default)' }}
         >
           <span className="text-sm font-medium" style={{ color: 'var(--accent-primary)' }}>
-          Book Appointment
+          {t("serviceSelector.book")}
         </span>
           <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" style={{ color: 'var(--accent-primary)' }} />
         </div>
@@ -499,6 +501,7 @@ interface ProviderCardProps {
 }
 
 function ProviderCard({ provider }: ProviderCardProps) {
+  const { t } = useTranslation();
   return (
     <motion.div
       whileHover={{ scale: 1.02 }}
@@ -527,7 +530,7 @@ function ProviderCard({ provider }: ProviderCardProps) {
           )}
           {provider.services && provider.services.length > 0 && (
             <p className="text-xs mt-1 truncate" style={{ color: 'var(--text-muted)' }}>
-              {provider.services.length} service{provider.services.length !== 1 ? "s" : ""}
+              {countLabel(t, "service", provider.services.length)}
             </p>
           )}
         </div>
@@ -537,6 +540,10 @@ function ProviderCard({ provider }: ProviderCardProps) {
 }
 
 // Loading Skeleton
+function countLabel(t: (key: string) => string, noun: "provider" | "service", count: number) {
+  return count === 1 ? t(`serviceSelector.${noun}One`) : t(`serviceSelector.${noun}Many`).replace("{0}", String(count));
+}
+
 function ServiceSelectorLoading() {
   return (
     <div className="w-full max-w-6xl mx-auto space-y-8">

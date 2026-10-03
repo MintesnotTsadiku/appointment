@@ -14,6 +14,7 @@ import { Label } from "@/components/label";
 import { Textarea } from "@/components/textarea";
 import { formatDate, formatTime } from "../../utils/dateHelpers";
 import { useTheme } from "@/components/theme-provider";
+import { intlLocale, useTranslation } from "@/lib/i18n";
 import type { BookingFormData, TimeSlot, Service } from "../../types";
 
 interface BookingFormProps {
@@ -57,6 +58,7 @@ export function BookingForm({
   const [errors, setErrors] = useState<Partial<Record<keyof BookingFormData, string>>>({});
   const [touched, setTouched] = useState<Partial<Record<keyof BookingFormData, boolean>>>({});
   const { theme, setTheme } = useTheme();
+  const { t, language } = useTranslation();
 
   // Theme toggle handler
   const toggleTheme = () => {
@@ -67,18 +69,17 @@ export function BookingForm({
   const validateField = (field: keyof BookingFormData, value: string): string | undefined => {
     switch (field) {
       case "userName":
-        if (!value.trim()) return "Name is required";
-        if (value.trim().length < 2) return "Name must be at least 2 characters";
+        if (!value.trim()) return t("bookingForm.nameRequired");
+        if (value.trim().length < 2) return t("bookingForm.nameShort");
         break;
       case "userEmail":
-        if (!value.trim()) return "Email is required";
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(value)) return "Please enter a valid email";
+        if (!value.trim()) return t("bookingForm.emailRequired");
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return t("bookingForm.emailInvalid");
         break;
       case "userPhone":
         if (value && value.trim()) {
           const phoneRegex = /^[+]?[\d\s-()]+$/;
-          if (!phoneRegex.test(value)) return "Please enter a valid phone number";
+          if (!phoneRegex.test(value)) return t("bookingForm.phoneInvalid");
         }
         break;
     }
@@ -184,7 +185,7 @@ export function BookingForm({
             }}
       >
         <ArrowLeft className="h-4 w-4 mr-2" />
-        Change Date/Time
+        {t("bookingForm.changeDateTime")}
       </Button>
 
           {/* Theme Toggle */}
@@ -197,7 +198,7 @@ export function BookingForm({
             }}
             whileTap={{ scale: 0.95 }}
             whileHover={{ scale: 1.02 }}
-            aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+            aria-label={t("bookingPicker.switchTheme")}
           >
             <AnimatePresence mode="wait">
               <motion.div
@@ -218,7 +219,7 @@ export function BookingForm({
               className="text-sm font-medium"
               style={{ color: 'var(--text-secondary)' }}
             >
-              {theme === "light" ? "Dark" : "Light"}
+              {theme === "light" ? t("bookingPicker.dark") : t("bookingPicker.light")}
             </span>
           </motion.button>
         </div>
@@ -243,10 +244,10 @@ export function BookingForm({
                 className="text-3xl md:text-4xl font-bold mb-2"
                 style={{ color: 'var(--text-primary)' }}
               >
-              Confirm Your Booking
+              {t("bookingForm.title")}
             </h1>
               <p style={{ color: 'var(--text-secondary)' }}>
-              Enter your details to complete the appointment
+              {t("bookingForm.subtitle")}
             </p>
           </div>
 
@@ -263,7 +264,7 @@ export function BookingForm({
                   className="text-base font-medium"
                   style={{ color: 'var(--text-primary)' }}
                 >
-                  Full Name <span style={{ color: 'var(--accent-primary)' }}>*</span>
+                  {t("bookingForm.fullName")} <span style={{ color: 'var(--accent-primary)' }}>*</span>
               </Label>
               <div className="relative">
                   <div 
@@ -278,7 +279,7 @@ export function BookingForm({
                 <Input
                   id="userName"
                   type="text"
-                  placeholder="John Doe"
+                  placeholder={t("bookingForm.namePlaceholder")}
                   value={formData.userName}
                   onChange={(e) => handleChange("userName", e.target.value)}
                   onBlur={() => handleBlur("userName")}
@@ -320,7 +321,7 @@ export function BookingForm({
                   className="text-base font-medium"
                   style={{ color: 'var(--text-primary)' }}
                 >
-                  Email Address <span style={{ color: 'var(--accent-primary)' }}>*</span>
+                  {t("bookingForm.email")} <span style={{ color: 'var(--accent-primary)' }}>*</span>
               </Label>
               <div className="relative">
                   <div 
@@ -364,7 +365,7 @@ export function BookingForm({
                 </p>
               )}
                 <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                Use an email address where the business can reach you
+                {t("bookingForm.emailHint")}
               </p>
               </motion.div>
 
@@ -380,7 +381,7 @@ export function BookingForm({
                   className="text-base font-medium"
                   style={{ color: 'var(--text-primary)' }}
                 >
-                  Phone Number <span style={{ color: 'var(--text-secondary)' }}>(optional)</span>
+                  {t("bookingForm.phone")} <span style={{ color: 'var(--text-secondary)' }}>{t("bookingForm.optional")}</span>
               </Label>
               <div className="relative">
                   <div 
@@ -437,7 +438,7 @@ export function BookingForm({
                   className="text-base font-medium"
                   style={{ color: 'var(--text-primary)' }}
                 >
-                  Additional Participants <span style={{ color: 'var(--text-secondary)' }}>(optional)</span>
+                  {t("bookingForm.participants")} <span style={{ color: 'var(--text-secondary)' }}>{t("bookingForm.optional")}</span>
               </Label>
               <div className="relative">
                   <div 
@@ -466,7 +467,7 @@ export function BookingForm({
                 />
               </div>
                 <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                Add emails separated by commas
+                {t("bookingForm.participantsHint")}
               </p>
               </motion.div>
 
@@ -482,7 +483,7 @@ export function BookingForm({
                   className="text-base font-medium"
                   style={{ color: 'var(--text-primary)' }}
                 >
-                  Notes or Special Requests <span style={{ color: 'var(--text-secondary)' }}>(optional)</span>
+                  {t("bookingForm.notes")} <span style={{ color: 'var(--text-secondary)' }}>{t("bookingForm.optional")}</span>
               </Label>
               <div className="relative">
                   <div 
@@ -496,7 +497,7 @@ export function BookingForm({
                   </div>
                 <Textarea
                   id="notes"
-                  placeholder="Any specific requirements or topics you'd like to discuss..."
+                  placeholder={t("bookingForm.notesPlaceholder")}
                   value={formData.notes}
                   onChange={(e) => handleChange("notes", e.target.value)}
                   disabled={loading}
@@ -537,12 +538,12 @@ export function BookingForm({
                 {loading ? (
                   <>
                     <Loader2 className="h-5 w-5 mr-2 animate-spin" />
-                    Confirming Booking...
+                    {t("bookingForm.confirming")}
                   </>
                 ) : (
                   <>
                     <CheckCircle2 className="h-5 w-5 mr-2" />
-                    Confirm Booking
+                    {t("bookingForm.confirm")}
                   </>
                 )}
               </Button>
@@ -568,7 +569,7 @@ export function BookingForm({
                 className="text-lg font-semibold mb-4"
                 style={{ color: 'var(--text-primary)' }}
               >
-              Booking Summary
+              {t("bookingForm.summary")}
             </h3>
 
             <div className="space-y-4">
@@ -590,13 +591,13 @@ export function BookingForm({
                     <Calendar className="h-5 w-5" style={{ color: 'var(--accent-primary)' }} />
                 </div>
                 <div className="flex-1 min-w-0">
-                    <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Service</p>
+                    <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t("customerBooking.service")}</p>
                     <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>
                     {service.name}
                   </p>
                   {service.provider && (
                       <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
-                      with {service.provider.name}
+                      {t("bookingPicker.with").replace("{0}", service.provider.name)}
                     </p>
                   )}
                 </div>
@@ -620,15 +621,15 @@ export function BookingForm({
                     <Clock className="h-5 w-5" style={{ color: 'var(--accent-primary)' }} />
                 </div>
                 <div className="flex-1 min-w-0">
-                    <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Date & Time</p>
+                    <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t("customerBooking.dateTime")}</p>
                     <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>
-                    {formatDate(selectedDate, 'full')}
+                    {formatDate(selectedDate, 'full', intlLocale(language))}
                   </p>
                     <p className="mt-1" style={{ color: 'var(--text-primary)' }}>
                     {formattedTime}
                   </p>
                     <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
-                    {service.duration} minutes
+                    {service.duration} {t("customerBooking.minutes")}
                   </p>
                 </div>
                 </motion.div>
@@ -652,7 +653,7 @@ export function BookingForm({
                       <MapPin className="h-5 w-5" style={{ color: 'var(--accent-primary)' }} />
                   </div>
                   <div className="flex-1 min-w-0">
-                      <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Location</p>
+                      <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t("customerBooking.location")}</p>
                       <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>
                       {service.location.is_online ? (
                         <span className="flex items-center gap-2">
@@ -660,7 +661,7 @@ export function BookingForm({
                               className="w-2 h-2 rounded-full"
                               style={{ backgroundColor: 'var(--accent-success)' }}
                             ></span>
-                          Online Meeting
+                          {t("customerBooking.online")}
                         </span>
                       ) : (
                         service.location.location_name
@@ -688,7 +689,7 @@ export function BookingForm({
                   className="text-sm"
                   style={{ color: 'var(--text-secondary)' }}
                 >
-                <p className="font-medium mb-1">Timezone</p>
+                <p className="font-medium mb-1">{t("bookingForm.timezone")}</p>
                 <p>{timezone}</p>
                 </motion.div>
 
@@ -702,7 +703,7 @@ export function BookingForm({
                     style={{ borderTop: '1px solid var(--border-subtle)' }}
                   >
                   <div className="flex items-center justify-between">
-                      <span style={{ color: 'var(--text-secondary)' }}>Price</span>
+                      <span style={{ color: 'var(--text-secondary)' }}>{t("publicSite.price")}</span>
                       <span className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>
                       {service.price} {service.currency || "ETB"}
                     </span>
@@ -723,7 +724,7 @@ export function BookingForm({
                 }}
               >
                 <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                Save your booking reference after confirmation. Message delivery is shown separately.
+                {t("bookingForm.note")}
               </p>
               </motion.div>
             </div>
