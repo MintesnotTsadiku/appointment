@@ -35,6 +35,20 @@ export interface ManageView {
   };
   rules: ManageRules;
   currency: string;
+  payment: PaymentView | null;
+}
+
+export interface PaymentView {
+  method: 'Bank transfer' | 'Chapa';
+  status: 'Awaiting payment' | 'Submitted' | 'Paid' | 'Rejected' | 'Expired' | 'Refunded';
+  amount: number;
+  service_price: number;
+  balance_due: number;
+  currency: string;
+  hold_expires_at: string | null;
+  accounts: { bank: string; account_name: string; account_number: string; note?: string | null }[];
+  reject_reason: string | null;
+  reference_submitted: boolean;
 }
 
 export type ManageResponse = ManageView | { valid: false; message?: string; cancelled?: boolean; fee?: number; refund?: number };

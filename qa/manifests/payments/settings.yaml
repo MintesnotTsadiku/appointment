@@ -1,0 +1,116 @@
+# The owner views the payments settings page set up by the fixture (bank transfer; Chapa off, so no secret fields).
+app: appointment
+base_url: http://127.0.0.84:44430
+default_role: Staff
+auth:
+  type: frappe_session
+  username: bloom.owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment-payments
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.payments_qa_fixtures.browser_values
+scenarios:
+- id: pay_settings_en_desktop
+  title: Owner sees payment settings (en, desktop)
+  viewport: &id003
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /settings/payments
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="payment-require"]'
+    - type: visible_selector
+      value: '[data-qa="payment-accounts"]'
+    - type: visible_selector
+      value: '[data-qa="payment-account-account_number"]'
+  actions:
+  - action: screenshot
+    name: pay_settings_en_desktop.png
+    full_page: true
+  - &id001
+    action: get_console_errors
+  - &id002
+    action: get_network_errors
+- id: pay_settings_en_mobile
+  title: Owner sees payment settings (en, mobile)
+  viewport: &id005
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /settings/payments
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="payment-require"]'
+    - type: visible_selector
+      value: '[data-qa="payment-accounts"]'
+    - type: visible_selector
+      value: '[data-qa="payment-account-account_number"]'
+  actions:
+  - action: screenshot
+    name: pay_settings_en_mobile.png
+    full_page: true
+  - *id001
+  - *id002
+- id: pay_settings_am_desktop
+  title: Owner sees payment settings (am, desktop)
+  viewport: *id003
+  checks: []
+  routes:
+  - path: /settings/payments
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="payment-require"]'
+    - type: visible_selector
+      value: '[data-qa="payment-accounts"]'
+    - type: visible_selector
+      value: '[data-qa="payment-account-account_number"]'
+  actions:
+  - &id004
+    action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation
+      status: 200
+  - action: screenshot
+    name: pay_settings_am_desktop.png
+    full_page: true
+  - *id004
+  - *id001
+  - *id002
+- id: pay_settings_am_mobile
+  title: Owner sees payment settings (am, mobile)
+  viewport: *id005
+  checks: []
+  routes:
+  - path: /settings/payments
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="payment-require"]'
+    - type: visible_selector
+      value: '[data-qa="payment-accounts"]'
+    - type: visible_selector
+      value: '[data-qa="payment-account-account_number"]'
+  actions:
+  - *id004
+  - action: screenshot
+    name: pay_settings_am_mobile.png
+    full_page: true
+  - *id004
+  - *id001
+  - *id002

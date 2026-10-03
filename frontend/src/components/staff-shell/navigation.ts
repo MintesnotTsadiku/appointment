@@ -16,6 +16,7 @@ import {
   ShieldCheck,
   User,
   Users,
+  Wallet,
 } from 'lucide-react';
 import { isAllowedDestination, type SessionState } from '@/context/session';
 
@@ -64,6 +65,7 @@ const SETTINGS: SettingsGroup[] = [
       { key: 'business', labelKey: 'staff.settings.business.title', descriptionKey: 'staff.settings.business.description', to: '/settings/business', icon: Building2, qa: 'settings-nav-business' },
       { key: 'services', labelKey: 'staff.settings.services.title', descriptionKey: 'staff.settings.services.description', to: '/settings/services', icon: Briefcase, qa: 'settings-nav-services' },
       { key: 'location', labelKey: 'staff.settings.location.title', descriptionKey: 'staff.settings.location.description', to: '/settings/location', icon: MapPin, qa: 'settings-nav-location' },
+      { key: 'payments', labelKey: 'staff.payments.navTitle', descriptionKey: 'staff.payments.navDescription', to: '/settings/payments', icon: Wallet, qa: 'settings-nav-payments', managerOnly: true },
       { key: 'notifications', labelKey: 'staff.settings.notifications.title', descriptionKey: 'staff.settings.notifications.description', to: '/settings/notifications', icon: Mail, qa: 'settings-nav-notifications', managerOnly: true },
       { key: 'public-experience', labelKey: 'staff.settings.publicExperience.title', descriptionKey: 'staff.settings.publicExperience.description', to: '/settings/public-experience', icon: Globe, qa: 'settings-nav-public-experience', managerOnly: true },
     ],

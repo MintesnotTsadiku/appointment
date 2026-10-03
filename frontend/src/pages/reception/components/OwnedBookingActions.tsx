@@ -15,6 +15,7 @@ import type { ClockFormat } from '@/lib/time';
 import { Appointment } from '../types';
 import { BookingHistory } from './BookingHistory';
 import { CustomerMessages } from './CustomerMessages';
+import { PaymentSection } from './PaymentSection';
 import { notificationNotice } from './notificationNotice';
 
 interface OwnedBookingActionsProps {
@@ -136,6 +137,7 @@ export function OwnedBookingActions({ appointment, onClose, onSuccess }: OwnedBo
             </section>
           )}
 
+          <PaymentSection appointment={appointment.name} onChanged={onSuccess} />
           <CustomerMessages bookingId={appointment.name} />
           <BookingHistory bookingId={appointment.name} />
         </div>

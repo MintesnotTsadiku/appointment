@@ -27,6 +27,7 @@ import { ServiceSelector } from "@/pages/booking-v2/components/ServiceSelector";
 import { DateTimeSelector } from "@/pages/booking-v2/components/DateTimeSelector";
 import { BookingForm } from "@/pages/booking-v2/components/BookingForm";
 import { ConfirmationModal } from "@/pages/booking-v2/components/ConfirmationModal";
+import { PaymentSummary, type CheckoutQuote, type PaymentMethod } from "@/pages/booking-v2/components/PaymentSummary";
 import { useTimeSlots } from "@/pages/booking-v2/hooks/useTimeSlots";
 import { useBookingSubmit } from "@/pages/booking-v2/hooks/useBookingSubmit";
 import type { Organization, Service, TimeSlot as V2TimeSlot, BookingFormData, BookingResponse } from "@/pages/booking-v2/types";
@@ -227,6 +228,21 @@ const OrganizationAppointmentV2 = () => {
   // Booking submission
   const { submitBooking, loading: bookingLoading } = useBookingSubmit();
 
+  // Payment at booking: amounts, refund terms and methods for the chosen slot.
+  const offeringId = type || meetingDurationCards[0]?.id || "";
+  const { data: quoteData } = useFrappeGetCall<{ message: CheckoutQuote }>(
+    "appointment.scheduler.payments.checkout",
+    { offering_id: offeringId, start_time: selectedSlot?.start_time },
+    currentPhase === "form" && offeringId && selectedSlot ? `checkout-${offeringId}-${selectedSlot.start_time}` : null,
+    { revalidateOnFocus: false }
+  );
+  const quote = quoteData?.message;
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | null>(null);
+  useEffect(() => {
+    if (quote?.required) setPaymentMethod((current) => (current && quote.methods.includes(current) ? current : quote.methods[0] ?? null));
+  }, [quote]);
+  const paymentBlocked = Boolean(quote?.required && !quote.methods.length);
+
   // Transform data for V2 components
   const organization: Organization | null = data && !data?.message?.error ? {
     id: orgSlug || "",
@@ -332,7 +348,15 @@ const OrganizationAppointmentV2 = () => {
         timeFormat,
         organizationId: data?.message?.error ? undefined : data?.message?.organization_id,
         serviceId: data?.message?.error ? undefined : data?.message?.service_id,
+        paymentMethod: quote?.required ? paymentMethod : null,
       });
+
+      // A held booking continues on the customer's manage page, where they pay.
+      if (response.status === "Pending" && response.managePath) {
+        // A full load: the manage page is a standalone public page without the app's own controls.
+        window.location.assign(`${response.managePath}${paymentMethod === "Chapa" ? "?pay=chapa" : ""}`);
+        return;
+      }
 
       // Re-fetch slots after successful booking to update availability
       if (refetchSlots) {
@@ -618,6 +642,8 @@ const OrganizationAppointmentV2 = () => {
                 transition={{ duration: 0.3 }}
                 className="py-8 px-4"
               >
+            {quote?.required && <PaymentSummary quote={quote} method={paymentMethod} onMethod={setPaymentMethod} />}
+            {!paymentBlocked && (
             <BookingForm
               service={currentService}
               selectedDate={selectedDate}
@@ -633,6 +659,7 @@ const OrganizationAppointmentV2 = () => {
               onBack={handlePhaseBack}
               loading={bookingLoading}
             />
+            )}
               </motion.div>
         )}
           </AnimatePresence>

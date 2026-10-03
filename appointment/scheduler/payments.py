@@ -268,6 +268,17 @@ def for_appointment(appointment):
     return rows
 
 
+@frappe.whitelist()
+def download_proof(payment, kind="proof"):
+    """Stream a private proof file to staff who can access the booking."""
+    payment = _staff_payment(payment)
+    url = payment.refund_proof if kind == "refund" else payment.proof
+    if not url:
+        frappe.throw(_("No file was attached."), frappe.DoesNotExistError)
+    file = frappe.get_doc("File", {"file_url": url, "attached_to_doctype": "Booking Payment", "attached_to_name": payment.name})
+    frappe.local.response.update(dict(filename=file.file_name, filecontent=file.get_content(), type="download", display_content_as="inline"))
+
+
 @frappe.whitelist(methods=["POST"])
 def confirm(payment):
     payment = _staff_payment(payment)

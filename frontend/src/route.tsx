@@ -25,6 +25,7 @@ const LocationSettings = lazy(() => import("@/pages/settings/location"));
 const CalendarSettings = lazy(() => import("@/pages/settings/calendar"));
 const BusinessSettings = lazy(() => import("@/pages/settings/business"));
 const NotificationSettings = lazy(() => import("@/pages/settings/notifications"));
+const PaymentSettings = lazy(() => import("@/pages/settings/payments"));
 const Customers = lazy(() => import("@/pages/customers"));
 const CustomerPage = lazy(() => import("@/pages/customers/detail"));
 const ManageBooking = lazy(() => import("@/pages/manage-booking"));
@@ -79,6 +80,7 @@ const Router = () => {
       <Route path="/settings/calendar" element={<CalendarSettings />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/business" element={<BusinessSettings />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/notifications" element={<NotificationSettings />} errorElement={<ErrorFallback />}></Route>
+      <Route path="/settings/payments" element={<PaymentSettings />} errorElement={<ErrorFallback />}></Route>
       <Route path="/customers" element={<Customers />} errorElement={<ErrorFallback />}></Route>
       <Route path="/customers/:customerId" element={<CustomerPage />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/services" element={<ServicesSettings />} errorElement={<ErrorFallback />}></Route>

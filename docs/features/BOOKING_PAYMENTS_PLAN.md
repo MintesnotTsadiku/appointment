@@ -1,7 +1,7 @@
 ---
 tags: [plan, appointment, payments]
 created: 2026-10-03
-status: decided 2026-10-03, in build
+status: built and verified 2026-10-03; Chapa waits for keys
 ---
 
 # Booking payments plan
@@ -127,4 +127,52 @@ Automatic refunds, payouts through an API, invoices and receipts, collecting the
 
 ## Run record
 
-Filled in after the build.
+### What was built
+
+- DocTypes `Payment Settings`, `Business Payment Settings`, `Payment Bank Account`, `Booking Payment` and `Platform Ledger Entry`. Backup `20261003_193459` was taken before the migrate.
+- `payments.py`: settings and collector, checkout quote, the hold, proof submission, staff confirm, reject and refund, the ledger, the hold job (every 5 minutes), the business settings API, and the staff proof download.
+- `payments_chapa.py`: initialize, verify before confirm, return, callback, the HMAC-signed webhook, and cancelling the checkout when a hold expires.
+- `booking.book()` takes `payment_method`. A booking that needs payment starts Pending and returns the payment instructions and the manage path. Paying (Pending to Confirmed) keeps the manage link valid.
+- Emails "Payment needed" and "Payment still needed" list the bank accounts and the reference. The confirmation shows what was paid and the balance. An expired hold says the payment was not received.
+- Public scheduler: a payment summary (service price, amount due now, balance, refund policy, late fee, method) before Confirm. A held booking continues on the manage page, with a full page load.
+- Manage page: payment panel with bank accounts, copy buttons, the reference, the deadline, and a reference and screenshot form. Chapa uses a pay button, auto-start after booking, and a verify on return.
+- Reception: a payment section (status, amounts, collector, proof, confirm, reject with reason, refund with proof).
+- `/settings/payments` (owners and managers): require payment, bank transfer and accounts, Chapa and its keys. Key fields appear only while keys are set or replaced. Who collects is shown read-only.
+- Onboarding: the "Add payment method" step now checks for a real method.
+
+### Found and fixed during the build
+
+- The per-business fee override was a Float that defaults to 0, so every business got a 0 fee. An explicit "Override Platform Fee" switch now guards it.
+- Agent Plane refuses to capture screens that show secret fields. The settings page now shows the Chapa key inputs only while someone edits them.
+- The long webhook URL widened the mobile settings page to 553 px. It now wraps.
+- After booking, the client-side move to the manage page kept the app's own theme toggle, which overlapped the language toggle on mobile. The move is now a full page load.
+
+### Tests
+
+| Suite | Result |
+|---|---|
+| `appointment.tests.test_payments` | 16 passed |
+| `appointment.tests.test_payments_chapa` | 6 passed (mocked HTTP; nothing reaches Chapa) |
+| All earlier suites (self-service, notifications, SMS, profiles, policies, overview, workflows) | passed |
+| `npm run -s test:dom` | passed |
+
+### Agent Plane runs
+
+`appointment.tests.payments_qa_fixtures.setup` turns on payment for Bloom (one QA account, a 30% booking fee policy). `cleanup` removes it and turns payment off.
+
+| Run | Manifest | Result |
+|---|---|---|
+| BQA-2026-00414, 00419 | `payments/guest.yaml` | Passed, 4 of 4 (1440×900 and 390×844, English and Amharic). Checkout shows ETB 500 price, ETB 150 due now, ETB 350 balance, refund policy and late fee. The manage page shows the account, and the reference is submitted. |
+| BQA-2026-00415, 00420 | `payments/staff.yaml` (bloom.manager) | Passed, 2 of 2. The manager confirms, the payment is Paid, and the booking is Confirmed. |
+| BQA-2026-00416, 00417 | `payments/settings.yaml` | Assertions passed. Captures were refused because the secret fields were visible (fixed above). |
+| BQA-2026-00418, 00421 | `payments/settings.yaml` | Passed, 4 of 4. Mobile width 390 px after the wrap fix. |
+| BQA-2026-00422 | `customer-notifications/guest.yaml`, English mobile | Passed: a business without payment still books directly. |
+
+All runs had 0 console and 0 network errors. Database check: the two confirmed payments are Paid with their bookings Confirmed, `amount_paid` 150 and balance 350. The two submitted payments are waiting. The QA data was removed afterwards.
+
+### Left open
+
+- Chapa has not been called for real. It needs the keys (test keys work) and the webhook set up in the Chapa dashboard. The URL is shown on the settings page.
+- Automatic refunds and payouts through the Chapa API are not built.
+- The platform ledger has no admin page yet. Entries are visible in Desk.
+- The scheduler's details form and its sidebar text are not yet translated (an existing limitation).

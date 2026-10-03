@@ -116,6 +116,10 @@ export interface BookingResponse {
   meetingProvider?: string;
   /** Customer email state from the booking API, for example "queued". */
   notificationStatus?: string;
+  /** "Pending" when the booking waits for payment. */
+  status?: string;
+  /** The customer's manage page, where payment continues. */
+  managePath?: string;
 }
 
 export interface BookingState {

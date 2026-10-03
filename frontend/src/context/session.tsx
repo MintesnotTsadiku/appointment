@@ -73,7 +73,7 @@ const ALLOWED_PREFIXES = [
   '/no-access',
 ];
 
-const MANAGER_ONLY_PREFIXES = ['/settings/business', '/settings/notifications', '/settings/team', '/onboarding'];
+const MANAGER_ONLY_PREFIXES = ['/settings/business', '/settings/notifications', '/settings/payments', '/settings/team', '/onboarding'];
 
 /** Prevent open redirects and restoring destinations the user may not access. */
 export function isAllowedDestination(path: string | null | undefined, session: SessionState | null): boolean {

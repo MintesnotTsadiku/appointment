@@ -20,6 +20,8 @@ interface SubmitBookingParams {
   serviceId?: string;
   reschedule?: string;
   eventToken?: string;
+  /** Required when the business takes payment at booking. */
+  paymentMethod?: string | null;
 }
 
 interface BookingApiResponse {
@@ -32,6 +34,8 @@ interface BookingApiResponse {
     reschedule_url?: string;
     meeting_provider?: string;
     notification_status?: string;
+    status?: string;
+    manage_path?: string;
   };
 }
 
@@ -56,6 +60,7 @@ export function useBookingSubmit() {
       serviceId,
       reschedule,
       eventToken,
+      paymentMethod,
     } = params;
 
     // Format date for API (YYYY-M-D format)
@@ -91,6 +96,7 @@ export function useBookingSubmit() {
       meetingData.organization_id = organizationId;
       // Customer emails use the language the customer booked in.
       meetingData.language = language;
+      if (paymentMethod) meetingData.payment_method = paymentMethod;
     }
     if (serviceId) {
       meetingData.service_id = serviceId;
@@ -128,6 +134,8 @@ export function useBookingSubmit() {
         rescheduleUrl: response.message.reschedule_url,
         meetingProvider: response.message.meeting_provider,
         notificationStatus: response.message.notification_status,
+        status: response.message.status,
+        managePath: response.message.manage_path,
       };
 
       return bookingResponse;

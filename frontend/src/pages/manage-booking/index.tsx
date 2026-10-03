@@ -12,6 +12,7 @@ import '@/public-experience/platform.css';
 import { BookingSummary } from './BookingSummary';
 import { CancelPanel, type CancelResult } from './CancelPanel';
 import { fill, formatMoney } from './format';
+import { PaymentPanel } from './PaymentPanel';
 import { ReschedulePanel } from './ReschedulePanel';
 import { SELF_SERVICE_API, type ManageResponse, type ManageView } from './types';
 
@@ -54,9 +55,17 @@ export default function ManageBookingPage() {
           </p>
         )}
         <BookingSummary view={view} />
+        {view.payment && view.payment.status !== 'Paid' && view.payment.status !== 'Refunded' && (
+          <PaymentPanel view={view} onPayment={(payment) => setView({ ...view, payment, booking: { ...view.booking, status: payment.status === 'Paid' ? 'Confirmed' : view.booking.status } })} />
+        )}
+        {view.payment?.status === 'Paid' && (
+          <p data-qa="manage-paid" className="text-sm font-medium">
+            {fill(t('payments.paidLine'), formatMoney(view.payment.amount, view.payment.currency))}
+          </p>
+        )}
         <p className="text-xs text-[var(--text-secondary)]">
           {t('customerManage.reference')}: <span className="font-mono">{view.booking.reference}</span>
-          {view.booking.status === 'Pending' && <> · {t('customerManage.statusPending')}</>}
+          {view.booking.status === 'Pending' && !view.payment && <> · {t('customerManage.statusPending')}</>}
         </p>
         {mode === 'reschedule' && (
           <ReschedulePanel

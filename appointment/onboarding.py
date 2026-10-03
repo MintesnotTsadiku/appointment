@@ -862,9 +862,10 @@ def get_detailed_checklist():
             "priority": 6
         })
         
-        # 7. Payment Method Configured (placeholder - implement when payment integration ready)
-        # For now, check if any payment settings exist
-        has_payment = False  # TODO: Implement payment check
+        # 7. Payment method: bank accounts or Chapa set up for the business.
+        from appointment.scheduler import payments
+
+        has_payment = bool(organization and payments.methods(organization.name))
         
         checklist_items.append({
             "id": "payment",
