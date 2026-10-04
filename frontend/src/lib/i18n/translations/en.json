@@ -2406,5 +2406,35 @@
     "atMost": "This service takes at most {0} per booking.",
     "maxMin": "The most per booking must be at least 1.",
     "quantity": "Quantity"
+  },
+  "myBookings": {
+    "title": "My bookings",
+    "intro": "Enter the email you booked with. We will email you a link to see your bookings.",
+    "send": "Email me a link",
+    "sent": "If this email has bookings with {0}, we sent it a link. The link works once, for 30 minutes.",
+    "otherEmail": "Use another email",
+    "opening": "Opening your bookings…",
+    "invalid": "This link no longer works. Ask for a new one.",
+    "failed": "Could not send the link. Try again.",
+    "upcoming": "Upcoming bookings",
+    "past": "Past bookings",
+    "none": "No bookings here.",
+    "manage": "Manage",
+    "signOut": "Sign out",
+    "signedInAs": "Signed in as {0}",
+    "paymentNeeded": "Payment needed",
+    "allLink": "All my bookings"
+  },
+  "myBookingsServer": {
+    "sentServer": "If this email has bookings with {0}, we sent it a link to see them.",
+    "ended": "Your sign-in has ended. Ask for a new link.",
+    "validEmail": "Enter a valid email address.",
+    "notFound": "Business not found.",
+    "yourBookings": "Your bookings",
+    "emailIntro": "Hello, use this link to see your bookings with {0}. It works once, for 30 minutes.",
+    "seeMine": "See my bookings",
+    "emailFooter": "You asked for this link on the {0} booking page. If you did not, you can ignore this email.",
+    "subject": "Your bookings with {0}",
+    "seeAll": "See all your bookings"
   }
 }

@@ -1,0 +1,155 @@
+# Run appointment.tests.my_bookings_qa_fixtures.setup first and cleanup afterwards. Links are single use: each run makes four.
+app: appointment
+base_url: http://127.0.0.84:44430
+default_role: Guest
+auth:
+  type: none
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.my_bookings_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-my-bookings
+scenarios:
+- id: mine_en_desktop
+  title: My bookings (en, desktop)
+  viewport: &id004
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /bloom-studio/my-bookings
+    assertions:
+    - type: network_idle
+  actions:
+  - action: wait_for
+    selector: '[data-qa="my-bookings-form"]'
+  - action: fill
+    selector: '[data-qa="my-bookings-email"]'
+    value: '{qa_mine_email}'
+  - action: click
+    selector: '[data-qa="my-bookings-send"]'
+    assertions:
+    - type: network_request
+      url_contains: my_bookings.request_link
+      method: POST
+      status: 200
+    - type: visible_selector
+      value: '[data-qa="my-bookings-sent"]'
+  - action: screenshot
+    name: mine_en_desktop-1-sent.png
+    full_page: true
+  - action: open_url
+    url: '{qa_mine_link_1}'
+  - action: wait_for
+    selector: '[data-qa="my-bookings-list"]'
+    assertions: &id001
+    - type: visible_selector
+      value: '[data-qa="my-bookings-list"]'
+    - type: visible_selector
+      value: :nth-match([data-qa="my-bookings-upcoming"] [data-qa="my-booking"], 2)
+  - action: screenshot
+    name: mine_en_desktop-2-list.png
+    full_page: true
+  - action: click
+    selector: :nth-match([data-qa="my-booking-manage"], 1)
+    assertions:
+    - type: url_contains
+      value: /booking/
+    - type: visible_selector
+      value: '[data-qa="manage-all-bookings"]'
+  - action: screenshot
+    name: mine_en_desktop-3-manage.png
+    full_page: true
+  - &id002
+    action: get_console_errors
+  - &id003
+    action: get_network_errors
+- id: mine_en_mobile
+  title: My bookings (en, mobile)
+  viewport: &id005
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{qa_mine_link_2}'
+    assertions:
+    - type: network_idle
+  actions:
+  - action: wait_for
+    selector: '[data-qa="my-bookings-list"]'
+    assertions: *id001
+  - action: screenshot
+    name: mine_en_mobile-1-list.png
+    full_page: true
+  - action: open_url
+    url: '{qa_mine_link_1}'
+  - action: wait_for
+    selector: '[data-qa="my-bookings-invalid"]'
+  - action: screenshot
+    name: mine_en_mobile-2-used-link.png
+    full_page: true
+  - *id002
+  - *id003
+- id: mine_am_desktop
+  title: My bookings (am, desktop)
+  viewport: *id004
+  checks: []
+  routes:
+  - path: /
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="language-toggle"]'
+  actions:
+  - &id006
+    action: press
+    selector: '[data-qa="language-toggle"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation.messages
+      status: 200
+  - action: open_url
+    url: '{qa_mine_link_3}'
+  - action: wait_for
+    selector: '[data-qa="my-bookings-list"]'
+    assertions: *id001
+  - action: screenshot
+    name: mine_am_desktop-1-list.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="my-bookings-sign-out"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="my-bookings-form"]'
+  - action: screenshot
+    name: mine_am_desktop-2-signed-out.png
+  - *id002
+  - *id003
+- id: mine_am_mobile
+  title: My bookings (am, mobile)
+  viewport: *id005
+  checks: []
+  routes:
+  - path: /
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="language-toggle"]'
+  actions:
+  - *id006
+  - action: open_url
+    url: '{qa_mine_link_4}'
+  - action: wait_for
+    selector: '[data-qa="my-bookings-list"]'
+    assertions: *id001
+  - action: screenshot
+    name: mine_am_mobile-1-list.png
+    full_page: true
+  - *id002
+  - *id003

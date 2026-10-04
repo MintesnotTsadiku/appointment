@@ -48,7 +48,8 @@ export function isPublicExperiencePath(pathname: string): boolean {
   if (segments.length === 3) return segments[1].toLowerCase() === "booking";
   if (segments.length === 2) {
     const second = segments[1].toLowerCase();
-    return second === "book" || LOCALES.has(second);
+    // `/<slug>/my-bookings`: the customer's bookings with this business.
+    return second === "book" || second === "my-bookings" || LOCALES.has(second);
   }
   return true;
 }

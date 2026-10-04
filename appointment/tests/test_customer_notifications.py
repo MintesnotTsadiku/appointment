@@ -207,7 +207,9 @@ class TestCustomerNotifications(BloomBookingCase):
                 manage = [link for link in links if f"/{slug}/booking/" in link]
                 closed = event in ("Cancellation", "Refund receipt")  # No manage link once the booking may be over.
                 self.assertEqual(len(manage), 0 if closed else 1, links)
-                self.assertEqual(len(links), 3 if event == "Reminder" else 1 if closed else 2, links)
+                # Every booking email also links to My bookings in the footer.
+                self.assertTrue(any(link.endswith(f"/{slug}/my-bookings") for link in links), links)
+                self.assertEqual(len(links), (3 if event == "Reminder" else 1 if closed else 2) + 1, links)
         amharic = render("Confirmation", doc, "am", doc.client_email)
         self.assertIn("ሰዓት", amharic["html"])
         if frappe.db.exists("Translation", {"language": "am", "source_text": "Booking confirmed"}):

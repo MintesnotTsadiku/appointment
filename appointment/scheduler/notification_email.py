@@ -142,6 +142,8 @@ def render(event, doc, language, recipient, receipt=None):
         booking_url=escape_html(get_url(f"/{business.slug}/book")) if business.slug else "",
         contact=t("Questions? Contact {0}.", " · ".join(filter(None, [business.phone, business.email]))) if (business.phone or business.email) else "",
         footer=t("You get this email because you booked with {0}.", business_name),
+        all_bookings_label=t("See all your bookings"),
+        all_bookings_url=escape_html(get_url(f"/{business.slug}/my-bookings")) if business.slug else "",
         opt_out_label=t("Stop reminders from this business"),
         opt_out_url=escape_html(opt_out_url(doc.organization, recipient)) if event == "Reminder" else "",
     )

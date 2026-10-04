@@ -39,6 +39,7 @@
     <tr>
       <td style="padding:16px 24px 24px;border-top:1px solid #e3e3df;font-size:12px;line-height:1.5;color:#5c6066;">
         {{ footer }}
+        {% if all_bookings_url %}<br><a href="{{ all_bookings_url }}" style="color:#5c6066;">{{ all_bookings_label }}</a>{% endif %}
         {% if opt_out_url %}<br><a href="{{ opt_out_url }}" style="color:#5c6066;">{{ opt_out_label }}</a>{% endif %}
       </td>
     </tr>

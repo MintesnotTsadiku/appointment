@@ -85,6 +85,9 @@ export default function ManageBookingPage() {
         {mode === 'cancel' && <CancelPanel view={view} onKeep={() => setMode('overview')} onCancelled={setCancelled} />}
         {mode === 'overview' && <Actions view={view} onMode={setMode} />}
         <Contact view={view} />
+        <a data-qa="manage-all-bookings" href={`/${view.business.slug}/my-bookings`} className="inline-block text-sm text-[var(--text-secondary)] underline underline-offset-4">
+          {t('myBookings.allLink')}
+        </a>
       </div>
     );
 
