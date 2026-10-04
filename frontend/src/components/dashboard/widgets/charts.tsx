@@ -160,3 +160,29 @@ function toWeeks(trend: Trend[]) {
     return acc;
   }, []);
 }
+
+export function ResourceUse({ ctx }: Props) {
+  const { t } = useTranslation();
+  const rows = ctx.report.current.resources;
+  if (rows === null || rows === undefined) return <p className="text-sm text-muted-foreground">{t('staff.widgets.resourceUse.notForProviders')}</p>;
+  if (!rows.length) return <p className="rounded-lg border border-dashed px-4 py-6 text-center text-sm text-muted-foreground">{t('staff.widgets.resourceUse.empty')}</p>;
+  return (
+    <ol className="space-y-3" data-qa="analytics-resource-use">
+      {rows.map((row) => (
+        <li key={row.resource} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1" data-qa="analytics-resource-row">
+          <span className="truncate text-sm text-foreground" title={`${row.name} · ${row.type_name} · ${row.location_name}`}>
+            {row.name}
+            <span className="text-muted-foreground"> · {row.location_name}{row.capacity > 1 ? ` · ${t('staff.resources.count').replace('{0}', String(row.capacity))}` : ''}</span>
+          </span>
+          <strong className="row-span-2 self-end text-sm font-semibold tabular-nums">{row.rate === null ? '—' : `${row.rate}%`}</strong>
+          <div className="h-2 rounded-full bg-muted" aria-hidden="true">
+            <div className="h-full rounded-full bg-chart-2" style={{ width: `${Math.min(100, row.rate ?? 0)}%` }} />
+          </div>
+          <span className="col-span-2 text-xs text-muted-foreground tabular-nums">
+            {t('staff.widgets.resourceUse.hours').replace('{0}', number.format(row.booked_hours)).replace('{1}', number.format(row.available_hours))}
+          </span>
+        </li>
+      ))}
+    </ol>
+  );
+}

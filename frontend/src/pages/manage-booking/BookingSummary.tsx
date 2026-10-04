@@ -1,4 +1,4 @@
-import { CalendarClock, MapPin, Scissors, UserRound } from 'lucide-react';
+import { Armchair, CalendarClock, MapPin, Scissors, UserRound } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useTranslation } from '@/lib/i18n';
 import { formatWhen } from './format';
@@ -18,7 +18,13 @@ export function BookingSummary({ view }: { view: ManageView }) {
       </Fact>
       <Fact icon={<Scissors aria-hidden="true" />} label={t('customerBooking.service')}>
         {booking.service}
+        {(booking.quantity ?? 1) > 1 && <span data-qa="manage-quantity"> {t('bookingPicker.times').replace('{0}', String(booking.quantity))}</span>}
       </Fact>
+      {booking.resources?.length ? (
+        <Fact icon={<Armchair aria-hidden="true" />} label={t('staff.resources.sectionTitle')}>
+          <span data-qa="manage-resources">{booking.resources.join(', ')}</span>
+        </Fact>
+      ) : null}
       {booking.provider && (
         <Fact icon={<UserRound aria-hidden="true" />} label={t('customerEmail.provider')}>
           {booking.provider}

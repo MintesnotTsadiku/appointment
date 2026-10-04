@@ -79,7 +79,9 @@ export function useCreateServiceForm(options: ServiceFormOptions | undefined, me
     if (!values.serviceName || values.serviceName.trim().length < 3) next.serviceName = messages.name;
     if (!values.duration || parseInt(values.duration) < 5) next.duration = messages.duration;
     if (!values.location) next.location = messages.location;
-    if (values.organization && selectedProviders.length === 0) next.providers = messages.providers;
+    // A business without staff may create a service and book it by room or machine instead.
+    const businessHasProviders = (options?.org_providers?.[values.organization] || []).length > 0;
+    if (values.organization && businessHasProviders && selectedProviders.length === 0) next.providers = messages.providers;
     setErrors(next);
     return Object.keys(next).length === 0;
   };

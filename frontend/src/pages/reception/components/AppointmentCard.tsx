@@ -103,7 +103,12 @@ export const AppointmentCard = ({ appointment, isDragging: overlay, compact, tim
             <p className={cn('truncate text-sm font-semibold leading-snug text-foreground', compact && 'text-xs', cancelled && 'line-through')}>
               {appointment.client_name}
             </p>
-            {appointment.service_name && <p className="truncate text-xs text-muted-foreground">{appointment.service_name}</p>}
+            {appointment.service_name && (
+              <p className="truncate text-xs text-muted-foreground">
+                {appointment.service_name}
+                {(appointment.quantity ?? 1) > 1 && <span data-qa="appointment-quantity"> × {appointment.quantity}</span>}
+              </p>
+            )}
             {density === 'full' && (appointment.provider_name || appointment.resource_names?.length) ? (
               <p className="truncate text-xs text-muted-foreground">
                 {[appointment.provider_name, ...(appointment.resource_names ?? [])].filter(Boolean).join(' · ')}

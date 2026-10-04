@@ -19,7 +19,7 @@ from appointment.scheduler import notifications
 
 @frappe.whitelist()
 @add_response_code
-def get_desk_appointments(date: str = None, location_name: str = None, provider_name: str = None, view: str = "day", organization: str = None):
+def get_desk_appointments(date: str = None, location_name: str = None, provider_name: str = None, view: str = "day", organization: str = None, resource: str = None):
     """
     Get appointments for day/week view with filters.
 
@@ -29,6 +29,7 @@ def get_desk_appointments(date: str = None, location_name: str = None, provider_
         provider_name: Filter by provider (optional)
         view: "day" or "week". Defaults to "day"
         organization: Active business. Validated against membership every call.
+        resource: Only bookings holding this room or machine (optional)
 
     Returns:
         Appointments plus the authorized scope, so the UI can distinguish
@@ -89,6 +90,10 @@ def get_desk_appointments(date: str = None, location_name: str = None, provider_
         filters["location"] = location_name
     if provider_name:
         filters["provider"] = provider_name
+    if resource:
+        filters["name"] = ["in", frappe.get_all(
+            "Appointment Resource", filters={"resource": resource, "parenttype": "Appointment"}, pluck="parent"
+        ) or [""]]
 
     # Get appointments (only select fields that exist in Appointment doctype).
     # get_list applies the record-level appointment_query in addition to filters.
@@ -100,7 +105,7 @@ def get_desk_appointments(date: str = None, location_name: str = None, provider_
             "client_name", "client_email", "client_phone", "customer", "last_changed_by",
             "cancellation_fee", "refund_due", "service",
             "provider", "location", "status",
-            "amount_paid", "notes", "event_type", "event", "organization", "booking_timezone", "modified"
+            "amount_paid", "notes", "event_type", "event", "organization", "booking_timezone", "modified", "quantity"
         ],
         order_by="appointment_date, start_time"
     )
@@ -181,6 +186,7 @@ def create_desk_appointment(
     appointment_date: str = None,
     customer: str = None,
     resource_name: str = None,
+    quantity: int = 1,
 ):
     """
     Create appointment on behalf of client.
@@ -287,6 +293,7 @@ def create_desk_appointment(
         appointment.provider = provider_name
         appointment.location = location_name
         appointment.event_type = event_type_name
+        appointment.quantity = frappe.utils.cint(quantity) or 1
         appointment.appointment_date = appointment_date
         appointment.start_time = start_time_str
         appointment.end_time = end_time_str
@@ -810,7 +817,7 @@ def get_services_list(organization: str = None):
     services = frappe.get_list(
         "Service",
         filters=filters,
-        fields=["name", "service_name", "duration", "price", "organization", "resource_only"],
+        fields=["name", "service_name", "duration", "price", "organization", "resource_only", "allow_quantity", "max_quantity"],
         order_by="service_name"
     )
 

@@ -121,8 +121,9 @@ def allocate(doc, service, location, start, end, strict=True, only=None):
     used = usage(every, start, end, exclude=doc.name if not doc.is_new() else None, lock=True)
     chosen = doc.flags.resource_choice if doc.flags.resource_choice and doc.flags.resource_choice[0] is STAFF_CHOICE else None
     rows = []
+    quantity = max(1, cint(doc.get("quantity") or 1))
     for need in wanted:
-        names, units = options[need.resource_type], units_of(need)
+        names, units = options[need.resource_type], units_of(need) * quantity
         fits = lambda name: name in names and _left(name, caps, used) >= units  # noqa: E731
         keep = current.get(need.resource_type)
         if not strict and keep:
@@ -145,11 +146,11 @@ def allocate(doc, service, location, start, end, strict=True, only=None):
     doc.set("resources", rows)
 
 
-def available(wanted, location, organization, start, end, only=None):
+def available(wanted, location, organization, start, end, only=None, quantity=1):
     """Read-only check for slot listing: every need has a resource with enough free units."""
     for need in wanted:
         names = candidates(need, location, organization, only)
-        if not set(names) - busy(names, start, end, units=units_of(need)):
+        if not set(names) - busy(names, start, end, units=units_of(need) * max(1, cint(quantity))):
             return False
     return True
 
@@ -386,6 +387,8 @@ def get_service_needs(service):
     return dict(
         needs=[dict(resource_type=row.resource_type, specific_resource=row.specific_resource, units=units_of(row)) for row in needs(doc)],
         resource_only=cint(doc.get("resource_only")),
+        allow_quantity=cint(doc.get("allow_quantity")),
+        max_quantity=max(1, cint(doc.get("max_quantity"))),
         types=frappe.get_all("Resource Type", filters={"organization": doc.organization, "is_active": 1}, fields=["name", "type_name"], order_by="type_name asc"),
         resources=frappe.get_all("Resource", filters={"organization": doc.organization, "is_active": 1}, fields=["name", "resource_name", "resource_type", "location"], order_by="resource_name asc"),
         unassigned=unassigned_rows(doc.organization, doc.name),
@@ -393,7 +396,7 @@ def get_service_needs(service):
 
 
 @frappe.whitelist(methods=["POST"])
-def save_service_needs(service, needs=None, resource_only=None):
+def save_service_needs(service, needs=None, resource_only=None, allow_quantity=None, max_quantity=None):
     """Replace what a service needs (and whether it is booked without staff), then bring
     upcoming bookings and offerings in line. Returns the bookings left without a resource."""
     doc = frappe.get_doc("Service", service)
@@ -410,6 +413,12 @@ def save_service_needs(service, needs=None, resource_only=None):
     doc.set("resource_needs", cleaned)
     if resource_only is not None:
         doc.resource_only = cint(resource_only)
+    if allow_quantity is not None:
+        doc.allow_quantity = cint(allow_quantity)
+    if max_quantity is not None:
+        if cint(max_quantity) < 1:
+            frappe.throw(_("The most per booking must be at least 1."))
+        doc.max_quantity = cint(max_quantity)
     _save_needs(doc)
     sync_offerings(doc.name)
     return dict(ok=True, unassigned=assign_upcoming(doc.organization, doc.name))
@@ -530,7 +539,7 @@ def for_booking(booking):
     only = frappe.db.get_value("EventType", doc.event_type, "resource")
     for need in needs(service):
         options = candidates(need, doc.location, doc.organization, only)
-        units = units_of(need)
+        units = units_of(need) * max(1, cint(doc.get("quantity") or 1))
         caps = capacities(options)
         used = usage(options, doc.occupied_from, doc.occupied_until, exclude=doc.name) if doc.occupied_from else {}
         result.append(dict(
@@ -540,6 +549,14 @@ def for_booking(booking):
                           capacity=caps.get(name, 1), left=_left(name, caps, used)) for name in options],
         ))
     return dict(needs=result, can_change=doc.status in ("Pending", "Confirmed"), modified=str(doc.modified))
+
+
+@frappe.whitelist()
+def options(organization):
+    """Active rooms and equipment, for filters."""
+    _require_reader(organization)
+    return frappe.get_all("Resource", filters={"organization": organization, "is_active": 1},
+                          fields=["name", "resource_name", "location"], order_by="resource_name asc")
 
 
 @frappe.whitelist()

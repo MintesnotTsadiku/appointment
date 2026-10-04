@@ -14,6 +14,7 @@
   "location",
   "service",
   "resources",
+  "quantity",
   "customer",
   "client_name",
   "client_email",
@@ -98,6 +99,13 @@
    "options": "Appointment Resource",
    "read_only": 1,
    "description": "Assigned by the booking engine. Staff change it from reception."
+  },
+  {
+   "fieldname": "quantity",
+   "fieldtype": "Int",
+   "label": "Quantity",
+   "default": "1",
+   "non_negative": 1
   },
   {
    "fieldname": "customer",
@@ -287,7 +295,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-10-04 16:00:00.000000",
+ "modified": "2026-10-04 19:00:00.000000",
  "modified_by": "Administrator",
  "module": "Scheduler",
  "name": "Appointment",

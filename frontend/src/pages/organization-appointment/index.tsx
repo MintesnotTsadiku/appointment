@@ -29,6 +29,7 @@ import { DateTimeSelector } from "@/pages/booking-v2/components/DateTimeSelector
 import { BookingForm } from "@/pages/booking-v2/components/BookingForm";
 import { ConfirmationModal } from "@/pages/booking-v2/components/ConfirmationModal";
 import { PaymentSummary, type CheckoutQuote, type PaymentMethod } from "@/pages/booking-v2/components/PaymentSummary";
+import { QuantityPicker } from "@/pages/booking-v2/components/QuantityPicker";
 import { useTimeSlots } from "@/pages/booking-v2/hooks/useTimeSlots";
 import { useBookingSubmit } from "@/pages/booking-v2/hooks/useBookingSubmit";
 import type { Organization, Service, TimeSlot as V2TimeSlot, BookingFormData, BookingResponse } from "@/pages/booking-v2/types";
@@ -86,6 +87,9 @@ const OrganizationAppointmentV2 = () => {
   const [bookingResponse, setBookingResponse] = useState<(BookingResponse & { userEmail?: string }) | null>(null);
   const { theme, setTheme } = useTheme();
   const { t } = useTranslation();
+  // Party size, for services that let customers choose how many.
+  const [quantity, setQuantity] = useState(1);
+  useEffect(() => setQuantity(1), [serviceSlug]);
   const bookingMode = theme === "dark" || (theme === "system" && typeof document !== "undefined" && document.documentElement.classList.contains("dark"))
     ? "dark"
     : "light";
@@ -225,6 +229,7 @@ const OrganizationAppointmentV2 = () => {
     organizationId: data?.message?.error ? undefined : data?.message?.organization_id,
     serviceId: data?.message?.error ? undefined : data?.message?.service_id,
     enabled: shouldFetchSlots && !data?.message?.error,
+    quantity,
   });
 
   // Booking submission
@@ -234,8 +239,8 @@ const OrganizationAppointmentV2 = () => {
   const offeringId = type || meetingDurationCards[0]?.id || "";
   const { data: quoteData } = useFrappeGetCall<{ message: CheckoutQuote }>(
     "appointment.scheduler.payments.checkout",
-    { offering_id: offeringId, start_time: selectedSlot?.start_time },
-    currentPhase === "form" && offeringId && selectedSlot ? `checkout-${offeringId}-${selectedSlot.start_time}` : null,
+    { offering_id: offeringId, start_time: selectedSlot?.start_time, quantity },
+    currentPhase === "form" && offeringId && selectedSlot ? `checkout-${offeringId}-${selectedSlot.start_time}-${quantity}` : null,
     { revalidateOnFocus: false }
   );
   const quote = quoteData?.message;
@@ -353,6 +358,7 @@ const OrganizationAppointmentV2 = () => {
         organizationId: data?.message?.error ? undefined : data?.message?.organization_id,
         serviceId: data?.message?.error ? undefined : data?.message?.service_id,
         paymentMethod: quote?.required ? paymentMethod : null,
+        quantity,
       });
 
       // A held booking continues on the customer's manage page, where they pay.
@@ -605,6 +611,9 @@ const OrganizationAppointmentV2 = () => {
                 transition={{ duration: 0.3 }}
                 className="py-8 px-4"
               >
+            {Boolean(data?.message?.allow_quantity) && (
+              <QuantityPicker value={quantity} max={Math.max(1, Number(data?.message?.max_quantity) || 1)} onChange={setQuantity} />
+            )}
             <DateTimeSelector
               selectedDate={selectedDate}
               displayMonth={displayMonth}
@@ -662,6 +671,7 @@ const OrganizationAppointmentV2 = () => {
               onSubmit={handleBookingSubmit}
               onBack={handlePhaseBack}
               loading={bookingLoading}
+              quantity={quantity}
             />
             )}
               </motion.div>

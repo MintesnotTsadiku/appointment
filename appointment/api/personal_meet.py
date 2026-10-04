@@ -176,7 +176,7 @@ def get_time_slots(
 ):
     if organization_id:
         from appointment.scheduler.booking import slots
-        return slots(duration_id, date, organization_id)
+        return slots(duration_id, date, organization_id, quantity=frappe.form_dict.get("quantity") or 1)
     # Only include debug messages in developer mode
     include_debug = frappe.conf.developer_mode or frappe.conf.get("developer_mode")
     debug_messages = [] if include_debug else None
@@ -494,7 +494,7 @@ def book_time_slot(
             frappe.throw(_("Use the booking management workflow to change an existing appointment."))
         return book(duration_id, start_time, end_time, user_name, user_email,
                     args.get("request_id"), args.get("user_phone", ""), args.get("notes", ""), organization_id,
-                    language=args.get("language"), payment_method=args.get("payment_method"))
+                    language=args.get("language"), payment_method=args.get("payment_method"), quantity=args.get("quantity") or 1)
     # Validate date is not in the past
     from frappe.utils import get_datetime, now_datetime
     requested_date = get_datetime(date)
@@ -910,6 +910,7 @@ def get_organization_services(org_slug):
             "duration": event.duration_override or service.duration,
             "price": event.price_override or service.price,
             "type": "organization",
+            "allow_quantity": frappe.utils.cint(service.allow_quantity), "max_quantity": max(1, frappe.utils.cint(service.max_quantity)),
             "provider_id": label["id"],
             "provider_name": display_name,
         })
@@ -955,6 +956,7 @@ def get_organization_meeting_windows(org_slug, service_slug):
         "durations": [{"id": event.name, "label": f"{duration} min", "duration": duration}],
         "is_organization": True, "organization_id": org.name, "service_id": service.name,
         "provider_count": 1, "providers": [_offering_label(event, provider)],
+        "allow_quantity": frappe.utils.cint(service.allow_quantity), "max_quantity": max(1, frappe.utils.cint(service.max_quantity)),
         "location": {"name": location.name, "location_name": location.location_name,
                      "timezone": location.timezone, "city": location.city, "is_online": False},
     }

@@ -33,6 +33,11 @@ const Reception = () => {
   const [timeSlotInterval, setTimeSlotInterval] = useState<TimeSlotInterval>(30);
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
   const [selectedProvider, setSelectedProvider] = useState<string | null>(null);
+  const [selectedResource, setSelectedResource] = useState<string | null>(null);
+  const { data: resourceData } = useFrappeGetCall<{ message: Array<{ name: string; resource_name: string }> }>(
+    'appointment.scheduler.resources.options', organization ? { organization } : undefined, organization ? `resource-options-${organization}` : null
+  );
+  const resourceOptions = resourceData?.message ?? [];
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showWalkInModal, setShowWalkInModal] = useState(false);
   const [walkInRefreshToken, setWalkInRefreshToken] = useState(0);
@@ -72,10 +77,11 @@ const Reception = () => {
       date: format(currentDate, 'yyyy-MM-dd'),
       location_name: selectedLocation || undefined,
       provider_name: selectedProvider || undefined,
+      resource: selectedResource || undefined,
       view: viewMode,
       organization: organization || undefined,
     },
-    `appointments-${dateRange.start}-${dateRange.end}-${selectedLocation || 'all'}-${selectedProvider || 'all'}-${viewMode}-${organization || 'all'}`,
+    `appointments-${dateRange.start}-${dateRange.end}-${selectedLocation || 'all'}-${selectedProvider || 'all'}-${selectedResource || 'all'}-${viewMode}-${organization || 'all'}`,
     {
       revalidateOnFocus: true,
     }
@@ -99,7 +105,7 @@ const Reception = () => {
   const deskScope = appointmentsData?.message?.scope;
   const deskTimezone = appointmentsData?.message?.timezone;
   const nextDate = appointmentsData?.message?.next_date;
-  const filtersActive = Boolean(selectedLocation || selectedProvider);
+  const filtersActive = Boolean(selectedLocation || selectedProvider || selectedResource);
   const locations = locationsData?.message?.locations || [];
   const providers = providersData?.message?.providers || [];
 
@@ -146,10 +152,13 @@ const Reception = () => {
             <DeskFilters
               locations={locations}
               providers={providers}
+              resources={resourceOptions}
               selectedLocation={selectedLocation}
               selectedProvider={selectedProvider}
+              selectedResource={selectedResource}
               onLocationChange={setSelectedLocation}
               onProviderChange={setSelectedProvider}
+              onResourceChange={setSelectedResource}
             />
             <DeskStats visible={appointments.length} confirmed={confirmedCount} pending={pendingCount} providers={providers.length} />
           </div>

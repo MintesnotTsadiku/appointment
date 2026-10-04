@@ -81,11 +81,13 @@ def required(organization):
 # ---------------------------------------------------------------------------
 # Checkout amounts
 # ---------------------------------------------------------------------------
-def quote_for(event_type, start_utc):
-    """Amounts and refund terms for one offering at one start time."""
+def quote_for(event_type, start_utc, quantity=1):
+    """Amounts and refund terms for one offering at one start time, for `quantity` (party size)."""
     event = frappe.get_doc("EventType", event_type)
     organization = frappe.db.get_value("Service", event.service, "organization")
-    price = flt(frappe.db.get_value("Service", event.service, "price"))
+    # The offering's own price wins, as on the public page; the quantity multiplies it.
+    unit_price = flt(event.price_override) or flt(frappe.db.get_value("Service", event.service, "price"))
+    price = round(unit_price * max(1, cint(quantity)), 2)
     zone = pytz.timezone(frappe.db.get_value("Location", event.location, "timezone") or "Africa/Addis_Ababa")
     local = pytz.UTC.localize(get_datetime(start_utc)).astimezone(zone)
     quote = calculate_booking_quote(event.service, price, event.location, event.provider, datetime.combine(local.date(), datetime.min.time()))
@@ -95,6 +97,8 @@ def quote_for(event_type, start_utc):
         required=required(organization) and due > 0,
         currency="ETB",
         service_price=price,
+        unit_price=unit_price,
+        quantity=max(1, cint(quantity)),
         amount_due=round(min(due, price) if price else due, 2),
         balance_due=round(max(price - due, 0), 2),
         is_deposit=bool(flt(quote.get("deposit_amount"))) and flt(quote.get("deposit_amount")) < price,
@@ -108,9 +112,12 @@ def quote_for(event_type, start_utc):
 
 @frappe.whitelist(allow_guest=True)
 @rate_limit(limit=60, seconds=60)
-def checkout(offering_id, start_time):
+def checkout(offering_id, start_time, quantity=1):
     """What the booking form shows before the customer confirms."""
-    return quote_for(offering_id, _utc(start_time))
+    from appointment.scheduler.booking import quantity_for
+
+    quantity = quantity_for(frappe.get_cached_doc("Service", frappe.db.get_value("EventType", offering_id, "service")), quantity)
+    return quote_for(offering_id, _utc(start_time), quantity)
 
 
 def _utc(value):
@@ -123,7 +130,7 @@ def _utc(value):
 # ---------------------------------------------------------------------------
 def prepare_booking(doc, method):
     """Before insert: a paid booking starts Pending. Returns the quote, or None when no payment is due."""
-    quote = quote_for(doc.event_type, _utc_from_doc(doc))
+    quote = quote_for(doc.event_type, _utc_from_doc(doc), doc.get("quantity") or 1)
     if not quote["required"]:
         return None
     if method not in quote["methods"]:

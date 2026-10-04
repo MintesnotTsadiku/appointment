@@ -25,6 +25,8 @@
   "opening_hours",
   "resources_section",
   "resource_only",
+  "allow_quantity",
+  "max_quantity",
   "resource_needs"
  ],
  "fields": [
@@ -158,6 +160,21 @@
    "description": "Customers book a room or machine directly. Each resource of the needed type becomes its own offering."
   },
   {
+   "fieldname": "allow_quantity",
+   "fieldtype": "Check",
+   "label": "Customers Choose How Many",
+   "default": "0",
+   "description": "The quantity multiplies the price and the room or equipment units."
+  },
+  {
+   "fieldname": "max_quantity",
+   "fieldtype": "Int",
+   "label": "Most Per Booking",
+   "default": "1",
+   "non_negative": 1,
+   "depends_on": "allow_quantity"
+  },
+  {
    "fieldname": "resource_needs",
    "fieldtype": "Table",
    "label": "Needs",
@@ -168,7 +185,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-04 16:00:00.000000",
+ "modified": "2026-10-04 19:00:00.000000",
  "modified_by": "Administrator",
  "module": "Scheduler",
  "name": "Service",

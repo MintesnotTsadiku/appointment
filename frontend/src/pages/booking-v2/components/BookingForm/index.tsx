@@ -33,6 +33,8 @@ interface BookingFormProps {
   // State
   loading?: boolean;
   className?: string;
+  /** Party size, shown with the service when more than one. */
+  quantity?: number;
 }
 
 export function BookingForm({
@@ -46,6 +48,7 @@ export function BookingForm({
   onBack,
   loading = false,
   className,
+  quantity = 1,
 }: BookingFormProps) {
   const [formData, setFormData] = useState<BookingFormData>({
     userName: initialData.userName || "",
@@ -594,6 +597,7 @@ export function BookingForm({
                     <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t("customerBooking.service")}</p>
                     <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>
                     {service.name}
+                    {quantity > 1 && <span data-qa="booking-summary-quantity"> {t("bookingPicker.times").replace("{0}", String(quantity))}</span>}
                   </p>
                   {service.provider && (
                       <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>

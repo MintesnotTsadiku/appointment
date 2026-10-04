@@ -24,6 +24,8 @@ export interface Appointment {
   location_name: string;
   /** Rooms or equipment the booking holds. */
   resource_names?: string[];
+  /** Party size; 1 unless the service lets customers choose. */
+  quantity?: number;
   status: 'Pending' | 'Confirmed' | 'Completed' | 'Cancelled' | 'No Show';
   amount_paid?: number;
   currency?: string;
@@ -55,6 +57,9 @@ export interface Service {
   price?: number;
   /** Booked without staff: the customer books a room or machine. */
   resource_only?: number;
+  /** Customers choose how many (party size), up to max_quantity. */
+  allow_quantity?: number;
+  max_quantity?: number;
 }
 
 export interface Provider {

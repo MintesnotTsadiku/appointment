@@ -24,6 +24,11 @@ const EditService = () => {
   const { serviceId } = useParams<{ serviceId: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  // Shares the needs section's request: a service booked without staff lists rooms, not providers.
+  const { data: needsData } = useFrappeGetCall<{ message: { resource_only: number } }>(
+    'appointment.scheduler.resources.get_service_needs', serviceId ? { service: serviceId } : undefined, serviceId ? `service-needs-${serviceId}` : null
+  );
+  const resourceOnly = needsData?.message?.resource_only === 1;
   const [linkProviderModalOpen, setLinkProviderModalOpen] = useState(false);
   const [pendingRemoval, setPendingRemoval] = useState<ServiceProvider | null>(null);
 
@@ -125,13 +130,17 @@ const EditService = () => {
       <div className="space-y-6">
         <ServiceDetailsSection values={form.values} errors={form.errors} setField={form.setField} />
         <ServicePricingSection values={form.values} errors={form.errors} setField={form.setField} />
-        <ServiceProvidersSection
-          providers={providers}
-          canLink={!!service.organization}
-          removingId={removingProvider && pendingRemoval ? pendingRemoval.name : null}
-          onLink={() => setLinkProviderModalOpen(true)}
-          onRemove={setPendingRemoval}
-        />
+        {resourceOnly ? (
+          <p className="rounded-lg border bg-muted/40 p-4 text-sm text-muted-foreground" data-qa="service-providers-hidden">{t('staff.resources.providersHidden')}</p>
+        ) : (
+          <ServiceProvidersSection
+            providers={providers}
+            canLink={!!service.organization}
+            removingId={removingProvider && pendingRemoval ? pendingRemoval.name : null}
+            onLink={() => setLinkProviderModalOpen(true)}
+            onRemove={setPendingRemoval}
+          />
+        )}
         {serviceId && <ServiceNeedsSection serviceId={serviceId} />}
         <PoliciesPointer />
       </div>

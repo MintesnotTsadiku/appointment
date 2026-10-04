@@ -25,6 +25,10 @@ export interface ManageView {
     offering: string;
     service: string | null;
     provider: string | null;
+    /** Rooms or equipment the booking holds. */
+    resources?: string[];
+    /** Party size; 1 unless the service lets customers choose. */
+    quantity?: number;
     location: string | null;
     address: string | null;
     starts_at: string;

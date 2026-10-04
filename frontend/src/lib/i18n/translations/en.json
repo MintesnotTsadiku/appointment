@@ -1649,6 +1649,13 @@
       "definitions": {
         "title": "How these rates are calculated",
         "description": "The exact rules behind the no-show rate, utilization and financial estimates."
+      },
+      "resourceUse": {
+        "title": "Room and equipment use",
+        "description": "Booked time over the time each room, machine or pool is open, counting every unit of a pool.",
+        "hours": "{0} of {1} unit hours booked",
+        "empty": "No rooms or equipment yet.",
+        "notForProviders": "Room and equipment use is shown to owners, managers and reception."
       }
     },
     "dashboard": {
@@ -1993,7 +2000,12 @@
       "unitsLeft": "{0} ({1} left)",
       "resourceOnly": "Customers book it without staff",
       "resourceOnlyHint": "Each room or machine of this type becomes its own choice on the booking page, and no provider is needed.",
-      "resourceOnlyNeedsOne": "Keep exactly one resource type, with any free one, to book it without staff."
+      "resourceOnlyNeedsOne": "Keep exactly one resource type, with any free one, to book it without staff.",
+      "quantityTitle": "Customers choose how many",
+      "quantityHint": "For seats or people. The price and the room or equipment units multiply by the number.",
+      "maxQuantity": "Most per booking",
+      "providersHidden": "Booked without staff: customers choose a room or machine, so no providers are listed.",
+      "filterAll": "All rooms and equipment"
     },
     "statements": {
       "title": "Monthly statements",
@@ -2179,7 +2191,11 @@
     "afternoon": "Afternoon",
     "evening": "Evening",
     "allSlots": "All Slots",
-    "slotLabel": "Time slot {0}"
+    "slotLabel": "Time slot {0}",
+    "howMany": "How many",
+    "fewer": "One fewer",
+    "more": "One more",
+    "times": "× {0}"
   },
   "payments": {
     "title": "Payment",
@@ -2383,5 +2399,12 @@
     "refundRecorded": "Refund recorded",
     "refundIntro": "Hello {0}, {1} recorded a refund for your booking. Your refund receipt is attached.",
     "receipt": "Receipt"
+  },
+  "quantityServer": {
+    "atLeastOne": "Choose at least one.",
+    "oneAtATime": "This service is booked for one at a time.",
+    "atMost": "This service takes at most {0} per booking.",
+    "maxMin": "The most per booking must be at least 1.",
+    "quantity": "Quantity"
   }
 }

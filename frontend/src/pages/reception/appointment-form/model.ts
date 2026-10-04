@@ -71,6 +71,8 @@ export interface BookingDraft {
   customer?: string;
   /** The room or machine, for a service booked without staff. */
   resource_name?: string;
+  /** How many, for services that allow it. */
+  quantity?: string;
 }
 
 export type FieldErrors = Partial<Record<keyof BookingDraft, string>>;

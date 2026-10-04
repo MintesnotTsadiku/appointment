@@ -204,6 +204,62 @@ def _utilization(rows, offerings, start, end, zone, buffers):
     }
 
 
+def _resource_usage(organization, workspace, scopes, start, end, business_zone):
+    """Room and equipment use: units booked over the units the open hours allow, per resource.
+
+    Open hours are the resource's location hours; a pool of N offers N units at a time.
+    Providers do not see this panel; receptionists see the resources in their locations.
+    """
+    if workspace["role"] == membership.ROLE_PROVIDER and not workspace["is_manager"]:
+        return None
+    filters = {"organization": organization, "is_active": 1}
+    if not workspace["is_manager"]:
+        allowed = {loc for scope in scopes if scope["organization"] == organization for loc in (scope["locations"] or [])}
+        if allowed:
+            filters["location"] = ["in", list(allowed)]
+    items = frappe.get_all("Resource", filters=filters, fields=["name", "resource_name", "resource_type", "location", "capacity"], limit_page_length=0)
+    if not items:
+        return []
+    lower = datetime.combine(start, time.min, business_zone).astimezone(timezone.utc).replace(tzinfo=None)
+    upper = datetime.combine(end + timedelta(days=1), time.min, business_zone).astimezone(timezone.utc).replace(tzinfo=None)
+    open_minutes = {}
+    for location_name in {item.location for item in items}:
+        location = frappe.get_doc("Location", location_name)
+        zone = ZoneInfo(location.timezone or str(business_zone))
+        spans = []
+        for offset in range(-1, (end - start).days + 2):
+            day = start + timedelta(days=offset)
+            for hours in booking.effective_hours(None, location, None, day):
+                opened = datetime.combine(day, _wall_time(hours["start_time"]), zone).astimezone(timezone.utc).replace(tzinfo=None)
+                closed = datetime.combine(day, _wall_time(hours["end_time"]), zone).astimezone(timezone.utc).replace(tzinfo=None)
+                if min(closed, upper) > max(opened, lower):
+                    spans.append((max(opened, lower), min(closed, upper)))
+        open_minutes[location_name] = _interval_minutes(spans)
+    held = frappe.db.sql(
+        """select r.resource, r.units, a.occupied_from, a.occupied_until from `tabAppointment Resource` r
+        inner join `tabAppointment` a on a.name = r.parent and r.parenttype = 'Appointment'
+        where r.resource in %s and a.status in %s and a.occupied_from < %s and a.occupied_until > %s""",
+        (tuple(item.name for item in items), tuple(CAPACITY_BOOKED), upper, lower), as_dict=True,
+    )
+    booked = defaultdict(float)
+    for row in held:
+        minutes = (min(row.occupied_until, upper) - max(row.occupied_from, lower)).total_seconds() / 60
+        booked[row.resource] += max(0, minutes) * max(1, int(row.units or 1))
+    types = dict(frappe.get_all("Resource Type", filters={"organization": organization}, fields=["name", "type_name"], as_list=True))
+    locations = dict(frappe.get_all("Location", filters={"name": ["in", list(open_minutes)]}, fields=["name", "location_name"], as_list=True))
+    result = []
+    for item in items:
+        capacity = max(1, int(item.capacity or 1))
+        available = open_minutes.get(item.location, 0) * capacity
+        result.append({
+            "resource": item.name, "name": item.resource_name, "type_name": types.get(item.resource_type, ""),
+            "location_name": locations.get(item.location, item.location), "capacity": capacity,
+            "booked_hours": round(booked[item.name] / 60, 1), "available_hours": round(available / 60, 1),
+            "rate": round(booked[item.name] / available * 100, 1) if available else None,
+        })
+    return sorted(result, key=lambda row: (-(row["rate"] or 0), row["name"]))
+
+
 def _authorize(organization, period):
     if frappe.session.user == "Guest" or not frappe.db.get_value("User", frappe.session.user, "enabled"):
         frappe.throw(_("Sign in to view your dashboard."), frappe.PermissionError)
@@ -247,6 +303,7 @@ def _report(organization, period):
     current = _rollup(rows, start, today, local_now, names, prices, provider_names, location_names, money)
     previous = _rollup(rows, previous_start, start - timedelta(days=1), local_now, names, prices, provider_names, location_names, money)
     current["utilization"] = _utilization(rows, offerings, start, today, zone, buffers)
+    current["resources"] = _resource_usage(organization, workspace, scopes, start, today, zone)
     previous["utilization"] = _utilization(rows, offerings, previous_start, start - timedelta(days=1), zone, buffers)
     upcoming = [row for row in rows if today <= row.appointment_date <= future_end and row.status in ("Pending", "Confirmed")]
     return {

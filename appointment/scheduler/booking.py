@@ -85,6 +85,19 @@ def _resource_offering(event, service, location, org, public, require_active):
     return ResolvedOffering(event, service, location, None, business)
 
 
+def quantity_for(service, value):
+    """How many (party size, seats) a booking is for: 1 unless the service lets customers choose, up to its maximum."""
+    quantity = cint(value) or 1
+    if quantity < 1:
+        frappe.throw(_("Choose at least one."))
+    if quantity > 1 and not service.get("allow_quantity"):
+        frappe.throw(_("This service is booked for one at a time."))
+    most = max(1, cint(service.get("max_quantity")) or 1)
+    if quantity > most:
+        frappe.throw(_("This service takes at most {0} per booking.").format(most))
+    return quantity
+
+
 def lock_offering(parts):
     """The booking's lock anchor: the provider's user, or the resource of a resource-only offering."""
     if parts.provider:
@@ -254,6 +267,7 @@ def validate_document(doc):
     else:
         start, end = old.starts_at, old.ends_at
         occupied_from, occupied_until = old.occupied_from, old.occupied_until
+    doc.quantity = quantity_for(service, doc.get("quantity"))
     doc.starts_at, doc.ends_at = start, end
     doc.occupied_from, doc.occupied_until = occupied_from, occupied_until
     doc.booking_timezone = zone
@@ -270,7 +284,8 @@ def validate_document(doc):
             check_capacity(provider, occupied_from, occupied_until, doc.name)
         # Rooms and equipment: strict when the booking takes a new time or a staff choice.
         reactivated = old and old.status not in ACTIVE
-        strict = bool(not old or time_changed or reactivated or doc.flags.resource_choice)
+        quantity_changed = old and cint(old.get("quantity") or 1) != cint(doc.quantity)
+        strict = bool(not old or time_changed or reactivated or doc.flags.resource_choice or quantity_changed)
         resources.allocate(doc, service, location, occupied_from, occupied_until, strict=strict, only=parts.event.resource)
     _validate_contact(doc, public)
     if doc.is_new() or not doc.customer:
@@ -334,6 +349,7 @@ def book(
     organization_id=None,
     language=None,
     payment_method=None,
+    quantity=1,
 ):
     if not re.fullmatch(r"[A-Za-z0-9_-]{16,100}", request_id or ""):
         frappe.throw(_("A valid booking request identity is required."))
@@ -350,6 +366,7 @@ def book(
         email=user_email,
         phone=user_phone or "",
         notes=notes or "",
+        **({"quantity": cint(quantity)} if cint(quantity) > 1 else {}),
     )
     digest = hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
     key = hashlib.sha256((business_name + "\0" + frappe.session.user + "\0" + request_id).encode()).hexdigest()
@@ -389,6 +406,7 @@ def book(
             client_phone=user_phone,
             customer_language=language if language in ("en", "am") else None,
             notes=notes,
+            quantity=cint(quantity) or 1,
             status="Confirmed",
             request_key=key,
             request_hash=digest,
@@ -417,9 +435,10 @@ def book(
 
 @frappe.whitelist(allow_guest=True)
 @rate_limit(limit=120, seconds=60)
-def slots(offering_id, date, organization_id=None):
+def slots(offering_id, date, organization_id=None, quantity=1):
     parts = offering(offering_id, public=True)
     event, service, location, provider, business = parts
+    quantity = quantity_for(service, quantity)
     if organization_id and business.name != organization_id:
         frappe.throw(_("Offering does not belong to this business."), frappe.PermissionError)
     day = getdate(date)
@@ -445,7 +464,7 @@ def slots(offering_id, date, organization_id=None):
                 _local_start, _local_end, begin, stop = check_hours(parts, start, end)
                 if provider:
                     check_capacity(provider, begin, stop, lock=False)
-                if wanted and not resources.available(wanted, location.name, business.name, begin, stop, only=event.resource):
+                if wanted and not resources.available(wanted, location.name, business.name, begin, stop, only=event.resource, quantity=quantity):
                     available = False
             except frappe.ValidationError:
                 frappe.clear_messages()

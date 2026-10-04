@@ -25,6 +25,8 @@ interface Need {
 interface NeedsResponse {
   needs: Need[];
   resource_only: number;
+  allow_quantity: number;
+  max_quantity: number;
   types: Array<{ name: string; type_name: string }>;
   resources: Array<{ name: string; resource_name: string; resource_type: string; location: string }>;
   unassigned: BookingRef[];
@@ -37,22 +39,28 @@ export function ServiceNeedsSection({ serviceId }: { serviceId: string }) {
   const { call, loading } = useFrappePostCall<{ message: { unassigned: BookingRef[] } }>(`${API}.save_service_needs`);
   const [needs, setNeeds] = useState<Need[]>([]);
   const [resourceOnly, setResourceOnly] = useState(false);
+  const [allowQuantity, setAllowQuantity] = useState(false);
+  const [maxQuantity, setMaxQuantity] = useState(1);
   const saved = data?.message;
   useEffect(() => {
     if (saved) {
       setNeeds(saved.needs);
       setResourceOnly(saved.resource_only === 1);
+      setAllowQuantity(saved.allow_quantity === 1);
+      setMaxQuantity(saved.max_quantity || 1);
     }
   }, [saved]);
   if (!saved) return null;
-  const dirty = JSON.stringify(needs) !== JSON.stringify(saved.needs) || resourceOnly !== (saved.resource_only === 1);
+  const dirty = JSON.stringify(needs) !== JSON.stringify(saved.needs) || resourceOnly !== (saved.resource_only === 1)
+    || allowQuantity !== (saved.allow_quantity === 1) || maxQuantity !== (saved.max_quantity || 1);
   // Booked without staff: exactly one need, every resource of that type is offered, one unit each.
   const canBeResourceOnly = needs.length === 1 && !needs[0].specific_resource;
   const unused = saved.types.filter((type) => !needs.some((need) => need.resource_type === type.name));
 
   async function save() {
     try {
-      const result = await call({ service: serviceId, needs: JSON.stringify(needs), resource_only: resourceOnly && canBeResourceOnly ? 1 : 0 });
+      const result = await call({ service: serviceId, needs: JSON.stringify(needs), resource_only: resourceOnly && canBeResourceOnly ? 1 : 0,
+        allow_quantity: allowQuantity ? 1 : 0, max_quantity: maxQuantity });
       const left = result.message.unassigned.length;
       if (left) toast.warning(t('staff.resources.needsUnassigned').replace('{0}', String(left)));
       else toast.success(t('staff.resources.needsSaved'));
@@ -122,6 +130,22 @@ export function ServiceNeedsSection({ serviceId }: { serviceId: string }) {
               onCheckedChange={setResourceOnly} />
           </div>
         )}
+        <div className="space-y-3 rounded-lg border p-3" data-qa="service-quantity">
+          <div className="flex items-start justify-between gap-4">
+            <div className="space-y-1">
+              <Label htmlFor="service-allow-quantity">{t('staff.resources.quantityTitle')}</Label>
+              <p className="text-xs text-muted-foreground">{t('staff.resources.quantityHint')}</p>
+            </div>
+            <Switch id="service-allow-quantity" data-qa="service-allow-quantity" checked={allowQuantity} onCheckedChange={setAllowQuantity} />
+          </div>
+          {allowQuantity && (
+            <div className="space-y-1.5">
+              <Label htmlFor="service-max-quantity">{t('staff.resources.maxQuantity')}</Label>
+              <Input id="service-max-quantity" data-qa="service-max-quantity" type="number" min={1} step={1} inputMode="numeric" className="w-32" value={maxQuantity}
+                onChange={(event) => setMaxQuantity(Math.max(1, Math.trunc(Number(event.target.value)) || 1))} />
+            </div>
+          )}
+        </div>
         <div className="flex flex-wrap gap-2">
           {unused.length > 0 && (
             <Button type="button" variant="outline" size="sm" data-qa="service-need-add" onClick={() => setNeeds([...needs, { resource_type: unused[0].name, specific_resource: null }])}>

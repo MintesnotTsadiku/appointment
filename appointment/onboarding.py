@@ -2211,9 +2211,8 @@ def create_service(name, duration, buffer_time, price=0, currency="ETB", organiz
                         "notes": None
                     })
             
-            # Validate that we have at least one provider
-            if not providers_to_create:
-                frappe.throw(_("No active providers found for this organization. Please add providers first."))
+            # A business without staff may still create a service: it has no offerings until it is
+            # set to be booked without staff (Settings › Rooms and equipment), which creates one per room.
         else:
             # Individual service - use current provider
             if not provider_name:

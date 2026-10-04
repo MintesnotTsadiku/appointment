@@ -14,7 +14,7 @@ import frappe
 import pytz
 from frappe import _
 from frappe.model.naming import getseries
-from frappe.utils import escape_html, flt, get_datetime
+from frappe.utils import cint, escape_html, flt, get_datetime
 
 from appointment.scheduler.booking_access import require_access
 
@@ -108,7 +108,7 @@ def issue(payment, kind):
         organization=payment.organization, booking_payment=payment.name, appointment=doc.name,
         issuer_name=who["name"], issuer_tin=who["tin"], issuer_email=who["email"], issuer_phone=who["phone"],
         customer_name=doc.client_name, customer_email=doc.client_email,
-        service_name=frappe.db.get_value("Service", doc.service, "service_name"),
+        service_name=frappe.db.get_value("Service", doc.service, "service_name") + (f" × {doc.quantity}" if cint(doc.get("quantity")) > 1 else ""),
         booking_reference=doc.appointment_id or doc.name,
         booking_start=f"{start:%Y-%m-%d %H:%M} ({zone.zone})" if start else "",
         method=payment.method,

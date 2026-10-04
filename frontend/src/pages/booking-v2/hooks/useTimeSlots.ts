@@ -15,6 +15,8 @@ interface UseTimeSlotsParams {
   organizationId?: string;
   serviceId?: string;
   enabled?: boolean;
+  /** Party size; times are offered only when the room or equipment units for it fit. */
+  quantity?: number;
 }
 
 interface TimeSlotsResponse {
@@ -50,6 +52,7 @@ export function useTimeSlots({
   organizationId,
   serviceId,
   enabled = true,
+  quantity = 1,
 }: UseTimeSlotsParams) {
   const [slots, setSlots] = useState<TimeSlot[]>([]);
 
@@ -74,6 +77,7 @@ export function useTimeSlots({
           ? {
               organization_id: organizationId,
               service_id: serviceId,
+              ...(quantity > 1 ? { quantity: String(quantity) } : {}),
             }
           : {}),
       }

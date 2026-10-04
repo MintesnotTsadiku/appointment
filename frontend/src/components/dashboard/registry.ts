@@ -1,6 +1,6 @@
 import {
   Activity, BarChart3, CalendarCheck2, CalendarClock, CalendarDays, CircleCheck, CircleX, Clock3, Coins, Gauge, Grid3x3,
-  Info, ListChecks, MapPin, Percent, PieChart, Repeat, Scale, Sparkles, TrendingDown, UserX, Users, Wallet, Zap,
+  Armchair, Info, ListChecks, MapPin, Percent, PieChart, Repeat, Scale, Sparkles, TrendingDown, UserX, Users, Wallet, Zap,
 } from 'lucide-react';
 import type { DashboardPage, LayoutEntry, WidgetDefinition } from './types';
 import * as M from './widgets/metrics';
@@ -46,6 +46,7 @@ export const WIDGETS: WidgetDefinition[] = [
   def('periodCompare', { category: 'performance', icon: Scale, size: { w: 6, h: 7 }, minSize: { w: 4, h: 6 }, Body: P.PeriodCompare }),
   def('topServices', { category: 'bookings', icon: Sparkles, size: list, minSize: { w: 3, h: 5 }, Body: C.TopServices }),
   def('providerActivity', { category: 'team', icon: Users, size: { w: 6, h: 8 }, minSize: { w: 3, h: 5 }, Body: C.ProviderActivity }),
+  def('resourceUse', { category: 'team', icon: Armchair, size: { w: 6, h: 8 }, minSize: { w: 3, h: 5 }, qa: 'analytics-resource-use-widget', Body: C.ResourceUse }),
   def('locationActivity', { category: 'team', icon: MapPin, size: { w: 6, h: 8 }, minSize: { w: 3, h: 5 }, Body: C.LocationActivity }),
   def('weekdayLoad', { category: 'performance', icon: CalendarDays, size: { w: 6, h: 8 }, minSize: chartMin, Body: C.WeekdayLoad }),
   def('hourLoad', { category: 'performance', icon: Clock3, size: { w: 6, h: 8 }, minSize: chartMin, Body: C.HourLoad }),
@@ -80,7 +81,8 @@ const DEFAULTS: Record<DashboardPage, Slot[]> = {
     ['statusMix', 0, 19, 6, 4], ['periodCompare', 6, 19, 6, 8], ['cancellationRate', 0, 23, 6, 4],
     ['providerActivity', 0, 27, 6, 8], ['locationActivity', 6, 27, 6, 8],
     ['popularTimes', 0, 35, 12, 8],
-    ['definitions', 0, 43, 12, 4],
+    ['resourceUse', 0, 43, 6, 8],
+    ['definitions', 0, 51, 12, 4],
   ],
 };
 

@@ -84,6 +84,7 @@ export const CreateAppointmentModal = ({
         notes: draft.notes,
         customer: customer?.name,
         resource_name: resourceOnly ? draft.resource_name : undefined,
+        quantity: Math.max(1, Number(draft.quantity) || 1),
       });
 
       if (result?.message?.success) {

@@ -130,6 +130,7 @@ def render(event, doc, language, recipient, receipt=None):
             *([(t("Provider"), escape_html(_value("Provider", doc.provider, "full_name")))] if doc.provider else []),
             (t("Location"), escape_html(_value("Location", doc.location, "location_name"))),
             *_resource_rows(doc, t),
+            *([(t("Quantity"), escape_html(str(doc.quantity)))] if (doc.get("quantity") or 1) > 1 else []),
             (t("Date and time"), escape_html(when(doc, language))),
             *_fee_rows(doc, t),
             *(payment["rows"] if event not in ("Cancellation", "Refund receipt") else []),

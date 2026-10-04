@@ -27,7 +27,9 @@ interface BookingFieldsProps {
 export function BookingFields({ idPrefix, timeQaPrefix, freeTime, draft, errors, onChange, formatEmail, extra, customerSlot, resourceLabel }: BookingFieldsProps) {
   const { t } = useTranslation();
   const { services, providers, locations } = useDeskOptions();
-  const resourceOnly = Boolean(services.find((service) => service.name === draft.service_name)?.resource_only);
+  const chosen = services.find((service) => service.name === draft.service_name);
+  const resourceOnly = Boolean(chosen?.resource_only);
+  const maxQuantity = chosen?.allow_quantity ? Math.max(1, chosen.max_quantity || 1) : 1;
   const rooms = useBookableResources(draft.service_name, resourceOnly && !resourceLabel);
   const id = (field: string) => `${idPrefix}-${field}`;
 
@@ -70,6 +72,10 @@ export function BookingFields({ idPrefix, timeQaPrefix, freeTime, draft, errors,
             </>
           )}
         </div>
+        {maxQuantity > 1 && !resourceLabel && (
+          <TextField id={id('quantity')} label={t('bookingPicker.howMany')} type="number" min={1} max={maxQuantity} className="sm:w-40"
+            value={draft.quantity || '1'} onValueChange={(quantity) => onChange({ quantity })} />
+        )}
         <ScheduleFields idPrefix={idPrefix} qaPrefix={timeQaPrefix} date={draft.appointment_date} startTime={draft.start_time} duration={draft.duration} onChange={onChange} freeTime={freeTime} />
         {extra}
       </Section>

@@ -22,6 +22,8 @@ interface SubmitBookingParams {
   eventToken?: string;
   /** Required when the business takes payment at booking. */
   paymentMethod?: string | null;
+  /** Party size, when the service lets customers choose. */
+  quantity?: number;
 }
 
 interface BookingApiResponse {
@@ -61,6 +63,7 @@ export function useBookingSubmit() {
       reschedule,
       eventToken,
       paymentMethod,
+      quantity,
     } = params;
 
     // Format date for API (YYYY-M-D format)
@@ -97,6 +100,7 @@ export function useBookingSubmit() {
       // Customer emails use the language the customer booked in.
       meetingData.language = language;
       if (paymentMethod) meetingData.payment_method = paymentMethod;
+      if (quantity && quantity > 1) meetingData.quantity = quantity;
     }
     if (serviceId) {
       meetingData.service_id = serviceId;

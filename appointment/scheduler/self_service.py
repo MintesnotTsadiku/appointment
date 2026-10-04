@@ -131,7 +131,9 @@ def _late_fee(doc, policy):
     if flt(policy.get("late_cancellation_fee_amount")) > 0:
         return flt(policy.get("late_cancellation_fee_amount"))
     percentage = flt(policy.get("late_cancellation_fee_percentage"))
-    price = flt(frappe.db.get_value("Service", doc.service, "price"))
+    # A percentage fee applies to what the booking costs: the offering's price times the quantity.
+    unit = flt(frappe.db.get_value("EventType", doc.event_type, "price_override")) or flt(frappe.db.get_value("Service", doc.service, "price"))
+    price = unit * max(1, cint(doc.get("quantity") or 1))
     return round(price * percentage / 100, 2) if percentage > 0 else 0.0
 
 
@@ -217,7 +219,9 @@ def _projection(doc):
             reference=doc.appointment_id or doc.name,
             offering=doc.event_type,
             service=frappe.db.get_value("Service", doc.service, "service_name"),
-            provider=frappe.db.get_value("Provider", doc.provider, "full_name"),
+            provider=frappe.db.get_value("Provider", doc.provider, "full_name") if doc.provider else None,
+            resources=[frappe.db.get_value("Resource", row.resource, "resource_name") for row in doc.get("resources") or []],
+            quantity=cint(doc.get("quantity") or 1),
             location=location.get("location_name"),
             address=address or None,
             starts_at=get_datetime(doc.starts_at).isoformat() + "Z",

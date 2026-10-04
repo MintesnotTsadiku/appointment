@@ -7,12 +7,12 @@ interface SlotsResponse {
 }
 
 /** Free slots for one offering on one day, from the public booking API. */
-export function useOfferingSlots(offering: string, organization: string, date: Date | null) {
+export function useOfferingSlots(offering: string, organization: string, date: Date | null, quantity = 1) {
   const day = date ? new Intl.DateTimeFormat('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(date) : null;
   const { data, isLoading } = useFrappeGetCall<{ message: SlotsResponse }>(
     'appointment.scheduler.booking.slots',
-    day ? { offering_id: offering, date: day, organization_id: organization } : undefined,
-    day ? `manage-slots-${offering}-${day}` : null,
+    day ? { offering_id: offering, date: day, organization_id: organization, ...(quantity > 1 ? { quantity } : {}) } : undefined,
+    day ? `manage-slots-${offering}-${day}-${quantity}` : null,
     { revalidateOnFocus: false }
   );
   const slots = useMemo<TimeSlot[]>(() => {
