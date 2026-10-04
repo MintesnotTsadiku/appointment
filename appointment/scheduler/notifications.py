@@ -24,7 +24,11 @@ EVENT_SETTING = {
     # Payment emails are part of confirming the booking.
     "Payment request": "send_confirmation",
     "Payment reminder": "send_confirmation",
+    # Receipts are records of money received or returned; they always go out.
+    "Payment receipt": None,
+    "Refund receipt": None,
 }
+RECEIPT_EVENTS = ("Payment receipt", "Refund receipt")
 DEFAULT_SETTINGS = dict(
     sms_enabled=0, send_confirmation=1, send_reschedule=1, send_cancellation=1, send_reminder=1, reminder_lead_hours=24
 )
@@ -81,20 +85,21 @@ def _event_for(doc):
 # ---------------------------------------------------------------------------
 # Decide and record
 # ---------------------------------------------------------------------------
-def queue_notification(doc, event):
+def queue_notification(doc, event, receipt=None):
     """Record and enqueue `event` on each channel. Returns the notification status.
 
     Email always runs. SMS runs when the business turned it on and the site has
     an SMS gateway. The status is "queued" when any channel queued a message.
+    A receipt goes by email only, once per receipt.
     """
-    statuses = [_queue_channel(doc, event, "Email")]
-    if business_settings(doc.organization).sms_enabled and notification_sms.available():
+    statuses = [_queue_channel(doc, event, "Email", receipt)]
+    if not receipt and business_settings(doc.organization).sms_enabled and notification_sms.available():
         statuses.append(_queue_channel(doc, event, "SMS"))
     return "queued" if "queued" in statuses else statuses[0]
 
 
-def _queue_channel(doc, event, channel):
-    key = _dedupe_key(doc, event) + ("" if channel == "Email" else ":sms")
+def _queue_channel(doc, event, channel, receipt=None):
+    key = (f"{doc.name}:{event}:{receipt}" if receipt else _dedupe_key(doc, event)) + ("" if channel == "Email" else ":sms")
     if frappe.db.exists("Appointment Notification", {"dedupe_key": key}):
         return "queued"
     raw = doc.client_email if channel == "Email" else doc.client_phone
@@ -106,6 +111,7 @@ def _queue_channel(doc, event, channel):
             appointment=doc.name,
             organization=doc.organization,
             event=event,
+            receipt=receipt,
             channel=channel,
             recipient=recipient or (raw or "")[:140],
             language=customer_language(doc),
@@ -122,13 +128,16 @@ def _queue_channel(doc, event, channel):
 
 def is_stale(event, doc):
     """The booking changed again before the job ran."""
+    if event in RECEIPT_EVENTS:
+        return False
     if event == "Cancellation":
         return doc.status != "Cancelled"
     return doc.status not in OPEN_STATUSES
 
 
 def _skip_reason(doc, event, channel, recipient):
-    if not business_settings(doc.organization)[EVENT_SETTING[event]]:
+    setting = EVENT_SETTING[event]
+    if setting and not business_settings(doc.organization)[setting]:
         return "disabled"
     if not recipient:
         return "no_recipient"

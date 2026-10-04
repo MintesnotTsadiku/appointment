@@ -1,0 +1,91 @@
+# Run appointment.tests.receipts_qa_fixtures.setup first and cleanup afterwards.
+# Downloads are saved in each run's downloads/ folder and listed by observe_downloads; check them in the run artifacts.
+app: appointment
+base_url: http://127.0.0.84:44430
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.receipts_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-receipts
+default_role: Administrator
+auth:
+  type: frappe_session
+  username: Administrator
+  verify_path: /api/method/frappe.auth.get_logged_user
+scenarios:
+- id: rc_admin_en_desktop
+  title: 'Administrator: statements per business and platform receipt details (en,
+    desktop)'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /admin/payments
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="admin-balances"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="admin-statement-month"]'
+  - action: screenshot
+    name: rc_admin_en_desktop-1-balances.png
+    full_page: true
+  - action: click
+    selector: :nth-match([data-qa="admin-balance-row"] [data-qa="admin-balance-statement"],
+      1)
+  - action: observe_downloads
+  - action: click
+    selector: '[data-qa="admin-tab-settings"]'
+  - action: wait_for
+    selector: '[data-qa="admin-platform-legal-name"]'
+  - action: screenshot
+    name: rc_admin_en_desktop-2-settings.png
+    full_page: true
+  - &id002
+    action: get_console_errors
+  - &id003
+    action: get_network_errors
+- id: rc_admin_am_mobile
+  title: 'Administrator: statements per business and platform receipt details (am,
+    mobile)'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /admin/payments
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="admin-balances"]'
+  actions:
+  - &id001
+    action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="admin-statement-month"]'
+  - action: screenshot
+    name: rc_admin_am_mobile-1-balances.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="admin-tab-settings"]'
+  - action: wait_for
+    selector: '[data-qa="admin-platform-legal-name"]'
+  - action: screenshot
+    name: rc_admin_am_mobile-2-settings.png
+    full_page: true
+  - *id001
+  - *id002
+  - *id003

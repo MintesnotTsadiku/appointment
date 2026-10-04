@@ -25,6 +25,7 @@ interface StaffPayment {
   refund_amount: number | null;
   refund_reference: string | null;
   refund_proof: string | null;
+  receipts?: { name: string; receipt_number: string; kind: 'Payment' | 'Refund'; status: 'Issued' | 'Void' }[];
 }
 
 const STATUS: Record<StaffPayment['status'], { key: string; variant: 'info' | 'warning' | 'success' | 'destructive' | 'muted' }> = {
@@ -85,6 +86,17 @@ export function PaymentSection({ appointment, onChanged }: { appointment: string
             {payment.refund_reference ? ` · ${payment.refund_reference}` : ''}
           </p>
         ) : null}
+        {payment.receipts?.filter((receipt) => receipt.status === 'Issued').map((receipt) => (
+          <a
+            key={receipt.name}
+            data-qa="booking-payment-receipt"
+            href={`/api/method/appointment.scheduler.receipts.download_staff?receipt=${encodeURIComponent(receipt.name)}`}
+            download
+            className="block text-primary underline-offset-4 hover:underline"
+          >
+            {t(receipt.kind === 'Refund' ? 'payments.refundReceipt' : 'payments.receipt').replace('{0}', receipt.receipt_number)}
+          </a>
+        ))}
       </div>
       {(payment.status === 'Submitted' || payment.status === 'Awaiting payment') && <Review payment={payment} onDone={refresh} />}
       {payment.status === 'Paid' && <Refund payment={payment} onDone={refresh} />}

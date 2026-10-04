@@ -247,6 +247,10 @@ scheduler_events = {
             "appointment.scheduler.notifications.send_due_reminders",
             "appointment.scheduler.notification_sms.poll_delivery",
         ],
+        # Last month's payment statement to each business owner.
+        "0 6 1 * *": [
+            "appointment.scheduler.statements.send_monthly_statements",
+        ],
     },
     # "hourly": [
     # 	"appointment.tasks.hourly"

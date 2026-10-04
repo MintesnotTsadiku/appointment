@@ -15,6 +15,9 @@ export interface PlatformSettings {
   free_bookings: number;
   platform_bank_accounts: BankAccount[];
   chapa_configured: boolean;
+  legal_name: string;
+  receipt_prefix: string;
+  tin: string;
 }
 
 export interface BusinessBalance {

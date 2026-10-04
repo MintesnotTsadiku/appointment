@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: "Receipt Ethiopic"; src: url("{{ font_url }}"); }
+  body { font-family: "Receipt Ethiopic", "Helvetica Neue", Arial, sans-serif; color: #1f2933; font-size: 11pt; margin: 0; }
+  .head { border-bottom: 2px solid #1f2933; padding-bottom: 8px; margin-bottom: 14px; }
+  .issuer { font-size: 15pt; font-weight: bold; }
+  .muted { color: #5f6b7a; font-size: 9pt; }
+  h1 { font-size: 13pt; margin: 0 0 4px; }
+  .void { color: #b42318; font-weight: bold; margin: 6px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+  td { padding: 5px 0; border-bottom: 1px solid #e4e7eb; vertical-align: top; }
+  td.label { color: #5f6b7a; width: 42%; }
+  .total { margin-top: 12px; padding: 10px; background: #f4f5f7; }
+  .total .value { font-size: 15pt; font-weight: bold; }
+  .foot { margin-top: 18px; }
+</style>
+</head>
+<body>
+  <div class="head">
+    <div class="issuer">{{ issuer_name }}</div>
+    {% for line in issuer_lines %}<div class="muted">{{ line }}</div>{% endfor %}
+  </div>
+  <h1>{{ title }}</h1>
+  <div class="muted">{{ not_invoice }}</div>
+  {% if void %}<div class="void">{{ void }}</div>{% endif %}
+  <table>
+    {% for label, value in rows %}<tr><td class="label">{{ label }}</td><td>{{ value }}</td></tr>{% endfor %}
+  </table>
+  <div class="total">
+    <div class="muted">{{ amount_label }}</div>
+    <div class="value">{{ amount }}</div>
+    {% if balance %}<div class="muted">{{ balance }}</div>{% endif %}
+  </div>
+  <div class="foot muted">{{ thanks }}</div>
+</body>
+</html>

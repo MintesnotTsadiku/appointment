@@ -1,0 +1,203 @@
+# Run appointment.tests.receipts_qa_fixtures.setup first and cleanup afterwards.
+# Downloads are saved in each run's downloads/ folder and listed by observe_downloads; check them in the run artifacts.
+app: appointment
+base_url: http://127.0.0.84:44430
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.receipts_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-receipts
+default_role: Staff
+auth:
+  type: frappe_session
+  username: bloom.owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+scenarios:
+- id: rc_owner_en_desktop
+  title: 'Owner: receipt settings, monthly statement and reception receipts (en, desktop)'
+  viewport: &id003
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /settings/payments
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="payment-statements"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="statement-totals"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="statement-net"]'
+    - type: visible_selector
+      value: '[data-qa="receipt-tin"]'
+  - action: screenshot
+    name: rc_owner_en_desktop-1-settings.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="statement-pdf"]'
+  - action: click
+    selector: '[data-qa="statement-csv"]'
+  - action: open_url
+    url: /reception?date={qa_rc_day}
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{qa_rc_2_id}"]'
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_rc_2_id}"]'
+    key: Enter
+    assertions:
+    - type: visible_selector
+      value: :nth-match([data-qa="booking-payment-receipt"], 2)
+  - action: screenshot
+    name: rc_owner_en_desktop-2-reception.png
+  - action: click
+    selector: :nth-match([data-qa="booking-payment-receipt"], 1)
+  - action: observe_downloads
+  - action: press
+    selector: '[data-qa="owned-booking-dialog"]'
+    key: Escape
+  - &id001
+    action: get_console_errors
+  - &id002
+    action: get_network_errors
+- id: rc_owner_en_mobile
+  title: 'Owner: receipt settings, monthly statement and reception receipts (en, mobile)'
+  viewport: &id005
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /settings/payments
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="payment-statements"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="statement-totals"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="statement-net"]'
+    - type: visible_selector
+      value: '[data-qa="receipt-tin"]'
+  - action: screenshot
+    name: rc_owner_en_mobile-1-settings.png
+    full_page: true
+  - action: open_url
+    url: /reception?date={qa_rc_day}
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{qa_rc_2_id}"]'
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_rc_2_id}"]'
+    key: Enter
+    assertions:
+    - type: visible_selector
+      value: :nth-match([data-qa="booking-payment-receipt"], 2)
+  - action: screenshot
+    name: rc_owner_en_mobile-2-reception.png
+  - action: press
+    selector: '[data-qa="owned-booking-dialog"]'
+    key: Escape
+  - *id001
+  - *id002
+- id: rc_owner_am_desktop
+  title: 'Owner: receipt settings, monthly statement and reception receipts (am, desktop)'
+  viewport: *id003
+  checks: []
+  routes:
+  - path: /settings/payments
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="payment-statements"]'
+  actions:
+  - &id004
+    action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="statement-totals"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="statement-net"]'
+    - type: visible_selector
+      value: '[data-qa="receipt-tin"]'
+  - action: screenshot
+    name: rc_owner_am_desktop-1-settings.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="statement-pdf"]'
+  - action: click
+    selector: '[data-qa="statement-csv"]'
+  - action: open_url
+    url: /reception?date={qa_rc_day}
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{qa_rc_2_id}"]'
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_rc_2_id}"]'
+    key: Enter
+    assertions:
+    - type: visible_selector
+      value: :nth-match([data-qa="booking-payment-receipt"], 2)
+  - action: screenshot
+    name: rc_owner_am_desktop-2-reception.png
+  - action: click
+    selector: :nth-match([data-qa="booking-payment-receipt"], 1)
+  - action: observe_downloads
+  - action: press
+    selector: '[data-qa="owned-booking-dialog"]'
+    key: Escape
+  - *id004
+  - *id001
+  - *id002
+- id: rc_owner_am_mobile
+  title: 'Owner: receipt settings, monthly statement and reception receipts (am, mobile)'
+  viewport: *id005
+  checks: []
+  routes:
+  - path: /settings/payments
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="payment-statements"]'
+  actions:
+  - *id004
+  - action: wait_for
+    selector: '[data-qa="statement-totals"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="statement-net"]'
+    - type: visible_selector
+      value: '[data-qa="receipt-tin"]'
+  - action: screenshot
+    name: rc_owner_am_mobile-1-settings.png
+    full_page: true
+  - action: open_url
+    url: /reception?date={qa_rc_day}
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{qa_rc_2_id}"]'
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_rc_2_id}"]'
+    key: Enter
+    assertions:
+    - type: visible_selector
+      value: :nth-match([data-qa="booking-payment-receipt"], 2)
+  - action: screenshot
+    name: rc_owner_am_mobile-2-reception.png
+  - action: press
+    selector: '[data-qa="owned-booking-dialog"]'
+    key: Escape
+  - *id004
+  - *id001
+  - *id002

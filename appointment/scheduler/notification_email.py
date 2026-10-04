@@ -54,9 +54,19 @@ COPY["Payment reminder"] = dict(
     heading="Payment still needed",
     intro="Hello {0}, we have not received your payment yet. Your booking is held until {1}.",
 )
+COPY["Payment receipt"] = dict(
+    subject="Your receipt from {0}",
+    heading="Payment received",
+    intro="Hello {0}, thank you for your payment to {1}. Your receipt is attached.",
+)
+COPY["Refund receipt"] = dict(
+    subject="Your refund receipt from {0}",
+    heading="Refund recorded",
+    intro="Hello {0}, {1} recorded a refund for your booking. Your refund receipt is attached.",
+)
 UNPAID_INTRO = "Hello {0}, your booking was released because the payment was not received."
 # Events whose booking is still open, so the email carries the manage link.
-MANAGEABLE = ("Confirmation", "Reschedule", "Reminder", "Payment request", "Payment reminder")
+MANAGEABLE = ("Confirmation", "Reschedule", "Reminder", "Payment request", "Payment reminder", "Payment receipt")
 
 
 def send_notification(notification):
@@ -71,8 +81,14 @@ def send_notification(notification):
         row.db_set({"status": "Skipped", "skip_reason": "stale"})
         return
     try:
-        message = render(row.event, doc, row.language, row.recipient)
+        message = render(row.event, doc, row.language, row.recipient, receipt=row.get("receipt"))
+        attachments = None
+        if row.get("receipt"):
+            from appointment.scheduler import receipts
+
+            attachments = [receipts.attachment(row.receipt)]
         queue = frappe.sendmail(
+            attachments=attachments,
             recipients=[row.recipient],
             subject=message["subject"],
             message=message["html"],
@@ -88,7 +104,7 @@ def send_notification(notification):
     row.db_set("email_queue", queue.name if queue else None)
 
 
-def render(event, doc, language, recipient):
+def render(event, doc, language, recipient, receipt=None):
     """Subject and HTML for one event, in `language` ("en" or "am")."""
     business = frappe.get_doc("Organization", doc.organization)
     business_name = business.organization_name
@@ -115,7 +131,8 @@ def render(event, doc, language, recipient):
             (t("Location"), escape_html(_value("Location", doc.location, "location_name"))),
             (t("Date and time"), escape_html(when(doc, language))),
             *_fee_rows(doc, t),
-            *(payment["rows"] if event != "Cancellation" else []),
+            *(payment["rows"] if event not in ("Cancellation", "Refund receipt") else []),
+            *_receipt_rows(receipt, t),
         ],
         manage_label=t("Manage your booking"),
         manage_url=escape_html(self_service.manage_url(doc)) if event in MANAGEABLE else "",
@@ -152,6 +169,18 @@ def _payment_facts(doc, language):
             rows.append((escape_html(t("Pay to")), escape_html(f"{account['bank']} · {account['account_name']} · {account['account_number']}")))
         rows.append((escape_html(t("Payment reference")), escape_html(doc.appointment_id or doc.name)))
     return {"rows": rows, "intro_args": [deadline_text, money(payment.amount)]}
+
+
+def _receipt_rows(receipt, t):
+    if not receipt:
+        return []
+    row = frappe.db.get_value("Payment Receipt", receipt, ["receipt_number", "kind", "amount", "currency"], as_dict=True)
+    if not row:
+        return []
+    rows = [(t("Receipt number"), escape_html(row.receipt_number))]
+    if row.kind == "Refund":
+        rows.append((t("Amount refunded"), escape_html(f"{row.currency} {flt(row.amount):,.2f}")))
+    return rows
 
 
 def _fee_rows(doc, t):

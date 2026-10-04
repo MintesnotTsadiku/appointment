@@ -8,6 +8,7 @@
   "appointment",
   "organization",
   "event",
+  "receipt",
   "channel",
   "recipient",
   "language",
@@ -44,9 +45,15 @@
    "fieldname": "event",
    "fieldtype": "Select",
    "label": "Event",
-   "options": "Confirmation\nReschedule\nCancellation\nReminder\nPayment request\nPayment reminder",
+   "options": "Confirmation\nReschedule\nCancellation\nReminder\nPayment request\nPayment reminder\nPayment receipt\nRefund receipt",
    "reqd": 1,
    "in_list_view": 1
+  },
+  {
+   "fieldname": "receipt",
+   "fieldtype": "Link",
+   "label": "Receipt",
+   "options": "Payment Receipt"
   },
   {
    "fieldname": "channel",
@@ -131,7 +138,7 @@
  ],
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-10-02 00:00:00.000000",
+ "modified": "2026-10-04 09:00:00.000000",
  "modified_by": "Administrator",
  "module": "Scheduler",
  "name": "Appointment Notification",

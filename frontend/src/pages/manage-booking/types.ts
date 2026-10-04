@@ -49,6 +49,7 @@ export interface PaymentView {
   accounts: { bank: string; account_name: string; account_number: string; note?: string | null }[];
   reject_reason: string | null;
   reference_submitted: boolean;
+  receipts?: { name: string; receipt_number: string; kind: 'Payment' | 'Refund' }[];
 }
 
 export type ManageResponse = ManageView | { valid: false; message?: string; cancelled?: boolean; fee?: number; refund?: number };

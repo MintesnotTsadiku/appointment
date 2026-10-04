@@ -14,7 +14,10 @@
   "section_platform",
   "collection_override",
   "override_platform_fee",
-  "platform_fee_override"
+  "platform_fee_override",
+  "receipts_section",
+  "receipt_prefix",
+  "tin"
  ],
  "fields": [
   {
@@ -77,11 +80,28 @@
    "label": "Platform Fee Override",
    "description": "Used when Override Platform Fee is on. Same unit as the platform fee (ETB or percent). 0 waives the fee.",
    "depends_on": "override_platform_fee"
+  },
+  {
+   "fieldname": "receipts_section",
+   "fieldtype": "Section Break",
+   "label": "Receipts"
+  },
+  {
+   "fieldname": "receipt_prefix",
+   "fieldtype": "Data",
+   "label": "Receipt Prefix",
+   "description": "Letters and digits, up to 8. Receipts are numbered PREFIX-YEAR-00001."
+  },
+  {
+   "fieldname": "tin",
+   "fieldtype": "Data",
+   "label": "TIN",
+   "description": "Shown on receipts when set."
   }
  ],
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-10-03 18:00:00.000000",
+ "modified": "2026-10-04 09:00:00.000000",
  "modified_by": "Administrator",
  "module": "Scheduler",
  "name": "Business Payment Settings",

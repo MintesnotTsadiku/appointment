@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: "Receipt Ethiopic"; src: url("{{ font_url }}"); }
+  body { font-family: "Receipt Ethiopic", "Helvetica Neue", Arial, sans-serif; color: #1f2933; font-size: 9.5pt; margin: 0; }
+  .head { border-bottom: 2px solid #1f2933; padding-bottom: 6px; margin-bottom: 10px; }
+  .business { font-size: 14pt; font-weight: bold; }
+  .muted { color: #5f6b7a; font-size: 8.5pt; }
+  h1 { font-size: 12pt; margin: 0; }
+  h2 { font-size: 10.5pt; margin: 14px 0 4px; }
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; color: #5f6b7a; font-weight: normal; border-bottom: 1px solid #c5ccd3; padding: 3px 4px; }
+  td { padding: 3px 4px; border-bottom: 1px solid #eef0f2; }
+  td.amount, th.amount { text-align: right; white-space: nowrap; }
+  .totals { margin-top: 14px; width: 55%; }
+  .net td { font-weight: bold; font-size: 11pt; border-top: 2px solid #1f2933; }
+</style>
+</head>
+<body>
+  <div class="head">
+    <div class="business">{{ business }}</div>
+    <h1>{{ title }}</h1>
+    <div class="muted">{{ period }}</div>
+  </div>
+  {% for name, rows in sections %}
+    <h2>{{ name }}</h2>
+    {% if rows %}
+    <table>
+      <tr>{% for column in columns %}<th{% if loop.last %} class="amount"{% endif %}>{{ column }}</th>{% endfor %}</tr>
+      {% for row in rows %}<tr>{% for cell in row %}<td{% if loop.last %} class="amount"{% endif %}>{{ cell }}</td>{% endfor %}</tr>{% endfor %}
+    </table>
+    {% else %}<div class="muted">{{ empty }}</div>{% endif %}
+  {% endfor %}
+  <table class="totals">
+    {% for label, value in totals %}<tr><td>{{ label }}</td><td class="amount">{{ value }}</td></tr>{% endfor %}
+    <tr class="net"><td>{{ net_label }}</td><td class="amount">{{ net }}</td></tr>
+  </table>
+  <p class="muted">{{ note }}</p>
+</body>
+</html>

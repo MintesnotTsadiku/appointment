@@ -2,7 +2,11 @@ import { Panel } from '@/components/analytics/Panels';
 import { Badge } from '@/components/badge';
 import { Button } from '@/components/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/table';
-import { useTranslation } from '@/lib/i18n';
+import { useMemo, useState } from 'react';
+import { Download } from 'lucide-react';
+import { NativeSelect } from '@/components/native-select';
+import { intlLocale, useTranslation } from '@/lib/i18n';
+import { statementUrl } from '@/pages/settings/payments/statementUrl';
 import { cn } from '@/lib/utils';
 import { formatMoney, type BusinessBalance } from './types';
 
@@ -13,9 +17,35 @@ export function BalancesPanel({ rows, currency, onSettle, onEdit }: {
   onSettle: (row: BusinessBalance) => void;
   onEdit: (row: BusinessBalance) => void;
 }) {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
+  const months = useMemo(() => Array.from({ length: 12 }, (_, index) => {
+    const date = new Date(new Date().getFullYear(), new Date().getMonth() - index, 1);
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+  }), []);
+  const [month, setMonth] = useState(months[0]);
+  const monthName = (value: string) => {
+    const [year, number] = value.split('-').map(Number);
+    return new Date(year, number - 1, 1).toLocaleDateString(intlLocale(language), { month: 'long', year: 'numeric' });
+  };
+  const statement = (row: BusinessBalance) => (
+    <Button asChild type="button" size="sm" variant="ghost">
+      <a data-qa="admin-balance-statement" download href={statementUrl(row.organization, month, 'pdf', language)}>
+        <Download aria-hidden="true" />
+        {t('staff.adminPayments.statement')}
+      </a>
+    </Button>
+  );
   return (
-    <Panel title={t('staff.adminPayments.balancesTitle')} subtitle={t('staff.adminPayments.balancesSubtitle')} qa="admin-balances">
+    <Panel
+      title={t('staff.adminPayments.balancesTitle')}
+      subtitle={t('staff.adminPayments.balancesSubtitle')}
+      qa="admin-balances"
+      aside={
+        <NativeSelect aria-label={t('staff.statements.month')} data-qa="admin-statement-month" wrapperClassName="w-44" value={month} onChange={(event) => setMonth(event.target.value)}>
+          {months.map((value) => <option key={value} value={value}>{monthName(value)}</option>)}
+        </NativeSelect>
+      }
+    >
       <div className="space-y-3 sm:hidden">
         {rows.length ? rows.map((row) => (
           <div key={row.organization} className="space-y-3 rounded-lg border p-3" data-qa="admin-balance-card" data-qa-org={row.organization}>
@@ -28,7 +58,10 @@ export function BalancesPanel({ rows, currency, onSettle, onEdit }: {
               <Figure label={t('staff.adminPayments.colPayoutDue')} value={formatMoney(row.payout_due, currency)} />
               <Figure label={t('staff.adminPayments.statusSettled')} value={formatMoney(row.settled, currency)} />
             </dl>
-            <Actions row={row} onEdit={onEdit} onSettle={onSettle} />
+            <div className="flex flex-wrap items-center gap-2">
+              <Actions row={row} onEdit={onEdit} onSettle={onSettle} />
+              {statement(row)}
+            </div>
           </div>
         )) : <p className="py-6 text-center text-sm text-muted-foreground">{t('staff.adminPayments.noBusinesses')}</p>}
       </div>
@@ -55,7 +88,10 @@ export function BalancesPanel({ rows, currency, onSettle, onEdit }: {
                 <TableCell className="whitespace-nowrap text-right tabular-nums">{formatMoney(row.payout_due, currency)}</TableCell>
                 <TableCell className="whitespace-nowrap text-right tabular-nums text-muted-foreground">{formatMoney(row.settled, currency)}</TableCell>
                 <TableCell className="text-right">
-                  <Actions row={row} onEdit={onEdit} onSettle={onSettle} className="justify-end" />
+                  <div className="flex flex-wrap items-center justify-end gap-2">
+                    {statement(row)}
+                    <Actions row={row} onEdit={onEdit} onSettle={onSettle} className="justify-end" />
+                  </div>
                 </TableCell>
               </TableRow>
             )) : (

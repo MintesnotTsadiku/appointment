@@ -205,7 +205,14 @@ def public_view(payment):
         accounts=bank_accounts(payment.organization, payment.collector) if payment.method == BANK else [],
         reject_reason=payment.reject_reason if payment.status == "Rejected" else None,
         reference_submitted=bool(payment.reference or payment.proof),
+        receipts=[dict(name=r.name, receipt_number=r.receipt_number, kind=r.kind) for r in _receipts(payment.name) if r.status == "Issued"],
     )
+
+
+def _receipts(payment_name):
+    from appointment.scheduler import receipts
+
+    return receipts.for_payment(payment_name)
 
 
 # ---------------------------------------------------------------------------
@@ -265,6 +272,8 @@ def for_appointment(appointment):
                 "reference", "proof", "submitted_at", "paid_at", "reject_reason", "refund_amount", "refund_reference", "refund_proof", "refunded_at"],
         order_by="creation desc",
     )
+    for row in rows:
+        row["receipts"] = _receipts(row.name)
     return rows
 
 
@@ -332,6 +341,9 @@ def record_refund(payment, amount, reference=None, file_name=None, file_data=Non
         )).insert(ignore_permissions=True).file_url
     payment.update(dict(status="Refunded", refund_amount=amount, refund_reference=(reference or "").strip()[:140], refunded_at=_now()))
     payment.save(ignore_permissions=True)
+    from appointment.scheduler import receipts
+
+    receipts.issue(payment, "Refund")
     return payment.as_dict()
 
 
@@ -350,6 +362,9 @@ def mark_paid(payment, reviewer=None, provider_reference=None):
     doc.flags.payment_change = PAYMENT_CHANGE
     doc.save(ignore_permissions=True)
     _ledger(payment)
+    from appointment.scheduler import receipts
+
+    receipts.issue(payment, "Payment")
     return payment
 
 
@@ -454,12 +469,21 @@ def get_settings(organization):
         collector=who,
         platform_accounts=bank_accounts(organization, "Platform") if who == "Platform" else [],
         methods=methods(organization),
+        receipt_prefix=settings.get("receipt_prefix") or "",
+        default_receipt_prefix=receipts_prefix_default(organization),
+        tin=settings.get("tin") or "",
     )
+
+
+def receipts_prefix_default(organization):
+    from appointment.scheduler import receipts
+
+    return receipts.default_prefix(frappe.db.get_value("Organization", organization, "organization_name"))
 
 
 @frappe.whitelist(methods=["POST"])
 def save_settings(organization, require_payment=None, accept_bank_transfer=None, accept_chapa=None, bank_accounts=None,
-                  chapa_secret_key=None, chapa_webhook_secret=None):
+                  chapa_secret_key=None, chapa_webhook_secret=None, receipt_prefix=None, tin=None):
     """Owners and managers set methods and accounts. Who collects stays with the platform administrator."""
     import json
 
@@ -480,6 +504,12 @@ def save_settings(organization, require_payment=None, accept_bank_transfer=None,
         settings.chapa_secret_key = chapa_secret_key
     if chapa_webhook_secret:
         settings.chapa_webhook_secret = chapa_webhook_secret
+    if receipt_prefix is not None:
+        from appointment.scheduler import receipts
+
+        settings.receipt_prefix = receipts.clean_prefix(receipt_prefix) or None
+    if tin is not None:
+        settings.tin = (tin or "").strip()[:40] or None
     settings.save(ignore_permissions=True) if not settings.is_new() else settings.insert(ignore_permissions=True)
     if require_payment is not None:
         if cint(require_payment) and not methods(organization):

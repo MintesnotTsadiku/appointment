@@ -38,6 +38,9 @@ export function PlatformSettingsForm({ saved, onSaved }: { saved: PlatformSettin
         platform_bank_accounts: JSON.stringify(draft.platform_bank_accounts),
         chapa_secret_key: draft.chapa_secret_key || undefined,
         chapa_webhook_secret: draft.chapa_webhook_secret || undefined,
+        legal_name: draft.legal_name,
+        receipt_prefix: draft.receipt_prefix,
+        tin: draft.tin,
       });
       toast.success(t('staff.adminPayments.saved'));
       setEditingKeys(false);
@@ -82,6 +85,23 @@ export function PlatformSettingsForm({ saved, onSaved }: { saved: PlatformSettin
       </SettingsSection>
       <SettingsSection title={t('staff.adminPayments.platformAccounts')} description={t('staff.adminPayments.platformAccountsHint')}>
         <BankAccountsEditor value={draft.platform_bank_accounts} onChange={(platform_bank_accounts) => patch({ platform_bank_accounts })} />
+      </SettingsSection>
+      <SettingsSection title={t('staff.statements.receiptsTitle')} description={t('staff.adminPayments.receiptsHint')}>
+        <div className="grid gap-4 sm:grid-cols-3">
+          <div className="space-y-1.5">
+            <Label htmlFor="platform-legal-name">{t('staff.adminPayments.legalName')}</Label>
+            <Input id="platform-legal-name" data-qa="admin-platform-legal-name" maxLength={140} value={draft.legal_name} onChange={(event) => patch({ legal_name: event.target.value })} />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="platform-receipt-prefix">{t('staff.statements.prefix')}</Label>
+            <Input id="platform-receipt-prefix" data-qa="admin-platform-prefix" maxLength={8} value={draft.receipt_prefix} placeholder="PLT"
+              onChange={(event) => patch({ receipt_prefix: event.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '') })} />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="platform-tin">{t('staff.statements.tin')}</Label>
+            <Input id="platform-tin" data-qa="admin-platform-tin" maxLength={40} value={draft.tin} onChange={(event) => patch({ tin: event.target.value })} />
+          </div>
+        </div>
       </SettingsSection>
       <SettingsSection title={t('staff.adminPayments.chapaTitle')} description={t('staff.adminPayments.chapaHint')}>
         {/* Secret inputs appear only while someone sets or replaces the keys. */}

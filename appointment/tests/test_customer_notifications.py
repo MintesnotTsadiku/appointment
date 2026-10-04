@@ -205,8 +205,9 @@ class TestCustomerNotifications(BloomBookingCase):
                 # Open bookings link to their manage page first; every email links to the booking page.
                 self.assertTrue(any(link.endswith(f"/{slug}/book") for link in links), links)
                 manage = [link for link in links if f"/{slug}/booking/" in link]
-                self.assertEqual(len(manage), 0 if event == "Cancellation" else 1, links)
-                self.assertEqual(len(links), {"Reminder": 3, "Cancellation": 1}.get(event, 2), links)
+                closed = event in ("Cancellation", "Refund receipt")  # No manage link once the booking may be over.
+                self.assertEqual(len(manage), 0 if closed else 1, links)
+                self.assertEqual(len(links), 3 if event == "Reminder" else 1 if closed else 2, links)
         amharic = render("Confirmation", doc, "am", doc.client_email)
         self.assertIn("ሰዓት", amharic["html"])
         if frappe.db.exists("Translation", {"language": "am", "source_text": "Booking confirmed"}):

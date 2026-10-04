@@ -49,6 +49,9 @@ def _platform_view():
         free_bookings=cint(settings.free_bookings),
         platform_bank_accounts=_accounts(settings.platform_bank_accounts),
         chapa_configured=bool(settings.chapa_secret_key),
+        legal_name=settings.get("legal_name") or "",
+        receipt_prefix=settings.get("receipt_prefix") or "",
+        tin=settings.get("tin") or "",
     )
 
 
@@ -156,7 +159,8 @@ def settle(names=None, organization=None, note=None):
 
 @frappe.whitelist(methods=["POST"])
 def save_platform(collection_mode=None, platform_fee_type=None, platform_fee_value=None, free_bookings=None,
-                  platform_bank_accounts=None, chapa_secret_key=None, chapa_webhook_secret=None):
+                  platform_bank_accounts=None, chapa_secret_key=None, chapa_webhook_secret=None,
+                  legal_name=None, receipt_prefix=None, tin=None):
     _require_admin()
     settings = frappe.get_single("Payment Settings")
     if collection_mode is not None:
@@ -179,6 +183,14 @@ def save_platform(collection_mode=None, platform_fee_type=None, platform_fee_val
         settings.chapa_secret_key = chapa_secret_key
     if chapa_webhook_secret:
         settings.chapa_webhook_secret = chapa_webhook_secret
+    if legal_name is not None:
+        settings.legal_name = (legal_name or "").strip()[:140] or None
+    if receipt_prefix is not None:
+        from appointment.scheduler import receipts
+
+        settings.receipt_prefix = receipts.clean_prefix(receipt_prefix) or None
+    if tin is not None:
+        settings.tin = (tin or "").strip()[:40] or None
     if settings.collection_mode == "Platform collects" and not settings.platform_bank_accounts and not settings.chapa_secret_key:
         frappe.throw(_("Add a platform bank account or Chapa keys before the platform collects payments."))
     settings.save(ignore_permissions=True)

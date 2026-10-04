@@ -1,0 +1,141 @@
+# Run appointment.tests.receipts_qa_fixtures.setup first and cleanup afterwards.
+# Downloads are saved in each run's downloads/ folder and listed by observe_downloads; check them in the run artifacts.
+app: appointment
+base_url: http://127.0.0.84:44430
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.receipts_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-receipts
+default_role: Guest
+auth:
+  type: none
+scenarios:
+- id: rc_guest_en_desktop
+  title: Customer downloads the payment receipt from the manage page (en, desktop)
+  viewport: &id003
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{qa_rc_2_manage}'
+    assertions:
+    - type: network_idle
+  actions:
+  - action: wait_for
+    selector: '[data-qa="manage-receipts"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="manage-receipts"]'
+      value: QARC-
+    - type: visible_selector
+      value: :nth-match([data-qa="manage-receipt"], 2)
+  - action: screenshot
+    name: rc_guest_en_desktop-1-manage.png
+    full_page: true
+  - action: click
+    selector: :nth-match([data-qa="manage-receipt"], 1)
+  - action: observe_downloads
+  - &id001
+    action: get_console_errors
+  - &id002
+    action: get_network_errors
+- id: rc_guest_en_mobile
+  title: Customer downloads the payment receipt from the manage page (en, mobile)
+  viewport: &id004
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{qa_rc_2_manage}'
+    assertions:
+    - type: network_idle
+  actions:
+  - action: wait_for
+    selector: '[data-qa="manage-receipts"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="manage-receipts"]'
+      value: QARC-
+    - type: visible_selector
+      value: :nth-match([data-qa="manage-receipt"], 2)
+  - action: screenshot
+    name: rc_guest_en_mobile-1-manage.png
+    full_page: true
+  - action: click
+    selector: :nth-match([data-qa="manage-receipt"], 1)
+  - action: observe_downloads
+  - *id001
+  - *id002
+- id: rc_guest_am_desktop
+  title: Customer downloads the payment receipt from the manage page (am, desktop)
+  viewport: *id003
+  checks: []
+  routes:
+  - path: /
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="language-toggle"]'
+  actions:
+  - &id005
+    action: press
+    selector: '[data-qa="language-toggle"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation.messages
+      status: 200
+  - action: open_url
+    url: '{qa_rc_2_manage}'
+  - action: wait_for
+    selector: '[data-qa="manage-receipts"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="manage-receipts"]'
+      value: QARC-
+    - type: visible_selector
+      value: :nth-match([data-qa="manage-receipt"], 2)
+  - action: screenshot
+    name: rc_guest_am_desktop-1-manage.png
+    full_page: true
+  - action: click
+    selector: :nth-match([data-qa="manage-receipt"], 1)
+  - action: observe_downloads
+  - *id001
+  - *id002
+- id: rc_guest_am_mobile
+  title: Customer downloads the payment receipt from the manage page (am, mobile)
+  viewport: *id004
+  checks: []
+  routes:
+  - path: /
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="language-toggle"]'
+  actions:
+  - *id005
+  - action: open_url
+    url: '{qa_rc_2_manage}'
+  - action: wait_for
+    selector: '[data-qa="manage-receipts"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="manage-receipts"]'
+      value: QARC-
+    - type: visible_selector
+      value: :nth-match([data-qa="manage-receipt"], 2)
+  - action: screenshot
+    name: rc_guest_am_mobile-1-manage.png
+    full_page: true
+  - action: click
+    selector: :nth-match([data-qa="manage-receipt"], 1)
+  - action: observe_downloads
+  - *id001
+  - *id002

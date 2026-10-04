@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useFrappePostCall } from 'frappe-react-sdk';
-import { Check, Copy, CreditCard, Landmark } from 'lucide-react';
+import { Check, Copy, CreditCard, Download, Landmark } from 'lucide-react';
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
 import { Label } from '@/components/label';
@@ -19,6 +19,30 @@ const STATUS_KEY: Record<PaymentView['status'], string> = {
   Expired: 'payments.statusExpired',
   Refunded: 'payments.statusRefunded',
 };
+
+/** Download links for the booking's payment and refund receipts. */
+export function ReceiptLinks({ view }: { view: ManageView }) {
+  const { t } = useTranslation();
+  const receipts = view.payment?.receipts ?? [];
+  if (!receipts.length) return null;
+  return (
+    <ul className="space-y-1 text-sm" data-qa="manage-receipts">
+      {receipts.map((receipt) => (
+        <li key={receipt.name}>
+          <a
+            data-qa="manage-receipt"
+            download
+            className="inline-flex items-center gap-1.5 font-medium text-[var(--accent-primary)] underline-offset-4 hover:underline"
+            href={`/api/method/appointment.scheduler.receipts.download?${new URLSearchParams({ token: view.token, slug: view.business.slug, receipt: receipt.name })}`}
+          >
+            <Download className="h-4 w-4" aria-hidden="true" />
+            {fill(t(receipt.kind === 'Refund' ? 'payments.refundReceipt' : 'payments.receipt'), receipt.receipt_number)}
+          </a>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 /** Payment for a held booking: bank accounts and proof, or Chapa checkout. */
 export function PaymentPanel({ view, onPayment }: { view: ManageView; onPayment: (payment: PaymentView) => void }) {
