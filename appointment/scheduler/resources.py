@@ -31,47 +31,81 @@ def needs(service):
     return [row for row in (service.get("resource_needs") or []) if row.resource_type]
 
 
-def candidates(need, location, organization):
-    """Resources that can satisfy one need at this location, in a stable order."""
+def candidates(need, location, organization, only=None):
+    """Resources that can satisfy one need at this location, in a stable order.
+
+    `only` limits a resource-only offering to its own resource.
+    """
     filters = {"organization": organization, "location": location, "resource_type": need.resource_type, "is_active": 1}
-    if need.specific_resource:
-        filters["name"] = need.specific_resource
+    if need.specific_resource or only:
+        filters["name"] = only or need.specific_resource
     return frappe.get_all("Resource", filters=filters, pluck="name", order_by="resource_name asc, name asc")
 
 
-def busy(names, start, end, exclude=None, lock=False):
-    """The subset of `names` held by another active booking or blocked over [start, end)."""
+def units_of(need):
+    return max(1, cint(need.get("units")))
+
+
+def capacities(names):
     if not names:
-        return set()
+        return {}
+    rows = frappe.get_all("Resource", filters={"name": ["in", list(names)]}, fields=["name", "capacity"])
+    return {row.name: max(1, cint(row.capacity)) for row in rows}
+
+
+FULL = 10**9  # A blocked resource has no units left.
+
+
+def usage(names, start, end, exclude=None, lock=False):
+    """Units held per resource by other active bookings over [start, end); blocked resources are full."""
+    if not names:
+        return {}
     suffix = " for update" if lock else ""
     held = frappe.db.sql(
-        f"""select r.resource from `tabAppointment Resource` r
+        f"""select r.resource, r.units from `tabAppointment Resource` r
         inner join `tabAppointment` a on a.name = r.parent and r.parenttype = 'Appointment'
         where r.resource in %s and a.status in %s and a.name != %s
         and a.occupied_from < %s and a.occupied_until > %s{suffix}""",
         (tuple(names), ACTIVE, exclude or "", end, start),
     )
+    used = {}
+    for resource, units in held:
+        used[resource] = used.get(resource, 0) + max(1, cint(units))
     blocked = frappe.db.sql(
         f"""select resource from `tabResource Block`
         where resource in %s and starts_at < %s and ends_at > %s{suffix}""",
         (tuple(names), end, start),
     )
-    return {row[0] for row in held} | {row[0] for row in blocked}
+    for (resource,) in blocked:
+        used[resource] = FULL
+    return used
+
+
+def _left(name, caps, used):
+    return max(0, caps.get(name, 1) - used.get(name, 0))
+
+
+def busy(names, start, end, exclude=None, lock=False, units=1):
+    """The subset of `names` without `units` free over [start, end)."""
+    caps, used = capacities(names), usage(names, start, end, exclude, lock)
+    return {name for name in names if _left(name, caps, used) < units}
 
 
 def _lock(names):
-    # Same order on every path: provider first (booking.lock_provider), then resources by name.
+    # Same order on every path: the booking's anchor first (provider user, or the offering's
+    # resource for a resource-only offering), then resources by name.
     if names:
         frappe.db.sql("select name from `tabResource` where name in %s order by name for update", (tuple(sorted(names)),))
 
 
-def allocate(doc, service, location, start, end, strict=True):
+def allocate(doc, service, location, start, end, strict=True, only=None):
     """Fill `doc.resources` for the service's needs.
 
     Strict (a new booking, a new time, a reactivation or a staff choice): every
-    need must get a free resource, else the time is unavailable. Not strict (any
-    other edit): keep current rows and fill missing needs only when a resource is
-    free, so editing notes on an unassigned booking still works.
+    need must get a resource with enough free units, else the time is
+    unavailable. Not strict (any other edit): keep current rows and fill missing
+    needs only when units are free, so editing notes on an unassigned booking
+    still works. `only` is the resource of a resource-only offering.
     """
     wanted = needs(service)
     if not wanted:
@@ -80,40 +114,42 @@ def allocate(doc, service, location, start, end, strict=True):
     current = {row.resource_type: row.resource for row in doc.get("resources") or []}
     if not strict and set(current) == {need.resource_type for need in wanted}:
         return
-    options = {need.resource_type: candidates(need, location.name, doc.organization) for need in wanted}
+    options = {need.resource_type: candidates(need, location.name, doc.organization, only) for need in wanted}
     every = sorted({name for names in options.values() for name in names})
     _lock(every)
-    taken = busy(every, start, end, exclude=doc.name if not doc.is_new() else None, lock=True)
+    caps = capacities(every)
+    used = usage(every, start, end, exclude=doc.name if not doc.is_new() else None, lock=True)
     chosen = doc.flags.resource_choice if doc.flags.resource_choice and doc.flags.resource_choice[0] is STAFF_CHOICE else None
     rows = []
     for need in wanted:
-        names = options[need.resource_type]
+        names, units = options[need.resource_type], units_of(need)
+        fits = lambda name: name in names and _left(name, caps, used) >= units  # noqa: E731
         keep = current.get(need.resource_type)
         if not strict and keep:
-            rows.append(dict(resource_type=need.resource_type, resource=keep))
+            rows.append(dict(resource_type=need.resource_type, resource=keep, units=units))
             continue
         if chosen and chosen[1] == need.resource_type:
-            if chosen[2] not in names or chosen[2] in taken:
+            if not fits(chosen[2]):
                 frappe.throw(_("This resource is not free at this time."))
             pick = chosen[2]
-        elif keep in names and keep not in taken:
+        elif keep and fits(keep):
             pick = keep
         else:
-            pick = next((name for name in names if name not in taken), None)
+            pick = next((name for name in names if fits(name)), None)
         if not pick:
             if strict:
                 type_name = frappe.db.get_value("Resource Type", need.resource_type, "type_name")
                 frappe.throw(_("This time is no longer available. No {0} is free.").format(type_name))
             continue
-        rows.append(dict(resource_type=need.resource_type, resource=pick))
+        rows.append(dict(resource_type=need.resource_type, resource=pick, units=units))
     doc.set("resources", rows)
 
 
-def available(wanted, location, organization, start, end):
-    """Read-only check for slot listing: every need has a free resource."""
+def available(wanted, location, organization, start, end, only=None):
+    """Read-only check for slot listing: every need has a resource with enough free units."""
     for need in wanted:
-        names = candidates(need, location, organization)
-        if not set(names) - busy(names, start, end):
+        names = candidates(need, location, organization, only)
+        if not set(names) - busy(names, start, end, units=units_of(need)):
             return False
     return True
 
@@ -211,7 +247,7 @@ def overview(organization):
     types = frappe.get_all("Resource Type", filters={"organization": organization}, fields=["name", "type_name", "is_active"], order_by="type_name asc")
     resources = frappe.get_all(
         "Resource", filters={"organization": organization},
-        fields=["name", "resource_name", "resource_type", "location", "is_active", "notes"], order_by="resource_name asc",
+        fields=["name", "resource_name", "resource_type", "location", "is_active", "notes", "capacity"], order_by="resource_name asc",
     )
     locations = frappe.get_all("Location", filters={"organization": organization, "is_active": 1}, fields=["name", "location_name", "timezone"], order_by="location_name asc")
     now = _utc_now()
@@ -254,22 +290,34 @@ def save_type(organization, type_name, name=None, is_active=1):
 
 
 @frappe.whitelist(methods=["POST"])
-def save_resource(organization, resource_name, resource_type, location, name=None, is_active=1, notes=None):
-    """Create or edit a resource. Turning one off is refused while upcoming bookings hold it."""
+def save_resource(organization, resource_name, resource_type, location, name=None, is_active=1, notes=None, capacity=1):
+    """Create or edit a resource.
+
+    Turning one off, moving it, or lowering its count is refused while upcoming bookings hold it.
+    """
     _require_manager(organization)
     doc = frappe.get_doc("Resource", name) if name else frappe.new_doc("Resource")
     if name and doc.organization != organization:
         frappe.throw(_("You cannot manage resources for this business."), frappe.PermissionError)
-    moving = name and (doc.location != location or doc.resource_type != resource_type or (doc.is_active and not cint(is_active)))
+    capacity = cint(capacity) or 1
+    if capacity < 1:
+        frappe.throw(_("A resource needs a count of at least 1."))
+    old_type = doc.resource_type
+    moving = name and (
+        doc.location != location or doc.resource_type != resource_type or (doc.is_active and not cint(is_active))
+        or capacity < max(1, cint(doc.capacity))
+    )
     if moving:
         held = _holding(doc.name, _utc_now(), None)
         if held:
             return dict(ok=False, conflicts=held)
     doc.update(dict(
         organization=organization, resource_name=(resource_name or "").strip(), resource_type=resource_type,
-        location=location, is_active=cint(is_active), notes=(notes or "").strip() or None,
+        location=location, is_active=cint(is_active), notes=(notes or "").strip() or None, capacity=capacity,
     ))
     doc.save(ignore_permissions=True)
+    for kind in {old_type, resource_type} - {None}:
+        sync_offerings_for_type(organization, kind)
     return dict(ok=True, name=doc.name, unassigned=assign_upcoming(organization))
 
 
@@ -336,7 +384,8 @@ def get_service_needs(service):
     doc = frappe.get_doc("Service", service)
     _require_manager(doc.organization)
     return dict(
-        needs=[dict(resource_type=row.resource_type, specific_resource=row.specific_resource) for row in needs(doc)],
+        needs=[dict(resource_type=row.resource_type, specific_resource=row.specific_resource, units=units_of(row)) for row in needs(doc)],
+        resource_only=cint(doc.get("resource_only")),
         types=frappe.get_all("Resource Type", filters={"organization": doc.organization, "is_active": 1}, fields=["name", "type_name"], order_by="type_name asc"),
         resources=frappe.get_all("Resource", filters={"organization": doc.organization, "is_active": 1}, fields=["name", "resource_name", "resource_type", "location"], order_by="resource_name asc"),
         unassigned=unassigned_rows(doc.organization, doc.name),
@@ -344,8 +393,9 @@ def get_service_needs(service):
 
 
 @frappe.whitelist(methods=["POST"])
-def save_service_needs(service, needs=None):
-    """Replace what a service needs, then assign upcoming bookings. Returns the ones left without a resource."""
+def save_service_needs(service, needs=None, resource_only=None):
+    """Replace what a service needs (and whether it is booked without staff), then bring
+    upcoming bookings and offerings in line. Returns the bookings left without a resource."""
     doc = frappe.get_doc("Service", service)
     _require_manager(doc.organization)
     rows = json.loads(needs) if isinstance(needs, str) else (needs or [])
@@ -356,10 +406,79 @@ def save_service_needs(service, needs=None):
         if not kind or kind in seen:
             continue
         seen.add(kind)
-        cleaned.append(dict(resource_type=kind, specific_resource=row.get("specific_resource") or None))
+        cleaned.append(dict(resource_type=kind, specific_resource=row.get("specific_resource") or None, units=max(1, cint(row.get("units") or 1))))
     doc.set("resource_needs", cleaned)
+    if resource_only is not None:
+        doc.resource_only = cint(resource_only)
     _save_needs(doc)
+    sync_offerings(doc.name)
     return dict(ok=True, unassigned=assign_upcoming(doc.organization, doc.name))
+
+
+PAUSED_KEY = "appointment_resource_only_paused:{0}"
+
+
+def sync_offerings(service_name):
+    """Keep one offering per bookable resource for a resource-only service.
+
+    Creates or reactivates an offering for each active resource of the needed
+    type (at that resource's location) and deactivates the rest. Switching the
+    service to resource-only pauses its staff offerings; switching back
+    reactivates exactly those.
+    """
+    service = frappe.get_doc("Service", service_name)
+    previous = frappe.flags.syncing_booking_urls
+    frappe.flags.syncing_booking_urls = True  # The booking-URL sync commits; offerings do not need it here.
+    try:
+        resource_rows = frappe.get_all("EventType", filters={"service": service.name, "resource": ["is", "set"]}, fields=["name", "resource", "location", "is_active"])
+        staff_rows = frappe.get_all("EventType", filters={"service": service.name, "resource": ["is", "not set"]}, fields=["name", "is_active"])
+        key = PAUSED_KEY.format(service.name)
+        paused = json.loads(frappe.db.get_default(key) or "[]")
+        wanted_needs = needs(service)
+        if service.resource_only and wanted_needs:
+            kind = wanted_needs[0].resource_type
+            wanted = {row.name: row for row in frappe.get_all(
+                "Resource", filters={"organization": service.organization, "resource_type": kind, "is_active": 1},
+                fields=["name", "location", "resource_name"],
+            )}
+            have = {row.resource: row for row in resource_rows}
+            for name, resource in wanted.items():
+                row = have.get(name)
+                if row:
+                    if not row.is_active or row.location != resource.location:
+                        frappe.db.set_value("EventType", row.name, {"is_active": 1, "location": resource.location})
+                    continue
+                offering = frappe.new_doc("EventType")
+                offering.update(dict(
+                    event_type_name=f"{service.service_name} · {resource.resource_name}"[:140],
+                    service=service.name, location=resource.location, resource=name, is_active=1,
+                ))
+                offering.insert(ignore_permissions=True)
+            for row in resource_rows:
+                if row.resource not in wanted and row.is_active:
+                    frappe.db.set_value("EventType", row.name, "is_active", 0)
+            newly = [row.name for row in staff_rows if row.is_active]
+            for name in newly:
+                frappe.db.set_value("EventType", name, "is_active", 0)
+            frappe.db.set_default(key, json.dumps(sorted(set(paused) | set(newly))))
+        else:
+            for row in resource_rows:
+                if row.is_active:
+                    frappe.db.set_value("EventType", row.name, "is_active", 0)
+            for name in paused:
+                if frappe.db.exists("EventType", name):
+                    frappe.db.set_value("EventType", name, "is_active", 1)
+            frappe.db.set_default(key, "")
+    finally:
+        frappe.flags.syncing_booking_urls = previous
+
+
+def sync_offerings_for_type(organization, resource_type):
+    """After a resource of this type changes, refresh the resource-only services that use it."""
+    services = frappe.get_all("Service", filters={"organization": organization, "resource_only": 1}, pluck="name")
+    for name in services:
+        if any(need.resource_type == resource_type for need in needs(frappe.get_doc("Service", name))):
+            sync_offerings(name)
 
 
 def _save_needs(service):
@@ -375,6 +494,15 @@ def _save_needs(service):
 
 def validate_service_needs(doc):
     """Called from Service.validate: needs stay inside the service's business."""
+    if doc.get("resource_only"):
+        rows = [row for row in doc.get("resource_needs") or [] if row.resource_type]
+        if len(rows) != 1:
+            frappe.throw(_("A service booked without staff needs exactly one resource type."))
+        if rows[0].specific_resource:
+            frappe.throw(_("A service booked without staff offers every resource of its type; leave the specific resource empty."))
+    for row in doc.get("resource_needs") or []:
+        if cint(row.get("units") or 1) < 1:
+            frappe.throw(_("Units must be at least 1."))
     seen = set()
     for row in doc.get("resource_needs") or []:
         if row.resource_type in seen:
@@ -398,13 +526,18 @@ def for_booking(booking):
     held = {row.resource_type: row.resource for row in doc.get("resources") or []}
     names = dict(frappe.get_all("Resource", filters={"organization": doc.organization}, fields=["name", "resource_name"], as_list=True))
     result = []
+    # A resource-only offering keeps its own resource; there is nothing to move to.
+    only = frappe.db.get_value("EventType", doc.event_type, "resource")
     for need in needs(service):
-        options = candidates(need, doc.location, doc.organization)
-        taken = busy(options, doc.occupied_from, doc.occupied_until, exclude=doc.name) if doc.occupied_from else set()
+        options = candidates(need, doc.location, doc.organization, only)
+        units = units_of(need)
+        caps = capacities(options)
+        used = usage(options, doc.occupied_from, doc.occupied_until, exclude=doc.name) if doc.occupied_from else {}
         result.append(dict(
-            resource_type=need.resource_type, type_name=_type_name(need.resource_type),
+            resource_type=need.resource_type, type_name=_type_name(need.resource_type), units=units,
             resource=held.get(need.resource_type), resource_name=names.get(held.get(need.resource_type)),
-            options=[dict(name=name, resource_name=names.get(name), free=name not in taken) for name in options],
+            options=[dict(name=name, resource_name=names.get(name), free=_left(name, caps, used) >= units,
+                          capacity=caps.get(name, 1), left=_left(name, caps, used)) for name in options],
         ))
     return dict(needs=result, can_change=doc.status in ("Pending", "Confirmed"), modified=str(doc.modified))
 

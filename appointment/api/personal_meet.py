@@ -898,13 +898,10 @@ def get_organization_services(org_slug):
         except (frappe.PermissionError, frappe.ValidationError):
             frappe.clear_messages()
             continue
-        display_name = provider.display_name or provider.full_name or provider.provider_name
-        if provider.name not in providers:
-            providers[provider.name] = {
-                "id": provider.name,
-                "name": display_name,
-                "avatar": _public_user_image(provider.user),
-            }
+        label = _offering_label(event, provider)
+        display_name = label["name"]
+        if provider and provider.name not in providers:
+            providers[provider.name] = label
         services.append({
             "name": service.service_name,
             "slug": event.name,
@@ -913,7 +910,7 @@ def get_organization_services(org_slug):
             "duration": event.duration_override or service.duration,
             "price": event.price_override or service.price,
             "type": "organization",
-            "provider_id": provider.name,
+            "provider_id": label["id"],
             "provider_name": display_name,
         })
     return {
@@ -927,6 +924,17 @@ def get_organization_services(org_slug):
         "organization_id": org.name,
         "is_organization": True,
     }
+
+
+def _offering_label(event, provider):
+    """Who or what the customer books: the provider, or the room or machine of a resource-only offering."""
+    if provider:
+        return {
+            "id": provider.name,
+            "name": provider.display_name or provider.full_name or provider.provider_name,
+            "avatar": _public_user_image(provider.user),
+        }
+    return {"id": event.resource, "name": frappe.db.get_value("Resource", event.resource, "resource_name"), "avatar": None}
 
 
 @frappe.whitelist(allow_guest=True)
@@ -946,11 +954,7 @@ def get_organization_meeting_windows(org_slug, service_slug):
         "service_name": service.service_name,
         "durations": [{"id": event.name, "label": f"{duration} min", "duration": duration}],
         "is_organization": True, "organization_id": org.name, "service_id": service.name,
-        "provider_count": 1, "providers": [{
-            "id": provider.name,
-            "name": provider.display_name or provider.full_name or provider.provider_name,
-            "avatar": _public_user_image(provider.user),
-        }],
+        "provider_count": 1, "providers": [_offering_label(event, provider)],
         "location": {"name": location.name, "location_name": location.location_name,
                      "timezone": location.timezone, "city": location.city, "is_online": False},
     }

@@ -36,8 +36,10 @@ def offering(name, public=False, require_active=True):
     event = frappe.get_doc("EventType", name)
     service = frappe.get_doc("Service", event.service)
     location = frappe.get_doc("Location", event.location)
-    provider = frappe.get_doc("Provider", event.provider)
     org = service.organization
+    if not event.provider:
+        return _resource_offering(event, service, location, org, public, require_active)
+    provider = frappe.get_doc("Provider", event.provider)
     if (
         not org
         or location.organization != org
@@ -68,6 +70,27 @@ def offering(name, public=False, require_active=True):
     if require_active and not frappe.db.get_value("User", provider.user, "enabled"):
         frappe.throw(_("This provider is unavailable."))
     return ResolvedOffering(event, service, location, provider, business)
+
+
+def _resource_offering(event, service, location, org, public, require_active):
+    """An offering booked without staff: its resource takes the provider's place; `provider` is None."""
+    resource = frappe.db.get_value("Resource", event.resource, ["organization", "location", "is_active"], as_dict=True) if event.resource else None
+    if not org or location.organization != org or not service.resource_only or not resource or resource.organization != org or resource.location != location.name:
+        frappe.throw(_("Offering must belong to one business."), frappe.PermissionError)
+    business = frappe.get_doc("Organization", org)
+    if require_active and not all((event.is_active, service.is_active, location.is_active, resource.is_active, business.is_active)):
+        frappe.throw(_("This offering is unavailable."))
+    if public and not business.enable_public_booking:
+        frappe.throw(_("Public booking is unavailable."), frappe.PermissionError)
+    return ResolvedOffering(event, service, location, None, business)
+
+
+def lock_offering(parts):
+    """The booking's lock anchor: the provider's user, or the resource of a resource-only offering."""
+    if parts.provider:
+        lock_provider(parts.provider)
+    else:
+        frappe.db.sql("select name from `tabResource` where name=%s for update", parts.event.resource)
 
 
 def utc(value):
@@ -104,6 +127,8 @@ def effective_hours(service, location, provider, day):
     weekday = getdate(day).strftime("%A")
     result = []
     for doc in (location, service, provider):
+        if doc is None:
+            continue  # A resource-only offering has no provider hours.
         if doc != location and doc.use_default_hours:
             continue
         rows = [r for r in doc.opening_hours if r.day_of_week == weekday]
@@ -121,7 +146,7 @@ def check_hours(parts, start, end):
     duration = int(event.duration_override or service.duration)
     if duration <= 0 or end - start != timedelta(minutes=duration):
         frappe.throw(_("Booking duration does not match the offering."))
-    notice = max(int(provider.minimum_booking_notice or 0), int(business.minimum_booking_notice or 0))
+    notice = max(int(provider.minimum_booking_notice or 0) if provider else 0, int(business.minimum_booking_notice or 0))
     if start < datetime.now(timezone.utc).replace(tzinfo=None) + timedelta(minutes=notice):
         frappe.throw(_("This time is too soon to book."))
     if local_start.date() != local_end.date():
@@ -183,8 +208,8 @@ def validate_document(doc):
     payment = doc.flags.payment_change is PAYMENT_CHANGE and bool(old)
     parts = offering(doc.event_type, public=public, require_active=not bool(old))
     _event, service, location, provider, business = parts
-    for field, expected in [("service", service.name), ("provider", provider.name), ("location", location.name)]:
-        if doc.get(field) != expected:
+    for field, expected in [("service", service.name), ("provider", provider.name if provider else None), ("location", location.name)]:
+        if (doc.get(field) or None) != expected:
             frappe.throw(_("Booking links must match the offering."), frappe.PermissionError)
     if doc.organization and doc.organization != business.name:
         frappe.throw(_("Booking business does not match the offering."), frappe.PermissionError)
@@ -202,11 +227,11 @@ def validate_document(doc):
             "request_hash",
             "request_result",
         ):
-            if doc.get(field) != old.get(field):
+            if (doc.get(field) or None) != (old.get(field) or None):
                 frappe.throw(_("Change the booking through its authorized lifecycle; ownership is immutable."))
     if not public and not customer and not payment:
         require_access(doc)
-    lock_provider(provider)
+    lock_offering(parts)
     if old:
         current = frappe.db.sql("select modified from `tabAppointment` where name=%s for update", doc.name)
         if current and str(current[0][0]) != str(old.modified):
@@ -221,7 +246,7 @@ def validate_document(doc):
     )
     if time_changed or (old and old.status == "Cancelled" and doc.status != "Cancelled"):
         if not all(
-            (parts.event.is_active, service.is_active, location.is_active, provider.is_active, business.is_active)
+            (parts.event.is_active, service.is_active, location.is_active, not provider or provider.is_active, business.is_active)
         ):
             frappe.throw(_("This offering is unavailable for a new time."))
         offering(doc.event_type)  # Recheck active membership/user for time changes.
@@ -241,11 +266,12 @@ def validate_document(doc):
         if not payment:
             doc.last_changed_by = "Customer" if customer else "Staff"
     if doc.status in ACTIVE:
-        check_capacity(provider, occupied_from, occupied_until, doc.name)
+        if provider:
+            check_capacity(provider, occupied_from, occupied_until, doc.name)
         # Rooms and equipment: strict when the booking takes a new time or a staff choice.
         reactivated = old and old.status not in ACTIVE
         strict = bool(not old or time_changed or reactivated or doc.flags.resource_choice)
-        resources.allocate(doc, service, location, occupied_from, occupied_until, strict=strict)
+        resources.allocate(doc, service, location, occupied_from, occupied_until, strict=strict, only=parts.event.resource)
     _validate_contact(doc, public)
     if doc.is_new() or not doc.customer:
         customer_identity.resolve_for_booking(doc)
@@ -327,8 +353,10 @@ def book(
     )
     digest = hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
     key = hashlib.sha256((business_name + "\0" + frappe.session.user + "\0" + request_id).encode()).hexdigest()
-    provider = frappe.get_doc("Provider", event.provider)
-    lock_provider(provider)
+    if event.provider:
+        lock_provider(frappe.get_doc("Provider", event.provider))
+    else:
+        frappe.db.sql("select name from `tabResource` where name=%s for update", event.resource)
     existing = frappe.db.sql(
         "select name, request_hash, request_result from `tabAppointment` where request_key=%s for update",
         key,
@@ -351,7 +379,7 @@ def book(
             organization=business.name,
             event_type=event.name,
             service=service.name,
-            provider=provider.name,
+            provider=provider.name if provider else None,
             location=location.name,
             appointment_date=local_start.date(),
             start_time=local_start.time().replace(tzinfo=None),
@@ -402,6 +430,9 @@ def slots(offering_id, date, organization_id=None):
         frappe.throw(_("The offering duration is invalid."))
     result = []
     wanted = resources.needs(service)
+    # A resource-only offering shows its resource where a provider would be.
+    label_id, label_name = (provider.name, provider.provider_name) if provider else (
+        event.resource, frappe.db.get_value("Resource", event.resource, "resource_name"))
     for h in effective_hours(service, location, provider, day):
         start = local_instant(day, h["start_time"], location.timezone) + timedelta(
             minutes=int(service.buffer_before or 0)
@@ -412,8 +443,9 @@ def slots(offering_id, date, organization_id=None):
             available = True
             try:
                 _local_start, _local_end, begin, stop = check_hours(parts, start, end)
-                check_capacity(provider, begin, stop, lock=False)
-                if wanted and not resources.available(wanted, location.name, business.name, begin, stop):
+                if provider:
+                    check_capacity(provider, begin, stop, lock=False)
+                if wanted and not resources.available(wanted, location.name, business.name, begin, stop, only=event.resource):
                     available = False
             except frappe.ValidationError:
                 frappe.clear_messages()
@@ -422,8 +454,8 @@ def slots(offering_id, date, organization_id=None):
                 dict(
                     start_time=start.isoformat() + "Z",
                     end_time=end.isoformat() + "Z",
-                    provider_id=provider.name,
-                    provider_name=provider.provider_name,
+                    provider_id=label_id,
+                    provider_name=label_name,
                     available=available,
                     booked=not available,
                 )
@@ -481,8 +513,10 @@ def change(booking_id, action, expected_modified, date=None, start_time=None):
     """Staff lifecycle command; preserves identity, checks stale edits, records Version."""
     doc = frappe.get_doc("Appointment", booking_id)
     require_access(doc)
-    provider = frappe.get_doc("Provider", doc.provider)
-    lock_provider(provider)
+    if doc.provider:
+        lock_provider(frappe.get_doc("Provider", doc.provider))
+    else:
+        frappe.db.sql("select name from `tabResource` where name=%s for update", frappe.db.get_value("EventType", doc.event_type, "resource"))
     doc.reload()
     require_access(doc)
     if str(doc.modified) != str(expected_modified):

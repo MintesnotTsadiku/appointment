@@ -127,8 +127,9 @@ def render(event, doc, language, recipient, receipt=None):
         logo_url=_public_logo(business.logo),
         details=[
             (t("Service"), escape_html(_value("Service", doc.service, "service_name"))),
-            (t("Provider"), escape_html(_value("Provider", doc.provider, "full_name"))),
+            *([(t("Provider"), escape_html(_value("Provider", doc.provider, "full_name")))] if doc.provider else []),
             (t("Location"), escape_html(_value("Location", doc.location, "location_name"))),
+            *_resource_rows(doc, t),
             (t("Date and time"), escape_html(when(doc, language))),
             *_fee_rows(doc, t),
             *(payment["rows"] if event not in ("Cancellation", "Refund receipt") else []),
@@ -169,6 +170,13 @@ def _payment_facts(doc, language):
             rows.append((escape_html(t("Pay to")), escape_html(f"{account['bank']} · {account['account_name']} · {account['account_number']}")))
         rows.append((escape_html(t("Payment reference")), escape_html(doc.appointment_id or doc.name)))
     return {"rows": rows, "intro_args": [deadline_text, money(payment.amount)]}
+
+
+def _resource_rows(doc, t):
+    """The rooms or equipment the booking holds, by name."""
+    names = [_value("Resource", row.resource, "resource_name") for row in doc.get("resources") or []]
+    names = [name for name in names if name]
+    return [(t("Room or equipment"), escape_html(", ".join(names)))] if names else []
 
 
 def _receipt_rows(receipt, t):

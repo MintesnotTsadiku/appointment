@@ -11,6 +11,7 @@
   "event_type_name",
   "service",
   "provider",
+  "resource",
   "location",
   "appointment_group",
   "description",
@@ -48,7 +49,15 @@
    "in_list_view": 1,
    "label": "Provider",
    "options": "Provider",
-   "reqd": 1
+   "reqd": 0
+  },
+  {
+   "fieldname": "resource",
+   "fieldtype": "Link",
+   "label": "Resource",
+   "options": "Resource",
+   "search_index": 1,
+   "description": "Set for a resource-only offering, which has no provider."
   },
   {
    "fieldname": "location",
@@ -93,7 +102,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-17 00:00:00.000000",
+ "modified": "2026-10-04 16:00:00.000000",
  "modified_by": "Administrator",
  "module": "Scheduler",
  "name": "EventType",

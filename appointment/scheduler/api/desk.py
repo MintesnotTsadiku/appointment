@@ -180,6 +180,7 @@ def create_desk_appointment(
     notes: str = None,
     appointment_date: str = None,
     customer: str = None,
+    resource_name: str = None,
 ):
     """
     Create appointment on behalf of client.
@@ -196,16 +197,21 @@ def create_desk_appointment(
         notes: Optional notes
         appointment_date: Appointment date (YYYY-MM-DD). Defaults to today
         customer: Customer Profile to link. Without it, the server matches or creates one.
+        resource_name: For a service booked without staff, the room or machine (instead of a provider).
 
     Returns:
         Created appointment
     """
     from appointment.scheduler.booking_access import require_access
     org = frappe.db.get_value("Service", service_name, "organization")
-    require_access(frappe._dict(organization=org, provider=provider_name))
+    resource_only = bool(frappe.db.get_value("Service", service_name, "resource_only"))
+    if resource_only:
+        provider_name = None
+        location_name = frappe.db.get_value("Resource", resource_name, "location") if resource_name else None
+    require_access(frappe._dict(organization=org, provider=provider_name, location=location_name))
     try:
         # Validate required fields
-        if not all([client_name, service_name, provider_name, location_name, start_time]):
+        if not all([client_name, service_name, resource_name if resource_only else provider_name, location_name, start_time]):
             return {"error": "Missing required fields"}, 400
 
         # Get appointment date
@@ -239,8 +245,8 @@ def create_desk_appointment(
                 end_time_str = end_time
                 end_datetime = get_datetime(f"{appointment_date} {end_time}")
 
-        # Check for conflicts
-        conflicts = check_conflicts(
+        # Resource-only bookings have no provider; booking validation checks the resource.
+        conflicts = [] if resource_only else check_conflicts(
             provider_name=provider_name,
             location_name=location_name,
             start_time=start_datetime,
@@ -258,7 +264,7 @@ def create_desk_appointment(
             "EventType",
             filters={
                 "service": service_name,
-                "provider": provider_name,
+                **({"resource": resource_name} if resource_only else {"provider": provider_name}),
                 "location": location_name,
                 "is_active": 1
             },
@@ -396,7 +402,8 @@ def update_appointment(
                 new_start_datetime = get_datetime(f"{new_date} {new_start_time_str}")
                 new_end_datetime = get_datetime(f"{new_date} {new_end_time_str}")
 
-                conflicts = check_conflicts(
+                # Booking validation checks resource-only bookings, which have no provider.
+                conflicts = [] if not appointment.provider else check_conflicts(
                     provider_name=appointment.provider,
                     location_name=appointment.location,
                     start_time=new_start_datetime,
@@ -486,8 +493,8 @@ def reschedule_appointment(appointment_name: str, new_start_time: str, new_end_t
         if not is_allowed:
             return {"error": error_message}, 400
 
-        # Check for conflicts (excluding current appointment)
-        conflicts = check_conflicts(
+        # Check for conflicts (excluding current appointment); booking validation covers resource-only bookings.
+        conflicts = [] if not appointment.provider else check_conflicts(
             provider_name=appointment.provider,
             location_name=appointment.location,
             start_time=new_start_datetime,

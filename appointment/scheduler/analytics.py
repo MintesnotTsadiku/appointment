@@ -104,7 +104,8 @@ def _rollup(rows, start, end, local_now, names, prices, provider_names, location
             record["no_show"] += 1
         if row.status in BOOKED:
             services[row.service] += 1
-            providers[row.provider] += 1
+            if row.provider:  # Resource-only bookings have no provider.
+                providers[row.provider] += 1
             locations[row.location] += 1
             booked_minutes += max(0, _minute(row.end_time) - _minute(row.start_time))
             heatmap[(row.appointment_date.weekday(), int(str(row.start_time).split(":")[0]))] += 1
@@ -177,8 +178,8 @@ def _occupied_minutes(rows, start, end, zone, buffers):
     upper = datetime.combine(end + timedelta(days=1), time.min, zone).astimezone(timezone.utc).replace(tzinfo=None)
     intervals = defaultdict(list)
     for row in rows:
-        if row.status not in CAPACITY_BOOKED or not start <= row.appointment_date <= end:
-            continue
+        if row.status not in CAPACITY_BOOKED or not start <= row.appointment_date <= end or not row.provider:
+            continue  # Provider utilization counts only bookings with a provider.
         if row.occupied_from and row.occupied_until:
             opened, closed = row.occupied_from, row.occupied_until
         else:
