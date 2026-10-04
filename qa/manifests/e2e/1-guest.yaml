@@ -1,0 +1,160 @@
+# Step 1 of the end-to-end check. Run appointment.tests.e2e_fixtures.setup first.
+app: appointment
+base_url: http://127.0.0.84:44430
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.e2e_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-e2e
+default_role: Guest
+auth:
+  type: none
+scenarios:
+- id: e2e_guest_paid_en_desktop
+  title: E2E guest books Cut and shape with a booking fee and sends the transfer reference
+    (en, desktop)
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /schedule/org/bloom-studio
+    assertions:
+    - type: network_idle
+  actions:
+  - action: wait_for
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Rahel
+      Girma")'
+  - action: click
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Rahel
+      Girma")'
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_e2e_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_e2e_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: wait_for
+    selector: '[data-qa="checkout-method-bank"]'
+  - action: fill
+    selector: '#userName'
+    value: E2E Paid customer
+  - action: fill
+    selector: '#userEmail'
+    value: qa-e2e-paid@example.test
+  - action: screenshot
+    name: e2e_guest_paid_en_desktop-1-checkout.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: book_time_slot
+      method: POST
+      status_min: 200
+      status_max: 299
+      timeout_ms: 25000
+    - type: url_contains
+      value: /booking/
+    - type: visible_selector
+      value: '[data-qa="manage-payment"][data-qa-state="Awaiting payment"]'
+  - action: wait_for
+    selector: '[data-qa="manage-bank-accounts"]'
+  - action: screenshot
+    name: e2e_guest_paid_en_desktop-2-pay.png
+    full_page: true
+  - action: fill
+    selector: '[data-qa="manage-payment-reference"]'
+    value: FT-E2E-0001
+  - action: click
+    selector: '[data-qa="manage-payment-submit"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.payments.submit_proof
+      method: POST
+      status: 200
+    - type: visible_selector
+      value: '[data-qa="manage-payment"][data-qa-state="Submitted"]'
+  - action: screenshot
+    name: e2e_guest_paid_en_desktop-3-submitted.png
+    full_page: true
+  - &id001
+    action: get_console_errors
+  - &id002
+    action: get_network_errors
+- id: e2e_guest_unpaid_am_mobile
+  title: E2E guest books Cut and shape with a booking fee, does not pay (am, mobile)
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="language-toggle"]'
+  actions:
+  - action: press
+    selector: '[data-qa="language-toggle"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation.messages
+      status: 200
+  - action: open_url
+    url: /schedule/org/bloom-studio
+  - action: wait_for
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Rahel
+      Girma")'
+  - action: click
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Rahel
+      Girma")'
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_e2e_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_e2e_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: wait_for
+    selector: '[data-qa="checkout-method-bank"]'
+  - action: fill
+    selector: '#userName'
+    value: E2E Unpaid customer
+  - action: fill
+    selector: '#userEmail'
+    value: qa-e2e-unpaid@example.test
+  - action: screenshot
+    name: e2e_guest_unpaid_am_mobile-1-checkout.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: book_time_slot
+      method: POST
+      status_min: 200
+      status_max: 299
+      timeout_ms: 25000
+    - type: url_contains
+      value: /booking/
+    - type: visible_selector
+      value: '[data-qa="manage-payment"][data-qa-state="Awaiting payment"]'
+  - action: wait_for
+    selector: '[data-qa="manage-bank-accounts"]'
+  - action: screenshot
+    name: e2e_guest_unpaid_am_mobile-2-pay.png
+    full_page: true
+  - *id001
+  - *id002

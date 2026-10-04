@@ -9,6 +9,7 @@ import time
 import unittest
 from concurrent.futures import ThreadPoolExecutor
 from datetime import timedelta
+from unittest.mock import patch
 
 import frappe
 import pytz
@@ -172,6 +173,26 @@ class TestAllocation(ResourceCase):
         self.assertNotIn(slot["start_time"], _free(HANNA, self._day(slot)))
         with self.assertRaises(frappe.ValidationError):
             self._book(HANNA, slot)
+
+
+class TestLocking(ResourceCase):
+    def test_slot_listing_takes_no_row_locks_but_booking_does(self):
+        self._chairs(1)
+        slot = self._shared_slots()[0]
+        seen = []
+        original = frappe.db.sql
+
+        def spy(query, *args, **kwargs):
+            seen.append(str(query))
+            return original(query, *args, **kwargs)
+
+        with patch.object(frappe.db, "sql", side_effect=spy):
+            booking.slots(HANNA, self._day(slot))
+        self.assertFalse([q for q in seen if "for update" in q.lower()], "Slot listing must not wait on bookings in progress.")
+        seen.clear()
+        with patch.object(frappe.db, "sql", side_effect=spy):
+            self._book(HANNA, slot)
+        self.assertTrue([q for q in seen if "for update" in q.lower()])
 
 
 class TestStaffActions(ResourceCase):

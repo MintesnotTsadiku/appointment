@@ -1741,7 +1741,11 @@
         "Confirmation": "Confirmation",
         "Reschedule": "New time",
         "Cancellation": "Cancellation",
-        "Reminder": "Reminder"
+        "Reminder": "Reminder",
+        "Payment request": "Payment request",
+        "Payment reminder": "Payment reminder",
+        "Payment receipt": "Payment receipt",
+        "Refund receipt": "Refund receipt"
       },
       "toast": {
         "queued": "Customer email queued.",

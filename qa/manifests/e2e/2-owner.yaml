@@ -1,0 +1,68 @@
+# Step 2: bloom.owner confirms the paid booking. Then run appointment.tests.e2e_fixtures.run_jobs.
+app: appointment
+base_url: http://127.0.0.84:44430
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.e2e_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-e2e
+default_role: Staff
+auth:
+  type: frappe_session
+  username: bloom.owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+scenarios:
+- id: e2e_owner_confirms_en_desktop
+  title: E2E owner sees the chair, confirms the transfer, and the receipt appears
+    (en, desktop)
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /reception?date={qa_e2e_day}
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa-appointment-name="{qa_e2e_paid_id}"]'
+  actions:
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_e2e_paid_id}"]'
+    key: Enter
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-resource"][data-qa-state="assigned"]'
+    - type: visible_selector
+      value: '[data-qa="booking-payment"][data-qa-state="Submitted"]'
+  - action: screenshot
+    name: e2e_owner-1-before.png
+  - action: click
+    selector: '[data-qa="booking-payment-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.payments.confirm
+      method: POST
+      status: 200
+    - type: visible_selector
+      value: '[data-qa="booking-payment"][data-qa-state="Paid"]'
+    - type: visible_selector
+      value: '[data-qa="booking-payment-receipt"]'
+  - action: screenshot
+    name: e2e_owner-2-paid.png
+  - action: press
+    selector: '[data-qa="owned-booking-dialog"]'
+    key: Escape
+  - action: open_url
+    url: /settings/payments
+  - action: wait_for
+    selector: '[data-qa="statement-net"]'
+  - action: screenshot
+    name: e2e_owner-3-statement.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors

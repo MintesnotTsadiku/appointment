@@ -1,0 +1,39 @@
+# Step 4, after run_jobs: reception's customer messages name the payment and receipt events.
+app: appointment
+base_url: http://127.0.0.84:44430
+default_role: Staff
+auth:
+  type: frappe_session
+  username: bloom.owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment-e2e
+capture_trace: true
+capture_video: false
+timeout_ms: 60000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.e2e_fixtures.browser_values
+scenarios:
+- id: probe_owner_messages
+  title: Customer messages list names payment and receipt events
+  viewport: {width: 1440, height: 900}
+  checks: []
+  routes:
+  - path: /reception?date={qa_e2e_day}
+    assertions:
+    - type: network_idle
+  actions:
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_e2e_paid_id}"]'
+    key: Enter
+  - action: wait_for
+    selector: '[data-qa="customer-messages"]'
+    assertions:
+    - type: visible_text
+      value: Payment receipt
+    - type: visible_text
+      value: Payment request
+  - action: screenshot
+    name: probe-owner-messages.png

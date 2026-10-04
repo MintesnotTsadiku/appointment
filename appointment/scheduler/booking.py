@@ -140,34 +140,35 @@ def check_hours(parts, start, end):
     return local_start, local_end, occupied_from, occupied_until
 
 
-def check_canonical_capacity(user, start, end, exclude=None):
+def check_canonical_capacity(user, start, end, exclude=None, lock=True):
     conflicts = frappe.db.sql(
-        """select a.name from `tabAppointment` a
+        f"""select a.name from `tabAppointment` a
         inner join `tabProvider` p on p.name=a.provider
         where p.user=%s and a.status in %s
         and a.occupied_from < %s and a.occupied_until > %s and a.name != %s
-        limit 1 for update""",
+        limit 1{" for update" if lock else ""}""",
         (user, ACTIVE, end, start, exclude or ""),
     )
     if conflicts:
         frappe.throw(_("This time is no longer available."))
 
 
-def check_capacity(provider, start, end, exclude=None):
+def check_capacity(provider, start, end, exclude=None, lock=True):
     # Locking read sees the latest committed result even under repeatable read.
-    check_canonical_capacity(provider.user, start, end, exclude)
+    # Slot listing passes lock=False: it only reads, and must not wait on bookings in progress.
+    check_canonical_capacity(provider.user, start, end, exclude, lock=lock)
     # Retained personal/calendar behavior must not bypass the same person's capacity.
     zone = frappe.utils.get_system_timezone()
     system_start = pytz.UTC.localize(start).astimezone(pytz.timezone(zone)).replace(tzinfo=None)
     system_end = pytz.UTC.localize(end).astimezone(pytz.timezone(zone)).replace(tzinfo=None)
     events = frappe.db.sql(
-        """select e.name from `tabBooking Event` e
+        f"""select e.name from `tabBooking Event` e
         left join `tabUser Appointment Availability` u on u.name=e.custom_user_calendar
         where (u.user=%s or exists (select 1 from `tabMembers` m
           inner join `tabUser Appointment Availability` member_calendar on member_calendar.name=m.user
           where m.parent=e.custom_appointment_group and m.parenttype='Appointment Group' and member_calendar.user=%s))
         and e.status != 'Cancelled' and e.starts_on < %s and e.ends_on > %s
-        limit 1 for update""",
+        limit 1{" for update" if lock else ""}""",
         (provider.user, provider.user, system_end, system_start),
     )
     if events:
@@ -411,7 +412,7 @@ def slots(offering_id, date, organization_id=None):
             available = True
             try:
                 _local_start, _local_end, begin, stop = check_hours(parts, start, end)
-                check_capacity(provider, begin, stop)
+                check_capacity(provider, begin, stop, lock=False)
                 if wanted and not resources.available(wanted, location.name, business.name, begin, stop):
                     available = False
             except frappe.ValidationError:

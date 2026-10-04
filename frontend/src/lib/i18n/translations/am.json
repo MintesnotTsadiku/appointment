@@ -1741,7 +1741,11 @@
         "Confirmation": "ማረጋገጫ",
         "Reschedule": "አዲስ ሰዓት",
         "Cancellation": "ስረዛ",
-        "Reminder": "ማስታወሻ"
+        "Reminder": "ማስታወሻ",
+        "Payment request": "የክፍያ ጥያቄ",
+        "Payment reminder": "የክፍያ ማስታወሻ",
+        "Payment receipt": "የክፍያ ደረሰኝ",
+        "Refund receipt": "የተመላሽ ደረሰኝ"
       },
       "toast": {
         "queued": "የደንበኛ ኢሜይል ተሰልፏል።",

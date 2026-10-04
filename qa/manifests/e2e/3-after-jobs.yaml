@@ -1,0 +1,46 @@
+# Step 3, after run_jobs. Then step 4, appointment.tests.e2e_fixtures.report and cleanup.
+app: appointment
+base_url: http://127.0.0.84:44430
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.e2e_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-e2e
+default_role: Guest
+auth:
+  type: none
+scenarios:
+- id: e2e_guest_after_jobs_en_desktop
+  title: 'E2E after the jobs: the paid booking shows its receipt; the expired hold
+    link no longer works (en, desktop)'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{qa_e2e_paid_manage}'
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="manage-receipt"]'
+  actions:
+  - action: screenshot
+    name: e2e_after-1-receipt.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="manage-receipt"]'
+  - action: observe_downloads
+  - action: open_url
+    url: '{qa_e2e_unpaid_manage}'
+  - action: wait_for
+    selector: '[data-qa="manage-invalid"]'
+  - action: screenshot
+    name: e2e_after-2-expired.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
