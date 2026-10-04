@@ -134,6 +134,7 @@ const Reception = () => {
 
   const locationLabel = selectedLocation ? locations.find((loc) => loc.name === selectedLocation)?.location_name || selectedLocation : null;
   const providerLabel = selectedProvider ? providers.find((prov) => prov.name === selectedProvider)?.provider_name || selectedProvider : null;
+  const resourceLabel = selectedResource ? resourceOptions.find((item) => item.name === selectedResource)?.resource_name || selectedResource : null;
 
   return (
     <StaffShell width="full">
@@ -169,6 +170,7 @@ const Reception = () => {
             <span>
               {t('staff.reception.filters')}: {locationLabel ? `${t('staff.reception.location')} ${locationLabel}` : t('staff.reception.allLocations')}
               {providerLabel ? ` · ${t('staff.reception.provider')} ${providerLabel}` : ''}
+              {resourceLabel ? ` · ${t('staff.resources.sectionTitle')} ${resourceLabel}` : ''}
             </span>
           </p>
         </section>

@@ -1,7 +1,7 @@
 ---
 tags: [plan, appointment, scheduling, resources, payments]
 created: 2026-10-04
-status: decided 2026-10-04; building
+status: built and verified 2026-10-04
 ---
 
 # Booking quantity and resource follow-ups plan
@@ -70,3 +70,59 @@ Follows [counted pools and resource-only bookings](POOLS_AND_RESOURCE_ONLY_PLAN.
 ## Out of scope
 
 Per-resource hours, a separate resource calendar page, and quantity discounts.
+
+## Run record
+
+### What was built
+
+- Fields `Service.allow_quantity`, `Service.max_quantity`, `Appointment.quantity` (existing bookings are 1). Backup `20261004_191302` was taken before the migrate.
+- **Booking:**
+  - `booking.quantity_for` enforces the switch and the maximum.
+  - The booking takes `units × quantity`, and a change of quantity is a strict allocation.
+  - `book`, `slots` and `get_time_slots` / `book_time_slot` take a quantity.
+- **Price:**
+  - `payments.quote_for` / `checkout` use the offering's price override when there is one, times the quantity. The response returns `unit_price` and `quantity`.
+  - The percentage late fee uses the total.
+- **Records:**
+  - The receipt names the service "× n".
+  - Emails have a Quantity row.
+  - The manage page shows the quantity and the room; its reschedule times use the quantity.
+- **Public scheduler:**
+  - A "How many" stepper sits above the date picker for services that allow it. Slots, checkout and booking use it, and the summary shows "× n".
+  - The summary also names the provider or room being booked.
+- **Settings:**
+  - The service page has "Customers choose how many" with "Most per booking".
+  - A service booked without staff hides the providers section and shows a note instead.
+- **Reception:**
+  - Create has a "How many" field when the service allows it, and cards show "× n".
+  - A "Room or equipment" filter shows only the bookings holding that resource (server side, `get_desk_appointments(resource=)`); the filter summary line names it.
+- **Insights:** a "Room and equipment use" widget, in the default layout. It shows booked unit-hours over open unit-hours per resource, for managers and reception (within their locations). Providers see a short note instead.
+- **Business without staff:** `create_service` and the create form no longer require a provider when the business has none. The service has no offerings until it is set to be booked without staff.
+- Patch `import_quantity_translations`.
+
+### Tests
+
+| Suite | Result |
+|---|---|
+| `appointment.tests.test_quantity` | 7 passed:<br>• quantity takes units and shapes the slots; the maximum and the switch;<br>• price, deposit basis and late fee; email and reception create;<br>• room use numbers and the provider exclusion; the reception room filter; a service for a business without staff. |
+| Pools, resources, payments, Chapa, payments admin, self-service, receipts, notifications, SMS, profiles, scheduling workflows, analytics maths, workspace overview, policies | passed |
+| `npm run -s test:dom` | passed |
+
+### Agent Plane runs
+
+`appointment.tests.quantity_qa_fixtures.setup` gives Bloom a QA "Group studio session (QA)" booked without staff from a 6-seat pool, up to 4 seats at 200 ETB. `cleanup` removes it.
+
+| Run | Manifest | Result |
+|---|---|---|
+| BQA-2026-00488 | `quantity/guest.yaml` | Passed, 2 of 2 (English desktop, Amharic mobile). The stepper sets 3, the times follow, the summary shows "× 3", and the booking is confirmed. |
+| BQA-2026-00489 | `quantity/owner.yaml` (bloom.owner) | Passed, 2 of 2:<br>• Insights shows "Studio seats (QA)".<br>• The service page shows the quantity switch on and the providers section hidden.<br>• Reception shows both bookings "× 3", and the room filter keeps them. |
+
+Both runs had 0 console and 0 network errors. Database check: the two bookings hold 3 units each of the 6-seat pool at 09:00, so the pool is full at that time.
+
+The filter summary line naming the room was added after these runs. It was typechecked and built, but not captured in the browser.
+
+### Left open
+
+- Per-resource opening hours (decided: not now).
+- Quantity discounts, and a separate resource calendar page.
+- Two existing lint errors in `booking-v2/hooks` (an unused `enabled` option in `useTimeSlots`, an `any` in `useBookingSubmit`). They are older than this work.

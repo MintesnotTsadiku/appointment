@@ -1,0 +1,164 @@
+# Run appointment.tests.quantity_qa_fixtures.setup first, guest.yaml before owner.yaml, then cleanup.
+app: appointment
+base_url: http://127.0.0.84:44430
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.quantity_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-quantity
+default_role: Guest
+auth:
+  type: none
+scenarios:
+- id: qty_guest_en_desktop
+  title: Guest books 3 seats in a group session (en, desktop)
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /schedule/org/bloom-studio
+    assertions:
+    - type: network_idle
+  actions:
+  - action: wait_for
+    selector: '[data-qa="booking-service"]:has-text("Group studio session (QA)")'
+  - action: click
+    selector: '[data-qa="booking-service"]:has-text("Group studio session (QA)")'
+  - action: wait_for
+    selector: '[data-qa="booking-quantity"]'
+  - action: click
+    selector: '[data-qa="booking-quantity-more"]'
+  - action: click
+    selector: '[data-qa="booking-quantity-more"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="booking-quantity-value"]'
+      value: '3'
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_qty_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_qty_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: screenshot
+    name: qty_guest_en_desktop-1-quantity.png
+    full_page: true
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: wait_for
+    selector: '#userName'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-summary-quantity"]'
+  - action: fill
+    selector: '#userName'
+    value: Group guest en
+  - action: fill
+    selector: '#userEmail'
+    value: qa-qty-guest-en@example.test
+  - action: screenshot
+    name: qty_guest_en_desktop-2-details.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: book_time_slot
+      method: POST
+      status_min: 200
+      status_max: 299
+      timeout_ms: 25000
+    - type: visible_selector
+      value: '[data-qa="booking-email-notice"]'
+  - action: screenshot
+    name: qty_guest_en_desktop-3-confirmed.png
+    full_page: true
+  - &id001
+    action: get_console_errors
+  - &id002
+    action: get_network_errors
+- id: qty_guest_am_mobile
+  title: Guest books 3 seats in a group session (am, mobile)
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="language-toggle"]'
+  actions:
+  - action: press
+    selector: '[data-qa="language-toggle"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation.messages
+      status: 200
+  - action: open_url
+    url: /schedule/org/bloom-studio
+  - action: wait_for
+    selector: '[data-qa="booking-service"]:has-text("Group studio session (QA)")'
+  - action: click
+    selector: '[data-qa="booking-service"]:has-text("Group studio session (QA)")'
+  - action: wait_for
+    selector: '[data-qa="booking-quantity"]'
+  - action: click
+    selector: '[data-qa="booking-quantity-more"]'
+  - action: click
+    selector: '[data-qa="booking-quantity-more"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="booking-quantity-value"]'
+      value: '3'
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_qty_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_qty_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: screenshot
+    name: qty_guest_am_mobile-1-quantity.png
+    full_page: true
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: wait_for
+    selector: '#userName'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-summary-quantity"]'
+  - action: fill
+    selector: '#userName'
+    value: Group guest am
+  - action: fill
+    selector: '#userEmail'
+    value: qa-qty-guest-am@example.test
+  - action: screenshot
+    name: qty_guest_am_mobile-2-details.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: book_time_slot
+      method: POST
+      status_min: 200
+      status_max: 299
+      timeout_ms: 25000
+    - type: visible_selector
+      value: '[data-qa="booking-email-notice"]'
+  - action: screenshot
+    name: qty_guest_am_mobile-3-confirmed.png
+    full_page: true
+  - *id001
+  - *id002
