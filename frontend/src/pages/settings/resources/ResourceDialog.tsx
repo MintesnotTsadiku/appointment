@@ -18,6 +18,7 @@ interface Draft {
   location: string;
   is_active: boolean;
   notes: string;
+  capacity: string;
 }
 
 /** Add or edit one resource. Turning it off or moving it is refused while upcoming bookings hold it. */
@@ -41,15 +42,15 @@ export function ResourceDialog({ open, organization, resource, types, locations,
     if (!open) return;
     setConflicts([]);
     setDraft(resource
-      ? { resource_name: resource.resource_name, resource_type: resource.resource_type, location: resource.location, is_active: resource.is_active === 1, notes: resource.notes || '' }
-      : { resource_name: '', resource_type: activeTypes[0]?.name || '', location: defaultLocation || locations[0]?.name || '', is_active: true, notes: '' });
+      ? { resource_name: resource.resource_name, resource_type: resource.resource_type, location: resource.location, is_active: resource.is_active === 1, notes: resource.notes || '', capacity: String(resource.capacity || 1) }
+      : { resource_name: '', resource_type: activeTypes[0]?.name || '', location: defaultLocation || locations[0]?.name || '', is_active: true, notes: '', capacity: '1' });
     // Reset only when the dialog opens for a resource.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, resource]);
 
   async function save() {
     try {
-      const result = await call({ organization, name: resource?.name, ...draft, is_active: draft.is_active ? 1 : 0 });
+      const result = await call({ organization, name: resource?.name, ...draft, is_active: draft.is_active ? 1 : 0, capacity: Math.max(1, Number(draft.capacity) || 1) });
       if (!result.message.ok) {
         setConflicts(result.message.conflicts || []);
         return;
@@ -87,6 +88,12 @@ export function ResourceDialog({ open, organization, resource, types, locations,
                 {locations.map((location) => <option key={location.name} value={location.name}>{location.location_name}</option>)}
               </NativeSelect>
             </div>
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="resource-capacity">{t('staff.resources.capacity')}</Label>
+            <Input id="resource-capacity" data-qa="resource-capacity" type="number" min={1} step={1} inputMode="numeric" className="sm:w-32" value={draft.capacity}
+              onChange={(event) => setDraft({ ...draft, capacity: event.target.value })} />
+            <p className="text-xs text-muted-foreground">{t('staff.resources.capacityHint')}</p>
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="resource-notes">{t('staff.resources.notes')}</Label>

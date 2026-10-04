@@ -1,0 +1,135 @@
+# Run appointment.tests.pools_qa_fixtures.setup first, guest.yaml before owner.yaml, then cleanup.
+# Reception opens on the QA day (?date=), so the new booking's date defaults to it.
+app: appointment
+base_url: http://127.0.0.84:44430
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.pools_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-pools
+default_role: Staff
+auth:
+  type: frappe_session
+  username: bloom.owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+scenarios:
+- id: pool_owner_en_desktop
+  title: 'Owner: pool count, service booked without staff, reception room booking
+    (en, desktop)'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /settings/resources
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="resource-settings"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="resource-capacity-badge"]'
+  - action: screenshot
+    name: pool_owner_en_desktop-1-resources.png
+    full_page: true
+  - action: open_url
+    url: /settings/services/{qa_pool_service}
+  - action: wait_for
+    selector: '[data-qa="service-resource-only-switch"][data-state="checked"]'
+  - action: screenshot
+    name: pool_owner_en_desktop-2-service.png
+    full_page: true
+  - action: open_url
+    url: /reception?date={qa_pool_day}
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{qa_pool_guest_id}"]'
+    assertions:
+    - type: visible_text
+      value: Room A (QA)
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_pool_guest_id}"]'
+    key: Enter
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-resource"][data-qa-state="assigned"]'
+  - action: screenshot
+    name: pool_owner_en_desktop-3-guest-booking.png
+  - action: press
+    selector: '[data-qa="owned-booking-dialog"]'
+    key: Escape
+  - action: click
+    selector: '[data-qa="reception-new-appointment"]'
+  - action: wait_for
+    selector: '#create-appointment-client-name'
+  - action: fill
+    selector: '#create-appointment-client-name'
+    value: Room desk booking QA
+  - action: select
+    selector: '#create-appointment-service'
+    value: '{qa_pool_service}'
+  - action: wait_for
+    selector: '#create-appointment-resource'
+  - action: select
+    selector: '#create-appointment-resource'
+    value: '{qa_pool_room_b}'
+  - action: fill
+    selector: '[data-qa="create-time-input"]'
+    value: '{qa_pool_time}'
+  - action: screenshot
+    name: pool_owner_en_desktop-4-create.png
+  - action: click
+    selector: '[data-qa="appointment-create-submit"]'
+    assertions:
+    - type: network_request
+      url_contains: create_desk_appointment
+      method: POST
+      status: 200
+  - action: screenshot
+    name: pool_owner_en_desktop-5-created.png
+    full_page: true
+  - &id002
+    action: get_console_errors
+  - &id003
+    action: get_network_errors
+- id: pool_owner_am_mobile
+  title: 'Owner: pool count, service booked without staff, reception room booking
+    (am, mobile)'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /settings/resources
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="resource-settings"]'
+  actions:
+  - &id001
+    action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="resource-capacity-badge"]'
+  - action: screenshot
+    name: pool_owner_am_mobile-1-resources.png
+    full_page: true
+  - action: open_url
+    url: /settings/services/{qa_pool_service}
+  - action: wait_for
+    selector: '[data-qa="service-resource-only-switch"][data-state="checked"]'
+  - action: screenshot
+    name: pool_owner_am_mobile-2-service.png
+    full_page: true
+  - *id001
+  - *id002
+  - *id003

@@ -24,3 +24,21 @@ export function useDeskOptions() {
     locations: locationsData?.message?.locations || [],
   };
 }
+
+export interface BookableResource {
+  name: string;
+  resource_name: string;
+  location: string;
+  location_name: string;
+  capacity: number;
+}
+
+/** Rooms or machines that can be booked for a service booked without staff. */
+export function useBookableResources(service: string, enabled: boolean) {
+  const { data } = useFrappeGetCall<{ message: BookableResource[] }>(
+    'appointment.scheduler.resources.bookable',
+    enabled && service ? { service } : undefined,
+    enabled && service ? `bookable-${service}` : null
+  );
+  return data?.message || [];
+}

@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react';
 import { useTranslation } from '@/lib/i18n';
-import { NotesField, OptionField, TextField } from './fields';
+import { Field, NotesField, OptionField, TextField } from './fields';
 import type { BookingDraft, FieldErrors } from './model';
 import { ScheduleFields } from './ScheduleFields';
-import { useDeskOptions } from './useDeskOptions';
+import { useBookableResources, useDeskOptions } from './useDeskOptions';
 
 interface BookingFieldsProps {
   idPrefix: string;
@@ -19,12 +19,16 @@ interface BookingFieldsProps {
   extra?: ReactNode;
   /** Rendered above the contact inputs (the customer picker on create). */
   customerSlot?: ReactNode;
+  /** An existing resource-only booking keeps its room; shown read-only. */
+  resourceLabel?: string;
 }
 
 /** Client, assignment, schedule and notes sections of the desk booking form. */
-export function BookingFields({ idPrefix, timeQaPrefix, freeTime, draft, errors, onChange, formatEmail, extra, customerSlot }: BookingFieldsProps) {
+export function BookingFields({ idPrefix, timeQaPrefix, freeTime, draft, errors, onChange, formatEmail, extra, customerSlot, resourceLabel }: BookingFieldsProps) {
   const { t } = useTranslation();
   const { services, providers, locations } = useDeskOptions();
+  const resourceOnly = Boolean(services.find((service) => service.name === draft.service_name)?.resource_only);
+  const rooms = useBookableResources(draft.service_name, resourceOnly && !resourceLabel);
   const id = (field: string) => `${idPrefix}-${field}`;
 
   return (
@@ -49,8 +53,22 @@ export function BookingFields({ idPrefix, timeQaPrefix, freeTime, draft, errors,
       <Section title={t('staff.receptionDesk.booking')}>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <OptionField id={id('service')} label={t('staff.receptionDesk.service')} required placeholder={t('staff.receptionDesk.selectService')} value={draft.service_name} options={services} optionLabel={(s) => s.service_name} error={errors.service_name} onValueChange={(service_name) => onChange({ service_name, ...serviceDuration(services, service_name) })} />
-          <OptionField id={id('provider')} label={t('staff.reception.provider')} required placeholder={t('staff.receptionDesk.selectProvider')} value={draft.provider_name} options={providers} optionLabel={(p) => p.provider_name} error={errors.provider_name} onValueChange={(provider_name) => onChange({ provider_name })} />
-          <OptionField id={id('location')} label={t('staff.receptionDesk.location')} required placeholder={t('staff.receptionDesk.selectLocation')} value={draft.location_name} options={locations} optionLabel={(l) => l.location_name} error={errors.location_name} onValueChange={(location_name) => onChange({ location_name })} />
+          {resourceOnly ? (
+            resourceLabel ? (
+              <Field id={id('resource')} label={t('staff.resources.sectionTitle')} className="sm:col-span-2">
+                <p id={id('resource')} className="flex h-10 items-center rounded-md border bg-muted/40 px-3 text-sm">{resourceLabel}</p>
+              </Field>
+            ) : (
+              <OptionField id={id('resource')} label={t('staff.resources.sectionTitle')} required className="sm:col-span-2" placeholder={t('staff.resources.chooseRoom')} value={draft.resource_name || ''} options={rooms}
+                optionLabel={(room) => `${room.resource_name} · ${room.location_name}`} error={errors.resource_name}
+                onValueChange={(resource_name) => onChange({ resource_name, provider_name: '', location_name: rooms.find((room) => room.name === resource_name)?.location || '' })} />
+            )
+          ) : (
+            <>
+              <OptionField id={id('provider')} label={t('staff.reception.provider')} required placeholder={t('staff.receptionDesk.selectProvider')} value={draft.provider_name} options={providers} optionLabel={(p) => p.provider_name} error={errors.provider_name} onValueChange={(provider_name) => onChange({ provider_name })} />
+              <OptionField id={id('location')} label={t('staff.receptionDesk.location')} required placeholder={t('staff.receptionDesk.selectLocation')} value={draft.location_name} options={locations} optionLabel={(l) => l.location_name} error={errors.location_name} onValueChange={(location_name) => onChange({ location_name })} />
+            </>
+          )}
         </div>
         <ScheduleFields idPrefix={idPrefix} qaPrefix={timeQaPrefix} date={draft.appointment_date} startTime={draft.start_time} duration={draft.duration} onChange={onChange} freeTime={freeTime} />
         {extra}

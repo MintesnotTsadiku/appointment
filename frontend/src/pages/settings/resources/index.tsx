@@ -175,6 +175,7 @@ function LocationResources({ name, resources, types, blocks, canManage, onAdd, o
                   <p className="font-medium">{resource.resource_name}</p>
                   <div className="mt-1 flex flex-wrap gap-1.5">
                     <Badge variant="secondary">{typeName(resource.resource_type)}</Badge>
+                    {(resource.capacity ?? 1) > 1 && <Badge variant="info" data-qa="resource-capacity-badge">{t('staff.resources.count').replace('{0}', String(resource.capacity))}</Badge>}
                     {!resource.is_active && <Badge variant="muted">{t('staff.resources.off')}</Badge>}
                   </div>
                   {resource.notes && <p className="mt-1 text-xs text-muted-foreground">{resource.notes}</p>}

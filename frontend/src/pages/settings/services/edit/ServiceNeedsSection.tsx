@@ -5,7 +5,9 @@ import { toast } from 'sonner';
 import { ArrowRight, Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/button';
 import { Label } from '@/components/label';
+import { Input } from '@/components/input';
 import { NativeSelect } from '@/components/native-select';
+import { Switch } from '@/components/switch';
 import { SettingsSection } from '@/components/settings-layout';
 import { useTranslation } from '@/lib/i18n';
 import { serverErrorMessage } from '@/lib/utils';
@@ -17,10 +19,12 @@ const API = 'appointment.scheduler.resources';
 interface Need {
   resource_type: string;
   specific_resource?: string | null;
+  units?: number;
 }
 
 interface NeedsResponse {
   needs: Need[];
+  resource_only: number;
   types: Array<{ name: string; type_name: string }>;
   resources: Array<{ name: string; resource_name: string; resource_type: string; location: string }>;
   unassigned: BookingRef[];
@@ -32,17 +36,23 @@ export function ServiceNeedsSection({ serviceId }: { serviceId: string }) {
   const { data, mutate } = useFrappeGetCall<{ message: NeedsResponse }>(`${API}.get_service_needs`, { service: serviceId }, `service-needs-${serviceId}`);
   const { call, loading } = useFrappePostCall<{ message: { unassigned: BookingRef[] } }>(`${API}.save_service_needs`);
   const [needs, setNeeds] = useState<Need[]>([]);
+  const [resourceOnly, setResourceOnly] = useState(false);
   const saved = data?.message;
   useEffect(() => {
-    if (saved) setNeeds(saved.needs);
+    if (saved) {
+      setNeeds(saved.needs);
+      setResourceOnly(saved.resource_only === 1);
+    }
   }, [saved]);
   if (!saved) return null;
-  const dirty = JSON.stringify(needs) !== JSON.stringify(saved.needs);
+  const dirty = JSON.stringify(needs) !== JSON.stringify(saved.needs) || resourceOnly !== (saved.resource_only === 1);
+  // Booked without staff: exactly one need, every resource of that type is offered, one unit each.
+  const canBeResourceOnly = needs.length === 1 && !needs[0].specific_resource;
   const unused = saved.types.filter((type) => !needs.some((need) => need.resource_type === type.name));
 
   async function save() {
     try {
-      const result = await call({ service: serviceId, needs: JSON.stringify(needs) });
+      const result = await call({ service: serviceId, needs: JSON.stringify(needs), resource_only: resourceOnly && canBeResourceOnly ? 1 : 0 });
       const left = result.message.unassigned.length;
       if (left) toast.warning(t('staff.resources.needsUnassigned').replace('{0}', String(left)));
       else toast.success(t('staff.resources.needsSaved'));
@@ -62,7 +72,7 @@ export function ServiceNeedsSection({ serviceId }: { serviceId: string }) {
         ) : (
           <ul className="space-y-3">
             {needs.map((need, index) => (
-              <li key={need.resource_type} className="grid grid-cols-1 items-end gap-2 rounded-lg border p-3 sm:grid-cols-[1fr_1fr_auto]" data-qa="service-need">
+              <li key={need.resource_type} className="grid grid-cols-1 items-end gap-2 rounded-lg border p-3 sm:grid-cols-[1fr_1fr_6rem_auto]" data-qa="service-need">
                 <div className="space-y-1.5">
                   <Label htmlFor={`need-type-${index}`}>{t('staff.resources.resourceType')}</Label>
                   <NativeSelect id={`need-type-${index}`} data-qa="service-need-type" value={need.resource_type}
@@ -82,6 +92,11 @@ export function ServiceNeedsSection({ serviceId }: { serviceId: string }) {
                     ))}
                   </NativeSelect>
                 </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor={`need-units-${index}`}>{t('staff.resources.units')}</Label>
+                  <Input id={`need-units-${index}`} data-qa="service-need-units" type="number" min={1} step={1} inputMode="numeric" value={need.units ?? 1}
+                    onChange={(event) => setNeeds(needs.map((row, i) => (i === index ? { ...row, units: Math.max(1, Math.trunc(Number(event.target.value)) || 1) } : row)))} />
+                </div>
                 <Button type="button" variant="ghost" size="icon" aria-label={t('staff.resources.removeNeed')} onClick={() => setNeeds(needs.filter((_, i) => i !== index))}>
                   <Trash2 aria-hidden="true" />
                 </Button>
@@ -93,6 +108,18 @@ export function ServiceNeedsSection({ serviceId }: { serviceId: string }) {
           <div className="space-y-2">
             <p className="text-sm font-medium">{t('staff.resources.unassignedTitle')}</p>
             <BookingList rows={saved.unassigned} qa="service-needs-unassigned" />
+          </div>
+        )}
+        {needs.length > 0 && (
+          <div className="flex items-start justify-between gap-4 rounded-lg border p-3" data-qa="service-resource-only">
+            <div className="space-y-1">
+              <Label htmlFor="service-resource-only">{t('staff.resources.resourceOnly')}</Label>
+              <p className="text-xs text-muted-foreground">
+                {canBeResourceOnly ? t('staff.resources.resourceOnlyHint') : t('staff.resources.resourceOnlyNeedsOne')}
+              </p>
+            </div>
+            <Switch id="service-resource-only" data-qa="service-resource-only-switch" checked={resourceOnly && canBeResourceOnly} disabled={!canBeResourceOnly}
+              onCheckedChange={setResourceOnly} />
           </div>
         )}
         <div className="flex flex-wrap gap-2">

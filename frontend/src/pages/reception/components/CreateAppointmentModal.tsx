@@ -9,6 +9,7 @@ import { CustomerPicker } from '@/pages/customers/CustomerPicker';
 import type { CustomerSummary } from '@/pages/customers/types';
 import { BookingFields } from '../appointment-form/BookingFields';
 import { FormDialog } from '../appointment-form/FormDialog';
+import { useDeskOptions } from '../appointment-form/useDeskOptions';
 import { scheduleWindow, validateBooking, type BookingDraft, type FieldErrors } from '../appointment-form/model';
 
 interface CreateAppointmentModalProps {
@@ -31,6 +32,7 @@ export const CreateAppointmentModal = ({
   defaultLocation,
 }: CreateAppointmentModalProps) => {
   const { t } = useTranslation();
+  const { services } = useDeskOptions();
   const [draft, setDraft] = useState<BookingDraft>({
     client_name: '',
     client_phone: '',
@@ -62,7 +64,8 @@ export const CreateAppointmentModal = ({
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const found = validateBooking(draft, { required: t('staff.form.required'), email: t('staff.receptionDesk.invalidEmail') });
+    const resourceOnly = Boolean(services.find((service) => service.name === draft.service_name)?.resource_only);
+    const found = validateBooking(draft, { required: t('staff.form.required'), email: t('staff.receptionDesk.invalidEmail') }, { resourceOnly });
     setErrors(found);
     if (Object.keys(found).length) return;
 
@@ -80,6 +83,7 @@ export const CreateAppointmentModal = ({
         end_time: endTime,
         notes: draft.notes,
         customer: customer?.name,
+        resource_name: resourceOnly ? draft.resource_name : undefined,
       });
 
       if (result?.message?.success) {

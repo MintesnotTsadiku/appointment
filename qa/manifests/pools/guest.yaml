@@ -1,0 +1,154 @@
+# Run appointment.tests.pools_qa_fixtures.setup first, guest.yaml before owner.yaml, then cleanup.
+app: appointment
+base_url: http://127.0.0.84:44430
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.pools_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-pools
+default_role: Guest
+auth:
+  type: none
+scenarios:
+- id: pool_guest_en_desktop
+  title: Guest books a meeting room without staff on the public page (en, desktop)
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /schedule/org/bloom-studio
+    assertions:
+    - type: network_idle
+  actions:
+  - action: wait_for
+    selector: '[data-qa="booking-service"]:has-text("Meeting room hire (QA)"):has-text("Room
+      A (QA)")'
+  - action: screenshot
+    name: pool_guest_en_desktop-1-services.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="booking-service"]:has-text("Meeting room hire (QA)"):has-text("Room
+      A (QA)")'
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_pool_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_pool_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+    assertions:
+    - type: visible_text
+      value: Room A (QA)
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: wait_for
+    selector: '#userName'
+    assertions:
+    - type: visible_text
+      value: Room A (QA)
+  - action: fill
+    selector: '#userName'
+    value: Pool guest en
+  - action: fill
+    selector: '#userEmail'
+    value: qa-pool-guest-en@example.test
+  - action: screenshot
+    name: pool_guest_en_desktop-2-details.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: book_time_slot
+      method: POST
+      status_min: 200
+      status_max: 299
+      timeout_ms: 25000
+    - type: visible_selector
+      value: '[data-qa="booking-email-notice"]'
+  - action: screenshot
+    name: pool_guest_en_desktop-3-confirmed.png
+    full_page: true
+  - &id001
+    action: get_console_errors
+  - &id002
+    action: get_network_errors
+- id: pool_guest_am_mobile
+  title: Guest books a meeting room without staff on the public page (am, mobile)
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="language-toggle"]'
+  actions:
+  - action: press
+    selector: '[data-qa="language-toggle"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation.messages
+      status: 200
+  - action: open_url
+    url: /schedule/org/bloom-studio
+  - action: wait_for
+    selector: '[data-qa="booking-service"]:has-text("Meeting room hire (QA)"):has-text("Room
+      A (QA)")'
+  - action: screenshot
+    name: pool_guest_am_mobile-1-services.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="booking-service"]:has-text("Meeting room hire (QA)"):has-text("Room
+      A (QA)")'
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_pool_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_pool_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+    assertions:
+    - type: visible_text
+      value: Room A (QA)
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: wait_for
+    selector: '#userName'
+    assertions:
+    - type: visible_text
+      value: Room A (QA)
+  - action: fill
+    selector: '#userName'
+    value: Pool guest am
+  - action: fill
+    selector: '#userEmail'
+    value: qa-pool-guest-am@example.test
+  - action: screenshot
+    name: pool_guest_am_mobile-2-details.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: book_time_slot
+      method: POST
+      status_min: 200
+      status_max: 299
+      timeout_ms: 25000
+    - type: visible_selector
+      value: '[data-qa="booking-email-notice"]'
+  - action: screenshot
+    name: pool_guest_am_mobile-3-confirmed.png
+    full_page: true
+  - *id001
+  - *id002

@@ -13,7 +13,7 @@ interface BookingNeed {
   type_name: string;
   resource: string | null;
   resource_name: string | null;
-  options: Array<{ name: string; resource_name: string; free: boolean }>;
+  options: Array<{ name: string; resource_name: string; free: boolean; capacity?: number; left?: number }>;
 }
 
 interface BookingResources {
@@ -67,7 +67,11 @@ export function ResourceSection({ appointment, onChanged }: { appointment: strin
                 {!need.resource && <option value="">{t('staff.resources.notAssigned')}</option>}
                 {need.options.map((option) => (
                   <option key={option.name} value={option.name} disabled={!option.free && option.name !== need.resource}>
-                    {option.free || option.name === need.resource ? option.resource_name : t('staff.resources.busy').replace('{0}', option.resource_name)}
+                    {option.free || option.name === need.resource
+                      ? (option.capacity ?? 1) > 1
+                        ? t('staff.resources.unitsLeft').replace('{0}', option.resource_name).replace('{1}', String(option.left ?? 0))
+                        : option.resource_name
+                      : t('staff.resources.busy').replace('{0}', option.resource_name)}
                   </option>
                 ))}
               </NativeSelect>

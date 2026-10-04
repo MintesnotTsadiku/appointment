@@ -542,6 +542,23 @@ def for_booking(booking):
     return dict(needs=result, can_change=doc.status in ("Pending", "Confirmed"), modified=str(doc.modified))
 
 
+@frappe.whitelist()
+def bookable(service):
+    """Rooms or machines staff can book for a service booked without staff."""
+    doc = frappe.get_doc("Service", service)
+    _require_reader(doc.organization)
+    if not doc.get("resource_only") or not needs(doc):
+        return []
+    rows = frappe.get_all(
+        "Resource", filters={"organization": doc.organization, "resource_type": needs(doc)[0].resource_type, "is_active": 1},
+        fields=["name", "resource_name", "location", "capacity"], order_by="resource_name asc",
+    )
+    titles = dict(frappe.get_all("Location", filters={"name": ["in", [r.location for r in rows] or [""]]}, fields=["name", "location_name"], as_list=True))
+    for row in rows:
+        row["location_name"] = titles.get(row.location, row.location)
+    return rows
+
+
 @frappe.whitelist(methods=["POST"])
 def set_resource(booking, resource_type, resource, expected_modified=None):
     doc = frappe.get_doc("Appointment", booking)

@@ -1,7 +1,7 @@
 ---
 tags: [plan, appointment, scheduling, resources]
 created: 2026-10-04
-status: decided 2026-10-04; building
+status: built and verified 2026-10-04
 ---
 
 # Counted pools and resource-only bookings plan
@@ -90,3 +90,63 @@ status: decided 2026-10-04; building
 ## Out of scope
 
 The customer choosing a quantity (party size), per-resource hours, a separate resource calendar, resource utilization in Insights, walk-ins for resource-only services, and businesses with no staff at all (service creation still needs a provider).
+
+## Run record
+
+### What was built
+
+- Fields: `Resource.capacity`, `Service Resource Need.units`, `Appointment Resource.units`, `Service.resource_only`, `EventType.resource`. `EventType.provider` and `Appointment.provider` are now optional. Backup `20261004_151650` was taken before the migrate.
+- `resources.py`:
+  - `usage` counts the units held per resource, and a block fills the resource. `allocate` and `available` fit units within the count.
+  - Reception's view shows the units left for the booking.
+  - `sync_offerings` keeps one offering per room. `bookable` lists the rooms for reception.
+  - Saving a resource re-syncs the services that use its type. Lowering a count, like turning a resource off, is refused while upcoming bookings hold it.
+- `booking.py`:
+  - `offering()` accepts a resource-only offering (`provider` None). `lock_offering` uses the resource as the lock anchor.
+  - Hours, notice, capacity, `book`, `slots` and `change` all work without a provider. Slots carry the room's name.
+- The EventType controller validates resource-only offerings.
+- The public services and meeting-windows endpoints label a room where a provider would be.
+- Emails hide the Provider row when there is none and list "Room or equipment".
+- Reception:
+  - Create offers a room choice for resource-only services (`resource_name`).
+  - The pre-checks for update and drag-reschedule skip bookings without a provider; booking validation covers them.
+  - Cards show the room. The edit dialog shows the room as fixed.
+- Analytics: provider utilization and top providers leave out bookings without a provider.
+- UI:
+  - Settings: "How many" on resources, with a count badge, and "Units" on service needs.
+  - The service page has the switch "Customers book it without staff". It needs one resource type, with any free one.
+  - Reception's move list shows the units left in a pool.
+  - The public summary names the provider or the room being booked.
+- Patch `import_pool_translations` imports the Amharic copy.
+
+### Found during the build
+
+- Switching an existing service to resource-only gives its upcoming staff bookings a room, by the existing rule that upcoming bookings are assigned where possible. Those bookings keep their provider. The QA fixture therefore uses a dedicated QA service, so no demo booking gets a room.
+- The public summary never showed who is booked (`currentService.provider` was never set), for staff offerings as well. It now comes from the meeting-windows response.
+- The booking-form manifest clicked "tomorrow", which fails when tomorrow is Monday (Bloom is closed). It now uses `appointment.tests.qa_days` to find the first open day.
+
+### Tests
+
+| Suite | Result |
+|---|---|
+| `appointment.tests.test_pools` | 13 passed:<br>• pools: units from one resource, room for two, a block fills the pool, cancel frees units, lowering the count is refused, units left in reception;<br>• resource-only: offerings follow the rooms and the mode, one need only, a room holds its time, a staff reschedule and a customer cancel, emails, reception create, the public list;<br>• a race over HTTP for the last units of a pool. |
+| Resources, scheduling workflows, self-service, payments, notifications, receipts, analytics maths, workspace overview | passed |
+| `npm run -s test:dom` | passed |
+
+### Agent Plane runs
+
+`appointment.tests.pools_qa_fixtures.setup` gives Bloom a QA service "Meeting room hire (QA)" booked without staff, with Room A and Room B, and a 10-unit "Dryers (QA)" pool. `cleanup` removes all of it.
+
+| Run | Manifest | Result |
+|---|---|---|
+| BQA-2026-00478 | `pools/guest.yaml` | Passed, 2 of 2 (English desktop, Amharic mobile). The service list shows a card per room. The details step names "Room A (QA)", and the booking is confirmed. |
+| BQA-2026-00479 | `pools/owner.yaml` (bloom.owner) | Passed, 2 of 2. The resources page shows the "10 units" badge. The service page shows the switch on. Reception shows the guest's booking on Room A and creates a booking on Room B. |
+| BQA-2026-00481 | `booking-form/guest.yaml` | Passed, 4 of 4, with the open-day fix. |
+
+All three runs had 0 console and 0 network errors. Database check: three bookings without a provider, two holding Room A at different times and one holding Room B, each with 1 unit. Earlier runs 00474–00477 and 00480 found a date field in reception that is a picker (the step was removed, and the date defaults to the reception day) and the Monday problem above.
+
+### Left open
+
+- The customer choosing a quantity (party size), per-resource hours, a resource calendar and resource utilization in Insights.
+- A business with no staff at all: creating a service still needs a provider.
+- The service page still shows its "Service providers" section for a resource-only service.

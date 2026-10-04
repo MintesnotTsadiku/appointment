@@ -29,6 +29,8 @@ const STATUSES = [
 
 export const EditAppointmentModal = ({ isOpen, onClose, appointment, onSuccess }: EditAppointmentModalProps) => {
   const { t } = useTranslation();
+  // A booking without a provider is a resource-only booking; its room stays as it is.
+  const resourceOnly = Boolean(appointment && !appointment.provider);
   const [draft, setDraft] = useState<EditDraft>(() => draftFrom(appointment));
   const [errors, setErrors] = useState<FieldErrors>({});
   const { call: updateAppointment, loading: updating } = useFrappePostCall('appointment.scheduler.api.desk.update_appointment');
@@ -41,7 +43,7 @@ export const EditAppointmentModal = ({ isOpen, onClose, appointment, onSuccess }
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const found = validateBooking(draft, { required: t('staff.form.required'), email: t('staff.receptionDesk.invalidEmail') });
+    const found = validateBooking(draft, { required: t('staff.form.required'), email: t('staff.receptionDesk.invalidEmail') }, { resourceOnly, resourceFixed: true });
     setErrors(found);
     if (Object.keys(found).length) return;
 
@@ -94,6 +96,7 @@ export const EditAppointmentModal = ({ isOpen, onClose, appointment, onSuccess }
         errors={errors}
         onChange={change}
         formatEmail={normalizeEmail}
+        resourceLabel={resourceOnly ? appointment.resource_names?.join(', ') || '—' : undefined}
         extra={<StatusField value={draft.status} onValueChange={(status) => change({ status })} />}
       />
     </FormDialog>

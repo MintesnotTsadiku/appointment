@@ -1984,7 +1984,16 @@
       "missingWarning": "No free {0} for this booking. Change the time or free a resource.",
       "moveTo": "Move to",
       "busy": "{0} (busy)",
-      "moved": "Booking moved to {0}"
+      "moved": "Booking moved to {0}",
+      "chooseRoom": "Choose a room or machine",
+      "capacity": "How many",
+      "capacityHint": "1 means one booking at a time. A higher number makes a pool, such as 10 dryers, that bookings share.",
+      "count": "{0} units",
+      "units": "Units",
+      "unitsLeft": "{0} ({1} left)",
+      "resourceOnly": "Customers book it without staff",
+      "resourceOnlyHint": "Each room or machine of this type becomes its own choice on the booking page, and no provider is needed.",
+      "resourceOnlyNeedsOne": "Keep exactly one resource type, with any free one, to book it without staff."
     },
     "statements": {
       "title": "Monthly statements",
@@ -2318,7 +2327,12 @@
     "locationBusiness": "The location must belong to this business.",
     "nameExists": "This location already has a resource with this name.",
     "hasBookings": "This resource has bookings. Turn it off instead.",
-    "resourceBusiness": "The resource must belong to this business."
+    "resourceBusiness": "The resource must belong to this business.",
+    "roomOrEquipment": "Room or equipment",
+    "oneTypeOnly": "A service booked without staff needs exactly one resource type.",
+    "noSpecific": "A service booked without staff offers every resource of its type; leave the specific resource empty.",
+    "unitsMin": "Units must be at least 1.",
+    "countMin": "A resource needs a count of at least 1."
   },
   "receiptServer": {
     "paymentReceipt": "Payment receipt",

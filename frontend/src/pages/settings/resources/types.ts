@@ -14,6 +14,8 @@ export interface Resource {
   location: string;
   is_active: number;
   notes?: string | null;
+  /** 1 = one booking at a time; more makes a counted pool. */
+  capacity?: number;
 }
 
 export interface ResourceLocation {

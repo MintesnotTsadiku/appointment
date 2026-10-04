@@ -1,4 +1,5 @@
 # Guests open the Bloom scheduler, reach the details form and submit it empty. Nothing is booked.
+# Picks the first open Bloom day (qa_days), not "tomorrow", which is closed on Mondays.
 app: appointment
 base_url: http://127.0.0.84:44430
 default_role: Guest
@@ -13,7 +14,7 @@ options:
   ignore_baseline_drift: true
   color_scheme: light
 fixtures:
-  provider: appointment.demo.showcase.browser_values
+  provider: appointment.tests.qa_days.browser_values
 scenarios:
 - id: form_en_desktop
   title: Service list and details form are in English (desktop); empty submit shows
@@ -45,9 +46,10 @@ scenarios:
   - action: click
     selector: :nth-match([data-qa="booking-service"], 1)
   - action: wait_for
-    selector: '[data-qa="booking-tomorrow"]'
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_open_day}"]:not([disabled])'
+    timeout_ms: 20000
   - action: click
-    selector: '[data-qa="booking-tomorrow"]'
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_open_day}"]'
   - action: wait_for
     selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
   - action: click
@@ -101,9 +103,10 @@ scenarios:
   - action: click
     selector: :nth-match([data-qa="booking-service"], 1)
   - action: wait_for
-    selector: '[data-qa="booking-tomorrow"]'
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_open_day}"]:not([disabled])'
+    timeout_ms: 20000
   - action: click
-    selector: '[data-qa="booking-tomorrow"]'
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_open_day}"]'
   - action: wait_for
     selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
   - action: click
@@ -168,9 +171,10 @@ scenarios:
   - action: click
     selector: :nth-match([data-qa="booking-service"], 1)
   - action: wait_for
-    selector: '[data-qa="booking-tomorrow"]'
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_open_day}"]:not([disabled])'
+    timeout_ms: 20000
   - action: click
-    selector: '[data-qa="booking-tomorrow"]'
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_open_day}"]'
   - action: wait_for
     selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
   - action: click
@@ -235,9 +239,10 @@ scenarios:
   - action: click
     selector: :nth-match([data-qa="booking-service"], 1)
   - action: wait_for
-    selector: '[data-qa="booking-tomorrow"]'
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_open_day}"]:not([disabled])'
+    timeout_ms: 20000
   - action: click
-    selector: '[data-qa="booking-tomorrow"]'
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_open_day}"]'
   - action: wait_for
     selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
   - action: click

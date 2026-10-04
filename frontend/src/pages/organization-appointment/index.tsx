@@ -285,6 +285,8 @@ const OrganizationAppointmentV2 = () => {
     duration: meetingDurationCards[0]?.duration || 30,
     type: "organization",
     providerCount: data.message.provider_count,
+    // Who or what is booked: the provider, or the room or machine of a service booked without staff.
+    provider: data.message.providers?.[0] ? { id: data.message.providers[0].id, name: data.message.providers[0].name, avatar: data.message.providers[0].avatar } : undefined,
     location: data.message.location, // Add location information
   } : null;
 

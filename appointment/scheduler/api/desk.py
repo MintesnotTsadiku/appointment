@@ -810,7 +810,7 @@ def get_services_list(organization: str = None):
     services = frappe.get_list(
         "Service",
         filters=filters,
-        fields=["name", "service_name", "duration", "price", "organization"],
+        fields=["name", "service_name", "duration", "price", "organization", "resource_only"],
         order_by="service_name"
     )
 

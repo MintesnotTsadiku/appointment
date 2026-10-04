@@ -53,6 +53,8 @@ export interface Service {
   service_name: string;
   duration: number;
   price?: number;
+  /** Booked without staff: the customer books a room or machine. */
+  resource_only?: number;
 }
 
 export interface Provider {
