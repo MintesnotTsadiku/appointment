@@ -84,6 +84,8 @@ def resolve_for_booking(doc):
     Email wins when email and phone match two different profiles; the phone
     match is flagged for staff as a possible duplicate.
     """
+    if not doc.organization:
+        return  # Independent providers' bookings have no business, and profiles belong to a business.
     if doc.customer:
         if frappe.db.get_value("Customer Profile", doc.customer, "organization") != doc.organization:
             frappe.throw(_("The customer belongs to another business."), frappe.PermissionError)

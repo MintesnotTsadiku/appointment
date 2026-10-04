@@ -56,6 +56,11 @@ EMAIL_QUEUE_STATUS = {"Not Sent": "Queued", "Sending": "Queued", "Sent": "Sent",
 # ---------------------------------------------------------------------------
 def on_appointment_update(doc):
     """Called from Appointment.on_update, which also runs on insert."""
+    if not doc.organization:
+        # Notification settings, templates and records belong to a business; independent
+        # providers' bookings have none yet, so they are not notified.
+        doc.flags.notification_status = "not_applicable"
+        return
     event = _event_for(doc)
     doc.flags.notification_status = queue_notification(doc, event) if event else "not_applicable"
 

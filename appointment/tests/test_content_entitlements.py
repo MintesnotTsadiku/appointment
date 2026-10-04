@@ -13,13 +13,14 @@ import frappe
 
 from appointment.content import entitlements, tenancy
 from appointment.content.entitlements import CAPABILITY_SET, DEFAULT_PLAN
+from appointment.tests import isolated_site
 
 MARKER = "CNT-"
 REQUIRED_SITE_FRAGMENT = "feat-content-publishing"
 
 
 def require_target():
-    if not frappe.conf.get("worktree_development") or (REQUIRED_SITE_FRAGMENT not in frappe.local.site and frappe.local.site not in ("meet-beta-content-fresh-a.localhost", "meet-beta-content-fresh-b.localhost")):
+    if not isolated_site.opted_in() and (not frappe.conf.get("worktree_development") or (REQUIRED_SITE_FRAGMENT not in frappe.local.site and frappe.local.site not in ("meet-beta-content-fresh-a.localhost", "meet-beta-content-fresh-b.localhost"))):
         frappe.throw(
             "This suite is restricted to the isolated content-publishing implementation site."
         )

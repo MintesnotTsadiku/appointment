@@ -9,13 +9,14 @@ import unittest
 import frappe
 
 from appointment.scheduler import membership, registration, translation, workspace
+from appointment.tests import isolated_site
 
 SETTINGS_DOCTYPE = "Appointment Registration Settings"
 MARKER = "REG-"
 
 
 def require_target():
-    if not frappe.conf.get("worktree_development") or "implement-owned-booking-slice" not in frappe.local.site:
+    if not isolated_site.opted_in() and (not frappe.conf.get("worktree_development") or "implement-owned-booking-slice" not in frappe.local.site):
         frappe.throw("This suite is restricted to the isolated owned-booking implementation site.")
 
 
@@ -182,7 +183,7 @@ class RegistrationAcceptance(unittest.TestCase):
         email = f"{self.marker.lower()}-session@example.test"
         registration.signup(email, "Session Owner", self.strong_password)
         self.created.append(("User", email))
-        base = "http://127.0.0.20:25310/api/method/"
+        base = (frappe.conf.get("host_name") or "http://127.0.0.20:25310").rstrip("/") + "/api/method/"
         with requests.Session() as session:
             session.trust_env = False
             login = session.post(base + "login", json={"usr": email, "pwd": self.strong_password}, timeout=20)
@@ -207,7 +208,7 @@ class RegistrationAcceptance(unittest.TestCase):
         self._set(self_signup_mode="Open", require_admin_approval=0)
         registration.signup(email, "Other Session", self.strong_password)
         self.created.append(("User", email))
-        base = "http://127.0.0.20:25310/api/method/"
+        base = (frappe.conf.get("host_name") or "http://127.0.0.20:25310").rstrip("/") + "/api/method/"
         with requests.Session() as session:
             session.trust_env = False
             self.assertEqual(session.post(base + "login", json={"usr": email, "pwd": self.strong_password}, timeout=20).status_code, 200)

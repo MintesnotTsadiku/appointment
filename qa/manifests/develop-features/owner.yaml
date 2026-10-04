@@ -1,0 +1,192 @@
+# Run appointment.tests.develop_features_qa_fixtures.setup first and cleanup afterwards.
+# Develop's features inside the merged staff shell: reception stages, the change reason and reception
+# state; the website, appearance and organization import pages; team invitations; personal details;
+# Insights filters; and the Journal link on a public template.
+app: appointment
+base_url: http://127.0.0.146:47800
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.develop_features_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-develop-features
+default_role: Staff
+auth:
+  type: frappe_session
+  username: bloom.owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+scenarios:
+- id: dev_owner_reception_desktop
+  title: 'Owner: reception stages, change reason and reception state (en, desktop)'
+  viewport: &desktop
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /reception?date={qa_dev_day}
+    assertions:
+    - type: network_idle
+  actions:
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{qa_dev_booking_id}"]'
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_dev_booking_id}"]'
+    key: Enter
+  - action: wait_for
+    selector: '[data-qa="booking-stages"]'
+  - action: wait_for
+    selector: '[data-qa="booking-change-reason"]'
+  - action: screenshot
+    name: dev_owner_reception_desktop-1-stages.png
+  - action: click
+    selector: '[data-qa="booking-stage-arrive"]'
+    assertions:
+    - type: network_request
+      url_contains: analytics_capture.reception_stage
+      status: 200
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_dev_booking_id}"]'
+    key: Enter
+  - action: click
+    selector: '[data-qa="booking-stage-check-in"]'
+    assertions:
+    - type: network_request
+      url_contains: analytics_capture.reception_stage
+      status: 200
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_dev_booking_id}"]'
+    key: Enter
+  - action: click
+    selector: '[data-qa="booking-stage-start"]'
+    assertions:
+    - type: network_request
+      url_contains: analytics_capture.reception_stage
+      status: 200
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_dev_booking_id}"]'
+    key: Enter
+  - action: click
+    selector: '[data-qa="booking-stage-end"]'
+    assertions:
+    - type: network_request
+      url_contains: analytics_capture.reception_stage
+      status: 200
+  - action: click
+    selector: '[data-qa="desk-filter-location"]'
+  - action: click
+    selector: '[role="option"]:has-text("Bole quiet styling room")'
+  - action: wait_for
+    selector: '[data-qa="reception-state"]'
+  - action: select
+    selector: '[data-qa="reception-state"]'
+    value: Open
+    assertions:
+    - type: network_request
+      url_contains: reception_state.set_state
+      status: 200
+  - action: screenshot
+    name: dev_owner_reception_desktop-2-state.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: dev_owner_settings_desktop
+  title: 'Owner: develop settings pages, invitations and personal details (en, desktop)'
+  viewport: *desktop
+  checks: []
+  routes:
+  - path: /settings
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="settings-website"]'
+    - type: visible_selector
+      value: '[data-qa="settings-appearance"]'
+    - type: visible_selector
+      value: '[data-qa="settings-organization-import"]'
+  actions:
+  - action: screenshot
+    name: dev_owner_settings_desktop-1-hub.png
+    full_page: true
+  - action: open_url
+    url: /settings/website
+  - action: wait_for
+    selector: '[data-page="website-setup"]'
+  - action: wait_for
+    selector: '[data-qa="staff-shell"]'
+  - action: screenshot
+    name: dev_owner_settings_desktop-2-website.png
+  - action: open_url
+    url: /settings/appearance
+  - action: wait_for
+    selector: '.internal-appearance'
+  - action: screenshot
+    name: dev_owner_settings_desktop-3-appearance.png
+  - action: open_url
+    url: /settings/organization-import
+  - action: wait_for
+    selector: '[data-page="organization-import"]'
+  - action: screenshot
+    name: dev_owner_settings_desktop-4-import.png
+  - action: open_url
+    url: /settings/team
+  - action: wait_for
+    selector: '[data-qa="team-invite-form"]'
+  - action: fill
+    selector: '[data-qa="team-invite-name"]'
+    value: QA Develop Invitee
+  - action: fill
+    selector: '[data-qa="team-invite-email"]'
+    value: qa-dev-invitee@example.test
+  - action: click
+    selector: '[data-qa="team-invite-send"]'
+    assertions:
+    - type: network_request
+      url_contains: staff_invitations.invite
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="team-invitation"][data-qa-state="Pending"]'
+  - action: screenshot
+    name: dev_owner_settings_desktop-5-invitation.png
+    full_page: true
+  - action: open_url
+    url: /settings/profile
+  - action: wait_for
+    selector: '[data-qa="account-details"] input#account-first_name:not([disabled])'
+  - action: click
+    selector: '[data-qa="account-details-save"]'
+    assertions:
+    - type: network_request
+      url_contains: account.save
+      status: 200
+  - action: screenshot
+    name: dev_owner_settings_desktop-6-profile.png
+    full_page: true
+  - action: open_url
+    url: /analytics
+  - action: wait_for
+    selector: '[data-qa="analytics-export"]'
+  - action: screenshot
+    name: dev_owner_settings_desktop-7-insights.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: dev_public_journal_desktop
+  title: 'Guest view: the published template links its Journal and Gallery (en, desktop)'
+  viewport: *desktop
+  checks: []
+  routes:
+  - path: /bloom-studio
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: 'a[href="/bloom-studio/blog"]'
+  actions:
+  - action: screenshot
+    name: dev_public_journal_desktop-1-site.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors

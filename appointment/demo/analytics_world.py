@@ -154,6 +154,9 @@ def historical_bookings(state):
                                           showcase.CLIENTS[0], 'guest1@example.test', request)
                     name = showcase.remember(state, 'Appointment', result['booking_id'])
                     row = frappe.get_doc('Appointment',name)
+                    # The booking created this profile only when it is the profile's first booking.
+                    if row.customer and frappe.db.count('Appointment', {'customer': row.customer}) == 1:
+                        showcase.remember(state, 'Customer Profile', row.customer)
                     row.status='Completed'
                     row.save(ignore_permissions=True)
                     frappe.db.set_value('Appointment',name,appointment_values(row,index),update_modified=False)

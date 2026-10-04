@@ -5,10 +5,11 @@ from pathlib import Path
 
 import frappe
 from frappe.utils import add_days, nowdate
+from appointment.tests import isolated_site
 
 
 def require_target():
-    if not frappe.conf.get("worktree_development") or ("implement-owned-booking-slice" not in frappe.local.site and frappe.local.site not in ("meet-beta-content-fresh-b.localhost", "meet-beta-feat-content-publishing-galler-5839d4.localhost")):
+    if not isolated_site.opted_in() and (not frappe.conf.get("worktree_development") or ("implement-owned-booking-slice" not in frappe.local.site and frappe.local.site not in ("meet-beta-content-fresh-b.localhost", "meet-beta-feat-content-publishing-galler-5839d4.localhost"))):
         frappe.throw("This suite is restricted to the isolated owned-booking implementation site.")
 
 
@@ -342,7 +343,7 @@ def prepare_review_demo():
             dict(
                 username=user.name,
                 password=password,
-                base_url="http://127.0.0.20:25310",
+                base_url=(frappe.conf.get("host_name") or "http://127.0.0.20:25310").rstrip("/"),
                 business=row,
                 booking=result["booking_id"],
                 date=day,

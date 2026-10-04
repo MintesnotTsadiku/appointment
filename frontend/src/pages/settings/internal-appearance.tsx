@@ -13,7 +13,7 @@ function RadioCards({ label, choices, value, change, disabled }: { label: string
     const next = event.key === 'Home' ? 0 : event.key === 'End' ? choices.length - 1 : (index + (['ArrowLeft','ArrowUp'].includes(event.key) ? -1 : 1) + choices.length) % choices.length;
     change(choices[next].key);
     (event.currentTarget.parentElement?.children[next] as HTMLElement)?.focus();
-  }}><strong>{choice.label}</strong>{choice.description && <small>{choice.description}</small>}{label === 'Application palette' && <span className="internal-swatches">{(() => { const palette = palettes.find(row => row.key === choice.key)!; return [palette.canvas,palette.accent,palette.dark].map(color => <i key={color} style={{background:color}}/>); })()}</span>}{label === 'Typography' && <span style={{display:'block',marginTop:'.5rem',fontFamily:fontFamilies[choice.key as Appearance['typography']]}}>Welcome · እንኳን ደህና መጡ</span>}</button>)}</div></>;
+  }}><strong>{choice.label}</strong>{choice.description && <small>{choice.description}</small>}{label === 'Application palette' && <span className="internal-swatches">{(() => { const palette = palettes.find(row => row.key === choice.key)!; return [palette.canvas,palette.accent,palette.dark].map((color, slot) => <i key={slot} style={{background:color}}/>); })()}</span>}{label === 'Typography' && <span style={{display:'block',marginTop:'.5rem',fontFamily:fontFamilies[choice.key as Appearance['typography']]}}>Welcome · እንኳን ደህና መጡ</span>}</button>)}</div></>;
 }
 export default function InternalAppearance() {
   const { appearance, savedAppearance, previewAppearance, cancelAppearance, saveAppearance, saving, isLoadingColors, appearanceError, resolvedTheme } = useTheme();

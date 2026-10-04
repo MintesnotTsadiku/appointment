@@ -17,13 +17,14 @@ from appointment.content.sanitize import (
     safe_url,
     sanitize_html,
 )
+from appointment.tests import isolated_site
 
 MARKER = "REL-"
 REQUIRED_SITE_FRAGMENT = "feat-content-publishing"
 
 
 def require_target():
-    if not frappe.conf.get("worktree_development") or (REQUIRED_SITE_FRAGMENT not in frappe.local.site and frappe.local.site != "meet-beta-content-fresh-b.localhost"):
+    if not isolated_site.opted_in() and (not frappe.conf.get("worktree_development") or (REQUIRED_SITE_FRAGMENT not in frappe.local.site and frappe.local.site != "meet-beta-content-fresh-b.localhost")):
         frappe.throw("This suite is restricted to the isolated content-publishing implementation site.")
 
 

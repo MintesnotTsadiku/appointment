@@ -17,14 +17,15 @@ from frappe.utils.password import update_password
 
 from appointment.helpers.utils import format_ethiopian_time, format_time_in_user_format
 from appointment.scheduler import booking
+from appointment.tests import isolated_site
 
-BASE = "http://127.0.0.20:25310"
+BASE = (frappe.conf.get("host_name") or "http://127.0.0.20:25310").rstrip("/")
 MARKER = "MEM-"
 DAYS = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
 
 
 def require_target():
-    if not frappe.conf.get("worktree_development") or "implement-owned-booking-slice" not in frappe.local.site:
+    if not isolated_site.opted_in() and (not frappe.conf.get("worktree_development") or "implement-owned-booking-slice" not in frappe.local.site):
         frappe.throw("This suite is restricted to the isolated owned-booking implementation site.")
 
 

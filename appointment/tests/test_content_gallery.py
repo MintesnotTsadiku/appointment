@@ -14,13 +14,14 @@ import frappe
 
 from appointment.content import entitlements, gallery, releases
 from appointment.content.gallery import MediaSafetyError
+from appointment.tests import isolated_site
 
 MARKER = "GAL-"
 REQUIRED_SITE_FRAGMENT = "feat-content-publishing"
 
 
 def require_target():
-    if not frappe.conf.get("worktree_development") or REQUIRED_SITE_FRAGMENT not in frappe.local.site:
+    if not isolated_site.opted_in() and (not frappe.conf.get("worktree_development") or REQUIRED_SITE_FRAGMENT not in frappe.local.site):
         frappe.throw("This suite is restricted to the isolated content-publishing implementation site.")
 
 
