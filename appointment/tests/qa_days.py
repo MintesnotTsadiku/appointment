@@ -13,11 +13,16 @@ from appointment.tests import demo_offerings
 FIRST_OFFERING = demo_offerings.wash_hanna()  # Wash and finish, Hanna: the first card on Bloom's page
 
 
-def browser_values(manifest=None):
-    values = showcase.browser_values(manifest)
+def open_day(offering=None):
+    """The first day from tomorrow on where the offering has an open time."""
     for offset in range(1, 14):
         day = add_days(nowdate(), offset)
-        if any(slot["available"] for slot in booking.slots(FIRST_OFFERING, day)["all_available_slots_for_data"]):
-            values["qa_open_day"] = str(day)
-            break
+        if any(slot["available"] for slot in booking.slots(offering or FIRST_OFFERING, day)["all_available_slots_for_data"]):
+            return str(day)
+    return ""
+
+
+def browser_values(manifest=None):
+    values = showcase.browser_values(manifest)
+    values["qa_open_day"] = open_day()
     return values

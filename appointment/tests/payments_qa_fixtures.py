@@ -10,6 +10,7 @@ import frappe
 from frappe.utils import add_days, nowdate
 
 from appointment.demo import showcase
+from appointment.tests import qa_days
 
 ORG = "Bole Bloom Hair Studio"
 POLICY_NAME = "QA payments booking fee"
@@ -36,10 +37,13 @@ def setup():
 
 def browser_values(manifest=None):
     values = showcase.browser_values(manifest)
+    values["qa_open_day"] = qa_days.open_day()
     for lang, size in COMBOS:
-        values[f"qa_pay_{lang}_{size}_id"] = frappe.db.get_value(
+        name = frappe.db.get_value(
             "Appointment", {"client_email": f"qa-pay-{lang}-{size}@example.test"}, "name", order_by="creation desc"
-        ) or ""
+        )
+        values[f"qa_pay_{lang}_{size}_id"] = name or ""
+        values[f"qa_pay_{lang}_{size}_day"] = str(frappe.db.get_value("Appointment", name, "appointment_date")) if name else ""
     return values
 
 

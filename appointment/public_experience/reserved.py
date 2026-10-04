@@ -28,6 +28,8 @@ RESERVED_ROOT_PATHS = frozenset(
         "settings",
         "admin",
         "reception",
+        "customers",
+        "forgot-password",
         "schedule",
         "preview",
         "tasks",

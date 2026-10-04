@@ -26,6 +26,7 @@ def browser_values(manifest=None):
     for index, (key, email) in enumerate(GUESTS.items()):
         doc = _latest_open_booking(email)
         values[f"{key}_booking"] = doc.name if doc else ""
+        values[f"{key}_day"] = str(doc.appointment_date) if doc else ""
         values[f"{key}_new_time"] = _later_free_time(doc, index) if doc else ""
     return values
 

@@ -38,9 +38,9 @@ scenarios:
   - action: click
     selector: :nth-match([data-qa="booking-service"], 1)
   - action: wait_for
-    selector: '[data-qa="booking-tomorrow"]'
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_open_day}"]'
   - action: click
-    selector: '[data-qa="booking-tomorrow"]'
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_open_day}"]'
   - action: wait_for
     selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
   - action: click
@@ -118,9 +118,9 @@ scenarios:
   - action: click
     selector: :nth-match([data-qa="booking-service"], 1)
   - action: wait_for
-    selector: '[data-qa="booking-tomorrow"]'
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_open_day}"]'
   - action: click
-    selector: '[data-qa="booking-tomorrow"]'
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_open_day}"]'
   - action: wait_for
     selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
   - action: click
@@ -204,9 +204,9 @@ scenarios:
   - action: click
     selector: :nth-match([data-qa="booking-service"], 1)
   - action: wait_for
-    selector: '[data-qa="booking-tomorrow"]'
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_open_day}"]'
   - action: click
-    selector: '[data-qa="booking-tomorrow"]'
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_open_day}"]'
   - action: wait_for
     selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
   - action: click
@@ -283,9 +283,9 @@ scenarios:
   - action: click
     selector: :nth-match([data-qa="booking-service"], 1)
   - action: wait_for
-    selector: '[data-qa="booking-tomorrow"]'
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_open_day}"]'
   - action: click
-    selector: '[data-qa="booking-tomorrow"]'
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_open_day}"]'
   - action: wait_for
     selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
   - action: click

@@ -52,6 +52,10 @@ def browser_values(manifest=None):
             name = frappe.db.get_value("Appointment", {"client_email": EMAIL.format(kind=kind, lang=lang, size=size)}, "name")
             values[f"qa_manage_{kind}_{lang}_{size}"] = _path(name) if name else ""
             values[f"qa_manage_{kind}_{lang}_{size}_id"] = name or ""
+            values[f"qa_manage_{kind}_{lang}_{size}_day"] = str(frappe.db.get_value("Appointment", name, "appointment_date")) if name else ""
+    from appointment.tests import qa_days
+
+    values["qa_open_day"] = qa_days.open_day(FREE_OFFERING)
     values["qa_manage_invalid"] = "/bloom-studio/booking/APT-0000.0.00000000000000000000000000000000"
     return values
 

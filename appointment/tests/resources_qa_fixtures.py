@@ -77,6 +77,7 @@ def browser_values(manifest=None):
     chairs = dict(frappe.get_all("Resource", filters={"resource_type": kind or ""}, fields=["resource_name", "name"], as_list=True))
     values["qa_res_chair_a"] = chairs.get("Quiet chair A", "")
     values["qa_res_chair_b"] = chairs.get("Quiet chair B", "")
+    values["qa_res_service"] = frappe.db.get_value("EventType", RAHEL, "service") or ""
     name = frappe.db.get_value("Appointment", {"client_email": EMAIL}, "name")
     values["qa_res_booking_id"] = name or ""
     if name:

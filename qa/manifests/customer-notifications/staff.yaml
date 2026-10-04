@@ -24,14 +24,12 @@ scenarios:
     height: 900
   checks: []
   routes:
-  - path: /reception
+  - path: /reception?date={qa_notify_en_desktop_day}
     assertions:
     - type: network_idle
     - type: visible_selector
       value: '[data-qa="desk-next-day"]'
   actions:
-  - action: click
-    selector: '[data-qa="desk-next-day"]'
   - action: wait_for
     selector: '[data-qa-appointment-name="{qa_notify_en_desktop_booking}"]'
   - action: press
@@ -98,14 +96,12 @@ scenarios:
     height: 844
   checks: []
   routes:
-  - path: /reception
+  - path: /reception?date={qa_notify_en_mobile_day}
     assertions:
     - type: network_idle
     - type: visible_selector
       value: '[data-qa="desk-next-day"]'
   actions:
-  - action: click
-    selector: '[data-qa="desk-next-day"]'
   - action: wait_for
     selector: '[data-qa-appointment-name="{qa_notify_en_mobile_booking}"]'
   - action: press
@@ -168,7 +164,7 @@ scenarios:
   viewport: *id005
   checks: []
   routes:
-  - path: /reception
+  - path: /reception?date={qa_notify_am_desktop_day}
     assertions:
     - type: network_idle
     - type: visible_selector
@@ -182,8 +178,6 @@ scenarios:
     - type: network_request
       url_contains: appointment.scheduler.translation
       status: 200
-  - action: click
-    selector: '[data-qa="desk-next-day"]'
   - action: wait_for
     selector: '[data-qa-appointment-name="{qa_notify_am_desktop_booking}"]'
   - action: press
@@ -247,15 +241,13 @@ scenarios:
   viewport: *id008
   checks: []
   routes:
-  - path: /reception
+  - path: /reception?date={qa_notify_am_mobile_day}
     assertions:
     - type: network_idle
     - type: visible_selector
       value: '[data-qa="desk-next-day"]'
   actions:
   - *id007
-  - action: click
-    selector: '[data-qa="desk-next-day"]'
   - action: wait_for
     selector: '[data-qa-appointment-name="{qa_notify_am_mobile_booking}"]'
   - action: press

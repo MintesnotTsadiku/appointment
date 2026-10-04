@@ -33,6 +33,10 @@ assert.equal(routesModule.isPublicExperiencePath("/demo-clinic/other/APT-1.0.abc
 assert.equal(routesModule.isPublicExperiencePath("/settings/booking/x"), false);
 assert.equal(routesModule.isPublicExperiencePath("/demo-clinic/my-bookings"), true);
 assert.equal(routesModule.isPublicExperiencePath("/settings/my-bookings"), false);
+// Staff routes must never be mistaken for a business slug: that would switch off the staff session.
+for (const staffPath of ["/customers", "/customers/CP-1", "/forgot-password"]) {
+  assert.equal(routesModule.isPublicExperiencePath(staffPath), false, staffPath);
+}
 assert.equal(routesModule.isPublicExperiencePath("/settings/public-experience"), false);
 assert.equal(routesModule.isPublicExperiencePath("/app"), false);
 assert.equal(routesModule.isPublicExperiencePath("/"), false);
