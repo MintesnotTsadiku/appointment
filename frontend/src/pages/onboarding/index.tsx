@@ -9,10 +9,12 @@ import { useSession } from '@/context/session';
 import { useTranslation } from '@/lib/i18n';
 import { parseFrappeErrorMsg } from '@/lib/utils';
 import { validateWindow, type ClockFormat } from '@/lib/time';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/tabs';
 import { BusinessSection, ServiceSection } from './DetailSections';
 import { HoursSection } from './HoursSection';
 import { DAYS, type SetupForm } from './types';
 import { OnboardingSuccess, type CreatedBusiness } from './OnboardingSuccess';
+import SoloSetup from './solo-setup';
 
 export default function Onboarding() {
   const navigate = useNavigate();
@@ -24,6 +26,7 @@ export default function Onboarding() {
   const [clockFormat, setClockFormat] = useState<ClockFormat>('12h');
   const [selectedDays, setSelectedDays] = useState(DAYS.slice(0, 5));
   const [problem, setProblem] = useState('');
+  const [structure, setStructure] = useState('organization');
   const [done, setDone] = useState<CreatedBusiness | null>(null);
   const [form, setForm] = useState<SetupForm>({
     business_name: '',
@@ -86,32 +89,43 @@ export default function Onboarding() {
       description={t('staff.onboarding.description')}
       headingQa="onboarding-heading"
     >
-      <form onSubmit={submit} className="mx-auto max-w-3xl space-y-6">
-        {problem && (
-          <Alert variant="destructive" role="alert" data-qa="onboarding-error">
-            <AlertCircle className="h-4 w-4" aria-hidden="true" />
-            <AlertDescription>{problem}</AlertDescription>
-          </Alert>
-        )}
-        <BusinessSection form={form} onChange={update} />
-        <ServiceSection form={form} onChange={update} />
-        <HoursSection
-          form={form}
-          onChange={update}
-          clockFormat={clockFormat}
-          onClockFormat={setClockFormat}
-          windowError={windowError}
-          selectedDays={selectedDays}
-          onDays={setSelectedDays}
-        />
-        <div className="flex flex-col-reverse items-stretch gap-3 border-t pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-muted-foreground">{t('staff.onboarding.privateNote')}</p>
-          <Button type="submit" data-qa="onboarding-submit" disabled={loading || Boolean(windowError)}>
-            {loading && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />}
-            {loading ? t('staff.onboarding.creating') : t('staff.onboarding.submit')}
-          </Button>
-        </div>
-      </form>
+      <Tabs value={structure} onValueChange={setStructure} className="mx-auto max-w-3xl space-y-6">
+        <TabsList aria-label={t('staff.onboarding.structure.label')} data-qa="onboarding-structure">
+          <TabsTrigger value="organization">{t('staff.onboarding.structure.organization')}</TabsTrigger>
+          <TabsTrigger value="individual">{t('staff.onboarding.structure.individual')}</TabsTrigger>
+        </TabsList>
+        <TabsContent value="individual">
+          <SoloSetup />
+        </TabsContent>
+        <TabsContent value="organization">
+          <form onSubmit={submit} className="space-y-6">
+            {problem && (
+              <Alert variant="destructive" role="alert" data-qa="onboarding-error">
+                <AlertCircle className="h-4 w-4" aria-hidden="true" />
+                <AlertDescription>{problem}</AlertDescription>
+              </Alert>
+            )}
+            <BusinessSection form={form} onChange={update} />
+            <ServiceSection form={form} onChange={update} />
+            <HoursSection
+              form={form}
+              onChange={update}
+              clockFormat={clockFormat}
+              onClockFormat={setClockFormat}
+              windowError={windowError}
+              selectedDays={selectedDays}
+              onDays={setSelectedDays}
+            />
+            <div className="flex flex-col-reverse items-stretch gap-3 border-t pt-6 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-xs text-muted-foreground">{t('staff.onboarding.privateNote')}</p>
+              <Button type="submit" data-qa="onboarding-submit" disabled={loading || Boolean(windowError)}>
+                {loading && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />}
+                {loading ? t('staff.onboarding.creating') : t('staff.onboarding.submit')}
+              </Button>
+            </div>
+          </form>
+        </TabsContent>
+      </Tabs>
     </StaffShell>
   );
 }

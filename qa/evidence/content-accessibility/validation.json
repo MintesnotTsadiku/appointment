@@ -1,0 +1,135 @@
+{
+  "run": "BQA-2026-00160",
+  "source_version": "1e22e48+source-e3b0c44298fc+qa-c569997a14d1",
+  "scenario_summary": {
+    "failed": 0,
+    "flaky": 0,
+    "passed": 10,
+    "skipped": 0,
+    "total": 10
+  },
+  "artifacts": [
+    {
+      "file": "abugida-desktop-light-gates.json",
+      "sha256": "cad2433ca64c84753051be0b3efbbc799bf57d7f049bd1692897ebf6b328576a"
+    },
+    {
+      "file": "selam-mobile-dark-gates.json",
+      "sha256": "1b31b66ad347984ff840c70600860a6199fb31c34a2cd1dc756548df910313e4"
+    },
+    {
+      "file": "tena-desktop-light-gates.json",
+      "sha256": "fca4f1365b0d0afef90cb08f89896861a0d7ea1b2e448d279f56bea39a0b9857"
+    },
+    {
+      "file": "bloom-mobile-dark-gates.json",
+      "sha256": "c9853cb595954f7223f07c48886bd8825f70274f5a731b77495df9d286eb54bb"
+    },
+    {
+      "file": "selam-desktop-light-gates.json",
+      "sha256": "c6de34d7d69a45eeb51a4cf320f4deac1c03fa407df8ec6eb8ebb7f5f20bb931"
+    },
+    {
+      "file": "meron-mobile-dark-gates.json",
+      "sha256": "46d2c1f8d18808cf127d9ab840a3c6155de14a9b19e6014b07cbf0e5ab20848a"
+    },
+    {
+      "file": "meron-desktop-light-gates.json",
+      "sha256": "51e566ecc79ceff741ffd1bdeeec586f1a1dea76c54fc4c6ba18ed2384825b53"
+    },
+    {
+      "file": "tena-mobile-dark-gates.json",
+      "sha256": "e3a2a492a609365b444c9b7a80a9b8d9c457379555d1e7d7974093d102b8392c"
+    },
+    {
+      "file": "bloom-desktop-light-gates.json",
+      "sha256": "a2654bace74876f6e54d96695b1afb30e132f15585b7e79f19a85ac78a56a0b6"
+    },
+    {
+      "file": "abugida-mobile-dark-gates.json",
+      "sha256": "3d0ecb4686ecdf4f32b41743f912ca57c895b1b85c7b7bee1bc2a5a565602902"
+    },
+    {
+      "file": "content-accessibility-gates-abugida-desktop-light/abugida-desktop-light-gates.png",
+      "sha256": "e25466019766337106c0fe48095048f17308718b30b801ad2c648d175c8eeec3"
+    },
+    {
+      "file": "content-accessibility-gates-abugida-desktop-light/abugida-desktop-light-inline-link-review.png",
+      "sha256": "837b3e0de46a77c59413024c3c5870efd617201593cc613c5b66d6aae08e9a8d"
+    },
+    {
+      "file": "content-accessibility-gates-abugida-mobile-dark/abugida-mobile-dark-gates.png",
+      "sha256": "92e3a99f842179f2912c50055ecccd4092ca863619fbccfcf72c6d7df68addb1"
+    },
+    {
+      "file": "content-accessibility-gates-abugida-mobile-dark/abugida-mobile-dark-inline-link-review.png",
+      "sha256": "0cbb91f9ea851f84fc521a569f17d301bb91a9fcddd7a431cb996430e8fe9bc6"
+    },
+    {
+      "file": "content-accessibility-gates-bloom-desktop-light/bloom-desktop-light-gates.png",
+      "sha256": "fc8f0c41846b2ea2553a07f53461df7df7bf9480899842635f655a9e3ea4ad45"
+    },
+    {
+      "file": "content-accessibility-gates-bloom-desktop-light/bloom-desktop-light-inline-link-review.png",
+      "sha256": "7a58cc4877efbf46b2dcbc798b6857f0af408b6966d3bf4637fcee76aba7ba1d"
+    },
+    {
+      "file": "content-accessibility-gates-bloom-mobile-dark/bloom-mobile-dark-gates.png",
+      "sha256": "2064f239c4e2ff24b698e5db47ed96faeb4e376b378f183954439a49906d596e"
+    },
+    {
+      "file": "content-accessibility-gates-bloom-mobile-dark/bloom-mobile-dark-inline-link-review.png",
+      "sha256": "a85b94836ca267227cd78daea98ce959d408d9abd9167efec488554f21ac0650"
+    },
+    {
+      "file": "content-accessibility-gates-meron-desktop-light/meron-desktop-light-gates.png",
+      "sha256": "1e0cf334dee67cde7191784dde7c8ff44410c31e5b5f367bf076e6eae9fae32f"
+    },
+    {
+      "file": "content-accessibility-gates-meron-desktop-light/meron-desktop-light-inline-link-review.png",
+      "sha256": "854d6477b2f20289d16b9034cbd7393b4478b4cfddbfd676976a9a65f693bb29"
+    },
+    {
+      "file": "content-accessibility-gates-meron-mobile-dark/meron-mobile-dark-gates.png",
+      "sha256": "b904cf97bcd643d290d289162ef9151685b92a6f9ce245b08a4193c961b932cb"
+    },
+    {
+      "file": "content-accessibility-gates-meron-mobile-dark/meron-mobile-dark-inline-link-review.png",
+      "sha256": "6b3c681c957d349955e3749c23e97657ffe23df3f1c607212a00c9a78d400300"
+    },
+    {
+      "file": "content-accessibility-gates-selam-desktop-light/selam-desktop-light-gates.png",
+      "sha256": "09e3bb0f75dffdeb66e7247234010a72260d2046c297baa92628839aff60f4e8"
+    },
+    {
+      "file": "content-accessibility-gates-selam-desktop-light/selam-desktop-light-inline-link-review.png",
+      "sha256": "9a8ba3bd6ee3cbc6a42f0745ece9b229986b574eb37a64625520293c9203189d"
+    },
+    {
+      "file": "content-accessibility-gates-selam-mobile-dark/selam-mobile-dark-gates.png",
+      "sha256": "c5efbf64c3249abc674ae7040fe6d869cbd8ced1abb2c9b06efad70d9c12239f"
+    },
+    {
+      "file": "content-accessibility-gates-selam-mobile-dark/selam-mobile-dark-inline-link-review.png",
+      "sha256": "ef18c591f70f1f8413058719c1ca43ae86d1fd98a107cd7fcd73d9f37a94ec78"
+    },
+    {
+      "file": "content-accessibility-gates-tena-desktop-light/tena-desktop-light-gates.png",
+      "sha256": "8870220b7b840a73b59c4b2bf2a14d9162d61326adbc8e3e3c5d0ca68b49f027"
+    },
+    {
+      "file": "content-accessibility-gates-tena-desktop-light/tena-desktop-light-inline-link-review.png",
+      "sha256": "f19cb69ee070cd425c84a24df7df1bf9f9e4aef8094e7bb6344590762d5fa87c"
+    },
+    {
+      "file": "content-accessibility-gates-tena-mobile-dark/tena-mobile-dark-gates.png",
+      "sha256": "650bd5f30173bfb9881409d2ecb5c9d42c0d8f4ae98eeecbbd2f8e73f23398a4"
+    },
+    {
+      "file": "content-accessibility-gates-tena-mobile-dark/tena-mobile-dark-inline-link-review.png",
+      "sha256": "a7b74598fb2cea4932d059bb804427237737dcd0f728f5d485c177f14d08765b"
+    }
+  ],
+  "engine": "axe-core 4.11.0",
+  "scope": "Seventy compiled-production public surfaces: automated WCAG A/AA checks, keyboard traversal, local largest paint and layout stability budgets. Incomplete checks require manual review; this does not certify full accessibility or remote network performance."
+}

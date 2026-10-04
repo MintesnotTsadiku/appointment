@@ -1,0 +1,22 @@
+{
+  "candidate_revision": "a836ea3f1356ed171e71570bc7e00f567f172dbd",
+  "rollback_revision": "1ae60d37c95ba50d81e3b7e7a00af44f7585d22a",
+  "rollback_parent": "ef9c42ae0fe93e818616e7e78e4f702de4d70b2f",
+  "rollback_archive_sha256": "7feb8dff75406db35fc69ec0cfed39c2ac5d7dfc5bd3da3adba2cf2f896bcd19",
+  "rollback_entry_sha256": "84d0b7dad10693294bcfd48aad864f8047f6a79ca56297866bec0256c13c9336",
+  "backend_uses_exact_rollback_archive": true,
+  "gateway_uses_exact_rollback_assets": true,
+  "retained_schema": true,
+  "working_checkout_preserved": true,
+  "scope": "Mechanical code compatibility against retained restored schema. Rollback includes the maintained production CSRF backport; older security controls are not a deployment recommendation.",
+  "candidate_restored": true,
+  "candidate_backend_import_verified": true,
+  "rollback_launch_state_removed": true,
+  "candidate_entry_sha256": "f2c9bd937edd9367de9acc5efeb8253c0fc8be5d40d962b0fa25f0498a4f9760",
+  "candidate_suite_revision": "f4260d0f14e2ce89b966ddc6941bfbd73f565bf7",
+  "upgraded_captures_match_original_candidate": 16,
+  "strict_candidate_run": "BQA-2026-03005",
+  "strict_rollback_run": "BQA-2026-03008",
+  "strict_upgrade_run": "BQA-2026-03010",
+  "upgrade_matches_candidate_capture_count": 16
+}

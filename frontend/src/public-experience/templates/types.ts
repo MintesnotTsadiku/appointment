@@ -17,8 +17,14 @@ export interface BookingTemplateProps extends TemplateProps {
   bookingPath?: string | null;
 }
 
+export interface ContentTemplateProps extends TemplateProps {
+  content: import("../contentContract").ContentState;
+  contentRoot: string;
+}
+
 export interface PublicTemplatePackage {
   key: string;
   Site: ComponentType<TemplateProps>;
   Booking: ComponentType<BookingTemplateProps>;
+  Content: ComponentType<ContentTemplateProps>;
 }

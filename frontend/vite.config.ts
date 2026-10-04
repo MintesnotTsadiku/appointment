@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 import { defineConfig, loadEnv } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
-export default defineConfig(({ command, mode }) => {
+export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const isolated = process.env.FRAPPE_WORKTREE_SITE;
   let proxyConfig = {};
@@ -50,13 +50,14 @@ export default defineConfig(({ command, mode }) => {
           // Frappe renders this block in production; Vite must not serve Jinja
           // expressions as JavaScript. Auth in development uses the API session.
           return html.replace(
-            /<script data-frappe-boot>[\s\S]*?<\/script>/,
+            /<script data-frappe-boot[^>]*>[\s\S]*?<\/script>/,
             '<script>window.frappe = window.frappe || {};</script>',
           );
         },
       },
       VitePWA({
         registerType: "autoUpdate",
+        scope: "/",
         includeAssets: ["favicon.ico", "apple-touch-icon.png", "masked-icon.svg"],
         
         // Web App Manifest
@@ -170,33 +171,22 @@ export default defineConfig(({ command, mode }) => {
         
         // Service Worker Configuration
         workbox: {
-          // CRITICAL FIX #4: Navigation fallback with denylist for Frappe routing
-          // Updated to work on all routes, not just /schedule/
-          // In production, HTML is at /schedule/index.html, in dev it's at root
-          navigateFallback: "/schedule/index.html",
-          navigateFallbackDenylist: [/^\/app/, /^\/api/, /^\/assets/, /^\/login/, /^\/files/, /^\/private/],
+          // Frappe renders session-specific HTML; no cached app-shell fallback.
+          navigateFallback: null,
+          importScripts: ["privacy-cache-cleanup.js"],
           
           // Caching strategies
           runtimeCaching: [
-            // CRITICAL FIX #1: HTML Entry point - MUST be NetworkFirst to get fresh CSRF tokens
-            // Updated to work on all routes (home, calendar, settings, etc.)
+            // Session boot and consent links must never survive in a browser cache.
             {
-              urlPattern: ({ request, url }) => {
-                // Match all navigation requests except excluded paths
-                const excluded = /^\/(app|api|assets|login|files|private)/;
-                return request.mode === "navigate" && !excluded.test(url.pathname);
-              },
-              handler: "NetworkFirst",
-              options: {
-                cacheName: "html-cache",
-                networkTimeoutSeconds: 3, // Wait 3s for network, then fall back to cache
-                expiration: {
-                  maxEntries: 10,
-                  maxAgeSeconds: 60 * 60 * 24 // 1 day (but NetworkFirst ensures fresh tokens)
-                }
-              }
+              urlPattern: ({ request }) => request.mode === "navigate",
+              handler: "NetworkOnly",
             },
-            
+            {
+              urlPattern: /\/api\//i,
+              handler: "NetworkOnly",
+            },
+
             // Static assets (images, fonts, etc.)
             {
               urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -253,68 +243,13 @@ export default defineConfig(({ command, mode }) => {
               }
             },
             
-            // CRITICAL FIX #2: Volatile Data (Time Slots/Availability) - Network Only or very short cache
-            {
-              urlPattern: /\/api\/method\/appointment\.(scheduler|booking|availability)\..*(slot|availability|time)/i,
-              handler: "NetworkOnly",
-              options: {
-                // No caching for availability slots to prevent double-booking
-                // Always fetch fresh data from network
-              }
-            },
-            
-            // Static Data (Services, Locations, Providers) - Can cache longer
-            {
-              urlPattern: /\/api\/method\/appointment\.(scheduler|booking)\..*(service|location|provider|group)/i,
-              handler: "NetworkFirst",
-              options: {
-                cacheName: "static-data-cache",
-                networkTimeoutSeconds: 10,
-                expiration: {
-                  maxEntries: 50,
-                  maxAgeSeconds: 60 * 60 // 1 hour (static data changes less frequently)
-                },
-                cacheableResponse: {
-                  statuses: [0, 200]
-                }
-              }
-            },
-            
-            // General API calls - Network first with cache fallback (short duration)
-            {
-              urlPattern: /\/api\/method\/appointment\..*/i,
-              handler: "NetworkFirst",
-              options: {
-                cacheName: "api-cache",
-                networkTimeoutSeconds: 10,
-                expiration: {
-                  maxEntries: 50,
-                  maxAgeSeconds: 60 * 5 // 5 minutes (reduced from 1 hour)
-                },
-                cacheableResponse: {
-                  statuses: [0, 200]
-                }
-              }
-            },
-            
-            // Schedule pages - Stale while revalidate (for better UX)
-            {
-              urlPattern: /\/schedule\/.*/i,
-              handler: "StaleWhileRevalidate",
-              options: {
-                cacheName: "schedule-pages-cache",
-                expiration: {
-                  maxEntries: 20,
-                  maxAgeSeconds: 60 * 60 * 24 // 1 day
-                }
-              }
-            }
           ],
           
           // Files to precache (available offline immediately)
           globPatterns: [
             "**/*.{js,css,html,ico,png,svg,woff,woff2}"
           ],
+          globIgnores: ["index.html", "schedule/index.html"],
           
           // Maximum cache size (in bytes)
           maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB
@@ -358,7 +293,6 @@ export default defineConfig(({ command, mode }) => {
     },
     resolve: {
       alias: {
-        // eslint-disable-next-line no-undef
         "@": path.resolve(__dirname, "./src"),
       },
     },

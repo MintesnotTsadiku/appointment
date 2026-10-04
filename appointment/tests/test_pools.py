@@ -18,9 +18,10 @@ from frappe.utils import add_days, get_datetime, nowdate
 from appointment.scheduler import booking, notification_email, resources, self_service
 from appointment.tests import test_resources as base
 from appointment.tests.test_customer_notifications import OWNER
+from appointment.tests import demo_offerings
 
 HANNA, EDEN, MAIN = base.HANNA, base.EDEN, base.MAIN
-SCALP_HANNA = "EVT-2026-000111"  # Scalp care consultation, Hanna, Bole main studio
+SCALP_HANNA = demo_offerings.scalp_hanna()  # Scalp care consultation, Hanna, Bole main studio
 ROOM_TYPE = "QA meeting room"
 
 

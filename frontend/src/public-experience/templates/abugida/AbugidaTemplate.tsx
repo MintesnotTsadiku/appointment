@@ -2,6 +2,7 @@ import type { BookingTemplateProps, TemplateProps } from "../types";
 import { action, brandLogo, contentImage, designImage, durationMinutes, formatPrice, localized, records, section } from "../content";
 import { usePublicChrome } from "../chrome";
 import "./abugida.css";
+import { AbugidaNewsletter } from "./AbugidaNewsletter";
 
 export function AbugidaSite({ snapshot, locale, applicationName, publicRoot, rootStyle, mode, toggleMode }: TemplateProps) {
   const chrome = usePublicChrome(locale);
@@ -29,7 +30,7 @@ export function AbugidaSite({ snapshot, locale, applicationName, publicRoot, roo
   return <div data-pe-root data-pe-recipe={snapshot.recipeKey} data-pe-mode={mode} className="abugida-site" data-template="abugida-language-v1" style={rootStyle}>
     <header className="abugida-nav">
       <a href={publicRoot}>{brand}</a>
-      <nav aria-label={chrome.t("navLabel")}><a href="#practice">{chrome.t("services")}</a><a href="#coaches">{chrome.t("team")}</a><a href="#contact">{chrome.t("visit")}</a></nav>
+      <nav aria-label={chrome.t("navLabel")}><a href={`${publicRoot}/blog`}>{chrome.t("journal")}</a><a href={`${publicRoot}/gallery`}>{chrome.t("gallery")}</a><a href="#practice">{chrome.t("services")}</a><a href="#coaches">{chrome.t("team")}</a><a href="#contact">{chrome.t("visit")}</a></nav>
       <button type="button" className="abugida-mode" onClick={toggleMode} aria-label={chrome.modeSwitchLabel(mode)}><span aria-hidden="true">{mode === "dark" ? "☀" : "◐"}</span>{chrome.modeName(mode)}</button>
       {primary ? <a href={primary.href}>{primary.label}</a> : null}
     </header>
@@ -66,7 +67,7 @@ export function AbugidaSite({ snapshot, locale, applicationName, publicRoot, roo
       {quote ? <section className="abugida-quote"><blockquote>“{localized(quote.quote, locale)}”<cite>{localized(quote.attribution, locale)}</cite></blockquote>{detailImage ? <img src={detailImage.src} alt="" /> : null}</section> : null}
       <section className="abugida-questions" id="faq"><div><h2>{localized(faq.title, locale)}</h2></div><div>{records(faq.items).map((item, index) => <details key={index}><summary>{localized(item.question, locale)}<span aria-hidden="true">+</span></summary><p>{localized(item.answer, locale)}</p></details>)}</div></section>
       <section className="abugida-rooms" id="contact">{locationImage ? <img src={locationImage.src} alt={locationImage.alt} /> : null}<div><h2>{localized(locations.title, locale)}</h2>{location ? <address>{localized(location.address, locale)}<br />{localized(location.hours, locale)}<br />{String(location.phone || "")}</address> : null}{finalAction ? <a className="abugida-button" href={finalAction.href}>{finalAction.label}</a> : null}</div></section>
-    </main>
+    <AbugidaNewsletter snapshot={snapshot} applicationName={applicationName} locale={locale} publicRoot={publicRoot} /></main>
     <footer className="abugida-footer"><a href={publicRoot}>{brand}</a>{localized(footer.body, locale) ? <p>{localized(footer.body, locale)}</p> : null}<small>© {new Date().getFullYear()} {applicationName}</small></footer>
   </div>;
 }

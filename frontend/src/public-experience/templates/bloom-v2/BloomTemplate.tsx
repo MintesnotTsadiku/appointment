@@ -79,7 +79,7 @@ export function BloomSite({ snapshot, locale, applicationName, publicRoot, rootS
   return <div ref={root} data-pe-root data-pe-recipe={snapshot.recipeKey} data-pe-mode={mode} data-motion={design.motion} className="bl" data-template="bloom-hair-v2" style={rootStyle}>
     <a className="bl-skip" href="#bl-main">{chrome.t("skip")}</a>
     <Bar logo={logo} name={applicationName} root={publicRoot} chrome={chrome} mode={mode} toggleMode={toggleMode}>
-      <nav aria-label={chrome.t("navLabel")} className="bl-nav">
+      <nav aria-label={chrome.t("navLabel")} className="bl-nav"><a href={`${publicRoot}/blog`}>{chrome.t("journal")}</a><a href={`${publicRoot}/gallery`}>{chrome.t("gallery")}</a>
         {menu.length ? <a href="#services">{chrome.t("services")}</a> : null}
         {stylists.length ? <a href="#team">{chrome.t("team")}</a> : null}
         {rooms.length ? <a href="#contact">{chrome.t("visit")}</a> : null}

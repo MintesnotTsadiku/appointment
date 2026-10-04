@@ -4,7 +4,11 @@ app_publisher = "minte"
 app_description = "The appointment scheduling app with team support in Frappe."
 app_email = "mtsadiku@gmail.com"
 app_license = "GNU AFFERO GENERAL PUBLIC LICENSE (v3)"
-# required_apps = []
+# Blog and Newsletter were split out of the framework in Frappe v16+. They are
+# pinned in docs/operations/content-dependencies.md. required_apps installs apps
+# already present on a Bench; the deployment manifest must fetch the pinned Git
+# repositories before installing Appointment.
+required_apps = ["blog", "newsletter"]
 
 # App Switcher Configuration
 # --------------------------
@@ -40,7 +44,10 @@ app_include_js = [
 
 # Email templates are imported after the app's doctypes exist so that the
 # Appointment Settings Link fields resolve on a fresh install.
-after_install = "appointment.tasks.import_email_templates.import_email_templates"
+after_install = [
+    "appointment.tasks.import_email_templates.import_email_templates",
+    "appointment.patches.v0_1.grant_content_doctype_permissions.execute",
+]
 
 after_sync = [
     "appointment.tasks.setup_erpnext_fields.setup_erpnext_fields",
@@ -59,6 +66,7 @@ after_migrate = [
     "appointment.tasks.import_email_templates.import_email_templates",
     # recipe manifests are code-owned; no database registry is reconciled.
     "appointment.public_experience.reconcile.ensure_public_site_unique_indexes",
+    "appointment.patches.v0_1.grant_content_doctype_permissions.execute",
 ]
 
 # include js, css files in header of web template
@@ -208,6 +216,8 @@ has_permission = {
 # Override standard doctype classes
 
 override_doctype_class = {
+    "Blog Post": "appointment.content.upstream.GovernedBlogPost",
+    "Newsletter": "appointment.content.upstream.GovernedNewsletter",
     "Booking Event": "appointment.overrides.event_override.BookingEventOverride",
     "Google Calendar": "appointment.overrides.google_calendar_override.GoogleCalendarOverride",
     "Customize Form": "appointment.overrides.customize_form_override.AppointmentOverrideCustomizeForm",
@@ -216,6 +226,8 @@ override_doctype_class = {
 # Document Events
 # ---------------
 # Hook on document methods and events
+
+extend_doctype_class = {"File": ["appointment.content.media_access.WebsiteFile"]}
 
 doc_events = {
     "Leave Application": {  # Leave Application is a doctype in HR module, which is not a requirement for this app
@@ -229,6 +241,7 @@ doc_events = {
 # ---------------
 
 scheduler_events = {
+    "cron": {"* * * * *": ["appointment.content.newsletter.campaigns.run_due"]},
     # "all": [
     # 	"appointment.tasks.all"
     # ],
@@ -272,7 +285,10 @@ scheduler_events = {
 # ------------------------------
 #
 override_whitelisted_methods = {
-    "frappe.integrations.doctype.google_calendar.google_calendar.google_callback": "appointment.overrides.google_calendar_override.google_callback"
+    "frappe.integrations.doctype.google_calendar.google_calendar.google_callback": "appointment.overrides.google_calendar_override.google_callback",
+    "newsletter.newsletter.doctype.newsletter.newsletter.subscribe": "appointment.content.upstream.legacy_subscription_unavailable",
+    "newsletter.newsletter.doctype.newsletter.newsletter.confirm_subscription": "appointment.content.upstream.legacy_subscription_unavailable",
+    "newsletter.newsletter.doctype.newsletter.newsletter.newsletter_email_read": "appointment.content.upstream.legacy_subscription_unavailable"
 }
 #
 # each overriding function accepts a `data` argument;
@@ -293,7 +309,7 @@ override_whitelisted_methods = {
 
 # Request Events
 # ----------------
-# before_request = ["appointment.utils.before_request"]
+before_request = ["appointment.content.upstream.block_legacy_public_routes"]
 # after_request = ["appointment.utils.after_request"]
 
 # Job Events
@@ -365,3 +381,45 @@ permission_query_conditions["Experience Release"] = "appointment.public_experien
 has_permission["Public Site"] = "appointment.public_experience.access.public_site_permission"
 has_permission["Public Site Domain"] = "appointment.public_experience.access.public_site_domain_permission"
 has_permission["Experience Release"] = "appointment.public_experience.access.experience_release_permission"
+
+# Content tenancy: entitlements, ownership, and upstream authoring isolation.
+# The same ownership rule answers lists and direct reads; a global Frappe role
+# never grants access to another business.
+permission_query_conditions["Business Entitlement"] = "appointment.content.access.business_entitlement_query"
+permission_query_conditions["Content Ownership"] = "appointment.content.access.content_ownership_query"
+permission_query_conditions["File"] = "appointment.content.access.file_query"
+has_permission["File"] = "appointment.content.access.file_permission"
+permission_query_conditions["Blog Post"] = "appointment.content.access.blog_post_query"
+permission_query_conditions["Newsletter"] = "appointment.content.access.newsletter_query"
+permission_query_conditions["Published Content Release"] = "appointment.content.access.published_content_release_query"
+permission_query_conditions["Gallery Collection"] = "appointment.content.access.gallery_collection_query"
+
+has_permission["Business Entitlement"] = "appointment.content.access.business_entitlement_permission"
+has_permission["Content Ownership"] = "appointment.content.access.content_ownership_permission"
+has_permission["Blog Post"] = "appointment.content.access.blog_post_permission"
+permission_query_conditions["Blog Category"] = "appointment.content.access.blog_category_query"
+permission_query_conditions["Blogger"] = "appointment.content.access.blogger_query"
+has_permission["Blog Category"] = "appointment.content.access.article_support_permission"
+has_permission["Blogger"] = "appointment.content.access.article_support_permission"
+has_permission["Newsletter"] = "appointment.content.access.newsletter_permission"
+has_permission["Published Content Release"] = "appointment.content.access.published_content_release_permission"
+has_permission["Gallery Collection"] = "appointment.content.access.gallery_collection_permission"
+
+# App-owned managed browser validation, restricted to the isolated content site.
+agent_plane_browser_qa_suites = ["appointment.tests.content_browser_suite.suites"]
+
+permission_query_conditions["Organization Workbook Import"] = "appointment.organization_import.access.query"
+permission_query_conditions["Business Staff Invitation"] = "appointment.content.staff_invitations.query"
+has_permission["Business Staff Invitation"] = "appointment.content.staff_invitations.permission"
+has_permission["Organization Workbook Import"] = "appointment.organization_import.access.permission"
+permission_query_conditions["Business Membership"] = "appointment.organization_import.access.membership_query"
+has_permission["Business Membership"] = "appointment.organization_import.access.membership_permission"
+
+for _newsletter_type, _newsletter_query in {
+    "Newsletter Audience Member": "audience_query",
+    "Newsletter Sender Identity": "sender_query",
+    "Business Newsletter Campaign": "campaign_query",
+    "Local Email Message": "sink_query",
+}.items():
+    permission_query_conditions[_newsletter_type] = f"appointment.content.newsletter.core.{_newsletter_query}"
+    has_permission[_newsletter_type] = "appointment.content.newsletter.core.permission"

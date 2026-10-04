@@ -8,12 +8,36 @@ only for previews.
 from __future__ import annotations
 
 import secrets
+import json
 
-PUBLIC_API_MARKER = "/api/method/appointment.public_experience.api.get_public"
+API_PREFIXES = (
+    "/api/method/appointment.public_experience.api.",
+    "/api/method/appointment.content.public_api.",
+    "/api/method/appointment.content.api.",
+    "/api/method/appointment.content.newsletter.",
+    "/api/method/appointment.content.staff_invitations.",
+)
 
 
 def generate_nonce() -> str:
     return secrets.token_urlsafe(16)
+
+
+def shell_nonce() -> str:
+    """Keep the HTML nonce and its response policy identical for this request."""
+    import frappe
+
+    nonce = generate_nonce()
+    frappe.local.content_shell_nonce = nonce
+    return nonce
+
+
+def encode_boot_data(boot: dict) -> str:
+    """Encode boot data without allowing any HTML parser closing-tag variant."""
+    import frappe
+
+    encoded = json.dumps(frappe.as_json(boot, indent=None, separators=(",", ":")))
+    return encoded.replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026")
 
 
 def build_csp(nonce: str | None = None) -> str:
@@ -51,11 +75,30 @@ def after_request(response=None, request=None):
     if response is None or request is None:
         return response
     path = getattr(request, "path", "") or ""
-    if not path.startswith(PUBLIC_API_MARKER):
-        return response
-    for key, value in security_headers(generate_nonce()).items():
-        try:
+    import frappe
+
+    nonce = getattr(frappe.local, "content_shell_nonce", None)
+    if nonce and getattr(response, "mimetype", None) == "text/html":
+        private = (frappe.session.user != "Guest" or path.startswith(("/newsletter/", "/team/invitation/", "/login", "/signup", "/settings", "/calendar")))
+        headers = security_headers(nonce, preview=private)
+        if path.startswith(("/newsletter/", "/team/invitation/")):
+            headers["Referrer-Policy"] = "no-referrer"
+        for key, value in headers.items():
             response.headers[key] = value
-        except Exception:
-            pass
+        return response
+    token_page = path.startswith(("/newsletter/", "/team/invitation/"))
+    if not token_page and not path.startswith(API_PREFIXES):
+        return response
+    private = token_page or path.endswith(".get_content_preview") or not path.startswith((
+        "/api/method/appointment.public_experience.api.get_public",
+        "/api/method/appointment.content.public_api.",
+    ))
+    headers = security_headers(generate_nonce(), preview=private)
+    if token_page:
+        # The application shell owns its script policy; token pages add privacy.
+        headers.pop("Content-Security-Policy")
+        headers.pop("X-Public-Experience-Nonce")
+        headers["Referrer-Policy"] = "no-referrer"
+    for key, value in headers.items():
+        response.headers[key] = value
     return response

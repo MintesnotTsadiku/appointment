@@ -33,12 +33,14 @@ export type SessionStateName =
   | 'workspace'
   | 'selection'
   | 'owner_setup'
+  | 'individual_owner'
   | 'no_assignment';
 
 export interface SessionState {
   authenticated: boolean;
   user: string;
   full_name?: string;
+  user_image?: string;
   is_administrator: boolean;
   roles: string[];
   has_staff_role?: boolean;
@@ -73,7 +75,7 @@ const ALLOWED_PREFIXES = [
   '/no-access',
 ];
 
-const MANAGER_ONLY_PREFIXES = ['/settings/business', '/settings/notifications', '/settings/payments', '/settings/resources', '/settings/team', '/onboarding'];
+const MANAGER_ONLY_PREFIXES = ['/settings/business', '/settings/notifications', '/settings/payments', '/settings/resources', '/settings/team', '/settings/website', '/settings/public-experience', '/settings/organization-import', '/onboarding'];
 
 /** Prevent open redirects and restoring destinations the user may not access. */
 export function isAllowedDestination(path: string | null | undefined, session: SessionState | null): boolean {
@@ -84,6 +86,8 @@ export function isAllowedDestination(path: string | null | undefined, session: S
     return false;
   }
   const clean = path.split('?')[0];
+  if (clean === '/settings/appearance' || clean === '/settings/profile' || clean.startsWith('/settings/profile/') || clean === '/settings') return true;
+  if (session.state === 'individual_owner') return ['/home', '/analytics', '/reception', '/settings/independent-booking', '/calendar'].includes(clean) || clean === '/settings/website' || clean.startsWith('/settings/website/');
   if (!ALLOWED_PREFIXES.some((prefix) => clean === prefix || clean.startsWith(prefix + '/'))) return false;
   if (session.state === 'administrator') return true;
   const role = session.selected?.role;
@@ -92,15 +96,15 @@ export function isAllowedDestination(path: string | null | undefined, session: S
   if (clean.startsWith('/reception')) return role === 'Receptionist';
   if (clean.startsWith('/customers')) return role === 'Receptionist' || role === 'Provider';
   if (clean.startsWith('/analytics')) return role === 'Provider' || role === 'Receptionist';
-  if (clean.startsWith('/home')) return false;
+  if (clean === '/home') return true;
   return role === 'Provider';
 }
 
-export const SessionProvider = ({ children }: { children: ReactNode }) => {
+export const SessionProvider = ({ children, enabled = true }: { children: ReactNode; enabled?: boolean }) => {
   const { data, error, isLoading, mutate } = useFrappeGetCall<{ message: SessionState }>(
     'appointment.scheduler.membership.context',
     undefined,
-    'session-context',
+    enabled ? 'session-context' : null,
     { revalidateOnFocus: true, revalidateOnReconnect: true }
   );
   const { call: selectCall } = useFrappePostCall('appointment.scheduler.membership.select_workspace');
@@ -131,7 +135,7 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
       reload,
       selectWorkspace,
       isManager: Boolean(
-        session?.is_administrator || session?.selected?.is_manager || session?.state === 'owner_setup'
+        session?.is_administrator || session?.selected?.is_manager || session?.state === 'owner_setup' || session?.state === 'individual_owner'
       ),
       isStaff,
     };

@@ -96,7 +96,7 @@ export function MeronSite({ snapshot, locale, applicationName, publicRoot, rootS
   return <div ref={root} data-pe-root data-pe-recipe={snapshot.recipeKey} data-pe-mode={mode} data-motion={design.motion} className="mr" data-template="meron-atelier-v2" style={rootStyle}>
     <a className="mr-skip" href="#mr-main">{chrome.t("skip")}</a>
     <Bar logo={logo} name={applicationName} root={publicRoot} chrome={chrome} mode={mode} toggleMode={toggleMode}>
-      <nav aria-label={chrome.t("navLabel")} className="mr-nav">
+      <nav aria-label={chrome.t("navLabel")} className="mr-nav"><a href={`${publicRoot}/blog`}>{chrome.t("journal")}</a><a href={`${publicRoot}/gallery`}>{chrome.t("gallery")}</a>
         {slips.length ? <a href="#services">{chrome.t("services")}</a> : null}
         {makers.length ? <a href="#team">{chrome.t("team")}</a> : null}
         {place ? <a href="#contact">{chrome.t("visit")}</a> : null}

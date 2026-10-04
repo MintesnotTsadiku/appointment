@@ -11,9 +11,10 @@ from frappe.utils import add_days, nowdate
 
 from appointment.scheduler import booking, payments, self_service
 from appointment.tests import payments_qa_fixtures
+from appointment.tests import demo_offerings
 
 ORG = payments_qa_fixtures.ORG
-OFFERING = "EVT-2026-000109"  # Cut and shape, Rahel, Bole quiet styling room
+OFFERING = demo_offerings.cut_rahel()  # Cut and shape, Rahel, Bole quiet styling room
 PREFIX = "QARC"
 EMAIL = "qa-receipt-{n}@example.test"
 

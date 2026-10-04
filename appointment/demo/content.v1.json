@@ -1,0 +1,139 @@
+{
+  "contract": "appointment-showcase-content.v1",
+  "version": 1,
+  "assetCatalog": "appointment/public_experience/manifest/showcase/catalog.v1.json",
+  "provenance": {
+    "copy": "Project-authored fictional business copy; no real testimonials or clinical claims.",
+    "images": "Existing project-generated local showcase support assets, verified against the versioned catalog checksums.",
+    "video": {
+      "provider": "youtube",
+      "id": "aqz-KE-bpKQ",
+      "title": "Big Buck Bunny — independent animation demonstration",
+      "credit": "Blender Foundation / www.bigbuckbunny.org — CC BY 3.0",
+      "licenseSource": "https://peach.blender.org/about/",
+      "automaticPlayback": false
+    }
+  },
+  "sites": {
+    "selam": {
+      "category": "Movement notes",
+      "articles": [
+        [
+          "A gentle start to your movement practice",
+          "gentle-start",
+          "Bring comfortable clothes and tell your coach what a good week would feel like. Your first session is a conversation as well as a chance to move.\n\nWe keep the pace unhurried. You can pause, ask questions, or change an exercise. Share any access needs before your appointment so the studio can prepare."
+        ],
+        [
+          "Making room for a regular routine",
+          "regular-routine",
+          "A routine is easier to maintain when it fits your day. Choose a time you can reach without rushing, and leave a little space afterwards.\n\nBetween sessions, notice what feels useful. Bring those observations to your next appointment. These fictional showcase notes are general information, not individual health advice."
+        ],
+        [
+          "What to expect in the studio",
+          "studio-visit",
+          "The Gerji studio is a quiet space for one-to-one coaching. Your booking confirmation includes the appointment time and arrival details.\n\nTell us if you need step-free access or a different arrangement. If your plans change, use the cancellation or rescheduling link in your confirmation."
+        ]
+      ],
+      "collections": [
+        "Inside the movement studio",
+        "A quieter kind of practice"
+      ]
+    },
+    "bloom": {
+      "category": "Studio journal",
+      "articles": [
+        [
+          "Getting ready for your first salon visit",
+          "first-salon-visit",
+          "Bring photos of styles you like, and tell your stylist about your current routine. We will discuss time, care, and the service you booked before starting.\n\nIf you have sensitivities or specific product preferences, mention them when you arrive. A clear conversation helps us plan a comfortable visit."
+        ],
+        [
+          "Finding a care routine that fits",
+          "care-routine",
+          "Your hair care routine should suit your schedule and preferences. Ask your stylist which steps are essential and which are optional.\n\nWrite down the products you already use, and bring your questions. These fictional studio notes do not replace a personal consultation or medical advice."
+        ],
+        [
+          "Meet the spaces at Bole Bloom",
+          "studio-spaces",
+          "The main studio has room for everyday appointments, while the quiet styling room offers a calmer setting. Choose the available location when booking.\n\nYour confirmation shows where to go. If you need a quieter appointment or extra assistance, contact the team before your visit."
+        ]
+      ],
+      "collections": [
+        "Life in the studio",
+        "Details that make a visit comfortable"
+      ]
+    },
+    "meron": {
+      "category": "Atelier notes",
+      "articles": [
+        [
+          "Preparing for your first fitting",
+          "first-fitting",
+          "Bring the garment, the shoes you expect to wear with it, and an idea of when you need it. The fitting is a chance to discuss how the garment should feel as well as how it looks.\n\nWe will explain the proposed adjustments and timing before work begins. Leave room for a second fitting when the alteration needs one."
+        ],
+        [
+          "Small details, considered carefully",
+          "considered-details",
+          "A sleeve, hem, or fastening can change the way a garment feels throughout the day. Tell us where you notice discomfort when you sit, walk, or reach.\n\nWe can discuss practical adjustments in the appointment. These fictional atelier notes illustrate the kind of questions that help a fitting."
+        ],
+        [
+          "Caring for a garment after alterations",
+          "garment-care",
+          "Check the original care label and ask whether the alteration changes how the garment should be pressed or stored. Keep any spare buttons or fabric with it.\n\nIf something feels different after the first wear, make a note and contact the atelier. Bring the garment back rather than trying an unfamiliar adjustment yourself."
+        ]
+      ],
+      "collections": [
+        "At the fitting table",
+        "Tools and thoughtful details"
+      ]
+    },
+    "abugida": {
+      "category": "Learning letters",
+      "articles": [
+        [
+          "Your first conversation session",
+          "first-conversation",
+          "Bring a situation you would like to handle more comfortably: greeting a neighbour, asking a question, or explaining your work. Your teacher will use that goal to shape the practice.\n\nYou do not need to arrive with perfect answers. The session gives you room to try, pause, and ask for help."
+        ],
+        [
+          "Practice between appointments",
+          "between-sessions",
+          "A short, regular practice can be more manageable than a long session once a week. Choose one useful phrase and try it in a real or imagined conversation.\n\nBring difficult moments to your next lesson. We can practise a different way to say the same thing and discuss where it might be useful."
+        ],
+        [
+          "Learning in a welcoming space",
+          "learning-space",
+          "Our fictional language house has spaces for individual conversation and small learning groups. Booking details show the selected session and location.\n\nTell the team about access needs or materials that help you learn. We can discuss a suitable arrangement before your first visit."
+        ]
+      ],
+      "collections": [
+        "Around the language house",
+        "Places to practise together"
+      ]
+    },
+    "tena": {
+      "category": "Care notes",
+      "articles": [
+        [
+          "Preparing for a consultation",
+          "preparing-consultation",
+          "Bring a list of your questions and the medicines or supplements you currently take. Your appointment confirmation includes the clinic location and arrival information.\n\nIf you need an interpreter or accessibility support, contact the clinic in advance. These fictional showcase notes are general appointment information, not medical advice."
+        ],
+        [
+          "Making your questions easier to remember",
+          "remembering-questions",
+          "It can help to write down what changed, when you first noticed it, and what you want to understand. Bring those notes to the consultation.\n\nAsk the clinician to explain anything that is unclear. If you need urgent medical help, use the appropriate local emergency service rather than waiting for a routine booking."
+        ],
+        [
+          "A calm arrival at the clinic",
+          "calm-arrival",
+          "Allow time to find the clinic and complete the arrival steps described in your confirmation. Tell reception if you need assistance or a quieter place to wait.\n\nIf you cannot attend, use your confirmation link to cancel or reschedule. This helps the clinic make the time available to another visitor."
+        ]
+      ],
+      "collections": [
+        "Around the family clinic",
+        "A welcoming place for a consultation"
+      ]
+    }
+  }
+}

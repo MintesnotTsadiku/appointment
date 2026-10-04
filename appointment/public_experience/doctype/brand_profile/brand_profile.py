@@ -26,6 +26,9 @@ class BrandProfile(Document):
         self._validate_capability()
         self._validate_single_active_profile()
         self._validate_owner_immutable()
+        from appointment.public_experience.identity_media import validate_profile
+
+        validate_profile(self)
         self._validate_recipe()
 
     def _validate_owner(self):

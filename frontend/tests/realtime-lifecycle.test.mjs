@@ -30,7 +30,7 @@ check(
 
 const app = read("src/app.tsx");
 check("app.tsx must disable the SDK socket", /enableSocket=\{false\}/.test(app));
-check("app.tsx must render <RealtimeProvider>", app.includes("<RealtimeProvider>"));
+check("app.tsx must render <RealtimeProvider>", /<RealtimeProvider(?:\s|>)/.test(app));
 
 const provider = read("src/components/realtime/RealtimeProvider.tsx");
 check(
@@ -116,4 +116,7 @@ for (const guestPath of ["/tena-studio", "/schedule/org/tena-studio"]) {
   assert.equal(effect(), undefined, `${guestPath} must not open a socket`);
 }
 assert.equal(created, 1, "guest public surfaces never create a connection");
-console.log("OK: StrictMode remount reuses one socket, real unmount closes it, guest pages open none");
+exports.RealtimeProvider({ children: null, enabled: false });
+assert.equal(effect(), undefined, "Public pages must not acquire a realtime connection");
+assert.equal(created, 1, "Disabled realtime must create no additional socket");
+console.log("OK: StrictMode remount reuses one socket, real unmount closes it, guest pages and disabled realtime open none");

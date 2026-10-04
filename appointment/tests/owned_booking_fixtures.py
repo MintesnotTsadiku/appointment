@@ -8,7 +8,7 @@ from frappe.utils import add_days, nowdate
 
 
 def require_target():
-    if not frappe.conf.get("worktree_development") or "implement-owned-booking-slice" not in frappe.local.site:
+    if not frappe.conf.get("worktree_development") or ("implement-owned-booking-slice" not in frappe.local.site and frappe.local.site not in ("meet-beta-content-fresh-b.localhost", "meet-beta-feat-content-publishing-galler-5839d4.localhost")):
         frappe.throw("This suite is restricted to the isolated owned-booking implementation site.")
 
 

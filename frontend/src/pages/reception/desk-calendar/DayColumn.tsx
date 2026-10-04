@@ -38,7 +38,7 @@ export function DayColumn({ date, appointments, slots, interval, slotPx, week, d
         const style = layout ? columnStyle(layout) : fallbackStyle(appointment, interval, slotPx, week);
         if (!style) return null;
         return (
-          <motion.div key={appointment.name} initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} className="absolute z-10" style={style}>
+          <motion.div key={appointment.name} initial={false} animate={{ opacity: 1, scale: 1 }} className="absolute z-10" style={style}>
             <AppointmentCard appointment={appointment} onEdit={onEdit} onClick={onEdit} compact={week || (layout?.totalColumns ?? 1) > 1} timeSlotInterval={interval} />
             {week && layout?.overflowCount ? (
               <button

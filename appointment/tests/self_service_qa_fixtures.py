@@ -13,9 +13,10 @@ import frappe
 from frappe.utils import add_days, nowdate
 
 from appointment.scheduler import booking, self_service
+from appointment.tests import demo_offerings
 
-FREE_OFFERING = "EVT-2026-000109"  # Cut and shape, Rahel Girma
-LATE_OFFERING = "EVT-2026-000111"  # Scalp care consultation
+FREE_OFFERING = demo_offerings.cut_rahel()  # Cut and shape, Rahel Girma
+LATE_OFFERING = demo_offerings.scalp_hanna()  # Scalp care consultation
 POLICY_NAME = "QA self-service late policy"
 EMAIL = "qa-manage-{kind}-{lang}-{size}@example.test"
 COMBOS = [(lang, size) for lang in ("en", "am") for size in ("desktop", "mobile")]

@@ -1,0 +1,18 @@
+{
+  "managed_browser_account": "BACCT-4043",
+  "managed_browser_session": "BSESS-4044",
+  "roles": [
+    "All",
+    "Desk User",
+    "Front Desk",
+    "Guest"
+  ],
+  "user": "wqa-websiteacceptance-staff@example.test",
+  "scope": [
+    "WQA-websiteacceptance Main"
+  ],
+  "cross_business_workspace_count": 1,
+  "publication_denied": true,
+  "account_created_by": "Guest invitation acceptance",
+  "role_assigned_by": "Normal owner Team UI"
+}

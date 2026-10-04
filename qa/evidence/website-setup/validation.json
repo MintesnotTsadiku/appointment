@@ -1,0 +1,125 @@
+{
+  "run": "BQA-2026-00112",
+  "status": "Passed",
+  "source_version": "30bdd38+source-f3b2f67d3b91+qa-2480cfc34d2b",
+  "scenario_summary": {
+    "failed": 0,
+    "flaky": 0,
+    "passed": 1,
+    "skipped": 0,
+    "total": 1
+  },
+  "baseline_changed_count": 0,
+  "cleanup": {
+    "deleted_businesses": 2,
+    "ok": true
+  },
+  "audit": {
+    "ok": true,
+    "remaining": {
+      "Blog Post": 0,
+      "Brand Profile": 0,
+      "Business Newsletter Campaign": 0,
+      "Content Ownership": 0,
+      "Gallery Collection": 0,
+      "Imported Locations": 0,
+      "Imported Memberships": 0,
+      "Imported Offerings": 0,
+      "Imported Providers": 0,
+      "Imported Services": 0,
+      "Local Email Message": 0,
+      "Location": 0,
+      "Newsletter Audience Member": 0,
+      "Newsletter Sender Identity": 0,
+      "Organization": 0,
+      "Organization Workbook Import": 0,
+      "Provider": 0,
+      "Public Site": 0,
+      "Published Content Release": 0,
+      "Service": 0
+    },
+    "remaining_record_count": 0
+  },
+  "roles": [
+    "All",
+    "Desk User",
+    "Guest",
+    "Organization Manager",
+    "Provider"
+  ],
+  "artifacts": [
+    {
+      "file": "website-article-workspace.png",
+      "sha256": "6de92753e00abf23278b8bdf08d155ce1c55b506f2cc8891bdc1f4a968a44b3b"
+    },
+    {
+      "file": "website-guest-article.png",
+      "sha256": "15346996e460c31d4096d98a4ad604615a3443710431e75c10fa7cd3d89289b8"
+    },
+    {
+      "file": "website-guest-blog.png",
+      "sha256": "16a580f2ae2c99cbb5b98437be68469e6da19469dbf5f885f5e9e11e5511050f"
+    },
+    {
+      "file": "website-guest-book.png",
+      "sha256": "9063baf21bff76ecc5f18c1d0ccf46860531ffd5bd3e90b902a10875de091aa4"
+    },
+    {
+      "file": "website-guest-collection-desktop.png",
+      "sha256": "73125a765a2c4ae24ed46ce67913d76baa8c9289ce1ca5e25b3448d51aaa04ef"
+    },
+    {
+      "file": "website-guest-collection-mobile-dark.png",
+      "sha256": "efa93d1a72cb74d7c559f705b8b1b907217cd6416007b39bda868b8e23a75c41"
+    },
+    {
+      "file": "website-guest-gallery.png",
+      "sha256": "7eb329101fc30333509fa0b3fb5964d04ee4943d87ec469a6061bfaaa13f808b"
+    },
+    {
+      "file": "website-guest-landing.png",
+      "sha256": "95a370d23104ca762aec58143add51fd484b6505f249e8b1eca261f70f611696"
+    },
+    {
+      "file": "website-newsletter-confirmation.png",
+      "sha256": "fe157bef2ee61b6d21d82dcb5c3038cc0b4f106c2231375d191d05933b255874"
+    },
+    {
+      "file": "website-newsletter-owner-delivery.png",
+      "sha256": "749be60db86764169d7a859273e3f24c069f1e32cbff4fbd90d44dd3f9e755e8"
+    },
+    {
+      "file": "website-newsletter-signup-mobile-dark.png",
+      "sha256": "59160fc6254b43627bb3fdc27c6345d4fbcd05fc7a7614d0e825ec6593380675"
+    },
+    {
+      "file": "website-newsletter-unsubscribe.png",
+      "sha256": "c749b200af4a764514785ec003daf0d8d7c7c859e27c31c3e8d55ba532dfe902"
+    },
+    {
+      "file": "website-preview-desktop.png",
+      "sha256": "9fdc0c440f0291f4122410ebaca26f7a7231d4ada90a4f7b0cd1801fd4d2dff8"
+    },
+    {
+      "file": "website-published-desktop.png",
+      "sha256": "c9819539aa2c710baf7ec01c099feb974767210ae32150e497b2400a00ac9738"
+    },
+    {
+      "file": "website-published-mobile.png",
+      "sha256": "c746467027fbf69141f1e6f6699476d06c33253c0c5819693b0b941066494064"
+    },
+    {
+      "file": "website-workbook-applied.png",
+      "sha256": "44236f125f42c9a443bdd28b3d86af6e8325da4489d83b92b52191b639732566"
+    },
+    {
+      "file": "website-workbook-correction.png",
+      "sha256": "73107af11cbf8f009d46dd05c6d355dafa891126758a757fc89048861e2289f2"
+    },
+    {
+      "file": "website-workbook-new-business.png",
+      "sha256": "15f1118e4c69a6aa1584eb615f0666bafd1764c584f2c27ca1b54cd173d8c8f3"
+    }
+  ],
+  "scope": "Core website setup, workbook creation/import, and local newsletter journey for one normal organization owner using Tena. Full template, expanded setup/import, fresh-site, and release-readiness gates remain pending."
+}

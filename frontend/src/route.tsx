@@ -2,8 +2,9 @@
  * External dependencies.
  */
 import { lazy } from "react";
-import { Route } from "react-router-dom";
+import { Navigate, Route } from "react-router-dom";
 import ErrorFallback from "./components/error-fallback";
+import BusinessOwnerRoute from "./components/workspace/BusinessOwnerRoute";
 
 /**
  * Lazy load components.
@@ -23,6 +24,8 @@ const TeamManagement = lazy(() => import("@/pages/settings/team"));
 const Profile = lazy(() => import("@/pages/settings/profile"));
 const LocationSettings = lazy(() => import("@/pages/settings/location"));
 const CalendarSettings = lazy(() => import("@/pages/settings/calendar"));
+const IndependentBookingSettings = lazy(() => import("@/pages/settings/independent-booking"));
+const IndependentBooking = lazy(() => import("@/pages/public-experience/independent-booking"));
 const BusinessSettings = lazy(() => import("@/pages/settings/business"));
 const NotificationSettings = lazy(() => import("@/pages/settings/notifications"));
 const PaymentSettings = lazy(() => import("@/pages/settings/payments"));
@@ -35,6 +38,13 @@ const ServicesSettings = lazy(() => import("@/pages/settings/services"));
 const EditService = lazy(() => import("@/pages/settings/edit-service"));
 const Manage = lazy(() => import("@/pages/settings/manage"));
 const PublicExperienceEditor = lazy(() => import("@/pages/settings/public-experience"));
+const WebsiteSetup = lazy(() => import("@/pages/settings/website-setup"));
+const WebsiteContent = lazy(() => import("@/pages/settings/website-content"));
+const OrganizationImport = lazy(() => import("@/pages/settings/organization-import"));
+const NewsletterWorkspace = lazy(() => import("@/pages/settings/website-newsletter"));
+const NewsletterAction = lazy(() => import("@/pages/public-experience/newsletter-action"));
+const StaffInvitation = lazy(() => import("@/pages/public-experience/staff-invitation"));
+const InternalAppearance = lazy(() => import("@/pages/settings/internal-appearance"));
 const Settings = lazy(() => import("@/pages/settings"));
 const AdminDashboard = lazy(() => import("@/pages/admin/dashboard"));
 const AdminPayments = lazy(() => import("@/pages/admin/payments"));
@@ -75,12 +85,16 @@ const Router = () => {
       <Route path="/no-access" element={<NoAccess />} errorElement={<ErrorFallback />}></Route>
       <Route path="/calendar" element={<Calendar />} errorElement={<ErrorFallback />}></Route>
       <Route path="/analytics" element={<Analytics />} errorElement={<ErrorFallback />}></Route>
+      <Route path="/settings/appearance" element={<InternalAppearance />} errorElement={<ErrorFallback />} />
       <Route path="/settings" element={<Settings />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/availability" element={<AvailabilitySettings />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/team" element={<TeamManagement />} errorElement={<ErrorFallback />}></Route>
+      <Route path="/settings/profile/details" element={<Navigate to="/settings/profile" replace />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/profile" element={<Profile />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/location" element={<LocationSettings />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/calendar" element={<CalendarSettings />} errorElement={<ErrorFallback />}></Route>
+      <Route path="/settings/independent-booking" element={<IndependentBookingSettings />} errorElement={<ErrorFallback />} />
+      <Route path="/schedule/individual/:offeringId" element={<IndependentBooking />} errorElement={<ErrorFallback />} />
       <Route path="/settings/business" element={<BusinessSettings />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/notifications" element={<NotificationSettings />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/payments" element={<PaymentSettings />} errorElement={<ErrorFallback />}></Route>
@@ -91,7 +105,15 @@ const Router = () => {
       <Route path="/settings/services/:serviceId" element={<EditService />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/edit-service/:serviceId" element={<EditService />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/manage" element={<Manage />} errorElement={<ErrorFallback />}></Route>
+      <Route element={<BusinessOwnerRoute />}>
       <Route path="/settings/public-experience" element={<PublicExperienceEditor />} errorElement={<ErrorFallback />}></Route>
+      <Route path="/settings/website" element={<WebsiteSetup />} errorElement={<ErrorFallback />}></Route>
+      <Route path="/settings/website/content" element={<WebsiteContent />} errorElement={<ErrorFallback />}></Route>
+      <Route path="/settings/organization-import" element={<OrganizationImport />} errorElement={<ErrorFallback />}></Route>
+      <Route path="/settings/website/newsletter" element={<NewsletterWorkspace />} errorElement={<ErrorFallback />} />
+      </Route>
+      <Route path="/newsletter/:action/:token" element={<NewsletterAction />} errorElement={<ErrorFallback />} />
+      <Route path="/team/invitation/:token" element={<StaffInvitation />} errorElement={<ErrorFallback />} />
       <Route path="/admin/dashboard" element={<AdminDashboard />} errorElement={<ErrorFallback />}></Route>
       <Route path="/admin/payments" element={<AdminPayments />} errorElement={<ErrorFallback />}></Route>
       <Route path="/schedule/in/:meetId" element={<Appointment />} errorElement={<ErrorFallback />}></Route>
@@ -112,6 +134,10 @@ const Router = () => {
       
       {/* Tenant public website and booking entry. Static routes above win; the
           resolver fails closed for unknown slugs. */}
+      <Route path="/:slug/blog" element={<PublicSitePage />} errorElement={<ErrorFallback />} />
+      <Route path="/:slug/blog/:contentSlug" element={<PublicSitePage />} errorElement={<ErrorFallback />} />
+      <Route path="/:slug/gallery" element={<PublicSitePage />} errorElement={<ErrorFallback />} />
+      <Route path="/:slug/gallery/:contentSlug" element={<PublicSitePage />} errorElement={<ErrorFallback />} />
       <Route path="/:slug/book" element={<PublicBookingPage />} errorElement={<ErrorFallback />}></Route>
       <Route path="/:slug/booking/:token" element={<ManageBooking />} errorElement={<ErrorFallback />}></Route>
       <Route path="/:slug/my-bookings" element={<MyBookings />} errorElement={<ErrorFallback />}></Route>

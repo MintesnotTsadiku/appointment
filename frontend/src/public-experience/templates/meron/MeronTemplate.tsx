@@ -2,6 +2,7 @@ import type { BookingTemplateProps, TemplateProps } from "../types";
 import { action, brandLogo, contentImage, designImage, localized, records, section } from "../content";
 import { usePublicChrome } from "../chrome";
 import "./meron.css";
+import { MeronNewsletter } from "./MeronNewsletter";
 
 export function MeronSite({ snapshot, locale, applicationName, publicRoot, rootStyle, mode, toggleMode }: TemplateProps) {
   const chrome = usePublicChrome(locale);
@@ -29,7 +30,7 @@ export function MeronSite({ snapshot, locale, applicationName, publicRoot, rootS
   return <div data-pe-root data-pe-recipe={snapshot.recipeKey} data-pe-mode={mode} className="meron-site" data-template="meron-atelier-v1" style={rootStyle}>
     <header className="meron-nav">
       <a href={publicRoot}>{logo ? <img className="pe-brand-logo" src={logo} alt="" /> : null}{applicationName}</a>
-      <nav aria-label={chrome.t("navLabel")}><a href="#services">{chrome.t("services")}</a><a href="#story">{chrome.t("team")}</a><a href="#contact">{chrome.t("visit")}</a></nav>
+      <nav aria-label={chrome.t("navLabel")}><a href={`${publicRoot}/blog`}>{chrome.t("journal")}</a><a href={`${publicRoot}/gallery`}>{chrome.t("gallery")}</a><a href="#services">{chrome.t("services")}</a><a href="#story">{chrome.t("team")}</a><a href="#contact">{chrome.t("visit")}</a></nav>
       <button type="button" className="meron-mode" onClick={toggleMode} aria-label={chrome.modeSwitchLabel(mode)}><span>{chrome.modeName(mode)}</span><i aria-hidden="true"></i></button>
       {primary ? <a className="meron-button" href={primary.href}>{primary.label}</a> : null}
     </header>
@@ -53,7 +54,7 @@ export function MeronSite({ snapshot, locale, applicationName, publicRoot, rootS
       {records(testimonials.items).length ? <section className="meron-story">{detailImage ? <img src={detailImage.src} alt="" /> : null}<div>{records(testimonials.items).slice(0, 1).map((item, index) => <blockquote key={index}>“{localized(item.quote, locale)}”<cite>{localized(item.attribution, locale)}</cite></blockquote>)}</div></section> : null}
       <section className="meron-faq" id="faq"><div><h2>{localized(faq.title, locale)}</h2><i></i></div><div>{records(faq.items).map((item, index) => <details key={index}><summary>{localized(item.question, locale)}<span aria-hidden="true">+</span></summary><p>{localized(item.answer, locale)}</p></details>)}</div></section>
       <section className="meron-location" id="contact">{locationImage ? <img src={locationImage.src} alt={locationImage.alt} /> : null}<div><h2>{localized(locations.title, locale)}</h2><i></i>{location ? <address>{localized(location.address, locale)}<br />{localized(location.hours, locale)}<br />{String(location.phone || "")}</address> : null}{finalAction ? <a className="meron-button" href={finalAction.href}>{finalAction.label}</a> : null}</div></section>
-    </main>
+    <MeronNewsletter snapshot={snapshot} applicationName={applicationName} locale={locale} publicRoot={publicRoot} /></main>
     <footer className="meron-footer"><a href={publicRoot}>{logo ? <img className="pe-brand-logo" src={logo} alt="" /> : null}{applicationName}</a>{localized(footer.body, locale) ? <small>{localized(footer.body, locale)}</small> : null}</footer>
   </div>;
 }

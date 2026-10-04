@@ -148,6 +148,7 @@ export function generateCSSVariables(colors: ThemeColors, mode: 'dark' | 'light'
 
     // Accent colors - Primary
     '--accent-primary': accent.primary.default,
+    '--chart-primary': mode === 'dark' && accent.primary.default === '#3b3b3b' ? '#bcbcbc' : accent.primary.default,
     '--accent-primary-hover': accent.primary.hover,
     '--accent-primary-light': accent.primary.light,
 
@@ -240,6 +241,11 @@ export function applyThemeColors(colors: ThemeColors, mode: 'dark' | 'light'): v
 
   // Accent colors - Primary (Violet/Purple)
   root.style.setProperty('--accent-primary', accent.primary.default);
+  root.style.setProperty('--chart-primary', mode === 'dark' && accent.primary.default === '#3b3b3b' ? '#bcbcbc' : accent.primary.default);
+  root.style.setProperty('--accent-primary-text', mode === 'dark' && accent.primary.default === '#3b3b3b' ? '#f5f5f5' : mode === 'dark' && accent.primary.default === '#0369a1' ? '#7dd3fc' : mode === 'dark' && accent.primary.default === '#047857' ? '#6ee7b7' : accent.primary.default);
+  root.style.setProperty('--status-confirmed-text', mode === 'dark' ? '#6ee7b7' : '#047857');
+  root.style.setProperty('--accent-secondary-text', mode === 'dark' ? '#fdba74' : '#9a3412');
+  root.style.setProperty('--accent-success-action', '#047857');
   root.style.setProperty('--accent-primary-hover', accent.primary.hover);
   root.style.setProperty('--accent-primary-light', accent.primary.light);
 

@@ -1,0 +1,121 @@
+vite v6.4.3 building for production...
+transforming...
+
+/assets/appointment/quiet-trust/fonts/dejavu-serif-bold.ttf referenced in /assets/appointment/quiet-trust/fonts/dejavu-serif-bold.ttf didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/assets/appointment/quiet-trust/fonts/noto-sans-ethiopic.ttf referenced in /assets/appointment/quiet-trust/fonts/noto-sans-ethiopic.ttf didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/assets/appointment/quiet-trust/fonts/dejavu-serif.ttf referenced in /assets/appointment/quiet-trust/fonts/dejavu-serif.ttf didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[vite:css][postcss] @import must precede all other statements (besides @charset or empty @layer)
+82 |     ======================================== */
+83 |  
+84 |  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+   |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+85 |  
+86 |  .ast-font-display {
+✓ 3174 modules transformed.
+rendering chunks...
+computing gzip size...
+../../../../../../../tmp/homepage-analytics-build/manifest.webmanifest                           1.91 kB
+../../../../../../../tmp/homepage-analytics-build/index.html                                     4.47 kB │ gzip:   1.69 kB
+../../../../../../../tmp/homepage-analytics-build/assets/ConfigurableDashboard-32L71Tc0.css      1.76 kB │ gzip:   0.68 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-0FuIOYQ-.css                      4.39 kB │ gzip:   1.30 kB
+../../../../../../../tmp/homepage-analytics-build/assets/platform-BlsSGq4z.css                   5.45 kB │ gzip:   1.40 kB
+../../../../../../../tmp/homepage-analytics-build/assets/registry-DQ9yh3pu.css                  72.15 kB │ gzip:  10.44 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-BXdfTaso.css                    120.62 kB │ gzip:  19.20 kB
+../../../../../../../tmp/homepage-analytics-build/assets/form-vendor-D9J1ljdc.js                 0.03 kB │ gzip:   0.05 kB
+../../../../../../../tmp/homepage-analytics-build/assets/subWeeks-BzuLi_K5.js                    0.13 kB │ gzip:   0.12 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-D0VJKZzH.js                       0.29 kB │ gzip:   0.23 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-YasF1NBY.js                       0.66 kB │ gzip:   0.40 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-C0qZ6S09.js                       0.93 kB │ gzip:   0.54 kB
+../../../../../../../tmp/homepage-analytics-build/assets/content-CAi8EZ-4.js                     1.03 kB │ gzip:   0.53 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-CpJZwrNf.js                       1.08 kB │ gzip:   0.60 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-CiZ6fQP2.js                       1.17 kB │ gzip:   0.63 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-NcO4w6eE.js                       1.26 kB │ gzip:   0.69 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-BUM-Xqci.js                       1.28 kB │ gzip:   0.65 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-DXy4r1SQ.js                       1.34 kB │ gzip:   0.68 kB
+../../../../../../../tmp/homepage-analytics-build/assets/newsletter-action-CRJ6TDl1.js           1.49 kB │ gzip:   0.82 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-B8psCmBG.js                       1.58 kB │ gzip:   0.87 kB
+../../../../../../../tmp/homepage-analytics-build/assets/staff-invitation-DzGWEGMS.js            1.68 kB │ gzip:   0.89 kB
+../../../../../../../tmp/homepage-analytics-build/assets/time-DXS_jRvv.js                        1.70 kB │ gzip:   0.84 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-DjOyOrrI.js                       1.74 kB │ gzip:   0.64 kB
+../../../../../../../tmp/homepage-analytics-build/assets/booking-ouiq6ZoE.js                     1.76 kB │ gzip:   0.87 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-Di0sQ7wZ.js                       1.91 kB │ gzip:   0.91 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-BPHP4blU.js                       1.95 kB │ gzip:   0.99 kB
+../../../../../../../tmp/homepage-analytics-build/assets/WorkspaceDashboard-B251P-XF.js          1.99 kB │ gzip:   0.91 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-DeQwVlfG.js                       2.06 kB │ gzip:   1.00 kB
+../../../../../../../tmp/homepage-analytics-build/assets/PublicExperienceProvider-DDKSkLUH.js    2.37 kB │ gzip:   1.21 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-opZgc9OH.js                       2.42 kB │ gzip:   1.10 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-B1XaOvkh.js                       2.66 kB │ gzip:   1.28 kB
+../../../../../../../tmp/homepage-analytics-build/assets/FilterBar-Bqwlj6ok.js                   2.72 kB │ gzip:   0.89 kB
+../../../../../../../tmp/homepage-analytics-build/assets/parseISO-HjVKrYO3.js                    2.99 kB │ gzip:   1.33 kB
+../../../../../../../tmp/homepage-analytics-build/assets/website-preview-BLlLeXnK.js             3.04 kB │ gzip:   1.37 kB
+../../../../../../../tmp/homepage-analytics-build/assets/independent-booking-CqDy3Q-2.js         3.20 kB │ gzip:   1.39 kB
+../../../../../../../tmp/homepage-analytics-build/assets/TimeInput-C6uZfgT2.js                   3.39 kB │ gzip:   1.52 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-CupfzDR0.js                       3.46 kB │ gzip:   1.44 kB
+../../../../../../../tmp/homepage-analytics-build/assets/independent-booking-CQHI7sDa.js         3.99 kB │ gzip:   1.61 kB
+../../../../../../../tmp/homepage-analytics-build/assets/StatsRow-Bw9P8WBk.js                    4.27 kB │ gzip:   1.44 kB
+../../../../../../../tmp/homepage-analytics-build/assets/site-DqonVVTL.js                        4.90 kB │ gzip:   2.12 kB
+../../../../../../../tmp/homepage-analytics-build/assets/login-CFTaGwyh.js                       5.07 kB │ gzip:   1.81 kB
+../../../../../../../tmp/homepage-analytics-build/assets/forgot-password-DOM_lAam.js             5.15 kB │ gzip:   1.81 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-DRtA_oJi.js                       5.22 kB │ gzip:   1.95 kB
+../../../../../../../tmp/homepage-analytics-build/assets/skeletons-D2Z6sYXA.js                   5.31 kB │ gzip:   2.19 kB
+../../../../../../../tmp/homepage-analytics-build/assets/organization-import-DyOdcNVo.js         5.45 kB │ gzip:   2.26 kB
+../../../../../../../tmp/homepage-analytics-build/assets/workbox-window.prod.es5-scn4_hCC.js     5.72 kB │ gzip:   2.35 kB
+../../../../../../../tmp/homepage-analytics-build/assets/LinkProviderModal-Cj0VPLPe.js           6.05 kB │ gzip:   2.33 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-CpvJA6TP.js                       6.34 kB │ gzip:   2.30 kB
+../../../../../../../tmp/homepage-analytics-build/assets/calendar-B1K14-1l.js                    6.44 kB │ gzip:   1.72 kB
+../../../../../../../tmp/homepage-analytics-build/assets/Navigation-sSOLx9nD.js                  7.18 kB │ gzip:   1.99 kB
+../../../../../../../tmp/homepage-analytics-build/assets/signup-DVhYXUlq.js                      7.58 kB │ gzip:   2.41 kB
+../../../../../../../tmp/homepage-analytics-build/assets/AppTopNav-CPsy6aak.js                   8.12 kB │ gzip:   3.03 kB
+../../../../../../../tmp/homepage-analytics-build/assets/business-CWM7JdM4.js                    8.30 kB │ gzip:   2.95 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-BWXyTktl.js                       8.70 kB │ gzip:   3.11 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-o-fnxSsS.js                       9.04 kB │ gzip:   3.25 kB
+../../../../../../../tmp/homepage-analytics-build/assets/website-newsletter-Bg880oV9.js          9.09 kB │ gzip:   2.89 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-DIxoR0oN.js                       9.14 kB │ gzip:   2.73 kB
+../../../../../../../tmp/homepage-analytics-build/assets/website-content-D4-i-KSb.js             9.71 kB │ gzip:   3.21 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-BDLu67Xh.js                       9.72 kB │ gzip:   2.68 kB
+../../../../../../../tmp/homepage-analytics-build/assets/api-DdmKIhOZ.js                        10.03 kB │ gzip:   3.87 kB
+../../../../../../../tmp/homepage-analytics-build/assets/public-experience-hkgvGCL6.js          10.89 kB │ gzip:   3.53 kB
+../../../../../../../tmp/homepage-analytics-build/assets/edit-service-HYRRaJl6.js               11.47 kB │ gzip:   2.85 kB
+../../../../../../../tmp/homepage-analytics-build/assets/api-DY07Qfq4.js                        12.05 kB │ gzip:   2.87 kB
+../../../../../../../tmp/homepage-analytics-build/assets/team-DPL4jB4d.js                       12.05 kB │ gzip:   3.86 kB
+../../../../../../../tmp/homepage-analytics-build/assets/website-setup-C_7QRmyR.js              13.00 kB │ gzip:   4.28 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-NYGtS6aT.js                      13.24 kB │ gzip:   2.79 kB
+../../../../../../../tmp/homepage-analytics-build/assets/profile-BAmhzg77.js                    14.77 kB │ gzip:   4.12 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-B_oms3qL.js                      16.80 kB │ gzip:   5.37 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-sFONT6vT.js                      17.64 kB │ gzip:   6.60 kB
+../../../../../../../tmp/homepage-analytics-build/assets/dashboard-Dmm8gte7.js                  18.49 kB │ gzip:   3.24 kB
+../../../../../../../tmp/homepage-analytics-build/assets/location-Co9ig9sH.js                   19.29 kB │ gzip:   4.61 kB
+../../../../../../../tmp/homepage-analytics-build/assets/PolicyManager-Kcmztoth.js              20.01 kB │ gzip:   4.81 kB
+../../../../../../../tmp/homepage-analytics-build/assets/subDays-BOzw5iFK.js                    22.23 kB │ gzip:   6.26 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-BF4coSAx.js                      22.64 kB │ gzip:   5.47 kB
+../../../../../../../tmp/homepage-analytics-build/assets/services-3yiVhey4.js                   22.77 kB │ gzip:   5.20 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-DS-Hcbya.js                      24.30 kB │ gzip:   8.34 kB
+../../../../../../../tmp/homepage-analytics-build/assets/assignments-BJFmS7q8.js                24.66 kB │ gzip:   5.77 kB
+../../../../../../../tmp/homepage-analytics-build/assets/preview-NEC4yZw0.js                    25.52 kB │ gzip:   6.84 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-ZC5is8H9.js                      32.26 kB │ gzip:  12.34 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-PfESgUMb.js                      32.58 kB │ gzip:   6.77 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-C3UIYy8e.js                      32.68 kB │ gzip:   6.40 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-BP1g83rs.js                      34.56 kB │ gzip:  10.98 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-DoTcHgm8.js                      40.74 kB │ gzip:   7.90 kB
+../../../../../../../tmp/homepage-analytics-build/assets/ConfigurableDashboard-1XIaiccL.js      46.31 kB │ gzip:  13.22 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-e9xhKNsx.js                      51.88 kB │ gzip:  10.59 kB
+../../../../../../../tmp/homepage-analytics-build/assets/availability-omp0Z6z1.js               56.03 kB │ gzip:  11.15 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-BunD5DWp.js                      64.18 kB │ gzip:  19.53 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-BVemc5_D.js                      64.76 kB │ gzip:   9.79 kB
+../../../../../../../tmp/homepage-analytics-build/assets/registry-CJrED9iM.js                   75.02 kB │ gzip:  10.24 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-BNBIAUk0.js                      82.78 kB │ gzip:  12.39 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-BDiBa4k8.js                     101.99 kB │ gzip:  19.25 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-CqFluCAL.js                     139.92 kB │ gzip:  36.12 kB
+../../../../../../../tmp/homepage-analytics-build/assets/ui-vendor-DzG544aN.js                 174.47 kB │ gzip:  51.63 kB
+../../../../../../../tmp/homepage-analytics-build/assets/react-vendor-BGxO5mgQ.js              234.17 kB │ gzip:  76.69 kB
+../../../../../../../tmp/homepage-analytics-build/assets/index-_R3uBGeI.js                     338.83 kB │ gzip: 112.08 kB
+✓ built in 12.56s
+
+PWA v1.2.0
+mode      generateSW
+precache  114 entries (2458.87 KiB)
+files generated
+  ../../../../../../../tmp/homepage-analytics-build/sw.js
+  ../../../../../../../tmp/homepage-analytics-build/workbox-c35ca7bb.js

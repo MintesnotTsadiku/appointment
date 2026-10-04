@@ -1,0 +1,28 @@
+{
+  "run": "BQA-2026-00174",
+  "source_version": "a810c2b+source-e3b0c44298fc+qa-0915670ce750",
+  "baseline_changed_count": 0,
+  "scenario_summary": {
+    "failed": 0,
+    "flaky": 0,
+    "passed": 1,
+    "skipped": 0,
+    "total": 1
+  },
+  "audit": {
+    "ok": true,
+    "publication_inventory_unchanged": true,
+    "read_only": true,
+    "remaining_record_count": 0
+  },
+  "artifacts": [
+    {
+      "file": "production-public-security.png",
+      "sha256": "1a72d48988c81e35de504589eba888cb795ebf860f141f65b22c113b8abe5163"
+    },
+    {
+      "file": "production-gates.json",
+      "sha256": "b0b729d7a1c4c69155cd87c9662a167b401c0d93a1760924f7a95b5e00a1ff5b"
+    }
+  ]
+}

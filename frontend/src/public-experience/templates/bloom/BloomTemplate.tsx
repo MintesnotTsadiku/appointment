@@ -2,6 +2,7 @@ import type { BookingTemplateProps, TemplateProps } from "../types";
 import { action, brandLogo, contentImage, designImage, formatPrice, localized, records, section } from "../content";
 import { usePublicChrome } from "../chrome";
 import "./bloom.css";
+import { BloomNewsletter } from "./BloomNewsletter";
 
 export function BloomSite({ snapshot, locale, applicationName, publicRoot, rootStyle, mode, toggleMode }: TemplateProps) {
   const chrome = usePublicChrome(locale);
@@ -28,7 +29,7 @@ export function BloomSite({ snapshot, locale, applicationName, publicRoot, rootS
   return <div data-pe-root data-pe-recipe={snapshot.recipeKey} data-pe-mode={mode} className="bloom-site" data-template="bloom-hair-v1" style={rootStyle}>
     <header className="bloom-nav">
       <a href={publicRoot}>{logo ? <img className="pe-brand-logo" src={logo} alt="" /> : null}{applicationName}</a>
-      <nav aria-label={chrome.t("navLabel")}><a href="#services">{chrome.t("services")}</a><a href="#people">{chrome.t("team")}</a><a href="#contact">{chrome.t("visit")}</a></nav>
+      <nav aria-label={chrome.t("navLabel")}><a href={`${publicRoot}/blog`}>{chrome.t("journal")}</a><a href={`${publicRoot}/gallery`}>{chrome.t("gallery")}</a><a href="#services">{chrome.t("services")}</a><a href="#people">{chrome.t("team")}</a><a href="#contact">{chrome.t("visit")}</a></nav>
       <button type="button" className="bloom-mode" onClick={toggleMode} aria-label={chrome.modeSwitchLabel(mode)}>{chrome.modeName(mode)} <span aria-hidden="true">{mode === "dark" ? "○" : "●"}</span></button>
       {primary ? <a className="bloom-button" href={primary.href}>{primary.label}</a> : null}
     </header>
@@ -59,7 +60,7 @@ export function BloomSite({ snapshot, locale, applicationName, publicRoot, rootS
       <section className="bloom-faq" id="faq"><div><h2>{localized(faq.title, locale)}</h2></div><div>{records(faq.items).map((item, index) => <details key={index}><summary>{localized(item.question, locale)}</summary><p>{localized(item.answer, locale)}</p></details>)}</div></section>
       <section className="bloom-studio" id="contact">{locationImage ? <img src={locationImage.src} alt={locationImage.alt} /> : null}<div><h2>{localized(locations.title, locale)}</h2>{location ? <address>{localized(location.address, locale)}<br />{localized(location.hours, locale)}<br />{String(location.phone || "")}</address> : null}</div></section>
       <section className="bloom-final"><div><h2>{localized(booking.title, locale)}</h2></div>{finalAction ? <a href={finalAction.href}>{finalAction.label}</a> : null}</section>
-    </main>
+    <BloomNewsletter snapshot={snapshot} applicationName={applicationName} locale={locale} publicRoot={publicRoot} /></main>
     <footer className="bloom-footer"><a href={publicRoot}>{logo ? <img className="pe-brand-logo" src={logo} alt="" /> : null}{applicationName}</a>{localized(footer.body, locale) ? <p>{localized(footer.body, locale)}</p> : null}<small>© {new Date().getFullYear()} {applicationName}</small></footer>
   </div>;
 }

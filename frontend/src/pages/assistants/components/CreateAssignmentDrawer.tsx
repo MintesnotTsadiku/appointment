@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Loader2, Users, UserCircle, Calendar, LinkIcon } from 'lucide-react';
 import { Drawer } from './Drawer';
+import { Input } from '@/components/input';
 import { Label } from '@/components/label';
 import { assistantAPI } from '@/lib/tasks-assistants/api';
 import { toast } from 'sonner';
@@ -257,7 +258,7 @@ export const CreateAssignmentDrawer = ({
             <Calendar className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
             Start Date
           </Label>
-          <input
+          <Input
             type="date"
             value={formData.start_date}
             onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
@@ -277,7 +278,7 @@ export const CreateAssignmentDrawer = ({
             <Calendar className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
             End Date (Optional)
           </Label>
-          <input
+          <Input
             type="date"
             value={formData.end_date || ''}
             onChange={(e) => setFormData({ ...formData, end_date: e.target.value || undefined })}

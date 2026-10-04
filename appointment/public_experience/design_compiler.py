@@ -27,6 +27,8 @@ _ALLOWED_INPUTS = frozenset(
         "application_name",
         "short_name",
         "accent_color",
+        "palette_choice",
+        "font_choice",
         "motion",
         "presentation_density",
         "hero_asset",
@@ -337,6 +339,8 @@ def _inputs(recipe, brand_inputs: Mapping[str, object] | None) -> dict[str, obje
         "heroAsset": "hero_asset",
         "detailAsset": "detail_asset",
         "accentColor": "accent_color",
+        "paletteChoice": "palette_choice",
+        "fontChoice": "font_choice",
         "applicationName": "application_name",
         "shortName": "short_name",
         "logoPrimary": "logo_primary",
@@ -372,8 +376,8 @@ def _inputs(recipe, brand_inputs: Mapping[str, object] | None) -> dict[str, obje
             result[field] = _safe_text(result[field], field)
     for field in ("logo_primary", "logo_compact", "favicon"):
         value = result.get(field)
-        if value is not None and (not isinstance(value, str) or not value.startswith("/assets/appointment/") or ".." in value or any(character in value for character in "?#<>\"'")):
-            raise _error(f"{field} must be a local appointment asset", field=field, observed=value)
+        if value is not None and (not isinstance(value, str) or not value.startswith(("/assets/appointment/", "/files/")) or ".." in value or any(character in value for character in "\\?#<>\"'") or any(ord(character) <= 32 for character in value)):
+            raise _error(f"{field} must be a validated local image asset", field=field, observed=value)
     for field, adjustment in (("hero_asset", "heroAsset"), ("detail_asset", "detailAsset")):
         allowed = set(recipe.adjustments.get(adjustment, {}).get("choices") or [])
         if not allowed or result.get(field) not in allowed:
@@ -444,9 +448,19 @@ def compile_design(
         capabilities["locales"] = list(locale_set)
     capability_document, sections, locales, richness = _capabilities(recipe, capabilities)
 
-    palette = _validate_palette(_load_primitive(recipe, "palette"))
+    from appointment.public_experience.appearance import selected_primitive
+
+    def primitive(kind, choice):
+        # "Template original" is the recipe's own primitive, so versioned recipes keep their own palette and fonts.
+        if not choice or choice == "default":
+            return _load_primitive(recipe, kind), recipe.primitives[kind].as_dict()
+        return selected_primitive(recipe, kind, choice)
+
+    palette_document, palette_reference = primitive("palette", input_values.get("palette_choice"))
+    font_document, font_reference = primitive("typography", input_values.get("font_choice"))
+    palette = _validate_palette(palette_document)
     tokens = _derive_tokens(palette, input_values.get("accent_color"))
-    typography = _validate_typography(_load_primitive(recipe, "typography"), locales)
+    typography = _validate_typography(font_document, locales)
     imagery = _validate_imagery(_load_primitive(recipe, "imagery"))
     layout = _validate_layout(_load_primitive(recipe, "layout"), recipe)
     surface = _validate_surface(_load_primitive(recipe, "surface"))
@@ -482,7 +496,8 @@ def compile_design(
         "recipeKey": recipe.key,
         "recipeVersion": recipe.version,
         "recipeHash": recipe.content_hash,
-        "primitiveManifest": {key: value.as_dict() for key, value in recipe.primitives.items()},
+        "primitiveManifest": {**{key: value.as_dict() for key, value in recipe.primitives.items()},
+                              "palette": palette_reference, "typography": font_reference},
         "tokens": tokens,
         "typography": {
             "supportedScripts": list(typography["supportedScripts"]),

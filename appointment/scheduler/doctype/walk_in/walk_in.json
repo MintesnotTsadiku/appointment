@@ -18,7 +18,9 @@
   "status",
   "assigned_appointment",
   "notes",
-  "created_at"
+  "created_at",
+  "assigned_at",
+  "workflow_events"
  ],
  "fields": [
   {
@@ -101,6 +103,19 @@
    "fieldtype": "Datetime",
    "label": "Created At",
    "read_only": 1
+  },
+  {
+   "fieldname": "assigned_at",
+   "fieldtype": "Datetime",
+   "label": "Assigned at UTC",
+   "read_only": 1
+  },
+  {
+   "fieldname": "workflow_events",
+   "fieldtype": "Long Text",
+   "label": "Workflow events",
+   "read_only": 1,
+   "hidden": 1
   }
  ],
  "index_web_pages_for_search": 1,

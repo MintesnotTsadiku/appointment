@@ -3,13 +3,29 @@ import { mergeConfig } from "./firstPaint";
 import { getFallbackPublicUIConfig } from "./tokens";
 import type { PublicUIConfig, PublishedSnapshot } from "./types";
 
+function requestError(body: unknown, status: number): Error {
+  if (body && typeof body === "object") {
+    const response = body as Record<string, unknown>;
+    if (typeof response._server_messages === "string") {
+      try {
+        const messages = JSON.parse(response._server_messages) as string[];
+        const detail = messages.map((message) => JSON.parse(message) as { message?: string })
+          .map((row) => row.message?.replace(/<[^>]*>/g, "") || "").filter(Boolean).join(" ");
+        if (detail) return new Error(detail);
+      } catch { /* Unrecognized error envelopes use the response status. */ }
+    }
+    if (typeof response.message === "string") return new Error(response.message);
+  }
+  return new Error("Unable to complete the request (" + status + ").");
+}
+
 async function fetchJson(path: string): Promise<unknown> {
   const response = await fetch(path, {
     credentials: "same-origin",
     headers: { Accept: "application/json" },
   });
-  if (!response.ok) throw new Error("public experience request failed: " + response.status);
   const body = (await response.json()) as unknown;
+  if (!response.ok) throw requestError(body, response.status);
   if (body && typeof body === "object" && "message" in (body as Record<string, unknown>)) {
     return (body as Record<string, unknown>).message;
   }
@@ -61,19 +77,17 @@ export async function callGet<T>(method: string, params?: Record<string, string 
 }
 
 export async function callMethod<T>(method: string, payload?: Record<string, unknown>): Promise<T> {
+  const csrfToken = window.frappe?.csrf_token;
   const response = await fetch("/api/method/" + method, {
     method: payload ? "POST" : "GET",
     credentials: "same-origin",
-    headers: { Accept: "application/json", "Content-Type": "application/json" },
+    headers: { Accept: "application/json", "Content-Type": "application/json",
+      ...(payload && csrfToken ? { "X-Frappe-CSRF-Token": csrfToken } : {}) },
     body: payload ? JSON.stringify(payload) : undefined,
   });
   const body = (await response.json()) as unknown;
   if (!response.ok) {
-    const detail =
-      body && typeof body === "object" && "message" in (body as Record<string, unknown>)
-        ? String((body as Record<string, unknown>).message)
-        : "request failed: " + response.status;
-    throw new Error(detail);
+    throw requestError(body, response.status);
   }
   if (body && typeof body === "object" && "message" in (body as Record<string, unknown>)) {
     return (body as Record<string, unknown>).message as T;

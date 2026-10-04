@@ -87,7 +87,7 @@ export function AbugidaSite({ snapshot, locale, applicationName, publicRoot, roo
   return <div ref={root} data-pe-root data-pe-recipe={snapshot.recipeKey} data-pe-mode={mode} data-motion={design.motion} className="ab" data-template="abugida-language-v2" style={rootStyle}>
     <a className="ab-skip" href="#ab-main">{chrome.t("skip")}</a>
     <Bar logo={logo} name={applicationName} root={publicRoot} chrome={chrome} mode={mode} toggleMode={toggleMode}>
-      <nav aria-label={chrome.t("navLabel")} className="ab-nav">
+      <nav aria-label={chrome.t("navLabel")} className="ab-nav"><a href={`${publicRoot}/blog`}>{chrome.t("journal")}</a><a href={`${publicRoot}/gallery`}>{chrome.t("gallery")}</a>
         {lessons.length ? <a href="#services">{chrome.t("services")}</a> : null}
         {coaches.length ? <a href="#team">{chrome.t("team")}</a> : null}
         {rooms.length ? <a href="#contact">{chrome.t("visit")}</a> : null}

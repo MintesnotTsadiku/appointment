@@ -5,3 +5,4 @@ Channels
 Tasks
 Assistants
 Public Experience
+Content

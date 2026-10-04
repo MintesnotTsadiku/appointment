@@ -8,8 +8,9 @@ from frappe.utils import add_days, nowdate
 
 from appointment.demo import showcase
 from appointment.scheduler import booking
+from appointment.tests import demo_offerings
 
-OFFERING = "EVT-2026-000109"  # Bloom: Cut and shape, Rahel Girma, Bole quiet styling room
+OFFERING = demo_offerings.cut_rahel()  # Bloom: Cut and shape, Rahel Girma, Bole quiet styling room
 
 
 def browser_values(manifest=None):

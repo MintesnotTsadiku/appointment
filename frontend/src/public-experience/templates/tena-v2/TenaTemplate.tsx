@@ -238,7 +238,7 @@ export function TenaSite({ snapshot, locale, applicationName, publicRoot, rootSt
           <Brand logo={logo} name={applicationName} href={publicRoot} />
           {localized(footer.body, locale) ? <p>{localized(footer.body, locale)}</p> : null}
         </div>
-        <nav aria-label={chrome.t("navLabel")}>
+        <nav aria-label={chrome.t("navLabel")}><a href={`${publicRoot}/blog`}>{chrome.t("journal")}</a><a href={`${publicRoot}/gallery`}>{chrome.t("gallery")}</a>
           {serviceItems.length ? <a href="#services">{chrome.t("services")}</a> : null}
           {firstPlace ? <a href="#contact">{chrome.t("visit")}</a> : null}
           {questions.length ? <a href="#faq">{chrome.t("questions")}</a> : null}

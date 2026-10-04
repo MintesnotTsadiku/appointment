@@ -8,8 +8,9 @@ from frappe.utils import add_days, nowdate
 
 from appointment.demo import showcase
 from appointment.scheduler import booking
+from appointment.tests import demo_offerings
 
-FIRST_OFFERING = "EVT-2026-000105"  # Wash and finish, Hanna: the first card on Bloom's page
+FIRST_OFFERING = demo_offerings.wash_hanna()  # Wash and finish, Hanna: the first card on Bloom's page
 
 
 def browser_values(manifest=None):

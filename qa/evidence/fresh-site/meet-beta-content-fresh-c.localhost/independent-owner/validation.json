@@ -1,0 +1,105 @@
+{
+  "run": "BQA-2026-04009",
+  "site": "meet-beta-content-fresh-c.localhost",
+  "status": "Passed",
+  "source_version": "ef9c42a+source-c67cdc98b923+qa-96cc244b8db9",
+  "scenario_summary": {
+    "failed": 0,
+    "flaky": 0,
+    "passed": 1,
+    "skipped": 0,
+    "total": 1
+  },
+  "baseline_changed_count": 0,
+  "audit": {
+    "ok": true,
+    "organization_proxy_created": false,
+    "remaining": {
+      "Appointment": 0,
+      "Brand Profile": 0,
+      "Business Newsletter Campaign": 0,
+      "Content Ownership": 0,
+      "EventType": 0,
+      "Gallery Collection": 0,
+      "Local Email Message": 0,
+      "Location": 0,
+      "Newsletter Audience Member": 0,
+      "Newsletter Sender Identity": 0,
+      "Organization": 0,
+      "Provider": 0,
+      "Public Site": 0,
+      "Published Content Release": 0,
+      "Service": 0
+    },
+    "remaining_record_count": 0
+  },
+  "cleanup": {
+    "exact_independent_businesses_removed": 1,
+    "ok": true
+  },
+  "roles": [
+    "All",
+    "Desk User",
+    "Guest",
+    "Provider"
+  ],
+  "scope": "Independent owner: scheduling before Website setup, explicit publication, guest booking, article and gallery publication, saved preview, and rollback.",
+  "artifacts": [
+    {
+      "file": "solo-guest-article.png",
+      "sha256": "58af6974c88eaa7ab23b46073b9b112557db917735c52281c46fb932e14b5064"
+    },
+    {
+      "file": "solo-guest-booking-confirmed.png",
+      "sha256": "b424134f21fbeda59d68582f75cfa41b568137d6a87339df4da8e1b7f426f868"
+    },
+    {
+      "file": "solo-guest-empty-gallery.png",
+      "sha256": "f4128bfb63c3ab09d9ba6a0287f846a812151eb4d9d028f1e10b0e12fd9776a1"
+    },
+    {
+      "file": "solo-guest-gallery.png",
+      "sha256": "9df061800abcd5903f0ab1d191e4a417822b910019f2a0500500938161a30e1c"
+    },
+    {
+      "file": "solo-guest-landing.png",
+      "sha256": "5027a41bb2d5a7ee64f2d84af2469efd8bfe6cb45ea59d1dac030a28bedf8131"
+    },
+    {
+      "file": "solo-operational-private.png",
+      "sha256": "5c853e056b9208474bce56a2b54afbb6b4b255d73f10152e28ac5a2ef1e5d6df"
+    },
+    {
+      "file": "solo-operational-published.png",
+      "sha256": "d71ada1e40f5f7e26b5a83a11bb29ccbbf1854982edd01a47ec4fdec61153586"
+    },
+    {
+      "file": "solo-owner-booked-schedule.png",
+      "sha256": "4d9c1565492dae3ce8215af50c846cfcc8d99f08f67f4049cfa7c2c197e34e52"
+    },
+    {
+      "file": "solo-owner-draft.png",
+      "sha256": "d62da6748e9b807bab050211b5216f0e9a25ca414a3463c93c62e01f9a823321"
+    },
+    {
+      "file": "solo-owner-published.png",
+      "sha256": "1fe01d280653991c4760361deb1c9f24f6494b73f2b2278bf8c9e27921bbbdd8"
+    },
+    {
+      "file": "solo-rolled-back-public-article.png",
+      "sha256": "58af6974c88eaa7ab23b46073b9b112557db917735c52281c46fb932e14b5064"
+    },
+    {
+      "file": "solo-saved-private-article.png",
+      "sha256": "d11ed6cf15b6db817179ea18a831be9a0d00875e96f25e67b1d6875e56c2e19b"
+    },
+    {
+      "file": "solo-schedule-without-website.png",
+      "sha256": "d31e59aabf9a60c1bcee32b5ac31a8921ebbfcd2bb3b69b5acfe6c86b5fdad0f"
+    },
+    {
+      "file": "solo-updated-public-article.png",
+      "sha256": "0dcbe2e315a38ae53e01c2f1d3bd33c64edcdbbfbdb4eb5391fbde61a969aae0"
+    }
+  ]
+}

@@ -49,11 +49,30 @@ class AnalyticsMathTest(unittest.TestCase):
     def test_occupied_union_includes_no_show_and_buffers_not_cancelled(self):
         day = date(2026, 9, 23)
         rows = [
-            frappe._dict(appointment_date=day, start_time=time(9), end_time=time(10), status="Completed", provider="p", service="s", occupied_from=None, occupied_until=None, booking_timezone="UTC"),
-            frappe._dict(appointment_date=day, start_time=time(9, 30), end_time=time(10, 30), status="No Show", provider="p", service="s", occupied_from=None, occupied_until=None, booking_timezone="UTC"),
+            frappe._dict(appointment_date=day, start_time=time(9), end_time=time(10), status="Completed", provider="p", service="s", occupied_from=datetime(2026,9,23,8,45), occupied_until=datetime(2026,9,23,10,15), booking_timezone="UTC"),
+            frappe._dict(appointment_date=day, start_time=time(9, 30), end_time=time(10, 30), status="No Show", provider="p", service="s", occupied_from=datetime(2026,9,23,9,15), occupied_until=datetime(2026,9,23,10,45), booking_timezone="UTC"),
             frappe._dict(appointment_date=day, start_time=time(11), end_time=time(12), status="Cancelled", provider="p", service="s", occupied_from=None, occupied_until=None, booking_timezone="UTC"),
         ]
         self.assertEqual(analytics._occupied_minutes(rows, day, day, ZoneInfo("UTC"), {"s": (15, 15)}), 120)
+
+    def test_missing_historical_intervals_are_not_rebuilt_from_current_buffers(self):
+        row=frappe._dict(appointment_date=date(2026,9,23),start_time=time(9),end_time=time(10),status='Confirmed',provider='p',service='s',occupied_from=None,occupied_until=None)
+        self.assertEqual(analytics._occupied_minutes([row],row.appointment_date,row.appointment_date,ZoneInfo('UTC'),{'s':(60,60)}),0)
+
+    def test_cohort_total_counts_retained_customers_and_declares_eligible_size(self):
+        from appointment.scheduler.analytics_customers import calculate
+        rows = [frappe._dict(client_email=email, status='Completed', appointment_date=day,
+                             client_phone='', amount_paid=0) for email, day in
+                [('first@example.test',date(2026,1,1)), ('second@example.test',date(2026,1,1)),
+                 ('second@example.test',date(2026,1,10))]]
+        contracts = {}
+        def metric(key, value, *args, **kwargs):
+            contracts[key] = dict(value=value, rows=kwargs.get('data',[]))
+        calculate(metric, rows, rows, date(2026,1,1), date(2026,6,1), date(2026,6,1), False)
+        cohort=contracts['cohorts']
+        self.assertEqual(cohort['value'],1)
+        self.assertEqual(sum(row['count'] for row in cohort['rows']),1)
+        self.assertEqual(sum(row['denominator'] for row in cohort['rows']),2)
 
     def test_csv_formula_prefix_and_quoting(self):
         self.assertEqual(analytics._csv_safe(" =2+2"), "' =2+2")

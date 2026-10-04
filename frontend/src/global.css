@@ -596,3 +596,13 @@ button[role="gridcell"][aria-selected="true"] span {
 .staff-dashboard[data-editing] .react-grid-item > .react-resizable-handle {
   opacity: 1;
 }
+
+/* Touch targets for the configurable dashboard's reorder and remove buttons. */
+[data-qa="workspace-analytics"] button[aria-label^="Move "],
+[data-qa="workspace-analytics"] button[aria-label^="Remove "] {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}

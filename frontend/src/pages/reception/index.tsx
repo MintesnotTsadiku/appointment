@@ -4,6 +4,7 @@ import { useFrappeGetCall } from 'frappe-react-sdk';
 import { format, startOfWeek, endOfWeek } from 'date-fns';
 import { AlertTriangle, CalendarClock, RotateCcw } from 'lucide-react';
 import { DeskHeader } from './components/DeskHeader';
+import { ReceptionState } from './components/ReceptionState';
 import { DeskFilters } from './components/DeskFilters';
 import { DeskCalendar } from './components/DeskCalendar';
 import { WalkInQueue } from './components/WalkInQueue';
@@ -88,7 +89,7 @@ const Reception = () => {
   );
 
   // Fetch locations and providers for filters
-  const { data: locationsData } = useFrappeGetCall<{ message: { locations: Location[] } }>(
+  const { data: locationsData, mutate: refreshLocations } = useFrappeGetCall<{ message: { locations: Location[] } }>(
     'appointment.scheduler.api.desk.get_locations_list',
     organization ? { organization } : undefined,
     `locations-${organization || 'all'}`
@@ -163,8 +164,11 @@ const Reception = () => {
             />
             <DeskStats visible={appointments.length} confirmed={confirmedCount} pending={pendingCount} providers={providers.length} />
           </div>
-          <p data-qa="reception-scope" className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+          <div data-qa="reception-scope" className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
             <span className="font-medium text-foreground">{deskScope?.organization_name || session?.selected?.business_name || t('staff.reception.allBusinesses')}</span>
+            {selectedLocation && (deskScope?.is_manager || deskScope?.receptionist) && (
+              <ReceptionState location={selectedLocation} state={locations.find((loc) => loc.name === selectedLocation)?.reception_state} refresh={() => void refreshLocations()} />
+            )}
             <span>{t('staff.reception.date')}: {format(currentDate, 'EEE, dd MMM yyyy')}</span>
             <span>{t('staff.reception.timezone')}: {deskTimezone || 'Africa/Addis_Ababa'}</span>
             <span>
@@ -172,7 +176,7 @@ const Reception = () => {
               {providerLabel ? ` · ${t('staff.reception.provider')} ${providerLabel}` : ''}
               {resourceLabel ? ` · ${t('staff.resources.sectionTitle')} ${resourceLabel}` : ''}
             </span>
-          </p>
+          </div>
         </section>
 
         <InsightBrief kind="reception" />
@@ -213,7 +217,7 @@ const Reception = () => {
           </Alert>
         )}
 
-        <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_320px]">
+        <div data-internal-grid className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_320px]">
           <div className="min-h-[600px] min-w-0">
             <DeskCalendar
               appointments={appointments}

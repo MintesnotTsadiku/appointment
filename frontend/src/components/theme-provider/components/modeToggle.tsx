@@ -3,7 +3,7 @@
  */
 import { useEffect, useState } from "react";
 import { Moon, Monitor, Sun } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 /**
  * Internal dependencies
@@ -16,6 +16,9 @@ const ROUTES_WITH_INTEGRATED_TOGGLE = [
   // Staff pages render the theme control in StaffShell's top bar.
   '/reception',
   '/home',
+  '/settings',
+  '/analytics',
+  '/calendar',
   '/onboarding',
   '/settings',
   '/calendar',
@@ -28,6 +31,7 @@ const ROUTES_WITH_INTEGRATED_TOGGLE = [
 
 const ModeToggle = () => {
   const { theme, setTheme } = useTheme();
+  const reducedMotion = useReducedMotion();
   const [shouldHide, setShouldHide] = useState(false);
 
   // Check current path on mount and when URL changes
@@ -95,10 +99,10 @@ const ModeToggle = () => {
       <AnimatePresence mode="wait">
         <motion.div
           key={theme + "-icon"}
-          initial={{ opacity: 0, y: 10 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.2 }}
+          exit={reducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
+          transition={{ duration: reducedMotion ? 0 : 0.2 }}
         >
           {theme === "light" ? (
             <Moon className="h-4 w-4 text-blue-500 fill-blue-500" />
@@ -113,10 +117,10 @@ const ModeToggle = () => {
       <AnimatePresence mode="wait">
         <motion.span
           key={theme + "-text"}
-          initial={{ opacity: 0 }}
+          initial={false}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
+          exit={{ opacity: reducedMotion ? 1 : 0 }}
+          transition={{ duration: reducedMotion ? 0 : 0.2 }}
           className="max-lg:hidden text-sm font-medium text-blue-500 dark:text-amber-500"
         >
           {theme === "light" ? "Dark" : theme === "dark" ? "System" : "Light"}

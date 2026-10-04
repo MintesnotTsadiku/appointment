@@ -1,0 +1,37 @@
+{
+  "production_entries": [
+    {
+      "template": "selam",
+      "production_entry": true,
+      "nonce_matches": true
+    },
+    {
+      "template": "meron",
+      "production_entry": true,
+      "nonce_matches": true
+    },
+    {
+      "template": "bloom",
+      "production_entry": true,
+      "nonce_matches": true
+    },
+    {
+      "template": "tena",
+      "production_entry": true,
+      "nonce_matches": true
+    },
+    {
+      "template": "abugida",
+      "production_entry": true,
+      "nonce_matches": true
+    }
+  ],
+  "page_errors": [],
+  "guest_private_requests": [],
+  "worker_root_scope": true,
+  "legacy_private_caches_removed": true,
+  "other_application_cache_preserved": true,
+  "private_api_denied": true,
+  "private_api_network_only": true,
+  "cached_private_paths": []
+}

@@ -13,7 +13,11 @@ for (const template of templates) {
   const source = fs.readdirSync(directory).filter((file) => file.endsWith("Template.tsx"));
   const styles = fs.readdirSync(directory).filter((file) => file.endsWith(".css"));
   assert.equal(source.length, 1, `${template} must own one template component`);
-  assert.equal(styles.length, 1, `${template} must own one stylesheet`);
+  assert.ok(styles.includes(`${template.replace(/-v2$/, "")}.css`), `${template} must own its main stylesheet`);
+  for (const stylesheet of styles) {
+    const css = fs.readFileSync(path.join(directory, stylesheet), "utf8");
+    assert.ok(!/@import[^;]*\.\.\//.test(css), `${template} cannot import another package stylesheet`);
+  }
   const component = fs.readFileSync(path.join(directory, source[0]), "utf8");
   assert.ok(component.includes("data-pe-mode={mode}"), `${template} must expose its resolved mode`);
   assert.ok(component.includes("toggleMode"), `${template} must own a mode switch`);

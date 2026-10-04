@@ -1,0 +1,61 @@
+{
+  "homepage": {
+    "run": "BQA-2026-00227",
+    "outcome": "passed",
+    "checks": [
+      "light/dark desktop/mobile",
+      "navigation",
+      "presets",
+      "persistence",
+      "filters",
+      "appearance mode",
+      "widget library",
+      "calendar popup",
+      "permissions",
+      "reception",
+      "category checkbox filtering"
+    ]
+  },
+  "independent": {
+    "run": "BQA-2026-00222",
+    "outcome": "passed",
+    "checks": [
+      "required selected-date preservation",
+      "calendar selection updates controlled input",
+      "guest booking confirmation",
+      "light/dark desktop/mobile",
+      "independent workspace"
+    ]
+  },
+  "prior_failures": [
+    {
+      "run": "BQA-2026-00215",
+      "reason": "Reception optimistic lock conflict; next full run passed"
+    },
+    {
+      "run": "BQA-2026-00217",
+      "reason": "Old business-name heading assertion; updated to business subtitle"
+    },
+    {
+      "run": "BQA-2026-00221",
+      "reason": "Required calendar date cleared on reselect; required selection fixed and next run passed"
+    }
+  ],
+  "typescript": {
+    "preexisting_errors": 271,
+    "changed_shared_control_errors": 0
+  },
+  "publishing": {
+    "run": "BQA-2026-00223",
+    "outcome": "passed",
+    "checks": [
+      "publishing",
+      "booking",
+      "staff invitation and permissions",
+      "business isolation",
+      "content and gallery",
+      "newsletter",
+      "workbook"
+    ]
+  }
+}

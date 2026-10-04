@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useFrappePostCall } from 'frappe-react-sdk';
+import { useFrappeGetCall, useFrappePostCall } from 'frappe-react-sdk';
 import { toast } from 'sonner';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/dialog';
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
 import { Label } from '@/components/label';
+import { NativeSelect } from '@/components/native-select';
 import { TimeInput } from '@/components/time-input';
 import { ClockFormatToggle } from '@/components/clock-format-toggle';
 import { StatusBadge } from '@/components/status-badge';
@@ -18,6 +19,19 @@ import { CustomerMessages } from './CustomerMessages';
 import { PaymentSection } from './PaymentSection';
 import { ResourceSection } from './ResourceSection';
 import { notificationNotice } from './notificationNotice';
+
+interface RecoveryCandidate {
+  name: string;
+  date: string;
+  time: string;
+}
+
+const STAGES = [
+  { stage: 'arrive', label: 'staff.receptionDesk.stageArrive' },
+  { stage: 'check-in', label: 'staff.receptionDesk.stageCheckIn' },
+  { stage: 'start', label: 'staff.receptionDesk.stageStart' },
+  { stage: 'end', label: 'staff.receptionDesk.stageEnd' },
+] as const;
 
 interface OwnedBookingActionsProps {
   appointment: Appointment;
@@ -34,21 +48,59 @@ export function OwnedBookingActions({ appointment, onClose, onSuccess }: OwnedBo
   const [timeValid, setTimeValid] = useState(true);
   const [problem, setProblem] = useState('');
   const [confirmCancel, setConfirmCancel] = useState(false);
+  const [reason, setReason] = useState('');
+  const [released, setReleased] = useState('');
   const { call, loading } = useFrappePostCall('appointment.scheduler.booking.change');
+  const stages = useFrappePostCall('appointment.scheduler.analytics_capture.reception_stage');
+  const recovery = useFrappePostCall('appointment.scheduler.analytics_capture.link_recovery');
+  const editable = ['Pending', 'Confirmed'].includes(appointment.status);
+  // Recovery links a replacement to a released provider slot, so resource-only bookings skip it.
+  const tracksProvider = editable && Boolean(appointment.provider);
+  const candidates = useFrappeGetCall<{ message: RecoveryCandidate[] }>(
+    'appointment.scheduler.analytics_capture.recovery_candidates',
+    { booking_id: appointment.name },
+    tracksProvider ? `recovery-candidates-${appointment.name}` : null
+  );
+
+  function fail(e: unknown) {
+    setProblem(parseFrappeErrorMsg(e as Parameters<typeof parseFrappeErrorMsg>[0]));
+  }
+
+  async function recordStage(stage: string, label: string) {
+    setProblem('');
+    try {
+      await stages.call({ booking_id: appointment.name, stage, expected_modified: appointment.modified });
+      toast.success(t('staff.receptionDesk.stageRecorded').replace('{0}', label));
+      onSuccess();
+      onClose();
+    } catch (e) {
+      fail(e);
+    }
+  }
+
+  async function linkRecovery() {
+    setProblem('');
+    try {
+      await recovery.call({ booking_id: appointment.name, released_booking: released });
+      onSuccess();
+      onClose();
+    } catch (e) {
+      fail(e);
+    }
+  }
 
   async function change(action: 'reschedule' | 'cancel') {
     setProblem('');
     try {
-      const result = await call({ booking_id: appointment.name, action, expected_modified: appointment.modified, date, start_time: time });
+      const result = await call({ booking_id: appointment.name, action, expected_modified: appointment.modified, date, start_time: time, reason });
       const notice = notificationNotice(result?.message?.notification_status);
       if (notice) toast.info(t(notice));
       onSuccess();
       onClose();
     } catch (e) {
-      setProblem(parseFrappeErrorMsg(e as Parameters<typeof parseFrappeErrorMsg>[0]));
+      fail(e);
     }
   }
-  const editable = ['Pending', 'Confirmed'].includes(appointment.status);
 
   return (
     <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
@@ -99,6 +151,22 @@ export function OwnedBookingActions({ appointment, onClose, onSuccess }: OwnedBo
           )}
 
           {editable && (
+            <section data-qa="booking-stages" className="space-y-3 rounded-lg border p-4">
+              <div className="space-y-1">
+                <h3 className="text-sm font-semibold text-foreground">{t('staff.receptionDesk.stagesTitle')}</h3>
+                <p className="text-xs text-muted-foreground">{t('staff.receptionDesk.stagesHint')}</p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {STAGES.map(({ stage, label }) => (
+                  <Button key={stage} type="button" size="sm" variant="outline" data-qa={`booking-stage-${stage}`} disabled={stages.loading} onClick={() => recordStage(stage, t(label))}>
+                    {t(label)}
+                  </Button>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {editable && (
             <section className="space-y-4">
               <h3 className="text-sm font-semibold text-foreground">{t('staff.receptionDesk.changeTime')}</h3>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -111,6 +179,10 @@ export function OwnedBookingActions({ appointment, onClose, onSuccess }: OwnedBo
                   <TimeInput id="booking-change-time" timeFormat={clockFormat} value={time} onChange={setTime} onValidityChange={setTimeValid} />
                   <ClockFormatToggle value={clockFormat} onChange={setClockFormat} />
                 </div>
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="booking-change-reason">{t('staff.receptionDesk.changeReason')}</Label>
+                <Input id="booking-change-reason" data-qa="booking-change-reason" value={reason} maxLength={500} onChange={(e) => setReason(e.target.value)} />
               </div>
               <div className="flex flex-wrap gap-2">
                 <Button data-qa="booking-reschedule" disabled={loading || !date || !time || !timeValid} onClick={() => change('reschedule')}>
@@ -135,6 +207,24 @@ export function OwnedBookingActions({ appointment, onClose, onSuccess }: OwnedBo
                   </div>
                 </div>
               )}
+            </section>
+          )}
+
+          {tracksProvider && Boolean(candidates.data?.message?.length) && (
+            <section data-qa="booking-recovery" className="space-y-3 rounded-lg border p-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="booking-recovery-slot">{t('staff.receptionDesk.recoveryTitle')}</Label>
+                <NativeSelect id="booking-recovery-slot" data-qa="booking-recovery-slot" value={released} onChange={(e) => setReleased(e.target.value)}>
+                  <option value="">{t('staff.receptionDesk.recoveryPlaceholder')}</option>
+                  {candidates.data?.message.map((row) => (
+                    <option key={row.name} value={row.name}>{row.date} {row.time} · {row.name}</option>
+                  ))}
+                </NativeSelect>
+                <p className="text-xs text-muted-foreground">{t('staff.receptionDesk.recoveryHint')}</p>
+              </div>
+              <Button type="button" variant="outline" size="sm" data-qa="booking-recovery-submit" disabled={!released || recovery.loading} onClick={linkRecovery}>
+                {t('staff.receptionDesk.recoverySubmit')}
+              </Button>
             </section>
           )}
 

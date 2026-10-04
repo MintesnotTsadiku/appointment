@@ -527,6 +527,22 @@
       "notifications": {
         "title": "Customer messages",
         "description": "Booking emails and reminders for customers"
+      },
+      "independentBooking": {
+        "title": "Your booking page",
+        "description": "Your services, hours and booking link as an independent provider"
+      },
+      "website": {
+        "title": "Website",
+        "description": "Create, preview and publish your business website"
+      },
+      "organizationImport": {
+        "title": "Organization workbook",
+        "description": "Import locations, staff, services and website content"
+      },
+      "appearance": {
+        "title": "Appearance",
+        "description": "Palette, color mode, typography and spacing"
       }
     },
     "status": {
@@ -570,9 +586,18 @@
         "team": "Team access",
         "teamHint": "Assign roles, providers and locations.",
         "site": "Website design",
-        "siteHint": "Preview and publish your public site."
+        "siteHint": "Preview and publish your public site.",
+        "independentBooking": "Your booking page",
+        "independentBookingHint": "Set services, hours and your booking link."
       },
-      "loadError": "Unable to load your workspace"
+      "loadError": "Unable to load your workspace",
+      "independentBusiness": "Independent business",
+      "attention": {
+        "one": "past appointment needs an outcome",
+        "many": "past appointments need an outcome",
+        "description": "Record completed, cancelled or no-show so today's board stays accurate.",
+        "action": "Record outcomes"
+      }
     },
     "analytics": {
       "scopeManager": "All business appointments",
@@ -651,7 +676,8 @@
         "utilization": "utilization",
         "view": "View insights"
       },
-      "customersLower": "returning customers"
+      "customersLower": "returning customers",
+      "filters": "Report filters"
     },
     "form": {
       "unsaved": "You have unsaved changes",
@@ -692,7 +718,12 @@
       "publishPage": "Publish a booking page",
       "notAssigned": "Reception is not assigned to you",
       "notAssignedHint": "Ask a manager to assign you a reception scope.",
-      "chooseBusiness": "Choose a business"
+      "chooseBusiness": "Choose a business",
+      "receptionState": "Reception state",
+      "stateUnconfigured": "Not set",
+      "stateOpen": "Reception open",
+      "stateClosed": "Reception closed",
+      "stateError": "Unable to change reception state. Reload and retry."
     },
     "team": {
       "description": "Give people access to this business and choose what they can see. Access is always limited to the roles and scope you set here.",
@@ -705,7 +736,7 @@
       "revokeTitle": "Revoke access to this business?",
       "revokeDescription": "will immediately lose access to this business. Their account and past appointments are kept.",
       "assignTitle": "Assign staff",
-      "assignDescription": "Add an existing account, or create a local one.",
+      "assignDescription": "Give an accepted account its role and scope.",
       "email": "Account email",
       "fullName": "Full name",
       "fullNameHint": "Only used when a new account is created.",
@@ -713,7 +744,7 @@
       "providerScope": "Provider scope (optional)",
       "locationScope": "Location scope",
       "locationScopeHint": "Leave all unchecked to allow every location in this business.",
-      "localOnly": "Local account assignment only. No email is delivered in this environment; new accounts are created without a password and an administrator sets one locally.",
+      "localOnly": "Invite staff first so they choose their own password, then assign the accepted account its role and scope. No external email is sent.",
       "assign": "Assign",
       "assigning": "Assigning…",
       "business": "Business",
@@ -723,6 +754,15 @@
         "manager": "Business setup, publication, team and oversight.",
         "provider": "Sees and manages appointments permitted by their scope.",
         "receptionist": "Manages permitted appointments for the assigned scope."
+      },
+      "invite": {
+        "title": "Invite staff",
+        "description": "The invited person chooses their own password. Assign their role and scope after they accept. No external email is sent.",
+        "email": "Email address",
+        "send": "Create invitation",
+        "open": "Open invitation",
+        "revoke": "Revoke",
+        "failed": "The invitation could not be saved. Try again."
       }
     },
     "business": {
@@ -824,7 +864,19 @@
       "fieldName": "Customer name",
       "fieldEmail": "Email",
       "fieldPhone": "Phone",
-      "fieldNotes": "Notes"
+      "fieldNotes": "Notes",
+      "stagesTitle": "Reception stages",
+      "stagesHint": "Record each stage when it happens. These stages stay separate from booking outcomes.",
+      "stageArrive": "Arrival",
+      "stageCheckIn": "Check in",
+      "stageStart": "Start service",
+      "stageEnd": "End service",
+      "stageRecorded": "{0} recorded.",
+      "changeReason": "Reason (optional)",
+      "recoveryTitle": "Verified released slot",
+      "recoveryPlaceholder": "Choose a captured cancellation",
+      "recoveryHint": "Record this link only when this booking replaced the released slot.",
+      "recoverySubmit": "Record verified recovery"
     },
     "calendar": {
       "title": "My schedule",
@@ -1084,6 +1136,18 @@
         "businessType": "Business Type",
         "timezone": "Timezone",
         "language": "Language"
+      },
+      "details": {
+        "title": "Your details",
+        "description": "Your name and phone number across all workspaces.",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "phone": "Phone Number",
+        "save": "Save details",
+        "saving": "Saving…",
+        "discard": "Discard changes",
+        "saved": "Your details are saved.",
+        "failed": "Your details could not be saved. Your changes are still here; try again."
       }
     },
     "calendarSync": {
@@ -1520,6 +1584,11 @@
         "friday": "Friday",
         "saturday": "Saturday",
         "sunday": "Sunday"
+      },
+      "structure": {
+        "label": "Business structure",
+        "organization": "Business with a team",
+        "individual": "Independent provider"
       }
     },
     "widgets": {
@@ -2047,7 +2116,9 @@
     "email": "Email",
     "hours": "Opening hours",
     "address": "Address",
-    "step": "Step {count}"
+    "step": "Step {count}",
+    "journal": "Journal",
+    "gallery": "Gallery"
   },
   "customerEmail": {
     "subjectConfirmation": "Your booking with {0} is confirmed",

@@ -18,9 +18,10 @@ from frappe.utils import add_days, nowdate
 
 from appointment.scheduler import booking, notifications, payments, resources, statements
 from appointment.tests import payments_qa_fixtures
+from appointment.tests import demo_offerings
 
 ORG = payments_qa_fixtures.ORG
-RAHEL = "EVT-2026-000109"  # Cut and shape, Rahel, Bole quiet styling room
+RAHEL = demo_offerings.cut_rahel()  # Cut and shape, Rahel, Bole quiet styling room
 TYPE_NAME = "Styling chair (E2E)"
 PREFIX = "QAE2E"
 STATE_KEY = "appointment_e2e_state"

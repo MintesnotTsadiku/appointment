@@ -17,7 +17,7 @@ from frappe.utils.password import update_password
 from appointment.scheduler import booking
 from appointment.tests import owned_booking_fixtures as fixtures
 
-BASE = "http://127.0.0.20:25310"
+BASE = (frappe.conf.get("host_name") or ("http://127.0.0.11:34340" if frappe.local.site in ("meet-beta-content-fresh-b.localhost", "meet-beta-feat-content-publishing-galler-5839d4.localhost") else "http://127.0.0.20:25310")).rstrip("/")
 
 
 class OwnedBookingAcceptance(unittest.TestCase):
@@ -26,6 +26,7 @@ class OwnedBookingAcceptance(unittest.TestCase):
         cls.state = fixtures.setup()
         cls.a, cls.b = cls.state["businesses"]
         cls.sessions = []
+        cls.addClassCleanup(cls.finish)
         cls.day = cls.state["day"]
         cls.results = []
         for item in (cls.a, cls.b, {"user": cls.state["customer"]}):
@@ -42,9 +43,12 @@ class OwnedBookingAcceptance(unittest.TestCase):
         frappe.set_user("Administrator")
 
     @classmethod
-    def tearDownClass(cls):
+    def finish(cls):
         for session in cls.sessions:
-            session.get(BASE + "/api/method/logout", timeout=20)
+            try:
+                session.get(BASE + "/api/method/logout", timeout=20)
+            except requests.RequestException:
+                pass
             session.close()
         cls.cleanup = fixtures.cleanup(cls.state)
 

@@ -49,7 +49,7 @@ export function ServiceSelector({
   }));
 
   return (
-    <div className={cn("w-full max-w-6xl mx-auto space-y-8", className)}>
+    <div role="region" aria-label="Available appointment services" className={cn("w-full max-w-6xl mx-auto space-y-8", className)}>
       {/* Organization Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -485,7 +485,7 @@ function ServiceCard({ service, onSelect, availableProviders = [], showProviderN
           className="flex items-center justify-between pt-4"
           style={{ borderTop: '1px solid var(--border-default)' }}
         >
-          <span className="text-sm font-medium" style={{ color: 'var(--accent-primary)' }}>
+          <span className="text-sm font-medium" style={{ color: 'var(--booking-action-text, var(--accent-primary))' }}>
           {t("serviceSelector.book")}
         </span>
           <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" style={{ color: 'var(--accent-primary)' }} />
@@ -575,4 +575,3 @@ function ServiceSelectorLoading() {
     </div>
   );
 }
-

@@ -1,0 +1,2622 @@
+{
+  "engine": "axe-core 4.11.0",
+  "viewport": "desktop",
+  "mode": "light",
+  "scope": "Automated WCAG A/AA checks, keyboard traversal, and local compiled-production navigation budget; manual accessibility review remains separate.",
+  "reports": [
+    {
+      "surface": "landing",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                "span[aria-hidden=\"true\"]"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "rgb(21, 21, 21)",
+                "decoration": "none",
+                "fontSize": "10px",
+                "fontWeight": "800",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content contains only non-text characters",
+                  "data": {
+                    "messageKey": "nonBmp"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "i:nth-child(2)"
+              ],
+              "reviewStyles": {
+                "tag": "I",
+                "color": "rgb(244, 239, 226)",
+                "decoration": "none",
+                "fontSize": "13px",
+                "fontWeight": "800",
+                "backgrounds": [
+                  {
+                    "tag": "SECTION",
+                    "color": "rgb(17, 61, 181)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content contains only non-text characters",
+                  "data": {
+                    "messageKey": "nonBmp"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "i:nth-child(4)"
+              ],
+              "reviewStyles": {
+                "tag": "I",
+                "color": "rgb(244, 239, 226)",
+                "decoration": "none",
+                "fontSize": "13px",
+                "fontWeight": "800",
+                "backgrounds": [
+                  {
+                    "tag": "SECTION",
+                    "color": "rgb(17, 61, 181)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content contains only non-text characters",
+                  "data": {
+                    "messageKey": "nonBmp"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "i:nth-child(6)"
+              ],
+              "reviewStyles": {
+                "tag": "I",
+                "color": "rgb(244, 239, 226)",
+                "decoration": "none",
+                "fontSize": "13px",
+                "fontWeight": "800",
+                "backgrounds": [
+                  {
+                    "tag": "SECTION",
+                    "color": "rgb(17, 61, 181)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content contains only non-text characters",
+                  "data": {
+                    "messageKey": "nonBmp"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 140.90000000596046,
+      "lcpMs": 460,
+      "cls": 0,
+      "externalResources": [],
+      "keyboard": [
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "Abugida Language Studio"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "Journal"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "Gallery"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "Practice"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "How it works"
+        }
+      ]
+    },
+    {
+      "surface": "book",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                "span[aria-hidden=\"true\"]"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "rgb(21, 21, 21)",
+                "decoration": "none",
+                "fontSize": "10px",
+                "fontWeight": "800",
+                "backgrounds": [
+                  {
+                    "tag": "MAIN",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content contains only non-text characters",
+                  "data": {
+                    "messageKey": "nonBmp"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 78.59999999403954,
+      "lcpMs": 320,
+      "cls": 0,
+      "externalResources": [],
+      "keyboard": [
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "Abugida Language Studio"
+        },
+        {
+          "tag": "BUTTON",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "Switch to dark mode"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "Back to the studio"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(255, 255, 255)",
+          "shadow": "none",
+          "name": "Choose a practice time \u2197"
+        }
+      ]
+    },
+    {
+      "surface": "scheduler",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                ".text-2xl.h-full.justify-center"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "rgb(255, 255, 255)",
+                "decoration": "none",
+                "fontSize": "24px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "SPAN",
+                    "color": "rgb(17, 61, 181)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content is too short to determine if it is actual text content",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "18.0pt (24px)",
+                    "fontWeight": "normal",
+                    "messageKey": "shortTextContent",
+                    "expectedContrastRatio": "3:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "h1"
+              ],
+              "reviewStyles": {
+                "tag": "H1",
+                "color": "rgb(21, 21, 21)",
+                "decoration": "none",
+                "fontSize": "36px",
+                "fontWeight": "700",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "27.0pt (36px)",
+                    "fontWeight": "bold",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "3:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".text-lg.mb-3"
+              ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "color(srgb 0.240392 0.232745 0.217451)",
+                "decoration": "none",
+                "fontSize": "18px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "13.5pt (18px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".gap-2.items-center.flex:nth-child(1) > span"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.240392 0.232745 0.217451)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".gap-4.flex-wrap.text-sm > .gap-2.items-center.flex:nth-child(2) > span"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.240392 0.232745 0.217451)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "h2"
+              ],
+              "reviewStyles": {
+                "tag": "H2",
+                "color": "rgb(21, 21, 21)",
+                "decoration": "none",
+                "fontSize": "24px",
+                "fontWeight": "700",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "18.0pt (24px)",
+                    "fontWeight": "bold",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "3:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "div:nth-child(1) > p"
+              ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "color(srgb 0.240392 0.232745 0.217451)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "12.0pt (16px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".hover\\:bg-\\[var\\(--border-default\\)\\]"
+              ],
+              "reviewStyles": {
+                "tag": "BUTTON",
+                "color": "color(srgb 0.240392 0.232745 0.217451)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "500",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".space-y-4 > h3"
+              ],
+              "reviewStyles": {
+                "tag": "H3",
+                "color": "rgb(21, 21, 21)",
+                "decoration": "none",
+                "fontSize": "18px",
+                "fontWeight": "600",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "13.5pt (18px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000080\"] > .relative > .text-xl.pr-16"
+              ],
+              "reviewStyles": {
+                "tag": "H4",
+                "color": "rgb(21, 21, 21)",
+                "decoration": "none",
+                "fontSize": "20px",
+                "fontWeight": "600",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "15.0pt (20px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000080\"] > .relative > .mb-3.gap-2"
+              ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "color(srgb 0.240392 0.232745 0.217451)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000080\"] > .relative > .line-clamp-2.mb-4"
+              ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "color(srgb 0.240392 0.232745 0.217451)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000080\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(1) > span"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.240392 0.232745 0.217451)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000080\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(2) > span"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.240392 0.232745 0.217451)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000080\"] > .relative > .pt-4.justify-between.items-center > .font-medium"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.0729412 0.176471 0.458824)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "500",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000079\"] > .relative > .text-xl.pr-16"
+              ],
+              "reviewStyles": {
+                "tag": "H4",
+                "color": "rgb(21, 21, 21)",
+                "decoration": "none",
+                "fontSize": "20px",
+                "fontWeight": "600",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "15.0pt (20px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000079\"] > .relative > .mb-3.gap-2"
+              ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "color(srgb 0.240392 0.232745 0.217451)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000079\"] > .relative > .line-clamp-2.mb-4"
+              ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "color(srgb 0.240392 0.232745 0.217451)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000079\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(1) > span"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.240392 0.232745 0.217451)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000079\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(2) > span"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.240392 0.232745 0.217451)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000079\"] > .relative > .pt-4.justify-between.items-center > .font-medium"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.0729412 0.176471 0.458824)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "500",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000078\"] > .relative > .text-xl.pr-16"
+              ],
+              "reviewStyles": {
+                "tag": "H4",
+                "color": "rgb(21, 21, 21)",
+                "decoration": "none",
+                "fontSize": "20px",
+                "fontWeight": "600",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "15.0pt (20px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000078\"] > .relative > .mb-3.gap-2"
+              ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "color(srgb 0.240392 0.232745 0.217451)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000078\"] > .relative > .line-clamp-2.mb-4"
+              ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "color(srgb 0.240392 0.232745 0.217451)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000078\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(1) > span"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.240392 0.232745 0.217451)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000078\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(2) > span"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.240392 0.232745 0.217451)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000078\"] > .relative > .pt-4.justify-between.items-center > .font-medium"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.0729412 0.176471 0.458824)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "500",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000077\"] > .relative > .text-xl.pr-16"
+              ],
+              "reviewStyles": {
+                "tag": "H4",
+                "color": "rgb(21, 21, 21)",
+                "decoration": "none",
+                "fontSize": "20px",
+                "fontWeight": "600",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "15.0pt (20px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000077\"] > .relative > .mb-3.gap-2"
+              ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "color(srgb 0.240392 0.232745 0.217451)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000077\"] > .relative > .line-clamp-2.mb-4"
+              ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "color(srgb 0.240392 0.232745 0.217451)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000077\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(1) > span"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.240392 0.232745 0.217451)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000077\"] > .relative > .flex-wrap.gap-3.mb-4 > .gap-1.items-center.flex:nth-child(2) > span"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.240392 0.232745 0.217451)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "button[data-qa-service-slug=\"EVT-2026-000077\"] > .relative > .pt-4.justify-between.items-center > .font-medium"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "color(srgb 0.0729412 0.176471 0.458824)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "500",
+                "backgrounds": [
+                  {
+                    "tag": "BUTTON",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".p-6.backdrop-blur-sm.rounded-xl > h3"
+              ],
+              "reviewStyles": {
+                "tag": "H3",
+                "color": "rgb(21, 21, 21)",
+                "decoration": "none",
+                "fontSize": "18px",
+                "fontWeight": "600",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "color(srgb 0.596078 0.572549 0.52549 / 0.45)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "13.5pt (18px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".font-normal.text-primary:nth-child(1)"
+              ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "rgb(23, 23, 23)",
+                "decoration": "none",
+                "fontSize": "14px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                ".hover\\:underline"
+              ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(21, 21, 21)",
+                "decoration": "underline",
+                "fontSize": "14px",
+                "fontWeight": "600",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "linear-gradient(135deg, color(srgb 0.596078 0.572549 0.52549 / 0.45) 0px, color(srgb 0.596078 0.572549 0.52549 / 0.45) 1px, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0) 32px)"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined due to a background gradient",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": "bgGradient",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 147.19999998807907,
+      "lcpMs": 1036,
+      "cls": 0,
+      "externalResources": [],
+      "keyboard": [
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(17, 61, 181)",
+          "color": "rgb(10, 10, 10)",
+          "shadow": "none",
+          "name": "Back to Abugida Language Studio"
+        },
+        {
+          "tag": "BUTTON",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(17, 61, 181)",
+          "color": "rgb(10, 10, 10)",
+          "shadow": "none",
+          "name": "Switch to dark mode"
+        },
+        {
+          "tag": "BUTTON",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "0px",
+          "outlineColor": "rgb(255, 255, 255)",
+          "color": "rgb(255, 255, 255)",
+          "shadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px",
+          "name": "View by Services"
+        },
+        {
+          "tag": "BUTTON",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "1px",
+          "outlineColor": "rgb(60, 59, 60)",
+          "color": "color(srgb 0.240392 0.232745 0.217451)",
+          "shadow": "none",
+          "name": "View by Providers"
+        },
+        {
+          "tag": "BUTTON",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "1px",
+          "outlineColor": "rgb(21, 22, 26)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "rgba(8, 18, 40, 0.12) 0px 16px 40px 0px",
+          "name": "Amharic starter sessionAbel FikruA welcoming 45-minute introduction to useful Amharic phrases, pronunciation and a simple practice plan.45 min550 ETBBook Appointment"
+        }
+      ]
+    },
+    {
+      "surface": "blog",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                "span[aria-hidden=\"true\"]"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "rgb(21, 21, 21)",
+                "decoration": "none",
+                "fontSize": "86.4px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content contains only non-text characters",
+                  "data": {
+                    "messageKey": "nonBmp"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "link-in-text-block",
+          "nodes": [
+            {
+              "target": [
+                "a[aria-label=\"Learning in a welcoming space\"]"
+              ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(21, 21, 21)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "ARTICLE",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "a[aria-label=\"Practice between appointments\"]"
+              ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(21, 21, 21)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "ARTICLE",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "article:nth-child(3) > a"
+              ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(21, 21, 21)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "ARTICLE",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 154.80000001192093,
+      "lcpMs": 360,
+      "cls": 0,
+      "externalResources": [],
+      "keyboard": [
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "Skip to content"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "Abugida Language Studio"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "Home"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "Journal"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "Gallery"
+        }
+      ]
+    },
+    {
+      "surface": "article",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                "span[aria-hidden=\"true\"]"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "rgb(21, 21, 21)",
+                "decoration": "none",
+                "fontSize": "86.4px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content contains only non-text characters",
+                  "data": {
+                    "messageKey": "nonBmp"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "div:nth-child(4) > p"
+              ],
+              "reviewStyles": {
+                "tag": "P",
+                "color": "rgb(21, 21, 21)",
+                "decoration": "none",
+                "fontSize": "18px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element's background color could not be determined because it partially overlaps other elements",
+                  "data": {
+                    "contrastRatio": 0,
+                    "fontSize": "13.5pt (18px)",
+                    "fontWeight": "normal",
+                    "messageKey": "elmPartiallyObscuring",
+                    "expectedContrastRatio": "4.5:1"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "link-in-text-block",
+          "nodes": [
+            {
+              "target": [
+                "#published-content > a[href$=\"blog\"]"
+              ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(21, 21, 21)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 125.30000001192093,
+      "lcpMs": 324,
+      "cls": 0,
+      "externalResources": [],
+      "keyboard": [
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "Skip to content"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "Abugida Language Studio"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "Home"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "Journal"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "Gallery"
+        }
+      ],
+      "inlineLinkReview": {
+        "decoration": "underline",
+        "focused": true,
+        "outline": "solid"
+      }
+    },
+    {
+      "surface": "gallery",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                "span[aria-hidden=\"true\"]"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "rgb(21, 21, 21)",
+                "decoration": "none",
+                "fontSize": "86.4px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content contains only non-text characters",
+                  "data": {
+                    "messageKey": "nonBmp"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "link-in-text-block",
+          "nodes": [
+            {
+              "target": [
+                "a[aria-label=\"Around the language house\"]"
+              ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(21, 21, 21)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "ARTICLE",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "a[aria-label=\"Places to practise together\"]"
+              ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(21, 21, 21)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "ARTICLE",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 113.90000000596046,
+      "lcpMs": 240,
+      "cls": 0,
+      "externalResources": [],
+      "keyboard": [
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "Skip to content"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "Abugida Language Studio"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "Home"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "Journal"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "Gallery"
+        }
+      ]
+    },
+    {
+      "surface": "collection",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                "span[aria-hidden=\"true\"]"
+              ],
+              "reviewStyles": {
+                "tag": "SPAN",
+                "color": "rgb(21, 21, 21)",
+                "decoration": "none",
+                "fontSize": "86.4px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "color-contrast",
+                  "message": "Element content contains only non-text characters",
+                  "data": {
+                    "messageKey": "nonBmp"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "link-in-text-block",
+          "nodes": [
+            {
+              "target": [
+                "a[target=\"_blank\"]"
+              ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(21, 21, 21)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            },
+            {
+              "target": [
+                "#published-content > a[href$=\"gallery\"]"
+              ],
+              "reviewStyles": {
+                "tag": "A",
+                "color": "rgb(21, 21, 21)",
+                "decoration": "none",
+                "fontSize": "16px",
+                "fontWeight": "400",
+                "backgrounds": [
+                  {
+                    "tag": "DIV",
+                    "color": "rgb(244, 239, 226)",
+                    "image": "none"
+                  },
+                  {
+                    "tag": "BODY",
+                    "color": "rgb(255, 255, 255)",
+                    "image": "none"
+                  }
+                ]
+              },
+              "checks": [
+                {
+                  "id": "link-in-text-block",
+                  "message": "Element's contrast ratio could not be determined because of element overlap",
+                  "data": {
+                    "messageKey": "bgOverlap"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "navigationMs": 92.40000000596046,
+      "lcpMs": 236,
+      "cls": 0,
+      "externalResources": [],
+      "keyboard": [
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "Skip to content"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "Abugida Language Studio"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "Home"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "Journal"
+        },
+        {
+          "tag": "A",
+          "visible": true,
+          "outline": "solid",
+          "outlineWidth": "3px",
+          "outlineColor": "rgb(7, 89, 133)",
+          "color": "rgb(21, 21, 21)",
+          "shadow": "none",
+          "name": "Gallery"
+        }
+      ]
+    }
+  ]
+}

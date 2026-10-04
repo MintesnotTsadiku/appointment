@@ -10,6 +10,10 @@ class Appointment(Document):
     def validate(self):
         validate_document(self)
 
+    def before_save(self):
+        from appointment.scheduler.analytics_capture import capture
+        capture(self)
+
     def after_insert(self):
         creation_history(self)
 

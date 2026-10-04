@@ -6,6 +6,11 @@ from frappe.model.document import Document
 
 
 class Location(Document):
+	def before_save(self):
+		old = self.get_doc_before_save()
+		self.reception_state = old.reception_state if old else "Unconfigured"
+		self.reception_events = old.reception_events if old else "[]"
+
 	def on_update(self):
 		"""Sync booking URLs for related providers/organizations"""
 		# Skip if we're already syncing to prevent recursion

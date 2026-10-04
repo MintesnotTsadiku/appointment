@@ -6,12 +6,87 @@ import json
 
 import frappe
 
+from appointment.content.monitoring import observed
+
 from appointment.public_experience import access, brand_compiler, publisher
 from appointment.public_experience import public_config
 from appointment.public_experience import resolver as resolver_module
 from appointment.public_experience.errors import BrandExperienceError, StaleDraftError
 from appointment.public_experience.recipes import list_recipes
 from appointment.public_experience.reserved import normalize_slug
+
+
+@frappe.whitelist(methods=["GET"])
+def website_setup_context(industry: str = "", mood: str = "", audience: str = "", density: str = ""):
+    from appointment.public_experience import setup
+
+    organizations = access.membership.manager_organizations()
+    providers = [name for name in access.owned_providers()
+                 if frappe.db.get_value("Provider", name, "organization_status") == "Independent"]
+    owners = [{"type": "Organization", "name": name,
+               "label": frappe.db.get_value("Organization", name, "organization_name")} for name in organizations]
+    owners += [{"type": "Provider", "name": name,
+                "label": frappe.db.get_value("Provider", name, "provider_name")} for name in providers]
+    sites = frappe.get_list("Public Site", filters={"status": ["!=", "Archived"]}, pluck="name")
+    selected = access.membership.context().get("selected") or {}
+    selected_owner = selected.get("organization")
+    if selected_owner not in {row["name"] for row in owners}:
+        selected_owner = owners[0]["name"] if len(owners) == 1 else None
+    return {"selectedOwner": selected_owner, "owners": owners, "catalog": setup.ranked_catalog(industry, mood, audience, density),
+            "sites": [setup.state(setup.require_site(name)) for name in sites]}
+
+
+@frappe.whitelist(methods=["POST"])
+@observed("identity.upload", scope="site")
+def upload_website_identity(site: str, expected_version: int, kind: str, content_base64: str, public_consent: int):
+    from appointment.public_experience.identity_media import upload
+
+    return upload(site, expected_version, kind, content_base64, public_consent)
+
+
+@frappe.whitelist(methods=["POST"])
+def preview_website_template(owner_type: str, owner: str, recipe_key: str, preferences=None):
+    from appointment.public_experience import setup
+
+    return setup.preview_template(owner_type, owner, recipe_key, preferences)
+
+
+@frappe.whitelist(methods=["POST"])
+def start_website_setup(owner_type: str, owner: str, title: str, slug: str, recipe_key: str, preferences=None):
+    from appointment.public_experience import setup
+
+    return setup.start(owner_type, owner, title, slug, recipe_key, preferences)
+
+
+@frappe.whitelist(methods=["POST"])
+def save_website_setup(site: str, expected_version: int, step: str, title=None,
+                       sections=None, features=None, brand_inputs=None):
+    from appointment.public_experience import setup
+
+    return setup.save(site, expected_version, step, title, sections, features, brand_inputs)
+
+
+@frappe.whitelist(methods=["POST"])
+@observed("website.preview", scope="site")
+def preview_website_setup(site: str, expected_version: int, brand_inputs=None):
+    from appointment.public_experience import setup
+
+    return setup.preview(site, expected_version, brand_inputs)
+
+
+@frappe.whitelist(methods=["POST"])
+def website_setup_readiness(site: str, expected_version: int):
+    from appointment.public_experience import setup
+
+    return setup.readiness(site, expected_version)
+
+
+@frappe.whitelist(methods=["POST"])
+@observed("website.publish", scope="site")
+def publish_website_setup(site: str, expected_version: int):
+    from appointment.public_experience import setup
+
+    return setup.publish(site, expected_version)
 
 
 def _request_host() -> str:
@@ -52,6 +127,14 @@ def get_public_experience_snapshot(locale: str | None = None, public_path: str |
         slug = frappe.db.get_value("Organization", context.organization, "slug")
         if slug:
             booking_path = f"/schedule/org/{slug}"
+    elif context.provider:
+        if frappe.db.get_value("Provider", context.provider, "enable_public_booking"):
+            event = frappe.db.get_value("EventType", {"provider": context.provider, "is_active": 1}, "name")
+            if event:
+                from appointment.scheduler.booking import offering
+
+                offering(event, public=True)
+                booking_path = f"/schedule/individual/{event}"
     return {
         "contract": "appointment-public-snapshot.v2",
         "releaseHash": context.release_hash,
@@ -68,6 +151,8 @@ def get_public_experience_snapshot(locale: str | None = None, public_path: str |
         "sections": snapshot.get("sections", []),
         "seo": snapshot.get("seo", {}),
         "booking": snapshot.get("booking", {}),
+        "features": snapshot.get("features", []),
+        "siteSlug": frappe.db.get_value("Public Site", context.public_site, "slug"),
     }
 
 

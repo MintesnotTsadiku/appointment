@@ -12,6 +12,7 @@
   "description",
   "is_active",
   "organization",
+  "independent_provider",
   "Section Break-Providers",
   "service_providers",
   "Section Break-1",
@@ -180,6 +181,14 @@
    "label": "Needs",
    "options": "Service Resource Need",
    "description": "Each booking also reserves one free resource of each listed type at its location."
+  },
+  {
+   "fieldname": "independent_provider",
+   "fieldtype": "Link",
+   "options": "Provider",
+   "label": "Independent business owner",
+   "description": "Exclusive provider business owner. Must be empty for organization records.",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,

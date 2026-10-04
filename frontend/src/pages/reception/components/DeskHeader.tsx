@@ -25,7 +25,7 @@ export const DeskHeader = ({ currentDate, viewMode, timeSlotInterval, onDateChan
   const label = viewMode === 'day' ? format(currentDate, 'EEEE, d MMM yyyy') : `${format(currentDate, 'MMM d')} – ${format(addDays(currentDate, 6), 'MMM d, yyyy')}`;
 
   return (
-    <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+    <div data-internal-toolbar className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
       <div className="flex min-w-0 flex-wrap items-center gap-x-4 gap-y-2">
         <h1 data-qa="reception-heading" className="font-heading text-xl font-semibold tracking-tight sm:text-2xl">{t('staff.nav.reception')}</h1>
         <div className="flex items-center gap-1">

@@ -17,7 +17,7 @@ export const WalkInCard = ({ walkIn, onAssign, isAssigning }: WalkInCardProps) =
   const waited = formatDistanceToNow(walkIn.creation ? new Date(walkIn.creation) : new Date(), { addSuffix: false });
 
   return (
-    <article data-qa="walkin-card" data-qa-walkin-name={walkIn.name} className="space-y-3 rounded-lg border bg-card p-3 shadow-sm">
+    <article data-qa="walkin-card" data-qa-walkin-name={walkIn.name} data-internal-panel className="space-y-3 rounded-lg border bg-card p-3 shadow-sm">
       <header className="flex items-start justify-between gap-2">
         <div className="min-w-0">
           <h3 className="truncate text-sm font-semibold text-foreground">{walkIn.client_name}</h3>

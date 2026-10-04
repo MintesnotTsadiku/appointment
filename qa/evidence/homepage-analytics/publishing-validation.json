@@ -1,0 +1,7 @@
+{
+  "run": "BQA-2026-00204",
+  "status": "Passed",
+  "suite": "website-setup",
+  "scope": "Existing booking, website, content, gallery, newsletter, invitations, reception and workbook journey",
+  "authentication": "Normal application login; no session artifacts exported"
+}

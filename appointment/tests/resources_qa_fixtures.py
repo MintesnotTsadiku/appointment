@@ -18,9 +18,10 @@ from frappe.utils import add_days, get_time, nowdate
 
 from appointment.demo import showcase
 from appointment.scheduler import booking, resources
+from appointment.tests import demo_offerings
 
 TYPE_NAME = "Styling chair (QA)"
-RAHEL = "EVT-2026-000109"  # Cut and shape, Rahel, Bole quiet styling room
+RAHEL = demo_offerings.cut_rahel()  # Cut and shape, Rahel, Bole quiet styling room
 MAIN = "Bole main studio"
 QUIET = "Bole quiet styling room"
 EMAIL = "qa-resource-reception@example.test"

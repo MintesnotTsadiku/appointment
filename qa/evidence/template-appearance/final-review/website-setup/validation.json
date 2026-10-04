@@ -1,0 +1,336 @@
+{
+  "run": "BQA-2026-00306",
+  "status": "Failed",
+  "outcome": "baseline_drift",
+  "source_version": "dd7ba60+source-08975574c0a3+qa-2d9ec793adbc",
+  "summary": {
+    "failed": 0,
+    "flaky": 0,
+    "passed": 1,
+    "skipped": 0,
+    "total": 1
+  },
+  "cleanup": {
+    "deleted_businesses": 3,
+    "ok": true
+  },
+  "audit": {
+    "ok": true,
+    "remaining": {
+      "Blog Post": 0,
+      "Brand Profile": 0,
+      "Business Entitlement": 0,
+      "Business Newsletter Campaign": 0,
+      "Content Ownership": 0,
+      "Gallery Collection": 0,
+      "Imported Locations": 0,
+      "Imported Memberships": 0,
+      "Imported Offerings": 0,
+      "Imported Providers": 0,
+      "Imported Services": 0,
+      "Invited Staff": 0,
+      "Local Email Message": 0,
+      "Location": 0,
+      "Newsletter Audience Member": 0,
+      "Newsletter Sender Identity": 0,
+      "Organization": 0,
+      "Organization Workbook Import": 0,
+      "Provider": 0,
+      "Public Site": 0,
+      "Published Content Release": 0,
+      "Service": 0,
+      "Staff Invitations": 0
+    },
+    "remaining_record_count": 0
+  },
+  "baseline_changed_count": 32,
+  "baseline_changes": [
+    {
+      "name": "website-setup-website-owner-journey/website-article-workspace.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-blog-entitlement-denied.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-gallery-entitlement-denied.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-guest-article.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-guest-book.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-guest-gallery.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-guest-landing.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-newsletter-entitlement-denied.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-newsletter-owner-delivery.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-newsletter-suppression-preserved.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-preview-desktop.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-private-preview-article.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-private-preview-blog.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-private-preview-booking.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-private-preview-collection.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-private-preview-gallery.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-private-preview-mobile-dark.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-published-desktop.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-published-mobile.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-receptionist-managed-session.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-receptionist-publishing-denied.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-rolled-back-public-article.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-saved-private-article.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-second-owner-isolation.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-staff-invitation-inbox.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-template-comparison-desktop.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-updated-public-article.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-workbook-applied.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-workbook-correction.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-workbook-draft-content.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-workbook-new-business.png",
+      "status": "changed"
+    },
+    {
+      "name": "website-setup-website-owner-journey/website-workbook-starter-content.png",
+      "status": "changed"
+    }
+  ],
+  "strict_visual_pass": false,
+  "artifacts": [
+    {
+      "file": "website-article-workspace.png",
+      "sha256": "3a72990ed189d6992131dc46c346b4643c98fc61fb420795e113f8baa1e34cf1"
+    },
+    {
+      "file": "website-blog-entitlement-denied.png",
+      "sha256": "eb933f608c0dbdc7f89dcd29b131d2b4e0991bb1e5898fd24688f7986e5aebbf"
+    },
+    {
+      "file": "website-gallery-entitlement-denied.png",
+      "sha256": "0f85f21b2011f375e8a3ddc45db8587365cd15f96576a19c9c31e95d3d65de6e"
+    },
+    {
+      "file": "website-guest-article.png",
+      "sha256": "2c07d62dfd6e88bb524d638050c103da3c9f20f8536f0463b43c02db6103b1a9"
+    },
+    {
+      "file": "website-guest-blog.png",
+      "sha256": "601bdd15360dcb7538e2ad326dd3059626634b1b1afb61eca125ed8c866a93df"
+    },
+    {
+      "file": "website-guest-book.png",
+      "sha256": "be28aad042ec666e0acbd08e54fffc173a104046f50e1a884fd8f7b496cf76fd"
+    },
+    {
+      "file": "website-guest-collection-desktop.png",
+      "sha256": "b499c798c05251e8093f5b3441b7ea102c073095555151c399346b8f343725db"
+    },
+    {
+      "file": "website-guest-collection-mobile-dark.png",
+      "sha256": "06d7384b22f8cab0903b3f43a5dcc4878ea282a54fc89c6f47fe78cfcb1519cf"
+    },
+    {
+      "file": "website-guest-gallery.png",
+      "sha256": "5b346d06528d3aa51b2ce336d06e236758b3162e796d18e8dd18378953e686c4"
+    },
+    {
+      "file": "website-guest-landing.png",
+      "sha256": "f903bc6fe50568b376288b7e924f429607bbcb2cb87612afed669cf7d4655881"
+    },
+    {
+      "file": "website-newsletter-confirmation.png",
+      "sha256": "fe157bef2ee61b6d21d82dcb5c3038cc0b4f106c2231375d191d05933b255874"
+    },
+    {
+      "file": "website-newsletter-entitlement-denied.png",
+      "sha256": "2e1aaf70302cb53b8fabc02746b5e13a02dc0d638e25deaef4d84da565e63b45"
+    },
+    {
+      "file": "website-newsletter-owner-delivery.png",
+      "sha256": "d904978fa184575a1c9e819b9b051b2ce2b2cb67880cf8988910a02280cf0baf"
+    },
+    {
+      "file": "website-newsletter-signup-mobile-dark.png",
+      "sha256": "793a21c30c9b889a7f38a60649e67d40cdbc08d781600ba9edcac01a868b04fe"
+    },
+    {
+      "file": "website-newsletter-suppression-preserved.png",
+      "sha256": "37b5d5fa8c93296c1ddf60f41e9688c202c6bb95dd4cb26283d01acdf7d75c8a"
+    },
+    {
+      "file": "website-newsletter-unsubscribe.png",
+      "sha256": "c749b200af4a764514785ec003daf0d8d7c7c859e27c31c3e8d55ba532dfe902"
+    },
+    {
+      "file": "website-preview-desktop.png",
+      "sha256": "0f26bdb5669de18ba5d6e0bf3302d002f5d2a4491ba552239c3b2c76578f5f78"
+    },
+    {
+      "file": "website-private-preview-article.png",
+      "sha256": "2d9e7b11f0f6aca61650ad3f50e29633867791a840a35d41e9f01335320c100f"
+    },
+    {
+      "file": "website-private-preview-blog.png",
+      "sha256": "092cc48540bb684b8fc177d1b942a905d81533f5e9ae740655799e563fb0886c"
+    },
+    {
+      "file": "website-private-preview-booking.png",
+      "sha256": "6acf9fb14fb6bcabc09e9ba667d2827870060942c29e02b2d822e99cef4caae5"
+    },
+    {
+      "file": "website-private-preview-collection.png",
+      "sha256": "fd882f26868841b41e499c4bd03f5196764e9e30cea1bcf7a4d66139342df350"
+    },
+    {
+      "file": "website-private-preview-gallery.png",
+      "sha256": "cffe830e4fc535342d4dfbce98ec00fae23650121c0cd87df6da8e2b830fb8a7"
+    },
+    {
+      "file": "website-private-preview-mobile-dark.png",
+      "sha256": "8df9ce8ba7f1de6c1337840fcae0d8a2265c12b398aebd3e4c0858eb6b0e4aba"
+    },
+    {
+      "file": "website-published-desktop.png",
+      "sha256": "d95df4731dbe5b61b9e68c8e6c1111ed9fb2c82170a454116cc750630caa956e"
+    },
+    {
+      "file": "website-published-mobile.png",
+      "sha256": "71d8ca03922cac420992a0bd3d1053ce02f6bb6ef921097789c28e5bbc53957a"
+    },
+    {
+      "file": "website-receptionist-managed-session.png",
+      "sha256": "43750c293b5dc47ae7e711bcd04135a42053de5e6b1a430c2fbdd9771a0c8308"
+    },
+    {
+      "file": "website-receptionist-publishing-denied.png",
+      "sha256": "b4b084daa4299960e3177b7c5cf74526ba0d5d5cc601679f7df1263e9e5a1b5a"
+    },
+    {
+      "file": "website-rolled-back-public-article.png",
+      "sha256": "b69ada9ed57cdb20ac54b92e7a2e592a8453c1fc40fba9f3ea0ab48967cb4ab7"
+    },
+    {
+      "file": "website-saved-private-article.png",
+      "sha256": "0ec4e7b6fa7c13f2d6bfd22cb48a4b2e97d6b6943c37b67bf1a88b842d151232"
+    },
+    {
+      "file": "website-second-owner-isolation.png",
+      "sha256": "66185bba190d193b72c93cce995654ec8963657048df1eceb3394d9c149fe4f9"
+    },
+    {
+      "file": "website-staff-invitation-accepted.png",
+      "sha256": "e551adbbf478801026eef3b7440a56a024c8aac785e8d05e7853090087bf3fe7"
+    },
+    {
+      "file": "website-staff-invitation-inbox.png",
+      "sha256": "258dc1f9d808e96b19713b8aa8d165086937509f34f6ef8361b8418f75b612a4"
+    },
+    {
+      "file": "website-template-comparison-desktop.png",
+      "sha256": "803f949cae280cd8c8ff1a0c76334f512c44b0f2758769d4d1e4e9eb9c778592"
+    },
+    {
+      "file": "website-updated-public-article.png",
+      "sha256": "cf414ba0c35dab5648d7c8f697587a064c75d0ad04493112d453e40591a1c5e2"
+    },
+    {
+      "file": "website-workbook-applied.png",
+      "sha256": "da8c003f12c6acba7079f1f7f7c2d1203d7f2e0f2ab1d18d9f409c64f9eeb56c"
+    },
+    {
+      "file": "website-workbook-correction.png",
+      "sha256": "3e6271cf5e683c114fd78007917f5f4c10c4770c546a78d297bd646ce43f7c19"
+    },
+    {
+      "file": "website-workbook-draft-content.png",
+      "sha256": "3bf740db2e69592398c647278a7d4b42b301c1e9c93be8f90921d505258531c0"
+    },
+    {
+      "file": "website-workbook-new-business.png",
+      "sha256": "04379065649c1975591d943c96120238ebc0a036b48e44a14af5a4e2de3825c4"
+    },
+    {
+      "file": "website-workbook-starter-content.png",
+      "sha256": "bbe49c0c03a44f985db83f20af8aca327ac0a9cdcc1fee545bae7385046a68f3"
+    }
+  ]
+}

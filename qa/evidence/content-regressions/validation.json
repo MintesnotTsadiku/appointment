@@ -1,0 +1,85 @@
+{
+  "date": "2026-09-26",
+  "source_revision": "a810c2b5db1e5d1a2201518db784e923dcaeb4c3",
+  "site": "meet-beta-feat-content-publishing-galler-5839d4.localhost",
+  "suites": [
+    {
+      "suite": "test_content_entitlements",
+      "tests": 13,
+      "passed": true
+    },
+    {
+      "suite": "test_content_releases",
+      "tests": 14,
+      "passed": true
+    },
+    {
+      "suite": "test_content_gallery",
+      "tests": 18,
+      "passed": true
+    },
+    {
+      "suite": "test_website_setup",
+      "tests": 12,
+      "passed": true
+    },
+    {
+      "suite": "test_content_monitoring",
+      "tests": 5,
+      "passed": true
+    },
+    {
+      "suite": "test_staff_invitations",
+      "tests": 14,
+      "passed": true
+    },
+    {
+      "suite": "test_content_upstream",
+      "tests": 6,
+      "passed": true
+    },
+    {
+      "suite": "test_content_newsletter",
+      "tests": 12,
+      "passed": true
+    },
+    {
+      "suite": "test_organization_import",
+      "tests": 11,
+      "passed": true
+    },
+    {
+      "suite": "test_public_experience_contracts",
+      "tests": 12,
+      "passed": true
+    },
+    {
+      "suite": "test_organization_workbook",
+      "tests": 10,
+      "passed": true
+    }
+  ],
+  "total": 127,
+  "synthetic_marker_counts": {
+    "Business Entitlement": 0,
+    "Content Ownership": 0,
+    "Gallery Collection": 0,
+    "Blog Post": 0,
+    "Public Site": 0,
+    "Organization": 0,
+    "User": 0
+  },
+  "frontend": {
+    "production_build": "Passed",
+    "focused_public_api_lint": "Passed",
+    "dom_contract_groups": 12,
+    "dom_contracts": "Passed"
+  },
+  "existing_broad_check_failures": {
+    "typescript_diagnostics": 272,
+    "introduced_typescript_diagnostics": 0,
+    "public_api_typescript_diagnostics": 0,
+    "reception_lint_findings": 7
+  },
+  "scope": "Focused implementation regressions. Managed browser acceptance and restored-runtime drills are recorded separately. Existing broad-check failures are preserved, not treated as passing."
+}

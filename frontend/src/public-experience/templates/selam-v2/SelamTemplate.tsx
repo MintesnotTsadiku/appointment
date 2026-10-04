@@ -86,7 +86,7 @@ export function SelamSite({ snapshot, locale, applicationName, publicRoot, rootS
   return <div ref={root} data-pe-root data-pe-recipe={snapshot.recipeKey} data-pe-mode={mode} data-motion={design.motion} className="sm" data-template="selam-movement-v2" style={rootStyle}>
     <a className="sm-skip" href="#sm-main">{chrome.t("skip")}</a>
     <Bar logo={logo} name={applicationName} root={publicRoot} chrome={chrome} mode={mode} toggleMode={toggleMode}>
-      <nav aria-label={chrome.t("navLabel")} className="sm-nav">
+      <nav aria-label={chrome.t("navLabel")} className="sm-nav"><a href={`${publicRoot}/blog`}>{chrome.t("journal")}</a><a href={`${publicRoot}/gallery`}>{chrome.t("gallery")}</a>
         {sessions.length ? <a href="#services">{chrome.t("services")}</a> : null}
         {coaches.length ? <a href="#team">{chrome.t("team")}</a> : null}
         {place ? <a href="#contact">{chrome.t("visit")}</a> : null}

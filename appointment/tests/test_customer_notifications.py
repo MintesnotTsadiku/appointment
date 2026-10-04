@@ -14,11 +14,12 @@ from frappe.utils import add_days, nowdate
 
 from appointment.scheduler import booking, notifications
 from appointment.scheduler.notification_email import render, send_notification
+from appointment.tests import demo_offerings
 
 OWNER = "bloom.owner@example.test"
 MANAGER = "bloom.manager@example.test"
 OTHER_OWNER = "tena.owner@example.test"
-OFFERING = "EVT-2026-000109"  # Cut and shape, Rahel Girma, Bole quiet styling room
+OFFERING = demo_offerings.cut_rahel()  # Cut and shape, Rahel Girma, Bole quiet styling room
 
 
 class BloomBookingCase(unittest.TestCase):

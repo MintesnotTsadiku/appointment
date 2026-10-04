@@ -1,7 +1,7 @@
 /**
  * External dependencies.
  */
-import { Suspense } from "react";
+import { Suspense, useMemo, useEffect, useState } from "react";
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -21,6 +21,7 @@ import { AppProvider } from "./context/app";
 import { TranslationProvider } from "./context/translation";
 import { LandingPageSettingsProvider } from "./context/landingPageSettings";
 import { RealtimeProvider } from "./components/realtime/RealtimeProvider";
+import { ThemeProvider } from "./components/theme-provider";
 import { SessionProvider } from "./context/session";
 import { Toaster } from "./components/sonner";
 import ModeToggle from "./components/theme-provider/components/modeToggle";
@@ -30,11 +31,12 @@ import { ConnectionStatus } from "./components/pwa/ConnectionStatus";
 import { isPublicExperiencePath } from "./public-experience/routes";
 
 const App = () => {
-  const router = createBrowserRouter(createRoutesFromElements(Router()), {
-    basename: BASE_ROUTE,
-  });
+  const router = useMemo(() => createBrowserRouter(createRoutesFromElements(Router()), { basename: BASE_ROUTE }), []);
+  const [currentPath, setCurrentPath] = useState(window.location.pathname);
+  useEffect(() => router.subscribe(state => setCurrentPath(state.location.pathname)), [router]);
   const pathname = typeof window === "undefined" ? "/" : window.location.pathname;
   const standalone = isPublicExperiencePath(pathname);
+  const publicOnly = standalone || pathname.startsWith("/schedule/");
   const usesPlatformLandingSettings = pathname === "/";
   const runtime = (
     <HelmetProvider>
@@ -46,18 +48,20 @@ const App = () => {
         enableSocket={false}
         siteName={getSiteName()}
       >
-        <RealtimeProvider>
-          <SessionProvider>
+        <RealtimeProvider enabled={!publicOnly}>
+          <SessionProvider enabled={!publicOnly}>
+            <ThemeProvider pathname={currentPath}>
             <TooltipProvider>
               <Suspense fallback={<></>}>
                 <RouterProvider router={router} />
                 <Toaster />
                 {standalone ? null : <ModeToggle />}
                 {standalone ? null : <InstallPrompt />}
-                <UpdateNotification />
+                <UpdateNotification showNotifications={!publicOnly} />
                 {standalone ? null : <ConnectionStatus />}
               </Suspense>
             </TooltipProvider>
+            </ThemeProvider>
           </SessionProvider>
         </RealtimeProvider>
       </FrappeProvider>

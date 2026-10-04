@@ -527,6 +527,22 @@
       "notifications": {
         "title": "የደንበኛ መልዕክቶች",
         "description": "ለደንበኞች የቀጠሮ ኢሜይሎች እና ማስታወሻዎች"
+      },
+      "independentBooking": {
+        "title": "የእርስዎ የቀጠሮ ገጽ",
+        "description": "እንደ ገለልተኛ አገልግሎት ሰጪ አገልግሎቶችዎ፣ ሰዓቶችዎ እና የቀጠሮ ማስያዣ አገናኝዎ"
+      },
+      "website": {
+        "title": "ድረ-ገጽ",
+        "description": "የንግድዎን ድረ-ገጽ ይፍጠሩ፣ ይመልከቱ እና ያትሙ"
+      },
+      "organizationImport": {
+        "title": "የድርጅት የስራ ደብተር",
+        "description": "ቦታዎችን፣ ሠራተኞችን፣ አገልግሎቶችን እና የድረ-ገጽ ይዘትን ያስገቡ"
+      },
+      "appearance": {
+        "title": "ገጽታ",
+        "description": "የቀለም ስብስብ፣ የቀለም ሁነታ፣ የፊደል አጻጻፍ እና ክፍተት"
       }
     },
     "status": {
@@ -570,9 +586,18 @@
         "team": "የቡድን መዳረሻ",
         "teamHint": "ሚናዎችን፣ አገልግሎት ሰጪዎችን እና ቅርንጫፎችን ይመድቡ።",
         "site": "የድረ-ገጽ ንድፍ",
-        "siteHint": "ሕዝባዊ ድረ-ገጽዎን ቅድመ እይታ ያድርጉ እና ያትሙ።"
+        "siteHint": "ሕዝባዊ ድረ-ገጽዎን ቅድመ እይታ ያድርጉ እና ያትሙ።",
+        "independentBooking": "የእርስዎ የቀጠሮ ገጽ",
+        "independentBookingHint": "አገልግሎቶችን፣ ሰዓቶችን እና የቀጠሮ ማስፈንጠሪያዎን ያዘጋጁ።"
       },
-      "loadError": "የሥራ ቦታዎን መጫን አልተቻለም"
+      "loadError": "የሥራ ቦታዎን መጫን አልተቻለም",
+      "independentBusiness": "ራሱን የቻለ ንግድ",
+      "attention": {
+        "one": "ያለፈ ቀጠሮ ውጤት ይፈልጋል",
+        "many": "ያለፉ ቀጠሮዎች ውጤት ይፈልጋሉ",
+        "description": "የዛሬው ሰሌዳ ትክክል እንዲሆን ተጠናቋል፣ ተሰርዟል ወይም አልመጣም ብለው ይመዝግቡ።",
+        "action": "ውጤቶችን ይመዝግቡ"
+      }
     },
     "analytics": {
       "scopeManager": "ሁሉም የንግዱ ቀጠሮዎች",
@@ -651,7 +676,8 @@
         "utilization": "አጠቃቀም",
         "view": "ግንዛቤዎችን ይመልከቱ"
       },
-      "customersLower": "ተመላሽ ደንበኞች"
+      "customersLower": "ተመላሽ ደንበኞች",
+      "filters": "የሪፖርት ማጣሪያዎች"
     },
     "form": {
       "unsaved": "ያልተቀመጡ ለውጦች አሉዎት",
@@ -692,7 +718,12 @@
       "publishPage": "የቀጠሮ ገጽ ያትሙ",
       "notAssigned": "እንግዳ መቀበያ አልተመደበልዎትም",
       "notAssignedHint": "ሥራ አስኪያጅ የእንግዳ መቀበያ ኃላፊነት እንዲመድብልዎ ይጠይቁ።",
-      "chooseBusiness": "ንግድ ይምረጡ"
+      "chooseBusiness": "ንግድ ይምረጡ",
+      "receptionState": "የመቀበያ ሁኔታ",
+      "stateUnconfigured": "አልተዘጋጀም",
+      "stateOpen": "መቀበያው ክፍት ነው",
+      "stateClosed": "መቀበያው ዝግ ነው",
+      "stateError": "የመቀበያ ሁኔታን መቀየር አልተቻለም። ገጹን እንደገና ጭነው ይሞክሩ።"
     },
     "team": {
       "description": "ሰዎች ይህን ንግድ እንዲደርሱበት ይፍቀዱ እና ምን ማየት እንደሚችሉ ይምረጡ። መዳረሻው ሁልጊዜ እዚህ በሚወስኑት ሚና እና ወሰን የተገደበ ነው።",
@@ -705,7 +736,7 @@
       "revokeTitle": "የዚህን ንግድ መዳረሻ ይሰርዙ?",
       "revokeDescription": "ወዲያውኑ የዚህን ንግድ መዳረሻ ያጣሉ። መለያቸው እና ያለፉ ቀጠሮዎቻቸው ይቀመጣሉ።",
       "assignTitle": "ሠራተኛ መድብ",
-      "assignDescription": "ያለ መለያ ያክሉ፣ ወይም የአካባቢ መለያ ይፍጠሩ።",
+      "assignDescription": "ለተቀበለ መለያ ሚናውን እና ወሰኑን ይስጡ።",
       "email": "የመለያ ኢሜይል",
       "fullName": "ሙሉ ስም",
       "fullNameHint": "አዲስ መለያ ሲፈጠር ብቻ ጥቅም ላይ ይውላል።",
@@ -713,7 +744,7 @@
       "providerScope": "የአገልግሎት ሰጪ ወሰን (አማራጭ)",
       "locationScope": "የቅርንጫፍ ወሰን",
       "locationScopeHint": "በዚህ ንግድ ውስጥ ያሉትን ሁሉንም ቅርንጫፎች ለመፍቀድ ሁሉንም ሳይመረጡ ይተዉ።",
-      "localOnly": "የአካባቢ መለያ ምደባ ብቻ። በዚህ አካባቢ ኢሜይል አይላክም፤ አዲስ መለያዎች ያለ የይለፍ ቃል ይፈጠራሉ እና አስተዳዳሪ በአካባቢው ያዘጋጃል።",
+      "localOnly": "ሠራተኞች የራሳቸውን የይለፍ ቃል እንዲመርጡ መጀመሪያ ይጋብዙ፣ ከዚያም ለተቀበለው መለያ ሚናውን እና ወሰኑን ይመድቡ። ውጫዊ ኢሜይል አይላክም።",
       "assign": "መድብ",
       "assigning": "በመመደብ ላይ…",
       "business": "ንግድ",
@@ -723,6 +754,15 @@
         "manager": "የንግድ ዝግጅት፣ ማተም፣ ቡድን እና ቁጥጥር።",
         "provider": "በወሰናቸው የተፈቀዱ ቀጠሮዎችን ያያሉ እና ያስተዳድራሉ።",
         "receptionist": "ለተመደበው ወሰን የተፈቀዱ ቀጠሮዎችን ያስተዳድራሉ።"
+      },
+      "invite": {
+        "title": "ሠራተኞችን ይጋብዙ",
+        "description": "የተጋበዘው ሰው የራሱን የይለፍ ቃል ይመርጣል። ከተቀበለ በኋላ ሚናውን እና ወሰኑን ይመድቡ። ውጫዊ ኢሜይል አይላክም።",
+        "email": "የኢሜይል አድራሻ",
+        "send": "ግብዣ ይፍጠሩ",
+        "open": "ግብዣውን ይክፈቱ",
+        "revoke": "ይሰርዙ",
+        "failed": "ግብዣው ሊቀመጥ አልቻለም። እንደገና ይሞክሩ።"
       }
     },
     "business": {
@@ -824,7 +864,19 @@
       "fieldName": "የደንበኛ ስም",
       "fieldEmail": "ኢሜይል",
       "fieldPhone": "ስልክ",
-      "fieldNotes": "ማስታወሻዎች"
+      "fieldNotes": "ማስታወሻዎች",
+      "stagesTitle": "የመቀበያ ደረጃዎች",
+      "stagesHint": "እያንዳንዱን ደረጃ በተከሰተበት ጊዜ ይመዝግቡ። እነዚህ ደረጃዎች ከቀጠሮ ውጤቶች ተለይተው ይቀመጣሉ።",
+      "stageArrive": "መድረስ",
+      "stageCheckIn": "ተመዝግቦ መግባት",
+      "stageStart": "አገልግሎት ጀምር",
+      "stageEnd": "አገልግሎት ጨርስ",
+      "stageRecorded": "{0} ተመዝግቧል።",
+      "changeReason": "ምክንያት (አማራጭ)",
+      "recoveryTitle": "የተረጋገጠ የተለቀቀ ሰዓት",
+      "recoveryPlaceholder": "የተመዘገበ ስረዛ ይምረጡ",
+      "recoveryHint": "ይህን ትስስር ይህ ቀጠሮ የተለቀቀውን ሰዓት በተካበት ጊዜ ብቻ ይመዝግቡ።",
+      "recoverySubmit": "የተረጋገጠ መልሶ ማግኛ ይመዝግቡ"
     },
     "calendar": {
       "title": "የእኔ መርሐ ግብር",
@@ -1084,6 +1136,18 @@
         "businessType": "የንግድ ዓይነት",
         "timezone": "የሰዓት ሰቅ",
         "language": "ቋንቋ"
+      },
+      "details": {
+        "title": "የእርስዎ መረጃ",
+        "description": "በሁሉም የስራ ቦታዎች ስምዎ እና ስልክ ቁጥርዎ።",
+        "firstName": "የመጀመሪያ ስም",
+        "lastName": "የአባት ስም",
+        "phone": "ስልክ ቁጥር",
+        "save": "ዝርዝሮችን ያስቀምጡ",
+        "saving": "በማስቀመጥ ላይ…",
+        "discard": "ለውጦችን ይተዉ",
+        "saved": "ዝርዝሮችዎ ተቀምጠዋል።",
+        "failed": "ዝርዝሮችዎ ሊቀመጡ አልቻሉም። ለውጦችዎ እዚህ አሉ፤ እንደገና ይሞክሩ።"
       }
     },
     "calendarSync": {
@@ -1520,6 +1584,11 @@
         "friday": "ዓርብ",
         "saturday": "ቅዳሜ",
         "sunday": "እሁድ"
+      },
+      "structure": {
+        "label": "የንግድ አወቃቀር",
+        "organization": "ቡድን ያለው ንግድ",
+        "individual": "ራሱን የቻለ አገልግሎት ሰጪ"
       }
     },
     "widgets": {
@@ -2047,7 +2116,9 @@
     "email": "ኢሜይል",
     "hours": "የሥራ ሰዓት",
     "address": "አድራሻ",
-    "step": "ደረጃ {count}"
+    "step": "ደረጃ {count}",
+    "journal": "መጽሔት",
+    "gallery": "ጋለሪ"
   },
   "customerEmail": {
     "subjectConfirmation": "ከ{0} ጋር ያለዎት ቀጠሮ ተረጋግጧል",

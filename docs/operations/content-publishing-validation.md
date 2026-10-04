@@ -1,0 +1,1099 @@
+# Content publishing, gallery and onboarding — progress and validation
+
+**Status:** Phases 0–3 preserved. Phases 4–10 implemented and accepted within the approved isolated/local-sink scope. Complete strict public, normal-owner, production privacy, and restored candidate/rollback/upgrade evidence is retained. The primary development runtime is restored.
+**Date:** 2026-09-26
+**Branch:** `feat/content-publishing-gallery-onboarding`
+**Historical Phase 0–3 head at recording:** `6e450cbeb639828db53841f39ae09d66092e35fa`
+**Plan:** `docs/features/CONTENT_PUBLISHING_GALLERY_AND_GUIDED_WEBSITE_SETUP_IMPLEMENTATION_PLAN.md`
+
+This file records implementation and acceptance against the approved plan.
+Earlier checkpoints below preserve failed and pending states as history. The
+current acceptance inventory is authoritative. No deployment, push, merge, or
+pull request was performed.
+
+## Current acceptance inventory
+
+Application correction: `a836ea3`. Final QA revision: `a810c2b`.
+Evidence-only commits do not change application behavior.
+
+| Phase | Delivered and accepted | Evidence |
+| --- | --- | --- |
+| 0–3 | Pinned dependencies, tenant entitlements, immutable releases, governed gallery | Preserved checkpoints; final 13 entitlement, 14 release and 18 gallery tests pass |
+| 4 | Five independent content packages; all public, empty and unavailable surfaces; desktop/mobile and light/dark | Strict `00173`: 20 scenarios, 280 captures, zero changes; `qa/evidence/content-templates/` and source comparison |
+| 5 | Ranked catalog, private live previews, resumable setup, readiness/publish and owner workspace | Fresh C strict `04042`: 39 captures; independent owner `04009`: 14 captures |
+| 6 | Versioned workbook, named-cell dry-run errors, confirmation, stable-key retry, audit and invitations | Fresh C import UI, 11 application and 10 parser regressions |
+| 7 | Scoped consent/suppression, opaque unsubscribe, verified sender, quotas, local background capture and theme signup | Fresh C newsletter UI, 12 regressions, protected restored unsubscribe at all three stages |
+| 8 | Explicit idempotent showcase seeder with checksummed local assets | Five businesses, three articles and two collections each, one draft/unsent preview each, valid release hashes, 160 journal records, zero external sends |
+| 9 | Seedless individual and organization journeys, managed staff, foreign-business denial, expired capabilities and limits | Fresh C strict runs above; nine cross-business and five capability denials; all 24 cleanup counters zero |
+| 10 | Monitoring, support/runbook, backup/restore, maintained code rollback/upgrade, production privacy, accessibility and local performance | Strict recovery `03005`/`03008`/`03010`: 48 captures; privacy `00174`; accessibility `00160`: 70 surfaces, zero automated violations/CLS; 603 reviewed color findings pass |
+
+All 127 focused backend/parser regressions and all twelve frontend DOM contract
+groups pass. The compiled production build and focused API lint pass.
+The full TypeScript baseline still has 272 diagnostics, with zero introduced by
+the final correction; seven pre-existing reception lint findings remain separate.
+See `qa/evidence/content-regressions/validation.json`.
+
+Newsletter delivery is local only. Paint measurements are unthrottled local
+measurements; complete screen-reader certification and remote load testing were
+not performed. The maintained older code drill proves retained-schema recovery
+compatibility; it does not approve that older build's security/visual posture for
+deployment. Preserve the current security controls in a production fallback.
+
+## Isolated runtime
+
+- Worktree: `/home/minte/projects/training-apps/.worktrees/frappe-appointment-beta`
+- Source Bench: `/home/minte/projects/training-apps`
+- Runtime state: `~/.local/state/frappe-worktree-stack/feat-content-publishing-galler-5839d4`
+- Site: `meet-beta-feat-content-publishing-galler-5839d4.localhost`
+- Frontend: `http://127.0.0.11:34340`
+- Backend (internal): `http://127.0.0.1:34341`
+- Socket.IO: 34342; Redis cache 34343; Redis queue 34344; watcher 34345
+- tmux session: `fw-meet-beta-feat-content-publishing-galler-5839d4`
+- Installed apps: `frappe`, `blog`, `newsletter`, `appointment`, `agent_harness`, `agent_plane`
+- Site config: `developer_mode=1`, `mute_emails=1`, `pause_scheduler=1`, fresh no-seed site
+- Credentials live only in the runtime's private `credentials.json`; nothing is
+  printed or committed.
+
+Verified at provisioning: all seven tmux panes alive, backend health 200,
+frontend health 200, `bench --site list-apps` matches the list above, worktree
+import path resolved, authenticated API returned `Administrator`, and the
+Socket.IO handshake through the frontend origin returned 200.
+
+Windows unique-address forwarding (`frappe-worktree windows-forward`) was not
+run. Subsequent Agent Plane managed Chromium acceptance used the unique
+`127.0.0.11` address directly from this Linux/WSL runtime; see the final gates below.
+
+## Dependency lock
+
+See `docs/operations/content-dependencies.md`. Blog is pinned to
+`ed1ed4019c7f167c41b80f8ea92da60680c2112d` (MIT) and Newsletter to
+`e5ed3645199104818c354617cb495cbdf90b94fe` (AGPL-3.0) on Frappe 17.0.0-dev.
+
+## What is implemented
+
+### Phase 0 — dependency qualification
+
+Blog and Newsletter are present on the source Bench, declared through
+Appointment `required_apps`, and installed on the isolated site. The dependency
+lock records commits, licenses, compatibility, install, upgrade and rollback.
+
+### Phase 1 — entitlements and tenant ownership
+
+- `Business Entitlement` projection per business and capability with states,
+  effective window, limits, source and reconciliation timestamp.
+- `appointment/content/entitlements.py`: closed capability registry, code-owned
+  defaults, `resolve` / `require_capability` / `enforce_limit` / `set_capability`.
+- `Content Ownership` mapping from one upstream authoring record (Blog Post,
+  Newsletter) or gallery collection to exactly one business and public site.
+- `appointment/content/tenancy.py` and `access.py`: shared list and
+  document-level permission rules for the content DocTypes plus Blog Post and
+  Newsletter. A global role alone never grants another business.
+- Patch `grant_content_doctype_permissions` adds scoped role DocPerms for Blog
+  Post and Newsletter; Appointment hooks then deny foreign records.
+- Fail-closed: unknown capability, ambiguous owner and missing business all
+  deny.
+
+### Phase 2 — immutable publication releases
+
+- `Published Content Release`: business, public site, content type, source,
+  route, locale, canonical hash, template compatibility, source timestamp,
+  sanitized content, media and SEO projections, supersedes / superseded-by,
+  withdrawal state and audit actor.
+- `appointment/content/sanitize.py`: strict parser that rebuilds a closed set of
+  structured blocks, rejects scripts, styles, event attributes, unknown tags,
+  frames, unsafe schemes and protocol-relative URLs, and a safe Markdown subset.
+- `appointment/content/releases.py`: publish, route takeover refusal, limit
+  enforcement, supersession, withdraw, rollback, session-bound preview and
+  guest-safe index/detail reads. Public reads never touch a mutable authoring
+  record.
+- `appointment/content/api.py` (owner) and `public_api.py` (guest).
+
+### Phase 3 — gallery
+
+- `Gallery Collection` and `Gallery Item` with grouping, ordering, focal points,
+  aspect hints, consent review, tags and SEO.
+- `appointment/content/gallery.py`: typed video providers (YouTube/Vimeo) with
+  identifier normalization and host allowlisting; site-local public media only;
+  images validated from decoded content (Pillow) with checksum, width and
+  height; alt text required; pending consent blocks publication.
+- `appointment/content/media_limits.py`: entitlement-backed collection, item and
+  storage limits.
+- Collection publication reuses the release path with content type
+  `gallery_collection`.
+
+## Test evidence
+
+All suites run with `bench --site <site> execute <module>.run` on the isolated
+site. Three suites, 35 tests, all passing, with exact cleanup (zero marker
+records remain):
+
+| Suite | Tests | Result |
+| --- | --- | --- |
+| `appointment.tests.test_content_entitlements.run` | 13 | OK |
+| `appointment.tests.test_content_releases.run` | 13 | OK |
+| `appointment.tests.test_content_gallery.run` | 9 | OK |
+
+Coverage includes capability defaults and overrides, fail-closed resolution,
+two-business isolation for lists and direct reads, upstream Blog Post isolation,
+guest denial, limit enforcement, sanitizer safety, publish / supersede / route
+conflict / withdraw / rollback, public read of active releases only,
+session-bound previews, typed video allowlisting, content-based image
+validation, spoofed upload rejection and consent gating.
+
+Backup drill: `bench --site <site> backup --with-files` completed successfully
+with database, public and private file archives.
+
+## Historical Phase 0–3 handoff: work then outstanding
+
+- **Phase 4** independent blog and gallery surfaces inside every certified
+  template package, with browser evidence.
+- **Phase 5** guided Website Setup, catalog metadata, deterministic
+  recommendations and live preview workspace.
+- **Phase 6** organization workbook import (schema, dry-run, audit, retry,
+  invitations).
+- **Phase 7** newsletter audience, consent, suppression, unsubscribe tokens,
+  background sends and the local email sink.
+- **Phase 8** showcase expansion and repository-owned reproduced media.
+- **Phase 9** clean-site normal-user Agent Plane browser acceptance.
+- **Phase 10** release readiness: upgrade/rollback, restore drills, monitoring
+  runbooks and security/accessibility/performance gates.
+
+Phase 4 now wires public content surfaces to the public APIs. Owner content
+authoring and Website Setup remain pending. No browser acceptance evidence
+exists for the new content surfaces. There is no payment integration, by design.
+
+
+## Phase 4 implementation checkpoint — 2026-09-26
+
+**Status:** Code exists. Phase 4 is not accepted or complete.
+
+- Each certified template owns a content component and its styles. Packages do
+  not import visual components from another package.
+- Blog indexes, articles, gallery indexes, and collections use the guest content
+  APIs. Public reads still use Active immutable releases.
+- Public responses now include `templateCompatVersion`. Detail rendering rejects
+  incompatible versions, mismatched routes, and mismatched locales.
+- The public resolver and React routes accept site-scoped blog and gallery paths.
+  Resolver cache identity now includes the path.
+- Each package includes loading, empty, unavailable, and newsletter-unavailable
+  treatments. Newsletter subscription stays unavailable until Phase 7.
+- Article blocks become native elements from a closed parser contract. No
+  template inserts raw HTML. Video items link to validated provider URLs.
+- Content pages include pagination, canonical metadata, a skip link, focus
+  styles, responsive layouts, and light/dark tokens.
+
+Validation:
+
+- Before edits: existing isolated-site suites passed 35/35 tests.
+- After edits: those suites and `test_public_content_routes.run` passed 40/40.
+- `npm run test:dom` passed, including the new public-content contract checks.
+- Focused ESLint checks passed for new content files.
+- `npx vite build` passed. Existing font asset resolution and bundle-size
+  warnings remain.
+- Full-project TypeScript checking fails outside the changed public content
+  files. Errors include availability templates, task components, missing PWA
+  declarations, and API types. This checkpoint does not repair those failures.
+- `git diff --check` passed.
+
+Managed browser preflight on this isolated site returned no Browser QA worker
+and no Browser Accounts. The referenced
+`docs/dev/agent-plane-browser-validation.md` is absent from this checkout.
+Installed Agent Plane instructions are available in its browser operations
+runbook. The user authorized browser bootstrap after this checkpoint. See the
+bootstrap record below.
+
+Remaining Phase 4 gates:
+
+1. Establish least-privileged managed Browser Accounts and Browser QA workers.
+2. Create and approve each template's blog and gallery design references.
+3. Validate real releases, pagination, typed rich text, images, video fallbacks,
+   empty/error states, keyboard behavior, accessibility, and performance.
+4. Capture landing, booking, scheduler, blog, article, gallery, collection, and
+   newsletter treatment for every template at desktop/mobile and light/dark.
+5. Store browser captures and source comparisons under `qa/evidence/`.
+
+No showcase data was seeded. No reference-runtime state was changed. No schema
+migration was needed. Phases 5–10 remain pending.
+
+
+## Authorized managed browser bootstrap — 2026-09-26
+
+The user authorized development Browser Account and worker bootstrap.
+
+- Created `content-browser-owner@example.test` with Provider and Organization
+  Manager roles. It has no platform administrator roles.
+- Created Browser Account `BACCT-0057` and primary session `BSESS-0058`.
+  Agent Plane stores the login credential encrypted. The runtime also holds a
+  private `browser-credentials.json` file with mode 0600.
+- Split the original combined worker into `short,default` and `long` workers.
+  Both use the pinned Harness environment. Topology reports one browser worker
+  and one agent worker.
+- Reused Node 24.12.0, Playwright 1.58.2, and Chromium 145.0.7632.6.
+- Added an app-owned, development-only managed browser smoke suite and guide.
+  It checks normal-user React and Desk access at desktop/mobile sizes.
+- The stricter smoke also checks an authenticated Socket.IO namespace over
+  WebSocket, through the frontend origin.
+
+Two runtime details needed correction:
+
+1. Export `FRAPPE_BENCH_ROOT` as well as `PYTHONPATH`. The earlier preflight
+   checked the source Bench queue namespace, which explains its missing-worker
+   result. The actual isolated worker initially consumed all three queues.
+2. Set isolated common config `webserver_host=127.0.0.1`, with port 34341.
+   Socket.IO otherwise calls the browser loopback host, where the backend does
+   not listen. Restart only the isolated Socket.IO service after this change.
+
+Browser run history:
+
+- `BQA-2026-00059`: all four browser assertions passed. The durable result failed
+  because the new suite had eight new screenshot baselines.
+- `BQA-2026-00060`: all four scenarios passed and established the reviewed
+  initial runtime-smoke baseline.
+- `BQA-2026-00061` and `BQA-2026-00062`: React and Desk authentication worked.
+  The added WebSocket checks exposed the callback-host problem. Run 62 also
+  overlapped the Socket.IO restart. These failed runs remain recorded.
+- `BQA-2026-00063`: strict repeat passed 4/4, with zero failures, flakes, or
+  screenshot baseline changes. Authenticated WebSocket checks passed. Captures
+  and their hashes are under `qa/evidence/content-runtime/`.
+
+Windows unique-host forwarding was attempted. Windows reported canceled
+administrative elevation. No forwarding success is claimed. The managed WSL
+browser can reach the isolated frontend directly.
+
+No business or showcase data was seeded during bootstrap. No schema migration
+was needed. These smoke captures do not approve Phase 4 public content surfaces.
+The public template, content, mode, and viewport acceptance matrix remains open.
+
+## Phase 5 core owner journey checkpoint — 2026-09-26
+
+Phase 5 is in progress. The new owner service ranks certified recipes, creates
+or resumes one business website, saves typed drafts with optimistic version
+checks, compiles private previews, and publishes through the existing brand and
+experience publishers. The Settings website workspace creates and edits article
+drafts, uploads validated consented images, publishes gallery collections, and
+shows release history. Owner requests use business permissions and entitlement
+checks. Public article bylines and editorial labels are captured in immutable
+releases; generated category identifiers are not public labels.
+
+Validation performed on the isolated site:
+
+- Existing entitlement, release, and gallery suites passed 35/35 before edits.
+- The normal-owner website suite passed 8/8, including foreign-owner denial,
+  stale writes, entitlement denial, unpublished previews, immutable article
+  labels, and tenant-bound image uploads.
+- Release tests passed 13/13; public route tests passed 5/5.
+- Frontend DOM guards, focused ESLint, and direct Vite production build passed.
+- The package build wrapper failed while contacting the package registry
+  (`EAI_AGAIN`). The direct Vite build used the installed dependencies.
+- App TypeScript checking still reports 273 existing errors outside the new
+  website files. This checkpoint does not claim a green full-project typecheck.
+
+The runtime's platform-host allowlist now contains the isolated site hostname
+and `127.0.0.11`; otherwise public requests through Vite could not resolve a
+published website. This setting must be part of fresh-runtime provisioning.
+The shared HTML entry no longer requests Google Fonts. Certified template fonts
+are packaged locally; the remote font request caused a browser capture timeout.
+
+Managed Browser QA uses the normal Provider / Organization Manager account and
+creates its business through the onboarding UI. Its fixture refuses preexisting
+marker records and removes only records created by that journey. The shared
+browser account predates the journey; this is not Phase 9 fresh-site evidence.
+Runs 00070–00078 retained their failures, including selector, host routing,
+font timeout, and visual drift. Run 00079 passed the owner journey and updated
+one reviewed blog capture after removing an internal category identifier.
+Strict repeat `BQA-2026-00080` passed 1/1 with zero failed or flaky scenarios,
+zero baseline changes, and zero remaining fixture records. Its eleven captures
+and validation metadata are retained under `qa/evidence/website-setup/`.
+This accepts the recorded Tena owner journey only.
+
+Remaining work includes the full five-template browser matrix, broader brand
+and content editing, complete media management and previews, and all Phase
+6–10 exit gates. The existing readiness endpoint requires a published brand;
+the guided flow needs readiness checks for the draft that Publish will compile.
+Newsletter signup remains unavailable until Phase 7.
+
+## Draft readiness and workbook import checkpoint — 2026-09-26
+
+The guided readiness service compiles the draft without creating published brand
+or experience records. It checks booking availability and selected entitlements.
+The save-and-return action saves progress and returns to Home. Backend tests
+passed 9/9. Managed browser run 00081 passed the expanded journey. Run 00082
+caught a new package shadowing the existing `appointment.onboarding` module.
+The package was renamed to `appointment.organization_import`, the isolated
+backend was restarted, and strict repeat 00083 passed with zero visual changes.
+That failure was retained rather than accepted or hidden.
+
+Phase 6 now has the versioned workbook template at
+`docs/import-templates/organization.v1.xlsx`, a bounded parser, authenticated
+review and confirmation APIs, and a Settings import screen. Parsing does not
+write records. It reports sheet and cell errors, validates stable references,
+and rejects formulas, unsupported columns, passwords, macros, external links,
+unsafe XML, duplicate entries, excessive archive expansion, and oversized row
+ranges. XML preflight permits UTF-8 only so alternate encodings cannot hide a
+DTD or entity declaration. `openpyxl~=3.1.5` matches the installed Frappe pin.
+
+Confirmed imports use normal document insert/save permissions and one controlled
+transaction. An immutable Organization Workbook Import audit stores the checksum,
+actor, summary, and stable-key mapping. Exact retries return the prior audit;
+corrected workbooks update mapped records. Missing rows never delete records.
+Location, provider, service, offering, and team records remain business scoped.
+Scoped Organization Manager membership DocPerms and controller validation allow
+normal owner assignment without granting access to another business. Role
+assignment still uses the existing trusted membership service.
+
+Validation:
+
+- Workbook parser: 10/10 tests passed, including alternate-encoding entities.
+- Normal-owner confirmation: 6/6 tests passed for two locations, retry,
+  correction, explicit confirmation, hash binding, isolation, audit protection,
+  and rollback after a failed application.
+- Entitlement regressions: 13/13; website setup: 9/9.
+- Focused frontend lint and direct production Vite build passed.
+- Full app TypeScript checking still reports 273 existing errors, with no errors
+  in the new website or workbook screens.
+- A site-scoped migrate applied the new audit DocType and membership DocPerms.
+- Managed browser run 00090 passed the owner journey plus workbook cell
+  correction, confirmation, and duplicate-free retry. Two new workbook captures
+  were reviewed. Strict repeat 00091 passed with zero failed or flaky scenarios,
+  zero visual changes, and zero remaining fixture records. Its thirteen captures
+  and audit are retained under `qa/evidence/website-setup/`.
+
+Phase 6 is not complete: the UI currently imports into an existing owned
+organization, staff must already have enabled accounts, and capacity is limited
+to individual appointments. Invitation acceptance, direct new-organization
+creation from a workbook, full website-text dry-run validation, and broader
+large-file/performance acceptance remain. Phases 7–10 are still pending.
+
+## Direct workbook business creation — 2026-09-26
+
+An organization owner can now choose to create a new organization directly from
+the workbook. The owner service uses a normal Organization insert with a server
+factory capability. Raw inserts cannot forge that capability. A protected
+workbook creation key at normal field permission level binds retries to the
+original owner and workbook namespace; it does not adopt existing organizations.
+
+The first new-business regression exposed an internal commit in the legacy
+booking URL sync and a retry field that normal owners could not write. Creation
+now suppresses that sync for the whole transaction and uses the new protected
+key. The exact failed synthetic business and its audit-mapped records were
+purged; the reserved failed-fixture check returned no remaining businesses.
+Nine workbook confirmation tests pass, including full rollback when a foreign
+location name collides. Parser tests remain 10/10 after additional plain-text,
+length, duplicate-day, and duplicate-website-field checks.
+
+Managed run 00098 created the second business directly from its workbook.
+Strict repeat 00099 passed with zero failed or flaky scenarios and zero visual
+changes. Fourteen captures and the expanded cleanup audit are retained under
+`qa/evidence/website-setup/`. This is still the shared normal organization owner
+on the existing isolated site, not the Phase 9 fresh-install journeys.
+
+Phase 6 still needs invitation acceptance, broader capacity handling, and full
+website-text dry-run validation. The full template matrix and Phases 7–10 remain
+pending.
+
+## Local newsletter core and browser journey — 2026-09-26
+
+The newsletter workspace now uses business-scoped consent records, opaque
+confirmation and unsubscribe tokens, local sender verification, immutable
+campaign snapshots, entitlement quotas, scheduling, throttles, bounded retries,
+and idempotent background capture. Delivery writes only to the local email sink.
+It does not invoke SMTP or the upstream Newsletter send/test-send paths.
+Each certified template owns its signup form and styles; only the signup hook
+is shared. Signup availability is checked against published feature snapshots.
+
+Focused results: newsletter 12/12, upstream draft/legacy-route guards 6/6,
+gallery 10/10, website setup 9/9, and entitlements 13/13. The newsletter suite
+covers explicit consent, single-use and expired links, audience and monthly
+quotas, sender verification, immutable content, request replay, suppression,
+unsubscribe after queueing, expired access, throttle/retry, and tenant isolation.
+Gallery document validation now checks website ownership for images, covers,
+posters, and thumbnails; raw inserts cannot bypass the media-library boundary.
+The spoofed-image regression still tests decoding with a correctly bound File.
+Focused frontend lint and the direct Vite build pass. The previously recorded
+repository TypeScript and npm registry failures remain separate open issues.
+
+Managed run 00109 passed the normal-owner sender, consent, confirmation, unsent
+preview, local campaign delivery, and guest unsubscribe journey. Strict repeat
+00110 caught two capture races and a public design/signup loading flicker.
+Those states were corrected rather than masking the changed area. Reviewed
+baseline 00111 passed; strict run **00112 passed with zero visual changes, failed
+scenarios, or flakes**. Eighteen captures are retained under
+`qa/evidence/website-setup/`, with the exact cleanup audit in `validation.json`.
+
+Retained failed runs document the fixes: 00106 exposed an incorrect resolver
+field in the public snapshot API; 00107 followed the previous inbox message
+before the new one opened; 00108 waited on a short-queue delivery while its
+only worker was occupied by browser QA. The isolated stack now has a dedicated
+`newsletter` short-queue worker. No external messages were sent.
+
+This accepts the core local newsletter journey on the existing isolated site
+using a normal organization owner and Tena. The full five-template matrix,
+expanded website/import requirements, fresh-site journeys, and upgrade/restore
+gates remain pending. See `docs/operations/content-newsletter.md` for transport,
+token, queue, and retry behavior.
+
+## Phase 8 content expansion and acceptance work in progress
+
+The primary isolated site is now explicitly seeded. It no longer counts as a
+fresh-site acceptance target. The reference runtime remains unchanged.
+
+The version 1 content manifest creates fifteen articles, ten collections, five
+newsletter drafts, and five unsent local previews across all certified templates.
+Its checksum is `14ef94a251e780ca6dc4a82c8394db63d71e7f5424a2011ae4fff9e86e50a53b`.
+The content inventory verifies all canonical release hashes and zero showcase
+audience members or delivery campaigns. Explicit seed replay creates no duplicates.
+`appointment.tests.test_rich_demo.verify` passes relationships, booking capacity,
+tenant scopes, and byte-identical inventory and private journal replay.
+
+Managed run `BQA-2026-00113` failed before browser execution because the new
+read-only fixture used `release_hash` instead of `content_hash`. The corrected
+full matrix `BQA-2026-00114` passed eighteen scenarios and exposed mobile overflow
+in the Tena landing headline. Both corrected mobile cases pass in
+`BQA-2026-00121`. The full matrix and strict repeat remain pending.
+
+Seedless site A, `meet-beta-content-fresh-a.localhost`, installs exactly Frappe,
+Blog, Newsletter, Appointment, Agent Harness, and Agent Plane. Before the first
+normal owner journey, all eight checked business/content table counts were zero.
+Managed profile `BACCT-1001` and session `BSESS-1002` use a separate private
+credential file. Disjoint harness counters prevent cross-site storage collisions.
+Fresh-site acceptance is still in progress. Do not treat failed or partial runs
+as acceptance evidence.
+
+New workbook tests pass eleven cases, including validated contact text, retained
+starter text before Website setup, and transactional rollback. Private template
+previews now include article and gallery surfaces. Fresh-site browser validation
+found missing upstream role grants. Install and migration hooks now reconcile
+Custom DocPerm so upstream metadata sync cannot remove the content grants.
+These expanded setup and installation changes await a passing strict journey.
+
+## Continued fresh-site and recovery work — 2026-09-26
+
+These changes are in progress after checkpoint `467b40b`. Phases 5–10 are not
+complete. No reference-runtime data was changed.
+
+- Added private template comparisons and six owner preview surfaces. The
+  ranking catalog explains audience, industry, feeling, density, and font
+  choices. Website drafts retain these preferences and the main visitor action.
+- Added owner logo and favicon upload controls. Images require public-display
+  consent, decoded image validation, and exact Public Site ownership. Favicon
+  uploads generate a square 256-pixel PNG. Re-selecting the same file works.
+- Fresh-site installation exposed missing upstream draft permissions. The
+  install and migration hooks now maintain tenant-governed Custom DocPerm rows;
+  normal owners no longer require Administrator to create an article.
+- Workbook website starter text survives import before website creation. Invalid
+  contact cells fail dry-run before writes. The workbook still links enabled
+  accounts after staff accept their invitations.
+- Added a local staff invitation inbox and explicit acceptance page. Acceptance
+  creates an account with its own password and no business membership. Existing
+  accounts must accept while signed in with the invited email. Tokens expire,
+  can be revoked, and are one-use. No external email is sent.
+- Article hero and inline images now use the same exact-site decoded-image gate
+  as gallery media. Private previews and newsletter actions return no-store and
+  noindex headers.
+
+Focused results: website setup 11 tests; staff invitations 4 tests plus 9
+entitlement regression tests; gallery and article media 11 tests; immutable
+releases 13 tests; public contracts and response privacy 9 tests. All passed.
+The focused frontend lint and installed Vite build passed. The previously
+recorded unrelated TypeScript failures remain separate.
+
+Fresh site A began without business or content data. Managed run
+`BQA-2026-01023` passed the expanded normal-owner journey, including local staff
+acceptance, with 27 captures. Run `01024` passed all functional steps but failed
+one screenshot comparison. Run `01025` passed after the comparison capture moved
+the pointer away from native controls and removed focus. These runs establish
+baselines; they are not strict final acceptance. A strict repeat of the final
+wizard remains required. No authentication trace or invitation token is exported.
+
+The full five-template matrix is running as `BQA-2026-00134`. The previous
+Tena mobile overflow fix remains in its own template package. An accessibility
+and local navigation-budget suite uses pinned axe-core 4.11.0. Its results are
+pending; automated checks do not replace manual accessibility review.
+
+A fresh second acceptance site, `meet-beta-content-fresh-b.localhost`, was
+provisioned without seeding. Browser validation on this site remains pending.
+
+### Recovery data-integrity result
+
+Backup `20260926_163236` restored only into the new isolated site
+`meet-beta-content-restore.localhost`. The recovery target retained the source
+credential encryption key privately, with muted email and paused scheduling.
+The source and restored inventory hashes match:
+`a396c5d73c81673fe8844ccd33bc54852db5b89483fc6ca244d7f576c9e471be`.
+
+Verification covered 35 publication releases, 15 actual media files, upstream
+record counts, two consent records, encrypted unsubscribe tokens, consent audit,
+and confirmed/suppressed states. Only the two explicit recovery consent fixtures
+and their captured messages were removed from the source after verification.
+The recovery target retains them. See `qa/evidence/content-recovery/validation.json`.
+Public-route browser recovery, code upgrade/rollback, remaining owner/staff and
+isolation journeys, monitoring/runbooks, and final accessibility/performance
+qualification are still pending.
+
+
+### Continued acceptance and operational checks
+
+Managed accessibility run `BQA-2026-00137` passed nine scenarios and rejected the
+Abugida mobile home link without an accessible name. Its own template now names
+the link. Repeat `00138` passed all ten scenarios across 70 public surfaces, with
+zero automated WCAG A/AA violations, no external resource requests, and the
+local 15-second navigation budget. Public reports and ten captures are retained
+under `qa/evidence/content-accessibility`. Incomplete contrast and link checks
+remain for manual review; this does not certify complete accessibility or
+production performance.
+
+Template baseline `00139` passed all twenty scenarios. Strict comparison `00140`
+is in progress. These captures include each template's own content-header logo.
+
+Website setup passed 12 tests, entitlement isolation 13, immutable publication
+14 (including foreign category/author rejection), newsletter 12, and monitoring
+5. The upstream global Blogger restriction initially blocked new site-owned
+authors. A proposed global property setter was rejected by automatic approval
+review and was not applied. The scoped fix retains user-permission enforcement
+and grants only the managed website's own author link for Blog Post.
+
+The explicit journal-owned support upgrade created ten category/author ownership
+mappings. A repeat created zero. All 35 release hashes remain valid and the five
+showcases retain zero audiences and campaigns. The journal owns 160 records.
+Exact repair removed the known interrupted synthetic independent-provider and
+diagnostic fixtures. The seven synthetic record counters returned zero.
+
+The organization browser journey now includes a separate managed receptionist
+profile configured only after guest invitation acceptance and normal-owner Team
+assignment. Its final browser run is pending. The second fresh-site independent
+owner run, full isolation/entitlement journeys, restored public-route checks,
+code upgrade/rollback, and manual accessibility qualification also remain pending.
+Monitoring and the operations runbook are implemented; their focused regression
+checks are recorded above. The final focused batch also passed staff invitations
+14, gallery/media 11, workbook import 11, response privacy 9, and upstream draft
+protection 6. Frontend lint passed with the two existing session fast-refresh
+warnings and no errors. No external email or reference-runtime changes occurred.
+
+### Independent operational onboarding and continued browser qualification
+
+The new independent setup creates an explicit provider-owned Service and Location.
+Their `independent_provider` links cannot coexist with organization ownership or
+change after creation. The EventType must resolve to those same owners. Public
+booking remains disabled until the normal owner publishes it. Guest bookings
+reuse the canonical transaction, hours, shared-user capacity lock, retry identity,
+and appointment lifecycle. Appointments retain their provider owner with an empty
+organization; no organization proxy is created. Scheduling is available before
+Website setup, and the owner can return through visible navigation.
+
+Fresh B received the additive schema migration. Four focused independent booking
+tests passed, including normal-user list filtering, foreign-owner denial, private
+publication, guest booking, retry, occupied-slot refusal, and unpublication.
+Website setup repeated with 12 passing tests. The focused frontend lint and Vite
+build passed. Managed independent UI validation is still pending.
+
+The existing organization booking HTTP suite could not start because it targeted
+its historical runtime port. No tests ran. Its interrupted synthetic fixture was
+removed through exact guarded cleanup; Fresh B again reports zero businesses,
+providers, sites, drafts, releases, audiences, and campaigns. The suite now uses
+the designated content runtime for these two explicitly allowed isolated sites,
+and registers cleanup before attempting HTTP login. Its regression repeat remains
+pending until the backend and frontend target Fresh B together.
+
+Template baseline `00141` passed 20 scenarios. Strict `00142` passed every
+functional scenario, with two screenshot differences limited to nine pixels each
+at rounded scheduler theme-button edges. The redundant nested backdrop filter was
+removed, and capture waits now require completed header and card opacity.
+Focused baseline `00143` passed both affected scenarios. Full baseline `00144` is
+running. No strict final template acceptance is claimed yet.
+
+The expanded owner suite includes a managed receptionist, a second business owner,
+saved article previews in the selected template, publish and rollback, suppression
+retention, tenant denial, expired capabilities, and server-enforced limits. These
+new browser checks remain pending. Recovery code-drill tooling archives the
+committed `facd02d` candidate without resetting the working checkout. The actual
+rollback and upgrade browser drill has not run yet.
+
+### Production shell and cache qualification in progress
+
+The production entry now includes the current Vite build instead of a stale list
+of hashed bundles. Both website and scheduler entry points pass a request nonce
+to the inline boot scripts and the response CSP. Guest pages skip private
+workspace and realtime connections. The custom-domain adapter exposes exact
+published-content, consent, and canonical booking endpoints while denying owner
+APIs and previews. PWA navigation and API requests use NetworkOnly; the raw Jinja
+entry is excluded from precaching and has no cached navigation fallback.
+
+The production build passed with existing installed dependencies. Eleven focused
+response/compiler tests passed. The PWA policy regression checks sensitive
+navigation, consent links, draft/audience APIs, slot reads, and static asset
+caching. Frontend DOM checks passed; focused lint has zero errors and the two
+existing session fast-refresh warnings. Production browser qualification remains
+pending. Strict template run `00145` is still executing; no final acceptance is
+claimed from an in-progress run.
+
+Run `00145` ended with 17 passing and three failed template scenarios. The failures
+were development-server connection refusal/reset and a detached element during
+Vite configuration restarts. Its 31 screenshot differences are not accepted.
+A final stable matrix will follow the owner workflow fixes. Fresh B is the next
+normal-owner acceptance target; the reference runtime remains untouched.
+
+### Independent owner managed-browser baseline
+
+Fresh B began with zero records in the eight business/content counters. Runs
+`02015` and `02016` exposed inaccessible exact labels on native selectors; the
+selectors now keep names independent of their option text. The calendar assertion
+was corrected to include its existing PRO badge. Run `02017` reached guest booking
+confirmation, the owner schedule, and published gallery delivery, then failed
+because the article assertion also matched the gallery status message. Status
+assertions now select the operation they verify.
+
+Run `02018` passed the complete independent-owner journey with fourteen authored
+captures: private operational setup, explicit booking publication, scheduling
+before Website setup, website publication, public article and collection, guest
+booking, saved template preview, public update, and publication rollback. Cleanup
+returned all eight counters to zero. Its strict repeat is pending. The original
+three backend suites also repeated successfully: entitlements 13, releases 14,
+and gallery 11, with zero marker records after cleanup.
+
+Independent strict run `02021` passed with zero screenshot changes across all
+fourteen authored captures. Its exact audit reports zero remaining operational,
+publication, sender, audience, campaign, and media ownership records. Evidence is
+retained in `qa/evidence/fresh-site/independent-owner`. The file metadata regression
+now has twelve passing gallery/media tests: public image bytes remain available,
+while File list and document metadata require management of the attached website.
+
+The existing organization booking HTTP and realtime suite repeated on Fresh B:
+17 tests passed; 21 exact synthetic records were removed and no exact parent or
+child records remained. Independent and organization regression both passed;
+expanded organization/staff/workbook/newsletter browser acceptance is pending.
+
+The expanded organization run `02022` verified managed receptionist login,
+newsletter capture/unsubscribe/suppression, article history, and workbook review
+and application before stopping at an inaccessible draft text label. That label
+now remains stable when the textarea contains imported text. The repeat is
+running. The private preview also fails closed for missing template packages;
+there are no TypeScript diagnostics in the touched content/setup/independent
+surfaces. The full application still reports 272 unrelated existing diagnostics.
+
+### Owner access and production privacy qualification checkpoint
+
+The independent journey remains accepted at strict run `02021`. The expanded
+organization journey now reaches workbook-created businesses and staff publication
+denial. Runs `02038` and `02042` exposed assumptions that creating a second
+business immediately selects it. The browser now uses the visible business
+chooser for each owner. Run `02046` stopped at staff assignment with a generic
+request error; it is not acceptance evidence. A repeat with stable source and
+services is required.
+
+Owner website routes now follow the selected business scope. A global manager
+role cannot grant a receptionist publishing controls in another workspace.
+Article fields remain disabled while a draft loads or saves, preventing typed
+changes from being overwritten by the load response. Textarea names remain
+stable after loading content.
+
+Production boot data escapes all HTML parser delimiters, including mixed-case
+closing script tags. The worker upgrade deletes four exact legacy private caches
+and preserves public assets and other applications. The root worker scope is
+explicit; generated edge configuration serves the worker with no-cache and
+Service-Worker-Allowed headers. These changes passed focused response, frontend
+DOM, and privacy regressions. The offline production build passed. Managed
+production browser qualification remains pending.
+
+The final focused regressions passed: entitlements 13, releases 14, gallery/media
+12, website setup 12, monitoring 5, staff invitations 14, upstream protection 6,
+newsletter 12, workbook application 11, workbook parser 10, and response contracts
+12. Focused lint has zero errors and two existing session fast-refresh warnings.
+The full application TypeScript baseline remains separately recorded above.
+
+Fresh C, `meet-beta-content-fresh-c.localhost`, was installed without seeding in
+the existing isolated Bench. It has the six required apps and zero records in all
+eight business/content counters. Its disjoint managed profile is BACCT-4001 with
+BSESS-4002. The first normal user has only Provider among application roles; no
+business was created by the operator. Credentials remain in private runtime files.
+Final fresh-site journeys, the stable template matrix, accessibility review, and
+production recovery/code rollback remain pending.
+
+### Final fresh-install independent owner accepted
+
+Fresh C strict run `04009` passed the complete fourteen-capture independent-owner
+journey with zero screenshot changes. It began without a Provider or Organization
+and used a Provider-only normal user. The audit reports no organization proxy and
+zero remaining operational, website, publication, media, sender, audience, or
+campaign records. Evidence is retained under
+`qa/evidence/fresh-site/meet-beta-content-fresh-c.localhost/independent-owner`.
+
+Organization run `02047` passed all functional checks. Strict repeat `02051` also
+passed functionally but found four visual changes. Two were the receptionist's
+moving current-time line. Two exposed three exact synthetic entitlement rows
+that older cleanup had omitted. Cleanup now removes those rows and counts
+Business Entitlement in its audit. The operator repair removed only the three
+marked orphan rows, after confirming the synthetic organization no longer existed.
+It changed no live business or plan. Receptionist captures use a fixed browser
+Date while normal timers and backend time remain real.
+
+The fresh independent repeat exposed a theme icon stuck in its entrance state.
+The global theme control now renders its icon on first paint and honors reduced
+motion for theme changes. Captures wait for page and theme animations to settle;
+the browser uses software rendering. Exact PNG comparison and functional
+assertions remain unchanged. Final baseline `04008` and strict `04009` passed.
+The full organization journey on Fresh C is running at `04010`. Template,
+production accessibility, and recovery/code drills remain pending.
+
+### Publication media and receptionist qualification
+
+The final review found that upstream File deletion removes physical bytes before
+ordinary document event hooks run. Website files now use a Frappe controller
+extension. It checks publication references before upstream deletion and checks
+attachment, URL, and privacy changes before upstream file movement. Published,
+superseded, and withdrawn history retain their media. Owners can still delete an
+unused image. Metadata write permission also rejects changes to an existing
+website attachment. Fifteen gallery tests passed, including normal-owner delete
+denial after withdrawal, file ownership and privacy changes, and unused cleanup.
+
+Receptionist entrance fades could leave content invisible with reduced motion
+and a fixed browser Date. Static workspace content now renders immediately.
+Visual captures wait for visible animated elements to settle. The frontend DOM
+regressions passed. Fresh C organization repeat `04022` is in progress; it must
+pass a separate strict comparison before acceptance.
+
+### Fresh-install organization owner accepted
+
+Fresh C baseline `04026` passed. Strict repeat `04030` passed all 39 authored
+captures with zero screenshot changes. All 24 cleanup counters are zero.
+Retained evidence includes the normal owner's resumable setup, all private
+surface previews, content publication and rollback, versioned workbook correction,
+application and exact retry, a workbook-created business, local newsletter
+sender verification, consent, confirmed delivery, unsubscribe and suppression.
+The receptionist account was created through its guest invitation and assigned
+by the normal owner through Team. It retained one location workspace and could
+not access publishing controls or APIs. Two separate managed identities created
+their own businesses. Nine cross-business requests and five expired-entitlement
+requests were denied; collection, article and send limits preserved releases.
+
+The browser checks both legitimate post-creation screens before choosing the
+second business through the visible workspace chooser. This corrects a test
+assumption without changing business creation behavior. Receptionist focused
+lint reports seven existing errors; running lint on the committed baseline
+reports the same seven errors. No new lint error was introduced by the entrance
+visibility changes. Full TypeScript still has the recorded unrelated baseline.
+
+Production public pages register their worker without a generic platform update
+banner over the independently owned template. The private workspace's asset-ready
+message now states that booking and account pages require a connection.
+Production and recovery qualification remain pending.
+
+The compiled production security baseline `00152` passed the five entry, CSP,
+service-worker, and cache privacy checks. A separate strict repeat is required.
+The release regressions passed 14 tests after media protection. The website
+suite initially stopped because its synthetic cleanup tried to delete an image
+before its test release. That prevented its savepoint rollback and caused the
+next preference test to reuse the prior draft. Cleanup now removes exact
+publication rows for the uploaded test sites first. The repeat passed all 12
+website tests. This correction changes test cleanup, not owner or publication
+permissions.
+
+### Compiled production privacy accepted
+
+Strict run `00153` passed with zero visual changes. It used actual Frappe HTML,
+the compiled entry, and the root-scoped service worker. All five entries had
+rendered HTML, matching CSP nonces, no unsafe-eval, and nosniff headers. Guest
+pages made no unsolicited workspace, content-authoring, or socket requests.
+The worker upgrade removed four exact private cache names, preserved an unrelated
+application cache, denied the owner API with no-store, and cached no private API
+or newsletter path. Public proof and its screenshot are retained under
+`qa/evidence/content-production`.
+
+An additional orphan-reference check found two exact sites from the failed
+website test savepoint. The cleanup verified their identities and missing
+synthetic organizations before deleting their owned records in dependency order.
+The synthetic site count is now zero. It changed no showcase or normal-owner
+acceptance business. The earlier seven marker counters also remain zero.
+
+The complete compiled template matrix is running at `00154`. Its controlled
+empty/error scenarios block service workers so Playwright can supply the exact
+API response. Actual service-worker behavior is qualified separately at `00153`.
+Accessibility, layout stability, restored public routes, and code rollback remain
+pending. No staging or external email action has been taken.
+
+The complete production template baseline `00154` passed all twenty scenarios
+and produced 280 authored captures. Inline article links now have a visible
+underline in each template's own CSS. The accessibility suite retains computed
+styles for incomplete gradient/link checks, keyboard focus details, local largest
+paint and layout stability measurements, and a clearly marked transient inline
+link style probe. That probe changes only the browser DOM and no stored release.
+Final strict template comparison and accessibility review remain pending.
+
+Accessibility run `00155` exposed a traversal-test assumption: booking has four
+focusable controls, so a fifth Tab correctly leaves the document. The test now
+checks up to five visible, enabled controls and requires an actual focus treatment.
+Each independent template also defines a visible focus ring for its landing and
+booking controls; newsletter controls retain their contrast-safe current-color
+ring. Initial production measurements were below one second for Selam's largest
+paint with layout movement below 0.004. These partial measurements are not final
+acceptance. Cooperative cancellation of `00155` ended with an upstream Browser
+QA timestamp-conflict error; that run is not retained as passing evidence.
+
+Production audit `00156` found layout movement above 0.1 while fetched headings,
+content, and signup replaced the loading state. Each template now keeps its main
+content and footer in its own loading treatment until the release is ready.
+Gallery covers reserve decoded dimensions when they match a collection image.
+Approved local fonts load before the provider exposes the public configuration.
+The scheduler focus check also found controls with no outline or shadow; its
+release-scoped focus rule now defines the complete ring, not only its color.
+The thresholds remain unchanged. Soft assertions collect all surface findings
+but still fail a run with any violation or exceeded budget.
+
+A scoped safety probe confirmed that a normal owner could create a Public Site
+File with inert PNG bytes named as HTML, bypassing governed uploads. It created
+no executable content and removed all its exact fixtures. New website attachments
+now require the server's request-scoped upload context. Gallery and identity
+services enter that context only after scope, consent, decoding, and quota checks.
+Client document flags cannot grant it. Sixteen gallery tests passed, including
+a forged-flag and ignore-permissions attempt; the website suite passed twelve.
+Frontend DOM checks passed and focused content/provider lint reported zero errors.
+The production and final normal-owner upload journeys must be repeated after these
+fixes before completion.
+
+Production run `00157` passed five of ten scenarios. Content surfaces now had
+zero layout movement in the completed measurements. Meron's mobile booking
+handoff still showed 0.128 movement because it rendered the provider's fallback
+identity before its published configuration. The handoff now waits for the
+published configuration and exposes an unavailable state on failure.
+Four scheduler focus checks read the first frame of an animated ring; their
+screenshots showed the ring. The check now waits up to one second for that actual
+visible outline or shadow, then records its computed style. The focus requirement
+and performance thresholds are unchanged. This failed run is not acceptance.
+
+Production run `00158` passed ten scenarios and all seventy surface audits.
+It reported zero automated violations and zero layout shift, with largest paints
+between 172 and 836 milliseconds on this local compiled runtime. It also passed
+keyboard traversal. These results do not resolve the audit's manual findings.
+Rendered-style review found muted scheduler text below 4.5 against overlapping
+translucent cards and patterns, a light-blue footer link on light canvases, and
+white avatar initials on bright gradients. Selam's small hero note used a weaker
+hard-coded color. The scheduler now strengthens secondary text, uses the approved
+primary/on-primary pair for action backgrounds, and underlines its branded footer
+link with the main text color. Selam's note uses its own muted-text token.
+These corrections require a fresh production audit and reviewed template baseline.
+
+Run `00159` passed ten production audit scenarios and all seventy automated
+surface checks. A separate rendered-style calculation covered 603 contrast
+findings, including gradient stops and translucent ancestors. It narrowed the
+remaining small-text failures to seventeen service-card action labels in Abugida
+and Bloom. Those labels now mix their own primary color with their main text
+color. Icons and the approved primary/on-primary action background remain separate.
+The recovery capture also waits for local fonts and disables capture animations.
+It uses the older build's normal Close control if its asset-ready banner appears.
+It does not mask or remove browser elements.
+
+Production accessibility run `00160` passed ten scenarios with zero baseline
+changes. All seventy surfaces passed automated WCAG A/AA, keyboard, local paint,
+layout, and external-resource checks. Largest paints ranged from 176 to 1,036
+milliseconds, with zero layout shift. The separate color review resolved all
+603 findings against the unchanged small/large text thresholds. Ten retained
+article-link probes show underlines and visible focus at both tested viewports.
+Evidence is in `qa/evidence/content-accessibility/`; its manual review states the
+scope and limits. The reproducible review script is `qa/contrast-review.py`.
+Final template comparison and restored-runtime browser stages remain pending.
+
+Template run `00161` passed all twenty browser scenarios and captured 280 PNGs.
+Its strict comparison reported 22 changes: the twenty corrected scheduler
+captures and two Selam light-mode hero-note captures. Those corrections were
+reviewed against the previous images. This comparison run is not final acceptance.
+Full-size review also found Selam's team introduction directly against the heading
+descenders. Selam now owns an 18-pixel gap. The managed matrix checks separate
+rendered text bounds for that heading and introduction at all four combinations.
+No other template imports its layout or style. The final baseline and strict
+repeat remain pending after the focused spacing capture.
+
+Template run `00162` passed all four focused Selam combinations. Eight captures
+changed after the owned team-heading spacing correction. Native desktop and
+mobile review confirmed separate rendered text bounds. Full baseline run `00163`
+then passed twenty scenarios, with 24 reviewed changes: twenty scheduler captures
+and four Selam landing captures. A strict repeat is required before export.
+
+A read-only security probe found that nested article images could skip site-owned
+image validation and historical file retention. All five nested HTML shapes were
+affected. Article publication now walks the same sanitized HTML tree for image
+sources. File retention parses exact image sources in structured HTML strings,
+including withdrawn releases. Two regressions cover five nesting shapes and an
+actual owner publication, withdrawal, and blocked physical-file deletion.
+Gallery (18), releases (14), entitlements (13), and website setup (12) all passed.
+The seven synthetic marker counts were zero after cleanup.
+
+The final broad TypeScript check reports 272 existing diagnostics. The touched
+service selector still contains its pre-existing `ringColor` style diagnostic;
+that property is identical at the Phase 0–3 checkpoint. No new diagnostic was
+introduced by the content changes. Earlier unrelated reception lint failures
+remain recorded separately.
+
+## Final production public acceptance
+
+Source `4918e47` has no uncommitted application changes. Strict template run
+`BQA-2026-00164` passed twenty scenarios, zero flaky or failed cases, and zero
+baseline changes. It retained 280 screenshots for all five certified templates,
+desktop/mobile, light/dark, and all fourteen public/empty/unavailable surfaces.
+Checksums are in `qa/evidence/content-templates/validation.json`. The source and
+browser comparison is `qa/evidence/content-design-review/comparison.html`.
+All comparison links resolve to retained boards, captures, and reports.
+
+Native review covered the five desktop landing and scheduler layouts, Selam's
+corrected desktop/mobile team spacing, mobile dark gallery and collection layouts,
+Abugida's article, and Tena's mobile scheduler. Captions, consent copy, clamped
+service descriptions, card badges, and booking labels remain within their own
+layout. The existing seventy-surface color and focus review remains applicable;
+the subsequent Selam spacing correction has its four-combination rendered-text
+bounds assertion in the accepted matrix.
+
+Strict production run `BQA-2026-00165` also passed with zero baseline changes.
+Its retained report qualifies actual compiled Frappe HTML, script nonces, guest
+isolation, root service-worker control, private request denial, and exact legacy
+cache removal. It changed no publication inventory. The showcase integrity check
+still reports valid release hashes, 160 owned journal records, three articles and
+two collections per template, and zero external sends.
+
+Fresh C run `04034` passed the complete normal-owner journey. Its strict comparison
+found two changed private example-cover crops. Native before/after review and the
+`a1710af` diff traced both to reserved cover dimensions, introduced after the
+previous fresh-site acceptance. Text, controls, and identity were unchanged.
+Baseline run `04038` passed with exactly those two reviewed changes. No application
+change or tolerance adjustment was made. A complete strict repeat is required.
+
+## Final fresh-site normal-owner acceptance
+
+Strict Fresh C run `BQA-2026-04042` passed the complete 39-capture journey with
+zero baseline changes, failed cases, or flaky cases. Source is `4918e47`.
+All 24 audit counters are zero after exact cleanup. The retained account has
+Provider and Organization Manager, with no Administrator or System Manager role.
+Managed staff acceptance, role/location scope, second-business isolation, nine
+cross-business denials, five expired-capability denials, enforced limits, and
+immutable release preservation are recorded in the approved proof files.
+Workbook error review, confirmation and idempotent retry, governed identity and
+gallery uploads, private previews, publication and rollback, verified local
+newsletter capture, guest unsubscribe, and suppression passed through the UI.
+The separate Fresh C independent-owner run `04009` remains retained and passed
+before the organization journey. No showcase seeder populated Fresh C.
+Evidence: `qa/evidence/fresh-site/meet-beta-content-fresh-c.localhost/`.
+
+## Production recovery CSRF correction
+
+Restored candidate run `03003` loaded the fifteen website/content routes and
+actual media, but guest unsubscribe returned Frappe's `Invalid Request`.
+The domain audit failed because consent did not change; its generic residue
+label reported zero residual records. This failed run is not acceptance.
+Production HTML creates a CSRF token, while the public POST helper omitted its
+header. The helper now sends the existing session token for state-changing
+requests. CSRF protection, token checks, and consent rules remain enabled.
+The recovery browser also checks the POST succeeds and carries that exact token
+without retaining the token in its public report.
+
+The maintained rollback revision is `1ae60d37c95ba50d81e3b7e7a00af44f7585d22a`,
+parent `ef9c42a`. Its sole changed file backports the same CSRF-header correction.
+It is preserved at `refs/qa/content-publishing-rollback` and will be archived and
+built exactly. The original unpatched rollback revision cannot pass production
+unsubscribe and is not an accepted fallback. No checkout, index, database,
+subscriber token, or media was reset or repaired. Frontend focused lint and all
+twelve DOM contract groups passed; a new compiled build and recovery repeat are
+required before qualification.
+
+Restored candidate baseline `03004` and strict repeat `03005` passed all sixteen
+captures after the CSRF correction. The audit confirms unchanged 35 releases and
+15 media files, successful guest unsubscribe, and retained suppression.
+Candidate evidence is in `qa/evidence/content-recovery/candidate/`.
+The maintained rollback archive checksum is
+`7feb8dff75406db35fc69ec0cfed39c2ac5d7dfc5bd3da3adba2cf2f896bcd19`.
+The runtime switched both backend import and production asset selection to that
+exact archive. Baseline `03006` passed all routes and protected unsubscribe.
+Its one visual difference is Selam's older landing note/team spacing, reviewed
+at native resolution. This stage tests code compatibility against retained data;
+it does not qualify the older build's visual or security posture for deployment.
+A strict rollback repeat and return-to-candidate repeat remain required.
+
+Strict rollback `03007` passed routes, media and consent but found one screenshot
+difference. Native comparison showed the older build's asset-ready banner on
+Abugida. Service-worker installation completed after the previous immediate
+banner check. Recovery capture now awaits actual worker readiness and two paint
+frames, uses the normal Close control, checks the banner is hidden, and moves the
+pointer away. It does not block the worker, alter DOM content, mask pixels, or
+relax comparison. A repeat must pass before rollback evidence is accepted.
+
+Strict maintained rollback run `03008` passed sixteen captures with zero baseline
+changes. Its audit retained all release/media digests and suppression and passed
+CSRF-protected guest unsubscribe. The exact archived backend and asset selection
+were verified. Upgrade restored the recorded candidate launch commands and
+removed the private rollback launch state. Upgrade baseline `03009` passed;
+its sixteen PNG checksums exactly match the original candidate captures.
+The one baseline change restores Selam's corrected candidate landing styling.
+Runtime selection and archive/entry checksums are in
+`qa/evidence/content-recovery/code-drill.json`. Strict upgrade repeat is required
+before the final recovery gate can be marked accepted.
+
+Strict upgrade `BQA-2026-03010` passed all sixteen captures with zero baseline
+changes. All three strict recovery stages retain unchanged 35-release/15-file
+inventories and successful protected unsubscribe with suppression preserved.
+The candidate and upgraded sixteen PNGs are byte-for-byte identical.
+Evidence: `qa/evidence/content-recovery/{candidate,rollback,upgrade}/`.
+The gateway was stopped on Restore and the isolated stack returned to the primary
+site. A final compiled-template repeat is running there after the CSRF correction.
+No reference runtime, working checkout, untracked file, or restored business
+record was reset, cleaned, or repaired.
+
+Post-CSRF compiled matrix `00166` passed twenty functional scenarios but found
+one screenshot difference. Native review and decoded-pixel comparison localized
+it to 21 antialiased pixels around Meron's mobile/light rounded theme-button
+edge; all text, layout, colors inside the button, and the rest of the page match.
+The scheduler capture now requires two consecutive byte-identical native browser
+frames, with at most eight attempts. It writes an unchanged browser PNG and
+fails if rendering cannot settle. No masking, image editing, baseline update,
+threshold, or product change is used. Strict acceptance must be repeated.
+
+Focused scheduler `00167` passed its scenario and required identical frames, but
+strict comparison found 30 antialiased pixels on a rounded service-card edge.
+Native review showed unchanged text, geometry, and colors away from that edge.
+Focused baseline `00168` passed with one reviewed scheduler capture update.
+The complete strict matrix is required again; neither partial run is exported
+as final template acceptance.
+
+Full settled-frame run `00169` passed twenty scenarios. It compared all 280
+captures and found eight mobile scheduler differences. Decoded RGB comparison
+found 8–32 pixels per image, confined to rounded control/card edges. Dimensions,
+all text pixels, and the rest of each page are identical. Representative native
+Abugida light and Meron dark pages were reviewed with the retained contrast and
+geometry evidence. The eight affected scenarios have a reviewed baseline run;
+all other baseline keys are retained. A full strict repeat remains mandatory.
+
+Reviewed settled-frame baseline `00170` passed the eight selected scenarios and
+updated exactly eight scheduler captures. The complete strict matrix uses the
+remaining baseline keys unchanged. The post-CSRF TypeScript comparison reports
+exactly the same 272 diagnostics, with zero introduced or removed diagnostics
+and none in `public-experience/api.ts`. The pure workbook parser rerun passed all
+ten malformed-input tests. These results do not replace full browser acceptance.
+
+Full strict `00171` passed twenty scenarios and 279 of 280 comparisons. The
+remaining legacy Tena mobile/dark scheduler baseline differed at fourteen pixels
+on the rounded control edge (x=16–17, y=622–746). All nine previously normalized
+mobile scheduler captures matched. Native layout and decoded RGB review found
+no text or geometry change. Focused baseline `00172` passed and updated that
+one reviewed capture. Full strict acceptance is required again, with no further
+application or browser-rendering change.
+
+## Final complete template gate
+
+Strict `BQA-2026-00173` passed all twenty scenarios and 280 captures, with zero
+failed or flaky cases and zero baseline changes. Application changes are clean;
+source is `a810c2b+source-e3b0c44298fc+qa-0fcc957b6e35`.
+All retained PNG checksums match `qa/evidence/content-templates/validation.json`.
+This final compiled run includes the production CSRF correction. Failed drift
+runs remain recorded above; no partial or baseline-update run is final evidence.
+
+## Final production and runtime restoration
+
+Strict `BQA-2026-00174` passed the compiled production privacy/cache gate with
+zero baseline changes. All five entries retain matching script nonces, no page
+errors or unsolicited guest private requests, root worker scope, network-only
+private APIs, exact legacy cache removal, and unrelated cache preservation.
+Final evidence is in `qa/evidence/content-production/`.
+
+The final regression sweep passed 117 site tests plus ten pure workbook parser
+tests. All seven synthetic marker counters and the extra `cnt-%` site query are
+zero. Showcase hashes and 160 journal records remain unchanged, with zero
+external sends. The development frontend was restored on the primary site;
+frontend, backend and browser worker are alive and the proxied backend ping
+returns pong. Temporary production and rollback launch states are removed.
+`qa/evidence/content-regressions/runtime-restoration.json` retains safe proof.
+The reference runtime and all existing checkouts/sites were preserved.

@@ -2,12 +2,74 @@
 
 import sys
 import unittest
+from types import SimpleNamespace
 
 from appointment.public_experience.actions import project_action, validate_action
 from appointment.public_experience.design_compiler import compile_design
 from appointment.public_experience.errors import DesignCompilationError, UnknownRecipeError, UnsafeActionIntentError
 from appointment.public_experience.recipes import get_recipe, list_recipes, recipe_versions
 from appointment.public_experience.section_schemas import validate_typed_section
+from appointment.public_experience.csp import after_request, encode_boot_data, shell_nonce
+
+
+class TestResponsePrivacy(unittest.TestCase):
+    def test_boot_data_cannot_close_a_script_tag(self):
+        import json
+
+        value = {"name": '</ScRiPt><script src="/files/untrusted.js"></script>&', "locale": "አማርኛ"}
+        encoded = encode_boot_data(value)
+        self.assertNotIn("<", encoded)
+        self.assertNotIn(">", encoded)
+        self.assertNotIn("&", encoded)
+        self.assertEqual(json.loads(json.loads(encoded)), value)
+
+    def test_html_nonce_matches_policy_and_token_pages_remain_private(self):
+        import frappe
+
+        previous = getattr(frappe.local, "content_shell_nonce", None)
+        try:
+            nonce = shell_nonce()
+            response = after_request(SimpleNamespace(headers={}, mimetype="text/html"),
+                SimpleNamespace(path="/newsletter/confirm/opaque-token"))
+            self.assertIn(f"'nonce-{nonce}'", response.headers["Content-Security-Policy"])
+            self.assertEqual(response.headers["Cache-Control"], "no-store")
+            self.assertEqual(response.headers["Referrer-Policy"], "no-referrer")
+        finally:
+            frappe.local.content_shell_nonce = previous
+
+    def test_custom_domain_allows_exact_guest_content_apis_only(self):
+        from appointment.public_experience.edge import EdgeOptions, _server_block
+
+        config = _server_block("public.example.test", EdgeOptions(frappe_site="test.localhost"), public_only=True)
+        for method in ("appointment.content.public_api.get_article_detail",
+                       "appointment.content.newsletter.public_api.subscribe",
+                       "appointment.scheduler.booking.book"):
+            self.assertIn(f"location = /api/method/{method}", config)
+        for method in ("appointment.content.api.publish_article",
+                       "appointment.content.public_api.get_content_preview",
+                       "frappe.client.get"):
+            self.assertNotIn(f"location = /api/method/{method}", config)
+        self.assertIn("location ~ ^/(app|login|logout|api|private|desk)(/|$) { return 404; }", config)
+        self.assertIn("location = /assets/appointment/frontend/sw.js", config)
+        self.assertIn('add_header Service-Worker-Allowed "/";', config)
+        self.assertIn('add_header Cache-Control "no-cache";', config)
+
+    def test_preview_and_newsletter_actions_cannot_be_cached_or_indexed(self):
+        for path in (
+            "/api/method/appointment.content.public_api.get_content_preview",
+            "/api/method/appointment.public_experience.api.preview_website",
+            "/api/method/appointment.content.newsletter.api.get_local_message",
+            "/newsletter/confirm/opaque-token",
+        ):
+            response = after_request(SimpleNamespace(headers={}), SimpleNamespace(path=path))
+            self.assertEqual(response.headers["Cache-Control"], "no-store")
+            self.assertEqual(response.headers["X-Robots-Tag"], "noindex, nofollow")
+
+    def test_public_release_reads_get_security_headers_without_private_cache_policy(self):
+        response = after_request(SimpleNamespace(headers={}), SimpleNamespace(
+            path="/api/method/appointment.content.public_api.get_article_detail"))
+        self.assertEqual(response.headers["X-Content-Type-Options"], "nosniff")
+        self.assertNotIn("Cache-Control", response.headers)
 
 
 class TestRecipeCompiler(unittest.TestCase):

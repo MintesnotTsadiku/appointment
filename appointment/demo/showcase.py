@@ -974,6 +974,10 @@ def summary(state):
 
 
 def seed(base_url="http://127.0.0.174:41960", anchor_date=None):
+    from appointment.demo.content_world import configure as configure_published_content
+    from appointment.demo.analytics_world import configure as configure_analytics
+    from appointment.demo.dashboard_world import configure as configure_dashboards
+
     validate_showcase_catalog()
     # Synthetic customers never get messages. The flag lasts for this request only.
     frappe.flags.skip_customer_notification = True
@@ -993,8 +997,11 @@ def seed(base_url="http://127.0.0.174:41960", anchor_date=None):
             if needs_public_upgrade or needs_content_upgrade:
                 # enrich_seeded_records already marked the content current; republish regardless.
                 configure_public_experience(state, force=True)
+            needs_published_content = configure_published_content(state)
+            needs_analytics = configure_analytics(state)
+            needs_dashboards = configure_dashboards(state)
             added = add_missing_businesses(state, base_url)
-            if needs_phase_write or needs_content_upgrade or needs_public_upgrade or added:
+            if needs_phase_write or needs_content_upgrade or needs_public_upgrade or needs_published_content or needs_analytics or needs_dashboards or added:
                 for dt, name in list(state["created"]):
                     for version in frappe.get_all("Version", filters={"ref_doctype": dt, "docname": name}, pluck="name"):
                         remember(state, "Version", version)
@@ -1028,7 +1035,10 @@ def seed(base_url="http://127.0.0.174:41960", anchor_date=None):
         try:
             configure(state)
             configure_public_experience(state)
+            configure_published_content(state)
             appointments(state)
+            configure_analytics(state, fresh=True)
+            configure_dashboards(state)
             record_landings(state["personas"], base_url)
             for dt, name in list(state["created"]):
                 for version in frappe.get_all("Version", filters={"ref_doctype": dt, "docname": name}, pluck="name"):
@@ -1147,7 +1157,12 @@ def _delete_journal_entries(entries):
     for dt, name in sorted(entries, key=lambda item: CLEANUP_PRIORITY.get(item[0], 4)):
         if not frappe.db.exists(dt, name):
             continue
-        if dt in {"Version", "Public Experience Outbox", "Experience Release", "Brand Revision"}:
+        if dt in {"Version", "Public Experience Outbox", "Experience Release", "Brand Revision", "Published Content Release",
+                  "Local Email Message", "Business Newsletter Campaign", "Newsletter Audience Member", "Newsletter Sender Identity"}:
+            if dt == "Newsletter Audience Member":
+                from frappe.utils.password import delete_all_passwords_for
+
+                delete_all_passwords_for(dt, name)
             frappe.db.delete(dt, {"name": name})
         else:
             frappe.delete_doc(dt, name, ignore_permissions=True, delete_permanently=True)
@@ -1171,6 +1186,17 @@ def _row_name(row):
 
 # Link checks intentionally remain enabled: later user-created dependents block cleanup.
 CLEANUP_PRIORITY = {
+    "Published Content Release": -8,
+    "Local Email Message": -7,
+    "Business Newsletter Campaign": -6,
+    "Newsletter Audience Member": -5,
+    "Newsletter Sender Identity": -4,
+    "Content Ownership": -3,
+    "Newsletter": -2,
+    "Gallery Collection": -2,
+    "Blog Post": -2,
+    "Email Group": -1,
+    "Blog Category": -1,
     "Version": 0,
     "Public Experience Outbox": 1,
     "Experience Release": 2,

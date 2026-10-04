@@ -2,6 +2,7 @@ import type { BookingTemplateProps, TemplateProps } from "../types";
 import { action, brandLogo, contentImage, designImage, durationMinutes, formatPrice, localized, records, section, sectionImage } from "../content";
 import { usePublicChrome } from "../chrome";
 import "./selam.css";
+import { SelamNewsletter } from "./SelamNewsletter";
 
 const Mark = () => <span className="selam-mark" aria-hidden="true">✳</span>;
 
@@ -32,7 +33,7 @@ export function SelamSite({ snapshot, locale, applicationName, publicRoot, rootS
   return <div data-pe-root data-pe-recipe={snapshot.recipeKey} data-pe-mode={mode} className="selam-site" data-template="selam-movement-v1" style={rootStyle}>
     <header className="selam-nav">
       <a className="selam-logo" href={publicRoot}>{logo ? <img className="pe-brand-logo" src={logo} alt="" /> : <Mark />} <strong>{applicationName}</strong></a>
-      <nav aria-label={chrome.t("navLabel")}><a href="#sessions">{chrome.t("services")}</a><a href="#people">{chrome.t("team")}</a><a href="#contact">{chrome.t("visit")}</a></nav>
+      <nav aria-label={chrome.t("navLabel")}><a href={`${publicRoot}/blog`}>{chrome.t("journal")}</a><a href={`${publicRoot}/gallery`}>{chrome.t("gallery")}</a><a href="#sessions">{chrome.t("services")}</a><a href="#people">{chrome.t("team")}</a><a href="#contact">{chrome.t("visit")}</a></nav>
       {primary ? <a className="selam-pill" href={primary.href}>{primary.label}</a> : null}
       <button type="button" className="selam-mode" onClick={toggleMode} aria-label={chrome.modeSwitchLabel(mode)}><span aria-hidden="true">{mode === "dark" ? "☀" : "☾"}</span><span>{chrome.modeName(mode)}</span></button>
     </header>
@@ -69,7 +70,7 @@ export function SelamSite({ snapshot, locale, applicationName, publicRoot, rootS
       <section className="selam-community">{aboutImage ? <img src={aboutImage.src} alt={aboutImage.alt} /> : null}<div><h2>{localized(about.title, locale)}</h2><p>{localized(about.body, locale)}</p></div><div className="selam-faq" id="faq"><h2>{localized(faq.title, locale)}</h2>{records(faq.items).map((item, index) => <details key={index}><summary>{localized(item.question, locale)}</summary><p>{localized(item.answer, locale)}</p></details>)}</div></section>
       <section className="selam-location" id="contact"><div><h2>{localized(locations.title, locale)}</h2>{location ? <address>{localized(location.address, locale)}<br />{localized(location.hours, locale)}<br />{String(location.phone || "")}</address> : null}</div>{locationImage ? <img src={locationImage.src} alt={locationImage.alt} /> : null}</section>
       <section className="selam-final"><h2>{localized(booking.title, locale)}</h2>{finalAction ? <a className="selam-pill" href={finalAction.href}>{finalAction.label}</a> : null}</section>
-    </main>
+    <SelamNewsletter snapshot={snapshot} applicationName={applicationName} locale={locale} publicRoot={publicRoot} /></main>
     <footer className="selam-footer"><a className="selam-logo" href={publicRoot}>{logo ? <img className="pe-brand-logo" src={logo} alt="" /> : <Mark />} <strong>{applicationName}</strong></a>{localized(footer.body, locale) ? <span>{localized(footer.body, locale)}</span> : null}<small>© {new Date().getFullYear()} {applicationName}</small></footer>
   </div>;
 }

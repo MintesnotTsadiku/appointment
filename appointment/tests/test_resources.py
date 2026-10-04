@@ -18,12 +18,14 @@ from frappe.utils import add_days, get_datetime, get_time, nowdate
 
 from appointment.scheduler import booking, resources
 from appointment.tests.test_customer_notifications import OTHER_OWNER, OWNER
+from appointment.tests import demo_offerings
 
-HANNA = "EVT-2026-000108"  # Cut and shape, Hanna, Bole main studio
-EDEN = "EVT-2026-000110"  # Cut and shape, Eden, Bole main studio
-RAHEL = "EVT-2026-000109"  # Cut and shape, Rahel, Bole quiet styling room
+HANNA = demo_offerings.cut_hanna()  # Cut and shape, Hanna, Bole main studio
+EDEN = demo_offerings.cut_eden()  # Cut and shape, Eden, Bole main studio
+RAHEL = demo_offerings.cut_rahel()  # Cut and shape, Rahel, Bole quiet styling room
 MAIN = "Bole main studio"
-BASE = "http://127.0.0.84:44430"
+# The site's own browser URL (set per worktree stack), so HTTP races hit this site.
+BASE = (frappe.conf.get("host_name") or "http://127.0.0.84:44430").rstrip("/")
 QA_TYPE = "QA styling chair"
 
 

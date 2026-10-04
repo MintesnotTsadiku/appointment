@@ -2,6 +2,7 @@ import type { BookingTemplateProps, TemplateProps } from "../types";
 import { action, brandLogo, contentImage, designImage, localized, records, section, sectionImage } from "../content";
 import { usePublicChrome } from "../chrome";
 import "./tena.css";
+import { TenaNewsletter } from "./TenaNewsletter";
 
 const Leaf = () => <span className="tena-leaf" aria-hidden="true">❧</span>;
 
@@ -32,7 +33,7 @@ export function TenaSite({ snapshot, locale, applicationName, publicRoot, rootSt
   return <div data-pe-root data-pe-recipe={snapshot.recipeKey} data-pe-mode={mode} className="tena-site" data-template="tena-clinic-v1" style={rootStyle}>
     <header className="tena-nav">
       <a href={publicRoot}>{logo ? <img className="pe-brand-logo" src={logo} alt="" /> : <Leaf />}<span>{applicationName}</span></a>
-      <nav aria-label={chrome.t("navLabel")}><a href="#care">{chrome.t("services")}</a><a href="#team">{chrome.t("team")}</a><a href="#contact">{chrome.t("visit")}</a></nav>
+      <nav aria-label={chrome.t("navLabel")}><a href={`${publicRoot}/blog`}>{chrome.t("journal")}</a><a href={`${publicRoot}/gallery`}>{chrome.t("gallery")}</a><a href="#care">{chrome.t("services")}</a><a href="#team">{chrome.t("team")}</a><a href="#contact">{chrome.t("visit")}</a></nav>
       <button type="button" className="tena-mode" onClick={toggleMode} aria-label={chrome.modeSwitchLabel(mode)}><span aria-hidden="true">{mode === "dark" ? "☀" : "☾"}</span>{chrome.modeName(mode)}</button>
       {primary ? <a className="tena-button" href={primary.href}>{primary.label}</a> : null}
     </header>
@@ -75,7 +76,7 @@ export function TenaSite({ snapshot, locale, applicationName, publicRoot, rootSt
         {location ? <address><span>{localized(location.name, locale)}</span><b>{localized(location.address, locale)}</b>{localized(location.hours, locale)}{location.phone ? <a href={`tel:${String(location.phone)}`}>{String(location.phone)}</a> : null}</address> : null}
       </section>
       <section className="tena-final"><Leaf /><div><h2>{localized(booking.title, locale)}</h2>{localized(booking.body, locale) ? <p>{localized(booking.body, locale)}</p> : null}</div>{finalAction ? <a href={finalAction.href}>{finalAction.label}</a> : null}</section>
-    </main>
+    <TenaNewsletter snapshot={snapshot} applicationName={applicationName} locale={locale} publicRoot={publicRoot} /></main>
     <footer className="tena-footer">
       <a href={publicRoot}>{logo ? <img className="pe-brand-logo" src={logo} alt="" /> : <Leaf />}<span>{applicationName}</span></a>
       {localized(footer.body, locale) ? <p>{localized(footer.body, locale)}</p> : null}

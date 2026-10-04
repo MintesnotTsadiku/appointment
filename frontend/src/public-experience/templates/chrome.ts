@@ -12,7 +12,7 @@ import type { ResolvedMode } from "../firstPaint";
  * Translations come from the Frappe `Translation` DocType like the rest of the app.
  */
 export type ChromeKey =
-  | "navLabel" | "services" | "team" | "visit" | "questions" | "backToSite"
+  | "navLabel" | "journal" | "gallery" | "services" | "team" | "visit" | "questions" | "backToSite"
   | "dark" | "light" | "switchToDark" | "switchToLight" | "skip"
   | "minutes" | "duration" | "price" | "phone" | "email" | "hours" | "address" | "step";
 

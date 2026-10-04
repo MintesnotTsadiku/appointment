@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/tabs';
 import { useTranslation } from '@/lib/i18n';
 import { PolicyManager } from '../components/PolicyManager';
 import { AccountSection } from './AccountSection';
+import { PersonalDetails } from './PersonalDetails';
 import { ProfileForm } from './ProfileForm';
 import { ProfileSummary } from './ProfileSummary';
 import { useProfileData } from './useProfileData';
@@ -83,6 +84,7 @@ function ProfileTab({ data }: { data: ProfileData }) {
           description={t('staff.profile.orgOnlyDescription')}
         />
       )}
+      <PersonalDetails />
       {provider && data.isProvider && <ProfileForm provider={provider} email={email} onSaved={refetch} />}
       <AccountSection />
     </>

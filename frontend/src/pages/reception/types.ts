@@ -70,6 +70,7 @@ export interface Provider {
 export interface Location {
   name: string;
   location_name: string;
+  reception_state?: string;
 }
 
 export type ViewMode = 'day' | 'week';

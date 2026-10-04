@@ -12,6 +12,7 @@ import { Label } from '@/components/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/select';
 import { SettingsPage, SettingsSection } from '@/components/settings-layout';
 import { EmptyState } from '@/components/states';
+import { Invitations } from './Invitations';
 import { MemberList } from './MemberList';
 import { AssignForm, type AssignValues } from './AssignForm';
 import type { LocationOption, Member, ProviderOption } from './types';
@@ -126,6 +127,8 @@ export default function TeamManagement() {
             action={<Button asChild size="sm"><Link to="/onboarding">{t('staff.team.setUp')}</Link></Button>}
           />
         ) : (
+          <>
+          <Invitations organization={activeOrg} />
           <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(0,1fr)_360px]">
             <SettingsSection
               title={t('staff.team.members')}
@@ -147,6 +150,7 @@ export default function TeamManagement() {
               />
             </SettingsSection>
           </div>
+          </>
         )}
       </div>
     </SettingsPage>

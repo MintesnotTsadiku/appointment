@@ -522,7 +522,7 @@ const OrganizationAppointmentV2 = () => {
             {/* Theme Toggle */}
             <motion.button
               onClick={toggleTheme}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg backdrop-blur-sm transition-all"
+              className="flex items-center gap-2 px-3 py-2 rounded-lg transition-colors"
               style={{ 
                 backgroundColor: 'var(--border-subtle)',
                 border: '1px solid var(--border-default)'
