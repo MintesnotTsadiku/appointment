@@ -2547,7 +2547,8 @@
       },
       "sms": "Also send SMS",
       "smsHint": "Sends the same messages to the customer's phone. Each SMS costs money.",
-      "smsUnavailable": "SMS is not set up for this site yet."
+      "smsUnavailable": "SMS is not set up for this site yet.",
+      "independentDefaults": "Your customers get an email when they book, when a booking moves or is cancelled, and a reminder 24 hours before. You cannot change these settings yet."
     },
     "customers": {
       "nav": "Customers",
@@ -3574,7 +3575,8 @@
       "noTimes": "No times are available on this date. Choose another day.",
       "name": "Your name",
       "email": "Your email",
-      "submit": "Confirm appointment"
+      "submit": "Confirm appointment",
+      "emailed": "We emailed you a confirmation with a link to manage your booking."
     },
     "newsletter": {
       "senderTitle": "Verify newsletter sender",
@@ -3593,5 +3595,9 @@
       "accepting": "Accepting…",
       "accept": "Accept invitation"
     }
+  },
+  "independentCustomersServer": {
+    "oneOwner": "A customer must belong to exactly one business.",
+    "defaultSettings": "Independent providers use the default message settings."
   }
 }

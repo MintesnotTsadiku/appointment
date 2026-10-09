@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { useFrappePostCall } from 'frappe-react-sdk';
+import { useFrappeGetCall, useFrappePostCall } from 'frappe-react-sdk';
 import { CalendarClock, CalendarX2, LogOut, MailCheck } from 'lucide-react';
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
@@ -33,6 +33,7 @@ interface BookingRow {
 interface Listing {
   valid: boolean;
   email?: string;
+  business_name?: string;
   upcoming?: BookingRow[];
   past?: BookingRow[];
 }
@@ -50,7 +51,10 @@ const STATUS_KEY: Record<BookingRow['status'], string> = {
   'No Show': 'staff.status.noShow',
 };
 
-const storageKey = (slug: string) => `appointment.myBookings.${slug}`;
+/** The business the server resolves: an organization slug, or an independent provider's offering. */
+type Owner = { slug: string } | { offering: string };
+
+const storageKey = (scope: string) => `appointment.myBookings.${scope}`;
 
 /**
  * One exchange per one-time token for the whole page lifetime. The page can mount twice
@@ -78,39 +82,54 @@ function writeSession(slug: string, value: StoredSession | null) {
 
 type Stage = 'loading' | 'form' | 'sent' | 'invalid' | 'list';
 
-/** A customer's bookings with one business, opened by an emailed one-time link. */
+/**
+ * A customer's bookings with one business, opened by an emailed one-time link.
+ * Organizations use `/<slug>/my-bookings`; independent providers use `/schedule/individual/<offering>/my-bookings`.
+ */
 export default function MyBookingsPage() {
   const { t, language } = useTranslation();
-  const { slug = '' } = useParams<{ slug: string }>();
+  const { slug = '', offeringId = '' } = useParams<{ slug: string; offeringId: string }>();
+  const owner: Owner = slug ? { slug } : { offering: offeringId };
+  // Stored sessions stay per page, so organization keys do not change.
+  const scope = slug || `individual.${offeringId}`;
+  const bookPath = slug ? `/${slug}/book` : `/schedule/individual/${offeringId}`;
   const [params, setParams] = useSearchParams();
   const { theme } = useTheme();
-  const brand = useBookingBrand(slug, theme === 'dark' ? 'dark' : 'light');
+  const brand = useBookingBrand(slug || undefined, theme === 'dark' ? 'dark' : 'light');
+  const { data: independent } = useFrappeGetCall<{ message: { business_name: string } }>(
+    'appointment.scheduler.independent.public_offering',
+    { offering_id: offeringId },
+    slug ? null : `my-bookings-offering-${offeringId}`,
+    { revalidateOnFocus: false }
+  );
   const [stage, setStage] = useState<Stage>('loading');
   const [listing, setListing] = useState<Listing | null>(null);
   const [session, setSession] = useState<StoredSession | null>(null);
   const { call: openLink } = useFrappePostCall<{ message: StoredSession }>(`${API}.open_link`);
 
   const load = useCallback(async (value: StoredSession) => {
-    const query = new URLSearchParams({ slug, session: value.session, email: value.email });
+    const query = new URLSearchParams({ ...owner, session: value.session, email: value.email });
     const response = await fetch(`/api/method/${API}.bookings?${query}`, { headers: { Accept: 'application/json' } });
     const data = (await response.json())?.message as Listing | undefined;
     if (!data?.valid) {
-      writeSession(slug, null);
+      writeSession(scope, null);
       setSession(null);
       setStage('form');
       return;
     }
     setListing(data);
     setStage('list');
-  }, [slug]);
+    // `owner` follows `scope`.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scope]);
 
   useEffect(() => {
     const token = params.get('token');
     if (token) {
-      if (!exchanges.has(token)) exchanges.set(token, openLink({ slug, token }).then((result) => result.message));
+      if (!exchanges.has(token)) exchanges.set(token, openLink({ ...owner, token }).then((result) => result.message));
       exchanges.get(token)!
         .then((value) => {
-          writeSession(slug, value);
+          writeSession(scope, value);
           setSession(value);
           // The link is spent; drop it from the address bar.
           setParams({}, { replace: true });
@@ -122,7 +141,7 @@ export default function MyBookingsPage() {
         });
       return;
     }
-    const stored = readSession(slug);
+    const stored = readSession(scope);
     if (stored) {
       setSession(stored);
       void load(stored);
@@ -131,11 +150,11 @@ export default function MyBookingsPage() {
     }
     // Run once per visit; the token is consumed above.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug]);
+  }, [scope]);
 
-  const businessName = brand.config?.identity.applicationName ?? '';
+  const businessName = brand.config?.identity.applicationName ?? independent?.message.business_name ?? listing?.business_name ?? '';
   const signOut = () => {
-    writeSession(slug, null);
+    writeSession(scope, null);
     setSession(null);
     setListing(null);
     setStage('form');
@@ -143,16 +162,16 @@ export default function MyBookingsPage() {
 
   let body: ReactNode;
   if (stage === 'loading') body = <p className="text-sm text-[var(--text-secondary)]" data-qa="my-bookings-loading">{t('myBookings.opening')}</p>;
-  else if (stage === 'form') body = <RequestForm slug={slug} language={language} onSent={() => setStage('sent')} />;
+  else if (stage === 'form') body = <RequestForm owner={owner} language={language} onSent={() => setStage('sent')} />;
   else if (stage === 'sent') body = <Sent businessName={businessName} onAgain={() => setStage('form')} />;
   else if (stage === 'invalid') body = <InvalidLink onAgain={() => setStage('form')} />;
-  else body = <Bookings listing={listing!} slug={slug} onSignOut={signOut} email={session?.email ?? listing?.email ?? ''} />;
+  else body = <Bookings listing={listing!} bookPath={bookPath} onSignOut={signOut} email={session?.email ?? listing?.email ?? ''} />;
 
   return (
     <div className="booking-experience min-h-screen text-[var(--text-primary)]" data-qa="my-bookings" style={{ ...brand.style, backgroundColor: 'var(--bg-primary)' }}>
       <header className="border-b border-[var(--border-subtle)]">
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-          <a href={brand.publicRoot} className="flex min-w-0 items-center gap-3 no-underline">
+          <a href={slug ? brand.publicRoot : bookPath} className="flex min-w-0 items-center gap-3 no-underline">
             {brand.config && brandLogo(brand.config.compiledDesign) ? (
               <img className="pe-brand-logo shrink-0" src={brandLogo(brand.config.compiledDesign)} alt="" />
             ) : (
@@ -171,7 +190,7 @@ export default function MyBookingsPage() {
   );
 }
 
-function RequestForm({ slug, language, onSent }: { slug: string; language: string; onSent: () => void }) {
+function RequestForm({ owner, language, onSent }: { owner: Owner; language: string; onSent: () => void }) {
   const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
@@ -180,7 +199,7 @@ function RequestForm({ slug, language, onSent }: { slug: string; language: strin
     event.preventDefault();
     setError('');
     try {
-      await call({ slug, email: email.trim(), language });
+      await call({ ...owner, email: email.trim(), language });
       onSent();
     } catch (err) {
       setError(serverErrorMessage(err) || t('myBookings.failed'));
@@ -221,7 +240,7 @@ function InvalidLink({ onAgain }: { onAgain: () => void }) {
   );
 }
 
-function Bookings({ listing, slug, email, onSignOut }: { listing: Listing; slug: string; email: string; onSignOut: () => void }) {
+function Bookings({ listing, bookPath, email, onSignOut }: { listing: Listing; bookPath: string; email: string; onSignOut: () => void }) {
   const { t } = useTranslation();
   const upcoming = listing.upcoming ?? [];
   const past = listing.past ?? [];
@@ -230,7 +249,7 @@ function Bookings({ listing, slug, email, onSignOut }: { listing: Listing; slug:
       <div className="flex flex-wrap items-center justify-between gap-3 text-sm">
         <span className="text-[var(--text-secondary)]">{fill(t('myBookings.signedInAs'), email)}</span>
         <div className="flex gap-2">
-          <Button asChild size="sm"><a href={`/${slug}/book`}>{t('customerManage.bookAgain')}</a></Button>
+          <Button asChild size="sm"><a href={bookPath}>{t('customerManage.bookAgain')}</a></Button>
           <Button type="button" size="sm" variant="outline" data-qa="my-bookings-sign-out" onClick={onSignOut}>
             <LogOut className="h-4 w-4" aria-hidden="true" />
             {t('myBookings.signOut')}

@@ -13,7 +13,7 @@ import pytz
 from frappe import _
 from frappe.utils import get_datetime, get_system_timezone, validate_email_address
 
-from appointment.scheduler import membership, notification_sms
+from appointment.scheduler import business_owner, membership, notification_sms
 from appointment.scheduler.booking_access import require_access
 
 EVENT_SETTING = {
@@ -56,11 +56,6 @@ EMAIL_QUEUE_STATUS = {"Not Sent": "Queued", "Sending": "Queued", "Sent": "Sent",
 # ---------------------------------------------------------------------------
 def on_appointment_update(doc):
     """Called from Appointment.on_update, which also runs on insert."""
-    if not doc.organization:
-        # Notification settings, templates and records belong to a business; independent
-        # providers' bookings have none yet, so they are not notified.
-        doc.flags.notification_status = "not_applicable"
-        return
     event = _event_for(doc)
     doc.flags.notification_status = queue_notification(doc, event) if event else "not_applicable"
 
@@ -94,32 +89,36 @@ def queue_notification(doc, event, receipt=None):
     """Record and enqueue `event` on each channel. Returns the notification status.
 
     Email always runs. SMS runs when the business turned it on and the site has
-    an SMS gateway. The status is "queued" when any channel queued a message.
-    A receipt goes by email only, once per receipt.
+    an SMS gateway; independent providers have no SMS. The status is "queued"
+    when any channel queued a message. A receipt goes by email only, once per receipt.
+    Bookings outside any business, such as personal meetings, are not notified.
     """
-    statuses = [_queue_channel(doc, event, "Email", receipt)]
-    if not receipt and business_settings(doc.organization).sms_enabled and notification_sms.available():
-        statuses.append(_queue_channel(doc, event, "SMS"))
+    owner = business_owner.for_booking(doc)
+    if not owner:
+        return "not_applicable"
+    statuses = [_queue_channel(doc, event, "Email", owner, receipt)]
+    if not receipt and owner.organization and business_settings(owner.key).sms_enabled and notification_sms.available():
+        statuses.append(_queue_channel(doc, event, "SMS", owner))
     return "queued" if "queued" in statuses else statuses[0]
 
 
-def _queue_channel(doc, event, channel, receipt=None):
+def _queue_channel(doc, event, channel, owner, receipt=None):
     key = (f"{doc.name}:{event}:{receipt}" if receipt else _dedupe_key(doc, event)) + ("" if channel == "Email" else ":sms")
     if frappe.db.exists("Appointment Notification", {"dedupe_key": key}):
         return "queued"
     raw = doc.client_email if channel == "Email" else doc.client_phone
     recipient = validate_email_address(raw or "") if channel == "Email" else notification_sms.normalize_phone(raw)
-    reason = _skip_reason(doc, event, channel, recipient)
+    reason = _skip_reason(doc, event, channel, recipient, owner)
     row = frappe.get_doc(
         dict(
             doctype="Appointment Notification",
             appointment=doc.name,
-            organization=doc.organization,
+            **business_owner.record_fields(owner),
             event=event,
             receipt=receipt,
             channel=channel,
             recipient=recipient or (raw or "")[:140],
-            language=customer_language(doc),
+            language=customer_language(doc, owner),
             status="Skipped" if reason else "Queued",
             skip_reason=reason,
             dedupe_key=key,
@@ -140,30 +139,31 @@ def is_stale(event, doc):
     return doc.status not in OPEN_STATUSES
 
 
-def _skip_reason(doc, event, channel, recipient):
+def _skip_reason(doc, event, channel, recipient, owner):
     setting = EVENT_SETTING[event]
-    if setting and not business_settings(doc.organization)[setting]:
+    if setting and not business_settings(owner.key)[setting]:
         return "disabled"
     if not recipient:
         return "no_recipient"
     # The opt-out link is in the reminder email; it stops reminders on every channel.
-    if event == "Reminder" and is_opted_out(doc.organization, doc.client_email or ""):
+    if event == "Reminder" and is_opted_out(owner.key, doc.client_email or ""):
         return "opted_out"
-    if _over_limit(doc.organization, recipient, event, channel):
+    if _over_limit(owner, recipient, event, channel):
         return "rate_limited"
     return None
 
 
-def _over_limit(organization, recipient, event, channel):
+def _over_limit(owner, recipient, event, channel):
     day_ago, hour_ago = datetime.now() - timedelta(days=1), datetime.now() - timedelta(hours=1)
     sent = {"status": ["in", ["Queued", "Sent", "Delivered"]], "channel": channel}
-    if frappe.db.count("Appointment Notification", {**sent, "organization": organization, "creation": [">", hour_ago]}) >= LIMIT_BUSINESS_PER_HOUR:
+    scope = business_owner.record_filters(owner)
+    if frappe.db.count("Appointment Notification", {**sent, **scope, "creation": [">", hour_ago]}) >= LIMIT_BUSINESS_PER_HOUR:
         return True
     if event != "Confirmation":
         return False
     confirmations = {**sent, "event": "Confirmation", "recipient": recipient, "creation": [">", day_ago]}
     return (
-        frappe.db.count("Appointment Notification", {**confirmations, "organization": organization}) >= LIMIT_ADDRESS_PER_BUSINESS_DAY
+        frappe.db.count("Appointment Notification", {**confirmations, **scope}) >= LIMIT_ADDRESS_PER_BUSINESS_DAY
         or frappe.db.count("Appointment Notification", confirmations) >= LIMIT_ADDRESS_PER_DAY
     )
 
@@ -178,28 +178,32 @@ def _dedupe_key(doc, event):
     return f"{doc.name}:{event}:{start}:{doc.modified}"
 
 
-def customer_language(doc):
+def customer_language(doc, owner=None):
+    owner = owner or business_owner.for_booking(doc)
     language = (
         doc.get("customer_language")
         or (doc.get("customer") and frappe.db.get_value("Customer Profile", doc.customer, "preferred_language"))
-        or frappe.db.get_value("Organization", doc.organization, "language")
+        or (owner and owner.language)
     )
     return language if language in ("en", "am") else "en"
 
 
 def business_settings(organization):
+    """Settings for an owner key. Independent providers use the defaults for now."""
+    if not organization or organization.startswith(business_owner.PREFIX):
+        return frappe._dict(DEFAULT_SETTINGS)
     saved = frappe.db.get_value(
         "Customer Notification Settings", organization, list(DEFAULT_SETTINGS), as_dict=True
     )
     return frappe._dict(saved or DEFAULT_SETTINGS)
 
 
-def is_opted_out(organization, email):
-    return bool(frappe.db.exists("Customer Notification Opt Out", {"opt_out_key": opt_out_key(organization, email)}))
+def is_opted_out(owner_key, email):
+    return bool(frappe.db.exists("Customer Notification Opt Out", {"opt_out_key": opt_out_key(owner_key, email)}))
 
 
-def opt_out_key(organization, email):
-    return f"{organization}:{email.strip().lower()}"[:140]
+def opt_out_key(owner_key, email):
+    return f"{owner_key}:{email.strip().lower()}"[:140]
 
 
 def _instant(value):
@@ -219,7 +223,7 @@ def send_due_reminders():
     candidates = frappe.get_all(
         "Appointment",
         filters={"status": "Confirmed", "starts_at": ["between", [now, now + timedelta(hours=LEAD_HOURS_RANGE[1])]]},
-        fields=["name", "organization", "starts_at", "creation"],
+        fields=["name", "organization", "service", "provider", "event_type", "starts_at", "creation"],
         order_by="starts_at asc",
     )
     done = set(
@@ -241,7 +245,10 @@ def send_due_reminders():
 
 
 def _reminder_due(row, now):
-    settings = business_settings(row.organization)
+    owner = business_owner.for_booking(row)
+    if not owner:
+        return False
+    settings = business_settings(owner.key)
     if not settings.send_reminder:
         return False
     lead = timedelta(hours=int(settings.reminder_lead_hours or DEFAULT_SETTINGS["reminder_lead_hours"]))
@@ -256,24 +263,27 @@ def _reminder_due(row, now):
 # ---------------------------------------------------------------------------
 @frappe.whitelist()
 def get_settings(organization):
-    _require_manager(organization)
+    owner = _require_manager(organization)
     recent = frappe.get_all(
         "Appointment Notification",
-        filters={"organization": organization},
+        filters=business_owner.record_filters(owner),
         fields=["name", "appointment", "event", "channel", "status", "skip_reason", "email_queue", "creation"],
         order_by="creation desc",
         limit=20,
     )
     return {
         "settings": business_settings(organization),
-        "sms_available": notification_sms.available(),
+        "sms_available": bool(owner.organization) and notification_sms.available(),
+        # Independent providers use the default settings; a provider record can come later.
+        "editable": bool(owner.organization),
         "recent": [_with_delivery(row) for row in recent],
     }
 
 
 @frappe.whitelist(methods=["POST"])
 def save_settings(organization, **values):
-    _require_manager(organization)
+    if not _require_manager(organization).organization:
+        frappe.throw(_("Independent providers use the default message settings."))
     clean = {key: int(frappe.utils.cint(values[key])) for key in DEFAULT_SETTINGS if key in values}
     for key in CHECK_SETTINGS:
         if key in clean:
@@ -315,8 +325,15 @@ def _with_delivery(row):
 
 
 def _require_manager(organization):
-    if organization not in membership.manager_organizations():
+    """The owner for a workspace key the current user manages."""
+    organization = organization or ""
+    if organization.startswith(business_owner.PREFIX):
+        from appointment.scheduler.independent import require_owner
+
+        require_owner(organization.removeprefix(business_owner.PREFIX))
+    elif organization not in membership.manager_organizations():
         frappe.throw(_("You cannot manage notifications for this business."), frappe.PermissionError)
+    return business_owner.from_key(organization)
 
 
 # ---------------------------------------------------------------------------
@@ -324,17 +341,21 @@ def _require_manager(organization):
 # ---------------------------------------------------------------------------
 @frappe.whitelist(allow_guest=True)
 def unsubscribe(organization, email):
-    """Signed link from reminder emails. Stops reminders from one business."""
+    """Signed link from reminder emails. Stops reminders from one business.
+
+    `organization` is the owner key, so it is `Provider:<provider>` for an independent provider.
+    """
     from frappe.utils.verified_command import verify_request
 
     if not verify_request():
         return
-    key = opt_out_key(organization, email)
+    owner = business_owner.from_key(organization)
+    key = opt_out_key(owner.key, email)
     if not frappe.db.exists("Customer Notification Opt Out", {"opt_out_key": key}):
         frappe.get_doc(
-            dict(doctype="Customer Notification Opt Out", organization=organization, email=email.strip().lower(), opt_out_key=key)
+            dict(doctype="Customer Notification Opt Out", **business_owner.record_fields(owner), email=email.strip().lower(), opt_out_key=key)
         ).insert(ignore_permissions=True)
-    business = frappe.db.get_value("Organization", organization, "organization_name") or organization
+    business = owner.display_name
     frappe.respond_as_web_page(
         _("Reminders turned off"),
         _("You will no longer get appointment reminders from {0}. Booking confirmations and changes still arrive.").format(

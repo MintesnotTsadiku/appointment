@@ -33,8 +33,11 @@ function toDraft(customer: CustomerDetail): Draft {
   };
 }
 
-/** Contact details, language, notes and preferred providers for owners, managers and reception. */
-export function CustomerEditor({ customer, organization, onSaved }: { customer: CustomerDetail; organization: string; onSaved: () => void }) {
+/**
+ * Contact details, language, notes and preferred providers for owners, managers and reception.
+ * An independent provider is the only provider of their business, so they get no preferred providers.
+ */
+export function CustomerEditor({ customer, organization, independent = false, onSaved }: { customer: CustomerDetail; organization: string; independent?: boolean; onSaved: () => void }) {
   const { t } = useTranslation();
   const [draft, setDraft] = useState<Draft>(() => toDraft(customer));
   const { call, loading } = useFrappePostCall(`${CUSTOMERS_API}.save`);
@@ -52,7 +55,7 @@ export function CustomerEditor({ customer, organization, onSaved }: { customer: 
         primary_phone: draft.primary_phone,
         preferred_language: draft.preferred_language === DEFAULT_LANGUAGE ? '' : draft.preferred_language,
         private_notes: draft.private_notes,
-        preferred_providers: JSON.stringify(draft.preferred_providers.filter((row) => row.provider)),
+        ...(independent ? {} : { preferred_providers: JSON.stringify(draft.preferred_providers.filter((row) => row.provider)) }),
       });
       toast.success(t('staff.customers.saved'));
       onSaved();
@@ -95,9 +98,11 @@ export function CustomerEditor({ customer, organization, onSaved }: { customer: 
           </div>
         </div>
       </SettingsSection>
-      <SettingsSection title={t('staff.customers.preferred')}>
-        <PreferredProvidersEditor organization={organization} value={draft.preferred_providers} onChange={(preferred_providers) => patch({ preferred_providers })} />
-      </SettingsSection>
+      {!independent && (
+        <SettingsSection title={t('staff.customers.preferred')}>
+          <PreferredProvidersEditor organization={organization} value={draft.preferred_providers} onChange={(preferred_providers) => patch({ preferred_providers })} />
+        </SettingsSection>
+      )}
       <StickySaveBar
         dirty={dirty}
         saving={loading}

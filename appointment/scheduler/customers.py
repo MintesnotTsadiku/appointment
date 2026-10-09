@@ -4,6 +4,9 @@ Owners and managers see and change everything for their business, including
 merges. Receptionists see and edit customers of their business. Providers see
 only the name and history of customers they have booked, without contact
 details or notes. Nothing here is open to guests.
+
+`organization` is the workspace key: an Organization name, or `Provider:<provider>`
+for an independent provider, who is the manager of their own customers.
 """
 
 import json
@@ -13,7 +16,7 @@ from frappe import _
 from frappe.query_builder.functions import Count, Max
 from frappe.utils import cint
 
-from appointment.scheduler import customer_identity
+from appointment.scheduler import business_owner, customer_identity
 from appointment.scheduler.booking_access import managed_organizations, providers, receptionist_organizations
 from appointment.scheduler.notification_sms import normalize_phone
 
@@ -27,6 +30,8 @@ HISTORY_FIELDS = [
 def role_in(organization, user=None):
     """'manager', 'reception', 'provider' or None for this user in this business."""
     user = user or frappe.session.user
+    if (organization or "").startswith(business_owner.PREFIX):
+        return "manager" if user == "Administrator" or _owns_provider(organization, user) else None
     if user == "Administrator" or organization in managed_organizations(user):
         return "manager"
     if organization in receptionist_organizations(user):
@@ -34,6 +39,18 @@ def role_in(organization, user=None):
     if _own_providers(organization, user):
         return "provider"
     return None
+
+
+def _owns_provider(key, user):
+    from appointment.scheduler.independent import require_owner
+
+    if user != frappe.session.user:
+        return False
+    try:
+        require_owner(key.removeprefix(business_owner.PREFIX))
+    except (frappe.PermissionError, frappe.DoesNotExistError):
+        return False
+    return True
 
 
 def _own_providers(organization, user=None):
@@ -55,7 +72,7 @@ def _require(organization, roles):
 
 
 def _require_customer(customer_id, roles):
-    organization = frappe.db.get_value("Customer Profile", customer_id, "organization")
+    organization = _profile_key(customer_id)
     if not organization:
         frappe.throw(_("Customer not found."), frappe.DoesNotExistError)
     role = _require(organization, roles)
@@ -69,7 +86,9 @@ def _require_customer(customer_id, roles):
 @frappe.whitelist()
 def search(organization, query="", page=0, include_archived=0):
     role = _require(organization, ("manager", "reception", "provider"))
-    filters = [["organization", "=", organization]]
+    owner = business_owner.from_key(organization)
+    filters = [[field, *(value if isinstance(value, list) else ["=", value])]
+               for field, value in business_owner.record_filters(owner).items()]
     if not cint(include_archived):
         filters.append(["status", "=", "Active"])
     or_filters = None
@@ -135,10 +154,11 @@ def save(organization, customer_id=None, preferred_providers=None, **fields):
     _require(organization, ("manager", "reception"))
     if customer_id:
         doc = frappe.get_doc("Customer Profile", customer_id)
-        if doc.organization != organization:
+        if business_owner.record_key(doc) != organization:
             frappe.throw(_("You cannot work with this business's customers."), frappe.PermissionError)
     else:
-        doc = frappe.get_doc(dict(doctype="Customer Profile", organization=organization))
+        owner = business_owner.from_key(organization)
+        doc = frappe.get_doc(dict(doctype="Customer Profile", **business_owner.record_fields(owner)))
     for key in EDITABLE:
         if key in fields:
             doc.set(key, fields[key] or None)
@@ -155,7 +175,7 @@ def save(organization, customer_id=None, preferred_providers=None, **fields):
 @frappe.whitelist()
 def merge_preview(source, target):
     organization, _role = _require_customer(source, ("manager",))
-    if frappe.db.get_value("Customer Profile", target, "organization") != organization:
+    if _profile_key(target) != organization:
         frappe.throw(_("Choose two different customers of the same business."))
     return {
         "source": _project(frappe.get_doc("Customer Profile", source).as_dict(), "manager"),
@@ -167,9 +187,14 @@ def merge_preview(source, target):
 @frappe.whitelist(methods=["POST"])
 def merge(source, target):
     organization, _role = _require_customer(source, ("manager",))
-    if frappe.db.get_value("Customer Profile", target, "organization") != organization:
+    if _profile_key(target) != organization:
         frappe.throw(_("Choose two different customers of the same business."))
     return customer_identity.merge(source, target)
+
+
+def _profile_key(customer_id):
+    row = frappe.db.get_value("Customer Profile", customer_id, ["organization", "independent_provider"], as_dict=True)
+    return business_owner.record_key(row) if row else None
 
 
 def _project(row, role, stats=None):
@@ -203,16 +228,20 @@ def _booking_stats(names, organization, role):
         frappe.qb.from_(appointment)
         .select(appointment.customer, Count(appointment.name).as_("count"), Max(appointment.appointment_date).as_("last"))
         .where(appointment.customer.isin(names))
-        .where(appointment.organization == organization)
         .groupby(appointment.customer)
     )
+    if organization.startswith(business_owner.PREFIX):
+        query = query.where(appointment.provider == organization.removeprefix(business_owner.PREFIX))
+        query = query.where(appointment.organization.isnull() | (appointment.organization == ""))
+    else:
+        query = query.where(appointment.organization == organization)
     if role == "provider":
         query = query.where(appointment.provider.isin(_own_providers(organization) or [""]))
     return {row.customer: dict(count=row.count, last=row.last) for row in query.run(as_dict=True)}
 
 
 def _history(customer_id, organization, role):
-    filters = {"customer": customer_id, "organization": organization}
+    filters = {"customer": customer_id, **business_owner.booking_filters(business_owner.from_key(organization))}
     if role == "provider":
         filters["provider"] = ["in", _own_providers(organization) or [""]]
     rows = frappe.get_all(

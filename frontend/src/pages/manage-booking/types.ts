@@ -19,7 +19,19 @@ export interface ManageRules {
 export interface ManageView {
   valid: true;
   token: string;
-  business: { id: string; name: string; slug: string; phone?: string | null; email?: string | null };
+  business: {
+    /** Organization name, or `Provider:<name>` for an independent provider. */
+    id: string;
+    name: string;
+    slug: string | null;
+    phone?: string | null;
+    email?: string | null;
+    kind?: 'organization' | 'provider';
+    book_path?: string;
+    my_bookings_path?: string;
+    /** `/<slug>/booking` or `/schedule/individual/booking`; the token follows. */
+    manage_root?: string;
+  };
   booking: {
     reference: string;
     offering: string;
@@ -54,6 +66,11 @@ export interface PaymentView {
   reject_reason: string | null;
   reference_submitted: boolean;
   receipts?: { name: string; receipt_number: string; kind: 'Payment' | 'Refund' }[];
+}
+
+/** How the server checks the route: by organization slug, or as an independent provider's booking. */
+export function ownerParams(view: ManageView): { slug: string } | { independent: 1 } {
+  return view.business.kind === 'provider' ? { independent: 1 } : { slug: view.business.slug ?? '' };
 }
 
 export type ManageResponse = ManageView | { valid: false; message?: string; cancelled?: boolean; fee?: number; refund?: number };

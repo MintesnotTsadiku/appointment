@@ -1,0 +1,85 @@
+# Run appointment.tests.develop_features_qa_fixtures.setup first and cleanup afterwards.
+# Customers of an independent provider: the guest's manage link and My bookings, and the
+# provider's Customers and Notifications pages. See docs/features/INDEPENDENT_PROVIDER_CUSTOMERS_PLAN.md.
+app: appointment
+base_url: http://127.0.0.146:47800
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.develop_features_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-independent-customers
+default_role: Guest
+auth:
+  type: none
+scenarios:
+- id: indep_guest_en_desktop
+  title: 'Guest of an independent provider: manage link and My bookings (en, desktop)'
+  viewport: &desktop
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{qa_independent_manage_path}'
+    assertions:
+    - type: network_idle
+  actions:
+  - action: wait_for
+    selector: '[data-qa="manage-start-reschedule"]'
+  - action: wait_for
+    selector: '[data-qa="manage-all-bookings"]'
+  - action: screenshot
+    name: indep_guest_en_desktop-1-manage.png
+    full_page: true
+  - action: open_url
+    url: /schedule/individual/{qa_independent_offering}/my-bookings
+  - action: wait_for
+    selector: '[data-qa="my-bookings-form"]'
+  - action: fill
+    selector: '[data-qa="my-bookings-email"]'
+    value: '{qa_independent_guest_email}'
+  - action: click
+    selector: '[data-qa="my-bookings-send"]'
+    assertions:
+    - type: network_request
+      url_contains: my_bookings.request_link
+      status: 200
+    - type: visible_selector
+      value: '[data-qa="my-bookings-sent"]'
+  - action: screenshot
+    name: indep_guest_en_desktop-2-my-bookings-sent.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: indep_guest_am_mobile
+  title: 'Guest of an independent provider: manage link in Amharic (am, mobile)'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{qa_independent_manage_path}'
+    assertions:
+    - type: network_idle
+  actions:
+  - action: wait_for
+    selector: '[data-qa="manage-start-reschedule"]'
+  - action: click
+    selector: '[data-qa="language-toggle"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="manage-start-cancel"]'
+  - action: screenshot
+    name: indep_guest_am_mobile-1-manage.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="language-toggle"]'
+  - action: get_console_errors
+  - action: get_network_errors

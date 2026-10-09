@@ -4,7 +4,7 @@ import { Button } from '@/components/button';
 import { useTranslation } from '@/lib/i18n';
 import { serverErrorMessage } from '@/lib/utils';
 import { fill, formatMoney } from './format';
-import { SELF_SERVICE_API, type ManageView } from './types';
+import { SELF_SERVICE_API, ownerParams, type ManageView } from './types';
 
 export interface CancelResult {
   fee: number;
@@ -24,7 +24,7 @@ export function CancelPanel({ view, onCancelled, onKeep }: { view: ManageView; o
   async function confirm() {
     setProblem('');
     try {
-      const result = await call({ token: view.token, accept_fee: accepted ? 1 : 0, slug: view.business.slug });
+      const result = await call({ token: view.token, accept_fee: accepted ? 1 : 0, ...ownerParams(view) });
       onCancelled(result.message);
     } catch (error) {
       setProblem(serverErrorMessage(error) || t('customerManage.failed'));

@@ -7,7 +7,7 @@ import { serverErrorMessage } from '@/lib/utils';
 import { DateTimeSelector } from '@/pages/booking-v2/components/DateTimeSelector';
 import type { TimeSlot } from '@/pages/booking-v2/types';
 import { fill } from './format';
-import { SELF_SERVICE_API, type ManageView } from './types';
+import { SELF_SERVICE_API, ownerParams, type ManageView } from './types';
 import { useOfferingSlots } from './useOfferingSlots';
 
 const ALL_DAYS = [0, 1, 2, 3, 4, 5, 6];
@@ -20,14 +20,14 @@ export function ReschedulePanel({ view, onMoved, onCancel }: { view: ManageView;
   const [slot, setSlot] = useState<TimeSlot | null>(null);
   const [timeFormat, setTimeFormat] = useState<'12h' | '24h' | 'ethiopian'>('12h');
   const [problem, setProblem] = useState('');
-  const { slots, loading } = useOfferingSlots(view.booking.offering, view.business.id, date, view.booking.quantity ?? 1);
+  const { slots, loading } = useOfferingSlots(view.booking.offering, view.business.kind === 'provider' ? '' : view.business.id, date, view.booking.quantity ?? 1);
   const { call, loading: saving } = useFrappePostCall<{ message: ManageView }>(`${SELF_SERVICE_API}.reschedule`);
 
   async function confirm() {
     if (!slot) return;
     setProblem('');
     try {
-      const result = await call({ token: view.token, start_time: slot.start_time, slug: view.business.slug });
+      const result = await call({ token: view.token, start_time: slot.start_time, ...ownerParams(view) });
       onMoved(result.message);
     } catch (error) {
       setProblem(serverErrorMessage(error) || t('customerManage.failed'));

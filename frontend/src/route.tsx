@@ -95,6 +95,9 @@ const Router = () => {
       <Route path="/settings/calendar" element={<CalendarSettings />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/independent-booking" element={<IndependentBookingSettings />} errorElement={<ErrorFallback />} />
       <Route path="/schedule/individual/:offeringId" element={<IndependentBooking />} errorElement={<ErrorFallback />} />
+      {/* An independent provider's customers: the manage link and My bookings. */}
+      <Route path="/schedule/individual/booking/:token" element={<ManageBooking />} errorElement={<ErrorFallback />} />
+      <Route path="/schedule/individual/:offeringId/my-bookings" element={<MyBookings />} errorElement={<ErrorFallback />} />
       <Route path="/settings/business" element={<BusinessSettings />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/notifications" element={<NotificationSettings />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/payments" element={<PaymentSettings />} errorElement={<ErrorFallback />}></Route>

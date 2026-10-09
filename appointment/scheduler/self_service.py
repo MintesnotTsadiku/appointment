@@ -22,7 +22,7 @@ from frappe.rate_limiter import rate_limit
 from frappe.utils import cint, flt, get_datetime, get_url
 from frappe.utils.password import get_encryption_key
 
-from appointment.scheduler import payments
+from appointment.scheduler import business_owner, payments
 from appointment.scheduler.booking import CUSTOMER_CHANGE
 from appointment.scheduler.helpers.policy_engine import get_applicable_policies
 
@@ -40,8 +40,9 @@ def token_for(doc):
 
 
 def manage_url(doc):
-    slug = frappe.db.get_value("Organization", doc.organization, "slug")
-    return get_url(f"/{slug}/booking/{token_for(doc)}") if slug else ""
+    """`/<slug>/booking/<token>` for an organization, `/schedule/individual/booking/<token>` for an independent provider."""
+    owner = business_owner.for_booking(doc)
+    return get_url(f"{owner.manage_root}/{token_for(doc)}") if owner and owner.manage_root else ""
 
 
 def _sign(name, version):
@@ -49,8 +50,11 @@ def _sign(name, version):
     return hmac.new(key, f"manage:{name}:{version}".encode(), hashlib.sha256).hexdigest()[:32]
 
 
-def _verify(token, slug=None):
-    """The booking for a valid, current token, or None."""
+def _verify(token, slug=None, independent=0):
+    """The booking for a valid, current token, or None.
+
+    The organization route passes its slug; the independent route asks for a provider-owned booking.
+    """
     try:
         name, version, signature = (token or "").rsplit(".", 2)
         version = int(version)
@@ -63,11 +67,13 @@ def _verify(token, slug=None):
         return None
     if slug and frappe.db.get_value("Organization", doc.organization, "slug") != slug:
         return None
+    if cint(independent) and (doc.organization or not business_owner.for_booking(doc)):
+        return None
     return doc
 
 
-def _require(token, slug=None):
-    doc = _verify(token, slug)
+def _require(token, slug=None, independent=0):
+    doc = _verify(token, slug, independent)
     if not doc:
         frappe.throw(INVALID, frappe.PermissionError)
     return doc
@@ -150,8 +156,8 @@ def _refund(paid, fee, policy):
 # ---------------------------------------------------------------------------
 @frappe.whitelist(allow_guest=True)
 @rate_limit(limit=30, seconds=60)
-def view(token, slug=None):
-    doc = _verify(token, slug)
+def view(token, slug=None, independent=0):
+    doc = _verify(token, slug, independent)
     if not doc:
         return {"valid": False, "message": INVALID}
     return _projection(doc)
@@ -159,9 +165,9 @@ def view(token, slug=None):
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])
 @rate_limit(limit=10, seconds=60, methods=["POST"])
-def reschedule(token, start_time, slug=None):
+def reschedule(token, start_time, slug=None, independent=0):
     """Move the booking to a new start (ISO UTC from the slots API), keeping its length."""
-    doc = _require(token, slug)
+    doc = _require(token, slug, independent)
     rules = decide(doc)
     if not rules["can_reschedule"]:
         frappe.throw(_("This booking can no longer be moved online. Contact the business."), frappe.ValidationError)
@@ -186,8 +192,8 @@ def reschedule(token, start_time, slug=None):
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])
 @rate_limit(limit=10, seconds=60, methods=["POST"])
-def cancel(token, accept_fee=0, slug=None):
-    doc = _require(token, slug)
+def cancel(token, accept_fee=0, slug=None, independent=0):
+    doc = _require(token, slug, independent)
     rules = decide(doc)
     if not rules["can_cancel"]:
         frappe.throw(INVALID, frappe.PermissionError)
@@ -204,9 +210,7 @@ def cancel(token, accept_fee=0, slug=None):
 
 def _projection(doc):
     """What the guest may see: this booking and the business's public contact only."""
-    business = frappe.db.get_value(
-        "Organization", doc.organization, ["name", "organization_name", "slug", "phone", "email"], as_dict=True
-    )
+    business = business_owner.for_booking(doc)
     location = frappe.db.get_value(
         "Location", doc.location, ["location_name", "address_line_1", "address_line_2", "city"], as_dict=True
     ) or {}
@@ -214,7 +218,11 @@ def _projection(doc):
     return {
         "valid": True,
         "token": token_for(doc),
-        "business": dict(id=business.name, name=business.organization_name, slug=business.slug, phone=business.phone, email=business.email),
+        "business": dict(
+            id=business.key, name=business.display_name, slug=business.slug, phone=business.phone, email=business.email,
+            kind=business.kind, book_path=business.book_path, my_bookings_path=business.my_bookings_path,
+            manage_root=business.manage_root,
+        ),
         "booking": dict(
             reference=doc.appointment_id or doc.name,
             offering=doc.event_type,

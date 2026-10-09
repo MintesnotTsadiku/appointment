@@ -1,7 +1,8 @@
 """QA fixtures for develop's features inside the merged staff shell.
 
 - A Bloom booking on the first open day, for reception stages, the change reason and reception state.
-- A QA independent provider with one offering, for the independent-owner home and booking page.
+- A QA independent provider with one published offering and one guest booking, for the
+  independent-owner home, booking page, Customers page, manage link and My bookings.
 
 Run `setup` before `qa/manifests/develop-features/*.yaml` and `cleanup` afterwards.
 """
@@ -19,6 +20,7 @@ INDEPENDENT_USER = "qa-independent-owner@example.test"
 INDEPENDENT_NAME = "QA Independent Studio"
 STATE_KEY = "appointment_develop_features_qa"
 INVITEE = "qa-dev-invitee@example.test"
+INDEPENDENT_GUEST = "qa-independent-guest@example.test"
 
 
 def setup():
@@ -39,11 +41,14 @@ def setup():
     provider = solo_setup.create(INDEPENDENT_NAME)["provider"]
     row = independent.create(provider, "QA Independent room", "QA Independent consultation", "Africa/Addis_Ababa",
                              30, "09:00", "17:00", list(independent.DAYS))
+    independent.publish(provider, 1)
+    guest = _independent_booking(row["offering"])
     frappe.set_user("Administrator")
     location = frappe.db.get_value("Appointment", result["booking_id"], "location")
     saved = frappe.db.get_value("Location", location, ["reception_state", "reception_events"], as_dict=True)
     frappe.db.set_default(STATE_KEY, json.dumps({"booking": result["booking_id"], "day": str(day), "provider": provider,
                                                  "offering": row.get("offering"), "location": location,
+                                                 "independent_booking": guest,
                                                  "reception_state": saved.reception_state, "reception_events": saved.reception_events}))
     frappe.db.commit()
     return {"booking": result["booking_id"], "provider": provider}
@@ -56,7 +61,23 @@ def browser_values(manifest=None):
     values["qa_dev_day"] = state.get("day", "")
     location = frappe.db.get_value("Appointment", state.get("booking"), "location") if state.get("booking") else None
     values["qa_dev_location"] = location or ""
+    values["qa_independent_offering"] = state.get("offering") or ""
+    values["qa_independent_guest_email"] = INDEPENDENT_GUEST
+    guest = state.get("independent_booking")
+    if guest and frappe.db.exists("Appointment", guest):
+        from appointment.scheduler import self_service
+
+        values["qa_independent_manage_path"] = self_service.manage_url(frappe.get_doc("Appointment", guest)).replace(frappe.utils.get_url(), "")
     return values
+
+
+def _independent_booking(offering):
+    """A guest booking on the first open day, so it has a provider-owned customer and a manage link."""
+    day = qa_days.open_day(offering)
+    slot = next(s for s in booking.slots(offering, day)["all_available_slots_for_data"] if s["available"])
+    frappe.set_user("Guest")
+    result = booking.book(offering, slot["start_time"], slot["end_time"], "Hanna Mekonnen", INDEPENDENT_GUEST, "qa-independent-guest-0001")
+    return result["booking_id"]
 
 
 def cleanup():
@@ -82,6 +103,10 @@ def cleanup():
         for provider in frappe.get_all("Provider", filters={"user": INDEPENDENT_USER}, pluck="name"):
             for name in frappe.get_all("Appointment", filters={"provider": provider}, pluck="name"):
                 frappe.delete_doc("Appointment", name, ignore_permissions=True, force=True)
+            # Guest bookings in the run made provider-owned profiles, emails and opt-outs.
+            for doctype in ("Appointment Notification", "Customer Notification Opt Out", "Customer Profile"):
+                for name in frappe.get_all(doctype, filters={"independent_provider": provider}, pluck="name"):
+                    frappe.delete_doc(doctype, name, ignore_permissions=True, force=True)
             for name in frappe.get_all("EventType", filters={"provider": provider}, pluck="name"):
                 frappe.delete_doc("EventType", name, ignore_permissions=True, force=True)
             for doctype in ("Service", "Location"):

@@ -33,7 +33,7 @@ export function ReceiptLinks({ view }: { view: ManageView }) {
             data-qa="manage-receipt"
             download
             className="inline-flex items-center gap-1.5 font-medium text-[var(--accent-primary)] underline-offset-4 hover:underline"
-            href={`/api/method/appointment.scheduler.receipts.download?${new URLSearchParams({ token: view.token, slug: view.business.slug, receipt: receipt.name })}`}
+            href={`/api/method/appointment.scheduler.receipts.download?${new URLSearchParams({ token: view.token, slug: view.business.slug ?? '', receipt: receipt.name })}`}
           >
             <Download className="h-4 w-4" aria-hidden="true" />
             {fill(t(receipt.kind === 'Refund' ? 'payments.refundReceipt' : 'payments.receipt'), receipt.receipt_number)}

@@ -18,7 +18,10 @@ import { SELF_SERVICE_API, type ManageResponse, type ManageView } from './types'
 
 type Mode = 'overview' | 'reschedule' | 'cancel';
 
-/** Public page behind the manage link in customer emails: reschedule or cancel one booking. */
+/**
+ * Public page behind the manage link in customer emails: reschedule or cancel one booking.
+ * Organizations use `/<slug>/booking/<token>`; independent providers use `/schedule/individual/booking/<token>`.
+ */
 export default function ManageBookingPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -27,7 +30,7 @@ export default function ManageBookingPage() {
   const brand = useBookingBrand(slug, theme === 'dark' ? 'dark' : 'light');
   const { data, isLoading } = useFrappeGetCall<{ message: ManageResponse }>(
     `${SELF_SERVICE_API}.view`,
-    { token, slug },
+    slug ? { token, slug } : { token, independent: 1 },
     token ? `manage-${token}` : null,
     { revalidateOnFocus: false }
   );
@@ -41,10 +44,12 @@ export default function ManageBookingPage() {
   }, [data]);
 
   const businessName = view?.business.name ?? brand.config?.identity.applicationName ?? '';
+  const bookPath = view?.business.book_path || (slug ? `/${slug}/book` : '');
+  const myBookingsPath = view?.business.my_bookings_path || (slug ? `/${slug}/my-bookings` : '');
   let body: ReactNode;
-  if (cancelled) body = <Cancelled result={cancelled} currency={view?.currency ?? 'ETB'} slug={slug} />;
+  if (cancelled) body = <Cancelled result={cancelled} currency={view?.currency ?? 'ETB'} bookPath={bookPath} />;
   else if (isLoading && !view) body = <p className="text-sm text-[var(--text-secondary)]">…</p>;
-  else if (!view) body = <Invalid slug={slug} />;
+  else if (!view) body = <Invalid bookPath={bookPath} />;
   else
     body = (
       <div className="space-y-6">
@@ -78,16 +83,18 @@ export default function ManageBookingPage() {
               setView(next);
               setMoved(true);
               setMode('overview');
-              navigate(`/${next.business.slug}/booking/${next.token}`, { replace: true });
+              navigate(`${next.business.manage_root || `/${next.business.slug}/booking`}/${next.token}`, { replace: true });
             }}
           />
         )}
         {mode === 'cancel' && <CancelPanel view={view} onKeep={() => setMode('overview')} onCancelled={setCancelled} />}
         {mode === 'overview' && <Actions view={view} onMode={setMode} />}
         <Contact view={view} />
-        <a data-qa="manage-all-bookings" href={`/${view.business.slug}/my-bookings`} className="inline-block text-sm text-[var(--text-secondary)] underline underline-offset-4">
-          {t('myBookings.allLink')}
-        </a>
+        {myBookingsPath && (
+          <a data-qa="manage-all-bookings" href={myBookingsPath} className="inline-block text-sm text-[var(--text-secondary)] underline underline-offset-4">
+            {t('myBookings.allLink')}
+          </a>
+        )}
       </div>
     );
 
@@ -95,7 +102,7 @@ export default function ManageBookingPage() {
     <div className="booking-experience min-h-screen text-[var(--text-primary)]" data-qa="manage-booking" style={{ ...brand.style, backgroundColor: 'var(--bg-primary)' }}>
       <header className="border-b border-[var(--border-subtle)]">
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-          <a href={brand.publicRoot} className="flex min-w-0 items-center gap-3 no-underline">
+          <a href={slug ? brand.publicRoot : bookPath || '/'} className="flex min-w-0 items-center gap-3 no-underline">
             {brand.config && brandLogo(brand.config.compiledDesign) ? (
               <img className="pe-brand-logo shrink-0" src={brandLogo(brand.config.compiledDesign)} alt="" />
             ) : (
@@ -167,23 +174,23 @@ function Contact({ view }: { view: ManageView }) {
   );
 }
 
-function Invalid({ slug }: { slug?: string }) {
+function Invalid({ bookPath }: { bookPath: string }) {
   const { t } = useTranslation();
   return (
     <div data-qa="manage-invalid" className="space-y-3 text-center">
       <CalendarX2 className="mx-auto h-10 w-10 text-[var(--text-secondary)]" aria-hidden="true" />
       <h2 className="text-lg font-semibold">{t('customerManage.invalidTitle')}</h2>
       <p className="text-sm text-[var(--text-secondary)]">{t('customerManage.invalidBody')}</p>
-      {slug && (
+      {bookPath && (
         <Button asChild variant="outline">
-          <a href={`/${slug}/book`}>{t('customerManage.bookAgain')}</a>
+          <a href={bookPath}>{t('customerManage.bookAgain')}</a>
         </Button>
       )}
     </div>
   );
 }
 
-function Cancelled({ result, currency, slug }: { result: CancelResult; currency: string; slug?: string }) {
+function Cancelled({ result, currency, bookPath }: { result: CancelResult; currency: string; bookPath: string }) {
   const { t } = useTranslation();
   return (
     <div data-qa="manage-cancelled" className="space-y-3 text-center">
@@ -194,9 +201,9 @@ function Cancelled({ result, currency, slug }: { result: CancelResult; currency:
           {fill(t('customerManage.cancelledFee'), formatMoney(result.fee, currency), formatMoney(result.refund, currency))}
         </p>
       )}
-      {slug && (
+      {bookPath && (
         <Button asChild variant="outline">
-          <a href={`/${slug}/book`}>{t('customerManage.bookAgain')}</a>
+          <a href={bookPath}>{t('customerManage.bookAgain')}</a>
         </Button>
       )}
     </div>

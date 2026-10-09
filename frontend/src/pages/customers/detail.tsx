@@ -7,7 +7,7 @@ import { Button } from '@/components/button';
 import { SettingsSection } from '@/components/settings-layout';
 import { StaffShell } from '@/components/staff-shell';
 import { ErrorState, PageSkeleton } from '@/components/states';
-import { useSession } from '@/context/session';
+import { useBusinessKey } from '@/hooks/useBusinessKey';
 import { useTranslation } from '@/lib/i18n';
 import { CustomerEditor } from './CustomerEditor';
 import { CustomerHistory } from './CustomerHistory';
@@ -19,7 +19,7 @@ export default function CustomerPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { customerId } = useParams<{ customerId: string }>();
-  const organization = useSession().session?.selected?.organization;
+  const { key: organization, independent } = useBusinessKey();
   const [merging, setMerging] = useState(false);
   const { data, error, isLoading, mutate } = useFrappeGetCall<{ message: CustomerDetail }>(
     `${CUSTOMERS_API}.get`,
@@ -66,7 +66,7 @@ export default function CustomerPage() {
             </span>
           </div>
           {canEdit && organization ? (
-            <CustomerEditor customer={customer} organization={organization} onSaved={() => mutate()} />
+            <CustomerEditor customer={customer} organization={organization} independent={independent} onSaved={() => mutate()} />
           ) : (
             <p className="text-sm text-muted-foreground">{t('staff.customers.providerView')}</p>
           )}

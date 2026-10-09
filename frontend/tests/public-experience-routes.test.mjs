@@ -58,6 +58,19 @@ for (const expected of ['path="/:slug"', 'path="/:slug/book"', 'path="/:slug/:lo
   assert.ok(routes.includes(expected), `route.tsx must declare ${expected}`);
 }
 
+// Independent providers' customers: manage link and My bookings live under `/schedule/individual`,
+// which the public site never claims as a business slug.
+for (const expected of ['path="/schedule/individual/booking/:token"', 'path="/schedule/individual/:offeringId/my-bookings"']) {
+  assert.ok(routes.includes(expected), `route.tsx must declare ${expected}`);
+}
+for (const independentPath of ["/schedule/individual/booking/APT-1.0.abc", "/schedule/individual/EVT-1/my-bookings"]) {
+  assert.equal(routesModule.isPublicExperiencePath(independentPath), false, independentPath);
+}
+const manage = read("src/pages/manage-booking/index.tsx");
+assert.ok(manage.includes("independent: 1"), "manage page must ask for a provider-owned booking on the independent route");
+const mine = read("src/pages/my-bookings/index.tsx");
+assert.ok(mine.includes("{ offering: offeringId }"), "My bookings must resolve an independent provider by its offering");
+
 const site = read("src/pages/public-experience/site.tsx");
 assert.ok(!site.includes("landingPageSettings"), "public site must not read legacy settings");
 assert.ok(!site.includes("theme-provider"), "public site must not use the legacy theme provider");

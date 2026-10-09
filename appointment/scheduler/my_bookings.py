@@ -4,6 +4,9 @@ The customer gives an email; when the business knows it, an email carries a link
 that works once for 30 minutes and opens a 7-day session on that device. There
 is no password. Each open booking keeps its own manage link, so changes follow
 the existing self-service rules. See docs/features/MY_BOOKINGS_PLAN.md.
+
+An organization's page is `/<slug>/my-bookings`. An independent provider's page is
+`/schedule/individual/<offering>/my-bookings`; its tokens carry the `Provider:<provider>` owner key.
 """
 
 import hashlib
@@ -16,7 +19,7 @@ from frappe.rate_limiter import rate_limit
 from frappe.utils import cint, escape_html, get_datetime, get_url
 from frappe.utils.password import get_encryption_key
 
-from appointment.scheduler import customer_identity, self_service
+from appointment.scheduler import business_owner, customer_identity, self_service
 
 LINK_SECONDS = 30 * 60
 SESSION_SECONDS = 7 * 24 * 3600
@@ -31,8 +34,8 @@ INVALID = "This link no longer works. Ask for a new one."
 # ---------------------------------------------------------------------------
 # Tokens
 # ---------------------------------------------------------------------------
-def _sign(purpose, organization, email, *parts):
-    message = "\0".join([purpose, organization, email, *map(str, parts)])
+def _sign(purpose, owner_key, email, *parts):
+    message = "\0".join([purpose, owner_key, email, *map(str, parts)])
     return hmac.new(get_encryption_key().encode(), message.encode(), hashlib.sha256).hexdigest()[:40]
 
 
@@ -40,37 +43,39 @@ def _nonce_key(nonce):
     return f"appointment:my_bookings:link:{nonce}"
 
 
-def link_token(organization, email):
+def link_token(owner_key, email):
     """A one-time token; the nonce lives in the cache until it is used or expires."""
     nonce = frappe.generate_hash(length=20)
     expires = int(time.time()) + LINK_SECONDS
-    frappe.cache.set_value(_nonce_key(nonce), f"{organization}\0{email}", expires_in_sec=LINK_SECONDS)
-    return f"{nonce}.{expires}.{_sign('link', organization, email, nonce, expires)}"
+    frappe.cache.set_value(_nonce_key(nonce), f"{owner_key}\0{email}", expires_in_sec=LINK_SECONDS)
+    return f"{nonce}.{expires}.{_sign('link', owner_key, email, nonce, expires)}"
 
 
-def link_url(organization, email):
-    slug = frappe.db.get_value("Organization", organization, "slug")
-    return get_url(f"/{slug}/my-bookings?token={link_token(organization, email)}")
+def link_url(owner, email):
+    return get_url(f"{owner.my_bookings_path}?token={link_token(owner.key, email)}")
 
 
-def session_token(organization, email):
+def session_token(owner_key, email):
     expires = int(time.time()) + SESSION_SECONDS
-    return f"{expires}.{_sign('session', organization, email, expires)}"
+    return f"{expires}.{_sign('session', owner_key, email, expires)}"
 
 
-def _business(slug):
+def _business(slug, offering=None):
+    """The owner for an organization slug, or for an independent provider's offering."""
+    if offering and not slug:
+        return business_owner.for_offering(offering)
     name = frappe.db.get_value("Organization", {"slug": slug, "is_active": 1}, "name") if slug else None
     if not name:
         frappe.throw(_("Business not found."), frappe.DoesNotExistError)
-    return name
+    return business_owner.from_key(name)
 
 
 # ---------------------------------------------------------------------------
 # Whose bookings
 # ---------------------------------------------------------------------------
-def _profiles(organization, email):
+def _profiles(owner, email):
     """The customer profile for this email and any profiles merged into it."""
-    key = customer_identity.match_key(organization, "email", email)
+    key = customer_identity.match_key(owner.key, "email", email)
     root = frappe.db.get_value("Customer Profile", {"email_key": key}, "name") if key else None
     if not root:
         return []
@@ -78,20 +83,18 @@ def _profiles(organization, email):
     return [root, *frappe.get_all("Customer Profile", filters={"merged_into": root}, pluck="name")]
 
 
-def _booking_names(organization, email):
-    by_email = frappe.db.sql(
-        "select name from `tabAppointment` where organization=%s and lower(client_email)=%s",
-        (organization, email),
-    )
-    names = {row[0] for row in by_email}
-    profiles = _profiles(organization, email)
+def _booking_names(owner, email):
+    scope = business_owner.booking_filters(owner)
+    by_email = frappe.get_all("Appointment", filters={**scope, "client_email": email}, pluck="name")
+    names = set(by_email)
+    profiles = _profiles(owner, email)
     if profiles:
-        names |= set(frappe.get_all("Appointment", filters={"organization": organization, "customer": ["in", profiles]}, pluck="name"))
+        names |= set(frappe.get_all("Appointment", filters={**scope, "customer": ["in", profiles]}, pluck="name"))
     return names
 
 
-def _known(organization, email):
-    return bool(_profiles(organization, email)) or bool(frappe.db.exists("Appointment", {"organization": organization, "client_email": email}))
+def _known(owner, email):
+    return bool(_profiles(owner, email)) or bool(frappe.db.exists("Appointment", {**business_owner.booking_filters(owner), "client_email": email}))
 
 
 # ---------------------------------------------------------------------------
@@ -99,25 +102,24 @@ def _known(organization, email):
 # ---------------------------------------------------------------------------
 @frappe.whitelist(allow_guest=True, methods=["POST"])
 @rate_limit(limit=5, seconds=600, methods=["POST"])
-def request_link(slug, email, language=None):
+def request_link(slug=None, email=None, language=None, offering=None):
     """Email a one-time link when the business knows this address. The answer never says which."""
-    organization = _business(slug)
-    business_name = frappe.db.get_value("Organization", organization, "organization_name")
+    owner = _business(slug, offering)
     address = customer_identity.normalize_email(email)
     if not address:
         frappe.throw(_("Enter a valid email address."))
-    throttle = f"appointment:my_bookings:sent:{organization}:{address}"
-    if _known(organization, address) and not frappe.cache.get_value(throttle):
+    throttle = f"appointment:my_bookings:sent:{owner.key}:{address}"
+    if _known(owner, address) and not frappe.cache.get_value(throttle):
         frappe.cache.set_value(throttle, 1, expires_in_sec=RESEND_SECONDS)
-        _send_link(organization, address, language if language in ("en", "am") else "en")
-    return {"message": _(SENT).format(business_name)}
+        _send_link(owner, address, language if language in ("en", "am") else "en")
+    return {"message": _(SENT).format(owner.display_name)}
 
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])
 @rate_limit(limit=20, seconds=600, methods=["POST"])
-def open_link(slug, token):
+def open_link(slug=None, token=None, offering=None):
     """Exchange a one-time link for a 7-day session on this device."""
-    organization = _business(slug)
+    owner_key = _business(slug, offering).key
     try:
         nonce, expires, signature = (token or "").split(".")
         expires = int(expires)
@@ -127,33 +129,33 @@ def open_link(slug, token):
     if not stored or expires < time.time():
         frappe.throw(_(INVALID), frappe.PermissionError)
     owner, email = str(stored).split("\0", 1)
-    if owner != organization or not hmac.compare_digest(signature, _sign("link", organization, email, nonce, expires)):
+    if owner != owner_key or not hmac.compare_digest(signature, _sign("link", owner_key, email, nonce, expires)):
         frappe.throw(_(INVALID), frappe.PermissionError)
     frappe.cache.delete_value(_nonce_key(nonce))  # One use only.
-    return {"session": session_token(organization, email), "email": email}
+    return {"session": session_token(owner_key, email), "email": email}
 
 
-def _session_email(organization, session, email):
+def _session_email(owner_key, session, email):
     try:
         expires, signature = (session or "").split(".")
         expires = int(expires)
     except ValueError:
         return None
     address = customer_identity.normalize_email(email)
-    if not address or expires < time.time() or not hmac.compare_digest(signature, _sign("session", organization, address, expires)):
+    if not address or expires < time.time() or not hmac.compare_digest(signature, _sign("session", owner_key, address, expires)):
         return None
     return address
 
 
 @frappe.whitelist(allow_guest=True)
 @rate_limit(limit=60, seconds=60)
-def bookings(slug, session, email):
+def bookings(slug=None, session=None, email=None, offering=None):
     """Upcoming and past bookings for the signed-in email at this business."""
-    organization = _business(slug)
-    address = _session_email(organization, session, email)
+    owner = _business(slug, offering)
+    address = _session_email(owner.key, session, email)
     if not address:
         return {"valid": False, "message": _("Your sign-in has ended. Ask for a new link.")}
-    names = _booking_names(organization, address)
+    names = _booking_names(owner, address)
     rows = frappe.get_all(
         "Appointment", filters={"name": ["in", list(names) or [""]]},
         fields=["name", "appointment_id", "service", "provider", "event_type", "starts_at", "booking_timezone", "status", "quantity", "manage_version"],
@@ -165,7 +167,7 @@ def bookings(slug, session, email):
         entry = _row(row, now)
         (upcoming if entry["upcoming"] else past).append(entry)
     upcoming.reverse()  # Soonest first.
-    return {"valid": True, "email": address, "upcoming": upcoming, "past": past}
+    return {"valid": True, "email": address, "business_name": owner.display_name, "upcoming": upcoming, "past": past}
 
 
 def _utc_now():
@@ -201,9 +203,7 @@ def _row(row, now):
 # ---------------------------------------------------------------------------
 # Email
 # ---------------------------------------------------------------------------
-def _send_link(organization, email, language):
-    business = frappe.get_doc("Organization", organization)
-
+def _send_link(business, email, language):
     def t(text, *args):
         return _(text, lang=language).format(*(escape_html(str(arg)) for arg in args))
 
@@ -212,23 +212,24 @@ def _send_link(organization, email, language):
     context = dict(
         lang=language,
         heading=t("Your bookings"),
-        intro=t("Hello, use this link to see your bookings with {0}. It works once, for 30 minutes.", business.organization_name),
-        business_name=escape_html(business.organization_name),
+        intro=t("Hello, use this link to see your bookings with {0}. It works once, for 30 minutes.", business.display_name),
+        business_name=escape_html(business.display_name),
         logo_url=_public_logo(business.logo),
         details=[],
         manage_label=t("See my bookings"),
-        manage_url=escape_html(link_url(organization, email)),
+        manage_url=escape_html(link_url(business, email)),
         booking_label=t("Open the booking page"),
-        booking_url=escape_html(get_url(f"/{business.slug}/book")) if business.slug else "",
+        booking_url=escape_html(get_url(business.book_path)) if business.book_path else "",
         contact=t("Questions? Contact {0}.", " · ".join(filter(None, [business.phone, business.email]))) if (business.phone or business.email) else "",
-        footer=t("You asked for this link on the {0} booking page. If you did not, you can ignore this email.", business.organization_name),
+        footer=t("You asked for this link on the {0} booking page. If you did not, you can ignore this email.", business.display_name),
         opt_out_label="", opt_out_url="",
     )
     frappe.sendmail(
         recipients=[email],
-        subject=_("Your bookings with {0}", lang=language).format(business.organization_name),
+        subject=_("Your bookings with {0}", lang=language).format(business.display_name),
         message=frappe.render_template(TEMPLATE, context),
-        reply_to=business.email or None,
-        reference_doctype="Organization", reference_name=organization,
+        reply_to=business.reply_to or None,
+        reference_doctype="Organization" if business.organization else "Provider",
+        reference_name=business.organization or business.provider,
         add_unsubscribe_link=0, delayed=True,
     )

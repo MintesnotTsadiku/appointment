@@ -52,7 +52,7 @@ export function primaryNav(session: SessionState | null): NavItem[] {
   const items: Array<NavItem & { show: boolean }> = [
     { key: 'home', labelKey: 'staff.nav.overview', to: '/home', icon: LayoutDashboard, qa: 'nav-home', show: isManager },
     { key: 'reception', labelKey: 'staff.nav.reception', to: '/reception', icon: Users, qa: 'nav-reception', show: isManager || isReceptionist },
-    { key: 'customers', labelKey: 'staff.customers.nav', to: '/customers', icon: Contact, qa: 'nav-customers', show: Boolean(selected) && session.state !== 'individual_owner' },
+    { key: 'customers', labelKey: 'staff.customers.nav', to: '/customers', icon: Contact, qa: 'nav-customers', show: Boolean(selected) || session.state === 'individual_owner' },
     { key: 'calendar', labelKey: 'staff.nav.schedule', to: '/calendar', icon: CalendarDays, qa: 'nav-calendar', show: !isManager },
     { key: 'analytics', labelKey: 'staff.nav.insights', to: '/analytics', icon: BarChart3, qa: 'nav-analytics', show: Boolean(selected) || session.state === 'individual_owner' },
     { key: 'settings', labelKey: 'staff.nav.settings', to: '/settings', icon: Settings, qa: 'nav-settings', show: isManager || settingsNav(session).length > 0 },

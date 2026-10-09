@@ -6,12 +6,12 @@ interface SlotsResponse {
   all_available_slots_for_data: { start_time: string; end_time: string; available: boolean }[];
 }
 
-/** Free slots for one offering on one day, from the public booking API. */
+/** Free slots for one offering on one day, from the public booking API. An empty `organization` skips the business check. */
 export function useOfferingSlots(offering: string, organization: string, date: Date | null, quantity = 1) {
   const day = date ? new Intl.DateTimeFormat('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(date) : null;
   const { data, isLoading } = useFrappeGetCall<{ message: SlotsResponse }>(
     'appointment.scheduler.booking.slots',
-    day ? { offering_id: offering, date: day, organization_id: organization, ...(quantity > 1 ? { quantity } : {}) } : undefined,
+    day ? { offering_id: offering, date: day, ...(organization ? { organization_id: organization } : {}), ...(quantity > 1 ? { quantity } : {}) } : undefined,
     day ? `manage-slots-${offering}-${day}-${quantity}` : null,
     { revalidateOnFocus: false }
   );

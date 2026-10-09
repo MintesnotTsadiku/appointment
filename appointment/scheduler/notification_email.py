@@ -2,6 +2,7 @@
 
 Values are escaped here because `frappe.render_template` does not autoescape.
 The only link is the business booking page, plus a signed reminder opt-out.
+The business is the booking's owner: an Organization or an independent provider.
 """
 
 import frappe
@@ -11,7 +12,7 @@ from frappe.utils import escape_html, flt, get_datetime, get_url
 from frappe.utils.verified_command import get_signed_params
 
 from appointment.helpers.utils import format_ethiopian_time
-from appointment.scheduler import self_service
+from appointment.scheduler import business_owner, self_service
 from appointment.scheduler.notifications import is_stale
 
 TEMPLATE = "appointment/templates/emails/customer_notification.html"
@@ -92,7 +93,7 @@ def send_notification(notification):
             recipients=[row.recipient],
             subject=message["subject"],
             message=message["html"],
-            reply_to=frappe.db.get_value("Organization", doc.organization, "email") or None,
+            reply_to=business_owner.for_booking(doc).reply_to or None,
             reference_doctype="Appointment",
             reference_name=doc.name,
             add_unsubscribe_link=0,
@@ -106,8 +107,8 @@ def send_notification(notification):
 
 def render(event, doc, language, recipient, receipt=None):
     """Subject and HTML for one event, in `language` ("en" or "am")."""
-    business = frappe.get_doc("Organization", doc.organization)
-    business_name = business.organization_name
+    business = business_owner.for_booking(doc)
+    business_name = business.display_name
     customer = (doc.client_name or "").strip()[:NAME_LIMIT]
     copy = COPY[event]
     by_customer = doc.get("last_changed_by") == "Customer" and event in CUSTOMER_INTRO
@@ -139,13 +140,13 @@ def render(event, doc, language, recipient, receipt=None):
         manage_label=t("Manage your booking"),
         manage_url=escape_html(self_service.manage_url(doc)) if event in MANAGEABLE else "",
         booking_label=t("Open the booking page"),
-        booking_url=escape_html(get_url(f"/{business.slug}/book")) if business.slug else "",
+        booking_url=escape_html(get_url(business.book_path)) if business.book_path else "",
         contact=t("Questions? Contact {0}.", " · ".join(filter(None, [business.phone, business.email]))) if (business.phone or business.email) else "",
         footer=t("You get this email because you booked with {0}.", business_name),
         all_bookings_label=t("See all your bookings"),
-        all_bookings_url=escape_html(get_url(f"/{business.slug}/my-bookings")) if business.slug else "",
+        all_bookings_url=escape_html(get_url(business.my_bookings_path)) if business.my_bookings_path else "",
         opt_out_label=t("Stop reminders from this business"),
-        opt_out_url=escape_html(opt_out_url(doc.organization, recipient)) if event == "Reminder" else "",
+        opt_out_url=escape_html(opt_out_url(business.key, recipient)) if event == "Reminder" else "",
     )
     return {"subject": context["subject"], "html": frappe.render_template(TEMPLATE, context)}
 
@@ -213,8 +214,9 @@ def when(doc, language):
     return f"{local:%A, %d %B %Y, %I:%M %p} ({zone.zone.replace('_', ' ')})"
 
 
-def opt_out_url(organization, email):
-    params = get_signed_params({"organization": organization, "email": email})
+def opt_out_url(owner_key, email):
+    # The parameter keeps its name so links already sent keep working.
+    params = get_signed_params({"organization": owner_key, "email": email})
     return get_url(f"/api/method/appointment.scheduler.notifications.unsubscribe?{params}")
 
 

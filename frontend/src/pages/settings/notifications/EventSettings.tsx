@@ -27,10 +27,12 @@ interface EventSettingsProps {
   value: NotificationSettings;
   onChange: (next: NotificationSettings) => void;
   smsAvailable: boolean;
+  /** Independent providers see the default settings without the SMS switch. */
+  readOnly?: boolean;
 }
 
 /** One switch per customer email, the SMS switch, and the reminder lead time. */
-export function EventSettings({ value, onChange, smsAvailable }: EventSettingsProps) {
+export function EventSettings({ value, onChange, smsAvailable, readOnly = false }: EventSettingsProps) {
   const { t } = useTranslation();
   const leadValid = leadTimeValid(value.reminder_lead_hours);
 
@@ -51,30 +53,33 @@ export function EventSettings({ value, onChange, smsAvailable }: EventSettingsPr
               id={`notify-${key}`}
               data-qa={`notify-${key}`}
               checked={value[field] === 1}
+              disabled={readOnly}
               onCheckedChange={(checked) => onChange({ ...value, [field]: checked ? 1 : 0 })}
               aria-describedby={`notify-${key}-hint`}
             />
           </li>
         ))}
       </ul>
-      <div className="flex items-start justify-between gap-4 border-t pt-3">
-        <div className="min-w-0">
-          <Label htmlFor="notify-sms" className="text-sm font-medium text-foreground">
-            {t('staff.notifications.sms')}
-          </Label>
-          <p id="notify-sms-hint" className="mt-0.5 text-sm text-muted-foreground">
-            {smsAvailable ? t('staff.notifications.smsHint') : t('staff.notifications.smsUnavailable')}
-          </p>
+      {!readOnly && (
+        <div className="flex items-start justify-between gap-4 border-t pt-3">
+          <div className="min-w-0">
+            <Label htmlFor="notify-sms" className="text-sm font-medium text-foreground">
+              {t('staff.notifications.sms')}
+            </Label>
+            <p id="notify-sms-hint" className="mt-0.5 text-sm text-muted-foreground">
+              {smsAvailable ? t('staff.notifications.smsHint') : t('staff.notifications.smsUnavailable')}
+            </p>
+          </div>
+          <Switch
+            id="notify-sms"
+            data-qa="notify-sms"
+            checked={value.sms_enabled === 1}
+            disabled={!smsAvailable && value.sms_enabled !== 1}
+            onCheckedChange={(checked) => onChange({ ...value, sms_enabled: checked ? 1 : 0 })}
+            aria-describedby="notify-sms-hint"
+          />
         </div>
-        <Switch
-          id="notify-sms"
-          data-qa="notify-sms"
-          checked={value.sms_enabled === 1}
-          disabled={!smsAvailable && value.sms_enabled !== 1}
-          onCheckedChange={(checked) => onChange({ ...value, sms_enabled: checked ? 1 : 0 })}
-          aria-describedby="notify-sms-hint"
-        />
-      </div>
+      )}
       {value.send_reminder === 1 && (
         <div className="max-w-xs pt-2">
           <Label htmlFor="notify-lead-hours">{t('staff.notifications.leadTime')}</Label>
@@ -87,6 +92,7 @@ export function EventSettings({ value, onChange, smsAvailable }: EventSettingsPr
             max={LEAD_HOURS.max}
             className="mt-1.5 tabular-nums"
             value={value.reminder_lead_hours}
+            readOnly={readOnly}
             aria-invalid={!leadValid}
             aria-describedby="notify-lead-hours-hint"
             onChange={(e) => onChange({ ...value, reminder_lead_hours: parseInt(e.target.value, 10) || 0 })}

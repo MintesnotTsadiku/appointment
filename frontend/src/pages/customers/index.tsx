@@ -8,17 +8,17 @@ import { Input } from '@/components/input';
 import { Label } from '@/components/label';
 import { StaffShell } from '@/components/staff-shell';
 import { EmptyState, ErrorState, ListSkeleton } from '@/components/states';
-import { useSession } from '@/context/session';
+import { useBusinessKey } from '@/hooks/useBusinessKey';
 import { useTranslation } from '@/lib/i18n';
 import { NewCustomerDialog } from './NewCustomerDialog';
 import { useDebounced } from './useDebounced';
 import { CUSTOMERS_API, type CustomerSummary, type SearchResult } from './types';
 
-/** Customers of the selected business, with search and paging. */
+/** Customers of the selected business or independent provider, with search and paging. */
 export default function CustomersPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const organization = useSession().session?.selected?.organization;
+  const organization = useBusinessKey().key;
   const [text, setText] = useState('');
   const [page, setPage] = useState(0);
   const [creating, setCreating] = useState(false);

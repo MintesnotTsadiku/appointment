@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/dropdown-menu';
 import { useSidebar } from '@/components/sidebar';
+import { useBusinessKey } from '@/hooks/useBusinessKey';
 
 export function useRoleLabel() {
   const { t } = useTranslation();
@@ -32,9 +33,13 @@ export function WorkspaceSwitcher() {
   const { t } = useTranslation();
   const roleLabel = useRoleLabel();
   const navigate = useNavigate();
+  const owner = useBusinessKey();
   if (!session) return null;
   const selected = session.selected;
-  const name = selected?.business_name ?? t('staff.nav.admin');
+  // An independent provider has no selected organization; their own business is the provider.
+  const independent = owner.independent && owner.key ? owner.key.replace(/^Provider:/, '') : null;
+  const name = selected?.business_name ?? independent ?? t('staff.nav.admin');
+  const role = selected?.role ?? (independent ? 'Owner' : undefined);
   const multiple = session.workspaces.length > 1;
 
   const onSwitch = async (workspace: Workspace) => {
@@ -55,7 +60,7 @@ export function WorkspaceSwitcher() {
       {!collapsed && (
         <span className="flex min-w-0 flex-1 flex-col text-left leading-tight">
           <span data-qa="active-business" className="truncate text-sm font-semibold text-foreground" title={name}>{name}</span>
-          <span className="truncate text-xs text-muted-foreground">{roleLabel(selected?.role)}</span>
+          <span className="truncate text-xs text-muted-foreground">{roleLabel(role)}</span>
         </span>
       )}
     </>
