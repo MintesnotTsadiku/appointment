@@ -28,7 +28,11 @@ from appointment.scheduler.helpers.policy_engine import get_applicable_policies
 
 MAX_SELF_RESCHEDULES = 2
 OPEN = ("Pending", "Confirmed")
-INVALID = _("This link no longer works. Use the link in your latest email, or contact the business.")
+
+
+def _invalid():
+    # Translate per request; a module-level _() would freeze the import-time language.
+    return _("This link no longer works. Use the link in your latest email, or contact the business.")
 
 
 # ---------------------------------------------------------------------------
@@ -75,7 +79,7 @@ def _verify(token, slug=None, independent=0):
 def _require(token, slug=None, independent=0):
     doc = _verify(token, slug, independent)
     if not doc:
-        frappe.throw(INVALID, frappe.PermissionError)
+        frappe.throw(_invalid(), frappe.PermissionError)
     return doc
 
 
@@ -159,7 +163,7 @@ def _refund(paid, fee, policy):
 def view(token, slug=None, independent=0):
     doc = _verify(token, slug, independent)
     if not doc:
-        return {"valid": False, "message": INVALID}
+        return {"valid": False, "message": _invalid()}
     return _projection(doc)
 
 
@@ -196,7 +200,7 @@ def cancel(token, accept_fee=0, slug=None, independent=0):
     doc = _require(token, slug, independent)
     rules = decide(doc)
     if not rules["can_cancel"]:
-        frappe.throw(INVALID, frappe.PermissionError)
+        frappe.throw(_invalid(), frappe.PermissionError)
     if rules["fee"] > 0 and not cint(accept_fee):
         frappe.throw(_("Confirm the late cancellation fee to cancel."), frappe.ValidationError)
     doc.status = "Cancelled"

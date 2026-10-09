@@ -10,6 +10,7 @@ from __future__ import annotations
 import io
 
 import frappe
+from frappe import _
 
 ALLOWED_FORMATS = {"JPEG": "image/jpeg", "PNG": "image/png", "WEBP": "image/webp"}
 MAX_BYTES = 5 * 1024 * 1024
@@ -30,9 +31,9 @@ def inspect_image(content: bytes) -> tuple[str, int, int]:
     from PIL import Image
 
     if not content:
-        raise MediaError("the uploaded file is empty")
+        raise MediaError(_("the uploaded file is empty"))
     if len(content) > MAX_BYTES:
-        raise MediaError("file exceeds the size limit")
+        raise MediaError(_("file exceeds the size limit"))
     try:
         with Image.open(io.BytesIO(content)) as image:
             image.verify()
@@ -40,11 +41,11 @@ def inspect_image(content: bytes) -> tuple[str, int, int]:
             image_format = image.format
             width, height = image.size
     except Exception as exc:
-        raise MediaError("the file is not a valid image") from exc
+        raise MediaError(_("the file is not a valid image")) from exc
     if image_format not in ALLOWED_FORMATS:
-        raise MediaError("unsupported image format; use JPEG, PNG or WebP")
+        raise MediaError(_("unsupported image format; use JPEG, PNG or WebP"))
     if width > MAX_DIMENSION or height > MAX_DIMENSION:
-        raise MediaError("image dimensions exceed the limit")
+        raise MediaError(_("image dimensions exceed the limit"))
     return ALLOWED_FORMATS[image_format], width, height
 
 
@@ -104,6 +105,6 @@ def enforce_quota(owner_type: str, organization: str | None, provider: str | Non
 
     usage = business_asset_usage(owner_type, organization, provider)
     if usage["count"] > MAX_ASSETS_PER_BUSINESS:
-        raise MediaError("this business has reached its asset limit")
+        raise MediaError(_("this business has reached its asset limit"))
     if usage["bytes"] > MAX_BYTES_PER_BUSINESS:
-        raise MediaError("this business has reached its storage limit")
+        raise MediaError(_("this business has reached its storage limit"))

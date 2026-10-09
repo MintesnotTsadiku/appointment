@@ -15,6 +15,7 @@ from datetime import timedelta
 from types import MappingProxyType
 
 import frappe
+from frappe import _
 from frappe.utils import now_datetime
 
 from appointment.public_experience import access
@@ -66,7 +67,7 @@ def _assert_current(site, expected_version: int) -> None:
     stored = int(site.draft_version or 0)
     if stored != int(expected_version):
         raise StaleDraftError(
-            f"the site draft advanced to version {stored}",
+            _("the site draft advanced to version {0}").format(stored),
             details={"expected": int(expected_version), "stored": stored, "site": site.name},
         )
 
@@ -85,17 +86,17 @@ def _parse_json(raw: object) -> dict:
 
 def _brand_artifact(site) -> tuple[str, dict]:
     if not site.brand_profile:
-        raise ExperiencePublishError("the site has no Brand Profile")
+        raise ExperiencePublishError(_("the site has no Brand Profile"))
     revision_name = frappe.db.get_value("Brand Profile", site.brand_profile, "active_revision")
     if not revision_name:
-        raise ExperiencePublishError("the brand has no published revision")
+        raise ExperiencePublishError(_("the brand has no published revision"))
     revision = frappe.get_doc("Brand Revision", revision_name)
     try:
         design = json.loads(revision.normalized_json or "")
     except (TypeError, ValueError) as exc:
-        raise ExperiencePublishError("the active Brand Revision is unreadable") from exc
+        raise ExperiencePublishError(_("the active Brand Revision is unreadable")) from exc
     if not isinstance(design, dict) or design.get("contentHash") != revision.compiled_design_hash:
-        raise ExperiencePublishError("the active Brand Revision is not a valid compiled design")
+        raise ExperiencePublishError(_("the active Brand Revision is not a valid compiled design"))
     return revision.name, design
 
 
@@ -147,14 +148,14 @@ def _compose_sections(site, recipe, *, public_path: str) -> list[dict]:
     present: set[str] = set()
     for row in rows:
         if row.section_type not in recipe.supported_sections:
-            raise ExperiencePublishError(f"section '{row.section_type}' is not supported by this recipe")
+            raise ExperiencePublishError(_("section '{0}' is not supported by this recipe").format(row.section_type))
         if int(row.schema_version or 0) != CONTENT_SCHEMA_VERSION:
-            raise ExperiencePublishError(f"section '{row.section_type}' has the wrong schema version")
+            raise ExperiencePublishError(_("section '{0}' has the wrong schema version").format(row.section_type))
         content = _section_content(row)
         report = validate_typed_section(row.section_type, content, allowed_intents=recipe.action_intents)
         if not report.ok:
             first = report.issues[0]
-            raise ExperiencePublishError(f"section '{row.section_type}' is invalid ({first.field}): {first.requirement}")
+            raise ExperiencePublishError(_("Section '{0}' is invalid ({1}): {2}").format(row.section_type, first.field, first.requirement))
         sections.append(
             {
                 "id": row.section_id,
@@ -167,7 +168,7 @@ def _compose_sections(site, recipe, *, public_path: str) -> list[dict]:
         present.add(row.section_type)
     missing = [name for name in recipe.required_sections if name not in present]
     if missing:
-        raise ExperiencePublishError("missing required sections: " + ", ".join(missing))
+        raise ExperiencePublishError(_("missing required sections: {0}").format(", ".join(missing)))
     location_query, phone = _first_location(sections)
     for section in sections:
         section["content"] = _project_content(
@@ -260,7 +261,7 @@ def publish_experience(site, expected_version: int):
     recipe = get_recipe(doc.recipe_key, doc.recipe_version or None)
     brand_revision, design = _brand_artifact(doc)
     if design.get("recipeKey") != recipe.key or int(design.get("recipeVersion") or 0) != recipe.version:
-        raise ExperiencePublishError("the site recipe and compiled design do not match")
+        raise ExperiencePublishError(_("the site recipe and compiled design do not match"))
     sections = _compose_sections(doc, recipe, public_path=f"/{doc.slug}")
     snapshot = _snapshot(doc, recipe, design, sections)
     release_hash = hash_document(_release_document(doc, snapshot, brand_revision, design))
@@ -319,7 +320,7 @@ def rollback_experience(site, release):
     doc.reload()
     target = release if hasattr(release, "normalized_json") else frappe.get_doc("Experience Release", release)
     if target.public_site != doc.name or not target.normalized_json:
-        raise ExperiencePublishError("the release does not belong to this site or has no snapshot")
+        raise ExperiencePublishError(_("the release does not belong to this site or has no snapshot"))
     snapshot = _parse_json(target.normalized_json)
     design = snapshot.get("compiledDesign") or {}
     release_hash = hash_document(_release_document(doc, snapshot, target.brand_revision, design))

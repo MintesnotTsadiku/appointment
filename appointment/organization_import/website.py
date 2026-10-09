@@ -5,6 +5,7 @@ import json
 import re
 
 import frappe
+from frappe import _
 
 from appointment.public_experience.section_schemas import validate_typed_section
 
@@ -24,16 +25,16 @@ def errors(rows, organization=None):
         kind, field = FIELDS[row["field"]]
         message = None
         if field == "email" and not re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]+", row["text"]):
-            message = "Enter a complete contact email address."
+            message = _("Enter a complete contact email address.")
         if sections is not None:
             section = next((entry for entry in sections if entry["type"] == kind), None)
             if section is None:
-                message = f"This template has no {kind} section. Remove this website text row."
+                message = _("This template has no {0} section. Remove this website text row.").format(kind)
             else:
                 proposed = deepcopy(section["content"])
                 proposed[field] = _value(field, row["text"])
                 if not validate_typed_section(kind, proposed).ok:
-                    message = "This text does not fit your website section. Use plain text within the template limits."
+                    message = _("This text does not fit your website section. Use plain text within the template limits.")
         if message:
             result.append({"sheet": "Website Content", "row": row["_row"], "cell": f"C{row['_row']}", "message": message})
     return result
@@ -45,7 +46,7 @@ def merge(sections, rows):
         kind, field = FIELDS[row["field"]]
         target = next((section for section in result if section["type"] == kind), None)
         if target is None:
-            frappe.throw(f"This template has no {kind} section. Choose a template that supports your imported content.")
+            frappe.throw(_("This template has no {0} section. Choose a template that supports your imported content.").format(kind))
         target["content"][field] = _value(field, row["text"])
     return result
 

@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 
 import frappe
+from frappe import _
 
 from appointment.content.monitoring import observed
 
@@ -242,7 +243,7 @@ def save_brand_draft(
     access.require_brand_manage(doc.owner_type, doc.organization, doc.provider)
     if int(doc.draft_version or 0) != int(expected_draft_version):
         raise StaleDraftError(
-            f"the brand draft advanced to version {doc.draft_version}",
+            _("the brand draft advanced to version {0}").format(doc.draft_version),
             details={"expected": int(expected_draft_version), "stored": int(doc.draft_version or 0)},
         )
     if brand_inputs_json is not None:
@@ -289,10 +290,10 @@ def site_readiness(site: str):
             "remediation": None,
         },
         {"check": "locales", "ok": bool([row for row in doc.enabled_locales if row.enabled]), "remediation": None},
-        {"check": "required_sections", "ok": not missing, "remediation": ("Add: " + ", ".join(missing)) if missing else None},
+        {"check": "required_sections", "ok": not missing, "remediation": _("Add: {0}").format(", ".join(missing)) if missing else None},
     ]
     primary = frappe.db.exists("Public Site Domain", {"public_site": site, "is_primary": 1})
-    checks.append({"check": "primary_domain", "ok": bool(primary), "remediation": "Optional; set a primary domain." if not primary else None})
+    checks.append({"check": "primary_domain", "ok": bool(primary), "remediation": _("Optional; set a primary domain.") if not primary else None})
     return {"ready": all(check["ok"] for check in checks if check["check"] != "primary_domain"), "checks": checks}
 
 
@@ -332,7 +333,7 @@ def domain_dns_instructions(domain: str):
     doc = frappe.get_doc("Public Site Domain", domain)
     site = frappe.db.get_value("Public Site", doc.public_site, ["owner_type", "organization", "provider"], as_dict=True)
     if not site:
-        frappe.throw("The domain has no site.")
+        frappe.throw(_("The domain has no site."))
     access.require_brand_manage(site.owner_type, site.organization, site.provider)
     target_host = frappe.conf.get("brand_public_experience_platform_host") or frappe.local.site
     records = dns.expected_records(doc.hostname_ascii, doc.verification_token or "", target_host, doc.domain_type)

@@ -4,6 +4,7 @@ import hashlib
 import json
 
 import frappe
+from frappe import _
 
 from appointment.content.tenancy import require_manage_business
 from appointment.organization_import import workbook, website
@@ -45,12 +46,12 @@ def confirm(content, organization, expected_hash, confirmed):
     if not organization:
         business.require_creation()
         if str(confirmed) not in {"1", "True", "true"}:
-            frappe.throw("Review the proposed changes and confirm the import.")
+            frappe.throw(_("Review the proposed changes and confirm the import."))
         proposed = workbook.dry_run(content)
         if not proposed["valid"]:
             return proposed
         if proposed["sha256"] != expected_hash:
-            frappe.throw("The workbook changed. Review a new dry run before confirming.")
+            frappe.throw(_("The workbook changed. Review a new dry run before confirming."))
         errors = _business_errors(proposed["rows"])
         if errors:
             return {**proposed, "valid": False, "errors": errors}
@@ -66,12 +67,12 @@ def confirm(content, organization, expected_hash, confirmed):
             raise
     require_manage_business("Organization", organization)
     if str(confirmed) not in {"1", "True", "true"}:
-        frappe.throw("Review the proposed changes and confirm the import.")
+        frappe.throw(_("Review the proposed changes and confirm the import."))
     proposed = workbook.dry_run(content)
     if not proposed["valid"]:
         return proposed
     if proposed["sha256"] != expected_hash:
-        frappe.throw("The workbook changed. Review a new dry run before confirming.")
+        frappe.throw(_("The workbook changed. Review a new dry run before confirming."))
     frappe.db.sql("select name from `tabOrganization` where name=%s for update", organization)
     namespace = proposed["rows"]["Organization"][0]["key"]
     identity = hashlib.sha256((organization + "\0" + namespace + "\0" + expected_hash).encode()).hexdigest()
@@ -112,16 +113,16 @@ def _business_errors(rows, organization=None):
         for row in rows[sheet]:
             if not frappe.db.exists("User", {"name": row["email"].lower(), "enabled": 1}):
                 errors.append({"sheet": sheet, "row": row["_row"], "cell": f"B{row['_row']}" if sheet == "Team" else f"C{row['_row']}",
-                               "message": "This staff member must accept an invitation before their account can be linked."})
+                               "message": _("This staff member must accept an invitation before their account can be linked.")})
     for row in rows["Services"]:
         if row["capacity"] != "1":
             errors.append({"sheet": "Services", "row": row["_row"], "cell": f"G{row['_row']}",
-                           "message": "This import currently supports individual appointment capacity of 1."})
+                           "message": _("This import currently supports individual appointment capacity of 1.")})
     locations = {row["key"]: row for row in rows["Locations"]}
     for row in rows["Availability"]:
         if row["timezone"] != locations[row["location_key"]]["timezone"]:
             errors.append({"sheet": "Availability", "row": row["_row"], "cell": f"F{row['_row']}",
-                           "message": "Use the same time zone as this location."})
+                           "message": _("Use the same time zone as this location.")})
     return errors
 
 
@@ -130,16 +131,16 @@ def _validate_map(mapping, organization):
 
     for sheet, records in mapping.items():
         if sheet not in TYPES:
-            frappe.throw("The previous import audit has unsupported records.")
+            frappe.throw(_("The previous import audit has unsupported records."))
         for name in records.values():
             if not frappe.db.exists(TYPES[sheet], name):
-                frappe.throw("An imported record was removed. Restore it before retrying this workbook.")
+                frappe.throw(_("An imported record was removed. Restore it before retrying this workbook."))
             doc = frappe.get_doc(TYPES[sheet], name)
             same_business = config_organization(doc) == organization
             if sheet == "Providers":
                 same_business = bool(doc.organizations) and all(row.organization == organization for row in doc.organizations)
             if not same_business:
-                frappe.throw("An imported record changed business. Review the import history.", frappe.PermissionError)
+                frappe.throw(_("An imported record changed business. Review the import history."), frappe.PermissionError)
             doc.check_permission("write")
 
 

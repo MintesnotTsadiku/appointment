@@ -1,6 +1,7 @@
 """Explicit staff account acceptance through an isolated local invitation inbox."""
 
 import frappe
+from frappe import _
 from frappe.model.document import Document
 from frappe.rate_limiter import rate_limit
 from frappe.utils import add_days, now_datetime
@@ -14,14 +15,14 @@ _WRITE = object()
 class StaffInvitation(Document):
     def validate(self):
         if self.flags.invitation_factory is not _WRITE:
-            frappe.throw("Use the team invitation workspace.", frappe.PermissionError)
+            frappe.throw(_("Use the team invitation workspace."), frappe.PermissionError)
         old = self.get_doc_before_save()
         if old and any(old.get(field) != self.get(field) for field in
                        ("organization", "email", "full_name", "invited_by", "token_hash", "expires_at")):
-            frappe.throw("Invitation identity cannot change.", frappe.PermissionError)
+            frappe.throw(_("Invitation identity cannot change."), frappe.PermissionError)
 
     def on_trash(self):
-        frappe.throw("Revoke an invitation instead of deleting its audit record.", frappe.PermissionError)
+        frappe.throw(_("Revoke an invitation instead of deleting its audit record."), frappe.PermissionError)
 
 
 @frappe.whitelist(methods=["POST"])
@@ -31,7 +32,7 @@ def invite(organization, staff_email, full_name):
     registration.require_invite_provisioning()
     address = email(staff_email)
     if not isinstance(full_name, str) or not full_name.strip() or len(full_name) > 140:
-        frappe.throw("Enter the staff member's name.")
+        frappe.throw(_("Enter the staff member's name."))
     value, digest = token()
     doc = frappe.get_doc({"doctype": "Business Staff Invitation", "organization": organization,
                           "email": address, "full_name": full_name.strip(), "invited_by": actor,
@@ -60,7 +61,7 @@ def revoke(invitation):
     membership.require_manager(doc.organization)
     _lock(doc)
     if doc.status == "Accepted":
-        frappe.throw("This account already accepted. Revoke its business membership separately.")
+        frappe.throw(_("This account already accepted. Revoke its business membership separately."))
     doc.status = "Revoked"
     _write(doc)
     return {"status": doc.status}
@@ -72,22 +73,22 @@ def accept(invitation_token, password=None):
     digest = token_hash(invitation_token)
     name = digest and frappe.db.get_value("Business Staff Invitation", {"token_hash": digest}, "name")
     if not name:
-        frappe.throw("This invitation is unavailable.", frappe.PermissionError)
+        frappe.throw(_("This invitation is unavailable."), frappe.PermissionError)
     doc = frappe.get_doc("Business Staff Invitation", name)
     _lock(doc)
     if doc.status != "Pending" or doc.expires_at <= now_datetime():
-        frappe.throw("This invitation has expired or was already used.", frappe.PermissionError)
+        frappe.throw(_("This invitation has expired or was already used."), frappe.PermissionError)
     if (not registration.invite_provisioning_allowed() or not membership.user_is_enabled(doc.invited_by)
             or doc.organization not in membership.manager_organizations(doc.invited_by)
             or not frappe.db.get_value("Organization", doc.organization, "is_active")):
-        frappe.throw("This invitation is no longer authorized.", frappe.PermissionError)
+        frappe.throw(_("This invitation is no longer authorized."), frappe.PermissionError)
     if frappe.db.exists("User", doc.email):
         if frappe.session.user != doc.email or not membership.user_is_enabled(doc.email):
-            frappe.throw("Sign in with the invited account before accepting. Its password will not change.",
+            frappe.throw(_("Sign in with the invited account before accepting. Its password will not change."),
                          frappe.PermissionError)
     else:
         if not password:
-            frappe.throw("Choose your account password.")
+            frappe.throw(_("Choose your account password."))
         parts = doc.full_name.split(" ", 1)
         user = frappe.get_doc({"doctype": "User", "email": doc.email, "first_name": parts[0],
                                "last_name": parts[1] if len(parts) > 1 else "", "enabled": 1,
@@ -97,7 +98,7 @@ def accept(invitation_token, password=None):
     doc.status, doc.accepted_at = "Accepted", now_datetime()
     _write(doc, trusted=True)
     return {"status": "Accepted", "email": doc.email,
-            "message": "Your account is ready. The business owner can now assign your role and scope."}
+            "message": _("Your account is ready. The business owner can now assign your role and scope.")}
 
 
 def permission(doc, user=None, permission_type="read", ptype=None, **kwargs):

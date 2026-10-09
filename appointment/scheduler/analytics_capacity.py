@@ -4,6 +4,7 @@ from datetime import datetime, timedelta, timezone, time
 from zoneinfo import ZoneInfo
 import frappe
 from appointment.scheduler import booking
+from frappe import _
 
 
 def calculate(metric, rows, start, end, zone, offerings, basis, documents=None):
@@ -13,7 +14,7 @@ def calculate(metric, rows, start, end, zone, offerings, basis, documents=None):
         _recorded_capacity(metric,rows,start,end,zone)
     else:
         for key in ('buffer_hours','occupied_heatmap'):
-            metric(key,None,'Recorded historical capacity requires appointment-date scope.','hours',known=0,eligible=1)
+            metric(key,None,_('Recorded historical capacity requires appointment-date scope.'),'hours',known=0,eligible=1)
     _future_capacity(metric,zone,offerings,documents)
 
 
@@ -32,7 +33,7 @@ def _recorded_capacity(metric,rows,start,end,zone):
             if a and b and min(b,upper)>max(a,lower):target[row.provider].append((max(a,lower),min(b,upper)))
     scheduled_minutes=sum((b-a).total_seconds()/60 for intervals in scheduled.values() for a,b in _merge_intervals(intervals))
     occupied_minutes=sum((b-a).total_seconds()/60 for intervals in occupied.values() for a,b in _merge_intervals(intervals))
-    metric('buffer_hours',round((occupied_minutes-scheduled_minutes)/60,2),'Occupied provider interval union minus scheduled interval union. Recorded buffers only; overlap counted once.','hours',known=sum(len(value) for value in occupied.values()),eligible=sum(len(value) for value in occupied.values())+missing)
+    metric('buffer_hours',round((occupied_minutes-scheduled_minutes)/60,2),_('Occupied provider interval union minus scheduled interval union. Recorded buffers only; overlap counted once.'),'hours',known=sum(len(value) for value in occupied.values()),eligible=sum(len(value) for value in occupied.values())+missing)
     buckets=Counter()
     for intervals in occupied.values():
         for opened,closed in _merge_intervals(intervals):
@@ -43,7 +44,7 @@ def _recorded_capacity(metric,rows,start,end,zone):
                 boundary=min(closed,next_hour if next_hour>cursor else cursor+timedelta(hours=1))
                 buckets[local.strftime('%a %H:00')]+=(boundary-cursor).total_seconds()/3600
                 cursor=boundary
-    metric('occupied_heatmap',round(sum(round(value,3) for value in buckets.values()),3),'Union of occupied provider intervals split across business weekday/hour; recorded buffers included. Hours, not start counts.','hours',data=[dict(name=key,count=round(value,3)) for key,value in sorted(buckets.items())],known=sum(len(value) for value in occupied.values()),eligible=sum(len(value) for value in occupied.values())+missing)
+    metric('occupied_heatmap',round(sum(round(value,3) for value in buckets.values()),3),_('Union of occupied provider intervals split across business weekday/hour; recorded buffers included. Hours, not start counts.'),'hours',data=[dict(name=key,count=round(value,3)) for key,value in sorted(buckets.items())],known=sum(len(value) for value in occupied.values()),eligible=sum(len(value) for value in occupied.values())+missing)
 
 
 def _future_capacity(metric,zone,offerings,documents):
@@ -81,6 +82,6 @@ def _future_capacity(metric,zone,offerings,documents):
                     closed=finish+timedelta(minutes=int(service.buffer_after or 0))
                     if now+timedelta(minutes=notice)<=cursor<until and not any(a<closed and b>opened for a,b in blocked[provider.user]):candidates.append(cursor)
                     cursor=finish
-    metric('future_slots',len(candidates),'Offering-specific start slots today through six following business days. Service options can overlap; counts are not independent simultaneous capacity. Current schedules, notice, buffers and canonical booking/calendar conflicts.','offering slots',known=len(parts),eligible=len(parts) or 1)
+    metric('future_slots',len(candidates),_('Offering-specific start slots today through six following business days. Service options can overlap; counts are not independent simultaneous capacity. Current schedules, notice, buffers and canonical booking/calendar conflicts.'),'offering slots',known=len(parts),eligible=len(parts) or 1)
     earliest=min(candidates,default=None)
-    metric('next_slot',round((earliest-now).total_seconds()/3600,2) if earliest else None,'Hours from generated time to earliest permitted offering-specific slot within today plus six days. Snapshot only; recheck when booking.','hours',known=int(bool(earliest)),eligible=1)
+    metric('next_slot',round((earliest-now).total_seconds()/3600,2) if earliest else None,_('Hours from generated time to earliest permitted offering-specific slot within today plus six days. Snapshot only; recheck when booking.'),'hours',known=int(bool(earliest)),eligible=1)

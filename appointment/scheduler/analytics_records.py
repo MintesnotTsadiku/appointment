@@ -1,13 +1,14 @@
 """Minimal record drill-downs with the same authorized filters as each metric."""
 from datetime import datetime, timezone
 import frappe
+from frappe import _
 
 SUPPORTED = {'total','active','pending','completed','cancelled','no_show','services','providers','locations','booked_hours','agenda','attention','upcoming','no_show_rate','attendance_rate','outcomes','sources','booking_trend'}
 
 
 def select(metric_id, rows, operational, filters, zone, today, offset):
     if metric_id not in SUPPORTED:
-        frappe.throw('This metric does not support a booking record drill-down.')
+        frappe.throw(_('This metric does not support a booking record drill-down.'))
     if metric_id in {'agenda','attention','upcoming'}:
         pool=[row for row in operational if row.status in {'Pending','Confirmed'}]
         if metric_id=='agenda':pool=[row for row in pool if row.appointment_date==today]

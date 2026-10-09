@@ -2,6 +2,7 @@
 import json
 from datetime import datetime, timezone
 import frappe
+from frappe import _
 from appointment.scheduler import membership, booking_access
 
 
@@ -14,9 +15,9 @@ def set_state(location: str, state: str):
         require_owner(doc.independent_provider)
         workspace={'is_manager':True,'role':'Owner'}
     if not workspace or not (workspace['is_manager'] or workspace['role']=='Receptionist' and any(scope['organization']==doc.organization and (not scope['locations'] or doc.name in scope['locations']) for scope in booking_access.reception_scope())):
-        frappe.throw('This reception location is outside your scope.',frappe.PermissionError)
+        frappe.throw(_('This reception location is outside your scope.'),frappe.PermissionError)
     if state not in {'Open','Closed'}:
-        frappe.throw('Choose Open or Closed.')
+        frappe.throw(_('Choose Open or Closed.'))
     frappe.db.sql('select name from tabLocation where name=%s for update',location)
     doc.reload()
     if doc.reception_state==state:

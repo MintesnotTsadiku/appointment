@@ -279,12 +279,12 @@ def validate_availability_hierarchy(location_name: str, service_name: Optional[s
             for day, day_ranges in service_by_day.items():
                 location_day_ranges = location_by_day.get(day, [])
                 if not location_day_ranges:
-                    return False, _(f"Service hours for {day} extend beyond Location hours. Location is closed on {day}.")
+                    return False, _("Service hours for {0} extend beyond Location hours. Location is closed on {0}.").format(day)
                 
                 # Check each service range is within location ranges
                 for service_range in day_ranges:
                     if not _is_range_within_parent(service_range, location_day_ranges):
-                        return False, _(f"Service hours for {day} ({service_range['start_time']} - {service_range['end_time']}) extend beyond Location hours.")
+                        return False, _("Service hours for {0} ({1} - {2}) extend beyond Location hours.").format(day, service_range['start_time'], service_range['end_time'])
     
     # Validate Provider hours
     if provider_name:
@@ -309,12 +309,12 @@ def validate_availability_hierarchy(location_name: str, service_name: Optional[s
             for day, day_ranges in provider_by_day.items():
                 parent_day_ranges = parent_by_day.get(day, [])
                 if not parent_day_ranges:
-                    return False, _(f"Provider hours for {day} extend beyond parent availability. No availability on {day}.")
+                    return False, _("Provider hours for {0} extend beyond parent availability. No availability on {0}.").format(day)
                 
                 # Check each provider range is within parent ranges
                 for provider_range in day_ranges:
                     if not _is_range_within_parent(provider_range, parent_day_ranges):
-                        return False, _(f"Provider hours for {day} ({provider_range['start_time']} - {provider_range['end_time']}) extend beyond parent availability.")
+                        return False, _("Provider hours for {0} ({1} - {2}) extend beyond parent availability.").format(day, provider_range['start_time'], provider_range['end_time'])
     
     return True, None
 

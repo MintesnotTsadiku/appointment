@@ -4,6 +4,7 @@ import hashlib
 import json
 
 import frappe
+from frappe import _
 from appointment.scheduler.analytics import _authorize
 
 FINANCIAL = {'catalog_value', 'recorded_payments', 'agreed_value', 'discounts', 'payment_records'}
@@ -38,7 +39,7 @@ CHARTS = {'value','bar','line','area','donut','radial','table','heatmap'}
 
 @frappe.whitelist(methods=['GET'])
 def load(organization: str, dashboard: str = 'home'):
-    workspace, _ = _authorize(organization,30)
+    workspace, _scopes = _authorize(organization,30)
     key = _key(organization,dashboard)
     value = frappe.defaults.get_user_default(key)
     return validate(frappe.parse_json(value),workspace) if value else None
@@ -46,7 +47,7 @@ def load(organization: str, dashboard: str = 'home'):
 
 @frappe.whitelist(methods=['POST'])
 def save(organization: str, dashboard: str, config: str):
-    workspace, _ = _authorize(organization,30)
+    workspace, _scopes = _authorize(organization,30)
     value = validate(frappe.parse_json(config),workspace)
     # Serialize preferences for one user so concurrent first saves cannot duplicate defaults.
     frappe.db.sql('select name from tabUser where name=%s for update',frappe.session.user)
@@ -56,13 +57,13 @@ def save(organization: str, dashboard: str, config: str):
 
 def validate(value,workspace):
     if not isinstance(value,dict) or value.get('version') != 1 or not isinstance(value.get('widgets'),list):
-        frappe.throw('Unsupported dashboard configuration.')
+        frappe.throw(_('Unsupported dashboard configuration.'))
     if len(value['widgets']) > len(WIDGETS):
-        frappe.throw('Too many widgets.')
+        frappe.throw(_('Too many widgets.'))
     widgets, seen = [],set()
     for row in value['widgets']:
         if not isinstance(row,dict):
-            frappe.throw('Invalid widget.')
+            frappe.throw(_('Invalid widget.'))
         key = row.get('id')
         if key not in WIDGETS or key in seen or (key in FINANCIAL and not workspace['is_manager']):
             continue
@@ -72,7 +73,7 @@ def validate(value,workspace):
             chart = supported[0]
         span=row.get('span',1)
         if span not in (1,2,3):
-            frappe.throw('Invalid widget size.')
+            frappe.throw(_('Invalid widget size.'))
         entry=dict(id=key,chart=chart,span=span)
         local=row.get('filters')
         if local:
@@ -101,7 +102,7 @@ def navigation():
 def save_navigation(placement: str, collapsed: bool = False):
     _signed_in()
     if placement not in {'top','sidebar'}:
-        frappe.throw('Choose top navigation or sidebar.')
+        frappe.throw(_('Choose top navigation or sidebar.'))
     value=dict(placement=placement,collapsed=bool(collapsed))
     frappe.db.sql('select name from tabUser where name=%s for update',frappe.session.user)
     frappe.defaults.set_user_default('appointment:navigation:v1',json.dumps(value))
@@ -110,12 +111,12 @@ def save_navigation(placement: str, collapsed: bool = False):
 
 def _signed_in():
     if frappe.session.user=='Guest' or not frappe.db.get_value('User',frappe.session.user,'enabled'):
-        frappe.throw('Sign in to manage preferences.',frappe.PermissionError)
+        frappe.throw(_('Sign in to manage preferences.'),frappe.PermissionError)
 
 
 def _key(organization,dashboard):
     if dashboard not in {'home','insights'}:
-        frappe.throw('Choose Home or Insights.')
+        frappe.throw(_('Choose Home or Insights.'))
     return 'appointment:dashboard:v1:'+dashboard+':'+hashlib.sha256(organization.encode()).hexdigest()[:24]
 
 

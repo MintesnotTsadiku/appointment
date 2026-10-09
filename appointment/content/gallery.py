@@ -37,15 +37,15 @@ def normalize_video(provider: object, identifier: object) -> str:
 
     provider_key = str(provider or "").strip().lower()
     if provider_key not in VIDEO_PROVIDERS:
-        raise MediaSafetyError("unsupported video provider")
+        raise MediaSafetyError(_("unsupported video provider"))
     value = str(identifier or "").strip()
     if not value:
-        raise MediaSafetyError("a video identifier is required")
+        raise MediaSafetyError(_("a video identifier is required"))
     if value.startswith("http://") or value.startswith("https://"):
         parsed = urlparse(value)
         host = parsed.netloc.lower()
         if host not in _PROVIDER_HOSTS[provider_key]:
-            raise MediaSafetyError("the video link is not from the selected provider")
+            raise MediaSafetyError(_("the video link is not from the selected provider"))
         if provider_key == "youtube":
             if host.endswith("youtu.be"):
                 value = parsed.path.strip("/").split("/")[0]
@@ -54,9 +54,9 @@ def normalize_video(provider: object, identifier: object) -> str:
         else:
             value = parsed.path.strip("/").split("/")[-1]
     if provider_key == "youtube" and not _YOUTUBE_ID.match(value):
-        raise MediaSafetyError("the YouTube video identifier is not valid")
+        raise MediaSafetyError(_("the YouTube video identifier is not valid"))
     if provider_key == "vimeo" and not _VIMEO_ID.match(value):
-        raise MediaSafetyError("the Vimeo video identifier is not valid")
+        raise MediaSafetyError(_("the Vimeo video identifier is not valid"))
     return value
 
 
@@ -72,13 +72,13 @@ def validate_image_asset(file_url: object, public_site=None) -> dict:
 
     url = safe_local_media(file_url)
     if not url:
-        raise MediaSafetyError("an image must be a site-local public file")
+        raise MediaSafetyError(_("an image must be a site-local public file"))
     filters = {"file_url": url, "is_private": 0}
     if public_site:
         filters.update({"attached_to_doctype": "Public Site", "attached_to_name": public_site})
     file_name = frappe.db.get_value("File", filters, "name")
     if not file_name:
-        raise MediaSafetyError("choose a public image from this website's media library")
+        raise MediaSafetyError(_("choose a public image from this website's media library"))
     content = frappe.get_doc("File", file_name).get_content()
     from appointment.public_experience.media import inspect_image
 
@@ -99,7 +99,7 @@ def validate_item(item, public_site=None) -> dict:
     if media_type == "image":
         meta = validate_image_asset(item.image, public_site)
         if not (item.alt_text or "").strip():
-            raise MediaSafetyError("every gallery image requires alt text")
+            raise MediaSafetyError(_("every gallery image requires alt text"))
         item.checksum = meta["checksum"]
         item.width = meta["width"]
         item.height = meta["height"]
@@ -109,23 +109,23 @@ def validate_item(item, public_site=None) -> dict:
     if media_type == "video":
         item.video_id = normalize_video(item.video_provider, item.video_id)
         if not (item.alt_text or "").strip():
-            raise MediaSafetyError("every gallery video requires alt text")
+            raise MediaSafetyError(_("every gallery video requires alt text"))
         if item.thumbnail:
             thumbnail_url = safe_local_media(item.thumbnail)
             if not thumbnail_url:
-                raise MediaSafetyError("a video thumbnail must be a site-local public image")
+                raise MediaSafetyError(_("a video thumbnail must be a site-local public image"))
             item.thumbnail = thumbnail_url
             validate_image_asset(item.thumbnail, public_site)
         if item.poster:
             poster_url = safe_local_media(item.poster)
             if not poster_url:
-                raise MediaSafetyError("a video poster must be a site-local public image")
+                raise MediaSafetyError(_("a video poster must be a site-local public image"))
             item.poster = poster_url
             validate_image_asset(item.poster, public_site)
         item.image = None
         item.checksum = None
         return {"provider": item.video_provider, "id": item.video_id}
-    raise MediaSafetyError("unsupported media type")
+    raise MediaSafetyError(_("unsupported media type"))
 
 
 def validate_collection(collection) -> dict:
@@ -142,7 +142,7 @@ def validate_collection(collection) -> dict:
     if collection.cover:
         cover = safe_local_media(collection.cover)
         if not cover:
-            raise MediaSafetyError("the cover must be a site-local public image")
+            raise MediaSafetyError(_("the cover must be a site-local public image"))
         collection.cover = cover
         validate_image_asset(collection.cover, collection.public_site)
     seen_orders: set[int] = set()
@@ -150,10 +150,10 @@ def validate_collection(collection) -> dict:
     for index, item in enumerate(collection.items):
         validate_item(item, collection.public_site)
         if item.sort_order in seen_orders:
-            raise MediaSafetyError("each gallery item needs a unique sort order")
+            raise MediaSafetyError(_("each gallery item needs a unique sort order"))
         seen_orders.add(item.sort_order)
         if item.consent_status not in CONSENT_STATES:
-            raise MediaSafetyError("unknown consent status")
+            raise MediaSafetyError(_("unknown consent status"))
         if item.consent_status == "Pending":
             pending_consent = True
         if index == 0 and item.consent_status == "Approved" and collection.consent_review_status == "Not Required":
@@ -161,7 +161,7 @@ def validate_collection(collection) -> dict:
     if pending_consent:
         collection.consent_review_status = "Pending"
     if collection.status == "Published" and pending_consent:
-        raise MediaSafetyError("a gallery with pending image consent cannot be published")
+        raise MediaSafetyError(_("a gallery with pending image consent cannot be published"))
     return {"items": len(collection.items)}
 
 

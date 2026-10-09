@@ -218,7 +218,7 @@ def create_desk_appointment(
     try:
         # Validate required fields
         if not all([client_name, service_name, resource_name if resource_only else provider_name, location_name, start_time]):
-            return {"error": "Missing required fields"}, 400
+            return {"error": _("Missing required fields")}, 400
 
         # Get appointment date
         if not appointment_date:
@@ -261,7 +261,7 @@ def create_desk_appointment(
 
         if conflicts:
             return {
-                "error": "Time slot conflicts with existing appointment",
+                "error": _("Time slot conflicts with existing appointment"),
                 "conflicts": conflicts
             }, 409
 
@@ -279,7 +279,7 @@ def create_desk_appointment(
         )
 
         if not event_type:
-            return {"error": "No active event type found for this service and provider"}, 404
+            return {"error": _("No active event type found for this service and provider")}, 404
 
         event_type_name = event_type[0].name
 
@@ -313,14 +313,14 @@ def create_desk_appointment(
         return {
             "success": True,
             "appointment": appointment.as_dict(),
-            "message": "Appointment created successfully",
+            "message": _("Appointment created successfully"),
             "notification_status": notification_status,
         }, 200
 
     except Exception as e:
         frappe.db.rollback()
         frappe.log_error(str(e), "Desk API: Create Appointment Error")
-        return {"error": f"Failed to create appointment: {str(e)}"}, 500
+        return {"error": _("Failed to create appointment: {0}").format(str(e))}, 500
 
 
 @frappe.whitelist()
@@ -420,7 +420,7 @@ def update_appointment(
 
                 if conflicts:
                     return {
-                        "error": "New time slot conflicts with existing appointment",
+                        "error": _("New time slot conflicts with existing appointment"),
                         "conflicts": conflicts
                     }, 409
 
@@ -436,16 +436,16 @@ def update_appointment(
         return {
             "success": True,
             "appointment": appointment.as_dict(),
-            "message": "Appointment updated successfully",
+            "message": _("Appointment updated successfully"),
             "notification_status": notification_status,
         }, 200
 
     except frappe.DoesNotExistError:
-        return {"error": "Appointment not found"}, 404
+        return {"error": _("Appointment not found")}, 404
     except Exception as e:
         frappe.db.rollback()
         frappe.log_error(str(e), "Desk API: Update Appointment Error")
-        return {"error": f"Failed to update appointment: {str(e)}"}, 500
+        return {"error": _("Failed to update appointment: {0}").format(str(e))}, 500
 
 
 @frappe.whitelist()
@@ -511,7 +511,7 @@ def reschedule_appointment(appointment_name: str, new_start_time: str, new_end_t
 
         if conflicts:
             return {
-                "error": "New time slot conflicts with existing appointment",
+                "error": _("New time slot conflicts with existing appointment"),
                 "conflicts": conflicts
             }, 409
 
@@ -527,16 +527,16 @@ def reschedule_appointment(appointment_name: str, new_start_time: str, new_end_t
         return {
             "success": True,
             "appointment": appointment.as_dict(),
-            "message": "Appointment rescheduled successfully",
+            "message": _("Appointment rescheduled successfully"),
             "notification_status": notification_status,
         }, 200
 
     except frappe.DoesNotExistError:
-        return {"error": "Appointment not found"}, 404
+        return {"error": _("Appointment not found")}, 404
     except Exception as e:
         frappe.db.rollback()
         frappe.log_error(str(e), "Desk API: Reschedule Appointment Error")
-        return {"error": f"Failed to reschedule appointment: {str(e)}"}, 500
+        return {"error": _("Failed to reschedule appointment: {0}").format(str(e))}, 500
 
 
 @frappe.whitelist()
@@ -618,7 +618,7 @@ def add_walk_in(
     """
     try:
         if not client_name or not client_phone:
-            return {"error": "Client name and phone are required"}, 400
+            return {"error": _("Client name and phone are required")}, 400
 
         # Create walk-in
         walk_in = frappe.new_doc("Walk In")
@@ -632,7 +632,7 @@ def add_walk_in(
             business = frappe.db.get_value("Customer Profile", customer, "organization")
             location_business = frappe.db.get_value("Location", location_name, "organization") if location_name else business
             if business not in business_scope() or location_business != business:
-                return {"error": "The customer belongs to another business"}, 403
+                return {"error": _("The customer belongs to another business")}, 403
             walk_in.customer = customer
         if service_requested:
             walk_in.service_requested = service_requested
@@ -651,13 +651,13 @@ def add_walk_in(
         return {
             "success": True,
             "walk_in": walk_in.as_dict(),
-            "message": "Walk-in added to queue"
+            "message": _("Walk-in added to queue")
         }, 200
 
     except Exception as e:
         frappe.db.rollback()
         frappe.log_error(str(e), "Desk API: Add Walk-In Error")
-        return {"error": f"Failed to add walk-in: {str(e)}"}, 500
+        return {"error": _("Failed to add walk-in: {0}").format(str(e))}, 500
 
 
 @frappe.whitelist()
@@ -678,18 +678,18 @@ def assign_walk_in_to_slot(walk_in_name: str, provider_name: str, location_name:
     from appointment.scheduler.booking_access import config_permission
     walk_in_doc = frappe.get_doc("Walk In", walk_in_name)
     if not config_permission(walk_in_doc, permission_type="write"):
-        frappe.throw("Not permitted to assign this walk-in", frappe.PermissionError)
+        frappe.throw(_("Not permitted to assign this walk-in"), frappe.PermissionError)
     try:
         # Get walk-in
         walk_in = frappe.get_doc("Walk In", walk_in_name)
 
         if walk_in.status != "waiting":
-            return {"error": "Walk-in is not in waiting status"}, 400
+            return {"error": _("Walk-in is not in waiting status")}, 400
 
         # Get service
         service_name = walk_in.service_requested
         if not service_name:
-            return {"error": "Walk-in does not have a service requested"}, 400
+            return {"error": _("Walk-in does not have a service requested")}, 400
 
         # Get service duration
         service_duration = frappe.db.get_value("Service", service_name, "duration") or 30
@@ -737,7 +737,7 @@ def assign_walk_in_to_slot(walk_in_name: str, provider_name: str, location_name:
             attempts += 1
 
         if attempts >= max_attempts:
-            return {"error": "No available slots found in the next 24 hours"}, 404
+            return {"error": _("No available slots found in the next 24 hours")}, 404
 
         # Create appointment
         appointment_date = slot_start.date().strftime("%Y-%m-%d")
@@ -758,7 +758,7 @@ def assign_walk_in_to_slot(walk_in_name: str, provider_name: str, location_name:
         )
 
         if not event_type:
-            return {"error": "No active event type found for this service and provider"}, 404
+            return {"error": _("No active event type found for this service and provider")}, 404
 
         event_type_name = event_type[0].name
 
@@ -795,15 +795,15 @@ def assign_walk_in_to_slot(walk_in_name: str, provider_name: str, location_name:
         return {
             "success": True,
             "appointment": appointment.as_dict(),
-            "message": "Walk-in assigned to appointment slot"
+            "message": _("Walk-in assigned to appointment slot")
         }, 200
 
     except frappe.DoesNotExistError:
-        return {"error": "Walk-in not found"}, 404
+        return {"error": _("Walk-in not found")}, 404
     except Exception as e:
         frappe.db.rollback()
         frappe.log_error(str(e), "Desk API: Assign Walk-In Error")
-        return {"error": f"Failed to assign walk-in: {str(e)}"}, 500
+        return {"error": _("Failed to assign walk-in: {0}").format(str(e))}, 500
 
 
 @frappe.whitelist()

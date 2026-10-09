@@ -4,6 +4,7 @@ import base64
 import binascii
 
 import frappe
+from frappe import _
 
 from appointment.content.monitoring import observed
 
@@ -17,7 +18,7 @@ def require_scope(organization=None):
     if organization:
         require_manage_business("Organization", organization)
     elif "Organization Manager" not in frappe.get_roles():
-        frappe.throw("An organization owner account is required for workbook setup.", frappe.PermissionError)
+        frappe.throw(_("An organization owner account is required for workbook setup."), frappe.PermissionError)
 
 
 @frappe.whitelist(methods=["GET"])
@@ -40,11 +41,11 @@ def download_template():
 
 def decode_upload(content_base64):
     if not isinstance(content_base64, str) or len(content_base64) > 7 * 1024 * 1024:
-        frappe.throw("Choose an XLSX workbook smaller than 5 MB.")
+        frappe.throw(_("Choose an XLSX workbook smaller than 5 MB."))
     try:
         return base64.b64decode(content_base64, validate=True)
     except (ValueError, binascii.Error):
-        frappe.throw("Upload the original XLSX workbook again.")
+        frappe.throw(_("Upload the original XLSX workbook again."))
 
 
 @frappe.whitelist(methods=["POST"])

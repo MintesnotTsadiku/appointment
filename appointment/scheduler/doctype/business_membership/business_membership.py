@@ -1,4 +1,5 @@
 import frappe
+from frappe import _
 from frappe.model.document import Document
 
 
@@ -11,11 +12,11 @@ class BusinessMembership(Document):
         membership.require_manager(self.organization)
         old = self.get_doc_before_save()
         if old and old.organization != self.organization:
-            frappe.throw("A membership cannot move to another business.", frappe.PermissionError)
+            frappe.throw(_("A membership cannot move to another business."), frappe.PermissionError)
         if self.membership_role not in membership.ASSIGNABLE_ROLES:
-            frappe.throw("Choose Manager, Provider, or Receptionist.", frappe.PermissionError)
+            frappe.throw(_("Choose Manager, Provider, or Receptionist."), frappe.PermissionError)
         if not frappe.db.exists("User", {"name": self.user, "enabled": 1}):
-            frappe.throw("Choose an enabled staff account.")
+            frappe.throw(_("Choose an enabled staff account."))
         membership._validate_provider(self.organization, self.provider)
         membership._validate_locations(self.organization, [row.location for row in self.locations])
 

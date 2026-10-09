@@ -1,0 +1,58 @@
+# Run appointment.tests.develop_features_qa_fixtures.setup first and cleanup afterwards.
+# A server error reaches a staff member in Amharic. See docs/features/SERVER_MESSAGES_TRANSLATION_PLAN.md.
+app: appointment
+base_url: http://127.0.0.146:47800
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.develop_features_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-server-am
+default_role: Staff
+auth:
+  type: frappe_session
+  username: bloom.owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+scenarios:
+- id: server_message_am_desktop
+  title: 'Owner in Amharic: ending a service before it starts is refused in Amharic (am, desktop)'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /reception?date={qa_dev_day}
+    assertions:
+    - type: network_idle
+  actions:
+  - action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation
+      status: 200
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{qa_dev_booking_id}"]'
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_dev_booking_id}"]'
+    key: Enter
+  - action: click
+    selector: '[data-qa="booking-stage-end"]'
+    assertions:
+    - type: visible_text
+      value: መጀመሪያ የቀደመውን የእንግዳ መቀበያ ደረጃ ያጠናቅቁ።
+  - action: screenshot
+    name: server_message_am_desktop-1-refused.png
+  - action: press
+    selector: 'body'
+    key: Escape
+  - action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+  - action: get_console_errors
+  - action: get_network_errors

@@ -6,6 +6,7 @@ import json
 from dataclasses import dataclass
 
 import frappe
+from frappe import _
 from frappe.utils import now_datetime
 
 from appointment.public_experience import access
@@ -58,7 +59,7 @@ def _assert_current(profile, expected_draft_version: int) -> None:
     stored = int(profile.draft_version or 0)
     if stored != int(expected_draft_version):
         raise StaleDraftError(
-            f"the brand draft advanced to version {stored}",
+            _("the brand draft advanced to version {0}").format(stored),
             details={"expected": int(expected_draft_version), "stored": stored, "profile": profile.name},
         )
 
@@ -73,9 +74,9 @@ def _inputs(profile) -> dict:
         try:
             data = json.loads(raw)
         except (TypeError, ValueError) as exc:
-            raise BrandCompilationError("recipe adjustments are not valid JSON", details={"profile": profile.name}) from exc
+            raise BrandCompilationError(_("recipe adjustments are not valid JSON"), details={"profile": profile.name}) from exc
     if not isinstance(data, dict):
-        raise BrandCompilationError("recipe adjustments must be a JSON object", details={"profile": profile.name})
+        raise BrandCompilationError(_("Recipe adjustments must be a JSON object."), details={"profile": profile.name})
     return data
 
 
@@ -170,7 +171,7 @@ def publish_brand(profile, expected_draft_version: int):
     _assert_current(doc, expected_draft_version)
     result = compile_brand(doc, expected_draft_version)
     if not result.is_valid:
-        raise BrandCompilationError("the compiled design is not publishable", details={"profile": doc.name})
+        raise BrandCompilationError(_("the compiled design is not publishable"), details={"profile": doc.name})
     revision = _write_revision(doc, result)
     _emit_after_commit("brand_published", {"profile": doc.name, "revision": revision.name, "hash": result.content_hash})
     return revision
@@ -185,9 +186,9 @@ def rollback_brand(profile, revision):
     doc.reload()
     target = revision if hasattr(revision, "normalized_json") else frappe.get_doc("Brand Revision", revision)
     if target.brand_profile != doc.name:
-        raise BrandCompilationError("the revision belongs to a different brand")
+        raise BrandCompilationError(_("the revision belongs to a different brand"))
     if not target.normalized_json or not target.compiled_design_hash:
-        raise BrandCompilationError("the revision has no compiled design to reinstate")
+        raise BrandCompilationError(_("the revision has no compiled design to reinstate"))
     result = BrandCompilationResult(
         profile=doc.name,
         draft_version=int(doc.draft_version or 0),

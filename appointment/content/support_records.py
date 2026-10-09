@@ -1,6 +1,7 @@
 """Site-owned upstream categories and authors; no global support-record reuse."""
 
 import frappe
+from frappe import _
 
 from appointment.content import tenancy
 
@@ -36,22 +37,22 @@ def bind(site, doctype, name):
 
 def validate_article(post, site):
     if not site:
-        frappe.throw("Article publication requires its owning website.", frappe.PermissionError)
+        frappe.throw(_("Article publication requires its owning website."), frappe.PermissionError)
     for field, doctype in (("blog_category", "Blog Category"), ("blogger", "Blogger")):
         name = post.get(field)
         if name and not frappe.db.exists("Content Ownership", {
             "public_site": site, "source_doctype": doctype, "source_name": name,
         }):
-            frappe.throw("Choose an article category and author belonging to this website.", frappe.PermissionError)
+            frappe.throw(_("Choose an article category and author belonging to this website."), frappe.PermissionError)
 
 
 def _existing(site, doctype):
     rows = frappe.get_all("Content Ownership", filters={"public_site": site.name, "source_doctype": doctype},
                           fields=["source_name"], limit=2)
     if len(rows) > 1:
-        frappe.throw("This website has ambiguous article support records.", frappe.PermissionError)
+        frappe.throw(_("This website has ambiguous article support records."), frappe.PermissionError)
     if rows:
         if not frappe.db.exists(doctype, rows[0].source_name):
-            frappe.throw("This website's article support record is missing.", frappe.PermissionError)
+            frappe.throw(_("This website's article support record is missing."), frappe.PermissionError)
         return rows[0].source_name
     return None

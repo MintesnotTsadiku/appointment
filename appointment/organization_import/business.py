@@ -3,6 +3,7 @@
 import hashlib
 
 import frappe
+from frappe import _
 
 from appointment.content.tenancy import require_manage_business
 from appointment.scheduler.workspace import _SETUP_CREATE, require_provider_account
@@ -11,7 +12,7 @@ from appointment.scheduler.workspace import _SETUP_CREATE, require_provider_acco
 def require_creation():
     user = require_provider_account()
     if "Organization Manager" not in frappe.get_roles(user):
-        frappe.throw("Choose an organization owner account before creating a business.", frappe.PermissionError)
+        frappe.throw(_("Choose an organization owner account before creating a business."), frappe.PermissionError)
     return user
 
 
@@ -28,7 +29,7 @@ def create(row):
         require_manage_business("Organization", previous)
         return previous
     if frappe.db.exists("Organization", row["name"]):
-        frappe.throw("That organization name is already used. Choose a different name in Organization B2.")
+        frappe.throw(_("That organization name is already used. Choose a different name in Organization B2."))
     doc = frappe.get_doc({"doctype": "Organization", "organization_name": row["name"], "owner_user": user,
                           "slug": "business-" + _key(user, row["key"])[:24],
                           "organization_type": "Other", "timezone": row["timezone"], "is_active": 1,

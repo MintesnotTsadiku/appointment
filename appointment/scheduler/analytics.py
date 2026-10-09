@@ -210,11 +210,11 @@ def _report(organization, period, filters=None, records_for=None, offset=0):
         "current": current, "previous": {key: previous[key] for key in ("total", "active", "completed", "cancelled", "no_show", "booked_hours", "no_show_rate", "utilization")},
         "today_confirmed": sum(row.appointment_date == today and row.status == "Confirmed" for row in upcoming),
         "next_seven_days": len(upcoming),
-        "workspace_schedule": [dict(booking=row.name, customer=row.client_name or "Customer", service=names.get(row.service, row.service), provider=provider_names.get(row.provider, row.provider), date=str(row.appointment_date), time=str(row.start_time), end_time=str(row.end_time), status=row.status) for row in sorted(upcoming, key=lambda item: (item.appointment_date, item.start_time, item.name))],
+        "workspace_schedule": [dict(booking=row.name, customer=row.client_name or _("Customer"), service=names.get(row.service, row.service), provider=provider_names.get(row.provider, row.provider), date=str(row.appointment_date), time=str(row.start_time), end_time=str(row.end_time), status=row.status) for row in sorted(upcoming, key=lambda item: (item.appointment_date, item.start_time, item.name))],
         "definitions": {
-            "no_show": "No Show / (Completed + No Show), after appointment end in the business timezone. Cancellations and unresolved bookings are excluded.",
-            "utilization": "Union of occupied provider intervals / union of current eligible provider working windows. Pending, Confirmed, Completed and No Show consume capacity; cancellations do not. Service buffers count.",
-            "schedule_limit": "Past schedules are not snapshotted, so historical capacity uses today's hours, holidays, offerings and assignments. Status is the latest recorded value.",
+            "no_show": _("No Show / (Completed + No Show), after appointment end in the business timezone. Cancellations and unresolved bookings are excluded."),
+            "utilization": _("Union of occupied provider intervals / union of current eligible provider working windows. Pending, Confirmed, Completed and No Show consume capacity; cancellations do not. Service buffers count."),
+            "schedule_limit": _("Past schedules are not snapshotted, so historical capacity uses today's hours, holidays, offerings and assignments. Status is the latest recorded value."),
         },
         "financial_note": _("Catalog value uses current service prices and is an estimate, not collected revenue.") if money else None,
     }
@@ -242,10 +242,10 @@ def overview(organization: str, period: int = 30, filters: str = "{}"):
 def records(organization: str, metric_id: str, period: int=30, filters: str='{}', offset: int=0):
     from appointment.scheduler.analytics_records import SUPPORTED
     if metric_id not in SUPPORTED:
-        frappe.throw('This metric does not support a booking record drill-down.')
+        frappe.throw(_('This metric does not support a booking record drill-down.'))
     try:offset=int(offset)
-    except (ValueError,TypeError):frappe.throw('Choose a valid record page.')
-    if offset<0 or offset>100000:frappe.throw('Choose a valid record page.')
+    except (ValueError,TypeError):frappe.throw(_('Choose a valid record page.'))
+    if offset<0 or offset>100000:frappe.throw(_('Choose a valid record page.'))
     return _report(organization,period,filters,metric_id,offset)
 
 
@@ -253,7 +253,7 @@ def records(organization: str, metric_id: str, period: int=30, filters: str='{}'
 def widget(organization: str, metric_id: str, period: int = 30, filters: str = "{}"):
     report = _report(organization, period, filters)
     if metric_id not in report["metrics"]:
-        frappe.throw("This widget is unavailable in your scope.", frappe.PermissionError)
+        frappe.throw(_("This widget is unavailable in your scope."), frappe.PermissionError)
     return report["metrics"][metric_id]
 
 

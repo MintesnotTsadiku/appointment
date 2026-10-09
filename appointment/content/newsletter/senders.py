@@ -3,6 +3,7 @@
 import hashlib
 
 import frappe
+from frappe import _
 from frappe.utils import add_to_date, get_datetime, now_datetime
 
 from appointment.content.newsletter import core
@@ -12,12 +13,12 @@ def request(site, address, name):
     doc = core.owner_site(site, capability=True)
     address = core.email(address)
     if not isinstance(name, str) or not name.strip() or len(name) > 100 or any(char in name for char in "<>\r\n"):
-        frappe.throw("Provide a sender name of at most 100 characters.")
+        frappe.throw(_("Provide a sender name of at most 100 characters."))
     frappe.db.sql("select name from `tabPublic Site` where name=%s for update", doc.name)
     key = hashlib.sha256((core.business_key(doc) + "\0" + address).encode()).hexdigest()
     existing = frappe.db.get_value("Newsletter Sender Identity", {"sender_key": key}, "name")
     if not existing and frappe.db.count("Newsletter Sender Identity", core.business_filters(doc)) >= 3:
-        frappe.throw("This business already has three sender identities.")
+        frappe.throw(_("This business already has three sender identities."))
     sender = core.lock(frappe.get_doc("Newsletter Sender Identity", existing)) if existing else frappe.get_doc(
         {"doctype": "Newsletter Sender Identity", **core.owner_fields(doc), "sender_key": key, "sender_email": address})
     if sender.status == "Verified Local":
@@ -40,10 +41,10 @@ def verify(token):
     digest = core.token_hash(token)
     name = frappe.db.get_value("Newsletter Sender Identity", {"verification_hash": digest}, "name") if digest else None
     if not name:
-        frappe.throw("This sender verification link is invalid or has expired.")
+        frappe.throw(_("This sender verification link is invalid or has expired."))
     doc = core.lock(frappe.get_doc("Newsletter Sender Identity", name))
     if doc.verification_hash != digest or doc.status != "Pending" or get_datetime(doc.verification_expires) < now_datetime():
-        frappe.throw("This sender verification link is invalid or has expired.")
+        frappe.throw(_("This sender verification link is invalid or has expired."))
     core.require_newsletter(doc)
     doc.status = "Verified Local"
     doc.verified_at = now_datetime()

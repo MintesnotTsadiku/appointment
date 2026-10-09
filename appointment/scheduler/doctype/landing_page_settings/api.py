@@ -2,6 +2,7 @@
 API endpoints for Landing Page Settings
 """
 import frappe
+from frappe import _
 
 
 @frappe.whitelist(allow_guest=True)
@@ -331,7 +332,7 @@ def get_landing_page_settings():
         return {
             "success": False,
             "error": str(e),
-            "message": "Failed to fetch landing page settings"
+            "message": _("Failed to fetch landing page settings")
         }
 
 

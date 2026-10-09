@@ -82,7 +82,7 @@ def create_policy_from_template(
     # Validate template
     template = get_policy_template(template_key)
     if not template:
-        return {"error": f"Template '{template_key}' not found"}, 404
+        return {"error": _("Template '{0}' not found").format(template_key)}, 404
     
     # Validate user permissions
     user = frappe.session.user
@@ -177,13 +177,13 @@ def create_policy_from_template(
         return {
             "success": True,
             "policy": policy.as_dict(),
-            "message": f"Policy '{policy.policy_name}' created successfully"
+            "message": _("Policy '{0}' created successfully").format(policy.policy_name)
         }, 200
     
     except Exception as e:
         frappe.db.rollback()
         frappe.log_error(str(e), "Policy Manager: Create Policy Error")
-        return {"error": f"Failed to create policy: {str(e)}"}, 500
+        return {"error": _("Failed to create policy: {0}").format(str(e))}, 500
 
 
 @frappe.whitelist()
@@ -227,7 +227,7 @@ def get_user_policies(user_type: str = None, entity_id: str = None):
                     entity_id = orgs[0].parent
     
     if not user_type or not entity_id:
-        return {"error": "User is not associated with a provider or organization"}, 404
+        return {"error": _("User is not associated with a provider or organization")}, 404
     
     policies = []
     
@@ -366,14 +366,14 @@ def validate_policy_creation_permission(
         if not user_provider:
             return {
                 "allowed": False,
-                "message": "Only providers can create provider-specific policies"
+                "message": _("Only providers can create provider-specific policies")
             }
         
         # Provider must match user's provider
         if provider and provider != user_provider:
             return {
                 "allowed": False,
-                "message": "You can only create policies for your own provider account"
+                "message": _("You can only create policies for your own provider account")
             }
         
         return {
@@ -387,7 +387,7 @@ def validate_policy_creation_permission(
         if not user_org:
             return {
                 "allowed": False,
-                "message": "Only organization owners/managers can create organization-wide policies"
+                "message": _("Only organization owners/managers can create organization-wide policies")
             }
         
         return {
@@ -401,7 +401,7 @@ def validate_policy_creation_permission(
         if not user_org:
             return {
                 "allowed": False,
-                "message": "Only organization owners/managers can create service-specific policies"
+                "message": _("Only organization owners/managers can create service-specific policies")
             }
         
         if service:
@@ -410,7 +410,7 @@ def validate_policy_creation_permission(
             if service_org != user_org:
                 return {
                     "allowed": False,
-                    "message": "Service does not belong to your organization"
+                    "message": _("Service does not belong to your organization")
                 }
         
         return {
@@ -424,7 +424,7 @@ def validate_policy_creation_permission(
         if not user_org:
             return {
                 "allowed": False,
-                "message": "Only organization owners/managers can create location-specific policies"
+                "message": _("Only organization owners/managers can create location-specific policies")
             }
         
         if location:
@@ -433,7 +433,7 @@ def validate_policy_creation_permission(
             if location_org != user_org:
                 return {
                     "allowed": False,
-                    "message": "Location does not belong to your organization"
+                    "message": _("Location does not belong to your organization")
                 }
         
         return {
@@ -444,7 +444,7 @@ def validate_policy_creation_permission(
     
     return {
         "allowed": False,
-        "message": "Invalid applies_to value"
+        "message": _("Invalid applies_to value")
     }
 
 
@@ -486,13 +486,13 @@ def update_policy(policy_id: str, **fields):
             organization_id=policy.created_by_organization or policy.organization,
         )
         if not scope["allowed"]:
-            frappe.throw(_(scope["message"]), frappe.PermissionError)
+            frappe.throw(scope["message"], frappe.PermissionError)
 
     policy.save(ignore_permissions=True)
     return {
         "success": True,
         "policy": policy.as_dict(),
-        "message": "Policy updated successfully"
+        "message": _("Policy updated successfully")
     }
 
 
@@ -533,7 +533,7 @@ def delete_policy(policy_id: str):
     policy = frappe.get_doc("Policy", policy_id)
     _check_policy_owner(policy, frappe.session.user)
     policy.delete(ignore_permissions=True)
-    return {"success": True, "message": "Policy deleted successfully"}
+    return {"success": True, "message": _("Policy deleted successfully")}
 
 
 @frappe.whitelist()
@@ -564,7 +564,7 @@ def get_organization_services(organization_id: str = None):
                 organization_id = org_manager[0].parent
     
     if not organization_id:
-        return {"error": "Organization not found"}, 404
+        return {"error": _("Organization not found")}, 404
     
     services = frappe.get_all(
         "Service",

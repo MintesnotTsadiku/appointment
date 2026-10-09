@@ -5,6 +5,7 @@ import json
 import re
 
 import frappe
+from frappe import _
 
 from appointment.content.monitoring import observed
 from frappe.utils import get_datetime, now_datetime
@@ -19,7 +20,7 @@ def create_draft(site, sender, subject, body):
     identity = _sender(sender, doc, verified=False)
     _content(subject, body)
     if frappe.db.count("Content Ownership", {"public_site": site, "source_doctype": "Newsletter"}) >= 50:
-        frappe.throw("This website already has 50 newsletter drafts.")
+        frappe.throw(_("This website already has 50 newsletter drafts."))
     group_name = "Website newsletter " + site
     group = frappe.db.get_value("Email Group", {"title": group_name}, "name")
     if not group:
@@ -49,9 +50,9 @@ def preview(site, ownership, sender):
 def queue(site, ownership, sender, request_id, scheduled_at=None, locale="en"):
     doc = core.owner_site(site, capability=True)
     if not re.fullmatch(r"[A-Za-z0-9_-]{16,100}", request_id or ""):
-        frappe.throw("A campaign request identity is required.")
+        frappe.throw(_("A campaign request identity is required."))
     if locale not in {"en", "am"}:
-        frappe.throw("Choose a supported newsletter language.")
+        frappe.throw(_("Choose a supported newsletter language."))
     frappe.db.sql("select name from `tabPublic Site` where name=%s for update", site)
     key = hashlib.sha256((core.business_key(doc) + "\0" + request_id).encode()).hexdigest()
     repeated = frappe.db.get_value("Business Newsletter Campaign", {"idempotency_key": key}, "name")
@@ -59,22 +60,22 @@ def queue(site, ownership, sender, request_id, scheduled_at=None, locale="en"):
         prior = frappe.get_doc("Business Newsletter Campaign", repeated)
         original = _draft(ownership, doc)
         if prior.newsletter != original.name or prior.sender_identity != sender:
-            frappe.throw("This request identity was already used for a different campaign.")
+            frappe.throw(_("This request identity was already used for a different campaign."))
         return {"campaign": repeated, "replayed": True, "delivery": "local-email-sink"}
     draft = _draft(ownership, doc)
     identity = _sender(sender, doc)
     when = get_datetime(scheduled_at) if scheduled_at else now_datetime()
     if scheduled_at and when < now_datetime():
-        frappe.throw("Choose a future newsletter time.")
+        frappe.throw(_("Choose a future newsletter time."))
     month = when.strftime("%Y-%m")
     count = frappe.db.count("Business Newsletter Campaign", {**core.business_filters(doc), "business_month": month})
     entitlements.enforce_limit(doc.owner_type, doc.organization, doc.provider, "newsletter", "monthly_sends", count + 1)
     members = frappe.get_all("Newsletter Audience Member", filters={**core.business_filters(doc), "public_site": site, "status": "Confirmed", "locale": locale},
                              pluck="name", order_by="name", limit_page_length=2001)
     if not members:
-        frappe.throw("No confirmed subscribers are available for this language.")
+        frappe.throw(_("No confirmed subscribers are available for this language."))
     if len(members) > 2000:
-        frappe.throw("Split this audience before sending; a local campaign supports at most 2,000 confirmed subscribers.")
+        frappe.throw(_("Split this audience before sending; a local campaign supports at most 2,000 confirmed subscribers."))
     entitlements.enforce_limit(doc.owner_type, doc.organization, doc.provider, "newsletter", "audience", len(members))
     content = {**_content(draft.subject, draft.message_md or ""), "locale": locale}
     campaign = frappe.get_doc({"doctype": "Business Newsletter Campaign", **core.owner_fields(doc),
@@ -117,7 +118,7 @@ def retry(name):
     core.owner_site(doc.public_site, capability=True)
     core.lock(doc)
     if doc.status not in {"Error", "Held"} or int(doc.retry_count or 0) >= 3:
-        frappe.throw("This campaign cannot be retried; the retry limit is three.")
+        frappe.throw(_("This campaign cannot be retried; the retry limit is three."))
     _sender(doc.sender_identity, doc)
     doc.retry_count = int(doc.retry_count or 0) + 1
     doc.status = "Queued"
@@ -132,7 +133,7 @@ def cancel(name):
     core.owner_site(doc.public_site)
     core.lock(doc)
     if doc.status == "Delivered":
-        frappe.throw("This campaign has already been captured in the local sink.")
+        frappe.throw(_("This campaign has already been captured in the local sink."))
     doc.status = "Cancelled"
     core.write(doc)
     return {"status": doc.status}
@@ -146,27 +147,27 @@ def _enqueue(name):
 def _sender(name, site, verified=True):
     doc = frappe.get_doc("Newsletter Sender Identity", name)
     if core.owner_tuple(doc) != core.owner_tuple(site) or doc.public_site != (site.name if site.doctype == "Public Site" else site.public_site):
-        frappe.throw("Choose a sender from this business website.", frappe.PermissionError)
+        frappe.throw(_("Choose a sender from this business website."), frappe.PermissionError)
     if verified and doc.status != "Verified Local":
-        frappe.throw("Verify the sender in the local email sink before sending.")
+        frappe.throw(_("Verify the sender in the local email sink before sending."))
     return doc
 
 
 def _draft(name, site):
     ownership = frappe.get_doc("Content Ownership", name)
     if ownership.source_doctype != "Newsletter" or ownership.public_site != site.name or core.owner_tuple(ownership) != core.owner_tuple(site):
-        frappe.throw("Choose a newsletter draft from this website.", frappe.PermissionError)
+        frappe.throw(_("Choose a newsletter draft from this website."), frappe.PermissionError)
     ownership.check_permission("read")
     doc = frappe.get_doc("Newsletter", ownership.source_name)
     doc.check_permission("read")
     if doc.content_type != "Markdown":
-        frappe.throw("Use the safe Markdown newsletter editor.")
+        frappe.throw(_("Use the safe Markdown newsletter editor."))
     return doc
 
 
 def _content(subject, body):
     if not isinstance(subject, str) or not subject.strip() or len(subject) > 200 or any(char in subject for char in "<>\r\n"):
-        frappe.throw("Provide a plain subject of at most 200 characters.")
+        frappe.throw(_("Provide a plain subject of at most 200 characters."))
     if not isinstance(body, str) or not body.strip() or len(body) > 100000:
-        frappe.throw("Write a newsletter of at most 100,000 characters.")
+        frappe.throw(_("Write a newsletter of at most 100,000 characters."))
     return {"subject": subject.strip(), "blocks": html_to_blocks(markdown_to_html(body))}

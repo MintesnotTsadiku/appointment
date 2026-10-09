@@ -11,6 +11,15 @@ CAPACITY_BOOKED = BOOKED | {"No Show"}
 NO_SHOW_DENOMINATOR = {"Completed", "No Show"}
 
 
+# Codes whose UI label differs only by case. The Translation table compares text without
+# case, so the code itself cannot carry its own translation; use the label's.
+CODE_LABELS = {"No Show": "No show", "Gallery Collection": "Gallery collection"}
+
+
+def _code_label(code):
+    return _(CODE_LABELS.get(code, code))
+
+
 def _wall_time(value):
     parts = [int(part) for part in str(value).split(":")]
     return time(parts[0], parts[1], parts[2] if len(parts) > 2 else 0)

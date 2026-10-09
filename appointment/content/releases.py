@@ -110,12 +110,12 @@ def build_article_projection(post, public_site=None) -> dict:
     hero = safe_media(post.get("meta_image"))
     images = image_sources(html)
     if post.get("meta_image") and not hero:
-        raise ContentPublishError("Choose a safe public article image.")
+        raise ContentPublishError(_("Choose a safe public article image."))
     if hero or images:
         from appointment.content.gallery import validate_image_asset
 
         if not public_site:
-            raise ContentPublishError("Article images require their owning website.")
+            raise ContentPublishError(_("Article images require their owning website."))
         for image in [hero, *images]:
             if image:
                 validate_image_asset(image, public_site)
@@ -169,17 +169,17 @@ def publish_article(ownership, expected_modified: str | None = None, locale: str
     own = frappe.get_doc("Content Ownership", ownership) if isinstance(ownership, str) else ownership
     tenancy.require_manage_business(own.owner_type, own.organization, own.provider)
     if own.source_doctype != "Blog Post":
-        raise ContentPublishError("this ownership record is not an article")
+        raise ContentPublishError(_("this ownership record is not an article"))
     post = frappe.get_doc("Blog Post", own.source_name)
     if expected_modified is not None and str(expected_modified) != str(post.get("modified")):
         raise StaleContentError(
-            "the article changed since it was loaded",
+            _("the article changed since it was loaded"),
             details={"expected": str(expected_modified), "stored": str(post.get("modified"))},
         )
     built = build_article_projection(post, own.public_site)
     projection = built["projection"]
     if not projection["blocks"]:
-        raise ContentPublishError("the article has no publishable content")
+        raise ContentPublishError(_("the article has no publishable content"))
     return publish_projection(
         own,
         capability="blog",
@@ -219,16 +219,16 @@ def publish_projection(
     own = frappe.get_doc("Content Ownership", ownership) if isinstance(ownership, str) else ownership
     entitlements.require_capability(own.owner_type, own.organization, own.provider, capability)
     if not own.public_site:
-        raise ContentPublishError("the content is not linked to a public site")
+        raise ContentPublishError(_("the content is not linked to a public site"))
     site = _site_meta(own.public_site)
     if not site:
-        raise ContentPublishError("the public site does not exist")
+        raise ContentPublishError(_("the public site does not exist"))
     locale = locale or site.default_locale or "en"
 
     _lock_site(own.public_site)
     existing = _active_release(own.public_site, locale, route)
     if existing and existing.source_name != source_name:
-        raise RouteConflictError(f"that public route is already owned by another {route_label}")
+        raise RouteConflictError(_("that public route is already owned by another {0}").format(route_label))
     if not existing and limit_key:
         active_count = frappe.db.count(
             "Published Content Release",
@@ -288,12 +288,12 @@ def publish_gallery_collection(ownership, locale: str | None = None):
     own = frappe.get_doc("Content Ownership", ownership) if isinstance(ownership, str) else ownership
     tenancy.require_manage_business(own.owner_type, own.organization, own.provider)
     if own.source_doctype != "Gallery Collection":
-        raise ContentPublishError("this ownership record is not a gallery collection")
+        raise ContentPublishError(_("this ownership record is not a gallery collection"))
     collection = frappe.get_doc("Gallery Collection", own.source_name)
     built = gallery_module.build_gallery_projection(collection)
     projection = built["projection"]
     if not projection["items"]:
-        raise ContentPublishError("the collection has no items")
+        raise ContentPublishError(_("the collection has no items"))
     return publish_projection(
         own,
         capability="gallery",
@@ -316,7 +316,7 @@ def withdraw_release(release, reason: str | None = None):
     if doc.status == "Withdrawn":
         return doc
     if doc.status != "Active":
-        raise ContentPublishError("only an active release can be withdrawn")
+        raise ContentPublishError(_("only an active release can be withdrawn"))
     doc.status = "Withdrawn"
     doc.withdrawn_by = frappe.session.user
     doc.withdrawn_at = now_datetime()
@@ -341,7 +341,7 @@ def rollback_release(release, locale: str | None = None):
     target = frappe.get_doc("Published Content Release", release) if isinstance(release, str) else release
     tenancy.require_manage_business(target.owner_type, target.organization, target.provider)
     if not target.content_json:
-        raise ContentPublishError("the target release has no projection")
+        raise ContentPublishError(_("the target release has no projection"))
     locale = locale or target.locale
     _lock_site(target.public_site)
     existing = _active_release(target.public_site, locale, target.route)
@@ -405,7 +405,7 @@ def preview_article(ownership, locale: str | None = None) -> dict:
     tenancy.require_manage_business(own.owner_type, own.organization, own.provider)
     entitlements.require_capability(own.owner_type, own.organization, own.provider, "blog")
     if own.source_doctype != "Blog Post":
-        raise ContentPublishError("this ownership record is not an article")
+        raise ContentPublishError(_("this ownership record is not an article"))
     post = frappe.get_doc("Blog Post", own.source_name)
     built = build_article_projection(post, own.public_site)
     projection = built["projection"]
@@ -443,7 +443,7 @@ def preview_gallery_collection(ownership, locale: str | None = None) -> dict:
     tenancy.require_manage_business(own.owner_type, own.organization, own.provider)
     entitlements.require_capability(own.owner_type, own.organization, own.provider, "gallery")
     if own.source_doctype != "Gallery Collection":
-        raise ContentPublishError("this ownership record is not a gallery collection")
+        raise ContentPublishError(_("this ownership record is not a gallery collection"))
     collection = frappe.get_doc("Gallery Collection", own.source_name)
     built = gallery_module.build_gallery_projection(collection)
     route = gallery_module.gallery_route(built["projection"]["slug"])

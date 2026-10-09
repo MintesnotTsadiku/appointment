@@ -371,7 +371,7 @@ def book(
     if not re.fullmatch(r"[A-Za-z0-9_-]{16,100}", request_id or ""):
         frappe.throw(_("A valid booking request identity is required."))
     if any(not isinstance(value, str) or len(value)>140 for value in (referral_source, referral_code)):
-        frappe.throw("Referral values must be text of at most 140 characters.")
+        frappe.throw(_("Referral values must be text of at most 140 characters."))
     event = frappe.get_doc("EventType", offering_id)
     business_name = frappe.db.get_value("Service", event.service, "organization") or ("Provider:" + event.provider)
     if organization_id and organization_id != business_name:
@@ -565,7 +565,7 @@ def change(booking_id, action, expected_modified, date=None, start_time=None, re
     if doc.status not in ("Pending", "Confirmed"):
         frappe.throw(_("Only pending or confirmed bookings can be changed."))
     if reason is not None and (not isinstance(reason,str) or len(reason)>500):
-        frappe.throw("Enter a reason of at most 500 characters.")
+        frappe.throw(_("Enter a reason of at most 500 characters."))
     doc.flags.analytics_reason=reason or ""
     if action == "cancel":
         doc.status = "Cancelled"

@@ -1,6 +1,7 @@
 """Exclusive provider businesses use the same booking transaction and capacity rules."""
 
 import frappe
+from frappe import _
 import pytz
 from frappe.utils import cint, get_time
 
@@ -15,7 +16,7 @@ def require_owner(provider):
     if (frappe.session.user == "Guest" or doc.user != frappe.session.user
             or not doc.is_active or doc.organization or doc.organizations
             or not frappe.db.get_value("User", doc.user, "enabled")):
-        frappe.throw("Only this independent business owner may change its booking setup.", frappe.PermissionError)
+        frappe.throw(_("Only this independent business owner may change its booking setup."), frappe.PermissionError)
     return doc
 
 
@@ -46,26 +47,26 @@ def permits(doc, user):
 def validate(doc):
     if doc.doctype == "Provider" and not doc.is_new() and (doc.organization or doc.organizations):
         if frappe.db.exists("Service", {"independent_provider": doc.name}):
-            frappe.throw("Keep this independent business separate. Use another provider record for organization membership.", frappe.PermissionError)
+            frappe.throw(_("Keep this independent business separate. Use another provider record for organization membership."), frappe.PermissionError)
     if doc.doctype not in ("Service", "Location", "EventType"):
         return
     provider = config_provider(doc)
     old = doc.get_doc_before_save()
     if old and config_provider(old) and config_provider(old) != provider:
-        frappe.throw("The independent business owner cannot be changed.", frappe.PermissionError)
+        frappe.throw(_("The independent business owner cannot be changed."), frappe.PermissionError)
     if not provider:
         return
     if booking_access.config_organization(doc):
-        frappe.throw("An offering must have exactly one business owner.", frappe.PermissionError)
+        frappe.throw(_("An offering must have exactly one business owner."), frappe.PermissionError)
     old = doc.get_doc_before_save()
     if old and (config_provider(old) != provider or booking_access.config_organization(old)):
-        frappe.throw("The independent business owner cannot be changed.", frappe.PermissionError)
+        frappe.throw(_("The independent business owner cannot be changed."), frappe.PermissionError)
     if doc.doctype == "EventType":
         service = frappe.get_doc("Service", doc.service)
         location = frappe.get_doc("Location", doc.location)
         owner = frappe.get_doc("Provider", doc.provider)
         if not matches(service, location, owner):
-            frappe.throw("Offering links must belong to the same independent business.", frappe.PermissionError)
+            frappe.throw(_("Offering links must belong to the same independent business."), frappe.PermissionError)
 
 
 def overview(provider):
@@ -82,7 +83,7 @@ def workspace():
     owners = [name for name in booking_access.providers() if not frappe.db.get_value("Provider", name, "organization")
               and not frappe.db.exists("Provider Organization", {"parent": name, "parenttype": "Provider"})]
     if len(owners) != 1:
-        frappe.throw("Choose one independent business.", frappe.PermissionError)
+        frappe.throw(_("Choose one independent business."), frappe.PermissionError)
     return {"provider": owners[0], "offerings": overview(owners[0])}
 
 
@@ -92,16 +93,16 @@ def create(provider, location_name, service_name, timezone, duration, opens_at, 
 
     owner = require_owner(provider)
     if timezone not in pytz.all_timezones or not 5 <= cint(duration) <= 480:
-        frappe.throw("Choose a valid time zone and a duration between 5 and 480 minutes.")
+        frappe.throw(_("Choose a valid time zone and a duration between 5 and 480 minutes."))
     days = frappe.parse_json(weekdays) if isinstance(weekdays, str) else weekdays
     if not isinstance(days, list) or not days or any(day not in DAYS for day in days) or get_time(opens_at) >= get_time(closes_at):
-        frappe.throw("Choose operating days and a closing time after opening time.")
+        frappe.throw(_("Choose operating days and a closing time after opening time."))
     if any(not isinstance(value, str) or not value.strip() or len(value) > 100 for value in (location_name, service_name)):
-        frappe.throw("Enter location and service names of at most 100 characters.")
+        frappe.throw(_("Enter location and service names of at most 100 characters."))
     lock_provider(owner)
     existing = overview(owner.name)
     if existing:
-        frappe.throw("Your first offering already exists. Review it before creating another.")
+        frappe.throw(_("Your first offering already exists. Review it before creating another."))
     previous = frappe.flags.syncing_booking_urls
     frappe.flags.syncing_booking_urls = True
     try:
@@ -131,10 +132,10 @@ def publish(provider, published):
     owner = require_owner(provider)
     lock_provider(owner)
     if str(published) not in {"0", "1"}:
-        frappe.throw("Choose a valid publication state.")
+        frappe.throw(_("Choose a valid publication state."))
     rows = overview(owner.name)
     if cint(published) and not rows:
-        frappe.throw("Create an offering before publishing.")
+        frappe.throw(_("Create an offering before publishing."))
     for row in rows:
         offering(row["offering"])
     owner.enable_public_booking = cint(published)
@@ -154,6 +155,6 @@ def public_offering(offering_id):
 
     event, service, location, provider, business = offering(offering_id, public=True)
     if business.doctype != "Provider":
-        frappe.throw("Choose an independent offering.", frappe.PermissionError)
+        frappe.throw(_("Choose an independent offering."), frappe.PermissionError)
     return {"offering": event.name, "business_name": provider.provider_name, "service": service.service_name,
             "duration": int(event.duration_override or service.duration), "timezone": location.timezone}

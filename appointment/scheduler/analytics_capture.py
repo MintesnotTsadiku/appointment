@@ -5,6 +5,7 @@ import json
 from datetime import datetime, timezone
 
 import frappe
+from frappe import _
 
 SNAPSHOT = ("booking_source", "referral_source", "referral_code", "agreed_price",
             "agreed_currency", "discount_amount", "discount_code", "price_basis", "price_captured_at")
@@ -81,7 +82,7 @@ def reception_stage(booking_id: str, stage: str, expected_modified: str):
     from appointment.scheduler.booking_access import require_access
 
     if stage not in STAGES:
-        frappe.throw("Choose a supported reception stage.")
+        frappe.throw(_("Choose a supported reception stage."))
     doc = frappe.get_doc("Appointment", booking_id)
     require_access(doc)
     _lock_booking(doc)
@@ -90,12 +91,12 @@ def reception_stage(booking_id: str, stage: str, expected_modified: str):
     if doc.get(STAGES[stage]):
         return {"booking_id": doc.name, "timestamp": doc.get(STAGES[stage]), "modified": str(doc.modified)}
     if str(doc.modified) != expected_modified:
-        frappe.throw("This booking changed. Reload before editing.", frappe.TimestampMismatchError)
+        frappe.throw(_("This booking changed. Reload before editing."), frappe.TimestampMismatchError)
     if doc.status not in ("Pending", "Confirmed"):
-        frappe.throw("Only active bookings support reception stages.")
+        frappe.throw(_("Only active bookings support reception stages."))
     prerequisite = {"check-in": "arrived_at", "start": "checked_in_at", "end": "actual_start"}.get(stage)
     if prerequisite and not doc.get(prerequisite):
-        frappe.throw("Complete the preceding reception stage first.")
+        frappe.throw(_("Complete the preceding reception stage first."))
     doc.flags.analytics_stage = stage
     doc.save(ignore_permissions=True)
     return {"booking_id": doc.name, "timestamp": doc.get(STAGES[stage]), "modified": str(doc.modified)}
@@ -110,20 +111,20 @@ def link_recovery(booking_id: str, released_booking: str):
     require_access(doc)
     require_access(released)
     if not doc.provider:
-        frappe.throw("Recovery links apply to bookings with a provider.")
+        frappe.throw(_("Recovery links apply to bookings with a provider."))
     if doc.organization != released.organization or doc.provider != released.provider:
-        frappe.throw("Recovery bookings must share a business and provider.")
+        frappe.throw(_("Recovery bookings must share a business and provider."))
     lock_provider(frappe.get_doc("Provider", doc.provider))
     doc.reload()
     released.reload()
     if released.status != "Cancelled" or doc.status not in {"Pending", "Confirmed"}:
-        frappe.throw("Recovery needs an active replacement and a cancelled booking.")
+        frappe.throw(_("Recovery needs an active replacement and a cancelled booking."))
     if not released.cancelled_at or not doc.price_captured_at or doc.price_captured_at < released.cancelled_at:
-        frappe.throw("Recovery requires a captured cancellation before replacement creation.")
+        frappe.throw(_("Recovery requires a captured cancellation before replacement creation."))
     if not (doc.occupied_from < released.occupied_until and released.occupied_from < doc.occupied_until):
-        frappe.throw("Replacement does not occupy the released interval.")
+        frappe.throw(_("Replacement does not occupy the released interval."))
     if doc.recovered_from and doc.recovered_from != released.name:
-        frappe.throw("This replacement already has a recovery link.")
+        frappe.throw(_("This replacement already has a recovery link."))
     if not doc.recovered_from:
         doc.flags.analytics_recovery = released.name
         doc.save(ignore_permissions=True)

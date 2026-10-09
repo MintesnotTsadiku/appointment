@@ -6,6 +6,7 @@ import re
 import secrets
 
 import frappe
+from frappe import _
 from frappe.model.document import Document
 from frappe.utils import now_datetime
 
@@ -18,23 +19,23 @@ TYPES = ("Newsletter Audience Member", "Newsletter Sender Identity", "Business N
 class NewsletterRecord(Document):
     def validate(self):
         if self.flags.newsletter_factory is not _WRITE:
-            frappe.throw("Use the business newsletter workspace to change newsletter records.", frappe.PermissionError)
+            frappe.throw(_("Use the business newsletter workspace to change newsletter records."), frappe.PermissionError)
         tenancy.require_business_owner(self.owner_type, self.organization, self.provider)
         site = frappe.db.get_value("Public Site", self.public_site, ["owner_type", "organization", "provider"], as_dict=True)
         if not site or owner_tuple(site) != owner_tuple(self):
-            frappe.throw("The newsletter record requires its business website.", frappe.PermissionError)
+            frappe.throw(_("The newsletter record requires its business website."), frappe.PermissionError)
         old = self.get_doc_before_save()
         if old and owner_tuple(old) != owner_tuple(self):
-            frappe.throw("Newsletter records cannot move to another business.", frappe.PermissionError)
+            frappe.throw(_("Newsletter records cannot move to another business."), frappe.PermissionError)
         if old and self.doctype == "Local Email Message":
-            frappe.throw("Captured email messages are immutable.", frappe.PermissionError)
+            frappe.throw(_("Captured email messages are immutable."), frappe.PermissionError)
         if old and self.doctype == "Business Newsletter Campaign":
             for field in ("newsletter", "sender_identity", "subject", "sender_email", "content_json", "audience_json", "idempotency_key", "business_month"):
                 if old.get(field) != self.get(field):
-                    frappe.throw("A queued newsletter's content and audience cannot change.", frappe.PermissionError)
+                    frappe.throw(_("A queued newsletter's content and audience cannot change."), frappe.PermissionError)
 
     def on_trash(self):
-        frappe.throw("Newsletter consent, delivery, and audit records cannot be deleted.", frappe.PermissionError)
+        frappe.throw(_("Newsletter consent, delivery, and audit records cannot be deleted."), frappe.PermissionError)
 
 
 def owner_tuple(doc):
@@ -68,7 +69,7 @@ def business_key(doc):
 def email(value):
     value = str(value or "").strip().lower()
     if len(value) > 160 or not re.fullmatch(r"[^\s<>@]+@[^\s<>@]+\.[^\s<>@]+", value):
-        frappe.throw("Enter a complete email address.")
+        frappe.throw(_("Enter a complete email address."))
     return value
 
 

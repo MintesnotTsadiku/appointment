@@ -35,7 +35,7 @@ def cleanup_orphaned_event_links():
         return {
             "success": True,
             "deleted_count": deleted_count,
-            "message": f"Cleaned up {deleted_count} orphaned Event DocType Link records"
+            "message": _("Cleaned up {0} orphaned Event DocType Link records").format(deleted_count)
         }
     except Exception as e:
         frappe.db.rollback()

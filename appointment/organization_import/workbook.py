@@ -7,6 +7,7 @@ from zipfile import BadZipFile, ZipFile
 from xml.etree.ElementTree import ParseError, fromstring
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
+from frappe import _
 from openpyxl import Workbook, load_workbook
 from openpyxl.styles import Font
 from openpyxl.utils import get_column_letter
@@ -73,21 +74,21 @@ def dry_run(content):
         _check_archive(content)
         book = load_workbook(BytesIO(content), read_only=False, data_only=False, keep_links=False)
     except (ValueError, BadZipFile, KeyError, OSError, ParseError, InvalidFileException):
-        return {"version": VERSION, "valid": False, "errors": [_error("Read Me", 1, "A", "Choose a valid current XLSX template without macros, external links, unsafe XML, or oversized archive entries.")], "rows": data}
+        return {"version": VERSION, "valid": False, "errors": [_error("Read Me", 1, "A", _("Choose a valid current XLSX template without macros, external links, unsafe XML, or oversized archive entries."))], "rows": data}
     try:
         if "Read Me" not in book.sheetnames or book["Read Me"]["A1"].value != VERSION:
-            errors.append(_error("Read Me", 1, "A", "Download the current workbook template."))
+            errors.append(_error("Read Me", 1, "A", _("Download the current workbook template.")))
         unknown = set(book.sheetnames) - set(SHEETS) - {"Read Me", "Examples"}
         for name in sorted(unknown):
-            errors.append(_error(name, 1, "A", "Remove this unsupported sheet."))
+            errors.append(_error(name, 1, "A", _("Remove this unsupported sheet.")))
         for name, fields in SHEETS.items():
             if name not in book.sheetnames:
-                errors.append(_error(name, 1, "A", "Restore this sheet from the current template."))
+                errors.append(_error(name, 1, "A", _("Restore this sheet from the current template.")))
                 continue
             _read_sheet(book[name], fields, data[name], errors)
         _references(data, errors)
         if len(data["Organization"]) != 1:
-            errors.append(_error("Organization", 2, "A", "Provide exactly one organization row."))
+            errors.append(_error("Organization", 2, "A", _("Provide exactly one organization row.")))
         return {"version": VERSION, "valid": not errors, "errors": errors, "rows": data,
                 "sha256": hashlib.sha256(content).hexdigest(),
                 "summary": {name: len(rows) for name, rows in data.items()}}
@@ -133,14 +134,14 @@ def _error(sheet, row, column, message):
 
 def _read_sheet(sheet, fields, rows, errors):
     if sheet.merged_cells.ranges:
-        errors.append(_error(sheet.title, 1, "A", "Unmerge cells and restore the template layout."))
+        errors.append(_error(sheet.title, 1, "A", _("Unmerge cells and restore the template layout.")))
         return
     if sheet.max_row > MAX_ROWS + 1 or sheet.max_column > len(fields):
-        errors.append(_error(sheet.title, 1, "A", "Use the template columns and at most 2,000 rows per sheet."))
+        errors.append(_error(sheet.title, 1, "A", _("Use the template columns and at most 2,000 rows per sheet.")))
         return
     headers = tuple(cell.value for cell in sheet[1])
     if headers != fields:
-        errors.append(_error(sheet.title, 1, "A", "Keep the template column headings in their original order."))
+        errors.append(_error(sheet.title, 1, "A", _("Keep the template column headings in their original order.")))
         return
     keys = set()
     for cells in sheet.iter_rows(min_row=2):
@@ -151,55 +152,55 @@ def _read_sheet(sheet, fields, rows, errors):
             value = str(cell.value).strip() if cell.value is not None else ""
             row[field] = value
             if cell.data_type == "f" or value.startswith(("=", "@")) or (value.startswith("+") and field != "phone") or cell.hyperlink:
-                errors.append(_error(sheet.title, cell.row, cell.column_letter, "Replace formulas and links with plain values."))
+                errors.append(_error(sheet.title, cell.row, cell.column_letter, _("Replace formulas and links with plain values.")))
             elif len(value) > 2400 or any(ord(character) < 32 for character in value if character not in "\n\r\t"):
-                errors.append(_error(sheet.title, cell.row, cell.column_letter, "Use plain text of at most 2,400 characters."))
+                errors.append(_error(sheet.title, cell.row, cell.column_letter, _("Use plain text of at most 2,400 characters.")))
             elif not value and field in REQUIRED[sheet.title]:
-                errors.append(_error(sheet.title, cell.row, cell.column_letter, f"Fill in {field.replace('_', ' ')}."))
+                errors.append(_error(sheet.title, cell.row, cell.column_letter, _("Fill in {0}.").format(field.replace("_", " "))))
             elif value:
                 message = _validate(field, value, sheet.title)
                 if message:
                     errors.append(_error(sheet.title, cell.row, cell.column_letter, message))
         if row["key"] in keys:
-            errors.append(_error(sheet.title, cells[0].row, "A", "Use a different stable key for each row."))
+            errors.append(_error(sheet.title, cells[0].row, "A", _("Use a different stable key for each row.")))
         keys.add(row["key"])
         rows.append(row)
 
 
 def _validate(field, value, sheet):
     if any(character in value for character in "<>"):
-        return "Use plain text without HTML markup."
+        return _("Use plain text without HTML markup.")
     if field == "name" and len(value) > 100:
-        return "Keep names to at most 100 characters."
+        return _("Keep names to at most 100 characters.")
     if field == "description" and len(value) > 500:
-        return "Keep descriptions to at most 500 characters."
+        return _("Keep descriptions to at most 500 characters.")
     if field.endswith("key") and not re.fullmatch(r"[a-zA-Z0-9_-]{1,64}", value):
-        return "Use a stable key with 1–64 letters, digits, underscores, or hyphens."
+        return _("Use a stable key with 1–64 letters, digits, underscores, or hyphens.")
     if field == "email" and not re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]+", value):
-        return "Enter a complete email address."
+        return _("Enter a complete email address.")
     if field == "timezone":
         try:
             ZoneInfo(value)
         except (ZoneInfoNotFoundError, ValueError):
-            return "Enter an IANA time zone, such as Africa/Addis_Ababa."
+            return _("Enter an IANA time zone, such as Africa/Addis_Ababa.")
     if field in {"duration", "capacity"}:
         ceiling = 480 if field == "duration" else 100
         floor = 5 if field == "duration" else 1
         if not value.isdigit() or not floor <= int(value) <= ceiling:
-            return f"Enter a whole number between {floor} and {ceiling}."
+            return _("Enter a whole number between {0} and {1}.").format(floor, ceiling)
     if field == "price":
         if not re.fullmatch(r"\d{1,7}(\.\d{1,2})?", value):
-            return "Enter a non-negative price with at most two decimal places."
+            return _("Enter a non-negative price with at most two decimal places.")
     if field == "public" and value not in {"0", "1"}:
-        return "Enter 1 for public or 0 for private."
+        return _("Enter 1 for public or 0 for private.")
     if field == "role" and value not in {"Manager", "Provider", "Receptionist"}:
-        return "Choose Manager, Provider, or Receptionist."
+        return _("Choose Manager, Provider, or Receptionist.")
     if field == "weekday" and value not in DAYS:
-        return "Use a full weekday name, such as Monday."
+        return _("Use a full weekday name, such as Monday.")
     if field in {"opens_at", "closes_at"} and not re.fullmatch(r"(?:[01]\d|2[0-3]):[0-5]\d", value):
-        return "Enter a 24-hour time in HH:MM format."
+        return _("Enter a 24-hour time in HH:MM format.")
     if sheet == "Website Content" and field == "field" and value not in {"hero_title", "hero_subtitle", "about_body", "contact_email", "contact_phone"}:
-        return "Choose hero_title, hero_subtitle, about_body, contact_email, or contact_phone."
+        return _("Choose hero_title, hero_subtitle, about_body, contact_email, or contact_phone.")
     return None
 
 
@@ -212,23 +213,23 @@ def _references(data, errors):
             for field, target in (("location_key", "Locations"), ("provider_key", "Providers")):
                 if row.get(field) and row[field] not in keys[target]:
                     column = get_column_letter(SHEETS[sheet].index(field) + 1)
-                    errors.append(_error(sheet, row["_row"], column, f"Use a key from the {target} sheet."))
+                    errors.append(_error(sheet, row["_row"], column, _("Use a key from the {0} sheet.").format(target)))
             if sheet == "Team":
                 for key in filter(None, (part.strip() for part in row["location_keys"].split(","))):
                     if key not in keys["Locations"]:
-                        errors.append(_error(sheet, row["_row"], "F", "Use comma-separated keys from Locations."))
+                        errors.append(_error(sheet, row["_row"], "F", _("Use comma-separated keys from Locations.")))
             if sheet == "Availability" and row["opens_at"] >= row["closes_at"]:
-                errors.append(_error(sheet, row["_row"], "E", "Closing time must follow opening time on the same day."))
+                errors.append(_error(sheet, row["_row"], "E", _("Closing time must follow opening time on the same day.")))
             if sheet == "Availability":
                 identity = (row["location_key"], row["weekday"])
                 if identity in days:
-                    errors.append(_error(sheet, row["_row"], "C", "Provide one hours row per location and weekday."))
+                    errors.append(_error(sheet, row["_row"], "C", _("Provide one hours row per location and weekday.")))
                 days.add(identity)
             if sheet == "Website Content":
                 field = row["field"]
                 if field in text_fields:
-                    errors.append(_error(sheet, row["_row"], "B", "Provide one row per website text field."))
+                    errors.append(_error(sheet, row["_row"], "B", _("Provide one row per website text field.")))
                 text_fields.add(field)
                 limit = {"hero_title": 1000, "hero_subtitle": 1000, "about_body": 2400, "contact_email": 160, "contact_phone": 32}.get(field, 2400)
                 if len(row["text"]) > limit:
-                    errors.append(_error(sheet, row["_row"], "C", f"Keep this text to at most {limit} characters."))
+                    errors.append(_error(sheet, row["_row"], "C", _("Keep this text to at most {0} characters.").format(limit)))

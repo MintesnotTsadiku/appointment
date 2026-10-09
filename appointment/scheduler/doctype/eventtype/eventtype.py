@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 import frappe
+from frappe import _
 from frappe.model.document import Document
 
 
@@ -19,13 +20,13 @@ class EventType(Document):
 				# Auto-fix: use the correct document name
 				self.provider = matching_providers[0].name
 			else:
-				frappe.throw(f"EventType {self.name} has invalid provider: {self.provider}. Provider does not exist.")
+				frappe.throw(_("EventType {0} has invalid provider: {1}. Provider does not exist.").format(self.name, self.provider))
 		
 		if self.service and not frappe.db.exists("Service", self.service):
-			frappe.throw(f"EventType {self.name} has invalid service: {self.service}. Service does not exist.")
+			frappe.throw(_("EventType {0} has invalid service: {1}. Service does not exist.").format(self.name, self.service))
 		
 		if self.location and not frappe.db.exists("Location", self.location):
-			frappe.throw(f"EventType {self.name} has invalid location: {self.location}. Location does not exist.")
+			frappe.throw(_("EventType {0} has invalid location: {1}. Location does not exist.").format(self.name, self.location))
 	
 		if not self.provider:
 			self._validate_resource_offering()
@@ -33,18 +34,18 @@ class EventType(Document):
 		if self.service and self.location and self.provider:
 			org = frappe.db.get_value("Service", self.service, "organization")
 			if org and (frappe.db.get_value("Location", self.location, "organization") != org or not frappe.db.exists("Provider Organization", {"parent": self.provider, "parenttype": "Provider", "organization": org, "status": "Active"})):
-				frappe.throw("Offering links must belong to the same business", frappe.PermissionError)
+				frappe.throw(_("Offering links must belong to the same business"), frappe.PermissionError)
 
 	def _validate_resource_offering(self):
 		"""An offering without a provider is a resource-only offering for one resource."""
 		if not self.resource:
-			frappe.throw("An offering needs a provider, or a resource when its service is booked without staff.")
+			frappe.throw(_("An offering needs a provider, or a resource when its service is booked without staff."))
 		service = frappe.db.get_value("Service", self.service, ["organization", "resource_only"], as_dict=True)
 		resource = frappe.db.get_value("Resource", self.resource, ["organization", "location"], as_dict=True)
 		if not service or not service.resource_only:
-			frappe.throw("Only a service booked without staff can have an offering without a provider.")
+			frappe.throw(_("Only a service booked without staff can have an offering without a provider."))
 		if not resource or resource.organization != service.organization or resource.location != self.location:
-			frappe.throw("Offering links must belong to the same business", frappe.PermissionError)
+			frappe.throw(_("Offering links must belong to the same business"), frappe.PermissionError)
 
 	def on_update(self):
 		"""Sync booking URLs when event types change"""

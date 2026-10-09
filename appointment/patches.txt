@@ -29,3 +29,4 @@ appointment.patches.v0_1.import_public_nav_translations
 appointment.patches.v0_1.import_develop_pages_translations
 appointment.patches.v0_1.import_independent_customer_translations
 appointment.patches.v0_1.import_independent_settings_translations
+appointment.patches.v0_1.import_server_message_translations

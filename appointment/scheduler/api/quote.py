@@ -56,14 +56,14 @@ def get_booking_quote(
     """
     # Validate required parameters
     if not service_name:
-        return {"error": "service_name is required"}, 400
+        return {"error": _("service_name is required")}, 400
     
     # Get service price
     try:
         service = frappe.get_doc("Service", service_name)
         service_price = float(service.price or 0.0)
     except frappe.DoesNotExistError:
-        return {"error": f"Service '{service_name}' not found"}, 404
+        return {"error": _("Service '{0}' not found").format(service_name)}, 404
     
     # Parse appointment date if provided
     appointment_datetime = None
@@ -71,7 +71,7 @@ def get_booking_quote(
         try:
             appointment_datetime = frappe.utils.get_datetime(appointment_date)
         except Exception:
-            return {"error": "Invalid appointment_date format. Use ISO format (YYYY-MM-DD or YYYY-MM-DD HH:MM:SS)"}, 400
+            return {"error": _("Invalid appointment_date format. Use ISO format (YYYY-MM-DD or YYYY-MM-DD HH:MM:SS)")}, 400
     
     # Calculate quote
     try:
@@ -106,7 +106,7 @@ def get_booking_quote(
     
     except Exception as e:
         frappe.log_error(f"Error calculating booking quote: {str(e)}", "Quote API Error")
-        return {"error": "Failed to calculate quote. Please try again."}, 500
+        return {"error": _("Failed to calculate quote. Please try again.")}, 500
 
 
 

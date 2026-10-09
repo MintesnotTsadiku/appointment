@@ -6,6 +6,7 @@ import json
 from importlib.resources import files
 
 import frappe
+from frappe import _
 
 from appointment.content import entitlements, tenancy
 from appointment.public_experience import brand_compiler, publisher
@@ -34,9 +35,9 @@ def validated_preferences(value):
         "main_action": {"booking", "contact"},
     }
     if not isinstance(value, dict) or set(value) - set(allowed):
-        frappe.throw("Choose supported website preferences.")
+        frappe.throw(_("Choose supported website preferences."))
     if any(not isinstance(choice, str) or choice not in allowed[key] for key, choice in value.items()):
-        frappe.throw("Choose supported website preferences.")
+        frappe.throw(_("Choose supported website preferences."))
     return dict(value)
 
 
@@ -49,7 +50,7 @@ def ranked_catalog(industry="", mood="", audience="", preferred_density=""):
         score = (4 if sector == industry else 0) + (2 if feeling == mood else 0) + (2 if target == audience else 0) + (1 if density == preferred_density else 0)
         rows.append({**recipe.as_summary(), "industry": sector, "density": density,
                      "score": score, "audienceAttributes": [target], "imageryIntensity": "high",
-                     "rankingReasons": [label for value, match, label in ((sector, industry, "Business focus"), (feeling, mood, "Feeling"), (target, audience, "Audience"), (density, preferred_density, "Content density")) if match and value == match],
+                     "rankingReasons": [label for value, match, label in ((sector, industry, _("Business focus")), (feeling, mood, _("Feeling")), (target, audience, _("Audience")), (density, preferred_density, _("Content density"))) if match and value == match],
                      "fontPairing": recipe.primitives["typography"].key.replace("-", " "),
                      "requiredAssetRoles": ["heroAsset", "detailAsset"], "lightDarkSupport": ["light", "dark"],
                      "surfaces": ["landing", "book", "scheduler", "blog", "article", "gallery", "collection", "newsletter"],
@@ -78,7 +79,7 @@ def _locked_site(site, expected_version):
     frappe.db.sql("select name from `tabPublic Site` where name=%s for update", doc.name)
     doc.reload()
     if int(doc.draft_version) != int(expected_version):
-        raise StaleDraftError("Your website changed. Reload before saving.")
+        raise StaleDraftError(_("Your website changed. Reload before saving."))
     return doc
 
 
@@ -125,12 +126,12 @@ def start(owner_type, owner, title, slug, recipe_key, preferences=None):
 
 def save(site, expected_version, step, title=None, sections=None, features=None, brand_inputs=None):
     if step not in STEPS:
-        frappe.throw("Choose a website setup step.")
+        frappe.throw(_("Choose a website setup step."))
     doc = _locked_site(site, expected_version)
     setup = json.loads(doc.website_setup_json or "{}")
     if features is not None:
         if not isinstance(features, list) or set(features) - {"blog", "gallery", "newsletter"}:
-            frappe.throw("Choose supported website features.")
+            frappe.throw(_("Choose supported website features."))
         for capability in features:
             entitlements.require_capability(doc.owner_type, doc.organization, doc.provider, capability)
         setup["features"] = sorted(set(features))
@@ -143,11 +144,11 @@ def save(site, expected_version, step, title=None, sections=None, features=None,
         profile.save()
     if sections is not None:
         if not isinstance(sections, list) or len(sections) > 20:
-            frappe.throw("Provide at most twenty website sections.")
+            frappe.throw(_("Provide at most twenty website sections."))
         doc.set("sections", [])
         for index, row in enumerate(sections):
             if not isinstance(row, dict) or set(row) != {"type", "content"}:
-                frappe.throw("Each section needs a type and content.")
+                frappe.throw(_("Each section needs a type and content."))
             doc.append("sections", {"section_id": row["type"], "section_type": row["type"],
                                     "enabled": 1, "order_index": index, "schema_version": 2,
                                     "content_json": json.dumps(row["content"])})
@@ -188,12 +189,12 @@ def readiness(site, expected_version):
     else:
         booking_ready = bool(frappe.db.get_value("Provider", doc.provider, "enable_public_booking") and frappe.db.exists("EventType", {"provider": doc.provider, "is_active": 1}))
     checks.append({"check": "booking", "ok": booking_ready,
-                   "remediation": None if booking_ready else "Create and publish an appointment offering in Business settings."})
+                   "remediation": None if booking_ready else _("Create and publish an appointment offering in Business settings.")})
     for capability in json.loads(doc.website_setup_json or "{}").get("features", []):
         entitlement = entitlements.resolve_entitlement(doc.owner_type, doc.organization, doc.provider, capability)
         active = bool(entitlement and entitlement["active"])
         checks.append({"check": capability, "ok": active,
-                       "remediation": None if active else "Restore this website feature before publishing."})
+                       "remediation": None if active else _("Restore this website feature before publishing.")})
     return {"ready": all(check["ok"] for check in checks), "checks": checks}
 
 
@@ -205,7 +206,7 @@ def preview(site, expected_version, brand_inputs=None):
             brand_inputs = json.loads(brand_inputs)
         allowed = {"paletteChoice", "fontChoice", "accentColor", "presentationDensity"}
         if not isinstance(brand_inputs, dict) or set(brand_inputs) - allowed:
-            frappe.throw("Choose supported appearance adjustments.")
+            frappe.throw(_("Choose supported appearance adjustments."))
         inputs = json.loads(profile.brand_inputs_json or "{}")
         for key in ("palette_choice", "font_choice", "accent_color", "presentation_density"):
             inputs.pop(key, None)
