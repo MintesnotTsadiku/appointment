@@ -14,6 +14,7 @@ runInNewContext(ts.transpileModule(source, {
     if (name === "react/jsx-runtime") return { jsx: (type, props) => ({ type, props }) };
     if (name === "react-router-dom") return { Navigate: "redirect", Outlet: "owner-workspace" };
     if (name === "@/context/session") return { useSession: () => state };
+    if (name === "@/lib/i18n") return { useTranslation: () => ({ t: key => key, language: "en" }) };
     throw new Error(`Unexpected import ${name}`);
   },
 });

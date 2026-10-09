@@ -74,18 +74,18 @@ test('homepage-matrix',async({page},testInfo)=>{
   await page.getByText('Shared filters',{exact:false}).click();
   await page.getByRole('button',{name:'Browse widgets',exact:true}).click();
   await expect(page.getByRole('textbox',{name:'Search',exact:true})).toBeVisible();
-  await page.getByRole('dialog').getByRole('checkbox',{name:'Bookings',exact:true}).check();
+  await page.getByRole('dialog').getByRole('checkbox',{name:'Booking counts',exact:true}).check();
   await expect(page.getByRole('dialog').getByRole('button',{name:/No-show rate/})).not.toBeVisible();
-  await page.getByRole('dialog').getByRole('checkbox',{name:'Bookings',exact:true}).uncheck();
+  await page.getByRole('dialog').getByRole('checkbox',{name:'Booking counts',exact:true}).uncheck();
   await stableScreenshot(page,{path:testInfo.outputPath('workspace-widget-library.png'),fullPage:true});
   await page.keyboard.press('Escape');
   await page.getByRole('button',{name:'Customize',exact:true}).click();
   for(const preset of ['clinic','freelancer','consultant','hairstylist','organization','reception','all']){
-   await chooseSelect(page,'Industry preset',preset==='all'?'All permitted widgets':preset);
+   await chooseSelect(page,'Industry preset',preset==='all'?'All permitted widgets':preset[0].toUpperCase()+preset.slice(1));
    await page.getByRole('button',{name:'Replace with preset'}).click();
    await stableScreenshot(page,{mask:[page.locator('[data-qa="analytics-freshness"]')],path:testInfo.outputPath(`homepage-preset-${preset}.png`),fullPage:true});
   }
-  await chooseSelect(page,'Industry preset','general');await page.getByRole('button',{name:'Replace with preset'}).click();
+  await chooseSelect(page,'Industry preset','General');await page.getByRole('button',{name:'Replace with preset'}).click();
   await chooseSelect(page,"Size of Today's agenda",'3');
   await chooseSelect(page,'Chart for Booking activity','line');
   await chooseSelect(page,'Local date basis for Booking activity','creation');

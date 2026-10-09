@@ -1,10 +1,12 @@
 import { useEffect, useRef } from 'react';
 import type { PublishedSnapshot } from '@/public-experience/types';
 import { WebsitePreview } from '../website-preview';
+import { useTranslation } from '@/lib/i18n';
 
 export function AppearancePreview({ snapshot, dirty, fullScreen, onClose }: {
   snapshot: PublishedSnapshot | null; dirty: boolean; fullScreen: boolean; onClose: () => void;
 }) {
+  const { t } = useTranslation();
   const root = useRef<HTMLElement>(null);
   const close = useRef(onClose);
   close.current = onClose;
@@ -25,7 +27,7 @@ export function AppearancePreview({ snapshot, dirty, fullScreen, onClose }: {
       previous?.focus();
     };
   }, [fullScreen]);
-  return <aside ref={root} className="appearance-preview" data-fullscreen={fullScreen} role={fullScreen ? 'dialog' : undefined} aria-modal={fullScreen || undefined} aria-label="Website preview" onKeyDown={event => {
+  return <aside ref={root} className="appearance-preview" data-fullscreen={fullScreen} role={fullScreen ? 'dialog' : undefined} aria-modal={fullScreen || undefined} aria-label={t("staff.website.appearance.previewTitle")} onKeyDown={event => {
     if (!fullScreen || event.defaultPrevented) return;
     if (event.key === 'Escape') { event.preventDefault(); onClose(); }
     if (event.key !== 'Tab') return;
@@ -33,5 +35,5 @@ export function AppearancePreview({ snapshot, dirty, fullScreen, onClose }: {
     const first = elements[0], last = elements[elements.length - 1];
     if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
     if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
-  }}><button type="button" className="appearance-mobile-preview" onClick={onClose}>← Back to appearance</button><div className="appearance-preview-status"><strong>Website preview</strong><span>{dirty ? 'Unsaved choices · preview only' : 'Published website is unchanged'}</span></div>{snapshot ? <WebsitePreview snapshot={snapshot} onEscape={fullScreen ? onClose : undefined}/> : <p>Choose your palette and fonts, then Save & preview to review the website.</p>}</aside>;
+  }}><button type="button" className="appearance-mobile-preview" onClick={onClose}>{t("staff.website.appearance.back")}</button><div className="appearance-preview-status"><strong>{t("staff.website.appearance.previewTitle")}</strong><span>{dirty ? t('staff.website.appearance.unsaved') : t('staff.website.appearance.unchanged')}</span></div>{snapshot ? <WebsitePreview snapshot={snapshot} onEscape={fullScreen ? onClose : undefined}/> : <p>{t("staff.website.appearance.choosePrompt")}</p>}</aside>;
 }

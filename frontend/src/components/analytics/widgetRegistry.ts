@@ -130,3 +130,18 @@ export const widgetContracts = widgets.map(widget => ({
     states: {loading:'Loading metric',empty:'No matching records',unavailable:'No eligible denominator or complete capture',partial:'Known and unknown coverage shown',error:'Retry this metric'},
     drillDown: ['agenda','attention','pending','arrivals','checked_in'].includes(widget.id)?'/reception':['services','catalog_quality'].includes(widget.id)?'/settings/business':null,
 }));
+
+type Translate = (key: string) => string;
+/** Translated text for a key, or the registry's English when the catalog has no entry. */
+export const translateOr = (t: Translate, key: string, fallback: string) => {
+    const text = t(key);
+    return text === key ? fallback : text;
+};
+const camelKey = (value: string) => value.toLowerCase().replace(/ (\w)/g, (_, letter: string) => letter.toUpperCase());
+export const widgetTitle = (t: Translate, widget: Pick<Widget, 'id' | 'title'>) => translateOr(t, `staff.widgets.library.${widget.id}.title`, widget.title);
+export const categoryLabel = (t: Translate, category: string) => translateOr(t, `staff.widgets.categories.${camelKey(category)}`, category);
+export const industryLabel = (t: Translate, industry: string) => translateOr(t, `staff.widgets.industry.${industry}`, industry);
+export const chartLabel = (t: Translate, chart: string) => translateOr(t, `staff.dashboard.charts.${chart}`, chart);
+export const basisLabel = (t: Translate, basis: string) => translateOr(t, `staff.analytics.filterPanel.basis.${basis}`, basis);
+const statusKeys: Record<string, string> = { Pending: 'pending', Confirmed: 'confirmed', Completed: 'completed', Cancelled: 'cancelled', 'No Show': 'noShow' };
+export const statusLabel = (t: Translate, status: string) => statusKeys[status] ? translateOr(t, `staff.status.${statusKeys[status]}`, status) : status;

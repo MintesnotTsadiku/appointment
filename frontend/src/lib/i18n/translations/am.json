@@ -677,7 +677,43 @@
         "view": "ግንዛቤዎችን ይመልከቱ"
       },
       "customersLower": "ተመላሽ ደንበኞች",
-      "filters": "የሪፖርት ማጣሪያዎች"
+      "filters": "የሪፖርት ማጣሪያዎች",
+      "filterPanel": {
+        "shared": "የጋራ ማጣሪያዎች",
+        "summary": "{0} · የ{1} ቀን",
+        "from": "ከቀን",
+        "through": "እስከ ቀን",
+        "startDate": "የመጀመሪያ ቀን",
+        "endDate": "የመጨረሻ ቀን",
+        "basisLabel": "የቀን መሠረት",
+        "segmentLabel": "የደንበኛ ክፍል",
+        "granularityLabel": "የጊዜ ክፍፍል",
+        "emptyMeansAll": "{0} · ባዶ ከሆነ ሁሉም",
+        "statuses": "ሁኔታዎች",
+        "sources": "ምንጮች",
+        "clear": "ማጣሪያዎችን አጽዳ",
+        "basisDate": "የ{0} ቀን",
+        "basis": {
+          "appointment": "ቀጠሮ",
+          "creation": "ምዝገባ",
+          "outcome": "ውጤት",
+          "event": "ክስተት"
+        },
+        "segment": {
+          "new": "አዲስ ደንበኞች",
+          "returning": "የተመለሱ ደንበኞች",
+          "repeat": "ተደጋጋሚ ደንበኞች"
+        },
+        "granularity": {
+          "daily": "ዕለታዊ"
+        },
+        "source": {
+          "online": "በመስመር ላይ",
+          "staff": "ሠራተኛ",
+          "import": "ማስገቢያ",
+          "unknown": "ያልታወቀ"
+        }
+      }
     },
     "form": {
       "unsaved": "ያልተቀመጡ ለውጦች አሉዎት",
@@ -1589,6 +1625,11 @@
         "label": "የንግድ አወቃቀር",
         "organization": "ቡድን ያለው ንግድ",
         "individual": "ራሱን የቻለ አገልግሎት ሰጪ"
+      },
+      "solo": {
+        "intro": "የግል ንግድዎንና ይፋዊ ድረ-ገጽዎን ያዘጋጁ። የቀጠሮ ማገናኛ ከማጋራትዎ በፊት ክፍት የቀጠሮ ጊዜዎችን ይገምግሙ።",
+        "name": "የግል ንግድ ስም",
+        "submit": "እንደ ግል አገልግሎት ሰጪ ቀጥል"
       }
     },
     "widgets": {
@@ -1725,6 +1766,562 @@
         "hours": "ከ{1} የክፍል ሰዓታት {0} ተይዟል",
         "empty": "እስካሁን ክፍሎች ወይም መሣሪያዎች የሉም።",
         "notForProviders": "የክፍልና መሣሪያ አጠቃቀም ለባለቤቶች፣ ለሥራ አስኪያጆችና ለእንግዳ መቀበያ ይታያል።"
+      },
+      "library": {
+        "agenda": {
+          "title": "የዛሬ መርሐ ግብር"
+        },
+        "total": {
+          "title": "ሁሉም ቀጠሮዎች"
+        },
+        "completed": {
+          "title": "የተጠናቀቀ"
+        },
+        "cancelled": {
+          "title": "የተሰረዘ"
+        },
+        "no_show": {
+          "title": "ያልመጡ"
+        },
+        "pending": {
+          "title": "ማረጋገጫ በመጠባበቅ ላይ"
+        },
+        "upcoming": {
+          "title": "የሚቀጥሉት ሰባት ቀናት ቀጠሮዎች"
+        },
+        "attention": {
+          "title": "ያልተፈቱ ቀጠሮዎች"
+        },
+        "booked_hours": {
+          "title": "የታቀዱ ሰዓቶች"
+        },
+        "occupied_hours": {
+          "title": "የተያዙ የአቅም ሰዓቶች"
+        },
+        "unique_customers": {
+          "title": "ልዩ ደንበኞች"
+        },
+        "repeat_customers": {
+          "title": "በጊዜው ውስጥ ደግመው የያዙ"
+        },
+        "new_customers": {
+          "title": "አዲስ ደንበኞች"
+        },
+        "returning_customers": {
+          "title": "የተመለሱ ደንበኞች"
+        },
+        "bookings_per_customer": {
+          "title": "ቀጠሮዎች በደንበኛ"
+        },
+        "missing_contacts": {
+          "title": "የጎደሉ የመገኛ መረጃዎች"
+        },
+        "average_duration": {
+          "title": "አማካይ የታቀደ ቆይታ"
+        },
+        "reschedules": {
+          "title": "የቀጠሮ ማዛወር ክስተቶች"
+        },
+        "confirmations": {
+          "title": "የማረጋገጫ ክስተቶች"
+        },
+        "cancellations_events": {
+          "title": "የስረዛ ክስተቶች"
+        },
+        "confirmation_turnaround": {
+          "title": "የማረጋገጫ ምላሽ ጊዜ"
+        },
+        "actual_duration": {
+          "title": "ትክክለኛ የአገልግሎት ቆይታ"
+        },
+        "service_delay": {
+          "title": "የአገልግሎት መዘግየት"
+        },
+        "cancellation_notice": {
+          "title": "የስረዛ ቅድመ ማሳወቂያ ጊዜ"
+        },
+        "arrivals": {
+          "title": "የደረሱ ደንበኞች"
+        },
+        "checked_in": {
+          "title": "ተመዝግበው የገቡ"
+        },
+        "no_show_rate": {
+          "title": "ያለመምጣት መጠን"
+        },
+        "attendance_rate": {
+          "title": "የመገኘት መጠን"
+        },
+        "completion_rate": {
+          "title": "የማጠናቀቅ መጠን"
+        },
+        "cancellation_rate": {
+          "title": "የስረዛ መጠን"
+        },
+        "repeat_percentage": {
+          "title": "የተደጋጋሚ ደንበኞች መቶኛ"
+        },
+        "reschedule_rate": {
+          "title": "የማዛወር መጠን"
+        },
+        "utilization": {
+          "title": "የአገልግሎት ሰጪ አጠቃቀም"
+        },
+        "booking_trend": {
+          "title": "የቀጠሮ እንቅስቃሴ"
+        },
+        "outcomes": {
+          "title": "የቀጠሮ ውጤቶች"
+        },
+        "sources": {
+          "title": "የቀጠሮ ምንጮች"
+        },
+        "services": {
+          "title": "የአገልግሎት ፍላጎት"
+        },
+        "providers": {
+          "title": "የአገልግሎት ሰጪዎች የሥራ ጫና"
+        },
+        "locations": {
+          "title": "የቅርንጫፎች የሥራ ጫና"
+        },
+        "duration_distribution": {
+          "title": "የታቀደ ቆይታ ስርጭት"
+        },
+        "cancellation_reasons": {
+          "title": "የስረዛ ምክንያቶች"
+        },
+        "agreed_value": {
+          "title": "የመጀመሪያው የተስማሙበት ዋጋ"
+        },
+        "catalog_value": {
+          "title": "የአሁኑ የዝርዝር ዋጋ ግምት"
+        },
+        "recorded_payments": {
+          "title": "የተመዘገቡ ክፍያዎች ድምር"
+        },
+        "discounts": {
+          "title": "የተስማሙባቸው ቅናሾች"
+        },
+        "payment_records": {
+          "title": "የተመዘገበ መጠን ያላቸው ቀጠሮዎች"
+        },
+        "buffer_hours": {
+          "title": "የተመዘገቡ የመሸጋገሪያ ሰዓቶች"
+        },
+        "occupied_heatmap": {
+          "title": "የተያዙ ሰዓቶች የሙቀት ካርታ"
+        },
+        "future_slots": {
+          "title": "የሚገኙ የአገልግሎት ክፍት ጊዜዎች"
+        },
+        "next_slot": {
+          "title": "ቀጣዩ ክፍት ጊዜ"
+        },
+        "referrals": {
+          "title": "በሪፈራል የተያዙ ቀጠሮዎች ድምር"
+        },
+        "late_cancellation_rate": {
+          "title": "የዘገየ ስረዛ መጠን"
+        },
+        "changes_per_booking": {
+          "title": "ለእያንዳንዱ ቀጠሮ የተደረጉ ለውጦች"
+        },
+        "verified_recovery": {
+          "title": "የተረጋገጠ ክፍት ጊዜ መልሶ መያዝ"
+        },
+        "lead_time": {
+          "title": "የቀጠሮ ቅድሚያ ጊዜ"
+        },
+        "lead_time_distribution": {
+          "title": "የቅድሚያ ጊዜ ስርጭት"
+        },
+        "creation_demand": {
+          "title": "ቀጠሮ የሚያዝበት ጊዜ ፍላጎት"
+        },
+        "start_popularity": {
+          "title": "የቀጠሮ መጀመሪያ ሰዓት ተወዳጅነት"
+        },
+        "recent_activity": {
+          "title": "የቅርብ ጊዜ የቀጠሮ እርምጃዎች"
+        },
+        "capture_quality": {
+          "title": "የመረጃ አመዘጋገብ ሙሉነት"
+        },
+        "reception_state": {
+          "title": "መቀበያቸው ክፍት የሆኑ ቅርንጫፎች"
+        },
+        "visit_interval": {
+          "title": "በጉብኝቶች መካከል ያለ ጊዜ"
+        },
+        "days_since_visit": {
+          "title": "ከመጨረሻው የተጠናቀቀ ጉብኝት ወዲህ ያለፉ ቀናት"
+        },
+        "lapse_risk": {
+          "title": "በደንብ ላይ የተመሠረተ ደንበኛ የማጣት ስጋት"
+        },
+        "second_visit_conversion": {
+          "title": "ከመጀመሪያ ወደ ሁለተኛ ጉብኝት ልወጣ"
+        },
+        "retention_30": {
+          "title": "የ30 ቀን ደንበኛ ማቆየት"
+        },
+        "retention_60": {
+          "title": "የ60 ቀን ደንበኛ ማቆየት"
+        },
+        "retention_90": {
+          "title": "የ90 ቀን ደንበኛ ማቆየት"
+        },
+        "cohorts": {
+          "title": "የበሰሉ የደንበኛ ቡድኖች"
+        },
+        "booking_concentration": {
+          "title": "የቀጠሮ ክምችት"
+        },
+        "customer_cancellation": {
+          "title": "የደንበኛ ስረዛ ድግግሞሽ"
+        },
+        "customer_no_show": {
+          "title": "የደንበኛ ያለመምጣት ድግግሞሽ"
+        },
+        "likely_duplicates": {
+          "title": "ተደጋግመው ሊሆኑ የሚችሉ የመገኛ መረጃዎች"
+        },
+        "unmatched_customers": {
+          "title": "ያልተዛመዱ የደንበኛ መዝገቦች"
+        },
+        "completed_today": {
+          "title": "ዛሬ የተጠናቀቁ"
+        },
+        "today_workload": {
+          "title": "የዛሬ የአገልግሎት ሰጪዎች የሥራ ጫና"
+        },
+        "conflicts": {
+          "title": "የተደራረቡ የተያዙ ጊዜዎች"
+        },
+        "active_providers": {
+          "title": "ንቁ አገልግሎት ሰጪዎች"
+        },
+        "active_locations": {
+          "title": "ንቁ ቅርንጫፎች"
+        },
+        "walk_ins_waiting": {
+          "title": "በመጠባበቅ ላይ ያሉ ድንገተኛ ደንበኞች"
+        },
+        "walk_ins_assigned": {
+          "title": "የተመደቡ ድንገተኛ ደንበኞች"
+        },
+        "walk_ins_cancelled": {
+          "title": "የተሰረዙ ድንገተኛ ደንበኞች"
+        },
+        "current_queue_wait": {
+          "title": "የአሁኑ የወረፋ ጥበቃ"
+        },
+        "queue_wait": {
+          "title": "ያለፈው የወረፋ ጥበቃ"
+        },
+        "walk_in_conversion": {
+          "title": "ድንገተኛ ደንበኛን የመመደብ ልወጣ"
+        },
+        "invitation_turnaround": {
+          "title": "ግብዣ የመቀበያ ጊዜ"
+        },
+        "content_type_status": {
+          "title": "የታተሙ የይዘት አይነቶች"
+        },
+        "publication_activity": {
+          "title": "የሕትመት እንቅስቃሴ"
+        },
+        "withdrawal_activity": {
+          "title": "ከሕትመት የተነሱ ይዘቶች"
+        },
+        "newsletter_confirmation_rate": {
+          "title": "የጋዜጣ ምዝገባ ማረጋገጫ መጠን"
+        },
+        "newsletter_confirmation_time": {
+          "title": "የጋዜጣ ምዝገባ ማረጋገጫ ጊዜ"
+        },
+        "newsletter_unsubscribed": {
+          "title": "ምዝገባቸውን የሰረዙ ተከታዮች"
+        },
+        "scheduled_campaigns": {
+          "title": "የታቀዱ የጋዜጣ ዘመቻዎች"
+        },
+        "catalog_quality": {
+          "title": "የአገልግሎት ዝርዝር ጥራት"
+        },
+        "invitations": {
+          "title": "የቡድን ግብዣዎች"
+        },
+        "content_status": {
+          "title": "የይዘት ሁኔታ"
+        },
+        "gallery_status": {
+          "title": "የምስል ማዕከል ሁኔታ"
+        },
+        "newsletter_audience": {
+          "title": "የጋዜጣ ተከታዮች"
+        },
+        "newsletter_campaigns": {
+          "title": "የጋዜጣ ዘመቻዎች"
+        },
+        "local_captured": {
+          "title": "በአካባቢው የተያዙ መልዕክቶች"
+        },
+        "newsletter_skipped": {
+          "title": "የተዘለሉ የጋዜጣ መልዕክቶች"
+        },
+        "newsletter_retries": {
+          "title": "የጋዜጣ ድጋሚ ሙከራዎች"
+        },
+        "sender_readiness": {
+          "title": "የጋዜጣ ላኪ ዝግጁነት"
+        },
+        "website_status": {
+          "title": "የድረ ገጽ ሕትመት ሁኔታ"
+        },
+        "payment_concentration": {
+          "title": "የተመዘገበ ክፍያ ክምችት"
+        },
+        "payments_per_customer": {
+          "title": "የተመዘገቡ ክፍያዎች በደንበኛ"
+        },
+        "service_scheduled_hours": {
+          "title": "የታቀዱ ሰዓቶች በአገልግሎት"
+        },
+        "service_completed_rate": {
+          "title": "የማጠናቀቅ መጠን በአገልግሎት"
+        },
+        "service_cancelled_rate": {
+          "title": "የስረዛ መጠን በአገልግሎት"
+        },
+        "service_no_show_rate": {
+          "title": "ያለመምጣት መጠን በአገልግሎት"
+        },
+        "service_catalog_value": {
+          "title": "የአሁኑ ዋጋ ግምት በአገልግሎት"
+        },
+        "provider_scheduled_hours": {
+          "title": "የታቀዱ ሰዓቶች በአገልግሎት ሰጪ"
+        },
+        "provider_completed_rate": {
+          "title": "የማጠናቀቅ መጠን በአገልግሎት ሰጪ"
+        },
+        "provider_cancelled_rate": {
+          "title": "የስረዛ መጠን በአገልግሎት ሰጪ"
+        },
+        "provider_no_show_rate": {
+          "title": "ያለመምጣት መጠን በአገልግሎት ሰጪ"
+        },
+        "provider_catalog_value": {
+          "title": "የአሁኑ ዋጋ ግምት በአገልግሎት ሰጪ"
+        },
+        "location_scheduled_hours": {
+          "title": "የታቀዱ ሰዓቶች በቅርንጫፍ"
+        },
+        "location_completed_rate": {
+          "title": "የማጠናቀቅ መጠን በቅርንጫፍ"
+        },
+        "location_cancelled_rate": {
+          "title": "የስረዛ መጠን በቅርንጫፍ"
+        },
+        "location_no_show_rate": {
+          "title": "ያለመምጣት መጠን በቅርንጫፍ"
+        },
+        "location_catalog_value": {
+          "title": "የአሁኑ ዋጋ ግምት በቅርንጫፍ"
+        },
+        "customer_preferences": {
+          "title": "የደንበኛ የአገልግሎት ምርጫዎች"
+        },
+        "average_estimate": {
+          "title": "አማካይ የአሁኑ ዋጋ ግምት"
+        },
+        "estimated_cancellation_loss": {
+          "title": "የተሰረዙ ቀጠሮዎች የዝርዝር ዋጋ ግምት"
+        },
+        "estimated_no_show_loss": {
+          "title": "ያልመጡ ቀጠሮዎች የዝርዝር ዋጋ ግምት"
+        },
+        "discount_usage": {
+          "title": "የቅናሽ አጠቃቀም"
+        },
+        "available_hours": {
+          "title": "የአሁኑ የሥራ ሰዓቶች"
+        },
+        "unused_hours": {
+          "title": "ጥቅም ላይ ያልዋሉ የአሁኑ የሥራ ሰዓቶች"
+        },
+        "schedule_gaps": {
+          "title": "የአሁኑ የመርሐ ግብር ክፍተቶች"
+        },
+        "fragmentation": {
+          "title": "ከ30 ደቂቃ በታች የሆኑ ክፍተቶች"
+        },
+        "buffer_share": {
+          "title": "የተመዘገበ የመሸጋገሪያ ጊዜ ድርሻ"
+        },
+        "capacity_adjusted_popularity": {
+          "title": "በአሁኑ አቅም ውስጥ ያለ ፍላጎት"
+        },
+        "no_availability_days": {
+          "title": "አሁን ክፍት ጊዜ የሌላቸው ቀናት"
+        },
+        "provider_utilization": {
+          "title": "አጠቃቀም በአገልግሎት ሰጪ"
+        },
+        "location_utilization": {
+          "title": "አጠቃቀም በቅርንጫፍ"
+        },
+        "service_utilization": {
+          "title": "አጠቃቀም በአገልግሎት"
+        },
+        "recovery_rate": {
+          "title": "የተረጋገጠ መልሶ የመያዝ መጠን"
+        },
+        "change_initiators": {
+          "title": "ለውጥ ያስጀመሩ አካላት"
+        },
+        "arrival_punctuality": {
+          "title": "በሰዓቱ የመድረስ ሁኔታ"
+        },
+        "service_overrun": {
+          "title": "ከተያዘው ጊዜ በላይ የፈጀ አገልግሎት"
+        },
+        "reception_queue_wait": {
+          "title": "ከመመዝገብ እስከ አገልግሎት ያለ ጥበቃ"
+        },
+        "appointment_weekday_mix": {
+          "title": "የቀጠሮ የሳምንቱ ቀናት"
+        },
+        "next_appointment": {
+          "title": "ቀጣይ ቀጠሮ"
+        },
+        "missing_staff_availability": {
+          "title": "የጎደሉ የሠራተኛ ብጁ ሰዓቶች"
+        },
+        "customer_provider_preferences": {
+          "title": "የደንበኛ የአገልግሎት ሰጪ ምርጫዎች"
+        },
+        "customer_location_preferences": {
+          "title": "የደንበኛ የቅርንጫፍ ምርጫዎች"
+        },
+        "setup_completeness": {
+          "title": "የንግድ ዝግጅት ፍተሻዎች"
+        },
+        "pending_imports": {
+          "title": "በመጠባበቅ ላይ ያሉ ማስገቢያዎች"
+        },
+        "campaign_errors": {
+          "title": "የዘመቻ ስህተቶች"
+        },
+        "newsletter_growth": {
+          "title": "የተከታዮች ምዝገባ አዝማሚያ"
+        },
+        "newsletter_unsubscribe_trend": {
+          "title": "የተከታዮች ምዝገባ ስረዛ አዝማሚያ"
+        },
+        "service_average_duration": {
+          "title": "አማካይ የታቀደ ቆይታ በአገልግሎት"
+        },
+        "service_actual_duration": {
+          "title": "ትክክለኛ ቆይታ በአገልግሎት"
+        },
+        "service_service_delay": {
+          "title": "የአገልግሎት መዘግየት በአገልግሎት"
+        },
+        "provider_average_duration": {
+          "title": "አማካይ የታቀደ ቆይታ በአገልግሎት ሰጪ"
+        },
+        "provider_actual_duration": {
+          "title": "ትክክለኛ ቆይታ በአገልግሎት ሰጪ"
+        },
+        "provider_service_delay": {
+          "title": "የአገልግሎት መዘግየት በአገልግሎት ሰጪ"
+        },
+        "location_average_duration": {
+          "title": "አማካይ የታቀደ ቆይታ በቅርንጫፍ"
+        },
+        "location_actual_duration": {
+          "title": "ትክክለኛ ቆይታ በቅርንጫፍ"
+        },
+        "location_service_delay": {
+          "title": "የአገልግሎት መዘግየት በቅርንጫፍ"
+        },
+        "opening_hours": {
+          "title": "የአሁኑ የቅርንጫፍ የሥራ ሰዓቶች"
+        },
+        "gallery_completeness": {
+          "title": "የምስል ማዕከል ማረጋገጫ ዝርዝር ችግሮች"
+        },
+        "publishing_errors": {
+          "title": "የሕትመት ስህተት ሽፋን"
+        },
+        "import_errors": {
+          "title": "የማስገቢያ ስህተት ሽፋን"
+        },
+        "attention_resolution": {
+          "title": "ጊዜ ያለፈባቸው ቀጠሮዎች የመፍቻ ጊዜ"
+        },
+        "future_estimate": {
+          "title": "የወደፊት ቀጠሮዎች በአሁኑ ዋጋ ግምት"
+        },
+        "missing_payment_entries": {
+          "title": "ዜሮ ወይም የጎደሉ የተመዘገቡ መጠኖች"
+        },
+        "paid_customers": {
+          "title": "የተመዘገበ መጠን ያላቸው ደንበኞች"
+        },
+        "active": {
+          "title": "ብቁ ንቁ ቀጠሮዎች"
+        },
+        "confirmed_today": {
+          "title": "ዛሬ የተረጋገጡ"
+        },
+        "event_coverage": {
+          "title": "የሂደት ክስተት ሽፋን"
+        },
+        "service_share": {
+          "title": "የአገልግሎት ቀጠሮ ድርሻ"
+        },
+        "service_trend": {
+          "title": "የአገልግሎት ቀጠሮ አዝማሚያ"
+        },
+        "service_repeat_usage": {
+          "title": "ተደጋጋሚ የአገልግሎት አጠቃቀም"
+        },
+        "peak_starts": {
+          "title": "በተስተዋሉ የጫና ሰዓቶች የተጀመሩ"
+        },
+        "offpeak_starts": {
+          "title": "ከተስተዋሉ የጫና ሰዓቶች ውጭ የተጀመሩ"
+        }
+      },
+      "categories": {
+        "operations": "ዕለታዊ ሥራ",
+        "bookings": "ቀጠሮዎች",
+        "attention": "ትኩረት የሚሹ",
+        "capacity": "አቅም",
+        "customers": "ደንበኞች",
+        "quality": "የመረጃ ጥራት",
+        "timing": "ጊዜ",
+        "reception": "እንግዳ መቀበያ",
+        "outcomes": "ውጤቶች",
+        "services": "አገልግሎቶች",
+        "team": "ቡድን",
+        "bookingValue": "የቀጠሮ ዋጋ",
+        "businessSetup": "የንግድ ዝግጅት",
+        "workload": "የሥራ ጫና"
+      },
+      "industry": {
+        "general": "አጠቃላይ",
+        "clinic": "ክሊኒክ",
+        "freelancer": "ነፃ ባለሙያ",
+        "consultant": "አማካሪ",
+        "hairstylist": "የፀጉር ባለሙያ",
+        "organization": "ድርጅት",
+        "reception": "እንግዳ መቀበያ",
+        "all": "ሁሉም የተፈቀዱ ዊጀቶች"
       }
     },
     "dashboard": {
@@ -1775,7 +2372,127 @@
       "reset": "ወደ ነባሪው መልስ",
       "saveLayout": "አቀማመጥ አስቀምጥ",
       "customize": "አብጅ",
-      "editingHint": "ካርዶቹን በመያዣቸው ይጎትቱ፣ ከታችኛው ቀኝ ጥግ መጠናቸውን ይቀይሩ፣ ወይም የእያንዳንዱን ካርድ ምናሌ ይጠቀሙ። ሲጨርሱ ያስቀምጡ።"
+      "editingHint": "ካርዶቹን በመያዣቸው ይጎትቱ፣ ከታችኛው ቀኝ ጥግ መጠናቸውን ይቀይሩ፣ ወይም የእያንዳንዱን ካርድ ምናሌ ይጠቀሙ። ሲጨርሱ ያስቀምጡ።",
+      "workspace": {
+        "periodDays": "{0} ቀናት",
+        "saved": "ዳሽቦርዱ ተቀምጧል።",
+        "saveFailed": "ማስቀመጥ አልተቻለም። ለውጦችዎ አልጠፉም፤ እንደገና መሞከር ይችላሉ።",
+        "eyebrow": "የንግድ ግንዛቤዎች",
+        "range": "ከ{0} እስከ {1} · {2}",
+        "dateRange": "ከ{0} እስከ {1}",
+        "loadingScope": "የሪፖርቱ ወሰን በመጫን ላይ…",
+        "browse": "ዊጀቶችን አስስ",
+        "openInsights": "ግንዛቤዎችን ክፈት",
+        "openHome": "መነሻ ገጽን ክፈት",
+        "homeHelp": "መነሻ ገጽ የዕለት አጠቃላይ እይታዎ ነው። እያንዳንዱ ዳሽቦርድ የራሱን ዊጀቶች እና አቀማመጥ ያስቀምጣል።",
+        "insightsHelp": "ግንዛቤዎች ዝርዝር የሪፖርት ዳሽቦርድዎ ነው። እያንዳንዱ ዳሽቦርድ የራሱን ዊጀቶች እና አቀማመጥ ያስቀምጣል።",
+        "libraryCount": "በቤተ መጻሕፍቱ ውስጥ {0} የተፈቀዱ ዊጀቶች · አንዳንዶቹ ተጨማሪ መረጃ ይፈልጋሉ።",
+        "editingHome": "መነሻ ገጽን በማስተካከል ላይ፦ የዘርፉን ዊጀቶች ለማከል ዘርፍ ይምረጡ፣ ወይም አቀማመጡን በዚያ ቅድመ ዝግጅት ይተኩ። ሙሉውን ቤተ መጻሕፍት ለመፈለግ ዊጀት አክልን ይጠቀሙ። ለውጦቹ ተግባራዊ የሚሆኑት ሲያስቀምጡ ነው።",
+        "editingInsights": "ግንዛቤዎችን በማስተካከል ላይ፦ የዘርፉን ዊጀቶች ለማከል ዘርፍ ይምረጡ፣ ወይም አቀማመጡን በዚያ ቅድመ ዝግጅት ይተኩ። ሙሉውን ቤተ መጻሕፍት ለመፈለግ ዊጀት አክልን ይጠቀሙ። ለውጦቹ ተግባራዊ የሚሆኑት ሲያስቀምጡ ነው።",
+        "customization": "የዳሽቦርድ ማበጀት",
+        "industryPreset": "የዘርፍ ቅድመ ዝግጅት",
+        "industry": "ዘርፍ",
+        "replacePreset": "በቅድመ ዝግጅቱ ተካ",
+        "loadError": "ይህን የሪፖርት ወሰን መጫን አልተቻለም።",
+        "retry": "እንደገና ሞክር",
+        "loadingWidgets": "ዊጀቶች በመጫን ላይ…",
+        "openReception": "እንግዳ መቀበያን ክፈት",
+        "moveEarlier": "{0}ን ወደ ፊት አንቀሳቅስ",
+        "moveLater": "{0}ን ወደ ኋላ አንቀሳቅስ",
+        "sizeOf": "የ{0} መጠን",
+        "size": "መጠን",
+        "chartFor": "የ{0} ገበታ",
+        "chart": "ገበታ",
+        "basisFor": "የ{0} የራሱ የቀን መሠረት",
+        "basis": "የራሱ የቀን መሠረት",
+        "inherit": "ከዳሽቦርዱ ውረስ",
+        "removeWidget": "{0}ን አስወግድ",
+        "localFilters": "የ{0} የራሱ ማጣሪያዎች",
+        "relatedRecords": "ተዛማጅ መዝገቦችን ክፈት",
+        "pages": "የዊጀት ገጾች",
+        "previous": "ቀዳሚ",
+        "next": "ቀጣይ",
+        "pageOf": "ገጽ {0} ከ{1}",
+        "freshness": "የተዘጋጀው {0} · የዕለት ሥራ ካርዶች የዛሬውን የአካባቢ ሰዓት መስኮት ይጠቀማሉ። ያለፈው አቅም አሁን ያሉትን መርሐ ግብሮች ይጠቀማል።",
+        "addTitle": "ዊጀት ያክሉ",
+        "addDescription": "ለአሁኑ ንግድዎ እና ሚናዎ የዊጀት ቤተ መጻሕፍቱን ይፈልጉ። የታከሉ ዊጀቶች ከታች ምልክት ተደርጎባቸዋል። ዊጀቶችን ካከሉ በኋላ አቀማመጥዎን ያስቀምጡ።",
+        "search": "ፈልግ",
+        "categories": "ምድቦች · የፈለጉትን ይምረጡ",
+        "industries": "ዘርፎች"
+      },
+      "charts": {
+        "value": "ነጠላ እሴት",
+        "bar": "የአምድ ገበታ",
+        "line": "የመስመር ገበታ",
+        "area": "የቦታ ገበታ",
+        "donut": "የቀለበት ገበታ",
+        "radial": "ክብ መለኪያ",
+        "table": "ሰንጠረዥ",
+        "heatmap": "የሙቀት ካርታ"
+      },
+      "home": {
+        "attentionOne": "ውጤት የሚያስፈልገው {0} ያለፈ ቀጠሮ አለ",
+        "attentionMany": "ውጤት የሚያስፈልጋቸው {0} ያለፉ ቀጠሮዎች አሉ",
+        "viewAppointments": "ቀጠሮዎችን ይመልከቱ →",
+        "confirmedScheduled": "ዛሬ {0} የተረጋገጡ · {1} የታቀዱ",
+        "weekPreview": "የሳምንቱ ቅድመ እይታ",
+        "viewCalendar": "የቀን መቁጠሪያውን ይመልከቱ →",
+        "upcomingSeven": "በሰባት ቀናት ውስጥ የሚመጡ",
+        "previousDay": "ቀዳሚው የቅድመ እይታ ቀን",
+        "nextDay": "ቀጣዩ የቅድመ እይታ ቀን",
+        "dayOne": "{0}፣ {1} ቀጠሮ",
+        "dayMany": "{0}፣ {1} ቀጠሮዎች",
+        "nothingElseToday": "ዛሬ ሌላ የታቀደ ቀጠሮ የለም።",
+        "nothingThisDay": "በዚህ ቀን የታቀደ ቀጠሮ የለም።",
+        "viewAllCount": "ሁሉንም {0} ቀጠሮዎች ይመልከቱ",
+        "popularServices": "ተወዳጅ አገልግሎቶች",
+        "viewAll": "ሁሉንም ይመልከቱ",
+        "summary": "የንግድ ማጠቃለያ",
+        "summaryRange": "{0} · ማጣሪያዎቹ በዚህ ማጠቃለያ ላይ ይተገበራሉ",
+        "indicators": "የንግድ አመላካቾች",
+        "catalogEstimate": "የዝርዝር ዋጋ · ግምት",
+        "upNext": "ቀጣዩ",
+        "noneToday": "ዛሬ የታቀደ ቀጠሮ የለም።",
+        "reviewCalendar": "የቀን መቁጠሪያዎን ይገምግሙ",
+        "nextLater": "ቀጣይ፦ {0} በ{1} በ{2}።"
+      },
+      "metric": {
+        "partial": "ከፊል መረጃ · ለዚህ ወሰን ሙሉ ድምር አይገኝም።",
+        "unavailable": "አይገኝም · ለዚህ ወሰን ብቁ አካፋይ ወይም ሙሉ የተመዘገበ መረጃ የለም።",
+        "definitionTitle": "የመለኪያው ትርጉም",
+        "category": "ምድብ",
+        "scheduleEstimate": "በአሁኑ መርሐ ግብር ላይ የተመሠረተ ግምት",
+        "bookingsCount": "{0} ቀጠሮዎች",
+        "bookingsTable": "{0} ቀጠሮዎች። የመረጃ ሰንጠረዡ ከታች ነው።",
+        "bookingsBy": "{0} ቀጠሮዎች በ{1}",
+        "rowBookings": "{0}፦ {1} ቀጠሮዎች",
+        "noMatching": "የሚዛመድ ቀጠሮ የለም።",
+        "viewData": "መረጃውን ይመልከቱ",
+        "partialCoverage": "ከፊል ሽፋን",
+        "knownUnknown": "{0} የታወቁ፣ {1} ያልታወቁ",
+        "knownUnknownShort": "{0} የታወቁ · {1} ያልታወቁ",
+        "definitionBasis": "ትርጉም · {0}",
+        "definitionData": "ትርጉም እና መረጃ",
+        "localError": "የዊጀቱን የራሱ ማጣሪያዎች መጫን አልተቻለም።",
+        "localLoading": "የዊጀቱ የራሱ መረጃ በመጫን ላይ…"
+      },
+      "matching": {
+        "view": "የሚዛመዱ ቀጠሮዎችን ይመልከቱ",
+        "title": "የሚዛመዱ ቀጠሮዎች",
+        "description": "ከዚህ ዊጀት ጋር ተመሳሳይ የንግድ ፈቃዶች እና የሚደገፉ ማጣሪያዎች። የዛሬ እና የሚመጡ ቀጠሮዎች ካርዶች የተገለጹ የአካባቢ ሰዓት መስኮቶቻቸውን ይይዛሉ።",
+        "loadError": "የሚዛመዱ መዝገቦችን መጫን አልተቻለም።",
+        "loading": "መዝገቦች በመጫን ላይ…",
+        "count": "{0} የሚዛመዱ ቀጠሮዎች",
+        "appointmentDate": "የቀጠሮ ቀን",
+        "pages": "የሚዛመዱ ቀጠሮዎች ገጾች"
+      },
+      "units": {
+        "bookings": "ቀጠሮዎች",
+        "hours": "ሰዓታት",
+        "minutes": "ደቂቃዎች",
+        "days": "ቀናት",
+        "rate": "መጠን"
+      }
     },
     "notifications": {
       "eventsTitle": "ለደንበኞች የሚላኩ ኢሜይሎች",
@@ -2095,6 +2812,342 @@
       "prefixHint": "ደረሰኞች እንደ {0} ይቆጠራሉ።",
       "tin": "የግብር ከፋይ መለያ ቁጥር (አማራጭ)",
       "tinHint": "ሲዘጋጅ በደረሰኞች ላይ ይታያል።"
+    },
+    "website": {
+      "setup": {
+        "title": "የድረ-ገጽ ዝግጅት",
+        "intro": "ዝግጁ ሲሆኑ የሕዝብ ድረ-ገጽዎን ይፍጠሩ። የቀጠሮ ዝግጅትዎ እንዳለ ይቆያል።",
+        "pageContent": "የገጽ ይዘት",
+        "articlesGallery": "ጽሑፎች እና የምስል ማዕከል",
+        "backToWorkspace": "ወደ የሥራ ቦታ ተመለስ",
+        "chooseWebsite": "ድረ-ገጽዎን ይምረጡ",
+        "resumeHeading": "ድረ-ገጽ ማዘጋጀትዎን ይቀጥሉ",
+        "resumeSite": "{0}ን ይቀጥሉ",
+        "completeProfile": "መጀመሪያ የንግድ መገለጫዎን በ{0} ውስጥ ያጠናቅቁ።",
+        "appointmentSetup": "የቀጠሮ ዝግጅት",
+        "businessFocus": "የንግድ ዘርፍ",
+        "feeling": "ስሜት",
+        "primaryAudience": "ዋና ተመልካቾች",
+        "contentDensity": "የሚመርጡት የይዘት ጥግግት",
+        "mainAction": "የጎብኚዎች ዋና ተግባር",
+        "any": "ማንኛውም",
+        "bookAppointment": "ቀጠሮ ይያዙ",
+        "contactBusiness": "ንግዱን ያግኙ",
+        "recommendedTemplates": "የሚመከሩ አብነቶች",
+        "fontPairingValue": "የፊደል ቅንጅት፦ {0}",
+        "matches": "የሚዛመዱት፦ {0}",
+        "previewTemplate": "የተመረጠውን አብነት ቅድመ-እይታ",
+        "websiteName": "የድረ-ገጽ ስም",
+        "websiteAddress": "የድረ-ገጽ አድራሻ",
+        "createDraft": "የድረ-ገጽ ረቂቅ ይፍጠሩ",
+        "stepsLabel": "የድረ-ገጽ ዝግጅት ደረጃዎች",
+        "selectedTemplate": "የተመረጠ አብነት · አቀማመጡ ተጠብቋል",
+        "accentColor": "የማድመቂያ ቀለም (አማራጭ)",
+        "templateNote": "የመረጡት አብነት የጸደቀ የፊደል ቅንጅት አለው፤ እንዲሁም ጽሑፍ እንዲነበብ፣ የትኩረት ምልክቶችን እና የቀጠሮ መያዣ መቆጣጠሪያዎችን ይጠብቃል። ነባሪ የትዕይንት ምስሎች የፕሮጀክቱ ንብረት የሆኑ ምናባዊ ምሳሌዎች ናቸው።",
+        "logoFavicon": "አርማ እና የትር ምልክት",
+        "identityType": "የመለያ ምስል ዓይነት",
+        "identityImage": "የአርማ ወይም የትር ምልክት ምስል",
+        "identityConsent": "ይህንን የመለያ ምስል በይፋ ለማሳየት ፈቃድ አለኝ።",
+        "imageTooLarge": "ከ5 ሜባ ያነሰ ምስል ይምረጡ።",
+        "imageUnreadable": "ይህንን ምስል ማንበብ አልተቻለም።",
+        "identitySaved": "የመለያ ምስልዎ በድረ-ገጹ ረቂቅ ላይ ተቀምጧል።",
+        "uploadIdentity": "የመለያ ምስል ይስቀሉ",
+        "identityPreviewAlt": "የ{0} ቅድመ-እይታ",
+        "itemsFromProfile": "ከንግድ መገለጫዎ የተወሰዱ {0} ንጥሎች። ከማተምዎ በፊት ትክክለኛ ዝርዝሮችን ያክሉ።",
+        "websiteFeatures": "የድረ-ገጽ ገጽታዎች",
+        "newsletterNote": "ለጋዜጣ መመዝገብ ፈቃድ እና ማረጋገጫ ይጠይቃል። ዘመቻዎች የተረጋገጠ ላኪ እንዲሁም በቂ የተመልካች እና የመላኪያ ገደብ ይጠይቃሉ። ይህ የልማት አካባቢ ኢሜይሎችን በአካባቢው ብቻ ይይዛል።",
+        "manageNewsletter": "የጋዜጣ ዝግጅትን ያስተዳድሩ",
+        "ready": "ዝግጁ",
+        "published": "ድረ-ገጽዎ ታትሟል።",
+        "saveFailed": "ድረ-ገጽዎን ማስቀመጥ አልተቻለም።",
+        "draftSaved": "የድረ-ገጽዎ ረቂቅ ተቀምጧል። በማንኛውም ጊዜ መመለስ ይችላሉ።",
+        "savePreview": "አስቀምጥ እና ቅድመ-እይታ",
+        "openPreview": "ቅድመ-እይታ ክፈት",
+        "saveReturn": "አስቀምጥ እና በኋላ ተመለስ",
+        "historyLink": "የሕትመት ታሪክ እና የምርት ስም ቅንብሮች",
+        "industry": {
+          "wellness": "ጤናማ አኗኗር",
+          "beauty": "ውበት",
+          "creative": "ፈጠራ",
+          "education": "ትምህርት",
+          "health": "ጤና"
+        },
+        "mood": {
+          "warm": "ሞቅ ያለ",
+          "bold": "ደፋር",
+          "editorial": "መጽሔታዊ",
+          "friendly": "ተግባቢ"
+        },
+        "audience": {
+          "clients": "ደንበኞች",
+          "learners": "ተማሪዎች",
+          "patients": "ታካሚዎች"
+        },
+        "density": {
+          "expressive": "ገላጭ"
+        },
+        "step": {
+          "brand": "የምርት ስም",
+          "content": "ይዘት",
+          "readiness": "ዝግጁነት"
+        },
+        "identity": {
+          "logoPrimary": "ዋና አርማ",
+          "logoCompact": "አጭር አርማ",
+          "favicon": "የትር ምልክት"
+        },
+        "field": {
+          "title": "ርዕስ",
+          "subtitle": "ንዑስ ርዕስ",
+          "body": "ዋና ጽሑፍ"
+        },
+        "feature": {
+          "newsletter": "ጋዜጣ"
+        }
+      },
+      "content": {
+        "title": "የድረ-ገጽ ይዘት",
+        "intro": "ረቂቆችን ያስቀምጡ፣ ይገምግሟቸው፣ ከዚያም ለጎብኚዎችዎ አንድ እትም ያትሙ።",
+        "newsletterLink": "ጋዜጣዎች እና ተመልካቾች",
+        "createIn": "ድረ-ገጽዎን በ{0} ውስጥ ይፍጠሩ።",
+        "draftsLabel": "የይዘት ረቂቆች",
+        "drafts": "ረቂቆች",
+        "editArticleNamed": "{0} የሚለውን ጽሑፍ ያርትዑ",
+        "noDrafts": "እስካሁን ምንም ረቂቅ የለም።",
+        "editorLabel": "የጽሑፍ ማረሚያ",
+        "editArticle": "ጽሑፉን ያርትዑ",
+        "newArticle": "አዲስ ጽሑፍ",
+        "articleTitle": "የጽሑፍ ርዕስ",
+        "articleAddress": "የጽሑፍ አድራሻ",
+        "summary": "ማጠቃለያ",
+        "articleText": "የጽሑፉ ዝርዝር",
+        "markdownHint": "ቀላል የMarkdown ርዕሶችን፣ ማድመቂያዎችን እና ዝርዝሮችን መጠቀም ይችላሉ።",
+        "saveDraft": "የጽሑፉን ረቂቅ አስቀምጥ",
+        "draftSaved": "የጽሑፉ ረቂቅ ተቀምጧል።",
+        "previewSaved": "የተቀመጠውን ጽሑፍ ቅድመ-እይታ",
+        "reloadBeforePreview": "የጽሑፉን ቅድመ-እይታ ከማየትዎ በፊት ድረ-ገጹን እንደገና ይጫኑ።",
+        "previewUnavailable": "የዚህ ድረ-ገጽ ቅድመ-እይታ አይገኝም። እንደገና ከመሞከርዎ በፊት ገጹን እንደገና ይጫኑ።",
+        "publish": "ጽሑፉን ያትሙ",
+        "published": "ጽሑፉ ታትሟል።",
+        "previewLabel": "የጽሑፍ ቅድመ-እይታ",
+        "savedPreview": "የተቀመጠ ጽሑፍ ቅድመ-እይታ",
+        "history": "የሕትመት ታሪክ",
+        "withdraw": "{0}ን ያንሱ",
+        "withdrawn": "ሕትመቱ ተነስቷል።",
+        "restore": "{0}ን ይመልሱ",
+        "restored": "የቀድሞው ሕትመት ተመልሷል።",
+        "updateFailed": "ይዘትዎን ማዘመን አልተቻለም።"
+      },
+      "gallery": {
+        "editorLabel": "የምስል ማዕከል ማረሚያ",
+        "title": "አዲስ የምስል ስብስብ",
+        "collectionTitle": "የስብስቡ ርዕስ",
+        "collectionAddress": "የስብስቡ አድራሻ",
+        "image": "የምስል ማዕከል ምስል",
+        "imageDescription": "የምስል መግለጫ",
+        "caption": "የምስል ጽሑፍ",
+        "consent": "ይህንን ምስል ለማተም ፈቃድ አለኝ፤ በምስሉ ላይ የሚታወቁ ሰዎችም ፈቅደዋል። ምስሉን መስቀል ለሕዝብ ተደራሽ ያደርገዋል።",
+        "saveDraft": "የምስል ማዕከል ረቂቅ አስቀምጥ",
+        "draftSaved": "የምስል ማዕከል ረቂቅ ተቀምጧል።",
+        "publish": "የምስል ማዕከሉን ያትሙ",
+        "published": "የምስል ማዕከሉ ታትሟል።",
+        "saveFailed": "የምስል ማዕከልዎን ማስቀመጥ አልተቻለም።",
+        "readFailed": "ምስልዎን ማንበብ አልተቻለም።"
+      },
+      "newsletter": {
+        "title": "የንግድ ጋዜጣዎች",
+        "intro": "መልዕክቶች በአካባቢው የኢሜይል ማጠራቀሚያ ውስጥ ይያዛሉ። ወደ ውጭ ኢሜይል መላክ ተሰናክሏል።",
+        "createIn": "በ{0} ውስጥ ድረ-ገጽ ይፍጠሩ።",
+        "access": "የጋዜጣ ፈቃድ፦ {0}። የተመልካች ገደብ፦ {1}። ወርሃዊ የዘመቻ ገደብ፦ {2}።",
+        "unlimited": "ያልተገደበ",
+        "senderLabel": "የጋዜጣ ላኪ",
+        "senderVerification": "የላኪ ማረጋገጫ",
+        "senderEmail": "የላኪ ኢሜይል",
+        "senderName": "የላኪ ስም",
+        "requestVerification": "የላኪ ማረጋገጫ ይጠይቁ",
+        "verificationNotice": "ከታች ባለው የአካባቢ ኢሜይል ሳጥን ውስጥ የማረጋገጫ መልዕክቱን ይክፈቱ።",
+        "campaignSender": "የዘመቻ ላኪ",
+        "chooseSender": "ላኪ ይምረጡ",
+        "draftLabel": "የጋዜጣ ረቂቅ",
+        "newNewsletter": "አዲስ ጋዜጣ",
+        "subject": "የጋዜጣ ርዕሰ ጉዳይ",
+        "text": "የጋዜጣ ጽሑፍ",
+        "markdownHint": "ቀላል Markdown ይጠቀሙ። ዘመቻ እስኪያረጋግጡ ድረስ ረቂቆች የግል ናቸው።",
+        "saveDraft": "የጋዜጣ ረቂቅ አስቀምጥ",
+        "draftSaved": "የጋዜጣ ረቂቅ ተቀምጧል።",
+        "campaignLabel": "የጋዜጣ ዘመቻ",
+        "review": "ዘመቻን ይገምግሙ እና ይያዙ",
+        "savedNewsletter": "የተቀመጠ ጋዜጣ",
+        "chooseDraft": "ረቂቅ ይምረጡ",
+        "capturePreview": "ያልተላከ ቅድመ-እይታ ይያዙ",
+        "previewCaptured": "ያልተላከ ቅድመ-እይታ ተይዟል። ይህ ቅድመ-እይታ ለማንም ተመልካች አልደረሰም።",
+        "schedule": "የመርሐ ግብር ሰዓት (አማራጭ፣ በድረ-ገጹ የሰዓት ሰቅ)",
+        "confirm": "የተቀመጠውን ጋዜጣ ገምግሜ ለዚህ ንግድ የተረጋገጡ ተመዝጋቢዎች እንዲያዝ ፈቅጃለሁ። ምዝገባቸውን የሰረዙ እና የታገዱ አድራሻዎች አይካተቱም።",
+        "confirmCampaign": "የአካባቢ ዘመቻን ያረጋግጡ",
+        "scheduled": "የአካባቢ ዘመቻ መርሐ ግብር ተይዞለታል።",
+        "queued": "የአካባቢ ዘመቻ ወረፋ ውስጥ ገብቷል።",
+        "checkDue": "ጊዜያቸው የደረሰ ዘመቻዎችን ያረጋግጡ",
+        "dueChecked": "ጊዜያቸው የደረሰ የአካባቢ ዘመቻዎች ተረጋግጠዋል።",
+        "campaignCounts": "{0} · {1} · {2} ተይዘዋል · {3} ተዘለዋል",
+        "retry": "{0}ን እንደገና ይሞክሩ",
+        "cancel": "{0}ን ይሰርዙ",
+        "refreshStatus": "የመላኪያ ሁኔታን ያድሱ",
+        "audienceLabel": "የጋዜጣ ተመልካቾች",
+        "audience": "ተመልካቾች ({0})",
+        "suppress": "{0}ን ያግዱ",
+        "noSubscribers": "እስካሁን ምንም ተመዝጋቢ የለም። ጎብኚዎች በግልጽ ፈቅደው ምዝገባቸውን ማረጋገጥ አለባቸው።",
+        "inbox": "የአካባቢ ኢሜይል ሳጥን",
+        "openMessage": "ለ{1} የተላከውን {0} ይክፈቱ",
+        "messageLabel": "የአካባቢ ኢሜይል መልዕክት",
+        "openAction": "የጋዜጣውን ተግባር ይክፈቱ",
+        "unsubscribe": "ከዚህ ጋዜጣ ምዝገባዎን ይሰርዙ",
+        "updateFailed": "ጋዜጣዎችን ማዘመን አልተቻለም።"
+      },
+      "preview": {
+        "liveLabel": "የድረ-ገጽ የቀጥታ ቅድመ-እይታ",
+        "unavailable": "ለዚህ አብነት ቅድመ-እይታ አይገኝም።",
+        "savedArticleNote": "የተቀመጠው ጽሑፍዎ የግል ቅድመ-እይታ። ሌሎቹ ገጾች የአቀማመጥ ምሳሌዎችን ያሳያሉ። ቀጠሮ መያዝ እና መመዝገብ እዚህ አይሰሩም።",
+        "note": "የግል ቅድመ-እይታ። የጽሑፍ እና የምስል ማዕከል ምሳሌዎች አቀማመጡን ብቻ ያሳያሉ፤ በፍጹም አይታተሙም። ቀጠሮ መያዝ እና መመዝገብ እዚህ አይሰሩም።",
+        "fullscreen": "ሙሉ ማያ ቅድመ-እይታ",
+        "closeFullscreen": "ሙሉ ማያ ቅድመ-እይታን ዝጋ",
+        "darkMode": "ጨለማ ገጽታን ይመልከቱ",
+        "lightMode": "ብሩህ ገጽታን ይመልከቱ",
+        "desktop": "በዴስክቶፕ ይመልከቱ",
+        "mobile": "በሞባይል ይመልከቱ",
+        "surface": "ገጽ",
+        "landing": "መግቢያ ገጽ",
+        "booking": "ወደ ቀጠሮ መያዣ ሽግግር",
+        "blog": "የብሎግ ማውጫ",
+        "article": "ጽሑፍ",
+        "gallery": "የምስል ማዕከል ማውጫ",
+        "collection": "የምስል ስብስብ",
+        "frameTitle": "የድረ-ገጽ ንድፍ ቅድመ-እይታ"
+      },
+      "appearance": {
+        "cardsLabel": "የአብነት ገጽታ",
+        "palette": "የቀለም ስብስብ",
+        "paletteHint": "ለዚህ አብነት የጸደቁ ምርጫዎች።",
+        "sampleTitle": "የሚጀምሩበት ቦታ",
+        "sampleText": "ለእርስዎ በጥንቃቄ የተዘጋጀ።",
+        "sampleButton": "ጉብኝት ይያዙ",
+        "swatchButton": "አዝራር",
+        "swatchText": "ጽሑፍ",
+        "fontPairing": "የፊደል ቅንጅት",
+        "fontHint": "የርዕስ እና የዋና ጽሑፍ ናሙናዎች · ላቲን + ግዕዝ",
+        "resetNotice": "የአብነቱ ነባሪዎች በዚህ ገጽ ብቻ ተመርጠዋል። ለማቆየት ያስቀምጡ፣ ወይም ይቀልብሱ።",
+        "reset": "ቀለሞችን እና ፊደላትን ዳግም አስጀምር",
+        "undo": "ዳግም ማስጀመሩን ቀልብስ",
+        "back": "← ወደ ገጽታ ተመለስ",
+        "previewTitle": "የድረ-ገጽ ቅድመ-እይታ",
+        "unsaved": "ያልተቀመጡ ምርጫዎች · ቅድመ-እይታ ብቻ",
+        "unchanged": "የታተመው ድረ-ገጽ አልተቀየረም",
+        "choosePrompt": "ድረ-ገጹን ለመገምገም የቀለም ስብስብ እና ፊደላትን ይምረጡ፣ ከዚያም «አስቀምጥ እና ቅድመ-እይታ» ይጫኑ።",
+        "chooseOption": "አማራጭ ይምረጡ",
+        "options": "የ{0} አማራጮች",
+        "selection": "ምርጫ",
+        "option": {
+          "templateOriginal": "የአብነቱ የመጀመሪያ",
+          "softCanvas": "ለስላሳ ዳራ",
+          "paperInk": "ወረቀት እና ቀለም",
+          "editorialContrast": "የመጽሔት ንፅፅር",
+          "clearSans": "ግልጽ ሳንስ"
+        }
+      }
+    },
+    "orgImport": {
+      "title": "የድርጅት የስራ ደብተር አስገባ",
+      "intro": "ለውጦቹን በንግድዎ ላይ ከመተግበርዎ በፊት ይገምግሙ። ቋሚ መለያ ቁልፎች እርማቶችንና ድጋሚ ሙከራዎችን ደህንነቱ የተጠበቀ ያደርጋሉ።",
+      "businessSettings": "የንግድ ቅንብሮች",
+      "downloadTemplate": "የስራ ደብተር ቅጹን አውርድ",
+      "guidance": "የስራ ደብተሩ መመሪያዎችንና የምሳሌ ረድፎችን ይዟል። ምሳሌዎቹ በፍጹም አይገቡም። የይለፍ ቃሎችን፣ ቀመሮችን ወይም የውጭ ማገናኛዎችን አያስገቡ። የሰራተኛ መለያዎችን ከማገናኘትዎ በፊት ሰራተኞቹ ግብዣቸውን መቀበል አለባቸው።",
+      "createNew": "ከዚህ የስራ ደብተር አዲስ ድርጅት ፍጠር",
+      "review": "የስራ ደብተሩን ገምግም",
+      "reviewComplete": "ግምገማው ተጠናቋል። ምንም የንግድ መዝገብ አልተቀየረም።",
+      "reviewLabel": "የስራ ደብተር ግምገማ",
+      "ready": "ለማረጋገጫ ዝግጁ ነው",
+      "correct": "እነዚህን ሕዋሶች አስተካክለው እንደገና ይጫኑ",
+      "sheet": "ሉህ",
+      "cell": "ሕዋስ",
+      "correction": "እርማት",
+      "records": "መዝገቦች",
+      "applyNote": "የድርጅቱ መረጃ፣ የቡድን ምደባዎች፣ የስራ ሰዓቶች እና የጸደቀ የድረ-ገጽ ጽሑፍም ይተገበራሉ። የጎደሉ ረድፎች ያሉትን መዝገቦች አይሰርዙም። ይህ ማስገባት ኢሜይል አይልክም።",
+      "confirmLabel": "እነዚህን ለውጦች ገምግሜያለሁ፤ በዚህ ድርጅት ላይ እንዲተገበሩ እፈልጋለሁ።",
+      "confirm": "ማስገባቱን አረጋግጥ",
+      "replayed": "ይህ የስራ ደብተር ቀደም ብሎ ተተግብሯል። ምንም የተደገመ መዝገብ አልተፈጠረም።",
+      "applied": "የስራ ደብተሩ ተተግብሯል። የማስገባቱ የኦዲት መዝገብ ተቀምጧል።",
+      "reviewFailed": "ይህን የስራ ደብተር መገምገም አልተቻለም።",
+      "tooLarge": "ከ5 ሜባ ያነሰ የስራ ደብተር ይምረጡ።",
+      "readFailed": "ይህን የስራ ደብተር ማንበብ አልተቻለም። እንደገና ይምረጡት።"
+    },
+    "appearance": {
+      "back": "ቅንብሮች እና የአሰሳ ምርጫዎች",
+      "title": "የመተግበሪያው ገጽታ",
+      "intro": "ለውስጣዊ ገጾች የግል ቅንብሮች፤ በመለያዎ ተቀምጠው በሁሉም መሣሪያዎችዎ ላይ ይሠራሉ።",
+      "hint": "አማራጭ ሲመርጡ ቅድመ እይታው ወዲያውኑ ይታያል። ምርጫዎችዎን ለማቆየት ያስቀምጡ።",
+      "paletteTitle": "የመተግበሪያው የቀለም ስብስብ",
+      "modeTitle": "የቀለም ሁነታ",
+      "modeSystemHint": "የመሣሪያዎን ቅንብር ይከተሉ",
+      "typographyTitle": "የፊደል አጻጻፍ",
+      "textSizeTitle": "የጽሑፍ መጠን",
+      "large": "ትልቅ",
+      "densityTitle": "የይዘት ጥግግት",
+      "compact": "የታመቀ",
+      "previewLabel": "የገጽታ ቀጥታ ቅድመ እይታ",
+      "previewDark": "የጨለማ ቅድመ እይታ · ቀጠሮዎች እና እንቅስቃሴዎች",
+      "previewLight": "የብሩህ ቅድመ እይታ · ቀጠሮዎች እና እንቅስቃሴዎች",
+      "sampleService": "ምክክር",
+      "viewAppointment": "ቀጠሮውን ይመልከቱ",
+      "previewNote": "ለማንበብ ቀላል ጽሑፍ፣ የተለመዱ የሁኔታ ቀለሞች እና የመረጡት ክፍተት።",
+      "unsaved": "ያልተቀመጠ የገጽታ ቅድመ እይታ",
+      "saved": "የተቀመጠ ገጽታ",
+      "savedMessage": "ገጽታው በመለያዎ ተቀምጧል።",
+      "save": "ገጽታውን አስቀምጥ",
+      "restored": "የተቀመጠው ገጽታ ተመልሷል።",
+      "reset": "ነባሪዎቹን መልስ",
+      "defaultsPreviewed": "ነባሪዎቹ በቅድመ እይታ ላይ ናቸው። ለማቆየት ያስቀምጡ።",
+      "palette": {
+        "codex": "ኮዴክስ",
+        "violet": "ወይን ጠጅ",
+        "ocean": "ውቅያኖስ",
+        "forest": "ደን"
+      },
+      "typography": {
+        "system": "የመሣሪያ ሳንስ ፊደል",
+        "noto": "Noto Ethiopic ፊደል",
+        "serif": "ክላሲክ ሰሪፍ ፊደል"
+      },
+      "typographyHint": {
+        "system": "የመሣሪያ ሳንስ + Noto Ethiopic",
+        "noto": "Noto Ethiopic + የመሣሪያ ሳንስ",
+        "serif": "DejaVu Serif + Noto Ethiopic"
+      },
+      "densityHint": {
+        "comfortable": "ሰፋ ያሉ ፓነሎችና ረድፎች",
+        "compact": "የተጠጋጉ ፓነሎች፤ በሞባይል የሚነኩ ቁልፎች ትልቅ ሆነው ይቆያሉ"
+      }
+    },
+    "independent": {
+      "title": "የግል ቀጠሮ ማስያዣ ዝግጅት",
+      "intro": "አገልግሎትዎንና የስራ ሰዓትዎን ያዘጋጁ። እስኪያትሙት ድረስ ቀጠሮ ማስያዣው ግላዊ ሆኖ ይቆያል።",
+      "duration": "የቆይታ ጊዜ በደቂቃ",
+      "opens": "የመክፈቻ ሰዓት",
+      "closes": "የመዝጊያ ሰዓት",
+      "workingDays": "የስራ ቀናት",
+      "save": "የግል አገልግሎቱን አስቀምጥ",
+      "saved": "አገልግሎትዎ ተቀምጧል። ከማተምዎ በፊት ይገምግሙት።",
+      "unpublishedNotice": "ቀጠሮ ማስያዣው ከህትመት ወጥቷል።",
+      "publishedNotice": "ቀጠሮ ማስያዣው ታትሟል።",
+      "offeringLabel": "የግል አገልግሎት",
+      "privateDraft": "ግላዊ ረቂቅ",
+      "publish": "ቀጠሮ ማስያዣውን አትም",
+      "unpublish": "ቀጠሮ ማስያዣውን ከህትመት አውጣ",
+      "openGuest": "የእንግዳ ቀጠሮ ማስያዣውን ክፈት",
+      "viewSchedule": "መርሐ ግብሩን ይመልከቱ",
+      "websiteSetup": "የድረ-ገጽ ዝግጅት ጀምር"
+    },
+    "ownerRoute": {
+      "checking": "የንግድ መዳረሻ በመፈተሽ ላይ…",
+      "error": "የንግድ መዳረሻን ማረጋገጥ አልተቻለም። እባክዎ እንደገና ይግቡ።"
     }
   },
   "publicSite": {
@@ -2507,5 +3560,38 @@
     "emailFooter": "ይህን ማስፈንጠሪያ በ{0} የቀጠሮ ገጽ ላይ ጠይቀዋል። ካልጠየቁ ይህን ኢሜይል መተው ይችላሉ።",
     "subject": "ከ{0} ጋር ያሉ ቀጠሮዎችዎ",
     "seeAll": "ሁሉንም ቀጠሮዎችዎን ይመልከቱ"
+  },
+  "public": {
+    "independentBooking": {
+      "unavailableTitle": "ቀጠሮ ማስያዝ አይቻልም",
+      "unavailable": "ይህ አገልግሎት አይገኝም። ለእርዳታ ንግዱን ያነጋግሩ።",
+      "loading": "ቀጠሮ ማስያዣው በመጫን ላይ…",
+      "title": "ከ{0} ጋር ቀጠሮ ይያዙ",
+      "duration": "{0} ደቂቃ",
+      "noEmail": "ምንም የኢሜይል ማሳወቂያ አልተላከም።",
+      "date": "የቀጠሮ ቀን",
+      "times": "ክፍት ሰዓቶች በ{0} ሰዓት አቆጣጠር",
+      "noTimes": "በዚህ ቀን ክፍት ሰዓት የለም። ሌላ ቀን ይምረጡ።",
+      "name": "ስምዎ",
+      "email": "ኢሜይልዎ",
+      "submit": "ቀጠሮውን አረጋግጥ"
+    },
+    "newsletter": {
+      "senderTitle": "የጋዜጣ መልዕክት ላኪውን አረጋግጥ",
+      "confirmTitle": "የጋዜጣ ምዝገባውን አረጋግጥ",
+      "unsubscribeTitle": "ከጋዜጣው ምዝገባ ውጣ",
+      "senderHint": "ይህ የሚያረጋግጠው የአካባቢውን የኢሜይል መቀበያ ብቻ ነው። ወደ ውጭ ኢሜይል መላክ ተሰናክሏል።",
+      "hint": "ይህን የጋዜጣ ምርጫ ለመተግበር ከታች ይምረጡ።",
+      "unavailable": "ይህ ማገናኛ አይገኝም።",
+      "applying": "በመተግበር ላይ…"
+    },
+    "staffInvitation": {
+      "title": "የሰራተኛ ግብዣ ተቀበል",
+      "intro": "የራስዎን የመለያ የይለፍ ቃል ይፍጠሩ። መለያ ካለዎት መጀመሪያ በተጋበዙበት ኢሜይል ይግቡ፤ ግብዣውን መቀበል የይለፍ ቃሉን አይቀይርም። የንግድ መዳረሻን ባለቤቱ ለብቻው ይሰጣል።",
+      "password": "አዲስ የመለያ የይለፍ ቃል",
+      "unavailable": "ይህ ግብዣ አይገኝም።",
+      "accepting": "በመቀበል ላይ…",
+      "accept": "ግብዣውን ተቀበል"
+    }
   }
 }

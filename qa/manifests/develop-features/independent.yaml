@@ -52,3 +52,38 @@ scenarios:
     full_page: true
   - action: get_console_errors
   - action: get_network_errors
+- id: dev_independent_am_mobile
+  title: 'Independent provider in Amharic: home dashboard and booking page settings (am, mobile)'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /home
+    assertions:
+    - type: network_idle
+  actions:
+  - action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="staff-shell"]'
+  - action: screenshot
+    name: dev_independent_am_mobile-1-home.png
+    full_page: true
+  - action: open_url
+    url: /settings/independent-booking
+  - action: wait_for
+    selector: '[data-qa="staff-shell"] h1'
+  - action: screenshot
+    name: dev_independent_am_mobile-2-booking-page.png
+    full_page: true
+  - action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+  - action: get_console_errors
+  - action: get_network_errors

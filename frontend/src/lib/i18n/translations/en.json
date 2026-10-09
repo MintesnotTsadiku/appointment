@@ -677,7 +677,43 @@
         "view": "View insights"
       },
       "customersLower": "returning customers",
-      "filters": "Report filters"
+      "filters": "Report filters",
+      "filterPanel": {
+        "shared": "Shared filters",
+        "summary": "{0} · {1} date",
+        "from": "From date",
+        "through": "Through date",
+        "startDate": "Start date",
+        "endDate": "End date",
+        "basisLabel": "Date basis",
+        "segmentLabel": "Customer segment",
+        "granularityLabel": "Granularity",
+        "emptyMeansAll": "{0} · empty means all",
+        "statuses": "Statuses",
+        "sources": "Sources",
+        "clear": "Clear filters",
+        "basisDate": "{0} date",
+        "basis": {
+          "appointment": "appointment",
+          "creation": "creation",
+          "outcome": "outcome",
+          "event": "event"
+        },
+        "segment": {
+          "new": "New customers",
+          "returning": "Customers who returned",
+          "repeat": "Repeat customers"
+        },
+        "granularity": {
+          "daily": "Daily"
+        },
+        "source": {
+          "online": "Online",
+          "staff": "Staff",
+          "import": "Import",
+          "unknown": "Unknown"
+        }
+      }
     },
     "form": {
       "unsaved": "You have unsaved changes",
@@ -1589,6 +1625,11 @@
         "label": "Business structure",
         "organization": "Business with a team",
         "individual": "Independent provider"
+      },
+      "solo": {
+        "intro": "Set up your independent business and public website. Review booking availability before sharing an appointment link.",
+        "name": "Independent business name",
+        "submit": "Continue as independent provider"
       }
     },
     "widgets": {
@@ -1725,6 +1766,562 @@
         "hours": "{0} of {1} unit hours booked",
         "empty": "No rooms or equipment yet.",
         "notForProviders": "Room and equipment use is shown to owners, managers and reception."
+      },
+      "library": {
+        "agenda": {
+          "title": "Today's agenda"
+        },
+        "total": {
+          "title": "All bookings"
+        },
+        "completed": {
+          "title": "Completed"
+        },
+        "cancelled": {
+          "title": "Cancelled"
+        },
+        "no_show": {
+          "title": "No-shows"
+        },
+        "pending": {
+          "title": "Pending confirmation"
+        },
+        "upcoming": {
+          "title": "Upcoming seven days"
+        },
+        "attention": {
+          "title": "Unresolved appointments"
+        },
+        "booked_hours": {
+          "title": "Scheduled hours"
+        },
+        "occupied_hours": {
+          "title": "Occupied capacity hours"
+        },
+        "unique_customers": {
+          "title": "Unique customers"
+        },
+        "repeat_customers": {
+          "title": "Repeat within period"
+        },
+        "new_customers": {
+          "title": "New customers"
+        },
+        "returning_customers": {
+          "title": "Customers who returned"
+        },
+        "bookings_per_customer": {
+          "title": "Bookings per customer"
+        },
+        "missing_contacts": {
+          "title": "Missing contacts"
+        },
+        "average_duration": {
+          "title": "Average scheduled duration"
+        },
+        "reschedules": {
+          "title": "Reschedule events"
+        },
+        "confirmations": {
+          "title": "Confirmation events"
+        },
+        "cancellations_events": {
+          "title": "Cancellation events"
+        },
+        "confirmation_turnaround": {
+          "title": "Confirmation turnaround"
+        },
+        "actual_duration": {
+          "title": "Actual service duration"
+        },
+        "service_delay": {
+          "title": "Service delay"
+        },
+        "cancellation_notice": {
+          "title": "Cancellation notice"
+        },
+        "arrivals": {
+          "title": "Arrivals"
+        },
+        "checked_in": {
+          "title": "Checked in"
+        },
+        "no_show_rate": {
+          "title": "No-show rate"
+        },
+        "attendance_rate": {
+          "title": "Attendance rate"
+        },
+        "completion_rate": {
+          "title": "Completion rate"
+        },
+        "cancellation_rate": {
+          "title": "Cancellation rate"
+        },
+        "repeat_percentage": {
+          "title": "Repeat customer percentage"
+        },
+        "reschedule_rate": {
+          "title": "Reschedule rate"
+        },
+        "utilization": {
+          "title": "Provider utilization"
+        },
+        "booking_trend": {
+          "title": "Booking activity"
+        },
+        "outcomes": {
+          "title": "Booking outcomes"
+        },
+        "sources": {
+          "title": "Booking sources"
+        },
+        "services": {
+          "title": "Service demand"
+        },
+        "providers": {
+          "title": "Provider workload"
+        },
+        "locations": {
+          "title": "Location workload"
+        },
+        "duration_distribution": {
+          "title": "Scheduled duration distribution"
+        },
+        "cancellation_reasons": {
+          "title": "Cancellation reasons"
+        },
+        "agreed_value": {
+          "title": "Original agreed value"
+        },
+        "catalog_value": {
+          "title": "Current catalog estimate"
+        },
+        "recorded_payments": {
+          "title": "Payments recorded"
+        },
+        "discounts": {
+          "title": "Agreed discounts"
+        },
+        "payment_records": {
+          "title": "Bookings with recorded amounts"
+        },
+        "buffer_hours": {
+          "title": "Recorded buffer hours"
+        },
+        "occupied_heatmap": {
+          "title": "Occupied-hour heatmap"
+        },
+        "future_slots": {
+          "title": "Available offering slots"
+        },
+        "next_slot": {
+          "title": "Next available slot"
+        },
+        "referrals": {
+          "title": "Referral booking totals"
+        },
+        "late_cancellation_rate": {
+          "title": "Late cancellation rate"
+        },
+        "changes_per_booking": {
+          "title": "Changes per booking"
+        },
+        "verified_recovery": {
+          "title": "Verified slot recovery"
+        },
+        "lead_time": {
+          "title": "Booking lead time"
+        },
+        "lead_time_distribution": {
+          "title": "Lead time distribution"
+        },
+        "creation_demand": {
+          "title": "Booking creation demand"
+        },
+        "start_popularity": {
+          "title": "Appointment start popularity"
+        },
+        "recent_activity": {
+          "title": "Recent booking actions"
+        },
+        "capture_quality": {
+          "title": "Capture completeness"
+        },
+        "reception_state": {
+          "title": "Reception open locations"
+        },
+        "visit_interval": {
+          "title": "Visit intervals"
+        },
+        "days_since_visit": {
+          "title": "Days since completed visit"
+        },
+        "lapse_risk": {
+          "title": "Rule-based lapse risk"
+        },
+        "second_visit_conversion": {
+          "title": "First-to-second visit conversion"
+        },
+        "retention_30": {
+          "title": "30-day retention"
+        },
+        "retention_60": {
+          "title": "60-day retention"
+        },
+        "retention_90": {
+          "title": "90-day retention"
+        },
+        "cohorts": {
+          "title": "Mature customer cohorts"
+        },
+        "booking_concentration": {
+          "title": "Booking concentration"
+        },
+        "customer_cancellation": {
+          "title": "Customer cancellation frequency"
+        },
+        "customer_no_show": {
+          "title": "Customer no-show frequency"
+        },
+        "likely_duplicates": {
+          "title": "Likely duplicate contacts"
+        },
+        "unmatched_customers": {
+          "title": "Unmatched customer records"
+        },
+        "completed_today": {
+          "title": "Completed today"
+        },
+        "today_workload": {
+          "title": "Today's provider workload"
+        },
+        "conflicts": {
+          "title": "Occupied interval conflicts"
+        },
+        "active_providers": {
+          "title": "Active providers"
+        },
+        "active_locations": {
+          "title": "Active locations"
+        },
+        "walk_ins_waiting": {
+          "title": "Walk-ins waiting"
+        },
+        "walk_ins_assigned": {
+          "title": "Walk-ins assigned"
+        },
+        "walk_ins_cancelled": {
+          "title": "Walk-ins cancelled"
+        },
+        "current_queue_wait": {
+          "title": "Current queue wait"
+        },
+        "queue_wait": {
+          "title": "Historical queue wait"
+        },
+        "walk_in_conversion": {
+          "title": "Walk-in assignment conversion"
+        },
+        "invitation_turnaround": {
+          "title": "Invitation acceptance turnaround"
+        },
+        "content_type_status": {
+          "title": "Published content types"
+        },
+        "publication_activity": {
+          "title": "Publication activity"
+        },
+        "withdrawal_activity": {
+          "title": "Content withdrawals"
+        },
+        "newsletter_confirmation_rate": {
+          "title": "Newsletter confirmation rate"
+        },
+        "newsletter_confirmation_time": {
+          "title": "Newsletter confirmation time"
+        },
+        "newsletter_unsubscribed": {
+          "title": "Unsubscribed audience"
+        },
+        "scheduled_campaigns": {
+          "title": "Scheduled newsletter campaigns"
+        },
+        "catalog_quality": {
+          "title": "Service catalog quality"
+        },
+        "invitations": {
+          "title": "Team invitations"
+        },
+        "content_status": {
+          "title": "Content status"
+        },
+        "gallery_status": {
+          "title": "Gallery status"
+        },
+        "newsletter_audience": {
+          "title": "Newsletter audience"
+        },
+        "newsletter_campaigns": {
+          "title": "Newsletter campaigns"
+        },
+        "local_captured": {
+          "title": "Locally captured messages"
+        },
+        "newsletter_skipped": {
+          "title": "Newsletter skipped messages"
+        },
+        "newsletter_retries": {
+          "title": "Newsletter retries"
+        },
+        "sender_readiness": {
+          "title": "Newsletter sender readiness"
+        },
+        "website_status": {
+          "title": "Website publication status"
+        },
+        "payment_concentration": {
+          "title": "Recorded-payment concentration"
+        },
+        "payments_per_customer": {
+          "title": "Recorded payments per customer"
+        },
+        "service_scheduled_hours": {
+          "title": "Scheduled hours by service"
+        },
+        "service_completed_rate": {
+          "title": "Completion rate by service"
+        },
+        "service_cancelled_rate": {
+          "title": "Cancellation rate by service"
+        },
+        "service_no_show_rate": {
+          "title": "No-show rate by service"
+        },
+        "service_catalog_value": {
+          "title": "Current-price estimate by service"
+        },
+        "provider_scheduled_hours": {
+          "title": "Scheduled hours by provider"
+        },
+        "provider_completed_rate": {
+          "title": "Completion rate by provider"
+        },
+        "provider_cancelled_rate": {
+          "title": "Cancellation rate by provider"
+        },
+        "provider_no_show_rate": {
+          "title": "No-show rate by provider"
+        },
+        "provider_catalog_value": {
+          "title": "Current-price estimate by provider"
+        },
+        "location_scheduled_hours": {
+          "title": "Scheduled hours by location"
+        },
+        "location_completed_rate": {
+          "title": "Completion rate by location"
+        },
+        "location_cancelled_rate": {
+          "title": "Cancellation rate by location"
+        },
+        "location_no_show_rate": {
+          "title": "No-show rate by location"
+        },
+        "location_catalog_value": {
+          "title": "Current-price estimate by location"
+        },
+        "customer_preferences": {
+          "title": "Customer service preferences"
+        },
+        "average_estimate": {
+          "title": "Average current-price estimate"
+        },
+        "estimated_cancellation_loss": {
+          "title": "Cancelled catalog estimate"
+        },
+        "estimated_no_show_loss": {
+          "title": "No-show catalog estimate"
+        },
+        "discount_usage": {
+          "title": "Discount usage"
+        },
+        "available_hours": {
+          "title": "Current working hours"
+        },
+        "unused_hours": {
+          "title": "Unused current working hours"
+        },
+        "schedule_gaps": {
+          "title": "Current schedule gaps"
+        },
+        "fragmentation": {
+          "title": "Gaps under 30 minutes"
+        },
+        "buffer_share": {
+          "title": "Recorded buffer share"
+        },
+        "capacity_adjusted_popularity": {
+          "title": "Demand inside current capacity"
+        },
+        "no_availability_days": {
+          "title": "Days without current availability"
+        },
+        "provider_utilization": {
+          "title": "Utilization by provider"
+        },
+        "location_utilization": {
+          "title": "Utilization by location"
+        },
+        "service_utilization": {
+          "title": "Utilization by service"
+        },
+        "recovery_rate": {
+          "title": "Verified recovery rate"
+        },
+        "change_initiators": {
+          "title": "Change initiators"
+        },
+        "arrival_punctuality": {
+          "title": "Arrival punctuality"
+        },
+        "service_overrun": {
+          "title": "Service overrun"
+        },
+        "reception_queue_wait": {
+          "title": "Check-in to service wait"
+        },
+        "appointment_weekday_mix": {
+          "title": "Appointment weekdays"
+        },
+        "next_appointment": {
+          "title": "Next appointment"
+        },
+        "missing_staff_availability": {
+          "title": "Missing custom staff hours"
+        },
+        "customer_provider_preferences": {
+          "title": "Customer provider preferences"
+        },
+        "customer_location_preferences": {
+          "title": "Customer location preferences"
+        },
+        "setup_completeness": {
+          "title": "Business setup checks"
+        },
+        "pending_imports": {
+          "title": "Pending imports"
+        },
+        "campaign_errors": {
+          "title": "Campaign errors"
+        },
+        "newsletter_growth": {
+          "title": "Audience creation trend"
+        },
+        "newsletter_unsubscribe_trend": {
+          "title": "Audience unsubscribe trend"
+        },
+        "service_average_duration": {
+          "title": "Average scheduled duration by service"
+        },
+        "service_actual_duration": {
+          "title": "Actual duration by service"
+        },
+        "service_service_delay": {
+          "title": "Service delay by service"
+        },
+        "provider_average_duration": {
+          "title": "Average scheduled duration by provider"
+        },
+        "provider_actual_duration": {
+          "title": "Actual duration by provider"
+        },
+        "provider_service_delay": {
+          "title": "Service delay by provider"
+        },
+        "location_average_duration": {
+          "title": "Average scheduled duration by location"
+        },
+        "location_actual_duration": {
+          "title": "Actual duration by location"
+        },
+        "location_service_delay": {
+          "title": "Service delay by location"
+        },
+        "opening_hours": {
+          "title": "Current location opening windows"
+        },
+        "gallery_completeness": {
+          "title": "Gallery checklist issues"
+        },
+        "publishing_errors": {
+          "title": "Publishing error coverage"
+        },
+        "import_errors": {
+          "title": "Import error coverage"
+        },
+        "attention_resolution": {
+          "title": "Overdue booking resolution time"
+        },
+        "future_estimate": {
+          "title": "Future current-price estimate"
+        },
+        "missing_payment_entries": {
+          "title": "Zero or missing recorded amounts"
+        },
+        "paid_customers": {
+          "title": "Customers with recorded amounts"
+        },
+        "active": {
+          "title": "Eligible active bookings"
+        },
+        "confirmed_today": {
+          "title": "Confirmed today"
+        },
+        "event_coverage": {
+          "title": "Workflow event coverage"
+        },
+        "service_share": {
+          "title": "Service booking share"
+        },
+        "service_trend": {
+          "title": "Service appointment trend"
+        },
+        "service_repeat_usage": {
+          "title": "Repeat service usage"
+        },
+        "peak_starts": {
+          "title": "Starts in observed peak hours"
+        },
+        "offpeak_starts": {
+          "title": "Starts outside observed peak hours"
+        }
+      },
+      "categories": {
+        "operations": "Operations",
+        "bookings": "Booking counts",
+        "attention": "Attention",
+        "capacity": "Capacity",
+        "customers": "Customers",
+        "quality": "Quality",
+        "timing": "Timing",
+        "reception": "Reception",
+        "outcomes": "Outcomes",
+        "services": "Services",
+        "team": "Team",
+        "bookingValue": "Booking value",
+        "businessSetup": "Business setup",
+        "workload": "Workload"
+      },
+      "industry": {
+        "general": "General",
+        "clinic": "Clinic",
+        "freelancer": "Freelancer",
+        "consultant": "Consultant",
+        "hairstylist": "Hairstylist",
+        "organization": "Organization",
+        "reception": "Reception",
+        "all": "All permitted widgets"
       }
     },
     "dashboard": {
@@ -1775,7 +2372,127 @@
       "reset": "Reset to default",
       "saveLayout": "Save layout",
       "customize": "Customize",
-      "editingHint": "Drag cards by their handle, resize from the bottom-right corner, or use each card's menu. Save when you are done."
+      "editingHint": "Drag cards by their handle, resize from the bottom-right corner, or use each card's menu. Save when you are done.",
+      "workspace": {
+        "periodDays": "{0} days",
+        "saved": "Dashboard saved.",
+        "saveFailed": "Unable to save. Your changes are still available to retry.",
+        "eyebrow": "Business insights",
+        "range": "{0} to {1} · {2}",
+        "dateRange": "{0} to {1}",
+        "loadingScope": "Loading reporting scope…",
+        "browse": "Browse widgets",
+        "openInsights": "Open Insights",
+        "openHome": "Open Home",
+        "homeHelp": "Home is your daily overview. Each dashboard saves its own widgets and layout.",
+        "insightsHelp": "Insights is your detailed reporting dashboard. Each dashboard saves its own widgets and layout.",
+        "libraryCount": "{0} permitted widgets in the library · some require additional data.",
+        "editingHome": "Editing Home: choose an industry to add its widgets, or replace the layout with that preset. Use Add widget to search the full library. Changes take effect when you Save.",
+        "editingInsights": "Editing Insights: choose an industry to add its widgets, or replace the layout with that preset. Use Add widget to search the full library. Changes take effect when you Save.",
+        "customization": "Dashboard customization",
+        "industryPreset": "Industry preset",
+        "industry": "Industry",
+        "replacePreset": "Replace with preset",
+        "loadError": "Unable to load this reporting scope.",
+        "retry": "Retry",
+        "loadingWidgets": "Loading widgets…",
+        "openReception": "Open reception",
+        "moveEarlier": "Move {0} earlier",
+        "moveLater": "Move {0} later",
+        "sizeOf": "Size of {0}",
+        "size": "Size",
+        "chartFor": "Chart for {0}",
+        "chart": "Chart",
+        "basisFor": "Local date basis for {0}",
+        "basis": "Local date basis",
+        "inherit": "Inherit",
+        "removeWidget": "Remove {0}",
+        "localFilters": "Local filters for {0}",
+        "relatedRecords": "Open related records",
+        "pages": "Widget pages",
+        "previous": "Previous",
+        "next": "Next",
+        "pageOf": "Page {0} of {1}",
+        "freshness": "Generated {0} · operational cards use today’s local window. Historical capacity uses current schedules.",
+        "addTitle": "Add a widget",
+        "addDescription": "Search the widget library for your current business and role. Added widgets are marked below. Save your layout after adding widgets.",
+        "search": "Search",
+        "categories": "Categories · choose any",
+        "industries": "Industries"
+      },
+      "charts": {
+        "value": "value",
+        "bar": "bar",
+        "line": "line",
+        "area": "area",
+        "donut": "donut",
+        "radial": "radial",
+        "table": "table",
+        "heatmap": "heatmap"
+      },
+      "home": {
+        "attentionOne": "{0} past appointment needs an outcome",
+        "attentionMany": "{0} past appointments need an outcome",
+        "viewAppointments": "View appointments →",
+        "confirmedScheduled": "{0} confirmed today · {1} scheduled",
+        "weekPreview": "Week preview",
+        "viewCalendar": "View calendar →",
+        "upcomingSeven": "upcoming in seven days",
+        "previousDay": "Previous preview day",
+        "nextDay": "Next preview day",
+        "dayOne": "{0}, {1} appointment",
+        "dayMany": "{0}, {1} appointments",
+        "nothingElseToday": "Nothing else is scheduled today.",
+        "nothingThisDay": "No scheduled appointments on this day.",
+        "viewAllCount": "View all {0} appointments",
+        "popularServices": "Popular services",
+        "viewAll": "View all",
+        "summary": "Business summary",
+        "summaryRange": "{0} · filters apply to this summary",
+        "indicators": "Business indicators",
+        "catalogEstimate": "Catalog value · estimate",
+        "upNext": "Up next",
+        "noneToday": "No scheduled appointments today.",
+        "reviewCalendar": "Review your calendar",
+        "nextLater": "Next: {0} on {1} at {2}."
+      },
+      "metric": {
+        "partial": "Partial data · a complete total is unavailable for this scope.",
+        "unavailable": "Unavailable · no eligible denominator or complete capture for this scope.",
+        "definitionTitle": "Metric definition",
+        "category": "Category",
+        "scheduleEstimate": "Current schedule estimate",
+        "bookingsCount": "{0} bookings",
+        "bookingsTable": "{0} bookings. Data table below.",
+        "bookingsBy": "{0} bookings by {1}",
+        "rowBookings": "{0}: {1} bookings",
+        "noMatching": "No matching bookings.",
+        "viewData": "View data",
+        "partialCoverage": "Partial coverage",
+        "knownUnknown": "{0} known, {1} unknown",
+        "knownUnknownShort": "{0} known · {1} unknown",
+        "definitionBasis": "Definition · {0}",
+        "definitionData": "Definition and data",
+        "localError": "Unable to load local widget filters.",
+        "localLoading": "Loading local widget data…"
+      },
+      "matching": {
+        "view": "View matching bookings",
+        "title": "Matching bookings",
+        "description": "Same business permissions and supported filters as this widget. Today and upcoming cards keep their declared local windows.",
+        "loadError": "Unable to load matching records.",
+        "loading": "Loading records…",
+        "count": "{0} matching bookings",
+        "appointmentDate": "Appointment date",
+        "pages": "Matching booking pages"
+      },
+      "units": {
+        "bookings": "bookings",
+        "hours": "hours",
+        "minutes": "minutes",
+        "days": "days",
+        "rate": "rate"
+      }
     },
     "notifications": {
       "eventsTitle": "Emails to customers",
@@ -2095,6 +2812,342 @@
       "prefixHint": "Receipts are numbered like {0}.",
       "tin": "TIN (optional)",
       "tinHint": "Shown on receipts when set."
+    },
+    "website": {
+      "setup": {
+        "title": "Website setup",
+        "intro": "Create your public website when you are ready. Your appointment setup remains available.",
+        "pageContent": "Page content",
+        "articlesGallery": "Articles & gallery",
+        "backToWorkspace": "Back to workspace",
+        "chooseWebsite": "Choose your website",
+        "resumeHeading": "Resume a website",
+        "resumeSite": "Resume {0}",
+        "completeProfile": "Complete your business profile in {0} first.",
+        "appointmentSetup": "appointment setup",
+        "businessFocus": "Business focus",
+        "feeling": "Feeling",
+        "primaryAudience": "Primary audience",
+        "contentDensity": "Preferred content density",
+        "mainAction": "Main visitor action",
+        "any": "Any",
+        "bookAppointment": "Book an appointment",
+        "contactBusiness": "Contact the business",
+        "recommendedTemplates": "Recommended templates",
+        "fontPairingValue": "Font pairing: {0}",
+        "matches": "Matches: {0}",
+        "previewTemplate": "Preview selected template",
+        "websiteName": "Website name",
+        "websiteAddress": "Website address",
+        "createDraft": "Create website draft",
+        "stepsLabel": "Website setup steps",
+        "selectedTemplate": "Selected template · layout retained",
+        "accentColor": "Accent color (optional)",
+        "templateNote": "Your selected template includes an approved font pairing and protects readable text, focus indicators, and booking controls. Default scene images are fictional examples owned by the project.",
+        "logoFavicon": "Logo and favicon",
+        "identityType": "Identity image type",
+        "identityImage": "Logo or favicon image",
+        "identityConsent": "I have permission to display this identity image publicly.",
+        "imageTooLarge": "Choose an image smaller than 5 MB.",
+        "imageUnreadable": "Unable to read this image.",
+        "identitySaved": "Your identity image is saved to the website draft.",
+        "uploadIdentity": "Upload identity image",
+        "identityPreviewAlt": "{0} preview",
+        "itemsFromProfile": "{0} items from your business profile. Add factual details before publication.",
+        "websiteFeatures": "Website features",
+        "newsletterNote": "Newsletter signup requires consent and confirmation. Campaigns require a verified sender and available audience and sending limits. This development environment captures email locally.",
+        "manageNewsletter": "Manage newsletter setup",
+        "ready": "Ready",
+        "published": "Your website is published.",
+        "saveFailed": "Unable to save your website.",
+        "draftSaved": "Your website draft is saved. You can return at any time.",
+        "savePreview": "Save & preview",
+        "openPreview": "Open preview",
+        "saveReturn": "Save and return later",
+        "historyLink": "Publication history and brand settings",
+        "industry": {
+          "wellness": "Wellness",
+          "beauty": "Beauty",
+          "creative": "Creative",
+          "education": "Education",
+          "health": "Health"
+        },
+        "mood": {
+          "warm": "Warm",
+          "bold": "Bold",
+          "editorial": "Editorial",
+          "friendly": "Friendly"
+        },
+        "audience": {
+          "clients": "Clients",
+          "learners": "Learners",
+          "patients": "Patients"
+        },
+        "density": {
+          "expressive": "Expressive"
+        },
+        "step": {
+          "brand": "Brand",
+          "content": "Content",
+          "readiness": "Readiness"
+        },
+        "identity": {
+          "logoPrimary": "Primary logo",
+          "logoCompact": "Compact logo",
+          "favicon": "Favicon"
+        },
+        "field": {
+          "title": "Title",
+          "subtitle": "Subtitle",
+          "body": "Body"
+        },
+        "feature": {
+          "newsletter": "Newsletter"
+        }
+      },
+      "content": {
+        "title": "Website content",
+        "intro": "Save drafts, review them, then publish a version for your visitors.",
+        "newsletterLink": "Newsletters and audience",
+        "createIn": "Create your website in {0}.",
+        "draftsLabel": "Content drafts",
+        "drafts": "Drafts",
+        "editArticleNamed": "Edit article {0}",
+        "noDrafts": "No drafts yet.",
+        "editorLabel": "Article editor",
+        "editArticle": "Edit article",
+        "newArticle": "New article",
+        "articleTitle": "Article title",
+        "articleAddress": "Article address",
+        "summary": "Summary",
+        "articleText": "Article text",
+        "markdownHint": "You can use simple Markdown headings, emphasis, and lists.",
+        "saveDraft": "Save article draft",
+        "draftSaved": "Article draft saved.",
+        "previewSaved": "Preview saved article",
+        "reloadBeforePreview": "Reload your website before previewing its article.",
+        "previewUnavailable": "This website preview is unavailable. Reload before retrying.",
+        "publish": "Publish article",
+        "published": "Article published.",
+        "previewLabel": "Article preview",
+        "savedPreview": "Saved article preview",
+        "history": "Publication history",
+        "withdraw": "Withdraw {0}",
+        "withdrawn": "Publication withdrawn.",
+        "restore": "Restore {0}",
+        "restored": "Previous publication restored.",
+        "updateFailed": "Unable to update your content."
+      },
+      "gallery": {
+        "editorLabel": "Gallery editor",
+        "title": "New gallery collection",
+        "collectionTitle": "Collection title",
+        "collectionAddress": "Collection address",
+        "image": "Gallery image",
+        "imageDescription": "Image description",
+        "caption": "Caption",
+        "consent": "I have permission to publish this image, including consent from identifiable people. Uploading makes the image publicly accessible.",
+        "saveDraft": "Save gallery draft",
+        "draftSaved": "Gallery draft saved.",
+        "publish": "Publish gallery",
+        "published": "Gallery published.",
+        "saveFailed": "Unable to save your gallery.",
+        "readFailed": "Unable to read your image."
+      },
+      "newsletter": {
+        "title": "Business newsletters",
+        "intro": "Messages are captured in the local email sink. External email delivery is disabled.",
+        "createIn": "Create a website in {0}.",
+        "access": "Newsletter access: {0}. Audience limit: {1}. Monthly campaign limit: {2}.",
+        "unlimited": "Unlimited",
+        "senderLabel": "Newsletter sender",
+        "senderVerification": "Sender verification",
+        "senderEmail": "Sender email",
+        "senderName": "Sender name",
+        "requestVerification": "Request sender verification",
+        "verificationNotice": "Open the verification message in the local email inbox below.",
+        "campaignSender": "Campaign sender",
+        "chooseSender": "Choose sender",
+        "draftLabel": "Newsletter draft",
+        "newNewsletter": "New newsletter",
+        "subject": "Newsletter subject",
+        "text": "Newsletter text",
+        "markdownHint": "Use simple Markdown. Drafts are private until you confirm a campaign.",
+        "saveDraft": "Save newsletter draft",
+        "draftSaved": "Newsletter draft saved.",
+        "campaignLabel": "Newsletter campaign",
+        "review": "Review and capture a campaign",
+        "savedNewsletter": "Saved newsletter",
+        "chooseDraft": "Choose draft",
+        "capturePreview": "Capture unsent preview",
+        "previewCaptured": "Unsent preview captured. No audience received this preview.",
+        "schedule": "Schedule time (optional, site timezone)",
+        "confirm": "I reviewed the saved newsletter and authorize capture for confirmed subscribers in this business. Unsubscribed and suppressed addresses are excluded.",
+        "confirmCampaign": "Confirm local campaign",
+        "scheduled": "Local campaign scheduled.",
+        "queued": "Local campaign queued.",
+        "checkDue": "Check due campaigns",
+        "dueChecked": "Due local campaigns checked.",
+        "campaignCounts": "{0} · {1} · {2} captured · {3} skipped",
+        "retry": "Retry {0}",
+        "cancel": "Cancel {0}",
+        "refreshStatus": "Refresh delivery status",
+        "audienceLabel": "Newsletter audience",
+        "audience": "Audience ({0})",
+        "suppress": "Suppress {0}",
+        "noSubscribers": "No subscribers yet. Visitors must explicitly consent and confirm their subscription.",
+        "inbox": "Local email inbox",
+        "openMessage": "Open {0} for {1}",
+        "messageLabel": "Local email message",
+        "openAction": "Open newsletter action",
+        "unsubscribe": "Unsubscribe from this newsletter",
+        "updateFailed": "Unable to update newsletters."
+      },
+      "preview": {
+        "liveLabel": "Website live preview",
+        "unavailable": "Preview unavailable for this template.",
+        "savedArticleNote": "Private preview of your saved article. Other surfaces show layout examples. Booking and signup remain inactive here.",
+        "note": "Private preview. Article and gallery examples show the layout and are never published. Booking and signup remain inactive here.",
+        "fullscreen": "Fullscreen preview",
+        "closeFullscreen": "Close fullscreen preview",
+        "darkMode": "Preview dark mode",
+        "lightMode": "Preview light mode",
+        "desktop": "Preview desktop",
+        "mobile": "Preview mobile",
+        "surface": "Surface",
+        "landing": "Landing page",
+        "booking": "Booking handoff",
+        "blog": "Blog index",
+        "article": "Article",
+        "gallery": "Gallery index",
+        "collection": "Gallery collection",
+        "frameTitle": "Website design preview"
+      },
+      "appearance": {
+        "cardsLabel": "Template appearance",
+        "palette": "Color palette",
+        "paletteHint": "Approved choices for this template.",
+        "sampleTitle": "A place to begin",
+        "sampleText": "Carefully made for you.",
+        "sampleButton": "Book a visit",
+        "swatchButton": "Button",
+        "swatchText": "Text",
+        "fontPairing": "Font pairing",
+        "fontHint": "Heading and body samples · Latin + Ethiopic",
+        "resetNotice": "Template defaults selected locally. Save to keep them, or Undo.",
+        "reset": "Reset palette & fonts",
+        "undo": "Undo reset",
+        "back": "← Back to appearance",
+        "previewTitle": "Website preview",
+        "unsaved": "Unsaved choices · preview only",
+        "unchanged": "Published website is unchanged",
+        "choosePrompt": "Choose your palette and fonts, then Save & preview to review the website.",
+        "chooseOption": "Choose an option",
+        "options": "{0} options",
+        "selection": "Selection",
+        "option": {
+          "templateOriginal": "Template original",
+          "softCanvas": "Soft canvas",
+          "paperInk": "Paper & ink",
+          "editorialContrast": "Editorial contrast",
+          "clearSans": "Clear sans"
+        }
+      }
+    },
+    "orgImport": {
+      "title": "Import organization workbook",
+      "intro": "Review changes before applying them to your business. Stable keys make corrections and retries safe.",
+      "businessSettings": "Business settings",
+      "downloadTemplate": "Download workbook template",
+      "guidance": "The workbook includes instructions and example rows. Examples are never imported. Do not enter passwords, formulas, or external links. Staff accounts must accept their invitations before you link them.",
+      "createNew": "Create a new organization from this workbook",
+      "review": "Review workbook",
+      "reviewComplete": "Review complete. No business records were changed.",
+      "reviewLabel": "Workbook review",
+      "ready": "Ready for confirmation",
+      "correct": "Correct these cells and upload again",
+      "sheet": "Sheet",
+      "cell": "Cell",
+      "correction": "Correction",
+      "records": "Records",
+      "applyNote": "Organization facts, team assignments, availability, and approved website text will also be applied. Missing rows do not delete existing records. This import does not send email.",
+      "confirmLabel": "I reviewed these changes and want to apply them to this organization.",
+      "confirm": "Confirm import",
+      "replayed": "This workbook was already applied. No duplicate records were created.",
+      "applied": "Workbook applied. The import audit was saved.",
+      "reviewFailed": "Unable to review this workbook.",
+      "tooLarge": "Choose a workbook smaller than 5 MB.",
+      "readFailed": "Unable to read this workbook. Choose it again."
+    },
+    "appearance": {
+      "back": "Settings and navigation preferences",
+      "title": "Application appearance",
+      "intro": "Personal settings for internal pages, saved to your account across devices.",
+      "hint": "Choose an option to preview it immediately. Save to keep your choices.",
+      "paletteTitle": "Application palette",
+      "modeTitle": "Color mode",
+      "modeSystemHint": "Follow your device",
+      "typographyTitle": "Typography",
+      "textSizeTitle": "Text size",
+      "large": "Large",
+      "densityTitle": "Density",
+      "compact": "Compact",
+      "previewLabel": "Appearance live preview",
+      "previewDark": "Dark preview · appointments and activity",
+      "previewLight": "Light preview · appointments and activity",
+      "sampleService": "Consultation",
+      "viewAppointment": "View appointment",
+      "previewNote": "Readable text, familiar status colors, and your chosen spacing.",
+      "unsaved": "Unsaved appearance preview",
+      "saved": "Saved appearance",
+      "savedMessage": "Appearance saved to your account.",
+      "save": "Save appearance",
+      "restored": "Saved appearance restored.",
+      "reset": "Reset defaults",
+      "defaultsPreviewed": "Defaults previewed. Save to keep them.",
+      "palette": {
+        "codex": "Codex",
+        "violet": "Violet",
+        "ocean": "Ocean",
+        "forest": "Forest"
+      },
+      "typography": {
+        "system": "System sans",
+        "noto": "Noto Ethiopic",
+        "serif": "Classic serif"
+      },
+      "typographyHint": {
+        "system": "Device sans + Noto Ethiopic",
+        "noto": "Noto Ethiopic + device sans",
+        "serif": "DejaVu Serif + Noto Ethiopic"
+      },
+      "densityHint": {
+        "comfortable": "Roomier panels and rows",
+        "compact": "Tighter panels; mobile touch targets stay large"
+      }
+    },
+    "independent": {
+      "title": "Independent booking setup",
+      "intro": "Set your service and working hours. Booking remains private until you publish it.",
+      "duration": "Duration in minutes",
+      "opens": "Opening time",
+      "closes": "Closing time",
+      "workingDays": "Working days",
+      "save": "Save independent offering",
+      "saved": "Your offering is saved. Review it before publishing.",
+      "unpublishedNotice": "Booking is unpublished.",
+      "publishedNotice": "Booking is published.",
+      "offeringLabel": "Independent offering",
+      "privateDraft": "Private draft",
+      "publish": "Publish booking",
+      "unpublish": "Unpublish booking",
+      "openGuest": "Open guest booking",
+      "viewSchedule": "View schedule",
+      "websiteSetup": "Start Website setup"
+    },
+    "ownerRoute": {
+      "checking": "Checking business access…",
+      "error": "Unable to confirm business access. Please sign in again."
     }
   },
   "publicSite": {
@@ -2507,5 +3560,38 @@
     "emailFooter": "You asked for this link on the {0} booking page. If you did not, you can ignore this email.",
     "subject": "Your bookings with {0}",
     "seeAll": "See all your bookings"
+  },
+  "public": {
+    "independentBooking": {
+      "unavailableTitle": "Booking unavailable",
+      "unavailable": "This offering is unavailable. Contact the business for help.",
+      "loading": "Loading booking…",
+      "title": "Book with {0}",
+      "duration": "{0} minutes",
+      "noEmail": "No email notification was sent.",
+      "date": "Appointment date",
+      "times": "Available times in {0}",
+      "noTimes": "No times are available on this date. Choose another day.",
+      "name": "Your name",
+      "email": "Your email",
+      "submit": "Confirm appointment"
+    },
+    "newsletter": {
+      "senderTitle": "Verify newsletter sender",
+      "confirmTitle": "Confirm newsletter subscription",
+      "unsubscribeTitle": "Unsubscribe from newsletter",
+      "senderHint": "This verifies the local email sink only. External email delivery is disabled.",
+      "hint": "Choose below to apply this newsletter preference.",
+      "unavailable": "This link is unavailable.",
+      "applying": "Applying…"
+    },
+    "staffInvitation": {
+      "title": "Accept staff invitation",
+      "intro": "Create your own account password. If you already have an account, sign in with the invited email first; accepting does not change its password. Your owner assigns business access separately.",
+      "password": "New account password",
+      "unavailable": "This invitation is unavailable.",
+      "accepting": "Accepting…",
+      "accept": "Accept invitation"
+    }
   }
 }

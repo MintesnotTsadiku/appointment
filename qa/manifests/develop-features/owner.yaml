@@ -190,3 +190,67 @@ scenarios:
     full_page: true
   - action: get_console_errors
   - action: get_network_errors
+- id: dev_owner_pages_am_desktop
+  title: 'Owner: develop''s pages in Amharic — settings hub, website, appearance, organization import, Insights (am, desktop)'
+  viewport: *desktop
+  checks: []
+  routes:
+  - path: /settings
+    assertions:
+    - type: network_idle
+  actions:
+  - action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="settings-website"]'
+    assertions:
+    - type: visible_text
+      value: ድረ-ገጽ
+  - action: screenshot
+    name: dev_owner_pages_am_desktop-1-hub.png
+    full_page: true
+  - action: open_url
+    url: /settings/website
+  - action: wait_for
+    selector: '[data-page="website-setup"]'
+  - action: screenshot
+    name: dev_owner_pages_am_desktop-2-website.png
+    full_page: true
+  - action: open_url
+    url: /settings/appearance
+  - action: wait_for
+    selector: '.internal-appearance'
+  - action: screenshot
+    name: dev_owner_pages_am_desktop-3-appearance.png
+    full_page: true
+  - action: open_url
+    url: /settings/organization-import
+  - action: wait_for
+    selector: '[data-page="organization-import"]'
+  - action: screenshot
+    name: dev_owner_pages_am_desktop-4-import.png
+    full_page: true
+  - action: open_url
+    url: /settings/website/newsletter
+  - action: wait_for
+    selector: '[data-page="website-newsletter"]'
+  - action: screenshot
+    name: dev_owner_pages_am_desktop-5-newsletter.png
+    full_page: true
+  - action: open_url
+    url: /analytics
+  - action: wait_for
+    selector: '[data-qa="analytics-export"]'
+  - action: screenshot
+    name: dev_owner_pages_am_desktop-6-insights.png
+    full_page: true
+  - action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+  - action: get_console_errors
+  - action: get_network_errors

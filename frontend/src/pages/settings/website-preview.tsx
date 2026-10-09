@@ -9,10 +9,12 @@ import { buildThemeAttributes } from "@/public-experience/firstPaint";
 import { getTemplatePackage } from "@/public-experience/templates/registry";
 import { getFallbackPublicUIConfig } from "@/public-experience/tokens";
 import type { PublishedSnapshot } from "@/public-experience/types";
+import { useTranslation } from "@/lib/i18n";
 
 const button = "rounded-lg border px-4 py-2";
 
 export function WebsitePreview({ snapshot, initialSurface = "landing", savedArticle = false, onEscape }: { snapshot: PublishedSnapshot; initialSurface?: string; savedArticle?: boolean; onEscape?: () => void }) {
+  const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
   const previewRoot = useRef<HTMLElement>(null);
   useEffect(() => {
@@ -56,17 +58,17 @@ export function WebsitePreview({ snapshot, initialSurface = "landing", savedArti
     publicRoot: "/website-preview", mode, toggleMode: () => setMode(mode === "light" ? "dark" : "light"),
     rootStyle: theme.variables as CSSProperties };
 
-  if (!template) return <section aria-label="Website live preview"><p>Preview unavailable for this template.</p></section>;
+  if (!template) return <section aria-label={t("staff.website.preview.liveLabel")}><p>{t("staff.website.preview.unavailable")}</p></section>;
 
-  return <section ref={previewRoot} aria-label="Website live preview" className={`space-y-4 website-preview${expanded ? " website-preview-expanded" : ""}`} role={expanded ? "dialog" : undefined} aria-modal={expanded || undefined} onKeyDown={event => { if (expanded && event.key === "Escape" && !event.defaultPrevented) { event.preventDefault(); setExpanded(false); } }}>
-    <p className="text-xs" style={{ color: "var(--text-muted)" }}>{savedArticle ? "Private preview of your saved article. Other surfaces show layout examples. Booking and signup remain inactive here." : "Private preview. Article and gallery examples show the layout and are never published. Booking and signup remain inactive here."}</p>
-    <div className="flex flex-wrap items-end gap-3"><button type="button" className={button} onClick={() => setExpanded(!expanded)}>{expanded ? "Close fullscreen preview" : "Fullscreen preview"}</button>
-      <button className={button} onClick={() => setMode(mode === "light" ? "dark" : "light")}>Preview {mode === "light" ? "dark" : "light"} mode</button>
-      <button className={button} onClick={() => { viewportChosen.current = true; setMobile(!mobile); }}>Preview {mobile ? "desktop" : "mobile"}</button>
-      <label>Surface<AppearanceSelect aria-label="Surface" value={surface} onChange={(event) => setSurface(event.target.value)}>
-        <option value="landing">Landing page</option><option value="booking">Booking handoff</option>
-        <option value="blog">Blog index</option><option value="article">Article</option>
-        <option value="gallery">Gallery index</option><option value="collection">Gallery collection</option>
+  return <section ref={previewRoot} aria-label={t("staff.website.preview.liveLabel")} className={`space-y-4 website-preview${expanded ? " website-preview-expanded" : ""}`} role={expanded ? "dialog" : undefined} aria-modal={expanded || undefined} onKeyDown={event => { if (expanded && event.key === "Escape" && !event.defaultPrevented) { event.preventDefault(); setExpanded(false); } }}>
+    <p className="text-xs" style={{ color: "var(--text-muted)" }}>{savedArticle ? t("staff.website.preview.savedArticleNote") : t("staff.website.preview.note")}</p>
+    <div className="flex flex-wrap items-end gap-3"><button type="button" className={button} onClick={() => setExpanded(!expanded)}>{expanded ? t("staff.website.preview.closeFullscreen") : t("staff.website.preview.fullscreen")}</button>
+      <button className={button} onClick={() => setMode(mode === "light" ? "dark" : "light")}>{mode === "light" ? t("staff.website.preview.darkMode") : t("staff.website.preview.lightMode")}</button>
+      <button className={button} onClick={() => { viewportChosen.current = true; setMobile(!mobile); }}>{mobile ? t("staff.website.preview.desktop") : t("staff.website.preview.mobile")}</button>
+      <label>{t("staff.website.preview.surface")}<AppearanceSelect aria-label={t("staff.website.preview.surface")} value={surface} onChange={(event) => setSurface(event.target.value)}>
+        <option value="landing">{t("staff.website.preview.landing")}</option><option value="booking">{t("staff.website.preview.booking")}</option>
+        <option value="blog">{t("staff.website.preview.blog")}</option><option value="article">{t("staff.website.preview.article")}</option>
+        <option value="gallery">{t("staff.website.preview.gallery")}</option><option value="collection">{t("staff.website.preview.collection")}</option>
       </AppearanceSelect></label>
     </div>
     <div className="mx-auto overflow-hidden rounded-xl border" style={{ maxWidth: mobile ? 390 : undefined }}

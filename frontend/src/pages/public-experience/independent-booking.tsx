@@ -4,11 +4,14 @@ import { useFrappeGetCall, useFrappePostCall } from 'frappe-react-sdk';
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
 import { parseFrappeErrorMsg } from '@/lib/utils';
+import { intlLocale, useTranslation } from '@/lib/i18n';
+import { fill } from '@/pages/manage-booking/format';
 
 interface Slot { start_time: string; end_time: string; available: boolean }
 interface Offering { business_name: string; service: string; duration: number; timezone: string }
 
 export default function IndependentBooking() {
+  const { t, language } = useTranslation();
   const { offeringId } = useParams();
   const [date, setDate] = useState('');
   const [slot, setSlot] = useState<Slot>();
@@ -29,15 +32,15 @@ export default function IndependentBooking() {
       setBooking(response.message.booking_id);
     } catch (reason) { setProblem(parseFrappeErrorMsg(reason as Parameters<typeof parseFrappeErrorMsg>[0])); }
   }
-  if (error) return <main className="mx-auto max-w-xl p-8"><h1>Booking unavailable</h1><p>This offering is unavailable. Contact the business for help.</p></main>;
-  if (!offering) return <main aria-busy="true" className="p-8">Loading booking…</main>;
-  return <main className="mx-auto max-w-2xl space-y-6 px-5 py-10"><h1 className="text-3xl font-semibold">Book with {offering.business_name}</h1><p>{offering.service} · {offering.duration} minutes</p>
-    {booking ? <section role="status"><h2>Booking confirmed</h2><p>Reference: {booking}</p><p>No email notification was sent.</p></section> : <form onSubmit={submit} className="space-y-5">
-      <label className="block">Appointment date<Input required type="date" value={date} onChange={event => { setDate(event.target.value); setSlot(undefined); }} /></label>
-      <fieldset><legend>Available times in {offering.timezone}</legend><div className="flex flex-wrap gap-3">{slots?.message.all_available_slots_for_data.filter(value => value.available).map(value => <label key={value.start_time} className="rounded-lg border p-3"><input type="radio" name="appointment-time" checked={slot?.start_time === value.start_time} onChange={() => setSlot(value)} /> {new Intl.DateTimeFormat('en', { hour: '2-digit', minute: '2-digit', timeZone: offering.timezone }).format(new Date(value.start_time))}</label>)}</div>{date && slots && !slots.message.all_available_slots_for_data.some(value => value.available) && <p>No times are available on this date. Choose another day.</p>}</fieldset>
-      <label className="block">Your name<Input required value={name} onChange={event => setName(event.target.value)} /></label>
-      <label className="block">Your email<Input required type="email" value={email} onChange={event => setEmail(event.target.value)} /></label>
-      {problem && <p role="alert">{problem}</p>}<Button type="submit" disabled={!slot || loading}>Confirm appointment</Button>
+  if (error) return <main className="mx-auto max-w-xl p-8"><h1>{t('public.independentBooking.unavailableTitle')}</h1><p>{t('public.independentBooking.unavailable')}</p></main>;
+  if (!offering) return <main aria-busy="true" className="p-8">{t('public.independentBooking.loading')}</main>;
+  return <main className="mx-auto max-w-2xl space-y-6 px-5 py-10"><h1 className="text-3xl font-semibold">{fill(t('public.independentBooking.title'), offering.business_name)}</h1><p>{offering.service} · {fill(t('public.independentBooking.duration'), offering.duration)}</p>
+    {booking ? <section role="status"><h2>{t('customerEmail.headingConfirmation')}</h2><p>{fill(t('staff.payments.referenceLine'), booking)}</p><p>{t('public.independentBooking.noEmail')}</p></section> : <form onSubmit={submit} className="space-y-5">
+      <label className="block">{t('public.independentBooking.date')}<Input required type="date" value={date} onChange={event => { setDate(event.target.value); setSlot(undefined); }} /></label>
+      <fieldset><legend>{fill(t('public.independentBooking.times'), offering.timezone)}</legend><div className="flex flex-wrap gap-3">{slots?.message.all_available_slots_for_data.filter(value => value.available).map(value => <label key={value.start_time} className="rounded-lg border p-3"><input type="radio" name="appointment-time" checked={slot?.start_time === value.start_time} onChange={() => setSlot(value)} /> {new Intl.DateTimeFormat(intlLocale(language), { hour: '2-digit', minute: '2-digit', timeZone: offering.timezone }).format(new Date(value.start_time))}</label>)}</div>{date && slots && !slots.message.all_available_slots_for_data.some(value => value.available) && <p>{t('public.independentBooking.noTimes')}</p>}</fieldset>
+      <label className="block">{t('public.independentBooking.name')}<Input required value={name} onChange={event => setName(event.target.value)} /></label>
+      <label className="block">{t('public.independentBooking.email')}<Input required type="email" value={email} onChange={event => setEmail(event.target.value)} /></label>
+      {problem && <p role="alert">{problem}</p>}<Button type="submit" disabled={!slot || loading}>{t('public.independentBooking.submit')}</Button>
     </form>}
   </main>;
 }

@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import type { CompiledDesign } from '@/public-experience/types';
+import { useTranslation } from '@/lib/i18n';
 
 /** Give template media queries a real viewport rather than an admin column. */
 export function PreviewFrame({ children, mobile, design, onEscape }: { children: ReactNode; mobile: boolean; design: CompiledDesign; onEscape?: () => void }) {
+  const { t } = useTranslation();
   const container = useRef<HTMLDivElement>(null);
   const escape = useRef(onEscape);
   escape.current = onEscape;
@@ -39,7 +41,7 @@ export function PreviewFrame({ children, mobile, design, onEscape }: { children:
   };
   const scale = Math.min(1, width / viewport);
   return <div ref={container} className="preview-frame-container" style={{ height: height * scale }}>
-    <iframe ref={frame} title="Website design preview" sandbox="allow-same-origin" srcDoc="<!doctype html><html><head></head><body></body></html>" onLoad={initialize} style={{ width: viewport, height, transform: `scale(${scale})`, transformOrigin: 'top left', border: 0 }}/>
+    <iframe ref={frame} title={t('staff.website.preview.frameTitle')} sandbox="allow-same-origin" srcDoc="<!doctype html><html><head></head><body></body></html>" onLoad={initialize} style={{ width: viewport, height, transform: `scale(${scale})`, transformOrigin: 'top left', border: 0 }}/>
     {target && createPortal(children, target)}
   </div>;
 }

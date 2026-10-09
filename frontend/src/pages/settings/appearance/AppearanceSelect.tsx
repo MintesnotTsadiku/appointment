@@ -1,5 +1,6 @@
 import { Children, isValidElement, useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { Check, ChevronDown } from 'lucide-react';
+import { useTranslation } from '@/lib/i18n';
 
 interface Props {
   value: string;
@@ -12,6 +13,7 @@ interface Props {
 
 /** Styled listbox with a single keyboard focus owner. */
 export function AppearanceSelect({ value, onChange, children, disabled, className, 'aria-label': label }: Props) {
+  const { t } = useTranslation();
   const choices = Children.toArray(children).filter(isValidElement).map(child => {
     const props = child.props as { value?: string; children: string };
     return { value: props.value ?? props.children, label: props.children };
@@ -36,7 +38,7 @@ export function AppearanceSelect({ value, onChange, children, disabled, classNam
         setActive(index => event.key === 'Home' ? 0 : event.key === 'End' ? choices.length - 1 : Math.max(0, Math.min(choices.length - 1, index + (event.key === 'ArrowDown' ? 1 : -1))));
       }
       if (open && ['Enter', ' '].includes(event.key)) { event.preventDefault(); choose(active); }
-    }}><span>{selected?.label || 'Choose an option'}</span><ChevronDown size={16}/></button>
-    {open && <div id={`${id}-options`} role="listbox" aria-label={`${label || "Selection"} options`} className="appearance-options">{choices.map((choice, index) => <button id={`${id}-${index}`} type="button" role="option" aria-selected={choice.value === value} key={choice.value} tabIndex={-1} data-active={index === active} onPointerMove={() => setActive(index)} onClick={event => { event.preventDefault(); event.stopPropagation(); choose(index); }}>{choice.label}{choice.value === value && <Check size={16}/>}</button>)}</div>}
+    }}><span>{selected?.label || t('staff.website.appearance.chooseOption')}</span><ChevronDown size={16}/></button>
+    {open && <div id={`${id}-options`} role="listbox" aria-label={t('staff.website.appearance.options').replace('{0}', label || t('staff.website.appearance.selection'))} className="appearance-options">{choices.map((choice, index) => <button id={`${id}-${index}`} type="button" role="option" aria-selected={choice.value === value} key={choice.value} tabIndex={-1} data-active={index === active} onPointerMove={() => setActive(index)} onClick={event => { event.preventDefault(); event.stopPropagation(); choose(index); }}>{choice.label}{choice.value === value && <Check size={16}/>}</button>)}</div>}
   </div>;
 }

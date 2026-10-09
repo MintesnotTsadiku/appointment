@@ -85,7 +85,22 @@ These suites create and remove their own records, so they refuse every site exce
 
 ## Open
 
-- **English-only pages:** develop's new pages (website setup, content, newsletter, gallery, organization import, appearance, independent booking, solo setup) need translations.
 - **Independent providers' customers:** they get no customer profiles and no booking emails yet.
 - **Playwright spec:** develop's `qa/homepage-analytics.spec.mjs` drives develop's previous navigation and home, which the staff shell replaced. Its features are covered by the develop-features Agent Plane manifests instead.
 - **Seeding:** the showcase seed does create customer profiles; an earlier note said otherwise, and that was wrong. Profiles created by the analytics world are now journaled, so cleanup removes them.
+
+## Translation of develop's pages (2026-10-09)
+
+Develop's pages and components are now translated to English and Amharic: website setup, content, newsletter, gallery, preview, organization import, internal appearance, independent booking, solo setup, the public newsletter and staff invitation pages, the independent-provider dashboard (HomeWorkspace, ConfigurableDashboard, metric widgets and their 176 widget titles) and the Insights filters. 649 strings were added; patch `import_develop_pages_translations` imports them.
+
+- **Server text:** strings that come from the server stay as sent. These are recipe, mood and audience names, readiness checks, status values and workbook errors. The exceptions are the appearance option names and the metric units, which are a small known set and are translated in the frontend with a fallback.
+- **Locale-aware dates:** dates on the independent-provider home follow the page language.
+- **Case rule:** to keep no English strings that differ only by case, the industry preset names are capitalized and the "Bookings" widget category is "Booking counts". `qa/homepage-analytics.spec.mjs` was updated to match.
+
+| Run | Manifest | Result |
+|---|---|---|
+| BQA-2026-00093 | develop-features/owner (adds an Amharic pass over the settings hub, website, appearance, organization import, newsletter and Insights) | Passed |
+| BQA-2026-00094 | develop-features/independent (adds the independent provider's home and booking page in Amharic, mobile) | Passed |
+| BQA-2026-00095, 00096, 00098, 00099 | staff-ui/solo-light, staff-ui/owner-light, quantity/guest, quantity/owner | Passed |
+
+**Known noise:** socket.io polling can answer 400 when a scenario opens several pages in quick succession. The dev proxy drops the old polling session while the page unloads. Pages are not affected.
