@@ -29,6 +29,7 @@ class WalkIn(Document):
 	
 	def validate(self):
 		"""Validate walk-in data"""
+		self.validate_owner()
 		if self.status == "assigned" and not self.assigned_appointment:
 			frappe.throw(_("Assigned appointment is required when status is 'assigned'"))
 		
@@ -42,7 +43,34 @@ class WalkIn(Document):
 			if self.location and appointment.location != self.location:
 				frappe.throw(_("Assigned appointment must belong to this walk-in location."))
 
+	def validate_owner(self):
+		"""An organization's walk-in belongs to its location's organization; an independent provider's to `independent_provider`.
+
+		Exactly one of the two owns it, and everything the walk-in names belongs to that owner.
+		"""
+		location = frappe.db.get_value("Location", self.location, ["organization", "independent_provider"], as_dict=True) if self.location else None
+		if not self.independent_provider and location and not location.organization:
+			self.independent_provider = location.independent_provider
+		old = self.get_doc_before_save()
+		# A walk-in saved before the field existed takes its owner from its location.
+		inferred = not (old and old.independent_provider) and location and self.independent_provider == location.independent_provider
+		if old and (old.independent_provider or None) != (self.independent_provider or None) and not inferred:
+			frappe.throw(_("The independent business owner cannot be changed."), frappe.PermissionError)
+		provider = self.independent_provider
+		if not provider:
+			return
+		owner = frappe.db.get_value("Provider", provider, ["organization", "is_active"], as_dict=True)
+		belongs = {
+			"location": not location or (not location.organization and location.independent_provider == provider),
+			"service": not self.service_requested or owned_by(provider, "Service", self.service_requested),
+			"provider": not self.provider_preferred or self.provider_preferred == provider,
+			"customer": not self.customer or owned_by(provider, "Customer Profile", self.customer),
+		}
+		if not owner or owner.organization or frappe.db.exists("Provider Organization", {"parent": provider, "parenttype": "Provider"}) or not all(belongs.values()):
+			frappe.throw(_("A walk-in must belong to exactly one business."), frappe.PermissionError)
 
 
-
-
+def owned_by(provider, doctype, name):
+	"""True when an independent provider, and no organization, owns this record."""
+	row = frappe.db.get_value(doctype, name, ["independent_provider", "organization"], as_dict=True)
+	return bool(row and row.independent_provider == provider and not row.organization)

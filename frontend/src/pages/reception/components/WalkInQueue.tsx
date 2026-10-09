@@ -5,6 +5,7 @@ import { Plus, RefreshCw, UserRound } from 'lucide-react';
 import { Badge } from '@/components/badge';
 import { Button } from '@/components/button';
 import { EmptyState, ErrorState, ListSkeleton } from '@/components/states';
+import { useBusinessKey } from '@/hooks/useBusinessKey';
 import { useTranslation } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 import type { WalkIn } from '../types';
@@ -21,10 +22,14 @@ export const WalkInQueue = ({ locationName, onAssignWalkIn, onCreateWalkIn, refr
   const { t } = useTranslation();
   const [assigningWalkIn, setAssigningWalkIn] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  // Organizations keep the queue across their scope; an independent provider asks for their own.
+  const owner = useBusinessKey();
+  const business = owner.independent ? owner.key : undefined;
+  const params = { ...(locationName ? { location_name: locationName } : {}), ...(business ? { business } : {}) };
   const { data: walkInsData, isLoading, error, mutate: refreshWalkIns } = useFrappeGetCall<{ message: { walk_ins: WalkIn[]; count: number } }>(
     'appointment.scheduler.api.desk.get_walk_ins',
-    locationName ? { location_name: locationName } : undefined,
-    `walk-ins-${locationName || 'all'}`,
+    Object.keys(params).length ? params : undefined,
+    owner.loading ? null : `walk-ins-${locationName || 'all'}-${business || 'scope'}`,
     { revalidateOnFocus: true, refreshInterval: 30000 }
   );
   const { call: assignWalkIn } = useFrappePostCall('appointment.scheduler.api.desk.assign_walk_in_to_slot');
@@ -45,28 +50,28 @@ export const WalkInQueue = ({ locationName, onAssignWalkIn, onCreateWalkIn, refr
     try {
       const walkIn = walkIns.find((w) => w.name === walkInName);
       if (!walkIn) {
-        toast.error('Walk-in not found');
+        toast.error(t('staff.receptionDesk.toast.walkInNotFound'));
         return;
       }
       if (!walkIn.location) {
-        toast.error('Walk-in needs a location');
+        toast.error(t('staff.receptionDesk.toast.walkInNeedsLocation'));
         return;
       }
       const providerName = walkIn.provider_preferred || '';
       if (!providerName) {
-        toast.error('Please select a provider');
+        toast.error(t('staff.receptionDesk.toast.selectProvider'));
         return;
       }
       const result = await assignWalkIn({ walk_in_name: walkInName, provider_name: providerName, location_name: walkIn.location });
       if (result?.message?.success) {
-        toast.success('Walk-in assigned!', { description: 'Appointment created successfully' });
+        toast.success(t('staff.receptionDesk.toast.walkInAssigned'), { description: t('staff.receptionDesk.toast.walkInAssignedHint') });
         refreshWalkIns();
         onAssignWalkIn(walkInName);
       } else {
-        toast.error('Assignment failed', { description: result?.message?.error });
+        toast.error(t('staff.receptionDesk.toast.assignFailed'), { description: result?.message?.error });
       }
     } catch (error) {
-      toast.error('Assignment failed', { description: (error as { message?: string } | undefined)?.message });
+      toast.error(t('staff.receptionDesk.toast.assignFailed'), { description: (error as { message?: string } | undefined)?.message });
     } finally {
       setAssigningWalkIn(null);
     }

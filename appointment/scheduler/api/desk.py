@@ -541,12 +541,13 @@ def reschedule_appointment(appointment_name: str, new_start_time: str, new_end_t
 
 @frappe.whitelist()
 @add_response_code
-def get_walk_ins(location_name: str = None):
+def get_walk_ins(location_name: str = None, business: str = None):
     """
     Get waiting walk-ins for a location.
 
     Args:
         location_name: Filter by location (optional). If not provided, returns all waiting walk-ins
+        business: `Provider:<provider>` for an independent provider's own queue (optional)
 
     Returns:
         List of walk-ins with status "waiting"
@@ -554,6 +555,9 @@ def get_walk_ins(location_name: str = None):
     filters = {
         "status": "waiting"
     }
+    provider = _independent_business(business)
+    if provider:
+        filters["independent_provider"] = provider
 
     if location_name:
         filters["location"] = location_name
@@ -599,6 +603,7 @@ def add_walk_in(
     provider_preferred: str = None,
     notes: str = None,
     customer: str = None,
+    business: str = None,
 ):
     """
     Add walk-in to queue.
@@ -612,10 +617,12 @@ def add_walk_in(
         provider_preferred: Provider name (optional)
         notes: Optional notes
         customer: Customer Profile picked at the desk (optional)
+        business: `Provider:<provider>` when an independent provider adds to their own queue (optional)
 
     Returns:
         Created walk-in
     """
+    provider = _independent_business(business)
     try:
         if not client_name or not client_phone:
             return {"error": _("Client name and phone are required")}, 400
@@ -626,7 +633,18 @@ def add_walk_in(
         walk_in.client_phone = client_phone
         if client_email:
             walk_in.client_email = client_email
-        if customer:
+        if provider:
+            # The provider's own offering; the walk-in validates that everything named belongs to it.
+            walk_in.independent_provider = provider
+            location_name = location_name or _independent_location(provider, service_requested)
+            provider_preferred = provider_preferred or provider
+            if customer:
+                from appointment.scheduler.doctype.walk_in.walk_in import owned_by
+
+                if not owned_by(provider, "Customer Profile", customer):
+                    return {"error": _("The customer belongs to another business")}, 403
+                walk_in.customer = customer
+        elif customer:
             from appointment.scheduler.booking_access import business_scope
 
             business = frappe.db.get_value("Customer Profile", customer, "organization")
@@ -679,6 +697,16 @@ def assign_walk_in_to_slot(walk_in_name: str, provider_name: str, location_name:
     walk_in_doc = frappe.get_doc("Walk In", walk_in_name)
     if not config_permission(walk_in_doc, permission_type="write"):
         frappe.throw(_("Not permitted to assign this walk-in"), frappe.PermissionError)
+    if walk_in_doc.independent_provider:
+        # An independent walk-in books the provider's own offering; the booking has no organization.
+        from appointment.scheduler.independent import require_owner
+
+        if frappe.session.user != "Administrator":
+            require_owner(walk_in_doc.independent_provider)
+        if provider_name and provider_name != walk_in_doc.independent_provider:
+            frappe.throw(_("Not permitted to assign this walk-in"), frappe.PermissionError)
+        provider_name = walk_in_doc.independent_provider
+        location_name = walk_in_doc.location or location_name
     try:
         # Get walk-in
         walk_in = frappe.get_doc("Walk In", walk_in_name)
@@ -694,50 +722,14 @@ def assign_walk_in_to_slot(walk_in_name: str, provider_name: str, location_name:
         # Get service duration
         service_duration = frappe.db.get_value("Service", service_name, "duration") or 30
 
-        # Find next available slot
-        if preferred_time:
-            # Use preferred time
-            if " " in preferred_time:
-                slot_start = get_datetime(preferred_time)
-            else:
-                # Use today with preferred time
-                today = getdate()
-                slot_start = get_datetime(f"{today} {preferred_time}")
+        if walk_in.independent_provider:
+            # The offering's own open times, so the booking falls inside the provider's hours.
+            slot = _independent_slot(service_name, provider_name, location_name, preferred_time)
         else:
-            # Find next available slot starting from now
-            slot_start = now_datetime()
-            # Round up to next 30-minute mark
-            minutes = slot_start.minute
-            if minutes % 30 != 0:
-                slot_start = slot_start.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
-            else:
-                slot_start = slot_start.replace(second=0, microsecond=0)
-
-        slot_end = slot_start + timedelta(minutes=int(service_duration))
-
-        # Check for conflicts and find next available slot
-        max_attempts = 48  # Try up to 24 hours ahead (48 half-hour slots)
-        attempts = 0
-
-        while attempts < max_attempts:
-            conflicts = check_conflicts(
-                provider_name=provider_name,
-                location_name=location_name,
-                start_time=slot_start,
-                end_time=slot_end
-            )
-
-            if not conflicts:
-                # Found available slot
-                break
-
-            # Try next 30-minute slot
-            slot_start = slot_start + timedelta(minutes=30)
-            slot_end = slot_start + timedelta(minutes=int(service_duration))
-            attempts += 1
-
-        if attempts >= max_attempts:
+            slot = _next_desk_slot(provider_name, location_name, service_duration, preferred_time)
+        if not slot:
             return {"error": _("No available slots found in the next 24 hours")}, 404
+        slot_start, slot_end = slot
 
         # Create appointment
         appointment_date = slot_start.date().strftime("%Y-%m-%d")
@@ -804,6 +796,99 @@ def assign_walk_in_to_slot(walk_in_name: str, provider_name: str, location_name:
         frappe.db.rollback()
         frappe.log_error(str(e), "Desk API: Assign Walk-In Error")
         return {"error": _("Failed to assign walk-in: {0}").format(str(e))}, 500
+
+
+def _next_desk_slot(provider_name, location_name, service_duration, preferred_time=None):
+    """The first half-hour start without a conflict within 24 hours, or None."""
+    # Find next available slot
+    if preferred_time:
+        # Use preferred time
+        if " " in preferred_time:
+            slot_start = get_datetime(preferred_time)
+        else:
+            # Use today with preferred time
+            today = getdate()
+            slot_start = get_datetime(f"{today} {preferred_time}")
+    else:
+        # Find next available slot starting from now
+        slot_start = now_datetime()
+        # Round up to next 30-minute mark
+        minutes = slot_start.minute
+        if minutes % 30 != 0:
+            slot_start = slot_start.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
+        else:
+            slot_start = slot_start.replace(second=0, microsecond=0)
+
+    slot_end = slot_start + timedelta(minutes=int(service_duration))
+
+    # Check for conflicts and find next available slot
+    max_attempts = 48  # Try up to 24 hours ahead (48 half-hour slots)
+    attempts = 0
+
+    while attempts < max_attempts:
+        conflicts = check_conflicts(
+            provider_name=provider_name,
+            location_name=location_name,
+            start_time=slot_start,
+            end_time=slot_end
+        )
+
+        if not conflicts:
+            # Found available slot
+            break
+
+        # Try next 30-minute slot
+        slot_start = slot_start + timedelta(minutes=30)
+        slot_end = slot_start + timedelta(minutes=int(service_duration))
+        attempts += 1
+
+    if attempts >= max_attempts:
+        return None
+    return slot_start, slot_end
+
+
+def _independent_slot(service_name, provider_name, location_name, preferred_time=None):
+    """The first open time of an independent provider's offering within 24 hours, as local wall times, or None."""
+    from appointment.scheduler.booking import offering, open_slots
+
+    events = frappe.get_all("EventType", filters={"service": service_name, "provider": provider_name,
+                            "location": location_name, "is_active": 1}, pluck="name", limit=1)
+    if not events:
+        return None
+    parts = offering(events[0])
+    zone = pytz.timezone(parts.location.timezone or "Africa/Addis_Ababa")
+    earliest = datetime.now(pytz.UTC)
+    if preferred_time:
+        local = get_datetime(preferred_time if " " in preferred_time else f"{earliest.astimezone(zone).date()} {preferred_time}")
+        earliest = max(earliest, zone.localize(local).astimezone(pytz.UTC))
+    latest = earliest + timedelta(hours=24)
+    for day in sorted({earliest.astimezone(zone).date(), latest.astimezone(zone).date()}):
+        for row in open_slots(parts, day)["all_available_slots_for_data"]:
+            start = datetime.fromisoformat(row["start_time"].replace("Z", "+00:00"))
+            if row["available"] and earliest <= start <= latest:
+                end = datetime.fromisoformat(row["end_time"].replace("Z", "+00:00"))
+                return start.astimezone(zone).replace(tzinfo=None), end.astimezone(zone).replace(tzinfo=None)
+    return None
+
+
+def _independent_business(business):
+    """The provider for a `Provider:<provider>` workspace key its owner uses, else None (organizations keep their checks)."""
+    from appointment.scheduler import business_owner
+    from appointment.scheduler.independent import require_owner
+
+    if not (business or "").startswith(business_owner.PREFIX):
+        return None
+    provider = business_owner.from_key(business).provider
+    if frappe.session.user != "Administrator":
+        require_owner(provider)
+    return provider
+
+
+def _independent_location(provider, service=None):
+    """The location of the provider's offering for this service, or of their first offering."""
+    filters = {"provider": provider, "is_active": 1, **({"service": service} if service else {})}
+    rows = frappe.get_all("EventType", filters=filters, pluck="location", order_by="creation asc", limit=1)
+    return rows[0] if rows else None
 
 
 @frappe.whitelist()

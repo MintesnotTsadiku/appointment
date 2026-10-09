@@ -912,7 +912,28 @@
       "recoveryTitle": "የተረጋገጠ የተለቀቀ ሰዓት",
       "recoveryPlaceholder": "የተመዘገበ ስረዛ ይምረጡ",
       "recoveryHint": "ይህን ትስስር ይህ ቀጠሮ የተለቀቀውን ሰዓት በተካበት ጊዜ ብቻ ይመዝግቡ።",
-      "recoverySubmit": "የተረጋገጠ መልሶ ማግኛ ይመዝግቡ"
+      "recoverySubmit": "የተረጋገጠ መልሶ ማግኛ ይመዝግቡ",
+      "toast": {
+        "walkInAdded": "ያለቀጠሮ የመጣ ደንበኛ ተጨምሯል",
+        "walkInAddedHint": "ወደ ተራ ዝርዝሩ ተጨምሯል።",
+        "walkInAddFailed": "ያለቀጠሮ የመጣውን ደንበኛ መጨመር አልተቻለም።",
+        "appointmentCreated": "ቀጠሮ ተፈጥሯል",
+        "scheduledFor": "ለ{0} ተይዟል",
+        "createFailed": "ቀጠሮውን መፍጠር አልተቻለም።",
+        "walkInNotFound": "ያለቀጠሮ የመጣው ደንበኛ አልተገኘም።",
+        "walkInNeedsLocation": "ያለቀጠሮ የመጣው ደንበኛ ቅርንጫፍ ያስፈልገዋል።",
+        "selectProvider": "አገልግሎት ሰጪ ይምረጡ።",
+        "walkInAssigned": "ያለቀጠሮ የመጣው ደንበኛ ተመድቧል",
+        "walkInAssignedHint": "ቀጠሮው ተፈጥሯል።",
+        "assignFailed": "ያለቀጠሮ የመጣውን ደንበኛ መመደብ አልተቻለም።",
+        "appointmentUpdated": "ቀጠሮ ተሻሽሏል",
+        "updatedFor": "አሁን በ{0}",
+        "updateFailed": "ቀጠሮውን ማሻሻል አልተቻለም።",
+        "rescheduled": "ቀጠሮው ተዛውሯል",
+        "movedTo": "ወደ {0} ተዛውሯል",
+        "rescheduleFailed": "ቀጠሮውን ማዛወር አልተቻለም።",
+        "tryAgain": "እንደገና ይሞክሩ።"
+      }
     },
     "calendar": {
       "title": "የእኔ መርሐ ግብር",
@@ -4342,5 +4363,8 @@
       "capturedLocation": "የተመዘገበ {0} ሲቀነስ {1} አማካይ በቅርንጫፍ። የጎደሉ የጊዜ ማህተሞች አይካተቱም።",
       "preferenceLocation": "በእያንዳንዱ ጊዜያዊ የኢሜይል ማንነት በብዛት የተመረጠ ቅርንጫፍ። እኩል ሲሆኑ እያንዳንዱ ምርጫ ይቆጠራል።"
     }
+  },
+  "independentWalkInServer": {
+    "oneOwner": "ያለቀጠሮ የመጣ ደንበኛ የአንድ ንግድ ብቻ መሆን አለበት።"
   }
 }

@@ -20,7 +20,7 @@ export function ReschedulePanel({ view, onMoved, onCancel }: { view: ManageView;
   const [slot, setSlot] = useState<TimeSlot | null>(null);
   const [timeFormat, setTimeFormat] = useState<'12h' | '24h' | 'ethiopian'>('12h');
   const [problem, setProblem] = useState('');
-  const { slots, loading } = useOfferingSlots(view.booking.offering, view.business.kind === 'provider' ? '' : view.business.id, date, view.booking.quantity ?? 1);
+  const { slots, loading } = useOfferingSlots(view, date);
   const { call, loading: saving } = useFrappePostCall<{ message: ManageView }>(`${SELF_SERVICE_API}.reschedule`);
 
   async function confirm() {

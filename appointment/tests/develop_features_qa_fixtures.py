@@ -2,7 +2,8 @@
 
 - A Bloom booking on the first open day, for reception stages, the change reason and reception state.
 - A QA independent provider with one published offering and one guest booking, for the
-  independent-owner home, booking page, Customers page, manage link and My bookings.
+  independent-owner home, booking page, Customers page, manage link, My bookings and
+  reception walk-ins (the run adds and assigns them; cleanup removes them).
 
 Run `setup` before `qa/manifests/develop-features/*.yaml` and `cleanup` afterwards.
 """
@@ -62,6 +63,7 @@ def browser_values(manifest=None):
     location = frappe.db.get_value("Appointment", state.get("booking"), "location") if state.get("booking") else None
     values["qa_dev_location"] = location or ""
     values["qa_independent_offering"] = state.get("offering") or ""
+    values["qa_independent_service"] = frappe.db.get_value("EventType", state.get("offering"), "service") if state.get("offering") else ""
     values["qa_independent_guest_email"] = INDEPENDENT_GUEST
     guest = state.get("independent_booking")
     if guest and frappe.db.exists("Appointment", guest):
@@ -101,6 +103,9 @@ def cleanup():
             if customer and not frappe.db.exists("Appointment", {"customer": customer}):
                 frappe.delete_doc("Customer Profile", customer, ignore_permissions=True, force=True)
         for provider in frappe.get_all("Provider", filters={"user": INDEPENDENT_USER}, pluck="name"):
+            # Walk-ins added at reception link their bookings; remove them first.
+            for name in frappe.get_all("Walk In", filters={"independent_provider": provider}, pluck="name"):
+                frappe.delete_doc("Walk In", name, ignore_permissions=True, force=True)
             for name in frappe.get_all("Appointment", filters={"provider": provider}, pluck="name"):
                 frappe.delete_doc("Appointment", name, ignore_permissions=True, force=True)
             # Guest bookings in the run made provider-owned profiles, emails and opt-outs; the run may save settings.

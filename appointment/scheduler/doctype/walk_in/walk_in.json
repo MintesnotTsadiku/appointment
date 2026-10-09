@@ -14,6 +14,7 @@
   "client_email",
   "service_requested",
   "location",
+  "independent_provider",
   "provider_preferred",
   "status",
   "assigned_appointment",
@@ -71,6 +72,15 @@
    "options": "Location"
   },
   {
+   "description": "Set for an independent provider's walk-in. An organization's walk-in belongs to the organization of its location.",
+   "fieldname": "independent_provider",
+   "fieldtype": "Link",
+   "label": "Independent Provider",
+   "options": "Provider",
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
    "fieldname": "provider_preferred",
    "fieldtype": "Link",
    "label": "Provider Preferred",
@@ -120,7 +130,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-20 00:00:00.000000",
+ "modified": "2026-10-10 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "Scheduler",
  "name": "Walk In",

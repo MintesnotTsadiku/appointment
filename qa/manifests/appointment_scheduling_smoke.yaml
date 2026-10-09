@@ -216,7 +216,7 @@ scenarios:
         selector: '[data-qa="appointment-update-submit"]'
         assertions:
           - type: visible_text
-            value: "Appointment updated!"
+            value: "Appointment updated"
           - type: network_request
             url_contains: update_appointment
             method: POST
@@ -268,7 +268,7 @@ scenarios:
         selector: '[data-qa="appointment-update-submit"]'
         assertions:
           - type: visible_text
-            value: "Appointment updated!"
+            value: "Appointment updated"
           - type: network_request
             url_contains: update_appointment
             method: POST
@@ -339,7 +339,7 @@ scenarios:
         selector: '[data-qa="walkin-card"]:has-text("{qa_marker} Walk-In") [data-qa="walkin-assign"]'
         assertions:
           - type: visible_text
-            value: "Walk-in assigned!"
+            value: "Walk-in assigned"
           - type: network_request
             url_contains: assign_walk_in_to_slot
             method: POST

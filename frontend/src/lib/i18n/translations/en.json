@@ -912,7 +912,28 @@
       "recoveryTitle": "Verified released slot",
       "recoveryPlaceholder": "Choose a captured cancellation",
       "recoveryHint": "Record this link only when this booking replaced the released slot.",
-      "recoverySubmit": "Record verified recovery"
+      "recoverySubmit": "Record verified recovery",
+      "toast": {
+        "walkInAdded": "Walk-in added",
+        "walkInAddedHint": "Added to the queue.",
+        "walkInAddFailed": "The walk-in could not be added.",
+        "appointmentCreated": "Appointment created",
+        "scheduledFor": "Scheduled for {0}",
+        "createFailed": "The appointment could not be created.",
+        "walkInNotFound": "Walk-in not found.",
+        "walkInNeedsLocation": "The walk-in needs a location.",
+        "selectProvider": "Choose a provider.",
+        "walkInAssigned": "Walk-in assigned",
+        "walkInAssignedHint": "The appointment is created.",
+        "assignFailed": "The walk-in could not be assigned.",
+        "appointmentUpdated": "Appointment updated",
+        "updatedFor": "Now at {0}",
+        "updateFailed": "The appointment could not be updated.",
+        "rescheduled": "Appointment moved",
+        "movedTo": "Moved to {0}",
+        "rescheduleFailed": "The appointment could not be moved.",
+        "tryAgain": "Try again."
+      }
     },
     "calendar": {
       "title": "My schedule",
@@ -4342,5 +4363,8 @@
       "capturedLocation": "Mean captured {0} minus {1} by location. Missing timestamps excluded.",
       "preferenceLocation": "Most frequently selected location per provisional email identity. Ties count each choice."
     }
+  },
+  "independentWalkInServer": {
+    "oneOwner": "A walk-in must belong to exactly one business."
   }
 }

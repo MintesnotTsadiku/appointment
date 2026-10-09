@@ -459,10 +459,15 @@ def book(
 @rate_limit(limit=120, seconds=60)
 def slots(offering_id, date, organization_id=None, quantity=1):
     parts = offering(offering_id, public=True)
+    if organization_id and parts.business.name != organization_id:
+        frappe.throw(_("Offering does not belong to this business."), frappe.PermissionError)
+    return open_slots(parts, date, quantity)
+
+
+def open_slots(parts, date, quantity=1):
+    """The day's times for a resolved offering. Callers decide whether the offering must be public."""
     event, service, location, provider, business = parts
     quantity = quantity_for(service, quantity)
-    if organization_id and business.name != organization_id:
-        frappe.throw(_("Offering does not belong to this business."), frappe.PermissionError)
     day = getdate(date)
     if not 0 <= (day - datetime.now().date()).days <= 366:
         frappe.throw(_("Choose a date within the next year."))

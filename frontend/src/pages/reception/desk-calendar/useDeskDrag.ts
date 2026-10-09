@@ -3,10 +3,12 @@ import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
 import { format, parseISO } from 'date-fns';
 import { useFrappePostCall } from 'frappe-react-sdk';
 import { toast } from 'sonner';
+import { intlLocale, useTranslation } from '@/lib/i18n';
 import type { Appointment } from '../types';
 
 /** Drag an appointment onto a slot to reschedule it, keeping its duration. */
 export function useDeskDrag(appointments: Appointment[], onUpdated: () => void) {
+  const { t, language } = useTranslation();
   const [activeId, setActiveId] = useState<string | null>(null);
   const [dragged, setDragged] = useState<Appointment | null>(null);
   const { call: rescheduleAppointment } = useFrappePostCall('appointment.scheduler.api.desk.reschedule_appointment');
@@ -32,13 +34,13 @@ export function useDeskDrag(appointments: Appointment[], onUpdated: () => void) 
         new_end_time: format(target.end, 'yyyy-MM-dd HH:mm:ss'),
       });
       if (result?.message?.success) {
-        toast.success('Appointment rescheduled', { description: `Moved to ${format(target.start, 'MMM d, h:mm a')}` });
+        toast.success(t('staff.receptionDesk.toast.rescheduled'), { description: t('staff.receptionDesk.toast.movedTo').replace('{0}', new Intl.DateTimeFormat(intlLocale(language), { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }).format(target.start)) });
         onUpdated();
       } else {
-        toast.error('Reschedule failed', { description: result?.message?.error || 'Unable to reschedule appointment' });
+        toast.error(t('staff.receptionDesk.toast.rescheduleFailed'), { description: result?.message?.error || t('staff.receptionDesk.toast.tryAgain') });
       }
     } catch (error) {
-      toast.error('Reschedule failed', { description: (error as { message?: string })?.message || 'An error occurred' });
+      toast.error(t('staff.receptionDesk.toast.rescheduleFailed'), { description: (error as { message?: string })?.message || t('staff.receptionDesk.toast.tryAgain') });
     }
   };
 

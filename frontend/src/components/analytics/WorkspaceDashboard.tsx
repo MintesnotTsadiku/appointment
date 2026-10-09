@@ -74,8 +74,8 @@ export function InsightBrief({ kind }: { kind: 'provider' | 'reception' }) {
     [report.today_confirmed, t('staff.analytics.brief.confirmedToday')],
     [report.next_seven_days, t('staff.analytics.brief.upcoming')],
     [report.current.completed, t('staff.analytics.brief.completedWeek')],
-    [report.current.no_show_rate.available ? `${report.current.no_show_rate.rate}%` : '—', t('staff.analytics.brief.noShow')],
-    [report.current.utilization.available ? `${report.current.utilization.rate}%` : '—', t('staff.analytics.brief.utilization')],
+    [report.current.no_show_rate.available && report.current.no_show_rate.rate != null ? `${report.current.no_show_rate.rate}%` : '—', t('staff.analytics.brief.noShow')],
+    [report.current.utilization.available && report.current.utilization.rate != null ? `${report.current.utilization.rate}%` : '—', t('staff.analytics.brief.utilization')],
   ] as const;
   return (
     <section data-qa={`${kind}-insight-brief`} className="flex flex-wrap items-center gap-x-5 gap-y-2 rounded-xl border bg-card px-4 py-3 text-sm shadow-card">

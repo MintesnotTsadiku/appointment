@@ -17,11 +17,15 @@ import { Alert, AlertDescription } from '@/components/alert';
 import { Button } from '@/components/button';
 import { EmptyState } from '@/components/states';
 import { useSession } from '@/context/session';
+import { useBusinessKey } from '@/hooks/useBusinessKey';
 import { useTranslation } from '@/lib/i18n';
 import { ViewMode, Appointment, Location, Provider, TimeSlotInterval } from './types';
 
 const Reception = () => {
   const { session } = useSession();
+  const owner = useBusinessKey();
+  // An independent provider has no selected organization; the scope is their own business.
+  const independentBusiness = owner.independent && owner.key ? owner.key.replace(/^Provider:/, '') : null;
   const { t } = useTranslation();
   const organization = session?.selected?.organization;
   const [searchParams] = useSearchParams();
@@ -165,7 +169,7 @@ const Reception = () => {
             <DeskStats visible={appointments.length} confirmed={confirmedCount} pending={pendingCount} providers={providers.length} />
           </div>
           <div data-qa="reception-scope" className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-            <span className="font-medium text-foreground">{deskScope?.organization_name || session?.selected?.business_name || t('staff.reception.allBusinesses')}</span>
+            <span className="font-medium text-foreground">{deskScope?.organization_name || session?.selected?.business_name || independentBusiness || t('staff.reception.allBusinesses')}</span>
             {selectedLocation && (deskScope?.is_manager || deskScope?.receptionist) && (
               <ReceptionState location={selectedLocation} state={locations.find((loc) => loc.name === selectedLocation)?.reception_state} refresh={() => void refreshLocations()} />
             )}

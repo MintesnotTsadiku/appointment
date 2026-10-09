@@ -3,7 +3,7 @@ import { useFrappePostCall } from 'frappe-react-sdk';
 import { toast } from 'sonner';
 import { format, parseISO } from 'date-fns';
 import { NativeSelect } from '@/components/native-select';
-import { useTranslation } from '@/lib/i18n';
+import { intlLocale, useTranslation } from '@/lib/i18n';
 import type { Appointment } from '../types';
 import { BookingFields } from '../appointment-form/BookingFields';
 import { Field } from '../appointment-form/fields';
@@ -28,7 +28,7 @@ const STATUSES = [
 ] as const;
 
 export const EditAppointmentModal = ({ isOpen, onClose, appointment, onSuccess }: EditAppointmentModalProps) => {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   // A booking without a provider is a resource-only booking; its room stays as it is.
   const resourceOnly = Boolean(appointment && !appointment.provider);
   const [draft, setDraft] = useState<EditDraft>(() => draftFrom(appointment));
@@ -65,14 +65,14 @@ export const EditAppointmentModal = ({ isOpen, onClose, appointment, onSuccess }
       });
 
       if (result?.message?.success) {
-        toast.success('Appointment updated!', { description: `Updated for ${format(start, 'MMM d, h:mm a')}` });
+        toast.success(t('staff.receptionDesk.toast.appointmentUpdated'), { description: t('staff.receptionDesk.toast.updatedFor').replace('{0}', new Intl.DateTimeFormat(intlLocale(language), { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }).format(start)) });
         onSuccess();
         onClose();
       } else {
-        toast.error('Update failed', { description: result?.message?.error });
+        toast.error(t('staff.receptionDesk.toast.updateFailed'), { description: result?.message?.error });
       }
     } catch (error) {
-      toast.error('Update failed', { description: (error as { message?: string } | undefined)?.message });
+      toast.error(t('staff.receptionDesk.toast.updateFailed'), { description: (error as { message?: string } | undefined)?.message });
     }
   };
 

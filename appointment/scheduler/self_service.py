@@ -23,7 +23,7 @@ from frappe.utils import cint, flt, get_datetime, get_url
 from frappe.utils.password import get_encryption_key
 
 from appointment.scheduler import business_owner, payments
-from appointment.scheduler.booking import CUSTOMER_CHANGE
+from appointment.scheduler.booking import CUSTOMER_CHANGE, offering, open_slots
 from appointment.scheduler.helpers.policy_engine import get_applicable_policies
 
 MAX_SELF_RESCHEDULES = 2
@@ -165,6 +165,16 @@ def view(token, slug=None, independent=0):
     if not doc:
         return {"valid": False, "message": _invalid()}
     return _projection(doc)
+
+
+@frappe.whitelist(allow_guest=True)
+@rate_limit(limit=120, seconds=60)
+def slots(token, date, slug=None, independent=0, quantity=1):
+    """Open times for the booking's own offering, published or not, while the customer may still move it."""
+    doc = _require(token, slug, independent)
+    if not decide(doc)["can_reschedule"]:
+        return dict(all_available_slots_for_data=[], total_slots_for_day=0)
+    return open_slots(offering(doc.event_type), date, quantity)
 
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])

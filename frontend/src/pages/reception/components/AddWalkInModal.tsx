@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { useFrappeGetCall, useFrappePostCall } from 'frappe-react-sdk';
 import { toast } from 'sonner';
-import { useSession } from '@/context/session';
+import { useBusinessKey } from '@/hooks/useBusinessKey';
 import { useTranslation } from '@/lib/i18n';
 import { serverErrorMessage } from '@/lib/utils';
 import { CustomerPicker } from '@/pages/customers/CustomerPicker';
@@ -37,7 +37,8 @@ export const AddWalkInModal = ({ isOpen, onClose, onSuccess, locations, provider
   const [draft, setDraft] = useState<WalkInDraft>(EMPTY);
   const [errors, setErrors] = useState<Partial<WalkInDraft>>({});
   const [customer, setCustomer] = useState<CustomerSummary | null>(null);
-  const organization = useSession().session?.selected?.organization;
+  // An independent provider's key (`Provider:<name>`) puts the walk-in in their own queue.
+  const { key: organization, independent } = useBusinessKey();
   const { data: servicesData } = useFrappeGetCall<{ message: { services: Service[] } }>(
     'appointment.scheduler.api.desk.get_services_list',
     undefined,
@@ -70,19 +71,20 @@ export const AddWalkInModal = ({ isOpen, onClose, onSuccess, locations, provider
         provider_preferred: draft.provider_preferred || undefined,
         notes: draft.notes || undefined,
         customer: customer?.name,
+        ...(independent && organization ? { business: organization } : {}),
       });
 
       if (result?.message?.success) {
-        toast.success('Walk-in added!', { description: 'Added to the queue successfully' });
+        toast.success(t('staff.receptionDesk.toast.walkInAdded'), { description: t('staff.receptionDesk.toast.walkInAddedHint') });
         onSuccess();
         onClose();
         setDraft(EMPTY);
         setCustomer(null);
       } else {
-        toast.error('Failed to add walk-in', { description: result?.message?.error });
+        toast.error(t('staff.receptionDesk.toast.walkInAddFailed'), { description: result?.message?.error });
       }
     } catch (error) {
-      toast.error('Failed to add walk-in', { description: serverErrorMessage(error) || undefined });
+      toast.error(t('staff.receptionDesk.toast.walkInAddFailed'), { description: serverErrorMessage(error) || undefined });
     }
   };
 

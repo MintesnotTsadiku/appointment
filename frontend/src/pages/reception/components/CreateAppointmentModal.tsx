@@ -3,7 +3,7 @@ import { useFrappePostCall } from 'frappe-react-sdk';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { useSession } from '@/context/session';
-import { useTranslation } from '@/lib/i18n';
+import { intlLocale, useTranslation } from '@/lib/i18n';
 import { serverErrorMessage } from '@/lib/utils';
 import { CustomerPicker } from '@/pages/customers/CustomerPicker';
 import type { CustomerSummary } from '@/pages/customers/types';
@@ -31,7 +31,7 @@ export const CreateAppointmentModal = ({
   defaultProvider,
   defaultLocation,
 }: CreateAppointmentModalProps) => {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const { services } = useDeskOptions();
   const [draft, setDraft] = useState<BookingDraft>({
     client_name: '',
@@ -88,14 +88,14 @@ export const CreateAppointmentModal = ({
       });
 
       if (result?.message?.success) {
-        toast.success('Appointment created!', { description: `Scheduled for ${format(start, 'MMM d, h:mm a')}` });
+        toast.success(t('staff.receptionDesk.toast.appointmentCreated'), { description: t('staff.receptionDesk.toast.scheduledFor').replace('{0}', new Intl.DateTimeFormat(intlLocale(language), { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }).format(start)) });
         onSuccess();
         onClose();
       } else {
-        toast.error('Creation failed', { description: result?.message?.error });
+        toast.error(t('staff.receptionDesk.toast.createFailed'), { description: result?.message?.error });
       }
     } catch (error) {
-      toast.error('Creation failed', { description: serverErrorMessage(error) || undefined });
+      toast.error(t('staff.receptionDesk.toast.createFailed'), { description: serverErrorMessage(error) || undefined });
     }
   };
 

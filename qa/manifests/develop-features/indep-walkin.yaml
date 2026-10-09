@@ -1,0 +1,149 @@
+# Run appointment.tests.develop_features_qa_fixtures.setup first and cleanup afterwards.
+# An independent provider adds walk-ins at reception and assigns them to their own offering.
+app: appointment
+base_url: http://127.0.0.146:47800
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.develop_features_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-independent-walkin
+default_role: Staff
+auth:
+  type: frappe_session
+  username: qa-independent-owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+scenarios:
+- id: indep_walkin_en_desktop
+  title: 'Independent provider: adds and assigns a walk-in at reception (en, desktop)'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /reception
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="walkin-queue"]'
+  actions:
+  - action: click
+    selector: '[data-qa="reception-add-walkin"]'
+  - action: wait_for
+    selector: '[data-qa="walkin-client-name"]'
+  - action: fill
+    selector: '[data-qa="walkin-client-name"]'
+    value: Selamawit Bekele
+  - action: fill
+    selector: '[data-qa="walkin-client-phone"]'
+    value: '+251911402233'
+  - action: select
+    selector: '#service_requested'
+    value: '{qa_independent_service}'
+  - action: click
+    selector: '[data-qa="walkin-submit"]'
+    assertions:
+    - type: network_request
+      url_contains: add_walk_in
+      method: POST
+      status: 200
+      response_json_path: message.success
+      response_json_value: true
+  - action: wait_for
+    selector: '[data-qa="walkin-card"]:has-text("Selamawit Bekele")'
+  - action: screenshot
+    name: indep_walkin_en_desktop-1-queued.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="walkin-card"]:has-text("Selamawit Bekele") [data-qa="walkin-assign"]'
+    assertions:
+    - type: network_request
+      url_contains: assign_walk_in_to_slot
+      method: POST
+      status: 200
+      response_json_path: message.success
+      response_json_value: true
+      timeout_ms: 20000
+    - type: visible_text
+      value: Walk-in assigned
+  - action: wait_for
+    selector: '[data-qa="walkin-card"]:has-text("Selamawit Bekele")'
+    state: detached
+  - action: screenshot
+    name: indep_walkin_en_desktop-2-assigned.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: indep_walkin_am_mobile
+  title: 'Independent provider: adds and assigns a walk-in in Amharic (am, mobile)'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /reception
+    assertions:
+    - type: network_idle
+  actions:
+  - action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation
+      status: 200
+  - action: click
+    selector: '[data-qa="reception-add-walkin"]'
+    assertions:
+    - type: visible_text
+      value: ያለቀጠሮ የመጣ ደንበኛ ያክሉ
+  - action: wait_for
+    selector: '[data-qa="walkin-client-name"]'
+  - action: fill
+    selector: '[data-qa="walkin-client-name"]'
+    value: Dawit Haile
+  - action: fill
+    selector: '[data-qa="walkin-client-phone"]'
+    value: '+251922507788'
+  - action: select
+    selector: '#service_requested'
+    value: '{qa_independent_service}'
+  - action: click
+    selector: '[data-qa="walkin-submit"]'
+    assertions:
+    - type: network_request
+      url_contains: add_walk_in
+      method: POST
+      status: 200
+      response_json_path: message.success
+      response_json_value: true
+  - action: wait_for
+    selector: '[data-qa="walkin-card"]:has-text("Dawit Haile")'
+  - action: screenshot
+    name: indep_walkin_am_mobile-1-queued.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="walkin-card"]:has-text("Dawit Haile") [data-qa="walkin-assign"]'
+    assertions:
+    - type: network_request
+      url_contains: assign_walk_in_to_slot
+      method: POST
+      status: 200
+      response_json_path: message.success
+      response_json_value: true
+      timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-qa="walkin-card"]:has-text("Dawit Haile")'
+    state: detached
+  - action: screenshot
+    name: indep_walkin_am_mobile-2-assigned.png
+    full_page: true
+  - action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+  - action: get_console_errors
+  - action: get_network_errors

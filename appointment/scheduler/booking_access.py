@@ -224,7 +224,7 @@ def config_query(doctype, user=None):
     if doctype == "EventType":
         return f"(`tabEventType`.service in (select name from `tabService` where organization in ({names})) or exists (select 1 from `tabService` s inner join `tabLocation` l on l.name=`tabEventType`.location where s.name=`tabEventType`.service and coalesce(s.organization, '')='' and coalesce(l.organization, '')='' and s.independent_provider in ({independent}) and s.independent_provider=`tabEventType`.provider and l.independent_provider=s.independent_provider))"
     if doctype == "Walk In":
-        return f"`tabWalk In`.location in (select name from `tabLocation` where organization in ({names}))"
+        return f"(`tabWalk In`.location in (select name from `tabLocation` where organization in ({names})) or `tabWalk In`.independent_provider in ({independent}))"
     if doctype == "Provider":
         own = providers(user)
         managed = managed_organizations(user)
