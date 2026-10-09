@@ -103,8 +103,8 @@ def cleanup():
         for provider in frappe.get_all("Provider", filters={"user": INDEPENDENT_USER}, pluck="name"):
             for name in frappe.get_all("Appointment", filters={"provider": provider}, pluck="name"):
                 frappe.delete_doc("Appointment", name, ignore_permissions=True, force=True)
-            # Guest bookings in the run made provider-owned profiles, emails and opt-outs.
-            for doctype in ("Appointment Notification", "Customer Notification Opt Out", "Customer Profile"):
+            # Guest bookings in the run made provider-owned profiles, emails and opt-outs; the run may save settings.
+            for doctype in ("Appointment Notification", "Customer Notification Opt Out", "Customer Profile", "Customer Notification Settings"):
                 for name in frappe.get_all(doctype, filters={"independent_provider": provider}, pluck="name"):
                     frappe.delete_doc(doctype, name, ignore_permissions=True, force=True)
             for name in frappe.get_all("EventType", filters={"provider": provider}, pluck="name"):

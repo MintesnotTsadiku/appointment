@@ -2547,8 +2547,7 @@
       },
       "sms": "Also send SMS",
       "smsHint": "Sends the same messages to the customer's phone. Each SMS costs money.",
-      "smsUnavailable": "SMS is not set up for this site yet.",
-      "independentDefaults": "Your customers get an email when they book, when a booking moves or is cancelled, and a reminder 24 hours before. You cannot change these settings yet."
+      "smsUnavailable": "SMS is not set up for this site yet."
     },
     "customers": {
       "nav": "Customers",
@@ -3597,7 +3596,10 @@
     }
   },
   "independentCustomersServer": {
-    "oneOwner": "A customer must belong to exactly one business.",
-    "defaultSettings": "Independent providers use the default message settings."
+    "oneOwner": "A customer must belong to exactly one business."
+  },
+  "independentSettingsServer": {
+    "oneOwner": "Message settings must belong to exactly one business.",
+    "ownerFixed": "The business of these settings cannot be changed."
   }
 }

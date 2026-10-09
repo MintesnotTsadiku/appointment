@@ -1,11 +1,12 @@
 {
  "actions": [],
- "autoname": "field:organization",
+ "autoname": "",
  "creation": "2026-10-02 00:00:00.000000",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "organization",
+  "independent_provider",
   "sms_enabled",
   "send_confirmation",
   "send_reschedule",
@@ -19,8 +20,16 @@
    "fieldtype": "Link",
    "label": "Organization",
    "options": "Organization",
-   "reqd": 1,
    "unique": 1
+  },
+  {
+   "fieldname": "independent_provider",
+   "fieldtype": "Link",
+   "label": "Independent Provider",
+   "options": "Provider",
+   "unique": 1,
+   "depends_on": "eval:!doc.organization",
+   "description": "Set instead of the organization when an independent provider owns these settings."
   },
   {
    "fieldname": "sms_enabled",
@@ -63,7 +72,7 @@
  ],
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-10-02 00:00:00.000000",
+ "modified": "2026-10-10 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Scheduler",
  "name": "Customer Notification Settings",
@@ -84,5 +93,5 @@
  "sort_order": "DESC",
  "states": [],
  "track_changes": 0,
- "naming_rule": "By fieldname"
+ "naming_rule": "By script"
 }

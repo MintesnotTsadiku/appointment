@@ -19,7 +19,7 @@ auth:
   verify_path: /api/method/frappe.auth.get_logged_user
 scenarios:
 - id: indep_provider_en_desktop
-  title: 'Independent provider: Customers list and profile, read-only notification settings (en, desktop)'
+  title: 'Independent provider: Customers list and profile, edits customer message settings (en, desktop)'
   viewport:
     width: 1440
     height: 900
@@ -50,7 +50,18 @@ scenarios:
   - action: open_url
     url: /settings/notifications
   - action: wait_for
-    selector: '[data-qa="staff-shell"] h1'
+    selector: '[data-qa="notify-confirmation"]'
+  - action: click
+    selector: '[data-qa="notify-confirmation"]'
+  - action: fill
+    selector: '[data-qa="notify-lead-hours"]'
+    value: '6'
+  - action: click
+    selector: '[data-qa="notification-settings-save"]'
+    assertions:
+    - type: network_request
+      url_contains: notifications.save_settings
+      status: 200
   - action: screenshot
     name: indep_provider_en_desktop-3-notifications.png
     full_page: true
@@ -78,6 +89,22 @@ scenarios:
     selector: :nth-match([data-qa="customer-row"], 1)
   - action: screenshot
     name: indep_provider_am_mobile-1-customers.png
+    full_page: true
+  - action: open_url
+    url: /settings/notifications
+  - action: wait_for
+    selector: '[data-qa="notify-lead-hours"]'
+  - action: fill
+    selector: '[data-qa="notify-lead-hours"]'
+    value: '12'
+  - action: click
+    selector: '[data-qa="notification-settings-save"]'
+    assertions:
+    - type: network_request
+      url_contains: notifications.save_settings
+      status: 200
+  - action: screenshot
+    name: indep_provider_am_mobile-2-notifications.png
     full_page: true
   - action: press
     selector: '[data-qa="topnav-language"]'

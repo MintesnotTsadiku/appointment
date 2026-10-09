@@ -18,6 +18,7 @@ from frappe import _
 from frappe.utils import get_datetime
 
 from appointment.helpers.utils import format_ethiopian_time
+from appointment.scheduler import business_owner
 
 TIMEOUT_SECONDS = 15
 # AfroMessage allows 30 status requests a minute; one run stays below that.
@@ -93,7 +94,8 @@ def send_notification(notification):
 
 
 def render(event, doc, language):
-    business = frappe.db.get_value("Organization", doc.organization, "organization_name")
+    owner = business_owner.for_booking(doc)
+    business = owner.display_name if owner else ""
     service = frappe.db.get_value("Service", doc.service, "service_name") if doc.service else ""
     return _(COPY[event], lang=language).format(business, service, when(doc, language))
 

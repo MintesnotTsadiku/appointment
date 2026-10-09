@@ -89,15 +89,16 @@ def queue_notification(doc, event, receipt=None):
     """Record and enqueue `event` on each channel. Returns the notification status.
 
     Email always runs. SMS runs when the business turned it on and the site has
-    an SMS gateway; independent providers have no SMS. The status is "queued"
-    when any channel queued a message. A receipt goes by email only, once per receipt.
+    an SMS gateway; the platform account sends it for every business. The status
+    is "queued" when any channel queued a message. A receipt goes by email only,
+    once per receipt.
     Bookings outside any business, such as personal meetings, are not notified.
     """
     owner = business_owner.for_booking(doc)
     if not owner:
         return "not_applicable"
     statuses = [_queue_channel(doc, event, "Email", owner, receipt)]
-    if not receipt and owner.organization and business_settings(owner.key).sms_enabled and notification_sms.available():
+    if not receipt and business_settings(owner.key).sms_enabled and notification_sms.available():
         statuses.append(_queue_channel(doc, event, "SMS", owner))
     return "queued" if "queued" in statuses else statuses[0]
 
@@ -189,10 +190,8 @@ def customer_language(doc, owner=None):
 
 
 def business_settings(organization):
-    """Settings for an owner key. Independent providers use the defaults for now."""
-    if not organization or organization.startswith(business_owner.PREFIX):
-        return frappe._dict(DEFAULT_SETTINGS)
-    saved = frappe.db.get_value(
+    """Settings for an owner key. The record name is the key; without a record the defaults apply."""
+    saved = organization and frappe.db.get_value(
         "Customer Notification Settings", organization, list(DEFAULT_SETTINGS), as_dict=True
     )
     return frappe._dict(saved or DEFAULT_SETTINGS)
@@ -272,18 +271,16 @@ def get_settings(organization):
         limit=20,
     )
     return {
-        "settings": business_settings(organization),
-        "sms_available": bool(owner.organization) and notification_sms.available(),
-        # Independent providers use the default settings; a provider record can come later.
-        "editable": bool(owner.organization),
+        "settings": business_settings(owner.key),
+        "sms_available": notification_sms.available(),
+        "editable": True,
         "recent": [_with_delivery(row) for row in recent],
     }
 
 
 @frappe.whitelist(methods=["POST"])
 def save_settings(organization, **values):
-    if not _require_manager(organization).organization:
-        frappe.throw(_("Independent providers use the default message settings."))
+    owner = _require_manager(organization)
     clean = {key: int(frappe.utils.cint(values[key])) for key in DEFAULT_SETTINGS if key in values}
     for key in CHECK_SETTINGS:
         if key in clean:
@@ -293,13 +290,15 @@ def save_settings(organization, **values):
     lead = clean.get("reminder_lead_hours")
     if lead is not None and not LEAD_HOURS_RANGE[0] <= lead <= LEAD_HOURS_RANGE[1]:
         frappe.throw(_("Choose a reminder lead time from 1 to 72 hours."))
-    if frappe.db.exists("Customer Notification Settings", organization):
-        doc = frappe.get_doc("Customer Notification Settings", organization)
+    if frappe.db.exists("Customer Notification Settings", owner.key):
+        doc = frappe.get_doc("Customer Notification Settings", owner.key)
     else:
-        doc = frappe.get_doc(dict(doctype="Customer Notification Settings", organization=organization, **DEFAULT_SETTINGS))
+        doc = frappe.get_doc(
+            dict(doctype="Customer Notification Settings", **business_owner.record_fields(owner), **DEFAULT_SETTINGS)
+        )
     doc.update(clean)
     doc.save(ignore_permissions=True)
-    return business_settings(organization)
+    return business_settings(owner.key)
 
 
 @frappe.whitelist()

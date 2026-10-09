@@ -1,8 +1,8 @@
-"""Customers of independent providers: profiles, emails, manage links and My bookings.
+"""Customers of independent providers: profiles, emails, manage links, My bookings and message settings.
 
 Two independent providers (A and B) each publish one offering. Guests book both
 with the same email. Every test rolls back to a savepoint.
-See docs/features/INDEPENDENT_PROVIDER_CUSTOMERS_PLAN.md.
+See docs/features/INDEPENDENT_PROVIDER_CUSTOMERS_PLAN.md and INDEPENDENT_PROVIDER_SETTINGS_PLAN.md.
 """
 
 from datetime import datetime, timedelta
@@ -17,7 +17,7 @@ from frappe.utils import get_url
 
 from appointment.public_experience import solo_setup
 from appointment.scheduler import (
-    booking, customer_identity, customers, independent, my_bookings, notifications, self_service,
+    booking, customer_identity, customers, independent, my_bookings, notification_sms, notifications, self_service,
 )
 from appointment.scheduler.notification_email import send_notification
 from appointment.tests.test_content_entitlements import EntitlementIsolationTests, _cleanup, require_target
@@ -176,12 +176,103 @@ class IndependentCustomerTests(unittest.TestCase):
         self.assertEqual(found["role"], "manager")
         self.assertEqual([row["name"] for row in found["customers"]], [doc.customer])
         self.assertEqual(customers.get(doc.customer)["history"][0]["name"], doc.name)
-        self.assertFalse(notifications.get_settings(key)["editable"])
         frappe.set_user(self.fixture["owners"]["B"])
         for call in (lambda: customers.search(key), lambda: customers.get(doc.customer),
-                     lambda: customers.save(key, display_name="Abel Bekele"), lambda: notifications.get_settings(key)):
+                     lambda: customers.save(key, display_name="Abel Bekele")):
             with self.assertRaises(frappe.PermissionError):
                 call()
+
+    # -----------------------------------------------------------------------
+    # Message settings
+    # -----------------------------------------------------------------------
+    def _save_settings(self, suffix="A", **values):
+        frappe.set_user(self.fixture["owners"][suffix])
+        saved = notifications.save_settings(self.businesses[suffix].key, **values)
+        frappe.set_user("Administrator")
+        return saved
+
+    def test_a_provider_without_settings_gets_the_defaults(self):
+        frappe.set_user(self.fixture["owners"]["A"])
+        result = notifications.get_settings(self.businesses["A"].key)
+        self.assertTrue(result["editable"])
+        self.assertEqual(result["settings"], notifications.DEFAULT_SETTINGS)
+
+    def test_provider_settings_are_saved_and_followed(self):
+        saved = self._save_settings(send_confirmation=0, reminder_lead_hours=6)
+        self.assertEqual((saved.send_confirmation, saved.reminder_lead_hours), (0, 6))
+        key = self.businesses["A"].key
+        record = frappe.get_doc("Customer Notification Settings", key)
+        self.assertEqual((record.independent_provider, record.organization), (self.businesses["A"].provider, None))
+        frappe.set_user(self.fixture["owners"]["A"])
+        self.assertEqual(notifications.get_settings(key)["settings"].reminder_lead_hours, 6)
+
+        doc = self._book()
+        frappe.set_user("Administrator")
+        row = frappe.get_all("Appointment Notification", filters={"appointment": doc.name}, fields=["event", "status", "skip_reason"])[0]
+        self.assertEqual((row.event, row.status, row.skip_reason), ("Confirmation", "Skipped", "disabled"))
+        other = self._book("B")
+        frappe.set_user("Administrator")
+        self.assertEqual(frappe.db.get_value("Appointment Notification", {"appointment": other.name}, "status"), "Queued",
+                         "Another provider keeps the defaults.")
+
+    def test_reminder_lead_time_is_used(self):
+        self._save_settings(reminder_lead_hours=6)
+        outside, inside = self._book("A", 0), self._book("A", 1)
+        frappe.set_user("Administrator")
+        now = datetime.now(pytz.UTC).replace(tzinfo=None)
+        for doc, hours in ((outside, 10), (inside, 5)):
+            frappe.db.set_value("Appointment", doc.name, {"starts_at": now + timedelta(hours=hours), "creation": now - timedelta(days=3)},
+                                update_modified=False)
+        notifications.send_due_reminders()
+        reminded = set(frappe.get_all("Appointment Notification", filters={"event": "Reminder", "appointment": ["in", [outside.name, inside.name]]},
+                                      pluck="appointment"))
+        self.assertEqual(reminded, {inside.name})
+
+    def test_sms_is_queued_when_turned_on(self):
+        from appointment.tests.test_customer_sms import configure_gateway
+
+        quiet = self._book("A", 0, phone="0911223344")
+        frappe.set_user("Administrator")
+        self.assertFalse(frappe.db.exists("Appointment Notification", {"appointment": quiet.name, "channel": "SMS"}), "SMS is off by default.")
+        configure_gateway()
+        frappe.set_user(self.fixture["owners"]["A"])
+        self.assertTrue(notifications.get_settings(self.businesses["A"].key)["sms_available"])
+        self._save_settings(sms_enabled=1)
+        doc = self._book("A", 1, phone="0911223344")
+        frappe.set_user("Administrator")
+        [row] = frappe.get_all("Appointment Notification", filters={"appointment": doc.name, "channel": "SMS"},
+                               fields=["status", "recipient", "independent_provider", "organization"])
+        self.assertEqual((row.status, row.recipient), ("Queued", "+251911223344"))
+        self.assertEqual((row.independent_provider, row.organization), (self.businesses["A"].provider, None))
+        text = notification_sms.render("Confirmation", doc, "en")
+        self.assertTrue(text.startswith(f"{self.businesses['A'].name}: "), text)
+
+    def test_another_user_cannot_read_or_save_provider_settings(self):
+        key = self.businesses["A"].key
+        for user in (self.fixture["owners"]["B"], "Guest"):
+            frappe.set_user(user)
+            for call in (lambda: notifications.get_settings(key), lambda: notifications.save_settings(key, send_confirmation=0)):
+                with self.assertRaises(frappe.PermissionError):
+                    call()
+        frappe.set_user("Administrator")
+        self.assertFalse(frappe.db.exists("Customer Notification Settings", key))
+
+    def test_organization_settings_keep_the_organization_name(self):
+        org = self.fixture["orgs"]["A"]
+        frappe.set_user(self.fixture["owners"]["A"])
+        saved = notifications.save_settings(org, send_reminder=0)
+        self.assertEqual(saved.send_reminder, 0)
+        frappe.set_user("Administrator")
+        record = frappe.get_doc("Customer Notification Settings", org)
+        self.assertEqual((record.name, record.organization, record.independent_provider), (org, org, None))
+        self.assertEqual(notifications.business_settings(self.businesses["A"].key).send_reminder, 1,
+                         "The owner's independent business keeps its own settings.")
+
+    def test_settings_need_exactly_one_owner(self):
+        frappe.set_user("Administrator")
+        for owners in ({}, {"organization": self.fixture["orgs"]["A"], "independent_provider": self.businesses["A"].provider}):
+            with self.assertRaises(frappe.ValidationError):
+                frappe.get_doc(dict(doctype="Customer Notification Settings", **owners)).insert()
 
 
 def _unwrapped(message):

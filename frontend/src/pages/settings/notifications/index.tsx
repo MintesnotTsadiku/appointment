@@ -14,8 +14,6 @@ import { leadTimeValid } from './leadTime';
 interface SettingsResponse {
   settings: NotificationSettings;
   sms_available: boolean;
-  /** False for an independent provider, who uses the default settings. */
-  editable?: boolean;
   recent: CustomerMessage[];
 }
 
@@ -31,7 +29,6 @@ export default function NotificationSettingsPage() {
   const { call: save, loading: saving } = useFrappePostCall('appointment.scheduler.notifications.save_settings');
   const [form, setForm] = useState<NotificationSettings | null>(null);
   const saved = data?.message?.settings;
-  const editable = data?.message?.editable !== false;
 
   useEffect(() => {
     if (saved) setForm(saved);
@@ -57,12 +54,7 @@ export default function NotificationSettingsPage() {
           <ErrorState onRetry={() => mutate()} />
         ) : (
           <SettingsSection title={t('staff.notifications.eventsTitle')} description={t('staff.notifications.eventsDescription')}>
-            {!editable && (
-              <p data-qa="notification-settings-defaults" className="mb-4 text-sm text-muted-foreground">
-                {t('staff.notifications.independentDefaults')}
-              </p>
-            )}
-            {isLoading || !form ? <ListSkeleton count={4} /> : <EventSettings value={form} onChange={setForm} smsAvailable={Boolean(data?.message?.sms_available)} readOnly={!editable} />}
+            {isLoading || !form ? <ListSkeleton count={4} /> : <EventSettings value={form} onChange={setForm} smsAvailable={Boolean(data?.message?.sms_available)} />}
           </SettingsSection>
         )}
         <SettingsSection title={t('staff.notifications.recentTitle')} description={t('staff.notifications.recentDescription')}>
@@ -74,7 +66,7 @@ export default function NotificationSettingsPage() {
             <EmptyState compact icon={Mail} title={t('staff.notifications.empty')} />
           )}
         </SettingsSection>
-        {form && editable && (
+        {form && (
           <StickySaveBar
             dirty={dirty}
             saving={saving}

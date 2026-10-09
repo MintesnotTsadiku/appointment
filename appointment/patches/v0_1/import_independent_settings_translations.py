@@ -1,0 +1,11 @@
+"""Import the Amharic copy for the message settings of independent providers:
+the new server messages for the settings record.
+
+The importer only adds or updates records.
+"""
+
+from appointment.patches.v0_1.import_frontend_translations import execute as import_frontend_translations
+
+
+def execute():
+    import_frontend_translations()
