@@ -26,10 +26,11 @@ def get_policy_templates():
     
     result = []
     for key, template in templates.items():
+        # Names and descriptions are English module data; translate them for the caller's language here.
         result.append({
             "key": key,
-            "name": template.get("name", ""),
-            "description": template.get("description", ""),
+            "name": _(template.get("name", "")),
+            "description": _(template.get("description", "")),
             "deposit_percentage": template.get("deposit_percentage", 0),
             "deposit_amount": template.get("deposit_amount", 0),
             "cancellation_window_hours": template.get("cancellation_window_hours", 0),

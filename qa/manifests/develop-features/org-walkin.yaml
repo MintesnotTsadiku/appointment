@@ -1,0 +1,182 @@
+# Run appointment.tests.org_walkin_qa_fixtures.setup first and cleanup afterwards.
+# An organization adds walk-ins at reception and assigns them to the first open time.
+# The fixture gives that time; Bloom has none from Sunday after closing to Monday morning.
+# See docs/features/WALKIN_HOURS_PLAN.md.
+app: appointment
+base_url: http://127.0.0.146:47800
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.org_walkin_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-org-walkin
+default_role: Staff
+auth:
+  type: frappe_session
+  username: bloom.owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+scenarios:
+- id: org_walkin_en_desktop
+  title: 'Organization: assigns a walk-in with a preferred provider inside opening hours (en, desktop)'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /reception
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="walkin-queue"]'
+  actions:
+  - action: click
+    selector: '[data-qa="reception-add-walkin"]'
+  - action: wait_for
+    selector: '[data-qa="walkin-client-name"]'
+  - action: fill
+    selector: '[data-qa="walkin-client-name"]'
+    value: Tigist Alemayehu
+  - action: fill
+    selector: '[data-qa="walkin-client-phone"]'
+    value: '+251911736401'
+  - action: select
+    selector: '#service_requested'
+    value: '{qa_org_walkin_service}'
+  - action: select
+    selector: '#location_name'
+    value: '{qa_org_walkin_location}'
+  - action: select
+    selector: '#provider_preferred'
+    value: '{qa_org_walkin_provider}'
+  - action: click
+    selector: '[data-qa="walkin-submit"]'
+    assertions:
+    - type: network_request
+      url_contains: add_walk_in
+      method: POST
+      status: 200
+      response_json_path: message.success
+      response_json_value: true
+  - action: wait_for
+    selector: '[data-qa="walkin-card"]:has-text("Tigist Alemayehu")'
+  - action: screenshot
+    name: org_walkin_en_desktop-1-queued.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="walkin-card"]:has-text("Tigist Alemayehu") [data-qa="walkin-assign"]'
+    assertions:
+    - type: network_request
+      url_contains: assign_walk_in_to_slot
+      method: POST
+      status: 200
+      response_json_path: message.success
+      response_json_value: true
+      timeout_ms: 20000
+    - type: network_request
+      url_contains: assign_walk_in_to_slot
+      response_json_path: message.appointment.provider
+      response_json_value: '{qa_org_walkin_provider}'
+    - type: network_request
+      url_contains: assign_walk_in_to_slot
+      response_json_path: message.appointment.appointment_date
+      response_json_value: '{qa_org_walkin_date}'
+    - type: network_request
+      url_contains: assign_walk_in_to_slot
+      response_json_path: message.appointment.start_time
+      response_json_value: '{qa_org_walkin_start}'
+    - type: visible_text
+      value: Walk-in assigned
+  - action: wait_for
+    selector: '[data-qa="walkin-card"]:has-text("Tigist Alemayehu")'
+    state: detached
+  - action: screenshot
+    name: org_walkin_en_desktop-2-assigned.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: org_walkin_any_am_mobile
+  title: 'Organization: assigns a walk-in without a preferred provider in Amharic (am, mobile)'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /reception
+    assertions:
+    - type: network_idle
+  actions:
+  - action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation
+      status: 200
+  - action: click
+    selector: '[data-qa="reception-add-walkin"]'
+    assertions:
+    - type: visible_text
+      value: ያለቀጠሮ የመጣ ደንበኛ ያክሉ
+  - action: wait_for
+    selector: '[data-qa="walkin-client-name"]'
+  - action: fill
+    selector: '[data-qa="walkin-client-name"]'
+    value: Yonas Gebremedhin
+  - action: fill
+    selector: '[data-qa="walkin-client-phone"]'
+    value: '+251911736402'
+  - action: select
+    selector: '#service_requested'
+    value: '{qa_org_walkin_service}'
+  - action: select
+    selector: '#location_name'
+    value: '{qa_org_walkin_quiet_location}'
+  - action: click
+    selector: '[data-qa="walkin-submit"]'
+    assertions:
+    - type: network_request
+      url_contains: add_walk_in
+      method: POST
+      status: 200
+      response_json_path: message.success
+      response_json_value: true
+  - action: wait_for
+    selector: '[data-qa="walkin-card"]:has-text("Yonas Gebremedhin")'
+  - action: screenshot
+    name: org_walkin_any_am_mobile-1-queued.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="walkin-card"]:has-text("Yonas Gebremedhin") [data-qa="walkin-assign"]'
+    assertions:
+    - type: network_request
+      url_contains: assign_walk_in_to_slot
+      method: POST
+      status: 200
+      response_json_path: message.success
+      response_json_value: true
+      timeout_ms: 20000
+    - type: network_request
+      url_contains: assign_walk_in_to_slot
+      response_json_path: message.appointment.appointment_date
+      response_json_value: '{qa_org_walkin_any_date}'
+    - type: network_request
+      url_contains: assign_walk_in_to_slot
+      response_json_path: message.appointment.start_time
+      response_json_value: '{qa_org_walkin_any_start}'
+    - type: visible_text
+      value: ያለቀጠሮ የመጣው ደንበኛ ተመድቧል
+  - action: wait_for
+    selector: '[data-qa="walkin-card"]:has-text("Yonas Gebremedhin")'
+    state: detached
+  - action: screenshot
+    name: org_walkin_any_am_mobile-2-assigned.png
+    full_page: true
+  - action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+  - action: get_console_errors
+  - action: get_network_errors

@@ -57,12 +57,12 @@ export const WalkInQueue = ({ locationName, onAssignWalkIn, onCreateWalkIn, refr
         toast.error(t('staff.receptionDesk.toast.walkInNeedsLocation'));
         return;
       }
-      const providerName = walkIn.provider_preferred || '';
-      if (!providerName) {
-        toast.error(t('staff.receptionDesk.toast.selectProvider'));
-        return;
-      }
-      const result = await assignWalkIn({ walk_in_name: walkInName, provider_name: providerName, location_name: walkIn.location });
+      // Without a preferred provider the server picks the provider with the first open time.
+      const result = await assignWalkIn({
+        walk_in_name: walkInName,
+        ...(walkIn.provider_preferred ? { provider_name: walkIn.provider_preferred } : {}),
+        location_name: walkIn.location,
+      });
       if (result?.message?.success) {
         toast.success(t('staff.receptionDesk.toast.walkInAssigned'), { description: t('staff.receptionDesk.toast.walkInAssignedHint') });
         refreshWalkIns();

@@ -922,7 +922,6 @@
         "createFailed": "The appointment could not be created.",
         "walkInNotFound": "Walk-in not found.",
         "walkInNeedsLocation": "The walk-in needs a location.",
-        "selectProvider": "Choose a provider.",
         "walkInAssigned": "Walk-in assigned",
         "walkInAssignedHint": "The appointment is created.",
         "assignFailed": "The walk-in could not be assigned.",
@@ -4143,7 +4142,9 @@
       "failedToAssignWalkIn0": "Failed to assign walk-in: {0}",
       "assignedAppointmentIsRequiredWhenStatus": "Assigned appointment is required when status is 'assigned'",
       "assignedAppointmentDoesNotExist": "Assigned appointment does not exist",
-      "assignedAppointmentMustBelongToThis": "Assigned appointment must belong to this walk-in location."
+      "assignedAppointmentMustBelongToThis": "Assigned appointment must belong to this walk-in location.",
+      "timeNotOpenForWalkInService": "This time is not open for the walk-in's service. Choose another time.",
+      "nothingOpenInNext24Hours": "Nothing is open for this service in the next 24 hours."
     },
     "quote": {
       "serviceNameIsRequired": "service_name is required",
@@ -4362,6 +4363,18 @@
       "durationLocation": "Mean scheduled duration by location for all selected latest states. Category averages are not additive.",
       "capturedLocation": "Mean captured {0} minus {1} by location. Missing timestamps excluded.",
       "preferenceLocation": "Most frequently selected location per provisional email identity. Ties count each choice."
+    },
+    "policyTemplates": {
+      "standardName": "Standard Deposit Policy",
+      "standardDescription": "Standard 50% deposit policy with 24-hour cancellation window",
+      "premiumName": "Premium Policy",
+      "premiumDescription": "Premium policy with higher deposit (75%) and longer cancellation window (48 hours)",
+      "noDepositName": "No Deposit Policy",
+      "noDepositDescription": "No deposit required, but strict cancellation rules (2-hour window)",
+      "flexibleName": "Flexible Policy",
+      "flexibleDescription": "Flexible policy with lower deposit (30%) and shorter cancellation window (6 hours)",
+      "locationBasedName": "Location-Based Policy",
+      "locationBasedDescription": "Fixed deposit amount policy (500 ETB) with 12-hour cancellation window"
     }
   },
   "independentWalkInServer": {

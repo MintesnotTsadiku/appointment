@@ -19,12 +19,13 @@ interface PolicyFormProps {
 }
 
 export const PolicyForm = ({ isOpen, onClose, onSuccess, userType, entityId, editingPolicy }: PolicyFormProps) => {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
 
+  // Template names come translated from the server, so a language switch fetches them again.
   const { data: templatesData } = useFrappeGetCall<{ message: { templates: PolicyTemplate[] } }>(
     'appointment.scheduler.api.policy_manager.get_policy_templates',
     undefined,
-    'policy-templates'
+    `policy-templates-${language}`
   );
   const { data: servicesData } = useFrappeGetCall<{ message: { services: OrgService[] } }>(
     'appointment.scheduler.api.policy_manager.get_organization_services',

@@ -1,0 +1,75 @@
+# The policy template list in Amharic. Nothing is saved, so no fixture is needed.
+# See docs/features/WALKIN_HOURS_PLAN.md.
+app: appointment
+base_url: http://127.0.0.146:47800
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+artifact_root: /tmp/agent_browser_qa/appointment-policy-am
+default_role: Staff
+auth:
+  type: frappe_session
+  username: bloom.owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+scenarios:
+- id: policy_templates_am_desktop
+  title: 'Owner in Amharic: the policy templates are listed in Amharic (am, desktop)'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /settings/manage
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="policy-create"]'
+  actions:
+  - action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation
+      status: 200
+  - action: click
+    selector: '[data-qa="policy-create"]'
+  - action: wait_for
+    selector: '#template'
+  # The open list is the listbox; its hidden form <option>s come first in the page, so check inside the listbox.
+  - action: click
+    selector: '#template'
+    assertions:
+    - type: text_contains
+      selector: '[role="listbox"]'
+      value: መደበኛ የቅድመ ክፍያ መመሪያ
+    - type: text_contains
+      selector: '[role="listbox"]'
+      value: ፕሪሚየም መመሪያ
+    - type: text_contains
+      selector: '[role="listbox"]'
+      value: ቅድመ ክፍያ የሌለው መመሪያ
+    - type: text_contains
+      selector: '[role="listbox"]'
+      value: ተለዋዋጭ መመሪያ
+    - type: text_contains
+      selector: '[role="listbox"]'
+      value: በቦታ ላይ የተመሠረተ መመሪያ
+    - type: text_contains
+      selector: '[role="listbox"]'
+      value: መደበኛ የ50% ቅድመ ክፍያ መመሪያ ከ24 ሰዓት የስረዛ ጊዜ ገደብ ጋር
+  - action: screenshot
+    name: policy_templates_am_desktop-1-templates.png
+    full_page: false
+  - action: press
+    selector: 'body'
+    key: Escape
+  - action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+  - action: get_console_errors
+  - action: get_network_errors

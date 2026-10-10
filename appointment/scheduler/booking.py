@@ -486,16 +486,7 @@ def open_slots(parts, date, quantity=1):
         finish = local_instant(day, h["end_time"], location.timezone)
         while start + timedelta(minutes=duration) <= finish:
             end = start + timedelta(minutes=duration)
-            available = True
-            try:
-                _local_start, _local_end, begin, stop = check_hours(parts, start, end)
-                if provider:
-                    check_capacity(provider, begin, stop, lock=False)
-                if wanted and not resources.available(wanted, location.name, business.name, begin, stop, only=event.resource, quantity=quantity):
-                    available = False
-            except frappe.ValidationError:
-                frappe.clear_messages()
-                available = False
+            available = is_open(parts, start, end, quantity, wanted)
             result.append(
                 dict(
                     start_time=start.isoformat() + "Z",
@@ -514,6 +505,22 @@ def open_slots(parts, date, quantity=1):
         duration=duration,
         total_slots_for_day=len(result),
     )
+
+
+def is_open(parts, start, end, quantity=1, wanted=None):
+    """Whether the offering can be booked from `start` to `end` (UTC): hours, notice, buffers, capacity and rooms."""
+    event, service, location, provider, business = parts
+    wanted = resources.needs(service) if wanted is None else wanted
+    try:
+        _local_start, _local_end, begin, stop = check_hours(parts, start, end)
+        if provider:
+            check_capacity(provider, begin, stop, lock=False)
+        if wanted and not resources.available(wanted, location.name, business.name, begin, stop, only=event.resource, quantity=quantity):
+            return False
+    except frappe.ValidationError:
+        frappe.clear_messages()
+        return False
+    return True
 
 
 @frappe.whitelist()

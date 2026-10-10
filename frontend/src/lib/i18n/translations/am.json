@@ -922,7 +922,6 @@
         "createFailed": "ቀጠሮውን መፍጠር አልተቻለም።",
         "walkInNotFound": "ያለቀጠሮ የመጣው ደንበኛ አልተገኘም።",
         "walkInNeedsLocation": "ያለቀጠሮ የመጣው ደንበኛ ቅርንጫፍ ያስፈልገዋል።",
-        "selectProvider": "አገልግሎት ሰጪ ይምረጡ።",
         "walkInAssigned": "ያለቀጠሮ የመጣው ደንበኛ ተመድቧል",
         "walkInAssignedHint": "ቀጠሮው ተፈጥሯል።",
         "assignFailed": "ያለቀጠሮ የመጣውን ደንበኛ መመደብ አልተቻለም።",
@@ -4143,7 +4142,9 @@
       "failedToAssignWalkIn0": "ያለቀጠሮ የመጣ ደንበኛ መመደብ አልተቻለም፦ {0}",
       "assignedAppointmentIsRequiredWhenStatus": "ሁኔታው 'assigned' ሲሆን የተመደበ ቀጠሮ ያስፈልጋል",
       "assignedAppointmentDoesNotExist": "የተመደበው ቀጠሮ የለም",
-      "assignedAppointmentMustBelongToThis": "የተመደበው ቀጠሮ የዚህ ያለቀጠሮ የመጣ ደንበኛ ቅርንጫፍ መሆን አለበት።"
+      "assignedAppointmentMustBelongToThis": "የተመደበው ቀጠሮ የዚህ ያለቀጠሮ የመጣ ደንበኛ ቅርንጫፍ መሆን አለበት።",
+      "timeNotOpenForWalkInService": "ይህ ሰዓት ደንበኛው ለጠየቀው አገልግሎት ክፍት አይደለም። ሌላ ሰዓት ይምረጡ።",
+      "nothingOpenInNext24Hours": "በሚቀጥሉት 24 ሰዓታት ውስጥ ለዚህ አገልግሎት ክፍት ጊዜ የለም።"
     },
     "quote": {
       "serviceNameIsRequired": "service_name ያስፈልጋል",
@@ -4362,6 +4363,18 @@
       "durationLocation": "ለሁሉም የተመረጡ የመጨረሻ ሁኔታዎች በቅርንጫፍ የታቀደ ቆይታ አማካይ። የምድብ አማካዮች አይደመሩም።",
       "capturedLocation": "የተመዘገበ {0} ሲቀነስ {1} አማካይ በቅርንጫፍ። የጎደሉ የጊዜ ማህተሞች አይካተቱም።",
       "preferenceLocation": "በእያንዳንዱ ጊዜያዊ የኢሜይል ማንነት በብዛት የተመረጠ ቅርንጫፍ። እኩል ሲሆኑ እያንዳንዱ ምርጫ ይቆጠራል።"
+    },
+    "policyTemplates": {
+      "standardName": "መደበኛ የቅድመ ክፍያ መመሪያ",
+      "standardDescription": "መደበኛ የ50% ቅድመ ክፍያ መመሪያ ከ24 ሰዓት የስረዛ ጊዜ ገደብ ጋር",
+      "premiumName": "ፕሪሚየም መመሪያ",
+      "premiumDescription": "ከፍ ያለ ቅድመ ክፍያ (75%) እና ረዘም ያለ የስረዛ ጊዜ ገደብ (48 ሰዓት) ያለው ፕሪሚየም መመሪያ",
+      "noDepositName": "ቅድመ ክፍያ የሌለው መመሪያ",
+      "noDepositDescription": "ቅድመ ክፍያ አያስፈልግም፤ ነገር ግን የስረዛ ደንቦቹ ጥብቅ ናቸው (የ2 ሰዓት ገደብ)",
+      "flexibleName": "ተለዋዋጭ መመሪያ",
+      "flexibleDescription": "ዝቅ ያለ ቅድመ ክፍያ (30%) እና አጠር ያለ የስረዛ ጊዜ ገደብ (6 ሰዓት) ያለው ተለዋዋጭ መመሪያ",
+      "locationBasedName": "በቦታ ላይ የተመሠረተ መመሪያ",
+      "locationBasedDescription": "ቋሚ የቅድመ ክፍያ መጠን (500 ብር) ያለው መመሪያ ከ12 ሰዓት የስረዛ ጊዜ ገደብ ጋር"
     }
   },
   "independentWalkInServer": {
