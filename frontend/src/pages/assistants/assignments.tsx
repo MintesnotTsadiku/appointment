@@ -176,7 +176,7 @@ const AssignmentsPage = () => {
 
   return (
     <div
-      className="min-h-screen text-[var(--text-primary)] overflow-hidden"
+      className="min-h-screen text-theme-primary overflow-hidden"
       style={{ backgroundColor: 'var(--bg-primary)' }}
     >
       {/* Ambient background effects */}
@@ -381,7 +381,7 @@ const AssignmentsPage = () => {
                             />
                             
                             <Card
-                              className="relative backdrop-blur-sm hover:scale-[1.02] transition-all duration-300 overflow-hidden"
+                              className="relative backdrop-blur-xs hover:scale-[1.02] transition-all duration-300 overflow-hidden"
                               style={{
                                 backgroundColor: 'var(--bg-elevated)',
                                 border: '1px solid var(--border-default)',
@@ -527,7 +527,7 @@ const AssignmentsPage = () => {
                                 key={assignment.name}
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
-                                className="hover:bg-[var(--bg-secondary)] transition-colors"
+                                className="hover:bg-theme-secondary transition-colors"
                               >
                                 <td className="px-4 py-3">
                                   <div className="flex items-center gap-3">

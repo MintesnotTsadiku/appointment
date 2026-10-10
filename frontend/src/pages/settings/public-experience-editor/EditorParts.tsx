@@ -11,13 +11,13 @@ export function StatusMessages({ error, message }: { error: string; message: str
       {error ? (
         <Alert variant="destructive" data-status="error">
           <AlertTriangle />
-          <AlertDescription className="break-words text-foreground">{error}</AlertDescription>
+          <AlertDescription className="wrap-break-word text-foreground">{error}</AlertDescription>
         </Alert>
       ) : null}
       {message ? (
         <Alert variant="success" role="status" data-status="ok">
           <CheckCircle2 />
-          <AlertDescription className="break-words text-foreground">{message}</AlertDescription>
+          <AlertDescription className="wrap-break-word text-foreground">{message}</AlertDescription>
         </Alert>
       ) : null}
     </>

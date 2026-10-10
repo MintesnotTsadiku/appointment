@@ -117,7 +117,7 @@ const Step5OrgSuccess = ({ onComplete }: Step5OrgSuccessProps) => {
         <div className="space-y-6">
           {/* Organization URL */}
           {orgUrl && (
-            <div className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
+            <div className="p-6 bg-linear-to-r/srgb from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                 Organization Booking Page
               </h3>
@@ -245,19 +245,19 @@ const Step5OrgSuccess = ({ onComplete }: Step5OrgSuccessProps) => {
             </h3>
             <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
               <li className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 shrink-0" />
                 <span>Test your booking page by clicking the preview button</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 shrink-0" />
                 <span>Share your booking links with customers</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 shrink-0" />
                 <span>Manage bookings from your dashboard</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 shrink-0" />
                 <span>Add more services or providers anytime</span>
               </li>
             </ul>

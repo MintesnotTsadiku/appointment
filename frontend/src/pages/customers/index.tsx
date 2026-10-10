@@ -111,7 +111,7 @@ function CustomerList({ rows, showContact }: { rows: CustomerSummary[]; showCont
           <Link
             to={`/customers/${row.name}`}
             data-qa="customer-row"
-            className="flex flex-col gap-1 px-4 py-3 hover:bg-muted/50 focus-visible:bg-muted/50 focus-visible:outline-none sm:flex-row sm:items-center sm:gap-4"
+            className="flex flex-col gap-1 px-4 py-3 hover:bg-muted/50 focus-visible:bg-muted/50 focus-visible:outline-hidden sm:flex-row sm:items-center sm:gap-4"
           >
             <span className="min-w-0 flex-1">
               <span className="flex flex-wrap items-center gap-2 font-medium text-foreground">

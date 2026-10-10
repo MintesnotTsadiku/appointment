@@ -33,14 +33,14 @@ export function CancelPanel({ view, onCancelled, onKeep }: { view: ManageView; o
 
   return (
     <section data-qa="manage-cancel" className="space-y-4">
-      <div data-qa="manage-cancel-terms" data-qa-state={rules.cancel_late ? 'late' : 'free'} className="space-y-2 rounded-xl border border-[var(--border-default)] p-4 text-sm">
-        <p className="font-medium text-[var(--text-primary)]">
+      <div data-qa="manage-cancel-terms" data-qa-state={rules.cancel_late ? 'late' : 'free'} className="space-y-2 rounded-xl border border-theme-default p-4 text-sm">
+        <p className="font-medium text-theme-primary">
           {rules.cancel_late
             ? fill(t('customerManage.cancelLate'), rules.cancellation_window_hours, formatMoney(rules.fee, currency))
             : t('customerManage.cancelFree')}
         </p>
         {rules.amount_paid > 0 && (
-          <p className="text-[var(--text-secondary)]">
+          <p className="text-theme-secondary">
             {rules.refund > 0
               ? fill(t('customerManage.refundLine'), formatMoney(rules.amount_paid, currency), formatMoney(rules.refund, currency))
               : fill(t('customerManage.refundNone'), formatMoney(rules.amount_paid, currency))}
@@ -48,11 +48,11 @@ export function CancelPanel({ view, onCancelled, onKeep }: { view: ManageView; o
         )}
       </div>
       {needsConsent && (
-        <label className="flex items-start gap-2 text-sm text-[var(--text-primary)]">
+        <label className="flex items-start gap-2 text-sm text-theme-primary">
           <input
             type="checkbox"
             data-qa="manage-accept-fee"
-            className="mt-0.5 h-4 w-4 accent-[var(--accent-primary,currentColor)]"
+            className="mt-0.5 h-4 w-4 accent-(--accent-primary,currentColor)"
             checked={accepted}
             onChange={(event) => setAccepted(event.target.checked)}
           />

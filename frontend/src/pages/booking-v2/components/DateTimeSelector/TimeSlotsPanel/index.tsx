@@ -104,7 +104,7 @@ export function TimeSlotsPanel({
       // Base styles
       "relative w-full h-14 md:h-16 rounded-xl font-medium transition-all duration-200",
       "flex items-center justify-between px-4 md:px-5",
-      "focus:outline-none focus:ring-2 focus:ring-offset-2 backdrop-blur-sm",
+      "focus:outline-hidden focus:ring-2 focus:ring-offset-2 backdrop-blur-xs",
       "focus:ring-offset-transparent",
       "group",
 
@@ -170,14 +170,14 @@ export function TimeSlotsPanel({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="flex items-start gap-3 p-3 rounded-lg backdrop-blur-sm"
+          className="flex items-start gap-3 p-3 rounded-lg backdrop-blur-xs"
           style={{ 
             backgroundColor: 'var(--bg-elevated)',
             border: '1px solid var(--border-default)'
           }}
         >
           <div 
-            className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center"
+            className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center"
             style={{ 
               background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
               opacity: 0.2
@@ -294,7 +294,7 @@ export function TimeSlotsPanel({
                     <div className="flex flex-col items-end gap-1">
                       {slot.recommended && (
                         <div
-                          className="flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium backdrop-blur-sm"
+                          className="flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium backdrop-blur-xs"
                           style={selected ? {
                             backgroundColor: 'rgba(255, 255, 255, 0.2)',
                             color: 'white'
@@ -395,7 +395,7 @@ function EmptySlots({ date }: { date: Date }) {
       className="w-full h-64 flex flex-col items-center justify-center text-center space-y-4 p-6"
     >
       <div 
-        className="h-16 w-16 rounded-full flex items-center justify-center backdrop-blur-sm"
+        className="h-16 w-16 rounded-full flex items-center justify-center backdrop-blur-xs"
         style={{ 
           background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
           opacity: 0.2

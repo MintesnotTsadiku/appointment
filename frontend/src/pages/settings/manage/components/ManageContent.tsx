@@ -64,7 +64,7 @@ function IndividualProviderPanel({ provider, onRefresh, query }: { provider: Ind
         </span>
         <div className="min-w-0">
           <h2 id="manage-individual-provider" className="flex flex-wrap items-center gap-2 text-base font-semibold text-foreground">
-            <span className="min-w-0 break-words">{provider.provider_name}</span>
+            <span className="min-w-0 wrap-break-word">{provider.provider_name}</span>
             <ValidationBadge status={provider.validation?.status} />
           </h2>
           <p className="text-xs text-muted-foreground">{t('staff.manage.individualProvider')}</p>
@@ -77,7 +77,7 @@ function IndividualProviderPanel({ provider, onRefresh, query }: { provider: Ind
           <AlertDescription>
             <ul className="list-disc space-y-0.5 pl-4">
               {issues.map((issue, idx) => (
-                <li key={idx} className="break-words">{issue}</li>
+                <li key={idx} className="wrap-break-word">{issue}</li>
               ))}
             </ul>
           </AlertDescription>

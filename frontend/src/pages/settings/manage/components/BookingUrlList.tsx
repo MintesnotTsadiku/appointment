@@ -16,7 +16,7 @@ export const BookingUrlList = ({ urls, showType = false }: { urls?: BookingUrl[]
               href={url.full_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-w-0 items-center gap-1 rounded-sm text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="inline-flex min-w-0 items-center gap-1 rounded-sm text-primary underline-offset-4 hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring"
             >
               <ExternalLink className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
               <span className="break-all">{url.description || url.url_type || url.full_url}</span>

@@ -57,7 +57,7 @@ interface SaveBarProps {
 export function StickySaveBar({ dirty = true, saving, onSave, onDiscard, saveLabel, form, saveQa, disabled, message }: SaveBarProps) {
   const { t } = useTranslation();
   return (
-    <div className="sticky bottom-0 z-20 -mx-4 mt-6 border-t bg-background/90 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+    <div className="sticky bottom-0 z-20 -mx-4 mt-6 border-t bg-background/90 px-4 py-3 backdrop-blur-sm sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
       <div className="flex flex-wrap items-center justify-end gap-2">
         <p className="mr-auto text-sm text-muted-foreground" aria-live="polite">
           {message ?? (dirty ? t('staff.form.unsaved') : t('staff.form.allSaved'))}

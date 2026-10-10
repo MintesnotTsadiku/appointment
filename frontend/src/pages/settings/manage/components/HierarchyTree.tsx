@@ -61,7 +61,7 @@ function OrganizationTree({ organization, onRefresh, query }: { organization: Or
       <section className="min-w-0 space-y-3 rounded-xl border bg-card p-4 shadow-card sm:p-5" aria-label={organization.organization_name}>
         <div className="flex min-w-0 flex-wrap items-center gap-2">
           <Building2 className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden="true" />
-          <h2 className="min-w-0 break-words text-base font-semibold text-foreground">{organization.organization_name}</h2>
+          <h2 className="min-w-0 wrap-break-word text-base font-semibold text-foreground">{organization.organization_name}</h2>
           <ValidationBadge status={organization.validation?.status} />
         </div>
         {!!organization.booking_urls?.length && (
@@ -176,7 +176,7 @@ function ServiceItem({ service, onEdit, onDelete }: ServiceItemProps) {
       {linked.length > 0 && (
         <SubList label={t('staff.manage.linkedProviders')}>
           {linked.map((sp, idx) => (
-            <p key={idx} className="break-words text-sm text-foreground">
+            <p key={idx} className="wrap-break-word text-sm text-foreground">
               {sp.provider_name} {Boolean(sp.is_primary) && <span className="text-muted-foreground">({t('staff.manage.primary')})</span>}
             </p>
           ))}

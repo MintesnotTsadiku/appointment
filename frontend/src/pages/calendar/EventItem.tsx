@@ -18,7 +18,7 @@ export function EventRow({ appointment, onOpen }: { appointment: Appointment; on
       onClick={() => onOpen(appointment)}
       aria-label={eventLabel(appointment)}
       title={`${appointment.client_name} · ${appointment.service_name}`}
-      className="flex w-full min-w-0 items-center gap-1.5 rounded-md px-1.5 py-0.5 text-left text-xs transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      className="flex w-full min-w-0 items-center gap-1.5 rounded-md px-1.5 py-0.5 text-left text-xs transition-colors hover:bg-accent focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring"
     >
       <StatusDot status={appointment.status} className="h-1.5 w-1.5" />
       <span className="shrink-0 tabular-nums text-muted-foreground">{shortTime(appointment.start_time)}</span>
@@ -33,7 +33,7 @@ export function AgendaRow({ appointment, onOpen }: { appointment: Appointment; o
     <button
       type="button"
       onClick={() => onOpen(appointment)}
-      className="flex w-full min-w-0 items-start gap-3 rounded-lg border bg-card p-3 text-left transition-colors hover:bg-accent/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:p-4"
+      className="flex w-full min-w-0 items-start gap-3 rounded-lg border bg-card p-3 text-left transition-colors hover:bg-accent/60 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring sm:p-4"
     >
       <div className="w-14 shrink-0 text-sm">
         <div className="font-semibold tabular-nums text-foreground">{shortTime(appointment.start_time)}</div>

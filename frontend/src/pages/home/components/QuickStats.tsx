@@ -42,14 +42,14 @@ const QuickStats = () => {
       value: stats.upcoming_today,
       subtitle: 'upcoming',
       icon: Clock,
-      gradient: 'bg-gradient-to-br from-blue-500 to-indigo-600',
+      gradient: 'bg-linear-to-br/srgb from-blue-500 to-indigo-600',
     },
     {
       title: 'Booking Rate',
       value: `${stats.booking_rate_change > 0 ? '+' : ''}${stats.booking_rate_change}%`,
       subtitle: 'vs last week',
       icon: stats.booking_rate_change >= 0 ? TrendingUp : TrendingDown,
-      gradient: stats.booking_rate_change >= 0 ? 'bg-gradient-success' : 'bg-gradient-to-br from-red-500 to-rose-600',
+      gradient: stats.booking_rate_change >= 0 ? 'bg-gradient-success' : 'bg-linear-to-br/srgb from-red-500 to-rose-600',
       trend: stats.booking_rate_change >= 0 ? 'up' : 'down',
     },
     {
@@ -74,7 +74,7 @@ const QuickStats = () => {
           {Array.from({ length: 4 }).map((_, i) => (
             <div 
               key={i} 
-              className="relative backdrop-blur-sm rounded-2xl p-5 animate-pulse"
+              className="relative backdrop-blur-xs rounded-2xl p-5 animate-pulse"
               style={{ 
                 backgroundColor: 'var(--border-subtle)',
                 border: '1px solid var(--border-default)'
@@ -106,7 +106,7 @@ const QuickStats = () => {
   if (error) {
     return (
       <div 
-        className="relative backdrop-blur-sm rounded-2xl p-6"
+        className="relative backdrop-blur-xs rounded-2xl p-6"
         style={{ 
           backgroundColor: 'var(--border-subtle)',
           border: '1px solid var(--border-default)'
@@ -146,7 +146,7 @@ const QuickStats = () => {
             />
             
             <div 
-              className="relative backdrop-blur-sm rounded-2xl p-5 hover:scale-[1.02] transition-all duration-300"
+              className="relative backdrop-blur-xs rounded-2xl p-5 hover:scale-[1.02] transition-all duration-300"
               style={{ 
                 backgroundColor: 'var(--border-subtle)',
                 border: '1px solid var(--border-default)'

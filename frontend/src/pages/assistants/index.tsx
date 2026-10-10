@@ -174,7 +174,7 @@ const AssistantsDashboard = () => {
 
   return (
     <div
-      className="min-h-screen text-[var(--text-primary)] overflow-hidden"
+      className="min-h-screen text-theme-primary overflow-hidden"
       style={{ backgroundColor: 'var(--bg-primary)' }}
     >
       {/* Ambient background effects */}
@@ -345,7 +345,7 @@ const AssistantsDashboard = () => {
                               </p>
                             </div>
                             <Clock
-                              className="w-3 h-3 flex-shrink-0 mt-1"
+                              className="w-3 h-3 shrink-0 mt-1"
                               style={{ color: 'var(--text-subtle)' }}
                             />
                           </motion.div>

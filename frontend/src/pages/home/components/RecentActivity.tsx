@@ -52,13 +52,13 @@ const RecentActivity = () => {
       case 'booking':
         return 'bg-gradient-success';
       case 'cancellation':
-        return 'bg-gradient-to-br from-red-500 to-rose-600';
+        return 'bg-linear-to-br/srgb from-red-500 to-rose-600';
       case 'reschedule':
-        return 'bg-gradient-to-br from-blue-500 to-indigo-600';
+        return 'bg-linear-to-br/srgb from-blue-500 to-indigo-600';
       case 'noshow':
         return 'bg-gradient-secondary';
       default:
-        return 'bg-gradient-to-br from-gray-500 to-gray-600';
+        return 'bg-linear-to-br/srgb from-gray-500 to-gray-600';
     }
   };
 
@@ -83,7 +83,7 @@ const RecentActivity = () => {
 
   return (
     <div 
-      className="relative backdrop-blur-sm rounded-2xl overflow-hidden"
+      className="relative backdrop-blur-xs rounded-2xl overflow-hidden"
       style={{ 
         backgroundColor: 'var(--border-subtle)',
         border: '1px solid var(--border-default)'
@@ -166,7 +166,7 @@ const RecentActivity = () => {
               >
                 {/* Activity Icon with gradient background */}
                 <div 
-                  className={`flex-shrink-0 p-2 rounded-lg ${getActivityGradient(activity.type)}`}
+                  className={`shrink-0 p-2 rounded-lg ${getActivityGradient(activity.type)}`}
                 >
                   <span className="text-white">
                     {getActivityIcon(activity.type)}
@@ -197,7 +197,7 @@ const RecentActivity = () => {
                     // Navigate to appointment details
                     console.log(`View appointment ${activity.appointment_id}`);
                   }}
-                  className="flex-shrink-0 p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
+                  className="shrink-0 p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
                   style={{ 
                     backgroundColor: 'var(--accent-primary-light)',
                     color: 'var(--accent-primary)'

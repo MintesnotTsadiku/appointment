@@ -76,7 +76,7 @@ export function WorkspaceSwitcher() {
         data-qa="workspace-switcher"
         aria-label={`${t('staff.shell.switchBusiness')}: ${name}`}
         className={cn(
-          'flex w-full items-center gap-2.5 rounded-lg border border-transparent p-1.5 text-left outline-none transition-colors hover:border-border hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-ring',
+          'flex w-full items-center gap-2.5 rounded-lg border border-transparent p-1.5 text-left outline-hidden transition-colors hover:border-border hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-ring',
           collapsed && 'justify-center'
         )}
       >

@@ -41,7 +41,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-gray-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-linear-to-br/srgb from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-gray-900 flex items-center justify-center p-4">
       {/* Animated Background Orbs */}
       <motion.div
         animate={{
@@ -79,7 +79,7 @@ const Login = () => {
           <Link to="/" className="inline-flex items-center justify-center mb-6">
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-xl"
+              className="w-16 h-16 bg-linear-to-br/srgb from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-xl"
             >
               <Calendar className="w-8 h-8 text-white" />
             </motion.div>
@@ -107,7 +107,7 @@ const Login = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="flex items-start gap-3 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg"
               >
-                <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+                <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
                 <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
               </motion.div>
             )}

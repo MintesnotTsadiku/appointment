@@ -39,7 +39,7 @@ export function ClockFormatToggle({ value, onChange, label = 'Clock format' }: C
               }}
               data-qa={`clock-format-${option.value}`}
               onClick={() => onChange(option.value)}
-              className="rounded-lg px-3 py-1.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2"
+              className="rounded-lg px-3 py-1.5 text-xs font-medium transition-colors focus-visible:outline-hidden focus-visible:ring-2"
               style={{
                 backgroundColor: selected ? 'var(--bg-elevated)' : 'transparent',
                 color: selected ? 'var(--accent-primary)' : 'var(--text-muted)',

@@ -97,7 +97,7 @@ export function ConfirmationModal({
           {/* Confirmation Email Notice */}
           <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
             <div className="flex items-start gap-3">
-              <Mail className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+              <Mail className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 shrink-0" />
               <div className="flex-1 min-w-0">
                 <p data-qa="booking-email-notice" data-qa-state={emailQueued ? "queued" : "not-sent"} className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-1">
                   {emailQueued ? t("customerBooking.emailQueuedTitle") : t("customerBooking.savedTitle")}
@@ -118,7 +118,7 @@ export function ConfirmationModal({
 
             {/* Service */}
             <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
+              <div className="shrink-0 w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
                 <Calendar className="h-5 w-5 text-primary-600 dark:text-primary-400" />
               </div>
               <div className="flex-1 min-w-0">
@@ -136,7 +136,7 @@ export function ConfirmationModal({
 
             {/* Date & Time */}
             <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
+              <div className="shrink-0 w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
                 <Clock className="h-5 w-5 text-primary-600 dark:text-primary-400" />
               </div>
               <div className="flex-1 min-w-0">
@@ -156,7 +156,7 @@ export function ConfirmationModal({
             {/* Location */}
             {service.location && (
               <div className="flex items-start gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
+                <div className="shrink-0 w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
                   <MapPin className="h-5 w-5 text-primary-600 dark:text-primary-400" />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -188,7 +188,7 @@ export function ConfirmationModal({
             {/* Meeting Link */}
             {bookingResponse.meetLink && (
               <div className="flex items-start gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
+                <div className="shrink-0 w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
                   <MapPin className="h-5 w-5 text-primary-600 dark:text-primary-400" />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -203,7 +203,7 @@ export function ConfirmationModal({
                       variant="outline"
                       size="sm"
                       onClick={() => handleCopy(bookingResponse.meetLink!, "meetLink")}
-                      className="flex-shrink-0"
+                      className="shrink-0"
                     >
                       {copied === "meetLink" ? (
                         <>

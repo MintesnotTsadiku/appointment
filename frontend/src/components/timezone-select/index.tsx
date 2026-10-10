@@ -62,7 +62,7 @@ export function TimeZoneSelect({ value, onChange, label = 'Time zone', id = 'tim
           aria-controls={`${id}-listbox`}
           autoComplete="off"
           disabled={disabled}
-          className="h-10 w-full rounded-lg border pl-9 pr-9 text-sm outline-none focus-visible:ring-2"
+          className="h-10 w-full rounded-lg border pl-9 pr-9 text-sm outline-hidden focus-visible:ring-2"
           style={{ borderColor: 'var(--border-default)', backgroundColor: 'var(--bg-elevated)', color: 'var(--text-primary)' }}
           value={open ? query : value}
           placeholder="Search time zones, e.g. Addis Ababa"
@@ -103,7 +103,7 @@ export function TimeZoneSelect({ value, onChange, label = 'Time zone', id = 'tim
                 type="button"
                 onMouseDown={(event) => event.preventDefault()}
                 onClick={() => choose(zone)}
-                className="flex w-full items-center justify-between rounded-md px-3 py-1.5 text-left text-sm hover:bg-[var(--border-subtle)]"
+                className="flex w-full items-center justify-between rounded-md px-3 py-1.5 text-left text-sm hover:bg-(--border-subtle)"
                 style={{ color: 'var(--text-primary)' }}
               >
                 <span>{zone.replace(/_/g, ' ')}</span>

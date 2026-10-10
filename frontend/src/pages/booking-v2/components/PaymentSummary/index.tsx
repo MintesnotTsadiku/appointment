@@ -71,7 +71,7 @@ export function PaymentSummary({ quote, method, onMethod }: { quote: CheckoutQuo
         {quote.methods.map((option) => (
           <label
             key={option}
-            className={cn("flex cursor-pointer items-start gap-3 rounded-xl border p-3 text-sm", method === option && "ring-2 ring-[var(--accent-primary)]")}
+            className={cn("flex cursor-pointer items-start gap-3 rounded-xl border p-3 text-sm", method === option && "ring-2 ring-(--accent-primary)")}
             style={{ borderColor: "var(--border-default)", color: "var(--text-primary)" }}
           >
             <input

@@ -190,7 +190,7 @@ const Step5Success = () => {
                 size="sm"
                 variant="outline"
                 onClick={handleCopy}
-                className="flex items-center space-x-2 flex-shrink-0"
+                className="flex items-center space-x-2 shrink-0"
               >
                 {copied ? (
                   <>
@@ -255,7 +255,7 @@ const Step5Success = () => {
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
               onClick={() => setShowQR(false)}
             >
               <motion.div

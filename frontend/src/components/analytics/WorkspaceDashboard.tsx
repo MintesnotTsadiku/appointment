@@ -85,7 +85,7 @@ export function InsightBrief({ kind }: { kind: 'provider' | 'reception' }) {
           <b className="font-semibold tabular-nums text-foreground">{value}</b> {label}
         </span>
       ))}
-      <Link to="/analytics" className="ml-auto inline-flex items-center gap-1 rounded-sm text-xs font-semibold text-primary outline-none focus-visible:ring-2 focus-visible:ring-ring">
+      <Link to="/analytics" className="ml-auto inline-flex items-center gap-1 rounded-sm text-xs font-semibold text-primary outline-hidden focus-visible:ring-2 focus-visible:ring-ring">
         {t('staff.analytics.brief.view')} <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
       </Link>
     </section>

@@ -181,7 +181,7 @@ useEffect(() => {
             variant="ghost"
             size="sm"
             onClick={onBack}
-              className="backdrop-blur-sm"
+              className="backdrop-blur-xs"
               style={{ 
                 color: 'var(--text-secondary)',
                 backgroundColor: 'var(--border-subtle)',
@@ -198,7 +198,7 @@ useEffect(() => {
           {/* Theme Toggle */}
           <motion.button
             onClick={toggleTheme}
-            className="flex items-center gap-2 px-3 py-2 rounded-lg backdrop-blur-sm transition-all"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg backdrop-blur-xs transition-all"
             style={{ 
               backgroundColor: 'var(--border-subtle)',
               border: '1px solid var(--border-default)'
@@ -266,14 +266,14 @@ useEffect(() => {
       )}
 
       {/* Main Content - Two Column Layout (Desktop) / Stacked (Mobile) */}
-      <div className="grid lg:grid-cols-[400px,1fr] gap-6 md:gap-8 items-start">
+      <div className="grid lg:grid-cols-[400px_1fr] gap-6 md:gap-8 items-start">
         {/* Left Column: Calendar */}
         <div className="space-y-6">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="rounded-2xl backdrop-blur-sm p-6"
+            className="rounded-2xl backdrop-blur-xs p-6"
             style={{ 
               backgroundColor: 'var(--bg-elevated)',
               border: '1px solid var(--border-default)'
@@ -297,7 +297,7 @@ useEffect(() => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="rounded-2xl backdrop-blur-sm p-6"
+            className="rounded-2xl backdrop-blur-xs p-6"
             style={{ 
               backgroundColor: 'var(--bg-elevated)',
               border: '1px solid var(--border-default)'
@@ -315,7 +315,7 @@ useEffect(() => {
               style={{ borderTop: '1px solid var(--border-subtle)' }}
             >
               <div className="flex items-start gap-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
-                <Info className="h-4 w-4 mt-0.5 flex-shrink-0" style={{ color: 'var(--accent-primary)' }} />
+                <Info className="h-4 w-4 mt-0.5 shrink-0" style={{ color: 'var(--accent-primary)' }} />
                 <div>
                   <p className="font-medium">{t("bookingPicker.timezoneLine").replace("{0}", timezone)}</p>
                   <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>{t("bookingPicker.timezoneHint")}</p>
@@ -331,7 +331,7 @@ useEffect(() => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="rounded-2xl backdrop-blur-sm p-6 min-h-[500px]"
+            className="rounded-2xl backdrop-blur-xs p-6 min-h-[500px]"
             style={{ 
               backgroundColor: 'var(--bg-elevated)',
               border: '1px solid var(--border-default)'
@@ -375,9 +375,9 @@ useEffect(() => {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         className={cn(
-                          "px-4 py-1.5 rounded-full text-sm font-medium transition-all backdrop-blur-sm",
+                          "px-4 py-1.5 rounded-full text-sm font-medium transition-all backdrop-blur-xs",
                           selectedProviderId === "all"
-                            ? "shadow-sm"
+                            ? "shadow-xs"
                             : ""
                         )}
                         style={selectedProviderId === "all" ? {
@@ -404,9 +404,9 @@ useEffect(() => {
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.1 + index * 0.05 }}
                           className={cn(
-                            "px-4 py-1.5 rounded-full text-sm font-medium transition-all backdrop-blur-sm",
+                            "px-4 py-1.5 rounded-full text-sm font-medium transition-all backdrop-blur-xs",
                             selectedProviderId === provider.id
-                              ? "shadow-sm"
+                              ? "shadow-xs"
                               : ""
                           )}
                           style={selectedProviderId === provider.id ? {
@@ -448,7 +448,7 @@ useEffect(() => {
                 className="flex flex-col items-center justify-center h-full py-12 text-center"
               >
                 <div 
-                  className="h-20 w-20 rounded-full flex items-center justify-center mb-4 backdrop-blur-sm"
+                  className="h-20 w-20 rounded-full flex items-center justify-center mb-4 backdrop-blur-xs"
                   style={{ 
                     background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
                     opacity: 0.2
@@ -493,14 +493,14 @@ useEffect(() => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
-        className="mt-8 rounded-xl p-4 backdrop-blur-sm"
+        className="mt-8 rounded-xl p-4 backdrop-blur-xs"
         style={{ 
           backgroundColor: 'var(--bg-elevated)',
           border: '1px solid var(--border-default)'
         }}
       >
         <div className="flex items-start gap-3">
-          <Info className="h-5 w-5 mt-0.5 flex-shrink-0" style={{ color: 'var(--accent-primary)' }} />
+          <Info className="h-5 w-5 mt-0.5 shrink-0" style={{ color: 'var(--accent-primary)' }} />
           <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>
             <p className="font-medium mb-1" style={{ color: 'var(--text-primary)' }}>{t("bookingPicker.infoTitle")}</p>
             <ul className="list-disc list-inside space-y-1" style={{ color: 'var(--text-muted)' }}>

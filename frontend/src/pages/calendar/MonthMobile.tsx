@@ -57,7 +57,7 @@ function MobileDay({ day, inMonth, selected, appointments, onSelect }: MobileDay
       aria-current={today ? 'date' : undefined}
       aria-label={`${format(day, 'EEEE, MMMM d')}, ${countLabel}`}
       className={cn(
-        'flex h-14 min-w-0 flex-col items-center justify-start gap-1 rounded-lg pt-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+        'flex h-14 min-w-0 flex-col items-center justify-start gap-1 rounded-lg pt-1 transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring',
         selected ? 'bg-accent' : 'hover:bg-accent/60'
       )}
     >

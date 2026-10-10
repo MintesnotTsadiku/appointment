@@ -154,7 +154,7 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={onEdit}
-                    className="px-4 py-2 rounded-xl text-sm font-semibold backdrop-blur-sm transition-all"
+                    className="px-4 py-2 rounded-xl text-sm font-semibold backdrop-blur-xs transition-all"
                     style={{
                       backgroundColor: 'var(--border-subtle)',
                       border: '1px solid var(--border-default)',
@@ -197,7 +197,7 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                     <motion.div
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
-                      className="p-4 rounded-xl backdrop-blur-sm border transition-all"
+                      className="p-4 rounded-xl backdrop-blur-xs border transition-all"
                       style={{
                         backgroundColor: overdue ? 'var(--accent-secondary-light)' : 'var(--bg-secondary)',
                         borderColor: overdue ? 'var(--accent-secondary)' : 'var(--border-subtle)',
@@ -233,7 +233,7 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                     <motion.div
                       initial={{ opacity: 0, x: 10 }}
                       animate={{ opacity: 1, x: 0 }}
-                      className="p-4 rounded-xl backdrop-blur-sm border"
+                      className="p-4 rounded-xl backdrop-blur-xs border"
                       style={{
                         backgroundColor: 'var(--bg-secondary)',
                         borderColor: 'var(--border-subtle)',
@@ -264,7 +264,7 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                     <motion.div
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
-                      className="p-4 rounded-xl backdrop-blur-sm border"
+                      className="p-4 rounded-xl backdrop-blur-xs border"
                       style={{
                         backgroundColor: 'var(--bg-secondary)',
                         borderColor: 'var(--border-subtle)',
@@ -295,7 +295,7 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                     <motion.div
                       initial={{ opacity: 0, x: 10 }}
                       animate={{ opacity: 1, x: 0 }}
-                      className="p-4 rounded-xl backdrop-blur-sm border"
+                      className="p-4 rounded-xl backdrop-blur-xs border"
                       style={{
                         backgroundColor: 'var(--bg-secondary)',
                         borderColor: 'var(--border-subtle)',
@@ -326,7 +326,7 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                     <motion.div
                       initial={{ opacity: 0, x: 10 }}
                       animate={{ opacity: 1, x: 0 }}
-                      className="p-4 rounded-xl backdrop-blur-sm border"
+                      className="p-4 rounded-xl backdrop-blur-xs border"
                       style={{
                         backgroundColor: 'var(--bg-secondary)',
                         borderColor: 'var(--border-subtle)',
@@ -357,7 +357,7 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="p-4 rounded-xl backdrop-blur-sm border"
+                      className="p-4 rounded-xl backdrop-blur-xs border"
                       style={{
                         backgroundColor: 'var(--bg-secondary)',
                         borderColor: 'var(--border-subtle)',
@@ -388,7 +388,7 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="p-4 rounded-xl backdrop-blur-sm border"
+                      className="p-4 rounded-xl backdrop-blur-xs border"
                       style={{
                         backgroundColor: 'var(--bg-secondary)',
                         borderColor: 'var(--border-subtle)',
@@ -419,7 +419,7 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="p-4 rounded-xl backdrop-blur-sm border"
+                      className="p-4 rounded-xl backdrop-blur-xs border"
                       style={{
                         backgroundColor: 'var(--bg-secondary)',
                         borderColor: 'var(--border-subtle)',
@@ -450,7 +450,7 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="p-4 rounded-xl backdrop-blur-sm border"
+                      className="p-4 rounded-xl backdrop-blur-xs border"
                       style={{
                         backgroundColor: 'var(--accent-success-light)',
                         borderColor: 'var(--accent-success)',
@@ -481,7 +481,7 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="p-4 rounded-xl backdrop-blur-sm border"
+                      className="p-4 rounded-xl backdrop-blur-xs border"
                       style={{
                         backgroundColor: 'var(--bg-secondary)',
                         borderColor: 'var(--border-subtle)',

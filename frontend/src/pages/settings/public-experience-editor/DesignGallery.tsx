@@ -26,7 +26,7 @@ export function DesignGallery({ recipes, selected, current, onSelect }: DesignGa
             data-qa={`design-${recipe.key}`}
             className={cn("flex w-[78%] min-w-0 shrink-0 snap-start flex-col overflow-hidden rounded-xl border bg-card transition-shadow sm:w-auto", isSelected ? "border-primary ring-2 ring-primary/30" : "hover:shadow-card")}
           >
-            <div className="relative aspect-[16/9] bg-muted">
+            <div className="relative aspect-video bg-muted">
               {recipe.showcase?.heroAsset ? <img src={recipe.showcase.heroAsset} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" /> : null}
               <div className="absolute left-2 top-2 flex gap-1.5">
                 {recipe.key === current ? <Badge variant="default">{t("staff.publicExperience.currentDesign")}</Badge> : null}

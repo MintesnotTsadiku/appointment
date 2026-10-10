@@ -24,7 +24,7 @@ export function LocationCard({ location, deleting, onEdit, onDelete }: LocationC
         </span>
         <div className="min-w-0 flex-1">
           <h3 className="truncate text-base font-semibold text-foreground">{name}</h3>
-          {location.address && <p className="mt-0.5 break-words text-sm text-muted-foreground">{location.address}</p>}
+          {location.address && <p className="mt-0.5 wrap-break-word text-sm text-muted-foreground">{location.address}</p>}
         </div>
         <div className="flex shrink-0 items-center gap-1">
           <Button type="button" variant="ghost" size="icon" className="h-9 w-9" onClick={() => onEdit(location)} aria-label={`${t('staff.locations.edit')}: ${name}`}>

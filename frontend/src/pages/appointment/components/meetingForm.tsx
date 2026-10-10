@@ -132,7 +132,7 @@ const MeetingForm = ({
           duration: 4000,
           classNames: {
             actionButton:
-              "group-[.toast]:!bg-red-500 group-[.toast]:hover:!bg-red-300 group-[.toast]:!text-white",
+              "group-[.toast]:bg-red-500! hover:group-[.toast]:bg-red-300! group-[.toast]:text-white!",
           },
           icon: <CircleAlert className="h-5 w-5 text-red-500" />,
           action: {
@@ -146,7 +146,7 @@ const MeetingForm = ({
   return (
     <motion.div
       key={2}
-      className={`w-full md:h-[31rem] lg:w-[41rem] shrink-0 md:p-6 md:px-4`}
+      className={`w-full md:h-124 lg:w-164 shrink-0 md:p-6 md:px-4`}
       initial={isMobileView ? {} : { x: "100%" }}
       animate={{ x: 0 }}
       exit={isMobileView ? {} : { x: "100%" }}

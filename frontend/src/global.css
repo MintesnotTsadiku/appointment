@@ -1,6 +1,444 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/*
+  Tailwind CSS v4 entry. The v3 Preflight replaces the v4 one, and
+  tailwind-v3-compat.css keeps the other v3 defaults; see
+  docs/operations/TAILWIND4_MIGRATION_PLAN.md.
+  Content detection matches the former tailwind.config.js `content` globs.
+*/
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import './styles/tailwind-v3-preflight.css' layer(base);
+@import 'tailwindcss/utilities.css' layer(utilities) source(none);
+@import 'tw-animate-css';
+@import './styles/tailwind-v3-compat.css';
+
+@source '../index.html';
+@source './**/*.{ts,tsx,js,jsx}';
+
+/*
+  Class-based dark mode. `:is(.dark *)` is the v3 selector: it matches inside
+  `.dark` and adds the same specificity as v3 did.
+*/
+@custom-variant dark (&:is(.dark *));
+
+/*
+  `inline` makes utilities use these values directly, as v3 did, so a token
+  that a page overrides on an inner element (for example --primary) still
+  applies to the utilities below that element.
+*/
+@theme inline {
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-success: hsl(var(--success));
+  --color-success-foreground: hsl(var(--success-foreground));
+
+  --color-warning: hsl(var(--warning));
+  --color-warning-foreground: hsl(var(--warning-foreground));
+
+  --color-info: hsl(var(--info));
+  --color-info-foreground: hsl(var(--info-foreground));
+
+  --color-sidebar: hsl(var(--sidebar));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+
+  --color-brand-indigo: var(--brand-primary);
+  --color-brand-indigo-dark: var(--brand-primary-dark);
+  --color-brand-indigo-light: var(--brand-primary-light);
+
+  --color-brand-emerald: var(--brand-secondary);
+  --color-brand-emerald-dark: var(--brand-secondary-dark);
+
+  --color-brand-gold: var(--brand-accent-gold);
+  --color-brand-teal: var(--brand-accent-teal);
+
+  /*
+    v3 parity: in v3, `shadow-card` also matched the `card` colour, so the
+    shadow colour utility won and every page drew `0 1px 3px` in the card
+    colour. The staff --shadow-card token never applied. Keep that output
+    until a design change decides to use the token.
+  */
+  --shadow-card: 0 1px 3px hsl(var(--card));
+  --shadow-pop: var(--shadow-pop, 0 10px 30px -10px rgb(0 0 0 / 0.25));
+
+  --background-image-gradient-hero: linear-gradient(
+    135deg,
+    var(--gradient-hero-start) 0%,
+    var(--gradient-hero-end) 100%
+  );
+  --background-image-gradient-feature: linear-gradient(
+    to right,
+    var(--gradient-feature-start),
+    var(--gradient-feature-mid),
+    var(--gradient-feature-end)
+  );
+  --background-image-gradient-card-hover: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.1) 0%,
+    rgba(139, 92, 246, 0.1) 100%
+  );
+  --background-image-gradient-pricing: linear-gradient(
+    to bottom right,
+    var(--brand-secondary),
+    var(--brand-secondary-dark)
+  );
+  --background-image-gradient-radial: radial-gradient(
+    circle at center,
+    var(--tw-gradient-stops)
+  );
+
+  --font-sans:
+    Inter, Noto Sans Ethiopic, -apple-system, BlinkMacSystemFont, Segoe UI,
+    sans-serif;
+  --font-heading: Plus Jakarta Sans, Inter, Noto Sans Ethiopic, sans-serif;
+  --font-mono: JetBrains Mono, Courier New, monospace;
+
+  --text-display-xl: 4.5rem;
+  --text-display-xl--line-height: 1;
+  --text-display-xl--letter-spacing: -0.02em;
+  --text-display-xl--font-weight: 800;
+  --text-display-lg: 3.75rem;
+  --text-display-lg--line-height: 1;
+  --text-display-lg--letter-spacing: -0.02em;
+  --text-display-lg--font-weight: 800;
+
+  --animate-gradient-shift: gradient-shift 8s ease infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-slide-up: slide-up 0.5s ease-out;
+  --animate-fade-in: fade-in 0.5s ease-out;
+
+  @keyframes gradient-shift {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+  @keyframes slide-up {
+    0% {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+}
+
+@utility bg-theme-primary {
+  /* Background utilities */
+  background-color: var(--bg-primary);
+}
+
+@utility bg-theme-secondary {
+  background-color: var(--bg-secondary);
+}
+
+@utility bg-theme-tertiary {
+  background-color: var(--bg-tertiary);
+}
+
+@utility bg-theme-elevated {
+  background-color: var(--bg-elevated);
+}
+
+@utility text-theme-primary {
+  /* Text utilities */
+  color: var(--text-primary);
+}
+
+@utility text-theme-secondary {
+  color: var(--text-secondary);
+}
+
+@utility text-theme-muted {
+  color: var(--text-muted);
+}
+
+@utility text-theme-subtle {
+  color: var(--text-subtle);
+}
+
+@utility border-theme-subtle {
+  /* Border utilities */
+  border-color: var(--border-subtle);
+}
+
+@utility border-theme-default {
+  border-color: var(--border-default);
+}
+
+@utility border-theme-strong {
+  border-color: var(--border-strong);
+}
+
+@utility bg-accent-primary {
+  /* Accent utilities */
+  background-color: var(--accent-primary);
+}
+
+@utility bg-accent-primary-hover {
+  &:hover {
+    background-color: var(--accent-primary-hover);
+  }
+}
+
+@utility bg-accent-primary-light {
+  background-color: var(--accent-primary-light);
+}
+
+@utility text-accent-primary {
+  color: var(--accent-primary);
+}
+
+@utility bg-accent-secondary {
+  background-color: var(--accent-secondary);
+}
+
+@utility bg-accent-secondary-hover {
+  &:hover {
+    background-color: var(--accent-secondary-hover);
+  }
+}
+
+@utility bg-accent-secondary-light {
+  background-color: var(--accent-secondary-light);
+}
+
+@utility text-accent-secondary {
+  color: var(--accent-secondary);
+}
+
+@utility bg-accent-success {
+  background-color: var(--accent-success);
+}
+
+@utility bg-accent-success-hover {
+  &:hover {
+    background-color: var(--accent-success-hover);
+  }
+}
+
+@utility bg-accent-success-light {
+  background-color: var(--accent-success-light);
+}
+
+@utility text-accent-success {
+  color: var(--accent-success);
+}
+
+@utility bg-accent-warning {
+  background-color: var(--accent-warning);
+}
+
+@utility bg-accent-warning-hover {
+  &:hover {
+    background-color: var(--accent-warning-hover);
+  }
+}
+
+@utility bg-accent-warning-light {
+  background-color: var(--accent-warning-light);
+}
+
+@utility text-accent-warning {
+  color: var(--accent-warning);
+}
+
+@utility text-status-pending {
+  /* Status utilities */
+  color: var(--status-pending);
+}
+
+@utility bg-status-pending {
+  background-color: var(--status-pending-bg);
+}
+
+@utility border-status-pending {
+  border-color: var(--status-pending);
+}
+
+@utility text-status-confirmed {
+  color: var(--status-confirmed);
+}
+
+@utility bg-status-confirmed {
+  background-color: var(--status-confirmed-bg);
+}
+
+@utility border-status-confirmed {
+  border-color: var(--status-confirmed);
+}
+
+@utility text-status-completed {
+  color: var(--status-completed);
+}
+
+@utility bg-status-completed {
+  background-color: var(--status-completed-bg);
+}
+
+@utility border-status-completed {
+  border-color: var(--status-completed);
+}
+
+@utility text-status-cancelled {
+  color: var(--status-cancelled);
+}
+
+@utility bg-status-cancelled {
+  background-color: var(--status-cancelled-bg);
+}
+
+@utility border-status-cancelled {
+  border-color: var(--status-cancelled);
+}
+
+@utility text-status-no-show {
+  color: var(--status-no-show);
+}
+
+@utility bg-status-no-show {
+  background-color: var(--status-no-show-bg);
+}
+
+@utility border-status-no-show {
+  border-color: var(--status-no-show);
+}
+
+@utility text-status-in-progress {
+  color: var(--status-in-progress);
+}
+
+@utility bg-status-in-progress {
+  background-color: var(--status-in-progress-bg);
+}
+
+@utility border-status-in-progress {
+  border-color: var(--status-in-progress);
+}
+
+@utility bg-gradient-primary {
+  /* Gradient utilities */
+  background: linear-gradient(
+    to right,
+    var(--gradient-primary-from),
+    var(--gradient-primary-to)
+  );
+}
+
+@utility bg-gradient-secondary {
+  background: linear-gradient(
+    to right,
+    var(--gradient-secondary-from),
+    var(--gradient-secondary-to)
+  );
+}
+
+@utility bg-gradient-success {
+  background: linear-gradient(
+    to right,
+    var(--gradient-success-from),
+    var(--gradient-success-to)
+  );
+}
+
+@utility glow-primary {
+  /* Glow utilities (dark mode) */
+  box-shadow: 0 0 60px var(--glow-primary);
+}
+
+@utility glow-secondary {
+  box-shadow: 0 0 60px var(--glow-secondary);
+}
+
+@utility glow-success {
+  box-shadow: 0 0 60px var(--glow-success);
+}
+
+@utility no-scrollbar {
+  /* Ensure scrolling works */
+  overflow: auto;
+  padding-right: 5px;
+
+  /* Reserve scrollbar space but hide it initially */
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 8px;
+    background: transparent;
+  }
+
+  /* Hide scrollbar thumb by default */
+  &::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 4px;
+    margin: 2px;
+  }
+
+  /* Show scrollbar on hover */
+  &:hover::-webkit-scrollbar-thumb {
+    background: rgba(55, 55, 55, 0.2);
+  }
+
+  &:hover::-webkit-scrollbar-track {
+    background: rgba(55, 55, 55, 0.1);
+  }
+}
 
 @layer base {
   :root {
@@ -379,14 +817,16 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  :root[data-surface="staff"] *,
-  :root[data-surface="staff"] *::before,
-  :root[data-surface="staff"] *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+@layer utilities {
+  @media (prefers-reduced-motion: reduce) {
+    :root[data-surface='staff'] *,
+    :root[data-surface='staff'] *::before,
+    :root[data-surface='staff'] *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
@@ -407,131 +847,17 @@
   }
 }
 
-html,
-body {
-  height: 100%;
-  width: 100%;
-}
+@layer utilities {
+  html,
+  body {
+    height: 100%;
+    width: 100%;
+  }
 
-/* ========================================
+  /* ========================================
    UTILITY CLASSES FOR THEME COLORS
    Use these for quick access to theme colors
    ======================================== */
-
-@layer utilities {
-  /* Background utilities */
-  .bg-theme-primary { background-color: var(--bg-primary); }
-  .bg-theme-secondary { background-color: var(--bg-secondary); }
-  .bg-theme-tertiary { background-color: var(--bg-tertiary); }
-  .bg-theme-elevated { background-color: var(--bg-elevated); }
-  
-  /* Text utilities */
-  .text-theme-primary { color: var(--text-primary); }
-  .text-theme-secondary { color: var(--text-secondary); }
-  .text-theme-muted { color: var(--text-muted); }
-  .text-theme-subtle { color: var(--text-subtle); }
-  
-  /* Border utilities */
-  .border-theme-subtle { border-color: var(--border-subtle); }
-  .border-theme-default { border-color: var(--border-default); }
-  .border-theme-strong { border-color: var(--border-strong); }
-  
-  /* Accent utilities */
-  .bg-accent-primary { background-color: var(--accent-primary); }
-  .bg-accent-primary-hover:hover { background-color: var(--accent-primary-hover); }
-  .bg-accent-primary-light { background-color: var(--accent-primary-light); }
-  .text-accent-primary { color: var(--accent-primary); }
-  
-  .bg-accent-secondary { background-color: var(--accent-secondary); }
-  .bg-accent-secondary-hover:hover { background-color: var(--accent-secondary-hover); }
-  .bg-accent-secondary-light { background-color: var(--accent-secondary-light); }
-  .text-accent-secondary { color: var(--accent-secondary); }
-  
-  .bg-accent-success { background-color: var(--accent-success); }
-  .bg-accent-success-hover:hover { background-color: var(--accent-success-hover); }
-  .bg-accent-success-light { background-color: var(--accent-success-light); }
-  .text-accent-success { color: var(--accent-success); }
-  
-  .bg-accent-warning { background-color: var(--accent-warning); }
-  .bg-accent-warning-hover:hover { background-color: var(--accent-warning-hover); }
-  .bg-accent-warning-light { background-color: var(--accent-warning-light); }
-  .text-accent-warning { color: var(--accent-warning); }
-  
-  /* Status utilities */
-  .text-status-pending { color: var(--status-pending); }
-  .bg-status-pending { background-color: var(--status-pending-bg); }
-  .border-status-pending { border-color: var(--status-pending); }
-  
-  .text-status-confirmed { color: var(--status-confirmed); }
-  .bg-status-confirmed { background-color: var(--status-confirmed-bg); }
-  .border-status-confirmed { border-color: var(--status-confirmed); }
-  
-  .text-status-completed { color: var(--status-completed); }
-  .bg-status-completed { background-color: var(--status-completed-bg); }
-  .border-status-completed { border-color: var(--status-completed); }
-  
-  .text-status-cancelled { color: var(--status-cancelled); }
-  .bg-status-cancelled { background-color: var(--status-cancelled-bg); }
-  .border-status-cancelled { border-color: var(--status-cancelled); }
-  
-  .text-status-no-show { color: var(--status-no-show); }
-  .bg-status-no-show { background-color: var(--status-no-show-bg); }
-  .border-status-no-show { border-color: var(--status-no-show); }
-  
-  .text-status-in-progress { color: var(--status-in-progress); }
-  .bg-status-in-progress { background-color: var(--status-in-progress-bg); }
-  .border-status-in-progress { border-color: var(--status-in-progress); }
-  
-  /* Gradient utilities */
-  .bg-gradient-primary {
-    background: linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to));
-  }
-  .bg-gradient-secondary {
-    background: linear-gradient(to right, var(--gradient-secondary-from), var(--gradient-secondary-to));
-  }
-  .bg-gradient-success {
-    background: linear-gradient(to right, var(--gradient-success-from), var(--gradient-success-to));
-  }
-  
-  /* Glow utilities (dark mode) */
-  .glow-primary {
-    box-shadow: 0 0 60px var(--glow-primary);
-  }
-  .glow-secondary {
-    box-shadow: 0 0 60px var(--glow-secondary);
-  }
-  .glow-success {
-    box-shadow: 0 0 60px var(--glow-success);
-  }
-  
-  /* Ensure scrolling works */
-  .no-scrollbar {
-    overflow: auto;
-    padding-right: 5px;
-  }
-
-  /* Reserve scrollbar space but hide it initially */
-  .no-scrollbar::-webkit-scrollbar {
-    width: 6px;
-    height: 8px;
-    background: transparent;
-  }
-
-  /* Hide scrollbar thumb by default */
-  .no-scrollbar::-webkit-scrollbar-thumb {
-    background: transparent;
-    border-radius: 4px;
-    margin: 2px;
-  }
-
-  /* Show scrollbar on hover */
-  .no-scrollbar:hover::-webkit-scrollbar-thumb {
-    background: rgba(55, 55, 55, 0.2);
-  }
-
-  .no-scrollbar:hover::-webkit-scrollbar-track {
-    background: rgba(55, 55, 55, 0.1);
-  }
 }
 
 @keyframes shimmer {

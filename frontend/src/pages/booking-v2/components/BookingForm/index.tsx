@@ -180,7 +180,7 @@ export function BookingForm({
         size="sm"
         onClick={onBack}
         disabled={loading}
-            className="backdrop-blur-sm"
+            className="backdrop-blur-xs"
             style={{ 
               color: 'var(--text-secondary)',
               backgroundColor: 'var(--border-subtle)',
@@ -194,7 +194,7 @@ export function BookingForm({
           {/* Theme Toggle */}
           <motion.button
             onClick={toggleTheme}
-            className="flex items-center gap-2 px-3 py-2 rounded-lg backdrop-blur-sm transition-all"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg backdrop-blur-xs transition-all"
             style={{ 
               backgroundColor: 'var(--border-subtle)',
               border: '1px solid var(--border-default)'
@@ -230,13 +230,13 @@ export function BookingForm({
 
       <div className="w-full max-w-7xl mx-auto px-5 md:px-6 py-8 md:py-16">
 
-        <div className="grid lg:grid-cols-[1fr,400px] gap-6 md:gap-8">
+        <div className="grid lg:grid-cols-[1fr_400px] gap-6 md:gap-8">
         {/* Form Section */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="rounded-2xl backdrop-blur-sm p-6 md:p-8"
+            className="rounded-2xl backdrop-blur-xs p-6 md:p-8"
             style={{ 
               backgroundColor: 'var(--bg-elevated)',
               border: '1px solid var(--border-default)'
@@ -271,7 +271,7 @@ export function BookingForm({
               </Label>
               <div className="relative">
                   <div 
-                    className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
                     style={{ 
                       background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
                       opacity: 0.2
@@ -288,7 +288,7 @@ export function BookingForm({
                   onBlur={() => handleBlur("userName")}
                   disabled={loading}
                   className={cn(
-                      "pl-12 h-12 text-base backdrop-blur-sm transition-all",
+                      "pl-12 h-12 text-base backdrop-blur-xs transition-all",
                     errors.userName && touched.userName && "border-red-500 focus:border-red-500"
                   )}
                     style={{
@@ -328,7 +328,7 @@ export function BookingForm({
               </Label>
               <div className="relative">
                   <div 
-                    className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
                     style={{ 
                       background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
                       opacity: 0.2
@@ -345,7 +345,7 @@ export function BookingForm({
                   onBlur={() => handleBlur("userEmail")}
                   disabled={loading}
                   className={cn(
-                      "pl-12 h-12 text-base backdrop-blur-sm transition-all",
+                      "pl-12 h-12 text-base backdrop-blur-xs transition-all",
                     errors.userEmail && touched.userEmail && "border-red-500 focus:border-red-500"
                   )}
                     style={{
@@ -388,7 +388,7 @@ export function BookingForm({
               </Label>
               <div className="relative">
                   <div 
-                    className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
                     style={{ 
                       background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
                       opacity: 0.2
@@ -405,7 +405,7 @@ export function BookingForm({
                   onBlur={() => handleBlur("userPhone")}
                   disabled={loading}
                   className={cn(
-                      "pl-12 h-12 text-base backdrop-blur-sm transition-all",
+                      "pl-12 h-12 text-base backdrop-blur-xs transition-all",
                     errors.userPhone && touched.userPhone && "border-red-500 focus:border-red-500"
                   )}
                     style={{
@@ -445,7 +445,7 @@ export function BookingForm({
               </Label>
               <div className="relative">
                   <div 
-                    className="absolute left-3 top-3 w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                    className="absolute left-3 top-3 w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
                     style={{ 
                       background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
                       opacity: 0.2
@@ -460,7 +460,7 @@ export function BookingForm({
                   value={formData.otherParticipants}
                   onChange={(e) => handleChange("otherParticipants", e.target.value)}
                   disabled={loading}
-                    className="pl-12 h-12 text-base backdrop-blur-sm transition-all"
+                    className="pl-12 h-12 text-base backdrop-blur-xs transition-all"
                     style={{
                       backgroundColor: 'var(--bg-secondary)',
                       color: 'var(--text-primary)',
@@ -490,7 +490,7 @@ export function BookingForm({
               </Label>
               <div className="relative">
                   <div 
-                    className="absolute left-3 top-3 w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                    className="absolute left-3 top-3 w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
                     style={{ 
                       background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
                       opacity: 0.2
@@ -504,7 +504,7 @@ export function BookingForm({
                   value={formData.notes}
                   onChange={(e) => handleChange("notes", e.target.value)}
                   disabled={loading}
-                    className="pl-12 min-h-[120px] text-base resize-none backdrop-blur-sm transition-all"
+                    className="pl-12 min-h-[120px] text-base resize-none backdrop-blur-xs transition-all"
                     style={{
                       backgroundColor: 'var(--bg-secondary)',
                       color: 'var(--text-primary)',
@@ -529,7 +529,7 @@ export function BookingForm({
                 type="submit"
                 data-qa="booking-confirm"
                 disabled={loading}
-                  className="w-full h-14 text-lg font-semibold backdrop-blur-sm shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full h-14 text-lg font-semibold backdrop-blur-xs shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{
                     background: loading 
                       ? 'var(--bg-secondary)' 
@@ -562,7 +562,7 @@ export function BookingForm({
             className="lg:sticky lg:top-8 h-fit"
           >
             <div 
-              className="rounded-2xl backdrop-blur-sm p-6 shadow-lg"
+              className="rounded-2xl backdrop-blur-xs p-6 shadow-lg"
               style={{ 
                 backgroundColor: 'var(--bg-elevated)',
                 border: '1px solid var(--border-default)'
@@ -585,7 +585,7 @@ export function BookingForm({
                   style={{ borderBottom: '1px solid var(--border-subtle)' }}
                 >
                   <div 
-                    className="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center"
+                    className="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center"
                     style={{ 
                       background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
                       opacity: 0.2
@@ -616,7 +616,7 @@ export function BookingForm({
                   style={{ borderBottom: '1px solid var(--border-subtle)' }}
                 >
                   <div 
-                    className="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center"
+                    className="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center"
                     style={{ 
                       background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
                       opacity: 0.2
@@ -648,7 +648,7 @@ export function BookingForm({
                     style={{ borderBottom: '1px solid var(--border-subtle)' }}
                   >
                     <div 
-                      className="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center"
+                      className="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center"
                       style={{ 
                         background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
                         opacity: 0.2
@@ -721,7 +721,7 @@ export function BookingForm({
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.55 }}
-                className="mt-6 p-4 rounded-lg backdrop-blur-sm"
+                className="mt-6 p-4 rounded-lg backdrop-blur-xs"
                 style={{ 
                   backgroundColor: 'var(--bg-secondary)',
                   border: '1px solid var(--border-default)'

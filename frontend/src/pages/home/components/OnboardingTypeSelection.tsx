@@ -7,7 +7,7 @@ interface OnboardingTypeSelectionProps {
 }
 
 const gradientBackground =
-  "min-h-screen bg-[radial-gradient(circle_at_top,_#f5f7ff,_#ffffff_45%,_#ffffff)] dark:bg-[radial-gradient(circle_at_top,_#020617,_#0f172a_45%,_#020617)]";
+  "min-h-screen bg-[radial-gradient(circle_at_top,#f5f7ff,#ffffff_45%,#ffffff)] dark:bg-[radial-gradient(circle_at_top,#020617,#0f172a_45%,#020617)]";
 
 const Card = ({
   title,

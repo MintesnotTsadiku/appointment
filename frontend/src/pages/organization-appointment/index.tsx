@@ -384,7 +384,7 @@ const OrganizationAppointmentV2 = () => {
   if (isLoading) {
     return (
       <div 
-        className="min-h-screen text-[var(--text-primary)]"
+        className="min-h-screen text-theme-primary"
         style={{ ...bookingBrand.style, backgroundColor: 'var(--bg-primary)' }}
       >
         {/* Ambient background effects */}
@@ -420,7 +420,7 @@ const OrganizationAppointmentV2 = () => {
       <>
         <MetaTags title="Error | Appointment" description="Error loading booking page" />
         <div 
-          className="min-h-screen text-[var(--text-primary)] flex items-center justify-center p-8"
+          className="min-h-screen text-theme-primary flex items-center justify-center p-8"
           style={{ ...bookingBrand.style, backgroundColor: 'var(--bg-primary)' }}
         >
           {/* Ambient background effects */}
@@ -443,7 +443,7 @@ const OrganizationAppointmentV2 = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="relative z-10 max-w-xl w-full rounded-2xl p-6 backdrop-blur-sm"
+            className="relative z-10 max-w-xl w-full rounded-2xl p-6 backdrop-blur-xs"
             style={{ 
               backgroundColor: 'var(--border-subtle)',
               border: '1px solid var(--border-default)'
@@ -557,7 +557,7 @@ const OrganizationAppointmentV2 = () => {
           </div>
         </motion.div>
       <div 
-        className="booking-experience min-h-screen text-[var(--text-primary)] pb-16"
+        className="booking-experience min-h-screen text-theme-primary pb-16"
         data-booking-branded={bookingBrand.config ? "true" : "false"}
         data-pe-recipe={bookingBrand.config?.recipeKey}
         style={{ ...bookingBrand.style, backgroundColor: 'var(--bg-primary)' }}

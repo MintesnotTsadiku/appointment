@@ -268,7 +268,7 @@ const AppointmentV2 = () => {
             {/* Theme Toggle */}
             <motion.button
               onClick={toggleTheme}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg backdrop-blur-sm transition-all"
+              className="flex items-center gap-2 px-3 py-2 rounded-lg backdrop-blur-xs transition-all"
               style={{ 
                 backgroundColor: 'var(--border-subtle)',
                 border: '1px solid var(--border-default)'
@@ -306,14 +306,14 @@ const AppointmentV2 = () => {
         {/* Phase 1: Duration Selection */}
         {currentPhase === 'selection' && (
           <div className="w-full h-full max-md:h-fit flex justify-center py-8">
-            <div className="container max-w-[74rem] mx-auto md:p-4 md:py-8 lg:py-16 grid md:gap-12">
-              <div className="grid lg:grid-cols-[360px,1fr] md:gap-8 max-md:gap-10 items-start relative rounded-lg">
+            <div className="container max-w-296 mx-auto md:p-4 md:py-8 lg:py-16 grid md:gap-12">
+              <div className="grid lg:grid-cols-[360px_1fr] md:gap-8 max-md:gap-10 items-start relative rounded-lg">
                 {/* Profile Section */}
                 {isLoading ? (
                   <ProfileSkeleton />
                 ) : (
-                  <div className="w-full flex flex-col gap-4 p-4 md:p-6 max-lg:md:pt-10 md:px-4 justify-center items-center bg-gradient-to-b from-blue-100 to-transparent dark:bg-gradient-to-b dark:from-zinc-800 md:rounded-2xl">
-                    <Avatar className="md:h-32 md:w-32 h-24 w-24 object-cover mb-4 md:mb-0 hover:outline outline-blue-300 dark:outline-blue-400/80 transition-all duration-100">
+                  <div className="w-full flex flex-col gap-4 p-4 md:p-6 max-lg:md:pt-10 md:px-4 justify-center items-center bg-linear-to-b/srgb from-blue-100 to-transparent dark:bg-linear-to-b/srgb dark:from-zinc-800 md:rounded-2xl">
+                    <Avatar className="md:h-32 md:w-32 h-24 w-24 object-cover mb-4 md:mb-0 hover:outline-solid outline-blue-300 dark:outline-blue-400/80 transition-all duration-100">
                       <AvatarImage
                         src={userInfo.userImage}
                         alt="Profile picture"

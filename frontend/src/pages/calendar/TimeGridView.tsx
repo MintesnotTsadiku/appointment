@@ -63,7 +63,7 @@ function DayHeading({ day, onOpenDay }: { day: Date; onOpenDay?: (day: Date) => 
       onClick={() => onOpenDay(day)}
       aria-label={`${t('staff.calendar.openDay')} ${format(day, 'EEEE, MMMM d')}`}
       aria-current={today ? 'date' : undefined}
-      className={cn(HEADING_CLASS, 'transition-colors hover:bg-accent/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring')}
+      className={cn(HEADING_CLASS, 'transition-colors hover:bg-accent/60 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring')}
     >
       {content}
     </button>
@@ -94,7 +94,7 @@ function TimeBlock({ event, compact, onOpen }: { event: PlacedEvent; compact: bo
       aria-label={eventLabel(apt)}
       title={`${apt.client_name} · ${apt.service_name}`}
       className={cn(
-        'absolute z-10 flex flex-col overflow-hidden rounded-md border-l-[3px] px-2 py-1 text-left text-xs text-foreground transition-shadow hover:shadow-card focus-visible:z-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+        'absolute z-10 flex flex-col overflow-hidden rounded-md border-l-[3px] px-2 py-1 text-left text-xs text-foreground transition-shadow hover:shadow-card focus-visible:z-20 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring',
         blockTone(apt.status),
         apt.status === 'Cancelled' && 'opacity-70'
       )}

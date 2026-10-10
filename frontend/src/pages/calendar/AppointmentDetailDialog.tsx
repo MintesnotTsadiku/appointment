@@ -58,7 +58,7 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div className="min-w-0 space-y-0.5">
       <dt className="text-xs text-muted-foreground">{label}</dt>
-      <dd className="break-words text-sm font-medium text-foreground">{children || '—'}</dd>
+      <dd className="wrap-break-word text-sm font-medium text-foreground">{children || '—'}</dd>
     </div>
   );
 }

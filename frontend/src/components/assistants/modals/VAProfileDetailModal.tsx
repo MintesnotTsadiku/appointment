@@ -146,17 +146,17 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex gap-2">
                     {profile.verified && (
-                      <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-white/20 text-white flex items-center gap-1 backdrop-blur-sm">
+                      <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-white/20 text-white flex items-center gap-1 backdrop-blur-xs">
                         <CheckCircle2 className="w-3.5 h-3.5" /> Verified
                       </span>
                     )}
                     {profile.featured && (
-                      <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-amber-500/30 text-amber-200 flex items-center gap-1 backdrop-blur-sm">
+                      <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-amber-500/30 text-amber-200 flex items-center gap-1 backdrop-blur-xs">
                         <Star className="w-3.5 h-3.5 fill-amber-300" /> Featured
                       </span>
                     )}
                   </div>
-                  <span className="px-3 py-1 text-xs font-bold rounded-full bg-white/20 text-white backdrop-blur-sm">
+                  <span className="px-3 py-1 text-xs font-bold rounded-full bg-white/20 text-white backdrop-blur-xs">
                     {tierConfig.label}
                   </span>
                 </div>
@@ -167,11 +167,11 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
                     {avatarUrl ? (
                       <img src={avatarUrl} alt={profile.full_name} className="w-20 h-20 rounded-2xl object-cover ring-4 ring-white/30" />
                     ) : (
-                      <div className="w-20 h-20 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-2xl font-bold text-white ring-4 ring-white/30">
+                      <div className="w-20 h-20 rounded-2xl bg-white/20 backdrop-blur-xs flex items-center justify-center text-2xl font-bold text-white ring-4 ring-white/30">
                         {initials}
                       </div>
                     )}
-                    <div className={`absolute -bottom-1 -right-1 w-6 h-6 rounded-full border-3 border-white flex items-center justify-center ${isActive ? 'bg-green-500' : 'bg-gray-400'}`}>
+                    <div className={`absolute -bottom-1 -right-1 w-6 h-6 rounded-full border-white flex items-center justify-center ${isActive ? 'bg-green-500' : 'bg-gray-400'}`}>
                       <span className="w-2.5 h-2.5 rounded-full bg-white animate-pulse" />
                     </div>
                   </div>

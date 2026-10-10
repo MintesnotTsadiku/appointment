@@ -46,14 +46,14 @@ export function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenCh
         <DialogTitle className="sr-only">{t('staff.shell.search')}</DialogTitle>
         <CommandPrimitive
           data-qa="command-palette"
-          className="flex h-full w-full flex-col text-popover-foreground [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:pb-1 [&_[cmdk-group-heading]]:pt-2 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground"
+          className="flex h-full w-full flex-col text-popover-foreground **:[[cmdk-group-heading]]:px-2 **:[[cmdk-group-heading]]:pb-1 **:[[cmdk-group-heading]]:pt-2 **:[[cmdk-group-heading]]:text-xs **:[[cmdk-group-heading]]:font-medium **:[[cmdk-group-heading]]:text-muted-foreground"
         >
           <div className="flex items-center gap-2 border-b px-3">
             <Search className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
             <CommandPrimitive.Input
               autoFocus
               placeholder={t('staff.shell.search')}
-              className="h-12 w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+              className="h-12 w-full bg-transparent text-sm outline-hidden placeholder:text-muted-foreground"
             />
           </div>
           <CommandPrimitive.List className="max-h-[min(60vh,380px)] overflow-y-auto p-2">
@@ -134,7 +134,7 @@ function PaletteItem({ value, onSelect, children }: { value: string; onSelect: (
     <CommandPrimitive.Item
       value={value}
       onSelect={onSelect}
-      className="flex cursor-default select-none items-center gap-2.5 rounded-md px-2 py-2 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-muted-foreground"
+      className="flex cursor-default select-none items-center gap-2.5 rounded-md px-2 py-2 text-sm outline-hidden aria-selected:bg-accent aria-selected:text-accent-foreground [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-muted-foreground"
     >
       {children}
     </CommandPrimitive.Item>

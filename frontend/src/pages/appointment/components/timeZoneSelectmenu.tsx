@@ -71,7 +71,7 @@ export default function TimeZoneSelect({
                   setTimeZone(getLocalTimezone());
                   setOpen(false);
                 }}
-                className="cursor-pointer py-3 px-4 flex items-center gap-2 truncate data-[selected=true]:!bg-blue-50 dark:data-[selected=true]:!bg-blue-800/20 text-blue-500 dark:text-blue-400 data-[selected=true]:!text-blue-500 dark:data-[selected=true]:!text-blue-400"
+                className="cursor-pointer py-3 px-4 flex items-center gap-2 truncate data-[selected=true]:bg-blue-50! dark:data-[selected=true]:bg-blue-800/20! text-blue-500 dark:text-blue-400 data-[selected=true]:text-blue-500! dark:data-[selected=true]:text-blue-400!"
               >
                 <RefreshCcw className="h-4 w-4 text-blue-500" />
                 <span>Reset to Default Timezone</span>
@@ -83,7 +83,7 @@ export default function TimeZoneSelect({
                     setTimeZone(tz);
                     setOpen(false);
                   }}
-                  className="cursor-pointer py-3 px-4 data-[selected=true]:!bg-blue-50 dark:data-[selected=true]:!bg-blue-800/20 text-blue-500 dark:text-blue-400 data-[selected=true]:!text-blue-500 dark:data-[selected=true]:!text-blue-400"
+                  className="cursor-pointer py-3 px-4 data-[selected=true]:bg-blue-50! dark:data-[selected=true]:bg-blue-800/20! text-blue-500 dark:text-blue-400 data-[selected=true]:text-blue-500! dark:data-[selected=true]:text-blue-400!"
                 >
                   <div className="flex w-full items-center gap-4">
                     <div className="w-40 truncate">

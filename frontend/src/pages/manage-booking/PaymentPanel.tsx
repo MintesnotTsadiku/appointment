@@ -32,7 +32,7 @@ export function ReceiptLinks({ view }: { view: ManageView }) {
           <a
             data-qa="manage-receipt"
             download
-            className="inline-flex items-center gap-1.5 font-medium text-[var(--accent-primary)] underline-offset-4 hover:underline"
+            className="inline-flex items-center gap-1.5 font-medium text-accent-primary underline-offset-4 hover:underline"
             href={`/api/method/appointment.scheduler.receipts.download?${new URLSearchParams({ token: view.token, slug: view.business.slug ?? '', receipt: receipt.name })}`}
           >
             <Download className="h-4 w-4" aria-hidden="true" />
@@ -50,24 +50,24 @@ export function PaymentPanel({ view, onPayment }: { view: ManageView; onPayment:
   const payment = view.payment!;
   const open = payment.status === 'Awaiting payment' || payment.status === 'Rejected';
   return (
-    <section data-qa="manage-payment" data-qa-state={payment.status} className="space-y-4 rounded-xl border border-[var(--border-default)] p-4">
+    <section data-qa="manage-payment" data-qa-state={payment.status} className="space-y-4 rounded-xl border border-theme-default p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="flex items-center gap-2 font-semibold">
           {payment.method === 'Chapa' ? <CreditCard className="h-4 w-4" aria-hidden="true" /> : <Landmark className="h-4 w-4" aria-hidden="true" />}
           {t('payments.title')}
         </h2>
-        <span data-qa="manage-payment-status" className="rounded-full border border-[var(--border-default)] px-2.5 py-0.5 text-xs">
+        <span data-qa="manage-payment-status" className="rounded-full border border-theme-default px-2.5 py-0.5 text-xs">
           {t(STATUS_KEY[payment.status])}
         </span>
       </div>
       <p className="text-sm">
         <span className="font-semibold tabular-nums">{formatMoney(payment.amount, payment.currency)}</span>
         {payment.balance_due > 0 && (
-          <span className="text-[var(--text-secondary)]"> · {t('payments.balance')}: {formatMoney(payment.balance_due, payment.currency)}</span>
+          <span className="text-theme-secondary"> · {t('payments.balance')}: {formatMoney(payment.balance_due, payment.currency)}</span>
         )}
       </p>
       {open && payment.hold_expires_at && (
-        <p className="text-sm text-[var(--text-secondary)]">{fill(t('payments.heldUntil'), formatWhen(payment.hold_expires_at, view.booking.timezone, language))}</p>
+        <p className="text-sm text-theme-secondary">{fill(t('payments.heldUntil'), formatWhen(payment.hold_expires_at, view.booking.timezone, language))}</p>
       )}
       {payment.status === 'Rejected' && payment.reject_reason && (
         <p role="alert" className="rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive">
@@ -106,18 +106,18 @@ function BankTransfer({ view, payment, onPayment }: { view: ManageView; payment:
       <p className="text-sm">{fill(t('payments.payTo'), formatMoney(payment.amount, payment.currency))}</p>
       <ul data-qa="manage-bank-accounts" className="space-y-2">
         {payment.accounts.map((account) => (
-          <li key={account.account_number} className="rounded-lg bg-[var(--bg-secondary,transparent)] p-3 text-sm">
+          <li key={account.account_number} className="rounded-lg bg-(--bg-secondary,transparent) p-3 text-sm">
             <p className="font-medium">{account.bank}</p>
-            <p className="text-[var(--text-secondary)]">{account.account_name}</p>
+            <p className="text-theme-secondary">{account.account_name}</p>
             <p className="flex items-center gap-2 font-mono">
               {account.account_number}
               <CopyButton value={account.account_number} />
             </p>
-            {account.note && <p className="text-xs text-[var(--text-secondary)]">{account.note}</p>}
+            {account.note && <p className="text-xs text-theme-secondary">{account.note}</p>}
           </li>
         ))}
       </ul>
-      <p className="text-sm text-[var(--text-secondary)]">
+      <p className="text-sm text-theme-secondary">
         {fill(t('payments.referenceHint'), view.booking.reference)} <CopyButton value={view.booking.reference} />
       </p>
       <div className="space-y-1.5">
@@ -199,7 +199,7 @@ function CopyButton({ value }: { value: string }) {
   return (
     <button
       type="button"
-      className="inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+      className="inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-xs text-theme-secondary hover:text-theme-primary"
       onClick={() => {
         void navigator.clipboard?.writeText(value);
         setCopied(true);

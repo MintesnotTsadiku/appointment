@@ -204,7 +204,7 @@ export const EditClientProfileModal = ({ clientId, isOpen, onClose, onSave }: Ed
                     id="status"
                     value={formData.status}
                     onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
-                    className="w-full rounded-xl border-2 transition-all focus:outline-none focus:ring-2"
+                    className="w-full rounded-xl border-2 transition-all focus:outline-hidden focus:ring-2"
                     style={{
                       backgroundColor: 'var(--bg-secondary)',
                       borderColor: 'var(--border-default)',
@@ -228,7 +228,7 @@ export const EditClientProfileModal = ({ clientId, isOpen, onClose, onSave }: Ed
                   id="timezone"
                   value={formData.timezone}
                   onChange={(e) => setFormData({ ...formData, timezone: e.target.value })}
-                  className="w-full rounded-xl border-2 transition-all focus:outline-none focus:ring-2"
+                  className="w-full rounded-xl border-2 transition-all focus:outline-hidden focus:ring-2"
                   style={{
                     backgroundColor: 'var(--bg-secondary)',
                     borderColor: 'var(--border-default)',
@@ -251,7 +251,7 @@ export const EditClientProfileModal = ({ clientId, isOpen, onClose, onSave }: Ed
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={onClose}
-                className="px-6 py-3 rounded-xl text-sm font-semibold backdrop-blur-sm transition-all"
+                className="px-6 py-3 rounded-xl text-sm font-semibold backdrop-blur-xs transition-all"
                 style={{
                   backgroundColor: 'var(--border-subtle)',
                   border: '1px solid var(--border-default)',

@@ -161,15 +161,15 @@ export default function MyBookingsPage() {
   };
 
   let body: ReactNode;
-  if (stage === 'loading') body = <p className="text-sm text-[var(--text-secondary)]" data-qa="my-bookings-loading">{t('myBookings.opening')}</p>;
+  if (stage === 'loading') body = <p className="text-sm text-theme-secondary" data-qa="my-bookings-loading">{t('myBookings.opening')}</p>;
   else if (stage === 'form') body = <RequestForm owner={owner} language={language} onSent={() => setStage('sent')} />;
   else if (stage === 'sent') body = <Sent businessName={businessName} onAgain={() => setStage('form')} />;
   else if (stage === 'invalid') body = <InvalidLink onAgain={() => setStage('form')} />;
   else body = <Bookings listing={listing!} bookPath={bookPath} onSignOut={signOut} email={session?.email ?? listing?.email ?? ''} />;
 
   return (
-    <div className="booking-experience min-h-screen text-[var(--text-primary)]" data-qa="my-bookings" style={{ ...brand.style, backgroundColor: 'var(--bg-primary)' }}>
-      <header className="border-b border-[var(--border-subtle)]">
+    <div className="booking-experience min-h-screen text-theme-primary" data-qa="my-bookings" style={{ ...brand.style, backgroundColor: 'var(--bg-primary)' }}>
+      <header className="border-b border-theme-subtle">
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
           <a href={slug ? brand.publicRoot : bookPath} className="flex min-w-0 items-center gap-3 no-underline">
             {brand.config && brandLogo(brand.config.compiledDesign) ? (
@@ -184,7 +184,7 @@ export default function MyBookingsPage() {
       </header>
       <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
         <h1 className="mb-6 text-2xl font-semibold" style={{ fontFamily: 'var(--booking-font-display)' }}>{t('myBookings.title')}</h1>
-        <div className="rounded-2xl border border-[var(--border-default)] bg-[var(--bg-secondary,transparent)] p-5 sm:p-6">{body}</div>
+        <div className="rounded-2xl border border-theme-default bg-(--bg-secondary,transparent) p-5 sm:p-6">{body}</div>
       </main>
     </div>
   );
@@ -207,7 +207,7 @@ function RequestForm({ owner, language, onSent }: { owner: Owner; language: stri
   };
   return (
     <form className="space-y-4" onSubmit={submit} data-qa="my-bookings-form">
-      <p className="text-sm text-[var(--text-secondary)]">{t('myBookings.intro')}</p>
+      <p className="text-sm text-theme-secondary">{t('myBookings.intro')}</p>
       <div className="space-y-1.5">
         <Label htmlFor="my-bookings-email">{t('bookingForm.email')}</Label>
         <Input id="my-bookings-email" data-qa="my-bookings-email" type="email" required autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} />
@@ -222,7 +222,7 @@ function Sent({ businessName, onAgain }: { businessName: string; onAgain: () => 
   const { t } = useTranslation();
   return (
     <div className="space-y-3 text-center" data-qa="my-bookings-sent" role="status">
-      <MailCheck className="mx-auto h-10 w-10 text-[var(--text-secondary)]" aria-hidden="true" />
+      <MailCheck className="mx-auto h-10 w-10 text-theme-secondary" aria-hidden="true" />
       <p className="text-sm">{fill(t('myBookings.sent'), businessName)}</p>
       <Button type="button" variant="outline" onClick={onAgain}>{t('myBookings.otherEmail')}</Button>
     </div>
@@ -233,7 +233,7 @@ function InvalidLink({ onAgain }: { onAgain: () => void }) {
   const { t } = useTranslation();
   return (
     <div className="space-y-3 text-center" data-qa="my-bookings-invalid">
-      <CalendarX2 className="mx-auto h-10 w-10 text-[var(--text-secondary)]" aria-hidden="true" />
+      <CalendarX2 className="mx-auto h-10 w-10 text-theme-secondary" aria-hidden="true" />
       <p className="text-sm">{t('myBookings.invalid')}</p>
       <Button type="button" onClick={onAgain}>{t('myBookings.send')}</Button>
     </div>
@@ -247,7 +247,7 @@ function Bookings({ listing, bookPath, email, onSignOut }: { listing: Listing; b
   return (
     <div className="space-y-6" data-qa="my-bookings-list">
       <div className="flex flex-wrap items-center justify-between gap-3 text-sm">
-        <span className="text-[var(--text-secondary)]">{fill(t('myBookings.signedInAs'), email)}</span>
+        <span className="text-theme-secondary">{fill(t('myBookings.signedInAs'), email)}</span>
         <div className="flex gap-2">
           <Button asChild size="sm"><a href={bookPath}>{t('customerManage.bookAgain')}</a></Button>
           <Button type="button" size="sm" variant="outline" data-qa="my-bookings-sign-out" onClick={onSignOut}>
@@ -268,25 +268,25 @@ function Section({ title, rows, qa, muted = false }: { title: string; rows: Book
     <section className="space-y-3" data-qa={qa}>
       <h2 className="text-sm font-semibold">{title}</h2>
       {rows.length === 0 ? (
-        <p className="text-sm text-[var(--text-secondary)]">{t('myBookings.none')}</p>
+        <p className="text-sm text-theme-secondary">{t('myBookings.none')}</p>
       ) : (
         <ul className="space-y-3">
           {rows.map((row) => (
             <li key={row.reference} data-qa="my-booking" data-qa-state={row.status}
-              className={`flex flex-wrap items-start justify-between gap-3 rounded-xl border border-[var(--border-default)] p-4 ${muted ? 'opacity-80' : ''}`}>
+              className={`flex flex-wrap items-start justify-between gap-3 rounded-xl border border-theme-default p-4 ${muted ? 'opacity-80' : ''}`}>
               <div className="min-w-0 space-y-1">
                 <p className="font-medium">
                   {row.service}
                   {row.quantity > 1 && <span> {t('bookingPicker.times').replace('{0}', String(row.quantity))}</span>}
                 </p>
-                <p className="flex items-center gap-1.5 text-sm text-[var(--text-secondary)]">
+                <p className="flex items-center gap-1.5 text-sm text-theme-secondary">
                   <CalendarClock className="h-4 w-4 shrink-0" aria-hidden="true" />
                   {formatWhen(row.starts_at, row.timezone, language)}
                 </p>
                 {(row.provider || row.resources.length > 0) && (
-                  <p className="text-sm text-[var(--text-secondary)]">{[row.provider, ...row.resources].filter(Boolean).join(' · ')}</p>
+                  <p className="text-sm text-theme-secondary">{[row.provider, ...row.resources].filter(Boolean).join(' · ')}</p>
                 )}
-                <p className="text-xs text-[var(--text-secondary)]">
+                <p className="text-xs text-theme-secondary">
                   {t(STATUS_KEY[row.status])}
                   {row.payment_status === 'Awaiting payment' && <> · {t('myBookings.paymentNeeded')}</>}
                   {' · '}<span className="font-mono">{row.reference}</span>

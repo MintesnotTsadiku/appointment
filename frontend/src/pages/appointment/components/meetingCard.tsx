@@ -26,14 +26,14 @@ const MeetingCard = ({ title, duration, onClick }: MeetingCardProps) => {
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
-      className="group cursor-pointer relative overflow-hidden rounded-2xl backdrop-blur-sm transition-all duration-300"
+      className="group cursor-pointer relative overflow-hidden rounded-2xl backdrop-blur-xs transition-all duration-300"
       style={{ 
         backgroundColor: 'var(--border-subtle)',
         border: '1px solid var(--border-default)'
       }}
     >
       {/* Gradient glow on hover */}
-      <div className="absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl blur-xl"
+      <div className="absolute inset-0 bg-linear-to-r/srgb opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl blur-xl"
         style={{
           background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))'
         }}

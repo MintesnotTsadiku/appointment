@@ -45,7 +45,7 @@ const Navigation = () => {
           <div className="flex items-center justify-between h-full">
             {/* Logo */}
             <motion.div
-              className="flex-shrink-0 flex items-center"
+              className="shrink-0 flex items-center"
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
@@ -166,7 +166,7 @@ const Navigation = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/50 backdrop-blur-xs"
               onClick={() => setIsMobileMenuOpen(false)}
             />
 

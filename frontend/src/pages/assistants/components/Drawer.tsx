@@ -81,7 +81,7 @@ export const Drawer = ({
           >
             {/* Header */}
             <div
-              className="flex items-center justify-between px-6 py-4 flex-shrink-0"
+              className="flex items-center justify-between px-6 py-4 shrink-0"
               style={{
                 backgroundColor: 'var(--bg-secondary)',
                 borderBottom: '1px solid var(--border-default)',
@@ -113,7 +113,7 @@ export const Drawer = ({
             {/* Footer */}
             {footer && (
               <div
-                className="px-6 py-4 flex-shrink-0"
+                className="px-6 py-4 shrink-0"
                 style={{
                   backgroundColor: 'var(--bg-secondary)',
                   borderTop: '1px solid var(--border-default)',

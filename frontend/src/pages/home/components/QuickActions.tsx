@@ -159,7 +159,7 @@ const QuickActions = () => {
               <div className="relative z-10 flex items-start gap-4">
                 {/* Icon */}
                 <div 
-                  className={`flex-shrink-0 p-2.5 rounded-xl transition-all duration-300 ${
+                  className={`shrink-0 p-2.5 rounded-xl transition-all duration-300 ${
                     action.isPrimary 
                       ? 'bg-white/20 group-hover:bg-white/30' 
                       : 'group-hover:scale-110'

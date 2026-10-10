@@ -98,5 +98,5 @@ export function ListSkeleton({ count = 4, className }: { count?: number; classNa
 
 /** Token-based skeleton block; the shared Skeleton keeps its booking-page palette. */
 export function Bone({ className }: { className?: string }) {
-  return <Skeleton className={cn('bg-muted before:via-foreground/[0.05] dark:bg-muted dark:before:via-foreground/[0.05]', className)} />;
+  return <Skeleton className={cn('bg-muted before:via-foreground/5 dark:bg-muted dark:before:via-foreground/5', className)} />;
 }

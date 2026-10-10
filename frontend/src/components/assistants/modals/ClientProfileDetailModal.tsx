@@ -103,7 +103,7 @@ export const ClientProfileDetailModal = ({ clientId, isOpen, onClose, onEdit, on
                     <motion.span
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full font-semibold text-white backdrop-blur-sm"
+                      className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full font-semibold text-white backdrop-blur-xs"
                       style={{
                         backgroundColor: isActive ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)',
                       }}
@@ -132,7 +132,7 @@ export const ClientProfileDetailModal = ({ clientId, isOpen, onClose, onEdit, on
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={onEdit}
-                  className="px-4 py-2 rounded-xl text-sm font-semibold backdrop-blur-sm transition-all"
+                  className="px-4 py-2 rounded-xl text-sm font-semibold backdrop-blur-xs transition-all"
                   style={{
                     backgroundColor: 'var(--border-subtle)',
                     border: '1px solid var(--border-default)',
@@ -161,7 +161,7 @@ export const ClientProfileDetailModal = ({ clientId, isOpen, onClose, onEdit, on
                 <motion.div
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="p-4 rounded-xl backdrop-blur-sm border"
+                  className="p-4 rounded-xl backdrop-blur-xs border"
                   style={{
                     backgroundColor: 'var(--bg-secondary)',
                     borderColor: 'var(--border-subtle)',
@@ -191,7 +191,7 @@ export const ClientProfileDetailModal = ({ clientId, isOpen, onClose, onEdit, on
                   <motion.div
                     initial={{ opacity: 0, x: 10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="p-4 rounded-xl backdrop-blur-sm border"
+                    className="p-4 rounded-xl backdrop-blur-xs border"
                     style={{
                       backgroundColor: 'var(--bg-secondary)',
                       borderColor: 'var(--border-subtle)',
@@ -222,7 +222,7 @@ export const ClientProfileDetailModal = ({ clientId, isOpen, onClose, onEdit, on
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="p-4 rounded-xl backdrop-blur-sm border"
+                    className="p-4 rounded-xl backdrop-blur-xs border"
                     style={{
                       backgroundColor: 'var(--bg-secondary)',
                       borderColor: 'var(--border-subtle)',
@@ -253,7 +253,7 @@ export const ClientProfileDetailModal = ({ clientId, isOpen, onClose, onEdit, on
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="p-4 rounded-xl backdrop-blur-sm border"
+                    className="p-4 rounded-xl backdrop-blur-xs border"
                     style={{
                       backgroundColor: 'var(--bg-secondary)',
                       borderColor: 'var(--border-subtle)',

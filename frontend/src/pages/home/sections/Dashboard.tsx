@@ -22,7 +22,7 @@ const Dashboard = ({ userName }: DashboardProps) => {
   return (
     <div 
       data-qa="app-shell"
-      className="min-h-screen text-[var(--text-primary)]"
+      className="min-h-screen text-theme-primary"
       style={{ backgroundColor: 'var(--bg-primary)' }}
     >
       {/* Ambient Background Glows */}
@@ -73,7 +73,7 @@ const Dashboard = ({ userName }: DashboardProps) => {
               {/* Navigation Links */}
               <motion.button
                 onClick={() => navigate('/calendar')}
-                className="px-3 py-2 rounded-lg backdrop-blur-sm transition-all flex items-center gap-2"
+                className="px-3 py-2 rounded-lg backdrop-blur-xs transition-all flex items-center gap-2"
                 style={{ 
                   backgroundColor: 'var(--border-subtle)',
                   border: '1px solid var(--border-default)',
@@ -88,7 +88,7 @@ const Dashboard = ({ userName }: DashboardProps) => {
               </motion.button>
               <motion.button
                 onClick={() => navigate('/analytics')}
-                className="px-3 py-2 rounded-lg backdrop-blur-sm transition-all flex items-center gap-2"
+                className="px-3 py-2 rounded-lg backdrop-blur-xs transition-all flex items-center gap-2"
                 style={{ 
                   backgroundColor: 'var(--border-subtle)',
                   border: '1px solid var(--border-default)',
@@ -103,7 +103,7 @@ const Dashboard = ({ userName }: DashboardProps) => {
               </motion.button>
               <motion.button
                 onClick={() => navigate('/reception')}
-                className="px-3 py-2 rounded-lg backdrop-blur-sm transition-all flex items-center gap-2"
+                className="px-3 py-2 rounded-lg backdrop-blur-xs transition-all flex items-center gap-2"
                 style={{ 
                   backgroundColor: 'var(--border-subtle)',
                   border: '1px solid var(--border-default)',
@@ -118,7 +118,7 @@ const Dashboard = ({ userName }: DashboardProps) => {
               </motion.button>
               <motion.button
                 onClick={() => navigate('/settings')}
-                className="px-3 py-2 rounded-lg backdrop-blur-sm transition-all flex items-center gap-2"
+                className="px-3 py-2 rounded-lg backdrop-blur-xs transition-all flex items-center gap-2"
                 style={{ 
                   backgroundColor: 'var(--border-subtle)',
                   border: '1px solid var(--border-default)',

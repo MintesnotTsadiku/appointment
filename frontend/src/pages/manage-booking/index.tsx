@@ -48,13 +48,13 @@ export default function ManageBookingPage() {
   const myBookingsPath = view?.business.my_bookings_path || (slug ? `/${slug}/my-bookings` : '');
   let body: ReactNode;
   if (cancelled) body = <Cancelled result={cancelled} currency={view?.currency ?? 'ETB'} bookPath={bookPath} />;
-  else if (isLoading && !view) body = <p className="text-sm text-[var(--text-secondary)]">…</p>;
+  else if (isLoading && !view) body = <p className="text-sm text-theme-secondary">…</p>;
   else if (!view) body = <Invalid bookPath={bookPath} />;
   else
     body = (
       <div className="space-y-6">
         {moved && (
-          <p role="status" data-qa="manage-moved" className="flex items-start gap-2 rounded-xl border border-[var(--border-default)] p-4 text-sm text-[var(--text-primary)]">
+          <p role="status" data-qa="manage-moved" className="flex items-start gap-2 rounded-xl border border-theme-default p-4 text-sm text-theme-primary">
             <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-600" aria-hidden="true" />
             {t('customerManage.rescheduled')}
           </p>
@@ -71,7 +71,7 @@ export default function ManageBookingPage() {
             <ReceiptLinks view={view} />
           </div>
         )}
-        <p className="text-xs text-[var(--text-secondary)]">
+        <p className="text-xs text-theme-secondary">
           {t('customerManage.reference')}: <span className="font-mono">{view.booking.reference}</span>
           {view.booking.status === 'Pending' && !view.payment && <> · {t('customerManage.statusPending')}</>}
         </p>
@@ -91,7 +91,7 @@ export default function ManageBookingPage() {
         {mode === 'overview' && <Actions view={view} onMode={setMode} />}
         <Contact view={view} />
         {myBookingsPath && (
-          <a data-qa="manage-all-bookings" href={myBookingsPath} className="inline-block text-sm text-[var(--text-secondary)] underline underline-offset-4">
+          <a data-qa="manage-all-bookings" href={myBookingsPath} className="inline-block text-sm text-theme-secondary underline underline-offset-4">
             {t('myBookings.allLink')}
           </a>
         )}
@@ -99,8 +99,8 @@ export default function ManageBookingPage() {
     );
 
   return (
-    <div className="booking-experience min-h-screen text-[var(--text-primary)]" data-qa="manage-booking" style={{ ...brand.style, backgroundColor: 'var(--bg-primary)' }}>
-      <header className="border-b border-[var(--border-subtle)]">
+    <div className="booking-experience min-h-screen text-theme-primary" data-qa="manage-booking" style={{ ...brand.style, backgroundColor: 'var(--bg-primary)' }}>
+      <header className="border-b border-theme-subtle">
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
           <a href={slug ? brand.publicRoot : bookPath || '/'} className="flex min-w-0 items-center gap-3 no-underline">
             {brand.config && brandLogo(brand.config.compiledDesign) ? (
@@ -119,7 +119,7 @@ export default function ManageBookingPage() {
         <h1 className="mb-6 text-2xl font-semibold" style={{ fontFamily: 'var(--booking-font-display)' }}>
           {t('customerManage.title')}
         </h1>
-        <div className="rounded-2xl border border-[var(--border-default)] bg-[var(--bg-secondary,transparent)] p-5 sm:p-6">{body}</div>
+        <div className="rounded-2xl border border-theme-default bg-(--bg-secondary,transparent) p-5 sm:p-6">{body}</div>
       </main>
     </div>
   );
@@ -137,7 +137,7 @@ function Actions({ view, onMode }: { view: ManageView; onMode: (mode: Mode) => v
   return (
     <div className="space-y-3">
       {blocked && (
-        <p data-qa="manage-reschedule-blocked" className="text-sm text-[var(--text-secondary)]">
+        <p data-qa="manage-reschedule-blocked" className="text-sm text-theme-secondary">
           {blocked}
         </p>
       )}
@@ -153,7 +153,7 @@ function Actions({ view, onMode }: { view: ManageView; onMode: (mode: Mode) => v
           </Button>
         )}
       </div>
-      <p className="text-xs text-[var(--text-secondary)]">{fill(t('customerManage.policyNote'), view.business.name)}</p>
+      <p className="text-xs text-theme-secondary">{fill(t('customerManage.policyNote'), view.business.name)}</p>
     </div>
   );
 }
@@ -163,8 +163,8 @@ function Contact({ view }: { view: ManageView }) {
   const { phone, email, name } = view.business;
   if (!phone && !email) return null;
   return (
-    <div data-qa="manage-contact" className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-[var(--border-subtle)] pt-4 text-sm">
-      <span className="flex items-center gap-1.5 text-[var(--text-secondary)]">
+    <div data-qa="manage-contact" className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-theme-subtle pt-4 text-sm">
+      <span className="flex items-center gap-1.5 text-theme-secondary">
         <Phone className="h-4 w-4" aria-hidden="true" />
         {fill(t('customerManage.contact'), name)}
       </span>
@@ -178,9 +178,9 @@ function Invalid({ bookPath }: { bookPath: string }) {
   const { t } = useTranslation();
   return (
     <div data-qa="manage-invalid" className="space-y-3 text-center">
-      <CalendarX2 className="mx-auto h-10 w-10 text-[var(--text-secondary)]" aria-hidden="true" />
+      <CalendarX2 className="mx-auto h-10 w-10 text-theme-secondary" aria-hidden="true" />
       <h2 className="text-lg font-semibold">{t('customerManage.invalidTitle')}</h2>
-      <p className="text-sm text-[var(--text-secondary)]">{t('customerManage.invalidBody')}</p>
+      <p className="text-sm text-theme-secondary">{t('customerManage.invalidBody')}</p>
       {bookPath && (
         <Button asChild variant="outline">
           <a href={bookPath}>{t('customerManage.bookAgain')}</a>
@@ -197,7 +197,7 @@ function Cancelled({ result, currency, bookPath }: { result: CancelResult; curre
       <CheckCircle2 className="mx-auto h-10 w-10 text-green-600" aria-hidden="true" />
       <h2 className="text-lg font-semibold">{t('customerManage.cancelled')}</h2>
       {result.fee > 0 && (
-        <p data-qa="manage-cancelled-fee" className="text-sm text-[var(--text-secondary)]">
+        <p data-qa="manage-cancelled-fee" className="text-sm text-theme-secondary">
           {fill(t('customerManage.cancelledFee'), formatMoney(result.fee, currency), formatMoney(result.refund, currency))}
         </p>
       )}

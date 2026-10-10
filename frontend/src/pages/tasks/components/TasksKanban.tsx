@@ -114,7 +114,7 @@ export const TasksKanban = ({
               }}
               onDragLeave={() => setActiveColumn(null)}
               onDrop={(e) => handleDrop(e, col.key)}
-              className="rounded-2xl border backdrop-blur-sm p-3 min-h-[320px] flex flex-col gap-3 transition-all"
+              className="rounded-2xl border backdrop-blur-xs p-3 min-h-[320px] flex flex-col gap-3 transition-all"
               style={{
                 borderColor: activeColumn === col.key ? col.accent : 'var(--border-subtle)',
                 backgroundColor:

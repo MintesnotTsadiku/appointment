@@ -85,7 +85,7 @@ const SetupChecklist = () => {
             initial={{ scale: 0, rotate: -180 }}
             animate={{ scale: 1, rotate: 0 }}
             transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
-            className="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl mb-5"
+            className="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-xs rounded-2xl mb-5"
           >
             <PartyPopper className="w-10 h-10 text-white" />
           </motion.div>
@@ -109,7 +109,7 @@ const SetupChecklist = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium text-white"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-xs rounded-full text-sm font-medium text-white"
           >
             <CheckCircle2 className="w-4 h-4" />
             <span>{totalCount}/{totalCount} tasks completed</span>
@@ -142,7 +142,7 @@ const SetupChecklist = () => {
 
   return (
     <div 
-      className="relative overflow-hidden rounded-2xl backdrop-blur-sm"
+      className="relative overflow-hidden rounded-2xl backdrop-blur-xs"
       style={{ 
         backgroundColor: 'var(--border-subtle)',
         border: '2px solid var(--accent-primary-light)'
@@ -257,7 +257,7 @@ const SetupChecklist = () => {
                   }}
                 >
                   {/* Checkbox */}
-                  <div className="flex-shrink-0 mt-0.5">
+                  <div className="shrink-0 mt-0.5">
                     {item.completed ? (
                       <motion.div
                         initial={{ scale: 0 }}
@@ -314,7 +314,7 @@ const SetupChecklist = () => {
                           window.location.href = item.actionUrl!;
                         }
                       }}
-                      className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all opacity-0 group-hover:opacity-100"
+                      className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all opacity-0 group-hover:opacity-100"
                       style={{ 
                         backgroundColor: 'var(--accent-primary-light)',
                         color: 'var(--accent-primary)'

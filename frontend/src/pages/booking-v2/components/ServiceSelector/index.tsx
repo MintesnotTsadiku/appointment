@@ -55,7 +55,7 @@ export function ServiceSelector({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="rounded-2xl backdrop-blur-sm p-6 md:p-8"
+        className="rounded-2xl backdrop-blur-xs p-6 md:p-8"
         style={{ 
           backgroundColor: 'var(--border-subtle)',
           border: '1px solid var(--border-default)'
@@ -66,7 +66,7 @@ export function ServiceSelector({
           <motion.div
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
-            className="flex-shrink-0 relative"
+            className="shrink-0 relative"
           >
             <div 
               className="absolute inset-0 rounded-xl blur-md opacity-50"
@@ -134,7 +134,7 @@ export function ServiceSelector({
           {/* View Mode Toggle (for organizations with multiple providers) */}
           {organization.providers.length > 1 && organizationServices.length > 0 && (
             <div 
-              className="inline-flex rounded-lg p-1 backdrop-blur-sm"
+              className="inline-flex rounded-lg p-1 backdrop-blur-xs"
               style={{ 
                 backgroundColor: 'var(--border-subtle)',
                 border: '1px solid var(--border-default)'
@@ -145,8 +145,8 @@ export function ServiceSelector({
                 className={cn(
                   "px-4 py-2 rounded-md text-sm font-medium transition-all",
                   viewMode === 'services'
-                    ? "bg-gradient-primary text-white shadow-sm"
-                    : "hover:bg-[var(--border-default)]"
+                    ? "bg-gradient-primary text-white shadow-xs"
+                    : "hover:bg-(--border-default)"
                 )}
                 style={{ 
                   color: viewMode === 'services' ? 'white' : 'var(--text-secondary)'
@@ -159,8 +159,8 @@ export function ServiceSelector({
                 className={cn(
                   "px-4 py-2 rounded-md text-sm font-medium transition-all",
                   viewMode === 'providers'
-                    ? "bg-gradient-primary text-white shadow-sm"
-                    : "hover:bg-[var(--border-default)]"
+                    ? "bg-gradient-primary text-white shadow-xs"
+                    : "hover:bg-(--border-default)"
                 )}
                 style={{ 
                   color: viewMode === 'providers' ? 'white' : 'var(--text-secondary)'
@@ -250,7 +250,7 @@ export function ServiceSelector({
                 >
                   {/* Provider Header */}
                   <div 
-                    className="flex items-center gap-3 p-4 rounded-xl backdrop-blur-sm"
+                    className="flex items-center gap-3 p-4 rounded-xl backdrop-blur-xs"
                     style={{ 
                       backgroundColor: 'var(--border-subtle)',
                       border: '1px solid var(--border-default)'
@@ -331,7 +331,7 @@ export function ServiceSelector({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="rounded-xl p-6 backdrop-blur-sm"
+          className="rounded-xl p-6 backdrop-blur-xs"
           style={{ 
             backgroundColor: 'var(--border-subtle)',
             border: '1px solid var(--border-default)'
@@ -376,8 +376,8 @@ function ServiceCard({ service, onSelect, availableProviders = [], showProviderN
       whileTap={{ scale: 0.98 }}
       onClick={() => onSelect(service)}
       className={cn(
-        "group relative rounded-xl p-6 backdrop-blur-sm transition-all duration-300",
-        "focus:outline-none focus:ring-2 focus:ring-offset-2",
+        "group relative rounded-xl p-6 backdrop-blur-xs transition-all duration-300",
+        "focus:outline-hidden focus:ring-2 focus:ring-offset-2",
         "text-left w-full"
       )}
       style={{ 
@@ -506,7 +506,7 @@ function ProviderCard({ provider }: ProviderCardProps) {
     <motion.div
       whileHover={{ scale: 1.02 }}
       transition={{ duration: 0.2 }}
-      className="rounded-lg p-4 backdrop-blur-sm"
+      className="rounded-lg p-4 backdrop-blur-xs"
       style={{ 
         backgroundColor: 'var(--bg-elevated)',
         border: '1px solid var(--border-default)'

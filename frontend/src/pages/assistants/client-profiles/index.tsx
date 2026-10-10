@@ -145,7 +145,7 @@ const ClientProfiles = () => {
 
   return (
     <div
-      className="min-h-screen text-[var(--text-primary)] overflow-hidden"
+      className="min-h-screen text-theme-primary overflow-hidden"
       style={{ backgroundColor: 'var(--bg-primary)' }}
     >
       {/* Ambient background effects */}
@@ -238,7 +238,7 @@ const ClientProfiles = () => {
                             />
                             
                             <Card
-                              className="relative p-5 backdrop-blur-sm hover:scale-[1.02] transition-all duration-300 cursor-pointer overflow-hidden"
+                              className="relative p-5 backdrop-blur-xs hover:scale-[1.02] transition-all duration-300 cursor-pointer overflow-hidden"
                               style={{
                                 backgroundColor: 'var(--bg-elevated)',
                                 border: '1px solid var(--border-default)',
@@ -271,7 +271,7 @@ const ClientProfiles = () => {
 
                               {/* Avatar and basic info */}
                               <div className="flex items-start gap-4 mb-4">
-                                <div className="relative flex-shrink-0">
+                                <div className="relative shrink-0">
                                   {avatarUrl ? (
                                     <img 
                                       src={avatarUrl} 
@@ -317,7 +317,7 @@ const ClientProfiles = () => {
                               <div className="p-3 rounded-xl mb-3" style={{ backgroundColor: 'var(--bg-secondary)' }}>
                                 {assignment ? (
                                   <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center flex-shrink-0">
+                                    <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center shrink-0">
                                       <Star className="w-4 h-4 text-white" />
                                     </div>
                                     <div className="flex-1 min-w-0">
@@ -330,7 +330,7 @@ const ClientProfiles = () => {
                                   </div>
                                 ) : (
                                   <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'var(--border-subtle)' }}>
+                                    <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: 'var(--border-subtle)' }}>
                                       <Clock className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
                                     </div>
                                     <div className="flex-1">
@@ -399,7 +399,7 @@ const ClientProfiles = () => {
                             return (
                               <tr
                                 key={profile.name}
-                                className="hover:bg-[var(--bg-secondary)] transition-colors cursor-pointer"
+                                className="hover:bg-theme-secondary transition-colors cursor-pointer"
                                 onClick={() => {
                                   setSelectedClientId(profile.name);
                                   setIsDetailModalOpen(true);

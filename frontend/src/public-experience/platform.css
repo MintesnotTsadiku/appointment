@@ -128,7 +128,8 @@
   background: radial-gradient(circle at 88% 8%, var(--accent-primary-light), transparent 35%);
 }
 
-.booking-experience .backdrop-blur-sm,
+/* Tailwind 4 renamed backdrop-blur-sm (4px) to backdrop-blur-xs. */
+.booking-experience .backdrop-blur-xs,
 .booking-experience .backdrop-blur-xl {
   backdrop-filter: none;
 }

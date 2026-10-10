@@ -91,7 +91,7 @@ const ModeToggle = () => {
   return (
     <motion.button
       onClick={toggleTheme}
-      className="fixed bg-background dark:hover:bg-zinc-800 z-50 max-md:top-4 max-md:right-4 top-10 right-5 lg:top-4 lg:right-4 flex gap-2 items-center justify-center rounded-full p-2 lg:px-3 hover:bg-gray-100 focus:outline-none overflow-hidden"
+      className="fixed bg-background dark:hover:bg-zinc-800 z-50 max-md:top-4 max-md:right-4 top-10 right-5 lg:top-4 lg:right-4 flex gap-2 items-center justify-center rounded-full p-2 lg:px-3 hover:bg-gray-100 focus:outline-hidden overflow-hidden"
       aria-label={`Theme: ${theme}. Switch theme`}
       data-qa="theme-toggle"
       whileTap={{ scale: 0.9 }}

@@ -59,13 +59,13 @@ const AlertsPanel = () => {
       case 'warning':
         return 'bg-gradient-secondary';
       case 'info':
-        return 'bg-gradient-to-br from-blue-500 to-indigo-600';
+        return 'bg-linear-to-br/srgb from-blue-500 to-indigo-600';
       case 'success':
         return 'bg-gradient-success';
       case 'error':
-        return 'bg-gradient-to-br from-red-500 to-rose-600';
+        return 'bg-linear-to-br/srgb from-red-500 to-rose-600';
       default:
-        return 'bg-gradient-to-br from-gray-500 to-gray-600';
+        return 'bg-linear-to-br/srgb from-gray-500 to-gray-600';
     }
   };
 
@@ -99,7 +99,7 @@ const AlertsPanel = () => {
 
   return (
     <div 
-      className="relative backdrop-blur-sm rounded-2xl overflow-hidden"
+      className="relative backdrop-blur-xs rounded-2xl overflow-hidden"
       style={{ 
         backgroundColor: 'var(--border-subtle)',
         border: '1px solid var(--border-default)'
@@ -184,7 +184,7 @@ const AlertsPanel = () => {
                   <div className="flex items-start gap-3">
                     {/* Icon */}
                     <div 
-                      className={`flex-shrink-0 p-2 rounded-lg ${getAlertGradient(alert.type)}`}
+                      className={`shrink-0 p-2 rounded-lg ${getAlertGradient(alert.type)}`}
                     >
                       <span className="text-white">
                         {getAlertIcon(alert.type)}
@@ -219,7 +219,7 @@ const AlertsPanel = () => {
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                         onClick={() => handleDismiss(alert, index)}
-                        className="flex-shrink-0 p-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
+                        className="shrink-0 p-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
                         style={{ 
                           backgroundColor: 'var(--border-default)',
                           color: 'var(--text-muted)'

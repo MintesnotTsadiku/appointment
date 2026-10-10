@@ -236,7 +236,7 @@ const GroupAppointment = () => {
           duration: 4000,
           classNames: {
             actionButton:
-              "group-[.toast]:!bg-red-500 group-[.toast]:hover:!bg-red-300 group-[.toast]:!text-white",
+              "group-[.toast]:bg-red-500! hover:group-[.toast]:bg-red-300! group-[.toast]:text-white!",
           },
           icon: <CircleAlert className="h-5 w-5 text-red-500" />,
           action: {
@@ -313,7 +313,7 @@ const GroupAppointment = () => {
               variant="ghost"
               size="sm"
               onClick={() => navigate("/")}
-              className="backdrop-blur-sm"
+              className="backdrop-blur-xs"
               style={{ 
                 color: 'var(--text-secondary)',
                 backgroundColor: 'var(--border-subtle)',
@@ -327,7 +327,7 @@ const GroupAppointment = () => {
             {/* Theme Toggle */}
             <motion.button
               onClick={toggleTheme}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg backdrop-blur-sm transition-all"
+              className="flex items-center gap-2 px-3 py-2 rounded-lg backdrop-blur-xs transition-all"
               style={{ 
                 backgroundColor: 'var(--border-subtle)',
                 border: '1px solid var(--border-default)'
@@ -377,7 +377,7 @@ const GroupAppointment = () => {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5, delay: 0.1 }}
-                  className="flex flex-col w-full lg:w-3/4 gap-4 rounded-2xl backdrop-blur-sm p-6"
+                  className="flex flex-col w-full lg:w-3/4 gap-4 rounded-2xl backdrop-blur-xs p-6"
                   style={{ 
                     backgroundColor: 'var(--bg-elevated)',
                     border: '1px solid var(--border-default)'
@@ -406,7 +406,7 @@ const GroupAppointment = () => {
                             >
                                 <div className="w-full truncate flex items-center justify-start gap-2" style={{ color: 'var(--text-secondary)' }}>
                                   <div 
-                                    className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                                    className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
                                     style={{ 
                                       background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
                                       opacity: 0.2
@@ -450,7 +450,7 @@ const GroupAppointment = () => {
                       >
                         <div className="w-full truncate flex items-center justify-start gap-2" style={{ color: 'var(--text-secondary)' }}>
                           <div 
-                            className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                            className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
                             style={{ 
                               background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
                               opacity: 0.2
@@ -489,7 +489,7 @@ const GroupAppointment = () => {
                   className="flex flex-col w-full lg:max-w-96 gap-6"
                 >
                 {/* Calendar View */}
-                  <div className="w-full rounded-2xl backdrop-blur-sm p-6" style={{ 
+                  <div className="w-full rounded-2xl backdrop-blur-xs p-6" style={{ 
                     backgroundColor: 'var(--bg-elevated)',
                     border: '1px solid var(--border-default)'
                   }}>
@@ -524,7 +524,7 @@ const GroupAppointment = () => {
                       className="rounded-md w-full flex lg:px-6 lg:p-2 p-0"
                   />
                 </div>
-                  <div className="w-full gap-4 flex flex-col rounded-2xl backdrop-blur-sm p-6" style={{ 
+                  <div className="w-full gap-4 flex flex-col rounded-2xl backdrop-blur-xs p-6" style={{ 
                     backgroundColor: 'var(--bg-elevated)',
                     border: '1px solid var(--border-default)'
                   }}>
@@ -540,8 +540,8 @@ const GroupAppointment = () => {
                         size="sm"
                         onClick={() => setTimeFormat("12h")}
                         className={cn(
-                              "h-8 px-3 text-xs backdrop-blur-sm transition-all",
-                              timeFormat === "12h" ? "shadow-sm" : ""
+                              "h-8 px-3 text-xs backdrop-blur-xs transition-all",
+                              timeFormat === "12h" ? "shadow-xs" : ""
                             )}
                             style={timeFormat === "12h" ? {
                               background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
@@ -562,8 +562,8 @@ const GroupAppointment = () => {
                         size="sm"
                         onClick={() => setTimeFormat("24h")}
                         className={cn(
-                              "h-8 px-3 text-xs backdrop-blur-sm transition-all",
-                              timeFormat === "24h" ? "shadow-sm" : ""
+                              "h-8 px-3 text-xs backdrop-blur-xs transition-all",
+                              timeFormat === "24h" ? "shadow-xs" : ""
                             )}
                             style={timeFormat === "24h" ? {
                               background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
@@ -584,8 +584,8 @@ const GroupAppointment = () => {
                         size="sm"
                         onClick={() => setTimeFormat("ethiopian")}
                         className={cn(
-                              "h-8 px-3 text-xs backdrop-blur-sm transition-all",
-                              timeFormat === "ethiopian" ? "shadow-sm" : ""
+                              "h-8 px-3 text-xs backdrop-blur-xs transition-all",
+                              timeFormat === "ethiopian" ? "shadow-xs" : ""
                             )}
                             style={timeFormat === "ethiopian" ? {
                               background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
@@ -628,7 +628,7 @@ const GroupAppointment = () => {
                 >
                 <Button
                   variant="link"
-                    className="px-0 backdrop-blur-sm"
+                    className="px-0 backdrop-blur-xs"
                     style={{ color: 'var(--accent-primary)' }}
                   onClick={() =>
                     dispatch({ type: "SET_EXPANDED", payload: false })
@@ -646,7 +646,7 @@ const GroupAppointment = () => {
                       ? false
                       : true) || loading
                   }
-                      className="flex w-fit px-10 md:hidden backdrop-blur-sm shadow-sm"
+                      className="flex w-fit px-10 md:hidden backdrop-blur-xs shadow-xs"
                       style={{
                         background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
                         color: 'white',
@@ -666,7 +666,7 @@ const GroupAppointment = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
               className={cn(
-                  "w-full flex flex-col lg:w-1/2 gap-4 rounded-2xl backdrop-blur-sm p-6",
+                  "w-full flex flex-col lg:w-1/2 gap-4 rounded-2xl backdrop-blur-xs p-6",
                 !state.expanded && "max-md:hidden"
               )}
                 style={{ 
@@ -690,7 +690,7 @@ const GroupAppointment = () => {
                 </div>
               ) : (
                 <>
-                  <div className="lg:h-[22rem] mb-3 overflow-y-auto no-scrollbar space-y-2">
+                  <div className="lg:h-88 mb-3 overflow-y-auto no-scrollbar space-y-2">
                     {state.meetingData.all_available_slots_for_data.length >
                     0 ? (
                       state.meetingData.all_available_slots_for_data.map(
@@ -714,7 +714,7 @@ const GroupAppointment = () => {
                                     duration: 3000,
                                     classNames: {
                                       actionButton:
-                                        "group-[.toast]:!bg-red-500 group-[.toast]:hover:!bg-red-300 group-[.toast]:!text-white",
+                                        "group-[.toast]:bg-red-500! hover:group-[.toast]:bg-red-300! group-[.toast]:text-white!",
                                     },
                                     icon: <CircleAlert className="h-5 w-5 text-red-500" />,
                                     action: {
@@ -735,8 +735,8 @@ const GroupAppointment = () => {
                               disabled={loading || isPast}
                               variant="outline"
                               className={cn(
-                                "w-full font-normal border transition-all backdrop-blur-sm",
-                                isSelected && "shadow-sm"
+                                "w-full font-normal border transition-all backdrop-blur-xs",
+                                isSelected && "shadow-xs"
                               )}
                               style={isSelected ? {
                                 background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
@@ -782,7 +782,7 @@ const GroupAppointment = () => {
                   <Button
                     disabled={loading}
                     className={cn(
-                      "lg:!mt-0 max-lg:w-full hidden backdrop-blur-sm shadow-sm",
+                      "lg:mt-0! max-lg:w-full hidden backdrop-blur-xs shadow-xs",
                       state.selectedSlot?.start_time &&
                         state.selectedSlot.end_time &&
                         "flex",

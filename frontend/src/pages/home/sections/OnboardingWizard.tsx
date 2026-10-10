@@ -20,7 +20,7 @@ import Step5OrgSuccess from '../components/Step5OrgSuccess';
 
 const totalSteps = 5;
 const gradientBackground =
-  "min-h-screen bg-[radial-gradient(circle_at_top,_#f5f7ff,_#ffffff_45%,_#ffffff)] dark:bg-[radial-gradient(circle_at_top,_#020617,_#0f172a_45%,_#020617)]";
+  "min-h-screen bg-[radial-gradient(circle_at_top,#f5f7ff,#ffffff_45%,#ffffff)] dark:bg-[radial-gradient(circle_at_top,#020617,#0f172a_45%,#020617)]";
 
 const getStepDescription = (isOrganization: boolean, currentStep: number) => {
   if (isOrganization) {
@@ -138,7 +138,7 @@ const OnboardingWizard = () => {
 
   return (
     <div data-qa="app-shell" data-qa-state="onboarding-wizard" className={gradientBackground}>
-      <div className="max-w-7xl mx-auto px-4 md:px-6 py-10 lg:grid lg:grid-cols-[360px,1fr] lg:gap-10 space-y-8 lg:space-y-0">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 py-10 lg:grid lg:grid-cols-[360px_1fr] lg:gap-10 space-y-8 lg:space-y-0">
         <WizardSidebar currentStep={currentStep} isOrganization={isOrganization} />
 
         <div className="flex flex-col gap-6">
@@ -159,7 +159,7 @@ const OnboardingWizard = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -24 }}
               transition={{ duration: 0.3 }}
-              className="bg-white dark:bg-gray-900/80 backdrop-blur rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 p-6 sm:p-8"
+              className="bg-white dark:bg-gray-900/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 p-6 sm:p-8"
             >
               {renderStep()}
             </motion.div>

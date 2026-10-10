@@ -82,7 +82,7 @@ export const TaskFilters = ({
         <select
           value={sortBy}
           onChange={(e) => onSortByChange(e.target.value)}
-          className="px-3 py-2 rounded-lg text-sm transition-all focus:outline-none focus:ring-2"
+          className="px-3 py-2 rounded-lg text-sm transition-all focus:outline-hidden focus:ring-2"
           style={{
             backgroundColor: 'var(--bg-secondary)',
             borderColor: 'var(--border-default)',
@@ -102,7 +102,7 @@ export const TaskFilters = ({
         <select
           value={statusFilter}
           onChange={(e) => onStatusFilterChange(e.target.value)}
-          className="px-3 py-2 rounded-lg text-sm transition-all focus:outline-none focus:ring-2"
+          className="px-3 py-2 rounded-lg text-sm transition-all focus:outline-hidden focus:ring-2"
           style={{
             backgroundColor: 'var(--bg-secondary)',
             borderColor: 'var(--border-default)',
@@ -124,7 +124,7 @@ export const TaskFilters = ({
         <select
           value={dateField}
           onChange={(e) => onDateFieldChange(e.target.value as 'deadline' | 'creation' | 'modified')}
-          className="px-3 py-2 rounded-lg text-sm transition-all focus:outline-none focus:ring-2"
+          className="px-3 py-2 rounded-lg text-sm transition-all focus:outline-hidden focus:ring-2"
           style={{
             backgroundColor: 'var(--bg-secondary)',
             borderColor: 'var(--border-default)',
@@ -142,7 +142,7 @@ export const TaskFilters = ({
       <select
         value={assigneeFilter}
         onChange={(e) => onAssigneeFilterChange(e.target.value)}
-        className="px-3 py-2 rounded-lg text-sm transition-all focus:outline-none focus:ring-2 min-w-[140px]"
+        className="px-3 py-2 rounded-lg text-sm transition-all focus:outline-hidden focus:ring-2 min-w-[140px]"
         style={{
           backgroundColor: 'var(--bg-secondary)',
           borderColor: 'var(--border-default)',
@@ -162,7 +162,7 @@ export const TaskFilters = ({
       <select
         value={clientFilter}
         onChange={(e) => onClientFilterChange(e.target.value)}
-        className="px-3 py-2 rounded-lg text-sm transition-all focus:outline-none focus:ring-2 min-w-[160px]"
+        className="px-3 py-2 rounded-lg text-sm transition-all focus:outline-hidden focus:ring-2 min-w-[160px]"
         style={{
           backgroundColor: 'var(--bg-secondary)',
           borderColor: 'var(--border-default)',
@@ -182,7 +182,7 @@ export const TaskFilters = ({
       <select
         value={projectFilter}
         onChange={(e) => onProjectFilterChange(e.target.value)}
-        className="px-3 py-2 rounded-lg text-sm transition-all focus:outline-none focus:ring-2 min-w-[150px]"
+        className="px-3 py-2 rounded-lg text-sm transition-all focus:outline-hidden focus:ring-2 min-w-[150px]"
         style={{
           backgroundColor: 'var(--bg-secondary)',
           borderColor: 'var(--border-default)',
@@ -202,7 +202,7 @@ export const TaskFilters = ({
       <select
         value={categoryFilter}
         onChange={(e) => onCategoryFilterChange(e.target.value)}
-        className="px-3 py-2 rounded-lg text-sm transition-all focus:outline-none focus:ring-2 min-w-[140px]"
+        className="px-3 py-2 rounded-lg text-sm transition-all focus:outline-hidden focus:ring-2 min-w-[140px]"
         style={{
           backgroundColor: 'var(--bg-secondary)',
           borderColor: 'var(--border-default)',

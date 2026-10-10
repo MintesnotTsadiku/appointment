@@ -47,7 +47,7 @@ export function DayColumn({ date, appointments, slots, interval, slotPx, week, d
                   event.stopPropagation();
                   onOverflow(layout.overflowDate || date, layout.overflowAppointments || []);
                 }}
-                className="absolute bottom-0 left-0 right-0 rounded-b-md border-t bg-card p-1 text-[10px] font-semibold text-primary outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring"
+                className="absolute bottom-0 left-0 right-0 rounded-b-md border-t bg-card p-1 text-[10px] font-semibold text-primary outline-hidden hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring"
               >
                 +{layout.overflowCount} more
               </button>
@@ -91,7 +91,7 @@ function NowLine({ top }: { top: number }) {
 function EmptyDay() {
   return (
     <div className="pointer-events-none absolute inset-x-0 top-24 flex justify-center">
-      <div className="rounded-lg border border-dashed bg-card/90 px-6 py-5 text-center backdrop-blur-sm">
+      <div className="rounded-lg border border-dashed bg-card/90 px-6 py-5 text-center backdrop-blur-xs">
         <CalendarX className="mx-auto mb-2 h-8 w-8 text-muted-foreground" aria-hidden="true" />
         <p className="text-sm font-medium text-foreground">No appointments scheduled</p>
         <p className="mt-0.5 text-xs text-muted-foreground">Select a time slot or use “New appointment”.</p>

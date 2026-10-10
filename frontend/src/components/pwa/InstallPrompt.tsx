@@ -122,7 +122,7 @@ export function InstallPrompt() {
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 border border-gray-200 dark:border-gray-700">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-linear-to-br/srgb from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
                     <Smartphone className="w-6 h-6 text-white" />
                   </div>
                   <div>
@@ -186,7 +186,7 @@ export function InstallPrompt() {
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
+                <div className="w-12 h-12 bg-linear-to-br/srgb from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
                   <Download className="w-6 h-6 text-white" />
                 </div>
                 <div>
@@ -236,7 +236,7 @@ export function InstallPrompt() {
               </button>
               <button
                 onClick={handleInstallClick}
-                className="flex-1 px-4 py-2.5 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium hover:from-indigo-700 hover:to-purple-700 transition-all transform hover:scale-105"
+                className="flex-1 px-4 py-2.5 rounded-lg bg-linear-to-r/srgb from-indigo-600 to-purple-600 text-white font-medium hover:from-indigo-700 hover:to-purple-700 transition-all transform hover:scale-105"
               >
                 Install
               </button>

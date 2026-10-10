@@ -224,7 +224,7 @@ export default function BookingPreview() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4">
       {/* Header Banner */}
-      <div className="max-w-7xl mx-auto mb-8 bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-600 dark:to-blue-700 rounded-2xl shadow-xl p-6 md:p-8 text-white">
+      <div className="max-w-7xl mx-auto mb-8 bg-linear-to-r/srgb from-blue-600 to-blue-700 dark:from-blue-600 dark:to-blue-700 rounded-2xl shadow-xl p-6 md:p-8 text-white">
         <div className="flex items-start justify-between">
           <div>
             <h1 className="text-2xl md:text-3xl font-bold mb-2 text-white">
@@ -446,7 +446,7 @@ export default function BookingPreview() {
               className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow"
             >
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-primary-600 dark:text-primary-400">
+                <div className="shrink-0 w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-primary-600 dark:text-primary-400">
                   {feature.icon}
                 </div>
                 <div>

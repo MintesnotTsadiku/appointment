@@ -108,7 +108,7 @@ export const ShareLinkModal = ({ open, onOpenChange }: ShareLinkModalProps) => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={() => onOpenChange(false)}
-          className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+          className="absolute inset-0 bg-black/60 backdrop-blur-xs"
         />
 
         {/* Modal */}
@@ -188,7 +188,7 @@ export const ShareLinkModal = ({ open, onOpenChange }: ShareLinkModalProps) => {
                     <input
                       value={bookingUrl}
                       readOnly
-                      className="flex-1 px-4 py-3 rounded-xl text-sm font-mono focus:outline-none focus:ring-2 transition-all"
+                      className="flex-1 px-4 py-3 rounded-xl text-sm font-mono focus:outline-hidden focus:ring-2 transition-all"
                       style={{ 
                         backgroundColor: 'var(--bg-elevated)',
                         border: '1px solid var(--border-default)',
@@ -201,7 +201,7 @@ export const ShareLinkModal = ({ open, onOpenChange }: ShareLinkModalProps) => {
                       whileTap={{ scale: 0.95 }}
                       type="button"
                       onClick={handleCopy}
-                      className="flex-shrink-0 px-4 py-3 rounded-xl font-medium transition-all"
+                      className="shrink-0 px-4 py-3 rounded-xl font-medium transition-all"
                       style={{ 
                         backgroundColor: copied ? 'var(--accent-success-light)' : 'var(--accent-primary-light)',
                         color: copied ? 'var(--accent-success)' : 'var(--accent-primary)',

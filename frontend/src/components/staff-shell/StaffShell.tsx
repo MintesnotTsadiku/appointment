@@ -53,7 +53,7 @@ export function StaffShell({ children, title, description, eyebrow, actions, bre
     <div data-qa="staff-shell" className="min-h-dvh bg-background text-foreground">
       <a
         href="#staff-main"
-        className="sr-only z-[60] rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground focus:not-sr-only focus:fixed focus:left-3 focus:top-3"
+        className="sr-only z-60 rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground focus:not-sr-only focus:fixed focus:left-3 focus:top-3"
       >
         {t('staff.shell.skip')}
       </a>
@@ -73,7 +73,7 @@ export function StaffShell({ children, title, description, eyebrow, actions, bre
       </Sheet>
       <div className={cn('flex min-h-dvh min-w-0 flex-col transition-[padding] duration-200 motion-reduce:transition-none', collapsed ? 'lg:pl-[68px]' : 'lg:pl-64')}>
         <TopBar onMenu={() => setMobileOpen(true)} onSearch={() => setPaletteOpen(true)} />
-        <main id="staff-main" tabIndex={-1} className={cn('flex-1 outline-none', !flush && 'px-4 py-4 sm:px-6 lg:py-5')}>
+        <main id="staff-main" tabIndex={-1} className={cn('flex-1 outline-hidden', !flush && 'px-4 py-4 sm:px-6 lg:py-5')}>
           <div className={cn('mx-auto w-full', WIDTH[width], className)}>
             {title && <PageHeader title={title} description={description} eyebrow={eyebrow} actions={actions} breadcrumbs={breadcrumbs} headingQa={headingQa} />}
             {children}
@@ -89,7 +89,7 @@ export function StaffShell({ children, title, description, eyebrow, actions, bre
 function TopBar({ onMenu, onSearch }: { onMenu: () => void; onSearch: () => void }) {
   const { t } = useTranslation();
   return (
-    <header className="sticky top-0 z-30 flex h-12 items-center gap-1.5 border-b bg-background/85 px-3 backdrop-blur supports-[backdrop-filter]:bg-background/70 sm:px-4 lg:px-6">
+    <header className="sticky top-0 z-30 flex h-12 items-center gap-1.5 border-b bg-background/85 px-3 backdrop-blur-sm supports-backdrop-filter:bg-background/70 sm:px-4 lg:px-6">
       <Button type="button" variant="ghost" size="icon" className="h-9 w-9 lg:hidden" onClick={onMenu} aria-label={t('staff.shell.menu')} data-qa="shell-menu">
         <Menu />
       </Button>
@@ -97,7 +97,7 @@ function TopBar({ onMenu, onSearch }: { onMenu: () => void; onSearch: () => void
         type="button"
         onClick={onSearch}
         data-qa="shell-search"
-        className="flex h-9 min-w-0 items-center gap-2 rounded-md border border-input bg-card px-3 text-sm text-muted-foreground shadow-sm outline-none transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring max-sm:w-9 max-sm:justify-center max-sm:px-0 sm:w-64"
+        className="flex h-9 min-w-0 items-center gap-2 rounded-md border border-input bg-card px-3 text-sm text-muted-foreground shadow-xs outline-hidden transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring max-sm:w-9 max-sm:justify-center max-sm:px-0 sm:w-64"
         aria-label={t('staff.shell.search')}
       >
         <Search className="h-4 w-4 shrink-0" aria-hidden="true" />

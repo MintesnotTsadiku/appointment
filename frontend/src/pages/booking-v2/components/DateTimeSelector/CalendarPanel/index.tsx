@@ -128,8 +128,8 @@ export function CalendarPanel({
     return cn(
       // Base styles
       "relative h-12 w-12 md:h-14 md:w-14 rounded-xl font-medium transition-all duration-200",
-      "flex items-center justify-center backdrop-blur-sm",
-      "focus:outline-none focus:ring-2 focus:ring-offset-2",
+      "flex items-center justify-center backdrop-blur-xs",
+      "focus:outline-hidden focus:ring-2 focus:ring-offset-2",
       "focus:ring-offset-transparent",
 
       // Selectable states
@@ -163,7 +163,7 @@ export function CalendarPanel({
           size="sm"
           onClick={goToPreviousMonth}
           disabled={loading}
-            className="h-10 w-10 p-0 backdrop-blur-sm"
+            className="h-10 w-10 p-0 backdrop-blur-xs"
             style={{ 
               backgroundColor: 'var(--border-subtle)',
               border: '1px solid var(--border-default)',
@@ -188,7 +188,7 @@ export function CalendarPanel({
           size="sm"
           onClick={goToNextMonth}
           disabled={loading}
-            className="h-10 w-10 p-0 backdrop-blur-sm"
+            className="h-10 w-10 p-0 backdrop-blur-xs"
             style={{ 
               backgroundColor: 'var(--border-subtle)',
               border: '1px solid var(--border-default)',
@@ -286,7 +286,7 @@ export function CalendarPanel({
             onMonthChange(today);
           }}
           disabled={loading || !isDateSelectable(today)}
-            className="h-9 px-4 text-sm backdrop-blur-sm"
+            className="h-9 px-4 text-sm backdrop-blur-xs"
             style={{ 
               backgroundColor: 'var(--border-subtle)',
               border: '1px solid var(--border-default)',
@@ -307,7 +307,7 @@ export function CalendarPanel({
             onMonthChange(tomorrow);
           }}
           disabled={loading || !isDateSelectable(addDays(today, 1))}
-            className="h-9 px-4 text-sm backdrop-blur-sm"
+            className="h-9 px-4 text-sm backdrop-blur-xs"
             style={{ 
               backgroundColor: 'var(--border-subtle)',
               border: '1px solid var(--border-default)',
@@ -327,7 +327,7 @@ export function CalendarPanel({
             onMonthChange(nextWeek);
           }}
           disabled={loading || !isDateSelectable(addDays(today, 7))}
-            className="h-9 px-4 text-sm backdrop-blur-sm"
+            className="h-9 px-4 text-sm backdrop-blur-xs"
             style={{ 
               backgroundColor: 'var(--border-subtle)',
               border: '1px solid var(--border-default)',

@@ -179,7 +179,7 @@ const Pricing = () => {
               {/* Card */}
               <div 
                 className={`relative h-full ast-panel p-8 rounded-2xl flex flex-col ${
-                  plan.highlight ? 'ring-2 ring-[var(--ast-accent-cyber)]' : ''
+                  plan.highlight ? 'ring-2 ring-(--ast-accent-cyber)' : ''
                 }`}
                 style={{ 
                   background: plan.highlight 
@@ -231,9 +231,9 @@ const Pricing = () => {
                   {plan.features.map((feature, fIndex) => (
                     <li key={fIndex} className="flex items-start gap-3">
                       {feature.included ? (
-                        <Check className="w-5 h-5 ast-text-cyber flex-shrink-0" />
+                        <Check className="w-5 h-5 ast-text-cyber shrink-0" />
                       ) : (
-                        <X className="w-5 h-5 ast-text-muted flex-shrink-0" />
+                        <X className="w-5 h-5 ast-text-muted shrink-0" />
                       )}
                       <span className={`ast-font-body text-sm ${
                         feature.included ? 'ast-text-dim' : 'ast-text-muted'

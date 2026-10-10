@@ -81,9 +81,9 @@ export const TaskCalendarCard = ({ task, compact, timeSlotInterval = 30, onClick
         onClick={handleClick}
       >
         {/* Priority dot and time */}
-        <div className="flex items-center gap-1 mb-0.5 flex-shrink-0">
+        <div className="flex items-center gap-1 mb-0.5 shrink-0">
           <div 
-            className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+            className="w-1.5 h-1.5 rounded-full shrink-0"
             style={{ backgroundColor: priorityVars.color }}
           />
           {!showMinimalInfo && deadlineTime && (
@@ -118,7 +118,7 @@ export const TaskCalendarCard = ({ task, compact, timeSlotInterval = 30, onClick
         
         {/* Status - only show if space allows */}
         {!showMinimalInfo && (
-          <div className="mt-1 flex-shrink-0 min-h-0 min-w-0">
+          <div className="mt-1 shrink-0 min-h-0 min-w-0">
             {showMediumInfo || showFullInfo ? (
               <div className="flex items-center gap-1">
                 <TaskStatusBadge status={task.status} className="text-[8px] px-1.5 py-0.5" />
@@ -157,7 +157,7 @@ export const TaskCalendarCard = ({ task, compact, timeSlotInterval = 30, onClick
           {/* Time at top */}
           {deadlineTime && (
             <div 
-              className="text-[9px] flex-shrink-0 min-w-0 mb-auto"
+              className="text-[9px] shrink-0 min-w-0 mb-auto"
               style={{ 
                 color: 'var(--text-subtle)',
                 paddingBottom: '4px'
@@ -168,13 +168,13 @@ export const TaskCalendarCard = ({ task, compact, timeSlotInterval = 30, onClick
           )}
           
           {/* Priority dot */}
-          <div className="flex items-center gap-1 mb-1 flex-shrink-0">
+          <div className="flex items-center gap-1 mb-1 shrink-0">
             {overdue && (
-              <AlertTriangle className="w-2.5 h-2.5 flex-shrink-0" style={{ color: priorityVars.color }} />
+              <AlertTriangle className="w-2.5 h-2.5 shrink-0" style={{ color: priorityVars.color }} />
             )}
             {!overdue && (
               <div 
-                className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                className="w-1.5 h-1.5 rounded-full shrink-0"
                 style={{ backgroundColor: priorityVars.color }}
               />
             )}
@@ -182,7 +182,7 @@ export const TaskCalendarCard = ({ task, compact, timeSlotInterval = 30, onClick
           
           {/* Task title at bottom */}
           <h4 
-            className="font-semibold pr-12 flex-shrink-0 min-w-0 text-xs mt-auto"
+            className="font-semibold pr-12 shrink-0 min-w-0 text-xs mt-auto"
             style={{ 
               color: 'var(--text-primary)',
               overflow: 'hidden',
@@ -202,11 +202,11 @@ export const TaskCalendarCard = ({ task, compact, timeSlotInterval = 30, onClick
         <>
           {/* Priority indicator */}
           {showFullInfo && (
-            <div className="flex items-center gap-2 mb-3 flex-shrink-0">
+            <div className="flex items-center gap-2 mb-3 shrink-0">
               {overdue && (
                 <>
                   <AlertTriangle 
-                    className="w-3 h-3 flex-shrink-0" 
+                    className="w-3 h-3 shrink-0" 
                     style={{ 
                       color: priorityVars.color,
                       filter: `drop-shadow(0 0 4px ${priorityVars.color})`
@@ -222,7 +222,7 @@ export const TaskCalendarCard = ({ task, compact, timeSlotInterval = 30, onClick
               )}
               {!overdue && (
                 <div 
-                  className="w-2 h-2 rounded-full shadow-lg flex-shrink-0"
+                  className="w-2 h-2 rounded-full shadow-lg shrink-0"
                   style={{ 
                     backgroundColor: priorityVars.color,
                     boxShadow: `0 0 8px ${priorityVars.color}`
@@ -234,7 +234,7 @@ export const TaskCalendarCard = ({ task, compact, timeSlotInterval = 30, onClick
 
           {/* Task title - always show */}
           <h4 
-            className={`font-semibold pr-12 flex-shrink-0 min-w-0 ${
+            className={`font-semibold pr-12 shrink-0 min-w-0 ${
               showMediumInfo ? 'text-sm mb-2' : 'text-sm mb-2'
             }`}
             style={{ 
@@ -254,7 +254,7 @@ export const TaskCalendarCard = ({ task, compact, timeSlotInterval = 30, onClick
           
           {/* Status and Priority - show if space allows */}
           {(showMediumInfo || showFullInfo) && (
-            <div className="flex items-center gap-2 mb-3 flex-shrink-0 flex-wrap">
+            <div className="flex items-center gap-2 mb-3 shrink-0 flex-wrap">
               <TaskStatusBadge status={task.status} className="text-[10px] px-2 py-0.5" />
               {showFullInfo && (
                 <TaskPriorityBadge priority={task.priority} className="text-[10px] px-2 py-0.5" />
@@ -265,7 +265,7 @@ export const TaskCalendarCard = ({ task, compact, timeSlotInterval = 30, onClick
           {/* Time - show based on space */}
           {showFullInfo && deadlineTime && (
             <div 
-              className="flex items-center gap-2 text-xs mt-auto flex-shrink-0 min-w-0"
+              className="flex items-center gap-2 text-xs mt-auto shrink-0 min-w-0"
               style={{ 
                 color: 'var(--text-subtle)',
                 borderTop: '1px solid color-mix(in srgb, var(--border-subtle) 50%, transparent)',
@@ -274,8 +274,8 @@ export const TaskCalendarCard = ({ task, compact, timeSlotInterval = 30, onClick
                 marginTop: 'auto'
               }}
             >
-              <div className="flex items-center gap-1.5 flex-shrink-0">
-                <Clock className="w-3 h-3 flex-shrink-0" />
+              <div className="flex items-center gap-1.5 shrink-0">
+                <Clock className="w-3 h-3 shrink-0" />
                 <span className="whitespace-nowrap">{deadlineTime}</span>
               </div>
             </div>
@@ -283,13 +283,13 @@ export const TaskCalendarCard = ({ task, compact, timeSlotInterval = 30, onClick
           
           {showMediumInfo && deadlineTime && (
             <div 
-              className="flex items-center gap-2 text-[10px] mt-auto flex-shrink-0 min-w-0"
+              className="flex items-center gap-2 text-[10px] mt-auto shrink-0 min-w-0"
               style={{ 
                 color: 'var(--text-subtle)',
                 paddingTop: '4px'
               }}
             >
-              <Clock className="w-2.5 h-2.5 flex-shrink-0" />
+              <Clock className="w-2.5 h-2.5 shrink-0" />
               <span className="whitespace-nowrap">{deadlineTime}</span>
             </div>
           )}

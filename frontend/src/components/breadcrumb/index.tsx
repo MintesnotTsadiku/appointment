@@ -12,7 +12,7 @@ Breadcrumb.displayName = "Breadcrumb"
 const BreadcrumbList = React.forwardRef<HTMLOListElement, React.ComponentPropsWithoutRef<"ol">>(({ className, ...props }, ref) => (
   <ol
     ref={ref}
-    className={cn("flex flex-wrap items-center gap-1.5 break-words text-sm text-muted-foreground", className)}
+    className={cn("flex flex-wrap items-center gap-1.5 wrap-break-word text-sm text-muted-foreground", className)}
     {...props}
   />
 ))
@@ -26,7 +26,7 @@ BreadcrumbItem.displayName = "BreadcrumbItem"
 const BreadcrumbLink = React.forwardRef<HTMLAnchorElement, React.ComponentPropsWithoutRef<"a"> & { asChild?: boolean }>(
   ({ asChild, className, ...props }, ref) => {
     const Comp = asChild ? Slot : "a"
-    return <Comp ref={ref} className={cn("rounded-sm transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", className)} {...props} />
+    return <Comp ref={ref} className={cn("rounded-sm transition-colors hover:text-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring", className)} {...props} />
   }
 )
 BreadcrumbLink.displayName = "BreadcrumbLink"

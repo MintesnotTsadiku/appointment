@@ -31,9 +31,9 @@ export const StatsRow = ({ stats, className = '' }: StatsRowProps) => {
           transition={{ duration: 0.5, delay: index * 0.1 }}
           className="relative group"
         >
-          <div className="absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl blur-xl" />
+          <div className="absolute inset-0 bg-linear-to-r/srgb opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl blur-xl" />
           <div
-            className={`relative backdrop-blur-sm rounded-xl p-4 hover:bg-[var(--border-subtle)] transition-all duration-300 ${
+            className={`relative backdrop-blur-xs rounded-xl p-4 hover:bg-(--border-subtle) transition-all duration-300 ${
               stat.onClick ? 'cursor-pointer' : ''
             }`}
             style={{
@@ -46,7 +46,7 @@ export const StatsRow = ({ stats, className = '' }: StatsRowProps) => {
               <div
                 className={`inline-flex p-2 rounded-lg ${stat.gradient || ''} ${
                   stat.customGradient
-                    ? `bg-gradient-to-br ${stat.customGradient}`
+                    ? `bg-linear-to-br/srgb ${stat.customGradient}`
                     : ''
                 }`}
               >

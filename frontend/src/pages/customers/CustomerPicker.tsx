@@ -70,7 +70,7 @@ export function CustomerPicker({ organization, value, onChange, excludeId, label
               <button
                 type="button"
                 data-qa={`${qa}-option`}
-                className="flex w-full flex-col items-start px-3 py-2 text-left hover:bg-muted focus-visible:bg-muted focus-visible:outline-none"
+                className="flex w-full flex-col items-start px-3 py-2 text-left hover:bg-muted focus-visible:bg-muted focus-visible:outline-hidden"
                 onClick={() => {
                   onChange(row);
                   setText('');

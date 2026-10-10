@@ -70,7 +70,7 @@ const SidebarMenuButton = React.forwardRef<HTMLButtonElement, SidebarMenuButtonP
         ref={ref}
         data-active={isActive || undefined}
         className={cn(
-          "flex h-9 w-full items-center gap-3 rounded-md px-2.5 text-sm font-medium text-sidebar-foreground outline-none transition-colors hover:bg-sidebar-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring data-[active]:bg-accent data-[active]:text-accent-foreground [&_svg]:size-[18px] [&_svg]:shrink-0",
+          "flex h-9 w-full items-center gap-3 rounded-md px-2.5 text-sm font-medium text-sidebar-foreground outline-hidden transition-colors hover:bg-sidebar-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring data-active:bg-accent data-active:text-accent-foreground [&_svg]:size-[18px] [&_svg]:shrink-0",
           collapsed && "justify-center px-0",
           className
         )}

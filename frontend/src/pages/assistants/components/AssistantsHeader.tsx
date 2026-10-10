@@ -37,7 +37,7 @@ export const AssistantsHeader = ({
       <div className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between gap-4">
           {/* Left side - Title & Navigation */}
-          <div className="flex items-center gap-3 lg:gap-4 flex-shrink min-w-0">
+          <div className="flex items-center gap-3 lg:gap-4 shrink min-w-0">
             {showBackButton && (
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -55,7 +55,7 @@ export const AssistantsHeader = ({
             )}
 
             {/* Logo & Title */}
-            <div className="flex items-center gap-2 lg:gap-3 flex-shrink-0">
+            <div className="flex items-center gap-2 lg:gap-3 shrink-0">
               <div className="relative">
                 <div className="absolute inset-0 rounded-xl blur-lg opacity-50 bg-gradient-primary" />
                 <div className="relative bg-gradient-primary p-2 lg:p-2.5 rounded-xl">
@@ -90,7 +90,7 @@ export const AssistantsHeader = ({
           </div>
 
           {/* Right side - Actions & Theme Toggle */}
-          <div className="flex items-center gap-2 lg:gap-3 flex-shrink-0">
+          <div className="flex items-center gap-2 lg:gap-3 shrink-0">
             {actions}
 
             {/* Theme Toggle */}

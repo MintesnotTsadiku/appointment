@@ -227,7 +227,7 @@ export const CreateAppointmentGroupModal = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => onOpenChange(false)}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-black/50 backdrop-blur-xs z-50"
           />
 
           {/* Modal */}
@@ -291,7 +291,7 @@ export const CreateAppointmentGroupModal = ({
                     onBlur={() => setActiveField(null)}
                     disabled={loading}
                     className={cn(
-                      "h-12 text-base backdrop-blur-sm transition-all",
+                      "h-12 text-base backdrop-blur-xs transition-all",
                       errors.groupName && "border-red-500"
                     )}
                     style={{
@@ -324,7 +324,7 @@ export const CreateAppointmentGroupModal = ({
                       }}
                     >
                       <SelectTrigger 
-                        className="h-12 backdrop-blur-sm"
+                        className="h-12 backdrop-blur-xs"
                         style={{
                           backgroundColor: 'var(--bg-secondary)',
                           border: '1px solid var(--border-default)',
@@ -365,7 +365,7 @@ export const CreateAppointmentGroupModal = ({
                       }}
                     >
                       <SelectTrigger 
-                        className="h-12 backdrop-blur-sm"
+                        className="h-12 backdrop-blur-xs"
                         style={{
                           backgroundColor: 'var(--bg-secondary)',
                           border: `1px solid ${errors.calendar ? 'var(--accent-primary)' : 'var(--border-default)'}`,
@@ -416,7 +416,7 @@ export const CreateAppointmentGroupModal = ({
                       }}
                       disabled={loading}
                       className={cn(
-                        "h-12 text-base backdrop-blur-sm",
+                        "h-12 text-base backdrop-blur-xs",
                         errors.duration && "border-red-500"
                       )}
                       style={{
@@ -445,7 +445,7 @@ export const CreateAppointmentGroupModal = ({
                       value={buffer}
                       onChange={(e) => setBuffer(e.target.value)}
                       disabled={loading}
-                      className="h-12 text-base backdrop-blur-sm"
+                      className="h-12 text-base backdrop-blur-xs"
                       style={{
                         backgroundColor: 'var(--bg-secondary)',
                         color: 'var(--text-primary)',
@@ -472,7 +472,7 @@ export const CreateAppointmentGroupModal = ({
                       }}
                     >
                       <SelectTrigger 
-                        className="h-12 backdrop-blur-sm"
+                        className="h-12 backdrop-blur-xs"
                         style={{
                           backgroundColor: 'var(--bg-secondary)',
                           border: '1px solid var(--border-default)',
@@ -565,7 +565,7 @@ export const CreateAppointmentGroupModal = ({
                     onValueChange={(value: 'Custom' | 'Zoom' | 'Google Meet') => setMeetProvider(value)}
                   >
                     <SelectTrigger 
-                      className="h-12 backdrop-blur-sm"
+                      className="h-12 backdrop-blur-xs"
                       style={{
                         backgroundColor: 'var(--bg-secondary)',
                         border: '1px solid var(--border-default)',
@@ -600,7 +600,7 @@ export const CreateAppointmentGroupModal = ({
                       }}
                       disabled={loading}
                       className={cn(
-                        "h-12 text-base backdrop-blur-sm",
+                        "h-12 text-base backdrop-blur-xs",
                         errors.meetLink && "border-red-500"
                       )}
                       style={{
@@ -664,7 +664,7 @@ export const CreateAppointmentGroupModal = ({
                     variant="outline"
                     onClick={() => onOpenChange(false)}
                     disabled={loading}
-                    className="backdrop-blur-sm"
+                    className="backdrop-blur-xs"
                     style={{
                       backgroundColor: 'var(--bg-secondary)',
                       border: '1px solid var(--border-default)',
@@ -676,7 +676,7 @@ export const CreateAppointmentGroupModal = ({
                   <Button
                     type="submit"
                     disabled={loading}
-                    className="backdrop-blur-sm shadow-lg"
+                    className="backdrop-blur-xs shadow-lg"
                     style={{
                       background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
                       color: 'white',

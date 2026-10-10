@@ -118,7 +118,7 @@ function TrendTable({ trend }: { trend: Trend[] }) {
   const { t } = useTranslation();
   return (
     <details className="text-sm">
-      <summary className="cursor-pointer rounded-sm text-xs font-medium text-primary outline-none focus-visible:ring-2 focus-visible:ring-ring">{t('staff.analytics.viewData')}</summary>
+      <summary className="cursor-pointer rounded-sm text-xs font-medium text-primary outline-hidden focus-visible:ring-2 focus-visible:ring-ring">{t('staff.analytics.viewData')}</summary>
       <div className="mt-2 max-h-48 overflow-auto rounded-lg border">
         <Table>
           <TableHeader className="sticky top-0 bg-card">

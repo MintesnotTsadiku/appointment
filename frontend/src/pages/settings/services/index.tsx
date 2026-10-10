@@ -126,7 +126,7 @@ function NextSteps() {
           <li key={link.to}>
             <Link
               to={link.to}
-              className="group flex h-full items-center justify-between gap-4 rounded-xl border bg-card p-4 shadow-card outline-none transition-colors hover:border-primary/40 hover:bg-accent/40 focus-visible:ring-2 focus-visible:ring-ring"
+              className="group flex h-full items-center justify-between gap-4 rounded-xl border bg-card p-4 shadow-card outline-hidden transition-colors hover:border-primary/40 hover:bg-accent/40 focus-visible:ring-2 focus-visible:ring-ring"
             >
               <span className="min-w-0">
                 <span className="block text-sm font-medium text-foreground">{link.title}</span>

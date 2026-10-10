@@ -29,7 +29,7 @@ export function ProviderNodeView({ provider, ctx }: { provider: ProviderNode; ct
       <div className="p-2 sm:p-3">
         <TreeToggle expanded={open} onToggle={() => ctx.toggle(provider.name)} controls={panel}>
           <User className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
-          <span className="min-w-0 break-words text-base font-semibold text-foreground">{provider.provider_name}</span>
+          <span className="min-w-0 wrap-break-word text-base font-semibold text-foreground">{provider.provider_name}</span>
           <ValidationBadge status={provider.validation?.status} />
           {provider.organizations?.some((org) => org.is_primary) && <Badge variant="info">{t('staff.manage.primary')}</Badge>}
         </TreeToggle>
@@ -59,7 +59,7 @@ function OrgNodeView({ provider, org, ctx }: { provider: ProviderNode; org: Prov
     <div className="min-w-0">
       <TreeToggle expanded={open} onToggle={() => ctx.toggle(key)} controls={domId(key)}>
         <Building2 className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
-        <span className="min-w-0 break-words text-sm font-medium text-foreground">{org.organization_name}</span>
+        <span className="min-w-0 wrap-break-word text-sm font-medium text-foreground">{org.organization_name}</span>
         {Boolean(org.is_primary) && <Badge variant="info">{t('staff.manage.primary')}</Badge>}
       </TreeToggle>
       {open && org.locations?.length > 0 && (
@@ -89,7 +89,7 @@ function LocationNodeView({ provider, org, location, parentKey, ctx }: LocationP
     <div className="min-w-0">
       <TreeToggle expanded={open} onToggle={() => ctx.toggle(key)} controls={domId(key)}>
         <MapPin className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
-        <span className="min-w-0 break-words text-sm font-medium text-foreground">{location.location_name}</span>
+        <span className="min-w-0 wrap-break-word text-sm font-medium text-foreground">{location.location_name}</span>
         {location.validation && <ValidationBadge status={location.validation.status} />}
       </TreeToggle>
       {open && (

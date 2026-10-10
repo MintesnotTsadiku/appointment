@@ -80,7 +80,7 @@ function OpenDay({ day, parentRanges, timeFormat, onAddRange, onRemoveRange, onR
                 value={range.start}
                 onChange={(value) => onRangeChange(index, 'start', value)}
                 timeFormat={timeFormat}
-                className={cn('min-w-[9.5rem] flex-1 sm:max-w-[12rem]', !valid && '[&_input]:border-destructive')}
+                className={cn('min-w-38 flex-1 sm:max-w-48', !valid && '[&_input]:border-destructive')}
               />
               <span className="text-sm text-muted-foreground" aria-hidden="true">{t('staff.availability.to')}</span>
               <Label htmlFor={`${day.day}-range-${index}-end`} className="sr-only">
@@ -91,7 +91,7 @@ function OpenDay({ day, parentRanges, timeFormat, onAddRange, onRemoveRange, onR
                 value={range.end}
                 onChange={(value) => onRangeChange(index, 'end', value)}
                 timeFormat={timeFormat}
-                className={cn('min-w-[9.5rem] flex-1 sm:max-w-[12rem]', !valid && '[&_input]:border-destructive')}
+                className={cn('min-w-38 flex-1 sm:max-w-48', !valid && '[&_input]:border-destructive')}
               />
               {day.ranges.length > 1 && (
                 <Button

@@ -36,7 +36,7 @@ export const TaskCard = ({
     >
       {/* Premium Glow Effect */}
       <div 
-        className="absolute -inset-0.5 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl blur-xl"
+        className="absolute -inset-0.5 bg-linear-to-r/srgb opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl blur-xl"
         style={{
           background: overdue
             ? 'linear-gradient(135deg, #ef4444, #f97316)'
@@ -49,7 +49,7 @@ export const TaskCard = ({
       />
       
       <Card
-        className="relative h-full p-6 backdrop-blur-sm transition-all duration-300 cursor-pointer border-2"
+        className="relative h-full p-6 backdrop-blur-xs transition-all duration-300 cursor-pointer border-2"
         style={{
           backgroundColor: 'var(--bg-elevated)',
           borderColor: overdue
@@ -85,7 +85,7 @@ export const TaskCard = ({
             <div className="flex-1 min-w-0">
               <div className="flex items-start gap-3 mb-3">
                 {isUrgent && !isCompleted && (
-                  <div className="flex-shrink-0 mt-0.5">
+                  <div className="shrink-0 mt-0.5">
                     <div className="relative">
                       <div className="absolute inset-0 bg-red-500 rounded-full blur-md opacity-50 animate-pulse" />
                       <AlertTriangle className="relative w-5 h-5 text-red-500" />
@@ -93,7 +93,7 @@ export const TaskCard = ({
                   </div>
                 )}
                 {isCompleted && (
-                  <div className="flex-shrink-0 mt-0.5">
+                  <div className="shrink-0 mt-0.5">
                     <div className="relative">
                       <div className="absolute inset-0 bg-green-500 rounded-full blur-md opacity-50" />
                       <Sparkles className="relative w-5 h-5 text-green-500" />
@@ -176,7 +176,7 @@ export const TaskCard = ({
                 e.stopPropagation();
                 onClick?.();
               }}
-              className="flex-shrink-0 p-2.5 rounded-xl transition-all backdrop-blur-sm ml-2"
+              className="shrink-0 p-2.5 rounded-xl transition-all backdrop-blur-xs ml-2"
               style={{
                 backgroundColor: 'var(--border-subtle)',
                 border: '1px solid var(--border-default)',

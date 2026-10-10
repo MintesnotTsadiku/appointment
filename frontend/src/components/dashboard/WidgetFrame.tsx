@@ -69,7 +69,7 @@ function WidgetInfo({ widget }: { widget: WidgetDefinition }) {
     <Popover>
       <PopoverTrigger asChild>
         <Button type="button" variant="ghost" size="icon" className="h-6 w-6 shrink-0 text-muted-foreground" aria-label={`${t('staff.dashboard.about')}: ${t(widget.titleKey)}`}>
-          <Info className="!size-3.5" />
+          <Info className="size-3.5!" />
         </Button>
       </PopoverTrigger>
       <PopoverContent align="end" className="w-72 text-sm">
@@ -87,7 +87,7 @@ function WidgetMenu({ widget, actions }: { widget: WidgetDefinition; actions: Wi
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button type="button" variant="ghost" size="icon" className="h-6 w-6 shrink-0" aria-label={`${t('staff.dashboard.widgetOptions')}: ${t(widget.titleKey)}`} data-qa="widget-menu">
-          <MoreHorizontal className="!size-4" />
+          <MoreHorizontal className="size-4!" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">

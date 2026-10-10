@@ -90,7 +90,7 @@ export function LedgerPanel({ businesses, currency, refreshKey, onSettle }: {
                 <Badge variant={STATUS_VARIANT[row.status]}>{t(STATUS_KEY[row.status])}</Badge>
                 {row.booking_reference && <span className="font-mono text-xs">{row.booking_reference}</span>}
               </div>
-              {row.note && <p className="whitespace-pre-line break-words text-xs text-muted-foreground">{row.note}</p>}
+              {row.note && <p className="whitespace-pre-line wrap-break-word text-xs text-muted-foreground">{row.note}</p>}
             </li>
           )) : <li className="py-6 text-center text-muted-foreground">{t('staff.adminPayments.noEntries')}</li>}
         </ul>

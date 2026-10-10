@@ -36,7 +36,7 @@ export function ReschedulePanel({ view, onMoved, onCancel }: { view: ManageView;
 
   return (
     <section data-qa="manage-reschedule" className="space-y-4">
-      <p className="text-sm text-[var(--text-secondary)]">{t('customerManage.rescheduleHint')}</p>
+      <p className="text-sm text-theme-secondary">{t('customerManage.rescheduleHint')}</p>
       <DateTimeSelector
         selectedDate={date}
         displayMonth={month}
@@ -63,7 +63,7 @@ export function ReschedulePanel({ view, onMoved, onCancel }: { view: ManageView;
           {problem}
         </p>
       )}
-      <p className="text-xs text-[var(--text-secondary)]">{fill(t('customerManage.reschedulesLeft'), view.rules.reschedules_left)}</p>
+      <p className="text-xs text-theme-secondary">{fill(t('customerManage.reschedulesLeft'), view.rules.reschedules_left)}</p>
       <div className="flex flex-wrap gap-2">
         <Button data-qa="manage-reschedule-confirm" disabled={!slot || saving} onClick={() => void confirm()}>
           {t('customerManage.rescheduleConfirm')}

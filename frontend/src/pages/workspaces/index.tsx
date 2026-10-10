@@ -95,7 +95,7 @@ function WorkspaceCard({ workspace, busy, disabled, onOpen }: CardProps) {
             <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
             <span className="sr-only">{t('staff.workspaces.locations')}</span>
           </dt>
-          <dd className="min-w-0 break-words">{locations}</dd>
+          <dd className="min-w-0 wrap-break-word">{locations}</dd>
         </div>
         <div className="flex min-w-0 items-start gap-2">
           <dt className="shrink-0 pt-0.5">

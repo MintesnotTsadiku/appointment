@@ -60,8 +60,8 @@ export const TasksSidebar = ({
   }, [tasksWithDate, dateField]);
 
   return (
-    <div className="hidden lg:block w-[300px] flex-shrink-0 space-y-4 sticky top-24 h-[calc(100vh-6rem)] overflow-hidden flex flex-col">
-      <div className="rounded-2xl border backdrop-blur-sm p-4 flex-shrink-0" style={{ backgroundColor: 'var(--bg-elevated)', borderColor: 'var(--border-default)' }}>
+    <div className="hidden lg:block w-[300px] shrink-0 space-y-4 sticky top-24 h-[calc(100vh-6rem)] overflow-hidden flex flex-col">
+      <div className="rounded-2xl border backdrop-blur-xs p-4 shrink-0" style={{ backgroundColor: 'var(--bg-elevated)', borderColor: 'var(--border-default)' }}>
         <div className="flex items-center justify-between mb-3">
           <div className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
             {format(currentDate, 'MMMM yyyy')}
@@ -81,7 +81,7 @@ export const TasksSidebar = ({
               <button
                 key={`mini-day-${dayKey}`}
                 onClick={() => onNavigateToDay(day)}
-                className="relative flex items-center justify-center h-9 rounded-lg text-sm font-medium transition-all hover:-translate-y-[1px]"
+                className="relative flex items-center justify-center h-9 rounded-lg text-sm font-medium transition-all hover:-translate-y-px"
                 style={{
                   backgroundColor: isTodayDate ? 'var(--accent-primary-light)' : 'var(--bg-secondary)',
                   color: isTodayDate ? 'var(--accent-primary)' : 'var(--text-primary)',
@@ -108,7 +108,7 @@ export const TasksSidebar = ({
         </div>
       </div>
 
-      <div className="rounded-2xl border backdrop-blur-sm p-4 flex-1 overflow-y-auto" style={{ backgroundColor: 'var(--bg-elevated)', borderColor: 'var(--border-default)' }}>
+      <div className="rounded-2xl border backdrop-blur-xs p-4 flex-1 overflow-y-auto" style={{ backgroundColor: 'var(--bg-elevated)', borderColor: 'var(--border-default)' }}>
         <div className="text-sm font-semibold mb-3" style={{ color: 'var(--text-primary)' }}>
           Tasks this month
         </div>
@@ -127,7 +127,7 @@ export const TasksSidebar = ({
                     <button
                       key={`list-task-${task.name}`}
                       onClick={() => onTaskClick(task)}
-                      className="w-full text-left text-xs px-3 py-2 rounded-lg border transition hover:-translate-y-[1px]"
+                      className="w-full text-left text-xs px-3 py-2 rounded-lg border transition hover:-translate-y-px"
                       style={{
                         backgroundColor: 'var(--bg-secondary)',
                         borderColor: 'var(--border-default)',

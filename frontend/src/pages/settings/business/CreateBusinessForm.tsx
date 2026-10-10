@@ -83,7 +83,7 @@ export function CreateBusinessForm({ form, onChange, days, onDaysChange, clockFo
           <legend className="text-sm font-medium">{t('staff.business.operatingDays')}</legend>
           <div className="mt-2 flex flex-wrap gap-2">
             {DAYS.map((day) => (
-              <label key={day} className="flex cursor-pointer items-center gap-2 rounded-md border bg-card px-3 py-1.5 text-sm has-[:checked]:border-primary has-[:checked]:bg-accent">
+              <label key={day} className="flex cursor-pointer items-center gap-2 rounded-md border bg-card px-3 py-1.5 text-sm has-checked:border-primary has-checked:bg-accent">
                 <input
                   type="checkbox"
                   className="h-4 w-4 accent-[hsl(var(--primary))]"

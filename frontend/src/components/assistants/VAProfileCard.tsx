@@ -42,9 +42,9 @@ export const VAProfileCard = ({ vaProfile, onClick, onEdit }: VAProfileCardProps
       animate={{ opacity: 1, y: 0 }}
       className="relative group"
     >
-      <div className="absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl blur-xl" />
+      <div className="absolute inset-0 bg-linear-to-r/srgb opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl blur-xl" />
       <Card
-        className="relative p-6 backdrop-blur-sm hover:scale-[1.02] transition-all duration-300 cursor-pointer"
+        className="relative p-6 backdrop-blur-xs hover:scale-[1.02] transition-all duration-300 cursor-pointer"
         style={{
           backgroundColor: 'var(--bg-elevated)',
           border: '1px solid var(--border-default)',
@@ -67,7 +67,7 @@ export const VAProfileCard = ({ vaProfile, onClick, onEdit }: VAProfileCardProps
                   }}
                 />
               ) : null}
-              <span className="absolute text-[var(--text-primary)]">{initials}</span>
+              <span className="absolute text-theme-primary">{initials}</span>
             </div>
             <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">

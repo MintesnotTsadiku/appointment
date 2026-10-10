@@ -272,11 +272,11 @@ const TasksDashboard = () => {
 
   return (
     <div
-      className="min-h-screen text-[var(--text-primary)]"
+      className="min-h-screen text-theme-primary"
       style={{ backgroundColor: 'var(--bg-primary)' }}
     >
       {/* Premium Ambient Background Effects */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none -z-0">
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div
           className="absolute -top-40 -right-40 w-96 h-96 rounded-full blur-[120px] opacity-40 animate-pulse"
           style={{ backgroundColor: 'var(--glow-primary)' }}
@@ -335,16 +335,16 @@ const TasksDashboard = () => {
                       transition={{ duration: 0.5, delay: index * 0.1 }}
                       className="relative group"
                     >
-                      <div className="absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl blur-xl" />
+                      <div className="absolute inset-0 bg-linear-to-r/srgb opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl blur-xl" />
                       <div 
-                        className="relative backdrop-blur-sm rounded-xl p-4 hover:bg-[var(--border-subtle)] transition-all duration-300"
+                        className="relative backdrop-blur-xs rounded-xl p-4 hover:bg-(--border-subtle) transition-all duration-300"
                         style={{ 
                           backgroundColor: 'var(--border-subtle)',
                           border: '1px solid var(--border-default)'
                         }}
                       >
                         <div className="flex items-center gap-3">
-                          <div className={`inline-flex p-2 rounded-lg bg-gradient-to-br ${stat.color}`}>
+                          <div className={`inline-flex p-2 rounded-lg bg-linear-to-br/srgb ${stat.color}`}>
                             <Icon className="w-4 h-4 text-white" />
                           </div>
                           <div>
@@ -439,7 +439,7 @@ const TasksDashboard = () => {
                     className="flex flex-col items-center justify-center py-20"
                   >
                     <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-r from-violet-500 to-pink-500 rounded-full blur-xl opacity-50 animate-pulse" />
+                      <div className="absolute inset-0 bg-linear-to-r/srgb from-violet-500 to-pink-500 rounded-full blur-xl opacity-50 animate-pulse" />
                       <Loader2 className="relative w-12 h-12 animate-spin" style={{ color: 'var(--accent-primary)' }} />
                     </div>
                     <p className="mt-4 text-sm" style={{ color: 'var(--text-muted)' }}>
@@ -493,15 +493,15 @@ const TasksDashboard = () => {
                     className="flex flex-col items-center justify-center py-20"
                   >
                     <div className="relative mb-6">
-                      <div className="absolute inset-0 bg-gradient-to-r from-violet-500 to-pink-500 rounded-full blur-2xl opacity-20" />
+                      <div className="absolute inset-0 bg-linear-to-r/srgb from-violet-500 to-pink-500 rounded-full blur-2xl opacity-20" />
                       <Card
-                        className="relative p-12 text-center backdrop-blur-sm max-w-md"
+                        className="relative p-12 text-center backdrop-blur-xs max-w-md"
                         style={{
                           backgroundColor: 'var(--bg-elevated)',
                           border: '1px solid var(--border-default)',
                         }}
                       >
-                        <div className="inline-flex p-4 rounded-2xl bg-gradient-to-br from-violet-500 to-pink-500 mb-6 shadow-lg">
+                        <div className="inline-flex p-4 rounded-2xl bg-linear-to-br/srgb from-violet-500 to-pink-500 mb-6 shadow-lg">
                           <FileText className="w-12 h-12 text-white" />
                         </div>
                         <h3 className="text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
@@ -519,7 +519,7 @@ const TasksDashboard = () => {
                             onClick={() => setIsCreateModalOpen(true)}
                             className="relative group px-6 py-3 rounded-xl text-sm font-semibold text-white overflow-hidden shadow-lg"
                           >
-                            <div className="absolute inset-0 bg-gradient-to-r from-violet-500 via-purple-500 to-pink-500 group-hover:opacity-90 transition-opacity" />
+                            <div className="absolute inset-0 bg-linear-to-r/srgb from-violet-500 via-purple-500 to-pink-500 group-hover:opacity-90 transition-opacity" />
                             <span className="relative z-10 flex items-center gap-2">
                               <Plus className="w-5 h-5" />
                               Create Your First Task

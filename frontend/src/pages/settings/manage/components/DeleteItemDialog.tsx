@@ -19,7 +19,7 @@ export function DeleteItemDialog({ target, onCancel, onConfirm }: { target: Dele
       <AlertDialogContent data-qa="manage-delete-dialog">
         <AlertDialogHeader>
           <AlertDialogTitle>{t('staff.manage.deleteTitle')}</AlertDialogTitle>
-          <AlertDialogDescription className="break-words">
+          <AlertDialogDescription className="wrap-break-word">
             <span className="font-medium text-foreground">{target?.label}</span> · {t('staff.manage.deleteDescription')}
           </AlertDialogDescription>
         </AlertDialogHeader>

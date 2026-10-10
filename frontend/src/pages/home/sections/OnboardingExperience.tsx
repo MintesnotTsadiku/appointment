@@ -60,7 +60,7 @@ const Checklist = () => {
 
 const ProgressTimeline = ({ step }: { step: number }) => {
   return (
-    <div className="bg-white/90 dark:bg-gray-900/70 backdrop-blur rounded-2xl border border-gray-200 dark:border-gray-800 p-6 shadow-xl">
+    <div className="bg-white/90 dark:bg-gray-900/70 backdrop-blur-sm rounded-2xl border border-gray-200 dark:border-gray-800 p-6 shadow-xl">
       <div className="flex items-center justify-between mb-4">
         <div>
           <p className="text-sm text-gray-500 dark:text-gray-400">Onboarding progress</p>

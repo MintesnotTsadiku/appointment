@@ -36,8 +36,8 @@ export function TimeFormatToggle({
             onClick={() => onChange(format.value)}
             className={cn(
               "relative px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200",
-              "focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] focus:ring-offset-2",
-              value === format.value && "shadow-sm"
+              "focus:outline-hidden focus:ring-2 focus:ring-(--accent-primary) focus:ring-offset-2",
+              value === format.value && "shadow-xs"
             )}
             style={{
               color: value === format.value ? "var(--pe-color-on-primary)" : "var(--text-secondary)",

@@ -58,7 +58,7 @@ export const WizardSidebar = ({
 
   return (
     <aside className="space-y-6">
-      <div className="bg-white/80 dark:bg-white/10 backdrop-blur border border-gray-200 dark:border-white/10 rounded-2xl p-6 shadow-lg">
+      <div className="bg-white/80 dark:bg-white/10 backdrop-blur-sm border border-gray-200 dark:border-white/10 rounded-2xl p-6 shadow-lg">
         <div>
           <p className="text-sm text-gray-500 dark:text-gray-300">Onboarding</p>
           <h1 className="text-2xl font-semibold text-gray-900 dark:text-white mt-1">

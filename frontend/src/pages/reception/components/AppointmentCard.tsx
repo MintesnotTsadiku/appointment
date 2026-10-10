@@ -75,7 +75,7 @@ export const AppointmentCard = ({ appointment, isDragging: overlay, compact, tim
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       className={cn(
-        'group relative flex h-full min-w-0 flex-col overflow-hidden rounded-md border bg-card text-left shadow-sm outline-none transition-shadow',
+        'group relative flex h-full min-w-0 flex-col overflow-hidden rounded-md border bg-card text-left shadow-xs outline-hidden transition-shadow',
         'hover:shadow-card focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
         onClick && 'cursor-pointer',
         // The in-grid original fades while its DragOverlay copy (overlay) follows the pointer.

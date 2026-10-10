@@ -113,7 +113,7 @@ const VAProfiles = () => {
 
   return (
     <div
-      className="min-h-screen text-[var(--text-primary)] overflow-hidden"
+      className="min-h-screen text-theme-primary overflow-hidden"
       style={{ backgroundColor: 'var(--bg-primary)' }}
     >
       {/* Ambient background effects */}
@@ -216,10 +216,10 @@ const VAProfiles = () => {
                             className="relative group"
                           >
                             {/* Glow effect */}
-                            <div className="absolute inset-0 bg-gradient-to-r from-violet-500/30 to-purple-500/30 opacity-0 group-hover:opacity-100 transition-all duration-500 rounded-2xl blur-2xl" />
+                            <div className="absolute inset-0 bg-linear-to-r/srgb from-violet-500/30 to-purple-500/30 opacity-0 group-hover:opacity-100 transition-all duration-500 rounded-2xl blur-2xl" />
                             
                             <Card
-                              className="relative overflow-hidden backdrop-blur-sm hover:scale-[1.02] transition-all duration-300 cursor-pointer"
+                              className="relative overflow-hidden backdrop-blur-xs hover:scale-[1.02] transition-all duration-300 cursor-pointer"
                               style={{
                                 backgroundColor: 'var(--bg-elevated)',
                                 border: '1px solid var(--border-default)',
@@ -249,7 +249,7 @@ const VAProfiles = () => {
                               <div className="p-5 pb-4">
                                 <div className="flex items-start gap-4">
                                   {/* Avatar with availability ring */}
-                                  <div className="relative flex-shrink-0">
+                                  <div className="relative shrink-0">
                                     <div 
                                       className="absolute -inset-1 rounded-2xl opacity-60"
                                       style={{ background: tierColors.bg }}
@@ -421,7 +421,7 @@ const VAProfiles = () => {
                               </div>
 
                               {/* Hover overlay */}
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                              <div className="absolute inset-0 bg-linear-to-t/srgb from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
                             </Card>
                           </motion.div>
                         );
@@ -462,7 +462,7 @@ const VAProfiles = () => {
                           {filteredProfiles.map((profile) => (
                             <tr
                               key={profile.name}
-                              className="hover:bg-[var(--bg-secondary)] transition-colors cursor-pointer"
+                              className="hover:bg-theme-secondary transition-colors cursor-pointer"
                               onClick={() => {
                                 setSelectedVAId(profile.name);
                                 setIsDetailModalOpen(true);

@@ -57,7 +57,7 @@ export function SetupProgress({ organization }: { organization: string }) {
             <li key={step.key}>
               <Link
                 to={step.to}
-                className="group flex items-center gap-3 rounded-md px-3 py-2 text-sm outline-none transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
+                className="group flex items-center gap-3 rounded-md px-3 py-2 text-sm outline-hidden transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
               >
                 {step.done ? (
                   <CheckCircle2 className="h-4 w-4 shrink-0 text-success" aria-label={t('staff.home.setup.done')} />

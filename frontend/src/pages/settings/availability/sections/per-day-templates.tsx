@@ -31,7 +31,7 @@ export function PerDayTemplates({ schedule, onChange, timeFormat }: PerDayTempla
                   const next = addLunchBreak(schedule, day.day);
                   if (next) onChange(next);
                 }}>
-                  <Coffee aria-hidden="true" className="!size-3.5" />
+                  <Coffee aria-hidden="true" className="size-3.5!" />
                   {t('staff.availability.addLunch')}
                 </Button>
               )}

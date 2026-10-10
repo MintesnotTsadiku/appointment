@@ -36,7 +36,7 @@ export function TodayAgenda({ organization, deskPath }: { organization: string; 
     <div className="space-y-2">
       <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
         <span>{upcoming.length} {t('staff.home.scheduledToday')}</span>
-        <Link to={deskPath} className="inline-flex items-center gap-1 rounded-sm font-medium text-primary outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        <Link to={deskPath} className="inline-flex items-center gap-1 rounded-sm font-medium text-primary outline-hidden focus-visible:ring-2 focus-visible:ring-ring">
           {t('staff.home.openDesk')}
           <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
         </Link>

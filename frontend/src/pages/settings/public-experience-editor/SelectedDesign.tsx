@@ -10,7 +10,7 @@ export function SelectedDesign({ recipe, site, contentHash }: { recipe?: Recipe;
   const live = site?.status === "Published";
   return (
     <aside className="min-w-0 overflow-hidden rounded-xl border bg-muted/30" data-qa="selected-design">
-      {recipe.showcase?.heroAsset ? <img src={recipe.showcase.heroAsset} alt="" className="aspect-[16/9] w-full object-cover" /> : null}
+      {recipe.showcase?.heroAsset ? <img src={recipe.showcase.heroAsset} alt="" className="aspect-video w-full object-cover" /> : null}
       <div className="space-y-3 p-4">
         <div className="space-y-1">
           <h3 className="text-base font-semibold text-foreground">{recipe.label}</h3>

@@ -61,7 +61,7 @@ function IndependentActions() {
             <Link
               to={to}
               data-qa={`home-action-${key}`}
-              className="flex items-start gap-3 rounded-md px-2 py-2.5 outline-none transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
+              className="flex items-start gap-3 rounded-md px-2 py-2.5 outline-hidden transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
             >
               <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-accent text-accent-foreground" aria-hidden="true">
                 <Icon className="h-4 w-4" />

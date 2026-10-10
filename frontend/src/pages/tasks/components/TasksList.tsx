@@ -13,22 +13,22 @@ export const TasksList = ({ tasks, isLoading, onTaskClick }: TasksListProps) => 
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center py-20">
-        <Loader2 className="w-8 h-8 animate-spin text-[var(--accent-primary)]" />
-        <p className="mt-4 text-sm text-[var(--text-muted)]">Loading tasks...</p>
+        <Loader2 className="w-8 h-8 animate-spin text-accent-primary" />
+        <p className="mt-4 text-sm text-theme-muted">Loading tasks...</p>
       </div>
     );
   }
 
   if (tasks.length === 0) {
     return (
-      <div className="text-center py-20 text-[var(--text-muted)]">
+      <div className="text-center py-20 text-theme-muted">
         No tasks found.
       </div>
     );
   }
 
   return (
-    <div className="rounded-2xl border overflow-hidden backdrop-blur-sm" style={{ backgroundColor: 'var(--bg-elevated)', borderColor: 'var(--border-default)' }}>
+    <div className="rounded-2xl border overflow-hidden backdrop-blur-xs" style={{ backgroundColor: 'var(--bg-elevated)', borderColor: 'var(--border-default)' }}>
       <table className="w-full text-left text-sm">
         <thead style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-subtle)' }}>
           <tr>
@@ -47,7 +47,7 @@ export const TasksList = ({ tasks, isLoading, onTaskClick }: TasksListProps) => 
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
               onClick={() => onTaskClick(task)}
-              className="cursor-pointer transition-colors hover:bg-[var(--bg-secondary)]"
+              className="cursor-pointer transition-colors hover:bg-theme-secondary"
             >
               <td className="px-4 py-3 font-medium" style={{ color: 'var(--text-primary)' }}>
                 {task.title}

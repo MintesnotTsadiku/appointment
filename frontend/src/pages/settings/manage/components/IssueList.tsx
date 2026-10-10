@@ -28,7 +28,7 @@ export function IssueList({ title, issues, fixFor, compact = false }: IssueListP
           const fix = fixFor(issue);
           return (
             <li key={idx} className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground">
-              <span className="min-w-0 flex-1 break-words">{issue}</span>
+              <span className="min-w-0 flex-1 wrap-break-word">{issue}</span>
               {fix && (
                 <Button size="sm" variant="outline" onClick={fix.action} className="h-7 shrink-0 px-2 text-xs">
                   <Wrench aria-hidden="true" />

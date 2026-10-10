@@ -35,7 +35,7 @@ export function QuickTemplates({ schedule, onChange, timeFormat, description, de
               </span>
               {template.includeLunch && (
                 <span className="mt-0.5 flex items-center gap-1 text-xs font-normal text-muted-foreground">
-                  <Coffee aria-hidden="true" className="!size-3" />
+                  <Coffee aria-hidden="true" className="size-3!" />
                   {t('staff.availability.includesLunch')}
                 </span>
               )}

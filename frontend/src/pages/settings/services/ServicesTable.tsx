@@ -93,7 +93,7 @@ function ServiceName({ service }: { service: Service }) {
     <div className="min-w-0">
       <Link
         to={`/settings/services/${service.name}`}
-        className="block truncate font-medium text-foreground underline-offset-4 hover:underline focus-visible:underline focus-visible:outline-none"
+        className="block truncate font-medium text-foreground underline-offset-4 hover:underline focus-visible:underline focus-visible:outline-hidden"
       >
         {service.service_name}
       </Link>

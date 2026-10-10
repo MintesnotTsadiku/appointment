@@ -46,11 +46,11 @@ export const ItemCard = ({ type, item, onEdit, onDelete, nested = false, childre
       <div className="flex items-start gap-2 sm:gap-3">
         <div className="min-w-0 flex-1 space-y-1">
           <div className="flex min-w-0 flex-wrap items-center gap-2">
-            <h3 className="min-w-0 break-words text-sm font-semibold text-foreground">{name}</h3>
+            <h3 className="min-w-0 wrap-break-word text-sm font-semibold text-foreground">{name}</h3>
             <ValidationBadge status={item.validation?.status} />
           </div>
-          <p className="line-clamp-2 break-words text-sm text-muted-foreground sm:line-clamp-3" title={description}>{description}</p>
-          {issues.length > 0 && <p className="break-words text-xs text-warning">{issues.join(', ')}</p>}
+          <p className="line-clamp-2 wrap-break-word text-sm text-muted-foreground sm:line-clamp-3" title={description}>{description}</p>
+          {issues.length > 0 && <p className="wrap-break-word text-xs text-warning">{issues.join(', ')}</p>}
           {type === 'provider' && item.booking_urls?.length > 0 && (
             <div className="border-t pt-2">
               <BookingUrlList urls={item.booking_urls} />

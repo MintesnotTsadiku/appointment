@@ -132,7 +132,7 @@ interface QueueBodyProps {
 
 function QueueBody({ loading, failed, onRetry, walkIns, assigning, onAssign }: QueueBodyProps) {
   const { t } = useTranslation();
-  if (loading) return <ListSkeleton count={3} className="[&>*]:h-32" />;
+  if (loading) return <ListSkeleton count={3} className="*:h-32" />;
   if (failed) return <ErrorState onRetry={onRetry} className="py-6" />;
   if (walkIns.length === 0) {
     return <EmptyState compact icon={UserRound} title={t('staff.receptionDesk.queueEmpty')} description={t('staff.receptionDesk.queueEmptyHint')} />;

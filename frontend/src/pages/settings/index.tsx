@@ -24,7 +24,7 @@ const Settings = () => {
                   <Link
                     to={item.to}
                     data-qa={`settings-${item.key}`}
-                    className="group flex h-full items-start gap-4 rounded-xl border bg-card p-4 shadow-card outline-none transition-colors hover:border-primary/40 hover:bg-accent/40 focus-visible:ring-2 focus-visible:ring-ring"
+                    className="group flex h-full items-start gap-4 rounded-xl border bg-card p-4 shadow-card outline-hidden transition-colors hover:border-primary/40 hover:bg-accent/40 focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent text-accent-foreground" aria-hidden="true">
                       <item.icon className="h-5 w-5" />

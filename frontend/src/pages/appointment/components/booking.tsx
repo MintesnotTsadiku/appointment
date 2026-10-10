@@ -259,7 +259,7 @@ const Booking = ({ type, banner, duration: durationProp, isOrganization, organiz
           duration: 4000,
           classNames: {
             actionButton:
-              "group-[.toast]:!bg-red-500 group-[.toast]:hover:!bg-red-300 group-[.toast]:!text-white",
+              "group-[.toast]:bg-red-500! hover:group-[.toast]:bg-red-300! group-[.toast]:text-white!",
           },
           icon: <CircleAlert className="h-5 w-5 text-red-500" />,
           action: {
@@ -287,7 +287,7 @@ const Booking = ({ type, banner, duration: durationProp, isOrganization, organiz
         duration: 4000,
         classNames: {
           actionButton:
-            "group-[.toast]:!bg-red-500 group-[.toast]:hover:!bg-red-300 group-[.toast]:!text-white",
+            "group-[.toast]:bg-red-500! hover:group-[.toast]:bg-red-300! group-[.toast]:text-white!",
         },
         icon: <CircleAlert className="h-5 w-5 text-red-500" />,
         action: {
@@ -332,7 +332,7 @@ const Booking = ({ type, banner, duration: durationProp, isOrganization, organiz
   return (
     <>
       <div className="w-full h-fit flex justify-center">
-        <div className="md:w-4xl max-lg:w-full md:p-4 md:py-6 gap-10 md:gap-12">
+        <div className="max-lg:w-full md:p-4 md:py-6 gap-10 md:gap-12">
           <div className="w-full rounded-xl  md:border border-blue-100 dark:border-zinc-800 border-t-0">
             {/* Banner */}
             <div
@@ -351,7 +351,7 @@ const Booking = ({ type, banner, duration: durationProp, isOrganization, organiz
               }
             >
               {/* avatar */}
-              <Avatar className="h-28 w-28 md:h-32 md:w-32 object-cover absolute bottom-0 translate-y-1/2 md:left-24 max-md:left-5 outline outline-white dark:outline-background">
+              <Avatar className="h-28 w-28 md:h-32 md:w-32 object-cover absolute bottom-0 translate-y-1/2 md:left-24 max-md:left-5 outline-solid outline-white dark:outline-background">
                 <AvatarImage
                   src={userInfo.userImage}
                   alt="Profile picture"
@@ -365,7 +365,7 @@ const Booking = ({ type, banner, duration: durationProp, isOrganization, organiz
             {/* Main */}
             <div className="w-full flex max-lg:flex-col max-md:p-4 gap-8 items-start overflow-hidden ">
               {/* Profile */}
-              <div className="max-lg:w-full md:min-w-sm md:max-w-sm flex flex-col gap-4 md:p-6 md:px-4">
+              <div className="max-lg:w-full md:max-w-sm flex flex-col gap-4 md:p-6 md:px-4">
                 <div className="w-full flex flex-col gap-1">
                   <Typography variant="h2" className="text-3xl font-semibold">
                     <Tooltip>
@@ -447,7 +447,7 @@ const Booking = ({ type, banner, duration: durationProp, isOrganization, organiz
                       className="w-full flex max-lg:flex-col gap-4 md:p-6 pb-8"
                     >
                       {(!state.isMobileView || !state.expanded) && (
-                        <div className="flex flex-col w-full lg:w-[25rem] shrink-0">
+                        <div className="flex flex-col w-full lg:w-100 shrink-0">
                           <CalendarWrapper
                             displayMonth={state.displayMonth}
                             selectedDate={selectedDate}
@@ -620,8 +620,8 @@ const Booking = ({ type, banner, duration: durationProp, isOrganization, organiz
                         ) : (
                           <div
                             className={cn(
-                              "lg:max-h-[28rem] lg:min-h-[22rem] overflow-y-auto no-scrollbar space-y-2 pb-4 transition-transform transform",
-                              state.showReschedule && "lg:!mt-0"
+                              "lg:max-h-112 lg:min-h-88 overflow-y-auto no-scrollbar space-y-2 pb-4 transition-transform transform",
+                              state.showReschedule && "lg:mt-0!"
                             )}
                             style={{
                               transform: selectedDate
@@ -644,7 +644,7 @@ const Booking = ({ type, banner, duration: durationProp, isOrganization, organiz
                                             duration: 3000,
                                             classNames: {
                                               actionButton:
-                                                "group-[.toast]:!bg-red-500 group-[.toast]:hover:!bg-red-300 group-[.toast]:!text-white",
+                                                "group-[.toast]:bg-red-500! hover:group-[.toast]:bg-red-300! group-[.toast]:text-white!",
                                             },
                                             icon: <CircleAlert className="h-5 w-5 text-red-500" />,
                                             action: {
@@ -702,7 +702,7 @@ const Booking = ({ type, banner, duration: durationProp, isOrganization, organiz
                         )}
                         {state.showReschedule && (
                           <Button
-                            className="bg-blue-500 dark:bg-blue-400 hover:bg-blue-500 dark:hover:bg-blue-400 lg:!mt-0 max-lg:w-full max-md:hidden"
+                            className="bg-blue-500 dark:bg-blue-400 hover:bg-blue-500 dark:hover:bg-blue-400 lg:mt-0! max-lg:w-full max-md:hidden"
                             onClick={onReschedule}
                             disabled={rescheduleLoading}
                           >

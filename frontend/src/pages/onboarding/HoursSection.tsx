@@ -65,7 +65,7 @@ function DayPicker({ selectedDays, onDays }: { selectedDays: string[]; onDays: (
         {DAYS.map((day) => (
           <label
             key={day}
-            className="flex cursor-pointer items-center gap-2 rounded-md border bg-background px-3 py-2 text-sm transition-colors hover:bg-muted has-[:checked]:border-primary has-[:checked]:bg-primary/5 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring"
+            className="flex cursor-pointer items-center gap-2 rounded-md border bg-background px-3 py-2 text-sm transition-colors hover:bg-muted has-checked:border-primary has-checked:bg-primary/5 has-focus-visible:ring-2 has-focus-visible:ring-ring"
           >
             <Checkbox className={CHECKBOX} checked={selectedDays.includes(day)} onChange={(e) => toggle(day, e.target.checked)} />
             {t(`staff.onboarding.days.${day.toLowerCase()}`)}

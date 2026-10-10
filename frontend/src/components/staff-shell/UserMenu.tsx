@@ -50,7 +50,7 @@ export function UserMenu({ compact = false }: { compact?: boolean }) {
         data-qa={compact ? 'user-menu-compact' : 'user-menu'}
         aria-label={`${t('staff.shell.account')}: ${name}`}
         className={cn(
-          'flex items-center gap-2.5 rounded-lg p-1.5 text-left outline-none transition-colors hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-ring',
+          'flex items-center gap-2.5 rounded-lg p-1.5 text-left outline-hidden transition-colors hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-ring',
           !iconOnly && 'w-full',
           iconOnly && 'justify-center'
         )}

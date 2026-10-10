@@ -157,7 +157,7 @@ const Services = () => {
               {/* Card */}
               <div 
                 className={`relative h-full ast-panel p-8 rounded-2xl ${
-                  tier.highlight ? 'ring-2 ring-[var(--ast-accent-cyber)]' : ''
+                  tier.highlight ? 'ring-2 ring-(--ast-accent-cyber)' : ''
                 }`}
                 style={{ 
                   background: tier.highlight 
@@ -199,7 +199,7 @@ const Services = () => {
                   {tier.features.map((feature, fIndex) => (
                     <li key={fIndex} className="flex items-start gap-3">
                       <div 
-                        className="w-5 h-5 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0"
+                        className="w-5 h-5 rounded-full flex items-center justify-center mt-0.5 shrink-0"
                         style={{ background: 'rgba(0, 255, 208, 0.15)' }}
                       >
                         <div className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--ast-accent-cyber)' }} />

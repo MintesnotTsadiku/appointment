@@ -75,7 +75,7 @@ const Footer = () => {
                   href={social.href}
                   whileHover={{ scale: 1.1, y: -2 }}
                   transition={{ duration: 0.2 }}
-                  className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-200 backdrop-blur-sm"
+                  className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-200 backdrop-blur-xs"
                   style={{ 
                     backgroundColor: 'var(--bg-elevated)',
                     border: '1px solid var(--border-default)'
@@ -98,7 +98,7 @@ const Footer = () => {
             {/* Contact Info */}
             <div className="space-y-3">
               <div className="flex items-start space-x-3">
-                <Mail className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: 'var(--accent-primary)' }} />
+                <Mail className="w-5 h-5 mt-0.5 shrink-0" style={{ color: 'var(--accent-primary)' }} />
                 <div>
                   <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>Email</p>
                   <a
@@ -117,7 +117,7 @@ const Footer = () => {
                 </div>
               </div>
               <div className="flex items-start space-x-3">
-                <Phone className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: 'var(--accent-primary)' }} />
+                <Phone className="w-5 h-5 mt-0.5 shrink-0" style={{ color: 'var(--accent-primary)' }} />
                 <div>
                   <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>Phone</p>
                   <a
@@ -136,7 +136,7 @@ const Footer = () => {
                 </div>
               </div>
               <div className="flex items-start space-x-3">
-                <MapPin className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: 'var(--accent-primary)' }} />
+                <MapPin className="w-5 h-5 mt-0.5 shrink-0" style={{ color: 'var(--accent-primary)' }} />
                 <div>
                   <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>Location</p>
                   <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
@@ -277,7 +277,7 @@ const Footer = () => {
               {['TeleBirr', 'Chapa', 'M-PESA', 'Stripe', 'PayPal'].map((method) => (
                 <div
                   key={method}
-                  className="px-4 py-2 rounded-lg text-xs font-medium backdrop-blur-sm"
+                  className="px-4 py-2 rounded-lg text-xs font-medium backdrop-blur-xs"
                   style={{ 
                     backgroundColor: 'var(--bg-elevated)',
                     border: '1px solid var(--border-default)',

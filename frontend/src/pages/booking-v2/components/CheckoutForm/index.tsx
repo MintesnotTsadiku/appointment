@@ -169,7 +169,7 @@ export function CheckoutForm({
         Back to Form
       </Button>
 
-      <div className="grid lg:grid-cols-[1fr,400px] gap-8">
+      <div className="grid lg:grid-cols-[1fr_400px] gap-8">
         {/* Payment Section */}
         <div className="space-y-6">
           <div>
@@ -194,7 +194,7 @@ export function CheckoutForm({
                   disabled={loading}
                   className={cn(
                     "relative p-6 rounded-xl border-2 transition-all duration-200 text-left",
-                    "hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary-500",
+                    "hover:shadow-md focus:outline-hidden focus:ring-2 focus:ring-primary-500",
                     selectedPaymentType === option.type
                       ? "border-primary-500 bg-primary-50 dark:bg-primary-900/20"
                       : "border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-700"
@@ -208,7 +208,7 @@ export function CheckoutForm({
                   )}
 
                   <div className="flex items-start gap-4 pr-10">
-                    <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
+                    <div className="shrink-0 w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
                       <DollarSign className="h-6 w-6 text-primary-600 dark:text-primary-400" />
                     </div>
                     <div className="flex-1">
@@ -245,7 +245,7 @@ export function CheckoutForm({
             {selectedPaymentType === 'partial' && (
               <div className="mt-4 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
                 <div className="flex items-start gap-2">
-                  <Info className="h-5 w-5 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
+                  <Info className="h-5 w-5 text-amber-600 dark:text-amber-400 mt-0.5 shrink-0" />
                   <p className="text-sm text-amber-800 dark:text-amber-300">
                     The remaining balance ({balanceDue} {service.currency || 'ETB'}) must be paid at the clinic before your appointment.
                   </p>
@@ -267,7 +267,7 @@ export function CheckoutForm({
                   disabled={loading}
                   className={cn(
                     "relative p-6 rounded-xl border-2 transition-all duration-200",
-                    "hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary-500",
+                    "hover:shadow-md focus:outline-hidden focus:ring-2 focus:ring-primary-500",
                     selectedGateway === gateway.id
                       ? "border-primary-500 bg-primary-50 dark:bg-primary-900/20"
                       : "border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-700"
@@ -282,7 +282,7 @@ export function CheckoutForm({
 
                   <div className="flex flex-col items-center text-center">
                     <div className={cn(
-                      "w-16 h-16 rounded-2xl bg-gradient-to-br flex items-center justify-center mb-3",
+                      "w-16 h-16 rounded-2xl bg-linear-to-br/srgb flex items-center justify-center mb-3",
                       gateway.color
                     )}>
                       <gateway.icon className="h-8 w-8 text-white" />
@@ -342,7 +342,7 @@ export function CheckoutForm({
               <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
                 <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
                   <div className="flex items-start gap-2">
-                    <Info className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                    <Info className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 shrink-0" />
                     <p className="text-sm text-blue-800 dark:text-blue-300">
                       You'll be redirected to Chapa's secure payment page to complete your transaction using card, mobile money, or bank transfer.
                     </p>

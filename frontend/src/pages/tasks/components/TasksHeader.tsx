@@ -88,9 +88,9 @@ export const TasksHeader = ({
       <div className="px-4 lg:px-6 py-3 max-w-[1800px] mx-auto">
         <div className="flex items-center justify-between gap-4">
           {/* Left side - Title & Navigation */}
-          <div className="flex items-center gap-4 lg:gap-6 flex-shrink min-w-0">
+          <div className="flex items-center gap-4 lg:gap-6 shrink min-w-0">
             {/* Logo & Title */}
-            <div className="flex items-center gap-2 lg:gap-3 flex-shrink-0">
+            <div className="flex items-center gap-2 lg:gap-3 shrink-0">
               <div className="relative">
                 <div 
                   className="absolute inset-0 rounded-xl blur-lg opacity-50 bg-gradient-primary"
@@ -180,7 +180,7 @@ export const TasksHeader = ({
           </div>
 
           {/* Right side - View Toggle & Actions */}
-          <div className="flex items-center gap-2 lg:gap-3 flex-shrink-0">
+          <div className="flex items-center gap-2 lg:gap-3 shrink-0">
             {/* Time Slot Interval Selector - Only for day/week views */}
             {(viewMode === 'day' || viewMode === 'week') && (
               <div 

@@ -254,7 +254,7 @@ export const TasksCalendar = ({
   if (isLoading) {
     return (
       <div 
-        className="backdrop-blur-sm rounded-2xl h-[700px] flex items-center justify-center"
+        className="backdrop-blur-xs rounded-2xl h-[700px] flex items-center justify-center"
         style={{ 
           backgroundColor: 'var(--bg-elevated)',
           border: '1px solid var(--border-default)'
@@ -433,7 +433,7 @@ export const TasksCalendar = ({
 
     return (
       <div 
-        className="backdrop-blur-sm rounded-2xl overflow-hidden"
+        className="backdrop-blur-xs rounded-2xl overflow-hidden"
         style={{ 
           backgroundColor: 'var(--bg-elevated)',
           border: '1px solid var(--border-default)'
@@ -442,7 +442,7 @@ export const TasksCalendar = ({
         <div className="flex min-w-full">
           {/* Time column */}
           <div 
-            className="w-20 flex-shrink-0"
+            className="w-20 shrink-0"
             style={{ borderRight: '1px solid var(--border-subtle)' }}
           >
             <div 
@@ -666,7 +666,7 @@ export const TasksCalendar = ({
 
     return (
       <div 
-        className="backdrop-blur-sm rounded-2xl overflow-hidden"
+        className="backdrop-blur-xs rounded-2xl overflow-hidden"
         style={{ 
           backgroundColor: 'var(--bg-elevated)',
           border: '1px solid var(--border-default)'
@@ -675,7 +675,7 @@ export const TasksCalendar = ({
         <div className="flex">
           {/* Time column */}
           <div 
-            className="w-20 flex-shrink-0"
+            className="w-20 shrink-0"
             style={{ borderRight: '1px solid var(--border-subtle)' }}
           >
             <div 
@@ -906,7 +906,7 @@ export const TasksCalendar = ({
     if (sortedTasks.length === 0) {
       return (
         <div 
-          className="backdrop-blur-sm rounded-2xl h-[700px] flex items-center justify-center"
+          className="backdrop-blur-xs rounded-2xl h-[700px] flex items-center justify-center"
           style={{ 
             backgroundColor: 'var(--bg-elevated)',
             border: '1px solid var(--border-default)'
@@ -922,7 +922,7 @@ export const TasksCalendar = ({
 
     return (
       <div 
-        className="backdrop-blur-sm rounded-2xl overflow-hidden"
+        className="backdrop-blur-xs rounded-2xl overflow-hidden"
         style={{ 
           backgroundColor: 'var(--bg-elevated)',
           border: '1px solid var(--border-default)'

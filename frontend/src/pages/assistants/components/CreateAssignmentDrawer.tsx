@@ -159,7 +159,7 @@ export const CreateAssignmentDrawer = ({
             value={formData.va_profile}
             onChange={(e) => setFormData({ ...formData, va_profile: e.target.value })}
             disabled={loadingProfiles}
-            className="w-full rounded-xl border-2 transition-all focus:outline-none focus:ring-2"
+            className="w-full rounded-xl border-2 transition-all focus:outline-hidden focus:ring-2"
             style={{
               backgroundColor: 'var(--bg-secondary)',
               borderColor: 'var(--border-default)',
@@ -186,7 +186,7 @@ export const CreateAssignmentDrawer = ({
             value={formData.client_profile}
             onChange={(e) => setFormData({ ...formData, client_profile: e.target.value })}
             disabled={loadingProfiles}
-            className="w-full rounded-xl border-2 transition-all focus:outline-none focus:ring-2"
+            className="w-full rounded-xl border-2 transition-all focus:outline-hidden focus:ring-2"
             style={{
               backgroundColor: 'var(--bg-secondary)',
               borderColor: 'var(--border-default)',
@@ -262,7 +262,7 @@ export const CreateAssignmentDrawer = ({
             type="date"
             value={formData.start_date}
             onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
-            className="w-full rounded-xl border-2 transition-all focus:outline-none focus:ring-2"
+            className="w-full rounded-xl border-2 transition-all focus:outline-hidden focus:ring-2"
             style={{
               backgroundColor: 'var(--bg-secondary)',
               borderColor: 'var(--border-default)',
@@ -282,7 +282,7 @@ export const CreateAssignmentDrawer = ({
             type="date"
             value={formData.end_date || ''}
             onChange={(e) => setFormData({ ...formData, end_date: e.target.value || undefined })}
-            className="w-full rounded-xl border-2 transition-all focus:outline-none focus:ring-2"
+            className="w-full rounded-xl border-2 transition-all focus:outline-hidden focus:ring-2"
             style={{
               backgroundColor: 'var(--bg-secondary)',
               borderColor: 'var(--border-default)',

@@ -67,7 +67,7 @@ export function SidebarNav({ collapsed = false, onToggleCollapsed, onNavigate, c
                   <SidebarMenuItem key={item.key}>
                     <SidebarMenuButton asChild isActive={isActivePath(pathname, item.to)} className="h-8 text-[13px]">
                       <Link to={item.to} data-qa={item.qa} aria-current={isActivePath(pathname, item.to) ? 'page' : undefined} onClick={onNavigate}>
-                        <item.icon aria-hidden="true" className="!size-4" />
+                        <item.icon aria-hidden="true" className="size-4!" />
                         <span className="truncate">{t(item.labelKey)}</span>
                       </Link>
                     </SidebarMenuButton>

@@ -174,7 +174,7 @@ const DebugPanel = ({ isOpen, onClose }: DebugPanelProps) => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="fixed inset-0 backdrop-blur-sm"
+          className="fixed inset-0 backdrop-blur-xs"
           style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}
         />
 
