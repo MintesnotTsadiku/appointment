@@ -137,10 +137,12 @@ def create(business_name, location_name, service_name, timezone, duration, opens
         )
         org.flags.workspace_setup = _SETUP_CREATE
         org.insert(ignore_permissions=True)
+        owner_name = frappe.db.get_value("User", user, "full_name") or user
         provider = frappe.get_doc(
             dict(
                 doctype="Provider",
-                provider_name=f"{business_name.strip()} — {frappe.db.get_value('User', user, 'full_name')}",
+                provider_name=f"{business_name.strip()} — {owner_name}",
+                full_name=owner_name,
                 user=user,
                 is_active=1,
                 use_default_hours=1,

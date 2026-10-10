@@ -46,6 +46,8 @@ app_include_js = [
 # Appointment Settings Link fields resolve on a fresh install.
 after_install = [
     "appointment.tasks.import_email_templates.import_email_templates",
+    # A new site marks every patch as done, so the Amharic catalog is imported here too.
+    "appointment.patches.v0_1.import_frontend_translations.execute",
     "appointment.patches.v0_1.grant_content_doctype_permissions.execute",
 ]
 
@@ -62,6 +64,8 @@ after_request = [
 
 after_migrate = [
     "appointment.tasks.setup_erpnext_fields.setup_erpnext_fields",
+    # Keeps the Amharic catalog current with en.json and am.json; only adds or updates.
+    "appointment.patches.v0_1.import_frontend_translations.execute",
     "appointment.tasks.import_form_tour_google_calendar.import_doc",
     "appointment.tasks.import_email_templates.import_email_templates",
     # recipe manifests are code-owned; no database registry is reconciled.
@@ -241,7 +245,6 @@ doc_events = {
 # ---------------
 
 scheduler_events = {
-    "cron": {"* * * * *": ["appointment.content.newsletter.campaigns.run_due"]},
     # "all": [
     # 	"appointment.tasks.all"
     # ],
@@ -253,6 +256,10 @@ scheduler_events = {
         "appointment.public_experience.hardening.process_pending_outbox",
     ],
     "cron": {
+        # Due newsletter campaigns.
+        "* * * * *": [
+            "appointment.content.newsletter.campaigns.run_due",
+        ],
         "*/5 * * * *": [
             "appointment.scheduler.payments.process_holds",
         ],

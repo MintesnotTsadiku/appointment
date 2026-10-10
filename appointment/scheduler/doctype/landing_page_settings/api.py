@@ -329,9 +329,9 @@ def get_landing_page_settings():
         
     except Exception as e:
         frappe.log_error(f"Error fetching landing page settings: {str(e)}")
+        # The exception text stays in the Error Log; guests get only the generic message.
         return {
             "success": False,
-            "error": str(e),
             "message": _("Failed to fetch landing page settings")
         }
 

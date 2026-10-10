@@ -6,6 +6,7 @@ import frappe
 import frappe.utils
 import requests
 from frappe import _, clear_messages
+from frappe.rate_limiter import rate_limit
 from appointment.scheduler.doctype.booking_event.booking_event import BookingEvent
 from frappe.integrations.doctype.google_calendar.google_calendar import (
     get_google_calendar_object,
@@ -542,6 +543,9 @@ def create_event_for_appointment_group(
     return response
 
 
+# The three legacy guest booking endpoints share this one counter. Each booking
+# emails every participant, so a guest must not create them without limit.
+@rate_limit(limit=10, seconds=60)
 def _create_event_for_appointment_group(
     appointment_group: object,
     date: str,

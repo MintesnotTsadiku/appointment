@@ -38,6 +38,8 @@ class ExperiencePublishError(BrandExperienceError):
 
 class PublicResolutionError(BrandExperienceError):
     code = "public_resolution"
+    # An unknown host or path is "not found" for the visitor, not a server failure.
+    http_status_code = 404
 
 
 class StaleDraftError(BrandExperienceError):

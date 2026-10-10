@@ -200,3 +200,21 @@ def run():
     if not result.wasSuccessful():
         raise AssertionError("Public experience contract tests failed")
     return {"passed": True, "tests": result.testsRun}
+
+
+class TestPublicOrigin(unittest.TestCase):
+    def test_platform_host_uses_https_behind_edge_tls(self):
+        import frappe
+        from unittest.mock import patch
+        from appointment.public_experience import resolver
+
+        with patch.dict(frappe.local.conf, {"brand_public_experience_platform_hosts": "book.example.et", "brand_public_experience_edge_tls": 1}):
+            self.assertEqual(resolver._origin("book.example.et"), "https://book.example.et")
+        with patch.dict(frappe.local.conf, {"brand_public_experience_platform_hosts": "book.example.et", "brand_public_experience_edge_tls": 0}):
+            self.assertEqual(resolver._origin("book.example.et"), "http://book.example.et")
+        self.assertEqual(resolver._origin("127.0.0.146"), "http://127.0.0.146")
+
+    def test_unknown_public_path_is_not_found(self):
+        from appointment.public_experience.errors import PublicResolutionError
+
+        self.assertEqual(PublicResolutionError("missing").http_status_code, 404)

@@ -40,13 +40,18 @@ def execute():
         if source and translated and translated != source:
             pairs[source] = translated
 
-    for source, translated in pairs.items():
-        existing = frappe.db.get_value(
-            "Translation", {"language": "am", "source_text": source}, "name"
+    # One read of the existing rows: this also runs on every install and migrate.
+    current = {
+        row.source_text: row
+        for row in frappe.get_all(
+            "Translation", filters={"language": "am"}, fields=["name", "source_text", "translated_text"]
         )
+    }
+    for source, translated in pairs.items():
+        existing = current.get(source)
         if existing:
-            if frappe.db.get_value("Translation", existing, "translated_text") != translated:
-                frappe.db.set_value("Translation", existing, "translated_text", translated)
+            if existing.translated_text != translated:
+                frappe.db.set_value("Translation", existing.name, "translated_text", translated)
         else:
             frappe.get_doc(
                 {

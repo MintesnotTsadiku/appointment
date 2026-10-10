@@ -96,7 +96,10 @@ def is_platform_host(host: str) -> bool:
 
 
 def _is_local(host: str) -> bool:
-    return host.endswith(".localhost") or host.startswith("127.") or host == "localhost" or is_platform_host(host)
+    # A platform host is served over plain HTTP only while the edge has no TLS (development stacks).
+    if host.endswith(".localhost") or host.startswith("127.") or host == "localhost":
+        return True
+    return is_platform_host(host) and not frappe.conf.get("brand_public_experience_edge_tls")
 
 
 def _origin(host: str) -> str:

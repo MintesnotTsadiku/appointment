@@ -643,9 +643,9 @@ def book_time_slot(
         )
         
         if conflicts:
+            # Never return the conflicting bookings: they name other customers.
             return {
                 "error": "Time slot is already booked",
-                "conflicts": conflicts
             }, 409  # Conflict status code
     
     appointment_group_obj = create_dummy_appointment_group(duration, user_availability)

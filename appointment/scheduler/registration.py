@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import frappe
 from frappe import _
+from frappe.rate_limiter import rate_limit
 
 SETTINGS_DOCTYPE = "Appointment Registration Settings"
 
@@ -120,6 +121,7 @@ def public_settings():
 
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])
+@rate_limit(limit=10, seconds=600, methods=["POST"])
 def signup(email, full_name=None, password=None, redirect_to=None):
     if requires_verification():
         frappe.throw(_("Email verification is not implemented. Use Open signup with administrator approval, or administrator provisioning."), frappe.PermissionError)
