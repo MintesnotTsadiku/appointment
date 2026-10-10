@@ -3972,7 +3972,8 @@
       "chooseRescheduleOrCancel": "ቀጠሮ ማዛወርን ወይም መሰረዝን ይምረጡ።",
       "changeTheBookingThroughItsAuthorized": "ቀጠሮውን በተፈቀደለት የሂደት ደረጃዎች በኩል ይቀይሩ፤ ባለቤትነቱ ሊቀየር አይችልም።",
       "chooseADateAndStartTime": "ቀን እና የመጀመሪያ ሰዓት ይምረጡ።",
-      "theBookingMustFitWithinOne2": "ቀጠሮው በአንድ የሥራ ቀን ውስጥ መሆን አለበት።"
+      "theBookingMustFitWithinOne2": "ቀጠሮው በአንድ የሥራ ቀን ውስጥ መሆን አለበት።",
+      "tooManyForEmail": "ለዚህ የኢሜይል አድራሻ በጣም ብዙ ቀጠሮዎች ተይዘዋል። ከጥቂት ደቂቃዎች በኋላ እንደገና ይሞክሩ።"
     },
     "independent": {
       "onlyThisIndependentBusinessOwnerMay": "የዚህን የግል ንግድ የቀጠሮ ማዋቀሪያ መቀየር የሚችለው ባለቤቱ ብቻ ነው።",

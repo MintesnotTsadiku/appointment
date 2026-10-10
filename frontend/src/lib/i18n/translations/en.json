@@ -3972,7 +3972,8 @@
       "chooseRescheduleOrCancel": "Choose reschedule or cancel.",
       "changeTheBookingThroughItsAuthorized": "Change the booking through its authorized lifecycle; ownership is immutable.",
       "chooseADateAndStartTime": "Choose a date and start time.",
-      "theBookingMustFitWithinOne2": "The booking must fit within one operating day."
+      "theBookingMustFitWithinOne2": "The booking must fit within one operating day.",
+      "tooManyForEmail": "Too many bookings for this email address. Try again in a few minutes."
     },
     "independent": {
       "onlyThisIndependentBusinessOwnerMay": "Only this independent business owner may change its booking setup.",
