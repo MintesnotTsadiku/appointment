@@ -350,8 +350,43 @@ def creation_history(doc):
     ).insert(ignore_permissions=True)
 
 
+BOOKING_WINDOW_SECONDS = 600
+
+
+def _booking_limit():
+    """Guest bookings per IP in the window. Signed-in staff book for many customers."""
+    if frappe.session.user != "Guest":
+        return 300
+    return cint(frappe.conf.get("guest_booking_limit_per_ip") or 10)
+
+
+def _guest_request(email):
+    # Like Frappe's rate limiter, this applies to web requests only, not to scripts, seeding or tests.
+    return bool(getattr(frappe.local, "request", None)) and frappe.session.user == "Guest" and bool((email or "").strip())
+
+
+def _guest_email_key(business, email):
+    return f"appointment:guest-bookings:{business}:{(email or '').strip().lower()}"
+
+
+def _check_guest_email(business, email):
+    """One client cannot fill a business's day: a few guest bookings per email in the window."""
+    if not _guest_request(email):
+        return
+    limit = cint(frappe.conf.get("guest_booking_limit_per_email") or 3)
+    if cint(frappe.cache.get_value(_guest_email_key(business, email))) >= limit:
+        frappe.throw(_("Too many bookings for this email address. Try again in a few minutes."), frappe.RateLimitExceededError)
+
+
+def _count_guest_email(business, email):
+    if not _guest_request(email):
+        return
+    key = _guest_email_key(business, email)
+    frappe.cache.set_value(key, cint(frappe.cache.get_value(key)) + 1, expires_in_sec=BOOKING_WINDOW_SECONDS)
+
+
 @frappe.whitelist(allow_guest=True, methods=["POST"])
-@rate_limit(limit=60, seconds=60, methods=["POST"])
+@rate_limit(limit=_booking_limit, seconds=BOOKING_WINDOW_SECONDS, methods=["POST"])
 def book(
     offering_id,
     start_time,
@@ -404,6 +439,7 @@ def book(
         if existing[0].request_hash != digest:
             frappe.throw(_("This request identity was already used for different booking details."))
         return json.loads(existing[0].request_result)
+    _check_guest_email(business_name, user_email)
     parts = offering(offering_id, public=True)
     event, service, location, provider, business = parts
     zone = pytz.timezone(location.timezone)
@@ -452,6 +488,7 @@ def book(
         )
     result["notification_status"] = notifications.status_of(doc)
     frappe.db.set_value("Appointment", doc.name, "request_result", json.dumps(result), update_modified=False)
+    _count_guest_email(business_name, user_email)
     return result
 
 

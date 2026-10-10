@@ -57,6 +57,11 @@ scenarios:
     selector: html.dark
   - action: screenshot
     name: shell-dark.png
+  # The theme is saved on the user: one more click returns to System, the starting state.
+  - action: click
+    selector: '[data-qa="topnav-theme"]'
+  - action: wait_for
+    selector: 'html:not(.dark)'
   - action: get_console_errors
   - action: get_network_errors
 - id: shell_menu_mobile

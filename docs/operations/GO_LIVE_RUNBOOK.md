@@ -16,7 +16,7 @@ These decisions are open. Close them before you provision the server. See [deplo
 
 | # | Decision | Effect on this runbook |
 |---|---|---|
-| 1 | Hosting shape: one EC2 host with Nginx, or ALB or CloudFront in front | Sections 5 and 8 |
+| 1 | Hosting shape. **Decided 2026-10-10:** the user's existing multi-bench setup on AWS EC2. This app gets its own bench on that host. | Sections 2, 5 and 8 |
 | 2 | Managed CDN custom hostnames, or self-managed Nginx with ACME | `brand_public_experience_edge_*` keys in section 3 |
 | 3 | Certificates: certbot HTTP-01, or a DNS-01 wildcard | Section 3, `brand_public_experience_edge_tls` |
 | 4 | Backup RPO, RTO and retention | Section 7 |
@@ -47,6 +47,15 @@ Do these steps as the bench user on the server.
 
 Do not install demo or QA data on a live site. Do not copy a development or showcase site to production.
 
+
+### On the existing multi-bench host
+
+- Give this app its own bench directory and its own Python virtual environment. Do not add it to another app's bench.
+- Pick ports that no other bench on the host uses: `webserver_port`, `socketio_port`, and the `redis_cache`, `redis_queue` and `redis_socketio` ports in `common_site_config.json`. List the ports in use first: `ss -ltn`.
+- Each bench has its own `supervisor` or `systemd` group. Name it after this bench, so that restarting it does not restart the others.
+- Nginx: `bench setup nginx` writes one file per bench. Include it next to the other benches' files, then run `nginx -t` before reloading. Only one Nginx serves ports 80 and 443 for all benches.
+- Each bench builds its own assets: `bench build --app appointment`. Do not share `sites/assets` between benches.
+
 ## 3. Site config
 
 Set each key with `bench --site <site> set-config <key> <value>`. Use `-p` for numbers and lists.
@@ -54,6 +63,8 @@ Set each key with `bench --site <site> set-config <key> <value>`. Use `-p` for n
 | Key | Production value | Why |
 |---|---|---|
 | `host_name` | `https://<platform host>` | Background jobs build emailed links and Chapa return URLs from it. |
+| `guest_booking_limit_per_ip` | absent (default 10) | Guest bookings per IP in 10 minutes. Set higher only on QA sites; the readiness report warns above 10. |
+| `guest_booking_limit_per_email` | absent (default 3) | Guest bookings per email address per business in 10 minutes. The readiness report warns above 3. |
 | `encryption_key` | Set by `new-site`. Never change it. | It decrypts the Chapa keys and the Email Account password. |
 | `developer_mode` | `0` | Developer mode shows tracebacks and allows DocType edits. |
 | `mute_emails` | `0` | With `1`, no booking email leaves the site. |

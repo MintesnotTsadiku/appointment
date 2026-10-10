@@ -185,7 +185,39 @@ The dev site has no `User Appointment Availability` records, and the current boo
 
 - Vite: "Some chunks are larger than 500 kB after minification", for the main `index-*.js` chunk (523.9 kB). It does not block the build. More code splitting or `manualChunks` would remove it.
 - `npm ci`: deprecated packages `source-map@0.8.0-beta.0`, `glob@10.5.0` and `eslint@9.39.5`.
-- `npm audit`: 16 vulnerabilities (3 moderate, 13 high). Review them before go-live.
+- `npm audit`: before, 16 vulnerabilities (3 moderate, 13 high). After `npm audit fix` (no `--force`), 8 remain (3 moderate, 5 high). See "npm audit (2026-10-10)" below.
 - `copy-pwa-assets` copies `public/offline.html`, but Vite already copies `frontend/public/` into the output. The step is redundant but harmless.
 
+### npm audit (2026-10-10)
+
+`npm audit fix` changed only `frontend/package-lock.json`. All upgrades are inside the ranges in `package.json`, and all are development dependencies. No runtime package changed.
+
+| Package | Before | After | Advisory fixed |
+|---|---|---|---|
+| `typescript-eslint` and the `@typescript-eslint/*` packages | 8.22.0 | 8.71.1 | High, through `typescript-estree` (lint only) |
+| `sharp` and the `@img/sharp-*` binaries | 0.35.4 | 0.35.5 | High, librsvg (GHSA-wq5f-xc86-pv6w; PWA icon generation at build time) |
+| `source-map-js` | 1.2.1 | 1.2.2 | High, GHSA-68fv-2mgg-jv7q (build only) |
+| `tailwindcss` | 3.4.6 | 3.4.19 | None; the update is the latest 3.x release |
+
+Open: 8 vulnerabilities, all in the Tailwind CSS 3 dependency tree. They are build-time and dev-time only. Tailwind runs in PostCSS during `vite build` and `vite dev`. The shipped bundle contains only the generated CSS, not this code.
+
+| Package | Severity | Path | Why it stays open |
+|---|---|---|---|
+| `braces` (GHSA-vfj7-8cjw-p6xm) | High | `tailwindcss` > `chokidar`, `micromatch` | No fixed `braces` release exists. |
+| `micromatch`, `fast-glob`, `chokidar` | High | `tailwindcss` | They depend on `braces`. |
+| `postcss-selector-parser` (GHSA-rj75-hqrm-r3gf) | Moderate | `tailwindcss`, `postcss-nested` | Fixed in 7.1.6. Tailwind 3 and `postcss-nested` 6 require `^6`. |
+| `postcss-nested` | Moderate | `tailwindcss` | Its fixed major (7) needs `postcss-selector-parser` 7. |
+| `tailwindcss` | High | direct | All 3.x versions are affected. The fix is Tailwind 4. |
+| `tailwindcss-animate` | Moderate | direct | Its peer dependency is Tailwind 3. Tailwind 4 uses `tw-animate-css` instead. |
+
+The only fix is a migration to Tailwind CSS 4. That needs a CSS-first configuration, `@tailwindcss/postcss` or `@tailwindcss/vite`, a replacement for `tailwindcss-animate`, and a visual check of every staff and public template. It is not a dependency bump, and it is not needed for runtime safety. Plan it as a separate task.
+
+Checks after the change: `npm ci` from the new lockfile succeeds. `tsc --noEmit -p tsconfig.app.json` reports 178 errors, the same as before. ESLint reports 240 problems, the same as before. `npm run -s test:dom` passes. `npm run build` succeeds. Browser QA on the dev stack: `booking-form/guest.yaml` BQA-2026-00160 passed, `staff-ui/owner-light.yaml` BQA-2026-00162 passed (only the known Reduced Motion console messages), `my-bookings/guest.yaml` BQA-2026-00163 passed. `staff-ui/shell-interactions.yaml` BQA-2026-00161 failed in `shell_switcher_desktop`: the workspace switcher menu shows no `workspace-option` items. The same failure occurs with the old lockfile (BQA-2026-00159), so the dependency change did not cause it.
+
 The stack's shared assets were not rebuilt. No `bench build` was run.
+
+## Decisions (2026-10-10)
+
+- **D1:** done. Guest bookings are limited per IP (10 in 10 minutes, `guest_booking_limit_per_ip`) and per email address per business (3 in 10 minutes, `guest_booking_limit_per_email`). Only successful bookings count. Signed-in staff get 300 per IP. Scripts, seeding and tests are not limited. Covered by tests in `test_guest_endpoints`.
+- **D2, D3, D4, D5:** the user chose not to change these now. They stay open: quotes for unpublished offerings, sign-up showing whether an email has an account, the legacy group and personal-meeting endpoints, and meeting-window lookups by offering name.
+- **D6:** done. **D7:** no change, as recommended.

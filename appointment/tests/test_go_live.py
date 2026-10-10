@@ -30,7 +30,8 @@ PRODUCTION = {
     "brand_public_experience_edge_tls": 1,
     "brand_public_experience_edge_staging_dir": "/srv/edge/staging",
 }
-DEV_ONLY = ("rich_demo_enabled", "isolated_test_suites", "allow_tests", "worktree_development", "mute_sms")
+DEV_ONLY = ("rich_demo_enabled", "isolated_test_suites", "allow_tests", "worktree_development", "mute_sms",
+            "guest_booking_limit_per_ip", "guest_booking_limit_per_email")
 
 
 def production_conf():

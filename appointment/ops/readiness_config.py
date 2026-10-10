@@ -18,6 +18,8 @@ FLAGS_OFF = {
 }
 # Keys that only local worktree and test sites use.
 DEV_ONLY_KEYS = ("rich_demo_enabled", "isolated_test_suites", "allow_tests", "worktree_development")
+# Guest booking limits (see booking._booking_limit): production keeps the defaults or lower.
+BOOKING_LIMITS = {"guest_booking_limit_per_ip": 10, "guest_booking_limit_per_email": 3}
 # Hosts that mark an Email Account as a local or test placeholder.
 PLACEHOLDER_DOMAINS = ("example.com", "example.org", "example.net", "test.com", "localhost", ".invalid", ".local", ".test")
 
@@ -31,7 +33,14 @@ class SiteConfig:
         rows += [self.absent(key, key in conf) for key in DEV_ONLY_KEYS]
         rows += [self.host_name(conf.get("host_name")), self.encryption_key(bool(conf.get("encryption_key")))]
         rows += self.public_hosts(conf)
+        rows += [self.booking_limit(key, conf.get(key), default) for key, default in BOOKING_LIMITS.items()]
         return rows
+
+    def booking_limit(self, key, value, default):
+        if not value or int(value) <= default:
+            return check(self.area, key, PASS, f"{key} is {value or default}.")
+        return check(self.area, key, WARN, f"{key} is {value}, above the production default of {default}. "
+                     "One client could fill a business's day.", f"Remove {key} from site_config.json.")
 
     def flag_off(self, key, value):
         if not is_on(value):

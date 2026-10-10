@@ -53,7 +53,10 @@ class OwnedBookingAcceptance(unittest.TestCase):
         cls.cleanup = fixtures.cleanup(cls.state)
 
     def setUp(self):
-        self.rate_key = frappe.cache.make_key("rl:appointment.scheduler.booking.book:192.0.2.77") + b":60"
+        from appointment.scheduler.booking import BOOKING_WINDOW_SECONDS
+
+        # Frappe's limiter key ends with the window length in seconds.
+        self.rate_key = frappe.cache.make_key("rl:appointment.scheduler.booking.book:192.0.2.77") + f":{BOOKING_WINDOW_SECONDS}".encode()
         self.rate_previous = (frappe.cache.get(self.rate_key), frappe.cache.ttl(self.rate_key))
         frappe.cache.setex(self.rate_key, 60, 0)
         frappe.db.rollback()  # Refresh the snapshot after independent HTTP commits.
@@ -496,7 +499,11 @@ class OwnedBookingAcceptance(unittest.TestCase):
         # exercise HTTP rejection, and restore its original value/TTL.
         key = self.rate_key
         previous, ttl = frappe.cache.get(key), frappe.cache.ttl(key)
-        frappe.cache.setex(key, 60, 60)
+        from appointment.scheduler.booking import BOOKING_WINDOW_SECONDS
+
+        # Fill the bucket to the guest limit in force on this site (booking._booking_limit).
+        limit = frappe.utils.cint(frappe.conf.get("guest_booking_limit_per_ip") or 10)
+        frappe.cache.setex(key, BOOKING_WINDOW_SECONDS, limit)
         try:
             response = self.post(self.payload())
             self.assertEqual(response.status_code, 429, response.text[:250])

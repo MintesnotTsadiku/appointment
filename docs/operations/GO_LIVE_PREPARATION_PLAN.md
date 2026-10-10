@@ -117,3 +117,13 @@ The first clean-install run reached the dev site through `bench serve` with no `
 | Full backend regression, 39 modules, including `test_go_live`, `test_guest_endpoints` and `test_app_identity` | All pass |
 | Frontend DOM tests and typecheck (178, unchanged) | Pass |
 | Agent Plane BQA-2026-00148, 00149, 00151, 00152 and 00153: my-bookings, booking form, develop-features owner and independent customers, staff-ui owner | Passed. The console entries are known noise: reduced-motion warnings, the sandboxed preview, and the expected 403 for a reused link. BQA-2026-00150 hit an Agent Plane record-save race and passed on retry as 00153. |
+
+### Decisions and follow-up (2026-10-10)
+
+- **Hosting:** the user's existing multi-bench setup on AWS EC2. The runbook (§1 and §2) has the notes for running beside other benches: its own bench, ports, process group and Nginx include.
+- **Guest booking limits** (review item D1): 10 guest bookings per IP and 3 per email address per business in 10 minutes. Only successful bookings count. Staff get 300 per IP. The limits are configurable (`guest_booking_limit_per_ip`, `guest_booking_limit_per_email`), and the readiness report warns when they are raised. The QA site raises them, because browser QA books from one IP. The other review items (D2–D5) stay open, by the user's choice.
+- **npm audit:** 16 findings down to 8, with `npm audit fix` and no breaking upgrades. The 8 that are left come from Tailwind CSS 3 build tooling. Fixing them needs a Tailwind 4 migration, which is a separate piece of work, and they do not reach the shipped bundle. Details are in [the guest endpoint review](GUEST_ENDPOINT_REVIEW.md).
+- **Test fixes:**
+  - `staff-ui/shell-interactions` now returns the theme to System at the end. The theme is saved on the user, so runs no longer affect each other (BQA-2026-00164 and 00165).
+  - `test_owned_booking` reads the limiter key's window and the limit in force, instead of fixed values.
+- **Verification:** the full backend regression, 39 modules, passes.
