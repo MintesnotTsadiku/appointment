@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
   if (isolated) {
     const target = `http://127.0.0.1:${process.env.FRAPPE_WORKTREE_WEB_PORT}`;
     proxyConfig = {
-      "^/(app|apps|desk|api|assets|files|private|logout)(/|$)": {
+      "^/(app|apps|desk|api|assets|files|private|logout|tools)(/|$)|^/(sitemap\\.xml|robots\\.txt)$": {
         target,
         // Preserve the browser Host so public-experience resolution exercises
         // the same trusted-host contract as the production reverse proxy.

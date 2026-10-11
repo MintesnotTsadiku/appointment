@@ -48,6 +48,7 @@ RESERVED_ROOT_PATHS = frozenset(
         "robots.txt",
         "sitemap.xml",
         "favicon.ico",
+        "tools",
     }
 )
 

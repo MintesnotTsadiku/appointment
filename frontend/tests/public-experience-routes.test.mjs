@@ -38,6 +38,12 @@ for (const staffPath of ["/customers", "/customers/CP-1", "/forgot-password"]) {
   assert.equal(routesModule.isPublicExperiencePath(staffPath), false, staffPath);
 }
 assert.equal(routesModule.isPublicExperiencePath("/settings/public-experience"), false);
+// Free tools are server-rendered Frappe pages; `tools` is never a business slug.
+for (const toolPath of ["/tools", "/tools/ethiopian-time-converter", "/Tools/ethiopian-time-converter"]) {
+  assert.equal(routesModule.isPublicExperiencePath(toolPath), false, toolPath);
+}
+assert.equal(routesModule.publicRootFromPath("/tools/ethiopian-time-converter"), "/");
+assert.equal(routesModule.publicRootForSlug("tools"), "/");
 assert.equal(routesModule.isPublicExperiencePath("/app"), false);
 assert.equal(routesModule.isPublicExperiencePath("/"), false);
 assert.equal(routesModule.publicRootFromPath("/tena-studio/book"), "/tena-studio");

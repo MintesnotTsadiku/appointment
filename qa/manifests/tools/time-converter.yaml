@@ -1,0 +1,141 @@
+# Guests open the free Ethiopian time converter. No sign-in. Nothing is saved.
+app: appointment
+base_url: http://127.0.0.146:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-time-converter
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 90000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+scenarios:
+- id: converter_desktop
+  title: Converter works for a guest (desktop); Habesha 2:00 day is 8:00 AM; one CTA
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /tools/ethiopian-time-converter
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_text
+      value: Ethiopian time converter
+    - type: visible_selector
+      value: '[data-qa="now-line"]'
+    - type: visible_selector
+      value: '[data-qa="tool-cta"]'
+    - type: text_contains
+      selector: '[data-qa="tool-cta"]'
+      value: Take bookings in Habesha time with Meet.et
+  actions:
+  - action: screenshot
+    name: converter_desktop-1-open.png
+    full_page: false
+  - action: select
+    selector: '[data-qa="habesha-hour"]'
+    value: '2'
+  - action: select
+    selector: '[data-qa="habesha-minute"]'
+    value: '00'
+  - action: click
+    selector: '[data-qa="habesha-half-day"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="intl-result"]'
+      value: 8:00 AM
+    - type: text_contains
+      selector: '[data-qa="intl-result-other"]'
+      value: 8:00 PM
+  - action: screenshot
+    name: converter_desktop-2-habesha-day.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="habesha-half-night"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="intl-result"]'
+      value: 8:00 PM
+  - action: fill
+    selector: '[data-qa="intl-input"]'
+    value: '13:30'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="habesha-result"]'
+      value: '7:30'
+    - type: text_contains
+      selector: '[data-qa="habesha-result-detail"]'
+      value: ከሰዓት
+  - action: screenshot
+    name: converter_desktop-3-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: converter_mobile
+  title: Converter works for a guest (mobile 390px); Habesha 2:00 day is 8:00 AM; one CTA
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /tools/ethiopian-time-converter
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_text
+      value: Ethiopian time converter
+    - type: visible_selector
+      value: '[data-qa="now-line"]'
+    - type: visible_selector
+      value: '[data-qa="tool-cta"]'
+    - type: text_contains
+      selector: '[data-qa="tool-cta"]'
+      value: Take bookings in Habesha time with Meet.et
+  actions:
+  - action: screenshot
+    name: converter_mobile-1-open.png
+    full_page: false
+  - action: select
+    selector: '[data-qa="habesha-hour"]'
+    value: '2'
+  - action: select
+    selector: '[data-qa="habesha-minute"]'
+    value: '00'
+  - action: click
+    selector: '[data-qa="habesha-half-day"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="intl-result"]'
+      value: 8:00 AM
+    - type: text_contains
+      selector: '[data-qa="intl-result-other"]'
+      value: 8:00 PM
+  - action: screenshot
+    name: converter_mobile-2-habesha-day.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="habesha-half-night"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="intl-result"]'
+      value: 8:00 PM
+  - action: fill
+    selector: '[data-qa="intl-input"]'
+    value: '13:30'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="habesha-result"]'
+      value: '7:30'
+    - type: text_contains
+      selector: '[data-qa="habesha-result-detail"]'
+      value: ከሰዓት
+  - action: screenshot
+    name: converter_mobile-3-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors

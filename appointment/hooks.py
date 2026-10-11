@@ -29,6 +29,13 @@ website_route_rules = [
         "from_route": "/schedule/<path:app_path>",
         "to_route": "schedule",
     },
+    # Server-rendered pages and crawler files. They must come before the SPA catch-all.
+    {
+        "from_route": "/tools/ethiopian-time-converter",
+        "to_route": "tools/ethiopian-time-converter",
+    },
+    {"from_route": "/sitemap.xml", "to_route": "sitemap.xml"},
+    {"from_route": "/robots.txt", "to_route": "robots.txt"},
     {
         "from_route": "/<path:app_path>",
         "to_route": "/",

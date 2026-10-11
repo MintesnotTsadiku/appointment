@@ -29,6 +29,7 @@ const Finale = ({ entry }: { entry: EntryLinks }) => {
         {doors.length > 0 && <Doors doors={doors} />}
         <footer className="lw-footer">
           <span>© {new Date().getFullYear()} {t("world.night.footer")}</span>
+          <a href="/tools/ethiopian-time-converter" data-qa="landing-time-tool">{t("world.night.timeTool")}</a>
           <span>{t("world.night.fiction")}</span>
         </footer>
       </div>

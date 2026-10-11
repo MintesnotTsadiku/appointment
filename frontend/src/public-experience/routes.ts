@@ -43,6 +43,7 @@ const RESERVED_FIRST_SEGMENTS = new Set([
   "robots.txt",
   "sitemap.xml",
   "favicon.ico",
+  "tools",
 ]);
 
 const LOCALES = new Set(["en", "am"]);
