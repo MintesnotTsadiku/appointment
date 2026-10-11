@@ -30,3 +30,9 @@
 
 .bloom-site[style*="--pe-selected-font-display"] :is(h1,h2,h3),.bloom-booking[style*="--pe-selected-font-display"] :is(h1,h2,h3){font-family:var(--pe-selected-font-display,inherit)}
 .bloom-site[style*="--pe-selected-font-body"] :is(p,li,address),.bloom-booking[style*="--pe-selected-font-body"] p{font-family:var(--pe-selected-font-body)}
+
+/* Platform credit: small Arial caps under the copyright, red underline like the nav accents. */
+.bloom-credit,.bloom-content-credit{grid-column:1/-1;flex-basis:100%;margin:0;font:12px/1.5 Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;opacity:.8}
+.bloom-credit:lang(am),.bloom-content-credit:lang(am){letter-spacing:0;text-transform:none;font-size:13px}
+.bloom-credit a,.bloom-content-credit a{display:inline-block;padding-block:10px;font-weight:700;text-decoration:underline;text-decoration-color:var(--red);text-underline-offset:4px}
+.bloom-content-footer{flex-wrap:wrap}

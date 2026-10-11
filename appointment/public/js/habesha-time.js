@@ -1,10 +1,13 @@
 /*
- * Ethiopian (Habesha) clock conversion for /tools/ethiopian-time-converter.
+ * Ethiopian (Habesha) clock conversion shared by the free tool pages
+ * (/tools/*). Python twin: appointment/growth/habesha.py; both are tested
+ * with appointment/growth/vectors/habesha.json.
  *
  * The Habesha clock counts 12 hours from sunrise (06:00) and 12 hours from
  * sunset (18:00). Habesha hour = international hour - 6 on a 12-hour dial;
- * minutes never change. The pure functions are also loaded by
- * frontend/tests/habesha-time.test.mjs, so keep them free of DOM access.
+ * minutes never change. Period words match the staff formatter
+ * (frontend/src/lib/time.ts). This file has no DOM access; page wiring lives
+ * in js/tools/*.js.
  */
 (function (root) {
   "use strict";
@@ -18,14 +21,14 @@
     night: { am: "ሌሊት", en: "night" },
     morning: { am: "ጠዋት", en: "morning" },
     afternoon: { am: "ከሰዓት", en: "afternoon" },
-    evening: { am: "ማታ", en: "evening" },
+    evening: { am: "ምሽት", en: "evening" },
   };
 
   function pad(value) {
     return String(value).padStart(2, "0");
   }
 
-  /** ጠዋት 06–11, ከሰዓት 12–17, ማታ 18–23, ሌሊት 00–05 (international hours). */
+  /** ጠዋት 06–11, ከሰዓት 12–17, ምሽት 18–23, ሌሊት 00–05 (international hours). */
   function periodKey(hour24) {
     if (hour24 < 6) return "night";
     if (hour24 < 12) return "morning";
@@ -50,9 +53,9 @@
     };
   }
 
-  /** Habesha hour (1–12) and half ("day" or "night") to international 24-hour time. */
+  /** Habesha hour (1–12) and half ("day"/"night") or period key to international 24-hour time. */
   function fromHabesha(hour, minute, half) {
-    var base = half === "night" ? 18 : 6;
+    var base = half === "night" || half === "evening" ? 18 : 6;
     return { hour: (base + (hour % 12)) % 24, minute: minute };
   }
 
@@ -95,7 +98,36 @@
     return { hour: get("hour") % 24, minute: get("minute") };
   }
 
+  /** "ጠዋት 2:30" for an international time. */
+  function formatHabesha(hour24, minute, withPeriod) {
+    var habesha = toHabesha(hour24, minute);
+    return withPeriod === false ? habesha.text : habesha.periodAm + " " + habesha.text;
+  }
+
+  /** "HH:MM" to {hour, minute}; null when malformed. */
+  function parseWall(value) {
+    var match = /^(\d{1,2}):(\d{2})$/.exec(String(value || "").trim());
+    if (!match) return null;
+    var hour = Number(match[1]);
+    var minute = Number(match[2]);
+    return hour > 23 || minute > 59 ? null : { hour: hour, minute: minute };
+  }
+
+  /** Opening hours in international ("en") or Habesha ("am") time; the period repeats only when it changes. */
+  function formatHoursRange(start, end, lang) {
+    var a = parseWall(start);
+    var b = parseWall(end);
+    if (!a || !b) return "";
+    if (lang !== "am") return format12(a.hour, a.minute) + " – " + format12(b.hour, b.minute);
+    var same = periodKey(a.hour) === periodKey(b.hour);
+    return formatHabesha(a.hour, a.minute) + " – " + formatHabesha(b.hour, b.minute, !same);
+  }
+
   var api = {
+    periodKey: periodKey,
+    formatHabesha: formatHabesha,
+    formatHoursRange: formatHoursRange,
+    parseWall: parseWall,
     toHabesha: toHabesha,
     fromHabesha: fromHabesha,
     format12: format12,
@@ -107,79 +139,4 @@
   };
   root.HabeshaTime = api;
   if (typeof module === "object" && module.exports) module.exports = api;
-
-  if (typeof document === "undefined") return;
-
-  /* Page wiring ---------------------------------------------------------- */
-  function describe(habesha) {
-    if (habesha.period === "night") return habesha.periodAm + " (night)";
-    return habesha.periodAm + " (" + habesha.periodEn + ") · " + habesha.halfAm + " (" + HALVES[habesha.half].en + ")";
-  }
-
-  function byQa(name) {
-    return document.querySelector('[data-qa="' + name + '"]');
-  }
-
-  function renderInternational() {
-    var parsed = parseInternational(byQa("intl-input").value);
-    var out = byQa("habesha-result");
-    var detail = byQa("habesha-result-detail");
-    if (!parsed) {
-      out.textContent = "—";
-      detail.textContent = "Enter a time such as 14:30 or 2:30 PM.";
-      return;
-    }
-    var habesha = toHabesha(parsed.hour, parsed.minute);
-    out.textContent = habesha.text;
-    detail.textContent = describe(habesha) + " — from " + format12(parsed.hour, parsed.minute) + " (" + format24(parsed.hour, parsed.minute) + ")";
-  }
-
-  function renderHabesha() {
-    var hour = Number(byQa("habesha-hour").value);
-    var minute = Number(byQa("habesha-minute").value);
-    var checked = document.querySelector('input[name="habesha-half"]:checked');
-    var half = checked ? checked.value : "day";
-    var other = half === "day" ? "night" : "day";
-    var main = fromHabesha(hour, minute, half);
-    var alt = fromHabesha(hour, minute, other);
-    var label = toHabesha(main.hour, main.minute);
-    byQa("intl-result").textContent = format12(main.hour, main.minute);
-    byQa("intl-result-detail").textContent =
-      format24(main.hour, main.minute) + " · " + label.periodAm + " (" + label.periodEn + ")";
-    byQa("intl-result-other").textContent =
-      "In the " + HALVES[other].en + " (" + HALVES[other].am + "), Habesha " + hour + ":" + pad(minute) +
-      " is " + format12(alt.hour, alt.minute) + ".";
-  }
-
-  function renderNow() {
-    var now = addisParts(new Date());
-    var habesha = toHabesha(now.hour, now.minute);
-    byQa("now-intl").textContent = format12(now.hour, now.minute);
-    byQa("now-habesha").textContent = habesha.text + " " + habesha.periodAm;
-  }
-
-  function start() {
-    document.documentElement.classList.remove("no-js");
-    var now = addisParts(new Date());
-    byQa("intl-input").value = format24(now.hour, now.minute);
-    byQa("intl-input").addEventListener("input", renderInternational);
-    byQa("habesha-hour").addEventListener("change", renderHabesha);
-    byQa("habesha-minute").addEventListener("change", renderHabesha);
-    document.querySelectorAll('input[name="habesha-half"]').forEach(function (input) {
-      input.addEventListener("change", renderHabesha);
-    });
-    document.querySelectorAll("[data-intl-preset]").forEach(function (button) {
-      button.addEventListener("click", function () {
-        byQa("intl-input").value = button.getAttribute("data-intl-preset");
-        renderInternational();
-      });
-    });
-    renderInternational();
-    renderHabesha();
-    renderNow();
-    setInterval(renderNow, 15000);
-  }
-
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
-  else start();
 })(typeof globalThis !== "undefined" ? globalThis : this);

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import type { ReactNode } from "react";
-import { useTranslation } from "@/lib/i18n";
+import { useBrandedTranslation } from "@/lib/platform-brand";
 import { WORLDS, clockLabel, type WorldId } from "../world";
 
 interface ChapterProps {
@@ -18,7 +18,7 @@ const REVEAL = {
 
 /** One hour of the day: the persona's story beside a live diorama. */
 const Chapter = ({ id, flip = false, children }: ChapterProps) => {
-  const { t } = useTranslation();
+  const { t } = useBrandedTranslation();
   const hour = clockLabel(WORLDS.find((world) => world.id === id)?.hour ?? 0);
   const key = (name: string) => t(`world.${id}.${name}`);
   return (

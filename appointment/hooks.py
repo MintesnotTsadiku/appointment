@@ -30,10 +30,28 @@ website_route_rules = [
         "to_route": "schedule",
     },
     # Server-rendered pages and crawler files. They must come before the SPA catch-all.
-    {
-        "from_route": "/tools/ethiopian-time-converter",
-        "to_route": "tools/ethiopian-time-converter",
-    },
+    # Free tools (appointment/www/tools), English at /tools/... and Amharic at /am/tools/...
+    *[
+        {"from_route": prefix + path, "to_route": "tools" + path}
+        for prefix in ("/tools", "/am/tools")
+        for path in (
+            "",
+            "/ethiopian-time-converter",
+            "/ethiopian-calendar-converter",
+            "/amharic-appointment-reminder",
+            "/business-hours-sign",
+        )
+    ],
+    # Public business directory (appointment/www/directory.py), English and Amharic.
+    {"from_route": "/directory", "to_route": "directory"},
+    {"from_route": "/directory/<category>", "to_route": "directory"},
+    {"from_route": "/directory/<category>/<area>", "to_route": "directory"},
+    {"from_route": "/am/directory", "to_route": "directory", "defaults": {"lang": "am"}},
+    {"from_route": "/am/directory/<category>", "to_route": "directory", "defaults": {"lang": "am"}},
+    {"from_route": "/am/directory/<category>/<area>", "to_route": "directory", "defaults": {"lang": "am"}},
+    # Partner program (appointment/www/partners.py); the language comes from the path.
+    {"from_route": "/partners", "to_route": "partners"},
+    {"from_route": "/am/partners", "to_route": "partners"},
     {"from_route": "/sitemap.xml", "to_route": "sitemap.xml"},
     {"from_route": "/robots.txt", "to_route": "robots.txt"},
     {
@@ -56,6 +74,8 @@ after_install = [
     # A new site marks every patch as done, so the Amharic catalog is imported here too.
     "appointment.patches.v0_1.import_frontend_translations.execute",
     "appointment.patches.v0_1.grant_content_doctype_permissions.execute",
+    # Fills empty platform brand and growth settings; never overwrites a saved value.
+    "appointment.growth.seed.ensure_defaults",
 ]
 
 after_sync = [
@@ -78,6 +98,16 @@ after_migrate = [
     # recipe manifests are code-owned; no database registry is reconciled.
     "appointment.public_experience.reconcile.ensure_public_site_unique_indexes",
     "appointment.patches.v0_1.grant_content_doctype_permissions.execute",
+    "appointment.growth.seed.ensure_defaults",
+    # Inserts missing directory categories and areas; never changes a saved row.
+    "appointment.growth.directory.ensure_defaults",
+]
+
+# Extra `/sitemap.xml` entries (appointment.growth.seo).
+appointment_sitemap_links = [
+    "appointment.www.directory.sitemap_links",
+    "appointment.growth.tools.registry.sitemap_links",
+    "appointment.growth.partner_page.sitemap_links",
 ]
 
 # include js, css files in header of web template
@@ -130,6 +160,12 @@ doctype_js = {
 # 	"methods": "appointment.utils.jinja_methods",
 # 	"filters": "appointment.utils.jinja_filters"
 # }
+jinja = {
+    "methods": [
+        "appointment.growth.jinja.platform_brand",
+        "appointment.growth.jinja.growth_settings",
+    ],
+}
 
 fixtures = [
     # Custom Fields for Appointment module
@@ -393,6 +429,11 @@ permission_query_conditions["Public Site"] = "appointment.public_experience.acce
 permission_query_conditions["Public Site Domain"] = "appointment.public_experience.access.public_site_domain_query"
 permission_query_conditions["Experience Release"] = "appointment.public_experience.access.experience_release_query"
 has_permission["Public Site"] = "appointment.public_experience.access.public_site_permission"
+# Sharing (workstream B): a site may not take another business's former address.
+_handlers = doc_events.setdefault("Public Site", {}).get("validate") or []
+doc_events["Public Site"]["validate"] = ([_handlers] if isinstance(_handlers, str) else list(_handlers)) + [
+    "appointment.growth.short_links.validate_public_site"
+]
 has_permission["Public Site Domain"] = "appointment.public_experience.access.public_site_domain_permission"
 has_permission["Experience Release"] = "appointment.public_experience.access.experience_release_permission"
 
@@ -437,3 +478,15 @@ for _newsletter_type, _newsletter_query in {
 }.items():
     permission_query_conditions[_newsletter_type] = f"appointment.content.newsletter.core.{_newsletter_query}"
     has_permission[_newsletter_type] = "appointment.content.newsletter.core.permission"
+
+# Growth referral loop (workstream C): sign-up attribution, qualification and customer vouchers.
+# Each handler is appended to a list so other doc_events on the same event keep working.
+for _doctype, _event, _handler in (
+    ("Organization", "after_insert", "appointment.growth.referrals.on_organization_insert"),
+    ("Provider", "on_update", "appointment.growth.referrals.on_provider_update"),
+    ("Appointment", "after_insert", "appointment.growth.customer_referrals.on_booking_insert"),
+    ("Appointment", "on_update", "appointment.growth.referrals.on_booking_change"),
+):
+    _handlers = doc_events.setdefault(_doctype, {}).get(_event) or []
+    doc_events[_doctype][_event] = ([_handlers] if isinstance(_handlers, str) else list(_handlers)) + [_handler]
+scheduler_events["daily"].append("appointment.growth.referrals.daily")

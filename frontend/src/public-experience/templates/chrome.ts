@@ -14,7 +14,8 @@ import type { ResolvedMode } from "../firstPaint";
 export type ChromeKey =
   | "navLabel" | "journal" | "gallery" | "services" | "team" | "visit" | "questions" | "backToSite"
   | "dark" | "light" | "switchToDark" | "switchToLight" | "skip"
-  | "minutes" | "duration" | "price" | "phone" | "email" | "hours" | "address" | "step";
+  | "minutes" | "duration" | "price" | "phone" | "email" | "hours" | "address" | "step"
+  | "websiteBy";
 
 export interface PublicChrome {
   t: (key: ChromeKey, values?: Record<string, string | number>) => string;

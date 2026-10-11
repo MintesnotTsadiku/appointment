@@ -1,0 +1,194 @@
+{%- from "appointment/templates/tools/icons.html" import icon -%}
+<!doctype html>
+<html lang="{{ lang }}" class="no-js" style="--brand-accent: {{ colors.accent }}; --brand-accent-ink: {{ colors.accent_ink }}; --brand-accent-dark: {{ colors.accent_dark }}; --brand-accent-dark-ink: {{ colors.accent_dark_ink }};">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ title }}</title>
+<meta name="description" content="{{ description }}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{ canonical }}">
+<link rel="alternate" hreflang="en" href="{{ alternates.en }}">
+<link rel="alternate" hreflang="am" href="{{ alternates.am }}">
+<link rel="alternate" hreflang="x-default" href="{{ alternates.en }}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{{ product_name }}">
+<meta property="og:title" content="{{ title }}">
+<meta property="og:description" content="{{ description }}">
+<meta property="og:url" content="{{ canonical }}">
+<meta property="og:locale" content="{{ 'am_ET' if lang == 'am' else 'en_US' }}">
+<meta property="og:locale:alternate" content="{{ 'en_US' if lang == 'am' else 'am_ET' }}">
+{%- if brand.og_image %}
+<meta property="og:image" content="{{ brand.og_image if brand.og_image.startswith('http') else brand.product_url ~ brand.og_image }}">
+{%- endif %}
+<meta name="twitter:card" content="summary">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="{{ colors.brand }}">
+<link rel="icon" href="{{ brand.mark or '/assets/appointment/appointment-logo.png' }}">
+<link rel="stylesheet" href="/assets/appointment/css/tools.css?v={{ asset_version }}">
+<link rel="stylesheet" href="/assets/appointment/css/partners.css?v={{ asset_version }}">
+<script type="application/ld+json">{{ faq_json_ld | safe }}</script>
+<script>document.documentElement.classList.replace("no-js", "js");</script>
+</head>
+<body class="partners-page">
+<a class="skip" href="#main">{{ t("skip") }}</a>
+<header class="wrap site-head">
+  <a class="brand" href="/" data-qa="partners-brand">
+    {%- if brand.mark %}<img src="{{ brand.mark }}" alt="" width="32" height="32">{% endif %}
+    <span>{{ product_name }}</span>
+  </a>
+  <nav class="head-nav" aria-label="{{ t('navLabel') }}">
+    <a href="#apply" class="nav-apply" data-qa="partners-nav-apply">{{ t("hero.apply") }}</a>
+    <a class="lang-switch" href="{{ alternates[other_lang] }}" hreflang="{{ other_lang }}" lang="{{ other_lang }}" data-qa="partners-lang-switch">{{ icon("globe") }}<span>{{ "English" if other_lang == "en" else "አማርኛ" }}</span></a>
+  </nav>
+</header>
+
+<main id="main" class="wrap">
+  <div class="hero p-hero">
+    <p class="eyebrow">{{ icon("sparkles") }}{{ t("eyebrow") }}</p>
+    <h1>{{ h1 }}</h1>
+    <p class="lede">{{ t("lede", product_name) }}</p>
+    <div class="btn-row p-hero-actions">
+      <a class="btn btn-primary" href="#apply" data-qa="partners-hero-apply">{{ t("hero.apply") }}{{ icon("arrow") }}</a>
+      <a class="btn btn-outline" href="#kit" data-qa="partners-hero-kit">{{ icon("send") }}{{ t("hero.kit") }}</a>
+    </div>
+    <ul class="p-facts" data-qa="partners-facts">
+      <li><strong>{{ numbers.reward }}</strong><span>{{ t("facts.reward") }}</span></li>
+      <li><strong>{{ t("facts.costValue") }}</strong><span>{{ t("facts.cost") }}</span></li>
+      <li><strong lang="am">አማ · EN</strong><span>{{ t("facts.languages") }}</span></li>
+    </ul>
+  </div>
+
+  <section class="block" aria-labelledby="who-title">
+    <h2 id="who-title">{{ t("who.title") }}</h2>
+    <ul class="p-audience" data-qa="partners-audience">
+      {%- for key, name, summary in audience %}
+      <li class="p-audience-item"><h3>{{ name }}</h3><p>{{ summary }}</p></li>
+      {%- endfor %}
+    </ul>
+  </section>
+
+  <section class="block" aria-labelledby="get-title">
+    <h2 id="get-title">{{ t("get.title") }}</h2>
+    <ul class="tool-list p-benefits" data-qa="partners-benefits">
+      <li><div class="tool-card"><span class="tool-icon">{{ icon("grid") }}</span>
+        <span><h3>{{ t("get.toolsTitle") }}</h3><p>{{ t("get.toolsText") }}</p></span></div></li>
+      <li><div class="tool-card"><span class="tool-icon">{{ icon("link") }}</span>
+        <span><h3>{{ t("get.codeTitle") }}</h3><p>{{ t("get.codeText", brand.short_host) }}</p></span></div></li>
+      <li><div class="tool-card" data-qa="partners-reward"><span class="tool-icon">{{ icon("sparkles") }}</span>
+        <span><h3>{{ t("get.rewardTitle") }}</h3><p>{{ t("get.rewardText", numbers.reward, numbers.threshold, numbers.business_reward) }}</p></span></div></li>
+    </ul>
+  </section>
+
+  <section class="block" aria-labelledby="how-title">
+    <h2 id="how-title">{{ t("how.title") }}</h2>
+    <ol class="p-steps" data-qa="partners-steps">
+      <li><span class="p-step-number" aria-hidden="true">1</span><h3>{{ t("how.step1") }}</h3><p>{{ t("how.step1Text") }}</p></li>
+      <li><span class="p-step-number" aria-hidden="true">2</span><h3>{{ t("how.step2") }}</h3><p>{{ t("how.step2Text", brand.short_host) }}</p></li>
+      <li><span class="p-step-number" aria-hidden="true">3</span><h3>{{ t("how.step3") }}</h3><p>{{ t("how.step3Text", numbers.threshold, numbers.reward) }}</p></li>
+    </ol>
+  </section>
+
+  <section class="block" id="kit" aria-labelledby="kit-title" data-qa="partners-kit">
+    <h2 id="kit-title">{{ icon("send") }}{{ t("kit.title") }}</h2>
+    <p class="lede">{{ t("kit.lede") }}</p>
+    <p class="note p-kit-note">{{ t("kit.placeholder", code_placeholder) }}</p>
+    <div class="messages p-kit">
+      {%- for post in kit %}
+      <article class="message-card" data-qa="partners-kit-{{ post.id }}">
+        <div class="message-head">
+          <h3>{{ post.label }}</h3>
+          <span class="pill" lang="{{ post.lang }}">{{ "አማ" if post.lang == "am" else "EN" }}</span>
+        </div>
+        <pre class="message-text" lang="{{ post.lang }}" id="kit-{{ post.id }}">{{ post.text }}</pre>
+        <div class="btn-row js-only">
+          <button type="button" class="btn btn-outline btn-sm" data-copy="kit-{{ post.id }}" data-copied="{{ t('kit.copied') }}" data-qa="partners-copy-{{ post.id }}">{{ icon("copy") }}<span>{{ t("kit.copy") }}</span></button>
+        </div>
+      </article>
+      {%- endfor %}
+    </div>
+  </section>
+
+  <section class="block p-apply" id="apply" aria-labelledby="apply-title">
+    <div class="card">
+      <h2 id="apply-title">{{ t("form.title") }}</h2>
+      <p class="card-sub">{{ t("form.lede") }}</p>
+      <div class="p-success" role="status" data-qa="partners-success" {% if form.state != "sent" %}hidden{% endif %}>
+        <span class="p-success-icon">{{ icon("check") }}</span>
+        <div><h3>{{ t("form.successTitle") }}</h3><p data-qa="partners-success-text">{{ form.message if form.state == "sent" else t("form.success") }}</p></div>
+      </div>
+      <form method="post" action="{{ canonical }}#apply" novalidate data-qa="partners-form" data-method="{{ apply_method }}"
+            data-msg-failed="{{ t('form.failed') }}" data-msg-rate="{{ t('form.rateLimited') }}" data-msg-fix="{{ t('form.fixErrors') }}"
+            data-msg-name="{{ t('form.nameRequired') }}" data-msg-email="{{ t('form.emailInvalid') }}" data-msg-kind="{{ t('form.kindRequired') }}"
+            data-msg-long="{{ t('form.tooLong') }}" data-msg-sending="{{ t('form.sending') }}"
+            {% if form.state == "sent" %}hidden{% endif %}>
+        {%- if csrf_token %}<input type="hidden" name="csrf_token" value="{{ csrf_token }}">{% endif %}
+        <div class="p-trap" aria-hidden="true"><label>{{ t("form.trap") }} <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+        <p class="p-form-error error-text" role="alert" data-qa="partners-form-error" {% if form.state not in ("invalid", "failed") %}hidden{% endif %}>{{ form.message if form.state in ("invalid", "failed") else "" }}</p>
+        <div class="row p-row">
+          <div class="field">
+            <label for="p-name">{{ t("form.name") }} <span class="p-req" aria-hidden="true">*</span></label>
+            <input class="input" id="p-name" name="name" type="text" autocomplete="name" required maxlength="140" value="{{ form['values'].get('name', '') }}" aria-describedby="p-name-error" {% if form.errors.name %}aria-invalid="true"{% endif %} data-qa="partners-name">
+            <p class="error-text" id="p-name-error" data-error-for="name" {% if not form.errors.name %}hidden{% endif %}>{{ form.errors.name or "" }}</p>
+          </div>
+          <div class="field">
+            <label for="p-organization">{{ t("form.organization") }}</label>
+            <input class="input" id="p-organization" name="organization" type="text" autocomplete="organization" maxlength="140" value="{{ form['values'].get('organization', '') }}" aria-describedby="p-organization-error" data-qa="partners-organization">
+            <p class="error-text" id="p-organization-error" data-error-for="organization" {% if not form.errors.organization %}hidden{% endif %}>{{ form.errors.organization or "" }}</p>
+          </div>
+        </div>
+        <div class="row p-row">
+          <div class="field">
+            <label for="p-email">{{ t("form.email") }} <span class="p-req" aria-hidden="true">*</span></label>
+            <input class="input" id="p-email" name="email" type="email" inputmode="email" autocomplete="email" required maxlength="140" value="{{ form['values'].get('email', '') }}" aria-describedby="p-email-error" {% if form.errors.email %}aria-invalid="true"{% endif %} data-qa="partners-email">
+            <p class="error-text" id="p-email-error" data-error-for="email" {% if not form.errors.email %}hidden{% endif %}>{{ form.errors.email or "" }}</p>
+          </div>
+          <div class="field">
+            <label for="p-phone">{{ t("form.phone") }}</label>
+            <input class="input" id="p-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="09…" value="{{ form['values'].get('phone', '') }}" data-qa="partners-phone">
+          </div>
+        </div>
+        <fieldset class="field" aria-describedby="p-kind-error">
+          <legend class="label">{{ t("form.kind") }} <span class="p-req" aria-hidden="true">*</span></legend>
+          <div class="seg p-kinds" data-qa="partners-kind">
+            {%- for key, label in kinds %}
+            <label><input type="radio" name="kind" value="{{ key }}" {% if form['values'].get('kind') == key %}checked{% endif %} data-qa="partners-kind-{{ key }}"><span>{{ label }}</span></label>
+            {%- endfor %}
+          </div>
+          <p class="error-text" id="p-kind-error" data-error-for="kind" {% if not form.errors.kind %}hidden{% endif %}>{{ form.errors.kind or "" }}</p>
+        </fieldset>
+        <div class="field">
+          <label for="p-message">{{ t("form.message") }}</label>
+          <textarea class="input p-textarea" id="p-message" name="message" rows="4" maxlength="1000" placeholder="{{ t('form.messagePlaceholder') }}" aria-describedby="p-message-error" data-qa="partners-message">{{ form['values'].get('message', '') }}</textarea>
+          <p class="error-text" id="p-message-error" data-error-for="message" {% if not form.errors.message %}hidden{% endif %}>{{ form.errors.message or "" }}</p>
+        </div>
+        <div class="p-submit-row">
+          <button type="submit" class="btn btn-primary p-submit" data-qa="partners-submit">{{ icon("send") }}<span>{{ t("form.submit") }}</span></button>
+          <p class="hint">{{ t("form.privacy") }}</p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="block faq" aria-labelledby="faq-title" data-qa="partners-faq">
+    <h2 id="faq-title">{{ t("faqTitle") }}</h2>
+    {%- for item in faq %}
+    <details{% if loop.first %} open{% endif %}>
+      <summary><h3>{{ item[0] }}</h3></summary>
+      <p>{{ item[1] }}</p>
+    </details>
+    {%- endfor %}
+  </section>
+</main>
+<footer class="wrap site-foot">
+  <nav aria-label="{{ t('navLabel') }}">
+    <a href="/">{{ t("home") }}</a>
+    <a href="{{ '/am/tools' if lang == 'am' else '/tools' }}">{{ t("tools") }}</a>
+    {%- if brand.support_email %}<a href="mailto:{{ brand.support_email }}">{{ brand.support_email }}</a>{% endif %}
+    {%- if brand.telegram_url %}<a href="{{ brand.telegram_url }}" rel="noopener">Telegram</a>{% endif %}
+  </nav>
+  <p>© {{ year }} {{ product_name }}{% if brand.tagline %} · {{ brand.tagline }}{% endif %}</p>
+</footer>
+<script src="/assets/appointment/js/partners.js?v={{ asset_version }}" defer></script>
+</body>
+</html>

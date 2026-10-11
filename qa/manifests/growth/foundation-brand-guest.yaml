@@ -1,0 +1,79 @@
+# Guests see the platform brand: the "Powered by" mark and invitation on a booking page, and the
+# brand name on the platform landing page. Read only; no fixture changes data.
+app: appointment
+base_url: http://127.0.0.146:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-foundation
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.growth_foundation_qa_fixtures.browser_values
+scenarios:
+- id: brand_guest_booking_desktop
+  title: Powered by on the Bloom scheduler (en, desktop)
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: '{demo_bloom_scheduler}'
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="powered-by"] [data-qa="powered-by-product"]:has-text("{qa_brand_product_name}")'
+    - type: visible_selector
+      value: '[data-qa="powered-by-cta"][href*="source=powered_by_page"]'
+  actions:
+  - action: scroll
+    delta_y: 5000
+  - action: screenshot
+    name: brand_guest_booking_desktop.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: brand_guest_booking_mobile
+  title: Powered by on the Bloom scheduler (en, mobile)
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{demo_bloom_scheduler}'
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="powered-by-product"]:has-text("{qa_brand_product_name}")'
+  actions:
+  - action: scroll
+    delta_y: 5000
+  - action: screenshot
+    name: brand_guest_booking_mobile.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: brand_guest_landing_desktop
+  title: Brand name on the platform landing page (en, desktop)
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="landing-brand-name"]:text-is("{qa_brand_product_name}")'
+  actions:
+  - action: screenshot
+    name: brand_guest_landing_desktop.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

@@ -1,11 +1,13 @@
 import type { BookingTemplateProps, TemplateProps } from "../types";
 import { action, brandLogo, contentImage, designImage, localized, records, section } from "../content";
+import { useTemplateCredit } from "../credit";
 import { usePublicChrome } from "../chrome";
 import "./meron.css";
 import { MeronNewsletter } from "./MeronNewsletter";
 
 export function MeronSite({ snapshot, locale, applicationName, publicRoot, rootStyle, mode, toggleMode }: TemplateProps) {
   const chrome = usePublicChrome(locale);
+  const credit = useTemplateCredit(chrome);
   const design = snapshot.compiledDesign;
   const hero = section(snapshot.sections, "hero");
   const services = section(snapshot.sections, "services");
@@ -55,7 +57,7 @@ export function MeronSite({ snapshot, locale, applicationName, publicRoot, rootS
       <section className="meron-faq" id="faq"><div><h2>{localized(faq.title, locale)}</h2><i></i></div><div>{records(faq.items).map((item, index) => <details key={index}><summary>{localized(item.question, locale)}<span aria-hidden="true">+</span></summary><p>{localized(item.answer, locale)}</p></details>)}</div></section>
       <section className="meron-location" id="contact">{locationImage ? <img src={locationImage.src} alt={locationImage.alt} /> : null}<div><h2>{localized(locations.title, locale)}</h2><i></i>{location ? <address>{localized(location.address, locale)}<br />{localized(location.hours, locale)}<br />{String(location.phone || "")}</address> : null}{finalAction ? <a className="meron-button" href={finalAction.href}>{finalAction.label}</a> : null}</div></section>
     <MeronNewsletter snapshot={snapshot} applicationName={applicationName} locale={locale} publicRoot={publicRoot} /></main>
-    <footer className="meron-footer"><a href={publicRoot}>{logo ? <img className="pe-brand-logo" src={logo} alt="" /> : null}{applicationName}</a>{localized(footer.body, locale) ? <small>{localized(footer.body, locale)}</small> : null}</footer>
+    <footer className="meron-footer"><a href={publicRoot}>{logo ? <img className="pe-brand-logo" src={logo} alt="" /> : null}{applicationName}</a>{localized(footer.body, locale) ? <small>{localized(footer.body, locale)}</small> : null}{credit ? <p className="meron-credit" lang={locale} data-qa="template-credit">{credit.before}<a href={credit.href} rel="noopener" data-qa="template-credit-link">{credit.product}</a>{credit.after}</p> : null}</footer>
   </div>;
 }
 

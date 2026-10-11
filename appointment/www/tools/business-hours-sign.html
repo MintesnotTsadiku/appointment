@@ -1,0 +1,91 @@
+{% extends "appointment/templates/tools/base.html" %}
+{% from "appointment/templates/tools/icons.html" import icon %}
+
+{% block hero %}
+<p class="lede">{{ t("lede") }}</p>
+{% endblock %}
+
+{% block content %}
+<div class="tool-grid split" data-qa="sign-tool">
+  <section class="card js-only" aria-labelledby="editor-title">
+    <h2 id="editor-title">{{ icon("clock") }}{{ t("editorTitle") }}</h2>
+    <div class="field">
+      <label for="s-business">{{ t("business") }}</label>
+      <input id="s-business" class="input" type="text" maxlength="60" autocomplete="organization" value="{{ business_example }}" data-qa="s-business">
+    </div>
+    <ul class="days" data-qa="s-days"></ul>
+    <div class="day-tools">
+      <button type="button" class="btn btn-outline btn-sm" data-qa="s-copy-weekdays">{{ icon("copy") }}<span>{{ t("copyWeekdays") }}</span></button>
+    </div>
+    <div class="row" style="margin-top: 16px">
+      <div class="field">
+        <label for="s-phone">{{ t("phone") }} <span class="hint">({{ t("optional") }})</span></label>
+        <input id="s-phone" class="input" type="tel" maxlength="30" autocomplete="tel" placeholder="{{ t('phoneExample') }}" data-qa="s-phone">
+      </div>
+      <div class="field">
+        <label for="s-link">{{ t("bookingLink") }} <span class="hint">({{ t("optional") }})</span></label>
+        <input id="s-link" class="input" type="text" maxlength="80" inputmode="url" autocomplete="url" placeholder="{{ t('bookingExample') }}" data-qa="s-link">
+      </div>
+    </div>
+    <fieldset class="field">
+      <legend class="label">{{ t("theme") }}</legend>
+      <div class="seg" role="radiogroup" aria-label="{{ t('theme') }}">
+        <label><input type="radio" name="s-theme" value="light" checked data-qa="s-theme-light"><span>{{ t("themeLight") }}</span></label>
+        <label><input type="radio" name="s-theme" value="dark" data-qa="s-theme-dark"><span>{{ t("themeDark") }}</span></label>
+        <label><input type="radio" name="s-theme" value="brand" data-qa="s-theme-brand"><span>{{ t("themeBrand") }}</span></label>
+      </div>
+      <label class="color-field" data-qa="s-color-field" hidden>
+        <input type="color" value="{{ default_color }}" data-qa="s-color">
+        <span>{{ t("color") }}</span>
+      </label>
+    </fieldset>
+    <fieldset class="field">
+      <legend class="label">{{ t("paper") }}</legend>
+      <div class="seg" role="radiogroup" aria-label="{{ t('paper') }}">
+        <label><input type="radio" name="s-paper" value="A4" checked data-qa="s-paper-a4"><span>A4</span></label>
+        <label><input type="radio" name="s-paper" value="A5" data-qa="s-paper-a5"><span>A5</span></label>
+      </div>
+    </fieldset>
+  </section>
+
+  <section class="sign-column sticky" aria-labelledby="preview-title">
+    <h2 id="preview-title" class="sr-only">{{ t("previewTitle") }}</h2>
+    <div class="sign-stage">
+      <article class="sign" data-theme="light" style="--sign-brand: {{ default_color }}; --sign-brand-ink: {{ default_color_ink }};" data-qa="sign">
+       <div class="sign-inner">
+        <p class="sign-kicker"><span lang="am">{{ sign_strings.kicker.am }}</span><span>{{ sign_strings.kicker.en }}</span></p>
+        <h3 class="sign-name" data-qa="sign-name">{{ business_example }}</h3>
+        <div class="sign-rule"></div>
+        <table class="sign-hours" data-qa="sign-hours">
+          <tbody>
+            {%- for row in rows %}
+            <tr data-qa="sign-row">
+              <th scope="row"><span lang="am">{{ row.amharic }}</span><small>{{ row.english }}</small></th>
+              {%- if row.ranges %}
+              <td>{% for r in row.ranges %}<span class="intl">{{ r.intl }}</span><span class="habesha" lang="am">{{ r.habesha }}</span>{% endfor %}</td>
+              {%- else %}
+              <td class="closed"><span lang="am">{{ sign_strings.closed.am }}</span> · {{ sign_strings.closed.en }}</td>
+              {%- endif %}
+            </tr>
+            {%- endfor %}
+          </tbody>
+        </table>
+        <div class="sign-contact" data-qa="sign-contact"></div>
+        <p class="sign-credit" data-qa="sign-credit">{{ t("credit", '<a href="' ~ link_back ~ '">' ~ link_back_short ~ '</a>') | safe }}</p>
+       </div>
+      </article>
+    </div>
+    <div class="btn-row js-only" style="margin-top: 14px; justify-content: center">
+      <button type="button" class="btn btn-primary" data-qa="s-print">{{ icon("printer") }}<span>{{ t("print") }}</span></button>
+      <a class="btn btn-outline" href="?view=print" target="_blank" rel="noopener" data-qa="s-print-preview">{{ t("printPreview") }}</a>
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block data %}<script type="application/json" id="tool-data">{{ tool_data | safe }}</script>{% endblock %}
+{% block scripts %}
+<script src="/assets/appointment/js/habesha-time.js?v={{ asset_version }}" defer></script>
+<script src="/assets/appointment/js/tools/tools-common.js?v={{ asset_version }}" defer></script>
+<script src="/assets/appointment/js/tools/hours-sign.js?v={{ asset_version }}" defer></script>
+{% endblock %}

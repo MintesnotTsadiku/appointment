@@ -3,6 +3,7 @@ import { useRef, type CSSProperties, type ReactNode } from "react";
 import type { BookingTemplateProps, TemplateProps } from "../types";
 import type { ContentRecord } from "../content";
 import { action, brandLogo, contentImage, designImage, durationMinutes, formatPrice, localized, records, section, sectionImage } from "../content";
+import { useTemplateCredit } from "../credit";
 import { usePublicChrome, type PublicChrome } from "../chrome";
 import { useReveal, useScrollState } from "../motion";
 import "./selam.css";
@@ -48,6 +49,7 @@ function Bar({ logo, name, root, chrome, mode, toggleMode, children }: { logo?: 
 
 export function SelamSite({ snapshot, locale, applicationName, publicRoot, rootStyle, mode, toggleMode }: TemplateProps) {
   const chrome = usePublicChrome(locale);
+  const credit = useTemplateCredit(chrome);
   const root = useRef<HTMLDivElement>(null);
   useReveal(root, locale);
   const design = snapshot.compiledDesign;
@@ -198,7 +200,10 @@ export function SelamSite({ snapshot, locale, applicationName, publicRoot, rootS
       <div className="sm-wrap sm-footer-inner">
         <p className="sm-footer-name">{applicationName}</p>
         {localized(footer.body, locale) ? <p className="sm-muted">{localized(footer.body, locale)}</p> : null}
-        <small>© {new Date().getFullYear()} {applicationName}</small>
+        <div className="sm-legal">
+          <small>© {new Date().getFullYear()} {applicationName}</small>
+          {credit ? <p className="sm-credit" lang={locale} data-qa="template-credit">{credit.before}<a href={credit.href} rel="noopener" data-qa="template-credit-link">{credit.product}</a>{credit.after}</p> : null}
+        </div>
       </div>
     </footer>
   </div>;

@@ -28,3 +28,9 @@
 
 .meron-site[style*="--pe-selected-font-display"] :is(h1,h2,h3),.meron-booking[style*="--pe-selected-font-display"] :is(h1,h2,h3){font-family:var(--pe-selected-font-display,inherit)}
 .meron-site[style*="--pe-selected-font-body"] :is(p,li,address),.meron-booking[style*="--pe-selected-font-body"] p{font-family:var(--pe-selected-font-body)}
+
+/* Platform credit: spaced caps aligned right, like the atelier's label. */
+.meron-credit,.meron-content-credit{grid-column:1/-1;flex-basis:100%;margin:0;text-align:right;font-size:12px;letter-spacing:.2em;text-transform:uppercase}
+.meron-credit:lang(am),.meron-content-credit:lang(am){letter-spacing:0;text-transform:none;font-size:13px}
+.meron-credit a,.meron-content-credit a{display:inline-block;padding-block:10px;text-decoration:none;border-bottom:1px solid var(--wine);line-height:1.2}
+.meron-content-footer{flex-wrap:wrap}

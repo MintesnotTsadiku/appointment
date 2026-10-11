@@ -1,0 +1,269 @@
+# Guests convert dates on the free Ethiopian calendar converter (en + am). Nothing is saved.
+app: appointment
+base_url: http://127.0.0.146:47800
+default_role: Guest
+auth:
+  type: none
+fixtures:
+  provider: appointment.tests.tools_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-tools-calendar-light
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+scenarios:
+- id: calendar_en_desktop_light
+  title: 'Calendar (en, desktop, light): today server-side; 2024-09-11 is Meskerem 1, 2017; Pagume 6, 2015 is 2023-09-11'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /tools/ethiopian-calendar-converter
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: text_contains
+      value: '{qa_today_en}'
+      selector: '[data-qa="calendar-today-ethiopian"]'
+    - type: visible_selector
+      selector: '[data-qa="months-table"]'
+    - type: visible_selector
+      selector: '[data-qa="tools-lang-switch"]'
+    - type: visible_selector
+      selector: '[data-qa="tool-cta"]'
+    - type: visible_selector
+      selector: '[data-qa="tool-faq"]'
+  actions:
+  - action: screenshot
+    name: calendar_en_desktop_light-1-open.png
+    full_page: false
+  - action: fill
+    selector: '[data-qa="g-year"]'
+    value: '2024'
+  - action: select
+    selector: '[data-qa="g-month"]'
+    value: '9'
+  - action: select
+    selector: '[data-qa="g-day"]'
+    value: '11'
+    assertions:
+    - type: text_contains
+      value: Meskerem 1, 2017
+      selector: '[data-qa="g-result"]'
+  - action: fill
+    selector: '[data-qa="e-year"]'
+    value: '2015'
+  - action: select
+    selector: '[data-qa="e-month"]'
+    value: '13'
+  - action: select
+    selector: '[data-qa="e-day"]'
+    value: '6'
+    assertions:
+    - type: text_contains
+      value: September 11, 2023
+      selector: '[data-qa="e-result"]'
+    - type: text_contains
+      value: leap year
+      selector: '[data-qa="e-result-leap"]'
+  - action: screenshot
+    name: calendar_en_desktop_light-2-converted.png
+    full_page: false
+  - action: screenshot
+    name: calendar_en_desktop_light-3-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: calendar_en_mobile_light
+  title: 'Calendar (en, mobile, light): today server-side; 2024-09-11 is Meskerem 1, 2017; Pagume 6, 2015 is 2023-09-11'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /tools/ethiopian-calendar-converter
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: text_contains
+      value: '{qa_today_en}'
+      selector: '[data-qa="calendar-today-ethiopian"]'
+    - type: visible_selector
+      selector: '[data-qa="months-table"]'
+    - type: visible_selector
+      selector: '[data-qa="tools-lang-switch"]'
+    - type: visible_selector
+      selector: '[data-qa="tool-cta"]'
+    - type: visible_selector
+      selector: '[data-qa="tool-faq"]'
+  actions:
+  - action: screenshot
+    name: calendar_en_mobile_light-1-open.png
+    full_page: false
+  - action: fill
+    selector: '[data-qa="g-year"]'
+    value: '2024'
+  - action: select
+    selector: '[data-qa="g-month"]'
+    value: '9'
+  - action: select
+    selector: '[data-qa="g-day"]'
+    value: '11'
+    assertions:
+    - type: text_contains
+      value: Meskerem 1, 2017
+      selector: '[data-qa="g-result"]'
+  - action: fill
+    selector: '[data-qa="e-year"]'
+    value: '2015'
+  - action: select
+    selector: '[data-qa="e-month"]'
+    value: '13'
+  - action: select
+    selector: '[data-qa="e-day"]'
+    value: '6'
+    assertions:
+    - type: text_contains
+      value: September 11, 2023
+      selector: '[data-qa="e-result"]'
+    - type: text_contains
+      value: leap year
+      selector: '[data-qa="e-result-leap"]'
+  - action: screenshot
+    name: calendar_en_mobile_light-2-converted.png
+    full_page: false
+  - action: screenshot
+    name: calendar_en_mobile_light-3-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: calendar_am_desktop_light
+  title: 'Calendar (am, desktop, light): today server-side; 2024-09-11 is Meskerem 1, 2017; Pagume 6, 2015 is 2023-09-11'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /am/tools/ethiopian-calendar-converter
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: text_contains
+      value: '{qa_today_am}'
+      selector: '[data-qa="calendar-today-ethiopian"]'
+    - type: visible_selector
+      selector: '[data-qa="months-table"]'
+    - type: visible_selector
+      selector: '[data-qa="tools-lang-switch"]'
+    - type: visible_selector
+      selector: '[data-qa="tool-cta"]'
+    - type: visible_selector
+      selector: '[data-qa="tool-faq"]'
+  actions:
+  - action: screenshot
+    name: calendar_am_desktop_light-1-open.png
+    full_page: false
+  - action: fill
+    selector: '[data-qa="g-year"]'
+    value: '2024'
+  - action: select
+    selector: '[data-qa="g-month"]'
+    value: '9'
+  - action: select
+    selector: '[data-qa="g-day"]'
+    value: '11'
+    assertions:
+    - type: text_contains
+      value: መስከረም 1 ቀን 2017 ዓ.ም.
+      selector: '[data-qa="g-result"]'
+  - action: fill
+    selector: '[data-qa="e-year"]'
+    value: '2015'
+  - action: select
+    selector: '[data-qa="e-month"]'
+    value: '13'
+  - action: select
+    selector: '[data-qa="e-day"]'
+    value: '6'
+    assertions:
+    - type: text_contains
+      value: ሴፕቴምበር 11 ቀን 2023
+      selector: '[data-qa="e-result"]'
+    - type: text_contains
+      value: የዘመን መለወጫ
+      selector: '[data-qa="e-result-leap"]'
+  - action: screenshot
+    name: calendar_am_desktop_light-2-converted.png
+    full_page: false
+  - action: screenshot
+    name: calendar_am_desktop_light-3-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: calendar_am_mobile_light
+  title: 'Calendar (am, mobile, light): today server-side; 2024-09-11 is Meskerem 1, 2017; Pagume 6, 2015 is 2023-09-11'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /am/tools/ethiopian-calendar-converter
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: text_contains
+      value: '{qa_today_am}'
+      selector: '[data-qa="calendar-today-ethiopian"]'
+    - type: visible_selector
+      selector: '[data-qa="months-table"]'
+    - type: visible_selector
+      selector: '[data-qa="tools-lang-switch"]'
+    - type: visible_selector
+      selector: '[data-qa="tool-cta"]'
+    - type: visible_selector
+      selector: '[data-qa="tool-faq"]'
+  actions:
+  - action: screenshot
+    name: calendar_am_mobile_light-1-open.png
+    full_page: false
+  - action: fill
+    selector: '[data-qa="g-year"]'
+    value: '2024'
+  - action: select
+    selector: '[data-qa="g-month"]'
+    value: '9'
+  - action: select
+    selector: '[data-qa="g-day"]'
+    value: '11'
+    assertions:
+    - type: text_contains
+      value: መስከረም 1 ቀን 2017 ዓ.ም.
+      selector: '[data-qa="g-result"]'
+  - action: fill
+    selector: '[data-qa="e-year"]'
+    value: '2015'
+  - action: select
+    selector: '[data-qa="e-month"]'
+    value: '13'
+  - action: select
+    selector: '[data-qa="e-day"]'
+    value: '6'
+    assertions:
+    - type: text_contains
+      value: ሴፕቴምበር 11 ቀን 2023
+      selector: '[data-qa="e-result"]'
+    - type: text_contains
+      value: የዘመን መለወጫ
+      selector: '[data-qa="e-result-leap"]'
+  - action: screenshot
+    name: calendar_am_mobile_light-2-converted.png
+    full_page: false
+  - action: screenshot
+    name: calendar_am_mobile_light-3-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors

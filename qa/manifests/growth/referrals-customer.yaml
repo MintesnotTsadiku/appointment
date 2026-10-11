@@ -1,0 +1,136 @@
+# Run with fixture appointment.tests.growth_referrals_qa_fixtures ($G/qa.sh runs setup before and cleanup after).
+# Customer referrals at Meskerem Hair Studio (offer on, both friends get 10%): a guest books and gets a
+# personal share link; a friend opens Hanna's link, sees "You were invited by Hanna" and books with it.
+app: appointment
+base_url: http://127.0.0.146:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-referrals-customer
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.growth_referrals_qa_fixtures.browser_values
+scenarios:
+- id: ref_customer_share_en_mobile
+  title: 'Guest books and sees the "Bring a friend" share card (en, mobile, light)'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /schedule/org/{qa_ref_owner_slug}
+    assertions:
+    - type: network_idle
+  actions:
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_ref_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_ref_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: wait_for
+    selector: '#userName'
+  - action: fill
+    selector: '#userName'
+    value: Abel Girma
+  - action: fill
+    selector: '#userEmail'
+    value: '{qa_ref_guest_1}'
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: book_time_slot
+      method: POST
+      status_min: 200
+      status_max: 299
+      timeout_ms: 25000
+    - type: network_request
+      url_contains: customer_referral_api.share
+      status: 200
+      timeout_ms: 15000
+    - type: visible_selector
+      value: '[data-qa="customer-share-card"]'
+    - type: visible_selector
+      value: '[data-qa="customer-share-telegram"][href^="https://t.me/share/url?url="][href*="ref%3DABEL"]'
+    - type: text_contains
+      value: 10% off your next visit
+  - action: scroll
+    selector: '[data-qa="customer-share-card"]'
+  - action: screenshot
+    name: ref_customer_share_en_mobile-1-card.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: ref_customer_friend_en_desktop
+  title: 'Friend opens the share link, sees the invite and books with it (en, desktop, light)'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /schedule/org/{qa_ref_owner_slug}?ref={qa_ref_customer_code}
+    assertions:
+    - type: network_idle
+  actions:
+  - action: wait_for
+    selector: '[data-qa="customer-invite-banner"]'
+    assertions:
+    - type: text_contains
+      value: You were invited by Hanna
+    - type: text_contains
+      value: Book now and get 10% off your next visit.
+  - action: screenshot
+    name: ref_customer_friend_en_desktop-1-invite.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_ref_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_ref_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: wait_for
+    selector: '#userName'
+  - action: fill
+    selector: '#userName'
+    value: Meron Haile
+  - action: fill
+    selector: '#userEmail'
+    value: '{qa_ref_guest_2}'
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: book_time_slot
+      method: POST
+      status_min: 200
+      status_max: 299
+      timeout_ms: 25000
+    - type: visible_selector
+      value: '[data-qa="booking-success"]'
+    - type: visible_selector
+      value: '[data-qa="customer-share-card"]'
+  - action: screenshot
+    name: ref_customer_friend_en_desktop-2-booked.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors

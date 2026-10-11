@@ -5,6 +5,9 @@ import "./fonts.css";
 import "./global.css";
 import "./components/workspace/workspace-controls.css";
 import App from "./app.tsx";
+import { captureReferralSource } from "./lib/referral-source";
+
+captureReferralSource();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

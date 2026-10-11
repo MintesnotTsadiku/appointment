@@ -1,0 +1,58 @@
+# Partners page in Amharic (/am/partners) on a phone in dark mode: content, kit and inline validation.
+# Nothing is submitted, so no fixture is needed. See docs/growth/MARKETING.md.
+app: appointment
+base_url: http://127.0.0.146:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-marketing-partners-am
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: dark
+scenarios:
+- id: marketing_partners_am_mobile
+  title: 'Partners page (am, mobile 390, dark)'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /am/partners
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: text_contains
+      selector: 'h1'
+      value: ለአባላትዎ
+    - type: visible_selector
+      value: '[data-qa="partners-lang-switch"][href$="/partners"]'
+  actions:
+  - action: screenshot
+    name: partners-am-hero.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="partners-hero-kit"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="partners-kit-signup-am"]'
+      value: ref=PARTNERCODE
+  - action: screenshot
+    name: partners-am-kit.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="partners-hero-apply"]'
+  - action: click
+    selector: '[data-qa="partners-submit"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-error-for="name"]'
+      value: ስምዎን ያስገቡ
+  - action: screenshot
+    name: partners-am-errors.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

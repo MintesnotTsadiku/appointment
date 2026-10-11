@@ -28,6 +28,7 @@ import { ServiceSelector } from "@/pages/booking-v2/components/ServiceSelector";
 import { DateTimeSelector } from "@/pages/booking-v2/components/DateTimeSelector";
 import { BookingForm } from "@/pages/booking-v2/components/BookingForm";
 import { ConfirmationModal } from "@/pages/booking-v2/components/ConfirmationModal";
+import CustomerInviteBanner from "@/components/growth-referrals/CustomerInviteBanner";
 import { PaymentSummary, type CheckoutQuote, type PaymentMethod } from "@/pages/booking-v2/components/PaymentSummary";
 import { QuantityPicker } from "@/pages/booking-v2/components/QuantityPicker";
 import { useTimeSlots } from "@/pages/booking-v2/hooks/useTimeSlots";
@@ -579,6 +580,8 @@ const OrganizationAppointmentV2 = () => {
         </div>
 
         <div className="booking-stage relative z-10">
+        {/* A friend's share link: "You were invited by …" (customer referrals). */}
+        {currentPhase !== 'success' && <CustomerInviteBanner slug={orgSlug} className="mx-auto mt-4 w-[calc(100%-2rem)] max-w-3xl" />}
         {/* Phase 1: Service Selection */}
           <AnimatePresence mode="wait">
         {currentPhase === 'service' && organization && !serviceSlug && (

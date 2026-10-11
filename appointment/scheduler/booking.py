@@ -484,8 +484,9 @@ def book(
             status="Pending",
             message=_("Booking held until payment."),
             payment=payments.public_view(payment),
-            manage_path=self_service.manage_url(doc).replace(frappe.utils.get_url(), ""),
         )
+    # The booker's own manage link; the confirmation screen also uses it for the customer-to-business prompt.
+    result["manage_path"] = self_service.manage_url(doc).replace(frappe.utils.get_url(), "")
     result["notification_status"] = notifications.status_of(doc)
     frappe.db.set_value("Appointment", doc.name, "request_result", json.dumps(result), update_modified=False)
     _count_guest_email(business_name, user_email)

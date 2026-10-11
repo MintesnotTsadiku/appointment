@@ -1,0 +1,105 @@
+# Run with fixture appointment.tests.growth_referrals_qa_fixtures ($G/qa.sh runs setup before and cleanup after).
+# The referrer (Meskerem Hair Studio) on the Grow page: invite code and link, the businesses it invited
+# (one in progress, one rewarded) and the "Bring a friend" offer; then at reception the friend's booking
+# shows "Referred by Hanna Bekele" and staff mark the friend's welcome reward as used.
+app: appointment
+base_url: http://127.0.0.146:47800
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.growth_referrals_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-growth-referrals-owner
+default_role: Staff
+auth:
+  type: frappe_session
+  username: qa-referrals-owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+scenarios:
+- id: ref_owner_grow_en_desktop
+  title: 'Owner: invite code, invited businesses and the customer offer on Grow (en, desktop, light)'
+  viewport: &desktop
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /grow
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="grow-referrals"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="grow-referral-code"]'
+    assertions:
+    - type: text_contains
+      value: '{qa_ref_code}'
+    - type: visible_selector
+      value: '[data-qa="grow-referral-telegram"][href^="https://t.me/share/url?url="][href*="ref%3D{qa_ref_code}"]'
+    - type: text_contains
+      value: Kalkidan Nail Bar
+    - type: text_contains
+      value: Saba Spa
+    - type: text_contains
+      value: Reward earned
+    - type: visible_selector
+      value: '[data-qa="grow-referrals-earned"]'
+  - action: screenshot
+    name: ref_owner_grow_en_desktop-1-referrals.png
+    full_page: false
+  - action: scroll
+    selector: '[data-qa="grow-customer-offer"]'
+  - action: wait_for
+    selector: '[data-qa="customer-offer-enabled"][data-state="checked"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="customer-offer-who-both"][data-state="on"]'
+    - type: text_contains
+      value: Lulit Tesfaye
+  - action: screenshot
+    name: ref_owner_grow_en_desktop-2-offer.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: ref_owner_reception_en_desktop
+  title: 'Reception: "Referred by" on the friend booking and a reward marked used (en, desktop, light)'
+  viewport: *desktop
+  checks: []
+  routes:
+  - path: /reception?date={qa_ref_day}
+    assertions:
+    - type: network_idle
+  actions:
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{qa_ref_friend_booking}"]'
+  - action: press
+    selector: '[data-qa-appointment-name="{qa_ref_friend_booking}"]'
+    key: Enter
+  - action: wait_for
+    selector: '[data-qa="booking-referred-by"]'
+    assertions:
+    - type: text_contains
+      value: Referred by
+    - type: text_contains
+      value: Hanna Bekele
+    - type: visible_selector
+      value: '[data-qa="booking-referral-vouchers"] [data-qa="referral-reward-redeem"]'
+  - action: screenshot
+    name: ref_owner_reception_en_desktop-1-referred.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-referral-vouchers"] [data-qa="referral-reward-redeem"]'
+    assertions:
+    - type: network_request
+      url_contains: customer_referral_api.redeem
+      status: 200
+  - action: screenshot
+    name: ref_owner_reception_en_desktop-2-redeemed.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

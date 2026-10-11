@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useRef } from "react";
-import { useTranslation } from "@/lib/i18n";
+import { useBrandedTranslation } from "@/lib/platform-brand";
 import { useStoryStep } from "./useStoryStep";
 
 const SLOTS = ["07:00", "07:30", "08:15", "09:00", "10:30", "11:15"];
@@ -8,7 +8,7 @@ const DATES = [28, 29, 30, 1, 2];
 
 /** Hana's booking page fills itself in while the assistant narrates. */
 const SoloStage = () => {
-  const { t } = useTranslation();
+  const { t, brand: { shortHost } } = useBrandedTranslation();
   const ref = useRef<HTMLDivElement>(null);
   const step = useStoryStep(ref, 4);
   const feed = [
@@ -24,7 +24,7 @@ const SoloStage = () => {
           <span className="lw-avatar">H</span>
           <div>
             <strong>{t("world.solo.page")}</strong>
-            <span className="lw-mono-sm">meet.et/hana</span>
+            <span className="lw-mono-sm">{shortHost}/hana</span>
           </div>
         </div>
         <div className="lw-dates">

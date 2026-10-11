@@ -1,0 +1,24 @@
+{
+  "about": "Shared test vectors for appointment/growth/ethiopian_calendar.py and appointment/public/js/tools/ethiopian-calendar.js. Each pair is [Gregorian ISO date, [Ethiopian year, month, day]]; month 13 is Pagume.",
+  "pairs": [
+    ["2024-09-11", [2017, 1, 1], "Enkutatash (Ethiopian New Year) 2017"],
+    ["2023-09-12", [2016, 1, 1], "Enkutatash 2016 falls on 12 September after a leap year"],
+    ["2023-09-11", [2015, 13, 6], "Pagume 6 in the leap year 2015"],
+    ["2027-09-11", [2019, 13, 6], "Pagume 6 in the leap year 2019"],
+    ["2027-09-12", [2020, 1, 1], "Enkutatash 2020"],
+    ["2026-09-10", [2018, 13, 5], "Pagume 5, last day of the common year 2018"],
+    ["2026-09-11", [2019, 1, 1], "Enkutatash 2019"],
+    ["2025-01-07", [2017, 4, 29], "Genna (Ethiopian Christmas) on Tahsas 29"],
+    ["2024-01-07", [2016, 4, 28], "Genna on Tahsas 28 in the year after Pagume 6"],
+    ["2025-01-19", [2017, 5, 11], "Timket (Epiphany)"],
+    ["2025-03-02", [2017, 6, 23], "Adwa Victory Day"],
+    ["2025-09-27", [2018, 1, 17], "Meskel"],
+    ["2024-02-29", [2016, 6, 21], "Gregorian leap day"],
+    ["2026-10-12", [2019, 2, 2], "A normal day in Tikimt"],
+    ["1970-01-01", [1962, 4, 23], "Unix epoch"],
+    ["2000-01-01", [1992, 4, 22], "Start of the year 2000"]
+  ],
+  "leap_years": [2011, 2015, 2019, 2023],
+  "common_years": [2016, 2017, 2018, 2020],
+  "invalid": [[2016, 13, 6], [2017, 14, 1], [2017, 1, 31], [2017, 0, 5]]
+}

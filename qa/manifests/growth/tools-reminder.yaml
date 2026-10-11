@@ -1,0 +1,413 @@
+# Guests write Amharic and English appointment reminders. Nothing is saved.
+app: appointment
+base_url: http://127.0.0.146:47800
+default_role: Guest
+auth:
+  type: none
+fixtures:
+  provider: appointment.tests.tools_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-tools-reminder
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+scenarios:
+- id: reminder_en_desktop
+  title: 'Reminder (en, desktop): Amharic + English messages, Habesha time, 3 Unicode SMS, Telegram share'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /tools/amharic-appointment-reminder
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: text_contains
+      value: Send these reminders automatically
+      selector: '[data-qa="tool-cta"]'
+    - type: visible_selector
+      selector: '[data-qa="r-message-am"]'
+    - type: visible_selector
+      selector: '[data-qa="tools-lang-switch"]'
+    - type: visible_selector
+      selector: '[data-qa="tool-cta"]'
+    - type: visible_selector
+      selector: '[data-qa="tool-faq"]'
+  actions:
+  - action: fill
+    selector: '[data-qa="r-business"]'
+    value: ሰላም የውበት ሳሎን
+  - action: fill
+    selector: '[data-qa="r-customer"]'
+    value: ሐና
+  - action: fill
+    selector: '[data-qa="r-service"]'
+    value: ፀጉር ሥራ
+  - action: fill
+    selector: '[data-qa="r-location"]'
+    value: ቦሌ፣ ኤድና ሞል አጠገብ
+  - action: select
+    selector: '[data-qa="r-e-year"]'
+    value: '{qa_eth_year}'
+  - action: select
+    selector: '[data-qa="r-e-month"]'
+    value: '2'
+  - action: select
+    selector: '[data-qa="r-e-day"]'
+    value: '5'
+  - action: select
+    selector: '[data-qa="r-hour"]'
+    value: '3'
+  - action: select
+    selector: '[data-qa="r-minute"]'
+    value: '00'
+  - action: click
+    selector: '[data-qa="r-period-morning"]'
+    assertions:
+    - type: text_contains
+      value: ውድ ሐና፣
+      selector: '[data-qa="r-message-am"]'
+    - type: text_contains
+      value: ጥቅምት 5 ቀን {qa_eth_year} ዓ.ም. ጠዋት 3:00 ሰዓት
+      selector: '[data-qa="r-message-am"]'
+    - type: text_contains
+      value: የፀጉር ሥራ ቀጠሮዎ
+      selector: '[data-qa="r-message-am"]'
+    - type: text_contains
+      value: 3 SMS
+      selector: '[data-qa="r-counter-am"]'
+    - type: text_contains
+      value: Dear ሐና,
+      selector: '[data-qa="r-message-en"]'
+    - type: text_contains
+      value: 9:00 AM (3:00 Ethiopian time)
+      selector: '[data-qa="r-message-en"]'
+    - type: visible_selector
+      selector: '[data-qa="r-share-am"][href^="https://t.me/share/url?url="][href*="source%3Dtool_amharic-appointment-reminder"]'
+  - action: screenshot
+    name: reminder_en_desktop-1-sms.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="r-clock-international"]'
+    assertions:
+    - type: text_contains
+      value: 9:00 AM (ጠዋት 3:00 ሰዓት)
+      selector: '[data-qa="r-message-am"]'
+  - action: click
+    selector: '[data-qa="r-channel-telegram"]'
+    assertions:
+    - type: text_contains
+      value: 📅
+      selector: '[data-qa="r-message-am"]'
+  - action: click
+    selector: '[data-qa="r-tone-friendly"]'
+    assertions:
+    - type: text_contains
+      value: ሰላም ሐና!
+      selector: '[data-qa="r-message-am"]'
+  - action: screenshot
+    name: reminder_en_desktop-2-telegram.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: reminder_en_mobile
+  title: 'Reminder (en, mobile): Amharic + English messages, Habesha time, 3 Unicode SMS, Telegram share'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /tools/amharic-appointment-reminder
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: text_contains
+      value: Send these reminders automatically
+      selector: '[data-qa="tool-cta"]'
+    - type: visible_selector
+      selector: '[data-qa="r-message-am"]'
+    - type: visible_selector
+      selector: '[data-qa="tools-lang-switch"]'
+    - type: visible_selector
+      selector: '[data-qa="tool-cta"]'
+    - type: visible_selector
+      selector: '[data-qa="tool-faq"]'
+  actions:
+  - action: fill
+    selector: '[data-qa="r-business"]'
+    value: ሰላም የውበት ሳሎን
+  - action: fill
+    selector: '[data-qa="r-customer"]'
+    value: ሐና
+  - action: fill
+    selector: '[data-qa="r-service"]'
+    value: ፀጉር ሥራ
+  - action: fill
+    selector: '[data-qa="r-location"]'
+    value: ቦሌ፣ ኤድና ሞል አጠገብ
+  - action: select
+    selector: '[data-qa="r-e-year"]'
+    value: '{qa_eth_year}'
+  - action: select
+    selector: '[data-qa="r-e-month"]'
+    value: '2'
+  - action: select
+    selector: '[data-qa="r-e-day"]'
+    value: '5'
+  - action: select
+    selector: '[data-qa="r-hour"]'
+    value: '3'
+  - action: select
+    selector: '[data-qa="r-minute"]'
+    value: '00'
+  - action: click
+    selector: '[data-qa="r-period-morning"]'
+    assertions:
+    - type: text_contains
+      value: ውድ ሐና፣
+      selector: '[data-qa="r-message-am"]'
+    - type: text_contains
+      value: ጥቅምት 5 ቀን {qa_eth_year} ዓ.ም. ጠዋት 3:00 ሰዓት
+      selector: '[data-qa="r-message-am"]'
+    - type: text_contains
+      value: የፀጉር ሥራ ቀጠሮዎ
+      selector: '[data-qa="r-message-am"]'
+    - type: text_contains
+      value: 3 SMS
+      selector: '[data-qa="r-counter-am"]'
+    - type: text_contains
+      value: Dear ሐና,
+      selector: '[data-qa="r-message-en"]'
+    - type: text_contains
+      value: 9:00 AM (3:00 Ethiopian time)
+      selector: '[data-qa="r-message-en"]'
+    - type: visible_selector
+      selector: '[data-qa="r-share-am"][href^="https://t.me/share/url?url="][href*="source%3Dtool_amharic-appointment-reminder"]'
+  - action: screenshot
+    name: reminder_en_mobile-1-sms.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="r-clock-international"]'
+    assertions:
+    - type: text_contains
+      value: 9:00 AM (ጠዋት 3:00 ሰዓት)
+      selector: '[data-qa="r-message-am"]'
+  - action: click
+    selector: '[data-qa="r-channel-telegram"]'
+    assertions:
+    - type: text_contains
+      value: 📅
+      selector: '[data-qa="r-message-am"]'
+  - action: click
+    selector: '[data-qa="r-tone-friendly"]'
+    assertions:
+    - type: text_contains
+      value: ሰላም ሐና!
+      selector: '[data-qa="r-message-am"]'
+  - action: screenshot
+    name: reminder_en_mobile-2-telegram.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: reminder_am_desktop
+  title: 'Reminder (am, desktop): Amharic + English messages, Habesha time, 3 Unicode SMS, Telegram share'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /am/tools/amharic-appointment-reminder
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: text_contains
+      value: እነዚህን ማስታወሻዎች በራስ-ሰር ይላኩ
+      selector: '[data-qa="tool-cta"]'
+    - type: visible_selector
+      selector: '[data-qa="r-message-am"]'
+    - type: visible_selector
+      selector: '[data-qa="tools-lang-switch"]'
+    - type: visible_selector
+      selector: '[data-qa="tool-cta"]'
+    - type: visible_selector
+      selector: '[data-qa="tool-faq"]'
+  actions:
+  - action: fill
+    selector: '[data-qa="r-business"]'
+    value: ሰላም የውበት ሳሎን
+  - action: fill
+    selector: '[data-qa="r-customer"]'
+    value: ሐና
+  - action: fill
+    selector: '[data-qa="r-service"]'
+    value: ፀጉር ሥራ
+  - action: fill
+    selector: '[data-qa="r-location"]'
+    value: ቦሌ፣ ኤድና ሞል አጠገብ
+  - action: select
+    selector: '[data-qa="r-e-year"]'
+    value: '{qa_eth_year}'
+  - action: select
+    selector: '[data-qa="r-e-month"]'
+    value: '2'
+  - action: select
+    selector: '[data-qa="r-e-day"]'
+    value: '5'
+  - action: select
+    selector: '[data-qa="r-hour"]'
+    value: '3'
+  - action: select
+    selector: '[data-qa="r-minute"]'
+    value: '00'
+  - action: click
+    selector: '[data-qa="r-period-morning"]'
+    assertions:
+    - type: text_contains
+      value: ውድ ሐና፣
+      selector: '[data-qa="r-message-am"]'
+    - type: text_contains
+      value: ጥቅምት 5 ቀን {qa_eth_year} ዓ.ም. ጠዋት 3:00 ሰዓት
+      selector: '[data-qa="r-message-am"]'
+    - type: text_contains
+      value: የፀጉር ሥራ ቀጠሮዎ
+      selector: '[data-qa="r-message-am"]'
+    - type: text_contains
+      value: 3 ኤስኤምኤስ
+      selector: '[data-qa="r-counter-am"]'
+    - type: text_contains
+      value: Dear ሐና,
+      selector: '[data-qa="r-message-en"]'
+    - type: text_contains
+      value: 9:00 AM (3:00 Ethiopian time)
+      selector: '[data-qa="r-message-en"]'
+    - type: visible_selector
+      selector: '[data-qa="r-share-am"][href^="https://t.me/share/url?url="][href*="source%3Dtool_amharic-appointment-reminder"]'
+  - action: screenshot
+    name: reminder_am_desktop-1-sms.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="r-clock-international"]'
+    assertions:
+    - type: text_contains
+      value: 9:00 AM (ጠዋት 3:00 ሰዓት)
+      selector: '[data-qa="r-message-am"]'
+  - action: click
+    selector: '[data-qa="r-channel-telegram"]'
+    assertions:
+    - type: text_contains
+      value: 📅
+      selector: '[data-qa="r-message-am"]'
+  - action: click
+    selector: '[data-qa="r-tone-friendly"]'
+    assertions:
+    - type: text_contains
+      value: ሰላም ሐና!
+      selector: '[data-qa="r-message-am"]'
+  - action: screenshot
+    name: reminder_am_desktop-2-telegram.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: reminder_am_mobile
+  title: 'Reminder (am, mobile): Amharic + English messages, Habesha time, 3 Unicode SMS, Telegram share'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /am/tools/amharic-appointment-reminder
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: text_contains
+      value: እነዚህን ማስታወሻዎች በራስ-ሰር ይላኩ
+      selector: '[data-qa="tool-cta"]'
+    - type: visible_selector
+      selector: '[data-qa="r-message-am"]'
+    - type: visible_selector
+      selector: '[data-qa="tools-lang-switch"]'
+    - type: visible_selector
+      selector: '[data-qa="tool-cta"]'
+    - type: visible_selector
+      selector: '[data-qa="tool-faq"]'
+  actions:
+  - action: fill
+    selector: '[data-qa="r-business"]'
+    value: ሰላም የውበት ሳሎን
+  - action: fill
+    selector: '[data-qa="r-customer"]'
+    value: ሐና
+  - action: fill
+    selector: '[data-qa="r-service"]'
+    value: ፀጉር ሥራ
+  - action: fill
+    selector: '[data-qa="r-location"]'
+    value: ቦሌ፣ ኤድና ሞል አጠገብ
+  - action: select
+    selector: '[data-qa="r-e-year"]'
+    value: '{qa_eth_year}'
+  - action: select
+    selector: '[data-qa="r-e-month"]'
+    value: '2'
+  - action: select
+    selector: '[data-qa="r-e-day"]'
+    value: '5'
+  - action: select
+    selector: '[data-qa="r-hour"]'
+    value: '3'
+  - action: select
+    selector: '[data-qa="r-minute"]'
+    value: '00'
+  - action: click
+    selector: '[data-qa="r-period-morning"]'
+    assertions:
+    - type: text_contains
+      value: ውድ ሐና፣
+      selector: '[data-qa="r-message-am"]'
+    - type: text_contains
+      value: ጥቅምት 5 ቀን {qa_eth_year} ዓ.ም. ጠዋት 3:00 ሰዓት
+      selector: '[data-qa="r-message-am"]'
+    - type: text_contains
+      value: የፀጉር ሥራ ቀጠሮዎ
+      selector: '[data-qa="r-message-am"]'
+    - type: text_contains
+      value: 3 ኤስኤምኤስ
+      selector: '[data-qa="r-counter-am"]'
+    - type: text_contains
+      value: Dear ሐና,
+      selector: '[data-qa="r-message-en"]'
+    - type: text_contains
+      value: 9:00 AM (3:00 Ethiopian time)
+      selector: '[data-qa="r-message-en"]'
+    - type: visible_selector
+      selector: '[data-qa="r-share-am"][href^="https://t.me/share/url?url="][href*="source%3Dtool_amharic-appointment-reminder"]'
+  - action: screenshot
+    name: reminder_am_mobile-1-sms.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="r-clock-international"]'
+    assertions:
+    - type: text_contains
+      value: 9:00 AM (ጠዋት 3:00 ሰዓት)
+      selector: '[data-qa="r-message-am"]'
+  - action: click
+    selector: '[data-qa="r-channel-telegram"]'
+    assertions:
+    - type: text_contains
+      value: 📅
+      selector: '[data-qa="r-message-am"]'
+  - action: click
+    selector: '[data-qa="r-tone-friendly"]'
+    assertions:
+    - type: text_contains
+      value: ሰላም ሐና!
+      selector: '[data-qa="r-message-am"]'
+  - action: screenshot
+    name: reminder_am_mobile-2-telegram.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors

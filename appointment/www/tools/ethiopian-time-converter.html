@@ -1,196 +1,96 @@
-<!doctype html>
-<html lang="en" class="no-js">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{ title }}</title>
-<meta name="description" content="{{ description }}">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="{{ canonical }}">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="{{ product_name }}">
-<meta property="og:title" content="{{ title }}">
-<meta property="og:description" content="{{ description }}">
-<meta property="og:url" content="{{ canonical }}">
-<meta name="twitter:card" content="summary">
-<meta name="color-scheme" content="light dark">
-<link rel="icon" href="/assets/appointment/appointment-logo.png">
-<script type="application/ld+json">{{ faq_json_ld | safe }}</script>
-<style>
-@font-face { font-family: "Page Ethiopic"; src: local("Noto Sans Ethiopic"), local("NotoSansEthiopic-Regular"), url("/assets/appointment/fonts/app/noto-sans-ethiopic.woff2") format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+1200-139F, U+2D80-2DDF, U+AB00-AB2F; }
-@font-face { font-family: "Fraunces"; src: url("/assets/appointment/fonts/landing/fraunces.woff2") format("woff2"); font-weight: 300 700; font-display: swap; unicode-range: U+0000-02FF, U+2000-206F; }
-:root {
-  --bg: #fff8f1; --paper: #ffffff; --ink: #2a1712; --muted: #6b4f45; --line: #ead9cc;
-  --accent: #a63d22; --accent-ink: #ffffff; --soft: #fbeadf; --focus: #1d4ed8;
-  --serif: "Fraunces", "Page Ethiopic", Georgia, serif;
-  --sans: "Page Ethiopic", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  color-scheme: light;
-}
-@media (prefers-color-scheme: dark) {
-  :root { --bg: #14163a; --paper: #1f2150; --ink: #fff7ee; --muted: #d6cbe0; --line: #3a3c72;
-    --accent: #ffc98a; --accent-ink: #1b1640; --soft: #2a2c62; --focus: #9cc2ff; color-scheme: dark; }
-}
-* { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
-body { margin: 0; background: var(--bg); color: var(--ink); font: 400 1rem/1.6 var(--sans); }
-a { color: var(--accent); }
-:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 6px; }
-.wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
-.top { display: flex; align-items: center; justify-content: space-between; min-height: 64px; }
-.brand { font: 600 1.15rem/1 var(--serif); color: var(--ink); text-decoration: none; padding: 12px 0; }
-.hero { padding: 24px 0 8px; }
-.eyebrow { margin: 0 0 8px; font-size: .85rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
-h1 { margin: 0 0 12px; font: 600 clamp(2rem, 6vw, 3.2rem)/1.1 var(--serif); letter-spacing: -.01em; }
-h2 { margin: 0 0 12px; font: 600 1.5rem/1.2 var(--serif); }
-.lede { margin: 0; max-width: 62ch; font-size: 1.1rem; color: var(--muted); }
-.rule { margin: 16px 0 0; padding: 12px 16px; background: var(--soft); border-radius: 14px; max-width: 62ch; }
-.now { margin: 20px 0 0; font-size: 1.05rem; }
-.now strong { font-variant-numeric: tabular-nums; }
-.tool { display: grid; gap: 16px; margin: 28px 0 0; }
-@media (min-width: 760px) { .tool { grid-template-columns: 1fr 1fr; } }
-.card { background: var(--paper); border: 1px solid var(--line); border-radius: 20px; padding: 20px; min-width: 0; }
-.card h2 { font-size: 1.2rem; }
-label, legend { display: block; font-weight: 600; margin: 0 0 6px; }
-input[type="text"], select { width: 100%; min-height: 48px; padding: 10px 12px; font: inherit; font-size: 1.1rem; color: var(--ink);
-  background: var(--bg); border: 1px solid var(--line); border-radius: 12px; }
-.row { display: flex; gap: 10px; }
-.row > div { flex: 1; min-width: 0; }
-.presets { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0; }
-.presets button { min-height: 44px; min-width: 64px; padding: 0 14px; font: inherit; color: var(--ink); background: var(--soft);
-  border: 1px solid var(--line); border-radius: 999px; cursor: pointer; }
-fieldset { border: 0; margin: 14px 0 0; padding: 0; }
-.halves { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.halves label { display: flex; align-items: center; gap: 10px; min-height: 52px; margin: 0; padding: 8px 12px; font-weight: 500;
-  border: 1px solid var(--line); border-radius: 12px; cursor: pointer; line-height: 1.25; }
-.halves input { width: 20px; height: 20px; accent-color: var(--accent); flex: none; }
-.halves label:has(input:checked) { border-color: var(--accent); background: var(--soft); }
-.halves small { display: block; color: var(--muted); font-size: .8rem; }
-.result { margin: 16px 0 0; padding: 16px; background: var(--soft); border-radius: 14px; }
-.result output { display: block; font: 600 2.4rem/1.1 var(--serif); font-variant-numeric: tabular-nums; }
-.result p { margin: 6px 0 0; color: var(--muted); }
-.cta-band { margin: 24px 0 0; padding: 22px 20px; border-radius: 20px; background: var(--ink); color: var(--bg); text-align: center; }
-.cta-band p { margin: 0 0 14px; }
-.cta { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 24px; border-radius: 999px;
-  background: var(--accent); color: var(--accent-ink); font-weight: 700; text-decoration: none; max-width: 100%; }
-@media (prefers-color-scheme: dark) { .cta-band { background: var(--paper); color: var(--ink); border: 1px solid var(--line); } }
-.no-js .js-only { display: none; }
-section.block { margin: 48px 0 0; }
-.table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); }
-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
-caption { text-align: left; padding: 12px 14px 0; color: var(--muted); font-size: .9rem; }
-th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--line); }
-thead th { font-size: .85rem; color: var(--muted); font-weight: 600; }
-tbody tr:last-child td { border-bottom: 0; }
-tbody tr.day td { background: color-mix(in srgb, var(--soft) 55%, transparent); }
-.t24 { color: var(--muted); }
-@media (max-width: 520px) { th, td { padding: 9px 8px; font-size: .92rem; } .hide-sm { display: none; } }
-.faq details { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; margin: 0 0 10px; }
-.faq summary { cursor: pointer; padding: 14px 16px; min-height: 48px; font-weight: 600; }
-.faq details p { margin: 0; padding: 0 16px 16px; }
-footer { margin: 56px 0 0; padding: 20px 0 32px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
-</style>
-</head>
-<body>
-<header class="wrap top">
-  <a class="brand" href="/">{{ product_name }}</a>
-</header>
-<main class="wrap">
-  <div class="hero">
-    <p class="eyebrow">Free tool · No sign-up</p>
-    <h1>{{ h1 }}</h1>
-    <p class="lede">Convert Ethiopian (Habesha) time to international time (East Africa Time) and back. Habesha clock hours start at sunrise, so 6:00 AM is 12 o'clock (ጠዋት 12 ሰዓት).</p>
-    <p class="rule"><strong>The rule:</strong> Habesha hour = international hour − 6, on a 12-hour clock. Minutes do not change. The day (ቀን) runs from 6:00 AM to 5:59 PM, and the night (ሌሊት) from 6:00 PM to 5:59 AM.</p>
-    <p class="now js-only" data-qa="now-line">Now in Addis Ababa: <strong data-qa="now-intl">—</strong> · Habesha <strong data-qa="now-habesha">—</strong></p>
-  </div>
+{% extends "appointment/templates/tools/base.html" %}
+{% from "appointment/templates/tools/icons.html" import icon %}
 
-  <div class="tool js-only" data-qa="converter">
-    <section class="card" aria-labelledby="to-habesha-title">
-      <h2 id="to-habesha-title">International → Habesha</h2>
-      <label for="intl-input">International time (24-hour or 12-hour)</label>
-      <input id="intl-input" type="text" inputmode="text" autocomplete="off" spellcheck="false" placeholder="14:30 or 2:30 PM" data-qa="intl-input">
-      <div class="presets" aria-label="Examples">
-        <button type="button" data-intl-preset="06:00">6 AM</button>
-        <button type="button" data-intl-preset="08:00">8 AM</button>
-        <button type="button" data-intl-preset="12:00">Noon</button>
-        <button type="button" data-intl-preset="15:00">3 PM</button>
-        <button type="button" data-intl-preset="20:00">8 PM</button>
-        <button type="button" data-intl-preset="00:00">Midnight</button>
-      </div>
-      <div class="result" aria-live="polite">
-        <output for="intl-input" data-qa="habesha-result">—</output>
-        <p data-qa="habesha-result-detail"></p>
-      </div>
-    </section>
+{% block hero %}
+<p class="lede">{{ t("lede") }}</p>
+<p class="note"><strong>{{ t("ruleLabel") }}</strong> {{ t("rule") }}</p>
+<p class="today js-only" data-qa="now-line">
+  <span class="today-label">{{ t("nowLabel") }}</span>
+  <span class="today-main"><span data-qa="now-intl">—</span> · <span data-qa="now-habesha">—</span></span>
+</p>
+{% endblock %}
 
-    <section class="card" aria-labelledby="to-intl-title">
-      <h2 id="to-intl-title">Habesha → International</h2>
-      <div class="row">
-        <div>
-          <label for="habesha-hour">Hour (ሰዓት)</label>
-          <select id="habesha-hour" data-qa="habesha-hour">
-            {% for h in hours %}<option value="{{ h }}"{% if h == 2 %} selected{% endif %}>{{ h }}</option>{% endfor %}
-          </select>
-        </div>
-        <div>
-          <label for="habesha-minute">Minutes</label>
-          <select id="habesha-minute" data-qa="habesha-minute">
-            {% for m in minutes %}<option value="{{ m }}">{{ m }}</option>{% endfor %}
-          </select>
-        </div>
+{% block content %}
+<div class="tool-grid two js-only" data-qa="converter">
+  <section class="card" aria-labelledby="to-habesha-title">
+    <h2 id="to-habesha-title">{{ icon("clock") }}{{ t("toHabeshaTitle") }}</h2>
+    <div class="field">
+      <label for="intl-input">{{ t("intlInputLabel") }}</label>
+      <input id="intl-input" class="input" type="text" inputmode="text" autocomplete="off" spellcheck="false" placeholder="14:30 · 2:30 PM" data-qa="intl-input">
+      <div class="chips" aria-label="{{ t('examples') }}">
+        <button type="button" class="chip" data-intl-preset="06:00" data-qa="preset-0600">6:00 AM</button>
+        <button type="button" class="chip" data-intl-preset="08:00" data-qa="preset-0800">8:00 AM</button>
+        <button type="button" class="chip" data-intl-preset="12:00" data-qa="preset-1200">{{ t("noon") }}</button>
+        <button type="button" class="chip" data-intl-preset="15:00" data-qa="preset-1500">3:00 PM</button>
+        <button type="button" class="chip" data-intl-preset="20:00" data-qa="preset-2000">8:00 PM</button>
+        <button type="button" class="chip" data-intl-preset="00:00" data-qa="preset-0000">{{ t("midnight") }}</button>
       </div>
-      <fieldset>
-        <legend>Day or night?</legend>
-        <div class="halves">
-          <label><input type="radio" name="habesha-half" value="day" checked data-qa="habesha-half-day"><span>ቀን · day<small>6 AM – 5:59 PM</small></span></label>
-          <label><input type="radio" name="habesha-half" value="night" data-qa="habesha-half-night"><span>ሌሊት · night<small>6 PM – 5:59 AM</small></span></label>
-        </div>
-      </fieldset>
-      <div class="result" aria-live="polite">
-        <output data-qa="intl-result">—</output>
-        <p data-qa="intl-result-detail"></p>
-        <p data-qa="intl-result-other"></p>
-      </div>
-    </section>
-  </div>
-
-  <div class="cta-band">
-    <p>Your customers think in Habesha time. Your booking page can too.</p>
-    <a class="cta" href="{{ cta_href }}" data-qa="tool-cta">Take bookings in Habesha time with {{ product_name }}</a>
-  </div>
-
-  <section class="block" aria-labelledby="table-title">
-    <h2 id="table-title">Ethiopian time chart: all 24 hours</h2>
-    <div class="table-scroll">
-      <table data-qa="reference-table">
-        <caption>Each international hour in East Africa Time (UTC+3) and the same moment on the Habesha clock.</caption>
-        <thead>
-          <tr><th scope="col">International</th><th scope="col" class="hide-sm">24-hour</th><th scope="col">Habesha time</th><th scope="col">Period</th></tr>
-        </thead>
-        <tbody>
-          {% for row in rows %}<tr class="{{ row.half }}" data-qa="reference-row">
-            <th scope="row">{{ row.intl_12 }}</th>
-            <td class="t24 hide-sm">{{ row.intl_24 }}</td>
-            <td>{{ row.text }}</td>
-            <td>{{ row.period_am }} ({{ row.period_en }}) · {{ row.half_am }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+    </div>
+    <div class="result" aria-live="polite">
+      <output for="intl-input" data-qa="habesha-result">—</output>
+      <p data-qa="habesha-result-detail"></p>
     </div>
   </section>
 
-  <section class="block faq" aria-labelledby="faq-title">
-    <h2 id="faq-title">Questions about Ethiopian time</h2>
-    {% for item in faq %}<details{% if loop.first %} open{% endif %}>
-      <summary><h3 style="display:inline;font-size:inherit;margin:0">{{ item[0] }}</h3></summary>
-      <p>{{ item[1] }}</p>
-    </details>
-    {% endfor %}
+  <section class="card" aria-labelledby="to-intl-title">
+    <h2 id="to-intl-title">{{ icon("swap") }}{{ t("toIntlTitle") }}</h2>
+    <div class="row">
+      <div class="field">
+        <label for="habesha-hour">{{ t("hourLabel") }}</label>
+        <select id="habesha-hour" class="select" data-qa="habesha-hour">
+          {%- for h in hours %}<option value="{{ h }}"{% if h == 2 %} selected{% endif %}>{{ h }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="field">
+        <label for="habesha-minute">{{ t("minuteLabel") }}</label>
+        <select id="habesha-minute" class="select" data-qa="habesha-minute">
+          {%- for m in minutes %}<option value="{{ m }}">{{ m }}</option>{% endfor %}
+        </select>
+      </div>
+    </div>
+    <fieldset class="field">
+      <legend class="label">{{ t("halfLegend") }}</legend>
+      <div class="seg stack" role="radiogroup">
+        <label><input type="radio" name="habesha-half" value="day" checked data-qa="habesha-half-day"><span>{{ t("halfDay") }}<small>{{ t("halfDayRange") }}</small></span></label>
+        <label><input type="radio" name="habesha-half" value="night" data-qa="habesha-half-night"><span>{{ t("halfNight") }}<small>{{ t("halfNightRange") }}</small></span></label>
+      </div>
+    </fieldset>
+    <div class="result" aria-live="polite">
+      <output data-qa="intl-result">—</output>
+      <p data-qa="intl-result-detail"></p>
+      <p data-qa="intl-result-other"></p>
+    </div>
   </section>
-</main>
-<footer class="wrap">
-  <p>© {{ product_name }} · Appointment scheduling for Ethiopian businesses, in English and Amharic. <a href="/">Home</a></p>
-</footer>
-<script src="/assets/appointment/js/habesha-time.js?v={{ script_version }}" defer></script>
-</body>
-</html>
+</div>
+{% endblock %}
+
+{% block extra %}
+<section class="block" aria-labelledby="table-title">
+  <h2 id="table-title">{{ t("tableTitle") }}</h2>
+  <div class="table-scroll">
+    <table data-qa="reference-table">
+      <caption>{{ t("tableCaption") }}</caption>
+      <thead>
+        <tr><th scope="col">{{ t("colIntl") }}</th><th scope="col" class="hide-sm">{{ t("col24") }}</th><th scope="col">{{ t("colHabesha") }}</th><th scope="col">{{ t("colPeriod") }}</th></tr>
+      </thead>
+      <tbody>
+        {%- for row in rows %}
+        <tr class="is-{{ row.half }}" data-qa="reference-row">
+          <th scope="row">{{ row.intl_12 }}</th>
+          <td class="muted hide-sm">{{ row.intl_24 }}</td>
+          <td>{{ row.text }}</td>
+          <td>{{ row.label }}</td>
+        </tr>
+        {%- endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}
+
+{% block data %}<script type="application/json" id="tool-data">{{ tool_data | safe }}</script>{% endblock %}
+{% block scripts %}
+<script src="/assets/appointment/js/habesha-time.js?v={{ asset_version }}" defer></script>
+<script src="/assets/appointment/js/tools/tools-common.js?v={{ asset_version }}" defer></script>
+<script src="/assets/appointment/js/tools/time-converter.js?v={{ asset_version }}" defer></script>
+{% endblock %}

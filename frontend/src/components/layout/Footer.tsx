@@ -8,8 +8,11 @@ import {
   Phone,
   MapPin,
 } from 'lucide-react';
+import { PlatformMark } from '@/components/platform-mark';
+import { useBrandedTranslation } from '@/lib/platform-brand';
 
 const Footer = () => {
+  const { t, brand } = useBrandedTranslation();
   const footerLinks = {
     product: [
       { label: 'Features', href: '#features' },
@@ -51,20 +54,13 @@ const Footer = () => {
           {/* Brand Column */}
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
-              <div 
-                className="w-10 h-10 rounded-lg flex items-center justify-center"
-                style={{ 
-                  background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))'
-                }}
-              >
-                <span className="text-white font-bold text-xl">ET</span>
-              </div>
+              <PlatformMark brand={brand} size={40} className="rounded-lg" />
               <span className="font-heading font-bold text-xl" style={{ color: 'var(--text-primary)' }}>
-                Meet.et
+                {brand.productName}
               </span>
             </div>
             <p className="mb-6 max-w-sm" style={{ color: 'var(--text-muted)' }}>
-              Turn your time into revenue. Ethiopia's leading scheduling and payment platform for professionals.
+              {brand.tagline || t('footer.tagline')}
             </p>
 
             {/* Social Links */}
@@ -252,7 +248,7 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             {/* Copyright */}
             <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
-              © {new Date().getFullYear()} Meet.et. All rights reserved.
+              © {new Date().getFullYear()} {t('footer.copyright')}
             </p>
 
             {/* Compliance Badges */}

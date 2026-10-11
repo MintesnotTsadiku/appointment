@@ -275,3 +275,10 @@
   .tc *, .tc *::before, .tc *::after { animation: none !important; transition: none !important; }
   .tc [data-reveal], .tc [data-reveal] .tc-board-row, .tc [data-reveal] .tc-plate { opacity: 1 !important; transform: none !important; }
 }
+
+/* Footer legal row and the platform credit: plain and legible, aligned with the clinic's link style. */
+.tc-legal { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; padding-top: 16px; border-top: 1px solid var(--tc-line); }
+.tc-legal small { color: var(--tc-muted); }
+.tc-footer-grid .tc-credit { max-width: none; margin-top: 0; color: var(--tc-muted); font-size: 0.875rem; }
+.tc-credit a { display: inline-block; padding-block: 10px; color: var(--tc-ink); font-weight: 600; text-decoration: underline; text-decoration-color: var(--tc-primary); text-underline-offset: 3px; }
+.tc-credit a:hover { color: var(--tc-primary); }

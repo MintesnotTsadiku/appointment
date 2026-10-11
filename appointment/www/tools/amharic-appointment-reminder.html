@@ -1,0 +1,117 @@
+{% extends "appointment/templates/tools/base.html" %}
+{% from "appointment/templates/tools/icons.html" import icon %}
+
+{% block hero %}
+<p class="lede">{{ t("lede") }}</p>
+{% endblock %}
+
+{% block content %}
+<div class="tool-grid split js-only" data-qa="reminder-tool">
+  <section class="card" aria-labelledby="details-title">
+    <h2 id="details-title">{{ icon("calendar") }}{{ t("detailsTitle") }}</h2>
+    <div class="field">
+      <label for="r-business">{{ t("business") }}</label>
+      <input id="r-business" class="input" type="text" maxlength="80" autocomplete="organization" value="{{ examples.business }}" data-qa="r-business">
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="r-customer">{{ t("customer") }} <span class="hint">({{ t("optional") }})</span></label>
+        <input id="r-customer" class="input" type="text" maxlength="60" autocomplete="off" value="{{ examples.customer }}" data-qa="r-customer">
+      </div>
+      <div class="field">
+        <label for="r-service">{{ t("service") }}</label>
+        <input id="r-service" class="input" type="text" maxlength="60" autocomplete="off" value="{{ examples.service }}" data-qa="r-service">
+      </div>
+    </div>
+
+    <fieldset class="field">
+      <legend class="label">{{ t("date") }}</legend>
+      <div class="seg" role="radiogroup" aria-label="{{ t('date') }}">
+        <label><input type="radio" name="r-calendar" value="ethiopian" checked data-qa="r-calendar-ethiopian"><span>{{ t("calendarEthiopian") }}</span></label>
+        <label><input type="radio" name="r-calendar" value="gregorian" data-qa="r-calendar-gregorian"><span>{{ t("calendarGregorian") }}</span></label>
+      </div>
+      <div class="row date-row" data-calendar="ethiopian">
+        <select class="select" aria-label="{{ t('tools.calendar.day') }}" data-qa="r-e-day">{% for d in range(1, 31) %}<option value="{{ d }}"{% if d == default_ethiopian.day %} selected{% endif %}>{{ d }}</option>{% endfor %}</select>
+        <select class="select" aria-label="{{ t('tools.calendar.month') }}" data-qa="r-e-month">{% for m in ethiopian_months %}<option value="{{ m.value }}"{% if m.value == default_ethiopian.month %} selected{% endif %}>{{ m.label }}</option>{% endfor %}</select>
+        <select class="select" aria-label="{{ t('tools.calendar.year') }}" data-qa="r-e-year">{% for y in year_options %}<option value="{{ y }}"{% if y == default_ethiopian.year %} selected{% endif %}>{{ y }}</option>{% endfor %}</select>
+      </div>
+      <div class="row date-row" data-calendar="gregorian" hidden>
+        <select class="select" aria-label="{{ t('tools.calendar.day') }}" data-qa="r-g-day">{% for d in range(1, 32) %}<option value="{{ d }}"{% if d == default_gregorian.day %} selected{% endif %}>{{ d }}</option>{% endfor %}</select>
+        <select class="select" aria-label="{{ t('tools.calendar.month') }}" data-qa="r-g-month">{% for m in gregorian_months %}<option value="{{ m.value }}"{% if m.value == default_gregorian.month %} selected{% endif %}>{{ m.label }}</option>{% endfor %}</select>
+        <select class="select" aria-label="{{ t('tools.calendar.year') }}" data-qa="r-g-year">{% for y in gregorian_years %}<option value="{{ y }}"{% if y == default_gregorian.year %} selected{% endif %}>{{ y }}</option>{% endfor %}</select>
+      </div>
+    </fieldset>
+
+    <fieldset class="field">
+      <legend class="label">{{ t("time") }}</legend>
+      <div class="seg" role="radiogroup" aria-label="{{ t('time') }}">
+        <label><input type="radio" name="r-clock" value="habesha" checked data-qa="r-clock-habesha"><span>{{ t("clockHabesha") }}</span></label>
+        <label><input type="radio" name="r-clock" value="international" data-qa="r-clock-international"><span>{{ t("clockInternational") }}</span></label>
+      </div>
+      <div class="row">
+        <select class="select" aria-label="{{ t('hour') }}" data-qa="r-hour">{% for h in hours %}<option value="{{ h }}"{% if h == 3 %} selected{% endif %}>{{ h }}</option>{% endfor %}</select>
+        <select class="select" aria-label="{{ t('minute') }}" data-qa="r-minute">{% for m in minutes %}<option value="{{ m }}">:{{ m }}</option>{% endfor %}</select>
+      </div>
+      <div class="seg" role="radiogroup" aria-label="{{ t('tools.timeConverter.colPeriod') }}" data-clock="habesha">
+        <label><input type="radio" name="r-period" value="morning" checked data-qa="r-period-morning"><span>ጠዋት</span></label>
+        <label><input type="radio" name="r-period" value="afternoon" data-qa="r-period-afternoon"><span>ከሰዓት</span></label>
+        <label><input type="radio" name="r-period" value="evening" data-qa="r-period-evening"><span>ምሽት</span></label>
+        <label><input type="radio" name="r-period" value="night" data-qa="r-period-night"><span>ሌሊት</span></label>
+      </div>
+      <div class="seg" role="radiogroup" aria-label="AM / PM" data-clock="international" hidden>
+        <label><input type="radio" name="r-ampm" value="am" checked data-qa="r-ampm-am"><span>AM</span></label>
+        <label><input type="radio" name="r-ampm" value="pm" data-qa="r-ampm-pm"><span>PM</span></label>
+      </div>
+    </fieldset>
+
+    <div class="field">
+      <label for="r-location">{{ t("location") }} <span class="hint">({{ t("optional") }})</span></label>
+      <input id="r-location" class="input" type="text" maxlength="80" autocomplete="off" value="{{ examples.location }}" data-qa="r-location">
+    </div>
+    <fieldset class="field">
+      <legend class="label">{{ t("tone") }}</legend>
+      <div class="seg" role="radiogroup" aria-label="{{ t('tone') }}">
+        <label><input type="radio" name="r-tone" value="formal" checked data-qa="r-tone-formal"><span>{{ t("toneFormal") }}</span></label>
+        <label><input type="radio" name="r-tone" value="friendly" data-qa="r-tone-friendly"><span>{{ t("toneFriendly") }}</span></label>
+      </div>
+    </fieldset>
+    <fieldset class="field">
+      <legend class="label">{{ t("channel") }}</legend>
+      <div class="seg" role="radiogroup" aria-label="{{ t('channel') }}">
+        <label><input type="radio" name="r-channel" value="sms" checked data-qa="r-channel-sms"><span>{{ t("channelSms") }}</span></label>
+        <label><input type="radio" name="r-channel" value="telegram" data-qa="r-channel-telegram"><span>Telegram</span></label>
+        <label><input type="radio" name="r-channel" value="whatsapp" data-qa="r-channel-whatsapp"><span>WhatsApp</span></label>
+      </div>
+    </fieldset>
+  </section>
+
+  <section class="card sticky" aria-labelledby="messages-title">
+    <h2 id="messages-title">{{ icon("message") }}{{ t("messagesTitle") }}</h2>
+    <div class="messages">
+      {%- for code, label in (("am", t("amharicMessage")), ("en", t("englishMessage"))) %}
+      <article class="message-card" data-qa="r-card-{{ code }}">
+        <div class="message-head">
+          <h3>{{ label }}</h3>
+          <span class="pill" data-qa="r-encoding-{{ code }}"></span>
+        </div>
+        <p class="message-text" lang="{{ code }}" data-qa="r-message-{{ code }}" aria-live="polite"></p>
+        <p class="counter" data-qa="r-counter-{{ code }}"></p>
+        <div class="btn-row">
+          <button type="button" class="btn btn-primary" data-copy="{{ code }}" data-qa="r-copy-{{ code }}">{{ icon("copy") }}<span data-label>{{ t("tools.common.copy") }}</span></button>
+          <a class="btn btn-outline" href="#" target="_blank" rel="noopener" data-share="{{ code }}" data-qa="r-share-{{ code }}">{{ icon("send") }}<span>{{ t("tools.common.shareTelegram") }}</span></a>
+        </div>
+      </article>
+      {%- endfor %}
+      <p class="hint" data-qa="r-unicode-note">{{ t("unicodeNote") }}</p>
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block data %}<script type="application/json" id="tool-data">{{ tool_data | safe }}</script>{% endblock %}
+{% block scripts %}
+<script src="/assets/appointment/js/habesha-time.js?v={{ asset_version }}" defer></script>
+<script src="/assets/appointment/js/tools/tools-common.js?v={{ asset_version }}" defer></script>
+<script src="/assets/appointment/js/tools/ethiopian-calendar.js?v={{ asset_version }}" defer></script>
+<script src="/assets/appointment/js/tools/reminder.js?v={{ asset_version }}" defer></script>
+{% endblock %}

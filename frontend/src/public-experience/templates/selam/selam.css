@@ -123,3 +123,8 @@
 
 .selam-site[style*="--pe-selected-font-display"] :is(h1,h2,h3),.selam-booking[style*="--pe-selected-font-display"] :is(h1,h2,h3){font-family:var(--pe-selected-font-display,inherit)}
 .selam-site[style*="--pe-selected-font-body"] :is(p,li,address),.selam-booking[style*="--pe-selected-font-body"] p{font-family:var(--pe-selected-font-body)}
+
+/* Platform credit: a quiet line in the plum ink. */
+.selam-credit,.selam-content-credit{grid-column:1/-1;flex-basis:100%;margin:0;font-size:14px;opacity:.85}
+.selam-credit a,.selam-content-credit a{display:inline-block;padding-block:10px;font-weight:700;text-decoration:underline;text-decoration-color:var(--plum);text-underline-offset:4px}
+.selam-content-footer{flex-wrap:wrap}

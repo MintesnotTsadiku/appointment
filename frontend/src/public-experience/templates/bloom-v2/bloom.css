@@ -219,3 +219,9 @@
   .bl [data-reveal] { opacity: 1 !important; transform: none !important; clip-path: none !important; }
   .bl-bar::after { display: none; }
 }
+
+/* Footer legal row and the platform credit: poster-plain, marigold underline like the booking accent. */
+.bl-legal { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; padding-top: 16px; border-top: 1px solid var(--bl-line); }
+.bl-credit { color: var(--bl-muted); font-size: 0.875rem; }
+.bl-credit a { display: inline-block; padding-block: 10px; color: var(--bl-ink); font-weight: 700; text-decoration: underline; text-decoration-color: var(--bl-gold); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.bl-credit a:hover { text-decoration-color: currentColor; }

@@ -1,12 +1,14 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, type CSSProperties } from "react";
-import { useTranslation } from "@/lib/i18n";
+import { useBrandedTranslation } from "@/lib/platform-brand";
+import { partnersPath } from "../../shared/offer";
 import type { EntryLinks } from "../../shared/useEntryLinks";
 import { useShowcaseDoors, type ShowcaseDoor } from "../../shared/useShowcaseDoors";
+import Promises from "./Promises";
 
 /** 23:45. The call to action and doors into real showcase businesses. */
 const Finale = ({ entry }: { entry: EntryLinks }) => {
-  const { t } = useTranslation();
+  const { t, brand, language } = useBrandedTranslation();
   const ref = useRef<HTMLElement>(null);
   const near = useInView(ref, { once: true, margin: "600px 0px" });
   const doors = useShowcaseDoors(near);
@@ -26,10 +28,13 @@ const Finale = ({ entry }: { entry: EntryLinks }) => {
             </>
           )}
         </div>
+        <Promises variant="compact" />
         {doors.length > 0 && <Doors doors={doors} />}
         <footer className="lw-footer">
           <span>© {new Date().getFullYear()} {t("world.night.footer")}</span>
-          <a href="/tools/ethiopian-time-converter" data-qa="landing-time-tool">{t("world.night.timeTool")}</a>
+          <a href="/tools" data-qa="landing-free-tools">{t("world.night.freeTools")}</a>
+          {brand.growth.directoryPublic && <a href="/directory" data-qa="landing-directory">{t("world.night.directory")}</a>}
+          {brand.growth.partnerProgramEnabled && <a href={partnersPath(language)} data-qa="landing-partners">{t("world.night.partners")}</a>}
           <span>{t("world.night.fiction")}</span>
         </footer>
       </div>
@@ -38,7 +43,7 @@ const Finale = ({ entry }: { entry: EntryLinks }) => {
 };
 
 const Doors = ({ doors }: { doors: ShowcaseDoor[] }) => {
-  const { t } = useTranslation();
+  const { t } = useBrandedTranslation();
   return (
     <div className="lw-doors" data-qa="landing-doors">
       <h2>{t("world.night.doorsTitle")}</h2>

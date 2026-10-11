@@ -24,6 +24,10 @@ def get_context(context):
     else:
         enabled = True
     boot["server_script_enabled"] = enabled
+    # The SPA paints the platform brand from boot, so the first frame never shows a placeholder.
+    from appointment.growth.api import public_payload
+
+    boot["platform_brand"] = public_payload()
     boot_json = encode_boot_data(boot)
 
     context.update(
@@ -34,6 +38,6 @@ def get_context(context):
         }
     )
 
-    context["app_name"] = "Appointment"
+    context["app_name"] = boot["platform_brand"]["brand"]["product_name"]
 
     return context

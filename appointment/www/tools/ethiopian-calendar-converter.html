@@ -1,0 +1,97 @@
+{% extends "appointment/templates/tools/base.html" %}
+{% from "appointment/templates/tools/icons.html" import icon %}
+
+{% block hero %}
+<p class="lede">{{ t("lede") }}</p>
+<p class="today" data-qa="calendar-today">
+  <span class="today-label">{{ t("todayLabel") }}</span>
+  <span class="today-main" data-qa="calendar-today-ethiopian">{{ today_weekday }}{{ "፣" if lang == "am" else "," }} {{ today_label }}</span>
+  <span class="today-sub" data-qa="calendar-today-gregorian">{{ t("todayGregorian", today_gregorian) }}{% if lang == "en" %} · <span lang="am">{{ today_ethiopian_am }}</span>{% endif %}</span>
+</p>
+{% endblock %}
+
+{% block content %}
+<div class="tool-grid two js-only" data-qa="calendar-converter">
+  <section class="card" aria-labelledby="to-ethiopian-title">
+    <h2 id="to-ethiopian-title">{{ icon("calendar") }}{{ t("toEthiopianTitle") }}</h2>
+    <div class="row date-row">
+      <div class="field">
+        <label for="g-day">{{ t("day") }}</label>
+        <select id="g-day" class="select" data-qa="g-day">{% for d in days31 %}<option value="{{ d }}">{{ d }}</option>{% endfor %}</select>
+      </div>
+      <div class="field">
+        <label for="g-month">{{ t("month") }}</label>
+        <select id="g-month" class="select" data-qa="g-month">{% for m in gregorian_months %}<option value="{{ m.value }}">{{ m.label }}</option>{% endfor %}</select>
+      </div>
+      <div class="field">
+        <label for="g-year">{{ t("year") }}</label>
+        <input id="g-year" class="input" type="number" inputmode="numeric" min="1900" max="2200" data-qa="g-year">
+      </div>
+    </div>
+    <div class="result" aria-live="polite">
+      <output class="big" data-qa="g-result">—</output>
+      <p data-qa="g-result-detail"></p>
+      <div class="btn-row">
+        <button type="button" class="btn btn-outline btn-sm" data-qa="g-today">{{ icon("calendar") }}<span>{{ t("today") }}</span></button>
+        <button type="button" class="btn btn-outline btn-sm" data-qa="g-copy">{{ icon("copy") }}<span data-label>{{ t("copyResult") }}</span></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="to-gregorian-title">
+    <h2 id="to-gregorian-title">{{ icon("swap") }}{{ t("toGregorianTitle") }}</h2>
+    <div class="row date-row">
+      <div class="field">
+        <label for="e-day">{{ t("day") }}</label>
+        <select id="e-day" class="select" data-qa="e-day">{% for d in days30 %}<option value="{{ d }}">{{ d }}</option>{% endfor %}</select>
+      </div>
+      <div class="field">
+        <label for="e-month">{{ t("month") }}</label>
+        <select id="e-month" class="select" data-qa="e-month">{% for m in months %}<option value="{{ m.value }}">{{ m.label }}</option>{% endfor %}</select>
+      </div>
+      <div class="field">
+        <label for="e-year">{{ t("year") }}</label>
+        <input id="e-year" class="input" type="number" inputmode="numeric" min="1890" max="2200" data-qa="e-year">
+      </div>
+    </div>
+    <div class="result" aria-live="polite">
+      <output class="big" data-qa="e-result">—</output>
+      <p data-qa="e-result-detail"></p>
+      <p data-qa="e-result-leap"></p>
+      <div class="btn-row">
+        <button type="button" class="btn btn-outline btn-sm" data-qa="e-today">{{ icon("calendar") }}<span>{{ t("today") }}</span></button>
+        <button type="button" class="btn btn-outline btn-sm" data-qa="e-copy">{{ icon("copy") }}<span data-label>{{ t("copyResult") }}</span></button>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block extra %}
+<section class="block" aria-labelledby="months-title">
+  <h2 id="months-title">{{ t("monthsTitle", ethiopian_year) }}</h2>
+  <div class="table-scroll">
+    <table data-qa="months-table">
+      <caption>{{ t("monthsCaption", ethiopian_year) }}</caption>
+      <thead><tr><th scope="col" class="hide-sm">{{ t("colNumber") }}</th><th scope="col">{{ t("colMonth") }}</th><th scope="col">{{ t("colDays") }}</th><th scope="col">{{ t("colStarts") }}</th></tr></thead>
+      <tbody>
+        {%- for row in month_rows %}
+        <tr class="{{ 'is-current' if row.number == current_month else '' }}" data-qa="month-row">
+          <td class="muted hide-sm">{{ row.number }}</td>
+          <th scope="row"><span lang="am">{{ row.amharic }}</span>{% if lang == "en" %} <span class="muted">· {{ row.english }}</span>{% endif %}</th>
+          <td>{{ row.days }}</td>
+          <td>{{ row.weekday }}{{ "፣" if lang == "am" else "," }} {{ row.starts }}</td>
+        </tr>
+        {%- endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}
+
+{% block data %}<script type="application/json" id="tool-data">{{ tool_data | safe }}</script>{% endblock %}
+{% block scripts %}
+<script src="/assets/appointment/js/tools/tools-common.js?v={{ asset_version }}" defer></script>
+<script src="/assets/appointment/js/tools/ethiopian-calendar.js?v={{ asset_version }}" defer></script>
+<script src="/assets/appointment/js/tools/calendar-converter.js?v={{ asset_version }}" defer></script>
+{% endblock %}

@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    {{ public_meta_tags or "" }}
     <script nonce="{{ content_shell_nonce }}">
       // Apply identity-scoped cached choices before CSS. The server revalidates them.
       try {
@@ -67,6 +68,8 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- Crawlable links for visitors and bots without JavaScript; the SPA renders its own footer. -->
+    <noscript><nav><a href="/tools">Free tools</a> · <a href="/am/tools" hreflang="am" lang="am">ነጻ መሣሪያዎች</a></nav></noscript>
     <script data-frappe-boot nonce="{{ content_shell_nonce }}">
       // Load everything from the page context to window object
       // This will allow us to access frappe boot in our react app.

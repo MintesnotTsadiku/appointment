@@ -68,6 +68,7 @@ const ALLOWED_PREFIXES = [
   '/calendar',
   '/reception',
   '/customers',
+  '/grow',
   '/settings',
   '/analytics',
   '/workspaces',
@@ -75,7 +76,7 @@ const ALLOWED_PREFIXES = [
   '/no-access',
 ];
 
-const MANAGER_ONLY_PREFIXES = ['/settings/business', '/settings/notifications', '/settings/payments', '/settings/resources', '/settings/team', '/settings/website', '/settings/public-experience', '/settings/organization-import', '/onboarding'];
+const MANAGER_ONLY_PREFIXES = ['/grow', '/settings/business', '/settings/notifications', '/settings/payments', '/settings/resources', '/settings/team', '/settings/website', '/settings/public-experience', '/settings/organization-import', '/onboarding'];
 
 /** Prevent open redirects and restoring destinations the user may not access. */
 export function isAllowedDestination(path: string | null | undefined, session: SessionState | null): boolean {
@@ -88,7 +89,7 @@ export function isAllowedDestination(path: string | null | undefined, session: S
   const clean = path.split('?')[0];
   if (clean === '/settings/appearance' || clean === '/settings/profile' || clean.startsWith('/settings/profile/') || clean === '/settings') return true;
   if (session.state === 'individual_owner') {
-    return ['/home', '/analytics', '/reception', '/settings/independent-booking', '/settings/notifications', '/calendar', '/customers'].includes(clean)
+    return ['/home', '/analytics', '/reception', '/settings/independent-booking', '/settings/notifications', '/calendar', '/customers', '/grow'].includes(clean)
       || clean.startsWith('/customers/') || clean === '/settings/website' || clean.startsWith('/settings/website/');
   }
   if (!ALLOWED_PREFIXES.some((prefix) => clean === prefix || clean.startsWith(prefix + '/'))) return false;

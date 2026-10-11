@@ -1,11 +1,13 @@
 import type { BookingTemplateProps, TemplateProps } from "../types";
 import { action, brandLogo, contentImage, designImage, durationMinutes, formatPrice, localized, records, section } from "../content";
+import { useTemplateCredit } from "../credit";
 import { usePublicChrome } from "../chrome";
 import "./abugida.css";
 import { AbugidaNewsletter } from "./AbugidaNewsletter";
 
 export function AbugidaSite({ snapshot, locale, applicationName, publicRoot, rootStyle, mode, toggleMode }: TemplateProps) {
   const chrome = usePublicChrome(locale);
+  const credit = useTemplateCredit(chrome);
   const design = snapshot.compiledDesign;
   const hero = section(snapshot.sections, "hero");
   const services = section(snapshot.sections, "services");
@@ -68,7 +70,7 @@ export function AbugidaSite({ snapshot, locale, applicationName, publicRoot, roo
       <section className="abugida-questions" id="faq"><div><h2>{localized(faq.title, locale)}</h2></div><div>{records(faq.items).map((item, index) => <details key={index}><summary>{localized(item.question, locale)}<span aria-hidden="true">+</span></summary><p>{localized(item.answer, locale)}</p></details>)}</div></section>
       <section className="abugida-rooms" id="contact">{locationImage ? <img src={locationImage.src} alt={locationImage.alt} /> : null}<div><h2>{localized(locations.title, locale)}</h2>{location ? <address>{localized(location.address, locale)}<br />{localized(location.hours, locale)}<br />{String(location.phone || "")}</address> : null}{finalAction ? <a className="abugida-button" href={finalAction.href}>{finalAction.label}</a> : null}</div></section>
     <AbugidaNewsletter snapshot={snapshot} applicationName={applicationName} locale={locale} publicRoot={publicRoot} /></main>
-    <footer className="abugida-footer"><a href={publicRoot}>{brand}</a>{localized(footer.body, locale) ? <p>{localized(footer.body, locale)}</p> : null}<small>© {new Date().getFullYear()} {applicationName}</small></footer>
+    <footer className="abugida-footer"><a href={publicRoot}>{brand}</a>{localized(footer.body, locale) ? <p>{localized(footer.body, locale)}</p> : null}<small>© {new Date().getFullYear()} {applicationName}</small>{credit ? <p className="abugida-credit" lang={locale} data-qa="template-credit">{credit.before}<a href={credit.href} rel="noopener" data-qa="template-credit-link">{credit.product}</a>{credit.after}</p> : null}</footer>
   </div>;
 }
 

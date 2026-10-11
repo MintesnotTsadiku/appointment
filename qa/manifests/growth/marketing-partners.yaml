@@ -1,0 +1,88 @@
+# Partners page (/partners): content, Telegram kit copy, inline validation and a successful application.
+# Run with fixture appointment.tests.growth_marketing_qa_fixtures (cleanup removes the Growth Partner
+# record the run creates). See docs/growth/MARKETING.md.
+app: appointment
+base_url: http://127.0.0.146:47800
+default_role: Guest
+auth:
+  type: none
+fixtures:
+  provider: appointment.tests.growth_marketing_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-growth-marketing-partners
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+scenarios:
+- id: marketing_partners_en_desktop
+  title: 'Partners page: apply as a partner (en, desktop, light)'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /partners
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-qa="partners-facts"]'
+    - type: visible_selector
+      value: '[data-qa="partners-kit-tools-en"]'
+    - type: text_contains
+      selector: '[data-qa="partners-kit-tools-am"]'
+      value: source=partner_PARTNERCODE
+  actions:
+  - action: screenshot
+    name: partners-en-hero.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="partners-hero-kit"]'
+  - action: screenshot
+    name: partners-en-kit.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="partners-hero-apply"]'
+  - action: click
+    selector: '[data-qa="partners-submit"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="partners-form-error"]'
+    - type: visible_selector
+      value: '[data-error-for="email"]'
+  - action: screenshot
+    name: partners-en-errors.png
+    full_page: false
+  - action: fill
+    selector: '[data-qa="partners-name"]'
+    value: '{qa_mkt_partner_name}'
+  - action: fill
+    selector: '[data-qa="partners-organization"]'
+    value: '{qa_mkt_partner_org}'
+  - action: fill
+    selector: '[data-qa="partners-email"]'
+    value: '{qa_mkt_partner_email}'
+  - action: fill
+    selector: '[data-qa="partners-phone"]'
+    value: '0911234567'
+  - action: click
+    selector: '[data-qa="partners-kind"] label:has([data-qa="partners-kind-school"])'
+  - action: fill
+    selector: '[data-qa="partners-message"]'
+    value: 'We train about 200 stylists a year in Bole and help graduates open their own chairs.'
+  - action: click
+    selector: '[data-qa="partners-submit"]'
+    assertions:
+    - type: network_request
+      url_contains: apply_partner
+      status: 200
+    - type: visible_selector
+      value: '[data-qa="partners-success"]'
+  - action: screenshot
+    name: partners-en-success.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

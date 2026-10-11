@@ -1,0 +1,32 @@
+{% extends "appointment/templates/tools/base.html" %}
+{% from "appointment/templates/tools/icons.html" import icon %}
+
+{% block hero %}
+<p class="lede">{{ t("lede") }}</p>
+{% endblock %}
+
+{% block content %}
+<section aria-labelledby="list-title">
+  <h2 id="list-title" class="sr-only">{{ t("listTitle") }}</h2>
+  <ul class="tool-list" data-qa="tools-index-list">
+    {%- for item in nav_tools %}
+    <li><a class="tool-card" href="{{ item.href }}" data-qa="tools-index-{{ item.slug }}">
+      <span class="tool-icon">{{ icon(item.icon) }}</span>
+      <span>
+        <h3>{{ item.name }}</h3>
+        <p>{{ item.summary }}</p>
+        <span class="go">{{ t("open") }}{{ icon("arrow") }}</span>
+      </span>
+    </a></li>
+    {%- endfor %}
+  </ul>
+</section>
+{% endblock %}
+
+{% block cta %}
+<section class="cta-band" aria-labelledby="cta-title">
+  <h2 id="cta-title">{{ t("ctaTitle") }}</h2>
+  <p>{{ t("ctaText", product_name) }}</p>
+  <a class="cta" href="{{ cta_href }}" data-qa="tool-cta">{{ t("cta") }}</a>
+</section>
+{% endblock %}

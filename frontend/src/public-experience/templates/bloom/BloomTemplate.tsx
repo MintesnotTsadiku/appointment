@@ -1,11 +1,13 @@
 import type { BookingTemplateProps, TemplateProps } from "../types";
 import { action, brandLogo, contentImage, designImage, formatPrice, localized, records, section } from "../content";
+import { useTemplateCredit } from "../credit";
 import { usePublicChrome } from "../chrome";
 import "./bloom.css";
 import { BloomNewsletter } from "./BloomNewsletter";
 
 export function BloomSite({ snapshot, locale, applicationName, publicRoot, rootStyle, mode, toggleMode }: TemplateProps) {
   const chrome = usePublicChrome(locale);
+  const credit = useTemplateCredit(chrome);
   const design = snapshot.compiledDesign;
   const hero = section(snapshot.sections, "hero");
   const services = section(snapshot.sections, "services");
@@ -61,7 +63,7 @@ export function BloomSite({ snapshot, locale, applicationName, publicRoot, rootS
       <section className="bloom-studio" id="contact">{locationImage ? <img src={locationImage.src} alt={locationImage.alt} /> : null}<div><h2>{localized(locations.title, locale)}</h2>{location ? <address>{localized(location.address, locale)}<br />{localized(location.hours, locale)}<br />{String(location.phone || "")}</address> : null}</div></section>
       <section className="bloom-final"><div><h2>{localized(booking.title, locale)}</h2></div>{finalAction ? <a href={finalAction.href}>{finalAction.label}</a> : null}</section>
     <BloomNewsletter snapshot={snapshot} applicationName={applicationName} locale={locale} publicRoot={publicRoot} /></main>
-    <footer className="bloom-footer"><a href={publicRoot}>{logo ? <img className="pe-brand-logo" src={logo} alt="" /> : null}{applicationName}</a>{localized(footer.body, locale) ? <p>{localized(footer.body, locale)}</p> : null}<small>© {new Date().getFullYear()} {applicationName}</small></footer>
+    <footer className="bloom-footer"><a href={publicRoot}>{logo ? <img className="pe-brand-logo" src={logo} alt="" /> : null}{applicationName}</a>{localized(footer.body, locale) ? <p>{localized(footer.body, locale)}</p> : null}<small>© {new Date().getFullYear()} {applicationName}</small>{credit ? <p className="bloom-credit" lang={locale} data-qa="template-credit">{credit.before}<a href={credit.href} rel="noopener" data-qa="template-credit-link">{credit.product}</a>{credit.after}</p> : null}</footer>
   </div>;
 }
 

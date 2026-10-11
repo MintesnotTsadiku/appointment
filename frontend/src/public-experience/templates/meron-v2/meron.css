@@ -212,3 +212,10 @@
   .mr [data-reveal], .mr [data-reveal] *, .mr-tape li { opacity: 1 !important; transform: none !important; }
   .mr-head::before, .mr-tape::before { transform: none !important; }
 }
+
+/* Footer legal row and the platform credit: a label-like caps line, as on a garment tag. */
+.mr-legal { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; }
+.mr-credit { color: var(--mr-muted); font-size: 0.8125rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.mr-credit:lang(am) { letter-spacing: 0; text-transform: none; font-size: 0.875rem; }
+.mr-credit a { display: inline-block; padding-block: 10px; color: var(--mr-ink); font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--mr-navy); line-height: 1.2; padding-bottom: 2px; }
+.mr-credit a:hover { border-bottom-width: 2px; }

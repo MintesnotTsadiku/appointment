@@ -217,3 +217,9 @@
   .ab-leader, .ab-rubric::before, .ab-hero-copy::before { transform: none !important; }
   .ab-leader { transform: translateY(-6px) !important; }
 }
+
+/* Footer legal row and the platform credit: a quiet line in the studio's ink, red underline. */
+.ab-legal { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; padding-top: 16px; border-top: 1px solid var(--ab-line); }
+.ab-credit { color: var(--ab-muted); font-size: 0.9375rem; font-style: italic; }
+.ab-credit a { display: inline-block; padding-block: 10px; color: var(--ab-ink); font-style: normal; font-weight: 700; text-decoration: underline; text-decoration-color: var(--ab-red); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.ab-credit a:hover { color: var(--ab-red); }

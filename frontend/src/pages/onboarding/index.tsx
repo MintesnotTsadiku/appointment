@@ -1,9 +1,9 @@
 import { FormEvent, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useFrappePostCall } from 'frappe-react-sdk';
 import { AlertCircle, Loader2 } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/alert';
 import { Button } from '@/components/button';
+import { Switch } from '@/components/switch';
 import { StaffShell } from '@/components/staff-shell';
 import { useSession } from '@/context/session';
 import { useTranslation } from '@/lib/i18n';
@@ -17,11 +17,13 @@ import { OnboardingSuccess, type CreatedBusiness } from './OnboardingSuccess';
 import SoloSetup from './solo-setup';
 
 export default function Onboarding() {
-  const navigate = useNavigate();
   const { reload } = useSession();
   const { t } = useTranslation();
   const { call: create, loading } = useFrappePostCall('appointment.scheduler.workspace.create');
   const { call: setOnboardingType } = useFrappePostCall('appointment.onboarding.set_onboarding_type');
+  const { call: publish } = useFrappePostCall('appointment.scheduler.workspace.publish');
+  // Publishing at setup saves a trip to settings; the owner can unpublish at any time.
+  const [publishNow, setPublishNow] = useState(true);
   const request = useRef<{ payload: string; key: string }>();
   const [clockFormat, setClockFormat] = useState<ClockFormat>('12h');
   const [selectedDays, setSelectedDays] = useState(DAYS.slice(0, 5));
@@ -63,11 +65,14 @@ export default function Onboarding() {
       // prospective owner (creates the provider record and capability).
       await setOnboardingType({ onboarding_type: 'organization' });
       const result = await create({ ...payload, request_id: request.current.key });
-      setDone(result?.message ?? null);
-      const next = await reload();
-      if (next?.state === 'workspace') {
-        navigate('/home', { replace: false });
+      const created = result?.message ?? null;
+      let published = false;
+      if (publishNow && created?.organization) {
+        // The business exists even if publishing fails; the success page then offers the settings page.
+        published = await publish({ organization: created.organization, published: 1 }).then(() => true, () => false);
       }
+      await reload();
+      setDone(created ? { ...created, published } : null);
     } catch (error) {
       setProblem(parseFrappeErrorMsg(error as Parameters<typeof parseFrappeErrorMsg>[0]));
     }
@@ -117,7 +122,15 @@ export default function Onboarding() {
               onDays={setSelectedDays}
             />
             <div className="flex flex-col-reverse items-stretch gap-3 border-t pt-6 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-xs text-muted-foreground">{t('staff.onboarding.privateNote')}</p>
+              <label className="flex min-h-11 cursor-pointer items-start gap-3 text-sm" data-qa="onboarding-publish-now">
+                <Switch checked={publishNow} onCheckedChange={setPublishNow} aria-describedby="onboarding-publish-hint" className="mt-0.5" />
+                <span>
+                  <span className="font-medium text-foreground">{t('staff.onboarding.publishNow')}</span>
+                  <span id="onboarding-publish-hint" className="block text-xs text-muted-foreground">
+                    {publishNow ? t('staff.onboarding.publishHint') : t('staff.onboarding.privateNote')}
+                  </span>
+                </span>
+              </label>
               <Button type="submit" data-qa="onboarding-submit" disabled={loading || Boolean(windowError)}>
                 {loading && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />}
                 {loading ? t('staff.onboarding.creating') : t('staff.onboarding.submit')}

@@ -166,8 +166,22 @@ def bookings(slug=None, session=None, email=None, offering=None):
     for row in rows:
         entry = _row(row, now)
         (upcoming if entry["upcoming"] else past).append(entry)
+    _add_book_again(owner, upcoming, past)
     upcoming.reverse()  # Soonest first.
     return {"valid": True, "email": address, "business_name": owner.display_name, "upcoming": upcoming, "past": past}
+
+
+def _add_book_again(owner, upcoming, past):
+    """Past bookings link straight back to the same service (Growth Settings `book_again_enabled`)."""
+    from appointment.growth import settings, touchpoints
+
+    enabled = settings.growth()["book_again_enabled"]
+    checked = {}
+    for entry in upcoming:
+        entry.pop("offering", None)
+    for entry in past:
+        offering = entry.pop("offering", None)
+        entry["book_again_path"] = (touchpoints.book_again_path(owner, offering, checked) or None) if enabled else None
 
 
 def _utc_now():
@@ -196,6 +210,7 @@ def _row(row, now):
         quantity=cint(row.quantity) or 1,
         payment_status=payment.status if payment else None,
         upcoming=start > now and row.status not in ("Cancelled",),
+        offering=row.event_type,
         manage_path=self_service.manage_url(doc).replace(get_url(), "") if doc else None,
     )
 

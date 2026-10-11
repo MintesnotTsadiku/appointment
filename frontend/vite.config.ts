@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
   if (isolated) {
     const target = `http://127.0.0.1:${process.env.FRAPPE_WORKTREE_WEB_PORT}`;
     proxyConfig = {
-      "^/(app|apps|desk|api|assets|files|private|logout|tools)(/|$)|^/(sitemap\\.xml|robots\\.txt)$": {
+      "^/(app|apps|desk|api|assets|files|private|logout|tools|am/tools|directory|am/directory|partners|am/partners)(/|$)|^/(sitemap\\.xml|robots\\.txt)$": {
         target,
         // Preserve the browser Host so public-experience resolution exercises
         // the same trusted-host contract as the production reverse proxy.
@@ -49,10 +49,13 @@ export default defineConfig(({ mode }) => {
         transformIndexHtml(html) {
           // Frappe renders this block in production; Vite must not serve Jinja
           // expressions as JavaScript. Auth in development uses the API session.
-          return html.replace(
-            /<script data-frappe-boot[^>]*>[\s\S]*?<\/script>/,
-            '<script>window.frappe = window.frappe || {};</script>',
-          );
+          return html
+            .replace(
+              /<script data-frappe-boot[^>]*>[\s\S]*?<\/script>/,
+              '<script>window.frappe = window.frappe || {};</script>',
+            )
+            // Business link-preview tags are rendered by Frappe (appointment/growth/sharing.py).
+            .replace(/\{\{\s*public_meta_tags[^}]*\}\}/, "");
         },
       },
       VitePWA({

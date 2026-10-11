@@ -30,6 +30,7 @@ const load = (rel) => {
 };
 const world = load("src/pages/landing/day/world.ts");
 const schedule = load("src/pages/landing/day/schedule.ts");
+const offer = load("src/pages/landing/shared/offer.ts");
 
 // Day clock.
 assert.equal(world.clockLabel(7), "07:00");
@@ -69,6 +70,21 @@ assert.equal(schedule.moveBooking(afternoon, "abebe", -60).outcome, "closed");
 assert.equal(schedule.moveBooking(afternoon, "yonas", 30).outcome, "closed", "cannot end after closing");
 assert.equal(afternoon.bookings[1].start, 1020, "the original day is not mutated");
 
+// Promise: the free wording follows the server's fee facts and falls back to the careful claim.
+assert.equal(offer.parseOffer(null, 5).free, "free_setup", "no answer yet: the claim true for every configuration");
+assert.equal(offer.parseOffer(null, 5).loaded, false);
+assert.equal(offer.parseOffer(null, 0).liveMinutes, 5, "minutes never show as zero");
+assert.equal(offer.parseOffer({ free: "no_fee", live_minutes: 7 }, 5).liveMinutes, 7, "server minutes win");
+assert.equal(offer.parseOffer({ free: "free_allowance", free_bookings: 0 }, 5).free, "free_setup", "an allowance of zero is not an allowance");
+assert.equal(offer.parseOffer({ free: "free_allowance", free_bookings: 30 }, 5).freeBookings, 30);
+assert.equal(offer.parseOffer({ free: "no_fee", free_bookings: 30 }, 5).freeBookings, 0);
+assert.equal(offer.parseOffer({ free: "anything" }, 5).free, "free_setup");
+assert.equal(offer.freeDetailKey(offer.parseOffer({ free: "no_fee" }, 5)), "world.promise.freeNoFee");
+assert.equal(offer.freeDetailKey(offer.parseOffer({ free: "free_allowance", free_bookings: 3 }, 5)), "world.promise.freeAllowance");
+assert.equal(offer.fill("Live in {minutes} minutes, {minutes}!", { minutes: 5 }), "Live in 5 minutes, 5!");
+assert.equal(offer.partnersPath("am"), "/am/partners");
+assert.equal(offer.partnersPath("en"), "/partners");
+
 // Copy exists in both shipped catalogs for every key the page uses.
 const flatten = (value, prefix = "") =>
   Object.entries(value).flatMap(([key, item]) =>
@@ -91,6 +107,13 @@ for (const [, key] of sources.matchAll(/t\("(world\.[\w.]+)"\)/g)) {
   assert.ok(en[key.slice("world.".length)], `unknown translation key ${key}`);
 }
 
+for (const key of ["freeNoFee", "freeAllowance", "freeSetup", "liveLabel", "liveDetail", "amharicLabel", "amharicDetail"]) {
+  assert.ok(en[`promise.${key}`], `missing world.promise.${key}`);
+}
+assert.ok(en["promise.liveLabel"].includes("{minutes}"), "the minutes are configured, never written into the copy");
+assert.ok(en["promise.freeAllowance"].includes("{count}"), "the free allowance is configured, never written into the copy");
+assert.ok(!/\d/.test(en["promise.liveLabel"] + en["promise.freeAllowance"] + en["promise.freeNoFee"]), "no hard-coded numbers in promises");
+assert.ok(read("src/pages/landing/day/components/Finale.tsx").includes("partnersPath(language)"), "the footer links the partners page");
 for (const key of ["bookedOnline", "movedTo", "clash", "closed", "cancelled", "restored", "stale", "reloaded"]) {
   assert.ok(en[`moves.${key}`], `missing world.moves.${key}`);
 }

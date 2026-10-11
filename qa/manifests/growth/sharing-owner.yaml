@@ -1,0 +1,143 @@
+# Run appointment.tests.growth_sharing_qa_fixtures.setup first and cleanup afterwards ($G/qa.sh does both).
+# Bloom Studio owner on the Grow page: share link and message, Telegram share URL, link preview card,
+# QR poster with both clocks, short-link check and ideas. Read-only for the showcase: no slug change.
+app: appointment
+base_url: http://127.0.0.146:47800
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.growth_sharing_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-growth-sharing
+default_role: Staff
+auth:
+  type: frappe_session
+  username: bloom.owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+scenarios:
+- id: share_owner_en_desktop
+  title: 'Bloom owner: Grow page, share to Telegram, edit message, preview, poster and short link (en, desktop)'
+  viewport: &desktop
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /grow
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="nav-grow"]'
+    - type: visible_selector
+      value: '[data-qa="grow-share"]'
+    - type: text_contains
+      value: '{qa_share_bloom_slug}'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="grow-preview-image"]'
+  - action: screenshot
+    name: share_owner_en_desktop-1-grow.png
+  - action: click
+    selector: '[data-qa="grow-copy-link"]'
+  - action: wait_for
+    selector: '[data-qa="grow-share-telegram"][href^="https://t.me/share/url?url="][href*="source%3Dtelegram_share"]'
+  - action: wait_for
+    selector: '[data-qa="grow-share-whatsapp"][href^="https://wa.me/?text="][href*="whatsapp_share"]'
+  - action: fill
+    selector: '[data-qa="grow-share-message"]'
+    value: 'Book your next visit with us online'
+  - action: wait_for
+    selector: '[data-qa="grow-share-telegram"][href*="text=Book%20your%20next%20visit%20with%20us%20online"]'
+  - action: wait_for
+    selector: '[data-qa="grow-message-reset"]'
+  - action: click
+    selector: '[data-qa="grow-message-lang-am"]'
+  - action: wait_for
+    selector: '[data-qa="grow-share-message"][lang="am"]'
+  - action: click
+    selector: '[data-qa="grow-preview-lang-am"]'
+  - action: screenshot
+    name: share_owner_en_desktop-2-message-preview.png
+  - action: scroll
+    selector: '[data-qa="grow-poster"]'
+  - action: wait_for
+    selector: '[data-qa="grow-poster-preview"]'
+  - action: click
+    selector: '[data-qa="grow-poster-theme-brand"]'
+  - action: click
+    selector: '[data-qa="grow-poster-size-a5"]'
+  - action: wait_for
+    selector: '[data-qa="grow-poster-download"][href*="format=pdf"][href*="size=A5"][href*="theme=brand"]'
+  - action: screenshot
+    name: share_owner_en_desktop-3-poster.png
+  - action: scroll
+    selector: '[data-qa="grow-short-link"]'
+  - action: fill
+    selector: '[data-qa="grow-slug-input"]'
+    value: admin
+  - action: wait_for
+    selector: '[data-qa="grow-slug-status"][data-state="error"]'
+  - action: fill
+    selector: '[data-qa="grow-slug-input"]'
+    value: bloom-qa-check
+    assertions:
+    - type: network_request
+      url_contains: short_links.check
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="grow-slug-status"][data-state="ok"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="grow-slug-suggestion"], 1)
+  - action: screenshot
+    name: share_owner_en_desktop-4-short-link.png
+  - action: open_url
+    url: /api/method/appointment.growth.poster.poster?business={qa_share_bloom_key}&size=A4&theme=light&languages=both&format=html
+  - action: wait_for
+    selector: '[data-poster-hours]'
+    assertions:
+    - type: visible_selector
+      value: '[data-clock="international"]'
+    - type: visible_selector
+      value: '[data-clock="habesha"]'
+    - type: text_contains
+      value: 'PM'
+    - type: text_contains
+      value: 'ለቀጠሮ ይቃኙ'
+  - action: screenshot
+    name: share_owner_en_desktop-5-poster-print-view.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: share_owner_am_mobile
+  title: 'Bloom owner: Grow page in Amharic on a phone (am, mobile)'
+  viewport: &mobile
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /grow
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="grow-share"]'
+  actions:
+  - action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="grow-share-telegram"][href*="source%3Dtelegram_share"]'
+  - action: screenshot
+    name: share_owner_am_mobile-1-grow.png
+    full_page: true
+  - action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+  - action: get_console_errors
+  - action: get_network_errors

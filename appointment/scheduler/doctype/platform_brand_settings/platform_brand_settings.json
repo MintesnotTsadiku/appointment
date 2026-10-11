@@ -1,0 +1,158 @@
+{
+ "actions": [],
+ "creation": "2026-10-12 09:00:00.000000",
+ "description": "Name, logos and contact details of the platform itself.",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "identity_section",
+  "product_name",
+  "product_url",
+  "short_host",
+  "identity_column",
+  "tagline_en",
+  "tagline_am",
+  "logos_section",
+  "logo",
+  "logo_dark",
+  "logos_column",
+  "mark",
+  "og_image",
+  "contact_section",
+  "primary_color",
+  "contact_column",
+  "support_email",
+  "telegram_url"
+ ],
+ "fields": [
+  {
+   "fieldname": "identity_section",
+   "fieldtype": "Section Break",
+   "label": "Identity",
+   "description": "How the platform names itself on public pages, emails and messages."
+  },
+  {
+   "fieldname": "product_name",
+   "fieldtype": "Data",
+   "label": "Product Name",
+   "description": "Shown in \"Powered by\", page titles and messages.",
+   "reqd": 1
+  },
+  {
+   "fieldname": "product_url",
+   "fieldtype": "Data",
+   "label": "Product URL",
+   "description": "Public address of the platform. Leave empty to use this site's address.",
+   "options": "URL"
+  },
+  {
+   "fieldname": "short_host",
+   "fieldtype": "Data",
+   "label": "Short Host",
+   "description": "Host shown in short links, for example the host of the product URL."
+  },
+  {
+   "fieldname": "identity_column",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "tagline_en",
+   "fieldtype": "Small Text",
+   "label": "Tagline (English)",
+   "description": "One short line about the platform."
+  },
+  {
+   "fieldname": "tagline_am",
+   "fieldtype": "Small Text",
+   "label": "Tagline (Amharic)",
+   "description": "The same line in Amharic."
+  },
+  {
+   "fieldname": "logos_section",
+   "fieldtype": "Section Break",
+   "label": "Logos",
+   "description": "Use files that are already uploaded to this site."
+  },
+  {
+   "fieldname": "logo",
+   "fieldtype": "Attach Image",
+   "label": "Logo",
+   "description": "Wide logo for light backgrounds."
+  },
+  {
+   "fieldname": "logo_dark",
+   "fieldtype": "Attach Image",
+   "label": "Logo for Dark Backgrounds",
+   "description": "Wide logo for dark backgrounds. Leave empty to use the logo."
+  },
+  {
+   "fieldname": "logos_column",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "mark",
+   "fieldtype": "Attach Image",
+   "label": "Mark",
+   "description": "Square icon shown next to the product name."
+  },
+  {
+   "fieldname": "og_image",
+   "fieldtype": "Attach Image",
+   "label": "Share Image",
+   "description": "Image that link previews show when someone shares the platform."
+  },
+  {
+   "fieldname": "contact_section",
+   "fieldtype": "Section Break",
+   "label": "Colour and Contact"
+  },
+  {
+   "fieldname": "primary_color",
+   "fieldtype": "Color",
+   "label": "Primary Colour",
+   "description": "Accent colour of the platform mark and links."
+  },
+  {
+   "fieldname": "contact_column",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "support_email",
+   "fieldtype": "Data",
+   "label": "Support Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "telegram_url",
+   "fieldtype": "Data",
+   "label": "Telegram URL",
+   "description": "Link to the platform's Telegram channel or group.",
+   "options": "URL"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-10-12 09:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Scheduler",
+ "name": "Platform Brand Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

@@ -1,0 +1,136 @@
+# Template footer credit on public sites (dark). Run with fixture appointment.tests.growth_showoff_qa_fixtures.
+app: appointment
+base_url: http://127.0.0.146:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-showoff-credit-dark
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: dark
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.growth_showoff_qa_fixtures.browser_values
+scenarios:
+- id: credit_bloom_en_mobile_dark
+  title: Bloom footer credit (en, mobile, dark)
+  viewport: &id004
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /{qa_showoff_bloom_slug}
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-pe-root]'
+  actions:
+  - action: scroll
+    delta_y: 20000
+  - action: wait_for
+    selector: '[data-qa="template-credit"]'
+  - action: get_text
+    selector: '[data-qa="template-credit"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="template-credit"]'
+      value: Website by
+    - type: visible_selector
+      value: '[data-qa="template-credit-link"][href*="source=template_credit"]'
+  - action: screenshot
+    name: credit_bloom_en_mobile_dark-footer.png
+    full_page: false
+  - &id001
+    action: get_console_errors
+  - &id002
+    action: get_network_errors
+- id: credit_meron_en_desktop_dark
+  title: Meron footer credit (en, desktop, dark)
+  viewport: &id003
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /meron-studio
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-pe-root]'
+  actions:
+  - action: scroll
+    delta_y: 20000
+  - action: wait_for
+    selector: '[data-qa="template-credit"]'
+  - action: get_text
+    selector: '[data-qa="template-credit"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="template-credit"]'
+      value: Website by
+    - type: visible_selector
+      value: '[data-qa="template-credit-link"][href*="source=template_credit"]'
+  - action: screenshot
+    name: credit_meron_en_desktop_dark-footer.png
+    full_page: false
+  - *id001
+  - *id002
+- id: credit_abugida_am_desktop_dark
+  title: Abugida footer credit (am, desktop, dark)
+  viewport: *id003
+  checks: []
+  routes:
+  - path: /abugida-studio/am
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-pe-root]'
+  actions:
+  - action: scroll
+    delta_y: 20000
+  - action: wait_for
+    selector: '[data-qa="template-credit"]'
+  - action: get_text
+    selector: '[data-qa="template-credit"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="template-credit"]'
+      value: ድረ-ገጽ በ
+    - type: visible_selector
+      value: '[data-qa="template-credit-link"][href*="source=template_credit"]'
+  - action: screenshot
+    name: credit_abugida_am_desktop_dark-footer.png
+    full_page: false
+  - *id001
+  - *id002
+- id: credit_tena_am_mobile_dark
+  title: Tena footer credit (am, mobile, dark)
+  viewport: *id004
+  checks: []
+  routes:
+  - path: /{qa_showoff_tena_slug}/am
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-pe-root]'
+  actions:
+  - action: scroll
+    delta_y: 20000
+  - action: wait_for
+    selector: '[data-qa="template-credit"]'
+  - action: get_text
+    selector: '[data-qa="template-credit"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="template-credit"]'
+      value: ድረ-ገጽ በ
+    - type: visible_selector
+      value: '[data-qa="template-credit-link"][href*="source=template_credit"]'
+  - action: screenshot
+    name: credit_tena_am_mobile_dark-footer.png
+    full_page: false
+  - *id001
+  - *id002

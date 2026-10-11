@@ -1,0 +1,69 @@
+# Owner opts Bloom into the directory. Run with fixture appointment.tests.growth_showoff_qa_fixtures (cleanup reverts the opt-in).
+app: appointment
+base_url: http://127.0.0.146:47800
+default_role: Staff
+auth:
+  type: frappe_session
+  username: bloom.owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment-growth-showoff-directory
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.growth_showoff_qa_fixtures.browser_values
+scenarios:
+- id: directory_owner_opt_in
+  title: Owner lists Bloom in the directory (en, desktop, light)
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /grow
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="directory-section"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="directory-toggle"]'
+  - action: screenshot
+    name: directory_owner-1-before.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="directory-category"]'
+  - action: click
+    selector: '[data-qa="directory-category-salon-barber"]'
+  - action: click
+    selector: '[data-qa="directory-area"]'
+  - action: click
+    selector: '[data-qa="directory-area-bole"]'
+  - action: click
+    selector: '[data-qa="directory-toggle"]'
+  - action: click
+    selector: '[data-qa="directory-save"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.growth.directory.save_owner_listing
+      method: POST
+      status: 200
+    - type: visible_selector
+      value: '[data-qa="directory-view"][href="/directory/salon-barber/bole"]'
+  - action: screenshot
+    name: directory_owner-2-listed.png
+    full_page: true
+  - action: open_url
+    url: /directory/salon-barber/bole
+  - action: wait_for
+    selector: '[data-qa="directory-listing"]:has-text("Bloom")'
+  - action: screenshot
+    name: directory_owner-3-area-page.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors

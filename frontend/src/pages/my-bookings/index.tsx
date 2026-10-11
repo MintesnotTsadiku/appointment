@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useFrappeGetCall, useFrappePostCall } from 'frappe-react-sdk';
-import { CalendarClock, CalendarX2, LogOut, MailCheck } from 'lucide-react';
+import { CalendarClock, CalendarX2, LogOut, MailCheck, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
 import { Label } from '@/components/label';
 import LanguageToggle from '@/components/language-toggle';
+import PoweredBy from '@/components/powered-by';
+import CustomerShareCard from '@/components/growth-referrals/CustomerShareCard';
+import { usePlatformBrand } from '@/lib/platform-brand';
 import { useTheme } from '@/components/theme-provider';
 import { useTranslation } from '@/lib/i18n';
 import { serverErrorMessage } from '@/lib/utils';
@@ -28,6 +31,8 @@ interface BookingRow {
   payment_status: string | null;
   upcoming: boolean;
   manage_path: string | null;
+  /** Past bookings: the same business and service, when Growth Settings allow it. */
+  book_again_path?: string | null;
 }
 
 interface Listing {
@@ -95,6 +100,7 @@ export default function MyBookingsPage() {
   const bookPath = slug ? `/${slug}/book` : `/schedule/individual/${offeringId}`;
   const [params, setParams] = useSearchParams();
   const { theme } = useTheme();
+  const { growth } = usePlatformBrand();
   const brand = useBookingBrand(slug || undefined, theme === 'dark' ? 'dark' : 'light');
   const { data: independent } = useFrappeGetCall<{ message: { business_name: string } }>(
     'appointment.scheduler.independent.public_offering',
@@ -185,7 +191,11 @@ export default function MyBookingsPage() {
       <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
         <h1 className="mb-6 text-2xl font-semibold" style={{ fontFamily: 'var(--booking-font-display)' }}>{t('myBookings.title')}</h1>
         <div className="rounded-2xl border border-theme-default bg-(--bg-secondary,transparent) p-5 sm:p-6">{body}</div>
+        {stage === 'list' && session && (
+          <CustomerShareCard className="mt-6" source={{ ...owner, session: session.session, email: session.email }} />
+        )}
       </main>
+      {growth.poweredByPages && <PoweredBy variant="inline" source="powered_by_page" className="mx-auto max-w-3xl pb-10 max-md:pb-10" />}
     </div>
   );
 }
@@ -295,6 +305,14 @@ function Section({ title, rows, qa, muted = false }: { title: string; rows: Book
               {row.manage_path && (
                 <Button asChild size="sm" variant="outline">
                   <a data-qa="my-booking-manage" href={row.manage_path}>{t('myBookings.manage')}</a>
+                </Button>
+              )}
+              {!row.manage_path && row.book_again_path && (
+                <Button asChild size="sm" variant="outline" className="min-h-11 sm:min-h-9">
+                  <a data-qa="my-booking-book-again" href={row.book_again_path}>
+                    <RotateCcw className="h-4 w-4" aria-hidden="true" />
+                    {t('customerManage.bookAgain')}
+                  </a>
                 </Button>
               )}
             </li>

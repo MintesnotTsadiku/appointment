@@ -1,0 +1,86 @@
+# Run with fixture appointment.tests.growth_referrals_qa_fixtures ($G/qa.sh runs setup before and cleanup after).
+# An independent provider (Hiwot Lash Studio) on the Grow page in Amharic on a phone, dark: the invite code,
+# the empty list of invited businesses, and turning on a "Bring a friend" offer with its own reward.
+app: appointment
+base_url: http://127.0.0.146:47800
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: dark
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.growth_referrals_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-growth-referrals-solo
+default_role: Staff
+auth:
+  type: frappe_session
+  username: qa-referrals-solo@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+scenarios:
+- id: ref_solo_grow_am_mobile_dark
+  title: 'Independent owner: referrals and the customer offer (am, mobile, dark)'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /grow
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="grow-referrals"]'
+  actions:
+  - action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="grow-referral-code"]'
+    assertions:
+    - type: text_contains
+      value: የግብዣ ኮድዎ
+    - type: text_contains
+      value: እስካሁን ምንም ንግድ የለም
+  - action: screenshot
+    name: ref_solo_grow_am_mobile_dark-1-referrals.png
+    full_page: false
+  - action: scroll
+    selector: '[data-qa="grow-customer-offer"]'
+  - action: click
+    selector: '[data-qa="customer-offer-enabled"]'
+  - action: click
+    selector: '[data-qa="customer-offer-type-custom"]'
+  - action: fill
+    selector: '[data-qa="customer-offer-text"]'
+    value: ነፃ የሽፋሽፍት እንክብካቤ
+  - action: click
+    selector: '[data-qa="customer-offer-who-both"]'
+  - action: click
+    selector: '[data-qa="customer-offer-ends"]'
+  - action: wait_for
+    selector: '[role="dialog"] table'
+  - action: screenshot
+    name: ref_solo_grow_am_mobile_dark-2-calendar.png
+    full_page: false
+  - action: press
+    selector: '[role="dialog"] table'
+    key: Escape
+  - action: click
+    selector: '[data-qa="customer-offer-save"]'
+    assertions:
+    - type: network_request
+      url_contains: customer_referral_api.save_offer
+      status: 200
+    - type: text_contains
+      value: ቅናሹ ተቀምጧል
+  - action: screenshot
+    name: ref_solo_grow_am_mobile_dark-3-offer.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

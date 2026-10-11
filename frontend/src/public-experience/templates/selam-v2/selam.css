@@ -220,3 +220,10 @@
   .sm [data-reveal] { opacity: 1 !important; transform: none !important; clip-path: none !important; }
   .sm-bar { transform: none !important; }
 }
+
+/* Footer legal row and the platform credit: a soft outlined pill like the studio's tempo tags. */
+.sm-legal { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 24px; }
+.sm-credit { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid var(--sm-line); border-radius: var(--sm-pill); color: var(--sm-muted); font-size: 0.875rem; }
+.sm-credit a { color: var(--sm-ink); font-weight: 800; text-decoration: none; }
+.sm-credit:has(a:hover) { border-color: var(--sm-primary); }
+.sm-credit a:hover { color: var(--sm-primary); }

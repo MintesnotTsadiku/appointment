@@ -1,0 +1,107 @@
+{
+ "actions": [],
+ "autoname": "hash",
+ "creation": "2026-10-12 02:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "owner_key",
+  "organization",
+  "independent_provider",
+  "enabled",
+  "reward_type",
+  "percent",
+  "reward_text",
+  "ends_on",
+  "friend_gets_offer",
+  "voucher_valid_days"
+ ],
+ "fields": [
+  {
+   "fieldname": "owner_key",
+   "fieldtype": "Data",
+   "label": "Business Key",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "organization",
+   "fieldtype": "Link",
+   "label": "Organization",
+   "options": "Organization"
+  },
+  {
+   "fieldname": "independent_provider",
+   "fieldtype": "Link",
+   "label": "Independent Provider",
+   "options": "Provider"
+  },
+  {
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled",
+   "default": "0",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "reward_type",
+   "fieldtype": "Select",
+   "label": "Reward Type",
+   "options": "Percent\nCustom",
+   "default": "Percent",
+   "reqd": 1
+  },
+  {
+   "fieldname": "percent",
+   "fieldtype": "Int",
+   "label": "Percent Off",
+   "default": "10"
+  },
+  {
+   "fieldname": "reward_text",
+   "fieldtype": "Data",
+   "label": "Custom Reward"
+  },
+  {
+   "fieldname": "ends_on",
+   "fieldtype": "Date",
+   "label": "Offer Ends On"
+  },
+  {
+   "fieldname": "friend_gets_offer",
+   "fieldtype": "Check",
+   "label": "Friend Gets The Offer Too",
+   "default": "0"
+  },
+  {
+   "fieldname": "voucher_valid_days",
+   "fieldtype": "Int",
+   "label": "Voucher Valid Days",
+   "default": "90"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-10-12 02:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Scheduler",
+ "name": "Customer Referral Offer",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

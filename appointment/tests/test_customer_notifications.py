@@ -12,6 +12,7 @@ import frappe
 import pytz
 from frappe.utils import add_days, nowdate
 
+from appointment.growth.brand import brand
 from appointment.scheduler import booking, notifications
 from appointment.scheduler.notification_email import render, send_notification
 from appointment.tests import demo_offerings
@@ -203,8 +204,12 @@ class TestCustomerNotifications(BloomBookingCase):
                 self.assertNotIn("<script>", html)
                 self.assertIn("&lt;script&gt;", html)
                 links = [part.split('"', 1)[0] for part in html.split('href="')[1:]]
-                # Open bookings link to their manage page first; every email links to the booking page.
-                self.assertTrue(any(link.endswith(f"/{slug}/book") for link in links), links)
+                # The platform's "Powered by" footer (docs/growth/TOUCHPOINTS.md) is not a business link.
+                platform = brand()["product_url"]
+                links = [link for link in links if not link.startswith(platform)]
+                # Open bookings link to their manage page first; every email links to the booking page,
+                # or straight back to the same service ("Book again").
+                self.assertTrue(any(link.endswith(f"/{slug}/book") or f"/schedule/org/{slug}/" in link for link in links), links)
                 manage = [link for link in links if f"/{slug}/booking/" in link]
                 closed = event in ("Cancellation", "Refund receipt")  # No manage link once the booking may be over.
                 self.assertEqual(len(manage), 0 if closed else 1, links)

@@ -1,0 +1,156 @@
+{
+ "actions": [],
+ "autoname": "hash",
+ "creation": "2026-10-12 02:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "owner_key",
+  "organization",
+  "independent_provider",
+  "customer_profile",
+  "customer_name",
+  "role",
+  "status",
+  "reward_label",
+  "referral_code",
+  "appointment",
+  "friend_profile",
+  "expires_on",
+  "redeemed_at",
+  "redeemed_by",
+  "redeemed_appointment",
+  "reward_key"
+ ],
+ "fields": [
+  {
+   "fieldname": "owner_key",
+   "fieldtype": "Data",
+   "label": "Business Key",
+   "reqd": 1,
+   "search_index": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "organization",
+   "fieldtype": "Link",
+   "label": "Organization",
+   "options": "Organization"
+  },
+  {
+   "fieldname": "independent_provider",
+   "fieldtype": "Link",
+   "label": "Independent Provider",
+   "options": "Provider"
+  },
+  {
+   "fieldname": "customer_profile",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer Profile",
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "label": "Customer Name",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "role",
+   "fieldtype": "Select",
+   "label": "Role",
+   "options": "Referrer\nFriend",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Issued\nRedeemed\nExpired",
+   "default": "Issued",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "reward_label",
+   "fieldtype": "Data",
+   "label": "Reward",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "referral_code",
+   "fieldtype": "Data",
+   "label": "Referral Code"
+  },
+  {
+   "fieldname": "appointment",
+   "fieldtype": "Link",
+   "label": "Referred Booking",
+   "options": "Appointment",
+   "search_index": 1
+  },
+  {
+   "fieldname": "friend_profile",
+   "fieldtype": "Link",
+   "label": "Friend",
+   "options": "Customer Profile"
+  },
+  {
+   "fieldname": "expires_on",
+   "fieldtype": "Date",
+   "label": "Expires On"
+  },
+  {
+   "fieldname": "redeemed_at",
+   "fieldtype": "Datetime",
+   "label": "Redeemed At"
+  },
+  {
+   "fieldname": "redeemed_by",
+   "fieldtype": "Link",
+   "label": "Redeemed By",
+   "options": "User"
+  },
+  {
+   "fieldname": "redeemed_appointment",
+   "fieldtype": "Link",
+   "label": "Redeemed On Booking",
+   "options": "Appointment"
+  },
+  {
+   "fieldname": "reward_key",
+   "fieldtype": "Data",
+   "label": "Reward Key",
+   "reqd": 1,
+   "unique": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-10-12 02:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Scheduler",
+ "name": "Customer Referral Reward",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "customer_name"
+}

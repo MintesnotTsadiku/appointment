@@ -8,6 +8,7 @@ import Prologue from "./components/Prologue";
 import Rail from "./components/Rail";
 import Sky from "./components/Sky";
 import TopBar from "./components/TopBar";
+import AmharicStage from "./stages/AmharicStage";
 import CareStage from "./stages/CareStage";
 import DeskStage from "./stages/DeskStage";
 import GrowStage from "./stages/GrowStage";
@@ -47,6 +48,7 @@ const DayLanding = () => {
           <Chapter id="moves"><MovesStage /></Chapter>
           <Chapter id="insights" flip><InsightsStage /></Chapter>
           <Chapter id="grow"><GrowStage /></Chapter>
+          <Chapter id="amharic" flip><AmharicStage /></Chapter>
           <Finale entry={entry} />
         </main>
       </div>

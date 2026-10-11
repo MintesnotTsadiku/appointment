@@ -1,0 +1,78 @@
+# Landing page promise (free to start, live in N minutes, Amharic everywhere) and the Amharic chapter.
+# Guest only; nothing is saved, so no fixture is needed. See docs/growth/MARKETING.md.
+app: appointment
+base_url: http://127.0.0.146:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-marketing-landing
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+scenarios:
+- id: marketing_landing_en_desktop
+  title: 'Landing promise and Amharic chapter (en, desktop, light)'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-qa="landing-promise"]'
+    - type: text_contains
+      selector: '[data-qa="landing-promise-free"]'
+      value: Free to start
+    - type: text_contains
+      selector: '[data-qa="landing-promise-live"]'
+      value: minutes
+    - type: text_contains
+      selector: '[data-qa="landing-promise-amharic"]'
+      value: Amharic everywhere
+    - type: network_request
+      url_contains: marketing.public_offer
+      status: 200
+  actions:
+  - action: screenshot
+    name: landing-en-promise.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="landing-timetable"] a[href="#amharic"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="landing-world"][data-world="amharic"]'
+  - action: click
+    selector: '[data-qa="landing-amharic-am"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="landing-amharic-sample"]'
+      value: ቀጠሮ ይያዙ
+  - action: screenshot
+    name: landing-en-amharic-chapter.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="landing-amharic-en"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="landing-amharic-sample"]'
+      value: Book an appointment
+  - action: scroll
+    delta_y: 5000
+  - action: scroll
+    delta_y: 5000
+  - action: wait_for
+    selector: '[data-qa="landing-promise-compact"]'
+  - action: wait_for
+    selector: '[data-qa="landing-partners"][href="/partners"]'
+  - action: screenshot
+    name: landing-en-finale.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

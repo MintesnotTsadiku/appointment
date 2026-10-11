@@ -1,0 +1,59 @@
+# Amharic, mobile, dark: landing page promise (free to start, live in N minutes, Amharic everywhere) and the Amharic chapter.
+# Guest only; nothing is saved, so no fixture is needed. See docs/growth/MARKETING.md.
+app: appointment
+base_url: http://127.0.0.146:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-marketing-landing-am
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+  color_scheme: dark
+scenarios:
+- id: marketing_landing_am_mobile
+  title: 'Landing promise and Amharic chapter (am, mobile 390, dark)'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="landing-promise"]'
+  actions:
+  - action: click
+    selector: '[data-qa="language-toggle"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="landing-promise-amharic"]'
+      value: በሁሉም ቦታ አማርኛ
+    - type: text_contains
+      selector: '[data-qa="landing-promise-free"]'
+      value: በነጻ ይጀምሩ
+  - action: screenshot
+    name: landing-am-mobile-promise.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="landing-timetable"] a[href="#amharic"]'
+  - action: wait_for
+    selector: '[data-qa="landing-amharic-sample"]'
+  - action: click
+    selector: '[data-qa="landing-amharic-am"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="landing-amharic-sample"]'
+      value: መስከረም 6
+  - action: screenshot
+    name: landing-am-mobile-chapter.png
+    full_page: false
+  - action: wait_for
+    selector: '[data-qa="landing-partners"][href="/am/partners"]'
+    state: attached
+  - action: get_console_errors
+  - action: get_network_errors

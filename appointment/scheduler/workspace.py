@@ -45,6 +45,17 @@ def require_provider_account():
     return user
 
 
+def _readable_slug(business_name):
+    """A short available address from the business name, so shared links stay memorable."""
+    from appointment.growth.short_links import suggestions
+    from appointment.public_experience.reserved import normalize_slug
+
+    if not normalize_slug(business_name):
+        return None  # A name without Latin letters keeps the generated address; the owner can pick one on Grow.
+    options = suggestions(business_name, None, count=1)
+    return options[0] if options else None
+
+
 @frappe.whitelist()
 def overview():
     require_provider_account()
@@ -94,9 +105,9 @@ def create(business_name, location_name, service_name, timezone, duration, opens
     for label in (business_name, location_name, service_name):
         if not str(label or "").strip() or len(label) > 100:
             frappe.throw(_("Names must contain 1–100 characters."))
-    # Serialize self-setup retries and give this operation an unguessable stable slug.
+    # Serialize self-setup retries by a key from the request; retries return the first result.
     key = hashlib.sha256((user + "\0" + request_id).encode()).hexdigest()
-    slug = "business-" + key[:24]
+    slug = _readable_slug(business_name) or "business-" + key[:24]
     payload = dict(
         business=business_name.strip(),
         location=location_name.strip(),

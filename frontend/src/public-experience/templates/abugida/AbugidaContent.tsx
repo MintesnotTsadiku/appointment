@@ -1,11 +1,14 @@
 import { createElement, type ReactNode } from "react";
 import type { ContentTemplateProps } from "../types";
+import { usePublicChrome } from "../chrome";
+import { useTemplateCredit } from "../credit";
 import { brandLogo } from "../content";
 import { richNodes, safeContentMedia, videoLink, type RichNode, type ContentBlock } from "../../contentContract";
 import "./abugida.css";
 import { AbugidaNewsletter } from "./AbugidaNewsletter";
 
-export function AbugidaContent({ snapshot, applicationName, publicRoot, rootStyle, mode, toggleMode, content, contentRoot }: ContentTemplateProps) {
+export function AbugidaContent({ snapshot, locale, applicationName, publicRoot, rootStyle, mode, toggleMode, content, contentRoot }: ContentTemplateProps) {
+  const credit = useTemplateCredit(usePublicChrome(locale));
   const logo = brandLogo(snapshot.compiledDesign);
   const release = content.release;
   const projection = release?.projection;
@@ -38,7 +41,7 @@ export function AbugidaContent({ snapshot, applicationName, publicRoot, rootStyl
       <AbugidaNewsletter snapshot={snapshot} applicationName={applicationName} locale={snapshot.locale} publicRoot={publicRoot} />
       </>}
     </main>
-    {!content.loading && <footer className="abugida-content-footer"><a href={publicRoot}>{applicationName}</a><a href={`${publicRoot}/book`}>Plan your visit →</a></footer>}
+    {!content.loading && <footer className="abugida-content-footer"><a href={publicRoot}>{applicationName}</a><a href={`${publicRoot}/book`}>Plan your visit →</a>{credit ? <p className="abugida-content-credit" lang={locale} data-qa="template-credit">{credit.before}<a href={credit.href} rel="noopener" data-qa="template-credit-link">{credit.product}</a>{credit.after}</p> : null}</footer>}
   </div>;
 }
 

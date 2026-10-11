@@ -3,6 +3,7 @@ import { useRef, type CSSProperties, type ReactNode } from "react";
 import type { BookingTemplateProps, TemplateProps } from "../types";
 import type { ContentImage, ContentRecord } from "../content";
 import { action, brandLogo, contentImage, designImage, durationMinutes, formatPrice, localized, records, section, sectionImage } from "../content";
+import { useTemplateCredit } from "../credit";
 import { usePublicChrome, type PublicChrome } from "../chrome";
 import { useReveal, useScrollState } from "../motion";
 import "./meron.css";
@@ -54,6 +55,7 @@ function uniqueImages(candidates: (ContentImage | null)[]): ContentImage[] {
 
 export function MeronSite({ snapshot, locale, applicationName, publicRoot, rootStyle, mode, toggleMode }: TemplateProps) {
   const chrome = usePublicChrome(locale);
+  const credit = useTemplateCredit(chrome);
   const root = useRef<HTMLDivElement>(null);
   useReveal(root, locale);
   const design = snapshot.compiledDesign;
@@ -206,7 +208,10 @@ export function MeronSite({ snapshot, locale, applicationName, publicRoot, rootS
       <div className="mr-wrap mr-footer-inner">
         <p className="mr-footer-name">{applicationName}</p>
         {localized(footer.body, locale) ? <p className="mr-muted">{localized(footer.body, locale)}</p> : null}
-        <small>© {new Date().getFullYear()} {applicationName}</small>
+        <div className="mr-legal">
+          <small>© {new Date().getFullYear()} {applicationName}</small>
+          {credit ? <p className="mr-credit" lang={locale} data-qa="template-credit">{credit.before}<a href={credit.href} rel="noopener" data-qa="template-credit-link">{credit.product}</a>{credit.after}</p> : null}
+        </div>
       </div>
     </footer>
   </div>;

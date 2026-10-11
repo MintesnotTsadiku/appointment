@@ -1,0 +1,98 @@
+# Timing run for the landing promise "live in N minutes": a guest goes from the landing page through
+# sign-up and business setup to a published booking page that a customer can open.
+# Run with fixture appointment.tests.growth_marketing_qa_fixtures (setup makes a fresh identity; cleanup
+# removes the account and the business through the document lifecycle). See docs/growth/MARKETING.md.
+app: appointment
+base_url: http://127.0.0.146:47800
+default_role: Guest
+auth:
+  type: none
+fixtures:
+  provider: appointment.tests.growth_marketing_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-growth-marketing-timing
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 240000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+scenarios:
+- id: marketing_signup_to_live
+  title: 'Sign-up to a published booking page (en, desktop)'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="landing-start"]'
+  actions:
+  - action: click
+    selector: '[data-qa="landing-start"]'
+    assertions:
+    - type: url_contains
+      value: /signup
+  - action: wait_for
+    selector: '[data-qa="signup-submit"]'
+  - action: fill
+    selector: '#fullName'
+    value: '{qa_mkt_full_name}'
+  - action: fill
+    selector: '#email'
+    value: '{qa_mkt_email}'
+  - action: fill
+    selector: '#password'
+    value: '{qa_mkt_password}'
+  - action: click
+    selector: '[data-qa="signup-submit"]'
+    assertions:
+    - type: network_request
+      url_contains: registration.signup
+      status: 200
+  # Open sign-up signs the new owner in and goes straight to business setup (no second sign-in).
+  - action: wait_for
+    selector: '#business_name'
+    timeout_ms: 20000
+  - action: screenshot
+    name: timing-2-onboarding.png
+    full_page: false
+  - action: fill
+    selector: '#business_name'
+    value: '{qa_mkt_business}'
+  - action: fill
+    selector: '#location_name'
+    value: '{qa_mkt_location}'
+  - action: fill
+    selector: '#service_name'
+    value: '{qa_mkt_service}'
+  - action: wait_for
+    selector: '[data-qa="onboarding-publish-now"] [role="switch"][data-state="checked"]'
+  - action: click
+    selector: '[data-qa="onboarding-submit"]'
+    assertions:
+    - type: network_request
+      url_contains: workspace.create
+      status: 200
+    - type: network_request
+      url_contains: workspace.publish
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="onboarding-success"][data-state="published"]'
+    timeout_ms: 20000
+  - action: screenshot
+    name: timing-3-live.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="onboarding-open-page"]'
+  - action: wait_for
+    selector: 'text={qa_mkt_service}'
+    timeout_ms: 20000
+  - action: screenshot
+    name: timing-4-booking-page.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

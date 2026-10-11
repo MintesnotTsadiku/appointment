@@ -3,6 +3,7 @@ import { useRef, type CSSProperties, type ReactNode } from "react";
 import type { BookingTemplateProps, TemplateProps } from "../types";
 import type { ContentRecord } from "../content";
 import { action, brandLogo, contentImage, designImage, durationMinutes, formatPrice, localized, records, section, sectionImage } from "../content";
+import { useTemplateCredit } from "../credit";
 import { usePublicChrome, type PublicChrome } from "../chrome";
 import { useReveal, useScrollState } from "../motion";
 import "./abugida.css";
@@ -50,6 +51,7 @@ function Bar({ logo, name, root, chrome, mode, toggleMode, children }: { logo?: 
 
 export function AbugidaSite({ snapshot, locale, applicationName, publicRoot, rootStyle, mode, toggleMode }: TemplateProps) {
   const chrome = usePublicChrome(locale);
+  const credit = useTemplateCredit(chrome);
   const root = useRef<HTMLDivElement>(null);
   useReveal(root, locale);
   const design = snapshot.compiledDesign;
@@ -202,7 +204,10 @@ export function AbugidaSite({ snapshot, locale, applicationName, publicRoot, roo
       <div className="ab-wrap ab-footer-inner">
         <p className="ab-footer-name">{applicationName}</p>
         {localized(footer.body, locale) ? <p className="ab-muted">{localized(footer.body, locale)}</p> : null}
-        <small>© {new Date().getFullYear()} {applicationName}</small>
+        <div className="ab-legal">
+          <small>© {new Date().getFullYear()} {applicationName}</small>
+          {credit ? <p className="ab-credit" lang={locale} data-qa="template-credit">{credit.before}<a href={credit.href} rel="noopener" data-qa="template-credit-link">{credit.product}</a>{credit.after}</p> : null}
+        </div>
       </div>
     </footer>
   </div>;

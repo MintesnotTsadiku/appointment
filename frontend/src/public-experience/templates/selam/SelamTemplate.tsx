@@ -1,5 +1,6 @@
 import type { BookingTemplateProps, TemplateProps } from "../types";
 import { action, brandLogo, contentImage, designImage, durationMinutes, formatPrice, localized, records, section, sectionImage } from "../content";
+import { useTemplateCredit } from "../credit";
 import { usePublicChrome } from "../chrome";
 import "./selam.css";
 import { SelamNewsletter } from "./SelamNewsletter";
@@ -8,6 +9,7 @@ const Mark = () => <span className="selam-mark" aria-hidden="true">✳</span>;
 
 export function SelamSite({ snapshot, locale, applicationName, publicRoot, rootStyle, mode, toggleMode }: TemplateProps) {
   const chrome = usePublicChrome(locale);
+  const credit = useTemplateCredit(chrome);
   const design = snapshot.compiledDesign;
   const hero = section(snapshot.sections, "hero");
   const services = section(snapshot.sections, "services");
@@ -71,7 +73,7 @@ export function SelamSite({ snapshot, locale, applicationName, publicRoot, rootS
       <section className="selam-location" id="contact"><div><h2>{localized(locations.title, locale)}</h2>{location ? <address>{localized(location.address, locale)}<br />{localized(location.hours, locale)}<br />{String(location.phone || "")}</address> : null}</div>{locationImage ? <img src={locationImage.src} alt={locationImage.alt} /> : null}</section>
       <section className="selam-final"><h2>{localized(booking.title, locale)}</h2>{finalAction ? <a className="selam-pill" href={finalAction.href}>{finalAction.label}</a> : null}</section>
     <SelamNewsletter snapshot={snapshot} applicationName={applicationName} locale={locale} publicRoot={publicRoot} /></main>
-    <footer className="selam-footer"><a className="selam-logo" href={publicRoot}>{logo ? <img className="pe-brand-logo" src={logo} alt="" /> : <Mark />} <strong>{applicationName}</strong></a>{localized(footer.body, locale) ? <span>{localized(footer.body, locale)}</span> : null}<small>© {new Date().getFullYear()} {applicationName}</small></footer>
+    <footer className="selam-footer"><a className="selam-logo" href={publicRoot}>{logo ? <img className="pe-brand-logo" src={logo} alt="" /> : <Mark />} <strong>{applicationName}</strong></a>{localized(footer.body, locale) ? <span>{localized(footer.body, locale)}</span> : null}<small>© {new Date().getFullYear()} {applicationName}</small>{credit ? <p className="selam-credit" lang={locale} data-qa="template-credit">{credit.before}<a href={credit.href} rel="noopener" data-qa="template-credit-link">{credit.product}</a>{credit.after}</p> : null}</footer>
   </div>;
 }
 

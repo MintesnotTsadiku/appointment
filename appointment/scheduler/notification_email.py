@@ -11,6 +11,7 @@ from frappe import _
 from frappe.utils import escape_html, flt, get_datetime, get_url
 from frappe.utils.verified_command import get_signed_params
 
+from appointment.growth import touchpoints
 from appointment.helpers.utils import format_ethiopian_time
 from appointment.scheduler import business_owner, self_service
 from appointment.scheduler.notifications import is_stale
@@ -148,6 +149,8 @@ def render(event, doc, language, recipient, receipt=None):
         opt_out_label=t("Stop reminders from this business"),
         opt_out_url=escape_html(opt_out_url(business.key, recipient)) if event == "Reminder" else "",
     )
+    # Book-again button and the platform's "Powered by" footer (Growth Settings).
+    context.update(touchpoints.email_context(event, doc, language))
     return {"subject": context["subject"], "html": frappe.render_template(TEMPLATE, context)}
 
 

@@ -1,0 +1,163 @@
+# Run appointment.tests.growth_sharing_qa_fixtures.setup first and cleanup afterwards ($G/qa.sh does both).
+# The fixture independent business (its own website) on the Grow page in dark mode: Amharic and English
+# on a phone, the poster print view with both clocks, and a short-link change that the run reverts.
+app: appointment
+base_url: http://127.0.0.146:47800
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: dark
+fixtures:
+  provider: appointment.tests.growth_sharing_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-growth-sharing
+default_role: Staff
+auth:
+  type: frappe_session
+  username: qa-sharing-owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+scenarios:
+- id: share_solo_am_mobile_dark
+  title: 'Independent owner: Grow page, share and poster (am, mobile, dark)'
+  viewport: &mobile
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /grow
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="grow-share"]'
+    - type: text_contains
+      value: '{qa_share_solo_slug}'
+  actions:
+  - action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="grow-share-message"][lang="am"]'
+  - action: wait_for
+    selector: '[data-qa="grow-share-telegram"][href^="https://t.me/share/url?url="][href*="source%3Dtelegram_share"]'
+  - action: screenshot
+    name: share_solo_am_mobile_dark-1-grow.png
+  - action: fill
+    selector: '[data-qa="grow-share-message"]'
+    value: 'ቀጣዩን ቀጠሮዎን በኦንላይን ይያዙ'
+  - action: wait_for
+    selector: '[data-qa="grow-message-reset"]'
+  - action: scroll
+    selector: '[data-qa="grow-preview"]'
+  - action: wait_for
+    selector: '[data-qa="grow-preview-image"]'
+  - action: screenshot
+    name: share_solo_am_mobile_dark-2-preview.png
+  - action: scroll
+    selector: '[data-qa="grow-poster"]'
+  - action: click
+    selector: '[data-qa="grow-poster-theme-dark"]'
+  - action: wait_for
+    selector: '[data-qa="grow-poster-download"][href*="theme=dark"]'
+  - action: screenshot
+    name: share_solo_am_mobile_dark-3-poster.png
+  - action: screenshot
+    name: share_solo_am_mobile_dark-4-full.png
+    full_page: true
+  - action: open_url
+    url: /api/method/appointment.growth.poster.poster?business={qa_share_solo_key}&size=A5&theme=dark&languages=am&format=html
+  - action: wait_for
+    selector: '[data-poster-hours]'
+    assertions:
+    - type: visible_selector
+      value: '[data-clock="habesha"]'
+    - type: text_contains
+      value: 'ምሽት'
+    - type: text_contains
+      value: 'PM'
+  - action: screenshot
+    name: share_solo_am_mobile_dark-5-poster-print-view.png
+    full_page: true
+  - action: open_url
+    url: /grow
+  - action: wait_for
+    selector: '[data-qa="grow-share"]'
+  - action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+  - action: get_console_errors
+  - action: get_network_errors
+- id: share_solo_en_mobile_dark_slug
+  title: 'Independent owner: change the short link, old link forwards, change it back (en, mobile, dark)'
+  viewport: *mobile
+  checks: []
+  routes:
+  - path: /grow
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="grow-short-link"]'
+  actions:
+  - action: scroll
+    selector: '[data-qa="grow-short-link"]'
+  - action: fill
+    selector: '[data-qa="grow-slug-input"]'
+    value: '{qa_share_solo_new_slug}'
+  - action: wait_for
+    selector: '[data-qa="grow-slug-status"][data-state="ok"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="grow-slug-suggestion"], 1)
+  - action: screenshot
+    name: share_solo_en_mobile_dark_slug-1-available.png
+  - action: click
+    selector: '[data-qa="grow-slug-save"]'
+  - action: wait_for
+    selector: '[data-qa="grow-slug-confirm"]'
+  - action: screenshot
+    name: share_solo_en_mobile_dark_slug-2-confirm.png
+  - action: click
+    selector: '[data-qa="grow-slug-confirm-save"]'
+    assertions:
+    - type: network_request
+      url_contains: short_links.change
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="grow-slug-aliases"]'
+  - action: wait_for
+    selector: '[data-qa="grow-share-link"]:has-text("{qa_share_solo_new_slug}")'
+  - action: screenshot
+    name: share_solo_en_mobile_dark_slug-3-changed.png
+  - action: open_url
+    url: /{qa_share_solo_slug}?source=qr_poster
+  - action: wait_for_url_contains
+    value: '/{qa_share_solo_new_slug}?source=qr_poster'
+  - action: wait_for
+    selector: 'main:not([data-pe-unavailable])'
+  - action: screenshot
+    name: share_solo_en_mobile_dark_slug-4-forwarded.png
+  - action: open_url
+    url: /grow
+  - action: scroll
+    selector: '[data-qa="grow-short-link"]'
+  - action: fill
+    selector: '[data-qa="grow-slug-input"]'
+    value: '{qa_share_solo_slug}'
+  - action: wait_for
+    selector: '[data-qa="grow-slug-status"][data-state="ok"]'
+  - action: click
+    selector: '[data-qa="grow-slug-save"]'
+  - action: click
+    selector: '[data-qa="grow-slug-confirm-save"]'
+    assertions:
+    - type: network_request
+      url_contains: short_links.change
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="grow-share-link"]:has-text("{qa_share_solo_slug}")'
+  - action: get_console_errors
+  - action: get_network_errors

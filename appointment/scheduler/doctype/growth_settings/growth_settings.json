@@ -1,0 +1,270 @@
+{
+ "actions": [],
+ "creation": "2026-10-12 09:00:00.000000",
+ "description": "Switches and texts for the platform's organic growth features.",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "touchpoints_section",
+  "powered_by_pages",
+  "powered_by_emails",
+  "powered_by_sms",
+  "book_again_enabled",
+  "customer_business_prompt_enabled",
+  "touchpoints_column",
+  "own_page_text_en",
+  "own_page_text_am",
+  "sharing_section",
+  "share_message_en",
+  "share_message_am",
+  "sharing_column",
+  "posters_enabled",
+  "referrals_section",
+  "business_referrals_enabled",
+  "referral_threshold_bookings",
+  "referral_reward_free_bookings",
+  "referrals_column",
+  "customer_referrals_enabled",
+  "customer_referral_default_percent",
+  "partner_program_enabled",
+  "partner_reward_free_bookings",
+  "tools_section",
+  "tools_enabled",
+  "showoff_section",
+  "directory_enabled",
+  "year_review_enabled",
+  "showoff_column",
+  "template_credit_enabled",
+  "marketing_section",
+  "marketing_live_minutes"
+ ],
+ "fields": [
+  {
+   "fieldname": "touchpoints_section",
+   "fieldtype": "Section Break",
+   "label": "Customer Touchpoints",
+   "description": "Small platform mentions that customers see after they book."
+  },
+  {
+   "fieldname": "powered_by_pages",
+   "fieldtype": "Check",
+   "label": "\"Powered by\" on Pages",
+   "description": "Show the platform mark on public booking pages.",
+   "default": "1"
+  },
+  {
+   "fieldname": "powered_by_emails",
+   "fieldtype": "Check",
+   "label": "\"Powered by\" in Emails",
+   "description": "Add one short platform line to customer emails.",
+   "default": "1"
+  },
+  {
+   "fieldname": "powered_by_sms",
+   "fieldtype": "Check",
+   "label": "\"Powered by\" in SMS",
+   "description": "Add the short host to customer SMS messages when there is room.",
+   "default": "1"
+  },
+  {
+   "fieldname": "book_again_enabled",
+   "fieldtype": "Check",
+   "label": "Book Again",
+   "description": "Offer a one-tap \"book again\" link after a visit.",
+   "default": "1"
+  },
+  {
+   "fieldname": "customer_business_prompt_enabled",
+   "fieldtype": "Check",
+   "label": "Ask Customers if They Run a Business",
+   "description": "Invite customers who run a business to make their own page.",
+   "default": "1"
+  },
+  {
+   "fieldname": "touchpoints_column",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "own_page_text_en",
+   "fieldtype": "Data",
+   "label": "Own Page Text (English)",
+   "description": "Line under \"Powered by\" that invites visitors to make a page."
+  },
+  {
+   "fieldname": "own_page_text_am",
+   "fieldtype": "Data",
+   "label": "Own Page Text (Amharic)"
+  },
+  {
+   "fieldname": "sharing_section",
+   "fieldtype": "Section Break",
+   "label": "Sharing",
+   "description": "Tools that help a business share its booking page."
+  },
+  {
+   "fieldname": "share_message_en",
+   "fieldtype": "Small Text",
+   "label": "Share Message (English)",
+   "description": "Placeholders: {business} and {link}."
+  },
+  {
+   "fieldname": "share_message_am",
+   "fieldtype": "Small Text",
+   "label": "Share Message (Amharic)",
+   "description": "Placeholders: {business} and {link}."
+  },
+  {
+   "fieldname": "sharing_column",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "posters_enabled",
+   "fieldtype": "Check",
+   "label": "Posters",
+   "description": "Let businesses print a poster with their QR code and hours.",
+   "default": "1"
+  },
+  {
+   "fieldname": "referrals_section",
+   "fieldtype": "Section Break",
+   "label": "Referrals"
+  },
+  {
+   "fieldname": "business_referrals_enabled",
+   "fieldtype": "Check",
+   "label": "Business Referrals",
+   "description": "Reward a business when a business it invited gets going.",
+   "default": "1"
+  },
+  {
+   "fieldname": "referral_threshold_bookings",
+   "fieldtype": "Int",
+   "label": "Bookings Before Reward",
+   "description": "Bookings the invited business must receive before the reward is given.",
+   "default": "20",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "referral_reward_free_bookings",
+   "fieldtype": "Int",
+   "label": "Reward (Free Bookings)",
+   "description": "Free bookings given to the business that invited.",
+   "default": "50",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "referrals_column",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "customer_referrals_enabled",
+   "fieldtype": "Check",
+   "label": "Customer Referrals",
+   "description": "Let businesses reward customers who bring friends.",
+   "default": "1"
+  },
+  {
+   "fieldname": "customer_referral_default_percent",
+   "fieldtype": "Int",
+   "label": "Default Customer Discount (%)",
+   "description": "Suggested discount for a referred friend.",
+   "default": "10",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "partner_program_enabled",
+   "fieldtype": "Check",
+   "label": "Partner Programme",
+   "description": "Accept partner applications from associations, trainers and community admins.",
+   "default": "1"
+  },
+  {
+   "fieldname": "partner_reward_free_bookings",
+   "fieldtype": "Int",
+   "label": "Partner Reward (Free Bookings)",
+   "description": "Free bookings given for each business a partner brings.",
+   "default": "50",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "tools_section",
+   "fieldtype": "Section Break",
+   "label": "Free Tools"
+  },
+  {
+   "fieldname": "tools_enabled",
+   "fieldtype": "Check",
+   "label": "Free Tools",
+   "description": "Show the public free tools, such as the Ethiopian time converter.",
+   "default": "1"
+  },
+  {
+   "fieldname": "showoff_section",
+   "fieldtype": "Section Break",
+   "label": "Show-off"
+  },
+  {
+   "fieldname": "directory_enabled",
+   "fieldtype": "Check",
+   "label": "Business Directory",
+   "description": "List published businesses in the public directory.",
+   "default": "1"
+  },
+  {
+   "fieldname": "year_review_enabled",
+   "fieldtype": "Check",
+   "label": "Year in Review",
+   "description": "Offer each business a shareable summary of its year.",
+   "default": "1"
+  },
+  {
+   "fieldname": "showoff_column",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "template_credit_enabled",
+   "fieldtype": "Check",
+   "label": "Template Credit",
+   "description": "Show a small credit in the footer of public business sites.",
+   "default": "1"
+  },
+  {
+   "fieldname": "marketing_section",
+   "fieldtype": "Section Break",
+   "label": "Marketing"
+  },
+  {
+   "fieldname": "marketing_live_minutes",
+   "fieldtype": "Int",
+   "label": "Live Numbers Refresh (Minutes)",
+   "description": "How often public counters on marketing pages refresh.",
+   "default": "5",
+   "non_negative": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-10-12 09:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Scheduler",
+ "name": "Growth Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

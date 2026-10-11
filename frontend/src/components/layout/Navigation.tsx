@@ -3,10 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import ModeToggle from '@/components/theme-provider/components/modeToggle';
 import LanguageToggle from '@/components/language-toggle';
-import { useTranslation } from '@/lib/i18n';
+import { PlatformMark } from '@/components/platform-mark';
+import { useBrandedTranslation } from '@/lib/platform-brand';
 
 const Navigation = () => {
-  const { t } = useTranslation();
+  const { t, brand } = useBrandedTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -50,16 +51,9 @@ const Navigation = () => {
               transition={{ duration: 0.2 }}
             >
               <a href="/" className="flex items-center space-x-2">
-                <div 
-                  className="w-10 h-10 rounded-lg flex items-center justify-center"
-                  style={{ 
-                    background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))'
-                  }}
-                >
-                  <span className="text-white font-bold text-xl">ET</span>
-                </div>
+                <PlatformMark brand={brand} size={40} className="rounded-lg" />
                 <span className="font-heading font-bold text-xl hidden sm:block" style={{ color: 'var(--text-primary)' }}>
-                  Meet.et
+                  {brand.productName}
                 </span>
               </a>
             </motion.div>

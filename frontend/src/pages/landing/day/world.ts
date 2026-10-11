@@ -12,6 +12,7 @@ export type WorldId =
   | "moves"
   | "insights"
   | "grow"
+  | "amharic"
   | "night";
 
 export interface World {
@@ -28,6 +29,7 @@ export const WORLDS: World[] = [
   { id: "moves", hour: 16.75 },
   { id: "insights", hour: 19 },
   { id: "grow", hour: 21.5 },
+  { id: "amharic", hour: 22.5 },
   { id: "night", hour: 23.75 },
 ];
 

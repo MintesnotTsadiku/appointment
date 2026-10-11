@@ -122,7 +122,7 @@ def public_settings():
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])
 @rate_limit(limit=10, seconds=600, methods=["POST"])
-def signup(email, full_name=None, password=None, redirect_to=None):
+def signup(email, full_name=None, password=None, redirect_to=None, ref=None, source=None):
     if requires_verification():
         frappe.throw(_("Email verification is not implemented. Use Open signup with administrator approval, or administrator provisioning."), frappe.PermissionError)
     if not self_signup_enabled():
@@ -154,6 +154,10 @@ def signup(email, full_name=None, password=None, redirect_to=None):
         frappe.throw(_("A password is required."))
     doc.new_password = password
     doc.insert(ignore_permissions=True)
+    from appointment.growth.referrals import remember_signup
+
+    # The first business this account creates takes the referral code and sign-up channel.
+    remember_signup(doc.name, ref, source)
     frappe.db.commit()
 
     if approval:
@@ -165,4 +169,18 @@ def signup(email, full_name=None, password=None, redirect_to=None):
         "status": status,
         "signup_mode": self_signup_mode(),
         "email_sent": False,
+        "signed_in": status == "active" and _sign_in(doc.name),
     }
+
+
+def _sign_in(user):
+    """Start the new account's session, so the owner goes straight to business setup.
+
+    The visitor has just chosen this password, so a second sign-in screen only adds a step.
+    Accounts that wait for administrator approval are disabled and are never signed in.
+    """
+    login_manager = getattr(frappe.local, "login_manager", None)
+    if not (frappe.request and login_manager):
+        return False
+    login_manager.login_as(user)
+    return True

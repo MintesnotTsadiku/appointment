@@ -1,0 +1,75 @@
+{
+ "actions": [],
+ "autoname": "field:code",
+ "creation": "2026-10-12 02:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "code",
+  "customer_profile",
+  "owner_key",
+  "organization",
+  "independent_provider"
+ ],
+ "fields": [
+  {
+   "fieldname": "code",
+   "fieldtype": "Data",
+   "label": "Code",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "customer_profile",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer Profile",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "owner_key",
+   "fieldtype": "Data",
+   "label": "Business Key",
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "organization",
+   "fieldtype": "Link",
+   "label": "Organization",
+   "options": "Organization"
+  },
+  {
+   "fieldname": "independent_provider",
+   "fieldtype": "Link",
+   "label": "Independent Provider",
+   "options": "Provider"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-10-12 02:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Scheduler",
+ "name": "Customer Referral Code",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

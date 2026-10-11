@@ -29,6 +29,7 @@ RESERVED_ROOT_PATHS = frozenset(
         "admin",
         "reception",
         "customers",
+        "grow",
         "forgot-password",
         "schedule",
         "preview",
@@ -49,6 +50,10 @@ RESERVED_ROOT_PATHS = frozenset(
         "sitemap.xml",
         "favicon.ico",
         "tools",
+        "directory",
+        "partners",
+        # Amharic versions of server-rendered pages: /am/tools/..., /am/directory/...
+        "am",
     }
 )
 

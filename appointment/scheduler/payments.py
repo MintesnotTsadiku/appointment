@@ -389,12 +389,13 @@ def _fee(payment):
 def _ledger(payment):
     fee = _fee(payment)
     paid_so_far = frappe.db.count("Booking Payment", {"organization": payment.organization, "status": ["in", ["Paid", "Refunded"]]})
-    waived = paid_so_far <= cint(platform().free_bookings)
+    base = cint(platform().free_bookings)
+    waived = paid_so_far <= base + _referral_bonus(payment.organization)
     if fee > 0 or payment.collector == "Platform":
         frappe.get_doc(dict(
             doctype="Platform Ledger Entry", organization=payment.organization, entry_type="Platform fee", amount=fee,
             status="Waived" if waived or fee <= 0 else "Due", appointment=payment.appointment, booking_payment=payment.name,
-            note=_("Free allowance") if waived and fee > 0 else None,
+            note=(_("Free allowance") if paid_so_far <= base else _("Referral bonus")) if waived and fee > 0 else None,
         )).insert(ignore_permissions=True)
     if payment.collector == "Platform":
         kept = 0 if waived else fee
@@ -402,6 +403,13 @@ def _ledger(payment):
             doctype="Platform Ledger Entry", organization=payment.organization, entry_type="Payout due",
             amount=round(flt(payment.amount) - kept, 2), status="Due", appointment=payment.appointment, booking_payment=payment.name,
         )).insert(ignore_permissions=True)
+
+
+def _referral_bonus(organization):
+    """Free bookings this business earned through referrals (Free Booking Credit rows)."""
+    from appointment.growth.referral_rewards import bonus_free_bookings
+
+    return bonus_free_bookings(organization)
 
 
 # ---------------------------------------------------------------------------

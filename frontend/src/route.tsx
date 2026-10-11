@@ -32,6 +32,7 @@ const PaymentSettings = lazy(() => import("@/pages/settings/payments"));
 const ResourceSettings = lazy(() => import("@/pages/settings/resources"));
 const Customers = lazy(() => import("@/pages/customers"));
 const CustomerPage = lazy(() => import("@/pages/customers/detail"));
+const Grow = lazy(() => import("@/pages/grow"));
 const ManageBooking = lazy(() => import("@/pages/manage-booking"));
 const MyBookings = lazy(() => import("@/pages/my-bookings"));
 const ServicesSettings = lazy(() => import("@/pages/settings/services"));
@@ -48,6 +49,8 @@ const InternalAppearance = lazy(() => import("@/pages/settings/internal-appearan
 const Settings = lazy(() => import("@/pages/settings"));
 const AdminDashboard = lazy(() => import("@/pages/admin/dashboard"));
 const AdminPayments = lazy(() => import("@/pages/admin/payments"));
+const AdminBrandGrowth = lazy(() => import("@/pages/admin/brand"));
+const AdminReferrals = lazy(() => import("@/pages/admin/referrals"));
 const Appointment = lazy(() => import("@/pages/appointment"));
 const GroupAppointment = lazy(() => import("@/pages/group-appointment"));
 const OrganizationAppointment = lazy(() => import("@/pages/organization-appointment"));
@@ -109,6 +112,7 @@ const Router = () => {
       <Route path="/settings/edit-service/:serviceId" element={<EditService />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/manage" element={<Manage />} errorElement={<ErrorFallback />}></Route>
       <Route element={<BusinessOwnerRoute />}>
+      <Route path="/grow" element={<Grow />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/public-experience" element={<PublicExperienceEditor />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/website" element={<WebsiteSetup />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/website/content" element={<WebsiteContent />} errorElement={<ErrorFallback />}></Route>
@@ -119,6 +123,8 @@ const Router = () => {
       <Route path="/team/invitation/:token" element={<StaffInvitation />} errorElement={<ErrorFallback />} />
       <Route path="/admin/dashboard" element={<AdminDashboard />} errorElement={<ErrorFallback />}></Route>
       <Route path="/admin/payments" element={<AdminPayments />} errorElement={<ErrorFallback />}></Route>
+      <Route path="/admin/brand" element={<AdminBrandGrowth />} errorElement={<ErrorFallback />}></Route>
+      <Route path="/admin/referrals" element={<AdminReferrals />} errorElement={<ErrorFallback />}></Route>
       <Route path="/schedule/in/:meetId" element={<Appointment />} errorElement={<ErrorFallback />}></Route>
       <Route path="/schedule/gr/:groupId" element={<GroupAppointment />} errorElement={<ErrorFallback />}></Route>
       <Route path="/schedule/org/:orgSlug" element={<OrganizationAppointment />} errorElement={<ErrorFallback />}></Route>

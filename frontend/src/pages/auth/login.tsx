@@ -4,6 +4,8 @@ import { useFrappeAuth } from 'frappe-react-sdk';
 import { motion } from 'framer-motion';
 import { Calendar, Mail, Lock, AlertCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/button';
+import LanguageToggle from '@/components/language-toggle';
+import { useTranslation } from '@/lib/i18n';
 import { isAllowedDestination, useSession } from '@/context/session';
 
 const Login = () => {
@@ -11,6 +13,7 @@ const Login = () => {
   const [searchParams] = useSearchParams();
   const { login } = useFrappeAuth();
   const { reload } = useSession();
+  const { t } = useTranslation();
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -34,14 +37,17 @@ const Login = () => {
         : context?.landing || '/home';
       navigate(target, { replace: true });
     } catch (err) {
-      setError((err as { message?: string })?.message || 'Invalid email or password. Please try again.');
+      setError((err as { message?: string })?.message || t('auth.login.failed'));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br/srgb from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-gray-900 flex items-center justify-center p-4">
+    <div className="relative min-h-screen overflow-hidden bg-linear-to-br/srgb from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-gray-900 flex items-center justify-center p-4">
+      <div className="absolute left-4 top-4 z-20 [&_[data-qa=language-current]+span]:hidden" data-qa="auth-language">
+        <LanguageToggle />
+      </div>
       {/* Animated Background Orbs */}
       <motion.div
         animate={{
@@ -85,10 +91,10 @@ const Login = () => {
             </motion.div>
           </Link>
           <h1 data-qa="login-heading" className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Welcome Back
+            {t('auth.login.title')}
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Sign in to your account to continue
+            {t('auth.login.subtitle')}
           </p>
         </div>
 
@@ -115,7 +121,7 @@ const Login = () => {
             {/* Email Field */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Email Address
+                {t('auth.emailLabel')}
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -134,7 +140,7 @@ const Login = () => {
             {/* Password Field */}
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Password
+                {t('auth.passwordLabel')}
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -156,7 +162,7 @@ const Login = () => {
                 to="/forgot-password"
                 className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium"
               >
-                Forgot password?
+                {t('auth.login.forgot')}
               </Link>
             </div>
 
@@ -169,10 +175,10 @@ const Login = () => {
               {loading ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Signing in...
+                  {t('auth.login.signingIn')}
                 </>
               ) : (
-                'Sign In'
+                t('auth.login.submit')
               )}
             </Button>
           </form>
@@ -180,12 +186,12 @@ const Login = () => {
           {/* Sign Up Link */}
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Don't have an account?{' '}
+              {t('auth.login.noAccount')}{' '}
               <Link
                 to="/signup"
                 className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium"
               >
-                Sign up for free
+                {t('auth.login.signupFree')}
               </Link>
             </p>
           </div>
@@ -197,7 +203,7 @@ const Login = () => {
             to="/"
             className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
           >
-            ← Back to home
+            ← {t('auth.backHome')}
           </Link>
         </div>
       </motion.div>

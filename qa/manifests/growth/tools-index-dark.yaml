@@ -1,0 +1,181 @@
+# Guests open the free tools index in English and Amharic.
+app: appointment
+base_url: http://127.0.0.146:47800
+default_role: Guest
+auth:
+  type: none
+fixtures:
+  provider: appointment.tests.tools_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-tools-index-dark
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: dark
+scenarios:
+- id: index_en_desktop_dark
+  title: 'Tools index (en, desktop, dark): four tools, language switch, CTA'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /tools
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_text
+      value: Free tools for Ethiopian businesses
+    - type: visible_selector
+      selector: '[data-qa="tools-index-list"]'
+    - type: visible_selector
+      selector: '[data-qa="tool-cta"]'
+    - type: visible_selector
+      selector: '[data-qa="tools-index-ethiopian-time-converter"]'
+    - type: visible_selector
+      selector: '[data-qa="tools-index-ethiopian-calendar-converter"]'
+    - type: visible_selector
+      selector: '[data-qa="tools-index-amharic-appointment-reminder"]'
+    - type: visible_selector
+      selector: '[data-qa="tools-index-business-hours-sign"]'
+  actions:
+  - action: screenshot
+    name: index_en_desktop_dark-1-open.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="tools-index-business-hours-sign"]'
+    assertions:
+    - type: url_contains
+      value: /tools/business-hours-sign
+  - action: click
+    selector: '[data-qa="tools-lang-switch"]'
+    assertions:
+    - type: url_contains
+      value: /tools/business-hours-sign
+  - action: get_console_errors
+  - action: get_network_errors
+- id: index_en_mobile_dark
+  title: 'Tools index (en, mobile, dark): four tools, language switch, CTA'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /tools
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_text
+      value: Free tools for Ethiopian businesses
+    - type: visible_selector
+      selector: '[data-qa="tools-index-list"]'
+    - type: visible_selector
+      selector: '[data-qa="tool-cta"]'
+    - type: visible_selector
+      selector: '[data-qa="tools-index-ethiopian-time-converter"]'
+    - type: visible_selector
+      selector: '[data-qa="tools-index-ethiopian-calendar-converter"]'
+    - type: visible_selector
+      selector: '[data-qa="tools-index-amharic-appointment-reminder"]'
+    - type: visible_selector
+      selector: '[data-qa="tools-index-business-hours-sign"]'
+  actions:
+  - action: screenshot
+    name: index_en_mobile_dark-1-open.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="tools-index-business-hours-sign"]'
+    assertions:
+    - type: url_contains
+      value: /tools/business-hours-sign
+  - action: click
+    selector: '[data-qa="tools-lang-switch"]'
+    assertions:
+    - type: url_contains
+      value: /tools/business-hours-sign
+  - action: get_console_errors
+  - action: get_network_errors
+- id: index_am_desktop_dark
+  title: 'Tools index (am, desktop, dark): four tools, language switch, CTA'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /am/tools
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_text
+      value: ለኢትዮጵያ ንግዶች ነጻ መሣሪያዎች
+    - type: visible_selector
+      selector: '[data-qa="tools-index-list"]'
+    - type: visible_selector
+      selector: '[data-qa="tool-cta"]'
+    - type: visible_selector
+      selector: '[data-qa="tools-index-ethiopian-time-converter"]'
+    - type: visible_selector
+      selector: '[data-qa="tools-index-ethiopian-calendar-converter"]'
+    - type: visible_selector
+      selector: '[data-qa="tools-index-amharic-appointment-reminder"]'
+    - type: visible_selector
+      selector: '[data-qa="tools-index-business-hours-sign"]'
+  actions:
+  - action: screenshot
+    name: index_am_desktop_dark-1-open.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="tools-index-business-hours-sign"]'
+    assertions:
+    - type: url_contains
+      value: /tools/business-hours-sign
+  - action: click
+    selector: '[data-qa="tools-lang-switch"]'
+    assertions:
+    - type: url_contains
+      value: /tools/business-hours-sign
+  - action: get_console_errors
+  - action: get_network_errors
+- id: index_am_mobile_dark
+  title: 'Tools index (am, mobile, dark): four tools, language switch, CTA'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /am/tools
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_text
+      value: ለኢትዮጵያ ንግዶች ነጻ መሣሪያዎች
+    - type: visible_selector
+      selector: '[data-qa="tools-index-list"]'
+    - type: visible_selector
+      selector: '[data-qa="tool-cta"]'
+    - type: visible_selector
+      selector: '[data-qa="tools-index-ethiopian-time-converter"]'
+    - type: visible_selector
+      selector: '[data-qa="tools-index-ethiopian-calendar-converter"]'
+    - type: visible_selector
+      selector: '[data-qa="tools-index-amharic-appointment-reminder"]'
+    - type: visible_selector
+      selector: '[data-qa="tools-index-business-hours-sign"]'
+  actions:
+  - action: screenshot
+    name: index_am_mobile_dark-1-open.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="tools-index-business-hours-sign"]'
+    assertions:
+    - type: url_contains
+      value: /tools/business-hours-sign
+  - action: click
+    selector: '[data-qa="tools-lang-switch"]'
+    assertions:
+    - type: url_contains
+      value: /tools/business-hours-sign
+  - action: get_console_errors
+  - action: get_network_errors

@@ -3,6 +3,7 @@ import { useRef, type CSSProperties } from "react";
 import type { BookingTemplateProps, TemplateProps } from "../types";
 import type { ContentRecord } from "../content";
 import { action, brandLogo, contentImage, designImage, durationMinutes, formatPrice, localized, records, section, sectionImage } from "../content";
+import { useTemplateCredit } from "../credit";
 import { usePublicChrome, type PublicChrome } from "../chrome";
 import { useReveal, useScrollState } from "../motion";
 import "./tena.css";
@@ -56,6 +57,7 @@ function Brand({ logo, name, href }: { logo?: string; name: string; href: string
 
 export function TenaSite({ snapshot, locale, applicationName, publicRoot, rootStyle, mode, toggleMode }: TemplateProps) {
   const chrome = usePublicChrome(locale);
+  const credit = useTemplateCredit(chrome);
   const root = useRef<HTMLDivElement>(null);
   const scroll = useScrollState();
   useReveal(root, locale);
@@ -244,7 +246,10 @@ export function TenaSite({ snapshot, locale, applicationName, publicRoot, rootSt
           {questions.length ? <a href="#faq">{chrome.t("questions")}</a> : null}
           {footerLinks.map((item) => <a key={item.href} href={item.href}>{item.label}</a>)}
         </nav>
-        <small>© {new Date().getFullYear()} {applicationName}</small>
+        <div className="tc-legal">
+          <small>© {new Date().getFullYear()} {applicationName}</small>
+          {credit ? <p className="tc-credit" lang={locale} data-qa="template-credit">{credit.before}<a href={credit.href} rel="noopener" data-qa="template-credit-link">{credit.product}</a>{credit.after}</p> : null}
+        </div>
       </div>
     </footer>
   </div>;

@@ -1,0 +1,237 @@
+# Growth touchpoints (en, light). Run with fixture appointment.tests.growth_touchpoints_qa_fixtures.
+# Guests book at Bloom, see Powered by and the business prompt; returning customer sees Book again; email previews.
+# The one-tap setup stops at the prefilled form; no business is created.
+app: appointment
+base_url: http://127.0.0.146:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-touchpoints-light
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.growth_touchpoints_qa_fixtures.browser_values
+scenarios:
+- id: tp_en_desktop_confirm
+  title: 'Guest books at Bloom: confirmation shows Powered by and the business prompt; dismiss hides it (en, desktop, light)'
+  viewport: &id003
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /
+    assertions:
+    - type: network_idle
+  actions:
+  - action: open_url
+    url: /schedule/org/{qa_touch_slug}
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_open_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_open_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: wait_for
+    selector: '#userName'
+  - action: fill
+    selector: '#userName'
+    value: Abel Girma
+  - action: fill
+    selector: '#userEmail'
+    value: '{qa_touch_guest_1}'
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: book_time_slot
+      method: POST
+      status_min: 200
+      status_max: 299
+      timeout_ms: 25000
+    - type: visible_selector
+      value: '[data-qa="booking-success"]'
+    - type: network_request
+      url_contains: business_prompt.prompt
+      status: 200
+      timeout_ms: 15000
+    - type: visible_selector
+      value: '[data-qa="business-prompt"]'
+    - type: visible_selector
+      value: '[data-booking-confirmation] [data-qa="powered-by"]'
+  - action: screenshot
+    name: tp_en_desktop-1-confirmation.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="business-prompt-dismiss"]'
+  - action: wait_for
+    selector: '[data-qa="business-prompt"]'
+    state: hidden
+  - action: screenshot
+    name: tp_en_desktop-2-dismissed.png
+    full_page: true
+  - &id001
+    action: get_console_errors
+  - &id002
+    action: get_network_errors
+- id: tp_en_mobile_setup
+  title: One-tap setup opens the prefilled sign-up form with no personal data in the URL (en, mobile, light)
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /
+    assertions:
+    - type: network_idle
+  actions:
+  - action: open_url
+    url: /schedule/org/{qa_touch_slug}
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_open_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_open_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: wait_for
+    selector: '#userName'
+  - action: fill
+    selector: '#userName'
+    value: Hiwot Kebede
+  - action: fill
+    selector: '#userEmail'
+    value: '{qa_touch_guest_2}'
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: book_time_slot
+      method: POST
+      status_min: 200
+      status_max: 299
+      timeout_ms: 25000
+    - type: visible_selector
+      value: '[data-qa="booking-success"]'
+    - type: network_request
+      url_contains: business_prompt.prompt
+      status: 200
+      timeout_ms: 15000
+    - type: visible_selector
+      value: '[data-qa="business-prompt"]'
+    - type: visible_selector
+      value: '[data-booking-confirmation] [data-qa="powered-by"]'
+  - action: screenshot
+    name: tp_en_mobile-1-confirmation.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="business-prompt-start"]'
+    assertions:
+    - type: url_contains
+      value: /signup?source=customer_prompt&prefill=
+    - type: visible_selector
+      value: '[data-qa="quick-start-form"]'
+    - type: url_not_contains
+      value: '%40'
+    - type: url_not_contains
+      value: Kebede
+  - action: wait_for
+    selector: input[data-qa="quick-start-business"][value="Hiwot Kebede"]
+    assertions:
+    - type: visible_selector
+      value: input[data-qa="quick-start-email"][value="{qa_touch_guest_2}"]
+    - type: visible_text
+      value: Your booking page, in a minute
+  - action: screenshot
+    name: tp_en_mobile-2-quick-start.png
+    full_page: true
+  - *id001
+  - *id002
+- id: tp_en_desktop_returning
+  title: My bookings offers Book again; the manage page shows the platform mark (en, desktop, light)
+  viewport: *id003
+  checks: []
+  routes:
+  - path: /
+    assertions:
+    - type: network_idle
+  actions:
+  - action: open_url
+    url: '{qa_touch_mine_link_1}'
+  - action: wait_for
+    selector: '[data-qa="my-bookings-list"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="my-bookings-past"] [data-qa="my-booking-book-again"]'
+    - type: visible_selector
+      value: '[data-qa="my-bookings"] [data-qa="powered-by"]'
+  - action: screenshot
+    name: tp_en_desktop-mine.png
+    full_page: true
+  - action: open_url
+    url: '{qa_touch_manage_path}'
+  - action: wait_for
+    selector: '[data-qa="manage-booking"] [data-qa="powered-by"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="manage-all-bookings"]'
+    - type: visible_selector
+      value: '[data-qa="powered-by-cta"]'
+  - action: screenshot
+    name: tp_en_desktop-manage.png
+    full_page: true
+  - *id001
+  - *id002
+- id: tp_en_emails
+  title: 'Confirmation and reminder emails: book-again button and Powered by footer (en, desktop)'
+  viewport: *id003
+  checks: []
+  routes:
+  - path: /
+    assertions:
+    - type: network_idle
+  actions:
+  - action: open_url
+    url: '{qa_touch_email_confirmation_en}'
+  - action: wait_for
+    selector: a[href*="source=powered_by_email"]
+    assertions:
+    - type: visible_text
+      value: Get your own booking page
+    - type: visible_selector
+      value: a[href*="/schedule/org/"]
+  - action: screenshot
+    name: tp_en-email-confirmation.png
+    full_page: true
+  - action: open_url
+    url: '{qa_touch_email_reminder_en}'
+  - action: wait_for
+    selector: a[href*="source=powered_by_email"]
+    assertions:
+    - type: visible_text
+      value: Get your own booking page
+    - type: visible_selector
+      value: a[href*="/schedule/org/"]
+  - action: screenshot
+    name: tp_en-email-reminder.png
+    full_page: true
+  - *id001
+  - *id002

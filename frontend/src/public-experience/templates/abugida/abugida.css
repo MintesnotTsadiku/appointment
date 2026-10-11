@@ -107,3 +107,8 @@
 
 .abugida-site[style*="--pe-selected-font-display"] :is(h1,h2,h3),.abugida-booking[style*="--pe-selected-font-display"] :is(h1,h2,h3){font-family:var(--pe-selected-font-display,inherit)}
 .abugida-site[style*="--pe-selected-font-body"] :is(p,li,address),.abugida-booking[style*="--pe-selected-font-body"] p{font-family:var(--pe-selected-font-body)}
+
+/* Platform credit: a small line on the dark footer band. */
+.abugida-credit,.abugida-content-credit{grid-column:1/-1;flex-basis:100%;margin:0;font-size:14px;opacity:.85}
+.abugida-credit a,.abugida-content-credit a{display:inline-block;padding-block:10px;color:inherit;font-weight:700;text-decoration:underline;text-underline-offset:4px}
+.abugida-content-footer{flex-wrap:wrap}

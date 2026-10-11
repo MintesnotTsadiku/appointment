@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState, type RefObject } from "react";
-import { useTranslation } from "@/lib/i18n";
+import { useBrandedTranslation } from "@/lib/platform-brand";
 
 const STEPS = ["step1", "step2", "step3", "step4", "step5"];
 const BOOKINGS = [38, 142, 260, 371, 486];
@@ -9,7 +9,7 @@ const SPARK = "M0 34 L20 30 L40 31 L60 24 L80 26 L100 18 L120 20 L140 11 L160 13
 
 /** Hana's business grows as the visitor scrolls; each stage can be picked too. */
 const GrowStage = () => {
-  const { t } = useTranslation();
+  const { t, brand: { shortHost } } = useBrandedTranslation();
   const ref = useRef<HTMLDivElement>(null);
   const [step, setStep] = useScrollStep(ref, STEPS.length);
   const ownDomain = step === STEPS.length - 1;
@@ -30,7 +30,7 @@ const GrowStage = () => {
         <div className="lw-url">
           <span className="lw-url-dots"><i /><i /><i /></span>
           <motion.span key={String(ownDomain)} className="lw-url-text" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
-            {ownDomain ? "https://hanacuts.com" : "meet.et/hana"}
+            {ownDomain ? "https://hanacuts.com" : `${shortHost}/hana`}
           </motion.span>
         </div>
         <div className="lw-browser-body">

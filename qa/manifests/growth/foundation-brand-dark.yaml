@@ -1,0 +1,92 @@
+# Brand & growth page, platform administrator, Amharic on a phone in dark mode. Run with fixture
+# appointment.tests.growth_foundation_qa_fixtures. Renames the product, saves, then restores it.
+app: appointment
+base_url: http://127.0.0.146:47800
+default_role: Administrator
+auth:
+  type: frappe_session
+  username: Administrator
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment-growth-foundation
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: dark
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.growth_foundation_qa_fixtures.browser_values
+scenarios:
+- id: brand_am_mobile_dark
+  title: Brand & growth, rename and restore (am, mobile, dark)
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /admin/brand
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="brand-product-name"]'
+  actions:
+  - &language
+    action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="brand-growth-tab-growth"]:has-text("እድገት")'
+    assertions:
+    - type: visible_text
+      value: ብራንድ እና እድገት
+  - action: screenshot
+    name: brand_am_mobile-1-brand.png
+    full_page: true
+  - action: fill
+    selector: '[data-qa="brand-product-name"]'
+    value: '{qa_brand_test_name}'
+  - action: wait_for
+    selector: '[data-qa="brand-preview-name"]:has-text("{qa_brand_test_name}")'
+  - action: click
+    selector: '[data-qa="brand-growth-save"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.growth.api.save_settings
+      status: 200
+    - type: visible_text
+      value: የብራንድ እና የእድገት ቅንብሮች ተቀምጠዋል።
+  - action: screenshot
+    name: brand_am_mobile-2-saved.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="brand-growth-tab-growth"]'
+  - action: wait_for
+    selector: '[data-qa="growth-powered-by-pages"]'
+    assertions:
+    - type: visible_text
+      value: የደንበኛ መገናኛዎች
+  - action: screenshot
+    name: brand_am_mobile-3-growth.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="brand-growth-tab-brand"]'
+  - action: fill
+    selector: '[data-qa="brand-product-name"]'
+    value: '{qa_brand_product_name}'
+  - action: click
+    selector: '[data-qa="brand-growth-save"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.growth.api.save_settings
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="brand-preview-name"]:text-is("{qa_brand_product_name}")'
+  - *language
+  - action: get_console_errors
+  - action: get_network_errors

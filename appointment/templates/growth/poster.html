@@ -1,0 +1,106 @@
+{%- set s = scale -%}
+{%- macro mm(value) -%}{{ '%.2f' % (value * s) }}mm{%- endmacro -%}
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ name }}</title>
+<style>
+  @font-face { font-family: "Poster Ethiopic"; font-weight: normal; src: url("{{ font_regular }}"); }
+  @font-face { font-family: "Poster Ethiopic"; font-weight: bold; src: url("{{ font_bold }}"); }
+  /* Frappe's PDF renderer reads page margins from .print-format; the poster is full bleed. */
+  .print-format { margin-top: 0mm; margin-bottom: 0mm; margin-left: 0mm; margin-right: 0mm; }
+  @page { size: {{ size }}; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: {{ colors.background }}; }
+  body { font-family: "Poster Ethiopic", "Noto Sans Ethiopic", "Helvetica Neue", Arial, sans-serif; color: {{ colors.text }};
+         -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { position: relative; width: {{ width }}mm; height: {{ height - 0.5 }}mm; overflow: hidden;
+          padding: {{ mm(15) }} {{ mm(16) }} 0; background: {{ colors.background }}; }
+  table { border-collapse: collapse; }
+  .head td { vertical-align: middle; }
+  .logo { width: {{ mm(22) }}; height: {{ mm(22) }}; border-radius: 50%; background: #ffffff; text-align: center;
+          overflow: hidden; border: {{ mm(0.6) }} solid {{ colors.rule }}; }
+  .logo img { width: {{ mm(16) }}; height: {{ mm(16) }}; margin-top: {{ mm(2.4) }}; object-fit: contain; }
+  .logo span { display: block; line-height: {{ mm(21) }}; font-size: {{ mm(8) }}; font-weight: bold; color: {{ colors.qr }}; }
+  .name { padding-left: {{ mm(5) }}; font-size: {{ mm(9.5) }}; line-height: 1.15; font-weight: bold; }
+  .place { padding-left: {{ mm(5) }}; font-size: {{ mm(4) }}; color: {{ colors.muted }}; padding-top: {{ mm(1) }}; }
+  .rule { height: {{ mm(1.2) }}; width: {{ mm(26) }}; background: {{ colors.accent }}; border-radius: {{ mm(1) }};
+          margin: {{ mm(8) }} auto {{ mm(6) }}; }
+  .center { text-align: center; }
+  .scan-am { font-size: {{ mm(14) }}; line-height: 1.2; font-weight: bold; color: {{ colors.accent }}; }
+  .scan-en { font-size: {{ mm(8) }}; line-height: 1.2; font-weight: bold; color: {{ colors.accent }}; margin-top: {{ mm(1) }}; }
+  .scan-en.alone { font-size: {{ mm(13) }}; }
+  .qr { width: {{ mm(98) }}; height: {{ mm(98) }}; margin: {{ mm(6) }} auto 0; background: #ffffff;
+        border-radius: {{ mm(5) }}; padding: {{ mm(3) }}; border: {{ mm(0.6) }} solid {{ colors.rule }}; }
+  .qr svg { width: {{ mm(91.8) }}; height: {{ mm(91.8) }}; display: block; }
+  .short { font-size: {{ mm(7.2) }}; font-weight: bold; letter-spacing: {{ mm(0.15) }}; margin-top: {{ mm(5) }}; }
+  .hint { font-size: {{ mm(3.8) }}; color: {{ colors.muted }}; margin-top: {{ mm(1.6) }}; }
+  .hours { margin-top: {{ mm(8) }}; background: {{ colors.panel }}; border-radius: {{ mm(4) }};
+           padding: {{ mm(4.5) }} {{ mm(6) }} {{ mm(3.5) }}; }
+  .hours-title { font-size: {{ mm(4.6) }}; font-weight: bold; margin-bottom: {{ mm(2) }}; }
+  .hours-title .sub { color: {{ colors.muted }}; font-weight: normal; }
+  .hours table { width: 100%; }
+  .hours th { text-align: left; font-size: {{ mm(3.2) }}; font-weight: bold; color: {{ colors.muted }};
+              text-transform: uppercase; letter-spacing: {{ mm(0.2) }}; padding: 0 {{ mm(2) }} {{ mm(1.6) }} 0; }
+  .hours td { font-size: {{ mm(4.4) }}; padding: {{ mm(1.8) }} {{ mm(2) }} {{ mm(1.8) }} 0; border-top: {{ mm(0.3) }} solid {{ colors.rule }};
+              vertical-align: top; }
+  .hours td.days { font-weight: bold; width: 30%; }
+  .hours td .small { display: block; font-size: {{ mm(3.2) }}; font-weight: normal; color: {{ colors.muted }}; }
+  .hours td.closed { color: {{ colors.muted }}; }
+  .foot { position: absolute; left: 0; right: 0; bottom: {{ mm(9) }}; text-align: center; font-size: {{ mm(3.2) }};
+          color: {{ colors.muted }}; }
+  .foot img { height: {{ mm(5) }}; width: {{ mm(5) }}; vertical-align: middle; margin-right: {{ mm(1.5) }}; border-radius: {{ mm(1) }}; }
+  .foot span { vertical-align: middle; }
+  @media screen { body { min-height: 100vh; } }
+</style>
+</head>
+<body>
+<div class="page" data-poster-theme="{{ theme }}" data-poster-size="{{ size }}">
+  <table class="head"><tr>
+    <td><div class="logo">{% if logo %}<img src="{{ logo }}" alt="">{% else %}<span>{{ initials }}</span>{% endif %}</div></td>
+    <td><div class="name">{{ name }}</div>{% if location_name %}<div class="place">{{ location_name }}</div>{% endif %}</td>
+  </tr></table>
+
+  <div class="rule"></div>
+  <div class="center">
+    {% if show_am %}<div class="scan-am">{{ scan_am }}</div>{% endif %}
+    {% if show_en %}<div class="scan-en{% if not show_am %} alone{% endif %}">{{ scan_en }}</div>{% endif %}
+    <div class="qr" data-poster-qr>{{ qr }}</div>
+    <div class="short" data-poster-short>{{ short }}</div>
+    <div class="hint">{% if show_am %}{{ hint_am }}{% endif %}{% if show_am and show_en %} · {% endif %}{% if show_en %}{{ hint_en }}{% endif %}</div>
+  </div>
+
+  {% if rows %}
+  <div class="hours" data-poster-hours>
+    <div class="hours-title">
+      {% if show_am %}{{ hours_am }}{% endif %}{% if show_am and show_en %} <span class="sub">· {{ hours_en }}</span>{% elif show_en %}{{ hours_en }}{% endif %}
+    </div>
+    <table>
+      <tr>
+        <th></th>
+        <th>{% if show_en %}{{ clock_intl_en }}{% else %}{{ clock_intl_am }}{% endif %}</th>
+        <th>{% if show_am %}{{ clock_habesha_am }}{% else %}{{ clock_habesha_en }}{% endif %}</th>
+      </tr>
+      {% for row in rows %}
+      <tr data-poster-row>
+        <td class="days">
+          {% if show_am %}{{ row.days_am }}{% if show_en %}<span class="small">{{ row.days_en }}</span>{% endif %}{% else %}{{ row.days_en }}{% endif %}
+        </td>
+        {% if row.closed %}
+        <td class="closed" colspan="2">{% if show_am %}{{ closed_am }}{% endif %}{% if show_am and show_en %} · {% endif %}{% if show_en %}{{ closed_en }}{% endif %}</td>
+        {% else %}
+        <td data-clock="international">{{ row.international }}</td>
+        <td data-clock="habesha">{{ row.habesha }}</td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  {% endif %}
+
+  <div class="foot">{% if platform_mark %}<img src="{{ platform_mark }}" alt="">{% endif %}<span>{% if show_am and not show_en %}{{ powered_am }}{% else %}{{ powered_en }}{% endif %}</span></div>
+</div>
+</body>
+</html>

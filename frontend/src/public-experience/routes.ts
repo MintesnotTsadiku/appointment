@@ -24,6 +24,7 @@ const RESERVED_FIRST_SEGMENTS = new Set([
   "admin",
   "reception",
   "customers",
+  "grow",
   "schedule",
   "preview",
   "tasks",
@@ -44,6 +45,10 @@ const RESERVED_FIRST_SEGMENTS = new Set([
   "sitemap.xml",
   "favicon.ico",
   "tools",
+  "directory",
+  "partners",
+  // Amharic versions of server-rendered pages: /am/tools/..., /am/directory/...
+  "am",
 ]);
 
 const LOCALES = new Set(["en", "am"]);

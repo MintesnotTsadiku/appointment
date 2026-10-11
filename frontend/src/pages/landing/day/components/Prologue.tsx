@@ -1,11 +1,12 @@
 import { motion } from "framer-motion";
-import { useTranslation } from "@/lib/i18n";
+import { useBrandedTranslation } from "@/lib/platform-brand";
 import type { EntryLinks } from "../../shared/useEntryLinks";
 import { CHAPTERS, clockLabel } from "../world";
+import Promises from "./Promises";
 
 /** 05:30. The city before the first booking, and the day's timetable. */
 const Prologue = ({ entry }: { entry: EntryLinks }) => {
-  const { t } = useTranslation();
+  const { t } = useBrandedTranslation();
   return (
     <section className="lw-prologue" data-world-section="dawn" aria-labelledby="lw-title">
       <div className="lw-wrap">
@@ -30,6 +31,7 @@ const Prologue = ({ entry }: { entry: EntryLinks }) => {
             <a className="lw-btn lw-btn-ghost" href={entry.start} data-qa="landing-start">{t(entry.startLabel)}</a>
           )}
         </div>
+        <Promises />
         <Timetable />
         <p className="lw-hint" aria-hidden="true">
           <span className="lw-hint-line" />
@@ -42,7 +44,7 @@ const Prologue = ({ entry }: { entry: EntryLinks }) => {
 
 /** A departures board listing the day's chapters. */
 const Timetable = () => {
-  const { t } = useTranslation();
+  const { t } = useBrandedTranslation();
   return (
     <nav className="lw-board" aria-labelledby="lw-board-title" data-qa="landing-timetable">
       <h2 id="lw-board-title">{t("world.dawn.cast")}</h2>

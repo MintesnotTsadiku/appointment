@@ -1,0 +1,118 @@
+# Guest browses /directory -> category -> area -> booking page (en desktop, am mobile). Run with fixture appointment.tests.growth_showoff_qa_fixtures.
+app: appointment
+base_url: http://127.0.0.146:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-showoff-directory-guest
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.growth_showoff_qa_fixtures.browser_values
+scenarios:
+- id: directory_guest_en_desktop
+  title: Guest browses the directory to a booking page (en, desktop)
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /directory
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="directory-category-link"]'
+  actions:
+  - action: screenshot
+    name: directory_guest_en_desktop-1-index.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="directory-category-link"][href="/directory/clinic"]'
+    assertions:
+    - type: url_contains
+      value: /directory/clinic
+    - type: visible_selector
+      value: '[data-qa="directory-listing"]'
+  - action: screenshot
+    name: directory_guest_en_desktop-2-category.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="directory-area-link"][href="/directory/clinic/yeka"]'
+    assertions:
+    - type: url_contains
+      value: /clinic/yeka
+    - type: text_contains
+      selector: '[data-qa="directory-heading"]'
+      value: Book a clinic in Yeka
+  - action: screenshot
+    name: directory_guest_en_desktop-3-area.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="directory-book"][href*="source=directory"]'
+    assertions:
+    - type: url_contains
+      value: source=directory
+    - type: visible_selector
+      value: '[data-pe-root]'
+  - action: screenshot
+    name: directory_guest_en_desktop-4-booking-page.png
+    full_page: false
+  - &id001
+    action: get_console_errors
+  - &id002
+    action: get_network_errors
+- id: directory_guest_am_mobile
+  title: Guest browses the directory to a booking page (am, mobile)
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /am/directory
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="directory-category-link"]'
+  actions:
+  - action: screenshot
+    name: directory_guest_am_mobile-1-index.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="directory-category-link"][href="/am/directory/clinic"]'
+    assertions:
+    - type: url_contains
+      value: /am/directory/clinic
+    - type: visible_selector
+      value: '[data-qa="directory-listing"]'
+  - action: screenshot
+    name: directory_guest_am_mobile-2-category.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="directory-area-link"][href="/am/directory/clinic/yeka"]'
+    assertions:
+    - type: url_contains
+      value: /clinic/yeka
+    - type: text_contains
+      selector: '[data-qa="directory-heading"]'
+      value: የካ
+  - action: screenshot
+    name: directory_guest_am_mobile-3-area.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="directory-book"][href*="source=directory"]'
+    assertions:
+    - type: url_contains
+      value: source=directory
+    - type: visible_selector
+      value: '[data-pe-root]'
+  - action: screenshot
+    name: directory_guest_am_mobile-4-booking-page.png
+    full_page: false
+  - *id001
+  - *id002

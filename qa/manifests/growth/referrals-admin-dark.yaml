@@ -1,0 +1,39 @@
+# Run with fixture appointment.tests.growth_referrals_qa_fixtures ($G/qa.sh runs setup before and cleanup after).
+# Platform administrator: the referrals overview on a phone in dark mode.
+app: appointment
+base_url: http://127.0.0.146:47800
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: dark
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.growth_referrals_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-growth-referrals-admin-dark
+default_role: Staff
+auth:
+  type: frappe_session
+  username: Administrator
+  verify_path: /api/method/frappe.auth.get_logged_user
+scenarios:
+- id: ref_admin_mobile_dark
+  title: 'Admin: referrals overview on a phone (en, mobile, dark)'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /admin/referrals
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="admin-referrals-totals"]'
+  actions:
+  - action: screenshot
+    name: ref_admin_mobile_dark-1-overview.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors

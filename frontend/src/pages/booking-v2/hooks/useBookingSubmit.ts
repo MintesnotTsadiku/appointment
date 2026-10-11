@@ -7,6 +7,8 @@ import { useRef } from "react";
 import { useFrappePostCall } from "frappe-react-sdk";
 import { getTimeZoneOffsetFromTimeZoneString, parseFrappeErrorMsg } from "@/lib/utils";
 import { useTranslation } from "@/lib/i18n";
+import { referralSource } from "@/lib/referral-source";
+import { CUSTOMER_REFERRAL_SOURCE, customerRefFor } from "@/lib/referral-link";
 import type { BookingFormData, BookingResponse, TimeSlot } from "../types";
 
 interface SubmitBookingParams {
@@ -101,6 +103,15 @@ export function useBookingSubmit() {
       meetingData.language = language;
       if (paymentMethod) meetingData.payment_method = paymentMethod;
       if (quantity && quantity > 1) meetingData.quantity = quantity;
+      // The share channel (Telegram, QR poster ...) the visitor arrived from.
+      const source = referralSource();
+      if (source) meetingData.referral_source = source;
+      // A friend's share code ("Bring a friend"); the server checks it belongs to this business.
+      const code = customerRefFor(window.location.search, window.location.pathname, safeSessionStorage());
+      if (code) {
+        meetingData.referral_code = code;
+        meetingData.referral_source ||= CUSTOMER_REFERRAL_SOURCE;
+      }
     }
     if (serviceId) {
       meetingData.service_id = serviceId;
@@ -158,4 +169,12 @@ export function useBookingSubmit() {
     error,
     reset,
   };
+}
+
+function safeSessionStorage(): Storage | null {
+  try {
+    return window.sessionStorage;
+  } catch {
+    return null;
+  }
 }

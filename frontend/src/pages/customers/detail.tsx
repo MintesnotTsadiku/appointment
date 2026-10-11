@@ -11,6 +11,7 @@ import { useBusinessKey } from '@/hooks/useBusinessKey';
 import { useTranslation } from '@/lib/i18n';
 import { CustomerEditor } from './CustomerEditor';
 import { CustomerHistory } from './CustomerHistory';
+import { CustomerRewards } from './CustomerRewards';
 import { MergeDialog } from './MergeDialog';
 import { CUSTOMERS_API, type CustomerDetail } from './types';
 
@@ -70,6 +71,7 @@ export default function CustomerPage() {
           ) : (
             <p className="text-sm text-muted-foreground">{t('staff.customers.providerView')}</p>
           )}
+          {canEdit && customerId && <CustomerRewards customerId={customerId} />}
           <SettingsSection title={t('staff.customers.history')}>
             <CustomerHistory rows={customer.history} />
           </SettingsSection>

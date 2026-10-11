@@ -43,6 +43,14 @@
   color: var(--text-primary);
   text-decoration: underline;
 }
+/* The own-page invitation stays quiet; it underlines on hover only. */
+[data-booking-branded="true"] [data-powered-by] a[data-powered-by-cta] {
+  color: var(--text-muted, currentColor);
+  text-decoration: none;
+}
+[data-booking-branded="true"] [data-powered-by] a[data-powered-by-cta]:hover {
+  text-decoration: underline;
+}
 
 
 /* Release-scoped booking continuity. The scheduler keeps one interaction model

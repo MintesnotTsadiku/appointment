@@ -29,9 +29,9 @@ assert.equal(toHabesha(8, 0), "2:00 ቀን ጠዋት");
 assert.equal(toHabesha(12, 0), "6:00 ቀን ከሰዓት");
 assert.equal(toHabesha(13, 30), "7:30 ቀን ከሰዓት");
 assert.equal(toHabesha(17, 59), "11:59 ቀን ከሰዓት");
-assert.equal(toHabesha(18, 0), "12:00 ሌሊት ማታ");
-assert.equal(toHabesha(20, 0), "2:00 ሌሊት ማታ");
-assert.equal(toHabesha(23, 59), "5:59 ሌሊት ማታ");
+assert.equal(toHabesha(18, 0), "12:00 ሌሊት ምሽት");
+assert.equal(toHabesha(20, 0), "2:00 ሌሊት ምሽት");
+assert.equal(toHabesha(23, 59), "5:59 ሌሊት ምሽት");
 assert.equal(toHabesha(0, 0), "6:00 ሌሊት ሌሊት");
 assert.equal(toHabesha(5, 59), "11:59 ሌሊት ሌሊት");
 
@@ -81,6 +81,22 @@ const addis = H.addisParts(new Date("2026-01-15T21:30:00Z"));
 assert.deepEqual([addis.hour, addis.minute], [0, 30]);
 
 const finale = fs.readFileSync(path.join(root, "src/pages/landing/day/components/Finale.tsx"), "utf8");
-assert.ok(finale.includes('href="/tools/ethiopian-time-converter"'), "landing footer must link to the time converter");
+assert.ok(finale.includes('href="/tools"'), "landing footer must link to the free tools index");
+
+// Shared vectors with the Python twin (appointment/growth/habesha.py).
+const vectors = JSON.parse(fs.readFileSync(path.join(root, "../appointment/growth/vectors/habesha.json"), "utf8"));
+for (const [hour, minute, habeshaHour, period] of vectors.to_habesha) {
+  const result = H.toHabesha(hour, minute);
+  assert.deepEqual([result.hour, result.minute, result.period], [habeshaHour, minute, period], `${hour}:${minute}`);
+  assert.equal(H.PERIODS[period].am, vectors.periods[period]);
+}
+for (const [habeshaHour, minute, half, hour] of vectors.from_habesha) {
+  assert.deepEqual([H.fromHabesha(habeshaHour, minute, half).hour, minute], [hour, minute]);
+}
+for (const [start, end, english, amharic] of vectors.ranges) {
+  assert.equal(H.formatHoursRange(start, end, "en"), english);
+  assert.equal(H.formatHoursRange(start, end, "am"), amharic);
+}
+assert.equal(H.formatHabesha(20, 0), "ምሽት 2:00");
 
 console.log("PASS: Habesha time conversion");

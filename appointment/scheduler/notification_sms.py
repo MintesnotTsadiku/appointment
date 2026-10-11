@@ -17,6 +17,7 @@ import requests
 from frappe import _
 from frappe.utils import get_datetime
 
+from appointment.growth import touchpoints
 from appointment.helpers.utils import format_ethiopian_time
 from appointment.scheduler import business_owner
 
@@ -97,7 +98,9 @@ def render(event, doc, language):
     owner = business_owner.for_booking(doc)
     business = owner.display_name if owner else ""
     service = frappe.db.get_value("Service", doc.service, "service_name") if doc.service else ""
-    return _(COPY[event], lang=language).format(business, service, when(doc, language))
+    text = _(COPY[event], lang=language).format(business, service, when(doc, language))
+    # Book-again and "Powered by" lines, only when they cost no extra segment.
+    return touchpoints.sms_with_extras(event, doc, language, text)
 
 
 def when(doc, language):

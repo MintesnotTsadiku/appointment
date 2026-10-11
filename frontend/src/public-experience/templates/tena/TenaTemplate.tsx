@@ -1,5 +1,6 @@
 import type { BookingTemplateProps, TemplateProps } from "../types";
 import { action, brandLogo, contentImage, designImage, localized, records, section, sectionImage } from "../content";
+import { useTemplateCredit } from "../credit";
 import { usePublicChrome } from "../chrome";
 import "./tena.css";
 import { TenaNewsletter } from "./TenaNewsletter";
@@ -8,6 +9,7 @@ const Leaf = () => <span className="tena-leaf" aria-hidden="true">❧</span>;
 
 export function TenaSite({ snapshot, locale, applicationName, publicRoot, rootStyle, mode, toggleMode }: TemplateProps) {
   const chrome = usePublicChrome(locale);
+  const credit = useTemplateCredit(chrome);
   const design = snapshot.compiledDesign;
   const hero = section(snapshot.sections, "hero");
   const services = section(snapshot.sections, "services");
@@ -82,6 +84,7 @@ export function TenaSite({ snapshot, locale, applicationName, publicRoot, rootSt
       {localized(footer.body, locale) ? <p>{localized(footer.body, locale)}</p> : null}
       <nav aria-label={chrome.t("navLabel")}><a href="#care">{chrome.t("services")}</a><a href="#contact">{chrome.t("visit")}</a><a href="#faq">{chrome.t("questions")}</a></nav>
       <small>© {new Date().getFullYear()} {applicationName}</small>
+      {credit ? <p className="tena-credit" lang={locale} data-qa="template-credit">{credit.before}<a href={credit.href} rel="noopener" data-qa="template-credit-link">{credit.product}</a>{credit.after}</p> : null}
     </footer>
   </div>;
 }

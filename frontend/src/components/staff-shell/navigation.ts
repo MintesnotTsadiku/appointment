@@ -20,6 +20,9 @@ import {
   Armchair,
   FileSpreadsheet,
   Palette,
+  Sprout,
+  Handshake,
+  Sparkles,
 } from 'lucide-react';
 import { isAllowedDestination, type SessionState } from '@/context/session';
 
@@ -49,15 +52,20 @@ export function primaryNav(session: SessionState | null): NavItem[] {
   // An independent provider runs their own business, so they see the manager destinations.
   const isManager = Boolean(session.is_administrator || selected?.is_manager || session.state === 'individual_owner');
   const isReceptionist = selected?.role === 'Receptionist';
+  // Growth tools belong to whoever runs the business: owners, managers and independent providers.
+  const isOwner = Boolean(selected?.is_manager || session.state === 'individual_owner');
   const items: Array<NavItem & { show: boolean }> = [
     { key: 'home', labelKey: 'staff.nav.overview', to: '/home', icon: LayoutDashboard, qa: 'nav-home', show: isManager },
     { key: 'reception', labelKey: 'staff.nav.reception', to: '/reception', icon: Users, qa: 'nav-reception', show: isManager || isReceptionist },
     { key: 'customers', labelKey: 'staff.customers.nav', to: '/customers', icon: Contact, qa: 'nav-customers', show: Boolean(selected) || session.state === 'individual_owner' },
     { key: 'calendar', labelKey: 'staff.nav.schedule', to: '/calendar', icon: CalendarDays, qa: 'nav-calendar', show: !isManager },
     { key: 'analytics', labelKey: 'staff.nav.insights', to: '/analytics', icon: BarChart3, qa: 'nav-analytics', show: Boolean(selected) || session.state === 'individual_owner' },
+    { key: 'grow', labelKey: 'staff.nav.grow', to: '/grow', icon: Sprout, qa: 'nav-grow', show: isOwner },
     { key: 'settings', labelKey: 'staff.nav.settings', to: '/settings', icon: Settings, qa: 'nav-settings', show: isManager || settingsNav(session).length > 0 },
     { key: 'admin', labelKey: 'staff.nav.admin', to: '/admin/dashboard', icon: ShieldCheck, qa: 'nav-admin', show: session.is_administrator },
     { key: 'admin-payments', labelKey: 'staff.adminPayments.title', to: '/admin/payments', icon: Wallet, qa: 'nav-admin-payments', show: session.is_administrator },
+    { key: 'admin-brand', labelKey: 'staff.brandGrowth.title', to: '/admin/brand', icon: Sparkles, qa: 'nav-admin-brand', show: session.is_administrator },
+    { key: 'admin-referrals', labelKey: 'staff.referralsAdmin.title', to: '/admin/referrals', icon: Handshake, qa: 'nav-admin-referrals', show: session.is_administrator },
   ];
   return items.filter((item) => item.show);
 }
@@ -121,7 +129,7 @@ export function isActivePath(pathname: string, to: string): boolean {
 }
 
 /** Routes rendered inside StaffShell; keeps staff tokens on during lazy loads. */
-export const STAFF_PREFIXES = ['/home', '/calendar', '/reception', '/analytics', '/settings', '/workspaces', '/onboarding', '/no-access', '/admin'];
+export const STAFF_PREFIXES = ['/home', '/grow', '/calendar', '/reception', '/analytics', '/settings', '/workspaces', '/onboarding', '/no-access', '/admin'];
 
 export function isStaffPath(pathname: string): boolean {
   return STAFF_PREFIXES.some((prefix) => isActivePath(pathname, prefix));

@@ -13,6 +13,10 @@ import {
   DialogTitle,
 } from "@/components/dialog";
 import { useTranslation } from "@/lib/i18n";
+import { usePlatformBrand } from "@/lib/platform-brand";
+import BusinessPrompt from "@/components/business-prompt";
+import CustomerShareCard from "@/components/growth-referrals/CustomerShareCard";
+import PoweredBy from "@/components/powered-by";
 import { formatDate, formatTime } from "../../utils/dateHelpers";
 import type { BookingResponse, Service, TimeSlot } from "../../types";
 
@@ -42,6 +46,7 @@ export function ConfirmationModal({
   brandStyle,
 }: ConfirmationModalProps) {
   const { t } = useTranslation();
+  const { growth } = usePlatformBrand();
   const [copied, setCopied] = useState<string | null>(null);
   const emailQueued = bookingResponse.notificationStatus === "queued";
 
@@ -297,6 +302,11 @@ export function ConfirmationModal({
             </ul>
           </div>
 
+          {/* Customer to business: "Do you take appointments too?" */}
+          {/* Customer referral: "Bring a friend" share link, when the business runs an offer. */}
+          {bookingResponse.bookingId && <CustomerShareCard source={{ bookingId: bookingResponse.bookingId }} />}
+          <BusinessPrompt managePath={bookingResponse.managePath} />
+
           {/* Close Button */}
           <Button
             onClick={onClose}
@@ -305,6 +315,8 @@ export function ConfirmationModal({
           >
             {t("customerBooking.done")}
           </Button>
+
+          {growth.poweredByPages && <PoweredBy variant="inline" source="powered_by_page" className="py-1 max-md:pb-1 max-lg:py-1" />}
         </div>
       </DialogContent>
     </Dialog>

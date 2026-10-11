@@ -1,0 +1,77 @@
+# Run with fixture appointment.tests.growth_referrals_qa_fixtures ($G/qa.sh runs setup before and cleanup after).
+# Platform administrator: the referrals overview (totals, list, sign-up sources) and approving a partner,
+# which issues a partner code (en, desktop, light). referrals-admin-dark.yaml covers mobile dark.
+app: appointment
+base_url: http://127.0.0.146:47800
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.growth_referrals_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-growth-referrals-admin
+default_role: Staff
+auth:
+  type: frappe_session
+  username: Administrator
+  verify_path: /api/method/frappe.auth.get_logged_user
+scenarios:
+- id: ref_admin_en_desktop
+  title: 'Admin: referrals, sign-up sources and partner approval (en, desktop, light)'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /admin/referrals
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="admin-referrals-totals"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="admin-referrals-list"]'
+    assertions:
+    - type: text_contains
+      value: Saba Spa
+    - type: text_contains
+      value: Kalkidan Nail Bar
+  - action: screenshot
+    name: ref_admin_en_desktop-1-referrals.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="admin-referrals-tab-sources"]'
+  - action: wait_for
+    selector: '[data-qa="admin-sources-list"]'
+    assertions:
+    - type: text_contains
+      value: Telegram share
+  - action: click
+    selector: '[data-qa="admin-sources-90"]'
+  - action: screenshot
+    name: ref_admin_en_desktop-2-sources.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="admin-referrals-tab-partners"]'
+  - action: wait_for
+    selector: '[data-qa="admin-partner-row"][data-qa-state="Pending"]'
+    assertions:
+    - type: text_contains
+      value: Addis Beauty Association
+  - action: click
+    selector: '[data-qa="admin-partner-row"][data-qa-state="Pending"] [data-qa="admin-partner-approve"]'
+    assertions:
+    - type: network_request
+      url_contains: partners.review
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="admin-partner-code"]'
+  - action: screenshot
+    name: ref_admin_en_desktop-3-partner-approved.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

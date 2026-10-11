@@ -1,0 +1,112 @@
+# Run with fixture appointment.tests.growth_referrals_qa_fixtures ($G/qa.sh runs setup before and cleanup after).
+# A new owner opens Meskerem Hair Studio's invite link, signs up, creates a business; then the referrer
+# signs in and finds the new business in "Businesses you invited". Both passwords are generated per run.
+app: appointment
+base_url: http://127.0.0.146:47800
+default_role: Guest
+auth:
+  type: none
+fixtures:
+  provider: appointment.tests.growth_referrals_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-growth-referrals-signup
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 240000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+  reduced_motion: reduce
+scenarios:
+- id: ref_signup_link_en_desktop
+  title: 'Sign-up through an invite link reaches the referrer progress list (en, desktop, light)'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /signup?ref={qa_ref_code}&source=telegram_share
+    assertions:
+    - type: network_idle
+  actions:
+  - action: wait_for
+    selector: '[data-qa="signup-referral"]'
+    assertions:
+    - type: text_contains
+      value: Invited by Meskerem Hair Studio
+  - action: screenshot
+    name: ref_signup-1-invite.png
+    full_page: false
+  - action: fill
+    selector: '#fullName'
+    value: Dawit Kebede
+  - action: fill
+    selector: '#email'
+    value: '{qa_ref_signup_email}'
+  - action: fill
+    selector: '#password'
+    value: '{qa_ref_signup_password}'
+  - action: click
+    selector: '[data-qa="signup-submit"]'
+    assertions:
+    - type: network_request
+      url_contains: registration.signup
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="login-heading"]'
+    timeout_ms: 20000
+  - action: fill
+    selector: '#email'
+    value: '{qa_ref_signup_email}'
+  - action: fill
+    selector: '#password'
+    value: '{qa_ref_signup_password}'
+  - action: click
+    selector: 'button[type="submit"]'
+  - action: wait_for
+    selector: '#business_name'
+    timeout_ms: 20000
+  - action: fill
+    selector: '#business_name'
+    value: '{qa_ref_signup_business}'
+  - action: fill
+    selector: '#location_name'
+    value: Kazanchis
+  - action: fill
+    selector: '#service_name'
+    value: Haircut
+  - action: click
+    selector: '[data-qa="onboarding-submit"]'
+    assertions:
+    - type: network_request
+      url_contains: workspace.create
+      status: 200
+  - action: open_url
+    url: /api/method/logout
+  - action: open_url
+    url: /login
+  - action: wait_for
+    selector: '[data-qa="login-heading"]'
+  - action: fill
+    selector: '#email'
+    value: '{qa_ref_owner_email}'
+  - action: fill
+    selector: '#password'
+    value: '{qa_ref_owner_password}'
+  - action: click
+    selector: 'button[type="submit"]'
+  - action: wait_for
+    selector: '[data-qa="nav-grow"]'
+    timeout_ms: 20000
+  - action: open_url
+    url: /grow
+  - action: wait_for
+    selector: '[data-qa="grow-referrals-list"]'
+    assertions:
+    - type: text_contains
+      value: '{qa_ref_signup_business}'
+  - action: screenshot
+    name: ref_signup-2-referrer-progress.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

@@ -3,7 +3,13 @@ import frappe
 no_cache = 1
 
 def get_context(context):
+    from appointment.growth import sharing, short_links
     from appointment.public_experience.csp import encode_boot_data, shell_nonce
+
+    # A business's former address (changed on the Grow page) redirects; printed posters keep working.
+    short_links.shell_redirect()
+    # Link previews (Telegram, Facebook, WhatsApp) read Open Graph tags without running the SPA.
+    context["public_meta_tags"] = sharing.shell_meta_tags()
 
     context["content_shell_nonce"] = shell_nonce()
     csrf_token = frappe.sessions.get_csrf_token()
@@ -24,6 +30,10 @@ def get_context(context):
     else:
         enabled = True
     boot["server_script_enabled"] = enabled
+    # The SPA paints the platform brand from boot, so the first frame never shows a placeholder.
+    from appointment.growth.api import public_payload
+
+    boot["platform_brand"] = public_payload()
     boot_json = encode_boot_data(boot)
 
     context.update(
@@ -34,7 +44,7 @@ def get_context(context):
         }
     )
 
-    context["app_name"] = "Meet.et - Ethiopian Scheduling Platform"
+    context["app_name"] = boot["platform_brand"]["brand"]["product_name"]
 
     return context
 

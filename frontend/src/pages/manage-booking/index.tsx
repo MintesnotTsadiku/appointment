@@ -4,6 +4,8 @@ import { useFrappeGetCall } from 'frappe-react-sdk';
 import { CalendarX2, CheckCircle2, Phone } from 'lucide-react';
 import { Button } from '@/components/button';
 import LanguageToggle from '@/components/language-toggle';
+import PoweredBy from '@/components/powered-by';
+import { usePlatformBrand } from '@/lib/platform-brand';
 import { useTheme } from '@/components/theme-provider';
 import { useTranslation } from '@/lib/i18n';
 import { useBookingBrand } from '@/public-experience/bookingTheme';
@@ -27,6 +29,7 @@ export default function ManageBookingPage() {
   const navigate = useNavigate();
   const { slug, token } = useParams<{ slug: string; token: string }>();
   const { theme } = useTheme();
+  const { growth } = usePlatformBrand();
   const brand = useBookingBrand(slug, theme === 'dark' ? 'dark' : 'light');
   const { data, isLoading } = useFrappeGetCall<{ message: ManageResponse }>(
     `${SELF_SERVICE_API}.view`,
@@ -121,6 +124,7 @@ export default function ManageBookingPage() {
         </h1>
         <div className="rounded-2xl border border-theme-default bg-(--bg-secondary,transparent) p-5 sm:p-6">{body}</div>
       </main>
+      {growth.poweredByPages && <PoweredBy variant="inline" source="powered_by_page" className="mx-auto max-w-3xl pb-10 max-md:pb-10" />}
     </div>
   );
 }

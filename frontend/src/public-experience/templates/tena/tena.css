@@ -33,3 +33,9 @@
 
 .tena-site[style*="--pe-selected-font-display"] :is(h1,h2,h3),.tena-booking[style*="--pe-selected-font-display"] :is(h1,h2,h3){font-family:var(--pe-selected-font-display,inherit)}
 .tena-site[style*="--pe-selected-font-body"] :is(p,li,address),.tena-booking[style*="--pe-selected-font-body"] p{font-family:var(--pe-selected-font-body)}
+
+/* Platform credit: a plain line under the copyright. */
+.tena-credit,.tena-content-credit{grid-column:1/-1;flex-basis:100%;margin:-30px 0 0;font-size:14px;opacity:.85}
+.tena-content-credit{margin:0}
+.tena-credit a,.tena-content-credit a{display:inline-block;padding-block:10px;font-weight:700;text-decoration:underline;text-decoration-color:var(--terra);text-underline-offset:4px}
+.tena-content-footer{flex-wrap:wrap}

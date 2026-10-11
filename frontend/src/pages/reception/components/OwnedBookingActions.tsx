@@ -17,6 +17,7 @@ import { Appointment } from '../types';
 import { BookingHistory } from './BookingHistory';
 import { CustomerMessages } from './CustomerMessages';
 import { PaymentSection } from './PaymentSection';
+import { BookingReferral } from './BookingReferral';
 import { ResourceSection } from './ResourceSection';
 import { notificationNotice } from './notificationNotice';
 
@@ -230,6 +231,7 @@ export function OwnedBookingActions({ appointment, onClose, onSuccess }: OwnedBo
 
           <ResourceSection appointment={appointment.name} onChanged={onSuccess} />
           <PaymentSection appointment={appointment.name} onChanged={onSuccess} />
+          <BookingReferral appointment={appointment.name} />
           <CustomerMessages bookingId={appointment.name} />
           <BookingHistory bookingId={appointment.name} />
         </div>
