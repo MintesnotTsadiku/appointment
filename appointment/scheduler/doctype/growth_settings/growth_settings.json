@@ -236,7 +236,7 @@
   {
    "fieldname": "marketing_live_minutes",
    "fieldtype": "Int",
-   "label": "Live Numbers Refresh (Minutes)",
+   "label": "Live numbers refresh (minutes)",
    "description": "How often public counters on marketing pages refresh.",
    "default": "5",
    "non_negative": 1

@@ -87,7 +87,8 @@ class TestPlatformBrand(unittest.TestCase):
         payload = api.public_brand()
         self.assertEqual(set(payload), {"brand", "growth"})
         self.assertTrue(payload["brand"]["product_name"])
-        self.assertEqual(set(payload["growth"]), set(api.PUBLIC_GROWTH))
+        # directory_public is derived (directory enabled and enough listed businesses), not a stored field.
+        self.assertEqual(set(payload["growth"]), {*api.PUBLIC_GROWTH, "directory_public"})
         for field in PRIVATE_GROWTH:
             self.assertNotIn(field, payload["growth"])
         with self.assertRaises(frappe.PermissionError):

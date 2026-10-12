@@ -7,7 +7,7 @@
 <title>{{ title }}</title>
 <meta name="description" content="{{ description }}">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="{{ canonical }}">
+<link rel="canonical" href="{{ canonical_url }}">
 <link rel="alternate" hreflang="en" href="{{ alternates.en }}">
 <link rel="alternate" hreflang="am" href="{{ alternates.am }}">
 <link rel="alternate" hreflang="x-default" href="{{ alternates.en }}">
@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="{{ product_name }}">
 <meta property="og:title" content="{{ title }}">
 <meta property="og:description" content="{{ description }}">
-<meta property="og:url" content="{{ canonical }}">
+<meta property="og:url" content="{{ canonical_url }}">
 <meta property="og:locale" content="{{ 'am_ET' if lang == 'am' else 'en_US' }}">
 <meta property="og:locale:alternate" content="{{ 'en_US' if lang == 'am' else 'am_ET' }}">
 {%- if brand.og_image %}
@@ -117,7 +117,7 @@
         <span class="p-success-icon">{{ icon("check") }}</span>
         <div><h3>{{ t("form.successTitle") }}</h3><p data-qa="partners-success-text">{{ (form.message if form.state == "sent" else t("form.success")) | e }}</p></div>
       </div>
-      <form method="post" action="{{ canonical }}#apply" novalidate data-qa="partners-form" data-method="{{ apply_method }}"
+      <form method="post" action="{{ canonical_url }}#apply" novalidate data-qa="partners-form" data-method="{{ apply_method }}"
             data-msg-failed="{{ t('form.failed') }}" data-msg-rate="{{ t('form.rateLimited') }}" data-msg-fix="{{ t('form.fixErrors') }}"
             data-msg-name="{{ t('form.nameRequired') }}" data-msg-email="{{ t('form.emailInvalid') }}" data-msg-kind="{{ t('form.kindRequired') }}"
             data-msg-long="{{ t('form.tooLong') }}" data-msg-sending="{{ t('form.sending') }}"

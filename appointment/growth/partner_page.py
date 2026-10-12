@@ -106,7 +106,7 @@ def build(context, lang: str | None = None):
         title=seo_title(t("title"), product),
         h1=t("h1"),
         description=t("description", product),
-        canonical=alternates[lang],
+        canonical_url=alternates[lang],  # Frappe overwrites `canonical` with the resolved route (/partners for /am/partners)
         alternates=alternates,
         other_lang="en" if lang == "am" else "am",
         brand=values,

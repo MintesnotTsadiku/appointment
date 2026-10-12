@@ -4865,7 +4865,7 @@
       "reward": "Reward (Free Bookings)",
       "customerDiscount": "Default Customer Discount (%)",
       "partnerReward": "Partner Reward (Free Bookings)",
-      "liveMinutes": "Live Numbers Refresh (Minutes)"
+      "liveMinutes": "Live numbers refresh (minutes)"
     },
     "growthSharing": {
       "bookOnline": "Book online",
@@ -5020,7 +5020,7 @@
       "madeWith": "Made free with {0}"
     },
     "index": {
-      "title": "Free Tools for Ethiopian Businesses",
+      "title": "Free tools for Ethiopian businesses",
       "h1": "Free tools for Ethiopian businesses",
       "description": "Free tools for Ethiopian businesses: convert Habesha time and Ethiopian dates, write Amharic reminders and print bilingual opening hours.",
       "lede": "Small, free helpers for people who run appointments in Ethiopia. They work on your phone, in English and Amharic, with no account.",

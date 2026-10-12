@@ -121,7 +121,7 @@ class Page:
         cards = [self.card(row) for row in shown]
         return dict(
             no_header=1, no_breadcrumbs=1, lang=self.lang, title=title, h1=h1, description=description,
-            canonical=canonical, product_name=self.brand["product_name"], brand=self.brand,
+            canonical_url=canonical, product_name=self.brand["product_name"], brand=self.brand,
             alternates=[dict(lang=lang, href=get_url(path(lang, self.category, self.area, self.number))) for lang in ("en", "am")],
             x_default=get_url(path("en", self.category, self.area, self.number)),
             other_language=dict(label="English" if self.lang == "am" else "አማርኛ",

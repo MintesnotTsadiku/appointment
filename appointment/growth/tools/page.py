@@ -51,7 +51,7 @@ def build(context, slug: str, lang: str | None = None):
             "title": title,
             "h1": t("h1"),
             "description": t("description"),
-            "canonical": alternates[lang],
+            "canonical_url": alternates[lang],  # Frappe overwrites `canonical` with the resolved route (no /am prefix)
             "alternates": alternates,
             "other_lang": "en" if lang == "am" else "am",
             "brand": values,

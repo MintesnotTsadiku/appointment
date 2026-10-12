@@ -52,8 +52,8 @@ class PagePost:
                          frappe.local.form_dict, frappe.local.lang)
         frappe.local.request = Request(EnvironBuilder(method="POST", path=self.path).get_environ())
         frappe.local.request_ip = self.ip
+        frappe.set_user("Guest")  # set_user resets form_dict, so the answers go in after it
         frappe.local.form_dict = frappe._dict(self.data)
-        frappe.set_user("Guest")
         return self
 
     def __exit__(self, *exc):
@@ -96,7 +96,9 @@ class TestPartnersPageSeo(unittest.TestCase):
                 self.assertIn("text/html", response.headers.get("Content-Type", ""))
                 self.assertIn(f'<html lang="{lang}"', raw)
                 self.assertEqual(len(re.findall(r"<h1[\s>]", raw)), 1)
-                self.assertNotIn("/assets/appointment/frontend/", raw, "the React bundle must not load here")
+                # The share image may live under the SPA's icons; only its scripts and styles must stay out.
+                self.assertNotRegex(raw, r'<(script|link)[^>]+(src|href)="[^"]*/assets/appointment/frontend/',
+                                    "the React bundle must not load here")
                 # Visible without JavaScript: the form, the kit and the FAQ are in the HTML.
                 for qa in ("partners-form", "partners-kit", "partners-faq", "partners-steps", "partners-benefits"):
                     self.assertIn(f'data-qa="{qa}"', raw)

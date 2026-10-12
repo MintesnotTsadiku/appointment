@@ -285,13 +285,16 @@ class TestDirectory(ShowoffCase):
         with self.assertRaises(frappe.PageDoesNotExistError):
             self._page()
 
-    def test_business_names_are_escaped_on_the_page(self):
-        business = self._org("Rose & <b>Lily</b> Salon")
+    def test_owner_values_are_escaped_on_the_page(self):
+        # Organization names cannot hold < or >, so the markup goes into a service name, which owners edit freely.
+        business = self._org('Rose & "Lily" Salon')
+        frappe.db.set_value("Service", business.service, "service_name", "<b>Lily</b> silk press")
         self._list(business, "salon-barber", "bole")
         context = self._page(category="salon-barber", area="bole")
         page = frappe.render_template("appointment/www/directory.html", context)
+        self.assertIn("<h3>Rose &amp; &#34;Lily&#34; Salon</h3>", page)
         self.assertNotIn("<b>Lily</b>", page)
-        self.assertIn("&lt;b&gt;Lily&lt;/b&gt;", page)
+        self.assertIn("<li>&lt;b&gt;Lily&lt;/b&gt; silk press</li>", page)
 
     def test_amharic_pages_hreflang_and_json_ld(self):
         business = self._org("Meskerem Beauty Studio")
@@ -301,7 +304,7 @@ class TestDirectory(ShowoffCase):
         self.assertIn("ቦሌ", page["h1"])
         self.assertEqual({row["lang"]: row["href"] for row in page["alternates"]},
                          {"en": get_url("/directory/salon-barber/bole"), "am": get_url("/am/directory/salon-barber/bole")})
-        self.assertEqual(page["canonical"], get_url("/am/directory/salon-barber/bole"))
+        self.assertEqual(page["canonical_url"], get_url("/am/directory/salon-barber/bole"))
         data = json.loads(page["json_ld"])
         self.assertEqual(data["@type"], "ItemList")
         item = next(row["item"] for row in data["itemListElement"] if row["item"]["name"] == page["cards"][0]["name"])
