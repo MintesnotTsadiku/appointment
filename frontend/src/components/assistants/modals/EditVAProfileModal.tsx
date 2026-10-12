@@ -4,10 +4,13 @@ import { Save, Loader2, User, Mail, Phone, Globe } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/dialog';
 import { Input } from '@/components/input';
 import { Label } from '@/components/label';
+import { OptionSelect } from '@/components/select/OptionSelect';
 import { assistantAPI } from '@/lib/tasks-assistants/api';
 import { toast } from 'sonner';
 import type { VAProfile } from '@/lib/tasks-assistants/types';
 import Spinner from '@/components/spinner';
+
+const selectClassName = 'h-auto w-full rounded-xl border-2 border-[var(--border-default)] bg-[var(--bg-secondary)] px-[1.125rem] py-[0.875rem] text-[var(--text-primary)] transition-all';
 
 interface EditVAProfileModalProps {
   vaId: string | null;
@@ -200,21 +203,13 @@ export const EditVAProfileModal = ({ vaId, isOpen, onClose, onSave }: EditVAProf
                   <Label htmlFor="status" className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
                     Status
                   </Label>
-                  <select
+                  <OptionSelect
                     id="status"
-                    value={formData.status}
-                    onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
-                    className="w-full rounded-xl border-2 transition-all focus:outline-hidden focus:ring-2"
-                    style={{
-                      backgroundColor: 'var(--bg-secondary)',
-                      borderColor: 'var(--border-default)',
-                      color: 'var(--text-primary)',
-                      padding: '0.875rem 1.125rem',
-                    }}
-                  >
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                  </select>
+                    value={formData.status ?? ''}
+                    onValueChange={(value) => setFormData({ ...formData, status: value as VAProfile['status'] })}
+                    className={selectClassName}
+                    options={[{ value: 'active', label: 'Active' }, { value: 'inactive', label: 'Inactive' }]}
+                  />
                 </div>
               </div>
 
@@ -224,24 +219,13 @@ export const EditVAProfileModal = ({ vaId, isOpen, onClose, onSave }: EditVAProf
                   <Globe className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
                   Timezone
                 </Label>
-                <select
+                <OptionSelect
                   id="timezone"
-                  value={formData.timezone}
-                  onChange={(e) => setFormData({ ...formData, timezone: e.target.value })}
-                  className="w-full rounded-xl border-2 transition-all focus:outline-hidden focus:ring-2"
-                  style={{
-                    backgroundColor: 'var(--bg-secondary)',
-                    borderColor: 'var(--border-default)',
-                    color: 'var(--text-primary)',
-                    padding: '0.875rem 1.125rem',
-                  }}
-                >
-                  {timezones.map((tz) => (
-                    <option key={tz} value={tz}>
-                      {tz.replace('Africa/', '')}
-                    </option>
-                  ))}
-                </select>
+                  value={formData.timezone ?? ''}
+                  onValueChange={(value) => setFormData({ ...formData, timezone: value })}
+                  className={selectClassName}
+                  options={timezones.map((tz) => ({ value: tz, label: tz.replace('Africa/', '') }))}
+                />
               </div>
             </div>
 

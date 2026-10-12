@@ -153,5 +153,36 @@
         "primitive": "abugida-language-alternate"
       }
     ]
+  },
+  "ergata-therapy": {
+    "palettes": [
+      {
+        "key": "default",
+        "label": "Template original",
+        "primitive": "ergata-therapy"
+      },
+      {
+        "key": "soft",
+        "label": "Soft canvas",
+        "primitive": "ergata-therapy-soft"
+      },
+      {
+        "key": "paper",
+        "label": "Paper & ink",
+        "primitive": "ergata-therapy-paper"
+      }
+    ],
+    "fonts": [
+      {
+        "key": "default",
+        "label": "Template original",
+        "primitive": "ergata-therapy"
+      },
+      {
+        "key": "alternate",
+        "label": "Clear sans",
+        "primitive": "ergata-therapy-alternate"
+      }
+    ]
   }
 }

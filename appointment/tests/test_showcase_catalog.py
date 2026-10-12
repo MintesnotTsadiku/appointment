@@ -16,8 +16,8 @@ from appointment.public_experience.showcase_catalog import (
 class TestShowcaseCatalog(unittest.TestCase):
     def test_runtime_assets_and_benchmarks_are_reproducible(self):
         catalog = validate_showcase_catalog()
-        self.assertEqual(set(catalog["sites"]), {"selam", "meron", "bloom", "tena", "abugida"})
-        self.assertEqual(len({site["slug"] for site in catalog["sites"].values()}), 5)
+        self.assertEqual(set(catalog["sites"]), {"selam", "meron", "bloom", "tena", "abugida", "ergata"})
+        self.assertEqual(len({site["slug"] for site in catalog["sites"].values()}), 6)
 
     def test_seed_assignments_come_from_catalog(self):
         catalog = validate_showcase_catalog()["sites"]
@@ -33,7 +33,7 @@ class TestShowcaseCatalog(unittest.TestCase):
         root = REPO_ROOT / "docs" / "design-references" / "public-experience" / "v1"
         manifest = json.loads((root / "manifest.json").read_text(encoding="utf-8"))
         self.assertEqual(manifest["contract"], "appointment-design-reference-manifest.v1")
-        self.assertEqual(len(manifest["files"]), 13)
+        self.assertEqual(len(manifest["files"]), 14)
         for item in manifest["files"]:
             path = root / item["path"]
             self.assertTrue(path.is_file(), path)

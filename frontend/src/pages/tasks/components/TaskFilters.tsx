@@ -1,5 +1,8 @@
 import { Search, Filter, SortAsc, CalendarClock } from 'lucide-react';
 import { Input } from '@/components/input';
+import { OptionSelect } from '@/components/select/OptionSelect';
+
+const selectClassName = 'h-auto w-auto gap-2 rounded-lg border-[var(--border-default)] bg-[var(--bg-secondary)] px-3 py-2 text-sm text-[var(--text-primary)] transition-all';
 
 interface TaskFiltersProps {
   searchQuery: string;
@@ -79,144 +82,70 @@ export const TaskFilters = ({
       {/* Sort */}
       <div className="flex items-center gap-2">
         <SortAsc className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
-        <select
+        <OptionSelect
           value={sortBy}
-          onChange={(e) => onSortByChange(e.target.value)}
-          className="px-3 py-2 rounded-lg text-sm transition-all focus:outline-hidden focus:ring-2"
-          style={{
-            backgroundColor: 'var(--bg-secondary)',
-            borderColor: 'var(--border-default)',
-            color: 'var(--text-primary)',
-            border: '1px solid var(--border-default)',
-          }}
-        >
-          <option value="deadline_asc">Soonest deadline</option>
-          <option value="priority_desc">Highest priority</option>
-          <option value="recent">Recently updated</option>
-        </select>
+          onValueChange={onSortByChange}
+          className={selectClassName}
+          options={[
+            { value: 'deadline_asc', label: 'Soonest deadline' },
+            { value: 'priority_desc', label: 'Highest priority' },
+            { value: 'recent', label: 'Recently updated' },
+          ]}
+        />
       </div>
 
       {/* Status Filter */}
       <div className="flex items-center gap-2">
         <Filter className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
-        <select
-          value={statusFilter}
-          onChange={(e) => onStatusFilterChange(e.target.value)}
-          className="px-3 py-2 rounded-lg text-sm transition-all focus:outline-hidden focus:ring-2"
-          style={{
-            backgroundColor: 'var(--bg-secondary)',
-            borderColor: 'var(--border-default)',
-            color: 'var(--text-primary)',
-            border: '1px solid var(--border-default)',
-          }}
-        >
-          {statuses.map((status) => (
-            <option key={status.value} value={status.value}>
-              {status.label}
-            </option>
-          ))}
-        </select>
+        <OptionSelect value={statusFilter} onValueChange={onStatusFilterChange} className={selectClassName} options={statuses} />
       </div>
 
       {/* Date field selector */}
       <div className="flex items-center gap-2">
         <CalendarClock className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
-        <select
+        <OptionSelect
           value={dateField}
-          onChange={(e) => onDateFieldChange(e.target.value as 'deadline' | 'creation' | 'modified')}
-          className="px-3 py-2 rounded-lg text-sm transition-all focus:outline-hidden focus:ring-2"
-          style={{
-            backgroundColor: 'var(--bg-secondary)',
-            borderColor: 'var(--border-default)',
-            color: 'var(--text-primary)',
-            border: '1px solid var(--border-default)',
-          }}
-        >
-          <option value="deadline">Deadline</option>
-          <option value="creation">Created</option>
-          <option value="modified">Last updated</option>
-        </select>
+          onValueChange={(value) => onDateFieldChange(value as 'deadline' | 'creation' | 'modified')}
+          className={selectClassName}
+          options={[
+            { value: 'deadline', label: 'Deadline' },
+            { value: 'creation', label: 'Created' },
+            { value: 'modified', label: 'Last updated' },
+          ]}
+        />
       </div>
 
       {/* Assignee Filter */}
-      <select
+      <OptionSelect
         value={assigneeFilter}
-        onChange={(e) => onAssigneeFilterChange(e.target.value)}
-        className="px-3 py-2 rounded-lg text-sm transition-all focus:outline-hidden focus:ring-2 min-w-[140px]"
-        style={{
-          backgroundColor: 'var(--bg-secondary)',
-          borderColor: 'var(--border-default)',
-          color: 'var(--text-primary)',
-          border: '1px solid var(--border-default)',
-        }}
-      >
-        <option value="">All VAs</option>
-        {assigneeOptions.map((opt) => (
-          <option key={opt.value} value={opt.value}>
-            {opt.label}
-          </option>
-        ))}
-      </select>
+        onValueChange={onAssigneeFilterChange}
+        className={`${selectClassName} min-w-[140px]`}
+        options={[{ value: '', label: 'All VAs' }, ...assigneeOptions]}
+      />
 
       {/* Client Filter */}
-      <select
+      <OptionSelect
         value={clientFilter}
-        onChange={(e) => onClientFilterChange(e.target.value)}
-        className="px-3 py-2 rounded-lg text-sm transition-all focus:outline-hidden focus:ring-2 min-w-[160px]"
-        style={{
-          backgroundColor: 'var(--bg-secondary)',
-          borderColor: 'var(--border-default)',
-          color: 'var(--text-primary)',
-          border: '1px solid var(--border-default)',
-        }}
-      >
-        <option value="">All clients</option>
-        {clientOptions.map((opt) => (
-          <option key={opt.value} value={opt.value}>
-            {opt.label}
-          </option>
-        ))}
-      </select>
+        onValueChange={onClientFilterChange}
+        className={`${selectClassName} min-w-[160px]`}
+        options={[{ value: '', label: 'All clients' }, ...clientOptions]}
+      />
 
       {/* Project Filter */}
-      <select
+      <OptionSelect
         value={projectFilter}
-        onChange={(e) => onProjectFilterChange(e.target.value)}
-        className="px-3 py-2 rounded-lg text-sm transition-all focus:outline-hidden focus:ring-2 min-w-[150px]"
-        style={{
-          backgroundColor: 'var(--bg-secondary)',
-          borderColor: 'var(--border-default)',
-          color: 'var(--text-primary)',
-          border: '1px solid var(--border-default)',
-        }}
-      >
-        <option value="">All projects</option>
-        {projectOptions.map((opt) => (
-          <option key={opt.value} value={opt.value}>
-            {opt.label}
-          </option>
-        ))}
-      </select>
+        onValueChange={onProjectFilterChange}
+        className={`${selectClassName} min-w-[150px]`}
+        options={[{ value: '', label: 'All projects' }, ...projectOptions]}
+      />
 
       {/* Category Filter */}
-      <select
+      <OptionSelect
         value={categoryFilter}
-        onChange={(e) => onCategoryFilterChange(e.target.value)}
-        className="px-3 py-2 rounded-lg text-sm transition-all focus:outline-hidden focus:ring-2 min-w-[140px]"
-        style={{
-          backgroundColor: 'var(--bg-secondary)',
-          borderColor: 'var(--border-default)',
-          color: 'var(--text-primary)',
-          border: '1px solid var(--border-default)',
-        }}
-      >
-        <option value="">All categories</option>
-        {categoryOptions.map((opt) => (
-          <option key={opt.value} value={opt.value}>
-            {opt.label}
-          </option>
-        ))}
-      </select>
+        onValueChange={onCategoryFilterChange}
+        className={`${selectClassName} min-w-[140px]`}
+        options={[{ value: '', label: 'All categories' }, ...categoryOptions]}
+      />
 
       {/* Show No Deadline Toggle */}
       <label className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm cursor-pointer transition-all hover:opacity-80" style={{

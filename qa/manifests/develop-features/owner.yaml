@@ -81,9 +81,19 @@ scenarios:
     selector: '[role="option"]:has-text("Bole quiet styling room")'
   - action: wait_for
     selector: '[data-qa="reception-state"]'
-  - action: select
+  - action: click
     selector: '[data-qa="reception-state"]'
-    value: Open
+  # The dropdown only reports a change, so close first (the fixture restores the saved state) and then open.
+  - action: click
+    selector: '[role="option"][data-value="Closed"]'
+    assertions:
+    - type: network_request
+      url_contains: reception_state.set_state
+      status: 200
+  - action: click
+    selector: '[data-qa="reception-state"]'
+  - action: click
+    selector: '[role="option"][data-value="Open"]'
     assertions:
     - type: network_request
       url_contains: reception_state.set_state

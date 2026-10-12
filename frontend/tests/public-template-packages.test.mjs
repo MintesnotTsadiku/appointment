@@ -5,7 +5,7 @@ import { strict as assert } from "node:assert";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const templateRoot = path.join(root, "src/public-experience/templates");
-const templates = ["selam", "bloom", "meron", "abugida", "tena", "tena-v2", "selam-v2", "bloom-v2", "meron-v2", "abugida-v2"];
+const templates = ["selam", "bloom", "meron", "abugida", "tena", "tena-v2", "selam-v2", "bloom-v2", "meron-v2", "abugida-v2", "ergata"];
 
 const registry = fs.readFileSync(path.join(templateRoot, "registry.ts"), "utf8");
 for (const template of templates) {
@@ -33,9 +33,18 @@ for (const key of ["selam-movement", "bloom-hair", "meron-atelier", "abugida-lan
   assert.ok(registry.includes(`"${key}@1"`), `${key} v1 stays registered for releases pinned to it`);
   assert.ok(registry.includes(`"${key}@2"`), `${key} v2 is registered`);
 }
+assert.ok(registry.includes(`"ergata-therapy@1"`), "ergata-therapy v1 is registered");
+assert.ok(!registry.includes(`"ergata-therapy@2"`), "ergata-therapy has no second version yet");
 assert.ok(registry.includes("rendererVersion"), "the registry resolves by renderer version");
+
+// Ergata (therapy practices) keeps its safety notice as owner content: numbers are never hard-coded.
+const ergata = fs.readFileSync(path.join(templateRoot, "ergata", "ErgataTemplate.tsx"), "utf8");
+assert.ok(!/\b(991|907|939)\b/.test(ergata), "emergency numbers come from the release, not the template");
+assert.ok(ergata.includes('section(snapshot.sections, "notice")') || ergata.includes('get("notice")'), "the template renders the notice section");
+assert.ok(ergata.includes("data-qa=\"template-credit\""), "the template draws the growth footer credit");
+assert.ok(ergata.includes("prefers-reduced-motion") || fs.readFileSync(path.join(templateRoot, "ergata", "ergata.css"), "utf8").includes("prefers-reduced-motion"), "motion respects reduced motion");
 assert.ok(!registry.includes("quiet-trust-warm-editorial"));
 assert.ok(!registry.includes("crafted-editorial-atelier"));
 assert.ok(!registry.includes("warm-vitality-studio"));
 assert.ok(!/tizita|wana/.test(registry), "retired themes stay unregistered");
-console.log("PASS: five certified recipes, each with independent, fail-closed v1 and v2 packages");
+console.log("PASS: six certified recipes with independent, fail-closed versioned packages");

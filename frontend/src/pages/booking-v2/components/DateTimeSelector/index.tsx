@@ -332,7 +332,7 @@ useEffect(() => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="rounded-2xl backdrop-blur-xs p-6 min-h-[500px]"
+            className="rounded-2xl backdrop-blur-xs p-6 lg:min-h-[500px]"
             style={{ 
               backgroundColor: 'var(--bg-elevated)',
               border: '1px solid var(--border-default)'

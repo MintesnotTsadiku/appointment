@@ -5,7 +5,7 @@ import { Button } from '@/components/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/dialog';
 import { Input } from '@/components/input';
 import { Label } from '@/components/label';
-import { NativeSelect } from '@/components/native-select';
+import { OptionSelect } from '@/components/select/OptionSelect';
 import { Switch } from '@/components/switch';
 import { FieldHint } from '@/components/settings-layout';
 import { useTranslation } from '@/lib/i18n';
@@ -54,11 +54,12 @@ export function BusinessRulesDialog({ business, platformMode, feeType, onClose, 
         <div className="space-y-5">
           <div className="space-y-1.5">
             <Label htmlFor="business-collects">{t('staff.adminPayments.whoCollects')}</Label>
-            <NativeSelect id="business-collects" data-qa="admin-business-collects" value={override} onChange={(event) => setOverride(event.target.value as CollectionOverride)}>
-              <option value="Platform default">{t('staff.adminPayments.modeDefault').replace('{0}', t(MODE_KEY[platformMode]))}</option>
-              <option value="Business collects">{t('staff.adminPayments.modeBusiness')}</option>
-              <option value="Platform collects">{t('staff.adminPayments.modePlatform')}</option>
-            </NativeSelect>
+            <OptionSelect id="business-collects" data-qa="admin-business-collects" value={override} onValueChange={(next) => setOverride(next as CollectionOverride)}
+              options={[
+                { value: 'Platform default', label: t('staff.adminPayments.modeDefault').replace('{0}', t(MODE_KEY[platformMode])) },
+                { value: 'Business collects', label: t('staff.adminPayments.modeBusiness') },
+                { value: 'Platform collects', label: t('staff.adminPayments.modePlatform') },
+              ]} />
           </div>
           {feeType !== 'None' && (
             <div className="space-y-3">

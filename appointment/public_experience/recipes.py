@@ -42,6 +42,9 @@ RECIPE_MANIFESTS = {
         1: "public_experience/manifest/design/recipes/tena-clinic.v1.json",
         2: "public_experience/manifest/design/recipes/tena-clinic.v2.json",
     },
+    "ergata-therapy": {
+        1: "public_experience/manifest/design/recipes/ergata-therapy.v1.json",
+    },
 }
 PRIMITIVE_MANIFESTS = {
     "palette": "public_experience/manifest/design/palettes/{key}.v{version}.json",

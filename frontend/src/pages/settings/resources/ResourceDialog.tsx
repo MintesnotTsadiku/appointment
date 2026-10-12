@@ -5,7 +5,7 @@ import { Button } from '@/components/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/dialog';
 import { Input } from '@/components/input';
 import { Label } from '@/components/label';
-import { NativeSelect } from '@/components/native-select';
+import { OptionSelect } from '@/components/select/OptionSelect';
 import { Switch } from '@/components/switch';
 import { useTranslation } from '@/lib/i18n';
 import { serverErrorMessage } from '@/lib/utils';
@@ -65,7 +65,7 @@ export function ResourceDialog({ open, organization, resource, types, locations,
   const valid = draft.resource_name.trim() && draft.resource_type && draft.location;
   return (
     <Dialog open={open} onOpenChange={(next) => !next && onClose()}>
-      <DialogContent className="sm:max-w-md" data-qa="resource-dialog">
+      <DialogContent className="p-6 sm:max-w-md" data-qa="resource-dialog">
         <DialogHeader>
           <DialogTitle>{resource ? t('staff.resources.editResource') : t('staff.resources.addResource')}</DialogTitle>
           <DialogDescription>{t('staff.resources.resourcesHint')}</DialogDescription>
@@ -78,15 +78,13 @@ export function ResourceDialog({ open, organization, resource, types, locations,
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
               <Label htmlFor="resource-type">{t('staff.resources.resourceType')}</Label>
-              <NativeSelect id="resource-type" data-qa="resource-type" value={draft.resource_type} onChange={(event) => setDraft({ ...draft, resource_type: event.target.value })}>
-                {activeTypes.map((type) => <option key={type.name} value={type.name}>{type.type_name}</option>)}
-              </NativeSelect>
+              <OptionSelect id="resource-type" data-qa="resource-type" value={draft.resource_type} onValueChange={(next) => setDraft({ ...draft, resource_type: next })}
+                options={activeTypes.map((type) => ({ value: type.name, label: type.type_name }))} />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="resource-location">{t('staff.resources.location')}</Label>
-              <NativeSelect id="resource-location" data-qa="resource-location" value={draft.location} onChange={(event) => setDraft({ ...draft, location: event.target.value })}>
-                {locations.map((location) => <option key={location.name} value={location.name}>{location.location_name}</option>)}
-              </NativeSelect>
+              <OptionSelect id="resource-location" data-qa="resource-location" value={draft.location} onValueChange={(next) => setDraft({ ...draft, location: next })}
+                options={locations.map((location) => ({ value: location.name, label: location.location_name }))} />
             </div>
           </div>
           <div className="space-y-1.5">

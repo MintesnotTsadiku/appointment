@@ -77,11 +77,11 @@ class TestRecipeCompiler(unittest.TestCase):
         recipes = list_recipes()
         self.assertEqual(
             [recipe.key for recipe in recipes],
-            ["selam-movement", "bloom-hair", "meron-atelier", "abugida-language", "tena-clinic"],
+            ["selam-movement", "bloom-hair", "meron-atelier", "abugida-language", "tena-clinic", "ergata-therapy"],
         )
         for recipe in recipes:
             self.assertEqual(recipe.required_sections[0], "hero")
-            self.assertEqual(len(recipe.required_sections), 13)
+            self.assertEqual(len(recipe.required_sections), 15 if recipe.key == "ergata-therapy" else 13)
 
     def test_business_specific_asset_is_projected_to_canonical_slots(self):
         recipe = get_recipe("abugida-language")
@@ -121,11 +121,15 @@ class TestRecipeCompiler(unittest.TestCase):
     def test_published_recipe_versions_stay_loadable_and_the_gallery_offers_the_latest(self):
         for recipe in list_recipes():
             versions = recipe_versions(recipe.key)
-            self.assertEqual(versions, (1, 2), recipe.key)
-            self.assertEqual(recipe.version, 2, "the gallery offers the Taste v1 version")
-            pinned = get_recipe(recipe.key, 1)
-            self.assertEqual(pinned.version, 1)
-            self.assertNotEqual(pinned.content_hash, recipe.content_hash)
+            if recipe.key == "ergata-therapy":
+                # Ergata started after the Taste v1 pass, so its first version is the latest.
+                self.assertEqual(versions, (1,))
+            else:
+                self.assertEqual(versions, (1, 2), recipe.key)
+                self.assertEqual(recipe.version, 2, "the gallery offers the Taste v1 version")
+                pinned = get_recipe(recipe.key, 1)
+                self.assertEqual(pinned.version, 1)
+                self.assertNotEqual(pinned.content_hash, recipe.content_hash)
             for version in versions:
                 design = compile_design(recipe.key, version, {"motion": "calm"}, None, ["en", "am"]).as_dict()
                 self.assertEqual(design["layout"]["rendererVersion"], version, f"{recipe.key} v{version} renders with its own package")
@@ -144,7 +148,7 @@ class TestRecipeCompiler(unittest.TestCase):
             for asset in typography["fontAssets"]:
                 self.assertTrue(asset["src"].startswith(f"/assets/appointment/fonts/{recipe.key.split('-')[0]}/"), asset["src"])
                 self.assertIn("Open Font License", asset["license"])
-        self.assertEqual(len(display_faces), 5, "no two templates share a display face")
+        self.assertEqual(len(display_faces), len(list_recipes()), "no two templates share a display face")
 
     def test_unknown_or_unsafe_adjustments_fail_closed(self):
         with self.assertRaises(UnknownRecipeError):
@@ -192,6 +196,65 @@ class TestTypedContentAndActions(unittest.TestCase):
         self.assertIn("local_asset", {issue.rule for issue in remote.issues})
         markup = validate_typed_section("about", {**about, **photo, "imageAlt": {"en": "<img onerror=x>"}})
         self.assertFalse(markup.ok)
+        hero = validate_typed_section("hero", {"title": {"en": "A calm space to talk"}, **photo})
+        self.assertTrue(hero.ok, hero.issues)
+
+    def test_approaches_and_notice_sections_are_closed_and_plain(self):
+        approaches = {"title": {"en": "How I work", "am": "የምሠራበት መንገድ"}, "items": [
+            {"title": {"en": "CBT"}, "description": {"en": "Notice how thoughts, feelings and actions connect."}}]}
+        self.assertTrue(validate_typed_section("approaches", approaches).ok)
+        self.assertFalse(validate_typed_section("approaches", {**approaches, "items": [{"title": {"en": "CBT"}}]}).ok)
+        self.assertFalse(validate_typed_section("approaches", {**approaches, "html": "<b>x</b>"}).ok)
+        notice = {"title": {"en": "This is not an emergency service"}, "body": {"en": "If you are in danger, call now."},
+                  "items": [{"label": {"en": "Police", "am": "ፖሊስ"}, "phone": "991"}, {"label": {"en": "Ambulance"}, "phone": "907"}]}
+        self.assertTrue(validate_typed_section("notice", notice).ok, validate_typed_section("notice", notice).issues)
+        self.assertTrue(validate_typed_section("notice", {"title": {"en": "Note"}}).ok, "phone lines are optional")
+        unsafe = {**notice, "items": [{"label": {"en": "Police"}, "phone": "javascript:alert(1)"}]}
+        self.assertIn("phone", {issue.rule for issue in validate_typed_section("notice", unsafe).issues})
+
+    def test_ergata_recipe_compiles_with_its_own_primitives_in_both_modes(self):
+        recipe = get_recipe("ergata-therapy")
+        self.assertIn("approaches", recipe.required_sections)
+        self.assertIn("notice", recipe.required_sections)
+        design = compile_design(recipe.key, recipe.version, {"motion": "calm"}, None, ["en", "am"]).as_dict()
+        self.assertEqual(design["layout"]["rendererKey"], "ergata-therapy")
+        self.assertEqual(design["layout"]["rendererVersion"], 1)
+        self.assertEqual(set(design["tokens"]), {"light", "dark"})
+        self.assertTrue(design["assets"]["hero.primary"]["src"].endswith("/heroes/ergata-therapy.webp"))
+        for choice in ("soft", "paper"):
+            compile_design(recipe.key, recipe.version, {"paletteChoice": choice}, None, ["en", "am"])
+        alternate = compile_design(recipe.key, recipe.version, {"fontChoice": "alternate"}, None, ["en", "am"]).as_dict()
+        self.assertEqual(alternate["typography"]["roles"]["display"]["family"], "Ergata Sans")
+
+    def test_ergata_starter_copy_is_bilingual_valid_and_invents_no_facts(self):
+        from appointment.public_experience.setup import _apply_starter, starter_content
+
+        recipe = get_recipe("ergata-therapy")
+        starter = starter_content(recipe)
+        self.assertIsNone(starter_content(get_recipe("tena-clinic")), "recipes without starter copy keep the generic draft")
+        text = lambda value: {"en": value}
+        content = {kind: {"title": text(kind), "items": []} for kind in recipe.required_sections}
+        content["hero"] = {"title": text("Practice"), "primaryAction": {"intent": "booking_start", "label": text("Book"), "placement": "primary"}}
+        content["about"] = {"title": text("About"), "body": text("A practice.")}
+        content["contact"] = {"title": text("Contact")}
+        content["booking_cta"] = {"title": text("Book"), "action": {"intent": "booking_start", "label": text("Book"), "placement": "primary"}}
+        content["footer"] = {"body": text("Practice"), "items": []}
+        content["providers"]["items"] = [{"id": "p1", "name": text("A"), "role": text("Provider"), "specialties": [], "credentials": []}]
+        content["services"]["items"] = [{"id": "s1", "name": text("Intro call"), "durationMinutes": 15, "price": 0}]
+        _apply_starter(content, starter, team=False, contact_first=False, intro_call=True)
+        for kind in recipe.required_sections:
+            report = validate_typed_section(kind, content[kind], allowed_intents=recipe.action_intents)
+            self.assertTrue(report.ok, (kind, report.issues))
+        self.assertEqual(content["hero"]["secondaryAction"]["intent"], "service_selection")
+        self.assertEqual(content["providers"]["items"][0]["role"]["am"], "ቴራፒስት")
+        self.assertEqual(content["proof"]["items"], [], "credentials are never invented")
+        self.assertEqual(content["testimonials"]["items"], [], "testimonials stay empty until the owner adds consented quotes")
+        self.assertEqual(content["services"]["items"][0]["id"], "s1", "sessions come from the business records")
+        self.assertEqual([item["phone"] for item in content["notice"]["items"]], ["991", "907"])
+        for kind, section in starter.items():
+            for field in ("title", "intro", "subtitle", "body", "eyebrow"):
+                if field in section:
+                    self.assertTrue(section[field].get("am"), f"{kind}.{field} needs Amharic")
 
 
 def run():

@@ -1,0 +1,143 @@
+{
+  "kind": "recipe",
+  "contract": "appointment-curated-recipe.v1",
+  "key": "ergata-therapy",
+  "version": 1,
+  "label": "Ergata Therapy",
+  "description": "For counsellors, psychologists and therapists in private practice. A calm, warm page in linen, sage and clay with a soft serif voice. It says who you help and how you work in plain words, lets a first session feel safe to book, and keeps a clear note that the practice is not an emergency service.",
+  "audience": "Independent counsellors, psychologists, psychotherapists, family and couples therapists, and small group practices.",
+  "mood": "calm-warm",
+  "supportedLocales": [
+    "en",
+    "am"
+  ],
+  "accessibility": {
+    "level": "AA",
+    "focusVisible": true,
+    "reducedMotion": true
+  },
+  "primitives": {
+    "palette": {
+      "key": "ergata-therapy",
+      "version": 1
+    },
+    "typography": {
+      "key": "ergata-therapy",
+      "version": 1
+    },
+    "imagery": {
+      "key": "ergata-rooms",
+      "version": 1
+    },
+    "layout": {
+      "key": "ergata-therapy",
+      "version": 1
+    },
+    "surface": {
+      "key": "ergata-therapy",
+      "version": 1
+    }
+  },
+  "supportedSections": [
+    "hero",
+    "benefits",
+    "approaches",
+    "about",
+    "process",
+    "services",
+    "providers",
+    "proof",
+    "testimonials",
+    "faq",
+    "notice",
+    "locations",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "requiredSections": [
+    "hero",
+    "benefits",
+    "approaches",
+    "about",
+    "process",
+    "services",
+    "providers",
+    "proof",
+    "testimonials",
+    "faq",
+    "notice",
+    "locations",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "defaultInputs": {
+    "motion": "calm",
+    "presentationDensity": "spacious",
+    "heroAsset": "hero.ergata",
+    "detailAsset": "detail.ergata"
+  },
+  "adjustments": {
+    "accentColor": {
+      "type": "hex-color",
+      "optional": true,
+      "protected": false
+    },
+    "motion": {
+      "type": "enum",
+      "choices": [
+        "calm",
+        "standard"
+      ],
+      "optional": true
+    },
+    "presentationDensity": {
+      "type": "enum",
+      "choices": [
+        "comfortable",
+        "spacious"
+      ],
+      "optional": true
+    },
+    "heroAsset": {
+      "type": "asset-role",
+      "choices": [
+        "hero.ergata"
+      ],
+      "optional": true
+    },
+    "detailAsset": {
+      "type": "asset-role",
+      "choices": [
+        "detail.ergata"
+      ],
+      "optional": true
+    }
+  },
+  "actionIntents": [
+    "booking_start",
+    "service_selection",
+    "provider_selection",
+    "call",
+    "directions",
+    "contact",
+    "faq_jump",
+    "back_to_site"
+  ],
+  "contentRichness": {
+    "default": "rich",
+    "choices": [
+      "compact",
+      "standard",
+      "rich"
+    ],
+    "requiredForCertification": [
+      "benefits",
+      "approaches",
+      "process",
+      "faq",
+      "notice"
+    ]
+  }
+}

@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { Check, HelpCircle, LayoutGrid, Loader2, Plus, RotateCcw, X } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n';
 import { Button } from '@/components/button';
-import { NativeSelect } from '@/components/native-select';
+import { OptionSelect } from '@/components/select/OptionSelect';
 
 interface DashboardControlsProps {
   editing: boolean;
@@ -46,11 +46,12 @@ export function DashboardControls(props: DashboardControlsProps) {
   return (
     <div className="flex flex-wrap items-center gap-2">
       <label className="sr-only" htmlFor="analytics-period">{t('staff.analytics.period')}</label>
-      <NativeSelect id="analytics-period" data-qa="analytics-period" value={props.period} onChange={(event) => props.onPeriod(Number(event.target.value))} className="h-9 w-36">
-        <option value={7}>{t('staff.analytics.last7')}</option>
-        <option value={30}>{t('staff.analytics.last30')}</option>
-        <option value={90}>{t('staff.analytics.last90')}</option>
-      </NativeSelect>
+      <OptionSelect id="analytics-period" data-qa="analytics-period" value={String(props.period)} onValueChange={(next) => props.onPeriod(Number(next))} className="h-9 w-36"
+        options={[
+          { value: '7', label: t('staff.analytics.last7') },
+          { value: '30', label: t('staff.analytics.last30') },
+          { value: '90', label: t('staff.analytics.last90') },
+        ]} />
       {props.children}
       <Button type="button" size="sm" variant="ghost" className="h-9" onClick={props.onGuide} data-qa="dashboard-guide">
         <HelpCircle aria-hidden="true" />

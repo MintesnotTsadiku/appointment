@@ -26,3 +26,11 @@ def browser_values(manifest=None):
     values = showcase.browser_values(manifest)
     values["qa_open_day"] = open_day()
     return values
+
+
+def twelve_hour(value):
+    """`HH:MM` as the staff time input shows it in English (`h:MM AM`), for QA `fill` steps."""
+    if not value:
+        return ""
+    hour, minute = (int(part) for part in value.split(":")[:2])
+    return f"{(hour % 12) or 12}:{minute:02d} {'PM' if hour >= 12 else 'AM'}"

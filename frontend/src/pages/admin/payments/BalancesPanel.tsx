@@ -4,7 +4,7 @@ import { Button } from '@/components/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/table';
 import { useMemo, useState } from 'react';
 import { Download } from 'lucide-react';
-import { NativeSelect } from '@/components/native-select';
+import { OptionSelect } from '@/components/select/OptionSelect';
 import { intlLocale, useTranslation } from '@/lib/i18n';
 import { statementUrl } from '@/pages/settings/payments/statementUrl';
 import { cn } from '@/lib/utils';
@@ -41,9 +41,8 @@ export function BalancesPanel({ rows, currency, onSettle, onEdit }: {
       subtitle={t('staff.adminPayments.balancesSubtitle')}
       qa="admin-balances"
       aside={
-        <NativeSelect aria-label={t('staff.statements.month')} data-qa="admin-statement-month" wrapperClassName="w-44" value={month} onChange={(event) => setMonth(event.target.value)}>
-          {months.map((value) => <option key={value} value={value}>{monthName(value)}</option>)}
-        </NativeSelect>
+        <OptionSelect aria-label={t('staff.statements.month')} data-qa="admin-statement-month" className="w-44" value={month} onValueChange={setMonth}
+          options={months.map((value) => ({ value, label: monthName(value) }))} />
       }
     >
       <div className="space-y-3 sm:hidden">

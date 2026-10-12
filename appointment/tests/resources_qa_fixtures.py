@@ -14,11 +14,12 @@ from datetime import datetime, timedelta
 
 import frappe
 import pytz
-from frappe.utils import add_days, get_time, nowdate
+from frappe.utils import add_days, get_time, getdate, nowdate
 
 from appointment.demo import showcase
 from appointment.scheduler import booking, resources
-from appointment.tests import demo_offerings
+from appointment.growth import habesha
+from appointment.tests import demo_offerings, qa_days
 
 TYPE_NAME = "Styling chair (QA)"
 RAHEL = demo_offerings.cut_rahel()  # Cut and shape, Rahel, Bole quiet styling room
@@ -85,6 +86,13 @@ def browser_values(manifest=None):
         values["qa_res_day"] = str(doc.appointment_date)
         values["qa_res_block_start"] = f"{doc.appointment_date}T{get_time(doc.start_time):%H:%M}"
         values["qa_res_block_end"] = f"{doc.appointment_date}T{get_time(doc.end_time):%H:%M}"
+        # The block dialog takes a calendar day and typed times in the page's clock.
+        values["qa_res_block_day_of_month"] = str(getdate(doc.appointment_date).day)
+        for key, value in (("start", doc.start_time), ("end", doc.end_time)):
+            wall = get_time(value)
+            hour, minute, period = habesha.to_habesha(wall.hour, wall.minute)
+            values[f"qa_res_block_{key}_en"] = qa_days.twelve_hour(f"{wall:%H:%M}")
+            values[f"qa_res_block_{key}_am"] = f"{hour}:{minute:02d} {habesha.PERIODS[period]['am']}"
     return values
 
 

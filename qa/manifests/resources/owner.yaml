@@ -53,12 +53,26 @@ scenarios:
       value: '[data-qa="resource-card"][data-qa-name="Chair 3"]'
   - action: click
     selector: '[data-qa="resource-card"][data-qa-name="Quiet chair A"] [data-qa="resource-block"]'
+  - action: click
+    selector: '[data-qa="block-start-date"]'
+  - action: click
+    selector: '[data-radix-popper-content-wrapper] button[name="day"]:not(.day-outside):text-is("{qa_res_block_day_of_month}")'
   - action: fill
-    selector: '[data-qa="block-start"]'
-    value: '{qa_res_block_start}'
+    selector: '[data-qa="block-start-time"]'
+    value: '{qa_res_block_start_en}'
+  - action: press
+    selector: '[data-qa="block-start-time"]'
+    key: Tab
+  - action: click
+    selector: '[data-qa="block-end-date"]'
+  - action: click
+    selector: '[data-radix-popper-content-wrapper] button[name="day"]:not(.day-outside):text-is("{qa_res_block_day_of_month}")'
   - action: fill
-    selector: '[data-qa="block-end"]'
-    value: '{qa_res_block_end}'
+    selector: '[data-qa="block-end-time"]'
+    value: '{qa_res_block_end_en}'
+  - action: press
+    selector: '[data-qa="block-end-time"]'
+    key: Tab
   - action: click
     selector: '[data-qa="block-save"]'
     assertions:
@@ -86,9 +100,10 @@ scenarios:
     assertions:
     - type: visible_selector
       value: '[data-qa="booking-resource"][data-qa-state="assigned"]'
-  - action: select
+  - action: click
     selector: '[data-qa="booking-resource-move"]'
-    value: '{qa_res_chair_b}'
+  - action: click
+    selector: '[role="option"][data-value="{qa_res_chair_b}"]'
     assertions:
     - type: visible_text
       value: Booking moved to Quiet chair B
@@ -175,12 +190,26 @@ scenarios:
     full_page: true
   - action: click
     selector: '[data-qa="resource-card"][data-qa-name="Quiet chair B"] [data-qa="resource-block"]'
+  - action: click
+    selector: '[data-qa="block-start-date"]'
+  - action: click
+    selector: '[data-radix-popper-content-wrapper] button[name="day"]:not(.day-outside):text-is("{qa_res_block_day_of_month}")'
   - action: fill
-    selector: '[data-qa="block-start"]'
-    value: '{qa_res_block_start}'
+    selector: '[data-qa="block-start-time"]'
+    value: '{qa_res_block_start_am}'
+  - action: press
+    selector: '[data-qa="block-start-time"]'
+    key: Tab
+  - action: click
+    selector: '[data-qa="block-end-date"]'
+  - action: click
+    selector: '[data-radix-popper-content-wrapper] button[name="day"]:not(.day-outside):text-is("{qa_res_block_day_of_month}")'
   - action: fill
-    selector: '[data-qa="block-end"]'
-    value: '{qa_res_block_end}'
+    selector: '[data-qa="block-end-time"]'
+    value: '{qa_res_block_end_am}'
+  - action: press
+    selector: '[data-qa="block-end-time"]'
+    key: Tab
   - action: click
     selector: '[data-qa="block-save"]'
     assertions:
@@ -208,9 +237,10 @@ scenarios:
     assertions:
     - type: visible_selector
       value: '[data-qa="booking-resource"][data-qa-state="assigned"]'
-  - action: select
+  - action: click
     selector: '[data-qa="booking-resource-move"]'
-    value: '{qa_res_chair_a}'
+  - action: click
+    selector: '[role="option"][data-value="{qa_res_chair_a}"]'
     assertions:
     - type: visible_text
       value: ቀጠሮው ወደ Quiet chair A ተዛውሯል

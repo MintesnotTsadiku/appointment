@@ -2,7 +2,7 @@ import { useFrappeGetCall, useFrappePostCall } from 'frappe-react-sdk';
 import { toast } from 'sonner';
 import { AlertTriangle } from 'lucide-react';
 import { Label } from '@/components/label';
-import { NativeSelect } from '@/components/native-select';
+import { OptionSelect } from '@/components/select/OptionSelect';
 import { useTranslation } from '@/lib/i18n';
 import { serverErrorMessage } from '@/lib/utils';
 
@@ -62,19 +62,17 @@ export function ResourceSection({ appointment, onChanged }: { appointment: strin
           {view.can_change && need.options.length > (need.resource ? 1 : 0) && (
             <div className="space-y-1.5">
               <Label htmlFor={`move-${need.resource_type}`}>{t('staff.resources.moveTo')}</Label>
-              <NativeSelect id={`move-${need.resource_type}`} data-qa="booking-resource-move" value={need.resource || ''} disabled={loading}
-                onChange={(event) => void move(need, event.target.value)}>
-                {!need.resource && <option value="">{t('staff.resources.notAssigned')}</option>}
-                {need.options.map((option) => (
-                  <option key={option.name} value={option.name} disabled={!option.free && option.name !== need.resource}>
-                    {option.free || option.name === need.resource
-                      ? (option.capacity ?? 1) > 1
-                        ? t('staff.resources.unitsLeft').replace('{0}', option.resource_name).replace('{1}', String(option.left ?? 0))
-                        : option.resource_name
-                      : t('staff.resources.busy').replace('{0}', option.resource_name)}
-                  </option>
-                ))}
-              </NativeSelect>
+              <OptionSelect id={`move-${need.resource_type}`} data-qa="booking-resource-move" value={need.resource || ''} disabled={loading}
+                onValueChange={(next) => void move(need, next)} placeholder={t('staff.resources.notAssigned')}
+                options={need.options.map((option) => ({
+                  value: option.name,
+                  disabled: !option.free && option.name !== need.resource,
+                  label: option.free || option.name === need.resource
+                    ? (option.capacity ?? 1) > 1
+                      ? t('staff.resources.unitsLeft').replace('{0}', option.resource_name).replace('{1}', String(option.left ?? 0))
+                      : option.resource_name
+                    : t('staff.resources.busy').replace('{0}', option.resource_name),
+                }))} />
             </div>
           )}
         </div>

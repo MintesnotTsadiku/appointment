@@ -69,6 +69,16 @@ def validate(doc):
             frappe.throw(_("Offering links must belong to the same independent business."), frappe.PermissionError)
 
 
+def live_page(provider):
+    """The business page customers open (`sharing.public_path`) and whether it takes bookings now."""
+    from appointment.growth.sharing import public_path
+    from appointment.scheduler import business_owner
+
+    path = public_path(business_owner.from_key(business_owner.PREFIX + provider))
+    published = cint(frappe.db.get_value("Provider", provider, "enable_public_booking"))
+    return {"business_path": path, "published": bool(published and path)}
+
+
 def overview(provider):
     owner = require_owner(provider)
     services = frappe.get_all("Service", filters={"independent_provider": owner.name, "organization": ["is", "not set"]}, pluck="name")
@@ -146,7 +156,7 @@ def publish(provider, published):
         owner.save(ignore_permissions=True)
     finally:
         frappe.flags.syncing_booking_urls = previous
-    return overview(owner.name)
+    return {"offerings": overview(owner.name), **live_page(owner.name)}
 
 
 @frappe.whitelist(allow_guest=True)
@@ -157,4 +167,7 @@ def public_offering(offering_id):
     if business.doctype != "Provider":
         frappe.throw(_("Choose an independent offering."), frappe.PermissionError)
     return {"offering": event.name, "business_name": provider.provider_name, "service": service.service_name,
-            "duration": int(event.duration_override or service.duration), "timezone": location.timezone}
+            "duration": int(event.duration_override or service.duration), "timezone": location.timezone,
+            "allow_quantity": cint(service.get("allow_quantity")), "max_quantity": max(1, cint(service.get("max_quantity")) or 1),
+            # The published website of this business, so the scheduler can wear its template's design.
+            "site_slug": frappe.db.get_value("Public Site", {"owner_type": "Provider", "provider": provider.name, "status": "Published"}, "slug")}

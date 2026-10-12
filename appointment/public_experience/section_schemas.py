@@ -6,6 +6,7 @@ facts and typed actions; it never stores HTML, CSS, scripts or arbitrary URLs.
 
 from __future__ import annotations
 
+import re
 from collections.abc import Iterable, Mapping
 
 from appointment.public_experience.actions import ACTION_INTENTS, validate_action
@@ -121,8 +122,9 @@ def _action(content: Mapping[str, object], key: str, allowed: Iterable[str]) -> 
 
 
 def _hero(content: Mapping[str, object], allowed: Iterable[str]) -> list[ValidationIssue]:
-    issues = _common(content, {"eyebrow", "title", "subtitle", "body", "primaryAction", "secondaryAction", "imageRole"})
+    issues = _common(content, {"eyebrow", "title", "subtitle", "body", "primaryAction", "secondaryAction", "imageRole", "image", "imageAlt"})
     issues.extend(_localized(content.get("eyebrow"), "eyebrow", required=False))
+    issues.extend(_image(content, ""))
     issues.extend(_localized(content.get("subtitle"), "subtitle", required=False))
     issues.extend(_action(content, "primaryAction", allowed))
     issues.extend(_action(content, "secondaryAction", allowed))
@@ -206,6 +208,42 @@ def _benefits(content: Mapping[str, object]) -> list[ValidationIssue]:
             issues.extend(_localized(item.get("title"), f"items[{index}].title"))
             issues.extend(_localized(item.get("description"), f"items[{index}].description"))
             issues.extend(_string(item.get("icon"), f"items[{index}].icon", max_length=32))
+    return issues
+
+
+def _approaches(content: Mapping[str, object]) -> list[ValidationIssue]:
+    """Ways of working in plain words, for example the therapy approaches a practice uses."""
+    issues = _common(content, {"title", "intro", "items"})
+    issues.extend(_record_list(content, "items", {"title", "description"}, max_items=12))
+    values = content.get("items")
+    if isinstance(values, list):
+        for index, item in enumerate(values):
+            if not isinstance(item, dict):
+                continue
+            issues.extend(_localized(item.get("title"), f"items[{index}].title"))
+            issues.extend(_localized(item.get("description"), f"items[{index}].description"))
+    return issues
+
+
+_NOTICE_PHONE_RE = re.compile(r"^[+0-9][0-9().\-\s]{1,31}$")
+
+
+def _notice(content: Mapping[str, object]) -> list[ValidationIssue]:
+    """A short safety or scope notice, with optional phone lines (for example emergency numbers).
+
+    The numbers are owner content, never platform logic, so each region and practice can edit them.
+    """
+    issues = _common(content, {"title", "body", "items"})
+    issues.extend(_record_list(content, "items", {"label", "phone"}, required=False, max_items=6))
+    values = content.get("items")
+    if isinstance(values, list):
+        for index, item in enumerate(values):
+            if not isinstance(item, dict):
+                continue
+            issues.extend(_localized(item.get("label"), f"items[{index}].label", max_length=160))
+            phone = item.get("phone")
+            if phone is not None and (not isinstance(phone, str) or _NOTICE_PHONE_RE.fullmatch(phone.strip()) is None):
+                issues.append(_issue(f"items[{index}].phone", "phone", phone, "a phone number of digits, spaces and + ( ) - only", "Enter the number as people dial it."))
     return issues
 
 
@@ -338,6 +376,8 @@ def validate_typed_section(
         "providers": lambda: _providers(content, allowed_intents),
         "process": lambda: _process(content),
         "benefits": lambda: _benefits(content),
+        "approaches": lambda: _approaches(content),
+        "notice": lambda: _notice(content),
         "testimonials": lambda: _testimonials(content),
         "proof": lambda: _proof(content),
         "locations": lambda: _locations(content, allowed_intents),

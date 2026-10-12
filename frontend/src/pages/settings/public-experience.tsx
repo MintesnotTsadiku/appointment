@@ -5,7 +5,7 @@ import { callGet, callMethod } from "@/public-experience/api";
 import { Button } from "@/components/button";
 import { Input } from "@/components/input";
 import { Label } from "@/components/label";
-import { NativeSelect } from "@/components/native-select";
+import { OptionSelect } from "@/components/select/OptionSelect";
 import { SettingsPage, SettingsSection } from "@/components/settings-layout";
 import { ErrorState } from "@/components/states";
 import { useTranslation } from "@/lib/i18n";
@@ -192,10 +192,9 @@ const PublicExperienceEditor = () => {
             <SettingsSection title={t("staff.publicExperience.brandTitle")} description={t("staff.publicExperience.brandDescription")}>
               <div className="max-w-xl space-y-1.5">
                 <Label htmlFor="pe-brand-profile">{t("staff.publicExperience.brandProfile")}</Label>
-                <NativeSelect id="pe-brand-profile" data-qa="public-experience-profile" value={selectedProfile} onChange={(event) => setSelectedProfile(event.target.value)}>
-                  <option value="">{t("staff.publicExperience.selectProfile")}</option>
-                  {profiles.map((item) => <option key={item.name} value={item.name}>{item.profile_name} · {item.lifecycle}</option>)}
-                </NativeSelect>
+                <OptionSelect id="pe-brand-profile" data-qa="public-experience-profile" value={selectedProfile} onValueChange={setSelectedProfile}
+                  placeholder={t("staff.publicExperience.selectProfile")}
+                  options={profiles.map((item) => ({ value: item.name, label: `${item.profile_name} · ${item.lifecycle}` }))} />
               </div>
 
               {profile ? (
@@ -267,10 +266,9 @@ const PublicExperienceEditor = () => {
             >
               <div className="max-w-xl space-y-1.5">
                 <Label htmlFor="pe-site">{t("staff.publicExperience.publicSite")}</Label>
-                <NativeSelect id="pe-site" data-qa="public-experience-site" value={selectedSite} onChange={(event) => setSelectedSite(event.target.value)}>
-                  <option value="">{t("staff.publicExperience.selectSite")}</option>
-                  {sites.map((item) => <option key={item.name} value={item.name}>{item.site_title} · {item.status}</option>)}
-                </NativeSelect>
+                <OptionSelect id="pe-site" data-qa="public-experience-site" value={selectedSite} onValueChange={setSelectedSite}
+                  placeholder={t("staff.publicExperience.selectSite")}
+                  options={sites.map((item) => ({ value: item.name, label: `${item.site_title} · ${item.status}` }))} />
               </div>
               {site ? (
                 <>

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useFrappePostCall } from 'frappe-react-sdk';
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
+import { TimeInput } from '@/components/time-input';
 import { Label } from '@/components/label';
 import { ArrowLeft, Clock } from 'lucide-react';
 import { StepLayout } from './StepLayout';
@@ -313,22 +314,18 @@ const Step3OrgAvailability = ({ onNext, onBack }: Step3OrgAvailabilityProps) => 
                       <div className="flex items-center gap-2">
                         {schedule[day as keyof WeeklySchedule].map((slot, slotIndex) => (
                           <div key={slotIndex} className="flex items-center gap-2">
-                            <Input
-                              type="time"
+                            <TimeInput
+                              timeFormat="12h"
                               value={slot.start}
-                              onChange={(e) =>
-                                updateSlot(day as keyof WeeklySchedule, slotIndex, 'start', e.target.value)
-                              }
-                              className="w-32 text-sm"
+                              onChange={(value) => updateSlot(day as keyof WeeklySchedule, slotIndex, 'start', value)}
+                              className="w-48"
                             />
                             <span className="text-gray-500">-</span>
-                            <Input
-                              type="time"
+                            <TimeInput
+                              timeFormat="12h"
                               value={slot.end}
-                              onChange={(e) =>
-                                updateSlot(day as keyof WeeklySchedule, slotIndex, 'end', e.target.value)
-                              }
-                              className="w-32 text-sm"
+                              onChange={(value) => updateSlot(day as keyof WeeklySchedule, slotIndex, 'end', value)}
+                              className="w-48"
                             />
                           </div>
                         ))}

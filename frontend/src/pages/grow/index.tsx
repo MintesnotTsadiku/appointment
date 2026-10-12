@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useFrappeGetCall } from 'frappe-react-sdk';
 import { Globe, Rocket } from 'lucide-react';
 import { Button } from '@/components/button';
@@ -26,6 +27,11 @@ export default function GrowPage() {
     business.key ? `grow-${business.key}` : null
   );
   const context = data?.message;
+  const { hash } = useLocation();
+  // Links such as `/grow#grow-poster` (from the setup success screen) open at that section once it renders.
+  useEffect(() => {
+    if (context && hash) document.getElementById(decodeURIComponent(hash.slice(1)))?.scrollIntoView({ block: 'start' });
+  }, [context, hash]);
 
   return (
     <StaffShell title={t('staff.grow.title')} description={t('staff.grow.description')} headingQa="grow-heading">

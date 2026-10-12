@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useFrappePostCall } from 'frappe-react-sdk';
-import { NativeSelect } from '@/components/native-select';
+import { OptionSelect } from '@/components/select/OptionSelect';
 import { useTranslation } from '@/lib/i18n';
 
 interface ReceptionStateProps {
@@ -28,19 +28,19 @@ export function ReceptionState({ location, state, refresh }: ReceptionStateProps
   return (
     <span className="inline-flex flex-wrap items-center gap-2">
       {/* Native select: QA drives it with selectOption by the "Open" / "Closed" values. */}
-      <NativeSelect
+      <OptionSelect
         data-qa="reception-state"
         aria-label={t('staff.reception.receptionState')}
         value={state || 'Unconfigured'}
         disabled={loading}
-        onChange={(e) => void change(e.target.value)}
-        wrapperClassName="w-auto"
-        className="h-8 text-xs"
-      >
-        <option value="Unconfigured" disabled>{t('staff.reception.stateUnconfigured')}</option>
-        <option value="Open">{t('staff.reception.stateOpen')}</option>
-        <option value="Closed">{t('staff.reception.stateClosed')}</option>
-      </NativeSelect>
+        onValueChange={(next) => void change(next)}
+        className="h-8 w-auto gap-2 text-xs"
+        options={[
+          { value: 'Unconfigured', label: t('staff.reception.stateUnconfigured'), disabled: true },
+          { value: 'Open', label: t('staff.reception.stateOpen') },
+          { value: 'Closed', label: t('staff.reception.stateClosed') },
+        ]}
+      />
       {error && <span role="alert" className="text-destructive">{error}</span>}
     </span>
   );

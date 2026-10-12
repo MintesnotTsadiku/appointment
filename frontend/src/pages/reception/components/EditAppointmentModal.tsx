@@ -2,7 +2,7 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { useFrappePostCall } from 'frappe-react-sdk';
 import { toast } from 'sonner';
 import { format, parseISO } from 'date-fns';
-import { NativeSelect } from '@/components/native-select';
+import { OptionSelect } from '@/components/select/OptionSelect';
 import { intlLocale, useTranslation } from '@/lib/i18n';
 import type { Appointment } from '../types';
 import { BookingFields } from '../appointment-form/BookingFields';
@@ -113,13 +113,8 @@ function StatusField({ value, onValueChange }: { value: string; onValueChange: (
   return (
     <Field id="edit-appointment-status" label={t('staff.receptionDesk.status')} aside={current}>
       {/* Stays a native select: QA drives it with a `select` action. */}
-      <NativeSelect id="edit-appointment-status" data-qa="appointment-status" value={value} onChange={(e) => onValueChange(e.target.value)}>
-        {STATUSES.map(([status, key]) => (
-          <option key={status} value={status}>
-            {t(key)}
-          </option>
-        ))}
-      </NativeSelect>
+      <OptionSelect id="edit-appointment-status" data-qa="appointment-status" value={value} onValueChange={onValueChange}
+        options={STATUSES.map(([status, key]) => ({ value: status, label: t(key) }))} />
     </Field>
   );
 }

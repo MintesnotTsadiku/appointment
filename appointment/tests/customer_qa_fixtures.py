@@ -29,6 +29,7 @@ def browser_values(manifest=None):
         qa_cp_time=_late_free_time(event),
         qa_cp_search=(sample[0].split()[0] if sample else ""),
     )
+    values["qa_cp_time_12h"] = qa_days.twelve_hour(values["qa_cp_time"])
     return values
 
 

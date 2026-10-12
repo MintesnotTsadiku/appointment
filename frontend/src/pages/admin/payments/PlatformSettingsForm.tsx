@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
 import { Label } from '@/components/label';
-import { NativeSelect } from '@/components/native-select';
+import { OptionSelect } from '@/components/select/OptionSelect';
 import { FieldHint, SettingsSection, StickySaveBar } from '@/components/settings-layout';
 import { useTranslation } from '@/lib/i18n';
 import { serverErrorMessage } from '@/lib/utils';
@@ -53,20 +53,22 @@ export function PlatformSettingsForm({ saved, onSaved }: { saved: PlatformSettin
   return (
     <div className="space-y-6" data-qa="admin-platform-settings">
       <SettingsSection title={t('staff.adminPayments.collectionTitle')} description={t('staff.adminPayments.collectionHint')}>
-        <NativeSelect aria-label={t('staff.adminPayments.whoCollects')} data-qa="admin-platform-collects" value={draft.collection_mode} onChange={(event) => patch({ collection_mode: event.target.value as CollectionMode })}>
-          <option value="Business collects">{t('staff.adminPayments.modeBusiness')}</option>
-          <option value="Platform collects">{t('staff.adminPayments.modePlatform')}</option>
-        </NativeSelect>
+        <OptionSelect aria-label={t('staff.adminPayments.whoCollects')} data-qa="admin-platform-collects" value={draft.collection_mode} onValueChange={(next) => patch({ collection_mode: next as CollectionMode })}
+          options={[
+            { value: 'Business collects', label: t('staff.adminPayments.modeBusiness') },
+            { value: 'Platform collects', label: t('staff.adminPayments.modePlatform') },
+          ]} />
       </SettingsSection>
       <SettingsSection title={t('staff.adminPayments.typeFee')} description={t('staff.adminPayments.feeHint')}>
         <div className="grid gap-4 sm:grid-cols-3">
           <div className="space-y-1.5">
             <Label htmlFor="platform-fee-type">{t('staff.adminPayments.feeType')}</Label>
-            <NativeSelect id="platform-fee-type" data-qa="admin-platform-fee-type" value={draft.platform_fee_type} onChange={(event) => patch({ platform_fee_type: event.target.value as FeeType })}>
-              <option value="None">{t('staff.adminPayments.feeNone')}</option>
-              <option value="Fixed">{t('staff.adminPayments.feeFixed')}</option>
-              <option value="Percent">{t('staff.adminPayments.feePercent')}</option>
-            </NativeSelect>
+            <OptionSelect id="platform-fee-type" data-qa="admin-platform-fee-type" value={draft.platform_fee_type} onValueChange={(next) => patch({ platform_fee_type: next as FeeType })}
+              options={[
+                { value: 'None', label: t('staff.adminPayments.feeNone') },
+                { value: 'Fixed', label: t('staff.adminPayments.feeFixed') },
+                { value: 'Percent', label: t('staff.adminPayments.feePercent') },
+              ]} />
           </div>
           {draft.platform_fee_type !== 'None' && (
             <div className="space-y-1.5">

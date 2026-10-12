@@ -1,0 +1,118 @@
+{
+  "kind": "typography",
+  "contract": "appointment-typography.v1",
+  "key": "ergata-therapy",
+  "version": 1,
+  "supportedScripts": [
+    "latin",
+    "ethiopic"
+  ],
+  "weights": [
+    400,
+    500,
+    600,
+    700
+  ],
+  "roles": {
+    "display": {
+      "family": "Ergata Serif",
+      "assetKey": "ergata-serif",
+      "weight": 400,
+      "sizeScale": "editorial",
+      "lineHeight": 1.08,
+      "letterSpacing": "-0.01em"
+    },
+    "body": {
+      "family": "Ergata Sans",
+      "assetKey": "ergata-sans",
+      "weight": 400,
+      "sizeScale": "comfortable",
+      "lineHeight": 1.65,
+      "letterSpacing": "0"
+    },
+    "ui": {
+      "family": "Ergata Sans",
+      "assetKey": "ergata-sans",
+      "weight": 600,
+      "sizeScale": "compact",
+      "lineHeight": 1.3,
+      "letterSpacing": "0"
+    },
+    "numeric": {
+      "family": "Ergata Sans",
+      "assetKey": "ergata-sans",
+      "weight": 600,
+      "sizeScale": "compact",
+      "lineHeight": 1.2,
+      "letterSpacing": "0"
+    }
+  },
+  "fontAssets": [
+    {
+      "key": "ergata-serif",
+      "family": "Ergata Serif",
+      "src": "/assets/appointment/fonts/ergata/fraunces-soft.woff2",
+      "weight": 400,
+      "format": "woff2",
+      "scripts": [
+        "latin"
+      ],
+      "license": "SIL Open Font License 1.1 (Fraunces, Undercase Type; SOFT axis at 100)"
+    },
+    {
+      "key": "ergata-serif-ethiopic",
+      "family": "Ergata Serif",
+      "src": "/assets/appointment/fonts/ergata/noto-serif-ethiopic.woff2",
+      "weight": 400,
+      "format": "woff2",
+      "scripts": [
+        "ethiopic"
+      ],
+      "license": "SIL Open Font License 1.1 (Noto Serif Ethiopic, Google)"
+    },
+    {
+      "key": "ergata-sans",
+      "family": "Ergata Sans",
+      "src": "/assets/appointment/fonts/ergata/source-sans-3.woff2",
+      "weight": 400,
+      "format": "woff2",
+      "scripts": [
+        "latin"
+      ],
+      "license": "SIL Open Font License 1.1 (Source Sans 3, Adobe)"
+    },
+    {
+      "key": "ergata-sans-ethiopic",
+      "family": "Ergata Sans",
+      "src": "/assets/appointment/fonts/ergata/noto-sans-ethiopic.woff2",
+      "weight": 400,
+      "format": "woff2",
+      "scripts": [
+        "ethiopic"
+      ],
+      "license": "SIL Open Font License 1.1 (Noto Sans Ethiopic, Google)"
+    }
+  ],
+  "fallbacks": {
+    "display": [
+      "Noto Serif Ethiopic",
+      "DejaVu Serif",
+      "Georgia",
+      "serif"
+    ],
+    "body": [
+      "Noto Sans Ethiopic",
+      "DejaVu Sans",
+      "sans-serif"
+    ],
+    "ui": [
+      "Noto Sans Ethiopic",
+      "DejaVu Sans",
+      "sans-serif"
+    ],
+    "numeric": [
+      "DejaVu Sans",
+      "sans-serif"
+    ]
+  }
+}

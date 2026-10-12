@@ -1,0 +1,305 @@
+# Run with fixture appointment.tests.growth_solo_success_qa_fixtures ($G/qa.sh runs setup before and cleanup after).
+# A fresh independent provider signs in, runs solo setup (name, first service, publish now) and lands on the
+# shared "your booking page is live" screen: the link is the provider's page (not settings), copy works,
+# Telegram share carries the link, and Open goes to the page. en desktop light, then am mobile dark.
+app: appointment
+base_url: http://127.0.0.146:47800
+default_role: Guest
+auth:
+  type: none
+fixtures:
+  provider: appointment.tests.growth_solo_success_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-growth-solo-success
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+  # The sign-in page holds only the fixture's throwaway account; the password field is masked.
+  disable_capture_on_sensitive_screen: false
+scenarios:
+- id: solo_success_en_desktop_light
+  title: 'Solo setup to the live booking page (en, desktop, light)'
+  viewport:
+    width: 1440
+    height: 900
+  options:
+    color_scheme: light
+  checks: []
+  routes:
+  - path: /login?redirect-to=/onboarding
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '#email'
+  actions:
+  - action: fill
+    selector: '#email'
+    value: '{qa_solo_en_email}'
+  - action: fill
+    selector: '#password'
+    value: '{qa_solo_en_password}'
+  - action: click
+    selector: 'form button[type="submit"]'
+  - action: wait_for
+    selector: '[data-qa="onboarding-structure"]'
+    timeout_ms: 20000
+    assertions:
+    - type: url_contains
+      value: /onboarding
+  - action: click
+    selector: '[data-qa="onboarding-structure"] [role="tab"]:nth-child(2)'
+  - action: wait_for
+    selector: '[data-qa="solo-setup"]'
+  - action: fill
+    selector: '[data-qa="solo-business-name"]'
+    value: '{qa_solo_en_business}'
+  - action: fill
+    selector: '[data-qa="solo-service-name"]'
+    value: '{qa_solo_en_service}'
+  - action: wait_for
+    selector: '[data-qa="solo-publish-now"] [role="switch"][data-state="checked"]'
+  - action: screenshot
+    name: solo_en_desktop-1-form.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="solo-submit"]'
+    assertions:
+    - type: network_request
+      url_contains: solo_setup.create
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="onboarding-success"][data-state="published"]'
+    timeout_ms: 20000
+    # The link is the provider's booking page, never settings.
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="onboarding-open-page"][href^="/schedule/individual/"]'
+    - type: text_contains
+      selector: '[data-qa="onboarding-live-link"]'
+      value: /schedule/individual/
+    - type: text_contains
+      selector: '[data-qa="onboarding-live-url"]'
+      value: http://127.0.0.146:47800/schedule/individual/
+    - type: text_contains
+      value: Your booking page is live
+    - type: visible_selector
+      value: '[data-qa="onboarding-telegram"][href^="https://t.me/share/url?url="][href*="schedule%2Findividual%2F"][href*="source%3Dtelegram_share"]'
+    - type: visible_selector
+      value: '[data-qa="onboarding-poster"][href="/grow#grow-poster"]'
+    - type: visible_selector
+      value: '[data-qa="onboarding-grow"][href="/grow"]'
+    - type: visible_selector
+      value: '[data-qa="onboarding-go-home"][href="/home"]'
+  - action: screenshot
+    name: solo_en_desktop-2-live.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="onboarding-copy-link"]'
+  - action: wait_for
+    selector: '[data-qa="onboarding-copy-link"][data-state="copied"]'
+    assertions:
+    - type: text_contains
+      value: Link copied
+  - action: screenshot
+    name: solo_en_desktop-3-copied.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="onboarding-open-page"]'
+  - action: wait_for
+    selector: 'main h1:has-text("{qa_solo_en_business}")'
+    timeout_ms: 20000
+    assertions:
+    - type: url_contains
+      value: /schedule/individual/
+    - type: url_not_contains
+      value: /settings
+    - type: text_contains
+      value: '{qa_solo_en_service}'
+  - action: screenshot
+    name: solo_en_desktop-4-page.png
+    full_page: false
+  # "Print a QR poster" opens Grow at the poster section.
+  - action: open_url
+    url: /grow#grow-poster
+  - action: wait_for
+    selector: '#grow-poster[data-qa="grow-poster"]'
+    timeout_ms: 20000
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="grow-poster-download"]'
+  - action: screenshot
+    name: solo_en_desktop-5-poster.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: solo_success_am_mobile_dark
+  title: 'Solo setup to the live booking page (am, mobile, dark)'
+  viewport:
+    width: 390
+    height: 844
+  options:
+    color_scheme: dark
+    is_mobile: true
+    has_touch: true
+  checks: []
+  routes:
+  - path: /login?redirect-to=/onboarding
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '#email'
+  actions:
+  - action: click
+    selector: '[data-qa="auth-language"] [data-qa="language-toggle"]'
+  - action: wait_for
+    selector: '[data-qa="language-current"]:has-text("አማ")'
+  - action: fill
+    selector: '#email'
+    value: '{qa_solo_am_email}'
+  - action: fill
+    selector: '#password'
+    value: '{qa_solo_am_password}'
+  - action: click
+    selector: 'form button[type="submit"]'
+  - action: wait_for
+    selector: '[data-qa="onboarding-structure"]'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="onboarding-structure"] [role="tab"]:nth-child(2)'
+  - action: wait_for
+    selector: '[data-qa="solo-setup"]'
+    assertions:
+    - type: text_contains
+      value: ምን አገልግሎት ይሰጣሉ?
+  - action: fill
+    selector: '[data-qa="solo-business-name"]'
+    value: '{qa_solo_am_business}'
+  - action: fill
+    selector: '[data-qa="solo-service-name"]'
+    value: '{qa_solo_am_service}'
+  - action: screenshot
+    name: solo_am_mobile-1-form.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="solo-submit"]'
+    assertions:
+    - type: network_request
+      url_contains: solo_setup.create
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="onboarding-success"][data-state="published"]'
+    timeout_ms: 20000
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="onboarding-open-page"][href^="/schedule/individual/"]'
+    - type: text_contains
+      selector: '[data-qa="onboarding-live-link"]'
+      value: /schedule/individual/
+    - type: text_contains
+      value: ቀጣይ እርምጃዎች
+    - type: visible_selector
+      value: '[data-qa="onboarding-telegram"][href*="source%3Dtelegram_share"]'
+  - action: screenshot
+    name: solo_am_mobile-2-live.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="onboarding-copy-link"]'
+  - action: wait_for
+    selector: '[data-qa="onboarding-copy-link"][data-state="copied"]'
+    assertions:
+    - type: text_contains
+      value: ሊንኩ ተቀድቷል
+  - action: click
+    selector: '[data-qa="onboarding-open-page"]'
+  - action: wait_for
+    selector: 'main h1:has-text("{qa_solo_am_business}")'
+    timeout_ms: 20000
+    assertions:
+    - type: url_contains
+      value: /schedule/individual/
+    - type: url_not_contains
+      value: /settings
+  - action: screenshot
+    name: solo_am_mobile-3-page.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: solo_success_draft_publish_en_mobile
+  title: 'Solo setup without publishing, then Publish from the success screen (en, mobile, light)'
+  viewport:
+    width: 390
+    height: 844
+  options:
+    color_scheme: light
+    is_mobile: true
+    has_touch: true
+  checks: []
+  routes:
+  - path: /login?redirect-to=/onboarding
+    assertions:
+    - type: network_idle
+  actions:
+  - action: fill
+    selector: '#email'
+    value: '{qa_solo_draft_email}'
+  - action: fill
+    selector: '#password'
+    value: '{qa_solo_draft_password}'
+  - action: click
+    selector: 'form button[type="submit"]'
+  - action: wait_for
+    selector: '[data-qa="onboarding-structure"]'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="onboarding-structure"] [role="tab"]:nth-child(2)'
+  - action: fill
+    selector: '[data-qa="solo-business-name"]'
+    value: '{qa_solo_draft_business}'
+  - action: fill
+    selector: '[data-qa="solo-service-name"]'
+    value: '{qa_solo_draft_service}'
+  - action: click
+    selector: '[data-qa="solo-publish-now"] [role="switch"]'
+  - action: wait_for
+    selector: '[data-qa="solo-publish-now"] [role="switch"][data-state="unchecked"]'
+  - action: click
+    selector: '[data-qa="solo-submit"]'
+    assertions:
+    - type: network_request
+      url_contains: solo_setup.create
+      status: 200
+  # Honest draft: no open or share buttons, the future link, and Publish.
+  - action: wait_for
+    selector: '[data-qa="onboarding-success"][data-state="draft"]'
+    timeout_ms: 20000
+    assertions:
+    - type: text_contains
+      value: Your booking page is not published yet
+    - type: visible_selector
+      value: '[data-qa="onboarding-publish"]'
+    - type: visible_selector
+      value: '[data-qa="onboarding-review"][href="/settings/independent-booking"]'
+    - type: visible_selector
+      value: '[data-qa="onboarding-success"]:not(:has([data-qa="onboarding-open-page"])):not(:has([data-qa="onboarding-telegram"]))'
+  - action: screenshot
+    name: solo_draft_mobile-1-draft.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="onboarding-publish"]'
+    assertions:
+    - type: network_request
+      url_contains: independent.publish
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="onboarding-success"][data-state="published"]'
+    timeout_ms: 20000
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="onboarding-open-page"][href^="/schedule/individual/"]'
+  - action: screenshot
+    name: solo_draft_mobile-2-published.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors

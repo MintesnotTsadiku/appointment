@@ -6,7 +6,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
 import { Label } from '@/components/label';
-import { NativeSelect } from '@/components/native-select';
+import { OptionSelect } from '@/components/select/OptionSelect';
+import { DatePicker } from '@/components/datetime-picker';
 import { TimeInput } from '@/components/time-input';
 import { ClockFormatToggle } from '@/components/clock-format-toggle';
 import { StatusBadge } from '@/components/status-badge';
@@ -173,7 +174,7 @@ export function OwnedBookingActions({ appointment, onClose, onSuccess }: OwnedBo
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="space-y-1.5">
                   <Label htmlFor="booking-change-date">{t('staff.receptionDesk.date')}</Label>
-                  <Input id="booking-change-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+                  <DatePicker id="booking-change-date" data-qa="booking-change-date" value={date} onValueChange={setDate} />
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="booking-change-time">{t('staff.receptionDesk.startTime')}</Label>
@@ -215,12 +216,9 @@ export function OwnedBookingActions({ appointment, onClose, onSuccess }: OwnedBo
             <section data-qa="booking-recovery" className="space-y-3 rounded-lg border p-4">
               <div className="space-y-1.5">
                 <Label htmlFor="booking-recovery-slot">{t('staff.receptionDesk.recoveryTitle')}</Label>
-                <NativeSelect id="booking-recovery-slot" data-qa="booking-recovery-slot" value={released} onChange={(e) => setReleased(e.target.value)}>
-                  <option value="">{t('staff.receptionDesk.recoveryPlaceholder')}</option>
-                  {candidates.data?.message.map((row) => (
-                    <option key={row.name} value={row.name}>{row.date} {row.time} · {row.name}</option>
-                  ))}
-                </NativeSelect>
+                <OptionSelect id="booking-recovery-slot" data-qa="booking-recovery-slot" value={released} onValueChange={setReleased}
+                  placeholder={t('staff.receptionDesk.recoveryPlaceholder')}
+                  options={(candidates.data?.message ?? []).map((row) => ({ value: row.name, label: `${row.date} ${row.time} · ${row.name}` }))} />
                 <p className="text-xs text-muted-foreground">{t('staff.receptionDesk.recoveryHint')}</p>
               </div>
               <Button type="button" variant="outline" size="sm" data-qa="booking-recovery-submit" disabled={!released || recovery.loading} onClick={linkRecovery}>

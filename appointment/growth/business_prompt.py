@@ -28,9 +28,6 @@ PREFILL_SECONDS = 30 * 60
 # Only a booking made in the last half hour can start the prompt: it is "the booking just made".
 FRESH_BOOKING = timedelta(minutes=30)
 STAFF_ROLES = registration.STAFF_ROLES + ("System Manager",)
-DEFAULT_HOURS = ("09:00", "17:00")
-DEFAULT_DURATION = 30
-WORKDAYS = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
 SOURCE = "customer_prompt"
 
 
@@ -154,20 +151,17 @@ def quick_start(business_name, service_name, prefill=None, timezone="Africa/Addi
     service_name = service_name.strip() if isinstance(service_name, str) else ""
     if not service_name or len(service_name) > 100:
         frappe.throw(_("Enter what you offer, in at most 100 characters."))
-    provider = solo_setup.create(business_name, timezone)["provider"]
+    created = solo_setup.create(business_name, timezone, service_name=service_name, publish=1)
+    provider = created["provider"]
     details = load(prefill) if prefill else None
     if details and details["email"] == frappe.session.user and details["phone"]:
         _set_phone(provider, details["phone"])
-    rows = independent.overview(provider)
-    if not rows:
-        independent.create(provider, business_name.strip()[:100], service_name, timezone, DEFAULT_DURATION,
-                           *DEFAULT_HOURS, list(WORKDAYS))
-    independent.publish(provider, 1)
     if prefill:
         discard(prefill)
     offering = independent.overview(provider)[0]
     return {"provider": provider, "business_name": business_name.strip(), "public_path": offering["public_path"],
-            "service": offering["service"], "landing": "/settings/independent-booking"}
+            "business_path": created["business_path"], "published": created["published"],
+            "service": offering["service"], "landing": created["landing"]}
 
 
 def _set_phone(provider, phone):

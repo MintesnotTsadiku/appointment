@@ -4,7 +4,7 @@ import { Panel } from '@/components/analytics/Panels';
 import { Badge } from '@/components/badge';
 import { Button } from '@/components/button';
 import { Checkbox } from '@/components/checkbox';
-import { NativeSelect } from '@/components/native-select';
+import { OptionSelect } from '@/components/select/OptionSelect';
 import { ErrorState, ListSkeleton } from '@/components/states';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/table';
 import { intlLocale, useTranslation } from '@/lib/i18n';
@@ -52,18 +52,12 @@ export function LedgerPanel({ businesses, currency, refreshKey, onSettle }: {
       }
     >
       <div className="mb-4 grid gap-2 sm:grid-cols-3">
-        <NativeSelect aria-label={t('staff.adminPayments.colBusiness')} data-qa="admin-ledger-business" value={organization} onChange={(event) => setOrganization(event.target.value)}>
-          <option value="">{t('staff.adminPayments.allBusinesses')}</option>
-          {businesses.map((row) => <option key={row.organization} value={row.organization}>{row.organization_name}</option>)}
-        </NativeSelect>
-        <NativeSelect aria-label={t('staff.adminPayments.colStatus')} data-qa="admin-ledger-status" value={status} onChange={(event) => setStatus(event.target.value as EntryStatus | '')}>
-          <option value="">{t('staff.adminPayments.allStatuses')}</option>
-          {(Object.keys(STATUS_KEY) as EntryStatus[]).map((value) => <option key={value} value={value}>{t(STATUS_KEY[value])}</option>)}
-        </NativeSelect>
-        <NativeSelect aria-label={t('staff.adminPayments.colType')} data-qa="admin-ledger-type" value={entryType} onChange={(event) => setEntryType(event.target.value)}>
-          <option value="">{t('staff.adminPayments.allTypes')}</option>
-          {Object.entries(TYPE_KEY).map(([value, key]) => <option key={value} value={value}>{t(key)}</option>)}
-        </NativeSelect>
+        <OptionSelect aria-label={t('staff.adminPayments.colBusiness')} data-qa="admin-ledger-business" value={organization} onValueChange={setOrganization}
+          options={[{ value: '', label: t('staff.adminPayments.allBusinesses') }, ...businesses.map((row) => ({ value: row.organization, label: row.organization_name }))]} />
+        <OptionSelect aria-label={t('staff.adminPayments.colStatus')} data-qa="admin-ledger-status" value={status} onValueChange={(next) => setStatus(next as EntryStatus | '')}
+          options={[{ value: '', label: t('staff.adminPayments.allStatuses') }, ...(Object.keys(STATUS_KEY) as EntryStatus[]).map((value) => ({ value, label: t(STATUS_KEY[value]) }))]} />
+        <OptionSelect aria-label={t('staff.adminPayments.colType')} data-qa="admin-ledger-type" value={entryType} onValueChange={setEntryType}
+          options={[{ value: '', label: t('staff.adminPayments.allTypes') }, ...Object.entries(TYPE_KEY).map(([value, key]) => ({ value, label: t(key) }))]} />
       </div>
       {error ? (
         <ErrorState onRetry={() => void mutate()} />

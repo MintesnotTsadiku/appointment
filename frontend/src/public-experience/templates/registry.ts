@@ -3,9 +3,11 @@ import { AbugidaContent } from "./abugida/AbugidaContent";
 import { MeronContent } from "./meron/MeronContent";
 import { BloomContent } from "./bloom/BloomContent";
 import { SelamContent } from "./selam/SelamContent";
+import { ErgataContent } from "./ergata/ErgataContent";
 import { AbugidaBooking, AbugidaSite } from "./abugida/AbugidaTemplate";
 import { AbugidaBooking as AbugidaV2Booking, AbugidaSite as AbugidaV2Site } from "./abugida-v2/AbugidaTemplate";
 import { BloomBooking, BloomSite } from "./bloom/BloomTemplate";
+import { ErgataBooking, ErgataSite } from "./ergata/ErgataTemplate";
 import { BloomBooking as BloomV2Booking, BloomSite as BloomV2Site } from "./bloom-v2/BloomTemplate";
 import { MeronBooking, MeronSite } from "./meron/MeronTemplate";
 import { MeronBooking as MeronV2Booking, MeronSite as MeronV2Site } from "./meron-v2/MeronTemplate";
@@ -31,6 +33,7 @@ const TEMPLATE_PACKAGES: Record<string, PublicTemplatePackage> = {
   "abugida-language@2": { key: "abugida-language", Site: AbugidaV2Site, Booking: AbugidaV2Booking, Content: AbugidaContent },
   "tena-clinic@1": { key: "tena-clinic", Site: TenaSite, Booking: TenaBooking, Content: TenaContent },
   "tena-clinic@2": { key: "tena-clinic", Site: TenaV2Site, Booking: TenaV2Booking, Content: TenaContent },
+  "ergata-therapy@1": { key: "ergata-therapy", Site: ErgataSite, Booking: ErgataBooking, Content: ErgataContent },
 };
 
 export function getTemplatePackage(rendererKey: string, rendererVersion: number = 1): PublicTemplatePackage | null {

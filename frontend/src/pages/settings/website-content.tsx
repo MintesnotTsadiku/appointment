@@ -8,6 +8,7 @@ import type { ContentDetail } from "@/public-experience/contentContract";
 import type { PublishedSnapshot } from "@/public-experience/types";
 import { StaffShell } from '@/components/staff-shell';
 import { useTranslation } from '@/lib/i18n';
+import { OptionSelect } from "@/components/select/OptionSelect";
 import { fill } from '@/pages/manage-booking/format';
 
 interface Site { name: string; site_title: string; slug: string }
@@ -75,7 +76,8 @@ export default function WebsiteContent() {
   return <StaffShell width="default"><div className="mx-auto max-w-5xl space-y-6 p-6" data-page="website-content">
     <header><h1 className="text-3xl font-semibold">{t("staff.website.content.title")}</h1><p>{t("staff.website.content.intro")}</p><Link to="/settings/website">{t("staff.website.setup.title")}</Link> · <Link to="/settings/website/newsletter">{t("staff.website.content.newsletterLink")}</Link></header>
     {error && <p role="alert">{error}</p>}{notice && <p role="status">{notice}</p>}
-    <label className="block">{t("staff.settings.website.title")}<select disabled={busy} aria-label={t("staff.settings.website.title")} className={field} value={site} onChange={(event) => setSite(event.target.value)}>{sites.map((row) => <option key={row.name} value={row.name}>{row.site_title}</option>)}</select></label>
+    <label className="block">{t("staff.settings.website.title")}<OptionSelect disabled={busy} aria-label={t("staff.settings.website.title")} className="mt-1 h-12" data-qa="website-content-site" value={site} onValueChange={setSite}
+      options={sites.map((row) => ({ value: row.name, label: row.site_title }))} /></label>
     {!sites.length && <p>{withLink(t("staff.website.content.createIn"), <Link to="/settings/website">{t("staff.website.setup.title")}</Link>)}</p>}
     <section aria-label={t("staff.website.content.draftsLabel")}><h2>{t("staff.website.content.drafts")}</h2>{drafts.length ? drafts.map((row) => <div className="flex gap-3 border-b py-3" key={row.name}><span>{row.title} · {row.status}</span>{row.source_doctype === "Blog Post" && <button className={button} disabled={busy} onClick={() => void run(async () => { adopt(await callGet<Article>(api + "get_content_draft", { ownership: row.name })); })}>{fill(t("staff.website.content.editArticleNamed"), row.title)}</button>}</div>) : <p>{t("staff.website.content.noDrafts")}</p>}</section>
     <section className="space-y-3" aria-label={t("staff.website.content.editorLabel")} aria-busy={busy}><h2>{article ? t("staff.website.content.editArticle") : t("staff.website.content.newArticle")}</h2>

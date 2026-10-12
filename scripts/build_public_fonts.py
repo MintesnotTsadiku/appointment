@@ -53,6 +53,12 @@ FONTS = [
     ("landing", "fraunces-italic", "fraunces/Fraunces-Italic[SOFT,WONK,opsz,wght].ttf", LATIN, {"SOFT": 0, "WONK": 0, "wght": (300, 700)}),
     ("landing", "jetbrains-mono", "jetbrainsmono/JetBrainsMono[wght].ttf", LATIN, {"wght": (400, 600)}),
     ("landing", "noto-serif-ethiopic", "notoserifethiopic/NotoSerifEthiopic[wdth,wght].ttf", ETHIOPIC, {"wdth": 100, "wght": (400, 600)}),
+    # Ergata (therapy practice): soft-terminal Fraunces for display, humanist Source Sans 3 for reading,
+    # each joined with its Noto Ethiopic partner (serif with serif, sans with sans).
+    ("ergata", "fraunces-soft", "fraunces/Fraunces[SOFT,WONK,opsz,wght].ttf", LATIN, {"SOFT": 100, "WONK": 0, "wght": (300, 600)}),
+    ("ergata", "source-sans-3", "sourcesans3/SourceSans3[wght].ttf", LATIN, {"wght": (400, 700)}),
+    ("ergata", "noto-serif-ethiopic", "notoserifethiopic/NotoSerifEthiopic[wdth,wght].ttf", ETHIOPIC, {"wdth": 100, "wght": (400, 600)}),
+    ("ergata", "noto-sans-ethiopic", "notosansethiopic/NotoSansEthiopic[wdth,wght].ttf", ETHIOPIC, {"wdth": 100, "wght": (400, 700)}),
     # The signed-in app and the platform chrome. Served locally so no page calls a font CDN.
     ("app", "inter", "inter/Inter[opsz,wght].ttf", LATIN, {"opsz": 14}),
     ("app", "plus-jakarta-sans", "plusjakartasans/PlusJakartaSans[wght].ttf", LATIN, {}),

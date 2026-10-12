@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { format, parseISO } from 'date-fns';
 import { CalendarIcon, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/button';
-import { Input } from '@/components/input';
+import { TimeInput } from '@/components/time-input';
+import { clockForLanguage } from '@/lib/time';
 import { Calendar } from '@/components/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/select';
@@ -18,7 +19,7 @@ interface ScheduleFieldsProps {
   startTime: string;
   duration: string;
   onChange: (patch: { appointment_date?: string; start_time?: string; duration?: string }) => void;
-  /** Native time input that accepts any minute; the create dialog always allowed that. */
+  /** Typed time that accepts any minute; the create dialog always allowed that. */
   freeTime?: boolean;
 }
 
@@ -71,10 +72,10 @@ function DateField({ id, value, onValueChange }: { id: string; value: string; on
 }
 
 function FreeTimeField({ id, qa, value, onValueChange }: { id: string; qa: string; value: string; onValueChange: (value: string) => void }) {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   return (
     <Field id={id} label={t('staff.receptionDesk.startTime')}>
-      <Input id={id} data-qa={qa} type="time" required className="tabular-nums" value={value} onChange={(event) => onValueChange(event.target.value)} />
+      <TimeInput id={id} data-qa={qa} timeFormat={clockForLanguage(language, '12h')} value={value} onChange={onValueChange} />
     </Field>
   );
 }

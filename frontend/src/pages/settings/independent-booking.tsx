@@ -2,21 +2,26 @@ import { FormEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useFrappeGetCall, useFrappePostCall } from 'frappe-react-sdk';
 import { StaffShell } from '@/components/staff-shell';
+import LivePageSuccess, { type LivePage } from '@/components/live-page-success';
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
 import { TimeZoneSelect } from '@/components/timezone-select';
+import { TimeInput } from '@/components/time-input';
+import { clockForLanguage } from '@/lib/time';
 import { parseFrappeErrorMsg } from '@/lib/utils';
 import { useTranslation } from '@/lib/i18n';
 
-interface Offering { offering: string; service: string; public_path: string; published: boolean }
+interface Offering { offering: string; service: string; business_name: string; public_path: string; published: boolean }
+interface PublishResult { business_path: string; published: boolean }
 interface Workspace { provider: string; offerings: Offering[] }
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
 export default function IndependentBookingSettings() {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const { data, mutate } = useFrappeGetCall<{ message: Workspace }>('appointment.scheduler.independent.workspace');
   const { call: create, loading } = useFrappePostCall('appointment.scheduler.independent.create');
-  const { call: publish, loading: publishing } = useFrappePostCall('appointment.scheduler.independent.publish');
+  const { call: publish, loading: publishing } = useFrappePostCall<{ message: PublishResult }>('appointment.scheduler.independent.publish');
+  const [live, setLive] = useState<LivePage | null>(null);
   const [location, setLocation] = useState('');
   const [service, setService] = useState('');
   const [zone, setZone] = useState('Africa/Addis_Ababa');
@@ -38,10 +43,14 @@ export default function IndependentBookingSettings() {
   async function toggle(row: Offering) {
     setError('');
     try {
-      await publish({ provider: workspace?.provider, published: row.published ? 0 : 1 });
-      await mutate(); setNotice(row.published ? t('staff.independent.unpublishedNotice') : t('staff.independent.publishedNotice'));
+      const result = await publish({ provider: workspace?.provider, published: row.published ? 0 : 1 });
+      await mutate();
+      // Publishing ends on the same success screen as setup; unpublishing stays here.
+      if (!row.published && result.message.published) setLive({ businessName: row.business_name, path: result.message.business_path, published: true });
+      else setNotice(t(result.message.published ? 'staff.independent.publishedNotice' : 'staff.independent.unpublishedNotice'));
     } catch (reason) { setError(parseFrappeErrorMsg(reason as Parameters<typeof parseFrappeErrorMsg>[0])); }
   }
+  if (live) return <StaffShell width="default"><LivePageSuccess page={live} qa="independent" settingsPath="/settings/independent-booking" /></StaffShell>;
   return <StaffShell width="default"><div className="mx-auto max-w-3xl space-y-6 px-5 py-10">
     <h1 className="text-3xl font-semibold">{t('staff.independent.title')}</h1>
     <p>{t('staff.independent.intro')}</p>
@@ -51,8 +60,8 @@ export default function IndependentBookingSettings() {
       <label className="block">{t('staff.business.serviceName')}<Input required maxLength={100} value={service} onChange={event => setService(event.target.value)} /></label>
       <TimeZoneSelect value={zone} onChange={setZone} />
       <label className="block">{t('staff.independent.duration')}<Input required type="number" min={5} max={480} value={duration} onChange={event => setDuration(event.target.value)} /></label>
-      <label className="block">{t('staff.independent.opens')}<Input required type="time" value={opens} onChange={event => setOpens(event.target.value)} /></label>
-      <label className="block">{t('staff.independent.closes')}<Input required type="time" value={closes} onChange={event => setCloses(event.target.value)} /></label>
+      <div><label className="block" htmlFor="independent-opens">{t('staff.independent.opens')}</label><TimeInput id="independent-opens" data-qa="independent-opens" timeFormat={clockForLanguage(language, '12h')} value={opens} onChange={setOpens} /></div>
+      <div><label className="block" htmlFor="independent-closes">{t('staff.independent.closes')}</label><TimeInput id="independent-closes" data-qa="independent-closes" timeFormat={clockForLanguage(language, '12h')} value={closes} onChange={setCloses} /></div>
       <fieldset><legend>{t('staff.independent.workingDays')}</legend>{days.map(day => <label className="mr-4 inline-flex gap-2" key={day}><input type="checkbox" checked={weekdays.includes(day)} onChange={event => setWeekdays(event.target.checked ? [...weekdays, day] : weekdays.filter(value => value !== day))} />{t(`staff.availability.days.${day}`)}</label>)}</fieldset>
       <Button disabled={loading || !workspace} type="submit">{t('staff.independent.save')}</Button>
     </form>}

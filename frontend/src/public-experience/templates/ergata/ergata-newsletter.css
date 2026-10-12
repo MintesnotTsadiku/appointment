@@ -1,0 +1,12 @@
+.eg-newsletter { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 64px; padding: clamp(24px, 5vw, 56px); border-radius: var(--eg-card, 20px); background: var(--eg-soft); color: var(--eg-ink); }
+.eg-newsletter h2 { margin: 8px 0 12px; font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.4rem); }
+.eg-newsletter p { color: var(--eg-muted); }
+.eg-newsletter-eyebrow { color: var(--eg-clay) !important; font-size: 0.875rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+.eg-newsletter form { display: grid; gap: 16px; align-content: center; }
+.eg-newsletter label { display: grid; gap: 8px; font-size: 1rem; }
+.eg-newsletter input[type=email] { width: 100%; min-height: 48px; padding: 0 16px; border: 1px solid var(--eg-line); border-radius: 999px; background: var(--eg-surface); color: inherit; font: inherit; }
+.eg-newsletter .eg-newsletter-consent { display: flex; align-items: flex-start; gap: 12px; line-height: 1.5; }
+.eg-newsletter input[type=checkbox] { width: 20px; height: 20px; flex-shrink: 0; margin-top: 3px; accent-color: var(--eg-primary); }
+.eg-newsletter button { justify-self: start; min-height: 48px; padding: 0 24px; border: 0; border-radius: 999px; background: var(--eg-primary); color: var(--eg-on-primary); font: inherit; font-weight: 600; cursor: pointer; }
+.eg-newsletter button:disabled { opacity: .6; cursor: default; }
+@media (max-width: 760px) { .eg-newsletter { grid-template-columns: 1fr; gap: 20px; } }

@@ -5,7 +5,7 @@ import { Input } from '@/components/input';
 import { Label } from '@/components/label';
 import { Textarea } from '@/components/textarea';
 import { Checkbox } from '@/components/checkbox';
-import { NativeSelect } from '@/components/native-select';
+import { OptionSelect } from '@/components/select/OptionSelect';
 import { FieldHint } from '@/components/settings-layout';
 import type { useCreateServiceForm, ServiceFormOptions } from './useCreateServiceForm';
 
@@ -22,14 +22,9 @@ export function ServiceScopeFields({ form, options }: { form: FormApi; options: 
       {options?.is_organization_user && options.organizations.length > 0 && (
         <Field id="service-organization" label={t('staff.services.organization')} required error={errors.organization}>
           {/* Native select keeps the empty "no organization" choice selectable. */}
-          <NativeSelect id="service-organization" value={values.organization} onChange={(e) => setField('organization', e.target.value)}>
-            <option value="">{t('staff.services.selectOrganization')}</option>
-            {options.organizations.map((org) => (
-              <option key={org.name} value={org.name}>
-                {org.organization_name}
-              </option>
-            ))}
-          </NativeSelect>
+          <OptionSelect id="service-organization" value={values.organization} onValueChange={(next) => setField('organization', next)}
+            placeholder={t('staff.services.selectOrganization')}
+            options={options.organizations.map((org) => ({ value: org.name, label: org.organization_name }))} />
         </Field>
       )}
 
@@ -60,15 +55,9 @@ export function ServiceScopeFields({ form, options }: { form: FormApi; options: 
 
       {options?.locations && options.locations.length > 0 && (
         <Field id="service-location" label={t('staff.services.locationLabel')} required error={errors.location}>
-          <NativeSelect id="service-location" value={values.location} onChange={(e) => setField('location', e.target.value)} aria-invalid={!!errors.location}>
-            <option value="">{t('staff.services.selectLocation')}</option>
-            {options.locations.map((loc) => (
-              <option key={loc.name} value={loc.name}>
-                {loc.location_name}
-                {loc.organization && ` (${t('staff.services.orgBranch')})`}
-              </option>
-            ))}
-          </NativeSelect>
+          <OptionSelect id="service-location" value={values.location} onValueChange={(next) => setField('location', next)} aria-invalid={!!errors.location}
+            placeholder={t('staff.services.selectLocation')}
+            options={options.locations.map((loc) => ({ value: loc.name, label: loc.organization ? `${loc.location_name} (${t('staff.services.orgBranch')})` : loc.location_name }))} />
         </Field>
       )}
     </>

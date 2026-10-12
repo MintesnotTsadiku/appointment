@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { useTranslation } from '@/lib/i18n';
 import { Input } from '@/components/input';
+import { DatePicker } from '@/components/datetime-picker';
 import { Label } from '@/components/label';
 import { Textarea } from '@/components/textarea';
 import { FieldHint } from '@/components/settings-layout';
@@ -174,10 +175,10 @@ export function PolicyFeeFields({ formData, errors, update }: FieldsProps) {
       <FieldGroup title={t('staff.policies.validity')}>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Field id="valid_from" label={t('staff.policies.validFrom')} required>
-            <Input id="valid_from" type="date" value={formData.valid_from} onChange={(e) => update({ valid_from: e.target.value })} />
+            <DatePicker id="valid_from" data-qa="policy-valid-from" value={formData.valid_from} onValueChange={(valid_from) => update({ valid_from })} />
           </Field>
           <Field id="valid_to" label={t('staff.policies.validTo')}>
-            <Input id="valid_to" type="date" value={formData.valid_to} onChange={(e) => update({ valid_to: e.target.value })} />
+            <DatePicker id="valid_to" data-qa="policy-valid-to" clearable min={formData.valid_from || undefined} value={formData.valid_to} onValueChange={(valid_to) => update({ valid_to })} />
           </Field>
         </div>
       </FieldGroup>

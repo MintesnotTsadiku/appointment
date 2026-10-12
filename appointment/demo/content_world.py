@@ -59,7 +59,12 @@ def load_content():
     catalog = validate_showcase_catalog()
     if content.get("contract") != "appointment-showcase-content.v1" or content.get("version") != VERSION:
         raise ValueError("Unsupported showcase content manifest")
-    if set(content["sites"]) != set(catalog["sites"]):
+    from appointment.demo.showcase import BUSINESSES
+
+    # The catalog can also list showcases that are not seeded here (for example a template
+    # showcase made by a browser fixture). Every seeded business still needs its content.
+    seeded = {key for key, *_ in BUSINESSES}
+    if not seeded <= set(content["sites"]) <= set(catalog["sites"]):
         raise ValueError("Showcase content does not cover every certified business")
     for key, world in content["sites"].items():
         if not 3 <= len(world["articles"]) <= 6 or not 2 <= len(world["collections"]) <= 4:

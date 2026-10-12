@@ -146,18 +146,21 @@ scenarios:
     assertions:
     - type: visible_selector
       value: '[data-qa="create-customer-picker-linked"]'
-  - action: select
+  - action: click
     selector: '#create-appointment-service'
-    value: '{qa_cp_service}'
-  - action: select
+  - action: click
+    selector: '[role="option"][data-value="{qa_cp_service}"]'
+  - action: click
     selector: '#create-appointment-provider'
-    value: '{qa_cp_provider}'
-  - action: select
+  - action: click
+    selector: '[role="option"][data-value="{qa_cp_provider}"]'
+  - action: click
     selector: '#create-appointment-location'
-    value: '{qa_cp_location}'
+  - action: click
+    selector: '[role="option"][data-value="{qa_cp_location}"]'
   - action: fill
     selector: '[data-qa="create-time-input"]'
-    value: '{qa_cp_time}'
+    value: '{qa_cp_time_12h}'
   - action: screenshot
     name: cp_manager_en_desktop-5-booking-picker.png
   - action: click

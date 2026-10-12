@@ -2,11 +2,14 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Loader2, Users, UserCircle, Calendar, LinkIcon } from 'lucide-react';
 import { Drawer } from './Drawer';
-import { Input } from '@/components/input';
 import { Label } from '@/components/label';
+import { OptionSelect } from '@/components/select/OptionSelect';
+import { DatePicker } from '@/components/datetime-picker';
 import { assistantAPI } from '@/lib/tasks-assistants/api';
 import { toast } from 'sonner';
 import type { VAProfile, ClientProfile, AssistantClientAssignment } from '@/lib/tasks-assistants/types';
+
+const selectClassName = 'h-auto w-full rounded-xl border-2 border-[var(--border-default)] bg-[var(--bg-secondary)] px-4 py-3 text-[var(--text-primary)] transition-all';
 
 interface CreateAssignmentDrawerProps {
   isOpen: boolean;
@@ -155,25 +158,14 @@ export const CreateAssignmentDrawer = ({
             <Users className="w-4 h-4" style={{ color: 'var(--accent-primary)' }} />
             Virtual Assistant <span style={{ color: 'var(--accent-secondary)' }}>*</span>
           </Label>
-          <select
-            value={formData.va_profile}
-            onChange={(e) => setFormData({ ...formData, va_profile: e.target.value })}
+          <OptionSelect
+            value={formData.va_profile ?? ''}
+            onValueChange={(value) => setFormData({ ...formData, va_profile: value })}
             disabled={loadingProfiles}
-            className="w-full rounded-xl border-2 transition-all focus:outline-hidden focus:ring-2"
-            style={{
-              backgroundColor: 'var(--bg-secondary)',
-              borderColor: 'var(--border-default)',
-              color: 'var(--text-primary)',
-              padding: '0.75rem 1rem',
-            }}
-          >
-            <option value="">Select a VA...</option>
-            {vaProfiles.map((va) => (
-              <option key={va.name} value={va.name}>
-                {va.full_name}
-              </option>
-            ))}
-          </select>
+            className={selectClassName}
+            placeholder="Select a VA..."
+            options={vaProfiles.map((va) => ({ value: va.name, label: va.full_name }))}
+          />
         </div>
 
         {/* Client Profile Selection */}
@@ -182,25 +174,14 @@ export const CreateAssignmentDrawer = ({
             <UserCircle className="w-4 h-4" style={{ color: 'var(--accent-secondary)' }} />
             Client <span style={{ color: 'var(--accent-secondary)' }}>*</span>
           </Label>
-          <select
-            value={formData.client_profile}
-            onChange={(e) => setFormData({ ...formData, client_profile: e.target.value })}
+          <OptionSelect
+            value={formData.client_profile ?? ''}
+            onValueChange={(value) => setFormData({ ...formData, client_profile: value })}
             disabled={loadingProfiles}
-            className="w-full rounded-xl border-2 transition-all focus:outline-hidden focus:ring-2"
-            style={{
-              backgroundColor: 'var(--bg-secondary)',
-              borderColor: 'var(--border-default)',
-              color: 'var(--text-primary)',
-              padding: '0.75rem 1rem',
-            }}
-          >
-            <option value="">Select a client...</option>
-            {clientProfiles.map((client) => (
-              <option key={client.name} value={client.name}>
-                {client.full_name}
-              </option>
-            ))}
-          </select>
+            className={selectClassName}
+            placeholder="Select a client..."
+            options={clientProfiles.map((client) => ({ value: client.name, label: client.full_name }))}
+          />
         </div>
 
         {/* Assignment Model */}
@@ -258,17 +239,10 @@ export const CreateAssignmentDrawer = ({
             <Calendar className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
             Start Date
           </Label>
-          <Input
-            type="date"
-            value={formData.start_date}
-            onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
-            className="w-full rounded-xl border-2 transition-all focus:outline-hidden focus:ring-2"
-            style={{
-              backgroundColor: 'var(--bg-secondary)',
-              borderColor: 'var(--border-default)',
-              color: 'var(--text-primary)',
-              padding: '0.75rem 1rem',
-            }}
+          <DatePicker
+            value={formData.start_date ?? ''}
+            onValueChange={(value) => setFormData({ ...formData, start_date: value })}
+            className="w-full"
           />
         </div>
 
@@ -278,17 +252,11 @@ export const CreateAssignmentDrawer = ({
             <Calendar className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
             End Date (Optional)
           </Label>
-          <Input
-            type="date"
+          <DatePicker
             value={formData.end_date || ''}
-            onChange={(e) => setFormData({ ...formData, end_date: e.target.value || undefined })}
-            className="w-full rounded-xl border-2 transition-all focus:outline-hidden focus:ring-2"
-            style={{
-              backgroundColor: 'var(--bg-secondary)',
-              borderColor: 'var(--border-default)',
-              color: 'var(--text-primary)',
-              padding: '0.75rem 1rem',
-            }}
+            onValueChange={(value) => setFormData({ ...formData, end_date: value || undefined })}
+            clearable
+            className="w-full"
           />
         </div>
       </form>

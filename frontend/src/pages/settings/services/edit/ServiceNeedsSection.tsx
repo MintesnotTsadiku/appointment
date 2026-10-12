@@ -6,7 +6,7 @@ import { ArrowRight, Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/button';
 import { Label } from '@/components/label';
 import { Input } from '@/components/input';
-import { NativeSelect } from '@/components/native-select';
+import { OptionSelect } from '@/components/select/OptionSelect';
 import { Switch } from '@/components/switch';
 import { SettingsSection } from '@/components/settings-layout';
 import { useTranslation } from '@/lib/i18n';
@@ -83,22 +83,16 @@ export function ServiceNeedsSection({ serviceId }: { serviceId: string }) {
               <li key={need.resource_type} className="grid grid-cols-1 items-end gap-2 rounded-lg border p-3 sm:grid-cols-[1fr_1fr_6rem_auto]" data-qa="service-need">
                 <div className="space-y-1.5">
                   <Label htmlFor={`need-type-${index}`}>{t('staff.resources.resourceType')}</Label>
-                  <NativeSelect id={`need-type-${index}`} data-qa="service-need-type" value={need.resource_type}
-                    onChange={(event) => setNeeds(needs.map((row, i) => (i === index ? { resource_type: event.target.value, specific_resource: null } : row)))}>
-                    {saved.types.filter((type) => type.name === need.resource_type || unused.includes(type)).map((type) => (
-                      <option key={type.name} value={type.name}>{type.type_name}</option>
-                    ))}
-                  </NativeSelect>
+                  <OptionSelect id={`need-type-${index}`} data-qa="service-need-type" value={need.resource_type}
+                    onValueChange={(next) => setNeeds(needs.map((row, i) => (i === index ? { resource_type: next, specific_resource: null } : row)))}
+                    options={saved.types.filter((type) => type.name === need.resource_type || unused.includes(type)).map((type) => ({ value: type.name, label: type.type_name }))} />
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor={`need-which-${index}`}>{t('staff.resources.whichOne')}</Label>
-                  <NativeSelect id={`need-which-${index}`} data-qa="service-need-which" value={need.specific_resource || ''}
-                    onChange={(event) => setNeeds(needs.map((row, i) => (i === index ? { ...row, specific_resource: event.target.value || null } : row)))}>
-                    <option value="">{t('staff.resources.anyFree')}</option>
-                    {saved.resources.filter((row) => row.resource_type === need.resource_type).map((row) => (
-                      <option key={row.name} value={row.name}>{row.resource_name}</option>
-                    ))}
-                  </NativeSelect>
+                  <OptionSelect id={`need-which-${index}`} data-qa="service-need-which" value={need.specific_resource || ''}
+                    onValueChange={(next) => setNeeds(needs.map((row, i) => (i === index ? { ...row, specific_resource: next || null } : row)))}
+                    options={[{ value: '', label: t('staff.resources.anyFree') },
+                      ...saved.resources.filter((row) => row.resource_type === need.resource_type).map((row) => ({ value: row.name, label: row.resource_name }))]} />
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor={`need-units-${index}`}>{t('staff.resources.units')}</Label>

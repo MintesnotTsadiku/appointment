@@ -3,6 +3,7 @@ import { useFrappePostCall } from 'frappe-react-sdk';
 import { toast } from 'sonner';
 import { Button } from '@/components/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/dialog';
+import { DateTimeField } from '@/components/datetime-picker';
 import { Input } from '@/components/input';
 import { Label } from '@/components/label';
 import { useTranslation } from '@/lib/i18n';
@@ -48,20 +49,20 @@ export function BlockDialog({ resource, onClose, onSaved }: { resource: Resource
 
   return (
     <Dialog open={Boolean(resource)} onOpenChange={(next) => !next && onClose()}>
-      <DialogContent className="sm:max-w-md" data-qa="resource-block-dialog">
+      <DialogContent className="p-6 sm:max-w-lg" data-qa="resource-block-dialog">
         <DialogHeader>
           <DialogTitle>{t('staff.resources.blockTitle').replace('{0}', resource?.resource_name ?? '')}</DialogTitle>
           <DialogDescription>{t('staff.resources.blockHint')}</DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4">
             <div className="space-y-1.5">
               <Label htmlFor="block-start">{t('staff.resources.blockStart')}</Label>
-              <Input id="block-start" data-qa="block-start" type="datetime-local" value={start} onChange={(event) => setStart(event.target.value)} />
+              <DateTimeField id="block-start" data-qa="block-start" required value={start} onValueChange={setStart} />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="block-end">{t('staff.resources.blockEnd')}</Label>
-              <Input id="block-end" data-qa="block-end" type="datetime-local" value={end} onChange={(event) => setEnd(event.target.value)} />
+              <DateTimeField id="block-end" data-qa="block-end" required value={end} onValueChange={setEnd} />
             </div>
           </div>
           <div className="space-y-1.5">

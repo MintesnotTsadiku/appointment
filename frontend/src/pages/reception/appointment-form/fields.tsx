@@ -1,7 +1,7 @@
 import type { ComponentProps, ReactNode } from 'react';
 import { Input } from '@/components/input';
 import { Label } from '@/components/label';
-import { NativeSelect } from '@/components/native-select';
+import { OptionSelect } from '@/components/select/OptionSelect';
 import { Textarea } from '@/components/textarea';
 import { FieldHint } from '@/components/settings-layout';
 import { cn } from '@/lib/utils';
@@ -72,7 +72,7 @@ interface OptionFieldProps<T> {
   className?: string;
 }
 
-/** Native select: the platform picker suits long lists, and QA drives some of these with `select`. */
+/** Standard dropdown over named records. */
 export function OptionField<T extends { name: string }>({
   id,
   label,
@@ -87,20 +87,15 @@ export function OptionField<T extends { name: string }>({
 }: OptionFieldProps<T>) {
   return (
     <Field id={id} label={label} error={error} required={required} className={className}>
-      <NativeSelect
+      <OptionSelect
         id={id}
         value={value}
-        onChange={(event) => onValueChange(event.target.value)}
+        onValueChange={onValueChange}
+        placeholder={placeholder}
+        options={options.map((option) => ({ value: option.name, label: optionLabel(option) }))}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? `${id}-error` : undefined}
-      >
-        <option value="">{placeholder}</option>
-        {options.map((option) => (
-          <option key={option.name} value={option.name}>
-            {optionLabel(option)}
-          </option>
-        ))}
-      </NativeSelect>
+      />
     </Field>
   );
 }

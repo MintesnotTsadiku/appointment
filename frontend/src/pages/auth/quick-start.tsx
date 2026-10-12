@@ -1,7 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { useFrappeAuth, useFrappeGetCall, useFrappePostCall } from 'frappe-react-sdk';
-import { AlertCircle, CalendarClock, Check, CheckCircle2, Copy, ExternalLink, Loader2, TimerOff } from 'lucide-react';
+import { AlertCircle, CalendarClock, Loader2, TimerOff } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/alert';
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
@@ -12,6 +12,7 @@ import { BUSINESS_PROMPT_API, signupPath } from '@/lib/growth-touchpoints';
 import { useTranslation } from '@/lib/i18n';
 import { usePlatformBrand } from '@/lib/platform-brand';
 import { parseFrappeErrorMsg } from '@/lib/utils';
+import { OnboardingSuccess } from '@/pages/onboarding/OnboardingSuccess';
 
 interface Prefill {
   full_name: string;
@@ -20,8 +21,11 @@ interface Prefill {
 }
 
 interface Created {
+  provider: string;
   business_name: string;
   public_path: string;
+  business_path?: string;
+  published?: boolean;
   landing: string;
 }
 
@@ -84,8 +88,7 @@ export default function QuickStartSignup({ prefill, source, refCode }: { prefill
   }
 
   let body;
-  if (stage === 'live' && created) body = <Live created={created} />;
-  else if (stage === 'pending') body = <p role="status" data-qa="quick-start-pending" className="text-sm">{t('growthTouchpoints.quickStart.pending')}</p>;
+  if (stage === 'pending') body = <p role="status" data-qa="quick-start-pending" className="text-sm">{t('growthTouchpoints.quickStart.pending')}</p>;
   else if (expired) body = <Expired source={source} refCode={refCode} />;
   else if (isLoading || !data) body = <p data-qa="quick-start-loading" role="status" className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />{t('growthTouchpoints.quickStart.loading')}</p>;
   else
@@ -132,23 +135,27 @@ export default function QuickStartSignup({ prefill, source, refCode }: { prefill
   const logo = brand.mark || brand.logo;
   return (
     <div className="min-h-screen bg-muted/40 px-4 py-6 text-foreground sm:py-10" data-qa="quick-start">
-      <div className="mx-auto flex max-w-xl items-center justify-between gap-3">
+      <div className={`mx-auto flex items-center justify-between gap-3 ${stage === 'live' ? 'max-w-2xl' : 'max-w-xl'}`}>
         <a href="/" className="flex min-w-0 items-center gap-2 font-semibold no-underline">
           {logo ? <img src={logo} alt="" className="h-8 w-8 shrink-0 rounded-lg object-contain" /> : null}
           <span className="truncate">{brand.productName}</span>
         </a>
         <LanguageToggle />
       </div>
-      <main className="mx-auto mt-6 max-w-xl rounded-2xl border bg-card p-5 shadow-card sm:mt-10 sm:p-8">
-        {stage !== 'live' && (
+      {stage === 'live' && created ? (
+        <main className="mx-auto mt-6 max-w-2xl sm:mt-10" data-qa="quick-start-live">
+          <OnboardingSuccess business={{ ...created, published: created.published ?? true }} qa="quick-start" />
+        </main>
+      ) : (
+        <main className="mx-auto mt-6 max-w-xl rounded-2xl border bg-card p-5 shadow-card sm:mt-10 sm:p-8">
           <header className="mb-6 space-y-2">
             <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t('growthTouchpoints.quickStart.eyebrow')}</p>
             <h1 data-qa="quick-start-heading" className="font-heading text-2xl font-semibold tracking-tight sm:text-3xl">{t('growthTouchpoints.quickStart.title')}</h1>
             {!expired && <p className="text-sm text-muted-foreground">{t('growthTouchpoints.quickStart.intro')}</p>}
           </header>
-        )}
-        {body}
-      </main>
+          {body}
+        </main>
+      )}
     </div>
   );
 }
@@ -174,42 +181,5 @@ function Expired({ source, refCode }: { source: string; refCode?: string | null 
       </div>
       <Button asChild><Link to={signupPath(source, { ref: refCode })}>{t('growthTouchpoints.quickStart.regularSignup')}</Link></Button>
     </div>
-  );
-}
-
-function Live({ created }: { created: Created }) {
-  const { t } = useTranslation();
-  const [copied, setCopied] = useState(false);
-  const url = `${window.location.origin}${created.public_path}`;
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(url);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 2000);
-    } catch {
-      setCopied(false);
-    }
-  };
-  return (
-    <section data-qa="quick-start-live" className="space-y-5">
-      <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-success/10 text-success" aria-hidden="true">
-        <CheckCircle2 className="h-6 w-6" />
-      </span>
-      <div className="space-y-1">
-        <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('growthTouchpoints.quickStart.liveTitle')}</h1>
-        <p className="text-sm text-muted-foreground"><span className="font-medium text-foreground">{created.business_name}</span> · {t('growthTouchpoints.quickStart.liveBody')}</p>
-      </div>
-      <div className="flex items-center gap-2 rounded-lg border bg-muted/40 p-2 pl-3">
-        <code data-qa="quick-start-link" className="min-w-0 flex-1 truncate text-sm">{url}</code>
-        <Button type="button" size="sm" variant="outline" data-qa="quick-start-copy" className="min-h-11 shrink-0 sm:min-h-9" onClick={() => void copy()}>
-          {copied ? <Check className="h-4 w-4" aria-hidden="true" /> : <Copy className="h-4 w-4" aria-hidden="true" />}
-          {copied ? t('growthTouchpoints.quickStart.copied') : t('growthTouchpoints.quickStart.copy')}
-        </Button>
-      </div>
-      <div className="flex flex-col gap-3 sm:flex-row">
-        <Button asChild className="h-11"><a data-qa="quick-start-open" href={created.public_path}><ExternalLink className="h-4 w-4" aria-hidden="true" />{t('growthTouchpoints.quickStart.openPage')}</a></Button>
-        <Button asChild variant="outline" className="h-11"><Link data-qa="quick-start-dashboard" to={created.landing}>{t('growthTouchpoints.quickStart.dashboard')}</Link></Button>
-      </div>
-    </section>
   );
 }

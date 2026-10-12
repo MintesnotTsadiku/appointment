@@ -6,9 +6,12 @@ import { Input } from '@/components/input';
 import { Label } from '@/components/label';
 import { Textarea } from '@/components/textarea';
 import { DateTimePicker } from '@/components/datetime-picker';
+import { OptionSelect } from '@/components/select/OptionSelect';
 import { taskAPI, assistantAPI, taskMasterDataAPI } from '@/lib/tasks-assistants/api';
 import { toast } from 'sonner';
 import type { Task } from '@/lib/tasks-assistants/types';
+
+const selectClassName = 'h-auto w-full rounded-xl border-2 border-[var(--border-default)] bg-[var(--bg-secondary)] px-[1.125rem] py-[0.875rem] text-[var(--text-primary)] transition-all';
 
 interface CreateTaskModalProps {
   isOpen: boolean;
@@ -25,8 +28,8 @@ export const CreateTaskModal = ({ isOpen, onClose, onSuccess }: CreateTaskModalP
   const [formData, setFormData] = useState<Partial<Task>>({
     title: '',
     description: '',
-    status: 'requested',
-    priority: 'medium',
+    status: 'Requested',
+    priority: 'Medium',
     client_profile: '',
     assignee: '',
     category: '',
@@ -172,47 +175,26 @@ export const CreateTaskModal = ({ isOpen, onClose, onSuccess }: CreateTaskModalP
                     <Label htmlFor="status" className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
                       Status
                     </Label>
-                    <select
+                    <OptionSelect
                       id="status"
-                      value={formData.status}
-                      onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
-                      className="w-full rounded-xl border-2 transition-all focus:outline-hidden focus:ring-2"
-                      style={{
-                        backgroundColor: 'var(--bg-secondary)',
-                        borderColor: 'var(--border-default)',
-                        color: 'var(--text-primary)',
-                        padding: '0.875rem 1.125rem',
-                      }}
-                    >
-                      <option value="Requested">Requested</option>
-                      <option value="Assigned">Assigned</option>
-                      <option value="In Progress">In Progress</option>
-                      <option value="Completed">Completed</option>
-                      <option value="Cancelled">Cancelled</option>
-                    </select>
+                      value={formData.status ?? ''}
+                      onValueChange={(value) => setFormData({ ...formData, status: value as Task['status'] })}
+                      className={selectClassName}
+                      options={[{ value: 'Requested', label: 'Requested' }, { value: 'Assigned', label: 'Assigned' }, { value: 'In Progress', label: 'In Progress' }, { value: 'Completed', label: 'Completed' }, { value: 'Cancelled', label: 'Cancelled' }]}
+                    />
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="priority" className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
                       Priority
                     </Label>
-                    <select
+                    <OptionSelect
                       id="priority"
-                      value={formData.priority}
-                      onChange={(e) => setFormData({ ...formData, priority: e.target.value as any })}
-                      className="w-full rounded-xl border-2 transition-all focus:outline-hidden focus:ring-2"
-                      style={{
-                        backgroundColor: 'var(--bg-secondary)',
-                        borderColor: 'var(--border-default)',
-                        color: 'var(--text-primary)',
-                        padding: '0.875rem 1.125rem',
-                      }}
-                    >
-                      <option value="Low">Low</option>
-                      <option value="Medium">Medium</option>
-                      <option value="High">High</option>
-                      <option value="Urgent">Urgent</option>
-                    </select>
+                      value={formData.priority ?? ''}
+                      onValueChange={(value) => setFormData({ ...formData, priority: value as Task['priority'] })}
+                      className={selectClassName}
+                      options={[{ value: 'Low', label: 'Low' }, { value: 'Medium', label: 'Medium' }, { value: 'High', label: 'High' }, { value: 'Urgent', label: 'Urgent' }]}
+                    />
                   </div>
                 </div>
 
@@ -275,101 +257,54 @@ export const CreateTaskModal = ({ isOpen, onClose, onSuccess }: CreateTaskModalP
                   <Label htmlFor="client_profile" className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
                     Client Profile <span style={{ color: 'var(--accent-secondary)' }}>*</span>
                   </Label>
-                  <select
+                  <OptionSelect
                     id="client_profile"
-                    value={formData.client_profile}
-                    onChange={(e) => setFormData({ ...formData, client_profile: e.target.value })}
+                    value={formData.client_profile ?? ''}
+                    onValueChange={(value) => setFormData({ ...formData, client_profile: value })}
                     required
-                    className="w-full rounded-xl border-2 transition-all focus:outline-hidden focus:ring-2"
-                    style={{
-                      backgroundColor: 'var(--bg-secondary)',
-                      borderColor: 'var(--border-default)',
-                      color: 'var(--text-primary)',
-                      padding: '0.875rem 1.125rem',
-                    }}
-                  >
-                    <option value="">Select a client...</option>
-                    {clientProfiles.map((client) => (
-                      <option key={client.name} value={client.name}>
-                        {client.full_name}
-                      </option>
-                    ))}
-                  </select>
+                    className={selectClassName}
+                    placeholder="Select a client..."
+                    options={clientProfiles.map((client) => ({ value: client.name, label: client.full_name }))}
+                  />
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="assignee" className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
                     Virtual Assistant
                   </Label>
-                  <select
+                  <OptionSelect
                     id="assignee"
-                    value={formData.assignee}
-                    onChange={(e) => setFormData({ ...formData, assignee: e.target.value })}
-                    className="w-full rounded-xl border-2 transition-all focus:outline-hidden focus:ring-2"
-                    style={{
-                      backgroundColor: 'var(--bg-secondary)',
-                      borderColor: 'var(--border-default)',
-                      color: 'var(--text-primary)',
-                      padding: '0.875rem 1.125rem',
-                    }}
-                  >
-                    <option value="">None</option>
-                    {vaProfiles.map((va) => (
-                      <option key={va.name} value={va.name}>
-                        {va.full_name}
-                      </option>
-                    ))}
-                  </select>
+                    value={formData.assignee ?? ''}
+                    onValueChange={(value) => setFormData({ ...formData, assignee: value })}
+                    className={selectClassName}
+                    options={[{ value: '', label: 'None' }, ...vaProfiles.map((va) => ({ value: va.name, label: va.full_name }))]}
+                  />
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="category" className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
                     Category
                   </Label>
-                  <select
+                  <OptionSelect
                     id="category"
-                    value={formData.category}
-                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full rounded-xl border-2 transition-all focus:outline-hidden focus:ring-2"
-                    style={{
-                      backgroundColor: 'var(--bg-secondary)',
-                      borderColor: 'var(--border-default)',
-                      color: 'var(--text-primary)',
-                      padding: '0.875rem 1.125rem',
-                    }}
-                  >
-                    <option value="">None</option>
-                    {categories.map((cat) => (
-                      <option key={cat.name} value={cat.name}>
-                        {cat.name}
-                      </option>
-                    ))}
-                  </select>
+                    value={formData.category ?? ''}
+                    onValueChange={(value) => setFormData({ ...formData, category: value })}
+                    className={selectClassName}
+                    options={[{ value: '', label: 'None' }, ...categories.map((cat) => ({ value: cat.name, label: cat.name }))]}
+                  />
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="project" className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
                     Project
                   </Label>
-                  <select
+                  <OptionSelect
                     id="project"
-                    value={formData.project}
-                    onChange={(e) => setFormData({ ...formData, project: e.target.value })}
-                    className="w-full rounded-xl border-2 transition-all focus:outline-hidden focus:ring-2"
-                    style={{
-                      backgroundColor: 'var(--bg-secondary)',
-                      borderColor: 'var(--border-default)',
-                      color: 'var(--text-primary)',
-                      padding: '0.875rem 1.125rem',
-                    }}
-                  >
-                    <option value="">None</option>
-                    {projects.map((proj) => (
-                      <option key={proj.name} value={proj.name}>
-                        {proj.name}
-                      </option>
-                    ))}
-                  </select>
+                    value={formData.project ?? ''}
+                    onValueChange={(value) => setFormData({ ...formData, project: value })}
+                    className={selectClassName}
+                    options={[{ value: '', label: 'None' }, ...projects.map((proj) => ({ value: proj.name, label: proj.name }))]}
+                  />
                 </div>
               </div>
             </div>

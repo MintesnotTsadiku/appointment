@@ -15,6 +15,7 @@ from frappe.utils import add_days, get_datetime, nowdate
 
 from appointment.demo import showcase
 from appointment.scheduler import booking, resources
+from appointment.tests import qa_days
 
 ORG = "Bole Bloom Hair Studio"
 OWNER = "bloom.owner@example.test"
@@ -71,6 +72,7 @@ def browser_values(manifest=None):
     state = json.loads(frappe.db.get_default(STATE_KEY) or "{}")
     values.update({f"qa_pool_{key}": value for key, value in state.items()})
     values["qa_pool_guest_id"] = frappe.db.get_value("Appointment", {"client_email": "qa-pool-guest-en@example.test"}, "name") or ""
+    values["qa_pool_time_12h"] = qa_days.twelve_hour(values.get("qa_pool_time", ""))
     return values
 
 

@@ -107,7 +107,7 @@ export default function Onboarding() {
           <TabsTrigger value="individual">{t('staff.onboarding.structure.individual')}</TabsTrigger>
         </TabsList>
         <TabsContent value="individual">
-          <SoloSetup />
+          <SoloSetup onCreated={setDone} />
         </TabsContent>
         <TabsContent value="organization">
           <form onSubmit={submit} className="space-y-6">

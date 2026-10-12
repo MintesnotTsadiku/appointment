@@ -79,6 +79,12 @@
       "sha256": "0aeb9d105210ec8d364d0764481935c2659a356dbc30cb1fbd6e4ad303d3c929",
       "width": 1536,
       "height": 1024
+    },
+    {
+      "path": "ergata/moodboard-01.webp",
+      "sha256": "febdd8f9ba63627ee8d18b7d215f489cae2e7a127f5afd0fee2ca7e941bd3fb3",
+      "width": 1536,
+      "height": 1024
     }
   ]
 }

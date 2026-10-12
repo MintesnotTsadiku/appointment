@@ -1,0 +1,48 @@
+{
+  "kind": "imagery",
+  "contract": "appointment-imagery.v1",
+  "key": "ergata-rooms",
+  "version": 1,
+  "assets": {
+    "hero.ergata": {
+      "src": "/assets/appointment/brand-experience/heroes/ergata-therapy.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/heroes/ergata-therapy.webp",
+      "alt": "Morning light through a linen curtain falls on an olive tree, a clay jug and a glass of water in a quiet room.",
+      "focalPoint": {
+        "x": 0.42,
+        "y": 0.6
+      },
+      "fit": "cover",
+      "width": 1040,
+      "height": 1300,
+      "mime": "image/webp",
+      "checksum": "sha256:7a8d0d2449143e481d0c85a7b08eb88fb78646dc21fd97391f4a2932119782cd",
+      "provenance": {
+        "source": "generated",
+        "role": "A calm, private room to talk",
+        "license": "project-generated",
+        "review": "Codex image generation; no people, text, logos or screens; Addis Ababa interior."
+      }
+    },
+    "detail.ergata": {
+      "src": "/assets/appointment/brand-experience/support/ergata/room.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/ergata/room.webp",
+      "alt": "Two soft armchairs face each other across a small wooden table in a sunlit counselling room.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.55
+      },
+      "fit": "cover",
+      "width": 1440,
+      "height": 960,
+      "mime": "image/webp",
+      "checksum": "sha256:bc55dee466db3aba5d40f54b8494d37573a22fa3f683d942ab1a613977437d58",
+      "provenance": {
+        "source": "generated",
+        "role": "Where the conversation happens",
+        "license": "project-generated",
+        "review": "Codex image generation; regenerated once to remove book-spine lettering; no people, text or logos."
+      }
+    }
+  }
+}

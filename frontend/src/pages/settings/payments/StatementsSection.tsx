@@ -3,7 +3,7 @@ import { useFrappeGetCall } from 'frappe-react-sdk';
 import { Download } from 'lucide-react';
 import { Button } from '@/components/button';
 import { Label } from '@/components/label';
-import { NativeSelect } from '@/components/native-select';
+import { OptionSelect } from '@/components/select/OptionSelect';
 import { SettingsSection } from '@/components/settings-layout';
 import { ErrorState, ListSkeleton } from '@/components/states';
 import { intlLocale, useTranslation } from '@/lib/i18n';
@@ -64,9 +64,8 @@ export function StatementsSection({ organization }: { organization: string }) {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div className="space-y-1.5 sm:w-60">
             <Label htmlFor="statement-month">{t('staff.statements.month')}</Label>
-            <NativeSelect id="statement-month" data-qa="statement-month" value={month} onChange={(event) => setMonth(event.target.value)}>
-              {months.map((value) => <option key={value} value={value}>{monthName(value)}</option>)}
-            </NativeSelect>
+            <OptionSelect id="statement-month" data-qa="statement-month" value={month} onValueChange={setMonth}
+              options={months.map((value) => ({ value, label: monthName(value) }))} />
           </div>
           <div className="flex flex-wrap gap-2">
             <Button asChild variant="outline" size="sm">

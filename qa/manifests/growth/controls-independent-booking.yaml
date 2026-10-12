@@ -1,0 +1,83 @@
+# Run with fixture appointment.tests.develop_features_qa_fixtures ($G/qa.sh runs setup before and cleanup after).
+# A guest books an independent provider's offering with the shared date and slot picker (en, desktop, light):
+# calendar, slots, details card, confirmation with the share card and the "your own page" prompt.
+app: appointment
+base_url: http://127.0.0.146:47800
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.develop_features_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-controls-independent-booking
+default_role: Guest
+auth:
+  type: none
+scenarios:
+- id: ctl_indep_book_en_desktop
+  title: 'Guest books an independent offering with the standard picker (en, desktop, light)'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /schedule/individual/{qa_independent_offering}
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="independent-booking"]'
+    - type: text_contains
+      value: QA Independent consultation
+  actions:
+  - action: wait_for
+    selector: '[data-qa="independent-booking-choose-first"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="independent-booking-submit"][disabled]'
+  - action: screenshot
+    name: ctl_indep_book_en_desktop-1-picker.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="booking-tomorrow"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.booking.slots
+      status: 200
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 2)
+    timeout_ms: 20000
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 2)
+  - action: wait_for
+    selector: '[data-qa="independent-booking-chosen"]'
+  - action: fill
+    selector: '[data-qa="independent-booking-name"]'
+    value: Meron Assefa
+  - action: fill
+    selector: '[data-qa="independent-booking-email-input"]'
+    value: qa-indep-picker-en@example.test
+  - action: screenshot
+    name: ctl_indep_book_en_desktop-2-details.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="independent-booking-submit"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.booking.book
+      method: POST
+      status_min: 200
+      status_max: 299
+      timeout_ms: 25000
+    - type: visible_selector
+      value: '[data-qa="independent-booking-confirmed"]'
+  - action: wait_for
+    selector: '[data-qa="independent-booking-email"]'
+  - action: screenshot
+    name: ctl_indep_book_en_desktop-3-confirmed.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors

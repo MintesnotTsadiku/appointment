@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { callGet, callMethod } from "@/public-experience/api";
 import { StaffShell } from '@/components/staff-shell';
 import { useTranslation } from '@/lib/i18n';
+import { OptionSelect } from "@/components/select/OptionSelect";
+import { DateTimeField } from "@/components/datetime-picker";
 import { fill } from '@/pages/manage-booking/format';
 
 interface Site { name: string; site_title: string }
@@ -72,7 +74,8 @@ export default function NewsletterWorkspace() {
   return <StaffShell width="default"><div className="mx-auto max-w-5xl space-y-6 p-6" data-page="website-newsletter">
     <header><h1 className="text-3xl font-semibold">{t("staff.website.newsletter.title")}</h1><p>{t("staff.website.newsletter.intro")}</p><Link to="/settings/website/content">{t("staff.website.content.title")}</Link></header>
     {error && <p role="alert">{error}</p>}{notice && <p role="status">{notice}</p>}
-    <label>{t("staff.settings.website.title")}<select aria-label={t("staff.settings.website.title")} className={field} value={site} onChange={(event) => setSite(event.target.value)}>{sites.map((row) => <option key={row.name} value={row.name}>{row.site_title}</option>)}</select></label>
+    <label>{t("staff.settings.website.title")}<OptionSelect aria-label={t("staff.settings.website.title")} className="mt-1 h-12" data-qa="newsletter-site" value={site} onValueChange={setSite}
+      options={sites.map((row) => ({ value: row.name, label: row.site_title }))} /></label>
     {!sites.length && <p>{withLink(t("staff.website.newsletter.createIn"), <Link to="/settings/website">{t("staff.website.setup.title")}</Link>)}</p>}
     {workspace && <>
       <p>{fill(t("staff.website.newsletter.access"), workspace.entitlement.state, workspace.entitlement.limits.audience ?? t("staff.website.newsletter.unlimited"), workspace.entitlement.limits.monthly_sends ?? t("staff.website.newsletter.unlimited"))}</p>
@@ -83,7 +86,8 @@ export default function NewsletterWorkspace() {
           const result = await callMethod<{ sender: string }>(api + "request_sender", { site, email: senderEmail, name: senderName });
           setSender(result.sender); setNotice(t("staff.website.newsletter.verificationNotice"));
         })}>{t("staff.website.newsletter.requestVerification")}</button>
-        <label>{t("staff.website.newsletter.campaignSender")}<select aria-label={t("staff.website.newsletter.campaignSender")} className={field} value={sender} onChange={(event) => setSender(event.target.value)}><option value="">{t("staff.website.newsletter.chooseSender")}</option>{workspace.senders.map((row) => <option key={row.name} value={row.name}>{row.sender_email} · {row.status}</option>)}</select></label>
+        <label>{t("staff.website.newsletter.campaignSender")}<OptionSelect aria-label={t("staff.website.newsletter.campaignSender")} className="mt-1 h-12" data-qa="newsletter-sender" value={sender} onValueChange={setSender}
+          placeholder={t("staff.website.newsletter.chooseSender")} options={workspace.senders.map((row) => ({ value: row.name, label: `${row.sender_email} · ${row.status}` }))} /></label>
       </section>
       <section className="space-y-3" aria-label={t("staff.website.newsletter.draftLabel")}><h2>{t("staff.website.newsletter.newNewsletter")}</h2>
         <label>{t("staff.website.newsletter.subject")}<input className={field} value={subject} onChange={(event) => setSubject(event.target.value)} /></label>
@@ -95,13 +99,14 @@ export default function NewsletterWorkspace() {
         })}>{t("staff.website.newsletter.saveDraft")}</button>
       </section>
       <section className="space-y-3" aria-label={t("staff.website.newsletter.campaignLabel")}><h2>{t("staff.website.newsletter.review")}</h2>
-        <label>{t("staff.website.newsletter.savedNewsletter")}<select aria-label={t("staff.website.newsletter.savedNewsletter")} className={field} value={draft} onChange={(event) => { setDraft(event.target.value); setConfirmed(false); setRequestId(crypto.randomUUID()); }}><option value="">{t("staff.website.newsletter.chooseDraft")}</option>{workspace.drafts.map((row) => <option key={row.ownership} value={row.ownership}>{row.subject}</option>)}</select></label>
+        <label>{t("staff.website.newsletter.savedNewsletter")}<OptionSelect aria-label={t("staff.website.newsletter.savedNewsletter")} className="mt-1 h-12" data-qa="newsletter-draft" value={draft} onValueChange={(next) => { setDraft(next); setConfirmed(false); setRequestId(crypto.randomUUID()); }}
+          placeholder={t("staff.website.newsletter.chooseDraft")} options={workspace.drafts.map((row) => ({ value: row.ownership, label: row.subject }))} /></label>
         <button className={button} disabled={busy || !enabled || !sender || !draft} onClick={() => void run(async () => {
           const result = await callMethod<{ message: string }>(api + "preview_draft", { site, ownership: draft, sender });
           setMessage(await callGet<Message>(api + "get_local_message", { message: result.message }));
           setNotice(t("staff.website.newsletter.previewCaptured"));
         })}>{t("staff.website.newsletter.capturePreview")}</button>
-        <label>{t("staff.website.newsletter.schedule")}<input className={field} type="datetime-local" value={scheduled} onChange={(event) => setScheduled(event.target.value)} /></label>
+        <div><label htmlFor="newsletter-schedule">{t("staff.website.newsletter.schedule")}</label><DateTimeField id="newsletter-schedule" data-qa="newsletter-schedule" className="mt-1" clearable value={scheduled} onValueChange={setScheduled} /></div>
         <label className="flex items-start gap-3"><input type="checkbox" checked={confirmed} onChange={(event) => setConfirmed(event.target.checked)} />{t("staff.website.newsletter.confirm")}</label>
         <button className={button} disabled={busy || !enabled || !verified || !draft || !confirmed} onClick={() => void run(async () => {
           await callMethod(api + "queue_campaign", { site, ownership: draft, sender, request_id: requestId, scheduled_at: scheduled || null });

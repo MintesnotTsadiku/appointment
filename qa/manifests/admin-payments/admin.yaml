@@ -45,9 +45,10 @@ scenarios:
     selector: '[data-qa="admin-tab-settings"]'
   - action: wait_for
     selector: '[data-qa="admin-platform-fee-type"]'
-  - action: select
+  - action: click
     selector: '[data-qa="admin-platform-fee-type"]'
-    value: Fixed
+  - action: click
+    selector: '[role="option"][data-value="Fixed"]'
   - action: fill
     selector: '[data-qa="admin-platform-fee-value"]'
     value: '25'
@@ -111,9 +112,10 @@ scenarios:
     full_page: true
   - action: click
     selector: '[data-qa="admin-tab-ledger"]'
-  - action: select
+  - action: click
     selector: '[data-qa="admin-ledger-status"]'
-    value: Waived
+  - action: click
+    selector: '[role="option"][data-value="Waived"]'
   - action: wait_for
     selector: '[data-qa="admin-ledger-card"][data-qa-state="Waived"]'
     assertions:
@@ -190,9 +192,10 @@ scenarios:
       value: እንደተከፈሉ የተመዘገቡ ግቤቶች፦ 1
   - action: click
     selector: '[data-qa="admin-tab-ledger"]'
-  - action: select
+  - action: click
     selector: '[data-qa="admin-ledger-status"]'
-    value: Settled
+  - action: click
+    selector: '[role="option"][data-value="Settled"]'
   - action: wait_for
     selector: :nth-match([data-qa="admin-ledger-row"][data-qa-state="Settled"], 2)
     assertions:
@@ -231,9 +234,10 @@ scenarios:
     full_page: true
   - action: click
     selector: '[data-qa="admin-tab-ledger"]'
-  - action: select
+  - action: click
     selector: '[data-qa="admin-ledger-status"]'
-    value: Waived
+  - action: click
+    selector: '[role="option"][data-value="Waived"]'
   - action: wait_for
     selector: '[data-qa="admin-ledger-card"][data-qa-state="Waived"]'
     assertions:

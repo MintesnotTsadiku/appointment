@@ -21,6 +21,7 @@ CATALOG = {
     "meron-atelier": ("creative", "editorial", "spacious"),
     "abugida-language": ("education", "friendly", "comfortable"),
     "tena-clinic": ("health", "calm", "comfortable"),
+    "ergata-therapy": ("therapy", "calm", "spacious"),
 }
 
 
@@ -28,7 +29,7 @@ def validated_preferences(value):
     if value is None:
         return {}
     allowed = {
-        "industry": {"", "wellness", "beauty", "creative", "education", "health"},
+        "industry": {"", "wellness", "beauty", "creative", "education", "health", "therapy"},
         "mood": {"", "warm", "bold", "editorial", "friendly", "calm"},
         "audience": {"", "clients", "learners", "patients"},
         "density": {"", "comfortable", "spacious", "expressive"},
@@ -248,9 +249,10 @@ def prefill_sections(scope, title, recipe, preferences=None):
     contact = (preferences or {}).get("main_action") == "contact"
     action = {"intent": "contact" if contact else "booking_start",
               "label": text("Contact us" if contact else "Book an appointment"), "placement": "primary"}
-    list_types = {"services", "providers", "process", "benefits", "testimonials", "proof", "locations", "faq"}
+    list_types = {"services", "providers", "process", "benefits", "approaches", "testimonials", "proof", "locations", "faq", "notice"}
     headings = {"services": "Services", "providers": "Our team", "process": "Your visit", "benefits": "What to expect",
-                "testimonials": "Client stories", "proof": "Our work", "locations": "Visit us", "faq": "Questions"}
+                "approaches": "How we work", "testimonials": "Client stories", "proof": "Our work", "locations": "Visit us",
+                "faq": "Questions", "notice": "Please note"}
     business = frappe.get_doc(scope["owner_type"], scope["organization"] or scope["provider"])
     description = business.get("description") or f"Welcome to {title}. Contact us to learn more about our services."
     # Drafts never invent testimonials, credentials, addresses, or business claims.
@@ -284,13 +286,19 @@ def prefill_sections(scope, title, recipe, preferences=None):
                                                   **({"hours": text(description)} if description else {}),
                                                   **({"phone": location.phone} if location.phone else {})})
         names = frappe.get_all("Provider Organization", filters={"organization": scope["organization"], "status": "Active"},
-                               pluck="parent", limit=24)
+                               pluck="parent", limit=24) if scope["organization"] else [scope["provider"]]
     else:
         names = [scope["provider"]]
     if names:
         providers = frappe.get_all("Provider", filters={"name": ["in", names], "is_active": 1}, fields=["name", "provider_name"], limit=24)
         content["providers"]["items"] = [{"id": row.name[:64], "name": text(row.provider_name),
                                            "role": text("Provider"), "specialties": [], "credentials": []} for row in providers]
+    starter = starter_content(recipe)
+    if starter:
+        intro_call = any(int(item.get("durationMinutes") or 0) <= 20 and not item.get("price")
+                         for item in content["services"]["items"])
+        _apply_starter(content, starter, team=len(content["providers"]["items"]) > 1,
+                       contact_first=contact, intro_call=intro_call)
     if scope["organization"]:
         from appointment.organization_import import website
 
@@ -300,3 +308,44 @@ def prefill_sections(scope, title, recipe, preferences=None):
     return [{"section_id": kind, "section_type": kind, "enabled": 1, "order_index": index,
              "schema_version": 2, "content_json": json.dumps(content[kind])}
             for index, kind in enumerate(recipe.required_sections)]
+
+
+def starter_content(recipe):
+    """The recipe's starter copy (English and Amharic), or None when the recipe has none."""
+    resource = files("appointment").joinpath(f"public_experience/manifest/content/{recipe.key}.v{recipe.version}.json")
+    if not resource.is_file():
+        return None
+    document = json.loads(resource.read_text(encoding="utf-8"))
+    if document.get("contract") != "appointment-starter-content.v1" or document.get("recipe") != recipe.key:
+        return None
+    return document["sections"]
+
+
+def _apply_starter(content, starter, *, team, contact_first, intro_call):
+    """Put a recipe's starter copy into a new draft.
+
+    Facts from the business records (services, locations, people, contact details) stay as they are.
+    Starter lists fill only lists that are still empty, so credentials and testimonials stay empty.
+    """
+    for kind, values in starter.items():
+        section = content.setdefault(kind, {})
+        for field in ("eyebrow", "title", "intro", "subtitle", "body", "image", "imageAlt", "action"):
+            if field in values:
+                section[field] = values[field]
+        if "items" in values and not section.get("items"):
+            section["items"] = values["items"]
+    hero, providers = starter.get("hero", {}), starter.get("providers", {})
+    if "hero" in starter:
+        if not contact_first and hero.get("primaryAction"):
+            content["hero"]["primaryAction"] = hero["primaryAction"]
+        secondary = hero.get("introCallAction") if intro_call else hero.get("secondaryAction")
+        if secondary:
+            content["hero"]["secondaryAction"] = secondary
+    if "providers" in starter:
+        if team and providers.get("titleTeam"):
+            content["providers"]["title"] = providers["titleTeam"]
+        content["providers"].pop("titleTeam", None)
+        content["providers"].pop("role", None)
+        for item in content["providers"].get("items", []):
+            if providers.get("role"):
+                item["role"] = providers["role"]

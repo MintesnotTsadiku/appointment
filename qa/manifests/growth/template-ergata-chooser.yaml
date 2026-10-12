@@ -1,0 +1,61 @@
+# Ergata Therapy template (website setup chooser for a group practice). Fixture: appointment.tests.template_ergata_qa_fixtures (setup before, cleanup after).
+app: appointment
+base_url: http://127.0.0.146:47800
+default_role: Staff
+auth:
+  type: frappe_session
+  username: hiwot.family.therapy@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment-growth-template-ergata-chooser
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 150000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.template_ergata_qa_fixtures.browser_values
+scenarios:
+- id: ergata_chooser_en_desktop
+  title: 'Group practice owner: the chooser offers Ergata with its preview (en, desktop)'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /settings/website
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="website-template-ergata-therapy"]'
+    - type: visible_selector
+      value: '[data-qa="website-template-ergata-therapy"] img[src*="ergata-therapy.webp"]'
+    - type: text_contains
+      value: Ergata Therapy
+  actions:
+  - action: scroll
+    selector: '[data-qa="website-template-ergata-therapy"]'
+  - action: screenshot
+    name: ergata_chooser_en_desktop-1-catalog.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="website-template-ergata-therapy"] input[type="radio"]'
+  - action: click
+    selector: '[data-qa="website-preview-template"]'
+    assertions:
+    - type: network_request
+      url_contains: preview_website_template
+      status: 200
+  - action: wait_for
+    selector: iframe
+  - action: scroll
+    selector: iframe
+  - action: screenshot
+    name: ergata_chooser_en_desktop-2-preview.png
+    full_page: false
+  - action: screenshot
+    name: ergata_chooser_en_desktop-3-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors

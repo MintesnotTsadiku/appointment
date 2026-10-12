@@ -69,17 +69,19 @@ scenarios:
   - action: fill
     selector: '#create-appointment-client-name'
     value: Room desk booking QA
-  - action: select
+  - action: click
     selector: '#create-appointment-service'
-    value: '{qa_pool_service}'
+  - action: click
+    selector: '[role="option"][data-value="{qa_pool_service}"]'
   - action: wait_for
     selector: '#create-appointment-resource'
-  - action: select
+  - action: click
     selector: '#create-appointment-resource'
-    value: '{qa_pool_room_b}'
+  - action: click
+    selector: '[role="option"][data-value="{qa_pool_room_b}"]'
   - action: fill
     selector: '[data-qa="create-time-input"]'
-    value: '{qa_pool_time}'
+    value: '{qa_pool_time_12h}'
   - action: screenshot
     name: pool_owner_en_desktop-4-create.png
   - action: click

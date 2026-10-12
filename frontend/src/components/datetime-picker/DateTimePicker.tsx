@@ -4,9 +4,11 @@ import { Calendar as CalendarIcon, Clock } from 'lucide-react';
 import { Calendar } from '@/components/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/popover';
 import { Button } from '@/components/button';
-import { Input } from '@/components/input';
+import { TimeInput } from '@/components/time-input';
 import { Label } from '@/components/label';
 import { cn } from '@/lib/utils';
+import { intlLocale, useTranslation } from '@/lib/i18n';
+import { clockForLanguage } from '@/lib/time';
 
 export interface DateTimePickerProps {
   value?: Date;
@@ -20,9 +22,10 @@ export const DateTimePicker = ({
   value,
   onChange,
   disabled,
-  placeholder = 'Pick a date and time',
+  placeholder,
   className,
 }: DateTimePickerProps) => {
+  const { t, language } = useTranslation();
   const [open, setOpen] = React.useState(false);
   const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(value);
   const [timeValue, setTimeValue] = React.useState<string>(
@@ -65,7 +68,7 @@ export const DateTimePicker = ({
   };
 
   const displayValue = selectedDate
-    ? `${format(selectedDate, 'PP')} at ${format(selectedDate, 'HH:mm')}`
+    ? new Intl.DateTimeFormat(intlLocale(language), { dateStyle: 'medium', timeStyle: 'short' }).format(selectedDate)
     : '';
 
   return (
@@ -89,7 +92,7 @@ export const DateTimePicker = ({
           {selectedDate ? (
             <span style={{ color: 'var(--text-primary)' }}>{displayValue}</span>
           ) : (
-            <span style={{ color: 'var(--text-muted)' }}>{placeholder}</span>
+            <span style={{ color: 'var(--text-muted)' }}>{placeholder ?? t('controls.pickDateTime')}</span>
           )}
         </Button>
       </PopoverTrigger>
@@ -112,18 +115,13 @@ export const DateTimePicker = ({
             <div className="space-y-2">
               <Label className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
                 <Clock className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
-                Time
+                {t('controls.time.label')}
               </Label>
-              <Input
-                type="time"
+              <TimeInput
+                id="datetime-picker-time"
+                timeFormat={clockForLanguage(language, '12h')}
                 value={timeValue}
-                onChange={(e) => handleTimeChange(e.target.value)}
-                className="rounded-xl border-2 transition-all"
-                style={{
-                  backgroundColor: 'var(--bg-secondary)',
-                  borderColor: 'var(--border-default)',
-                  padding: '0.875rem 1.125rem',
-                }}
+                onChange={handleTimeChange}
               />
             </div>
           </div>

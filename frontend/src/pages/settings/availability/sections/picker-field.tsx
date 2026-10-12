@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Label } from '@/components/label';
-import { NativeSelect } from '@/components/native-select';
+import { OptionSelect } from '@/components/select/OptionSelect';
 import { FieldHint } from '@/components/settings-layout';
 
 interface Option { value: string; label: string }
@@ -19,7 +19,7 @@ interface PickerFieldProps {
   aside?: ReactNode;
 }
 
-/** Labelled native select; native keeps the platform picker for long lists and QA `select` actions. */
+/** Labelled standard dropdown. */
 export function PickerField({ id, label, value, onChange, placeholder, options, hint, disabled, required, qa, aside }: PickerFieldProps) {
   return (
     <div className="min-w-0">
@@ -30,22 +30,17 @@ export function PickerField({ id, label, value, onChange, placeholder, options, 
         </Label>
         {aside}
       </div>
-      <NativeSelect
+      <OptionSelect
         id={id}
         data-qa={qa}
         value={value}
-        onChange={(event) => onChange(event.target.value)}
+        onValueChange={onChange}
+        options={options}
+        placeholder={placeholder}
         disabled={disabled}
         required={required}
         aria-describedby={hint ? `${id}-hint` : undefined}
-      >
-        <option value="">{placeholder}</option>
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </NativeSelect>
+      />
       {hint && <FieldHint id={`${id}-hint`}>{hint}</FieldHint>}
     </div>
   );

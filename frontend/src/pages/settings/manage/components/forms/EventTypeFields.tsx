@@ -1,5 +1,5 @@
 import { Input } from '@/components/input';
-import { NativeSelect } from '@/components/native-select';
+import { OptionSelect } from '@/components/select/OptionSelect';
 import { Textarea } from '@/components/textarea';
 import { useTranslation } from '@/lib/i18n';
 import type { OrgOptions } from '../../types';
@@ -23,14 +23,8 @@ export function EventTypeFields({ idPrefix, values, onChange, options, creating 
       : t(`staff.manage.form.select${key}`);
     return (
       <Field id={id(field)} label={label} required>
-        <NativeSelect id={id(field)} required disabled={empty} value={values[field]} onChange={(e) => onChange(field, e.target.value)}>
-          <option value="">{placeholder}</option>
-          {items.map((item) => (
-            <option key={item.value} value={item.value}>
-              {item.label}
-            </option>
-          ))}
-        </NativeSelect>
+        <OptionSelect id={id(field)} required disabled={empty} value={values[field]} onValueChange={(next) => onChange(field, next)}
+          placeholder={placeholder} options={items} />
       </Field>
     );
   };

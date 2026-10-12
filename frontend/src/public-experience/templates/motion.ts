@@ -38,10 +38,13 @@ export function useReveal(root: RefObject<HTMLElement | null>, key: unknown = nu
     };
     const onScroll = () => { if (!frame) frame = window.requestAnimationFrame(sweep); };
     window.addEventListener("scroll", onScroll, { passive: true });
+    // A taller viewport (a rotated phone, a full-page capture) shows more items without a scroll.
+    window.addEventListener("resize", onScroll, { passive: true });
     node.dataset.motionReady = "true";
     return () => {
       observer.disconnect();
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
       if (frame) window.cancelAnimationFrame(frame);
     };
   }, [root, key]);

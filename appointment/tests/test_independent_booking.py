@@ -42,6 +42,8 @@ class IndependentBookingTests(unittest.TestCase):
         frappe.set_user("Guest")
         info = independent.public_offering(self.row["offering"])
         self.assertEqual(info["service"], "Independent consultation")
+        # The booking page shows "How many" only when the service lets customers choose.
+        self.assertEqual((info["allow_quantity"], info["max_quantity"]), (0, 1))
         day = (datetime.now() + timedelta(days=2)).date().isoformat()
         available = booking.slots(self.row["offering"], day)["all_available_slots_for_data"]
         slot = next(row for row in available if row["available"])

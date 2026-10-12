@@ -41,9 +41,10 @@ scenarios:
   - action: fill
     selector: '[data-qa="walkin-client-phone"]'
     value: '+251911402233'
-  - action: select
+  - action: click
     selector: '#service_requested'
-    value: '{qa_independent_service}'
+  - action: click
+    selector: '[role="option"][data-value="{qa_independent_service}"]'
   - action: click
     selector: '[data-qa="walkin-submit"]'
     assertions:
@@ -109,9 +110,10 @@ scenarios:
   - action: fill
     selector: '[data-qa="walkin-client-phone"]'
     value: '+251922507788'
-  - action: select
+  - action: click
     selector: '#service_requested'
-    value: '{qa_independent_service}'
+  - action: click
+    selector: '[role="option"][data-value="{qa_independent_service}"]'
   - action: click
     selector: '[data-qa="walkin-submit"]'
     assertions:

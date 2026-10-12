@@ -25,6 +25,10 @@
 @font-face { font-family: "Meron Garamond"; src: url("/assets/appointment/fonts/meron/noto-serif-ethiopic.woff2") format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+1200-139F, U+2D80-2DDF, U+AB00-AB2F; }
 @font-face { font-family: "Abugida Alegreya"; src: url("/assets/appointment/fonts/abugida/alegreya.woff2") format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+0000-02FF, U+2000-206F, U+20AC, U+2122, U+2190-2193, U+2212, U+2215; }
 @font-face { font-family: "Abugida Alegreya"; src: url("/assets/appointment/fonts/abugida/abyssinica-sil.woff2") format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+1200-139F, U+2D80-2DDF, U+AB00-AB2F; }
+@font-face { font-family: "Ergata Serif"; src: url("/assets/appointment/fonts/ergata/fraunces-soft.woff2") format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+0000-02FF, U+2000-206F, U+20AC, U+2122, U+2190-2193, U+2212, U+2215; }
+@font-face { font-family: "Ergata Serif"; src: url("/assets/appointment/fonts/ergata/noto-serif-ethiopic.woff2") format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+1200-139F, U+2D80-2DDF, U+AB00-AB2F; }
+@font-face { font-family: "Ergata Sans"; src: url("/assets/appointment/fonts/ergata/source-sans-3.woff2") format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+0000-02FF, U+2000-206F, U+20AC, U+2122, U+2190-2193, U+2212, U+2215; }
+@font-face { font-family: "Ergata Sans"; src: url("/assets/appointment/fonts/ergata/noto-sans-ethiopic.woff2") format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+1200-139F, U+2D80-2DDF, U+AB00-AB2F; }
 
 [data-booking-branded="true"] h1,
 [data-booking-branded="true"] h2,
@@ -211,4 +215,8 @@
 [data-booking-confirmation="true"] .dark\:bg-blue-900\/20 {
   background: var(--bg-secondary) !important;
   border-color: var(--border-default) !important;
+}
+
+.booking-experience[data-pe-recipe="ergata-therapy"] {
+  background-image: radial-gradient(120% 60% at 100% 0%, var(--accent-primary-light), transparent 60%);
 }

@@ -143,7 +143,8 @@ def get_public_experience_snapshot(locale: str | None = None, public_path: str |
             booking_path = f"/schedule/org/{slug}"
     elif context.provider:
         if frappe.db.get_value("Provider", context.provider, "enable_public_booking"):
-            event = frappe.db.get_value("EventType", {"provider": context.provider, "is_active": 1}, "name")
+            # The first offering the owner made is the main one; later ones are extras.
+            event = frappe.db.get_value("EventType", {"provider": context.provider, "is_active": 1}, "name", order_by="creation asc")
             if event:
                 from appointment.scheduler.booking import offering
 

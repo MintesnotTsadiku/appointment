@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { callGet, callMethod } from "@/public-experience/api";
 import { StaffShell } from '@/components/staff-shell';
 import { useTranslation } from "@/lib/i18n";
+import { OptionSelect } from "@/components/select/OptionSelect";
 
 interface Business { name: string; label: string }
 interface CellError { sheet: string; row: number; cell: string; message: string }
@@ -61,7 +62,8 @@ export default function OrganizationImport() {
     {notice && <p role="status">{notice}</p>}
     <a className={`${button} inline-block`} href={"/api/method/" + api + "download_template"}>{t("staff.orgImport.downloadTemplate")}</a>
     <p>{t("staff.orgImport.guidance")}</p>
-    <label className="block">{t("staff.availability.organization")}<select className={field} value={organization} onChange={(event) => { setOrganization(event.target.value); setReview(null); setConfirmed(false); }}><option value="">{t("staff.orgImport.createNew")}</option>{businesses.map((business) => <option key={business.name} value={business.name}>{business.label}</option>)}</select></label>
+    <label className="block">{t("staff.availability.organization")}<OptionSelect className="mt-1 h-12" data-qa="org-import-organization" value={organization} onValueChange={(next) => { setOrganization(next); setReview(null); setConfirmed(false); }}
+      options={[{ value: "", label: t("staff.orgImport.createNew") }, ...businesses.map((business) => ({ value: business.name, label: business.label }))]} /></label>
     <label className="block">{t("staff.settings.organizationImport.title")}<input className={field} type="file" accept=".xlsx" onChange={(event) => void run(() => chooseFile(event.target.files?.[0]))} /></label>
     <button className={button} disabled={busy || !content} onClick={() => void run(async () => {
       setConfirmed(false); setReview(await callMethod<Review>(api + "preview_import", { organization, content_base64: content }));
