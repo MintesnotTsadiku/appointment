@@ -35,7 +35,7 @@ export function useShowcaseDoors(enabled: boolean): ShowcaseDoor[] {
 async function loadDoor(slug: string): Promise<ShowcaseDoor | null> {
   try {
     const response = await fetch(
-      "/api/method/appointment.public_experience.api.get_public_ui_config?public_path=" + encodeURIComponent("/" + slug),
+      "/api/method/appointment.public_experience.api.get_public_ui_config?optional=1&public_path=" + encodeURIComponent("/" + slug),
       { credentials: "same-origin", headers: { Accept: "application/json" } },
     );
     if (!response.ok) return null;

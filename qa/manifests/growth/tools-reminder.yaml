@@ -30,13 +30,13 @@ scenarios:
       value: Send these reminders automatically
       selector: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="r-message-am"]'
+      value: '[data-qa="r-message-am"]'
     - type: visible_selector
-      selector: '[data-qa="tools-lang-switch"]'
+      value: '[data-qa="tools-lang-switch"]'
     - type: visible_selector
-      selector: '[data-qa="tool-cta"]'
+      value: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="tool-faq"]'
+      value: '[data-qa="tool-faq"]'
   actions:
   - action: fill
     selector: '[data-qa="r-business"]'
@@ -87,7 +87,7 @@ scenarios:
       value: 9:00 AM (3:00 Ethiopian time)
       selector: '[data-qa="r-message-en"]'
     - type: visible_selector
-      selector: '[data-qa="r-share-am"][href^="https://t.me/share/url?url="][href*="source%3Dtool_amharic-appointment-reminder"]'
+      value: '[data-qa="r-share-am"][href^="https://t.me/share/url?url="][href*="source%3Dtool_amharic-appointment-reminder"]'
   - action: screenshot
     name: reminder_en_desktop-1-sms.png
     full_page: true
@@ -129,13 +129,13 @@ scenarios:
       value: Send these reminders automatically
       selector: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="r-message-am"]'
+      value: '[data-qa="r-message-am"]'
     - type: visible_selector
-      selector: '[data-qa="tools-lang-switch"]'
+      value: '[data-qa="tools-lang-switch"]'
     - type: visible_selector
-      selector: '[data-qa="tool-cta"]'
+      value: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="tool-faq"]'
+      value: '[data-qa="tool-faq"]'
   actions:
   - action: fill
     selector: '[data-qa="r-business"]'
@@ -186,7 +186,7 @@ scenarios:
       value: 9:00 AM (3:00 Ethiopian time)
       selector: '[data-qa="r-message-en"]'
     - type: visible_selector
-      selector: '[data-qa="r-share-am"][href^="https://t.me/share/url?url="][href*="source%3Dtool_amharic-appointment-reminder"]'
+      value: '[data-qa="r-share-am"][href^="https://t.me/share/url?url="][href*="source%3Dtool_amharic-appointment-reminder"]'
   - action: screenshot
     name: reminder_en_mobile-1-sms.png
     full_page: true
@@ -228,13 +228,13 @@ scenarios:
       value: እነዚህን ማስታወሻዎች በራስ-ሰር ይላኩ
       selector: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="r-message-am"]'
+      value: '[data-qa="r-message-am"]'
     - type: visible_selector
-      selector: '[data-qa="tools-lang-switch"]'
+      value: '[data-qa="tools-lang-switch"]'
     - type: visible_selector
-      selector: '[data-qa="tool-cta"]'
+      value: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="tool-faq"]'
+      value: '[data-qa="tool-faq"]'
   actions:
   - action: fill
     selector: '[data-qa="r-business"]'
@@ -285,7 +285,7 @@ scenarios:
       value: 9:00 AM (3:00 Ethiopian time)
       selector: '[data-qa="r-message-en"]'
     - type: visible_selector
-      selector: '[data-qa="r-share-am"][href^="https://t.me/share/url?url="][href*="source%3Dtool_amharic-appointment-reminder"]'
+      value: '[data-qa="r-share-am"][href^="https://t.me/share/url?url="][href*="source%3Dtool_amharic-appointment-reminder"]'
   - action: screenshot
     name: reminder_am_desktop-1-sms.png
     full_page: true
@@ -327,13 +327,13 @@ scenarios:
       value: እነዚህን ማስታወሻዎች በራስ-ሰር ይላኩ
       selector: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="r-message-am"]'
+      value: '[data-qa="r-message-am"]'
     - type: visible_selector
-      selector: '[data-qa="tools-lang-switch"]'
+      value: '[data-qa="tools-lang-switch"]'
     - type: visible_selector
-      selector: '[data-qa="tool-cta"]'
+      value: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="tool-faq"]'
+      value: '[data-qa="tool-faq"]'
   actions:
   - action: fill
     selector: '[data-qa="r-business"]'
@@ -384,7 +384,7 @@ scenarios:
       value: 9:00 AM (3:00 Ethiopian time)
       selector: '[data-qa="r-message-en"]'
     - type: visible_selector
-      selector: '[data-qa="r-share-am"][href^="https://t.me/share/url?url="][href*="source%3Dtool_amharic-appointment-reminder"]'
+      value: '[data-qa="r-share-am"][href^="https://t.me/share/url?url="][href*="source%3Dtool_amharic-appointment-reminder"]'
   - action: screenshot
     name: reminder_am_mobile-1-sms.png
     full_page: true

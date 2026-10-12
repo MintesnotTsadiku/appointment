@@ -1,0 +1,160 @@
+# Guests open the free Ethiopian time converter in dark mode: English desktop and Amharic mobile.
+# The CTA uses the configured product name (fixture appointment.tests.tools_qa_fixtures).
+app: appointment
+base_url: http://127.0.0.146:47800
+default_role: Guest
+auth:
+  type: none
+fixtures:
+  provider: appointment.tests.tools_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-time-converter-dark
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: dark
+scenarios:
+- id: converter_en_desktop_dark
+  title: 'Converter (en, desktop): Habesha 2:00 day is 8:00 AM, night 8:00 PM; 20:00 is ምሽት 2:00; brand CTA'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /tools/ethiopian-time-converter
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_text
+      value: Ethiopian time converter
+    - type: visible_selector
+      value: '[data-qa="now-line"]'
+    - type: text_contains
+      value: Take bookings in Habesha time with {qa_product_name}
+      selector: '[data-qa="tool-cta"]'
+    - type: visible_selector
+      value: '[data-qa="tools-lang-switch"]'
+    - type: visible_selector
+      value: '[data-qa="tool-cta"]'
+    - type: visible_selector
+      value: '[data-qa="tool-faq"]'
+  actions:
+  - action: screenshot
+    name: converter_en_desktop_dark-1-open.png
+    full_page: false
+  - action: select
+    selector: '[data-qa="habesha-hour"]'
+    value: '2'
+  - action: select
+    selector: '[data-qa="habesha-minute"]'
+    value: '00'
+  - action: click
+    selector: '[data-qa="habesha-half-day"]'
+    assertions:
+    - type: text_contains
+      value: 8:00 AM
+      selector: '[data-qa="intl-result"]'
+    - type: text_contains
+      value: 8:00 PM
+      selector: '[data-qa="intl-result-other"]'
+  - action: click
+    selector: '[data-qa="habesha-half-night"]'
+    assertions:
+    - type: text_contains
+      value: 8:00 PM
+      selector: '[data-qa="intl-result"]'
+  - action: fill
+    selector: '[data-qa="intl-input"]'
+    value: '13:30'
+    assertions:
+    - type: text_contains
+      value: '7:30'
+      selector: '[data-qa="habesha-result"]'
+    - type: text_contains
+      value: ከሰዓት
+      selector: '[data-qa="habesha-result-detail"]'
+  - action: fill
+    selector: '[data-qa="intl-input"]'
+    value: '20:00'
+    assertions:
+    - type: text_contains
+      value: ምሽት
+      selector: '[data-qa="habesha-result-detail"]'
+  - action: screenshot
+    name: converter_en_desktop_dark-2-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: converter_am_mobile_dark
+  title: 'Converter (am, mobile): Habesha 2:00 day is 8:00 AM, night 8:00 PM; 20:00 is ምሽት 2:00; brand CTA'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /am/tools/ethiopian-time-converter
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_text
+      value: የኢትዮጵያ ሰዓት መቀየሪያ
+    - type: visible_selector
+      value: '[data-qa="now-line"]'
+    - type: text_contains
+      value: በ{qa_product_name} ቀጠሮዎችን በሀበሻ ሰዓት ይቀበሉ
+      selector: '[data-qa="tool-cta"]'
+    - type: visible_selector
+      value: '[data-qa="tools-lang-switch"]'
+    - type: visible_selector
+      value: '[data-qa="tool-cta"]'
+    - type: visible_selector
+      value: '[data-qa="tool-faq"]'
+  actions:
+  - action: screenshot
+    name: converter_am_mobile_dark-1-open.png
+    full_page: false
+  - action: select
+    selector: '[data-qa="habesha-hour"]'
+    value: '2'
+  - action: select
+    selector: '[data-qa="habesha-minute"]'
+    value: '00'
+  - action: click
+    selector: '[data-qa="habesha-half-day"]'
+    assertions:
+    - type: text_contains
+      value: 8:00 AM
+      selector: '[data-qa="intl-result"]'
+    - type: text_contains
+      value: 8:00 PM
+      selector: '[data-qa="intl-result-other"]'
+  - action: click
+    selector: '[data-qa="habesha-half-night"]'
+    assertions:
+    - type: text_contains
+      value: 8:00 PM
+      selector: '[data-qa="intl-result"]'
+  - action: fill
+    selector: '[data-qa="intl-input"]'
+    value: '13:30'
+    assertions:
+    - type: text_contains
+      value: ከሰዓት 7:30
+      selector: '[data-qa="habesha-result"]'
+    - type: text_contains
+      value: ከሰዓት
+      selector: '[data-qa="habesha-result-detail"]'
+  - action: fill
+    selector: '[data-qa="intl-input"]'
+    value: '20:00'
+    assertions:
+    - type: text_contains
+      value: ምሽት
+      selector: '[data-qa="habesha-result-detail"]'
+  - action: screenshot
+    name: converter_am_mobile_dark-2-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors

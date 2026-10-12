@@ -236,6 +236,11 @@ class TestDirectory(ShowoffCase):
         self.assertTrue(state["published"])
         self.assertEqual(state["area"], "bole", "The location name mentions Bole.")
         self.assertTrue(any(row["value"] == "salon-barber" for row in state["categories"]))
+        # Labels follow the staff app's language, not the account language.
+        labels = {lang: next(row["label"] for row in directory.owner_listing(business.key, lang)["categories"]
+                             if row["value"] == "salon-barber") for lang in ("en", "am")}
+        self.assertNotEqual(labels["en"], labels["am"])
+        self.assertTrue(labels["en"].isascii())
 
     def test_only_opted_in_published_businesses_appear(self):
         listed = self._org("Saron Hair Lounge")

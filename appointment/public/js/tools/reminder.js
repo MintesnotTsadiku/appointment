@@ -229,9 +229,16 @@
 
   C.onReady(function () {
     var tool = C.byQa("reminder-tool");
-    tool.addEventListener("input", render);
+    function switchesSystem(event) {
+      return event.target.name === "r-clock" || event.target.name === "r-calendar";
+    }
+    // A radio fires "input" before "change". Convert on "change" first, so the
+    // previous moment is not lost to a render with the new system's stale fields.
+    tool.addEventListener("input", function (event) {
+      if (!switchesSystem(event)) render();
+    });
     tool.addEventListener("change", function (event) {
-      if (event.target.name === "r-clock" || event.target.name === "r-calendar") convertInputs(event);
+      if (switchesSystem(event)) convertInputs(event);
       render();
     });
     document.querySelectorAll("[data-copy]").forEach(function (button) {

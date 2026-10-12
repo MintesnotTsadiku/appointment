@@ -30,7 +30,7 @@ scenarios:
       value: Show these hours on your own booking page
       selector: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="sign"]'
+      value: '[data-qa="sign"]'
     - type: text_contains
       value: 8:30 AM – 5:30 PM
       selector: '[data-qa="sign-hours"]'
@@ -38,11 +38,11 @@ scenarios:
       value: ጠዋት 2:30 – ከሰዓት 11:30
       selector: '[data-qa="sign-hours"]'
     - type: visible_selector
-      selector: '[data-qa="tools-lang-switch"]'
+      value: '[data-qa="tools-lang-switch"]'
     - type: visible_selector
-      selector: '[data-qa="tool-cta"]'
+      value: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="tool-faq"]'
+      value: '[data-qa="tool-faq"]'
   actions:
   - action: fill
     selector: '[data-qa="s-business"]'
@@ -68,14 +68,14 @@ scenarios:
     value: example.com/selam
     assertions:
     - type: visible_selector
-      selector: '[data-qa="sign-book"]'
+      value: '[data-qa="sign-book"]'
   - action: click
     selector: '[data-qa="s-theme-brand"]'
     assertions:
     - type: visible_selector
-      selector: '[data-qa="sign"][data-theme="brand"]'
+      value: '[data-qa="sign"][data-theme="brand"]'
     - type: visible_selector
-      selector: '[data-qa="s-color"]'
+      value: '[data-qa="s-color"]'
   - action: click
     selector: '[data-qa="s-paper-a5"]'
   - action: screenshot
@@ -85,7 +85,7 @@ scenarios:
     url: /tools/business-hours-sign?view=print#s={qa_sign_hash}
     assertions:
     - type: visible_selector
-      selector: html.print-preview [data-qa="sign"]
+      value: html.print-preview [data-qa="sign"]
     - type: text_contains
       value: ዝግ ነው · Closed
       selector: '[data-qa="sign-hours"]'
@@ -112,7 +112,7 @@ scenarios:
       value: Show these hours on your own booking page
       selector: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="sign"]'
+      value: '[data-qa="sign"]'
     - type: text_contains
       value: 8:30 AM – 5:30 PM
       selector: '[data-qa="sign-hours"]'
@@ -120,11 +120,11 @@ scenarios:
       value: ጠዋት 2:30 – ከሰዓት 11:30
       selector: '[data-qa="sign-hours"]'
     - type: visible_selector
-      selector: '[data-qa="tools-lang-switch"]'
+      value: '[data-qa="tools-lang-switch"]'
     - type: visible_selector
-      selector: '[data-qa="tool-cta"]'
+      value: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="tool-faq"]'
+      value: '[data-qa="tool-faq"]'
   actions:
   - action: fill
     selector: '[data-qa="s-business"]'
@@ -150,14 +150,14 @@ scenarios:
     value: example.com/selam
     assertions:
     - type: visible_selector
-      selector: '[data-qa="sign-book"]'
+      value: '[data-qa="sign-book"]'
   - action: click
     selector: '[data-qa="s-theme-brand"]'
     assertions:
     - type: visible_selector
-      selector: '[data-qa="sign"][data-theme="brand"]'
+      value: '[data-qa="sign"][data-theme="brand"]'
     - type: visible_selector
-      selector: '[data-qa="s-color"]'
+      value: '[data-qa="s-color"]'
   - action: click
     selector: '[data-qa="s-paper-a5"]'
   - action: screenshot
@@ -167,7 +167,7 @@ scenarios:
     url: /tools/business-hours-sign?view=print#s={qa_sign_hash}
     assertions:
     - type: visible_selector
-      selector: html.print-preview [data-qa="sign"]
+      value: html.print-preview [data-qa="sign"]
     - type: text_contains
       value: ዝግ ነው · Closed
       selector: '[data-qa="sign-hours"]'
@@ -194,7 +194,7 @@ scenarios:
       value: እነዚህን ሰዓቶች በራስዎ የቀጠሮ ገጽ ያሳዩ
       selector: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="sign"]'
+      value: '[data-qa="sign"]'
     - type: text_contains
       value: 8:30 AM – 5:30 PM
       selector: '[data-qa="sign-hours"]'
@@ -202,11 +202,11 @@ scenarios:
       value: ጠዋት 2:30 – ከሰዓት 11:30
       selector: '[data-qa="sign-hours"]'
     - type: visible_selector
-      selector: '[data-qa="tools-lang-switch"]'
+      value: '[data-qa="tools-lang-switch"]'
     - type: visible_selector
-      selector: '[data-qa="tool-cta"]'
+      value: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="tool-faq"]'
+      value: '[data-qa="tool-faq"]'
   actions:
   - action: fill
     selector: '[data-qa="s-business"]'
@@ -232,14 +232,14 @@ scenarios:
     value: example.com/selam
     assertions:
     - type: visible_selector
-      selector: '[data-qa="sign-book"]'
+      value: '[data-qa="sign-book"]'
   - action: click
     selector: '[data-qa="s-theme-brand"]'
     assertions:
     - type: visible_selector
-      selector: '[data-qa="sign"][data-theme="brand"]'
+      value: '[data-qa="sign"][data-theme="brand"]'
     - type: visible_selector
-      selector: '[data-qa="s-color"]'
+      value: '[data-qa="s-color"]'
   - action: click
     selector: '[data-qa="s-paper-a5"]'
   - action: screenshot
@@ -249,7 +249,7 @@ scenarios:
     url: /am/tools/business-hours-sign?view=print#s={qa_sign_hash}
     assertions:
     - type: visible_selector
-      selector: html.print-preview [data-qa="sign"]
+      value: html.print-preview [data-qa="sign"]
     - type: text_contains
       value: ዝግ ነው · Closed
       selector: '[data-qa="sign-hours"]'
@@ -276,7 +276,7 @@ scenarios:
       value: እነዚህን ሰዓቶች በራስዎ የቀጠሮ ገጽ ያሳዩ
       selector: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="sign"]'
+      value: '[data-qa="sign"]'
     - type: text_contains
       value: 8:30 AM – 5:30 PM
       selector: '[data-qa="sign-hours"]'
@@ -284,11 +284,11 @@ scenarios:
       value: ጠዋት 2:30 – ከሰዓት 11:30
       selector: '[data-qa="sign-hours"]'
     - type: visible_selector
-      selector: '[data-qa="tools-lang-switch"]'
+      value: '[data-qa="tools-lang-switch"]'
     - type: visible_selector
-      selector: '[data-qa="tool-cta"]'
+      value: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="tool-faq"]'
+      value: '[data-qa="tool-faq"]'
   actions:
   - action: fill
     selector: '[data-qa="s-business"]'
@@ -314,14 +314,14 @@ scenarios:
     value: example.com/selam
     assertions:
     - type: visible_selector
-      selector: '[data-qa="sign-book"]'
+      value: '[data-qa="sign-book"]'
   - action: click
     selector: '[data-qa="s-theme-brand"]'
     assertions:
     - type: visible_selector
-      selector: '[data-qa="sign"][data-theme="brand"]'
+      value: '[data-qa="sign"][data-theme="brand"]'
     - type: visible_selector
-      selector: '[data-qa="s-color"]'
+      value: '[data-qa="s-color"]'
   - action: click
     selector: '[data-qa="s-paper-a5"]'
   - action: screenshot
@@ -331,7 +331,7 @@ scenarios:
     url: /am/tools/business-hours-sign?view=print#s={qa_sign_hash}
     assertions:
     - type: visible_selector
-      selector: html.print-preview [data-qa="sign"]
+      value: html.print-preview [data-qa="sign"]
     - type: text_contains
       value: ዝግ ነው · Closed
       selector: '[data-qa="sign-hours"]'

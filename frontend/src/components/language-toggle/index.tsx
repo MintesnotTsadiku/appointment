@@ -3,7 +3,6 @@ import { Globe } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n';
 
 const SHORT_LABEL: Record<string, string> = { en: 'EN', am: 'አማ' };
-const FLAG: Record<string, string> = { en: '🇺🇸', am: '🇪🇹' };
 
 const LanguageToggle = () => {
   const { language, setLanguage, languages } = useTranslation();
@@ -35,9 +34,6 @@ const LanguageToggle = () => {
           className="text-sm font-medium text-gray-700 dark:text-gray-300"
         >
           {SHORT_LABEL[language] ?? language.toUpperCase()}
-        </span>
-        <span className="text-xs text-gray-500 dark:text-gray-500">
-          {FLAG[language] ?? '🌐'}
         </span>
       </motion.div>
     </button>

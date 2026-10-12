@@ -50,19 +50,15 @@ scenarios:
       value: '[data-qa="landing-world"][data-world="amharic"]'
   - action: click
     selector: '[data-qa="landing-amharic-am"]'
-    assertions:
-    - type: text_contains
-      selector: '[data-qa="landing-amharic-sample"]'
-      value: ቀጠሮ ይያዙ
+  - action: wait_for
+    selector: '[data-qa="landing-amharic-sample"] .lw-am-book:text-is("ቀጠሮ ይያዙ")'
   - action: screenshot
     name: landing-en-amharic-chapter.png
     full_page: false
   - action: click
     selector: '[data-qa="landing-amharic-en"]'
-    assertions:
-    - type: text_contains
-      selector: '[data-qa="landing-amharic-sample"]'
-      value: Book an appointment
+  - action: wait_for
+    selector: '[data-qa="landing-amharic-sample"] .lw-am-book:text-is("Book an appointment")'
   - action: scroll
     delta_y: 5000
   - action: scroll

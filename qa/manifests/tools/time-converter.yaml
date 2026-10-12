@@ -1,4 +1,4 @@
-# Guests open the free Ethiopian time converter in English and Amharic. No sign-in. Nothing is saved.
+# Guests open the free Ethiopian time converter in English. No sign-in. Nothing is saved. Amharic: time-converter-am.yaml.
 # The CTA uses the configured product name (fixture appointment.tests.tools_qa_fixtures).
 app: appointment
 base_url: http://127.0.0.146:47800
@@ -30,16 +30,16 @@ scenarios:
     - type: visible_text
       value: Ethiopian time converter
     - type: visible_selector
-      selector: '[data-qa="now-line"]'
+      value: '[data-qa="now-line"]'
     - type: text_contains
       value: Take bookings in Habesha time with {qa_product_name}
       selector: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="tools-lang-switch"]'
+      value: '[data-qa="tools-lang-switch"]'
     - type: visible_selector
-      selector: '[data-qa="tool-cta"]'
+      value: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="tool-faq"]'
+      value: '[data-qa="tool-faq"]'
   actions:
   - action: screenshot
     name: converter_en_desktop-1-open.png
@@ -101,16 +101,16 @@ scenarios:
     - type: visible_text
       value: Ethiopian time converter
     - type: visible_selector
-      selector: '[data-qa="now-line"]'
+      value: '[data-qa="now-line"]'
     - type: text_contains
       value: Take bookings in Habesha time with {qa_product_name}
       selector: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="tools-lang-switch"]'
+      value: '[data-qa="tools-lang-switch"]'
     - type: visible_selector
-      selector: '[data-qa="tool-cta"]'
+      value: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="tool-faq"]'
+      value: '[data-qa="tool-faq"]'
   actions:
   - action: screenshot
     name: converter_en_mobile-1-open.png
@@ -155,148 +155,6 @@ scenarios:
       selector: '[data-qa="habesha-result-detail"]'
   - action: screenshot
     name: converter_en_mobile-2-full.png
-    full_page: true
-  - action: get_console_errors
-  - action: get_network_errors
-- id: converter_am_desktop
-  title: 'Converter (am, desktop): Habesha 2:00 day is 8:00 AM, night 8:00 PM; 20:00 is ምሽት 2:00; brand CTA'
-  viewport:
-    width: 1440
-    height: 900
-  checks: []
-  routes:
-  - path: /am/tools/ethiopian-time-converter
-    assertions:
-    - type: network_idle
-    - type: no_blank_page
-    - type: visible_text
-      value: የኢትዮጵያ ሰዓት መቀየሪያ
-    - type: visible_selector
-      selector: '[data-qa="now-line"]'
-    - type: text_contains
-      value: በ{qa_product_name} ቀጠሮዎችን በሀበሻ ሰዓት ይቀበሉ
-      selector: '[data-qa="tool-cta"]'
-    - type: visible_selector
-      selector: '[data-qa="tools-lang-switch"]'
-    - type: visible_selector
-      selector: '[data-qa="tool-cta"]'
-    - type: visible_selector
-      selector: '[data-qa="tool-faq"]'
-  actions:
-  - action: screenshot
-    name: converter_am_desktop-1-open.png
-    full_page: false
-  - action: select
-    selector: '[data-qa="habesha-hour"]'
-    value: '2'
-  - action: select
-    selector: '[data-qa="habesha-minute"]'
-    value: '00'
-  - action: click
-    selector: '[data-qa="habesha-half-day"]'
-    assertions:
-    - type: text_contains
-      value: 8:00 AM
-      selector: '[data-qa="intl-result"]'
-    - type: text_contains
-      value: 8:00 PM
-      selector: '[data-qa="intl-result-other"]'
-  - action: click
-    selector: '[data-qa="habesha-half-night"]'
-    assertions:
-    - type: text_contains
-      value: 8:00 PM
-      selector: '[data-qa="intl-result"]'
-  - action: fill
-    selector: '[data-qa="intl-input"]'
-    value: '13:30'
-    assertions:
-    - type: text_contains
-      value: ከሰዓት 7:30
-      selector: '[data-qa="habesha-result"]'
-    - type: text_contains
-      value: ከሰዓት
-      selector: '[data-qa="habesha-result-detail"]'
-  - action: fill
-    selector: '[data-qa="intl-input"]'
-    value: '20:00'
-    assertions:
-    - type: text_contains
-      value: ምሽት
-      selector: '[data-qa="habesha-result-detail"]'
-  - action: screenshot
-    name: converter_am_desktop-2-full.png
-    full_page: true
-  - action: get_console_errors
-  - action: get_network_errors
-- id: converter_am_mobile
-  title: 'Converter (am, mobile): Habesha 2:00 day is 8:00 AM, night 8:00 PM; 20:00 is ምሽት 2:00; brand CTA'
-  viewport:
-    width: 390
-    height: 844
-  checks: []
-  routes:
-  - path: /am/tools/ethiopian-time-converter
-    assertions:
-    - type: network_idle
-    - type: no_blank_page
-    - type: visible_text
-      value: የኢትዮጵያ ሰዓት መቀየሪያ
-    - type: visible_selector
-      selector: '[data-qa="now-line"]'
-    - type: text_contains
-      value: በ{qa_product_name} ቀጠሮዎችን በሀበሻ ሰዓት ይቀበሉ
-      selector: '[data-qa="tool-cta"]'
-    - type: visible_selector
-      selector: '[data-qa="tools-lang-switch"]'
-    - type: visible_selector
-      selector: '[data-qa="tool-cta"]'
-    - type: visible_selector
-      selector: '[data-qa="tool-faq"]'
-  actions:
-  - action: screenshot
-    name: converter_am_mobile-1-open.png
-    full_page: false
-  - action: select
-    selector: '[data-qa="habesha-hour"]'
-    value: '2'
-  - action: select
-    selector: '[data-qa="habesha-minute"]'
-    value: '00'
-  - action: click
-    selector: '[data-qa="habesha-half-day"]'
-    assertions:
-    - type: text_contains
-      value: 8:00 AM
-      selector: '[data-qa="intl-result"]'
-    - type: text_contains
-      value: 8:00 PM
-      selector: '[data-qa="intl-result-other"]'
-  - action: click
-    selector: '[data-qa="habesha-half-night"]'
-    assertions:
-    - type: text_contains
-      value: 8:00 PM
-      selector: '[data-qa="intl-result"]'
-  - action: fill
-    selector: '[data-qa="intl-input"]'
-    value: '13:30'
-    assertions:
-    - type: text_contains
-      value: ከሰዓት 7:30
-      selector: '[data-qa="habesha-result"]'
-    - type: text_contains
-      value: ከሰዓት
-      selector: '[data-qa="habesha-result-detail"]'
-  - action: fill
-    selector: '[data-qa="intl-input"]'
-    value: '20:00'
-    assertions:
-    - type: text_contains
-      value: ምሽት
-      selector: '[data-qa="habesha-result-detail"]'
-  - action: screenshot
-    name: converter_am_mobile-2-full.png
     full_page: true
   - action: get_console_errors
   - action: get_network_errors

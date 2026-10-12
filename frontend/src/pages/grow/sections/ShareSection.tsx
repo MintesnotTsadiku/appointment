@@ -24,7 +24,9 @@ export default function ShareSection({ data }: { data: GrowContext }) {
     }),
     [data.messages.templates, name, tracked.telegram_share]
   );
-  const [lang, setLang] = useState<Lang>(language === 'am' ? 'am' : 'en');
+  // The message follows the app language until the owner picks one.
+  const [picked, setLang] = useState<Lang | null>(null);
+  const lang: Lang = picked ?? (language === 'am' ? 'am' : 'en');
   const [drafts, setDrafts] = useState<Record<Lang, string>>(initial);
   const message = drafts[lang];
   const edited = message !== initial[lang];

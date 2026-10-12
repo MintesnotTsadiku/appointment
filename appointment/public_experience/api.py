@@ -12,7 +12,7 @@ from appointment.content.monitoring import observed
 from appointment.public_experience import access, brand_compiler, publisher
 from appointment.public_experience import public_config
 from appointment.public_experience import resolver as resolver_module
-from appointment.public_experience.errors import BrandExperienceError, StaleDraftError
+from appointment.public_experience.errors import BrandExperienceError, PublicResolutionError, StaleDraftError
 from appointment.public_experience.recipes import list_recipes
 from appointment.public_experience.reserved import normalize_slug
 
@@ -102,7 +102,9 @@ def _request_path() -> str:
 
 
 @frappe.whitelist(allow_guest=True, methods=["GET"])
-def get_public_ui_config(locale: str | None = None, public_path: str | None = None):
+def get_public_ui_config(locale: str | None = None, public_path: str | None = None, optional: int | str = 0):
+    """Return the public UI config. With `optional`, a path that has no published site returns None
+    (status 200) instead of a 404: callers such as the booking page theme a business only when it has one."""
     from appointment.public_experience import observability
 
     try:
@@ -110,6 +112,11 @@ def get_public_ui_config(locale: str | None = None, public_path: str | None = No
             _request_host(), public_path if public_path is not None else _request_path(), locale
         )
         result = public_config.config_from_resolved(context).as_dict()
+    except PublicResolutionError as exc:
+        observability.record("resolve_rejected", reason=exc.details.get("reason"))
+        if frappe.utils.cint(optional):
+            return None
+        raise
     except BrandExperienceError as exc:
         observability.record("resolve_rejected", reason=exc.details.get("reason"))
         raise
@@ -118,10 +125,16 @@ def get_public_ui_config(locale: str | None = None, public_path: str | None = No
 
 
 @frappe.whitelist(allow_guest=True, methods=["GET"])
-def get_public_experience_snapshot(locale: str | None = None, public_path: str | None = None):
-    context = resolver_module.resolve_public_experience(
-        _request_host(), public_path if public_path is not None else _request_path(), locale
-    )
+def get_public_experience_snapshot(locale: str | None = None, public_path: str | None = None, optional: int | str = 0):
+    """The published snapshot. With `optional`, a path without a published site returns None instead of a 404."""
+    try:
+        context = resolver_module.resolve_public_experience(
+            _request_host(), public_path if public_path is not None else _request_path(), locale
+        )
+    except PublicResolutionError:
+        if frappe.utils.cint(optional):
+            return None
+        raise
     snapshot = resolver_module.public_snapshot(context.release)
     booking_path = None
     if context.organization:

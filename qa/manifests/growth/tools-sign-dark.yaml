@@ -1,0 +1,181 @@
+# Guests build a bilingual opening-hours sign; the print preview (?view=print) shows the @media print layout. Dark mode: English desktop and Amharic mobile.
+app: appointment
+base_url: http://127.0.0.146:47800
+default_role: Guest
+auth:
+  type: none
+fixtures:
+  provider: appointment.tests.tools_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-tools-sign-dark
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: dark
+scenarios:
+- id: sign_en_desktop_dark
+  title: 'Sign (en, desktop): lunch break, both clocks, closed Sunday, brand colour, print preview'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /tools/business-hours-sign
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: text_contains
+      value: Show these hours on your own booking page
+      selector: '[data-qa="tool-cta"]'
+    - type: visible_selector
+      value: '[data-qa="sign"]'
+    - type: text_contains
+      value: 8:30 AM – 5:30 PM
+      selector: '[data-qa="sign-hours"]'
+    - type: text_contains
+      value: ጠዋት 2:30 – ከሰዓት 11:30
+      selector: '[data-qa="sign-hours"]'
+    - type: visible_selector
+      value: '[data-qa="tools-lang-switch"]'
+    - type: visible_selector
+      value: '[data-qa="tool-cta"]'
+    - type: visible_selector
+      value: '[data-qa="tool-faq"]'
+  actions:
+  - action: fill
+    selector: '[data-qa="s-business"]'
+    value: ሰላም የውበት ሳሎን
+    assertions:
+    - type: text_contains
+      value: ሰላም የውበት ሳሎን
+      selector: '[data-qa="sign-name"]'
+  - action: click
+    selector: '[data-qa="s-add-break-0"]'
+    assertions:
+    - type: text_contains
+      value: 8:30 AM – 12:30 PM
+      selector: '[data-qa="sign-hours"]'
+    - type: text_contains
+      value: ከሰዓት 7:30 – 11:30
+      selector: '[data-qa="sign-hours"]'
+  - action: fill
+    selector: '[data-qa="s-phone"]'
+    value: 0911 234 567
+  - action: fill
+    selector: '[data-qa="s-link"]'
+    value: example.com/selam
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="sign-book"]'
+  - action: click
+    selector: '[data-qa="s-theme-brand"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="sign"][data-theme="brand"]'
+    - type: visible_selector
+      value: '[data-qa="s-color"]'
+  - action: click
+    selector: '[data-qa="s-paper-a5"]'
+  - action: screenshot
+    name: sign_en_desktop_dark-1-editor.png
+    full_page: true
+  - action: open_url
+    url: /tools/business-hours-sign?view=print#s={qa_sign_hash}
+    assertions:
+    - type: visible_selector
+      value: html.print-preview [data-qa="sign"]
+    - type: text_contains
+      value: ዝግ ነው · Closed
+      selector: '[data-qa="sign-hours"]'
+    - type: text_contains
+      value: 0911 234 567
+      selector: '[data-qa="sign-contact"]'
+  - action: screenshot
+    name: sign_en_desktop_dark-2-print-preview.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: sign_am_mobile_dark
+  title: 'Sign (am, mobile): lunch break, both clocks, closed Sunday, brand colour, print preview'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /am/tools/business-hours-sign
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: text_contains
+      value: እነዚህን ሰዓቶች በራስዎ የቀጠሮ ገጽ ያሳዩ
+      selector: '[data-qa="tool-cta"]'
+    - type: visible_selector
+      value: '[data-qa="sign"]'
+    - type: text_contains
+      value: 8:30 AM – 5:30 PM
+      selector: '[data-qa="sign-hours"]'
+    - type: text_contains
+      value: ጠዋት 2:30 – ከሰዓት 11:30
+      selector: '[data-qa="sign-hours"]'
+    - type: visible_selector
+      value: '[data-qa="tools-lang-switch"]'
+    - type: visible_selector
+      value: '[data-qa="tool-cta"]'
+    - type: visible_selector
+      value: '[data-qa="tool-faq"]'
+  actions:
+  - action: fill
+    selector: '[data-qa="s-business"]'
+    value: ሰላም የውበት ሳሎን
+    assertions:
+    - type: text_contains
+      value: ሰላም የውበት ሳሎን
+      selector: '[data-qa="sign-name"]'
+  - action: click
+    selector: '[data-qa="s-add-break-0"]'
+    assertions:
+    - type: text_contains
+      value: 8:30 AM – 12:30 PM
+      selector: '[data-qa="sign-hours"]'
+    - type: text_contains
+      value: ከሰዓት 7:30 – 11:30
+      selector: '[data-qa="sign-hours"]'
+  - action: fill
+    selector: '[data-qa="s-phone"]'
+    value: 0911 234 567
+  - action: fill
+    selector: '[data-qa="s-link"]'
+    value: example.com/selam
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="sign-book"]'
+  - action: click
+    selector: '[data-qa="s-theme-brand"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="sign"][data-theme="brand"]'
+    - type: visible_selector
+      value: '[data-qa="s-color"]'
+  - action: click
+    selector: '[data-qa="s-paper-a5"]'
+  - action: screenshot
+    name: sign_am_mobile_dark-1-editor.png
+    full_page: true
+  - action: open_url
+    url: /am/tools/business-hours-sign?view=print#s={qa_sign_hash}
+    assertions:
+    - type: visible_selector
+      value: html.print-preview [data-qa="sign"]
+    - type: text_contains
+      value: ዝግ ነው · Closed
+      selector: '[data-qa="sign-hours"]'
+    - type: text_contains
+      value: 0911 234 567
+      selector: '[data-qa="sign-contact"]'
+  - action: screenshot
+    name: sign_am_mobile_dark-2-print-preview.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors

@@ -134,10 +134,11 @@ scenarios:
     name: share_solo_en_mobile_dark_slug-3-changed.png
   - action: open_url
     url: /{qa_share_solo_slug}?source=qr_poster
-  - action: wait_for_url_contains
-    value: '/{qa_share_solo_new_slug}?source=qr_poster'
   - action: wait_for
     selector: 'main:not([data-pe-unavailable])'
+    assertions:
+    - type: url_contains
+      value: '/{qa_share_solo_new_slug}?source=qr_poster'
   - action: screenshot
     name: share_solo_en_mobile_dark_slug-4-forwarded.png
   - action: open_url

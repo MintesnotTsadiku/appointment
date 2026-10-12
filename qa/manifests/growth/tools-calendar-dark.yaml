@@ -30,13 +30,13 @@ scenarios:
       value: '{qa_today_en}'
       selector: '[data-qa="calendar-today-ethiopian"]'
     - type: visible_selector
-      selector: '[data-qa="months-table"]'
+      value: '[data-qa="months-table"]'
     - type: visible_selector
-      selector: '[data-qa="tools-lang-switch"]'
+      value: '[data-qa="tools-lang-switch"]'
     - type: visible_selector
-      selector: '[data-qa="tool-cta"]'
+      value: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="tool-faq"]'
+      value: '[data-qa="tool-faq"]'
   actions:
   - action: screenshot
     name: calendar_en_desktop_dark-1-open.png
@@ -93,13 +93,13 @@ scenarios:
       value: '{qa_today_en}'
       selector: '[data-qa="calendar-today-ethiopian"]'
     - type: visible_selector
-      selector: '[data-qa="months-table"]'
+      value: '[data-qa="months-table"]'
     - type: visible_selector
-      selector: '[data-qa="tools-lang-switch"]'
+      value: '[data-qa="tools-lang-switch"]'
     - type: visible_selector
-      selector: '[data-qa="tool-cta"]'
+      value: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="tool-faq"]'
+      value: '[data-qa="tool-faq"]'
   actions:
   - action: screenshot
     name: calendar_en_mobile_dark-1-open.png
@@ -156,13 +156,13 @@ scenarios:
       value: '{qa_today_am}'
       selector: '[data-qa="calendar-today-ethiopian"]'
     - type: visible_selector
-      selector: '[data-qa="months-table"]'
+      value: '[data-qa="months-table"]'
     - type: visible_selector
-      selector: '[data-qa="tools-lang-switch"]'
+      value: '[data-qa="tools-lang-switch"]'
     - type: visible_selector
-      selector: '[data-qa="tool-cta"]'
+      value: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="tool-faq"]'
+      value: '[data-qa="tool-faq"]'
   actions:
   - action: screenshot
     name: calendar_am_desktop_dark-1-open.png
@@ -219,13 +219,13 @@ scenarios:
       value: '{qa_today_am}'
       selector: '[data-qa="calendar-today-ethiopian"]'
     - type: visible_selector
-      selector: '[data-qa="months-table"]'
+      value: '[data-qa="months-table"]'
     - type: visible_selector
-      selector: '[data-qa="tools-lang-switch"]'
+      value: '[data-qa="tools-lang-switch"]'
     - type: visible_selector
-      selector: '[data-qa="tool-cta"]'
+      value: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="tool-faq"]'
+      value: '[data-qa="tool-faq"]'
   actions:
   - action: screenshot
     name: calendar_am_mobile_dark-1-open.png

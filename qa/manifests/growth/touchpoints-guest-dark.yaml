@@ -88,6 +88,11 @@ scenarios:
   - action: screenshot
     name: tp_am_mobile-1-confirmation.png
     full_page: true
+  - action: press
+    selector: '[data-qa="business-prompt-start"]'
+    key: Shift
+  - action: screenshot
+    name: tp_am_mobile-1b-confirmation-growth.png
   - action: click
     selector: '[data-qa="business-prompt-dismiss"]'
   - action: wait_for

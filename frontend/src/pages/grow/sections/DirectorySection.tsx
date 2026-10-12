@@ -41,7 +41,7 @@ export default function DirectorySection() {
   const { organization, manager } = useAnalyticsScope();
   const key = organization && manager ? `directory-listing-${organization}-${language}` : null;
   const { data, error, isLoading, mutate } = useFrappeGetCall<{ message: Listing }>(
-    'appointment.growth.directory.owner_listing', organization ? { owner_key: organization } : undefined, key, { revalidateOnFocus: false },
+    'appointment.growth.directory.owner_listing', organization ? { owner_key: organization, lang: language } : undefined, key, { revalidateOnFocus: false },
   );
   const { call: save, loading: saving } = useFrappePostCall<{ message: Listing }>('appointment.growth.directory.save_owner_listing');
   const listing = data?.message;
@@ -57,7 +57,7 @@ export default function DirectorySection() {
   const incomplete = form.listed && (!form.category || !form.area);
   const submit = async () => {
     try {
-      const result = await save({ owner_key: organization, listed: form.listed ? 1 : 0, category: form.category || null, area: form.area || null });
+      const result = await save({ owner_key: organization, listed: form.listed ? 1 : 0, category: form.category || null, area: form.area || null, lang: language });
       await mutate(result, { revalidate: false });
       toast.success(form.listed ? tr('listedToast') : tr('hiddenToast'));
     } catch {

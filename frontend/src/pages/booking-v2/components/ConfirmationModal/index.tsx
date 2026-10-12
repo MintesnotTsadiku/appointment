@@ -12,7 +12,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/dialog";
-import { useTranslation } from "@/lib/i18n";
+import { intlLocale, useTranslation } from "@/lib/i18n";
 import { usePlatformBrand } from "@/lib/platform-brand";
 import BusinessPrompt from "@/components/business-prompt";
 import CustomerShareCard from "@/components/growth-referrals/CustomerShareCard";
@@ -45,7 +45,7 @@ export function ConfirmationModal({
   userEmail,
   brandStyle,
 }: ConfirmationModalProps) {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const { growth } = usePlatformBrand();
   const [copied, setCopied] = useState<string | null>(null);
   const emailQueued = bookingResponse.notificationStatus === "queued";
@@ -147,7 +147,7 @@ export function ConfirmationModal({
               <div className="flex-1 min-w-0">
                 <p className="text-sm text-gray-600 dark:text-gray-400">{t("customerBooking.dateTime")}</p>
                 <p className="font-semibold text-gray-900 dark:text-gray-100 text-lg">
-                  {formatDate(selectedDate, 'full')}
+                  {formatDate(selectedDate, 'full', intlLocale(language))}
                 </p>
                 <p className="text-gray-900 dark:text-gray-100 mt-1">
                   {formattedTime} • {service.duration} {t("customerBooking.minutes")}

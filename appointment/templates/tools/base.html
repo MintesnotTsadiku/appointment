@@ -57,7 +57,7 @@
 </header>
 <main id="main" class="wrap">
   <div class="hero">
-    <p class="eyebrow">{{ icon("sparkles") }}{{ t("tools.common.freeTool") }}</p>
+    <p class="eyebrow">{{ icon("sparkles") }}{{ t("tools.common.freeTool") if tool.slug else t("tools.common.freeIndex") }}</p>
     <h1>{{ h1 }}</h1>
     {% block hero %}{% endblock %}
   </div>

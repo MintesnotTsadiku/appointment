@@ -16,6 +16,8 @@ const ROUTES_WITH_INTEGRATED_TOGGLE = [
   // Staff pages render the theme control in StaffShell's top bar.
   '/reception',
   '/home',
+  '/grow',
+  '/customers',
   '/settings',
   '/analytics',
   '/calendar',

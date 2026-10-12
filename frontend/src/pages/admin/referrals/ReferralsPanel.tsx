@@ -17,7 +17,7 @@ export function ReferralsPanel({ rows }: { rows: AdminReferral[] }) {
   return (
     <ul data-qa="admin-referrals-list" className="divide-y rounded-xl border bg-card">
       {rows.map((row) => (
-        <li key={row.name} data-qa="admin-referral-row" className="grid gap-3 px-4 py-3 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1fr)_auto] md:items-center">
+        <li key={row.name} data-qa="admin-referral-row" className="grid gap-3 px-4 py-3 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1fr)_8rem] md:items-center">
           <div className="min-w-0">
             <p className="truncate font-medium text-foreground">{row.referred_name}</p>
             <p className="text-xs text-muted-foreground">{fill(t('staff.referralsAdmin.joined'), date(row.joined_on))}</p>

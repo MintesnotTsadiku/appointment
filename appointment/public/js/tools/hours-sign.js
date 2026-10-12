@@ -145,7 +145,7 @@
       var toggle = document.createElement("label");
       toggle.className = "switch";
       toggle.innerHTML = '<input type="checkbox" data-qa="s-open-' + index + '"' + (ranges.length ? " checked" : "") +
-        '><span class="track"></span><span>' + C.fmt(S.open) + "</span>";
+        '><span class="track"></span><span>' + C.fmt(ranges.length ? S.open : S.closedToggle) + "</span>";
       toggle.querySelector("input").addEventListener("change", function (event) {
         state.week[index] = event.target.checked ? [["08:30", "17:30"]] : [];
         renderEditor();

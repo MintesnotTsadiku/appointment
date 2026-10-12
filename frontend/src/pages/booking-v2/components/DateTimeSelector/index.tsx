@@ -255,6 +255,7 @@ useEffect(() => {
           {(serviceName || providerName) && (
             <p 
               className="mt-2 text-lg"
+              data-qa="booking-picker-service"
               style={{ color: 'var(--text-secondary)' }}
             >
               {serviceName}

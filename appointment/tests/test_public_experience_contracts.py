@@ -218,3 +218,15 @@ class TestPublicOrigin(unittest.TestCase):
         from appointment.public_experience.errors import PublicResolutionError
 
         self.assertEqual(PublicResolutionError("missing").http_status_code, 404)
+
+    def test_optional_config_for_an_unpublished_path_is_empty_not_an_error(self):
+        from unittest.mock import patch
+        from appointment.public_experience import api
+        from appointment.public_experience.errors import PublicResolutionError
+
+        missing = PublicResolutionError("no site", details={"reason": "unknown_host"})
+        with patch.object(api.resolver_module, "resolve_public_experience", side_effect=missing):
+            self.assertIsNone(api.get_public_ui_config(public_path="/new-business", optional=1))
+            with self.assertRaises(PublicResolutionError):
+                api.get_public_ui_config(public_path="/new-business")
+            self.assertIsNone(api.get_public_experience_snapshot(public_path="/new-business", optional=1))

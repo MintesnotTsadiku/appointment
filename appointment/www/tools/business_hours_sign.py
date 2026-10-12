@@ -55,6 +55,7 @@ def get_context(context):
     strings = {key: t.both(key) for key in ("closed", "kicker", "phone", "bookOnline")}
     strings["credit"] = t("credit", "{0}")
     strings.update({key: t(key) for key in ("addBreak", "removeBreak", "open")})
+    strings["closedToggle"] = t("closed")
     context.update(
         {
             "rows": week_rows(),

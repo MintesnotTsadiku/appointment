@@ -74,15 +74,28 @@ The new flow has three screens: sign up, business form, live link.
 
 ### Timing
 
-Not measured yet. The site restore paused all Agent Plane runs (see "Run after the restore").
-Two earlier runs of the old flow failed before the business step: one because the Vite dev server
-reloaded while another workstream edited files, one because the landing page was broken by an
-edit in progress. They gave no time.
+Measured on 12 October 2026, run `BQA-2026-00297` (`marketing-signup-timing.yaml`, desktop 1440, English):
 
-The claim stays at the configured 5 minutes. The new flow has six text fields and three buttons.
-After the restore, run `marketing-signup-timing.yaml` and record the time from the first click to the
-open booking page here. If a human pace (about 3 seconds for each field) makes it longer than
-`marketing_live_minutes`, lower the setting.
+| Step | Time from the first click |
+|---|---|
+| Press **Start free** on the landing page | 0 s |
+| Sign-up form submitted (3 fields) | 9 s |
+| Business form open (signed in, no second sign-in) | 13 s |
+| Business form submitted (3 fields, publish switch on) | 18 s |
+| Live link shown | 21 s |
+| Customer booking page open with the service | 26 s |
+
+The browser fills each field in about 1 second. At a human pace of about 10 seconds for each of the
+six fields, plus 20 seconds to read each of the three screens, the total is about 2 minutes. This is
+less than `marketing_live_minutes` (5), so the landing promise stays at 5 minutes. No friction was
+removed in this pass.
+
+The run found one defect: the booking page of a new business asked for the public site config of
+`/<slug>` and got four `404` errors, because a new business has no published site yet. The config
+API now accepts `optional=1` and returns an empty result for such a path
+(`appointment/public_experience/api.py`, `get_public_ui_config`). The booking page theme
+(`frontend/src/public-experience/bookingTheme.ts`) and the landing showcase doors use it. A run after
+the fix has no console or network errors (except the known socket.io polling noise).
 
 ## 3. Partners page
 
@@ -214,7 +227,7 @@ horizontal scroll on the auth pages, and the flag emoji next to the auth languag
 
 ## Open items
 
-- Measure the sign-up to live time (see "Run after the restore").
+- The sign-up to live time is measured (section 2). Measure it again when the onboarding flow changes.
 - New businesses get a slug like `business-<hash>`. Their public link is long. A readable slug at
   setup would make the shared link better. This needs a change in `workspace.create` (not done).
 - Partners have no self-service view of their sign-ups. The FAQ tells them to ask the team.

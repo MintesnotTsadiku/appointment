@@ -3,6 +3,7 @@ import { CalendarDays, X } from 'lucide-react';
 import { Button } from '@/components/button';
 import { Calendar } from '@/components/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/popover';
+import { intlLocale, useTranslation } from '@/lib/i18n';
 import { useRewardText } from './useRewardText';
 
 const iso = (date: Date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
@@ -18,6 +19,8 @@ export function DatePickerButton({ id, value, onChange, placeholder, clearLabel,
 }) {
   const [open, setOpen] = useState(false);
   const { date } = useRewardText();
+  const { language } = useTranslation();
+  const locale = intlLocale(language);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   return (
@@ -38,6 +41,10 @@ export function DatePickerButton({ id, value, onChange, placeholder, clearLabel,
               setOpen(false);
             }}
             disabled={(day) => day < today}
+            formatters={{
+              formatCaption: (month) => new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(month),
+              formatWeekdayName: (day) => new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(day),
+            }}
             initialFocus
           />
         </PopoverContent>

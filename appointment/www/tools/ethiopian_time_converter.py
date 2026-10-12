@@ -21,7 +21,10 @@ def reference_rows(lang: str) -> list[dict]:
         half = habesha.half_key(hour24)
         period_am = habesha.PERIODS[period]["am"]
         half_am = habesha.HALVES[half]["am"]
-        label = f"{period_am} · {half_am}" if lang == "am" else f"{period_am} ({habesha.PERIODS[period]['en']}) · {half_am}"
+        label = period_am if lang == "am" else f"{period_am} ({habesha.PERIODS[period]['en']})"
+        if half_am != period_am:
+            # Night hours 00-05 are ሌሊት in both names; show the word once.
+            label = f"{label} · {half_am}"
         rows.append(
             {
                 "intl_24": f"{hour24:02d}:00",

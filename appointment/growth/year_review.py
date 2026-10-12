@@ -211,5 +211,6 @@ def image(business: str, period: str, lang: str = "en", size: str = "portrait"):
     content = render(owner, chosen, review, lang, size)
     frappe.response.filename = f"year-in-review-{chosen['key']}-{lang}-{size}.png"
     frappe.response.filecontent = content
-    frappe.response.type = "binary"
+    # "download" serves the PNG with its image type; "binary" would force an octet-stream attachment.
+    frappe.response.type = "download"
     frappe.response.display_content_as = "inline"

@@ -137,6 +137,26 @@ class RegistrationAcceptance(unittest.TestCase):
         self.assertEqual(workspace.require_provider_account(), plain)
         frappe.set_user("Administrator")
 
+    def test_04b_two_owners_with_the_same_name_can_both_start(self):
+        from appointment.onboarding import set_onboarding_type
+
+        self._set(self_signup_mode="Open", allow_self_service_business_creation=1, require_admin_approval=0)
+        shared = f"{self.marker} Same Name"
+        providers = []
+        for label in ("same-a", "same-b"):
+            user = self._insert(
+                "User", email=f"{self.marker.lower()}-{label}@example.test", first_name=shared,
+                send_welcome_email=0, enabled=1, user_type="Website User",
+            ).name
+            frappe.set_user(user)
+            set_onboarding_type("organization")
+            frappe.set_user("Administrator")
+            provider = frappe.db.get_value("Provider", {"user": user}, ["name", "full_name"], as_dict=True)
+            self.created.append(("Provider", provider.name))
+            providers.append(provider)
+        self.assertNotEqual(providers[0].name, providers[1].name)
+        self.assertEqual({row.full_name for row in providers}, {shared})
+
     def test_05_invite_provisioning_is_gated(self):
         manager = self._user("manager", user_type="System User", roles=("Provider", "Organization Manager"))
         org = self._insert(

@@ -30,7 +30,13 @@ scenarios:
       value: '[data-pe-root]'
   actions:
   - action: scroll
-    delta_y: 20000
+    delta_y: 5000
+  - action: scroll
+    delta_y: 5000
+  - action: scroll
+    delta_y: 5000
+  - action: scroll
+    delta_y: 5000
   - action: wait_for
     selector: '[data-qa="template-credit"]'
   - action: get_text
@@ -62,7 +68,13 @@ scenarios:
       value: '[data-pe-root]'
   actions:
   - action: scroll
-    delta_y: 20000
+    delta_y: 5000
+  - action: scroll
+    delta_y: 5000
+  - action: scroll
+    delta_y: 5000
+  - action: scroll
+    delta_y: 5000
   - action: wait_for
     selector: '[data-qa="template-credit"]'
   - action: get_text
@@ -70,7 +82,8 @@ scenarios:
     assertions:
     - type: text_contains
       selector: '[data-qa="template-credit"]'
-      value: Website by
+      # Meron sets its footer credit in small capitals (text-transform: uppercase).
+      value: WEBSITE BY
     - type: visible_selector
       value: '[data-qa="template-credit-link"][href*="source=template_credit"]'
   - action: screenshot
@@ -90,7 +103,13 @@ scenarios:
       value: '[data-pe-root]'
   actions:
   - action: scroll
-    delta_y: 20000
+    delta_y: 5000
+  - action: scroll
+    delta_y: 5000
+  - action: scroll
+    delta_y: 5000
+  - action: scroll
+    delta_y: 5000
   - action: wait_for
     selector: '[data-qa="template-credit"]'
   - action: get_text
@@ -118,7 +137,13 @@ scenarios:
       value: '[data-pe-root]'
   actions:
   - action: scroll
-    delta_y: 20000
+    delta_y: 5000
+  - action: scroll
+    delta_y: 5000
+  - action: scroll
+    delta_y: 5000
+  - action: scroll
+    delta_y: 5000
   - action: wait_for
     selector: '[data-qa="template-credit"]'
   - action: get_text

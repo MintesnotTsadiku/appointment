@@ -25,18 +25,18 @@ scenarios:
     height: 900
   checks: []
   routes:
-  - path: /signup?ref={qa_ref_code}&source=telegram_share
+  - path: /
     assertions:
     - type: network_idle
   actions:
+  # The sign-up page has a password field, so Agent Plane redacts its screenshots; it is checked by assertions.
+  - action: open_url
+    url: /signup?ref={qa_ref_code}&source=telegram_share
   - action: wait_for
     selector: '[data-qa="signup-referral"]'
     assertions:
     - type: text_contains
       value: Invited by Meskerem Hair Studio
-  - action: screenshot
-    name: ref_signup-1-invite.png
-    full_page: false
   - action: fill
     selector: '#fullName'
     value: Dawit Kebede
@@ -52,17 +52,7 @@ scenarios:
     - type: network_request
       url_contains: registration.signup
       status: 200
-  - action: wait_for
-    selector: '[data-qa="login-heading"]'
-    timeout_ms: 20000
-  - action: fill
-    selector: '#email'
-    value: '{qa_ref_signup_email}'
-  - action: fill
-    selector: '#password'
-    value: '{qa_ref_signup_password}'
-  - action: click
-    selector: 'button[type="submit"]'
+  # Open sign-up signs the new owner in and goes straight to business setup.
   - action: wait_for
     selector: '#business_name'
     timeout_ms: 20000
@@ -75,14 +65,26 @@ scenarios:
   - action: fill
     selector: '#service_name'
     value: Haircut
+  - action: wait_for
+    selector: '[data-qa="onboarding-publish-now"] [role="switch"][data-state="checked"]'
   - action: click
     selector: '[data-qa="onboarding-submit"]'
     assertions:
     - type: network_request
       url_contains: workspace.create
       status: 200
-  - action: open_url
-    url: /api/method/logout
+  - action: wait_for
+    selector: '[data-qa="onboarding-success"]'
+    timeout_ms: 20000
+  - action: screenshot
+    name: ref_signup-1-live.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="onboarding-go-home"]'
+  - action: click
+    selector: '[data-qa="user-menu"]'
+  - action: click
+    selector: '[data-qa="topnav-logout"]'
   - action: open_url
     url: /login
   - action: wait_for

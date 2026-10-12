@@ -64,7 +64,7 @@ class TestTimeConverterPage(unittest.TestCase):
     def test_reference_table_has_every_hour(self):
         self.assertEqual(self.html.count('data-qa="reference-row"'), 24)
         self.assertRegex(self.text, r"8:00 AM</th>\s*<td[^>]*>08:00</td>\s*<td>2:00</td>\s*<td>ጠዋት \(morning\) · ቀን</td>")
-        self.assertRegex(self.text, r"12:00 AM</th>\s*<td[^>]*>00:00</td>\s*<td>6:00</td>\s*<td>ሌሊት \(night\) · ሌሊት</td>")
+        self.assertRegex(self.text, r"12:00 AM</th>\s*<td[^>]*>00:00</td>\s*<td>6:00</td>\s*<td>ሌሊት \(night\)</td>")
         self.assertRegex(self.text, r"8:00 PM</th>\s*<td[^>]*>20:00</td>\s*<td>2:00</td>\s*<td>ምሽት \(evening\) · ሌሊት</td>")
         self.assertNotIn("ማታ", self.text, "the evening word is ምሽት, as in the staff app")
 

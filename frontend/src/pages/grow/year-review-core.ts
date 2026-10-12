@@ -95,6 +95,22 @@ export function telegramShareUrl(url: string, text: string): string {
   return `https://t.me/share/url?${query.toString()}`;
 }
 
+/** The period's dates for people: the Ethiopian calendar in Amharic, the Gregorian one in English. */
+export function dateRange(start: string, end: string, lang: string): string {
+  const from = new Date(`${start}T00:00:00Z`);
+  const to = new Date(`${end}T00:00:00Z`);
+  if (Number.isNaN(from.getTime()) || Number.isNaN(to.getTime())) return `${start} – ${end}`;
+  const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: lang === 'am' ? 'long' : 'short', year: 'numeric', timeZone: 'UTC' };
+  try {
+    const format = new Intl.DateTimeFormat(lang === 'am' ? 'am-u-ca-ethiopic' : 'en-GB', options) as Intl.DateTimeFormat & {
+      formatRange(start: Date, end: Date): string;
+    };
+    return format.formatRange(from, to);
+  } catch {
+    return `${start} – ${end}`;
+  }
+}
+
 export function fillText(text: string, values: Record<string, string | number>): string {
   return fill(text, values);
 }

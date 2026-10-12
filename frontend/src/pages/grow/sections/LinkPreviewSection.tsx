@@ -8,7 +8,9 @@ import type { GrowContext, Lang } from '../types';
 /** A chat-style preview of the card Telegram, Facebook and WhatsApp show for the link. */
 export default function LinkPreviewSection({ data }: { data: GrowContext }) {
   const { t, language } = useTranslation();
-  const [lang, setLang] = useState<Lang>(language === 'am' ? 'am' : 'en');
+  // The preview follows the app language until the owner picks one.
+  const [picked, setLang] = useState<Lang | null>(null);
+  const lang: Lang = picked ?? (language === 'am' ? 'am' : 'en');
   const [broken, setBroken] = useState<Record<string, boolean>>({});
   const preview = data.preview?.[lang];
   if (!preview) return null;

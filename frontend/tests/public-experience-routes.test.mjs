@@ -90,7 +90,8 @@ assert.ok(booking.includes("getTemplatePackage"), "booking entry must delegate t
 assert.ok(booking.includes("BookingTemplate"), "booking entry must use the template-owned booking handoff");
 
 const bookingTheme = read("src/public-experience/bookingTheme.ts");
-assert.ok(bookingTheme.includes("fetchPublicConfig(undefined, publicRootForSlug(orgSlug))"), "scheduler must resolve the organization public release");
+assert.ok(bookingTheme.includes("fetchOptionalPublicConfig(publicRootForSlug(orgSlug))"), "scheduler must resolve the organization public release");
+assert.ok(read("src/public-experience/api.ts").includes('{ optional: "1" }'), "a business without a published site must not cause a 404");
 assert.ok(bookingTheme.includes('"--accent-primary": primary'), "scheduler must map the public primary token");
 assert.ok(bookingTheme.includes('"--booking-font-display"'), "scheduler must map public typography");
 

@@ -236,8 +236,8 @@
   {
    "fieldname": "marketing_live_minutes",
    "fieldtype": "Int",
-   "label": "Live numbers refresh (minutes)",
-   "description": "How often public counters on marketing pages refresh.",
+   "label": "Minutes to a live page (landing promise)",
+   "description": "The landing page promises a live booking page in this many minutes. Keep it at or above the measured sign-up time.",
    "default": "5",
    "non_negative": 1
   }

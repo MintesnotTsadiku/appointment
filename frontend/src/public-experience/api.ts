@@ -37,11 +37,12 @@ function publicPath(): string | undefined {
   return window.location.pathname;
 }
 
-function publicQuery(locale?: string, pathOverride?: string): string {
+function publicQuery(locale?: string, pathOverride?: string, extra: Record<string, string> = {}): string {
   const params = new URLSearchParams();
   if (locale) params.set("locale", locale);
   const path = pathOverride || publicPath();
   if (path) params.set("public_path", path);
+  for (const [key, value] of Object.entries(extra)) params.set(key, value);
   const query = params.toString();
   return query ? "?" + query : "";
 }
@@ -53,10 +54,18 @@ export async function fetchPublicConfig(locale?: string, pathOverride?: string):
   return mergeConfig(raw, getFallbackPublicUIConfig(locale));
 }
 
+/** The published config of a business site, or null when the path has no published site (no 404). */
+export async function fetchOptionalPublicConfig(path: string): Promise<PublicUIConfig | null> {
+  const raw = await fetchJson(
+    "/api/method/appointment.public_experience.api.get_public_ui_config" + publicQuery(undefined, path, { optional: "1" }),
+  );
+  return raw && typeof raw === "object" ? mergeConfig(raw, getFallbackPublicUIConfig()) : null;
+}
+
 export async function fetchPublishedSnapshot(locale?: string): Promise<PublishedSnapshot | null> {
   try {
     const raw = await fetchJson(
-      "/api/method/appointment.public_experience.api.get_public_experience_snapshot" + publicQuery(locale),
+      "/api/method/appointment.public_experience.api.get_public_experience_snapshot" + publicQuery(locale, undefined, { optional: "1" }),
     );
     if (!raw || typeof raw !== "object") return null;
     const snapshot = raw as PublishedSnapshot;

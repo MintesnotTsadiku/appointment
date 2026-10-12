@@ -3247,7 +3247,8 @@
         "shareFailed": "Sharing did not work. Download the image instead.",
         "promoTitle": "Your year in review",
         "promoDescription": "Turn your bookings into an image to share on Instagram and Telegram.",
-        "promoAction": "Open year in review"
+        "promoAction": "Open year in review",
+        "rangeDates": "{period} · {dates}"
       },
       "directory": {
         "title": "Business directory",
@@ -3539,7 +3540,7 @@
         "toolsEnabled": "Show the free tools",
         "toolsEnabledHint": "Public tools such as the Ethiopian time converter.",
         "marketing": "Marketing",
-        "liveMinutes": "Live numbers refresh (minutes)",
+        "liveMinutes": "Minutes to a live page (landing promise)",
         "showoff": "Show-off",
         "showoffHint": "Ways for businesses to show their work in public.",
         "directory": "Business directory",
@@ -4865,7 +4866,7 @@
       "reward": "Reward (Free Bookings)",
       "customerDiscount": "Default Customer Discount (%)",
       "partnerReward": "Partner Reward (Free Bookings)",
-      "liveMinutes": "Live numbers refresh (minutes)"
+      "liveMinutes": "Minutes to a live page (landing promise)"
     },
     "growthSharing": {
       "bookOnline": "Book online",
@@ -5017,7 +5018,8 @@
       "copied": "Copied to clipboard",
       "copyFailed": "Select the text and copy it",
       "shareTelegram": "Share to Telegram",
-      "madeWith": "Made free with {0}"
+      "madeWith": "Made free with {0}",
+      "freeIndex": "Free · No sign-up · Works on your phone"
     },
     "index": {
       "title": "Free tools for Ethiopian businesses",

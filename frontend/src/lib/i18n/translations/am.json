@@ -3247,7 +3247,8 @@
         "shareFailed": "ማጋራት አልተሳካም። በምትኩ ምስሉን ያውርዱ።",
         "promoTitle": "የዓመትዎ ማጠቃለያ",
         "promoDescription": "ቀጠሮዎችዎን በኢንስታግራምና በቴሌግራም የሚጋራ ምስል ያድርጉ።",
-        "promoAction": "ማጠቃለያውን ክፈት"
+        "promoAction": "ማጠቃለያውን ክፈት",
+        "rangeDates": "{period} · {dates}"
       },
       "directory": {
         "title": "የንግድ ማውጫ",
@@ -3539,7 +3540,7 @@
         "toolsEnabled": "ነጻ መሣሪያዎቹን አሳይ",
         "toolsEnabledHint": "እንደ የኢትዮጵያ ሰዓት መቀየሪያ ያሉ ይፋዊ መሣሪያዎች።",
         "marketing": "ማስታወቂያ",
-        "liveMinutes": "የቀጥታ ቁጥሮች ማደሻ (ደቂቃ)",
+        "liveMinutes": "ገጽ ቀጥታ እስኪሆን ያሉ ደቂቃዎች (የመነሻ ገጽ ቃል)",
         "showoff": "ማሳያ",
         "showoffHint": "ንግዶች ሥራቸውን በይፋ የሚያሳዩባቸው መንገዶች።",
         "directory": "የንግድ ማውጫ",
@@ -4865,7 +4866,7 @@
       "reward": "ሽልማት (ነጻ ቀጠሮዎች)",
       "customerDiscount": "ነባሪ የደንበኛ ቅናሽ (%)",
       "partnerReward": "የአጋር ሽልማት (ነጻ ቀጠሮዎች)",
-      "liveMinutes": "የቀጥታ ቁጥሮች ማደሻ (ደቂቃ)"
+      "liveMinutes": "ገጽ ቀጥታ እስኪሆን ያሉ ደቂቃዎች (የመነሻ ገጽ ቃል)"
     },
     "growthSharing": {
       "bookOnline": "በኦንላይን ይያዙ",
@@ -5017,7 +5018,8 @@
       "copied": "ተቀድቷል",
       "copyFailed": "ጽሑፉን መርጠው ይቅዱት",
       "shareTelegram": "በቴሌግራም ያጋሩ",
-      "madeWith": "በ{0} በነጻ የተዘጋጀ"
+      "madeWith": "በ{0} በነጻ የተዘጋጀ",
+      "freeIndex": "ነጻ · ምዝገባ አያስፈልግም · በስልክዎ ይሠራል"
     },
     "index": {
       "title": "ለኢትዮጵያ ንግዶች ነጻ መሣሪያዎች",

@@ -13,7 +13,7 @@ import { useTranslation } from '@/lib/i18n';
 import { usePlatformBrand } from '@/lib/platform-brand';
 import { cn } from '@/lib/utils';
 import {
-  REVIEW_SOURCE, fillText, imageUrl, reviewTiles, telegramShareUrl, withSource,
+  REVIEW_SOURCE, dateRange, fillText, imageUrl, reviewTiles, telegramShareUrl, withSource,
   type YearReviewStats,
 } from '../year-review-core';
 
@@ -44,7 +44,9 @@ export default function YearReviewSection() {
   const brand = usePlatformBrand();
   const { organization, manager } = useAnalyticsScope();
   const [period, setPeriod] = useState<string | null>(null);
-  const [imageLanguage, setImageLanguage] = useState<string>(language === 'am' ? 'am' : 'en');
+  // The image follows the app language until the owner picks one.
+  const [pickedLanguage, setImageLanguage] = useState<string | null>(null);
+  const imageLanguage = pickedLanguage ?? (language === 'am' ? 'am' : 'en');
   const [size, setSize] = useState<Size>('portrait');
   const params = organization ? { business: organization, ...(period ? { period } : {}) } : undefined;
   const { data, error, isLoading, mutate } = useFrappeGetCall<{ message: Summary }>(
@@ -173,14 +175,14 @@ function Ready({ business, period, stats, imageLanguage, size, link, captions }:
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,20rem)] lg:items-start">
       <div className="space-y-4">
         <p className="text-sm text-muted-foreground" data-qa="year-review-range">
-          {fillText(tr('range'), { period: language === 'am' ? period.labels.am : period.labels.en, start: period.start, end: period.end })}
+          {fillText(tr('rangeDates'), { period: language === 'am' ? period.labels.am : period.labels.en, dates: dateRange(period.start, period.end, language) })}
         </p>
         <dl className="grid grid-cols-2 gap-3" data-qa="year-review-stats">
           {tiles.map((tile, index) => (
             <div key={tile.key} data-qa={`year-review-stat-${tile.key}`} className={cn('min-w-0 rounded-lg border bg-muted/30 p-4', index === 0 && 'col-span-2 bg-primary/5 sm:col-span-1')}>
               <dt className="text-xs font-medium text-muted-foreground">{tile.label}</dt>
-              <dd className={cn('mt-1 truncate font-semibold tabular-nums text-foreground', index === 0 ? 'text-3xl' : 'text-xl')} title={tile.value}>{tile.value}</dd>
-              {tile.note && <dd className="mt-0.5 truncate text-xs text-muted-foreground">{tile.note}</dd>}
+              <dd className={cn('mt-1 font-semibold leading-tight tabular-nums text-foreground [overflow-wrap:anywhere]', index === 0 ? 'text-3xl' : 'text-xl')}>{tile.value}</dd>
+              {tile.note && <dd className="mt-1 text-xs text-muted-foreground [overflow-wrap:anywhere]">{tile.note}</dd>}
             </div>
           ))}
         </dl>

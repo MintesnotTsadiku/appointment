@@ -958,7 +958,15 @@ def set_onboarding_type(onboarding_type):
             provider.onboarding_current_step = 1
             provider.onboarding_organization = None
             provider.flags.onboarding_update = _ONBOARDING_UPDATE
-            provider.insert(ignore_permissions=True)
+            # Providers are named by `provider_name`. Two people can share a name, so the record name (and
+            # with it `provider_name`) gets a number suffix when needed; `full_name` and `display_name` keep
+            # the person's own name.
+            from frappe.model.naming import append_number_if_name_exists
+
+            unique_name = append_number_if_name_exists("Provider", provider.provider_name)
+            if unique_name != provider.provider_name and user_full_name:
+                provider.display_name = user_full_name
+            provider.insert(ignore_permissions=True, set_name=unique_name)
 
         # A prospective owner becomes provider-capable when they choose a type.
         # Membership scope still decides which businesses they can act on.

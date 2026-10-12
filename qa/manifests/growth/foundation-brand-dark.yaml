@@ -43,7 +43,8 @@ scenarios:
   - action: wait_for
     selector: '[data-qa="brand-growth-tab-growth"]:has-text("እድገት")'
     assertions:
-    - type: visible_text
+    - type: text_contains
+      selector: '[data-qa="brand-growth-heading"]'
       value: ብራንድ እና እድገት
   - action: screenshot
     name: brand_am_mobile-1-brand.png

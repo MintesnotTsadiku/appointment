@@ -178,6 +178,10 @@
 .lw-display { font-family: var(--lw-serif); font-weight: 400; letter-spacing: -0.03em; line-height: 0.98; margin: 0;
   font-size: clamp(2.7rem, 7.4vw, 6.6rem); font-variation-settings: "opsz" 144; }
 .lw-display em { font-style: italic; color: var(--lw-accent); }
+/* Ethiopic has no glyphs in the display serif: the fallback face with negative tracking closes the word spaces. */
+:lang(am) .lw-display, :lang(am) .lw-story h2 { letter-spacing: 0; word-spacing: 0.12em; line-height: 1.12; }
+/* Keep large headings readable where they pass over the sun or moon. */
+.lw-display, .lw-story h2, .lw-doors h2 { text-shadow: 0 1px 24px color-mix(in srgb, var(--lw-sky-top) 70%, transparent); }
 .lw-lede { font-size: clamp(1.02rem, 1.4vw, 1.2rem); line-height: 1.6; max-width: 38rem; opacity: 0.88; }
 
 /* Prologue */

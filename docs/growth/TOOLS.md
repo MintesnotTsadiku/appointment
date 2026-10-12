@@ -1,7 +1,7 @@
 # Growth workstream D: free tools
 
-Status: code complete. Browser QA with Agent Plane and the Frappe test modules are **not run yet**,
-because the site was paused for a restore from backup. See "Run after the restore".
+Status: complete. Frappe tests pass and all 11 Agent Plane manifests pass after the restore
+(see "Browser QA after the restore").
 
 ## What the tools do
 
@@ -33,7 +33,7 @@ When `Growth Settings.tools_enabled` is off, every tool page returns 404 and the
 - JavaScript: `appointment/public/js/habesha-time.js` (pure, shared), `appointment/public/js/tools/{tools-common,ethiopian-calendar,time-converter,calendar-converter,reminder,hours-sign}.js`.
 - Styles: `appointment/public/css/tools.css` (one file for all tools, light and dark, print rules).
 - Tests: `appointment/tests/test_time_converter_page.py`, `test_tools_pages.py`, `test_habesha_calendar_vectors.py`, `frontend/tests/habesha-time.test.mjs`, `frontend/tests/tools-pages.test.mjs`.
-- QA: `qa/manifests/tools/time-converter.yaml`, `qa/manifests/growth/tools-{index,index-dark,calendar,calendar-dark,reminder,sign}.yaml`, fixture `appointment/tests/tools_qa_fixtures.py`.
+- QA: `qa/manifests/tools/time-converter{,-am,-dark}.yaml`, `qa/manifests/growth/tools-{index,index-dark,calendar,calendar-dark,reminder,reminder-dark,sign,sign-dark}.yaml`, fixture `appointment/tests/tools_qa_fixtures.py`.
 
 Shared files changed with small edits: `appointment/hooks.py` (route rules for `/tools...` and
 `/am/tools...`, `appointment_sitemap_links` entry), `appointment/public_experience/reserved.py` and
@@ -104,9 +104,28 @@ Shared files changed with small edits: `appointment/hooks.py` (route rules for `
 2. No migrate is needed (no DocType change).
 3. `$G/test.sh appointment.tests.test_time_converter_page appointment.tests.test_tools_pages appointment.tests.test_habesha_calendar_vectors`.
 4. Agent Plane, fixture `appointment.tests.tools_qa_fixtures`:
-   `qa/manifests/tools/time-converter.yaml`, `qa/manifests/growth/tools-index.yaml`,
-   `tools-index-dark.yaml`, `tools-calendar.yaml`, `tools-calendar-dark.yaml`,
-   `tools-reminder.yaml`, `tools-sign.yaml`. Review the screenshots.
+   the 11 manifests listed under "Files". Review the screenshots.
+
+## Browser QA after the restore
+
+All manifests pass with 0 console errors and 0 network errors (BQA-2026-00353 to 00372).
+Fixes found by the runs:
+
+- Manifests: `visible_selector` takes the selector in `value`, not `selector`.
+- The time converter manifest is split into English and Amharic files. One run with four
+  scenarios went over the 300 s stale-run limit of Agent Plane.
+- Reminder: switching Habesha/International lost the time, because a radio fires `input`
+  before `change`. The page now converts on `change` only.
+- Reminder: the SMS counter was a flex row, so its text read "3\nSMS". It is plain text now.
+- Segmented controls: the hidden radio now covers its whole segment, so a click on the input
+  (for example by a test) is not blocked by the label text.
+- Polish: the 24-hour chart shows "ሌሊት" once for 00-05; the sign editor says "Closed" on a
+  closed day; the phone and link fields stack at 520 px or less; the month select is full
+  width at 480 px or less; the selected segment is easier to see in dark mode; the sign button
+  link has no underline; the index badge reads "Free · No sign-up · Works on your phone".
+- New dark manifests for the time converter, reminder and sign.
+- Known: the QA browser has no emoji font, so the Telegram/WhatsApp message emoji show as
+  boxes in screenshots. Phones show them correctly.
 
 ## Decisions
 

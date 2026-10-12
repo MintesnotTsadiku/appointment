@@ -54,4 +54,8 @@ assert.equal(review.imageUrl('Provider:Abel Fikru', 'ec-2018', 'am', 'story'),
 assert.equal(review.withSource('https://brand.example/bloom-studio', 'year_review'), 'https://brand.example/bloom-studio?source=year_review');
 assert.equal(review.withSource('', 'year_review'), '');
 assert.ok(review.telegramShareUrl('https://brand.example/b?source=year_review', 'Our year').startsWith('https://t.me/share/url?url=https%3A%2F%2Fbrand.example'));
+const plain = (text) => text.replace(/\s/g, ' ');
+assert.equal(plain(review.dateRange('2025-09-11', '2026-09-10', 'en')), '11 Sept 2025 – 10 Sept 2026');
+assert.equal(plain(review.dateRange('2025-09-11', '2026-09-10', 'am')), 'መስከረም 1 – ጳጉሜን 5፣ 2018', 'Amharic uses the Ethiopian calendar.');
+assert.equal(review.dateRange('bad', '2026-09-10', 'en'), 'bad – 2026-09-10');
 console.log('PASS: template credit link and year-in-review tiles');

@@ -129,6 +129,8 @@ def cleanup():
             _remove_business(key)
         for user in state.get("users") or []:
             _delete_where("Business Signup Source", "signup_user", user)
+            # Onboarding gives the new owner a Provider record that no organization row points to.
+            _delete_where("Provider", "user", user)
             _delete_where("Business Membership", "user", user)
             _delete_one("User", user)
     finally:

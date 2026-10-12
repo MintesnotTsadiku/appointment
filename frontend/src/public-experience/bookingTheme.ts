@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 
-import { fetchPublicConfig } from "./api";
+import { fetchOptionalPublicConfig } from "./api";
 import { publicRootForSlug } from "./routes";
 import type { PublicUIConfig } from "./types";
 
@@ -70,8 +70,8 @@ export function useBookingBrand(orgSlug: string | undefined, mode: BookingMode) 
     let active = true;
     setConfig(null);
     if (!orgSlug) return () => { active = false; };
-    fetchPublicConfig(undefined, publicRootForSlug(orgSlug))
-      .then((next) => { if (active && next.source === "experience-release") setConfig(next); })
+    fetchOptionalPublicConfig(publicRootForSlug(orgSlug))
+      .then((next) => { if (active && next?.source === "experience-release") setConfig(next); })
       .catch(() => { if (active) setConfig(null); });
     return () => { active = false; };
   }, [orgSlug]);

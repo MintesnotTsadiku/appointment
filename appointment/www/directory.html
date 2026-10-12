@@ -25,12 +25,13 @@
 <script type="application/ld+json">{{ breadcrumb_json_ld | safe }}</script>
 <style>
 @font-face { font-family: "Page Ethiopic"; src: local("Noto Sans Ethiopic"), local("NotoSansEthiopic-Regular"), url("/assets/appointment/fonts/app/noto-sans-ethiopic.woff2") format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+1200-139F, U+2D80-2DDF, U+AB00-AB2F; }
+@font-face { font-family: "Page Sans"; src: url("/assets/appointment/fonts/app/inter.woff2") format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+0000-02FF, U+2000-206F, U+20AC; }
 @font-face { font-family: "Fraunces"; src: url("/assets/appointment/fonts/landing/fraunces.woff2") format("woff2"); font-weight: 300 700; font-display: swap; unicode-range: U+0000-02FF, U+2000-206F; }
 :root {
   --bg: #fff8f1; --paper: #ffffff; --ink: #2a1712; --muted: #6b4f45; --line: #ead9cc;
   --accent: #a63d22; --accent-ink: #ffffff; --soft: #fbeadf; --focus: #1d4ed8;
   --serif: "Fraunces", "Page Ethiopic", Georgia, serif;
-  --sans: "Page Ethiopic", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --sans: "Page Sans", "Page Ethiopic", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
@@ -95,9 +96,13 @@ section.block { margin: 36px 0 0; }
 .cta-band p { margin: 0; max-width: 56ch; }
 .cta { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 24px; border-radius: 999px; background: var(--accent); color: var(--accent-ink); font-weight: 700; text-decoration: none; max-width: 100%; }
 @media (prefers-color-scheme: dark) { .cta-band { background: var(--paper); color: var(--ink); border: 1px solid var(--line); } }
-@media (min-width: 760px) { .cta-band { grid-template-columns: 1fr auto; align-items: center; } .cta-band .cta { grid-row: span 2; } }
+@media (min-width: 760px) {
+  .cta-band { grid-template-columns: 1fr auto; align-items: center; column-gap: 24px; padding: 28px 32px; }
+  .cta-band h2, .cta-band p { grid-column: 1; }
+  .cta-band .cta { grid-column: 2; grid-row: 1 / span 2; }
+}
 body .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-footer { margin: 56px 0 0; padding: 20px 0 32px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
+footer, footer.wrap { margin-top: 56px; margin-bottom: 0; padding: 20px 16px 32px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
 footer p { margin: 0 0 6px; }
 </style>
 </head>

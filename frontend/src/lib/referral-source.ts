@@ -16,7 +16,10 @@ export function captureReferralSource(): void {
     /* Storage is optional. */
   }
   // Frappe only stores the view when website view tracking is on; failures never affect the page.
-  fetch(viewLogUrl(source, document.referrer), { credentials: 'same-origin' }).catch(() => undefined);
+  // Read the body: an unread response body keeps the request open, so the page never goes network-idle.
+  fetch(viewLogUrl(source, document.referrer), { credentials: 'same-origin' })
+    .then((response) => response.text())
+    .catch(() => undefined);
 }
 
 /** The source captured in this session, else from the current URL. */

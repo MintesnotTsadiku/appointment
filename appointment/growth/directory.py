@@ -249,10 +249,10 @@ def _listing_doc(owner):
                                organization=owner.organization, provider=owner.provider, listed=0))
 
 
-def _owner_state(owner) -> dict:
+def _owner_state(owner, lang: str | None = None) -> dict:
     doc = _listing_doc(owner)
     page = booking_pages([owner.key]).get(owner.key)
-    lang = (frappe.local.lang or "en").split("-")[0]
+    lang = lang if lang in ("en", "am") else (frappe.local.lang or "en").split("-")[0]
     category = doc.category or suggest_category(owner)
     area = doc.area or suggest_area(owner)
     path = None
@@ -269,13 +269,15 @@ def _owner_state(owner) -> dict:
 
 
 @frappe.whitelist(methods=["GET"])
-def owner_listing(owner_key: str):
-    """The owner's directory listing with the category and area choices."""
-    return _owner_state(require_business(owner_key))
+def owner_listing(owner_key: str, lang: str | None = None):
+    """The owner's directory listing with the category and area choices, labelled in `lang` (the staff
+    app's own language, which can differ from the account language)."""
+    return _owner_state(require_business(owner_key), lang)
 
 
 @frappe.whitelist(methods=["POST"])
-def save_owner_listing(owner_key: str, listed: int | str = 0, category: str | None = None, area: str | None = None):
+def save_owner_listing(owner_key: str, listed: int | str = 0, category: str | None = None, area: str | None = None,
+                       lang: str | None = None):
     owner = require_business(owner_key)
     if not enabled():
         frappe.throw(_("The business directory is not available right now."))
@@ -293,7 +295,7 @@ def save_owner_listing(owner_key: str, listed: int | str = 0, category: str | No
     else:
         doc.save(ignore_permissions=True)
     frappe.cache.delete_value(PUBLIC_CACHE_KEY)
-    return _owner_state(owner)
+    return _owner_state(owner, lang)
 
 
 # ---------------------------------------------------------------------------

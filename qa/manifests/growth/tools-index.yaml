@@ -29,17 +29,17 @@ scenarios:
     - type: visible_text
       value: Free tools for Ethiopian businesses
     - type: visible_selector
-      selector: '[data-qa="tools-index-list"]'
+      value: '[data-qa="tools-index-list"]'
     - type: visible_selector
-      selector: '[data-qa="tool-cta"]'
+      value: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="tools-index-ethiopian-time-converter"]'
+      value: '[data-qa="tools-index-ethiopian-time-converter"]'
     - type: visible_selector
-      selector: '[data-qa="tools-index-ethiopian-calendar-converter"]'
+      value: '[data-qa="tools-index-ethiopian-calendar-converter"]'
     - type: visible_selector
-      selector: '[data-qa="tools-index-amharic-appointment-reminder"]'
+      value: '[data-qa="tools-index-amharic-appointment-reminder"]'
     - type: visible_selector
-      selector: '[data-qa="tools-index-business-hours-sign"]'
+      value: '[data-qa="tools-index-business-hours-sign"]'
   actions:
   - action: screenshot
     name: index_en_desktop_light-1-open.png
@@ -70,17 +70,17 @@ scenarios:
     - type: visible_text
       value: Free tools for Ethiopian businesses
     - type: visible_selector
-      selector: '[data-qa="tools-index-list"]'
+      value: '[data-qa="tools-index-list"]'
     - type: visible_selector
-      selector: '[data-qa="tool-cta"]'
+      value: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="tools-index-ethiopian-time-converter"]'
+      value: '[data-qa="tools-index-ethiopian-time-converter"]'
     - type: visible_selector
-      selector: '[data-qa="tools-index-ethiopian-calendar-converter"]'
+      value: '[data-qa="tools-index-ethiopian-calendar-converter"]'
     - type: visible_selector
-      selector: '[data-qa="tools-index-amharic-appointment-reminder"]'
+      value: '[data-qa="tools-index-amharic-appointment-reminder"]'
     - type: visible_selector
-      selector: '[data-qa="tools-index-business-hours-sign"]'
+      value: '[data-qa="tools-index-business-hours-sign"]'
   actions:
   - action: screenshot
     name: index_en_mobile_light-1-open.png
@@ -111,17 +111,17 @@ scenarios:
     - type: visible_text
       value: ለኢትዮጵያ ንግዶች ነጻ መሣሪያዎች
     - type: visible_selector
-      selector: '[data-qa="tools-index-list"]'
+      value: '[data-qa="tools-index-list"]'
     - type: visible_selector
-      selector: '[data-qa="tool-cta"]'
+      value: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="tools-index-ethiopian-time-converter"]'
+      value: '[data-qa="tools-index-ethiopian-time-converter"]'
     - type: visible_selector
-      selector: '[data-qa="tools-index-ethiopian-calendar-converter"]'
+      value: '[data-qa="tools-index-ethiopian-calendar-converter"]'
     - type: visible_selector
-      selector: '[data-qa="tools-index-amharic-appointment-reminder"]'
+      value: '[data-qa="tools-index-amharic-appointment-reminder"]'
     - type: visible_selector
-      selector: '[data-qa="tools-index-business-hours-sign"]'
+      value: '[data-qa="tools-index-business-hours-sign"]'
   actions:
   - action: screenshot
     name: index_am_desktop_light-1-open.png
@@ -152,17 +152,17 @@ scenarios:
     - type: visible_text
       value: ለኢትዮጵያ ንግዶች ነጻ መሣሪያዎች
     - type: visible_selector
-      selector: '[data-qa="tools-index-list"]'
+      value: '[data-qa="tools-index-list"]'
     - type: visible_selector
-      selector: '[data-qa="tool-cta"]'
+      value: '[data-qa="tool-cta"]'
     - type: visible_selector
-      selector: '[data-qa="tools-index-ethiopian-time-converter"]'
+      value: '[data-qa="tools-index-ethiopian-time-converter"]'
     - type: visible_selector
-      selector: '[data-qa="tools-index-ethiopian-calendar-converter"]'
+      value: '[data-qa="tools-index-ethiopian-calendar-converter"]'
     - type: visible_selector
-      selector: '[data-qa="tools-index-amharic-appointment-reminder"]'
+      value: '[data-qa="tools-index-amharic-appointment-reminder"]'
     - type: visible_selector
-      selector: '[data-qa="tools-index-business-hours-sign"]'
+      value: '[data-qa="tools-index-business-hours-sign"]'
   actions:
   - action: screenshot
     name: index_am_mobile_light-1-open.png
