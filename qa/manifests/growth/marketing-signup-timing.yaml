@@ -83,11 +83,27 @@ scenarios:
   - action: wait_for
     selector: '[data-qa="onboarding-success"][data-state="published"]'
     timeout_ms: 20000
+    # The live link is the business page, not the first service (no offering id in the path).
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="onboarding-open-page"][href^="/schedule/org/"]:not([href*="EVT-"])'
+    - type: text_contains
+      selector: '[data-qa="onboarding-live-link"]'
+      value: /schedule/org/
   - action: screenshot
     name: timing-3-live.png
     full_page: false
+  # The business page lists its services; the customer picks one and sees the time picker.
   - action: click
     selector: '[data-qa="onboarding-open-page"]'
+  - action: wait_for
+    selector: '[data-qa="booking-service"]:has-text("{qa_mkt_service}")'
+    timeout_ms: 20000
+    assertions:
+    - type: url_contains
+      value: /schedule/org/
+  - action: click
+    selector: '[data-qa="booking-service"]:has-text("{qa_mkt_service}")'
   - action: wait_for
     selector: '[data-qa="booking-picker-service"]:has-text("{qa_mkt_service}")'
     timeout_ms: 20000

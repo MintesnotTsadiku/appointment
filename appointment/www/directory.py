@@ -170,7 +170,7 @@ class Page:
 
     def card(self, row) -> dict:
         area, category = self.areas[row["area"]], self.categories[row["category"]]
-        return dict(**row, area_label=self.label(area, "area_name"), city=area.city or "",
+        return dict(**row, area_label=self.label(area, "area_name"), city=self.label(area, "city"), region=area.city or "",
                     category_label=self.label(category, "category_name"),
                     initials="".join(word[0] for word in row["name"].split()[:2]).upper(),
                     logo_url=get_url(row["logo"]) if row["logo"] else "")
@@ -231,7 +231,7 @@ class Page:
         for index, card in enumerate(cards, start=(self.number - 1) * PAGE_SIZE + 1):
             business = {
                 "@type": "LocalBusiness", "name": card["name"], "url": get_url(card["href"]),
-                "address": {"@type": "PostalAddress", "addressLocality": card["area_label"], "addressRegion": card["city"], "addressCountry": "ET"},
+                "address": {"@type": "PostalAddress", "addressLocality": card["area_label"], "addressRegion": card["region"], "addressCountry": "ET"},
             }
             if card["logo_url"]:
                 business["image"] = card["logo_url"]

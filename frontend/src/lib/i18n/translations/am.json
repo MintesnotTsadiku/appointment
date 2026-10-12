@@ -3706,7 +3706,8 @@
     "next3Online": "በተያዘው ሰዓት የስብሰባ ማገናኛውን ይጠቀሙ",
     "next3Place": "ከቀጠሮዎ ጥቂት ደቂቃዎች በፊት በተመረጠው ቦታ ይድረሱ",
     "next4": "መቀየር ወይም መሰረዝ ከፈለጉ ንግዱን ያግኙ",
-    "done": "ተጠናቋል"
+    "done": "ተጠናቋል",
+    "zoneTime": "የ{0} ሰዓት"
   },
   "customerSms": {
     "confirmation": "{0}፦ ለ{1} በ{2} የያዙት ቀጠሮ ተረጋግጧል።",
@@ -5418,5 +5419,25 @@
       "invitedBy": "የጋበዘዎት፦ {0}",
       "bonus": "በዚህ ግብዣ ይመዝገቡ፤ ገጽዎ ሥራ ሲጀምር ሁለታችሁም ነፃ ቀጠሮዎች ታገኛላችሁ።"
     }
+  },
+  "timeZoneCities": {
+    "Addis_Ababa": "አዲስ አበባ",
+    "Nairobi": "ናይሮቢ",
+    "Djibouti": "ጅቡቲ",
+    "Asmara": "አስመራ",
+    "Mogadishu": "ሞቃዲሾ",
+    "Kampala": "ካምፓላ",
+    "Dar_es_Salaam": "ዳሬሰላም",
+    "Khartoum": "ካርቱም",
+    "Cairo": "ካይሮ",
+    "Dubai": "ዱባይ",
+    "Riyadh": "ሪያድ",
+    "London": "ለንደን",
+    "Paris": "ፓሪስ",
+    "Berlin": "በርሊን",
+    "New_York": "ኒው ዮርክ",
+    "Chicago": "ቺካጎ",
+    "Los_Angeles": "ሎስ አንጀለስ",
+    "Toronto": "ቶሮንቶ"
   }
 }

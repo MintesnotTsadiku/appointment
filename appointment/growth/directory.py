@@ -57,7 +57,7 @@ def categories() -> list[dict]:
 def areas() -> list[dict]:
     return frappe.get_all(
         AREA, filters={"enabled": 1},
-        fields=["name", "slug", "area_name", "area_name_am", "city", "aliases", "sort_order"],
+        fields=["name", "slug", "area_name", "area_name_am", "city", "city_am", "aliases", "sort_order"],
         order_by="sort_order asc, area_name asc",
     )
 
@@ -264,7 +264,7 @@ def _owner_state(owner, lang: str | None = None) -> dict:
         published=bool(page), name=(page or {}).get("name") or owner.display_name, page_path=(page or {}).get("href"),
         directory_path=path,
         categories=[dict(value=row.name, label=label(row, lang, "category_name")) for row in categories()],
-        areas=[dict(value=row.name, label=label(row, lang, "area_name"), city=row.city) for row in areas()],
+        areas=[dict(value=row.name, label=label(row, lang, "area_name"), city=label(row, lang, "city")) for row in areas()],
     )
 
 
@@ -311,3 +311,16 @@ def ensure_defaults():
         for index, row in enumerate(rows):
             if not frappe.db.exists(doctype, row["slug"]):
                 frappe.get_doc(dict(doctype=doctype, sort_order=(index + 1) * 10, enabled=1, **row)).insert(ignore_permissions=True)
+    _fill_amharic_cities(AREAS)
+
+
+def _fill_amharic_cities(seeded: list[dict]):
+    """Give seeded areas saved before `city_am` existed their Amharic city. Fills empty values only."""
+    for row in seeded:
+        if not row.get("city_am"):
+            continue
+        current = frappe.db.get_value(AREA, row["slug"], ["city", "city_am"], as_dict=True)
+        if current and not current.city_am and current.city == row["city"]:
+            doc = frappe.get_doc(AREA, row["slug"])
+            doc.city_am = row["city_am"]
+            doc.save(ignore_permissions=True)

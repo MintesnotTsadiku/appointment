@@ -80,6 +80,15 @@ scenarios:
       value: '[data-qa="business-prompt"]'
     - type: visible_selector
       value: '[data-booking-confirmation] [data-qa="powered-by"]'
+    # Amharic: the zone in Amharic and the time on the Ethiopian clock with its period.
+    - type: text_contains
+      selector: '[data-qa="booking-confirmation-zone"]'
+      value: የአዲስ አበባ ሰዓት
+    - type: text_contains
+      selector: '[data-qa="booking-confirmation-time"]'
+      value: 'ሰዓት '
+    - type: visible_selector
+      value: '[data-qa="booking-confirmation-time"]:is(:has-text("ጠዋት"), :has-text("ከሰዓት"), :has-text("ምሽት"), :has-text("ሌሊት"))'
   - action: wait_for
     selector: '[data-qa="business-prompt"]'
     assertions:

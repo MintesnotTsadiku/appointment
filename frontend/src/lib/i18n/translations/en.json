@@ -3706,7 +3706,8 @@
     "next3Online": "Use the meeting link at the scheduled time",
     "next3Place": "Arrive at the chosen location a few minutes before your appointment",
     "next4": "Contact the business if you need to change or cancel",
-    "done": "Done"
+    "done": "Done",
+    "zoneTime": "{0} time"
   },
   "customerSms": {
     "confirmation": "{0}: your booking for {1} on {2} is confirmed.",
@@ -5418,5 +5419,25 @@
       "invitedBy": "Invited by {0}",
       "bonus": "Sign up with this invite and you both earn free bookings once your page gets going."
     }
+  },
+  "timeZoneCities": {
+    "Addis_Ababa": "Addis Ababa",
+    "Nairobi": "Nairobi",
+    "Djibouti": "Djibouti",
+    "Asmara": "Asmara",
+    "Mogadishu": "Mogadishu",
+    "Kampala": "Kampala",
+    "Dar_es_Salaam": "Dar es Salaam",
+    "Khartoum": "Khartoum",
+    "Cairo": "Cairo",
+    "Dubai": "Dubai",
+    "Riyadh": "Riyadh",
+    "London": "London",
+    "Paris": "Paris",
+    "Berlin": "Berlin",
+    "New_York": "New York",
+    "Chicago": "Chicago",
+    "Los_Angeles": "Los Angeles",
+    "Toronto": "Toronto"
   }
 }

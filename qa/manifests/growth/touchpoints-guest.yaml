@@ -71,6 +71,10 @@ scenarios:
       value: '[data-qa="business-prompt"]'
     - type: visible_selector
       value: '[data-booking-confirmation] [data-qa="powered-by"]'
+    # A friendly zone label instead of the raw IANA name.
+    - type: text_contains
+      selector: '[data-qa="booking-confirmation-zone"]'
+      value: Addis Ababa time
   - action: screenshot
     name: tp_en_desktop-1-confirmation.png
     full_page: true

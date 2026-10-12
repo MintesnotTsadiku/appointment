@@ -5,16 +5,25 @@ import { useTranslation } from '@/lib/i18n';
 
 export interface CreatedBusiness {
   business_name: string;
+  /** The first offering's booking page. */
   public_path: string;
+  /** The business's public page: its published site, else `/schedule/org/<slug>` (or the provider's page). */
+  business_path?: string;
   organization?: string;
   /** True when the booking page was published during setup. */
   published?: boolean;
 }
 
+/** The link to share after setup: the business page, not one service. */
+export function businessPagePath(business: Pick<CreatedBusiness, 'business_path' | 'public_path'>): string {
+  return business.business_path || business.public_path;
+}
+
 export function OnboardingSuccess({ business }: { business: CreatedBusiness }) {
   const { t } = useTranslation();
   const live = Boolean(business.published);
-  const link = typeof window === 'undefined' ? business.public_path : window.location.origin + business.public_path;
+  const path = businessPagePath(business);
+  const link = typeof window === 'undefined' ? path : window.location.origin + path;
   return (
     <section data-qa="onboarding-success" data-state={live ? 'published' : 'draft'} className="mx-auto max-w-2xl rounded-xl border bg-card p-6 shadow-card sm:p-8">
       <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-success/10 text-success" aria-hidden="true">
@@ -34,7 +43,7 @@ export function OnboardingSuccess({ business }: { business: CreatedBusiness }) {
         {live ? (
           <>
             <Button asChild>
-              <Link to={business.public_path} data-qa="onboarding-open-page">
+              <Link to={path} data-qa="onboarding-open-page">
                 <ExternalLink aria-hidden="true" />
                 {t('staff.onboarding.openPage')}
               </Link>
@@ -49,7 +58,7 @@ export function OnboardingSuccess({ business }: { business: CreatedBusiness }) {
               <Link to="/settings/business">{t('staff.onboarding.review')}</Link>
             </Button>
             <Button variant="outline" asChild>
-              <Link to={business.public_path}>{t('staff.onboarding.preview')}</Link>
+              <Link to={path}>{t('staff.onboarding.preview')}</Link>
             </Button>
           </>
         )}

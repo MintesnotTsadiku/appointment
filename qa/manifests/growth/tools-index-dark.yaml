@@ -179,3 +179,53 @@ scenarios:
       value: /tools/business-hours-sign
   - action: get_console_errors
   - action: get_network_errors
+- id: footer_en_desktop_dark
+  title: 'Tools footer (en, desktop, dark)'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /tools/ethiopian-calendar-converter
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="tools-footer-links"] [data-qa="tools-footer-index"]'
+    # The home page link sits on the copyright row, not at the end of the tool links.
+    - type: visible_selector
+      value: '[data-qa="tools-footer"] .foot-base [data-qa="tools-footer-home"]'
+  actions:
+  - action: scroll
+    delta_y: 5000
+  - action: scroll
+    delta_y: 5000
+  - action: screenshot
+    name: footer_en_desktop_dark.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: footer_am_mobile_dark
+  title: 'Tools footer (am, mobile, dark)'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /am/tools
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="tools-footer-links"] [data-qa="tools-footer-index"]'
+    # The home page link sits on the copyright row, not at the end of the tool links.
+    - type: visible_selector
+      value: '[data-qa="tools-footer"] .foot-base [data-qa="tools-footer-home"]'
+  actions:
+  - action: scroll
+    delta_y: 5000
+  - action: scroll
+    delta_y: 5000
+  - action: screenshot
+    name: footer_am_mobile_dark.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

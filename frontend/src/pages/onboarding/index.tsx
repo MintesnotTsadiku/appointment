@@ -67,12 +67,19 @@ export default function Onboarding() {
       const result = await create({ ...payload, request_id: request.current.key });
       const created = result?.message ?? null;
       let published = false;
+      let businessPath = created?.business_path;
       if (publishNow && created?.organization) {
         // The business exists even if publishing fails; the success page then offers the settings page.
-        published = await publish({ organization: created.organization, published: 1 }).then(() => true, () => false);
+        published = await publish({ organization: created.organization, published: 1 }).then(
+          (response) => {
+            businessPath = response?.message?.business_path || businessPath;
+            return true;
+          },
+          () => false
+        );
       }
       await reload();
-      setDone(created ? { ...created, published } : null);
+      setDone(created ? { ...created, business_path: businessPath, published } : null);
     } catch (error) {
       setProblem(parseFrappeErrorMsg(error as Parameters<typeof parseFrappeErrorMsg>[0]));
     }

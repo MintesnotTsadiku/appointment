@@ -26,6 +26,9 @@ scenarios:
     - type: network_idle
     - type: visible_selector
       value: '[data-qa="landing-promise"]'
+    # The landing page has no light/dark theme and its top bar holds the controls: no global floating toggle.
+    - type: visible_selector
+      value: 'body:not(:has([data-qa="theme-toggle"])) [data-qa="landing-bar"]'
   actions:
   - action: click
     selector: '[data-qa="language-toggle"]'

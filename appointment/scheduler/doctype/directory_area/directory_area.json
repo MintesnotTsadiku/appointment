@@ -10,6 +10,7 @@
   "area_name_am",
   "slug",
   "city",
+  "city_am",
   "column_break_1",
   "enabled",
   "sort_order",
@@ -44,6 +45,12 @@
    "description": "The city this area belongs to, for example Addis Ababa."
   },
   {
+   "fieldname": "city_am",
+   "fieldtype": "Data",
+   "label": "City (Amharic)",
+   "description": "The city name in Amharic, for example አዲስ አበባ. Amharic pages show it; empty falls back to the English city."
+  },
+  {
    "fieldname": "column_break_1",
    "fieldtype": "Column Break",
    "label": ""
@@ -71,7 +78,7 @@
  ],
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-10-12 00:00:00.000000",
+ "modified": "2026-10-12 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "Scheduler",
  "name": "Directory Area",

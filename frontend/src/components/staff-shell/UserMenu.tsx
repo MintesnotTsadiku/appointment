@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import { useFrappeAuth } from 'frappe-react-sdk';
 import { ExternalLink, LayoutGrid, LogOut, Monitor, Moon, Sun, User } from 'lucide-react';
 import { useSession, isAllowedDestination } from '@/context/session';
 import { useTheme } from '@/components/theme-provider';
 import { useTranslation } from '@/lib/i18n';
+import { useSignOut } from '@/lib/sign-out';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback } from '@/components/avatar';
 import {
@@ -30,7 +30,7 @@ export function initialsOf(name: string) {
 /** Account actions; `compact` renders only the avatar (mobile top bar). */
 export function UserMenu({ compact = false }: { compact?: boolean }) {
   const { session } = useSession();
-  const { logout } = useFrappeAuth();
+  const signOut = useSignOut();
   const { theme, setTheme } = useTheme();
   const { t } = useTranslation();
   const { collapsed } = useSidebar();
@@ -38,11 +38,6 @@ export function UserMenu({ compact = false }: { compact?: boolean }) {
   if (!session) return null;
   const name = session.full_name || session.user;
   const iconOnly = compact || collapsed;
-
-  const signOut = async () => {
-    await logout();
-    navigate('/login', { replace: true });
-  };
 
   return (
     <DropdownMenu>

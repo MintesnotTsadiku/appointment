@@ -64,9 +64,12 @@ img, svg { display: block; }
 .site-foot { margin-top: 64px; padding-bottom: 40px; color: var(--muted); font-size: .92rem; }
 .site-foot::before { content: ""; display: block; margin-bottom: 20px; border-top: 1px solid var(--line); }
 .site-foot nav { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 0 0 12px; }
-.site-foot nav a { display: inline-flex; align-items: center; min-height: 36px; color: var(--ink); text-decoration: none; }
-.site-foot nav a:hover { text-decoration: underline; }
+.site-foot nav a, .foot-home { display: inline-flex; align-items: center; min-height: 36px; color: var(--ink); text-decoration: none; }
+.site-foot nav a:hover, .foot-home:hover { text-decoration: underline; }
 .site-foot p { margin: 0; }
+/* Copyright on the left, the home page link on the right; they stack on narrow screens. */
+.foot-base { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 18px; padding-top: 12px; border-top: 1px solid var(--line); }
+@media (min-width: 760px) { .site-foot nav a { white-space: nowrap; } }
 
 /* Hero ------------------------------------------------------------------- */
 .hero { padding: 20px 0 8px; }

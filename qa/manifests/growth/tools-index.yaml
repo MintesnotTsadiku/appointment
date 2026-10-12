@@ -179,3 +179,78 @@ scenarios:
       value: /tools/business-hours-sign
   - action: get_console_errors
   - action: get_network_errors
+- id: footer_en_desktop_light
+  title: 'Tools footer (en, desktop, light)'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /tools
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="tools-footer-links"] [data-qa="tools-footer-index"]'
+    # The home page link sits on the copyright row, not at the end of the tool links.
+    - type: visible_selector
+      value: '[data-qa="tools-footer"] .foot-base [data-qa="tools-footer-home"]'
+  actions:
+  - action: scroll
+    delta_y: 5000
+  - action: scroll
+    delta_y: 5000
+  - action: screenshot
+    name: footer_en_desktop_light.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: footer_am_desktop_light
+  title: 'Tools footer (am, desktop, light)'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /am/tools/ethiopian-time-converter
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="tools-footer-links"] [data-qa="tools-footer-index"]'
+    # The home page link sits on the copyright row, not at the end of the tool links.
+    - type: visible_selector
+      value: '[data-qa="tools-footer"] .foot-base [data-qa="tools-footer-home"]'
+  actions:
+  - action: scroll
+    delta_y: 5000
+  - action: scroll
+    delta_y: 5000
+  - action: screenshot
+    name: footer_am_desktop_light.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: footer_en_mobile_light
+  title: 'Tools footer (en, mobile, light)'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /tools/business-hours-sign
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="tools-footer-links"] [data-qa="tools-footer-index"]'
+    # The home page link sits on the copyright row, not at the end of the tool links.
+    - type: visible_selector
+      value: '[data-qa="tools-footer"] .foot-base [data-qa="tools-footer-home"]'
+  actions:
+  - action: scroll
+    delta_y: 5000
+  - action: scroll
+    delta_y: 5000
+  - action: screenshot
+    name: footer_en_mobile_light.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

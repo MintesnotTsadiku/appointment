@@ -17,7 +17,8 @@ import { usePlatformBrand } from "@/lib/platform-brand";
 import BusinessPrompt from "@/components/business-prompt";
 import CustomerShareCard from "@/components/growth-referrals/CustomerShareCard";
 import PoweredBy from "@/components/powered-by";
-import { formatDate, formatTime } from "../../utils/dateHelpers";
+import { formatDate } from "../../utils/dateHelpers";
+import { clockForLanguage, formatInstant, zoneLabel } from "@/lib/time";
 import type { BookingResponse, Service, TimeSlot } from "../../types";
 
 interface ConfirmationModalProps {
@@ -51,9 +52,12 @@ export function ConfirmationModal({
   const emailQueued = bookingResponse.notificationStatus === "queued";
 
   const startTime = new Date(selectedSlot.start_time);
-  const formattedTime = timeFormat === '24h' 
-    ? formatTime(startTime, '24h', timezone)
-    : formatTime(startTime, '12h', timezone);
+  const formattedTime = formatInstant(startTime, clockForLanguage(language, timeFormat), timezone);
+  const timezoneLabel = zoneLabel(timezone, language, t("customerBooking.zoneTime"), (city) => {
+    const key = `timeZoneCities.${city}`;
+    const name = t(key);
+    return name === key ? null : name;
+  });
 
   const handleCopy = (text: string, type: string) => {
     navigator.clipboard.writeText(text);
@@ -149,11 +153,11 @@ export function ConfirmationModal({
                 <p className="font-semibold text-gray-900 dark:text-gray-100 text-lg">
                   {formatDate(selectedDate, 'full', intlLocale(language))}
                 </p>
-                <p className="text-gray-900 dark:text-gray-100 mt-1">
+                <p data-qa="booking-confirmation-time" className="text-gray-900 dark:text-gray-100 mt-1">
                   {formattedTime} • {service.duration} {t("customerBooking.minutes")}
                 </p>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  {timezone}
+                <p data-qa="booking-confirmation-zone" title={timezone} className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  {timezoneLabel}
                 </p>
               </div>
             </div>

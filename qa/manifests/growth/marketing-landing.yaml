@@ -27,6 +27,9 @@ scenarios:
     - type: no_blank_page
     - type: visible_selector
       value: '[data-qa="landing-promise"]'
+    # The landing page has no light/dark theme and its top bar holds the controls: no global floating toggle.
+    - type: visible_selector
+      value: 'body:not(:has([data-qa="theme-toggle"])) [data-qa="landing-bar"]'
     - type: text_contains
       selector: '[data-qa="landing-promise-free"]'
       value: Free to start

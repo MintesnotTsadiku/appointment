@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Command as CommandPrimitive } from 'cmdk';
 import { Building2, Languages, LogOut, Moon, Search, Sun } from 'lucide-react';
-import { useFrappeAuth } from 'frappe-react-sdk';
 import { useSession } from '@/context/session';
 import { useTheme } from '@/components/theme-provider';
 import { useTranslation } from '@/lib/i18n';
+import { useSignOut } from '@/lib/sign-out';
 import { Dialog, DialogContent, DialogTitle } from '@/components/dialog';
 import { primaryNav, settingsNav } from './navigation';
 import { useRoleLabel } from './WorkspaceSwitcher';
@@ -15,7 +15,7 @@ export function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenCh
   const { session, selectWorkspace } = useSession();
   const { resolvedTheme, setTheme } = useTheme();
   const { t, language, languages, setLanguage } = useTranslation();
-  const { logout } = useFrappeAuth();
+  const signOut = useSignOut();
   const roleLabel = useRoleLabel();
   const navigate = useNavigate();
 
@@ -107,12 +107,7 @@ export function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenCh
               </PaletteItem>
               <PaletteItem
                 value="sign out"
-                onSelect={() =>
-                  run(async () => {
-                    await logout();
-                    navigate('/login', { replace: true });
-                  })
-                }
+                onSelect={() => run(signOut)}
               >
                 <LogOut />
                 {t('staff.shell.signOut')}

@@ -241,6 +241,10 @@ class TestDirectory(ShowoffCase):
                              if row["value"] == "salon-barber") for lang in ("en", "am")}
         self.assertNotEqual(labels["en"], labels["am"])
         self.assertTrue(labels["en"].isascii())
+        # Area options show the city in the page language too.
+        cities = {lang: next(row["city"] for row in directory.owner_listing(business.key, lang)["areas"] if row["value"] == "bole")
+                  for lang in ("en", "am")}
+        self.assertEqual(cities, {"en": "Addis Ababa", "am": "አዲስ አበባ"})
 
     def test_only_opted_in_published_businesses_appear(self):
         listed = self._org("Saron Hair Lounge")
@@ -315,6 +319,8 @@ class TestDirectory(ShowoffCase):
         item = next(row["item"] for row in data["itemListElement"] if row["item"]["name"] == page["cards"][0]["name"])
         self.assertEqual(item["@type"], "LocalBusiness")
         self.assertIn("source=directory", item["url"])
+        self.assertEqual(page["cards"][0]["city"], "አዲስ አበባ")
+        self.assertEqual(item["address"]["addressRegion"], "Addis Ababa")
         self.assertEqual(json.loads(page["breadcrumb_json_ld"])["@type"], "BreadcrumbList")
 
     def test_sitemap_lists_only_non_empty_pages_in_both_languages(self):

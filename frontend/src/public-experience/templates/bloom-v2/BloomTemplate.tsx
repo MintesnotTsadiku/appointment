@@ -6,6 +6,7 @@ import { action, brandLogo, contentImage, designImage, durationMinutes, formatPr
 import { useTemplateCredit } from "../credit";
 import { usePublicChrome, type PublicChrome } from "../chrome";
 import { useReveal, useScrollState } from "../motion";
+import { withAccentInk } from "./ink";
 import "./bloom.css";
 
 /*
@@ -78,7 +79,7 @@ export function BloomSite({ snapshot, locale, applicationName, publicRoot, rootS
   const rooms = records(locations.items);
   const phone = typeof contact.phone === "string" ? contact.phone : "";
 
-  return <div ref={root} data-pe-root data-pe-recipe={snapshot.recipeKey} data-pe-mode={mode} data-motion={design.motion} className="bl" data-template="bloom-hair-v2" style={rootStyle}>
+  return <div ref={root} data-pe-root data-pe-recipe={snapshot.recipeKey} data-pe-mode={mode} data-motion={design.motion} className="bl" data-template="bloom-hair-v2" style={withAccentInk(rootStyle)}>
     <a className="bl-skip" href="#bl-main">{chrome.t("skip")}</a>
     <Bar logo={logo} name={applicationName} root={publicRoot} chrome={chrome} mode={mode} toggleMode={toggleMode}>
       <nav aria-label={chrome.t("navLabel")} className="bl-nav"><a href={`${publicRoot}/blog`}>{chrome.t("journal")}</a><a href={`${publicRoot}/gallery`}>{chrome.t("gallery")}</a>
@@ -206,7 +207,7 @@ export function BloomBooking({ snapshot, locale, applicationName, publicRoot, ro
   const image = designImage(design, "hero.primary");
   const root = useRef<HTMLDivElement>(null);
   useReveal(root, locale);
-  return <div ref={root} data-motion={design.motion} data-pe-booking data-pe-recipe={snapshot.recipeKey} data-pe-mode={mode} className="bl bl-handoff" data-template="bloom-hair-v2" style={rootStyle}>
+  return <div ref={root} data-motion={design.motion} data-pe-booking data-pe-recipe={snapshot.recipeKey} data-pe-mode={mode} className="bl bl-handoff" data-template="bloom-hair-v2" style={withAccentInk(rootStyle)}>
     <Bar logo={brandLogo(design)} name={applicationName} root={publicRoot} chrome={chrome} mode={mode} toggleMode={toggleMode}>
       <a className="bl-link bl-back" href={publicRoot}>{chrome.t("backToSite")}</a>
     </Bar>

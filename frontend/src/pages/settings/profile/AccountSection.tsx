@@ -1,6 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useFrappeAuth } from 'frappe-react-sdk';
 import { LogOut } from 'lucide-react';
 import {
   AlertDialog,
@@ -15,21 +13,12 @@ import {
 import { Button } from '@/components/button';
 import { SettingsSection } from '@/components/settings-layout';
 import { useTranslation } from '@/lib/i18n';
+import { useSignOut } from '@/lib/sign-out';
 
 export function AccountSection() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const { logout } = useFrappeAuth();
+  const signOut = useSignOut();
   const [confirming, setConfirming] = useState(false);
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-      navigate('/login');
-    } catch (error) {
-      console.error('Logout failed:', error);
-    }
-  };
 
   return (
     <SettingsSection title={t('staff.profile.accountTitle')} description={t('staff.profile.accountDescription')}>
@@ -52,7 +41,7 @@ export function AccountSection() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>{t('staff.form.cancel')}</AlertDialogCancel>
-            <AlertDialogAction onClick={handleLogout}>{t('staff.profile.logout')}</AlertDialogAction>
+            <AlertDialogAction onClick={() => void signOut()}>{t('staff.profile.logout')}</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

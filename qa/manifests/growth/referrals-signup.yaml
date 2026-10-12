@@ -83,12 +83,21 @@ scenarios:
     selector: '[data-qa="onboarding-go-home"]'
   - action: click
     selector: '[data-qa="user-menu"]'
+  # Sign-out ends the session once and reloads the sign-in page: no Guest session check (403) afterwards.
   - action: click
     selector: '[data-qa="topnav-logout"]'
-  - action: open_url
-    url: /login
+    assertions:
+    - type: network_request
+      url_contains: /api/method/logout
+      status: 200
   - action: wait_for
     selector: '[data-qa="login-heading"]'
+    timeout_ms: 20000
+    assertions:
+    - type: url_contains
+      value: /login
+  - action: get_console_errors
+  - action: get_network_errors
   - action: fill
     selector: '#email'
     value: '{qa_ref_owner_email}'

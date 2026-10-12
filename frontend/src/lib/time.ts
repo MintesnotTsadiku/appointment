@@ -147,3 +147,48 @@ export function parseDisplayTime(input: string, format: ClockFormat): string | n
   }
   return null;
 }
+
+/**
+ * The clock a customer sees for a language. Amharic screens show Ethiopian local
+ * time with its period (ጠዋት, ከሰዓት, ምሽት, ሌሊት), like the staff screens and the
+ * Amharic notifications; other languages keep the chosen clock.
+ */
+export function clockForLanguage(language: string, chosen: ClockFormat): ClockFormat {
+  return language === 'am' ? 'ethiopian' : chosen;
+}
+
+/** The city part of an IANA zone: `Africa/Addis_Ababa` -> `Addis_Ababa`. */
+export function zoneCityKey(timeZone: string): string {
+  const parts = (timeZone || '').split('/').filter(Boolean);
+  return parts.length > 1 ? parts[parts.length - 1] : '';
+}
+
+/** The localised generic zone name from Intl, e.g. "East Africa Time" / "የምስራቅ አፍሪካ ሰዓት". */
+export function genericZoneName(timeZone: string, locale: string): string {
+  try {
+    const part = new Intl.DateTimeFormat(locale, { timeZone, timeZoneName: 'longGeneric' })
+      .formatToParts(new Date())
+      .find((item) => item.type === 'timeZoneName');
+    return part?.value || timeZone;
+  } catch {
+    return timeZone;
+  }
+}
+
+/**
+ * A friendly label for an IANA zone, e.g. "Addis Ababa time" / "የአዲስ አበባ ሰዓት".
+ * `cityName` returns the city in the page language or null when it has no translation;
+ * `pattern` is the translated "{0} time". Zones without a city fall back to the Intl name.
+ */
+export function zoneLabel(
+  timeZone: string,
+  language: string,
+  pattern: string,
+  cityName: (key: string) => string | null
+): string {
+  const key = zoneCityKey(timeZone);
+  if (!key) return timeZone ? genericZoneName(timeZone, language === 'am' ? 'am-ET' : 'en-US') : '';
+  const city = cityName(key) ?? (language === 'am' ? null : key.replace(/_/g, ' '));
+  if (!city) return genericZoneName(timeZone, 'am-ET');
+  return pattern.replace('{0}', city);
+}

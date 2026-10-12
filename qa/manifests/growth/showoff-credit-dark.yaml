@@ -159,3 +159,45 @@ scenarios:
     full_page: false
   - *id001
   - *id002
+- id: bloom_button_en_desktop_dark
+  title: Bloom booking button contrast (en, desktop, dark)
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /{qa_showoff_bloom_slug}
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-pe-root]'
+    # The accent booking button keeps AA contrast: its ink is set from the palette on the root.
+    - type: visible_selector
+      value: '[data-template="bloom-hair-v2"][style*="--bl-gold-ink"] .bl-hero .bl-btn'
+  actions:
+  - action: screenshot
+    name: bloom_button_en_desktop_dark.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: bloom_button_am_mobile_dark
+  title: Bloom booking button contrast (am, mobile, dark)
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /{qa_showoff_bloom_slug}/am
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-pe-root]'
+    # The accent booking button keeps AA contrast: its ink is set from the palette on the root.
+    - type: visible_selector
+      value: '[data-template="bloom-hair-v2"][style*="--bl-gold-ink"] .bl-hero .bl-btn'
+  actions:
+  - action: screenshot
+    name: bloom_button_am_mobile_dark.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

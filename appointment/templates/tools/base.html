@@ -102,15 +102,17 @@
   </section>
   {%- endif %}
 </main>
-<footer class="wrap site-foot">
-  <nav aria-label="{{ t('tools.common.allTools') }}">
+<footer class="wrap site-foot" data-qa="tools-footer">
+  <nav aria-label="{{ t('tools.common.allTools') }}" data-qa="tools-footer-links">
     <a href="{{ '/am/tools' if lang == 'am' else '/tools' }}" data-qa="tools-footer-index">{{ t("tools.common.allTools") }}</a>
     {%- for item in nav_tools %}
     <a href="{{ item.href }}">{{ item.name }}</a>
     {%- endfor %}
-    <a href="/">{{ t("tools.common.home") }}</a>
   </nav>
-  <p>© {{ year }} {{ product_name }}{% if brand.tagline %} · {{ brand.tagline }}{% endif %}</p>
+  <div class="foot-base">
+    <p>© {{ year }} {{ product_name }}{% if brand.tagline %} · {{ brand.tagline }}{% endif %}</p>
+    <a class="foot-home" href="/" data-qa="tools-footer-home">{{ t("tools.common.home") }}</a>
+  </div>
 </footer>
 {% block data %}{% endblock %}
 {% block scripts %}{% endblock %}

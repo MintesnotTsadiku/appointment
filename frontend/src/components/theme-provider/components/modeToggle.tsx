@@ -9,27 +9,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
  * Internal dependencies
  */
 import { useTheme } from "..";
-
-// Routes that have their own integrated theme toggle
-// These routes should hide the global ModeToggle and use their own integrated toggle
-const ROUTES_WITH_INTEGRATED_TOGGLE = [
-  // Staff pages render the theme control in StaffShell's top bar.
-  '/reception',
-  '/home',
-  '/grow',
-  '/customers',
-  '/settings',
-  '/analytics',
-  '/calendar',
-  '/onboarding',
-  '/settings',
-  '/calendar',
-  '/analytics',
-  '/workspaces',
-  '/no-access',
-  '/admin',
-  '/schedule', // All booking pages have integrated toggles
-];
+import { hidesGlobalModeToggle } from "./modeToggleRoutes";
 
 const ModeToggle = () => {
   const { theme, setTheme } = useTheme();
@@ -39,11 +19,7 @@ const ModeToggle = () => {
   // Check current path on mount and when URL changes
   useEffect(() => {
     const checkPath = () => {
-      const currentPath = window.location.pathname;
-      const hide = ROUTES_WITH_INTEGRATED_TOGGLE.some(
-        route => currentPath.startsWith(route)
-      );
-      setShouldHide(hide);
+      setShouldHide(hidesGlobalModeToggle(window.location.pathname));
     };
 
     // Initial check

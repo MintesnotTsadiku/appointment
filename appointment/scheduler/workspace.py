@@ -87,6 +87,14 @@ def overview():
     return rows
 
 
+def business_path(organization):
+    """The business's public booking page: its published site, else `/schedule/org/<slug>`."""
+    from appointment.growth.sharing import public_path
+    from appointment.scheduler import business_owner
+
+    return public_path(business_owner.from_key(organization))
+
+
 @frappe.whitelist(methods=["POST"])
 def create(business_name, location_name, service_name, timezone, duration, opens_at, closes_at, weekdays, request_id):
     user = require_provider_account()
@@ -197,6 +205,7 @@ def create(business_name, location_name, service_name, timezone, duration, opens
         offering(event.name)
         membership.grant_roles(user, ("Provider", "Organization Manager"))
         result = next(row for row in overview() if row["organization"] == org.name)
+        result["business_path"] = business_path(org.name)
         org.setup_request_result = json.dumps(result)
         org.save(ignore_permissions=True)
         return result
@@ -221,4 +230,4 @@ def publish(organization, published):
     org = frappe.get_doc("Organization", organization)
     org.enable_public_booking = enabled
     org.save(ignore_permissions=True)
-    return {"published": bool(enabled)}
+    return {"published": bool(enabled), "business_path": business_path(organization)}
