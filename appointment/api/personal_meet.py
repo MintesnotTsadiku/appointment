@@ -4,6 +4,7 @@ import re
 import frappe
 import frappe.utils
 import pytz
+from frappe import _
 
 from appointment.appointment.doctype.appointment_group.appointment_group import _get_time_slots_for_day
 from appointment.helpers.overrides import add_response_code

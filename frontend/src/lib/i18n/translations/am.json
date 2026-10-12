@@ -3384,6 +3384,55 @@
         "title": "መጀመሪያ የቀጠሮ ገጽዎን ይፋ ያድርጉ",
         "description": "ደንበኞች በኦንላይን ቀጠሮ መያዝ ሲችሉ እዚህ ሊንኩን ማጋራትና ፖስተር ማተም ይችላሉ።",
         "action": "ቀጠሮ ማስያዣ ያዘጋጁ"
+      },
+      "referrals": {
+        "title": "ሌሎች ንግዶችን ይጋብዙ",
+        "rule": "የጋበዙት ንግድ {0} የተለያዩ ደንበኞችን ሲያገለግል ሁለታችሁም {1} ነፃ ቀጠሮዎች ታገኛላችሁ።",
+        "yourCode": "የግብዣ ኮድዎ",
+        "telegram": "በቴሌግራም ይጋብዙ",
+        "telegramMessage": "ቀጠሮዎቼን በ{0} በኦንላይን እቀበላለሁ። በእኔ ሊንክ ይመዝገቡና ሁለታችንም ነፃ ቀጠሮዎች እናገኛለን፦",
+        "copyLink": "የግብዣ ሊንኩን ቅዳ",
+        "copied": "የግብዣ ሊንኩ ተቀድቷል",
+        "copyFailed": "መቅዳት አልተቻለም። ሊንኩን መርጠው ይቅዱት።",
+        "progressTitle": "የጋበዟቸው ንግዶች",
+        "progressLabel": "ለሽልማቱ የተያዙ ቀጠሮዎች",
+        "earnedTotal": "{0} ነፃ ቀጠሮዎች አግኝተዋል",
+        "empty": "እስካሁን ምንም ንግድ የለም",
+        "emptyBody": "ሊንክዎን ያጋሩ። በሊንኩ የሚመዘገቡ ንግዶች እዚህ ይታያሉ።",
+        "bookings": "ከ{1} ቀጠሮዎች {0}",
+        "joined": "የተቀላቀለው {0}",
+        "statusPending": "ተመዝግቧል",
+        "statusQualified": "ግቡን አሳክቷል",
+        "statusRewarded": "ሽልማት ተገኝቷል",
+        "rewardEarned": "ለእርስዎ +{0} ነፃ ቀጠሮዎች"
+      },
+      "customerOffer": {
+        "title": "የ«ጓደኛዎን ይጋብዙ» ቅናሽ",
+        "description": "ደንበኞች ሊንክ ያጋራሉ። አዲስ ጓደኛ ቀጠሮ ሲይዝ ይሸልሟቸዋል።",
+        "enabled": "ቅናሹ በርቷል",
+        "howItWorks": "ደንበኞች ሊንካቸውን ከቀጠሮ በኋላ እና በ«ቀጠሮዎቼ» ያያሉ። ሠራተኞች ሽልማቱን በእንግዳ መቀበያ ጥቅም ላይ እንደዋለ ይመዘግባሉ።",
+        "rewardType": "ሽልማት",
+        "percent": "የመቶኛ ቅናሽ",
+        "custom": "የራስዎ ሽልማት",
+        "percentLabel": "ቅናሽ በመቶኛ",
+        "customLabel": "ሽልማቱን ይግለጹ",
+        "customPlaceholder": "ነፃ የፀጉር እጥበት",
+        "whoGets": "ሽልማቱን የሚያገኘው",
+        "referrerOnly": "ያጋራው ሰው",
+        "both": "ሁለቱም ጓደኞች",
+        "endsOn": "ቅናሹ የሚያበቃበት (አማራጭ)",
+        "noEnd": "የማብቂያ ቀን የለም",
+        "clearDate": "የማብቂያ ቀኑን አስወግድ",
+        "preview": "አዲስ ጓደኛ ያመጣ ደንበኛ {0} ያገኛል።",
+        "previewBoth": "አዲስ ጓደኛ ያመጣ ደንበኛም ጓደኛውም እያንዳንዳቸው {0} ያገኛሉ።",
+        "incomplete": "ለመቀጠል ሽልማቱን ይምረጡ።",
+        "save": "ቅናሹን አስቀምጥ",
+        "saved": "ቅናሹ ተቀምጧል",
+        "saveFailed": "ቅናሹን ማስቀመጥ አልተቻለም። እንደገና ይሞክሩ።",
+        "recent": "የቅርብ ጊዜ ሽልማቶች",
+        "counts": "{0} በመጠባበቅ ላይ · {1} ጥቅም ላይ ውሏል",
+        "noRewards": "እስካሁን ሽልማት የለም",
+        "noRewardsBody": "ጓደኞች በደንበኛ ሊንክ ቀጠሮ ሲይዙ ሽልማቶች እዚህ ይታያሉ።"
       }
     },
     "brandGrowth": {
@@ -3499,6 +3548,83 @@
         "yearReviewHint": "ለእያንዳንዱ ንግድ ሊጋራ የሚችል የዓመት ማጠቃለያ አቅርብ።",
         "templateCredit": "የቴምፕሌት ምስጋና",
         "templateCreditHint": "በይፋዊ የንግድ ድረ-ገጾች ግርጌ ላይ ትንሽ ምስጋና አሳይ።"
+      }
+    },
+    "referrals": {
+      "referredBy": "የጋበዘው፦",
+      "vouchers": "የሚጠቀሙባቸው ሽልማቶች",
+      "redeem": "ጥቅም ላይ ዋለ",
+      "redeemed": "ሽልማቱ ጥቅም ላይ እንደዋለ ተመዝግቧል",
+      "redeemFailed": "ሽልማቱን ማዘመን አልተቻለም። እንደገና ይሞክሩ።",
+      "roleReferrer": "ጓደኛ ስላመጡ",
+      "roleFriend": "የእንኳን ደህና መጡ ሽልማት",
+      "expires": "እስከ {0} ይጠቀሙ",
+      "redeemedOn": "ጥቅም ላይ የዋለው {0}",
+      "statusIssued": "ለመጠቀም ዝግጁ",
+      "statusRedeemed": "ጥቅም ላይ ውሏል",
+      "statusExpired": "ጊዜው አልፏል",
+      "customerTitle": "የግብዣ ሽልማቶች",
+      "code": "የማጋሪያ ኮድ",
+      "friends": "ያመጧቸው ጓደኞች",
+      "none": "እስካሁን ሽልማት የለም።"
+    },
+    "referralsAdmin": {
+      "title": "ግብዣዎች",
+      "description": "ንግዶችን የሚጋብዙ ንግዶች፣ ምዝገባዎች ከየት እንደሚመጡ እና የአጋርነት ማመልከቻዎች።",
+      "tabReferrals": "ግብዣዎች",
+      "tabSources": "የምዝገባ ምንጮች",
+      "tabPartners": "አጋሮች",
+      "totalPending": "በሂደት ላይ",
+      "totalRewarded": "የተሸለሙ",
+      "totalCredited": "የተሰጡ ነፃ ቀጠሮዎች",
+      "totalOwed": "ለአጋሮች የሚከፈል",
+      "rule": "የተጋበዘ ንግድ {0} የተለያዩ ደንበኞች አገልግሎት ሲያገኙ ብቁ ይሆናል። ሁለቱም ንግዶች {1} ነፃ ቀጠሮዎች ያገኛሉ፤ አጋር {2} ያገኛል።",
+      "off": "የንግድ ግብዣዎች ጠፍተዋል። በ«ብራንድ እና ዕድገት» ያብሯቸው።",
+      "joined": "የተቀላቀለው {0}",
+      "kindBusiness": "ንግድ",
+      "kindPartner": "አጋር",
+      "emptyReferrals": "እስካሁን ግብዣ የለም",
+      "emptyReferralsBody": "በግብዣ ኮድ የሚመዘገቡ ንግዶች እዚህ ይታያሉ።",
+      "sourcesTotal": "{0} አዲስ ንግዶች",
+      "lastDays": "ያለፉት {0} ቀናት",
+      "emptySources": "በዚህ ጊዜ ውስጥ አዲስ ንግድ የለም",
+      "emptyPartners": "እስካሁን የአጋርነት ማመልከቻ የለም",
+      "emptyPartnersBody": "ከአጋሮች ገጽ የሚመጡ ማመልከቻዎች እዚህ ይታያሉ።",
+      "partnerPending": "ግምገማ በመጠባበቅ ላይ",
+      "partnerApproved": "ጸድቋል",
+      "partnerRejected": "ውድቅ ተደርጓል",
+      "appliedOn": "ያመለከተው {0}",
+      "partnerCode": "ኮድ",
+      "qualified": "{0} ብቁ ንግዶች",
+      "approve": "አጽድቅ",
+      "reject": "ውድቅ አድርግ",
+      "approved": "ጸድቋል። የአጋር ኮድ፦ {0}",
+      "rejected": "ማመልከቻው ውድቅ ተደርጓል",
+      "reviewFailed": "ውሳኔውን ማስቀመጥ አልተቻለም። እንደገና ይሞክሩ።",
+      "rejectTitle": "{0} ውድቅ ይደረግ?",
+      "rejectBody": "አመልካቹ ኮድ አያገኝም። ለመዝገብዎ ማስታወሻ ማከል ይችላሉ።",
+      "rejectNote": "ማስታወሻ (አማራጭ)",
+      "cancel": "ይቆይ",
+      "kind": {
+        "association": "ማኅበር",
+        "school": "የውበት ትምህርት ቤት",
+        "trainer": "አሠልጣኝ",
+        "telegram": "የቴሌግራም አስተዳዳሪ",
+        "other": "ሌላ"
+      },
+      "source": {
+        "direct": "በቀጥታ",
+        "referral": "የንግድ ግብዣ",
+        "partner": "አጋር",
+        "powered_by_page": "የቀጠሮ ገጽ ግርጌ",
+        "powered_by_email": "የደንበኛ ኢሜይሎች",
+        "powered_by_sms": "የደንበኛ ኤስኤምኤስ",
+        "customer_prompt": "የደንበኛ ጥያቄ",
+        "directory": "ማውጫ",
+        "year_review": "የዓመቱ ማጠቃለያ",
+        "template_credit": "የቴምፕሌት ምስጋና",
+        "telegram_share": "የቴሌግራም ማጋሪያ",
+        "tool": "መሣሪያ፦ {0}"
       }
     }
   },
@@ -4814,6 +4940,28 @@
       "imageProvider": "በብዛት የተያዘ",
       "imageAmharic": "በአማርኛ የተያዙ",
       "imageTitle": "የዓመቱ ማጠቃለያ"
+    },
+    "referrals": {
+      "referralBonus": "የግብዣ ጉርሻ",
+      "choosePercentOrOwn": "የመቶኛ ቅናሽ ወይም የራስዎን ሽልማት ይምረጡ።",
+      "chooseApproveReject": "ማጽደቅ ወይም ውድቅ ማድረግን ይምረጡ።",
+      "choosePartnerKind": "ምን ዓይነት አጋር እንደሆኑ ይምረጡ።",
+      "codeFailed": "የግብዣ ኮድ መፍጠር አልተቻለም። እንደገና ይሞክሩ።",
+      "customerReferralsOff": "የደንበኛ ግብዣዎች ለመድረኩ ጠፍተዋል።",
+      "describeReward": "ሽልማቱን ይግለጹ፤ ለምሳሌ ነፃ የፀጉር እጥበት።",
+      "discountRange": "ከ1 እስከ 100 በመቶ ያለ ቅናሽ ያስገቡ።",
+      "textOnly": "ጽሑፍ ብቻ ያስገቡ።",
+      "enterName": "ስምዎን ያስገቡ።",
+      "adminOnly": "ግብዣዎችን ማስተዳደር የሚችሉት የመድረኩ አስተዳዳሪዎች ብቻ ናቸው።",
+      "ownerOnly": "የንግዱን ግብዣዎች ማየት የሚችሉት ባለቤቱ ወይም ሥራ አስኪያጅ ብቻ ናቸው።",
+      "signInFirst": "መጀመሪያ ይግቡ።",
+      "partnerThanks": "እናመሰግናለን። ማመልከቻዎን ገምግመን በኢሜይል እንመልሳለን።",
+      "otherBusinessBooking": "ቀጠሮው የሌላ ንግድ ነው።",
+      "endDatePast": "የማብቂያው ቀን ያለፈ ሊሆን አይችልም።",
+      "partnerClosed": "የአጋርነት ፕሮግራሙ አሁን ክፍት አይደለም።",
+      "rewardExpired": "የዚህ ሽልማት ጊዜ አልፏል።",
+      "rewardUsed": "ይህ ሽልማት ጥቅም ላይ ውሏል ወይም ጊዜው አልፏል።",
+      "cannotRedeem": "ይህን ሽልማት መጠቀም አይችሉም።"
     }
   },
   "independentWalkInServer": {
@@ -5243,6 +5391,30 @@
       "emailInvalid": "ትክክለኛ የኢሜይል አድራሻ ያስገቡ።",
       "kindRequired": "ምን ዓይነት አጋር እንደሆኑ ይምረጡ።",
       "tooLong": "ይህ በጣም ረጅም ነው።"
+    }
+  },
+  "growthReferrals": {
+    "reward": {
+      "percentOff": "በሚቀጥለው ጉብኝትዎ {0}% ቅናሽ"
+    },
+    "share": {
+      "title": "ጓደኛዎን ይጋብዙ",
+      "body": "ሊንክዎን ያጋሩ። አዲስ ጓደኛዎ ቀጠሮ ሲይዝ እርስዎ {0} ያገኛሉ።",
+      "bodyBoth": "ሊንክዎን ያጋሩ። አዲስ ጓደኛዎ ቀጠሮ ሲይዝ ሁለታችሁም {0} ታገኛላችሁ።",
+      "message": "ቀጠሮዬን በ{0} ነው የምይዘው። በእኔ ሊንክ እዚህ ይያዙ፦",
+      "messageBoth": "ቀጠሮዬን በ{0} ነው የምይዘው። በእኔ ሊንክ ይያዙና {1} ያግኙ፦",
+      "ends": "ቅናሹ የሚያበቃው {0}",
+      "telegram": "በቴሌግራም ያጋሩ",
+      "copy": "ሊንኬን ቅዳ",
+      "copied": "ሊንኩ ተቀድቷል"
+    },
+    "invite": {
+      "title": "{0} ጋብዘዎታል",
+      "offer": "አሁን ይያዙና {0} ያግኙ።"
+    },
+    "signup": {
+      "invitedBy": "የጋበዘዎት፦ {0}",
+      "bonus": "በዚህ ግብዣ ይመዝገቡ፤ ገጽዎ ሥራ ሲጀምር ሁለታችሁም ነፃ ቀጠሮዎች ታገኛላችሁ።"
     }
   }
 }

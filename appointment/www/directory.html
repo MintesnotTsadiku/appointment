@@ -154,15 +154,15 @@ footer p { margin: 0 0 6px; }
     <ul class="cards">
       {% for card in cards %}<li class="card" data-qa="directory-listing">
         <div class="card-head">
-          <span class="logo" aria-hidden="true">{% if card.logo %}<img src="{{ card.logo }}" alt="" loading="lazy">{% else %}{{ card.initials }}{% endif %}</span>
+          <span class="logo" aria-hidden="true">{% if card.logo %}<img src="{{ card.logo | e }}" alt="" loading="lazy">{% else %}{{ card.initials | e }}{% endif %}</span>
           <div style="min-width:0">
-            <h3>{{ card.name }}</h3>
-            <p class="where">{{ card.category_label }} · {{ card.area_label }}{% if card.city and card.city != card.area_label %}, {{ card.city }}{% endif %}</p>
+            <h3>{{ card.name | e }}</h3>
+            <p class="where">{{ card.category_label }} · {{ card.area_label }}{% if card.city and card.city != card.area_label %}, {{ card.city | e }}{% endif %}</p>
           </div>
         </div>
-        {% if card.description %}<p class="desc">{{ card.description }}</p>{% endif %}
-        {% if card.services %}<div><p class="svc-label">{{ t.services }}</p><ul class="svc">{% for name in card.services %}<li>{{ name }}</li>{% endfor %}</ul></div>{% endif %}
-        <a class="book" href="{{ card.href }}" data-qa="directory-book">{{ t.book }}<span class="sr">: {{ card.name }}</span></a>
+        {% if card.description %}<p class="desc">{{ card.description | e }}</p>{% endif %}
+        {% if card.services %}<div><p class="svc-label">{{ t.services }}</p><ul class="svc">{% for name in card.services %}<li>{{ name | e }}</li>{% endfor %}</ul></div>{% endif %}
+        <a class="book" href="{{ card.href | e }}" data-qa="directory-book">{{ t.book }}<span class="sr">: {{ card.name | e }}</span></a>
       </li>
       {% endfor %}
     </ul>

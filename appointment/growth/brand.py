@@ -2,7 +2,6 @@
 
 from urllib.parse import urlparse
 
-import frappe
 from frappe.utils import get_url
 
 from appointment.growth import cache

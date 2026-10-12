@@ -40,5 +40,5 @@ export function signupPath(source: string, extra: Record<string, string | null |
 
 /** Only same-site paths may be followed from a server answer. */
 export function safeLocalPath(path?: string | null): string {
-  return typeof path === 'string' && path.startsWith('/') && !path.startsWith('//') ? path : '';
+  return typeof path === 'string' && /^\/(?![/\\])/.test(path) ? path : '';
 }

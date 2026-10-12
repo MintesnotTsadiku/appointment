@@ -44,7 +44,7 @@ GROWTH_DEFAULTS = {
 
 
 def ensure_defaults():
-    """Fill every empty brand and growth value. Safe to run any number of times."""
+    """Fill brand and growth values that were never set. Safe to run any number of times."""
     _fill("Platform Brand Settings", BRAND_DEFAULTS)
     _fill("Growth Settings", GROWTH_DEFAULTS)
 
@@ -52,12 +52,11 @@ def ensure_defaults():
 def _fill(doctype: str, defaults: dict):
     if not frappe.db.table_exists("Singles") or not frappe.db.exists("DocType", doctype):
         return
-    saved = frappe.db.get_singles_dict(doctype)
-    # A switch or number set to 0 is a choice; only text can be "empty" once saved.
-    missing = {
-        field: value for field, value in defaults.items()
-        if field not in saved or (isinstance(value, str) and not saved.get(field))
-    }
+    # Fill only fields that were never stored. A saved document stores every field, so a text the
+    # admin cleared on purpose, or a switch set to 0, stays as chosen; new fields get their default.
+    singles = frappe.qb.Table("tabSingles")
+    stored = {row[0] for row in frappe.qb.from_(singles).select(singles.field).where(singles.doctype == doctype).run()}
+    missing = {field: value for field, value in defaults.items() if field not in stored}
     if not missing:
         return
     doc = frappe.get_single(doctype)

@@ -32,14 +32,15 @@ def bonus_free_bookings(owner_key):
 
 
 def real_bookings(owner_key):
-    """Bookings that count toward qualification for one business."""
+    """Bookings that count toward qualification for one business: one per customer email, so repeat
+    bookings by the same person cannot fill the threshold."""
     owner = business_owner.from_key(owner_key)
     appointment = frappe.qb.DocType("Appointment")
     email = Coalesce(appointment.client_email, "")
     took_place = (appointment.status == "Completed") | (
         (appointment.status == "Confirmed") & (appointment.starts_at <= _utc_now())
     )
-    query = frappe.qb.from_(appointment).select(Count(appointment.name)).where(took_place)
+    query = frappe.qb.from_(appointment).select(Count(email).distinct()).where(took_place & (email != ""))
     if owner.organization:
         query = query.where(appointment.organization == owner.organization)
     else:

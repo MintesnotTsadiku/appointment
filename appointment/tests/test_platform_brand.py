@@ -39,13 +39,15 @@ class TestPlatformBrand(unittest.TestCase):
         cache.clear(BRAND)
         cache.clear(GROWTH)
 
-    def test_seed_fills_only_empty_values_and_is_idempotent(self):
+    def test_seed_fills_only_values_never_set_and_is_idempotent(self):
         frappe.db.set_single_value(BRAND, "tagline_en", "")
+        frappe.db.delete("Singles", {"doctype": BRAND, "field": "tagline_am"})
         frappe.db.set_single_value(BRAND, "product_name", "Custom Name")
         frappe.db.set_single_value(GROWTH, "posters_enabled", 0)
         frappe.db.delete("Singles", {"doctype": GROWTH, "field": "tools_enabled"})
         seed.ensure_defaults()
-        self.assertEqual(frappe.db.get_single_value(BRAND, "tagline_en"), seed.BRAND_DEFAULTS["tagline_en"])
+        self.assertFalse(frappe.db.get_single_value(BRAND, "tagline_en"), "a text cleared on purpose stays empty")
+        self.assertEqual(frappe.db.get_single_value(BRAND, "tagline_am"), seed.BRAND_DEFAULTS["tagline_am"], "a text never set is seeded")
         self.assertEqual(frappe.db.get_single_value(BRAND, "product_name"), "Custom Name", "a saved name is kept")
         self.assertEqual(frappe.db.get_single_value(GROWTH, "posters_enabled"), 0, "a switch turned off stays off")
         self.assertEqual(frappe.db.get_single_value(GROWTH, "tools_enabled"), 1, "a switch never saved is seeded on")

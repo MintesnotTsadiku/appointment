@@ -177,10 +177,11 @@ def _sign_in(user):
     """Start the new account's session, so the owner goes straight to business setup.
 
     The visitor has just chosen this password, so a second sign-in screen only adds a step.
-    Accounts that wait for administrator approval are disabled and are never signed in.
+    Accounts that wait for administrator approval are disabled and are never signed in, and a
+    signed-in caller (for example an administrator creating an account) keeps their own session.
     """
     login_manager = getattr(frappe.local, "login_manager", None)
-    if not (frappe.request and login_manager):
+    if not (frappe.request and login_manager) or frappe.session.user != "Guest":
         return False
     login_manager.login_as(user)
     return True

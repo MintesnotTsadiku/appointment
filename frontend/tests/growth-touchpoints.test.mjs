@@ -39,5 +39,6 @@ assert.equal(safeLocalPath('/signup?source=x'), '/signup?source=x');
 assert.equal(safeLocalPath('//evil.example/x'), '');
 assert.equal(safeLocalPath('https://evil.example'), '');
 assert.equal(safeLocalPath(undefined), '');
+assert.equal(safeLocalPath('/\\evil.example/x'), '');
 
 console.log('growth-touchpoints tests passed');

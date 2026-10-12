@@ -201,6 +201,14 @@ class TestPartnerFormWithoutJavaScript(PartnerFormCase):
         self.assertIn('value="Addis Beauty Association"', page, "valid answers are kept")
         self.assertEqual(self.partners("not-an-email"), 0)
 
+    def test_echoed_answers_are_escaped(self):
+        script = '"><script>alert(1)</script>'
+        data = _application(email="not-an-email", organization=script, message=script)
+        form, page = self.post(data)
+        self.assertEqual(form["state"], "invalid")
+        self.assertNotIn("<script>alert(1)</script>", page)
+        self.assertIn("&lt;script&gt;", page)
+
     def test_api_errors_render_as_a_form_message(self):
         data = _application(phone="12")
         form, page = self.post(data)

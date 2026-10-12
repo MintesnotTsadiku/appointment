@@ -8,7 +8,6 @@ shared settings cache is never changed. See docs/growth/REFERRALS.md.
 
 import contextlib
 import random
-import re
 import unittest
 from datetime import datetime, timedelta
 from unittest import mock
@@ -209,6 +208,14 @@ class TestBusinessReferrals(ReferralCase):
         self.assertEqual((view["referrals"][0]["bookings"], view["threshold"], view["earned_free_bookings"]), (3, 3, 50))
         self.assertIn(f"/signup?ref={view['code']}", view["link"])
 
+    def test_repeat_bookings_by_one_customer_count_once(self):
+        referrer = self._org("Bethel Beauty")
+        referred = self._solo("Abel Fades", ref=referrals.business_code(referrer.key))
+        email = f"dawit.{frappe.generate_hash(length=6)}@gmail.com"
+        for slot in range(3):
+            self._took_place(self._book(referred, slot, "Dawit Alemu", email=email))
+        self.assertEqual(referral_rewards.real_bookings(referred.key), 1)
+
     def test_platform_fee_waiver_uses_the_referral_bonus(self):
         business = self._org("Sara Lashes")
         settings = payments.business(business.key)
@@ -246,7 +253,7 @@ class TestCustomerReferrals(ReferralCase):
         frappe.set_user("Guest")
         share = customer_referral_api.share(first.appointment_id)
         self.assertTrue(share["active"])
-        self.assertRegex(share["code"], r"^HANNA\d{3}$")
+        self.assertRegex(share["code"], r"^HANNA\d{5}$")
         self.assertIn(f"/schedule/org/{business.slug}?ref={share['code']}", share["link"])
         invite = customer_referral_api.invite(share["code"], slug=business.slug)
         self.assertEqual((invite["valid"], invite["first_name"], invite["percent"], invite["friend_gets_offer"]), (True, "Hanna", 10, True))

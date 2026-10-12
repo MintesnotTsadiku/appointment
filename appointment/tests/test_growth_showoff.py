@@ -285,6 +285,14 @@ class TestDirectory(ShowoffCase):
         with self.assertRaises(frappe.PageDoesNotExistError):
             self._page()
 
+    def test_business_names_are_escaped_on_the_page(self):
+        business = self._org("Rose & <b>Lily</b> Salon")
+        self._list(business, "salon-barber", "bole")
+        context = self._page(category="salon-barber", area="bole")
+        page = frappe.render_template("appointment/www/directory.html", context)
+        self.assertNotIn("<b>Lily</b>", page)
+        self.assertIn("&lt;b&gt;Lily&lt;/b&gt;", page)
+
     def test_amharic_pages_hreflang_and_json_ld(self):
         business = self._org("Meskerem Beauty Studio")
         self._list(business, "salon-barber", "bole")

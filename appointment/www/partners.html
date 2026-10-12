@@ -115,7 +115,7 @@
       <p class="card-sub">{{ t("form.lede") }}</p>
       <div class="p-success" role="status" data-qa="partners-success" {% if form.state != "sent" %}hidden{% endif %}>
         <span class="p-success-icon">{{ icon("check") }}</span>
-        <div><h3>{{ t("form.successTitle") }}</h3><p data-qa="partners-success-text">{{ form.message if form.state == "sent" else t("form.success") }}</p></div>
+        <div><h3>{{ t("form.successTitle") }}</h3><p data-qa="partners-success-text">{{ (form.message if form.state == "sent" else t("form.success")) | e }}</p></div>
       </div>
       <form method="post" action="{{ canonical }}#apply" novalidate data-qa="partners-form" data-method="{{ apply_method }}"
             data-msg-failed="{{ t('form.failed') }}" data-msg-rate="{{ t('form.rateLimited') }}" data-msg-fix="{{ t('form.fixErrors') }}"
@@ -124,28 +124,28 @@
             {% if form.state == "sent" %}hidden{% endif %}>
         {%- if csrf_token %}<input type="hidden" name="csrf_token" value="{{ csrf_token }}">{% endif %}
         <div class="p-trap" aria-hidden="true"><label>{{ t("form.trap") }} <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
-        <p class="p-form-error error-text" role="alert" data-qa="partners-form-error" {% if form.state not in ("invalid", "failed") %}hidden{% endif %}>{{ form.message if form.state in ("invalid", "failed") else "" }}</p>
+        <p class="p-form-error error-text" role="alert" data-qa="partners-form-error" {% if form.state not in ("invalid", "failed") %}hidden{% endif %}>{{ (form.message if form.state in ("invalid", "failed") else "") | e }}</p>
         <div class="row p-row">
           <div class="field">
             <label for="p-name">{{ t("form.name") }} <span class="p-req" aria-hidden="true">*</span></label>
-            <input class="input" id="p-name" name="name" type="text" autocomplete="name" required maxlength="140" value="{{ form['values'].get('name', '') }}" aria-describedby="p-name-error" {% if form.errors.name %}aria-invalid="true"{% endif %} data-qa="partners-name">
+            <input class="input" id="p-name" name="name" type="text" autocomplete="name" required maxlength="140" value="{{ form['values'].get('name', '') | e }}" aria-describedby="p-name-error" {% if form.errors.name %}aria-invalid="true"{% endif %} data-qa="partners-name">
             <p class="error-text" id="p-name-error" data-error-for="name" {% if not form.errors.name %}hidden{% endif %}>{{ form.errors.name or "" }}</p>
           </div>
           <div class="field">
             <label for="p-organization">{{ t("form.organization") }}</label>
-            <input class="input" id="p-organization" name="organization" type="text" autocomplete="organization" maxlength="140" value="{{ form['values'].get('organization', '') }}" aria-describedby="p-organization-error" data-qa="partners-organization">
+            <input class="input" id="p-organization" name="organization" type="text" autocomplete="organization" maxlength="140" value="{{ form['values'].get('organization', '') | e }}" aria-describedby="p-organization-error" data-qa="partners-organization">
             <p class="error-text" id="p-organization-error" data-error-for="organization" {% if not form.errors.organization %}hidden{% endif %}>{{ form.errors.organization or "" }}</p>
           </div>
         </div>
         <div class="row p-row">
           <div class="field">
             <label for="p-email">{{ t("form.email") }} <span class="p-req" aria-hidden="true">*</span></label>
-            <input class="input" id="p-email" name="email" type="email" inputmode="email" autocomplete="email" required maxlength="140" value="{{ form['values'].get('email', '') }}" aria-describedby="p-email-error" {% if form.errors.email %}aria-invalid="true"{% endif %} data-qa="partners-email">
+            <input class="input" id="p-email" name="email" type="email" inputmode="email" autocomplete="email" required maxlength="140" value="{{ form['values'].get('email', '') | e }}" aria-describedby="p-email-error" {% if form.errors.email %}aria-invalid="true"{% endif %} data-qa="partners-email">
             <p class="error-text" id="p-email-error" data-error-for="email" {% if not form.errors.email %}hidden{% endif %}>{{ form.errors.email or "" }}</p>
           </div>
           <div class="field">
             <label for="p-phone">{{ t("form.phone") }}</label>
-            <input class="input" id="p-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="09…" value="{{ form['values'].get('phone', '') }}" data-qa="partners-phone">
+            <input class="input" id="p-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="09…" value="{{ form['values'].get('phone', '') | e }}" data-qa="partners-phone">
           </div>
         </div>
         <fieldset class="field" aria-describedby="p-kind-error">
@@ -159,7 +159,7 @@
         </fieldset>
         <div class="field">
           <label for="p-message">{{ t("form.message") }}</label>
-          <textarea class="input p-textarea" id="p-message" name="message" rows="4" maxlength="1000" placeholder="{{ t('form.messagePlaceholder') }}" aria-describedby="p-message-error" data-qa="partners-message">{{ form['values'].get('message', '') }}</textarea>
+          <textarea class="input p-textarea" id="p-message" name="message" rows="4" maxlength="1000" placeholder="{{ t('form.messagePlaceholder') }}" aria-describedby="p-message-error" data-qa="partners-message">{{ form['values'].get('message', '') | e }}</textarea>
           <p class="error-text" id="p-message-error" data-error-for="message" {% if not form.errors.message %}hidden{% endif %}>{{ form.errors.message or "" }}</p>
         </div>
         <div class="p-submit-row">

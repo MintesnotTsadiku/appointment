@@ -3384,6 +3384,55 @@
         "title": "Publish your booking page first",
         "description": "When customers can book online, you can share the link and print a poster here.",
         "action": "Set up booking"
+      },
+      "referrals": {
+        "title": "Invite other businesses",
+        "rule": "When a business you invite serves {0} different customers, you both get {1} free bookings.",
+        "yourCode": "Your invite code",
+        "telegram": "Invite on Telegram",
+        "telegramMessage": "I take bookings online with {0}. Sign up with my link and we both get free bookings:",
+        "copyLink": "Copy invite link",
+        "copied": "Invite link copied",
+        "copyFailed": "Could not copy. Select the link and copy it.",
+        "progressTitle": "Businesses you invited",
+        "progressLabel": "Bookings toward the reward",
+        "earnedTotal": "You earned {0} free bookings",
+        "empty": "No businesses yet",
+        "emptyBody": "Share your link. Businesses that sign up with it show here.",
+        "bookings": "{0} of {1} bookings",
+        "joined": "Joined {0}",
+        "statusPending": "Signed up",
+        "statusQualified": "Goal reached",
+        "statusRewarded": "Reward earned",
+        "rewardEarned": "+{0} free bookings for you"
+      },
+      "customerOffer": {
+        "title": "Bring a friend offer",
+        "description": "Customers share a link. You reward them when a new friend books.",
+        "enabled": "Offer is on",
+        "howItWorks": "Customers see their link after booking and in My bookings. Staff mark rewards as used at the desk.",
+        "rewardType": "Reward",
+        "percent": "Percent off",
+        "custom": "Your own reward",
+        "percentLabel": "Discount in percent",
+        "customLabel": "Describe the reward",
+        "customPlaceholder": "Free hair wash",
+        "whoGets": "Who gets the reward",
+        "referrerOnly": "The one who shares",
+        "both": "Both friends",
+        "endsOn": "Offer ends (optional)",
+        "noEnd": "No end date",
+        "clearDate": "Remove end date",
+        "preview": "A customer who brings a new friend gets {0}.",
+        "previewBoth": "A customer who brings a new friend, and the friend, each get {0}.",
+        "incomplete": "Choose the reward to continue.",
+        "save": "Save offer",
+        "saved": "Offer saved",
+        "saveFailed": "Could not save the offer. Try again.",
+        "recent": "Recent rewards",
+        "counts": "{0} waiting · {1} used",
+        "noRewards": "No rewards yet",
+        "noRewardsBody": "Rewards show here when friends book with a customer's link."
       }
     },
     "brandGrowth": {
@@ -3499,6 +3548,83 @@
         "yearReviewHint": "Offer each business a shareable summary of its year.",
         "templateCredit": "Template credit",
         "templateCreditHint": "Show a small credit in the footer of public business sites."
+      }
+    },
+    "referrals": {
+      "referredBy": "Referred by",
+      "vouchers": "Rewards to use",
+      "redeem": "Mark used",
+      "redeemed": "Reward marked as used",
+      "redeemFailed": "Could not update the reward. Try again.",
+      "roleReferrer": "For bringing a friend",
+      "roleFriend": "Welcome reward",
+      "expires": "Use by {0}",
+      "redeemedOn": "Used {0}",
+      "statusIssued": "Ready to use",
+      "statusRedeemed": "Used",
+      "statusExpired": "Expired",
+      "customerTitle": "Referral rewards",
+      "code": "Share code",
+      "friends": "Friends brought",
+      "none": "No rewards yet."
+    },
+    "referralsAdmin": {
+      "title": "Referrals",
+      "description": "Businesses that invite businesses, where sign-ups come from, and partner applications.",
+      "tabReferrals": "Referrals",
+      "tabSources": "Sign-up sources",
+      "tabPartners": "Partners",
+      "totalPending": "In progress",
+      "totalRewarded": "Rewarded",
+      "totalCredited": "Free bookings credited",
+      "totalOwed": "Owed to partners",
+      "rule": "A referred business qualifies when {0} different customers have had a visit. Both businesses get {1} free bookings; a partner earns {2}.",
+      "off": "Business referrals are off. Turn them on in Brand & growth.",
+      "joined": "Joined {0}",
+      "kindBusiness": "Business",
+      "kindPartner": "Partner",
+      "emptyReferrals": "No referrals yet",
+      "emptyReferralsBody": "Businesses that sign up with an invite code show here.",
+      "sourcesTotal": "{0} new businesses",
+      "lastDays": "Last {0} days",
+      "emptySources": "No new businesses in this period",
+      "emptyPartners": "No partner applications yet",
+      "emptyPartnersBody": "Applications from the partners page show here.",
+      "partnerPending": "Awaiting review",
+      "partnerApproved": "Approved",
+      "partnerRejected": "Declined",
+      "appliedOn": "Applied {0}",
+      "partnerCode": "Code",
+      "qualified": "{0} qualified businesses",
+      "approve": "Approve",
+      "reject": "Decline",
+      "approved": "Approved. Partner code: {0}",
+      "rejected": "Application declined",
+      "reviewFailed": "Could not save the decision. Try again.",
+      "rejectTitle": "Decline {0}?",
+      "rejectBody": "The applicant gets no code. You can add a note for your records.",
+      "rejectNote": "Note (optional)",
+      "cancel": "Keep it",
+      "kind": {
+        "association": "Association",
+        "school": "Beauty school",
+        "trainer": "Trainer",
+        "telegram": "Telegram admin",
+        "other": "Other"
+      },
+      "source": {
+        "direct": "Direct",
+        "referral": "Business invite",
+        "partner": "Partner",
+        "powered_by_page": "Booking page footer",
+        "powered_by_email": "Customer emails",
+        "powered_by_sms": "Customer SMS",
+        "customer_prompt": "Customer prompt",
+        "directory": "Directory",
+        "year_review": "Year in review",
+        "template_credit": "Template credit",
+        "telegram_share": "Telegram share",
+        "tool": "Tool: {0}"
       }
     }
   },
@@ -4814,6 +4940,28 @@
       "imageProvider": "Most booked",
       "imageAmharic": "Booked in Amharic",
       "imageTitle": "Year in review"
+    },
+    "referrals": {
+      "referralBonus": "Referral bonus",
+      "choosePercentOrOwn": "Choose a percent off or your own reward.",
+      "chooseApproveReject": "Choose approve or reject.",
+      "choosePartnerKind": "Choose what kind of partner you are.",
+      "codeFailed": "Could not create a referral code. Try again.",
+      "customerReferralsOff": "Customer referrals are turned off for the platform.",
+      "describeReward": "Describe the reward, for example a free hair wash.",
+      "discountRange": "Enter a discount between 1 and 100 percent.",
+      "textOnly": "Enter text only.",
+      "enterName": "Enter your name.",
+      "adminOnly": "Only platform administrators can manage referrals.",
+      "ownerOnly": "Only the business owner or a manager can see its referrals.",
+      "signInFirst": "Sign in first.",
+      "partnerThanks": "Thank you. We will review your application and reply by email.",
+      "otherBusinessBooking": "The booking belongs to another business.",
+      "endDatePast": "The end date cannot be in the past.",
+      "partnerClosed": "The partner program is not open right now.",
+      "rewardExpired": "This reward has expired.",
+      "rewardUsed": "This reward was already used or has expired.",
+      "cannotRedeem": "You cannot redeem this reward."
     }
   },
   "independentWalkInServer": {
@@ -5243,6 +5391,30 @@
       "emailInvalid": "Enter a valid email address.",
       "kindRequired": "Choose what kind of partner you are.",
       "tooLong": "This is too long."
+    }
+  },
+  "growthReferrals": {
+    "reward": {
+      "percentOff": "{0}% off your next visit"
+    },
+    "share": {
+      "title": "Bring a friend",
+      "body": "Share your link. When a new friend books, you get {0}.",
+      "bodyBoth": "Share your link. When a new friend books, you both get {0}.",
+      "message": "I book my appointments at {0}. Book here with my link:",
+      "messageBoth": "I book my appointments at {0}. Book with my link and get {1}:",
+      "ends": "Offer ends {0}",
+      "telegram": "Share on Telegram",
+      "copy": "Copy my link",
+      "copied": "Link copied"
+    },
+    "invite": {
+      "title": "You were invited by {0}",
+      "offer": "Book now and get {0}."
+    },
+    "signup": {
+      "invitedBy": "Invited by {0}",
+      "bonus": "Sign up with this invite and you both earn free bookings once your page gets going."
     }
   }
 }

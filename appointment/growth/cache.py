@@ -14,7 +14,10 @@ def stored(doctype: str) -> dict:
 
 
 def clear(doctype: str):
-    frappe.cache.delete_value(KEYS[doctype])
+    key = KEYS[doctype]
+    frappe.cache.delete_value(key)
+    # A request that reads the single before this save commits would cache the old values again.
+    frappe.db.after_commit.add(lambda: frappe.cache.delete_value(key))
 
 
 def _read(doctype: str) -> dict:

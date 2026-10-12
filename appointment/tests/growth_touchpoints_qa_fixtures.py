@@ -110,9 +110,10 @@ def cleanup():
     frappe.set_user("Administrator")
     emails = (RETURNING, *GUESTS)
     names = frappe.get_all("Appointment", filters={"client_email": ["in", emails]}, pluck="name")
-    customers = set(frappe.get_all("Appointment", filters={"name": ["in", names or [""]]}, pluck="customer"))
-    frappe.db.delete("Appointment Notification", {"appointment": ["in", names or [""]]})
-    frappe.db.delete("Email Queue", {"reference_doctype": "Appointment", "reference_name": ["in", names or [""]]})
+    customers = set(frappe.get_all("Appointment", filters={"name": ["in", names]}, pluck="customer")) if names else set()
+    if names:  # `in ("")` would also match rows whose link is empty.
+        frappe.db.delete("Appointment Notification", {"appointment": ["in", names]})
+        frappe.db.delete("Email Queue", {"reference_doctype": "Appointment", "reference_name": ["in", names]})
     org = _org()
     for name in frappe.get_all("Email Queue", filters={"reference_doctype": "Organization", "reference_name": org,
                                                        "message": ["like", "%my-bookings?token=%"]}, pluck="name"):

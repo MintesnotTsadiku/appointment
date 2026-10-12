@@ -102,7 +102,7 @@ function RejectDialog({ partner, busy, onClose, onReject }: { partner: Partner |
           <Textarea id="partner-reject-note" data-qa="admin-partner-reject-note" rows={3} value={note} onChange={(event) => setNote(event.target.value)} />
         </div>
         <DialogFooter>
-          <Button variant="ghost" onClick={onClose}>{t('staff.referralsAdmin.cancel')}</Button>
+          <Button variant="ghost" onClick={onClose} data-qa="admin-partner-reject-cancel">{t('staff.referralsAdmin.cancel')}</Button>
           <Button data-qa="admin-partner-reject-confirm" variant="destructive" disabled={busy} onClick={() => onReject(note)}>{t('staff.referralsAdmin.reject')}</Button>
         </DialogFooter>
       </DialogContent>

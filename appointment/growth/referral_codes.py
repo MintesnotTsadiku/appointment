@@ -63,7 +63,8 @@ def customer_code(profile_name):
     )
     if not profile:
         frappe.throw(_("Customer not found."), frappe.DoesNotExistError)
-    return _insert_code("Customer Referral Code", first_name(profile.display_name), dict(
+    # Five digits: a customer code carries a first name, so it must not be easy to guess.
+    return _insert_code("Customer Referral Code", first_name(profile.display_name), min_digits=5, values=dict(
         customer_profile=profile.name, owner_key=business_owner.record_key(profile),
         organization=profile.organization, independent_provider=profile.independent_provider,
     ))
@@ -106,10 +107,10 @@ def first_name(name):
 # ---------------------------------------------------------------------------
 # Generation
 # ---------------------------------------------------------------------------
-def _insert_code(doctype, label, values):
+def _insert_code(doctype, label, values, min_digits=3):
     stem = _stem(label)
     for attempt in range(ATTEMPTS):
-        digits = 3 if attempt < ATTEMPTS // 2 else 5
+        digits = max(min_digits, 3 if attempt < ATTEMPTS // 2 else 5)
         code = f"{stem}{random.randint(10 ** (digits - 1), 10 ** digits - 1)}"
         if frappe.db.exists(doctype, code):
             continue

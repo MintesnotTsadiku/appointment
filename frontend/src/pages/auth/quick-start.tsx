@@ -70,7 +70,8 @@ export default function QuickStartSignup({ prefill, source, refCode }: { prefill
         setStage('pending');
         return;
       }
-      await login({ username: form.email, password: form.password });
+      // Sign-up starts the session itself when it can; sign in only when it did not.
+      if (!account?.message?.signed_in) await login({ username: form.email, password: form.password });
       const result = await quickStart({ business_name: form.business_name, service_name: form.service_name, prefill });
       setCreated(result.message);
       await reload();

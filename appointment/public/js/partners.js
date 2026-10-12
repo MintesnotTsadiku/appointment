@@ -89,9 +89,8 @@
       var last = messages.length ? JSON.parse(messages[messages.length - 1]) : null;
       var text = last && (last.message || last);
       if (typeof text === "string") {
-        var holder = document.createElement("div");
-        holder.innerHTML = text;
-        return holder.textContent.trim();
+        // DOMParser builds an inert document: markup in a message never loads or runs.
+        return (new DOMParser().parseFromString(text, "text/html").body.textContent || "").trim();
       }
     } catch (error) {
       /* Fall back to the generic message. */

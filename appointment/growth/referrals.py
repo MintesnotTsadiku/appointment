@@ -143,7 +143,14 @@ def on_booking_change(doc, method=None):
 
     key = customer_referrals.booking_owner_key(doc)
     if key:
-        referral_rewards.check_business(key)
+        # A referral problem (for example a deleted referrer business) must never block a booking;
+        # the daily job evaluates the referral again.
+        frappe.db.savepoint("growth_referral_progress")
+        try:
+            referral_rewards.check_business(key)
+        except Exception:
+            frappe.db.rollback(save_point="growth_referral_progress")
+            frappe.log_error(title="Referral progress check failed", reference_doctype=doc.doctype, reference_name=doc.name)
     if doc.status == "Cancelled" and doc.has_value_changed("status"):
         customer_referrals.on_booking_cancel(doc)
 
