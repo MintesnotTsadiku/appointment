@@ -52,11 +52,15 @@ def ensure_defaults():
 def _fill(doctype: str, defaults: dict):
     if not frappe.db.table_exists("Singles") or not frappe.db.exists("DocType", doctype):
         return
-    # Fill only fields that were never stored. A saved document stores every field, so a text the
-    # admin cleared on purpose, or a switch set to 0, stays as chosen; new fields get their default.
+    # Install stores a single's fields empty without saving it (no `creation`). Until the first save,
+    # fill every empty field. After it, fill only fields never stored (new fields), so a text the
+    # admin cleared on purpose, or a switch set to 0, stays as chosen.
     singles = frappe.qb.Table("tabSingles")
-    stored = {row[0] for row in frappe.qb.from_(singles).select(singles.field).where(singles.doctype == doctype).run()}
-    missing = {field: value for field, value in defaults.items() if field not in stored}
+    stored = dict(frappe.qb.from_(singles).select(singles.field, singles.value).where(singles.doctype == doctype).run())
+    if stored.get("creation"):
+        missing = {field: value for field, value in defaults.items() if field not in stored}
+    else:
+        missing = {field: value for field, value in defaults.items() if stored.get(field) in (None, "")}
     if not missing:
         return
     doc = frappe.get_single(doctype)

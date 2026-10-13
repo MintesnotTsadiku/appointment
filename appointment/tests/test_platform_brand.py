@@ -40,6 +40,8 @@ class TestPlatformBrand(unittest.TestCase):
         cache.clear(GROWTH)
 
     def test_seed_fills_only_values_never_set_and_is_idempotent(self):
+        for doctype in (BRAND, GROWTH):  # The admin has saved both settings once.
+            frappe.db.set_single_value(doctype, "creation", frappe.utils.now())
         frappe.db.set_single_value(BRAND, "tagline_en", "")
         frappe.db.delete("Singles", {"doctype": BRAND, "field": "tagline_am"})
         frappe.db.set_single_value(BRAND, "product_name", "Custom Name")
@@ -55,6 +57,16 @@ class TestPlatformBrand(unittest.TestCase):
         modified = frappe.db.get_single_value(BRAND, "modified")
         seed.ensure_defaults()
         self.assertEqual(frappe.db.get_single_value(BRAND, "modified"), modified, "a second run changes nothing")
+
+    def test_seed_fills_empty_fields_of_a_never_saved_install(self):
+        # A fresh install stores the fields empty and never saves the single, so it has no `creation`.
+        frappe.db.delete("Singles", {"doctype": BRAND, "field": "creation"})
+        frappe.db.set_single_value(BRAND, "product_name", "")
+        frappe.db.set_single_value(BRAND, "tagline_en", "")
+        frappe.db.delete("Singles", {"doctype": BRAND, "field": "creation"})
+        seed.ensure_defaults()
+        self.assertEqual(frappe.db.get_single_value(BRAND, "product_name"), seed.BRAND_DEFAULTS["product_name"])
+        self.assertEqual(frappe.db.get_single_value(BRAND, "tagline_en"), seed.BRAND_DEFAULTS["tagline_en"])
 
     def test_cache_is_cleared_on_save(self):
         before = brand()["product_name"]
