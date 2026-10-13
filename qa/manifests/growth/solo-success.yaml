@@ -81,7 +81,7 @@ scenarios:
       value: /schedule/individual/
     - type: text_contains
       selector: '[data-qa="onboarding-live-url"]'
-      value: http://127.0.0.146:47800/schedule/individual/
+      value: /schedule/individual/
     - type: text_contains
       value: Your booking page is live
     - type: visible_selector

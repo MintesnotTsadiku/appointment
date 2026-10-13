@@ -12,7 +12,7 @@ from frappe import _
 from frappe.rate_limiter import rate_limit
 from frappe.utils import cint, get_datetime, get_time, getdate
 
-from appointment.scheduler import customer_identity, notifications, resources
+from appointment.scheduler import customer_identity, notifications, online_meeting, resources
 from appointment.scheduler.booking_access import require_access
 
 _PUBLIC_CREATE = object()
@@ -283,6 +283,7 @@ def validate_document(doc):
         start, end = old.starts_at, old.ends_at
         occupied_from, occupied_until = old.occupied_from, old.occupied_until
     doc.quantity = quantity_for(service, doc.get("quantity"))
+    online_meeting.apply_to_booking(doc, location, old)
     doc.starts_at, doc.ends_at = start, end
     doc.occupied_from, doc.occupied_until = occupied_from, occupied_until
     doc.booking_timezone = zone

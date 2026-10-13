@@ -873,6 +873,7 @@ def update_last_assigned_provider(service_name, provider_name):
 @add_response_code
 def get_organization_services(org_slug):
     from appointment.scheduler.booking import offering
+    from appointment.scheduler.online_meeting import public_place
 
     org_slug = _public_identifier(org_slug, "organization slug", r"[a-z0-9][a-z0-9-]{0,139}")
 
@@ -915,6 +916,8 @@ def get_organization_services(org_slug):
             "allow_quantity": frappe.utils.cint(service.allow_quantity), "max_quantity": max(1, frappe.utils.cint(service.max_quantity)),
             "provider_id": label["id"],
             "provider_name": display_name,
+            # How the session meets; public, never the meeting link.
+            **public_place(location),
         })
     return {
         "full_name": org.organization_name,
@@ -944,6 +947,7 @@ def _offering_label(event, provider):
 @add_response_code
 def get_organization_meeting_windows(org_slug, service_slug):
     from appointment.scheduler.booking import offering
+    from appointment.scheduler.online_meeting import is_online, public_place
 
     org_slug = _public_identifier(org_slug, "organization slug", r"[a-z0-9][a-z0-9-]{0,139}")
     service_slug = _public_identifier(service_slug, "service slug", r"[A-Za-z0-9][A-Za-z0-9._-]{0,139}")
@@ -959,8 +963,12 @@ def get_organization_meeting_windows(org_slug, service_slug):
         "is_organization": True, "organization_id": org.name, "service_id": service.name,
         "provider_count": 1, "providers": [_offering_label(event, provider)],
         "allow_quantity": frappe.utils.cint(service.allow_quantity), "max_quantity": max(1, frappe.utils.cint(service.max_quantity)),
+        # The place's public format; an online place never sends its meeting link or an address.
         "location": {"name": location.name, "location_name": location.location_name,
-                     "timezone": location.timezone, "city": location.city, "is_online": False},
+                     "timezone": location.timezone, "city": location.city, "is_online": is_online(location),
+                     "address": ", ".join(part for part in (location.address_line_1, location.address_line_2, location.city) if part)
+                     if location.address_line_1 and not is_online(location) else "",
+                     **public_place(location)},
     }
 
 

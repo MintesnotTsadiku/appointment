@@ -11,6 +11,7 @@ import { useTranslation } from '@/lib/i18n';
 import { useBookingBrand } from '@/public-experience/bookingTheme';
 import { brandLogo } from '@/public-experience/templates/content';
 import '@/public-experience/platform.css';
+import { JoinSession } from '@/components/online-session/JoinSession';
 import { BookingSummary } from './BookingSummary';
 import { CancelPanel, type CancelResult } from './CancelPanel';
 import { fill, formatMoney } from './format';
@@ -63,6 +64,7 @@ export default function ManageBookingPage() {
           </p>
         )}
         <BookingSummary view={view} />
+        {view.booking.online && <JoinSession session={view.booking.online} timezone={view.booking.timezone} />}
         {view.payment && view.payment.status !== 'Paid' && view.payment.status !== 'Refunded' && (
           <PaymentPanel view={view} onPayment={(payment) => setView({ ...view, payment, booking: { ...view.booking, status: payment.status === 'Paid' ? 'Confirmed' : view.booking.status } })} />
         )}

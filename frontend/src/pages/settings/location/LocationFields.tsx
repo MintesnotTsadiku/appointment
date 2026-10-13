@@ -1,99 +1,150 @@
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
+import { Building2, Lock, Video } from 'lucide-react';
 import { Checkbox } from '@/components/checkbox';
 import { Input } from '@/components/input';
 import { Label } from '@/components/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/select';
+import { OptionSelect } from '@/components/select/OptionSelect';
+import { ToggleGroup, ToggleGroupItem } from '@/components/toggle-group';
 import { FieldHint } from '@/components/settings-layout';
 import { useTranslation } from '@/lib/i18n';
-import { TIMEZONES, type LocationErrors, type LocationFormData, type ProviderOption, type ServiceOption } from './types';
+import { PLATFORM_SUGGESTIONS } from '@/lib/online-session';
+import { TIMEZONES, type LinkMode, type LocationErrors, type LocationFormData, type LocationKind, type Owner, type SessionOption } from './types';
+
+const OTHER = '__other__';
 
 interface LocationFieldsProps {
   form: LocationFormData;
   errors: LocationErrors;
   onChange: (patch: Partial<LocationFormData>) => void;
-  /** Empty when the provider picker should be hidden. */
-  providers: ProviderOption[];
-  /** Empty when service linking should be hidden. */
-  services: ServiceOption[];
+  /** Shown when the user manages more than one business and the place is new. */
+  owners: Owner[];
+  platforms: string[];
+  /** The owner's sessions a new place can offer (independent businesses). */
+  sessions: SessionOption[];
 }
 
-export function LocationFields({ form, errors, onChange, providers, services }: LocationFieldsProps) {
+export function LocationFields({ form, errors, onChange, owners, platforms, sessions }: LocationFieldsProps) {
   const { t } = useTranslation();
+  const online = form.location_type === 'Online';
   return (
     <>
-      <TextField id="location_name" label={t('staff.locations.fields.name')} required value={form.location_name}
-        placeholder={t('staff.locations.fields.namePlaceholder')} error={errors.location_name} onChange={(v) => onChange({ location_name: v })} />
-      <TextField id="address_line_1" label={t('staff.locations.fields.address1')} required value={form.address_line_1}
-        placeholder={t('staff.locations.fields.address1Placeholder')} error={errors.address_line_1} onChange={(v) => onChange({ address_line_1: v })} />
-      <TextField id="address_line_2" label={t('staff.locations.fields.address2')} value={form.address_line_2}
-        placeholder={t('staff.locations.fields.address2Placeholder')} onChange={(v) => onChange({ address_line_2: v })} />
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <TextField id="city" label={t('staff.locations.fields.city')} required value={form.city}
-          placeholder={t('staff.locations.fields.cityPlaceholder')} error={errors.city} onChange={(v) => onChange({ city: v })} />
-        <TextField id="phone" type="tel" label={t('staff.locations.fields.phone')} value={form.phone}
-          placeholder="+251 911 234 567" onChange={(v) => onChange({ phone: v })} />
-      </div>
+      {owners.length > 1 && (
+        <Field id="location-owner" label={t('staff.locations.owner')}>
+          <OptionSelect id="location-owner" data-qa="location-owner" value={form.owner}
+            onValueChange={(owner) => onChange({ owner, sessions: [] })}
+            options={owners.map((owner) => ({ value: owner.key, label: owner.label }))} />
+        </Field>
+      )}
+      <TypeField value={form.location_type} onChange={(location_type) => onChange({ location_type })} />
+      <TextField id="location_name" qa="location-name" label={t('staff.locations.fields.name')} required value={form.location_name}
+        placeholder={t(online ? 'staff.locations.fields.onlineNamePlaceholder' : 'staff.locations.fields.namePlaceholder')}
+        error={errors.location_name} onChange={(v) => onChange({ location_name: v })} />
+      {online ? (
+        <OnlineFields form={form} errors={errors} onChange={onChange} platforms={platforms} />
+      ) : (
+        <>
+          <TextField id="address_line_1" qa="location-address" label={t('staff.locations.fields.address1')} required value={form.address_line_1}
+            placeholder={t('staff.locations.fields.address1Placeholder')} error={errors.address_line_1} onChange={(v) => onChange({ address_line_1: v })} />
+          <TextField id="address_line_2" label={t('staff.locations.fields.address2')} value={form.address_line_2}
+            placeholder={t('staff.locations.fields.address2Placeholder')} onChange={(v) => onChange({ address_line_2: v })} />
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <TextField id="city" label={t('staff.locations.fields.city')} required value={form.city}
+              placeholder={t('staff.locations.fields.cityPlaceholder')} error={errors.city} onChange={(v) => onChange({ city: v })} />
+            <TextField id="phone" type="tel" label={t('staff.locations.fields.phone')} value={form.phone}
+              placeholder="+251 911 234 567" onChange={(v) => onChange({ phone: v })} />
+          </div>
+        </>
+      )}
       <Field id="timezone" label={t('staff.locations.fields.timezone')}>
-        <Select value={form.timezone} onValueChange={(value) => onChange({ timezone: value })}>
-          <SelectTrigger id="timezone">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {TIMEZONES.map((tz) => (
-              <SelectItem key={tz.value} value={tz.value}>{tz.label}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <OptionSelect id="timezone" value={form.timezone} onValueChange={(timezone) => onChange({ timezone })}
+          options={TIMEZONES.map((tz) => ({ value: tz.value, label: tz.label }))} />
       </Field>
-      {providers.length > 0 && <ProviderField value={form.provider_id} providers={providers} onChange={(v) => onChange({ provider_id: v })} />}
-      {services.length > 0 && <ServiceField selected={form.service_ids} services={services} onChange={(ids) => onChange({ service_ids: ids })} />}
+      {sessions.length > 0 && <SessionsField selected={form.sessions} sessions={sessions} onChange={(ids) => onChange({ sessions: ids })} />}
     </>
   );
 }
 
-function ProviderField({ value, providers, onChange }: { value: string; providers: ProviderOption[]; onChange: (value: string) => void }) {
+function TypeField({ value, onChange }: { value: LocationKind; onChange: (value: LocationKind) => void }) {
   const { t } = useTranslation();
   return (
-    <Field id="provider_id" label={t('staff.locations.fields.provider')} hint={t('staff.locations.fields.providerHint')}>
-      <Select value={value} onValueChange={onChange}>
-        <SelectTrigger id="provider_id" aria-describedby="provider_id-hint">
-          <SelectValue placeholder={t('staff.locations.fields.providerPlaceholder')} />
-        </SelectTrigger>
-        <SelectContent>
-          {providers.map((provider) => (
-            <SelectItem key={provider.name} value={provider.name}>
-              {provider.provider_name} {provider.full_name ? `(${provider.full_name})` : ''}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </Field>
+    <div className="space-y-1.5">
+      <Label id="location-type-label">{t('staff.locations.typeLabel')}</Label>
+      <ToggleGroup type="single" value={value} aria-labelledby="location-type-label" className="grid w-full grid-cols-2"
+        onValueChange={(next) => next && onChange(next as LocationKind)} data-qa="location-type">
+        <ToggleGroupItem value="In person" className="h-10 gap-2" data-qa="location-type-in-person">
+          <Building2 className="h-4 w-4" aria-hidden="true" />{t('staff.locations.typeInPerson')}
+        </ToggleGroupItem>
+        <ToggleGroupItem value="Online" className="h-10 gap-2" data-qa="location-type-online">
+          <Video className="h-4 w-4" aria-hidden="true" />{t('staff.locations.typeOnline')}
+        </ToggleGroupItem>
+      </ToggleGroup>
+      <FieldHint>{t(value === 'Online' ? 'staff.locations.typeHintOnline' : 'staff.locations.typeHintInPerson')}</FieldHint>
+    </div>
   );
 }
 
-function ServiceField({ selected, services, onChange }: { selected: string[]; services: ServiceOption[]; onChange: (ids: string[]) => void }) {
+function OnlineFields({ form, errors, onChange, platforms }: Pick<LocationFieldsProps, 'form' | 'errors' | 'onChange' | 'platforms'>) {
+  const { t } = useTranslation();
+  const suggestions = platforms.length ? platforms : PLATFORM_SUGGESTIONS;
+  const listed = suggestions.includes(form.video_platform);
+  const [other, setOther] = useState(!listed && form.video_platform !== '');
+  const choice = other || (!listed && form.video_platform) ? OTHER : form.video_platform;
+  const fixed = form.meeting_link_mode === 'Fixed link';
+  return (
+    <>
+      <Field id="video_platform" label={t('staff.locations.platform')}>
+        <OptionSelect id="video_platform" data-qa="location-platform" value={choice} placeholder={t('staff.locations.platformPlaceholder')}
+          onValueChange={(value) => {
+            setOther(value === OTHER);
+            onChange({ video_platform: value === OTHER ? '' : value });
+          }}
+          options={[...suggestions.map((name) => ({ value: name, label: name })), { value: OTHER, label: t('staff.locations.platformOther') }]} />
+        {choice === OTHER && (
+          <Input id="video_platform_other" data-qa="location-platform-other" className="mt-2" maxLength={60} value={form.video_platform}
+            aria-label={t('staff.locations.platformOtherPlaceholder')} placeholder={t('staff.locations.platformOtherPlaceholder')}
+            onChange={(event) => onChange({ video_platform: event.target.value })} />
+        )}
+      </Field>
+      <div className="space-y-1.5">
+        <Label id="link-mode-label">{t('staff.locations.linkMode')}</Label>
+        <ToggleGroup type="single" value={form.meeting_link_mode} aria-labelledby="link-mode-label" className="grid w-full grid-cols-2"
+          onValueChange={(next) => next && onChange({ meeting_link_mode: next as LinkMode })} data-qa="location-link-mode">
+          <ToggleGroupItem value="Fixed link" className="h-auto min-h-10 whitespace-normal py-2" data-qa="location-link-fixed">{t('staff.locations.linkFixed')}</ToggleGroupItem>
+          <ToggleGroupItem value="Per booking" className="h-auto min-h-10 whitespace-normal py-2" data-qa="location-link-per-booking">{t('staff.locations.linkPerBooking')}</ToggleGroupItem>
+        </ToggleGroup>
+        <FieldHint>{t(fixed ? 'staff.locations.linkFixedHint' : 'staff.locations.linkPerBookingHint')}</FieldHint>
+      </div>
+      {fixed && (
+        <div className="space-y-1.5">
+          <TextField id="meeting_link" qa="location-link" type="url" label={t('staff.locations.link')} required value={form.meeting_link}
+            placeholder="https://meet.google.com/…" error={errors.meeting_link} onChange={(v) => onChange({ meeting_link: v })} />
+          {!errors.meeting_link && (
+            <p className="flex items-start gap-1.5 text-xs text-muted-foreground">
+              <Lock className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />{t('staff.locations.linkPrivate')}
+            </p>
+          )}
+        </div>
+      )}
+    </>
+  );
+}
+
+function SessionsField({ selected, sessions, onChange }: { selected: string[]; sessions: SessionOption[]; onChange: (ids: string[]) => void }) {
   const { t } = useTranslation();
   const toggle = (id: string, checked: boolean) => onChange(checked ? [...selected, id] : selected.filter((s) => s !== id));
   return (
-    <fieldset className="space-y-2">
-      <legend className="text-sm font-medium text-foreground">{t('staff.locations.fields.services')}</legend>
+    <fieldset className="space-y-2" data-qa="location-sessions">
+      <legend className="text-sm font-medium text-foreground">{t('staff.locations.sessionsHere')}</legend>
       <div className="max-h-48 space-y-1 overflow-y-auto rounded-lg border bg-muted/30 p-2">
-        {services.map((service) => (
-          <label key={service.name} htmlFor={`service-${service.name}`} className="flex cursor-pointer items-start gap-3 rounded-md px-2 py-2 hover:bg-accent">
-            <Checkbox
-              id={`service-${service.name}`}
-              checked={selected.includes(service.name)}
-              onCheckedChange={(checked) => toggle(service.name, checked)}
-              className="mt-0.5 shrink-0 accent-primary"
-            />
-            <span className="min-w-0 text-sm">
-              <span className="font-medium text-foreground">{service.service_name}</span>
-              {service.description && <span className="block text-xs text-muted-foreground">{service.description}</span>}
-            </span>
+        {sessions.map((session) => (
+          <label key={session.name} htmlFor={`session-${session.name}`} className="flex min-h-11 cursor-pointer items-center gap-3 rounded-md px-2 py-2 hover:bg-accent">
+            <Checkbox id={`session-${session.name}`} checked={selected.includes(session.name)}
+              onCheckedChange={(checked) => toggle(session.name, checked === true)} className="shrink-0" />
+            <span className="min-w-0 text-sm font-medium text-foreground">{session.service_name}</span>
           </label>
         ))}
       </div>
-      <FieldHint>{t('staff.locations.fields.servicesHint')}</FieldHint>
+      <FieldHint>{t('staff.locations.sessionsHereHint')}</FieldHint>
     </fieldset>
   );
 }
@@ -114,6 +165,7 @@ function Field({ id, label, required, hint, error, children }: { id: string; lab
 
 interface TextFieldProps {
   id: string;
+  qa?: string;
   label: string;
   value: string;
   placeholder?: string;
@@ -123,11 +175,12 @@ interface TextFieldProps {
   onChange: (value: string) => void;
 }
 
-function TextField({ id, label, value, placeholder, required, type = 'text', error, onChange }: TextFieldProps) {
+function TextField({ id, qa, label, value, placeholder, required, type = 'text', error, onChange }: TextFieldProps) {
   return (
     <Field id={id} label={label} required={required} error={error}>
       <Input
         id={id}
+        data-qa={qa}
         type={type}
         value={value}
         placeholder={placeholder}

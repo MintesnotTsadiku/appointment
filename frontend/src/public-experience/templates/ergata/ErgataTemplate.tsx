@@ -1,7 +1,8 @@
 import { useRef, type CSSProperties } from "react";
 
 import type { BookingTemplateProps, TemplateProps } from "../types";
-import type { CompiledDesign } from "../../types";
+import type { CompiledDesign, SessionFormat } from "../../types";
+import { meetOfFormat, placeMeetOf, sessionMeetOf, type Meet } from "@/lib/online-session";
 import type { ContentRecord } from "../content";
 import { action, brandLogo, contentImage, durationMinutes, formatPrice, localized, records, section } from "../content";
 import { useTemplateCredit } from "../credit";
@@ -19,9 +20,7 @@ import "./ergata.css";
  * Copy is the owner's; anything the release does not contain is hidden.
  */
 
-type Meet = "in_person" | "online" | "phone";
-
-interface Art { src: string; alt: string; mobile?: string }
+interface Art { src: string; alt: string; mobile?: string; position?: string }
 
 /** A section's own photo, or the template's photo for that slot with its smaller mobile file. */
 function art(value: unknown, locale: string, design: CompiledDesign, role: string): Art | null {
@@ -37,16 +36,22 @@ interface PhotoProps { image: Art; width: number; height: number; sizes: string;
 function Photo({ image, width, height, sizes, className, eager = false, decorative = false }: PhotoProps) {
   return <img className={className} src={image.src} srcSet={image.mobile ? `${image.mobile} 720w, ${image.src} ${width}w` : undefined}
     sizes={image.mobile ? sizes : undefined} alt={decorative ? "" : image.alt} width={width} height={height}
-    loading={eager ? undefined : "lazy"} decoding="async" />;
+    style={image.position ? { objectPosition: image.position } : undefined} loading={eager ? undefined : "lazy"} decoding="async" />;
 }
 
-/** How a session meets: the release's `format`, else read from its name in either language. */
-function sessionMeet(item: ContentRecord): Meet {
-  if (item.format === "in_person" || item.format === "online" || item.format === "phone") return item.format;
-  const name = `${localized(item.name, "en")} ${localized(item.name, "am")}`.toLowerCase();
-  if (/online|video|ኦንላይን|ቪዲዮ/.test(name)) return "online";
-  if (/phone|call|ስልክ|ጥሪ/.test(name)) return "phone";
-  return "in_person";
+type Formats = Record<string, SessionFormat> | undefined;
+
+/** The derived format of a content item from the snapshot, by its `id` (service or location). */
+function derivedFormat(item: ContentRecord, formats: Formats) {
+  return typeof item.id === "string" ? meetOfFormat(formats?.[item.id]) : null;
+}
+
+/**
+ * How a session meets: the release's `format`; else the type of its offering's location (`sessionFormats`,
+ * so an online location reads "Online video" without any content); else its name in either language.
+ */
+function sessionMeet(item: ContentRecord, formats?: Formats): Meet {
+  return sessionMeetOf(item.format, derivedFormat(item, formats), `${localized(item.name, "en")} ${localized(item.name, "am")}`);
 }
 
 function sessionArt(item: ContentRecord, meet: Meet): FormatKey {
@@ -57,8 +62,8 @@ function sessionArt(item: ContentRecord, meet: Meet): FormatKey {
 const MEET_ICON: Record<Meet, ErgataIconName> = { in_person: "room", online: "video", phone: "phone" };
 const MEET_LABEL = { in_person: "formatInPerson", online: "formatOnline", phone: "formatPhone" } as const;
 
-function placeMeet(item: ContentRecord): "in_person" | "online" {
-  return item.format === "online" ? "online" : "in_person";
+function placeMeet(item: ContentRecord, formats?: Formats): "in_person" | "online" {
+  return placeMeetOf(item.format, derivedFormat(item, formats));
 }
 
 function sessionPrice(item: ContentRecord, locale: string, chrome: PublicChrome): string {
@@ -90,11 +95,13 @@ interface SessionsProps {
   chrome: PublicChrome;
   bookHref?: string;
   paths?: Record<string, string>;
+  /** `sessionFormats` from the snapshot: the format of each session's location, by service id. */
+  formats?: Formats;
   compact?: boolean;
 }
 
 /** Session cards. With per-session scheduler paths each card books its own session (online or office). */
-function Sessions({ items, locale, chrome, bookHref, paths = {}, compact = false }: SessionsProps) {
+function Sessions({ items, locale, chrome, bookHref, paths = {}, formats, compact = false }: SessionsProps) {
   return <ul className={compact ? "eg-sessions eg-sessions-compact" : "eg-sessions"}>
     {items.map((item, index) => {
       const minutes = durationMinutes(item.durationMinutes);
@@ -103,7 +110,7 @@ function Sessions({ items, locale, chrome, bookHref, paths = {}, compact = false
       const summary = localized(item.summary, locale);
       const own = typeof item.id === "string" ? paths[item.id] : undefined;
       const href = compact ? own : own || action(item.action, locale)?.href || bookHref;
-      const meet = sessionMeet(item);
+      const meet = sessionMeet(item, formats);
       const scene = sessionArt(item, meet);
       return <li key={String(item.id || index)} className="eg-session" data-format={scene} data-meet={meet} data-reveal={compact ? undefined : true} style={{ "--i": index % 3 } as CSSProperties}>
         {compact ? <span className="eg-session-icon"><Icon name={MEET_ICON[meet]} /></span> : <div className="eg-session-scene"><FormatArt format={scene} /></div>}
@@ -250,8 +257,8 @@ export function ErgataSite({ snapshot, locale, applicationName, publicRoot, root
   const quotes = records(testimonials.items);
   const questions = records(faq.items);
   const places = records(locations.items);
-  const offices = places.filter((item) => placeMeet(item) === "in_person");
-  const online = places.filter((item) => placeMeet(item) === "online");
+  const offices = places.filter((item) => placeMeet(item, snapshot.placeFormats) === "in_person");
+  const online = places.filter((item) => placeMeet(item, snapshot.placeFormats) === "online");
   const highlights = records(about.highlights).map((item) => localized(item, locale)).filter(Boolean);
   const lead = team[0];
   const leadPhoto = lead ? contentImage(lead, locale) : null;
@@ -264,7 +271,7 @@ export function ErgataSite({ snapshot, locale, applicationName, publicRoot, root
   });
   const hasVisit = Boolean(places.length || phone || email);
   const paths = snapshot.bookingPaths || {};
-  const meets = Array.from(new Set(sessions.map(sessionMeet)));
+  const meets = Array.from(new Set(sessions.map((item) => sessionMeet(item, snapshot.sessionFormats))));
 
   return <div ref={root} data-pe-root data-pe-recipe={snapshot.recipeKey} data-pe-mode={mode} data-motion={design.motion}
     data-density={String(design.density.presentation || "spacious")} className="eg" data-template="ergata-therapy-v1" lang={locale} style={rootStyle}>
@@ -397,7 +404,7 @@ export function ErgataSite({ snapshot, locale, applicationName, publicRoot, root
             <h2 id="eg-sessions-title">{localized(services.title, locale)}</h2>
             {localized(services.intro, locale) ? <p>{localized(services.intro, locale)}</p> : null}
           </header>
-          <Sessions items={sessions} locale={locale} chrome={chrome} bookHref={bookHref} paths={paths} />
+          <Sessions items={sessions} locale={locale} chrome={chrome} bookHref={bookHref} paths={paths} formats={snapshot.sessionFormats} />
         </div>
       </section> : null}
 
@@ -418,7 +425,7 @@ export function ErgataSite({ snapshot, locale, applicationName, publicRoot, root
                 return <li key={String(item.id || index)} className="eg-person" data-reveal style={{ "--i": index } as CSSProperties}>
                   <div className="eg-portrait-wrap">
                     <Blob variant={index + 1} className="eg-blob eg-portrait-blob" />
-                    {photo ? <img className="eg-portrait" src={photo.src} alt={photo.alt || name} loading="lazy" decoding="async" width={768} height={768} /> : <span className="eg-portrait eg-initial" aria-hidden="true">{name.slice(0, 1)}</span>}
+                    {photo ? <img className="eg-portrait" src={photo.src} alt={photo.alt || name} style={photo.position ? { objectPosition: photo.position } : undefined} loading="lazy" decoding="async" width={768} height={768} /> : <span className="eg-portrait eg-initial" aria-hidden="true">{name.slice(0, 1)}</span>}
                     <Sprig className="eg-sprig eg-portrait-sprig" />
                   </div>
                   <div>
@@ -577,7 +584,7 @@ export function ErgataBooking({ snapshot, locale, applicationName, publicRoot, r
       </div>
       {sessions.length ? <section className="eg-handoff-sessions" aria-labelledby="eg-handoff-sessions-title">
         <h2 id="eg-handoff-sessions-title">{localized(services.title, locale)}</h2>
-        <Sessions items={sessions} locale={locale} chrome={chrome} paths={snapshot.bookingPaths} compact />
+        <Sessions items={sessions} locale={locale} chrome={chrome} paths={snapshot.bookingPaths} formats={snapshot.sessionFormats} compact />
       </section> : null}
     </main>
   </div>;

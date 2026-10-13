@@ -275,7 +275,8 @@ const Reception = () => {
             setShowWalkInModal(false);
             setWalkInRefreshToken((token) => token + 1);
           }}
-          locations={locations}
+          // A walk-in is at a door: online locations are not offered.
+          locations={locations.filter((loc) => loc.location_type !== 'Online')}
           providers={providers}
         />
       )}

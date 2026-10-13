@@ -14,6 +14,7 @@ import { Label } from "@/components/label";
 import { Textarea } from "@/components/textarea";
 import { formatDate, formatTime } from "../../utils/dateHelpers";
 import { useTheme } from "@/components/theme-provider";
+import { useOnlineLabel } from "@/components/online-session/JoinSession";
 import { intlLocale, useTranslation } from "@/lib/i18n";
 import type { BookingFormData, TimeSlot, Service } from "../../types";
 
@@ -62,6 +63,7 @@ export function BookingForm({
   const [touched, setTouched] = useState<Partial<Record<keyof BookingFormData, boolean>>>({});
   const { theme, setTheme } = useTheme();
   const { t, language } = useTranslation();
+  const onlineLabel = useOnlineLabel();
 
   // Theme toggle handler
   const toggleTheme = () => {
@@ -665,7 +667,7 @@ export function BookingForm({
                               className="w-2 h-2 rounded-full"
                               style={{ backgroundColor: 'var(--accent-success)' }}
                             ></span>
-                          {t("customerBooking.online")}
+                          {onlineLabel(service.location.platform)}
                         </span>
                       ) : (
                         service.location.location_name

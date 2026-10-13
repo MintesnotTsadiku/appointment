@@ -12,6 +12,8 @@
   "event_type",
   "provider",
   "location",
+  "is_online",
+  "meeting_link",
   "service",
   "resources",
   "quantity",
@@ -101,6 +103,22 @@
    "label": "Location",
    "options": "Location",
    "reqd": 1
+  },
+  {
+   "default": "0",
+   "description": "Set from the location type when the booking is made.",
+   "fieldname": "is_online",
+   "fieldtype": "Check",
+   "label": "Online session",
+   "read_only": 1
+  },
+  {
+   "depends_on": "is_online",
+   "description": "Private. Sent only to this customer.",
+   "fieldname": "meeting_link",
+   "fieldtype": "Data",
+   "label": "Meeting link",
+   "length": 500
   },
   {
    "fieldname": "service",
@@ -424,7 +442,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-10-04 19:00:00.000000",
+ "modified": "2026-10-14 09:00:00.000000",
  "modified_by": "Administrator",
  "module": "Scheduler",
  "name": "Appointment",

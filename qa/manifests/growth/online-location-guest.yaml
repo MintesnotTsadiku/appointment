@@ -1,0 +1,127 @@
+# Online locations: a guest books an online session at the Yared Tesfaye Counselling showcase and sees
+# "Online video · Google Meet" instead of an address; the manage page of an online booking that starts now
+# shows "Join session" (en, desktop and phone, light). Frappe tests prove the link is in no public payload.
+# Fixture: appointment.tests.template_ergata_qa_fixtures (setup before, cleanup after). Run setup shortly before:
+# its join-ready booking starts at setup time and its window closes 45 minutes later.
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-online-location-guest
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 150000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.template_ergata_qa_fixtures.browser_values
+scenarios:
+- id: online_guest_book_en_desktop
+  title: 'Guest books an online session: format line, confirmation, no link in public pages (en, desktop, light)'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /{qa_ergata_slug}
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="ergata-session-book"][data-meet="online"]'
+    - type: visible_selector
+      value: '[data-qa="ergata-place-online"]'
+  actions:
+  - action: scroll
+    selector: :nth-match([data-qa="ergata-session-book"][data-meet="online"], 3)
+  - action: screenshot
+    name: online_guest_book_en_desktop-1-sessions.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="ergata-session-book"][data-meet="online"], 3)
+  - action: wait_for
+    selector: '[data-qa="independent-booking-online"]'
+    assertions:
+    - type: text_contains
+      value: Online video · Google Meet
+  - action: click
+    selector: '[data-qa="booking-tomorrow"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.booking.slots
+      status: 200
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 2)
+    timeout_ms: 20000
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 2)
+  - action: wait_for
+    selector: '[data-qa="independent-booking-chosen"]'
+  - action: fill
+    selector: '[data-qa="independent-booking-name"]'
+    value: Mahlet Girma
+  - action: fill
+    selector: '[data-qa="independent-booking-email-input"]'
+    value: mahlet.girma@example.test
+  - action: screenshot
+    name: online_guest_book_en_desktop-2-details.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="independent-booking-submit"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.booking.book
+      method: POST
+      status_min: 200
+      status_max: 299
+      response_body_contains: booking_id
+      timeout_ms: 25000
+    - type: visible_selector
+      value: '[data-qa="independent-booking-confirmed-online"]'
+  - action: get_text
+    selector: '[data-qa="independent-booking-confirmed"]'
+    assertions:
+    - type: text_contains
+      value: Online video · Google Meet
+  - action: screenshot
+    name: online_guest_book_en_desktop-3-confirmed.png
+    full_page: true
+  - action: open_url
+    url: '{qa_online_manage_path}'
+  - action: wait_for
+    selector: '[data-qa="online-join"][data-qa-state="open"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="online-join-link"][href="https://meet.google.com/ytc-room-one"][target="_blank"]'
+    - type: text_contains
+      value: Online video · Google Meet
+  - action: screenshot
+    name: online_guest_book_en_desktop-4-manage-join.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: online_guest_manage_en_mobile
+  title: 'Manage page of an online booking that is open now (en, phone, light)'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: '{qa_online_manage_path}'
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="online-join"][data-qa-state="open"]'
+  actions:
+  - action: screenshot
+    name: online_guest_manage_en_mobile-1-join.png
+    full_page: true
+  - action: open_url
+    url: /schedule/individual/booking/not-a-real-token
+  - action: wait_for
+    selector: '[data-qa="manage-invalid"]'
+  - action: get_console_errors
+  - action: get_network_errors

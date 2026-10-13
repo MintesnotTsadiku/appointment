@@ -1,5 +1,6 @@
-import { Armchair, CalendarClock, MapPin, Scissors, UserRound } from 'lucide-react';
+import { Armchair, CalendarClock, MapPin, Scissors, UserRound, Video } from 'lucide-react';
 import type { ReactNode } from 'react';
+import { useOnlineLabel } from '@/components/online-session/JoinSession';
 import { useTranslation } from '@/lib/i18n';
 import { formatWhen } from './format';
 import type { ManageView } from './types';
@@ -8,6 +9,7 @@ import type { ManageView } from './types';
 export function BookingSummary({ view }: { view: ManageView }) {
   const { t, language } = useTranslation();
   const { booking } = view;
+  const onlineLabel = useOnlineLabel();
   return (
     <dl data-qa="manage-summary" className="grid gap-4 sm:grid-cols-2">
       <Fact icon={<CalendarClock aria-hidden="true" />} label={t('customerBooking.dateTime')}>
@@ -30,7 +32,12 @@ export function BookingSummary({ view }: { view: ManageView }) {
           {booking.provider}
         </Fact>
       )}
-      {booking.location && (
+      {booking.online && (
+        <Fact icon={<Video aria-hidden="true" />} label={t('onlineSession.howWeMeet')}>
+          <span data-qa="manage-online">{onlineLabel(booking.online.platform)}</span>
+        </Fact>
+      )}
+      {booking.location && !booking.online && (
         <Fact icon={<MapPin aria-hidden="true" />} label={t('customerBooking.location')}>
           {booking.location}
           {booking.address && <span className="block text-xs text-theme-secondary">{booking.address}</span>}

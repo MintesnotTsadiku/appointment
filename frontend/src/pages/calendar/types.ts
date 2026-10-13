@@ -17,6 +17,8 @@ export interface Appointment {
   provider_name: string;
   location: string;
   location_name: string;
+  /** Booked at an online location. */
+  is_online?: boolean;
   status: AppointmentStatus;
   amount_paid?: number;
   currency?: string;

@@ -46,6 +46,22 @@ def upload_website_identity(site: str, expected_version: int, kind: str, content
 
 
 @frappe.whitelist(methods=["POST"])
+@observed("section_image.upload", scope="site")
+def upload_website_section_image(site: str, content_base64: str, public_consent: int):
+    """Add an owner photo to the website's media library for a section image slot."""
+    from appointment.public_experience import section_media
+
+    return section_media.upload(site, content_base64, public_consent)
+
+
+@frappe.whitelist(methods=["GET"])
+def website_media_library(site: str):
+    from appointment.public_experience import section_media
+
+    return section_media.library(site)
+
+
+@frappe.whitelist(methods=["POST"])
 def preview_website_template(owner_type: str, owner: str, recipe_key: str, preferences=None):
     from appointment.public_experience import setup
 
@@ -124,21 +140,75 @@ def get_public_ui_config(locale: str | None = None, public_path: str | None = No
     return result
 
 
-def _independent_booking_paths(provider):
-    """The scheduler path of each bookable offering of an independent provider, by service, oldest first."""
+def _independent_offerings(provider):
+    """The bookable offerings of an independent provider, oldest first, one per service."""
     from appointment.scheduler.booking import offering
 
-    paths = {}
+    found = {}
     for event in frappe.get_all("EventType", filters={"provider": provider, "is_active": 1},
                                 fields=["name", "service"], order_by="creation asc"):
-        if event.service in paths:
+        if event.service in found:
             continue
         try:
-            offering(event.name, public=True)
+            found[event.service] = offering(event.name, public=True)
         except (frappe.PermissionError, frappe.ValidationError, frappe.DoesNotExistError):
             continue
-        paths[event.service] = f"/schedule/individual/{event.name}"
-    return paths
+    return found
+
+
+def _independent_booking_paths(provider):
+    """The scheduler path of each bookable offering of an independent provider, by service, oldest first."""
+    return {service: f"/schedule/individual/{parts.event.name}" for service, parts in _independent_offerings(provider).items()}
+
+
+def _format(place):
+    """The public session format of a place: `locationType` and the platform label, never the meeting link."""
+    from appointment.scheduler.online_meeting import public_place
+
+    facts = public_place(place)
+    return {"locationType": facts["location_type"], "platform": facts["platform"]}
+
+
+def _session_formats(organization=None, provider=None):
+    """How each session meets, by service, and how each place meets, by location.
+
+    A service whose offerings meet both online and in person has no entry; its content `format` or its name decides.
+    """
+    if provider:
+        from appointment.scheduler.booking import offering
+
+        pairs, places = [], {}
+        for event in frappe.get_all("EventType", filters={"provider": provider, "is_active": 1}, pluck="name"):
+            try:
+                parts = offering(event, public=True)
+            except (frappe.PermissionError, frappe.ValidationError, frappe.DoesNotExistError):
+                frappe.clear_messages()
+                continue
+            pairs.append((parts.service.name, parts.location.name))
+            places[parts.location.name] = parts.location
+        location_filter = {"independent_provider": provider, "organization": ["is", "not set"]}
+    else:
+        services = frappe.get_all("Service", filters={"organization": organization, "is_active": 1}, pluck="name")
+        rows = frappe.get_all("EventType", filters={"service": ["in", services or [""]], "is_active": 1},
+                              fields=["service", "location"]) if services else []
+        pairs = [(row.service, row.location) for row in rows]
+        places = {}
+        location_filter = {"organization": organization}
+    for row in frappe.get_all("Location", filters={**location_filter, "is_active": 1},
+                              fields=["name", "location_type", "video_platform"]):
+        places.setdefault(row.name, row)
+    place_formats = {name[:64]: _format(place) for name, place in places.items()}
+    by_service = {}
+    for service, location in pairs:
+        if location[:64] in place_formats:
+            by_service.setdefault(service, []).append(place_formats[location[:64]])
+    session_formats = {}
+    for service, formats in by_service.items():
+        if len({row["locationType"] for row in formats}) == 1:
+            platforms = {row["platform"] for row in formats}
+            session_formats[service] = {"locationType": formats[0]["locationType"],
+                                        "platform": formats[0]["platform"] if len(platforms) == 1 else ""}
+    return session_formats, place_formats
 
 
 @frappe.whitelist(allow_guest=True, methods=["GET"])
@@ -155,6 +225,9 @@ def get_public_experience_snapshot(locale: str | None = None, public_path: str |
     snapshot = resolver_module.public_snapshot(context.release)
     booking_path = None
     booking_paths = {}
+    session_formats, place_formats = {}, {}
+    if context.organization or context.provider:
+        session_formats, place_formats = _session_formats(context.organization, context.provider)
     if context.organization:
         slug = frappe.db.get_value("Organization", context.organization, "slug")
         if slug:
@@ -179,6 +252,10 @@ def get_public_experience_snapshot(locale: str | None = None, public_path: str |
         "bookingPath": booking_path,
         # Each session's own scheduler, by service, so a visitor can pick the online or the office session.
         "bookingPaths": booking_paths,
+        # How each session and place meets ("online" or "in_person") and its platform label, by service and by
+        # location. Public and never secret: the meeting link is not here. See docs/growth/ONLINE_LOCATIONS.md.
+        "sessionFormats": session_formats,
+        "placeFormats": place_formats,
         "sections": snapshot.get("sections", []),
         "seo": snapshot.get("seo", {}),
         "booking": snapshot.get("booking", {}),

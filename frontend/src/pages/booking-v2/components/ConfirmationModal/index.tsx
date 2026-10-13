@@ -12,6 +12,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/dialog";
+import { useOnlineLabel } from "@/components/online-session/JoinSession";
 import { intlLocale, useTranslation } from "@/lib/i18n";
 import { usePlatformBrand } from "@/lib/platform-brand";
 import BusinessPrompt from "@/components/business-prompt";
@@ -47,6 +48,7 @@ export function ConfirmationModal({
   brandStyle,
 }: ConfirmationModalProps) {
   const { t, language } = useTranslation();
+  const onlineLabel = useOnlineLabel();
   const { growth } = usePlatformBrand();
   const [copied, setCopied] = useState<string | null>(null);
   const emailQueued = bookingResponse.notificationStatus === "queued";
@@ -174,7 +176,7 @@ export function ConfirmationModal({
                     {service.location.is_online ? (
                       <span className="flex items-center gap-2">
                         <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                        {t("customerBooking.online")}
+                        {onlineLabel(service.location.platform)}
                       </span>
                     ) : (
                       service.location.location_name

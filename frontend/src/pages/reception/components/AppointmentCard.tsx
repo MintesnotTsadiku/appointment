@@ -1,7 +1,7 @@
 import { useRef, type KeyboardEvent, type MouseEvent } from 'react';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
-import { GripVertical, Pencil } from 'lucide-react';
+import { GripVertical, Pencil, Video } from 'lucide-react';
 import { Button } from '@/components/button';
 import { StatusBadge } from '@/components/status-badge';
 import { useTranslation } from '@/lib/i18n';
@@ -40,6 +40,14 @@ export const AppointmentCard = ({ appointment, isDragging: overlay, compact, tim
   const end = appointment.end_time?.substring(0, 5) || '00:00';
   const density = densityFor(appointment, timeSlotInterval, compact);
   const cancelled = appointment.status === 'Cancelled';
+  const online = Boolean(appointment.is_online);
+  const onlineMark = online ? (
+    <span data-qa="appointment-online" title={t('staff.online.badge')} className="inline-flex shrink-0 items-center gap-0.5 rounded-full bg-info/10 px-1.5 text-[11px] font-medium text-info">
+      <Video className="h-3 w-3" aria-hidden="true" />
+      {density === 'full' && t('staff.online.badge')}
+      {density !== 'full' && <span className="sr-only">{t('staff.online.badge')}</span>}
+    </span>
+  ) : null;
 
   const handleMouseDown = (e: MouseEvent) => {
     if ((e.target as HTMLElement).closest('button')) return;
@@ -68,7 +76,7 @@ export const AppointmentCard = ({ appointment, isDragging: overlay, compact, tim
       data-qa-appointment-name={appointment.name}
       data-status={appointment.status}
       {...attributes}
-      aria-label={`${start}–${end} ${appointment.client_name}, ${appointment.service_name || ''} (${appointment.status})`}
+      aria-label={`${start}–${end} ${appointment.client_name}, ${appointment.service_name || ''}${online ? `, ${t('staff.online.badge')}` : ''} (${appointment.status})`}
       title={`${start}–${end} · ${appointment.client_name}${appointment.service_name ? ` · ${appointment.service_name}` : ''}`}
       style={{ transform: CSS.Translate.toString(transform) }}
       onMouseDown={handleMouseDown}
@@ -87,16 +95,20 @@ export const AppointmentCard = ({ appointment, isDragging: overlay, compact, tim
       <span className={cn('absolute inset-y-0 left-0 w-1', tone.bar)} aria-hidden="true" />
       <div className={cn('relative flex min-h-0 min-w-0 flex-1 flex-col pl-2.5 pr-6', density === 'xs' ? 'justify-center py-0.5' : 'gap-0.5 py-1.5')}>
         {density === 'xs' ? (
-          <p className="truncate text-xs leading-tight">
+          <p className="flex min-w-0 items-center gap-1 truncate text-xs leading-tight">
+            {onlineMark}
             <span className="font-medium tabular-nums text-muted-foreground">{start}</span>{' '}
             <span className={cn('font-semibold text-foreground', cancelled && 'line-through')}>{appointment.client_name}</span>
           </p>
         ) : (
           <>
             <div className="flex min-w-0 items-center justify-between gap-2">
-              <span className="truncate text-xs font-medium tabular-nums text-muted-foreground">
-                {start}
-                {density === 'full' && `–${end}`}
+              <span className="flex min-w-0 items-center gap-1.5">
+                <span className="truncate text-xs font-medium tabular-nums text-muted-foreground">
+                  {start}
+                  {density === 'full' && `–${end}`}
+                </span>
+                {onlineMark}
               </span>
               {density === 'full' && !compact && <StatusBadge status={appointment.status} className="shrink-0 px-1.5 py-0 text-[11px]" />}
             </div>

@@ -59,7 +59,7 @@ The app has no "online" Location type and no meeting-link field on Location or E
 - `independent.public_offering` returns `location` (`name`, and `address` only when the place has a street address). The independent scheduler shows the office name and address under the session name (`data-qa="independent-booking-place"`).
 - Content: `format` on sessions and places, the online card's steps and privacy note.
 
-A real "online location" feature needs: a `location_type` (or `is_online`) field on Location; a meeting link or a meeting provider per Location or EventType (a fixed room link, or a generated link per booking); the link in the confirmation email, the manage-booking page and the calendar event, sent only to the booked customer; `is_online` set from the field in `get_organization_meeting_windows` and `public_offering`; reception and walk-in flows that skip online places; and setup that offers "online" next to "office" when an owner adds a place. This change does not build that feature.
+The real online location feature now exists: see `docs/growth/ONLINE_LOCATIONS.md`. The showcase "Online video room" is an Online location with a fixed Google Meet link, and the template derives each session and place format from `sessionFormats` and `placeFormats` when the content has no `format`.
 
 ## Images and how they were made
 
@@ -127,8 +127,7 @@ Other checks: typecheck 176 errors (gate 176), `test:dom` pass, build pass. Frap
 
 ## Open points
 
-- The guided setup editor edits only English titles and body text; owners cannot yet edit or remove list items (approaches, FAQ, place notes) or choose a session or place `format` there, and an English edit drops the Amharic value of that field. Owners cannot yet upload their own photo into the new image slots from the editor. This affects all templates.
-- There is no real online location feature (see "Online and office sessions").
+- Done (2026-10-14): the website section editor edits every field in English and Amharic, edits, reorders and removes list items, sets the session and place `format`, and fills each image slot by upload or from the media library. An English edit keeps the Amharic. See `docs/growth/WEBSITE_EDITOR.md`.
 - Organizations still get one booking path; `bookingPaths` is for independent providers only.
 - The independent scheduler opens in the visitor's app language, not the page language, and shows the Service name in English. This was already so before this change.
 - The shared scheduler draws the selected day with a primary-to-accent gradient (sage to clay); this is shared scheduler styling.

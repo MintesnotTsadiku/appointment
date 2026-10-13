@@ -19,7 +19,7 @@ from frappe.rate_limiter import rate_limit
 from frappe.utils import cint, escape_html, get_datetime, get_url
 from frappe.utils.password import get_encryption_key
 
-from appointment.scheduler import business_owner, customer_identity, self_service
+from appointment.scheduler import business_owner, customer_identity, online_meeting, self_service
 
 LINK_SECONDS = 30 * 60
 SESSION_SECONDS = 7 * 24 * 3600
@@ -158,7 +158,7 @@ def bookings(slug=None, session=None, email=None, offering=None):
     names = _booking_names(owner, address)
     rows = frappe.get_all(
         "Appointment", filters={"name": ["in", list(names) or [""]]},
-        fields=["name", "appointment_id", "service", "provider", "event_type", "starts_at", "booking_timezone", "status", "quantity", "manage_version"],
+        fields=["name", "appointment_id", "service", "provider", "event_type", "starts_at", "ends_at", "booking_timezone", "status", "quantity", "manage_version", "is_online"],
         order_by="starts_at desc", limit=LIST_LIMIT,
     )
     now = _utc_now()
@@ -194,7 +194,9 @@ def _row(row, now):
     from appointment.scheduler import payments
 
     start = get_datetime(row.starts_at)
-    open_booking = row.status in OPEN and start > now
+    # An online session stays upcoming, with its manage page and "Join session", until it ends.
+    until = get_datetime(row.ends_at) if cint(row.is_online) and row.ends_at else start
+    open_booking = row.status in OPEN and until > now
     doc = frappe.get_doc("Appointment", row.name) if open_booking else None
     rooms = [frappe.db.get_value("Resource", r, "resource_name") for r in frappe.get_all(
         "Appointment Resource", filters={"parent": row.name, "parenttype": "Appointment"}, pluck="resource")]
@@ -209,9 +211,12 @@ def _row(row, now):
         status=row.status,
         quantity=cint(row.quantity) or 1,
         payment_status=payment.status if payment else None,
-        upcoming=start > now and row.status not in ("Cancelled",),
+        upcoming=until > now and row.status not in ("Cancelled",),
         offering=row.event_type,
         manage_path=self_service.manage_url(doc).replace(get_url(), "") if doc else None,
+        location_type="online" if cint(row.is_online) else "in_person",
+        # The signed-in customer's own session link, only while the booking is open.
+        online=online_meeting.customer_view(doc) if doc else None,
     )
 
 

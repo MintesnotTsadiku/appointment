@@ -5,6 +5,7 @@
 
 import { Clock, Star, User, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useOnlineLabel } from "@/components/online-session/JoinSession";
 import { intlLocale, useTranslation } from "@/lib/i18n";
 import { motion } from "framer-motion";
 import {
@@ -29,6 +30,7 @@ export function TimeSlotsPanel({
   location,
 }: TimeSlotsProps) {
   const { t } = useTranslation();
+  const onlineLabel = useOnlineLabel();
   // Group slots by time of day
   const groupedSlots: TimeSlotGroup[] = groupByTimeOfDay
     ? groupSlotsByTimeOfDay(slots)
@@ -196,7 +198,7 @@ export function TimeSlotsPanel({
                     className="w-2 h-2 rounded-full"
                     style={{ backgroundColor: 'var(--accent-success)' }}
                   />
-                  {t("bookingPicker.online")}
+                  {onlineLabel(location.platform)}
                 </span>
               ) : (
                 location.location_name

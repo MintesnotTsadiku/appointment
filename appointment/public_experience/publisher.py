@@ -24,6 +24,7 @@ from appointment.public_experience.canonical import canonicalize, hash_document
 from appointment.public_experience.design_compiler import compile_design
 from appointment.public_experience.errors import ExperiencePublishError, StaleDraftError, UnsafeActionIntentError
 from appointment.public_experience.recipes import get_recipe
+from appointment.public_experience.section_media import require_site_media
 from appointment.public_experience.section_schemas import CONTENT_SCHEMA_VERSION, validate_typed_section
 
 PREVIEW_TTL_SECONDS = 900
@@ -156,6 +157,7 @@ def _compose_sections(site, recipe, *, public_path: str) -> list[dict]:
         if not report.ok:
             first = report.issues[0]
             raise ExperiencePublishError(_("Section '{0}' is invalid ({1}): {2}").format(row.section_type, first.field, first.requirement))
+        require_site_media(site.name, content)
         sections.append(
             {
                 "id": row.section_id,

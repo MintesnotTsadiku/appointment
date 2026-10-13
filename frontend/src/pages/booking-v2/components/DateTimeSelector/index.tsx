@@ -48,6 +48,7 @@ interface DateTimeSelectorProps {
     location_name: string;
     address?: string;
     is_online?: boolean;
+    platform?: string;
   };
   
   // Navigation

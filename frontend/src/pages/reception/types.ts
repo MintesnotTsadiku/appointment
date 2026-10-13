@@ -22,6 +22,10 @@ export interface Appointment {
   provider_name: string;
   location: string;
   location_name: string;
+  /** Booked at an online location. */
+  is_online?: number | boolean;
+  /** The private meeting link; staff of this business only. */
+  meeting_link?: string | null;
   /** Rooms or equipment the booking holds. */
   resource_names?: string[];
   /** Party size; 1 unless the service lets customers choose. */
@@ -71,6 +75,7 @@ export interface Location {
   name: string;
   location_name: string;
   reception_state?: string;
+  location_type?: 'In person' | 'Online';
 }
 
 export type ViewMode = 'day' | 'week';

@@ -8,6 +8,7 @@ import type { Appointment } from '../types';
 import { BookingFields } from '../appointment-form/BookingFields';
 import { Field } from '../appointment-form/fields';
 import { FormDialog } from '../appointment-form/FormDialog';
+import { MeetingLinkSection } from './MeetingLinkSection';
 import { normalizeEmail, scheduleWindow, validateBooking, type BookingDraft, type FieldErrors } from '../appointment-form/model';
 
 interface EditAppointmentModalProps {
@@ -89,6 +90,8 @@ export const EditAppointmentModal = ({ isOpen, onClose, appointment, onSuccess }
       pending={updating}
       onSubmit={handleSubmit}
     >
+      {/* An online booking's private link; it saves on its own, so the dialog stays open. */}
+      {Boolean(appointment.is_online) && <MeetingLinkSection appointment={appointment.name} onChanged={() => undefined} />}
       <BookingFields
         idPrefix="edit-appointment"
         timeQaPrefix="edit-time"

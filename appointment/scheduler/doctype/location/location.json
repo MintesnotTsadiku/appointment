@@ -11,6 +11,11 @@
   "is_active",
   "organization",
   "independent_provider",
+  "online_section",
+  "location_type",
+  "video_platform",
+  "meeting_link_mode",
+  "meeting_link",
   "Section Break-1",
   "address_line_1",
   "address_line_2",
@@ -155,12 +160,50 @@
    "label": "Reception workflow events",
    "read_only": 1,
    "hidden": 1
+  },
+  {
+   "fieldname": "online_section",
+   "fieldtype": "Section Break",
+   "label": "How sessions meet"
+  },
+  {
+   "default": "In person",
+   "description": "Online: customers meet by video or phone, and the location has no street address.",
+   "fieldname": "location_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Location type",
+   "options": "In person\nOnline"
+  },
+  {
+   "depends_on": "eval:doc.location_type=='Online'",
+   "description": "Shown to customers, for example Google Meet, Zoom or Phone.",
+   "fieldname": "video_platform",
+   "fieldtype": "Data",
+   "label": "Video platform",
+   "length": 60
+  },
+  {
+   "default": "Fixed link",
+   "depends_on": "eval:doc.location_type=='Online'",
+   "fieldname": "meeting_link_mode",
+   "fieldtype": "Select",
+   "label": "Meeting link",
+   "options": "Fixed link\nPer booking"
+  },
+  {
+   "depends_on": "eval:doc.location_type=='Online' && doc.meeting_link_mode=='Fixed link'",
+   "description": "Private. Only the booked customer gets it, in their messages and on their booking page.",
+   "fieldname": "meeting_link",
+   "fieldtype": "Data",
+   "label": "Fixed meeting link",
+   "length": 500
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-16 01:25:32.110494",
+ "modified": "2026-10-14 09:00:00.000000",
  "modified_by": "Administrator",
  "module": "Scheduler",
  "name": "Location",

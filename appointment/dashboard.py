@@ -443,7 +443,7 @@ def get_appointments(start_date=None, end_date=None, status=None, service=None, 
             filters=filters,
             fields=["name", "appointment_id", "appointment_date", "start_time", "end_time",
                    "client_name", "client_email", "client_phone", "service", "provider",
-                   "location", "status", "amount_paid", "notes", "event_type", "event"],
+                   "location", "status", "amount_paid", "notes", "event_type", "event", "is_online"],
             order_by="appointment_date asc, start_time asc"
         )
         
@@ -503,7 +503,8 @@ def get_appointments(start_date=None, end_date=None, status=None, service=None, 
                 "currency": currency,
                 "notes": apt.notes or "",
                 "event_type": apt.event_type or "",
-                "event": apt.event or ""
+                "event": apt.event or "",
+                "is_online": bool(apt.is_online),
             })
         
         frappe.response["message"] = {

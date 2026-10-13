@@ -38,6 +38,11 @@ PHONE = "000 000 0106"
 OFFICE = "Bole counselling office"
 ONLINE = "Online video room"
 OFFICE_ADDRESS = "Cameroon Street, Tsehay Building, second floor, office 204"
+# A fictional Google Meet room in the real link shape. Only booked customers get it (docs/growth/ONLINE_LOCATIONS.md).
+MEETING_LINK = "https://meet.google.com/ytc-room-one"
+PLATFORM = "Google Meet"
+QA_CLIENT = "Selamawit Bekele"
+QA_CLIENT_EMAIL = "selamawit.bekele@example.test"
 
 
 def t(en, am):
@@ -96,6 +101,26 @@ def browser_values(manifest=None):
     values["qa_ergata_owner"] = SOLO
     values["qa_ergata_practice_owner"] = PRACTICE_OWNER
     values["qa_ergata_practice"] = (state.get("organizations") or [""])[0]
+    join = state.get("join_booking")
+    if join and frappe.db.exists("Appointment", join):
+        from appointment.scheduler import self_service
+
+        doc = frappe.get_doc("Appointment", join)
+        values["qa_online_manage_path"] = self_service.manage_url(doc).replace(frappe.utils.get_url(), "")
+        values["qa_online_booking"] = join
+        values["qa_online_client"] = QA_CLIENT
+    desk = state.get("desk_booking")
+    if desk and frappe.db.exists("Appointment", desk):
+        values["qa_online_desk_booking"] = desk
+        values["qa_online_desk_date"] = str(frappe.db.get_value("Appointment", desk, "appointment_date"))
+    provider = (state.get("providers") or [""])[0]
+    if provider:
+        values["qa_online_intro_service"] = frappe.db.get_value(
+            "Service", {"independent_provider": provider, "service_name": SESSIONS[0][0]}, "name") or ""
+    # The owner adds one more online room in `online-location.yaml`; each run takes a free name.
+    values["qa_online_new_location"] = next(
+        (name for name in ("Evening video room", "Weekend video room", "Morning video room", "Second video room")
+         if not frappe.db.exists("Location", {"location_name": name})), "Late video room")
     return values
 
 
@@ -107,9 +132,10 @@ def _user(state, email, first, last):
 
 
 def _online_location(office, provider):
-    """The online video room: a Location of this provider without a street address, with longer hours."""
+    """The online video room: an Online Location of this provider with a fixed Google Meet link and longer hours."""
     return frappe.get_doc({"doctype": "Location", "location_name": ONLINE, "independent_provider": provider,
-                           "timezone": TZ, "phone": PHONE, "is_active": 1,
+                           "timezone": TZ, "phone": PHONE, "is_active": 1, "location_type": "Online",
+                           "video_platform": PLATFORM, "meeting_link_mode": "Fixed link", "meeting_link": MEETING_LINK,
                            "opening_hours": [{"day_of_week": row.day_of_week, "is_open": row.is_open,
                                               "start_time": "08:00" if row.is_open else row.start_time,
                                               "end_time": "20:00" if row.is_open else row.end_time}
@@ -178,6 +204,51 @@ def _solo_practice(state):
     site.save(ignore_permissions=True)
     frappe.set_user(SOLO)
     website.publish(site.name, frappe.db.get_value("Public Site", site.name, "draft_version"))
+    frappe.set_user("Administrator")
+    state["join_booking"] = _join_ready_booking(services["Individual session online"])
+    state["desk_booking"] = _online_booking(services["First session online"], "Dawit Mengistu", "dawit.mengistu@example.test")
+    _save(state)
+
+
+def _online_booking(service, client, email):
+    """An online booking at the first free time from tomorrow, through the normal booking lifecycle."""
+    from datetime import datetime, timedelta
+
+    import pytz
+
+    from appointment.scheduler import booking
+
+    event = frappe.get_all("EventType", filters={"service": service}, pluck="name", order_by="creation asc", limit=1)[0]
+    parts = booking.offering(event, public=True)
+    today = datetime.now(pytz.timezone(TZ)).date()
+    slot = next(row for offset in range(1, 15)
+                for row in booking.open_slots(parts, today + timedelta(days=offset))["all_available_slots_for_data"] if row["available"])
+    result = booking.book(event, slot["start_time"], slot["end_time"], client, email,
+                          "ergata-online-" + secrets.token_hex(8), user_phone="0911 000 106", language="en")
+    return frappe.db.get_value("Appointment", {"appointment_id": result["booking_id"]}, "name")
+
+
+def _join_ready_booking(service):
+    """One online booking whose join window is open now, for the manage page.
+
+    It is booked through the normal lifecycle at the first free time, then its times move to now, because the
+    booking rules refuse a start in the past. Only this QA fixture does that.
+    """
+    from datetime import datetime, timedelta
+
+    import pytz
+
+    name = _online_booking(service, QA_CLIENT, QA_CLIENT_EMAIL)
+    zone = pytz.timezone(TZ)
+    start = datetime.now(pytz.UTC).replace(second=0, microsecond=0) - timedelta(minutes=5)
+    end = start + timedelta(minutes=50)
+    local_start, local_end = start.astimezone(zone), end.astimezone(zone)
+    naive = lambda value: value.replace(tzinfo=None)  # noqa: E731
+    frappe.db.set_value("Appointment", name, {
+        "starts_at": naive(start), "ends_at": naive(end), "occupied_from": naive(start), "occupied_until": naive(end),
+        "appointment_date": local_start.date(), "start_time": local_start.strftime("%H:%M:%S"), "end_time": local_end.strftime("%H:%M:%S"),
+    }, update_modified=False)
+    return name
 
 
 def _showcase_sections(starter, provider, places, services):
@@ -207,8 +278,9 @@ def _showcase_sections(starter, provider, places, services):
                    "እንዴት እንደምንገናኝ ይምረጡ፤ በቦሌ ቢሮ ወይም በኦንላይን ቪዲዮ። የቆይታው ርዝመት እና ክፍያ ከመያዝዎ በፊት ይታያሉ።"),
         "items": [
         {"id": services[name], "name": t(name, name_am), "summary": t(summary, summary_am), "durationMinutes": duration,
-         "price": price, "currency": "ETB", "format": meet, "action": act("service_selection", "Book this session", "ይህን ቆይታ ይያዙ")}
-        for name, duration, price, meet, summary, name_am, summary_am in SESSIONS]}
+         "price": price, "currency": "ETB", "action": act("service_selection", "Book this session", "ይህን ቆይታ ይያዙ")}
+        # No `format`: the template reads it from the offering's location (`sessionFormats`).
+        for name, duration, price, _meet, summary, name_am, summary_am in SESSIONS]}
     content["providers"] = {**starter["providers"], "items": [{
         "id": provider[:64], "name": t("Yared Tesfaye", "ያሬድ ተስፋዬ"), "role": t("Counselling psychologist", "የምክር ሥነ-ልቦና ባለሙያ"),
         "specialties": [t("Anxiety", "ጭንቀት"), t("Grief", "ሐዘን"), t("Burnout", "መዛል"), t("Couples", "ጥንዶች")],
@@ -229,7 +301,8 @@ def _showcase_sections(starter, provider, places, services):
         "intro": t("Meet in a quiet office in Bole, or by secure video from a private place of your own. Both have the same care and the same fee.",
                    "በቦሌ በሚገኝ ጸጥ ያለ ቢሮ፣ ወይም ከራስዎ ግላዊ ቦታ በደህንነቱ በተጠበቀ ቪዲዮ ይገናኙ። ሁለቱም አንድ ዓይነት እንክብካቤ እና አንድ ዓይነት ክፍያ አላቸው።"),
         "items": [
-            {"id": places["in_person"][:64], "format": "in_person", "name": t("Bole counselling office", "የቦሌ የምክር ቢሮ"),
+            # No `format` on places either: `placeFormats` gives it by location.
+            {"id": places["in_person"][:64], "name": t("Bole counselling office", "የቦሌ የምክር ቢሮ"),
              "address": t(f"{OFFICE_ADDRESS}, Bole, Addis Ababa", "ካሜሩን ጎዳና፣ ፀሐይ ሕንፃ፣ ሁለተኛ ፎቅ፣ ቢሮ ቁጥር 204፣ ቦሌ፣ አዲስ አበባ"),
              "phone": PHONE,
              "hours": t("Monday to Saturday, 09:00–18:00", "ከሰኞ እስከ ቅዳሜ፣ 09:00–18:00"),
@@ -241,8 +314,8 @@ def _showcase_sections(starter, provider, places, services):
              "image": ASSETS + "support/ergata/office.webp",
              "imageAlt": t("A wooden door with an arched top stands open at the top of stone steps between large potted plants.",
                            "በትላልቅ የሸክላ ተክሎች መካከል ባሉ የድንጋይ ደረጃዎች ላይ ቅስት ያለው የእንጨት በር ተከፍቷል።")},
-            {"id": places["online"][:64], "format": "online", "name": t("Online video sessions", "የኦንላይን ቪዲዮ ቆይታዎች"),
-             "address": t("A secure video link, sent by email before each session", "ከእያንዳንዱ ቆይታ በፊት በኢሜል የሚላክ ደህንነቱ የተጠበቀ የቪዲዮ ማስፈንጠሪያ"),
+            {"id": places["online"][:64], "name": t("Online video sessions", "የኦንላይን ቪዲዮ ቆይታዎች"),
+             "address": t("Google Meet. Your private link comes with your booking email.", "ጉግል ሚት። የግል ማስፈንጠሪያዎ ከቀጠሮ ኢሜልዎ ጋር ይደርስዎታል።"),
              "hours": t("Monday to Saturday, 08:00–20:00", "ከሰኞ እስከ ቅዳሜ፣ 08:00–20:00"),
              "notes": [t("Book an online session and choose a time.", "የኦንላይን ቆይታ ይያዙ እና ሰዓት ይምረጡ።"),
                        t("Find a quiet room where nobody can hear you. Earphones help.", "ማንም የማይሰማዎት ጸጥ ያለ ክፍል ያግኙ። የጆሮ ማዳመጫ ይረዳል።"),
@@ -364,7 +437,8 @@ def _require(value):
 
 
 def _state():
-    return json.loads(frappe.db.get_default(STATE_KEY) or "{}")
+    # Read the row itself: the defaults cache can still hold the value from before the last setup.
+    return json.loads(frappe.db.get_value("DefaultValue", {"parent": "__default", "defkey": STATE_KEY}, "defvalue") or "{}")
 
 
 def _save(state):

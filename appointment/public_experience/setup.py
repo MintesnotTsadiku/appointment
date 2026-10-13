@@ -96,7 +96,17 @@ def state(doc):
             "setup": json.loads(doc.website_setup_json or "{}"),
             "sections": [{"type": row.section_type, "content": json.loads(row.content_json)} for row in doc.sections],
             "status": doc.status, "url": doc.platform_url,
-            "capabilities": list(entitlements.list_entitlements(doc.owner_type, doc.organization, doc.provider).values())}
+            "capabilities": list(entitlements.list_entitlements(doc.owner_type, doc.organization, doc.provider).values()),
+            **_editor_state(doc)}
+
+
+def _editor_state(doc):
+    """What the section editor needs: the field description, derived session formats and media limits."""
+    from appointment.public_experience import section_media, session_formats
+    from appointment.public_experience.section_editor import EDITOR_SCHEMA
+
+    return {"editorSchema": EDITOR_SCHEMA, "derivedFormats": session_formats.for_site(doc).as_dict(),
+            "mediaLimits": section_media.limits()}
 
 
 def start(owner_type, owner, title, slug, recipe_key, preferences=None):
@@ -146,17 +156,41 @@ def save(site, expected_version, step, title=None, sections=None, features=None,
     if sections is not None:
         if not isinstance(sections, list) or len(sections) > 20:
             frappe.throw(_("Provide at most twenty website sections."))
+        rows = _edited_sections(doc, sections)
         doc.set("sections", [])
-        for index, row in enumerate(sections):
-            if not isinstance(row, dict) or set(row) != {"type", "content"}:
-                frappe.throw(_("Each section needs a type and content."))
-            doc.append("sections", {"section_id": row["type"], "section_type": row["type"],
+        for index, (kind, content) in enumerate(rows):
+            doc.append("sections", {"section_id": kind, "section_type": kind,
                                     "enabled": 1, "order_index": index, "schema_version": 2,
-                                    "content_json": json.dumps(row["content"])})
+                                    "content_json": json.dumps(content)})
     setup["step"] = step
     doc.website_setup_json = json.dumps(setup)
     doc.save()
     return state(doc)
+
+
+def _edited_sections(doc, sections):
+    """Merge each edited section into the stored one (keeping translations) and validate what changed."""
+    from appointment.public_experience.content_merge import merge_content
+    from appointment.public_experience.section_media import require_site_media
+    from appointment.public_experience.section_schemas import validate_typed_section
+
+    stored = {row.section_type: json.loads(row.content_json or "{}") for row in doc.sections}
+    intents = get_recipe(doc.recipe_key).action_intents
+    rows = []
+    for row in sections:
+        if not isinstance(row, dict) or set(row) != {"type", "content"} or not isinstance(row["content"], dict):
+            frappe.throw(_("Each section needs a type and content."))
+        kind = row["type"]
+        content = merge_content(stored.get(kind), row["content"])
+        if content != stored.get(kind):
+            report = validate_typed_section(kind, content, allowed_intents=intents)
+            if not report.ok:
+                issue = report.issues[0]
+                frappe.throw(_("Check the {0} section: {1} needs {2}.").format(kind, issue.field, issue.requirement),
+                             title=_("Website content"))
+            require_site_media(doc.name, content)
+        rows.append((kind, content))
+    return rows
 
 
 def publish(site, expected_version):
@@ -274,15 +308,24 @@ def prefill_sections(scope, title, recipe, preferences=None):
                                           "durationMinutes": row.duration, "price": row.price, "currency": "ETB",
                                           **({"summary": text(row.description)} if row.description else {})} for row in services]
         locations = frappe.get_all("Location", filters={**operational_owner, "is_active": 1},
-                                   fields=["name", "location_name", "address_line_1", "phone"], order_by="location_name", limit=12)
+                                   fields=["name", "location_name", "address_line_1", "phone", "location_type", "video_platform"],
+                                   order_by="location_name", limit=12)
+        # Offices first: the first place feeds the directions action.
+        locations.sort(key=lambda row: row.location_type == "Online")
         for location in locations:
-            if not location.address_line_1:
+            online = location.location_type == "Online"
+            # An office needs its street address; a place without one and not online is skipped.
+            if not location.address_line_1 and not online:
                 continue
             hours = frappe.get_doc("Location", location.name).opening_hours
             description = "; ".join(f"{row.day_of_week}: {frappe.utils.get_time(row.start_time).strftime('%H:%M')}–{frappe.utils.get_time(row.end_time).strftime('%H:%M')}"
                                     for row in hours if row.is_open)
+            # An online place gets the online card. Its line names the platform, never the private meeting link.
+            platform = f" · {location.video_platform}" if location.video_platform else ""
             content["locations"]["items"].append({"id": location.name[:64], "name": text(location.location_name),
-                                                  "address": text(location.address_line_1),
+                                                  "address": {"en": f"Online video{platform}", "am": f"ኦንላይን ቪዲዮ{platform}"}
+                                                  if online else text(location.address_line_1),
+                                                  **({"format": "online"} if online else {}),
                                                   **({"hours": text(description)} if description else {}),
                                                   **({"phone": location.phone} if location.phone else {})})
         names = frappe.get_all("Provider Organization", filters={"organization": scope["organization"], "status": "Active"},

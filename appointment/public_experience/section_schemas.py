@@ -50,27 +50,54 @@ def _string(value: object, field: str, *, required: bool = True, max_length: int
         return [_issue(field, "safe_text", value, f"plain text of at most {max_length} characters", "Use plain text only.")]
     return []
 
+# Owner uploads live in this site's media library as public files with a generated, flat name.
+_OWNER_FILE_RE = re.compile(r"^/files/[A-Za-z0-9][A-Za-z0-9._-]{0,180}$")
+IMAGE_KEYS = ("image", "imageAlt", "imageFocus")
+
+
 def _asset(value: object, field: str) -> list[ValidationIssue]:
+    """A packaged template asset, or an owner upload. The publisher checks that an upload belongs to the site."""
     issues = _string(value, field, max_length=255)
     if issues:
         return issues
-    if not str(value).startswith("/assets/appointment/") or ".." in str(value):
-        return [_issue(field, "local_asset", value, "a packaged appointment asset path", "Use a trusted local asset.")]
+    text = str(value)
+    if ".." in text or not (text.startswith("/assets/appointment/") or _OWNER_FILE_RE.fullmatch(text)):
+        return [_issue(field, "local_asset", value, "a packaged asset or an image from this website's media library", "Choose an image from your media library.")]
     return []
 
 
+def is_owner_upload(value: object) -> bool:
+    return isinstance(value, str) and _OWNER_FILE_RE.fullmatch(value) is not None and ".." not in value
+
+
+def _focus(value: object, field: str) -> list[ValidationIssue]:
+    """The focal point of a photo, in percent from the top-left corner. Templates crop around it."""
+    if (isinstance(value, dict) and set(value) == {"x", "y"}
+            and all(isinstance(value[axis], int) and not isinstance(value[axis], bool) and 0 <= value[axis] <= 100 for axis in ("x", "y"))):
+        return []
+    return [_issue(field, "focus", value, "x and y from 0 to 100", "Choose the focal point again.")]
+
+
 def _image(content: Mapping[str, object], field: str) -> list[ValidationIssue]:
-    """Optional owner photo: a packaged asset plus its localized alt text.
+    """Optional owner photo: a packaged asset or an owner upload, its localized alt text and a focal point.
 
     Releases published before these fields existed simply omit them, so the
     template hides the image instead of borrowing another business's photo.
+    An owner upload must describe the photo in English for screen readers.
     """
     prefix = f"{field}." if field else ""
     issues: list[ValidationIssue] = []
-    if content.get("image") is not None:
-        issues.extend(_asset(content.get("image"), f"{prefix}image"))
+    image = content.get("image")
+    if image is not None:
+        issues.extend(_asset(image, f"{prefix}image"))
     if content.get("imageAlt") is not None:
         issues.extend(_localized(content.get("imageAlt"), f"{prefix}imageAlt", required=False, max_length=240))
+    if is_owner_upload(image):
+        alt = content.get("imageAlt")
+        if not isinstance(alt, dict) or not str(alt.get("en") or "").strip():
+            issues.append(_issue(f"{prefix}imageAlt.en", "alt_required", None, "an English description of the photo", "Describe the photo for people who cannot see it."))
+    if content.get("imageFocus") is not None:
+        issues.extend(_focus(content.get("imageFocus"), f"{prefix}imageFocus"))
     return issues
 
 
@@ -134,7 +161,7 @@ def _action(content: Mapping[str, object], key: str, allowed: Iterable[str]) -> 
 
 
 def _hero(content: Mapping[str, object], allowed: Iterable[str]) -> list[ValidationIssue]:
-    issues = _common(content, {"eyebrow", "title", "subtitle", "body", "primaryAction", "secondaryAction", "imageRole", "image", "imageAlt"})
+    issues = _common(content, {"eyebrow", "title", "subtitle", "body", "primaryAction", "secondaryAction", "imageRole", "image", "imageAlt", "imageFocus"})
     issues.extend(_localized(content.get("eyebrow"), "eyebrow", required=False))
     issues.extend(_image(content, ""))
     issues.extend(_localized(content.get("subtitle"), "subtitle", required=False))
@@ -147,7 +174,7 @@ def _hero(content: Mapping[str, object], allowed: Iterable[str]) -> list[Validat
 
 def _services(content: Mapping[str, object], allowed: Iterable[str]) -> list[ValidationIssue]:
     issues = _common(content, {"title", "intro", "items"})
-    issues.extend(_record_list(content, "items", {"id", "name", "summary", "durationMinutes", "price", "currency", "action", "image", "imageAlt", "format"}, max_items=24))
+    issues.extend(_record_list(content, "items", {"id", "name", "summary", "durationMinutes", "price", "currency", "action", "image", "imageAlt", "imageFocus", "format"}, max_items=24))
     values = content.get("items")
     if isinstance(values, list):
         for index, item in enumerate(values):
@@ -171,7 +198,7 @@ def _services(content: Mapping[str, object], allowed: Iterable[str]) -> list[Val
 
 def _providers(content: Mapping[str, object], allowed: Iterable[str]) -> list[ValidationIssue]:
     issues = _common(content, {"title", "intro", "items"})
-    issues.extend(_record_list(content, "items", {"id", "name", "role", "specialties", "credentials", "imageRole", "image", "imageAlt", "action"}, max_items=24))
+    issues.extend(_record_list(content, "items", {"id", "name", "role", "specialties", "credentials", "imageRole", "image", "imageAlt", "imageFocus", "action"}, max_items=24))
     values = content.get("items")
     if isinstance(values, list):
         for index, item in enumerate(values):
@@ -211,7 +238,7 @@ def _process(content: Mapping[str, object]) -> list[ValidationIssue]:
 
 
 def _benefits(content: Mapping[str, object]) -> list[ValidationIssue]:
-    issues = _common(content, {"title", "intro", "items", "image", "imageAlt"})
+    issues = _common(content, {"title", "intro", "items", "image", "imageAlt", "imageFocus"})
     issues.extend(_image(content, ""))
     issues.extend(_record_list(content, "items", {"title", "description", "icon"}, max_items=12))
     values = content.get("items")
@@ -227,7 +254,7 @@ def _benefits(content: Mapping[str, object]) -> list[ValidationIssue]:
 
 def _approaches(content: Mapping[str, object]) -> list[ValidationIssue]:
     """Ways of working in plain words, for example the therapy approaches a practice uses."""
-    issues = _common(content, {"title", "intro", "items", "image", "imageAlt"})
+    issues = _common(content, {"title", "intro", "items", "image", "imageAlt", "imageFocus"})
     issues.extend(_image(content, ""))
     issues.extend(_record_list(content, "items", {"title", "description"}, max_items=12))
     values = content.get("items")
@@ -248,7 +275,7 @@ def _notice(content: Mapping[str, object]) -> list[ValidationIssue]:
 
     The numbers are owner content, never platform logic, so each region and practice can edit them.
     """
-    issues = _common(content, {"title", "body", "items", "image", "imageAlt"})
+    issues = _common(content, {"title", "body", "items", "image", "imageAlt", "imageFocus"})
     issues.extend(_image(content, ""))
     issues.extend(_record_list(content, "items", {"label", "phone"}, required=False, max_items=6))
     values = content.get("items")
@@ -295,7 +322,7 @@ def _proof(content: Mapping[str, object]) -> list[ValidationIssue]:
 
 def _locations(content: Mapping[str, object], allowed: Iterable[str]) -> list[ValidationIssue]:
     issues = _common(content, {"title", "intro", "items"})
-    issues.extend(_record_list(content, "items", {"id", "name", "address", "phone", "hours", "directionsAction", "image", "imageAlt", "format", "body", "notes"}, max_items=12))
+    issues.extend(_record_list(content, "items", {"id", "name", "address", "phone", "hours", "directionsAction", "image", "imageAlt", "imageFocus", "format", "body", "notes"}, max_items=12))
     values = content.get("items")
     if isinstance(values, list):
         for index, item in enumerate(values):
@@ -320,7 +347,7 @@ def _locations(content: Mapping[str, object], allowed: Iterable[str]) -> list[Va
 
 
 def _about(content: Mapping[str, object]) -> list[ValidationIssue]:
-    issues = _common(content, {"title", "body", "highlights", "imageRole", "image", "imageAlt"})
+    issues = _common(content, {"title", "body", "highlights", "imageRole", "image", "imageAlt", "imageFocus"})
     issues.extend(_localized(content.get("body"), "body", max_length=2400))
     highlights = content.get("highlights")
     if highlights is not None:
@@ -336,7 +363,7 @@ def _about(content: Mapping[str, object]) -> list[ValidationIssue]:
 
 
 def _faq(content: Mapping[str, object]) -> list[ValidationIssue]:
-    issues = _common(content, {"title", "items", "image", "imageAlt"})
+    issues = _common(content, {"title", "items", "image", "imageAlt", "imageFocus"})
     issues.extend(_image(content, ""))
     issues.extend(_record_list(content, "items", {"question", "answer"}, max_items=20))
     values = content.get("items")
@@ -360,7 +387,7 @@ def _contact(content: Mapping[str, object], allowed: Iterable[str]) -> list[Vali
 
 
 def _booking(content: Mapping[str, object], allowed: Iterable[str]) -> list[ValidationIssue]:
-    issues = _common(content, {"title", "body", "action", "image", "imageAlt"})
+    issues = _common(content, {"title", "body", "action", "image", "imageAlt", "imageFocus"})
     issues.extend(_image(content, ""))
     action = content.get("action")
     if action is None:

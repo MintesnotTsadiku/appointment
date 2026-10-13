@@ -11,6 +11,8 @@ import { DatePicker } from '@/components/datetime-picker';
 import { TimeInput } from '@/components/time-input';
 import { ClockFormatToggle } from '@/components/clock-format-toggle';
 import { StatusBadge } from '@/components/status-badge';
+import { Badge } from '@/components/badge';
+import { Video } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n';
 import { parseFrappeErrorMsg } from '@/lib/utils';
 import type { ClockFormat } from '@/lib/time';
@@ -20,6 +22,7 @@ import { CustomerMessages } from './CustomerMessages';
 import { PaymentSection } from './PaymentSection';
 import { BookingReferral } from './BookingReferral';
 import { ResourceSection } from './ResourceSection';
+import { MeetingLinkSection } from './MeetingLinkSection';
 import { notificationNotice } from './notificationNotice';
 
 interface RecoveryCandidate {
@@ -119,7 +122,12 @@ export function OwnedBookingActions({ appointment, onClose, onSuccess }: OwnedBo
             <div className="flex flex-wrap items-center justify-between gap-2">
               {/* Exact "Status: X" text is asserted by QA. */}
               <p data-qa="booking-current-status" className="font-medium text-foreground">Status: {appointment.status}</p>
-              <StatusBadge status={appointment.status} />
+              <span className="flex items-center gap-1.5">
+                {Boolean(appointment.is_online) && (
+                  <Badge variant="info" data-qa="booking-online-badge"><Video aria-hidden="true" />{t('staff.online.badge')}</Badge>
+                )}
+                <StatusBadge status={appointment.status} />
+              </span>
             </div>
             <p className="text-muted-foreground">
               {t('staff.receptionDesk.bookingReference')}: <span data-qa="booking-reference" className="font-medium tabular-nums text-foreground">{appointment.appointment_id || appointment.name}</span>
@@ -151,6 +159,8 @@ export function OwnedBookingActions({ appointment, onClose, onSuccess }: OwnedBo
               {problem}
             </p>
           )}
+
+          <MeetingLinkSection appointment={appointment.name} onChanged={onSuccess} />
 
           {editable && (
             <section data-qa="booking-stages" className="space-y-3 rounded-lg border p-4">

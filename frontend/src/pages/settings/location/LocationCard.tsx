@@ -1,30 +1,40 @@
 import { Link } from 'react-router-dom';
-import { AlertTriangle, Clock, Globe, MapPin, Pencil, Phone, Trash2 } from 'lucide-react';
+import { AlertTriangle, Building2, Clock, Globe, Link2, Lock, MapPin, Pencil, Phone, Trash2, Video } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/alert';
 import { Badge } from '@/components/badge';
 import { Button } from '@/components/button';
+import { useOnlineLabel } from '@/components/online-session/JoinSession';
 import { useTranslation } from '@/lib/i18n';
 import type { Location } from './types';
 
 interface LocationCardProps {
   location: Location;
+  /** The business name, when the user manages more than one. */
+  owner?: string;
   deleting: boolean;
   onEdit: (location: Location) => void;
   onDelete: (location: Location) => void;
 }
 
-export function LocationCard({ location, deleting, onEdit, onDelete }: LocationCardProps) {
+export function LocationCard({ location, owner, deleting, onEdit, onDelete }: LocationCardProps) {
   const { t } = useTranslation();
+  const onlineLabel = useOnlineLabel();
   const name = location.location_name;
+  const online = location.location_type === 'Online';
   return (
-    <article className="flex h-full flex-col gap-4 rounded-xl border bg-card p-4 shadow-card sm:p-5">
+    <article data-qa="location-card" data-qa-type={online ? 'online' : 'in_person'} className="flex h-full flex-col gap-4 rounded-xl border bg-card p-4 shadow-card sm:p-5">
       <div className="flex items-start gap-3">
         <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary" aria-hidden="true">
-          <MapPin className="h-4 w-4" />
+          {online ? <Video className="h-4 w-4" /> : <MapPin className="h-4 w-4" />}
         </span>
         <div className="min-w-0 flex-1">
-          <h3 className="truncate text-base font-semibold text-foreground">{name}</h3>
-          {location.address && <p className="mt-0.5 wrap-break-word text-sm text-muted-foreground">{location.address}</p>}
+          <h3 className="line-clamp-2 wrap-break-word text-base font-semibold text-foreground">{name}</h3>
+          {online ? (
+            <p className="mt-0.5 text-sm text-muted-foreground" data-qa="location-card-online">{onlineLabel(location.video_platform)}</p>
+          ) : (
+            location.address && <p className="mt-0.5 wrap-break-word text-sm text-muted-foreground">{location.address}</p>
+          )}
+          {owner && <p className="mt-0.5 truncate text-xs text-muted-foreground">{owner}</p>}
         </div>
         <div className="flex shrink-0 items-center gap-1">
           <Button type="button" variant="ghost" size="icon" className="h-9 w-9" onClick={() => onEdit(location)} aria-label={`${t('staff.locations.edit')}: ${name}`}>
@@ -45,9 +55,19 @@ export function LocationCard({ location, deleting, onEdit, onDelete }: LocationC
       </div>
 
       <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+        <Badge variant={online ? 'info' : 'muted'} data-qa="location-type-badge">
+          {online ? <Video aria-hidden="true" /> : <Building2 aria-hidden="true" />}
+          {t(online ? 'staff.locations.typeOnline' : 'staff.locations.typeInPerson')}
+        </Badge>
+        {online && (
+          <Badge variant="muted" data-qa="location-link-badge">
+            {location.meeting_link_mode === 'Per booking' ? <Link2 aria-hidden="true" /> : <Lock aria-hidden="true" />}
+            {t(location.meeting_link_mode === 'Per booking' ? 'staff.locations.perBookingBadge' : 'staff.locations.fixedBadge')}
+          </Badge>
+        )}
         <Badge variant={location.has_opening_hours ? 'success' : 'warning'}>
           <Clock aria-hidden="true" />
-          <span className="tabular-nums">{location.opening_hours_count}</span> {t('staff.locations.hoursSet')}
+          {t('staff.locations.openDays').replace('{0}', String(location.opening_hours_count))}
         </Badge>
         <span className="inline-flex min-w-0 items-center gap-1">
           <Globe className="h-3 w-3 shrink-0" aria-hidden="true" />

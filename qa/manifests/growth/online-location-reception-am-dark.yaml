@@ -1,0 +1,82 @@
+# Online locations: the owner's reception desk marks the online booking and sets a per-booking meeting link
+# (am, phone, dark). Fixture: appointment.tests.template_ergata_qa_fixtures (setup before, cleanup after); its
+# desk booking (Dawit Mengistu, first session online) is on the first free day from tomorrow. See docs/growth/ONLINE_LOCATIONS.md.
+app: appointment
+base_url: http://localhost:47800
+default_role: Staff
+auth:
+  type: frappe_session
+  username: yared.tesfaye.counselling@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment-growth-online-location-reception
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 150000
+options:
+  ignore_baseline_drift: true
+  color_scheme: dark
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.template_ergata_qa_fixtures.browser_values
+scenarios:
+- id: online_reception_am_mobile_dark
+  title: 'Reception shows the online badge and the owner changes the meeting link (am, phone, dark)'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /reception?date={qa_online_desk_date}
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa-appointment-name="{qa_online_desk_booking}"]'
+  actions:
+  - action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation
+      status: 200
+  - action: scroll
+    selector: '[data-qa-appointment-name="{qa_online_desk_booking}"]'
+  - action: wait_for
+    selector: '[data-qa-appointment-name="{qa_online_desk_booking}"] [data-qa="appointment-online"]'
+  - action: screenshot
+    name: online_reception_am_mobile_dark-1-desk.png
+    full_page: false
+  - action: click
+    selector: '[data-qa-appointment-name="{qa_online_desk_booking}"]'
+  - action: wait_for
+    selector: '[data-qa="booking-meeting-link"][data-qa-state="set"]'
+    assertions:
+    - type: text_contains
+      value: የኦንላይን ቆይታ
+    - type: text_contains
+      value: ኦንላይን ቪዲዮ · Google Meet
+  - action: scroll
+    selector: '[data-qa="booking-meeting-link"]'
+  - action: screenshot
+    name: online_reception_am_mobile_dark-2-dialog.png
+    full_page: false
+  - action: fill
+    selector: '[data-qa="booking-meeting-link-input"]'
+    value: https://meet.google.com/ytc-room-two
+  - action: click
+    selector: '[data-qa="booking-meeting-link-save"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.online_meeting.set_link
+      method: POST
+      status: 200
+    - type: text_contains
+      value: ማስፈንጠሪያው ተቀምጧል
+  - action: wait_for
+    selector: '[data-qa="booking-meeting-link-open"][href="https://meet.google.com/ytc-room-two"]'
+  - action: screenshot
+    name: online_reception_am_mobile_dark-3-saved.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

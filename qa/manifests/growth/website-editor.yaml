@@ -1,0 +1,172 @@
+# Website section editor (en, desktop, light). Fixture: appointment.tests.website_editor_qa_fixtures (keeps a copy of
+# the Ergata showcase content; run `bench execute appointment.tests.website_editor_qa_fixtures.restore` after the run).
+# The owner overrides a session format, edits a place note in English and Amharic, reorders and removes an FAQ item,
+# uploads a photo into the FAQ slot with alt text, previews and publishes; the public page shows the changes.
+app: appointment
+base_url: http://localhost:47800
+default_role: Staff
+auth:
+  type: frappe_session
+  username: yared.tesfaye.counselling@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment-growth-website-editor
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 240000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.website_editor_qa_fixtures.browser_values
+scenarios:
+- id: website_editor_en_desktop
+  title: 'Independent owner: edit sessions, places, FAQ and a photo, then publish (en, desktop, light)'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /settings/website
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="website-step-content"]'
+  actions:
+  - action: click
+    selector: '[data-qa="website-step-content"]'
+    assertions:
+    - type: network_request
+      url_contains: save_website_setup
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="website-editor-sections"]'
+  - action: click
+    selector: '[data-qa="website-editor-tab-services"]'
+  - action: click
+    selector: '[data-qa="website-editor-services-item-0-toggle"]'
+  - action: click
+    selector: '[data-qa="website-editor-services-item-0-format"]'
+  - action: click
+    selector: '[role="option"][data-value="phone"]'
+  - action: wait_for
+    selector: '[data-qa="website-editor-services-item-0-format"][data-value="phone"]'
+  - action: screenshot
+    name: website_editor_en_desktop-1-session-format.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="website-editor-tab-locations"]'
+  - action: click
+    selector: '[data-qa="website-editor-locations-item-0-toggle"]'
+  - action: fill
+    selector: '[data-qa="website-editor-locations-item-0-notes-0-en"]'
+    value: Free parking in the courtyard and a lift to the second floor
+  - action: fill
+    selector: '[data-qa="website-editor-locations-item-0-notes-0-am"]'
+    value: በግቢው ውስጥ ነጻ የመኪና ማቆሚያ እና ወደ ሁለተኛ ፎቅ አሳንሰር አለ
+  - action: scroll
+    selector: '[data-qa="website-editor-locations-item-0-notes"]'
+  - action: screenshot
+    name: website_editor_en_desktop-2-place-notes.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="website-editor-tab-faq"]'
+  - action: click
+    selector: '[data-qa="website-editor-faq-item-1-up"]'
+  - action: click
+    selector: '[data-qa="website-editor-faq-item-2-remove"]'
+  - action: wait_for
+    selector: '[data-qa="website-editor-confirm-remove"]'
+  - action: screenshot
+    name: website_editor_en_desktop-3-remove-confirm.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="website-editor-confirm-remove"]'
+  - action: click
+    selector: '[data-qa="website-editor-faq-image-choose"]'
+  - action: wait_for
+    selector: '[data-qa="website-editor-faq-image-dialog"]'
+  - action: upload_file
+    selector: '[data-qa="website-editor-faq-image-file"]'
+    path: '{qa_editor_upload}'
+  - action: click
+    selector: '[data-qa="website-editor-faq-image-consent"]'
+  - action: screenshot
+    name: website_editor_en_desktop-4-upload-dialog.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="website-editor-faq-image-upload"]'
+    assertions:
+    - type: network_request
+      url_contains: upload_website_section_image
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="website-editor-faq-image-alt-en"]'
+  - action: fill
+    selector: '[data-qa="website-editor-faq-image-alt-en"]'
+    value: A small clay cup and a sprig of green leaves on a wooden windowsill in soft light
+  - action: fill
+    selector: '[data-qa="website-editor-faq-image-alt-am"]'
+    value: በለስላሳ ብርሃን በእንጨት የመስኮት ደፍ ላይ ትንሽ የሸክላ ስኒ እና አረንጓዴ ቅጠሎች
+  - action: scroll
+    selector: '[data-qa="website-editor-faq-image"]'
+  - action: screenshot
+    name: website_editor_en_desktop-5-faq-photo.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="website-save-preview"]'
+    assertions:
+    - type: network_request
+      url_contains: preview_website_setup
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="website-setup-notice"]'
+  - action: screenshot
+    name: website_editor_en_desktop-6-saved-preview.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="website-step-readiness"]'
+  - action: click
+    selector: '[data-qa="website-publish"]'
+    assertions:
+    - type: network_request
+      url_contains: publish_website_setup
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="website-setup-notice"]'
+  - action: open_url
+    url: /yared-counselling
+    assertions:
+    - type: network_idle
+    - type: text_contains
+      value: Free parking in the courtyard and a lift to the second floor
+    - type: visible_selector
+      value: '#eg-faq-title'
+    - type: visible_selector
+      value: 'img[src^="/files/section-"]'
+  - action: wait_for
+    selector: '[data-format][data-meet="phone"]'
+  - action: click
+    selector: 'footer a[href="#sessions"]'
+  - action: wait_for
+    selector: '#sessions'
+  - action: screenshot
+    name: website_editor_en_desktop-7-public-sessions.png
+    full_page: false
+  - action: click
+    selector: 'footer a[href="#faq"]'
+  - action: wait_for
+    selector: '#faq'
+  - action: screenshot
+    name: website_editor_en_desktop-8-public-faq.png
+    full_page: false
+  - action: click
+    selector: 'a.eg-faq-ask'
+  - action: wait_for
+    selector: '#contact'
+  - action: screenshot
+    name: website_editor_en_desktop-9-public-places.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

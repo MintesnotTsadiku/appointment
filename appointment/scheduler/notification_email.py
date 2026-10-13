@@ -66,9 +66,16 @@ COPY["Refund receipt"] = dict(
     heading="Refund recorded",
     intro="Hello {0}, {1} recorded a refund for your booking. Your refund receipt is attached.",
 )
+COPY["Meeting link"] = dict(
+    subject="Your session link from {0}",
+    heading="Your session link",
+    intro="Hello {0}, {1} added the link for your online session.",
+)
 UNPAID_INTRO = "Hello {0}, your booking was released because the payment was not received."
 # Events whose booking is still open, so the email carries the manage link.
-MANAGEABLE = ("Confirmation", "Reschedule", "Reminder", "Payment request", "Payment reminder", "Payment receipt")
+MANAGEABLE = ("Confirmation", "Reschedule", "Reminder", "Payment request", "Payment reminder", "Payment receipt", "Meeting link")
+# Events that carry the session link of an online booking.
+JOINABLE = ("Confirmation", "Reschedule", "Reminder", "Payment receipt", "Meeting link")
 
 
 def send_notification(notification):
@@ -130,7 +137,7 @@ def render(event, doc, language, recipient, receipt=None):
         details=[
             (t("Service"), escape_html(_value("Service", doc.service, "service_name"))),
             *([(t("Provider"), escape_html(_value("Provider", doc.provider, "full_name")))] if doc.provider else []),
-            (t("Location"), escape_html(_value("Location", doc.location, "location_name"))),
+            _place_row(doc, t),
             *_resource_rows(doc, t),
             *([(t("Quantity"), escape_html(str(doc.quantity)))] if (doc.get("quantity") or 1) > 1 else []),
             (t("Date and time"), escape_html(when(doc, language))),
@@ -138,6 +145,7 @@ def render(event, doc, language, recipient, receipt=None):
             *(payment["rows"] if event not in ("Cancellation", "Refund receipt") else []),
             *_receipt_rows(receipt, t),
         ],
+        **_join_context(event, doc, t),
         manage_label=t("Manage your booking"),
         manage_url=escape_html(self_service.manage_url(doc)) if event in MANAGEABLE else "",
         booking_label=t("Open the booking page"),
@@ -152,6 +160,24 @@ def render(event, doc, language, recipient, receipt=None):
     # Book-again button and the platform's "Powered by" footer (Growth Settings).
     context.update(touchpoints.email_context(event, doc, language))
     return {"subject": context["subject"], "html": frappe.render_template(TEMPLATE, context)}
+
+
+def _place_row(doc, t):
+    """Where the session happens: the place name, or "Online video" and its platform."""
+    if not doc.get("is_online"):
+        return (t("Location"), escape_html(_value("Location", doc.location, "location_name")))
+    platform = _value("Location", doc.location, "video_platform")
+    return (t("How we meet"), t("Online video · {0}", platform) if platform else t("Online video"))
+
+
+def _join_context(event, doc, t):
+    """The private session link of this customer's online booking, while the booking is open."""
+    if not doc.get("is_online") or event not in JOINABLE or doc.status not in ("Pending", "Confirmed"):
+        return dict(join_url="", join_label="", join_note="")
+    if not doc.get("meeting_link"):
+        return dict(join_url="", join_label="", join_note=t("We will send you the session link before your session."))
+    return dict(join_url=escape_html(doc.meeting_link), join_label=t("Join session"),
+                join_note=t("This link is for you only. Please do not share it."))
 
 
 def _payment_facts(doc, language):

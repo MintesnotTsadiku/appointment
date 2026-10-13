@@ -27,6 +27,8 @@ EVENT_SETTING = {
     # Receipts are records of money received or returned; they always go out.
     "Payment receipt": None,
     "Refund receipt": None,
+    # Staff set or changed the link of an online session; it follows the confirmation setting.
+    "Meeting link": "send_confirmation",
 }
 RECEIPT_EVENTS = ("Payment receipt", "Refund receipt")
 DEFAULT_SETTINGS = dict(
@@ -79,6 +81,9 @@ def _event_for(doc):
         return "Confirmation"
     if doc.status in OPEN_STATUSES and _instant(before.starts_at) != _instant(doc.starts_at):
         return "Reschedule"
+    if (doc.status == "Confirmed" and doc.get("is_online") and doc.get("meeting_link")
+            and doc.get("meeting_link") != before.get("meeting_link")):
+        return "Meeting link"
     return None
 
 

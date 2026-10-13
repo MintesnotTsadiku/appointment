@@ -1,3 +1,5 @@
+import type { LocationType, OnlineSession } from '@/lib/online-session';
+
 /** Shapes returned by appointment.scheduler.self_service. */
 export const SELF_SERVICE_API = 'appointment.scheduler.self_service';
 
@@ -48,6 +50,9 @@ export interface ManageView {
     timezone: string;
     status: 'Pending' | 'Confirmed';
     duration_minutes: number;
+    location_type?: LocationType;
+    /** This customer's own online session (private link and join window); null in person. */
+    online?: OnlineSession | null;
   };
   rules: ManageRules;
   currency: string;

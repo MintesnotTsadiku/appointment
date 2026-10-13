@@ -25,6 +25,20 @@ export interface Service {
   type: 'individual' | 'organization' | 'group';
   provider?: Provider;
   providerCount?: number;
+  /** Where the session happens; an online place has no address and never a meeting link here. */
+  location?: ServiceLocation;
+}
+
+export interface ServiceLocation {
+  name: string;
+  location_name: string;
+  address?: string;
+  phone?: string;
+  timezone?: string;
+  city?: string;
+  is_online?: boolean;
+  location_type?: 'online' | 'in_person';
+  platform?: string;
 }
 
 export interface Organization {
@@ -52,6 +66,9 @@ export interface TimeSlot {
     location_name: string;
     address?: string;
     is_online?: boolean;
+    /** Public session format and platform label; never the meeting link. */
+    location_type?: 'online' | 'in_person';
+    platform?: string;
   };
 }
 
@@ -195,6 +212,9 @@ export interface TimeSlotsProps {
     location_name: string;
     address?: string;
     is_online?: boolean;
+    /** Public session format and platform label; never the meeting link. */
+    location_type?: 'online' | 'in_person';
+    platform?: string;
   };
   date: Date;
   slots: TimeSlot[];

@@ -87,6 +87,13 @@ export interface PublicSection {
   content: Record<string, unknown>;
 }
 
+/** The public session format of a session or place. */
+export interface SessionFormat {
+  locationType: "online" | "in_person";
+  /** Platform label of an online place, for example "Google Meet"; empty in person. */
+  platform?: string;
+}
+
 export interface PublishedSnapshot {
   previewContent?: { article: import("./contentContract").ContentDetail; gallery: import("./contentContract").ContentDetail };
   siteSlug?: string;
@@ -105,6 +112,13 @@ export interface PublishedSnapshot {
   bookingPath?: string | null;
   /** Independent providers: each session's own scheduler path, by service id. */
   bookingPaths?: Record<string, string>;
+  /**
+   * How each session meets, by service id: from the location of its bookable offerings. A service offered both
+   * online and in person has no entry. Public and never secret: no meeting link. See docs/growth/ONLINE_LOCATIONS.md.
+   */
+  sessionFormats?: Record<string, SessionFormat>;
+  /** How each place meets, by location id (the `id` of a `locations` item). */
+  placeFormats?: Record<string, SessionFormat>;
   sections: PublicSection[];
   seo: Record<string, unknown>;
   booking: Record<string, unknown>;

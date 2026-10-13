@@ -48,13 +48,14 @@ export function WebsitePreview({ snapshot, initialSurface = "landing", savedArti
     return () => query.removeEventListener("change", update);
   }, []);
   const [surface, setSurface] = useState(initialSurface);
+  const [locale, setLocale] = useState("en");
   const template = getTemplatePackage(snapshot.compiledDesign.layout.rendererKey, snapshot.compiledDesign.layout.rendererVersion);
   const theme = buildThemeAttributes({ ...getFallbackPublicUIConfig("en"), compiledDesign: snapshot.compiledDesign }, mode, false);
   const kind = ["blog", "article"].includes(surface) ? "blog" : "gallery";
   const release = kind === "blog" ? snapshot.previewContent?.article : snapshot.previewContent?.gallery;
   const content: ContentState = { kind, detail: ["article", "collection"].includes(surface), loading: false,
     unavailable: false, release: release || null, entries: release ? [release] : [], page: 1, hasNext: false };
-  const common = { snapshot, locale: "en", applicationName: snapshot.compiledDesign.identity.applicationName,
+  const common = { snapshot, locale, applicationName: snapshot.compiledDesign.identity.applicationName,
     publicRoot: "/website-preview", mode, toggleMode: () => setMode(mode === "light" ? "dark" : "light"),
     rootStyle: theme.variables as CSSProperties };
 
@@ -65,6 +66,7 @@ export function WebsitePreview({ snapshot, initialSurface = "landing", savedArti
     <div className="flex flex-wrap items-end gap-3"><button type="button" className={button} onClick={() => setExpanded(!expanded)}>{expanded ? t("staff.website.preview.closeFullscreen") : t("staff.website.preview.fullscreen")}</button>
       <button className={button} onClick={() => setMode(mode === "light" ? "dark" : "light")}>{mode === "light" ? t("staff.website.preview.darkMode") : t("staff.website.preview.lightMode")}</button>
       <button className={button} onClick={() => { viewportChosen.current = true; setMobile(!mobile); }}>{mobile ? t("staff.website.preview.desktop") : t("staff.website.preview.mobile")}</button>
+      <button className={button} data-qa="website-preview-language" onClick={() => setLocale(locale === "en" ? "am" : "en")}>{locale === "en" ? t("staff.website.preview.showAmharic") : t("staff.website.preview.showEnglish")}</button>
       <label>{t("staff.website.preview.surface")}<AppearanceSelect aria-label={t("staff.website.preview.surface")} value={surface} onChange={(event) => setSurface(event.target.value)}>
         <option value="landing">{t("staff.website.preview.landing")}</option><option value="booking">{t("staff.website.preview.booking")}</option>
         <option value="blog">{t("staff.website.preview.blog")}</option><option value="article">{t("staff.website.preview.article")}</option>

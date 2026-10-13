@@ -1172,7 +1172,8 @@
       "errors": {
         "name": "Location name must be at least 2 characters",
         "address": "Address line 1 is required",
-        "city": "City is required"
+        "city": "City is required",
+        "link": "Enter a meeting link that starts with https://"
       },
       "fields": {
         "name": "Location name",
@@ -1189,8 +1190,37 @@
         "providerPlaceholder": "Select a provider",
         "providerHint": "Select which provider this location belongs to",
         "services": "Link to Services (Optional)",
-        "servicesHint": "Select which services are available at this location"
-      }
+        "servicesHint": "Select which services are available at this location",
+        "onlineNamePlaceholder": "e.g., Online video room"
+      },
+      "typeLabel": "How do clients meet here?",
+      "typeInPerson": "In person",
+      "typeOnline": "Online",
+      "typeHintInPerson": "Clients come to this address.",
+      "typeHintOnline": "Clients join by video or phone. No street address is needed.",
+      "platform": "Video platform",
+      "platformPlaceholder": "Choose a platform",
+      "platformOther": "Other platform",
+      "platformOtherPlaceholder": "Platform name",
+      "linkMode": "Meeting link",
+      "linkFixed": "One fixed link",
+      "linkPerBooking": "A link per booking",
+      "linkFixedHint": "Every booking here gets this link.",
+      "linkPerBookingHint": "Add each booking's link at the reception desk. The client gets it by email.",
+      "link": "Fixed meeting link",
+      "linkPrivate": "Private. Only booked clients get it, in their messages and on their booking page.",
+      "owner": "Business",
+      "sessionsHere": "Offer these sessions here",
+      "sessionsHereHint": "Each chosen session gets its own booking page at this place.",
+      "perBookingBadge": "Link per booking",
+      "fixedBadge": "Fixed private link",
+      "updated": "Location updated",
+      "addOnline": "Add an online location",
+      "onlinePromptTitle": "Meet clients online too",
+      "onlinePromptBody": "Add an online location with your video link. Clients book it like an office and get the link privately.",
+      "noOwnerTitle": "Places are managed by the owner",
+      "noOwner": "Only a business owner or manager can add or change places.",
+      "openDays": "Open {0} days a week"
     },
     "profile": {
       "tabProfile": "Profile",
@@ -2605,7 +2635,8 @@
         "Payment request": "Payment request",
         "Payment reminder": "Payment reminder",
         "Payment receipt": "Payment receipt",
-        "Refund receipt": "Refund receipt"
+        "Refund receipt": "Refund receipt",
+        "Meeting link": "Session link"
       },
       "toast": {
         "queued": "Customer email queued.",
@@ -3089,7 +3120,9 @@
         "article": "Article",
         "gallery": "Gallery index",
         "collection": "Gallery collection",
-        "frameTitle": "Website design preview"
+        "frameTitle": "Website design preview",
+        "showAmharic": "Show in Amharic",
+        "showEnglish": "Show in English"
       },
       "appearance": {
         "cardsLabel": "Template appearance",
@@ -3119,6 +3152,148 @@
           "paperInk": "Paper & ink",
           "editorialContrast": "Editorial contrast",
           "clearSans": "Clear sans"
+        }
+      },
+      "editor": {
+        "title": "Page content",
+        "intro": "Choose a section, then edit its text in English and Amharic. The preview changes as you type. Your changes go to the draft; visitors see them after you publish.",
+        "sections": "Website sections",
+        "english": "English",
+        "amharic": "Amharic",
+        "needsAttention": "Needs attention",
+        "fixBeforeSaving": "Some content needs attention. Fix the marked fields, then save again.",
+        "items": "Items",
+        "itemCount": "{0} of {1}",
+        "itemNumber": "Item {0}",
+        "lineNumber": "Line {0}",
+        "addItem": "Add item",
+        "addLine": "Add line",
+        "factsNote": "These come from your business settings. You can change their website text, order and visibility here.",
+        "factsSource": "Length and fee come from your business settings.",
+        "minutes": "{0} minutes",
+        "free": "Free of charge",
+        "moveUp": "Move {0} up",
+        "moveDown": "Move {0} down",
+        "removeItem": "Remove {0}",
+        "removeTitle": "Remove “{0}”?",
+        "removeBody": "It leaves the draft now and the public page after you publish. The English and Amharic text of this item are removed together.",
+        "keep": "Keep it",
+        "remove": "Remove",
+        "consentLabel": "This person agreed that we publish their words.",
+        "section": {
+          "hero": "Opening",
+          "benefits": "Who we help",
+          "approaches": "How we work",
+          "about": "About",
+          "process": "First visit steps",
+          "services": "Sessions and services",
+          "providers": "People",
+          "proof": "Credentials",
+          "testimonials": "Client words",
+          "faq": "FAQ",
+          "notice": "Safety notice",
+          "locations": "Places",
+          "contact": "Contact",
+          "booking_cta": "Booking band",
+          "footer": "Footer"
+        },
+        "list": {
+          "benefits": "Needs you help with",
+          "approaches": "Ways of working",
+          "process": "Steps",
+          "services": "Sessions on the website",
+          "providers": "People on the website",
+          "proof": "Credentials list",
+          "testimonials": "Quotes",
+          "faq": "Questions and answers",
+          "notice": "Phone lines",
+          "locations": "Place cards",
+          "footer": "Footer links"
+        },
+        "add": {
+          "benefit": "Add a need",
+          "approach": "Add a way of working",
+          "step": "Add a step",
+          "credential": "Add a credential",
+          "testimonial": "Add a quote",
+          "question": "Add a question",
+          "phoneLine": "Add a phone line",
+          "place": "Add a place card"
+        },
+        "field": {
+          "title": "Heading",
+          "intro": "Introduction",
+          "body": "Main text",
+          "eyebrow": "Small line above the heading",
+          "subtitle": "Lead paragraph",
+          "description": "Description",
+          "name": "Name",
+          "summary": "Short description",
+          "role": "Role",
+          "specialties": "Specialties",
+          "credentials": "Short credentials",
+          "label": "Label",
+          "value": "Credential",
+          "detail": "Detail",
+          "quote": "Quote",
+          "attribution": "Who said it",
+          "question": "Question",
+          "answer": "Answer",
+          "phone": "Phone number",
+          "email": "Email address",
+          "address": "Address line",
+          "notes": "Notes",
+          "hours": "Hours",
+          "highlights": "Highlights",
+          "consent": "Consent",
+          "placeNote": "Directions or privacy note",
+          "placeNotes": "Short notes or how-it-works steps"
+        },
+        "format": {
+          "label": "Session format on the website",
+          "placeLabel": "Card type",
+          "auto": "Auto ({0})",
+          "inPerson": "In person",
+          "online": "Online video",
+          "phone": "Phone",
+          "fromLocation": "From its location",
+          "fromName": "From its name",
+          "ownerChoice": "Your choice"
+        },
+        "issue": {
+          "required": "Enter the English text.",
+          "tooLong": "Use at most {0} characters.",
+          "tooMany": "Keep at most {0} items.",
+          "phone": "Enter the number as people dial it: digits, spaces and + ( ) - only.",
+          "email": "Enter a valid email address.",
+          "altRequired": "Describe the photo in English for people who cannot see it.",
+          "consent": "Publish a quote only with the person's consent."
+        },
+        "image": {
+          "label": "Photo",
+          "choose": "Add photo",
+          "change": "Change photo",
+          "reset": "Use template default",
+          "templateDefault": "The template shows its own photo here.",
+          "focusHelp": "Click the most important part of the photo. The website crops around it.",
+          "wide": "Wide",
+          "tall": "Tall",
+          "alt": "Photo description",
+          "altHelp": "Screen readers read this description. Say what the photo shows, in one sentence.",
+          "dialogTitle": "Choose a photo",
+          "rules": "JPEG, PNG or WebP, up to {0} MB. We remove hidden data such as location from the file.",
+          "uploadTab": "Upload",
+          "libraryTab": "Media library",
+          "file": "Photo file",
+          "consent": "I have permission to show this photo on my public website.",
+          "upload": "Upload and use",
+          "uploading": "Uploading…",
+          "loading": "Loading your photos…",
+          "emptyLibrary": "Your media library is empty. Upload a photo first.",
+          "size": "{0} KB",
+          "wrongType": "Choose a JPEG, PNG or WebP image.",
+          "tooLarge": "Choose a photo smaller than {0} MB.",
+          "uploadFailed": "We could not use this photo. Use a JPEG, PNG or WebP image under {0} MB, or remove unused photos from the media library."
         }
       }
     },
@@ -3656,6 +3831,17 @@
       "noPageTitle": "Add a service to get your booking page",
       "noPageBody": "is saved. Add what you offer and your hours, then publish.",
       "finishSetup": "Finish setup"
+    },
+    "online": {
+      "badge": "Online",
+      "sectionTitle": "Online session",
+      "noLink": "No link yet. The client sees \"Your session link will appear here.\" until you add one.",
+      "linkLabel": "Meeting link for this booking",
+      "save": "Save link",
+      "saved": "Link saved. The client gets it by email.",
+      "fixedNote": "This place has a fixed link. A new link here applies to this booking only.",
+      "perBookingNote": "Private. Only this client gets it, by email and on their booking page.",
+      "closed": "This booking is closed, so its link cannot change."
     }
   },
   "publicSite": {
@@ -3714,7 +3900,11 @@
     "footer": "You get this email because you booked with {0}.",
     "optOut": "Stop reminders from this business",
     "optOutTitle": "Reminders turned off",
-    "optOutMessage": "You will no longer get appointment reminders from {0}. Booking confirmations and changes still arrive."
+    "optOutMessage": "You will no longer get appointment reminders from {0}. Booking confirmations and changes still arrive.",
+    "subjectMeetingLink": "Your session link from {0}",
+    "headingMeetingLink": "Your session link",
+    "introMeetingLink": "Hello {0}, {1} added the link for your online session.",
+    "linkLater": "We will send you the session link before your session."
   },
   "customerBooking": {
     "emailQueuedTitle": "Confirmation email on its way",
@@ -3753,7 +3943,9 @@
     "reschedule": "{0}: your booking for {1} is moved to {2}.",
     "cancellation": "{0}: your booking for {1} on {2} is cancelled.",
     "reminder": "{0}: reminder of your booking for {1} on {2}.",
-    "notSetUp": "SMS is not set up for this site."
+    "notSetUp": "SMS is not set up for this site.",
+    "meetingLink": "{0}: the link for your online session for {1} on {2} is ready.",
+    "join": "Join: {0}"
   },
   "customerManage": {
     "title": "Manage your booking",
@@ -5500,5 +5692,33 @@
       "label": "Time"
     },
     "pickDateTime": "Pick a date and time"
+  },
+  "onlineSession": {
+    "label": "Online video",
+    "labelWith": "Online video · {0}",
+    "howWeMeet": "How we meet",
+    "join": "Join session",
+    "openNow": "Join from a quiet, private place.",
+    "opensAt": "Join opens at {0}",
+    "prepare": "The button appears here 15 minutes before the start. Use a phone or laptop with a camera.",
+    "noLink": "Your session link will appear here.",
+    "noLinkEmail": "The business adds it before your session. You also get it by email.",
+    "ended": "This session has ended.",
+    "endedHint": "To meet again, book a new session.",
+    "private": "This link is for you only. Please do not share it.",
+    "linkByEmail": "Your private session link comes by email and appears on your booking page.",
+    "openTitle": "Your session is open"
+  },
+  "onlineServer": {
+    "link": "Meeting link",
+    "onlyOnline": "Only an online booking has a meeting link.",
+    "fixedNeeded": "Enter the fixed meeting link, or choose a link per booking.",
+    "type": "Choose In person or Online.",
+    "walkIn": "A walk-in needs an in-person place. Choose an office, not an online location.",
+    "nameTaken": "A place with this name already exists. Choose another name.",
+    "address": "Enter the street address of this place.",
+    "activeSessions": "This place has active sessions. Move or turn off those sessions first.",
+    "openBookings": "This place has open bookings. It cannot be removed.",
+    "notYours": "You cannot manage the places of this business."
   }
 }

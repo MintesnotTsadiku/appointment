@@ -22,7 +22,7 @@ from frappe.rate_limiter import rate_limit
 from frappe.utils import cint, flt, get_datetime, get_url
 from frappe.utils.password import get_encryption_key
 
-from appointment.scheduler import business_owner, payments
+from appointment.scheduler import business_owner, online_meeting, payments
 from appointment.scheduler.booking import CUSTOMER_CHANGE, offering, open_slots
 from appointment.scheduler.helpers.policy_engine import get_applicable_policies
 
@@ -67,7 +67,7 @@ def _verify(token, slug=None, independent=0):
     if not hmac.compare_digest(signature, _sign(name, version)) or not frappe.db.exists("Appointment", name):
         return None
     doc = frappe.get_doc("Appointment", name)
-    if cint(doc.manage_version) != version or doc.status not in OPEN or _hours_left(doc) <= 0:
+    if cint(doc.manage_version) != version or doc.status not in OPEN or not _link_open(doc):
         return None
     if slug and frappe.db.get_value("Organization", doc.organization, "slug") != slug:
         return None
@@ -88,6 +88,13 @@ def _require(token, slug=None, independent=0):
 # ---------------------------------------------------------------------------
 def _now():
     return datetime.now(pytz.UTC).replace(tzinfo=None)
+
+
+def _link_open(doc, now=None):
+    """A manage link works until the start. An online booking keeps it to the end, for its "Join session" button."""
+    if cint(doc.get("is_online")):
+        return get_datetime(doc.ends_at) > (now or _now())
+    return _hours_left(doc, now) > 0
 
 
 def _hours_left(doc, now=None):
@@ -228,7 +235,8 @@ def _projection(doc):
     location = frappe.db.get_value(
         "Location", doc.location, ["location_name", "address_line_1", "address_line_2", "city"], as_dict=True
     ) or {}
-    address = ", ".join(filter(None, [location.get("address_line_1"), location.get("address_line_2"), location.get("city")]))
+    online = online_meeting.customer_view(doc)
+    address = "" if online else ", ".join(filter(None, [location.get("address_line_1"), location.get("address_line_2"), location.get("city")]))
     return {
         "valid": True,
         "token": token_for(doc),
@@ -251,6 +259,9 @@ def _projection(doc):
             timezone=doc.booking_timezone,
             status=doc.status,
             duration_minutes=int((get_datetime(doc.ends_at) - get_datetime(doc.starts_at)).total_seconds() // 60),
+            location_type="online" if online else "in_person",
+            # This customer's own session: platform, private meeting link and join window. None in person.
+            online=online,
         ),
         "rules": decide(doc),
         "currency": "ETB",

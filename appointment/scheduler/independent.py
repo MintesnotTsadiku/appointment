@@ -162,6 +162,7 @@ def publish(provider, published):
 @frappe.whitelist(allow_guest=True)
 def public_offering(offering_id):
     from appointment.scheduler.booking import offering
+    from appointment.scheduler.online_meeting import is_online, public_place
 
     event, service, location, provider, business = offering(offering_id, public=True)
     if business.doctype != "Provider":
@@ -169,10 +170,11 @@ def public_offering(offering_id):
     return {"offering": event.name, "business_name": provider.provider_name, "service": service.service_name,
             "duration": int(event.duration_override or service.duration), "timezone": location.timezone,
             "allow_quantity": cint(service.get("allow_quantity")), "max_quantity": max(1, cint(service.get("max_quantity")) or 1),
-            # Where the session happens. Only a place with a street address (an office) has an address to show;
-            # a place without one (for example online video) shows none.
+            # Where the session happens. An office with a street address shows it; an online place shows its
+            # format and platform label (`location_type`, `platform`), never its meeting link.
             "location": {"name": location.location_name,
                          "address": ", ".join(part for part in (location.address_line_1, location.address_line_2, location.city) if part)
-                         if location.address_line_1 else ""},
+                         if location.address_line_1 and not is_online(location) else "",
+                         **public_place(location)},
             # The published website of this business, so the scheduler can wear its template's design.
             "site_slug": frappe.db.get_value("Public Site", {"owner_type": "Provider", "provider": provider.name, "status": "Published"}, "slug")}

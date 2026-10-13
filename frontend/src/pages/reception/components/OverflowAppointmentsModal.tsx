@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { CalendarDays, ChevronRight, MapPin, User } from 'lucide-react';
+import { CalendarDays, ChevronRight, MapPin, User, Video } from 'lucide-react';
 import { Button } from '@/components/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/dialog';
 import { StatusBadge } from '@/components/status-badge';
@@ -91,8 +91,8 @@ function OverflowRow({ appointment, onEdit }: { appointment: Appointment; onEdit
             </span>
           )}
           {appointment.location_name && (
-            <span className="inline-flex items-center gap-1">
-              <MapPin className="h-3 w-3" aria-hidden="true" />
+            <span className="inline-flex items-center gap-1" data-qa={appointment.is_online ? 'appointment-online' : undefined}>
+              {appointment.is_online ? <Video className="h-3 w-3 text-info" aria-hidden="true" /> : <MapPin className="h-3 w-3" aria-hidden="true" />}
               {appointment.location_name}
             </span>
           )}

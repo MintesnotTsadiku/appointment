@@ -105,7 +105,8 @@ def get_desk_appointments(date: str = None, location_name: str = None, provider_
             "client_name", "client_email", "client_phone", "customer", "last_changed_by",
             "cancellation_fee", "refund_due", "service",
             "provider", "location", "status",
-            "amount_paid", "notes", "event_type", "event", "organization", "booking_timezone", "modified", "quantity"
+            "amount_paid", "notes", "event_type", "event", "organization", "booking_timezone", "modified", "quantity",
+            "is_online", "meeting_link"
         ],
         order_by="appointment_date, start_time"
     )
@@ -894,10 +895,13 @@ def _independent_business(business):
 
 
 def _independent_location(provider, service=None):
-    """The location of the provider's offering for this service, or of their first offering."""
+    """The in-person location of the provider's offering for this service, or of their first offering.
+
+    A walk-in is at a door, so online locations are skipped.
+    """
     filters = {"provider": provider, "is_active": 1, **({"service": service} if service else {})}
-    rows = frappe.get_all("EventType", filters=filters, pluck="location", order_by="creation asc", limit=1)
-    return rows[0] if rows else None
+    rows = frappe.get_all("EventType", filters=filters, pluck="location", order_by="creation asc")
+    return next((row for row in rows if frappe.db.get_value("Location", row, "location_type") != "Online"), None)
 
 
 @frappe.whitelist()
@@ -955,7 +959,7 @@ def get_locations_list(organization: str = None):
     locations = frappe.get_list(
         "Location",
         filters=filters,
-        fields=["name", "location_name", "organization", "timezone", "reception_state"],
+        fields=["name", "location_name", "organization", "timezone", "reception_state", "location_type"],
         order_by="location_name"
     )
 

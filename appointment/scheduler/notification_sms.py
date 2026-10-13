@@ -35,7 +35,10 @@ COPY = {
     "Reschedule": "{0}: your booking for {1} is moved to {2}.",
     "Cancellation": "{0}: your booking for {1} on {2} is cancelled.",
     "Reminder": "{0}: reminder of your booking for {1} on {2}.",
+    "Meeting link": "{0}: the link for your online session for {1} on {2} is ready.",
 }
+# The session link of an online booking. It is part of the message, so the segment guard drops extras, not the link.
+JOIN_EVENTS = ("Confirmation", "Reschedule", "Reminder", "Meeting link")
 
 
 def available():
@@ -99,6 +102,8 @@ def render(event, doc, language):
     business = owner.display_name if owner else ""
     service = frappe.db.get_value("Service", doc.service, "service_name") if doc.service else ""
     text = _(COPY[event], lang=language).format(business, service, when(doc, language))
+    if event in JOIN_EVENTS and doc.get("is_online") and doc.get("meeting_link"):
+        text += "\n" + _("Join: {0}", lang=language).format(doc.meeting_link)
     # Book-again and "Powered by" lines, only when they cost no extra segment.
     return touchpoints.sms_with_extras(event, doc, language, text)
 

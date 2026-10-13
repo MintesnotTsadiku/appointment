@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useFrappeGetCall, useFrappePostCall } from 'frappe-react-sdk';
-import { CalendarClock, CalendarX2, LogOut, MailCheck, RotateCcw } from 'lucide-react';
+import { CalendarClock, CalendarX2, LogOut, MailCheck, RotateCcw, Video } from 'lucide-react';
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
 import { Label } from '@/components/label';
@@ -15,6 +15,8 @@ import { serverErrorMessage } from '@/lib/utils';
 import { useBookingBrand } from '@/public-experience/bookingTheme';
 import { brandLogo } from '@/public-experience/templates/content';
 import { fill, formatWhen } from '@/pages/manage-booking/format';
+import { JoinSession, useOnlineLabel } from '@/components/online-session/JoinSession';
+import type { LocationType, OnlineSession } from '@/lib/online-session';
 import '@/public-experience/platform.css';
 
 const API = 'appointment.scheduler.my_bookings';
@@ -33,6 +35,9 @@ interface BookingRow {
   manage_path: string | null;
   /** Past bookings: the same business and service, when Growth Settings allow it. */
   book_again_path?: string | null;
+  location_type?: LocationType;
+  /** Open online bookings: this customer's own session link and join window. */
+  online?: OnlineSession | null;
 }
 
 interface Listing {
@@ -274,6 +279,7 @@ function Bookings({ listing, bookPath, email, onSignOut }: { listing: Listing; b
 
 function Section({ title, rows, qa, muted = false }: { title: string; rows: BookingRow[]; qa: string; muted?: boolean }) {
   const { t, language } = useTranslation();
+  const onlineLabel = useOnlineLabel();
   return (
     <section className="space-y-3" data-qa={qa}>
       <h2 className="text-sm font-semibold">{title}</h2>
@@ -296,6 +302,12 @@ function Section({ title, rows, qa, muted = false }: { title: string; rows: Book
                 {(row.provider || row.resources.length > 0) && (
                   <p className="text-sm text-theme-secondary">{[row.provider, ...row.resources].filter(Boolean).join(' · ')}</p>
                 )}
+                {row.location_type === 'online' && (
+                  <p className="flex items-center gap-1.5 text-sm text-theme-secondary" data-qa="my-booking-online">
+                    <Video className="h-4 w-4 shrink-0" aria-hidden="true" />
+                    {onlineLabel(row.online?.platform)}
+                  </p>
+                )}
                 <p className="text-xs text-theme-secondary">
                   {t(STATUS_KEY[row.status])}
                   {row.payment_status === 'Awaiting payment' && <> · {t('myBookings.paymentNeeded')}</>}
@@ -306,6 +318,11 @@ function Section({ title, rows, qa, muted = false }: { title: string; rows: Book
                 <Button asChild size="sm" variant="outline">
                   <a data-qa="my-booking-manage" href={row.manage_path}>{t('myBookings.manage')}</a>
                 </Button>
+              )}
+              {row.online && (
+                <div className="basis-full">
+                  <JoinSession session={row.online} timezone={row.timezone} compact />
+                </div>
               )}
               {!row.manage_path && row.book_again_path && (
                 <Button asChild size="sm" variant="outline" className="min-h-11 sm:min-h-9">

@@ -51,22 +51,29 @@ export function brandLogo(design: CompiledDesign): string | undefined {
     : undefined;
 }
 
+const OWNER_FILE_RE = /^\/files\/[A-Za-z0-9][A-Za-z0-9._-]{0,180}$/;
+
+/** A packaged template asset, or an owner photo from the site's media library (flat `/files/` name). */
 export function localAsset(value: unknown, fallback: string): string {
-  return typeof value === "string"
-    && value.startsWith("/assets/appointment/")
-    && !value.includes("..") ? value : fallback;
+  if (typeof value !== "string" || value.includes("..")) return fallback;
+  return value.startsWith("/assets/appointment/") || OWNER_FILE_RE.test(value) ? value : fallback;
 }
 
 export interface ContentImage {
   src: string;
   alt: string;
+  /** CSS object-position from the owner's focal point, when one is set. */
+  position?: string;
 }
 
 /** An owner photo from release content. Missing alt text means decoration. */
 export function contentImage(value: unknown, locale: string): ContentImage | null {
   const item = record(value);
   const src = localAsset(item.image, "");
-  return src ? { src, alt: localized(item.imageAlt, locale) } : null;
+  if (!src) return null;
+  const focus = record(item.imageFocus);
+  const position = typeof focus.x === "number" && typeof focus.y === "number" ? `${focus.x}% ${focus.y}%` : undefined;
+  return { src, alt: localized(item.imageAlt, locale), ...(position ? { position } : {}) };
 }
 
 /** A recipe image role with the alt text recorded in the imagery manifest. */

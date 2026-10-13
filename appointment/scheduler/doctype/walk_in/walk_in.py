@@ -30,6 +30,8 @@ class WalkIn(Document):
 	def validate(self):
 		"""Validate walk-in data"""
 		self.validate_owner()
+		if self.location and frappe.db.get_value("Location", self.location, "location_type") == "Online":
+			frappe.throw(_("A walk-in needs an in-person place. Choose an office, not an online location."))
 		if self.status == "assigned" and not self.assigned_appointment:
 			frappe.throw(_("Assigned appointment is required when status is 'assigned'"))
 		

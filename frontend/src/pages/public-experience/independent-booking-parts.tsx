@@ -1,5 +1,5 @@
 import type { FormEvent } from 'react';
-import { CalendarCheck2, CheckCircle2, Loader2 } from 'lucide-react';
+import { CalendarCheck2, CheckCircle2, Loader2, Video } from 'lucide-react';
 import { Button } from '@/components/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/card';
 import { Input } from '@/components/input';
@@ -59,7 +59,7 @@ export function DetailsForm({ slot, timeFormat, timezone, quantity, name, email,
 }
 
 /** The confirmation: when, the reference, the email status, then the share card and the "your own page" prompt. */
-export function BookingConfirmed({ booking, timeFormat, timezone }: { booking: Booked; timeFormat: TimeFormat; timezone: string }) {
+export function BookingConfirmed({ booking, timeFormat, timezone, online }: { booking: Booked; timeFormat: TimeFormat; timezone: string; online?: string }) {
   const { t } = useTranslation();
   return <section role="status" className="mx-auto max-w-2xl space-y-4" data-qa="independent-booking-confirmed">
     <Card className="rounded-2xl"><CardContent className="space-y-4 p-6 sm:p-8">
@@ -70,8 +70,12 @@ export function BookingConfirmed({ booking, timeFormat, timezone }: { booking: B
           <p className="font-medium" data-qa="independent-booking-when"><SlotWhen slot={booking.slot} timeFormat={timeFormat} timezone={timezone} quantity={booking.quantity} /></p>
         </div>
       </div>
+      {online && <p className="flex items-center gap-1.5 font-medium" data-qa="independent-booking-confirmed-online">
+        <Video className="h-4 w-4 shrink-0" aria-hidden="true" />{online}
+      </p>}
       <p className="text-sm text-theme-secondary">{fill(t('staff.payments.referenceLine'), booking.id)}</p>
       <p className="text-sm" data-qa="independent-booking-email">{booking.emailed ? t('public.independentBooking.emailed') : t('public.independentBooking.noEmail')}</p>
+      {online && <p className="text-sm text-theme-secondary" data-qa="independent-booking-link-note">{t('onlineSession.linkByEmail')}</p>}
     </CardContent></Card>
     <CustomerShareCard source={{ bookingId: booking.id }} />
     <BusinessPrompt managePath={booking.managePath} />

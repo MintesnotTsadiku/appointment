@@ -1,6 +1,7 @@
 import { FormEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useFrappeGetCall, useFrappePostCall } from 'frappe-react-sdk';
+import { Video } from 'lucide-react';
 import { StaffShell } from '@/components/staff-shell';
 import LivePageSuccess, { type LivePage } from '@/components/live-page-success';
 import { Button } from '@/components/button';
@@ -66,6 +67,10 @@ export default function IndependentBookingSettings() {
       <Button disabled={loading || !workspace} type="submit">{t('staff.independent.save')}</Button>
     </form>}
     {workspace?.offerings.map(row => <section key={row.offering} aria-label={t('staff.independent.offeringLabel')} className="space-y-3 rounded-xl border p-5"><h2>{row.service}</h2><p>{row.published ? t('staff.business.published') : t('staff.independent.privateDraft')}</p><Button disabled={publishing} onClick={() => void toggle(row)}>{row.published ? t('staff.independent.unpublish') : t('staff.independent.publish')}</Button>{row.published && <Link className="ml-4 underline" to={row.public_path}>{t('staff.independent.openGuest')}</Link>}</section>)}
+    {Boolean(workspace?.offerings.length) && <section data-qa="independent-online-prompt" className="flex flex-wrap items-center justify-between gap-4 rounded-xl border p-5">
+      <div className="min-w-0 space-y-1"><h2 className="font-semibold">{t('staff.locations.onlinePromptTitle')}</h2><p className="text-sm text-muted-foreground">{t('staff.locations.onlinePromptBody')}</p></div>
+      <Button asChild variant="outline"><Link to="/settings/location?new=online" data-qa="independent-add-online"><Video aria-hidden="true" />{t('staff.locations.addOnline')}</Link></Button>
+    </section>}
     <nav className="flex flex-wrap gap-6"><Link className="underline" to="/settings/appearance">{t('staff.settings.appearance.title')}</Link><Link className="underline" to="/calendar">{t('staff.independent.viewSchedule')}</Link><Link className="underline" to="/settings/website">{t('staff.independent.websiteSetup')}</Link></nav>
   </div></StaffShell>;
 }

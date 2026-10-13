@@ -1,4 +1,5 @@
-import { MapPin } from 'lucide-react';
+import { MapPin, Video } from 'lucide-react';
+import { useTranslation } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 import { StatusBadge } from '@/components/status-badge';
 import { shortTime } from './dates';
@@ -29,6 +30,7 @@ export function EventRow({ appointment, onOpen }: { appointment: Appointment; on
 
 /** A full row for the list view and the mobile day agenda. */
 export function AgendaRow({ appointment, onOpen }: { appointment: Appointment; onOpen: (apt: Appointment) => void }) {
+  const { t } = useTranslation();
   return (
     <button
       type="button"
@@ -46,9 +48,9 @@ export function AgendaRow({ appointment, onOpen }: { appointment: Appointment; o
         </div>
         <p className="truncate text-sm text-muted-foreground">{appointment.service_name}</p>
         {appointment.location_name && (
-          <p className="flex min-w-0 items-center gap-1 text-xs text-muted-foreground">
-            <MapPin className="h-3 w-3 shrink-0" aria-hidden="true" />
-            <span className="truncate">{appointment.location_name}</span>
+          <p className="flex min-w-0 items-center gap-1 text-xs text-muted-foreground" data-qa={appointment.is_online ? 'calendar-online' : undefined}>
+            {appointment.is_online ? <Video className="h-3 w-3 shrink-0 text-info" aria-hidden="true" /> : <MapPin className="h-3 w-3 shrink-0" aria-hidden="true" />}
+            <span className="truncate">{appointment.is_online ? `${t('staff.online.badge')} · ${appointment.location_name}` : appointment.location_name}</span>
           </p>
         )}
       </div>

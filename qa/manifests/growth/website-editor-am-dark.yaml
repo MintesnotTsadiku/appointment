@@ -1,0 +1,178 @@
+# Website section editor (am, mobile, dark). Fixture: appointment.tests.website_editor_qa_fixtures (keeps a copy of
+# the Ergata showcase content; run `bench execute appointment.tests.website_editor_qa_fixtures.restore` after the run).
+# In Amharic on a phone: a session format, an Amharic place note, an FAQ move and remove, a photo from the media
+# library with an Amharic description, the preview, publish, and the Amharic public page.
+app: appointment
+base_url: http://localhost:47800
+default_role: Staff
+auth:
+  type: frappe_session
+  username: yared.tesfaye.counselling@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment-growth-website-editor-am-dark
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 240000
+options:
+  ignore_baseline_drift: true
+  color_scheme: dark
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.website_editor_qa_fixtures.browser_values
+scenarios:
+- id: website_editor_am_mobile_dark
+  title: 'Independent owner: edit content in Amharic on a phone, then publish (am, mobile, dark)'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /settings/website
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="website-step-content"]'
+  actions:
+  - action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation
+      status: 200
+  - action: click
+    selector: '[data-qa="website-step-content"]'
+    assertions:
+    - type: network_request
+      url_contains: save_website_setup
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="website-editor-sections"]'
+    assertions:
+    - type: text_contains
+      value: የገጽ ይዘት
+  - action: screenshot
+    name: website_editor_am_mobile_dark-1-sections.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="website-editor-tab-services"]'
+  - action: click
+    selector: '[data-qa="website-editor-services-item-1-toggle"]'
+  - action: click
+    selector: '[data-qa="website-editor-services-item-1-format"]'
+  - action: click
+    selector: '[role="option"][data-value="phone"]'
+  - action: wait_for
+    selector: '[data-qa="website-editor-services-item-1-format"][data-value="phone"]'
+  - action: screenshot
+    name: website_editor_am_mobile_dark-2-session-format.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="website-editor-tab-locations"]'
+  - action: click
+    selector: '[data-qa="website-editor-locations-item-0-toggle"]'
+  - action: fill
+    selector: '[data-qa="website-editor-locations-item-0-notes-1-am"]'
+    value: ትንሽ የመቆያ ቦታ አለ፤ በኮሪደር ላይ በፍጹም አይጠብቁም
+  - action: scroll
+    selector: '[data-qa="website-editor-locations-item-0-notes"]'
+  - action: screenshot
+    name: website_editor_am_mobile_dark-3-place-note.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="website-editor-tab-faq"]'
+  - action: click
+    selector: '[data-qa="website-editor-faq-item-0-down"]'
+  - action: click
+    selector: '[data-qa="website-editor-faq-item-3-remove"]'
+  - action: wait_for
+    selector: '[data-qa="website-editor-confirm-remove"]'
+  - action: screenshot
+    name: website_editor_am_mobile_dark-4-remove-confirm.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="website-editor-confirm-remove"]'
+  - action: click
+    selector: '[data-qa="website-editor-faq-image-choose"]'
+  - action: click
+    selector: '[data-qa="website-editor-faq-image-tab-library"]'
+  - action: wait_for
+    selector: 'li:first-child > [data-qa="website-editor-faq-image-library-item"]'
+  - action: screenshot
+    name: website_editor_am_mobile_dark-5-library.png
+    full_page: false
+  - action: click
+    selector: 'li:first-child > [data-qa="website-editor-faq-image-library-item"]'
+  - action: fill
+    selector: '[data-qa="website-editor-faq-image-alt-en"]'
+    value: A small clay cup and a sprig of green leaves on a wooden windowsill in soft light
+  - action: fill
+    selector: '[data-qa="website-editor-faq-image-alt-am"]'
+    value: በለስላሳ ብርሃን በእንጨት የመስኮት ደፍ ላይ ትንሽ የሸክላ ስኒ እና አረንጓዴ ቅጠሎች
+  - action: scroll
+    selector: '[data-qa="website-editor-faq-image"]'
+  - action: screenshot
+    name: website_editor_am_mobile_dark-6-faq-photo.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="website-save-preview"]'
+    assertions:
+    - type: network_request
+      url_contains: preview_website_setup
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="website-setup-notice"]'
+  - action: click
+    selector: '[data-qa="website-open-preview"]'
+  - action: wait_for
+    selector: '.appearance-preview[data-fullscreen="true"] iframe'
+  - action: click
+    selector: '[data-qa="website-preview-language"]'
+  - action: screenshot
+    name: website_editor_am_mobile_dark-7-preview.png
+    full_page: false
+  - action: press
+    selector: '[data-qa="website-preview-language"]'
+    key: Escape
+  - action: click
+    selector: '[data-qa="website-step-readiness"]'
+  - action: click
+    selector: '[data-qa="website-publish"]'
+    assertions:
+    - type: network_request
+      url_contains: publish_website_setup
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="website-setup-notice"]'
+  - action: open_url
+    url: /{qa_ergata_slug}/am
+    assertions:
+    - type: network_idle
+    - type: text_contains
+      value: በኮሪደር ላይ በፍጹም አይጠብቁም
+    - type: visible_selector
+      value: 'img[src^="/files/section-"]'
+  - action: click
+    selector: 'footer a[href="#sessions"]'
+  - action: wait_for
+    selector: '#sessions'
+  - action: screenshot
+    name: website_editor_am_mobile_dark-8-public-sessions.png
+    full_page: false
+  - action: click
+    selector: 'footer a[href="#faq"]'
+  - action: wait_for
+    selector: '#faq'
+  - action: screenshot
+    name: website_editor_am_mobile_dark-9-public-faq.png
+    full_page: false
+  - action: click
+    selector: 'a.eg-faq-ask'
+  - action: wait_for
+    selector: '#contact'
+  - action: screenshot
+    name: website_editor_am_mobile_dark-10-public-places.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

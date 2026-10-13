@@ -6,6 +6,11 @@ from frappe.model.document import Document
 
 
 class Location(Document):
+	def validate(self):
+		from appointment.scheduler.online_meeting import validate_location
+
+		validate_location(self)
+
 	def before_save(self):
 		old = self.get_doc_before_save()
 		self.reception_state = old.reception_state if old else "Unconfigured"
