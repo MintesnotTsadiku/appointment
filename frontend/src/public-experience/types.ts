@@ -103,6 +103,8 @@ export interface PublishedSnapshot {
   layoutRendererVersion: number;
   compiledDesign: CompiledDesign;
   bookingPath?: string | null;
+  /** Independent providers: each session's own scheduler path, by service id. */
+  bookingPaths?: Record<string, string>;
   sections: PublicSection[];
   seo: Record<string, unknown>;
   booking: Record<string, unknown>;

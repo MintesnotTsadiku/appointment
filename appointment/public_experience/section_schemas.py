@@ -74,6 +74,18 @@ def _image(content: Mapping[str, object], field: str) -> list[ValidationIssue]:
     return issues
 
 
+# How a session or place meets: in a room, over video or by phone. Templates draw the matching badge.
+SESSION_FORMATS = ("in_person", "online", "phone")
+PLACE_FORMATS = ("in_person", "online")
+
+
+def _format(content: Mapping[str, object], field: str, allowed: tuple[str, ...]) -> list[ValidationIssue]:
+    value = content.get("format")
+    if value is None or value in allowed:
+        return []
+    return [_issue(f"{field}.format", "enum", value, " or ".join(allowed), "Choose how this session or place meets.")]
+
+
 def _closed(value: Mapping[str, object], field: str, allowed: set[str]) -> list[ValidationIssue]:
     return [
         _issue(f"{field}.{key}", "unknown_key", key, "a field in the section schema", "Remove the unsupported field.")
@@ -135,7 +147,7 @@ def _hero(content: Mapping[str, object], allowed: Iterable[str]) -> list[Validat
 
 def _services(content: Mapping[str, object], allowed: Iterable[str]) -> list[ValidationIssue]:
     issues = _common(content, {"title", "intro", "items"})
-    issues.extend(_record_list(content, "items", {"id", "name", "summary", "durationMinutes", "price", "currency", "action", "image", "imageAlt"}, max_items=24))
+    issues.extend(_record_list(content, "items", {"id", "name", "summary", "durationMinutes", "price", "currency", "action", "image", "imageAlt", "format"}, max_items=24))
     values = content.get("items")
     if isinstance(values, list):
         for index, item in enumerate(values):
@@ -153,6 +165,7 @@ def _services(content: Mapping[str, object], allowed: Iterable[str]) -> list[Val
                 issues.extend(_string(item.get("currency"), f"items[{index}].currency", max_length=8))
             issues.extend(_action(item, "action", allowed))
             issues.extend(_image(item, f"items[{index}]"))
+            issues.extend(_format(item, f"items[{index}]", SESSION_FORMATS))
     return issues
 
 
@@ -198,7 +211,8 @@ def _process(content: Mapping[str, object]) -> list[ValidationIssue]:
 
 
 def _benefits(content: Mapping[str, object]) -> list[ValidationIssue]:
-    issues = _common(content, {"title", "intro", "items"})
+    issues = _common(content, {"title", "intro", "items", "image", "imageAlt"})
+    issues.extend(_image(content, ""))
     issues.extend(_record_list(content, "items", {"title", "description", "icon"}, max_items=12))
     values = content.get("items")
     if isinstance(values, list):
@@ -213,7 +227,8 @@ def _benefits(content: Mapping[str, object]) -> list[ValidationIssue]:
 
 def _approaches(content: Mapping[str, object]) -> list[ValidationIssue]:
     """Ways of working in plain words, for example the therapy approaches a practice uses."""
-    issues = _common(content, {"title", "intro", "items"})
+    issues = _common(content, {"title", "intro", "items", "image", "imageAlt"})
+    issues.extend(_image(content, ""))
     issues.extend(_record_list(content, "items", {"title", "description"}, max_items=12))
     values = content.get("items")
     if isinstance(values, list):
@@ -233,7 +248,8 @@ def _notice(content: Mapping[str, object]) -> list[ValidationIssue]:
 
     The numbers are owner content, never platform logic, so each region and practice can edit them.
     """
-    issues = _common(content, {"title", "body", "items"})
+    issues = _common(content, {"title", "body", "items", "image", "imageAlt"})
+    issues.extend(_image(content, ""))
     issues.extend(_record_list(content, "items", {"label", "phone"}, required=False, max_items=6))
     values = content.get("items")
     if isinstance(values, list):
@@ -279,7 +295,7 @@ def _proof(content: Mapping[str, object]) -> list[ValidationIssue]:
 
 def _locations(content: Mapping[str, object], allowed: Iterable[str]) -> list[ValidationIssue]:
     issues = _common(content, {"title", "intro", "items"})
-    issues.extend(_record_list(content, "items", {"id", "name", "address", "phone", "hours", "directionsAction", "image", "imageAlt"}, max_items=12))
+    issues.extend(_record_list(content, "items", {"id", "name", "address", "phone", "hours", "directionsAction", "image", "imageAlt", "format", "body", "notes"}, max_items=12))
     values = content.get("items")
     if isinstance(values, list):
         for index, item in enumerate(values):
@@ -293,6 +309,13 @@ def _locations(content: Mapping[str, object], allowed: Iterable[str]) -> list[Va
                 issues.extend(_string(item.get("phone"), f"items[{index}].phone", max_length=32))
             issues.extend(_action(item, "directionsAction", allowed))
             issues.extend(_image(item, f"items[{index}]"))
+            issues.extend(_format(item, f"items[{index}]", PLACE_FORMATS))
+            issues.extend(_localized(item.get("body"), f"items[{index}].body", required=False, max_length=600))
+            notes = item.get("notes")
+            issues.extend(_list(notes, f"items[{index}].notes", required=False, max_items=6))
+            if isinstance(notes, list) and len(notes) <= 6:
+                for note_index, note in enumerate(notes):
+                    issues.extend(_localized(note, f"items[{index}].notes[{note_index}]", max_length=240))
     return issues
 
 
@@ -313,7 +336,8 @@ def _about(content: Mapping[str, object]) -> list[ValidationIssue]:
 
 
 def _faq(content: Mapping[str, object]) -> list[ValidationIssue]:
-    issues = _common(content, {"title", "items"})
+    issues = _common(content, {"title", "items", "image", "imageAlt"})
+    issues.extend(_image(content, ""))
     issues.extend(_record_list(content, "items", {"question", "answer"}, max_items=20))
     values = content.get("items")
     if isinstance(values, list):
@@ -336,7 +360,8 @@ def _contact(content: Mapping[str, object], allowed: Iterable[str]) -> list[Vali
 
 
 def _booking(content: Mapping[str, object], allowed: Iterable[str]) -> list[ValidationIssue]:
-    issues = _common(content, {"title", "body", "action"})
+    issues = _common(content, {"title", "body", "action", "image", "imageAlt"})
+    issues.extend(_image(content, ""))
     action = content.get("action")
     if action is None:
         issues.append(_issue("action", "required", None, "a booking action", "Add the primary booking action."))

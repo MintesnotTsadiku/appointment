@@ -198,7 +198,7 @@
       "faviconChecksum": "2cbb69eef30c974e4623a254ab561dd8a1d49704c0678dd6b94956062879e06d"
     },
     "ergata": {
-      "slug": "tsion-counselling",
+      "slug": "yared-counselling",
       "recipe": "ergata-therapy",
       "heroRole": "hero.ergata",
       "detailRole": "detail.ergata",
@@ -211,19 +211,19 @@
           "checksum": "bc55dee466db3aba5d40f54b8494d37573a22fa3f683d942ab1a613977437d58"
         },
         {
-          "asset": "/assets/appointment/brand-experience/support/ergata/window.webp",
-          "checksum": "b4c4a65e4bce7d7f6383b0751ed869c9178eef66c2dcf5cb94b7e405bf3601ec"
+          "asset": "/assets/appointment/brand-experience/support/ergata/office.webp",
+          "checksum": "c73495832e1f5c4406a462eeb426c4737dcc08c78830eb0e627b2ccade01a2bf"
         },
         {
-          "asset": "/assets/appointment/brand-experience/support/ergata/path.webp",
-          "checksum": "ca893487d2cd3bc8f06261f56f5f8870379c98c4f0cc1b0f3477a9fc42b65475"
+          "asset": "/assets/appointment/brand-experience/support/ergata/online.webp",
+          "checksum": "bbc8cc94e64310d71afb9ad3ea0844a42e28d07d938e266cc80aa0a6596b27bf"
         }
       ],
       "providerAssets": [
         {
-          "name": "Tsion Hailu",
-          "asset": "/assets/appointment/brand-experience/providers/tsion-hailu.webp",
-          "checksum": "a784658e217b578b35f5643d293b04110f54ea4a250e1fa2f264d27d9ad645d8"
+          "name": "Yared Tesfaye",
+          "asset": "/assets/appointment/brand-experience/providers/yared-tesfaye.webp",
+          "checksum": "38279b7f1198b8e4ffe84d376d6092754ab6c574764598d23f3ad8bb173facd2"
         }
       ],
       "logoAsset": "/assets/appointment/brand-experience/brands/ergata-showcase-logo.webp",

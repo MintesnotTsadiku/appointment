@@ -2,11 +2,14 @@
 
 `setup()` creates, and records by exact name:
 
-- Tsion Hailu Counselling: an independent counselling psychologist (owner tsion.hailu.counselling@example.test)
-  with six session types (introductory call, first session, in person, online video, phone, couples), one
-  Old Airport room, and a published Ergata website at `/tsion-counselling` in English and Amharic. The draft
-  starts from guided website setup (`setup.start`), so the recipe's starter copy is used, then the showcase
-  facts (credentials, practice story, session copy in both languages) replace it before publishing.
+- Yared Tesfaye Counselling: an independent counselling psychologist (owner yared.tesfaye.counselling@example.test)
+  who meets clients in an office in Bole and over online video. Two Location records (the Bole office and an
+  online video room without a street address) and six offerings: a free introductory video call, a first session
+  and a regular session in each format, and a couples session at the office. Each offering is its own scheduler,
+  so a visitor chooses online or office when they book. A published Ergata website at `/yared-counselling` in
+  English and Amharic. The draft starts from guided website setup (`setup.start`), so the recipe's starter copy
+  is used, then the showcase facts (credentials, practice story, session and place copy in both languages)
+  replace it before publishing.
 - Hiwot Family Therapy Centre: a small group practice (organization, owner
   hiwot.family.therapy@example.test) with no website yet, so its owner sees the template chooser.
 
@@ -22,16 +25,19 @@ import frappe
 from appointment.demo import showcase
 
 STATE_KEY = "appointment_template_ergata_qa"
-SOLO = "tsion.hailu.counselling@example.test"
+SOLO = "yared.tesfaye.counselling@example.test"
 PRACTICE_OWNER = "hiwot.family.therapy@example.test"
-BUSINESS = "Tsion Hailu Counselling"
+BUSINESS = "Yared Tesfaye Counselling"
 PRACTICE = "Hiwot Family Therapy Centre"
-SLUG = "tsion-counselling"
+SLUG = "yared-counselling"
 TZ = "Africa/Addis_Ababa"
 DAYS = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
 OPEN_DAYS = [day for day in DAYS if day != "Sunday"]
 ASSETS = "/assets/appointment/brand-experience/"
 PHONE = "000 000 0106"
+OFFICE = "Bole counselling office"
+ONLINE = "Online video room"
+OFFICE_ADDRESS = "Cameroon Street, Tsehay Building, second floor, office 204"
 
 
 def t(en, am):
@@ -42,26 +48,26 @@ def act(intent, en, am, placement="inline"):
     return {"intent": intent, "label": t(en, am), "placement": placement}
 
 
-# name, duration, price, English summary, Amharic name, Amharic summary
+# name, duration, price, format, English summary, Amharic name, Amharic summary
 SESSIONS = (
-    ("Free introductory call", 15, 0,
-     "A short phone call to ask questions and see whether we are a good fit. No preparation needed.",
-     "ነጻ የትውውቅ ጥሪ", "ጥያቄዎችዎን ለመጠየቅ እና እንደምንስማማ ለማየት የሚደረግ አጭር የስልክ ጥሪ። ምንም ዝግጅት አያስፈልግም።"),
-    ("First session, in person", 60, 1500,
-     "A longer first meeting to understand what brings you, agree on confidentiality and choose a first focus.",
-     "የመጀመሪያ ቆይታ በአካል", "ወደዚህ ያመጣዎትን ለመረዳት፣ በሚስጥራዊነት ላይ ለመስማማት እና የመጀመሪያ ትኩረት ለመምረጥ የሚደረግ ረዘም ያለ ቆይታ።"),
-    ("Individual session, in person", 50, 1200,
-     "The regular one-to-one session in the quiet Old Airport room.",
-     "የግል ቆይታ በአካል", "ጸጥ ባለው የኦልድ ኤርፖርት ክፍል የሚደረግ መደበኛ የአንድ ለአንድ ቆይታ።"),
-    ("Online video session", 50, 1200,
-     "The same session over a secure video link, from anywhere you feel private and comfortable.",
-     "የኦንላይን ቪዲዮ ቆይታ", "ተመሳሳይ ቆይታ በደህንነቱ በተጠበቀ የቪዲዮ ማስፈንጠሪያ፣ ግላዊ እና ምቹ ከሆነልዎ ቦታ።"),
-    ("Phone session", 50, 1000,
-     "For days when video is hard: a full session by phone.",
-     "የስልክ ቆይታ", "ቪዲዮ በሚያስቸግርበት ቀን፣ ሙሉ ቆይታ በስልክ።"),
-    ("Couples session", 80, 2000,
+    ("Free introductory call", 15, 0, "online",
+     "A short video call to ask questions and see whether we are a good fit. No preparation needed.",
+     "ነጻ የትውውቅ ጥሪ", "ጥያቄዎችዎን ለመጠየቅ እና እንደምንስማማ ለማየት የሚደረግ አጭር የቪዲዮ ጥሪ። ምንም ዝግጅት አያስፈልግም።"),
+    ("First session at the office", 60, 1500, "in_person",
+     "A longer first meeting in the Bole office to understand what brings you, agree on confidentiality and choose a first focus.",
+     "የመጀመሪያ ቆይታ በቢሮ", "ወደዚህ ያመጣዎትን ለመረዳት፣ በሚስጥራዊነት ላይ ለመስማማት እና የመጀመሪያ ትኩረት ለመምረጥ በቦሌው ቢሮ የሚደረግ ረዘም ያለ ቆይታ።"),
+    ("First session online", 60, 1500, "online",
+     "The same first meeting over a secure video link, from a quiet place where you can talk freely.",
+     "የመጀመሪያ ቆይታ በኦንላይን", "ተመሳሳይ የመጀመሪያ ቆይታ በደህንነቱ በተጠበቀ የቪዲዮ ማስፈንጠሪያ፣ በነጻነት ማውራት ከሚችሉበት ጸጥ ያለ ቦታ።"),
+    ("Individual session at the office", 50, 1200, "in_person",
+     "The regular one-to-one session in the quiet Bole office.",
+     "የግል ቆይታ በቢሮ", "ጸጥ ባለው የቦሌ ቢሮ የሚደረግ መደበኛ የአንድ ለአንድ ቆይታ።"),
+    ("Individual session online", 50, 1200, "online",
+     "The regular session by video, from anywhere you feel private and comfortable.",
+     "የግል ቆይታ በኦንላይን", "መደበኛው ቆይታ በቪዲዮ፣ ግላዊ እና ምቹ ከሆነልዎ ከማንኛውም ቦታ።"),
+    ("Couples session at the office", 80, 2000, "in_person",
      "Time for both of you to be heard, with a calm structure for difficult conversations.",
-     "የጥንዶች ቆይታ", "ሁለታችሁም እንድትደመጡ፣ ለአስቸጋሪ ንግግሮች የተረጋጋ አቀራረብ ያለው ቆይታ።"),
+     "የጥንዶች ቆይታ በቢሮ", "ሁለታችሁም እንድትደመጡ፣ ለአስቸጋሪ ንግግሮች የተረጋጋ አቀራረብ ያለው ቆይታ።"),
 )
 
 
@@ -100,26 +106,38 @@ def _user(state, email, first, last):
     _save(state)
 
 
+def _online_location(office, provider):
+    """The online video room: a Location of this provider without a street address, with longer hours."""
+    return frappe.get_doc({"doctype": "Location", "location_name": ONLINE, "independent_provider": provider,
+                           "timezone": TZ, "phone": PHONE, "is_active": 1,
+                           "opening_hours": [{"day_of_week": row.day_of_week, "is_open": row.is_open,
+                                              "start_time": "08:00" if row.is_open else row.start_time,
+                                              "end_time": "20:00" if row.is_open else row.end_time}
+                                             for row in office.opening_hours]}).insert(ignore_permissions=True)
+
+
 def _solo_practice(state):
     from appointment.public_experience import setup as website, solo_setup
     from appointment.scheduler import independent
     from appointment.scheduler.booking import offering
 
-    _user(state, SOLO, "Tsion", "Hailu")
+    _user(state, SOLO, "Yared", "Tesfaye")
     frappe.set_user(SOLO)
     provider = solo_setup.create(BUSINESS)["provider"]
     state["providers"].append(provider)
     _save(state)
     first = SESSIONS[1]
-    row = independent.create(provider, "Old Airport counselling room", first[0], TZ, first[1], "09:00", "18:00", OPEN_DAYS)
+    row = independent.create(provider, OFFICE, first[0], TZ, first[1], "09:00", "18:00", OPEN_DAYS)
     frappe.set_user("Administrator")
     event = frappe.get_doc("EventType", row["offering"])
-    location = frappe.get_doc("Location", event.location)
-    location.update({"address_line_1": "Old Airport area, green gate, first floor, room 2", "city": "Addis Ababa",
-                     "phone": PHONE, "timezone": TZ})
-    location.save(ignore_permissions=True)
+    office = frappe.get_doc("Location", event.location)
+    office.update({"address_line_1": OFFICE_ADDRESS, "address_line_2": "Bole", "city": "Addis Ababa",
+                   "phone": PHONE, "timezone": TZ})
+    office.save(ignore_permissions=True)
+    online = _online_location(office, provider)
+    places = {"in_person": office.name, "online": online.name}
     services = {}
-    for name, duration, price, summary, *_ in SESSIONS:
+    for name, duration, price, meet, summary, *_ in SESSIONS:
         if name == first[0]:
             service = frappe.get_doc("Service", event.service)
             service.update({"price": price, "description": summary})
@@ -129,14 +147,14 @@ def _solo_practice(state):
                                       "duration": duration, "price": price, "description": summary,
                                       "use_default_hours": 1, "is_active": 1}).insert(ignore_permissions=True)
             created = frappe.get_doc({"doctype": "EventType", "event_type_name": name, "service": service.name,
-                                      "location": location.name, "provider": provider, "is_active": 1}).insert(ignore_permissions=True)
+                                      "location": places[meet], "provider": provider, "is_active": 1}).insert(ignore_permissions=True)
             offering(created.name)
         services[name] = service.name
     doc = frappe.get_doc("Provider", provider)
-    doc.update({"full_name": "Tsion Hailu", "display_name": "Tsion Hailu", "timezone": TZ,
-                "bio": "Counselling psychologist in Addis Ababa. Individual and couples sessions in Amharic and English."})
+    doc.update({"full_name": "Yared Tesfaye", "display_name": "Yared Tesfaye", "timezone": TZ,
+                "bio": "Counselling psychologist in Addis Ababa. Individual and couples sessions in Amharic and English, at the Bole office or online."})
     doc.save(ignore_permissions=True)
-    frappe.db.set_value("User", SOLO, "user_image", ASSETS + "providers/tsion-hailu.webp")
+    frappe.db.set_value("User", SOLO, "user_image", ASSETS + "providers/yared-tesfaye.webp")
     frappe.set_user(SOLO)
     independent.publish(provider, 1)
     draft = website.start("Provider", provider, BUSINESS, SLUG, "ergata-therapy", {"industry": "therapy", "main_action": "booking"})
@@ -146,88 +164,109 @@ def _solo_practice(state):
     site = frappe.get_doc("Public Site", draft["site"])
     profile = frappe.get_doc("Brand Profile", site.brand_profile)
     profile.update({"logo_primary": ASSETS + "brands/ergata-showcase-logo.webp", "logo_compact": ASSETS + "brands/ergata-showcase-logo.webp",
-                    "favicon": ASSETS + "brands/ergata-showcase-favicon.png", "short_name": "Tsion"})
+                    "favicon": ASSETS + "brands/ergata-showcase-favicon.png", "short_name": "Yared"})
     profile.save(ignore_permissions=True)
     starter = {row.section_type: json.loads(row.content_json) for row in site.sections}
-    content = _showcase_sections(starter, provider, location.name, services)
+    content = _showcase_sections(starter, provider, places, services)
     for row in site.sections:
         row.content_json = json.dumps(content[row.section_type])
     if "am" not in [row.locale for row in site.enabled_locales]:
         site.append("enabled_locales", {"locale": "am", "enabled": 1, "translation_status": "Complete"})
-    site.seo_json = json.dumps({"title": "Tsion Hailu Counselling | Addis Ababa",
-                                "description": "Confidential counselling and psychotherapy in Addis Ababa, in person or online, in Amharic or English."})
+    site.seo_json = json.dumps({"title": "Yared Tesfaye Counselling | Bole, Addis Ababa and online",
+                                "description": "Confidential counselling and psychotherapy in Amharic or English, at an office in Bole, Addis Ababa, or by online video."})
     site.booking_json = json.dumps({"showPrices": True, "currency": "ETB", "timezone": TZ})
     site.save(ignore_permissions=True)
     frappe.set_user(SOLO)
     website.publish(site.name, frappe.db.get_value("Public Site", site.name, "draft_version"))
 
 
-def _showcase_sections(starter, provider, location, services):
+def _showcase_sections(starter, provider, places, services):
     """The showcase replaces starter copy with one practitioner's facts; the structure stays the recipe's."""
     content = dict(starter)
     hero = dict(starter["hero"])
     hero.update({
-        "eyebrow": t("Counselling psychologist · Addis Ababa", "የምክር ሥነ-ልቦና ባለሙያ · አዲስ አበባ"),
+        "eyebrow": t("Counselling psychologist · Bole office and online", "የምክር ሥነ-ልቦና ባለሙያ · ቦሌ ቢሮ እና ኦንላይን"),
         "body": t("Confidential. No referral needed. Sessions in Amharic or English.",
                   "ሚስጥራዊ ነው። ሪፈራል አያስፈልግም። ቆይታዎች በአማርኛ ወይም በእንግሊዝኛ።"),
     })
     content["hero"] = hero
     content["about"] = {
-        "title": t("Hello, I am Tsion", "ሰላም፣ ጽዮን እባላለሁ"),
-        "body": t("I am a counselling psychologist with twelve years of practice in Addis Ababa: first in a university counselling centre, then in a hospital outpatient clinic, and now in my own quiet room near Old Airport.\n\n"
+        "title": t("Hello, I am Yared", "ሰላም፣ ያሬድ እባላለሁ"),
+        "body": t("I am a counselling psychologist with twelve years of practice in Addis Ababa: first in a university counselling centre, then in a hospital outpatient clinic, and now in my own quiet office in Bole and online.\n\n"
                   "Many people tell me they waited a long time before reaching out. That is normal. My work is to make the first step lighter: we go at your pace, in the language that feels most like you, and nothing is shared without your agreement.",
-                  "በአዲስ አበባ ለአሥራ ሁለት ዓመታት የሠራሁ የምክር ሥነ-ልቦና ባለሙያ ነኝ፤ መጀመሪያ በአንድ ዩኒቨርሲቲ የምክር ማዕከል፣ ከዚያም በሆስፒታል የተመላላሽ ክሊኒክ፣ አሁን ደግሞ በኦልድ ኤርፖርት አካባቢ ባለው ጸጥ ያለ ክፍሌ።\n\n"
+                  "በአዲስ አበባ ለአሥራ ሁለት ዓመታት የሠራሁ የምክር ሥነ-ልቦና ባለሙያ ነኝ፤ መጀመሪያ በአንድ ዩኒቨርሲቲ የምክር ማዕከል፣ ከዚያም በሆስፒታል የተመላላሽ ክሊኒክ፣ አሁን ደግሞ ቦሌ በሚገኘው ጸጥ ያለ ቢሮዬ እና በኦንላይን።\n\n"
                   "ብዙ ሰዎች እርዳታ ከመጠየቃቸው በፊት ረጅም ጊዜ እንደጠበቁ ይነግሩኛል። ይህ የተለመደ ነው። የእኔ ሥራ የመጀመሪያውን እርምጃ ማቅለል ነው፤ በእርስዎ ፍጥነት፣ ይበልጥ በሚገልጽዎ ቋንቋ እንሄዳለን፤ ያለ እርስዎ ፈቃድም ምንም ነገር አይነገርም።"),
-        "highlights": [t("Amharic and English", "አማርኛ እና እንግሊዝኛ"), t("In person, video and phone", "በአካል፣ በቪዲዮ እና በስልክ"),
+        "highlights": [t("Amharic and English", "አማርኛ እና እንግሊዝኛ"), t("At the Bole office or online", "በቦሌ ቢሮ ወይም በኦንላይን"),
                        t("Adults and couples", "አዋቂዎች እና ጥንዶች")],
         "image": ASSETS + "support/ergata/room.webp",
         "imageAlt": t("Two soft armchairs face each other across a small wooden table in a sunlit counselling room.",
                       "ፀሐይ በገባበት የምክር ክፍል ውስጥ ሁለት ምቹ ወንበሮች በትንሽ የእንጨት ጠረጴዛ ዙሪያ ፊት ለፊት ተቀምጠዋል።"),
     }
-    content["services"] = {**starter["services"], "items": [
+    content["services"] = {**starter["services"],
+        "intro": t("Choose how we meet: in the Bole office or by online video. The length and fee are shown before you book.",
+                   "እንዴት እንደምንገናኝ ይምረጡ፤ በቦሌ ቢሮ ወይም በኦንላይን ቪዲዮ። የቆይታው ርዝመት እና ክፍያ ከመያዝዎ በፊት ይታያሉ።"),
+        "items": [
         {"id": services[name], "name": t(name, name_am), "summary": t(summary, summary_am), "durationMinutes": duration,
-         "price": price, "currency": "ETB", "action": act("service_selection", "Book this session", "ይህን ቆይታ ይያዙ")}
-        for name, duration, price, summary, name_am, summary_am in SESSIONS]}
+         "price": price, "currency": "ETB", "format": meet, "action": act("service_selection", "Book this session", "ይህን ቆይታ ይያዙ")}
+        for name, duration, price, meet, summary, name_am, summary_am in SESSIONS]}
     content["providers"] = {**starter["providers"], "items": [{
-        "id": provider[:64], "name": t("Tsion Hailu", "ጽዮን ኃይሉ"), "role": t("Counselling psychologist", "የምክር ሥነ-ልቦና ባለሙያ"),
+        "id": provider[:64], "name": t("Yared Tesfaye", "ያሬድ ተስፋዬ"), "role": t("Counselling psychologist", "የምክር ሥነ-ልቦና ባለሙያ"),
         "specialties": [t("Anxiety", "ጭንቀት"), t("Grief", "ሐዘን"), t("Burnout", "መዛል"), t("Couples", "ጥንዶች")],
         "credentials": [t("Twelve years in practice", "የአሥራ ሁለት ዓመት ልምድ"), t("Trauma-informed care", "ጉዳትን ያገናዘበ እንክብካቤ"),
                         t("Regular clinical supervision", "መደበኛ የክሊኒካል ክትትል")],
-        "image": ASSETS + "providers/tsion-hailu.webp",
-        "imageAlt": t("Portrait of Tsion Hailu in a white cotton scarf, smiling gently.", "ነጭ የጥጥ ሻርፕ የለበሰችው ጽዮን ኃይሉ በፈገግታ።"),
-        "action": act("provider_selection", "Book with Tsion", "ከጽዮን ጋር ቀጠሮ ይያዙ"),
+        "image": ASSETS + "providers/yared-tesfaye.webp",
+        "imageAlt": t("Portrait of Yared Tesfaye in a linen shirt and a sage cardigan, with a calm, attentive expression.",
+                      "የተልባ እግር ሸሚዝ እና አረንጓዴ ሹራብ የለበሰው ያሬድ ተስፋዬ፣ በተረጋጋና በትኩረት በሚያዳምጥ ገጽታ።"),
+        "action": act("provider_selection", "Book with Yared", "ከያሬድ ጋር ቀጠሮ ይያዙ"),
     }]}
     content["proof"] = {**starter["proof"], "items": [
         {"label": t("Degree", "ትምህርት"), "value": t("MA, Counselling Psychology", "ኤምኤ፣ የምክር ሥነ-ልቦና"), "detail": t("Addis Ababa University", "አዲስ አበባ ዩኒቨርሲቲ")},
-        {"label": t("Licence", "ፈቃድ"), "value": t("Licensed counselling psychologist", "ፈቃድ ያላት የምክር ሥነ-ልቦና ባለሙያ"), "detail": t("Addis Ababa City Health Bureau", "የአዲስ አበባ ከተማ ጤና ቢሮ")},
+        {"label": t("Licence", "ፈቃድ"), "value": t("Licensed counselling psychologist", "ፈቃድ ያለው የምክር ሥነ-ልቦና ባለሙያ"), "detail": t("Addis Ababa City Health Bureau", "የአዲስ አበባ ከተማ ጤና ቢሮ")},
         {"label": t("Membership", "አባልነት"), "value": t("Ethiopian Psychologists' Association", "የኢትዮጵያ ሥነ-ልቦና ባለሙያዎች ማኅበር")},
         {"label": t("Supervision", "ክትትል"), "value": t("Clinical supervision every two weeks", "በየሁለት ሳምንቱ የክሊኒካል ክትትል"), "detail": t("With a senior clinical psychologist", "ከከፍተኛ የክሊኒካል ሥነ-ልቦና ባለሙያ ጋር")},
     ]}
     content["locations"] = {**starter["locations"],
-        "intro": t("A quiet first-floor room with its own entrance, a short walk from the Old Airport roundabout.",
-                   "የራሱ መግቢያ ያለው ጸጥ ያለ የአንደኛ ፎቅ ክፍል፤ ከኦልድ ኤርፖርት አደባባይ በእግር አጭር መንገድ።"),
-        "items": [{"id": location[:64], "name": t("Old Airport counselling room", "የኦልድ ኤርፖርት የምክር ክፍል"),
-                   "address": t("Old Airport area, green gate, first floor, room 2, Addis Ababa", "ኦልድ ኤርፖርት አካባቢ፣ አረንጓዴ በር፣ አንደኛ ፎቅ፣ ክፍል 2፣ አዲስ አበባ"),
-                   "phone": PHONE,
-                   "hours": t("Monday to Saturday, 09:00–18:00. Online sessions by arrangement.", "ከሰኞ እስከ ቅዳሜ፣ 09:00–18:00። የኦንላይን ቆይታዎች በቀጠሮ።"),
-                   "directionsAction": act("directions", "Get directions", "አቅጣጫ ያግኙ"),
-                   "image": ASSETS + "support/ergata/path.webp",
-                   "imageAlt": t("A stone path between green plants leads to an open wooden door in a quiet courtyard.",
-                                 "በአረንጓዴ ተክሎች መካከል ያለ የድንጋይ መንገድ ጸጥ ባለ ግቢ ውስጥ ወደተከፈተ የእንጨት በር ያመራል።")}]}
+        "intro": t("Meet in a quiet office in Bole, or by secure video from a private place of your own. Both have the same care and the same fee.",
+                   "በቦሌ በሚገኝ ጸጥ ያለ ቢሮ፣ ወይም ከራስዎ ግላዊ ቦታ በደህንነቱ በተጠበቀ ቪዲዮ ይገናኙ። ሁለቱም አንድ ዓይነት እንክብካቤ እና አንድ ዓይነት ክፍያ አላቸው።"),
+        "items": [
+            {"id": places["in_person"][:64], "format": "in_person", "name": t("Bole counselling office", "የቦሌ የምክር ቢሮ"),
+             "address": t(f"{OFFICE_ADDRESS}, Bole, Addis Ababa", "ካሜሩን ጎዳና፣ ፀሐይ ሕንፃ፣ ሁለተኛ ፎቅ፣ ቢሮ ቁጥር 204፣ ቦሌ፣ አዲስ አበባ"),
+             "phone": PHONE,
+             "hours": t("Monday to Saturday, 09:00–18:00", "ከሰኞ እስከ ቅዳሜ፣ 09:00–18:00"),
+             "body": t("A five-minute walk from the Bole Medhane Alem roundabout. The building has a quiet side entrance with a wooden door.",
+                       "ከቦሌ መድኃኔዓለም አደባባይ በእግር አምስት ደቂቃ። ሕንፃው የእንጨት በር ያለው ጸጥ ያለ የጎን መግቢያ አለው።"),
+             "notes": [t("Parking in the courtyard and a lift to the second floor", "በግቢው ውስጥ የመኪና ማቆሚያ እና ወደ ሁለተኛ ፎቅ አሳንሰር አለ"),
+                       t("A small waiting corner, so you never wait in a corridor", "ትንሽ የመቆያ ቦታ አለ፤ በኮሪደር ላይ አይጠብቁም")],
+             "directionsAction": act("directions", "Get directions", "አቅጣጫ ያግኙ"),
+             "image": ASSETS + "support/ergata/office.webp",
+             "imageAlt": t("A wooden door with an arched top stands open at the top of stone steps between large potted plants.",
+                           "በትላልቅ የሸክላ ተክሎች መካከል ባሉ የድንጋይ ደረጃዎች ላይ ቅስት ያለው የእንጨት በር ተከፍቷል።")},
+            {"id": places["online"][:64], "format": "online", "name": t("Online video sessions", "የኦንላይን ቪዲዮ ቆይታዎች"),
+             "address": t("A secure video link, sent by email before each session", "ከእያንዳንዱ ቆይታ በፊት በኢሜል የሚላክ ደህንነቱ የተጠበቀ የቪዲዮ ማስፈንጠሪያ"),
+             "hours": t("Monday to Saturday, 08:00–20:00", "ከሰኞ እስከ ቅዳሜ፣ 08:00–20:00"),
+             "notes": [t("Book an online session and choose a time.", "የኦንላይን ቆይታ ይያዙ እና ሰዓት ይምረጡ።"),
+                       t("Find a quiet room where nobody can hear you. Earphones help.", "ማንም የማይሰማዎት ጸጥ ያለ ክፍል ያግኙ። የጆሮ ማዳመጫ ይረዳል።"),
+                       t("Open the link a few minutes early on a phone or laptop with a camera.", "ካሜራ ባለው ስልክ ወይም ላፕቶፕ ማስፈንጠሪያውን ጥቂት ደቂቃዎች ቀደም ብለው ይክፈቱ።")],
+             "body": t("Sessions are never recorded. Yared joins from a closed, private room.",
+                       "ቆይታዎች በፍጹም አይቀረጹም። ያሬድ ዝግ ከሆነ ግላዊ ክፍል ይገናኛል።"),
+             "image": ASSETS + "support/ergata/online.webp",
+             "imageAlt": t("A laptop, a cup of tea and a notebook on a wooden desk by a sheer curtain, ready for a video session.",
+                           "ለቪዲዮ ቆይታ የተዘጋጀ፣ ቀጭን መጋረጃ አጠገብ ባለ የእንጨት ጠረጴዛ ላይ ላፕቶፕ፣ ሻይ እና ማስታወሻ ደብተር።")},
+        ]}
     content["contact"] = {**starter["contact"], "phone": PHONE,
-        "body": t("Call or send a message with any question before you book. Messages are read only by Tsion and answered within one working day.",
-                  "ከመያዝዎ በፊት ማንኛውም ጥያቄ ካለዎት ይደውሉ ወይም መልእክት ይላኩ። መልእክቶች የሚነበቡት በጽዮን ብቻ ሲሆን በአንድ የሥራ ቀን ውስጥ ምላሽ ያገኛሉ።"),
-        "action": act("call", "Call Tsion", "ለጽዮን ይደውሉ", "primary")}
+        "body": t("Call or send a message with any question before you book. Messages are read only by Yared and answered within one working day.",
+                  "ከመያዝዎ በፊት ማንኛውም ጥያቄ ካለዎት ይደውሉ ወይም መልእክት ይላኩ። መልእክቶች የሚነበቡት በያሬድ ብቻ ሲሆን በአንድ የሥራ ቀን ውስጥ ምላሽ ያገኛሉ።"),
+        "action": act("call", "Call Yared", "ለያሬድ ይደውሉ", "primary")}
     faq = list(starter["faq"]["items"])
     faq[-1] = {"question": t("How do I pay?", "እንዴት ነው የምከፍለው?"),
-               "answer": t("Fees are shown next to each session. You can pay by Telebirr, bank transfer or cash at the session. If cost is a barrier, ask about the small number of reduced-fee places.",
-                           "ክፍያው ከእያንዳንዱ ቆይታ አጠገብ ይታያል። በቴሌብር፣ በባንክ ዝውውር ወይም በቆይታው ዕለት በጥሬ ገንዘብ መክፈል ይችላሉ። ወጪው እንቅፋት ከሆነብዎ፣ ስለ ጥቂት የቅናሽ ቦታዎች ይጠይቁ።")}
+               "answer": t("Fees are shown next to each session. You can pay by Telebirr or bank transfer, or in cash at the office. If cost is a barrier, ask about the small number of reduced-fee places.",
+                           "ክፍያው ከእያንዳንዱ ቆይታ አጠገብ ይታያል። በቴሌብር፣ በባንክ ዝውውር ወይም በቢሮ በጥሬ ገንዘብ መክፈል ይችላሉ። ወጪው እንቅፋት ከሆነብዎ፣ ስለ ጥቂት የቅናሽ ቦታዎች ይጠይቁ።")}
     faq.append({"question": t("Is online therapy as helpful as meeting in person?", "የኦንላይን ሕክምና እንደ አካል ቆይታ ይጠቅማል?"),
-                "answer": t("For many people, yes. Choose a quiet, private place with a steady connection. You receive a secure video link before the session.",
-                            "ለብዙ ሰዎች አዎ። ጸጥ ያለ፣ ግላዊ ቦታ እና የተረጋጋ ኢንተርኔት ይምረጡ። ከቆይታው በፊት ደህንነቱ የተጠበቀ የቪዲዮ ማስፈንጠሪያ ይደርስዎታል።")})
+                "answer": t("For many people, yes. Choose a quiet, private place with a steady connection. You receive a secure video link before the session, and you can move between online and office sessions at any time.",
+                            "ለብዙ ሰዎች አዎ። ጸጥ ያለ፣ ግላዊ ቦታ እና የተረጋጋ ኢንተርኔት ይምረጡ። ከቆይታው በፊት ደህንነቱ የተጠበቀ የቪዲዮ ማስፈንጠሪያ ይደርስዎታል፤ በማንኛውም ጊዜ በኦንላይን እና በቢሮ ቆይታዎች መካከል መቀያየር ይችላሉ።")})
     content["faq"] = {**starter["faq"], "items": faq}
-    content["footer"] = {"body": t("Counselling and psychotherapy in Addis Ababa, in Amharic and English.",
-                                   "በአዲስ አበባ የምክር እና የሥነ-ልቦና ሕክምና አገልግሎት፣ በአማርኛ እና በእንግሊዝኛ።"), "items": []}
+    content["footer"] = {"body": t("Counselling and psychotherapy in Amharic and English, at an office in Bole, Addis Ababa, and online.",
+                                   "በአማርኛ እና በእንግሊዝኛ የምክር እና የሥነ-ልቦና ሕክምና አገልግሎት፣ በቦሌ፣ አዲስ አበባ በሚገኝ ቢሮ እና በኦንላይን።"), "items": []}
     return content
 
 

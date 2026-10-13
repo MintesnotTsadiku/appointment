@@ -226,6 +226,47 @@ class TestTypedContentAndActions(unittest.TestCase):
         alternate = compile_design(recipe.key, recipe.version, {"fontChoice": "alternate"}, None, ["en", "am"]).as_dict()
         self.assertEqual(alternate["typography"]["roles"]["display"]["family"], "Ergata Sans")
 
+    def test_ergata_sessions_and_places_say_how_they_meet(self):
+        session = {"id": "s1", "name": {"en": "Individual session online"}, "durationMinutes": 50, "price": 1200, "format": "online"}
+        services = {"title": {"en": "Sessions"}, "items": [session, {**session, "id": "s2", "format": "in_person"}]}
+        self.assertTrue(validate_typed_section("services", services).ok, validate_typed_section("services", services).issues)
+        self.assertIn("enum", {issue.rule for issue in validate_typed_section("services", {**services, "items": [{**session, "format": "zoom"}]}).issues})
+        office = {"id": "l1", "format": "in_person", "name": {"en": "Bole office"}, "address": {"en": "Cameroon Street, Bole"},
+                  "body": {"en": "A short walk from the roundabout."}, "notes": [{"en": "Parking in the courtyard", "am": "የመኪና ማቆሚያ አለ"}]}
+        online = {"id": "l2", "format": "online", "name": {"en": "Online video"}, "address": {"en": "A secure video link"},
+                  "notes": [{"en": "Find a quiet room."}], "body": {"en": "Sessions are never recorded."}}
+        places = {"title": {"en": "Where we meet"}, "items": [office, online]}
+        self.assertTrue(validate_typed_section("locations", places).ok, validate_typed_section("locations", places).issues)
+        self.assertFalse(validate_typed_section("locations", {**places, "items": [{**online, "format": "phone"}]}).ok, "a place is a room or online")
+        self.assertFalse(validate_typed_section("locations", {**places, "items": [{**office, "notes": ["Parking"]}]}).ok, "notes are localized")
+        self.assertFalse(validate_typed_section("locations", {**places, "items": [{**office, "notes": [{"en": "x"}] * 7}]}).ok)
+
+    def test_ergata_image_slots_take_packaged_photos_only(self):
+        photo = {"image": "/assets/appointment/brand-experience/support/ergata/approach-walk.webp", "imageAlt": {"en": "A path", "am": "መንገድ"}}
+        sections = {
+            "benefits": {"title": {"en": "Help"}, "items": []},
+            "approaches": {"title": {"en": "Approaches"}, "items": []},
+            "faq": {"title": {"en": "Questions"}, "items": []},
+            "notice": {"title": {"en": "Not an emergency service"}},
+            "booking_cta": {"title": {"en": "Book"}, "action": {"intent": "booking_start", "label": {"en": "Book"}, "placement": "primary"}},
+        }
+        for kind, content in sections.items():
+            self.assertTrue(validate_typed_section(kind, {**content, **photo}).ok, kind)
+            self.assertFalse(validate_typed_section(kind, {**content, "image": "https://example.com/a.webp"}).ok, kind)
+
+    def test_ergata_imagery_gives_every_slot_a_small_mobile_file(self):
+        from pathlib import Path
+
+        design = compile_design("ergata-therapy", 1, {}, None, ["en", "am"]).as_dict()
+        root = Path(__file__).resolve().parents[1] / "public"
+        for role in ("needs.ergata", "approach.ergata", "faq.ergata", "office.ergata", "online.ergata", "band.ergata", "window.ergata"):
+            asset = design["assets"][role]
+            self.assertNotEqual(asset["src"], asset["mobileSrc"], role)
+            for key in ("src", "mobileSrc"):
+                path = root / asset[key].removeprefix("/assets/appointment/")
+                self.assertTrue(path.is_file(), asset[key])
+                self.assertLess(path.stat().st_size, 200 * 1024, asset[key])
+
     def test_ergata_starter_copy_is_bilingual_valid_and_invents_no_facts(self):
         from appointment.public_experience.setup import _apply_starter, starter_content
 

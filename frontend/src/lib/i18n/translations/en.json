@@ -3685,7 +3685,12 @@
     "sessions": "Sessions",
     "free": "Free",
     "bookThis": "Book this session",
-    "callNumber": "Call {label} on {number}"
+    "callNumber": "Call {label} on {number}",
+    "formatInPerson": "In person",
+    "formatOnline": "Online video",
+    "formatPhone": "By phone",
+    "areaMap": "Map of the area around {name}",
+    "goodToKnow": "Good to know"
   },
   "customerEmail": {
     "subjectConfirmation": "Your booking with {0} is confirmed",

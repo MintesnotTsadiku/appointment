@@ -124,6 +124,23 @@ def get_public_ui_config(locale: str | None = None, public_path: str | None = No
     return result
 
 
+def _independent_booking_paths(provider):
+    """The scheduler path of each bookable offering of an independent provider, by service, oldest first."""
+    from appointment.scheduler.booking import offering
+
+    paths = {}
+    for event in frappe.get_all("EventType", filters={"provider": provider, "is_active": 1},
+                                fields=["name", "service"], order_by="creation asc"):
+        if event.service in paths:
+            continue
+        try:
+            offering(event.name, public=True)
+        except (frappe.PermissionError, frappe.ValidationError, frappe.DoesNotExistError):
+            continue
+        paths[event.service] = f"/schedule/individual/{event.name}"
+    return paths
+
+
 @frappe.whitelist(allow_guest=True, methods=["GET"])
 def get_public_experience_snapshot(locale: str | None = None, public_path: str | None = None, optional: int | str = 0):
     """The published snapshot. With `optional`, a path without a published site returns None instead of a 404."""
@@ -137,19 +154,16 @@ def get_public_experience_snapshot(locale: str | None = None, public_path: str |
         raise
     snapshot = resolver_module.public_snapshot(context.release)
     booking_path = None
+    booking_paths = {}
     if context.organization:
         slug = frappe.db.get_value("Organization", context.organization, "slug")
         if slug:
             booking_path = f"/schedule/org/{slug}"
     elif context.provider:
         if frappe.db.get_value("Provider", context.provider, "enable_public_booking"):
+            booking_paths = _independent_booking_paths(context.provider)
             # The first offering the owner made is the main one; later ones are extras.
-            event = frappe.db.get_value("EventType", {"provider": context.provider, "is_active": 1}, "name", order_by="creation asc")
-            if event:
-                from appointment.scheduler.booking import offering
-
-                offering(event, public=True)
-                booking_path = f"/schedule/individual/{event}"
+            booking_path = next(iter(booking_paths.values()), None)
     return {
         "contract": "appointment-public-snapshot.v2",
         "releaseHash": context.release_hash,
@@ -163,6 +177,8 @@ def get_public_experience_snapshot(locale: str | None = None, public_path: str |
         "layoutRendererVersion": context.layout_renderer_version,
         "compiledDesign": snapshot.get("compiledDesign") or {},
         "bookingPath": booking_path,
+        # Each session's own scheduler, by service, so a visitor can pick the online or the office session.
+        "bookingPaths": booking_paths,
         "sections": snapshot.get("sections", []),
         "seo": snapshot.get("seo", {}),
         "booking": snapshot.get("booking", {}),

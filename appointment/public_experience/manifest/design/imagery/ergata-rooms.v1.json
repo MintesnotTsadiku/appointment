@@ -6,7 +6,7 @@
   "assets": {
     "hero.ergata": {
       "src": "/assets/appointment/brand-experience/heroes/ergata-therapy.webp",
-      "mobileSrc": "/assets/appointment/brand-experience/heroes/ergata-therapy.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/heroes/ergata-therapy-m.webp",
       "alt": "Morning light through a linen curtain falls on an olive tree, a clay jug and a glass of water in a quiet room.",
       "focalPoint": {
         "x": 0.42,
@@ -26,7 +26,7 @@
     },
     "detail.ergata": {
       "src": "/assets/appointment/brand-experience/support/ergata/room.webp",
-      "mobileSrc": "/assets/appointment/brand-experience/support/ergata/room.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/ergata/room-m.webp",
       "alt": "Two soft armchairs face each other across a small wooden table in a sunlit counselling room.",
       "focalPoint": {
         "x": 0.5,
@@ -42,6 +42,146 @@
         "role": "Where the conversation happens",
         "license": "project-generated",
         "review": "Codex image generation; regenerated once to remove book-spine lettering; no people, text or logos."
+      }
+    },
+    "window.ergata": {
+      "src": "/assets/appointment/brand-experience/support/ergata/window.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/ergata/window-m.webp",
+      "alt": "A small clay cup and a sprig of green leaves on a wooden windowsill in soft light.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1440,
+      "height": 961,
+      "mime": "image/webp",
+      "checksum": "sha256:b4c4a65e4bce7d7f6383b0751ed869c9178eef66c2dcf5cb94b7e405bf3601ec",
+      "provenance": {
+        "source": "generated",
+        "role": "A quiet detail of the room",
+        "license": "project-generated",
+        "review": "Codex image generation; no people, text or logos."
+      }
+    },
+    "needs.ergata": {
+      "src": "/assets/appointment/brand-experience/support/ergata/needs-cup.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/ergata/needs-cup-m.webp",
+      "alt": "Two hands hold a small clay cup of tea against a soft linen sleeve.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1024,
+      "height": 1024,
+      "mime": "image/webp",
+      "checksum": "sha256:1b0224cfed837fa23c91f5edc7a6cbd7e51baffd63bfa7b41ddc47c3af283dfb",
+      "provenance": {
+        "source": "generated",
+        "role": "You do not need the right words yet",
+        "license": "project-generated",
+        "review": "Codex image generation (2026-10-13 set); same art direction as the hero; no text, logos, signage or readable screens; no faces."
+      }
+    },
+    "approach.ergata": {
+      "src": "/assets/appointment/brand-experience/support/ergata/approach-walk.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/ergata/approach-walk-m.webp",
+      "alt": "An earth path winds uphill between tall eucalyptus trees in soft morning light.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.6
+      },
+      "fit": "cover",
+      "width": 880,
+      "height": 1100,
+      "mime": "image/webp",
+      "checksum": "sha256:1158b383795f533dcc97a840e4ad12a26b445136fed30a7b3c9c170ad7decba7",
+      "provenance": {
+        "source": "generated",
+        "role": "A walk at your own pace",
+        "license": "project-generated",
+        "review": "Codex image generation (2026-10-13 set); same art direction as the hero; no text, logos, signage or readable screens; no faces."
+      }
+    },
+    "faq.ergata": {
+      "src": "/assets/appointment/brand-experience/support/ergata/faq-tea.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/ergata/faq-tea-m.webp",
+      "alt": "A black clay coffee pot and two small cups on a low wooden table by a sunlit window.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.65
+      },
+      "fit": "cover",
+      "width": 1024,
+      "height": 1280,
+      "mime": "image/webp",
+      "checksum": "sha256:0d9d67e45e6d84020e8b3ff5912b0aa0173794377c931f4e6676b92f19ae433f",
+      "provenance": {
+        "source": "generated",
+        "role": "Time to ask anything",
+        "license": "project-generated",
+        "review": "Codex image generation (2026-10-13 set); same art direction as the hero; no text, logos, signage or readable screens; no faces."
+      }
+    },
+    "office.ergata": {
+      "src": "/assets/appointment/brand-experience/support/ergata/office.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/ergata/office-m.webp",
+      "alt": "A wooden door with an arched top stands open at the top of stone steps between large potted plants.",
+      "focalPoint": {
+        "x": 0.45,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1440,
+      "height": 960,
+      "mime": "image/webp",
+      "checksum": "sha256:c73495832e1f5c4406a462eeb426c4737dcc08c78830eb0e627b2ccade01a2bf",
+      "provenance": {
+        "source": "generated",
+        "role": "The office entrance",
+        "license": "project-generated",
+        "review": "Codex image generation (2026-10-13 set); same art direction as the hero; no text, logos, signage or readable screens; no faces."
+      }
+    },
+    "online.ergata": {
+      "src": "/assets/appointment/brand-experience/support/ergata/online.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/ergata/online-m.webp",
+      "alt": "A laptop, a cup of tea and a notebook on a wooden desk by a sheer curtain, ready for a video session.",
+      "focalPoint": {
+        "x": 0.6,
+        "y": 0.55
+      },
+      "fit": "cover",
+      "width": 1440,
+      "height": 960,
+      "mime": "image/webp",
+      "checksum": "sha256:bbc8cc94e64310d71afb9ad3ea0844a42e28d07d938e266cc80aa0a6596b27bf",
+      "provenance": {
+        "source": "generated",
+        "role": "A private corner for an online session",
+        "license": "project-generated",
+        "review": "Codex image generation (2026-10-13 set); same art direction as the hero; no text, logos, signage or readable screens; no faces."
+      }
+    },
+    "band.ergata": {
+      "src": "/assets/appointment/brand-experience/support/ergata/band-dawn.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/ergata/band-dawn-m.webp",
+      "alt": "An arched window opens onto a soft dawn sky over green hills.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.45
+      },
+      "fit": "cover",
+      "width": 960,
+      "height": 1280,
+      "mime": "image/webp",
+      "checksum": "sha256:71f73414e0b642c412dbd6f794d43ca0f232c0abba6c2fad1b0b0d4171ea7e95",
+      "provenance": {
+        "source": "generated",
+        "role": "When you feel ready",
+        "license": "project-generated",
+        "review": "Codex image generation (2026-10-13 set); same art direction as the hero; no text, logos, signage or readable screens; no faces."
       }
     }
   }

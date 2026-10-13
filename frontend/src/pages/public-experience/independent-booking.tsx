@@ -2,7 +2,7 @@ import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { addDays } from 'date-fns';
 import { useParams } from 'react-router-dom';
 import { useFrappeGetCall, useFrappePostCall } from 'frappe-react-sdk';
-import { CalendarX2, Clock3 } from 'lucide-react';
+import { CalendarX2, Clock3, MapPin } from 'lucide-react';
 import { Card, CardContent } from '@/components/card';
 import { Skeleton } from '@/components/skeleton';
 import LanguageToggle from '@/components/language-toggle';
@@ -22,7 +22,7 @@ import { useTranslation } from '@/lib/i18n';
 import '@/public-experience/platform.css';
 import { BookingConfirmed, DetailsForm, type Booked, type TimeFormat } from './independent-booking-parts';
 
-interface Offering { site_slug?: string | null; business_name: string; service: string; duration: number; timezone: string; allow_quantity?: number; max_quantity?: number }
+interface Offering { site_slug?: string | null; business_name: string; service: string; duration: number; timezone: string; allow_quantity?: number; max_quantity?: number; location?: { name?: string; address?: string } }
 interface SlotRow { start_time: string; end_time: string; available: boolean }
 
 const ALL_DAYS = [0, 1, 2, 3, 4, 5, 6];
@@ -102,6 +102,9 @@ export default function IndependentBooking() {
           <span>{offering.service}</span><span aria-hidden="true">·</span>
           <span className="inline-flex items-center gap-1"><Clock3 className="h-4 w-4" aria-hidden="true" />{fill(t('public.independentBooking.duration'), offering.duration)}</span>
         </p>
+        {offering.location?.address ? <p className="flex items-start gap-1 text-sm text-theme-secondary" data-qa="independent-booking-place">
+          <MapPin className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" /><span>{offering.location.name} · {offering.location.address}</span>
+        </p> : null}
       </div>}
       {body}
       <div className={booking ? 'mx-auto max-w-2xl' : undefined}><a data-qa="independent-my-bookings" href={`/schedule/individual/${offeringId}/my-bookings`} className="inline-block text-sm text-theme-secondary underline underline-offset-4">{t('myBookings.allLink')}</a></div>

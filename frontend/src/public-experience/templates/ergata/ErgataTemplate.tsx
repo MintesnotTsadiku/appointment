@@ -1,30 +1,64 @@
 import { useRef, type CSSProperties } from "react";
 
 import type { BookingTemplateProps, TemplateProps } from "../types";
+import type { CompiledDesign } from "../../types";
 import type { ContentRecord } from "../content";
-import { action, brandLogo, contentImage, durationMinutes, formatPrice, localized, records, section, sectionImage } from "../content";
+import { action, brandLogo, contentImage, durationMinutes, formatPrice, localized, records, section } from "../content";
 import { useTemplateCredit } from "../credit";
 import { usePublicChrome, type PublicChrome } from "../chrome";
 import { useReveal, useScrollState } from "../motion";
 import { Icon, iconName, type ErgataIconName } from "./icons";
+import { AreaMap, Blob, FormatArt, Horizon, NeedArt, NoticeArt, OnlineArt, Sprig, StepArt, StepPath, StoneArt, type FormatKey } from "./illustrations";
 import "./ergata.css";
 
 /*
  * Ergata Therapy v1: a page for a counsellor or a small group practice.
- * The arched window is the one recurring shape (hero photo, portrait, booking band).
- * Everything else stays quiet: linen ground, sage actions, clay for small marks only.
+ * The arched window is the one recurring shape (hero photo, portraits, image slots, booking band).
+ * Every section carries a picture: an owner photo when the release has one, otherwise the
+ * template's own photo for that slot (imagery roles `*.ergata`) and its drawn line art.
  * Copy is the owner's; anything the release does not contain is hidden.
  */
 
-type Format = "room" | "video" | "phone" | "intro";
+type Meet = "in_person" | "online" | "phone";
 
-/** A session's format, read from its English name, chooses only the icon. */
-function sessionFormat(item: ContentRecord): Format {
+interface Art { src: string; alt: string; mobile?: string }
+
+/** A section's own photo, or the template's photo for that slot with its smaller mobile file. */
+function art(value: unknown, locale: string, design: CompiledDesign, role: string): Art | null {
+  const own = contentImage(value, locale);
+  if (own) return own;
+  const found = design.assets[role];
+  if (!found?.src) return null;
+  return { src: found.src, alt: found.alt || "", mobile: found.mobileSrc && found.mobileSrc !== found.src ? found.mobileSrc : undefined };
+}
+
+interface PhotoProps { image: Art; width: number; height: number; sizes: string; className?: string; eager?: boolean; decorative?: boolean }
+
+function Photo({ image, width, height, sizes, className, eager = false, decorative = false }: PhotoProps) {
+  return <img className={className} src={image.src} srcSet={image.mobile ? `${image.mobile} 720w, ${image.src} ${width}w` : undefined}
+    sizes={image.mobile ? sizes : undefined} alt={decorative ? "" : image.alt} width={width} height={height}
+    loading={eager ? undefined : "lazy"} decoding="async" />;
+}
+
+/** How a session meets: the release's `format`, else read from its name in either language. */
+function sessionMeet(item: ContentRecord): Meet {
+  if (item.format === "in_person" || item.format === "online" || item.format === "phone") return item.format;
   const name = `${localized(item.name, "en")} ${localized(item.name, "am")}`.toLowerCase();
-  if (/intro|ትውውቅ/.test(name)) return "intro";
-  if (/online|video|ኦንላይን|ቪዲዮ/.test(name)) return "video";
-  if (/phone|ስልክ/.test(name)) return "phone";
-  return "room";
+  if (/online|video|ኦንላይን|ቪዲዮ/.test(name)) return "online";
+  if (/phone|call|ስልክ|ጥሪ/.test(name)) return "phone";
+  return "in_person";
+}
+
+function sessionArt(item: ContentRecord, meet: Meet): FormatKey {
+  const name = `${localized(item.name, "en")} ${localized(item.name, "am")}`.toLowerCase();
+  return /intro|ትውውቅ/.test(name) ? "intro" : meet;
+}
+
+const MEET_ICON: Record<Meet, ErgataIconName> = { in_person: "room", online: "video", phone: "phone" };
+const MEET_LABEL = { in_person: "formatInPerson", online: "formatOnline", phone: "formatPhone" } as const;
+
+function placeMeet(item: ContentRecord): "in_person" | "online" {
+  return item.format === "online" ? "online" : "in_person";
 }
 
 function sessionPrice(item: ContentRecord, locale: string, chrome: PublicChrome): string {
@@ -46,35 +80,44 @@ function ModeSwitch({ mode, toggleMode, chrome }: Pick<TemplateProps, "mode" | "
   </button>;
 }
 
+function MeetBadge({ meet, chrome }: { meet: Meet; chrome: PublicChrome }) {
+  return <span className="eg-meet" data-meet={meet}><Icon name={MEET_ICON[meet]} /><span>{chrome.t(MEET_LABEL[meet])}</span></span>;
+}
+
 interface SessionsProps {
   items: ContentRecord[];
   locale: string;
   chrome: PublicChrome;
   bookHref?: string;
+  paths?: Record<string, string>;
   compact?: boolean;
 }
 
-function Sessions({ items, locale, chrome, bookHref, compact = false }: SessionsProps) {
+/** Session cards. With per-session scheduler paths each card books its own session (online or office). */
+function Sessions({ items, locale, chrome, bookHref, paths = {}, compact = false }: SessionsProps) {
   return <ul className={compact ? "eg-sessions eg-sessions-compact" : "eg-sessions"}>
     {items.map((item, index) => {
       const minutes = durationMinutes(item.durationMinutes);
       const price = sessionPrice(item, locale, chrome);
       const name = localized(item.name, locale);
       const summary = localized(item.summary, locale);
-      const choose = action(item.action, locale);
-      const href = compact ? undefined : choose?.href || bookHref;
-      const format = sessionFormat(item);
-      return <li key={String(item.id || index)} className="eg-session" data-format={format} data-reveal={compact ? undefined : true} style={{ "--i": index } as CSSProperties}>
-        <span className="eg-session-icon"><Icon name={format} /></span>
+      const own = typeof item.id === "string" ? paths[item.id] : undefined;
+      const href = compact ? own : own || action(item.action, locale)?.href || bookHref;
+      const meet = sessionMeet(item);
+      const scene = sessionArt(item, meet);
+      return <li key={String(item.id || index)} className="eg-session" data-format={scene} data-meet={meet} data-reveal={compact ? undefined : true} style={{ "--i": index % 3 } as CSSProperties}>
+        {compact ? <span className="eg-session-icon"><Icon name={MEET_ICON[meet]} /></span> : <div className="eg-session-scene"><FormatArt format={scene} /></div>}
         <div className="eg-session-body">
+          {compact ? null : <MeetBadge meet={meet} chrome={chrome} />}
           <h3>{name}</h3>
           {summary && !compact ? <p>{summary}</p> : null}
           <p className="eg-session-facts">
+            {compact ? <span className="eg-session-meet">{chrome.t(MEET_LABEL[meet])}</span> : null}
             {minutes ? <span><span className="eg-sr">{chrome.t("duration")} </span>{chrome.t("minutes", { count: minutes })}</span> : null}
             {price ? <span className="eg-session-price" data-free={item.price === 0 || undefined}><span className="eg-sr">{chrome.t("price")} </span>{price}</span> : null}
           </p>
         </div>
-        {href ? <a className="eg-session-book" href={href} aria-label={`${chrome.t("bookThis")}: ${name}`} data-qa="ergata-session-book">
+        {href ? <a className="eg-session-book" href={href} aria-label={`${chrome.t("bookThis")}: ${name}`} data-qa="ergata-session-book" data-meet={meet}>
           <span>{chrome.t("bookThis")}</span><Icon name="arrow" />
         </a> : null}
       </li>;
@@ -94,21 +137,71 @@ function SafetyNotice({ notice, locale, chrome, compact = false }: NoticeProps) 
   const title = localized(notice.title, locale);
   if (!title) return null;
   return <aside className={compact ? "eg-notice eg-notice-compact" : "eg-notice"} aria-labelledby={compact ? "eg-notice-title-compact" : "eg-notice-title"} data-qa="ergata-notice">
-    <span className="eg-notice-icon"><Icon name="lifebuoy" /></span>
+    {compact ? <span className="eg-notice-icon"><Icon name="lifebuoy" /></span> : <div className="eg-notice-art-wrap"><Blob variant={2} className="eg-blob eg-notice-blob" /><NoticeArt /></div>}
     <div className="eg-notice-copy">
       <h2 id={compact ? "eg-notice-title-compact" : "eg-notice-title"}>{title}</h2>
       {localized(notice.body, locale) ? <p>{localized(notice.body, locale)}</p> : null}
+      {lines.length ? <ul className="eg-notice-lines">
+        {lines.map((item, index) => {
+          const label = localized(item.label, locale);
+          const phone = String(item.phone).trim();
+          return <li key={index}><a href={telHref(phone)} aria-label={chrome.t("callNumber", { label, number: phone })} data-qa="ergata-notice-call">
+            <Icon name="phone" /><strong>{phone}</strong><span>{label}</span>
+          </a></li>;
+        })}
+      </ul> : null}
     </div>
-    {lines.length ? <ul className="eg-notice-lines">
-      {lines.map((item, index) => {
-        const label = localized(item.label, locale);
-        const phone = String(item.phone).trim();
-        return <li key={index}><a href={telHref(phone)} aria-label={chrome.t("callNumber", { label, number: phone })} data-qa="ergata-notice-call">
-          <strong>{phone}</strong><span>{label}</span>
-        </a></li>;
-      })}
-    </ul> : null}
   </aside>;
+}
+
+interface PlaceProps { place: ContentRecord; locale: string; chrome: PublicChrome; design: CompiledDesign; phone: string }
+
+function OfficeCard({ place, locale, chrome, design, phone }: PlaceProps) {
+  const photo = art(place, locale, design, "office.ergata");
+  const directions = action(place.directionsAction, locale);
+  const notes = records(place.notes).map((entry) => localized(entry, locale)).filter(Boolean);
+  const name = localized(place.name, locale);
+  const placePhone = typeof place.phone === "string" ? place.phone : phone;
+  return <article className="eg-place eg-place-office" data-reveal data-qa="ergata-place-office">
+    <div className="eg-place-media">
+      {photo ? <Photo className="eg-place-photo" image={photo} width={1440} height={960} sizes="(max-width: 760px) 92vw, 46vw" /> : null}
+      <div className="eg-map-card" role="img" aria-label={chrome.t("areaMap", { name })}>
+        <AreaMap />
+        <span className="eg-map-label"><Icon name="pin" />{name}</span>
+      </div>
+    </div>
+    <div className="eg-place-body">
+      <MeetBadge meet="in_person" chrome={chrome} />
+      <h3>{name}</h3>
+      <p className="eg-place-address"><Icon name="pin" /><span>{localized(place.address, locale)}</span></p>
+      {localized(place.body, locale) ? <p className="eg-place-note">{localized(place.body, locale)}</p> : null}
+      {notes.length ? <ul className="eg-place-notes" aria-label={chrome.t("goodToKnow")}>{notes.map((note, index) => <li key={index}><Icon name="check" />{note}</li>)}</ul> : null}
+      <dl className="eg-place-facts">
+        {localized(place.hours, locale) ? <div><dt><Icon name="clock" /><span>{chrome.t("hours")}</span></dt><dd>{localized(place.hours, locale)}</dd></div> : null}
+        {placePhone ? <div><dt><Icon name="phone" /><span>{chrome.t("phone")}</span></dt><dd><a href={telHref(placePhone)}>{placePhone}</a></dd></div> : null}
+      </dl>
+      {directions ? <a className="eg-btn eg-btn-quiet" href={directions.href} rel="noopener noreferrer" data-qa="ergata-directions"><Icon name="pin" /><span>{directions.label}</span></a> : null}
+    </div>
+  </article>;
+}
+
+function OnlineCard({ place, locale, chrome, design }: PlaceProps) {
+  const photo = art(place, locale, design, "online.ergata");
+  const notes = records(place.notes).map((entry) => localized(entry, locale)).filter(Boolean);
+  return <article className="eg-place eg-place-online" data-reveal data-qa="ergata-place-online">
+    <div className="eg-place-media">
+      {photo ? <Photo className="eg-place-photo" image={photo} width={1440} height={960} sizes="(max-width: 760px) 92vw, 46vw" /> : null}
+      <div className="eg-online-card" aria-hidden="true"><OnlineArt /></div>
+    </div>
+    <div className="eg-place-body">
+      <MeetBadge meet="online" chrome={chrome} />
+      <h3>{localized(place.name, locale)}</h3>
+      <p className="eg-place-address"><Icon name="video" /><span>{localized(place.address, locale)}</span></p>
+      {notes.length ? <ol className="eg-place-steps" aria-label={chrome.t("goodToKnow")}>{notes.map((note, index) => <li key={index}><span aria-hidden="true">{index + 1}</span>{note}</li>)}</ol> : null}
+      {localized(place.body, locale) ? <p className="eg-place-privacy"><Icon name="lock" /><span>{localized(place.body, locale)}</span></p> : null}
+      {localized(place.hours, locale) ? <dl className="eg-place-facts"><div><dt><Icon name="clock" /><span>{chrome.t("hours")}</span></dt><dd>{localized(place.hours, locale)}</dd></div></dl> : null}
+    </div>
+  </article>;
 }
 
 export function ErgataSite({ snapshot, locale, applicationName, publicRoot, rootStyle, mode, toggleMode }: TemplateProps) {
@@ -140,8 +233,13 @@ export function ErgataSite({ snapshot, locale, applicationName, publicRoot, root
   const bookingAction = action(booking.action, locale);
   const bookLabel = primary?.label || bookingAction?.label || "";
   const bookHref = primary?.href || bookingAction?.href;
-  const heroImage = sectionImage(hero, locale, design, "hero.primary");
-  const aboutImage = sectionImage(about, locale, design, "section.detail");
+  const heroImage = art(hero, locale, design, "hero.primary");
+  const aboutImage = art(about, locale, design, "section.detail");
+  const aboutDetail = art(null, locale, design, "window.ergata");
+  const needsImage = art(benefits, locale, design, "needs.ergata");
+  const approachImage = art(approaches, locale, design, "approach.ergata");
+  const faqImage = art(faq, locale, design, "faq.ergata");
+  const bandImage = art(booking, locale, design, "band.ergata");
   const logo = brandLogo(design);
   const needs = records(benefits.items);
   const ways = records(approaches.items);
@@ -152,20 +250,21 @@ export function ErgataSite({ snapshot, locale, applicationName, publicRoot, root
   const quotes = records(testimonials.items);
   const questions = records(faq.items);
   const places = records(locations.items);
+  const offices = places.filter((item) => placeMeet(item) === "in_person");
+  const online = places.filter((item) => placeMeet(item) === "online");
   const highlights = records(about.highlights).map((item) => localized(item, locale)).filter(Boolean);
   const lead = team[0];
   const leadPhoto = lead ? contentImage(lead, locale) : null;
-  const firstPlace = places[0];
-  const placeImage = firstPlace ? contentImage(firstPlace, locale) : null;
-  const directions = firstPlace ? action(firstPlace.directionsAction, locale) : null;
-  const phone = typeof contact.phone === "string" ? contact.phone : typeof firstPlace?.phone === "string" ? firstPlace.phone : "";
+  const phone = typeof contact.phone === "string" ? contact.phone : typeof offices[0]?.phone === "string" ? offices[0].phone : "";
   const email = typeof contact.email === "string" ? contact.email : "";
   const contactAction = action(contact.action, locale);
   const footerLinks = records(footer.items).flatMap((item) => {
     const link = action(item.action, locale);
     return link && !link.href.endsWith("/book") && !link.href.endsWith("#contact") ? [link] : [];
   });
-  const hasVisit = Boolean(firstPlace || phone || email);
+  const hasVisit = Boolean(places.length || phone || email);
+  const paths = snapshot.bookingPaths || {};
+  const meets = Array.from(new Set(sessions.map(sessionMeet)));
 
   return <div ref={root} data-pe-root data-pe-recipe={snapshot.recipeKey} data-pe-mode={mode} data-motion={design.motion}
     data-density={String(design.density.presentation || "spacious")} className="eg" data-template="ergata-therapy-v1" lang={locale} style={rootStyle}>
@@ -197,10 +296,13 @@ export function ErgataSite({ snapshot, locale, applicationName, publicRoot, root
                 <Icon name={secondary.href.endsWith("#faq") ? "intro" : "phone"} /><span>{secondary.label}</span><Icon name="arrow" className="eg-icon eg-icon-arrow" />
               </a> : null}
             </div>
+            {meets.length > 1 ? <ul className="eg-hero-meets">{meets.map((meet) => <li key={meet}><MeetBadge meet={meet} chrome={chrome} /></li>)}</ul> : null}
             {localized(hero.body, locale) ? <p className="eg-reassure"><Icon name="lock" />{localized(hero.body, locale)}</p> : null}
           </div>
           {heroImage ? <figure className="eg-hero-art">
-            <div className="eg-arch"><img src={heroImage.src} alt={heroImage.alt} width={1040} height={1300} /></div>
+            <Blob variant={0} className="eg-blob eg-hero-blob" />
+            <Sprig className="eg-sprig eg-hero-sprig" />
+            <div className="eg-arch"><Photo image={heroImage} width={1040} height={1300} sizes="(max-width: 760px) 92vw, 40vw" eager /></div>
             {lead && localized(lead.name, locale) ? <figcaption className="eg-hero-card">
               {leadPhoto ? <img src={leadPhoto.src} alt="" width={64} height={64} /> : <span className="eg-initial" aria-hidden="true">{localized(lead.name, locale).slice(0, 1)}</span>}
               <span><strong>{localized(lead.name, locale)}</strong>{localized(lead.role, locale) ? <span>{localized(lead.role, locale)}</span> : null}</span>
@@ -211,13 +313,17 @@ export function ErgataSite({ snapshot, locale, applicationName, publicRoot, root
 
       {needs.length ? <section className="eg-section eg-needs" id="help" aria-labelledby="eg-needs-title">
         <div className="eg-wrap eg-split">
-          <header className="eg-head" data-reveal>
+          <header className="eg-head eg-needs-head" data-reveal>
             <h2 id="eg-needs-title">{localized(benefits.title, locale)}</h2>
             {localized(benefits.intro, locale) ? <p>{localized(benefits.intro, locale)}</p> : null}
+            {needsImage ? <figure className="eg-needs-art">
+              <Blob variant={1} className="eg-blob eg-needs-blob" />
+              <div className="eg-arch eg-arch-soft"><Photo image={needsImage} width={1024} height={1024} sizes="(max-width: 760px) 80vw, 30vw" /></div>
+            </figure> : null}
           </header>
           <ul className="eg-needs-list">
-            {needs.map((item, index) => <li key={index} data-reveal style={{ "--i": index % 4 } as CSSProperties}>
-              <span className="eg-needs-icon"><Icon name={iconName(item.icon, "leaf") as ErgataIconName} /></span>
+            {needs.map((item, index) => <li key={index} data-reveal data-tone={index % 3} style={{ "--i": index % 4 } as CSSProperties}>
+              <span className="eg-needs-scene"><NeedArt name={iconName(item.icon, "leaf")} /></span>
               <div><h3>{localized(item.title, locale)}</h3><p>{localized(item.description, locale)}</p></div>
             </li>)}
           </ul>
@@ -225,47 +331,63 @@ export function ErgataSite({ snapshot, locale, applicationName, publicRoot, root
       </section> : null}
 
       {ways.length ? <section className="eg-section eg-approach" id="approach" aria-labelledby="eg-approach-title">
-        <div className="eg-wrap">
-          <header className="eg-head eg-head-wide" data-reveal>
-            <h2 id="eg-approach-title">{localized(approaches.title, locale)}</h2>
-            {localized(approaches.intro, locale) ? <p>{localized(approaches.intro, locale)}</p> : null}
-          </header>
-          <dl className="eg-ways">
-            {ways.map((item, index) => <div key={index} data-reveal style={{ "--i": index } as CSSProperties}>
-              <dt>{localized(item.title, locale)}</dt>
-              <dd>{localized(item.description, locale)}</dd>
-            </div>)}
-          </dl>
+        <Blob variant={2} className="eg-blob eg-approach-blob" />
+        <div className="eg-wrap eg-approach-grid">
+          <div className="eg-approach-side">
+            <header className="eg-head" data-reveal>
+              <h2 id="eg-approach-title">{localized(approaches.title, locale)}</h2>
+              {localized(approaches.intro, locale) ? <p>{localized(approaches.intro, locale)}</p> : null}
+            </header>
+            {approachImage ? <figure className="eg-approach-art" data-reveal>
+              <div className="eg-arch"><Photo image={approachImage} width={1024} height={1280} sizes="(max-width: 760px) 92vw, 34vw" /></div>
+            </figure> : null}
+          </div>
+          <ol className="eg-ways">
+            {ways.map((item, index) => <li key={index} data-reveal style={{ "--i": index % 3 } as CSSProperties}>
+              <span className="eg-way-stone"><StoneArt index={index} /></span>
+              <div>
+                <h3>{localized(item.title, locale)}</h3>
+                <p>{localized(item.description, locale)}</p>
+              </div>
+            </li>)}
+          </ol>
         </div>
       </section> : null}
 
       {localized(about.body, locale) ? <section className="eg-section eg-about" id="about" aria-labelledby="eg-about-title">
         <div className="eg-wrap eg-about-grid">
-          {aboutImage ? <figure className="eg-about-art" data-reveal><img src={aboutImage.src} alt={aboutImage.alt} loading="lazy" width={1440} height={960} /></figure> : null}
+          {aboutImage ? <figure className="eg-about-art" data-reveal>
+            <Blob variant={0} className="eg-blob eg-about-blob" />
+            <div className="eg-about-main"><Photo image={aboutImage} width={1440} height={960} sizes="(max-width: 760px) 92vw, 46vw" /></div>
+            {aboutDetail ? <div className="eg-about-detail"><Photo image={aboutDetail} width={1440} height={961} sizes="(max-width: 760px) 40vw, 18vw" decorative /></div> : null}
+          </figure> : null}
           <div className="eg-about-copy" data-reveal>
             <h2 id="eg-about-title">{localized(about.title, locale)}</h2>
             {localized(about.body, locale).split(/\n{2,}/).map((paragraph, index) => <p key={index}>{paragraph}</p>)}
-            {highlights.length ? <ul className="eg-chips">{highlights.map((item, index) => <li key={index}>{item}</li>)}</ul> : null}
+            {highlights.length ? <ul className="eg-chips">{highlights.map((item, index) => <li key={index}><Icon name="leaf" />{item}</li>)}</ul> : null}
           </div>
         </div>
       </section> : null}
 
       {steps.length ? <section className="eg-section eg-steps" aria-labelledby="eg-steps-title">
         <div className="eg-wrap">
-          <header className="eg-head eg-head-wide" data-reveal>
+          <header className="eg-head eg-head-wide eg-head-center" data-reveal>
             <h2 id="eg-steps-title">{localized(process.title, locale)}</h2>
             {localized(process.intro, locale) ? <p>{localized(process.intro, locale)}</p> : null}
           </header>
-          <ol className="eg-step-list" style={{ "--eg-steps": Math.min(steps.length, 4) } as CSSProperties}>
-            {steps.map((item, index) => {
-              const number = String(item.step || index + 1);
-              return <li key={index} data-reveal style={{ "--i": index } as CSSProperties}>
-                <span className="eg-step-dot" aria-hidden="true">{number}</span>
-                <h3><span className="eg-sr">{chrome.t("step", { count: number })} </span>{localized(item.title, locale)}</h3>
-                <p>{localized(item.description, locale)}</p>
-              </li>;
-            })}
-          </ol>
+          <div className="eg-step-track">
+            <StepPath />
+            <ol className="eg-step-list" style={{ "--eg-steps": Math.min(steps.length, 4) } as CSSProperties}>
+              {steps.map((item, index) => {
+                const number = String(item.step || index + 1);
+                return <li key={index} data-reveal style={{ "--i": index } as CSSProperties}>
+                  <span className="eg-step-stop"><StepArt index={index} /><span className="eg-step-dot" aria-hidden="true">{number}</span></span>
+                  <h3><span className="eg-sr">{chrome.t("step", { count: number })} </span>{localized(item.title, locale)}</h3>
+                  <p>{localized(item.description, locale)}</p>
+                </li>;
+              })}
+            </ol>
+          </div>
         </div>
       </section> : null}
 
@@ -275,7 +397,7 @@ export function ErgataSite({ snapshot, locale, applicationName, publicRoot, root
             <h2 id="eg-sessions-title">{localized(services.title, locale)}</h2>
             {localized(services.intro, locale) ? <p>{localized(services.intro, locale)}</p> : null}
           </header>
-          <Sessions items={sessions} locale={locale} chrome={chrome} bookHref={bookHref} />
+          <Sessions items={sessions} locale={locale} chrome={chrome} bookHref={bookHref} paths={paths} />
         </div>
       </section> : null}
 
@@ -292,13 +414,19 @@ export function ErgataSite({ snapshot, locale, applicationName, publicRoot, root
                 const name = localized(item.name, locale);
                 const specialties = records(item.specialties).map((entry) => localized(entry, locale)).filter(Boolean);
                 const notes = records(item.credentials).map((entry) => localized(entry, locale)).filter(Boolean);
+                const bookWith = action(item.action, locale);
                 return <li key={String(item.id || index)} className="eg-person" data-reveal style={{ "--i": index } as CSSProperties}>
-                  {photo ? <img className="eg-portrait" src={photo.src} alt={photo.alt || name} loading="lazy" width={768} height={768} /> : <span className="eg-portrait eg-initial" aria-hidden="true">{name.slice(0, 1)}</span>}
+                  <div className="eg-portrait-wrap">
+                    <Blob variant={index + 1} className="eg-blob eg-portrait-blob" />
+                    {photo ? <img className="eg-portrait" src={photo.src} alt={photo.alt || name} loading="lazy" decoding="async" width={768} height={768} /> : <span className="eg-portrait eg-initial" aria-hidden="true">{name.slice(0, 1)}</span>}
+                    <Sprig className="eg-sprig eg-portrait-sprig" />
+                  </div>
                   <div>
                     <h3>{name}</h3>
                     {localized(item.role, locale) ? <p className="eg-role">{localized(item.role, locale)}</p> : null}
                     {specialties.length ? <ul className="eg-chips">{specialties.map((entry, key) => <li key={key}>{entry}</li>)}</ul> : null}
                     {notes.length ? <ul className="eg-ticks">{notes.map((entry, key) => <li key={key}><Icon name="check" />{entry}</li>)}</ul> : null}
+                    {bookWith && bookHref ? <a className="eg-btn" href={bookHref} data-qa="ergata-person-book">{bookWith.label}</a> : null}
                   </div>
                 </li>;
               })}
@@ -307,6 +435,7 @@ export function ErgataSite({ snapshot, locale, applicationName, publicRoot, root
               <h3 id="eg-credentials-title">{localized(proof.title, locale)}</h3>
               {localized(proof.intro, locale) ? <p className="eg-credentials-intro">{localized(proof.intro, locale)}</p> : null}
               <dl>{credentials.map((item, index) => <div key={index}>
+                <span className="eg-credential-mark" aria-hidden="true"><Icon name={(["leaf", "shield", "link", "path"] as const)[index % 4]} /></span>
                 <dt>{localized(item.label, locale)}</dt>
                 <dd><strong>{localized(item.value, locale)}</strong>{localized(item.detail, locale) ? <span>{localized(item.detail, locale)}</span> : null}</dd>
               </div>)}</dl>
@@ -332,14 +461,19 @@ export function ErgataSite({ snapshot, locale, applicationName, publicRoot, root
 
       {questions.length ? <section className="eg-section eg-faq" id="faq" aria-labelledby="eg-faq-title">
         <div className="eg-wrap eg-split">
-          <header className="eg-head" data-reveal>
+          <header className="eg-head eg-faq-head" data-reveal>
             <h2 id="eg-faq-title">{localized(faq.title, locale)}</h2>
-            {hasVisit && localized(contact.title, locale) ? <a className="eg-soft-link eg-faq-ask" href="#contact">
+            {faqImage ? <figure className="eg-faq-art">
+              <div className="eg-arch"><Photo image={faqImage} width={1024} height={1280} sizes="(max-width: 760px) 80vw, 30vw" /></div>
+              {hasVisit && localized(contact.title, locale) ? <a className="eg-faq-ask" href="#contact">
+                <span className="eg-faq-ask-icon"><Icon name="intro" /></span><span>{localized(contact.title, locale)}</span><Icon name="arrow" className="eg-icon eg-icon-arrow" />
+              </a> : null}
+            </figure> : hasVisit && localized(contact.title, locale) ? <a className="eg-soft-link" href="#contact">
               <Icon name="intro" /><span>{localized(contact.title, locale)}</span><Icon name="arrow" className="eg-icon eg-icon-arrow" />
             </a> : null}
           </header>
           <div className="eg-faq-list">{questions.map((item, index) => <details key={index} data-qa="ergata-faq-item">
-            <summary><span>{localized(item.question, locale)}</span><Icon name="plus" className="eg-icon eg-faq-icon" /></summary>
+            <summary><span className="eg-faq-num" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span><span>{localized(item.question, locale)}</span><Icon name="plus" className="eg-icon eg-faq-icon" /></summary>
             <p>{localized(item.answer, locale)}</p>
           </details>)}</div>
         </div>
@@ -350,43 +484,44 @@ export function ErgataSite({ snapshot, locale, applicationName, publicRoot, root
       </section> : null}
 
       {hasVisit ? <section className="eg-section eg-visit" id="contact" aria-labelledby="eg-visit-title">
-        <div className="eg-wrap eg-visit-grid">
-          <div className="eg-visit-card" data-reveal>
+        <div className="eg-wrap">
+          <header className="eg-head eg-head-wide eg-head-center" data-reveal>
             <h2 id="eg-visit-title">{localized(locations.title, locale) || localized(contact.title, locale)}</h2>
-            {localized(locations.intro, locale) ? <p className="eg-visit-intro">{localized(locations.intro, locale)}</p> : null}
-            <dl className="eg-visit-facts">
-              {firstPlace ? <div><dt><Icon name="pin" /><span>{chrome.t("address")}</span></dt><dd>
-                {localized(firstPlace.name, locale) ? <strong>{localized(firstPlace.name, locale)}</strong> : null}
-                <span>{localized(firstPlace.address, locale)}</span>
-                {directions ? <a href={directions.href} rel="noopener noreferrer">{directions.label}</a> : null}
-              </dd></div> : null}
-              {firstPlace && localized(firstPlace.hours, locale) ? <div><dt><Icon name="clock" /><span>{chrome.t("hours")}</span></dt><dd>{localized(firstPlace.hours, locale)}</dd></div> : null}
-              {phone ? <div><dt><Icon name="phone" /><span>{chrome.t("phone")}</span></dt><dd><a href={telHref(phone)}>{phone}</a></dd></div> : null}
-              {email ? <div><dt><Icon name="mail" /><span>{chrome.t("email")}</span></dt><dd><a href={`mailto:${email}`}>{email}</a></dd></div> : null}
-            </dl>
-            {places.length > 1 ? <ul className="eg-chips">{places.slice(1).map((item, index) => <li key={index}>{localized(item.name, locale)}</li>)}</ul> : null}
-            {localized(contact.body, locale) ? <p className="eg-visit-note">{localized(contact.body, locale)}</p> : null}
-            {contactAction && !contactAction.href.endsWith("/book") ? <a className="eg-soft-link" href={contactAction.href}><Icon name="phone" /><span>{contactAction.label}</span><Icon name="arrow" className="eg-icon eg-icon-arrow" /></a> : null}
-          </div>
-          {placeImage ? <figure className="eg-visit-art" data-reveal><img src={placeImage.src} alt={placeImage.alt} loading="lazy" width={1440} height={960} /></figure> : null}
+            {localized(locations.intro, locale) ? <p>{localized(locations.intro, locale)}</p> : null}
+          </header>
+          {places.length ? <div className={offices.length + online.length > 1 ? "eg-places" : "eg-places eg-places-one"}>
+            {offices.map((place, index) => <OfficeCard key={`office-${index}`} place={place} locale={locale} chrome={chrome} design={design} phone={phone} />)}
+            {online.map((place, index) => <OnlineCard key={`online-${index}`} place={place} locale={locale} chrome={chrome} design={design} phone={phone} />)}
+          </div> : null}
+          {phone || email || localized(contact.body, locale) ? <div className="eg-contact-strip" data-reveal>
+            <span className="eg-contact-mark" aria-hidden="true"><Icon name="mail" /></span>
+            {localized(contact.body, locale) ? <p>{localized(contact.body, locale)}</p> : null}
+            <div className="eg-contact-links">
+              {phone ? <a href={telHref(phone)}><Icon name="phone" /><span>{phone}</span></a> : null}
+              {email ? <a href={`mailto:${email}`}><Icon name="mail" /><span>{email}</span></a> : null}
+              {contactAction && !contactAction.href.endsWith("/book") && !contactAction.href.startsWith("tel:") ? <a href={contactAction.href}><Icon name="arrow" /><span>{contactAction.label}</span></a> : null}
+            </div>
+          </div> : null}
         </div>
       </section> : null}
 
       {bookHref && bookLabel ? <section className="eg-band" aria-labelledby="eg-band-title">
         <div className="eg-wrap">
           <div className="eg-band-inner" data-reveal>
-            <span className="eg-band-arch" aria-hidden="true" />
-            <div>
+            <Blob variant={1} className="eg-blob eg-band-blob" />
+            <div className="eg-band-copy">
               <h2 id="eg-band-title">{localized(booking.title, locale)}</h2>
               {localized(booking.body, locale) ? <p>{localized(booking.body, locale)}</p> : null}
+              <a className="eg-btn eg-btn-inverse eg-btn-lg" href={bookingAction?.href || bookHref} data-qa="ergata-band-book">{bookLabel}</a>
             </div>
-            <a className="eg-btn eg-btn-inverse eg-btn-lg" href={bookingAction?.href || bookHref} data-qa="ergata-band-book">{bookLabel}</a>
+            {bandImage ? <div className="eg-band-window"><Photo image={bandImage} width={960} height={1280} sizes="(max-width: 760px) 70vw, 24vw" decorative /></div> : <span className="eg-band-arch" aria-hidden="true" />}
           </div>
         </div>
       </section> : null}
     </main>
 
     <footer className="eg-footer">
+      <Horizon />
       <div className="eg-wrap eg-footer-grid">
         <div className="eg-footer-brand">
           <Brand logo={logo} name={applicationName} href={publicRoot} />
@@ -421,6 +556,7 @@ export function ErgataBooking({ snapshot, locale, applicationName, publicRoot, r
   const label = action(hero.primaryAction, locale)?.label || action(booking.action, locale)?.label || "";
   const logo = brandLogo(design);
   const sessions = records(services.items);
+  const windowArt = art(booking, locale, design, "band.ergata");
   return <div ref={root} data-motion={design.motion} data-pe-booking data-pe-recipe={snapshot.recipeKey} data-pe-mode={mode}
     className="eg eg-handoff" data-template="ergata-therapy-v1" lang={locale} style={rootStyle}>
     <header className="eg-bar">
@@ -432,7 +568,7 @@ export function ErgataBooking({ snapshot, locale, applicationName, publicRoot, r
     </header>
     <main className="eg-wrap eg-handoff-grid">
       <div className="eg-handoff-copy">
-        <span className="eg-handoff-arch" aria-hidden="true" />
+        {windowArt ? <div className="eg-handoff-window"><Photo image={windowArt} width={960} height={1280} sizes="160px" eager decorative /></div> : <span className="eg-handoff-arch" aria-hidden="true" />}
         <h1>{localized(booking.title, locale)}</h1>
         {localized(booking.body, locale) ? <p className="eg-lede">{localized(booking.body, locale)}</p> : null}
         {bookingPath && label ? <a className="eg-btn eg-btn-lg" href={bookingPath} data-qa="ergata-handoff-book">{label}</a> : null}
@@ -441,7 +577,7 @@ export function ErgataBooking({ snapshot, locale, applicationName, publicRoot, r
       </div>
       {sessions.length ? <section className="eg-handoff-sessions" aria-labelledby="eg-handoff-sessions-title">
         <h2 id="eg-handoff-sessions-title">{localized(services.title, locale)}</h2>
-        <Sessions items={sessions} locale={locale} chrome={chrome} compact />
+        <Sessions items={sessions} locale={locale} chrome={chrome} paths={snapshot.bookingPaths} compact />
       </section> : null}
     </main>
   </div>;

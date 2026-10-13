@@ -16,7 +16,8 @@ export type ChromeKey =
   | "dark" | "light" | "switchToDark" | "switchToLight" | "skip"
   | "minutes" | "duration" | "price" | "phone" | "email" | "hours" | "address" | "step"
   | "websiteBy"
-  | "approach" | "sessions" | "free" | "bookThis" | "callNumber";
+  | "approach" | "sessions" | "free" | "bookThis" | "callNumber"
+  | "formatInPerson" | "formatOnline" | "formatPhone" | "areaMap" | "goodToKnow";
 
 export interface PublicChrome {
   t: (key: ChromeKey, values?: Record<string, string | number>) => string;

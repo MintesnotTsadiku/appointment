@@ -3685,7 +3685,12 @@
     "sessions": "ቆይታዎች",
     "free": "ነጻ",
     "bookThis": "ይህን ቆይታ ይያዙ",
-    "callNumber": "ለ{label} በ{number} ይደውሉ"
+    "callNumber": "ለ{label} በ{number} ይደውሉ",
+    "formatInPerson": "በአካል",
+    "formatOnline": "በኦንላይን ቪዲዮ",
+    "formatPhone": "በስልክ",
+    "areaMap": "የ{name} አካባቢ ካርታ",
+    "goodToKnow": "ማወቅ የሚጠቅሙ ነገሮች"
   },
   "customerEmail": {
     "subjectConfirmation": "ከ{0} ጋር ያለዎት ቀጠሮ ተረጋግጧል",

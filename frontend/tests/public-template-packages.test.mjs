@@ -43,6 +43,13 @@ assert.ok(!/\b(991|907|939)\b/.test(ergata), "emergency numbers come from the re
 assert.ok(ergata.includes('section(snapshot.sections, "notice")') || ergata.includes('get("notice")'), "the template renders the notice section");
 assert.ok(ergata.includes("data-qa=\"template-credit\""), "the template draws the growth footer credit");
 assert.ok(ergata.includes("prefers-reduced-motion") || fs.readFileSync(path.join(templateRoot, "ergata", "ergata.css"), "utf8").includes("prefers-reduced-motion"), "motion respects reduced motion");
+const ergataCss = fs.readFileSync(path.join(templateRoot, "ergata", "ergata.css"), "utf8");
+assert.ok(ergata.includes("snapshot.bookingPaths"), "each Ergata session card books its own session (online or office)");
+for (const role of ["needs.ergata", "approach.ergata", "faq.ergata", "office.ergata", "online.ergata", "band.ergata"]) {
+  assert.ok(ergata.includes(`"${role}"`), `Ergata draws its own picture for ${role} when the owner has none`);
+}
+assert.ok(/srcSet=/.test(ergata) && /loading=\{eager \? undefined : "lazy"\}/.test(ergata), "Ergata photos load lazily with a mobile source");
+assert.ok(/@media \(prefers-reduced-motion: reduce\)[\s\S]*animation: none !important/.test(ergataCss), "breathing shapes stop under reduced motion");
 assert.ok(!registry.includes("quiet-trust-warm-editorial"));
 assert.ok(!registry.includes("crafted-editorial-atelier"));
 assert.ok(!registry.includes("warm-vitality-studio"));
