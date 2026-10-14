@@ -189,7 +189,7 @@ scenarios:
     selector: '[data-pe-booking][data-template="ergata-therapy-v1"]'
     assertions:
     - type: visible_selector
-      value: '[data-qa="ergata-handoff-book"][href^="/schedule/individual/"]'
+      value: '[data-qa="ergata-handoff-book"][href^="/schedule/p/{qa_ergata_slug}/"]'
     - type: text_contains
       value: When you feel ready
   - action: screenshot

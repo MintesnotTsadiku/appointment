@@ -265,7 +265,7 @@ class TestDirectory(ShowoffCase):
         self.assertNotIn(quiet.key, keys, "Businesses are not listed until the owner opts in.")
         self.assertNotIn(unpublished.key, keys, "A business without a published booking page is left out.")
         self.assertTrue(keys[listed.key]["href"].endswith("?source=directory"))
-        self.assertTrue(keys[solo.key]["href"].startswith("/schedule/individual/"))
+        self.assertTrue(keys[solo.key]["href"].startswith("/schedule/p/"), "an independent provider is listed by its provider page")
         self.assertIn("Silk press", keys[listed.key]["services"])
         frappe.set_user(listed.user)
         directory.save_owner_listing(listed.key, 0)

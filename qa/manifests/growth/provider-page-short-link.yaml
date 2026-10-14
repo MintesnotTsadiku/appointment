@@ -1,0 +1,57 @@
+# Short links to a provider page: `/<page address>` opens `/schedule/p/<page address>`, and a former address
+# (`/<old>` and `/schedule/p/<old>`) opens the current page with the share source kept (en, phone, light).
+# Fixture: appointment.tests.provider_page_qa_fixtures (its setup changes the address once, like the Grow page).
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/pp-short
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.provider_page_qa_fixtures.browser_values
+scenarios:
+- id: pp_short_en
+  title: 'Guest: short and former addresses open the current provider page (en, phone, light)'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /{qa_provider_slug}?source=qr_poster
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="provider-page-name"]'
+    - type: url_contains
+      value: /schedule/p/{qa_provider_slug}?source=qr_poster
+  actions:
+  - action: screenshot
+    name: pp_short_en-1-short.png
+    full_page: false
+  - action: open_url
+    url: /{qa_provider_former_slug}?source=telegram_share
+  - action: wait_for
+    selector: '[data-qa="provider-page-name"]'
+    assertions:
+    - type: url_contains
+      value: /schedule/p/{qa_provider_slug}?source=telegram_share
+  - action: open_url
+    url: /schedule/p/{qa_provider_former_slug}
+  - action: wait_for
+    selector: '[data-qa="provider-page-name"]'
+    assertions:
+    - type: url_contains
+      value: /schedule/p/{qa_provider_slug}
+  - action: screenshot
+    name: pp_short_en-2-former.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

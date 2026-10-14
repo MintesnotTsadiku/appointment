@@ -24,7 +24,10 @@ def create(business_name, timezone="Africa/Addis_Ababa", service_name=None, publ
     """
     if service_name is not None and (not isinstance(service_name, str) or not service_name.strip() or len(service_name) > 100):
         frappe.throw(_("Enter what you offer, in at most 100 characters."))
+    from appointment.scheduler.provider_page import ensure_slug
+
     provider = _save_provider(business_name, timezone)
+    ensure_slug(provider)  # the provider page address; Grow can change it
     if service_name:
         _first_offering(provider, service_name.strip(), timezone, cint(publish))
     return {"provider": provider.name, "business_name": provider.provider_name, "landing": LANDING,

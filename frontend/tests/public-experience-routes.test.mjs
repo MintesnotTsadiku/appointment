@@ -69,7 +69,12 @@ for (const expected of ['path="/:slug"', 'path="/:slug/book"', 'path="/:slug/:lo
 for (const expected of ['path="/schedule/individual/booking/:token"', 'path="/schedule/individual/:offeringId/my-bookings"']) {
   assert.ok(routes.includes(expected), `route.tsx must declare ${expected}`);
 }
-for (const independentPath of ["/schedule/individual/booking/APT-1.0.abc", "/schedule/individual/EVT-1/my-bookings"]) {
+// Provider pages: `/schedule/p/<slug>` lists the services; `/schedule/p/<slug>/<offering>` is one scheduler.
+for (const expected of ['path="/schedule/p/:providerSlug"', 'path="/schedule/p/:providerSlug/:offeringId"']) {
+  assert.ok(routes.includes(expected), `route.tsx must declare ${expected}`);
+}
+assert.ok(routes.indexOf('path="/schedule/p/:providerSlug"') < routes.indexOf('path="/:slug"'), "provider pages come before the website catch-all");
+for (const independentPath of ["/schedule/individual/booking/APT-1.0.abc", "/schedule/individual/EVT-1/my-bookings", "/schedule/p/rahel-nutrition", "/schedule/p/rahel-nutrition/EVT-1"]) {
   assert.equal(routesModule.isPublicExperiencePath(independentPath), false, independentPath);
 }
 const manage = read("src/pages/manage-booking/index.tsx");

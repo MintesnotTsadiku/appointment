@@ -1,11 +1,12 @@
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { addDays } from 'date-fns';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useFrappeGetCall, useFrappePostCall } from 'frappe-react-sdk';
-import { CalendarX2, Clock3, MapPin, Video } from 'lucide-react';
+import { ArrowLeft, CalendarX2, Clock3, MapPin, Video } from 'lucide-react';
 import { Card, CardContent } from '@/components/card';
 import { Skeleton } from '@/components/skeleton';
 import LanguageToggle from '@/components/language-toggle';
+import MetaTags from '@/components/meta-tags';
 import PoweredBy from '@/components/powered-by';
 import CustomerInviteBanner from '@/components/growth-referrals/CustomerInviteBanner';
 import { DateTimeSelector } from '@/pages/booking-v2/components/DateTimeSelector';
@@ -24,16 +25,20 @@ import { useOnlineLabel } from '@/components/online-session/JoinSession';
 import type { LocationType } from '@/lib/online-session';
 import { BookingConfirmed, DetailsForm, type Booked, type TimeFormat } from './independent-booking-parts';
 
-interface Offering { site_slug?: string | null; business_name: string; service: string; duration: number; timezone: string; allow_quantity?: number; max_quantity?: number; location?: { name?: string; address?: string; location_type?: LocationType; platform?: string } }
+interface Offering { site_slug?: string | null; provider_slug?: string | null; business_name: string; service: string; duration: number; timezone: string; allow_quantity?: number; max_quantity?: number; location?: { name?: string; address?: string; location_type?: LocationType; platform?: string } }
 interface SlotRow { start_time: string; end_time: string; available: boolean }
 
 const ALL_DAYS = [0, 1, 2, 3, 4, 5, 6];
 const BOOKING_WINDOW_DAYS = 90;
 
-/** Public booking page for an independent provider's offering: the same date and slot picker as organization booking. */
+/**
+ * Public booking page for an independent provider's offering: the same date and slot picker as organization booking.
+ * It opens at `/schedule/p/<provider slug>/<offering>` from the provider page, and at the older
+ * `/schedule/individual/<offering>` from links shared before provider pages existed.
+ */
 export default function IndependentBooking() {
   const { t, language } = useTranslation();
-  const { offeringId } = useParams();
+  const { offeringId, providerSlug } = useParams();
   const { growth } = usePlatformBrand();
   const [date, setDate] = useState<Date | null>(null);
   const [month, setMonth] = useState(new Date());
@@ -48,7 +53,7 @@ export default function IndependentBooking() {
   const details = useRef<HTMLDivElement>(null);
   // Amharic readers see Habesha time first; a choice in the toggle wins.
   const timeFormat: TimeFormat = chosenFormat ?? (language === 'am' ? 'ethiopian' : '12h');
-  const { data, error } = useFrappeGetCall<{ message: Offering }>('appointment.scheduler.independent.public_offering', { offering_id: offeringId });
+  const { data, error } = useFrappeGetCall<{ message: Offering }>('appointment.scheduler.independent.public_offering', { offering_id: offeringId, ...(providerSlug ? { slug: providerSlug } : {}) });
   const offering = data?.message;
   const onlineLabel = useOnlineLabel();
   // An online session shows "Online video · <platform>" where an office shows its address.
@@ -60,6 +65,8 @@ export default function IndependentBooking() {
   const { call, loading } = useFrappePostCall('appointment.scheduler.booking.book');
 
   useEffect(() => { if (slot) details.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, [slot]);
+  // Opened from a service lower on the provider page: start at the top, not at the old scroll position.
+  useEffect(() => { window.scrollTo(0, 0); }, [offeringId]);
 
   async function submit(event: FormEvent) {
     event.preventDefault(); setProblem('');
@@ -70,6 +77,9 @@ export default function IndependentBooking() {
       setBooking({ id: response.message.booking_id, emailed: response.message.notification_status === 'queued', managePath: response.message.manage_path, slot, quantity });
     } catch (reason) { setProblem(parseFrappeErrorMsg(reason as Parameters<typeof parseFrappeErrorMsg>[0])); }
   }
+
+  // "All services" goes back to the provider page; search engines treat that page as the main one.
+  const pagePath = offering?.provider_slug ? `/schedule/p/${offering.provider_slug}` : '';
 
   let body;
   if (error) body = <Unavailable />;
@@ -100,7 +110,12 @@ export default function IndependentBooking() {
         <LanguageToggle />
       </div>
     </header>
+    {pagePath && <MetaTags canonical={`${window.location.origin}${pagePath}`} />}
     <main className="mx-auto max-w-6xl space-y-6 px-4 py-8 sm:px-6">
+      {pagePath && !error && !booking && <Link to={pagePath} data-qa="independent-booking-all-services"
+        className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-theme-secondary underline-offset-4 hover:underline">
+        <ArrowLeft className="h-4 w-4" aria-hidden="true" />{t('public.providerPage.allServices')}
+      </Link>}
       {offering && !error && <div className="space-y-2">
         <h1 className="text-2xl font-semibold sm:text-3xl" style={{ fontFamily: 'var(--booking-font-display)' }}>{fill(t('public.independentBooking.title'), offering.business_name)}</h1>
         <p className="flex flex-wrap items-center gap-x-2 text-theme-secondary" data-qa="independent-booking-service">

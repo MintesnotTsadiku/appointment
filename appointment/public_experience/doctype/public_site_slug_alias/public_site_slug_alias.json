@@ -3,13 +3,14 @@
  "allow_rename": 0,
  "autoname": "field:slug",
  "creation": "2026-10-12 09:00:00.000000",
- "description": "A former address of a Public Site. Visits to it redirect to the current address, so printed posters and shared links keep working.",
+ "description": "A former address of a Public Site or of a provider page. Visits to it redirect to the current address, so printed posters and shared links keep working.",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
   "slug",
   "public_site",
+  "provider",
   "retired_at",
   "retired_by"
  ],
@@ -29,7 +30,16 @@
    "in_standard_filter": 1,
    "label": "Public Site",
    "options": "Public Site",
-   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "description": "The independent provider whose provider page used this address. Set on provider page aliases only.",
+   "fieldname": "provider",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Provider",
+   "options": "Provider",
    "search_index": 1
   },
   {
@@ -49,7 +59,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-10-12 09:00:00.000000",
+ "modified": "2026-10-14 10:00:00.000000",
  "modified_by": "Administrator",
  "module": "Public Experience",
  "name": "Public Site Slug Alias",

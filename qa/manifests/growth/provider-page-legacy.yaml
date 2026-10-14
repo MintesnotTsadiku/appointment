@@ -1,0 +1,77 @@
+# Links shared before provider pages: `/schedule/individual/<offering>` still opens the scheduler, shows
+# "Back to all services" to the provider page, and books (en, phone, light).
+# Fixture: appointment.tests.provider_page_qa_fixtures.
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-provider-page-legacy
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 150000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.provider_page_qa_fixtures.browser_values
+scenarios:
+- id: provider_page_legacy_en_mobile
+  title: 'Guest: an old offering link books and leads to the provider page (en, phone, light)'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /schedule/individual/{qa_provider_online_offering}
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="independent-booking-all-services"][href="/schedule/p/{qa_provider_slug}"]'
+    - type: text_contains
+      value: Online video · Zoom
+  actions:
+  - action: screenshot
+    name: provider_page_legacy_en_mobile-1-scheduler.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 3)
+    timeout_ms: 20000
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 3)
+  - action: fill
+    selector: '[data-qa="independent-booking-name"]'
+    value: Abel Tesfaye
+  - action: fill
+    selector: '[data-qa="independent-booking-email-input"]'
+    value: abel.tesfaye@example.test
+  - action: click
+    selector: '[data-qa="independent-booking-submit"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.booking.book
+      method: POST
+      status_min: 200
+      status_max: 299
+      response_body_contains: booking_id
+      timeout_ms: 25000
+    - type: visible_selector
+      value: '[data-qa="independent-booking-confirmed"]'
+  - action: screenshot
+    name: provider_page_legacy_en_mobile-2-confirmed.png
+    full_page: true
+  - action: open_url
+    url: /schedule/individual/{qa_provider_online_offering}
+  - action: click
+    selector: '[data-qa="independent-booking-all-services"]'
+  - action: wait_for
+    selector: '[data-qa="provider-page-name"]'
+    assertions:
+    - type: url_contains
+      value: /schedule/p/{qa_provider_slug}
+  - action: get_console_errors
+  - action: get_network_errors

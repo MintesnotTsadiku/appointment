@@ -60,8 +60,10 @@ def session_token(owner_key, email):
     return f"{expires}.{_sign('session', owner_key, email, expires)}"
 
 
-def _business(slug, offering=None):
-    """The owner for an organization slug, or for an independent provider's offering."""
+def _business(slug, offering=None, provider_slug=None):
+    """The owner for an organization slug, an independent provider's offering, or a provider page address."""
+    if provider_slug and not slug and not offering:
+        return business_owner.for_page_slug(provider_slug)
     if offering and not slug:
         return business_owner.for_offering(offering)
     name = frappe.db.get_value("Organization", {"slug": slug, "is_active": 1}, "name") if slug else None

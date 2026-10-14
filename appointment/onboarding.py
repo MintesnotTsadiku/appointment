@@ -3260,13 +3260,17 @@ def get_provider_profile():
                 "language",
                 "business_type",
                 "profile_photo",
-                "organization"
+                "organization",
+                "spoken_languages"
             ],
             as_dict=True
         )
         
         if not provider:
             frappe.throw(_("Provider profile not found. Please complete onboarding first."))
+        from appointment.scheduler.provider_page import spoken_languages
+
+        provider.spoken_languages = spoken_languages(provider.spoken_languages)
         
         # Get organization name if exists
         if provider.organization:
@@ -3283,7 +3287,7 @@ def get_provider_profile():
 
 
 @frappe.whitelist()
-def update_provider_profile(provider_name=None, full_name=None, phone=None, bio=None, timezone=None, language=None, business_type=None):
+def update_provider_profile(provider_name=None, full_name=None, phone=None, bio=None, timezone=None, language=None, business_type=None, spoken_languages=None):
     """
     Update current user's provider profile
     """
@@ -3312,7 +3316,12 @@ def update_provider_profile(provider_name=None, full_name=None, phone=None, bio=
             provider.language = language
         if business_type is not None:
             provider.business_type = business_type
+        if spoken_languages is not None:
+            # Codes shown as chips on the public provider page; validate_provider keeps only known codes.
+            provider.spoken_languages = spoken_languages if isinstance(spoken_languages, str) else frappe.as_json(spoken_languages)
         
+        # The signed-in person's own provider record, and only the fields above.
+        provider.flags.onboarding_update = _ONBOARDING_UPDATE
         provider.save(ignore_permissions=True)
         
         frappe.response["message"] = {

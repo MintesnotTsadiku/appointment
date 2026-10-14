@@ -133,10 +133,14 @@ class TestBookAgain(TouchpointCase):
     def test_independent_link_and_fallback(self):
         provider, offering = self._independent()
         _result, doc = self._book(offering)
-        self.assertEqual(touchpoints.book_again_url(doc), get_url(f"/schedule/individual/{offering}"))
-        owner = frappe._dict(organization=None, provider=provider, slug=None, book_path="/schedule/individual/first")
-        with patch.object(touchpoints, "_bookable", return_value=False):  # The offering is no longer public.
-            self.assertEqual(touchpoints.book_again_path(owner, offering), "/schedule/individual/first")
+        page = frappe.db.get_value("Provider", provider, "public_slug")
+        # The same service on the provider page; the page itself when the offering is no longer public.
+        self.assertEqual(touchpoints.book_again_url(doc), get_url(f"/schedule/p/{page}/{offering}"))
+        owner = frappe._dict(organization=None, provider=provider, slug=None, page_slug=page, book_path=f"/schedule/p/{page}")
+        with patch.object(touchpoints, "_bookable", return_value=False):
+            self.assertEqual(touchpoints.book_again_path(owner, offering), f"/schedule/p/{page}")
+        before = frappe._dict(organization=None, provider=provider, slug=None, book_path="/schedule/individual/first")
+        self.assertEqual(touchpoints.book_again_path(before, offering), f"/schedule/individual/{offering}", "an owner without a page address")
         self.assertEqual(touchpoints.book_again_path(None, offering), "")
 
     def test_my_bookings_lists_book_again_for_past_bookings_only(self):
@@ -289,7 +293,7 @@ class TestBusinessPrompt(TouchpointCase):
         created = business_prompt.quick_start("Liya Haile Beauty", "Eyebrow shaping", prefill=prefill)
         provider = frappe.get_doc("Provider", created["provider"])
         self.assertEqual((provider.provider_name, provider.enable_public_booking, provider.phone), ("Liya Haile Beauty", 1, "+251911445566"))
-        self.assertTrue(created["public_path"].startswith("/schedule/individual/"))
+        self.assertTrue(created["public_path"].startswith(f"/schedule/p/{provider.public_slug}/"))
         frappe.set_user("Guest")
         offering = created["public_path"].rsplit("/", 1)[1]
         self.assertEqual(independent.public_offering(offering)["service"], "Eyebrow shaping")

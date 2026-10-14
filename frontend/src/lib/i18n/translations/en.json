@@ -1255,7 +1255,9 @@
         "phone": "Phone Number",
         "businessType": "Business Type",
         "timezone": "Timezone",
-        "language": "Language"
+        "language": "Language",
+        "spokenLanguages": "Languages you speak",
+        "spokenLanguagesHint": "Customers see them on your booking page."
       },
       "details": {
         "title": "Your details",
@@ -3543,7 +3545,13 @@
           "length": "Too short or too long.",
           "format": "Use lowercase letters, numbers and single hyphens.",
           "current": "This is your current address."
-        }
+        },
+        "providerPageTitle": "Your booking page address",
+        "providerPageDescription": "Customers open this address to see all your services and book.",
+        "providerPageFull": "Full address",
+        "providerPageNudge": "Pick an address people can say and remember, such as your name.",
+        "providerPageWebsite": "Want a full website too? Your address stays the same.",
+        "providerPageOpen": "Open your page"
       },
       "poster": {
         "title": "Counter poster",
@@ -4309,6 +4317,28 @@
       "unavailable": "This invitation is unavailable.",
       "accepting": "Accepting…",
       "accept": "Accept invitation"
+    },
+    "providerPage": {
+      "loading": "Loading booking page…",
+      "unavailableTitle": "Booking page unavailable",
+      "unavailable": "This booking page is not available. Check the address, or contact the provider.",
+      "services": "Services",
+      "servicesIntro": "Choose a service, then pick a time that suits you.",
+      "book": "See open times",
+      "bookService": "See open times for {0}",
+      "free": "Free",
+      "inPerson": "In person",
+      "howToMeet": "How would you like to meet?",
+      "formats": "How sessions happen",
+      "formatsBoth": "Online and in person",
+      "formatsOnline": "Online sessions",
+      "formatsInPerson": "In-person sessions",
+      "speaks": "Speaks",
+      "places": "Where we meet",
+      "website": "Visit the website",
+      "allServices": "Back to all services",
+      "metaTitle": "{0} · Book online",
+      "servicesCount": "{0} services"
     }
   },
   "independentCustomersServer": {
@@ -5720,5 +5750,9 @@
     "activeSessions": "This place has active sessions. Move or turn off those sessions first.",
     "openBookings": "This place has open bookings. It cannot be removed.",
     "notYours": "You cannot manage the places of this business."
+  },
+  "providerPageServer": {
+    "notAvailable": "This booking page is not available.",
+    "aliasOwner": "A former address belongs to exactly one website or provider page."
   }
 }

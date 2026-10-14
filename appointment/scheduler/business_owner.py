@@ -90,7 +90,7 @@ def _organization(name):
     return frappe._dict(
         key=row.name, kind="organization", organization=row.name, provider=None,
         display_name=row.organization_name or row.name, logo=row.logo, email=row.email, phone=row.phone,
-        reply_to=row.email, timezone=row.timezone, language=row.language, slug=row.slug,
+        reply_to=row.email, timezone=row.timezone, language=row.language, slug=row.slug, page_slug=None,
         public_root=root, book_path=f"{root}/book" if root else "", my_bookings_path=f"{root}/my-bookings" if root else "",
         manage_root=f"{root}/booking" if root else "",
     )
@@ -99,22 +99,39 @@ def _organization(name):
 def _provider(name, offering=None):
     row = frappe.db.get_value(
         "Provider", name,
-        ["name", "provider_name", "display_name", "profile_photo", "email", "phone", "user", "timezone", "language", "organization"],
+        ["name", "provider_name", "display_name", "profile_photo", "email", "phone", "user", "timezone", "language",
+         "organization", "public_slug"],
         as_dict=True,
     )
     if not row or row.organization:
         frappe.throw(_("Business not found."), frappe.DoesNotExistError)
     services = frappe.get_all("Service", filters={"independent_provider": name, "organization": ["is", "not set"]}, pluck="name")
     offering = offering or _first_offering(name, services)
-    root = f"/schedule/individual/{offering}" if offering else ""
+    offering_root = f"/schedule/individual/{offering}" if offering else ""
+    # The provider page lists every service; without an address yet, the first offering is the page.
+    # With no offering there is nothing to book, so there is no page yet.
+    root = f"/schedule/p/{row.public_slug}" if row.public_slug and offering_root else offering_root
     return frappe._dict(
         key=PREFIX + name, kind="provider", organization=None, provider=name, services=services,
         display_name=row.display_name or row.provider_name or name, logo=row.profile_photo, email=row.email, phone=row.phone,
         # The provider is the business, so replies reach their own account when no business email is set.
-        reply_to=row.email or row.user, timezone=row.timezone, language=row.language, slug=None,
-        public_root=root, book_path=root, my_bookings_path=f"{root}/my-bookings" if root else "",
+        # `slug` stays None: callers read it as an organization slug. `page_slug` is the provider page address.
+        reply_to=row.email or row.user, timezone=row.timezone, language=row.language, slug=None, page_slug=row.public_slug,
+        public_root=root, book_path=root,
+        # My bookings stays on an offering path; its tokens and links are offering based.
+        my_bookings_path=f"{offering_root}/my-bookings" if offering_root else "",
         manage_root="/schedule/individual/booking",
     )
+
+
+def for_page_slug(slug):
+    """The independent owner of a provider page address (current or former). Raises when unknown."""
+    from appointment.scheduler.provider_page import owner_for_slug
+
+    provider, _current = owner_for_slug(slug)
+    if not provider:
+        frappe.throw(_("Business not found."), frappe.DoesNotExistError)
+    return _provider(provider)
 
 
 def _first_offering(provider, services):

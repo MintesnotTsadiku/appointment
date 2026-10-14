@@ -1,7 +1,8 @@
 """Sharing a business's booking link: share messages, link preview cards and the Grow page data.
 
 A business is an Organization or an independent Provider (owner key `Provider:<name>`). Its
-public link is its published Public Site (`/<slug>`), else its booking page. Every owner endpoint
+public link is its published Public Site (`/<slug>`), else its booking page; for an independent
+provider that is the provider page `/schedule/p/<page address>` (docs/growth/PROVIDER_PAGE.md). Every owner endpoint
 checks that the signed-in user runs that business; guests only ever receive public page meta.
 See docs/growth/SHARING.md.
 """
@@ -87,6 +88,8 @@ def profile(owner, lang: str = "en") -> dict:
     path = public_path(owner, site)
     published = bool(site and site.status == "Published")
     short_host = brand()["short_host"]
+    # Without a website, an independent provider's address is its provider page; `<short host>/<page>` redirects to it.
+    page_slug = None if site else owner.get("page_slug")
     return dict(
         key=owner.key,
         kind=owner.kind,
@@ -100,10 +103,12 @@ def profile(owner, lang: str = "en") -> dict:
         tagline=_tagline(snapshot, lang),
         site=site.name if site else None,
         published=published,
-        slug=site.slug if site else None,
+        slug=site.slug if site else page_slug,
+        slug_kind="site" if site else ("provider_page" if page_slug else None),
+        view_path=site.slug if site else (f"schedule/p/{page_slug}" if page_slug else None),
         path=path,
         url=get_url(path) if path else "",
-        short=f"{short_host}/{site.slug}" if published else "",
+        short=f"{short_host}/{site.slug}" if published else (f"{short_host}/{page_slug}" if page_slug else ""),
     )
 
 
@@ -237,12 +242,14 @@ def page_description(data: dict, lang: str) -> str:
     return text if len(text) <= 155 else text[:154].rstrip() + "…"
 
 
-def page_meta(host: str, path: str) -> dict | None:
+def page_meta(host: str, path: str, lang: str | None = None) -> dict | None:
     """Open Graph values for a published business page, or None for any other path."""
 
     from appointment.public_experience.errors import BrandExperienceError
     from appointment.public_experience.resolver import BOOKING, WEBSITE, normalize_path, resolve_public_experience
 
+    if (path or "").startswith("/schedule/p/"):
+        return provider_page_meta(path, lang)
     clean = normalize_path(path)
     segments = [segment for segment in clean.split("/") if segment]
     locale = segments[-1] if len(segments) == 2 and segments[-1] in LANGS else None
@@ -260,6 +267,30 @@ def page_meta(host: str, path: str) -> dict | None:
         description=page_description(data, lang),
         image=get_url(card_url(data, lang)),
         url=context.canonical_url,
+        site_name=data["name"],
+        locale="am_ET" if lang == "am" else "en_US",
+    )
+
+
+def provider_page_meta(path: str, lang: str | None = None) -> dict | None:
+    """Open Graph values for `/schedule/p/<slug>(/<offering>)`; the canonical URL is the provider page."""
+
+    from appointment.scheduler import provider_page
+
+    segments = [segment for segment in path.split("/") if segment]
+    if len(segments) not in (3, 4):
+        return None
+    provider, current = provider_page.owner_for_slug(segments[2])
+    if not provider or not provider_page._published(provider) or not provider_page.bookable_offerings(provider):
+        return None
+    owner = business_owner.from_key(business_owner.PREFIX + provider)
+    lang = lang if lang in LANGS else (owner.language if owner.language in LANGS else "en")
+    data = profile(owner, lang)
+    return dict(
+        title=page_title(data, lang),
+        description=page_description(data, lang),
+        image=get_url(card_url(data, lang)),
+        url=get_url(provider_page.ROOT + current),
         site_name=data["name"],
         locale="am_ET" if lang == "am" else "en_US",
     )
@@ -298,7 +329,7 @@ def shell_meta_tags() -> str:
 
     try:
         # Values are escaped in meta_tags; Markup keeps an autoescaping template from escaping the tags.
-        return Markup(meta_tags(page_meta(request.host.split(":")[0], request.path)))
+        return Markup(meta_tags(page_meta(request.host.split(":")[0], request.path, request.args.get("lang"))))
     except Exception:
         frappe.log_error(title="Share card meta failed")
         return ""
@@ -312,16 +343,17 @@ def stats(owner, data: dict) -> dict:
 
     since = add_days(now_datetime(), -STATS_DAYS)
     visits = {source: 0 for source in SOURCES}
-    if data["slug"]:
+    prefix = data.get("view_path")
+    if prefix:
         rows = frappe.get_all(
             "Web Page View",
-            filters={"creation": [">=", since], "source": ["in", SOURCES], "path": ["like", f"{data['slug']}%"]},
+            filters={"creation": [">=", since], "source": ["in", SOURCES], "path": ["like", f"{prefix}%"]},
             fields=["source", "path"],
             limit=10000,
             ignore_permissions=True,
         )
         for row in rows:
-            if row.path == data["slug"] or row.path.startswith(data["slug"] + "/"):
+            if row.path == prefix or row.path.startswith(prefix + "/"):
                 visits[row.source] += 1
     bookings = {source: 0 for source in SOURCES}
     filters = {**business_owner.booking_filters(owner), "creation": [">=", since], "referral_source": ["in", SOURCES]}
@@ -338,7 +370,7 @@ def grow_context(business: str):
     """Everything the Grow page needs for one business."""
 
     from appointment.growth.settings import growth
-    from appointment.growth.short_links import ALIAS, RULES
+    from appointment.growth.short_links import RULES
 
     owner = require_business(business)
     flags = growth()
@@ -353,11 +385,22 @@ def grow_context(business: str):
                       am=share_messages(english["name"], links["telegram_share"])["am"]),
         preview=dict(en=preview(english, "en"), am=preview(amharic, "am")) if english["url"] else None,
         posters=dict(enabled=flags["posters_enabled"], locations=_poster_locations(owner)),
-        slug=dict(editable=bool(english["site"]), rules=RULES,
-                  aliases=frappe.get_all(ALIAS, filters={"public_site": english["site"]}, pluck="slug", order_by="creation desc")
-                  if english["site"] else []),
+        slug=dict(editable=bool(english["slug_kind"]), kind=english["slug_kind"], rules=RULES,
+                  aliases=_aliases(owner, english)),
         stats=stats(owner, english),
     )
+
+
+def _aliases(owner, data: dict) -> list[str]:
+    from appointment.growth.short_links import ALIAS
+
+    if data["slug_kind"] == "site":
+        filters = {"public_site": data["site"]}
+    elif data["slug_kind"] == "provider_page":
+        filters = {"provider": owner.provider}
+    else:
+        return []
+    return frappe.get_all(ALIAS, filters=filters, pluck="slug", order_by="creation desc")
 
 
 def _poster_locations(owner) -> list[dict]:

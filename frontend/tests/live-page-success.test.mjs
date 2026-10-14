@@ -24,6 +24,8 @@ assert.equal(liveState({ path: '', published: true }), 'no-page', 'no page is ne
 assert.equal(shortLink('book.example', '/tena-studio'), 'book.example/tena-studio');
 assert.equal(shortLink('https://book.example/', '/tena-studio'), 'book.example/tena-studio');
 assert.equal(shortLink('book.example', 'tena-studio'), 'book.example/tena-studio');
+assert.equal(shortLink('book.example', '/schedule/p/rahel-nutrition'), 'book.example/rahel-nutrition', 'a provider page reads as its short address');
+assert.equal(shortLink('book.example', '/schedule/p/rahel-nutrition/EVT-1'), 'book.example/schedule/p/rahel-nutrition/EVT-1');
 
 assert.equal(fullLink('https://book.example', '/tena-studio'), 'https://book.example/tena-studio');
 assert.equal(fullLink('https://book.example/', 'tena-studio'), 'https://book.example/tena-studio');

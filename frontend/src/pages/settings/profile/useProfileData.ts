@@ -13,6 +13,8 @@ export interface ProviderProfile {
   profile_photo?: string;
   organization?: string;
   organization_name?: string;
+  /** Language codes shown on the public provider page. */
+  spoken_languages?: string[];
 }
 
 interface UserInfo {

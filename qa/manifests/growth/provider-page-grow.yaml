@@ -1,0 +1,95 @@
+# The owner of a provider page without a website: Grow shows "Your booking page address" with the full address,
+# the owner changes it, the former address is listed and forwards, then the run changes it back; the booking
+# settings link to the page (en, phone, dark). Fixture: appointment.tests.provider_page_qa_fixtures.
+app: appointment
+base_url: http://localhost:47800
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 150000
+options:
+  ignore_baseline_drift: true
+  color_scheme: dark
+fixtures:
+  provider: appointment.tests.provider_page_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-growth-provider-page-grow
+default_role: Staff
+auth:
+  type: frappe_session
+  username: rahel.girma.nutrition@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+scenarios:
+- id: provider_page_grow_en_mobile_dark
+  title: 'Owner: provider page address on Grow, change and change back (en, phone, dark)'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /grow
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="grow-short-link"]'
+    - type: text_contains
+      value: Your booking page address
+  actions:
+  - action: scroll
+    selector: '[data-qa="grow-short-link"]'
+  - action: wait_for
+    selector: '[data-qa="grow-slug-full"]:has-text("/schedule/p/{qa_provider_slug}")'
+  - action: wait_for
+    selector: '[data-qa="grow-slug-aliases"]:has-text("{qa_provider_former_slug}")'
+  - action: screenshot
+    name: provider_page_grow_en_mobile_dark-1-address.png
+  - action: fill
+    selector: '[data-qa="grow-slug-input"]'
+    value: rahel-dietitian
+  - action: wait_for
+    selector: '[data-qa="grow-slug-status"][data-state="ok"]'
+  - action: click
+    selector: '[data-qa="grow-slug-save"]'
+  - action: click
+    selector: '[data-qa="grow-slug-confirm-save"]'
+    assertions:
+    - type: network_request
+      url_contains: short_links.change
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="grow-slug-full"]:has-text("/schedule/p/rahel-dietitian")'
+  - action: screenshot
+    name: provider_page_grow_en_mobile_dark-2-changed.png
+  - action: open_url
+    url: /schedule/p/{qa_provider_slug}
+  - action: wait_for
+    selector: '[data-qa="provider-page-name"]'
+    assertions:
+    - type: url_contains
+      value: /schedule/p/rahel-dietitian
+  - action: open_url
+    url: /grow
+  - action: scroll
+    selector: '[data-qa="grow-short-link"]'
+  - action: fill
+    selector: '[data-qa="grow-slug-input"]'
+    value: '{qa_provider_slug}'
+  - action: wait_for
+    selector: '[data-qa="grow-slug-status"][data-state="ok"]'
+  - action: click
+    selector: '[data-qa="grow-slug-save"]'
+  - action: click
+    selector: '[data-qa="grow-slug-confirm-save"]'
+    assertions:
+    - type: network_request
+      url_contains: short_links.change
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="grow-slug-full"]:has-text("/schedule/p/{qa_provider_slug}")'
+  - action: open_url
+    url: /settings/independent-booking
+  - action: wait_for
+    selector: '[data-qa="independent-open-page"][href="/schedule/p/{qa_provider_slug}"]'
+  - action: screenshot
+    name: provider_page_grow_en_mobile_dark-3-settings.png
+  - action: get_console_errors
+  - action: get_network_errors

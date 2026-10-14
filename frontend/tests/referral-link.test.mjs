@@ -29,6 +29,8 @@ assert.deepEqual({ ...signupParams('') }, { ref: '', source: '' });
 // The scope is the business of the scheduler path.
 assert.equal(referralScope('/schedule/org/bloom-studio/haircut'), 'org:bloom-studio');
 assert.equal(referralScope('/schedule/individual/ET-0042'), 'ind:ET-0042');
+assert.equal(referralScope('/schedule/p/rahel-nutrition'), 'pro:rahel-nutrition');
+assert.equal(referralScope('/schedule/p/rahel-nutrition/EVT-2026-000100'), 'pro:rahel-nutrition', 'the page and its schedulers share one scope');
 assert.equal(referralScope('/schedule/individual/booking/APT-1'), '');
 assert.equal(referralScope('/bloom-studio'), '');
 

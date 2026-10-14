@@ -8,6 +8,8 @@ export interface ProfileFormData {
   timezone: string;
   language: string;
   business_type: string;
+  /** Spoken language codes joined by commas, in `SPOKEN_LANGUAGES` order. */
+  spoken_languages: string;
 }
 
 export const BUSINESS_TYPES = [
@@ -21,6 +23,17 @@ export const BUSINESS_TYPES = [
 export const LANGUAGES = [
   { value: 'en', label: 'English' },
   { value: 'am', label: 'አማርኛ (Amharic)' },
+];
+
+/** Languages a provider can list on the public provider page, each in its own script. */
+export const SPOKEN_LANGUAGES = [
+  { value: 'am', label: 'አማርኛ' },
+  { value: 'en', label: 'English' },
+  { value: 'om', label: 'Afaan Oromoo' },
+  { value: 'ti', label: 'ትግርኛ' },
+  { value: 'so', label: 'Soomaali' },
+  { value: 'ar', label: 'العربية' },
+  { value: 'fr', label: 'Français' },
 ];
 
 export const TIMEZONES = [
@@ -39,6 +52,7 @@ export function formFromProvider(data?: ProviderProfile): ProfileFormData {
     timezone: data?.timezone || 'Africa/Addis_Ababa',
     language: data?.language || 'en',
     business_type: data?.business_type || 'clinic',
+    spoken_languages: SPOKEN_LANGUAGES.map((row) => row.value).filter((code) => data?.spoken_languages?.includes(code)).join(','),
   };
 }
 

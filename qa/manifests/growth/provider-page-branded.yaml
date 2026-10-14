@@ -1,0 +1,90 @@
+# Provider page of a provider with a published website (Yared Tesfaye Counselling, Ergata template): the page
+# wears the website's colours, type and hero photo, shows the website copy in Amharic, links to the website, and
+# its sessions open schedulers under the page (en desktop light; am phone dark).
+# Fixture: appointment.tests.template_ergata_qa_fixtures (kept after the run, like template-ergata.yaml).
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-provider-page-branded
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 150000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.template_ergata_qa_fixtures.browser_values
+scenarios:
+- id: provider_page_branded_en_desktop
+  title: 'Guest: branded provider page (en, desktop, light)'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /schedule/p/{qa_ergata_slug}
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="provider-page"][data-booking-branded="true"][data-pe-recipe="ergata-therapy"]'
+    - type: visible_selector
+      value: '[data-qa="provider-page-website"][href="/{qa_ergata_slug}"]'
+    - type: text_contains
+      value: Counselling psychologist
+  actions:
+  - action: get_text
+    selector: '[data-qa="provider-services"]'
+    assertions:
+    - type: text_contains
+      value: Free introductory call
+    - type: text_contains
+      value: Online video · Google Meet
+  - action: screenshot
+    name: provider_page_branded_en_desktop-1-page.png
+    full_page: true
+  - action: click
+    selector: ':nth-match([data-qa="provider-service-book"], 2)'
+  - action: wait_for
+    selector: '[data-qa="independent-booking"][data-booking-branded="true"]'
+    assertions:
+    - type: url_contains
+      value: /schedule/p/{qa_ergata_slug}/
+    - type: visible_selector
+      value: '[data-qa="independent-booking-all-services"]'
+  - action: screenshot
+    name: provider_page_branded_en_desktop-2-scheduler.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: provider_page_branded_am_mobile
+  title: 'Guest: branded provider page in Amharic (am, phone)'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /schedule/p/{qa_ergata_slug}?lang=am
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="provider-page"][data-booking-branded="true"]'
+  actions:
+  - action: get_text
+    selector: '[data-qa="provider-page"]'
+    assertions:
+    - type: text_contains
+      value: ያሬድ ተስፋዬ
+    - type: text_contains
+      value: ነጻ የትውውቅ ጥሪ
+  - action: screenshot
+    name: provider_page_branded_am_mobile-1-top.png
+    full_page: false
+  - action: screenshot
+    name: provider_page_branded_am_mobile-2-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors

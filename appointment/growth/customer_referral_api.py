@@ -57,9 +57,9 @@ def share(booking_id=None):
 
 @frappe.whitelist(allow_guest=True)
 @rate_limit(limit=30, seconds=60)
-def my_share(slug=None, session=None, email=None, offering=None):
+def my_share(slug=None, session=None, email=None, offering=None, provider_slug=None):
     """The share link on My bookings, for a signed-in customer."""
-    owner = my_bookings._business(slug, offering)
+    owner = my_bookings._business(slug, offering, provider_slug)
     address = my_bookings._session_email(owner.key, session, email)
     profiles = my_bookings._profiles(owner, address) if address else []
     return _share_view(owner.key, profiles[0] if profiles else None)
@@ -67,10 +67,10 @@ def my_share(slug=None, session=None, email=None, offering=None):
 
 @frappe.whitelist(allow_guest=True)
 @rate_limit(limit=60, seconds=60)
-def invite(code=None, slug=None, offering=None):
-    """"You were invited by <first name>" for a friend who opens a share link."""
+def invite(code=None, slug=None, offering=None, provider_slug=None):
+    """"You were invited by <first name>" for a friend who opens a share link (scheduler or provider page)."""
     try:
-        owner = my_bookings._business(slug, offering)
+        owner = my_bookings._business(slug, offering, provider_slug)
     except frappe.DoesNotExistError:
         return {"valid": False}
     clean = referral_codes.clean(code)

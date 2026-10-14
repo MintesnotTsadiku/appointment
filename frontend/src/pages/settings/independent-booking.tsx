@@ -14,7 +14,7 @@ import { useTranslation } from '@/lib/i18n';
 
 interface Offering { offering: string; service: string; business_name: string; public_path: string; published: boolean }
 interface PublishResult { business_path: string; published: boolean }
-interface Workspace { provider: string; offerings: Offering[] }
+interface Workspace { provider: string; offerings: Offering[]; business_path?: string; published?: boolean }
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
 export default function IndependentBookingSettings() {
@@ -66,6 +66,7 @@ export default function IndependentBookingSettings() {
       <fieldset><legend>{t('staff.independent.workingDays')}</legend>{days.map(day => <label className="mr-4 inline-flex gap-2" key={day}><input type="checkbox" checked={weekdays.includes(day)} onChange={event => setWeekdays(event.target.checked ? [...weekdays, day] : weekdays.filter(value => value !== day))} />{t(`staff.availability.days.${day}`)}</label>)}</fieldset>
       <Button disabled={loading || !workspace} type="submit">{t('staff.independent.save')}</Button>
     </form>}
+    {workspace?.published && workspace.business_path && <p><Link data-qa="independent-open-page" className="font-medium underline underline-offset-4" to={workspace.business_path}>{t('staff.grow.slug.providerPageOpen')}</Link></p>}
     {workspace?.offerings.map(row => <section key={row.offering} aria-label={t('staff.independent.offeringLabel')} className="space-y-3 rounded-xl border p-5"><h2>{row.service}</h2><p>{row.published ? t('staff.business.published') : t('staff.independent.privateDraft')}</p><Button disabled={publishing} onClick={() => void toggle(row)}>{row.published ? t('staff.independent.unpublish') : t('staff.independent.publish')}</Button>{row.published && <Link className="ml-4 underline" to={row.public_path}>{t('staff.independent.openGuest')}</Link>}</section>)}
     {Boolean(workspace?.offerings.length) && <section data-qa="independent-online-prompt" className="flex flex-wrap items-center justify-between gap-4 rounded-xl border p-5">
       <div className="min-w-0 space-y-1"><h2 className="font-semibold">{t('staff.locations.onlinePromptTitle')}</h2><p className="text-sm text-muted-foreground">{t('staff.locations.onlinePromptBody')}</p></div>

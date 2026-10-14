@@ -6,8 +6,9 @@ import { Label } from '@/components/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/select';
 import { FieldHint, SettingsSection, StickySaveBar } from '@/components/settings-layout';
 import { Textarea } from '@/components/textarea';
+import { ToggleGroup, ToggleGroupItem } from '@/components/toggle-group';
 import { useTranslation } from '@/lib/i18n';
-import { BUSINESS_TYPES, LANGUAGES, TIMEZONES, formFromProvider, type ProfileFormData } from './options';
+import { BUSINESS_TYPES, LANGUAGES, SPOKEN_LANGUAGES, TIMEZONES, formFromProvider, type ProfileFormData } from './options';
 import type { ProviderProfile } from './useProfileData';
 
 interface ProfileFormProps {
@@ -31,7 +32,7 @@ export function ProfileForm({ provider, email, onSaved }: ProfileFormProps) {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      await updateProfile(form);
+      await updateProfile({ ...form, spoken_languages: JSON.stringify(form.spoken_languages ? form.spoken_languages.split(',') : []) });
       toast.success(t('staff.profile.saved'));
       onSaved();
     } catch (error) {
@@ -82,6 +83,13 @@ export function ProfileForm({ provider, email, onSaved }: ProfileFormProps) {
           <OptionField id="timezone" label={t('staff.profile.fields.timezone')} value={form.timezone} options={TIMEZONES} onChange={set('timezone')} />
           <OptionField id="language" label={t('staff.profile.fields.language')} value={form.language} options={LANGUAGES} onChange={set('language')} />
         </div>
+        <Field id="spoken_languages" label={t('staff.profile.fields.spokenLanguages')} hint={t('staff.profile.fields.spokenLanguagesHint')} className="mt-4">
+          <ToggleGroup type="multiple" variant="outline" aria-labelledby="spoken_languages-label" data-qa="profile-spoken-languages" className="flex flex-wrap justify-start"
+            value={form.spoken_languages ? form.spoken_languages.split(',') : []}
+            onValueChange={(codes) => set('spoken_languages')(SPOKEN_LANGUAGES.map((row) => row.value).filter((code) => codes.includes(code)).join(','))}>
+            {SPOKEN_LANGUAGES.map((row) => <ToggleGroupItem key={row.value} value={row.value} className="h-11 rounded-full px-4">{row.label}</ToggleGroupItem>)}
+          </ToggleGroup>
+        </Field>
       </SettingsSection>
 
       <StickySaveBar dirty={dirty} saving={isSaving} form="profile-form" disabled={!dirty} onDiscard={() => setForm(saved)} saveQa="profile-save" />
@@ -117,7 +125,7 @@ function OptionField({ id, label, value, options, onChange }: OptionFieldProps) 
 function Field({ id, label, required, hint, className, children }: { id: string; label: string; required?: boolean; hint?: string; className?: string; children: ReactNode }) {
   return (
     <div className={`min-w-0 space-y-1.5 ${className ?? ''}`}>
-      <Label htmlFor={id}>
+      <Label htmlFor={id} id={`${id}-label`}>
         {label}
         {required && <span className="ml-0.5 text-destructive" aria-hidden="true">*</span>}
       </Label>

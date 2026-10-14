@@ -19,9 +19,14 @@ export function liveState(page: Pick<LivePage, 'path' | 'published'>): LiveState
   return page.published ? 'published' : 'draft';
 }
 
-/** The link as people read it aloud: `<short_host>/path`, without the scheme. */
+/**
+ * The link as people read it aloud: `<short_host>/path`, without the scheme. A provider page
+ * `/schedule/p/<slug>` reads as `<short_host>/<slug>`, which redirects to it.
+ */
 export function shortLink(shortHost: string, path: string): string {
   const host = (shortHost || '').replace(/^https?:\/\//, '').replace(/\/+$/, '');
+  const page = /^\/?schedule\/p\/([^/?#]+)\/?$/.exec(path);
+  if (page) return `${host}/${page[1]}`;
   return `${host}${path.startsWith('/') ? path : `/${path}`}`;
 }
 

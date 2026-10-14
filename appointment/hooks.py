@@ -108,6 +108,7 @@ appointment_sitemap_links = [
     "appointment.www.directory.sitemap_links",
     "appointment.growth.tools.registry.sitemap_links",
     "appointment.growth.partner_page.sitemap_links",
+    "appointment.scheduler.provider_page.sitemap_links",
 ]
 
 # include js, css files in header of web template
@@ -486,6 +487,10 @@ for _doctype, _event, _handler in (
     ("Provider", "on_update", "appointment.growth.referrals.on_provider_update"),
     ("Appointment", "after_insert", "appointment.growth.customer_referrals.on_booking_insert"),
     ("Appointment", "on_update", "appointment.growth.referrals.on_booking_change"),
+    # Provider pages (docs/growth/PROVIDER_PAGE.md): the page address follows the website address.
+    ("Provider", "validate", "appointment.scheduler.provider_page.validate_provider"),
+    ("Provider", "on_trash", "appointment.scheduler.provider_page.delete_aliases"),
+    ("Public Site", "on_update", "appointment.growth.short_links.sync_provider_slug"),
 ):
     _handlers = doc_events.setdefault(_doctype, {}).get(_event) or []
     doc_events[_doctype][_event] = ([_handlers] if isinstance(_handlers, str) else list(_handlers)) + [_handler]

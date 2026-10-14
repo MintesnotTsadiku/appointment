@@ -141,13 +141,15 @@ def booking_pages(owner_keys) -> dict[str, dict]:
             page.update(name=page["name"] or row.organization_name or row.name, logo=page["logo"] or row.logo or "",
                         description=_summary(row.description))
     for row in frappe.get_all("Provider", filters={"name": ["in", providers or [""]], "is_active": 1, "organization": ["is", "not set"]},
-                              fields=["name", "display_name", "provider_name", "profile_photo", "bio", "enable_public_booking"]):
+                              fields=["name", "display_name", "provider_name", "profile_photo", "bio", "enable_public_booking", "public_slug"]):
         key = PREFIX + row.name
         page = pages.get(key)
         if not page and row.enable_public_booking:
             offering = _first_offering(row.name)
             if offering:
-                page = pages[key] = dict(href=f"/schedule/individual/{offering}", logo="", name="")
+                # The provider page lists every service; the first offering only before the page has an address.
+                href = f"/schedule/p/{row.public_slug}" if row.public_slug else f"/schedule/individual/{offering}"
+                page = pages[key] = dict(href=href, logo="", name="")
         if page:
             page.update(name=page["name"] or row.display_name or row.provider_name or row.name,
                         logo=page["logo"] or row.profile_photo or "", description=_summary(row.bio))

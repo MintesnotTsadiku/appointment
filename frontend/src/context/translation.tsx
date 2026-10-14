@@ -60,7 +60,10 @@ export const TranslationProvider = ({ children }: { children: ReactNode }) => {
       method: 'POST',
       credentials: 'include',
       headers: { 'X-Frappe-CSRF-Token': csrfToken() },
-    }).catch(() => {
+    })
+      // Read the body: an unread response keeps the request open, so the page never goes network-idle.
+      .then((response) => response.text())
+      .catch(() => {
       /* Guest sessions cannot persist a server preference. */
     });
   }, []);

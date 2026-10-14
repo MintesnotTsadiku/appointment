@@ -284,7 +284,8 @@ class TestCustomerReferrals(ReferralCase):
         first = self._book(business, 0, "Mahlet Tesfaye")
         frappe.set_user("Guest")
         share = customer_referral_api.share(first.appointment_id)
-        self.assertIn(f"/schedule/individual/{business.offering}?ref=", share["link"])
+        # The friend's link opens the provider page with all services.
+        self.assertIn(f"/schedule/p/{frappe.db.get_value('Provider', business.key.removeprefix('Provider:'), 'public_slug')}?ref=", share["link"])
         self.assertEqual(customer_referral_api.invite(share["code"], offering=business.offering)["reward_text"], "Free hair wash")
         friend = self._book(business, 1, "Ruth Alemayehu", code=share["code"])
         [voucher] = frappe.get_all("Customer Referral Reward", filters={"appointment": friend.name}, fields=["name", "role", "reward_label"])

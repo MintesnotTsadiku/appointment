@@ -33,11 +33,14 @@ export function signupParams(search: string): { ref: string; source: string } {
 
 /**
  * The business a scheduler path belongs to, so a friend's code is only sent to that business:
- * `org:<slug>` for `/schedule/org/<slug>/…`, `ind:<offering>` for `/schedule/individual/<offering>`.
+ * `org:<slug>` for `/schedule/org/<slug>/…`, `pro:<slug>` for a provider page `/schedule/p/<slug>/…`,
+ * `ind:<offering>` for `/schedule/individual/<offering>`.
  */
 export function referralScope(pathname: string): string {
   const org = /^\/schedule\/org\/([^/?#]+)/.exec(pathname);
   if (org) return `org:${org[1]}`;
+  const page = /^\/schedule\/p\/([^/?#]+)/.exec(pathname);
+  if (page) return `pro:${page[1]}`;
   const solo = /^\/schedule\/individual\/([^/?#]+)/.exec(pathname);
   return solo && solo[1] !== 'booking' ? `ind:${solo[1]}` : '';
 }

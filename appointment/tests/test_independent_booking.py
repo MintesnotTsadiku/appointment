@@ -65,6 +65,21 @@ class IndependentBookingTests(unittest.TestCase):
             independent.public_offering(self.row["offering"])
         self.assertTrue(booking_access.can_access(doc))
 
+    def test_offerings_live_under_the_provider_page_and_old_links_still_book(self):
+        slug = frappe.db.get_value("Provider", self.owner, "public_slug")
+        self.assertTrue(slug)
+        self.assertEqual(self.row["public_path"], f"/schedule/p/{slug}/{self.row['offering']}")
+        independent.publish(self.owner, 1)
+        frappe.set_user("Guest")
+        self.assertEqual(independent.public_offering(self.row["offering"], slug=slug)["provider_slug"], slug)
+        legacy = independent.public_offering(self.row["offering"])  # `/schedule/individual/<offering>`
+        self.assertEqual(legacy["service"], "Independent consultation")
+        day = (datetime.now() + timedelta(days=2)).date().isoformat()
+        slot = next(row for row in booking.slots(self.row["offering"], day)["all_available_slots_for_data"] if row["available"])
+        result = booking.book(offering_id=self.row["offering"], start_time=slot["start_time"], end_time=slot["end_time"],
+                              user_name="Legacy link guest", user_email="legacy-link@example.test", request_id="independent-legacy-0001")
+        self.assertEqual(frappe.db.get_value("Appointment", result["booking_id"], "provider"), self.owner)
+
     def test_foreign_owner_cannot_configure_publish_or_read_booking(self):
         event, service, location, provider, _ = booking.offering(self.row["offering"])
         frappe.set_user(self.fixture["owners"]["B"])

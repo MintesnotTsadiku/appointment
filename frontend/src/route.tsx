@@ -26,6 +26,7 @@ const LocationSettings = lazy(() => import("@/pages/settings/location"));
 const CalendarSettings = lazy(() => import("@/pages/settings/calendar"));
 const IndependentBookingSettings = lazy(() => import("@/pages/settings/independent-booking"));
 const IndependentBooking = lazy(() => import("@/pages/public-experience/independent-booking"));
+const ProviderPage = lazy(() => import("@/pages/public-experience/provider-page"));
 const BusinessSettings = lazy(() => import("@/pages/settings/business"));
 const NotificationSettings = lazy(() => import("@/pages/settings/notifications"));
 const PaymentSettings = lazy(() => import("@/pages/settings/payments"));
@@ -98,6 +99,9 @@ const Router = () => {
       <Route path="/settings/calendar" element={<CalendarSettings />} errorElement={<ErrorFallback />}></Route>
       <Route path="/settings/independent-booking" element={<IndependentBookingSettings />} errorElement={<ErrorFallback />} />
       <Route path="/schedule/individual/:offeringId" element={<IndependentBooking />} errorElement={<ErrorFallback />} />
+      {/* An independent provider's public page and, under it, each service's scheduler. */}
+      <Route path="/schedule/p/:providerSlug" element={<ProviderPage />} errorElement={<ErrorFallback />} />
+      <Route path="/schedule/p/:providerSlug/:offeringId" element={<IndependentBooking />} errorElement={<ErrorFallback />} />
       {/* An independent provider's customers: the manage link and My bookings. */}
       <Route path="/schedule/individual/booking/:token" element={<ManageBooking />} errorElement={<ErrorFallback />} />
       <Route path="/schedule/individual/:offeringId/my-bookings" element={<MyBookings />} errorElement={<ErrorFallback />} />

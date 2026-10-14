@@ -28,7 +28,8 @@ export interface GrowContext {
   messages: { templates: Record<Lang, string>; en: string; am: string };
   preview: Record<Lang, LinkPreview> | null;
   posters: { enabled: boolean; locations: { name: string; label: string }[] };
-  slug: { editable: boolean; rules: { min: number; max: number; pattern: string }; aliases: string[] };
+  /** `kind`: the website address, or (an independent provider without a website) the provider page address. */
+  slug: { editable: boolean; kind?: 'site' | 'provider_page' | null; rules: { min: number; max: number; pattern: string }; aliases: string[] };
   stats: { days: number; visits: Record<ShareSource, number>; bookings: Record<ShareSource, number> };
 }
 

@@ -75,17 +75,15 @@ scenarios:
     # The link is the provider's booking page, never settings.
     assertions:
     - type: visible_selector
-      value: '[data-qa="onboarding-open-page"][href^="/schedule/individual/"]'
-    - type: text_contains
-      selector: '[data-qa="onboarding-live-link"]'
-      value: /schedule/individual/
+      value: '[data-qa="onboarding-open-page"][href^="/schedule/p/"]'
+    # The short link reads `<short host>/<page address>`; the full address is the provider page.
     - type: text_contains
       selector: '[data-qa="onboarding-live-url"]'
-      value: /schedule/individual/
+      value: /schedule/p/
     - type: text_contains
       value: Your booking page is live
     - type: visible_selector
-      value: '[data-qa="onboarding-telegram"][href^="https://t.me/share/url?url="][href*="schedule%2Findividual%2F"][href*="source%3Dtelegram_share"]'
+      value: '[data-qa="onboarding-telegram"][href^="https://t.me/share/url?url="][href*="schedule%2Fp%2F"][href*="source%3Dtelegram_share"]'
     - type: visible_selector
       value: '[data-qa="onboarding-poster"][href="/grow#grow-poster"]'
     - type: visible_selector
@@ -112,7 +110,7 @@ scenarios:
     timeout_ms: 20000
     assertions:
     - type: url_contains
-      value: /schedule/individual/
+      value: /schedule/p/
     - type: url_not_contains
       value: /settings
     - type: text_contains
@@ -193,10 +191,10 @@ scenarios:
     timeout_ms: 20000
     assertions:
     - type: visible_selector
-      value: '[data-qa="onboarding-open-page"][href^="/schedule/individual/"]'
+      value: '[data-qa="onboarding-open-page"][href^="/schedule/p/"]'
     - type: text_contains
-      selector: '[data-qa="onboarding-live-link"]'
-      value: /schedule/individual/
+      selector: '[data-qa="onboarding-live-url"]'
+      value: /schedule/p/
     - type: text_contains
       value: ቀጣይ እርምጃዎች
     - type: visible_selector
@@ -218,7 +216,7 @@ scenarios:
     timeout_ms: 20000
     assertions:
     - type: url_contains
-      value: /schedule/individual/
+      value: /schedule/p/
     - type: url_not_contains
       value: /settings
   - action: screenshot
@@ -297,7 +295,7 @@ scenarios:
     timeout_ms: 20000
     assertions:
     - type: visible_selector
-      value: '[data-qa="onboarding-open-page"][href^="/schedule/individual/"]'
+      value: '[data-qa="onboarding-open-page"][href^="/schedule/p/"]'
   - action: screenshot
     name: solo_draft_mobile-2-published.png
     full_page: true

@@ -1255,7 +1255,9 @@
         "phone": "ስልክ ቁጥር",
         "businessType": "የንግድ ዓይነት",
         "timezone": "የሰዓት ሰቅ",
-        "language": "ቋንቋ"
+        "language": "ቋንቋ",
+        "spokenLanguages": "የሚናገሯቸው ቋንቋዎች",
+        "spokenLanguagesHint": "ደንበኞች በቀጠሮ ገጽዎ ላይ ያዩዋቸዋል።"
       },
       "details": {
         "title": "የእርስዎ መረጃ",
@@ -3543,7 +3545,13 @@
           "length": "በጣም አጭር ወይም በጣም ረጅም ነው።",
           "format": "ትንንሽ የእንግሊዝኛ ፊደላት፣ ቁጥሮችና ነጠላ ሰረዝ ይጠቀሙ።",
           "current": "ይህ የአሁኑ አድራሻዎ ነው።"
-        }
+        },
+        "providerPageTitle": "የቀጠሮ ገጽዎ አድራሻ",
+        "providerPageDescription": "ደንበኞች ሁሉንም አገልግሎቶችዎን ለማየት እና ቀጠሮ ለመያዝ ይህን አድራሻ ይከፍታሉ።",
+        "providerPageFull": "ሙሉ አድራሻ",
+        "providerPageNudge": "ሰዎች በቀላሉ የሚናገሩትና የሚያስታውሱት አድራሻ ይምረጡ፤ ለምሳሌ ስምዎን።",
+        "providerPageWebsite": "ሙሉ ድረ-ገጽም ይፈልጋሉ? አድራሻዎ እንዳለ ይቆያል።",
+        "providerPageOpen": "ገጽዎን ይክፈቱ"
       },
       "poster": {
         "title": "የመደርደሪያ ፖስተር",
@@ -4309,6 +4317,28 @@
       "unavailable": "ይህ ግብዣ አይገኝም።",
       "accepting": "በመቀበል ላይ…",
       "accept": "ግብዣውን ተቀበል"
+    },
+    "providerPage": {
+      "loading": "የቀጠሮ ገጹ በመጫን ላይ…",
+      "unavailableTitle": "የቀጠሮ ገጹ አይገኝም",
+      "unavailable": "ይህ የቀጠሮ ገጽ አይገኝም። አድራሻውን ያረጋግጡ ወይም አገልግሎት ሰጪውን ያነጋግሩ።",
+      "services": "አገልግሎቶች",
+      "servicesIntro": "አገልግሎት ይምረጡ፤ ከዚያ የሚመችዎትን ሰዓት ይያዙ።",
+      "book": "ክፍት ሰዓቶችን ይመልከቱ",
+      "bookService": "የ{0} ክፍት ሰዓቶችን ይመልከቱ",
+      "free": "ነጻ",
+      "inPerson": "በአካል",
+      "howToMeet": "እንዴት መገናኘት ይፈልጋሉ?",
+      "formats": "ቆይታዎቹ የሚካሄዱበት መንገድ",
+      "formatsBoth": "በኦንላይን እና በአካል",
+      "formatsOnline": "የኦንላይን ቆይታዎች",
+      "formatsInPerson": "በአካል የሚደረጉ ቆይታዎች",
+      "speaks": "የሚናገሯቸው ቋንቋዎች",
+      "places": "የምንገናኝበት ቦታ",
+      "website": "ድረ-ገጹን ይጎብኙ",
+      "allServices": "ወደ ሁሉም አገልግሎቶች ይመለሱ",
+      "metaTitle": "{0} · በኦንላይን ቀጠሮ ይያዙ",
+      "servicesCount": "{0} አገልግሎቶች"
     }
   },
   "independentCustomersServer": {
@@ -5720,5 +5750,9 @@
     "activeSessions": "ይህ ቦታ ንቁ ቆይታዎች አሉት። መጀመሪያ እነዚያን ቆይታዎች ያዛውሩ ወይም ያጥፉ።",
     "openBookings": "ይህ ቦታ ክፍት ቀጠሮዎች አሉት። ሊሰረዝ አይችልም።",
     "notYours": "የዚህን ንግድ ቦታዎች ማስተዳደር አይችሉም።"
+  },
+  "providerPageServer": {
+    "notAvailable": "ይህ የቀጠሮ ገጽ አይገኝም።",
+    "aliasOwner": "የቀድሞ አድራሻ የአንድ ድረ-ገጽ ወይም የአንድ አገልግሎት ሰጪ ገጽ ብቻ ነው።"
   }
 }

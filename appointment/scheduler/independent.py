@@ -82,9 +82,11 @@ def live_page(provider):
 def overview(provider):
     owner = require_owner(provider)
     services = frappe.get_all("Service", filters={"independent_provider": owner.name, "organization": ["is", "not set"]}, pluck="name")
+    slug = frappe.db.get_value("Provider", owner.name, "public_slug")
+    root = f"/schedule/p/{slug}/" if slug else "/schedule/individual/"
     return [{"offering": row.name, "service": frappe.db.get_value("Service", row.service, "service_name"),
              "business_name": owner.provider_name, "published": bool(owner.enable_public_booking),
-             "public_path": "/schedule/individual/" + row.name}
+             "public_path": root + row.name}
             for row in frappe.get_all("EventType", filters={"provider": owner.name, "service": ["in", services or [""]]}, fields=["name", "service"])]
 
 
@@ -94,12 +96,13 @@ def workspace():
               and not frappe.db.exists("Provider Organization", {"parent": name, "parenttype": "Provider"})]
     if len(owners) != 1:
         frappe.throw(_("Choose one independent business."), frappe.PermissionError)
-    return {"provider": owners[0], "offerings": overview(owners[0])}
+    return {"provider": owners[0], "offerings": overview(owners[0]), **live_page(owners[0])}
 
 
 @frappe.whitelist(methods=["POST"])
 def create(provider, location_name, service_name, timezone, duration, opens_at, closes_at, weekdays):
     from appointment.scheduler.booking import lock_provider, offering
+    from appointment.scheduler.provider_page import ensure_slug
 
     owner = require_owner(provider)
     if timezone not in pytz.all_timezones or not 5 <= cint(duration) <= 480:
@@ -110,6 +113,7 @@ def create(provider, location_name, service_name, timezone, duration, opens_at, 
     if any(not isinstance(value, str) or not value.strip() or len(value) > 100 for value in (location_name, service_name)):
         frappe.throw(_("Enter location and service names of at most 100 characters."))
     lock_provider(owner)
+    ensure_slug(owner)
     existing = overview(owner.name)
     if existing:
         frappe.throw(_("Your first offering already exists. Review it before creating another."))
@@ -138,9 +142,11 @@ def create(provider, location_name, service_name, timezone, duration, opens_at, 
 def publish(provider, published):
     from appointment.onboarding import _ONBOARDING_UPDATE
     from appointment.scheduler.booking import lock_provider, offering
+    from appointment.scheduler.provider_page import ensure_slug
 
     owner = require_owner(provider)
     lock_provider(owner)
+    ensure_slug(owner)  # sets owner.public_slug too, so the save below keeps it
     if str(published) not in {"0", "1"}:
         frappe.throw(_("Choose a valid publication state."))
     rows = overview(owner.name)
@@ -160,14 +166,20 @@ def publish(provider, published):
 
 
 @frappe.whitelist(allow_guest=True)
-def public_offering(offering_id):
+def public_offering(offering_id, slug=None):
+    """One offering's scheduler. With `slug` (from `/schedule/p/<slug>/<offering>`), the offering must be that provider's."""
     from appointment.scheduler.booking import offering
     from appointment.scheduler.online_meeting import is_online, public_place
+    from appointment.scheduler.provider_page import owner_for_slug
 
     event, service, location, provider, business = offering(offering_id, public=True)
     if business.doctype != "Provider":
         frappe.throw(_("Choose an independent offering."), frappe.PermissionError)
+    if slug and owner_for_slug(slug)[0] != provider.name:
+        frappe.throw(_("Choose an independent offering."), frappe.PermissionError)
     return {"offering": event.name, "business_name": provider.provider_name, "service": service.service_name,
+            # The provider page this offering belongs to: its "All services" link and canonical address.
+            "provider_slug": provider.get("public_slug") or None,
             "duration": int(event.duration_override or service.duration), "timezone": location.timezone,
             "allow_quantity": cint(service.get("allow_quantity")), "max_quantity": max(1, cint(service.get("max_quantity")) or 1),
             # Where the session happens. An office with a street address shows it; an online place shows its

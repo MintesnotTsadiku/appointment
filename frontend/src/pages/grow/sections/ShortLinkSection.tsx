@@ -38,6 +38,8 @@ export default function ShortLinkSection({ data, onChanged }: { data: GrowContex
   const check = checkData?.message;
   const fresh = check && check.slug === candidate && query === candidate;
   const changeCall = useFrappePostCall<{ message: ChangeResult }>(SLUG_CHANGE_API);
+  // An independent provider without a website edits its provider page address (`/schedule/p/<slug>`).
+  const page = data.slug.kind === 'provider_page';
 
   if (!data.slug.editable) {
     return (
@@ -77,7 +79,8 @@ export default function ShortLinkSection({ data, onChanged }: { data: GrowContex
   };
 
   return (
-    <GrowCard qa="grow-short-link" icon={AtSign} title={t('staff.grow.slug.title')} description={t('staff.grow.slug.description')}>
+    <GrowCard qa="grow-short-link" icon={AtSign} title={t(page ? 'staff.grow.slug.providerPageTitle' : 'staff.grow.slug.title')}
+      description={t(page ? 'staff.grow.slug.providerPageDescription' : 'staff.grow.slug.description')}>
       <div className="space-y-4">
         <div>
           <Label htmlFor="grow-slug" className="text-sm font-medium">{t('staff.grow.slug.label')}</Label>
@@ -108,6 +111,10 @@ export default function ShortLinkSection({ data, onChanged }: { data: GrowContex
             {status.tone === 'ok' ? <Check className="h-4 w-4" aria-hidden="true" /> : status.tone === 'error' ? <CircleAlert className="h-4 w-4" aria-hidden="true" /> : isLoading && candidate !== current ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : null}
             {status.text}
           </p>
+          {page && current && <p className="mt-1 text-xs text-muted-foreground" data-qa="grow-slug-full">
+            {t('staff.grow.slug.providerPageFull')}: <span className="break-all font-medium text-foreground">{`${window.location.host}/schedule/p/${current}`}</span>
+          </p>}
+          {page && current.startsWith('book-') && <p className="mt-2 text-sm text-muted-foreground" data-qa="grow-slug-nudge">{t('staff.grow.slug.providerPageNudge')}</p>}
         </div>
 
         {suggestions.length > 0 && (
@@ -140,6 +147,15 @@ export default function ShortLinkSection({ data, onChanged }: { data: GrowContex
               {t('staff.grow.slug.former')}
             </p>
             <p className="mt-1 break-all text-foreground">{formerAddresses.map((slug) => `${host}/${slug}`).join(' · ')}</p>
+          </div>
+        )}
+
+        {page && (
+          <div data-qa="grow-slug-website" className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-dashed px-3 py-2.5">
+            <p className="text-sm text-muted-foreground">{t('staff.grow.slug.providerPageWebsite')}</p>
+            <Button asChild variant="ghost" size="sm" className="min-h-11">
+              <Link to="/settings/website"><Globe aria-hidden="true" />{t('staff.grow.slug.createSite')}</Link>
+            </Button>
           </div>
         )}
       </div>

@@ -69,7 +69,8 @@ def book_again_path(owner, offering=None, checked=None):
     """The business's booking page, with the same service preselected when that offering is still bookable.
 
     Organizations: `/schedule/org/<slug>/<offering>`, else `/<slug>/book`.
-    Independent providers: `/schedule/individual/<offering>`, else their first offering.
+    Independent providers: `/schedule/p/<page address>/<offering>`, else their provider page
+    (`/schedule/individual/<offering>` paths only before the provider has a page address).
     `checked` is an optional dict that remembers offerings already resolved, for lists.
     """
     if not owner:
@@ -78,7 +79,7 @@ def book_again_path(owner, offering=None, checked=None):
         if owner.organization and owner.slug:
             return f"/schedule/org/{owner.slug}/{offering}"
         if owner.provider:
-            return f"/schedule/individual/{offering}"
+            return f"/schedule/p/{owner.page_slug}/{offering}" if owner.get("page_slug") else f"/schedule/individual/{offering}"
     return owner.book_path or ""
 
 

@@ -158,7 +158,9 @@ def _independent_offerings(provider):
 
 def _independent_booking_paths(provider):
     """The scheduler path of each bookable offering of an independent provider, by service, oldest first."""
-    return {service: f"/schedule/individual/{parts.event.name}" for service, parts in _independent_offerings(provider).items()}
+    slug = frappe.db.get_value("Provider", provider, "public_slug")
+    root = f"/schedule/p/{slug}/" if slug else "/schedule/individual/"
+    return {service: root + parts.event.name for service, parts in _independent_offerings(provider).items()}
 
 
 def _format(place):

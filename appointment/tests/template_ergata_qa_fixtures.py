@@ -178,6 +178,7 @@ def _solo_practice(state):
         services[name] = service.name
     doc = frappe.get_doc("Provider", provider)
     doc.update({"full_name": "Yared Tesfaye", "display_name": "Yared Tesfaye", "timezone": TZ,
+                "spoken_languages": json.dumps(["am", "en"]),  # chips on the provider page
                 "bio": "Counselling psychologist in Addis Ababa. Individual and couples sessions in Amharic and English, at the Bole office or online."})
     doc.save(ignore_permissions=True)
     frappe.db.set_value("User", SOLO, "user_image", ASSETS + "providers/yared-tesfaye.webp")

@@ -25,7 +25,7 @@ function session(): Storage | null {
  * "You were invited by <first name>" on the scheduler when the visitor opened a friend's share link.
  * It also keeps the code for this visit so the booking carries it.
  */
-export default function CustomerInviteBanner({ slug, offering, className }: { slug?: string; offering?: string; className?: string }) {
+export default function CustomerInviteBanner({ slug, offering, providerSlug, className }: { slug?: string; offering?: string; providerSlug?: string; className?: string }) {
   const { t } = useTranslation();
   const reward = useRewardText();
   const [code] = useState(() => {
@@ -34,8 +34,8 @@ export default function CustomerInviteBanner({ slug, offering, className }: { sl
   });
   const { data } = useFrappeGetCall<{ message: Invite }>(
     `${CUSTOMER_REFERRALS_API}.invite`,
-    { code, slug, offering },
-    code && (slug || offering) ? `referral-invite-${code}-${slug || offering}` : null
+    { code, slug, offering, provider_slug: providerSlug },
+    code && (slug || offering || providerSlug) ? `referral-invite-${code}-${slug || offering || providerSlug}` : null
   );
   const invite = data?.message;
   if (!invite?.valid || !invite.first_name) return null;

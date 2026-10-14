@@ -22,6 +22,8 @@
   "bio",
   "timezone",
   "language",
+  "public_slug",
+  "spoken_languages",
   "business_type",
   "calendar_preference",
   "section_break_booking_preferences",
@@ -140,6 +142,22 @@
    "label": "Preferred Language",
    "options": "en\nam",
    "default": "en"
+  },
+  {
+   "description": "The address of the public provider page: /schedule/p/<public slug>. It follows the Public Site address when the provider has one. Change it on the Grow page.",
+   "fieldname": "public_slug",
+   "fieldtype": "Data",
+   "label": "Public Page Address",
+   "length": 60,
+   "no_copy": 1,
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "description": "Languages the provider speaks with customers, as a JSON list of codes (am, en, om, ti, so, ar, fr). The public provider page shows them.",
+   "fieldname": "spoken_languages",
+   "fieldtype": "Small Text",
+   "label": "Spoken Languages"
   },
   {
    "fieldname": "business_type",
@@ -324,7 +342,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-16 01:21:41.686814",
+ "modified": "2026-10-14 10:00:00.000000",
  "modified_by": "Administrator",
  "module": "Scheduler",
  "name": "Provider",
