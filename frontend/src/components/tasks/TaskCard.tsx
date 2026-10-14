@@ -3,7 +3,9 @@ import { Clock, Calendar, User, ChevronRight, Sparkles, AlertTriangle, Briefcase
 import { Card } from '@/components/card';
 import { TaskStatusBadge } from './TaskStatusBadge';
 import { TaskPriorityBadge } from './TaskPriorityBadge';
-import { formatDate, formatDateTime, formatDuration, isOverdue } from '@/lib/tasks-assistants/utils';
+import { isOverdue } from '@/lib/tasks-assistants/utils';
+import { useTaskFormat } from '@/lib/tasks-assistants/format';
+import { useTranslation } from '@/lib/i18n';
 import type { Task } from '@/lib/tasks-assistants/types';
 
 interface TaskCardProps {
@@ -18,14 +20,14 @@ interface TaskCardProps {
 export const TaskCard = ({
   task,
   onClick,
-  onEdit,
-  onDelete,
   showClient = true,
   showAssignee = true,
 }: TaskCardProps) => {
+  const { t } = useTranslation();
+  const fmt = useTaskFormat();
   const overdue = isOverdue(task);
-  const isUrgent = task.priority === 'urgent';
-  const isCompleted = task.status === 'completed';
+  const isUrgent = task.priority === 'Urgent';
+  const isCompleted = task.status === 'Completed';
 
   return (
     <motion.div
@@ -33,6 +35,7 @@ export const TaskCard = ({
       animate={{ opacity: 1, scale: 1 }}
       whileHover={{ scale: 1.02, y: -4 }}
       className="relative group h-full"
+      data-qa="task-card"
     >
       {/* Premium Glow Effect */}
       <div 
@@ -117,7 +120,7 @@ export const TaskCard = ({
                       }}
                     >
                       <AlertTriangle className="w-3 h-3" />
-                      Overdue
+                      {t('tasks.card.overdue')}
                     </motion.span>
                   )}
                 </div>
@@ -149,7 +152,7 @@ export const TaskCard = ({
                       color: 'var(--text-secondary)',
                     }}
                   >
-                    Client: {task.client_profile}
+                    {t('tasks.card.client').replace('{0}', task.client_profile)}
                   </span>
                 )}
                 {showAssignee && task.assignee && (
@@ -182,7 +185,8 @@ export const TaskCard = ({
                 border: '1px solid var(--border-default)',
                 color: 'var(--text-muted)',
               }}
-              title="View details"
+              title={t('tasks.card.viewDetails')}
+              aria-label={t('tasks.card.viewDetails')}
             >
               <ChevronRight className="w-5 h-5" />
             </motion.button>
@@ -217,7 +221,7 @@ export const TaskCard = ({
                       : 'var(--text-secondary)' 
                   }}
                 >
-                  {formatDateTime(task.deadline)}
+                  {fmt.dateTime(task.deadline)}
                 </span>
               </motion.div>
             )}
@@ -228,7 +232,7 @@ export const TaskCard = ({
                   <Clock className="w-4 h-4 text-purple-500" />
                 </div>
                 <span style={{ color: 'var(--text-secondary)' }}>
-                  {formatDuration(task.estimated_duration)} estimated
+                  {t('tasks.card.estimated').replace('{0}', fmt.duration(task.estimated_duration))}
                 </span>
               </div>
             )}

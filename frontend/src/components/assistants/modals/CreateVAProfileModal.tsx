@@ -7,10 +7,32 @@ import { Label } from '@/components/label';
 import { PhoneInput } from '@/components/phone-input';
 import { OptionSelect } from '@/components/select/OptionSelect';
 import { assistantAPI } from '@/lib/tasks-assistants/api';
+import { serverError, useTaskFormat } from '@/lib/tasks-assistants/format';
 import { toast } from 'sonner';
 import { useTranslation } from '@/lib/i18n';
 import { normalizePhone } from '@/lib/phone';
 import type { VAProfile } from '@/lib/tasks-assistants/types';
+
+/** Time zones offered for an assistant, stored as IANA names. */
+export const VA_TIMEZONES = [
+  'Africa/Addis_Ababa',
+  'Africa/Nairobi',
+  'Africa/Cairo',
+  'Africa/Lagos',
+  'Africa/Johannesburg',
+];
+
+const ZONE_KEYS: Record<string, string> = {
+  'Africa/Addis_Ababa': 'addisAbaba',
+  'Africa/Nairobi': 'nairobi',
+  'Africa/Cairo': 'cairo',
+  'Africa/Lagos': 'lagos',
+  'Africa/Johannesburg': 'johannesburg',
+};
+
+/** The translated city of an assistant's time zone; unknown zones show their city as stored. */
+export const vaZoneName = (t: (key: string) => string, timeZone: string) =>
+  ZONE_KEYS[timeZone] ? t(`assistants.va.timezone.${ZONE_KEYS[timeZone]}`) : timeZone.split('/').pop()?.replace(/_/g, ' ') || timeZone;
 
 const selectClassName = 'h-auto w-full rounded-xl border-2 border-[var(--border-default)] bg-[var(--bg-secondary)] px-[1.125rem] py-[0.875rem] text-[var(--text-primary)] transition-all';
 
@@ -22,6 +44,7 @@ interface CreateVAProfileModalProps {
 
 export const CreateVAProfileModal = ({ isOpen, onClose, onSuccess }: CreateVAProfileModalProps) => {
   const { t } = useTranslation();
+  const fmt = useTaskFormat();
   const [phoneChecked, setPhoneChecked] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<Partial<VAProfile>>({
@@ -52,7 +75,7 @@ export const CreateVAProfileModal = ({ isOpen, onClose, onSuccess }: CreateVAPro
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.full_name || !formData.email) {
-      toast.error('Full name and email are required');
+      toast.error(t('assistants.va.form.required'));
       return;
     }
     if (formData.phone?.trim() && !normalizePhone(formData.phone)) {
@@ -64,25 +87,17 @@ export const CreateVAProfileModal = ({ isOpen, onClose, onSuccess }: CreateVAPro
       setLoading(true);
       const response = await assistantAPI.vaProfile.create({ ...formData, phone: normalizePhone(formData.phone) });
       if (response.success) {
-        toast.success('VA Profile created successfully');
+        toast.success(t('assistants.va.form.created'));
         onSuccess?.();
         resetForm();
         onClose();
       }
     } catch (error: any) {
-      toast.error(error?.message || 'Failed to create VA profile');
+      toast.error(serverError(error, t('assistants.va.form.createFailed')));
     } finally {
       setLoading(false);
     }
   };
-
-  const timezones = [
-    'Africa/Addis_Ababa',
-    'Africa/Nairobi',
-    'Africa/Cairo',
-    'Africa/Lagos',
-    'Africa/Johannesburg',
-  ];
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -104,7 +119,7 @@ export const CreateVAProfileModal = ({ isOpen, onClose, onSuccess }: CreateVAPro
                 WebkitTextFillColor: 'transparent',
               }}
             >
-              Create VA Profile
+              {t('assistants.va.form.createTitle')}
             </DialogTitle>
           </DialogHeader>
 
@@ -114,7 +129,7 @@ export const CreateVAProfileModal = ({ isOpen, onClose, onSuccess }: CreateVAPro
             <div className="space-y-2">
               <Label htmlFor="full_name" className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
                 <User className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
-                Full Name <span style={{ color: 'var(--accent-secondary)' }}>*</span>
+                {t('assistants.common.fullName')} <span style={{ color: 'var(--accent-secondary)' }}>*</span>
               </Label>
               <Input
                 id="full_name"
@@ -134,7 +149,7 @@ export const CreateVAProfileModal = ({ isOpen, onClose, onSuccess }: CreateVAPro
             <div className="space-y-2">
               <Label htmlFor="email" className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
                 <Mail className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
-                Email <span style={{ color: 'var(--accent-secondary)' }}>*</span>
+                {t('assistants.common.email')} <span style={{ color: 'var(--accent-secondary)' }}>*</span>
               </Label>
               <Input
                 id="email"
@@ -175,14 +190,14 @@ export const CreateVAProfileModal = ({ isOpen, onClose, onSuccess }: CreateVAPro
 
               <div className="space-y-2">
                 <Label htmlFor="status" className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
-                  Status
+                  {t('assistants.common.status')}
                 </Label>
                 <OptionSelect
                   id="status"
                   value={formData.status ?? ''}
                   onValueChange={(value) => setFormData({ ...formData, status: value as VAProfile['status'] })}
                   className={selectClassName}
-                  options={[{ value: 'active', label: 'Active' }, { value: 'inactive', label: 'Inactive' }]}
+                  options={[{ value: 'active', label: fmt.profileStatus('active') }, { value: 'inactive', label: fmt.profileStatus('inactive') }]}
                 />
               </div>
             </div>
@@ -191,14 +206,14 @@ export const CreateVAProfileModal = ({ isOpen, onClose, onSuccess }: CreateVAPro
             <div className="space-y-2">
               <Label htmlFor="timezone" className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
                 <Globe className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
-                Timezone
+                {t('assistants.common.timeZone')}
               </Label>
               <OptionSelect
                 id="timezone"
                 value={formData.timezone ?? ''}
                 onValueChange={(value) => setFormData({ ...formData, timezone: value })}
                 className={selectClassName}
-                options={timezones.map((tz) => ({ value: tz, label: tz.replace('Africa/', '') }))}
+                options={VA_TIMEZONES.map((tz) => ({ value: tz, label: vaZoneName(t, tz) }))}
               />
             </div>
           </div>
@@ -216,7 +231,7 @@ export const CreateVAProfileModal = ({ isOpen, onClose, onSuccess }: CreateVAPro
                 color: 'var(--text-secondary)',
               }}
             >
-              Cancel
+              {t('assistants.common.cancel')}
             </motion.button>
             <motion.button
               type="submit"
@@ -238,12 +253,12 @@ export const CreateVAProfileModal = ({ isOpen, onClose, onSuccess }: CreateVAPro
                 {loading ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    Creating...
+                    {t('assistants.common.creating')}
                   </>
                 ) : (
                   <>
                     <Plus className="w-4 h-4" />
-                    Create VA Profile
+                    {t('assistants.va.form.createTitle')}
                   </>
                 )}
               </span>

@@ -26,11 +26,14 @@ import type { Task, TaskStatistics } from '@/lib/tasks-assistants/types';
 import type { ViewMode, TimeSlotInterval } from './types';
 import Spinner from '@/components/spinner';
 import { toast } from 'sonner';
-import { format } from 'date-fns';
+import { useTranslation } from '@/lib/i18n';
+import { serverError, useTaskFormat } from '@/lib/tasks-assistants/format';
 
 type FilterStatus = Task['status'] | 'all';
 
 const TasksDashboard = () => {
+  const { t } = useTranslation();
+  const fmt = useTaskFormat();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<ViewMode>('cards');
@@ -93,7 +96,7 @@ const TasksDashboard = () => {
         setTasks(response.data);
       }
     } catch (error: any) {
-      toast.error(error?.message || 'Failed to load tasks');
+      toast.error(serverError(error, t('tasks.page.loadFailed')));
     } finally {
       setLoading(false);
     }
@@ -212,35 +215,35 @@ const TasksDashboard = () => {
   const statsConfig = [
     {
       key: 'total' as const,
-      label: 'Total Tasks',
+      label: t('tasks.page.statTotal'),
       icon: FileText,
       color: 'from-blue-500 to-indigo-600',
       value: statistics?.total || 0,
     },
     {
       key: 'Requested' as const,
-      label: 'Requested',
+      label: fmt.taskStatus('Requested'),
       icon: AlertCircle,
       color: 'from-gray-500 to-gray-600',
       value: getStatusCount('Requested'),
     },
     {
       key: 'In Progress' as const,
-      label: 'In Progress',
+      label: fmt.taskStatus('In Progress'),
       icon: Clock,
       color: 'from-yellow-500 to-orange-500',
       value: getStatusCount('In Progress'),
     },
     {
       key: 'Completed' as const,
-      label: 'Completed',
+      label: fmt.taskStatus('Completed'),
       icon: CheckCircle2,
       color: 'from-green-500 to-emerald-600',
       value: getStatusCount('Completed'),
     },
     {
       key: 'Cancelled' as const,
-      label: 'Cancelled',
+      label: fmt.taskStatus('Cancelled'),
       icon: AlertCircle,
       color: 'from-red-500 to-rose-600',
       value: getStatusCount('Cancelled'),
@@ -255,9 +258,9 @@ const TasksDashboard = () => {
         prev.map((t) => (t.name === taskName ? { ...t, status: newStatus } : t))
       );
       loadStatistics();
-      toast.success('Task status updated');
+      toast.success(t('tasks.page.statusUpdated'));
     } catch (error: any) {
-      toast.error(error?.message || 'Failed to update status');
+      toast.error(serverError(error, t('tasks.page.statusUpdateFailed')));
     } finally {
       setStatusUpdating(null);
     }
@@ -272,6 +275,7 @@ const TasksDashboard = () => {
 
   return (
     <div
+      data-qa="tasks-page"
       className="min-h-screen text-theme-primary"
       style={{ backgroundColor: 'var(--bg-primary)' }}
     >
@@ -294,7 +298,7 @@ const TasksDashboard = () => {
       <div className="relative z-10">
         {/* Sticky Top Section: Header + Stats + (Filters for cards/kanban/list) */}
         <div 
-          className="sticky top-0 z-50"
+          className="lg:sticky lg:top-0 relative z-50"
           style={{ 
             backgroundColor: 'var(--bg-primary)',
           }}
@@ -348,7 +352,7 @@ const TasksDashboard = () => {
                             <Icon className="w-4 h-4 text-white" />
                           </div>
                           <div>
-                            <div className="text-2xl font-bold tracking-tight">{stat.value}</div>
+                            <div className="text-2xl font-bold tracking-tight">{fmt.number(stat.value)}</div>
                             <div 
                               className="text-xs"
                               style={{ color: 'var(--text-muted)' }}
@@ -443,7 +447,7 @@ const TasksDashboard = () => {
                       <Loader2 className="relative w-12 h-12 animate-spin" style={{ color: 'var(--accent-primary)' }} />
                     </div>
                     <p className="mt-4 text-sm" style={{ color: 'var(--text-muted)' }}>
-                      Loading your tasks...
+                      {t('tasks.page.loadingYour')}
                     </p>
                   </motion.div>
                 ) : sortedTasks.length > 0 ? (
@@ -505,12 +509,12 @@ const TasksDashboard = () => {
                           <FileText className="w-12 h-12 text-white" />
                         </div>
                         <h3 className="text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
-                          {searchQuery || statusFilter !== 'all' ? 'No tasks match your filters' : 'No tasks yet'}
+                          {searchQuery || statusFilter !== 'all' ? t('tasks.page.emptyFiltered') : t('tasks.page.emptyNone')}
                         </h3>
                         <p className="text-sm mb-6" style={{ color: 'var(--text-muted)' }}>
                           {searchQuery || statusFilter !== 'all'
-                            ? 'Try adjusting your search or filters'
-                            : 'Get started by creating your first task and watch your productivity soar'}
+                            ? t('tasks.page.emptyFilteredHint')
+                            : t('tasks.page.emptyNoneHint')}
                         </p>
                         {!searchQuery && statusFilter === 'all' && (
                           <motion.button
@@ -522,7 +526,7 @@ const TasksDashboard = () => {
                             <div className="absolute inset-0 bg-linear-to-r/srgb from-violet-500 via-purple-500 to-pink-500 group-hover:opacity-90 transition-opacity" />
                             <span className="relative z-10 flex items-center gap-2">
                               <Plus className="w-5 h-5" />
-                              Create Your First Task
+                              {t('tasks.page.createFirst')}
                             </span>
                           </motion.button>
                         )}

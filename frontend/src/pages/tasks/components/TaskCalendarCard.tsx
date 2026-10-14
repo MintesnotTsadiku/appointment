@@ -4,7 +4,8 @@ import { Task } from '@/lib/tasks-assistants/types';
 import { TaskStatusBadge } from '@/components/tasks/TaskStatusBadge';
 import { TaskPriorityBadge } from '@/components/tasks/TaskPriorityBadge';
 import { TimeSlotInterval } from '../types';
-import { format, parseISO } from 'date-fns';
+import { useTranslation } from '@/lib/i18n';
+import { useTaskFormat } from '@/lib/tasks-assistants/format';
 import { isOverdue } from '@/lib/tasks-assistants/utils';
 
 interface TaskCalendarCardProps {
@@ -30,6 +31,8 @@ const getPriorityColor = (priority: Task['priority'], isOverdue: boolean) => {
 };
 
 export const TaskCalendarCard = ({ task, compact, timeSlotInterval = 30, onClick }: TaskCalendarCardProps) => {
+  const { t } = useTranslation();
+  const fmt = useTaskFormat();
   const overdue = isOverdue(task);
   const isUrgent = task.priority === 'Urgent';
   const isCompleted = task.status === 'Completed';
@@ -37,15 +40,7 @@ export const TaskCalendarCard = ({ task, compact, timeSlotInterval = 30, onClick
   const priorityVars = getPriorityColor(task.priority, overdue);
   
   // Extract time from deadline
-  let deadlineTime = '';
-  if (task.deadline) {
-    try {
-      const deadlineDate = parseISO(task.deadline);
-      deadlineTime = format(deadlineDate, 'HH:mm');
-    } catch (e) {
-      deadlineTime = '';
-    }
-  }
+  const deadlineTime = fmt.time(task.deadline, true);
 
   // Determine what to show based on time slot interval
   const showMinimalInfo = timeSlotInterval <= 30;
@@ -216,7 +211,7 @@ export const TaskCalendarCard = ({ task, compact, timeSlotInterval = 30, onClick
                     className="text-xs font-medium"
                     style={{ color: priorityVars.color }}
                   >
-                    Overdue
+                    {t('tasks.calendar.overdue')}
                   </span>
                 </>
               )}

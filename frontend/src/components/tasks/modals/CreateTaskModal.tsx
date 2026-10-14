@@ -10,6 +10,11 @@ import { OptionSelect } from '@/components/select/OptionSelect';
 import { taskAPI, assistantAPI, taskMasterDataAPI } from '@/lib/tasks-assistants/api';
 import { toast } from 'sonner';
 import type { Task } from '@/lib/tasks-assistants/types';
+import { useTranslation } from '@/lib/i18n';
+import { serverError, useTaskFormat, parseApiDate, toApiDateTime } from '@/lib/tasks-assistants/format';
+
+const STATUS_VALUES: Task['status'][] = ['Requested', 'Assigned', 'In Progress', 'Completed', 'Cancelled'];
+const PRIORITY_VALUES: Task['priority'][] = ['Low', 'Medium', 'High', 'Urgent'];
 
 const selectClassName = 'h-auto w-full rounded-xl border-2 border-[var(--border-default)] bg-[var(--bg-secondary)] px-[1.125rem] py-[0.875rem] text-[var(--text-primary)] transition-all';
 
@@ -20,6 +25,8 @@ interface CreateTaskModalProps {
 }
 
 export const CreateTaskModal = ({ isOpen, onClose, onSuccess }: CreateTaskModalProps) => {
+  const { t } = useTranslation();
+  const fmt = useTaskFormat();
   const [loading, setLoading] = useState(false);
   const [clientProfiles, setClientProfiles] = useState<any[]>([]);
   const [vaProfiles, setVaProfiles] = useState<any[]>([]);
@@ -84,7 +91,7 @@ export const CreateTaskModal = ({ isOpen, onClose, onSuccess }: CreateTaskModalP
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.title || !formData.client_profile) {
-      toast.error('Title and client profile are required');
+      toast.error(t('tasks.form.required'));
       return;
     }
 
@@ -92,13 +99,13 @@ export const CreateTaskModal = ({ isOpen, onClose, onSuccess }: CreateTaskModalP
       setLoading(true);
       const response = await taskAPI.create(formData);
       if (response.success) {
-        toast.success('Task created successfully');
+        toast.success(t('tasks.form.created'));
         onSuccess?.();
         resetForm();
         onClose();
       }
-    } catch (error: any) {
-      toast.error(error?.message || 'Failed to create task');
+    } catch (error) {
+      toast.error(serverError(error, t('tasks.form.createFailed')));
     } finally {
       setLoading(false);
     }
@@ -106,7 +113,7 @@ export const CreateTaskModal = ({ isOpen, onClose, onSuccess }: CreateTaskModalP
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent side="right" className="w-full sm:max-w-[600px] overflow-y-auto p-4" style={{
+      <DialogContent data-qa="task-form" side="right" className="w-full sm:max-w-[600px] overflow-y-auto p-4" style={{
         backgroundColor: 'var(--bg-elevated)',
         borderLeft: '1px solid var(--border-default)',
       }}>
@@ -119,7 +126,7 @@ export const CreateTaskModal = ({ isOpen, onClose, onSuccess }: CreateTaskModalP
               WebkitTextFillColor: 'transparent',
             }}
           >
-            Create Task
+            {t('tasks.form.createTitle')}
           </DialogTitle>
         </DialogHeader>
 
@@ -128,13 +135,13 @@ export const CreateTaskModal = ({ isOpen, onClose, onSuccess }: CreateTaskModalP
           <div className="space-y-6 mb-8">
             <div>
               <h3 className="text-sm font-bold uppercase tracking-wide mb-4" style={{ color: 'var(--text-subtle)' }}>
-                Basic Information
+                {t('tasks.form.basicInfo')}
               </h3>
               <div className="space-y-5">
                 {/* Title */}
                 <div className="space-y-2">
                   <Label htmlFor="title" className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
-                    Title <span style={{ color: 'var(--accent-secondary)' }}>*</span>
+                    {t('tasks.form.title')} <span style={{ color: 'var(--accent-secondary)' }}>*</span>
                   </Label>
                   <Input
                     id="title"
@@ -153,7 +160,7 @@ export const CreateTaskModal = ({ isOpen, onClose, onSuccess }: CreateTaskModalP
                 {/* Description */}
                 <div className="space-y-2">
                   <Label htmlFor="description" className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
-                    Description
+                    {t('tasks.form.description')}
                   </Label>
                   <Textarea
                     id="description"
@@ -173,53 +180,53 @@ export const CreateTaskModal = ({ isOpen, onClose, onSuccess }: CreateTaskModalP
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="status" className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
-                      Status
+                      {t('assistants.common.status')}
                     </Label>
                     <OptionSelect
                       id="status"
                       value={formData.status ?? ''}
                       onValueChange={(value) => setFormData({ ...formData, status: value as Task['status'] })}
                       className={selectClassName}
-                      options={[{ value: 'Requested', label: 'Requested' }, { value: 'Assigned', label: 'Assigned' }, { value: 'In Progress', label: 'In Progress' }, { value: 'Completed', label: 'Completed' }, { value: 'Cancelled', label: 'Cancelled' }]}
+                      options={STATUS_VALUES.map((value) => ({ value, label: fmt.taskStatus(value) }))}
                     />
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="priority" className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
-                      Priority
+                      {t('tasks.form.priority')}
                     </Label>
                     <OptionSelect
                       id="priority"
                       value={formData.priority ?? ''}
                       onValueChange={(value) => setFormData({ ...formData, priority: value as Task['priority'] })}
                       className={selectClassName}
-                      options={[{ value: 'Low', label: 'Low' }, { value: 'Medium', label: 'Medium' }, { value: 'High', label: 'High' }, { value: 'Urgent', label: 'Urgent' }]}
+                      options={PRIORITY_VALUES.map((value) => ({ value, label: fmt.taskPriority(value) }))}
                     />
                   </div>
                 </div>
 
                 {/* Deadline and Daily Briefing */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
                       <Calendar className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
-                      Deadline
+                      {t('tasks.form.deadline')}
                     </Label>
                     <DateTimePicker
-                      value={formData.deadline ? new Date(formData.deadline) : undefined}
+                      value={parseApiDate(formData.deadline) ?? undefined}
                       onChange={(date) => {
                         setFormData({
                           ...formData,
-                          deadline: date ? date.toISOString().slice(0, 16) : '',
+                          deadline: toApiDateTime(date),
                         });
                       }}
-                      placeholder="Select deadline date and time"
+                      placeholder={t('tasks.form.deadlinePlaceholder')}
                     />
                   </div>
 
                   <div className="space-y-2">
                     <Label className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
-                      Options
+                      {t('tasks.form.options')}
                     </Label>
                     <div className="flex items-center h-12 px-5 rounded-xl border-2" style={{
                       backgroundColor: 'var(--bg-secondary)',
@@ -236,7 +243,7 @@ export const CreateTaskModal = ({ isOpen, onClose, onSuccess }: CreateTaskModalP
                         }}
                       />
                       <Label htmlFor="is_daily_briefing" className="ml-3 text-sm cursor-pointer" style={{ color: 'var(--text-secondary)' }}>
-                        Show in Daily Briefing
+                        {t('tasks.form.dailyBriefing')}
                       </Label>
                     </div>
                   </div>
@@ -250,12 +257,12 @@ export const CreateTaskModal = ({ isOpen, onClose, onSuccess }: CreateTaskModalP
             <div>
               <h3 className="text-sm font-bold uppercase tracking-wide mb-4 flex items-center gap-2" style={{ color: 'var(--text-subtle)' }}>
                 <User className="w-4 h-4" />
-                Assignment
+                {t('tasks.form.assignment')}
               </h3>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="client_profile" className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
-                    Client Profile <span style={{ color: 'var(--accent-secondary)' }}>*</span>
+                    {t('tasks.form.clientProfile')} <span style={{ color: 'var(--accent-secondary)' }}>*</span>
                   </Label>
                   <OptionSelect
                     id="client_profile"
@@ -263,47 +270,47 @@ export const CreateTaskModal = ({ isOpen, onClose, onSuccess }: CreateTaskModalP
                     onValueChange={(value) => setFormData({ ...formData, client_profile: value })}
                     required
                     className={selectClassName}
-                    placeholder="Select a client..."
+                    placeholder={t('tasks.form.clientPlaceholder')}
                     options={clientProfiles.map((client) => ({ value: client.name, label: client.full_name }))}
                   />
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="assignee" className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
-                    Virtual Assistant
+                    {t('tasks.form.assistant')}
                   </Label>
                   <OptionSelect
                     id="assignee"
                     value={formData.assignee ?? ''}
                     onValueChange={(value) => setFormData({ ...formData, assignee: value })}
                     className={selectClassName}
-                    options={[{ value: '', label: 'None' }, ...vaProfiles.map((va) => ({ value: va.name, label: va.full_name }))]}
+                    options={[{ value: '', label: t('tasks.form.none') }, ...vaProfiles.map((va) => ({ value: va.name, label: va.full_name }))]}
                   />
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="category" className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
-                    Category
+                    {t('tasks.form.category')}
                   </Label>
                   <OptionSelect
                     id="category"
                     value={formData.category ?? ''}
                     onValueChange={(value) => setFormData({ ...formData, category: value })}
                     className={selectClassName}
-                    options={[{ value: '', label: 'None' }, ...categories.map((cat) => ({ value: cat.name, label: cat.name }))]}
+                    options={[{ value: '', label: t('tasks.form.none') }, ...categories.map((cat) => ({ value: cat.name, label: cat.name }))]}
                   />
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="project" className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
-                    Project
+                    {t('tasks.form.project')}
                   </Label>
                   <OptionSelect
                     id="project"
                     value={formData.project ?? ''}
                     onValueChange={(value) => setFormData({ ...formData, project: value })}
                     className={selectClassName}
-                    options={[{ value: '', label: 'None' }, ...projects.map((proj) => ({ value: proj.name, label: proj.name }))]}
+                    options={[{ value: '', label: t('tasks.form.none') }, ...projects.map((proj) => ({ value: proj.name, label: proj.name }))]}
                   />
                 </div>
               </div>
@@ -315,12 +322,12 @@ export const CreateTaskModal = ({ isOpen, onClose, onSuccess }: CreateTaskModalP
             <div>
               <h3 className="text-sm font-bold uppercase tracking-wide mb-4 flex items-center gap-2" style={{ color: 'var(--text-subtle)' }}>
                 <Clock className="w-4 h-4" />
-                Duration
+                {t('tasks.form.duration')}
               </h3>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="estimated_duration" className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
-                    Estimated Duration (Minutes)
+                    {t('tasks.form.estimatedMinutes')}
                   </Label>
                   <Input
                     id="estimated_duration"
@@ -353,10 +360,11 @@ export const CreateTaskModal = ({ isOpen, onClose, onSuccess }: CreateTaskModalP
                 color: 'var(--text-secondary)',
               }}
             >
-              Cancel
+              {t('assistants.common.cancel')}
             </motion.button>
             <motion.button
               type="submit"
+              data-qa="task-submit"
               disabled={loading}
               whileHover={{ scale: loading ? 1 : 1.02, y: loading ? 0 : -2 }}
               whileTap={{ scale: loading ? 1 : 0.98 }}
@@ -374,12 +382,12 @@ export const CreateTaskModal = ({ isOpen, onClose, onSuccess }: CreateTaskModalP
                 {loading ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    Creating...
+                    {t('assistants.common.creating')}
                   </>
                 ) : (
                   <>
                     <Plus className="w-4 h-4" />
-                    Create Task
+                    {t('tasks.form.createTitle')}
                   </>
                 )}
               </span>

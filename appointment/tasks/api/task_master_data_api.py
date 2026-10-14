@@ -6,6 +6,7 @@ Provides CRUD operations for Task Categories, Task Templates, and Task Projects
 import frappe
 from frappe import _
 from frappe.utils import cint
+from appointment.assistants.helpers.errors import raise_user_error
 
 
 # =====================================================
@@ -32,7 +33,7 @@ def create_task_category(data):
             data = frappe.parse_json(data)
         
         if not data.get("name"):
-            frappe.throw(_("Category name is required"))
+            frappe.throw(_("Enter a category name."))
         
         category = frappe.new_doc("Task Category")
         category.name = data.get("name")
@@ -43,13 +44,12 @@ def create_task_category(data):
         
         return {
             "success": True,
-            "message": _("Task Category created successfully"),
+            "message": _("Task category created."),
             "data": category.as_dict()
         }
     
     except Exception as e:
-        frappe.log_error(f"Error creating Task Category: {str(e)}", "Task Master Data API: Create Category")
-        frappe.throw(_(f"Failed to create Task Category: {str(e)}"))
+        raise_user_error(e, _("Could not create the task category. Please try again."), "Task Master Data API: Create Category")
 
 
 @frappe.whitelist()
@@ -75,8 +75,7 @@ def list_task_categories(filters=None):
         }
     
     except Exception as e:
-        frappe.log_error(f"Error listing Task Categories: {str(e)}", "Task Master Data API: List Categories")
-        frappe.throw(_(f"Failed to list Task Categories: {str(e)}"))
+        raise_user_error(e, _("Could not load task categories. Please try again."), "Task Master Data API: List Categories")
 
 
 # =====================================================
@@ -104,7 +103,7 @@ def create_task_template(data):
             data = frappe.parse_json(data)
         
         if not data.get("name"):
-            frappe.throw(_("Template name is required"))
+            frappe.throw(_("Enter a template name."))
         
         template = frappe.new_doc("Task Template")
         template.name = data.get("name")
@@ -126,13 +125,12 @@ def create_task_template(data):
         
         return {
             "success": True,
-            "message": _("Task Template created successfully"),
+            "message": _("Task template created."),
             "data": template.as_dict()
         }
     
     except Exception as e:
-        frappe.log_error(f"Error creating Task Template: {str(e)}", "Task Master Data API: Create Template")
-        frappe.throw(_(f"Failed to create Task Template: {str(e)}"))
+        raise_user_error(e, _("Could not create the task template. Please try again."), "Task Master Data API: Create Template")
 
 
 @frappe.whitelist()
@@ -140,7 +138,7 @@ def get_task_template(template_name):
     """Get a Task Template with its tasks"""
     try:
         if not frappe.db.exists("Task Template", template_name):
-            frappe.throw(_("Task Template not found"))
+            frappe.throw(_("This task template no longer exists."))
         
         template = frappe.get_doc("Task Template", template_name)
         
@@ -150,8 +148,7 @@ def get_task_template(template_name):
         }
     
     except Exception as e:
-        frappe.log_error(f"Error getting Task Template: {str(e)}", "Task Master Data API: Get Template")
-        frappe.throw(_(f"Failed to get Task Template: {str(e)}"))
+        raise_user_error(e, _("Could not load the task template. Please try again."), "Task Master Data API: Get Template")
 
 
 @frappe.whitelist()
@@ -177,8 +174,7 @@ def list_task_templates(filters=None):
         }
     
     except Exception as e:
-        frappe.log_error(f"Error listing Task Templates: {str(e)}", "Task Master Data API: List Templates")
-        frappe.throw(_(f"Failed to list Task Templates: {str(e)}"))
+        raise_user_error(e, _("Could not load task templates. Please try again."), "Task Master Data API: List Templates")
 
 
 @frappe.whitelist()
@@ -196,10 +192,10 @@ def create_tasks_from_template(template_name, client_profile, assignee=None):
     """
     try:
         if not frappe.db.exists("Task Template", template_name):
-            frappe.throw(_("Task Template not found"))
+            frappe.throw(_("This task template no longer exists."))
         
         if not frappe.db.exists("Client Profile", client_profile):
-            frappe.throw(_("Client Profile not found"))
+            frappe.throw(_("This client profile no longer exists."))
         
         template = frappe.get_doc("Task Template", template_name)
         created_tasks = []
@@ -226,7 +222,7 @@ def create_tasks_from_template(template_name, client_profile, assignee=None):
         
         return {
             "success": True,
-            "message": _("Tasks created successfully from template"),
+            "message": _("Tasks created from the template."),
             "data": {
                 "tasks": created_tasks,
                 "count": len(created_tasks)
@@ -234,8 +230,7 @@ def create_tasks_from_template(template_name, client_profile, assignee=None):
         }
     
     except Exception as e:
-        frappe.log_error(f"Error creating tasks from template: {str(e)}", "Task Master Data API: Create from Template")
-        frappe.throw(_(f"Failed to create tasks from template: {str(e)}"))
+        raise_user_error(e, _("Could not create tasks from the template. Please try again."), "Task Master Data API: Create from Template")
 
 
 # =====================================================
@@ -268,9 +263,9 @@ def create_task_project(data):
             data = frappe.parse_json(data)
         
         if not data.get("name"):
-            frappe.throw(_("Project name is required"))
+            frappe.throw(_("Enter a project name."))
         if not data.get("client_profile"):
-            frappe.throw(_("Client Profile is required"))
+            frappe.throw(_("Choose a client profile."))
         
         project = frappe.new_doc("Task Project")
         project.name = data.get("name")
@@ -291,13 +286,12 @@ def create_task_project(data):
         
         return {
             "success": True,
-            "message": _("Task Project created successfully"),
+            "message": _("Project created."),
             "data": project.as_dict()
         }
     
     except Exception as e:
-        frappe.log_error(f"Error creating Task Project: {str(e)}", "Task Master Data API: Create Project")
-        frappe.throw(_(f"Failed to create Task Project: {str(e)}"))
+        raise_user_error(e, _("Could not create the project. Please try again."), "Task Master Data API: Create Project")
 
 
 @frappe.whitelist()
@@ -305,7 +299,7 @@ def get_task_project(project_name):
     """Get a Task Project with details"""
     try:
         if not frappe.db.exists("Task Project", project_name):
-            frappe.throw(_("Task Project not found"))
+            frappe.throw(_("This project no longer exists."))
         
         project = frappe.get_doc("Task Project", project_name)
         
@@ -327,8 +321,7 @@ def get_task_project(project_name):
         }
     
     except Exception as e:
-        frappe.log_error(f"Error getting Task Project: {str(e)}", "Task Master Data API: Get Project")
-        frappe.throw(_(f"Failed to get Task Project: {str(e)}"))
+        raise_user_error(e, _("Could not load the project. Please try again."), "Task Master Data API: Get Project")
 
 
 @frappe.whitelist()
@@ -358,8 +351,7 @@ def list_task_projects(filters=None, fields=None):
         }
     
     except Exception as e:
-        frappe.log_error(f"Error listing Task Projects: {str(e)}", "Task Master Data API: List Projects")
-        frappe.throw(_(f"Failed to list Task Projects: {str(e)}"))
+        raise_user_error(e, _("Could not load projects. Please try again."), "Task Master Data API: List Projects")
 
 
 @frappe.whitelist()
@@ -372,7 +364,7 @@ def get_project_statistics(project_name):
     """
     try:
         if not frappe.db.exists("Task Project", project_name):
-            frappe.throw(_("Task Project not found"))
+            frappe.throw(_("This project no longer exists."))
         
         statuses = ["Requested", "Assigned", "In Progress", "Completed", "Cancelled"]
         stats = {}
@@ -389,7 +381,6 @@ def get_project_statistics(project_name):
         }
     
     except Exception as e:
-        frappe.log_error(f"Error getting project statistics: {str(e)}", "Task Master Data API: Project Statistics")
-        frappe.throw(_(f"Failed to get project statistics: {str(e)}"))
+        raise_user_error(e, _("Could not load project statistics. Please try again."), "Task Master Data API: Project Statistics")
 
 

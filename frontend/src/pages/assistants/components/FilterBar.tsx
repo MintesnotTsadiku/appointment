@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import { Search, Filter, LayoutGrid, List, ChevronDown } from 'lucide-react';
 import { Input } from '@/components/input';
+import { useTranslation } from '@/lib/i18n';
+import { useTaskFormat } from '@/lib/tasks-assistants/format';
 
 type ViewMode = 'cards' | 'table';
 type StatusFilter = 'all' | 'active' | 'inactive';
@@ -21,7 +23,7 @@ interface FilterBarProps {
 export const FilterBar = ({
   searchQuery,
   onSearchChange,
-  searchPlaceholder = 'Search...',
+  searchPlaceholder,
   statusFilter = 'all',
   onStatusFilterChange,
   viewMode = 'cards',
@@ -30,6 +32,8 @@ export const FilterBar = ({
   showViewToggle = true,
   children,
 }: FilterBarProps) => {
+  const { t } = useTranslation();
+  const fmt = useTaskFormat();
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -44,7 +48,8 @@ export const FilterBar = ({
           style={{ color: 'var(--text-muted)' }}
         />
         <Input
-          placeholder={searchPlaceholder}
+          placeholder={searchPlaceholder ?? t('assistants.common.search')}
+          aria-label={searchPlaceholder ?? t('assistants.common.search')}
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           className="pl-10 h-10"
@@ -69,7 +74,7 @@ export const FilterBar = ({
               key={status}
               whileTap={{ scale: 0.95 }}
               onClick={() => onStatusFilterChange(status)}
-              className="relative px-3 py-1.5 text-xs font-medium rounded-lg transition-all capitalize"
+              className="relative px-3 py-1.5 text-xs font-medium rounded-lg transition-all"
               style={{
                 color:
                   statusFilter === status
@@ -88,7 +93,9 @@ export const FilterBar = ({
                   transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
                 />
               )}
-              <span className="relative z-10">{status}</span>
+              <span className="relative z-10">
+                {status === 'all' ? t('assistants.common.all') : fmt.profileStatus(status)}
+              </span>
             </motion.button>
           ))}
         </div>
@@ -116,7 +123,8 @@ export const FilterBar = ({
                   ? 'var(--text-primary)'
                   : 'var(--text-subtle)',
             }}
-            title="Card View"
+            title={t('assistants.shared.cardView')}
+            aria-label={t('assistants.shared.cardView')}
           >
             {viewMode === 'cards' && (
               <motion.div
@@ -141,7 +149,8 @@ export const FilterBar = ({
                   ? 'var(--text-primary)'
                   : 'var(--text-subtle)',
             }}
-            title="Table View"
+            title={t('assistants.shared.tableView')}
+            aria-label={t('assistants.shared.tableView')}
           >
             {viewMode === 'table' && (
               <motion.div

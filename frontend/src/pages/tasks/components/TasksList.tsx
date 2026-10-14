@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Task } from '@/lib/tasks-assistants/types';
-import { format, parseISO } from 'date-fns';
+import { useTranslation } from '@/lib/i18n';
+import { useTaskFormat } from '@/lib/tasks-assistants/format';
 import { Loader2 } from 'lucide-react';
 
 interface TasksListProps {
@@ -10,11 +11,14 @@ interface TasksListProps {
 }
 
 export const TasksList = ({ tasks, isLoading, onTaskClick }: TasksListProps) => {
+  const { t } = useTranslation();
+  const fmt = useTaskFormat();
+
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center py-20">
         <Loader2 className="w-8 h-8 animate-spin text-accent-primary" />
-        <p className="mt-4 text-sm text-theme-muted">Loading tasks...</p>
+        <p className="mt-4 text-sm text-theme-muted">{t('tasks.page.loading')}</p>
       </div>
     );
   }
@@ -22,7 +26,7 @@ export const TasksList = ({ tasks, isLoading, onTaskClick }: TasksListProps) => 
   if (tasks.length === 0) {
     return (
       <div className="text-center py-20 text-theme-muted">
-        No tasks found.
+        {t('tasks.page.noTasksFound')}
       </div>
     );
   }
@@ -32,11 +36,11 @@ export const TasksList = ({ tasks, isLoading, onTaskClick }: TasksListProps) => 
       <table className="w-full text-left text-sm">
         <thead style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-subtle)' }}>
           <tr>
-            <th className="px-4 py-3 font-medium">Title</th>
-            <th className="px-4 py-3 font-medium">Status</th>
-            <th className="px-4 py-3 font-medium">Priority</th>
-            <th className="px-4 py-3 font-medium">Deadline</th>
-            <th className="px-4 py-3 font-medium">Assignee</th>
+            <th className="px-4 py-3 font-medium">{t('tasks.page.colTitle')}</th>
+            <th className="px-4 py-3 font-medium">{t('assistants.common.status')}</th>
+            <th className="px-4 py-3 font-medium">{t('tasks.page.colPriority')}</th>
+            <th className="px-4 py-3 font-medium">{t('tasks.page.colDeadline')}</th>
+            <th className="px-4 py-3 font-medium">{t('tasks.page.colAssignee')}</th>
           </tr>
         </thead>
         <tbody className="divide-y" style={{ borderColor: 'var(--border-subtle)' }}>
@@ -60,7 +64,7 @@ export const TasksList = ({ tasks, isLoading, onTaskClick }: TasksListProps) => 
                     color: 'var(--text-secondary)'
                   }}
                 >
-                  {task.status}
+                  {fmt.taskStatus(task.status)}
                 </span>
               </td>
               <td className="px-4 py-3">
@@ -70,11 +74,11 @@ export const TasksList = ({ tasks, isLoading, onTaskClick }: TasksListProps) => 
                   task.priority === 'Medium' ? 'text-yellow-600 border-yellow-200 bg-yellow-50' :
                   'text-blue-500 border-blue-200 bg-blue-50'
                 }`}>
-                  {task.priority}
+                  {fmt.taskPriority(task.priority)}
                 </span>
               </td>
               <td className="px-4 py-3" style={{ color: 'var(--text-muted)' }}>
-                {task.deadline ? format(parseISO(task.deadline), 'MMM d, HH:mm') : '-'}
+                {task.deadline ? `${fmt.date(task.deadline, { month: 'short', day: 'numeric' })}, ${fmt.time(task.deadline, true)}` : '-'}
               </td>
               <td className="px-4 py-3" style={{ color: 'var(--text-muted)' }}>
                 {task.assignee || '-'}

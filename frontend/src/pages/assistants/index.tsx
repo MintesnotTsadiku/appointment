@@ -26,9 +26,13 @@ import type {
 } from '@/lib/tasks-assistants/types';
 import Spinner from '@/components/spinner';
 import { toast } from 'sonner';
+import { useTranslation } from '@/lib/i18n';
+import { serverError, useTaskFormat } from '@/lib/tasks-assistants/format';
 
 const AssistantsDashboard = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const fmt = useTaskFormat();
   const [statistics, setStatistics] = useState<AssignmentStatistics | null>(null);
   const [loading, setLoading] = useState(true);
   const [vaProfiles, setVAProfiles] = useState<VAProfile[]>([]);
@@ -75,8 +79,8 @@ const AssistantsDashboard = () => {
       if (assignResponse.success && assignResponse.data) {
         setAssignments(assignResponse.data);
       }
-    } catch (error: any) {
-      toast.error(error?.message || 'Failed to load dashboard data');
+    } catch (error) {
+      toast.error(serverError(error, t('assistants.dashboard.loadFailed')));
     } finally {
       setLoading(false);
     }
@@ -87,43 +91,43 @@ const AssistantsDashboard = () => {
 
   const stats = [
     {
-      label: 'Total VAs',
-      value: vaProfiles.length,
+      label: t('assistants.dashboard.totalVas'),
+      value: fmt.number(vaProfiles.length),
       icon: Users,
       gradient: 'bg-gradient-primary',
       onClick: () => navigate('/assistants/va-profiles'),
     },
     {
-      label: 'Active VAs',
-      value: activeVAs,
+      label: t('assistants.dashboard.activeVas'),
+      value: fmt.number(activeVAs),
       icon: CheckCircle2,
       gradient: 'bg-gradient-success',
       onClick: () => navigate('/assistants/va-profiles'),
     },
     {
-      label: 'Total Clients',
-      value: clientProfiles.length,
+      label: t('assistants.dashboard.totalClients'),
+      value: fmt.number(clientProfiles.length),
       icon: UserCircle,
       gradient: 'bg-gradient-secondary',
       onClick: () => navigate('/assistants/client-profiles'),
     },
     {
-      label: 'Active Clients',
-      value: activeClients,
+      label: t('assistants.dashboard.activeClients'),
+      value: fmt.number(activeClients),
       icon: TrendingUp,
       customGradient: 'from-blue-500 to-indigo-600',
       onClick: () => navigate('/assistants/client-profiles'),
     },
     {
-      label: 'Active Assignments',
-      value: statistics?.by_status.active || 0,
+      label: t('assistants.dashboard.activeAssignments'),
+      value: fmt.number(statistics?.by_status.active || 0),
       icon: LinkIcon,
       customGradient: 'from-teal-500 to-emerald-600',
       onClick: () => navigate('/assistants/assignments'),
     },
     {
-      label: 'Paused',
-      value: statistics?.by_status.inactive || 0,
+      label: t('assistants.dashboard.inactiveAssignments'),
+      value: fmt.number(statistics?.by_status.inactive || 0),
       icon: PauseCircle,
       customGradient: 'from-gray-500 to-gray-600',
       onClick: () => navigate('/assistants/assignments'),
@@ -132,22 +136,22 @@ const AssistantsDashboard = () => {
 
   const quickActions = [
     {
-      title: 'Manage VA Profiles',
-      description: 'View and manage virtual assistant profiles, skills, and availability',
+      title: t('assistants.dashboard.manageVaTitle'),
+      description: t('assistants.dashboard.manageVaDesc'),
       icon: Users,
       gradient: 'bg-gradient-primary',
       path: '/assistants/va-profiles',
     },
     {
-      title: 'Manage Client Profiles',
-      description: 'View and manage client profiles and their information',
+      title: t('assistants.dashboard.manageClientsTitle'),
+      description: t('assistants.dashboard.manageClientsDesc'),
       icon: UserCircle,
       gradient: 'bg-gradient-secondary',
       path: '/assistants/client-profiles',
     },
     {
-      title: 'Manage Assignments',
-      description: 'View and manage VA-to-client assignments and relationships',
+      title: t('assistants.dashboard.manageAssignmentsTitle'),
+      description: t('assistants.dashboard.manageAssignmentsDesc'),
       icon: LinkIcon,
       gradient: 'bg-gradient-success',
       path: '/assistants/assignments',
@@ -159,13 +163,13 @@ const AssistantsDashboard = () => {
     ...vaProfiles.slice(0, 3).map((va) => ({
       type: 'va' as const,
       name: va.full_name,
-      action: 'VA profile updated',
+      action: t('assistants.dashboard.vaProfileUpdated'),
       time: va.modified,
     })),
     ...clientProfiles.slice(0, 3).map((client) => ({
       type: 'client' as const,
       name: client.full_name,
-      action: 'Client profile updated',
+      action: t('assistants.dashboard.clientProfileUpdated'),
       time: client.modified,
     })),
   ]
@@ -174,6 +178,7 @@ const AssistantsDashboard = () => {
 
   return (
     <div
+      data-qa="assistants-dashboard"
       className="min-h-screen text-theme-primary overflow-hidden"
       style={{ backgroundColor: 'var(--bg-primary)' }}
     >
@@ -196,14 +201,15 @@ const AssistantsDashboard = () => {
       <div className="relative z-10">
         {/* Header */}
         <AssistantsHeader
-          title="Assistants"
-          subtitle="Workforce Management System"
+          title={t('assistants.dashboard.title')}
+          subtitle={t('assistants.dashboard.subtitle')}
           icon={Users}
           actions={
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => navigate('/assistants/assignments')}
+              aria-label={t('assistants.assignments.newAssignment')}
               className="relative group flex items-center gap-1.5 lg:gap-2 px-3 lg:px-5 py-2 lg:py-2.5 rounded-lg lg:rounded-xl font-medium text-xs lg:text-sm overflow-hidden"
             >
               <div className="absolute inset-0 transition-all bg-gradient-primary group-hover:opacity-90" />
@@ -218,9 +224,9 @@ const AssistantsDashboard = () => {
               </div>
               <Plus className="relative z-10 w-4 h-4 text-white" />
               <span className="relative z-10 text-white hidden sm:inline">
-                New Assignment
+                {t('assistants.assignments.newAssignment')}
               </span>
-              <span className="relative z-10 text-white sm:hidden">New</span>
+              <span className="relative z-10 text-white sm:hidden">{t('assistants.assignments.new')}</span>
               <Sparkles className="relative z-10 w-3 h-3 text-white/70 opacity-0 group-hover:opacity-100 transition-opacity hidden lg:block" />
             </motion.button>
           }
@@ -245,7 +251,7 @@ const AssistantsDashboard = () => {
                     className="text-sm font-semibold uppercase tracking-wider"
                     style={{ color: 'var(--text-muted)' }}
                   >
-                    Quick Actions
+                    {t('assistants.dashboard.quickActions')}
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {quickActions.map((action, index) => (
@@ -298,7 +304,7 @@ const AssistantsDashboard = () => {
                     className="text-sm font-semibold uppercase tracking-wider mb-4"
                     style={{ color: 'var(--text-muted)' }}
                   >
-                    Recent Activity
+                    {t('assistants.dashboard.recentActivity')}
                   </h2>
                   <Card
                     className="p-4"
@@ -357,7 +363,7 @@ const AssistantsDashboard = () => {
                         style={{ color: 'var(--text-muted)' }}
                       >
                         <Activity className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                        <p className="text-sm">No recent activity</p>
+                        <p className="text-sm">{t('assistants.dashboard.noRecentActivity')}</p>
                       </div>
                     )}
                   </Card>
@@ -375,28 +381,25 @@ const AssistantsDashboard = () => {
                     className="text-sm font-semibold uppercase tracking-wider mb-4"
                     style={{ color: 'var(--text-muted)' }}
                   >
-                    Assignment Model Distribution
+                    {t('assistants.dashboard.modelDistribution')}
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {[
                       {
                         model: '1:1',
-                        label: 'Dedicated',
-                        description: 'One VA per client',
+                        description: t('assistants.shared.modelDescOne'),
                         count: statistics.by_model['1:1'],
                         color: 'bg-gradient-primary',
                       },
                       {
                         model: '1:2',
-                        label: 'Shared (2)',
-                        description: 'One VA for two clients',
+                        description: t('assistants.shared.modelDescTwo'),
                         count: statistics.by_model['1:2'],
                         color: 'bg-gradient-secondary',
                       },
                       {
                         model: '1:3',
-                        label: 'Shared (3)',
-                        description: 'One VA for three clients',
+                        description: t('assistants.shared.modelDescThree'),
                         count: statistics.by_model['1:3'],
                         color: 'bg-gradient-success',
                       },
@@ -424,14 +427,14 @@ const AssistantsDashboard = () => {
                               className="text-3xl font-bold"
                               style={{ color: 'var(--text-primary)' }}
                             >
-                              {item.count}
+                              {fmt.number(item.count)}
                             </span>
                           </div>
                           <h3
                             className="font-semibold"
                             style={{ color: 'var(--text-primary)' }}
                           >
-                            {item.label}
+                            {fmt.model(item.model)}
                           </h3>
                           <p
                             className="text-sm"

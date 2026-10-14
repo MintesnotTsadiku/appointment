@@ -6,6 +6,7 @@ Provides CRUD operations for Task management
 import frappe
 from frappe import _
 from frappe.utils import cint, flt, nowdate, now_datetime, get_datetime
+from appointment.assistants.helpers.errors import raise_user_error
 
 
 # =====================================================
@@ -42,9 +43,9 @@ def create_task(data):
         
         # Validate required fields
         if not data.get("title"):
-            frappe.throw(_("Title is required"))
+            frappe.throw(_("Enter a task title."))
         if not data.get("client_profile"):
-            frappe.throw(_("Client Profile is required"))
+            frappe.throw(_("Choose a client profile."))
         
         # Create task document
         task = frappe.new_doc("Task")
@@ -85,13 +86,12 @@ def create_task(data):
         
         return {
             "success": True,
-            "message": _("Task created successfully"),
+            "message": _("Task created."),
             "data": task.as_dict()
         }
     
     except Exception as e:
-        frappe.log_error(f"Error creating task: {str(e)}", "Task API: Create")
-        frappe.throw(_(f"Failed to create task: {str(e)}"))
+        raise_user_error(e, _("Could not create the task. Please try again."), "Task API: Create")
 
 
 @frappe.whitelist()
@@ -108,7 +108,7 @@ def get_task(task_name, fields=None):
     """
     try:
         if not frappe.db.exists("Task", task_name):
-            frappe.throw(_("Task not found"))
+            frappe.throw(_("This task no longer exists."))
         
         if fields:
             field_list = [f.strip() for f in fields.split(",")]
@@ -125,8 +125,7 @@ def get_task(task_name, fields=None):
             }
     
     except Exception as e:
-        frappe.log_error(f"Error getting task: {str(e)}", "Task API: Get")
-        frappe.throw(_(f"Failed to get task: {str(e)}"))
+        raise_user_error(e, _("Could not load the task. Please try again."), "Task API: Get")
 
 
 @frappe.whitelist()
@@ -176,8 +175,7 @@ def list_tasks(filters=None, fields=None, page_length=20, page_start=0, order_by
         }
     
     except Exception as e:
-        frappe.log_error(f"Error listing tasks: {str(e)}", "Task API: List")
-        frappe.throw(_(f"Failed to list tasks: {str(e)}"))
+        raise_user_error(e, _("Could not load tasks. Please try again."), "Task API: List")
 
 
 @frappe.whitelist()
@@ -197,7 +195,7 @@ def update_task(task_name, data):
             data = frappe.parse_json(data)
         
         if not frappe.db.exists("Task", task_name):
-            frappe.throw(_("Task not found"))
+            frappe.throw(_("This task no longer exists."))
         
         task = frappe.get_doc("Task", task_name)
         
@@ -231,13 +229,12 @@ def update_task(task_name, data):
         
         return {
             "success": True,
-            "message": _("Task updated successfully"),
+            "message": _("Task updated."),
             "data": task.as_dict()
         }
     
     except Exception as e:
-        frappe.log_error(f"Error updating task: {str(e)}", "Task API: Update")
-        frappe.throw(_(f"Failed to update task: {str(e)}"))
+        raise_user_error(e, _("Could not update the task. Please try again."), "Task API: Update")
 
 
 @frappe.whitelist()
@@ -253,19 +250,18 @@ def delete_task(task_name):
     """
     try:
         if not frappe.db.exists("Task", task_name):
-            frappe.throw(_("Task not found"))
+            frappe.throw(_("This task no longer exists."))
         
         frappe.delete_doc("Task", task_name, force=1)
         frappe.db.commit()
         
         return {
             "success": True,
-            "message": _("Task deleted successfully")
+            "message": _("Task deleted.")
         }
     
     except Exception as e:
-        frappe.log_error(f"Error deleting task: {str(e)}", "Task API: Delete")
-        frappe.throw(_(f"Failed to delete task: {str(e)}"))
+        raise_user_error(e, _("Could not delete the task. Please try again."), "Task API: Delete")
 
 
 # =====================================================
@@ -286,11 +282,11 @@ def update_task_status(task_name, status):
     """
     try:
         if not frappe.db.exists("Task", task_name):
-            frappe.throw(_("Task not found"))
+            frappe.throw(_("This task no longer exists."))
         
         valid_statuses = ["Requested", "Assigned", "In Progress", "Completed", "Cancelled"]
         if status not in valid_statuses:
-            frappe.throw(_(f"Invalid status. Must be one of: {', '.join(valid_statuses)}"))
+            frappe.throw(_("Choose a valid task status: {0}.").format(", ".join(valid_statuses)))
         
         task = frappe.get_doc("Task", task_name)
         task.status = status
@@ -305,13 +301,12 @@ def update_task_status(task_name, status):
         
         return {
             "success": True,
-            "message": _("Task status updated successfully"),
+            "message": _("Task status updated."),
             "data": task.as_dict()
         }
     
     except Exception as e:
-        frappe.log_error(f"Error updating task status: {str(e)}", "Task API: Update Status")
-        frappe.throw(_(f"Failed to update task status: {str(e)}"))
+        raise_user_error(e, _("Could not change the task status. Please try again."), "Task API: Update Status")
 
 
 @frappe.whitelist()
@@ -328,10 +323,10 @@ def assign_task(task_name, assignee):
     """
     try:
         if not frappe.db.exists("Task", task_name):
-            frappe.throw(_("Task not found"))
+            frappe.throw(_("This task no longer exists."))
         
         if assignee and not frappe.db.exists("VA Profile", assignee):
-            frappe.throw(_("VA Profile not found"))
+            frappe.throw(_("This VA profile no longer exists."))
         
         task = frappe.get_doc("Task", task_name)
         task.assignee = assignee
@@ -344,13 +339,12 @@ def assign_task(task_name, assignee):
         
         return {
             "success": True,
-            "message": _("Task assigned successfully"),
+            "message": _("Task assigned."),
             "data": task.as_dict()
         }
     
     except Exception as e:
-        frappe.log_error(f"Error assigning task: {str(e)}", "Task API: Assign")
-        frappe.throw(_(f"Failed to assign task: {str(e)}"))
+        raise_user_error(e, _("Could not assign the task. Please try again."), "Task API: Assign")
 
 
 # =====================================================
@@ -388,8 +382,7 @@ def get_tasks_by_client(client_profile, status=None):
         }
     
     except Exception as e:
-        frappe.log_error(f"Error getting tasks by client: {str(e)}", "Task API: Get by Client")
-        frappe.throw(_(f"Failed to get tasks: {str(e)}"))
+        raise_user_error(e, _("Could not load tasks. Please try again."), "Task API: Get by Client")
 
 
 @frappe.whitelist()
@@ -423,8 +416,7 @@ def get_tasks_by_assignee(assignee, status=None):
         }
     
     except Exception as e:
-        frappe.log_error(f"Error getting tasks by assignee: {str(e)}", "Task API: Get by Assignee")
-        frappe.throw(_(f"Failed to get tasks: {str(e)}"))
+        raise_user_error(e, _("Could not load tasks. Please try again."), "Task API: Get by Assignee")
 
 
 @frappe.whitelist()
@@ -474,8 +466,7 @@ def get_daily_briefing_tasks(client_profile=None, date=None):
         }
     
     except Exception as e:
-        frappe.log_error(f"Error getting daily briefing tasks: {str(e)}", "Task API: Daily Briefing")
-        frappe.throw(_(f"Failed to get daily briefing tasks: {str(e)}"))
+        raise_user_error(e, _("Could not load the daily briefing. Please try again."), "Task API: Daily Briefing")
 
 
 @frappe.whitelist()
@@ -514,7 +505,6 @@ def get_task_statistics(client_profile=None, assignee=None):
         }
     
     except Exception as e:
-        frappe.log_error(f"Error getting task statistics: {str(e)}", "Task API: Statistics")
-        frappe.throw(_(f"Failed to get task statistics: {str(e)}"))
+        raise_user_error(e, _("Could not load task statistics. Please try again."), "Task API: Statistics")
 
 

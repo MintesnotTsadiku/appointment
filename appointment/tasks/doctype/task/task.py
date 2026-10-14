@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 import frappe
+from frappe import _
 from frappe.model.document import Document
 from datetime import datetime
 
@@ -32,7 +33,7 @@ class Task(Document):
 		
 		# Check for self-reference
 		if self.name and self.name in dependency_names:
-			frappe.throw("A task cannot depend on itself")
+			frappe.throw(_("A task cannot depend on itself."))
 		
 		# Check for circular dependencies (basic check - can be enhanced)
 		for dep_name in dependency_names:
@@ -42,7 +43,7 @@ class Task(Document):
 				if dep_task.dependencies:
 					dep_dependencies = [d.depends_on_task for d in dep_task.dependencies if d.depends_on_task]
 					if self.name in dep_dependencies:
-						frappe.throw(f"Circular dependency detected: Task {self.name} and {dep_name} depend on each other")
+						frappe.throw(_("Tasks {0} and {1} depend on each other. Remove one of the dependencies.").format(self.name, dep_name))
 	
 	def on_update(self):
 		"""Called when task is updated"""
@@ -65,7 +66,9 @@ class Task(Document):
 		if incomplete_dependencies and self.status == "In Progress":
 			self.status = "Assigned"
 			frappe.msgprint(
-				f"Cannot start task: {len(incomplete_dependencies)} dependency(ies) not completed",
+				_("This task cannot start yet: {0} task(s) it depends on are not completed.").format(
+					len(incomplete_dependencies)
+				),
 				indicator="orange"
 			)
 

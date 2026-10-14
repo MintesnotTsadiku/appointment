@@ -7,11 +7,9 @@ import {
   CheckCircle2,
   XCircle,
   Link as LinkIcon,
-  Mail,
   Globe,
   Building2,
   Clock,
-  Briefcase,
   Star,
   ChevronRight,
 } from 'lucide-react';
@@ -26,6 +24,9 @@ import { assistantAPI } from '@/lib/tasks-assistants/api';
 import type { ClientProfile, AssistantClientAssignment } from '@/lib/tasks-assistants/types';
 import Spinner from '@/components/spinner';
 import { toast } from 'sonner';
+import { useTranslation } from '@/lib/i18n';
+import { serverError, useTaskFormat } from '@/lib/tasks-assistants/format';
+import { timezoneLabel } from '@/components/assistants/modals/CreateClientProfileModal';
 
 const resolveAvatar = (url?: string) => {
   if (!url) return '';
@@ -37,6 +38,10 @@ const resolveAvatar = (url?: string) => {
 };
 
 const ClientProfiles = () => {
+  const { t } = useTranslation();
+  const fmt = useTaskFormat();
+  const languageLabel = (code: string) =>
+    code === 'en' || code === 'am' ? t(`assistants.client.language.${code}`) : code;
   const [clientProfiles, setClientProfiles] = useState<ClientProfile[]>([]);
   const [assignments, setAssignments] = useState<AssistantClientAssignment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -73,7 +78,7 @@ const ClientProfiles = () => {
         setAssignments(assignResponse.data);
       }
     } catch (error: any) {
-      toast.error(error?.message || 'Failed to load client profiles');
+      toast.error(serverError(error, t('assistants.client.page.loadFailed')));
     } finally {
       setLoading(false);
     }
@@ -111,25 +116,25 @@ const ClientProfiles = () => {
 
   const stats = [
     {
-      label: 'Total Clients',
+      label: t('assistants.client.page.totalClients'),
       value: clientProfiles.length,
       icon: UserCircle,
       gradient: 'bg-gradient-secondary',
     },
     {
-      label: 'Active',
+      label: fmt.profileStatus('active'),
       value: activeCount,
       icon: CheckCircle2,
       gradient: 'bg-gradient-success',
     },
     {
-      label: 'Inactive',
+      label: fmt.profileStatus('inactive'),
       value: inactiveCount,
       icon: XCircle,
       customGradient: 'from-gray-500 to-gray-600',
     },
     {
-      label: 'With VA Assigned',
+      label: t('assistants.client.page.withVa'),
       value: assignedCount,
       icon: LinkIcon,
       gradient: 'bg-gradient-primary',
@@ -163,8 +168,8 @@ const ClientProfiles = () => {
       <div className="relative z-10">
         {/* Header */}
         <AssistantsHeader
-          title="Client Profiles"
-          subtitle="Client Relationship Management"
+          title={t('assistants.client.page.title')}
+          subtitle={t('assistants.client.page.subtitle')}
           icon={UserCircle}
           showBackButton
           backPath="/assistants"
@@ -179,9 +184,9 @@ const ClientProfiles = () => {
               <div className="absolute inset-0 transition-all bg-gradient-secondary group-hover:opacity-90" />
               <Plus className="relative z-10 w-4 h-4 text-white" />
               <span className="relative z-10 text-white hidden sm:inline">
-                Create Client
+                {t('assistants.client.page.create')}
               </span>
-              <span className="relative z-10 text-white sm:hidden">New</span>
+              <span className="relative z-10 text-white sm:hidden">{t('assistants.client.page.createShort')}</span>
               <Sparkles className="relative z-10 w-3 h-3 text-white/70 opacity-0 group-hover:opacity-100 transition-opacity hidden lg:block" />
             </motion.button>
           }
@@ -202,7 +207,7 @@ const ClientProfiles = () => {
               <FilterBar
                 searchQuery={searchQuery}
                 onSearchChange={setSearchQuery}
-                searchPlaceholder="Search client profiles..."
+                searchPlaceholder={t('assistants.client.page.search')}
                 statusFilter={statusFilter}
                 onStatusFilterChange={setStatusFilter}
                 viewMode={viewMode}
@@ -259,7 +264,7 @@ const ClientProfiles = () => {
                                   }`}
                                 >
                                   <span className={`w-2 h-2 rounded-full ${isActive ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} />
-                                  {isActive ? 'Active' : 'Inactive'}
+                                  {fmt.profileStatus(profile.status)}
                                 </span>
                                 
                                 {/* Company badge */}
@@ -309,7 +314,7 @@ const ClientProfiles = () => {
                                   {profile.timezone && (
                                     <div className="flex items-center gap-1 text-xs" style={{ color: 'var(--text-subtle)' }}>
                                       <Globe className="w-3 h-3" />
-                                      {profile.timezone.replace('Africa/', '')}
+                                      {timezoneLabel(t, profile.timezone)}
                                     </div>
                                   )}
                                 </div>
@@ -323,10 +328,10 @@ const ClientProfiles = () => {
                                       <Star className="w-4 h-4 text-white" />
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                      <p className="text-xs font-medium" style={{ color: 'var(--accent-success)' }}>Assigned VA</p>
+                                      <p className="text-xs font-medium" style={{ color: 'var(--accent-success)' }}>{t('assistants.client.page.assignedVa')}</p>
                                       <p className="text-sm font-semibold truncate" style={{ color: 'var(--text-primary)' }}>{assignment.va_profile}</p>
                                     </div>
-                                    <span className="text-xs font-bold px-2 py-1 rounded bg-gradient-primary text-white">
+                                    <span className="text-xs font-bold px-2 py-1 rounded bg-gradient-primary text-white" title={fmt.model(assignment.assignment_model)}>
                                       {assignment.assignment_model}
                                     </span>
                                   </div>
@@ -336,8 +341,8 @@ const ClientProfiles = () => {
                                       <Clock className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
                                     </div>
                                     <div className="flex-1">
-                                      <p className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>No VA Assigned</p>
-                                      <p className="text-xs" style={{ color: 'var(--text-subtle)' }}>Waiting for assignment</p>
+                                      <p className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>{t('assistants.client.page.noVa')}</p>
+                                      <p className="text-xs" style={{ color: 'var(--text-subtle)' }}>{t('assistants.client.page.waiting')}</p>
                                     </div>
                                   </div>
                                 )}
@@ -347,7 +352,7 @@ const ClientProfiles = () => {
                               <div className="flex items-center justify-between pt-3" style={{ borderTop: '1px solid var(--border-subtle)' }}>
                                 {profile.preferred_language && (
                                   <span className="text-xs flex items-center gap-1" style={{ color: 'var(--text-muted)' }}>
-                                    🌐 {profile.preferred_language === 'en' ? 'English' : profile.preferred_language === 'am' ? 'Amharic' : profile.preferred_language}
+                                    🌐 {languageLabel(profile.preferred_language)}
                                   </span>
                                 )}
                                 {profile.city && (
@@ -381,12 +386,12 @@ const ClientProfiles = () => {
                               color: 'var(--text-muted)',
                             }}
                           >
-                            <th className="px-4 py-3 font-medium">Client</th>
-                            <th className="px-4 py-3 font-medium">Company</th>
-                            <th className="px-4 py-3 font-medium">Status</th>
-                            <th className="px-4 py-3 font-medium">Assigned VA</th>
-                            <th className="px-4 py-3 font-medium">Location</th>
-                            <th className="px-4 py-3 font-medium">Actions</th>
+                            <th className="px-4 py-3 font-medium">{t('assistants.client.page.client')}</th>
+                            <th className="px-4 py-3 font-medium">{t('assistants.client.page.company')}</th>
+                            <th className="px-4 py-3 font-medium">{t('assistants.common.status')}</th>
+                            <th className="px-4 py-3 font-medium">{t('assistants.client.page.assignedVa')}</th>
+                            <th className="px-4 py-3 font-medium">{t('assistants.client.page.location')}</th>
+                            <th className="px-4 py-3 font-medium">{t('assistants.client.page.actions')}</th>
                           </tr>
                         </thead>
                         <tbody
@@ -437,17 +442,17 @@ const ClientProfiles = () => {
                                     }`}
                                   >
                                     <span className={`w-1.5 h-1.5 rounded-full ${profile.status === 'active' ? 'bg-green-500' : 'bg-gray-400'}`} />
-                                    {profile.status}
+                                    {fmt.profileStatus(profile.status)}
                                   </span>
                                 </td>
                                 <td className="px-4 py-3">
                                   {assignment ? (
                                     <div className="flex items-center gap-2">
-                                      <span className="text-xs font-bold px-2 py-0.5 rounded bg-gradient-primary text-white">{assignment.assignment_model}</span>
+                                      <span className="text-xs font-bold px-2 py-0.5 rounded bg-gradient-primary text-white" title={fmt.model(assignment.assignment_model)}>{assignment.assignment_model}</span>
                                       <span className="text-sm" style={{ color: 'var(--accent-success)' }}>{assignment.va_profile}</span>
                                     </div>
                                   ) : (
-                                    <span className="text-sm" style={{ color: 'var(--text-subtle)' }}>Unassigned</span>
+                                    <span className="text-sm" style={{ color: 'var(--text-subtle)' }}>{t('assistants.client.page.unassigned')}</span>
                                   )}
                                 </td>
                                 <td className="px-4 py-3 text-sm" style={{ color: 'var(--text-muted)' }}>
@@ -462,6 +467,8 @@ const ClientProfiles = () => {
                                       setSelectedClientId(profile.name);
                                       setIsEditModalOpen(true);
                                     }}
+                                    aria-label={t('assistants.client.page.editProfile')}
+                                    title={t('assistants.client.page.editProfile')}
                                     className="p-1.5 rounded-lg transition-colors"
                                     style={{
                                       backgroundColor: 'var(--border-subtle)',
@@ -495,15 +502,15 @@ const ClientProfiles = () => {
                     className="text-lg font-semibold mb-2"
                     style={{ color: 'var(--text-primary)' }}
                   >
-                    No client profiles found
+                    {t('assistants.client.page.emptyTitle')}
                   </p>
                   <p
                     className="text-sm mb-6"
                     style={{ color: 'var(--text-muted)' }}
                   >
                     {searchQuery || statusFilter !== 'all'
-                      ? 'Try adjusting your filters'
-                      : 'Get started by creating your first client profile'}
+                      ? t('assistants.client.page.emptyFiltered')
+                      : t('assistants.client.page.emptyStart')}
                   </p>
                   {!searchQuery && statusFilter === 'all' && (
                     <motion.button
@@ -513,7 +520,7 @@ const ClientProfiles = () => {
                       className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-gradient-secondary"
                     >
                       <Plus className="w-4 h-4" />
-                      Create Client Profile
+                      {t('assistants.client.form.createTitle')}
                     </motion.button>
                   )}
                 </Card>

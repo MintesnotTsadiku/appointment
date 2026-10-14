@@ -19,11 +19,36 @@ import { CreateVAProfileModal } from '@/components/assistants/modals/CreateVAPro
 import { EditVAProfileModal } from '@/components/assistants/modals/EditVAProfileModal';
 import { VAProfileDetailModal } from '@/components/assistants/modals/VAProfileDetailModal';
 import { assistantAPI } from '@/lib/tasks-assistants/api';
+import { serverError, useTaskFormat } from '@/lib/tasks-assistants/format';
+import { useTranslation } from '@/lib/i18n';
 import type { VAProfile } from '@/lib/tasks-assistants/types';
 import Spinner from '@/components/spinner';
 import { toast } from 'sonner';
 
+const TIER_BACKGROUNDS: Record<string, string> = {
+  junior: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+  standard: 'linear-gradient(135deg, #3b82f6, #6366f1)',
+  senior: 'linear-gradient(135deg, #f59e0b, #ef4444)',
+};
+
+const AVAILABILITY_COLORS: Record<string, { bg: string; fg: string }> = {
+  available: { bg: 'rgba(34, 197, 94, 0.15)', fg: '#22c55e' },
+  limited: { bg: 'rgba(251, 191, 36, 0.15)', fg: '#fbbf24' },
+  booked: { bg: 'rgba(239, 68, 68, 0.15)', fg: '#ef4444' },
+};
+
+const RESPONSE_ICONS: Record<string, string> = {
+  immediate: '⚡',
+  within_1_hour: '⚡',
+  within_4_hours: '🕐',
+  within_24_hours: '📅',
+};
+
 const VAProfiles = () => {
+  const { t } = useTranslation();
+  const fmt = useTaskFormat();
+  const countLabel = (count: number, one: string, many: string) =>
+    t(count === 1 ? one : many).replace('{0}', fmt.number(count));
   const [vaProfiles, setVAProfiles] = useState<VAProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -50,7 +75,7 @@ const VAProfiles = () => {
         setVAProfiles(response.data);
       }
     } catch (error: any) {
-      toast.error(error?.message || 'Failed to load VA profiles');
+      toast.error(serverError(error, t('assistants.va.page.loadFailed')));
     } finally {
       setLoading(false);
     }
@@ -86,25 +111,25 @@ const VAProfiles = () => {
 
   const stats = [
     {
-      label: 'Total VAs',
+      label: t('assistants.va.page.totalVas'),
       value: vaProfiles.length,
       icon: Users,
       gradient: 'bg-gradient-primary',
     },
     {
-      label: 'Active',
+      label: t('assistants.status.active'),
       value: activeCount,
       icon: CheckCircle2,
       gradient: 'bg-gradient-success',
     },
     {
-      label: 'Inactive',
+      label: t('assistants.status.inactive'),
       value: inactiveCount,
       icon: XCircle,
       customGradient: 'from-gray-500 to-gray-600',
     },
     {
-      label: 'Avg. Skills',
+      label: t('assistants.va.page.avgSkills'),
       value: avgSkills,
       icon: Star,
       gradient: 'bg-gradient-secondary',
@@ -131,8 +156,8 @@ const VAProfiles = () => {
       <div className="relative z-10">
         {/* Header */}
         <AssistantsHeader
-          title="VA Profiles"
-          subtitle="Virtual Assistant Management"
+          title={t('assistants.va.page.title')}
+          subtitle={t('assistants.va.page.subtitle')}
           icon={Users}
           showBackButton
           backPath="/assistants"
@@ -147,9 +172,9 @@ const VAProfiles = () => {
               <div className="absolute inset-0 transition-all bg-gradient-primary group-hover:opacity-90" />
               <Plus className="relative z-10 w-4 h-4 text-white" />
               <span className="relative z-10 text-white hidden sm:inline">
-                Create VA Profile
+                {t('assistants.va.form.createTitle')}
               </span>
-              <span className="relative z-10 text-white sm:hidden">New</span>
+              <span className="relative z-10 text-white sm:hidden">{t('assistants.va.page.createShort')}</span>
               <Sparkles className="relative z-10 w-3 h-3 text-white/70 opacity-0 group-hover:opacity-100 transition-opacity hidden lg:block" />
             </motion.button>
           }
@@ -170,7 +195,7 @@ const VAProfiles = () => {
               <FilterBar
                 searchQuery={searchQuery}
                 onSearchChange={setSearchQuery}
-                searchPlaceholder="Search VA profiles..."
+                searchPlaceholder={t('assistants.va.page.search')}
                 statusFilter={statusFilter}
                 onStatusFilterChange={setStatusFilter}
                 viewMode={viewMode}
@@ -190,22 +215,12 @@ const VAProfiles = () => {
                           .join('')
                           .slice(0, 2);
                         const rating = profile.rating || 0;
-                        const responseTimeLabel = {
-                          immediate: '⚡ Immediate',
-                          within_1_hour: '⚡ < 1 hour',
-                          within_4_hours: '🕐 < 4 hours',
-                          within_24_hours: '📅 < 24 hours',
-                        }[profile.response_time || 'within_1_hour'] || '⚡ < 1 hour';
-                        const availabilityColors = {
-                          available: { bg: 'rgba(34, 197, 94, 0.15)', text: '#22c55e', label: 'Available' },
-                          limited: { bg: 'rgba(251, 191, 36, 0.15)', text: '#fbbf24', label: 'Limited' },
-                          booked: { bg: 'rgba(239, 68, 68, 0.15)', text: '#ef4444', label: 'Booked' },
-                        }[profile.availability_status || 'available'] || { bg: 'rgba(34, 197, 94, 0.15)', text: '#22c55e', label: 'Available' };
-                        const tierColors = {
-                          junior: { bg: 'linear-gradient(135deg, #6366f1, #8b5cf6)', label: 'Junior' },
-                          standard: { bg: 'linear-gradient(135deg, #3b82f6, #6366f1)', label: 'Standard' },
-                          senior: { bg: 'linear-gradient(135deg, #f59e0b, #ef4444)', label: 'Senior' },
-                        }[profile.assistant_tier || 'standard'] || { bg: 'linear-gradient(135deg, #3b82f6, #6366f1)', label: 'Standard' };
+                        const responseTime = profile.response_time || 'within_1_hour';
+                        const responseTimeLabel = `${RESPONSE_ICONS[responseTime] || '⚡'} ${fmt.responseTime(responseTime)}`;
+                        const availability = profile.availability_status || 'available';
+                        const availabilityColors = AVAILABILITY_COLORS[availability] || AVAILABILITY_COLORS.available;
+                        const tier = profile.assistant_tier || 'standard';
+                        const tierBg = TIER_BACKGROUNDS[tier] || TIER_BACKGROUNDS.standard;
 
                         return (
                           <motion.div
@@ -236,12 +251,12 @@ const VAProfiles = () => {
                                 <div className="absolute top-3 right-3 flex gap-1.5 z-10">
                                   {profile.verified && (
                                     <span className="px-2 py-0.5 text-xs font-semibold rounded-full bg-blue-500/20 text-blue-400 flex items-center gap-1">
-                                      <CheckCircle2 className="w-3 h-3" /> Verified
+                                      <CheckCircle2 className="w-3 h-3" /> {t('assistants.va.verified')}
                                     </span>
                                   )}
                                   {profile.featured && (
                                     <span className="px-2 py-0.5 text-xs font-semibold rounded-full bg-amber-500/20 text-amber-400 flex items-center gap-1">
-                                      <Star className="w-3 h-3 fill-amber-400" /> Featured
+                                      <Star className="w-3 h-3 fill-amber-400" /> {t('assistants.va.featured')}
                                     </span>
                                   )}
                                 </div>
@@ -254,7 +269,7 @@ const VAProfiles = () => {
                                   <div className="relative shrink-0">
                                     <div 
                                       className="absolute -inset-1 rounded-2xl opacity-60"
-                                      style={{ background: tierColors.bg }}
+                                      style={{ background: tierBg }}
                                     />
                                     {avatarUrl ? (
                                       <img
@@ -265,7 +280,7 @@ const VAProfiles = () => {
                                     ) : (
                                       <div
                                         className="relative w-16 h-16 rounded-xl flex items-center justify-center text-xl font-bold text-white"
-                                        style={{ background: tierColors.bg }}
+                                        style={{ background: tierBg }}
                                       >
                                         {initials}
                                       </div>
@@ -274,7 +289,7 @@ const VAProfiles = () => {
                                     <div
                                       className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 flex items-center justify-center"
                                       style={{
-                                        backgroundColor: availabilityColors.text,
+                                        backgroundColor: availabilityColors.fg,
                                         borderColor: 'var(--bg-elevated)',
                                       }}
                                     >
@@ -319,15 +334,15 @@ const VAProfiles = () => {
                                             />
                                           ))}
                                           <span className="text-xs font-semibold ml-1" style={{ color: 'var(--text-muted)' }}>
-                                            ({profile.total_reviews || 0})
+                                            ({fmt.number(profile.total_reviews || 0)})
                                           </span>
                                         </div>
                                       )}
                                       <span 
                                         className="px-2 py-0.5 text-xs font-semibold rounded-full text-white"
-                                        style={{ background: tierColors.bg }}
+                                        style={{ background: tierBg }}
                                       >
-                                        {tierColors.label}
+                                        {fmt.tier(tier)}
                                       </span>
                                     </div>
                                   </div>
@@ -341,21 +356,21 @@ const VAProfiles = () => {
                               >
                                 <div className="text-center">
                                   <p className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>
-                                    {profile.tasks_completed || 0}
+                                    {fmt.number(profile.tasks_completed || 0)}
                                   </p>
-                                  <p className="text-xs" style={{ color: 'var(--text-subtle)' }}>Tasks</p>
+                                  <p className="text-xs" style={{ color: 'var(--text-subtle)' }}>{t('assistants.va.metric.tasks')}</p>
                                 </div>
                                 <div className="text-center">
                                   <p className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>
-                                    {profile.success_rate || 0}%
+                                    {fmt.number(profile.success_rate || 0)}%
                                   </p>
-                                  <p className="text-xs" style={{ color: 'var(--text-subtle)' }}>Success</p>
+                                  <p className="text-xs" style={{ color: 'var(--text-subtle)' }}>{t('assistants.va.metric.success')}</p>
                                 </div>
                                 <div className="text-center">
                                   <p className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>
-                                    {profile.years_experience || 0}
+                                    {fmt.number(profile.years_experience || 0)}
                                   </p>
-                                  <p className="text-xs" style={{ color: 'var(--text-subtle)' }}>Years</p>
+                                  <p className="text-xs" style={{ color: 'var(--text-subtle)' }}>{t('assistants.va.metric.years')}</p>
                                 </div>
                               </div>
 
@@ -384,7 +399,7 @@ const VAProfiles = () => {
                                           color: 'var(--text-muted)',
                                         }}
                                       >
-                                        +{profile.skills.length - 3}
+                                        +{fmt.number(profile.skills.length - 3)}
                                       </span>
                                     )}
                                   </div>
@@ -402,20 +417,20 @@ const VAProfiles = () => {
                                     {profile.languages && profile.languages.length > 0 && (
                                       <div className="flex items-center gap-1 text-xs" style={{ color: 'var(--text-subtle)' }}>
                                         <Globe className="w-3 h-3" />
-                                        {profile.languages.length}
+                                        {fmt.number(profile.languages.length)}
                                       </div>
                                     )}
                                   </div>
                                   <div className="flex items-center gap-2">
                                     <span 
                                       className="px-2 py-1 text-xs font-semibold rounded-md"
-                                      style={{ backgroundColor: availabilityColors.bg, color: availabilityColors.text }}
+                                      style={{ backgroundColor: availabilityColors.bg, color: availabilityColors.fg }}
                                     >
-                                      {availabilityColors.label}
+                                      {fmt.availability(availability)}
                                     </span>
                                     {profile.hourly_rate && (
                                       <span className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>
-                                        ${profile.hourly_rate}/hr
+                                        {t('assistants.va.page.hourlyRate').replace('{0}', `$${fmt.number(profile.hourly_rate)}`)}
                                       </span>
                                     )}
                                   </div>
@@ -449,12 +464,12 @@ const VAProfiles = () => {
                               color: 'var(--text-muted)',
                             }}
                           >
-                            <th className="px-4 py-3 font-medium">Name</th>
-                            <th className="px-4 py-3 font-medium">Email</th>
-                            <th className="px-4 py-3 font-medium">Status</th>
-                            <th className="px-4 py-3 font-medium">Skills</th>
-                            <th className="px-4 py-3 font-medium">Languages</th>
-                            <th className="px-4 py-3 font-medium">Actions</th>
+                            <th className="px-4 py-3 font-medium">{t('assistants.va.page.name')}</th>
+                            <th className="px-4 py-3 font-medium">{t('assistants.common.email')}</th>
+                            <th className="px-4 py-3 font-medium">{t('assistants.common.status')}</th>
+                            <th className="px-4 py-3 font-medium">{t('assistants.va.detail.skills')}</th>
+                            <th className="px-4 py-3 font-medium">{t('assistants.va.languages')}</th>
+                            <th className="px-4 py-3 font-medium">{t('assistants.va.page.actions')}</th>
                           </tr>
                         </thead>
                         <tbody
@@ -519,7 +534,7 @@ const VAProfiles = () => {
                                         : 'bg-gray-400'
                                     }`}
                                   />
-                                  {profile.status}
+                                  {fmt.profileStatus(profile.status)}
                                 </span>
                               </td>
                               <td className="px-4 py-3">
@@ -528,8 +543,7 @@ const VAProfiles = () => {
                                     className="text-sm"
                                     style={{ color: 'var(--text-muted)' }}
                                   >
-                                    {profile.skills.length} skill
-                                    {profile.skills.length !== 1 ? 's' : ''}
+                                    {countLabel(profile.skills.length, 'assistants.va.skillsOne', 'assistants.va.skillsMany')}
                                   </span>
                                 ) : (
                                   <span
@@ -546,8 +560,7 @@ const VAProfiles = () => {
                                     className="text-sm"
                                     style={{ color: 'var(--text-muted)' }}
                                   >
-                                    {profile.languages.length} lang
-                                    {profile.languages.length !== 1 ? 's' : ''}
+                                    {countLabel(profile.languages.length, 'assistants.va.languagesOne', 'assistants.va.languagesMany')}
                                   </span>
                                 ) : (
                                   <span
@@ -567,6 +580,8 @@ const VAProfiles = () => {
                                     setSelectedVAId(profile.name);
                                     setIsEditModalOpen(true);
                                   }}
+                                  aria-label={t('assistants.va.page.editProfile')}
+                                  title={t('assistants.va.page.editProfile')}
                                   className="p-1.5 rounded-lg transition-colors"
                                   style={{
                                     backgroundColor: 'var(--border-subtle)',
@@ -599,15 +614,15 @@ const VAProfiles = () => {
                     className="text-lg font-semibold mb-2"
                     style={{ color: 'var(--text-primary)' }}
                   >
-                    No VA profiles found
+                    {t('assistants.va.page.emptyTitle')}
                   </p>
                   <p
                     className="text-sm mb-6"
                     style={{ color: 'var(--text-muted)' }}
                   >
                     {searchQuery || statusFilter !== 'all'
-                      ? 'Try adjusting your filters'
-                      : 'Get started by creating your first VA profile'}
+                      ? t('assistants.va.page.emptyFiltered')
+                      : t('assistants.va.page.emptyStart')}
                   </p>
                   {!searchQuery && statusFilter === 'all' && (
                     <motion.button
@@ -617,7 +632,7 @@ const VAProfiles = () => {
                       className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-gradient-primary"
                     >
                       <Plus className="w-4 h-4" />
-                      Create VA Profile
+                      {t('assistants.va.form.createTitle')}
                     </motion.button>
                   )}
                 </Card>

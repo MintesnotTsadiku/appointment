@@ -5,45 +5,6 @@
 import type { Task } from './types';
 
 /**
- * Format date for display
- */
-export const formatDate = (dateString?: string): string => {
-  if (!dateString) return '';
-  const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  });
-};
-
-/**
- * Format datetime for display
- */
-export const formatDateTime = (dateString?: string): string => {
-  if (!dateString) return '';
-  const date = new Date(dateString);
-  return date.toLocaleString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-};
-
-/**
- * Format duration (minutes) to readable string
- */
-export const formatDuration = (minutes?: number): string => {
-  if (!minutes) return '';
-  if (minutes < 60) return `${minutes} min`;
-  const hours = Math.floor(minutes / 60);
-  const mins = minutes % 60;
-  return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
-};
-
-/**
  * Get status color for task status
  */
 const normalizeStatus = (status?: string): Task['status'] => {
@@ -106,35 +67,6 @@ export const getPriorityColor = (priority: Task['priority']): string => {
     'Urgent': 'bg-red-500',
   };
   return colors[normalized] || 'bg-gray-500';
-};
-
-/**
- * Get status label
- */
-export const getStatusLabel = (status: Task['status']): string => {
-  const normalized = normalizeStatus(status);
-  const labels: Record<Task['status'], string> = {
-    'Requested': 'Requested',
-    'Assigned': 'Assigned',
-    'In Progress': 'In Progress',
-    'Completed': 'Completed',
-    'Cancelled': 'Cancelled',
-  };
-  return labels[normalized] || normalized;
-};
-
-/**
- * Get priority label
- */
-export const getPriorityLabel = (priority: Task['priority']): string => {
-  const normalized = normalizePriority(priority);
-  const labels: Record<Task['priority'], string> = {
-    'Low': 'Low',
-    'Medium': 'Medium',
-    'High': 'High',
-    'Urgent': 'Urgent',
-  };
-  return labels[normalized] || normalized;
 };
 
 /**

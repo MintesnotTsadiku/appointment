@@ -1,0 +1,210 @@
+# The Assistants and Tasks area in Amharic, mobile 390, dark: VA profiles, client profiles, assignments, the
+# dashboard and tasks (cards, board, month, week), with their detail, edit and create dialogs.
+# Run appointment.tests.assistants_i18n_qa_fixtures.setup first and cleanup afterwards
+# (three assistants, three clients, three assignments, six tasks around today).
+# The English desktop light run is assistants-en.yaml; phone fields are phone-assistants.yaml.
+app: appointment
+base_url: http://localhost:47800
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 240000
+options:
+  ignore_baseline_drift: true
+  color_scheme: dark
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.assistants_i18n_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-assistants-am-dark
+default_role: Administrator
+auth:
+  type: frappe_session
+  username: Administrator
+  verify_path: /api/method/frappe.auth.get_logged_user
+scenarios:
+- id: assistants_am_mobile_dark
+  title: Assistants and tasks pages, details and forms (am, mobile_dark)
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /assistants/va-profiles
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="va-create"]'
+  actions:
+  - action: press
+    selector: '[data-qa="topnav-language"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation.messages
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="va-card"]:has-text("{qa_va_name}")'
+    assertions:
+    - type: text_contains
+      value: ጠቅላላ ረዳቶች
+  - action: screenshot
+    name: assistants_am_mobile_dark-1-va-list.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="va-card"]:has-text("{qa_va_name}")'
+  - action: wait_for
+    selector: '[data-qa="va-detail-tier"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="va-detail-tier"]'
+      value: ልምድ ያለው
+    - type: visible_selector
+      value: '[data-qa="va-detail-close"]'
+  - action: screenshot
+    name: assistants_am_mobile_dark-2-va-detail.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="assistant-detail-edit"]'
+  - action: wait_for
+    selector: '[data-qa="assistant-profile-submit"]'
+  - action: screenshot
+    name: assistants_am_mobile_dark-3-va-edit.png
+    full_page: false
+  - action: press
+    selector: '[role="dialog"]'
+    key: Escape
+  - action: click
+    selector: '[data-qa="va-create"]'
+  - action: wait_for
+    selector: '[role="dialog"] #full_name'
+  - action: screenshot
+    name: assistants_am_mobile_dark-4-va-create.png
+    full_page: false
+  - action: press
+    selector: '[role="dialog"]'
+    key: Escape
+  - action: open_url
+    url: /assistants/client-profiles
+  - action: wait_for
+    selector: '[data-qa="client-card"]:has-text("{qa_client_name}")'
+    assertions:
+    - type: text_contains
+      value: ጠቅላላ ደንበኞች
+  - action: screenshot
+    name: assistants_am_mobile_dark-5-client-list.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="client-card"]:has-text("{qa_client_name}")'
+  - action: wait_for
+    selector: '[data-qa="client-detail"]'
+  - action: screenshot
+    name: assistants_am_mobile_dark-6-client-detail.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="assistant-detail-edit"]'
+  - action: wait_for
+    selector: '[data-qa="assistant-profile-submit"]'
+  - action: screenshot
+    name: assistants_am_mobile_dark-7-client-edit.png
+    full_page: false
+  - action: press
+    selector: '[role="dialog"]'
+    key: Escape
+  - action: click
+    selector: '[data-qa="client-create"]'
+  - action: wait_for
+    selector: '[role="dialog"] #full_name'
+  - action: screenshot
+    name: assistants_am_mobile_dark-8-client-create.png
+    full_page: false
+  - action: press
+    selector: '[role="dialog"]'
+    key: Escape
+  - action: open_url
+    url: /assistants/assignments
+  - action: wait_for
+    selector: '[data-qa="assignment-card"]:has-text("{qa_client_email}")'
+    assertions:
+    - type: text_contains
+      value: ለ2 የተጋራ (1:2)
+  - action: screenshot
+    name: assistants_am_mobile_dark-9-assignments.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="assignment-create"]'
+  - action: wait_for
+    selector: '[data-qa="assignment-drawer"]'
+  - action: screenshot
+    name: assistants_am_mobile_dark-10-assignment-create.png
+    full_page: false
+  - action: open_url
+    url: /assistants
+  - action: wait_for
+    selector: '[data-qa="assistants-dashboard"]'
+  - action: screenshot
+    name: assistants_am_mobile_dark-11-dashboard.png
+    full_page: false
+  - action: open_url
+    url: /tasks
+  - action: wait_for
+    selector: '[data-qa="task-card"]:has-text("{qa_task_title}")'
+    assertions:
+    - type: text_contains
+      value: ተግባራት
+    - type: text_contains
+      value: አስቸኳይ
+  - action: screenshot
+    name: assistants_am_mobile_dark-12-tasks-cards.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="tasks-view-kanban"]'
+  - action: wait_for
+    selector: '[data-qa="task-card"]:has-text("{qa_task_title}")'
+    assertions:
+    - type: text_contains
+      value: በሂደት ላይ
+  - action: screenshot
+    name: assistants_am_mobile_dark-13-tasks-board.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="tasks-view-month"]'
+  - action: wait_for
+    selector: '[data-qa="tasks-page"]'
+  - action: screenshot
+    name: assistants_am_mobile_dark-14-tasks-month.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="tasks-view-week"]'
+  - action: wait_for
+    selector: '[data-qa="tasks-page"]'
+  - action: screenshot
+    name: assistants_am_mobile_dark-15-tasks-week.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="tasks-view-cards"]'
+  - action: click
+    selector: '[data-qa="task-card"]:has-text("{qa_task_title}")'
+  - action: wait_for
+    selector: '[data-qa="task-detail"]'
+  - action: screenshot
+    name: assistants_am_mobile_dark-16-task-detail.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="task-detail-edit"]'
+  - action: wait_for
+    selector: '[data-qa="task-form"]'
+  - action: screenshot
+    name: assistants_am_mobile_dark-17-task-edit.png
+    full_page: false
+  - action: press
+    selector: '[role="dialog"]'
+    key: Escape
+  - action: click
+    selector: '[data-qa="task-create"]'
+  - action: wait_for
+    selector: '[data-qa="task-form"]'
+  - action: screenshot
+    name: assistants_am_mobile_dark-18-task-create.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

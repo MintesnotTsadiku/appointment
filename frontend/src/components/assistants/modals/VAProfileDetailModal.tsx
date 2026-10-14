@@ -16,12 +16,16 @@ import {
   DollarSign,
   MessageSquare,
   Languages,
-  Wrench
+  Wrench,
+  X
 } from 'lucide-react';
-import { Dialog, DialogContent } from '@/components/dialog';
+import { Dialog, DialogClose, DialogContent, DialogTitle } from '@/components/dialog';
 import { PhoneText } from '@/components/phone-input';
 import { useTranslation } from '@/lib/i18n';
 import { assistantAPI } from '@/lib/tasks-assistants/api';
+import { serverError, useTaskFormat } from '@/lib/tasks-assistants/format';
+import { clockForLanguage, formatWallTime } from '@/lib/time';
+import { vaZoneName } from './CreateVAProfileModal';
 import type { VAProfile } from '@/lib/tasks-assistants/types';
 import Spinner from '@/components/spinner';
 import { toast } from 'sonner';
@@ -34,6 +38,28 @@ interface VAProfileDetailModalProps {
   onDelete?: () => void;
 }
 
+/** The header renders its own close button beside the tier badge, so the dialog's corner one is hidden. */
+const HIDE_BUILT_IN_CLOSE = '[&>button:last-child]:hidden';
+
+const TIER_BACKGROUNDS: Record<string, string> = {
+  junior: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+  standard: 'linear-gradient(135deg, #3b82f6, #6366f1)',
+  senior: 'linear-gradient(135deg, #f59e0b, #ef4444)',
+};
+
+const AVAILABILITY_COLORS: Record<string, { bg: string; fg: string }> = {
+  available: { bg: 'rgba(34, 197, 94, 0.15)', fg: '#22c55e' },
+  limited: { bg: 'rgba(251, 191, 36, 0.15)', fg: '#fbbf24' },
+  booked: { bg: 'rgba(239, 68, 68, 0.15)', fg: '#ef4444' },
+};
+
+const RESPONSE_ICONS: Record<string, string> = {
+  immediate: '⚡',
+  within_1_hour: '⚡',
+  within_4_hours: '🕐',
+  within_24_hours: '📅',
+};
+
 const resolveAvatar = (url?: string) => {
   if (!url) return '';
   if (url.startsWith('http')) return url;
@@ -44,7 +70,8 @@ const resolveAvatar = (url?: string) => {
 };
 
 export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }: VAProfileDetailModalProps) => {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
+  const fmt = useTaskFormat();
   const [profile, setProfile] = useState<VAProfile | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -64,7 +91,7 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
         setProfile(response.data);
       }
     } catch (error: any) {
-      toast.error(error?.message || 'Failed to load VA profile');
+      toast.error(serverError(error, t('assistants.va.toast.loadOneFailed')));
       onClose();
     } finally {
       setLoading(false);
@@ -72,14 +99,14 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
   };
 
   const handleDelete = async () => {
-    if (!confirm('Are you sure you want to delete this VA profile?')) return;
+    if (!confirm(t('assistants.va.detail.confirmDelete'))) return;
     try {
       await assistantAPI.vaProfile.delete(vaId!);
-      toast.success('VA Profile deleted successfully');
+      toast.success(t('assistants.va.toast.deleted'));
       onDelete?.();
       onClose();
     } catch (error: any) {
-      toast.error(error?.message || 'Failed to delete VA profile');
+      toast.error(serverError(error, t('assistants.va.toast.deleteFailed')));
     }
   };
 
@@ -88,13 +115,14 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
       <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogContent
           side="right"
-          className="max-w-2xl sm:max-w-xl sm:right-4 sm:left-auto sm:inset-y-auto sm:top-auto sm:bottom-4 sm:h-[90vh] sm:max-h-[90vh] sm:rounded-2xl overflow-hidden"
+          className={`max-w-2xl sm:max-w-xl sm:right-4 sm:left-auto sm:inset-y-auto sm:top-auto sm:bottom-4 sm:h-[90vh] sm:max-h-[90vh] sm:rounded-2xl overflow-hidden ${HIDE_BUILT_IN_CLOSE}`}
+          data-qa="va-detail"
           style={{ backgroundColor: 'var(--bg-elevated)', border: '1px solid var(--border-default)' }}
         >
           <div className="p-12 text-center">
-            <p className="text-lg font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>VA Profile not found</p>
-            <button onClick={onClose} className="px-4 py-2 rounded-xl text-sm font-semibold" style={{ backgroundColor: 'var(--border-subtle)', color: 'var(--text-secondary)' }}>
-              Close
+            <DialogTitle className="text-lg font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>{t('assistants.va.detail.notFound')}</DialogTitle>
+            <button onClick={onClose} data-qa="va-detail-close" className="px-4 py-2 rounded-xl text-sm font-semibold" style={{ backgroundColor: 'var(--border-subtle)', color: 'var(--text-secondary)' }}>
+              {t('assistants.common.close')}
             </button>
           </div>
         </DialogContent>
@@ -107,30 +135,23 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
   const isActive = profile?.status === 'active';
   const rating = profile?.rating || 0;
   
-  const tierConfig = {
-    junior: { bg: 'linear-gradient(135deg, #6366f1, #8b5cf6)', label: 'Junior' },
-    standard: { bg: 'linear-gradient(135deg, #3b82f6, #6366f1)', label: 'Standard' },
-    senior: { bg: 'linear-gradient(135deg, #f59e0b, #ef4444)', label: 'Senior' },
-  }[profile?.assistant_tier || 'standard'] || { bg: 'linear-gradient(135deg, #3b82f6, #6366f1)', label: 'Standard' };
+  const wallTime = (value?: string) => (value ? formatWallTime(value.slice(0, 5), clockForLanguage(language, '24h')) : '');
 
-  const availabilityConfig = {
-    available: { bg: 'rgba(34, 197, 94, 0.15)', text: '#22c55e', label: 'Available' },
-    limited: { bg: 'rgba(251, 191, 36, 0.15)', text: '#fbbf24', label: 'Limited Availability' },
-    booked: { bg: 'rgba(239, 68, 68, 0.15)', text: '#ef4444', label: 'Fully Booked' },
-  }[profile?.availability_status || 'available'] || { bg: 'rgba(34, 197, 94, 0.15)', text: '#22c55e', label: 'Available' };
+  const tier = profile?.assistant_tier || 'standard';
+  const tierBg = TIER_BACKGROUNDS[tier] || TIER_BACKGROUNDS.standard;
 
-  const responseTimeConfig = {
-    immediate: { icon: '⚡', label: 'Immediate Response' },
-    within_1_hour: { icon: '⚡', label: 'Responds within 1 hour' },
-    within_4_hours: { icon: '🕐', label: 'Responds within 4 hours' },
-    within_24_hours: { icon: '📅', label: 'Responds within 24 hours' },
-  }[profile?.response_time || 'within_1_hour'] || { icon: '⚡', label: 'Responds within 1 hour' };
+  const availability = profile?.availability_status || 'available';
+  const availabilityColors = AVAILABILITY_COLORS[availability] || AVAILABILITY_COLORS.available;
+
+  const responseTime = profile?.response_time || 'within_1_hour';
+  const responseIcon = RESPONSE_ICONS[responseTime] || '⚡';
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
         side="right"
-        className="max-w-2xl sm:max-w-xl sm:right-4 sm:left-auto sm:inset-y-auto sm:top-auto sm:bottom-4 sm:h-[90vh] sm:max-h-[90vh] sm:rounded-2xl overflow-hidden p-0"
+        className={`max-w-2xl sm:max-w-xl sm:right-4 sm:left-auto sm:inset-y-auto sm:top-auto sm:bottom-4 sm:h-[90vh] sm:max-h-[90vh] sm:rounded-2xl overflow-hidden p-0 ${profile ? HIDE_BUILT_IN_CLOSE : ''}`}
+        data-qa="va-detail"
         style={{ backgroundColor: 'var(--bg-elevated)', border: '1px solid var(--border-default)' }}
       >
         {loading ? (
@@ -143,26 +164,36 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
         ) : profile ? (
           <div className="flex flex-col h-full">
             {/* Hero Header */}
-            <div className="relative" style={{ background: tierConfig.bg }}>
+            <div className="relative" style={{ background: tierBg }}>
               <div className="absolute inset-0 bg-black/20" />
               <div className="relative px-6 pt-6 pb-16">
                 {/* Top badges */}
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex gap-2">
+                <div className="flex items-start justify-between gap-3 mb-4">
+                  <div className="flex flex-wrap gap-2 min-w-0">
                     {profile.verified && (
                       <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-white/20 text-white flex items-center gap-1 backdrop-blur-xs">
-                        <CheckCircle2 className="w-3.5 h-3.5" /> Verified
+                        <CheckCircle2 className="w-3.5 h-3.5" /> {t('assistants.va.verified')}
                       </span>
                     )}
                     {profile.featured && (
                       <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-amber-500/30 text-amber-200 flex items-center gap-1 backdrop-blur-xs">
-                        <Star className="w-3.5 h-3.5 fill-amber-300" /> Featured
+                        <Star className="w-3.5 h-3.5 fill-amber-300" /> {t('assistants.va.featured')}
                       </span>
                     )}
                   </div>
-                  <span className="px-3 py-1 text-xs font-bold rounded-full bg-white/20 text-white backdrop-blur-xs">
-                    {tierConfig.label}
-                  </span>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span data-qa="va-detail-tier" className="px-3 py-1 text-xs font-bold rounded-full bg-white/20 text-white backdrop-blur-xs whitespace-nowrap">
+                      {fmt.tier(tier)}
+                    </span>
+                    <DialogClose
+                      data-qa="va-detail-close"
+                      aria-label={t('assistants.common.close')}
+                      title={t('assistants.common.close')}
+                      className="p-1.5 rounded-xl text-white/80 transition-all hover:text-white hover:bg-black/20 focus:outline-hidden focus:ring-2 focus:ring-white/60"
+                    >
+                      <X className="h-5 w-5" />
+                    </DialogClose>
+                  </div>
                 </div>
 
                 {/* Avatar and name */}
@@ -180,7 +211,7 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
                     </div>
                   </div>
                   <div className="flex-1">
-                    <h2 className="text-2xl font-bold text-white mb-1">{profile.full_name}</h2>
+                    <DialogTitle className="text-2xl font-bold text-white mb-1 leading-tight">{profile.full_name}</DialogTitle>
                     {profile.headline && <p className="text-white/80 text-sm">{profile.headline}</p>}
                     {/* Rating */}
                     {rating > 0 && (
@@ -188,7 +219,7 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
                         {[1, 2, 3, 4, 5].map((star) => (
                           <Star key={star} className={`w-4 h-4 ${star <= rating ? 'fill-amber-300 text-amber-300' : 'text-white/30'}`} />
                         ))}
-                        <span className="text-white/80 text-sm ml-1">({profile.total_reviews || 0} reviews)</span>
+                        <span className="text-white/80 text-sm ml-1">({t('assistants.va.detail.reviews').replace('{0}', fmt.number(profile.total_reviews || 0))})</span>
                       </div>
                     )}
                   </div>
@@ -198,13 +229,13 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
               {/* Metrics cards - floating */}
               <div className="absolute -bottom-12 left-6 right-6 grid grid-cols-4 gap-3">
                 {[
-                  { label: 'Tasks', value: profile.tasks_completed || 0, icon: Briefcase },
-                  { label: 'Success', value: `${profile.success_rate || 0}%`, icon: Award },
-                  { label: 'Years', value: profile.years_experience || 0, icon: Clock },
-                  { label: 'Rate', value: profile.hourly_rate ? `$${profile.hourly_rate}` : '-', icon: DollarSign },
+                  { key: 'tasks', label: t('assistants.va.metric.tasks'), value: fmt.number(profile.tasks_completed || 0), icon: Briefcase },
+                  { key: 'success', label: t('assistants.va.metric.success'), value: `${fmt.number(profile.success_rate || 0)}%`, icon: Award },
+                  { key: 'years', label: t('assistants.va.metric.years'), value: fmt.number(profile.years_experience || 0), icon: Clock },
+                  { key: 'rate', label: t('assistants.va.metric.rate'), value: profile.hourly_rate ? `$${fmt.number(profile.hourly_rate)}` : '-', icon: DollarSign },
                 ].map((metric, i) => (
                   <motion.div
-                    key={metric.label}
+                    key={metric.key}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.1 }}
@@ -213,7 +244,7 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
                   >
                     <metric.icon className="w-4 h-4 mx-auto mb-1" style={{ color: 'var(--accent-primary)' }} />
                     <p className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>{metric.value}</p>
-                    <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{metric.label}</p>
+                    <p className="text-xs truncate" style={{ color: 'var(--text-muted)' }}>{metric.label}</p>
                   </motion.div>
                 ))}
               </div>
@@ -223,18 +254,18 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
             <div className="flex-1 overflow-y-auto pt-16 px-6 pb-6 space-y-6">
               {/* Availability & Response */}
               <div className="flex items-center gap-3 flex-wrap">
-                <span className="px-3 py-1.5 text-sm font-semibold rounded-lg" style={{ backgroundColor: availabilityConfig.bg, color: availabilityConfig.text }}>
-                  {availabilityConfig.label}
+                <span className="px-3 py-1.5 text-sm font-semibold rounded-lg" style={{ backgroundColor: availabilityColors.bg, color: availabilityColors.fg }}>
+                  {fmt.availability(availability)}
                 </span>
                 <span className="px-3 py-1.5 text-sm rounded-lg flex items-center gap-1.5" style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-muted)' }}>
-                  {responseTimeConfig.icon} {responseTimeConfig.label}
+                  {responseIcon} {t('assistants.va.detail.responds').replace('{0}', fmt.responseTime(responseTime))}
                 </span>
               </div>
 
               {/* Bio */}
               {profile.bio && (
                 <div>
-                  <h3 className="text-sm font-bold uppercase tracking-wide mb-2" style={{ color: 'var(--text-subtle)' }}>About</h3>
+                  <h3 className="text-sm font-bold uppercase tracking-wide mb-2" style={{ color: 'var(--text-subtle)' }}>{t('assistants.va.detail.about')}</h3>
                   <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{profile.bio}</p>
                 </div>
               )}
@@ -242,7 +273,7 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
               {/* Skills */}
               {profile.skills && profile.skills.length > 0 && (
                 <div>
-                  <h3 className="text-sm font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--text-subtle)' }}>Skills</h3>
+                  <h3 className="text-sm font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--text-subtle)' }}>{t('assistants.va.detail.skills')}</h3>
                   <div className="flex flex-wrap gap-2">
                     {profile.skills.map((skill) => (
                       <span
@@ -251,7 +282,7 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
                         style={{ backgroundColor: 'var(--accent-primary-light)', color: 'var(--accent-primary)' }}
                       >
                         {skill.skill}
-                        <span className="text-xs opacity-70 capitalize">• {skill.proficiency_level}</span>
+                        <span className="text-xs opacity-70">• {fmt.proficiency(skill.proficiency_level)}</span>
                       </span>
                     ))}
                   </div>
@@ -262,7 +293,7 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
               {profile.tools && profile.tools.length > 0 && (
                 <div>
                   <h3 className="text-sm font-bold uppercase tracking-wide mb-3 flex items-center gap-2" style={{ color: 'var(--text-subtle)' }}>
-                    <Wrench className="w-4 h-4" /> Tools & Software
+                    <Wrench className="w-4 h-4" /> {t('assistants.va.detail.tools')}
                   </h3>
                   <div className="grid grid-cols-2 gap-2">
                     {profile.tools.map((tool) => (
@@ -272,8 +303,8 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
                         style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-subtle)' }}
                       >
                         <span className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{tool.tool_name}</span>
-                        <span className="text-xs px-2 py-0.5 rounded-full capitalize" style={{ backgroundColor: 'var(--accent-primary-light)', color: 'var(--accent-primary)' }}>
-                          {tool.proficiency_level}
+                        <span className="text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: 'var(--accent-primary-light)', color: 'var(--accent-primary)' }}>
+                          {fmt.proficiency(tool.proficiency_level)}
                         </span>
                       </div>
                     ))}
@@ -285,7 +316,7 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
               {profile.specializations && profile.specializations.length > 0 && (
                 <div>
                   <h3 className="text-sm font-bold uppercase tracking-wide mb-3 flex items-center gap-2" style={{ color: 'var(--text-subtle)' }}>
-                    <Zap className="w-4 h-4" /> Industry Specializations
+                    <Zap className="w-4 h-4" /> {t('assistants.va.detail.specializations')}
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {profile.specializations.map((spec) => (
@@ -294,7 +325,7 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
                         className="px-3 py-1.5 text-sm font-medium rounded-lg"
                         style={{ background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2))', color: '#a78bfa' }}
                       >
-                        {spec.specialization} {spec.years_in_industry ? `• ${spec.years_in_industry}y` : ''}
+                        {spec.specialization} {spec.years_in_industry ? `• ${t('assistants.va.detail.yearsShort').replace('{0}', fmt.number(spec.years_in_industry))}` : ''}
                       </span>
                     ))}
                   </div>
@@ -305,7 +336,7 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
               {profile.certifications && profile.certifications.length > 0 && (
                 <div>
                   <h3 className="text-sm font-bold uppercase tracking-wide mb-3 flex items-center gap-2" style={{ color: 'var(--text-subtle)' }}>
-                    <Award className="w-4 h-4" /> Certifications
+                    <Award className="w-4 h-4" /> {t('assistants.va.detail.certifications')}
                   </h3>
                   <div className="space-y-2">
                     {profile.certifications.map((cert, i) => (
@@ -316,7 +347,7 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
                       >
                         <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{cert.certification_name}</p>
                         {cert.issuing_organization && <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{cert.issuing_organization}</p>}
-                        {cert.date_obtained && <p className="text-xs mt-1" style={{ color: 'var(--text-subtle)' }}>Obtained: {new Date(cert.date_obtained).toLocaleDateString()}</p>}
+                        {cert.date_obtained && <p className="text-xs mt-1" style={{ color: 'var(--text-subtle)' }}>{t('assistants.va.detail.obtained').replace('{0}', fmt.date(cert.date_obtained))}</p>}
                       </div>
                     ))}
                   </div>
@@ -327,7 +358,7 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
               {profile.languages && profile.languages.length > 0 && (
                 <div>
                   <h3 className="text-sm font-bold uppercase tracking-wide mb-3 flex items-center gap-2" style={{ color: 'var(--text-subtle)' }}>
-                    <Languages className="w-4 h-4" /> Languages
+                    <Languages className="w-4 h-4" /> {t('assistants.va.languages')}
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {profile.languages.map((lang) => (
@@ -338,7 +369,7 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
                       >
                         <Globe className="w-3.5 h-3.5" style={{ color: 'var(--text-muted)' }} />
                         {lang.language}
-                        <span className="text-xs capitalize" style={{ color: 'var(--text-muted)' }}>• {lang.proficiency}</span>
+                        <span className="text-xs" style={{ color: 'var(--text-muted)' }}>• {fmt.proficiency(lang.proficiency)}</span>
                       </span>
                     ))}
                   </div>
@@ -350,7 +381,7 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
                 <div className="p-4 rounded-xl" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-subtle)' }}>
                   <div className="flex items-center gap-2 mb-1">
                     <Mail className="w-4 h-4" style={{ color: 'var(--accent-primary)' }} />
-                    <span className="text-xs font-semibold uppercase" style={{ color: 'var(--text-subtle)' }}>Email</span>
+                    <span className="text-xs font-semibold uppercase" style={{ color: 'var(--text-subtle)' }}>{t('assistants.common.email')}</span>
                   </div>
                   <p className="text-sm font-medium truncate" style={{ color: 'var(--text-primary)' }}>{profile.email}</p>
                 </div>
@@ -367,9 +398,9 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
                   <div className="p-4 rounded-xl" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-subtle)' }}>
                     <div className="flex items-center gap-2 mb-1">
                       <Calendar className="w-4 h-4" style={{ color: 'var(--accent-primary)' }} />
-                      <span className="text-xs font-semibold uppercase" style={{ color: 'var(--text-subtle)' }}>Timezone</span>
+                      <span className="text-xs font-semibold uppercase" style={{ color: 'var(--text-subtle)' }}>{t('assistants.common.timeZone')}</span>
                     </div>
-                    <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{profile.timezone.replace('Africa/', '')}</p>
+                    <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{vaZoneName(t, profile.timezone)}</p>
                   </div>
                 )}
               </div>
@@ -379,11 +410,11 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
                 <div className="p-4 rounded-xl" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-subtle)' }}>
                   <div className="flex items-center gap-2 mb-2">
                     <Clock className="w-4 h-4" style={{ color: 'var(--accent-primary)' }} />
-                    <span className="text-xs font-semibold uppercase" style={{ color: 'var(--text-subtle)' }}>Working Hours</span>
+                    <span className="text-xs font-semibold uppercase" style={{ color: 'var(--text-subtle)' }}>{t('assistants.va.detail.workingHours')}</span>
                   </div>
                   <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
-                    {profile.working_hours_start?.slice(0, 5)} - {profile.working_hours_end?.slice(0, 5)}
-                    {profile.available_hours_per_week && <span style={{ color: 'var(--text-muted)' }}> • {profile.available_hours_per_week}h/week available</span>}
+                    {wallTime(profile.working_hours_start)} - {wallTime(profile.working_hours_end)}
+                    {profile.available_hours_per_week && <span style={{ color: 'var(--text-muted)' }}> • {t('assistants.va.detail.hoursPerWeek').replace('{0}', fmt.number(profile.available_hours_per_week))}</span>}
                   </p>
                 </div>
               )}
@@ -399,7 +430,7 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
                 style={{ backgroundColor: 'rgba(239, 68, 68, 0.15)', color: '#ef4444' }}
               >
                 <Trash2 className="w-4 h-4 inline mr-2" />
-                Delete
+                {t('assistants.common.delete')}
               </motion.button>
               <div className="flex gap-3">
                 <motion.button
@@ -409,7 +440,7 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
                   style={{ backgroundColor: 'var(--bg-elevated)', border: '1px solid var(--border-default)', color: 'var(--text-primary)' }}
                 >
                   <MessageSquare className="w-4 h-4" />
-                  Message
+                  {t('assistants.va.detail.message')}
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.02 }}
@@ -417,10 +448,10 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
                   onClick={onEdit}
                   data-qa="assistant-detail-edit"
                   className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all flex items-center gap-2"
-                  style={{ background: tierConfig.bg }}
+                  style={{ background: tierBg }}
                 >
                   <Edit className="w-4 h-4" />
-                  Edit Profile
+                  {t('assistants.va.detail.editProfile')}
                 </motion.button>
               </div>
             </div>

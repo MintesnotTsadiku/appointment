@@ -9,7 +9,16 @@ import { taskAPI } from '@/lib/tasks-assistants/api';
 import type { Task } from '@/lib/tasks-assistants/types';
 import Spinner from '@/components/spinner';
 import { toast } from 'sonner';
-import { formatDateTime, formatDuration, isOverdue } from '@/lib/tasks-assistants/utils';
+import { isOverdue } from '@/lib/tasks-assistants/utils';
+import { serverError, useTaskFormat } from '@/lib/tasks-assistants/format';
+import { useTranslation } from '@/lib/i18n';
+
+const DEPENDENCY_KEYS: Record<string, string> = {
+  finish_to_start: 'finishToStart',
+  start_to_start: 'startToStart',
+  finish_to_finish: 'finishToFinish',
+  start_to_finish: 'startToFinish',
+};
 
 interface TaskDetailModalProps {
   taskId: string | null;
@@ -20,6 +29,8 @@ interface TaskDetailModalProps {
 }
 
 export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: TaskDetailModalProps) => {
+  const { t } = useTranslation();
+  const fmt = useTaskFormat();
   const [task, setTask] = useState<Task | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -38,8 +49,8 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
       if (response.success && response.data) {
         setTask(response.data);
       }
-    } catch (error: any) {
-      toast.error(error?.message || 'Failed to load task');
+    } catch (error) {
+      toast.error(serverError(error, t('tasks.detail.loadFailed')));
       onClose();
     } finally {
       setLoading(false);
@@ -47,39 +58,26 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
   };
 
   const handleDelete = async () => {
-    if (!confirm('Are you sure you want to delete this task?')) return;
+    if (!confirm(t('tasks.detail.confirmDelete'))) return;
 
     try {
       await taskAPI.delete(taskId!);
-      toast.success('Task deleted successfully');
+      toast.success(t('tasks.detail.deleted'));
       onDelete?.();
       onClose();
-    } catch (error: any) {
-      toast.error(error?.message || 'Failed to delete task');
+    } catch (error) {
+      toast.error(serverError(error, t('tasks.detail.deleteFailed')));
     }
   };
 
   const overdue = task ? isOverdue(task) : false;
-  const isUrgent = task?.priority === 'urgent';
-  const isCompleted = task?.status === 'completed';
-
-  // Get gradient based on status/priority using CSS variables
-  const getHeaderGradient = () => {
-    if (overdue) {
-      return `linear-gradient(135deg, var(--accent-secondary), var(--accent-secondary-hover))`;
-    }
-    if (isUrgent) {
-      return `linear-gradient(135deg, var(--accent-warning), var(--accent-secondary))`;
-    }
-    if (isCompleted) {
-      return `linear-gradient(135deg, var(--accent-success), var(--accent-success-hover))`;
-    }
-    return `linear-gradient(135deg, var(--accent-primary), var(--accent-primary-hover))`;
-  };
+  const dependencyLabel = (type: string) =>
+    DEPENDENCY_KEYS[type] ? t(`tasks.detail.dependency.${DEPENDENCY_KEYS[type]}`) : type;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
+        data-qa="task-detail"
         side="right"
         className="w-full sm:max-w-[640px] p-0 h-full overflow-hidden"
         style={{
@@ -108,13 +106,13 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
             <>
               {/* Premium Gradient Header */}
               <div 
-                className="relative h-24 overflow-hidden border-b"
+                className="relative min-h-24 overflow-hidden border-b"
                 style={{
-                  backgroundColor: '#f4f4f5',
+                  backgroundColor: 'var(--bg-secondary)',
                   borderColor: 'var(--border-default)',
                 }}
               >
-                <div className="relative h-full flex items-center px-6">
+                <div className="relative h-full flex items-center pl-6 pr-14 py-4">
                   <div className="flex-1">
                     <motion.h2
                       initial={{ opacity: 0, y: 6 }}
@@ -139,7 +137,7 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                           }}
                         >
                           <AlertTriangle className="w-3 h-3" />
-                          Overdue
+                          {t('tasks.card.overdue')}
                         </motion.span>
                       )}
                     </div>
@@ -154,6 +152,7 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={onEdit}
+                    data-qa="task-detail-edit"
                     className="px-4 py-2 rounded-xl text-sm font-semibold backdrop-blur-xs transition-all"
                     style={{
                       backgroundColor: 'var(--border-subtle)',
@@ -162,7 +161,7 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                     }}
                   >
                     <Edit className="w-4 h-4 inline mr-2" />
-                    Edit
+                    {t('assistants.common.edit')}
                   </motion.button>
                   <motion.button
                     whileHover={{ scale: 1.05 }}
@@ -174,7 +173,22 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                     }}
                   >
                     <Trash2 className="w-4 h-4 inline mr-2" />
-                    Delete
+                    {t('assistants.common.delete')}
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={onClose}
+                    data-qa="task-detail-close"
+                    className="px-4 py-2 rounded-xl text-sm font-semibold backdrop-blur-xs transition-all"
+                    style={{
+                      backgroundColor: 'var(--border-subtle)',
+                      border: '1px solid var(--border-default)',
+                      color: 'var(--text-primary)',
+                    }}
+                  >
+                    <X className="w-4 h-4 inline mr-2" />
+                    {t('assistants.common.close')}
                   </motion.button>
                 </div>
 
@@ -183,7 +197,7 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                   <div className="space-y-3 pb-6 border-b" style={{ borderColor: 'var(--border-subtle)' }}>
                     <h3 className="text-sm font-bold uppercase tracking-wide flex items-center gap-2" style={{ color: 'var(--text-subtle)' }}>
                       <FileText className="w-4 h-4" />
-                      Description
+                      {t('tasks.detail.description')}
                     </h3>
                     <p className="text-base leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
                       {task.description}
@@ -219,17 +233,17 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                         </div>
                         <div>
                           <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-subtle)' }}>
-                            Deadline
+                            {t('tasks.detail.deadline')}
                           </p>
                           <p className="text-sm font-semibold mt-1" style={{ color: overdue ? 'var(--accent-secondary)' : 'var(--text-primary)' }}>
-                            {formatDateTime(task.deadline)}
+                            {fmt.dateTime(task.deadline)}
                           </p>
                         </div>
                       </div>
                     </motion.div>
                   )}
 
-                  {task.estimated_duration && (
+                  {!!task.estimated_duration && (
                     <motion.div
                       initial={{ opacity: 0, x: 10 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -250,17 +264,17 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                         </div>
                         <div>
                           <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-subtle)' }}>
-                            Estimated Duration
+                            {t('tasks.detail.estimatedDuration')}
                           </p>
                           <p className="text-sm font-semibold mt-1" style={{ color: 'var(--text-primary)' }}>
-                            {formatDuration(task.estimated_duration)}
+                            {fmt.duration(task.estimated_duration)}
                           </p>
                         </div>
                       </div>
                     </motion.div>
                   )}
 
-                  {task.actual_duration && (
+                  {!!task.actual_duration && (
                     <motion.div
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -281,10 +295,10 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                         </div>
                         <div>
                           <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-subtle)' }}>
-                            Actual Duration
+                            {t('tasks.detail.actualDuration')}
                           </p>
                           <p className="text-sm font-semibold mt-1" style={{ color: 'var(--text-primary)' }}>
-                            {formatDuration(task.actual_duration)}
+                            {fmt.duration(task.actual_duration)}
                           </p>
                         </div>
                       </div>
@@ -312,7 +326,7 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                         </div>
                         <div>
                           <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-subtle)' }}>
-                            Client
+                            {t('tasks.detail.client')}
                           </p>
                           <p className="text-sm font-semibold mt-1" style={{ color: 'var(--text-primary)' }}>
                             {task.client_profile}
@@ -343,7 +357,7 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                         </div>
                         <div>
                           <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-subtle)' }}>
-                            Assigned To
+                            {t('tasks.detail.assignedTo')}
                           </p>
                           <p className="text-sm font-semibold mt-1" style={{ color: 'var(--text-primary)' }}>
                             {task.assignee}
@@ -374,7 +388,7 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                         </div>
                         <div>
                           <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-subtle)' }}>
-                            Category
+                            {t('tasks.detail.category')}
                           </p>
                           <p className="text-sm font-semibold mt-1" style={{ color: 'var(--text-primary)' }}>
                             {task.category}
@@ -405,7 +419,7 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                         </div>
                         <div>
                           <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-subtle)' }}>
-                            Project
+                            {t('tasks.detail.project')}
                           </p>
                           <p className="text-sm font-semibold mt-1" style={{ color: 'var(--text-primary)' }}>
                             {task.project}
@@ -436,7 +450,7 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                         </div>
                         <div>
                           <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-subtle)' }}>
-                            Related Appointment
+                            {t('tasks.detail.relatedAppointment')}
                           </p>
                           <p className="text-sm font-semibold mt-1" style={{ color: 'var(--text-primary)' }}>
                             {task.related_event}
@@ -446,7 +460,7 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                     </motion.div>
                   )}
 
-                  {task.is_daily_briefing && (
+                  {!!task.is_daily_briefing && (
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -467,10 +481,10 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                         </div>
                         <div>
                           <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-subtle)' }}>
-                            Daily Briefing
+                            {t('tasks.detail.dailyBriefing')}
                           </p>
                           <p className="text-sm font-semibold mt-1" style={{ color: 'var(--text-primary)' }}>
-                            Enabled
+                            {t('tasks.detail.enabled')}
                           </p>
                         </div>
                       </div>
@@ -498,10 +512,10 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                         </div>
                         <div>
                           <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-subtle)' }}>
-                            Created
+                            {t('tasks.detail.created')}
                           </p>
                           <p className="text-sm font-semibold mt-1" style={{ color: 'var(--text-primary)' }}>
-                            {formatDateTime(task.creation)}
+                            {fmt.dateTime(task.creation)}
                           </p>
                         </div>
                       </div>
@@ -514,13 +528,13 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                   <div className="space-y-3 pb-4">
                     <h3 className="text-sm font-bold uppercase tracking-wide flex items-center gap-2" style={{ color: 'var(--text-subtle)' }}>
                       <Tag className="w-4 h-4" />
-                      Dependencies
+                      {t('tasks.detail.dependencies')}
                     </h3>
                     <div className="rounded-xl border overflow-hidden" style={{ borderColor: 'var(--border-subtle)' }}>
                       <div className="grid grid-cols-3 text-xs font-semibold px-4 py-2" style={{ color: 'var(--text-subtle)', backgroundColor: 'var(--bg-secondary)' }}>
-                        <span>Task</span>
-                        <span>Type</span>
-                        <span>Link</span>
+                        <span>{t('tasks.detail.colTask')}</span>
+                        <span>{t('tasks.detail.colType')}</span>
+                        <span>{t('tasks.detail.colLink')}</span>
                       </div>
                       {task.dependencies.map((dep) => (
                         <div
@@ -529,7 +543,7 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                           style={{ borderColor: 'var(--border-subtle)', color: 'var(--text-primary)' }}
                         >
                           <span className="truncate">{dep.depends_on_task}</span>
-                          <span className="capitalize">{dep.dependency_type?.replaceAll('_', ' ')}</span>
+                          <span>{dependencyLabel(dep.dependency_type)}</span>
                           <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
                             — 
                           </span>
@@ -542,8 +556,8 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
             </>
           ) : (
             <div className="p-12 text-center">
-              <p className="text-lg font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>Task not found</p>
-              <Button onClick={onClose}>Close</Button>
+              <p className="text-lg font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>{t('tasks.detail.notFound')}</p>
+              <Button onClick={onClose} data-qa="task-detail-close">{t('assistants.common.close')}</Button>
             </div>
           )}
         </motion.div>

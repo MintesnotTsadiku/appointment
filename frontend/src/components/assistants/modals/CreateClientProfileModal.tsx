@@ -9,8 +9,24 @@ import { OptionSelect } from '@/components/select/OptionSelect';
 import { assistantAPI } from '@/lib/tasks-assistants/api';
 import { toast } from 'sonner';
 import { useTranslation } from '@/lib/i18n';
+import { serverError, useTaskFormat } from '@/lib/tasks-assistants/format';
 import { normalizePhone } from '@/lib/phone';
 import type { ClientProfile } from '@/lib/tasks-assistants/types';
+
+/** Time zones a client can choose, with their catalog keys. */
+export const CLIENT_TIMEZONES: Record<string, string> = {
+  'Africa/Addis_Ababa': 'addisAbaba',
+  'Africa/Nairobi': 'nairobi',
+  'Africa/Cairo': 'cairo',
+  'Africa/Lagos': 'lagos',
+  'Africa/Johannesburg': 'johannesburg',
+};
+
+/** The translated city name of a client time zone; unknown zones show their city. */
+export const timezoneLabel = (t: (key: string) => string, timezone: string) => {
+  const key = CLIENT_TIMEZONES[timezone];
+  return key ? t(`assistants.client.timezone.${key}`) : timezone.replace(/^.*\//, '').replace(/_/g, ' ');
+};
 
 const selectClassName = 'h-auto w-full rounded-xl border-2 border-[var(--border-default)] bg-[var(--bg-secondary)] px-[1.125rem] py-[0.875rem] text-[var(--text-primary)] transition-all';
 
@@ -22,6 +38,7 @@ interface CreateClientProfileModalProps {
 
 export const CreateClientProfileModal = ({ isOpen, onClose, onSuccess }: CreateClientProfileModalProps) => {
   const { t } = useTranslation();
+  const fmt = useTaskFormat();
   const [phoneChecked, setPhoneChecked] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<Partial<ClientProfile>>({
@@ -52,7 +69,7 @@ export const CreateClientProfileModal = ({ isOpen, onClose, onSuccess }: CreateC
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.full_name || !formData.email) {
-      toast.error('Full name and email are required');
+      toast.error(t('assistants.client.form.required'));
       return;
     }
     if (formData.phone?.trim() && !normalizePhone(formData.phone)) {
@@ -64,25 +81,17 @@ export const CreateClientProfileModal = ({ isOpen, onClose, onSuccess }: CreateC
       setLoading(true);
       const response = await assistantAPI.clientProfile.create({ ...formData, phone: normalizePhone(formData.phone) });
       if (response.success) {
-        toast.success('Client Profile created successfully');
+        toast.success(t('assistants.client.form.created'));
         onSuccess?.();
         resetForm();
         onClose();
       }
     } catch (error: any) {
-      toast.error(error?.message || 'Failed to create client profile');
+      toast.error(serverError(error, t('assistants.client.form.createFailed')));
     } finally {
       setLoading(false);
     }
   };
-
-  const timezones = [
-    'Africa/Addis_Ababa',
-    'Africa/Nairobi',
-    'Africa/Cairo',
-    'Africa/Lagos',
-    'Africa/Johannesburg',
-  ];
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -104,7 +113,7 @@ export const CreateClientProfileModal = ({ isOpen, onClose, onSuccess }: CreateC
               WebkitTextFillColor: 'transparent',
             }}
           >
-            Create Client Profile
+            {t('assistants.client.form.createTitle')}
           </DialogTitle>
         </DialogHeader>
 
@@ -114,7 +123,7 @@ export const CreateClientProfileModal = ({ isOpen, onClose, onSuccess }: CreateC
             <div className="space-y-2">
               <Label htmlFor="full_name" className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
                 <User className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
-                Full Name <span style={{ color: 'var(--accent-secondary)' }}>*</span>
+                {t('assistants.common.fullName')} <span style={{ color: 'var(--accent-secondary)' }}>*</span>
               </Label>
               <Input
                 id="full_name"
@@ -134,7 +143,7 @@ export const CreateClientProfileModal = ({ isOpen, onClose, onSuccess }: CreateC
             <div className="space-y-2">
               <Label htmlFor="email" className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
                 <Mail className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
-                Email <span style={{ color: 'var(--accent-secondary)' }}>*</span>
+                {t('assistants.common.email')} <span style={{ color: 'var(--accent-secondary)' }}>*</span>
               </Label>
               <Input
                 id="email"
@@ -175,14 +184,14 @@ export const CreateClientProfileModal = ({ isOpen, onClose, onSuccess }: CreateC
 
               <div className="space-y-2">
                 <Label htmlFor="status" className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
-                  Status
+                  {t('assistants.common.status')}
                 </Label>
                 <OptionSelect
                   id="status"
                   value={formData.status ?? ''}
                   onValueChange={(value) => setFormData({ ...formData, status: value as ClientProfile['status'] })}
                   className={selectClassName}
-                  options={[{ value: 'active', label: 'Active' }, { value: 'inactive', label: 'Inactive' }]}
+                  options={['active', 'inactive'].map((value) => ({ value, label: fmt.profileStatus(value) }))}
                 />
               </div>
             </div>
@@ -191,14 +200,14 @@ export const CreateClientProfileModal = ({ isOpen, onClose, onSuccess }: CreateC
             <div className="space-y-2">
               <Label htmlFor="timezone" className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
                 <Globe className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
-                Timezone
+                {t('assistants.common.timeZone')}
               </Label>
               <OptionSelect
                 id="timezone"
                 value={formData.timezone ?? ''}
                 onValueChange={(value) => setFormData({ ...formData, timezone: value })}
                 className={selectClassName}
-                options={timezones.map((tz) => ({ value: tz, label: tz.replace('Africa/', '') }))}
+                options={Object.keys(CLIENT_TIMEZONES).map((tz) => ({ value: tz, label: timezoneLabel(t, tz) }))}
               />
             </div>
           </div>
@@ -216,7 +225,7 @@ export const CreateClientProfileModal = ({ isOpen, onClose, onSuccess }: CreateC
                 color: 'var(--text-secondary)',
               }}
             >
-              Cancel
+              {t('assistants.common.cancel')}
             </motion.button>
             <motion.button
               type="submit"
@@ -238,12 +247,12 @@ export const CreateClientProfileModal = ({ isOpen, onClose, onSuccess }: CreateC
                 {loading ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    Creating...
+                    {t('assistants.common.creating')}
                   </>
                 ) : (
                   <>
                     <Plus className="w-4 h-4" />
-                    Create Client Profile
+                    {t('assistants.client.form.createTitle')}
                   </>
                 )}
               </span>

@@ -1,8 +1,11 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { FileText, ChevronLeft, ChevronRight, Plus, Sparkles, Moon, Sun, Clock } from 'lucide-react';
-import { format, addDays, subDays, addWeeks, subWeeks, addMonths, subMonths, startOfWeek, endOfWeek, startOfMonth } from 'date-fns';
+import { format, addDays, subDays, addWeeks, subWeeks, addMonths, subMonths, startOfWeek, endOfWeek } from 'date-fns';
 import { ViewMode, TimeSlotInterval } from '../types';
 import { useTheme } from '@/components/theme-provider';
+import { LanguageButton } from '@/components/staff-shell/ShellControls';
+import { useTranslation } from '@/lib/i18n';
+import { useTaskFormat } from '@/lib/tasks-assistants/format';
 
 interface TasksHeaderProps {
   currentDate: Date;
@@ -24,6 +27,8 @@ export const TasksHeader = ({
   onCreateTask,
 }: TasksHeaderProps) => {
   const { theme, setTheme } = useTheme();
+  const { t } = useTranslation();
+  const fmt = useTaskFormat();
   const goToToday = () => onDateChange(new Date());
   
   const goToPrev = () => {
@@ -52,26 +57,27 @@ export const TasksHeader = ({
   const getDateDisplay = () => {
     switch (viewMode) {
       case 'month':
-        return format(currentDate, 'MMMM yyyy');
-      case 'week':
+        return fmt.date(currentDate, { month: 'long', year: 'numeric' });
+      case 'week': {
         const weekStart = startOfWeek(currentDate, { weekStartsOn: 1 });
         const weekEnd = endOfWeek(currentDate, { weekStartsOn: 1 });
-        return `${format(weekStart, 'MMM d')} - ${format(weekEnd, 'MMM d, yyyy')}`;
+        return `${fmt.date(weekStart, { month: 'short', day: 'numeric' })} – ${fmt.date(weekEnd)}`;
+      }
       case 'day':
-        return format(currentDate, 'EEEE, MMM d, yyyy');
+        return fmt.date(currentDate, { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' });
       default:
-        return format(currentDate, 'MMM d, yyyy');
+        return fmt.date(currentDate);
     }
   };
 
   const getViewLabel = () => {
     switch (viewMode) {
       case 'month':
-        return 'Month';
+        return t('tasks.page.view.month');
       case 'week':
-        return `Week ${format(currentDate, 'w')}`;
+        return t('tasks.page.weekNumber').replace('{0}', fmt.number(Number(format(currentDate, 'w'))));
       case 'day':
-        return format(currentDate, 'EEEE');
+        return fmt.date(currentDate, { weekday: 'long' });
       default:
         return '';
     }
@@ -86,9 +92,9 @@ export const TasksHeader = ({
       }}
     >
       <div className="px-4 lg:px-6 py-3 max-w-[1800px] mx-auto">
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
           {/* Left side - Title & Navigation */}
-          <div className="flex items-center gap-4 lg:gap-6 shrink min-w-0">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 lg:gap-6 shrink min-w-0">
             {/* Logo & Title */}
             <div className="flex items-center gap-2 lg:gap-3 shrink-0">
               <div className="relative">
@@ -101,7 +107,7 @@ export const TasksHeader = ({
               </div>
               <div className="hidden sm:block">
                 <h1 className="text-lg lg:text-xl font-bold tracking-tight flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
-                  Tasks
+                  {t('tasks.page.title')}
                   <span 
                     className="px-2 py-0.5 text-[10px] font-semibold rounded-full"
                     style={{ 
@@ -110,10 +116,10 @@ export const TasksHeader = ({
                       border: '1px solid var(--accent-primary-light)'
                     }}
                   >
-                    PRO
+                    {t('tasks.page.pro')}
                   </span>
                 </h1>
-                <p className="text-xs hidden lg:block" style={{ color: 'var(--text-subtle)' }}>Task Management</p>
+                <p className="text-xs hidden lg:block" style={{ color: 'var(--text-subtle)' }}>{t('tasks.page.subtitle')}</p>
               </div>
             </div>
 
@@ -144,7 +150,7 @@ export const TasksHeader = ({
                     border: `1px solid ${isToday ? 'var(--border-strong)' : 'var(--border-default)'}`
                   }}
                 >
-                  Today
+                  {t('tasks.page.today')}
                 </motion.button>
 
                 <motion.button
@@ -168,7 +174,7 @@ export const TasksHeader = ({
                     borderLeft: '2px solid var(--accent-primary)'
                   }}
                 >
-                  <div className="text-sm lg:text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
+                  <div className="text-sm lg:text-lg font-semibold capitalize" style={{ color: 'var(--text-primary)' }}>
                     {getViewLabel()}
                   </div>
                   <div className="text-xs" style={{ color: 'var(--text-subtle)' }}>
@@ -180,7 +186,8 @@ export const TasksHeader = ({
           </div>
 
           {/* Right side - View Toggle & Actions */}
-          <div className="flex items-center gap-2 lg:gap-3 shrink-0">
+          {/* On phones the actions join the row above and the view toggle takes its own full-width row. */}
+          <div className="flex items-center gap-2 lg:gap-3 shrink-0 max-sm:contents">
             {/* Time Slot Interval Selector - Only for day/week views */}
             {(viewMode === 'day' || viewMode === 'week') && (
               <div 
@@ -200,7 +207,7 @@ export const TasksHeader = ({
                     style={{ 
                       color: timeSlotInterval === interval ? 'var(--text-primary)' : 'var(--text-subtle)'
                     }}
-                    title={`${interval} minute intervals`}
+                    title={t('tasks.page.intervalTitle').replace('{0}', fmt.number(interval))}
                   >
                     {timeSlotInterval === interval && (
                       <motion.div
@@ -213,7 +220,7 @@ export const TasksHeader = ({
                         transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                       />
                     )}
-                    <span className="relative z-10">{interval}m</span>
+                    <span className="relative z-10">{t('tasks.page.intervalShort').replace('{0}', fmt.number(interval))}</span>
                   </motion.button>
                 ))}
               </div>
@@ -221,7 +228,7 @@ export const TasksHeader = ({
 
             {/* View Mode Toggle */}
             <div 
-              className="flex items-center p-0.5 lg:p-1 rounded-lg lg:rounded-xl"
+              className="flex items-center p-0.5 lg:p-1 rounded-lg lg:rounded-xl max-sm:order-last max-sm:w-full"
               style={{ 
                 backgroundColor: 'var(--border-subtle)',
                 border: '1px solid var(--border-default)'
@@ -232,7 +239,8 @@ export const TasksHeader = ({
                   key={mode}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => onViewModeChange(mode)}
-                  className="relative px-2.5 lg:px-4 py-1.5 lg:py-2 text-xs lg:text-sm font-medium rounded-md lg:rounded-lg transition-all capitalize"
+                  data-qa={`tasks-view-${mode}`}
+                  className="relative px-2.5 lg:px-4 py-1.5 lg:py-2 text-xs lg:text-sm font-medium rounded-md lg:rounded-lg transition-all capitalize whitespace-nowrap max-sm:flex-1"
                   style={{ 
                     color: viewMode === mode ? 'var(--text-primary)' : 'var(--text-subtle)'
                   }}
@@ -248,7 +256,7 @@ export const TasksHeader = ({
                       transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                     />
                   )}
-                  <span className="relative z-10">{mode}</span>
+                  <span className="relative z-10">{t(`tasks.page.view.${mode}`)}</span>
                 </motion.button>
               ))}
             </div>
@@ -258,7 +266,8 @@ export const TasksHeader = ({
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={onCreateTask}
-              className="relative group flex items-center gap-1.5 lg:gap-2 px-3 lg:px-5 py-2 lg:py-2.5 rounded-lg lg:rounded-xl font-medium text-xs lg:text-sm overflow-hidden"
+              data-qa="task-create"
+              className="relative group flex items-center gap-1.5 lg:gap-2 px-3 lg:px-5 py-2 lg:py-2.5 rounded-lg lg:rounded-xl font-medium text-xs lg:text-sm overflow-hidden max-sm:ml-auto"
             >
               <div 
                 className="absolute inset-0 transition-all bg-gradient-primary group-hover:opacity-90"
@@ -272,10 +281,12 @@ export const TasksHeader = ({
                 />
               </div>
               <Plus className="relative z-10 w-4 h-4 text-white" />
-              <span className="relative z-10 text-white hidden sm:inline">Create Task</span>
-              <span className="relative z-10 text-white sm:hidden">New</span>
+              <span className="relative z-10 text-white hidden sm:inline">{t('tasks.page.createTask')}</span>
+              <span className="relative z-10 text-white sm:hidden">{t('tasks.page.newShort')}</span>
               <Sparkles className="relative z-10 w-3 h-3 text-white/70 opacity-0 group-hover:opacity-100 transition-opacity hidden lg:block" />
             </motion.button>
+
+            <LanguageButton />
 
             {/* Theme Toggle */}
             <motion.button
@@ -287,7 +298,7 @@ export const TasksHeader = ({
               }}
               whileTap={{ scale: 0.95 }}
               whileHover={{ scale: 1.02 }}
-              aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+              aria-label={theme === 'light' ? t('tasks.page.switchToDark') : t('tasks.page.switchToLight')}
             >
               <AnimatePresence mode="wait">
                 <motion.div
@@ -308,7 +319,7 @@ export const TasksHeader = ({
                 className="text-xs lg:text-sm font-medium hidden md:inline"
                 style={{ color: theme === "light" ? '#60a5fa' : '#fbbf24' }}
               >
-                {theme === "light" ? "Dark" : "Light"}
+                {theme === 'light' ? t('tasks.page.dark') : t('tasks.page.light')}
               </span>
             </motion.button>
           </div>

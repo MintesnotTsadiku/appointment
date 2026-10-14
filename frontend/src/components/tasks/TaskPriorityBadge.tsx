@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { getPriorityLabel } from '@/lib/tasks-assistants/utils';
+import { useTaskFormat } from '@/lib/tasks-assistants/format';
 import type { Task } from '@/lib/tasks-assistants/types';
 
 interface TaskPriorityBadgeProps {
@@ -27,10 +27,10 @@ const priorityConfig: Record<Task['priority'], { gradient: [string, string]; glo
 };
 
 export const TaskPriorityBadge = ({ priority, className }: TaskPriorityBadgeProps) => {
-  const label = getPriorityLabel(priority);
+  const fmt = useTaskFormat();
+  const label = fmt.taskPriority(priority);
   const config = priorityConfig[priority] || priorityConfig['Medium'];
-  const normalizedPriority = priority === 'Urgent' ? 'Urgent' : priority;
-  const isUrgent = normalizedPriority === 'Urgent';
+  const isUrgent = priority === 'Urgent';
   const [color1, color2] = config.gradient;
 
   return (

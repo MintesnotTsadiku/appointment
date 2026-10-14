@@ -30,11 +30,15 @@ import type {
 } from '@/lib/tasks-assistants/types';
 import Spinner from '@/components/spinner';
 import { toast } from 'sonner';
+import { useTranslation } from '@/lib/i18n';
+import { serverError, useTaskFormat } from '@/lib/tasks-assistants/format';
 
 type AssignmentViewMode = 'cards' | 'table';
 type ModelFilter = 'all' | '1:1' | '1:2' | '1:3';
 
 const AssignmentsPage = () => {
+  const { t } = useTranslation();
+  const fmt = useTaskFormat();
   const [assignments, setAssignments] = useState<AssistantClientAssignment[]>([]);
   const [statistics, setStatistics] = useState<AssignmentStatistics | null>(null);
   const [loading, setLoading] = useState(true);
@@ -62,14 +66,14 @@ const AssignmentsPage = () => {
       if (assignResponse.success && assignResponse.data) {
         setAssignments(assignResponse.data);
       } else {
-        toast.error('Failed to load assignments');
+        toast.error(t('assistants.assignments.loadFailed'));
       }
 
       if (statsResponse.success && statsResponse.data) {
         setStatistics(statsResponse.data);
       }
-    } catch (error: any) {
-      toast.error(error?.message || 'Failed to load assignments');
+    } catch (error) {
+      toast.error(serverError(error, t('assistants.assignments.loadFailed')));
     } finally {
       setLoading(false);
     }
@@ -102,25 +106,25 @@ const AssignmentsPage = () => {
 
   const stats = [
     {
-      label: 'Total Assignments',
+      label: t('assistants.assignments.total'),
       value: statistics?.total || 0,
       icon: LinkIcon,
       gradient: 'bg-gradient-primary',
     },
     {
-      label: 'Active',
+      label: fmt.profileStatus('active'),
       value: statistics?.by_status.active || 0,
       icon: CheckCircle2,
       gradient: 'bg-gradient-success',
     },
     {
-      label: 'Paused',
+      label: fmt.profileStatus('inactive'),
       value: statistics?.by_status.inactive || 0,
       icon: PauseCircle,
       gradient: 'bg-gradient-secondary',
     },
     {
-      label: 'Ended',
+      label: fmt.profileStatus('ended'),
       value: statistics?.by_status.ended || 0,
       icon: XCircle,
       customGradient: 'from-gray-500 to-gray-600',
@@ -130,41 +134,33 @@ const AssignmentsPage = () => {
   const getStatusConfig = (status: string) => {
     switch (status) {
       case 'active':
-        return { bg: 'bg-green-500/15', text: 'text-green-500', dot: 'bg-green-500', label: 'Active', icon: CheckCircle2 };
+        return { bg: 'bg-green-500/15', tone: 'text-green-500', dot: 'bg-green-500', icon: CheckCircle2 };
       case 'inactive':
-        return { bg: 'bg-orange-500/15', text: 'text-orange-500', dot: 'bg-orange-500', label: 'Paused', icon: PauseCircle };
+        return { bg: 'bg-orange-500/15', tone: 'text-orange-500', dot: 'bg-orange-500', icon: PauseCircle };
       case 'ended':
-        return { bg: 'bg-gray-500/15', text: 'text-gray-400', dot: 'bg-gray-400', label: 'Ended', icon: XCircle };
+        return { bg: 'bg-gray-500/15', tone: 'text-gray-400', dot: 'bg-gray-400', icon: XCircle };
       default:
-        return { bg: 'bg-gray-500/15', text: 'text-gray-400', dot: 'bg-gray-400', label: status, icon: XCircle };
+        return { bg: 'bg-gray-500/15', tone: 'text-gray-400', dot: 'bg-gray-400', icon: XCircle };
     }
   };
 
   const getModelConfig = (model: string) => {
     switch (model) {
       case '1:1':
-        return { gradient: 'linear-gradient(135deg, #6366f1, #8b5cf6)', label: 'Dedicated', color: 'bg-gradient-primary' };
+        return { gradient: 'linear-gradient(135deg, #6366f1, #8b5cf6)', color: 'bg-gradient-primary' };
       case '1:2':
-        return { gradient: 'linear-gradient(135deg, #f97316, #ea580c)', label: 'Shared (2)', color: 'bg-gradient-secondary' };
+        return { gradient: 'linear-gradient(135deg, #f97316, #ea580c)', color: 'bg-gradient-secondary' };
       case '1:3':
-        return { gradient: 'linear-gradient(135deg, #10b981, #059669)', label: 'Shared (3)', color: 'bg-gradient-success' };
+        return { gradient: 'linear-gradient(135deg, #10b981, #059669)', color: 'bg-gradient-success' };
       default:
-        return { gradient: 'linear-gradient(135deg, #6b7280, #9ca3af)', label: model, color: 'bg-gray-500' };
+        return { gradient: 'linear-gradient(135deg, #6b7280, #9ca3af)', color: 'bg-gray-500' };
     }
   };
 
-  const formatDate = (dateStr?: string) => {
-    if (!dateStr) return '-';
-    try {
-      return new Date(dateStr).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      });
-    } catch {
-      return dateStr;
-    }
-  };
+  const formatDate = (dateStr?: string) => fmt.date(dateStr) || '-';
+
+  const formatDays = (days: number) =>
+    (days === 1 ? t('assistants.assignments.daysOne') : t('assistants.assignments.daysMany')).replace('{0}', fmt.number(days));
 
   const getDaysActive = (startDate?: string) => {
     if (!startDate) return null;
@@ -197,8 +193,8 @@ const AssignmentsPage = () => {
 
       <div className="relative z-10">
         <AssistantsHeader
-          title="Assignments"
-          subtitle="VA-Client Relationship Management"
+          title={t('assistants.assignments.title')}
+          subtitle={t('assistants.assignments.subtitle')}
           icon={LinkIcon}
           showBackButton
           backPath="/assistants"
@@ -208,6 +204,7 @@ const AssignmentsPage = () => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={loadData}
+                aria-label={t('assistants.common.refresh')}
                 className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all"
                 style={{
                   backgroundColor: 'var(--bg-secondary)',
@@ -216,20 +213,22 @@ const AssignmentsPage = () => {
                 }}
               >
                 <RefreshCw className="w-4 h-4" />
-                <span className="hidden sm:inline">Refresh</span>
+                <span className="hidden sm:inline">{t('assistants.common.refresh')}</span>
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setIsCreateDrawerOpen(true)}
+                data-qa="assignment-create"
+                aria-label={t('assistants.assignments.newAssignment')}
                 className="relative group flex items-center gap-1.5 lg:gap-2 px-3 lg:px-5 py-2 lg:py-2.5 rounded-lg lg:rounded-xl font-medium text-xs lg:text-sm overflow-hidden"
               >
                 <div className="absolute inset-0 transition-all bg-gradient-success group-hover:opacity-90" />
                 <Plus className="relative z-10 w-4 h-4 text-white" />
                 <span className="relative z-10 text-white hidden sm:inline">
-                  New Assignment
+                  {t('assistants.assignments.newAssignment')}
                 </span>
-                <span className="relative z-10 text-white sm:hidden">New</span>
+                <span className="relative z-10 text-white sm:hidden">{t('assistants.assignments.new')}</span>
                 <Sparkles className="relative z-10 w-3 h-3 text-white/70 opacity-0 group-hover:opacity-100 transition-opacity hidden lg:block" />
               </motion.button>
             </div>
@@ -250,9 +249,9 @@ const AssignmentsPage = () => {
               {statistics && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {[
-                    { model: '1:1' as const, label: 'Dedicated', desc: 'One VA per client', count: statistics.by_model['1:1'] },
-                    { model: '1:2' as const, label: 'Shared (2)', desc: 'One VA for two clients', count: statistics.by_model['1:2'] },
-                    { model: '1:3' as const, label: 'Shared (3)', desc: 'One VA for three clients', count: statistics.by_model['1:3'] },
+                    { model: '1:1' as const, desc: t('assistants.shared.modelDescOne'), count: statistics.by_model['1:1'] },
+                    { model: '1:2' as const, desc: t('assistants.shared.modelDescTwo'), count: statistics.by_model['1:2'] },
+                    { model: '1:3' as const, desc: t('assistants.shared.modelDescThree'), count: statistics.by_model['1:3'] },
                   ].map((item) => {
                     const config = getModelConfig(item.model);
                     return (
@@ -281,8 +280,8 @@ const AssignmentsPage = () => {
                               <CheckCircle2 className="w-5 h-5 text-white" />
                             )}
                           </div>
-                          <div className="text-4xl font-bold text-white mb-1">{item.count}</div>
-                          <div className="text-sm font-semibold text-white">{item.label}</div>
+                          <div className="text-4xl font-bold text-white mb-1">{fmt.number(item.count)}</div>
+                          <div className="text-sm font-semibold text-white">{fmt.model(item.model)}</div>
                           <div className="text-xs text-white/70">{item.desc}</div>
                         </div>
                       </motion.button>
@@ -295,7 +294,7 @@ const AssignmentsPage = () => {
               <FilterBar
                 searchQuery={searchQuery}
                 onSearchChange={setSearchQuery}
-                searchPlaceholder="Search VA or client..."
+                searchPlaceholder={t('assistants.assignments.searchPlaceholder')}
                 statusFilter={statusFilter}
                 onStatusFilterChange={setStatusFilter}
                 showViewToggle={false}
@@ -315,7 +314,8 @@ const AssignmentsPage = () => {
                     style={{
                       color: viewMode === 'cards' ? 'var(--text-primary)' : 'var(--text-subtle)',
                     }}
-                    title="Card View"
+                    title={t('assistants.shared.cardView')}
+                    aria-label={t('assistants.shared.cardView')}
                   >
                     {viewMode === 'cards' && (
                       <motion.div
@@ -337,7 +337,8 @@ const AssignmentsPage = () => {
                     style={{
                       color: viewMode === 'table' ? 'var(--text-primary)' : 'var(--text-subtle)',
                     }}
-                    title="Table View"
+                    title={t('assistants.shared.tableView')}
+                    aria-label={t('assistants.shared.tableView')}
                   >
                     {viewMode === 'table' && (
                       <motion.div
@@ -361,7 +362,6 @@ const AssignmentsPage = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                     <AnimatePresence>
                       {filteredAssignments.map((assignment, index) => {
-                        const statusConfig = getStatusConfig(assignment.status);
                         const modelConfig = getModelConfig(assignment.assignment_model);
                         const daysActive = getDaysActive(assignment.start_date);
                         
@@ -373,6 +373,7 @@ const AssignmentsPage = () => {
                             exit={{ opacity: 0, y: -20 }}
                             transition={{ delay: index * 0.05 }}
                             className="relative group"
+                            data-qa="assignment-card"
                           >
                             {/* Premium glow effect on hover */}
                             <div 
@@ -395,13 +396,10 @@ const AssignmentsPage = () => {
                                 <div className="absolute -right-8 -top-8 w-24 h-24 rounded-full bg-white/10 blur-xl" />
                                 
                                 <div className="relative z-10 flex items-center justify-between">
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-white font-bold text-lg">{assignment.assignment_model}</span>
-                                    <span className="text-white/70 text-sm">{modelConfig.label}</span>
-                                  </div>
+                                  <span className="text-white font-bold text-sm">{fmt.model(assignment.assignment_model)}</span>
                                   <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full bg-white/20 text-white`}>
                                     <span className={`w-2 h-2 rounded-full ${assignment.status === 'active' ? 'bg-white animate-pulse' : 'bg-white/60'}`} />
-                                    {statusConfig.label}
+                                    {fmt.profileStatus(assignment.status)}
                                   </span>
                                 </div>
                               </div>
@@ -414,7 +412,7 @@ const AssignmentsPage = () => {
                                   </div>
                                   <div className="flex-1 min-w-0">
                                     <p className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
-                                      Virtual Assistant
+                                      {t('assistants.assignments.virtualAssistant')}
                                     </p>
                                     <p className="font-bold truncate" style={{ color: 'var(--text-primary)' }}>
                                       {assignment.va_profile}
@@ -437,7 +435,7 @@ const AssignmentsPage = () => {
                                   </div>
                                   <div className="flex-1 min-w-0">
                                     <p className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
-                                      Client
+                                      {t('assistants.assignments.client')}
                                     </p>
                                     <p className="font-bold truncate" style={{ color: 'var(--text-primary)' }}>
                                       {assignment.client_profile}
@@ -451,10 +449,10 @@ const AssignmentsPage = () => {
                                     <div className="p-3 rounded-xl" style={{ backgroundColor: 'var(--bg-secondary)' }}>
                                       <div className="flex items-center gap-2 mb-1">
                                         <TrendingUp className="w-4 h-4" style={{ color: 'var(--accent-success)' }} />
-                                        <span className="text-xs" style={{ color: 'var(--text-muted)' }}>Duration</span>
+                                        <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{t('assistants.assignments.duration')}</span>
                                       </div>
                                       <p className="font-bold" style={{ color: 'var(--text-primary)' }}>
-                                        {daysActive} days
+                                        {formatDays(daysActive)}
                                       </p>
                                     </div>
                                   )}
@@ -462,7 +460,7 @@ const AssignmentsPage = () => {
                                     <div className="p-3 rounded-xl" style={{ backgroundColor: 'var(--bg-secondary)' }}>
                                       <div className="flex items-center gap-2 mb-1">
                                         <Calendar className="w-4 h-4" style={{ color: 'var(--accent-primary)' }} />
-                                        <span className="text-xs" style={{ color: 'var(--text-muted)' }}>Started</span>
+                                        <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{t('assistants.assignments.started')}</span>
                                       </div>
                                       <p className="font-bold text-sm" style={{ color: 'var(--text-primary)' }}>
                                         {formatDate(assignment.start_date)}
@@ -475,7 +473,7 @@ const AssignmentsPage = () => {
                                 {assignment.end_date && (
                                   <div className="flex items-center gap-2 pt-3 text-xs" style={{ borderTop: '1px solid var(--border-subtle)', color: 'var(--text-muted)' }}>
                                     <Clock className="w-3 h-3" />
-                                    <span>Ends: {formatDate(assignment.end_date)}</span>
+                                    <span>{t('assistants.assignments.ends').replace('{0}', formatDate(assignment.end_date))}</span>
                                   </div>
                                 )}
                               </div>
@@ -504,13 +502,13 @@ const AssignmentsPage = () => {
                               color: 'var(--text-muted)',
                             }}
                           >
-                            <th className="px-4 py-3 font-medium">VA Profile</th>
-                            <th className="px-4 py-3 font-medium">Client Profile</th>
-                            <th className="px-4 py-3 font-medium">Model</th>
-                            <th className="px-4 py-3 font-medium">Status</th>
-                            <th className="px-4 py-3 font-medium">Duration</th>
-                            <th className="px-4 py-3 font-medium">Start Date</th>
-                            <th className="px-4 py-3 font-medium">Actions</th>
+                            <th className="px-4 py-3 font-medium">{t('assistants.assignments.vaProfile')}</th>
+                            <th className="px-4 py-3 font-medium">{t('assistants.assignments.clientProfile')}</th>
+                            <th className="px-4 py-3 font-medium">{t('assistants.assignments.modelShort')}</th>
+                            <th className="px-4 py-3 font-medium">{t('assistants.common.status')}</th>
+                            <th className="px-4 py-3 font-medium">{t('assistants.assignments.duration')}</th>
+                            <th className="px-4 py-3 font-medium">{t('assistants.assignments.startDate')}</th>
+                            <th className="px-4 py-3 font-medium">{t('assistants.assignments.actions')}</th>
                           </tr>
                         </thead>
                         <tbody
@@ -528,6 +526,7 @@ const AssignmentsPage = () => {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 className="hover:bg-theme-secondary transition-colors"
+                                data-qa="assignment-card"
                               >
                                 <td className="px-4 py-3">
                                   <div className="flex items-center gap-3">
@@ -554,21 +553,21 @@ const AssignmentsPage = () => {
                                     className="text-white text-xs font-bold px-3 py-1.5 rounded-lg"
                                     style={{ background: modelConfig.gradient }}
                                   >
-                                    {assignment.assignment_model}
+                                    {fmt.model(assignment.assignment_model)}
                                   </span>
                                 </td>
                                 <td className="px-4 py-3">
                                   <span
-                                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full ${statusConfig.bg} ${statusConfig.text}`}
+                                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full ${statusConfig.bg} ${statusConfig.tone}`}
                                   >
                                     <span className={`w-2 h-2 rounded-full ${statusConfig.dot}`} />
-                                    {statusConfig.label}
+                                    {fmt.profileStatus(assignment.status)}
                                   </span>
                                 </td>
                                 <td className="px-4 py-3">
                                   {daysActive !== null ? (
                                     <span className="font-medium" style={{ color: 'var(--text-primary)' }}>
-                                      {daysActive} days
+                                      {formatDays(daysActive)}
                                     </span>
                                   ) : (
                                     <span style={{ color: 'var(--text-subtle)' }}>-</span>
@@ -582,6 +581,8 @@ const AssignmentsPage = () => {
                                     whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.9 }}
                                     className="p-2 rounded-lg transition-colors"
+                                    aria-label={t('assistants.assignments.viewDetails')}
+                                    title={t('assistants.assignments.viewDetails')}
                                     style={{
                                       backgroundColor: 'var(--border-subtle)',
                                       color: 'var(--text-muted)',
@@ -614,15 +615,15 @@ const AssignmentsPage = () => {
                     className="text-lg font-semibold mb-2"
                     style={{ color: 'var(--text-primary)' }}
                   >
-                    No assignments found
+                    {t('assistants.assignments.emptyTitle')}
                   </p>
                   <p
                     className="text-sm mb-6"
                     style={{ color: 'var(--text-muted)' }}
                   >
                     {searchQuery || statusFilter !== 'all' || modelFilter !== 'all'
-                      ? 'Try adjusting your filters'
-                      : 'Create an assignment to connect VAs with clients'}
+                      ? t('assistants.assignments.emptyFiltered')
+                      : t('assistants.assignments.emptyHint')}
                   </p>
                   {!searchQuery && statusFilter === 'all' && modelFilter === 'all' && (
                     <motion.button
@@ -632,7 +633,7 @@ const AssignmentsPage = () => {
                       className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-gradient-success"
                     >
                       <Plus className="w-4 h-4" />
-                      Create Assignment
+                      {t('assistants.assignments.createTitle')}
                     </motion.button>
                   )}
                 </Card>

@@ -2,6 +2,8 @@ import { motion } from 'framer-motion';
 import { Mail, Phone, ChevronRight } from 'lucide-react';
 import { Card } from '@/components/card';
 import { formatPhone } from '@/lib/phone';
+import { useTranslation } from '@/lib/i18n';
+import { useTaskFormat } from '@/lib/tasks-assistants/format';
 import type { ClientProfile } from '@/lib/tasks-assistants/types';
 
 interface ClientProfileCardProps {
@@ -11,6 +13,8 @@ interface ClientProfileCardProps {
 }
 
 export const ClientProfileCard = ({ clientProfile, onClick, onEdit }: ClientProfileCardProps) => {
+  const { t } = useTranslation();
+  const fmt = useTaskFormat();
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -42,7 +46,7 @@ export const ClientProfileCard = ({ clientProfile, onClick, onEdit }: ClientProf
                     : 'bg-gray-500 text-white'
                 }`}
               >
-                {clientProfile.status === 'active' ? 'Active' : 'Inactive'}
+                {fmt.profileStatus(clientProfile.status)}
               </span>
             </div>
             <div className="space-y-2 text-sm">
@@ -78,7 +82,8 @@ export const ClientProfileCard = ({ clientProfile, onClick, onEdit }: ClientProf
                   backgroundColor: 'var(--border-subtle)',
                   color: 'var(--text-muted)',
                 }}
-                title="View profile"
+                title={t('assistants.client.page.viewProfile')}
+                aria-label={t('assistants.client.page.viewProfile')}
               >
                 <ChevronRight className="w-4 h-4" />
               </motion.button>

@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 import frappe
+from frappe import _
 from frappe.model.document import Document
 
 
@@ -35,9 +36,9 @@ class AssistantClientAssignment(Document):
 			current_count += 1
 		
 		if current_count > va_profile.max_clients:
+			name = frappe.db.get_value("User", va_profile.user, "full_name") or va_profile.user
 			frappe.throw(
-				f"Assistant {va_profile.user} has reached maximum client capacity ({va_profile.max_clients}). "
-				f"Current active assignments: {current_count}"
+				_("{0} already has the maximum of {1} active clients.").format(name, va_profile.max_clients)
 			)
 	
 	def validate_assignment_type(self):
@@ -58,7 +59,9 @@ class AssistantClientAssignment(Document):
 		
 		if va_profile.max_clients < expected_max:
 			frappe.throw(
-				f"Assistant can handle max {va_profile.max_clients} client(s), but assignment type '{self.assignment_type}' requires {expected_max}"
+				_("This assistant can take up to {0} clients, but this assignment model needs {1}.").format(
+					va_profile.max_clients, expected_max
+				)
 			)
 	
 	def validate_unique_assignment(self):
@@ -77,7 +80,7 @@ class AssistantClientAssignment(Document):
 		)
 		
 		if existing:
-			frappe.throw("An active assignment already exists for this assistant-client pair")
+			frappe.throw(_("This assistant already has an active assignment with this client."))
 	
 	def on_update(self):
 		"""Update related records after save"""

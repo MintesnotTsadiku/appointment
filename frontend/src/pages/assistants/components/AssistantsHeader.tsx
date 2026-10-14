@@ -2,6 +2,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, Moon, Sun, Sparkles, LucideIcon } from 'lucide-react';
 import { useTheme } from '@/components/theme-provider';
+import { LanguageButton } from '@/components/staff-shell/ShellControls';
+import { useTranslation } from '@/lib/i18n';
 
 interface AssistantsHeaderProps {
   title: string;
@@ -23,6 +25,7 @@ export const AssistantsHeader = ({
   children,
 }: AssistantsHeaderProps) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { theme, setTheme } = useTheme();
   const toggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light');
 
@@ -43,6 +46,8 @@ export const AssistantsHeader = ({
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate(backPath)}
+                aria-label={t('assistants.shared.back')}
+                title={t('assistants.shared.back')}
                 className="p-1.5 lg:p-2 rounded-lg transition-all"
                 style={{
                   backgroundColor: 'var(--border-subtle)',
@@ -76,7 +81,7 @@ export const AssistantsHeader = ({
                       border: '1px solid var(--accent-primary-light)',
                     }}
                   >
-                    PRO
+                    {t('assistants.shared.pro')}
                   </span>
                 </h1>
                 <p
@@ -93,6 +98,8 @@ export const AssistantsHeader = ({
           <div className="flex items-center gap-2 lg:gap-3 shrink-0">
             {actions}
 
+            <LanguageButton />
+
             {/* Theme Toggle */}
             <motion.button
               onClick={toggleTheme}
@@ -103,7 +110,7 @@ export const AssistantsHeader = ({
               }}
               whileTap={{ scale: 0.95 }}
               whileHover={{ scale: 1.02 }}
-              aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+              aria-label={theme === 'light' ? t('assistants.shared.switchToDark') : t('assistants.shared.switchToLight')}
             >
               <AnimatePresence mode="wait">
                 <motion.div
@@ -124,7 +131,7 @@ export const AssistantsHeader = ({
                 className="text-xs lg:text-sm font-medium hidden md:inline"
                 style={{ color: theme === 'light' ? '#60a5fa' : '#fbbf24' }}
               >
-                {theme === 'light' ? 'Dark' : 'Light'}
+                {theme === 'light' ? t('assistants.shared.dark') : t('assistants.shared.light')}
               </span>
             </motion.button>
           </div>

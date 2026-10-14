@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { getStatusLabel } from '@/lib/tasks-assistants/utils';
+import { useTaskFormat } from '@/lib/tasks-assistants/format';
 import type { Task } from '@/lib/tasks-assistants/types';
 
 interface TaskStatusBadgeProps {
@@ -31,7 +31,8 @@ const statusConfig: Record<Task['status'], { gradient: [string, string]; glow: s
 };
 
 export const TaskStatusBadge = ({ status, className }: TaskStatusBadgeProps) => {
-  const label = getStatusLabel(status);
+  const fmt = useTaskFormat();
+  const label = fmt.taskStatus(status);
   const config = statusConfig[status] || statusConfig['Requested'];
   const [color1, color2] = config.gradient;
 

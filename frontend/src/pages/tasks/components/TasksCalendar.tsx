@@ -9,6 +9,14 @@ import { Task } from '@/lib/tasks-assistants/types';
 import { TaskCalendarCard } from './TaskCalendarCard';
 import { ViewMode, TimeSlotInterval } from '../types';
 import { isOverdue } from '@/lib/tasks-assistants/utils';
+import { useTranslation } from '@/lib/i18n';
+import { useTaskFormat } from '@/lib/tasks-assistants/format';
+
+const UNSCHEDULED_KEYS = {
+  deadline: 'tasks.calendar.unscheduledDeadline',
+  creation: 'tasks.calendar.unscheduledCreation',
+  modified: 'tasks.calendar.unscheduledModified',
+} as const;
 
 const WORK_START_HOUR = 8;
 const WORK_END_HOUR = 20; // exclusive
@@ -36,6 +44,18 @@ export const TasksCalendar = ({
   onTaskClick,
   onNavigateToDay,
 }: TasksCalendarProps) => {
+  const { t } = useTranslation();
+  const fmt = useTaskFormat();
+  const slotLabel = (hour: number, minute: number) => {
+    const slotDate = new Date(currentDate);
+    slotDate.setHours(hour, minute, 0, 0);
+    return fmt.time(slotDate, true);
+  };
+  const taskCount = (count: number) =>
+    t(count === 1 ? 'tasks.page.countTasksOne' : 'tasks.page.countTasksMany').replace('{0}', fmt.number(count));
+  const deadlineLabel = (value?: string) =>
+    value ? `${fmt.date(value, { month: 'short', day: 'numeric' })}, ${fmt.time(value, true)}` : '';
+
   // Helper function to extract date from selected field (fallback to deadline/creation)
   const getTaskDate = (task: Task): Date | null => {
     const candidate =
@@ -266,7 +286,7 @@ export const TasksCalendar = ({
             style={{ color: 'var(--accent-primary)' }}
           />
           <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-            Loading tasks...
+            {t('tasks.page.loading')}
           </p>
         </div>
       </div>
@@ -280,7 +300,7 @@ export const TasksCalendar = ({
     const calendarStart = startOfWeek(monthStart, { weekStartsOn: 1 });
     const calendarEnd = endOfWeek(monthEnd, { weekStartsOn: 1 });
     const days = eachDayOfInterval({ start: calendarStart, end: calendarEnd });
-    const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const weekDays = days.slice(0, 7).map((day) => fmt.date(day, { weekday: 'short' }));
 
     return (
       <div className="flex gap-4 h-full">
@@ -347,7 +367,7 @@ export const TasksCalendar = ({
                         backgroundColor: isTodayDate ? 'var(--accent-primary-light)' : 'var(--bg-secondary)'
                       }}
                     >
-                      {format(day, 'd')}
+                      {fmt.date(day, { day: 'numeric' })}
                     </div>
                     {dayTasks.length > 0 && (
                       <span
@@ -358,7 +378,7 @@ export const TasksCalendar = ({
                           border: '1px solid var(--border-default)',
                         }}
                       >
-                        {dayTasks.length} task{dayTasks.length > 1 ? 's' : ''}
+                        {taskCount(dayTasks.length)}
                       </span>
                     )}
                   </div>
@@ -383,13 +403,13 @@ export const TasksCalendar = ({
                             borderColor: `${priorityColor}40`,
                             color: 'var(--text-primary)',
                           }}
-                          title={`${task.title}${task.deadline ? ` - ${formatDateTime(task.deadline)}` : ''}`}
+                          title={`${task.title}${task.deadline ? ` - ${deadlineLabel(task.deadline)}` : ''}`}
                         >
                           <div className="flex items-center justify-between gap-2">
                             <span className="font-semibold truncate">{task.title}</span>
                             {task.deadline && (
                               <span className="text-[11px] opacity-80 whitespace-nowrap">
-                                {format(parseISO(task.deadline), 'HH:mm')}
+                                {fmt.time(task.deadline, true)}
                               </span>
                             )}
                           </div>
@@ -402,7 +422,7 @@ export const TasksCalendar = ({
                                 border: `1px solid ${priorityColor}40`,
                               }}
                             >
-                              {task.status}
+                              {fmt.taskStatus(task.status)}
                             </span>
                             {task.client_profile && (
                               <span className="truncate">{task.client_profile}</span>
@@ -413,7 +433,7 @@ export const TasksCalendar = ({
                     })}
                     {dayTasks.length > 3 && (
                       <div className="text-xs px-2" style={{ color: 'var(--text-muted)' }}>
-                        +{dayTasks.length - 3} more
+                        {t('tasks.page.moreCount').replace('{0}', fmt.number(dayTasks.length - 3))}
                       </div>
                     )}
                   </div>
@@ -463,7 +483,7 @@ export const TasksCalendar = ({
                   className="text-xs font-medium"
                   style={{ color: 'var(--text-muted)' }}
                 >
-                  {slot.hour.toString().padStart(2, '0')}:{slot.minute.toString().padStart(2, '0')}
+                  {slotLabel(slot.hour, slot.minute)}
                 </span>
               </div>
             ))}
@@ -498,13 +518,13 @@ export const TasksCalendar = ({
                       className="text-sm font-semibold"
                       style={{ color: isTodayDate ? 'var(--accent-primary)' : 'var(--text-muted)' }}
                     >
-                      {format(day, 'EEE')}
+                      {fmt.date(day, { weekday: 'short' })}
                     </div>
                     <div 
                       className="text-2xl font-bold"
                       style={{ color: isTodayDate ? 'var(--text-primary)' : 'var(--text-secondary)' }}
                     >
-                      {format(day, 'd')}
+                      {fmt.date(day, { day: 'numeric' })}
                     </div>
                   </div>
                 </div>
@@ -621,7 +641,7 @@ export const TasksCalendar = ({
           <div className="border-t" style={{ borderColor: 'var(--border-subtle)' }}>
             <div className="px-4 py-3 flex items-center justify-between">
               <h3 className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
-                Unscheduled (no {dateField} date)
+                {t(UNSCHEDULED_KEYS[dateField])}
               </h3>
               <span className="text-xs px-2 py-1 rounded-lg" style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-muted)' }}>
                 {tasksWithoutDate.length}
@@ -687,13 +707,13 @@ export const TasksCalendar = ({
                   className="text-sm font-semibold"
                   style={{ color: isTodayDate ? 'var(--accent-primary)' : 'var(--text-muted)' }}
                 >
-                  {format(currentDate, 'EEE')}
+                  {fmt.date(currentDate, { weekday: 'short' })}
                 </div>
                 <div 
                   className="text-2xl font-bold"
                   style={{ color: isTodayDate ? 'var(--text-primary)' : 'var(--text-secondary)' }}
                 >
-                  {format(currentDate, 'd')}
+                  {fmt.date(currentDate, { day: 'numeric' })}
                 </div>
               </div>
             </div>
@@ -711,7 +731,7 @@ export const TasksCalendar = ({
                   className="text-xs font-medium"
                   style={{ color: 'var(--text-muted)' }}
                 >
-                  {slot.hour.toString().padStart(2, '0')}:{slot.minute.toString().padStart(2, '0')}
+                  {slotLabel(slot.hour, slot.minute)}
                 </span>
               </div>
             ))}
@@ -833,7 +853,7 @@ export const TasksCalendar = ({
           <div className="border-t" style={{ borderColor: 'var(--border-subtle)' }}>
             <div className="px-4 py-3 flex items-center justify-between">
               <h3 className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
-                Unscheduled (no {dateField} date)
+                {t(UNSCHEDULED_KEYS[dateField])}
               </h3>
               <span className="text-xs px-2 py-1 rounded-lg" style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-muted)' }}>
                 {tasksWithoutDate.length}
@@ -914,7 +934,7 @@ export const TasksCalendar = ({
         >
           <div className="text-center">
             <FileText className="w-16 h-16 mx-auto mb-4" style={{ color: 'var(--text-muted)' }} />
-            <p style={{ color: 'var(--text-secondary)' }}>No tasks found</p>
+            <p style={{ color: 'var(--text-secondary)' }}>{t('tasks.page.noTasksFound')}</p>
           </div>
         </div>
       );
@@ -943,9 +963,9 @@ export const TasksCalendar = ({
                     style={{ color: 'var(--text-primary)' }}
                   >
                     {isNoDeadline 
-                      ? 'Tasks without Deadline' 
+                      ? t('tasks.calendar.withoutDeadline')
                       : date 
-                        ? format(date, 'EEEE, MMMM d, yyyy')
+                        ? fmt.date(date, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })
                         : dateKey
                     }
                   </h3>
@@ -987,10 +1007,10 @@ export const TasksCalendar = ({
                                 <>
                                   <span className="flex items-center gap-1">
                                     <CalendarIcon className="w-3 h-3" />
-                                    {format(taskDate, 'MMM d, yyyy')}
+                                    {fmt.date(taskDate)}
                                   </span>
                                   <span className="flex items-center gap-1">
-                                    <span>{format(taskDate, 'HH:mm')}</span>
+                                    <span>{fmt.time(taskDate)}</span>
                                   </span>
                                 </>
                               )}
@@ -1011,15 +1031,3 @@ export const TasksCalendar = ({
 
   return null;
 };
-
-// Helper to format date/time - need to import from utils
-const formatDateTime = (dateString?: string): string => {
-  if (!dateString) return '';
-  try {
-    const date = parseISO(dateString);
-    return format(date, 'MMM d, HH:mm');
-  } catch (e) {
-    return '';
-  }
-};
-

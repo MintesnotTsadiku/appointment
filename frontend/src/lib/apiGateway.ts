@@ -140,6 +140,31 @@ export function getActionCode(endpoint: string): string | null {
   return ACTION_MAP[endpoint] || null;
 }
 
+/** An error whose message the server raised for the user (already in the user's language). */
+export class GatewayServerError extends Error {
+  readonly fromServer = true;
+}
+
+/** The first user-facing message of a Frappe response (`_server_messages`), without markup. */
+function firstServerMessage(data: { _server_messages?: string }): string | null {
+  if (!data?._server_messages) return null;
+  try {
+    for (const raw of JSON.parse(data._server_messages) as string[]) {
+      let text = raw;
+      try {
+        text = JSON.parse(raw)?.message ?? raw;
+      } catch {
+        /* A plain string message. */
+      }
+      const plain = String(text).replace(/<[^>]*>/g, '').trim();
+      if (plain) return plain;
+    }
+  } catch {
+    /* Malformed messages fall back to the gateway error. */
+  }
+  return null;
+}
+
 /**
  * Make a GET request through the API gateway
  */
@@ -194,13 +219,10 @@ export async function gatewayGet<T = any>(
   // Unwrap Frappe's wrapper first
   let gatewayResponse = data.message || data;
   
-  // If gatewayResponse has an error, throw it
-  if (gatewayResponse?.error) {
-    throw new Error(gatewayResponse.error);
-  }
-  
-  // If gatewayResponse has success:false, throw
-  if (gatewayResponse?.success === false) {
+  // A failed call: prefer the (translated) message the server raised, then the gateway error.
+  if (gatewayResponse?.error || gatewayResponse?.success === false) {
+    const serverMessage = firstServerMessage(data);
+    if (serverMessage) throw new GatewayServerError(serverMessage);
     throw new Error(gatewayResponse.error || 'API call failed');
   }
   
@@ -258,13 +280,10 @@ export async function gatewayPost<T = any>(
   // Unwrap Frappe's wrapper first
   let gatewayResponse = data.message || data;
   
-  // If gatewayResponse has an error, throw it
-  if (gatewayResponse?.error) {
-    throw new Error(gatewayResponse.error);
-  }
-  
-  // If gatewayResponse has success:false, throw
-  if (gatewayResponse?.success === false) {
+  // A failed call: prefer the (translated) message the server raised, then the gateway error.
+  if (gatewayResponse?.error || gatewayResponse?.success === false) {
+    const serverMessage = firstServerMessage(data);
+    if (serverMessage) throw new GatewayServerError(serverMessage);
     throw new Error(gatewayResponse.error || 'API call failed');
   }
   

@@ -9,6 +9,8 @@ import { OptionSelect } from '@/components/select/OptionSelect';
 import { assistantAPI } from '@/lib/tasks-assistants/api';
 import { toast } from 'sonner';
 import { useTranslation } from '@/lib/i18n';
+import { serverError, useTaskFormat } from '@/lib/tasks-assistants/format';
+import { CLIENT_TIMEZONES, timezoneLabel } from './CreateClientProfileModal';
 import { formatPhone, normalizePhone } from '@/lib/phone';
 import type { ClientProfile } from '@/lib/tasks-assistants/types';
 import Spinner from '@/components/spinner';
@@ -24,6 +26,7 @@ interface EditClientProfileModalProps {
 
 export const EditClientProfileModal = ({ clientId, isOpen, onClose, onSave }: EditClientProfileModalProps) => {
   const { t } = useTranslation();
+  const fmt = useTaskFormat();
   const [phoneChecked, setPhoneChecked] = useState(false);
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
@@ -70,7 +73,7 @@ export const EditClientProfileModal = ({ clientId, isOpen, onClose, onSave }: Ed
         });
       }
     } catch (error: any) {
-      toast.error(error?.message || 'Failed to load client profile');
+      toast.error(serverError(error, t('assistants.client.detail.loadFailed')));
       onClose();
     } finally {
       setInitialLoading(false);
@@ -80,7 +83,7 @@ export const EditClientProfileModal = ({ clientId, isOpen, onClose, onSave }: Ed
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.full_name || !formData.email) {
-      toast.error('Full name and email are required');
+      toast.error(t('assistants.client.form.required'));
       return;
     }
     if (formData.phone?.trim() && !normalizePhone(formData.phone)) {
@@ -92,24 +95,16 @@ export const EditClientProfileModal = ({ clientId, isOpen, onClose, onSave }: Ed
       setLoading(true);
       const response = await assistantAPI.clientProfile.update(clientId!, { ...formData, phone: normalizePhone(formData.phone) });
       if (response.success) {
-        toast.success('Client Profile updated successfully');
+        toast.success(t('assistants.client.form.updated'));
         onSave?.();
         onClose();
       }
     } catch (error: any) {
-      toast.error(error?.message || 'Failed to update client profile');
+      toast.error(serverError(error, t('assistants.client.form.updateFailed')));
     } finally {
       setLoading(false);
     }
   };
-
-  const timezones = [
-    'Africa/Addis_Ababa',
-    'Africa/Nairobi',
-    'Africa/Cairo',
-    'Africa/Lagos',
-    'Africa/Johannesburg',
-  ];
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -131,7 +126,7 @@ export const EditClientProfileModal = ({ clientId, isOpen, onClose, onSave }: Ed
               WebkitTextFillColor: 'transparent',
             }}
           >
-            Edit Client Profile
+            {t('assistants.client.form.editTitle')}
           </DialogTitle>
         </DialogHeader>
 
@@ -152,7 +147,7 @@ export const EditClientProfileModal = ({ clientId, isOpen, onClose, onSave }: Ed
               <div className="space-y-2">
                 <Label htmlFor="full_name" className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
                   <User className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
-                  Full Name <span style={{ color: 'var(--accent-secondary)' }}>*</span>
+                  {t('assistants.common.fullName')} <span style={{ color: 'var(--accent-secondary)' }}>*</span>
                 </Label>
                 <Input
                   id="full_name"
@@ -172,7 +167,7 @@ export const EditClientProfileModal = ({ clientId, isOpen, onClose, onSave }: Ed
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
                   <Mail className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
-                  Email <span style={{ color: 'var(--accent-secondary)' }}>*</span>
+                  {t('assistants.common.email')} <span style={{ color: 'var(--accent-secondary)' }}>*</span>
                 </Label>
                 <Input
                   id="email"
@@ -213,14 +208,14 @@ export const EditClientProfileModal = ({ clientId, isOpen, onClose, onSave }: Ed
 
                 <div className="space-y-2">
                   <Label htmlFor="status" className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
-                    Status
+                    {t('assistants.common.status')}
                   </Label>
                   <OptionSelect
                     id="status"
                     value={formData.status ?? ''}
                     onValueChange={(value) => setFormData({ ...formData, status: value as ClientProfile['status'] })}
                     className={selectClassName}
-                    options={[{ value: 'active', label: 'Active' }, { value: 'inactive', label: 'Inactive' }]}
+                    options={['active', 'inactive'].map((value) => ({ value, label: fmt.profileStatus(value) }))}
                   />
                 </div>
               </div>
@@ -229,14 +224,14 @@ export const EditClientProfileModal = ({ clientId, isOpen, onClose, onSave }: Ed
               <div className="space-y-2">
                 <Label htmlFor="timezone" className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
                   <Globe className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
-                  Timezone
+                  {t('assistants.common.timeZone')}
                 </Label>
                 <OptionSelect
                   id="timezone"
                   value={formData.timezone ?? ''}
                   onValueChange={(value) => setFormData({ ...formData, timezone: value })}
                   className={selectClassName}
-                  options={timezones.map((tz) => ({ value: tz, label: tz.replace('Africa/', '') }))}
+                  options={Object.keys(CLIENT_TIMEZONES).map((tz) => ({ value: tz, label: timezoneLabel(t, tz) }))}
                 />
               </div>
             </div>
@@ -254,7 +249,7 @@ export const EditClientProfileModal = ({ clientId, isOpen, onClose, onSave }: Ed
                   color: 'var(--text-secondary)',
                 }}
               >
-                Cancel
+                {t('assistants.common.cancel')}
               </motion.button>
               <motion.button
                 type="submit"
@@ -276,12 +271,12 @@ export const EditClientProfileModal = ({ clientId, isOpen, onClose, onSave }: Ed
                   {loading ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      Saving...
+                      {t('assistants.common.saving')}
                     </>
                   ) : (
                     <>
                       <Save className="w-4 h-4" />
-                      Save Changes
+                      {t('assistants.client.form.saveChanges')}
                     </>
                   )}
                 </span>

@@ -7,6 +7,8 @@ import { OptionSelect } from '@/components/select/OptionSelect';
 import { DatePicker } from '@/components/datetime-picker';
 import { assistantAPI } from '@/lib/tasks-assistants/api';
 import { toast } from 'sonner';
+import { useTranslation } from '@/lib/i18n';
+import { serverError, useTaskFormat } from '@/lib/tasks-assistants/format';
 import type { VAProfile, ClientProfile, AssistantClientAssignment } from '@/lib/tasks-assistants/types';
 
 const selectClassName = 'h-auto w-full rounded-xl border-2 border-[var(--border-default)] bg-[var(--bg-secondary)] px-4 py-3 text-[var(--text-primary)] transition-all';
@@ -22,6 +24,8 @@ export const CreateAssignmentDrawer = ({
   onClose,
   onSuccess,
 }: CreateAssignmentDrawerProps) => {
+  const { t } = useTranslation();
+  const fmt = useTaskFormat();
   const [loading, setLoading] = useState(false);
   const [vaProfiles, setVAProfiles] = useState<VAProfile[]>([]);
   const [clientProfiles, setClientProfiles] = useState<ClientProfile[]>([]);
@@ -56,7 +60,7 @@ export const CreateAssignmentDrawer = ({
         setClientProfiles(clientResponse.data);
       }
     } catch (error) {
-      toast.error('Failed to load profiles');
+      toast.error(serverError(error, t('assistants.assignments.loadProfilesFailed')));
     } finally {
       setLoadingProfiles(false);
     }
@@ -66,7 +70,7 @@ export const CreateAssignmentDrawer = ({
     e.preventDefault();
 
     if (!formData.va_profile || !formData.client_profile) {
-      toast.error('Please select a VA and a client');
+      toast.error(t('assistants.assignments.selectVaAndClient'));
       return;
     }
 
@@ -77,15 +81,15 @@ export const CreateAssignmentDrawer = ({
       });
 
       if (response.success) {
-        toast.success('Assignment created successfully');
+        toast.success(t('assistants.assignments.created'));
         onSuccess?.();
         resetForm();
         onClose();
       } else {
-        toast.error(response.error || 'Failed to create assignment');
+        toast.error(response.error || t('assistants.assignments.createFailed'));
       }
-    } catch (error: any) {
-      toast.error(error?.message || 'Failed to create assignment');
+    } catch (error) {
+      toast.error(serverError(error, t('assistants.assignments.createFailed')));
     } finally {
       setLoading(false);
     }
@@ -105,8 +109,9 @@ export const CreateAssignmentDrawer = ({
     <Drawer
       isOpen={isOpen}
       onClose={onClose}
-      title="Create Assignment"
+      title={t('assistants.assignments.createTitle')}
       width="md"
+      qa="assignment-drawer"
       footer={
         <div className="flex items-center gap-3 justify-end">
           <motion.button
@@ -120,13 +125,14 @@ export const CreateAssignmentDrawer = ({
               color: 'var(--text-secondary)',
             }}
           >
-            Cancel
+            {t('assistants.common.cancel')}
           </motion.button>
           <motion.button
             whileHover={{ scale: loading ? 1 : 1.02 }}
             whileTap={{ scale: loading ? 1 : 0.98 }}
             onClick={handleSubmit}
             disabled={loading}
+            data-qa="assignment-submit"
             className="relative px-5 py-2.5 rounded-xl text-sm font-semibold text-white overflow-hidden"
             style={{
               background: loading
@@ -138,12 +144,12 @@ export const CreateAssignmentDrawer = ({
               {loading ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  Creating...
+                  {t('assistants.common.creating')}
                 </>
               ) : (
                 <>
                   <Plus className="w-4 h-4" />
-                  Create Assignment
+                  {t('assistants.assignments.createTitle')}
                 </>
               )}
             </span>
@@ -156,14 +162,14 @@ export const CreateAssignmentDrawer = ({
         <div className="space-y-2">
           <Label className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
             <Users className="w-4 h-4" style={{ color: 'var(--accent-primary)' }} />
-            Virtual Assistant <span style={{ color: 'var(--accent-secondary)' }}>*</span>
+            {t('assistants.assignments.virtualAssistant')} <span style={{ color: 'var(--accent-secondary)' }}>*</span>
           </Label>
           <OptionSelect
             value={formData.va_profile ?? ''}
             onValueChange={(value) => setFormData({ ...formData, va_profile: value })}
             disabled={loadingProfiles}
             className={selectClassName}
-            placeholder="Select a VA..."
+            placeholder={t('assistants.assignments.selectVa')}
             options={vaProfiles.map((va) => ({ value: va.name, label: va.full_name }))}
           />
         </div>
@@ -172,14 +178,14 @@ export const CreateAssignmentDrawer = ({
         <div className="space-y-2">
           <Label className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
             <UserCircle className="w-4 h-4" style={{ color: 'var(--accent-secondary)' }} />
-            Client <span style={{ color: 'var(--accent-secondary)' }}>*</span>
+            {t('assistants.assignments.client')} <span style={{ color: 'var(--accent-secondary)' }}>*</span>
           </Label>
           <OptionSelect
             value={formData.client_profile ?? ''}
             onValueChange={(value) => setFormData({ ...formData, client_profile: value })}
             disabled={loadingProfiles}
             className={selectClassName}
-            placeholder="Select a client..."
+            placeholder={t('assistants.assignments.selectClient')}
             options={clientProfiles.map((client) => ({ value: client.name, label: client.full_name }))}
           />
         </div>
@@ -188,7 +194,7 @@ export const CreateAssignmentDrawer = ({
         <div className="space-y-2">
           <Label className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
             <LinkIcon className="w-4 h-4" style={{ color: 'var(--accent-success)' }} />
-            Assignment Model
+            {t('assistants.assignments.model')}
           </Label>
           <div className="grid grid-cols-3 gap-2">
             {(['1:1', '1:2', '1:3'] as const).map((model) => (
@@ -221,13 +227,7 @@ export const CreateAssignmentDrawer = ({
                   color: 'var(--text-primary)',
                 }}
               >
-                <span className="font-bold">{model}</span>
-                <p
-                  className="text-xs mt-1"
-                  style={{ color: 'var(--text-muted)' }}
-                >
-                  {model === '1:1' ? 'Dedicated' : model === '1:2' ? 'Shared (2)' : 'Shared (3)'}
-                </p>
+                <span className="text-xs font-semibold leading-snug">{fmt.model(model)}</span>
               </motion.button>
             ))}
           </div>
@@ -237,7 +237,7 @@ export const CreateAssignmentDrawer = ({
         <div className="space-y-2">
           <Label className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
             <Calendar className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
-            Start Date
+            {t('assistants.assignments.startDate')}
           </Label>
           <DatePicker
             value={formData.start_date ?? ''}
@@ -250,7 +250,7 @@ export const CreateAssignmentDrawer = ({
         <div className="space-y-2">
           <Label className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
             <Calendar className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
-            End Date (Optional)
+            {t('assistants.assignments.endDateOptional')}
           </Label>
           <DatePicker
             value={formData.end_date || ''}

@@ -8,6 +8,7 @@ from frappe import _
 from frappe.utils import cint, flt, nowdate, now_datetime, get_datetime
 
 from appointment.helpers.phone import require_phone
+from appointment.assistants.helpers.errors import raise_user_error
 
 
 # Helper mappings to keep frontend-friendly payloads while using the current DocTypes
@@ -163,9 +164,9 @@ def create_va_profile(data):
         
         # Validate required fields
         if not data.get("full_name"):
-            frappe.throw(_("Full Name is required"))
+            frappe.throw(_("Enter the full name."))
         if not data.get("email"):
-            frappe.throw(_("Email is required"))
+            frappe.throw(_("Enter an email address."))
 
         status = data.get("status", "active")
         user_id = data.get("user") or data.get("email")
@@ -212,13 +213,12 @@ def create_va_profile(data):
         
         return {
             "success": True,
-            "message": _("VA Profile created successfully"),
+            "message": _("VA profile created."),
             "data": _serialize_va_profile(va_profile)
         }
     
     except Exception as e:
-        frappe.log_error(f"Error creating VA Profile: {str(e)}", "Assistant API: Create VA Profile")
-        frappe.throw(_(f"Failed to create VA Profile: {str(e)}"))
+        raise_user_error(e, _("Could not create the VA profile. Please try again."), "Assistant API: Create VA Profile")
 
 
 @frappe.whitelist()
@@ -235,7 +235,7 @@ def get_va_profile(va_name, fields=None):
     """
     try:
         if not frappe.db.exists("VA Profile", va_name):
-            frappe.throw(_("VA Profile not found"))
+            frappe.throw(_("This VA profile no longer exists."))
         
         va_profile = frappe.get_doc("VA Profile", va_name)
         serialized = _serialize_va_profile(va_profile)
@@ -254,8 +254,7 @@ def get_va_profile(va_name, fields=None):
         }
     
     except Exception as e:
-        frappe.log_error(f"Error getting VA Profile: {str(e)}", "Assistant API: Get VA Profile")
-        frappe.throw(_(f"Failed to get VA Profile: {str(e)}"))
+        raise_user_error(e, _("Could not load the VA profile. Please try again."), "Assistant API: Get VA Profile")
 
 
 @frappe.whitelist()
@@ -312,8 +311,7 @@ def list_va_profiles(filters=None, fields=None, page_length=20, page_start=0, or
         }
     
     except Exception as e:
-        frappe.log_error(f"Error listing VA Profiles: {str(e)}", "Assistant API: List VA Profiles")
-        frappe.throw(_(f"Failed to list VA Profiles: {str(e)}"))
+        raise_user_error(e, _("Could not load VA profiles. Please try again."), "Assistant API: List VA Profiles")
 
 
 @frappe.whitelist()
@@ -333,7 +331,7 @@ def update_va_profile(va_name, data):
             data = frappe.parse_json(data)
         
         if not frappe.db.exists("VA Profile", va_name):
-            frappe.throw(_("VA Profile not found"))
+            frappe.throw(_("This VA profile no longer exists."))
         
         va_profile = frappe.get_doc("VA Profile", va_name)
 
@@ -374,13 +372,12 @@ def update_va_profile(va_name, data):
         
         return {
             "success": True,
-            "message": _("VA Profile updated successfully"),
+            "message": _("VA profile updated."),
             "data": _serialize_va_profile(va_profile)
         }
     
     except Exception as e:
-        frappe.log_error(f"Error updating VA Profile: {str(e)}", "Assistant API: Update VA Profile")
-        frappe.throw(_(f"Failed to update VA Profile: {str(e)}"))
+        raise_user_error(e, _("Could not update the VA profile. Please try again."), "Assistant API: Update VA Profile")
 
 
 @frappe.whitelist()
@@ -396,19 +393,18 @@ def delete_va_profile(va_name):
     """
     try:
         if not frappe.db.exists("VA Profile", va_name):
-            frappe.throw(_("VA Profile not found"))
+            frappe.throw(_("This VA profile no longer exists."))
         
         frappe.delete_doc("VA Profile", va_name, force=1)
         frappe.db.commit()
         
         return {
             "success": True,
-            "message": _("VA Profile deleted successfully")
+            "message": _("VA profile deleted.")
         }
     
     except Exception as e:
-        frappe.log_error(f"Error deleting VA Profile: {str(e)}", "Assistant API: Delete VA Profile")
-        frappe.throw(_(f"Failed to delete VA Profile: {str(e)}"))
+        raise_user_error(e, _("Could not delete the VA profile. Please try again."), "Assistant API: Delete VA Profile")
 
 
 # =====================================================
@@ -439,9 +435,9 @@ def create_client_profile(data):
         
         # Validate required fields
         if not data.get("full_name"):
-            frappe.throw(_("Full Name is required"))
+            frappe.throw(_("Enter the full name."))
         if not data.get("email"):
-            frappe.throw(_("Email is required"))
+            frappe.throw(_("Enter an email address."))
 
         status = data.get("status", "active")
         user_id = data.get("user") or data.get("email")
@@ -485,13 +481,12 @@ def create_client_profile(data):
         
         return {
             "success": True,
-            "message": _("Client Profile created successfully"),
+            "message": _("Client profile created."),
             "data": _serialize_client_profile(client_profile)
         }
     
     except Exception as e:
-        frappe.log_error(f"Error creating Client Profile: {str(e)}", "Assistant API: Create Client Profile")
-        frappe.throw(_(f"Failed to create Client Profile: {str(e)}"))
+        raise_user_error(e, _("Could not create the client profile. Please try again."), "Assistant API: Create Client Profile")
 
 
 @frappe.whitelist()
@@ -508,7 +503,7 @@ def get_client_profile(client_name, fields=None):
     """
     try:
         if not frappe.db.exists("Client Profile", client_name):
-            frappe.throw(_("Client Profile not found"))
+            frappe.throw(_("This client profile no longer exists."))
         
         client_profile = frappe.get_doc("Client Profile", client_name)
         serialized = _serialize_client_profile(client_profile)
@@ -527,8 +522,7 @@ def get_client_profile(client_name, fields=None):
         }
     
     except Exception as e:
-        frappe.log_error(f"Error getting Client Profile: {str(e)}", "Assistant API: Get Client Profile")
-        frappe.throw(_(f"Failed to get Client Profile: {str(e)}"))
+        raise_user_error(e, _("Could not load the client profile. Please try again."), "Assistant API: Get Client Profile")
 
 
 @frappe.whitelist()
@@ -585,8 +579,7 @@ def list_client_profiles(filters=None, fields=None, page_length=20, page_start=0
         }
     
     except Exception as e:
-        frappe.log_error(f"Error listing Client Profiles: {str(e)}", "Assistant API: List Client Profiles")
-        frappe.throw(_(f"Failed to list Client Profiles: {str(e)}"))
+        raise_user_error(e, _("Could not load client profiles. Please try again."), "Assistant API: List Client Profiles")
 
 
 @frappe.whitelist()
@@ -606,7 +599,7 @@ def update_client_profile(client_name, data):
             data = frappe.parse_json(data)
         
         if not frappe.db.exists("Client Profile", client_name):
-            frappe.throw(_("Client Profile not found"))
+            frappe.throw(_("This client profile no longer exists."))
         
         client_profile = frappe.get_doc("Client Profile", client_name)
 
@@ -651,13 +644,12 @@ def update_client_profile(client_name, data):
         
         return {
             "success": True,
-            "message": _("Client Profile updated successfully"),
+            "message": _("Client profile updated."),
             "data": _serialize_client_profile(client_profile)
         }
     
     except Exception as e:
-        frappe.log_error(f"Error updating Client Profile: {str(e)}", "Assistant API: Update Client Profile")
-        frappe.throw(_(f"Failed to update Client Profile: {str(e)}"))
+        raise_user_error(e, _("Could not update the client profile. Please try again."), "Assistant API: Update Client Profile")
 
 
 @frappe.whitelist()
@@ -673,19 +665,18 @@ def delete_client_profile(client_name):
     """
     try:
         if not frappe.db.exists("Client Profile", client_name):
-            frappe.throw(_("Client Profile not found"))
+            frappe.throw(_("This client profile no longer exists."))
         
         frappe.delete_doc("Client Profile", client_name, force=1)
         frappe.db.commit()
         
         return {
             "success": True,
-            "message": _("Client Profile deleted successfully")
+            "message": _("Client profile deleted.")
         }
     
     except Exception as e:
-        frappe.log_error(f"Error deleting Client Profile: {str(e)}", "Assistant API: Delete Client Profile")
-        frappe.throw(_(f"Failed to delete Client Profile: {str(e)}"))
+        raise_user_error(e, _("Could not delete the client profile. Please try again."), "Assistant API: Delete Client Profile")
 
 
 # =====================================================
@@ -716,15 +707,15 @@ def create_assignment(data):
         
         # Validate required fields
         if not data.get("va_profile") and not data.get("assistant"):
-            frappe.throw(_("VA Profile is required"))
+            frappe.throw(_("Choose a VA profile."))
         if not data.get("client_profile"):
-            frappe.throw(_("Client Profile is required"))
+            frappe.throw(_("Choose a client profile."))
         if not data.get("assignment_model"):
-            frappe.throw(_("Assignment Model is required"))
+            frappe.throw(_("Choose an assignment model."))
 
         assignment_type = ASSIGNMENT_MODEL_TO_TYPE.get(data.get("assignment_model"))
         if not assignment_type:
-            frappe.throw(_("Assignment Model must be one of: 1:1, 1:2, 1:3"))
+            frappe.throw(_("Choose an assignment model: 1:1, 1:2 or 1:3."))
 
         # Create assignment document
         assignment = frappe.new_doc("Assistant Client Assignment")
@@ -743,13 +734,12 @@ def create_assignment(data):
         
         return {
             "success": True,
-            "message": _("Assignment created successfully"),
+            "message": _("Assignment created."),
             "data": _serialize_assignment(assignment)
         }
     
     except Exception as e:
-        frappe.log_error(f"Error creating assignment: {str(e)}", "Assistant API: Create Assignment")
-        frappe.throw(_(f"Failed to create assignment: {str(e)}"))
+        raise_user_error(e, _("Could not create the assignment. Please try again."), "Assistant API: Create Assignment")
 
 
 @frappe.whitelist()
@@ -766,7 +756,7 @@ def get_assignment(assignment_name, fields=None):
     """
     try:
         if not frappe.db.exists("Assistant Client Assignment", assignment_name):
-            frappe.throw(_("Assignment not found"))
+            frappe.throw(_("This assignment no longer exists."))
         
         assignment = frappe.get_doc("Assistant Client Assignment", assignment_name)
         serialized = _serialize_assignment(assignment)
@@ -785,8 +775,7 @@ def get_assignment(assignment_name, fields=None):
         }
     
     except Exception as e:
-        frappe.log_error(f"Error getting assignment: {str(e)}", "Assistant API: Get Assignment")
-        frappe.throw(_(f"Failed to get assignment: {str(e)}"))
+        raise_user_error(e, _("Could not load the assignment. Please try again."), "Assistant API: Get Assignment")
 
 
 @frappe.whitelist()
@@ -858,8 +847,7 @@ def list_assignments(filters=None, fields=None, page_length=20, page_start=0, or
         }
     
     except Exception as e:
-        frappe.log_error(f"Error listing assignments: {str(e)}", "Assistant API: List Assignments")
-        frappe.throw(_(f"Failed to list assignments: {str(e)}"))
+        raise_user_error(e, _("Could not load assignments. Please try again."), "Assistant API: List Assignments")
 
 
 @frappe.whitelist()
@@ -879,7 +867,7 @@ def update_assignment(assignment_name, data):
             data = frappe.parse_json(data)
         
         if not frappe.db.exists("Assistant Client Assignment", assignment_name):
-            frappe.throw(_("Assignment not found"))
+            frappe.throw(_("This assignment no longer exists."))
         
         assignment = frappe.get_doc("Assistant Client Assignment", assignment_name)
 
@@ -908,13 +896,12 @@ def update_assignment(assignment_name, data):
         
         return {
             "success": True,
-            "message": _("Assignment updated successfully"),
+            "message": _("Assignment updated."),
             "data": _serialize_assignment(assignment)
         }
     
     except Exception as e:
-        frappe.log_error(f"Error updating assignment: {str(e)}", "Assistant API: Update Assignment")
-        frappe.throw(_(f"Failed to update assignment: {str(e)}"))
+        raise_user_error(e, _("Could not update the assignment. Please try again."), "Assistant API: Update Assignment")
 
 
 @frappe.whitelist()
@@ -930,19 +917,18 @@ def delete_assignment(assignment_name):
     """
     try:
         if not frappe.db.exists("Assistant Client Assignment", assignment_name):
-            frappe.throw(_("Assignment not found"))
+            frappe.throw(_("This assignment no longer exists."))
         
         frappe.delete_doc("Assistant Client Assignment", assignment_name, force=1)
         frappe.db.commit()
         
         return {
             "success": True,
-            "message": _("Assignment deleted successfully")
+            "message": _("Assignment deleted.")
         }
     
     except Exception as e:
-        frappe.log_error(f"Error deleting assignment: {str(e)}", "Assistant API: Delete Assignment")
-        frappe.throw(_(f"Failed to delete assignment: {str(e)}"))
+        raise_user_error(e, _("Could not delete the assignment. Please try again."), "Assistant API: Delete Assignment")
 
 
 # =====================================================
@@ -989,8 +975,7 @@ def get_clients_for_va(va_profile, status="active"):
         }
     
     except Exception as e:
-        frappe.log_error(f"Error getting clients for VA: {str(e)}", "Assistant API: Get Clients for VA")
-        frappe.throw(_(f"Failed to get clients: {str(e)}"))
+        raise_user_error(e, _("Could not load the assistant's clients. Please try again."), "Assistant API: Get Clients for VA")
 
 
 @frappe.whitelist()
@@ -1033,8 +1018,7 @@ def get_vas_for_client(client_profile, status="active"):
         }
     
     except Exception as e:
-        frappe.log_error(f"Error getting VAs for client: {str(e)}", "Assistant API: Get VAs for Client")
-        frappe.throw(_(f"Failed to get VAs: {str(e)}"))
+        raise_user_error(e, _("Could not load the client's assistants. Please try again."), "Assistant API: Get VAs for Client")
 
 
 @frappe.whitelist()
@@ -1075,7 +1059,6 @@ def get_assignment_statistics():
         }
     
     except Exception as e:
-        frappe.log_error(f"Error getting assignment statistics: {str(e)}", "Assistant API: Statistics")
-        frappe.throw(_(f"Failed to get assignment statistics: {str(e)}"))
+        raise_user_error(e, _("Could not load assignment statistics. Please try again."), "Assistant API: Statistics")
 
 

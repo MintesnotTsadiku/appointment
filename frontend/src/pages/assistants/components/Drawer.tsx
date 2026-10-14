@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { useEffect } from 'react';
+import { useTranslation } from '@/lib/i18n';
 
 interface DrawerProps {
   isOpen: boolean;
@@ -9,6 +10,8 @@ interface DrawerProps {
   children: React.ReactNode;
   footer?: React.ReactNode;
   width?: 'sm' | 'md' | 'lg';
+  /** Optional data-qa hook on the drawer panel. */
+  qa?: string;
 }
 
 export const Drawer = ({
@@ -18,7 +21,9 @@ export const Drawer = ({
   children,
   footer,
   width = 'md',
+  qa,
 }: DrawerProps) => {
+  const { t } = useTranslation();
   // Close on escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -68,6 +73,9 @@ export const Drawer = ({
 
           {/* Drawer Panel */}
           <motion.div
+            data-qa={qa}
+            role="dialog"
+            aria-label={title}
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
@@ -97,6 +105,8 @@ export const Drawer = ({
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={onClose}
+                aria-label={t('assistants.common.close')}
+                title={t('assistants.common.close')}
                 className="p-2 rounded-lg transition-colors"
                 style={{
                   backgroundColor: 'var(--border-subtle)',

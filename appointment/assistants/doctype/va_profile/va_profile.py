@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 import frappe
+from frappe import _
 from frappe.model.document import Document
 
 
@@ -9,7 +10,7 @@ class VAProfile(Document):
 	def validate(self):
 		"""Validate max_clients and update current_clients"""
 		if self.max_clients not in [1, 2, 3]:
-			frappe.throw("Max clients must be 1, 2, or 3")
+			frappe.throw(_("An assistant can take 1, 2 or 3 clients."))
 		
 		# Calculate current active clients
 		self.update_current_clients()
@@ -28,7 +29,11 @@ class VAProfile(Document):
 		
 		# Check if current exceeds max
 		if self.current_clients > self.max_clients:
-			frappe.throw(f"Current clients ({self.current_clients}) exceeds max clients ({self.max_clients})")
+			frappe.throw(
+				_("This assistant has {0} active clients, more than the maximum of {1}.").format(
+					self.current_clients, self.max_clients
+				)
+			)
 	
 	def on_update(self):
 		"""Update current clients after save"""

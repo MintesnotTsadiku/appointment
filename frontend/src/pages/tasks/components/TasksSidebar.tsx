@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, isToday, parseISO } from 'date-fns';
+import { format, startOfMonth, endOfMonth, startOfWeek, eachDayOfInterval, addDays, isToday, parseISO } from 'date-fns';
 import { Task } from '@/lib/tasks-assistants/types';
+import { useTranslation } from '@/lib/i18n';
+import { useTaskFormat } from '@/lib/tasks-assistants/format';
 
 interface TasksSidebarProps {
   currentDate: Date;
@@ -20,7 +22,10 @@ export const TasksSidebar = ({
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(currentDate);
   const monthDays = eachDayOfInterval({ start: monthStart, end: monthEnd });
-  const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const { t } = useTranslation();
+  const fmt = useTaskFormat();
+  const weekStart = startOfWeek(currentDate, { weekStartsOn: 1 });
+  const weekDays = Array.from({ length: 7 }, (_, i) => fmt.date(addDays(weekStart, i), { weekday: 'narrow' }));
 
   const getTaskDate = (task: Task): Date | null => {
     const candidate =
@@ -40,14 +45,17 @@ export const TasksSidebar = ({
 
   const tasksWithDate = useMemo(() => tasks.filter((task) => !!getTaskDate(task)), [tasks, dateField]);
 
+  const taskCount = (count: number) =>
+    t(count === 1 ? 'tasks.page.countTasksOne' : 'tasks.page.countTasksMany').replace('{0}', fmt.number(count));
+
   const tasksByDate = useMemo(() => {
     const map = new Map<string, Task[]>();
-    tasksWithDate.forEach((t) => {
-      const d = getTaskDate(t);
+    tasksWithDate.forEach((task) => {
+      const d = getTaskDate(task);
       if (!d) return;
       const key = format(d, 'yyyy-MM-dd');
       if (!map.has(key)) map.set(key, []);
-      map.get(key)!.push(t);
+      map.get(key)!.push(task);
     });
     map.forEach((list) =>
       list.sort((a, b) => {
@@ -64,12 +72,12 @@ export const TasksSidebar = ({
       <div className="rounded-2xl border backdrop-blur-xs p-4 shrink-0" style={{ backgroundColor: 'var(--bg-elevated)', borderColor: 'var(--border-default)' }}>
         <div className="flex items-center justify-between mb-3">
           <div className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
-            {format(currentDate, 'MMMM yyyy')}
+            {fmt.date(currentDate, { month: 'long', year: 'numeric' })}
           </div>
         </div>
         <div className="grid grid-cols-7 text-center text-[11px] mb-2" style={{ color: 'var(--text-subtle)' }}>
-          {weekDays.map((d) => (
-            <div key={`mini-${d}`} className="py-1">{d[0]}</div>
+          {weekDays.map((d, i) => (
+            <div key={`mini-${i}`} className="py-1">{d}</div>
           ))}
         </div>
         <div className="grid grid-cols-7 gap-1">
@@ -87,9 +95,9 @@ export const TasksSidebar = ({
                   color: isTodayDate ? 'var(--accent-primary)' : 'var(--text-primary)',
                   border: isTodayDate ? '1px solid var(--accent-primary)' : '1px solid var(--border-subtle)'
                 }}
-                title={count ? `${count} task${count > 1 ? 's' : ''}` : ''}
+                title={count ? taskCount(count) : ''}
               >
-                {format(day, 'd')}
+                {fmt.date(day, { day: 'numeric' })}
                 {count > 0 && (
                   <span
                     className="absolute -top-1 -right-1 w-5 h-5 rounded-full text-[10px] font-semibold flex items-center justify-center"
@@ -99,7 +107,7 @@ export const TasksSidebar = ({
                       border: '1px solid var(--bg-elevated)'
                     }}
                   >
-                    {count}
+                    {fmt.number(count)}
                   </span>
                 )}
               </button>
@@ -110,17 +118,17 @@ export const TasksSidebar = ({
 
       <div className="rounded-2xl border backdrop-blur-xs p-4 flex-1 overflow-y-auto" style={{ backgroundColor: 'var(--bg-elevated)', borderColor: 'var(--border-default)' }}>
         <div className="text-sm font-semibold mb-3" style={{ color: 'var(--text-primary)' }}>
-          Tasks this month
+          {t('tasks.page.sidebarTitle')}
         </div>
         {tasksWithDate.length === 0 ? (
-          <div className="text-xs" style={{ color: 'var(--text-muted)' }}>No tasks</div>
+          <div className="text-xs" style={{ color: 'var(--text-muted)' }}>{t('tasks.page.noTasks')}</div>
         ) : (
           Array.from(tasksByDate.entries())
             .sort(([a], [b]) => (a < b ? -1 : 1))
             .map(([dateKey, dateTasks]) => (
               <div key={`list-${dateKey}`} className="mb-3">
                 <div className="text-[11px] font-semibold mb-1" style={{ color: 'var(--text-subtle)' }}>
-                  {format(parseISO(dateKey), 'EEE, MMM d')}
+                  {fmt.date(parseISO(dateKey), { weekday: 'short', month: 'short', day: 'numeric' })}
                 </div>
                 <div className="space-y-1">
                   {dateTasks.slice(0, 4).map((task) => (
@@ -138,19 +146,19 @@ export const TasksSidebar = ({
                         <span className="font-semibold truncate">{task.title}</span>
                         {task.deadline && (
                           <span className="text-[10px]" style={{ color: 'var(--text-muted)' }}>
-                            {format(parseISO(task.deadline), 'HH:mm')}
+                            {fmt.time(task.deadline, true)}
                           </span>
                         )}
                       </div>
                       <div className="flex items-center gap-2 mt-1 text-[11px]" style={{ color: 'var(--text-muted)' }}>
-                        <span>{task.status}</span>
+                        <span>{fmt.taskStatus(task.status)}</span>
                         {task.client_profile && <span className="truncate">{task.client_profile}</span>}
                       </div>
                     </button>
                   ))}
                   {dateTasks.length > 4 && (
                     <div className="text-[11px]" style={{ color: 'var(--text-muted)' }}>
-                      +{dateTasks.length - 4} more
+                      {t('tasks.page.moreCount').replace('{0}', fmt.number(dateTasks.length - 4))}
                     </div>
                   )}
                 </div>

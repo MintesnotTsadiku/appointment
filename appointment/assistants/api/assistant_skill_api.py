@@ -6,6 +6,7 @@ Provides CRUD operations for Assistant Skills
 import frappe
 from frappe import _
 from frappe.utils import cint
+from appointment.assistants.helpers.errors import raise_user_error
 
 
 # =====================================================
@@ -33,7 +34,7 @@ def create_assistant_skill(data):
             data = frappe.parse_json(data)
         
         if not data.get("name"):
-            frappe.throw(_("Skill name is required"))
+            frappe.throw(_("Enter a skill name."))
         
         skill = frappe.new_doc("Assistant Skill")
         skill.name = data.get("name")
@@ -45,13 +46,12 @@ def create_assistant_skill(data):
         
         return {
             "success": True,
-            "message": _("Assistant Skill created successfully"),
+            "message": _("Skill created."),
             "data": skill.as_dict()
         }
     
     except Exception as e:
-        frappe.log_error(f"Error creating Assistant Skill: {str(e)}", "Assistant Skill API: Create")
-        frappe.throw(_(f"Failed to create Assistant Skill: {str(e)}"))
+        raise_user_error(e, _("Could not create the skill. Please try again."), "Assistant Skill API: Create")
 
 
 @frappe.whitelist()
@@ -59,7 +59,7 @@ def get_assistant_skill(skill_name):
     """Get a single Assistant Skill"""
     try:
         if not frappe.db.exists("Assistant Skill", skill_name):
-            frappe.throw(_("Assistant Skill not found"))
+            frappe.throw(_("This skill no longer exists."))
         
         skill = frappe.get_doc("Assistant Skill", skill_name)
         
@@ -69,8 +69,7 @@ def get_assistant_skill(skill_name):
         }
     
     except Exception as e:
-        frappe.log_error(f"Error getting Assistant Skill: {str(e)}", "Assistant Skill API: Get")
-        frappe.throw(_(f"Failed to get Assistant Skill: {str(e)}"))
+        raise_user_error(e, _("Could not load the skill. Please try again."), "Assistant Skill API: Get")
 
 
 @frappe.whitelist()
@@ -100,8 +99,7 @@ def list_assistant_skills(filters=None, fields=None):
         }
     
     except Exception as e:
-        frappe.log_error(f"Error listing Assistant Skills: {str(e)}", "Assistant Skill API: List")
-        frappe.throw(_(f"Failed to list Assistant Skills: {str(e)}"))
+        raise_user_error(e, _("Could not load skills. Please try again."), "Assistant Skill API: List")
 
 
 @frappe.whitelist()
@@ -112,7 +110,7 @@ def update_assistant_skill(skill_name, data):
             data = frappe.parse_json(data)
         
         if not frappe.db.exists("Assistant Skill", skill_name):
-            frappe.throw(_("Assistant Skill not found"))
+            frappe.throw(_("This skill no longer exists."))
         
         skill = frappe.get_doc("Assistant Skill", skill_name)
         
@@ -126,13 +124,12 @@ def update_assistant_skill(skill_name, data):
         
         return {
             "success": True,
-            "message": _("Assistant Skill updated successfully"),
+            "message": _("Skill updated."),
             "data": skill.as_dict()
         }
     
     except Exception as e:
-        frappe.log_error(f"Error updating Assistant Skill: {str(e)}", "Assistant Skill API: Update")
-        frappe.throw(_(f"Failed to update Assistant Skill: {str(e)}"))
+        raise_user_error(e, _("Could not update the skill. Please try again."), "Assistant Skill API: Update")
 
 
 @frappe.whitelist()
@@ -140,19 +137,18 @@ def delete_assistant_skill(skill_name):
     """Delete an Assistant Skill"""
     try:
         if not frappe.db.exists("Assistant Skill", skill_name):
-            frappe.throw(_("Assistant Skill not found"))
+            frappe.throw(_("This skill no longer exists."))
         
         frappe.delete_doc("Assistant Skill", skill_name, force=1)
         frappe.db.commit()
         
         return {
             "success": True,
-            "message": _("Assistant Skill deleted successfully")
+            "message": _("Skill deleted.")
         }
     
     except Exception as e:
-        frappe.log_error(f"Error deleting Assistant Skill: {str(e)}", "Assistant Skill API: Delete")
-        frappe.throw(_(f"Failed to delete Assistant Skill: {str(e)}"))
+        raise_user_error(e, _("Could not delete the skill. Please try again."), "Assistant Skill API: Delete")
 
 
 # =====================================================
@@ -174,17 +170,17 @@ def assign_skill_to_va(va_profile, skill_name, proficiency_level="intermediate")
     """
     try:
         if not frappe.db.exists("VA Profile", va_profile):
-            frappe.throw(_("VA Profile not found"))
+            frappe.throw(_("This VA profile no longer exists."))
         
         if not frappe.db.exists("Assistant Skill", skill_name):
-            frappe.throw(_("Assistant Skill not found"))
+            frappe.throw(_("This skill no longer exists."))
         
         va_profile_doc = frappe.get_doc("VA Profile", va_profile)
         
         # Check if skill already assigned
         existing_skills = [s.skill for s in va_profile_doc.skills if s.skill == skill_name]
         if existing_skills:
-            frappe.throw(_("Skill is already assigned to this VA"))
+            frappe.throw(_("This assistant already has this skill."))
         
         # Add skill
         va_profile_doc.append("skills", {
@@ -198,12 +194,11 @@ def assign_skill_to_va(va_profile, skill_name, proficiency_level="intermediate")
         
         return {
             "success": True,
-            "message": _("Skill assigned successfully")
+            "message": _("Skill added to the assistant.")
         }
     
     except Exception as e:
-        frappe.log_error(f"Error assigning skill: {str(e)}", "Assistant Skill API: Assign")
-        frappe.throw(_(f"Failed to assign skill: {str(e)}"))
+        raise_user_error(e, _("Could not add the skill to the assistant. Please try again."), "Assistant Skill API: Assign")
 
 
 @frappe.whitelist()
@@ -220,14 +215,14 @@ def remove_skill_from_va(va_profile, skill_name):
     """
     try:
         if not frappe.db.exists("VA Profile", va_profile):
-            frappe.throw(_("VA Profile not found"))
+            frappe.throw(_("This VA profile no longer exists."))
         
         va_profile_doc = frappe.get_doc("VA Profile", va_profile)
         
         # Find and remove skill
         skills_to_remove = [s for s in va_profile_doc.skills if s.skill == skill_name]
         if not skills_to_remove:
-            frappe.throw(_("Skill is not assigned to this VA"))
+            frappe.throw(_("This assistant does not have this skill."))
         
         for skill_row in skills_to_remove:
             va_profile_doc.remove(skill_row)
@@ -237,12 +232,11 @@ def remove_skill_from_va(va_profile, skill_name):
         
         return {
             "success": True,
-            "message": _("Skill removed successfully")
+            "message": _("Skill removed from the assistant.")
         }
     
     except Exception as e:
-        frappe.log_error(f"Error removing skill: {str(e)}", "Assistant Skill API: Remove")
-        frappe.throw(_(f"Failed to remove skill: {str(e)}"))
+        raise_user_error(e, _("Could not remove the skill from the assistant. Please try again."), "Assistant Skill API: Remove")
 
 
 @frappe.whitelist()
@@ -258,7 +252,7 @@ def get_va_skills(va_profile):
     """
     try:
         if not frappe.db.exists("VA Profile", va_profile):
-            frappe.throw(_("VA Profile not found"))
+            frappe.throw(_("This VA profile no longer exists."))
         
         va_profile_doc = frappe.get_doc("VA Profile", va_profile)
         
@@ -280,8 +274,7 @@ def get_va_skills(va_profile):
         }
     
     except Exception as e:
-        frappe.log_error(f"Error getting VA skills: {str(e)}", "Assistant Skill API: Get VA Skills")
-        frappe.throw(_(f"Failed to get VA skills: {str(e)}"))
+        raise_user_error(e, _("Could not load the assistant's skills. Please try again."), "Assistant Skill API: Get VA Skills")
 
 
 @frappe.whitelist()
@@ -298,7 +291,7 @@ def get_vas_by_skill(skill_name, proficiency_level=None):
     """
     try:
         if not frappe.db.exists("Assistant Skill", skill_name):
-            frappe.throw(_("Assistant Skill not found"))
+            frappe.throw(_("This skill no longer exists."))
         
         # Get all VA Profiles
         va_profiles = frappe.get_all("VA Profile", fields=["name", "user", "is_active"])
@@ -333,7 +326,6 @@ def get_vas_by_skill(skill_name, proficiency_level=None):
         }
     
     except Exception as e:
-        frappe.log_error(f"Error getting VAs by skill: {str(e)}", "Assistant Skill API: Get VAs by Skill")
-        frappe.throw(_(f"Failed to get VAs by skill: {str(e)}"))
+        raise_user_error(e, _("Could not load assistants with this skill. Please try again."), "Assistant Skill API: Get VAs by Skill")
 
 

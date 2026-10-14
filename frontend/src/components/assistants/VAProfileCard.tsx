@@ -2,6 +2,8 @@ import { motion } from 'framer-motion';
 import { Mail, Phone, User, ChevronRight } from 'lucide-react';
 import { Card } from '@/components/card';
 import { formatPhone } from '@/lib/phone';
+import { useTranslation } from '@/lib/i18n';
+import { useTaskFormat } from '@/lib/tasks-assistants/format';
 import type { VAProfile } from '@/lib/tasks-assistants/types';
 
 interface VAProfileCardProps {
@@ -20,6 +22,10 @@ const resolveAvatar = (url?: string) => {
 };
 
 export const VAProfileCard = ({ vaProfile, onClick, onEdit }: VAProfileCardProps) => {
+  const { t } = useTranslation();
+  const fmt = useTaskFormat();
+  const skillCount = vaProfile.skills?.length || 0;
+  const statusKey = vaProfile.status === 'active' ? 'active' : 'inactive';
   const rawAvatar =
     vaProfile.avatar_url || vaProfile.image_url || vaProfile.profile_image || '';
   const avatarUrl =
@@ -85,7 +91,7 @@ export const VAProfileCard = ({ vaProfile, onClick, onEdit }: VAProfileCardProps
                     : 'bg-gray-500 text-white'
                 }`}
               >
-                {vaProfile.status === 'active' ? 'Active' : 'Inactive'}
+                {fmt.profileStatus(statusKey)}
               </span>
             </div>
             <div className="space-y-2 text-sm">
@@ -111,7 +117,7 @@ export const VAProfileCard = ({ vaProfile, onClick, onEdit }: VAProfileCardProps
                   style={{ color: 'var(--text-muted)' }}
                 >
                   <User className="w-4 h-4" />
-                  {vaProfile.skills.length} skill{vaProfile.skills.length > 1 ? 's' : ''}
+                  {t(skillCount === 1 ? 'assistants.va.skillsOne' : 'assistants.va.skillsMany').replace('{0}', fmt.number(skillCount))}
                 </div>
               )}
             </div>
@@ -131,7 +137,8 @@ export const VAProfileCard = ({ vaProfile, onClick, onEdit }: VAProfileCardProps
                   backgroundColor: 'var(--border-subtle)',
                   color: 'var(--text-muted)',
                 }}
-                title="View profile"
+                title={t('assistants.va.viewProfile')}
+                aria-label={t('assistants.va.viewProfile')}
               >
                 <ChevronRight className="w-4 h-4" />
               </motion.button>

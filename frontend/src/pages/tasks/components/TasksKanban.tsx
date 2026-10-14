@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { Plus, Loader2 } from 'lucide-react';
 import { TaskCard } from '@/components/tasks/TaskCard';
 import type { Task } from '@/lib/tasks-assistants/types';
+import { useTranslation } from '@/lib/i18n';
+import { useTaskFormat } from '@/lib/tasks-assistants/format';
 
 interface TasksKanbanProps {
   tasks: Task[];
@@ -14,12 +16,12 @@ interface TasksKanbanProps {
   onCreateTask: () => void;
 }
 
-const columns: { key: Task['status']; title: string; accent: string }[] = [
-  { key: 'Requested', title: 'Requested', accent: 'var(--accent-primary)' },
-  { key: 'Assigned', title: 'Assigned', accent: 'var(--accent-secondary)' },
-  { key: 'In Progress', title: 'In Progress', accent: 'var(--accent-warning)' },
-  { key: 'Completed', title: 'Completed', accent: 'var(--accent-success)' },
-  { key: 'Cancelled', title: 'Cancelled', accent: 'var(--text-muted)' },
+const columns: { key: Task['status']; accent: string }[] = [
+  { key: 'Requested', accent: 'var(--accent-primary)' },
+  { key: 'Assigned', accent: 'var(--accent-secondary)' },
+  { key: 'In Progress', accent: 'var(--accent-warning)' },
+  { key: 'Completed', accent: 'var(--accent-success)' },
+  { key: 'Cancelled', accent: 'var(--text-muted)' },
 ];
 
 export const TasksKanban = ({
@@ -31,6 +33,8 @@ export const TasksKanban = ({
   onTaskEdit,
   onCreateTask,
 }: TasksKanbanProps) => {
+  const { t } = useTranslation();
+  const fmt = useTaskFormat();
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [activeColumn, setActiveColumn] = useState<Task['status'] | null>(null);
 
@@ -67,7 +71,7 @@ export const TasksKanban = ({
           color: 'var(--text-secondary)',
         }}
       >
-        {count}
+        {fmt.number(count)}
       </span>
     </div>
   );
@@ -77,10 +81,10 @@ export const TasksKanban = ({
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>
-            Kanban
+            {t('tasks.page.kanbanTitle')}
           </h3>
           <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
-            Drag tasks across columns to collaborate with your client/VA in real time.
+            {t('tasks.page.kanbanHint')}
           </p>
         </div>
         <motion.button
@@ -92,7 +96,7 @@ export const TasksKanban = ({
           <div className="absolute inset-0 bg-gradient-primary opacity-90" />
           <div className="absolute inset-0 blur-xl opacity-60 bg-gradient-primary" />
           <Plus className="relative z-10 w-4 h-4 text-white" />
-          <span className="relative z-10 text-white">New Task</span>
+          <span className="relative z-10 text-white">{t('tasks.page.newTask')}</span>
         </motion.button>
       </div>
 
@@ -100,7 +104,7 @@ export const TasksKanban = ({
         <div className="flex justify-center py-12">
           <div className="flex items-center gap-3 text-sm" style={{ color: 'var(--text-muted)' }}>
             <Loader2 className="w-5 h-5 animate-spin" />
-            Loading tasks...
+            {t('tasks.page.loading')}
           </div>
         </div>
       ) : (
@@ -123,7 +127,7 @@ export const TasksKanban = ({
                     : 'var(--bg-elevated)',
               }}
             >
-              {renderColumnHeader(col.title, col.tasks.length, col.accent)}
+              {renderColumnHeader(fmt.taskStatus(col.key), col.tasks.length, col.accent)}
 
               {col.tasks.length === 0 ? (
                 <div
@@ -134,7 +138,7 @@ export const TasksKanban = ({
                     backgroundColor: 'var(--bg-secondary)',
                   }}
                 >
-                  Drop tasks here
+                  {t('tasks.page.dropHere')}
                 </div>
               ) : (
                 col.tasks.map((task) => (
@@ -161,7 +165,7 @@ export const TasksKanban = ({
                     {statusUpdating === task.name && (
                       <div className="mt-2 flex items-center gap-2 text-xs" style={{ color: 'var(--text-muted)' }}>
                         <Loader2 className="w-3 h-3 animate-spin" />
-                        Updating...
+                        {t('assistants.common.updating')}
                       </div>
                     )}
                   </div>

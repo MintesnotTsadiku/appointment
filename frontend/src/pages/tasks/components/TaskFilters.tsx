@@ -1,6 +1,10 @@
 import { Search, Filter, SortAsc, CalendarClock } from 'lucide-react';
 import { Input } from '@/components/input';
 import { OptionSelect } from '@/components/select/OptionSelect';
+import { useTranslation } from '@/lib/i18n';
+import { useTaskFormat } from '@/lib/tasks-assistants/format';
+
+const STATUSES = ['Requested', 'Assigned', 'In Progress', 'Completed', 'Cancelled'];
 
 const selectClassName = 'h-auto w-auto gap-2 rounded-lg border-[var(--border-default)] bg-[var(--bg-secondary)] px-3 py-2 text-sm text-[var(--text-primary)] transition-all';
 
@@ -53,22 +57,20 @@ export const TaskFilters = ({
   dateField,
   onDateFieldChange,
 }: TaskFiltersProps) => {
+  const { t } = useTranslation();
+  const fmt = useTaskFormat();
   const statuses = [
-    { value: 'all', label: 'All' },
-    { value: 'Requested', label: 'Requested' },
-    { value: 'Assigned', label: 'Assigned' },
-    { value: 'In Progress', label: 'In Progress' },
-    { value: 'Completed', label: 'Completed' },
-    { value: 'Cancelled', label: 'Cancelled' },
+    { value: 'all', label: t('assistants.common.all') },
+    ...STATUSES.map((status) => ({ value: status, label: fmt.taskStatus(status) })),
   ];
 
   return (
-    <div className="flex items-center gap-3 flex-wrap">
+    <div className="flex items-center gap-3 flex-wrap" data-qa="tasks-filters">
       {/* Search */}
       <div className="relative flex-1 min-w-[200px]">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: 'var(--text-muted)' }} />
         <Input
-          placeholder="Search tasks by title or description..."
+          placeholder={t('tasks.filters.searchPlaceholder')}
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           className="pl-10"
@@ -87,9 +89,9 @@ export const TaskFilters = ({
           onValueChange={onSortByChange}
           className={selectClassName}
           options={[
-            { value: 'deadline_asc', label: 'Soonest deadline' },
-            { value: 'priority_desc', label: 'Highest priority' },
-            { value: 'recent', label: 'Recently updated' },
+            { value: 'deadline_asc', label: t('tasks.filters.sortDeadline') },
+            { value: 'priority_desc', label: t('tasks.filters.sortPriority') },
+            { value: 'recent', label: t('tasks.filters.sortRecent') },
           ]}
         />
       </div>
@@ -108,9 +110,9 @@ export const TaskFilters = ({
           onValueChange={(value) => onDateFieldChange(value as 'deadline' | 'creation' | 'modified')}
           className={selectClassName}
           options={[
-            { value: 'deadline', label: 'Deadline' },
-            { value: 'creation', label: 'Created' },
-            { value: 'modified', label: 'Last updated' },
+            { value: 'deadline', label: t('tasks.filters.dateDeadline') },
+            { value: 'creation', label: t('tasks.filters.dateCreated') },
+            { value: 'modified', label: t('tasks.filters.dateModified') },
           ]}
         />
       </div>
@@ -120,7 +122,7 @@ export const TaskFilters = ({
         value={assigneeFilter}
         onValueChange={onAssigneeFilterChange}
         className={`${selectClassName} min-w-[140px]`}
-        options={[{ value: '', label: 'All VAs' }, ...assigneeOptions]}
+        options={[{ value: '', label: t('tasks.filters.allAssistants') }, ...assigneeOptions]}
       />
 
       {/* Client Filter */}
@@ -128,7 +130,7 @@ export const TaskFilters = ({
         value={clientFilter}
         onValueChange={onClientFilterChange}
         className={`${selectClassName} min-w-[160px]`}
-        options={[{ value: '', label: 'All clients' }, ...clientOptions]}
+        options={[{ value: '', label: t('tasks.filters.allClients') }, ...clientOptions]}
       />
 
       {/* Project Filter */}
@@ -136,7 +138,7 @@ export const TaskFilters = ({
         value={projectFilter}
         onValueChange={onProjectFilterChange}
         className={`${selectClassName} min-w-[150px]`}
-        options={[{ value: '', label: 'All projects' }, ...projectOptions]}
+        options={[{ value: '', label: t('tasks.filters.allProjects') }, ...projectOptions]}
       />
 
       {/* Category Filter */}
@@ -144,7 +146,7 @@ export const TaskFilters = ({
         value={categoryFilter}
         onValueChange={onCategoryFilterChange}
         className={`${selectClassName} min-w-[140px]`}
-        options={[{ value: '', label: 'All categories' }, ...categoryOptions]}
+        options={[{ value: '', label: t('tasks.filters.allCategories') }, ...categoryOptions]}
       />
 
       {/* Show No Deadline Toggle */}
@@ -161,7 +163,7 @@ export const TaskFilters = ({
             accentColor: 'var(--accent-primary)',
           }}
         />
-        <span style={{ color: 'var(--text-primary)' }}>Show No Deadline</span>
+        <span style={{ color: 'var(--text-primary)' }}>{t('tasks.filters.showNoDeadline')}</span>
       </label>
     </div>
   );
