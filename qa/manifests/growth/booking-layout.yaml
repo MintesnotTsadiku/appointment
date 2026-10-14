@@ -1,0 +1,280 @@
+# Booking layout (en, light). No fixture: it reads the Selam, Bloom, Yared and Rahel showcases and books nothing.
+# Desktop: the side column (summary, calendar, time format) and the slot panel stay in place, the slot list scrolls
+# inside the panel, and the bottom bar shows the chosen time with Continue. Phone: a strip of days sticks under the
+# header and only the list scrolls. See docs/growth/BOOKING_LAYOUT.md.
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-booking-layout
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 150000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+  reduced_motion: reduce
+scenarios:
+- id: layout_selam_en_desktop
+  title: 'Selam: services, then the time picker with a sticky side column, the bar and Continue (en, desktop, light)'
+  viewport: &desktop
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /schedule/org/selam-studio
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="booking-business"]'
+    - type: visible_selector
+      value: :nth-match([data-qa="booking-service"], 2)
+  actions:
+  - action: screenshot
+    name: layout_selam_en_desktop-1-services.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-picker"][data-wide="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-summary"] [data-qa="booking-picker-service"]'
+    - type: visible_selector
+      value: '[data-qa="booking-summary-place"]'
+    - type: visible_selector
+      value: '[data-qa="booking-time-format"]'
+    - type: visible_selector
+      value: '[data-qa="booking-slot-panel"]'
+  - action: click
+    selector: '[data-qa="booking-tomorrow"]'
+    assertions:
+    - type: network_request
+      url_contains: get_time_slots
+      status: 200
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+    timeout_ms: 20000
+  - action: screenshot
+    name: layout_selam_en_desktop-2-picker.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: wait_for
+    selector: '[data-qa="booking-bar"] [data-qa="booking-continue"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-slot"][aria-pressed="true"]'
+    - type: text_contains
+      selector: '[data-qa="booking-bar-when"]'
+      value: Selam Bekele
+  - action: screenshot
+    name: layout_selam_en_desktop-3-chosen.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-info"]'
+  - action: wait_for
+    selector: '[data-qa="booking-info-notes"]'
+  - action: click
+    selector: '[data-qa="booking-time-format-option"][data-value="ethiopian"]'
+  - action: screenshot
+    name: layout_selam_en_desktop-4-habesha-notes.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-continue"]'
+  - action: wait_for
+    selector: '#userName'
+  - action: screenshot
+    name: layout_selam_en_desktop-5-details.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: layout_bloom_en_desktop
+  title: 'Bloom: category tabs, provider row, provider filter in the side column, the list scrolls in its panel (en, desktop, light)'
+  viewport: *desktop
+  checks: []
+  routes:
+  - path: /schedule/org/bloom-studio
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="booking-providers"]'
+  actions:
+  - action: screenshot
+    name: layout_bloom_en_desktop-1-services.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-provider"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-provider"][aria-pressed="true"]'
+  - action: scroll
+    delta_y: 500
+  - action: screenshot
+    name: layout_bloom_en_desktop-2-filtered-scrolled.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: click
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: wait_for
+    selector: '[data-qa="booking-slots"], [data-qa="booking-slots-empty"]'
+    timeout_ms: 20000
+  - action: screenshot
+    name: layout_bloom_en_desktop-3-picker.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-slot-scroll"]'
+  - action: scroll
+    delta_y: 600
+  - action: screenshot
+    name: layout_bloom_en_desktop-4-list-scrolled.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: layout_yared_en_desktop
+  title: 'Yared (branded): provider page with a sticky profile, the office and the online scheduler (en, desktop, light)'
+  viewport: *desktop
+  checks: []
+  routes:
+  - path: /schedule/p/yared-counselling
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="provider-page"][data-booking-branded="true"]'
+    - type: visible_selector
+      value: '[data-qa="provider-format-filter"]'
+  actions:
+  - action: screenshot
+    name: layout_yared_en_desktop-1-page.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="provider-format-filter"] button:has-text("Online sessions")'
+  - action: screenshot
+    name: layout_yared_en_desktop-2-online-filter.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="provider-service-book"], 1)
+  - action: wait_for
+    selector: '[data-qa="independent-booking-online"]'
+  - action: click
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+    timeout_ms: 20000
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: wait_for
+    selector: '[data-qa="booking-bar"]'
+  - action: screenshot
+    name: layout_yared_en_desktop-3-online-chosen.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-continue"]'
+  - action: wait_for
+    selector: '[data-qa="independent-booking-chosen"]'
+  - action: screenshot
+    name: layout_yared_en_desktop-4-details.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="independent-booking-change"]'
+  - action: wait_for
+    selector: '[data-qa="booking-slot"][aria-pressed="true"]'
+  - action: click
+    selector: '[data-qa="independent-booking-all-services"]'
+  - action: wait_for
+    selector: '[data-qa="provider-page-name"]'
+  - action: click
+    selector: '[data-qa="provider-format-filter"] button:has-text("In-person sessions")'
+  - action: click
+    selector: :nth-match([data-qa="provider-service-book"], 1)
+  - action: wait_for
+    selector: '[data-qa="independent-booking-place"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="independent-booking-place"]'
+      value: Cameroon Street
+  - action: screenshot
+    name: layout_yared_en_desktop-5-office.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: layout_selam_en_mobile
+  title: 'Selam on a phone: sticky strip of days, the list scrolls, the bar stays at the bottom (en, mobile, light)'
+  viewport: &mobile
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /schedule/org/selam-studio
+    assertions:
+    - type: network_idle
+  actions:
+  - action: screenshot
+    name: layout_selam_en_mobile-1-services.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-picker"][data-wide="false"] [data-qa="booking-strip"]'
+  - action: click
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+    timeout_ms: 20000
+  - action: screenshot
+    name: layout_selam_en_mobile-2-picker.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: scroll
+    delta_y: 600
+  - action: wait_for
+    selector: '[data-qa="booking-bar"] [data-qa="booking-continue"]'
+  - action: screenshot
+    name: layout_selam_en_mobile-3-scrolled-bar.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-calendar-toggle"]'
+  - action: wait_for
+    selector: '[data-qa="booking-strip"][data-open="true"] [role="grid"]'
+  - action: screenshot
+    name: layout_selam_en_mobile-4-calendar-open.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: layout_rahel_en_mobile
+  title: 'Rahel on a phone: provider page, then the scheduler with the strip and the bar (en, mobile, light)'
+  viewport: *mobile
+  checks: []
+  routes:
+  - path: /schedule/p/rahel-nutrition
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="provider-page-name"]'
+  actions:
+  - action: screenshot
+    name: layout_rahel_en_mobile-1-page.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="provider-service-book"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-strip"]'
+  - action: click
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+    timeout_ms: 20000
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: wait_for
+    selector: '[data-qa="booking-bar"]'
+  - action: screenshot
+    name: layout_rahel_en_mobile-2-chosen.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

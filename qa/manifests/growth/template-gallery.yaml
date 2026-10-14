@@ -1,0 +1,234 @@
+# Landing template gallery: every certified template as a card with a preview, a live example and "Use this template".
+# Guest only; nothing is saved, so no fixture is needed. Needs the published showcase sites (Bloom, Selam, Tena,
+# Abugida, Meron, and Ergata from appointment.tests.template_ergata_qa_fixtures). See docs/growth/TEMPLATE_GALLERY.md.
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-template-gallery
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 240000
+options:
+  ignore_baseline_drift: true
+scenarios:
+- id: template_gallery_en_desktop_light
+  title: 'Every template card, preview at desktop and mobile in light and dark, live example and sign-up handoff (en, desktop 1440, light)'
+  viewport:
+    width: 1440
+    height: 900
+  options:
+    color_scheme: light
+  checks: []
+  routes:
+  - path: /
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="landing-bar"] a[data-qa="landing-nav-templates"][href="#gallery"]'
+    - type: visible_selector
+      value: '[data-qa="landing-timetable"] a[href="#gallery"]'
+  actions:
+  - action: click
+    selector: '[data-qa="landing-nav-templates"]'
+  - action: wait_for
+    selector: '[data-qa="template-card"][data-template="ergata-therapy"]'
+    timeout_ms: 20000
+    assertions:
+    - type: network_request
+      url_contains: get_public_template_gallery
+      status: 200
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="selam-movement"] img[src$="selam-movement-desktop.webp"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="bloom-hair"] img[src$="bloom-hair-mobile.webp"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="meron-atelier"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="abugida-language"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="tena-clinic"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="ergata-therapy"] a[data-qa="template-live"][href="/yared-counselling"]'
+    - type: text_contains
+      selector: '[data-qa="template-card"][data-template="tena-clinic"]'
+      value: For family clinics
+    - type: text_contains
+      selector: '[data-qa="template-card"][data-template="bloom-hair"] [data-qa="template-modes"]'
+      value: Light and dark
+    - type: text_contains
+      selector: '[data-qa="template-card"][data-template="bloom-hair"] [data-qa="template-languages"]'
+      value: English and Amharic
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="bloom-hair"] a[data-qa="template-use"][href="/signup?source=template_gallery&template=bloom-hair"]'
+  # The nav link lands on the gallery heading.
+  - action: screenshot
+    name: gallery-en-desktop-1-cards.png
+    full_page: false
+  - action: scroll
+    delta_y: 820
+  - action: screenshot
+    name: gallery-en-desktop-2-cards-row2.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="template-card"][data-template="bloom-hair"] [data-qa="template-preview-open"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"] iframe[data-qa="template-preview-frame"][src="/bloom-studio?display=light"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="template-preview"][data-viewport="desktop"][data-mode="light"]'
+    - type: visible_selector
+      value: '[data-qa="template-preview-use"][href="/signup?source=template_gallery&template=bloom-hair"]'
+    - type: visible_selector
+      value: '[data-qa="template-preview-live"][href="/bloom-studio"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"] .lw-preview-status'
+    state: detached
+    timeout_ms: 15000
+  - action: screenshot
+    name: gallery-en-desktop-3-preview-desktop-light.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="template-preview-mobile"]'
+  - action: click
+    selector: '[data-qa="template-preview-dark"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"][data-viewport="mobile"][data-mode="dark"] iframe[src="/bloom-studio?display=dark"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"] .lw-preview-status'
+    state: detached
+    timeout_ms: 15000
+  - action: screenshot
+    name: gallery-en-desktop-4-preview-mobile-dark.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="template-preview-close"]'
+    assertions:
+    - type: visible_selector
+      value: 'body:not(:has([data-qa="template-preview"])) [data-qa="template-gallery"]'
+  - action: wait_for
+    selector: '[data-qa="landing-footer-templates"][href="/templates"]'
+    state: attached
+  - action: open_url
+    url: /bloom-studio
+    assertions:
+    - type: url_contains
+      value: /bloom-studio
+    - type: visible_selector
+      value: '[data-pe-mode]'
+  - action: screenshot
+    name: gallery-en-desktop-5-live-example.png
+    full_page: false
+  - action: open_url
+    url: /templates
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="templates-page"] [data-qa="template-card"][data-template="ergata-therapy"]'
+    - type: visible_selector
+      value: '[data-qa="landing-nav-templates"][aria-current="page"]'
+    - type: visible_selector
+      value: 'body:not(:has([data-qa="theme-toggle"])) [data-qa="landing-bar"]'
+  - action: screenshot
+    name: gallery-en-desktop-6-templates-page.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+
+- id: template_gallery_am_mobile_dark
+  title: 'Gallery shelf, Amharic copy, preview in Amharic and dark (am, mobile 390, dark)'
+  viewport:
+    width: 390
+    height: 844
+  options:
+    color_scheme: dark
+    is_mobile: true
+    has_touch: true
+  checks: []
+  routes:
+  - path: /
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="landing-nav-templates"]'
+  actions:
+  - action: click
+    selector: '[data-qa="language-toggle"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="landing-nav-templates"]'
+      value: አብነቶች
+  - action: click
+    selector: '[data-qa="landing-nav-templates"]'
+  - action: wait_for
+    selector: '[data-qa="template-card"][data-template="ergata-therapy"]'
+    timeout_ms: 20000
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="template-gallery"]'
+      value: ንግድዎ በመስመር ላይ እንዴት እንደሚታይ ይምረጡ
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="selam-movement"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="bloom-hair"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="meron-atelier"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="abugida-language"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="tena-clinic"]'
+    - type: text_contains
+      selector: '[data-qa="template-card"][data-template="tena-clinic"]'
+      value: ለቤተሰብ ክሊኒኮች
+    - type: text_contains
+      selector: '[data-qa="template-card"][data-template="selam-movement"] [data-qa="template-use"]'
+      value: ይህን አብነት ይጠቀሙ
+  - action: screenshot
+    name: gallery-am-mobile-1-heading.png
+    full_page: false
+  - action: scroll
+    delta_y: 620
+  - action: screenshot
+    name: gallery-am-mobile-2-card.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="template-card"][data-template="tena-clinic"] [data-qa="template-preview-open"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"][data-viewport="mobile"] iframe[src="/tena-studio/am?display=light"]'
+  - action: click
+    selector: '[data-qa="template-preview-dark"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"][data-mode="dark"] iframe[src="/tena-studio/am?display=dark"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="template-preview-use"][href="/signup?source=template_gallery&template=tena-clinic"]'
+    - type: text_contains
+      selector: '[data-qa="template-preview-use"]'
+      value: ይህን አብነት ይጠቀሙ
+  - action: wait_for
+    selector: '[data-qa="template-preview"] .lw-preview-status'
+    state: detached
+    timeout_ms: 15000
+  - action: screenshot
+    name: gallery-am-mobile-3-preview-dark.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="template-preview-desktop"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"][data-viewport="desktop"] iframe[src="/tena-studio/am?display=dark"]'
+  - action: screenshot
+    name: gallery-am-mobile-4-preview-desktop.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="template-preview-close"]'
+  - action: open_url
+    url: /tena-studio/am
+    assertions:
+    - type: visible_selector
+      value: '[data-pe-mode]'
+  - action: screenshot
+    name: gallery-am-mobile-5-live-example.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

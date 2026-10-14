@@ -12,7 +12,7 @@ const source = readFileSync(new URL('../src/components/theme-provider/components
 vm.runInNewContext(ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 } }).outputText, { exports });
 const { hidesGlobalModeToggle } = exports;
 
-for (const path of ['/', '/home', '/grow', '/settings/profile', '/schedule/org/bloom-studio', '/no-access']) {
+for (const path of ['/', '/templates', '/home', '/grow', '/settings/profile', '/schedule/org/bloom-studio', '/no-access']) {
   assert.equal(hidesGlobalModeToggle(path), true, `${path} owns its theme control`);
 }
 for (const path of ['/login', '/signup', '/partners', '/assistant', '/bloom-studio']) {

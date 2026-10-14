@@ -6,17 +6,18 @@ import { usePublicContent } from "./usePublicContent";
 import { publicRootFromPath } from "./routes";
 import { getTemplatePackage } from "./templates/registry";
 import type { PublishedSnapshot } from "./types";
+import { PublicUnavailable } from "./PublicStates";
 
 export function PublicContentPage({ snapshot }: { snapshot: PublishedSnapshot }) {
   const { pathname, search } = useLocation();
-  const { theme, setPreference } = usePublicExperience();
+  const { config, theme, setPreference } = usePublicExperience();
   const publicRoot = publicRootFromPath(pathname);
   const route = pathname.slice(publicRoot.length).replace(/\/$/, "");
   const rawPage = Number(new URLSearchParams(search).get("page") || 1);
   const page = Number.isSafeInteger(rawPage) && rawPage > 0 ? rawPage : 1;
   const content = usePublicContent(decodeURIComponent(publicRoot.slice(1)), route, snapshot.locale, page);
   const template = getTemplatePackage(snapshot.compiledDesign.layout.rendererKey, snapshot.compiledDesign.layout.rendererVersion);
-  if (!template) return <main><h1>Unsupported public template</h1></main>;
+  if (!template) return <PublicUnavailable kind="unsupported" config={config} mode={theme.mode} />;
   const Content = template.Content;
   const rootStyle = theme.variables as CSSProperties;
   const title = content.release?.seo.title || content.release?.projection.title;

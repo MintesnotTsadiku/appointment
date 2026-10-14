@@ -2,13 +2,13 @@ import { Minus, Plus } from "lucide-react";
 import { useTranslation } from "@/lib/i18n";
 
 /** "How many" for services that let customers choose a party size or number of seats. */
-export function QuantityPicker({ value, max, onChange }: { value: number; max: number; onChange: (value: number) => void }) {
+export function QuantityPicker({ value, max, onChange, className }: { value: number; max: number; onChange: (value: number) => void; className?: string }) {
   const { t } = useTranslation();
   const button = "flex h-10 w-10 items-center justify-center rounded-lg border transition-colors disabled:opacity-40";
   const style = { borderColor: "var(--border-default)", color: "var(--text-primary)", backgroundColor: "var(--bg-elevated)" };
   return (
-    <div className="mx-auto mb-6 flex w-full max-w-7xl items-center justify-between gap-4 rounded-xl border px-4 py-3"
-      style={{ borderColor: "var(--border-default)", backgroundColor: "var(--bg-elevated)" }} data-qa="booking-quantity">
+    <div className={`flex w-full items-center justify-between gap-4 border px-4 py-3 ${className ?? "mx-auto mb-6 max-w-7xl rounded-xl"}`}
+      style={{ borderColor: "var(--border-default)", backgroundColor: "var(--bg-elevated)", borderRadius: className ? "var(--booking-radius, 1rem)" : undefined }} data-qa="booking-quantity">
       <span className="text-sm font-medium" style={{ color: "var(--text-primary)" }} id="booking-quantity-label">{t("bookingPicker.howMany")}</span>
       <div className="flex items-center gap-3" role="group" aria-labelledby="booking-quantity-label">
         <button type="button" className={button} style={style} data-qa="booking-quantity-less" aria-label={t("bookingPicker.fewer")}

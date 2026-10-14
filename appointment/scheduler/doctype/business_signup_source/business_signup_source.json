@@ -9,6 +9,7 @@
   "status",
   "source",
   "ref_code",
+  "template",
   "owner_key",
   "business_name",
   "organization",
@@ -47,6 +48,12 @@
    "label": "Referral Code"
   },
   {
+   "fieldname": "template",
+   "fieldtype": "Data",
+   "label": "Website Template",
+   "description": "Template chosen in the landing gallery before sign-up (a certified recipe key)."
+  },
+  {
    "fieldname": "owner_key",
    "fieldtype": "Data",
    "label": "Business Key",
@@ -78,7 +85,7 @@
  ],
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-10-12 02:00:00.000000",
+ "modified": "2026-10-14 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "Scheduler",
  "name": "Business Signup Source",

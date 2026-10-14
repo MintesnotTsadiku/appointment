@@ -1,9 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useFrappeGetCall } from 'frappe-react-sdk';
-import { CalendarX2 } from 'lucide-react';
-import { Card, CardContent } from '@/components/card';
-import { Skeleton } from '@/components/skeleton';
+import { RotateCw } from 'lucide-react';
+import { BookingState, ProviderPageSkeleton, previewState } from '@/components/booking-states';
+import '@/pages/booking-v2/components/DateTimeSelector/layout.css';
+import { ThemeSwitch } from '@/pages/organization-appointment/header';
 import LanguageToggle from '@/components/language-toggle';
 import MetaTags from '@/components/meta-tags';
 import PoweredBy from '@/components/powered-by';
@@ -14,7 +15,7 @@ import { useBookingBrand } from '@/public-experience/bookingTheme';
 import { useTranslation } from '@/lib/i18n';
 import { fill } from '@/pages/manage-booking/format';
 import '@/public-experience/platform.css';
-import { PROVIDER_PAGE_API, PROVIDER_ROOT, localized, providerBio, type ProviderPageData } from './provider-core';
+import { PROVIDER_PAGE_API, PROVIDER_ROOT, localized, providerBio, serviceFormats, type PlaceType, type ProviderPageData } from './provider-core';
 import { ProviderHero, ProviderPlaces, ServiceCard } from './provider-page-parts';
 
 /**
@@ -29,8 +30,11 @@ export default function ProviderPage() {
   const navigate = useNavigate();
   const { growth } = usePlatformBrand();
   const { resolvedTheme } = useTheme();
-  const { data, error } = useFrappeGetCall<{ message: ProviderPageData }>(PROVIDER_PAGE_API, { slug: providerSlug }, `provider-page-${providerSlug}`, { revalidateOnFocus: false });
-  const page = data?.message;
+  const { data, error, mutate } = useFrappeGetCall<{ message: ProviderPageData }>(PROVIDER_PAGE_API, { slug: providerSlug }, `provider-page-${providerSlug}`, { revalidateOnFocus: false });
+  const preview = previewState();
+  const forced = preview === 'loading' || preview === 'error' || preview === 'unavailable' ? preview : null;
+  const page = forced ? undefined : data?.message;
+  const failed = forced === 'error' || Boolean(error && (!error.httpStatus || error.httpStatus >= 500));
   const brand = useBookingBrand(page?.site_slug || undefined, resolvedTheme === 'dark' ? 'dark' : 'light');
 
   // A shared Amharic link (`?lang=am`) opens in Amharic. Once per visit: the dev double effect would
@@ -52,58 +56,77 @@ export default function ProviderPage() {
   }, [page, providerSlug, search, navigate]);
 
   const branded = Boolean(brand.config);
+  // Many services that meet in both ways: a format filter keeps the list short.
+  const [format, setFormat] = useState<'all' | PlaceType>('all');
+  const formatCounts = (page?.services ?? []).reduce((counts, service) => {
+    for (const type of serviceFormats(service)) counts[type] += 1;
+    return counts;
+  }, { online: 0, in_person: 0 } as Record<PlaceType, number>);
+  const showFormatFilter = (page?.services.length ?? 0) >= 4 && formatCounts.online > 0 && formatCounts.in_person > 0;
+  const services = (page?.services ?? []).filter((service) => format === 'all' || serviceFormats(service).includes(format));
   const name = page ? localized(page.person?.name, language, page.name) : '';
   const logo = brand.config?.identity?.logoCompact || brand.config?.identity?.logoPrimary || '';
   let body;
-  if (error) body = <Unavailable />;
-  else if (!page) body = <Loading label={t('public.providerPage.loading')} />;
-  // Phone: who, then the services, then the places. Desktop: who and places on the left, services on the right.
+  if (error || forced === 'error' || forced === 'unavailable') body = <Unavailable failed={failed} onRetry={() => void mutate()} />;
+  else if (!page) body = <ProviderPageSkeleton label={t('public.providerPage.loading')} />;
+  // Phone: who, then the services, then the places. Desktop: who and places in a sticky column, services on the right.
   else body = <div className="grid gap-6 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] lg:items-start lg:gap-x-10">
-    <aside className="lg:col-start-1 lg:row-start-1"><ProviderHero page={page} name={name} /></aside>
-    <aside className="order-last lg:order-none lg:col-start-1 lg:row-start-2"><ProviderPlaces places={page.locations} /></aside>
-    <section aria-labelledby="provider-services-title" className="min-w-0 space-y-5 lg:col-start-2 lg:row-span-3 lg:row-start-1">
+    <aside className="contents lg:sticky lg:top-[calc(var(--bk-top)+1.5rem)] lg:col-start-1 lg:row-start-1 lg:flex lg:max-h-[calc(100dvh-var(--bk-top)-3rem)] lg:flex-col lg:gap-6 lg:overflow-y-auto lg:overscroll-contain" data-qa="provider-page-aside">
+      <div className="order-first"><ProviderHero page={page} name={name} /></div>
+      <div className="order-last lg:order-none"><ProviderPlaces places={page.locations} /></div>
+    </aside>
+    <section aria-labelledby="provider-services-title" className="min-w-0 space-y-5 lg:col-start-2 lg:row-start-1">
       <div className="space-y-1.5">
         <h2 id="provider-services-title" className="text-2xl font-semibold sm:text-3xl" style={{ fontFamily: 'var(--booking-font-display)' }}>{t('public.providerPage.services')}</h2>
         <p className="text-theme-secondary">{t('public.providerPage.servicesIntro')}</p>
       </div>
       <CustomerInviteBanner providerSlug={page.canonical_slug} />
+      {showFormatFilter && <div className="bk-days !mx-0 !px-0" role="group" aria-label={t('public.providerPage.formats')} data-qa="provider-format-filter">
+        {([['all', t('bookingLayout.allServices'), page.services.length], ['online', t('public.providerPage.formatsOnline'), formatCounts.online],
+          ['in_person', t('public.providerPage.formatsInPerson'), formatCounts.in_person]] as const).map(([key, label, count]) => (
+          <button key={key} type="button" className="bk-chip" aria-pressed={format === key} onClick={() => setFormat(key)}>
+            {label}<span className="tabular-nums opacity-70">{count}</span>
+          </button>
+        ))}
+      </div>}
       <ul className="grid gap-4" data-qa="provider-services">
-        {page.services.map((service) => <li key={service.service}><ServiceCard service={service} slug={page.canonical_slug} branded={branded} /></li>)}
+        {services.map((service) => <li key={service.service}><ServiceCard service={service} slug={page.canonical_slug} branded={branded} /></li>)}
       </ul>
     </section>
   </div>;
 
-  return <div className="booking-experience min-h-screen text-theme-primary" data-qa="provider-page"
+  return <div className="booking-experience flex min-h-screen flex-col text-theme-primary" data-qa="provider-page"
     data-booking-branded={branded ? 'true' : 'false'} data-pe-recipe={brand.config?.recipeKey}
-    style={{ ...brand.style, backgroundColor: 'var(--bg-primary)' }}>
+    style={{ ...brand.style, '--bk-top': '4rem', backgroundColor: 'var(--bg-primary)' } as CSSProperties}>
     {page && <MetaTags title={fill(t('public.providerPage.metaTitle'), name)} description={providerBio(page, language) || undefined}
       canonical={`${window.location.origin}${PROVIDER_ROOT}${page.canonical_slug}`} />}
-    <header className="sticky top-0 z-20 border-b border-theme-subtle backdrop-blur-md" style={{ backgroundColor: 'color-mix(in srgb, var(--bg-primary) 82%, transparent)' }}>
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+    <header className="sticky top-0 z-20 h-16 border-b border-theme-subtle backdrop-blur-md" style={{ backgroundColor: 'color-mix(in srgb, var(--bg-primary) 88%, transparent)' }}>
+      <div className="mx-auto flex h-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
         <span className="flex min-w-0 items-center gap-2.5">
           {branded && logo && <img src={logo} alt="" className="h-8 w-8 shrink-0 rounded-full object-contain" />}
-          <span className="truncate font-semibold" data-qa="provider-page-business">{page?.business_name ?? ''}</span>
+          <span className="truncate font-semibold" data-qa="provider-page-business">
+            {page?.business_name ?? (error || forced ? '' : <span className="bk-bone inline-block h-4 w-40 align-middle" aria-hidden="true" />)}
+          </span>
         </span>
-        <LanguageToggle />
+        <div className="flex items-center gap-2"><LanguageToggle /><ThemeSwitch /></div>
       </div>
     </header>
-    <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-10">{body}</main>
+    <main className={`mx-auto w-full max-w-6xl px-4 sm:px-6 ${error || forced === 'error' || forced === 'unavailable' ? 'flex flex-1 items-center py-10' : 'py-6 sm:py-10'}`}>
+      <div className="w-full">{body}</div>
+    </main>
     {page && growth.poweredByPages && <PoweredBy variant="footer" source="powered_by_page" className="mx-auto max-w-6xl px-4 sm:px-6" />}
   </div>;
 }
 
-function Unavailable() {
+function Unavailable({ failed, onRetry }: { failed: boolean; onRetry: () => void }) {
   const { t } = useTranslation();
-  return <Card data-qa="provider-page-unavailable" className="mx-auto max-w-xl rounded-2xl text-center"><CardContent className="space-y-3 p-8">
-    <CalendarX2 className="mx-auto h-10 w-10 text-theme-secondary" aria-hidden="true" />
-    <h1 className="text-xl font-semibold">{t('public.providerPage.unavailableTitle')}</h1>
-    <p className="text-sm text-theme-secondary">{t('public.providerPage.unavailable')}</p>
-  </CardContent></Card>;
-}
-
-function Loading({ label }: { label: string }) {
-  return <div aria-busy="true" aria-label={label} className="grid gap-6 lg:grid-cols-[380px_1fr] lg:gap-10">
-    <Skeleton className="h-96 rounded-2xl" />
-    <div className="space-y-4"><Skeleton className="h-10 w-48" /><Skeleton className="h-44 rounded-2xl" /><Skeleton className="h-44 rounded-2xl" /></div>
+  return <div className="bk-surface mx-auto max-w-xl px-5 sm:px-10">
+    <BookingState kind={failed ? 'error' : 'not-found'} headingLevel={1} qa="provider-page-unavailable"
+      title={failed ? t('bookingStates.errorTitle') : t('public.providerPage.unavailableTitle')}
+      description={failed ? t('bookingStates.errorBody') : t('public.providerPage.unavailable')}
+      actions={[
+        ...(failed ? [{ label: t('bookingStates.retry'), onClick: onRetry, icon: RotateCw, qa: 'booking-state-retry' }] : []),
+        { label: t('bookingStates.goHome'), href: '/', qa: 'booking-state-home' },
+      ]} />
   </div>;
 }

@@ -1,6 +1,6 @@
 # Run with fixture appointment.tests.develop_features_qa_fixtures ($G/qa.sh runs setup before and cleanup after).
 # A guest books an independent provider's offering with the shared date and slot picker (en, desktop, light):
-# calendar, slots, details card, confirmation with the share card and the "your own page" prompt.
+# calendar, slots, the bottom bar with Continue, details card, confirmation with the share card and the "your own page" prompt.
 app: appointment
 base_url: http://localhost:47800
 capture_trace: true
@@ -33,11 +33,12 @@ scenarios:
     - type: text_contains
       value: QA Independent consultation
   actions:
+  # Step one: the picker asks for a day; the bottom bar appears only once a time is chosen.
   - action: wait_for
-    selector: '[data-qa="independent-booking-choose-first"]'
+    selector: '[data-qa="booking-pick-date"]'
     assertions:
     - type: visible_selector
-      value: '[data-qa="independent-booking-submit"][disabled]'
+      value: '[data-qa="booking-picker"][data-selected="false"]'
   - action: screenshot
     name: ctl_indep_book_en_desktop-1-picker.png
     full_page: true
@@ -52,6 +53,8 @@ scenarios:
     timeout_ms: 20000
   - action: click
     selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 2)
+  - action: click
+    selector: '[data-qa="booking-continue"]'
   - action: wait_for
     selector: '[data-qa="independent-booking-chosen"]'
   - action: fill

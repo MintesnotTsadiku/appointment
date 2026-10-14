@@ -1,19 +1,13 @@
-import { motion, useInView } from "framer-motion";
-import { useRef, type CSSProperties } from "react";
 import { useBrandedTranslation } from "@/lib/platform-brand";
 import { partnersPath } from "../../shared/offer";
 import type { EntryLinks } from "../../shared/useEntryLinks";
-import { useShowcaseDoors, type ShowcaseDoor } from "../../shared/useShowcaseDoors";
 import Promises from "./Promises";
 
-/** 23:45. The call to action and doors into real showcase businesses. */
+/** 23:45. The call to action. The showcase businesses are in the template gallery (23:00). */
 const Finale = ({ entry }: { entry: EntryLinks }) => {
   const { t, brand, language } = useBrandedTranslation();
-  const ref = useRef<HTMLElement>(null);
-  const near = useInView(ref, { once: true, margin: "600px 0px" });
-  const doors = useShowcaseDoors(near);
   return (
-    <section ref={ref} id="night" className="lw-finale" data-world-section="night" aria-labelledby="lw-night-title">
+    <section id="night" className="lw-finale" data-world-section="night" aria-labelledby="lw-night-title">
       <div className="lw-wrap">
         <p className="lw-eyebrow">{t("world.night.eyebrow")}</p>
         <h2 id="lw-night-title" className="lw-display">{t("world.night.title")}</h2>
@@ -29,9 +23,9 @@ const Finale = ({ entry }: { entry: EntryLinks }) => {
           )}
         </div>
         <Promises variant="compact" />
-        {doors.length > 0 && <Doors doors={doors} />}
         <footer className="lw-footer">
           <span>© {new Date().getFullYear()} {t("world.night.footer")}</span>
+          <a href="/templates" data-qa="landing-footer-templates">{t("world.night.templates")}</a>
           <a href="/tools" data-qa="landing-free-tools">{t("world.night.freeTools")}</a>
           {brand.growth.directoryPublic && <a href="/directory" data-qa="landing-directory">{t("world.night.directory")}</a>}
           {brand.growth.partnerProgramEnabled && <a href={partnersPath(language)} data-qa="landing-partners">{t("world.night.partners")}</a>}
@@ -39,42 +33,6 @@ const Finale = ({ entry }: { entry: EntryLinks }) => {
         </footer>
       </div>
     </section>
-  );
-};
-
-const Doors = ({ doors }: { doors: ShowcaseDoor[] }) => {
-  const { t } = useBrandedTranslation();
-  return (
-    <div className="lw-doors" data-qa="landing-doors">
-      <h2>{t("world.night.doorsTitle")}</h2>
-      <p className="lw-lede">{t("world.night.doorsLede")}</p>
-      <ul className="lw-doors-grid">
-        {doors.map((door, order) => (
-          <motion.li
-            key={door.slug}
-            className="lw-door"
-            style={{ "--door-accent": door.accent ?? "#fff" } as CSSProperties}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: order * 0.08, duration: 0.7 }}
-            data-qa="landing-door"
-          >
-            {door.hero && <img className="lw-door-hero" src={door.hero} alt="" loading="lazy" />}
-            <div className="lw-door-body">
-              {door.logo && <img className="lw-door-logo" src={door.logo} alt="" loading="lazy" />}
-              <h3 className="lw-door-name">{door.name}</h3>
-              <div className="lw-door-actions">
-                <a href={"/" + door.slug} aria-label={t("world.night.visit") + " " + door.name}>{t("world.night.visit")}</a>
-                <a className="lw-door-book" href={"/" + door.slug + "/book"} aria-label={t("world.night.book") + " " + door.name}>
-                  {t("world.night.book")} →
-                </a>
-              </div>
-            </div>
-          </motion.li>
-        ))}
-      </ul>
-    </div>
   );
 };
 

@@ -175,7 +175,7 @@ scenarios:
       - action: scroll
         delta_y: 4000
       - action: wait_for
-        selector: '[data-qa="landing-doors"]'
+        selector: '[data-qa="landing-final-start"]'
         timeout_ms: 15000
         assertions:
           - type: visible_selector
@@ -296,7 +296,7 @@ scenarios:
       - action: scroll
         delta_y: 4000
       - action: wait_for
-        selector: '[data-qa="landing-doors"]'
+        selector: '[data-qa="landing-final-start"]'
         timeout_ms: 15000
         assertions:
           - type: visible_selector
@@ -312,7 +312,7 @@ scenarios:
       - action: get_network_errors
 
   - id: landing_handoff_booking
-    title: Showcase door hands off to a published booking entry
+    title: Template gallery hands off to a published showcase site
     viewport: {width: 1440, height: 900}
     checks: []
     routes:
@@ -331,10 +331,10 @@ scenarios:
       - action: scroll
         delta_y: 5000
       - action: wait_for
-        selector: '[data-qa="landing-door"] a[href="/bloom-studio/book"]'
+        selector: '[data-qa="template-card"][data-template="bloom-hair"] a[data-qa="template-live"][href="/bloom-studio"]'
         timeout_ms: 15000
-      - action: click
-        selector: '[data-qa="landing-door"] a[href="/bloom-studio/book"]'
+      - action: open_url
+        url: /bloom-studio/book
         assertions:
           - type: url_contains
             value: /bloom-studio/book

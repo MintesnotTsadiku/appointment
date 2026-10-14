@@ -57,6 +57,8 @@ export function ReschedulePanel({ view, onMoved, onCancel }: { view: ManageView;
         loading={loading}
         serviceName={view.booking.service ?? undefined}
         embedded
+        action={{ label: t('customerManage.rescheduleConfirm'), onClick: () => void confirm(), busy: saving, qa: 'manage-reschedule-confirm' }}
+        barDetail={view.booking.service ?? undefined}
       />
       {problem && (
         <p role="alert" className="rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive">
@@ -65,9 +67,6 @@ export function ReschedulePanel({ view, onMoved, onCancel }: { view: ManageView;
       )}
       <p className="text-xs text-theme-secondary">{fill(t('customerManage.reschedulesLeft'), view.rules.reschedules_left)}</p>
       <div className="flex flex-wrap gap-2">
-        <Button data-qa="manage-reschedule-confirm" disabled={!slot || saving} onClick={() => void confirm()}>
-          {t('customerManage.rescheduleConfirm')}
-        </Button>
         <Button variant="outline" onClick={onCancel}>
           {t('customerManage.keep')}
         </Button>

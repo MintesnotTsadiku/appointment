@@ -14,6 +14,9 @@ import React, {
  */
 import { Profile } from "@/pages/appointment/components/socialProfiles";
 import NetworkDisconnect from "@/components/network-disconnect";
+import { isPublicExperiencePath } from "@/public-experience/routes";
+
+const isPublicBookingPath = (pathname: string) => pathname.startsWith("/schedule/") || isPublicExperiencePath(pathname);
 
 // Define the types for the userInfo and MeetingProviderTypes
 type MeetingProviderTypes = "Google Meet" | "Zoom";
@@ -132,7 +135,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
 
   const isOnline = useSyncExternalStore(subscribe, getSnapshot);
 
-  if (!isOnline) {
+  // Public booking pages keep their content and the customer's choices offline; they show a quiet notice instead.
+  if (!isOnline && !isPublicBookingPath(window.location.pathname)) {
     return <NetworkDisconnect />;
   }
 

@@ -3,7 +3,7 @@
  *
  * Proves the day clock and the pretend scheduling rules, that every chapter has
  * English and Amharic copy, and that the page keeps its handoffs to auth,
- * the language toggle, and published showcase sites without legacy sections.
+ * the language toggle, the template gallery and published showcase sites without legacy sections.
  *
  * Run with `npm run test:dom`.
  */
@@ -24,13 +24,14 @@ const load = (rel) => {
     ts.transpileModule(read(rel), {
       compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 },
     }).outputText,
-    { exports },
+    { exports, URLSearchParams },
   );
   return exports;
 };
 const world = load("src/pages/landing/day/world.ts");
 const schedule = load("src/pages/landing/day/schedule.ts");
 const offer = load("src/pages/landing/shared/offer.ts");
+const gallery = load("src/pages/landing/shared/templateGallery.ts");
 
 // Day clock.
 assert.equal(world.clockLabel(7), "07:00");
@@ -131,9 +132,52 @@ assert.ok(!page.includes("layout/Navigation"), "landing owns its chrome");
 assert.ok(read("src/pages/landing/day/components/TopBar.tsx").includes("LanguageToggle"), "language toggle stays on /");
 assert.ok(sources.includes('href="/login"'), "sign-in handoff");
 assert.ok(sources.includes("registration.public_settings"), "sign-up follows the platform policy");
-const doors = read("src/pages/landing/shared/useShowcaseDoors.ts");
-assert.ok(doors.includes('source !== "experience-release"'), "showcase doors fail closed");
-assert.ok(doors.includes("get_public_ui_config"), "doors read the trusted public projection");
+// Template gallery: every certified template comes from the server list, never from this page.
+assert.ok(world.STOPS.some((item) => item.id === "gallery"), "the timetable and rail stop at the gallery");
+assert.ok(!world.CHAPTERS.some((item) => item.id === "gallery"), "the gallery is not a persona chapter");
+for (const key of ["short", "status", "eyebrow", "title", "lede", "preview", "live", "use", "noLive", "desktop", "mobile", "light", "dark", "close"]) {
+  assert.ok(en[`gallery.${key}`], `missing world.gallery.${key}`);
+}
+for (const industry of ["wellness", "beauty", "creative", "education", "health", "therapy"]) {
+  assert.ok(en[`gallery.industry.${industry}`] && en[`gallery.for.${industry}`], `missing gallery copy for ${industry}`);
+}
+assert.ok(en["nav.templates"] && en["night.templates"], "the top bar and footer link the gallery");
+const galleryRows = {
+  templates: [
+    { key: "bloom-hair", label: "Bloom Hair", audience: "Hair salons", industry: "beauty", locales: ["en", "am", "fr"], themes: ["light", "dark"],
+      accent: "#4a1f55", hero: "/assets/appointment/brand-experience/heroes/bloom-hair.webp",
+      previews: { desktop: "/assets/appointment/brand-experience/template-gallery/bloom-hair-desktop.webp", mobile: "https://example.com/x.webp" },
+      showcase: { path: "/bloom-studio", title: "Bole Bloom Hair Studio" } },
+    { key: "new-recipe", label: "New Recipe", industry: "", locales: ["en"], themes: ["light"], accent: "red; x", previews: {}, showcase: { path: "//evil.example" } },
+    { key: "bloom-hair", label: "Duplicate" },
+    { key: "Bad Key", label: "Rejected" },
+    { key: "no-label" },
+  ],
+};
+const parsed = gallery.parseGallery(galleryRows);
+assert.deepEqual(Array.from(parsed, (item) => item.key), ["bloom-hair", "new-recipe"], "any new template is listed; malformed rows are dropped");
+assert.deepEqual(Array.from(parsed[0].locales), ["en", "am"]);
+assert.equal(parsed[0].previews.mobile, undefined, "remote preview images are refused");
+assert.equal(parsed[0].showcase.path, "/bloom-studio");
+assert.equal(parsed[1].showcase, null, "a template without a safe published showcase has no live link");
+assert.equal(parsed[1].accent, null, "colours are hex only");
+assert.equal(gallery.parseGallery(null).length, 0, "a failed request shows no cards");
+assert.equal(gallery.previewSrc("/bloom-studio", "am", "dark"), "/bloom-studio/am?display=dark");
+assert.equal(gallery.previewSrc("/tena-studio", "en", "light"), "/tena-studio?display=light");
+assert.equal(gallery.templateStartHref("/signup", "tena-clinic"), "/signup?source=template_gallery&template=tena-clinic");
+assert.equal(gallery.templateStartHref("/signup?ref=abc", "tena-clinic"), "/signup?ref=abc&source=template_gallery&template=tena-clinic");
+assert.equal(gallery.fitScale(400, 800, 414, 868), Math.min(400 / 414, 800 / 868));
+assert.equal(gallery.fitScale(2000, 2000, 414, 868), 1, "never enlarges the page");
+const galleryView = read("src/pages/landing/day/components/TemplateGallery.tsx");
+assert.ok(galleryView.includes("templates.map("), "cards are drawn from the server list");
+assert.ok(!/bloom-hair|selam-movement|tena-clinic|ergata-therapy|meron-atelier|abugida-language/.test(galleryView + read("src/pages/landing/day/components/TemplatePreview.tsx")),
+  "the gallery never hard-codes a template");
+assert.ok(read("src/pages/landing/day/DayLanding.tsx").includes("<TemplateGallery"), "the landing page shows the gallery");
+assert.ok(read("src/pages/landing/day/components/TopBar.tsx").includes("world.nav.templates"), "the top bar links the gallery");
+assert.ok(read("src/pages/landing/day/components/Finale.tsx").includes('href="/templates"'), "the footer links the gallery page");
+assert.ok(read("src/route.tsx").includes('path="/templates" element={<TemplatesPage />}'), "the gallery has its own page");
+assert.ok(read("src/public-experience/routes.ts").includes('"templates"'), "/templates can never become a site slug");
+assert.ok(read("src/public-experience/PublicExperienceProvider.tsx").includes('get("display")'), "the preview opens a showcase in a chosen mode");
 assert.ok(read("src/route.tsx").includes('path="/" element={<LandingPage />}'), "landing route unchanged");
 
 console.log("landing-world: ok");

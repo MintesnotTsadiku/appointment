@@ -33,8 +33,11 @@ def website_setup_context(industry: str = "", mood: str = "", audience: str = ""
     selected_owner = selected.get("organization")
     if selected_owner not in {row["name"] for row in owners}:
         selected_owner = owners[0]["name"] if len(owners) == 1 else None
+    from appointment.growth.template_choice import for_user as gallery_template
+
     return {"selectedOwner": selected_owner, "owners": owners, "catalog": setup.ranked_catalog(industry, mood, audience, density),
-            "sites": [setup.state(setup.require_site(name)) for name in sites]}
+            "sites": [setup.state(setup.require_site(name)) for name in sites],
+            "galleryTemplate": gallery_template(frappe.session.user)}
 
 
 @frappe.whitelist(methods=["POST"])
@@ -73,6 +76,14 @@ def start_website_setup(owner_type: str, owner: str, title: str, slug: str, reci
     from appointment.public_experience import setup
 
     return setup.start(owner_type, owner, title, slug, recipe_key, preferences)
+
+
+@frappe.whitelist(methods=["POST"])
+def switch_website_template(site: str, expected_version: int, recipe_key: str):
+    """Move a website draft to another template after the owner confirmed it."""
+    from appointment.public_experience import template_switch
+
+    return template_switch.switch(site, expected_version, recipe_key)
 
 
 @frappe.whitelist(methods=["POST"])
@@ -301,6 +312,14 @@ def list_public_sites():
 def list_curated_recipes():
     showcases = _recipe_showcases()
     return {"recipes": [{**recipe.as_summary(), "showcase": showcases.get(recipe.key)} for recipe in list_recipes()]}
+
+
+@frappe.whitelist(allow_guest=True, methods=["GET"])
+def get_public_template_gallery():
+    """Every certified template with its previews and, when published, its live showcase (landing gallery)."""
+    from appointment.public_experience.template_gallery import template_gallery
+
+    return template_gallery()
 
 
 def _recipe_showcases() -> dict[str, dict]:

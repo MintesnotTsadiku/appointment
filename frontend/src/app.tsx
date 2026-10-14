@@ -28,6 +28,7 @@ import ModeToggle from "./components/theme-provider/components/modeToggle";
 import { InstallPrompt } from "./components/pwa/InstallPrompt";
 import { UpdateNotification } from "./components/pwa/UpdateNotification";
 import { ConnectionStatus } from "./components/pwa/ConnectionStatus";
+import { BookingOfflineNotice } from "./components/booking-states";
 import { isPublicExperiencePath } from "./public-experience/routes";
 
 const App = () => {
@@ -58,7 +59,7 @@ const App = () => {
                 {standalone ? null : <ModeToggle />}
                 {standalone ? null : <InstallPrompt />}
                 <UpdateNotification showNotifications={!publicOnly} />
-                {standalone ? null : <ConnectionStatus />}
+                {publicOnly ? <BookingOfflineNotice /> : <ConnectionStatus />}
               </Suspense>
             </TooltipProvider>
             </ThemeProvider>

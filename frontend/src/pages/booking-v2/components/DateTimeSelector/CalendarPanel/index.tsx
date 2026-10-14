@@ -1,366 +1,144 @@
 /**
- * Modern Calendar Component - Premium Design System
- * Mobile-first, accessible, beautiful with glass-morphism
+ * The month calendar of the booking time picker: compact enough to stay in the sticky side column.
+ * Days outside the booking window or on closed weekdays are disabled; open days carry a small dot.
  */
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { intlLocale, useTranslation } from "@/lib/i18n";
-import { Button } from "@/components/button";
-import { motion } from "framer-motion";
-import {
-  getCalendarDates,
-  isToday,
-  isSameDay,
-  startOfDay,
-  addDays,
-} from "../../../utils/dateHelpers";
+import { getCalendarDates, isToday, isSameDay, startOfDay, addDays } from "../../../utils/dateHelpers";
 import type { CalendarProps } from "../../../types";
 
 // 2023-01-01 was a Sunday; seven days from it give the weekday names in any locale.
 const weekdayLabels = (locale: string) =>
   Array.from({ length: 7 }, (_, day) => new Intl.DateTimeFormat(locale, { weekday: "short" }).format(new Date(2023, 0, 1 + day)));
 
+/** `YYYY-MM-DD` in local time, the value browser QA uses to pick a day. */
+export const isoDay = (date: Date) =>
+  `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+
+/** Whether a day can be booked: inside the window and on an open weekday. */
+export function isSelectableDay(date: Date, { minDate, maxDate, availableDays = [0, 1, 2, 3, 4, 5, 6] }: Pick<CalendarProps, "minDate" | "maxDate" | "availableDays">) {
+  const today = startOfDay(new Date());
+  const min = minDate && startOfDay(minDate) > today ? startOfDay(minDate) : today;
+  const time = startOfDay(date).getTime();
+  if (time < min.getTime()) return false;
+  if (maxDate && time > startOfDay(maxDate).getTime()) return false;
+  return availableDays.includes(date.getDay());
+}
+
 export function CalendarPanel({
   selectedDate,
   displayMonth,
   onDateSelect,
   onMonthChange,
-  availableDays = [0, 1, 2, 3, 4, 5, 6], // All days available by default
+  availableDays = [0, 1, 2, 3, 4, 5, 6],
   minDate,
   maxDate,
   loading = false,
   className,
-}: CalendarProps) {
+  showQuickJumps = true,
+}: CalendarProps & { showQuickJumps?: boolean }) {
   const { t, language } = useTranslation();
   const locale = intlLocale(language);
   const monthLabel = new Intl.DateTimeFormat(locale, { month: "long", year: "numeric" }).format(displayMonth);
-  const calendarDates = getCalendarDates(displayMonth);
+  const dates = getCalendarDates(displayMonth);
+  const weeks = Array.from({ length: Math.ceil(dates.length / 7) }, (_, week) => dates.slice(week * 7, week * 7 + 7));
   const today = startOfDay(new Date());
-  const effectiveMinDate = minDate && minDate > today ? minDate : today;
+  const selectable = (date: Date) => isSelectableDay(date, { minDate, maxDate, availableDays });
+  const thisMonth = displayMonth.getFullYear() === today.getFullYear() && displayMonth.getMonth() === today.getMonth();
 
-  // Navigate to previous month
-  const goToPreviousMonth = () => {
-    const prevMonth = new Date(displayMonth);
-    prevMonth.setMonth(prevMonth.getMonth() - 1);
-    onMonthChange(prevMonth);
+  const shiftMonth = (by: number) => {
+    const next = new Date(displayMonth);
+    next.setDate(1);
+    next.setMonth(next.getMonth() + by);
+    onMonthChange(next);
   };
-
-  // Navigate to next month
-  const goToNextMonth = () => {
-    const nextMonth = new Date(displayMonth);
-    nextMonth.setMonth(nextMonth.getMonth() + 1);
-    onMonthChange(nextMonth);
-  };
-
-  // Check if a date is selectable
-  const isDateSelectable = (date: Date): boolean => {
-    if (loading) return false;
-
-    const dateTime = startOfDay(date).getTime();
-    const minDateTime = effectiveMinDate.getTime();
-    const maxDateTime = maxDate ? startOfDay(maxDate).getTime() : Infinity;
-
-    // Check if date is in valid range
-    if (dateTime < minDateTime || dateTime > maxDateTime) return false;
-
-    // Check if day of week is available
-    if (!availableDays.includes(date.getDay())) return false;
-
-    return true;
-  };
-
-  // Check if date is in current month
-  const isCurrentMonth = (date: Date): boolean => {
-    return date.getMonth() === displayMonth.getMonth();
-  };
-
-  // Handle date click
-  const handleDateClick = (date: Date) => {
-    if (!isDateSelectable(date)) return;
+  const jump = (date: Date) => {
     onDateSelect(date);
-  };
-
-  // Get date button styling
-  const getDateButtonStyles = (date: Date) => {
-    const selectable = isDateSelectable(date);
-    const selected = selectedDate && isSameDay(date, selectedDate);
-    const isCurrentDay = isToday(date);
-    const inCurrentMonth = isCurrentMonth(date);
-
-    if (selected) {
-      return {
-        background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
-        color: 'white',
-        border: '1px solid transparent',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
-      };
-    }
-
-    if (!selectable) {
-      return {
-        backgroundColor: 'var(--bg-secondary)',
-        color: 'var(--text-muted)',
-        border: '1px solid var(--border-subtle)',
-        opacity: 0.4
-      };
-    }
-
-    if (isCurrentDay && !selected) {
-      return {
-        backgroundColor: 'var(--bg-elevated)',
-        color: inCurrentMonth ? 'var(--text-primary)' : 'var(--text-muted)',
-        border: '2px solid var(--accent-primary)',
-      };
-    }
-
-    return {
-      backgroundColor: 'var(--bg-elevated)',
-      color: inCurrentMonth ? 'var(--text-primary)' : 'var(--text-muted)',
-      border: '1px solid var(--border-subtle)',
-    };
-  };
-
-  const getDateButtonClasses = (date: Date) => {
-    const selectable = isDateSelectable(date);
-    const selected = selectedDate && isSameDay(date, selectedDate);
-
-    return cn(
-      // Base styles
-      "relative h-12 w-12 md:h-14 md:w-14 rounded-xl font-medium transition-all duration-200",
-      "flex items-center justify-center backdrop-blur-xs",
-      "focus:outline-hidden focus:ring-2 focus:ring-offset-2",
-      "focus:ring-offset-transparent",
-
-      // Selectable states
-      selectable && !selected && [
-        "cursor-pointer",
-        "hover:scale-105 active:scale-95",
-      ],
-
-      // Selected state
-      selected && [
-        "shadow-md",
-        "scale-105",
-        "font-bold",
-      ],
-
-      // Non-selectable states
-      !selectable && [
-        "cursor-not-allowed",
-        "hover:scale-100",
-      ]
-    );
+    onMonthChange(date);
   };
 
   return (
     <div className={cn("w-full", className)}>
-      {/* Calendar Header */}
-      <div className="flex items-center justify-between mb-6 px-2">
-        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={goToPreviousMonth}
-          disabled={loading}
-            className="h-10 w-10 p-0 backdrop-blur-xs"
-            style={{ 
-              backgroundColor: 'var(--border-subtle)',
-              border: '1px solid var(--border-default)',
-              color: 'var(--text-secondary)'
-            }}
-          aria-label={t("bookingPicker.previousMonth")}
-        >
-          <ChevronLeft className="h-5 w-5" />
-        </Button>
-        </motion.div>
-
-        <h2 
-          className="text-xl font-semibold"
-          style={{ color: 'var(--text-primary)' }}
-        >
-          {monthLabel}
-        </h2>
-
-        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={goToNextMonth}
-          disabled={loading}
-            className="h-10 w-10 p-0 backdrop-blur-xs"
-            style={{ 
-              backgroundColor: 'var(--border-subtle)',
-              border: '1px solid var(--border-default)',
-              color: 'var(--text-secondary)'
-            }}
-          aria-label={t("bookingPicker.nextMonth")}
-        >
-          <ChevronRight className="h-5 w-5" />
-        </Button>
-        </motion.div>
+      <div className="mb-2 flex items-center justify-between gap-2">
+        <button type="button" className="bk-icon-btn" onClick={() => shiftMonth(-1)} disabled={thisMonth}
+          aria-label={t("bookingPicker.previousMonth")}>
+          <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+        </button>
+        <h2 className="text-base font-semibold" style={{ color: "var(--text-primary)" }} aria-live="polite">{monthLabel}</h2>
+        <button type="button" className="bk-icon-btn" onClick={() => shiftMonth(1)} aria-label={t("bookingPicker.nextMonth")}>
+          <ChevronRight className="h-4 w-4" aria-hidden="true" />
+        </button>
       </div>
 
-      {/* Weekday Headers */}
-      <div className="grid grid-cols-7 gap-1 mb-3">
-        {weekdayLabels(locale).map((day) => (
-          <div
-            key={day}
-            className="h-10 flex items-center justify-center text-sm font-medium"
-            style={{ color: 'var(--text-secondary)' }}
-          >
-            {day}
+      <div role="grid" aria-label={t("bookingPicker.calendarFor").replace("{0}", monthLabel)} className="space-y-0.5">
+        <div role="row" className="grid grid-cols-7 gap-1">
+          {weekdayLabels(locale).map((day) => (
+            <div key={day} role="columnheader" className="flex h-6 items-center justify-center text-[0.6875rem] font-semibold uppercase tracking-wide" style={{ color: "var(--text-muted)" }}>
+              {day}
+            </div>
+          ))}
+        </div>
+        {weeks.map((week, row) => (
+          <div key={row} role="row" className="grid grid-cols-7 gap-1">
+            {week.map((date) => {
+              const open = selectable(date);
+              const selected = Boolean(selectedDate && isSameDay(date, selectedDate));
+              const inMonth = date.getMonth() === displayMonth.getMonth();
+              const current = isToday(date);
+              return (
+                <div key={isoDay(date)} role="gridcell" aria-selected={selected}>
+                  <button
+                    type="button"
+                    data-qa="booking-date"
+                    data-qa-date={isoDay(date)}
+                    onClick={() => open && onDateSelect(date)}
+                    disabled={!open || loading}
+                    aria-pressed={selected}
+                    aria-current={current ? "date" : undefined}
+                    aria-label={`${date.toLocaleDateString(locale, { weekday: "long", month: "long", day: "numeric", year: "numeric" })}${open ? "" : ` · ${t("bookingLayout.closedDay")}`}`}
+                    className={cn(
+                      "relative flex h-8 w-full items-center justify-center rounded-[0.625rem] text-sm font-medium tabular-nums transition-colors",
+                      "focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-(--accent-primary)",
+                      open && !selected && "hover:bg-(--accent-primary-light)",
+                      !open && "cursor-not-allowed"
+                    )}
+                    style={selected ? {
+                      background: "var(--accent-primary)",
+                      color: "var(--pe-color-on-primary, #fff)",
+                      fontWeight: 700,
+                    } : {
+                      color: open ? (inMonth ? "var(--text-primary)" : "var(--text-secondary)") : "var(--text-subtle, var(--text-muted))",
+                      opacity: open ? 1 : inMonth ? 0.45 : 0.25,
+                      boxShadow: current ? "inset 0 0 0 1.5px var(--accent-primary)" : undefined,
+                    }}
+                  >
+                    {date.getDate()}
+                    {open && !selected && inMonth && (
+                      <span className="absolute bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full" style={{ backgroundColor: "var(--accent-success)" }} aria-hidden="true" />
+                    )}
+                  </button>
+                </div>
+              );
+            })}
           </div>
         ))}
       </div>
 
-      {/* Calendar Grid */}
-      <div
-        role="grid"
-        aria-label={t("bookingPicker.calendarFor").replace("{0}", monthLabel)}
-        className="grid grid-cols-7 gap-1"
-      >
-        {calendarDates.map((date, index) => {
-          const selectable = isDateSelectable(date);
-          const selected = selectedDate && isSameDay(date, selectedDate);
-          const isCurrentDay = isToday(date);
-
-          return (
-            <motion.button
-              key={index}
-              role="gridcell"
-              data-qa="booking-date"
-              data-qa-date={`${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`}
-              onClick={() => handleDateClick(date)}
-              disabled={!selectable || loading}
-              whileHover={selectable && !selected ? { scale: 1.05 } : {}}
-              whileTap={selectable && !selected ? { scale: 0.95 } : {}}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: index * 0.01 }}
-              aria-label={`${date.toLocaleDateString(locale, { 
-                month: 'long', 
-                day: 'numeric', 
-                year: 'numeric',
-                weekday: 'long' 
-              })}${!selectable ? ' (unavailable)' : ''}`}
-              aria-selected={selected}
-              aria-current={isCurrentDay ? 'date' : undefined}
-              className={getDateButtonClasses(date)}
-              style={getDateButtonStyles(date)}
-            >
-              <span className="relative z-10" style={{ color: selected ? 'white' : undefined }}>
-                  {date.getDate()}
-                </span>
-
-              {/* Today badge */}
-              {isCurrentDay && !selected && (
-                <span 
-                  className="absolute bottom-1 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full"
-                  style={{ backgroundColor: 'var(--accent-primary)' }}
-                />
-              )}
-
-              {/* Availability indicator */}
-              {selectable && !selected && !isCurrentDay && isCurrentMonth(date) && (
-                <span 
-                  className="absolute bottom-1.5 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full"
-                  style={{ backgroundColor: 'var(--accent-success)' }}
-                />
-              )}
-            </motion.button>
-          );
-        })}
-      </div>
-
-      {/* Quick Jump Actions */}
-      <div className="mt-6 flex gap-2 justify-center flex-wrap">
-        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-        <Button
-          data-qa="booking-today"
-          variant="outline"
-          size="sm"
-          onClick={() => {
-            const today = new Date();
-            onDateSelect(today);
-            onMonthChange(today);
-          }}
-          disabled={loading || !isDateSelectable(today)}
-            className="h-9 px-4 text-sm backdrop-blur-xs"
-            style={{ 
-              backgroundColor: 'var(--border-subtle)',
-              border: '1px solid var(--border-default)',
-              color: 'var(--text-secondary)'
-            }}
-        >
-          {t("bookingPicker.today")}
-        </Button>
-        </motion.div>
-        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-        <Button
-          data-qa="booking-tomorrow"
-          variant="outline"
-          size="sm"
-          onClick={() => {
-            const tomorrow = addDays(today, 1);
-            onDateSelect(tomorrow);
-            onMonthChange(tomorrow);
-          }}
-          disabled={loading || !isDateSelectable(addDays(today, 1))}
-            className="h-9 px-4 text-sm backdrop-blur-xs"
-            style={{ 
-              backgroundColor: 'var(--border-subtle)',
-              border: '1px solid var(--border-default)',
-              color: 'var(--text-secondary)'
-            }}
-        >
-          {t("bookingPicker.tomorrow")}
-        </Button>
-        </motion.div>
-        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => {
-            const nextWeek = addDays(today, 7);
-            onDateSelect(nextWeek);
-            onMonthChange(nextWeek);
-          }}
-          disabled={loading || !isDateSelectable(addDays(today, 7))}
-            className="h-9 px-4 text-sm backdrop-blur-xs"
-            style={{ 
-              backgroundColor: 'var(--border-subtle)',
-              border: '1px solid var(--border-default)',
-              color: 'var(--text-secondary)'
-            }}
-        >
-          {t("bookingPicker.nextWeek")}
-        </Button>
-        </motion.div>
-      </div>
-
-      {/* Legend */}
-      <div 
-        className="mt-6 pt-6 space-y-2"
-        style={{ borderTop: '1px solid var(--border-subtle)' }}
-      >
-        <div className="flex items-center gap-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
-          <div className="flex items-center gap-2">
-            <div 
-              className="h-3 w-3 rounded-full border-2"
-              style={{ borderColor: 'var(--accent-primary)' }}
-            />
-            <span>{t("bookingPicker.today")}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div 
-              className="h-2 w-2 rounded-full"
-              style={{ backgroundColor: 'var(--accent-success)' }}
-            />
-            <span>{t("bookingPicker.available")}</span>
-          </div>
+      {showQuickJumps && (
+        <div className="mt-2.5 flex flex-wrap gap-1.5 [&>.bk-chip]:min-h-8">
+          <button type="button" className="bk-chip" data-qa="booking-today" disabled={loading || !selectable(today)} onClick={() => jump(new Date())}>
+            {t("bookingPicker.today")}
+          </button>
+          <button type="button" className="bk-chip" data-qa="booking-tomorrow" disabled={loading || !selectable(addDays(today, 1))} onClick={() => jump(addDays(today, 1))}>
+            {t("bookingPicker.tomorrow")}
+          </button>
+          <button type="button" className="bk-chip" disabled={loading || !selectable(addDays(today, 7))} onClick={() => jump(addDays(today, 7))}>
+            {t("bookingPicker.nextWeek")}
+          </button>
         </div>
-      </div>
+      )}
     </div>
   );
 }

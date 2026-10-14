@@ -1,7 +1,8 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useFrappeGetCall } from 'frappe-react-sdk';
-import { CalendarX2, CheckCircle2, Phone } from 'lucide-react';
+import { CheckCircle2, Phone } from 'lucide-react';
+import { BookingCardSkeleton, BookingState } from '@/components/booking-states';
 import { Button } from '@/components/button';
 import LanguageToggle from '@/components/language-toggle';
 import PoweredBy from '@/components/powered-by';
@@ -52,7 +53,7 @@ export default function ManageBookingPage() {
   const myBookingsPath = view?.business.my_bookings_path || (slug ? `/${slug}/my-bookings` : '');
   let body: ReactNode;
   if (cancelled) body = <Cancelled result={cancelled} currency={view?.currency ?? 'ETB'} bookPath={bookPath} />;
-  else if (isLoading && !view) body = <p className="text-sm text-theme-secondary">…</p>;
+  else if (isLoading && !view) body = <BookingCardSkeleton rows={1} />;
   else if (!view) body = <Invalid bookPath={bookPath} />;
   else
     body = (
@@ -183,16 +184,8 @@ function Contact({ view }: { view: ManageView }) {
 function Invalid({ bookPath }: { bookPath: string }) {
   const { t } = useTranslation();
   return (
-    <div data-qa="manage-invalid" className="space-y-3 text-center">
-      <CalendarX2 className="mx-auto h-10 w-10 text-theme-secondary" aria-hidden="true" />
-      <h2 className="text-lg font-semibold">{t('customerManage.invalidTitle')}</h2>
-      <p className="text-sm text-theme-secondary">{t('customerManage.invalidBody')}</p>
-      {bookPath && (
-        <Button asChild variant="outline">
-          <a href={bookPath}>{t('customerManage.bookAgain')}</a>
-        </Button>
-      )}
-    </div>
+    <BookingState kind="unavailable" compact qa="manage-invalid" title={t('customerManage.invalidTitle')} description={t('customerManage.invalidBody')}
+      actions={bookPath ? [{ label: t('customerManage.bookAgain'), href: bookPath }] : []} />
   );
 }
 

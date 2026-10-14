@@ -1,0 +1,249 @@
+# "Use this template" carried from the landing gallery to the first website setup.
+# Run with fixture appointment.tests.template_preselect_qa_fixtures (setup makes a fresh identity; cleanup removes
+# that account, its business, its website draft and brand profile). Scenarios run in order: the second signs in
+# as the owner the first one created. See docs/growth/TEMPLATE_GALLERY.md.
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+fixtures:
+  provider: appointment.tests.template_preselect_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/tpl-preselect
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 300000
+options:
+  ignore_baseline_drift: true
+  # The sign-up and sign-in pages hold only the fixture's throwaway account; the password field is masked.
+  disable_capture_on_sensitive_screen: false
+scenarios:
+- id: guest_en_desktop
+  title: 'Guest picks Ergata in the gallery, signs up, sets up the business and finds Ergata preselected (en, desktop 1440, light)'
+  viewport:
+    width: 1440
+    height: 900
+  options:
+    color_scheme: light
+  checks: []
+  routes:
+  - path: /
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="landing-nav-templates"]'
+  actions:
+  - action: click
+    selector: '[data-qa="landing-nav-templates"]'
+  - action: wait_for
+    selector: '[data-qa="template-card"][data-template="ergata-therapy"] [data-qa="template-use"]'
+    timeout_ms: 20000
+  - action: scroll
+    selector: '[data-qa="template-card"][data-template="ergata-therapy"]'
+  - action: screenshot
+    name: preselect-en-1-gallery.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="template-card"][data-template="ergata-therapy"] [data-qa="template-use"]'
+    assertions:
+    - type: url_contains
+      value: /signup?source=template_gallery&template=ergata-therapy
+  - action: wait_for
+    selector: '[data-qa="signup-submit"]'
+  - action: fill
+    selector: '#fullName'
+    value: '{qa_tp_full_name}'
+  - action: fill
+    selector: '#email'
+    value: '{qa_tp_email}'
+  - action: fill
+    selector: '#password'
+    value: '{qa_tp_password}'
+  - action: click
+    selector: '[data-qa="signup-submit"]'
+    assertions:
+    - type: network_request
+      url_contains: registration.signup
+      status: 200
+  # Sign-up signs the owner in and goes to business setup; the template waits with the account.
+  - action: wait_for
+    selector: '#business_name'
+    timeout_ms: 20000
+    assertions:
+    - type: url_contains
+      value: /onboarding
+  - action: fill
+    selector: '#business_name'
+    value: '{qa_tp_business}'
+  - action: fill
+    selector: '#location_name'
+    value: '{qa_tp_location}'
+  - action: fill
+    selector: '#service_name'
+    value: '{qa_tp_service}'
+  - action: click
+    selector: '[data-qa="onboarding-submit"]'
+    assertions:
+    - type: network_request
+      url_contains: workspace.create
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="onboarding-gallery-template"]'
+    timeout_ms: 20000
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="onboarding-gallery-template"]'
+      value: 'Your website: Ergata Therapy'
+    - type: visible_selector
+      value: '[data-qa="onboarding-gallery-template-start"][href="/settings/website?source=template_gallery&template=ergata-therapy"]'
+  - action: scroll
+    selector: '[data-qa="onboarding-gallery-template"]'
+  - action: screenshot
+    name: preselect-en-2-onboarding-done.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="onboarding-gallery-template-start"]'
+  # Website setup: Ergata selected, the note, the card first, and a preview drawn with Ergata.
+  - action: wait_for
+    selector: '[data-qa="website-gallery-note"]'
+    timeout_ms: 20000
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="website-gallery-note"]'
+      value: 'You chose Ergata Therapy from our gallery'
+    - type: visible_selector
+      value: '[data-qa="website-template-ergata-therapy"][data-selected] input[type="radio"]:checked'
+    - type: visible_selector
+      value: '[data-qa="website-template-ergata-therapy"] [data-qa="website-gallery-badge"]'
+    - type: visible_selector
+      value: '[data-qa="website-address"][value="{qa_tp_address}"]'
+  - action: wait_for
+    selector: '[data-qa="website-setup-preview"][data-recipe="ergata-therapy"]'
+    timeout_ms: 20000
+  - action: screenshot
+    name: preselect-en-3-website-setup.png
+    full_page: false
+  # Business focus re-ranks the templates but keeps the gallery choice.
+  - action: click
+    selector: 'button[role="combobox"][aria-label="Business focus"]'
+  - action: click
+    selector: '[role="listbox"] [role="option"]:has-text("Beauty")'
+  - action: wait_for
+    selector: '[data-qa="website-template-ergata-therapy"][data-selected] input[type="radio"]:checked'
+    timeout_ms: 10000
+  - action: screenshot
+    name: preselect-en-4-rerank.png
+    full_page: false
+  - action: screenshot
+    name: preselect-en-5-preview.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="website-create-draft"]'
+    assertions:
+    - type: network_request
+      url_contains: start_website_setup
+      status: 200
+  - action: wait_for
+    selector: '.website-setup-status:has-text("ergata-therapy")'
+    timeout_ms: 20000
+  - action: screenshot
+    name: preselect-en-6-draft.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+
+- id: owner_am_mobile
+  title: 'Owner with a website picks Bloom in the gallery: highlighted chooser and a confirm step (am, mobile 390, dark)'
+  viewport:
+    width: 390
+    height: 844
+  options:
+    color_scheme: dark
+    is_mobile: true
+    has_touch: true
+  checks: []
+  routes:
+  - path: /login
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '#email'
+  actions:
+  - action: click
+    selector: '[data-qa="language-toggle"]'
+  - action: fill
+    selector: '#email'
+    value: '{qa_tp_email}'
+  - action: fill
+    selector: '#password'
+    value: '{qa_tp_password}'
+  - action: click
+    selector: 'form button[type="submit"]'
+  - action: wait_for
+    selector: 'body:not(:has(#password))'
+    timeout_ms: 20000
+  - action: open_url
+    url: /templates
+  - action: wait_for
+    selector: '[data-qa="template-card"][data-template="bloom-hair"] [data-qa="template-use"][href="/settings/website?source=template_gallery&template=bloom-hair"]'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="template-card"][data-template="bloom-hair"] [data-qa="template-use"]'
+  - action: wait_for
+    selector: '[data-qa="website-template-switch"]'
+    timeout_ms: 20000
+    assertions:
+    - type: url_contains
+      value: template=bloom-hair
+    - type: text_contains
+      selector: '[data-qa="website-template-switch"]'
+      value: የBloom Hair አብነትን መርጠዋል
+    - type: visible_selector
+      value: '[data-qa="website-switch-template-bloom-hair"][data-selected] [data-qa="website-gallery-badge"]'
+    - type: visible_selector
+      value: '[data-qa="website-switch-template-ergata-therapy"] [data-qa="website-current-badge"]'
+    - type: text_contains
+      selector: '.website-setup-status'
+      value: ergata-therapy
+  - action: screenshot
+    name: preselect-am-1-switch-offer.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="website-switch-template"]'
+  - action: wait_for
+    selector: '[data-qa="website-switch-confirm"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="website-switch-confirm"]'
+      value: ወደ Bloom Hair አብነት ይቀየር?
+  - action: screenshot
+    name: preselect-am-2-confirm.png
+    full_page: false
+  # Cancel leaves the site as it is.
+  - action: click
+    selector: '[data-qa="website-switch-cancel"]'
+  - action: wait_for
+    selector: '.website-setup-status:has-text("ergata-therapy")'
+  - action: click
+    selector: '[data-qa="website-switch-template"]'
+  - action: click
+    selector: '[data-qa="website-switch-confirm-action"]'
+    assertions:
+    - type: network_request
+      url_contains: switch_website_template
+      status: 200
+  - action: wait_for
+    selector: '.website-setup-status:has-text("bloom-hair")'
+    timeout_ms: 20000
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="website-setup-notice"]'
+      value: Bloom Hair
+    - type: url_not_contains
+      value: template=
+  - action: screenshot
+    name: preselect-am-3-switched.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

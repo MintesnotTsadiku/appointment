@@ -34,7 +34,19 @@
       "logoAsset": "/assets/appointment/brand-experience/brands/selam-logo.webp",
       "logoChecksum": "49c0d52766957affdb4744644eb5f74dc1e14b41b694effbf3881d4a588516bb",
       "faviconAsset": "/assets/appointment/brand-experience/brands/selam-favicon.png",
-      "faviconChecksum": "61fb0e5708910ee02173f4e69114972aede076d152e335702ec4471a5be86624"
+      "faviconChecksum": "61fb0e5708910ee02173f4e69114972aede076d152e335702ec4471a5be86624",
+      "previewAssets": [
+        {
+          "viewport": "desktop",
+          "asset": "/assets/appointment/brand-experience/template-gallery/selam-movement-desktop.webp",
+          "checksum": "b6036a52142e94805e2f597f739224b1c8a570856f50490cb49fecc591b25723"
+        },
+        {
+          "viewport": "mobile",
+          "asset": "/assets/appointment/brand-experience/template-gallery/selam-movement-mobile.webp",
+          "checksum": "463ead910ecd01be5631ef0f54ce3b7bfd719db5df68db91cd38dd69aed6067b"
+        }
+      ]
     },
     "meron": {
       "slug": "meron-studio",
@@ -68,7 +80,19 @@
       "logoAsset": "/assets/appointment/brand-experience/brands/meron-logo.webp",
       "logoChecksum": "ff01f2c7e5d1e1d54017260ac1c52119ba707f3c946e6d63a90a8c1cb251272e",
       "faviconAsset": "/assets/appointment/brand-experience/brands/meron-favicon.png",
-      "faviconChecksum": "99cf34eae9b7cc9952fa2e002fd3d4df069c0a2ec873f4a0b634ce778c1667ac"
+      "faviconChecksum": "99cf34eae9b7cc9952fa2e002fd3d4df069c0a2ec873f4a0b634ce778c1667ac",
+      "previewAssets": [
+        {
+          "viewport": "desktop",
+          "asset": "/assets/appointment/brand-experience/template-gallery/meron-atelier-desktop.webp",
+          "checksum": "918f6b549a2834cd15d810fd30fef2ef6ac0adaf0545e8f483ea9d28d810e061"
+        },
+        {
+          "viewport": "mobile",
+          "asset": "/assets/appointment/brand-experience/template-gallery/meron-atelier-mobile.webp",
+          "checksum": "a4567b387fc236d1689a89363225b43aaeb7d1e11ef1390d95e681e6fca84a4d"
+        }
+      ]
     },
     "bloom": {
       "slug": "bloom-studio",
@@ -112,7 +136,19 @@
       "logoAsset": "/assets/appointment/brand-experience/brands/bloom-logo.webp",
       "logoChecksum": "5c9e470d131246266fa31497dccdd7ec80fb7da287b855cd56144af5840f70dc",
       "faviconAsset": "/assets/appointment/brand-experience/brands/bloom-favicon.png",
-      "faviconChecksum": "b7041926f13608e3bfcce6e791314f23ef57f1c36a0688a9d0ff7bf2b93a8d87"
+      "faviconChecksum": "b7041926f13608e3bfcce6e791314f23ef57f1c36a0688a9d0ff7bf2b93a8d87",
+      "previewAssets": [
+        {
+          "viewport": "desktop",
+          "asset": "/assets/appointment/brand-experience/template-gallery/bloom-hair-desktop.webp",
+          "checksum": "6e6d5f9b39f7aefbba3051c818cf57e30c2c8a75c3c990be958a25307865365f"
+        },
+        {
+          "viewport": "mobile",
+          "asset": "/assets/appointment/brand-experience/template-gallery/bloom-hair-mobile.webp",
+          "checksum": "893ce9410fdb9800b7762cdaacf1c40c56e682bfa1b8194c39fb3ecdfb79baaf"
+        }
+      ]
     },
     "tena": {
       "slug": "tena-studio",
@@ -156,7 +192,19 @@
       "logoAsset": "/assets/appointment/brand-experience/brands/tena-logo.webp",
       "logoChecksum": "35ad2219f5c3c58ace48ec1c0c9c3162c7555a5ad2fdb922b1ce8c7fd02369b2",
       "faviconAsset": "/assets/appointment/brand-experience/brands/tena-favicon.png",
-      "faviconChecksum": "d7c2476f690591244bef0c7eae5efda3745091dac5bb28682fa1e0359f06182c"
+      "faviconChecksum": "d7c2476f690591244bef0c7eae5efda3745091dac5bb28682fa1e0359f06182c",
+      "previewAssets": [
+        {
+          "viewport": "desktop",
+          "asset": "/assets/appointment/brand-experience/template-gallery/tena-clinic-desktop.webp",
+          "checksum": "3451c638f070e6f09c605a81e5861f92531b8329aad11e8af2c2b6685629abf1"
+        },
+        {
+          "viewport": "mobile",
+          "asset": "/assets/appointment/brand-experience/template-gallery/tena-clinic-mobile.webp",
+          "checksum": "4577ef0e18a605fe0681a409f451538f62430b25a5ba0b2cf82a9581bfd112f1"
+        }
+      ]
     },
     "abugida": {
       "slug": "abugida-studio",
@@ -195,7 +243,19 @@
       "logoAsset": "/assets/appointment/brand-experience/brands/abugida-logo.webp",
       "logoChecksum": "08e2686f04776a07ccc19796a8642fb1ca16b5d9142633b88fb6c5957665de23",
       "faviconAsset": "/assets/appointment/brand-experience/brands/abugida-favicon.png",
-      "faviconChecksum": "2cbb69eef30c974e4623a254ab561dd8a1d49704c0678dd6b94956062879e06d"
+      "faviconChecksum": "2cbb69eef30c974e4623a254ab561dd8a1d49704c0678dd6b94956062879e06d",
+      "previewAssets": [
+        {
+          "viewport": "desktop",
+          "asset": "/assets/appointment/brand-experience/template-gallery/abugida-language-desktop.webp",
+          "checksum": "2231358f18363f3d15546822aa6611e9643d0d02527c787922eb416698762095"
+        },
+        {
+          "viewport": "mobile",
+          "asset": "/assets/appointment/brand-experience/template-gallery/abugida-language-mobile.webp",
+          "checksum": "75f7a8b3b248a54fc247d03e93357e6e932e11cdd233ebc668de5fc66cf60260"
+        }
+      ]
     },
     "ergata": {
       "slug": "yared-counselling",
@@ -229,7 +289,19 @@
       "logoAsset": "/assets/appointment/brand-experience/brands/ergata-showcase-logo.webp",
       "logoChecksum": "e008467354de5f13531e70834d2d755edb70443e466a7b2ee0c0a5c299e061de",
       "faviconAsset": "/assets/appointment/brand-experience/brands/ergata-showcase-favicon.png",
-      "faviconChecksum": "615f6dac7cc36efb53412fcab11cf0bfea0e519a05284d08975731a3985e2332"
+      "faviconChecksum": "615f6dac7cc36efb53412fcab11cf0bfea0e519a05284d08975731a3985e2332",
+      "previewAssets": [
+        {
+          "viewport": "desktop",
+          "asset": "/assets/appointment/brand-experience/template-gallery/ergata-therapy-desktop.webp",
+          "checksum": "6850b91fa07b69b306783415d8370895b794c1e5d31ff421c57dc7c111d59dc1"
+        },
+        {
+          "viewport": "mobile",
+          "asset": "/assets/appointment/brand-experience/template-gallery/ergata-therapy-mobile.webp",
+          "checksum": "215042e9f7be4fdacc8a6be7a3de6a211ca9a417197ef308b8872731c04cc340"
+        }
+      ]
     }
   }
 }

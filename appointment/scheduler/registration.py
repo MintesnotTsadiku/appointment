@@ -122,7 +122,7 @@ def public_settings():
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])
 @rate_limit(limit=10, seconds=600, methods=["POST"])
-def signup(email, full_name=None, password=None, redirect_to=None, ref=None, source=None):
+def signup(email, full_name=None, password=None, redirect_to=None, ref=None, source=None, template=None):
     if requires_verification():
         frappe.throw(_("Email verification is not implemented. Use Open signup with administrator approval, or administrator provisioning."), frappe.PermissionError)
     if not self_signup_enabled():
@@ -157,7 +157,8 @@ def signup(email, full_name=None, password=None, redirect_to=None, ref=None, sou
     from appointment.growth.referrals import remember_signup
 
     # The first business this account creates takes the referral code and sign-up channel.
-    remember_signup(doc.name, ref, source)
+    # A template from the landing gallery waits there for the first website setup.
+    remember_signup(doc.name, ref, source, template)
     frappe.db.commit()
 
     if approval:

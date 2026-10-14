@@ -5,6 +5,8 @@ import { fetchPublishedSnapshot } from "@/public-experience/api";
 import { PublicExperienceProvider } from "@/public-experience/PublicExperienceProvider";
 import { PublicSiteHome } from "@/public-experience/PublicSiteHome";
 import type { PublishedSnapshot } from "@/public-experience/types";
+import { PublicLoading, PublicUnavailable } from "@/public-experience/PublicStates";
+import { previewState } from "@/components/booking-states";
 
 /** The current path for a former site address, or null. */
 async function formerAddressTarget(pathname: string, search: string): Promise<string | null> {
@@ -50,18 +52,8 @@ const PublicSitePage = () => {
     if (typeof title === "string" && title) document.title = title;
   }, [snapshot]);
 
-  if (!resolved) {
-    return <div data-pe-loading className="p-8 text-sm">Loading public experience…</div>;
-  }
-
-  if (!snapshot) {
-    return (
-      <main data-pe-unavailable className="mx-auto max-w-3xl p-8">
-        <h1 className="text-2xl font-semibold">Public experience unavailable</h1>
-        <p className="mt-2 text-sm">This address does not have an active published release.</p>
-      </main>
-    );
-  }
+  if (!resolved || previewState() === "loading") return <PublicLoading />;
+  if (!snapshot) return <PublicUnavailable kind="unavailable" />;
 
   return (
     <PublicExperienceProvider key={pathname} locale={snapshot.locale}>

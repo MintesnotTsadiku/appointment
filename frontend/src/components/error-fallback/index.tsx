@@ -1,51 +1,37 @@
 /**
- * External dependencies
+ * A route that failed to render: the shared illustrated state with the reason, a reload and a way home.
  */
 import { useRouteError } from "react-router-dom";
-/**
- * Internal dependencies
- */
-import { TriangleAlert } from "lucide-react";
+import { RotateCw } from "lucide-react";
+import { BookingState, BookingStatePage } from "@/components/booking-states";
+import { useTranslation } from "@/lib/i18n";
+
+function errorText(error: unknown): string {
+  if (!error) return "";
+  if (typeof error === "string") return error;
+  if (error instanceof Error) return error.message;
+  if (typeof error === "object") {
+    if ("message" in error && typeof error.message === "string") return error.message;
+    const nested = (error as { error?: unknown }).error;
+    if (typeof nested === "string") return nested;
+    if (nested instanceof Error) return nested.message;
+  }
+  return "";
+}
 
 const ErrorFallback = () => {
   const error = useRouteError();
+  const { t } = useTranslation();
   console.error(error);
-  
-  // Safely extract error message
-  let errorMessage = "Something went wrong";
-  if (error) {
-    if (typeof error === 'string') {
-      errorMessage = error;
-    } else if (error instanceof Error) {
-      errorMessage = error.message || "Something went wrong";
-    } else if (typeof error === 'object' && error !== null) {
-      // Handle error objects safely
-      if ('message' in error && typeof error.message === 'string') {
-        errorMessage = error.message;
-      } else if ('error' in error) {
-        // Handle nested error objects
-        const nestedError = (error as { error?: unknown }).error;
-        if (typeof nestedError === 'string') {
-          errorMessage = nestedError;
-        } else if (nestedError instanceof Error) {
-          errorMessage = nestedError.message;
-        }
-      }
-    }
-  }
-  
   return (
-    <div className="w-screen h-screen flex justify-center items-center">
-      <div className=" rounded-lg p-4 mb-6">
-        <div className="flex flex-col items-start ">
-          <div className="flex items-center mb-1">
-            <TriangleAlert className="text-red-500 h-4 w-4 mr-2" />
-            <h3 className="font-medium text-red-500">Something went wrong</h3>
-          </div>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{errorMessage}</p>
-        </div>
-      </div>
-    </div>
+    <BookingStatePage qa="route-error">
+      <BookingState kind="error" headingLevel={1} title={t("bookingStates.pageErrorTitle")} description={t("bookingStates.errorBody")}
+        detail={errorText(error) || undefined}
+        actions={[
+          { label: t("bookingStates.reload"), onClick: () => window.location.reload(), icon: RotateCw, qa: "booking-state-retry" },
+          { label: t("bookingStates.goHome"), href: "/", qa: "booking-state-home" },
+        ]} />
+    </BookingStatePage>
   );
 };
 

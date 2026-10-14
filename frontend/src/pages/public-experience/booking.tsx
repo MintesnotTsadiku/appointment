@@ -6,17 +6,18 @@ import { PublicExperienceProvider, usePublicExperience } from "@/public-experien
 import { publicRootForSlug } from "@/public-experience/routes";
 import { getTemplatePackage } from "@/public-experience/templates/registry";
 import type { PublishedSnapshot } from "@/public-experience/types";
+import { PublicLoading, PublicUnavailable } from "@/public-experience/PublicStates";
 import "@/public-experience/platform.css";
 
 function BookingHandoff({ snapshot, slug }: { snapshot: PublishedSnapshot; slug?: string }) {
-  const { config, theme, setPreference, isLoading, error } = usePublicExperience();
+  const { config, theme, setPreference, refresh, isLoading, error } = usePublicExperience();
   const rootStyle = theme.variables as CSSProperties;
   const siteRoot = publicRootForSlug(slug);
   const publicRoot = snapshot.locale && snapshot.locale !== "en" ? `${siteRoot}/${snapshot.locale}` : siteRoot;
   const template = getTemplatePackage(snapshot.compiledDesign.layout.rendererKey, snapshot.compiledDesign.layout.rendererVersion);
-  if (isLoading) return <div data-pe-loading role="status" className="p-8">Loading published design…</div>;
-  if (error) return <main data-pe-unavailable className="p-8"><h1>Booking unavailable</h1><p>Please try again later.</p></main>;
-  if (!template) return <main data-pe-unsupported className="p-8">Unsupported public template</main>;
+  if (isLoading) return <PublicLoading config={config} mode={theme.mode} />;
+  if (error) return <PublicUnavailable kind="error" config={config} mode={theme.mode} onRetry={refresh} />;
+  if (!template) return <PublicUnavailable kind="unsupported" config={config} mode={theme.mode} />;
   const BookingTemplate = template.Booking;
   return <BookingTemplate
     snapshot={snapshot}
@@ -45,15 +46,8 @@ const PublicBookingPage = () => {
     return () => { active = false; };
   }, [locale]);
 
-  if (!resolved) return <div data-pe-loading className="p-8 text-sm">Loading public experience…</div>;
-  if (!snapshot) {
-    return (
-      <main data-pe-unavailable className="mx-auto max-w-2xl p-8">
-        <h1 className="text-2xl font-semibold">Booking unavailable</h1>
-        <p className="mt-2 text-sm">This address does not have an active published release.</p>
-      </main>
-    );
-  }
+  if (!resolved) return <PublicLoading />;
+  if (!snapshot) return <PublicUnavailable kind="booking-unavailable" />;
   return (
     <PublicExperienceProvider locale={snapshot.locale}>
       <BookingHandoff snapshot={snapshot} slug={slug} />

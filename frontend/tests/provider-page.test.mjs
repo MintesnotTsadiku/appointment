@@ -62,7 +62,8 @@ assert.equal(initials(''), '');
 assert.equal(PROVIDER_PAGE_API, 'appointment.scheduler.provider_page.public_provider');
 const page = read('src/pages/public-experience/provider-page.tsx');
 const parts = read('src/pages/public-experience/provider-page-parts.tsx');
-for (const hook of ['provider-page', 'provider-page-unavailable']) assert.ok(page.includes(`data-qa="${hook}"`), hook);
+// The unavailable state is the shared BookingState, which takes its hook as `qa`.
+for (const hook of ['provider-page', 'provider-page-unavailable']) assert.ok(page.includes(`data-qa="${hook}"`) || page.includes(` qa="${hook}"`), hook);
 for (const hook of ['provider-page-name', 'provider-service', 'provider-service-book', 'provider-format']) assert.ok(parts.includes(`data-qa="${hook}"`), hook);
 assert.ok(page.includes('canonical_slug') && page.includes('replace: true'), 'a former address is replaced by the current one');
 assert.ok(page.includes('useBookingBrand(page?.site_slug'), 'a published website brands the page');

@@ -10,6 +10,7 @@ import BusinessOwnerRoute from "./components/workspace/BusinessOwnerRoute";
  * Lazy load components.
  */
 const LandingPage = lazy(() => import("@/pages/landing"));
+const TemplatesPage = lazy(() => import("@/pages/landing/templates"));
 const Login = lazy(() => import("@/pages/auth/login"));
 const Signup = lazy(() => import("@/pages/auth/signup"));
 const ForgotPassword = lazy(() => import("@/pages/auth/forgot-password"));
@@ -79,6 +80,7 @@ const Router = () => {
   return (
     <>
       <Route path="/" element={<LandingPage />} errorElement={<ErrorFallback />}></Route>
+      <Route path="/templates" element={<TemplatesPage />} errorElement={<ErrorFallback />}></Route>
       <Route path="/assistant" element={<AssistantLanding />} errorElement={<ErrorFallback />}></Route>
       <Route path="/login" element={<Login />} errorElement={<ErrorFallback />}></Route>
       <Route path="/signup" element={<Signup />} errorElement={<ErrorFallback />}></Route>

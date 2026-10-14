@@ -1,3 +1,4 @@
+import { PublicContentLoading } from "../../PublicStates";
 import { createElement, useRef, type ReactNode } from "react";
 
 import type { ContentTemplateProps } from "../types";
@@ -31,7 +32,7 @@ export function ErgataContent({ snapshot, locale, applicationName, publicRoot, r
       </div>
     </header>
     <main id="published-content" tabIndex={-1} className="eg-wrap">
-      {content.loading ? <p role="status">Loading published content…</p> : <>
+      {content.loading ? <PublicContentLoading /> : <>
         <section className="eg-content-heading"><h1>{heading}</h1>{projection?.excerpt || projection?.summary ? <p>{projection.excerpt || projection.summary}</p> : null}</section>
         {content.unavailable ? <section className="eg-content-state"><h2>Content unavailable</h2><p>This content may have been withdrawn or is not available in this language.</p><a href={contentRoot}>{listName}</a></section> : content.detail && release ? <>
           {safeContentMedia(release.hero || release.cover) ? <img className="eg-content-cover" src={safeContentMedia(release.hero || release.cover)} alt="" width={cover?.width} height={cover?.height} /> : null}

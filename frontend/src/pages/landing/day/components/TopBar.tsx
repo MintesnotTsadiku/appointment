@@ -3,8 +3,13 @@ import { useBrandedTranslation } from "@/lib/platform-brand";
 import type { EntryLinks } from "../../shared/useEntryLinks";
 import { clockLabel } from "../world";
 
-/** Floating bar: brand, the story clock, language and the account entry. */
-const TopBar = ({ hour, entry }: { hour: number; entry: EntryLinks }) => {
+/** Floating bar: brand, the story clock, the template gallery, language and the account entry. */
+const TopBar = ({ hour, entry, templatesHref, onTemplates = false }: {
+  hour: number;
+  entry: EntryLinks;
+  templatesHref: string;
+  onTemplates?: boolean;
+}) => {
   const { t, brand } = useBrandedTranslation();
   return (
     <header className="lw-bar" data-qa="landing-bar">
@@ -17,6 +22,9 @@ const TopBar = ({ hour, entry }: { hour: number; entry: EntryLinks }) => {
       </span>
       <span className="lw-bar-spacer" />
       <div className="lw-bar-actions">
+        <a className="lw-bar-templates" href={templatesHref} aria-current={onTemplates ? "page" : undefined} data-qa="landing-nav-templates">
+          {t("world.nav.templates")}
+        </a>
         <LanguageToggle />
         {entry.authenticated ? (
           <a className="lw-btn lw-btn-solid lw-btn-small" href={entry.workspace}>{t("world.nav.workspace")}</a>

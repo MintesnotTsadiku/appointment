@@ -4,7 +4,7 @@ Contract for other workstreams:
 
 - `business_code(owner_key)` returns the business's code and creates it on first use.
 - `record_signup(code, owner_key)` links a new business to the business or partner that referred it.
-- Sign-up pages pass `?ref=<code>` and `?source=<channel>` to `registration.signup`, which calls
+- Sign-up pages pass `?ref=<code>`, `?source=<channel>` and `?template=<recipe key>` to `registration.signup`, which calls
   `remember_signup`. The first business that account creates takes the stored attribution
   (Organization and Provider hooks below), so every new business has a Business Signup Source.
 - Guest `apply_partner(name, organization, email, phone, kind, message)` lives in `partners`; it is
@@ -42,13 +42,17 @@ def clean_source(source, has_ref=False):
     return REFERRAL if has_ref else DIRECT
 
 
-def remember_signup(user, ref=None, source=None):
-    """Keep a new account's sign-up channel until it creates its first business."""
+def remember_signup(user, ref=None, source=None, template=None):
+    """Keep a new account's sign-up channel (and gallery template) until it creates its first business."""
+    from appointment.growth import template_choice
+
     if not user or user in ("Guest", "Administrator"):
         return None
     code = referral_codes.clean(ref)
     pending = frappe.db.get_value("Business Signup Source", {"signup_user": user, "status": "Pending"}, "name")
     values = dict(source=clean_source(source, bool(code)), ref_code=code or None)
+    if template is not None:
+        values["template"] = template_choice.clean(template)
     if pending:
         frappe.db.set_value("Business Signup Source", pending, values)
         return pending

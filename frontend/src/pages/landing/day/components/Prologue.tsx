@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useBrandedTranslation } from "@/lib/platform-brand";
 import type { EntryLinks } from "../../shared/useEntryLinks";
-import { CHAPTERS, clockLabel } from "../world";
+import { STOPS, clockLabel } from "../world";
 import Promises from "./Promises";
 
 /** 05:30. The city before the first booking, and the day's timetable. */
@@ -49,7 +49,7 @@ const Timetable = () => {
     <nav className="lw-board" aria-labelledby="lw-board-title" data-qa="landing-timetable">
       <h2 id="lw-board-title">{t("world.dawn.cast")}</h2>
       <ol>
-        {CHAPTERS.map((world, order) => (
+        {STOPS.map((world, order) => (
           <motion.li
             key={world.id}
             initial={{ opacity: 0, y: 8 }}

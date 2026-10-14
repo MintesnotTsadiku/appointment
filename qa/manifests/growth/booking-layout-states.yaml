@@ -1,0 +1,180 @@
+# Booking states (en, light). No fixture: unknown addresses and the development-only `?preview-state=` switch
+# (loading, error, empty, offline) hold each state so it can be captured. Nothing is written.
+# Every state is the shared illustrated component with a next action, in the page's brand tokens.
+# See docs/growth/BOOKING_LAYOUT.md.
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-booking-states
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 150000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+  reduced_motion: reduce
+scenarios:
+- id: states_unavailable_en_desktop
+  title: 'Unknown business, service, provider, offering and website; invalid manage and my-bookings links (en, desktop, light)'
+  viewport: &desktop
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /schedule/org/no-such-studio-qa
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-unavailable"][data-kind="not-found"]'
+    - type: visible_text
+      value: This booking page is not available
+    - type: visible_selector
+      value: '[data-qa="booking-state-home"]'
+  actions:
+  - action: screenshot
+    name: states_en_desktop-1-unknown-business.png
+    full_page: false
+  - action: open_url
+    url: /schedule/org/selam-studio/no-such-service
+  - action: wait_for
+    selector: '[data-qa="booking-unavailable"][data-kind="unavailable"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-state-services"][href="/schedule/org/selam-studio"]'
+    - type: visible_selector
+      value: '[data-qa="booking-unavailable-page"][data-booking-branded="true"]'
+  - action: screenshot
+    name: states_en_desktop-2-unknown-service-branded.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-state-services"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: open_url
+    url: /schedule/p/no-such-provider-qa
+  - action: wait_for
+    selector: '[data-qa="provider-page-unavailable"]'
+  - action: screenshot
+    name: states_en_desktop-3-unknown-provider.png
+    full_page: false
+  - action: open_url
+    url: /schedule/individual/EVT-NO-SUCH-OFFERING
+  - action: wait_for
+    selector: '[data-qa="independent-booking-unavailable"]'
+  - action: screenshot
+    name: states_en_desktop-4-unknown-offering.png
+    full_page: false
+  - action: open_url
+    url: /no-such-site-qa
+  - action: wait_for
+    selector: 'main[data-pe-unavailable] [data-qa="booking-state-home"]'
+    assertions:
+    - type: visible_text
+      value: This website is not available
+  - action: screenshot
+    name: states_en_desktop-5-unknown-site.png
+    full_page: false
+  - action: open_url
+    url: /selam-studio/booking/not-a-real-token
+  - action: wait_for
+    selector: '[data-qa="manage-invalid"]'
+  - action: screenshot
+    name: states_en_desktop-6-manage-invalid.png
+    full_page: false
+  - action: open_url
+    url: /selam-studio/my-bookings?token=not-a-real-token
+  - action: wait_for
+    selector: '[data-qa="my-bookings-invalid"]'
+  - action: screenshot
+    name: states_en_desktop-7-my-bookings-invalid.png
+    full_page: false
+  - action: get_network_errors
+- id: states_preview_en_desktop
+  title: 'Skeletons, error with retry, a day without times and the offline notice (en, desktop, light)'
+  viewport: *desktop
+  checks: []
+  routes:
+  - path: /schedule/org/selam-studio?preview-state=loading
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-loading"] [aria-busy="true"]'
+  actions:
+  - action: screenshot
+    name: states_preview_en_desktop-1-services-skeleton.png
+    full_page: false
+  - action: open_url
+    url: /schedule/org/selam-studio/EVT-2026-000002?type=EVT-2026-000002&preview-state=loading
+  - action: wait_for
+    selector: '[data-qa="booking-loading"] [aria-busy="true"]'
+  - action: screenshot
+    name: states_preview_en_desktop-2-picker-skeleton.png
+    full_page: false
+  - action: open_url
+    url: /schedule/p/rahel-nutrition?preview-state=loading
+  - action: wait_for
+    selector: '[data-qa="provider-page"] [aria-busy="true"]'
+  - action: screenshot
+    name: states_preview_en_desktop-3-provider-skeleton.png
+    full_page: false
+  - action: open_url
+    url: /schedule/p/rahel-nutrition?preview-state=error
+  - action: wait_for
+    selector: '[data-qa="provider-page-unavailable"][data-kind="error"] [data-qa="booking-state-retry"]'
+  - action: screenshot
+    name: states_preview_en_desktop-4-provider-error.png
+    full_page: false
+  - action: open_url
+    url: /schedule/org/selam-studio/EVT-2026-000002?type=EVT-2026-000002&preview-state=empty
+  - action: wait_for
+    selector: '[data-qa="booking-slots-empty"] [data-qa="booking-next-day"]'
+  - action: screenshot
+    name: states_preview_en_desktop-5-no-times.png
+    full_page: false
+  - action: open_url
+    url: /schedule/org/selam-studio?preview-state=offline
+  - action: wait_for
+    selector: '[data-qa="booking-offline"]'
+    assertions:
+    - type: visible_selector
+      value: :nth-match([data-qa="booking-service"], 1)
+  - action: screenshot
+    name: states_preview_en_desktop-6-offline.png
+    full_page: false
+  - action: open_url
+    url: /selam-studio?preview-state=loading
+  - action: wait_for
+    selector: '[data-pe-loading] [aria-busy="true"]'
+  - action: screenshot
+    name: states_preview_en_desktop-7-site-skeleton.png
+    full_page: false
+- id: states_en_mobile
+  title: 'States on a phone: unknown business, picker skeleton, a day without times (en, mobile, light)'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /schedule/org/no-such-studio-qa
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-unavailable"]'
+  actions:
+  - action: screenshot
+    name: states_en_mobile-1-unknown-business.png
+    full_page: false
+  - action: open_url
+    url: /schedule/org/selam-studio/EVT-2026-000002?type=EVT-2026-000002&preview-state=loading
+  - action: wait_for
+    selector: '[data-qa="booking-loading"] [aria-busy="true"]'
+  - action: screenshot
+    name: states_en_mobile-2-picker-skeleton.png
+    full_page: false
+  - action: open_url
+    url: /schedule/org/selam-studio/EVT-2026-000002?type=EVT-2026-000002&preview-state=empty
+  - action: wait_for
+    selector: '[data-qa="booking-slots-empty"]'
+  - action: screenshot
+    name: states_en_mobile-3-no-times.png
+    full_page: false

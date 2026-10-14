@@ -50,7 +50,8 @@ export function DetailsForm({ slot, timeFormat, timezone, quantity, name, email,
           <Input id="independent-booking-email-input" data-qa="independent-booking-email-input" required type="email" autoComplete="email" inputMode="email" className="h-11" disabled={!slot} value={email} onChange={event => onEmail(event.target.value)} />
         </div>
         {problem && <p role="alert" data-qa="independent-booking-error" className="rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive sm:col-span-2">{problem}</p>}
-        <Button type="submit" size="lg" className="min-h-11 w-full sm:col-span-2 sm:w-auto sm:justify-self-start" data-qa="independent-booking-submit" disabled={!slot || busy}>
+        <Button type="submit" size="lg" className="min-h-11 w-full sm:col-span-2 sm:w-auto sm:justify-self-start" data-qa="independent-booking-submit" disabled={!slot || busy}
+          style={{ backgroundColor: 'var(--accent-primary)', color: 'var(--pe-color-on-primary, #fff)' }}>
           {busy && <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />}{t('public.independentBooking.submit')}
         </Button>
       </form>

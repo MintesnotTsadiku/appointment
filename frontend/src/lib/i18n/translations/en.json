@@ -256,7 +256,8 @@
       "start": "Create your business",
       "workspace": "Open your workspace",
       "skip": "Skip to the story",
-      "clock": "Time of day in the story"
+      "clock": "Time of day in the story",
+      "templates": "Templates"
     },
     "status": {
       "live": "Live today",
@@ -424,16 +425,13 @@
       "eyebrow": "23:45 · the city is asleep",
       "title": "Tomorrow is already booked.",
       "lede": "Set up your business tonight. Your first customer can book before breakfast.",
-      "doorsTitle": "Step into a live showcase business",
-      "doorsLede": "These showcase businesses are published on {product}. Visit their page, or go straight to booking.",
-      "visit": "Visit",
-      "book": "Book",
       "footer": "{product} · scheduling for service businesses",
       "fiction": "The people and businesses in this story are fictional demo examples.",
       "timeTool": "Ethiopian time converter",
       "directory": "Business directory",
       "freeTools": "Free tools for businesses",
-      "partners": "Partners"
+      "partners": "Partners",
+      "templates": "Website templates"
     },
     "promise": {
       "title": "What you get",
@@ -463,6 +461,57 @@
       "reminder": "Reminder",
       "staff": "Staff app",
       "caption": "The same booking in both languages. Tap to switch."
+    },
+    "gallery": {
+      "short": "Templates",
+      "status": "Shop windows lit",
+      "eyebrow": "23:00 · the shop windows are lit for tomorrow",
+      "title": "Choose how your business looks online.",
+      "lede": "Every template is a complete website with online booking, in English and Amharic, light and dark. Preview one here, or open a live example.",
+      "listLabel": "Website templates",
+      "preview": "Preview",
+      "previewOf": "Preview {template}",
+      "live": "Open live example",
+      "liveOf": "Open the live example of {template}",
+      "noLive": "Live example coming soon",
+      "use": "Use this template",
+      "useOf": "Use the {template} template",
+      "desktopAlt": "{template} on a desktop screen",
+      "mobileAlt": "{template} on a phone",
+      "modes": "Light and dark",
+      "languages": "English and Amharic",
+      "english": "English",
+      "amharic": "Amharic",
+      "viewport": "Screen size",
+      "desktop": "Desktop",
+      "mobile": "Mobile",
+      "mode": "Appearance",
+      "light": "Light",
+      "dark": "Dark",
+      "close": "Close preview",
+      "frameTitle": "Live example of {template}",
+      "loading": "Opening the live example…",
+      "pictureNote": "This is a picture of the template. Open the live example to try it.",
+      "empty": "The templates could not be loaded. Please try again in a moment.",
+      "pageTitle": "Website templates · {product}",
+      "pageDescription": "Every website template on {product}: complete booking websites for salons, clinics, studios, tutors and therapy practices, in English and Amharic.",
+      "backToStory": "Back to the story",
+      "industry": {
+        "wellness": "Wellness",
+        "beauty": "Beauty",
+        "creative": "Creative",
+        "education": "Education",
+        "health": "Health",
+        "therapy": "Counselling and therapy"
+      },
+      "for": {
+        "wellness": "For personal trainers, yoga and pilates teachers and small movement studios.",
+        "beauty": "For hair salons, barbers, braiding studios and nail and beauty studios.",
+        "creative": "For tailors, dressmakers, shoemakers, jewellers and other craft studios.",
+        "education": "For teachers, tutors and small language and music schools.",
+        "health": "For family clinics, dental and eye clinics and other health practices.",
+        "therapy": "For counsellors, psychologists and group therapy practices."
+      }
     }
   },
   "staff": {
@@ -2915,6 +2964,22 @@
       "tinHint": "Shown on receipts when set."
     },
     "website": {
+      "templateChoice": {
+        "chosenNote": "You chose {0} from our gallery — you can change it anytime.",
+        "badge": "Your gallery choice",
+        "current": "Current template",
+        "switchTitle": "Switch your website to {0}?",
+        "switchIntro": "You chose {0} in our template gallery. Your website uses {1} now. Nothing changes until you confirm.",
+        "switchAction": "Use {0}",
+        "keep": "Keep {0}",
+        "confirmTitle": "Switch to {0}?",
+        "confirmBody": "Your draft takes the colours, fonts, layout and starter text of {0}. Sections you have edited keep your words. Your live website stays as it is until you publish.",
+        "confirm": "Switch template",
+        "switched": "Your website draft now uses {0}. Publish when you are ready to show it on your live website.",
+        "nextTitle": "Your website: {0}",
+        "nextBody": "You chose this template in our gallery. Your website draft starts with it, and you can change it anytime.",
+        "nextAction": "Set up my website"
+      },
       "setup": {
         "title": "Website setup",
         "intro": "Create your public website when you are ready. Your appointment setup remains available.",
@@ -5757,5 +5822,57 @@
   "providerPageServer": {
     "notAvailable": "This booking page is not available.",
     "aliasOwner": "A former address belongs to exactly one website or provider page."
+  },
+  "bookingStates": {
+    "retry": "Try again",
+    "goHome": "Go to the home page",
+    "seeServices": "See all services",
+    "loadingTimes": "Loading open times",
+    "loadingServices": "Loading services",
+    "loadingBooking": "Loading your booking",
+    "loadingSite": "Loading the website",
+    "offlineTitle": "You are offline.",
+    "offlineBody": "Your choices stay here. Open times update when you reconnect.",
+    "unavailableTitle": "This booking page is not available",
+    "unavailableBody": "The address may be wrong, or the business no longer takes bookings online. Check the link you received.",
+    "serviceUnavailableTitle": "This service is not open for booking",
+    "serviceUnavailableBody": "It may be paused or moved. You can choose another service from the same business.",
+    "errorTitle": "We could not load this page",
+    "errorBody": "The connection or the server had a problem. Try again in a moment.",
+    "siteUnavailableTitle": "This website is not available",
+    "siteUnavailableBody": "This address does not have a published website. Check the address, or book directly with the business.",
+    "siteErrorTitle": "The website did not load",
+    "unsupportedTitle": "This website cannot be shown",
+    "unsupportedBody": "Its design is not available in this version. The business can publish it again.",
+    "bookingUnavailableTitle": "Online booking is not available here",
+    "pageErrorTitle": "Something went wrong on this page",
+    "reload": "Reload the page",
+    "notFoundTitle": "We could not find this page",
+    "notFoundBody": "The link may be old or mistyped.",
+    "noBookingsTitle": "No bookings here yet",
+    "noBookingsBody": "When you book with this business, your bookings show here.",
+    "linkSentTitle": "Check your email"
+  },
+  "bookingLayout": {
+    "continue": "Continue",
+    "closedDay": "no open times",
+    "nextOpenDay": "Show the next open day",
+    "firstOpenDay": "Show the first open day",
+    "taken": "already booked",
+    "unavailable": "cannot be booked",
+    "bestFit": "recommended time",
+    "habesha": "Habesha",
+    "days": "Open days",
+    "hideCalendar": "Hide the month calendar",
+    "showCalendar": "Show the month calendar",
+    "choices": "Booking choices",
+    "previousDay": "Previous open day",
+    "nextDay": "Next open day",
+    "categories": "Service categories",
+    "allServices": "All",
+    "noMatchTitle": "No services match",
+    "noMatchBody": "Choose another category or provider.",
+    "noServicesTitle": "No services to book yet",
+    "noServicesBody": "This business has not published services for online booking. Check again later."
   }
 }

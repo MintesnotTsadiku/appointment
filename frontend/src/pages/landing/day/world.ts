@@ -13,6 +13,7 @@ export type WorldId =
   | "insights"
   | "grow"
   | "amharic"
+  | "gallery"
   | "night";
 
 export interface World {
@@ -30,10 +31,15 @@ export const WORLDS: World[] = [
   { id: "insights", hour: 19 },
   { id: "grow", hour: 21.5 },
   { id: "amharic", hour: 22.5 },
+  { id: "gallery", hour: 23 },
   { id: "night", hour: 23.75 },
 ];
 
-export const CHAPTERS = WORLDS.filter((world) => world.id !== "dawn" && world.id !== "night");
+/** Story chapters: a persona's hour beside a live diorama. */
+export const CHAPTERS = WORLDS.filter((world) => !["dawn", "gallery", "night"].includes(world.id));
+
+/** Every stop on the timetable and the hour rail: the chapters plus the template gallery. */
+export const STOPS = WORLDS.filter((world) => world.id !== "dawn" && world.id !== "night");
 
 /** Hour of day for a position `fraction` (0..1) through world `index`. */
 export function hourAt(index: number, fraction: number): number {

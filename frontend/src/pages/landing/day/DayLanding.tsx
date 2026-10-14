@@ -7,6 +7,7 @@ import Finale from "./components/Finale";
 import Prologue from "./components/Prologue";
 import Rail from "./components/Rail";
 import Sky from "./components/Sky";
+import TemplateGallery from "./components/TemplateGallery";
 import TopBar from "./components/TopBar";
 import AmharicStage from "./stages/AmharicStage";
 import CareStage from "./stages/CareStage";
@@ -37,7 +38,7 @@ const DayLanding = () => {
         <LandingHead />
         <a className="lw-skip" href="#solo">{t("world.nav.skip")}</a>
         <Sky hour={clock.hour} />
-        <TopBar hour={clock.hour} entry={entry} />
+        <TopBar hour={clock.hour} entry={entry} templatesHref="#gallery" />
         <Rail index={clock.index} />
         <main className="lw-main">
           <Prologue entry={entry} />
@@ -49,6 +50,7 @@ const DayLanding = () => {
           <Chapter id="insights" flip><InsightsStage /></Chapter>
           <Chapter id="grow"><GrowStage /></Chapter>
           <Chapter id="amharic" flip><AmharicStage /></Chapter>
+          <TemplateGallery entry={entry} />
           <Finale entry={entry} />
         </main>
       </div>

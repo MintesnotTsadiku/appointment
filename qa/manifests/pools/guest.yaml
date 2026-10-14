@@ -47,6 +47,8 @@ scenarios:
       value: Room A (QA)
   - action: click
     selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: '[data-qa="booking-continue"]'
   - action: wait_for
     selector: '#userName'
     assertions:
@@ -122,6 +124,8 @@ scenarios:
       value: Room A (QA)
   - action: click
     selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: '[data-qa="booking-continue"]'
   - action: wait_for
     selector: '#userName'
     assertions:

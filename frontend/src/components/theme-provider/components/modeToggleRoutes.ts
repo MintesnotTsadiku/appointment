@@ -17,8 +17,9 @@ const PREFIXES = [
   '/schedule', // All booking pages have integrated toggles
 ];
 
-// The landing page tints itself by its story clock, not by light/dark, and its top bar holds the controls.
-const EXACT = ['/'];
+// The landing page and its template gallery tint themselves by the story clock, not by light/dark,
+// and their top bar holds the controls.
+const EXACT = ['/', '/templates'];
 
 export function hidesGlobalModeToggle(pathname: string): boolean {
   const path = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname;

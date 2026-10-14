@@ -38,7 +38,7 @@ type Stage = 'form' | 'pending' | 'live';
  * One submit creates the account, signs in, creates the independent business with its first
  * offering and publishes it, so the person ends on a live booking page.
  */
-export default function QuickStartSignup({ prefill, source, refCode }: { prefill: string; source: string; refCode?: string | null }) {
+export default function QuickStartSignup({ prefill, source, refCode, template }: { prefill: string; source: string; refCode?: string | null; template?: string }) {
   const { t } = useTranslation();
   const brand = usePlatformBrand();
   const { login } = useFrappeAuth();
@@ -69,7 +69,7 @@ export default function QuickStartSignup({ prefill, source, refCode }: { prefill
     setProblem('');
     setBusy(true);
     try {
-      const account = await signup({ email: form.email, full_name: form.full_name, password: form.password, redirect_to: '/home', source, ref: refCode || undefined });
+      const account = await signup({ email: form.email, full_name: form.full_name, password: form.password, redirect_to: '/home', source, ref: refCode || undefined, template: template || undefined });
       if (account?.message?.status === 'pending_approval') {
         setStage('pending');
         return;
@@ -89,7 +89,7 @@ export default function QuickStartSignup({ prefill, source, refCode }: { prefill
 
   let body;
   if (stage === 'pending') body = <p role="status" data-qa="quick-start-pending" className="text-sm">{t('growthTouchpoints.quickStart.pending')}</p>;
-  else if (expired) body = <Expired source={source} refCode={refCode} />;
+  else if (expired) body = <Expired source={source} refCode={refCode} template={template} />;
   else if (isLoading || !data) body = <p data-qa="quick-start-loading" role="status" className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />{t('growthTouchpoints.quickStart.loading')}</p>;
   else
     body = (
@@ -170,7 +170,7 @@ function Field({ id, label, hint, children }: { id: string; label: string; hint?
   );
 }
 
-function Expired({ source, refCode }: { source: string; refCode?: string | null }) {
+function Expired({ source, refCode, template }: { source: string; refCode?: string | null; template?: string }) {
   const { t } = useTranslation();
   return (
     <div data-qa="quick-start-expired" className="space-y-4 text-center">
@@ -179,7 +179,7 @@ function Expired({ source, refCode }: { source: string; refCode?: string | null 
         <p className="font-semibold">{t('growthTouchpoints.quickStart.expiredTitle')}</p>
         <p className="text-sm text-muted-foreground">{t('growthTouchpoints.quickStart.expiredBody')}</p>
       </div>
-      <Button asChild><Link to={signupPath(source, { ref: refCode })}>{t('growthTouchpoints.quickStart.regularSignup')}</Link></Button>
+      <Button asChild><Link to={signupPath(source, { ref: refCode, template })}>{t('growthTouchpoints.quickStart.regularSignup')}</Link></Button>
     </div>
   );
 }

@@ -103,7 +103,8 @@ assert.ok(bookingTheme.includes('"--booking-font-display"'), "scheduler must map
 const scheduler = read("src/pages/organization-appointment/index.tsx");
 assert.ok(scheduler.includes("useBookingBrand"), "shared scheduler must adopt the public brand");
 assert.ok(scheduler.includes("data-booking-branded"), "shared scheduler must expose branding state for QA");
-assert.ok(scheduler.includes("href={bookingBrand.publicRoot}"), "shared scheduler must link back to the tenant site");
+assert.ok(scheduler.includes("home={bookingBrand.publicRoot}") && read("src/pages/organization-appointment/header.tsx").includes("href={home}"),
+  "shared scheduler must link back to the tenant site");
 
 const editor = read("src/pages/settings/public-experience.tsx");
 assert.ok(editor.includes("appointment.public_experience.api."), "editor must call the management API");

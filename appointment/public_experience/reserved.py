@@ -52,6 +52,8 @@ RESERVED_ROOT_PATHS = frozenset(
         "tools",
         "directory",
         "partners",
+        # Template gallery of the platform landing page.
+        "templates",
         # Amharic versions of server-rendered pages: /am/tools/..., /am/directory/...
         "am",
     }

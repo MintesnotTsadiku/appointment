@@ -1,3 +1,4 @@
+import { PublicContentLoading } from "../../PublicStates";
 import { createElement, type ReactNode } from "react";
 import type { ContentTemplateProps } from "../types";
 import { usePublicChrome } from "../chrome";
@@ -22,7 +23,7 @@ export function AbugidaContent({ snapshot, locale, applicationName, publicRoot, 
       <button type="button" onClick={toggleMode} aria-label={`Switch to ${mode === "dark" ? "light" : "dark"} mode`}>{mode === "dark" ? "Light" : "Dark"}</button>
     </header>
     <main id="published-content" tabIndex={-1}>
-      {content.loading ? <p role="status">Loading published content…</p> : <>
+      {content.loading ? <PublicContentLoading /> : <>
       <section className="abugida-content-heading"><p>A new perspective, one story at a time.</p><h1><span aria-hidden="true">✦ </span>{heading}</h1>{projection?.excerpt || projection?.summary ? <p>{projection.excerpt || projection.summary}</p> : null}</section>
       {content.unavailable ? <section className="abugida-content-state"><h2>Content unavailable</h2><p>This content may have been withdrawn or is not available in this language.</p><a href={contentRoot}>Return to {content.kind === "blog" ? "journal" : "gallery"}</a></section> : content.detail && release ? <>
         {safeContentMedia(release.hero || release.cover) ? <img className="abugida-content-cover" src={safeContentMedia(release.hero || release.cover)} alt="" width={cover?.width} height={cover?.height} style={{ aspectRatio: cover?.width && cover.height ? `${cover.width} / ${cover.height}` : "16 / 9" }} /> : null}

@@ -57,6 +57,7 @@ def validate_showcase_catalog() -> dict[str, Any]:
         _verify_checksum(asset, site["heroChecksum"])
         _verify_checksum(_asset_path(site["logoAsset"]), site["logoChecksum"])
         _verify_checksum(_asset_path(site["faviconAsset"]), site["faviconChecksum"])
+        _validate_previews(key, site.get("previewAssets"))
         support_assets = site.get("supportAssets")
         if not isinstance(support_assets, list) or len(support_assets) != 3:
             raise ValueError(f"Showcase site {key} requires three support assets")
@@ -77,6 +78,19 @@ def validate_showcase_catalog() -> dict[str, Any]:
         if not benchmark.is_file():
             raise ValueError(f"Missing benchmark for {key}: {site['benchmark']}")
     return catalog
+
+
+#: The template gallery shows every template at these sizes.
+PREVIEW_VIEWPORTS = ("desktop", "mobile")
+
+
+def _validate_previews(key: str, previews: Any) -> None:
+    """Gallery screenshots (scripts/capture_template_gallery.py): one per viewport, checksummed."""
+    if not isinstance(previews, list) or sorted(row.get("viewport") for row in previews if isinstance(row, dict)) != sorted(PREVIEW_VIEWPORTS):
+        raise ValueError(f"Showcase site {key} requires desktop and mobile preview assets")
+    for preview in previews:
+        _require_text(preview, key, "viewport", "asset", "checksum")
+        _verify_checksum(_asset_path(preview["asset"]), preview["checksum"])
 
 
 def _require_text(site: dict[str, Any], key: str, *fields: str) -> None:

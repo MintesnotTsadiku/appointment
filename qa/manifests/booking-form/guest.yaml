@@ -38,8 +38,9 @@ scenarios:
   - action: wait_for
     selector: :nth-match([data-qa="booking-service"], 1)
     assertions:
-    - type: visible_text
-      value: Choose the type of appointment you'd like to book
+    - type: text_contains
+      selector: '[data-qa="booking-services-bar"]'
+      value: Select a service
   - action: screenshot
     name: form_en_desktop-1-services.png
     full_page: true
@@ -54,6 +55,8 @@ scenarios:
     selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
   - action: click
     selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: '[data-qa="booking-continue"]'
   - action: wait_for
     selector: '#userName'
     assertions:
@@ -95,8 +98,9 @@ scenarios:
   - action: wait_for
     selector: :nth-match([data-qa="booking-service"], 1)
     assertions:
-    - type: visible_text
-      value: Choose the type of appointment you'd like to book
+    - type: text_contains
+      selector: '[data-qa="booking-services-bar"]'
+      value: Select a service
   - action: screenshot
     name: form_en_mobile-1-services.png
     full_page: true
@@ -111,6 +115,8 @@ scenarios:
     selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
   - action: click
     selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: '[data-qa="booking-continue"]'
   - action: wait_for
     selector: '#userName'
     assertions:
@@ -163,8 +169,9 @@ scenarios:
   - action: wait_for
     selector: :nth-match([data-qa="booking-service"], 1)
     assertions:
-    - type: visible_text
-      value: ሊይዙት የሚፈልጉትን የቀጠሮ ዓይነት ይምረጡ
+    - type: text_contains
+      selector: '[data-qa="booking-services-bar"]'
+      value: አገልግሎት ይምረጡ
   - action: screenshot
     name: form_am_desktop-1-services.png
     full_page: true
@@ -179,6 +186,8 @@ scenarios:
     selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
   - action: click
     selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: '[data-qa="booking-continue"]'
   - action: wait_for
     selector: '#userName'
     assertions:
@@ -231,8 +240,9 @@ scenarios:
   - action: wait_for
     selector: :nth-match([data-qa="booking-service"], 1)
     assertions:
-    - type: visible_text
-      value: ሊይዙት የሚፈልጉትን የቀጠሮ ዓይነት ይምረጡ
+    - type: text_contains
+      selector: '[data-qa="booking-services-bar"]'
+      value: አገልግሎት ይምረጡ
   - action: screenshot
     name: form_am_mobile-1-services.png
     full_page: true
@@ -247,6 +257,8 @@ scenarios:
     selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
   - action: click
     selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: '[data-qa="booking-continue"]'
   - action: wait_for
     selector: '#userName'
     assertions:

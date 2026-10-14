@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useFrappeGetCall, useFrappePostCall } from 'frappe-react-sdk';
-import { CalendarClock, CalendarX2, LogOut, MailCheck, RotateCcw, Video } from 'lucide-react';
+import { CalendarClock, LogOut, MailCheck, RotateCcw, Video } from 'lucide-react';
+import { BookingCardSkeleton, BookingState } from '@/components/booking-states';
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
 import { Label } from '@/components/label';
@@ -172,7 +173,7 @@ export default function MyBookingsPage() {
   };
 
   let body: ReactNode;
-  if (stage === 'loading') body = <p className="text-sm text-theme-secondary" data-qa="my-bookings-loading">{t('myBookings.opening')}</p>;
+  if (stage === 'loading') body = <div data-qa="my-bookings-loading"><BookingCardSkeleton rows={2} label={t('myBookings.opening')} /></div>;
   else if (stage === 'form') body = <RequestForm owner={owner} language={language} onSent={() => setStage('sent')} />;
   else if (stage === 'sent') body = <Sent businessName={businessName} onAgain={() => setStage('form')} />;
   else if (stage === 'invalid') body = <InvalidLink onAgain={() => setStage('form')} />;
@@ -246,13 +247,8 @@ function Sent({ businessName, onAgain }: { businessName: string; onAgain: () => 
 
 function InvalidLink({ onAgain }: { onAgain: () => void }) {
   const { t } = useTranslation();
-  return (
-    <div className="space-y-3 text-center" data-qa="my-bookings-invalid">
-      <CalendarX2 className="mx-auto h-10 w-10 text-theme-secondary" aria-hidden="true" />
-      <p className="text-sm">{t('myBookings.invalid')}</p>
-      <Button type="button" onClick={onAgain}>{t('myBookings.send')}</Button>
-    </div>
-  );
+  return <BookingState kind="unavailable" compact qa="my-bookings-invalid" title={t('customerManage.invalidTitle')} description={t('myBookings.invalid')}
+    actions={[{ label: t('myBookings.send'), onClick: onAgain }]} />;
 }
 
 function Bookings({ listing, bookPath, email, onSignOut }: { listing: Listing; bookPath: string; email: string; onSignOut: () => void }) {
@@ -284,7 +280,7 @@ function Section({ title, rows, qa, muted = false }: { title: string; rows: Book
     <section className="space-y-3" data-qa={qa}>
       <h2 className="text-sm font-semibold">{title}</h2>
       {rows.length === 0 ? (
-        <p className="text-sm text-theme-secondary">{t('myBookings.none')}</p>
+        <p className="rounded-xl border border-dashed border-theme-default px-4 py-5 text-center text-sm text-theme-secondary" data-qa="my-bookings-none">{t('myBookings.none')}</p>
       ) : (
         <ul className="space-y-3">
           {rows.map((row) => (

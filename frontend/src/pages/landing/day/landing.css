@@ -91,6 +91,11 @@
   --lw-accent: #f2c46d; --lw-paper: #16173f; --lw-paper-ink: #fbf3e4; --lw-skyline: #07081c;
   --lw-sun: #f7efd9; --lw-stars: 1; --lw-lights: 0.85; --lw-clouds: 0;
 }
+.lw[data-world="gallery"] {
+  --lw-sky-top: #070923; --lw-sky-mid: #141641; --lw-sky-low: #2f2558; --lw-ink: #f8f3ff;
+  --lw-accent: #ffcf7d; --lw-paper: #12153a; --lw-paper-ink: #f8f3ff; --lw-skyline: #06071a;
+  --lw-sun: #f4eeda; --lw-stars: 1; --lw-lights: 1; --lw-clouds: 0;
+}
 .lw[data-world="night"] {
   --lw-sky-top: #04050d; --lw-sky-mid: #0a0e24; --lw-sky-low: #1a1f47; --lw-ink: #f5f1ff;
   --lw-accent: #ffd27a; --lw-paper: #12163a; --lw-paper-ink: #f5f1ff; --lw-skyline: #05060f;
@@ -158,6 +163,8 @@
   box-shadow: 0 10px 30px -12px color-mix(in srgb, var(--lw-ink) 60%, transparent); }
 .lw-btn-ghost { border-color: color-mix(in srgb, var(--lw-ink) 30%, transparent); color: var(--lw-ink); background: transparent; }
 .lw-btn-small { min-height: 38px; padding: 0 14px; font-size: 0.85rem; }
+.lw-bar-templates { font-weight: 600; font-size: 0.85rem; text-decoration: none; padding: 9px 12px; border-radius: 999px; white-space: nowrap; }
+.lw-bar-templates:hover, .lw-bar-templates[aria-current="page"] { background: color-mix(in srgb, var(--lw-ink) 12%, transparent); }
 
 .lw-rail { position: fixed; z-index: 30; right: 22px; top: 50%; translate: 0 -50%; display: none; flex-direction: column; gap: 4px; }
 .lw-rail a { display: flex; align-items: center; justify-content: flex-end; gap: 10px; text-decoration: none;
@@ -181,7 +188,7 @@
 /* Ethiopic has no glyphs in the display serif: the fallback face with negative tracking closes the word spaces. */
 :lang(am) .lw-display, :lang(am) .lw-story h2 { letter-spacing: 0; word-spacing: 0.12em; line-height: 1.12; }
 /* Keep large headings readable where they pass over the sun or moon. */
-.lw-display, .lw-story h2, .lw-doors h2 { text-shadow: 0 1px 24px color-mix(in srgb, var(--lw-sky-top) 70%, transparent); }
+.lw-display, .lw-story h2 { text-shadow: 0 1px 24px color-mix(in srgb, var(--lw-sky-top) 70%, transparent); }
 .lw-lede { font-size: clamp(1.02rem, 1.4vw, 1.2rem); line-height: 1.6; max-width: 38rem; opacity: 0.88; }
 
 /* Prologue */
@@ -252,23 +259,6 @@
 /* Finale */
 .lw-finale { min-height: 100vh; padding: 160px 0 clamp(130px, 22vh, 240px); display: flex; flex-direction: column; justify-content: center; }
 .lw-finale .lw-lede { margin: 24px 0 32px; }
-.lw-doors { margin-top: 90px; }
-.lw-doors h2 { font-family: var(--lw-serif); font-weight: 400; font-size: clamp(1.6rem, 3vw, 2.4rem); margin: 0 0 6px; }
-.lw-doors-grid { list-style: none; padding: 0; margin: 28px 0 0; display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
-.lw-door { position: relative; border-radius: 120px 120px 18px 18px; overflow: hidden; aspect-ratio: 3 / 4.2;
-  border: 1px solid color-mix(in srgb, var(--lw-ink) 16%, transparent); background: var(--lw-paper); display: flex; flex-direction: column; justify-content: flex-end; }
-.lw-door img.lw-door-hero { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.55; filter: saturate(0.9);
-  transition: opacity 0.6s, transform 1.2s var(--lw-ease); }
-.lw-door:hover img.lw-door-hero, .lw-door:focus-within img.lw-door-hero { opacity: 0.9; transform: scale(1.04); }
-.lw-door::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 30%, rgba(4, 5, 14, 0.92)); }
-.lw-door-body { position: relative; z-index: 1; padding: 18px; color: #fff; }
-.lw-door-logo { width: 40px; height: 40px; border-radius: 12px; object-fit: contain; background: #fff; padding: 4px; margin-bottom: 10px; }
-.lw-door-name { font-family: var(--lw-serif); font-size: 1.2rem; line-height: 1.15; margin: 0 0 12px; }
-.lw-door-actions { display: flex; gap: 8px; }
-.lw-door-actions a { font-size: 0.82rem; font-weight: 600; padding: 7px 12px; border-radius: 999px; text-decoration: none;
-  background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.3); color: #fff; }
-.lw-door-actions a.lw-door-book { background: #fff; color: #111; border-color: transparent; }
-.lw-door { box-shadow: inset 0 5px 0 var(--door-accent, transparent); }
 .lw-footer { margin-top: 100px; padding-top: 22px; display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between;
   font-size: 0.82rem; opacity: 0.7; border-top: 1px solid color-mix(in srgb, var(--lw-ink) 16%, transparent); }
 
@@ -281,7 +271,6 @@
   .lw-brand-name, .lw-bar-signin, .lw-bar-start { display: none; }
   .lw-chapter { padding: 110px 0 120px; }
   .lw-ghost-hour { display: none; }
-  .lw-door { aspect-ratio: auto; min-height: 260px; }
 }
 
 @keyframes lw-twinkle { from { filter: brightness(0.7); } to { filter: brightness(1.3); } }

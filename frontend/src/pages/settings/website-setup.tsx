@@ -13,6 +13,9 @@ import { useTranslation } from '@/lib/i18n';
 import { fill } from '@/pages/manage-booking/format';
 import { ContentStep, draftIssues, savedSections } from "./website-editor/ContentStep";
 import type { SectionSchema } from "./website-editor/core";
+import { GalleryBadge, GalleryChoiceNote } from "./website-template-choice/GalleryChoiceNote";
+import { TemplateSwitchPanel } from "./website-template-choice/TemplateSwitchPanel";
+import { TEMPLATE_CHOICE_API, addressFromName, choiceFirst, pickGalleryTemplate, templateFromSearch, withoutTemplate } from "@/lib/template-choice";
 
 interface Owner { type: string; name: string; label: string }
 interface Recipe { key: string; label: string; audience: string; mood: string; score: number; industry: string; thumbnail: string; rankingReasons: string[]; fontPairing: string }
@@ -28,7 +31,7 @@ interface Website {
   derivedFormats?: { services?: Record<string, string>; places?: Record<string, string> };
   mediaLimits?: { maxBytes: number; types: string[] };
 }
-interface Context { selectedOwner?: string; owners: Owner[]; catalog: Recipe[]; sites: Website[] }
+interface Context { selectedOwner?: string; owners: Owner[]; catalog: Recipe[]; sites: Website[]; galleryTemplate?: string | null }
 
 const field = "block w-full rounded-lg border p-3 dark:bg-slate-900";
 const button = "rounded-lg border px-4 py-2 disabled:opacity-50";
@@ -81,6 +84,11 @@ export default function WebsiteSetup() {
   const [notice, setNotice] = useState("");
   const [contentFocus, setContentFocus] = useState<string | undefined>();
   const [readiness, setReadiness] = useState<Array<{ check: string; ok: boolean; remediation: string }>>([]);
+  // The template chosen in the landing gallery: preselected for a new website, offered (never applied) for an existing one.
+  const [gallery, setGallery] = useState("");
+  const [switchOffer, setSwitchOffer] = useState("");
+  const galleryPreviewed = useRef(false);
+  const noticeRef = useRef<HTMLParagraphElement>(null);
 
   function adopt(next: Website) {
     setResetUndo(null);
@@ -107,6 +115,7 @@ export default function WebsiteSetup() {
         const existing = result.selectedOwner ? result.sites.find(row => row.owner === result.selectedOwner) : result.sites.length === 1 ? result.sites[0] : undefined;
         if (result.selectedOwner) setOwner(result.selectedOwner);
         if (existing) adopt({ ...existing, setup: { ...existing.setup, step: "brand" } });
+        resolveGalleryChoice(result, existing);
       }
       setOwner((value) => value || result.owners[0]?.name || "");
       setRecipe((value) => value || result.catalog[0]?.key || "");
@@ -124,6 +133,48 @@ export default function WebsiteSetup() {
       .catch((reason: Error) => { if (active) setError(reason.message); }), 150);
     return () => { active = false; window.clearTimeout(timer); };
   }, [previewSite, previewVersion, palette, font, accent, presentationDensity]);
+
+  useEffect(() => {
+    const selected = context.owners.find((row) => row.name === owner);
+    if (!gallery || site || !selected || galleryPreviewed.current) return;
+    galleryPreviewed.current = true;
+    callMethod<PublishedSnapshot>(api + "preview_website_template", { owner_type: selected.type, owner, recipe_key: gallery, preferences: { main_action: "booking" } })
+      .then(setSnapshot).catch((reason: Error) => setError(reason.message));
+  }, [gallery, site, owner, context.owners]);
+
+  function resolveGalleryChoice(result: Context, existing?: Website) {
+    const fromLink = templateFromSearch(window.location.search);
+    const chosen = pickGalleryTemplate(fromLink, existing ? null : result.galleryTemplate, result.catalog.map((row) => row.key));
+    if (fromLink && !result.owners.length) void callMethod(TEMPLATE_CHOICE_API + ".note_template", { template: fromLink }).catch(() => undefined);
+    if (!chosen) return;
+    if (existing) {
+      if (chosen === fromLink && chosen !== existing.recipeKey) setSwitchOffer(chosen);
+      return;
+    }
+    const name = result.owners.find((row) => row.name === (result.selectedOwner || result.owners[0]?.name))?.label || "";
+    setGallery(chosen); setRecipe(chosen);
+    setTitle((value) => value || name); setSlug((value) => value || addressFromName(name));
+  }
+
+  function clearGalleryLink() {
+    navigate({ search: withoutTemplate(window.location.search) }, { replace: true });
+  }
+
+  /** Preferences re-rank the templates; they never replace the template chosen in the gallery. */
+  function rerank() {
+    if (!gallery) setRecipe("");
+  }
+
+  async function switchTemplate(key: string) {
+    if (!site) return;
+    await run(async () => {
+      const next = await callMethod<Website>(api + "switch_website_template", { site: site.site, expected_version: site.draftVersion, recipe_key: key });
+      adopt(next); setSnapshot(null); setSwitchOffer(""); clearGalleryLink();
+      setNotice(fill(t("staff.website.templateChoice.switched"), context.catalog.find((row) => row.key === key)?.label || key));
+      // The offer closes; bring the owner to the confirmation instead of the middle of the page.
+      window.setTimeout(() => noticeRef.current?.scrollIntoView({ block: "center" }), 0);
+    });
+  }
 
   async function run(operation: () => Promise<unknown>) {
     setBusy(true); setError(""); setNotice("");
@@ -156,31 +207,34 @@ export default function WebsiteSetup() {
     {site && context.owners.length > 1 && <label>{t("staff.team.business")}<AppearanceSelect aria-label={t("staff.team.business")} value={site.owner} onChange={event => { const next = context.sites.find(row => row.owner === event.target.value); setOwner(event.target.value); setSnapshot(null); if (next) adopt({ ...next, setup: { ...next.setup, step: "brand" } }); else { setSite(null); setTitle(""); setSlug(""); } }}>{context.owners.map(row => <option key={row.name} value={row.name}>{row.label}</option>)}</AppearanceSelect></label>}
     {site && context.sites.length > 1 && <label>{t("staff.settings.website.title")}<AppearanceSelect aria-label={t("staff.settings.website.title")} value={site.site} onChange={event => { const next = context.sites.find(row => row.site === event.target.value); if (next) adopt({ ...next, setup: { ...next.setup, step: "brand" } }); }}>{context.sites.map(row => <option key={row.site} value={row.site}>{row.title}</option>)}</AppearanceSelect></label>}
     {error && <p role="alert" className="rounded border border-red-500 p-3">{error}</p>}
-    {notice && <p role="status" data-qa="website-setup-notice">{notice}</p>}
+    {notice && <p ref={noticeRef} role="status" data-qa="website-setup-notice">{notice}</p>}
     {!site ? <section className="space-y-4" aria-label={t("staff.website.setup.chooseWebsite")}>
+      {gallery && recipe === gallery && <GalleryChoiceNote label={context.catalog.find((row) => row.key === gallery)?.label || gallery} />}
       {context.sites.length > 0 && <div><h2>{t("staff.website.setup.resumeHeading")}</h2>{context.sites.map((row) => <button key={row.site} className={button} onClick={() => adopt(row)}>{fill(t("staff.website.setup.resumeSite"), row.title)}</button>)}</div>}
       {!context.owners.length && <p>{withLink(t("staff.website.setup.completeProfile"), <Link to="/onboarding">{t("staff.website.setup.appointmentSetup")}</Link>)}</p>}
       <label className="block">{t("staff.team.business")}<AppearanceSelect aria-label={t("staff.team.business")} value={owner} onChange={(event) => setOwner(event.target.value)}>{context.owners.map((row) => <option key={row.name} value={row.name}>{row.label}</option>)}</AppearanceSelect></label>
       <div className="grid gap-4 md:grid-cols-2">
-        <label>{t("staff.website.setup.businessFocus")}<AppearanceSelect aria-label={t("staff.website.setup.businessFocus")} value={industry} onChange={(event) => { setIndustry(event.target.value); setRecipe(""); }}><option value="">{t("staff.website.setup.any")}</option>{["wellness", "beauty", "creative", "education", "health", "therapy"].map((value) => <option key={value} value={value}>{t(industryKeys[value])}</option>)}</AppearanceSelect></label>
-        <label>{t("staff.website.setup.feeling")}<AppearanceSelect aria-label={t("staff.website.setup.feeling")} value={mood} onChange={(event) => { setMood(event.target.value); setRecipe(""); }}><option value="">{t("staff.website.setup.any")}</option>{["warm", "bold", "editorial", "friendly", "calm"].map((value) => <option key={value} value={value}>{t(moodKeys[value])}</option>)}</AppearanceSelect></label>
-        <label>{t("staff.website.setup.primaryAudience")}<AppearanceSelect aria-label={t("staff.website.setup.primaryAudience")} value={audience} onChange={(event) => { setAudience(event.target.value); setRecipe(""); }}><option value="">{t("staff.website.setup.any")}</option>{["clients", "learners", "patients"].map((value) => <option key={value} value={value}>{t(audienceKeys[value])}</option>)}</AppearanceSelect></label>
-        <label>{t("staff.website.setup.contentDensity")}<AppearanceSelect aria-label={t("staff.website.setup.contentDensity")} value={density} onChange={(event) => { setDensity(event.target.value); setRecipe(""); }}><option value="">{t("staff.website.setup.any")}</option>{["comfortable", "spacious", "expressive"].map((value) => <option key={value} value={value}>{t(densityKeys[value])}</option>)}</AppearanceSelect></label>
+        <label>{t("staff.website.setup.businessFocus")}<AppearanceSelect aria-label={t("staff.website.setup.businessFocus")} value={industry} onChange={(event) => { setIndustry(event.target.value); rerank(); }}><option value="">{t("staff.website.setup.any")}</option>{["wellness", "beauty", "creative", "education", "health", "therapy"].map((value) => <option key={value} value={value}>{t(industryKeys[value])}</option>)}</AppearanceSelect></label>
+        <label>{t("staff.website.setup.feeling")}<AppearanceSelect aria-label={t("staff.website.setup.feeling")} value={mood} onChange={(event) => { setMood(event.target.value); rerank(); }}><option value="">{t("staff.website.setup.any")}</option>{["warm", "bold", "editorial", "friendly", "calm"].map((value) => <option key={value} value={value}>{t(moodKeys[value])}</option>)}</AppearanceSelect></label>
+        <label>{t("staff.website.setup.primaryAudience")}<AppearanceSelect aria-label={t("staff.website.setup.primaryAudience")} value={audience} onChange={(event) => { setAudience(event.target.value); rerank(); }}><option value="">{t("staff.website.setup.any")}</option>{["clients", "learners", "patients"].map((value) => <option key={value} value={value}>{t(audienceKeys[value])}</option>)}</AppearanceSelect></label>
+        <label>{t("staff.website.setup.contentDensity")}<AppearanceSelect aria-label={t("staff.website.setup.contentDensity")} value={density} onChange={(event) => { setDensity(event.target.value); rerank(); }}><option value="">{t("staff.website.setup.any")}</option>{["comfortable", "spacious", "expressive"].map((value) => <option key={value} value={value}>{t(densityKeys[value])}</option>)}</AppearanceSelect></label>
         <label>{t("staff.website.setup.mainAction")}<AppearanceSelect aria-label={t("staff.website.setup.mainAction")} value={mainAction} onChange={event => setMainAction(event.target.value)}><option value="booking">{t("staff.website.setup.bookAppointment")}</option><option value="contact">{t("staff.website.setup.contactBusiness")}</option></AppearanceSelect></label>
       </div>
-      <fieldset><legend>{t("staff.website.setup.recommendedTemplates")}</legend><div className="grid gap-3 md:grid-cols-3">{context.catalog.map((row) => <label key={row.key} className="rounded-xl border p-4" data-qa={`website-template-${row.key}`}><img src={row.thumbnail} alt="" className="mb-3 h-32 w-full rounded-lg object-cover" /><input type="radio" name="recipe" checked={recipe === row.key} onChange={() => setRecipe(row.key)} /> <strong>{row.label}</strong><p>{row.audience}</p><p>{row.mood}</p><p>{fill(t("staff.website.setup.fontPairingValue"), row.fontPairing)}</p>{row.rankingReasons.length > 0 && <p>{fill(t("staff.website.setup.matches"), row.rankingReasons.join(", "))}</p>}</label>)}</div></fieldset>
+      <fieldset><legend>{t("staff.website.setup.recommendedTemplates")}</legend><div className="grid gap-3 md:grid-cols-3">{choiceFirst(context.catalog, gallery).map((row) => <label key={row.key} className={`rounded-xl border p-4 ${row.key === gallery ? "border-primary ring-2 ring-primary/30" : ""}`} data-qa={`website-template-${row.key}`} data-selected={recipe === row.key || undefined}><img src={row.thumbnail} alt="" className="mb-3 h-32 w-full rounded-lg object-cover" /><input type="radio" name="recipe" checked={recipe === row.key} onChange={() => setRecipe(row.key)} /> <strong>{row.label}</strong>{row.key === gallery && <GalleryBadge />}<p>{row.audience}</p><p>{row.mood}</p><p>{fill(t("staff.website.setup.fontPairingValue"), row.fontPairing)}</p>{row.rankingReasons.length > 0 && <p>{fill(t("staff.website.setup.matches"), row.rankingReasons.join(", "))}</p>}</label>)}</div></fieldset>
       <button className={button} data-qa="website-preview-template" disabled={busy || !owner || !recipe} onClick={() => void run(async () => {
         const selected = context.owners.find((row) => row.name === owner);
         if (selected) setSnapshot(await callMethod<PublishedSnapshot>(api + "preview_website_template", { owner_type: selected.type, owner, recipe_key: recipe, preferences }));
       })}>{t("staff.website.setup.previewTemplate")}</button>
       <label className="block">{t("staff.website.setup.websiteName")}<input className={field} value={title} onChange={(event) => setTitle(event.target.value)} /></label>
-      <label className="block">{t("staff.website.setup.websiteAddress")}<input className={field} value={slug} onChange={(event) => setSlug(event.target.value)} placeholder="your-business" /></label>
-      <button className={button} disabled={busy || !owner || !title || !slug || !recipe} onClick={() => void run(async () => {
+      <label className="block">{t("staff.website.setup.websiteAddress")}<input className={field} data-qa="website-address" value={slug} onChange={(event) => setSlug(event.target.value)} placeholder="your-business" /></label>
+      <button className={button} data-qa="website-create-draft" disabled={busy || !owner || !title || !slug || !recipe} onClick={() => void run(async () => {
         const selected = context.owners.find((row) => row.name === owner);
         if (!selected) return;
         adopt(await callMethod<Website>(api + "start_website_setup", { owner_type: selected.type, owner, title, slug, recipe_key: recipe, preferences }));
+        if (gallery) clearGalleryLink();
       })}>{t("staff.website.setup.createDraft")}</button>
     </section> : <>
+      {switchOffer && <TemplateSwitchPanel catalog={context.catalog} current={site.recipeKey} chosen={switchOffer} busy={busy} onSwitch={switchTemplate} onKeep={() => { setSwitchOffer(""); clearGalleryLink(); }} />}
       <nav aria-label={t("staff.website.setup.stepsLabel")} className="flex flex-wrap gap-3">{steps.map((value) => <button key={value} className={button} data-qa={`website-step-${value}`} aria-current={step === value ? "step" : undefined} disabled={busy} onClick={() => void run(() => save(value))}>{t(stepKeys[value])}</button>)}</nav>
       <p className="website-setup-status">{site.status} · <a href={site.url}>{site.url}</a> · {site.recipeKey}</p>
       {step === "content" && site.editorSchema ? <ContentStep sections={sections} schemas={site.editorSchema} snapshot={snapshot} focus={contentFocus}
@@ -211,7 +265,7 @@ export default function WebsiteSetup() {
       </section>{step === "brand" && <AppearancePreview snapshot={snapshot} fullScreen={fullPreview} onClose={() => setFullPreview(false)} dirty={palette !== (site.brandInputs.paletteChoice || site.brandInputs.palette_choice || "default") || font !== (site.brandInputs.fontChoice || site.brandInputs.font_choice || "default") || accent !== (site.brandInputs.accentColor || site.brandInputs.accent_color || "") || title !== site.title || presentationDensity !== (site.brandInputs.presentationDensity || site.brandInputs.presentation_density || "comfortable")}/>}</div>}
       <div className="appearance-actions flex flex-wrap gap-3"><button className="appearance-primary" data-qa="website-save-preview" disabled={busy} onClick={() => void run(async () => { const saved = await save(step); if (saved) setSnapshot(await callMethod<PublishedSnapshot>(api + "preview_website_setup", { site: saved.site, expected_version: saved.draftVersion })); })}>{t("staff.website.setup.savePreview")}</button><button className="appearance-mobile-preview" data-qa="website-open-preview" disabled={!snapshot} onClick={() => setFullPreview(true)}>{t("staff.website.setup.openPreview")}</button><button className={button} disabled={busy} onClick={() => void run(() => save(step))}>{t("staff.publicExperience.saveDraft")}</button><button className={button} disabled={busy} onClick={() => void run(async () => { await save(step); navigate("/home"); })}>{t("staff.website.setup.saveReturn")}</button><Link className={button} to="/settings/public-experience">{t("staff.website.setup.historyLink")}</Link></div>
     </>}
-    {snapshot && (!site || (step !== "brand" && step !== "content")) && <WebsitePreview snapshot={snapshot} />}
+    {snapshot && (!site || (step !== "brand" && step !== "content")) && <div data-qa="website-setup-preview" data-recipe={snapshot.recipeKey}><WebsitePreview snapshot={snapshot} /></div>}
   </div></StaffShell>;
 }
 

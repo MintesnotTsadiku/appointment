@@ -10,6 +10,7 @@ import { useTranslation } from '@/lib/i18n';
 import QuickStartSignup from './quick-start';
 import ReferralInvite from '@/components/growth-referrals/ReferralInvite';
 import { signupParams } from '@/lib/referral-link';
+import { signInPath, templateFromSearch } from '@/lib/template-choice';
 
 interface PublicSettings {
   signup_enabled: boolean;
@@ -32,11 +33,14 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [status, setStatus] = useState<'active' | 'pending_approval' | null>(null);
-  // `?ref=<code>` and `?source=<channel>` go with the account to its first business.
+  // `?ref=<code>` and `?source=<channel>` go with the account to its first business;
+  // `?template=<key>` from the landing gallery waits with it for the first website setup.
   const [attribution] = useState(() => {
     const { ref, source } = signupParams(window.location.search);
-    return { ...(ref ? { ref } : {}), ...(source ? { source } : {}) };
+    const template = templateFromSearch(window.location.search);
+    return { ...(ref ? { ref } : {}), ...(source ? { source } : {}), ...(template ? { template } : {}) };
   });
+  const loginPath = signInPath(attribution.template || '');
 
   useEffect(() => {
     fetch('/api/method/appointment.scheduler.registration.public_settings', { credentials: 'include' })
@@ -60,7 +64,7 @@ const Signup = () => {
       }
       setStatus((result?.message?.status as typeof status) || 'active');
       if ((result?.message?.status || 'active') === 'active') {
-        setTimeout(() => navigate('/login'), 2000);
+        setTimeout(() => navigate(loginPath), 2000);
       }
     } catch (err) {
       setError((err as { message?: string })?.message || t('auth.signup.failed'));
@@ -87,7 +91,7 @@ const Signup = () => {
           </div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{t('auth.signup.created')}</h2>
           <p className="text-gray-600 dark:text-gray-400 mb-4">{message}</p>
-          <Link to="/login" className="text-sm text-indigo-600 dark:text-indigo-400 font-medium">
+          <Link to={loginPath} className="text-sm text-indigo-600 dark:text-indigo-400 font-medium">
             {t('auth.signup.goSignIn')}
           </Link>
         </motion.div>
@@ -147,7 +151,7 @@ const Signup = () => {
                 {settings ? (settings.unavailable_reason || t('auth.signup.closed')) : t('auth.signup.loading')}
               </p>
               <Button asChild variant="outline">
-                <Link to="/login">{t('auth.signup.backSignIn')}</Link>
+                <Link to={loginPath}>{t('auth.signup.backSignIn')}</Link>
               </Button>
             </div>
           ) : (
@@ -232,7 +236,7 @@ const Signup = () => {
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600 dark:text-gray-400">
               {t('auth.signup.haveAccount')}{' '}
-              <Link to="/login" className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium">
+              <Link to={loginPath} className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium">
                 {t('auth.signup.signIn')}
               </Link>
             </p>
@@ -253,7 +257,7 @@ const Signup = () => {
 const SignupPage = () => {
   const params = new URLSearchParams(window.location.search);
   const prefill = params.get('prefill');
-  if (prefill) return <QuickStartSignup prefill={prefill} source={params.get('source') || 'customer_prompt'} refCode={params.get('ref')} />;
+  if (prefill) return <QuickStartSignup prefill={prefill} source={params.get('source') || 'customer_prompt'} refCode={params.get('ref')} template={templateFromSearch(window.location.search)} />;
   return <Signup />;
 };
 

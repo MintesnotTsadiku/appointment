@@ -1,6 +1,7 @@
 import { useFrappePostCall } from 'frappe-react-sdk';
 import LivePageSuccess, { type LivePage } from '@/components/live-page-success';
 import { useSession } from '@/context/session';
+import { GalleryTemplateNext } from './GalleryTemplateNext';
 
 export interface CreatedBusiness {
   business_name: string;
@@ -47,6 +48,7 @@ export function OnboardingSuccess({ business, qa = 'onboarding' }: { business: C
       qa={qa}
       onPublish={independent || business.organization ? publish : undefined}
       settingsPath={independent ? '/settings/independent-booking' : '/settings/business'}
+      next={<GalleryTemplateNext qa={qa} />}
     />
   );
 }

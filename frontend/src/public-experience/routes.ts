@@ -47,6 +47,8 @@ const RESERVED_FIRST_SEGMENTS = new Set([
   "tools",
   "directory",
   "partners",
+  // Template gallery of the platform landing page.
+  "templates",
   // Amharic versions of server-rendered pages: /am/tools/..., /am/directory/...
   "am",
 ]);

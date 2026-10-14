@@ -1,16 +1,18 @@
 /**
- * ServiceSelector - Phase 1: Discover
- * Beautiful service/provider selection for organizations
- * Premium Design System with glass-morphism and animations
+ * Organization service chooser: the business summary, a sticky bar with category tabs (it shows the
+ * business name once the summary scrolls away), providers as a sideways row that filters the services,
+ * and a grid of service cards. See docs/growth/BOOKING_LAYOUT.md.
  */
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Clock, User, Users, DollarSign, ChevronRight, Building2 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ArrowRight, Clock, LayoutGrid, Users } from "lucide-react";
 import { useTranslation } from "@/lib/i18n";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar";
+import { BookingState } from "@/components/booking-states";
+import { priceLabel } from "@/pages/public-experience/provider-core";
+import { shortProviderName } from "../DateTimeSelector/TimeSlotsPanel";
 import type { Service, Organization, Provider } from "../../types";
+import "../DateTimeSelector/layout.css";
 
 interface ServiceSelectorProps {
   organization: Organization;
@@ -20,558 +22,193 @@ interface ServiceSelectorProps {
   className?: string;
 }
 
-export function ServiceSelector({
-  organization,
-  services,
-  onServiceSelect,
-  loading = false,
-  className,
-}: ServiceSelectorProps) {
-  const [viewMode, setViewMode] = useState<'services' | 'providers'>('services');
-  const { t } = useTranslation();
-  
-  if (loading) {
-    return <ServiceSelectorLoading />;
-  }
+type Category = "all" | Service["type"];
+const CATEGORY_KEYS: Record<Exclude<Category, "all">, string> = {
+  individual: "serviceSelector.individualTitle",
+  organization: "serviceSelector.generalTitle",
+  group: "serviceSelector.groupTitle",
+};
 
-  // Group services by type
-  const individualServices = services.filter((s) => s.type === "individual");
-  const organizationServices = services.filter((s) => s.type === "organization");
-  const groupServices = services.filter((s) => s.type === "group");
-  
-  // Group services by provider for provider view
-  const servicesByProvider = organization.providers.map(provider => ({
-    provider,
-    services: services.filter(s => 
-      s.provider?.id === provider.id || 
-      (s.type === 'organization' && provider.services?.some(ps => ps === s.name))
-    ),
-  }));
+/** Whether a provider offers a service: their own service, or a shared one that lists them. */
+function offers(provider: Provider, service: Service) {
+  return service.provider?.id === provider.id || (service.type === "organization" && Boolean(provider.services?.includes(service.name)));
+}
+
+export function ServiceSelector({ organization, services, onServiceSelect, className }: ServiceSelectorProps) {
+  const { t } = useTranslation();
+  const [category, setCategory] = useState<Category>("all");
+  const [providerId, setProviderId] = useState<string>("all");
+  const hero = useRef<HTMLElement>(null);
+  const [compact, setCompact] = useState(false);
+
+  // The sticky bar shows the business once its summary has scrolled away.
+  useEffect(() => {
+    const element = hero.current;
+    if (!element || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(([entry]) => setCompact(!entry.isIntersecting), { rootMargin: "-80px 0px 0px 0px" });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
+  const categories = useMemo(() => {
+    const present = (["individual", "organization", "group"] as const).filter((type) => services.some((service) => service.type === type));
+    return present.length > 1 ? (["all", ...present] as Category[]) : [];
+  }, [services]);
+  const providers = organization.providers;
+  const provider = providers.find((row) => row.id === providerId);
+  const shown = services.filter((service) => (category === "all" || service.type === category) && (!provider || offers(provider, service)));
+  const soleProvider = providers.length === 1 ? providers[0] : null;
 
   return (
-    <div role="region" aria-label="Available appointment services" className={cn("w-full max-w-6xl mx-auto space-y-8", className)}>
-      {/* Organization Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="rounded-2xl backdrop-blur-xs p-6 md:p-8"
-        style={{ 
-          backgroundColor: 'var(--border-subtle)',
-          border: '1px solid var(--border-default)'
-        }}
-      >
-        <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-          {/* Logo */}
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.2 }}
-            className="shrink-0 relative"
-          >
-            <div 
-              className="absolute inset-0 rounded-xl blur-md opacity-50"
-              style={{ backgroundColor: 'var(--accent-primary)' }}
-            />
-            <Avatar className="relative h-20 w-20 md:h-24 md:w-24 rounded-xl ring-2"
-              style={{ ringColor: 'var(--accent-primary)' }}
-            >
-              <AvatarImage src={organization.logo} alt={organization.name} />
-              <AvatarFallback className="text-2xl bg-gradient-primary text-white rounded-xl">
-                {organization.name.charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-          </motion.div>
-
-          {/* Info */}
-          <div className="flex-1">
-            <h1 className="text-3xl md:text-4xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
-              {organization.name}
-            </h1>
-            {organization.description && (
-              <p className="text-lg mb-3" style={{ color: 'var(--text-secondary)' }}>
-                {organization.description}
-              </p>
-            )}
-            <div className="flex flex-wrap items-center gap-4 text-sm">
-              <div className="flex items-center gap-2" style={{ color: 'var(--text-secondary)' }}>
-                <div className="inline-flex p-1.5 rounded-lg bg-gradient-primary">
-                  <Users className="h-4 w-4 text-white" />
-                </div>
-                <span>
-                  {countLabel(t, "provider", organization.providers.length)}
-                </span>
-              </div>
-              <div className="flex items-center gap-2" style={{ color: 'var(--text-secondary)' }}>
-                <div className="inline-flex p-1.5 rounded-lg bg-gradient-secondary">
-                  <Building2 className="h-4 w-4 text-white" />
-                </div>
-                <span>
-                  {countLabel(t, "service", services.length)}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Services Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-        className="space-y-6"
-      >
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <h2 className="text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
-              {t("serviceSelector.title")}
-            </h2>
-            <p style={{ color: 'var(--text-secondary)' }}>
-              {t("serviceSelector.subtitle")}
-            </p>
-          </div>
-          
-          {/* View Mode Toggle (for organizations with multiple providers) */}
-          {organization.providers.length > 1 && organizationServices.length > 0 && (
-            <div 
-              className="inline-flex rounded-lg p-1 backdrop-blur-xs"
-              style={{ 
-                backgroundColor: 'var(--border-subtle)',
-                border: '1px solid var(--border-default)'
-              }}
-            >
-              <button
-                onClick={() => setViewMode('services')}
-                className={cn(
-                  "px-4 py-2 rounded-md text-sm font-medium transition-all",
-                  viewMode === 'services'
-                    ? "bg-gradient-primary text-white shadow-xs"
-                    : "hover:bg-(--border-default)"
-                )}
-                style={{ 
-                  color: viewMode === 'services' ? 'white' : 'var(--text-secondary)'
-                }}
-              >
-                {t("serviceSelector.byServices")}
-              </button>
-              <button
-                onClick={() => setViewMode('providers')}
-                className={cn(
-                  "px-4 py-2 rounded-md text-sm font-medium transition-all",
-                  viewMode === 'providers'
-                    ? "bg-gradient-primary text-white shadow-xs"
-                    : "hover:bg-(--border-default)"
-                )}
-                style={{ 
-                  color: viewMode === 'providers' ? 'white' : 'var(--text-secondary)'
-                }}
-              >
-                {t("serviceSelector.byProviders")}
-              </button>
-            </div>
-          )}
-        </div>
-
-        {/* Individual Services */}
-        {individualServices.length > 0 && (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
-              <div className="inline-flex p-1.5 rounded-lg bg-gradient-primary">
-                <User className="h-5 w-5 text-white" />
-              </div>
-              {t("serviceSelector.individualTitle")}
-            </h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {individualServices.map((service, index) => (
-                <motion.div
-                  key={service.slug || service.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-                >
-                  <ServiceCard
-                  service={service}
-                  onSelect={onServiceSelect}
-                />
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Organization Services - Services View */}
-        {organizationServices.length > 0 && viewMode === 'services' && (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
-              <div className="inline-flex p-1.5 rounded-lg bg-gradient-secondary">
-                <Building2 className="h-5 w-5 text-white" />
-              </div>
-              {t("serviceSelector.generalTitle")}
-            </h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {organizationServices.map((service, index) => (
-                <motion.div
-                  key={service.slug || service.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-                >
-                  <ServiceCard
-                  service={service}
-                  onSelect={onServiceSelect}
-                  availableProviders={organization.providers.filter(p => 
-                    p.services?.some(ps => ps === service.name)
-                  )}
-                />
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        )}
-        
-        {/* Organization Services - Provider View */}
-        {organizationServices.length > 0 && viewMode === 'providers' && (
-          <div className="space-y-6">
-            <h3 className="text-lg font-semibold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
-              <div className="inline-flex p-1.5 rounded-lg bg-gradient-primary">
-                <Users className="h-5 w-5 text-white" />
-              </div>
-              {t("serviceSelector.byProviderTitle")}
-            </h3>
-            {servicesByProvider.map(({ provider, services: providerServices }, providerIndex) => {
-              if (providerServices.length === 0) return null;
-              return (
-                <motion.div
-                  key={`provider-${provider.id}`}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.3 + providerIndex * 0.1 }}
-                  className="space-y-4"
-                >
-                  {/* Provider Header */}
-                  <div 
-                    className="flex items-center gap-3 p-4 rounded-xl backdrop-blur-xs"
-                    style={{ 
-                      backgroundColor: 'var(--border-subtle)',
-                      border: '1px solid var(--border-default)'
-                    }}
-                  >
-                    <Avatar className="h-12 w-12">
-                      <AvatarImage src={provider.avatar} alt={provider.name} />
-                      <AvatarFallback className="bg-gradient-primary text-white">
-                        {provider.name.charAt(0).toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <h4 className="font-semibold" style={{ color: 'var(--text-primary)' }}>
-                        {provider.name}
-                      </h4>
-                      {provider.designation && (
-                        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                          {provider.designation}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  
-                  {/* Services for this provider */}
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {providerServices.map((service, serviceIndex) => (
-                      <motion.div
-                        key={service.slug || service.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.4 + providerIndex * 0.1 + serviceIndex * 0.05 }}
-                      >
-                        <ServiceCard
-                        service={service}
-                        onSelect={onServiceSelect}
-                        showProviderName={false}
-                      />
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-        )}
-
-        {/* Group Services */}
-        {groupServices.length > 0 && (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
-              <div className="inline-flex p-1.5 rounded-lg bg-gradient-success">
-                <Users className="h-5 w-5 text-white" />
-              </div>
-              {t("serviceSelector.groupTitle")}
-            </h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {groupServices.map((service, index) => (
-                <motion.div
-                  key={service.slug || service.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-                >
-                  <ServiceCard
-                  service={service}
-                  onSelect={onServiceSelect}
-                />
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        )}
-      </motion.div>
-
-      {/* Providers Section */}
-      {organization.providers.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="rounded-xl p-6 backdrop-blur-xs"
-          style={{ 
-            backgroundColor: 'var(--border-subtle)',
-            border: '1px solid var(--border-default)'
-          }}
-        >
-          <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>
-            {t("serviceSelector.ourProviders")}
-          </h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {organization.providers.map((provider, index) => (
-              <motion.div
-                key={provider.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
-              >
-                <ProviderCard provider={provider} />
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-      )}
-    </div>
-  );
-}
-
-// Service Card Component
-interface ServiceCardProps {
-  service: Service;
-  onSelect: (service: Service) => void;
-  availableProviders?: Provider[];
-  showProviderName?: boolean;
-}
-
-function ServiceCard({ service, onSelect, availableProviders = [], showProviderName = true }: ServiceCardProps) {
-  const { t } = useTranslation();
-  return (
-    <motion.button
-      data-qa="booking-service"
-      data-qa-service-slug={service.slug}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      onClick={() => onSelect(service)}
-      className={cn(
-        "group relative rounded-xl p-6 backdrop-blur-xs transition-all duration-300",
-        "focus:outline-hidden focus:ring-2 focus:ring-offset-2",
-        "text-left w-full"
-      )}
-      style={{ 
-        backgroundColor: 'var(--border-subtle)',
-        border: '1px solid var(--border-default)',
-      }}
-    >
-      {/* Gradient glow on hover - subtle and transparent */}
-      <div 
-        className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-300 rounded-xl blur-2xl"
-        style={{
-          background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))'
-        }}
-      />
-      <div className="relative">
-      {/* Service Type Badge */}
-      {service.type === "individual" && service.provider && (
-          <div className="absolute top-0 right-0">
-            <div className="flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium bg-gradient-primary text-white">
-            <User className="h-3 w-3" />
-            <span>{t("serviceSelector.individual")}</span>
-          </div>
-        </div>
-      )}
-
-      {/* Service Name */}
-        <h4 className="text-xl font-semibold mb-2 pr-16" style={{ color: 'var(--text-primary)' }}>
-        {service.name}
-      </h4>
-
-      {/* Provider Name (for individual services) */}
-      {service.provider && showProviderName && (
-          <p className="text-sm mb-3 flex items-center gap-2" style={{ color: 'var(--text-secondary)' }}>
-            <User className="h-3 w-3" style={{ color: 'var(--accent-primary)' }} />
-          {service.provider.name}
-        </p>
-      )}
-      
-      {/* Available Providers (for organization services) */}
-      {availableProviders.length > 0 && (
-        <div className="mb-3">
-            <p className="text-xs mb-2" style={{ color: 'var(--text-muted)' }}>{t("serviceSelector.availableProviders")}</p>
-          <div className="flex -space-x-2">
-            {availableProviders.slice(0, 3).map((provider) => (
-                <Avatar 
-                  key={`avatar-${provider.id}`} 
-                  className="h-7 w-7 border-2" 
-                  style={{ borderColor: 'var(--bg-primary)' }}
-                  title={provider.name}
-                >
-                <AvatarImage src={provider.avatar} alt={provider.name} />
-                  <AvatarFallback className="text-xs bg-gradient-primary text-white">
-                  {provider.name.charAt(0).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-            ))}
-            {availableProviders.length > 3 && (
-                <div 
-                  className="h-7 w-7 rounded-full border-2 flex items-center justify-center"
-                  style={{ 
-                    backgroundColor: 'var(--border-subtle)',
-                    borderColor: 'var(--bg-primary)'
-                  }}
-                >
-                  <span className="text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>
-                  +{availableProviders.length - 3}
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Description */}
-      {service.description && (
-          <p className="text-sm mb-4 line-clamp-2" style={{ color: 'var(--text-secondary)' }}>
-          {service.description}
-        </p>
-      )}
-
-      {/* Service Details */}
-        <div className="flex flex-wrap items-center gap-3 text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
-        <div className="flex items-center gap-1">
-            <Clock className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
-          <span>{t("bookingPicker.minutes").replace("{0}", String(service.duration))}</span>
-        </div>
-        {service.price && service.price > 0 && (
-          <div className="flex items-center gap-1">
-              <DollarSign className="h-4 w-4" style={{ color: 'var(--accent-success)' }} />
-            <span>
-              {service.price} {service.currency || "ETB"}
-            </span>
-          </div>
-        )}
-        {service.providerCount && service.providerCount > 1 && (
-          <div className="flex items-center gap-1">
-              <Users className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
-            <span>{countLabel(t, "provider", service.providerCount)}</span>
-          </div>
-        )}
-      </div>
-
-      {/* CTA */}
-        <div 
-          className="flex items-center justify-between pt-4"
-          style={{ borderTop: '1px solid var(--border-default)' }}
-        >
-          <span className="text-sm font-medium" style={{ color: 'var(--booking-action-text, var(--accent-primary))' }}>
-          {t("serviceSelector.book")}
-        </span>
-          <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" style={{ color: 'var(--accent-primary)' }} />
-        </div>
-      </div>
-    </motion.button>
-  );
-}
-
-// Provider Card Component (Info Only)
-interface ProviderCardProps {
-  provider: Provider;
-}
-
-function ProviderCard({ provider }: ProviderCardProps) {
-  const { t } = useTranslation();
-  return (
-    <motion.div
-      whileHover={{ scale: 1.02 }}
-      transition={{ duration: 0.2 }}
-      className="rounded-lg p-4 backdrop-blur-xs"
-      style={{ 
-        backgroundColor: 'var(--bg-elevated)',
-        border: '1px solid var(--border-default)'
-      }}
-    >
-      <div className="flex items-start gap-3">
-        <Avatar className="h-12 w-12">
-          <AvatarImage src={provider.avatar} alt={provider.name} />
-          <AvatarFallback className="bg-gradient-primary text-white">
-            {provider.name.charAt(0).toUpperCase()}
+    <div role="region" aria-label={t("serviceSelector.title")} className={`mx-auto w-full max-w-6xl space-y-5 ${className ?? ""}`} data-qa="booking-services">
+      <header ref={hero} className="bk-card flex flex-col gap-5 p-5 sm:flex-row sm:items-center sm:p-7" data-qa="booking-business">
+        <Avatar className="h-16 w-16 shrink-0 rounded-2xl sm:h-20 sm:w-20">
+          <AvatarImage src={organization.logo} alt="" className="object-cover" />
+          <AvatarFallback className="rounded-2xl text-2xl font-semibold" style={{ background: "var(--accent-primary-light)", color: "var(--accent-primary)" }}>
+            {organization.name.charAt(0).toUpperCase()}
           </AvatarFallback>
         </Avatar>
-        <div className="flex-1 min-w-0">
-          <h4 className="font-semibold truncate" style={{ color: 'var(--text-primary)' }}>
-            {provider.name}
-          </h4>
-          {provider.designation && (
-            <p className="text-sm truncate" style={{ color: 'var(--text-secondary)' }}>
-              {provider.designation}
-            </p>
+        <div className="min-w-0 flex-1 space-y-2">
+          <h1 className="text-2xl font-semibold leading-tight text-balance sm:text-3xl" style={{ color: "var(--text-primary)", fontFamily: "var(--booking-font-display)" }}>
+            {organization.name}
+          </h1>
+          {organization.description && (
+            <p className="line-clamp-3 max-w-3xl leading-relaxed sm:line-clamp-2" style={{ color: "var(--text-secondary)" }}>{organization.description}</p>
           )}
-          {provider.services && provider.services.length > 0 && (
-            <p className="text-xs mt-1 truncate" style={{ color: 'var(--text-muted)' }}>
-              {countLabel(t, "service", provider.services.length)}
-            </p>
-          )}
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
-// Loading Skeleton
-function countLabel(t: (key: string) => string, noun: "provider" | "service", count: number) {
-  return count === 1 ? t(`serviceSelector.${noun}One`) : t(`serviceSelector.${noun}Many`).replace("{0}", String(count));
-}
-
-function ServiceSelectorLoading() {
-  return (
-    <div className="w-full max-w-6xl mx-auto space-y-8">
-      {/* Header Skeleton */}
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 md:p-8 border border-gray-200 dark:border-gray-700">
-        <div className="flex items-start gap-6">
-          <div className="h-24 w-24 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse" />
-          <div className="flex-1 space-y-3">
-            <div className="h-8 w-64 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-            <div className="h-4 w-96 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-            <div className="h-4 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-1 text-sm" style={{ color: "var(--text-secondary)" }}>
+            <span className="inline-flex items-center gap-1.5"><LayoutGrid className="h-4 w-4" style={{ color: "var(--accent-primary)" }} aria-hidden="true" />{countLabel(t, "service", services.length)}</span>
+            {soleProvider ? (
+              <span className="inline-flex items-center gap-2" data-qa="booking-sole-provider">
+                <Avatar className="h-6 w-6"><AvatarImage src={soleProvider.avatar} alt="" /><AvatarFallback className="text-[0.6rem]">{soleProvider.name.charAt(0)}</AvatarFallback></Avatar>
+                {t("bookingPicker.with").replace("{0}", shortProviderName(soleProvider.name))}
+              </span>
+            ) : providers.length > 1 && (
+              <span className="inline-flex items-center gap-1.5"><Users className="h-4 w-4" style={{ color: "var(--accent-primary)" }} aria-hidden="true" />{countLabel(t, "provider", providers.length)}</span>
+            )}
           </div>
         </div>
+      </header>
+
+      {/* Sticky under the page header: the business once the summary scrolls away, and the categories. */}
+      <div className="sticky z-20 flex min-h-14 items-center gap-3 rounded-b-2xl px-1 py-2 transition-[background-color,padding] duration-200 motion-reduce:transition-none data-[compact=true]:px-4" data-qa="booking-services-bar" data-compact={compact ? "true" : "false"}
+        style={{ top: "var(--bk-top, 0px)", backgroundColor: compact ? "color-mix(in srgb, var(--bg-elevated) 94%, transparent)" : "transparent", backdropFilter: compact ? "blur(12px)" : undefined, borderStyle: "solid", borderColor: compact ? "var(--border-default)" : "transparent", borderWidth: "0 1px 1px" }}>
+        {compact && (
+          <span className="flex min-w-0 shrink items-center gap-2 max-sm:hidden" aria-hidden="true">
+            <Avatar className="h-7 w-7 rounded-lg"><AvatarImage src={organization.logo} alt="" /><AvatarFallback className="rounded-lg text-xs">{organization.name.charAt(0)}</AvatarFallback></Avatar>
+            <span className="truncate text-sm font-semibold" style={{ color: "var(--text-primary)" }}>{organization.name}</span>
+          </span>
+        )}
+        <div className="min-w-0 flex-1">
+          {categories.length > 0 ? (
+            <div className="bk-days !mx-0 !px-0" role="group" aria-label={t("bookingLayout.categories")}>
+              {categories.map((key) => (
+                <button key={key} type="button" className="bk-chip" aria-pressed={category === key} onClick={() => setCategory(key)} data-qa="booking-category">
+                  {key === "all" ? t("bookingLayout.allServices") : t(CATEGORY_KEYS[key])}
+                  <span className="tabular-nums opacity-70">{key === "all" ? services.length : services.filter((service) => service.type === key).length}</span>
+                </button>
+              ))}
+            </div>
+          ) : (
+            <h2 className="truncate text-lg font-semibold" style={{ color: "var(--text-primary)" }}>{t("serviceSelector.title")}</h2>
+          )}
+        </div>
+        <span className="shrink-0 text-sm tabular-nums" style={{ color: "var(--text-muted)" }} aria-live="polite">{countLabel(t, "service", shown.length)}</span>
       </div>
 
-      {/* Services Skeleton */}
-      <div className="space-y-6">
-        <div className="h-6 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div
-              key={i}
-              className="h-64 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse"
-              style={{ animationDelay: `${i * 100}ms` }}
-            />
-          ))}
+      {providers.length > 1 && (
+        <section aria-labelledby="bk-providers-title" className="space-y-2.5" data-qa="booking-providers">
+          <h2 id="bk-providers-title" className="bk-eyebrow">{t("serviceSelector.ourProviders")}</h2>
+          <div className="bk-days" role="group" aria-labelledby="bk-providers-title">
+            <button type="button" className="bk-chip !min-h-14 !rounded-2xl !px-4" aria-pressed={providerId === "all"} onClick={() => setProviderId("all")}>
+              <Users className="h-4 w-4" aria-hidden="true" />{t("bookingPicker.allProviders")}
+            </button>
+            {providers.map((row) => (
+              <button key={row.id} type="button" className="bk-chip !min-h-14 !rounded-2xl !pl-2 !pr-4" aria-pressed={providerId === row.id}
+                onClick={() => setProviderId(providerId === row.id ? "all" : row.id)} data-qa="booking-provider" title={row.name}>
+                <Avatar className="h-10 w-10"><AvatarImage src={row.avatar} alt="" className="object-cover" /><AvatarFallback>{row.name.charAt(0).toUpperCase()}</AvatarFallback></Avatar>
+                <span className="flex flex-col items-start leading-tight">
+                  <span>{shortProviderName(row.name)}</span>
+                  <span className="text-xs font-normal opacity-75">{countLabel(t, "service", services.filter((service) => offers(row, service)).length)}</span>
+                </span>
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {shown.length === 0 ? (
+        <div className="bk-card px-5">
+          <BookingState kind="empty" compact headingLevel={2} qa="booking-services-empty"
+            title={services.length ? t("bookingLayout.noMatchTitle") : t("bookingLayout.noServicesTitle")}
+            description={services.length ? t("bookingLayout.noMatchBody") : t("bookingLayout.noServicesBody")}
+            actions={services.length ? [{ label: t("bookingStates.seeServices"), onClick: () => { setCategory("all"); setProviderId("all"); } }] : []} />
         </div>
-      </div>
+      ) : (
+        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {shown.map((service) => (
+            <li key={service.slug || service.id} className="flex">
+              <ServiceCard service={service} onSelect={onServiceSelect}
+                providers={service.type === "organization" ? providers.filter((row) => offers(row, service)) : []} showProvider={!soleProvider} />
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
+}
+
+function ServiceCard({ service, onSelect, providers, showProvider }: { service: Service; onSelect: (service: Service) => void; providers: Provider[]; showProvider: boolean }) {
+  const { t, language } = useTranslation();
+  return (
+    <button
+      type="button"
+      data-qa="booking-service"
+      data-qa-service-slug={service.slug}
+      onClick={() => onSelect(service)}
+      className="bk-card group flex w-full flex-col gap-3 p-5 text-start transition-[border-color,transform] duration-150 hover:-translate-y-0.5 hover:border-(--accent-primary) focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-(--accent-primary) motion-reduce:transform-none"
+    >
+      <div className="flex w-full items-start justify-between gap-3">
+        <h3 className="text-lg font-semibold leading-snug" style={{ color: "var(--text-primary)" }}>{service.name}</h3>
+        {Boolean(service.price && service.price > 0) && (
+          <span className="shrink-0 rounded-full px-2.5 py-1 text-sm font-semibold tabular-nums" data-qa="booking-service-price"
+            style={{ backgroundColor: "var(--accent-primary-light)", color: "var(--booking-action-text, var(--accent-primary))" }}>
+            {priceLabel(Number(service.price), service.currency || "ETB", language, "")}
+          </span>
+        )}
+      </div>
+      {showProvider && service.provider?.name && (
+        <span className="flex items-center gap-2 text-sm" style={{ color: "var(--text-secondary)" }}>
+          <Avatar className="h-6 w-6"><AvatarImage src={service.provider.avatar} alt="" /><AvatarFallback className="text-[0.6rem]">{service.provider.name.charAt(0)}</AvatarFallback></Avatar>
+          {shortProviderName(service.provider.name)}
+        </span>
+      )}
+      {providers.length > 1 && (
+        <span className="flex items-center gap-2 text-sm" style={{ color: "var(--text-secondary)" }}>
+          <span className="flex -space-x-2">
+            {providers.slice(0, 3).map((row) => (
+              <Avatar key={row.id} className="h-6 w-6 border-2" style={{ borderColor: "var(--bg-elevated)" }}>
+                <AvatarImage src={row.avatar} alt="" /><AvatarFallback className="text-[0.6rem]">{row.name.charAt(0)}</AvatarFallback>
+              </Avatar>
+            ))}
+          </span>
+          {countLabel(t, "provider", providers.length)}
+        </span>
+      )}
+      {service.description && <p className="line-clamp-2 text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>{service.description}</p>}
+      <span className="mt-auto flex w-full items-center justify-between gap-3 pt-3 text-sm" style={{ borderTop: "1px solid var(--border-subtle)" }}>
+        <span className="inline-flex items-center gap-1.5" style={{ color: "var(--text-secondary)" }}>
+          <Clock className="h-4 w-4" style={{ color: "var(--accent-primary)" }} aria-hidden="true" />
+          {t("bookingPicker.minutes").replace("{0}", String(service.duration))}
+        </span>
+        <span className="inline-flex items-center gap-1.5 font-semibold" style={{ color: "var(--booking-action-text, var(--accent-primary))" }}>
+          {t("serviceSelector.book")}
+          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+        </span>
+      </span>
+    </button>
+  );
+}
+
+function countLabel(t: (key: string) => string, noun: "provider" | "service", count: number) {
+  return count === 1 ? t(`serviceSelector.${noun}One`) : t(`serviceSelector.${noun}Many`).replace("{0}", String(count));
 }

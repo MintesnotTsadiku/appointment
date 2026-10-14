@@ -33,6 +33,9 @@ function systemPrefersDark(): boolean {
 }
 
 function storedPreference(): ThemePreference {
+  // `?display=dark|light` opens one view in a mode without saving it (the landing template preview).
+  const requested = typeof window === "undefined" ? null : new URLSearchParams(window.location.search).get("display");
+  if (requested === "light" || requested === "dark") return requested;
   if (typeof localStorage === "undefined") return "system";
   const value = localStorage.getItem(PREFERENCE_KEY);
   return value === "light" || value === "dark" ? value : "system";

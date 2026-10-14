@@ -20,13 +20,15 @@ interface Props {
   /** Where the owner reviews or finishes the setup. */
   settingsPath: string;
   dashboardPath?: string;
+  /** A next step that comes first, for example the website template chosen in the landing gallery. */
+  next?: ReactNode;
 }
 
 /**
  * The end of business setup: the live link with copy, open and Telegram share, then next steps.
  * Used by organization onboarding, solo setup and quick start. A draft shows an honest state with Publish.
  */
-export default function LivePageSuccess({ page: initial, qa, onPublish, settingsPath, dashboardPath = '/home' }: Props) {
+export default function LivePageSuccess({ page: initial, qa, onPublish, settingsPath, dashboardPath = '/home', next }: Props) {
   const { t } = useTranslation();
   const [page, setPage] = useState(initial);
   const [publishing, setPublishing] = useState(false);
@@ -84,6 +86,7 @@ export default function LivePageSuccess({ page: initial, qa, onPublish, settings
           </Button>
         )}
       </div>
+      {next}
       {state === 'published' && <NextSteps qa={qa} />}
       <div className="mt-6 border-t pt-4">
         <Button asChild variant="ghost" className="-ml-3 min-h-11 text-muted-foreground hover:text-foreground">

@@ -1,31 +1,28 @@
 /**
- * Organization Appointment V2 - Premium Design System
- * Uses new redesigned UI with exact same API integration as old version
- * Compatible with existing AppContext and URL structure
- * 
- * Design: Premium "100 Million Startup" aesthetic with:
- * - Dark mode foundation with ambient background glows
- * - Glass-morphism effects with backdrop-blur
- * - Smooth Framer Motion animations
- * - Gradient icons and cards
- * - Dynamic CSS variables from theme system
+ * Organization booking: choose a service, then a time, then enter details.
+ * `/schedule/org/<slug>` lists the services; `/schedule/org/<slug>/<service>?type=<offering>` opens the time picker.
+ * A published website lends the pages its template's colours and type (useBookingBrand).
+ * Layout and states: docs/growth/BOOKING_LAYOUT.md.
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useFrappeGetCall } from "frappe-react-sdk";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAppContext } from "@/context/app";
 import { getLocalTimezone } from "@/lib/utils";
-import { ArrowLeft, Info, Moon, Sun } from "lucide-react";
+import { ArrowLeft, Clock3, LayoutGrid, MapPin, RotateCw, User, Video } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
 import { useTranslation } from "@/lib/i18n";
 import MetaTags from "@/components/meta-tags";
 import PoweredBy from "@/components/powered-by";
+import LanguageToggle from "@/components/language-toggle";
+import { BookingState, BookingStatePage, ServicesSkeleton, TimePickerSkeleton, previewState, type BookingStateAction } from "@/components/booking-states";
+import { useOnlineLabel } from "@/components/online-session/JoinSession";
 
-// Import new V2 components
 import { ServiceSelector } from "@/pages/booking-v2/components/ServiceSelector";
-import { DateTimeSelector } from "@/pages/booking-v2/components/DateTimeSelector";
+import { BookingSummaryCard, DateTimeSelector, type SummaryFact } from "@/pages/booking-v2/components/DateTimeSelector";
+import { shortProviderName } from "@/pages/booking-v2/components/DateTimeSelector/TimeSlotsPanel";
 import { BookingForm } from "@/pages/booking-v2/components/BookingForm";
 import { ConfirmationModal } from "@/pages/booking-v2/components/ConfirmationModal";
 import CustomerInviteBanner from "@/components/growth-referrals/CustomerInviteBanner";
@@ -34,6 +31,10 @@ import { QuantityPicker } from "@/pages/booking-v2/components/QuantityPicker";
 import { useTimeSlots } from "@/pages/booking-v2/hooks/useTimeSlots";
 import { useBookingSubmit } from "@/pages/booking-v2/hooks/useBookingSubmit";
 import type { Organization, Service, TimeSlot as V2TimeSlot, BookingFormData, BookingResponse } from "@/pages/booking-v2/types";
+import { useBookingBrand } from "@/public-experience/bookingTheme";
+import { brandLogo } from "@/public-experience/templates/content";
+import { BookingHeaderBar, ThemeSwitch } from "./header";
+import "@/public-experience/platform.css";
 
 interface BookingApiProvider {
   id?: string;
@@ -53,19 +54,17 @@ interface BookingApiService {
   provider_id?: string;
   provider_name?: string;
 }
-import { useBookingBrand } from "@/public-experience/bookingTheme";
-import { brandLogo } from "@/public-experience/templates/content";
-import "@/public-experience/platform.css";
 
-// Import old components for fallback
-import { ProfileSkeleton } from "@/pages/appointment/components/skeletons";
+type Phase = "service" | "datetime" | "form" | "success";
+
+/** Height of the sticky booking header; the time picker's sticky columns start under it. */
+const HEADER_HEIGHT = "4.5rem";
 
 const OrganizationAppointmentV2 = () => {
   const { orgSlug, serviceSlug } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  // Use existing AppContext (important for compatibility!)
   const {
     setMeetingId,
     setUserInfo,
@@ -80,55 +79,53 @@ const OrganizationAppointmentV2 = () => {
     setMeetingDurationCards,
   } = useAppContext();
 
-  // Local state
   const [friendlyError, setFriendlyError] = useState<string>("");
-  const [currentPhase, setCurrentPhase] = useState<'service' | 'datetime' | 'form' | 'success'>('service');
+  const [currentPhase, setCurrentPhase] = useState<Phase>("service");
   const [displayMonth, setDisplayMonth] = useState(new Date());
-  const [timeFormat, setTimeFormat] = useState<'12h' | '24h' | 'ethiopian'>('12h');
+  const [timeFormat, setTimeFormat] = useState<"12h" | "24h" | "ethiopian">("12h");
   const [bookingResponse, setBookingResponse] = useState<(BookingResponse & { userEmail?: string }) | null>(null);
-  const { theme, setTheme } = useTheme();
+  // The slot as the picker shows it, with its provider, so it stays highlighted and the bar can name the provider.
+  const [chosenSlot, setChosenSlot] = useState<V2TimeSlot | null>(null);
+  const { theme } = useTheme();
   const { t } = useTranslation();
-  // Party size, for services that let customers choose how many.
+  const onlineLabel = useOnlineLabel();
   const [quantity, setQuantity] = useState(1);
   useEffect(() => setQuantity(1), [serviceSlug]);
   const bookingMode = theme === "dark" || (theme === "system" && typeof document !== "undefined" && document.documentElement.classList.contains("dark"))
     ? "dark"
     : "light";
   const bookingBrand = useBookingBrand(orgSlug, bookingMode);
+  const forced = previewState();
 
-  // Theme toggle handler
-  const toggleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light");
-  };
-  
-  // Get type from URL (this is how old implementation works)
   const type = searchParams.get("type");
 
-  // EXACT SAME API calls as old implementation
-  const apiEndpoint = orgSlug && serviceSlug 
+  const apiEndpoint = orgSlug && serviceSlug
     ? "appointment.api.personal_meet.get_organization_meeting_windows"
-    : orgSlug 
+    : orgSlug
     ? "appointment.api.personal_meet.get_organization_services"
     : null;
-    
+
   const apiParams = orgSlug && serviceSlug
     ? { org_slug: orgSlug, service_slug: serviceSlug }
     : orgSlug
     ? { org_slug: orgSlug }
     : undefined;
-    
-  const { data, isLoading, error } = useFrappeGetCall(
-    apiEndpoint,
+
+  const { data, isLoading, error, mutate } = useFrappeGetCall(
+    apiEndpoint ?? "",
     apiParams,
     undefined,
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
-      errorRetryCount: 3,
+      // An unknown or unpublished page answers 403 or 404 at once; only server and network errors retry.
+      onErrorRetry: (failure: { httpStatus?: number }, _key: string, _config: unknown, revalidate: (options: { retryCount: number }) => void, { retryCount }: { retryCount: number }) => {
+        if ((failure?.httpStatus ?? 500) < 500 || retryCount >= 2) return;
+        setTimeout(() => revalidate({ retryCount }), 1500);
+      },
     }
   );
 
-  // Initialize timezone (same as old implementation)
   useEffect(() => {
     if (orgSlug && serviceSlug) {
       setMeetingId(`${orgSlug}/${serviceSlug}`);
@@ -136,24 +133,21 @@ const OrganizationAppointmentV2 = () => {
     setTimeZone(getLocalTimezone());
   }, [orgSlug, serviceSlug, setMeetingId, setTimeZone]);
 
-  // Process API response (same as old implementation)
   useEffect(() => {
     if (data) {
-      // Check if response contains an error
       if (data?.message?.error) {
-        const errorMsg = typeof data.message.error === 'string' 
-          ? data.message.error 
+        const errorMsg = typeof data.message.error === "string"
+          ? data.message.error
           : JSON.stringify(data.message.error);
         setFriendlyError(errorMsg);
         return;
       }
-      
-      // Only process if we have valid data
+
       if (!data?.message?.full_name && !data?.message?.company) {
         setFriendlyError("Invalid response from server");
         return;
       }
-      
+
       setUserInfo({
         name: data?.message?.full_name,
         designation: data?.message?.position,
@@ -163,56 +157,38 @@ const OrganizationAppointmentV2 = () => {
         meetingProvider: data?.message?.meeting_provider,
         banner_image: data?.message?.banner_image,
       });
-      
+
       if (data?.message?.durations) {
         setMeetingDurationCards(data?.message?.durations);
-        
-        // If we have a serviceSlug and no type, auto-select the first duration
+
+        // A service link without an offering opens its first offering.
         if (serviceSlug && data?.message?.durations?.length > 0 && !type) {
-          const firstDurationId = data.message.durations[0].id;
-          // Update URL with type parameter
-          setSearchParams({ type: firstDurationId });
+          setSearchParams({ type: data.message.durations[0].id });
         }
-        
-        // If we have a serviceSlug and type, move to datetime phase
+
         if (serviceSlug && type && data?.message?.durations?.length > 0) {
-          setCurrentPhase('datetime');
+          setCurrentPhase((phase) => (phase === "service" ? "datetime" : phase));
         }
       }
-      
+
       setFriendlyError("");
     }
   }, [data, serviceSlug, type, setMeetingDurationCards, setSearchParams, setUserInfo]);
 
   useEffect(() => {
     if (error) {
-      // Handle error object properly - extract string message
-      let errorMessage = "Failed to load booking page";
-      if (typeof error === 'string') {
-        errorMessage = error;
-      } else if (error?.message) {
-        errorMessage = String(error.message);
-      } else if (error?.exception) {
-        errorMessage = String(error.exception);
-      } else if (typeof error === 'object' && error !== null) {
-        // If error is an object, try to extract a message or stringify safely
-        if ('error' in error) {
-          errorMessage = String(error.error);
-        } else {
-          errorMessage = "An error occurred. Please try again.";
-        }
-      }
-      setFriendlyError(errorMessage);
+      let errorMessage = "";
+      if (typeof error === "string") errorMessage = error;
+      else if (error?.message) errorMessage = String(error.message);
+      else if (error?.exception) errorMessage = String(error.exception);
+      setFriendlyError(errorMessage || "error");
     }
   }, [error]);
 
-  // Fetch time slots using new hook
-  const shouldFetchSlots = !!(
-    serviceSlug &&
-    type &&
-    selectedDate &&
-    meetingDurationCards.length > 0
-  );
+  // A new service or day starts without a chosen time.
+  useEffect(() => { setChosenSlot(null); }, [serviceSlug, type]);
+
+  const shouldFetchSlots = !!(serviceSlug && type && selectedDate && meetingDurationCards.length > 0);
 
   const {
     slots,
@@ -221,8 +197,6 @@ const OrganizationAppointmentV2 = () => {
     validEndDate,
     isLoading: slotsLoading,
     refetch: refetchSlots,
-    rawApiData,
-    bookingConfig,
   } = useTimeSlots({
     durationId: type || meetingDurationCards[0]?.id || "",
     date: shouldFetchSlots ? selectedDate : null,
@@ -233,7 +207,6 @@ const OrganizationAppointmentV2 = () => {
     quantity,
   });
 
-  // Booking submission
   const { submitBooking, loading: bookingLoading } = useBookingSubmit();
 
   // Payment at booking: amounts, refund terms and methods for the chosen slot.
@@ -251,7 +224,6 @@ const OrganizationAppointmentV2 = () => {
   }, [quote]);
   const paymentBlocked = Boolean(quote?.required && !quote.methods.length);
 
-  // Transform data for V2 components
   const organization: Organization | null = data && !data?.message?.error ? {
     id: orgSlug || "",
     slug: orgSlug || "",
@@ -267,7 +239,7 @@ const OrganizationAppointmentV2 = () => {
       services: p.services,
     })) || [],
     services: data.message.services?.map((s: BookingApiService) => ({
-      id: s.service_id || s.slug || s.name, // Use slug or name as fallback
+      id: s.service_id || s.slug || s.name,
       slug: s.slug,
       name: s.name,
       description: s.description,
@@ -293,10 +265,9 @@ const OrganizationAppointmentV2 = () => {
     providerCount: data.message.provider_count,
     // Who or what is booked: the provider, or the room or machine of a service booked without staff.
     provider: data.message.providers?.[0] ? { id: data.message.providers[0].id, name: data.message.providers[0].name, avatar: data.message.providers[0].avatar } : undefined,
-    location: data.message.location, // Add location information
+    location: data.message.location,
   } : null;
 
-  // Convert available days to numbers
   const availableDaysNumbers = availableDays?.map((day: string) => {
     const dayMap: { [key: string]: number } = {
       Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3,
@@ -305,9 +276,7 @@ const OrganizationAppointmentV2 = () => {
     return dayMap[day];
   }).filter((d: number | undefined) => d !== undefined) || [];
 
-  // Handlers
   const handleServiceSelect = (service: Service) => {
-    // Navigate with service slug (same as old implementation)
     navigate(`/schedule/org/${orgSlug}/${service.slug}`);
   };
 
@@ -317,7 +286,7 @@ const OrganizationAppointmentV2 = () => {
       setCurrentPhase("datetime");
       return;
     }
-    if (currentPhase === "datetime" && organization?.services.length > 1) {
+    if (currentPhase === "datetime") {
       setCurrentPhase("service");
       navigate("/schedule/org/" + orgSlug);
       return;
@@ -327,16 +296,13 @@ const OrganizationAppointmentV2 = () => {
 
   const handleDateSelect = (date: Date) => {
     setSelectedDate(date);
+    setChosenSlot(null);
   };
 
+  // Choosing a time keeps the picker open; the bottom bar shows it with "Continue".
   const handleSlotSelect = (slot: V2TimeSlot) => {
-    // Convert V2 slot format to old format (preserve provider info!)
-    setSelectedSlot({
-      start_time: slot.start_time,
-      end_time: slot.end_time,
-      provider: slot.provider, // IMPORTANT: Pass provider for multi-provider bookings
-    });
-    setCurrentPhase('form');
+    setChosenSlot(slot);
+    setSelectedSlot({ start_time: slot.start_time, end_time: slot.end_time, provider: slot.provider });
   };
 
   const handleBookingSubmit = async (formData: BookingFormData) => {
@@ -351,7 +317,7 @@ const OrganizationAppointmentV2 = () => {
           start_time: selectedSlot.start_time,
           end_time: selectedSlot.end_time,
           available: true,
-          provider: selectedSlot.provider, // Pass provider from selected slot
+          provider: selectedSlot.provider,
         },
         formData,
         timezone: timeZone,
@@ -369,107 +335,84 @@ const OrganizationAppointmentV2 = () => {
         return;
       }
 
-      // Re-fetch slots after successful booking to update availability
-      if (refetchSlots) {
-        await refetchSlots();
-      }
-
+      if (refetchSlots) await refetchSlots();
       setBookingResponse({ ...response, userEmail: formData.userEmail });
-      setCurrentPhase('success');
+      setCurrentPhase("success");
     } catch (error) {
       console.error("Booking error:", error);
     }
   };
 
-  // Loading state
-  if (isLoading) {
-    return (
-      <div 
-        className="min-h-screen text-theme-primary"
-        style={{ ...bookingBrand.style, backgroundColor: 'var(--bg-primary)' }}
-      >
-        {/* Ambient background effects */}
-        <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div 
-            className="absolute -top-40 -right-40 w-80 h-80 rounded-full blur-[100px]"
-            style={{ backgroundColor: 'var(--glow-primary)' }}
-          />
-          <div 
-            className="absolute top-1/2 -left-40 w-80 h-80 rounded-full blur-[100px]"
-            style={{ backgroundColor: 'var(--glow-secondary)' }}
-          />
-          <div 
-            className="absolute -bottom-40 right-1/3 w-80 h-80 rounded-full blur-[100px]"
-            style={{ backgroundColor: 'var(--glow-success)' }}
-          />
-        </div>
-        
-        <div className="relative z-10 container mx-auto px-4 py-8">
-          <ProfileSkeleton />
-        </div>
-      </div>
-    );
-  }
+  const brandName = bookingBrand.config?.identity.applicationName || userInfo?.organizationName || "";
+  const logo = bookingBrand.config ? brandLogo(bookingBrand.config.compiledDesign) : "";
+  const pageStyle = { ...bookingBrand.style, "--bk-top": HEADER_HEIGHT } as CSSProperties;
+  const header = (
+    <BookingHeaderBar
+      height={HEADER_HEIGHT}
+      style={bookingBrand.style}
+      branded={Boolean(bookingBrand.config)}
+      recipe={bookingBrand.config?.recipeKey}
+      home={bookingBrand.publicRoot}
+      homeLabel={brandName ? t("schedulerPage.backTo").replace("{0}", brandName) : t("publicSite.backToSite")}
+      name={brandName || (isLoading ? "" : t("schedulerPage.appointments"))}
+      logo={logo}
+      back={currentPhase !== "service" && !friendlyError && !error ? (
+        <button type="button" onClick={handlePhaseBack} className="booking-back" aria-label={t("schedulerPage.previousStep")}>
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+          <span>{t("schedulerPage.back")}</span>
+        </button>
+      ) : null}
+      step={!friendlyError && !error ? t(currentPhase === "service" ? "schedulerPage.stepService" : currentPhase === "datetime" ? "schedulerPage.stepTime" : currentPhase === "form" ? "schedulerPage.stepDetails" : "schedulerPage.stepDone") : undefined}
+      actions={<><LanguageToggle /><ThemeSwitch /></>}
+    />
+  );
 
-  // Error state
-  if (error || friendlyError) {
-    const errorMessage = typeof friendlyError === 'string' 
-      ? friendlyError 
-      : String(friendlyError || 'Page not found');
-    
+  const unavailable = Boolean(error || friendlyError) || forced === "error" || forced === "unavailable";
+  // Loading: a skeleton in the shape of the page that comes.
+  if ((isLoading && !data && !unavailable) || forced === "loading") {
     return (
       <>
-        <MetaTags title="Error | Appointment" description="Error loading booking page" />
-        <div 
-          className="min-h-screen text-theme-primary flex items-center justify-center p-8"
-          style={{ ...bookingBrand.style, backgroundColor: 'var(--bg-primary)' }}
-        >
-          {/* Ambient background effects */}
-          <div className="fixed inset-0 overflow-hidden pointer-events-none">
-            <div 
-              className="absolute -top-40 -right-40 w-80 h-80 rounded-full blur-[100px]"
-              style={{ backgroundColor: 'var(--glow-primary)' }}
-            />
-            <div 
-              className="absolute top-1/2 -left-40 w-80 h-80 rounded-full blur-[100px]"
-              style={{ backgroundColor: 'var(--glow-secondary)' }}
-            />
-            <div 
-              className="absolute -bottom-40 right-1/3 w-80 h-80 rounded-full blur-[100px]"
-              style={{ backgroundColor: 'var(--glow-success)' }}
-            />
-          </div>
-          
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="relative z-10 max-w-xl w-full rounded-2xl p-6 backdrop-blur-xs"
-            style={{ 
-              backgroundColor: 'var(--border-subtle)',
-              border: '1px solid var(--border-default)'
-            }}
-          >
-            <div className="flex items-start space-x-3">
-              <div className="inline-flex p-2 rounded-lg bg-gradient-primary">
-                <Info className="w-5 h-5 text-white" />
-              </div>
-              <div>
-                <h2 className="font-semibold text-lg mb-1" style={{ color: 'var(--text-primary)' }}>
-                  Booking link not available
-                </h2>
-                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{errorMessage}</p>
-                <p className="text-sm mt-3">
-                  <a href="/" className="underline" style={{ color: 'var(--accent-primary)' }}>
-                    Go to home
-                  </a>
-                </p>
-              </div>
-            </div>
-          </motion.div>
+        {header}
+        <div className="booking-experience min-h-screen px-4 py-6 text-theme-primary sm:px-6" style={{ ...pageStyle, backgroundColor: "var(--bg-primary)" }}
+          data-booking-branded={bookingBrand.config ? "true" : "false"} data-pe-recipe={bookingBrand.config?.recipeKey} data-qa="booking-loading">
+          <div className="mx-auto max-w-7xl">{serviceSlug ? <TimePickerSkeleton /> : <ServicesSkeleton />}</div>
         </div>
       </>
     );
+  }
+
+  // Not available: an unknown or unpublished business or service, or a failed request.
+  if (unavailable) {
+    const failed = forced === "error" || Boolean(error && (!error.httpStatus || error.httpStatus >= 500));
+    const actions: BookingStateAction[] = failed
+      ? [{ label: t("bookingStates.retry"), onClick: () => void mutate(), icon: RotateCw, qa: "booking-state-retry" }]
+      : serviceSlug ? [{ label: t("bookingStates.seeServices"), href: `/schedule/org/${orgSlug}`, icon: LayoutGrid, qa: "booking-state-services" }] : [];
+    actions.push({ label: t("bookingStates.goHome"), href: "/", qa: "booking-state-home" });
+    return (
+      <>
+        <MetaTags title={t("bookingStates.unavailableTitle")} description={t("bookingStates.unavailableBody")} />
+        <BookingStatePage style={pageStyle} header={header} branded={Boolean(bookingBrand.config)} recipe={bookingBrand.config?.recipeKey} qa="booking-unavailable-page">
+          <BookingState kind={failed ? "error" : serviceSlug ? "unavailable" : "not-found"} headingLevel={1} qa="booking-unavailable"
+            title={failed ? t("bookingStates.errorTitle") : serviceSlug ? t("bookingStates.serviceUnavailableTitle") : t("bookingStates.unavailableTitle")}
+            description={failed ? t("bookingStates.errorBody") : serviceSlug ? t("bookingStates.serviceUnavailableBody") : t("bookingStates.unavailableBody")}
+            actions={actions} />
+        </BookingStatePage>
+      </>
+    );
+  }
+
+  const location = currentService?.location;
+  const facts: SummaryFact[] = [];
+  if (currentService) {
+    facts.push({ icon: Clock3, text: t("bookingPicker.minutes").replace("{0}", String(currentService.duration)), qa: "booking-summary-duration" });
+    if (organization?.providers.length === 1 && currentService.provider?.name) {
+      facts.push({ icon: User, text: t("bookingPicker.with").replace("{0}", shortProviderName(currentService.provider.name)) });
+    }
+    if (location) {
+      facts.push(location.is_online
+        ? { icon: Video, text: onlineLabel(location.platform), qa: "booking-summary-online" }
+        : { icon: MapPin, text: location.location_name || location.name, detail: location.address, qa: "booking-summary-place" });
+    }
   }
 
   return (
@@ -478,178 +421,70 @@ const OrganizationAppointmentV2 = () => {
         title={`${userInfo?.name || "Book Appointment"} | Scheduler`}
         description={`Schedule an appointment with ${userInfo?.name || "us"}`}
       />
-      {/* Persistent branded booking header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="sticky top-0 z-50 w-full backdrop-blur-xl"
-          data-booking-branded={bookingBrand.config ? "true" : "false"}
-          data-pe-recipe={bookingBrand.config?.recipeKey}
-          style={{ ...bookingBrand.style,
-            backgroundColor: 'color-mix(in srgb, var(--bg-primary) 95%, transparent)',
-            borderBottom: '1px solid var(--border-subtle)'
-          }}
-        >
-          <div className="w-full max-w-7xl mx-auto px-5 md:px-6 py-4 flex items-center justify-between gap-5">
-            <div className="flex min-w-0 items-center gap-3">
-              {currentPhase !== "service" && (
-                <button type="button" onClick={handlePhaseBack} className="booking-back" aria-label={t("schedulerPage.previousStep")}>
-                  <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-                  <span>{t("schedulerPage.back")}</span>
-                </button>
-              )}
-            <a
-              href={bookingBrand.publicRoot}
-              className="flex min-w-0 items-center gap-3 no-underline"
-              aria-label={bookingBrand.config?.identity.applicationName || userInfo?.organizationName ? t("schedulerPage.backTo").replace("{0}", bookingBrand.config?.identity.applicationName || userInfo?.organizationName || "") : t("publicSite.backToSite")}
-            >
-              {bookingBrand.config && brandLogo(bookingBrand.config.compiledDesign) ? (
-                <img className="pe-brand-logo shrink-0" src={brandLogo(bookingBrand.config.compiledDesign)} alt="" />
-              ) : (
-                <span className="pe-brand-mark shrink-0" aria-hidden="true">✦</span>
-              )}
-              <span
-                className="truncate text-base font-semibold"
-                style={{ color: "var(--text-primary)", fontFamily: "var(--booking-font-display)" }}
-              >
-                {bookingBrand.config?.identity.applicationName || userInfo?.organizationName || t("schedulerPage.appointments")}
-              </span>
-            </a>
-            </div>
-            <div className="booking-header-actions">
-              <span className="booking-step" aria-live="polite">{t(currentPhase === "service" ? "schedulerPage.stepService" : currentPhase === "datetime" ? "schedulerPage.stepTime" : currentPhase === "form" ? "schedulerPage.stepDetails" : "schedulerPage.stepDone")}</span>
-
-            {/* Theme Toggle */}
-            <motion.button
-              onClick={toggleTheme}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg transition-colors"
-              style={{ 
-                backgroundColor: 'var(--border-subtle)',
-                border: '1px solid var(--border-default)'
-              }}
-              whileTap={{ scale: 0.95 }}
-              whileHover={{ scale: 1.02 }}
-              aria-label={t("bookingPicker.switchTheme")}
-            >
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={theme + "-icon"}
-                  initial={{ opacity: 0, rotate: -90 }}
-                  animate={{ opacity: 1, rotate: 0 }}
-                  exit={{ opacity: 0, rotate: 90 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {theme === "light" ? (
-                    <Moon className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
-                  ) : (
-                    <Sun className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
-                  )}
-                </motion.div>
-              </AnimatePresence>
-              <span 
-                className="text-sm font-medium"
-                style={{ color: 'var(--text-secondary)' }}
-              >
-                {theme === "light" ? t("bookingPicker.dark") : t("bookingPicker.light")}
-              </span>
-            </motion.button>
-            </div>
-          </div>
-        </motion.div>
-      <div 
-        className="booking-experience min-h-screen text-theme-primary pb-16"
+      {header}
+      <div
+        className={`booking-experience min-h-screen text-theme-primary ${currentPhase === "datetime" ? "" : "pb-10"}`}
         data-booking-branded={bookingBrand.config ? "true" : "false"}
         data-pe-recipe={bookingBrand.config?.recipeKey}
-        style={{ ...bookingBrand.style, backgroundColor: 'var(--bg-primary)' }}
+        style={{ ...pageStyle, backgroundColor: "var(--bg-primary)" }}
       >
-        {/* Ambient background effects */}
-        <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div 
-            className="absolute -top-40 -right-40 w-80 h-80 rounded-full blur-[100px]"
-            style={{ backgroundColor: 'var(--glow-primary)' }}
-          />
-          <div 
-            className="absolute top-1/2 -left-40 w-80 h-80 rounded-full blur-[100px]"
-            style={{ backgroundColor: 'var(--glow-secondary)' }}
-          />
-          <div 
-            className="absolute -bottom-40 right-1/3 w-80 h-80 rounded-full blur-[100px]"
-            style={{ backgroundColor: 'var(--glow-success)' }}
-          />
-        </div>
-
         <div className="booking-stage relative z-10">
-        {/* A friend's share link: "You were invited by …" (customer referrals). */}
-        {currentPhase !== 'success' && <CustomerInviteBanner slug={orgSlug} className="mx-auto mt-4 w-[calc(100%-2rem)] max-w-3xl" />}
-        {/* Phase 1: Service Selection */}
+          {/* A friend's share link: "You were invited by …" (customer referrals). */}
+          {currentPhase !== "success" && <CustomerInviteBanner slug={orgSlug} className="mx-auto mt-4 w-[calc(100%-2rem)] max-w-3xl" />}
+
+          {currentPhase === "service" && organization && !serviceSlug && (
+            <div className="px-4 py-6 sm:px-6 sm:py-8">
+              <ServiceSelector organization={organization} services={organization.services} onServiceSelect={handleServiceSelect} />
+            </div>
+          )}
+
+          {/* A service link resolves its offering first. */}
+          {currentPhase === "service" && serviceSlug && (
+            <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6"><TimePickerSkeleton /></div>
+          )}
+
           <AnimatePresence mode="wait">
-        {currentPhase === 'service' && organization && !serviceSlug && (
+            {currentPhase === "datetime" && currentService && (
               <motion.div
-                key="service"
+                key="datetime"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="py-8 px-4"
+                transition={{ duration: 0.2 }}
+                className="px-4 py-4 sm:px-6"
               >
-            <ServiceSelector
-              organization={organization}
-              services={organization.services}
-              onServiceSelect={handleServiceSelect}
-              loading={false}
-            />
+                <DateTimeSelector
+                  selectedDate={selectedDate}
+                  displayMonth={displayMonth}
+                  onDateSelect={handleDateSelect}
+                  onMonthChange={setDisplayMonth}
+                  availableDays={availableDaysNumbers}
+                  minDate={validStartDate}
+                  maxDate={validEndDate}
+                  availableSlots={slots}
+                  selectedSlot={chosenSlot}
+                  onSlotSelect={handleSlotSelect}
+                  timeFormat={timeFormat}
+                  onTimeFormatChange={setTimeFormat}
+                  timezone={timeZone}
+                  loading={slotsLoading}
+                  serviceName={currentService.name}
+                  duration={currentService.duration}
+                  location={currentService.location}
+                  summary={<BookingSummaryCard eyebrow={organization?.name} title={currentService.name} titleQa="booking-picker-service" facts={facts} />}
+                  extras={Boolean(data?.message?.allow_quantity) && (
+                    <QuantityPicker className="bk-card" value={quantity} max={Math.max(1, Number(data?.message?.max_quantity) || 1)}
+                      onChange={(next) => { setQuantity(next); setChosenSlot(null); }} />
+                  )}
+                  action={{ label: t("bookingLayout.continue"), onClick: () => chosenSlot && setCurrentPhase("form") }}
+                  footer={<PoweredBy variant="inline" className="!py-2 max-md:!pb-2" />}
+                />
               </motion.div>
-        )}
-          </AnimatePresence>
-
-        {/* Phase 2: Date & Time Selection */}
-          <AnimatePresence mode="wait">
-        {currentPhase === 'datetime' && currentService && (
-              <motion.div
-                key="datetime"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3 }}
-                className="py-8 px-4"
-              >
-            {Boolean(data?.message?.allow_quantity) && (
-              <QuantityPicker value={quantity} max={Math.max(1, Number(data?.message?.max_quantity) || 1)} onChange={setQuantity} />
             )}
-            <DateTimeSelector
-              selectedDate={selectedDate}
-              displayMonth={displayMonth}
-              onDateSelect={handleDateSelect}
-              onMonthChange={setDisplayMonth}
-              availableDays={availableDaysNumbers}
-              minDate={validStartDate}
-              maxDate={validEndDate}
-              availableSlots={slots}
-              selectedSlot={selectedSlot ? {
-                id: "temp",
-                start_time: selectedSlot.start_time,
-                end_time: selectedSlot.end_time,
-                available: true,
-              } : null}
-              onSlotSelect={handleSlotSelect}
-              timeFormat={timeFormat}
-              onTimeFormatChange={setTimeFormat}
-              timezone={timeZone}
-              loading={slotsLoading}
-              serviceName={currentService.name}
-              duration={currentService.duration}
-              location={currentService.location}
-              rawApiData={rawApiData}
-              bookingConfig={bookingConfig}
-            />
-              </motion.div>
-        )}
           </AnimatePresence>
 
-        {/* Phase 3: Booking Form */}
           <AnimatePresence mode="wait">
-        {currentPhase === 'form' && currentService && selectedSlot && (
+            {currentPhase === "form" && currentService && selectedSlot && (
               <motion.div
                 key="form"
                 initial={{ opacity: 0, x: 20 }}
@@ -658,62 +493,60 @@ const OrganizationAppointmentV2 = () => {
                 transition={{ duration: 0.3 }}
                 className="py-8 px-4"
               >
-            {quote?.required && <PaymentSummary quote={quote} method={paymentMethod} onMethod={setPaymentMethod} />}
-            {!paymentBlocked && (
-            <BookingForm
-              service={currentService}
-              selectedDate={selectedDate}
-              selectedSlot={{
-                id: "temp",
-                start_time: selectedSlot.start_time,
-                end_time: selectedSlot.end_time,
-                available: true,
-              }}
-              timeFormat={timeFormat}
-              timezone={timeZone}
-              onSubmit={handleBookingSubmit}
-              onBack={handlePhaseBack}
-              loading={bookingLoading}
-              quantity={quantity}
-            />
-            )}
+                {quote?.required && <PaymentSummary quote={quote} method={paymentMethod} onMethod={setPaymentMethod} />}
+                {!paymentBlocked && (
+                  <BookingForm
+                    service={currentService}
+                    selectedDate={selectedDate}
+                    selectedSlot={{
+                      id: "temp",
+                      start_time: selectedSlot.start_time,
+                      end_time: selectedSlot.end_time,
+                      available: true,
+                    }}
+                    timeFormat={timeFormat}
+                    timezone={timeZone}
+                    onSubmit={handleBookingSubmit}
+                    onBack={handlePhaseBack}
+                    loading={bookingLoading}
+                    quantity={quantity}
+                  />
+                )}
               </motion.div>
-        )}
+            )}
           </AnimatePresence>
 
-        {/* Phase 4: Confirmation Modal */}
           <AnimatePresence>
-        {currentPhase === 'success' && bookingResponse && currentService && selectedSlot && (
-          <ConfirmationModal
-            open={true}
-            onClose={() => {
-              // Go back to datetime phase and refetch slots to show updated availability
-              if (refetchSlots) {
-                refetchSlots();
-              }
-              setCurrentPhase('datetime');
-            }}
-            bookingResponse={bookingResponse}
-            service={currentService}
-            selectedDate={selectedDate}
-            selectedSlot={{
-              id: "temp",
-              start_time: selectedSlot.start_time,
-              end_time: selectedSlot.end_time,
-              available: true,
-            }}
-            timeFormat={timeFormat}
-            timezone={timeZone}
-            userEmail={bookingResponse.userEmail || ""}
-            brandStyle={bookingBrand.style}
-          />
-        )}
+            {currentPhase === "success" && bookingResponse && currentService && selectedSlot && (
+              <ConfirmationModal
+                open={true}
+                onClose={() => {
+                  if (refetchSlots) refetchSlots();
+                  setChosenSlot(null);
+                  setCurrentPhase("datetime");
+                }}
+                bookingResponse={bookingResponse}
+                service={currentService}
+                selectedDate={selectedDate}
+                selectedSlot={{
+                  id: "temp",
+                  start_time: selectedSlot.start_time,
+                  end_time: selectedSlot.end_time,
+                  available: true,
+                }}
+                timeFormat={timeFormat}
+                timezone={timeZone}
+                userEmail={bookingResponse.userEmail || ""}
+                brandStyle={bookingBrand.style}
+              />
+            )}
           </AnimatePresence>
 
-        {/* Powered By Footer */}
-          <div className="mt-8 relative z-10">
-          <PoweredBy />
-          </div>
+          {currentPhase !== "datetime" && (
+            <div className="relative z-10 mt-8">
+              <PoweredBy />
+            </div>
+          )}
         </div>
       </div>
     </>
