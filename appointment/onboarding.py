@@ -2632,7 +2632,10 @@ def save_organization_profile(organization_name, organization_type, email, phone
         
         # Generate slug if not exists
         if not org.slug:
-            org.slug = make_slug(organization_name)
+            from appointment.growth.short_links import free_organization_slug
+
+            # Never another business's address (Organization.validate checks it too).
+            org.slug = free_organization_slug(make_slug(organization_name), org.name)
         
         # Save
         if org.is_new():
@@ -3256,6 +3259,7 @@ def get_provider_profile():
                 "email",
                 "phone",
                 "bio",
+                "bio_am",
                 "timezone",
                 "language",
                 "business_type",
@@ -3287,7 +3291,7 @@ def get_provider_profile():
 
 
 @frappe.whitelist()
-def update_provider_profile(provider_name=None, full_name=None, phone=None, bio=None, timezone=None, language=None, business_type=None, spoken_languages=None):
+def update_provider_profile(provider_name=None, full_name=None, phone=None, bio=None, timezone=None, language=None, business_type=None, spoken_languages=None, bio_am=None):
     """
     Update current user's provider profile
     """
@@ -3310,6 +3314,9 @@ def update_provider_profile(provider_name=None, full_name=None, phone=None, bio=
             provider.phone = phone
         if bio is not None:
             provider.bio = bio
+        if bio_am is not None:
+            # The Amharic provider page shows it; when it is empty the page shows the English bio.
+            provider.bio_am = bio_am
         if timezone is not None:
             provider.timezone = timezone
         if language is not None:

@@ -20,6 +20,7 @@
   "is_active",
   "Section Break-3",
   "bio",
+  "bio_am",
   "timezone",
   "language",
   "public_slug",
@@ -129,6 +130,13 @@
    "fieldtype": "Small Text",
    "label": "Bio",
    "length": 500
+  },
+  {
+   "fieldname": "bio_am",
+   "fieldtype": "Small Text",
+   "label": "Bio (Amharic)",
+   "length": 500,
+   "description": "Shown on the Amharic provider page. When it is empty, the page shows the English bio."
   },
   {
    "fieldname": "timezone",
@@ -342,7 +350,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-14 10:00:00.000000",
+ "modified": "2026-10-14 11:40:00.000000",
  "modified_by": "Administrator",
  "module": "Scheduler",
  "name": "Provider",

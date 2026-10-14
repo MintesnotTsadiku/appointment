@@ -1,7 +1,7 @@
 # Guests open the free Ethiopian time converter in dark mode: English desktop and Amharic mobile.
 # The CTA uses the configured product name (fixture appointment.tests.tools_qa_fixtures).
 app: appointment
-base_url: http://127.0.0.146:47800
+base_url: http://localhost:47800
 default_role: Guest
 auth:
   type: none

@@ -3,7 +3,7 @@
 # state; the website, appearance and organization import pages; team invitations; personal details;
 # Insights filters; and the Journal link on a public template.
 app: appointment
-base_url: http://127.0.0.146:47800
+base_url: http://localhost:47800
 capture_trace: true
 capture_video: false
 capture_instruction_timeline: true

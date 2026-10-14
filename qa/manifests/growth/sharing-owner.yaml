@@ -2,7 +2,7 @@
 # Bloom Studio owner on the Grow page: share link and message, Telegram share URL, link preview card,
 # QR poster with both clocks, short-link check and ideas. Read-only for the showcase: no slug change.
 app: appointment
-base_url: http://127.0.0.146:47800
+base_url: http://localhost:47800
 capture_trace: true
 capture_video: false
 capture_instruction_timeline: true

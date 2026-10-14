@@ -2,7 +2,7 @@
 # A guest books an independent provider's offering in Amharic on a phone in dark mode: Habesha time by default,
 # the same date and slot picker, details and confirmation.
 app: appointment
-base_url: http://127.0.0.146:47800
+base_url: http://localhost:47800
 capture_trace: true
 capture_video: false
 capture_instruction_timeline: true

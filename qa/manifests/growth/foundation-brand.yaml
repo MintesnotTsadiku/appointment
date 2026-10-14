@@ -3,7 +3,7 @@
 # The scenario renames the product, sees the preview and the saved value, then restores the original name.
 # Dark mobile: foundation-brand-dark.yaml. Guest "Powered by": foundation-brand-guest.yaml.
 app: appointment
-base_url: http://127.0.0.146:47800
+base_url: http://localhost:47800
 default_role: Administrator
 auth:
   type: frappe_session

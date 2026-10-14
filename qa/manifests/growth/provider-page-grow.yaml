@@ -1,6 +1,6 @@
 # The owner of a provider page without a website: Grow shows "Your booking page address" with the full address,
 # the owner changes it, the former address is listed and forwards, then the run changes it back; the booking
-# settings link to the page (en, phone, dark). Fixture: appointment.tests.provider_page_qa_fixtures.
+# settings link to the page, and the profile edits the bio in English and Amharic (en, phone, dark). Fixture: appointment.tests.provider_page_qa_fixtures.
 app: appointment
 base_url: http://localhost:47800
 capture_trace: true
@@ -91,5 +91,16 @@ scenarios:
     selector: '[data-qa="independent-open-page"][href="/schedule/p/{qa_provider_slug}"]'
   - action: screenshot
     name: provider_page_grow_en_mobile_dark-3-settings.png
+  - action: open_url
+    url: /settings/profile
+  - action: wait_for
+    selector: '[data-qa="profile-bio-en"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="profile-bio-am"][lang="am"]'
+  - action: scroll
+    selector: '[data-qa="profile-bio"]'
+  - action: screenshot
+    name: provider_page_grow_en_mobile_dark-4-profile-bio.png
   - action: get_console_errors
   - action: get_network_errors

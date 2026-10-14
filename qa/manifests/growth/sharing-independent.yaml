@@ -2,7 +2,7 @@
 # The fixture independent business (its own website) on the Grow page in dark mode: Amharic and English
 # on a phone, the poster print view with both clocks, and a short-link change that the run reverts.
 app: appointment
-base_url: http://127.0.0.146:47800
+base_url: http://localhost:47800
 capture_trace: true
 capture_video: false
 capture_instruction_timeline: true

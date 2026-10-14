@@ -1,7 +1,7 @@
 # Brand & growth page, platform administrator, Amharic on a phone in dark mode. Run with fixture
 # appointment.tests.growth_foundation_qa_fixtures. Renames the product, saves, then restores it.
 app: appointment
-base_url: http://127.0.0.146:47800
+base_url: http://localhost:47800
 default_role: Administrator
 auth:
   type: frappe_session

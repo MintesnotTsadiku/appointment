@@ -15,12 +15,19 @@ const exports = {};
 vm.runInNewContext(ts.transpileModule(read('src/pages/public-experience/provider-core.ts'),
   { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 } }).outputText,
 { exports, Intl, URLSearchParams, Map, Set, Number, Array });
-const { localized, priceLabel, formatLabel, groupFormats, serviceFormats, offeringPath, initials, PROVIDER_PAGE_API } = exports;
+const { localized, priceLabel, formatLabel, groupFormats, serviceFormats, offeringPath, initials, providerBio, PROVIDER_PAGE_API } = exports;
 
 // Words in the reader's language, else English, else the record's own text.
 assert.equal(localized({ en: 'Meal plan', am: 'የምግብ እቅድ' }, 'am'), 'የምግብ እቅድ');
 assert.equal(localized({ en: 'Meal plan' }, 'am'), 'Meal plan');
 assert.equal(localized(undefined, 'am', 'From the record'), 'From the record');
+
+// The bio in the page language, else the bio in the other language.
+assert.equal(providerBio({ bio: 'Dietitian', bio_am: 'የሥነ-ምግብ ባለሙያ' }, 'am'), 'የሥነ-ምግብ ባለሙያ');
+assert.equal(providerBio({ bio: 'Dietitian', bio_am: 'የሥነ-ምግብ ባለሙያ' }, 'en'), 'Dietitian');
+assert.equal(providerBio({ bio: 'Dietitian', bio_am: ' ' }, 'am'), 'Dietitian');
+assert.equal(providerBio({ bio: '', bio_am: 'የሥነ-ምግብ ባለሙያ' }, 'en'), 'የሥነ-ምግብ ባለሙያ');
+assert.equal(providerBio({ bio: '' }, 'am'), '');
 
 // Prices: free when zero, else the currency code and a grouped amount.
 assert.equal(priceLabel(0, 'ETB', 'en', 'Free'), 'Free');
@@ -59,6 +66,7 @@ for (const hook of ['provider-page', 'provider-page-unavailable']) assert.ok(pag
 for (const hook of ['provider-page-name', 'provider-service', 'provider-service-book', 'provider-format']) assert.ok(parts.includes(`data-qa="${hook}"`), hook);
 assert.ok(page.includes('canonical_slug') && page.includes('replace: true'), 'a former address is replaced by the current one');
 assert.ok(page.includes('useBookingBrand(page?.site_slug'), 'a published website brands the page');
+assert.ok(parts.includes('providerBio(page, language)') && page.includes('providerBio(page, language)'), 'the hero and the meta description show the bio in the page language');
 assert.ok(!/meeting_link/.test(page + parts + read('src/pages/public-experience/provider-core.ts')), 'the page never reads a meeting link');
 assert.ok(parts.includes("from '@/components/toggle-group'"), 'the format chooser is the shadcn toggle group');
 const scheduler = read('src/pages/public-experience/independent-booking.tsx');

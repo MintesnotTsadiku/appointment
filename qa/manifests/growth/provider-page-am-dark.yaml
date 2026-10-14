@@ -1,4 +1,4 @@
-# Provider page in Amharic on a phone, dark: hero, language chips, format chooser stacked, a service opens its
+# Provider page in Amharic on a phone, dark: hero with the Amharic bio, language chips, format chooser stacked, a service opens its
 # scheduler with "Back to all services". Fixture: appointment.tests.provider_page_qa_fixtures.
 app: appointment
 base_url: http://localhost:47800
@@ -41,6 +41,11 @@ scenarios:
       value: ክፍት ሰዓቶችን ይመልከቱ
     - type: text_contains
       value: እንዴት መገናኘት ይፈልጋሉ?
+  - action: get_text
+    selector: '[data-qa="provider-page-bio"][lang="am"]'
+    assertions:
+    - type: text_contains
+      value: የተመዘገበች የሥነ-ምግብ ባለሙያ
   - action: screenshot
     name: provider_page_am_mobile_dark-1-top.png
     full_page: false

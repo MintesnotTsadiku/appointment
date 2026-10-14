@@ -5,6 +5,8 @@ export interface ProfileFormData {
   full_name: string;
   phone: string;
   bio: string;
+  /** The Amharic bio; the Amharic provider page shows it, else the English one. */
+  bio_am: string;
   timezone: string;
   language: string;
   business_type: string;
@@ -49,6 +51,7 @@ export function formFromProvider(data?: ProviderProfile): ProfileFormData {
     full_name: data?.full_name || '',
     phone: data?.phone || '',
     bio: data?.bio || '',
+    bio_am: data?.bio_am || '',
     timezone: data?.timezone || 'Africa/Addis_Ababa',
     language: data?.language || 'en',
     business_type: data?.business_type || 'clinic',

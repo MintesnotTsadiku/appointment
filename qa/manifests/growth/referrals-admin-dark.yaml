@@ -1,7 +1,7 @@
 # Run with fixture appointment.tests.growth_referrals_qa_fixtures ($G/qa.sh runs setup before and cleanup after).
 # Platform administrator: the referrals overview on a phone in dark mode.
 app: appointment
-base_url: http://127.0.0.146:47800
+base_url: http://localhost:47800
 capture_trace: true
 capture_video: false
 capture_instruction_timeline: true

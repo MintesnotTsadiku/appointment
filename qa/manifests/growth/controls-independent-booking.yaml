@@ -2,7 +2,7 @@
 # A guest books an independent provider's offering with the shared date and slot picker (en, desktop, light):
 # calendar, slots, details card, confirmation with the share card and the "your own page" prompt.
 app: appointment
-base_url: http://127.0.0.146:47800
+base_url: http://localhost:47800
 capture_trace: true
 capture_video: false
 capture_instruction_timeline: true

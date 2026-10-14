@@ -2,7 +2,7 @@
 # An independent provider (Hiwot Lash Studio) on the Grow page in Amharic on a phone, dark: the invite code,
 # the empty list of invited businesses, and turning on a "Bring a friend" offer with its own reward.
 app: appointment
-base_url: http://127.0.0.146:47800
+base_url: http://localhost:47800
 capture_trace: true
 capture_video: false
 capture_instruction_timeline: true

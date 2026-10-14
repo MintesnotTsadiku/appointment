@@ -22,6 +22,7 @@ from appointment.growth.sharing import require_business
 from appointment.growth.settings import growth
 from appointment.scheduler.analytics_calculations import BOOKED
 from appointment.scheduler.business_owner import PREFIX
+from appointment.scheduler.provider_page import provider_bio
 
 LISTING = "Directory Listing"
 CATEGORY = "Directory Category"
@@ -108,6 +109,8 @@ def suggest_area(owner) -> str | None:
 def booking_pages(owner_keys) -> dict[str, dict]:
     """Published booking page per owner key: `{href, logo, name, description}`.
 
+    A provider page also has `descriptions` by language ("en", "am"): its bio, each falling back to the other.
+
     A published Public Site wins. Without one, the scheduler page counts when
     public booking is on (an organization slug, or an independent offering).
     Owners without either are left out.
@@ -141,7 +144,7 @@ def booking_pages(owner_keys) -> dict[str, dict]:
             page.update(name=page["name"] or row.organization_name or row.name, logo=page["logo"] or row.logo or "",
                         description=_summary(row.description))
     for row in frappe.get_all("Provider", filters={"name": ["in", providers or [""]], "is_active": 1, "organization": ["is", "not set"]},
-                              fields=["name", "display_name", "provider_name", "profile_photo", "bio", "enable_public_booking", "public_slug"]):
+                              fields=["name", "display_name", "provider_name", "profile_photo", "bio", "bio_am", "enable_public_booking", "public_slug"]):
         key = PREFIX + row.name
         page = pages.get(key)
         if not page and row.enable_public_booking:
@@ -151,8 +154,10 @@ def booking_pages(owner_keys) -> dict[str, dict]:
                 href = f"/schedule/p/{row.public_slug}" if row.public_slug else f"/schedule/individual/{offering}"
                 page = pages[key] = dict(href=href, logo="", name="")
         if page:
+            # The bio in each language, else the other one (`provider_page.provider_bio`).
+            descriptions = {lang: _summary(provider_bio(row, lang)) for lang in ("en", "am")}
             page.update(name=page["name"] or row.display_name or row.provider_name or row.name,
-                        logo=page["logo"] or row.profile_photo or "", description=_summary(row.bio))
+                        logo=page["logo"] or row.profile_photo or "", description=descriptions["en"], descriptions=descriptions)
     return pages
 
 
@@ -236,6 +241,7 @@ def listings(category: str | None = None, area: str | None = None) -> list[dict]
         if page:
             result.append(dict(owner_key=row.owner_key, category=row.category, area=row.area, name=page["name"],
                                logo=page["logo"], description=page.get("description") or "",
+                               descriptions=page.get("descriptions") or {},
                                href=f"{page['href']}?source={SOURCE}", services=services.get(row.owner_key, [])))
     return sorted(result, key=lambda item: item["name"].lower())
 

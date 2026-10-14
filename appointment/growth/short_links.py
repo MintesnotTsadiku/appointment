@@ -7,7 +7,8 @@ owned an alias may take it back; no other business can claim it.
 Public Site slugs, Organization slugs and provider page addresses (`Provider.public_slug`) share one
 address space. An independent provider with a website has one address: the site slug, and its
 `public_slug` follows it (`sync_provider_slug`). Without a website, `check` and `change` work on the
-provider page address. See docs/growth/PROVIDER_PAGE.md.
+provider page address. `Organization.validate` checks a new or changed organization slug with
+`organization_slug_taken`. See docs/growth/PROVIDER_PAGE.md.
 """
 
 from __future__ import annotations
@@ -45,6 +46,36 @@ def problem(slug: str, site: str | None = None, *, provider: str | None = None) 
     if _taken(slug, site, provider):
         return "taken"
     return None
+
+
+def organization_slug_taken(slug: str, organization: str | None = None) -> bool:
+    """True when another business uses `slug`: its website, a former address or a provider page address.
+
+    The namespace part of `problem` for `Organization.slug`, which `Organization.validate` calls for every new or
+    changed slug. The organization's own slug, websites and former website addresses do not count. Organization
+    slugs keep their own length and format rules (`business-<key>` is longer than a short link).
+    """
+
+    organization = organization or ""
+    site = frappe.db.get_value("Public Site", {"slug": slug}, ["name", "organization"], as_dict=True)
+    if site and site.organization != organization:
+        return True
+    alias = frappe.db.get_value(ALIAS, slug, ["public_site", "provider"], as_dict=True)
+    if alias and (alias.provider or not alias.public_site
+                  or frappe.db.get_value("Public Site", alias.public_site, "organization") != organization):
+        return True
+    if frappe.db.get_value("Organization", {"slug": slug, "name": ["!=", organization]}, "name"):
+        return True
+    return bool(frappe.db.get_value("Provider", {"public_slug": slug}, "name"))
+
+
+def free_organization_slug(base: str, organization: str | None = None) -> str:
+    """`base`, or `base-2`, `base-3` … when another business uses it (`organization_slug_taken`)."""
+
+    candidate, number = base, 2
+    while organization_slug_taken(candidate, organization):
+        candidate, number = f"{base}-{number}", number + 1
+    return candidate
 
 
 def _taken(slug: str, site: str | None, provider: str | None = None) -> bool:
@@ -186,6 +217,8 @@ MESSAGES = {
     "reserved": "That address is reserved by the platform.",
     "taken": "That address is already taken.",
 }
+#: `Organization.validate` shows it when a new or changed slug is another business's address.
+ORGANIZATION_TAKEN = "The booking address {0} is already used by another business. Choose another address."
 
 
 def state(site: str) -> dict:

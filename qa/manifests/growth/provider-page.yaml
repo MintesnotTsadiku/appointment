@@ -38,6 +38,11 @@ scenarios:
       value: '[data-qa="provider-page-languages"]'
   actions:
   - action: get_text
+    selector: '[data-qa="provider-page-bio"][lang="en"]'
+    assertions:
+    - type: text_contains
+      value: Registered dietitian in Addis Ababa
+  - action: get_text
     selector: '[data-qa="provider-services"]'
     assertions:
     - type: text_contains

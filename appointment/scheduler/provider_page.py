@@ -47,7 +47,9 @@ def public_provider(slug: str = ""):
         "name": doc.display_name or doc.provider_name or doc.name,
         "business_name": doc.provider_name or doc.name,
         "photo": public_photo(doc.profile_photo) or content["person"].get("image", ""),
+        # The page picks the bio in its language and falls back to the other one (`provider_bio`).
         "bio": _plain(doc.bio),
+        "bio_am": _plain(doc.bio_am),
         "languages": spoken_languages(doc.spoken_languages),
         "timezone": offerings[0].location.timezone or doc.timezone or "Africa/Addis_Ababa",
         "site_slug": site.slug if site else None,
@@ -247,6 +249,12 @@ def _published(provider):
             or not doc.user or not frappe.db.get_value("User", doc.user, "enabled")):
         return None
     return doc
+
+
+def provider_bio(row, lang: str) -> str:
+    """The bio in `lang` ("am" or "en"), else the bio in the other language. `row` is a Provider doc or dict."""
+    english, amharic = _plain(row.get("bio")), _plain(row.get("bio_am"))
+    return (amharic or english) if lang == "am" else (english or amharic)
 
 
 def _plain(text) -> str:

@@ -3,7 +3,7 @@
 # Run with fixture appointment.tests.growth_marketing_qa_fixtures (setup makes a fresh identity; cleanup
 # removes the account and the business through the document lifecycle). See docs/growth/MARKETING.md.
 app: appointment
-base_url: http://127.0.0.146:47800
+base_url: http://localhost:47800
 default_role: Guest
 auth:
   type: none

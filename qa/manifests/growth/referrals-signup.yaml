@@ -2,7 +2,7 @@
 # A new owner opens Meskerem Hair Studio's invite link, signs up, creates a business; then the referrer
 # signs in and finds the new business in "Businesses you invited". Both passwords are generated per run.
 app: appointment
-base_url: http://127.0.0.146:47800
+base_url: http://localhost:47800
 default_role: Guest
 auth:
   type: none

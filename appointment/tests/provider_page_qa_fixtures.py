@@ -32,6 +32,8 @@ OFFICE = "Kazanchis consultation room"
 ONLINE = "Rahel online consultations"
 BIO = ("Registered dietitian in Addis Ababa. Practical eating plans for diabetes, pregnancy, sport and "
        "healthy weight, built around Ethiopian food and fasting seasons.")
+BIO_AM = ("በአዲስ አበባ የተመዘገበች የሥነ-ምግብ ባለሙያ። ለስኳር ሕመም፣ ለእርግዝና፣ ለስፖርት እና ለጤናማ ክብደት "
+          "በኢትዮጵያ ምግብ እና በጾም ወቅቶች ላይ የተመሠረተ ተግባራዊ የአመጋገብ ዕቅድ።")
 # name, duration, price, formats, description
 SERVICES = (
     ("Meal plan consultation", 60, 1200, ("in_person", "online"),
@@ -147,7 +149,7 @@ def _shape(provider, first_offering):
                                       "is_active": 1}).insert(ignore_permissions=True)
             offering(created.name)
     doc = frappe.get_doc("Provider", provider)
-    doc.update({"full_name": "Rahel Girma", "display_name": "Rahel Girma", "bio": BIO, "profile_photo": PHOTO,
+    doc.update({"full_name": "Rahel Girma", "display_name": "Rahel Girma", "bio": BIO, "bio_am": BIO_AM, "profile_photo": PHOTO,
                 "spoken_languages": json.dumps(["am", "en", "om"]), "timezone": TZ})
     doc.save(ignore_permissions=True)
 

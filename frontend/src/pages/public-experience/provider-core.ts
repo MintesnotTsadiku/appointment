@@ -16,7 +16,9 @@ export interface ProviderService {
   duration: number; price: number; currency: string; offerings: ProviderOffering[];
 }
 export interface ProviderPageData {
-  slug: string; canonical_slug: string; name: string; business_name: string; photo: string; bio: string;
+  slug: string; canonical_slug: string; name: string; business_name: string; photo: string;
+  /** The bio in English and in Amharic; read it with `providerBio`. */
+  bio: string; bio_am?: string;
   languages: string[]; timezone: string; site_slug?: string | null;
   person?: { name?: Texts; role?: Texts; image?: string; imageAlt?: Texts };
   /** The website's hero photo, for the profile card's cover; empty without a website. */
@@ -31,6 +33,13 @@ export interface FormatChoice { offering: string; path: string; type: PlaceType;
 export function localized(texts: Texts | undefined, language: string, fallback = ''): string {
   const lang = language === 'am' ? 'am' : 'en';
   return (texts?.[lang] || texts?.en || fallback || '').trim();
+}
+
+/** The bio in the page language, else the bio in the other language. */
+export function providerBio(page: Pick<ProviderPageData, 'bio' | 'bio_am'>, language: string): string {
+  const english = (page.bio || '').trim();
+  const amharic = (page.bio_am || '').trim();
+  return language === 'am' ? amharic || english : english || amharic;
 }
 
 /** "Free", or the amount with its currency code: "ETB 1,500" (Ethiopic digits are not used in prices). */

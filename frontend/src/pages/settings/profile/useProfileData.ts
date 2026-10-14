@@ -7,6 +7,7 @@ export interface ProviderProfile {
   email: string;
   phone?: string;
   bio?: string;
+  bio_am?: string;
   timezone: string;
   language: string;
   business_type?: string;

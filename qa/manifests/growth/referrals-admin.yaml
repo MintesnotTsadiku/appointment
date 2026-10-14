@@ -2,7 +2,7 @@
 # Platform administrator: the referrals overview (totals, list, sign-up sources) and approving a partner,
 # which issues a partner code (en, desktop, light). referrals-admin-dark.yaml covers mobile dark.
 app: appointment
-base_url: http://127.0.0.146:47800
+base_url: http://localhost:47800
 capture_trace: true
 capture_video: false
 capture_instruction_timeline: true

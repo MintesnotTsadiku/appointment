@@ -1,7 +1,7 @@
 # Run appointment.tests.develop_features_qa_fixtures.setup first and cleanup afterwards.
 # An independent provider (develop's individual_owner workspace) inside the merged staff shell.
 app: appointment
-base_url: http://127.0.0.146:47800
+base_url: http://localhost:47800
 capture_trace: true
 capture_video: false
 capture_instruction_timeline: true

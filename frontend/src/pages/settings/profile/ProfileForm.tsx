@@ -5,9 +5,9 @@ import { Input } from '@/components/input';
 import { Label } from '@/components/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/select';
 import { FieldHint, SettingsSection, StickySaveBar } from '@/components/settings-layout';
-import { Textarea } from '@/components/textarea';
 import { ToggleGroup, ToggleGroupItem } from '@/components/toggle-group';
 import { useTranslation } from '@/lib/i18n';
+import { LocalizedInput } from '@/pages/settings/website-editor/fields';
 import { BUSINESS_TYPES, LANGUAGES, SPOKEN_LANGUAGES, TIMEZONES, formFromProvider, type ProfileFormData } from './options';
 import type { ProviderProfile } from './useProfileData';
 
@@ -60,9 +60,12 @@ export function ProfileForm({ provider, email, onSaved }: ProfileFormProps) {
           <Field id="full_name" label={t('staff.profile.fields.fullName')}>
             <Input id="full_name" value={form.full_name} onChange={(e) => set('full_name')(e.target.value)} placeholder={t('staff.profile.fields.fullNamePlaceholder')} />
           </Field>
-          <Field id="bio" label={t('staff.profile.fields.bio')} className="sm:col-span-2">
-            <Textarea id="bio" rows={4} value={form.bio} onChange={(e) => set('bio')(e.target.value)} placeholder={t('staff.profile.fields.bioPlaceholder')} />
-          </Field>
+          {/* English and Amharic side by side, like the website editor. The public page shows its own language, else the other. */}
+          <div className="@container min-w-0 space-y-1.5 sm:col-span-2">
+            <LocalizedInput label={t('staff.profile.fields.bio')} value={{ en: form.bio, am: form.bio_am }} long maxLength={500} qa="profile-bio"
+              onChange={(value) => setForm((prev) => ({ ...prev, bio: value.en ?? prev.bio, bio_am: value.am ?? prev.bio_am }))} />
+            <FieldHint id="bio-hint">{t('staff.profile.fields.bioHint')}</FieldHint>
+          </div>
         </div>
       </SettingsSection>
 

@@ -8,7 +8,7 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/toggle-group';
 import { useTranslation } from '@/lib/i18n';
 import { fill } from '@/pages/manage-booking/format';
 import {
-  LANGUAGE_NAMES, formatLabel, groupFormats, initials, localized, offeringPath, priceLabel, serviceFormats,
+  LANGUAGE_NAMES, formatLabel, groupFormats, initials, localized, offeringPath, priceLabel, providerBio, serviceFormats,
   type FormatChoice, type ProviderPageData, type ProviderPlace, type ProviderService,
 } from './provider-core';
 
@@ -19,6 +19,7 @@ const surfaceStyle = { backgroundColor: 'var(--bg-elevated)' };
 export function ProviderHero({ page, name }: { page: ProviderPageData; name: string }) {
   const { t, language } = useTranslation();
   const role = localized(page.person?.role, language);
+  const bio = providerBio(page, language);
   const subtitle = role || (page.business_name !== name ? page.business_name : '');
   const formats = new Set(page.services.flatMap((service) => serviceFormats(service)));
   const formatsText = formats.size > 1 ? t('public.providerPage.formatsBoth')
@@ -39,7 +40,7 @@ export function ProviderHero({ page, name }: { page: ProviderPageData; name: str
         <h1 data-qa="provider-page-name" className="text-2xl font-semibold leading-tight sm:text-3xl" style={{ fontFamily: 'var(--booking-font-display)' }}>{name}</h1>
         {subtitle && <p className="text-theme-secondary" data-qa="provider-page-role">{subtitle}</p>}
       </div>
-      {page.bio && <p className="leading-relaxed text-theme-secondary" data-qa="provider-page-bio">{page.bio}</p>}
+      {bio && <p className="leading-relaxed text-theme-secondary" data-qa="provider-page-bio" lang={bio === (page.bio_am || '').trim() ? 'am' : 'en'}>{bio}</p>}
       <dl className="space-y-2.5 border-t border-theme-subtle pt-4 text-sm">
         <Fact icon={LayoutList} label={t('public.providerPage.services')}>{fill(t('public.providerPage.servicesCount'), page.services.length)}</Fact>
         <Fact icon={formats.has('online') ? Video : MapPin} label={t('public.providerPage.formats')}>{formatsText}</Fact>

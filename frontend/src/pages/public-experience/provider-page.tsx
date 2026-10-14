@@ -14,7 +14,7 @@ import { useBookingBrand } from '@/public-experience/bookingTheme';
 import { useTranslation } from '@/lib/i18n';
 import { fill } from '@/pages/manage-booking/format';
 import '@/public-experience/platform.css';
-import { PROVIDER_PAGE_API, PROVIDER_ROOT, localized, type ProviderPageData } from './provider-core';
+import { PROVIDER_PAGE_API, PROVIDER_ROOT, localized, providerBio, type ProviderPageData } from './provider-core';
 import { ProviderHero, ProviderPlaces, ServiceCard } from './provider-page-parts';
 
 /**
@@ -76,7 +76,7 @@ export default function ProviderPage() {
   return <div className="booking-experience min-h-screen text-theme-primary" data-qa="provider-page"
     data-booking-branded={branded ? 'true' : 'false'} data-pe-recipe={brand.config?.recipeKey}
     style={{ ...brand.style, backgroundColor: 'var(--bg-primary)' }}>
-    {page && <MetaTags title={fill(t('public.providerPage.metaTitle'), name)} description={page.bio || undefined}
+    {page && <MetaTags title={fill(t('public.providerPage.metaTitle'), name)} description={providerBio(page, language) || undefined}
       canonical={`${window.location.origin}${PROVIDER_ROOT}${page.canonical_slug}`} />}
     <header className="sticky top-0 z-20 border-b border-theme-subtle backdrop-blur-md" style={{ backgroundColor: 'color-mix(in srgb, var(--bg-primary) 82%, transparent)' }}>
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">

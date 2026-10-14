@@ -3,7 +3,7 @@
 # (one in progress, one rewarded) and the "Bring a friend" offer; then at reception the friend's booking
 # shows "Referred by Hanna Bekele" and staff mark the friend's welcome reward as used.
 app: appointment
-base_url: http://127.0.0.146:47800
+base_url: http://localhost:47800
 capture_trace: true
 capture_video: false
 capture_instruction_timeline: true

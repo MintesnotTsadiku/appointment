@@ -80,6 +80,11 @@ scenarios:
       value: ያሬድ ተስፋዬ
     - type: text_contains
       value: ነጻ የትውውቅ ጥሪ
+  - action: get_text
+    selector: '[data-qa="provider-page-bio"][lang="am"]'
+    assertions:
+    - type: text_contains
+      value: የግልና የጥንዶች ምክር
   - action: screenshot
     name: provider_page_branded_am_mobile-1-top.png
     full_page: false

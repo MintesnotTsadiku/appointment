@@ -1,6 +1,6 @@
 # Guests write Amharic and English appointment reminders. Nothing is saved. Dark mode: English desktop and Amharic mobile.
 app: appointment
-base_url: http://127.0.0.146:47800
+base_url: http://localhost:47800
 default_role: Guest
 auth:
   type: none

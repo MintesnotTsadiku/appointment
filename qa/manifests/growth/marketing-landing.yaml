@@ -1,7 +1,7 @@
 # Landing page promise (free to start, live in N minutes, Amharic everywhere) and the Amharic chapter.
 # Guest only; nothing is saved, so no fixture is needed. See docs/growth/MARKETING.md.
 app: appointment
-base_url: http://127.0.0.146:47800
+base_url: http://localhost:47800
 default_role: Guest
 auth:
   type: none

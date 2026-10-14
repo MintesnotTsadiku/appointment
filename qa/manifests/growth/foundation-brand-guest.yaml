@@ -1,7 +1,7 @@
 # Guests see the platform brand: the "Powered by" mark and invitation on a booking page, and the
 # brand name on the platform landing page. Read only; no fixture changes data.
 app: appointment
-base_url: http://127.0.0.146:47800
+base_url: http://localhost:47800
 default_role: Guest
 auth:
   type: none

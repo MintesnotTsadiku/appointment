@@ -168,6 +168,98 @@ class ProviderPageTests(unittest.TestCase):
         doc.save(ignore_permissions=True)
         self.assertEqual(provider_page.spoken_languages(frappe.db.get_value("Provider", self.provider, "spoken_languages")), ["am", "en", "om"])
 
+    def test_bio_in_each_language_falls_back_to_the_other(self):
+        from appointment import onboarding
+
+        english, amharic = "Physiotherapist for back and knee pain.", "ለጀርባና ለጉልበት ሕመም የፊዚዮቴራፒ ባለሙያ።"
+        frappe.set_user(self.owner_user)
+        onboarding.update_provider_profile(bio=english, bio_am=amharic)
+        self.assertTrue(frappe.response["message"].get("success"), frappe.response["message"])
+        onboarding.get_provider_profile()
+        self.assertEqual((frappe.response["message"]["bio"], frappe.response["message"]["bio_am"]), (english, amharic))
+        frappe.set_user("Guest")
+        page = provider_page.public_provider(self.slug())
+        self.assertEqual((page["bio"], page["bio_am"]), (english, amharic))
+        frappe.set_user("Administrator")
+        row = {"bio": english, "bio_am": amharic}
+        self.assertEqual((provider_page.provider_bio(row, "en"), provider_page.provider_bio(row, "am")), (english, amharic))
+        self.assertEqual(provider_page.provider_bio({"bio": english, "bio_am": "  "}, "am"), english)
+        self.assertEqual(provider_page.provider_bio({"bio": "", "bio_am": amharic}, "en"), amharic)
+        key = business_owner.PREFIX + self.provider
+        self.assertEqual(directory.booking_pages([key])[key]["descriptions"], {"en": english, "am": amharic})
+        frappe.db.set_value("Provider", self.provider, "bio", "")
+        self.assertEqual(directory.booking_pages([key])[key]["descriptions"], {"en": amharic, "am": amharic})
+
+    def test_directory_card_shows_the_description_in_the_page_language(self):
+        from appointment.www import directory as directory_page
+
+        page = directory_page.Page.__new__(directory_page.Page)
+        row = {"area": "a", "category": "c", "name": "Selam Tadesse", "logo": "", "description": "English",
+               "descriptions": {"en": "English", "am": "አማርኛ"}}
+        page.areas = {"a": frappe._dict(area_name="Bole", city="Addis Ababa")}
+        page.categories = {"c": frappe._dict(category_name="Physio")}
+        for lang, expected in (("en", "English"), ("am", "አማርኛ")):
+            page.lang = lang
+            self.assertEqual(page.card(row)["description"], expected)
+        page.lang = "am"
+        self.assertEqual(page.card({**row, "descriptions": {}})["description"], "English")
+
+    # ------------------------------------------------------------------
+    # Organization slugs share the address space
+    # ------------------------------------------------------------------
+    def _organization(self, slug, name="Hana Clinic"):
+        return frappe.get_doc(dict(
+            doctype="Organization", organization_name=f"{name} {self.marker}", slug=slug, organization_type="Other",
+            owner_user=self.other_user, is_active=1, timezone="Africa/Addis_Ababa")).insert(ignore_permissions=True)
+
+    def test_an_organization_cannot_take_a_provider_page_address(self):
+        frappe.clear_messages()
+        with self.assertRaises(frappe.ValidationError) as raised:
+            self._organization(self.slug())
+        self.assertIn("already used by another business", str(raised.exception))
+        doc = frappe.get_doc("Organization", self.org)
+        doc.slug = self.slug(self.other)
+        with self.assertRaises(frappe.ValidationError):
+            doc.save(ignore_permissions=True)
+
+    def test_an_organization_cannot_take_a_former_address_or_another_website(self):
+        old = self.slug(self.other)
+        frappe.set_user(self.other_user)
+        short_links.change(business_owner.PREFIX + self.other, f"{self.marker}-moved")
+        frappe.set_user("Administrator")
+        with self.assertRaises(frappe.ValidationError):
+            self._organization(old)
+        site = self._site(f"{self.marker}-site")
+        with self.assertRaises(frappe.ValidationError):
+            self._organization(frappe.db.get_value("Public Site", site, "slug"), "Tsion Clinic")
+        with self.assertRaises(frappe.ValidationError):
+            self._organization(f"{self.marker}-org", "Meron Clinic")  # another organization's slug
+
+    def test_an_organization_keeps_its_own_addresses(self):
+        doc = frappe.get_doc("Organization", self.org)
+        doc.description = "Family clinic in Bole."
+        doc.save(ignore_permissions=True)  # its own current slug
+        self.assertFalse(short_links.organization_slug_taken(doc.slug, doc.name))
+        self.assertTrue(short_links.organization_slug_taken(doc.slug, None))
+        # A slug that clashed before this check stays valid until it changes.
+        frappe.db.set_value("Organization", self.org, "slug", self.slug(), update_modified=False)
+        doc = frappe.get_doc("Organization", self.org)
+        doc.description = "Family clinic in Bole, open on Saturdays."
+        doc.save(ignore_permissions=True)
+        self.assertEqual(frappe.db.get_value("Organization", self.org, "slug"), self.slug())
+
+    def test_every_path_that_sets_an_organization_slug_avoids_page_addresses(self):
+        from appointment.scheduler import workspace
+
+        taken = self.slug()
+        self.assertEqual(short_links.free_organization_slug(taken), f"{taken}-2")
+        self.assertEqual(short_links.free_organization_slug(f"{self.marker}-free"), f"{self.marker}-free")
+        self.assertNotEqual(workspace._readable_slug(taken), taken)
+        from appointment import onboarding
+
+        source = inspect.getsource(onboarding.save_organization_profile)
+        self.assertIn("free_organization_slug(make_slug(organization_name)", source)
+
     # ------------------------------------------------------------------
     # Guest endpoint
     # ------------------------------------------------------------------
