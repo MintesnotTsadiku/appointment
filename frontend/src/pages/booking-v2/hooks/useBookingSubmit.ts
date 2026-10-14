@@ -85,15 +85,19 @@ export function useBookingSubmit() {
       start_time: timeSlot.start_time,
       end_time: timeSlot.end_time,
       user_name: formData.userName,
-      user_email: formData.userEmail,
+      user_email: formData.userEmail || "",
       other_participants: formData.otherParticipants || "",
       notes: formData.notes || "",
       time_format: timeFormat,
     };
 
-    // Add phone if provided
+    // The main contact, in E.164 form.
     if (formData.userPhone) {
       meetingData.user_phone = formData.userPhone;
+    }
+    // Other people coming, by phone number.
+    if (formData.participantPhones?.length) {
+      meetingData.participant_phones = formData.participantPhones.join(",");
     }
 
     // Add organization/service info if provided

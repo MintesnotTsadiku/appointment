@@ -58,6 +58,9 @@ scenarios:
     selector: '#userName'
     value: Pool guest en
   - action: fill
+    selector: '#userPhone'
+    value: '+251910492108'
+  - action: fill
     selector: '#userEmail'
     value: qa-pool-guest-en@example.test
   - action: screenshot
@@ -134,6 +137,9 @@ scenarios:
   - action: fill
     selector: '#userName'
     value: Pool guest am
+  - action: fill
+    selector: '#userPhone'
+    value: '+251910956890'
   - action: fill
     selector: '#userEmail'
     value: qa-pool-guest-am@example.test

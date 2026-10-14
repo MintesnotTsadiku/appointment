@@ -5,6 +5,7 @@ import { Badge } from '@/components/badge';
 import { Button } from '@/components/button';
 import { useOnlineLabel } from '@/components/online-session/JoinSession';
 import { useTranslation } from '@/lib/i18n';
+import { formatPhone } from '@/lib/phone';
 import type { Location } from './types';
 
 interface LocationCardProps {
@@ -76,7 +77,7 @@ export function LocationCard({ location, owner, deleting, onEdit, onDelete }: Lo
         {location.phone && (
           <span className="inline-flex min-w-0 items-center gap-1">
             <Phone className="h-3 w-3 shrink-0" aria-hidden="true" />
-            <span className="truncate tabular-nums">{location.phone}</span>
+            <span className="truncate tabular-nums">{formatPhone(location.phone)}</span>
           </span>
         )}
       </div>

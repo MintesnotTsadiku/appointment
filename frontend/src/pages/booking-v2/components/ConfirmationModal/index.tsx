@@ -3,7 +3,7 @@
  * Beautiful success confirmation with actions
  */
 
-import { CheckCircle2, Calendar, Clock, Mail, MapPin, Copy, ExternalLink, X } from "lucide-react";
+import { CheckCircle2, Calendar, Clock, Mail, MapPin, Copy, ExternalLink, X, Link2, Phone } from "lucide-react";
 import { useState, type CSSProperties } from "react";
 import { Button } from "@/components/button";
 import {
@@ -20,6 +20,7 @@ import CustomerShareCard from "@/components/growth-referrals/CustomerShareCard";
 import PoweredBy from "@/components/powered-by";
 import { formatDate } from "../../utils/dateHelpers";
 import { clockForLanguage, formatInstant, zoneLabel } from "@/lib/time";
+import { formatPhone } from "@/lib/phone";
 import type { BookingResponse, Service, TimeSlot } from "../../types";
 
 interface ConfirmationModalProps {
@@ -32,6 +33,8 @@ interface ConfirmationModalProps {
   timeFormat: '12h' | '24h' | 'ethiopian';
   timezone: string;
   userEmail: string;
+  /** The phone number the business will use, in E.164 form. */
+  userPhone?: string;
   brandStyle?: CSSProperties;
 }
 
@@ -45,6 +48,7 @@ export function ConfirmationModal({
   timeFormat,
   timezone,
   userEmail,
+  userPhone,
   brandStyle,
 }: ConfirmationModalProps) {
   const { t, language } = useTranslation();
@@ -52,6 +56,8 @@ export function ConfirmationModal({
   const { growth } = usePlatformBrand();
   const [copied, setCopied] = useState<string | null>(null);
   const emailQueued = bookingResponse.notificationStatus === "queued";
+  // The manage link works without email: a phone-only customer keeps it to change or cancel.
+  const manageUrl = bookingResponse.managePath ? new URL(bookingResponse.managePath, window.location.origin).toString() : "";
 
   const startTime = new Date(selectedSlot.start_time);
   const formattedTime = formatInstant(startTime, clockForLanguage(language, timeFormat), timezone);
@@ -104,7 +110,7 @@ export function ConfirmationModal({
         </div>
 
         {/* Booking Details */}
-        <div className="space-y-4 px-6 pb-6">
+        <div className="min-w-0 space-y-4 px-6 pb-6">
           {/* Confirmation Email Notice */}
           <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
             <div className="flex items-start gap-3">
@@ -114,9 +120,20 @@ export function ConfirmationModal({
                   {emailQueued ? t("customerBooking.emailQueuedTitle") : t("customerBooking.savedTitle")}
                 </p>
                 <p className="text-sm text-blue-700 dark:text-blue-300">
-                  {emailQueued ? t("customerBooking.emailQueuedBody") : t("customerBooking.notSentBody")}{" "}
-                  <span className="font-semibold">{userEmail}</span>
+                  {emailQueued ? (
+                    <>{t("customerBooking.emailQueuedBody")} <span className="font-semibold">{userEmail}</span></>
+                  ) : userEmail ? (
+                    <>{t("customerBooking.notSentBody")} <span className="font-semibold">{userEmail}</span></>
+                  ) : (
+                    t("customerBooking.noEmailBody")
+                  )}
                 </p>
+                {userPhone && (
+                  <p data-qa="booking-phone-notice" className="mt-1 flex items-center gap-1.5 text-sm text-blue-700 dark:text-blue-300">
+                    <Phone className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                    <span>{t("customerBooking.phoneOnFile").replace("{0}", "")}<span dir="ltr" className="font-semibold">{formatPhone(userPhone)}</span></span>
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -233,13 +250,42 @@ export function ConfirmationModal({
               </div>
             )}
 
-            {/* Booking ID */}
+            {/* Booking reference: always shown, so a customer without email can quote it. */}
             {bookingResponse.bookingId && (
-              <div className="text-xs text-gray-500 dark:text-gray-400 pt-4 border-t border-gray-200 dark:border-gray-700">
-                {t("customerBooking.bookingId")}: <span className="font-mono">{bookingResponse.bookingId}</span>
+              <div className="flex flex-wrap items-center justify-between gap-2 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {t("customerBooking.bookingId")}: <span data-qa="booking-reference" className="font-mono font-semibold text-gray-900 dark:text-gray-100 break-all">{bookingResponse.bookingId}</span>
+                </p>
+                <Button variant="outline" size="sm" data-qa="booking-reference-copy" onClick={() => handleCopy(bookingResponse.bookingId!, "reference")}>
+                  {copied === "reference" ? <CheckCircle2 className="h-4 w-4 mr-1 text-green-600" /> : <Copy className="h-4 w-4 mr-1" />}
+                  {copied === "reference" ? t("customerBooking.copied") : t("customerBooking.copy")}
+                </Button>
               </div>
             )}
           </div>
+
+          {/* Manage link: change or cancel without email or an account. */}
+          {manageUrl && (
+            <div data-qa="booking-manage" className="min-w-0 overflow-hidden rounded-xl border-2 border-gray-200 dark:border-gray-700 p-4 space-y-2">
+              <div className="flex items-center gap-2">
+                <Link2 className="h-5 w-5 text-primary-600 dark:text-primary-400 shrink-0" aria-hidden="true" />
+                <h3 className="font-semibold text-gray-900 dark:text-gray-100">{t("customerBooking.manageTitle")}</h3>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t("customerBooking.manageBody")}</p>
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                <code data-qa="booking-manage-link" className="min-w-0 flex-1 truncate rounded-lg bg-gray-100 px-3 py-2 text-sm dark:bg-gray-700">{manageUrl}</code>
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm" className="flex-1 sm:flex-none" data-qa="booking-manage-copy" onClick={() => handleCopy(manageUrl, "manage")}>
+                    {copied === "manage" ? <CheckCircle2 className="h-4 w-4 mr-1 text-green-600" /> : <Copy className="h-4 w-4 mr-1" />}
+                    {copied === "manage" ? t("customerBooking.copied") : t("customerBooking.copy")}
+                  </Button>
+                  <Button asChild size="sm" className="flex-1 sm:flex-none" data-qa="booking-manage-open">
+                    <a href={manageUrl}><ExternalLink className="h-4 w-4 mr-1" />{t("customerBooking.manageOpen")}</a>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Action Buttons */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">

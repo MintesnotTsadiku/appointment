@@ -55,13 +55,14 @@ class TestCustomerProfiles(BloomBookingCase):
         row = frappe.db.get_value("Appointment", result["booking_id"], ["customer", "client_name"], as_dict=True)
         self.assertEqual((row.customer, row.client_name), (profile.name, "Typed Name"))
 
-    def test_email_and_phone_matching_two_profiles_links_email_and_flags_phone(self):
+    def test_email_and_phone_matching_two_profiles_links_phone_and_flags_email(self):
+        # Phone is the main contact since phone-first booking.
         by_email = self._profile(name="A", email="split@example.test")
         by_phone = self._profile(name="B", phone="0911000111")
-        result = self._book(email="split@example.test", phone="0911000111")
+        result = self._book(email="split@example.test", phone="+251 911 000 111")
 
-        self.assertEqual(frappe.db.get_value("Appointment", result["booking_id"], "customer"), by_email.name)
-        self.assertEqual(frappe.db.get_value("Customer Profile", by_phone.name, "possible_duplicate"), 1)
+        self.assertEqual(frappe.db.get_value("Appointment", result["booking_id"], "customer"), by_phone.name)
+        self.assertEqual(frappe.db.get_value("Customer Profile", by_email.name, "possible_duplicate"), 1)
 
     def test_staff_booking_with_name_only_creates_a_profile(self):
         frappe.set_user(MANAGER)
@@ -78,10 +79,10 @@ class TestCustomerProfiles(BloomBookingCase):
         self.assertFalse(doc.client_email)
         self.assertEqual(frappe.db.get_value("Customer Profile", doc.customer, "display_name"), "Walk-up guest")
 
-    def test_public_booking_still_requires_email(self):
+    def test_public_booking_without_phone_or_email_is_refused(self):
         start = self.slots[0]
         with self.assertRaises(frappe.ValidationError):
-            booking.book(OFFERING, start["start_time"], start["end_time"], "No Email", "", "n" * 24, organization_id=self.org)
+            booking.book(OFFERING, start["start_time"], start["end_time"], "No Contact", "", "n" * 24, organization_id=self.org)
 
     def test_staff_create_links_the_picked_customer(self):
         profile = self._profile(name="Picked Customer")

@@ -12,6 +12,7 @@ from frappe import _
 from frappe.rate_limiter import rate_limit
 from frappe.utils import cint, get_datetime, get_time, getdate
 
+from appointment.helpers import phone as phones
 from appointment.scheduler import customer_identity, notifications, online_meeting, resources
 from appointment.scheduler.booking_access import require_access
 
@@ -309,14 +310,26 @@ def validate_document(doc):
 
 
 def _validate_contact(doc, public):
-    """Name always. Email for public bookings, which confirm by email; optional for staff."""
+    """Name always. Phone is the main contact; email is optional.
+
+    A public booking needs a phone number. Callers from before phone-first
+    that send only an email are still accepted. Staff may book with a name
+    only. Every phone number is stored in E.164 form.
+    """
     doc.client_name = (doc.client_name or "").strip()
     if not doc.client_name:
         frappe.throw(_("A customer name is required."))
-    if public and not doc.client_email:
-        frappe.throw(_("Customer name and email are required."))
+    doc.client_email = (doc.client_email or "").strip() or None
+    if public and not doc.client_phone and not doc.client_email:
+        frappe.throw(_("Enter your phone number."), title=_("Phone number"))
+    if doc.client_phone and (doc.is_new() or doc.has_value_changed("client_phone")):
+        doc.client_phone = phones.require_phone(doc.client_phone)
+    doc.client_phone = doc.client_phone or None
     if doc.client_email:
         frappe.utils.validate_email_address(doc.client_email, throw=True)
+    if doc.is_new() or doc.has_value_changed("participant_phones"):
+        numbers = phones.normalize_phone_list(doc.get("participant_phones"), exclude=[doc.client_phone] if doc.client_phone else ())
+        doc.participant_phones = "\n".join(numbers) or None
 
 
 def creation_history(doc):
@@ -361,29 +374,39 @@ def _booking_limit():
     return cint(frappe.conf.get("guest_booking_limit_per_ip") or 10)
 
 
-def _guest_request(email):
+def _guest_request():
     # Like Frappe's rate limiter, this applies to web requests only, not to scripts, seeding or tests.
-    return bool(getattr(frappe.local, "request", None)) and frappe.session.user == "Guest" and bool((email or "").strip())
+    return bool(getattr(frappe.local, "request", None)) and frappe.session.user == "Guest"
 
 
-def _guest_email_key(business, email):
-    return f"appointment:guest-bookings:{business}:{(email or '').strip().lower()}"
+def _guest_contacts(business, email, phone):
+    """(cache key, limit, message) for each contact the guest gave."""
+    rows = []
+    number = phones.normalize_phone(phone)
+    if number:
+        limit = cint(frappe.conf.get("guest_booking_limit_per_phone") or 3)
+        rows.append((f"appointment:guest-bookings:{business}:phone:{number}", limit, _("Too many bookings for this phone number. Try again in a few minutes.")))
+    address = (email or "").strip().lower()
+    if address:
+        limit = cint(frappe.conf.get("guest_booking_limit_per_email") or 3)
+        rows.append((f"appointment:guest-bookings:{business}:{address}", limit, _("Too many bookings for this email address. Try again in a few minutes.")))
+    return rows
 
 
-def _check_guest_email(business, email):
-    """One client cannot fill a business's day: a few guest bookings per email in the window."""
-    if not _guest_request(email):
+def _check_guest_contacts(business, email, phone):
+    """One client cannot fill a business's day: a few guest bookings per phone, and per email, in the window."""
+    if not _guest_request():
         return
-    limit = cint(frappe.conf.get("guest_booking_limit_per_email") or 3)
-    if cint(frappe.cache.get_value(_guest_email_key(business, email))) >= limit:
-        frappe.throw(_("Too many bookings for this email address. Try again in a few minutes."), frappe.RateLimitExceededError)
+    for key, limit, message in _guest_contacts(business, email, phone):
+        if cint(frappe.cache.get_value(key)) >= limit:
+            frappe.throw(message, frappe.RateLimitExceededError)
 
 
-def _count_guest_email(business, email):
-    if not _guest_request(email):
+def _count_guest_contacts(business, email, phone):
+    if not _guest_request():
         return
-    key = _guest_email_key(business, email)
-    frappe.cache.set_value(key, cint(frappe.cache.get_value(key)) + 1, expires_in_sec=BOOKING_WINDOW_SECONDS)
+    for key, _limit, _message in _guest_contacts(business, email, phone):
+        frappe.cache.set_value(key, cint(frappe.cache.get_value(key)) + 1, expires_in_sec=BOOKING_WINDOW_SECONDS)
 
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])
@@ -393,8 +416,8 @@ def book(
     start_time,
     end_time,
     user_name,
-    user_email,
-    request_id,
+    user_email="",
+    request_id=None,
     user_phone="",
     notes="",
     organization_id=None,
@@ -403,7 +426,13 @@ def book(
     quantity=1,
     referral_source="",
     referral_code="",
+    participant_phones="",
 ):
+    """Create a public booking. Phone is the main contact and email is optional.
+
+    `user_email` keeps its place so callers from before phone-first still work.
+    `participant_phones` is a list or comma-separated text of other people's numbers.
+    """
     if not re.fullmatch(r"[A-Za-z0-9_-]{16,100}", request_id or ""):
         frappe.throw(_("A valid booking request identity is required."))
     if any(not isinstance(value, str) or len(value)>140 for value in (referral_source, referral_code)):
@@ -418,10 +447,12 @@ def book(
         start=start.isoformat(),
         end=end.isoformat(),
         name=user_name,
-        email=user_email,
+        email=user_email or "",
         phone=user_phone or "",
         notes=notes or "",
         **({"quantity": cint(quantity)} if cint(quantity) > 1 else {}),
+        # Only present when given, so earlier request digests stay the same.
+        **({"participants": phones.split_phones(participant_phones)} if participant_phones else {}),
     )
     if referral_source or referral_code:
         payload.update(referral_source=referral_source,referral_code=referral_code)
@@ -440,7 +471,7 @@ def book(
         if existing[0].request_hash != digest:
             frappe.throw(_("This request identity was already used for different booking details."))
         return json.loads(existing[0].request_result)
-    _check_guest_email(business_name, user_email)
+    _check_guest_contacts(business_name, user_email, user_phone)
     parts = offering(offering_id, public=True)
     event, service, location, provider, business = parts
     zone = pytz.timezone(location.timezone)
@@ -462,6 +493,7 @@ def book(
             client_name=user_name,
             client_email=user_email,
             client_phone=user_phone,
+            participant_phones="\n".join(phones.split_phones(participant_phones)),
             customer_language=language if language in ("en", "am") else None,
             notes=notes,
             quantity=cint(quantity) or 1,
@@ -490,7 +522,7 @@ def book(
     result["manage_path"] = self_service.manage_url(doc).replace(frappe.utils.get_url(), "")
     result["notification_status"] = notifications.status_of(doc)
     frappe.db.set_value("Appointment", doc.name, "request_result", json.dumps(result), update_modified=False)
-    _count_guest_email(business_name, user_email)
+    _count_guest_contacts(business_name, user_email, user_phone)
     return result
 
 

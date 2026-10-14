@@ -61,6 +61,9 @@ scenarios:
     selector: '#userName'
     value: Dawit Alemu
   - action: fill
+    selector: '#userPhone'
+    value: '+251910154803'
+  - action: fill
     selector: '#userEmail'
     value: '{qa_touch_guest_3}'
   - action: click

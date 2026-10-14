@@ -1,5 +1,6 @@
 import { useRef, type CSSProperties, type ReactNode } from "react";
 
+import { formatPhone, phoneHref } from "@/lib/phone";
 import type { BookingTemplateProps, TemplateProps } from "../types";
 import type { ContentRecord } from "../content";
 import { action, brandLogo, contentImage, designImage, durationMinutes, formatPrice, localized, records, section, sectionImage } from "../content";
@@ -185,7 +186,7 @@ export function AbugidaSite({ snapshot, locale, applicationName, publicRoot, roo
               </article>;
             })}
             <p className="ab-contact">
-              {phone ? <a className="ab-inline" href={`tel:${phone.replace(/\s+/g, "")}`}><span className="ab-sr">{chrome.t("phone")} </span>{phone}</a> : null}
+              {phone ? <a className="ab-inline" href={phoneHref(phone) || `tel:${phone.replace(/\s+/g, "")}`}><span className="ab-sr">{chrome.t("phone")} </span>{formatPhone(phone)}</a> : null}
               {email ? <a className="ab-inline" href={`mailto:${email}`}><span className="ab-sr">{chrome.t("email")} </span>{email}</a> : null}
             </p>
           </div>

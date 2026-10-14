@@ -33,3 +33,5 @@ appointment.patches.v0_1.import_independent_followups_translations
 appointment.patches.v0_1.import_server_message_translations
 appointment.patches.v0_1.import_walkin_hours_translations
 appointment.patches.v0_1.backfill_provider_page_slugs
+appointment.patches.v0_1.normalize_phone_numbers
+appointment.patches.v0_1.import_phone_first_translations

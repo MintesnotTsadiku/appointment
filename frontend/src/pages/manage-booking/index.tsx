@@ -9,6 +9,7 @@ import PoweredBy from '@/components/powered-by';
 import { usePlatformBrand } from '@/lib/platform-brand';
 import { useTheme } from '@/components/theme-provider';
 import { useTranslation } from '@/lib/i18n';
+import { formatPhone, phoneHref } from '@/lib/phone';
 import { useBookingBrand } from '@/public-experience/bookingTheme';
 import { brandLogo } from '@/public-experience/templates/content';
 import '@/public-experience/platform.css';
@@ -175,7 +176,7 @@ function Contact({ view }: { view: ManageView }) {
         <Phone className="h-4 w-4" aria-hidden="true" />
         {fill(t('customerManage.contact'), name)}
       </span>
-      {phone && <a href={`tel:${phone.replace(/\s+/g, '')}`} className="underline underline-offset-4">{phone}</a>}
+      {phone && <a href={phoneHref(phone) || `tel:${phone.replace(/\s+/g, '')}`} className="underline underline-offset-4">{formatPhone(phone)}</a>}
       {email && <a href={`mailto:${email}`} className="underline underline-offset-4">{email}</a>}
     </div>
   );

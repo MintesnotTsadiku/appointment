@@ -18,6 +18,7 @@ from frappe import _
 from frappe.utils import get_datetime
 
 from appointment.growth import touchpoints
+from appointment.helpers import phone
 from appointment.helpers.utils import format_ethiopian_time
 from appointment.scheduler import business_owner
 
@@ -55,20 +56,9 @@ def is_muted():
 def normalize_phone(raw):
     """Return the number in +<country><number> form, or "" when it is not usable.
 
-    Ethiopian numbers may arrive as 09…/07…, 9…/7…, 2519… or +2519….
+    Kept for existing callers; the rule lives in `appointment.helpers.phone`.
     """
-    number = re.sub(r"[\s\-().]", "", raw or "")
-    if number.startswith("+"):
-        return number if number[1:].isdigit() and 8 <= len(number) - 1 <= 15 else ""
-    if not number.isdigit():
-        return ""
-    if number.startswith("251") and len(number) == 12:
-        return "+" + number
-    if number.startswith("0") and len(number) == 10 and number[1] in "79":
-        return "+251" + number[1:]
-    if len(number) == 9 and number[0] in "79":
-        return "+251" + number
-    return ""
+    return phone.normalize_phone(raw)
 
 
 def send_notification(notification):

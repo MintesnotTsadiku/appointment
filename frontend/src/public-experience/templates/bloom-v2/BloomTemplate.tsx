@@ -1,5 +1,6 @@
 import { useRef, type CSSProperties, type ReactNode } from "react";
 
+import { formatPhone, phoneHref } from "@/lib/phone";
 import type { BookingTemplateProps, TemplateProps } from "../types";
 import type { ContentRecord } from "../content";
 import { action, brandLogo, contentImage, designImage, durationMinutes, formatPrice, localized, records, section, sectionImage } from "../content";
@@ -168,7 +169,7 @@ export function BloomSite({ snapshot, locale, applicationName, publicRoot, rootS
               <p>{localized(item.address, locale)}</p>
               {localized(item.hours, locale) ? <p className="bl-muted">{localized(item.hours, locale)}</p> : null}
               <p className="bl-room-links">
-                {telephone ? <a href={`tel:${telephone.replace(/\s+/g, "")}`}><span className="bl-sr">{chrome.t("phone")} </span>{telephone}</a> : null}
+                {telephone ? <a href={phoneHref(telephone) || `tel:${telephone.replace(/\s+/g, "")}`}><span className="bl-sr">{chrome.t("phone")} </span>{formatPhone(telephone)}</a> : null}
                 {directions ? <a href={directions.href} rel="noopener noreferrer">{directions.label}</a> : null}
               </p>
             </article>;

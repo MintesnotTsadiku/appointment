@@ -38,13 +38,17 @@ MAX_MESSAGE = 1000
 
 
 class Copy:
-    """`t("title")` reads `growthPartners.title` in the page language; extra args fill `{0}`, `{1}`."""
+    """`t("title")` reads `growthPartners.title` in the page language; extra args fill `{0}`, `{1}`.
+
+    `t("controls.phone.hint")` reads the app's shared control text by its full key.
+    """
 
     def __init__(self, lang: str):
         self.lang = lang
 
     def __call__(self, key: str, *args) -> str:
-        value = text(f"{GROUP}.{key}", self.lang)
+        full_key = key if key.startswith("controls.") else f"{GROUP}.{key}"
+        value = text(full_key, self.lang)
         return value.format(*args) if args else value
 
 

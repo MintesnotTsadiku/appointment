@@ -482,7 +482,7 @@ def book_time_slot(
     end_time: str,
     user_timezone_offset: str,
     user_name: str,
-    user_email: str,
+    user_email: str = "",
     other_participants: str = None,
     provider_id: str = None,
     organization_id: str = None,
@@ -493,10 +493,23 @@ def book_time_slot(
         from appointment.scheduler.booking import book
         if args.get("reschedule") or args.get("event_token"):
             frappe.throw(_("Use the booking management workflow to change an existing appointment."))
+        # Phone is the main contact; email is optional. Other people come as phone numbers.
         return book(duration_id, start_time, end_time, user_name, user_email,
                     args.get("request_id"), args.get("user_phone", ""), args.get("notes", ""), organization_id,
                     language=args.get("language"), payment_method=args.get("payment_method"), quantity=args.get("quantity") or 1,
-                    referral_source=args.get("referral_source") or "", referral_code=args.get("referral_code") or "")
+                    referral_source=args.get("referral_source") or "", referral_code=args.get("referral_code") or "",
+                    participant_phones=args.get("participant_phones") or "")
+    if args.get("user_phone"):
+        from appointment.helpers.phone import require_phone
+
+        args["user_phone"] = require_phone(args["user_phone"])
+    if args.get("participant_phones"):
+        from appointment.helpers.phone import normalize_phone_list
+
+        # A personal calendar meeting keeps other people's numbers in the event details.
+        args["participant_phones"] = ",".join(normalize_phone_list(args["participant_phones"]))
+    if not user_email:
+        frappe.throw(_("Enter your email address. The meeting invitation is sent by email."))
     # Validate date is not in the past
     from frappe.utils import get_datetime, now_datetime
     requested_date = get_datetime(date)

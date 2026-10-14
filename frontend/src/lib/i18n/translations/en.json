@@ -4010,7 +4010,12 @@
     "next3Place": "Arrive at the chosen location a few minutes before your appointment",
     "next4": "Contact the business if you need to change or cancel",
     "done": "Done",
-    "zoneTime": "{0} time"
+    "zoneTime": "{0} time",
+    "noEmailBody": "Save your booking reference and the manage link below. You need them to change or cancel your booking.",
+    "phoneOnFile": "The business will contact you at {0}",
+    "manageTitle": "Manage your booking",
+    "manageBody": "Use this link to see, change or cancel your booking. Keep it private.",
+    "manageOpen": "Open"
   },
   "customerSms": {
     "confirmation": "{0}: your booking for {1} on {2} is confirmed.",
@@ -4192,7 +4197,10 @@
     "nameShort": "Name must be at least 2 characters",
     "emailRequired": "Email is required",
     "emailInvalid": "Please enter a valid email",
-    "phoneInvalid": "Please enter a valid phone number"
+    "phoneInvalid": "Please enter a valid phone number",
+    "phoneHint": "The business uses this number to confirm your booking and reach you.",
+    "emailOptionalHint": "Optional. Add it to get your confirmation by email too.",
+    "participantsPhoneHint": "Type each person's phone number and press Enter or a comma."
   },
   "serviceSelector": {
     "title": "Select a service",
@@ -4333,7 +4341,8 @@
     "signOut": "Sign out",
     "signedInAs": "Signed in as {0}",
     "paymentNeeded": "Payment needed",
-    "allLink": "All my bookings"
+    "allLink": "All my bookings",
+    "phoneOnly": "Booked with a phone number only? Open the manage link from your booking confirmation to see, change or cancel that booking."
   },
   "myBookingsServer": {
     "sentServer": "If this email has bookings with {0}, we sent it a link to see them.",
@@ -5789,7 +5798,28 @@
       "help24h": "Use hours 00–23 and minutes 00–59.",
       "label": "Time"
     },
-    "pickDateTime": "Pick a date and time"
+    "pickDateTime": "Pick a date and time",
+    "phone": {
+      "label": "Phone number",
+      "placeholder": "0911 22 33 44",
+      "hint": "Enter a phone number like 0911 22 33 44 or +251 91 122 3344. International numbers start with + and the country code.",
+      "required": "Enter your phone number.",
+      "tagsPlaceholder": "Type a phone number, then press Enter",
+      "tagsMore": "Add another number",
+      "tagsHelp": "Press Enter or type a comma after each number. Each number becomes a tag you can remove.",
+      "remove": "Remove {0}",
+      "added": "{0} added",
+      "removed": "{0} removed",
+      "duplicate": "This number is already in the list.",
+      "ownNumber": "This is the main phone number. Add other people's numbers here.",
+      "max": "Add at most {0} other people.",
+      "list": "Phone numbers added",
+      "notAPhone": "{0} is not a phone number.",
+      "tooManyForPhone": "Too many bookings for this phone number. Try again in a few minutes.",
+      "otherCustomer": "Another customer of this business already uses this phone number.",
+      "peopleLabel": "Other people coming",
+      "peopleCount": "{0} other people"
+    }
   },
   "onlineSession": {
     "label": "Online video",
@@ -5874,5 +5904,8 @@
     "noMatchBody": "Choose another category or provider.",
     "noServicesTitle": "No services to book yet",
     "noServicesBody": "This business has not published services for online booking. Check again later."
+  },
+  "phoneServer": {
+    "inviteNeedsEmail": "Enter your email address. The meeting invitation is sent by email."
   }
 }

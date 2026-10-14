@@ -3,6 +3,8 @@ import { format, parseISO } from 'date-fns';
 import { useTranslation } from '@/lib/i18n';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/dialog';
 import { StatusBadge } from '@/components/status-badge';
+import { PhoneText } from '@/components/phone-input';
+import { phoneList } from '@/lib/phone';
 import { timeRange } from './dates';
 import type { Appointment } from './types';
 
@@ -32,8 +34,13 @@ function DetailBody({ appointment: apt }: { appointment: Appointment }) {
         <Field label={t('staff.calendar.detail.time')}>
           <span className="tabular-nums">{timeRange(apt)}</span>
         </Field>
+        <Field label={t('staff.calendar.detail.phone')}><PhoneText value={apt.client_phone} /></Field>
         <Field label={t('staff.calendar.detail.email')}>{apt.client_email}</Field>
-        <Field label={t('staff.calendar.detail.phone')}>{apt.client_phone}</Field>
+        {phoneList(apt.participant_phones).length > 0 && (
+          <Field label={t('controls.phone.peopleLabel')}>
+            <span className="flex flex-col">{phoneList(apt.participant_phones).map((number) => <PhoneText key={number} value={number} />)}</span>
+          </Field>
+        )}
         {apt.location_name && <Field label={t('staff.calendar.detail.location')}>{apt.location_name}</Field>}
         {paid && (
           <Field label={t('staff.calendar.detail.amountPaid')}>

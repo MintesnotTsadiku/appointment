@@ -12,6 +12,7 @@ import { useBusinessKey } from '@/hooks/useBusinessKey';
 import { useTranslation } from '@/lib/i18n';
 import { NewCustomerDialog } from './NewCustomerDialog';
 import { useDebounced } from './useDebounced';
+import { formatPhone } from '@/lib/phone';
 import { CUSTOMERS_API, type CustomerSummary, type SearchResult } from './types';
 
 /** Customers of the selected business or independent provider, with search and paging. */
@@ -120,7 +121,7 @@ function CustomerList({ rows, showContact }: { rows: CustomerSummary[]; showCont
               </span>
               {showContact && (
                 <span className="block truncate text-xs text-muted-foreground">
-                  {[row.primary_phone, row.primary_email].filter(Boolean).join(' · ')}
+                  {[row.primary_phone && formatPhone(row.primary_phone), row.primary_email].filter(Boolean).join(' · ')}
                 </span>
               )}
             </span>

@@ -3,6 +3,7 @@ import { useFrappePostCall, useFrappeGetCall } from 'frappe-react-sdk';
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
 import { Label } from '@/components/label';
+import { PhoneInput, usePhoneProblem } from '@/components/phone-input';
 import { Textarea } from '@/components/textarea';
 import {
   Select,
@@ -16,6 +17,8 @@ import { StepLayout } from './StepLayout';
 import { SearchableSelect } from './SearchableSelect';
 import type { Organization } from '@/context/onboarding/types';
 import { useOnboarding } from '@/context/onboarding';
+import { useTranslation } from '@/lib/i18n';
+import { formatPhone, normalizePhone } from '@/lib/phone';
 
 interface Step1OrgProfileProps {
   onNext: () => void;
@@ -23,6 +26,8 @@ interface Step1OrgProfileProps {
 
 const Step1OrgProfile = ({ onNext }: Step1OrgProfileProps) => {
   const { progress } = useOnboarding();
+  const { t } = useTranslation();
+  const phoneProblem = usePhoneProblem();
   const [selectedOrgId, setSelectedOrgId] = useState<string>('new');
   const [organizationName, setOrganizationName] = useState('');
   const [organizationType, setOrganizationType] = useState('');
@@ -73,7 +78,7 @@ const Step1OrgProfile = ({ onNext }: Step1OrgProfileProps) => {
         setOrganizationName(org.organization_name);
         setOrganizationType(org.organization_type);
         setEmail(org.email);
-        setPhone(org.phone);
+        setPhone(formatPhone(org.phone));
         setTimezone(org.timezone);
         setLanguage(org.language);
         setDescription(org.description || '');
@@ -105,8 +110,9 @@ const Step1OrgProfile = ({ onNext }: Step1OrgProfileProps) => {
       newErrors.email = 'Please enter a valid email address';
     }
 
-    if (!phone || phone.trim().length < 10) {
-      newErrors.phone = 'Please enter a valid phone number';
+    const phoneError = phoneProblem(phone, true);
+    if (phoneError) {
+      newErrors.phone = phoneError;
     }
 
     setErrors(newErrors);
@@ -123,7 +129,7 @@ const Step1OrgProfile = ({ onNext }: Step1OrgProfileProps) => {
         organization_name: organizationName,
         organization_type: organizationType,
         email,
-        phone,
+        phone: normalizePhone(phone),
         timezone,
         language,
         description,
@@ -241,18 +247,18 @@ const Step1OrgProfile = ({ onNext }: Step1OrgProfileProps) => {
         {/* Phone */}
         <div className="space-y-2">
           <Label htmlFor="phone">
-            Phone Number <span className="text-red-500">*</span>
+            {t('controls.phone.label')} <span className="text-red-500">*</span>
           </Label>
-          <Input
+          <PhoneInput
             id="phone"
-            type="tel"
-            placeholder="+251911234567"
+            required
             value={phone}
-            onChange={(e) => {
-              setPhone(e.target.value);
+            messages={false}
+            showError={!!errors.phone}
+            onChange={(value) => {
+              setPhone(value);
               if (errors.phone) setErrors({ ...errors, phone: '' });
             }}
-            className={errors.phone ? 'border-red-500' : ''}
           />
           {errors.phone && (
             <p className="text-sm text-red-500">{errors.phone}</p>

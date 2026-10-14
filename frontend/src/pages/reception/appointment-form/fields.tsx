@@ -1,5 +1,6 @@
 import type { ComponentProps, ReactNode } from 'react';
 import { Input } from '@/components/input';
+import { PhoneInput, PhoneTagsInput } from '@/components/phone-input';
 import { Label } from '@/components/label';
 import { OptionSelect } from '@/components/select/OptionSelect';
 import { Textarea } from '@/components/textarea';
@@ -56,6 +57,52 @@ export function TextField({ id, label, value, onValueChange, error, required, cl
         {...props}
       />
     </Field>
+  );
+}
+
+interface PhoneFieldProps {
+  id: string;
+  label: ReactNode;
+  value: string;
+  onValueChange: (value: string) => void;
+  error?: string;
+  required?: boolean;
+  className?: string;
+  help?: ReactNode;
+  'data-qa'?: string;
+}
+
+/** The standard phone input inside a desk field; the form's validation shows the shared hint. */
+export function PhoneField({ id, label, value, onValueChange, error, required, className, help, 'data-qa': qa }: PhoneFieldProps) {
+  return (
+    <Field id={id} label={label} error={error} required={required} className={className}>
+      <PhoneInput id={id} data-qa={qa} value={value} onChange={onValueChange} required={required} messages={false}
+        aria-invalid={error ? true : undefined} aria-describedby={error ? `${id}-error` : help ? `${id}-help` : undefined} />
+      {!error && help && <FieldHint id={`${id}-help`}>{help}</FieldHint>}
+    </Field>
+  );
+}
+
+interface PhoneTagsFieldProps {
+  id: string;
+  label: ReactNode;
+  value: string[];
+  onValueChange: (value: string[]) => void;
+  onValidityChange?: (valid: boolean) => void;
+  exclude?: string;
+  help?: ReactNode;
+  className?: string;
+  'data-qa'?: string;
+}
+
+/** Other people coming, as phone tags. */
+export function PhoneTagsField({ id, label, value, onValueChange, onValidityChange, exclude, help, className, 'data-qa': qa }: PhoneTagsFieldProps) {
+  return (
+    <div className={cn('min-w-0 space-y-1.5', className)}>
+      <Label id={`${id}-label`} htmlFor={id} className="text-sm font-medium text-foreground">{label}</Label>
+      <PhoneTagsInput id={id} data-qa={qa} aria-labelledby={`${id}-label`} value={value} onChange={onValueChange}
+        onValidityChange={onValidityChange} exclude={exclude} help={help} helpClassName="text-xs" errorClassName="text-xs" />
+    </div>
   );
 }
 

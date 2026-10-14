@@ -1,5 +1,7 @@
 import { Input } from '@/components/input';
 import { Label } from '@/components/label';
+import { PhoneInput } from '@/components/phone-input';
+import { normalizePhone } from '@/lib/phone';
 import { useTranslation } from '@/lib/i18n';
 
 export interface ContactDraft {
@@ -12,11 +14,18 @@ interface ContactFieldsProps {
   idPrefix: string;
   value: ContactDraft;
   nameError?: string;
+  /** Show the phone hint now, for example after a submit attempt. */
+  showPhoneError?: boolean;
   onChange: (patch: Partial<ContactDraft>) => void;
 }
 
-/** Name (required), phone and email inputs shared by create and edit. */
-export function ContactFields({ idPrefix, value, nameError, onChange }: ContactFieldsProps) {
+/** True when the phone is empty or a usable number; the server checks it again. */
+export function contactPhoneOk(value: ContactDraft): boolean {
+  return !value.primary_phone.trim() || Boolean(normalizePhone(value.primary_phone));
+}
+
+/** Name (required), then phone, then email; shared by create and edit. */
+export function ContactFields({ idPrefix, value, nameError, showPhoneError, onChange }: ContactFieldsProps) {
   const { t } = useTranslation();
   const id = (field: string) => `${idPrefix}-${field}`;
   return (
@@ -43,13 +52,13 @@ export function ContactFields({ idPrefix, value, nameError, onChange }: ContactF
       </div>
       <div className="space-y-1.5">
         <Label htmlFor={id('phone')}>{t('staff.customers.phone')}</Label>
-        <Input
+        <PhoneInput
           id={id('phone')}
           data-qa={`${idPrefix}-phone`}
-          type="tel"
-          placeholder="+251 9XX XXX XXX"
           value={value.primary_phone}
-          onChange={(event) => onChange({ primary_phone: event.target.value })}
+          showError={showPhoneError}
+          errorClassName="text-xs"
+          onChange={(primary_phone) => onChange({ primary_phone })}
         />
       </div>
       <div className="space-y-1.5">

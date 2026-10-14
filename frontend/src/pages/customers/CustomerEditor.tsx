@@ -7,7 +7,7 @@ import { SettingsSection, StickySaveBar } from '@/components/settings-layout';
 import { Textarea } from '@/components/textarea';
 import { useTranslation } from '@/lib/i18n';
 import { serverErrorMessage } from '@/lib/utils';
-import { ContactFields } from './ContactFields';
+import { ContactFields, contactPhoneOk } from './ContactFields';
 import { PreferredProvidersEditor } from './PreferredProvidersEditor';
 import { CUSTOMERS_API, type CustomerDetail, type PreferredProvider } from './types';
 
@@ -44,8 +44,13 @@ export function CustomerEditor({ customer, organization, independent = false, on
   useEffect(() => setDraft(toDraft(customer)), [customer]);
   const dirty = JSON.stringify(draft) !== JSON.stringify(toDraft(customer));
   const patch = (next: Partial<Draft>) => setDraft((current) => ({ ...current, ...next }));
+  const [showPhoneError, setShowPhoneError] = useState(false);
 
   async function save() {
+    if (!contactPhoneOk(draft)) {
+      setShowPhoneError(true);
+      return;
+    }
     try {
       await call({
         organization,
@@ -68,7 +73,7 @@ export function CustomerEditor({ customer, organization, independent = false, on
     <div className="space-y-6">
       <SettingsSection title={t('staff.customers.details')}>
         <div className="space-y-4">
-          <ContactFields idPrefix="customer" value={draft} onChange={patch} />
+          <ContactFields idPrefix="customer" value={draft} showPhoneError={showPhoneError} onChange={patch} />
           <div className="max-w-xs space-y-1.5">
             <Label htmlFor="customer-language">{t('staff.customers.language')}</Label>
             <Select value={draft.preferred_language} onValueChange={(preferred_language) => patch({ preferred_language })}>

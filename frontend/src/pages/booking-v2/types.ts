@@ -90,10 +90,15 @@ export interface AvailabilityData {
 
 export interface BookingFormData {
   userName: string;
+  /** Optional since phone-first; personal calendar meetings still need it. */
   userEmail: string;
+  /** The main contact. The form sends it in E.164 form, such as "+251911223344". */
   userPhone?: string;
   notes?: string;
+  /** Emails of other people, for personal calendar meetings only. */
   otherParticipants?: string;
+  /** Other people's phone numbers in E.164 form. */
+  participantPhones?: string[];
 }
 
 export type PaymentGateway = 'telebirr' | 'chapa';

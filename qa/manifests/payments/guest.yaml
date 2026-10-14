@@ -55,6 +55,9 @@ scenarios:
     selector: '#userName'
     value: QA Pay EN desktop
   - action: fill
+    selector: '#userPhone'
+    value: '+251910789230'
+  - action: fill
     selector: '#userEmail'
     value: qa-pay-en-desktop@example.test
   - action: screenshot
@@ -136,6 +139,9 @@ scenarios:
   - action: fill
     selector: '#userName'
     value: QA Pay EN mobile
+  - action: fill
+    selector: '#userPhone'
+    value: '+251910035659'
   - action: fill
     selector: '#userEmail'
     value: qa-pay-en-mobile@example.test
@@ -225,6 +231,9 @@ scenarios:
     selector: '#userName'
     value: QA Pay AM desktop
   - action: fill
+    selector: '#userPhone'
+    value: '+251910313188'
+  - action: fill
     selector: '#userEmail'
     value: qa-pay-am-desktop@example.test
   - action: screenshot
@@ -305,6 +314,9 @@ scenarios:
   - action: fill
     selector: '#userName'
     value: QA Pay AM mobile
+  - action: fill
+    selector: '#userPhone'
+    value: '+251910063944'
   - action: fill
     selector: '#userEmail'
     value: qa-pay-am-mobile@example.test

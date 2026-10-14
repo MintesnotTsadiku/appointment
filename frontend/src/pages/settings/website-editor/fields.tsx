@@ -19,7 +19,7 @@ const ISSUE_KEYS: Record<Issue["code"], string> = {
   required: "staff.website.editor.issue.required",
   tooLong: "staff.website.editor.issue.tooLong",
   tooMany: "staff.website.editor.issue.tooMany",
-  phone: "staff.website.editor.issue.phone",
+  phone: "controls.phone.hint",
   email: "staff.website.editor.issue.email",
   altRequired: "staff.website.editor.issue.altRequired",
   consent: "staff.website.editor.issue.consent",

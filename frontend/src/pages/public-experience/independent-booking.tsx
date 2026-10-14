@@ -23,7 +23,8 @@ import { useTranslation } from '@/lib/i18n';
 import '@/public-experience/platform.css';
 import { useOnlineLabel } from '@/components/online-session/JoinSession';
 import type { LocationType } from '@/lib/online-session';
-import { BookingConfirmed, DetailsForm, type Booked, type TimeFormat } from './independent-booking-parts';
+import { BookingConfirmed, DetailsForm, type Booked, type Contact, type TimeFormat } from './independent-booking-parts';
+import { normalizePhone } from '@/lib/phone';
 
 interface Offering { site_slug?: string | null; provider_slug?: string | null; business_name: string; service: string; duration: number; timezone: string; allow_quantity?: number; max_quantity?: number; location?: { name?: string; address?: string; location_type?: LocationType; platform?: string } }
 interface SlotRow { start_time: string; end_time: string; available: boolean }
@@ -49,8 +50,10 @@ export default function IndependentBooking() {
   const [step, setStep] = useState<'time' | 'details'>('time');
   const [quantity, setQuantity] = useState(1);
   const [chosenFormat, setChosenFormat] = useState<TimeFormat | null>(null);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [contact, setContact] = useState<Contact>({ name: '', phone: '', email: '', participants: [] });
+  const [phoneValid, setPhoneValid] = useState(false);
+  const [participantsValid, setParticipantsValid] = useState(true);
+  const [showErrors, setShowErrors] = useState(false);
   const [requestId] = useState(() => crypto.randomUUID());
   const [problem, setProblem] = useState('');
   const [booking, setBooking] = useState<Booked>();
@@ -74,9 +77,13 @@ export default function IndependentBooking() {
   async function submit(event: FormEvent) {
     event.preventDefault(); setProblem('');
     if (!slot) return;
+    setShowErrors(true);
+    if (!phoneValid || !participantsValid) return;
     try {
-      const response = await call({ offering_id: offeringId, start_time: slot.start_time, end_time: slot.end_time, user_name: name,
-        user_email: email, request_id: requestId, ...(quantity > 1 ? { quantity } : {}), ...referralTerms() });
+      const response = await call({ offering_id: offeringId, start_time: slot.start_time, end_time: slot.end_time, user_name: contact.name,
+        user_phone: normalizePhone(contact.phone), user_email: contact.email.trim(), request_id: requestId,
+        ...(contact.participants.length ? { participant_phones: contact.participants.join(',') } : {}),
+        ...(quantity > 1 ? { quantity } : {}), ...referralTerms() });
       setBooking({ id: response.message.booking_id, emailed: response.message.notification_status === 'queued', managePath: response.message.manage_path, slot, quantity });
     } catch (reason) { setProblem(parseFrappeErrorMsg(reason as Parameters<typeof parseFrappeErrorMsg>[0])); }
   }
@@ -118,7 +125,8 @@ export default function IndependentBooking() {
     <BookingSummaryCard eyebrow={fill(t('public.independentBooking.title'), offering.business_name)} title={offering.service}
       titleQa="independent-booking-service" facts={facts} />
     <DetailsForm slot={slot} timeFormat={timeFormat} timezone={offering.timezone} quantity={quantity}
-      name={name} email={email} onName={setName} onEmail={setEmail} onChangeTime={() => setStep('time')}
+      contact={contact} onContact={setContact} showErrors={showErrors} onPhoneValid={setPhoneValid} onParticipantsValid={setParticipantsValid}
+      onChangeTime={() => setStep('time')}
       problem={problem} busy={loading} onSubmit={submit} />
   </div>;
   else body = <>

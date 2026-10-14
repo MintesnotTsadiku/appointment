@@ -11,6 +11,8 @@ export interface Appointment {
   client_name: string;
   client_email: string;
   client_phone: string;
+  /** Other people coming, E.164 numbers one per line. */
+  participant_phones?: string | null;
   service: string;
   service_name: string;
   provider: string;

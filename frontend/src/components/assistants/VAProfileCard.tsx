@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Mail, Phone, User, ChevronRight } from 'lucide-react';
 import { Card } from '@/components/card';
+import { formatPhone } from '@/lib/phone';
 import type { VAProfile } from '@/lib/tasks-assistants/types';
 
 interface VAProfileCardProps {
@@ -101,7 +102,7 @@ export const VAProfileCard = ({ vaProfile, onClick, onEdit }: VAProfileCardProps
                   style={{ color: 'var(--text-muted)' }}
                 >
                   <Phone className="w-4 h-4" />
-                  {vaProfile.phone}
+                  {formatPhone(vaProfile.phone)}
                 </div>
               )}
               {vaProfile.skills && vaProfile.skills.length > 0 && (

@@ -495,3 +495,11 @@ for _doctype, _event, _handler in (
     _handlers = doc_events.setdefault(_doctype, {}).get(_event) or []
     doc_events[_doctype][_event] = ([_handlers] if isinstance(_handlers, str) else list(_handlers)) + [_handler]
 scheduler_events["daily"].append("appointment.growth.referrals.daily")
+
+# One phone rule everywhere (appointment.helpers.phone): changed phone fields are
+# stored as +<country><number>. Appended so other validate handlers keep working.
+for _doctype in ("Organization", "Provider", "Location", "Walk In", "Growth Partner", "Landing Page Settings", "Client Profile"):
+    _handlers = doc_events.setdefault(_doctype, {}).get("validate") or []
+    doc_events[_doctype]["validate"] = ([_handlers] if isinstance(_handlers, str) else list(_handlers)) + [
+        "appointment.helpers.phone.validate_phone_fields"
+    ]

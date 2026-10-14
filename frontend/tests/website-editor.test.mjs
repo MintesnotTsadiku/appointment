@@ -11,7 +11,8 @@ function load(path) {
   const exports = {};
   const source = readFileSync(new URL(path, import.meta.url), 'utf8');
   const output = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 } }).outputText;
-  vm.runInNewContext(output, { exports });
+  const modules = { '@/lib/phone': '../src/lib/phone.ts' };
+  vm.runInNewContext(output, { exports, require: (name) => load(modules[name]) });
   return exports;
 }
 

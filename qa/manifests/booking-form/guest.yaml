@@ -1,4 +1,5 @@
 # Guests open the Bloom scheduler, reach the details form and submit it empty. Nothing is booked.
+# Phone-first: the empty form asks for the name and the phone number; email is optional.
 # Picks the first open Bloom day (qa_days), not "tomorrow", which is closed on Mondays.
 app: appointment
 base_url: http://127.0.0.84:44430
@@ -70,7 +71,7 @@ scenarios:
     - type: visible_text
       value: Name is required
     - type: visible_text
-      value: Email is required
+      value: Enter your phone number.
   - action: screenshot
     name: form_en_desktop-2-details.png
     full_page: true
@@ -130,7 +131,7 @@ scenarios:
     - type: visible_text
       value: Name is required
     - type: visible_text
-      value: Email is required
+      value: Enter your phone number.
   - action: screenshot
     name: form_en_mobile-2-details.png
     full_page: true
@@ -201,7 +202,7 @@ scenarios:
     - type: visible_text
       value: ስም ያስፈልጋል
     - type: visible_text
-      value: ኢሜይል ያስፈልጋል
+      value: ስልክ ቁጥርዎን ያስገቡ።
   - action: screenshot
     name: form_am_desktop-2-details.png
     full_page: true
@@ -272,7 +273,7 @@ scenarios:
     - type: visible_text
       value: ስም ያስፈልጋል
     - type: visible_text
-      value: ኢሜይል ያስፈልጋል
+      value: ስልክ ቁጥርዎን ያስገቡ።
   - action: screenshot
     name: form_am_mobile-2-details.png
     full_page: true

@@ -5,13 +5,15 @@
  */
 
 import { useState } from "react";
-import { ArrowLeft, Calendar, Clock, User, Mail, Phone, MessageSquare, Users, Loader2, CheckCircle2, MapPin, Moon, Sun } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, User, Mail, Phone, MessageSquare, Loader2, CheckCircle2, MapPin, Moon, Sun } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/button";
 import { Input } from "@/components/input";
 import { Label } from "@/components/label";
 import { Textarea } from "@/components/textarea";
+import { PhoneInput, PhoneTagsInput } from "@/components/phone-input";
+import { normalizePhone } from "@/lib/phone";
 import { formatDate, formatTime } from "../../utils/dateHelpers";
 import { useTheme } from "@/components/theme-provider";
 import { useOnlineLabel } from "@/components/online-session/JoinSession";
@@ -36,6 +38,8 @@ interface BookingFormProps {
   className?: string;
   /** Party size, shown with the service when more than one. */
   quantity?: number;
+  /** Personal calendar meetings send a calendar invitation, so they still need an email. */
+  emailRequired?: boolean;
 }
 
 export function BookingForm({
@@ -50,6 +54,7 @@ export function BookingForm({
   loading = false,
   className,
   quantity = 1,
+  emailRequired = false,
 }: BookingFormProps) {
   const [formData, setFormData] = useState<BookingFormData>({
     userName: initialData.userName || "",
@@ -57,7 +62,10 @@ export function BookingForm({
     userPhone: initialData.userPhone || "",
     notes: initialData.notes || "",
     otherParticipants: initialData.otherParticipants || "",
+    participantPhones: initialData.participantPhones || [],
   });
+  // False while the participants field holds text that is not a phone number yet.
+  const [participantsValid, setParticipantsValid] = useState(true);
 
   const [errors, setErrors] = useState<Partial<Record<keyof BookingFormData, string>>>({});
   const [touched, setTouched] = useState<Partial<Record<keyof BookingFormData, boolean>>>({});
@@ -78,14 +86,12 @@ export function BookingForm({
         if (value.trim().length < 2) return t("bookingForm.nameShort");
         break;
       case "userEmail":
-        if (!value.trim()) return t("bookingForm.emailRequired");
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return t("bookingForm.emailInvalid");
+        if (!value.trim()) return emailRequired ? t("bookingForm.emailRequired") : undefined;
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) return t("bookingForm.emailInvalid");
         break;
       case "userPhone":
-        if (value && value.trim()) {
-          const phoneRegex = /^[+]?[\d\s-()]+$/;
-          if (!phoneRegex.test(value)) return t("bookingForm.phoneInvalid");
-        }
+        if (!value.trim()) return t("controls.phone.required");
+        if (!normalizePhone(value)) return t("controls.phone.hint");
         break;
     }
     return undefined;
@@ -103,25 +109,20 @@ export function BookingForm({
 
   const handleBlur = (field: keyof BookingFormData) => {
     setTouched((prev) => ({ ...prev, [field]: true }));
-    const error = validateField(field, formData[field] || "");
+    const value = formData[field];
+    const error = validateField(field, typeof value === "string" ? value : "");
     setErrors((prev) => ({ ...prev, [field]: error }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate all required fields
+    // Name, then phone (required), then email (optional unless the meeting needs an invitation).
     const newErrors: Partial<Record<keyof BookingFormData, string>> = {};
-    (["userName", "userEmail"] as const).forEach((field) => {
+    (["userName", "userPhone", "userEmail"] as const).forEach((field) => {
       const error = validateField(field, formData[field] || "");
       if (error) newErrors[field] = error;
     });
-
-    // Check optional phone validation
-    if (formData.userPhone) {
-      const phoneError = validateField("userPhone", formData.userPhone);
-      if (phoneError) newErrors.userPhone = phoneError;
-    }
 
     setErrors(newErrors);
     setTouched({
@@ -130,13 +131,13 @@ export function BookingForm({
       userPhone: true,
     });
 
-    // If there are errors, don't submit
-    if (Object.keys(newErrors).length > 0) {
+    // If there are errors, or a participant number still needs fixing, don't submit
+    if (Object.keys(newErrors).length > 0 || !participantsValid) {
       return;
     }
 
-    // Submit the form
-    await onSubmit(formData);
+    // Submit the form with the phone in its stored form
+    await onSubmit({ ...formData, userPhone: normalizePhone(formData.userPhone), userEmail: formData.userEmail.trim() });
   };
 
   const startTime = new Date(selectedSlot.start_time);
@@ -297,7 +298,6 @@ export function BookingForm({
                       backgroundColor: 'var(--bg-secondary)',
                       color: 'var(--text-primary)',
                       border: `1px solid ${errors.userName && touched.userName ? 'var(--accent-primary)' : 'var(--border-default)'}`,
-                      placeholder: 'var(--text-muted)'
                     }}
                   aria-invalid={errors.userName && touched.userName ? "true" : "false"}
                   aria-describedby={errors.userName ? "userName-error" : undefined}
@@ -314,7 +314,7 @@ export function BookingForm({
               )}
               </motion.div>
 
-            {/* Email Field */}
+            {/* Phone Field */}
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -322,11 +322,71 @@ export function BookingForm({
                 className="space-y-2"
               >
                 <Label 
+                  htmlFor="userPhone" 
+                  className="text-base font-medium"
+                  style={{ color: 'var(--text-primary)' }}
+                >
+                  {t("bookingForm.phone")} <span style={{ color: 'var(--accent-primary)' }}>*</span>
+              </Label>
+              <div className="relative">
+                  <div 
+                    className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                    style={{ 
+                      background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
+                      opacity: 0.2
+                    }}
+                  >
+                    <Phone className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
+                  </div>
+                <PhoneInput
+                  id="userPhone"
+                  data-qa="booking-phone"
+                  required
+                  value={formData.userPhone || ""}
+                  onChange={(value) => handleChange("userPhone", value)}
+                  onBlur={() => handleBlur("userPhone")}
+                  disabled={loading}
+                  showError={Boolean(errors.userPhone && touched.userPhone)}
+                  className="pl-12 h-12 text-base backdrop-blur-xs transition-all"
+                  style={{
+                    backgroundColor: 'var(--bg-secondary)',
+                    color: 'var(--text-primary)',
+                    border: `1px solid ${errors.userPhone && touched.userPhone ? 'var(--accent-primary)' : 'var(--border-default)'}`,
+                  }}
+                  messages={false}
+                  aria-describedby={errors.userPhone && touched.userPhone ? "userPhone-error" : "userPhone-help"}
+                />
+              </div>
+              {errors.userPhone && touched.userPhone ? (
+                  <p 
+                    id="userPhone-error" 
+                    role="alert"
+                    data-qa="booking-phone-error"
+                    className="text-sm flex items-start gap-1"
+                    style={{ color: 'var(--accent-primary)' }}
+                  >
+                  <span className="text-xs mt-0.5">⚠</span> <span>{errors.userPhone}</span>
+                </p>
+              ) : (
+                <p id="userPhone-help" className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                  {t("bookingForm.phoneHint")}
+                </p>
+              )}
+              </motion.div>
+
+            {/* Email Field */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="space-y-2"
+              >
+                <Label 
                   htmlFor="userEmail" 
                   className="text-base font-medium"
                   style={{ color: 'var(--text-primary)' }}
                 >
-                  {t("bookingForm.email")} <span style={{ color: 'var(--accent-primary)' }}>*</span>
+                  {t("bookingForm.email")} {emailRequired ? <span style={{ color: 'var(--accent-primary)' }}>*</span> : <span style={{ color: 'var(--text-secondary)' }}>{t("bookingForm.optional")}</span>}
               </Label>
               <div className="relative">
                   <div 
@@ -341,7 +401,10 @@ export function BookingForm({
                 <Input
                   id="userEmail"
                   type="email"
-                  placeholder="john@example.com"
+                  inputMode="email"
+                  autoComplete="email"
+                  data-qa="booking-email"
+                  placeholder="name@example.com"
                   value={formData.userEmail}
                   onChange={(e) => handleChange("userEmail", e.target.value)}
                   onBlur={() => handleBlur("userEmail")}
@@ -354,7 +417,6 @@ export function BookingForm({
                       backgroundColor: 'var(--bg-secondary)',
                       color: 'var(--text-primary)',
                       border: `1px solid ${errors.userEmail && touched.userEmail ? 'var(--accent-primary)' : 'var(--border-default)'}`,
-                      placeholder: 'var(--text-muted)'
                     }}
                   aria-invalid={errors.userEmail && touched.userEmail ? "true" : "false"}
                   aria-describedby={errors.userEmail ? "userEmail-error" : undefined}
@@ -370,65 +432,8 @@ export function BookingForm({
                 </p>
               )}
                 <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                {t("bookingForm.emailHint")}
+                {emailRequired ? t("bookingForm.emailHint") : t("bookingForm.emailOptionalHint")}
               </p>
-              </motion.div>
-
-            {/* Phone Field */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="space-y-2"
-              >
-                <Label 
-                  htmlFor="userPhone" 
-                  className="text-base font-medium"
-                  style={{ color: 'var(--text-primary)' }}
-                >
-                  {t("bookingForm.phone")} <span style={{ color: 'var(--text-secondary)' }}>{t("bookingForm.optional")}</span>
-              </Label>
-              <div className="relative">
-                  <div 
-                    className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                    style={{ 
-                      background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
-                      opacity: 0.2
-                    }}
-                  >
-                    <Phone className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
-                  </div>
-                <Input
-                  id="userPhone"
-                  type="tel"
-                  placeholder="+251 91 234 5678"
-                  value={formData.userPhone}
-                  onChange={(e) => handleChange("userPhone", e.target.value)}
-                  onBlur={() => handleBlur("userPhone")}
-                  disabled={loading}
-                  className={cn(
-                      "pl-12 h-12 text-base backdrop-blur-xs transition-all",
-                    errors.userPhone && touched.userPhone && "border-red-500 focus:border-red-500"
-                  )}
-                    style={{
-                      backgroundColor: 'var(--bg-secondary)',
-                      color: 'var(--text-primary)',
-                      border: `1px solid ${errors.userPhone && touched.userPhone ? 'var(--accent-primary)' : 'var(--border-default)'}`,
-                      placeholder: 'var(--text-muted)'
-                    }}
-                  aria-invalid={errors.userPhone && touched.userPhone ? "true" : "false"}
-                  aria-describedby={errors.userPhone ? "userPhone-error" : undefined}
-                />
-              </div>
-              {errors.userPhone && touched.userPhone && (
-                  <p 
-                    id="userPhone-error" 
-                    className="text-sm flex items-center gap-1"
-                    style={{ color: 'var(--accent-primary)' }}
-                  >
-                  <span className="text-xs">⚠</span> {errors.userPhone}
-                </p>
-              )}
               </motion.div>
 
             {/* Additional Participants */}
@@ -439,41 +444,32 @@ export function BookingForm({
                 className="space-y-2"
               >
                 <Label 
+                  id="otherParticipants-label"
                   htmlFor="otherParticipants" 
                   className="text-base font-medium"
                   style={{ color: 'var(--text-primary)' }}
                 >
                   {t("bookingForm.participants")} <span style={{ color: 'var(--text-secondary)' }}>{t("bookingForm.optional")}</span>
               </Label>
-              <div className="relative">
-                  <div 
-                    className="absolute left-3 top-3 w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                    style={{ 
-                      background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
-                      opacity: 0.2
-                    }}
-                  >
-                    <Users className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
-                  </div>
-                <Input
-                  id="otherParticipants"
-                  type="text"
-                  placeholder="name@example.com, another@example.com"
-                  value={formData.otherParticipants}
-                  onChange={(e) => handleChange("otherParticipants", e.target.value)}
-                  disabled={loading}
-                    className="pl-12 h-12 text-base backdrop-blur-xs transition-all"
-                    style={{
-                      backgroundColor: 'var(--bg-secondary)',
-                      color: 'var(--text-primary)',
-                      border: '1px solid var(--border-default)',
-                      placeholder: 'var(--text-muted)'
-                    }}
-                />
-              </div>
-                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                {t("bookingForm.participantsHint")}
-              </p>
+              <PhoneTagsInput
+                id="otherParticipants"
+                data-qa="booking-participants"
+                aria-labelledby="otherParticipants-label"
+                value={formData.participantPhones || []}
+                onChange={(numbers) => setFormData((prev) => ({ ...prev, participantPhones: numbers }))}
+                onValidityChange={setParticipantsValid}
+                exclude={formData.userPhone}
+                disabled={loading}
+                help={t("bookingForm.participantsPhoneHint")}
+                className="min-h-12 px-3 py-2 backdrop-blur-xs transition-all"
+                style={{
+                  backgroundColor: 'var(--bg-secondary)',
+                  color: 'var(--text-primary)',
+                  border: '1px solid var(--border-default)',
+                }}
+                errorStyle={{ color: 'var(--accent-primary)' }}
+                helpStyle={{ color: 'var(--text-secondary)' }}
+              />
               </motion.div>
 
             {/* Notes */}
@@ -511,7 +507,6 @@ export function BookingForm({
                       backgroundColor: 'var(--bg-secondary)',
                       color: 'var(--text-primary)',
                       border: '1px solid var(--border-default)',
-                      placeholder: 'var(--text-muted)'
                     }}
                   rows={4}
                 />

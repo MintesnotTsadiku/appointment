@@ -2,7 +2,8 @@
 
 A Customer Profile belongs to one business: an Organization or an independent
 provider (see `business_owner`). Profiles match only on the exact normalized
-email or phone inside that business, never on names. Bookings keep their own
+phone or email inside that business, never on names. Phone numbers are
+stored in E.164 form (see `appointment.helpers.phone`). Bookings keep their own
 contact snapshot after they link to a profile.
 """
 
@@ -13,7 +14,8 @@ from frappe import _
 from frappe.utils import validate_email_address
 
 from appointment.scheduler import business_owner
-from appointment.scheduler.notification_sms import normalize_phone
+from appointment.helpers.phone import hint as phone_hint
+from appointment.helpers.phone import normalize_phone
 
 
 def normalize_email(value):
@@ -51,7 +53,7 @@ def prepare_profile(doc):
     if doc.primary_email and not normalize_email(doc.primary_email):
         frappe.throw(_("Enter a valid email address."))
     if doc.primary_phone and not normalize_phone(doc.primary_phone):
-        frappe.throw(_("Enter a valid phone number."))
+        frappe.throw(phone_hint())
     doc.primary_email = normalize_email(doc.primary_email) or None
     doc.primary_phone = normalize_phone(doc.primary_phone) or None
     owner_key = business_owner.record_key(doc)
@@ -98,8 +100,9 @@ def _check_independent_preference(doc, row):
 def resolve_for_booking(doc):
     """Link a new booking to its customer, creating the profile when none matches.
 
-    Email wins when email and phone match two different profiles; the phone
-    match is flagged for staff as a possible duplicate.
+    Phone is the main contact, so the phone match wins when phone and email
+    match two different profiles; the email match is flagged for staff as a
+    possible duplicate.
     """
     owner = business_owner.for_booking(doc)
     if not owner:
@@ -111,8 +114,8 @@ def resolve_for_booking(doc):
         return
     found = find_by_key(owner.key, doc.client_email, doc.client_phone)
     if found.get("email") and found.get("phone") and found["email"] != found["phone"]:
-        frappe.db.set_value("Customer Profile", found["phone"], "possible_duplicate", 1, update_modified=False)
-    doc.customer = found.get("email") or found.get("phone") or create_profile(doc, owner).name
+        frappe.db.set_value("Customer Profile", found["email"], "possible_duplicate", 1, update_modified=False)
+    doc.customer = found.get("phone") or found.get("email") or create_profile(doc, owner).name
 
 
 def create_profile(doc, owner=None):

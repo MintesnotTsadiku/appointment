@@ -21,6 +21,7 @@
   "client_name",
   "client_email",
   "client_phone",
+  "participant_phones",
   "customer_language",
   "appointment_date",
   "start_time",
@@ -163,14 +164,21 @@
    "label": "Client Email",
    "options": "Email",
    "reqd": 0,
-   "description": "Required for public bookings, which confirm by email. Optional for staff bookings."
+   "description": "Optional. Email confirmations go only to bookings with an email."
   },
   {
    "fieldname": "client_phone",
    "fieldtype": "Data",
    "label": "Client Phone",
    "options": "Phone",
-   "reqd": 0
+   "reqd": 0,
+   "description": "The main contact, stored as +<country><number>, such as +251911223344. Required for public bookings."
+  },
+  {
+   "fieldname": "participant_phones",
+   "fieldtype": "Small Text",
+   "label": "Other People's Phones",
+   "description": "Phone numbers of other people who come to this booking, one per line, as +<country><number>."
   },
   {
    "fieldname": "customer_language",
@@ -442,7 +450,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-10-14 09:00:00.000000",
+ "modified": "2026-10-14 16:00:00.000000",
  "modified_by": "Administrator",
  "module": "Scheduler",
  "name": "Appointment",

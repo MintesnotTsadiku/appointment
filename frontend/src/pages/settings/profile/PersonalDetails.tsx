@@ -4,15 +4,17 @@ import { Alert, AlertDescription } from '@/components/alert';
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
 import { Label } from '@/components/label';
+import { PhoneInput } from '@/components/phone-input';
 import { SettingsSection } from '@/components/settings-layout';
 import { ErrorState } from '@/components/states';
 import { useSession } from '@/context/session';
 import { useTranslation } from '@/lib/i18n';
+import { formatPhone, normalizePhone } from '@/lib/phone';
 
 type Details = { first_name: string; last_name: string; mobile_no: string };
 type Account = Details & { full_name: string; email: string; user_image?: string };
 
-const pick = (account: Account): Details => ({ first_name: account.first_name, last_name: account.last_name, mobile_no: account.mobile_no });
+const pick = (account: Account): Details => ({ first_name: account.first_name, last_name: account.last_name, mobile_no: formatPhone(account.mobile_no) });
 
 /** The signed-in person's own name and phone, shared by every workspace they belong to. */
 export function PersonalDetails() {
@@ -25,6 +27,7 @@ export function PersonalDetails() {
   const [saving, setSaving] = useState(false);
   const [notice, setNotice] = useState('');
   const [error, setError] = useState('');
+  const [phoneChecked, setPhoneChecked] = useState(false);
 
   useEffect(() => {
     if (account) setDraft(pick(account));
@@ -32,11 +35,15 @@ export function PersonalDetails() {
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
+    if (draft.mobile_no.trim() && !normalizePhone(draft.mobile_no)) {
+      setPhoneChecked(true);
+      return;
+    }
     setSaving(true);
     setError('');
     setNotice('');
     try {
-      const result = await save({ details: JSON.stringify(draft) });
+      const result = await save({ details: JSON.stringify({ ...draft, mobile_no: normalizePhone(draft.mobile_no) }) });
       await query.mutate(result, false);
       await reload();
       setNotice(t('staff.profile.details.saved'));
@@ -71,7 +78,8 @@ export function PersonalDetails() {
             </div>
             <div className="space-y-1.5 sm:col-span-2">
               <Label htmlFor="account-mobile_no">{t('staff.profile.details.phone')}</Label>
-              <Input {...field('mobile_no')} type="tel" autoComplete="tel" />
+              <PhoneInput id="account-mobile_no" value={draft.mobile_no} showError={phoneChecked}
+                onChange={(mobile_no) => setDraft({ ...draft, mobile_no })} />
             </div>
             <div className="flex flex-wrap gap-2 sm:col-span-2">
               <Button type="submit" data-qa="account-details-save">{saving ? t('staff.profile.details.saving') : t('staff.profile.details.save')}</Button>

@@ -1,5 +1,6 @@
 import { useRef, type CSSProperties, type ReactNode } from "react";
 
+import { formatPhone, phoneHref } from "@/lib/phone";
 import type { BookingTemplateProps, TemplateProps } from "../types";
 import type { ContentRecord } from "../content";
 import { action, brandLogo, contentImage, designImage, durationMinutes, formatPrice, localized, records, section, sectionImage } from "../content";
@@ -179,7 +180,7 @@ export function SelamSite({ snapshot, locale, applicationName, publicRoot, rootS
           <p className="sm-address">{localized(place.address, locale)}</p>
           {localized(place.hours, locale) ? <p className="sm-muted">{localized(place.hours, locale)}</p> : null}
           <p className="sm-contacts">
-            {phone ? <a href={`tel:${phone.replace(/\s+/g, "")}`}><span className="sm-sr">{chrome.t("phone")} </span>{phone}</a> : null}
+            {phone ? <a href={phoneHref(phone) || `tel:${phone.replace(/\s+/g, "")}`}><span className="sm-sr">{chrome.t("phone")} </span>{formatPhone(phone)}</a> : null}
             {email ? <a href={`mailto:${email}`}><span className="sm-sr">{chrome.t("email")} </span>{email}</a> : null}
             {directions ? <a href={directions.href} rel="noopener noreferrer">{directions.label}</a> : null}
           </p>

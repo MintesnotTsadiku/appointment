@@ -17,6 +17,7 @@ import frappe
 from frappe.utils import getdate, nowdate
 from frappe.utils.password import update_password
 
+from appointment.helpers.phone import placeholder_numbers
 from appointment.scheduler import booking, membership, workspace
 from appointment.public_experience import publish_brand
 from appointment.public_experience.recipes import get_recipe
@@ -318,8 +319,8 @@ def insert(state, values):
     return doc
 
 
-def user(state, key, name, persona):
-    email = f"{key}@example.test"
+def user(state, key, name, persona, email=None):
+    email = email or f"{key}@example.test"
     if frappe.db.exists("User", email):
         frappe.throw(f"Pre-existing account {email}; no credentials or roles have been changed.")
     first, _, last = name.partition(" ")
@@ -495,7 +496,8 @@ def configure(state, keys=None):
             public_path=f"/schedule/org/{org.slug}",
             description=description,
         )
-        enrich_business_records(key, state["businesses"][key])
+        with placeholder_numbers():
+            enrich_business_records(key, state["businesses"][key])
         frappe.set_user("Administrator")
     if keys is not None:
         return
@@ -619,7 +621,8 @@ def enrich_business_records(key, business):
 
 def enrich_seeded_records(state):
     for key, business in state["businesses"].items():
-        enrich_business_records(key, business)
+        with placeholder_numbers():
+            enrich_business_records(key, business)
     state["content_version"] = CONTENT_VERSION
 
 
@@ -969,6 +972,8 @@ def summary(state):
         anchor_date=state["anchor_date"],
         credentials_path=str(state_path()),
         counts=dict(Counter(dt for dt, _ in state["created"])),
+        independents={key: dict(path=value["public_path"], appointments=len(value["appointments"]))
+                      for key, value in (state.get("independents") or {}).items()},
         personas=[{k: v for k, v in row.items() if k != "password"} for row in state["personas"]],
     )
 
@@ -1001,6 +1006,8 @@ def seed(base_url="http://127.0.0.174:41960", anchor_date=None):
             needs_analytics = configure_analytics(state)
             needs_dashboards = configure_dashboards(state)
             added = add_missing_businesses(state, base_url)
+            # Independent providers with their own website (Ergata): added or refreshed by their own version.
+            added += configure_independents(state, base_url)
             if needs_phase_write or needs_content_upgrade or needs_public_upgrade or needs_published_content or needs_analytics or needs_dashboards or added:
                 for dt, name in list(state["created"]):
                     for version in frappe.get_all("Version", filters={"ref_doctype": dt, "docname": name}, pluck="name"):
@@ -1040,6 +1047,7 @@ def seed(base_url="http://127.0.0.174:41960", anchor_date=None):
             configure_analytics(state, fresh=True)
             configure_dashboards(state)
             record_landings(state["personas"], base_url)
+            configure_independents(state, base_url)
             for dt, name in list(state["created"]):
                 for version in frappe.get_all("Version", filters={"ref_doctype": dt, "docname": name}, pluck="name"):
                     remember(state, "Version", version)
@@ -1051,6 +1059,16 @@ def seed(base_url="http://127.0.0.174:41960", anchor_date=None):
         state["phase"] = "ready"
         write_state(state)
         return summary(state)
+
+
+def configure_independents(state, base_url):
+    from appointment.demo import independent_world
+
+    try:
+        return independent_world.configure(state, base_url)
+    except Exception:
+        frappe.db.rollback()
+        raise
 
 
 def add_missing_businesses(state, base_url):
@@ -1106,7 +1124,7 @@ def retire_businesses(keys, dry_run=True):
         keys = json.loads(keys) if keys.startswith("[") else [keys]
     with locked():
         state = load_state()
-        unknown = [key for key in keys if key not in state["businesses"]]
+        unknown = [key for key in keys if key not in state["businesses"] and key not in state.get("independents", {})]
         if unknown:
             frappe.throw(f"Not in this journal: {', '.join(unknown)}")
         retired = _retired_entries(state, keys)
@@ -1130,8 +1148,9 @@ def _retired_entries(state, keys):
     """Journal entries reachable from the businesses' organizations and users."""
     marks = set()
     for key in keys:
-        business = state["businesses"][key]
-        marks.update({business["organization"], business["owner"]})
+        business = state["businesses"].get(key) or state["independents"][key]
+        # An independent showcase has no organization: its records link to the provider.
+        marks.update({business.get("organization") or business["provider"], business["owner"]})
     marks.update(p["email"] for p in state["personas"] if p["email"].split(".", 1)[0] in keys)
     pending = [entry for entry in state["created"] if frappe.db.exists(entry[0], entry[1])]
     rows = {tuple(entry): _field_values(*entry) for entry in pending}
@@ -1175,6 +1194,7 @@ def _forget_businesses(state, keys, retired):
     state["personas"] = [p for p in state["personas"] if p["email"] not in names]
     for key in keys:
         state["businesses"].pop(key, None)
+        state.get("independents", {}).pop(key, None)
     for field in ("appointments", "rescheduled"):
         if isinstance(state.get(field), list):
             state[field] = [row for row in state[field] if _row_name(row) not in names]
@@ -1200,9 +1220,11 @@ CLEANUP_PRIORITY = {
     "Version": 0,
     "Public Experience Outbox": 1,
     "Experience Release": 2,
+    "Public Site Slug Alias": 2.5,
     "Public Site": 3,
     "Brand Revision": 4,
     "Brand Profile": 5,
+    "Appointment Notification": 5.5,
     "Appointment": 6,
     "Customer Profile": 6.5,
     "Business Membership": 7,
@@ -1256,7 +1278,9 @@ def browser_values(manifest=None):
             (f"demo_{key}_scheduler", value["public_path"]),
         )
     }
-    return public_paths | surface_paths | {
+    from appointment.demo.independent_world import paths as independent_paths
+
+    return public_paths | surface_paths | independent_paths(state) | {
         "demo_scheduler_paths": {key: value["public_path"] for key, value in state["businesses"].items()},
         "demo_lifecycle_booking": candidate[0].name if candidate else "",
         "demo_lifecycle_customer": candidate[0].client_name if candidate else "",

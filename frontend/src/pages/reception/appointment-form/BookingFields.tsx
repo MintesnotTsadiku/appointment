@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { useTranslation } from '@/lib/i18n';
-import { Field, NotesField, OptionField, TextField } from './fields';
+import { Field, NotesField, OptionField, PhoneField, PhoneTagsField, TextField } from './fields';
 import type { BookingDraft, FieldErrors } from './model';
 import { ScheduleFields } from './ScheduleFields';
 import { useBookableResources, useDeskOptions } from './useDeskOptions';
@@ -21,10 +21,14 @@ interface BookingFieldsProps {
   customerSlot?: ReactNode;
   /** An existing resource-only booking keeps its room; shown read-only. */
   resourceLabel?: string;
+  /** False while the other-people field holds text that is not a phone number. */
+  onParticipantsValid?: (valid: boolean) => void;
+  /** Editing an older booking that has no phone does not ask for one. */
+  phoneOptional?: boolean;
 }
 
 /** Client, assignment, schedule and notes sections of the desk booking form. */
-export function BookingFields({ idPrefix, timeQaPrefix, freeTime, draft, errors, onChange, formatEmail, extra, customerSlot, resourceLabel }: BookingFieldsProps) {
+export function BookingFields({ idPrefix, timeQaPrefix, freeTime, draft, errors, onChange, formatEmail, extra, customerSlot, resourceLabel, onParticipantsValid, phoneOptional }: BookingFieldsProps) {
   const { t } = useTranslation();
   const { services, providers, locations } = useDeskOptions();
   const chosen = services.find((service) => service.name === draft.service_name);
@@ -39,17 +43,21 @@ export function BookingFields({ idPrefix, timeQaPrefix, freeTime, draft, errors,
         {customerSlot}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <TextField id={id('client-name')} label={t('staff.receptionDesk.clientName')} required autoComplete="off" value={draft.client_name} error={errors.client_name} onValueChange={(client_name) => onChange({ client_name })} />
-          <TextField id={id('client-phone')} label={t('staff.receptionDesk.phone')} type="tel" placeholder="+251 9XX XXX XXX" value={draft.client_phone} error={errors.client_phone} onValueChange={(client_phone) => onChange({ client_phone })} />
+          <PhoneField id={id('client-phone')} data-qa={id('client-phone')} label={t('staff.receptionDesk.phone')} required={!phoneOptional} value={draft.client_phone} error={errors.client_phone} onValueChange={(client_phone) => onChange({ client_phone })} />
         </div>
         <TextField
           id={id('client-email')}
-          label={t('staff.receptionDesk.email')}
+          data-qa={id('client-email')}
+          label={<>{t('staff.receptionDesk.email')} <span className="font-normal text-muted-foreground">{t('bookingForm.optional')}</span></>}
           type="email"
           placeholder="name@example.com"
           value={draft.client_email}
           error={errors.client_email}
           onValueChange={(value) => onChange({ client_email: value && formatEmail ? formatEmail(value) : value })}
         />
+        <PhoneTagsField id={id('participants')} data-qa={id('participants')} label={<>{t('bookingForm.participants')} <span className="font-normal text-muted-foreground">{t('bookingForm.optional')}</span></>}
+          value={draft.participant_phones || []} onValueChange={(participant_phones) => onChange({ participant_phones })}
+          onValidityChange={onParticipantsValid} exclude={draft.client_phone} help={t('bookingForm.participantsPhoneHint')} />
       </Section>
 
       <Section title={t('staff.receptionDesk.booking')}>

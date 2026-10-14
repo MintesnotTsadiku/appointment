@@ -55,6 +55,9 @@ scenarios:
     selector: '#userName'
     value: Fikir Tesfaye
   - action: fill
+    selector: '#userPhone'
+    value: '+251910291197'
+  - action: fill
     selector: '#userEmail'
     value: fikir.walkthrough@example.test
   - action: screenshot

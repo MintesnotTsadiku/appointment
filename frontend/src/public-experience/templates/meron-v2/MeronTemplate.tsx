@@ -1,5 +1,6 @@
 import { useRef, type CSSProperties, type ReactNode } from "react";
 
+import { formatPhone, phoneHref } from "@/lib/phone";
 import type { BookingTemplateProps, TemplateProps } from "../types";
 import type { ContentImage, ContentRecord } from "../content";
 import { action, brandLogo, contentImage, designImage, durationMinutes, formatPrice, localized, records, section, sectionImage } from "../content";
@@ -187,7 +188,7 @@ export function MeronSite({ snapshot, locale, applicationName, publicRoot, rootS
             <dl>
               <div><dt>{chrome.t("address")}</dt><dd>{localized(place.address, locale)}{directions ? <a href={directions.href} rel="noopener noreferrer">{directions.label}</a> : null}</dd></div>
               {localized(place.hours, locale) ? <div><dt>{chrome.t("hours")}</dt><dd>{localized(place.hours, locale)}</dd></div> : null}
-              {phone ? <div><dt>{chrome.t("phone")}</dt><dd><a href={`tel:${phone.replace(/\s+/g, "")}`}>{phone}</a></dd></div> : null}
+              {phone ? <div><dt>{chrome.t("phone")}</dt><dd><a href={phoneHref(phone) || `tel:${phone.replace(/\s+/g, "")}`}>{formatPhone(phone)}</a></dd></div> : null}
               {email ? <div><dt>{chrome.t("email")}</dt><dd><a href={`mailto:${email}`}>{email}</a></dd></div> : null}
             </dl>
           </div>

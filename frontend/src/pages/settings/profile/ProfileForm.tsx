@@ -3,10 +3,12 @@ import { useFrappePostCall } from 'frappe-react-sdk';
 import { toast } from 'sonner';
 import { Input } from '@/components/input';
 import { Label } from '@/components/label';
+import { PhoneInput } from '@/components/phone-input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/select';
 import { FieldHint, SettingsSection, StickySaveBar } from '@/components/settings-layout';
 import { ToggleGroup, ToggleGroupItem } from '@/components/toggle-group';
 import { useTranslation } from '@/lib/i18n';
+import { formatPhone, normalizePhone } from '@/lib/phone';
 import { LocalizedInput } from '@/pages/settings/website-editor/fields';
 import { BUSINESS_TYPES, LANGUAGES, SPOKEN_LANGUAGES, TIMEZONES, formFromProvider, type ProfileFormData } from './options';
 import type { ProviderProfile } from './useProfileData';
@@ -19,9 +21,14 @@ interface ProfileFormProps {
 
 export function ProfileForm({ provider, email, onSaved }: ProfileFormProps) {
   const { t } = useTranslation();
-  const saved = useMemo(() => formFromProvider(provider), [provider]);
+  // The phone in its display form, so the field's own reformatting does not mark the form as changed.
+  const saved = useMemo(() => {
+    const form = formFromProvider(provider);
+    return { ...form, phone: formatPhone(form.phone) };
+  }, [provider]);
   const [form, setForm] = useState<ProfileFormData>(saved);
   const [isSaving, setIsSaving] = useState(false);
+  const [phoneChecked, setPhoneChecked] = useState(false);
   const { call: updateProfile } = useFrappePostCall('appointment.onboarding.update_provider_profile');
 
   useEffect(() => setForm(saved), [saved]);
@@ -30,9 +37,13 @@ export function ProfileForm({ provider, email, onSaved }: ProfileFormProps) {
   const set = (key: keyof ProfileFormData) => (value: string) => setForm((prev) => ({ ...prev, [key]: value }));
 
   const handleSave = async () => {
+    if (form.phone.trim() && !normalizePhone(form.phone)) {
+      setPhoneChecked(true);
+      return;
+    }
     setIsSaving(true);
     try {
-      await updateProfile({ ...form, spoken_languages: JSON.stringify(form.spoken_languages ? form.spoken_languages.split(',') : []) });
+      await updateProfile({ ...form, phone: normalizePhone(form.phone), spoken_languages: JSON.stringify(form.spoken_languages ? form.spoken_languages.split(',') : []) });
       toast.success(t('staff.profile.saved'));
       onSaved();
     } catch (error) {
@@ -75,7 +86,7 @@ export function ProfileForm({ provider, email, onSaved }: ProfileFormProps) {
             <Input id="profile-email" type="email" value={email} readOnly disabled aria-describedby="profile-email-hint" />
           </Field>
           <Field id="phone" label={t('staff.profile.fields.phone')}>
-            <Input id="phone" type="tel" value={form.phone} onChange={(e) => set('phone')(e.target.value)} placeholder="+251 911 234 567" />
+            <PhoneInput id="phone" value={form.phone} onChange={set('phone')} showError={phoneChecked} />
           </Field>
         </div>
       </SettingsSection>

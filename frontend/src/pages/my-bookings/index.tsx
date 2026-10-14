@@ -230,6 +230,7 @@ function RequestForm({ owner, language, onSent }: { owner: Owner; language: stri
         {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
       </div>
       <Button type="submit" data-qa="my-bookings-send" disabled={loading || !email.trim()}>{t('myBookings.send')}</Button>
+      <p className="rounded-lg border border-theme-default px-3 py-2 text-sm text-theme-secondary" data-qa="my-bookings-phone-only">{t('myBookings.phoneOnly')}</p>
     </form>
   );
 }

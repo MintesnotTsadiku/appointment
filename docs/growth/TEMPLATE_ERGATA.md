@@ -95,23 +95,49 @@ Motion: the hero arch opens like a curtain, copy rises, sections fade up 14 px, 
 - Schema: `section_schemas.py` (`approaches`, `notice`, hero photo, image slots, session and place `format`, place `body` and `notes`); `Public Site Section.section_type` options (migrated once).
 - Booking: `public_experience/api.py` (`bookingPaths`), `scheduler/independent.py` (`public_offering.location`), `pages/public-experience/independent-booking.tsx` (office line), `public-experience/types.ts`.
 - Setup: `setup.py` (catalog entry, industry "therapy", starter copy, fix: an independent provider's draft now lists that provider). Website setup page: industry option "Counselling and therapy" and `data-qa` hooks on the template cards and the preview button.
-- Showcase catalog: `manifest/showcase/catalog.v1.json` entry `ergata` (slug `yared-counselling`). `demo/content_world.py` now requires content for every seeded business only, so a catalog showcase made by a fixture does not break the seeder.
+- Showcase catalog: `manifest/showcase/catalog.v1.json` entry `ergata` (slug `yared-counselling`). `demo/content_world.py` requires content for every seeded organization only; the Ergata showcase is an independent showcase and has no article world.
 - Independent booking: `public_offering` returns `site_slug`; the independent scheduler (`/schedule/individual/<offering>`) wears the published template's colours and type, as organization schedulers do. The public booking path for an independent provider now opens the first offering the owner made.
 - Tests: `frontend/tests/public-template-packages.test.mjs`, `appointment/tests/test_public_experience_contracts.py`, `appointment/tests/test_showcase_catalog.py`.
+- Showcase: `appointment/demo/independent_showcase.py`, `ergata_showcase.py`, `independent_world.py`; test `appointment/tests/test_independent_showcases.py`.
 - QA: `appointment/tests/template_ergata_qa_fixtures.py`, `qa/manifests/growth/template-ergata.yaml`, `template-ergata-dark.yaml`, `template-ergata-chooser.yaml`.
 
 ## Showcase
 
-The seeder (`appointment.demo.showcase.seed`) needs a paused scheduler and seeds organizations only, and the dev site must not be reseeded. So the showcase is a QA fixture with exact cleanup: `appointment.tests.template_ergata_qa_fixtures`.
+The showcase is seeded. `appointment.demo.showcase.seed` makes it on every rich-demo site, like the five organization showcases, so the template gallery shows "Open live example" for Ergata after a normal seed.
 
-- Yared Tesfaye Counselling, an independent counselling psychologist (fictional, owner `yared.tesfaye.counselling@example.test`), at `/yared-counselling`, English and Amharic. He meets clients at an office in Bole (Cameroon Street, Tsehay Building, second floor, office 204; a five-minute walk from the Bole Medhane Alem roundabout; fictional building) and by online video. Six sessions: free 15-minute introductory video call, first session at the office (60 min, ETB 1,500), first session online (60 min, ETB 1,500), individual session at the office (50 min, ETB 1,200), individual session online (50 min, ETB 1,200), couples session at the office (80 min, ETB 2,000). The draft starts from guided setup, so it also tests the starter copy. Amharic third-person copy uses masculine forms ("ፈቃድ ያለው", "የለበሰው", "ያሬድ … ይገናኛል", "ከያሬድ ጋር ቀጠሮ ይያዙ").
-- Hiwot Family Therapy Centre, a small group practice (organization) with no website, so its owner sees the template chooser.
+- Yared Tesfaye Counselling, an independent counselling psychologist (fictional, owner `yared.tesfaye.counselling@example.test`), at `/yared-counselling` and `/yared-counselling/am`, with the provider page `/schedule/p/yared-counselling`. He meets clients at an office in Bole (Cameroon Street, Tsehay Building, second floor, office 204; a five-minute walk from the Bole Medhane Alem roundabout; fictional building) and by online video (an Online location on Google Meet with the fixed, fictional link `https://meet.google.com/ytc-room-one`). Six sessions: free 15-minute introductory video call, first session at the office (60 min, ETB 1,500), first session online (60 min, ETB 1,500), individual session at the office (50 min, ETB 1,200), individual session online (50 min, ETB 1,200), couples session at the office (80 min, ETB 2,000). Office hours are Monday to Saturday 09:00–18:00, online hours 08:00–20:00. The draft starts from guided setup, so it also tests the starter copy. Amharic third-person copy uses masculine forms ("ፈቃድ ያለው", "የለበሰው", "ያሬድ … ይገናኛል", "ከያሬድ ጋር ቀጠሮ ይያዙ").
+- History: about 140 sessions over 90 days back and 30 days ahead, half online and half at the office, by 16 fictional clients (`<given>.<family>@example.test`, numbers `+2519112000NN`). Past sessions are Completed or No Show, about one in thirteen is cancelled, and each booking has the same authored lifecycle facts as the analytics world (sources online, staff and import; no walk-ins). `FACTS_VERSION` in `independent_world.py` makes the next `seed` write the facts again on the owned bookings that nobody changed in the app.
 
-`cleanup()` deletes only the records that `setup()` recorded, by exact name (both Locations go with the provider's `independent_provider` filter). The earlier Tsion Hailu showcase was removed with the same `cleanup()` before the new `setup()`.
+### One definition, two users
+
+- `appointment/demo/independent_showcase.py`: the general mechanism. `IndependentShowcase` is a frozen definition of one independent provider (owner, slug, recipe, office and online places, sessions in English and Amharic, bio, spoken languages, portrait, brand marks, SEO, and a function that writes the website sections). `build(definition, record)` makes it through the product's own calls (`solo_setup.create`, `independent.create`, an Online location, one offering per session, `independent.publish`, `setup.start` and `setup.publish`) and passes every record it makes to `record`. `refresh()` writes a newer definition onto an existing showcase and publishes again. `problems()` lists what a definition is missing; `collisions()` lists records that already use its identity.
+- `appointment/demo/ergata_showcase.py`: the Ergata definition and its section content. The seeder and the QA fixture both import it, so they cannot drift.
+- `appointment/demo/independent_world.py`: the seeder part. `SHOWCASES` lists the definitions by catalog key. The journal keeps them in `state["independents"]`, apart from `state["businesses"]`, because the content, analytics, dashboard and reception worlds read every business as an organization. Every record, the owner's generated password (in the private journal only), the bookings and the customer profiles are in `state["created"]`, so the integrity check, `retire_businesses(["ergata"])` and `cleanup()` cover them.
+- Upgrade: `seed` adds a missing independent showcase on an already seeded site, after `add_missing_businesses`, and touches nothing else. A higher `version` in the definition makes the next `seed` refresh the profile and the website. The seeder refuses to adopt a pre-existing user, provider, slug, slug alias or location name, and says to run the QA fixture's `cleanup` when the fixture made them.
+
+### The QA fixture
+
+`appointment.tests.template_ergata_qa_fixtures.setup()` uses the seeded showcase when the journal has one, and otherwise makes its own copy from the same definition (for a site without the seed). Then it adds two online bookings (Selamawit Bekele, join window open now; Dawit Mengistu, first free day) and Hiwot Family Therapy Centre, a small group practice (organization) with no website, so its owner sees the template chooser.
+
+`cleanup()` deletes only what the fixture made. With the seeded showcase, it deletes the two bookings by exact name and what the QA runs added to the showcase after `setup()` (bookings, customer profiles, locations and their offerings that are not in the seeder journal); it never deletes a journal record. With its own copy, it deletes that copy as before.
+
+On the dev site (2026-10-14) the fixture copy was removed with the fixture's `cleanup()`, then `seed` added the showcase on the upgrade path: 1 user, 1 provider, 2 locations, 6 services, 6 offerings, 1 website (brand profile, revision, release, outbox), 143 bookings (86 Completed, 9 No Show, 11 Cancelled, 37 Confirmed; 71 office, 72 online), 16 customer profiles and 254 versions. The other showcases did not change. A second `seed` left the journal byte-identical.
 
 ## QA runs (Agent Plane)
 
-The manifests use `base_url: http://localhost:47800` (the recreated stack). Runs of 2026-10-13:
+The manifests use `base_url: http://localhost:47800` (the recreated stack).
+
+Runs of 2026-10-14 against the seeded showcase (fixture `setup()` in reuse mode first):
+
+| Run | Manifest | Result |
+|---|---|---|
+| BQA-2026-00188 | `template-ergata.yaml` (online and office sessions to the time picker; seeded bookings show as taken slots) | Passed, 0 console, 0 network errors |
+| BQA-2026-00193 | `template-ergata-dark.yaml` | Passed, 1 console message (known reduced-motion notice), 0 network errors |
+| BQA-2026-00196 | `template-ergata-chooser.yaml` | Passed, 4 console messages (sandboxed preview iframe), 0 network errors |
+| BQA-2026-00197 | `provider-page-branded.yaml` | Passed, 2 console messages, 0 network errors |
+| BQA-2026-00191 | `template-gallery.yaml` (Ergata card has "Open live example" to `/yared-counselling`) | Passed, 0 console, 0 network errors |
+
+Runs of 2026-10-13:
 
 | Run | Manifest | Result |
 |---|---|---|
@@ -131,4 +157,4 @@ Other checks: typecheck 176 errors (gate 176), `test:dom` pass, build pass. Frap
 - Organizations still get one booking path; `bookingPaths` is for independent providers only.
 - The independent scheduler opens in the visitor's app language, not the page language, and shows the Service name in English. This was already so before this change.
 - The shared scheduler draws the selected day with a primary-to-accent gradient (sage to clay); this is shared scheduler styling.
-- The showcase lives only while the fixture runs. To ship it permanently, the seeder needs support for independent-provider businesses.
+- Done (2026-10-14): the showcase is seeded (see Showcase).

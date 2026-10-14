@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Loader2, UserPlus, Users } from 'lucide-react';
 import { useFrappeGetCall, useFrappePostCall } from 'frappe-react-sdk';
 import { useTranslation } from '@/lib/i18n';
+import { formatPhone } from '@/lib/phone';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/button';
 import { Checkbox } from '@/components/checkbox';
@@ -128,7 +129,7 @@ export const LinkProviderModal = ({ open, onOpenChange, serviceId, serviceName, 
                           {Boolean(provider.is_primary_org) && <span className="ml-2 text-xs font-normal text-primary">({t('staff.services.primaryInOrg')})</span>}
                         </Label>
                         <p className="mt-0.5 truncate text-sm text-muted-foreground">{provider.email}</p>
-                        {provider.phone && <p className="mt-0.5 text-xs text-muted-foreground">{provider.phone}</p>}
+                        {provider.phone && <p className="mt-0.5 text-xs text-muted-foreground">{formatPhone(provider.phone)}</p>}
                       </div>
                       {selected && (
                         <div className="flex shrink-0 items-center gap-2">

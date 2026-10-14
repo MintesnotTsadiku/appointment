@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { useTranslation } from '@/lib/i18n';
 import { serverErrorMessage } from '@/lib/utils';
 import { FormDialog } from '@/pages/reception/appointment-form/FormDialog';
-import { ContactFields, type ContactDraft } from './ContactFields';
+import { ContactFields, contactPhoneOk, type ContactDraft } from './ContactFields';
 import { CUSTOMERS_API, type CustomerDetail } from './types';
 
 interface NewCustomerDialogProps {
@@ -21,12 +21,17 @@ export function NewCustomerDialog({ open, organization, onClose, onCreated }: Ne
   const { t } = useTranslation();
   const [draft, setDraft] = useState<ContactDraft>(EMPTY);
   const [nameError, setNameError] = useState('');
+  const [showPhoneError, setShowPhoneError] = useState(false);
   const { call, loading } = useFrappePostCall<{ message: CustomerDetail }>(`${CUSTOMERS_API}.save`);
 
   async function submit(event: FormEvent) {
     event.preventDefault();
     if (!draft.display_name.trim()) {
       setNameError(t('staff.form.required'));
+      return;
+    }
+    if (!contactPhoneOk(draft)) {
+      setShowPhoneError(true);
       return;
     }
     try {
@@ -57,6 +62,7 @@ export function NewCustomerDialog({ open, organization, onClose, onCreated }: Ne
         idPrefix="new-customer"
         value={draft}
         nameError={nameError}
+        showPhoneError={showPhoneError}
         onChange={(patch) => {
           setDraft((current) => ({ ...current, ...patch }));
           if (patch.display_name) setNameError('');

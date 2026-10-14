@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Mail, Phone, ChevronRight } from 'lucide-react';
 import { Card } from '@/components/card';
+import { formatPhone } from '@/lib/phone';
 import type { ClientProfile } from '@/lib/tasks-assistants/types';
 
 interface ClientProfileCardProps {
@@ -58,7 +59,7 @@ export const ClientProfileCard = ({ clientProfile, onClick, onEdit }: ClientProf
                   style={{ color: 'var(--text-muted)' }}
                 >
                   <Phone className="w-4 h-4" />
-                  {clientProfile.phone}
+                  {formatPhone(clientProfile.phone)}
                 </div>
               )}
             </div>

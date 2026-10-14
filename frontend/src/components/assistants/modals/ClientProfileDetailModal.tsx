@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Edit, Trash2, User, Mail, Phone, Globe, CheckCircle2, XCircle } from 'lucide-react';
 import { Dialog, DialogContent } from '@/components/dialog';
+import { PhoneText } from '@/components/phone-input';
 import { assistantAPI } from '@/lib/tasks-assistants/api';
 import type { ClientProfile } from '@/lib/tasks-assistants/types';
 import Spinner from '@/components/spinner';
@@ -211,7 +212,7 @@ export const ClientProfileDetailModal = ({ clientId, isOpen, onClose, onEdit, on
                           Phone
                         </p>
                         <p className="text-sm font-semibold mt-1" style={{ color: 'var(--text-primary)' }}>
-                          {profile.phone}
+                          <PhoneText value={profile.phone} />
                         </p>
                       </div>
                     </div>

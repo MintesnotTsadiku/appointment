@@ -3,6 +3,9 @@ import { useFrappePostCall, useFrappeGetCall } from 'frappe-react-sdk';
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
 import { Label } from '@/components/label';
+import { PhoneInput, usePhoneProblem } from '@/components/phone-input';
+import { useTranslation } from '@/lib/i18n';
+import { formatPhone, normalizePhone } from '@/lib/phone';
 import { StepLayout } from './StepLayout';
 import { ArrowLeft, Plus, Users, Mail, Phone, Link as LinkIcon } from 'lucide-react';
 import {
@@ -22,6 +25,8 @@ interface Step2OrgProvidersProps {
 
 const Step2OrgProviders = ({ onNext, onBack }: Step2OrgProvidersProps) => {
   const { progress } = useOnboarding();
+  const { t } = useTranslation();
+  const phoneProblem = usePhoneProblem();
   const [selectedOrgId, setSelectedOrgId] = useState<string | null>(null);
   const [providers, setProviders] = useState<Provider[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -86,8 +91,9 @@ const Step2OrgProviders = ({ onNext, onBack }: Step2OrgProvidersProps) => {
       newErrors.email = 'Please enter a valid email address';
     }
 
-    if (!phone || phone.trim().length < 10) {
-      newErrors.phone = 'Please enter a valid phone number';
+    const phoneError = phoneProblem(phone, true);
+    if (phoneError) {
+      newErrors.phone = phoneError;
     }
 
     setErrors(newErrors);
@@ -134,7 +140,7 @@ const Step2OrgProviders = ({ onNext, onBack }: Step2OrgProvidersProps) => {
       const result = await addProvider({
         provider_name: providerName,
         email,
-        phone,
+        phone: normalizePhone(phone),
         specialization,
         invite_existing: false,
         organization_id: selectedOrgId,
@@ -239,7 +245,7 @@ const Step2OrgProviders = ({ onNext, onBack }: Step2OrgProvidersProps) => {
                         {provider.phone && (
                           <span className="flex items-center gap-1">
                             <Phone className="w-3 h-3" />
-                            {provider.phone}
+                            {formatPhone(provider.phone)}
                           </span>
                         )}
                       </div>
@@ -350,17 +356,17 @@ const Step2OrgProviders = ({ onNext, onBack }: Step2OrgProvidersProps) => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="phone">Phone <span className="text-red-500">*</span></Label>
-                <Input
+                <Label htmlFor="phone">{t('controls.phone.label')} <span className="text-red-500">*</span></Label>
+                <PhoneInput
                   id="phone"
-                  type="tel"
-                  placeholder="+251911234567"
+                  required
                   value={phone}
-                  onChange={(e) => {
-                    setPhone(e.target.value);
+                  messages={false}
+                  showError={!!errors.phone}
+                  onChange={(value) => {
+                    setPhone(value);
                     if (errors.phone) setErrors({ ...errors, phone: '' });
                   }}
-                  className={errors.phone ? 'border-red-500' : ''}
                 />
                 {errors.phone && <p className="text-sm text-red-500">{errors.phone}</p>}
               </div>

@@ -10,6 +10,8 @@ export interface Appointment {
   client_name: string;
   client_email: string;
   client_phone: string;
+  /** Other people coming, E.164 numbers one per line. */
+  participant_phones?: string | null;
   /** Customer Profile ID, when the booking is linked. */
   customer?: string | null;
   /** Set when the customer changed the booking through their manage link. */
@@ -43,6 +45,8 @@ export interface WalkIn {
   client_name: string;
   client_phone: string;
   client_email?: string;
+  /** Other people coming with the walk-in, E.164 numbers one per line. */
+  participant_phones?: string | null;
   service_requested?: string;
   location?: string;
   location_name?: string;

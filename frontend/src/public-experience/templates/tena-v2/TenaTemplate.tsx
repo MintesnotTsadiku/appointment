@@ -1,5 +1,6 @@
 import { useRef, type CSSProperties } from "react";
 
+import { formatPhone, phoneHref } from "@/lib/phone";
 import type { BookingTemplateProps, TemplateProps } from "../types";
 import type { ContentRecord } from "../content";
 import { action, brandLogo, contentImage, designImage, durationMinutes, formatPrice, localized, records, section, sectionImage } from "../content";
@@ -46,7 +47,7 @@ function Arrival({ location, locale, chrome, phone, email }: { location: Content
   return <dl className="tc-fields">
     <div><dt>{chrome.t("address")}</dt><dd>{localized(location.name, locale) ? <strong>{localized(location.name, locale)}</strong> : null}<span>{localized(location.address, locale)}</span>{directions ? <a href={directions.href} rel="noopener noreferrer">{directions.label}</a> : null}</dd></div>
     {localized(location.hours, locale) ? <div><dt>{chrome.t("hours")}</dt><dd>{localized(location.hours, locale)}</dd></div> : null}
-    {telephone ? <div><dt>{chrome.t("phone")}</dt><dd><a href={`tel:${telephone.replace(/\s+/g, "")}`}>{telephone}</a></dd></div> : null}
+    {telephone ? <div><dt>{chrome.t("phone")}</dt><dd><a href={phoneHref(telephone) || `tel:${telephone.replace(/\s+/g, "")}`}>{formatPhone(telephone)}</a></dd></div> : null}
     {email ? <div><dt>{chrome.t("email")}</dt><dd><a href={`mailto:${email}`}>{email}</a></dd></div> : null}
   </dl>;
 }

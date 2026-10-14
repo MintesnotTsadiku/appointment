@@ -1,10 +1,13 @@
 import { formatDistanceToNow } from 'date-fns';
-import { ArrowRight, Clock, Loader2, Mail, MapPin, Phone, User } from 'lucide-react';
+import { ArrowRight, Clock, Loader2, Mail, MapPin, Phone, User, Users } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import type { ReactNode } from 'react';
 import { Badge } from '@/components/badge';
 import { Button } from '@/components/button';
 import { useTranslation } from '@/lib/i18n';
 import type { WalkIn } from '../types';
+import { PhoneText } from '@/components/phone-input';
+import { phoneList } from '@/lib/phone';
 
 interface WalkInCardProps {
   walkIn: WalkIn;
@@ -30,7 +33,11 @@ export const WalkInCard = ({ walkIn, onAssign, isAssigning }: WalkInCardProps) =
       </header>
 
       <dl className="space-y-1 text-xs text-muted-foreground">
-        {walkIn.client_phone && <Detail icon={Phone} label={t('staff.receptionDesk.phone')} value={walkIn.client_phone} />}
+        {walkIn.client_phone && <Detail icon={Phone} label={t('staff.receptionDesk.phone')} value={<PhoneText value={walkIn.client_phone} />} />}
+        {phoneList(walkIn.participant_phones).length > 0 && (
+          <Detail icon={Users} label={t('controls.phone.peopleLabel')}
+            value={<span data-qa="walkin-card-participants">{t('controls.phone.peopleCount').replace('{0}', String(phoneList(walkIn.participant_phones).length))}: {phoneList(walkIn.participant_phones).map((number, index) => <span key={number}>{index ? ', ' : ''}<PhoneText value={number} /></span>)}</span>} />
+        )}
         {walkIn.client_email && <Detail icon={Mail} label={t('staff.receptionDesk.email')} value={walkIn.client_email} />}
         {walkIn.location_name && <Detail icon={MapPin} label={t('staff.receptionDesk.location')} value={walkIn.location_name} />}
         {walkIn.provider_preferred_name && <Detail icon={User} label={t('staff.receptionDesk.preferredProvider')} value={walkIn.provider_preferred_name} />}
@@ -47,7 +54,7 @@ export const WalkInCard = ({ walkIn, onAssign, isAssigning }: WalkInCardProps) =
   );
 };
 
-function Detail({ icon: Icon, label, value }: { icon: LucideIcon; label: string; value: string }) {
+function Detail({ icon: Icon, label, value }: { icon: LucideIcon; label: string; value: ReactNode }) {
   return (
     <div className="flex min-w-0 items-center gap-2">
       <dt>

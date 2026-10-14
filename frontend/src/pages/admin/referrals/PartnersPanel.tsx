@@ -10,6 +10,7 @@ import { EmptyState } from '@/components/states';
 import { Textarea } from '@/components/textarea';
 import { useRewardText } from '@/components/growth-referrals/useRewardText';
 import { useTranslation } from '@/lib/i18n';
+import { formatPhone, phoneHref } from '@/lib/phone';
 import { PARTNERS_API } from '@/lib/referral-link';
 import { serverErrorMessage } from '@/lib/utils';
 import { fill } from '@/pages/manage-booking/format';
@@ -61,7 +62,7 @@ function PartnerRow({ row, busy, onApprove, onReject }: { row: Partner; busy: bo
       </div>
       <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground">
         <a href={`mailto:${row.email}`} className="inline-flex min-h-6 items-center gap-1.5 break-all hover:text-foreground"><Mail className="h-3.5 w-3.5" aria-hidden="true" />{row.email}</a>
-        {row.phone && <a href={`tel:${row.phone}`} className="inline-flex min-h-6 items-center gap-1.5 hover:text-foreground"><Phone className="h-3.5 w-3.5" aria-hidden="true" />{row.phone}</a>}
+        {row.phone && <a href={phoneHref(row.phone) || undefined} className="inline-flex min-h-6 items-center gap-1.5 hover:text-foreground"><Phone className="h-3.5 w-3.5" aria-hidden="true" />{formatPhone(row.phone)}</a>}
         {row.applied_on && <span>{fill(t('staff.referralsAdmin.appliedOn'), date(row.applied_on))}</span>}
       </div>
       {row.message && <p className="mt-2 whitespace-pre-line rounded-lg bg-muted/50 px-3 py-2 text-sm text-foreground">{row.message}</p>}

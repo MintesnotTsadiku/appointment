@@ -52,6 +52,9 @@ scenarios:
     selector: '#userName'
     value: Abel Girma
   - action: fill
+    selector: '#userPhone'
+    value: '+251910755375'
+  - action: fill
     selector: '#userEmail'
     value: '{qa_touch_guest_1}'
   - action: click
@@ -131,6 +134,9 @@ scenarios:
   - action: fill
     selector: '#userName'
     value: Hiwot Kebede
+  - action: fill
+    selector: '#userPhone'
+    value: '+251910779715'
   - action: fill
     selector: '#userEmail'
     value: '{qa_touch_guest_2}'

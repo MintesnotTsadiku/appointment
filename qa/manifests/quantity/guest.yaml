@@ -63,6 +63,9 @@ scenarios:
     selector: '#userName'
     value: Group guest en
   - action: fill
+    selector: '#userPhone'
+    value: '+251910609214'
+  - action: fill
     selector: '#userEmail'
     value: qa-qty-guest-en@example.test
   - action: screenshot
@@ -144,6 +147,9 @@ scenarios:
   - action: fill
     selector: '#userName'
     value: Group guest am
+  - action: fill
+    selector: '#userPhone'
+    value: '+251910260031'
   - action: fill
     selector: '#userEmail'
     value: qa-qty-guest-am@example.test

@@ -10,6 +10,7 @@ from __future__ import annotations
 from appointment.growth import habesha
 from appointment.growth.ethiopian_calendar import WEEKDAYS
 from appointment.growth.tools import colors, page
+from appointment.growth.tools.catalog import text
 
 SLUG = "business-hours-sign"
 no_cache = 1
@@ -63,6 +64,8 @@ def get_context(context):
             "default_color": context.colors["brand"],
             "default_color_ink": "#ffffff" if colors.contrast(colors.parse(context.colors["brand"]), (255, 255, 255)) >= 4.5 else "#111111",
             "business_example": t("businessExample"),
+            # The app's shared phone hint, the same text as every other phone field.
+            "phone_hint": text("controls.phone.hint", context.lang),
             "tool_data": page.js_data(
                 {
                     "lang": context.lang,

@@ -450,6 +450,7 @@ const AppointmentV2 = () => {
               onSubmit={handleBookingSubmit}
               onBack={() => setCurrentPhase('datetime')}
               loading={bookingLoading}
+              emailRequired
             />
           </div>
         )}

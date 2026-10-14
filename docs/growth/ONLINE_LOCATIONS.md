@@ -103,7 +103,7 @@ Places use the content `format`, then `placeFormats`, then `in_person`. The Erga
 
 ## Showcase
 
-`appointment.tests.template_ergata_qa_fixtures` makes the Yared Tesfaye Counselling "Online video room" an Online location on Google Meet with the fixed, fictional link `https://meet.google.com/ytc-room-one`. Its session and place content has no `format`; the template derives it. The fixture also makes two online bookings: one whose join window is open now (Selamawit Bekele, for the manage page) and one on the first free day (Dawit Mengistu, for the reception desk). Re-run `setup()` shortly before the browser runs: the join window closes 45 minutes after setup.
+The seeded Yared Tesfaye Counselling showcase (`appointment/demo/ergata_showcase.py`, used by the seeder and by `appointment.tests.template_ergata_qa_fixtures`) has the "Online video room" as an Online location on Google Meet with the fixed, fictional link `https://meet.google.com/ytc-room-one`. Its session and place content has no `format`; the template derives it. The fixture also makes two online bookings: one whose join window is open now (Selamawit Bekele, for the manage page) and one on the first free day (Dawit Mengistu, for the reception desk). Re-run `setup()` shortly before the browser runs: the join window closes 45 minutes after setup.
 
 ## Tests
 

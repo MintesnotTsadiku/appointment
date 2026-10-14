@@ -15,6 +15,7 @@ from appointment.scheduler.helpers.policy_engine import validate_reschedule, get
 from appointment.scheduler.helpers.slot_engine import check_conflicts
 from appointment.helpers.overrides import add_response_code
 from appointment.scheduler import notifications
+from appointment.helpers.phone import phone_problem
 
 
 @frappe.whitelist()
@@ -102,7 +103,7 @@ def get_desk_appointments(date: str = None, location_name: str = None, provider_
         filters=filters,
         fields=[
             "name", "appointment_id", "appointment_date", "start_time", "end_time",
-            "client_name", "client_email", "client_phone", "customer", "last_changed_by",
+            "client_name", "client_email", "client_phone", "participant_phones", "customer", "last_changed_by",
             "cancellation_fee", "refund_due", "service",
             "provider", "location", "status",
             "amount_paid", "notes", "event_type", "event", "organization", "booking_timezone", "modified", "quantity",
@@ -188,6 +189,7 @@ def create_desk_appointment(
     customer: str = None,
     resource_name: str = None,
     quantity: int = 1,
+    participant_phones: str = None,
 ):
     """
     Create appointment on behalf of client.
@@ -205,6 +207,7 @@ def create_desk_appointment(
         appointment_date: Appointment date (YYYY-MM-DD). Defaults to today
         customer: Customer Profile to link. Without it, the server matches or creates one.
         resource_name: For a service booked without staff, the room or machine (instead of a provider).
+        participant_phones: Other people's phone numbers, comma separated (optional)
 
     Returns:
         Created appointment
@@ -220,6 +223,8 @@ def create_desk_appointment(
         # Validate required fields
         if not all([client_name, service_name, resource_name if resource_only else provider_name, location_name, start_time]):
             return {"error": _("Missing required fields")}, 400
+        if client_phone and phone_problem(client_phone):
+            return {"error": phone_problem(client_phone)}, 400
 
         # Get appointment date
         if not appointment_date:
@@ -289,6 +294,7 @@ def create_desk_appointment(
         appointment.client_name = client_name
         appointment.client_phone = client_phone or ""
         appointment.client_email = client_email or ""
+        appointment.participant_phones = participant_phones or None
         appointment.customer = customer or None
         appointment.service = service_name
         appointment.provider = provider_name
@@ -338,7 +344,8 @@ def update_appointment(
     start_time: str = None,
     end_time: str = None,
     status: str = None,
-    notes: str = None
+    notes: str = None,
+    participant_phones: str = None,
 ):
     """
     Update appointment details.
@@ -356,6 +363,7 @@ def update_appointment(
         end_time: End time (HH:MM:SS) (optional)
         status: Status (optional)
         notes: Notes (optional)
+        participant_phones: Other people's phone numbers, comma separated (optional)
 
     Returns:
         Updated appointment
@@ -369,8 +377,12 @@ def update_appointment(
         # Update fields if provided
         if client_name is not None:
             appointment.client_name = client_name
+        if client_phone and phone_problem(client_phone):
+            return {"error": phone_problem(client_phone)}, 400
         if client_phone is not None:
             appointment.client_phone = client_phone
+        if participant_phones is not None:
+            appointment.participant_phones = participant_phones
         if client_email is not None:
             appointment.client_email = client_email
         if service_name is not None:
@@ -568,7 +580,7 @@ def get_walk_ins(location_name: str = None, business: str = None):
         "Walk In",
         filters=filters,
         fields=[
-            "name", "client_name", "client_phone", "client_email",
+            "name", "client_name", "client_phone", "client_email", "participant_phones",
             "service_requested", "location",
             "provider_preferred",
             "status", "assigned_appointment", "notes", "creation"
@@ -605,14 +617,16 @@ def add_walk_in(
     notes: str = None,
     customer: str = None,
     business: str = None,
+    participant_phones: str = None,
 ):
     """
     Add walk-in to queue.
 
     Args:
         client_name: Client name
-        client_phone: Client phone
+        client_phone: Client phone, in any accepted form (see appointment.helpers.phone)
         client_email: Client email (optional)
+        participant_phones: Other people's phone numbers, comma separated (optional)
         service_requested: Service name (optional)
         location_name: Location name (optional)
         provider_preferred: Provider name (optional)
@@ -627,6 +641,8 @@ def add_walk_in(
     try:
         if not client_name or not client_phone:
             return {"error": _("Client name and phone are required")}, 400
+        if phone_problem(client_phone):
+            return {"error": phone_problem(client_phone)}, 400
 
         # Create walk-in
         walk_in = frappe.new_doc("Walk In")
@@ -634,6 +650,8 @@ def add_walk_in(
         walk_in.client_phone = client_phone
         if client_email:
             walk_in.client_email = client_email
+        if participant_phones:
+            walk_in.participant_phones = participant_phones
         if provider:
             # The provider's own offering; the walk-in validates that everything named belongs to it.
             walk_in.independent_provider = provider
@@ -765,6 +783,7 @@ def assign_walk_in_to_slot(walk_in_name: str, provider_name: str = None, locatio
         appointment.client_name = walk_in.client_name
         appointment.client_phone = walk_in.client_phone
         appointment.client_email = walk_in.client_email or ""
+        appointment.participant_phones = walk_in.get("participant_phones") or None
         appointment.customer = walk_in.customer or None
         appointment.service = service_name
         appointment.provider = provider_name

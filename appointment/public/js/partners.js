@@ -61,9 +61,11 @@
     var name = form.elements.name.value.trim();
     var email = form.elements.email.value.trim();
     var kind = form.querySelector('input[name="kind"]:checked');
+    var phone = form.elements.phone.value.trim();
     var errors = {
       name: !name ? data.msgName : name.length > 140 ? data.msgLong : "",
       email: !email || email.length > 140 || !EMAIL.test(email) ? data.msgEmail : "",
+      phone: phone && !window.AppointmentPhone.normalize(phone) ? data.msgPhone : "",
       kind: kind ? "" : data.msgKind,
       organization: form.elements.organization.value.trim().length > 140 ? data.msgLong : "",
       message: form.elements.message.value.trim().length > 1000 ? data.msgLong : "",
@@ -118,9 +120,10 @@
     label.textContent = form.dataset.msgSending;
 
     var payload = new URLSearchParams();
-    ["name", "organization", "email", "phone", "message"].forEach(function (field) {
+    ["name", "organization", "email", "message"].forEach(function (field) {
       payload.append(field, form.elements[field].value.trim());
     });
+    payload.append("phone", window.AppointmentPhone.normalize(form.elements.phone.value));
     payload.append("kind", form.querySelector('input[name="kind"]:checked').value);
     var headers = { Accept: "application/json", "Content-Type": "application/x-www-form-urlencoded" };
     var token = form.elements.csrf_token;

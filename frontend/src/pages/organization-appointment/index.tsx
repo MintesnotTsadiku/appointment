@@ -83,7 +83,7 @@ const OrganizationAppointmentV2 = () => {
   const [currentPhase, setCurrentPhase] = useState<Phase>("service");
   const [displayMonth, setDisplayMonth] = useState(new Date());
   const [timeFormat, setTimeFormat] = useState<"12h" | "24h" | "ethiopian">("12h");
-  const [bookingResponse, setBookingResponse] = useState<(BookingResponse & { userEmail?: string }) | null>(null);
+  const [bookingResponse, setBookingResponse] = useState<(BookingResponse & { userEmail?: string; userPhone?: string }) | null>(null);
   // The slot as the picker shows it, with its provider, so it stays highlighted and the bar can name the provider.
   const [chosenSlot, setChosenSlot] = useState<V2TimeSlot | null>(null);
   const { theme } = useTheme();
@@ -336,7 +336,7 @@ const OrganizationAppointmentV2 = () => {
       }
 
       if (refetchSlots) await refetchSlots();
-      setBookingResponse({ ...response, userEmail: formData.userEmail });
+      setBookingResponse({ ...response, userEmail: formData.userEmail, userPhone: formData.userPhone });
       setCurrentPhase("success");
     } catch (error) {
       console.error("Booking error:", error);
@@ -537,6 +537,7 @@ const OrganizationAppointmentV2 = () => {
                 timeFormat={timeFormat}
                 timezone={timeZone}
                 userEmail={bookingResponse.userEmail || ""}
+                userPhone={bookingResponse.userPhone}
                 brandStyle={bookingBrand.style}
               />
             )}

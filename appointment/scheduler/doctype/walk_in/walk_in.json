@@ -12,6 +12,7 @@
   "client_name",
   "client_phone",
   "client_email",
+  "participant_phones",
   "service_requested",
   "location",
   "independent_provider",
@@ -50,13 +51,20 @@
    "in_list_view": 1,
    "label": "Client Phone",
    "options": "Phone",
-   "reqd": 1
+   "reqd": 1,
+   "description": "Stored as +<country><number>, such as +251911223344."
   },
   {
    "fieldname": "client_email",
    "fieldtype": "Data",
    "label": "Client Email",
    "options": "Email"
+  },
+  {
+   "fieldname": "participant_phones",
+   "fieldtype": "Small Text",
+   "label": "Other People's Phones",
+   "description": "Phone numbers of other people who come with this customer, one per line, as +<country><number>."
   },
   {
    "fieldname": "service_requested",
@@ -130,7 +138,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-10 12:00:00.000000",
+ "modified": "2026-10-14 16:00:00.000000",
  "modified_by": "Administrator",
  "module": "Scheduler",
  "name": "Walk In",

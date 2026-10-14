@@ -4,9 +4,12 @@ import { Save, Loader2, User, Mail, Phone, Globe } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/dialog';
 import { Input } from '@/components/input';
 import { Label } from '@/components/label';
+import { PhoneInput } from '@/components/phone-input';
 import { OptionSelect } from '@/components/select/OptionSelect';
 import { assistantAPI } from '@/lib/tasks-assistants/api';
 import { toast } from 'sonner';
+import { useTranslation } from '@/lib/i18n';
+import { formatPhone, normalizePhone } from '@/lib/phone';
 import type { VAProfile } from '@/lib/tasks-assistants/types';
 import Spinner from '@/components/spinner';
 
@@ -20,6 +23,8 @@ interface EditVAProfileModalProps {
 }
 
 export const EditVAProfileModal = ({ vaId, isOpen, onClose, onSave }: EditVAProfileModalProps) => {
+  const { t } = useTranslation();
+  const [phoneChecked, setPhoneChecked] = useState(false);
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [formData, setFormData] = useState<Partial<VAProfile>>({
@@ -40,6 +45,7 @@ export const EditVAProfileModal = ({ vaId, isOpen, onClose, onSave }: EditVAProf
   }, [isOpen, vaId]);
 
   const resetForm = () => {
+    setPhoneChecked(false);
     setFormData({
       full_name: '',
       email: '',
@@ -58,7 +64,7 @@ export const EditVAProfileModal = ({ vaId, isOpen, onClose, onSave }: EditVAProf
         setFormData({
           full_name: profile.full_name,
           email: profile.email,
-          phone: profile.phone || '',
+          phone: formatPhone(profile.phone),
           status: profile.status,
           timezone: profile.timezone || 'Africa/Addis_Ababa',
         });
@@ -77,10 +83,15 @@ export const EditVAProfileModal = ({ vaId, isOpen, onClose, onSave }: EditVAProf
       toast.error('Full name and email are required');
       return;
     }
+    if (formData.phone?.trim() && !normalizePhone(formData.phone)) {
+      setPhoneChecked(true);
+      toast.error(t('controls.phone.hint'));
+      return;
+    }
 
     try {
       setLoading(true);
-      const response = await assistantAPI.vaProfile.update(vaId!, formData);
+      const response = await assistantAPI.vaProfile.update(vaId!, { ...formData, phone: normalizePhone(formData.phone) });
       if (response.success) {
         toast.success('VA Profile updated successfully');
         onSave?.();
@@ -184,12 +195,13 @@ export const EditVAProfileModal = ({ vaId, isOpen, onClose, onSave }: EditVAProf
                 <div className="space-y-2">
                   <Label htmlFor="phone" className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
                     <Phone className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
-                    Phone
+                    {t('controls.phone.label')}
                   </Label>
-                  <Input
+                  <PhoneInput
                     id="phone"
                     value={formData.phone || ''}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    showError={phoneChecked}
+                    onChange={(phone) => setFormData({ ...formData, phone })}
                     className="rounded-xl border-2 transition-all"
                     style={{
                       backgroundColor: 'var(--bg-secondary)',

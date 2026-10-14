@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import { useSession } from '@/context/session';
 import { intlLocale, useTranslation } from '@/lib/i18n';
 import { serverErrorMessage } from '@/lib/utils';
+import { formatPhone, normalizePhone } from '@/lib/phone';
 import { CustomerPicker } from '@/pages/customers/CustomerPicker';
 import type { CustomerSummary } from '@/pages/customers/types';
 import { BookingFields } from '../appointment-form/BookingFields';
@@ -46,6 +47,7 @@ export const CreateAppointmentModal = ({
     notes: '',
   });
   const [errors, setErrors] = useState<FieldErrors>({});
+  const [participantsValid, setParticipantsValid] = useState(true);
   const [customer, setCustomer] = useState<CustomerSummary | null>(null);
   const organization = useSession().session?.selected?.organization;
   const { call: createAppointment, loading: creating } = useFrappePostCall('appointment.scheduler.api.desk.create_desk_appointment');
@@ -65,16 +67,17 @@ export const CreateAppointmentModal = ({
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const resourceOnly = Boolean(services.find((service) => service.name === draft.service_name)?.resource_only);
-    const found = validateBooking(draft, { required: t('staff.form.required'), email: t('staff.receptionDesk.invalidEmail') }, { resourceOnly });
+    const found = validateBooking(draft, { required: t('staff.form.required'), email: t('staff.receptionDesk.invalidEmail'), phone: t('controls.phone.hint'), phoneRequired: t('controls.phone.required') }, { resourceOnly });
     setErrors(found);
-    if (Object.keys(found).length) return;
+    if (Object.keys(found).length || !participantsValid) return;
 
     try {
       const { start, endTime } = scheduleWindow(draft.appointment_date, draft.start_time, draft.duration);
       const result = await createAppointment({
         client_name: draft.client_name,
-        client_phone: draft.client_phone,
+        client_phone: normalizePhone(draft.client_phone),
         client_email: draft.client_email,
+        participant_phones: (draft.participant_phones || []).join(','),
         service_name: draft.service_name,
         provider_name: draft.provider_name,
         location_name: draft.location_name,
@@ -118,7 +121,11 @@ export const CreateAppointmentModal = ({
         freeTime
         draft={draft}
         errors={errors}
-        onChange={(patch) => setDraft((current) => ({ ...current, ...patch }))}
+        onChange={(patch) => {
+          setDraft((current) => ({ ...current, ...patch }));
+          setErrors((current) => ({ ...current, ...Object.fromEntries(Object.keys(patch).map((key) => [key, undefined])) }));
+        }}
+        onParticipantsValid={setParticipantsValid}
         customerSlot={
           <CustomerPicker
             organization={organization}
@@ -131,7 +138,7 @@ export const CreateAppointmentModal = ({
                 setDraft((current) => ({
                   ...current,
                   client_name: picked.display_name,
-                  client_phone: picked.primary_phone ?? '',
+                  client_phone: picked.primary_phone ? formatPhone(picked.primary_phone) : '',
                   client_email: picked.primary_email ?? '',
                 }));
               }

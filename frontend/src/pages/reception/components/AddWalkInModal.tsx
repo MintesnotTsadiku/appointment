@@ -7,7 +7,8 @@ import { serverErrorMessage } from '@/lib/utils';
 import { CustomerPicker } from '@/pages/customers/CustomerPicker';
 import type { CustomerSummary } from '@/pages/customers/types';
 import type { Location, Provider, Service } from '../types';
-import { NotesField, OptionField, TextField } from '../appointment-form/fields';
+import { NotesField, OptionField, PhoneField, PhoneTagsField, TextField } from '../appointment-form/fields';
+import { formatPhone, normalizePhone } from '@/lib/phone';
 import { FormDialog } from '../appointment-form/FormDialog';
 import { EMAIL_PATTERN } from '../appointment-form/model';
 
@@ -37,6 +38,8 @@ export const AddWalkInModal = ({ isOpen, onClose, onSuccess, locations, provider
   const [draft, setDraft] = useState<WalkInDraft>(EMPTY);
   const [errors, setErrors] = useState<Partial<WalkInDraft>>({});
   const [customer, setCustomer] = useState<CustomerSummary | null>(null);
+  const [participants, setParticipants] = useState<string[]>([]);
+  const [participantsValid, setParticipantsValid] = useState(true);
   // An independent provider's key (`Provider:<name>`) puts the walk-in in their own queue.
   const { key: organization, independent } = useBusinessKey();
   const { data: servicesData } = useFrappeGetCall<{ message: { services: Service[] } }>(
@@ -46,15 +49,20 @@ export const AddWalkInModal = ({ isOpen, onClose, onSuccess, locations, provider
   );
   const { call: addWalkIn, loading: creating } = useFrappePostCall('appointment.scheduler.api.desk.add_walk_in');
   const services = servicesData?.message?.services || [];
-  const set = (field: keyof WalkInDraft) => (value: string) => setDraft((current) => ({ ...current, [field]: value }));
+  const set = (field: keyof WalkInDraft) => (value: string) => {
+    setDraft((current) => ({ ...current, [field]: value }));
+    // A fixed field drops its old message; the next submit checks again.
+    setErrors((current) => ({ ...current, [field]: undefined }));
+  };
 
   const validate = () => {
     const found: Partial<WalkInDraft> = {};
     if (!draft.client_name.trim()) found.client_name = t('staff.form.required');
-    if (!draft.client_phone.trim()) found.client_phone = t('staff.form.required');
+    if (!draft.client_phone.trim()) found.client_phone = t('controls.phone.required');
+    else if (!normalizePhone(draft.client_phone)) found.client_phone = t('controls.phone.hint');
     if (draft.client_email && !EMAIL_PATTERN.test(draft.client_email)) found.client_email = t('staff.receptionDesk.invalidEmail');
     setErrors(found);
-    return Object.keys(found).length === 0;
+    return Object.keys(found).length === 0 && participantsValid;
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -64,8 +72,9 @@ export const AddWalkInModal = ({ isOpen, onClose, onSuccess, locations, provider
     try {
       const result = await addWalkIn({
         client_name: draft.client_name,
-        client_phone: draft.client_phone,
+        client_phone: normalizePhone(draft.client_phone),
         client_email: draft.client_email || undefined,
+        participant_phones: participants.length ? participants.join(',') : undefined,
         service_requested: draft.service_requested || undefined,
         location_name: draft.location_name || undefined,
         provider_preferred: draft.provider_preferred || undefined,
@@ -79,6 +88,7 @@ export const AddWalkInModal = ({ isOpen, onClose, onSuccess, locations, provider
         onSuccess();
         onClose();
         setDraft(EMPTY);
+        setParticipants([]);
         setCustomer(null);
       } else {
         toast.error(t('staff.receptionDesk.toast.walkInAddFailed'), { description: result?.message?.error });
@@ -112,7 +122,7 @@ export const AddWalkInModal = ({ isOpen, onClose, onSuccess, locations, provider
             setDraft((current) => ({
               ...current,
               client_name: picked.display_name,
-              client_phone: picked.primary_phone ?? current.client_phone,
+              client_phone: picked.primary_phone ? formatPhone(picked.primary_phone) : current.client_phone,
               client_email: picked.primary_email ?? '',
             }));
           }
@@ -120,9 +130,11 @@ export const AddWalkInModal = ({ isOpen, onClose, onSuccess, locations, provider
       />
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <TextField id="client_name" data-qa="walkin-client-name" label={t('staff.receptionDesk.clientName')} required autoComplete="off" value={draft.client_name} error={errors.client_name} onValueChange={set('client_name')} />
-        <TextField id="client_phone" data-qa="walkin-client-phone" label={t('staff.receptionDesk.phone')} required type="tel" placeholder="+251 9XX" value={draft.client_phone} error={errors.client_phone} onValueChange={set('client_phone')} />
+        <PhoneField id="client_phone" data-qa="walkin-client-phone" label={t('staff.receptionDesk.phone')} required value={draft.client_phone} error={errors.client_phone} onValueChange={set('client_phone')} />
       </div>
-      <TextField id="client_email" label={t('staff.receptionDesk.email')} type="email" placeholder="name@example.com" value={draft.client_email} error={errors.client_email} onValueChange={set('client_email')} />
+      <TextField id="client_email" data-qa="walkin-client-email" label={<>{t('staff.receptionDesk.email')} <span className="font-normal text-muted-foreground">{t('bookingForm.optional')}</span></>} type="email" placeholder="name@example.com" value={draft.client_email} error={errors.client_email} onValueChange={set('client_email')} />
+      <PhoneTagsField id="walkin-participants" data-qa="walkin-participants" label={<>{t('controls.phone.peopleLabel')} <span className="font-normal text-muted-foreground">{t('bookingForm.optional')}</span></>}
+        value={participants} onValueChange={setParticipants} onValidityChange={setParticipantsValid} exclude={draft.client_phone} help={t('bookingForm.participantsPhoneHint')} />
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <OptionField id="service_requested" label={t('staff.receptionDesk.service')} placeholder={t('staff.receptionDesk.selectService')} value={draft.service_requested} options={services} optionLabel={(s) => s.service_name} onValueChange={set('service_requested')} />
         <OptionField id="location_name" label={t('staff.receptionDesk.location')} placeholder={t('staff.receptionDesk.selectLocation')} value={draft.location_name} options={locations} optionLabel={(l) => l.location_name} onValueChange={set('location_name')} />

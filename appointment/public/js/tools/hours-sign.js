@@ -96,6 +96,7 @@
   /* Page wiring ---------------------------------------------------------- */
   var C = root.ToolsCommon;
   var H = root.HabeshaTime;
+  var P = root.AppointmentPhone;
   var data = C.data();
   var S = data.strings || {};
   var lang = data.lang === "am" ? "am" : "en";
@@ -216,7 +217,7 @@
     });
     var contact = "";
     if (state.phone) {
-      contact += '<div><strong><span lang="am">' + escapeHtml(S.phone.am) + "</span> · " + escapeHtml(S.phone.en) + "</strong> " + escapeHtml(state.phone) + "</div>";
+      contact += '<div><strong><span lang="am">' + escapeHtml(S.phone.am) + "</span> · " + escapeHtml(S.phone.en) + "</strong> " + escapeHtml(P.format(state.phone)) + "</div>";
     }
     if (state.link) {
       contact += '<a class="sign-book" href="' + escapeHtml(linkHref(state.link)) + '" data-qa="sign-book"><span lang="am">' +
@@ -233,6 +234,16 @@
     var hash = "#s=" + encodeState(state);
     if (history.replaceState) history.replaceState(null, "", location.pathname + location.search + hash);
     C.byQa("s-print-preview").href = location.pathname + "?view=print" + hash;
+  }
+
+  /** The phone stays optional; a number that cannot be dialled gets the shared hint under the field. */
+  function checkPhone(show) {
+    var usable = !state.phone || Boolean(P.normalize(state.phone));
+    var hint = C.byQa("s-phone-hint");
+    if (usable) hint.hidden = true;
+    else if (show) hint.hidden = false;
+    if (hint.hidden) C.byQa("s-phone").removeAttribute("aria-invalid");
+    else C.byQa("s-phone").setAttribute("aria-invalid", "true");
   }
 
   function readForm() {
@@ -274,9 +285,12 @@
       renderEditor();
       renderSign();
     });
+    C.byQa("s-phone").addEventListener("input", function () { checkPhone(false); });
+    C.byQa("s-phone").addEventListener("change", function () { checkPhone(true); });
     C.byQa("s-print").addEventListener("click", function () { window.print(); });
     renderEditor();
     readForm();
     renderSign();
+    checkPhone(true);
   });
 })(typeof globalThis !== "undefined" ? globalThis : this);

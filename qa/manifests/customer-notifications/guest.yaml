@@ -55,6 +55,9 @@ scenarios:
     selector: '#userName'
     value: QA Notify EN desktop
   - action: fill
+    selector: '#userPhone'
+    value: '+251910831154'
+  - action: fill
     selector: '#userEmail'
     value: qa-notify-en-desktop@example.test
   - action: screenshot
@@ -119,6 +122,9 @@ scenarios:
   - action: fill
     selector: '#userName'
     value: QA Notify EN mobile
+  - action: fill
+    selector: '#userPhone'
+    value: '+251910381409'
   - action: fill
     selector: '#userEmail'
     value: qa-notify-en-mobile@example.test
@@ -192,6 +198,9 @@ scenarios:
     selector: '#userName'
     value: QA Notify AM desktop
   - action: fill
+    selector: '#userPhone'
+    value: '+251910801938'
+  - action: fill
     selector: '#userEmail'
     value: qa-notify-am-desktop@example.test
   - action: screenshot
@@ -263,6 +272,9 @@ scenarios:
   - action: fill
     selector: '#userName'
     value: QA Notify AM mobile
+  - action: fill
+    selector: '#userPhone'
+    value: '+251910369391'
   - action: fill
     selector: '#userEmail'
     value: qa-notify-am-mobile@example.test

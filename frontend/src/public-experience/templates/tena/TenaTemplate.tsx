@@ -1,3 +1,4 @@
+import { formatPhone, phoneHref } from "@/lib/phone";
 import type { BookingTemplateProps, TemplateProps } from "../types";
 import { action, brandLogo, contentImage, designImage, localized, records, section, sectionImage } from "../content";
 import { useTemplateCredit } from "../credit";
@@ -75,7 +76,7 @@ export function TenaSite({ snapshot, locale, applicationName, publicRoot, rootSt
       <section className="tena-visit" id="contact">
         <div><h2>{localized(locations.title, locale)}</h2>{localized(locations.intro, locale) ? <p>{localized(locations.intro, locale)}</p> : null}</div>
         {locationImage ? <img src={locationImage.src} alt={locationImage.alt} /> : null}
-        {location ? <address><span>{localized(location.name, locale)}</span><b>{localized(location.address, locale)}</b>{localized(location.hours, locale)}{location.phone ? <a href={`tel:${String(location.phone)}`}>{String(location.phone)}</a> : null}</address> : null}
+        {location ? <address><span>{localized(location.name, locale)}</span><b>{localized(location.address, locale)}</b>{localized(location.hours, locale)}{location.phone ? <a href={phoneHref(String(location.phone)) || `tel:${String(location.phone)}`}>{formatPhone(String(location.phone))}</a> : null}</address> : null}
       </section>
       <section className="tena-final"><Leaf /><div><h2>{localized(booking.title, locale)}</h2>{localized(booking.body, locale) ? <p>{localized(booking.body, locale)}</p> : null}</div>{finalAction ? <a href={finalAction.href}>{finalAction.label}</a> : null}</section>
     <TenaNewsletter snapshot={snapshot} applicationName={applicationName} locale={locale} publicRoot={publicRoot} /></main>

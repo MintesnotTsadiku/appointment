@@ -120,7 +120,7 @@
       <form method="post" action="{{ canonical_url }}#apply" novalidate data-qa="partners-form" data-method="{{ apply_method }}"
             data-msg-failed="{{ t('form.failed') }}" data-msg-rate="{{ t('form.rateLimited') }}" data-msg-fix="{{ t('form.fixErrors') }}"
             data-msg-name="{{ t('form.nameRequired') }}" data-msg-email="{{ t('form.emailInvalid') }}" data-msg-kind="{{ t('form.kindRequired') }}"
-            data-msg-long="{{ t('form.tooLong') }}" data-msg-sending="{{ t('form.sending') }}"
+            data-msg-long="{{ t('form.tooLong') }}" data-msg-phone="{{ t('controls.phone.hint') }}" data-msg-sending="{{ t('form.sending') }}"
             {% if form.state == "sent" %}hidden{% endif %}>
         {%- if csrf_token %}<input type="hidden" name="csrf_token" value="{{ csrf_token }}">{% endif %}
         <div class="p-trap" aria-hidden="true"><label>{{ t("form.trap") }} <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
@@ -145,7 +145,8 @@
           </div>
           <div class="field">
             <label for="p-phone">{{ t("form.phone") }}</label>
-            <input class="input" id="p-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="09…" value="{{ form['values'].get('phone', '') | e }}" data-qa="partners-phone">
+            <input class="input" id="p-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="0911 22 33 44" value="{{ form['values'].get('phone', '') | e }}" aria-describedby="p-phone-error" data-qa="partners-phone">
+            <p class="error-text" id="p-phone-error" data-error-for="phone" hidden></p>
           </div>
         </div>
         <fieldset class="field" aria-describedby="p-kind-error">
@@ -189,6 +190,7 @@
   </nav>
   <p>© {{ year }} {{ product_name }}{% if brand.tagline %} · {{ brand.tagline }}{% endif %}</p>
 </footer>
+<script src="/assets/appointment/js/phone.js?v={{ asset_version }}" defer></script>
 <script src="/assets/appointment/js/partners.js?v={{ asset_version }}" defer></script>
 </body>
 </html>

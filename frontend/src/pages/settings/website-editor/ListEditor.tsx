@@ -1,8 +1,10 @@
-import { useState, type ReactNode } from "react";
+import { useId, useState, type ReactNode } from "react";
 import { ChevronDown, Plus } from "lucide-react";
 
 import { Button } from "@/components/button";
 import { Checkbox } from "@/components/checkbox";
+import { Label } from "@/components/label";
+import { PhoneInput } from "@/components/phone-input";
 import { useTranslation } from "@/lib/i18n";
 import { fill } from "@/pages/manage-booking/format";
 import { asRecords, moveItem, newItem, readLocale, removeItem, renumber, replaceItem, type Content, type EditorField, type EditorList, type Issue } from "./core";
@@ -56,8 +58,12 @@ export function FieldInput({ section, field, content, onPatch, issues, prefix, d
     return <LocalizedInput label={label} value={value} long={field.kind === "long"} required={field.required} maxLength={field.maxLength}
       issues={own} qa={`${qa}-${field.key}`} onChange={(next) => onPatch({ [field.key]: next })} />;
   }
+  if (field.kind === "plain" && field.pattern === "phone") {
+    return <PhoneLineInput label={label} value={value} maxLength={field.maxLength}
+      issues={own} qa={`${qa}-${field.key}`} onChange={(next) => onPatch({ [field.key]: next })} />;
+  }
   if (field.kind === "plain") {
-    return <PlainInput label={label} value={value} maxLength={field.maxLength} type={field.pattern === "email" ? "email" : field.pattern === "phone" ? "tel" : "text"}
+    return <PlainInput label={label} value={value} maxLength={field.maxLength} type={field.pattern === "email" ? "email" : "text"}
       issues={own} qa={`${qa}-${field.key}`} onChange={(next) => onPatch({ [field.key]: next })} />;
   }
   if (field.kind === "format") {
@@ -70,6 +76,17 @@ export function FieldInput({ section, field, content, onPatch, issues, prefix, d
   }
   return <div className="space-y-1"><label className="flex items-center gap-2 text-sm"><Checkbox checked={value === true} data-qa={`${qa}-${field.key}`}
     onCheckedChange={(checked) => onPatch({ [field.key]: checked })} />{t("staff.website.editor.consentLabel")}</label><IssueList issues={own} /></div>;
+}
+
+/** A phone line: the shared phone control, with the editor's issue list under it. */
+function PhoneLineInput({ label, value, onChange, maxLength, issues, qa }: { label: string; value: unknown; onChange: (value: string) => void; maxLength: number; issues: Issue[]; qa: string }) {
+  const id = useId();
+  return <div className="space-y-1">
+    <Label htmlFor={id} className="text-sm font-medium">{label}</Label>
+    <PhoneInput id={id} value={typeof value === "string" ? value : ""} maxLength={maxLength} data-qa={qa} messages={false}
+      aria-invalid={issues.length > 0 || undefined} onChange={onChange} className="md:max-w-sm" />
+    <IssueList issues={issues} />
+  </div>;
 }
 
 interface ListProps {

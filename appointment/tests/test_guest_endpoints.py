@@ -120,7 +120,7 @@ class TestGuestBookingLimits(unittest.TestCase):
 
     def setUp(self):
         # QA sites raise these limits in site config; the tests check the production defaults.
-        self.defaults = patch.dict(frappe.local.conf, {"guest_booking_limit_per_ip": None, "guest_booking_limit_per_email": None})
+        self.defaults = patch.dict(frappe.local.conf, {"guest_booking_limit_per_ip": None, "guest_booking_limit_per_email": None, "guest_booking_limit_per_phone": None})
         self.defaults.start()
 
     def tearDown(self):
@@ -136,6 +136,12 @@ class TestGuestBookingLimits(unittest.TestCase):
         frappe.set_user("Administrator")
         self.assertEqual(booking._booking_limit(), 300)
 
+    def _clear(self, business, email="", phone=""):
+        from appointment.scheduler import booking
+
+        for key, _limit, _message in booking._guest_contacts(business, email, phone):
+            frappe.cache.delete_value(key)
+
     def test_one_email_books_a_few_times_per_business(self):
         from appointment.scheduler import booking
 
@@ -143,14 +149,34 @@ class TestGuestBookingLimits(unittest.TestCase):
         try:
             with GuestRequest():
                 for _attempt in range(3):
-                    booking._check_guest_email(business, email)
-                    booking._count_guest_email(business, email)
+                    booking._check_guest_contacts(business, email, "")
+                    booking._count_guest_contacts(business, email, "")
                 with self.assertRaises(frappe.RateLimitExceededError):
-                    booking._check_guest_email(business, email.upper())
-                booking._check_guest_email("Another Business", email)  # Counted per business.
+                    booking._check_guest_contacts(business, email.upper(), "")
+                booking._check_guest_contacts("Another Business", email, "")  # Counted per business.
             # Scripts, seeding and tests run outside a web request and are not limited.
             frappe.set_user("Guest")
-            booking._check_guest_email(business, email)
+            booking._check_guest_contacts(business, email, "")
         finally:
             frappe.set_user("Administrator")
-            frappe.cache.delete_value(booking._guest_email_key(business, email))
+            self._clear(business, email=email)
+
+    def test_one_phone_books_a_few_times_per_business_in_any_form(self):
+        from appointment.scheduler import booking
+        from appointment.tests.phones import fresh_phone
+
+        business = "QA Phone Limit Business"
+        local = fresh_phone(local=True)
+        try:
+            with GuestRequest():
+                for _attempt in range(3):
+                    booking._check_guest_contacts(business, "", local)
+                    booking._count_guest_contacts(business, "", local)
+                # The same number typed another way is the same customer.
+                with self.assertRaises(frappe.RateLimitExceededError):
+                    booking._check_guest_contacts(business, f"other-{local}@example.test", "+251" + local[1:])
+                with patch.dict(frappe.local.conf, {"guest_booking_limit_per_phone": 5}):
+                    booking._check_guest_contacts(business, "", local)
+        finally:
+            frappe.set_user("Administrator")
+            self._clear(business, phone=local)

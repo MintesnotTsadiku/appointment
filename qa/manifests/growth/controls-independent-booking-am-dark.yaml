@@ -66,6 +66,9 @@ scenarios:
     selector: '[data-qa="independent-booking-name"]'
     value: ሰላማዊት በቀለ
   - action: fill
+    selector: '[data-qa="independent-booking-phone"]'
+    value: '+251910604419'
+  - action: fill
     selector: '[data-qa="independent-booking-email-input"]'
     value: qa-indep-picker-am@example.test
   - action: screenshot

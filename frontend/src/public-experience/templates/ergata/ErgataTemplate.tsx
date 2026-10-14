@@ -1,5 +1,6 @@
 import { useRef, type CSSProperties } from "react";
 
+import { formatPhone, phoneHref } from "@/lib/phone";
 import type { BookingTemplateProps, TemplateProps } from "../types";
 import type { CompiledDesign, SessionFormat } from "../../types";
 import { meetOfFormat, placeMeetOf, sessionMeetOf, type Meet } from "@/lib/online-session";
@@ -72,7 +73,7 @@ function sessionPrice(item: ContentRecord, locale: string, chrome: PublicChrome)
 }
 
 function telHref(phone: string): string {
-  return `tel:${phone.replace(/[^\d+]/g, "")}`;
+  return phoneHref(phone) || `tel:${phone.replace(/[^\d+]/g, "")}`;
 }
 
 function Brand({ logo, name, href }: { logo?: string; name: string; href: string }) {
@@ -153,7 +154,7 @@ function SafetyNotice({ notice, locale, chrome, compact = false }: NoticeProps) 
           const label = localized(item.label, locale);
           const phone = String(item.phone).trim();
           return <li key={index}><a href={telHref(phone)} aria-label={chrome.t("callNumber", { label, number: phone })} data-qa="ergata-notice-call">
-            <Icon name="phone" /><strong>{phone}</strong><span>{label}</span>
+            <Icon name="phone" /><strong>{formatPhone(phone)}</strong><span>{label}</span>
           </a></li>;
         })}
       </ul> : null}
@@ -185,7 +186,7 @@ function OfficeCard({ place, locale, chrome, design, phone }: PlaceProps) {
       {notes.length ? <ul className="eg-place-notes" aria-label={chrome.t("goodToKnow")}>{notes.map((note, index) => <li key={index}><Icon name="check" />{note}</li>)}</ul> : null}
       <dl className="eg-place-facts">
         {localized(place.hours, locale) ? <div><dt><Icon name="clock" /><span>{chrome.t("hours")}</span></dt><dd>{localized(place.hours, locale)}</dd></div> : null}
-        {placePhone ? <div><dt><Icon name="phone" /><span>{chrome.t("phone")}</span></dt><dd><a href={telHref(placePhone)}>{placePhone}</a></dd></div> : null}
+        {placePhone ? <div><dt><Icon name="phone" /><span>{chrome.t("phone")}</span></dt><dd><a href={telHref(placePhone)}>{formatPhone(placePhone)}</a></dd></div> : null}
       </dl>
       {directions ? <a className="eg-btn eg-btn-quiet" href={directions.href} rel="noopener noreferrer" data-qa="ergata-directions"><Icon name="pin" /><span>{directions.label}</span></a> : null}
     </div>
@@ -504,7 +505,7 @@ export function ErgataSite({ snapshot, locale, applicationName, publicRoot, root
             <span className="eg-contact-mark" aria-hidden="true"><Icon name="mail" /></span>
             {localized(contact.body, locale) ? <p>{localized(contact.body, locale)}</p> : null}
             <div className="eg-contact-links">
-              {phone ? <a href={telHref(phone)}><Icon name="phone" /><span>{phone}</span></a> : null}
+              {phone ? <a href={telHref(phone)}><Icon name="phone" /><span>{formatPhone(phone)}</span></a> : null}
               {email ? <a href={`mailto:${email}`}><Icon name="mail" /><span>{email}</span></a> : null}
               {contactAction && !contactAction.href.endsWith("/book") && !contactAction.href.startsWith("tel:") ? <a href={contactAction.href}><Icon name="arrow" /><span>{contactAction.label}</span></a> : null}
             </div>

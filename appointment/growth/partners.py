@@ -15,7 +15,8 @@ from frappe.utils import now_datetime, validate_email_address
 from appointment.growth import referral_codes
 from appointment.growth.settings import growth
 from appointment.scheduler import business_owner
-from appointment.scheduler.notification_sms import normalize_phone
+from appointment.helpers.phone import hint as phone_hint
+from appointment.helpers.phone import normalize_phone
 
 KINDS = ("association", "school", "trainer", "telegram", "other")
 REVIEWABLE = ("Pending", "Approved", "Rejected")
@@ -45,7 +46,7 @@ def _validated(name, organization, email, phone, kind, message):
         frappe.throw(_("Enter a valid email address."))
     number = normalize_phone(phone) if phone else ""
     if phone and not number:
-        frappe.throw(_("Enter a valid phone number."))
+        frappe.throw(phone_hint())
     if kind not in KINDS:
         frappe.throw(_("Choose what kind of partner you are."))
     return dict(

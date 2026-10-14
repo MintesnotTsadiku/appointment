@@ -3,6 +3,7 @@ import { Building2, Lock, Video } from 'lucide-react';
 import { Checkbox } from '@/components/checkbox';
 import { Input } from '@/components/input';
 import { Label } from '@/components/label';
+import { PhoneInput } from '@/components/phone-input';
 import { OptionSelect } from '@/components/select/OptionSelect';
 import { ToggleGroup, ToggleGroupItem } from '@/components/toggle-group';
 import { FieldHint } from '@/components/settings-layout';
@@ -50,8 +51,10 @@ export function LocationFields({ form, errors, onChange, owners, platforms, sess
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <TextField id="city" label={t('staff.locations.fields.city')} required value={form.city}
               placeholder={t('staff.locations.fields.cityPlaceholder')} error={errors.city} onChange={(v) => onChange({ city: v })} />
-            <TextField id="phone" type="tel" label={t('staff.locations.fields.phone')} value={form.phone}
-              placeholder="+251 911 234 567" onChange={(v) => onChange({ phone: v })} />
+            <Field id="phone" label={t('staff.locations.fields.phone')} error={errors.phone}>
+              <PhoneInput id="phone" value={form.phone} messages={false} showError={!!errors.phone}
+                aria-describedby={errors.phone ? 'phone-error' : undefined} onChange={(phone) => onChange({ phone })} />
+            </Field>
           </div>
         </>
       )}

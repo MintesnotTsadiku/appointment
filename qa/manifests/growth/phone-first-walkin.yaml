@@ -1,0 +1,114 @@
+# Phone-first at reception (docs/growth/PHONE_FIRST.md), English, desktop, light.
+# Run appointment.tests.phone_first_qa_fixtures.setup first and cleanup afterwards.
+# Reception adds a walk-in: the phone is required and first, a bad number shows the shared hint,
+# the email is optional, and the people who came along are added as phone tags.
+app: appointment
+base_url: http://localhost:47800
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.phone_first_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-phone-first-walkin
+default_role: Staff
+auth:
+  type: frappe_session
+  username: bloom.owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+scenarios:
+- id: phone_first_walkin_en_desktop
+  title: 'Reception adds a walk-in with a local phone number and two people as phone tags (en, desktop)'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /reception
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="walkin-queue"]'
+  actions:
+  - action: click
+    selector: '[data-qa="reception-add-walkin"]'
+  - action: wait_for
+    selector: '[data-qa="walkin-client-name"]'
+  - action: fill
+    selector: '[data-qa="walkin-client-name"]'
+    value: Kidist Mulugeta
+  - action: fill
+    selector: '[data-qa="walkin-client-phone"]'
+    value: 0911 73 64
+  - action: click
+    selector: '[data-qa="walkin-submit"]'
+    assertions:
+    - type: text_contains
+      selector: '#client_phone-error'
+      value: Enter a phone number like 0911 22 33 44 or +251 91 122 3344
+  - action: screenshot
+    name: phone_first_walkin_en_desktop-1-hint.png
+    full_page: true
+  - action: fill
+    selector: '[data-qa="walkin-client-phone"]'
+    value: 0911 73 64 13
+  - action: fill
+    selector: '[data-qa="walkin-participants-input"]'
+    value: '0911 22 33 99'
+  - action: press
+    selector: '[data-qa="walkin-participants-input"]'
+    key: Enter
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="walkin-participants-tag"][data-phone="+251911223399"]'
+  - action: fill
+    selector: '[data-qa="walkin-participants-input"]'
+    value: '0711 22 33 99,'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="walkin-participants-tag"][data-phone="+251711223399"]'
+  - action: click
+    selector: '#service_requested'
+  - action: click
+    selector: '[role="option"][data-value="{qa_org_walkin_service}"]'
+  - action: click
+    selector: '#location_name'
+  - action: click
+    selector: '[role="option"][data-value="{qa_org_walkin_location}"]'
+  - action: screenshot
+    name: phone_first_walkin_en_desktop-2-filled.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="walkin-submit"]'
+    assertions:
+    - type: network_request
+      url_contains: add_walk_in
+      method: POST
+      status: 200
+      response_json_path: message.success
+      response_json_value: true
+    - type: network_request
+      url_contains: add_walk_in
+      request_json_path: client_phone
+      request_json_value: '+251911736413'
+    - type: network_request
+      url_contains: add_walk_in
+      request_json_path: participant_phones
+      request_json_value: '+251911223399,+251711223399'
+  - action: wait_for
+    selector: '[data-qa="walkin-card"]:has-text("Kidist Mulugeta")'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="walkin-card"]:has-text("Kidist Mulugeta")'
+      value: +251 91 173 6413
+    - type: text_contains
+      selector: '[data-qa="walkin-card"]:has-text("Kidist Mulugeta") [data-qa="walkin-card-participants"]'
+      value: +251 71 122 3399
+  - action: screenshot
+    name: phone_first_walkin_en_desktop-3-queued.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors

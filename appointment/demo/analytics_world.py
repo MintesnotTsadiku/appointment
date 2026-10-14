@@ -7,6 +7,8 @@ from zoneinfo import ZoneInfo
 
 import frappe
 
+from appointment.helpers.phone import placeholder_numbers
+
 VERSION = 6
 SOURCES = ("online", "staff", "walk-in", "import")
 
@@ -56,7 +58,8 @@ def configure(state, fresh=False):
             from appointment.scheduler.reception_state import set_state
             if frappe.db.get_value("Location", location, "reception_state") not in {"Open", "Closed"}:
                 set_state(location, "Open")
-        counts["walk_ins"] += walk_ins(state, business)
+        with placeholder_numbers():  # Seeded walk-ins keep non-dialable numbers.
+            counts["walk_ins"] += walk_ins(state, business)
     frappe.set_user("Administrator")
     state["analytics_world"] = {"version": VERSION, "synthetic": True,
                                 "appointments": counts["appointments"], "cohort_bookings_added": cohort_count,

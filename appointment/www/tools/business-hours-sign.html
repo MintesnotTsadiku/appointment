@@ -20,7 +20,8 @@
     <div class="row contact-row" style="margin-top: 16px">
       <div class="field">
         <label for="s-phone">{{ t("phone") }} <span class="hint">({{ t("optional") }})</span></label>
-        <input id="s-phone" class="input" type="tel" maxlength="30" autocomplete="tel" placeholder="{{ t('phoneExample') }}" data-qa="s-phone">
+        <input id="s-phone" class="input" type="tel" maxlength="30" autocomplete="tel" placeholder="{{ t('phoneExample') }}" aria-describedby="s-phone-hint" data-qa="s-phone">
+        <p class="error-text" id="s-phone-hint" data-qa="s-phone-hint" hidden>{{ phone_hint }}</p>
       </div>
       <div class="field">
         <label for="s-link">{{ t("bookingLink") }} <span class="hint">({{ t("optional") }})</span></label>
@@ -86,6 +87,7 @@
 {% block data %}<script type="application/json" id="tool-data">{{ tool_data | safe }}</script>{% endblock %}
 {% block scripts %}
 <script src="/assets/appointment/js/habesha-time.js?v={{ asset_version }}" defer></script>
+<script src="/assets/appointment/js/phone.js?v={{ asset_version }}" defer></script>
 <script src="/assets/appointment/js/tools/tools-common.js?v={{ asset_version }}" defer></script>
 <script src="/assets/appointment/js/tools/hours-sign.js?v={{ asset_version }}" defer></script>
 {% endblock %}

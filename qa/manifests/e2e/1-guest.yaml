@@ -50,6 +50,9 @@ scenarios:
     selector: '#userName'
     value: E2E Paid customer
   - action: fill
+    selector: '#userPhone'
+    value: '+251910265756'
+  - action: fill
     selector: '#userEmail'
     value: qa-e2e-paid@example.test
   - action: screenshot
@@ -136,6 +139,9 @@ scenarios:
   - action: fill
     selector: '#userName'
     value: E2E Unpaid customer
+  - action: fill
+    selector: '#userPhone'
+    value: '+251910032543'
   - action: fill
     selector: '#userEmail'
     value: qa-e2e-unpaid@example.test

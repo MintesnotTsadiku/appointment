@@ -3,6 +3,7 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { useFrappePostCall } from 'frappe-react-sdk';
 import { toast } from 'sonner';
 import { useTranslation } from '@/lib/i18n';
+import { normalizePhone } from '@/lib/phone';
 import type { EditTarget, OrgOptions } from '../types';
 import { ItemFormDialog } from './ItemFormDialog';
 import { ServiceFields } from './forms/ServiceFields';
@@ -82,7 +83,7 @@ export const EditItemModal = ({ isOpen, onClose, item, organization, onSuccess }
         address_line_1: formData.address_line_1,
         address_line_2: formData.address_line_2,
         city: formData.city,
-        phone: formData.phone,
+        phone: normalizePhone(formData.phone),
         timezone: formData.timezone,
       });
       toast.success('Location updated successfully');
@@ -101,6 +102,10 @@ export const EditItemModal = ({ isOpen, onClose, item, organization, onSuccess }
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (item.type === 'location' && formData.phone?.trim() && !normalizePhone(formData.phone)) {
+      toast.error(t('controls.phone.hint'));
+      return;
+    }
     try {
       await submitByType();
       onSuccess();

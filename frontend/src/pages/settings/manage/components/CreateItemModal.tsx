@@ -3,6 +3,7 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { useFrappePostCall } from 'frappe-react-sdk';
 import { toast } from 'sonner';
 import { useTranslation } from '@/lib/i18n';
+import { normalizePhone } from '@/lib/phone';
 import type { EditableType, OrgOptions } from '../types';
 import { ItemFormDialog } from './ItemFormDialog';
 import { ServiceFields } from './forms/ServiceFields';
@@ -89,7 +90,7 @@ export const CreateItemModal = ({ isOpen, onClose, type, organizationId, organiz
         address_line_1: formData.address_line_1,
         address_line_2: formData.address_line_2,
         city: formData.city,
-        phone: formData.phone,
+        phone: normalizePhone(formData.phone),
         timezone: formData.timezone,
       });
       toast.success('Location created successfully');
@@ -107,6 +108,10 @@ export const CreateItemModal = ({ isOpen, onClose, type, organizationId, organiz
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (type === 'location' && formData.phone?.trim() && !normalizePhone(formData.phone)) {
+      toast.error(t('controls.phone.hint'));
+      return;
+    }
     try {
       await submitByType();
       onSuccess();

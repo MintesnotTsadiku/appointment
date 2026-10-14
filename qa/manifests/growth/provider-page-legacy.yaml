@@ -49,6 +49,9 @@ scenarios:
     selector: '[data-qa="independent-booking-name"]'
     value: Abel Tesfaye
   - action: fill
+    selector: '[data-qa="independent-booking-phone"]'
+    value: '+251910715145'
+  - action: fill
     selector: '[data-qa="independent-booking-email-input"]'
     value: abel.tesfaye@example.test
   - action: click

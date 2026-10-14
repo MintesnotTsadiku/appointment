@@ -6,6 +6,7 @@ import { Input } from '@/components/input';
 import { Label } from '@/components/label';
 import { useTranslation } from '@/lib/i18n';
 import { CUSTOMERS_API, type CustomerSummary, type SearchResult } from './types';
+import { formatPhone } from '@/lib/phone';
 import { useDebounced } from './useDebounced';
 
 interface CustomerPickerProps {
@@ -77,7 +78,7 @@ export function CustomerPicker({ organization, value, onChange, excludeId, label
                 }}
               >
                 <span className="font-medium text-foreground">{row.display_name}</span>
-                <span className="text-xs text-muted-foreground">{[row.primary_phone, row.primary_email].filter(Boolean).join(' · ')}</span>
+                <span className="text-xs text-muted-foreground">{[row.primary_phone && formatPhone(row.primary_phone), row.primary_email].filter(Boolean).join(' · ')}</span>
               </button>
             </li>
           ))}

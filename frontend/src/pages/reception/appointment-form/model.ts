@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { normalizePhone } from '@/lib/phone';
 
 export const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export const DURATION_OPTIONS = ['15', '30', '45', '60', '90', '120'];
@@ -60,6 +61,8 @@ export interface BookingDraft {
   client_name: string;
   client_phone: string;
   client_email: string;
+  /** Other people coming, as E.164 phone numbers. */
+  participant_phones?: string[];
   service_name: string;
   provider_name: string;
   location_name: string;
@@ -77,14 +80,21 @@ export interface BookingDraft {
 
 export type FieldErrors = Partial<Record<keyof BookingDraft, string>>;
 
-/** Name and assignment are required; phone and email are optional (email is checked when present). */
+/**
+ * Name, phone and assignment are required; email is optional and checked when present.
+ * Editing a booking that has no phone, or keeps the phone it was saved with, does not ask for one.
+ */
 export function validateBooking(
   draft: BookingDraft,
-  messages: { required: string; email: string },
-  { resourceOnly = false, resourceFixed = false }: { resourceOnly?: boolean; resourceFixed?: boolean } = {},
+  messages: { required: string; email: string; phone: string; phoneRequired: string },
+  { resourceOnly = false, resourceFixed = false, savedPhone }: { resourceOnly?: boolean; resourceFixed?: boolean; savedPhone?: string } = {},
 ): FieldErrors {
   const errors: FieldErrors = {};
   if (!draft.client_name.trim()) errors.client_name = messages.required;
+  const phone = draft.client_phone.trim();
+  const editing = savedPhone !== undefined;
+  if (!phone && !editing) errors.client_phone = messages.phoneRequired;
+  else if (phone && phone !== savedPhone && !normalizePhone(phone)) errors.client_phone = messages.phone;
   if (draft.client_email.trim() && !EMAIL_PATTERN.test(draft.client_email.trim())) errors.client_email = messages.email;
   if (!draft.service_name) errors.service_name = messages.required;
   if (resourceOnly) {

@@ -4,9 +4,12 @@ import { Plus, Loader2, User, Mail, Phone, Globe } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/dialog';
 import { Input } from '@/components/input';
 import { Label } from '@/components/label';
+import { PhoneInput } from '@/components/phone-input';
 import { OptionSelect } from '@/components/select/OptionSelect';
 import { assistantAPI } from '@/lib/tasks-assistants/api';
 import { toast } from 'sonner';
+import { useTranslation } from '@/lib/i18n';
+import { normalizePhone } from '@/lib/phone';
 import type { ClientProfile } from '@/lib/tasks-assistants/types';
 
 const selectClassName = 'h-auto w-full rounded-xl border-2 border-[var(--border-default)] bg-[var(--bg-secondary)] px-[1.125rem] py-[0.875rem] text-[var(--text-primary)] transition-all';
@@ -18,6 +21,8 @@ interface CreateClientProfileModalProps {
 }
 
 export const CreateClientProfileModal = ({ isOpen, onClose, onSuccess }: CreateClientProfileModalProps) => {
+  const { t } = useTranslation();
+  const [phoneChecked, setPhoneChecked] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<Partial<ClientProfile>>({
     full_name: '',
@@ -34,6 +39,7 @@ export const CreateClientProfileModal = ({ isOpen, onClose, onSuccess }: CreateC
   }, [isOpen]);
 
   const resetForm = () => {
+    setPhoneChecked(false);
     setFormData({
       full_name: '',
       email: '',
@@ -49,10 +55,15 @@ export const CreateClientProfileModal = ({ isOpen, onClose, onSuccess }: CreateC
       toast.error('Full name and email are required');
       return;
     }
+    if (formData.phone?.trim() && !normalizePhone(formData.phone)) {
+      setPhoneChecked(true);
+      toast.error(t('controls.phone.hint'));
+      return;
+    }
 
     try {
       setLoading(true);
-      const response = await assistantAPI.clientProfile.create(formData);
+      const response = await assistantAPI.clientProfile.create({ ...formData, phone: normalizePhone(formData.phone) });
       if (response.success) {
         toast.success('Client Profile created successfully');
         onSuccess?.();
@@ -146,12 +157,13 @@ export const CreateClientProfileModal = ({ isOpen, onClose, onSuccess }: CreateC
               <div className="space-y-2">
                 <Label htmlFor="phone" className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
                   <Phone className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
-                  Phone
+                  {t('controls.phone.label')}
                 </Label>
-                <Input
+                <PhoneInput
                   id="phone"
                   value={formData.phone || ''}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  showError={phoneChecked}
+                  onChange={(phone) => setFormData({ ...formData, phone })}
                   className="rounded-xl border-2 transition-all"
                   style={{
                     backgroundColor: 'var(--bg-secondary)',

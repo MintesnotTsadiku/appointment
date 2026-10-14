@@ -9,6 +9,7 @@ import { BookingFields } from '../appointment-form/BookingFields';
 import { Field } from '../appointment-form/fields';
 import { FormDialog } from '../appointment-form/FormDialog';
 import { MeetingLinkSection } from './MeetingLinkSection';
+import { normalizePhone, phoneList } from '@/lib/phone';
 import { normalizeEmail, scheduleWindow, validateBooking, type BookingDraft, type FieldErrors } from '../appointment-form/model';
 
 interface EditAppointmentModalProps {
@@ -34,27 +35,33 @@ export const EditAppointmentModal = ({ isOpen, onClose, appointment, onSuccess }
   const resourceOnly = Boolean(appointment && !appointment.provider);
   const [draft, setDraft] = useState<EditDraft>(() => draftFrom(appointment));
   const [errors, setErrors] = useState<FieldErrors>({});
+  const [participantsValid, setParticipantsValid] = useState(true);
   const { call: updateAppointment, loading: updating } = useFrappePostCall('appointment.scheduler.api.desk.update_appointment');
 
   useEffect(() => {
     if (appointment) setDraft(draftFrom(appointment));
   }, [appointment]);
 
-  const change = (patch: Partial<EditDraft>) => setDraft((current) => ({ ...current, ...patch }));
+  const change = (patch: Partial<EditDraft>) => {
+    setDraft((current) => ({ ...current, ...patch }));
+    setErrors((current) => ({ ...current, ...Object.fromEntries(Object.keys(patch).map((key) => [key, undefined])) }));
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const found = validateBooking(draft, { required: t('staff.form.required'), email: t('staff.receptionDesk.invalidEmail') }, { resourceOnly, resourceFixed: true });
+    const found = validateBooking(draft, { required: t('staff.form.required'), email: t('staff.receptionDesk.invalidEmail'), phone: t('controls.phone.hint'), phoneRequired: t('controls.phone.required') }, { resourceOnly, resourceFixed: true, savedPhone: appointment.client_phone || '' });
     setErrors(found);
-    if (Object.keys(found).length) return;
+    if (Object.keys(found).length || !participantsValid) return;
 
     try {
       const { start, endTime } = scheduleWindow(draft.appointment_date, draft.start_time, draft.duration);
       const result = await updateAppointment({
         appointment_name: appointment.name,
         client_name: draft.client_name,
-        client_phone: draft.client_phone,
+        // An unchanged older number is sent as it was saved; the server leaves it alone.
+        client_phone: normalizePhone(draft.client_phone) || draft.client_phone,
         client_email: draft.client_email ? normalizeEmail(draft.client_email) : '',
+        participant_phones: (draft.participant_phones || []).join(','),
         service_name: draft.service_name,
         provider_name: draft.provider_name,
         location_name: draft.location_name,
@@ -99,6 +106,8 @@ export const EditAppointmentModal = ({ isOpen, onClose, appointment, onSuccess }
         errors={errors}
         onChange={change}
         formatEmail={normalizeEmail}
+        onParticipantsValid={setParticipantsValid}
+        phoneOptional={!appointment.client_phone}
         resourceLabel={resourceOnly ? appointment.resource_names?.join(', ') || '—' : undefined}
         extra={<StatusField value={draft.status} onValueChange={(status) => change({ status })} />}
       />
@@ -129,6 +138,7 @@ function draftFrom(appointment: Appointment): EditDraft {
     client_name: appointment.client_name || '',
     client_phone: appointment.client_phone || '',
     client_email: appointment.client_email ? normalizeEmail(appointment.client_email) : '',
+    participant_phones: phoneList(appointment.participant_phones),
     service_name: appointment.service || '',
     provider_name: appointment.provider || '',
     location_name: appointment.location || '',

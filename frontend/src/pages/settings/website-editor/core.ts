@@ -1,7 +1,9 @@
 /**
- * Pure helpers of the website section editor. No imports, so `tests/website-editor.test.mjs` runs them in Node.
+ * Pure helpers of the website section editor. Their only import is the import-free `lib/phone.ts`, so
+ * `tests/website-editor.test.mjs` runs them in Node.
  * The editor schema comes from `appointment/public_experience/section_editor.py`.
  */
+import { normalizePhone } from "@/lib/phone";
 
 export type Localized = Record<string, string>;
 export type Content = Record<string, unknown>;
@@ -44,7 +46,6 @@ export interface Issue {
 }
 
 export const LOCALES = ["en", "am"] as const;
-const PHONE_RE = /^[+0-9][0-9().\-\s]{1,31}$/;
 const EMAIL_RE = /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/;
 const OWNER_FILE_RE = /^\/files\/[A-Za-z0-9][A-Za-z0-9._-]{0,180}$/;
 
@@ -156,7 +157,7 @@ function validateFields(fields: EditorField[], content: Content, prefix: string)
     }
     if (field.kind === "plain" && typeof value === "string" && value.trim()) {
       if (value.length > field.maxLength) issues.push({ path, code: "tooLong", limit: field.maxLength });
-      else if (field.pattern === "phone" && !PHONE_RE.test(value.trim())) issues.push({ path, code: "phone" });
+      else if (field.pattern === "phone" && !normalizePhone(value)) issues.push({ path, code: "phone" });
       else if (field.pattern === "email" && !EMAIL_RE.test(value.trim())) issues.push({ path, code: "email" });
     }
     if (field.kind === "consent" && value !== true) issues.push({ path, code: "consent" });

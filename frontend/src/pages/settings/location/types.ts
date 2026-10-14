@@ -1,4 +1,5 @@
 import { isMeetingLink } from '@/lib/online-session';
+import { normalizePhone } from '@/lib/phone';
 
 /** API of `appointment.scheduler.locations`. */
 export const LOCATIONS_API = 'appointment.scheduler.locations';
@@ -115,6 +116,7 @@ export function validateLocation(form: LocationFormData): LocationErrors {
   } else if (form.meeting_link_mode === 'Fixed link' && !isMeetingLink(form.meeting_link)) {
     errors.meeting_link = 'staff.locations.errors.link';
   }
+  if (form.phone.trim() && !normalizePhone(form.phone)) errors.phone = 'controls.phone.hint';
   return errors;
 }
 
@@ -129,7 +131,7 @@ export function payloadFor(form: LocationFormData, location?: string) {
     address_line_1: online ? '' : form.address_line_1.trim(),
     address_line_2: online ? '' : form.address_line_2.trim(),
     city: online ? '' : form.city.trim(),
-    phone: form.phone.trim(),
+    phone: normalizePhone(form.phone),
     timezone: form.timezone,
     video_platform: online ? form.video_platform.trim() : '',
     meeting_link_mode: form.meeting_link_mode,

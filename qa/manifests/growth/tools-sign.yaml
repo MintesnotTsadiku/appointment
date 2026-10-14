@@ -90,7 +90,7 @@ scenarios:
       value: ዝግ ነው · Closed
       selector: '[data-qa="sign-hours"]'
     - type: text_contains
-      value: 0911 234 567
+      value: +251 91 123 4567
       selector: '[data-qa="sign-contact"]'
   - action: screenshot
     name: sign_en_desktop-2-print-preview.png
@@ -172,7 +172,7 @@ scenarios:
       value: ዝግ ነው · Closed
       selector: '[data-qa="sign-hours"]'
     - type: text_contains
-      value: 0911 234 567
+      value: +251 91 123 4567
       selector: '[data-qa="sign-contact"]'
   - action: screenshot
     name: sign_en_mobile-2-print-preview.png
@@ -254,7 +254,7 @@ scenarios:
       value: ዝግ ነው · Closed
       selector: '[data-qa="sign-hours"]'
     - type: text_contains
-      value: 0911 234 567
+      value: +251 91 123 4567
       selector: '[data-qa="sign-contact"]'
   - action: screenshot
     name: sign_am_desktop-2-print-preview.png
@@ -336,7 +336,7 @@ scenarios:
       value: ዝግ ነው · Closed
       selector: '[data-qa="sign-hours"]'
     - type: text_contains
-      value: 0911 234 567
+      value: +251 91 123 4567
       selector: '[data-qa="sign-contact"]'
   - action: screenshot
     name: sign_am_mobile-2-print-preview.png

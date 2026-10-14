@@ -1,20 +1,23 @@
 """QA fixtures for the Ergata Therapy template (`qa/manifests/growth/template-ergata*.yaml`).
 
-`setup()` creates, and records by exact name:
+The showcase is Yared Tesfaye Counselling, an independent counselling psychologist (owner
+yared.tesfaye.counselling@example.test) who meets clients in an office in Bole and over online video: two
+Location records (the Bole office and an Online location with a fixed Google Meet link), six offerings, and a
+published Ergata website at `/yared-counselling` in English and Amharic. Its definition is shared with the
+seeder: `appointment/demo/ergata_showcase.py`.
 
-- Yared Tesfaye Counselling: an independent counselling psychologist (owner yared.tesfaye.counselling@example.test)
-  who meets clients in an office in Bole and over online video. Two Location records (the Bole office and an
-  online video room without a street address) and six offerings: a free introductory video call, a first session
-  and a regular session in each format, and a couples session at the office. Each offering is its own scheduler,
-  so a visitor chooses online or office when they book. A published Ergata website at `/yared-counselling` in
-  English and Amharic. The draft starts from guided website setup (`setup.start`), so the recipe's starter copy
-  is used, then the showcase facts (credentials, practice story, session and place copy in both languages)
-  replace it before publishing.
-- Hiwot Family Therapy Centre: a small group practice (organization, owner
-  hiwot.family.therapy@example.test) with no website yet, so its owner sees the template chooser.
+`setup()` uses the seeded showcase when the site has one (`appointment.demo.showcase.seed`), and otherwise
+makes its own copy from the same definition. Either way it then records, by exact name:
 
-The people, places and credentials are fictional. `cleanup()` deletes only what this module recorded: every
+- two online bookings for the manage page and the reception desk (one with its join window open now);
+- Hiwot Family Therapy Centre: a small group practice (organization, owner hiwot.family.therapy@example.test)
+  with no website yet, so its owner sees the template chooser.
+
+The people, places and credentials are fictional. `cleanup()` deletes only what this module made: every
 delete uses one exact name or one exact single-value filter, and it does nothing when the record is empty.
+With the seeded showcase it never deletes a record of the seeder journal; it deletes only the fixture
+bookings and what the QA runs added to the showcase after `setup()` (bookings, customer profiles, locations
+and their offerings).
 """
 
 import json
@@ -22,76 +25,50 @@ import secrets
 
 import frappe
 
-from appointment.demo import showcase
+from appointment.demo import ergata_showcase, independent_showcase, independent_world, showcase
 
+SHOWCASE = ergata_showcase.SHOWCASE
 STATE_KEY = "appointment_template_ergata_qa"
-SOLO = "yared.tesfaye.counselling@example.test"
+SOLO = SHOWCASE.owner_email
 PRACTICE_OWNER = "hiwot.family.therapy@example.test"
-BUSINESS = "Yared Tesfaye Counselling"
+BUSINESS = SHOWCASE.business
 PRACTICE = "Hiwot Family Therapy Centre"
-SLUG = "yared-counselling"
-TZ = "Africa/Addis_Ababa"
-DAYS = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
-OPEN_DAYS = [day for day in DAYS if day != "Sunday"]
-ASSETS = "/assets/appointment/brand-experience/"
-PHONE = "000 000 0106"
-OFFICE = "Bole counselling office"
-ONLINE = "Online video room"
-OFFICE_ADDRESS = "Cameroon Street, Tsehay Building, second floor, office 204"
-# A fictional Google Meet room in the real link shape. Only booked customers get it (docs/growth/ONLINE_LOCATIONS.md).
-MEETING_LINK = "https://meet.google.com/ytc-room-one"
-PLATFORM = "Google Meet"
+SLUG = SHOWCASE.slug
+TZ = SHOWCASE.timezone
+DAYS = independent_showcase.DAYS
+OPEN_DAYS = list(SHOWCASE.open_days)
+ASSETS = ergata_showcase.ASSETS
+PHONE = SHOWCASE.phone
+OFFICE = SHOWCASE.office.name
+ONLINE = SHOWCASE.online.name
+OFFICE_ADDRESS = ergata_showcase.OFFICE_ADDRESS
+MEETING_LINK = ergata_showcase.MEETING_LINK
+PLATFORM = ergata_showcase.PLATFORM
+SESSIONS = SHOWCASE.sessions
 QA_CLIENT = "Selamawit Bekele"
 QA_CLIENT_EMAIL = "selamawit.bekele@example.test"
-
-
-def t(en, am):
-    return {"en": en, "am": am}
-
-
-def act(intent, en, am, placement="inline"):
-    return {"intent": intent, "label": t(en, am), "placement": placement}
-
-
-# name, duration, price, format, English summary, Amharic name, Amharic summary
-SESSIONS = (
-    ("Free introductory call", 15, 0, "online",
-     "A short video call to ask questions and see whether we are a good fit. No preparation needed.",
-     "ነጻ የትውውቅ ጥሪ", "ጥያቄዎችዎን ለመጠየቅ እና እንደምንስማማ ለማየት የሚደረግ አጭር የቪዲዮ ጥሪ። ምንም ዝግጅት አያስፈልግም።"),
-    ("First session at the office", 60, 1500, "in_person",
-     "A longer first meeting in the Bole office to understand what brings you, agree on confidentiality and choose a first focus.",
-     "የመጀመሪያ ቆይታ በቢሮ", "ወደዚህ ያመጣዎትን ለመረዳት፣ በሚስጥራዊነት ላይ ለመስማማት እና የመጀመሪያ ትኩረት ለመምረጥ በቦሌው ቢሮ የሚደረግ ረዘም ያለ ቆይታ።"),
-    ("First session online", 60, 1500, "online",
-     "The same first meeting over a secure video link, from a quiet place where you can talk freely.",
-     "የመጀመሪያ ቆይታ በኦንላይን", "ተመሳሳይ የመጀመሪያ ቆይታ በደህንነቱ በተጠበቀ የቪዲዮ ማስፈንጠሪያ፣ በነጻነት ማውራት ከሚችሉበት ጸጥ ያለ ቦታ።"),
-    ("Individual session at the office", 50, 1200, "in_person",
-     "The regular one-to-one session in the quiet Bole office.",
-     "የግል ቆይታ በቢሮ", "ጸጥ ባለው የቦሌ ቢሮ የሚደረግ መደበኛ የአንድ ለአንድ ቆይታ።"),
-    ("Individual session online", 50, 1200, "online",
-     "The regular session by video, from anywhere you feel private and comfortable.",
-     "የግል ቆይታ በኦንላይን", "መደበኛው ቆይታ በቪዲዮ፣ ግላዊ እና ምቹ ከሆነልዎ ከማንኛውም ቦታ።"),
-    ("Couples session at the office", 80, 2000, "in_person",
-     "Time for both of you to be heard, with a calm structure for difficult conversations.",
-     "የጥንዶች ቆይታ በቢሮ", "ሁለታችሁም እንድትደመጡ፣ ለአስቸጋሪ ንግግሮች የተረጋጋ አቀራረብ ያለው ቆይታ።"),
-)
 
 
 def setup():
     frappe.set_user("Administrator")
     cleanup()
-    state = {"users": [], "providers": [], "organizations": [], "sites": []}
+    seeded = independent_world.seeded(SHOWCASE.key)
+    state = {"users": [], "providers": [], "organizations": [], "sites": [], "bookings": [],
+             "reused": seeded["provider"] if seeded else None, "since": frappe.utils.now()}
     _save(state)  # Recorded first, so a failed setup can still be cleaned.
     previous = frappe.flags.syncing_booking_urls
     frappe.flags.syncing_booking_urls = True
     try:
-        _solo_practice(state)
+        services = seeded["services"] if seeded else _solo_practice(state)
+        _bookings(state, services)
         _group_practice(state)
     finally:
         frappe.flags.syncing_booking_urls = previous
         frappe.set_user("Administrator")
         _save(state)
     frappe.db.commit()
-    return {"slug": SLUG, "site": (state.get("sites") or [None])[0], "practice": (state.get("organizations") or [None])[0]}
+    site = seeded["public_site"] if seeded else (state.get("sites") or [None])[0]
+    return {"slug": SLUG, "site": site, "seeded": bool(seeded), "practice": (state.get("organizations") or [None])[0]}
 
 
 def browser_values(manifest=None):
@@ -113,15 +90,19 @@ def browser_values(manifest=None):
     if desk and frappe.db.exists("Appointment", desk):
         values["qa_online_desk_booking"] = desk
         values["qa_online_desk_date"] = str(frappe.db.get_value("Appointment", desk, "appointment_date"))
-    provider = (state.get("providers") or [""])[0]
+    provider = _provider(state)
     if provider:
         values["qa_online_intro_service"] = frappe.db.get_value(
-            "Service", {"independent_provider": provider, "service_name": SESSIONS[0][0]}, "name") or ""
+            "Service", {"independent_provider": provider, "service_name": SESSIONS[0].name}, "name") or ""
     # The owner adds one more online room in `online-location.yaml`; each run takes a free name.
     values["qa_online_new_location"] = next(
         (name for name in ("Evening video room", "Weekend video room", "Morning video room", "Second video room")
          if not frappe.db.exists("Location", {"location_name": name})), "Late video room")
     return values
+
+
+def _provider(state):
+    return state.get("reused") or (state.get("providers") or [""])[0]
 
 
 def _user(state, email, first, last):
@@ -131,84 +112,25 @@ def _user(state, email, first, last):
     _save(state)
 
 
-def _online_location(office, provider):
-    """The online video room: an Online Location of this provider with a fixed Google Meet link and longer hours."""
-    return frappe.get_doc({"doctype": "Location", "location_name": ONLINE, "independent_provider": provider,
-                           "timezone": TZ, "phone": PHONE, "is_active": 1, "location_type": "Online",
-                           "video_platform": PLATFORM, "meeting_link_mode": "Fixed link", "meeting_link": MEETING_LINK,
-                           "opening_hours": [{"day_of_week": row.day_of_week, "is_open": row.is_open,
-                                              "start_time": "08:00" if row.is_open else row.start_time,
-                                              "end_time": "20:00" if row.is_open else row.end_time}
-                                             for row in office.opening_hours]}).insert(ignore_permissions=True)
-
-
 def _solo_practice(state):
-    from appointment.public_experience import setup as website, solo_setup
-    from appointment.scheduler import independent
-    from appointment.scheduler.booking import offering
+    """The fixture's own copy of the showcase, from the shared definition. Returns its services by name."""
+    _user(state, SOLO, *SHOWCASE.owner_name)
+    lists = {"Provider": "providers", "Public Site": "sites"}
 
-    _user(state, SOLO, "Yared", "Tesfaye")
-    frappe.set_user(SOLO)
-    provider = solo_setup.create(BUSINESS)["provider"]
-    state["providers"].append(provider)
-    _save(state)
-    first = SESSIONS[1]
-    row = independent.create(provider, OFFICE, first[0], TZ, first[1], "09:00", "18:00", OPEN_DAYS)
-    frappe.set_user("Administrator")
-    event = frappe.get_doc("EventType", row["offering"])
-    office = frappe.get_doc("Location", event.location)
-    office.update({"address_line_1": OFFICE_ADDRESS, "address_line_2": "Bole", "city": "Addis Ababa",
-                   "phone": PHONE, "timezone": TZ})
-    office.save(ignore_permissions=True)
-    online = _online_location(office, provider)
-    places = {"in_person": office.name, "online": online.name}
-    services = {}
-    for name, duration, price, meet, summary, *_ in SESSIONS:
-        if name == first[0]:
-            service = frappe.get_doc("Service", event.service)
-            service.update({"price": price, "description": summary})
-            service.save(ignore_permissions=True)
-        else:
-            service = frappe.get_doc({"doctype": "Service", "service_name": name, "independent_provider": provider,
-                                      "duration": duration, "price": price, "description": summary,
-                                      "use_default_hours": 1, "is_active": 1}).insert(ignore_permissions=True)
-            created = frappe.get_doc({"doctype": "EventType", "event_type_name": name, "service": service.name,
-                                      "location": places[meet], "provider": provider, "is_active": 1}).insert(ignore_permissions=True)
-            offering(created.name)
-        services[name] = service.name
-    doc = frappe.get_doc("Provider", provider)
-    doc.update({"full_name": "Yared Tesfaye", "display_name": "Yared Tesfaye", "timezone": TZ,
-                "spoken_languages": json.dumps(["am", "en"]),  # chips on the provider page
-                "bio": "Counselling psychologist in Addis Ababa. Individual and couples sessions in Amharic and English, at the Bole office or online.",
-                "bio_am": "በአዲስ አበባ የምክር ሥነ-ልቦና ባለሙያ። የግልና የጥንዶች ምክር በአማርኛና በእንግሊዝኛ፣ በቦሌ ቢሮ ወይም በኦንላይን።"})
-    doc.save(ignore_permissions=True)
-    frappe.db.set_value("User", SOLO, "user_image", ASSETS + "providers/yared-tesfaye.webp")
-    frappe.set_user(SOLO)
-    independent.publish(provider, 1)
-    draft = website.start("Provider", provider, BUSINESS, SLUG, "ergata-therapy", {"industry": "therapy", "main_action": "booking"})
-    frappe.set_user("Administrator")
-    state["sites"].append(draft["site"])
-    _save(state)
-    site = frappe.get_doc("Public Site", draft["site"])
-    profile = frappe.get_doc("Brand Profile", site.brand_profile)
-    profile.update({"logo_primary": ASSETS + "brands/ergata-showcase-logo.webp", "logo_compact": ASSETS + "brands/ergata-showcase-logo.webp",
-                    "favicon": ASSETS + "brands/ergata-showcase-favicon.png", "short_name": "Yared"})
-    profile.save(ignore_permissions=True)
-    starter = {row.section_type: json.loads(row.content_json) for row in site.sections}
-    content = _showcase_sections(starter, provider, places, services)
-    for row in site.sections:
-        row.content_json = json.dumps(content[row.section_type])
-    if "am" not in [row.locale for row in site.enabled_locales]:
-        site.append("enabled_locales", {"locale": "am", "enabled": 1, "translation_status": "Complete"})
-    site.seo_json = json.dumps({"title": "Yared Tesfaye Counselling | Bole, Addis Ababa and online",
-                                "description": "Confidential counselling and psychotherapy in Amharic or English, at an office in Bole, Addis Ababa, or by online video."})
-    site.booking_json = json.dumps({"showPrices": True, "currency": "ETB", "timezone": TZ})
-    site.save(ignore_permissions=True)
-    frappe.set_user(SOLO)
-    website.publish(site.name, frappe.db.get_value("Public Site", site.name, "draft_version"))
-    frappe.set_user("Administrator")
+    def record(doctype, name):
+        if doctype in lists and name not in state[lists[doctype]]:
+            state[lists[doctype]].append(name)
+            _save(state)
+
+    return independent_showcase.build(SHOWCASE, record)["services"]
+
+
+def _bookings(state, services):
     state["join_booking"] = _join_ready_booking(services["Individual session online"])
+    state["bookings"].append(state["join_booking"])
+    _save(state)
     state["desk_booking"] = _online_booking(services["First session online"], "Dawit Mengistu", "dawit.mengistu@example.test")
+    state["bookings"].append(state["desk_booking"])
     _save(state)
 
 
@@ -226,7 +148,7 @@ def _online_booking(service, client, email):
     slot = next(row for offset in range(1, 15)
                 for row in booking.open_slots(parts, today + timedelta(days=offset))["all_available_slots_for_data"] if row["available"])
     result = booking.book(event, slot["start_time"], slot["end_time"], client, email,
-                          "ergata-online-" + secrets.token_hex(8), user_phone="0911 000 106", language="en")
+                          "ergata-online-" + secrets.token_hex(8), user_phone="+251911000106", language="en")
     return frappe.db.get_value("Appointment", {"appointment_id": result["booking_id"]}, "name")
 
 
@@ -253,98 +175,6 @@ def _join_ready_booking(service):
     return name
 
 
-def _showcase_sections(starter, provider, places, services):
-    """The showcase replaces starter copy with one practitioner's facts; the structure stays the recipe's."""
-    content = dict(starter)
-    hero = dict(starter["hero"])
-    hero.update({
-        "eyebrow": t("Counselling psychologist · Bole office and online", "የምክር ሥነ-ልቦና ባለሙያ · ቦሌ ቢሮ እና ኦንላይን"),
-        "body": t("Confidential. No referral needed. Sessions in Amharic or English.",
-                  "ሚስጥራዊ ነው። ሪፈራል አያስፈልግም። ቆይታዎች በአማርኛ ወይም በእንግሊዝኛ።"),
-    })
-    content["hero"] = hero
-    content["about"] = {
-        "title": t("Hello, I am Yared", "ሰላም፣ ያሬድ እባላለሁ"),
-        "body": t("I am a counselling psychologist with twelve years of practice in Addis Ababa: first in a university counselling centre, then in a hospital outpatient clinic, and now in my own quiet office in Bole and online.\n\n"
-                  "Many people tell me they waited a long time before reaching out. That is normal. My work is to make the first step lighter: we go at your pace, in the language that feels most like you, and nothing is shared without your agreement.",
-                  "በአዲስ አበባ ለአሥራ ሁለት ዓመታት የሠራሁ የምክር ሥነ-ልቦና ባለሙያ ነኝ፤ መጀመሪያ በአንድ ዩኒቨርሲቲ የምክር ማዕከል፣ ከዚያም በሆስፒታል የተመላላሽ ክሊኒክ፣ አሁን ደግሞ ቦሌ በሚገኘው ጸጥ ያለ ቢሮዬ እና በኦንላይን።\n\n"
-                  "ብዙ ሰዎች እርዳታ ከመጠየቃቸው በፊት ረጅም ጊዜ እንደጠበቁ ይነግሩኛል። ይህ የተለመደ ነው። የእኔ ሥራ የመጀመሪያውን እርምጃ ማቅለል ነው፤ በእርስዎ ፍጥነት፣ ይበልጥ በሚገልጽዎ ቋንቋ እንሄዳለን፤ ያለ እርስዎ ፈቃድም ምንም ነገር አይነገርም።"),
-        "highlights": [t("Amharic and English", "አማርኛ እና እንግሊዝኛ"), t("At the Bole office or online", "በቦሌ ቢሮ ወይም በኦንላይን"),
-                       t("Adults and couples", "አዋቂዎች እና ጥንዶች")],
-        "image": ASSETS + "support/ergata/room.webp",
-        "imageAlt": t("Two soft armchairs face each other across a small wooden table in a sunlit counselling room.",
-                      "ፀሐይ በገባበት የምክር ክፍል ውስጥ ሁለት ምቹ ወንበሮች በትንሽ የእንጨት ጠረጴዛ ዙሪያ ፊት ለፊት ተቀምጠዋል።"),
-    }
-    content["services"] = {**starter["services"],
-        "intro": t("Choose how we meet: in the Bole office or by online video. The length and fee are shown before you book.",
-                   "እንዴት እንደምንገናኝ ይምረጡ፤ በቦሌ ቢሮ ወይም በኦንላይን ቪዲዮ። የቆይታው ርዝመት እና ክፍያ ከመያዝዎ በፊት ይታያሉ።"),
-        "items": [
-        {"id": services[name], "name": t(name, name_am), "summary": t(summary, summary_am), "durationMinutes": duration,
-         "price": price, "currency": "ETB", "action": act("service_selection", "Book this session", "ይህን ቆይታ ይያዙ")}
-        # No `format`: the template reads it from the offering's location (`sessionFormats`).
-        for name, duration, price, _meet, summary, name_am, summary_am in SESSIONS]}
-    content["providers"] = {**starter["providers"], "items": [{
-        "id": provider[:64], "name": t("Yared Tesfaye", "ያሬድ ተስፋዬ"), "role": t("Counselling psychologist", "የምክር ሥነ-ልቦና ባለሙያ"),
-        "specialties": [t("Anxiety", "ጭንቀት"), t("Grief", "ሐዘን"), t("Burnout", "መዛል"), t("Couples", "ጥንዶች")],
-        "credentials": [t("Twelve years in practice", "የአሥራ ሁለት ዓመት ልምድ"), t("Trauma-informed care", "ጉዳትን ያገናዘበ እንክብካቤ"),
-                        t("Regular clinical supervision", "መደበኛ የክሊኒካል ክትትል")],
-        "image": ASSETS + "providers/yared-tesfaye.webp",
-        "imageAlt": t("Portrait of Yared Tesfaye in a linen shirt and a sage cardigan, with a calm, attentive expression.",
-                      "የተልባ እግር ሸሚዝ እና አረንጓዴ ሹራብ የለበሰው ያሬድ ተስፋዬ፣ በተረጋጋና በትኩረት በሚያዳምጥ ገጽታ።"),
-        "action": act("provider_selection", "Book with Yared", "ከያሬድ ጋር ቀጠሮ ይያዙ"),
-    }]}
-    content["proof"] = {**starter["proof"], "items": [
-        {"label": t("Degree", "ትምህርት"), "value": t("MA, Counselling Psychology", "ኤምኤ፣ የምክር ሥነ-ልቦና"), "detail": t("Addis Ababa University", "አዲስ አበባ ዩኒቨርሲቲ")},
-        {"label": t("Licence", "ፈቃድ"), "value": t("Licensed counselling psychologist", "ፈቃድ ያለው የምክር ሥነ-ልቦና ባለሙያ"), "detail": t("Addis Ababa City Health Bureau", "የአዲስ አበባ ከተማ ጤና ቢሮ")},
-        {"label": t("Membership", "አባልነት"), "value": t("Ethiopian Psychologists' Association", "የኢትዮጵያ ሥነ-ልቦና ባለሙያዎች ማኅበር")},
-        {"label": t("Supervision", "ክትትል"), "value": t("Clinical supervision every two weeks", "በየሁለት ሳምንቱ የክሊኒካል ክትትል"), "detail": t("With a senior clinical psychologist", "ከከፍተኛ የክሊኒካል ሥነ-ልቦና ባለሙያ ጋር")},
-    ]}
-    content["locations"] = {**starter["locations"],
-        "intro": t("Meet in a quiet office in Bole, or by secure video from a private place of your own. Both have the same care and the same fee.",
-                   "በቦሌ በሚገኝ ጸጥ ያለ ቢሮ፣ ወይም ከራስዎ ግላዊ ቦታ በደህንነቱ በተጠበቀ ቪዲዮ ይገናኙ። ሁለቱም አንድ ዓይነት እንክብካቤ እና አንድ ዓይነት ክፍያ አላቸው።"),
-        "items": [
-            # No `format` on places either: `placeFormats` gives it by location.
-            {"id": places["in_person"][:64], "name": t("Bole counselling office", "የቦሌ የምክር ቢሮ"),
-             "address": t(f"{OFFICE_ADDRESS}, Bole, Addis Ababa", "ካሜሩን ጎዳና፣ ፀሐይ ሕንፃ፣ ሁለተኛ ፎቅ፣ ቢሮ ቁጥር 204፣ ቦሌ፣ አዲስ አበባ"),
-             "phone": PHONE,
-             "hours": t("Monday to Saturday, 09:00–18:00", "ከሰኞ እስከ ቅዳሜ፣ 09:00–18:00"),
-             "body": t("A five-minute walk from the Bole Medhane Alem roundabout. The building has a quiet side entrance with a wooden door.",
-                       "ከቦሌ መድኃኔዓለም አደባባይ በእግር አምስት ደቂቃ። ሕንፃው የእንጨት በር ያለው ጸጥ ያለ የጎን መግቢያ አለው።"),
-             "notes": [t("Parking in the courtyard and a lift to the second floor", "በግቢው ውስጥ የመኪና ማቆሚያ እና ወደ ሁለተኛ ፎቅ አሳንሰር አለ"),
-                       t("A small waiting corner, so you never wait in a corridor", "ትንሽ የመቆያ ቦታ አለ፤ በኮሪደር ላይ አይጠብቁም")],
-             "directionsAction": act("directions", "Get directions", "አቅጣጫ ያግኙ"),
-             "image": ASSETS + "support/ergata/office.webp",
-             "imageAlt": t("A wooden door with an arched top stands open at the top of stone steps between large potted plants.",
-                           "በትላልቅ የሸክላ ተክሎች መካከል ባሉ የድንጋይ ደረጃዎች ላይ ቅስት ያለው የእንጨት በር ተከፍቷል።")},
-            {"id": places["online"][:64], "name": t("Online video sessions", "የኦንላይን ቪዲዮ ቆይታዎች"),
-             "address": t("Google Meet. Your private link comes with your booking email.", "ጉግል ሚት። የግል ማስፈንጠሪያዎ ከቀጠሮ ኢሜልዎ ጋር ይደርስዎታል።"),
-             "hours": t("Monday to Saturday, 08:00–20:00", "ከሰኞ እስከ ቅዳሜ፣ 08:00–20:00"),
-             "notes": [t("Book an online session and choose a time.", "የኦንላይን ቆይታ ይያዙ እና ሰዓት ይምረጡ።"),
-                       t("Find a quiet room where nobody can hear you. Earphones help.", "ማንም የማይሰማዎት ጸጥ ያለ ክፍል ያግኙ። የጆሮ ማዳመጫ ይረዳል።"),
-                       t("Open the link a few minutes early on a phone or laptop with a camera.", "ካሜራ ባለው ስልክ ወይም ላፕቶፕ ማስፈንጠሪያውን ጥቂት ደቂቃዎች ቀደም ብለው ይክፈቱ።")],
-             "body": t("Sessions are never recorded. Yared joins from a closed, private room.",
-                       "ቆይታዎች በፍጹም አይቀረጹም። ያሬድ ዝግ ከሆነ ግላዊ ክፍል ይገናኛል።"),
-             "image": ASSETS + "support/ergata/online.webp",
-             "imageAlt": t("A laptop, a cup of tea and a notebook on a wooden desk by a sheer curtain, ready for a video session.",
-                           "ለቪዲዮ ቆይታ የተዘጋጀ፣ ቀጭን መጋረጃ አጠገብ ባለ የእንጨት ጠረጴዛ ላይ ላፕቶፕ፣ ሻይ እና ማስታወሻ ደብተር።")},
-        ]}
-    content["contact"] = {**starter["contact"], "phone": PHONE,
-        "body": t("Call or send a message with any question before you book. Messages are read only by Yared and answered within one working day.",
-                  "ከመያዝዎ በፊት ማንኛውም ጥያቄ ካለዎት ይደውሉ ወይም መልእክት ይላኩ። መልእክቶች የሚነበቡት በያሬድ ብቻ ሲሆን በአንድ የሥራ ቀን ውስጥ ምላሽ ያገኛሉ።"),
-        "action": act("call", "Call Yared", "ለያሬድ ይደውሉ", "primary")}
-    faq = list(starter["faq"]["items"])
-    faq[-1] = {"question": t("How do I pay?", "እንዴት ነው የምከፍለው?"),
-               "answer": t("Fees are shown next to each session. You can pay by Telebirr or bank transfer, or in cash at the office. If cost is a barrier, ask about the small number of reduced-fee places.",
-                           "ክፍያው ከእያንዳንዱ ቆይታ አጠገብ ይታያል። በቴሌብር፣ በባንክ ዝውውር ወይም በቢሮ በጥሬ ገንዘብ መክፈል ይችላሉ። ወጪው እንቅፋት ከሆነብዎ፣ ስለ ጥቂት የቅናሽ ቦታዎች ይጠይቁ።")}
-    faq.append({"question": t("Is online therapy as helpful as meeting in person?", "የኦንላይን ሕክምና እንደ አካል ቆይታ ይጠቅማል?"),
-                "answer": t("For many people, yes. Choose a quiet, private place with a steady connection. You receive a secure video link before the session, and you can move between online and office sessions at any time.",
-                            "ለብዙ ሰዎች አዎ። ጸጥ ያለ፣ ግላዊ ቦታ እና የተረጋጋ ኢንተርኔት ይምረጡ። ከቆይታው በፊት ደህንነቱ የተጠበቀ የቪዲዮ ማስፈንጠሪያ ይደርስዎታል፤ በማንኛውም ጊዜ በኦንላይን እና በቢሮ ቆይታዎች መካከል መቀያየር ይችላሉ።")})
-    content["faq"] = {**starter["faq"], "items": faq}
-    content["footer"] = {"body": t("Counselling and psychotherapy in Amharic and English, at an office in Bole, Addis Ababa, and online.",
-                                   "በአማርኛ እና በእንግሊዝኛ የምክር እና የሥነ-ልቦና ሕክምና አገልግሎት፣ በቦሌ፣ አዲስ አበባ በሚገኝ ቢሮ እና በኦንላይን።"), "items": []}
-    return content
-
-
 def _group_practice(state):
     from appointment.scheduler import workspace
 
@@ -361,11 +191,15 @@ def cleanup():
     """Delete what `setup` recorded. Nothing is filtered by a list or an empty value."""
     frappe.set_user("Administrator")
     state = _state()
-    if not any(state.get(key) for key in ("users", "providers", "organizations", "sites")):
+    if not any(state.get(key) for key in ("users", "providers", "organizations", "sites", "bookings", "reused")):
         return
     previous = frappe.flags.syncing_booking_urls
     frappe.flags.syncing_booking_urls = True
     try:
+        for name in state.get("bookings") or []:
+            _delete_booking(name)
+        if state.get("reused"):
+            _remove_qa_additions(state["reused"], state.get("since"))
         for site in state.get("sites") or []:
             _remove_site(site)
         for provider in state.get("providers") or []:
@@ -385,6 +219,40 @@ def cleanup():
         frappe.flags.syncing_booking_urls = previous
     frappe.db.set_default(STATE_KEY, "")
     frappe.db.commit()
+
+
+def _delete_booking(name):
+    _require(name)
+    _delete_where("Appointment Notification", "appointment", name)
+    _delete_one("Appointment", name)
+
+
+def _remove_qa_additions(provider, since):
+    """What the QA runs added to the seeded showcase after `setup()`. Seeder-owned records always stay."""
+    _require(provider)
+    _require(since)
+    seeded = independent_world.seeded(SHOWCASE.key)
+    if not seeded or seeded["provider"] != provider:
+        return
+    owned = {tuple(entry) for entry in seeded["created"]}
+
+    def added(doctype, field, value):
+        _require(value)
+        names = frappe.get_all(doctype, filters={field: value, "creation": [">=", since]}, pluck="name")
+        return [name for name in names if (doctype, name) not in owned]
+
+    for name in added("Appointment", "provider", provider):
+        _delete_booking(name)
+    for name in added("Customer Profile", "independent_provider", provider):
+        _delete_one("Customer Profile", name)
+    for location in added("Location", "independent_provider", provider):
+        for event in added("EventType", "location", location):
+            _delete_one("EventType", event)
+        _delete_one("Location", location)
+    for event in added("EventType", "provider", provider):
+        _delete_one("EventType", event)
+    for service in added("Service", "independent_provider", provider):
+        _delete_one("Service", service)
 
 
 def _remove_site(site):

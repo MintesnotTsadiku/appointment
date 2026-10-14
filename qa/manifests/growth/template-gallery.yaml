@@ -1,6 +1,6 @@
 # Landing template gallery: every certified template as a card with a preview, a live example and "Use this template".
-# Guest only; nothing is saved, so no fixture is needed. Needs the published showcase sites (Bloom, Selam, Tena,
-# Abugida, Meron, and Ergata from appointment.tests.template_ergata_qa_fixtures). See docs/growth/TEMPLATE_GALLERY.md.
+# Guest only; nothing is saved, so no fixture is needed. Needs the published showcase sites from the seeder
+# (appointment.demo.showcase.seed: Bloom, Selam, Tena, Abugida, Meron and Ergata). See docs/growth/TEMPLATE_GALLERY.md.
 app: appointment
 base_url: http://localhost:47800
 default_role: Guest

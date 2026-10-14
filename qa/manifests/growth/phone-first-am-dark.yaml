@@ -1,0 +1,188 @@
+# Phone-first booking (docs/growth/PHONE_FIRST.md), Amharic, mobile, dark.
+# Run appointment.tests.phone_first_qa_fixtures.setup first and cleanup afterwards.
+# A guest books at Bloom with a phone number only: the phone is first and required, email is
+# optional, other people come as phone tags (Enter, comma, paste), and a tag can be removed.
+# The confirmation shows the booking reference and the manage link.
+# The English desktop light run is phone-first.yaml; reception is phone-first-walkin.yaml.
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-phone-first-am-dark
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: dark
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.phone_first_qa_fixtures.browser_values
+scenarios:
+- id: phone_first_am_mobile_dark
+  title: 'Guest books with a phone number only; other people as phone tags (am, mobile, dark)'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="language-toggle"]'
+  actions:
+  - action: press
+    selector: '[data-qa="language-toggle"]'
+    key: Enter
+    assertions:
+    - type: network_request
+      url_contains: appointment.scheduler.translation.messages
+      status: 200
+  - action: open_url
+    url: /schedule/org/bloom-studio
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_open_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_open_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: '[data-qa="booking-continue"]'
+  - action: wait_for
+    selector: '#userName'
+  - action: screenshot
+    name: phone_first_am_mobile_dark-1-empty.png
+    full_page: true
+  # The empty form asks for the name and the phone, not the email.
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+    assertions:
+    - type: visible_text
+      value: ስልክ ቁጥርዎን ያስገቡ።
+    - type: visible_selector
+      value: '[data-qa="booking-phone-error"]'
+  - action: fill
+    selector: '#userName'
+    value: መሠረት ዓለሙ
+  # A number that is too short shows the shared hint.
+  - action: fill
+    selector: '[data-qa="booking-phone"]'
+    value: 0911 22 33
+  - action: click
+    selector: '#userName'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="booking-phone-error"]'
+      value: ስልክ ቁጥሩን እንደ 0911 22 33 44 ወይም +251 91 122 3344 ያስገቡ
+  - action: screenshot
+    name: phone_first_am_mobile_dark-2-phone-hint.png
+    full_page: true
+  # Nine digits without 0 or +251 is an Ethiopian mobile number.
+  - action: fill
+    selector: '[data-qa="booking-phone"]'
+    value: '+251 91 173 6412'
+  - action: click
+    selector: '#userName'
+    assertions:
+    - type: visible_text
+      value: ንግዱ ቀጠሮዎን ለማረጋገጥና እርስዎን ለማግኘት ይህን ቁጥር ይጠቀማል።
+  # Other people: Enter, then a comma, then a pasted list.
+  - action: fill
+    selector: '[data-qa="booking-participants-input"]'
+    value: '0911223366'
+  - action: press
+    selector: '[data-qa="booking-participants-input"]'
+    key: Enter
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-participants-tag"][data-phone="+251911223366"]'
+  - action: fill
+    selector: '[data-qa="booking-participants-input"]'
+    value: '711223377,'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-participants-tag"][data-phone="+251711223377"]'
+  - action: fill
+    selector: '[data-qa="booking-participants-input"]'
+    value: '+254 712 345 678, 0911 22 33 88'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-participants-tag"][data-phone="+254712345678"]'
+    - type: visible_selector
+      value: '[data-qa="booking-participants-tag"][data-phone="+251911223388"]'
+  # A bad number stays in the field with the hint.
+  - action: fill
+    selector: '[data-qa="booking-participants-input"]'
+    value: '12345'
+  - action: press
+    selector: '[data-qa="booking-participants-input"]'
+    key: Enter
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-participants-error"]'
+  - action: screenshot
+    name: phone_first_am_mobile_dark-3-tags-and-hint.png
+    full_page: true
+  - action: press
+    selector: '[data-qa="booking-participants-input"]'
+    key: Control+A
+  - action: press
+    selector: '[data-qa="booking-participants-input"]'
+    key: Delete
+  - action: click
+    selector: '[data-qa="booking-participants-tag"][data-phone="+254712345678"] [data-qa="booking-participants-remove"]'
+  - action: wait_for
+    selector: '[data-qa="booking-participants-tag"][data-phone="+254712345678"]'
+    state: detached
+  - action: screenshot
+    name: phone_first_am_mobile_dark-4-filled.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+    assertions:
+    - type: network_request
+      url_contains: book_time_slot
+      method: POST
+      status: 200
+      request_json_path: user_phone
+      request_json_value: '+251911736412'
+    - type: network_request
+      url_contains: book_time_slot
+      request_json_path: participant_phones
+      request_json_value: '+251911223366,+251711223377,+251911223388'
+    - type: network_request
+      url_contains: book_time_slot
+      request_json_path: user_email
+      request_json_value: ''
+  - action: wait_for
+    selector: '[data-qa="booking-success"]'
+    timeout_ms: 20000
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-reference"]'
+    - type: visible_selector
+      value: '[data-qa="booking-manage-link"]'
+    - type: text_contains
+      selector: '[data-qa="booking-phone-notice"]'
+      value: +251 91 173 6412
+  - action: screenshot
+    name: phone_first_am_mobile_dark-5-confirmed.png
+    full_page: true
+  - action: scroll
+    selector: '[data-booking-confirmation="true"]'
+    delta_y: 900
+  - action: screenshot
+    name: phone_first_am_mobile_dark-6-manage-link.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors

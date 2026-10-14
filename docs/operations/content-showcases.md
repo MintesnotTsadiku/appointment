@@ -4,7 +4,7 @@
 SHA-256 is `14ef94a251e780ca6dc4a82c8394db63d71e7f5424a2011ae4fff9e86e50a53b`.
 The image catalog supplies local assets and verifies their checksums before use.
 
-Each of the five fictional businesses receives three published articles,
+Each of the five fictional organization businesses receives three published articles,
 two published gallery collections, one newsletter draft, and one unsent preview.
 The seeder creates no subscribers or delivery campaigns. Sender verification
 requests and previews stay in the local email inbox.
@@ -36,3 +36,13 @@ byte-identical records and private journal bytes across a repeat.
 
 The showcase site is visual evidence only. Seedless owner acceptance uses
 separate sites. Full browser, accessibility, and release gates remain required.
+
+## Independent showcases
+
+The seeder also makes independent-provider showcases: one practitioner who is
+the business, with their own locations, sessions, provider page and published
+website. Today there is one, Yared Tesfaye Counselling (Ergata Therapy,
+`/yared-counselling`). The definitions are in `appointment/demo/` and are
+shared with the QA fixtures. See `docs/growth/TEMPLATE_ERGATA.md`, section
+"Showcase". These showcases get bookings, but no articles, galleries or
+newsletters.
