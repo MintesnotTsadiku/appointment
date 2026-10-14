@@ -17,7 +17,7 @@ const SECTION_KEYS: Record<string, string> = {
   testimonials: "staff.website.editor.section.testimonials", faq: "staff.website.editor.section.faq",
   notice: "staff.website.editor.section.notice", locations: "staff.website.editor.section.locations",
   contact: "staff.website.editor.section.contact", booking_cta: "staff.website.editor.section.booking_cta",
-  footer: "staff.website.editor.section.footer",
+  footer: "staff.website.editor.section.footer", gallery: "staff.website.editor.section.gallery",
 };
 
 /**

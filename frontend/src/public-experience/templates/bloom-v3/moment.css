@@ -1,0 +1,17 @@
+/* Bloom v3 booking-success moment. Loaded only with the confirmation (lazy module). */
+.b3-moment { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; border-radius: inherit; }
+.b3-petal { position: absolute; top: -40px; left: var(--x); width: calc(var(--s) * 1.5); height: calc(var(--s) * 2); opacity: 0;
+  filter: drop-shadow(0 2px 3px rgba(74, 31, 85, .25)); animation: b3-petal-fall 3200ms cubic-bezier(.25, .6, .35, 1) var(--d) 1 forwards; }
+.b3-petal-a { color: #f5a524; }
+.b3-petal-b { color: #e7a1a8; }
+.b3-petal-c { color: #c98a5e; }
+@keyframes b3-petal-fall {
+  0% { opacity: 0; transform: translate3d(0, 0, 0) rotate(0deg); }
+  10% { opacity: 1; }
+  80% { opacity: .95; }
+  100% { opacity: 0; transform: translate3d(calc(var(--s) * -1.4), 230px, 0) rotate(var(--r)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .b3-petal { animation: none; opacity: .55; top: calc(4px + var(--s) * .2); transform: rotate(var(--r)); }
+  .b3-petal:nth-child(n + 7) { display: none; }
+}

@@ -46,6 +46,13 @@ export interface CompiledDesign {
     mime?: string;
     checksum?: string;
     provenance?: Record<string, unknown>;
+    /** Optional art direction (appointment-imagery.v1): mobile crop size, night photos, AVIF and smaller widths. */
+    mobileWidth?: number;
+    mobileHeight?: number;
+    darkSrc?: string;
+    darkMobileSrc?: string;
+    formats?: string[];
+    widths?: number[];
   }>;
   actionIntents: string[];
   contentCapabilities: Record<string, unknown>;
@@ -119,6 +126,8 @@ export interface PublishedSnapshot {
   sessionFormats?: Record<string, SessionFormat>;
   /** How each place meets, by location id (the `id` of a `locations` item). */
   placeFormats?: Record<string, SessionFormat>;
+  /** Weekly opening hours by location id ("open now" and the Habesha clock). */
+  placeHours?: Record<string, { timezone: string; days: Array<{ day: string; open: string; close: string }> }>;
   sections: PublicSection[];
   seo: Record<string, unknown>;
   booking: Record<string, unknown>;

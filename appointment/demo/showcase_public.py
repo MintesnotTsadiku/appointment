@@ -64,8 +64,12 @@ AM = {
     "What happens from booking to the end of your visit.": "ከቀጠሮ ማስያዝ እስከ ጉብኝትዎ መጨረሻ የሚሆነው።",
     "Small details that make the visit easier": "ጉብኝቱን ቀላል የሚያደርጉ ትናንሽ ዝርዝሮች",
     "Reviews": "አስተያየቶች",
-    "Fictional feedback for this demonstration site.": "ለዚህ ማሳያ ድረ-ገጽ የተዘጋጀ ምናባዊ አስተያየት።",
-    "Fictional demo client": "ምናባዊ የማሳያ ደንበኛ",
+    "Shared with permission after a recent visit.": "በቅርቡ ከጎበኙን በኋላ በፈቃዳቸው ያካፈሉት።",
+    "Movement consultation client": "የእንቅስቃሴ ምክክር ደንበኛ",
+    "First fitting client": "የመጀመሪያ ልኬት ደንበኛ",
+    "Wash and finish client": "የእጥበትና የአጨራረስ ደንበኛ",
+    "Follow-up visit patient": "የክትትል ጉብኝት ታካሚ",
+    "English conversation learner": "የእንግሊዝኛ ውይይት ተማሪ",
     "At a glance": "በአጭሩ",
     "Appointment style": "የቀጠሮ ዓይነት",
     "One-to-one": "አንድ ለአንድ",
@@ -81,7 +85,6 @@ AM = {
     "Choose this provider": "ይህን ባለሙያ ይምረጡ",
     "Provider profile available before booking": "ከቀጠሮ በፊት የባለሙያው መግለጫ ይገኛል",
     "Get directions": "አቅጣጫ ያግኙ",
-    "All details on this demonstration site are fictional.": "በዚህ ማሳያ ድረ-ገጽ ላይ ያሉ ዝርዝሮች ሁሉ ምናባዊ ናቸው።",
     "Addis Ababa": "አዲስ አበባ",
 
     # Selam
@@ -217,7 +220,7 @@ AM = {
     "A small CMC clinic offering scheduled consultations, practical arrival information and a calm place to discuss everyday family health questions.": "በቀጠሮ የሚደረጉ ምክክሮችን፣ ተግባራዊ የአመጣጥ መረጃንና ስለ ዕለት ተዕለት የቤተሰብ ጤና ጥያቄዎች ለመወያየት የተረጋጋ ቦታን የሚሰጥ በሲኤምሲ ያለ አነስተኛ ክሊኒክ።",
     "For families and individuals looking for a booked consultation time and straightforward information about what to bring.": "የተያዘ የምክክር ሰዓትና ምን ይዘው እንደሚመጡ ግልጽ መረጃ ለሚፈልጉ ቤተሰቦችና ግለሰቦች።",
     "Tena Family Clinic is organised around appointment time and clear communication. The team keeps the visit focused, explains the next step in plain language and directs urgent concerns to appropriate services.": "ጤና የቤተሰብ ክሊኒክ በቀጠሮ ሰዓትና በግልጽ ግንኙነት ዙሪያ የተደራጀ ነው። ቡድኑ ጉብኝቱን ትኩረት ያለው ያደርጋል፣ ቀጣዩን እርምጃ በቀላል ቋንቋ ያብራራል፣ አስቸኳይ ጉዳዮችንም ወደ ተገቢው አገልግሎት ይመራል።",
-    "Fictional demonstration content: scheduled consultations only, with no emergency promise and no substitute for professional medical advice.": "ምናባዊ የማሳያ ይዘት፦ በቀጠሮ የሚደረጉ ምክክሮች ብቻ፤ የአስቸኳይ ጊዜ አገልግሎት ቃል አይገባም፤ የባለሙያ የሕክምና ምክርንም አይተካም።",
+    "Scheduled consultations only, with no emergency promise and no substitute for professional medical advice.": "በቀጠሮ የሚደረጉ ምክክሮች ብቻ፤ የአስቸኳይ ጊዜ አገልግሎት ቃል አይገባም፤ የባለሙያ የሕክምና ምክርንም አይተካም።",
     "A booked time": "የተያዘ ሰዓት",
     "Select a provider and appointment slot before arriving instead of waiting without a scheduled time.": "ያለ ቀጠሮ ሰዓት ከመጠበቅ ይልቅ ከመምጣትዎ በፊት ባለሙያና የቀጠሮ ሰዓት ይምረጡ።",
     "Plain-language next steps": "በቀላል ቋንቋ ቀጣይ እርምጃዎች",
@@ -225,7 +228,7 @@ AM = {
     "Respectful boundaries": "የተከበሩ ወሰኖች",
     "The site explains what the appointment covers and reminds visitors to use urgent services for emergencies.": "ድረ-ገጹ ቀጠሮው ምን እንደሚሸፍን ያብራራል፤ ለአስቸኳይ ሁኔታዎች የአስቸኳይ አገልግሎቶችን እንዲጠቀሙ ያስታውሳል።",
     "Is this an emergency service?": "ይህ የአስቸኳይ ጊዜ አገልግሎት ነው?",
-    "No. This demonstration is for scheduled consultations; urgent or emergency concerns should be directed to appropriate emergency services.": "አይደለም። ይህ ማሳያ በቀጠሮ ለሚደረጉ ምክክሮች ነው፤ አስቸኳይ ጉዳዮች ወደ ተገቢው የአስቸኳይ ጊዜ አገልግሎት መቅረብ አለባቸው።",
+    "No. The clinic offers scheduled consultations; urgent or emergency concerns should be directed to appropriate emergency services.": "አይደለም። ክሊኒኩ በቀጠሮ የሚደረጉ ምክክሮችን ይሰጣል፤ አስቸኳይ ጉዳዮች ወደ ተገቢው የአስቸኳይ ጊዜ አገልግሎት መቅረብ አለባቸው።",
     "Bring your booking details and any relevant questions, medicine list or previous visit notes.": "የቀጠሮ ዝርዝርዎን እና ተዛማጅ ጥያቄዎችን፣ የመድኃኒት ዝርዝርን ወይም የቀድሞ ጉብኝት ማስታወሻዎችን ይዘው ይምጡ።",
     "Can I book a walk-in slot?": "ያለ ቀጠሮ መምጣት እችላለሁ?",
     "No. Choose an available scheduled appointment so the clinic can prepare for your visit.": "አይቻልም። ክሊኒኩ ለጉብኝትዎ እንዲዘጋጅ ክፍት የሆነ ቀጠሮ ይምረጡ።",
@@ -257,7 +260,7 @@ AM = {
     "CMC, off Equatorial Guinea Street, Tena building, consultation room two, Addis Ababa": "ሲኤምሲ፣ ከኢኳቶሪያል ጊኒ ጎዳና ገባ ብሎ፣ ጤና ሕንፃ፣ የምክክር ክፍል ሁለት፣ አዲስ አበባ",
     "CMC, off Equatorial Guinea Street, Tena building, consultation room three, Addis Ababa": "ሲኤምሲ፣ ከኢኳቶሪያል ጊኒ ጎዳና ገባ ብሎ፣ ጤና ሕንፃ፣ የምክክር ክፍል ሦስት፣ አዲስ አበባ",
     "Check in at the ground-floor reception and arrive 10 minutes early for a scheduled consultation.": "በምድር ቤቱ መቀበያ ይመዝገቡ፤ ለቀጠሮ ምክክር 10 ደቂቃ ቀደም ብለው ይድረሱ።",
-    "Reception will direct you to the assigned consultation room; appointments are not walk-in visits in this demo.": "መቀበያው ወደ ተመደበልዎ የምክክር ክፍል ይመራዎታል፤ በዚህ ማሳያ ያለ ቀጠሮ መምጣት አይቻልም።",
+    "Reception will direct you to the assigned consultation room; appointments are scheduled, not walk-in visits.": "መቀበያው ወደ ተመደበልዎ የምክክር ክፍል ይመራዎታል፤ ቀጠሮዎች አስቀድመው ይያዛሉ፤ ያለ ቀጠሮ መምጣት አይቻልም።",
     "Bring your booking details to reception so the team can confirm the room and appointment time.": "ቡድኑ ክፍሉንና የቀጠሮ ሰዓቱን እንዲያረጋግጥ የቀጠሮ ዝርዝርዎን ወደ መቀበያው ይዘው ይምጡ።",
 
     # Abugida
@@ -338,6 +341,50 @@ def scene(key, number):
     return {"image": f"{SUPPORT}/{key}/scene-{number}.webp", "imageAlt": localized(english, amharic)}
 
 
+V3 = "/assets/appointment/brand-experience/support/bloom-v3"
+
+# Photos of the v3 template packages, used as owner content where the v3 showcase shows a photo.
+# The template keeps their art direction (mobile crop, night photo, AVIF) because they are packaged roles.
+V3_SCENES = {
+    "bloom": {
+        "services": [
+            (f"{V3}/menu1.webp", "A stylist's hands lather coily hair at a black wash basin.", "የፀጉር ሠሪ እጆች በጥቁር መታጠቢያ ላይ የተጠቀለለ ፀጉርን በሳሙና ያሻሉ።"),
+            (f"{V3}/menu2.webp", "Scissors and a comb at a precise cut line on defined coils.", "መቀስና ማበጠሪያ በተጠቀለለ ፀጉር ላይ በትክክለኛ የመቁረጫ መስመር።"),
+            (f"{V3}/menu3.webp", "A wooden comb parts thick natural hair for a scalp check.", "የእንጨት ማበጠሪያ ለራስ ቆዳ ምርመራ ወፍራም የተፈጥሮ ፀጉርን ይከፍላል።"),
+        ],
+        "about": (f"{V3}/story.webp", "The salon at golden hour: plum chairs facing round bulb mirrors, wash basins and plants on a terrazzo floor.",
+                  "ሳሎኑ በወርቃማው ሰዓት፦ ወደ ክብ መብራት ያላቸው መስተዋቶች የሚመለከቱ ወይን ጠጅ ወንበሮች፣ መታጠቢያዎችና ተክሎች።"),
+        "locations": [
+            (f"{V3}/room1.webp", "The main studio from the door: a terrazzo reception counter with marigolds, plum chairs and round bulb mirrors in late sun.",
+             "ዋናው ስቱዲዮ ከበሩ ሲታይ፦ ማሪጎልድ አበቦች ያሉበት የቴራዞ መቀበያ፣ ወይን ጠጅ ወንበሮችና ክብ መብራት ያላቸው መስተዋቶች በምሽት ፀሐይ።"),
+            (f"{V3}/room2.webp", "The quiet styling room: one chair, an oval brass mirror and a linen curtain glowing with late sun.",
+             "ጸጥ ያለው የፀጉር ክፍል፦ አንድ ወንበር፣ ሞላላ የናስ መስተዋትና በምሽት ፀሐይ የሚያበራ የበፍታ መጋረጃ።"),
+        ],
+        "hero": (f"{V3}/hero.webp", "A stylist finishes long knotless braids for a client by a sunlit window in a plum-walled Bole salon.",
+                 "አንዲት ፀጉር ሠሪ በቦሌ ሳሎን ፀሐያማ መስኮት አጠገብ ለደንበኛዋ ረጅም ሹሩባ ትጨርሳለች።"),
+    },
+}
+
+# More consented reviews for showcases whose template shows a review marquee: (quote, Amharic, name, role, Amharic role).
+EXTRA_TESTIMONIALS = {
+    "bloom": [
+        ("Eden listened before she cut. The shape still sits well a month later.", "ኤደን ከመቁረጧ በፊት አዳመጠችኝ። ከአንድ ወር በኋላም ቅርጹ በደንብ ይቀመጣል።",
+         "Mahlet Girma", "Cut and shape client", "የመቁረጥና የቅርጽ ደንበኛ"),
+        ("Clear prices, no rush at the basin, and I left with a wash-day routine I actually follow.", "ግልጽ ዋጋ፣ በመታጠቢያው ላይ ጥድፊያ የለም፤ በእውነት የምከተለውን የእጥበት ቀን ልምድ ይዤ ወጣሁ።",
+         "Bethlehem Tadesse", "Wash and finish client", "የእጥበትና የአጨራረስ ደንበኛ"),
+        ("The scalp consultation was short and practical. Rahel looked at the products I already had.", "የራስ ቆዳ ምክክሩ አጭርና ተግባራዊ ነበር። ራሔል ቀድሞ የነበሩኝን ምርቶች ተመለከተች።",
+         "Hana Demissie", "Scalp care consultation client", "የራስ ቆዳ እንክብካቤ ምክክር ደንበኛ"),
+        ("Booking online took a minute, and the reminder explained the room and the stairs.", "በኦንላይን ቀጠሮ መያዝ አንድ ደቂቃ ፈጀ፤ ማስታወሻውም ክፍሉንና ደረጃውን አብራራልኝ።",
+         "Selamawit Abebe", "Wash and finish client", "የእጥበትና የአጨራረስ ደንበኛ"),
+    ],
+}
+
+
+def v3_image(entry):
+    path, english, amharic = entry
+    return {"image": path, "imageAlt": localized(english, amharic)}
+
+
 # Section headings and intros written for each business, so no two sites share them.
 # Each value is (English, Amharic).
 SECTION_COPY = {
@@ -367,6 +414,7 @@ SECTION_COPY = {
         "proof_title": ("The studio in short", "ስቱዲዮው በአጭሩ"),
         "providers_intro": ("Three stylists, each with a different strength.", "ሦስት ፀጉር ሠሪዎች፣ እያንዳንዳቸው የተለየ ጥንካሬ ያላቸው።"),
         "locations_intro": ("Two rooms off Africa Avenue: one lively, one quiet.", "ከአፍሪካ ጎዳና ገባ ብሎ ሁለት ክፍሎች፤ አንዱ ሕያው፣ አንዱ ጸጥ ያለ።"),
+        "gallery_title": ("Fresh looks from the studio", "ከስቱዲዮው አዳዲስ ስታይሎች"),
     },
     "tena": {
         "process_title": ("From booking to the consultation room", "ከቀጠሮ ማስያዝ እስከ ምክክር ክፍሉ"),

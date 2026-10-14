@@ -33,7 +33,7 @@ export function SectionForm({ type, schema, content, issues, context, onChange }
     {schema.list && <ListEditor section={type} list={schema.list} items={content[schema.list.key]} issues={issues} derived={derived}
       onChange={(items) => patch({ [schema.list!.key]: items })}
       renderFacts={schema.list.facts ? (item) => <Facts item={item} language={language} t={t} /> : undefined}
-      renderImage={(item, onPatch, index) => <ImageSlot site={context.site} limits={context.limits} content={item} title={item.name}
+      renderImage={(item, onPatch, index) => <ImageSlot site={context.site} limits={context.limits} content={item} title={item.name || item.title || item.caption}
         issues={issues} prefix={`${schema.list!.key}.${index}.`} qa={`${qa}-item-${index}-image`} onPatch={onPatch} />} />}
   </div>;
 }

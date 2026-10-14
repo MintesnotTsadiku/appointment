@@ -56,7 +56,8 @@ def capture(base_url: str) -> dict[str, list[dict[str, str]]]:
                     color_scheme="light",
                     reduced_motion="reduce",
                 )
-                page.goto(f"{base_url.rstrip('/')}/{slug}", wait_until="networkidle")
+                # A fixed afternoon in Addis Ababa, so time-of-day templates show their day photos (development server only).
+                page.goto(f"{base_url.rstrip('/')}/{slug}?preview-time=16:30", wait_until="networkidle")
                 page.evaluate("document.fonts.ready")
                 page.wait_for_timeout(1200)
                 image = Image.open(io.BytesIO(page.screenshot(full_page=False))).convert("RGB")

@@ -18,7 +18,7 @@ export interface FontChoice {
   fontAssets: { key: string; family: string; src: string; weight: number; format: string }[];
   fallbacks: Record<string, string[]>;
 }
-export interface AppearanceOptions { palettes: PaletteChoice[]; fonts: FontChoice[] }
+export interface AppearanceOptions { palettes: PaletteChoice[]; fonts: FontChoice[]; motion?: string[] }
 
 function selectWithKeyboard(event: React.KeyboardEvent, index: number, choices: { key: string }[], change: (key: string) => void) {
   if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) return;

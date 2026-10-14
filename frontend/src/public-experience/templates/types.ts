@@ -27,4 +27,6 @@ export interface PublicTemplatePackage {
   Site: ComponentType<TemplateProps>;
   Booking: ComponentType<BookingTemplateProps>;
   Content: ComponentType<ContentTemplateProps>;
+  /** The template's own loading screen (site shell and content), shown while the published design loads. */
+  Loading?: ComponentType<{ mode: ResolvedMode; locale?: string }>;
 }

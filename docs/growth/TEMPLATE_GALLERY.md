@@ -42,13 +42,13 @@ Images made on 2026-10-14 (`appointment/public/brand-experience/template-gallery
 | Template | Desktop (1280 px wide) | Mobile (420 px wide) |
 |---|---|---|
 | Selam Movement | `selam-movement-desktop.webp` 72 KB | `selam-movement-mobile.webp` 37 KB |
-| Bloom Hair | `bloom-hair-desktop.webp` 80 KB | `bloom-hair-mobile.webp` 43 KB |
+| Bloom Hair (v3, recaptured 2026-10-15) | `bloom-hair-desktop.webp` 74 KB | `bloom-hair-mobile.webp` 41 KB |
 | Meron Atelier | `meron-atelier-desktop.webp` 66 KB | `meron-atelier-mobile.webp` 36 KB |
 | Abugida Language | `abugida-language-desktop.webp` 77 KB | `abugida-language-mobile.webp` 45 KB |
 | Tena Clinic | `tena-clinic-desktop.webp` 50 KB | `tena-clinic-mobile.webp` 41 KB |
 | Ergata Therapy | `ergata-therapy-desktop.webp` 60 KB | `ergata-therapy-mobile.webp` 33 KB |
 
-Run the script again after a template redesign and commit the new images with the catalog change.
+Run the script again after a template redesign and commit the new images with the catalog change. The script opens each showcase with `?preview-time=16:30`, so a template with day and night photos (Bloom v3) shows its day photos. The gallery lists the latest recipe version of each template; Bloom is v3 (`docs/design/BLOOM_V3.md`). Runs of 2026-10-15 after the Bloom v3 move: BQA-2026-00262 (`template-gallery.yaml`, passed, 0 console, 0 network errors).
 
 ## Showing a showcase in a chosen mode
 

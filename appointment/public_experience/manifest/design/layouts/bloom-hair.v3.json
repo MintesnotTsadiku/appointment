@@ -1,0 +1,58 @@
+{
+  "kind": "layout",
+  "contract": "appointment-layout.v1",
+  "key": "bloom-hair",
+  "version": 3,
+  "rendererKey": "bloom-hair",
+  "contentSchemaVersion": 2,
+  "sections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "benefits",
+    "testimonials",
+    "proof",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer",
+    "gallery"
+  ],
+  "requiredSections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "benefits",
+    "testimonials",
+    "proof",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "responsive": {
+    "desktop": "bloom-hair-v3-desktop",
+    "tablet": "bloom-hair-v3-tablet",
+    "mobile": "bloom-hair-v3-mobile",
+    "maxContentWidth": 1440
+  },
+  "density": {
+    "content": [
+      "compact",
+      "standard",
+      "rich"
+    ],
+    "presentation": [
+      "comfortable",
+      "spacious"
+    ],
+    "defaultContent": "rich",
+    "defaultPresentation": "comfortable"
+  }
+}

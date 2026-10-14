@@ -52,12 +52,13 @@ const PublicSitePage = () => {
     if (typeof title === "string" && title) document.title = title;
   }, [snapshot]);
 
-  if (!resolved || previewState() === "loading") return <PublicLoading />;
+  if (!resolved) return <PublicLoading />;
   if (!snapshot) return <PublicUnavailable kind="unavailable" />;
 
   return (
     <PublicExperienceProvider key={pathname} locale={snapshot.locale}>
-      <PublicSiteHome snapshot={snapshot} />
+      {/* Development only: `?preview-state=loading` holds the template's own loading screen. */}
+      <PublicSiteHome snapshot={snapshot} forceLoading={previewState() === "loading"} />
     </PublicExperienceProvider>
   );
 };

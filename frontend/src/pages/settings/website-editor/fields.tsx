@@ -24,6 +24,7 @@ const ISSUE_KEYS: Record<Issue["code"], string> = {
   email: "staff.website.editor.issue.email",
   altRequired: "staff.website.editor.issue.altRequired",
   consent: "staff.website.editor.issue.consent",
+  imageRequired: "staff.website.editor.issue.imageRequired",
 };
 
 /** The translated message of one validation issue. */

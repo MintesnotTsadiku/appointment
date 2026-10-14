@@ -5,7 +5,7 @@ import { strict as assert } from "node:assert";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const templateRoot = path.join(root, "src/public-experience/templates");
-const templates = ["selam", "bloom", "meron", "abugida", "tena", "tena-v2", "selam-v2", "bloom-v2", "meron-v2", "abugida-v2", "ergata"];
+const templates = ["selam", "bloom", "meron", "abugida", "tena", "tena-v2", "selam-v2", "bloom-v2", "meron-v2", "abugida-v2", "ergata", "bloom-v3"];
 
 const registry = fs.readFileSync(path.join(templateRoot, "registry.ts"), "utf8");
 for (const template of templates) {
@@ -13,7 +13,7 @@ for (const template of templates) {
   const source = fs.readdirSync(directory).filter((file) => file.endsWith("Template.tsx"));
   const styles = fs.readdirSync(directory).filter((file) => file.endsWith(".css"));
   assert.equal(source.length, 1, `${template} must own one template component`);
-  assert.ok(styles.includes(`${template.replace(/-v2$/, "")}.css`), `${template} must own its main stylesheet`);
+  assert.ok(styles.includes(`${template.replace(/-v[23]$/, "")}.css`), `${template} must own its main stylesheet`);
   for (const stylesheet of styles) {
     const css = fs.readFileSync(path.join(directory, stylesheet), "utf8");
     assert.ok(!/@import[^;]*\.\.\//.test(css), `${template} cannot import another package stylesheet`);
@@ -33,7 +33,35 @@ for (const key of ["selam-movement", "bloom-hair", "meron-atelier", "abugida-lan
   assert.ok(registry.includes(`"${key}@1"`), `${key} v1 stays registered for releases pinned to it`);
   assert.ok(registry.includes(`"${key}@2"`), `${key} v2 is registered`);
 }
+assert.ok(registry.includes(`"bloom-hair@3"`), "bloom-hair v3 (Golden Hour Salon) is registered next to v1 and v2");
 assert.ok(registry.includes(`"ergata-therapy@1"`), "ergata-therapy v1 is registered");
+
+// v3 packages: visual components stay in the package; behaviour comes from the headless kit only.
+const kitRoot = path.join(templateRoot, "kit");
+for (const file of fs.readdirSync(kitRoot).concat(fs.readdirSync(path.join(kitRoot, "core")).map((name) => `core/${name}`))) {
+  if (!file.endsWith(".ts") && !file.endsWith(".tsx")) continue;
+  assert.ok(file.endsWith(".ts"), `the kit is headless: ${file} must not be a JSX component file`);
+  const source = fs.readFileSync(path.join(kitRoot, file), "utf8");
+  assert.ok(!/\.css["']/.test(source), `the kit ships no stylesheet (${file})`);
+  assert.ok(!/framer-motion/.test(source), `no animation library in public templates (${file})`);
+}
+for (const template of ["bloom-v3"]) {
+  const directory = path.join(templateRoot, template);
+  for (const file of fs.readdirSync(directory).filter((name) => /\.tsx?$/.test(name))) {
+    const source = fs.readFileSync(path.join(directory, file), "utf8");
+    for (const match of source.matchAll(/from "\.\.\/([^"]+)"/g)) {
+      assert.ok(!/^(selam|bloom|meron|abugida|tena|ergata)(-v\d)?\//.test(match[1]), `${template}/${file} must not import another template package (${match[1]})`);
+    }
+    assert.ok(!/framer-motion/.test(source), `${template}/${file} must not use an animation library`);
+  }
+  const css = fs.readFileSync(path.join(directory, "bloom.css"), "utf8");
+  assert.ok(/prefers-reduced-motion: reduce/.test(css) && /data-motion-level="none"/.test(css), `${template} stops motion under reduced motion`);
+  const component = fs.readFileSync(path.join(directory, "BloomTemplate.tsx"), "utf8");
+  for (const hook of ["useReveal", "useScrollProgress", "usePointerEffects", "useNextAvailability", "useTimeOfDay", "circularModeSwitch", "bookingTransition"]) {
+    assert.ok(component.includes(hook), `${template} uses the kit's ${hook}`);
+  }
+  assert.ok(component.includes('section(snapshot.sections, "process")') && component.includes('section(snapshot.sections, "proof")'), `${template} renders the required process and proof sections`);
+}
 assert.ok(!registry.includes(`"ergata-therapy@2"`), "ergata-therapy has no second version yet");
 assert.ok(registry.includes("rendererVersion"), "the registry resolves by renderer version");
 

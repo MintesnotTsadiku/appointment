@@ -1,0 +1,300 @@
+# Bloom v3 "Golden Hour Salon" (dark, reduced motion). Fixture: appointment.tests.template_bloom_v3_qa_fixtures (setup before, cleanup after).
+# After hours: the hero and the booking band show their night photos in dark mode. Reduced motion shows every section at once and the
+# review marquee as a still grid. The mode switch works both ways. English and Amharic, desktop and phone.
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-template-bloom-v3-dark
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+  color_scheme: dark
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.template_bloom_v3_qa_fixtures.browser_values
+scenarios:
+- id: bloom_dark_en_desktop
+  title: Bloom v3 bloom_dark_en_desktop (dark, reduced motion)
+  viewport: &id001
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /{qa_bloom_slug}?display=dark&preview-time=21:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="bloom-hair-v3"][data-pe-recipe="bloom-hair"]'
+    - type: text_contains
+      value: Good evening
+  actions:
+  - action: wait_for
+    selector: .b3-mirror img[src*="hero-night"]
+  - action: wait_for
+    selector: .b3[data-motion-level="none"]
+  - action: screenshot
+    name: bloom_dark_en_desktop-01-hero.png
+    full_page: false
+  - action: click
+    selector: '#b3-reviews-title'
+  - action: wait_for
+    selector: .b3-marquee-track[data-marquee="static"]
+  - action: screenshot
+    name: bloom_dark_en_desktop-02-reviews-still.png
+    full_page: false
+  - action: click
+    selector: '#b3-band-title'
+  - action: wait_for
+    selector: .b3-band-photo img[src*="band-night"]
+  - action: screenshot
+    name: bloom_dark_en_desktop-03-band-night.png
+    full_page: false
+  - action: click
+    selector: '#b3-hero-title'
+  - action: screenshot
+    name: bloom_dark_en_desktop-04-full.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="bloom-mode"]'
+    assertions:
+    - type: visible_selector
+      value: .b3[data-pe-mode="light"]
+  - action: screenshot
+    name: bloom_dark_en_desktop-05-light-after-dark.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="bloom-mode"]'
+    assertions:
+    - type: visible_selector
+      value: .b3[data-pe-mode="dark"]
+  - action: click
+    selector: '[data-qa="bloom-band-book"]'
+  - action: wait_for
+    selector: '[data-vt-book]'
+  - action: screenshot
+    name: bloom_dark_en_desktop-06-handoff.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="bloom-handoff-book"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: screenshot
+    name: bloom_dark_en_desktop-07-scheduler.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: bloom_dark_en_mobile
+  title: Bloom v3 bloom_dark_en_mobile (dark, reduced motion)
+  viewport: &id002
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /{qa_bloom_slug}?display=dark&preview-time=21:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="bloom-hair-v3"][data-pe-recipe="bloom-hair"]'
+    - type: text_contains
+      value: Good evening
+  actions:
+  - action: wait_for
+    selector: .b3-mirror img[src*="hero-night"]
+  - action: wait_for
+    selector: .b3[data-motion-level="none"]
+  - action: screenshot
+    name: bloom_dark_en_mobile-01-hero.png
+    full_page: false
+  - action: click
+    selector: '#b3-reviews-title'
+  - action: wait_for
+    selector: .b3-marquee-track[data-marquee="static"]
+  - action: screenshot
+    name: bloom_dark_en_mobile-02-reviews-still.png
+    full_page: false
+  - action: click
+    selector: '#b3-band-title'
+  - action: wait_for
+    selector: .b3-band-photo img[src*="band-night"]
+  - action: screenshot
+    name: bloom_dark_en_mobile-03-band-night.png
+    full_page: false
+  - action: click
+    selector: '#b3-hero-title'
+  - action: screenshot
+    name: bloom_dark_en_mobile-04-full.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="bloom-mode"]'
+    assertions:
+    - type: visible_selector
+      value: .b3[data-pe-mode="light"]
+  - action: screenshot
+    name: bloom_dark_en_mobile-05-light-after-dark.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="bloom-mode"]'
+    assertions:
+    - type: visible_selector
+      value: .b3[data-pe-mode="dark"]
+  - action: click
+    selector: '[data-qa="bloom-band-book"]'
+  - action: wait_for
+    selector: '[data-vt-book]'
+  - action: screenshot
+    name: bloom_dark_en_mobile-06-handoff.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="bloom-handoff-book"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: screenshot
+    name: bloom_dark_en_mobile-07-scheduler.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: bloom_dark_am_desktop
+  title: Bloom v3 bloom_dark_am_desktop (dark, reduced motion)
+  viewport: *id001
+  checks: []
+  routes:
+  - path: /{qa_bloom_slug}/am?display=dark&preview-time=21:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="bloom-hair-v3"][data-pe-recipe="bloom-hair"]'
+    - type: text_contains
+      value: እንደምን አመሹ
+  actions:
+  - action: wait_for
+    selector: .b3-mirror img[src*="hero-night"]
+  - action: wait_for
+    selector: .b3[data-motion-level="none"]
+  - action: screenshot
+    name: bloom_dark_am_desktop-01-hero.png
+    full_page: false
+  - action: click
+    selector: '#b3-reviews-title'
+  - action: wait_for
+    selector: .b3-marquee-track[data-marquee="static"]
+  - action: screenshot
+    name: bloom_dark_am_desktop-02-reviews-still.png
+    full_page: false
+  - action: click
+    selector: '#b3-band-title'
+  - action: wait_for
+    selector: .b3-band-photo img[src*="band-night"]
+  - action: screenshot
+    name: bloom_dark_am_desktop-03-band-night.png
+    full_page: false
+  - action: click
+    selector: '#b3-hero-title'
+  - action: screenshot
+    name: bloom_dark_am_desktop-04-full.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="bloom-mode"]'
+    assertions:
+    - type: visible_selector
+      value: .b3[data-pe-mode="light"]
+  - action: screenshot
+    name: bloom_dark_am_desktop-05-light-after-dark.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="bloom-mode"]'
+    assertions:
+    - type: visible_selector
+      value: .b3[data-pe-mode="dark"]
+  - action: click
+    selector: '[data-qa="bloom-band-book"]'
+  - action: wait_for
+    selector: '[data-vt-book]'
+  - action: screenshot
+    name: bloom_dark_am_desktop-06-handoff.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="bloom-handoff-book"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: screenshot
+    name: bloom_dark_am_desktop-07-scheduler.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: bloom_dark_am_mobile
+  title: Bloom v3 bloom_dark_am_mobile (dark, reduced motion)
+  viewport: *id002
+  checks: []
+  routes:
+  - path: /{qa_bloom_slug}/am?display=dark&preview-time=21:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="bloom-hair-v3"][data-pe-recipe="bloom-hair"]'
+    - type: text_contains
+      value: እንደምን አመሹ
+  actions:
+  - action: wait_for
+    selector: .b3-mirror img[src*="hero-night"]
+  - action: wait_for
+    selector: .b3[data-motion-level="none"]
+  - action: screenshot
+    name: bloom_dark_am_mobile-01-hero.png
+    full_page: false
+  - action: click
+    selector: '#b3-reviews-title'
+  - action: wait_for
+    selector: .b3-marquee-track[data-marquee="static"]
+  - action: screenshot
+    name: bloom_dark_am_mobile-02-reviews-still.png
+    full_page: false
+  - action: click
+    selector: '#b3-band-title'
+  - action: wait_for
+    selector: .b3-band-photo img[src*="band-night"]
+  - action: screenshot
+    name: bloom_dark_am_mobile-03-band-night.png
+    full_page: false
+  - action: click
+    selector: '#b3-hero-title'
+  - action: screenshot
+    name: bloom_dark_am_mobile-04-full.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="bloom-mode"]'
+    assertions:
+    - type: visible_selector
+      value: .b3[data-pe-mode="light"]
+  - action: screenshot
+    name: bloom_dark_am_mobile-05-light-after-dark.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="bloom-mode"]'
+    assertions:
+    - type: visible_selector
+      value: .b3[data-pe-mode="dark"]
+  - action: click
+    selector: '[data-qa="bloom-band-book"]'
+  - action: wait_for
+    selector: '[data-vt-book]'
+  - action: screenshot
+    name: bloom_dark_am_mobile-06-handoff.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="bloom-handoff-book"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: screenshot
+    name: bloom_dark_am_mobile-07-scheduler.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

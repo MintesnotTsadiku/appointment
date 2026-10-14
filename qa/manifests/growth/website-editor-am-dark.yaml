@@ -97,7 +97,7 @@ scenarios:
     full_page: false
   - action: fill
     selector: '[data-qa="website-editor-locations-item-0-phone"]'
-    value: 000 000 0106
+    value: +251 11 000 0106
   - action: click
     selector: '[data-qa="website-editor-tab-faq"]'
   - action: click

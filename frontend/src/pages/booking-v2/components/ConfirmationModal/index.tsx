@@ -4,7 +4,7 @@
  */
 
 import { CheckCircle2, Calendar, Clock, Mail, MapPin, Copy, ExternalLink, X, Link2, Phone } from "lucide-react";
-import { useState, type CSSProperties } from "react";
+import { useState, type CSSProperties, type ReactNode } from "react";
 import { Button } from "@/components/button";
 import {
   Dialog,
@@ -36,6 +36,8 @@ interface ConfirmationModalProps {
   /** The phone number the business will use, in E.164 form. */
   userPhone?: string;
   brandStyle?: CSSProperties;
+  /** The template's success moment (decoration from the published template package), behind the header. */
+  moment?: ReactNode;
 }
 
 export function ConfirmationModal({
@@ -50,6 +52,7 @@ export function ConfirmationModal({
   userEmail,
   userPhone,
   brandStyle,
+  moment,
 }: ConfirmationModalProps) {
   const { t, language } = useTranslation();
   const onlineLabel = useOnlineLabel();
@@ -78,7 +81,8 @@ export function ConfirmationModal({
       <DialogContent data-booking-confirmation="true" style={brandStyle} className="max-w-2xl max-h-[90vh] overflow-y-auto">
         {/* Success Animation Header */}
         <div className="relative">
-          <div className="flex flex-col items-center text-center pt-6 pb-4">
+          {moment}
+          <div className="relative flex flex-col items-center text-center pt-6 pb-4">
             {/* Animated Success Icon */}
             <div className="relative">
               <div className="absolute inset-0 bg-green-500 rounded-full animate-ping opacity-20" />

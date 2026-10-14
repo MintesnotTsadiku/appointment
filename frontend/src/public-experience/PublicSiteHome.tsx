@@ -10,7 +10,7 @@ import { PublicLoading, PublicUnavailable } from "./PublicStates";
 
 const localizedRoot = (root: string, locale: string) => (locale && locale !== "en" && root !== "/" ? `${root}/${locale}` : root);
 
-export const PublicSiteHome = ({ snapshot }: { snapshot: PublishedSnapshot }) => {
+export const PublicSiteHome = ({ snapshot, forceLoading = false }: { snapshot: PublishedSnapshot; forceLoading?: boolean }) => {
   const { config, theme, setPreference, refresh, isLoading, error } = usePublicExperience();
   const locale = snapshot.locale || config.locale;
   const design = snapshot.compiledDesign;
@@ -22,7 +22,10 @@ export const PublicSiteHome = ({ snapshot }: { snapshot: PublishedSnapshot }) =>
   } as CSSProperties;
   const toggleMode = () => setPreference(theme.mode === "dark" ? "light" : "dark");
 
-  if (isLoading) return <PublicLoading config={config} mode={theme.mode} />;
+  if (isLoading || forceLoading) {
+    const Loading = template?.Loading;
+    return Loading ? <div style={rootStyle}><Loading mode={theme.mode} locale={snapshot.locale} /></div> : <PublicLoading config={config} mode={theme.mode} />;
+  }
   if (error) return <PublicUnavailable kind="error" config={config} mode={theme.mode} onRetry={refresh} />;
   if (!template) return <PublicUnavailable kind="unsupported" config={config} mode={theme.mode} />;
   if (snapshot.routeKind.startsWith("blog_") || snapshot.routeKind.startsWith("gallery_")) return <PublicContentPage snapshot={snapshot} />;

@@ -26,10 +26,18 @@ from appointment.demo import showcase_public as public_copy
 from appointment.public_experience.publisher import publish_experience
 
 VERSION = 1
-CONTENT_VERSION = 5
-PUBLIC_EXPERIENCE_VERSION = 15
+CONTENT_VERSION = 6
+PUBLIC_EXPERIENCE_VERSION = 17
 TZ = "Africa/Addis_Ababa"
 DEMO_BRAND_RECIPES = recipe_assignments()
+# The giant word in the Bloom v3 hero and footer is the brand's short name.
+SHORT_NAMES = {"bloom": "Bloom"}
+
+
+def showcase_motion(recipe_key):
+    """Showcases use the most expressive motion their recipe offers (new sites keep the recipe default)."""
+    choices = get_recipe(recipe_key).adjustments.get("motion", {}).get("choices") or []
+    return "expressive" if "expressive" in choices else "calm"
 
 PROVIDER_PORTRAITS = {
     "Selam Bekele": "/assets/appointment/brand-experience/providers/selam-bekele.webp",
@@ -119,7 +127,7 @@ BUSINESSES = [
         "Tena Family Clinic",
         "Dawit Haile",
         "Healthcare",
-        "A small family clinic in CMC with scheduled consultations and clear arrival times. All people and appointments in this demonstration are fictional.",
+        "A small family clinic in CMC with scheduled consultations and clear arrival times.",
         (8, 17),
         ["Sunday"],
         [("General consultation", 30, 700), ("Follow-up visit", 30, 450), ("Wellness consultation", 60, 1000)],
@@ -148,7 +156,7 @@ DEMO_CONTENT = {
     "selam": {
         "headline": "A steadier way back into movement",
         "description": "Quiet one-to-one movement coaching in Gerji for people building a kinder, more useful routine around work and everyday life.",
-        "contact": {"email": "hello.selam@example.test", "phone": "000 000 0101"},
+        "contact": {"email": "hello.selam@example.test", "phone": "+251 11 000 0101"},
         "audience": "For desk-bound professionals, returning movers and anyone who wants practical guidance without a crowded class.",
         "story": "Selam Movement Practice grew from short, attentive sessions that fit around real working weeks. Each visit starts with listening, then turns into a small set of movements you can understand and repeat.",
         "provider_bios": ["Selam creates calm, practical movement sessions for people returning to activity or trying to make a routine stick."],
@@ -156,7 +164,7 @@ DEMO_CONTENT = {
             {"name": "Movement consultation", "description": "A 45-minute conversation and movement check-in to understand your routine, goals and a comfortable place to begin.", "preparation": "Wear clothes you can move in and bring one question about your current routine.", "duration": 45, "price": 900},
             {"name": "Guided mobility session", "description": "A spacious one-to-one session with simple mobility work, pacing and a short take-home sequence.", "preparation": "Arrive five minutes early; no previous movement experience is expected.", "duration": 60, "price": 1200},
         ],
-        "locations": [{"address_line_1": "Gerji, off CMC Road", "address_line_2": "Blue gate, second floor, room 3", "phone": "000 000 0101", "arrival": "Use the blue gate and allow a few minutes to settle in before the session."}],
+        "locations": [{"address_line_1": "Gerji, off CMC Road", "address_line_2": "Blue gate, second floor, room 3", "phone": "+251 11 000 0101", "arrival": "Use the blue gate and allow a few minutes to settle in before the session."}],
         "benefits": [("A quiet start", "Begin with a conversation about your week before any movement is selected."), ("Useful between visits", "Leave with a short sequence that is realistic to repeat at home or at a desk."), ("Paced for you", "Sessions stay one-to-one, with room to pause, ask questions and adjust.")],
         "faq": [("Do I need to be fit already?", "No. The first visit is designed to meet you where you are and choose an appropriate starting point."), ("What should I bring?", "Comfortable clothing and a little context about what you would like to make easier."), ("How do I choose a session?", "Choose Movement consultation for a first conversation or Guided mobility session if you already know you want to practise.")],
         "cta": {"hero_primary": "Start with a consultation", "hero_secondary": "See the two session options", "booking_title": "Make room for a useful hour", "booking_subtitle": "Pick a session and a time that leaves your week feeling more workable.", "booking_primary": "Find a movement time"},
@@ -165,7 +173,7 @@ DEMO_CONTENT = {
     "meron": {
         "headline": "Clothes that fit the person wearing them",
         "description": "A Kazanchis atelier for careful fittings, thoughtful alterations and occasion pieces shaped around how you actually want to move.",
-        "contact": {"email": "atelier.meron@example.test", "phone": "000 000 0102"},
+        "contact": {"email": "atelier.meron@example.test", "phone": "+251 11 000 0102"},
         "audience": "For people preparing a special outfit, refining a favourite garment or looking for an attentive first fitting.",
         "story": "Meron Tailoring Atelier keeps the fitting table at the centre of the process. Measurements, fabric, movement and the occasion are considered together before a needle touches the garment.",
         "provider_bios": ["Meron leads each fitting with a practical eye for proportion, comfort and the small details that make a garment feel like yours."],
@@ -173,7 +181,7 @@ DEMO_CONTENT = {
             {"name": "First fitting", "description": "A focused fitting appointment to review the garment, take measurements and agree the alteration plan before work begins.", "preparation": "Bring the garment, the shoes or layers you expect to wear with it, and any reference for the intended fit.", "duration": 30, "price": 350},
             {"name": "Occasion wear consultation", "description": "A longer atelier conversation for an occasion outfit, covering silhouette, fabric choices, timing and the next fitting.", "preparation": "Bring inspiration, a preferred fabric if you have one, and the date you are working towards.", "duration": 60, "price": 700},
         ],
-        "locations": [{"address_line_1": "Kazanchis, near the old railway station", "address_line_2": "Courtyard atelier, ground floor", "phone": "000 000 0102", "arrival": "Look for the courtyard entrance; the fitting room is at the back of the ground-floor atelier."}],
+        "locations": [{"address_line_1": "Kazanchis, near the old railway station", "address_line_2": "Courtyard atelier, ground floor", "phone": "+251 11 000 0102", "arrival": "Look for the courtyard entrance; the fitting room is at the back of the ground-floor atelier."}],
         "benefits": [("A measured plan", "Leave the first fitting knowing what will change, what will stay and what happens next."), ("Fit before finish", "Appointments make space to test comfort and movement, not only the mirror view."), ("A human-scale atelier", "One fitting table keeps the conversation direct from first measurement to final adjustment.")],
         "faq": [("Should I bring the shoes for my outfit?", "Yes, especially for trousers, skirts or occasion pieces where the finished length matters."), ("Can I book an alteration without a consultation?", "Start with First fitting so the garment and the intended result can be reviewed together."), ("How far ahead should I book?", "Bring your event date to the consultation; the atelier will discuss a realistic fitting sequence.")],
         "cta": {"hero_primary": "Reserve a fitting", "hero_secondary": "Compare the atelier appointments", "booking_title": "Bring the garment; bring the occasion", "booking_subtitle": "Choose the appointment that gives your piece the right amount of attention.", "booking_primary": "Book an atelier visit"},
@@ -182,7 +190,7 @@ DEMO_CONTENT = {
     "bloom": {
         "headline": "Natural hair care, with time to breathe",
         "description": "A Bole neighbourhood studio for natural hair care, fresh cuts and unrushed styling, with a choice of stylists and two different rooms.",
-        "contact": {"email": "hello.bloom@example.test", "phone": "000 000 0103"},
+        "contact": {"email": "hello.bloom@example.test", "phone": "+251 11 000 0103"},
         "audience": "For clients who want a clear plan for wash day, a considered shape or a calmer styling appointment.",
         "story": "Bole Bloom Hair Studio was set up for appointments that do not feel hurried. The team talks through texture, routine and the look you want, then chooses the right pace and room for the service.",
         "provider_bios": ["Hanna helps clients turn a big hair decision into a manageable appointment, from first wash-and-finish visits to shape changes.", "Rahel brings a patient, detail-led approach to wash care and styling, with special attention to an easy home routine.", "Eden enjoys precise shaping and calm consultations that make room for questions about texture, length and upkeep."],
@@ -191,7 +199,7 @@ DEMO_CONTENT = {
             {"name": "Cut and shape", "description": "A 45-minute shape appointment with a clear conversation about length, movement and how the cut should behave between visits.", "preparation": "Bring one or two references if helpful; the stylist will confirm the shape before cutting.", "duration": 45, "price": 850},
             {"name": "Scalp care consultation", "description": "A short, practical conversation about your wash routine, comfort and the products already in your bathroom.", "preparation": "Bring a list or photo of products you use if you would like to review them together.", "duration": 30, "price": 500},
         ],
-        "locations": [{"address_line_1": "Bole, off Africa Avenue", "address_line_2": "Main studio, first floor above the bookshop", "phone": "000 000 0103", "arrival": "The main studio is upstairs above the bookshop; please arrive with enough time to choose your room."}, {"address_line_1": "Bole, off Africa Avenue", "address_line_2": "Quiet styling room, rear entrance", "phone": "000 000 0103", "arrival": "Ask at the main entrance for the quiet room; the team will guide you through the rear entrance."}],
+        "locations": [{"address_line_1": "Bole, off Africa Avenue", "address_line_2": "Main studio, first floor above the bookshop", "phone": "+251 11 000 0103", "arrival": "The main studio is upstairs above the bookshop; please arrive with enough time to choose your room."}, {"address_line_1": "Bole, off Africa Avenue", "address_line_2": "Quiet styling room, rear entrance", "phone": "+251 11 000 0103", "arrival": "Ask at the main entrance for the quiet room; the team will guide you through the rear entrance."}],
         "benefits": [("A conversation before the chair", "Talk through texture, time and the result you want before the service begins."), ("Two room options", "Choose the lively main studio or the quieter styling room when the appointment allows."), ("A routine you can repeat", "Leave with practical language for caring for your hair between visits.")],
         "faq": [("Which stylist should I choose?", "Choose Hanna for a broad plan, Rahel for wash-care detail or Eden for shaping and a precise cut conversation."), ("Can I request the quiet room?", "Yes. Select an available appointment and mention the quiet room in your notes; room availability is shown with the booking."), ("What if I am not sure which service fits?", "Start with Scalp care consultation if the main question is your routine, or book a wash and finish for a service-led visit.")],
         "cta": {"hero_primary": "Choose your studio appointment", "hero_secondary": "Meet the three stylists", "booking_title": "Your hair appointment can have a little more time", "booking_subtitle": "Choose a service, stylist and room that fit the kind of visit you want.", "booking_primary": "See Bole availability"},
@@ -200,7 +208,7 @@ DEMO_CONTENT = {
     "tena": {
         "headline": "Scheduled family appointments, clearly explained",
         "description": "A small CMC clinic offering scheduled consultations, practical arrival information and a calm place to discuss everyday family health questions.",
-        "contact": {"email": "appointments.tena@example.test", "phone": "000 000 0104"},
+        "contact": {"email": "appointments.tena@example.test", "phone": "+251 11 000 0104"},
         "audience": "For families and individuals looking for a booked consultation time and straightforward information about what to bring.",
         "story": "Tena Family Clinic is organised around appointment time and clear communication. The team keeps the visit focused, explains the next step in plain language and directs urgent concerns to appropriate services.",
         "provider_bios": ["Dawit provides scheduled family consultations with attention to the client’s questions, visit context and agreed follow-up steps.", "Saron supports booked consultations with a careful listening style and clear explanations of what the appointment can cover.", "Yonas focuses on making routine follow-up visits organised, respectful and easy to navigate."],
@@ -209,16 +217,16 @@ DEMO_CONTENT = {
             {"name": "Follow-up visit", "description": "A focused appointment to review an earlier conversation, clarify questions and record the next agreed action.", "preparation": "Bring any notes or instructions from your previous visit and arrive with your questions ready.", "duration": 30, "price": 450},
             {"name": "Wellness consultation", "description": "A longer conversation about everyday wellbeing, routines and questions you would like to discuss with a clinician.", "preparation": "Set aside the full hour and bring any routine or family context that would help the conversation.", "duration": 60, "price": 1000},
         ],
-        "locations": [{"address_line_1": "CMC, off Equatorial Guinea Street", "address_line_2": "Tena building, ground floor reception", "phone": "000 000 0104", "arrival": "Check in at the ground-floor reception and arrive 10 minutes early for a scheduled consultation."}, {"address_line_1": "CMC, off Equatorial Guinea Street", "address_line_2": "Tena building, consultation room two", "phone": "000 000 0104", "arrival": "Reception will direct you to the assigned consultation room; appointments are not walk-in visits in this demo."}, {"address_line_1": "CMC, off Equatorial Guinea Street", "address_line_2": "Tena building, consultation room three", "phone": "000 000 0104", "arrival": "Bring your booking details to reception so the team can confirm the room and appointment time."}],
+        "locations": [{"address_line_1": "CMC, off Equatorial Guinea Street", "address_line_2": "Tena building, ground floor reception", "phone": "+251 11 000 0104", "arrival": "Check in at the ground-floor reception and arrive 10 minutes early for a scheduled consultation."}, {"address_line_1": "CMC, off Equatorial Guinea Street", "address_line_2": "Tena building, consultation room two", "phone": "+251 11 000 0104", "arrival": "Reception will direct you to the assigned consultation room; appointments are scheduled, not walk-in visits."}, {"address_line_1": "CMC, off Equatorial Guinea Street", "address_line_2": "Tena building, consultation room three", "phone": "+251 11 000 0104", "arrival": "Bring your booking details to reception so the team can confirm the room and appointment time."}],
         "benefits": [("A booked time", "Select a provider and appointment slot before arriving instead of waiting without a scheduled time."), ("Plain-language next steps", "The visit makes room to clarify what was discussed and what should happen next."), ("Respectful boundaries", "The site explains what the appointment covers and reminds visitors to use urgent services for emergencies.")],
-        "faq": [("Is this an emergency service?", "No. This demonstration is for scheduled consultations; urgent or emergency concerns should be directed to appropriate emergency services."), ("What should I bring?", "Bring your booking details and any relevant questions, medicine list or previous visit notes."), ("Can I book a walk-in slot?", "No. Choose an available scheduled appointment so the clinic can prepare for your visit.")],
+        "faq": [("Is this an emergency service?", "No. The clinic offers scheduled consultations; urgent or emergency concerns should be directed to appropriate emergency services."), ("What should I bring?", "Bring your booking details and any relevant questions, medicine list or previous visit notes."), ("Can I book a walk-in slot?", "No. Choose an available scheduled appointment so the clinic can prepare for your visit.")],
         "cta": {"hero_primary": "Choose a consultation time", "hero_secondary": "Read arrival information", "booking_title": "Choose a clear time for the conversation", "booking_subtitle": "Select the consultation, provider and CMC room that fit your visit.", "booking_primary": "View clinic appointments"},
-        "trust": "Fictional demonstration content: scheduled consultations only, with no emergency promise and no substitute for professional medical advice.",
+        "trust": "Scheduled consultations only, with no emergency promise and no substitute for professional medical advice.",
     },
     "abugida": {
         "headline": "Language practice for the moments that matter",
         "description": "Practical English and Amharic coaching in Arat Kilo for work, study and everyday conversations, at a pace you can keep.",
-        "contact": {"email": "learn.abugida@example.test", "phone": "000 000 0105"},
+        "contact": {"email": "learn.abugida@example.test", "phone": "+251 11 000 0105"},
         "audience": "For learners preparing for a workplace conversation, a study goal or a more confident day-to-day exchange.",
         "story": "Abugida Language Studio treats language practice as a regular habit rather than a performance. Sessions use real situations, useful phrases and a clear next step for the week ahead.",
         "provider_bios": ["Kalkidan builds structured practice around the learner’s real situations, from workplace introductions to longer conversations.", "Abel brings a patient, example-rich style to Amharic and English practice, with room to repeat, ask and try again."],
@@ -226,7 +234,7 @@ DEMO_CONTENT = {
             {"name": "English conversation coaching", "description": "A 60-minute practice session using work, study or everyday scenarios chosen with the learner.", "preparation": "Bring one situation you expect to face soon, such as an introduction, meeting or phone call.", "duration": 60, "price": 650},
             {"name": "Amharic starter session", "description": "A welcoming 45-minute introduction to useful Amharic phrases, pronunciation and a simple practice plan.", "preparation": "No preparation is needed; bring a situation where you would like to use a few new phrases.", "duration": 45, "price": 550},
         ],
-        "locations": [{"address_line_1": "Arat Kilo, near the university gate", "address_line_2": "Learning room, second floor above the stationery shop", "phone": "000 000 0105", "arrival": "Enter above the stationery shop and ask for the learning room; plan a few minutes for the stairs."}, {"address_line_1": "Arat Kilo, near the university gate", "address_line_2": "Conversation room, second floor, room 4", "phone": "000 000 0105", "arrival": "The conversation room is marked at the end of the second-floor corridor."}],
+        "locations": [{"address_line_1": "Arat Kilo, near the university gate", "address_line_2": "Learning room, second floor above the stationery shop", "phone": "+251 11 000 0105", "arrival": "Enter above the stationery shop and ask for the learning room; plan a few minutes for the stairs."}, {"address_line_1": "Arat Kilo, near the university gate", "address_line_2": "Conversation room, second floor, room 4", "phone": "+251 11 000 0105", "arrival": "The conversation room is marked at the end of the second-floor corridor."}],
         "benefits": [("Situations, not worksheets", "Practise the conversations you are likely to have at work, in class and around town."), ("A small weekly step", "Each session ends with one manageable prompt to try before the next visit."), ("Room to try again", "Private practice makes it easier to pause, repeat a phrase and ask what sounds natural.")],
         "faq": [("Do I need to know any Amharic?", "No. The starter session is designed for a first useful set of phrases and sounds."), ("Can sessions focus on work?", "Yes. Bring a meeting, introduction, email or phone situation you would like to rehearse."), ("Which room will I use?", "Your booking shows the assigned learning or conversation room; both are in the Arat Kilo studio.")],
         "cta": {"hero_primary": "Choose your first practice", "hero_secondary": "See the coaching options", "booking_title": "Put one real conversation on the calendar", "booking_subtitle": "Choose a language, a provider and a practice room for the next step.", "booking_primary": "Book a language session"},
@@ -735,6 +743,13 @@ def _public_section_rows(key, business):
         "tena": "The arrival details made a scheduled clinic visit feel much less uncertain.",
         "abugida": "Practising a situation I was about to face made the next conversation feel possible.",
     }[key]
+    testimonial_role = {
+        "selam": "Movement consultation client",
+        "meron": "First fitting client",
+        "bloom": "Wash and finish client",
+        "tena": "Follow-up visit patient",
+        "abugida": "English conversation learner",
+    }[key]
     proof_items = [
         {"label": _localized(label), "value": _localized(value), "detail": _localized(note)}
         for label, value, note in detail["proof"]
@@ -745,21 +760,38 @@ def _public_section_rows(key, business):
     ]
     # One label per booking intent; sites published before this rule keep their footer label.
     footer_book = detail["cta"].get("footer", "Book an appointment")
+    recipe = get_recipe(DEMO_BRAND_RECIPES[key]["recipe"])
+    reviews = [{"quote": _localized(testimonial_quote), "attribution": _localized(testimonial_attribution), "role": _localized(testimonial_role), "consent": True}]
+    reviews += [{"quote": public_copy.localized(quote, quote_am), "attribution": _localized(name), "role": public_copy.localized(role, role_am), "consent": True}
+                for quote, quote_am, name, role, role_am in public_copy.EXTRA_TESTIMONIALS.get(key, [])] if recipe.version >= 3 else []
     section_rows = [
         ("hero", {"title": _localized(detail["headline"]), "subtitle": _localized(detail["description"]), "primaryAction": _action(detail["cta"]["hero_primary"], "booking_start", "primary"), "secondaryAction": _action(detail["cta"]["hero_secondary"], "faq_jump", "secondary"), "imageRole": "hero.primary"}),
         ("services", {"title": _localized({"selam": "Choose a pace that fits your week", "meron": "Start with the right atelier conversation", "bloom": "Pick the kind of hair day you want", "tena": "Select the appointment that fits the question", "abugida": "Choose a useful place to practise"}[key]), "intro": _localized(detail["audience"]), "items": service_items}),
         ("providers", {"title": _localized({"selam": "Your movement guide", "meron": "The person at the fitting table", "bloom": "Meet the Bole Bloom team", "tena": "The scheduled consultation team", "abugida": "Your language practice partners"}[key]), "intro": public_copy.section_copy(key, "providers_intro", "Meet the people who hold the appointment with you."), "items": provider_items}),
         ("process", {"title": public_copy.section_copy(key, "process_title", "How a visit works"), "intro": public_copy.section_copy(key, "process_intro", "What happens from booking to the end of your visit."), "items": process_items}),
         ("benefits", {"title": public_copy.section_copy(key, "benefits_title", "Small details that make the visit easier"), "items": benefit_items}),
-        ("testimonials", {"title": public_copy.section_copy(key, "testimonials_title", "Reviews"), "intro": _localized("Fictional feedback for this demonstration site."), "items": [{"quote": _localized(testimonial_quote), "attribution": _localized(testimonial_attribution), "role": _localized("Fictional demo client"), "consent": True}]}),
+        ("testimonials", {"title": public_copy.section_copy(key, "testimonials_title", "Reviews"), "intro": _localized("Shared with permission after a recent visit."), "items": reviews}),
         ("proof", {"title": public_copy.section_copy(key, "proof_title", "At a glance"), "items": proof_items}),
         ("locations", {"title": _localized({"selam": "A private Gerji studio", "meron": "Find the Kazanchis atelier", "bloom": "Choose your Bole room", "tena": "Arrive at CMC", "abugida": "Find the Arat Kilo rooms"}[key]), "intro": public_copy.section_copy(key, "locations_intro", "Know where to go and what to expect when you arrive."), "items": location_items}),
         ("about", {"title": _localized({"selam": "Movement that belongs in real life", "meron": "The atelier approach", "bloom": "A calmer salon appointment", "tena": "How Tena appointments work", "abugida": "Practice for real situations"}[key]), "body": public_copy.joined(_localized(detail["story"]), _localized(detail["trust"])), "highlights": [_localized(title) for title, _ in detail["benefits"]], "imageRole": "section.detail", **public_copy.scene(key, scenes["about"])}),
         ("faq", {"title": _localized({"selam": "Before your first movement visit", "meron": "Before you come to the atelier", "bloom": "Before your Bole appointment", "tena": "Before a clinic consultation", "abugida": "Before your first practice"}[key]), "items": faq_items}),
         ("contact", {"title": _localized({"selam": "Plan a quieter arrival", "meron": "Plan your fitting visit", "bloom": "Plan your studio visit", "tena": "Know before you arrive", "abugida": "Make the room easy to find"}[key]), "body": public_copy.joined(_localized(detail["locations"][0]["arrival"]), opening_hours), "phone": detail["contact"]["phone"], "email": detail["contact"]["email"], "action": _action("Call to ask a question", "call", "primary")}),
         ("booking_cta", {"title": _localized(detail["cta"]["booking_title"]), "body": _localized(detail["cta"]["booking_subtitle"]), "action": _action(detail["cta"]["booking_primary"], "booking_start", "primary")}),
-        ("footer", {"title": _localized(business["name"]), "body": public_copy.joined(_localized(detail["trust"]), _localized("All details on this demonstration site are fictional.")), "items": [{"label": _localized(footer_book), "action": _action(footer_book, "booking_start", "tertiary")}, {"label": _localized("Contact the team"), "action": _action("Contact the team", "contact", "tertiary")}]}),
+        ("footer", {"title": _localized(business["name"]), "body": _localized(detail["trust"]), "items": [{"label": _localized(footer_book), "action": _action(footer_book, "booking_start", "tertiary")}, {"label": _localized("Contact the team"), "action": _action("Contact the team", "contact", "tertiary")}]}),
     ]
+    if recipe.version >= 3 and key in public_copy.V3_SCENES:
+        # The v3 showcase shows the template's own photos as its content (they keep their night and mobile crops).
+        scenes_v3 = public_copy.V3_SCENES[key]
+        rows = dict(section_rows)
+        rows["hero"].update(public_copy.v3_image(scenes_v3["hero"]))
+        rows["about"].update(public_copy.v3_image(scenes_v3["about"]))
+        for item, entry in zip(rows["services"]["items"], scenes_v3["services"]):
+            item.update(public_copy.v3_image(entry))
+        for item, entry in zip(rows["locations"]["items"], scenes_v3["locations"]):
+            item.update(public_copy.v3_image(entry))
+    if "gallery" in recipe.supported_sections:
+        # Empty on purpose: the template shows its own lookbook and the before/after pair.
+        section_rows.append(("gallery", {"title": public_copy.section_copy(key, "gallery_title", "Fresh looks from the studio"), "items": []}))
     return _section_rows(section_rows)
 
 
@@ -781,7 +813,8 @@ def _rich_release_for(site, headline, recipe_key):
         return None
     if sections.get("hero", {}).get("title", {}).get("en") != headline:
         return None
-    if snapshot.get("contentSchemaVersion") != 2 or len(snapshot.get("sections", [])) != 13:
+    expected = 14 if "gallery" in get_recipe(recipe_key).supported_sections else 13
+    if snapshot.get("contentSchemaVersion") != 2 or len(snapshot.get("sections", [])) != expected:
         return None
     # Releases from before the content-ownership pass lack owner photos and Amharic copy.
     if snapshot.get("recipeVersion") != get_recipe(recipe_key).version or not sections.get("about", {}).get("image"):
@@ -815,7 +848,7 @@ def configure_public_experience(state, keys=None, force=False):
         profile_values = {
             "profile_name": f"{business['name']} brand",
             "application_name": business["name"],
-            "short_name": business["name"].split()[0],
+            "short_name": SHORT_NAMES.get(key, business["name"].split()[0]),
             "logo_primary": brand["logo"],
             "logo_compact": brand["logo"],
             "favicon": brand["favicon"],
@@ -824,7 +857,7 @@ def configure_public_experience(state, keys=None, force=False):
             "provider": None,
             "recipe_key": brand["recipe"],
             "recipe_version": get_recipe(brand["recipe"]).version,
-            "brand_inputs_json": json.dumps({"motion": "calm", "presentationDensity": brand["density"], "heroAsset": brand["hero"], "detailAsset": brand["detail"]}, sort_keys=True),
+            "brand_inputs_json": json.dumps({"motion": showcase_motion(brand["recipe"]), "presentationDensity": brand["density"], "heroAsset": brand["hero"], "detailAsset": brand["detail"]}, sort_keys=True),
             "lifecycle": "Draft",
         }
         if profile is None:
@@ -863,7 +896,8 @@ def configure_public_experience(state, keys=None, force=False):
                 {"locale": "am", "enabled": 1, "is_default": 0, "translation_status": "Partial"},
             ],
             "seo_json": json.dumps({"title": f"{business['name']} | {DEMO_CONTENT[key]['headline']}", "description": business["description"]}),
-            "booking_json": json.dumps({"showPrices": True, "currency": "ETB", "timezone": TZ, "arrivalNote": DEMO_CONTENT[key]["locations"][0]["arrival"]}),
+            # Showcases show live availability (the owner setting is off by default for new sites).
+            "booking_json": json.dumps({"showPrices": True, "currency": "ETB", "timezone": TZ, "arrivalNote": DEMO_CONTENT[key]["locations"][0]["arrival"], "liveAvailability": True}),
             "public_booking_enabled": 1,
             "sections": [{"section_id": f"{key}-{index}-{section_type}", "section_type": section_type, "order_index": index, "content_json": json.dumps(content)} for index, (section_type, content) in enumerate(section_rows, start=1)],
         }

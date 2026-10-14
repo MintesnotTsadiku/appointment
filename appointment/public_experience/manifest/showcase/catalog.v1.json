@@ -98,9 +98,9 @@
       "slug": "bloom-studio",
       "recipe": "bloom-hair",
       "heroRole": "hero.bloom",
-      "detailRole": "detail.bloom",
-      "heroAsset": "/assets/appointment/brand-experience/heroes/bloom-hair.webp",
-      "heroChecksum": "6afcd83ce024de66dbdd2c37394eadc4d1f5aad1be36119ce93b0cd767315994",
+      "detailRole": "story.bloom",
+      "heroAsset": "/assets/appointment/brand-experience/support/bloom-v3/hero.webp",
+      "heroChecksum": "422732d3db683e2c1957e0d9317b95549fb6bd163d2b881adfe7a4e8f52007b2",
       "benchmark": "docs/design-references/public-experience/v1/warm-vitality/full-page-01.webp",
       "supportAssets": [
         {
@@ -141,12 +141,430 @@
         {
           "viewport": "desktop",
           "asset": "/assets/appointment/brand-experience/template-gallery/bloom-hair-desktop.webp",
-          "checksum": "6e6d5f9b39f7aefbba3051c818cf57e30c2c8a75c3c990be958a25307865365f"
+          "checksum": "8d58035c4533a6d91299a5591120072d23bfc2b177f0e09f03d122ed05ec829d"
         },
         {
           "viewport": "mobile",
           "asset": "/assets/appointment/brand-experience/template-gallery/bloom-hair-mobile.webp",
-          "checksum": "893ce9410fdb9800b7762cdaacf1c40c56e682bfa1b8194c39fb3ecdfb79baaf"
+          "checksum": "e6a673ab6cf6033f091263cfacfdee29594b4dff93b8e0491721c1fe1912b677"
+        }
+      ],
+      "templateAssets": [
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/after-m.avif",
+          "checksum": "737b2acb073c8d5628ca0f75c41b680d9cbaadd7240e057dfb714cc1a843ffd7"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/after-m.webp",
+          "checksum": "de1caf8096389644ebc3536d917d5b7b0752419bb8bf31f4c72e5da25bb8ac45"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/after-w560.avif",
+          "checksum": "096c09e76437d87e6145391898a689ed0834fb54fcf24bc2fd0b7221bd1aa89b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/after-w560.webp",
+          "checksum": "bd3ba393b0bfa31b04343badf5127ad39d3fe215d6946a940dfd20aec0e50dbc"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/after.avif",
+          "checksum": "0efdac3ba9554c75da13b32ce5a96f80ac3f1089438311b0f503cf137c6f753d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/after.webp",
+          "checksum": "4589d1fa9ccb972953b6d00e52f62244e844c3c88a8489952ffd8f8c6ed3985f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/band-m.avif",
+          "checksum": "46bd686961e74fcb860eb794e6f25360df536f4b6aae62a1e21340a53c5bd9f1"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/band-m.webp",
+          "checksum": "e49e9b0b3e3872d507c0f137b58bf95279845413618856b89452833a2a3ea1ab"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/band-night-m.avif",
+          "checksum": "72f255d04a36ae5610c1eaf20a0b5148dfeba94f3093b021074e9fabf3a13452"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/band-night-m.webp",
+          "checksum": "7d7f5189243264082542f75d28bce730e50f0fe154ee1e5c862c9f8be97f2064"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/band-night-w640.avif",
+          "checksum": "b8481c193f2d4f548ab0076d4b6aa4437300e00d19b459415455c801a20187f9"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/band-night-w640.webp",
+          "checksum": "1bc338b4b15a76cf88b4c7445ef0a4e98c2c9b9bcaba36ef58c5ff051e81a463"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/band-night-w960.avif",
+          "checksum": "79c243cef0d737641ba7301450a7dffbce9a4a7cb7084b85ea56be4de6f4b3ea"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/band-night-w960.webp",
+          "checksum": "a0997daf88f4fd5aac8db04811777359f643154266aa99e01f05a88cecdc4614"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/band-night.avif",
+          "checksum": "72d39369100c1ea073bb849ace06cace0e61807fe176e8fd9a979d35a5b575ff"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/band-night.webp",
+          "checksum": "8dc7db0b77815c5022a303e20142ba47b009df4837253864f2f67523addd9315"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/band-w640.avif",
+          "checksum": "bcda32f93b90e2fcef579533ca695cb18955f7cc09941b045c15ed5ca9682832"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/band-w640.webp",
+          "checksum": "40497268b0292097c64c576f14ca88614a1097ee759de4c1c06862eb29db4baf"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/band-w960.avif",
+          "checksum": "06012789b8e3b9af0d331f06d95c0e9ffe16d9a9e7f25a89c7c704d7abebbf8f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/band-w960.webp",
+          "checksum": "5070b332d7faaeaf964f844804417066b23b8120d4f86e7fa7fbcf1125046b8c"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/band.avif",
+          "checksum": "56fca6b6f6bc905de3e98bbd85d6dcf4e4ac21c372361426d3c357e2d21ae0b5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/band.webp",
+          "checksum": "d5e56dbf8989492eef9ae0479aaa3b1d5e554350feee2b2a3d281e07fbf4bd58"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/before-m.avif",
+          "checksum": "6519947c96c5bdbe3455d22cfc9891bee69f909be53fc66a243c34f9717c90b0"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/before-m.webp",
+          "checksum": "aaaf12c3fad5633bef4e1a1632dd007a236b8ba7c1b788d558267ec2aab653d3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/before-w560.avif",
+          "checksum": "a5db3d1cc3c8d5ba0ab196544813d851ca304dd25cedad631edb0da6e40e0ceb"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/before-w560.webp",
+          "checksum": "859f148951d835dc72dfcd72b693b0fc489e1013173be7b8608a7a79279828c5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/before.avif",
+          "checksum": "2f4acba1e1c54f61c141423c7bc4b72be2c5d5a383788a02ce355c187cfa5e13"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/before.webp",
+          "checksum": "63f64c15f593b75f0540bf53fe70f0ef55bab275b4cfa7735f991709dcf39f8f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/hero-m.avif",
+          "checksum": "6f66da41678b07c04b0421dec90267d5f713651086a7998f626ff21a6e58deb4"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/hero-m.webp",
+          "checksum": "68d9a7f008410779f1f8c62b0099b4d3b5513ab5d42a4695b4898791be60fb87"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/hero-night-m.avif",
+          "checksum": "802487be35a060d4276d990f7e0437c42a24295693834b12ce65018cc7e48a9c"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/hero-night-m.webp",
+          "checksum": "4fcf219ba7296740d0701885bd28c6ca58057d2d909de7536b07e66cfb0b02fb"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/hero-night-w640.avif",
+          "checksum": "8854fb08dc05a65f4dce19c6142dd0217d315351359614435591d3289368c4ed"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/hero-night-w640.webp",
+          "checksum": "d6911709507fe3b512cd31f6a2dc3285ad1697cc81dd3d26903ffab8418b3759"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/hero-night-w960.avif",
+          "checksum": "ca74930029f099f6e01a2f8c1763151e9b508cbf530986aefa965d8769b8d81e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/hero-night-w960.webp",
+          "checksum": "7609fa2bb70c08cfa97ae59d0a5f959ff845678193d37342ec8a5b812bde7f26"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/hero-night.avif",
+          "checksum": "0204dc0fdf41e34792844dc6653dafb8e6f6ae0a5b363d913fafa965d8e4af74"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/hero-night.webp",
+          "checksum": "68b2fdc0682613e3df8961e6a86908a7acace51105ea7f61605d1f59bd9c2a0e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/hero-w640.avif",
+          "checksum": "430bb1049327e665bc5f93f71f745bee390a955e1b0fecf145fe72695c25b9f6"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/hero-w640.webp",
+          "checksum": "e639362893ebf2e5c56d33d1fc46d0078eba6ba1567461197f979d65ff0eec66"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/hero-w960.avif",
+          "checksum": "8dd2afc2c16dc498f230f73b4c4ef0730b84aab81b3bedc72475933fec636f43"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/hero-w960.webp",
+          "checksum": "52367729638e59dbb17cf79dd8433231cb43fed1a640cab6e85cc8ac519d8254"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/hero.avif",
+          "checksum": "43d7631825619c8171ad1a93837e58664c211d031fe642aa2fcb8c685ad2a4c9"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/hero.webp",
+          "checksum": "422732d3db683e2c1957e0d9317b95549fb6bd163d2b881adfe7a4e8f52007b2"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/look1-m.avif",
+          "checksum": "81782f5c86634ff71906d2ba00bb6dbb6493f5866195fe6b32efbe984f1c8cbd"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/look1-m.webp",
+          "checksum": "ec696052c7636f8167ea91aab3c7b1a5c0e899c389fbd0d55959a7379815bdd5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/look1-w560.avif",
+          "checksum": "09fb464abe82f2d30107155c116422644bc258e7c2b158569d56acc76ae57955"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/look1-w560.webp",
+          "checksum": "ac7424ed299d5df1d4ea744c165df6161c90676be8f9623d0a8891e7898986e6"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/look1.avif",
+          "checksum": "be882a693a24ab713c7c0658ef48f8e53f1260b43f2401ed03a1273054655791"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/look1.webp",
+          "checksum": "e1ae80c7a0d3fc0f02f603606b5ce13fea17f4558895e33f8a30652f102a21c8"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/look2-m.avif",
+          "checksum": "f784dec304877bb073d50db7ff7ad126a36041366978dffb53bdd1f843d61811"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/look2-m.webp",
+          "checksum": "625e593ee974d961855e32d5032553f87c911d0d12e1cd2e33aef747e6be8f00"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/look2-w560.avif",
+          "checksum": "f793e788521f8d88bfd6e2d5a5124668fd4c65ec22002cf61ac38ec0bf810606"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/look2-w560.webp",
+          "checksum": "b801303f7a8d946dca765dd0e49bf464ae1bde6c80772a217ec0a20bb0d42ee1"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/look2.avif",
+          "checksum": "213e5056864ade1f6403543d213ce10189e03008c3c7f7d9e91ab550c0a05a0c"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/look2.webp",
+          "checksum": "14cbb28c54ea66755ae790c5d14ceff9e8d7f4cc6b8a65c1b914ff3ea6f6fc15"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/look3-m.avif",
+          "checksum": "80ec34b7b32c1e23312cea7da0cbb1a0296b17509d68ce9197decbd74031eb36"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/look3-m.webp",
+          "checksum": "7d74f5e4e277cc8450f4876edcf1ab8eaca632f11beb77f6b1816eae6cb93a6c"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/look3-w560.avif",
+          "checksum": "aea6048109a1866784f4b6459c8f689056cfd40ce19494cfeb4cce3827bb28bb"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/look3-w560.webp",
+          "checksum": "5c86aabab3530e4818c2fe0eb82e5e7bc619a4ed2499135e06229b65e394ce1b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/look3.avif",
+          "checksum": "5a124dc4b032253394675e904ee95c1a49e26895c27af88a62d8382d8e60b0f5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/look3.webp",
+          "checksum": "889c202db060f876734414eccd03a9b103e33aef5fa781b41d293c9492b9d3f1"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/menu1-m.avif",
+          "checksum": "0931e34a36fac1a98b218f3976ee6160198c90f9ee189fb65013da94a88942f3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/menu1-m.webp",
+          "checksum": "9f551cb430caf8c51013f5e3177d39f4bf8176f9c20bd4842e2f8c9aa47db362"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/menu1-w480.avif",
+          "checksum": "a8eca8bfa63fef52e7308fa899bc5906b935fd87513dd8f6820c4659a64258e2"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/menu1-w480.webp",
+          "checksum": "6c1e59a5066ecfe8727b513e4942498d76458c8eba6b890d23db7d637dc272b5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/menu1.avif",
+          "checksum": "4a7954fd8a9acb251ffd3188d57839c456a803643b9543db611acbe76ac842e2"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/menu1.webp",
+          "checksum": "d03b498264b27056ade4370f95a0870df3e7491ae5458eb9d2415a1874332d27"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/menu2-m.avif",
+          "checksum": "9a9a02f8793364de39a64ee40bf2d7421dd645ce8432c76dd2ab58e729e7c943"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/menu2-m.webp",
+          "checksum": "83505a83069e4276850db03c8fc3e1107ce56f5d0e62130fbf73d3691c6e307f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/menu2-w480.avif",
+          "checksum": "97903f3ca059b521300ca23ca3faf6ae6b5d93dbbdf29fd77dbe93b6e3c2819d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/menu2-w480.webp",
+          "checksum": "761ae8717344766a99d7e38c61c1fa70f37847970a70edeb4fa1cb30c83e537b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/menu2.avif",
+          "checksum": "2d516afc055da83f605a09e22ea0f2b8ea0555c93866b4b83ab04f0bb41685dc"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/menu2.webp",
+          "checksum": "c6d5c20aab0114112884b4af91aba8e4220d663b7a83ad920393ff62cec241fe"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/menu3-m.avif",
+          "checksum": "d1caf0e0acd259e5f5f9518ee758a3fee2528f62a0fc751ae83863a73dd79e10"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/menu3-m.webp",
+          "checksum": "a6de0cd9597062fb5e07c4148d1a6e9412cd9b8f523545c7f57cb9355f596670"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/menu3-w480.avif",
+          "checksum": "a33752fc23ecdae222b317fa65ea5f326c5f75f6aa92e60ac390db722f67753e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/menu3-w480.webp",
+          "checksum": "91f6421c486fcdbb9a68e791e3dbeaaa919182255e3acb7c5d444cbf09b9478d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/menu3.avif",
+          "checksum": "7e5bb66a191a4a7039c7bd759c57ea5b2c2bd95e21b60cae905ae4c67f49668a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/menu3.webp",
+          "checksum": "bd8b3beec349348db8dd0755cbcec8d873dff9f40e57afb8e25ac7a48151feb8"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/room1-m.avif",
+          "checksum": "4d9e06b634c4873e506dfdf7a25af99ec64e6923313f49a86008c249ff7bf6a8"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/room1-m.webp",
+          "checksum": "ffec11e92240ce10e3753b6618d006beb0961a015a3c09184197a8f2cae6e0d3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/room1-w640.avif",
+          "checksum": "31c76f7f82bcc739d1e52a73eccc905f4ca6d3f1fc10b8e56598130d951b95fd"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/room1-w640.webp",
+          "checksum": "9d2eca633380491057f99d95ca9aa639048f694d93033a41be6f5820cbd2712d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/room1-w960.avif",
+          "checksum": "28e965bc70f4dba45f63907e34a6233c6866a811c7ec9826c668fd6706bdfd11"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/room1-w960.webp",
+          "checksum": "f05966463f304e1590e7511411d238ceb542ccd9f8e62c0b1466f8da7b5d3f3c"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/room1.avif",
+          "checksum": "c1b1f92bf70ef8dd2ddc177cbc52c717866783ed79d0a2ff9b8622e70002c769"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/room1.webp",
+          "checksum": "8f46454882471046e092cd243936f039a9ec788a347d29db76571d8a8f3f24f8"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/room2-m.avif",
+          "checksum": "c831bf577a5e049a6059994651918e8e898db2f390550c81c0d5c27a4ab67779"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/room2-m.webp",
+          "checksum": "9f19f80a92db5515d31955c9aeaf01fcae03b61761122d279661f54072a230fe"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/room2-w640.avif",
+          "checksum": "239bded809aaefb7a673d10dd15eab697b4fd0038936898fd28c90d369bb6f8a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/room2-w640.webp",
+          "checksum": "a61de8f74ec2d3403d8b4a1c2bb2ba9c8e6be518c38cdd681bdde113701c5400"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/room2-w960.avif",
+          "checksum": "6cbd49efe710a21d77ca118de4598de350511ca3ca0fbfbe415de10eb884d796"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/room2-w960.webp",
+          "checksum": "aa13c3405664166f23ddf9a79c73caaaf925b80a48d23dfe6d95683364d18d0d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/room2.avif",
+          "checksum": "3838333351bbac412a07c7daa8d477bb0469954ee607c8f3ba4791e9b9c4744b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/room2.webp",
+          "checksum": "f62f6fa73530099c5c41256503437c588b16f73ff8e6a076937e0cb50725c9c4"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/story-m.avif",
+          "checksum": "fb810d7ed8a9072ba02583022025516b3633d14f8963106f509a3af91d40daac"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/story-m.webp",
+          "checksum": "6be15b6f81f8e4af226e05f6a56d5dee4e75b6c3dc217fa4fb71b464959f282f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/story-w640.avif",
+          "checksum": "4c5c41ff1fe8377b429ac1a351c482f6e658e186c49d2babdd1c08688b3ea42d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/story-w640.webp",
+          "checksum": "75311ca5dabacbe775bad929db45180ccddd7dd94feaa89fad4f98ebe2223f58"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/story-w960.avif",
+          "checksum": "dcdd66170acffa5aaa61376bba3c9f46ebf8297093feb41bb70d7451beb7b05c"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/story-w960.webp",
+          "checksum": "79fd832c0a9ed81d48369531bd15878606d20566af5858cbc140c2df5e19b177"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/story.avif",
+          "checksum": "313ee9e7edb31ee483b629f9039b5e262a730b263f238905cd23423e352538a5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/bloom-v3/story.webp",
+          "checksum": "c6c64df8f0043e345e36d54844f6aaff6736ce6dce604b2e040a0a3b3e2aea41"
         }
       ]
     },

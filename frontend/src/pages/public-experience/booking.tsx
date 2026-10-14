@@ -7,6 +7,7 @@ import { publicRootForSlug } from "@/public-experience/routes";
 import { getTemplatePackage } from "@/public-experience/templates/registry";
 import type { PublishedSnapshot } from "@/public-experience/types";
 import { PublicLoading, PublicUnavailable } from "@/public-experience/PublicStates";
+import { previewState } from "@/components/booking-states";
 import "@/public-experience/platform.css";
 
 function BookingHandoff({ snapshot, slug }: { snapshot: PublishedSnapshot; slug?: string }) {
@@ -15,7 +16,10 @@ function BookingHandoff({ snapshot, slug }: { snapshot: PublishedSnapshot; slug?
   const siteRoot = publicRootForSlug(slug);
   const publicRoot = snapshot.locale && snapshot.locale !== "en" ? `${siteRoot}/${snapshot.locale}` : siteRoot;
   const template = getTemplatePackage(snapshot.compiledDesign.layout.rendererKey, snapshot.compiledDesign.layout.rendererVersion);
-  if (isLoading) return <PublicLoading config={config} mode={theme.mode} />;
+  if (isLoading || previewState() === "loading") {
+    const Loading = template?.Loading;
+    return Loading ? <div style={rootStyle}><Loading mode={theme.mode} locale={snapshot.locale} /></div> : <PublicLoading config={config} mode={theme.mode} />;
+  }
   if (error) return <PublicUnavailable kind="error" config={config} mode={theme.mode} onRetry={refresh} />;
   if (!template) return <PublicUnavailable kind="unsupported" config={config} mode={theme.mode} />;
   const BookingTemplate = template.Booking;

@@ -11,7 +11,7 @@ ASSETS = "/assets/appointment/brand-experience/"
 SLUG = "yared-counselling"
 OWNER = "yared.tesfaye.counselling@example.test"
 BUSINESS = "Yared Tesfaye Counselling"
-PHONE = "000 000 0106"
+PHONE = "+251 11 000 0106"
 OFFICE_ADDRESS = "Cameroon Street, Tsehay Building, second floor, office 204"
 # A fictional Google Meet room in the real link shape. Only booked customers get it (docs/growth/ONLINE_LOCATIONS.md).
 MEETING_LINK = "https://meet.google.com/ytc-room-one"
@@ -143,7 +143,7 @@ def sections(starter, provider, places, services):
 
 SHOWCASE = IndependentShowcase(
     key="ergata",
-    version=1,
+    version=2,
     business=BUSINESS,
     owner_email=OWNER,
     owner_name=("Yared", "Tesfaye"),

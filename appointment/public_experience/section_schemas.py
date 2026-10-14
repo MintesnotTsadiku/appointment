@@ -222,8 +222,10 @@ def _providers(content: Mapping[str, object], allowed: Iterable[str]) -> list[Va
 
 
 def _process(content: Mapping[str, object]) -> list[ValidationIssue]:
-    issues = _common(content, {"title", "intro", "items"})
-    issues.extend(_record_list(content, "items", {"step", "title", "description"}, max_items=12))
+    """Steps of a visit. An optional section photo, and an optional photo per step (sticky story scenes)."""
+    issues = _common(content, {"title", "intro", "items", *IMAGE_KEYS})
+    issues.extend(_image(content, ""))
+    issues.extend(_record_list(content, "items", {"step", "title", "description", *IMAGE_KEYS}, max_items=12))
     values = content.get("items")
     if isinstance(values, list):
         for index, item in enumerate(values):
@@ -234,6 +236,23 @@ def _process(content: Mapping[str, object]) -> list[ValidationIssue]:
                 issues.append(_issue(f"items[{index}].step", "bounds", step, "an integer from 1 to 12", "Number each step."))
             issues.extend(_localized(item.get("title"), f"items[{index}].title"))
             issues.extend(_localized(item.get("description"), f"items[{index}].description"))
+            issues.extend(_image(item, f"items[{index}]"))
+    return issues
+
+
+def _gallery(content: Mapping[str, object]) -> list[ValidationIssue]:
+    """Up to twelve photos with a description and an optional caption. Every item needs its photo."""
+    issues = _common(content, {"title", "intro", "items"})
+    issues.extend(_record_list(content, "items", {"caption", *IMAGE_KEYS}, max_items=12))
+    values = content.get("items")
+    if isinstance(values, list):
+        for index, item in enumerate(values):
+            if not isinstance(item, dict):
+                continue
+            if item.get("image") is None:
+                issues.append(_issue(f"items[{index}].image", "required", None, "a photo", "Add a photo or remove this item."))
+            issues.extend(_image(item, f"items[{index}]"))
+            issues.extend(_localized(item.get("caption"), f"items[{index}].caption", required=False, max_length=240))
     return issues
 
 
@@ -291,7 +310,8 @@ def _notice(content: Mapping[str, object]) -> list[ValidationIssue]:
 
 
 def _testimonials(content: Mapping[str, object]) -> list[ValidationIssue]:
-    issues = _common(content, {"title", "intro", "items"})
+    issues = _common(content, {"title", "intro", "items", *IMAGE_KEYS})
+    issues.extend(_image(content, ""))
     issues.extend(_record_list(content, "items", {"quote", "attribution", "role", "consent"}, max_items=12))
     values = content.get("items")
     if isinstance(values, list):
@@ -377,7 +397,8 @@ def _faq(content: Mapping[str, object]) -> list[ValidationIssue]:
 
 
 def _contact(content: Mapping[str, object], allowed: Iterable[str]) -> list[ValidationIssue]:
-    issues = _common(content, {"title", "body", "phone", "email", "action"})
+    issues = _common(content, {"title", "body", "phone", "email", "action", *IMAGE_KEYS})
+    issues.extend(_image(content, ""))
     if content.get("phone") is not None:
         issues.extend(_string(content.get("phone"), "phone", max_length=32))
     if content.get("email") is not None:
@@ -438,6 +459,7 @@ def validate_typed_section(
         "contact": lambda: _contact(content, allowed_intents),
         "booking_cta": lambda: _booking(content, allowed_intents),
         "footer": lambda: _footer(content, allowed_intents),
+        "gallery": lambda: _gallery(content),
     }
     validator = validators.get(section_type)
     if validator is None:

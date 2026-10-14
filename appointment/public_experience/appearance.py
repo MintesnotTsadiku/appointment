@@ -29,4 +29,5 @@ def options(recipe):
         fonts.append({"key": row["key"], "label": row["label"], "roles": document["roles"],
                       "fontAssets": document["fontAssets"], "fallbacks": document["fallbacks"],
                       "scripts": document["supportedScripts"]})
-    return {"palettes": palettes, "fonts": fonts}
+    motion = recipe.adjustments.get("motion") or {}
+    return {"palettes": palettes, "fonts": fonts, "motion": list(motion.get("choices") or [])}

@@ -24,6 +24,8 @@ interface Website {
   owner: string; site: string; title: string; slug: string; recipeKey: string; draftVersion: number; url: string;
   setup: { step?: string; features?: string[]; preferences?: Record<string, string> }; status: string; sections: Section[];
   brandInputs: Record<string, string>;
+  /** Booking options of the public website; live availability is off until the owner turns it on. */
+  booking?: { liveAvailability?: boolean };
   appearanceOptions: AppearanceOptions;
   identityAssets: Record<string, string | null>;
   capabilities: Array<{ capability: string; active: boolean }>;
@@ -74,6 +76,8 @@ export default function WebsiteSetup() {
   const [fullPreview, setFullPreview] = useState(false);
   const [accent, setAccent] = useState("");
   const [presentationDensity, setPresentationDensity] = useState("comfortable");
+  const [motion, setMotion] = useState("");
+  const [liveAvailability, setLiveAvailability] = useState(false);
   const [identityKind, setIdentityKind] = useState("logo_primary");
   const [identityFile, setIdentityFile] = useState<File | null>(null);
   const [imageConsent, setImageConsent] = useState(false);
@@ -97,6 +101,7 @@ export default function WebsiteSetup() {
     setFont(next.brandInputs.fontChoice || next.brandInputs.font_choice || "default");
     setFeatures(next.setup.features || []); setAccent(next.brandInputs.accentColor || next.brandInputs.accent_color || "");
     setPresentationDensity(next.brandInputs.presentationDensity || next.brandInputs.presentation_density || "comfortable");
+    setMotion(next.brandInputs.motion || ""); setLiveAvailability(Boolean(next.booking?.liveAvailability));
     const preferences = next.setup.preferences;
     if (preferences) {
       setIndustry(preferences.industry || ""); setMood(preferences.mood || "");
@@ -128,11 +133,11 @@ export default function WebsiteSetup() {
   useEffect(() => {
     if (!previewSite) return;
     let active = true;
-    const timer = window.setTimeout(() => callMethod<PublishedSnapshot>(api + "preview_website_setup", { site: previewSite, expected_version: previewVersion, brand_inputs: { paletteChoice: palette, fontChoice: font, accentColor: accent || null, presentationDensity } })
+    const timer = window.setTimeout(() => callMethod<PublishedSnapshot>(api + "preview_website_setup", { site: previewSite, expected_version: previewVersion, brand_inputs: { paletteChoice: palette, fontChoice: font, accentColor: accent || null, presentationDensity, ...(motion ? { motion } : {}) } })
       .then(next => { if (active) setSnapshot(next); })
       .catch((reason: Error) => { if (active) setError(reason.message); }), 150);
     return () => { active = false; window.clearTimeout(timer); };
-  }, [previewSite, previewVersion, palette, font, accent, presentationDensity]);
+  }, [previewSite, previewVersion, palette, font, accent, presentationDensity, motion]);
 
   useEffect(() => {
     const selected = context.owners.find((row) => row.name === owner);
@@ -192,7 +197,8 @@ export default function WebsiteSetup() {
     }
     const next = await callMethod<Website>(api + "save_website_setup", {
       site: site.site, expected_version: site.draftVersion, step, title, sections: savedSections(sections), features,
-      brand_inputs: { ...site.brandInputs, presentationDensity, palette_choice: undefined, font_choice: undefined, paletteChoice: palette, fontChoice: font, accentColor: accent || undefined, accent_color: undefined },
+      brand_inputs: { ...site.brandInputs, presentationDensity, palette_choice: undefined, font_choice: undefined, paletteChoice: palette, fontChoice: font, accentColor: accent || undefined, accent_color: undefined, ...(motion ? { motion } : {}) },
+      booking: { liveAvailability },
     });
     adopt(next); setSnapshot(null); setNotice(t("staff.website.setup.draftSaved"));
     return next;
@@ -241,7 +247,7 @@ export default function WebsiteSetup() {
         context={{ site: site.site, limits: site.mediaLimits || { maxBytes: 5 * 1024 * 1024, types: ["image/jpeg", "image/png", "image/webp"] }, derived: site.derivedFormats || {} }}
         dirty={JSON.stringify(savedSections(sections)) !== JSON.stringify(savedSections(site.sections))} fullPreview={fullPreview}
         onClosePreview={() => setFullPreview(false)} onChange={setSections} /> : <div className={step === "brand" ? "appearance-workspace" : ""}><section className={step === "brand" ? "appearance-controls space-y-4" : "space-y-4"}>
-        {step === "brand" && <><div className="appearance-template"><img src={context.catalog.find(row => row.key === site.recipeKey)?.thumbnail} alt=""/><div><strong>{context.catalog.find(row => row.key === site.recipeKey)?.label || site.recipeKey}</strong><p>{t("staff.website.setup.selectedTemplate")}</p></div></div><label className="block">{t("staff.website.setup.websiteName")}<input className={field} value={title} onChange={(event) => setTitle(event.target.value)} /></label><AppearanceCards options={site.appearanceOptions} palette={palette} font={font} disabled={busy} onPalette={key => { setPalette(key); setAccent(""); setResetUndo(null); }} onFont={key => { setFont(key); setResetUndo(null); }} onReset={() => { setResetUndo({ palette, font, accent }); setPalette("default"); setFont("default"); setAccent(""); }} onUndo={resetUndo ? () => { setPalette(resetUndo.palette); setFont(resetUndo.font); setAccent(resetUndo.accent); setResetUndo(null); } : undefined}/><label className="block">{t("staff.website.setup.accentColor")}<input className={field} value={accent} onChange={(event) => setAccent(event.target.value)} placeholder="#26765b" /></label><label className="block">{t("staff.publicExperience.density")}<AppearanceSelect aria-label={t("staff.publicExperience.density")} value={presentationDensity} onChange={(event) => setPresentationDensity(event.target.value)}><option value="comfortable">{t("staff.publicExperience.densityComfortable")}</option><option value="spacious">{t("staff.publicExperience.densitySpacious")}</option></AppearanceSelect></label><p>{t("staff.website.setup.templateNote")}</p>
+        {step === "brand" && <><div className="appearance-template"><img src={context.catalog.find(row => row.key === site.recipeKey)?.thumbnail} alt=""/><div><strong>{context.catalog.find(row => row.key === site.recipeKey)?.label || site.recipeKey}</strong><p>{t("staff.website.setup.selectedTemplate")}</p></div></div><label className="block">{t("staff.website.setup.websiteName")}<input className={field} value={title} onChange={(event) => setTitle(event.target.value)} /></label><AppearanceCards options={site.appearanceOptions} palette={palette} font={font} disabled={busy} onPalette={key => { setPalette(key); setAccent(""); setResetUndo(null); }} onFont={key => { setFont(key); setResetUndo(null); }} onReset={() => { setResetUndo({ palette, font, accent }); setPalette("default"); setFont("default"); setAccent(""); }} onUndo={resetUndo ? () => { setPalette(resetUndo.palette); setFont(resetUndo.font); setAccent(resetUndo.accent); setResetUndo(null); } : undefined}/><label className="block">{t("staff.website.setup.accentColor")}<input className={field} value={accent} onChange={(event) => setAccent(event.target.value)} placeholder="#26765b" /></label><label className="block">{t("staff.publicExperience.density")}<AppearanceSelect aria-label={t("staff.publicExperience.density")} value={presentationDensity} onChange={(event) => setPresentationDensity(event.target.value)}><option value="comfortable">{t("staff.publicExperience.densityComfortable")}</option><option value="spacious">{t("staff.publicExperience.densitySpacious")}</option></AppearanceSelect></label>{site.appearanceOptions.motion?.length ? <label className="block">{t("staff.website.setup.motion")}<AppearanceSelect aria-label={t("staff.website.setup.motion")} value={motion || "standard"} onChange={(event) => setMotion(event.target.value)}>{site.appearanceOptions.motion.map((value) => <option key={value} value={value}>{t(`staff.website.setup.motionLevel.${value}`)}</option>)}</AppearanceSelect><span className="mt-1 block text-sm text-muted-foreground">{t("staff.website.setup.motionHelp")}</span></label> : null}<p>{t("staff.website.setup.templateNote")}</p>
           <details className="appearance-identity"><summary>{t("staff.website.setup.logoFavicon")}</summary><fieldset className="space-y-3 rounded-xl border p-4"><legend className="sr-only">{t("staff.website.setup.logoFavicon")}</legend>
             <label className="block">{t("staff.website.setup.identityType")}<AppearanceSelect aria-label={t("staff.website.setup.identityType")} value={identityKind} onChange={(event) => setIdentityKind(event.target.value)}><option value="logo_primary">{t(identityKeys.logo_primary)}</option><option value="logo_compact">{t(identityKeys.logo_compact)}</option><option value="favicon">{t(identityKeys.favicon)}</option></AppearanceSelect></label>
             <label className="block">{t("staff.website.setup.identityImage")}<input ref={identityInput} className={field} type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => { setIdentityFile(event.target.files?.[0] || null); setImageConsent(false); }} /></label>
@@ -258,7 +264,7 @@ export default function WebsiteSetup() {
             })}>{t("staff.website.setup.uploadIdentity")}</button>
             {Object.entries(site.identityAssets || {}).filter(([, url]) => url).map(([kind, url]) => <figure key={kind}><img src={url || undefined} alt={fill(t("staff.website.setup.identityPreviewAlt"), identityKeys[kind] ? t(identityKeys[kind]) : kind.replace(/_/g, " "))} className="h-16 w-16 object-contain" /><figcaption>{identityKeys[kind] ? t(identityKeys[kind]) : kind.replace(/_/g, " ")}</figcaption></figure>)}
           </fieldset></details></>}
-        {step === "features" && <fieldset><legend>{t("staff.website.setup.websiteFeatures")}</legend>{["blog", "gallery", "newsletter"].map((value) => <AppearanceCheckbox key={value} checked={features.includes(value)} disabled={!site.capabilities.some((row) => row.capability === value && row.active)} onChange={(checked) => setFeatures((current) => checked ? [...current, value] : current.filter((item) => item !== value))}>{t(featureKeys[value])}</AppearanceCheckbox>)}<p>{t("staff.website.setup.newsletterNote")}</p><Link to="/settings/website/newsletter">{t("staff.website.setup.manageNewsletter")}</Link></fieldset>}
+        {step === "features" && <fieldset><legend>{t("staff.website.setup.websiteFeatures")}</legend>{["blog", "gallery", "newsletter"].map((value) => <AppearanceCheckbox key={value} checked={features.includes(value)} disabled={!site.capabilities.some((row) => row.capability === value && row.active)} onChange={(checked) => setFeatures((current) => checked ? [...current, value] : current.filter((item) => item !== value))}>{t(featureKeys[value])}</AppearanceCheckbox>)}<p>{t("staff.website.setup.newsletterNote")}</p><Link to="/settings/website/newsletter">{t("staff.website.setup.manageNewsletter")}</Link><AppearanceCheckbox checked={liveAvailability} onChange={setLiveAvailability} qa="website-setup-live-availability">{t("staff.website.setup.liveAvailability")}</AppearanceCheckbox><p>{t("staff.website.setup.liveAvailabilityHelp")}</p></fieldset>}
         {(step === "readiness" || step === "published") && <><button className={button} disabled={busy} onClick={() => void run(async () => {
           const result = await callMethod<{ checks: typeof readiness }>(api + "website_setup_readiness", { site: site.site, expected_version: site.draftVersion }); setReadiness(result.checks);
         })}>{t("staff.publicExperience.checkReadiness")}</button><ul>{readiness.map((row) => <li key={row.check}>{row.ok ? t("staff.website.setup.ready") : t("staff.manage.validation.warning")}: {row.check.replace(/_/g, " ")} {row.remediation}</li>)}</ul><button className={button} data-qa="website-publish" disabled={busy} onClick={() => void run(async () => { adopt(await callMethod<Website>(api + "publish_website_setup", { site: site.site, expected_version: site.draftVersion })); setNotice(t("staff.website.setup.published")); })}>{t("staff.publicExperience.publishRelease")}</button></>}

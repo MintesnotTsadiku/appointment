@@ -88,4 +88,10 @@ assert.equal(core.checkUpload({ size: 10, type: 'image/webp' }, limits), null);
 assert.equal(core.isOwnerUpload('/files/../private/files/a.webp'), false);
 assert.equal(core.isOwnerUpload('/files/section-a1.webp'), true);
 
+// A gallery item needs its own photo; other image slots fall back to the template's photo.
+const gallerySchema = { fields: [], list: { key: 'items', fields: [{ key: 'caption', kind: 'text', required: false, maxLength: 240 }], maxItems: 12, add: true, label: 'caption', image: true, imageRequired: true } };
+assert.deepEqual(plain(core.validateSection(gallerySchema, { items: [{ caption: { en: 'Braids' } }] })).map((issue) => `${issue.path}:${issue.code}`), ['items.0.image:imageRequired']);
+assert.deepEqual(plain(core.validateSection(gallerySchema, { items: [{ image: '/files/section-b2.webp', imageAlt: { en: 'Braids' } }] })), []);
+assert.deepEqual(plain(core.validateSection(gallerySchema, { items: [{ image: '/files/section-b2.webp' }] })).map((issue) => issue.code), ['altRequired']);
+
 console.log('website-editor: ok');

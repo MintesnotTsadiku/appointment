@@ -1,0 +1,498 @@
+{
+  "kind": "imagery",
+  "contract": "appointment-imagery.v1",
+  "key": "bloom-golden-hour",
+  "version": 1,
+  "assets": {
+    "hero.bloom": {
+      "src": "/assets/appointment/brand-experience/support/bloom-v3/hero.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/bloom-v3/hero-m.webp",
+      "alt": "A stylist finishes long knotless braids for a client by a sunlit window in a plum-walled Bole salon.",
+      "focalPoint": {
+        "x": 0.62,
+        "y": 0.45
+      },
+      "fit": "cover",
+      "width": 1536,
+      "height": 960,
+      "mime": "image/webp",
+      "checksum": "sha256:422732d3db683e2c1957e0d9317b95549fb6bd163d2b881adfe7a4e8f52007b2",
+      "provenance": {
+        "source": "generated",
+        "role": "Hero",
+        "license": "project-generated",
+        "review": "Codex image generation, 2026-10-15, Golden Hour art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 900,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "darkSrc": "/assets/appointment/brand-experience/support/bloom-v3/hero-night.webp",
+      "darkMobileSrc": "/assets/appointment/brand-experience/support/bloom-v3/hero-night-m.webp",
+      "checksums": {
+        "hero-m.avif": "sha256:6f66da41678b07c04b0421dec90267d5f713651086a7998f626ff21a6e58deb4",
+        "hero-m.webp": "sha256:68d9a7f008410779f1f8c62b0099b4d3b5513ab5d42a4695b4898791be60fb87",
+        "hero-night-m.avif": "sha256:802487be35a060d4276d990f7e0437c42a24295693834b12ce65018cc7e48a9c",
+        "hero-night-m.webp": "sha256:4fcf219ba7296740d0701885bd28c6ca58057d2d909de7536b07e66cfb0b02fb",
+        "hero-night-w640.avif": "sha256:8854fb08dc05a65f4dce19c6142dd0217d315351359614435591d3289368c4ed",
+        "hero-night-w640.webp": "sha256:d6911709507fe3b512cd31f6a2dc3285ad1697cc81dd3d26903ffab8418b3759",
+        "hero-night-w960.avif": "sha256:ca74930029f099f6e01a2f8c1763151e9b508cbf530986aefa965d8769b8d81e",
+        "hero-night-w960.webp": "sha256:7609fa2bb70c08cfa97ae59d0a5f959ff845678193d37342ec8a5b812bde7f26",
+        "hero-night.avif": "sha256:0204dc0fdf41e34792844dc6653dafb8e6f6ae0a5b363d913fafa965d8e4af74",
+        "hero-night.webp": "sha256:68b2fdc0682613e3df8961e6a86908a7acace51105ea7f61605d1f59bd9c2a0e",
+        "hero-w640.avif": "sha256:430bb1049327e665bc5f93f71f745bee390a955e1b0fecf145fe72695c25b9f6",
+        "hero-w640.webp": "sha256:e639362893ebf2e5c56d33d1fc46d0078eba6ba1567461197f979d65ff0eec66",
+        "hero-w960.avif": "sha256:8dd2afc2c16dc498f230f73b4c4ef0730b84aab81b3bedc72475933fec636f43",
+        "hero-w960.webp": "sha256:52367729638e59dbb17cf79dd8433231cb43fed1a640cab6e85cc8ac519d8254",
+        "hero.avif": "sha256:43d7631825619c8171ad1a93837e58664c211d031fe642aa2fcb8c685ad2a4c9"
+      }
+    },
+    "band.bloom": {
+      "src": "/assets/appointment/brand-experience/support/bloom-v3/band.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/bloom-v3/band-m.webp",
+      "alt": "An empty plum salon chair faces a round mirror ringed with bulbs in warm evening light.",
+      "focalPoint": {
+        "x": 0.62,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1600,
+      "height": 686,
+      "mime": "image/webp",
+      "checksum": "sha256:d5e56dbf8989492eef9ae0479aaa3b1d5e554350feee2b2a3d281e07fbf4bd58",
+      "provenance": {
+        "source": "generated",
+        "role": "Booking band",
+        "license": "project-generated",
+        "review": "Codex image generation, 2026-10-15, Golden Hour art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 900,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "darkSrc": "/assets/appointment/brand-experience/support/bloom-v3/band-night.webp",
+      "darkMobileSrc": "/assets/appointment/brand-experience/support/bloom-v3/band-night-m.webp",
+      "checksums": {
+        "band-m.avif": "sha256:46bd686961e74fcb860eb794e6f25360df536f4b6aae62a1e21340a53c5bd9f1",
+        "band-m.webp": "sha256:e49e9b0b3e3872d507c0f137b58bf95279845413618856b89452833a2a3ea1ab",
+        "band-night-m.avif": "sha256:72f255d04a36ae5610c1eaf20a0b5148dfeba94f3093b021074e9fabf3a13452",
+        "band-night-m.webp": "sha256:7d7f5189243264082542f75d28bce730e50f0fe154ee1e5c862c9f8be97f2064",
+        "band-night-w640.avif": "sha256:b8481c193f2d4f548ab0076d4b6aa4437300e00d19b459415455c801a20187f9",
+        "band-night-w640.webp": "sha256:1bc338b4b15a76cf88b4c7445ef0a4e98c2c9b9bcaba36ef58c5ff051e81a463",
+        "band-night-w960.avif": "sha256:79c243cef0d737641ba7301450a7dffbce9a4a7cb7084b85ea56be4de6f4b3ea",
+        "band-night-w960.webp": "sha256:a0997daf88f4fd5aac8db04811777359f643154266aa99e01f05a88cecdc4614",
+        "band-night.avif": "sha256:72d39369100c1ea073bb849ace06cace0e61807fe176e8fd9a979d35a5b575ff",
+        "band-night.webp": "sha256:8dc7db0b77815c5022a303e20142ba47b009df4837253864f2f67523addd9315",
+        "band-w640.avif": "sha256:bcda32f93b90e2fcef579533ca695cb18955f7cc09941b045c15ed5ca9682832",
+        "band-w640.webp": "sha256:40497268b0292097c64c576f14ca88614a1097ee759de4c1c06862eb29db4baf",
+        "band-w960.avif": "sha256:06012789b8e3b9af0d331f06d95c0e9ffe16d9a9e7f25a89c7c704d7abebbf8f",
+        "band-w960.webp": "sha256:5070b332d7faaeaf964f844804417066b23b8120d4f86e7fa7fbcf1125046b8c",
+        "band.avif": "sha256:56fca6b6f6bc905de3e98bbd85d6dcf4e4ac21c372361426d3c357e2d21ae0b5"
+      }
+    },
+    "story.bloom": {
+      "src": "/assets/appointment/brand-experience/support/bloom-v3/story.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/bloom-v3/story-m.webp",
+      "alt": "The salon at golden hour: plum chairs facing round bulb mirrors, wash basins and plants on a terrazzo floor.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1440,
+      "height": 960,
+      "mime": "image/webp",
+      "checksum": "sha256:c6c64df8f0043e345e36d54844f6aaff6736ce6dce604b2e040a0a3b3e2aea41",
+      "provenance": {
+        "source": "generated",
+        "role": "Story",
+        "license": "project-generated",
+        "review": "Codex image generation, 2026-10-15, Golden Hour art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 900,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "checksums": {
+        "story-m.avif": "sha256:fb810d7ed8a9072ba02583022025516b3633d14f8963106f509a3af91d40daac",
+        "story-m.webp": "sha256:6be15b6f81f8e4af226e05f6a56d5dee4e75b6c3dc217fa4fb71b464959f282f",
+        "story-w640.avif": "sha256:4c5c41ff1fe8377b429ac1a351c482f6e658e186c49d2babdd1c08688b3ea42d",
+        "story-w640.webp": "sha256:75311ca5dabacbe775bad929db45180ccddd7dd94feaa89fad4f98ebe2223f58",
+        "story-w960.avif": "sha256:dcdd66170acffa5aaa61376bba3c9f46ebf8297093feb41bb70d7451beb7b05c",
+        "story-w960.webp": "sha256:79fd832c0a9ed81d48369531bd15878606d20566af5858cbc140c2df5e19b177",
+        "story.avif": "sha256:313ee9e7edb31ee483b629f9039b5e262a730b263f238905cd23423e352538a5"
+      }
+    },
+    "room1.bloom": {
+      "src": "/assets/appointment/brand-experience/support/bloom-v3/room1.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/bloom-v3/room1-m.webp",
+      "alt": "The main studio from the door: a terrazzo reception counter with marigolds, plum chairs and round bulb mirrors in late sun.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1440,
+      "height": 960,
+      "mime": "image/webp",
+      "checksum": "sha256:8f46454882471046e092cd243936f039a9ec788a347d29db76571d8a8f3f24f8",
+      "provenance": {
+        "source": "generated",
+        "role": "Main room",
+        "license": "project-generated",
+        "review": "Codex image generation, 2026-10-15, Golden Hour art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 540,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "checksums": {
+        "room1-m.avif": "sha256:4d9e06b634c4873e506dfdf7a25af99ec64e6923313f49a86008c249ff7bf6a8",
+        "room1-m.webp": "sha256:ffec11e92240ce10e3753b6618d006beb0961a015a3c09184197a8f2cae6e0d3",
+        "room1-w640.avif": "sha256:31c76f7f82bcc739d1e52a73eccc905f4ca6d3f1fc10b8e56598130d951b95fd",
+        "room1-w640.webp": "sha256:9d2eca633380491057f99d95ca9aa639048f694d93033a41be6f5820cbd2712d",
+        "room1-w960.avif": "sha256:28e965bc70f4dba45f63907e34a6233c6866a811c7ec9826c668fd6706bdfd11",
+        "room1-w960.webp": "sha256:f05966463f304e1590e7511411d238ceb542ccd9f8e62c0b1466f8da7b5d3f3c",
+        "room1.avif": "sha256:c1b1f92bf70ef8dd2ddc177cbc52c717866783ed79d0a2ff9b8622e70002c769"
+      }
+    },
+    "room2.bloom": {
+      "src": "/assets/appointment/brand-experience/support/bloom-v3/room2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/bloom-v3/room2-m.webp",
+      "alt": "The quiet styling room: one chair, an oval brass mirror and a linen curtain glowing with late sun.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1440,
+      "height": 960,
+      "mime": "image/webp",
+      "checksum": "sha256:f62f6fa73530099c5c41256503437c588b16f73ff8e6a076937e0cb50725c9c4",
+      "provenance": {
+        "source": "generated",
+        "role": "Second room",
+        "license": "project-generated",
+        "review": "Codex image generation, 2026-10-15, Golden Hour art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 540,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "checksums": {
+        "room2-m.avif": "sha256:c831bf577a5e049a6059994651918e8e898db2f390550c81c0d5c27a4ab67779",
+        "room2-m.webp": "sha256:9f19f80a92db5515d31955c9aeaf01fcae03b61761122d279661f54072a230fe",
+        "room2-w640.avif": "sha256:239bded809aaefb7a673d10dd15eab697b4fd0038936898fd28c90d369bb6f8a",
+        "room2-w640.webp": "sha256:a61de8f74ec2d3403d8b4a1c2bb2ba9c8e6be518c38cdd681bdde113701c5400",
+        "room2-w960.avif": "sha256:6cbd49efe710a21d77ca118de4598de350511ca3ca0fbfbe415de10eb884d796",
+        "room2-w960.webp": "sha256:aa13c3405664166f23ddf9a79c73caaaf925b80a48d23dfe6d95683364d18d0d",
+        "room2.avif": "sha256:3838333351bbac412a07c7daa8d477bb0469954ee607c8f3ba4791e9b9c4744b"
+      }
+    },
+    "look1.bloom": {
+      "src": "/assets/appointment/brand-experience/support/bloom-v3/look1.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/bloom-v3/look1-m.webp",
+      "alt": "Long knotless braids with small gold cuffs, seen from behind in golden light.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.45
+      },
+      "fit": "cover",
+      "width": 880,
+      "height": 1100,
+      "mime": "image/webp",
+      "checksum": "sha256:e1ae80c7a0d3fc0f02f603606b5ce13fea17f4558895e33f8a30652f102a21c8",
+      "provenance": {
+        "source": "generated",
+        "role": "Lookbook",
+        "license": "project-generated",
+        "review": "Codex image generation, 2026-10-15, Golden Hour art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 750,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        560
+      ],
+      "checksums": {
+        "look1-m.avif": "sha256:81782f5c86634ff71906d2ba00bb6dbb6493f5866195fe6b32efbe984f1c8cbd",
+        "look1-m.webp": "sha256:ec696052c7636f8167ea91aab3c7b1a5c0e899c389fbd0d55959a7379815bdd5",
+        "look1-w560.avif": "sha256:09fb464abe82f2d30107155c116422644bc258e7c2b158569d56acc76ae57955",
+        "look1-w560.webp": "sha256:ac7424ed299d5df1d4ea744c165df6161c90676be8f9623d0a8891e7898986e6",
+        "look1.avif": "sha256:be882a693a24ab713c7c0658ef48f8e53f1260b43f2401ed03a1273054655791"
+      }
+    },
+    "look2.bloom": {
+      "src": "/assets/appointment/brand-experience/support/bloom-v3/look2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/bloom-v3/look2-m.webp",
+      "alt": "A fresh tapered cut with defined coils, seen from behind.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.4
+      },
+      "fit": "cover",
+      "width": 880,
+      "height": 1100,
+      "mime": "image/webp",
+      "checksum": "sha256:14cbb28c54ea66755ae790c5d14ceff9e8d7f4cc6b8a65c1b914ff3ea6f6fc15",
+      "provenance": {
+        "source": "generated",
+        "role": "Lookbook",
+        "license": "project-generated",
+        "review": "Codex image generation, 2026-10-15, Golden Hour art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 750,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        560
+      ],
+      "checksums": {
+        "look2-m.avif": "sha256:f784dec304877bb073d50db7ff7ad126a36041366978dffb53bdd1f843d61811",
+        "look2-m.webp": "sha256:625e593ee974d961855e32d5032553f87c911d0d12e1cd2e33aef747e6be8f00",
+        "look2-w560.avif": "sha256:f793e788521f8d88bfd6e2d5a5124668fd4c65ec22002cf61ac38ec0bf810606",
+        "look2-w560.webp": "sha256:b801303f7a8d946dca765dd0e49bf464ae1bde6c80772a217ec0a20bb0d42ee1",
+        "look2.avif": "sha256:213e5056864ade1f6403543d213ce10189e03008c3c7f7d9e91ab550c0a05a0c"
+      }
+    },
+    "look3.bloom": {
+      "src": "/assets/appointment/brand-experience/support/bloom-v3/look3.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/bloom-v3/look3-m.webp",
+      "alt": "A glossy silk press with soft movement, seen from behind.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.45
+      },
+      "fit": "cover",
+      "width": 880,
+      "height": 1100,
+      "mime": "image/webp",
+      "checksum": "sha256:889c202db060f876734414eccd03a9b103e33aef5fa781b41d293c9492b9d3f1",
+      "provenance": {
+        "source": "generated",
+        "role": "Lookbook",
+        "license": "project-generated",
+        "review": "Codex image generation, 2026-10-15, Golden Hour art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 750,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        560
+      ],
+      "checksums": {
+        "look3-m.avif": "sha256:80ec34b7b32c1e23312cea7da0cbb1a0296b17509d68ce9197decbd74031eb36",
+        "look3-m.webp": "sha256:7d74f5e4e277cc8450f4876edcf1ab8eaca632f11beb77f6b1816eae6cb93a6c",
+        "look3-w560.avif": "sha256:aea6048109a1866784f4b6459c8f689056cfd40ce19494cfeb4cce3827bb28bb",
+        "look3-w560.webp": "sha256:5c86aabab3530e4818c2fe0eb82e5e7bc619a4ed2499135e06229b65e394ce1b",
+        "look3.avif": "sha256:5a124dc4b032253394675e904ee95c1a49e26895c27af88a62d8382d8e60b0f5"
+      }
+    },
+    "menu1.bloom": {
+      "src": "/assets/appointment/brand-experience/support/bloom-v3/menu1.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/bloom-v3/menu1-m.webp",
+      "alt": "A stylist's hands lather coily hair at a black wash basin.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 900,
+      "height": 900,
+      "mime": "image/webp",
+      "checksum": "sha256:d03b498264b27056ade4370f95a0870df3e7491ae5458eb9d2415a1874332d27",
+      "provenance": {
+        "source": "generated",
+        "role": "Menu photo",
+        "license": "project-generated",
+        "review": "Codex image generation, 2026-10-15, Golden Hour art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 600,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        480
+      ],
+      "checksums": {
+        "menu1-m.avif": "sha256:0931e34a36fac1a98b218f3976ee6160198c90f9ee189fb65013da94a88942f3",
+        "menu1-m.webp": "sha256:9f551cb430caf8c51013f5e3177d39f4bf8176f9c20bd4842e2f8c9aa47db362",
+        "menu1-w480.avif": "sha256:a8eca8bfa63fef52e7308fa899bc5906b935fd87513dd8f6820c4659a64258e2",
+        "menu1-w480.webp": "sha256:6c1e59a5066ecfe8727b513e4942498d76458c8eba6b890d23db7d637dc272b5",
+        "menu1.avif": "sha256:4a7954fd8a9acb251ffd3188d57839c456a803643b9543db611acbe76ac842e2"
+      }
+    },
+    "menu2.bloom": {
+      "src": "/assets/appointment/brand-experience/support/bloom-v3/menu2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/bloom-v3/menu2-m.webp",
+      "alt": "Scissors and a comb at a precise cut line on defined coils.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 900,
+      "height": 900,
+      "mime": "image/webp",
+      "checksum": "sha256:c6d5c20aab0114112884b4af91aba8e4220d663b7a83ad920393ff62cec241fe",
+      "provenance": {
+        "source": "generated",
+        "role": "Menu photo",
+        "license": "project-generated",
+        "review": "Codex image generation, 2026-10-15, Golden Hour art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 600,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        480
+      ],
+      "checksums": {
+        "menu2-m.avif": "sha256:9a9a02f8793364de39a64ee40bf2d7421dd645ce8432c76dd2ab58e729e7c943",
+        "menu2-m.webp": "sha256:83505a83069e4276850db03c8fc3e1107ce56f5d0e62130fbf73d3691c6e307f",
+        "menu2-w480.avif": "sha256:97903f3ca059b521300ca23ca3faf6ae6b5d93dbbdf29fd77dbe93b6e3c2819d",
+        "menu2-w480.webp": "sha256:761ae8717344766a99d7e38c61c1fa70f37847970a70edeb4fa1cb30c83e537b",
+        "menu2.avif": "sha256:2d516afc055da83f605a09e22ea0f2b8ea0555c93866b4b83ab04f0bb41685dc"
+      }
+    },
+    "menu3.bloom": {
+      "src": "/assets/appointment/brand-experience/support/bloom-v3/menu3.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/bloom-v3/menu3-m.webp",
+      "alt": "A wooden comb parts thick natural hair for a scalp check.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 900,
+      "height": 900,
+      "mime": "image/webp",
+      "checksum": "sha256:bd8b3beec349348db8dd0755cbcec8d873dff9f40e57afb8e25ac7a48151feb8",
+      "provenance": {
+        "source": "generated",
+        "role": "Menu photo",
+        "license": "project-generated",
+        "review": "Codex image generation, 2026-10-15, Golden Hour art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 600,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        480
+      ],
+      "checksums": {
+        "menu3-m.avif": "sha256:d1caf0e0acd259e5f5f9518ee758a3fee2528f62a0fc751ae83863a73dd79e10",
+        "menu3-m.webp": "sha256:a6de0cd9597062fb5e07c4148d1a6e9412cd9b8f523545c7f57cb9355f596670",
+        "menu3-w480.avif": "sha256:a33752fc23ecdae222b317fa65ea5f326c5f75f6aa92e60ac390db722f67753e",
+        "menu3-w480.webp": "sha256:91f6421c486fcdbb9a68e791e3dbeaaa919182255e3acb7c5d444cbf09b9478d",
+        "menu3.avif": "sha256:7e5bb66a191a4a7039c7bd759c57ea5b2c2bd95e21b60cae905ae4c67f49668a"
+      }
+    },
+    "before.bloom": {
+      "src": "/assets/appointment/brand-experience/support/bloom-v3/before.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/bloom-v3/before-m.webp",
+      "alt": "A client seen from behind with natural, unstyled coily hair.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.45
+      },
+      "fit": "cover",
+      "width": 880,
+      "height": 1100,
+      "mime": "image/webp",
+      "checksum": "sha256:63f64c15f593b75f0540bf53fe70f0ef55bab275b4cfa7735f991709dcf39f8f",
+      "provenance": {
+        "source": "generated",
+        "role": "Before",
+        "license": "project-generated",
+        "review": "Codex image generation, 2026-10-15, Golden Hour art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 750,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        560
+      ],
+      "checksums": {
+        "before-m.avif": "sha256:6519947c96c5bdbe3455d22cfc9891bee69f909be53fc66a243c34f9717c90b0",
+        "before-m.webp": "sha256:aaaf12c3fad5633bef4e1a1632dd007a236b8ba7c1b788d558267ec2aab653d3",
+        "before-w560.avif": "sha256:a5db3d1cc3c8d5ba0ab196544813d851ca304dd25cedad631edb0da6e40e0ceb",
+        "before-w560.webp": "sha256:859f148951d835dc72dfcd72b693b0fc489e1013173be7b8608a7a79279828c5",
+        "before.avif": "sha256:2f4acba1e1c54f61c141423c7bc4b72be2c5d5a383788a02ce355c187cfa5e13"
+      }
+    },
+    "after.bloom": {
+      "src": "/assets/appointment/brand-experience/support/bloom-v3/after.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/bloom-v3/after-m.webp",
+      "alt": "The same client seen from behind after a silk press, with long, sleek hair.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.45
+      },
+      "fit": "cover",
+      "width": 880,
+      "height": 1100,
+      "mime": "image/webp",
+      "checksum": "sha256:4589d1fa9ccb972953b6d00e52f62244e844c3c88a8489952ffd8f8c6ed3985f",
+      "provenance": {
+        "source": "generated",
+        "role": "After",
+        "license": "project-generated",
+        "review": "Codex image generation, 2026-10-15, Golden Hour art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 750,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        560
+      ],
+      "checksums": {
+        "after-m.avif": "sha256:737b2acb073c8d5628ca0f75c41b680d9cbaadd7240e057dfb714cc1a843ffd7",
+        "after-m.webp": "sha256:de1caf8096389644ebc3536d917d5b7b0752419bb8bf31f4c72e5da25bb8ac45",
+        "after-w560.avif": "sha256:096c09e76437d87e6145391898a689ed0834fb54fcf24bc2fd0b7221bd1aa89b",
+        "after-w560.webp": "sha256:bd3ba393b0bfa31b04343badf5127ad39d3fe215d6946a940dfd20aec0e50dbc",
+        "after.avif": "sha256:0efdac3ba9554c75da13b32ce5a96f80ac3f1089438311b0f503cf137c6f753d"
+      }
+    }
+  }
+}

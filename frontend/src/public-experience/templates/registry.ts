@@ -9,6 +9,7 @@ import { AbugidaBooking as AbugidaV2Booking, AbugidaSite as AbugidaV2Site } from
 import { BloomBooking, BloomSite } from "./bloom/BloomTemplate";
 import { ErgataBooking, ErgataSite } from "./ergata/ErgataTemplate";
 import { BloomBooking as BloomV2Booking, BloomSite as BloomV2Site } from "./bloom-v2/BloomTemplate";
+import { BloomBooking as BloomV3Booking, BloomLoading as BloomV3Loading, BloomSite as BloomV3Site } from "./bloom-v3/BloomTemplate";
 import { MeronBooking, MeronSite } from "./meron/MeronTemplate";
 import { MeronBooking as MeronV2Booking, MeronSite as MeronV2Site } from "./meron-v2/MeronTemplate";
 import { SelamBooking, SelamSite } from "./selam/SelamTemplate";
@@ -27,6 +28,7 @@ const TEMPLATE_PACKAGES: Record<string, PublicTemplatePackage> = {
   "selam-movement@2": { key: "selam-movement", Site: SelamV2Site, Booking: SelamV2Booking, Content: SelamContent },
   "bloom-hair@1": { key: "bloom-hair", Site: BloomSite, Booking: BloomBooking, Content: BloomContent },
   "bloom-hair@2": { key: "bloom-hair", Site: BloomV2Site, Booking: BloomV2Booking, Content: BloomContent },
+  "bloom-hair@3": { key: "bloom-hair", Site: BloomV3Site, Booking: BloomV3Booking, Content: BloomContent, Loading: BloomV3Loading },
   "meron-atelier@1": { key: "meron-atelier", Site: MeronSite, Booking: MeronBooking, Content: MeronContent },
   "meron-atelier@2": { key: "meron-atelier", Site: MeronV2Site, Booking: MeronV2Booking, Content: MeronContent },
   "abugida-language@1": { key: "abugida-language", Site: AbugidaSite, Booking: AbugidaBooking, Content: AbugidaContent },

@@ -7,7 +7,8 @@ from this description and validates it, so the two cannot drift apart.
 Field kinds: `text` (one localized line), `long` (localized paragraph), `plain` (an email, or a notice line
 `dial` number such as an emergency short code), `phone` (a phone number under the app's phone rule, stored
 in E.164 form), `format` (how a session or place meets), `consent` (a testimonial's consent), `strings` (a
-list of localized lines). A section or item with `image` has an image slot (`image`, `imageAlt`, `imageFocus`).
+list of localized lines). A section or item with `image` has an image slot (`image`, `imageAlt`, `imageFocus`); `imageRequired` on a
+list means each item needs its photo (gallery).
 A `list` has records; `add: False` means its records come from business facts and can only be edited,
 reordered or removed.
 """
@@ -52,9 +53,9 @@ EDITOR_SCHEMA: dict[str, dict] = {
                                  max_items=12, label="title")},
     "about": {"fields": [_title(), _field("body", "long", required=True, max_length=2400),
                          _field("highlights", "strings", max_items=8)], "image": True},
-    "process": {"fields": [_title(), _intro()],
+    "process": {"fields": [_title(), _intro()], "image": True,
                 "list": _list([_field("title", required=True), _field("description", "long", required=True)],
-                              max_items=12, label="title", numbered="step")},
+                              max_items=12, label="title", numbered="step", image=True)},
     "services": {"fields": [_title(), _intro()],
                  "list": _list([_field("name", required=True), _field("summary", "long"),
                                 _field("format", "format", options=list(SESSION_FORMATS))],
@@ -70,7 +71,7 @@ EDITOR_SCHEMA: dict[str, dict] = {
     "testimonials": {"fields": [_title(), _intro()],
                      "list": _list([_field("quote", "long", required=True), _field("attribution", required=True),
                                     _field("role"), _field("consent", "consent", required=True)],
-                                   max_items=12, label="attribution", defaults={"consent": False})},
+                                   max_items=12, label="attribution", defaults={"consent": False}), "image": True},
     "faq": {"fields": [_title()], "image": True,
             "list": _list([_field("question", required=True), _field("answer", "long", required=True, max_length=1600)],
                           max_items=20, label="question")},
@@ -84,7 +85,9 @@ EDITOR_SCHEMA: dict[str, dict] = {
                                  _field("phone", "phone", max_length=32)],
                                 max_items=12, label="name", image=True, generated_id="place")},
     "contact": {"fields": [_title(), _field("body", "long", max_length=2400), _field("phone", "phone", max_length=32),
-                           _field("email", "plain", max_length=160, pattern="email")]},
+                           _field("email", "plain", max_length=160, pattern="email")], "image": True},
+    "gallery": {"fields": [_title(), _intro()],
+                "list": _list([_field("caption", max_length=240)], max_items=12, label="caption", image=True, image_required=True)},
     "booking_cta": {"fields": [_title(), _field("body", "long", max_length=2400)], "image": True},
     "footer": {"fields": [_field("body", "long", max_length=2400)],
                "list": _list([_field("label", required=True)], max_items=12, add=False, label="label")},

@@ -94,6 +94,7 @@ def state(doc):
             "brandInputs": json.loads(profile.brand_inputs_json or "{}"),
             "identityAssets": {field: profile.get(field) for field in ("logo_primary", "logo_compact", "favicon")},
             "setup": json.loads(doc.website_setup_json or "{}"),
+            "booking": booking_options(doc),
             "sections": [{"type": row.section_type, "content": json.loads(row.content_json)} for row in doc.sections],
             "status": doc.status, "url": doc.platform_url,
             "capabilities": list(entitlements.list_entitlements(doc.owner_type, doc.organization, doc.provider).values()),
@@ -135,10 +136,26 @@ def start(owner_type, owner, title, slug, recipe_key, preferences=None):
     return state(doc)
 
 
-def save(site, expected_version, step, title=None, sections=None, features=None, brand_inputs=None):
+def booking_options(doc):
+    """The owner's booking options for the public website. Live availability is off unless the owner turns it on."""
+    from appointment.public_experience.next_availability import enabled
+
+    return {"liveAvailability": enabled(json.loads(doc.booking_json or "{}"))}
+
+
+def _set_booking_options(doc, booking):
+    if not isinstance(booking, dict) or set(booking) - {"liveAvailability"} or not all(isinstance(value, bool) for value in booking.values()):
+        frappe.throw(_("Choose supported booking options."))
+    stored = json.loads(doc.booking_json or "{}")
+    doc.booking_json = json.dumps({**(stored if isinstance(stored, dict) else {}), **booking}, sort_keys=True)
+
+
+def save(site, expected_version, step, title=None, sections=None, features=None, brand_inputs=None, booking=None):
     if step not in STEPS:
         frappe.throw(_("Choose a website setup step."))
     doc = _locked_site(site, expected_version)
+    if booking is not None:
+        _set_booking_options(doc, json.loads(booking) if isinstance(booking, str) else booking)
     setup = json.loads(doc.website_setup_json or "{}")
     if features is not None:
         if not isinstance(features, list) or set(features) - {"blog", "gallery", "newsletter"}:
@@ -240,7 +257,7 @@ def preview(site, expected_version, brand_inputs=None):
     if brand_inputs is not None:
         if isinstance(brand_inputs, str):
             brand_inputs = json.loads(brand_inputs)
-        allowed = {"paletteChoice", "fontChoice", "accentColor", "presentationDensity"}
+        allowed = {"paletteChoice", "fontChoice", "accentColor", "presentationDensity", "motion"}
         if not isinstance(brand_inputs, dict) or set(brand_inputs) - allowed:
             frappe.throw(_("Choose supported appearance adjustments."))
         inputs = json.loads(profile.brand_inputs_json or "{}")
@@ -284,10 +301,10 @@ def prefill_sections(scope, title, recipe, preferences=None):
     contact = (preferences or {}).get("main_action") == "contact"
     action = {"intent": "contact" if contact else "booking_start",
               "label": text("Contact us" if contact else "Book an appointment"), "placement": "primary"}
-    list_types = {"services", "providers", "process", "benefits", "approaches", "testimonials", "proof", "locations", "faq", "notice"}
+    list_types = {"services", "providers", "process", "benefits", "approaches", "testimonials", "proof", "locations", "faq", "notice", "gallery"}
     headings = {"services": "Services", "providers": "Our team", "process": "Your visit", "benefits": "What to expect",
                 "approaches": "How we work", "testimonials": "Client stories", "proof": "Our work", "locations": "Visit us",
-                "faq": "Questions", "notice": "Please note"}
+                "faq": "Questions", "notice": "Please note", "gallery": "Our work in photos"}
     business = frappe.get_doc(scope["owner_type"], scope["organization"] or scope["provider"])
     description = business.get("description") or f"Welcome to {title}. Contact us to learn more about our services."
     # Drafts never invent testimonials, credentials, addresses, or business claims.
@@ -349,9 +366,11 @@ def prefill_sections(scope, title, recipe, preferences=None):
         merged = website.merge([{"type": kind, "content": value} for kind, value in content.items()],
                                website.pending(scope["organization"]))
         content = {row["type"]: row["content"] for row in merged}
+    # An optional gallery starts empty (the template shows its own photos) so the owner can fill it in the editor.
+    kinds = [*recipe.required_sections, *(["gallery"] if "gallery" in recipe.supported_sections else [])]
     return [{"section_id": kind, "section_type": kind, "enabled": 1, "order_index": index,
              "schema_version": 2, "content_json": json.dumps(content[kind])}
-            for index, kind in enumerate(recipe.required_sections)]
+            for index, kind in enumerate(kinds)]
 
 
 def starter_content(recipe):

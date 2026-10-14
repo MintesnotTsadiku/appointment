@@ -24,7 +24,7 @@ export const FIELD_KEYS: Record<string, string> = {
   phone: "staff.website.editor.field.phone", email: "staff.website.editor.field.email",
   address: "staff.website.editor.field.address", notes: "staff.website.editor.field.notes",
   hours: "staff.website.editor.field.hours", highlights: "staff.website.editor.field.highlights",
-  consent: "staff.website.editor.field.consent",
+  consent: "staff.website.editor.field.consent", caption: "staff.website.editor.field.caption",
 };
 
 /** Some field names mean something more precise in one section. */
@@ -157,7 +157,7 @@ const LIST_KEYS: Record<string, string> = {
   providers: "staff.website.editor.list.providers", proof: "staff.website.editor.list.proof",
   testimonials: "staff.website.editor.list.testimonials", faq: "staff.website.editor.list.faq",
   notice: "staff.website.editor.list.notice", locations: "staff.website.editor.list.locations",
-  footer: "staff.website.editor.list.footer",
+  footer: "staff.website.editor.list.footer", gallery: "staff.website.editor.list.gallery",
 };
 
 const ADD_KEYS: Record<string, string> = {
@@ -165,5 +165,6 @@ const ADD_KEYS: Record<string, string> = {
   process: "staff.website.editor.add.step", proof: "staff.website.editor.add.credential",
   testimonials: "staff.website.editor.add.testimonial", faq: "staff.website.editor.add.question",
   notice: "staff.website.editor.add.phoneLine", locations: "staff.website.editor.add.place",
+  gallery: "staff.website.editor.add.photo",
 };
 

@@ -29,4 +29,12 @@ for (const [name, palette] of [['v1', palettes], ['v2', v2]]) {
 assert.equal(accentInk('#f5a524', ['#ffffff']), BLOOM_DESIGN_INK);
 assert.equal(accentInk('#a20a23', ['#ffffff', '#4a171d']), '#ffffff');
 assert.equal(accentInk(undefined, ['#ffffff']), BLOOM_DESIGN_INK);
-console.log('PASS: Bloom v2 booking buttons meet 4.5:1 on light and dark accents');
+// Bloom v3 keeps its own copy of the rule (packages share no code) and writes --b3-gold-ink.
+const v3exports = {};
+vm.runInNewContext(ts.transpileModule(readFileSync(new URL('../src/public-experience/templates/bloom-v3/ink.ts', import.meta.url), 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 } }).outputText, { exports: v3exports });
+for (const mode of ['light', 'dark']) {
+  const tokens = v2[mode];
+  const style = v3exports.withAccentInk({ '--pe-color-accent': tokens.accent, '--pe-color-on-primary': tokens.onPrimary, '--pe-color-text': tokens.text, '--pe-color-canvas': tokens.canvas });
+  assert.ok(contrastRatio(tokens.accent, style['--b3-gold-ink']) >= AA_TEXT, `v3 ${mode}: button text keeps AA`);
+}
+console.log('PASS: Bloom v2 and v3 booking buttons meet 4.5:1 on light and dark accents');

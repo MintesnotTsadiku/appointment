@@ -74,6 +74,15 @@ def validate_showcase_catalog() -> dict[str, Any]:
                 raise ValueError(f"Invalid provider asset for {key}")
             _require_text(provider, key, "name", "asset", "checksum")
             _verify_checksum(_asset_path(provider["asset"]), provider["checksum"])
+        # Optional: every file of a template package's imagery (desktop, mobile, night, widths, AVIF).
+        template_assets = site.get("templateAssets", [])
+        if not isinstance(template_assets, list):
+            raise ValueError(f"Invalid template assets for {key}")
+        for entry in template_assets:
+            if not isinstance(entry, dict):
+                raise ValueError(f"Invalid template asset for {key}")
+            _require_text(entry, key, "asset", "checksum")
+            _verify_checksum(_asset_path(entry["asset"]), entry["checksum"])
         benchmark = REPO_ROOT / site["benchmark"]
         if not benchmark.is_file():
             raise ValueError(f"Missing benchmark for {key}: {site['benchmark']}")

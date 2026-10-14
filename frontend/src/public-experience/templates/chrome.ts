@@ -17,7 +17,14 @@ export type ChromeKey =
   | "minutes" | "duration" | "price" | "phone" | "email" | "hours" | "address" | "step"
   | "websiteBy"
   | "approach" | "sessions" | "free" | "bookThis" | "callNumber"
-  | "formatInPerson" | "formatOnline" | "formatPhone" | "areaMap" | "goodToKnow";
+  | "formatInPerson" | "formatOnline" | "formatPhone" | "areaMap" | "goodToKnow"
+  // Template kit (v3): time of day, opening hours, live availability, lookbook, reviews and rooms.
+  | "greetingMorning" | "greetingAfternoon" | "greetingEvening" | "greetingNight"
+  | "openNow" | "opensToday" | "opensOn" | "habeshaTime" | "internationalTime" | "clockFormat"
+  | "nextFree" | "nextFreeChair" | "today" | "tomorrow" | "leftToday" | "leftTodayOne" | "seeAllTimes" | "bookWith"
+  | "lookbook" | "nextLook" | "previousLook" | "lookOf" | "before" | "after" | "compare" | "previous" | "next"
+  | "pauseReviews" | "playReviews" | "onThisPage" | "rooms" | "copyAddress" | "copied" | "call" | "loadingSite"
+  | "lookBraids" | "lookTaper" | "lookSilk" | "menu" | "stillUnsure";
 
 export interface PublicChrome {
   t: (key: ChromeKey, values?: Record<string, string | number>) => string;

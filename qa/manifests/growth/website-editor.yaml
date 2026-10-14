@@ -2,7 +2,7 @@
 # the Ergata showcase content; run `bench execute appointment.tests.website_editor_qa_fixtures.restore` after the run).
 # The owner overrides a session format, edits a place note in English and Amharic, reorders and removes an FAQ item,
 # uploads a photo into the FAQ slot with alt text, previews and publishes; the public page shows the changes.
-# Phone fields: a place phone that does not fit shows the shared hint, the showcase's stored placeholder number does
+# Phone fields: a place phone that does not fit shows the shared hint, the showcase's stored non-dialable number (+251 11 000 0106) does
 # not block the save, and a contact phone typed in local form is stored in E.164 and shown formatted with a tel: link.
 app: appointment
 base_url: http://localhost:47800
@@ -89,7 +89,7 @@ scenarios:
     full_page: false
   - action: fill
     selector: '[data-qa="website-editor-locations-item-0-phone"]'
-    value: 000 000 0106
+    value: +251 11 000 0106
   - action: click
     selector: '[data-qa="website-editor-tab-contact"]'
   - action: fill

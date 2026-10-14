@@ -67,6 +67,9 @@ _PALETTE_ROLES = frozenset(
         "disabled",
     }
 )
+_OPTIONAL_IMAGERY_KEYS = frozenset({"mobileWidth", "mobileHeight", "darkSrc", "darkMobileSrc", "formats", "widths", "checksums"})
+_IMAGERY_FORMATS = frozenset({"avif"})
+MOTION_LEVELS = ("calm", "standard", "expressive")
 _ACTION_INTENTS = frozenset(
     {
         "booking_start",
@@ -258,9 +261,9 @@ def _validate_imagery(imagery: Mapping[str, object]) -> dict[str, dict[str, obje
         if not isinstance(role, str) or not isinstance(asset, dict):
             raise DesignManifestError("imagery roles must map to objects")
         required = {"src", "mobileSrc", "alt", "focalPoint", "fit", "width", "height", "mime", "checksum", "provenance"}
-        if set(asset) != required:
+        if not required <= set(asset) or set(asset) - required - _OPTIONAL_IMAGERY_KEYS:
             raise DesignManifestError(f"imagery role {role} schema is closed")
-        for key in ("src", "mobileSrc"):
+        for key in ("src", "mobileSrc", *(name for name in ("darkSrc", "darkMobileSrc") if name in asset)):
             value = asset[key]
             if not isinstance(value, str) or not value.startswith("/assets/") or "://" in value or ".." in value:
                 raise DesignManifestError(f"imagery {role}.{key} must be a local application asset")
@@ -284,8 +287,45 @@ def _validate_imagery(imagery: Mapping[str, object]) -> dict[str, dict[str, obje
             raise DesignManifestError(f"imagery {role} focal point is invalid")
         if asset["fit"] not in {"cover", "contain"} or not isinstance(asset["provenance"], dict):
             raise DesignManifestError(f"imagery {role} fit/provenance is invalid")
+        _validate_imagery_variants(role, asset)
         result[role] = dict(asset)
     return result
+
+
+def _positive_int(value: object) -> bool:
+    return isinstance(value, int) and not isinstance(value, bool) and value > 0
+
+
+def _validate_imagery_variants(role: str, asset: Mapping[str, object]) -> None:
+    """Optional art direction: a mobile crop size, night variants, and extra files for `srcset`.
+
+    `mobileWidth`/`mobileHeight` give the mobile crop its own size (so the page reserves the right box).
+    `darkSrc`/`darkMobileSrc` are night photos for dark mode. `formats: ["avif"]` says that an AVIF file
+    sits next to every WebP file of the role. `widths` lists smaller desktop files named `<name>-w<width>.webp`.
+    """
+    if ("mobileWidth" in asset) != ("mobileHeight" in asset):
+        raise DesignManifestError(f"imagery {role} needs both mobileWidth and mobileHeight")
+    for key in ("mobileWidth", "mobileHeight"):
+        if key in asset and (not _positive_int(asset[key]) or asset[key] < 240):
+            raise DesignManifestError(f"imagery {role}.{key} is invalid")
+    if "darkMobileSrc" in asset and "darkSrc" not in asset:
+        raise DesignManifestError(f"imagery {role} has a night mobile file without a night desktop file")
+    formats = asset.get("formats", [])
+    if not isinstance(formats, list) or any(value not in _IMAGERY_FORMATS for value in formats) or len(set(formats)) != len(formats):
+        raise DesignManifestError(f"imagery {role}.formats is invalid")
+    widths = asset.get("widths", [])
+    if (
+        not isinstance(widths, list)
+        or any(not _positive_int(value) or value < 320 or value >= asset["width"] for value in widths)
+        or widths != sorted(set(widths))
+    ):
+        raise DesignManifestError(f"imagery {role}.widths must be ascending and smaller than the width")
+    if "checksums" in asset:
+        checksums = asset["checksums"]
+        if not isinstance(checksums, dict) or any(
+            not isinstance(value, str) or not value.startswith("sha256:") for value in checksums.values()
+        ):
+            raise DesignManifestError(f"imagery {role}.checksums is invalid")
 
 
 def _validate_layout(layout: Mapping[str, object], recipe) -> dict[str, object]:
@@ -362,7 +402,7 @@ def _inputs(recipe, brand_inputs: Mapping[str, object] | None) -> dict[str, obje
             raise _error("accent_color must be a six-digit hex color", field="accent_color", observed=value)
         result["accent_color"] = normalize_hex(value)
     result["motion"] = result.get("motion", "calm")
-    if result["motion"] not in {"calm", "standard"}:
+    if result["motion"] not in MOTION_LEVELS:
         raise _error("motion is not a recipe-approved adjustment", field="motion", observed=result["motion"])
     result["presentation_density"] = result.get("presentation_density", "comfortable")
     if result["presentation_density"] not in {"comfortable", "spacious"}:
@@ -534,6 +574,8 @@ def compile_design(
                 "mime": asset["mime"],
                 "checksum": asset["checksum"],
                 "provenance": dict(asset["provenance"]),
+                # Optional art direction; absent keys keep older compiled designs byte-identical.
+                **{key: asset[key] for key in ("mobileWidth", "mobileHeight", "darkSrc", "darkMobileSrc", "formats", "widths") if key in asset},
             }
             for role, asset in selected_imagery.items()
         },

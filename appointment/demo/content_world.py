@@ -1,4 +1,4 @@
-"""Explicit, journal-owned content expansion for the five fictional showcases."""
+"""Explicit, journal-owned content expansion for the five organization showcases."""
 
 import base64
 import hashlib
@@ -13,7 +13,21 @@ from appointment.public_experience.publisher import publish_experience
 from appointment.public_experience.showcase_catalog import APP_ROOT, validate_showcase_catalog
 
 VERSION = 1
+# Raise it when the published copy changes (articles, gallery captions, the newsletter draft). The next
+# `seed` rewrites only the journal-owned records and publishes them again (`_upgrade_copy`).
+COPY_VERSION = 3
 MANIFEST = Path(__file__).with_name("content.v1.json")
+
+
+def gallery_copy(business_name):
+    """Public gallery copy of one showcase. Reads as the business's own words."""
+    return {"summary": f"People and places at {business_name}.", "caption": f"Inside {business_name}.",
+            "credit": business_name,
+            "videoCaption": "Big Buck Bunny, an open animated film by the Blender Foundation. Not filmed at the studio."}
+
+
+def newsletter_body(business_name, first_article):
+    return f"# Welcome to {business_name}\n\n{first_article}\n\nThank you for reading. Reply to this email with any question before your next visit."
 
 
 def bind_owned_support():
@@ -82,11 +96,18 @@ def configure(state):
     digest = hashlib.sha256(MANIFEST.read_bytes()).hexdigest()
     prior = state.get("published_content")
     if prior:
-        if prior.get("version") != VERSION or prior.get("manifest_checksum") != digest:
+        if prior.get("version") != VERSION:
             frappe.throw("The showcase content manifest changed. Use a reviewed version upgrade before reseeding.")
         for doctype, name in prior["records"]:
             if not frappe.db.exists(doctype, name):
                 frappe.throw("The published showcase inventory is incomplete; refusing to adopt replacement records.")
+        if prior.get("copy_version", 1) != COPY_VERSION:
+            _upgrade_copy(state, content)
+            prior["manifest_checksum"] = digest
+            prior["copy_version"] = COPY_VERSION
+            return True
+        if prior.get("manifest_checksum") != digest:
+            frappe.throw("The showcase content manifest changed. Use a reviewed version upgrade before reseeding.")
         return False
     baseline = {tuple(row) for row in state["created"]}
     for business in state["businesses"].values():
@@ -134,17 +155,17 @@ def configure(state):
             media.append(image["url"])
         for index, title in enumerate(world["collections"]):
             items = [{"media_type": "image", "image": media[index], "alt_text": title,
-                      "caption": "A fictional scene from " + business["name"] + ".",
-                      "credit": "Project-generated showcase image", "display_date": state["anchor_date"],
+                      "caption": gallery_copy(business["name"])["caption"],
+                      "credit": gallery_copy(business["name"])["credit"], "display_date": state["anchor_date"],
                       "consent_status": "Approved", "consent_evidence": "Project-generated fictional people and places; showcase use approved."}]
             if index == 1:
                 video = content["provenance"]["video"]
                 items.append({"media_type": "video", "video_provider": video["provider"], "video_id": video["id"],
                               "alt_text": video["title"], "thumbnail": media[2], "credit": video["credit"],
-                              "caption": "Independent animation example for a governed video link. This is not footage of the business.",
+                              "caption": gallery_copy(business["name"])["videoCaption"],
                               "consent_status": "Not Required"})
             draft = authoring.create_gallery(site.name, title, f"showcase-collection-{index + 1}",
-                                             "People and places in our fictional showcase.", items)
+                                             gallery_copy(business["name"])["summary"], items)
             showcase.remember(state, "Gallery Collection", draft["source"])
             showcase.remember(state, "Content Ownership", draft["ownership"])
             release = releases.publish_gallery_collection(draft["ownership"])
@@ -152,7 +173,7 @@ def configure(state):
         sender = senders.request(site.name, key + "-updates@example.test", business["name"])
         showcase.remember(state, "Newsletter Sender Identity", sender["sender"])
         draft = campaigns.create_draft(site.name, sender["sender"], "A note from " + business["name"],
-                                       f"# Welcome to {business['name']}\n\n{world['articles'][0][2]}\n\nThis is an unsent fictional showcase newsletter.")
+                                       newsletter_body(business["name"], world["articles"][0][2]))
         showcase.remember(state, "Newsletter", draft["newsletter"])
         showcase.remember(state, "Content Ownership", draft["ownership"])
         group = frappe.db.get_value("Email Group", {"title": "Website newsletter " + site.name}, "name")
@@ -171,9 +192,70 @@ def configure(state):
         business["newsletter_draft"] = draft["ownership"]
         business["newsletter_preview"] = preview["message"]
         frappe.set_user("Administrator")
-    state["published_content"] = {"version": VERSION, "manifest_checksum": digest,
+    state["published_content"] = {"version": VERSION, "manifest_checksum": digest, "copy_version": COPY_VERSION,
                                    "records": [row for row in state["created"] if tuple(row) not in baseline]}
     return True
+
+
+def _owned(state, doctype, name):
+    if [doctype, name] not in state["created"]:
+        frappe.throw("A showcase record is outside the journal. No content was changed.")
+    return name
+
+
+def _upgrade_copy(state, content):
+    """Rewrite the public copy of the journal-owned articles, galleries and newsletter drafts, then publish again.
+
+    Only records in the journal change. Each new release joins the journal and the content inventory.
+    """
+    from appointment.demo import showcase
+
+    added = []
+    for key, business in state["businesses"].items():
+        world = content["sites"][key]
+        copy = gallery_copy(business["name"])
+        frappe.set_user(business["owner"])
+        for ownership, (title, _slug, body) in zip(business.get("articles") or [], world["articles"]):
+            _owned(state, "Content Ownership", ownership)
+            draft = authoring.get_draft(ownership)
+            text, summary = f"# {title}\n\n{body}", body.split("\n")[0]
+            changed = draft["body"] != text or draft["title"] != title
+            if changed:
+                authoring.save_article(ownership, draft["modified"], title, text, summary)
+            # The blog keeps the first meta description it made; it feeds the article's search description.
+            post = frappe.get_doc("Blog Post", frappe.db.get_value("Content Ownership", ownership, "source_name"))
+            if post.meta_description != summary[:140]:
+                post.meta_description = summary[:140]
+                post.save()
+                changed = True
+            if not changed:
+                continue
+            release = releases.publish_article(ownership)
+            added.append(showcase.remember(state, "Published Content Release", release.name))
+        rows = frappe.get_all("Content Ownership", filters={"public_site": business["public_site"],
+                              "source_doctype": "Gallery Collection"}, fields=["name", "source_name"])
+        for row in rows:
+            _owned(state, "Content Ownership", row.name)
+            collection = frappe.get_doc("Gallery Collection", _owned(state, "Gallery Collection", row.source_name))
+            collection.summary = copy["summary"]
+            for item in collection.items:
+                if item.media_type == "image":
+                    item.caption, item.credit = copy["caption"], copy["credit"]
+                else:
+                    item.caption = copy["videoCaption"]
+                    item.alt_text = content["provenance"]["video"]["title"]
+            collection.save()
+            release = releases.publish_gallery_collection(row.name)
+            added.append(showcase.remember(state, "Published Content Release", release.name))
+        newsletter = business.get("newsletter_draft")
+        if newsletter:
+            source = frappe.db.get_value("Content Ownership", _owned(state, "Content Ownership", newsletter), "source_name")
+            draft = frappe.get_doc("Newsletter", _owned(state, "Newsletter", source))
+            draft.message_md = newsletter_body(business["name"], world["articles"][0][2])
+            draft.save()
+    frappe.set_user("Administrator")
+    state["published_content"]["records"].extend(["Published Content Release", name] for name in added)
+    return added
 
 
 def refresh_covers():

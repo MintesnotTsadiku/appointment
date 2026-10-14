@@ -3070,7 +3070,16 @@
         },
         "feature": {
           "newsletter": "ጋዜጣ"
-        }
+        },
+        "motion": "እንቅስቃሴ",
+        "motionHelp": "ገጹ ምን ያህል እንደሚንቀሳቀስ። መሣሪያቸው ትንሽ እንቅስቃሴ እንዲያሳይ ያዘጋጁ ጎብኚዎች ሁልጊዜ የማይንቀሳቀስ ገጽ ያያሉ።",
+        "motionLevel": {
+          "calm": "ረጋ ያለ",
+          "standard": "መደበኛ እንቅስቃሴ",
+          "expressive": "ሕያው"
+        },
+        "liveAvailability": "ቀጣይ ክፍት ሰዓቶቼን በድረ-ገጹ ላይ አሳይ",
+        "liveAvailabilityHelp": "ጎብኚዎች ቀጣዩን ክፍት ሰዓትና ዛሬ ስንት ሰዓቶች እንደቀሩ ያያሉ። ማን እንደያዘ በጭራሽ አያዩም። ለውጡ የሚታየው ሲያትሙ ነው።"
       },
       "content": {
         "title": "የድረ-ገጽ ይዘት",
@@ -3263,7 +3272,8 @@
           "locations": "ቦታዎች",
           "contact": "አድራሻ",
           "booking_cta": "የቀጠሮ መያዣ ክፍል",
-          "footer": "የገጹ ግርጌ"
+          "footer": "የገጹ ግርጌ",
+          "gallery": "የፎቶ ማዕከል"
         },
         "list": {
           "benefits": "የሚረዷቸው ፍላጎቶች",
@@ -3276,7 +3286,8 @@
           "faq": "ጥያቄዎች እና መልሶች",
           "notice": "የስልክ መስመሮች",
           "locations": "የቦታ ካርዶች",
-          "footer": "የግርጌ ማስፈንጠሪያዎች"
+          "footer": "የግርጌ ማስፈንጠሪያዎች",
+          "gallery": "በፎቶ ማዕከሉ ያሉ ፎቶዎች"
         },
         "add": {
           "benefit": "ፍላጎት ያክሉ",
@@ -3286,7 +3297,8 @@
           "testimonial": "ጥቅስ ያክሉ",
           "question": "ጥያቄ ያክሉ",
           "phoneLine": "የስልክ መስመር ያክሉ",
-          "place": "የቦታ ካርድ ያክሉ"
+          "place": "የቦታ ካርድ ያክሉ",
+          "photo": "ፎቶ ያክሉ"
         },
         "field": {
           "title": "ርዕስ",
@@ -3315,7 +3327,8 @@
           "highlights": "ዋና ዋና ነጥቦች",
           "consent": "ፈቃድ",
           "placeNote": "የአቅጣጫ ወይም የግላዊነት ማስታወሻ",
-          "placeNotes": "አጫጭር ማስታወሻዎች ወይም የአሠራር ደረጃዎች"
+          "placeNotes": "አጫጭር ማስታወሻዎች ወይም የአሠራር ደረጃዎች",
+          "caption": "የፎቶ መግለጫ ጽሑፍ"
         },
         "format": {
           "label": "በድር ጣቢያው ላይ ያለው የቆይታ ዓይነት",
@@ -3335,7 +3348,8 @@
           "phone": "ቁጥሩን ሰዎች እንደሚደውሉት ያስገቡ፤ አሃዞች፣ ክፍተቶች እና + ( ) - ብቻ።",
           "email": "ትክክለኛ የኢሜይል አድራሻ ያስገቡ።",
           "altRequired": "ማየት ለማይችሉ ሰዎች ፎቶውን በእንግሊዝኛ ይግለጹ።",
-          "consent": "ጥቅስ የሚታተመው በሰውየው ፈቃድ ብቻ ነው።"
+          "consent": "ጥቅስ የሚታተመው በሰውየው ፈቃድ ብቻ ነው።",
+          "imageRequired": "ፎቶ ያክሉ ወይም ይህን ንጥል ያስወግዱ።"
         },
         "image": {
           "label": "ፎቶ",
@@ -3950,7 +3964,47 @@
     "formatOnline": "በኦንላይን ቪዲዮ",
     "formatPhone": "በስልክ",
     "areaMap": "የ{name} አካባቢ ካርታ",
-    "goodToKnow": "ማወቅ የሚጠቅሙ ነገሮች"
+    "goodToKnow": "ማወቅ የሚጠቅሙ ነገሮች",
+    "greetingMorning": "እንደምን አደሩ",
+    "greetingAfternoon": "እንደምን ዋሉ",
+    "greetingEvening": "እንደምን አመሹ",
+    "greetingNight": "እንደምን አመሹ",
+    "openNow": "አሁን ክፍት ነው · {time} ይዘጋል",
+    "opensToday": "አሁን ዝግ ነው · ዛሬ {time} ይከፈታል",
+    "opensOn": "አሁን ዝግ ነው · {day} {time} ይከፈታል",
+    "habeshaTime": "የሀበሻ ሰዓት",
+    "internationalTime": "ዓለም አቀፍ ሰዓት",
+    "clockFormat": "የሰዓት አቆጣጠር",
+    "nextFree": "ቀጣይ ክፍት ሰዓት፦ {when} {time}",
+    "nextFreeChair": "ቀጣይ ክፍት ወንበር፦ {when} {time}",
+    "today": "ዛሬ",
+    "tomorrow": "ነገ",
+    "leftToday": "ዛሬ {count} ክፍት ሰዓቶች ቀርተዋል",
+    "leftTodayOne": "ዛሬ አንድ ክፍት ሰዓት ቀርቷል",
+    "seeAllTimes": "ሁሉንም ክፍት ሰዓቶች ይመልከቱ",
+    "bookWith": "ከ{name} ጋር ቀጠሮ ይያዙ",
+    "lookbook": "የስታይል መጽሔት",
+    "nextLook": "ቀጣይ ስታይል",
+    "previousLook": "ያለፈው ስታይል",
+    "lookOf": "{index} ከ{count}",
+    "before": "በፊት",
+    "after": "በኋላ",
+    "compare": "በፊትና በኋላ ለማነጻጸር ይጎትቱ",
+    "previous": "ቀደም ያሉ ፎቶዎችን አሳይ",
+    "next": "ተጨማሪ ፎቶዎችን አሳይ",
+    "pauseReviews": "አስተያየቶቹን አቁም",
+    "playReviews": "አስተያየቶቹን አጫውት",
+    "onThisPage": "በዚህ ገጽ",
+    "rooms": "ክፍሎቻችን",
+    "copyAddress": "አድራሻውን ቅዳ",
+    "copied": "አድራሻው ተቀድቷል",
+    "call": "ይደውሉልን",
+    "loadingSite": "ድረ-ገጹ እየተጫነ ነው",
+    "lookBraids": "ኖትለስ ሹሩባ",
+    "lookTaper": "የተቀረጸ አቆራረጥ",
+    "lookSilk": "ሲልክ ፕሬስ",
+    "menu": "የዋጋ ዝርዝር",
+    "stillUnsure": "አሁንም እርግጠኛ አይደሉም? ይጠይቁን"
   },
   "customerEmail": {
     "subjectConfirmation": "ከ{0} ጋር ያለዎት ቀጠሮ ተረጋግጧል",

@@ -17,6 +17,12 @@ Sessions, people and footer links come from business settings. The owner cannot 
 
 Edits change the draft. Visitors see the edits after "Publish" in the "Readiness" step, as before.
 
+## Photo slots and the gallery (template v3)
+
+- The process, testimonials and contact sections have a photo slot. Each process step also has one.
+- A recipe that supports the `gallery` section gets an empty gallery in a new draft. The owner adds up to 12 photos, each with a description and an optional caption. A gallery item without a photo cannot be saved ("Add a photo, or remove this item."). The list has `imageRequired` in `EDITOR_SCHEMA`.
+- An empty gallery and an empty slot show the template's own photos. See `docs/design/TEMPLATE_V3_KIT.md`.
+
 ## How the editor knows the fields
 
 `appointment/public_experience/section_editor.py` has `EDITOR_SCHEMA`. For each section type it lists:
@@ -85,6 +91,8 @@ The fixture `appointment.tests.website_editor_qa_fixtures` uses the Ergata showc
 The photos that a run uploads stay in the showcase media library, because a published release uses them.
 
 The two manifests also type a place phone that does not fit (the hint shows, in English and Amharic), put the stored placeholder back, and (English run) type the contact phone `0911 22 33 44`. The public page then shows `+251 91 122 3344` with a `tel:+251911223344` link. `restore()` puts the placeholder back.
+
+After the photo slots and the gallery (2026-10-15): BQA-2026-00273 (`website-editor.yaml`) and BQA-2026-00274 (`website-editor-am-dark.yaml`) passed with 0 network errors.
 
 Runs of 2026-10-15: BQA-2026-00232 (`website-editor.yaml`) and BQA-2026-00231 (`website-editor-am-dark.yaml`) passed with 0 network errors and the known console notices.
 

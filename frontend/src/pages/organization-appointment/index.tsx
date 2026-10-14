@@ -33,6 +33,8 @@ import { useBookingSubmit } from "@/pages/booking-v2/hooks/useBookingSubmit";
 import type { Organization, Service, TimeSlot as V2TimeSlot, BookingFormData, BookingResponse } from "@/pages/booking-v2/types";
 import { useBookingBrand } from "@/public-experience/bookingTheme";
 import { brandLogo } from "@/public-experience/templates/content";
+import { haptic } from "@/public-experience/templates/kit/haptics";
+import { TemplateMoment } from "@/public-experience/templates/moments";
 import { BookingHeaderBar, ThemeSwitch } from "./header";
 import "@/public-experience/platform.css";
 
@@ -303,6 +305,7 @@ const OrganizationAppointmentV2 = () => {
   const handleSlotSelect = (slot: V2TimeSlot) => {
     setChosenSlot(slot);
     setSelectedSlot({ start_time: slot.start_time, end_time: slot.end_time, provider: slot.provider });
+    haptic("select");
   };
 
   const handleBookingSubmit = async (formData: BookingFormData) => {
@@ -338,6 +341,7 @@ const OrganizationAppointmentV2 = () => {
       if (refetchSlots) await refetchSlots();
       setBookingResponse({ ...response, userEmail: formData.userEmail, userPhone: formData.userPhone });
       setCurrentPhase("success");
+      haptic("success");
     } catch (error) {
       console.error("Booking error:", error);
     }
@@ -539,6 +543,7 @@ const OrganizationAppointmentV2 = () => {
                 userEmail={bookingResponse.userEmail || ""}
                 userPhone={bookingResponse.userPhone}
                 brandStyle={bookingBrand.style}
+                moment={bookingBrand.config ? <TemplateMoment rendererKey={bookingBrand.config.compiledDesign.layout.rendererKey} rendererVersion={bookingBrand.config.compiledDesign.layout.rendererVersion} /> : null}
               />
             )}
           </AnimatePresence>

@@ -6,6 +6,7 @@ import json
 
 import frappe
 from frappe import _
+from frappe.rate_limiter import rate_limit
 
 from appointment.content.monitoring import observed
 
@@ -88,10 +89,10 @@ def switch_website_template(site: str, expected_version: int, recipe_key: str):
 
 @frappe.whitelist(methods=["POST"])
 def save_website_setup(site: str, expected_version: int, step: str, title=None,
-                       sections=None, features=None, brand_inputs=None):
+                       sections=None, features=None, brand_inputs=None, booking=None):
     from appointment.public_experience import setup
 
-    return setup.save(site, expected_version, step, title, sections, features, brand_inputs)
+    return setup.save(site, expected_version, step, title, sections, features, brand_inputs, booking)
 
 
 @frappe.whitelist(methods=["POST"])
@@ -224,6 +225,36 @@ def _session_formats(organization=None, provider=None):
     return session_formats, place_formats
 
 
+def _hhmm(value) -> str:
+    """`HH:MM` of a Time value (a timedelta or a string from the database); "" when it is empty."""
+    if value in (None, ""):
+        return ""
+    if hasattr(value, "total_seconds"):
+        minutes = min(int(value.total_seconds()) // 60, 24 * 60 - 1)
+        return f"{minutes // 60:02d}:{minutes % 60:02d}"
+    parts = str(value).split(":")
+    try:
+        return f"{int(parts[0]):02d}:{int(parts[1]):02d}"
+    except (IndexError, ValueError):
+        return ""
+
+
+def _place_hours(organization=None, provider=None):
+    """Weekly opening hours of each active place, by location, for "open now" badges. Public facts only."""
+    location_filter = {"organization": organization} if organization else {"independent_provider": provider, "organization": ["is", "not set"]}
+    places = frappe.get_all("Location", filters={**location_filter, "is_active": 1}, fields=["name", "timezone"])
+    if not places:
+        return {}
+    rows = frappe.get_all("Opening Hours", filters={"parenttype": "Location", "parent": ["in", [row.name for row in places]], "is_open": 1},
+                          fields=["parent", "day_of_week", "start_time", "end_time"], order_by="idx asc", ignore_permissions=True)
+    hours = {row.name[:64]: {"timezone": row.timezone or "Africa/Addis_Ababa", "days": []} for row in places}
+    for row in rows:
+        start, end = _hhmm(row.start_time), _hhmm(row.end_time)
+        if row.parent[:64] in hours and row.day_of_week and start < end:
+            hours[row.parent[:64]]["days"].append({"day": row.day_of_week, "open": start, "close": end})
+    return hours
+
+
 @frappe.whitelist(allow_guest=True, methods=["GET"])
 def get_public_experience_snapshot(locale: str | None = None, public_path: str | None = None, optional: int | str = 0):
     """The published snapshot. With `optional`, a path without a published site returns None instead of a 404."""
@@ -238,9 +269,10 @@ def get_public_experience_snapshot(locale: str | None = None, public_path: str |
     snapshot = resolver_module.public_snapshot(context.release)
     booking_path = None
     booking_paths = {}
-    session_formats, place_formats = {}, {}
+    session_formats, place_formats, place_hours = {}, {}, {}
     if context.organization or context.provider:
         session_formats, place_formats = _session_formats(context.organization, context.provider)
+        place_hours = _place_hours(context.organization, context.provider)
     if context.organization:
         slug = frappe.db.get_value("Organization", context.organization, "slug")
         if slug:
@@ -269,12 +301,33 @@ def get_public_experience_snapshot(locale: str | None = None, public_path: str |
         # location. Public and never secret: the meeting link is not here. See docs/growth/ONLINE_LOCATIONS.md.
         "sessionFormats": session_formats,
         "placeFormats": place_formats,
+        # Weekly opening hours by location ("open now" and the Habesha clock on template pages).
+        "placeHours": place_hours,
         "sections": snapshot.get("sections", []),
         "seo": snapshot.get("seo", {}),
         "booking": snapshot.get("booking", {}),
         "features": snapshot.get("features", []),
         "siteSlug": frappe.db.get_value("Public Site", context.public_site, "slug"),
     }
+
+
+@frappe.whitelist(allow_guest=True, methods=["GET"])
+@rate_limit(limit=60, seconds=60)
+def get_next_availability(public_path: str | None = None, locale: str | None = None):
+    """Guest: the next free times of a published site, when its owner turned live availability on.
+
+    Counts and start times only (see `next_availability`); cached for 60 seconds per release. A site
+    without the setting, or a path without a published site, answers `{"enabled": false}`.
+    """
+    from appointment.public_experience import next_availability
+
+    try:
+        context = resolver_module.resolve_public_experience(
+            _request_host(), public_path if public_path is not None else _request_path(), locale
+        )
+    except PublicResolutionError:
+        return {"enabled": False}
+    return next_availability.for_context(context)
 
 
 @frappe.whitelist(methods=["GET"])

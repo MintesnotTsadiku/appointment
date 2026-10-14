@@ -125,8 +125,10 @@ class TestRecipeCompiler(unittest.TestCase):
                 # Ergata started after the Taste v1 pass, so its first version is the latest.
                 self.assertEqual(versions, (1,))
             else:
-                self.assertEqual(versions, (1, 2), recipe.key)
-                self.assertEqual(recipe.version, 2, "the gallery offers the Taste v1 version")
+                # Bloom is the phase 1 flagship of the template reimagination (v3); v1 and v2 stay loadable.
+                expected = (1, 2, 3) if recipe.key == "bloom-hair" else (1, 2)
+                self.assertEqual(versions, expected, recipe.key)
+                self.assertEqual(recipe.version, expected[-1], "the gallery offers the latest version")
                 pinned = get_recipe(recipe.key, 1)
                 self.assertEqual(pinned.version, 1)
                 self.assertNotEqual(pinned.content_hash, recipe.content_hash)

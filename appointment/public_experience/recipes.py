@@ -29,6 +29,7 @@ RECIPE_MANIFESTS = {
     "bloom-hair": {
         1: "public_experience/manifest/design/recipes/bloom-hair.v1.json",
         2: "public_experience/manifest/design/recipes/bloom-hair.v2.json",
+        3: "public_experience/manifest/design/recipes/bloom-hair.v3.json",
     },
     "meron-atelier": {
         1: "public_experience/manifest/design/recipes/meron-atelier.v1.json",

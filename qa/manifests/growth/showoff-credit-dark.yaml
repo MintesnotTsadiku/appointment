@@ -173,7 +173,7 @@ scenarios:
       value: '[data-pe-root]'
     # The accent booking button keeps AA contrast: its ink is set from the palette on the root.
     - type: visible_selector
-      value: '[data-template="bloom-hair-v2"][style*="--bl-gold-ink"] .bl-hero .bl-btn'
+      value: '[data-template="bloom-hair-v3"][style*="--b3-gold-ink"] .b3-hero .b3-btn'
   actions:
   - action: screenshot
     name: bloom_button_en_desktop_dark.png
@@ -194,7 +194,7 @@ scenarios:
       value: '[data-pe-root]'
     # The accent booking button keeps AA contrast: its ink is set from the palette on the root.
     - type: visible_selector
-      value: '[data-template="bloom-hair-v2"][style*="--bl-gold-ink"] .bl-hero .bl-btn'
+      value: '[data-template="bloom-hair-v3"][style*="--b3-gold-ink"] .b3-hero .b3-btn'
   actions:
   - action: screenshot
     name: bloom_button_am_mobile_dark.png

@@ -3070,7 +3070,16 @@
         },
         "feature": {
           "newsletter": "Newsletter"
-        }
+        },
+        "motion": "Motion",
+        "motionHelp": "How much the page moves. Visitors who ask their device for less motion always get a still page.",
+        "motionLevel": {
+          "calm": "Calm",
+          "standard": "Standard motion",
+          "expressive": "Expressive"
+        },
+        "liveAvailability": "Show my next free times on the website",
+        "liveAvailabilityHelp": "Visitors see the next free time and how many times are left today. They never see who booked. The change goes live when you publish."
       },
       "content": {
         "title": "Website content",
@@ -3263,7 +3272,8 @@
           "locations": "Places",
           "contact": "Contact",
           "booking_cta": "Booking band",
-          "footer": "Footer"
+          "footer": "Footer",
+          "gallery": "Photo gallery"
         },
         "list": {
           "benefits": "Needs you help with",
@@ -3276,7 +3286,8 @@
           "faq": "Questions and answers",
           "notice": "Phone lines",
           "locations": "Place cards",
-          "footer": "Footer links"
+          "footer": "Footer links",
+          "gallery": "Photos in the gallery"
         },
         "add": {
           "benefit": "Add a need",
@@ -3286,7 +3297,8 @@
           "testimonial": "Add a quote",
           "question": "Add a question",
           "phoneLine": "Add a phone line",
-          "place": "Add a place card"
+          "place": "Add a place card",
+          "photo": "Add a photo"
         },
         "field": {
           "title": "Heading",
@@ -3315,7 +3327,8 @@
           "highlights": "Highlights",
           "consent": "Consent",
           "placeNote": "Directions or privacy note",
-          "placeNotes": "Short notes or how-it-works steps"
+          "placeNotes": "Short notes or how-it-works steps",
+          "caption": "Caption"
         },
         "format": {
           "label": "Session format on the website",
@@ -3335,7 +3348,8 @@
           "phone": "Enter the number as people dial it: digits, spaces and + ( ) - only.",
           "email": "Enter a valid email address.",
           "altRequired": "Describe the photo in English for people who cannot see it.",
-          "consent": "Publish a quote only with the person's consent."
+          "consent": "Publish a quote only with the person's consent.",
+          "imageRequired": "Add a photo, or remove this item."
         },
         "image": {
           "label": "Photo",
@@ -3950,7 +3964,47 @@
     "formatOnline": "Online video",
     "formatPhone": "By phone",
     "areaMap": "Map of the area around {name}",
-    "goodToKnow": "Good to know"
+    "goodToKnow": "Good to know",
+    "greetingMorning": "Good morning",
+    "greetingAfternoon": "Good afternoon",
+    "greetingEvening": "Good evening",
+    "greetingNight": "Good evening, night owl",
+    "openNow": "Open now · closes at {time}",
+    "opensToday": "Closed now · opens today at {time}",
+    "opensOn": "Closed now · opens {day} at {time}",
+    "habeshaTime": "Habesha time",
+    "internationalTime": "International time",
+    "clockFormat": "Clock format",
+    "nextFree": "Next free time: {when}, {time}",
+    "nextFreeChair": "Next free chair: {when}, {time}",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "leftToday": "{count} times left today",
+    "leftTodayOne": "One time left today",
+    "seeAllTimes": "See all free times",
+    "bookWith": "Book with {name}",
+    "lookbook": "Lookbook",
+    "nextLook": "Next look",
+    "previousLook": "Previous look",
+    "lookOf": "{index} of {count}",
+    "before": "Before",
+    "after": "After",
+    "compare": "Drag to compare before and after",
+    "previous": "Show earlier photos",
+    "next": "Show more photos",
+    "pauseReviews": "Pause the reviews",
+    "playReviews": "Play the reviews",
+    "onThisPage": "On this page",
+    "rooms": "Our rooms",
+    "copyAddress": "Copy address",
+    "copied": "Address copied",
+    "call": "Call us",
+    "loadingSite": "Loading the website",
+    "lookBraids": "Knotless braids",
+    "lookTaper": "Tapered cut",
+    "lookSilk": "Silk press",
+    "menu": "Price menu",
+    "stillUnsure": "Still unsure? Ask us"
   },
   "customerEmail": {
     "subjectConfirmation": "Your booking with {0} is confirmed",

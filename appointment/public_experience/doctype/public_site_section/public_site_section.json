@@ -8,7 +8,7 @@
  "field_order": ["section_id", "section_type", "enabled", "order_index", "schema_version", "content_json"],
  "fields": [
   {"description": "Stable instance identifier, unique within the site.", "fieldname": "section_id", "fieldtype": "Data", "in_list_view": 1, "label": "Section ID", "reqd": 1},
-  {"fieldname": "section_type", "fieldtype": "Select", "in_list_view": 1, "label": "Section Type", "options": "hero\nservices\nproviders\nprocess\nbenefits\napproaches\ntestimonials\nproof\nlocations\nabout\nfaq\nnotice\ncontact\nbooking_cta\nfooter", "reqd": 1},
+  {"fieldname": "section_type", "fieldtype": "Select", "in_list_view": 1, "label": "Section Type", "options": "hero\nservices\nproviders\nprocess\nbenefits\napproaches\ntestimonials\nproof\nlocations\nabout\nfaq\nnotice\ncontact\nbooking_cta\nfooter\ngallery", "reqd": 1},
   {"default": "1", "fieldname": "enabled", "fieldtype": "Check", "in_list_view": 1, "label": "Enabled"},
   {"fieldname": "order_index", "fieldtype": "Int", "label": "Order"},
   {"default": "2", "fieldname": "schema_version", "fieldtype": "Int", "label": "Schema Version", "read_only": 1},
@@ -18,7 +18,7 @@
  "index_web_pages_for_search": 0,
  "istable": 1,
  "links": [],
- "modified": "2026-10-12 14:00:00.000000",
+ "modified": "2026-10-15 09:00:00.000000",
  "modified_by": "Administrator",
  "module": "Public Experience",
  "name": "Public Site Section",

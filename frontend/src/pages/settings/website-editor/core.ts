@@ -27,6 +27,8 @@ export interface EditorList {
   add: boolean;
   label: string;
   image?: boolean;
+  /** Each item needs its own photo (a gallery); other image slots fall back to the template's photo. */
+  imageRequired?: boolean;
   numbered?: string;
   inherit?: string[];
   defaults?: Content;
@@ -42,7 +44,7 @@ export interface SectionSchema {
 
 export interface Issue {
   path: string;
-  code: "required" | "tooLong" | "tooMany" | "phone" | "dial" | "email" | "altRequired" | "consent";
+  code: "required" | "tooLong" | "tooMany" | "phone" | "dial" | "email" | "altRequired" | "consent" | "imageRequired";
   limit?: number;
 }
 
@@ -148,6 +150,7 @@ export function validateSection(schema: SectionSchema, content: Content, stored?
       const prefix = `${schema.list!.key}.${index}.`;
       issues.push(...validateFields(schema.list!.fields, item, prefix, known));
       if (schema.list!.image) issues.push(...validateImage(item, prefix));
+      if (schema.list!.imageRequired && !(typeof item.image === "string" && item.image)) issues.push({ path: `${prefix}image`, code: "imageRequired" });
     });
   }
   return issues;
