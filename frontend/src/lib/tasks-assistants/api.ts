@@ -25,7 +25,7 @@ import type {
 
 export const taskAPI = {
   create: (data: Partial<Task>): Promise<APIResponse<Task>> =>
-    gatewayPost('appointment.tasks.api.task_api.create_task', data),
+    gatewayPost('appointment.tasks.api.task_api.create_task', { data }),
 
   get: (taskName: string, fields?: string): Promise<APIResponse<Task>> =>
     gatewayGet('appointment.tasks.api.task_api.get_task', {
@@ -94,7 +94,7 @@ export const taskAPI = {
 export const taskMasterDataAPI = {
   categories: {
     create: (data: { name: string; description?: string }): Promise<APIResponse<TaskCategory>> =>
-      gatewayPost('appointment.tasks.api.task_master_data_api.create_task_category', data),
+      gatewayPost('appointment.tasks.api.task_master_data_api.create_task_category', { data }),
 
     list: (filters?: Record<string, any>): Promise<APIResponse<TaskCategory[]>> =>
       gatewayGet('appointment.tasks.api.task_master_data_api.list_task_categories', {
@@ -104,7 +104,7 @@ export const taskMasterDataAPI = {
 
   templates: {
     create: (data: Partial<TaskTemplate>): Promise<APIResponse<TaskTemplate>> =>
-      gatewayPost('appointment.tasks.api.task_master_data_api.create_task_template', data),
+      gatewayPost('appointment.tasks.api.task_master_data_api.create_task_template', { data }),
 
     get: (templateName: string): Promise<APIResponse<TaskTemplate>> =>
       gatewayGet('appointment.tasks.api.task_master_data_api.get_task_template', {
@@ -130,7 +130,7 @@ export const taskMasterDataAPI = {
 
   projects: {
     create: (data: Partial<TaskProject>): Promise<APIResponse<TaskProject>> =>
-      gatewayPost('appointment.tasks.api.task_master_data_api.create_task_project', data),
+      gatewayPost('appointment.tasks.api.task_master_data_api.create_task_project', { data }),
 
     get: (projectName: string): Promise<APIResponse<TaskProject & { tasks: Task[]; tasks_count: number }>> =>
       gatewayGet('appointment.tasks.api.task_master_data_api.get_task_project', {
@@ -160,7 +160,7 @@ export const taskMasterDataAPI = {
 export const assistantAPI = {
   vaProfile: {
     create: (data: Partial<VAProfile>): Promise<APIResponse<VAProfile>> =>
-      gatewayPost('appointment.assistants.api.assistant_api.create_va_profile', data),
+      gatewayPost('appointment.assistants.api.assistant_api.create_va_profile', { data }),
 
     get: (vaName: string, fields?: string): Promise<APIResponse<VAProfile>> =>
       gatewayGet('appointment.assistants.api.assistant_api.get_va_profile', {
@@ -191,7 +191,7 @@ export const assistantAPI = {
 
   clientProfile: {
     create: (data: Partial<ClientProfile>): Promise<APIResponse<ClientProfile>> =>
-      gatewayPost('appointment.assistants.api.assistant_api.create_client_profile', data),
+      gatewayPost('appointment.assistants.api.assistant_api.create_client_profile', { data }),
 
     get: (clientName: string, fields?: string): Promise<APIResponse<ClientProfile>> =>
       gatewayGet('appointment.assistants.api.assistant_api.get_client_profile', {
@@ -222,7 +222,7 @@ export const assistantAPI = {
 
   assignment: {
     create: (data: Partial<AssistantClientAssignment>): Promise<APIResponse<AssistantClientAssignment>> =>
-      gatewayPost('appointment.assistants.api.assistant_api.create_assignment', data),
+      gatewayPost('appointment.assistants.api.assistant_api.create_assignment', { data }),
 
     get: (assignmentName: string, fields?: string): Promise<APIResponse<AssistantClientAssignment>> =>
       gatewayGet('appointment.assistants.api.assistant_api.get_assignment', {
@@ -276,7 +276,7 @@ export const assistantAPI = {
 // Assistant Skills APIs
 export const assistantSkillAPI = {
   create: (data: { name: string; description?: string; category?: string }): Promise<APIResponse<AssistantSkill>> =>
-    gatewayPost('appointment.assistants.api.assistant_skill_api.create_assistant_skill', data),
+    gatewayPost('appointment.assistants.api.assistant_skill_api.create_assistant_skill', { data }),
 
   get: (skillName: string): Promise<APIResponse<AssistantSkill>> =>
     gatewayGet('appointment.assistants.api.assistant_skill_api.get_assistant_skill', {

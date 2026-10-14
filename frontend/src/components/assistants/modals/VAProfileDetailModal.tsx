@@ -4,6 +4,7 @@ import {
   Edit, 
   Trash2, 
   Mail, 
+  Phone,
   Globe, 
   CheckCircle2, 
   Star,
@@ -18,6 +19,8 @@ import {
   Wrench
 } from 'lucide-react';
 import { Dialog, DialogContent } from '@/components/dialog';
+import { PhoneText } from '@/components/phone-input';
+import { useTranslation } from '@/lib/i18n';
 import { assistantAPI } from '@/lib/tasks-assistants/api';
 import type { VAProfile } from '@/lib/tasks-assistants/types';
 import Spinner from '@/components/spinner';
@@ -41,6 +44,7 @@ const resolveAvatar = (url?: string) => {
 };
 
 export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }: VAProfileDetailModalProps) => {
+  const { t } = useTranslation();
   const [profile, setProfile] = useState<VAProfile | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -350,6 +354,15 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
                   </div>
                   <p className="text-sm font-medium truncate" style={{ color: 'var(--text-primary)' }}>{profile.email}</p>
                 </div>
+                {profile.phone && (
+                  <div className="p-4 rounded-xl" data-qa="va-detail-phone" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-subtle)' }}>
+                    <div className="flex items-center gap-2 mb-1">
+                      <Phone className="w-4 h-4" style={{ color: 'var(--accent-primary)' }} />
+                      <span className="text-xs font-semibold uppercase" style={{ color: 'var(--text-subtle)' }}>{t('controls.phone.label')}</span>
+                    </div>
+                    <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}><PhoneText value={profile.phone} /></p>
+                  </div>
+                )}
                 {profile.timezone && (
                   <div className="p-4 rounded-xl" style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-subtle)' }}>
                     <div className="flex items-center gap-2 mb-1">
@@ -402,6 +415,7 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={onEdit}
+                  data-qa="assistant-detail-edit"
                   className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all flex items-center gap-2"
                   style={{ background: tierConfig.bg }}
                 >

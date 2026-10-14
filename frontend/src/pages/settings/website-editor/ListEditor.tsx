@@ -58,12 +58,12 @@ export function FieldInput({ section, field, content, onPatch, issues, prefix, d
     return <LocalizedInput label={label} value={value} long={field.kind === "long"} required={field.required} maxLength={field.maxLength}
       issues={own} qa={`${qa}-${field.key}`} onChange={(next) => onPatch({ [field.key]: next })} />;
   }
-  if (field.kind === "plain" && field.pattern === "phone") {
+  if (field.kind === "phone") {
     return <PhoneLineInput label={label} value={value} maxLength={field.maxLength}
       issues={own} qa={`${qa}-${field.key}`} onChange={(next) => onPatch({ [field.key]: next })} />;
   }
   if (field.kind === "plain") {
-    return <PlainInput label={label} value={value} maxLength={field.maxLength} type={field.pattern === "email" ? "email" : "text"}
+    return <PlainInput label={label} value={value} maxLength={field.maxLength} type={field.pattern === "email" ? "email" : field.pattern === "dial" ? "tel" : "text"}
       issues={own} qa={`${qa}-${field.key}`} onChange={(next) => onPatch({ [field.key]: next })} />;
   }
   if (field.kind === "format") {
@@ -78,7 +78,7 @@ export function FieldInput({ section, field, content, onPatch, issues, prefix, d
     onCheckedChange={(checked) => onPatch({ [field.key]: checked })} />{t("staff.website.editor.consentLabel")}</label><IssueList issues={own} /></div>;
 }
 
-/** A phone line: the shared phone control, with the editor's issue list under it. */
+/** A phone number under the app's phone rule: the shared phone control, with the editor's issue list under it. */
 function PhoneLineInput({ label, value, onChange, maxLength, issues, qa }: { label: string; value: unknown; onChange: (value: string) => void; maxLength: number; issues: Issue[]; qa: string }) {
   const id = useId();
   return <div className="space-y-1">

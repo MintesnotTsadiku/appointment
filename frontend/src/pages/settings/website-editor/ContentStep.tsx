@@ -20,12 +20,16 @@ const SECTION_KEYS: Record<string, string> = {
   footer: "staff.website.editor.section.footer",
 };
 
-/** Issues of every section, by section type, checked on the content that will be saved. */
-export function draftIssues(sections: DraftSection[], schemas: Record<string, SectionSchema>): Record<string, Issue[]> {
+/**
+ * Issues of every section, by section type, checked on the content that will be saved.
+ * `stored` is the saved draft: its phone numbers are not checked again.
+ */
+export function draftIssues(sections: DraftSection[], schemas: Record<string, SectionSchema>, stored: DraftSection[] = []): Record<string, Issue[]> {
   const result: Record<string, Issue[]> = {};
   for (const row of sections) {
     const schema = schemas[row.type];
-    const issues = schema ? validateSection(schema, cleanContent(row.content)) : [];
+    const before = stored.find((saved) => saved.type === row.type)?.content;
+    const issues = schema ? validateSection(schema, cleanContent(row.content), before) : [];
     if (issues.length) result[row.type] = issues;
   }
   return result;
@@ -37,6 +41,8 @@ export function savedSections(sections: DraftSection[]): DraftSection[] {
 
 interface Props {
   sections: DraftSection[];
+  /** The saved draft, to tell changed phone numbers from stored ones. */
+  stored: DraftSection[];
   schemas: Record<string, SectionSchema>;
   context: EditorContext;
   snapshot: PublishedSnapshot | null;
@@ -48,11 +54,11 @@ interface Props {
 }
 
 /** The content step: pick a section, edit it in both languages, and watch the page change beside it. */
-export function ContentStep({ sections, schemas, context, snapshot, dirty, fullPreview, onClosePreview, onChange, focus }: Props) {
+export function ContentStep({ sections, stored, schemas, context, snapshot, dirty, fullPreview, onClosePreview, onChange, focus }: Props) {
   const { t } = useTranslation();
   const editable = sections.filter((row) => schemas[row.type]);
   const [selected, setSelected] = useState(editable[0]?.type || "");
-  const issues = useMemo(() => draftIssues(sections, schemas), [sections, schemas]);
+  const issues = useMemo(() => draftIssues(sections, schemas, stored), [sections, schemas, stored]);
   useEffect(() => { if (focus) setSelected(focus); }, [focus]);
   const current = sections.find((row) => row.type === selected);
   const live = useMemo(() => snapshot ? { ...snapshot, sections: previewSections(snapshot.sections, savedSections(sections), context.derived) } : null,

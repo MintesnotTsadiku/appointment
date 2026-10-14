@@ -85,7 +85,6 @@ export const EditVAProfileModal = ({ vaId, isOpen, onClose, onSave }: EditVAProf
     }
     if (formData.phone?.trim() && !normalizePhone(formData.phone)) {
       setPhoneChecked(true);
-      toast.error(t('controls.phone.hint'));
       return;
     }
 
@@ -191,7 +190,7 @@ export const EditVAProfileModal = ({ vaId, isOpen, onClose, onSave }: EditVAProf
               </div>
 
               {/* Phone and Status */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="phone" className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
                     <Phone className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
@@ -199,6 +198,7 @@ export const EditVAProfileModal = ({ vaId, isOpen, onClose, onSave }: EditVAProf
                   </Label>
                   <PhoneInput
                     id="phone"
+                    data-qa="assistant-profile-phone"
                     value={formData.phone || ''}
                     showError={phoneChecked}
                     onChange={(phone) => setFormData({ ...formData, phone })}
@@ -258,6 +258,7 @@ export const EditVAProfileModal = ({ vaId, isOpen, onClose, onSave }: EditVAProf
               </motion.button>
               <motion.button
                 type="submit"
+                data-qa="assistant-profile-submit"
                 disabled={loading}
                 whileHover={{ scale: loading ? 1 : 1.02, y: loading ? 0 : -2 }}
                 whileTap={{ scale: loading ? 1 : 0.98 }}

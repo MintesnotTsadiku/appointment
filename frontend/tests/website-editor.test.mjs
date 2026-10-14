@@ -51,6 +51,19 @@ const issues = core.validateSection(faq, { title: { am: 'ጥያቄዎች' }, ima
 assert.deepEqual(plain(issues).map((issue) => `${issue.path}:${issue.code}`), ['title.en:required', 'imageAlt.en:altRequired', 'items.0.answer.en:tooLong']);
 assert.equal(core.validateSection(faq, { title: { en: 'Q' }, image: '/assets/appointment/x.webp', items: [] }).length, 0, 'a template photo needs no owner alt text');
 
+// Phone fields follow the phone rule; a number the stored section already has is not checked again.
+const phoneSchema = { fields: [{ key: 'phone', kind: 'phone', required: false, maxLength: 32 }],
+  list: { key: 'items', maxItems: 4, add: true, label: 'name', fields: [{ key: 'phone', kind: 'phone', required: false, maxLength: 32 }] } };
+const phoneIssues = (content, stored) => plain(core.validateSection(phoneSchema, content, stored)).map((issue) => `${issue.path}:${issue.code}`);
+assert.deepEqual(phoneIssues({ phone: '0911 22 33 44', items: [{ phone: '+44 20 7946 0958' }] }), []);
+assert.deepEqual(phoneIssues({ phone: '0911 22 33', items: [{ phone: 'call me' }] }), ['phone:phone', 'items.0.phone:phone']);
+const placeholder = { phone: '000 000 0101', items: [{ id: 'a', phone: '000 000 0102' }, { id: 'b', phone: '000 000 0103' }] };
+assert.deepEqual(phoneIssues({ phone: '000 000 0101', items: [placeholder.items[1], placeholder.items[0]] }, placeholder), [], 'stored placeholders do not block other edits');
+assert.deepEqual(phoneIssues({ phone: '000 000 0109', items: [] }, placeholder), ['phone:phone'], 'a changed number is checked');
+const notice = { fields: [], list: { key: 'items', maxItems: 6, add: true, label: 'label', fields: [{ key: 'phone', kind: 'plain', pattern: 'dial', required: false, maxLength: 32 }] } };
+assert.deepEqual(plain(core.validateSection(notice, { items: [{ phone: '991' }, { phone: '+251 11 551 5566' }] })), [], 'a notice line takes an emergency short code');
+assert.deepEqual(plain(core.validateSection(notice, { items: [{ phone: 'ask us' }] })).map((issue) => issue.code), ['dial']);
+
 // Session format: the owner's choice, else the location's, else the name's.
 assert.deepEqual(plain(core.shownMeet({ id: 's1', format: 'phone' }, { s1: 'online' })), { meet: 'phone', source: 'owner' });
 assert.deepEqual(plain(core.shownMeet({ id: 's1' }, { s1: 'online' })), { meet: 'online', source: 'location' });

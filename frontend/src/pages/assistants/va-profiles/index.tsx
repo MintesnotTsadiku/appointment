@@ -141,6 +141,7 @@ const VAProfiles = () => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => setIsCreateModalOpen(true)}
+              data-qa="va-create"
               className="relative group flex items-center gap-1.5 lg:gap-2 px-3 lg:px-5 py-2 lg:py-2.5 rounded-lg lg:rounded-xl font-medium text-xs lg:text-sm overflow-hidden"
             >
               <div className="absolute inset-0 transition-all bg-gradient-primary group-hover:opacity-90" />
@@ -219,6 +220,7 @@ const VAProfiles = () => {
                             <div className="absolute inset-0 bg-linear-to-r/srgb from-violet-500/30 to-purple-500/30 opacity-0 group-hover:opacity-100 transition-all duration-500 rounded-2xl blur-2xl" />
                             
                             <Card
+                              data-qa="va-card"
                               className="relative overflow-hidden backdrop-blur-xs hover:scale-[1.02] transition-all duration-300 cursor-pointer"
                               style={{
                                 backgroundColor: 'var(--bg-elevated)',

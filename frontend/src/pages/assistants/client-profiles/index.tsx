@@ -173,6 +173,7 @@ const ClientProfiles = () => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => setIsCreateModalOpen(true)}
+              data-qa="client-create"
               className="relative group flex items-center gap-1.5 lg:gap-2 px-3 lg:px-5 py-2 lg:py-2.5 rounded-lg lg:rounded-xl font-medium text-xs lg:text-sm overflow-hidden"
             >
               <div className="absolute inset-0 transition-all bg-gradient-secondary group-hover:opacity-90" />
@@ -238,6 +239,7 @@ const ClientProfiles = () => {
                             />
                             
                             <Card
+                              data-qa="client-card"
                               className="relative p-5 backdrop-blur-xs hover:scale-[1.02] transition-all duration-300 cursor-pointer overflow-hidden"
                               style={{
                                 backgroundColor: 'var(--bg-elevated)',

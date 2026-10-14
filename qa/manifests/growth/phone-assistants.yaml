@@ -1,0 +1,215 @@
+# Phone fields of the assistant modals (docs/growth/PHONE_FIRST.md), English, light.
+# Run appointment.tests.assistant_phone_qa_fixtures.setup first and cleanup afterwards.
+# The VA and client profile modals use the shared PhoneInput: a number that does not fit shows the
+# shared hint, a local number is sent and stored in E.164 form, and the detail modal shows it formatted.
+# Desktop covers the VA profile; mobile covers the client profile.
+app: appointment
+base_url: http://localhost:47800
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.assistant_phone_qa_fixtures.browser_values
+artifact_root: /tmp/agent_browser_qa/appointment-phone-assistants
+default_role: Administrator
+auth:
+  type: frappe_session
+  username: Administrator
+  verify_path: /api/method/frappe.auth.get_logged_user
+scenarios:
+- id: phone_assistants_va_en_desktop
+  title: 'VA profile: a bad number shows the hint, a local number is stored in E.164 and shown formatted (en, desktop)'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /assistants/va-profiles
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="va-create"]'
+  actions:
+  - action: click
+    selector: '[data-qa="va-create"]'
+  - action: wait_for
+    selector: '[role="dialog"] #full_name'
+  - action: fill
+    selector: '[role="dialog"] #full_name'
+    value: Selamawit Bekele
+  - action: fill
+    selector: '[role="dialog"] #email'
+    value: '{qa_va_email}'
+  - action: fill
+    selector: '[data-qa="assistant-profile-phone"]'
+    value: 0911 48 26
+  - action: click
+    selector: '[data-qa="assistant-profile-submit"]'
+    assertions:
+    - type: text_contains
+      selector: '#phone-error'
+      value: Enter a phone number like 0911 22 33 44 or +251 91 122 3344
+  - action: screenshot
+    name: phone_assistants_va_en_desktop-1-hint.png
+    full_page: false
+  - action: fill
+    selector: '[data-qa="assistant-profile-phone"]'
+    value: 0911 48 26 01
+  - action: click
+    selector: '[data-qa="assistant-profile-submit"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.api.gateway.route
+      method: POST
+      request_json_path: data.phone
+      request_json_value: '+251911482601'
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="va-card"]:has-text("Selamawit Bekele")'
+  - action: click
+    selector: '[data-qa="va-card"]:has-text("Selamawit Bekele")'
+  - action: wait_for
+    selector: '[data-qa="va-detail-phone"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="va-detail-phone"]'
+      value: +251 91 148 2601
+    - type: visible_selector
+      value: '[data-qa="va-detail-phone"] a[href="tel:+251911482601"]'
+  - action: screenshot
+    name: phone_assistants_va_en_desktop-2-detail.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="assistant-detail-edit"]'
+  - action: wait_for
+    selector: '[data-qa="assistant-profile-phone"]'
+  - action: fill
+    selector: '[data-qa="assistant-profile-phone"]'
+    value: call me
+  - action: click
+    selector: '[data-qa="assistant-profile-submit"]'
+    assertions:
+    - type: text_contains
+      selector: '#phone-error'
+      value: Enter a phone number like 0911 22 33 44 or +251 91 122 3344
+  - action: fill
+    selector: '[data-qa="assistant-profile-phone"]'
+    value: 0711 48 26 02
+  - action: screenshot
+    name: phone_assistants_va_en_desktop-3-edit.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="assistant-profile-submit"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.api.gateway.route
+      method: POST
+      request_json_path: data.phone
+      request_json_value: '+251711482602'
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="va-card"]:has-text("Selamawit Bekele")'
+  - action: click
+    selector: '[data-qa="va-card"]:has-text("Selamawit Bekele")'
+  - action: wait_for
+    selector: '[data-qa="va-detail-phone"]:has-text("+251 71 148 2602")'
+  - action: screenshot
+    name: phone_assistants_va_en_desktop-4-saved.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: phone_assistants_client_en_mobile
+  title: 'Client profile: a bad number shows the hint, a local number is stored in E.164 and shown formatted (en, mobile)'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /assistants/client-profiles
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="client-create"]'
+  actions:
+  - action: click
+    selector: '[data-qa="client-create"]'
+  - action: wait_for
+    selector: '[role="dialog"] #full_name'
+  - action: fill
+    selector: '[role="dialog"] #full_name'
+    value: Dawit Tadesse
+  - action: fill
+    selector: '[role="dialog"] #email'
+    value: '{qa_client_email}'
+  - action: fill
+    selector: '[data-qa="assistant-profile-phone"]'
+    value: '12345'
+  - action: click
+    selector: '[data-qa="assistant-profile-submit"]'
+    assertions:
+    - type: text_contains
+      selector: '#phone-error'
+      value: Enter a phone number like 0911 22 33 44 or +251 91 122 3344
+  - action: screenshot
+    name: phone_assistants_client_en_mobile-1-hint.png
+    full_page: false
+  - action: fill
+    selector: '[data-qa="assistant-profile-phone"]'
+    value: 0911 48 26 03
+  - action: click
+    selector: '[data-qa="assistant-profile-submit"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.api.gateway.route
+      method: POST
+      request_json_path: data.phone
+      request_json_value: '+251911482603'
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="client-card"]:has-text("Dawit Tadesse")'
+  - action: click
+    selector: '[data-qa="client-card"]:has-text("Dawit Tadesse")'
+  - action: wait_for
+    selector: '[role="dialog"] a[href="tel:+251911482603"]'
+    assertions:
+    - type: text_contains
+      selector: '[role="dialog"] a[href="tel:+251911482603"]'
+      value: +251 91 148 2603
+  - action: screenshot
+    name: phone_assistants_client_en_mobile-2-detail.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="assistant-detail-edit"]'
+  - action: wait_for
+    selector: '[data-qa="assistant-profile-phone"]'
+  - action: fill
+    selector: '[data-qa="assistant-profile-phone"]'
+    value: 011 123 4567
+  - action: screenshot
+    name: phone_assistants_client_en_mobile-3-edit.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="assistant-profile-submit"]'
+    assertions:
+    - type: network_request
+      url_contains: appointment.api.gateway.route
+      method: POST
+      request_json_path: data.phone
+      request_json_value: '+251111234567'
+      status: 200
+  - action: wait_for
+    selector: '[data-qa="client-card"]:has-text("Dawit Tadesse")'
+  - action: click
+    selector: '[data-qa="client-card"]:has-text("Dawit Tadesse")'
+  - action: wait_for
+    selector: '[role="dialog"] a[href="tel:+251111234567"]:has-text("+251 11 123 4567")'
+  - action: screenshot
+    name: phone_assistants_client_en_mobile-4-saved.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

@@ -80,6 +80,24 @@ scenarios:
   - action: screenshot
     name: website_editor_am_mobile_dark-3-place-note.png
     full_page: false
+  - action: fill
+    selector: '[data-qa="website-editor-locations-item-0-phone"]'
+    value: 0911 22 33
+  - action: press
+    selector: '[data-qa="website-editor-locations-item-0-phone"]'
+    key: Tab
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="website-editor-locations-item-0"] [role="alert"]'
+      value: ስልክ ቁጥሩን እንደ 0911 22 33 44 ወይም +251 91 122 3344 ያስገቡ
+  - action: scroll
+    delta_y: 180
+  - action: screenshot
+    name: website_editor_am_mobile_dark-3b-place-phone-hint.png
+    full_page: false
+  - action: fill
+    selector: '[data-qa="website-editor-locations-item-0-phone"]'
+    value: 000 000 0106
   - action: click
     selector: '[data-qa="website-editor-tab-faq"]'
   - action: click

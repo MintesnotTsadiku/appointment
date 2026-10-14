@@ -2,6 +2,8 @@
 # the Ergata showcase content; run `bench execute appointment.tests.website_editor_qa_fixtures.restore` after the run).
 # The owner overrides a session format, edits a place note in English and Amharic, reorders and removes an FAQ item,
 # uploads a photo into the FAQ slot with alt text, previews and publishes; the public page shows the changes.
+# Phone fields: a place phone that does not fit shows the shared hint, the showcase's stored placeholder number does
+# not block the save, and a contact phone typed in local form is stored in E.164 and shown formatted with a tel: link.
 app: appointment
 base_url: http://localhost:47800
 default_role: Staff
@@ -69,6 +71,37 @@ scenarios:
     selector: '[data-qa="website-editor-locations-item-0-notes"]'
   - action: screenshot
     name: website_editor_en_desktop-2-place-notes.png
+    full_page: false
+  - action: fill
+    selector: '[data-qa="website-editor-locations-item-0-phone"]'
+    value: 0911 22 33
+  - action: press
+    selector: '[data-qa="website-editor-locations-item-0-phone"]'
+    key: Tab
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="website-editor-locations-item-0"] [role="alert"]'
+      value: Enter a phone number like 0911 22 33 44 or +251 91 122 3344
+  - action: scroll
+    delta_y: 700
+  - action: screenshot
+    name: website_editor_en_desktop-2b-place-phone-hint.png
+    full_page: false
+  - action: fill
+    selector: '[data-qa="website-editor-locations-item-0-phone"]'
+    value: 000 000 0106
+  - action: click
+    selector: '[data-qa="website-editor-tab-contact"]'
+  - action: fill
+    selector: '[data-qa="website-editor-contact-phone"]'
+    value: 0911 22 33 44
+  - action: press
+    selector: '[data-qa="website-editor-contact-phone"]'
+    key: Tab
+  - action: scroll
+    delta_y: 700
+  - action: screenshot
+    name: website_editor_en_desktop-2c-contact-phone.png
     full_page: false
   - action: click
     selector: '[data-qa="website-editor-tab-faq"]'
@@ -165,6 +198,10 @@ scenarios:
     selector: 'a.eg-faq-ask'
   - action: wait_for
     selector: '#contact'
+    assertions:
+    - type: text_contains
+      selector: '.eg-contact-links a[href="tel:+251911223344"]'
+      value: +251 91 122 3344
   - action: screenshot
     name: website_editor_en_desktop-9-public-places.png
     full_page: false

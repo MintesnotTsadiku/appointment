@@ -11,12 +11,13 @@ export type Meet = "in_person" | "online" | "phone";
 
 export interface EditorField {
   key: string;
-  kind: "text" | "long" | "plain" | "format" | "consent" | "strings";
+  kind: "text" | "long" | "plain" | "phone" | "format" | "consent" | "strings";
   required: boolean;
   maxLength: number;
   maxItems?: number;
   options?: Meet[];
-  pattern?: "phone" | "email";
+  /** `dial`: a notice line as people dial it, short codes such as 991 included. */
+  pattern?: "dial" | "email";
 }
 
 export interface EditorList {
@@ -41,12 +42,14 @@ export interface SectionSchema {
 
 export interface Issue {
   path: string;
-  code: "required" | "tooLong" | "tooMany" | "phone" | "email" | "altRequired" | "consent";
+  code: "required" | "tooLong" | "tooMany" | "phone" | "dial" | "email" | "altRequired" | "consent";
   limit?: number;
 }
 
 export const LOCALES = ["en", "am"] as const;
 const EMAIL_RE = /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/;
+// The server's notice line rule (`section_schemas._NOTICE_PHONE_RE`).
+const DIAL_RE = /^[+0-9][0-9().\-\s]{1,31}$/;
 const OWNER_FILE_RE = /^\/files\/[A-Za-z0-9][A-Za-z0-9._-]{0,180}$/;
 
 export function asRecord(value: unknown): Content {
@@ -128,23 +131,39 @@ export function isOwnerUpload(value: unknown): boolean {
   return typeof value === "string" && OWNER_FILE_RE.test(value) && !value.includes("..");
 }
 
-/** Check one section like the server does, so the owner sees translated messages before saving. */
-export function validateSection(schema: SectionSchema, content: Content): Issue[] {
-  const issues = validateFields(schema.fields, content, "");
+/**
+ * Check one section like the server does, so the owner sees translated messages before saving.
+ * A phone number that the stored section already has is not checked again (`stored`), so a showcase's
+ * placeholder number or an older value does not block other edits; the server follows the same rule.
+ */
+export function validateSection(schema: SectionSchema, content: Content, stored?: Content): Issue[] {
+  const before = asRecord(stored);
+  const issues = validateFields(schema.fields, content, "", knownPhones(schema.fields, [before]));
   if (schema.image) issues.push(...validateImage(content, ""));
   if (schema.list) {
     const items = asRecords(content[schema.list.key]);
+    const known = knownPhones(schema.list.fields, asRecords(before[schema.list.key]));
     if (items.length > schema.list.maxItems) issues.push({ path: schema.list.key, code: "tooMany", limit: schema.list.maxItems });
     items.forEach((item, index) => {
       const prefix = `${schema.list!.key}.${index}.`;
-      issues.push(...validateFields(schema.list!.fields, item, prefix));
+      issues.push(...validateFields(schema.list!.fields, item, prefix, known));
       if (schema.list!.image) issues.push(...validateImage(item, prefix));
     });
   }
   return issues;
 }
 
-function validateFields(fields: EditorField[], content: Content, prefix: string): Issue[] {
+/** The stored phone numbers of each phone field, by field key. */
+function knownPhones(fields: EditorField[], records: Content[]): Record<string, Set<string>> {
+  const result: Record<string, Set<string>> = {};
+  for (const field of fields) {
+    if (field.kind !== "phone") continue;
+    result[field.key] = new Set(records.map((record) => record[field.key]).filter((value): value is string => typeof value === "string"));
+  }
+  return result;
+}
+
+function validateFields(fields: EditorField[], content: Content, prefix: string, known: Record<string, Set<string>> = {}): Issue[] {
   const issues: Issue[] = [];
   for (const field of fields) {
     const path = prefix + field.key;
@@ -157,8 +176,12 @@ function validateFields(fields: EditorField[], content: Content, prefix: string)
     }
     if (field.kind === "plain" && typeof value === "string" && value.trim()) {
       if (value.length > field.maxLength) issues.push({ path, code: "tooLong", limit: field.maxLength });
-      else if (field.pattern === "phone" && !normalizePhone(value)) issues.push({ path, code: "phone" });
+      else if (field.pattern === "dial" && !DIAL_RE.test(value.trim())) issues.push({ path, code: "dial" });
       else if (field.pattern === "email" && !EMAIL_RE.test(value.trim())) issues.push({ path, code: "email" });
+    }
+    if (field.kind === "phone" && typeof value === "string" && value.trim() && !known[field.key]?.has(value)) {
+      if (value.length > field.maxLength) issues.push({ path, code: "tooLong", limit: field.maxLength });
+      else if (!normalizePhone(value)) issues.push({ path, code: "phone" });
     }
     if (field.kind === "consent" && value !== true) issues.push({ path, code: "consent" });
   }

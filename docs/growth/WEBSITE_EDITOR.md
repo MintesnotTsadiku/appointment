@@ -21,7 +21,7 @@ Edits change the draft. Visitors see the edits after "Publish" in the "Readiness
 
 `appointment/public_experience/section_editor.py` has `EDITOR_SCHEMA`. For each section type it lists:
 
-- `fields`: each field's key, kind (`text`, `long`, `plain`, `format`, `consent`, `strings`), whether English is required, and the maximum length.
+- `fields`: each field's key, kind (`text`, `long`, `plain`, `phone`, `format`, `consent`, `strings`), whether English is required, and the maximum length. `phone` is a number under the app's phone rule (place phones and the contact phone). `plain` is an email (`pattern: email`) or a notice line as people dial it (`pattern: dial`, for example 991).
 - `image`: the section has an image slot (`image`, `imageAlt`, `imageFocus`).
 - `list`: the item fields, the maximum number of items, whether the owner can add items, the item's image slot, and the keys that a new item gets (`numbered`, `inherit`, `defaults`, `generatedId`).
 
@@ -29,7 +29,9 @@ Edits change the draft. Visitors see the edits after "Publish" in the "Readiness
 
 ## Validation
 
-The editor checks each section before it saves, with the same rules as the server: required English text, maximum lengths, maximum items, phone and email shape, photo description and quote consent. The messages are in English and Amharic (`staff.website.editor.issue.*`). The editor does not save while a changed section has a problem. It opens the section with the problem instead.
+The editor checks each section before it saves, with the same rules as the server: required English text, maximum lengths, maximum items, phone numbers (the shared phone rule, `controls.phone.hint`), notice line and email shape, photo description and quote consent. The messages are in English and Amharic (`staff.website.editor.issue.*`). The editor does not save while a changed section has a problem. It opens the section with the problem instead.
+
+`setup.save()` stores each changed phone in E.164 form and refuses a changed phone that is not usable (`section_editor.normalize_phones`). A phone that the stored section already has is not checked again, in the editor or on the server, so the showcases' placeholder numbers do not block other edits. See `docs/growth/PHONE_FIRST.md`.
 
 `setup.save()` validates each changed section again with `validate_typed_section`. It refuses the save and names the field when a section is not valid. Sections that did not change are not validated again, so an older draft can still move between steps.
 
@@ -81,6 +83,10 @@ The fixture `appointment.tests.website_editor_qa_fixtures` uses the Ergata showc
 - `qa/manifests/growth/website-editor-am-dark.yaml`: Amharic, phone, dark.
 
 The photos that a run uploads stay in the showcase media library, because a published release uses them.
+
+The two manifests also type a place phone that does not fit (the hint shows, in English and Amharic), put the stored placeholder back, and (English run) type the contact phone `0911 22 33 44`. The public page then shows `+251 91 122 3344` with a `tel:+251911223344` link. `restore()` puts the placeholder back.
+
+Runs of 2026-10-15: BQA-2026-00232 (`website-editor.yaml`) and BQA-2026-00231 (`website-editor-am-dark.yaml`) passed with 0 network errors and the known console notices.
 
 Runs of 2026-10-14:
 

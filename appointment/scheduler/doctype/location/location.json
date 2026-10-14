@@ -40,34 +40,6 @@
    "unique": 1
   },
   {
-   "fieldname": "address_line_1",
-   "fieldtype": "Data",
-   "label": "Address Line 1"
-  },
-  {
-   "fieldname": "address_line_2",
-   "fieldtype": "Data",
-   "label": "Address Line 2"
-  },
-  {
-   "default": "Addis Ababa",
-   "fieldname": "city",
-   "fieldtype": "Data",
-   "label": "City"
-  },
-  {
-   "fieldname": "phone",
-   "fieldtype": "Data",
-   "label": "Phone",
-   "options": "Phone"
-  },
-  {
-   "default": "Africa/Addis_Ababa",
-   "fieldname": "timezone",
-   "fieldtype": "Data",
-   "label": "Timezone"
-  },
-  {
    "default": "1",
    "fieldname": "is_active",
    "fieldtype": "Check",
@@ -203,7 +175,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-14 09:00:00.000000",
+ "modified": "2026-10-15 09:00:00.000000",
  "modified_by": "Administrator",
  "module": "Scheduler",
  "name": "Location",

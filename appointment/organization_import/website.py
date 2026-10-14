@@ -7,6 +7,7 @@ import re
 import frappe
 from frappe import _
 
+from appointment.helpers.phone import phone_problem
 from appointment.public_experience.section_schemas import validate_typed_section
 
 FIELDS = {"hero_title": ("hero", "title"), "hero_subtitle": ("hero", "subtitle"),
@@ -26,6 +27,8 @@ def errors(rows, organization=None):
         message = None
         if field == "email" and not re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]+", row["text"]):
             message = _("Enter a complete contact email address.")
+        if field == "phone" and phone_problem(row["text"]):
+            message = phone_problem(row["text"])
         if sections is not None:
             section = next((entry for entry in sections if entry["type"] == kind), None)
             if section is None:

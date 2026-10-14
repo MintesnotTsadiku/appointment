@@ -26,7 +26,9 @@ def _sample_value(field):
     if kind in {"text", "long"}:
         return t("Plain words", "ቀላል ቃላት")
     if kind == "plain":
-        return "+251 11 000 0000" if field.get("pattern") != "email" else "hello@example.test"
+        return {"email": "hello@example.test", "dial": "991"}[field["pattern"]]
+    if kind == "phone":
+        return "+251911223344"
     if kind == "format":
         return field["options"][-1]
     if kind == "consent":
@@ -111,6 +113,48 @@ class EditorSchemaContractTests(unittest.TestCase):
         self.assertIn("alt_required", rules)
         content.update({"imageAlt": t("Two cups of tea"), "imageFocus": {"x": 120, "y": 5}})
         self.assertEqual([issue.rule for issue in validate_typed_section("notice", content).issues], ["focus"])
+
+
+class PhoneFieldTests(unittest.TestCase):
+    def test_place_and_contact_phones_use_the_phone_rule_and_notice_lines_take_short_codes(self):
+        self.assertEqual(next(field for field in EDITOR_SCHEMA["contact"]["fields"] if field["key"] == "phone")["kind"], "phone")
+        self.assertEqual(next(field for field in EDITOR_SCHEMA["locations"]["list"]["fields"] if field["key"] == "phone")["kind"], "phone")
+        notice = next(field for field in EDITOR_SCHEMA["notice"]["list"]["fields"] if field["key"] == "phone")
+        self.assertEqual((notice["kind"], notice["pattern"]), ("plain", "dial"))
+
+    def test_a_changed_phone_is_stored_in_e164_form(self):
+        from appointment.public_experience.section_editor import normalize_phones
+
+        stored = {"phone": "+251911223344", "items": [{"id": "p1", "phone": "+251111234567"}]}
+        contact = normalize_phones("contact", {"phone": "0711 22 33 44"}, stored)
+        self.assertEqual(contact["phone"], "+251711223344")
+        places = normalize_phones("locations", {"items": [{"id": "p1", "phone": "011 123 4567"}, {"id": "p2", "phone": "+44 20 7946 0958"}]}, stored)
+        self.assertEqual([item["phone"] for item in places["items"]], ["+251111234567", "+442079460958"])
+
+    def test_a_changed_phone_that_is_not_usable_is_refused_with_the_hint(self):
+        from appointment.helpers.phone import hint
+        from appointment.public_experience.section_editor import normalize_phones
+
+        with self.assertRaises(frappe.ValidationError) as raised:
+            normalize_phones("locations", {"items": [{"id": "p1", "phone": "0911 22 33"}]}, {"items": []})
+        self.assertIn("items[0].phone", str(raised.exception))
+        self.assertIn(hint(), str(raised.exception))
+
+    def test_a_stored_placeholder_number_does_not_block_other_edits(self):
+        from appointment.public_experience.section_editor import normalize_phones
+
+        stored = {"phone": "000 000 0101", "items": [{"id": "p1", "phone": "000 000 0102"}, {"id": "p2", "phone": "000 000 0103"}]}
+        edited = {"title": t("Visit us"), "phone": "000 000 0101",
+                  "items": [{"id": "p2", "phone": "000 000 0103"}, {"id": "p1", "phone": "000 000 0102"}]}
+        self.assertEqual(normalize_phones("contact", copy.deepcopy(edited), stored)["phone"], "000 000 0101")
+        self.assertEqual(normalize_phones("locations", copy.deepcopy(edited), stored)["items"], edited["items"])
+
+    def test_the_showcase_seeders_keep_their_placeholder_numbers(self):
+        from appointment.helpers.phone import placeholder_numbers
+        from appointment.public_experience.section_editor import normalize_phones
+
+        with placeholder_numbers():
+            self.assertEqual(normalize_phones("contact", {"phone": "000 000 0109"}, {})["phone"], "000 000 0109")
 
 
 class BilingualMergeTests(unittest.TestCase):
@@ -276,6 +320,22 @@ class OwnerEditorTests(unittest.TestCase):
         with self.assertRaises(frappe.ValidationError) as raised:
             self._save(state, sections)
         self.assertIn("items[", str(raised.exception))
+
+    def test_a_contact_phone_edit_is_stored_in_e164_form_and_keeps_the_amharic(self):
+        state = self._state(self.site_a)
+        frappe.set_user(self.owner_a)
+        sections = copy.deepcopy(state["sections"])
+        contact = next(row for row in sections if row["type"] == "contact")["content"]
+        title_before = contact.get("title")
+        contact.update({"phone": "0911 22 33 44", "title": {"en": "Talk to us"}})
+        saved = self._save(state, sections)
+        stored = next(row for row in saved["sections"] if row["type"] == "contact")["content"]
+        self.assertEqual(stored["phone"], "+251911223344")
+        if isinstance(title_before, dict) and title_before.get("am"):
+            self.assertEqual(stored["title"], {"en": "Talk to us", "am": title_before["am"]})
+        contact.update({"phone": "12345"})
+        with self.assertRaises(frappe.ValidationError):
+            self._save(saved, [row if row["type"] != "contact" else {"type": "contact", "content": contact} for row in saved["sections"]])
 
     def test_state_describes_the_editor_for_every_section_of_the_recipe(self):
         state = self._state(self.site_a)

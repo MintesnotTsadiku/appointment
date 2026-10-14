@@ -237,7 +237,7 @@ export default function WebsiteSetup() {
       {switchOffer && <TemplateSwitchPanel catalog={context.catalog} current={site.recipeKey} chosen={switchOffer} busy={busy} onSwitch={switchTemplate} onKeep={() => { setSwitchOffer(""); clearGalleryLink(); }} />}
       <nav aria-label={t("staff.website.setup.stepsLabel")} className="flex flex-wrap gap-3">{steps.map((value) => <button key={value} className={button} data-qa={`website-step-${value}`} aria-current={step === value ? "step" : undefined} disabled={busy} onClick={() => void run(() => save(value))}>{t(stepKeys[value])}</button>)}</nav>
       <p className="website-setup-status">{site.status} · <a href={site.url}>{site.url}</a> · {site.recipeKey}</p>
-      {step === "content" && site.editorSchema ? <ContentStep sections={sections} schemas={site.editorSchema} snapshot={snapshot} focus={contentFocus}
+      {step === "content" && site.editorSchema ? <ContentStep sections={sections} stored={site.sections} schemas={site.editorSchema} snapshot={snapshot} focus={contentFocus}
         context={{ site: site.site, limits: site.mediaLimits || { maxBytes: 5 * 1024 * 1024, types: ["image/jpeg", "image/png", "image/webp"] }, derived: site.derivedFormats || {} }}
         dirty={JSON.stringify(savedSections(sections)) !== JSON.stringify(savedSections(site.sections))} fullPreview={fullPreview}
         onClosePreview={() => setFullPreview(false)} onChange={setSections} /> : <div className={step === "brand" ? "appearance-workspace" : ""}><section className={step === "brand" ? "appearance-controls space-y-4" : "space-y-4"}>
@@ -274,5 +274,5 @@ function changedIssues(site: Website, sections: Section[]): string | undefined {
   if (!site.editorSchema) return undefined;
   const stored = new Map(savedSections(site.sections).map((row) => [row.type, JSON.stringify(row.content)]));
   const changed = savedSections(sections).filter((row) => stored.get(row.type) !== JSON.stringify(row.content));
-  return Object.keys(draftIssues(changed, site.editorSchema))[0];
+  return Object.keys(draftIssues(changed, site.editorSchema, site.sections))[0];
 }

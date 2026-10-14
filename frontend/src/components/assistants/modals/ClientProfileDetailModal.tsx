@@ -133,6 +133,7 @@ export const ClientProfileDetailModal = ({ clientId, isOpen, onClose, onEdit, on
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={onEdit}
+                  data-qa="assistant-detail-edit"
                   className="px-4 py-2 rounded-xl text-sm font-semibold backdrop-blur-xs transition-all"
                   style={{
                     backgroundColor: 'var(--border-subtle)',

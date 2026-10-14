@@ -171,6 +171,7 @@ def save(site, expected_version, step, title=None, sections=None, features=None,
 def _edited_sections(doc, sections):
     """Merge each edited section into the stored one (keeping translations) and validate what changed."""
     from appointment.public_experience.content_merge import merge_content
+    from appointment.public_experience.section_editor import normalize_phones
     from appointment.public_experience.section_media import require_site_media
     from appointment.public_experience.section_schemas import validate_typed_section
 
@@ -181,7 +182,7 @@ def _edited_sections(doc, sections):
         if not isinstance(row, dict) or set(row) != {"type", "content"} or not isinstance(row["content"], dict):
             frappe.throw(_("Each section needs a type and content."))
         kind = row["type"]
-        content = merge_content(stored.get(kind), row["content"])
+        content = normalize_phones(kind, merge_content(stored.get(kind), row["content"]), stored.get(kind))
         if content != stored.get(kind):
             report = validate_typed_section(kind, content, allowed_intents=intents)
             if not report.ok:

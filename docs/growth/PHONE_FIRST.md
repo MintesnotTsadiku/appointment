@@ -50,6 +50,9 @@ The browser accepts a few numbers that the full metadata refuses (for example an
 - `Appointment.participant_phones` (Small Text): other people's numbers in E.164 form, one per line.
 - `Walk In.participant_phones` (Small Text): the same for a walk-in. Assigning the walk-in copies them to the booking.
 - Every phone field is stored in E.164 form when it is saved or changed: Appointment and Walk In `client_phone`, Customer Profile `primary_phone`, and through a validate hook Organization, Provider, Location, Growth Partner, Landing Page Settings and Client Profile phones. An unchanged older value that is not valid does not block other edits.
+- The assistant API (`appointment/assistants/api/assistant_api.py`) stores the VA phone (`User.mobile_no`) and the client phone (`Client Profile.phone`, and its user's `mobile_no`) in E.164 form, with the same rule for unchanged older values.
+- The website editor's place phones (`locations` items) and contact phone (`contact.phone`) are stored in E.164 form when they change. See "Website editor" below.
+- `Location` had five fields defined twice in `location.json` (`address_line_1`, `address_line_2`, `city`, `phone`, `timezone`). Both copies used the same field name, so the site had one database column for each and no data moved. The copies at the top of the field list were removed; the fields in the "Address Information" section stay. Migrate removed the extra DocField rows. On the development site all 14 locations kept their values (11 with a phone, 11 with an address, 14 with a city).
 - Patch `appointment.patches.v0_1.normalize_phone_numbers` writes the E.164 form of valid stored numbers, and the new match key of a Customer Profile. It leaves values that are not valid as they are and counts them. It skips a profile when another profile of the same business already has that number (counted as a conflict). It only writes values that change, so it is safe to run again.
 
 On the development site, the patch read 49 stored numbers: 2 changed (Appointment), 1 already in E.164 form (Customer Profile), 46 not valid and left as they are (30 seeded walk-ins with `0000000000`, 11 locations and 5 organizations with showcase placeholder numbers), 0 conflicts.
@@ -60,16 +63,47 @@ On the development site, the patch read 49 stored numbers: 2 changed (Appointmen
 - `appointment.api.personal_meet.book_time_slot` passes `participant_phones` to `book`.
 - `appointment.scheduler.api.desk.create_desk_appointment`, `update_appointment` and `add_walk_in` accept `participant_phones` and answer a bad phone with the hint (HTTP 400).
 
+## Website editor
+
+The section editor has a `phone` field kind (`appointment/public_experience/section_editor.py`). The place phone of each place card and the contact phone use it. The editor shows them with `PhoneInput` and checks them with `lib/phone.ts`. A number that does not fit shows the shared hint under the field, and the editor does not save the section.
+
+`setup.save()` calls `section_editor.normalize_phones` after the bilingual merge. A changed number is stored in E.164 form. A changed number that is not usable is refused with the hint and the field path (for example `items[0].phone`). A number that the stored section already has is not checked again, in the editor and on the server, so a showcase with placeholder numbers ("000 000 0106") can still save other edits. The showcase seeders run inside `phone.placeholder_numbers()` and keep their numbers. The workbook import (`organization_import/website.py`) refuses a contact phone row that does not fit, with the hint.
+
+The safety notice's phone lines are not under the phone rule: they are emergency numbers such as 991 and 907. They are `plain` fields with the `dial` pattern: digits, spaces and `+ ( ) -`, the same rule as `section_schemas._notice`. The message is `staff.website.editor.issue.phone`.
+
+Templates show every phone with `formatPhone` and a `tel:` link. The version 1 templates of Bloom, Meron, Abugida and Selam now do the same for the place phone.
+
+## Assistant forms
+
+The VA and client profile modals (`frontend/src/components/assistants/modals/`) use `PhoneInput`. A number that does not fit shows the hint under the field; the form sends E.164. The client detail modal shows the number with `PhoneText`, and the VA detail modal now shows it too. On a phone screen the phone field takes the full width.
+
+The create calls of `frontend/src/lib/tasks-assistants/api.ts` sent the fields at the top level, but the server functions take one `data` argument, so the gateway refused every create ("missing 1 required positional argument: 'data'"). They now send `{ data }`. This fixes creating VA profiles, client profiles, assignments, tasks, task categories, task templates, task projects and assistant skills.
+
 ## Tests and QA
 
 - `appointment/tests/test_phone_first.py`: shared cases, booking with phone only, phone and email, a bad phone refused with the hint, the same phone in another form is the same customer, other people by phone, too many people, email-only callers, saved phone fields, and the patch is idempotent.
 - `appointment/tests/test_guest_endpoints.py`: the limit per email and the limit per phone.
 - `appointment/tests/test_customer_profiles.py`: the phone match wins.
+- `appointment/tests/test_website_editor.py`: the phone field kinds, a changed phone stored in E.164, a bad changed phone refused with the hint, stored placeholders that do not block other edits, the seeders' placeholders, and an owner's contact phone edit that keeps the Amharic title.
+- `appointment/tests/test_phone_first.py`: the assistant API stores VA and client phones in E.164 and refuses a bad number.
+- `appointment/scheduler/doctype/location/test_location.py`: each Location field is defined once and is in the field order.
 - `frontend/tests/phone.test.mjs`: the shared cases in the app rule and in the server-rendered pages rule.
 - Agent Plane: `qa/manifests/growth/phone-first.yaml` (English, desktop, light), `phone-first-am-dark.yaml` (Amharic, mobile, dark) and `phone-first-walkin.yaml` (reception). Run `appointment.tests.phone_first_qa_fixtures.setup` before them and `cleanup` after them. The manifests that fill a booking form now type a phone number first.
+- Agent Plane: `qa/manifests/growth/phone-assistants.yaml` (VA profile on desktop, client profile on a phone, English, light). Run `appointment.tests.assistant_phone_qa_fixtures.setup` before it and `cleanup` after it; `stored_phones()` reads the stored numbers. The fixture deletes only its two profiles and their two users, by name.
+- `website-editor.yaml` and `website-editor-am-dark.yaml` check the place phone hint (English and Amharic), the stored placeholder, and a contact phone stored in E.164 and shown as `+251 91 122 3344` with a `tel:` link.
+
+Runs of 2026-10-15:
+
+| Run | Manifest | Result |
+|---|---|---|
+| BQA-2026-00233 | `phone-assistants.yaml` | Passed. Stored: VA `+251711482602`, client `+251111234567`. 0 network errors. Console: the reduced-motion notice. |
+| BQA-2026-00232 | `website-editor.yaml` | Passed. 0 network errors. Console: the known sandboxed preview notices and the reduced-motion notice. |
+| BQA-2026-00231 | `website-editor-am-dark.yaml` | Passed. 0 network errors. Same known notices. |
+| BQA-2026-00234 | `online-location.yaml` | Passed. 0 network errors. |
+| BQA-2026-00235 | `phone-first.yaml` | Passed. 0 console errors, 0 network errors. |
 
 ## Follow-up
 
 - My bookings sign-in by phone needs SMS codes. It stays email-based until the SMS gateway (AfroMessage token) is configured.
 - SMS to the other people on a booking is not sent.
-- The website editor's `locations` and `contact` phone fields have no `phone` pattern in `appointment/public_experience/section_editor.py`, so they are still plain text inputs.
+- The assistant pages and modals have English-only text apart from the phone field. They need translation keys.

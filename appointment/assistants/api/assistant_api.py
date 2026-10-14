@@ -7,6 +7,8 @@ import frappe
 from frappe import _
 from frappe.utils import cint, flt, nowdate, now_datetime, get_datetime
 
+from appointment.helpers.phone import require_phone
+
 
 # Helper mappings to keep frontend-friendly payloads while using the current DocTypes
 ASSIGNMENT_MODEL_TO_TYPE = {
@@ -15,6 +17,17 @@ ASSIGNMENT_MODEL_TO_TYPE = {
     "1:3": "shared_3",
 }
 ASSIGNMENT_TYPE_TO_MODEL = {v: k for k, v in ASSIGNMENT_MODEL_TO_TYPE.items()}
+
+
+def _phone(value, current=None) -> str:
+    """The E.164 form of a typed phone number, or "" when it is empty.
+
+    An unchanged stored value stays as it is, so an older record can still be saved for other edits.
+    """
+    value = (value or "").strip()
+    if not value or value == (current or ""):
+        return value
+    return require_phone(value, _("Phone"))
 
 
 def _status_flag(status: str) -> int:
@@ -156,7 +169,7 @@ def create_va_profile(data):
 
         status = data.get("status", "active")
         user_id = data.get("user") or data.get("email")
-        phone = data.get("phone")
+        phone = _phone(data.get("phone"))
 
         # Ensure backing User exists (or create a lightweight one)
         if not frappe.db.exists("User", user_id):
@@ -353,7 +366,7 @@ def update_va_profile(va_name, data):
         if "email" in data and data.get("email"):
             user_doc.email = data.get("email")
         if "phone" in data:
-            user_doc.mobile_no = data.get("phone")
+            user_doc.mobile_no = _phone(data.get("phone"), user_doc.mobile_no)
         if "status" in data:
             user_doc.enabled = _status_flag(data.get("status"))
         user_doc.save(ignore_permissions=True)
@@ -432,7 +445,7 @@ def create_client_profile(data):
 
         status = data.get("status", "active")
         user_id = data.get("user") or data.get("email")
-        phone = data.get("phone")
+        phone = _phone(data.get("phone"))
 
         if not frappe.db.exists("User", user_id):
             user_doc = frappe.new_doc("User")
@@ -602,7 +615,7 @@ def update_client_profile(client_name, data):
         if "email" in data:
             client_profile.email = data.get("email")
         if "phone" in data:
-            client_profile.phone = data.get("phone")
+            client_profile.phone = _phone(data.get("phone"), client_profile.phone)
         if "status" in data:
             client_profile.is_active = _status_flag(data.get("status"))
         if "timezone" in data:
@@ -630,7 +643,7 @@ def update_client_profile(client_name, data):
             if "email" in data and data.get("email"):
                 user_doc.email = data.get("email")
             if "phone" in data:
-                user_doc.mobile_no = data.get("phone")
+                user_doc.mobile_no = client_profile.phone
             if "status" in data:
                 user_doc.enabled = _status_flag(data.get("status"))
             user_doc.save(ignore_permissions=True)

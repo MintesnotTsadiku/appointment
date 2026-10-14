@@ -144,6 +144,25 @@ class TestPhoneFields(unittest.TestCase):
         doc.save(ignore_permissions=True)
         self.assertEqual(doc.phone, "000 000 0199")
 
+    def test_assistant_profiles_store_phones_in_e164_form(self):
+        from unittest.mock import patch
+
+        from appointment.assistants.api import assistant_api
+
+        local = fresh_phone(local=True)
+        with patch.object(frappe.db, "commit"):
+            email = f"tsion.alemu.{frappe.generate_hash(length=8)}@example.test"
+            va = assistant_api.create_va_profile({"full_name": "Tsion Alemu", "email": email, "phone": local})["data"]
+            self.assertEqual(frappe.db.get_value("User", email, "mobile_no"), "+251" + local[1:])
+            with self.assertRaises(frappe.ValidationError):
+                assistant_api.update_va_profile(va["name"], {"phone": "0911 22"})
+            client_email = f"mekdes.haile.{frappe.generate_hash(length=8)}@example.test"
+            client = assistant_api.create_client_profile({"full_name": "Mekdes Haile", "email": client_email, "phone": fresh_phone(local=True)})["data"]
+            other = fresh_phone(local=True)
+            updated = assistant_api.update_client_profile(client["name"], {"phone": other})["data"]
+            self.assertEqual(updated["phone"], "+251" + other[1:])
+            self.assertEqual(frappe.db.get_value("User", client_email, "mobile_no"), "+251" + other[1:])
+
     def test_normalization_patch_is_idempotent(self):
         org = frappe.get_all("Organization", pluck="name", limit=1)
         if not org:
