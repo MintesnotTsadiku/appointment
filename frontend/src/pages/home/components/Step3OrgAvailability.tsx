@@ -315,14 +315,12 @@ const Step3OrgAvailability = ({ onNext, onBack }: Step3OrgAvailabilityProps) => 
                         {schedule[day as keyof WeeklySchedule].map((slot, slotIndex) => (
                           <div key={slotIndex} className="flex items-center gap-2">
                             <TimeInput
-                              timeFormat="12h"
                               value={slot.start}
                               onChange={(value) => updateSlot(day as keyof WeeklySchedule, slotIndex, 'start', value)}
                               className="w-48"
                             />
                             <span className="text-gray-500">-</span>
                             <TimeInput
-                              timeFormat="12h"
                               value={slot.end}
                               onChange={(value) => updateSlot(day as keyof WeeklySchedule, slotIndex, 'end', value)}
                               className="w-48"

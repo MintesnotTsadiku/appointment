@@ -112,6 +112,20 @@ export function formatInstant(
   }).format(date);
 }
 
+/**
+ * A local date and time for a picker or label: the locale's medium date, then the
+ * time in `format`. Ethiopian time is built here because Intl has no such clock;
+ * other formats keep the locale's own short time.
+ */
+export function formatLocalDateTime(date: Date, locale: string, format: ClockFormat): string {
+  if (Number.isNaN(date.getTime())) return '';
+  if (format !== 'ethiopian') {
+    return new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }).format(date);
+  }
+  const day = new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(date);
+  return `${day}, ${toEthiopian(date.getHours(), date.getMinutes()).label}`;
+}
+
 /** Validate a same-day opening window (overnight hours are not supported). */
 export function validateWindow(opensAt: string, closesAt: string): string | null {
   const open = parseWallTime(opensAt);

@@ -71,7 +71,7 @@ def browser_values(manifest=None):
 	return {
 		"qa_va_name": VAS[0]["full_name"],
 		"qa_client_name": CLIENTS[0]["full_name"],
-		# Assignment cards show the client profile id, which is the client's email.
+		# Assignment cards show the client's name, with the profile id (the email) under it.
 		"qa_client_email": CLIENTS[0]["email"],
 		"qa_task_title": TASKS[1][0],
 	}

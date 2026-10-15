@@ -29,16 +29,35 @@ const DialogOverlay = React.forwardRef<
 ))
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
 
+// Menus, popovers and selects inside a dialog use another copy of Radix's layer
+// and focus stacks, so the dialog does not see them as nested (and pulls focus
+// back): Escape or a click while one is open would close the dialog too. While a
+// popper is open, leave those events to it.
+// Tooltips use "delayed-open"/"instant-open", and a closing popper says "closed".
+const OPEN_NESTED_LAYER = "[data-radix-popper-content-wrapper] > [data-state=\"open\"]"
+
+function keepOpenForNestedLayer(event: Event) {
+  if (document.querySelector(OPEN_NESTED_LAYER)) event.preventDefault()
+}
+
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
     side?: "center" | "right" | "left"
   }
->(({ className, children, side = "center", ...props }, ref) => (
+>(({ className, children, side = "center", onEscapeKeyDown, onInteractOutside, ...props }, ref) => (
   <DialogPortal>
     <DialogOverlay />
     <DialogPrimitive.Content
       ref={ref}
+      onEscapeKeyDown={(event) => {
+        onEscapeKeyDown?.(event)
+        keepOpenForNestedLayer(event)
+      }}
+      onInteractOutside={(event) => {
+        onInteractOutside?.(event)
+        keepOpenForNestedLayer(event)
+      }}
       className={cn(
         side === "center" &&
           "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-0 shadow-2xl duration-300 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] rounded-2xl overflow-hidden backdrop-blur-xl",

@@ -1,9 +1,9 @@
-import { useState, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Loader2, Calendar as CalendarIcon, FileText } from 'lucide-react';
 import { 
-  format, parseISO, isSameDay, isToday, isSameMonth, startOfWeek, endOfWeek,
-  startOfMonth, endOfMonth, eachDayOfInterval, addDays, addWeeks, addMonths
+  format, parseISO, isToday, isSameMonth, startOfWeek, endOfWeek,
+  startOfMonth, endOfMonth, eachDayOfInterval, addDays
 } from 'date-fns';
 import { Task } from '@/lib/tasks-assistants/types';
 import { TaskCalendarCard } from './TaskCalendarCard';
@@ -11,6 +11,7 @@ import { ViewMode, TimeSlotInterval } from '../types';
 import { isOverdue } from '@/lib/tasks-assistants/utils';
 import { useTranslation } from '@/lib/i18n';
 import { useTaskFormat } from '@/lib/tasks-assistants/format';
+import { personName } from '@/components/assistants/PersonLabel';
 
 const UNSCHEDULED_KEYS = {
   deadline: 'tasks.calendar.unscheduledDeadline',
@@ -46,6 +47,13 @@ export const TasksCalendar = ({
 }: TasksCalendarProps) => {
   const { t } = useTranslation();
   const fmt = useTaskFormat();
+  const weekScrollRef = useRef<HTMLDivElement>(null);
+
+  // On phones the week scrolls sideways; start it at today (or the first day).
+  useEffect(() => {
+    if (viewMode !== 'week') return;
+    scrollWeekToToday(weekScrollRef.current);
+  }, [viewMode, currentDate]);
   const slotLabel = (hour: number, minute: number) => {
     const slotDate = new Date(currentDate);
     slotDate.setHours(hour, minute, 0, 0);
@@ -425,7 +433,7 @@ export const TasksCalendar = ({
                               {fmt.taskStatus(task.status)}
                             </span>
                             {task.client_profile && (
-                              <span className="truncate">{task.client_profile}</span>
+                              <span className="truncate">{personName(task.client_name, task.client_profile)}</span>
                             )}
                           </div>
                         </button>
@@ -459,28 +467,36 @@ export const TasksCalendar = ({
           border: '1px solid var(--border-default)'
         }}
       >
-        <div className="flex min-w-full">
+        {/* Phones: three days fit; the week scrolls sideways with snap, the
+            time column and day headers stay in place. */}
+        <div
+          ref={weekScrollRef}
+          data-qa="tasks-week-scroll"
+          className="max-md:max-h-[72dvh] max-md:overflow-auto max-md:overscroll-contain max-md:snap-x max-md:snap-mandatory max-md:scroll-pl-14"
+        >
+        {/* w-max: the row is as wide as its days, so the sticky time column sticks all the way. */}
+        <div className="flex min-w-full max-md:w-max">
           {/* Time column */}
           <div 
-            className="w-20 shrink-0"
-            style={{ borderRight: '1px solid var(--border-subtle)' }}
+            className="w-14 md:w-20 shrink-0 max-md:sticky max-md:left-0 max-md:z-30"
+            style={{ borderRight: '1px solid var(--border-subtle)', backgroundColor: 'var(--bg-elevated)' }}
           >
             <div 
-              className="h-16 flex items-center justify-center"
-              style={{ borderBottom: '1px solid var(--border-subtle)' }}
+              className="h-16 flex items-center justify-center max-md:sticky max-md:top-0 max-md:z-30"
+              style={{ borderBottom: '1px solid var(--border-subtle)', backgroundColor: 'var(--bg-elevated)' }}
             />
             {/* Time labels - show only on the hour */}
             {timeSlots.filter(slot => slot.minute === 0).map((slot) => (
               <div
                 key={`${slot.hour}-${slot.minute}`}
-                className="flex items-start justify-end pr-3 pt-1"
+                className="flex items-start justify-end pr-1.5 md:pr-3 pt-1 text-right"
                 style={{ 
                   height: `${slotHeightPx * (60 / timeSlotInterval)}px`,
                   borderBottom: '1px solid var(--border-subtle)'
                 }}
               >
                 <span 
-                  className="text-xs font-medium"
+                  className="text-[10px] md:text-xs font-medium leading-tight"
                   style={{ color: 'var(--text-muted)' }}
                 >
                   {slotLabel(slot.hour, slot.minute)}
@@ -500,17 +516,22 @@ export const TasksCalendar = ({
             return (
               <div 
                 key={day.toString()} 
-                className="flex-1 relative"
+                data-qa="tasks-week-day"
+                data-today={isTodayDate || undefined}
+                className="flex-1 relative pl-1.5 md:pl-3 max-md:min-w-[6.5rem] max-md:snap-start"
                 style={{ 
                   borderRight: '1px solid var(--border-subtle)',
-                  paddingLeft: '12px'
                 }}
               >
                 <div 
-                  className="h-16 flex items-center justify-center"
+                  data-qa="tasks-week-day-header"
+                  className="h-16 flex items-center justify-center max-md:sticky max-md:top-0 max-md:z-20 -ml-1.5 md:-ml-3"
                   style={{ 
                     borderBottom: '1px solid var(--border-subtle)',
-                    backgroundColor: isTodayDate ? 'var(--accent-primary-light)' : 'transparent'
+                    backgroundColor: 'var(--bg-elevated)',
+                    backgroundImage: isTodayDate
+                      ? 'linear-gradient(var(--accent-primary-light), var(--accent-primary-light))'
+                      : undefined,
                   }}
                 >
                   <div className="text-center">
@@ -635,6 +656,7 @@ export const TasksCalendar = ({
             );
           })}
         </div>
+        </div>
 
         {/* Unscheduled tasks (no date) as side rail */}
         {tasksWithoutDate.length > 0 && (
@@ -664,7 +686,7 @@ export const TasksCalendar = ({
                   <div className="text-sm font-semibold truncate">{task.title}</div>
                   {task.client_profile && (
                     <div className="text-[11px] mt-1" style={{ color: 'var(--text-muted)' }}>
-                      {task.client_profile}
+                      {personName(task.client_name, task.client_profile)}
                     </div>
                   )}
                 </motion.div>
@@ -876,7 +898,7 @@ export const TasksCalendar = ({
                   <div className="text-sm font-semibold truncate">{task.title}</div>
                   {task.client_profile && (
                     <div className="text-[11px] mt-1" style={{ color: 'var(--text-muted)' }}>
-                      {task.client_profile}
+                      {personName(task.client_name, task.client_profile)}
                     </div>
                   )}
                 </motion.div>
@@ -1031,3 +1053,11 @@ export const TasksCalendar = ({
 
   return null;
 };
+
+/** Scroll a sideways-scrolling week so today (else the first day) is the first column. */
+function scrollWeekToToday(container: HTMLDivElement | null) {
+  if (!container || container.scrollWidth <= container.clientWidth) return;
+  const today = container.querySelector<HTMLElement>('[data-today="true"]');
+  const timeColumn = container.firstElementChild?.firstElementChild as HTMLElement | null;
+  container.scrollLeft = today ? today.offsetLeft - (timeColumn?.offsetWidth ?? 0) : 0;
+}

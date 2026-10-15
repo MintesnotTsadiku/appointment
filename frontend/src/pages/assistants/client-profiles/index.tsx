@@ -10,7 +10,6 @@ import {
   Globe,
   Building2,
   Clock,
-  Star,
   ChevronRight,
 } from 'lucide-react';
 import { Card } from '@/components/card';
@@ -27,6 +26,7 @@ import { toast } from 'sonner';
 import { useTranslation } from '@/lib/i18n';
 import { serverError, useTaskFormat } from '@/lib/tasks-assistants/format';
 import { timezoneLabel } from '@/components/assistants/modals/CreateClientProfileModal';
+import { PersonAvatar, personName } from '@/components/assistants/PersonLabel';
 
 const resolveAvatar = (url?: string) => {
   if (!url) return '';
@@ -324,12 +324,10 @@ const ClientProfiles = () => {
                               <div className="p-3 rounded-xl mb-3" style={{ backgroundColor: 'var(--bg-secondary)' }}>
                                 {assignment ? (
                                   <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center shrink-0">
-                                      <Star className="w-4 h-4 text-white" />
-                                    </div>
+                                    <PersonAvatar name={personName(assignment.va_name, assignment.va_profile)} size="sm" className="rounded-lg w-8 h-8" />
                                     <div className="flex-1 min-w-0">
                                       <p className="text-xs font-medium" style={{ color: 'var(--accent-success)' }}>{t('assistants.client.page.assignedVa')}</p>
-                                      <p className="text-sm font-semibold truncate" style={{ color: 'var(--text-primary)' }}>{assignment.va_profile}</p>
+                                      <p className="text-sm font-semibold truncate" style={{ color: 'var(--text-primary)' }} title={assignment.va_profile}>{personName(assignment.va_name, assignment.va_profile)}</p>
                                     </div>
                                     <span className="text-xs font-bold px-2 py-1 rounded bg-gradient-primary text-white" title={fmt.model(assignment.assignment_model)}>
                                       {assignment.assignment_model}
@@ -449,7 +447,7 @@ const ClientProfiles = () => {
                                   {assignment ? (
                                     <div className="flex items-center gap-2">
                                       <span className="text-xs font-bold px-2 py-0.5 rounded bg-gradient-primary text-white" title={fmt.model(assignment.assignment_model)}>{assignment.assignment_model}</span>
-                                      <span className="text-sm" style={{ color: 'var(--accent-success)' }}>{assignment.va_profile}</span>
+                                      <span className="text-sm" style={{ color: 'var(--accent-success)' }} title={assignment.va_profile}>{personName(assignment.va_name, assignment.va_profile)}</span>
                                     </div>
                                   ) : (
                                     <span className="text-sm" style={{ color: 'var(--text-subtle)' }}>{t('assistants.client.page.unassigned')}</span>

@@ -9,6 +9,7 @@ from frappe.utils import cint, flt, nowdate, now_datetime, get_datetime
 
 from appointment.helpers.phone import require_phone
 from appointment.assistants.helpers.errors import raise_user_error
+from appointment.assistants.helpers.display_names import add_assignment_names
 
 
 # Helper mappings to keep frontend-friendly payloads while using the current DocTypes
@@ -120,6 +121,10 @@ def _serialize_client_profile(client_doc):
 
 def _serialize_assignment(assignment_doc):
     """Map DocType fields to frontend-friendly names."""
+    return add_assignment_names([_assignment_row(assignment_doc)])[0]
+
+
+def _assignment_row(assignment_doc):
     return {
         "name": assignment_doc.name,
         "va_profile": assignment_doc.assistant,
@@ -762,7 +767,7 @@ def get_assignment(assignment_name, fields=None):
         serialized = _serialize_assignment(assignment)
 
         if fields:
-            field_list = [f.strip() for f in fields.split(",")]
+            field_list = [f.strip() for f in fields.split(",")] + ["va_name", "client_name"]
             filtered = {field: serialized.get(field) for field in field_list}
             return {
                 "success": True,
@@ -819,9 +824,8 @@ def list_assignments(filters=None, fields=None, page_length=20, page_start=0, or
             order_by=order_by
         )
 
-        assignments = []
-        for row in assignments_raw:
-            serialized = {
+        assignments = add_assignment_names([
+            {
                 "name": row.name,
                 "va_profile": row.assistant,
                 "client_profile": row.client_profile,
@@ -831,10 +835,11 @@ def list_assignments(filters=None, fields=None, page_length=20, page_start=0, or
                 "status": "inactive" if row.status == "paused" else row.status,
                 "modified": row.modified,
             }
-            if fields:
-                field_list = [f.strip() for f in fields.split(",")]
-                serialized = {field: serialized.get(field) for field in field_list}
-            assignments.append(serialized)
+            for row in assignments_raw
+        ])
+        if fields:
+            field_list = [f.strip() for f in fields.split(",")] + ["va_name", "client_name"]
+            assignments = [{field: row.get(field) for field in field_list} for row in assignments]
 
         total_count = frappe.db.count("Assistant Client Assignment", filters=mapped_filters)
 
@@ -957,7 +962,7 @@ def get_clients_for_va(va_profile, status="active"):
             order_by="start_date desc"
         )
 
-        assignments = [
+        assignments = add_assignment_names([
             {
                 "name": row.name,
                 "client_profile": row.client_profile,
@@ -966,7 +971,7 @@ def get_clients_for_va(va_profile, status="active"):
                 "end_date": row.end_date,
             }
             for row in assignments_raw
-        ]
+        ])
         
         return {
             "success": True,
@@ -1000,7 +1005,7 @@ def get_vas_for_client(client_profile, status="active"):
             order_by="start_date desc"
         )
 
-        assignments = [
+        assignments = add_assignment_names([
             {
                 "name": row.name,
                 "va_profile": row.assistant,
@@ -1009,7 +1014,7 @@ def get_vas_for_client(client_profile, status="active"):
                 "end_date": row.end_date,
             }
             for row in assignments_raw
-        ]
+        ])
         
         return {
             "success": True,

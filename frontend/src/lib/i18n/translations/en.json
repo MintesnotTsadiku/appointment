@@ -6320,6 +6320,14 @@
         "message": "Message",
         "editProfile": "Edit profile"
       }
+    },
+    "contact": {
+      "call": "Call",
+      "sms": "Text message (SMS)",
+      "whatsapp": "WhatsApp",
+      "telegram": "Telegram",
+      "email": "Email",
+      "none": "No phone number or email on this profile"
     }
   },
   "tasks": {

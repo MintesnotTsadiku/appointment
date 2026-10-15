@@ -3,6 +3,7 @@ import { format, startOfMonth, endOfMonth, startOfWeek, eachDayOfInterval, addDa
 import { Task } from '@/lib/tasks-assistants/types';
 import { useTranslation } from '@/lib/i18n';
 import { useTaskFormat } from '@/lib/tasks-assistants/format';
+import { personName } from '@/components/assistants/PersonLabel';
 
 interface TasksSidebarProps {
   currentDate: Date;
@@ -152,7 +153,7 @@ export const TasksSidebar = ({
                       </div>
                       <div className="flex items-center gap-2 mt-1 text-[11px]" style={{ color: 'var(--text-muted)' }}>
                         <span>{fmt.taskStatus(task.status)}</span>
-                        {task.client_profile && <span className="truncate">{task.client_profile}</span>}
+                        {task.client_profile && <span className="truncate">{personName(task.client_name, task.client_profile)}</span>}
                       </div>
                     </button>
                   ))}

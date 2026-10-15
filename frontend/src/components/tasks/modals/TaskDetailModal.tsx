@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { X, Edit, Trash2, Calendar, Clock, User, AlertTriangle, FileText, Tag, CheckCircle2 } from 'lucide-react';
+import { X, Edit, Trash2, Calendar, Clock, AlertTriangle, FileText, Tag, CheckCircle2 } from 'lucide-react';
 import { Dialog, DialogContent } from '@/components/dialog';
 import { Button } from '@/components/button';
 import { TaskStatusBadge } from '@/components/tasks/TaskStatusBadge';
@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 import { isOverdue } from '@/lib/tasks-assistants/utils';
 import { serverError, useTaskFormat } from '@/lib/tasks-assistants/format';
 import { useTranslation } from '@/lib/i18n';
+import { PersonAvatar, personName } from '@/components/assistants/PersonLabel';
 
 const DEPENDENCY_KEYS: Record<string, string> = {
   finish_to_start: 'finishToStart',
@@ -316,19 +317,15 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                       }}
                     >
                       <div className="flex items-center gap-3">
-                        <div 
-                          className="p-2 rounded-lg"
-                          style={{
-                            backgroundColor: 'var(--accent-primary-light)',
-                          }}
-                        >
-                          <User className="w-5 h-5" style={{ color: 'var(--accent-primary)' }} />
-                        </div>
-                        <div>
+                        <PersonAvatar name={personName(task.client_name, task.client_profile)} size="md" tone="secondary" />
+                        <div className="min-w-0">
                           <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-subtle)' }}>
                             {t('tasks.detail.client')}
                           </p>
-                          <p className="text-sm font-semibold mt-1" style={{ color: 'var(--text-primary)' }}>
+                          <p className="text-sm font-semibold mt-1 truncate" style={{ color: 'var(--text-primary)' }} data-qa="person-name">
+                            {personName(task.client_name, task.client_profile)}
+                          </p>
+                          <p className="text-xs truncate" style={{ color: 'var(--text-muted)' }} data-qa="person-email">
                             {task.client_profile}
                           </p>
                         </div>
@@ -347,19 +344,15 @@ export const TaskDetailModal = ({ taskId, isOpen, onClose, onEdit, onDelete }: T
                       }}
                     >
                       <div className="flex items-center gap-3">
-                        <div 
-                          className="p-2 rounded-lg"
-                          style={{
-                            backgroundColor: 'var(--accent-success-light)',
-                          }}
-                        >
-                          <User className="w-5 h-5" style={{ color: 'var(--accent-success)' }} />
-                        </div>
-                        <div>
+                        <PersonAvatar name={personName(task.assignee_name, task.assignee)} size="md" tone="primary" />
+                        <div className="min-w-0">
                           <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-subtle)' }}>
                             {t('tasks.detail.assignedTo')}
                           </p>
-                          <p className="text-sm font-semibold mt-1" style={{ color: 'var(--text-primary)' }}>
+                          <p className="text-sm font-semibold mt-1 truncate" style={{ color: 'var(--text-primary)' }} data-qa="person-name">
+                            {personName(task.assignee_name, task.assignee)}
+                          </p>
+                          <p className="text-xs truncate" style={{ color: 'var(--text-muted)' }} data-qa="person-email">
                             {task.assignee}
                           </p>
                         </div>

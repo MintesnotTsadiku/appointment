@@ -3,6 +3,7 @@ import { Task } from '@/lib/tasks-assistants/types';
 import { useTranslation } from '@/lib/i18n';
 import { useTaskFormat } from '@/lib/tasks-assistants/format';
 import { Loader2 } from 'lucide-react';
+import { PersonLabel } from '@/components/assistants/PersonLabel';
 
 interface TasksListProps {
   tasks: Task[];
@@ -81,7 +82,7 @@ export const TasksList = ({ tasks, isLoading, onTaskClick }: TasksListProps) => 
                 {task.deadline ? `${fmt.date(task.deadline, { month: 'short', day: 'numeric' })}, ${fmt.time(task.deadline, true)}` : '-'}
               </td>
               <td className="px-4 py-3" style={{ color: 'var(--text-muted)' }}>
-                {task.assignee || '-'}
+                {task.assignee ? <PersonLabel name={task.assignee_name} id={task.assignee} size="xs" /> : '-'}
               </td>
             </motion.tr>
           ))}

@@ -14,7 +14,6 @@ import {
   Zap,
   Calendar,
   DollarSign,
-  MessageSquare,
   Languages,
   Wrench,
   X
@@ -26,6 +25,7 @@ import { assistantAPI } from '@/lib/tasks-assistants/api';
 import { serverError, useTaskFormat } from '@/lib/tasks-assistants/format';
 import { clockForLanguage, formatWallTime } from '@/lib/time';
 import { vaZoneName } from './CreateVAProfileModal';
+import { ContactMenu } from '../ContactMenu';
 import type { VAProfile } from '@/lib/tasks-assistants/types';
 import Spinner from '@/components/spinner';
 import { toast } from 'sonner';
@@ -433,15 +433,7 @@ export const VAProfileDetailModal = ({ vaId, isOpen, onClose, onEdit, onDelete }
                 {t('assistants.common.delete')}
               </motion.button>
               <div className="flex gap-3">
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="px-4 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center gap-2"
-                  style={{ backgroundColor: 'var(--bg-elevated)', border: '1px solid var(--border-default)', color: 'var(--text-primary)' }}
-                >
-                  <MessageSquare className="w-4 h-4" />
-                  {t('assistants.va.detail.message')}
-                </motion.button>
+                <ContactMenu phone={profile.phone} email={profile.email} />
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}

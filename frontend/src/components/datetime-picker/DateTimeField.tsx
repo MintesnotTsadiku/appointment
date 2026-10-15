@@ -1,6 +1,5 @@
 import { TimeInput } from '@/components/time-input';
-import { useTranslation } from '@/lib/i18n';
-import { clockForLanguage, type ClockFormat } from '@/lib/time';
+import type { ClockFormat } from '@/lib/time';
 import { cn } from '@/lib/utils';
 import { DatePicker } from './DatePicker';
 
@@ -23,12 +22,11 @@ export interface DateTimeFieldProps {
 
 /** Date and time of day as two standard controls: the shadcn calendar and the time input. */
 export function DateTimeField({ value, onValueChange, id, timeFormat, defaultTime = '09:00', required, disabled, clearable, className, 'data-qa': qa }: DateTimeFieldProps) {
-  const { language } = useTranslation();
   const [date, time] = value ? [value.slice(0, 10), value.slice(11, 16)] : ['', ''];
   return <div className={cn('grid items-start gap-2 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]', className)}>
     <DatePicker id={id} value={date} disabled={disabled} clearable={clearable} data-qa={qa ? `${qa}-date` : undefined}
       onValueChange={(next) => onValueChange(next ? `${next}T${time || defaultTime}` : '')} />
-    <TimeInput id={`${id}-time`} data-qa={qa ? `${qa}-time` : undefined} timeFormat={timeFormat ?? clockForLanguage(language, '12h')}
+    <TimeInput id={`${id}-time`} data-qa={qa ? `${qa}-time` : undefined} timeFormat={timeFormat}
       value={time || defaultTime} required={required} disabled={disabled || !date}
       onChange={(next) => date && onValueChange(`${date}T${next || defaultTime}`)} />
   </div>;

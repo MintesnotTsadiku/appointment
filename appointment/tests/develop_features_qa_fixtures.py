@@ -1,6 +1,8 @@
 """QA fixtures for develop's features inside the merged staff shell.
 
-- A Bloom booking on the first open day, for reception stages, the change reason and reception state.
+- A Bloom booking on the first open day, for reception stages, the change reason and reception state
+  (owner.yaml moves it through every stage).
+- A second Bloom booking that stays untouched, for server-am.yaml (ending it before it starts is refused).
 - A QA independent provider with one published offering and one guest booking, for the
   independent-owner home, booking page, Customers page, manage link, My bookings and
   reception walk-ins (the run adds and assigns them; cleanup removes them).
@@ -17,6 +19,7 @@ from appointment.scheduler import booking, independent
 from appointment.tests import demo_offerings, qa_days
 
 EMAIL = "qa-dev-stages@example.test"
+SERVER_EMAIL = "qa-dev-server-message@example.test"
 INDEPENDENT_USER = "qa-independent-owner@example.test"
 INDEPENDENT_NAME = "QA Independent Studio"
 STATE_KEY = "appointment_develop_features_qa"
@@ -32,6 +35,8 @@ def setup():
     slot = next(s for s in booking.slots(offering, day)["all_available_slots_for_data"] if s["available"])
     frappe.set_user("Guest")
     result = booking.book(offering, slot["start_time"], slot["end_time"], "QA Develop Stages", EMAIL, "qa-dev-stages-0001")
+    slot = next(s for s in booking.slots(offering, day)["all_available_slots_for_data"] if s["available"])
+    booking.book(offering, slot["start_time"], slot["end_time"], "QA Server Message", SERVER_EMAIL, "qa-dev-server-message-0001")
     frappe.set_user("Administrator")
 
     frappe.get_doc(dict(doctype="User", email=INDEPENDENT_USER, first_name="QA Independent", send_welcome_email=0,
@@ -58,10 +63,12 @@ def setup():
 def browser_values(manifest=None):
     values = showcase.browser_values(manifest)
     state = json.loads(frappe.db.get_default(STATE_KEY) or "{}")
-    values["qa_dev_booking_id"] = state.get("booking", "")
-    values["qa_dev_day"] = state.get("day", "")
-    location = frappe.db.get_value("Appointment", state.get("booking"), "location") if state.get("booking") else None
-    values["qa_dev_location"] = location or ""
+    # Read the bookings themselves: the cached site default can lag right after setup.
+    stages = frappe.db.get_value("Appointment", {"client_email": EMAIL}, ["name", "location", "start_time"], as_dict=True) or {}
+    values["qa_dev_booking_id"] = stages.get("name", "")
+    values["qa_dev_server_booking_id"] = frappe.db.get_value("Appointment", {"client_email": SERVER_EMAIL}, "name") or ""
+    values["qa_dev_day"] = state.get("day") or (str(frappe.utils.getdate(stages["start_time"])) if stages else "")
+    values["qa_dev_location"] = stages.get("location") or ""
     values["qa_independent_offering"] = state.get("offering") or ""
     values["qa_independent_service"] = frappe.db.get_value("EventType", state.get("offering"), "service") if state.get("offering") else ""
     values["qa_independent_guest_email"] = INDEPENDENT_GUEST
@@ -97,7 +104,7 @@ def cleanup():
     previous = frappe.flags.syncing_booking_urls
     frappe.flags.syncing_booking_urls = True  # The booking-URL sync commits; cleanup commits once at the end.
     try:
-        for name in frappe.get_all("Appointment", filters={"client_email": EMAIL}, pluck="name"):
+        for name in frappe.get_all("Appointment", filters={"client_email": ["in", [EMAIL, SERVER_EMAIL]]}, pluck="name"):
             customer = frappe.db.get_value("Appointment", name, "customer")
             frappe.delete_doc("Appointment", name, ignore_permissions=True, force=True)
             if customer and not frappe.db.exists("Appointment", {"customer": customer}):

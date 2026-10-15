@@ -11,7 +11,11 @@ export interface Task {
   priority: 'Low' | 'Medium' | 'High' | 'Urgent';
   deadline?: string;
   assignee?: string;
+  /** Display name of the assignee, from the API. */
+  assignee_name?: string | null;
   client_profile: string;
+  /** Display name of the client, from the API. */
+  client_name?: string;
   category?: string;
   project?: string;
   related_event?: string;
@@ -159,6 +163,9 @@ export interface ClientProfile {
 export interface AssistantClientAssignment {
   name: string;
   va_profile: string;
+  /** Display names, from the API. */
+  va_name?: string;
+  client_name?: string;
   client_profile: string;
   assignment_model: '1:1' | '1:2' | '1:3';
   start_date?: string;

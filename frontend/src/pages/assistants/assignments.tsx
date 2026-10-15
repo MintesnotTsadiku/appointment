@@ -8,8 +8,6 @@ import {
   CheckCircle2,
   PauseCircle,
   XCircle,
-  Users,
-  UserCircle,
   Calendar,
   ChevronRight,
   LayoutGrid,
@@ -32,6 +30,7 @@ import Spinner from '@/components/spinner';
 import { toast } from 'sonner';
 import { useTranslation } from '@/lib/i18n';
 import { serverError, useTaskFormat } from '@/lib/tasks-assistants/format';
+import { PersonAvatar, PersonLabel, personName } from '@/components/assistants/PersonLabel';
 
 type AssignmentViewMode = 'cards' | 'table';
 type ModelFilter = 'all' | '1:1' | '1:2' | '1:3';
@@ -96,8 +95,9 @@ const AssignmentsPage = () => {
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
         return (
-          assignment.va_profile.toLowerCase().includes(query) ||
-          assignment.client_profile.toLowerCase().includes(query)
+          [assignment.va_profile, assignment.va_name, assignment.client_profile, assignment.client_name].some((value) =>
+            (value || '').toLowerCase().includes(query)
+          )
         );
       }
       return true;
@@ -406,15 +406,16 @@ const AssignmentsPage = () => {
 
                               <div className="p-5">
                                 {/* VA Info */}
-                                <div className="flex items-center gap-3 mb-4">
-                                  <div className="w-12 h-12 rounded-xl bg-gradient-primary flex items-center justify-center ring-2 ring-white/10">
-                                    <Users className="w-6 h-6 text-white" />
-                                  </div>
+                                <div className="flex items-center gap-3 mb-4" data-qa="assignment-va">
+                                  <PersonAvatar name={personName(assignment.va_name, assignment.va_profile)} size="lg" className="ring-2 ring-white/10" />
                                   <div className="flex-1 min-w-0">
                                     <p className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
                                       {t('assistants.assignments.virtualAssistant')}
                                     </p>
-                                    <p className="font-bold truncate" style={{ color: 'var(--text-primary)' }}>
+                                    <p className="font-bold truncate" style={{ color: 'var(--text-primary)' }} data-qa="person-name">
+                                      {personName(assignment.va_name, assignment.va_profile)}
+                                    </p>
+                                    <p className="text-xs truncate" style={{ color: 'var(--text-muted)' }} title={assignment.va_profile}>
                                       {assignment.va_profile}
                                     </p>
                                   </div>
@@ -429,15 +430,16 @@ const AssignmentsPage = () => {
                                 </div>
 
                                 {/* Client Info */}
-                                <div className="flex items-center gap-3 mb-4">
-                                  <div className="w-12 h-12 rounded-xl bg-gradient-secondary flex items-center justify-center ring-2 ring-white/10">
-                                    <UserCircle className="w-6 h-6 text-white" />
-                                  </div>
+                                <div className="flex items-center gap-3 mb-4" data-qa="assignment-client">
+                                  <PersonAvatar name={personName(assignment.client_name, assignment.client_profile)} size="lg" tone="secondary" className="ring-2 ring-white/10" />
                                   <div className="flex-1 min-w-0">
                                     <p className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
                                       {t('assistants.assignments.client')}
                                     </p>
-                                    <p className="font-bold truncate" style={{ color: 'var(--text-primary)' }}>
+                                    <p className="font-bold truncate" style={{ color: 'var(--text-primary)' }} data-qa="person-name">
+                                      {personName(assignment.client_name, assignment.client_profile)}
+                                    </p>
+                                    <p className="text-xs truncate" style={{ color: 'var(--text-muted)' }} title={assignment.client_profile}>
                                       {assignment.client_profile}
                                     </p>
                                   </div>
@@ -529,24 +531,23 @@ const AssignmentsPage = () => {
                                 data-qa="assignment-card"
                               >
                                 <td className="px-4 py-3">
-                                  <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-lg bg-gradient-primary flex items-center justify-center">
-                                      <Users className="w-5 h-5 text-white" />
-                                    </div>
-                                    <span className="font-medium" style={{ color: 'var(--text-primary)' }}>
-                                      {assignment.va_profile}
-                                    </span>
-                                  </div>
+                                  <PersonLabel
+                                    name={assignment.va_name}
+                                    id={assignment.va_profile}
+                                    showEmail
+                                    size="md"
+                                    nameClassName="font-medium text-theme-primary"
+                                  />
                                 </td>
                                 <td className="px-4 py-3">
-                                  <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-lg bg-gradient-secondary flex items-center justify-center">
-                                      <UserCircle className="w-5 h-5 text-white" />
-                                    </div>
-                                    <span className="font-medium" style={{ color: 'var(--text-primary)' }}>
-                                      {assignment.client_profile}
-                                    </span>
-                                  </div>
+                                  <PersonLabel
+                                    name={assignment.client_name}
+                                    id={assignment.client_profile}
+                                    showEmail
+                                    size="md"
+                                    tone="secondary"
+                                    nameClassName="font-medium text-theme-primary"
+                                  />
                                 </td>
                                 <td className="px-4 py-3">
                                   <span

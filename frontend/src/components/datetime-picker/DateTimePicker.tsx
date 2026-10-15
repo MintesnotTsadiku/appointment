@@ -8,7 +8,7 @@ import { TimeInput } from '@/components/time-input';
 import { Label } from '@/components/label';
 import { cn } from '@/lib/utils';
 import { intlLocale, useTranslation } from '@/lib/i18n';
-import { clockForLanguage } from '@/lib/time';
+import { clockForLanguage, formatLocalDateTime } from '@/lib/time';
 
 export interface DateTimePickerProps {
   value?: Date;
@@ -67,9 +67,8 @@ export const DateTimePicker = ({
     }
   };
 
-  const displayValue = selectedDate
-    ? new Intl.DateTimeFormat(intlLocale(language), { dateStyle: 'medium', timeStyle: 'short' }).format(selectedDate)
-    : '';
+  const clock = clockForLanguage(language, '12h');
+  const displayValue = selectedDate ? formatLocalDateTime(selectedDate, intlLocale(language), clock) : '';
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -119,7 +118,7 @@ export const DateTimePicker = ({
               </Label>
               <TimeInput
                 id="datetime-picker-time"
-                timeFormat={clockForLanguage(language, '12h')}
+                timeFormat={clock}
                 value={timeValue}
                 onChange={handleTimeChange}
               />

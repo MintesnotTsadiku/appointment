@@ -57,6 +57,26 @@ scenarios:
     name: assistants_en_desktop_light-2-va-detail.png
     full_page: false
   - action: click
+    selector: '[data-qa="assistant-contact"]'
+  - action: wait_for
+    selector: '[data-qa="assistant-contact-menu"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="assistant-contact-call"]'
+    - type: visible_selector
+      value: '[data-qa="assistant-contact-whatsapp"]'
+    - type: visible_selector
+      value: '[data-qa="assistant-contact-email"]'
+    - type: text_contains
+      selector: '[data-qa="assistant-contact-menu"]'
+      value: Telegram
+  - action: screenshot
+    name: assistants_en_desktop_light-2b-va-contact.png
+    full_page: false
+  - action: press
+    selector: '[data-qa="assistant-contact-menu"]'
+    key: Escape
+  - action: click
     selector: '[data-qa="assistant-detail-edit"]'
   - action: wait_for
     selector: '[data-qa="assistant-profile-submit"]'
@@ -116,8 +136,17 @@ scenarios:
   - action: open_url
     url: /assistants/assignments
   - action: wait_for
-    selector: '[data-qa="assignment-card"]:has-text("{qa_client_email}")'
+    selector: '[data-qa="assignment-card"]:has-text("{qa_client_name}")'
     assertions:
+    - type: text_contains
+      selector: '[data-qa="assignment-card"]:has-text("{qa_client_name}") [data-qa="assignment-va"] [data-qa="person-name"]'
+      value: '{qa_va_name}'
+    - type: text_contains
+      selector: '[data-qa="assignment-card"]:has-text("{qa_client_name}") [data-qa="assignment-client"] [data-qa="person-name"]'
+      value: '{qa_client_name}'
+    - type: text_contains
+      selector: '[data-qa="assignment-card"]:has-text("{qa_client_name}") [data-qa="assignment-client"]'
+      value: '{qa_client_email}'
     - type: text_contains
       value: Shared by 2 (1:2)
   - action: screenshot
@@ -146,6 +175,15 @@ scenarios:
       value: Tasks
     - type: text_contains
       value: Urgent
+  - action: wait_for
+    selector: '[data-qa="task-card"]:has-text("{qa_task_title}") [data-qa="task-card-assignee"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="task-card"]:has-text("{qa_task_title}") [data-qa="task-card-assignee"]'
+      value: '{qa_va_name}'
+    - type: text_contains
+      selector: '[data-qa="task-card"]:has-text("{qa_task_title}") [data-qa="task-card-client"]'
+      value: '{qa_client_name}'
   - action: screenshot
     name: assistants_en_desktop_light-12-tasks-cards.png
     full_page: false
@@ -169,7 +207,10 @@ scenarios:
   - action: click
     selector: '[data-qa="tasks-view-week"]'
   - action: wait_for
-    selector: '[data-qa="tasks-page"]'
+    selector: '[data-qa="tasks-week-scroll"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="tasks-week-day"][data-today="true"] [data-qa="tasks-week-day-header"]'
   - action: screenshot
     name: assistants_en_desktop_light-15-tasks-week.png
     full_page: false
@@ -179,6 +220,13 @@ scenarios:
     selector: '[data-qa="task-card"]:has-text("{qa_task_title}")'
   - action: wait_for
     selector: '[data-qa="task-detail"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="task-detail"]'
+      value: '{qa_va_name}'
+    - type: text_contains
+      selector: '[data-qa="task-detail"]'
+      value: '{qa_client_name}'
   - action: screenshot
     name: assistants_en_desktop_light-16-task-detail.png
     full_page: false
@@ -186,9 +234,23 @@ scenarios:
     selector: '[data-qa="task-detail-edit"]'
   - action: wait_for
     selector: '[data-qa="task-form"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="task-form"]'
+      value: 10:00 AM
   - action: screenshot
     name: assistants_en_desktop_light-17-task-edit.png
     full_page: false
+  - action: click
+    selector: '[data-qa="task-form"] button:has-text("10:00 AM")'
+  - action: wait_for
+    selector: '#datetime-picker-time'
+  - action: screenshot
+    name: assistants_en_desktop_light-17b-task-deadline-picker.png
+    full_page: false
+  - action: press
+    selector: '#datetime-picker-time'
+    key: Escape
   - action: press
     selector: '[role="dialog"]'
     key: Escape

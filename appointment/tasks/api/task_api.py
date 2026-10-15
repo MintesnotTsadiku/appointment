@@ -6,6 +6,7 @@ Provides CRUD operations for Task management
 import frappe
 from frappe import _
 from frappe.utils import cint, flt, nowdate, now_datetime, get_datetime
+from appointment.assistants.helpers.display_names import add_task_names
 from appointment.assistants.helpers.errors import raise_user_error
 
 
@@ -87,7 +88,7 @@ def create_task(data):
         return {
             "success": True,
             "message": _("Task created."),
-            "data": task.as_dict()
+            "data": _task_payload(task)
         }
     
     except Exception as e:
@@ -115,13 +116,13 @@ def get_task(task_name, fields=None):
             task = frappe.get_doc("Task", task_name)
             return {
                 "success": True,
-                "data": {field: getattr(task, field, None) for field in field_list if hasattr(task, field)}
+                "data": add_task_names([{field: getattr(task, field, None) for field in field_list if hasattr(task, field)}])[0]
             }
         else:
             task = frappe.get_doc("Task", task_name)
             return {
                 "success": True,
-                "data": task.as_dict()
+                "data": _task_payload(task)
             }
     
     except Exception as e:
@@ -168,7 +169,7 @@ def list_tasks(filters=None, fields=None, page_length=20, page_start=0, order_by
         
         return {
             "success": True,
-            "data": tasks,
+            "data": add_task_names(tasks),
             "total": total_count,
             "page_start": cint(page_start),
             "page_length": cint(page_length)
@@ -230,7 +231,7 @@ def update_task(task_name, data):
         return {
             "success": True,
             "message": _("Task updated."),
-            "data": task.as_dict()
+            "data": _task_payload(task)
         }
     
     except Exception as e:
@@ -302,7 +303,7 @@ def update_task_status(task_name, status):
         return {
             "success": True,
             "message": _("Task status updated."),
-            "data": task.as_dict()
+            "data": _task_payload(task)
         }
     
     except Exception as e:
@@ -340,7 +341,7 @@ def assign_task(task_name, assignee):
         return {
             "success": True,
             "message": _("Task assigned."),
-            "data": task.as_dict()
+            "data": _task_payload(task)
         }
     
     except Exception as e:
@@ -377,7 +378,7 @@ def get_tasks_by_client(client_profile, status=None):
         
         return {
             "success": True,
-            "data": tasks,
+            "data": add_task_names(tasks),
             "count": len(tasks)
         }
     
@@ -411,7 +412,7 @@ def get_tasks_by_assignee(assignee, status=None):
         
         return {
             "success": True,
-            "data": tasks,
+            "data": add_task_names(tasks),
             "count": len(tasks)
         }
     
@@ -460,7 +461,7 @@ def get_daily_briefing_tasks(client_profile=None, date=None):
         
         return {
             "success": True,
-            "data": filtered_tasks,
+            "data": add_task_names(filtered_tasks),
             "date": str(date_obj),
             "count": len(filtered_tasks)
         }
@@ -508,3 +509,6 @@ def get_task_statistics(client_profile=None, assignee=None):
         raise_user_error(e, _("Could not load task statistics. Please try again."), "Task API: Statistics")
 
 
+def _task_payload(task):
+    """The task as a dict, with the client's and assignee's display names."""
+    return add_task_names([task.as_dict()])[0]

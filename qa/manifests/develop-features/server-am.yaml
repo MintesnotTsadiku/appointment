@@ -1,4 +1,5 @@
-# Run appointment.tests.develop_features_qa_fixtures.setup first and cleanup afterwards.
+# Run appointment.tests.develop_features_qa_fixtures.setup first and cleanup afterwards. It uses its own
+# booking (qa_dev_server_booking_id), so it passes before or after owner.yaml.
 # A server error reaches a staff member in Amharic. See docs/features/SERVER_MESSAGES_TRANSLATION_PLAN.md.
 app: appointment
 base_url: http://localhost:47800
@@ -37,9 +38,9 @@ scenarios:
       url_contains: appointment.scheduler.translation
       status: 200
   - action: wait_for
-    selector: '[data-qa-appointment-name="{qa_dev_booking_id}"]'
+    selector: '[data-qa-appointment-name="{qa_dev_server_booking_id}"]'
   - action: press
-    selector: '[data-qa-appointment-name="{qa_dev_booking_id}"]'
+    selector: '[data-qa-appointment-name="{qa_dev_server_booking_id}"]'
     key: Enter
   - action: click
     selector: '[data-qa="booking-stage-end"]'

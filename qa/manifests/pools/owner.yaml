@@ -69,6 +69,9 @@ scenarios:
   - action: fill
     selector: '#create-appointment-client-name'
     value: Room desk booking QA
+  - action: fill
+    selector: '[data-qa="create-appointment-client-phone"]'
+    value: 0911 52 61 70
   - action: click
     selector: '#create-appointment-service'
   - action: click

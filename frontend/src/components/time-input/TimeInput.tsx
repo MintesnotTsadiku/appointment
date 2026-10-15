@@ -4,14 +4,16 @@ import { Input } from '@/components/input';
 import { Button } from '@/components/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/select';
-import { formatWallTime, parseDisplayTime, parseWallTime, type ClockFormat } from '@/lib/time';
+import { clockForLanguage, formatWallTime, parseDisplayTime, parseWallTime, type ClockFormat } from '@/lib/time';
 import { useTranslation } from '@/lib/i18n';
 
 export type TimeFormat = ClockFormat;
 interface TimeInputProps {
+  /** The stored 24-hour wall time, `HH:mm`; the clock only changes what is shown and typed. */
   value: string;
   onChange: (value: string) => void;
-  timeFormat: ClockFormat;
+  /** An explicit clock (e.g. from a clock-format toggle). Defaults to Ethiopian time in Amharic, 12-hour otherwise. */
+  timeFormat?: ClockFormat;
   disabled?: boolean;
   className?: string;
   placeholder?: string;
@@ -21,8 +23,9 @@ interface TimeInputProps {
   'data-qa'?: string;
 }
 
-export function TimeInput({ value, onChange, timeFormat, disabled, className, placeholder, id, onValidityChange, required = true, 'data-qa': qa }: TimeInputProps) {
-  const { t } = useTranslation();
+export function TimeInput({ value, onChange, timeFormat: chosenFormat, disabled, className, placeholder, id, onValidityChange, required = true, 'data-qa': qa }: TimeInputProps) {
+  const { t, language } = useTranslation();
+  const timeFormat = chosenFormat ?? clockForLanguage(language, '12h');
   const generatedId = useId();
   const inputId = id || generatedId;
   const input = useRef<HTMLInputElement>(null);

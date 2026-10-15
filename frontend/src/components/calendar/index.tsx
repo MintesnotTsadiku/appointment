@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { DayPicker } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
+import { intlLocale, TranslationContext } from "@/lib/i18n";
 import { buttonVariants } from "@/components/button";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
@@ -13,9 +14,12 @@ function Calendar({
   showOutsideDays = true,
   ...props
 }: CalendarProps) {
+  // Outside a translation provider (or in English) the day picker's own English labels stay.
+  const language = React.useContext(TranslationContext)?.language ?? "en";
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
+      formatters={language === "en" ? undefined : localFormatters(intlLocale(language))}
       className={cn("platform-calendar p-3", className)}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
@@ -64,5 +68,15 @@ function Calendar({
   );
 }
 Calendar.displayName = "Calendar";
+
+/** Month caption and weekday names in the app language (date-fns has no Amharic locale). */
+function localFormatters(locale: string): CalendarProps["formatters"] {
+  const caption = new Intl.DateTimeFormat(locale, { month: "long", year: "numeric" });
+  const weekday = new Intl.DateTimeFormat(locale, { weekday: "narrow" });
+  return {
+    formatCaption: (month) => caption.format(month),
+    formatWeekdayName: (day) => weekday.format(day),
+  };
+}
 
 export { Calendar };

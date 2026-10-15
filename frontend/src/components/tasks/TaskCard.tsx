@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Clock, Calendar, User, ChevronRight, Sparkles, AlertTriangle, Briefcase, Link2 } from 'lucide-react';
+import { Clock, Calendar, ChevronRight, Sparkles, AlertTriangle, Briefcase, Link2 } from 'lucide-react';
 import { Card } from '@/components/card';
 import { TaskStatusBadge } from './TaskStatusBadge';
 import { TaskPriorityBadge } from './TaskPriorityBadge';
@@ -7,6 +7,7 @@ import { isOverdue } from '@/lib/tasks-assistants/utils';
 import { useTaskFormat } from '@/lib/tasks-assistants/format';
 import { useTranslation } from '@/lib/i18n';
 import type { Task } from '@/lib/tasks-assistants/types';
+import { PersonAvatar, personName } from '@/components/assistants/PersonLabel';
 
 interface TaskCardProps {
   task: Task;
@@ -145,27 +146,32 @@ export const TaskCard = ({
               <div className="flex flex-wrap gap-2 mb-4">
                 {showClient && task.client_profile && (
                   <span
-                    className="px-2.5 py-1 text-xs rounded-lg border"
+                    data-qa="task-card-client"
+                    title={task.client_profile}
+                    className="inline-flex items-center gap-1.5 px-2 py-1 text-xs rounded-lg border"
                     style={{
                       borderColor: 'var(--border-subtle)',
                       backgroundColor: 'var(--bg-secondary)',
                       color: 'var(--text-secondary)',
                     }}
                   >
-                    {t('tasks.card.client').replace('{0}', task.client_profile)}
+                    <PersonAvatar name={personName(task.client_name, task.client_profile)} size="xs" tone="secondary" />
+                    {t('tasks.card.client').replace('{0}', personName(task.client_name, task.client_profile))}
                   </span>
                 )}
                 {showAssignee && task.assignee && (
                   <span
-                    className="inline-flex items-center gap-1 px-2.5 py-1 text-xs rounded-lg border"
+                    data-qa="task-card-assignee"
+                    title={task.assignee}
+                    className="inline-flex items-center gap-1.5 px-2 py-1 text-xs rounded-lg border"
                     style={{
                       borderColor: 'var(--border-subtle)',
                       backgroundColor: 'var(--bg-secondary)',
                       color: 'var(--text-secondary)',
                     }}
                   >
-                    <User className="w-3 h-3" />
-                    {task.assignee}
+                    <PersonAvatar name={personName(task.assignee_name, task.assignee)} size="xs" />
+                    {personName(task.assignee_name, task.assignee)}
                   </span>
                 )}
               </div>
