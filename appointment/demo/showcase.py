@@ -285,19 +285,40 @@ def state_path():
     return Path(frappe.get_site_path("private", "rich-demo-v1.json")).resolve()
 
 
+#: Business records whose presence makes a site "not empty" for a first showcase seed.
+SHOWCASE_SITE_EMPTY_CHECK = ("Organization", "Provider", "Appointment")
+
+
+def named_showcase_site() -> bool:
+    """True when the site config names this exact site as the server's showcase site."""
+    return bool(frappe.conf.get("showcase_site")) and frappe.conf.get("showcase_site") == frappe.local.site
+
+
 def require_target():
-    if not (
-        frappe.local.site.endswith(".localhost")
-        and frappe.conf.get("worktree_development")
-        and frappe.conf.get("rich_demo_enabled") == 1
-        and frappe.conf.get("mute_emails")
-        and frappe.conf.get("pause_scheduler")
-    ):
+    """Allow the seeder only on an isolated development site or on the one named showcase site.
+
+    Both need `rich_demo_enabled`, muted email and a paused scheduler. A development site also
+    needs a `.localhost` name and `worktree_development`. A server showcase site is named in its
+    own config (`showcase_site`), and its first seed needs an empty site, so the seeder can never
+    take over a site that already has businesses or bookings.
+    """
+    flags = (frappe.conf.get("rich_demo_enabled") == 1 and frappe.conf.get("mute_emails")
+             and frappe.conf.get("pause_scheduler"))
+    development = frappe.local.site.endswith(".localhost") and frappe.conf.get("worktree_development")
+    if not (flags and (development or named_showcase_site())):
         frappe.throw(
-            "Rich demo requires an explicitly enabled isolated .localhost site, muted email and paused scheduler."
+            "Rich demo requires an isolated .localhost development site or the site named in showcase_site, "
+            "with rich_demo_enabled, muted email and a paused scheduler."
         )
     if frappe.session.user != "Administrator":
         frappe.throw("Run the demo command as the site Administrator.", frappe.PermissionError)
+    if not development and not state_path().exists():
+        existing = [doctype for doctype in SHOWCASE_SITE_EMPTY_CHECK if frappe.db.count(doctype)]
+        if existing:
+            frappe.throw(
+                "The showcase site already has records ({0}). The first showcase seed needs an empty site; "
+                "create a new site for the showcases. No data changed.".format(", ".join(existing))
+            )
 
 
 @contextmanager

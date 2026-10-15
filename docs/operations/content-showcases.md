@@ -162,43 +162,49 @@ run does the steps whose version changed and nothing else.
 
 ## Regenerate showcase data on a server
 
-There is one seeder: `appointment.demo.showcase.seed`. It is the "explicit,
-idempotent production seeder" that `AGENTS.md` names, but its guard
-(`require_target`) only accepts a site that meets all of these:
+There is one seeder: `appointment.demo.showcase.seed`. Its guard
+(`require_target`) accepts only these two kinds of site:
 
-- the site name ends with `.localhost`,
-- `worktree_development` is set,
-- `rich_demo_enabled` is `1`,
-- `mute_emails` and `pause_scheduler` are set,
-- the command runs as Administrator (`bench execute` does).
+- **A development site:** the name ends with `.localhost` and
+  `worktree_development` is set.
+- **The named server showcase site:** the site config key `showcase_site`
+  holds this site's own name (for example `showcase.example.com`). On the
+  **first** seed the site must be empty: no Organization, Provider or
+  Appointment. Later seeds are allowed because the site has the seeder's
+  private journal.
 
-So the seeder never runs on a live site, and it cannot be pointed at one by
-mistake. Do not weaken the guard. Do not run the seeder on a site that has real
-businesses or real customers, and do not copy a showcase site to production
-(`GO_LIVE_RUNBOOK.md` §2).
+Both kinds also need `rich_demo_enabled` set to `1`, `mute_emails`,
+`pause_scheduler`, and the command must run as Administrator (`bench execute`
+does). The seeder therefore cannot take over a live site: a live site is not
+named in `showcase_site`, and it is not empty.
 
-The safe way to have showcase data on a server is a separate showcase site,
-for example `showcase.localhost`, in its own bench (or at least its own site,
-never the live one). Its folder name ends with `.localhost`; Nginx serves it
-under a public name by sending `X-Frappe-Site-Name: showcase.localhost`.
+Never set `showcase_site` on the live site, never run the seeder on a site
+with real businesses or customers, and never copy a showcase site to
+production (`GO_LIVE_RUNBOOK.md` §2).
+
+### Steps
+
+Use a separate site for the showcases, for example `showcase.example.com`
+(its own bench is best; its own site is the minimum).
 
 1. Create the site and install the app (as in `GO_LIVE_RUNBOOK.md` §2):
 
    ```bash
-   bench new-site showcase.localhost --db-root-username <root user> --install-app appointment
-   bench --site showcase.localhost migrate
+   bench new-site showcase.example.com --db-root-username <root user> --install-app appointment
+   bench --site showcase.example.com migrate
    ```
 
-2. Turn on the seeder flags. Mute email and pause the scheduler first:
+2. Name the site as the showcase site and turn on the seeder flags. Mute email
+   and pause the scheduler first:
 
    ```bash
-   bench --site showcase.localhost set-config -p mute_emails 1
-   bench --site showcase.localhost set-config -p pause_scheduler 1
-   bench --site showcase.localhost set-config -p worktree_development 1
-   bench --site showcase.localhost set-config -p rich_demo_enabled 1
-   bench --site showcase.localhost set-config host_name https://<showcase host>
-   bench --site showcase.localhost set-config -p brand_public_experience_platform_hosts '["<showcase host>"]'
-   bench --site showcase.localhost set-config -p brand_public_experience_edge_tls 1
+   bench --site showcase.example.com set-config -p mute_emails 1
+   bench --site showcase.example.com set-config -p pause_scheduler 1
+   bench --site showcase.example.com set-config showcase_site showcase.example.com
+   bench --site showcase.example.com set-config -p rich_demo_enabled 1
+   bench --site showcase.example.com set-config host_name https://showcase.example.com
+   bench --site showcase.example.com set-config -p brand_public_experience_platform_hosts '["showcase.example.com"]'
+   bench --site showcase.example.com set-config -p brand_public_experience_edge_tls 1
    ```
 
    The last three keys make the public pages answer on the showcase host
@@ -209,56 +215,62 @@ under a public name by sending `X-Frappe-Site-Name: showcase.localhost`.
    only goes into the persona landing links in the private journal.
 
    ```bash
-   bench --site showcase.localhost execute appointment.demo.showcase.seed \
-     --kwargs '{"base_url": "https://<showcase host>"}'
+   bench --site showcase.example.com execute appointment.demo.showcase.seed \
+     --kwargs '{"base_url": "https://showcase.example.com"}'
    ```
 
-   On the drill of 2026-10-16 a fresh seed took 5 minutes. A repeat run takes
-   a few seconds and changes nothing.
+   On the drill of 2026-10-16 a fresh seed took about 5 minutes. A repeat run
+   takes a few seconds and changes nothing. If the site is not empty on the
+   first seed, the seeder stops with "The showcase site already has records …"
+   and changes nothing.
 
-4. Turn off the seeder flags. Keep email muted and the scheduler paused on the
-   showcase site: the showcase customers have `example.test` addresses, and
+4. Turn off `rich_demo_enabled`. Keep `showcase_site`, muted email and the
+   paused scheduler: the showcase customers have `example.test` addresses, and
    reminders for them must not go to the mail queue.
 
    ```bash
-   bench --site showcase.localhost set-config -p rich_demo_enabled 0
-   bench --site showcase.localhost set-config -p worktree_development 0
+   bench --site showcase.example.com set-config -p rich_demo_enabled 0
    ```
 
-   Turn the two flags on again only for the next seed.
+   Turn it on again only for the next seed or cleanup.
 
-5. Point Nginx at the site (`proxy_set_header X-Frappe-Site-Name
-   showcase.localhost;` for the showcase host) and reload Nginx after
-   `nginx -t`.
+5. Serve the site through Nginx like any other site of the bench (for a site
+   named after its host, the normal `bench setup nginx` config works), and
+   reload Nginx after `nginx -t`.
 
 6. Check:
 
-   - `https://<showcase host>/bloom-studio`, `/selam-studio`, `/tena-studio`,
-     `/abugida-studio`, `/meron-studio` and `/yared-counselling` open, in
-     English and with `?lang=am`;
+   - `https://showcase.example.com/bloom-studio`, `/selam-studio`,
+     `/tena-studio`, `/abugida-studio`, `/meron-studio` and
+     `/yared-counselling` open, in English and with `/am`;
    - `/bloom-studio/book` and `/schedule/p/yared-counselling` open and show
      free times;
    - `/directory` lists the six showcases;
-   - `bench --site showcase.localhost execute appointment.tests.test_rich_demo.verify`
-     (it needs the seeder flags of step 2 for the duration of the check).
+   - `bench --site showcase.example.com execute appointment.tests.test_rich_demo.verify`
+     (it needs `rich_demo_enabled` for the duration of the check).
 
-   The private journal `sites/showcase.localhost/private/rich-demo-v1.json`
+   The readiness report (`appointment.ops.go_live.report`) is for the live
+   site; on the showcase site it reports the demo keys as expected failures.
+
+   The private journal `sites/showcase.example.com/private/rich-demo-v1.json`
    lists every record the seeder made, and the sign-in credentials of the
    showcase staff. Do not copy, print or commit it.
 
+A `.localhost` site with `worktree_development` (the development rule) also
+works on a server when Nginx sends `X-Frappe-Site-Name`, but the named
+`showcase_site` is the clearer choice for a server.
+
+### Refresh and upgrade
+
 To make the data current again (the bookings are around the anchor date):
 
-- On a showcase site that nobody has used, turn the flags on, run
+- On a showcase site that nobody has used, turn `rich_demo_enabled` on, run
   `appointment.demo.showcase.cleanup` (it deletes only the records in the
   journal), then `seed` again.
 - When people booked on the showcase site, cleanup stops on their bookings, on
-  purpose. Make a new site instead: `bench drop-site showcase.localhost` (check
-  the name first), then steps 1 to 6.
+  purpose. Make a new site instead: `bench drop-site showcase.example.com`
+  (check the name first), then steps 1 to 6.
 
 A seed after an app update upgrades the existing showcases in place: each step
 whose version changed writes its new values on the records it owns, and the
 websites are published again.
-
-A guard that allowed a named showcase site without `.localhost` (for example a
-`showcase_site` key next to `rich_demo_enabled`) is a possible change. It is
-not made: the current guard is the reason the seeder cannot reach a live site.

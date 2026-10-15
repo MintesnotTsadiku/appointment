@@ -17,7 +17,7 @@ FLAGS_OFF = {
     "maintenance_mode": "Maintenance mode blocks every visitor.",
 }
 # Keys that only local worktree and test sites use.
-DEV_ONLY_KEYS = ("rich_demo_enabled", "isolated_test_suites", "allow_tests", "worktree_development")
+DEV_ONLY_KEYS = ("rich_demo_enabled", "isolated_test_suites", "allow_tests", "worktree_development", "showcase_site")
 # Guest booking limits (see booking._booking_limit): production keeps the defaults or lower.
 BOOKING_LIMITS = {"guest_booking_limit_per_ip": 10, "guest_booking_limit_per_email": 3}
 # Hosts that mark an Email Account as a local or test placeholder.
