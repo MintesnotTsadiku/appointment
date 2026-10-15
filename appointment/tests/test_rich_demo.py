@@ -55,7 +55,7 @@ def verify():
         assert organization.email == detail["contact"]["email"]
         assert organization.phone == detail["contact"]["phone"]
         assert organization.email.endswith("@example.test")
-        assert organization.phone.startswith("000 ")
+        assert " 000 " in organization.phone  # The non-dialable placeholder, such as "+251 11 000 0101".
         for index, provider_id in enumerate(business["providers"]):
             provider = frappe.get_doc("Provider", provider_id)
             assert provider.bio == detail["provider_bios"][index]
@@ -92,8 +92,9 @@ def verify():
         catalog = get_organization_services(frappe.db.get_value("Organization", business["organization"], "slug"))
         assert catalog["provider_count"] == len(business["providers"])
         assert len(catalog["providers"]) == len(business["providers"])
+        # The scheduler sends the 192 px variant of each portrait as the avatar.
         assert {row["avatar"] for row in catalog["providers"]} == {
-            rich_demo.PROVIDER_PORTRAITS[frappe.db.get_value("Provider", provider_id, "display_name")]
+            rich_demo.PROVIDER_PORTRAITS[frappe.db.get_value("Provider", provider_id, "display_name")].replace(".webp", "-192.webp")
             for provider_id in business["providers"]
         }
         assert catalog["description"] == business["description"]
@@ -114,7 +115,8 @@ def verify():
         assert sections["booking_cta"]["action"]["href"] == f"/{business['public_experience_path'].strip('/')}/book"
         assert len(sections["services"]["items"]) == len(service_ids)
         assert [item["name"]["en"] for item in sections["services"]["items"]] == [frappe.db.get_value("Service", service_id, "service_name") for service_id in service_ids]
-        assert all("ETB" in item["summary"]["en"] and "minutes" in item["summary"]["en"] for item in sections["services"]["items"])
+        # Price and length are their own fields; the summary is the service description.
+        assert all(item["currency"] == "ETB" and item["durationMinutes"] > 0 and item["summary"].get("am") for item in sections["services"]["items"])
         assert [item["name"]["en"] for item in sections["providers"]["items"]] == [frappe.db.get_value("Provider", provider_id, "display_name") for provider_id in business["providers"]]
         assert all(item["specialties"] and item["credentials"] for item in sections["providers"]["items"])
         assert [item["image"] for item in sections["providers"]["items"]] == [rich_demo.PROVIDER_PORTRAITS[frappe.db.get_value("Provider", provider_id, "display_name")] for provider_id in business["providers"]]

@@ -58,7 +58,7 @@ def configure(state, fresh=False):
             from appointment.scheduler.reception_state import set_state
             if frappe.db.get_value("Location", location, "reception_state") not in {"Open", "Closed"}:
                 set_state(location, "Open")
-        with placeholder_numbers():  # Seeded walk-ins keep non-dialable numbers.
+        with placeholder_numbers():  # The phone hook skips seeded walk-ins; their numbers are already E.164.
             counts["walk_ins"] += walk_ins(state, business)
     frappe.set_user("Administrator")
     state["analytics_world"] = {"version": VERSION, "synthetic": True,
@@ -170,7 +170,7 @@ def historical_bookings(state):
 
 
 def walk_ins(state, business):
-    from appointment.demo import showcase
+    from appointment.demo import customer_world, showcase
 
     now = datetime.now(timezone.utc).replace(tzinfo=None)
     system_zone = ZoneInfo(frappe.utils.get_system_timezone())
@@ -193,8 +193,9 @@ def walk_ins(state, business):
             if status == "assigned" and not assigned:
                 continue
             created = now - timedelta(minutes=15 + index * 6)
-            doc = showcase.insert(state, dict(doctype="Walk In", client_name=f"Demo walk-in {index + 1} · {status}",
-                     client_phone="0000000000", client_email=f"walkin{index}.{status}@example.test",
+            client, person = customer_world.walk_in_person(business["organization"], index, status)
+            doc = showcase.insert(state, dict(doctype="Walk In", client_name=person,
+                     client_phone=customer_world.customer_phone(client), client_email=f"walkin{index}.{status}@example.test",
                      service_requested=offering["service"], location=offering["location"], provider_preferred=provider,
                      status=status, assigned_appointment=assigned[0].name if status == "assigned" else None,
                      created_at=created.replace(tzinfo=timezone.utc).astimezone(system_zone).replace(tzinfo=None),

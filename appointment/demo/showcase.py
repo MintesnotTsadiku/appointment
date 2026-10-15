@@ -26,8 +26,8 @@ from appointment.demo import showcase_public as public_copy
 from appointment.public_experience.publisher import publish_experience
 
 VERSION = 1
-CONTENT_VERSION = 8
-PUBLIC_EXPERIENCE_VERSION = 25
+CONTENT_VERSION = 9
+PUBLIC_EXPERIENCE_VERSION = 26
 TZ = "Africa/Addis_Ababa"
 DEMO_BRAND_RECIPES = recipe_assignments()
 # The giant word in the Bloom v3 hero and footer is the brand's short name.
@@ -78,6 +78,19 @@ BUSINESS_NAMES_AM = {
     "bloom": "ቦሌ ብሉም የፀጉር ስቱዲዮ",
     "tena": "ጤና የቤተሰብ ክሊኒክ",
     "abugida": "አቡጊዳ የቋንቋ ስቱዲዮ",
+}
+# The languages each provider speaks with clients (Provider.spoken_languages).
+SPOKEN_LANGUAGES = {
+    "Selam Bekele": ["am", "en"],
+    "Meron Alemu": ["am", "en"],
+    "Hanna Tesfaye": ["am", "en"],
+    "Rahel Girma": ["am"],
+    "Eden Tadesse": ["am", "en"],
+    "Dawit Haile": ["am", "en"],
+    "Saron Mekonnen": ["am", "en", "om"],
+    "Yonas Assefa": ["am", "en", "ti"],
+    "Kalkidan Getachew": ["am", "en"],
+    "Abel Fikru": ["am", "en", "fr"],
 }
 
 CLIENTS = [
@@ -596,6 +609,8 @@ def enrich_business_records(key, business):
                 "display_name_am": AMHARIC_NAMES[name_map[key][index]],
                 "email": business["owner"] if index == 0 else f"{key}.provider{index}@example.test",
                 "bio": detail["provider_bios"][index],
+                "bio_am": public_copy.PROVIDER_BIOS_AM[detail["provider_bios"][index]],
+                "spoken_languages": json.dumps(SPOKEN_LANGUAGES[name_map[key][index]]),
                 "timezone": TZ,
                 "language": "en",
                 "business_type": {"selam": "other", "meron": "other", "bloom": "salon", "tena": "clinic", "abugida": "university"}[key],
@@ -666,7 +681,8 @@ def enrich_seeded_records(state):
 
 
 def _localized(text):
-    return public_copy.localized(text)
+    # A plain number reads the same on Amharic pages.
+    return public_copy.localized(text, text if text.isdigit() else None)
 
 
 def _action(label, intent, placement="inline"):
@@ -858,6 +874,9 @@ def _rich_release_for(site, headline, recipe_key):
         return None
     # Releases from before the holiday moments lack the owner switch the showcases turn on.
     if (snapshot.get("booking") or {}).get("holidayGreetings") is not True:
+        return None
+    # Releases from before the Amharic reviewer names show Latin names on Amharic pages.
+    if not all((item.get("attribution") or {}).get("am") for item in sections.get("testimonials", {}).get("items", [])):
         return None
     return release
 
@@ -1083,7 +1102,10 @@ def seed(base_url="http://127.0.0.174:41960", anchor_date=None):
             added = add_missing_businesses(state, base_url)
             # Independent providers with their own website (Ergata): added or refreshed by their own version.
             added += configure_independents(state, base_url)
-            if needs_phase_write or needs_content_upgrade or needs_public_upgrade or needs_published_content or needs_analytics or needs_dashboards or added:
+            needs_customers = configure_customers(state)
+            needs_growth = configure_growth(state)
+            if (needs_phase_write or needs_content_upgrade or needs_public_upgrade or needs_published_content or needs_analytics
+                    or needs_dashboards or added or needs_customers or needs_growth):
                 for dt, name in list(state["created"]):
                     for version in frappe.get_all("Version", filters={"ref_doctype": dt, "docname": name}, pluck="name"):
                         remember(state, "Version", version)
@@ -1123,6 +1145,8 @@ def seed(base_url="http://127.0.0.174:41960", anchor_date=None):
             configure_dashboards(state)
             record_landings(state["personas"], base_url)
             configure_independents(state, base_url)
+            configure_customers(state)
+            configure_growth(state)
             for dt, name in list(state["created"]):
                 for version in frappe.get_all("Version", filters={"ref_doctype": dt, "docname": name}, pluck="name"):
                     remember(state, "Version", version)
@@ -1141,6 +1165,26 @@ def configure_independents(state, base_url):
 
     try:
         return independent_world.configure(state, base_url)
+    except Exception:
+        frappe.db.rollback()
+        raise
+
+
+def configure_customers(state):
+    from appointment.demo import customer_world
+
+    try:
+        return customer_world.configure(state)
+    except Exception:
+        frappe.db.rollback()
+        raise
+
+
+def configure_growth(state):
+    from appointment.demo import growth_world
+
+    try:
+        return growth_world.configure(state)
     except Exception:
         frappe.db.rollback()
         raise

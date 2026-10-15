@@ -465,6 +465,7 @@ SECTION_COPY = {
         "proof_title": ("The atelier in short", "አቴሊየሩ በአጭሩ"),
         "providers_intro": ("The person who measures is the person who sews.", "የሚለካው ሰው የሚሰፋውም ሰው ነው።"),
         "locations_intro": ("A courtyard atelier in Kazanchis.", "በካዛንቺስ በግቢ ውስጥ ያለ አቴሊየር።"),
+        "gallery_title": ("Pieces from the atelier", "ከአቴሊየሩ የወጡ ልብሶች"),
     },
     "bloom": {
         "process_title": ("Your visit, from chair to mirror", "ጉብኝትዎ፣ ከወንበር እስከ መስተዋት"),
@@ -669,3 +670,55 @@ AM.update({
     "Moves to take home": "ወደ ቤት የሚወሰዱ እንቅስቃሴዎች",
     "A short sequence you can repeat at a desk or at home.": "በጠረጴዛ አጠገብ ወይም በቤት ሊደግሙት የሚችሉት አጭር ቅደም ተከተል።",
 })
+
+# The names of the reviewers in Ge'ez script, for the reviews on Amharic pages.
+AM.update({
+    "Liya Tadesse": "ሊያ ታደሰ",
+    "Mimi Kebede": "ሚሚ ከበደ",
+    "Rahel Alemu": "ራሔል አለሙ",
+    "Abel Girma": "አቤል ግርማ",
+    "Sara Yilma": "ሳራ ይልማ",
+    "Tsion Alemayehu": "ጽዮን አለማየሁ",
+    "Henok Wolde": "ሄኖክ ወልዴ",
+    "Saba Getahun": "ሳባ ጌታሁን",
+    "Dawit Kassa": "ዳዊት ካሳ",
+    "Mahlet Girma": "ማህሌት ግርማ",
+    "Bethlehem Tadesse": "ቤተልሔም ታደሰ",
+    "Hana Demissie": "ሐና ደምሴ",
+    "Selamawit Abebe": "ሰላማዊት አበበ",
+    "Meron Tadesse": "ሜሮን ታደሰ",
+    "Daniel Okafor": "ዳንኤል ኦካፎር",
+    "Hiwot Bekele": "ሕይወት በቀለ",
+    "Sophie Laurent": "ሶፊ ሎረን",
+    "Meseret Alemu": "መሠረት አለሙ",
+    "Henok Tadesse": "ሄኖክ ታደሰ",
+    "Tsehay Bekele": "ፀሐይ በቀለ",
+    "Lidya Getachew": "ሊድያ ጌታቸው",
+    "Rediet Haile": "ረድኤት ኃይሌ",
+    "Yonatan Desta": "ዮናታን ደስታ",
+    "Saba Mengistu": "ሳባ መንግሥቱ",
+})
+
+# The provider bios in Amharic (Provider.bio_am), next to the English bios in `showcase.DEMO_CONTENT`.
+PROVIDER_BIOS_AM = {
+    "Selam creates calm, practical movement sessions for people returning to activity or trying to make a routine stick.":
+        "ሰላም ወደ እንቅስቃሴ ለሚመለሱ ወይም ልምምዳቸውን ዘላቂ ለማድረግ ለሚሞክሩ ሰዎች የተረጋጉና ተግባራዊ የእንቅስቃሴ ክፍለ ጊዜዎችን ታዘጋጃለች።",
+    "Meron leads each fitting with a practical eye for proportion, comfort and the small details that make a garment feel like yours.":
+        "ሜሮን እያንዳንዱን ልኬት ለመጠን፣ ለምቾትና ልብሱን የራስዎ እንዲመስል ለሚያደርጉት ትናንሽ ዝርዝሮች በሚጠነቀቅ ተግባራዊ ዓይን ትመራለች።",
+    "Hanna helps clients turn a big hair decision into a manageable appointment, from first wash-and-finish visits to shape changes.":
+        "ሐና ከመጀመሪያው የእጥበትና የአጨራረስ ጉብኝት እስከ የቅርጽ ለውጥ ድረስ፣ ትልቅ የፀጉር ውሳኔን ወደ ቀላል ቀጠሮ እንዲቀይሩ ደንበኞችን ትረዳለች።",
+    "Rahel brings a patient, detail-led approach to wash care and styling, with special attention to an easy home routine.":
+        "ራሔል ለፀጉር እጥበትና ስታይል በትዕግሥትና ለዝርዝር በመጠንቀቅ ትሠራለች፤ በተለይም ቀላል የቤት ውስጥ እንክብካቤ ላይ ታተኩራለች።",
+    "Eden enjoys precise shaping and calm consultations that make room for questions about texture, length and upkeep.":
+        "ኤደን ትክክለኛ ቅርጽ ማውጣትንና ስለ ፀጉር ዓይነት፣ ርዝመትና እንክብካቤ ለሚነሱ ጥያቄዎች ቦታ የሚሰጡ የተረጋጉ ምክክሮችን ትወዳለች።",
+    "Dawit provides scheduled family consultations with attention to the client’s questions, visit context and agreed follow-up steps.":
+        "ዳዊት የታካሚውን ጥያቄዎች፣ የጉብኝቱን ሁኔታና የተስማሙበትን የክትትል እርምጃዎች በትኩረት እየተከታተለ በቀጠሮ የሚደረጉ የቤተሰብ ምክክሮችን ይሰጣል።",
+    "Saron supports booked consultations with a careful listening style and clear explanations of what the appointment can cover.":
+        "ሳሮን በጥንቃቄ በማዳመጥና ቀጠሮው ምን ሊሸፍን እንደሚችል በግልጽ በማስረዳት በቀጠሮ የሚደረጉ ምክክሮችን ታግዛለች።",
+    "Yonas focuses on making routine follow-up visits organised, respectful and easy to navigate.":
+        "ዮናስ መደበኛ የክትትል ጉብኝቶች የተደራጁ፣ አክብሮት ያላቸውና ለመከታተል ቀላል እንዲሆኑ ያደርጋል።",
+    "Kalkidan builds structured practice around the learner’s real situations, from workplace introductions to longer conversations.":
+        "ቃልኪዳን ከሥራ ቦታ መግቢያዎች እስከ ረዘም ያሉ ውይይቶች ድረስ፣ በተማሪው እውነተኛ ሁኔታዎች ዙሪያ የተደራጀ ልምምድ ታዘጋጃለች።",
+    "Abel brings a patient, example-rich style to Amharic and English practice, with room to repeat, ask and try again.":
+        "አቤል የአማርኛና የእንግሊዝኛ ልምምድን በትዕግሥትና በብዙ ምሳሌዎች ይመራል፤ ለመድገም፣ ለመጠየቅና እንደገና ለመሞከር ቦታ ይሰጣል።",
+}
