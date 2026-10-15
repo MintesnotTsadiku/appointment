@@ -1,4 +1,5 @@
 # The Bloom booking journey as one product: landing -> /book handoff (a service row) -> time picker -> back to the service
+# (desktop: the header's Back from the details, the time picker and the chooser, back to /book, then on to the booking)
 # chooser (one card per service, the stylist filter) -> time picker -> details (phone first) -> confirmation with petals.
 # Fixture: appointment.tests.template_bloom_v3_qa_fixtures (setup before, cleanup after; cleanup deletes the bookings that the
 # two scenarios make, by the QA client's exact email). See docs/growth/BOOKING_LAYOUT.md, "Booking skins".
@@ -105,6 +106,55 @@ scenarios:
   - action: screenshot
     name: journey_en-6-details.png
     full_page: false
+  # The header's Back: details -> the time picker with the time still selected -> the service chooser -> the /book page.
+  - action: click
+    selector: '[data-qa="booking-back"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-steps"][data-step="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-slot"][aria-pressed="true"]'
+  - action: wait_for
+    selector: '[data-qa="booking-bar"]'
+  - action: screenshot
+    name: journey_en-6b-back-to-time.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-back"][data-target="service"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 2)
+  - action: wait_for
+    selector: '[data-qa="booking-back"][data-target="previous"]'
+  - action: screenshot
+    name: journey_en-6c-back-to-chooser.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-back"][data-target="previous"]'
+  - action: wait_for
+    selector: '[data-qa="bloom-handoff-service-1"]'
+    timeout_ms: 20000
+    assertions:
+    - type: url_contains
+      value: /book
+  - action: screenshot
+    name: journey_en-6d-back-to-website.png
+    full_page: false
+  # Again into the time picker and the details.
+  - action: click
+    selector: '[data-qa="bloom-handoff-service-1"]'
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_bloom_open_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_bloom_open_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 2)
+    timeout_ms: 20000
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 2)
+  - action: click
+    selector: '[data-qa="booking-continue"]'
+  - action: wait_for
+    selector: '#userName'
   - action: fill
     selector: '#userName'
     value: '{qa_bloom_client}'
@@ -163,7 +213,7 @@ scenarios:
     name: journey_am-2-time.png
     full_page: false
   - action: click
-    selector: '[data-qa="booking-step-back"][data-target="service"]'
+    selector: '[data-qa="booking-back"][data-target="service"]'
   - action: wait_for
     selector: :nth-match([data-qa="booking-service"], 3)
   - action: screenshot
@@ -209,6 +259,20 @@ scenarios:
   - action: screenshot
     name: journey_am-6-details.png
     full_page: false
+  # The header's Back (the chevron on a phone): details -> the time picker with the time still selected.
+  - action: click
+    selector: '[data-qa="booking-back"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-slot"][aria-pressed="true"]'
+  - action: wait_for
+    selector: '[data-qa="booking-phone-continue"]'
+  - action: screenshot
+    name: journey_am-6b-back-to-time.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-phone-continue"] [data-qa="booking-continue"]'
+  - action: wait_for
+    selector: '#userName'
   - action: fill
     selector: '#userName'
     value: '{qa_bloom_client}'

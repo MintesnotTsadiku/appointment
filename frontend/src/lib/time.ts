@@ -26,11 +26,28 @@ const ETHIOPIAN_PERIODS = {
   evening: 'ምሽት',
 } as const;
 
+/** The four Habesha periods of a day, in the order of the day from midnight. */
+export const HABESHA_PERIODS = ['night', 'morning', 'afternoon', 'evening'] as const;
+export type HabeshaPeriod = (typeof HABESHA_PERIODS)[number];
+
+/**
+ * The Habesha period of a 24-hour wall clock hour. The one rule for the period word of a Habesha label
+ * and for the slot groups of the time picker with Habesha time.
+ */
+export function habeshaPeriod(hour24: number): HabeshaPeriod {
+  if (hour24 < 6) return 'night';
+  if (hour24 < 12) return 'morning';
+  if (hour24 < 18) return 'afternoon';
+  return 'evening';
+}
+
 export function ethiopianPeriod(hour24: number): string {
-  if (hour24 < 6) return ETHIOPIAN_PERIODS.night;
-  if (hour24 < 12) return ETHIOPIAN_PERIODS.morning;
-  if (hour24 < 18) return ETHIOPIAN_PERIODS.afternoon;
-  return ETHIOPIAN_PERIODS.evening;
+  return ETHIOPIAN_PERIODS[habeshaPeriod(hour24)];
+}
+
+/** The Habesha period of an instant in a time zone (the zone the picker shows its times in). */
+export function habeshaPeriodOfInstant(instant: Date | string, timeZone?: string): HabeshaPeriod {
+  return habeshaPeriod(wallPartsInZone(instant, timeZone).hour);
 }
 
 /**

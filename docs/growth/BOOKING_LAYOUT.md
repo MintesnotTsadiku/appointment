@@ -31,7 +31,7 @@ The owner asked for this layout on 2026-10-15: at 100 % zoom on a laptop, everyt
   - The header: the day ("Thursday, October 15"), the number of open times and the time zone ("6 slots available · Addis Ababa time") on the left; the time format (12-hour, 24-hour, Habesha) and the buttons for the previous and the next open day on the right.
   - The provider chips ("Any provider" and one chip per provider), when the service has more than one provider. A long team scrolls sideways.
   - The "Your time" bar. Before a choice it says "Pick a time". After a choice it shows the day, the time, the provider, the service and its length, for example "Thu, Oct 15 · 3:00 PM · With Selam Bekele · Movement consultation · 45 min", and the Continue button. The bar has the same height in both states, so nothing moves when the customer chooses a time.
-  - The slot list. It is the only part that scrolls. The headings "Morning", "Afternoon" and "Evening" stick to its top.
+  - The slot list. It is the only part that scrolls. The group headings ("Morning", "Afternoon" and "Evening"; with Habesha time the Habesha periods, see below) stick to its top.
 - There is no bar at the bottom of the screen on wide layouts.
 - The column scrolls on its own only when the window is too short for it (below about 680 px with the quantity picker).
 
@@ -69,7 +69,7 @@ Because of this, the booking journey manifests do not depend on the time of day:
 
 ### Coming back to the picker
 
-When the customer comes back from the details (the done step "Time" in the header on every scheduler, or "Change time" in the summary on the provider scheduler), the chosen time stays selected and comes into view: in the middle of the slot list on wide layouts, in the middle of the screen on phones.
+When the customer comes back from the details (the header's Back button, the done step "Time" in the header on every scheduler, or "Change time" in the summary on the provider scheduler), the chosen time stays selected and comes into view: in the middle of the slot list on wide layouts, in the middle of the screen on phones.
 
 ### Habesha time and the Ethiopian calendar
 
@@ -82,6 +82,7 @@ Habesha time switches the whole picker to the Ethiopian calendar (owner, 2026-10
 - Both grids are one component (`MonthGrid`): the same look and keys. Arrow keys move between days, Home and End go to the start and end of the week, Page Up and Page Down change the month. Each day's accessible name is the full date of its calendar ("ሐሙስ፣ ጥቅምት 5 ቀን 2019", "Thursday, Tikimt 5, 2019").
 - The day title, the phone's strip of days (Ethiopian day numbers, the Ethiopian month next to "Today"), the "Your time" bar, the details summary and the confirmation show the Ethiopian date with Habesha time, for example "ሐሙስ፣ ጥቅምት 5 ቀን 2019 · ሰዓት 3:00 ጠዋት".
 - The conversion is in `frontend/src/lib/ethiopian-calendar.ts`, the twin of `appointment/growth/ethiopian_calendar.py` and `public/js/tools/ethiopian-calendar.js`, with the month names (the same as the twins; month 13 is spelled ጳጉሜ everywhere, also where the browser's own Ethiopic calendar writes ጳጉሜን), month lengths, the month grid and the dates in words. The template kit re-exports the conversion (`templates/kit/core/holidays.ts`), so template packages still import only the kit. `tests/ethiopian-calendar.test.mjs` checks it against the shared vectors (`appointment/growth/vectors/ethiopian_calendar.json`), for example 15 October 2026 = Tikimt 5, 2019, and Pagume of 2018 (5 days) and 2019 (6 days).
+- The slot list groups the times by the Habesha periods of their labels (owner, 2026-10-16): ሌሊት / Night (0:00–5:59), ጠዋት / Morning (6:00–11:59), ከሰዓት / Afternoon (12:00–17:59) and ምሽት / Evening (18:00–23:59), in the time zone of the picker. So 17:00, "11:00 afternoon" ("ሰዓት 11:00 ከሰዓት"), is under "Afternoon", and 18:00, "12:00 evening", starts "Evening". Before, the groups were the international parts of the day (evening from 17:00). The headings, their counts and the sticky headings use the same groups. One rule gives both the label's period and the group: `habeshaPeriod` in `frontend/src/lib/time.ts`; the groups are in `DateTimeSelector/TimeSlotsPanel/groups.ts`. 12-hour and 24-hour keep the international groups (morning, afternoon from 12:00, evening from 17:00). `tests/booking-slot-groups.test.mjs` checks every hour of the day in English and Amharic: the period word of each slot's label is the heading of its group. Each heading has `data-group` (`night`, `morning`, `afternoon`, `evening`).
 - The details form and the confirmation now use the picker's clock. Before, they always showed Habesha time on Amharic pages, even when the customer chose 12-hour.
 - English pages say Habesha time in English, with the period words of the free time converter: the slot buttons "6:00 afternoon", the "Your time" bar "6:00 in the afternoon", the details summary, the confirmation and the independent booking "6:00 in the afternoon (Habesha time)", for example "Friday, Tikimt 27, 2019 · 6:00 in the afternoon (Habesha time)". Amharic pages keep "ሰዓት 6:00 ከሰዓት". Code: `habeshaLabel` and the `habesha` option of `formatInstant` (`frontend/src/lib/time.ts`); without a page language (staff screens) the label stays Amharic.
 
@@ -193,11 +194,23 @@ The numbers are from the Bloom, Selam, Abugida and Meron showcases (`booking-fit
 - The Confirm bar is fixed to the bottom of the screen, above the safe area (`env(safe-area-inset-bottom)`): the total and a wide Confirm. On the provider scheduler Confirm takes the whole bar, because the chosen time is in the summary at the top. The page has room under the content, so the bar never covers the last field or the footer.
 - A focused field stays above the bar: fields have a `scroll-margin-bottom` of the bar's height, and the frame checks the field again after the keyboard opens (`visualViewport`) and scrolls the page when the field is under the bar.
 
-### Back to a step
+### Back
 
-The header has no Back button now. The done steps of the step indicator are links back to their step (`BookingSteps` `links`): "✓ Service" opens the service chooser (the provider page on the provider scheduler), "✓ Time" opens the time picker with the chosen time still selected. They are real links or buttons with the name "Back to Time" ("ወደ ሰዓት ይመለሱ"), reachable with Tab, with a clear focus ring. "Service" has an address, so a modified click opens it in a new tab. This applies on the time picker too (the "Service" link replaces Back) and on the organization, provider and independent schedulers. The reschedule panel has no step header and does not change. Browser Back works as before: the steps are page state, so Back leaves the scheduler page.
+The owner asked for the header's Back button again on 2026-10-16. It is at the start of the header, on the left, on every screen width, and the done steps stay links (`BookingSteps` `links`). Code: `frontend/src/pages/booking-v2/components/skin/back.tsx` (`BookingBack`, `useBookingBack`).
 
-Below 900 px the steps are the thin progress line, so the step before the current one is also a compact link at the start of the header: a chevron with the step name ("‹ Time"); below 480 px only the chevron, with the same accessible name. `data-qa`: `booking-step-link` (with `data-target`) and `booking-step-back`.
+| Step | Back goes to |
+| --- | --- |
+| Details | The time picker, with the chosen time still selected and in view. |
+| Time picker | The service chooser (organization) or the provider page (provider scheduler). |
+| Service chooser, provider page | The in-app page before the booking pages (for example the website's `/book` page), else the business website. Without either, there is no Back. |
+| Confirmation | No Back. The business name links to the website. |
+
+- When the page that Back goes to is the previous page in the browser's history (the chooser before the picker), Back is the browser's Back. Otherwise the target replaces the current page (`replace`), so the history does not grow a loop: after "Back" from a picker that was opened from `/book`, the chooser is in the picker's place and its Back goes to `/book`.
+- To find "the page before the booking pages", both routers (the website app and the full app) record each in-app location by its history index (`frontend/src/lib/history-trail.ts`, `sessionStorage` `app-history-trail`, with a copy in memory when storage is blocked). Back walks back over the booking pages (`/schedule/org/…`, `/schedule/p/…`, `/schedule/individual/<offering>`) to the first other page. A fresh document starts a new trail, so a link opened from outside the app goes to the website.
+- The button shows a chevron and "Back" ("ተመለስ"). Its accessible name says where it goes: "Back to Time" ("ወደ ሰዓት ይመለሱ"), "Back to Service", "Back to Bole Bloom Hair Studio" or "Go to the previous page" ("ወደ ቀዳሚው ገጽ ይመለሱ"). Below 480 px it is the chevron only (40 × 40 px). It uses the header's tokens, so it follows each skin's header in light and dark mode. `data-qa="booking-back"` with `data-target` (`time`, `service`, `site` or `previous`).
+- The header does not wrap: the business name truncates. Measured on Bloom, Selam, Tena, Abugida, Meron and Rahel at 390, 768, 1280 and 1440 px, English and Amharic, light and dark: the steps stay on one line (24 to 32 px high), the Back button is 40 px high, and the page has no horizontal scroll.
+- The done steps are still links: "✓ Service" (an address, so a modified click opens a new tab) and "✓ Time", with the name "Back to Time". Below 900 px the steps are the thin progress line only; the phone-only "‹ Time" link is gone, because Back does its work.
+- The reschedule panel and the manage page keep their own Back. The browser's Back works as before: the steps inside one address are page state, and the chooser's address shows the chooser.
 
 ### Fields and the summary
 
@@ -215,7 +228,8 @@ One shared flow (`pages/organization-appointment`, `booking-v2` components) keep
 | Part | What it does |
 | --- | --- |
 | `useBookingSkin(config, brandStyle, mode)` | The skin of the published design (`templates/booking-skin.ts`), else the default skin. It adds the skin tokens to the brand variables and gives `data-bk-skin` and `data-bk-frame`. |
-| `BookingSteps` | "Service → Time → Details → Done" in the page header. Done steps are links back to their step. On screens below 900 px it is a thin progress line along the bottom edge of the header, and the step before the current one is a compact link at the start of the header. The current step is announced. The skin can draw each mark. |
+| `BookingSteps` | "Service → Time → Details → Done" in the page header. Done steps are links back to their step. On screens below 900 px it is a thin progress line along the bottom edge of the header. The current step is announced. The skin can draw each mark. |
+| `BookingBack` | The header's Back button at the start of the header (see "Back"). |
 | `BookingBackdrop` | The faint page background: the smallest file of the skin's backdrop photo (the night photo in dark mode), blurred, behind the page. It covers the whole viewport, so it is never the largest paint. |
 | `ServicePhoto` | The service photo in the skin's frame, with the AVIF and width files of a packaged photo. Always lazy. |
 | `skin.css` | Shared defaults and the tokens: `--bk-action-*`, `--bk-header-*`, `--bk-frame-line`, `--bk-backdrop-*`. |
@@ -277,18 +291,30 @@ Local servers answer fast, so a skeleton shows for a moment only. In development
 | `qa/manifests/growth/booking-layout.yaml` | Selam, Bloom and Yared on desktop, Selam and Rahel on a phone (en, light) |
 | `qa/manifests/growth/booking-layout-am-dark.yaml` | Selam and Rahel on desktop, Bloom and Yared on a phone, states (am, dark) |
 | `qa/manifests/growth/booking-layout-states.yaml` | Unknown addresses, expired links, skeletons, error, no times, offline (en, light) |
-| `qa/manifests/growth/booking-fit.yaml` | The picker and the details step fit the window: Bloom, Selam, Tena, Abugida, Meron and Rahel (default skin, provider scheduler) at 1280 × 720, 1366 × 768, 1440 × 900 and 390 × 844, Selam at 1660 × 880 and Bloom at 1920 × 1080; every site in en and am, light and dark. Picker: summary, calendar, time format, zone, footer and "Your time" inside the window with no page scroll; the last open time of a day chosen; "Your time" and Continue in view; Continue opens the details. Details: the summary, the Confirm bar with Confirm and the footer with Powered by inside the window with no page scroll on laptops; the summary and the Confirm bar in view on the phone; the "Time" step link (the chevron on the phone) goes back to the picker with the time still selected. |
-| `qa/manifests/growth/booking-ethiopian.yaml` | Habesha time and the Ethiopian calendar (fixture `appointment.tests.booking_ethiopian_qa_fixtures`, values only): today's Ethiopian day and month checked against the Python twin, a day and a time, unselect and choose again, the Ethiopian date in the details, Pagume by month navigation (Selam en desktop, Bloom am desktop dark, Tena en phone, Rahel am phone dark). |
+| `qa/manifests/growth/booking-fit.yaml` | The picker and the details step fit the window: Bloom, Selam, Tena, Abugida, Meron and Rahel (default skin, provider scheduler) at 1280 × 720, 1366 × 768, 1440 × 900 and 390 × 844, Selam at 1660 × 880 and Bloom at 1920 × 1080; every site in en and am, light and dark. Picker: summary, calendar, time format, zone, footer and "Your time" inside the window with no page scroll; the last open time of a day chosen; "Your time" and Continue in view; Continue opens the details. Details: the summary, the Confirm bar with Confirm and the footer with Powered by inside the window with no page scroll on laptops; the summary and the Confirm bar in view on the phone; the "Time" step link (on the phone, the header's Back) goes back to the picker with the time still selected. |
+| `qa/manifests/growth/booking-ethiopian.yaml` | Habesha time and the Ethiopian calendar (fixture `appointment.tests.booking_ethiopian_qa_fixtures`, values only): today's Ethiopian day and month checked against the Python twin, a day and a time, unselect and choose again, the Ethiopian date in the details, Pagume by month navigation (Selam en desktop, Bloom am desktop dark, Tena en phone, Rahel am phone dark). The slot groups with Habesha time: on Bloom, "11:00 afternoon" ("ሰዓት 11:00 ከሰዓት") under "Afternoon" ("ከሰዓት"), "12:00 evening" under "Evening" ("ምሽት"), no afternoon time in another group, and 5:00 PM under "Evening" with 12-hour (Bloom en desktop, Bloom am desktop dark). |
 
 These manifests need no fixture and book nothing. Existing booking manifests now select Continue (`[data-qa="booking-continue"]`) after they choose a slot.
 
-`qa/manifests/growth/booking-journey-bloom.yaml` (fixture `appointment.tests.template_bloom_v3_qa_fixtures`, setup before, cleanup after) follows one customer through Bloom: the landing page, the `/book` handoff (select a service row), the time picker with any stylist, back to the service chooser (three cards, the stylist filter), the time picker, the details (phone first) and the confirmation with the petals. It runs in English on a desktop in light mode, and in Amharic on a phone in dark mode with the Hanna filter. The fixture cleanup also finds the QA client's bookings by the exact phone number and name, because a phone-first booking has no email.
+`qa/manifests/growth/booking-journey-bloom.yaml` (fixture `appointment.tests.template_bloom_v3_qa_fixtures`, setup before, cleanup after) follows one customer through Bloom: the landing page, the `/book` handoff (select a service row), the time picker with any stylist, back to the service chooser (three cards, the stylist filter), the time picker, the details (phone first) and the confirmation with the petals. On the desktop it also selects the header's Back from the details (the time picker with the time still selected), from the time picker (the chooser) and from the chooser (the `/book` page), then books; on the phone, Back from the details. `booking-journey-selam.yaml` does the same on Selam. It runs in English on a desktop in light mode, and in Amharic on a phone in dark mode with the Hanna filter. The fixture cleanup also finds the QA client's bookings by the exact phone number and name, because a phone-first booking has no email.
 
 Manifests that chose a provider's card (`e2e/1-guest`, `resources/guest`, `pools/guest`) now choose the provider chip first, or choose the room in the time picker's filter. Their Amharic scenarios find the card by the website's Amharic service name.
 
 ### Fit check
 
 The runner has no bounding-box assertion. In development builds, `?qa-fit=1` (kept for the tab's session) makes the picker write `data-qa-fit` on `[data-qa="booking-picker"]` with the parts that are fully inside the window: `summary`, `calendar`, `format`, `zone`, `footer`, `bar`, `go`, `chosen`, and `no-page-scroll` when the page does not scroll (`DateTimeSelector/fitProbe.ts`). The details step writes it on `[data-qa="booking-details-layout"]` with `summary`, `bar`, `go`, `footer`, `powered` and `no-page-scroll`. `booking-fit.yaml` waits for selectors such as `[data-qa-fit~="calendar"][data-qa-fit~="no-page-scroll"]`. Production builds never run the probe.
+
+### Runs (Back button and Habesha slot groups, 2026-10-16)
+
+| Run | Manifest | Result |
+| --- | --- | --- |
+| BQA-2026-00646 | `booking-ethiopian.yaml` (5 scenarios, with the new Bloom en groups scenario) | Passed. (BQA-2026-00645 failed on a manifest selector: `section:not(…)` also matched the outer panel; the selector now names the group sections.) |
+| BQA-2026-00647 | `booking-journey-bloom.yaml` (Back from details, time picker and chooser to `/book`) | Passed, 0 console and 0 network errors. |
+| BQA-2026-00648 | `booking-journey-selam.yaml` | Passed. |
+| BQA-2026-00649 | `controls-independent-booking.yaml` (Back from details) | Passed. |
+| BQA-2026-00650 | `provider-page.yaml` (Back from details, then to the provider page) | Passed. |
+| BQA-2026-00651 | `booking-fit.yaml` (26 scenarios; the phone scenarios use the header's Back) | Passed. |
+| BQA-2026-00655 | `booking-layout.yaml` | Passed. |
 
 ### Runs (details step layout, 2026-10-15, night)
 
@@ -300,7 +326,7 @@ The runner has no bounding-box assertion. In development builds, `?qa-fit=1` (ke
 | BQA-2026-00631, 00632 | `phone-first.yaml`, `-am-dark` | Passed. |
 | BQA-2026-00634, 00638 | `controls-independent-booking.yaml`, `-am-dark` | Passed. (BQA-2026-00635 opened `/schedule/individual/` with no offering, the known lag of the fixture's state after setup; the run after a new setup passed.) |
 
-The manifests that selected the header's Back button now select the step links: `booking-journey-*` (`[data-qa="booking-step-link"][data-target="service"]` on desktops, `[data-qa="booking-step-back"]` on phones) and `booking-ethiopian.yaml` (the "Time" step).
+The manifests that selected the header's Back button now select the step links: `booking-journey-*` (`[data-qa="booking-step-link"][data-target="service"]` on desktops, `[data-qa="booking-step-back"]` on phones) and `booking-ethiopian.yaml` (the "Time" step). Since 2026-10-16 the phone link is the header's Back, `[data-qa="booking-back"]`.
 
 ### Runs (phase 3 consolidation, 2026-10-15, evening)
 

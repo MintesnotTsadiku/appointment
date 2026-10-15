@@ -304,12 +304,12 @@ scenarios:
     - type: visible_selector
       value: '[data-qa="booking-confirm-bar"] [data-qa="booking-confirm"]'
     - type: visible_selector
-      value: '[data-qa="booking-step-back"][data-target="time"]'
+      value: '[data-qa="booking-back"][data-target="time"]'
   - action: screenshot
     name: fit_bloom_390x844_am_light-3-details.png
     full_page: false
   - action: click
-    selector: '[data-qa="booking-step-back"][data-target="time"]'
+    selector: '[data-qa="booking-back"][data-target="time"]'
   - action: wait_for
     selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
     assertions:
@@ -596,12 +596,12 @@ scenarios:
     - type: visible_selector
       value: '[data-qa="booking-confirm-bar"] [data-qa="booking-confirm"]'
     - type: visible_selector
-      value: '[data-qa="booking-step-back"][data-target="time"]'
+      value: '[data-qa="booking-back"][data-target="time"]'
   - action: screenshot
     name: fit_selam_390x844_en_light-3-details.png
     full_page: false
   - action: click
-    selector: '[data-qa="booking-step-back"][data-target="time"]'
+    selector: '[data-qa="booking-back"][data-target="time"]'
   - action: wait_for
     selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
     assertions:
@@ -888,12 +888,12 @@ scenarios:
     - type: visible_selector
       value: '[data-qa="booking-confirm-bar"] [data-qa="booking-confirm"]'
     - type: visible_selector
-      value: '[data-qa="booking-step-back"][data-target="time"]'
+      value: '[data-qa="booking-back"][data-target="time"]'
   - action: screenshot
     name: fit_tena_390x844_am_dark-3-details.png
     full_page: false
   - action: click
-    selector: '[data-qa="booking-step-back"][data-target="time"]'
+    selector: '[data-qa="booking-back"][data-target="time"]'
   - action: wait_for
     selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
     assertions:
@@ -1180,12 +1180,12 @@ scenarios:
     - type: visible_selector
       value: '[data-qa="booking-confirm-bar"] [data-qa="booking-confirm"]'
     - type: visible_selector
-      value: '[data-qa="booking-step-back"][data-target="time"]'
+      value: '[data-qa="booking-back"][data-target="time"]'
   - action: screenshot
     name: fit_abugida_390x844_en_dark-3-details.png
     full_page: false
   - action: click
-    selector: '[data-qa="booking-step-back"][data-target="time"]'
+    selector: '[data-qa="booking-back"][data-target="time"]'
   - action: wait_for
     selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
     assertions:
@@ -1472,12 +1472,12 @@ scenarios:
     - type: visible_selector
       value: '[data-qa="booking-confirm-bar"] [data-qa="booking-confirm"]'
     - type: visible_selector
-      value: '[data-qa="booking-step-back"][data-target="time"]'
+      value: '[data-qa="booking-back"][data-target="time"]'
   - action: screenshot
     name: fit_meron_390x844_am_light-3-details.png
     full_page: false
   - action: click
-    selector: '[data-qa="booking-step-back"][data-target="time"]'
+    selector: '[data-qa="booking-back"][data-target="time"]'
   - action: wait_for
     selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
     assertions:
@@ -1758,12 +1758,12 @@ scenarios:
     - type: visible_selector
       value: '[data-qa="booking-confirm-bar"] [data-qa="independent-booking-submit"]'
     - type: visible_selector
-      value: '[data-qa="booking-step-back"][data-target="time"]'
+      value: '[data-qa="booking-back"][data-target="time"]'
   - action: screenshot
     name: fit_rahel_390x844_en_light-3-details.png
     full_page: false
   - action: click
-    selector: '[data-qa="booking-step-back"][data-target="time"]'
+    selector: '[data-qa="booking-back"][data-target="time"]'
   - action: wait_for
     selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
     assertions:

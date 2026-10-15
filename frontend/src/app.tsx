@@ -30,11 +30,19 @@ import { UpdateNotification } from "./components/pwa/UpdateNotification";
 import { ConnectionStatus } from "./components/pwa/ConnectionStatus";
 import { BookingOfflineNotice } from "./components/booking-states";
 import { isPublicExperiencePath } from "./public-experience/routes";
+import { recordLocation } from "./lib/history-trail";
 
 const App = () => {
   const router = useMemo(() => createBrowserRouter(createRoutesFromElements(Router()), { basename: BASE_ROUTE }), []);
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
-  useEffect(() => router.subscribe(state => setCurrentPath(state.location.pathname)), [router]);
+  useEffect(() => {
+    // The in-app trail of this tab's history: the booking header's Back goes to the page that came before.
+    recordLocation(router.state.location, router.state.historyAction);
+    return router.subscribe(state => {
+      setCurrentPath(state.location.pathname);
+      recordLocation(state.location, state.historyAction);
+    });
+  }, [router]);
   const pathname = typeof window === "undefined" ? "/" : window.location.pathname;
   const standalone = isPublicExperiencePath(pathname);
   const publicOnly = standalone || pathname.startsWith("/schedule/");

@@ -4264,6 +4264,7 @@
     "morning": "Morning",
     "afternoon": "Afternoon",
     "evening": "Evening",
+    "night": "night",
     "allSlots": "All Slots",
     "slotLabel": "Time slot {0}",
     "howMany": "How many",
@@ -4392,7 +4393,8 @@
     "backTo": "Back to {0}",
     "appointments": "Appointments",
     "back": "Back",
-    "previousStep": "Go to the previous booking step"
+    "previousStep": "Go to the previous booking step",
+    "previousPage": "Go to the previous page"
   },
   "adminPaymentsServer": {
     "onlyAdmins": "Only platform administrators can manage platform payments.",

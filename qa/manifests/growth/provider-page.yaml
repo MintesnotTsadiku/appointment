@@ -89,6 +89,38 @@ scenarios:
     selector: '[data-qa="booking-continue"]'
   - action: wait_for
     selector: '[data-qa="independent-booking-chosen"]'
+  # The header's Back: details -> the time picker with the time still selected -> the provider page.
+  - action: click
+    selector: '[data-qa="booking-back"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-slot"][aria-pressed="true"]'
+  - action: click
+    selector: '[data-qa="booking-back"][data-target="service"]'
+  - action: wait_for
+    selector: '[data-qa="provider-services"]'
+    assertions:
+    - type: url_not_contains
+      value: /schedule/p/{qa_provider_slug}/
+  - action: screenshot
+    name: provider_page_en_desktop_book-2b-back-to-page.png
+    full_page: false
+  - action: click
+    selector: '[data-service="{qa_provider_both_service}"] [data-qa="provider-format-option"]:has-text("Zoom")'
+  - action: click
+    selector: '[data-service="{qa_provider_both_service}"] [data-qa="provider-service-book"]'
+  - action: wait_for
+    selector: '[data-qa="independent-booking-online"]'
+  - action: click
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 2)
+    timeout_ms: 20000
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 2)
+  - action: click
+    selector: '[data-qa="booking-continue"]'
+  - action: wait_for
+    selector: '[data-qa="independent-booking-chosen"]'
   - action: fill
     selector: '[data-qa="independent-booking-name"]'
     value: '{qa_provider_client}'

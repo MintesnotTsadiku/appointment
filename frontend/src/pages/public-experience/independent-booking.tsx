@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useId, useMemo, useState, type CSSProperties } from 'react';
 import { addDays } from 'date-fns';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useFrappeGetCall, useFrappePostCall } from 'frappe-react-sdk';
 import { ArrowLeft, Clock3, LayoutGrid, MapPin, RotateCw, Video } from 'lucide-react';
 import LanguageToggle from '@/components/language-toggle';
@@ -18,7 +18,7 @@ import { CUSTOMER_REFERRAL_SOURCE, customerRefFor } from '@/lib/referral-link';
 import { usePlatformBrand } from '@/lib/platform-brand';
 import { useTheme } from '@/components/theme-provider';
 import { useBookingBrand } from '@/public-experience/bookingTheme';
-import { BookingBackdrop, BookingSteps, ServicePhoto, formatPhotoSource, useBookingSkin, type StepLink } from '@/pages/booking-v2/components/skin';
+import { BookingBack, BookingBackdrop, BookingSteps, ServicePhoto, bookingReferrerIndex, formatPhotoSource, useBookingBack, useBookingSkin, type StepLink } from '@/pages/booking-v2/components/skin';
 import { BarAmount, DetailsLayout, focusField } from '@/pages/booking-v2/components/BookingForm/DetailsLayout';
 import { haptic } from '@/public-experience/templates/kit/haptics';
 import { TemplateMoment } from '@/public-experience/templates/moments';
@@ -48,7 +48,6 @@ const HEADER_HEIGHT = '4rem';
 export default function IndependentBooking() {
   const { t, language } = useTranslation();
   const { offeringId, providerSlug } = useParams();
-  const navigate = useNavigate();
   const formId = `independent-details-${useId().replace(/:/g, '')}`;
   const { growth } = usePlatformBrand();
   const [date, setDate] = useState<Date | null>(null);
@@ -111,11 +110,22 @@ export default function IndependentBooking() {
   // "All services" goes back to the provider page; search engines treat that page as the main one.
   const pagePath = offering?.provider_slug ? `/schedule/p/${offering.provider_slug}` : '';
   const backPath = pagePath || (providerSlug ? `/schedule/p/${providerSlug}` : '');
-  // The done steps in the header are the way back: the provider's services, then the time (it stays selected).
+  const back = useBookingBack();
+  const toServices = () => back.toPath(backPath);
+  // The done steps in the header link back too: the provider's services, then the time (it stays selected).
   const stepLinks: Partial<Record<'service' | 'time', StepLink>> = booking ? {} : {
-    ...(backPath ? { service: { href: backPath, onSelect: () => navigate(backPath) } } : {}),
+    ...(backPath ? { service: { href: backPath, onSelect: toServices } } : {}),
     ...(step === 'details' ? { time: { onSelect: () => setStep('time') } } : {}),
   };
+  // The header's Back: details → time, time → the provider page, else the page before or the business website.
+  const website = offering?.site_slug && !(brand.resolved && !brand.config) ? brand.publicRoot : undefined;
+  const backTo = (place: string) => t('schedulerPage.backTo').replace('{0}', place);
+  const leaveTo = bookingReferrerIndex() !== null ? 'previous' : website ? 'site' : null;
+  const backButton = !offering || booking ? null
+    : step === 'details' && slot ? <BookingBack target="time" label={backTo(t('bookingSteps.time'))} onBack={() => setStep('time')} />
+    : backPath ? <BookingBack target="service" label={backTo(t('bookingSteps.service'))} onBack={toServices} />
+    : leaveTo ? <BookingBack target={leaveTo} label={leaveTo === 'previous' ? t('schedulerPage.previousPage') : t('publicSite.backToSite')} onBack={() => back.leave(website)} />
+    : null;
   const failed = forced === 'error' || (error && (!error.httpStatus || error.httpStatus >= 500));
   const unavailable = forced === 'unavailable' || forced === 'error' || Boolean(error);
 
@@ -185,7 +195,8 @@ export default function IndependentBooking() {
     <BookingBackdrop active={skin} />
     <header className={`sticky top-0 z-50 backdrop-blur-xl ${skinned ? 'bk-header' : 'border-b border-theme-subtle'}`} {...(skinned ? skin.attrs : {})}
       style={{ height: HEADER_HEIGHT, ...(skinned ? {} : { backgroundColor: 'color-mix(in srgb, var(--bg-primary) 92%, transparent)' }) }}>
-      <div className="bk-header-inner mx-auto flex h-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
+      <div className="bk-header-inner mx-auto flex h-full max-w-7xl items-center justify-between gap-3 px-4 sm:gap-4 sm:px-6">
+        {!unavailable && backButton}
         <span className="min-w-0 flex-1 truncate font-semibold" data-qa="independent-booking-business" style={{ fontFamily: 'var(--booking-font-display)' }}>
           {(offering ? localName(offering.business_local_name, language, offering.business_name) : null) ?? (unavailable ? '' : <span className="bk-bone inline-block h-4 w-40 align-middle" aria-hidden="true" />)}
         </span>

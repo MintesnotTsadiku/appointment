@@ -12,7 +12,7 @@ import CustomerInviteBanner from '@/components/growth-referrals/CustomerInviteBa
 import { usePlatformBrand } from '@/lib/platform-brand';
 import { useTheme } from '@/components/theme-provider';
 import { useBookingBrand } from '@/public-experience/bookingTheme';
-import { BookingBackdrop, useBookingSkin } from '@/pages/booking-v2/components/skin';
+import { BookingBack, BookingBackdrop, bookingReferrerIndex, useBookingBack, useBookingSkin } from '@/pages/booking-v2/components/skin';
 import { useTranslation } from '@/lib/i18n';
 import { fill } from '@/pages/manage-booking/format';
 import '@/public-experience/platform.css';
@@ -71,6 +71,10 @@ export default function ProviderPage() {
   const services = (page?.services ?? []).filter((service) => format === 'all' || serviceFormats(service).includes(format));
   const name = page ? providerName(page, language) : '';
   const logo = brand.config?.identity?.logoCompact || brand.config?.identity?.logoPrimary || '';
+  // Back leaves the booking pages: the in-app page before them (the website's `/book`), else the website.
+  const back = useBookingBack();
+  const website = page?.site_slug && !(brand.resolved && !brand.config) ? brand.publicRoot : undefined;
+  const leaveTo = bookingReferrerIndex() !== null ? 'previous' : website ? 'site' : null;
   let body;
   if (error || forced === 'error' || forced === 'unavailable') body = <Unavailable failed={failed} onRetry={() => void mutate()} />;
   else if (!page) body = <ProviderPageSkeleton label={t('public.providerPage.loading')} />;
@@ -107,8 +111,10 @@ export default function ProviderPage() {
     {page && <MetaTags title={fill(t('public.providerPage.metaTitle'), name)} description={providerBio(page, language) || undefined}
       canonical={`${window.location.origin}${PROVIDER_ROOT}${page.canonical_slug}`} />}
     <header className="sticky top-0 z-20 h-16 border-b border-theme-subtle backdrop-blur-md" style={{ backgroundColor: 'color-mix(in srgb, var(--bg-primary) 88%, transparent)' }}>
-      <div className="mx-auto flex h-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
-        <span className="flex min-w-0 items-center gap-2.5">
+      <div className="mx-auto flex h-full max-w-6xl items-center justify-between gap-3 px-4 sm:gap-4 sm:px-6">
+        {page && leaveTo && <BookingBack target={leaveTo} label={leaveTo === 'previous' ? t('schedulerPage.previousPage') : t('publicSite.backToSite')}
+          onBack={() => back.leave(website)} />}
+        <span className="flex min-w-0 flex-1 items-center gap-2.5">
           {branded && logo && <img src={logo} alt="" className="h-8 w-8 shrink-0 rounded-full object-contain" />}
           <span className="truncate font-semibold" data-qa="provider-page-business">
             {page?.business_name ?? (error || forced ? '' : <span className="bk-bone inline-block h-4 w-40 align-middle" aria-hidden="true" />)}

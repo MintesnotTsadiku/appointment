@@ -11,6 +11,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { BookingOfflineNotice } from "./components/booking-states";
 import { TranslationProvider } from "./context/translation";
 import { BASE_ROUTE } from "./lib/constant";
+import { recordLocation } from "./lib/history-trail";
 import { publicSiteRoutes } from "./public-site-routes";
 
 function FullApplication({ onHandOver }: { onHandOver: () => void }) {
@@ -25,6 +26,11 @@ export default function SiteApp({ onHandOver }: { onHandOver: () => void }) {
       <Route path="*" element={<FullApplication onHandOver={onHandOver} />} />
     </>,
   ), { basename: BASE_ROUTE }), [onHandOver]);
+  // The in-app trail of this tab's history (lib/history-trail.ts), so a scheduler's Back can return here.
+  useEffect(() => {
+    recordLocation(router.state.location, router.state.historyAction);
+    return router.subscribe((state) => recordLocation(state.location, state.historyAction));
+  }, [router]);
   return (
     <TranslationProvider>
       <HelmetProvider>

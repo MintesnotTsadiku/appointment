@@ -32,7 +32,7 @@ import { QuantityPicker } from "@/pages/booking-v2/components/QuantityPicker";
 import { useTimeSlots } from "@/pages/booking-v2/hooks/useTimeSlots";
 import { useBookingSubmit } from "@/pages/booking-v2/hooks/useBookingSubmit";
 import type { Organization, Service, ServiceLocation, ServiceOffering, TimeSlot as V2TimeSlot, BookingFormData, BookingResponse } from "@/pages/booking-v2/types";
-import { BookingBackdrop, BookingSteps, ServicePhoto, servicePhotoSource, useBookingSkin, type BookingStep, type StepLink } from "@/pages/booking-v2/components/skin";
+import { BookingBack, BookingBackdrop, BookingSteps, ServicePhoto, bookingReferrerIndex, servicePhotoSource, useBookingBack, useBookingSkin, type BookingStep, type StepLink } from "@/pages/booking-v2/components/skin";
 import { useBookingBrand } from "@/public-experience/bookingTheme";
 import { brandLogo } from "@/public-experience/templates/content";
 import { haptic } from "@/public-experience/templates/kit/haptics";
@@ -251,6 +251,11 @@ const OrganizationAppointmentV2 = () => {
     }
   }, [error]);
 
+  // The chooser's address (Back, or the browser's Back from the picker) shows the chooser.
+  useEffect(() => {
+    if (!serviceSlug) setCurrentPhase((phase) => (phase === "datetime" || phase === "form" ? "service" : phase));
+  }, [serviceSlug]);
+
   // A new service or day starts without a chosen time.
   useEffect(() => { setChosenSlot(null); }, [serviceSlug, type]);
 
@@ -369,16 +374,21 @@ const OrganizationAppointmentV2 = () => {
     setCurrentPhase("datetime");
   };
   const servicesPath = "/schedule/org/" + orgSlug;
+  const back = useBookingBack();
+  // Back to the service chooser: the browser's Back when the chooser is the previous page, else in place.
   const backToServices = () => {
     setCurrentPhase("service");
-    navigate(servicesPath);
+    back.toPath(servicesPath);
   };
+  // The service chooser leaves the booking pages: the page before them, else the business website.
+  // While the website loads, Back assumes there is one (no shift in the header); without one it goes away.
+  const website = bookingBrand.resolved && !bookingBrand.config ? undefined : bookingBrand.publicRoot;
   const handlePhaseBack = () => {
     if (currentPhase === "form") return backToTime();
     if (currentPhase === "datetime") return backToServices();
-    navigate(bookingBrand.publicRoot);
+    back.leave(website);
   };
-  // The done steps in the header are the way back (they replace the Back button).
+  // The done steps in the header are links back too.
   const stepLinks: Partial<Record<BookingStep, StepLink>> = {
     ...(currentPhase === "datetime" || currentPhase === "form" ? { service: { href: servicesPath, onSelect: backToServices } } : {}),
     ...(currentPhase === "form" ? { time: { onSelect: backToTime } } : {}),
@@ -439,6 +449,15 @@ const OrganizationAppointmentV2 = () => {
   const logo = bookingBrand.config ? brandLogo(bookingBrand.config.compiledDesign) : "";
   const pageStyle = { ...skin.style, "--bk-top": HEADER_HEIGHT } as CSSProperties;
   const showSteps = !friendlyError && !error;
+  const shownPhase = serviceSlug && currentPhase === "service" ? "datetime" : currentPhase;
+  const backTo = (place: string) => t("schedulerPage.backTo").replace("{0}", place);
+  const leaveTo = bookingReferrerIndex() !== null ? "previous" : website ? "site" : null;
+  // The header's Back: details → time, time → services, services → the page before or the website.
+  const backButton = !showSteps || shownPhase === "success" ? null
+    : shownPhase === "form" ? <BookingBack target="time" label={backTo(t("bookingSteps.time"))} onBack={backToTime} />
+    : shownPhase === "datetime" ? <BookingBack target="service" label={backTo(t("bookingSteps.service"))} onBack={backToServices} />
+    : leaveTo ? <BookingBack target={leaveTo} label={leaveTo === "previous" ? t("schedulerPage.previousPage") : brandName ? backTo(brandName) : t("publicSite.backToSite")} onBack={handlePhaseBack} />
+    : null;
   const header = (
     <BookingHeaderBar
       height={HEADER_HEIGHT}
@@ -450,7 +469,8 @@ const OrganizationAppointmentV2 = () => {
       homeLabel={brandName ? t("schedulerPage.backTo").replace("{0}", brandName) : t("publicSite.backToSite")}
       name={brandName || (isLoading ? "" : t("schedulerPage.appointments"))}
       logo={logo}
-      steps={showSteps ? <BookingSteps step={STEP_OF[serviceSlug && currentPhase === "service" ? "datetime" : currentPhase]} skin={skin.skin} links={stepLinks} /> : undefined}
+      back={backButton}
+      steps={showSteps ? <BookingSteps step={STEP_OF[shownPhase]} skin={skin.skin} links={stepLinks} /> : undefined}
       actions={<><LanguageToggle /><ThemeSwitch /></>}
     />
   );

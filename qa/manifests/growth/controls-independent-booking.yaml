@@ -58,6 +58,18 @@ scenarios:
     selector: '[data-qa="booking-continue"]'
   - action: wait_for
     selector: '[data-qa="independent-booking-chosen"]'
+  # The header's Back: the details go back to the time picker with the chosen time still selected.
+  - action: click
+    selector: '[data-qa="booking-back"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-slot"][aria-pressed="true"]'
+  - action: screenshot
+    name: ctl_indep_book_en_desktop-1b-back-to-time.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-continue"]'
+  - action: wait_for
+    selector: '[data-qa="independent-booking-chosen"]'
   - action: fill
     selector: '[data-qa="independent-booking-name"]'
     value: Meron Assefa

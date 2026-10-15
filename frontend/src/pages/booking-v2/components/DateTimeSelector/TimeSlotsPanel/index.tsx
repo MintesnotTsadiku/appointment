@@ -1,5 +1,6 @@
 /**
- * The slot list of one day, grouped into morning, afternoon and evening.
+ * The slot list of one day, grouped into morning, afternoon and evening (with Habesha time: the Habesha
+ * periods of the labels, see `groups.ts`).
  * Group headings stick to the top of the scrolling list. Each slot is a toggle button;
  * choosing one does not leave the page, the bottom bar shows it with the next step.
  */
@@ -8,10 +9,8 @@ import { ArrowRight, Star } from "lucide-react";
 import { formatInstant } from "@/lib/time";
 import { intlLocale, useTranslation } from "@/lib/i18n";
 import { BookingState, SlotListSkeleton } from "@/components/booking-states";
-import { getTimeOfDay } from "../../../utils/dateHelpers";
 import type { TimeFormat, TimeSlot } from "../../../types";
-
-type Group = { key: "morning" | "afternoon" | "evening"; slots: TimeSlot[] };
+import { groupSlots } from "./groups";
 
 /** The person's name from a provider label such as "Selam Movement Practice — Selam Bekele". */
 export function shortProviderName(name?: string | null): string {
@@ -58,20 +57,17 @@ export function TimeSlotsPanel({ date, slots, selectedSlot, onSlotSelect, timeFo
     );
   }
 
-  const groups: Group[] = (["morning", "afternoon", "evening"] as const).map((key) => ({
-    key,
-    slots: slots.filter((slot) => getTimeOfDay(new Date(slot.start_time)) === key),
-  }));
+  const groups = groupSlots(slots, timeFormat, timezone);
   const formatSlot = (slot: TimeSlot) => formatInstant(slot.start_time, timeFormat, timezone, { language });
 
   return (
     <div className="w-full" data-qa="booking-slots" data-qa-open={openCount}>
-      {groups.filter((group) => group.slots.length > 0).map((group) => {
+      {groups.map((group) => {
         const open = group.slots.filter(slotOpen).length;
         const headingId = `bk-group-${group.key}`;
         return (
           <section key={group.key} aria-labelledby={headingId}>
-            <h3 id={headingId} className="bk-group-head" data-qa="booking-slot-group">
+            <h3 id={headingId} className="bk-group-head" data-qa="booking-slot-group" data-group={group.key}>
               <span>{t(`bookingPicker.${group.key}`)}</span>
               <span className="font-medium normal-case tracking-normal" style={{ color: "var(--text-muted)" }}>
                 {open === 1 ? t("bookingPicker.oneSlot") : t("bookingPicker.slotsAvailable").replace("{0}", String(open))}

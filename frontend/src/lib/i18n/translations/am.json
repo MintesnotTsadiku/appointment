@@ -4264,6 +4264,7 @@
     "morning": "ጠዋት",
     "afternoon": "ከሰዓት",
     "evening": "ምሽት",
+    "night": "ሌሊት",
     "allSlots": "ሁሉም ሰዓቶች",
     "slotLabel": "የሰዓት ቦታ {0}",
     "howMany": "ስንት",
@@ -4392,7 +4393,8 @@
     "backTo": "ወደ {0} ይመለሱ",
     "appointments": "ቀጠሮዎች",
     "back": "ተመለስ",
-    "previousStep": "ወደ ቀዳሚው የቀጠሮ ደረጃ ይመለሱ"
+    "previousStep": "ወደ ቀዳሚው የቀጠሮ ደረጃ ይመለሱ",
+    "previousPage": "ወደ ቀዳሚው ገጽ ይመለሱ"
   },
   "adminPaymentsServer": {
     "onlyAdmins": "የመድረክ ክፍያዎችን ማስተዳደር የሚችሉት የመድረኩ አስተዳዳሪዎች ብቻ ናቸው።",

@@ -2,7 +2,8 @@
 # Ethiopian calendar from the Python twin (appointment.tests.booking_ethiopian_qa_fixtures.browser_values; no setup or cleanup).
 # Rahel's provider page needs appointment.tests.provider_page_qa_fixtures.setup to have run once. Each scenario: the Ethiopian
 # grid with today's Ethiopian day and month (checked against the twin), a day and a time, the chosen time unselected and
-# chosen again, the Ethiopian date in the details summary, then Pagume (5 or 6 days) by month navigation.
+# chosen again, the Ethiopian date in the details summary, then Pagume (5 or 6 days) by month navigation. On Bloom (en and am)
+# the slot groups follow the Habesha periods of the labels: "11:00 afternoon" (17:00) is under Afternoon (ከሰዓት).
 # See docs/growth/BOOKING_LAYOUT.md, "Habesha time and the Ethiopian calendar".
 app: appointment
 base_url: http://localhost:47800
@@ -151,6 +152,53 @@ scenarios:
     full_page: False
   - action: get_console_errors
   - action: get_network_errors
+- id: eth_bloom_en_groups_light
+  title: 'Bloom: with Habesha time the slot groups follow the labels ("11:00 afternoon" under Afternoon) (en, desktop, light)'
+  viewport:
+    width: 1440
+    height: 900
+  options:
+    color_scheme: light
+  checks: []
+  routes:
+  - path: /schedule/org/bloom-studio?display=light&lang=en
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="booking-service"]'
+  actions:
+  - action: click
+    selector: ':nth-match([data-qa="booking-service"], 1)'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"]'
+  - action: click
+    selector: '[data-qa="booking-time-format-option"][data-value="ethiopian"]'
+  - action: wait_for
+    selector: '[data-qa="booking-calendar"][data-calendar="ethiopian"]'
+  - action: click
+    selector: ':nth-match([data-qa="booking-calendar"] [data-qa="booking-date"]:not([disabled]), 2)'
+  - action: wait_for
+    selector: 'section:has(> [data-qa="booking-slot-group"][data-group="afternoon"]:has-text("Afternoon")) [data-qa="booking-slot"]:has-text("11:00 afternoon")'
+    timeout_ms: 20000
+    assertions:
+    - type: visible_selector
+      value: 'section:has(> [data-qa="booking-slot-group"][data-group="evening"]:has-text("Evening")) [data-qa="booking-slot"]:has-text("12:00 evening")'
+  - action: wait_for
+    selector: 'section[aria-labelledby^="bk-group-"]:not([aria-labelledby="bk-group-afternoon"]) [data-qa="booking-slot"]:has-text("afternoon")'
+    state: 'detached'
+    timeout_ms: 5000
+  - action: click
+    selector: '[data-qa="booking-slot-group"][data-group="afternoon"]'
+  - action: screenshot
+    name: 'eth_bloom_en_groups_light-1-habesha-groups.png'
+    full_page: False
+  # 12-hour keeps the international parts of the day: 5:00 PM is under Evening.
+  - action: click
+    selector: '[data-qa="booking-time-format-option"][data-value="12h"]'
+  - action: wait_for
+    selector: 'section:has(> [data-qa="booking-slot-group"][data-group="evening"]) [data-qa="booking-slot"]:has-text("5:00 PM")'
+  - action: get_console_errors
+  - action: get_network_errors
 - id: eth_bloom_am_desktop_dark
   title: 'Bloom: Amharic starts with Habesha time and the Ethiopian calendar (am, desktop, dark)'
   viewport:
@@ -188,6 +236,23 @@ scenarios:
   - action: wait_for
     selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
     timeout_ms: 20000
+  # The slot groups are the Habesha periods of the labels: 17:00 is "ሰዓት 11:00 ከሰዓት" under "ከሰዓት", 18:00 starts "ምሽት".
+  - action: wait_for
+    selector: 'section:has(> [data-qa="booking-slot-group"][data-group="afternoon"]:has-text("ከሰዓት")) [data-qa="booking-slot"]:has-text("ሰዓት 11:00 ከሰዓት")'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-slot-group"][data-group="morning"]:has-text("ጠዋት")'
+    - type: visible_selector
+      value: 'section:has(> [data-qa="booking-slot-group"][data-group="evening"]:has-text("ምሽት")) [data-qa="booking-slot"]:has-text("ሰዓት 12:00 ምሽት")'
+  - action: wait_for
+    selector: 'section[aria-labelledby^="bk-group-"]:not([aria-labelledby="bk-group-afternoon"]) [data-qa="booking-slot"]:has-text("ከሰዓት")'
+    state: 'detached'
+    timeout_ms: 5000
+  - action: click
+    selector: '[data-qa="booking-slot-group"][data-group="afternoon"]'
+  - action: screenshot
+    name: 'eth_bloom_am_desktop_dark-1b-habesha-groups.png'
+    full_page: False
   - action: click
     selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
   - action: wait_for
@@ -351,7 +416,7 @@ scenarios:
     name: 'eth_tena_en_phone_light-4-details.png'
     full_page: False
   - action: click
-    selector: '[data-qa="booking-step-back"][data-target="time"]'
+    selector: '[data-qa="booking-back"][data-target="time"]'
   - action: wait_for
     selector: '[data-qa="booking-picker"]'
   - action: click

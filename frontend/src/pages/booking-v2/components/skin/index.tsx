@@ -5,7 +5,7 @@
  */
 
 import { useMemo, type CSSProperties, type ReactNode } from "react";
-import { Check, ChevronLeft } from "lucide-react";
+import { Check } from "lucide-react";
 import { useTranslation } from "@/lib/i18n";
 import { BOOKING_STEPS, DEFAULT_BOOKING_SKIN, bookingSkin, loadBookingSkinStyle, type BookingSkin, type BookingStep } from "@/public-experience/templates/booking-skin";
 import { widthSet, type PictureAsset } from "@/public-experience/templates/kit/core/picture";
@@ -13,6 +13,7 @@ import type { CompiledDesign, PublicUIConfig } from "@/public-experience/types";
 import "./skin.css";
 
 export type { BookingStep } from "@/public-experience/templates/booking-skin";
+export { BookingBack, bookingReferrerIndex, useBookingBack, type BookingBackTarget } from "./back";
 
 export interface ActiveSkin {
   skin: BookingSkin;
@@ -110,24 +111,16 @@ function StepAnchor({ link, label, className, qa, target, children }: {
 
 /**
  * "Service → Time → Details → Done". The current step is announced; the skin may draw each mark.
- * Done steps with a `links` entry are links back to that step (they replace the header's Back button).
- * Below 900 px the steps are a thin progress line, so the step just before the current one is also a
- * compact link at the start of the header (`bk-step-back`).
+ * Done steps with a `links` entry are links back to that step, next to the header's Back button.
+ * Below 900 px the steps are a thin progress line along the bottom edge of the header.
  */
 export function BookingSteps({ step, skin, links }: { step: BookingStep; skin: BookingSkin; links?: Partial<Record<BookingStep, StepLink>> }) {
   const { t } = useTranslation();
   const current = BOOKING_STEPS.indexOf(step);
   const Mark = skin.StepMark;
-  const previous = BOOKING_STEPS.slice(0, Math.max(0, current)).reverse().find((key) => links?.[key]);
   const backLabel = (key: BookingStep) => t("schedulerPage.backTo").replace("{0}", t(STEP_KEYS[key]));
   return (
-    <nav className="bk-steps" aria-label={t("bookingSteps.label")} data-qa="booking-steps" data-step={step} data-back={previous ? "true" : "false"}>
-      {previous && links?.[previous] && (
-        <StepAnchor link={links[previous]!} label={backLabel(previous)} className="bk-step-back" qa="booking-step-back" target={previous}>
-          <ChevronLeft className="h-4 w-4" aria-hidden="true" />
-          <span>{t(STEP_KEYS[previous])}</span>
-        </StepAnchor>
-      )}
+    <nav className="bk-steps" aria-label={t("bookingSteps.label")} data-qa="booking-steps" data-step={step}>
       <ol>
         {BOOKING_STEPS.map((key, index) => {
           const state = index < current ? "done" : index === current ? "current" : "next";
