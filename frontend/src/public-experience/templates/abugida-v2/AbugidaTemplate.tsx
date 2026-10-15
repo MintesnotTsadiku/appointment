@@ -17,12 +17,18 @@ import "./abugida.css";
 
 const GEEZ_DIGITS = ["", "፩", "፪", "፫", "፬", "፭", "፮", "፯", "፰", "፱", "፲", "፲፩", "፲፪"];
 
-function Contents({ items, locale, chrome, linkRows }: { items: ContentRecord[]; locale: string; chrome: PublicChrome; linkRows: boolean }) {
+/** On the handoff, a service row links to that service's own scheduler. */
+function own(paths: Record<string, string> | undefined, item: ContentRecord) {
+  const href = typeof item.id === "string" ? paths?.[item.id] : undefined;
+  return href ? { href, label: "" } : null;
+}
+
+function Contents({ items, locale, chrome, linkRows, paths }: { items: ContentRecord[]; locale: string; chrome: PublicChrome; linkRows: boolean; paths?: Record<string, string> }) {
   return <ol className="ab-contents" data-reveal>
     {items.map((item, index) => {
       const minutes = durationMinutes(item.durationMinutes);
       const price = formatPrice(item.price, item.currency, locale);
-      const choose = linkRows ? action(item.action, locale) : null;
+      const choose = linkRows ? action(item.action, locale) : own(paths, item);
       const name = localized(item.name, locale);
       return <li key={String(item.id || index)} style={{ "--i": index } as CSSProperties}>
         <div className="ab-contents-line">
@@ -233,7 +239,7 @@ export function AbugidaBooking({ snapshot, locale, applicationName, publicRoot, 
       <div className="ab-hero-copy">
         <h1>{localized(booking.title, locale)}</h1>
         {localized(booking.body, locale) ? <p className="ab-lede">{localized(booking.body, locale)}</p> : null}
-        {records(services.items).length ? <Contents items={records(services.items)} locale={locale} chrome={chrome} linkRows={false} /> : null}
+        {records(services.items).length ? <Contents items={records(services.items)} locale={locale} chrome={chrome} linkRows={false} paths={snapshot.bookingPaths} /> : null}
         {bookingPath && label ? <div className="ab-actions"><a className="ab-btn" href={bookingPath}>{label}</a></div> : null}
       </div>
     </main>

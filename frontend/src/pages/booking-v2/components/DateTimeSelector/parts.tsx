@@ -23,12 +23,16 @@ export interface SummaryFact {
 }
 
 /** What is being booked: the service as the page heading, then duration, provider and place. */
-export function BookingSummaryCard({ eyebrow, title, titleQa, facts, children, headingLevel = 1, compact = false }: {
+export function BookingSummaryCard({ eyebrow, title, titleQa, facts, children, headingLevel = 1, compact = false, media }: {
   eyebrow?: ReactNode; title: ReactNode; titleQa?: string; facts: SummaryFact[]; children?: ReactNode; headingLevel?: 1 | 2; compact?: boolean;
+  /** The service photo: a banner on top of the card, or a small frame beside the title when compact. */
+  media?: ReactNode;
 }) {
   const Heading = headingLevel === 1 ? "h1" : "h2";
   return (
-    <section className={compact ? "space-y-2.5" : "bk-card space-y-2.5 p-4 sm:p-5"} data-qa="booking-summary">
+    <section className={`bk-summary ${compact ? "" : "bk-card p-4 sm:p-5"}`} data-qa="booking-summary" data-compact={compact ? "true" : "false"} data-media={media ? "true" : "false"}>
+      {media && <div className="bk-summary-media">{media}</div>}
+      <div className="min-w-0 space-y-2.5">
       {eyebrow && <p className="bk-eyebrow truncate">{eyebrow}</p>}
       <Heading className="text-xl font-semibold leading-tight text-balance" data-qa={titleQa}
         style={{ color: "var(--text-primary)", fontFamily: "var(--booking-font-display)" }}>
@@ -51,6 +55,7 @@ export function BookingSummaryCard({ eyebrow, title, titleQa, facts, children, h
         </ul>
       )}
       {children}
+      </div>
     </section>
   );
 }

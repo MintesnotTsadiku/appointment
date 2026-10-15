@@ -27,6 +27,23 @@ export interface Service {
   providerCount?: number;
   /** Where the session happens; an online place has no address and never a meeting link here. */
   location?: ServiceLocation;
+  /** The service photo of the published website (a local path), if any. */
+  image?: string;
+  /** The service's place in the website's services section, for the template's own photo; -1 when unknown. */
+  photoIndex?: number;
+  /** The service with each provider: one offering per provider (and place). */
+  offerings?: ServiceOffering[];
+  /** True when the offerings have different prices; `price` is then the lowest. */
+  priceFrom?: boolean;
+}
+
+/** One provider's offering of a service: what the booking is made for. */
+export interface ServiceOffering {
+  id: string;
+  provider?: Provider;
+  duration?: number;
+  price?: number;
+  location?: ServiceLocation;
 }
 
 export interface ServiceLocation {
@@ -57,6 +74,8 @@ export interface TimeSlot {
   start_time: string;
   end_time: string;
   provider?: Provider;
+  /** The offering of this time when a service shows the times of several providers. */
+  offeringId?: string;
   available: boolean;
   recommended?: boolean;
   isPast?: boolean;

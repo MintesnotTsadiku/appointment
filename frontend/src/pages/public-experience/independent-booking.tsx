@@ -18,6 +18,7 @@ import { CUSTOMER_REFERRAL_SOURCE, customerRefFor } from '@/lib/referral-link';
 import { usePlatformBrand } from '@/lib/platform-brand';
 import { useTheme } from '@/components/theme-provider';
 import { useBookingBrand } from '@/public-experience/bookingTheme';
+import { BookingBackdrop, useBookingSkin } from '@/pages/booking-v2/components/skin';
 import { parseFrappeErrorMsg } from '@/lib/utils';
 import { useTranslation } from '@/lib/i18n';
 import '@/public-experience/platform.css';
@@ -68,6 +69,8 @@ export default function IndependentBooking() {
   const { resolvedTheme } = useTheme();
   // A published website lends the scheduler its template's colours and type, as on organization pages.
   const brand = useBookingBrand(offering?.site_slug || undefined, resolvedTheme === 'dark' ? 'dark' : 'light');
+  // The template's booking skin (tokens, frames and the faint page background), as on organization pages.
+  const skin = useBookingSkin(brand.config, brand.style, resolvedTheme === 'dark' ? 'dark' : 'light');
   const { slots, loading: slotsLoading } = useSlots(offeringId, date, quantity);
   const { call, loading } = useFrappePostCall('appointment.scheduler.booking.book');
 
@@ -147,7 +150,8 @@ export default function IndependentBooking() {
 
   return <div className="booking-experience min-h-screen text-theme-primary" data-qa="independent-booking"
     data-booking-branded={brand.config ? 'true' : 'false'} data-pe-recipe={brand.config?.recipeKey}
-    style={{ ...brand.style, '--bk-top': HEADER_HEIGHT, backgroundColor: 'var(--bg-primary)' } as CSSProperties}>
+    {...skin.attrs} style={{ ...skin.style, '--bk-top': HEADER_HEIGHT, backgroundColor: 'var(--bg-primary)' } as CSSProperties}>
+    <BookingBackdrop active={skin} />
     <header className="sticky top-0 z-50 border-b border-theme-subtle backdrop-blur-xl" style={{ height: HEADER_HEIGHT, backgroundColor: 'color-mix(in srgb, var(--bg-primary) 92%, transparent)' }}>
       <div className="mx-auto flex h-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
         {step === 'details' && !booking ? (

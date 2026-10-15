@@ -512,8 +512,16 @@ export function BloomLoading({ mode, locale = "en" }: { mode: TemplateProps["mod
   </div>;
 }
 
+/** A plain click on a booking link moves inside the app, so the booking pages open without a full reload. */
+function inApp(event: MouseEvent<HTMLAnchorElement>, href: string, navigate: (to: string) => void) {
+  if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || !href.startsWith("/") || href.startsWith("//")) return;
+  event.preventDefault();
+  navigate(href);
+}
+
 export function BloomBooking({ snapshot, locale, applicationName, publicRoot, rootStyle, bookingPath, mode, toggleMode }: BookingTemplateProps) {
   const chrome = usePublicChrome(locale);
+  const navigate = useNavigate();
   const design = snapshot.compiledDesign;
   const root = useRef<HTMLDivElement>(null);
   const level = useBloomMotion(root, design.motion, locale);
@@ -539,19 +547,26 @@ export function BloomBooking({ snapshot, locale, applicationName, publicRoot, ro
           <p className="b3-greet"><span>{greeting(chrome, now)}</span></p>
           <h1>{localized(booking.title, locale)}</h1>
           {localized(booking.body, locale) ? <p>{localized(booking.body, locale)}</p> : null}
-          {bookingPath && label ? <a className="b3-btn" href={bookingPath} data-magnetic="6" data-qa="bloom-handoff-book"><span>{label}</span><span className="b3-btn-arrow" aria-hidden="true">→</span></a> : null}
+          {bookingPath && label ? <a className="b3-btn" href={bookingPath} onClick={(event) => inApp(event, bookingPath, navigate)} data-magnetic="6" data-qa="bloom-handoff-book"><span>{label}</span><span className="b3-btn-arrow" aria-hidden="true">→</span></a> : null}
           <NextChip facts={data?.next ? { next: data.next.start, todayLeft: data.todayLeft } : null} data={data} chrome={chrome} locale={locale} variant="nextFreeChair" href={bookingPath || undefined} qa="bloom-handoff-next" />
         </div>
-        {menu.length ? <ol className="b3-handoff-menu">{menu.map((item, index) => {
+        {menu.length ? <ol className="b3-handoff-menu" aria-label={localized(services.title, locale) || undefined}>{menu.map((item, index) => {
           const photo = art(item, locale, design, `menu${(index % 3) + 1}.bloom`);
           const price = formatPrice(item.price, item.currency, locale);
           const minutes = durationMinutes(item.durationMinutes);
           const facts = typeof item.id === "string" ? data?.services[item.id] : null;
-          return <li key={String(item.id || index)} data-reveal="rise">
+          // Each row opens its own service in the scheduler, with any stylist.
+          const href = (typeof item.id === "string" && snapshot.bookingPaths?.[item.id]) || bookingPath || "";
+          const body = <>
             {photo ? <span className="b3-menu-thumb" aria-hidden="true"><Photo image={photo} sizes="72px" decorative /></span> : null}
             <span className="b3-menu-name">{localized(item.name, locale)}</span>
             <span className="b3-menu-meta">{minutes ? chrome.t("minutes", { count: minutes }) : null}{price ? <> · {price}</> : null}
               {facts?.next && data ? <span className="b3-menu-live"><span className="b3-pulse" aria-hidden="true" />{slotText(chrome, facts.next, data.timezone, locale)}</span> : null}</span>
+            {href ? <span className="b3-handoff-go" aria-hidden="true">→</span> : null}
+          </>;
+          return <li key={String(item.id || index)} data-reveal="rise">
+            {href ? <a className="b3-handoff-row" href={href} onClick={(event) => inApp(event, href, navigate)} data-qa={`bloom-handoff-service-${index}`}>{body}</a>
+              : <div className="b3-handoff-row">{body}</div>}
           </li>;
         })}</ol> : null}
       </div>

@@ -66,18 +66,23 @@ export function bookingBrandVariables(config: PublicUIConfig, mode: BookingMode)
 
 export function useBookingBrand(orgSlug: string | undefined, mode: BookingMode) {
   const [config, setConfig] = useState<PublicUIConfig | null>(null);
+  // True once the published design is known (or known to be absent), so photos load their right files.
+  const [resolved, setResolved] = useState(false);
   useEffect(() => {
     let active = true;
     setConfig(null);
+    setResolved(false);
     if (!orgSlug) return () => { active = false; };
     fetchOptionalPublicConfig(publicRootForSlug(orgSlug))
       .then((next) => { if (active && next?.source === "experience-release") setConfig(next); })
-      .catch(() => { if (active) setConfig(null); });
+      .catch(() => { if (active) setConfig(null); })
+      .finally(() => { if (active) setResolved(true); });
     return () => { active = false; };
   }, [orgSlug]);
   return useMemo(() => ({
     config,
+    resolved,
     publicRoot: publicRootForSlug(orgSlug),
     style: config ? bookingBrandVariables(config, mode) : undefined,
-  }), [config, mode, orgSlug]);
+  }), [config, resolved, mode, orgSlug]);
 }

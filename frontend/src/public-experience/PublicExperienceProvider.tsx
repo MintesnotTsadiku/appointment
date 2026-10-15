@@ -89,6 +89,8 @@ export const PublicExperienceProvider = ({
     setPreferenceState(next);
     try {
       localStorage.setItem(PREFERENCE_KEY, next);
+      // The booking pages (theme provider) read this key: the scheduler keeps the website's mode.
+      localStorage.setItem("vite-ui-theme", next);
     } catch {
       /* A display preference is optional. */
     }

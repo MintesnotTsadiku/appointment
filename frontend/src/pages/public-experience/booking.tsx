@@ -3,14 +3,16 @@ import { useParams } from "react-router-dom";
 
 import { fetchPublishedSnapshot } from "@/public-experience/api";
 import { PublicExperienceProvider, usePublicExperience } from "@/public-experience/PublicExperienceProvider";
-import { publicRootForSlug } from "@/public-experience/routes";
+import { publicRootForSlug, withBookingLanguage } from "@/public-experience/routes";
 import { getTemplatePackage } from "@/public-experience/templates/registry";
 import type { PublishedSnapshot } from "@/public-experience/types";
 import { PublicLoading, PublicUnavailable } from "@/public-experience/PublicStates";
 import { previewState } from "@/components/booking-states";
 import "@/public-experience/platform.css";
 
-function BookingHandoff({ snapshot, slug }: { snapshot: PublishedSnapshot; slug?: string }) {
+function BookingHandoff({ snapshot: published, slug }: { snapshot: PublishedSnapshot; slug?: string }) {
+  // The scheduler opens in the website's language.
+  const snapshot = withBookingLanguage(published);
   const { config, theme, setPreference, refresh, isLoading, error } = usePublicExperience();
   const rootStyle = theme.variables as CSSProperties;
   const siteRoot = publicRootForSlug(slug);

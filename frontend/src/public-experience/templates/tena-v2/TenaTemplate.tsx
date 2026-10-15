@@ -20,14 +20,22 @@ interface BoardProps {
   locale: string;
   chrome: PublicChrome;
   linkRows: boolean;
+  /** The scheduler of each service, by service id; on the handoff the rows link there. */
+  paths?: Record<string, string>;
 }
 
-function ServiceBoard({ items, locale, chrome, linkRows }: BoardProps) {
+/** On the handoff, a service row links to that service's own scheduler. */
+function own(paths: Record<string, string> | undefined, item: ContentRecord) {
+  const href = typeof item.id === "string" ? paths?.[item.id] : undefined;
+  return href ? { href, label: "" } : null;
+}
+
+function ServiceBoard({ items, locale, chrome, linkRows, paths }: BoardProps) {
   return <ol className="tc-board-rows" data-reveal>
     {items.map((item, index) => {
       const minutes = durationMinutes(item.durationMinutes);
       const price = formatPrice(item.price, item.currency, locale);
-      const choose = linkRows ? action(item.action, locale) : null;
+      const choose = linkRows ? action(item.action, locale) : own(paths, item);
       const name = localized(item.name, locale);
       return <li key={String(item.id || index)} className="tc-board-row" style={{ "--i": index } as CSSProperties}>
         <div className="tc-board-name">
@@ -285,7 +293,7 @@ export function TenaBooking({ snapshot, locale, applicationName, publicRoot, roo
         {firstPlace ? <div className="tc-card tc-handoff-arrival"><Arrival location={firstPlace} locale={locale} chrome={chrome} phone={typeof contact.phone === "string" ? contact.phone : undefined} /></div> : null}
       </div>
       {records(services.items).length ? <div className="tc-board" aria-label={localized(services.title, locale) || undefined}>
-        <ServiceBoard items={records(services.items)} locale={locale} chrome={chrome} linkRows={false} />
+        <ServiceBoard items={records(services.items)} locale={locale} chrome={chrome} linkRows={false} paths={snapshot.bookingPaths} />
       </div> : null}
     </main>
   </div>;

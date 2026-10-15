@@ -1,0 +1,229 @@
+# The Bloom booking journey as one product: landing -> /book handoff (a service row) -> time picker -> back to the service
+# chooser (one card per service, the stylist filter) -> time picker -> details (phone first) -> confirmation with petals.
+# Fixture: appointment.tests.template_bloom_v3_qa_fixtures (setup before, cleanup after; cleanup deletes the bookings that the
+# two scenarios make, by the QA client's exact email). See docs/growth/BOOKING_LAYOUT.md, "Booking skins".
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-booking-journey-bloom
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 240000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.template_bloom_v3_qa_fixtures.browser_values
+scenarios:
+- id: journey_en_desktop_light
+  title: English, desktop, light
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /{qa_bloom_slug}?display=light
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="bloom-hair-v3"][data-pe-recipe="bloom-hair"]'
+  actions:
+  - action: screenshot
+    name: journey_en-1-landing.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="bloom-hero-book"]'
+  - action: wait_for
+    selector: '[data-qa="bloom-handoff-service-1"]'
+  - action: screenshot
+    name: journey_en-2-handoff.png
+    full_page: false
+  # A service row is a real link to that service's time picker, with any stylist.
+  - action: click
+    selector: '[data-qa="bloom-handoff-service-1"]'
+    assertions:
+    - type: url_contains
+      value: with=any
+  - action: wait_for
+    selector: '[data-qa="booking-steps"][data-step="time"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-bk-skin="bloom-v3"] [data-qa="booking-summary"] [data-vt-service] img'
+  - action: wait_for
+    selector: '[data-qa="booking-provider-filter"] [data-qa="booking-provider-any"][aria-pressed="true"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+    timeout_ms: 20000
+  - action: screenshot
+    name: journey_en-3-time-any.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-header"] .booking-back'
+  # The chooser: one card per service (three services, three stylists), each with its photo and its team.
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 3)
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 4)
+    state: detached
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"][data-photo="true"] [data-qa="booking-service-team"], 3)
+  - action: wait_for
+    selector: '[data-qa="booking-business-logo"][src*="bloom-logo"]'
+  - action: screenshot
+    name: journey_en-4-chooser.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+    assertions:
+    - type: url_contains
+      value: with=any
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_bloom_open_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_bloom_open_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 2)
+    timeout_ms: 20000
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 2)
+  - action: wait_for
+    selector: '[data-qa="booking-bar"]'
+  - action: screenshot
+    name: journey_en-5-time-chosen.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-continue"]'
+  - action: wait_for
+    selector: '#userName'
+  - action: wait_for
+    selector: '[data-qa="booking-details-zone"]:has-text("Addis Ababa time")'
+  - action: screenshot
+    name: journey_en-6-details.png
+    full_page: false
+  - action: fill
+    selector: '#userName'
+    value: '{qa_bloom_client}'
+  - action: fill
+    selector: '[data-qa="booking-phone"]'
+    value: '{qa_bloom_phone}'
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+  - action: wait_for
+    selector: '[data-qa="booking-success"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-qa="booking-moment"]'
+  - action: screenshot
+    name: journey_en-7-petals.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: journey_am_mobile_dark
+  title: Amharic, phone, dark
+  viewport:
+    width: 390
+    height: 844
+  options:
+    color_scheme: dark
+  checks: []
+  routes:
+  - path: /{qa_bloom_slug}/am
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="bloom-hair-v3"][data-pe-mode="dark"]'
+  actions:
+  - action: click
+    selector: :nth-match([data-qa="bloom-hero-book"], 1)
+  - action: wait_for
+    selector: '[data-qa="bloom-handoff-service-0"]'
+  - action: screenshot
+    name: journey_am-1-handoff.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="bloom-handoff-service-0"]'
+    assertions:
+    - type: url_contains
+      value: lang=am
+  - action: wait_for
+    selector: '[data-qa="booking-steps"][data-step="time"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-qa="booking-picker-service"]:has-text("ማጠብና ማሳመር")'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+    timeout_ms: 20000
+  - action: screenshot
+    name: journey_am-2-time.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-header"] .booking-back'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 3)
+  - action: screenshot
+    name: journey_am-3-chooser.png
+    full_page: false
+  # The stylist filter: the card then books with that stylist.
+  - action: click
+    selector: '[data-qa="booking-provider"]:has-text("Hanna")'
+  - action: wait_for
+    selector: '[data-qa="booking-provider"][aria-pressed="true"]:has-text("Hanna")'
+  - action: screenshot
+    name: journey_am-4-chooser-hanna.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+    assertions:
+    - type: url_contains
+      value: with=Bole
+  - action: wait_for
+    selector: '[data-qa="booking-provider-option"][aria-pressed="true"]:has-text("Hanna")'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_bloom_open_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_bloom_open_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 3)
+    timeout_ms: 20000
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 3)
+  - action: wait_for
+    selector: '[data-qa="booking-bar"]'
+  - action: screenshot
+    name: journey_am-5-time-chosen.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-continue"]'
+  - action: wait_for
+    selector: '#userName'
+  - action: wait_for
+    selector: '[data-qa="booking-details-zone"]:has-text("የአዲስ አበባ ሰዓት")'
+  - action: screenshot
+    name: journey_am-6-details.png
+    full_page: false
+  - action: fill
+    selector: '#userName'
+    value: '{qa_bloom_client}'
+  - action: fill
+    selector: '[data-qa="booking-phone"]'
+    value: '{qa_bloom_phone}'
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+  - action: wait_for
+    selector: '[data-qa="booking-success"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-qa="booking-moment"]'
+  - action: screenshot
+    name: journey_am-7-petals.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

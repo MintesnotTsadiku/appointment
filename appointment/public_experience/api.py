@@ -175,6 +175,25 @@ def _independent_booking_paths(provider):
     return {service: root + parts.event.name for service, parts in _independent_offerings(provider).items()}
 
 
+def _organization_booking_paths(organization, slug):
+    """The scheduler of each service of a business, by service: its first public offering, with any provider."""
+    from appointment.scheduler.booking import offering
+
+    services = frappe.get_all("Service", filters={"organization": organization, "is_active": 1}, pluck="name")
+    found = {}
+    for event in frappe.get_all("EventType", filters={"is_active": 1, "service": ["in", services]},
+                                fields=["name", "service"], order_by="creation asc") if services else []:
+        if event.service in found:
+            continue
+        try:
+            offering(event.name, public=True)
+        except (frappe.PermissionError, frappe.ValidationError, frappe.DoesNotExistError):
+            frappe.clear_messages()
+            continue
+        found[event.service] = f"/schedule/org/{slug}/{event.name}?with=any"
+    return found
+
+
 def _format(place):
     """The public session format of a place: `locationType` and the platform label, never the meeting link."""
     from appointment.scheduler.online_meeting import public_place
@@ -277,6 +296,7 @@ def get_public_experience_snapshot(locale: str | None = None, public_path: str |
         slug = frappe.db.get_value("Organization", context.organization, "slug")
         if slug:
             booking_path = f"/schedule/org/{slug}"
+            booking_paths = _organization_booking_paths(context.organization, slug)
     elif context.provider:
         if frappe.db.get_value("Provider", context.provider, "enable_public_booking"):
             booking_paths = _independent_booking_paths(context.provider)

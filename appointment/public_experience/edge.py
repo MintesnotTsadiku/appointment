@@ -80,6 +80,7 @@ def _server_block(server_name: str, options: EdgeOptions, *, public_only: bool =
             "appointment.content.newsletter.public_api.verify_sender",
             "appointment.scheduler.independent.public_offering",
             "appointment.scheduler.booking.slots",
+            "appointment.scheduler.booking.service_slots",
             "appointment.scheduler.booking.book",
             "appointment.api.personal_meet.get_organization_services",
             "appointment.api.personal_meet.get_organization_meeting_windows",

@@ -15,14 +15,20 @@ import "./selam.css";
  * Radius system: controls pill, images 0, panels 16px. Lime fills the review band only.
  */
 
-function Sessions({ items, locale, chrome, compact }: { items: ContentRecord[]; locale: string; chrome: PublicChrome; compact?: boolean }) {
+/** On the handoff, a service row links to that service's own scheduler. */
+function own(paths: Record<string, string> | undefined, item: ContentRecord) {
+  const href = typeof item.id === "string" ? paths?.[item.id] : undefined;
+  return href ? { href, label: "" } : null;
+}
+
+function Sessions({ items, locale, chrome, compact, paths }: { items: ContentRecord[]; locale: string; chrome: PublicChrome; compact?: boolean; paths?: Record<string, string> }) {
   // The pace bar shows each session's true length against the longest one.
   const longest = Math.max(1, ...items.map((item) => durationMinutes(item.durationMinutes) || 0));
   return <div className={compact ? "sm-sessions sm-sessions-compact" : "sm-sessions"}>
     {items.map((item, index) => {
       const minutes = durationMinutes(item.durationMinutes);
       const price = formatPrice(item.price, item.currency, locale);
-      const choose = compact ? null : action(item.action, locale);
+      const choose = compact ? own(paths, item) : action(item.action, locale);
       const photo = compact ? null : contentImage(item, locale);
       const name = localized(item.name, locale);
       return <article key={String(item.id || index)} className="sm-session" data-reveal style={{ "--i": index, "--sm-pace": minutes ? minutes / longest : 0 } as CSSProperties}>
@@ -231,7 +237,7 @@ export function SelamBooking({ snapshot, locale, applicationName, publicRoot, ro
           {localized(booking.body, locale) ? <p className="sm-lede">{localized(booking.body, locale)}</p> : null}
           {bookingPath && label ? <div className="sm-actions"><a className="sm-pill" href={bookingPath}>{label}</a></div> : null}
         </div>
-        {records(services.items).length ? <Sessions items={records(services.items)} locale={locale} chrome={chrome} compact /> : null}
+        {records(services.items).length ? <Sessions items={records(services.items)} locale={locale} chrome={chrome} compact paths={snapshot.bookingPaths} /> : null}
       </div>
       {image ? <figure className="sm-strip"><img src={image.src} alt={image.alt} /></figure> : null}
     </main>

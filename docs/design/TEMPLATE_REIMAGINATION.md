@@ -614,13 +614,55 @@ Effort is in agent-days (one agent working; parallel phases run at the same time
 | **3. Polish** | Night variants review, dark mode pass (N2–N5), mobile pass (Mo1–Mo6), Ergata additions (5.6, 4 images), performance pass, gallery screenshots, v1 retirement | 4–5 d | 2 agents |
 | **Total** | | **about 34–40 agent-days, about 3 calendar weeks with 4–5 agents** | |
 
+### Status (2026-10-15)
+
+- **Phase 0 and phase 1 are done.** The owner approved every recommendation in section 9 and the additions A1–A7 below. The kit, the next-availability endpoint, the imagery and content-model changes and Bloom v3 are on `develop`. See [TEMPLATE_V3_KIT.md](TEMPLATE_V3_KIT.md) and [BLOOM_V3.md](BLOOM_V3.md).
+- **The booking journey is done for Bloom.** Booking pages now carry a template-owned booking skin. See [BOOKING_LAYOUT.md](../growth/BOOKING_LAYOUT.md) and the "Booking skins" section of [TEMPLATE_V3_KIT.md](TEMPLATE_V3_KIT.md).
+- **Phase 2 is next.** Selam, Tena, Abugida and Meron each get the landing page **and** the booking skin in the same piece of work.
+
+### Consistency requirements for every v3 template
+
+A template is not done until it meets every item in this list. Bloom v3 is the reference for each item.
+
+**Landing page**
+
+1. The concept from section 5, with a photo or a drawing in every section, its own shape language, and its own signature motion.
+2. The additions the owner approved:
+   - A1: a time-of-day greeting, and the night photos after dark (Addis Ababa time). Dark mode always uses the night photos.
+   - A2: a booking-success moment that belongs to the template.
+   - A3: zoom and pan on images under the pointer (fine pointers only).
+   - A4: haptics, on a time pick and on booking.
+   - A5: the template's own loading screen.
+   - A6: section progress dots on long pages.
+   - A7: Ethiopian holiday moments (phase 3).
+3. Live availability ("Next free: …") from `useNextAvailability`. It shows only when the owner setting is on. It is on for showcases.
+4. Opening hours with the International/Habesha switch (the default is Habesha in Amharic).
+5. A review marquee with a pause control, or a pull quote when there is one review.
+6. Images through `pictureSet`: AVIF and WebP, mobile crops, night variants, width and height, lazy below the fold.
+7. Motion through the kit only, with the motion level gate. Reduced motion always wins.
+
+**Booking journey: continuity, not spectacle**
+
+8. The `/book` handoff rows are real links to `snapshot.bookingPaths[item.id]`. They work with the keyboard and the screen reader. On Amharic pages they carry `lang=am`.
+9. The service chooser shows one card per service: photo, name, price, duration, stacked provider portraits and "Any provider". The provider chips stay as a filter. The time picker then shows every provider (`?with=any`).
+10. A booking skin in `<package>/booking.tsx` and `booking.css`, registered in `SKINS`, with every CSS rule scoped under `[data-bk-skin=…]`. The skin sets the header, a faint backdrop echo of the hero (the smallest width file, the night file in dark mode), the heading font, the card frame shape, the primary button style and the step marks (Service → Time → Details → Done). It carries the service photo into the time picker and the booking summary. The confirmation also uses the skin.
+11. Booking pages have only three kinds of motion: the landing → handoff view transition, a short pick on the chosen card or time (with `haptic("select")`), and the success moment. They have no parallax, no marquees, no count-ups and no large animated imagery.
+12. The phone-first details form (phone, then email, then participants as tags), friendly time zone labels, the business logo and themed field icons.
+13. Light/dark mode and the language continue from the landing page through to the confirmation.
+14. Performance: the chooser and the time picker must not get slower than the current build. Compare the two builds on the same machine. Service photos are lazy and never become the phone LCP element.
+
+**Package rules (AGENTS.md)**
+
+15. Each template is an independent package. It never imports another template's visual components. The kit and the skin contract are imported as headless code or types only. `public-template-packages.test.mjs` and `booking-skin.test.mjs` enforce this.
+16. Images are generated with the Codex CLI (`gpt-6.1-sol`). The prompts state the faces rule, and night photos are edits of the day photos. Every file is checksummed in the imagery manifest and in the showcase catalog. The showcase moves to v3 through the seeder only.
+
 ### QA per template (at the end of phases 1–3)
 
-- Agent Plane manifests (`qa/manifests/growth/template-<name>-v3.yaml`, plus `-dark`): desktop 1440 and mobile 390, light and dark, English and Amharic, plus a reduced-motion run. Flow: landing, then a service card, then the booking handoff, then the time picker.
+- Agent Plane manifests (`qa/manifests/growth/template-<name>-v3.yaml`, plus `-dark` and `-states`), and a journey manifest copied from `booking-journey-bloom.yaml`. They cover desktop 1440 and mobile 390, light and dark, English and Amharic, plus a reduced-motion run. The journey goes from the landing page through `/book` (click a service row), the chooser, the time picker and the details form to the confirmation with the success moment.
 - Screenshot review in the style of this document (full page and mid-scroll), read by an art director. Keep the screenshots in the Agent Plane run artifacts and record the run IDs in the template's design document. Do not commit screenshots.
 - A performance budget check with Lighthouse in headless Chromium (mobile preset): LCP at most 2.5 s, CLS at most 0.05, total image weight on first load at most 500 KB, and the JavaScript kit at most 8 KB gzipped. Record the results in the template doc.
 - Accessibility: axe run with zero serious issues; keyboard pass on the sliders, marquee pause, lightbox and accordions; AA contrast check on text over photos.
-- Frontend gate (from the brief): typecheck error count at most 156, `npm run -s test:dom` and `npm run -s build` pass; `public-template-packages.test.mjs` updated for the v3 keys.
+- Frontend gate (from the brief): typecheck error count at most 124 (it may only go down), `npm run -s test:dom` and `npm run -s build` pass; `public-template-packages.test.mjs` updated for the v3 keys.
 
 ## 9. Decisions for the owner
 

@@ -4,9 +4,8 @@
  * Redesigned with "100 million startup" aesthetic
  */
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { ArrowLeft, Calendar, Clock, User, Mail, Phone, MessageSquare, Loader2, CheckCircle2, MapPin, Moon, Sun } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/button";
 import { Input } from "@/components/input";
@@ -14,7 +13,10 @@ import { Label } from "@/components/label";
 import { Textarea } from "@/components/textarea";
 import { PhoneInput, PhoneTagsInput } from "@/components/phone-input";
 import { normalizePhone } from "@/lib/phone";
-import { formatDate, formatTime } from "../../utils/dateHelpers";
+import { formatDate } from "../../utils/dateHelpers";
+import { clockForLanguage, formatInstant, zoneLabel } from "@/lib/time";
+import { priceLabel } from "@/pages/public-experience/provider-core";
+import "../skin/skin.css";
 import { useTheme } from "@/components/theme-provider";
 import { useOnlineLabel } from "@/components/online-session/JoinSession";
 import { intlLocale, useTranslation } from "@/lib/i18n";
@@ -40,6 +42,8 @@ interface BookingFormProps {
   quantity?: number;
   /** Personal calendar meetings send a calendar invitation, so they still need an email. */
   emailRequired?: boolean;
+  /** The service photo in the skin's frame; it takes the place of the service icon in the summary. */
+  media?: ReactNode;
 }
 
 export function BookingForm({
@@ -55,6 +59,7 @@ export function BookingForm({
   className,
   quantity = 1,
   emailRequired = false,
+  media,
 }: BookingFormProps) {
   const [formData, setFormData] = useState<BookingFormData>({
     userName: initialData.userName || "",
@@ -141,36 +146,22 @@ export function BookingForm({
   };
 
   const startTime = new Date(selectedSlot.start_time);
-  const formattedTime = timeFormat === '24h' 
-    ? formatTime(startTime, '24h', timezone)
-    : formatTime(startTime, '12h', timezone);
+  // The same clock as the picker and the confirmation (Habesha time on Amharic pages).
+  const formattedTime = formatInstant(startTime, clockForLanguage(language, timeFormat), timezone);
+  const zone = zoneLabel(timezone, language, t("customerBooking.zoneTime"), (city) => {
+    const key = `timeZoneCities.${city}`;
+    const name = t(key);
+    return name === key ? null : name;
+  });
 
   return (
     <div 
-      className={cn("w-full min-h-screen relative", className)}
-      style={{ backgroundColor: 'var(--bg-primary)' }}
+      className={cn("w-full relative", className)}
+      data-qa="booking-details"
     >
-      {/* Ambient Background Glows */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
-        <div 
-          className="absolute top-1/4 -left-1/4 w-96 h-96 rounded-full blur-3xl opacity-30"
-          style={{ background: 'var(--glow-primary)' }}
-        />
-        <div 
-          className="absolute bottom-1/4 -right-1/4 w-96 h-96 rounded-full blur-3xl opacity-20"
-          style={{ background: 'var(--glow-secondary)' }}
-        />
-        <div 
-          className="absolute top-1/2 right-1/4 w-72 h-72 rounded-full blur-3xl opacity-15"
-          style={{ background: 'var(--glow-success)' }}
-        />
-      </div>
 
       {/* Sticky Header with Back Button and Theme Toggle */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
+      <div
         className="sticky top-0 z-50 w-full backdrop-blur-xl"
         style={{ 
           backgroundColor: 'color-mix(in srgb, var(--bg-primary) 95%, transparent)',
@@ -195,50 +186,37 @@ export function BookingForm({
       </Button>
 
           {/* Theme Toggle */}
-          <motion.button
+          <button
             onClick={toggleTheme}
             className="flex items-center gap-2 px-3 py-2 rounded-lg backdrop-blur-xs transition-all"
             style={{ 
               backgroundColor: 'var(--border-subtle)',
               border: '1px solid var(--border-default)'
             }}
-            whileTap={{ scale: 0.95 }}
-            whileHover={{ scale: 1.02 }}
             aria-label={t("bookingPicker.switchTheme")}
           >
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={theme + "-icon"}
-                initial={{ opacity: 0, rotate: -90 }}
-                animate={{ opacity: 1, rotate: 0 }}
-                exit={{ opacity: 0, rotate: 90 }}
-                transition={{ duration: 0.2 }}
-              >
+            <span key={theme + "-icon"}>
                 {theme === "light" ? (
                   <Moon className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
                 ) : (
                   <Sun className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
                 )}
-              </motion.div>
-            </AnimatePresence>
+            </span>
             <span 
               className="text-sm font-medium"
               style={{ color: 'var(--text-secondary)' }}
             >
               {theme === "light" ? t("bookingPicker.dark") : t("bookingPicker.light")}
             </span>
-          </motion.button>
+          </button>
         </div>
-      </motion.div>
+      </div>
 
-      <div className="w-full max-w-7xl mx-auto px-5 md:px-6 py-8 md:py-16">
+      <div className="w-full max-w-6xl mx-auto md:px-2 py-2 md:py-6">
 
         <div className="grid lg:grid-cols-[1fr_400px] gap-6 md:gap-8">
         {/* Form Section */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+          <div
             className="rounded-2xl backdrop-blur-xs p-6 md:p-8"
             style={{ 
               backgroundColor: 'var(--bg-elevated)',
@@ -259,10 +237,7 @@ export function BookingForm({
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Name Field */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
+              <div
                 className="space-y-2"
               >
                 <Label 
@@ -273,15 +248,9 @@ export function BookingForm({
                   {t("bookingForm.fullName")} <span style={{ color: 'var(--accent-primary)' }}>*</span>
               </Label>
               <div className="relative">
-                  <div 
-                    className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                    style={{ 
-                      background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
-                      opacity: 0.2
-                    }}
-                  >
-                    <User className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
-                  </div>
+                  <span className="bk-field-icon pointer-events-none absolute start-3.5 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center" aria-hidden="true">
+                    <User className="h-[1.125rem] w-[1.125rem]" strokeWidth={1.75} />
+                  </span>
                 <Input
                   id="userName"
                   type="text"
@@ -312,13 +281,10 @@ export function BookingForm({
                   <span className="text-xs">⚠</span> {errors.userName}
                 </p>
               )}
-              </motion.div>
+              </div>
 
             {/* Phone Field */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25 }}
+              <div
                 className="space-y-2"
               >
                 <Label 
@@ -329,15 +295,9 @@ export function BookingForm({
                   {t("bookingForm.phone")} <span style={{ color: 'var(--accent-primary)' }}>*</span>
               </Label>
               <div className="relative">
-                  <div 
-                    className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                    style={{ 
-                      background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
-                      opacity: 0.2
-                    }}
-                  >
-                    <Phone className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
-                  </div>
+                  <span className="bk-field-icon pointer-events-none absolute start-3.5 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center" aria-hidden="true">
+                    <Phone className="h-[1.125rem] w-[1.125rem]" strokeWidth={1.75} />
+                  </span>
                 <PhoneInput
                   id="userPhone"
                   data-qa="booking-phone"
@@ -372,13 +332,10 @@ export function BookingForm({
                   {t("bookingForm.phoneHint")}
                 </p>
               )}
-              </motion.div>
+              </div>
 
             {/* Email Field */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
+              <div
                 className="space-y-2"
               >
                 <Label 
@@ -389,15 +346,9 @@ export function BookingForm({
                   {t("bookingForm.email")} {emailRequired ? <span style={{ color: 'var(--accent-primary)' }}>*</span> : <span style={{ color: 'var(--text-secondary)' }}>{t("bookingForm.optional")}</span>}
               </Label>
               <div className="relative">
-                  <div 
-                    className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                    style={{ 
-                      background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
-                      opacity: 0.2
-                    }}
-                  >
-                    <Mail className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
-                  </div>
+                  <span className="bk-field-icon pointer-events-none absolute start-3.5 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center" aria-hidden="true">
+                    <Mail className="h-[1.125rem] w-[1.125rem]" strokeWidth={1.75} />
+                  </span>
                 <Input
                   id="userEmail"
                   type="email"
@@ -434,13 +385,10 @@ export function BookingForm({
                 <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
                 {emailRequired ? t("bookingForm.emailHint") : t("bookingForm.emailOptionalHint")}
               </p>
-              </motion.div>
+              </div>
 
             {/* Additional Participants */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.35 }}
+              <div
                 className="space-y-2"
               >
                 <Label 
@@ -470,13 +418,10 @@ export function BookingForm({
                 errorStyle={{ color: 'var(--accent-primary)' }}
                 helpStyle={{ color: 'var(--text-secondary)' }}
               />
-              </motion.div>
+              </div>
 
             {/* Notes */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
+              <div
                 className="space-y-2"
               >
                 <Label 
@@ -487,15 +432,9 @@ export function BookingForm({
                   {t("bookingForm.notes")} <span style={{ color: 'var(--text-secondary)' }}>{t("bookingForm.optional")}</span>
               </Label>
               <div className="relative">
-                  <div 
-                    className="absolute left-3 top-3 w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                    style={{ 
-                      background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
-                      opacity: 0.2
-                    }}
-                  >
-                    <MessageSquare className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
-                  </div>
+                  <span className="bk-field-icon pointer-events-none absolute start-3.5 top-3 flex h-6 w-6 items-center justify-center" aria-hidden="true">
+                    <MessageSquare className="h-[1.125rem] w-[1.125rem]" strokeWidth={1.75} />
+                  </span>
                 <Textarea
                   id="notes"
                   placeholder={t("bookingForm.notesPlaceholder")}
@@ -511,29 +450,17 @@ export function BookingForm({
                   rows={4}
                 />
               </div>
-              </motion.div>
+              </div>
 
             {/* Submit Button */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.45 }}
+              <div
                 className="pt-4"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
               >
               <Button
                 type="submit"
                 data-qa="booking-confirm"
                 disabled={loading}
-                  className="w-full h-14 text-lg font-semibold backdrop-blur-xs shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                  style={{
-                    background: loading 
-                      ? 'var(--bg-secondary)' 
-                      : 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
-                    color: 'white',
-                    border: '1px solid transparent'
-                  }}
+                  className="bk-action w-full h-14 text-lg"
               >
                 {loading ? (
                   <>
@@ -547,15 +474,12 @@ export function BookingForm({
                   </>
                 )}
               </Button>
-              </motion.div>
+              </div>
           </form>
-          </motion.div>
+          </div>
 
         {/* Booking Summary Sidebar */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+          <div
             className="lg:sticky lg:top-8 h-fit"
           >
             <div 
@@ -574,22 +498,15 @@ export function BookingForm({
 
             <div className="space-y-4">
               {/* Service */}
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
+                <div
                   className="flex items-start gap-3 pb-4"
                   style={{ borderBottom: '1px solid var(--border-subtle)' }}
                 >
-                  <div 
-                    className="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center"
-                    style={{ 
-                      background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
-                      opacity: 0.2
-                    }}
-                  >
-                    <Calendar className="h-5 w-5" style={{ color: 'var(--accent-primary)' }} />
-                </div>
+                  {media ? <span className="bk-summary-media shrink-0">{media}</span> : (
+                  <span className="bk-summary-icon shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" aria-hidden="true">
+                    <Calendar className="h-5 w-5" strokeWidth={1.75} />
+                  </span>
+                  )}
                 <div className="flex-1 min-w-0">
                     <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t("customerBooking.service")}</p>
                     <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>
@@ -602,25 +519,16 @@ export function BookingForm({
                     </p>
                   )}
                 </div>
-                </motion.div>
+                </div>
 
               {/* Date & Time */}
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.35 }}
+                <div
                   className="flex items-start gap-3 pb-4"
                   style={{ borderBottom: '1px solid var(--border-subtle)' }}
                 >
-                  <div 
-                    className="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center"
-                    style={{ 
-                      background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
-                      opacity: 0.2
-                    }}
-                  >
-                    <Clock className="h-5 w-5" style={{ color: 'var(--accent-primary)' }} />
-                </div>
+                  <span className="bk-summary-icon shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" aria-hidden="true">
+                    <Clock className="h-5 w-5" strokeWidth={1.75} />
+                  </span>
                 <div className="flex-1 min-w-0">
                     <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t("customerBooking.dateTime")}</p>
                     <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>
@@ -633,26 +541,17 @@ export function BookingForm({
                     {service.duration} {t("customerBooking.minutes")}
                   </p>
                 </div>
-                </motion.div>
+                </div>
 
               {/* Location */}
               {service.location && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
+                  <div
                     className="flex items-start gap-3 pb-4"
                     style={{ borderBottom: '1px solid var(--border-subtle)' }}
                   >
-                    <div 
-                      className="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center"
-                      style={{ 
-                        background: 'linear-gradient(to right, var(--gradient-primary-from), var(--gradient-primary-to))',
-                        opacity: 0.2
-                      }}
-                    >
-                      <MapPin className="h-5 w-5" style={{ color: 'var(--accent-primary)' }} />
-                  </div>
+                    <span className="bk-summary-icon shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" aria-hidden="true">
+                    <MapPin className="h-5 w-5" strokeWidth={1.75} />
+                  </span>
                   <div className="flex-1 min-w-0">
                       <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t("customerBooking.location")}</p>
                       <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>
@@ -679,45 +578,36 @@ export function BookingForm({
                       </p>
                     )}
                   </div>
-                  </motion.div>
+                  </div>
               )}
 
               {/* Timezone */}
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.45 }}
+                <div
                   className="text-sm"
                   style={{ color: 'var(--text-secondary)' }}
                 >
                 <p className="font-medium mb-1">{t("bookingForm.timezone")}</p>
-                <p>{timezone}</p>
-                </motion.div>
+                <p data-qa="booking-details-zone" title={timezone}>{zone}</p>
+                </div>
 
               {/* Price (if applicable) */}
               {service.price && service.price > 0 && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
+                  <div
                     className="pt-4"
                     style={{ borderTop: '1px solid var(--border-subtle)' }}
                   >
                   <div className="flex items-center justify-between">
                       <span style={{ color: 'var(--text-secondary)' }}>{t("publicSite.price")}</span>
                       <span className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>
-                      {service.price} {service.currency || "ETB"}
+                      {priceLabel(Number(service.price), service.currency || "ETB", language, "")}
                     </span>
                   </div>
-                  </motion.div>
+                  </div>
               )}
             </div>
 
             {/* Info Banner */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.55 }}
+              <div
                 className="mt-6 p-4 rounded-lg backdrop-blur-xs"
                 style={{ 
                   backgroundColor: 'var(--bg-secondary)',
@@ -727,9 +617,9 @@ export function BookingForm({
                 <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
                 {t("bookingForm.note")}
               </p>
-              </motion.div>
+              </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </div>

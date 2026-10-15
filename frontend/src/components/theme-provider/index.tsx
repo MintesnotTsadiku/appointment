@@ -38,6 +38,8 @@ export function ThemeProvider({ children, pathname }: { children: React.ReactNod
     setError(null);
     setState({ user, saved: fallback, draft: fallback });
   }, [user, fallback]);
+  // A public website may change the shared display mode; the booking page it opens in the app follows it.
+  useEffect(() => { if (!internal) setPublicMode(legacyMode()); }, [pathname, internal]);
   useEffect(() => {
     if (!internal || !query.data?.message) return;
     const value = query.data.message;
@@ -96,7 +98,8 @@ export function ThemeProvider({ children, pathname }: { children: React.ReactNod
         previewAppearance(next);
         if (pathname !== '/settings/appearance') void saveValue(next).catch(() => undefined);
       }
-      else { setPublicMode(mode); try { localStorage.setItem('vite-ui-theme', mode); } catch { /* Optional cache. */ } }
+      // Public pages share one display mode: the website (pe-display-mode) and the booking pages.
+      else { setPublicMode(mode); try { localStorage.setItem('vite-ui-theme', mode); localStorage.setItem('pe-display-mode', mode); } catch { /* Optional cache. */ } }
     }, colors, isLoadingColors: internal && (!session?.authenticated || query.isLoading || !!query.error), resolvedTheme,
   };
   return <ThemeProviderContext.Provider value={value}>{children}</ThemeProviderContext.Provider>;

@@ -203,6 +203,17 @@
   color: var(--text-primary) !important;
 }
 
+/* The saved-booking notice: brand text and lines instead of the default blue. */
+[data-booking-confirmation="true"] .text-blue-900,
+[data-booking-confirmation="true"] .dark\:text-blue-100 { color: var(--text-primary) !important; }
+[data-booking-confirmation="true"] .text-blue-700,
+[data-booking-confirmation="true"] .dark\:text-blue-300 { color: var(--text-secondary) !important; }
+[data-booking-confirmation="true"] .text-blue-600,
+[data-booking-confirmation="true"] .dark\:text-blue-400 { color: var(--accent-primary) !important; }
+[data-booking-confirmation="true"] .border-blue-200,
+[data-booking-confirmation="true"] .dark\:border-blue-800 { border-color: var(--border-default) !important; }
+[data-booking-confirmation="true"] h2 { font-family: var(--booking-font-display); }
+
 [data-booking-confirmation="true"] .text-gray-600,
 [data-booking-confirmation="true"] .text-gray-500,
 [data-booking-confirmation="true"] .dark\:text-gray-400 {

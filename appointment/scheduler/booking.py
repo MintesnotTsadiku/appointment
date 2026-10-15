@@ -535,6 +535,61 @@ def slots(offering_id, date, organization_id=None, quantity=1):
     return open_slots(parts, date, quantity)
 
 
+MAX_SIBLINGS = 24
+
+
+def sibling_offerings(parts, documents=None):
+    """The public offerings of one business service: the anchor first, then the other providers' offerings.
+
+    A business offers a service as one offering per provider and place (EventType). The customer chooses
+    the service first, so the time picker shows the times of all of these together, and each time keeps
+    its own offering (provider and place). Independent providers get the anchor only.
+    """
+    if not parts.service.organization:
+        return [parts]
+    names = frappe.get_all(
+        "EventType",
+        filters={"is_active": 1, "service": parts.event.service, "name": ["!=", parts.event.name]},
+        pluck="name",
+        order_by="name asc",
+        limit=MAX_SIBLINGS,
+    )
+    found = [parts]
+    for name in names:
+        try:
+            other = offering(name, public=True, documents=documents)
+        except (frappe.PermissionError, frappe.ValidationError, frappe.DoesNotExistError):
+            frappe.clear_messages()
+            continue
+        if other.business.name == parts.business.name:
+            found.append(other)
+    return found
+
+
+@frappe.whitelist(allow_guest=True)
+@rate_limit(limit=120, seconds=60)
+def service_slots(offering_id, date, organization_id=None, quantity=1):
+    """The day's times of a service with any of its providers. Each row names its own offering."""
+    parts = offering(offering_id, public=True)
+    if organization_id and parts.business.name != organization_id:
+        frappe.throw(_("Offering does not belong to this business."), frappe.PermissionError)
+    documents: dict = {}
+    siblings = sibling_offerings(parts, documents)
+    # The anchor's answer is the frame (days, duration); its errors (a date out of range) reach the caller.
+    result = open_slots(parts, date, quantity)
+    rows = [dict(row, offering_id=parts.event.name) for row in result["all_available_slots_for_data"]]
+    for other in siblings[1:]:
+        try:
+            day = open_slots(other, date, quantity)
+        except frappe.ValidationError:
+            frappe.clear_messages()
+            continue
+        rows.extend(dict(row, offering_id=other.event.name) for row in day["all_available_slots_for_data"])
+    rows.sort(key=lambda row: row["start_time"])
+    result.update(all_available_slots_for_data=rows, total_slots_for_day=len(rows), provider_count=len(siblings))
+    return result
+
+
 def open_slots(parts, date, quantity=1):
     """The day's times for a resolved offering. Callers decide whether the offering must be public."""
     event, service, location, provider, business = parts

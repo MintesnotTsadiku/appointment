@@ -19,6 +19,7 @@ STATE_KEY = "appointment_template_bloom_v3_qa"
 QA_CLIENT = "Tsion Alemu"
 QA_EMAIL = "tsion.alemu@example.test"
 QA_PHONE = "0900 000 017"
+QA_PHONE_E164 = "+251900000017"
 
 
 def setup():
@@ -48,10 +49,11 @@ def _open_day():
     return str(day)
 
 
-def cleanup():
+def cleanup(since=None):
+    """`since` (optional) widens the window to an earlier run of this session, for example after a lost state."""
     frappe.set_user("Administrator")
     state = _state()
-    since = state.get("since")
+    since = since or state.get("since")
     if not since or not showcase.state_path().exists():
         frappe.db.set_default(STATE_KEY, "")
         frappe.db.commit()
@@ -64,14 +66,19 @@ def cleanup():
     previous = frappe.flags.syncing_booking_urls
     frappe.flags.syncing_booking_urls = True
     try:
-        for name in frappe.get_all("Appointment", filters={"organization": organization, "client_email": QA_EMAIL, "creation": [">=", since]}, pluck="name"):
+        # The QA client books by email or, phone first, by phone only (booking-journey-bloom.yaml).
+        by_email = frappe.get_all("Appointment", filters={"organization": organization, "client_email": QA_EMAIL, "creation": [">=", since]}, pluck="name")
+        by_phone = frappe.get_all("Appointment", filters={"organization": organization, "client_phone": QA_PHONE_E164, "client_name": QA_CLIENT, "creation": [">=", since]}, pluck="name")
+        for name in sorted(set(by_email) | set(by_phone)):
             if ("Appointment", name) in owned:
                 continue
             for notification in frappe.get_all("Appointment Notification", filters={"appointment": name}, pluck="name"):
                 _delete_one("Appointment Notification", notification)
             _delete_one("Appointment", name)
             deleted += 1
-        for name in frappe.get_all("Customer Profile", filters={"organization": organization, "primary_email": QA_EMAIL, "creation": [">=", since]}, pluck="name"):
+        profiles = set(frappe.get_all("Customer Profile", filters={"organization": organization, "primary_email": QA_EMAIL, "creation": [">=", since]}, pluck="name"))
+        profiles |= set(frappe.get_all("Customer Profile", filters={"organization": organization, "primary_phone": QA_PHONE_E164, "display_name": QA_CLIENT, "creation": [">=", since]}, pluck="name"))
+        for name in sorted(profiles):
             if ("Customer Profile", name) not in owned:
                 _delete_one("Customer Profile", name)
     finally:

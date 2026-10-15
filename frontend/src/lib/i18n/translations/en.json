@@ -4164,7 +4164,9 @@
     "howMany": "How many",
     "fewer": "One fewer",
     "more": "One more",
-    "times": "× {0}"
+    "times": "× {0}",
+    "anyProvider": "Any provider",
+    "places": "{0} places"
   },
   "payments": {
     "title": "Payment",
@@ -4272,7 +4274,9 @@
     "providerOne": "1 provider",
     "providerMany": "{0} providers",
     "serviceOne": "1 service",
-    "serviceMany": "{0} services"
+    "serviceMany": "{0} services",
+    "priceFrom": "from {0}",
+    "chooseTime": "Choose a time"
   },
   "schedulerPage": {
     "stepService": "Choose a service",
@@ -6482,5 +6486,13 @@
       "allCategories": "All categories",
       "showNoDeadline": "Show tasks without deadline"
     }
+  },
+  "bookingSteps": {
+    "label": "Booking steps",
+    "service": "Service",
+    "time": "Time",
+    "details": "Details",
+    "done": "Done",
+    "position": "Step {0} of {1}: {2}"
   }
 }

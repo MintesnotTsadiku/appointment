@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 
 import { usePublicExperience } from "./PublicExperienceProvider";
-import { publicRootFromPath } from "./routes";
+import { publicRootFromPath, withBookingLanguage } from "./routes";
 import { getTemplatePackage } from "./templates/registry";
 import type { PublishedSnapshot } from "./types";
 import "./platform.css";
@@ -10,7 +10,9 @@ import { PublicLoading, PublicUnavailable } from "./PublicStates";
 
 const localizedRoot = (root: string, locale: string) => (locale && locale !== "en" && root !== "/" ? `${root}/${locale}` : root);
 
-export const PublicSiteHome = ({ snapshot, forceLoading = false }: { snapshot: PublishedSnapshot; forceLoading?: boolean }) => {
+export const PublicSiteHome = ({ snapshot: published, forceLoading = false }: { snapshot: PublishedSnapshot; forceLoading?: boolean }) => {
+  // Links into the scheduler keep the page's language.
+  const snapshot = withBookingLanguage(published);
   const { config, theme, setPreference, refresh, isLoading, error } = usePublicExperience();
   const locale = snapshot.locale || config.locale;
   const design = snapshot.compiledDesign;

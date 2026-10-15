@@ -60,8 +60,8 @@ interface DateTimeSelectorProps {
     is_online?: boolean;
     platform?: string;
   };
-  /** Replaces the default summary card (service, duration, provider, place). */
-  summary?: ReactNode;
+  /** Replaces the default summary card (service, duration, provider, place). A function gets the layout (wide or not). */
+  summary?: ReactNode | ((wide: boolean) => ReactNode);
   /** More controls for the side column, such as the quantity picker. */
   extras?: ReactNode;
   /** The next step. Without it, choosing a slot calls `onSlotSelect` only (older pages move on there). */
@@ -70,6 +70,11 @@ interface DateTimeSelectorProps {
   barDetail?: string;
   /** Quiet links (my bookings, powered by): at the foot of the side column when wide, under the list when narrow. */
   footer?: ReactNode;
+  /** Everyone who offers the service (the filter shows them even on a day they do not work). */
+  providers?: Array<{ id: string; name: string; avatar?: string }>;
+  /** The provider filter, when the page owns it ("all" for any provider). */
+  providerId?: string;
+  onProviderChange?: (providerId: string) => void;
 
   /** @deprecated The page header owns navigation. */
   onBack?: () => void;
@@ -108,6 +113,9 @@ export function DateTimeSelector({
   action,
   barDetail,
   footer,
+  providers: offeredBy,
+  providerId: chosenProvider,
+  onProviderChange,
   embedded = false,
 }: DateTimeSelectorProps) {
   const { t, language } = useTranslation();
@@ -120,20 +128,24 @@ export function DateTimeSelector({
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [stripHeight, setStripHeight] = useState(0);
 
-  // Providers present on this day, for the filter.
-  const providers = useMemo(() => {
+  // Everyone who offers the service when the page knows them, else the providers present on this day.
+  const providers = useMemo<Array<{ id: string; name: string; avatar?: string }>>(() => {
+    if (offeredBy?.length) return offeredBy;
     const map = new Map<string, string>();
     availableSlots.forEach((slot) => { if (slot.provider?.id && slot.provider.name) map.set(slot.provider.id, slot.provider.name); });
     return Array.from(map, ([id, name]) => ({ id, name }));
-  }, [availableSlots]);
-  const [providerId, setProviderId] = useState("all");
+  }, [availableSlots, offeredBy]);
+  const [ownProviderId, setOwnProviderId] = useState("all");
+  const providerId = chosenProvider ?? ownProviderId;
+  const setProviderId = (next: string) => (onProviderChange ? onProviderChange(next) : setOwnProviderId(next));
   const [showAllProviders, setShowAllProviders] = useState(false);
   useEffect(() => {
-    if (providerId !== "all" && !providers.some((provider) => provider.id === providerId)) setProviderId("all");
-  }, [providers, providerId]);
+    if (!onProviderChange && providerId !== "all" && !providers.some((provider) => provider.id === providerId)) setOwnProviderId("all");
+  }, [providers, providerId, onProviderChange]);
   const slots = useMemo(
-    () => (providerId === "all" ? availableSlots : availableSlots.filter((slot) => slot.provider?.id === providerId)),
-    [availableSlots, providerId]
+    () => (providerId !== "all" ? availableSlots.filter((slot) => slot.provider?.id === providerId)
+      : providers.length > 1 ? anyProvider(availableSlots) : availableSlots),
+    [availableSlots, providerId, providers.length]
   );
 
   // Narrow: the group headings stick under the strip, so the strip's height is a layout token.
@@ -182,7 +194,8 @@ export function DateTimeSelector({
       ? { icon: Video, text: onlineLabel(location.platform), qa: "booking-summary-online" }
       : { icon: MapPin, text: location.location_name || location.name, detail: location.address, qa: "booking-summary-place" });
   }
-  const summaryNode = summary !== undefined ? summary
+  const summaryNode = typeof summary === "function" ? summary(wide)
+    : summary !== undefined ? summary
     : embedded || !serviceName ? null
     : <BookingSummaryCard title={serviceName} titleQa="booking-picker-service" facts={facts} compact={!wide} />;
 
@@ -190,10 +203,10 @@ export function DateTimeSelector({
     <div className="space-y-2" data-qa="booking-provider-filter">
       <p className="bk-eyebrow" id="bk-provider-label">{t("bookingPicker.filterProvider")}</p>
       <div role="group" aria-labelledby="bk-provider-label" className={wide ? "flex flex-wrap gap-1.5" : "bk-days"}>
-        <button type="button" className="bk-chip" aria-pressed={providerId === "all"} onClick={() => setProviderId("all")}>{t("bookingPicker.allProviders")}</button>
+        <button type="button" className="bk-chip" aria-pressed={providerId === "all"} onClick={() => setProviderId("all")} data-qa="booking-provider-any">{t("bookingPicker.anyProvider")}</button>
         {(wide && !showAllProviders ? providers.slice(0, MAX_VISIBLE_PROVIDERS) : providers).map((provider) => (
           <button key={provider.id} type="button" className="bk-chip" aria-pressed={providerId === provider.id} onClick={() => setProviderId(provider.id)}
-            title={provider.name}>
+            title={provider.name} data-qa="booking-provider-option">
             {shortProviderName(provider.name)}
           </button>
         ))}
@@ -312,6 +325,23 @@ export function DateTimeSelector({
       )}
     </div>
   );
+}
+
+/**
+ * "Any provider": one time per start. The time goes to one of the providers who are free then, in turn
+ * by the time of day, so the bookings spread over the team. Taken only when everyone is taken.
+ */
+function anyProvider(list: TimeSlot[]): TimeSlot[] {
+  const byStart = new Map<string, TimeSlot[]>();
+  list.forEach((slot) => {
+    const row = byStart.get(slot.start_time);
+    if (row) row.push(slot); else byStart.set(slot.start_time, [slot]);
+  });
+  return Array.from(byStart.values(), (row) => {
+    const open = row.filter(slotOpen);
+    if (!open.length) return row[0];
+    return open[Math.floor(Date.parse(row[0].start_time) / 900000) % open.length];
+  });
 }
 
 /** Whether the picker's own width fits two columns; measured before paint, so there is no flash. */

@@ -164,6 +164,44 @@ Website setup, "Website features" step: "Show my next free times on the website"
 - The website editor edits all of these (`section_editor.py`, `imageRequired` on the gallery list).
 - `Public Site Section.section_type` has the option `gallery` (one migration).
 
+## Booking skins
+
+The booking pages (service chooser, time picker, details, confirmation) are one shared flow with one interaction model. A template package dresses it with a small skin. The skin gives data, tokens and at most a few visual slots. It never imports from another template, and the shared flow never imports a template's page components. The booking pages are conversion pages: speed and clarity first, no parallax, marquee, count-up or large moving image.
+
+### The contract
+
+`frontend/src/public-experience/templates/booking-skin.ts` defines `BookingSkin`:
+
+| Field | Required | Meaning |
+|---|---|---|
+| `key` | Yes | `rendererKey@rendererVersion`, for example `bloom-hair@3`. |
+| `name` | Yes | The value of `data-bk-skin` on the booking pages, for example `bloom-v3`. |
+| `frame` | Yes | The shape of service photos and portraits: `rounded`, `mirror`, `arch`, `circle` or `square` (`data-bk-frame`). |
+| `servicePhotoRoles` | Yes | Image roles for service photos when the website item has no photo. The flow uses the role at the item's place in the services section, so the photo is the same as on the landing page. Use `[]` for none. |
+| `backdropRole` | No | The image role for the faint page background. The flow uses its smallest width file and its night photo in dark mode. Pick a photo that the handoff already showed. |
+| `tokens(brand, mode)` | No | CSS custom properties from the brand variables: `--bk-action-bg`, `--bk-action-ink`, `--bk-action-radius`, `--bk-action-shadow`. Keep AA contrast for the action label. |
+| `StepMark` | No | A visual slot: the mark of one step (`index`, `state`: `done`, `current` or `next`). Decorative (`aria-hidden`); the flow writes the step names. |
+
+The skin's stylesheet is `booking.css` in the package. Scope every rule under `[data-bk-skin="<name>"]`, or use a class with the package's own prefix and `k-` (Bloom uses `.b3k-`). The CSS can set these tokens and draw these parts:
+
+| Token or part | Use |
+|---|---|
+| `--bk-header-bg`, `--bk-header-line` | The page header. Set text colours on `.bk-header-inner` (the header element carries the brand variables inline). |
+| `--bk-frame-line` | The line around photo frames. |
+| `--bk-backdrop-opacity`, `--bk-backdrop-blur` | The page background echo. |
+| `.booking-experience[data-bk-skin=…]` | The page: for example, remove the shared grid pattern. |
+| `.bk-card`, `.bk-slot`, `.bk-day`, `.bk-chip`, `.bk-eyebrow`, `h1`, `h2` | Shape and type inside the flow. Do not change their size or order. |
+
+### Rules
+
+- Register the skin in `SKINS` in `booking-skin.ts`. Import only the skin module of the package (`./<package>/booking`). The skin module imports the contract as types only.
+- Do not add a hook that moves things: no `useScrollProgress`, `useMarquee`, `useCountUp`, `data-scroll` or `data-count` in a skin. `frontend/tests/booking-skin.test.mjs` checks this and the CSS scope.
+- Animate only the selection feedback (the flow owns it) and the template's success moment (`templates/moments.tsx`). Stop all animation with reduced motion.
+- Load no extra large image. The backdrop is one small file. Service photos load lazily at the frame size.
+- Marigold-style accent rules belong to the skin. Bloom fills only the booking action with marigold; the chosen time stays plum.
+- Measure the chooser and the time picker on a phone (390 px, 9 Mbps, 170 ms, CPU 4x) before and after. LCP and CLS must not get worse.
+- A template without a skin gets `DEFAULT_BOOKING_SKIN`: the brand tokens only. Its pages do not change.
+
 ## Checklist for the next v3 package
 
 1. Add the recipe, layout and surface `v3` manifests, and the imagery manifest with `darkSrc` for the hero and the band. Pin palette and typography versions that exist.
@@ -173,3 +211,4 @@ Website setup, "Website features" step: "Show my next free times on the website"
 5. Generate the images with the Codex CLI method (`BLOOM_V3.md`, "Images"). Record every file with its checksum.
 6. Move the showcase through the seeder: catalog `heroRole`, `detailRole`, `templateAssets`, and a higher `PUBLIC_EXPERIENCE_VERSION`.
 7. Write the three manifests (`template-<name>-v3.yaml`, `-dark`, `-states`), run them, and record the run IDs.
+8. Add the booking skin (`booking.tsx`, `booking.css`, a `SKINS` entry), link each service row on the handoff to `snapshot.bookingPaths[item.id]`, and write `booking-journey-<name>.yaml` like `booking-journey-bloom.yaml`.

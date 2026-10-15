@@ -885,6 +885,7 @@ def update_last_assigned_provider(service_name, provider_name):
 @frappe.whitelist(allow_guest=True)
 @add_response_code
 def get_organization_services(org_slug):
+    from appointment.public_experience import service_media
     from appointment.scheduler.booking import offering
     from appointment.scheduler.online_meeting import public_place
 
@@ -908,6 +909,7 @@ def get_organization_services(org_slug):
         if service_names
         else []
     )
+    photos = service_media.for_organization(org_name)
     for row in rows:
         try:
             event, service, location, provider, business = offering(row.name, public=True)
@@ -929,6 +931,8 @@ def get_organization_services(org_slug):
             "allow_quantity": frappe.utils.cint(service.allow_quantity), "max_quantity": max(1, frappe.utils.cint(service.max_quantity)),
             "provider_id": label["id"],
             "provider_name": display_name,
+            # The service photo of the published website and the service's place there; one card per service.
+            **_service_photo(photos.get(service.name, {})),
             # How the session meets; public, never the meeting link.
             **public_place(location),
         })
@@ -959,30 +963,60 @@ def _offering_label(event, provider):
 @frappe.whitelist(allow_guest=True)
 @add_response_code
 def get_organization_meeting_windows(org_slug, service_slug):
-    from appointment.scheduler.booking import offering
-    from appointment.scheduler.online_meeting import is_online, public_place
+    from appointment.public_experience import service_media
+    from appointment.scheduler.booking import offering, sibling_offerings
 
     org_slug = _public_identifier(org_slug, "organization slug", r"[a-z0-9][a-z0-9-]{0,139}")
     service_slug = _public_identifier(service_slug, "service slug", r"[A-Za-z0-9][A-Za-z0-9._-]{0,139}")
-    event, service, location, provider, org = offering(service_slug, public=True)
+    parts = offering(service_slug, public=True)
+    event, service, location, provider, org = parts
     if org.slug != org_slug:
         frappe.throw("Offering does not belong to this business", frappe.PermissionError)
     duration = int(event.duration_override or service.duration)
+    # The same service with the other providers (and their places); the time picker shows their times together.
+    siblings = sibling_offerings(parts)
+    offerings = [
+        {
+            "id": item.event.name,
+            "provider": _offering_label(item.event, item.provider),
+            "duration": int(item.event.duration_override or item.service.duration),
+            "price": item.event.price_override or item.service.price,
+            "location": _public_location(item.location),
+        }
+        for item in siblings
+    ]
     return {
         "full_name": org.organization_name, "company": org.organization_name,
         "profile_pic": org.logo, "meeting_provider": "builtin",
         "service_name": service.service_name,
         "durations": [{"id": event.name, "label": f"{duration} min", "duration": duration}],
         "is_organization": True, "organization_id": org.name, "service_id": service.name,
-        "provider_count": 1, "providers": [_offering_label(event, provider)],
+        "provider_count": len(offerings), "providers": [item["provider"] for item in offerings],
+        "offerings": offerings,
+        "description": event.description or service.description,
+        "price": event.price_override or service.price,
+        **_service_photo(service_media.for_organization(org.name).get(service.name, {})),
         "allow_quantity": frappe.utils.cint(service.allow_quantity), "max_quantity": max(1, frappe.utils.cint(service.max_quantity)),
-        # The place's public format; an online place never sends its meeting link or an address.
-        "location": {"name": location.name, "location_name": location.location_name,
-                     "timezone": location.timezone, "city": location.city, "is_online": is_online(location),
-                     "address": ", ".join(part for part in (location.address_line_1, location.address_line_2, location.city) if part)
-                     if location.address_line_1 and not is_online(location) else "",
-                     **public_place(location)},
+        "location": _public_location(location),
     }
+
+
+def _service_photo(found):
+    """The website's photo, place and words for a service (see `service_media.for_organization`)."""
+    return {"image": found.get("image", ""), "photo_index": found.get("index", -1),
+            "local_name": found.get("name", {}), "local_description": found.get("summary", {})}
+
+
+def _public_location(location):
+    """The place's public facts. An online place never sends its meeting link or an address."""
+    from appointment.scheduler.online_meeting import is_online, public_place
+
+    online = is_online(location)
+    return {"name": location.name, "location_name": location.location_name,
+            "timezone": location.timezone, "city": location.city, "is_online": online,
+            "address": ", ".join(part for part in (location.address_line_1, location.address_line_2, location.city) if part)
+            if location.address_line_1 and not online else "",
+            **public_place(location)}
 
 
 def get_booking_configuration(organization_id=None, provider_id=None):

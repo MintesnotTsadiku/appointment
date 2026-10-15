@@ -36,6 +36,8 @@ A glossy beauty campaign at golden hour in a Bole natural-hair salon. After dark
 
 The booking handoff (`/bloom-studio/book`) uses the band photo as its stage, a glass panel with the greeting, the booking action and the next free chair, and the service list with photos and next free times. The panel is the target of the booking view transition (`data-vt-book`).
 
+Each service row on the handoff is a link to that service's time picker with any stylist. The booking pages after the handoff wear Bloom's booking skin (`bloom-v3/booking.tsx`, `booking.css`): see `docs/growth/BOOKING_LAYOUT.md`, "Booking skins".
+
 The booking success moment is petals that drift over the confirmation header (`BloomMoment.tsx`, loaded only after a booking). With reduced motion six petals rest without movement.
 
 The loading screen is the mirror stage with shimmering bones and glowing bulbs (`BloomLoading`). It shows while the published design loads, on the site and on the handoff.

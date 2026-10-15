@@ -8,7 +8,7 @@
 import { useEffect, useState, type CSSProperties } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useFrappeGetCall } from "frappe-react-sdk";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { useAppContext } from "@/context/app";
 import { getLocalTimezone } from "@/lib/utils";
 import { ArrowLeft, Clock3, LayoutGrid, MapPin, RotateCw, User, Video } from "lucide-react";
@@ -30,7 +30,8 @@ import { PaymentSummary, type CheckoutQuote, type PaymentMethod } from "@/pages/
 import { QuantityPicker } from "@/pages/booking-v2/components/QuantityPicker";
 import { useTimeSlots } from "@/pages/booking-v2/hooks/useTimeSlots";
 import { useBookingSubmit } from "@/pages/booking-v2/hooks/useBookingSubmit";
-import type { Organization, Service, TimeSlot as V2TimeSlot, BookingFormData, BookingResponse } from "@/pages/booking-v2/types";
+import type { Organization, Service, ServiceLocation, ServiceOffering, TimeSlot as V2TimeSlot, BookingFormData, BookingResponse } from "@/pages/booking-v2/types";
+import { BookingBackdrop, BookingSteps, ServicePhoto, servicePhotoSource, useBookingSkin, type BookingStep } from "@/pages/booking-v2/components/skin";
 import { useBookingBrand } from "@/public-experience/bookingTheme";
 import { brandLogo } from "@/public-experience/templates/content";
 import { haptic } from "@/public-experience/templates/kit/haptics";
@@ -55,9 +56,55 @@ interface BookingApiService {
   type: Service["type"];
   provider_id?: string;
   provider_name?: string;
+  image?: string;
+  /** The service's place in the website's services section (for the template's own photo), or -1. */
+  photo_index?: number;
+  /** The website's name and summary of the service, by language. */
+  local_name?: Record<string, string>;
+  local_description?: Record<string, string>;
+}
+
+interface BookingApiOffering {
+  id: string;
+  provider?: BookingApiProvider;
+  duration?: number;
+  price?: number;
+  location?: ServiceLocation;
 }
 
 type Phase = "service" | "datetime" | "form" | "success";
+const STEP_OF: Record<Phase, BookingStep> = { service: "service", datetime: "time", form: "details", success: "done" };
+
+/**
+ * One card per service: the API lists one row per offering (service with one provider at one place).
+ * The first row of a service is its anchor; the price is the lowest, marked "from" when they differ.
+ */
+function groupServices(rows: BookingApiService[], providers: BookingApiProvider[], providerCount: number, language: string): Service[] {
+  const groups = new Map<string, Service>();
+  rows.forEach((row) => {
+    const key = row.service_id || row.slug;
+    const provider = row.provider_id ? { id: row.provider_id, name: row.provider_name || "", avatar: providers.find((item) => item.id === row.provider_id)?.avatar } : undefined;
+    const offering: ServiceOffering = { id: row.slug, provider, duration: row.duration, price: row.price };
+    const found = groups.get(key);
+    if (!found) {
+      groups.set(key, {
+        id: key, slug: row.slug, name: row.local_name?.[language] || row.name,
+        description: row.local_description?.[language] || row.description, duration: row.duration, price: row.price,
+        currency: "ETB", type: row.type, provider, providerCount: row.provider_id ? 1 : providerCount, image: row.image || undefined,
+        photoIndex: row.photo_index ?? -1, offerings: [offering],
+      });
+      return;
+    }
+    found.offerings!.push(offering);
+    found.providerCount = found.offerings!.length;
+    if (typeof row.price === "number" && row.price !== found.price) {
+      found.priceFrom = true;
+      if (!found.price || row.price < found.price) found.price = row.price;
+    }
+    if (row.duration < found.duration) found.duration = row.duration;
+  });
+  return Array.from(groups.values());
+}
 
 /** Height of the sticky booking header; the time picker's sticky columns start under it. */
 const HEADER_HEIGHT = "4.5rem";
@@ -89,17 +136,28 @@ const OrganizationAppointmentV2 = () => {
   // The slot as the picker shows it, with its provider, so it stays highlighted and the bar can name the provider.
   const [chosenSlot, setChosenSlot] = useState<V2TimeSlot | null>(null);
   const { theme } = useTheme();
-  const { t } = useTranslation();
+  const { t, language, setLanguage, languages } = useTranslation();
   const onlineLabel = useOnlineLabel();
+  // `?lang=am` from an Amharic website: the booking pages continue in that language.
+  const langParam = searchParams.get("lang");
+  useEffect(() => {
+    if (langParam && langParam !== language && languages.includes(langParam)) setLanguage(langParam);
+  }, [langParam, language, languages, setLanguage]);
+  // Each step starts at the top of the page (an in-app link keeps the previous page's scroll).
+  useEffect(() => { window.scrollTo(0, 0); }, [serviceSlug, currentPhase]);
   const [quantity, setQuantity] = useState(1);
   useEffect(() => setQuantity(1), [serviceSlug]);
   const bookingMode = theme === "dark" || (theme === "system" && typeof document !== "undefined" && document.documentElement.classList.contains("dark"))
     ? "dark"
     : "light";
   const bookingBrand = useBookingBrand(orgSlug, bookingMode);
+  const skin = useBookingSkin(bookingBrand.config, bookingBrand.style, bookingMode);
   const forced = previewState();
 
   const type = searchParams.get("type");
+  // `?with=<provider>` opens the time picker with one provider and `?with=any` with all of them.
+  // An offering's own link (no `with`) starts with that offering's provider.
+  const withParam = searchParams.get("with");
 
   const apiEndpoint = orgSlug && serviceSlug
     ? "appointment.api.personal_meet.get_organization_meeting_windows"
@@ -163,9 +221,10 @@ const OrganizationAppointmentV2 = () => {
       if (data?.message?.durations) {
         setMeetingDurationCards(data?.message?.durations);
 
-        // A service link without an offering opens its first offering.
+        // A service link without an offering opens its first offering (and keeps `with`).
         if (serviceSlug && data?.message?.durations?.length > 0 && !type) {
-          setSearchParams({ type: data.message.durations[0].id });
+          const first = data.message.durations[0].id;
+          setSearchParams((previous) => { const next = new URLSearchParams(previous); next.set("type", first); return next; }, { replace: true });
         }
 
         if (serviceSlug && type && data?.message?.durations?.length > 0) {
@@ -190,6 +249,20 @@ const OrganizationAppointmentV2 = () => {
   // A new service or day starts without a chosen time.
   useEffect(() => { setChosenSlot(null); }, [serviceSlug, type]);
 
+  // The service with each of its providers (and their places); the picker shows their times together.
+  const offerings: BookingApiOffering[] = serviceSlug && !data?.message?.error && Array.isArray(data?.message?.offerings) ? data.message.offerings : [];
+  const anchorProvider: string | undefined = data?.message?.providers?.[0]?.id;
+  const providerFilter = offerings.length < 2 ? "all"
+    : withParam === "any" ? "all"
+    : withParam && offerings.some((item) => item.provider?.id === withParam) ? withParam
+    : anchorProvider || "all";
+  const changeProvider = (next: string) => {
+    setSearchParams((previous) => { const params = new URLSearchParams(previous); params.set("with", next === "all" ? "any" : next); return params; }, { replace: true });
+    if (chosenSlot && next !== "all" && chosenSlot.provider?.id !== next) setChosenSlot(null);
+  };
+  const offeredBy = offerings.flatMap((item) => (item.provider ? [{ id: item.provider.id || item.provider.name, name: item.provider.name, avatar: item.provider.avatar }] : []))
+    .filter((item, index, list) => list.findIndex((other) => other.id === item.id) === index);
+
   const shouldFetchSlots = !!(serviceSlug && type && selectedDate && meetingDurationCards.length > 0);
 
   const {
@@ -207,12 +280,15 @@ const OrganizationAppointmentV2 = () => {
     serviceId: data?.message?.error ? undefined : data?.message?.service_id,
     enabled: shouldFetchSlots && !data?.message?.error,
     quantity,
+    allProviders: offerings.length > 1,
   });
 
   const { submitBooking, loading: bookingLoading } = useBookingSubmit();
 
+  // The booking is for the chosen time's own offering (its provider and place), else the anchor.
+  const offeringId = chosenSlot?.offeringId || type || meetingDurationCards[0]?.id || "";
+  const bookedOffering = offerings.find((item) => item.id === offeringId);
   // Payment at booking: amounts, refund terms and methods for the chosen slot.
-  const offeringId = type || meetingDurationCards[0]?.id || "";
   const { data: quoteData } = useFrappeGetCall<{ message: CheckoutQuote }>(
     "appointment.scheduler.payments.checkout",
     { offering_id: offeringId, start_time: selectedSlot?.start_time, quantity },
@@ -240,35 +316,31 @@ const OrganizationAppointmentV2 = () => {
       designation: data.message.position,
       services: p.services,
     })) || [],
-    services: data.message.services?.map((s: BookingApiService) => ({
-      id: s.service_id || s.slug || s.name,
-      slug: s.slug,
-      name: s.name,
-      description: s.description,
-      duration: s.duration,
-      price: s.price,
-      currency: "ETB",
-      type: s.type,
-      provider: s.provider_id ? {
-        id: s.provider_id,
-        name: s.provider_name,
-        avatar: data.message.providers?.find((provider: BookingApiProvider) => provider.id === s.provider_id)?.avatar,
-      } : undefined,
-      providerCount: s.provider_id ? 1 : data.message.provider_count,
-    })) || [],
+    services: groupServices(data.message.services || [], data.message.providers || [], data.message.provider_count, language),
   } : null;
 
   const currentService: Service | null = serviceSlug && data && !data?.message?.error ? {
     id: data.message.service_id || serviceSlug,
     slug: serviceSlug,
-    name: data.message.service_name || serviceSlug,
+    name: data.message.local_name?.[language] || data.message.service_name || serviceSlug,
     duration: meetingDurationCards[0]?.duration || 30,
     type: "organization",
     providerCount: data.message.provider_count,
     // Who or what is booked: the provider, or the room or machine of a service booked without staff.
     provider: data.message.providers?.[0] ? { id: data.message.providers[0].id, name: data.message.providers[0].name, avatar: data.message.providers[0].avatar } : undefined,
     location: data.message.location,
+    image: data.message.image || undefined,
+    price: data.message.price,
+    currency: "ETB",
   } : null;
+  // What the customer books once a time is chosen: that time's provider, place, length and price.
+  const bookedService: Service | null = currentService && bookedOffering ? {
+    ...currentService,
+    provider: bookedOffering.provider ? { id: bookedOffering.provider.id || bookedOffering.provider.name, name: bookedOffering.provider.name, avatar: bookedOffering.provider.avatar } : currentService.provider,
+    location: bookedOffering.location || currentService.location,
+    duration: bookedOffering.duration || currentService.duration,
+    price: bookedOffering.price ?? currentService.price,
+  } : currentService;
 
   const availableDaysNumbers = availableDays?.map((day: string) => {
     const dayMap: { [key: string]: number } = {
@@ -278,8 +350,12 @@ const OrganizationAppointmentV2 = () => {
     return dayMap[day];
   }).filter((d: number | undefined) => d !== undefined) || [];
 
-  const handleServiceSelect = (service: Service) => {
-    navigate(`/schedule/org/${orgSlug}/${service.slug}`);
+  // Choosing a service opens its times with any provider, or with the provider of the chooser's filter.
+  const handleServiceSelect = (service: Service, providerId: string) => {
+    haptic("select");
+    const own = providerId !== "all" ? service.offerings?.find((item) => item.provider?.id === providerId) : undefined;
+    const anchor = own?.id || service.slug;
+    navigate(`/schedule/org/${orgSlug}/${anchor}?type=${encodeURIComponent(anchor)}&with=${encodeURIComponent(own ? providerId : "any")}${langParam ? `&lang=${encodeURIComponent(langParam)}` : ""}`);
   };
 
   const handlePhaseBack = () => {
@@ -309,11 +385,11 @@ const OrganizationAppointmentV2 = () => {
   };
 
   const handleBookingSubmit = async (formData: BookingFormData) => {
-    if (!currentService || !selectedDate || !selectedSlot) return;
+    if (!bookedService || !selectedDate || !selectedSlot) return;
 
     try {
       const response = await submitBooking({
-        durationId: type || meetingDurationCards[0]?.id || "",
+        durationId: offeringId,
         date: selectedDate,
         timeSlot: {
           id: "temp",
@@ -349,11 +425,13 @@ const OrganizationAppointmentV2 = () => {
 
   const brandName = bookingBrand.config?.identity.applicationName || userInfo?.organizationName || "";
   const logo = bookingBrand.config ? brandLogo(bookingBrand.config.compiledDesign) : "";
-  const pageStyle = { ...bookingBrand.style, "--bk-top": HEADER_HEIGHT } as CSSProperties;
+  const pageStyle = { ...skin.style, "--bk-top": HEADER_HEIGHT } as CSSProperties;
+  const showSteps = !friendlyError && !error;
   const header = (
     <BookingHeaderBar
       height={HEADER_HEIGHT}
-      style={bookingBrand.style}
+      style={skin.style}
+      skin={skin.attrs}
       branded={Boolean(bookingBrand.config)}
       recipe={bookingBrand.config?.recipeKey}
       home={bookingBrand.publicRoot}
@@ -366,10 +444,16 @@ const OrganizationAppointmentV2 = () => {
           <span>{t("schedulerPage.back")}</span>
         </button>
       ) : null}
-      step={!friendlyError && !error ? t(currentPhase === "service" ? "schedulerPage.stepService" : currentPhase === "datetime" ? "schedulerPage.stepTime" : currentPhase === "form" ? "schedulerPage.stepDetails" : "schedulerPage.stepDone") : undefined}
+      steps={showSteps ? <BookingSteps step={STEP_OF[serviceSlug && currentPhase === "service" ? "datetime" : currentPhase]} skin={skin.skin} /> : undefined}
       actions={<><LanguageToggle /><ThemeSwitch /></>}
     />
   );
+  const pageAttrs = {
+    ...skin.attrs,
+    "data-booking-branded": bookingBrand.config ? "true" : "false",
+    "data-pe-recipe": bookingBrand.config?.recipeKey,
+    "data-pe-mode": bookingMode,
+  };
 
   const unavailable = Boolean(error || friendlyError) || forced === "error" || forced === "unavailable";
   // Loading: a skeleton in the shape of the page that comes.
@@ -378,7 +462,8 @@ const OrganizationAppointmentV2 = () => {
       <>
         {header}
         <div className="booking-experience min-h-screen px-4 py-6 text-theme-primary sm:px-6" style={{ ...pageStyle, backgroundColor: "var(--bg-primary)" }}
-          data-booking-branded={bookingBrand.config ? "true" : "false"} data-pe-recipe={bookingBrand.config?.recipeKey} data-qa="booking-loading">
+          {...pageAttrs} data-qa="booking-loading">
+          <BookingBackdrop active={skin} />
           <div className="mx-auto max-w-7xl">{serviceSlug ? <TimePickerSkeleton /> : <ServicesSkeleton />}</div>
         </div>
       </>
@@ -405,19 +490,31 @@ const OrganizationAppointmentV2 = () => {
     );
   }
 
-  const location = currentService?.location;
+  // The summary: the service, its length, and the provider and place once they are known.
   const facts: SummaryFact[] = [];
   if (currentService) {
-    facts.push({ icon: Clock3, text: t("bookingPicker.minutes").replace("{0}", String(currentService.duration)), qa: "booking-summary-duration" });
-    if (organization?.providers.length === 1 && currentService.provider?.name) {
-      facts.push({ icon: User, text: t("bookingPicker.with").replace("{0}", shortProviderName(currentService.provider.name)) });
-    }
+    const places = offerings.length > 1 ? offerings.map((item) => item.location).filter((item): item is ServiceLocation => Boolean(item)) : [];
+    const distinct = places.filter((item, index) => places.findIndex((other) => other.name === item.name) === index);
+    // The place: the chosen time's, else the filtered provider's, else the service's one place, else "N places".
+    const filtered = providerFilter !== "all" ? offerings.find((item) => item.provider?.id === providerFilter)?.location : undefined;
+    const location = chosenSlot && bookedOffering?.location ? bookedOffering.location : filtered || (distinct.length > 1 ? null : currentService.location);
+    const who = chosenSlot && bookedService?.provider?.name ? bookedService.provider.name
+      : offerings.length < 2 ? currentService.provider?.name : providerFilter !== "all" ? offeredBy.find((item) => item.id === providerFilter)?.name : "";
+    facts.push({ icon: Clock3, text: t("bookingPicker.minutes").replace("{0}", String(bookedService?.duration || currentService.duration)), qa: "booking-summary-duration" });
+    if (who) facts.push({ icon: User, text: t("bookingPicker.with").replace("{0}", shortProviderName(who)), qa: "booking-summary-provider" });
     if (location) {
       facts.push(location.is_online
         ? { icon: Video, text: onlineLabel(location.platform), qa: "booking-summary-online" }
         : { icon: MapPin, text: location.location_name || location.name, detail: location.address, qa: "booking-summary-place" });
+    } else if (distinct.length > 1 && !filtered) {
+      facts.push({ icon: MapPin, text: t("bookingPicker.places").replace("{0}", String(distinct.length)),
+        detail: distinct.map((item) => item.location_name || item.name).join(" · "), qa: "booking-summary-place" });
     }
   }
+  const photo = currentService && bookingBrand.resolved ? servicePhotoSource(skin, currentService.image, Number(data?.message?.photo_index ?? -1)) : null;
+  // While the design loads, an empty frame keeps the photo's place (no shift, no wrong file).
+  const summaryMedia = (wide: boolean) => photo ? <ServicePhoto asset={photo} sizes={wide ? "300px" : "56px"} vt />
+    : currentService?.image && !bookingBrand.resolved ? <span className="bk-photo" aria-hidden="true" /> : undefined;
 
   return (
     <>
@@ -428,17 +525,17 @@ const OrganizationAppointmentV2 = () => {
       {header}
       <div
         className={`booking-experience min-h-screen text-theme-primary ${currentPhase === "datetime" ? "" : "pb-10"}`}
-        data-booking-branded={bookingBrand.config ? "true" : "false"}
-        data-pe-recipe={bookingBrand.config?.recipeKey}
+        {...pageAttrs}
         style={{ ...pageStyle, backgroundColor: "var(--bg-primary)" }}
       >
+        <BookingBackdrop active={skin} />
         <div className="booking-stage relative z-10">
           {/* A friend's share link: "You were invited by …" (customer referrals). */}
           {currentPhase !== "success" && <CustomerInviteBanner slug={orgSlug} className="mx-auto mt-4 w-[calc(100%-2rem)] max-w-3xl" />}
 
           {currentPhase === "service" && organization && !serviceSlug && (
             <div className="px-4 py-6 sm:px-6 sm:py-8">
-              <ServiceSelector organization={organization} services={organization.services} onServiceSelect={handleServiceSelect} />
+              <ServiceSelector organization={organization} services={organization.services} onServiceSelect={handleServiceSelect} skin={skin} logo={logo} photosReady={bookingBrand.resolved} />
             </div>
           )}
 
@@ -447,81 +544,67 @@ const OrganizationAppointmentV2 = () => {
             <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6"><TimePickerSkeleton /></div>
           )}
 
-          <AnimatePresence mode="wait">
-            {currentPhase === "datetime" && currentService && (
-              <motion.div
-                key="datetime"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="px-4 py-4 sm:px-6"
-              >
-                <DateTimeSelector
-                  selectedDate={selectedDate}
-                  displayMonth={displayMonth}
-                  onDateSelect={handleDateSelect}
-                  onMonthChange={setDisplayMonth}
-                  availableDays={availableDaysNumbers}
-                  minDate={validStartDate}
-                  maxDate={validEndDate}
-                  availableSlots={slots}
-                  selectedSlot={chosenSlot}
-                  onSlotSelect={handleSlotSelect}
-                  timeFormat={timeFormat}
-                  onTimeFormatChange={setTimeFormat}
-                  timezone={timeZone}
-                  loading={slotsLoading}
-                  serviceName={currentService.name}
-                  duration={currentService.duration}
-                  location={currentService.location}
-                  summary={<BookingSummaryCard eyebrow={organization?.name} title={currentService.name} titleQa="booking-picker-service" facts={facts} />}
-                  extras={Boolean(data?.message?.allow_quantity) && (
-                    <QuantityPicker className="bk-card" value={quantity} max={Math.max(1, Number(data?.message?.max_quantity) || 1)}
-                      onChange={(next) => { setQuantity(next); setChosenSlot(null); }} />
-                  )}
-                  action={{ label: t("bookingLayout.continue"), onClick: () => chosenSlot && setCurrentPhase("form") }}
-                  footer={<PoweredBy variant="inline" className="!py-2 max-md:!pb-2" />}
-                />
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <AnimatePresence mode="wait">
-            {currentPhase === "form" && currentService && selectedSlot && (
-              <motion.div
-                key="form"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3 }}
-                className="py-8 px-4"
-              >
-                {quote?.required && <PaymentSummary quote={quote} method={paymentMethod} onMethod={setPaymentMethod} />}
-                {!paymentBlocked && (
-                  <BookingForm
-                    service={currentService}
-                    selectedDate={selectedDate}
-                    selectedSlot={{
-                      id: "temp",
-                      start_time: selectedSlot.start_time,
-                      end_time: selectedSlot.end_time,
-                      available: true,
-                    }}
-                    timeFormat={timeFormat}
-                    timezone={timeZone}
-                    onSubmit={handleBookingSubmit}
-                    onBack={handlePhaseBack}
-                    loading={bookingLoading}
-                    quantity={quantity}
-                  />
+          {currentPhase === "datetime" && currentService && (
+            <div className="px-4 py-4 sm:px-6">
+              <DateTimeSelector
+                selectedDate={selectedDate}
+                displayMonth={displayMonth}
+                onDateSelect={handleDateSelect}
+                onMonthChange={setDisplayMonth}
+                availableDays={availableDaysNumbers}
+                minDate={validStartDate}
+                maxDate={validEndDate}
+                availableSlots={slots}
+                selectedSlot={chosenSlot}
+                onSlotSelect={handleSlotSelect}
+                timeFormat={timeFormat}
+                onTimeFormatChange={setTimeFormat}
+                timezone={timeZone}
+                loading={slotsLoading}
+                serviceName={currentService.name}
+                duration={bookedService?.duration || currentService.duration}
+                location={bookedService?.location || currentService.location}
+                providers={offerings.length > 1 ? offeredBy : undefined}
+                providerId={offerings.length > 1 ? providerFilter : undefined}
+                onProviderChange={offerings.length > 1 ? changeProvider : undefined}
+                summary={(wide: boolean) => <BookingSummaryCard eyebrow={organization?.name} title={currentService.name} titleQa="booking-picker-service" facts={facts} compact={!wide} media={summaryMedia(wide)} />}
+                extras={Boolean(data?.message?.allow_quantity) && (
+                  <QuantityPicker className="bk-card" value={quantity} max={Math.max(1, Number(data?.message?.max_quantity) || 1)}
+                    onChange={(next) => { setQuantity(next); setChosenSlot(null); }} />
                 )}
-              </motion.div>
-            )}
-          </AnimatePresence>
+                action={{ label: t("bookingLayout.continue"), onClick: () => chosenSlot && setCurrentPhase("form") }}
+                footer={<PoweredBy variant="inline" className="!py-2 max-md:!pb-2" />}
+              />
+            </div>
+          )}
+
+          {currentPhase === "form" && bookedService && selectedSlot && (
+            <div className="px-4 py-6 sm:py-8">
+              {quote?.required && <PaymentSummary quote={quote} method={paymentMethod} onMethod={setPaymentMethod} />}
+              {!paymentBlocked && (
+                <BookingForm
+                  service={bookedService}
+                  selectedDate={selectedDate}
+                  selectedSlot={{
+                    id: "temp",
+                    start_time: selectedSlot.start_time,
+                    end_time: selectedSlot.end_time,
+                    available: true,
+                  }}
+                  timeFormat={timeFormat}
+                  timezone={timeZone}
+                  onSubmit={handleBookingSubmit}
+                  onBack={handlePhaseBack}
+                  loading={bookingLoading}
+                  quantity={quantity}
+                  media={photo ? <ServicePhoto asset={photo} sizes="88px" /> : undefined}
+                />
+              )}
+            </div>
+          )}
 
           <AnimatePresence>
-            {currentPhase === "success" && bookingResponse && currentService && selectedSlot && (
+            {currentPhase === "success" && bookingResponse && bookedService && selectedSlot && (
               <ConfirmationModal
                 open={true}
                 onClose={() => {
@@ -530,7 +613,7 @@ const OrganizationAppointmentV2 = () => {
                   setCurrentPhase("datetime");
                 }}
                 bookingResponse={bookingResponse}
-                service={currentService}
+                service={bookedService}
                 selectedDate={selectedDate}
                 selectedSlot={{
                   id: "temp",
@@ -542,7 +625,8 @@ const OrganizationAppointmentV2 = () => {
                 timezone={timeZone}
                 userEmail={bookingResponse.userEmail || ""}
                 userPhone={bookingResponse.userPhone}
-                brandStyle={bookingBrand.style}
+                brandStyle={skin.style}
+                skinAttrs={skin.attrs}
                 moment={bookingBrand.config ? <TemplateMoment rendererKey={bookingBrand.config.compiledDesign.layout.rendererKey} rendererVersion={bookingBrand.config.compiledDesign.layout.rendererVersion} /> : null}
               />
             )}

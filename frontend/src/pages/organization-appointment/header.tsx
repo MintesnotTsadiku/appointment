@@ -7,19 +7,24 @@ import { useTranslation } from "@/lib/i18n";
  * The sticky header of the organization scheduler: back, the business, the step and the mode switch.
  * Its height is fixed, so the time picker's sticky columns can start right under it.
  */
-export function BookingHeaderBar({ height, style, branded, recipe, home, homeLabel, name, logo, back, step, actions }: {
+export function BookingHeaderBar({ height, style, branded, recipe, home, homeLabel, name, logo, back, step, steps, actions, skin }: {
   height: string; style?: CSSProperties; branded: boolean; recipe?: string; home: string; homeLabel: string;
   name: string; logo?: string; back?: ReactNode; step?: string; actions?: ReactNode;
+  /** The step indicator ("Service → Time → Details → Done"); it replaces the plain step name. */
+  steps?: ReactNode;
+  /** `data-bk-skin` and `data-bk-frame` of the booking skin; the skin's CSS draws the header. */
+  skin?: Record<string, string>;
 }) {
   return (
     <header
-      className="sticky top-0 z-50 w-full backdrop-blur-xl"
+      className="bk-header sticky top-0 z-50 w-full backdrop-blur-xl"
       data-booking-branded={branded ? "true" : "false"}
       data-pe-recipe={recipe}
       data-qa="booking-header"
-      style={{ ...style, height, backgroundColor: "color-mix(in srgb, var(--bg-primary) 92%, transparent)", borderBottom: "1px solid var(--border-subtle)" }}
+      {...skin}
+      style={{ ...style, height }}
     >
-      <div className="mx-auto flex h-full w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
+      <div className="bk-header-inner mx-auto flex h-full w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
         <div className="flex min-w-0 items-center gap-3">
           {back}
           <a href={home} className="flex min-w-0 items-center gap-3 no-underline" aria-label={homeLabel}>
@@ -31,8 +36,9 @@ export function BookingHeaderBar({ height, style, branded, recipe, home, homeLab
             )}
           </a>
         </div>
+        {steps}
         <div className="booking-header-actions">
-          {step && <span className="booking-step" aria-live="polite">{step}</span>}
+          {step && !steps && <span className="booking-step" aria-live="polite">{step}</span>}
           {actions}
         </div>
       </div>

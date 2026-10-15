@@ -12,6 +12,7 @@ import CustomerInviteBanner from '@/components/growth-referrals/CustomerInviteBa
 import { usePlatformBrand } from '@/lib/platform-brand';
 import { useTheme } from '@/components/theme-provider';
 import { useBookingBrand } from '@/public-experience/bookingTheme';
+import { BookingBackdrop, useBookingSkin } from '@/pages/booking-v2/components/skin';
 import { useTranslation } from '@/lib/i18n';
 import { fill } from '@/pages/manage-booking/format';
 import '@/public-experience/platform.css';
@@ -36,6 +37,8 @@ export default function ProviderPage() {
   const page = forced ? undefined : data?.message;
   const failed = forced === 'error' || Boolean(error && (!error.httpStatus || error.httpStatus >= 500));
   const brand = useBookingBrand(page?.site_slug || undefined, resolvedTheme === 'dark' ? 'dark' : 'light');
+  // The template's booking skin (tokens, frames and the faint page background), as on organization pages.
+  const skin = useBookingSkin(brand.config, brand.style, resolvedTheme === 'dark' ? 'dark' : 'light');
 
   // A shared Amharic link (`?lang=am`) opens in Amharic. Once per visit: the dev double effect would
   // otherwise save the preference twice at the same moment.
@@ -97,7 +100,8 @@ export default function ProviderPage() {
 
   return <div className="booking-experience flex min-h-screen flex-col text-theme-primary" data-qa="provider-page"
     data-booking-branded={branded ? 'true' : 'false'} data-pe-recipe={brand.config?.recipeKey}
-    style={{ ...brand.style, '--bk-top': '4rem', backgroundColor: 'var(--bg-primary)' } as CSSProperties}>
+    {...skin.attrs} style={{ ...skin.style, '--bk-top': '4rem', backgroundColor: 'var(--bg-primary)' } as CSSProperties}>
+    <BookingBackdrop active={skin} />
     {page && <MetaTags title={fill(t('public.providerPage.metaTitle'), name)} description={providerBio(page, language) || undefined}
       canonical={`${window.location.origin}${PROVIDER_ROOT}${page.canonical_slug}`} />}
     <header className="sticky top-0 z-20 h-16 border-b border-theme-subtle backdrop-blur-md" style={{ backgroundColor: 'color-mix(in srgb, var(--bg-primary) 88%, transparent)' }}>

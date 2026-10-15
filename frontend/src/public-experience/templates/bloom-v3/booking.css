@@ -1,0 +1,65 @@
+/* Bloom v3 on the booking pages. Same salon as the landing page, quieter: no parallax, marquee or
+   moving image. Only rules under [data-bk-skin="bloom-v3"]; the shared flow owns the layout. */
+[data-bk-skin="bloom-v3"] {
+  --bk-frame-line: #d9a07b;
+  --bk-header-bg: color-mix(in srgb, #4a1f55 58%, #0d0510);
+  --bk-header-line: transparent;
+  --bk-backdrop-opacity: 0.2;
+  --bk-backdrop-blur: 22px;
+}
+[data-bk-skin="bloom-v3"][data-pe-mode="dark"],
+.dark [data-bk-skin="bloom-v3"] { --bk-backdrop-opacity: 0.34; --bk-header-bg: color-mix(in srgb, #1a0f1d 82%, #3b1645); }
+
+/* The bar of the landing page: deep plum in both modes with the marigold line of the handoff. */
+[data-bk-skin="bloom-v3"].bk-header .bk-header-inner {
+  --text-primary: #fff7ee;
+  --text-secondary: rgba(255, 247, 238, 0.8);
+  --text-muted: rgba(255, 247, 238, 0.72);
+  --border-default: rgba(255, 247, 238, 0.24);
+  --border-subtle: rgba(255, 247, 238, 0.16);
+  --bg-elevated: rgba(255, 247, 238, 0.08);
+  --accent-primary: #f5a524;
+  --pe-color-on-primary: #2a1430;
+  color: #fff7ee;
+}
+[data-bk-skin="bloom-v3"].bk-header::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 2px;
+  background: linear-gradient(90deg, #f5a524, #e7a1a8 55%, #d9a07b);
+}
+[data-bk-skin="bloom-v3"].bk-header [data-qa="language-toggle"] svg,
+[data-bk-skin="bloom-v3"].bk-header [data-qa="language-toggle"] span { color: rgba(255, 247, 238, 0.86); }
+[data-bk-skin="bloom-v3"].bk-header [data-qa="language-toggle"]:hover { background: rgba(255, 247, 238, 0.1); }
+[data-bk-skin="bloom-v3"].bk-header :focus-visible { outline-color: #ffd58a; }
+[data-bk-skin="bloom-v3"].bk-header .pe-brand-logo { border-radius: 999px; }
+
+/* The page: the band photo's echo replaces the shared grid pattern. */
+.booking-experience[data-bk-skin="bloom-v3"] { background-image: none; }
+.booking-experience[data-bk-skin="bloom-v3"]::before { display: none; }
+
+/* Headings: the poster face; Amharic keeps the condensed black Ethiopic face with more leading. */
+[data-bk-skin="bloom-v3"] h1,
+[data-bk-skin="bloom-v3"] h2 { font-weight: 400; letter-spacing: 0.005em; }
+[data-bk-skin="bloom-v3"]:lang(am) h1,
+[data-bk-skin="bloom-v3"]:lang(am) h2,
+[data-bk-skin="bloom-v3"] :lang(am) h1,
+[data-bk-skin="bloom-v3"] :lang(am) h2 { font-weight: 900; letter-spacing: 0; line-height: 1.22; }
+[data-bk-skin="bloom-v3"] .bk-eyebrow { color: var(--accent-primary); letter-spacing: 0.16em; }
+[data-bk-skin="bloom-v3"] :lang(am) .bk-eyebrow { letter-spacing: 0.04em; }
+
+/* Cards: soft paper with a hairline; the chosen card or slot is plum, never marigold. */
+[data-bk-skin="bloom-v3"] .bk-card { border-radius: 24px; }
+[data-bk-skin="bloom-v3"] .bk-slot { border-radius: 999px; padding-inline: 1.125rem; }
+[data-bk-skin="bloom-v3"] .bk-day { border-radius: 999px 999px 14px 14px; }
+
+/* Steps: a small round-top mirror per step. */
+.b3k-mark { flex: none; overflow: visible; }
+.b3k-mark-frame { fill: none; stroke: currentColor; stroke-width: 1.4; opacity: 0.7; }
+.b3k-mark-num { fill: currentColor; font: 700 10px/1 var(--booking-font-body, sans-serif); }
+.b3k-mark-tick { fill: none; stroke: #2a1430; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.b3k-mark[data-state="current"] .b3k-mark-frame { fill: #f5a524; stroke: #f5a524; opacity: 1; }
+.b3k-mark[data-state="current"] .b3k-mark-num { fill: #2a1430; }
+.b3k-mark[data-state="done"] .b3k-mark-frame { fill: #d9a07b; stroke: #d9a07b; opacity: 1; }
+[data-bk-skin="bloom-v3"] .bk-steps li + li::before { background: linear-gradient(90deg, #d9a07b, rgba(217, 160, 123, 0.3)); }

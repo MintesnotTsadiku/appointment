@@ -27,14 +27,18 @@ scenarios:
     - type: network_idle
   actions:
   - action: wait_for
-    selector: '[data-qa="booking-service"]:has-text("Meeting room hire (QA)"):has-text("Room
-      A (QA)")'
+    selector: '[data-qa="booking-service"]:has-text("Meeting room hire (QA)")'
   - action: screenshot
     name: pool_guest_en_desktop-1-services.png
     full_page: true
   - action: click
-    selector: '[data-qa="booking-service"]:has-text("Meeting room hire (QA)"):has-text("Room
-      A (QA)")'
+    selector: '[data-qa="booking-service"]:has-text("Meeting room hire (QA)")'
+  # One card per service: Room A is chosen in the time picker's filter.
+  - action: wait_for
+    selector: '[data-qa="booking-provider-option"]:has-text("Room A (QA)")'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-provider-option"]:has-text("Room A (QA)")'
   - action: wait_for
     selector: '[data-qa="booking-date"][data-qa-date="{qa_pool_day}"]:not([disabled])'
     timeout_ms: 20000
@@ -107,14 +111,18 @@ scenarios:
   - action: open_url
     url: /schedule/org/bloom-studio
   - action: wait_for
-    selector: '[data-qa="booking-service"]:has-text("Meeting room hire (QA)"):has-text("Room
-      A (QA)")'
+    selector: '[data-qa="booking-service"]:has-text("Meeting room hire (QA)")'
   - action: screenshot
     name: pool_guest_am_mobile-1-services.png
     full_page: true
   - action: click
-    selector: '[data-qa="booking-service"]:has-text("Meeting room hire (QA)"):has-text("Room
-      A (QA)")'
+    selector: '[data-qa="booking-service"]:has-text("Meeting room hire (QA)")'
+  # One card per service: Room A is chosen in the time picker's filter.
+  - action: wait_for
+    selector: '[data-qa="booking-provider-option"]:has-text("Room A (QA)")'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-provider-option"]:has-text("Room A (QA)")'
   - action: wait_for
     selector: '[data-qa="booking-date"][data-qa-date="{qa_pool_day}"]:not([disabled])'
     timeout_ms: 20000

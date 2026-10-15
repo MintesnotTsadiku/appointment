@@ -86,3 +86,16 @@ export function publicRootForSlug(slug?: string): string {
   if (!slug || RESERVED_FIRST_SEGMENTS.has(slug.toLowerCase())) return "/";
   return "/" + encodeURIComponent(slug);
 }
+
+/** A scheduler path in the website's language: the booking pages open in Amharic after an Amharic page. */
+export function schedulerHref(path: string | null | undefined, locale: string | undefined): string {
+  if (!path || !locale || locale === "en" || !path.startsWith("/schedule/")) return path || "";
+  return `${path}${path.includes("?") ? "&" : "?"}lang=${encodeURIComponent(locale)}`;
+}
+
+/** The snapshot's booking paths in its own language. */
+export function withBookingLanguage<T extends { locale?: string; bookingPath?: string | null; bookingPaths?: Record<string, string> }>(snapshot: T): T {
+  if (!snapshot.locale || snapshot.locale === "en") return snapshot;
+  const paths = Object.fromEntries(Object.entries(snapshot.bookingPaths || {}).map(([key, value]) => [key, schedulerHref(value, snapshot.locale)]));
+  return { ...snapshot, bookingPath: snapshot.bookingPath ? schedulerHref(snapshot.bookingPath, snapshot.locale) : snapshot.bookingPath, bookingPaths: paths };
+}

@@ -486,7 +486,15 @@
 .b3-handoff-panel { view-transition-name: pe-book; }
 .b3-handoff-panel h1 { font-size: clamp(2.4rem, 1.5rem + 2.6vw, 4.2rem); line-height: 1.02; }
 .b3-handoff-menu { display: grid; gap: 12px; }
-.b3-handoff-menu li { display: grid; grid-template-columns: 64px minmax(0, 1fr); grid-template-areas: "thumb name" "thumb meta"; column-gap: 16px; align-items: center; padding: 14px 18px; border-radius: 24px; background: rgba(28, 10, 32, .5); border: 1px solid rgba(255, 247, 238, .16); backdrop-filter: blur(14px); }
+.b3-handoff-row { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; grid-template-areas: "thumb name go" "thumb meta go"; column-gap: 16px; align-items: center; min-height: 92px; padding: 14px 18px; border-radius: 24px; color: inherit; text-decoration: none; background: rgba(28, 10, 32, .5); border: 1px solid rgba(255, 247, 238, .16); backdrop-filter: blur(14px); transition: border-color .2s, background-color .2s, transform .2s var(--b3-ease); }
+a.b3-handoff-row:hover { border-color: color-mix(in srgb, var(--b3-gold) 70%, transparent); background: rgba(28, 10, 32, .62); transform: translateX(4px); }
+a.b3-handoff-row:active { transform: translateX(2px) scale(.99); }
+.b3-handoff-row .b3-menu-thumb { grid-area: thumb; }
+.b3-handoff-row .b3-menu-name { grid-area: name; }
+.b3-handoff-row .b3-menu-meta { grid-area: meta; }
+.b3-handoff-go { grid-area: go; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 999px; color: var(--b3-gold-ink); background: var(--b3-gold); font-weight: 800; transition: transform .2s var(--b3-ease); }
+a.b3-handoff-row:hover .b3-handoff-go { transform: translateX(3px); }
+@media (prefers-reduced-motion: reduce) { .b3-handoff-row, .b3-handoff-go { transition: none; } a.b3-handoff-row:hover, a.b3-handoff-row:active, a.b3-handoff-row:hover .b3-handoff-go { transform: none; } }
 .b3-handoff-menu .b3-menu-thumb { box-shadow: 0 0 0 2px rgba(255, 247, 238, .6); }
 .b3-handoff-menu .b3-menu-name { font-size: 1.6rem; }
 .b3-handoff-menu .b3-menu-meta { color: var(--b3-on-stage-muted); }

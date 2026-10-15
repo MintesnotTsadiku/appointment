@@ -27,12 +27,15 @@ scenarios:
     assertions:
     - type: network_idle
   actions:
+  # One card per service: choose the stylist in the provider row, then the service.
   - action: wait_for
-    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Eden
-      Tadesse")'
+    selector: '[data-qa="booking-provider"]:has-text("Eden")'
   - action: click
-    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Eden
-      Tadesse")'
+    selector: '[data-qa="booking-provider"]:has-text("Eden")'
+  - action: wait_for
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Eden")'
+  - action: click
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape")'
   - action: wait_for
     selector: '[data-qa="booking-date"][data-qa-date="{qa_res_day}"]'
   - action: click
@@ -44,12 +47,15 @@ scenarios:
     full_page: true
   - action: open_url
     url: /schedule/org/bloom-studio
+  # One card per service: choose the stylist in the provider row, then the service.
   - action: wait_for
-    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Rahel
-      Girma")'
+    selector: '[data-qa="booking-provider"]:has-text("Rahel")'
   - action: click
-    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Rahel
-      Girma")'
+    selector: '[data-qa="booking-provider"]:has-text("Rahel")'
+  - action: wait_for
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Rahel")'
+  - action: click
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape")'
   - action: wait_for
     selector: '[data-qa="booking-date"][data-qa-date="{qa_res_day}"]'
   - action: click
@@ -75,12 +81,15 @@ scenarios:
     assertions:
     - type: network_idle
   actions:
+  # One card per service: choose the stylist in the provider row, then the service.
   - action: wait_for
-    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Eden
-      Tadesse")'
+    selector: '[data-qa="booking-provider"]:has-text("Eden")'
   - action: click
-    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Eden
-      Tadesse")'
+    selector: '[data-qa="booking-provider"]:has-text("Eden")'
+  - action: wait_for
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Eden")'
+  - action: click
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape")'
   - action: wait_for
     selector: '[data-qa="booking-date"][data-qa-date="{qa_res_day}"]'
   - action: click
@@ -92,12 +101,15 @@ scenarios:
     full_page: true
   - action: open_url
     url: /schedule/org/bloom-studio
+  # One card per service: choose the stylist in the provider row, then the service.
   - action: wait_for
-    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Rahel
-      Girma")'
+    selector: '[data-qa="booking-provider"]:has-text("Rahel")'
   - action: click
-    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Rahel
-      Girma")'
+    selector: '[data-qa="booking-provider"]:has-text("Rahel")'
+  - action: wait_for
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Rahel")'
+  - action: click
+    selector: '[data-qa="booking-service"]:has-text("Cut and shape")'
   - action: wait_for
     selector: '[data-qa="booking-date"][data-qa-date="{qa_res_day}"]'
   - action: click
@@ -130,12 +142,15 @@ scenarios:
       status: 200
   - action: open_url
     url: /schedule/org/bloom-studio
+  # One card per service: choose the stylist in the provider row, then the service.
   - action: wait_for
-    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Eden
-      Tadesse")'
+    selector: '[data-qa="booking-provider"]:has-text("Eden")'
   - action: click
-    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Eden
-      Tadesse")'
+    selector: '[data-qa="booking-provider"]:has-text("Eden")'
+  - action: wait_for
+    selector: '[data-qa="booking-service"]:has-text("ቁርጥና ቅርጽ"):has-text("Eden")'
+  - action: click
+    selector: '[data-qa="booking-service"]:has-text("ቁርጥና ቅርጽ")'
   - action: wait_for
     selector: '[data-qa="booking-date"][data-qa-date="{qa_res_day}"]'
   - action: click
@@ -147,12 +162,15 @@ scenarios:
     full_page: true
   - action: open_url
     url: /schedule/org/bloom-studio
+  # One card per service: choose the stylist in the provider row, then the service.
   - action: wait_for
-    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Rahel
-      Girma")'
+    selector: '[data-qa="booking-provider"]:has-text("Rahel")'
   - action: click
-    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Rahel
-      Girma")'
+    selector: '[data-qa="booking-provider"]:has-text("Rahel")'
+  - action: wait_for
+    selector: '[data-qa="booking-service"]:has-text("ቁርጥና ቅርጽ"):has-text("Rahel")'
+  - action: click
+    selector: '[data-qa="booking-service"]:has-text("ቁርጥና ቅርጽ")'
   - action: wait_for
     selector: '[data-qa="booking-date"][data-qa-date="{qa_res_day}"]'
   - action: click
@@ -185,12 +203,15 @@ scenarios:
       status: 200
   - action: open_url
     url: /schedule/org/bloom-studio
+  # One card per service: choose the stylist in the provider row, then the service.
   - action: wait_for
-    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Eden
-      Tadesse")'
+    selector: '[data-qa="booking-provider"]:has-text("Eden")'
   - action: click
-    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Eden
-      Tadesse")'
+    selector: '[data-qa="booking-provider"]:has-text("Eden")'
+  - action: wait_for
+    selector: '[data-qa="booking-service"]:has-text("ቁርጥና ቅርጽ"):has-text("Eden")'
+  - action: click
+    selector: '[data-qa="booking-service"]:has-text("ቁርጥና ቅርጽ")'
   - action: wait_for
     selector: '[data-qa="booking-date"][data-qa-date="{qa_res_day}"]'
   - action: click
@@ -202,12 +223,15 @@ scenarios:
     full_page: true
   - action: open_url
     url: /schedule/org/bloom-studio
+  # One card per service: choose the stylist in the provider row, then the service.
   - action: wait_for
-    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Rahel
-      Girma")'
+    selector: '[data-qa="booking-provider"]:has-text("Rahel")'
   - action: click
-    selector: '[data-qa="booking-service"]:has-text("Cut and shape"):has-text("Rahel
-      Girma")'
+    selector: '[data-qa="booking-provider"]:has-text("Rahel")'
+  - action: wait_for
+    selector: '[data-qa="booking-service"]:has-text("ቁርጥና ቅርጽ"):has-text("Rahel")'
+  - action: click
+    selector: '[data-qa="booking-service"]:has-text("ቁርጥና ቅርጽ")'
   - action: wait_for
     selector: '[data-qa="booking-date"][data-qa-date="{qa_res_day}"]'
   - action: click

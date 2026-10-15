@@ -4164,7 +4164,9 @@
     "howMany": "ስንት",
     "fewer": "አንድ ቀንስ",
     "more": "አንድ ጨምር",
-    "times": "× {0}"
+    "times": "× {0}",
+    "anyProvider": "ማንኛውም ባለሙያ",
+    "places": "{0} ቦታዎች"
   },
   "payments": {
     "title": "ክፍያ",
@@ -4272,7 +4274,9 @@
     "providerOne": "1 አገልግሎት ሰጪ",
     "providerMany": "{0} አገልግሎት ሰጪዎች",
     "serviceOne": "1 አገልግሎት",
-    "serviceMany": "{0} አገልግሎቶች"
+    "serviceMany": "{0} አገልግሎቶች",
+    "priceFrom": "ከ{0} ጀምሮ",
+    "chooseTime": "ሰዓት ይምረጡ"
   },
   "schedulerPage": {
     "stepService": "አገልግሎት ይምረጡ",
@@ -6482,5 +6486,13 @@
       "allCategories": "ሁሉም ምድቦች",
       "showNoDeadline": "የማብቂያ ጊዜ የሌላቸውን አሳይ"
     }
+  },
+  "bookingSteps": {
+    "label": "የቀጠሮ ደረጃዎች",
+    "service": "አገልግሎት",
+    "time": "ሰዓት",
+    "details": "ዝርዝር",
+    "done": "ተጠናቀቀ",
+    "position": "ደረጃ {0} ከ{1}፦ {2}"
   }
 }

@@ -27,6 +27,14 @@
   border-radius: var(--booking-radius, 1rem);
 }
 
+/* ------------------------------------------------------------- summary with the service photo */
+
+.bk-summary[data-media="true"][data-compact="false"] .bk-summary-media { margin-bottom: 1rem; }
+.bk-summary[data-media="true"][data-compact="false"] .bk-photo { width: 100%; height: 9.5rem; }
+.bk-summary[data-media="true"][data-compact="true"] { display: grid; grid-template-columns: 3.5rem minmax(0, 1fr); gap: 0.875rem; align-items: center; }
+/* Small on phones, so the photo is not the page's largest paint (it loads after the page data). */
+.bk-summary[data-media="true"][data-compact="true"] .bk-photo { width: 3.5rem; height: 4.25rem; }
+
 /* ------------------------------------------------------------- wide */
 
 .bk-grid {
@@ -153,15 +161,17 @@
   border-color: var(--accent-primary);
   box-shadow: 0 8px 22px color-mix(in srgb, var(--accent-primary) 32%, transparent);
 }
+/* Taken times stay in place (so the day keeps its rhythm) but step back: no frame, no line-through,
+   no provider. Their state is in the accessible name ("taken"). */
 .bk-slot:disabled {
-  cursor: not-allowed;
+  cursor: default;
   color: var(--text-muted);
   background: transparent;
-  border-style: dashed;
-  border-color: var(--border-subtle);
-  opacity: 0.6;
+  border-color: transparent;
+  opacity: 0.42;
 }
-.bk-slot:disabled .bk-slot-time { text-decoration: line-through; text-decoration-thickness: 1px; }
+.bk-slot:disabled .bk-slot-time { font-weight: 500; }
+.bk-slot:disabled .bk-slot-who { display: none; }
 .bk-slot-time { font-size: 1rem; font-weight: 650; font-variant-numeric: tabular-nums; line-height: 1.25; }
 .bk-slot-who { max-width: 100%; overflow: hidden; color: var(--text-secondary); font-size: 0.75rem; text-overflow: ellipsis; white-space: nowrap; }
 .bk-slot[aria-pressed="true"] .bk-slot-who { color: inherit; opacity: 0.85; }
@@ -378,13 +388,14 @@
   justify-content: center;
   gap: 0.5rem;
   padding: 0 1.375rem;
-  color: var(--pe-color-on-primary, #fff);
-  background: var(--accent-primary);
-  border-radius: calc(var(--booking-radius, 1rem) * 0.7);
-  font-weight: 650;
-  transition: transform 140ms ease, background-color 140ms ease;
+  color: var(--bk-action-ink, var(--pe-color-on-primary, #fff));
+  background: var(--bk-action-bg, var(--accent-primary));
+  border-radius: var(--bk-action-radius, calc(var(--booking-radius, 1rem) * 0.7));
+  box-shadow: var(--bk-action-shadow, none);
+  font-weight: 700;
+  transition: transform 140ms ease, filter 140ms ease;
 }
-.bk-bar-go:hover:not(:disabled) { background: var(--accent-primary-hover, var(--accent-primary)); transform: translateX(1px); }
+.bk-bar-go:hover:not(:disabled) { filter: brightness(1.05); transform: translateX(1px); }
 .bk-bar-go:disabled { opacity: 0.6; cursor: progress; }
 .bk-bar-go:focus-visible { outline: 3px solid var(--accent-primary); outline-offset: 3px; }
 /* Wide: the bar sits under the slot panel, so the side column keeps its full height. */
@@ -411,3 +422,45 @@
 @media (prefers-reduced-motion: reduce) {
   .bk-aside, .bk-panel, .bk-slot, .bk-chip, .bk-day, .bk-bar-go, .bk-bar-space { transition: none; }
 }
+
+/* ------------------------------------------------------------- service chooser cards */
+
+.bk-service-grid {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 640px) { .bk-service-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1024px) { .bk-service-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.bk-service {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  align-items: start;
+  gap: 1rem;
+  padding: 1rem;
+  transition: border-color 150ms ease, transform 150ms ease;
+}
+.bk-service[data-photo="false"] { grid-template-columns: minmax(0, 1fr); }
+.bk-service:hover { border-color: var(--accent-primary); transform: translateY(-2px); }
+.bk-service:focus-visible { outline: 3px solid var(--accent-primary); outline-offset: 2px; }
+.bk-service-photo { width: 5.5rem; height: 6.75rem; }
+.bk-service-body { display: flex; min-width: 0; height: 100%; flex-direction: column; gap: 0.625rem; }
+.bk-service-name { color: var(--text-primary); font-family: var(--booking-font-display); font-size: 1.25rem; line-height: 1.2; text-wrap: balance; }
+.bk-service-text {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.55;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+@media (min-width: 640px) {
+  .bk-service { grid-template-columns: minmax(0, 1fr); padding: 0.875rem 0.875rem 1.125rem; }
+  .bk-service-photo { width: 100%; height: 12rem; }
+  .bk-service-body { padding-inline: 0.375rem; }
+}
+@media (prefers-reduced-motion: reduce) { .bk-service { transition: none; } .bk-service:hover { transform: none; } }

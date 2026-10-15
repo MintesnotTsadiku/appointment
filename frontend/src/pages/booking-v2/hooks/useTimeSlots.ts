@@ -17,6 +17,8 @@ interface UseTimeSlotsParams {
   enabled?: boolean;
   /** Party size; times are offered only when the room or equipment units for it fit. */
   quantity?: number;
+  /** The service's times with every provider (`scheduler.booking.service_slots`); each slot names its offering. */
+  allProviders?: boolean;
 }
 
 interface TimeSlotsResponse {
@@ -25,6 +27,8 @@ interface TimeSlotsResponse {
     end_time: string;
     provider_id?: string;
     provider_name?: string;
+    /** The offering of this time (service with all providers). */
+    offering_id?: string;
     booked?: boolean; // Support for booked status from backend
     available?: boolean; // Support for availability from backend
   }>;
@@ -53,6 +57,7 @@ export function useTimeSlots({
   serviceId,
   enabled = true,
   quantity = 1,
+  allProviders = false,
 }: UseTimeSlotsParams) {
   const [slots, setSlots] = useState<TimeSlot[]>([]);
 
@@ -66,7 +71,10 @@ export function useTimeSlots({
     : null;
 
   // Build API parameters
-  const apiParams = formattedDate && durationId
+  const allParams = allProviders && formattedDate && durationId && organizationId
+    ? { offering_id: durationId, date: formattedDate, organization_id: organizationId, ...(quantity > 1 ? { quantity: String(quantity) } : {}) }
+    : null;
+  const apiParams = allParams ?? (formattedDate && durationId
     ? {
         duration_id: durationId,
         date: formattedDate,
@@ -81,15 +89,15 @@ export function useTimeSlots({
             }
           : {}),
       }
-    : null;
+    : null);
 
   // Fetch time slots from API
   const { data, isLoading, error, mutate } = useFrappeGetCall<{
     message: TimeSlotsResponse;
   }>(
-    "appointment.api.personal_meet.get_time_slots",
-    apiParams,
-    apiParams ? undefined : null, // Don't make call if params are null
+    allParams ? "appointment.scheduler.booking.service_slots" : "appointment.api.personal_meet.get_time_slots",
+    apiParams ?? undefined,
+    apiParams && enabled ? undefined : null, // Don't make call if params are null
     {
       revalidateOnFocus: false,
       errorRetryCount: 3,
@@ -145,6 +153,7 @@ export function useTimeSlots({
               id: slot.provider_id,
               name: slot.provider_name,
             } : undefined,
+            offeringId: slot.offering_id,
             available: isAvailable,
             isPast,
             booked: isBooked,

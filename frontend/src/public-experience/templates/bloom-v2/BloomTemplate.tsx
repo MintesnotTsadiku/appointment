@@ -16,12 +16,18 @@ import "./bloom.css";
  * Radius system: 4px everywhere. Marigold fills booking actions and nothing else.
  */
 
-function PriceBoard({ items, locale, chrome, linkRows }: { items: ContentRecord[]; locale: string; chrome: PublicChrome; linkRows: boolean }) {
+/** On the handoff, a service row links to that service's own scheduler. */
+function own(paths: Record<string, string> | undefined, item: ContentRecord) {
+  const href = typeof item.id === "string" ? paths?.[item.id] : undefined;
+  return href ? { href, label: "" } : null;
+}
+
+function PriceBoard({ items, locale, chrome, linkRows, paths }: { items: ContentRecord[]; locale: string; chrome: PublicChrome; linkRows: boolean; paths?: Record<string, string> }) {
   return <ul className="bl-prices">
     {items.map((item, index) => {
       const minutes = durationMinutes(item.durationMinutes);
       const price = formatPrice(item.price, item.currency, locale);
-      const choose = linkRows ? action(item.action, locale) : null;
+      const choose = linkRows ? action(item.action, locale) : own(paths, item);
       const name = localized(item.name, locale);
       return <li key={String(item.id || index)} data-reveal style={{ "--i": index } as CSSProperties}>
         <div className="bl-price-name">
@@ -220,7 +226,7 @@ export function BloomBooking({ snapshot, locale, applicationName, publicRoot, ro
       </div>
       <div className="bl-handoff-side">
         {image ? <img src={image.src} alt={image.alt} /> : null}
-        {records(services.items).length ? <PriceBoard items={records(services.items)} locale={locale} chrome={chrome} linkRows={false} /> : null}
+        {records(services.items).length ? <PriceBoard items={records(services.items)} locale={locale} chrome={chrome} linkRows={false} paths={snapshot.bookingPaths} /> : null}
       </div>
     </main>
   </div>;

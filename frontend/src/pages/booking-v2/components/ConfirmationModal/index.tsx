@@ -38,6 +38,8 @@ interface ConfirmationModalProps {
   brandStyle?: CSSProperties;
   /** The template's success moment (decoration from the published template package), behind the header. */
   moment?: ReactNode;
+  /** `data-bk-skin` and `data-bk-frame` of the booking skin: the dialog is outside the page, so it carries them itself. */
+  skinAttrs?: Record<string, string>;
 }
 
 export function ConfirmationModal({
@@ -53,6 +55,7 @@ export function ConfirmationModal({
   userPhone,
   brandStyle,
   moment,
+  skinAttrs,
 }: ConfirmationModalProps) {
   const { t, language } = useTranslation();
   const onlineLabel = useOnlineLabel();
@@ -78,7 +81,7 @@ export function ConfirmationModal({
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <DialogContent data-booking-confirmation="true" style={brandStyle} className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent data-booking-confirmation="true" {...skinAttrs} style={brandStyle} className="max-w-2xl max-h-[90vh] overflow-y-auto">
         {/* Success Animation Header */}
         <div className="relative">
           {moment}
