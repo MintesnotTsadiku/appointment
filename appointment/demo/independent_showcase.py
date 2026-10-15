@@ -41,6 +41,8 @@ class Place:
     city: str = "Addis Ababa"
     platform: str = ""
     meeting_link: str = ""
+    name_am: str = ""  # Location.location_name_am
+    address_am: str = ""  # Location.address_am: the whole address in one line
 
 
 @dataclass(frozen=True)
@@ -141,6 +143,7 @@ def build(showcase, record):
             provider = _provider(showcase, record)
             places, services, offerings = _sessions(showcase, provider, record)
             apply_profile(showcase, provider)
+            apply_places(showcase, places)
             _as(showcase.owner_email, _publish_booking, provider)
             site = _website(showcase, provider, places, services, record)
     finally:
@@ -161,6 +164,7 @@ def refresh(showcase, built, record):
     try:
         with placeholder_numbers():
             apply_profile(showcase, built["provider"])
+            apply_places(showcase, built["places"])
             _upgrade_template(showcase, built["public_site"])
             site = frappe.get_doc("Public Site", built["public_site"])
             starter = {row.section_type: json.loads(row.content_json) for row in site.sections}
@@ -191,6 +195,13 @@ def apply_profile(showcase, provider):
                 "bio": showcase.bio, "bio_am": showcase.bio_am, "display_name_am": showcase.full_name_am})
     doc.save(ignore_permissions=True)
     frappe.db.set_value("User", showcase.owner_email, "user_image", showcase.portrait)
+
+
+def apply_places(showcase, places):
+    """The Amharic names (and the office's Amharic address) of the showcase's places."""
+    for meet, place in (("in_person", showcase.office), ("online", showcase.online)):
+        if places.get(meet):
+            frappe.db.set_value("Location", places[meet], {"location_name_am": place.name_am, "address_am": place.address_am})
 
 
 def apply_website(showcase, site, provider, places, services, starter):

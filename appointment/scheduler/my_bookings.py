@@ -19,7 +19,7 @@ from frappe.rate_limiter import rate_limit
 from frappe.utils import cint, escape_html, get_datetime, get_url
 from frappe.utils.password import get_encryption_key
 
-from appointment.scheduler import business_owner, customer_identity, online_meeting, self_service
+from appointment.scheduler import business_owner, customer_identity, localized_names, online_meeting, self_service
 
 LINK_SECONDS = 30 * 60
 SESSION_SECONDS = 7 * 24 * 3600
@@ -170,7 +170,11 @@ def bookings(slug=None, session=None, email=None, offering=None):
         (upcoming if entry["upcoming"] else past).append(entry)
     _add_book_again(owner, upcoming, past)
     upcoming.reverse()  # Soonest first.
-    return {"valid": True, "email": address, "business_name": owner.display_name, "upcoming": upcoming, "past": past}
+    return {"valid": True, "email": address, "business_name": owner.display_name,
+            # The business name as `{en, am}`; Amharic pages show the Amharic name.
+            "local_business_name": localized_names.owner_names("Organization" if owner.organization else "Provider",
+                                                               owner.organization or owner.provider),
+            "upcoming": upcoming, "past": past}
 
 
 def _add_book_again(owner, upcoming, past):
@@ -207,6 +211,8 @@ def _row(row, now):
         reference=row.appointment_id or row.name,
         service=frappe.db.get_value("Service", row.service, "service_name"),
         provider=frappe.db.get_value("Provider", row.provider, "full_name") if row.provider else None,
+        # The provider's public name as `{en, am}` (Provider.display_name_am).
+        local_provider=_provider_names(row.provider),
         resources=[name for name in rooms if name],
         starts_at=start.isoformat() + "Z",
         timezone=row.booking_timezone,
@@ -222,10 +228,22 @@ def _row(row, now):
     )
 
 
+def _provider_names(provider):
+    if not provider:
+        return {}
+    row = frappe.db.get_value("Provider", provider, ["display_name", "full_name", "provider_name", "display_name_am"], as_dict=True)
+    return localized_names.provider_names(row) if row else {}
+
+
 # ---------------------------------------------------------------------------
 # Email
 # ---------------------------------------------------------------------------
 def _send_link(business, email, language):
+    # The business name in the message language (an Amharic name when the business has one).
+    name = localized_names.for_language(
+        localized_names.owner_names("Organization" if business.organization else "Provider", business.organization or business.provider),
+        language, business.display_name)
+
     def t(text, *args):
         return _(text, lang=language).format(*(escape_html(str(arg)) for arg in args))
 
@@ -234,8 +252,8 @@ def _send_link(business, email, language):
     context = dict(
         lang=language,
         heading=t("Your bookings"),
-        intro=t("Hello, use this link to see your bookings with {0}. It works once, for 30 minutes.", business.display_name),
-        business_name=escape_html(business.display_name),
+        intro=t("Hello, use this link to see your bookings with {0}. It works once, for 30 minutes.", name),
+        business_name=escape_html(name),
         logo_url=_public_logo(business.logo),
         details=[],
         manage_label=t("See my bookings"),
@@ -243,12 +261,12 @@ def _send_link(business, email, language):
         booking_label=t("Open the booking page"),
         booking_url=escape_html(get_url(business.book_path)) if business.book_path else "",
         contact=t("Questions? Contact {0}.", " · ".join(filter(None, [business.phone, business.email]))) if (business.phone or business.email) else "",
-        footer=t("You asked for this link on the {0} booking page. If you did not, you can ignore this email.", business.display_name),
+        footer=t("You asked for this link on the {0} booking page. If you did not, you can ignore this email.", name),
         opt_out_label="", opt_out_url="",
     )
     frappe.sendmail(
         recipients=[email],
-        subject=_("Your bookings with {0}", lang=language).format(business.display_name),
+        subject=_("Your bookings with {0}", lang=language).format(name),
         message=frappe.render_template(TEMPLATE, context),
         reply_to=business.reply_to or None,
         reference_doctype="Organization" if business.organization else "Provider",

@@ -1250,7 +1250,12 @@
         "providerHint": "Select which provider this location belongs to",
         "services": "Link to Services (Optional)",
         "servicesHint": "Select which services are available at this location",
-        "onlineNamePlaceholder": "e.g., Online video room"
+        "onlineNamePlaceholder": "e.g., Online video room",
+        "nameAm": "Name in Amharic (optional)",
+        "nameAmPlaceholder": "e.g., ቦሌ ቅርንጫፍ",
+        "addressAm": "Address in Amharic (optional)",
+        "addressAmPlaceholder": "e.g., ቦሌ መንገድ፣ ኤድና ሞል አጠገብ፣ አዲስ አበባ",
+        "amharicHint": "Amharic pages and messages show the Amharic name and address. When a box is empty, they show the English one."
       },
       "typeLabel": "How do clients meet here?",
       "typeInPerson": "In person",
@@ -3958,6 +3963,7 @@
     "visit": "Visit",
     "questions": "Questions",
     "backToSite": "Back to site",
+    "backToSiteShort": "Site",
     "dark": "Dark",
     "light": "Light",
     "switchToDark": "Switch to dark mode",
@@ -4355,7 +4361,8 @@
     "phoneInvalid": "Please enter a valid phone number",
     "phoneHint": "The business uses this number to confirm your booking and reach you.",
     "emailOptionalHint": "Optional. Add it to get your confirmation by email too.",
-    "participantsPhoneHint": "Type each person's phone number and press Enter or a comma."
+    "participantsPhoneHint": "Type each person's phone number and press Enter or a comma.",
+    "total": "Total"
   },
   "serviceSelector": {
     "title": "Select a service",

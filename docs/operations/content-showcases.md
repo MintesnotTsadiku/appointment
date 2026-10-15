@@ -58,6 +58,12 @@ next to it:
 | Provider | `display_name_am` | Service chooser chips and avatars, time picker, booking summary and bar, details step, confirmation, provider page, directory |
 | Organization | `organization_name_am`, `description_am` | Chooser heading and description, booking header, directory, link previews (`og:title`, `og:site_name`) |
 | Public Site | `site_title_am` | Website header and footer on Amharic pages, `/book`, the booking header |
+| Location | `location_name_am`, `address_am` (the whole address, one line) | Booking summary and details, provider page places, independent booking, manage booking, Amharic emails |
+
+Manage booking (`self_service` view, `local_names`), My bookings (`local_business_name`, `local_provider`) and
+the Amharic customer emails and SMS (`notification_email`, `notification_sms`, the My bookings link email) use the
+Amharic business, provider and place names when they exist. English pages and messages keep the English
+fields they showed before. An Amharic SMS still goes through the segment guard.
 
 When an Amharic value is empty, the page shows the English value. The public
 APIs send the names as `{en, am}` (`appointment/scheduler/localized_names.py`),
@@ -74,10 +80,13 @@ Owners edit the names in English and Amharic side by side:
   (`public_names.save_business_names`, managers only).
 - Settings › Profile, "Name on booking pages": the signed-in provider's own name.
 - Website setup, "Website name in Amharic".
+- Settings › Locations, the place form: "Name in Amharic" next to the name, and "Address in Amharic" under the
+  address (`locations.save`, `location_name_am`, `address_am`; left out, they keep their values).
 
-The seeder (`CONTENT_VERSION` 7, Ergata showcase version 3) fills the Amharic
-names of the five organization showcases, their ten providers and the Ergata
-practice. A repeat run writes the same values.
+The seeder (`CONTENT_VERSION` 8, Ergata showcase version 6) fills the Amharic
+names of the five organization showcases, their ten providers, their nine places
+(name and address, from the website's own translations) and the Ergata practice
+and its two places. A repeat run writes the same values.
 
 ### Portraits
 

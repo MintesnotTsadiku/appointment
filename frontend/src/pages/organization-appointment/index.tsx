@@ -12,7 +12,7 @@ import { AnimatePresence } from "framer-motion";
 import { useAppContext } from "@/context/app";
 import { getLocalTimezone } from "@/lib/utils";
 import { localizeBookingPayload, siteName } from "@/lib/local-names";
-import { ArrowLeft, Clock3, LayoutGrid, MapPin, RotateCw, User, Video } from "lucide-react";
+import { Clock3, LayoutGrid, MapPin, RotateCw, User, Video } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
 import { useTranslation } from "@/lib/i18n";
 import MetaTags from "@/components/meta-tags";
@@ -32,7 +32,7 @@ import { QuantityPicker } from "@/pages/booking-v2/components/QuantityPicker";
 import { useTimeSlots } from "@/pages/booking-v2/hooks/useTimeSlots";
 import { useBookingSubmit } from "@/pages/booking-v2/hooks/useBookingSubmit";
 import type { Organization, Service, ServiceLocation, ServiceOffering, TimeSlot as V2TimeSlot, BookingFormData, BookingResponse } from "@/pages/booking-v2/types";
-import { BookingBackdrop, BookingSteps, ServicePhoto, servicePhotoSource, useBookingSkin, type BookingStep } from "@/pages/booking-v2/components/skin";
+import { BookingBackdrop, BookingSteps, ServicePhoto, servicePhotoSource, useBookingSkin, type BookingStep, type StepLink } from "@/pages/booking-v2/components/skin";
 import { useBookingBrand } from "@/public-experience/bookingTheme";
 import { brandLogo } from "@/public-experience/templates/content";
 import { haptic } from "@/public-experience/templates/kit/haptics";
@@ -363,18 +363,25 @@ const OrganizationAppointmentV2 = () => {
     navigate(`/schedule/org/${orgSlug}/${anchor}?type=${encodeURIComponent(anchor)}&with=${encodeURIComponent(own ? providerId : "any")}${langParam ? `&lang=${encodeURIComponent(langParam)}` : ""}`);
   };
 
+  // Back to the time picker: the chosen time stays selected and comes into view.
+  const backToTime = () => {
+    refetchSlots?.();
+    setCurrentPhase("datetime");
+  };
+  const servicesPath = "/schedule/org/" + orgSlug;
+  const backToServices = () => {
+    setCurrentPhase("service");
+    navigate(servicesPath);
+  };
   const handlePhaseBack = () => {
-    if (currentPhase === "form") {
-      refetchSlots?.();
-      setCurrentPhase("datetime");
-      return;
-    }
-    if (currentPhase === "datetime") {
-      setCurrentPhase("service");
-      navigate("/schedule/org/" + orgSlug);
-      return;
-    }
+    if (currentPhase === "form") return backToTime();
+    if (currentPhase === "datetime") return backToServices();
     navigate(bookingBrand.publicRoot);
+  };
+  // The done steps in the header are the way back (they replace the Back button).
+  const stepLinks: Partial<Record<BookingStep, StepLink>> = {
+    ...(currentPhase === "datetime" || currentPhase === "form" ? { service: { href: servicesPath, onSelect: backToServices } } : {}),
+    ...(currentPhase === "form" ? { time: { onSelect: backToTime } } : {}),
   };
 
   const handleDateSelect = (date: Date) => {
@@ -443,13 +450,7 @@ const OrganizationAppointmentV2 = () => {
       homeLabel={brandName ? t("schedulerPage.backTo").replace("{0}", brandName) : t("publicSite.backToSite")}
       name={brandName || (isLoading ? "" : t("schedulerPage.appointments"))}
       logo={logo}
-      back={currentPhase !== "service" && !friendlyError && !error ? (
-        <button type="button" onClick={handlePhaseBack} className="booking-back" aria-label={t("schedulerPage.previousStep")}>
-          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-          <span>{t("schedulerPage.back")}</span>
-        </button>
-      ) : null}
-      steps={showSteps ? <BookingSteps step={STEP_OF[serviceSlug && currentPhase === "service" ? "datetime" : currentPhase]} skin={skin.skin} /> : undefined}
+      steps={showSteps ? <BookingSteps step={STEP_OF[serviceSlug && currentPhase === "service" ? "datetime" : currentPhase]} skin={skin.skin} links={stepLinks} /> : undefined}
       actions={<><LanguageToggle /><ThemeSwitch /></>}
     />
   );
@@ -529,7 +530,7 @@ const OrganizationAppointmentV2 = () => {
       />
       {header}
       <div
-        className={`booking-experience text-theme-primary ${currentPhase === "datetime" ? "" : "pb-10"}`}
+        className={`booking-experience text-theme-primary ${currentPhase === "datetime" || currentPhase === "form" ? "" : "pb-10"}`}
         {...pageAttrs}
         // The header sits above this block, so the block fills the rest of the window and the time picker fits it.
         style={{ ...pageStyle, backgroundColor: "var(--bg-primary)", minHeight: `calc(100dvh - ${HEADER_HEIGHT})` }}
@@ -586,8 +587,9 @@ const OrganizationAppointmentV2 = () => {
           )}
 
           {currentPhase === "form" && bookedService && selectedSlot && (
-            <div className="px-4 py-6 sm:py-8">
-              {quote?.required && <PaymentSummary quote={quote} method={paymentMethod} onMethod={setPaymentMethod} />}
+            <div className="px-4 py-4 sm:px-6">
+              {/* Payment needs a method the business has not set up: the summary explains it, there is no form. */}
+              {paymentBlocked && quote && <PaymentSummary quote={quote} method={paymentMethod} onMethod={setPaymentMethod} />}
               {!paymentBlocked && (
                 <BookingForm
                   service={bookedService}
@@ -605,6 +607,9 @@ const OrganizationAppointmentV2 = () => {
                   loading={bookingLoading}
                   quantity={quantity}
                   media={photo ? <ServicePhoto asset={photo} sizes="88px" /> : undefined}
+                  prelude={quote?.required ? <PaymentSummary quote={quote} method={paymentMethod} onMethod={setPaymentMethod} /> : undefined}
+                  foot={<PoweredBy variant="inline" className="!py-2 max-md:!pb-2" />}
+                  fit
                 />
               )}
             </div>
@@ -639,7 +644,7 @@ const OrganizationAppointmentV2 = () => {
             )}
           </AnimatePresence>
 
-          {currentPhase !== "datetime" && (
+          {currentPhase !== "datetime" && currentPhase !== "form" && (
             <div className="relative z-10 mt-8">
               <PoweredBy />
             </div>

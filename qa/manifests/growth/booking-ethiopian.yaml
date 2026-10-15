@@ -69,6 +69,13 @@ scenarios:
       value: '[data-qa="booking-bar-when"] >> text=/Meskerem|Tikimt|Hidar|Tahsas|Tir|Yekatit|Megabit|Miyazya|Ginbot|Sene|Hamle|Nehase|Pagume/'
     - type: visible_selector
       value: '[data-qa="booking-day-title"] >> text=/Meskerem|Tikimt|Hidar|Tahsas|Tir|Yekatit|Megabit|Miyazya|Ginbot|Sene|Hamle|Nehase|Pagume/'
+    # English pages say Habesha time in English (no Amharic period words).
+    - type: visible_selector
+      value: '[data-qa="booking-bar-when"] >> text=/\d{1,2}:\d{2} (in the morning|in the afternoon|in the evening|at night)/'
+  - action: wait_for
+    selector: '[data-qa="booking-bar-when"]:has-text("ሰዓት")'
+    state: 'detached'
+    timeout_ms: 5000
   - action: screenshot
     name: 'eth_selam_en_desktop_light-2-chosen.png'
     full_page: False
@@ -96,11 +103,13 @@ scenarios:
     assertions:
     - type: visible_selector
       value: '[data-qa="booking-details"] >> text=/Meskerem|Tikimt|Hidar|Tahsas|Tir|Yekatit|Megabit|Miyazya|Ginbot|Sene|Hamle|Nehase|Pagume/'
+    - type: visible_selector
+      value: '[data-qa="booking-details"] >> text=/(in the morning|in the afternoon|in the evening|at night) \(Habesha time\)/'
   - action: screenshot
     name: 'eth_selam_en_desktop_light-4-details.png'
     full_page: False
   - action: click
-    selector: '.booking-back'
+    selector: '[data-qa="booking-step-link"][data-target="time"]'
   - action: wait_for
     selector: '[data-qa="booking-picker"]'
   - action: wait_for
@@ -219,7 +228,7 @@ scenarios:
     name: 'eth_bloom_am_desktop_dark-4-details.png'
     full_page: False
   - action: click
-    selector: '.booking-back'
+    selector: '[data-qa="booking-step-link"][data-target="time"]'
   - action: wait_for
     selector: '[data-qa="booking-picker"]'
   - action: wait_for
@@ -342,7 +351,7 @@ scenarios:
     name: 'eth_tena_en_phone_light-4-details.png'
     full_page: False
   - action: click
-    selector: '.booking-back'
+    selector: '[data-qa="booking-step-back"][data-target="time"]'
   - action: wait_for
     selector: '[data-qa="booking-picker"]'
   - action: click

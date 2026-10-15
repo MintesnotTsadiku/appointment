@@ -24,7 +24,8 @@ function inside(element: Element | null, height: number, width: number) {
   return box.width > 0 && box.height > 0 && box.top >= -0.5 && box.left >= -0.5 && box.bottom <= height + 0.5 && box.right <= width + 0.5;
 }
 
-export function useFitProbe(root: RefObject<HTMLElement | null>) {
+/** `parts` replaces the picker's list (the details step checks its summary, Confirm bar and footer). */
+export function useFitProbe(root: RefObject<HTMLElement | null>, parts: Array<[string, string]> = PARTS) {
   useEffect(() => {
     if (!qaFitProbe()) return;
     const element = root.current;
@@ -34,7 +35,7 @@ export function useFitProbe(root: RefObject<HTMLElement | null>) {
       frame = 0;
       const height = window.innerHeight;
       const width = document.documentElement.clientWidth;
-      const fit = PARTS.filter(([, selector]) => inside(element.querySelector(selector) ?? document.querySelector(selector), height, width)).map(([name]) => name);
+      const fit = parts.filter(([, selector]) => inside(element.querySelector(selector) ?? document.querySelector(selector), height, width)).map(([name]) => name);
       if (document.documentElement.scrollHeight <= height + 1) fit.push("no-page-scroll");
       element.setAttribute("data-qa-fit", fit.join(" "));
     };
@@ -52,5 +53,5 @@ export function useFitProbe(root: RefObject<HTMLElement | null>) {
       window.clearInterval(timer);
       if (frame) cancelAnimationFrame(frame);
     };
-  }, [root]);
+  }, [root, parts]);
 }

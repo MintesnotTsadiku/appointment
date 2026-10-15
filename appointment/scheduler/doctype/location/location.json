@@ -8,6 +8,7 @@
  "engine": "InnoDB",
  "field_order": [
   "location_name",
+  "location_name_am",
   "is_active",
   "organization",
   "independent_provider",
@@ -20,6 +21,7 @@
   "address_line_1",
   "address_line_2",
   "city",
+  "address_am",
   "phone",
   "Column Break-2",
   "timezone",
@@ -38,6 +40,13 @@
    "label": "Location Name",
    "reqd": 1,
    "unique": 1
+  },
+  {
+   "fieldname": "location_name_am",
+   "fieldtype": "Data",
+   "label": "Location Name (Amharic)",
+   "length": 140,
+   "description": "The place's name on Amharic pages and in Amharic messages, in Ge'ez script. When it is empty, they show the location name."
   },
   {
    "default": "1",
@@ -72,6 +81,13 @@
    "fieldname": "city",
    "fieldtype": "Data",
    "label": "City"
+  },
+  {
+   "fieldname": "address_am",
+   "fieldtype": "Data",
+   "label": "Address (Amharic)",
+   "length": 280,
+   "description": "The whole address on Amharic pages and in Amharic messages, in one line. When it is empty, they show the address lines and city."
   },
   {
    "fieldname": "phone",
@@ -175,7 +191,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-15 09:00:00.000000",
+ "modified": "2026-10-16 09:00:00.000000",
  "modified_by": "Administrator",
  "module": "Scheduler",
  "name": "Location",

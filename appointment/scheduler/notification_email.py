@@ -13,7 +13,7 @@ from frappe.utils.verified_command import get_signed_params
 
 from appointment.growth import touchpoints
 from appointment.helpers.utils import format_ethiopian_time
-from appointment.scheduler import business_owner, self_service
+from appointment.scheduler import business_owner, localized_names, self_service
 from appointment.scheduler.notifications import is_stale
 
 TEMPLATE = "appointment/templates/emails/customer_notification.html"
@@ -116,7 +116,9 @@ def send_notification(notification):
 def render(event, doc, language, recipient, receipt=None):
     """Subject and HTML for one event, in `language` ("en" or "am")."""
     business = business_owner.for_booking(doc)
-    business_name = business.display_name
+    # Amharic messages name the business, the provider and the place in Amharic when the business gave those names.
+    names = localized_names.booking_names(doc)
+    business_name = localized_names.for_language(names["business"], language, business.display_name)
     customer = (doc.client_name or "").strip()[:NAME_LIMIT]
     copy = COPY[event]
     by_customer = doc.get("last_changed_by") == "Customer" and event in CUSTOMER_INTRO
@@ -136,8 +138,10 @@ def render(event, doc, language, recipient, receipt=None):
         logo_url=_public_logo(business.logo),
         details=[
             (t("Service"), escape_html(_value("Service", doc.service, "service_name"))),
-            *([(t("Provider"), escape_html(_value("Provider", doc.provider, "full_name")))] if doc.provider else []),
-            _place_row(doc, t),
+            *([(t("Provider"), escape_html(localized_names.for_language(names["provider"], language,
+                                                                          _value("Provider", doc.provider, "full_name"))))]
+              if doc.provider else []),
+            _place_row(doc, t, localized_names.for_language(names["location"], language, _value("Location", doc.location, "location_name"))),
             *_resource_rows(doc, t),
             *([(t("Quantity"), escape_html(str(doc.quantity)))] if (doc.get("quantity") or 1) > 1 else []),
             (t("Date and time"), escape_html(when(doc, language))),
@@ -162,10 +166,10 @@ def render(event, doc, language, recipient, receipt=None):
     return {"subject": context["subject"], "html": frappe.render_template(TEMPLATE, context)}
 
 
-def _place_row(doc, t):
-    """Where the session happens: the place name, or "Online video" and its platform."""
+def _place_row(doc, t, place_name):
+    """Where the session happens: the place name (in the message language), or "Online video" and its platform."""
     if not doc.get("is_online"):
-        return (t("Location"), escape_html(_value("Location", doc.location, "location_name")))
+        return (t("Location"), escape_html(place_name))
     platform = _value("Location", doc.location, "video_platform")
     return (t("How we meet"), t("Online video · {0}", platform) if platform else t("Online video"))
 

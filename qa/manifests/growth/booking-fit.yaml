@@ -1,9 +1,13 @@
 # Booking time picker fits the window (owner request 2026-10-15). No fixture: it reads the Bloom, Selam, Tena, Abugida and
 # Meron showcases and Rahel's provider page (appointment.tests.provider_page_qa_fixtures.setup must have run once), and books nothing.
-# Laptops (1280x720, 1366x768, 1440x900): the summary, the calendar, the time format, the footer (booking notes, powered by)
+# Laptops (1280x720, 1366x768, 1440x900; 1660x880 for Selam and 1920x1080 for Bloom): the summary, the calendar, the time format, the footer (booking notes, powered by)
 # and the "Your time" bar are inside the window without a page scroll; only the slot list scrolls. After the last open time
 # of a day (at the bottom of the list) is chosen, the bar at the top shows it with Continue, and Continue opens the details.
 # Phone (390x844): the summary and the time format at the top, the sticky strip with "Your time", Continue at the bottom.
+# The details step (2026-10-15): on laptops (1280x720 to 1920x1080) the summary, the Confirm bar with Confirm, and the footer
+# with Powered by are inside the window without a page scroll (only the form scrolls); on the phone the summary and the fixed
+# Confirm bar are in view. The done step "Time" in the header (the "Time" chevron on the phone) goes back to the picker with
+# the chosen time still selected.
 # `?qa-fit=1` (development builds only) makes the picker write `data-qa-fit` with the parts that are fully inside the window;
 # the runner has no bounding-box assertion. See docs/growth/BOOKING_LAYOUT.md.
 app: appointment
@@ -72,10 +76,26 @@ scenarios:
   - action: click
     selector: '[data-qa="booking-continue"]'
   - action: wait_for
-    selector: '#userName'
+    selector: '[data-qa="booking-details-layout"][data-wide="true"][data-qa-fit~="summary"][data-qa-fit~="bar"][data-qa-fit~="go"][data-qa-fit~="footer"][data-qa-fit~="powered"][data-qa-fit~="no-page-scroll"]'
+    assertions:
+    - type: visible_selector
+      value: '#userName'
+    - type: visible_selector
+      value: '[data-qa="booking-confirm-bar"] [data-qa="booking-confirm"]'
+    - type: visible_selector
+      value: '[data-qa="booking-details-footer"] [data-qa="powered-by"]'
+    - type: visible_selector
+      value: '[data-qa="booking-step-link"][data-target="time"]'
   - action: screenshot
     name: fit_bloom_1280x720_en_light-3-details.png
     full_page: false
+  - action: click
+    selector: '[data-qa="booking-step-link"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-steps"][data-step="time"]'
   - action: get_console_errors
   - action: get_network_errors
 - id: fit_bloom_1366x768_am_dark
@@ -132,10 +152,26 @@ scenarios:
   - action: click
     selector: '[data-qa="booking-continue"]'
   - action: wait_for
-    selector: '#userName'
+    selector: '[data-qa="booking-details-layout"][data-wide="true"][data-qa-fit~="summary"][data-qa-fit~="bar"][data-qa-fit~="go"][data-qa-fit~="footer"][data-qa-fit~="powered"][data-qa-fit~="no-page-scroll"]'
+    assertions:
+    - type: visible_selector
+      value: '#userName'
+    - type: visible_selector
+      value: '[data-qa="booking-confirm-bar"] [data-qa="booking-confirm"]'
+    - type: visible_selector
+      value: '[data-qa="booking-details-footer"] [data-qa="powered-by"]'
+    - type: visible_selector
+      value: '[data-qa="booking-step-link"][data-target="time"]'
   - action: screenshot
     name: fit_bloom_1366x768_am_dark-3-details.png
     full_page: false
+  - action: click
+    selector: '[data-qa="booking-step-link"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-steps"][data-step="time"]'
   - action: get_console_errors
   - action: get_network_errors
 - id: fit_bloom_1440x900_en_dark
@@ -189,10 +225,26 @@ scenarios:
   - action: click
     selector: '[data-qa="booking-continue"]'
   - action: wait_for
-    selector: '#userName'
+    selector: '[data-qa="booking-details-layout"][data-wide="true"][data-qa-fit~="summary"][data-qa-fit~="bar"][data-qa-fit~="go"][data-qa-fit~="footer"][data-qa-fit~="powered"][data-qa-fit~="no-page-scroll"]'
+    assertions:
+    - type: visible_selector
+      value: '#userName'
+    - type: visible_selector
+      value: '[data-qa="booking-confirm-bar"] [data-qa="booking-confirm"]'
+    - type: visible_selector
+      value: '[data-qa="booking-details-footer"] [data-qa="powered-by"]'
+    - type: visible_selector
+      value: '[data-qa="booking-step-link"][data-target="time"]'
   - action: screenshot
     name: fit_bloom_1440x900_en_dark-3-details.png
     full_page: false
+  - action: click
+    selector: '[data-qa="booking-step-link"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-steps"][data-step="time"]'
   - action: get_console_errors
   - action: get_network_errors
 - id: fit_bloom_390x844_am_light
@@ -245,10 +297,24 @@ scenarios:
   - action: click
     selector: '[data-qa="booking-continue"]'
   - action: wait_for
-    selector: '#userName'
+    selector: '[data-qa="booking-details-layout"][data-wide="false"][data-qa-fit~="summary"][data-qa-fit~="bar"][data-qa-fit~="go"]'
+    assertions:
+    - type: visible_selector
+      value: '#userName'
+    - type: visible_selector
+      value: '[data-qa="booking-confirm-bar"] [data-qa="booking-confirm"]'
+    - type: visible_selector
+      value: '[data-qa="booking-step-back"][data-target="time"]'
   - action: screenshot
     name: fit_bloom_390x844_am_light-3-details.png
     full_page: false
+  - action: click
+    selector: '[data-qa="booking-step-back"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-steps"][data-step="time"]'
   - action: get_console_errors
   - action: get_network_errors
 - id: fit_selam_1280x720_am_dark
@@ -305,10 +371,26 @@ scenarios:
   - action: click
     selector: '[data-qa="booking-continue"]'
   - action: wait_for
-    selector: '#userName'
+    selector: '[data-qa="booking-details-layout"][data-wide="true"][data-qa-fit~="summary"][data-qa-fit~="bar"][data-qa-fit~="go"][data-qa-fit~="footer"][data-qa-fit~="powered"][data-qa-fit~="no-page-scroll"]'
+    assertions:
+    - type: visible_selector
+      value: '#userName'
+    - type: visible_selector
+      value: '[data-qa="booking-confirm-bar"] [data-qa="booking-confirm"]'
+    - type: visible_selector
+      value: '[data-qa="booking-details-footer"] [data-qa="powered-by"]'
+    - type: visible_selector
+      value: '[data-qa="booking-step-link"][data-target="time"]'
   - action: screenshot
     name: fit_selam_1280x720_am_dark-3-details.png
     full_page: false
+  - action: click
+    selector: '[data-qa="booking-step-link"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-steps"][data-step="time"]'
   - action: get_console_errors
   - action: get_network_errors
 - id: fit_selam_1366x768_en_dark
@@ -362,10 +444,26 @@ scenarios:
   - action: click
     selector: '[data-qa="booking-continue"]'
   - action: wait_for
-    selector: '#userName'
+    selector: '[data-qa="booking-details-layout"][data-wide="true"][data-qa-fit~="summary"][data-qa-fit~="bar"][data-qa-fit~="go"][data-qa-fit~="footer"][data-qa-fit~="powered"][data-qa-fit~="no-page-scroll"]'
+    assertions:
+    - type: visible_selector
+      value: '#userName'
+    - type: visible_selector
+      value: '[data-qa="booking-confirm-bar"] [data-qa="booking-confirm"]'
+    - type: visible_selector
+      value: '[data-qa="booking-details-footer"] [data-qa="powered-by"]'
+    - type: visible_selector
+      value: '[data-qa="booking-step-link"][data-target="time"]'
   - action: screenshot
     name: fit_selam_1366x768_en_dark-3-details.png
     full_page: false
+  - action: click
+    selector: '[data-qa="booking-step-link"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-steps"][data-step="time"]'
   - action: get_console_errors
   - action: get_network_errors
 - id: fit_selam_1440x900_am_light
@@ -422,10 +520,26 @@ scenarios:
   - action: click
     selector: '[data-qa="booking-continue"]'
   - action: wait_for
-    selector: '#userName'
+    selector: '[data-qa="booking-details-layout"][data-wide="true"][data-qa-fit~="summary"][data-qa-fit~="bar"][data-qa-fit~="go"][data-qa-fit~="footer"][data-qa-fit~="powered"][data-qa-fit~="no-page-scroll"]'
+    assertions:
+    - type: visible_selector
+      value: '#userName'
+    - type: visible_selector
+      value: '[data-qa="booking-confirm-bar"] [data-qa="booking-confirm"]'
+    - type: visible_selector
+      value: '[data-qa="booking-details-footer"] [data-qa="powered-by"]'
+    - type: visible_selector
+      value: '[data-qa="booking-step-link"][data-target="time"]'
   - action: screenshot
     name: fit_selam_1440x900_am_light-3-details.png
     full_page: false
+  - action: click
+    selector: '[data-qa="booking-step-link"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-steps"][data-step="time"]'
   - action: get_console_errors
   - action: get_network_errors
 - id: fit_selam_390x844_en_light
@@ -475,10 +589,24 @@ scenarios:
   - action: click
     selector: '[data-qa="booking-continue"]'
   - action: wait_for
-    selector: '#userName'
+    selector: '[data-qa="booking-details-layout"][data-wide="false"][data-qa-fit~="summary"][data-qa-fit~="bar"][data-qa-fit~="go"]'
+    assertions:
+    - type: visible_selector
+      value: '#userName'
+    - type: visible_selector
+      value: '[data-qa="booking-confirm-bar"] [data-qa="booking-confirm"]'
+    - type: visible_selector
+      value: '[data-qa="booking-step-back"][data-target="time"]'
   - action: screenshot
     name: fit_selam_390x844_en_light-3-details.png
     full_page: false
+  - action: click
+    selector: '[data-qa="booking-step-back"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-steps"][data-step="time"]'
   - action: get_console_errors
   - action: get_network_errors
 - id: fit_tena_1280x720_en_dark
@@ -532,10 +660,26 @@ scenarios:
   - action: click
     selector: '[data-qa="booking-continue"]'
   - action: wait_for
-    selector: '#userName'
+    selector: '[data-qa="booking-details-layout"][data-wide="true"][data-qa-fit~="summary"][data-qa-fit~="bar"][data-qa-fit~="go"][data-qa-fit~="footer"][data-qa-fit~="powered"][data-qa-fit~="no-page-scroll"]'
+    assertions:
+    - type: visible_selector
+      value: '#userName'
+    - type: visible_selector
+      value: '[data-qa="booking-confirm-bar"] [data-qa="booking-confirm"]'
+    - type: visible_selector
+      value: '[data-qa="booking-details-footer"] [data-qa="powered-by"]'
+    - type: visible_selector
+      value: '[data-qa="booking-step-link"][data-target="time"]'
   - action: screenshot
     name: fit_tena_1280x720_en_dark-3-details.png
     full_page: false
+  - action: click
+    selector: '[data-qa="booking-step-link"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-steps"][data-step="time"]'
   - action: get_console_errors
   - action: get_network_errors
 - id: fit_tena_1366x768_am_light
@@ -592,10 +736,26 @@ scenarios:
   - action: click
     selector: '[data-qa="booking-continue"]'
   - action: wait_for
-    selector: '#userName'
+    selector: '[data-qa="booking-details-layout"][data-wide="true"][data-qa-fit~="summary"][data-qa-fit~="bar"][data-qa-fit~="go"][data-qa-fit~="footer"][data-qa-fit~="powered"][data-qa-fit~="no-page-scroll"]'
+    assertions:
+    - type: visible_selector
+      value: '#userName'
+    - type: visible_selector
+      value: '[data-qa="booking-confirm-bar"] [data-qa="booking-confirm"]'
+    - type: visible_selector
+      value: '[data-qa="booking-details-footer"] [data-qa="powered-by"]'
+    - type: visible_selector
+      value: '[data-qa="booking-step-link"][data-target="time"]'
   - action: screenshot
     name: fit_tena_1366x768_am_light-3-details.png
     full_page: false
+  - action: click
+    selector: '[data-qa="booking-step-link"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-steps"][data-step="time"]'
   - action: get_console_errors
   - action: get_network_errors
 - id: fit_tena_1440x900_en_light
@@ -649,10 +809,26 @@ scenarios:
   - action: click
     selector: '[data-qa="booking-continue"]'
   - action: wait_for
-    selector: '#userName'
+    selector: '[data-qa="booking-details-layout"][data-wide="true"][data-qa-fit~="summary"][data-qa-fit~="bar"][data-qa-fit~="go"][data-qa-fit~="footer"][data-qa-fit~="powered"][data-qa-fit~="no-page-scroll"]'
+    assertions:
+    - type: visible_selector
+      value: '#userName'
+    - type: visible_selector
+      value: '[data-qa="booking-confirm-bar"] [data-qa="booking-confirm"]'
+    - type: visible_selector
+      value: '[data-qa="booking-details-footer"] [data-qa="powered-by"]'
+    - type: visible_selector
+      value: '[data-qa="booking-step-link"][data-target="time"]'
   - action: screenshot
     name: fit_tena_1440x900_en_light-3-details.png
     full_page: false
+  - action: click
+    selector: '[data-qa="booking-step-link"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-steps"][data-step="time"]'
   - action: get_console_errors
   - action: get_network_errors
 - id: fit_tena_390x844_am_dark
@@ -705,10 +881,24 @@ scenarios:
   - action: click
     selector: '[data-qa="booking-continue"]'
   - action: wait_for
-    selector: '#userName'
+    selector: '[data-qa="booking-details-layout"][data-wide="false"][data-qa-fit~="summary"][data-qa-fit~="bar"][data-qa-fit~="go"]'
+    assertions:
+    - type: visible_selector
+      value: '#userName'
+    - type: visible_selector
+      value: '[data-qa="booking-confirm-bar"] [data-qa="booking-confirm"]'
+    - type: visible_selector
+      value: '[data-qa="booking-step-back"][data-target="time"]'
   - action: screenshot
     name: fit_tena_390x844_am_dark-3-details.png
     full_page: false
+  - action: click
+    selector: '[data-qa="booking-step-back"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-steps"][data-step="time"]'
   - action: get_console_errors
   - action: get_network_errors
 - id: fit_abugida_1280x720_am_light
@@ -765,10 +955,26 @@ scenarios:
   - action: click
     selector: '[data-qa="booking-continue"]'
   - action: wait_for
-    selector: '#userName'
+    selector: '[data-qa="booking-details-layout"][data-wide="true"][data-qa-fit~="summary"][data-qa-fit~="bar"][data-qa-fit~="go"][data-qa-fit~="footer"][data-qa-fit~="powered"][data-qa-fit~="no-page-scroll"]'
+    assertions:
+    - type: visible_selector
+      value: '#userName'
+    - type: visible_selector
+      value: '[data-qa="booking-confirm-bar"] [data-qa="booking-confirm"]'
+    - type: visible_selector
+      value: '[data-qa="booking-details-footer"] [data-qa="powered-by"]'
+    - type: visible_selector
+      value: '[data-qa="booking-step-link"][data-target="time"]'
   - action: screenshot
     name: fit_abugida_1280x720_am_light-3-details.png
     full_page: false
+  - action: click
+    selector: '[data-qa="booking-step-link"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-steps"][data-step="time"]'
   - action: get_console_errors
   - action: get_network_errors
 - id: fit_abugida_1366x768_en_light
@@ -822,10 +1028,26 @@ scenarios:
   - action: click
     selector: '[data-qa="booking-continue"]'
   - action: wait_for
-    selector: '#userName'
+    selector: '[data-qa="booking-details-layout"][data-wide="true"][data-qa-fit~="summary"][data-qa-fit~="bar"][data-qa-fit~="go"][data-qa-fit~="footer"][data-qa-fit~="powered"][data-qa-fit~="no-page-scroll"]'
+    assertions:
+    - type: visible_selector
+      value: '#userName'
+    - type: visible_selector
+      value: '[data-qa="booking-confirm-bar"] [data-qa="booking-confirm"]'
+    - type: visible_selector
+      value: '[data-qa="booking-details-footer"] [data-qa="powered-by"]'
+    - type: visible_selector
+      value: '[data-qa="booking-step-link"][data-target="time"]'
   - action: screenshot
     name: fit_abugida_1366x768_en_light-3-details.png
     full_page: false
+  - action: click
+    selector: '[data-qa="booking-step-link"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-steps"][data-step="time"]'
   - action: get_console_errors
   - action: get_network_errors
 - id: fit_abugida_1440x900_am_dark
@@ -882,10 +1104,26 @@ scenarios:
   - action: click
     selector: '[data-qa="booking-continue"]'
   - action: wait_for
-    selector: '#userName'
+    selector: '[data-qa="booking-details-layout"][data-wide="true"][data-qa-fit~="summary"][data-qa-fit~="bar"][data-qa-fit~="go"][data-qa-fit~="footer"][data-qa-fit~="powered"][data-qa-fit~="no-page-scroll"]'
+    assertions:
+    - type: visible_selector
+      value: '#userName'
+    - type: visible_selector
+      value: '[data-qa="booking-confirm-bar"] [data-qa="booking-confirm"]'
+    - type: visible_selector
+      value: '[data-qa="booking-details-footer"] [data-qa="powered-by"]'
+    - type: visible_selector
+      value: '[data-qa="booking-step-link"][data-target="time"]'
   - action: screenshot
     name: fit_abugida_1440x900_am_dark-3-details.png
     full_page: false
+  - action: click
+    selector: '[data-qa="booking-step-link"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-steps"][data-step="time"]'
   - action: get_console_errors
   - action: get_network_errors
 - id: fit_abugida_390x844_en_dark
@@ -935,10 +1173,24 @@ scenarios:
   - action: click
     selector: '[data-qa="booking-continue"]'
   - action: wait_for
-    selector: '#userName'
+    selector: '[data-qa="booking-details-layout"][data-wide="false"][data-qa-fit~="summary"][data-qa-fit~="bar"][data-qa-fit~="go"]'
+    assertions:
+    - type: visible_selector
+      value: '#userName'
+    - type: visible_selector
+      value: '[data-qa="booking-confirm-bar"] [data-qa="booking-confirm"]'
+    - type: visible_selector
+      value: '[data-qa="booking-step-back"][data-target="time"]'
   - action: screenshot
     name: fit_abugida_390x844_en_dark-3-details.png
     full_page: false
+  - action: click
+    selector: '[data-qa="booking-step-back"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-steps"][data-step="time"]'
   - action: get_console_errors
   - action: get_network_errors
 - id: fit_meron_1280x720_en_light
@@ -992,10 +1244,26 @@ scenarios:
   - action: click
     selector: '[data-qa="booking-continue"]'
   - action: wait_for
-    selector: '#userName'
+    selector: '[data-qa="booking-details-layout"][data-wide="true"][data-qa-fit~="summary"][data-qa-fit~="bar"][data-qa-fit~="go"][data-qa-fit~="footer"][data-qa-fit~="powered"][data-qa-fit~="no-page-scroll"]'
+    assertions:
+    - type: visible_selector
+      value: '#userName'
+    - type: visible_selector
+      value: '[data-qa="booking-confirm-bar"] [data-qa="booking-confirm"]'
+    - type: visible_selector
+      value: '[data-qa="booking-details-footer"] [data-qa="powered-by"]'
+    - type: visible_selector
+      value: '[data-qa="booking-step-link"][data-target="time"]'
   - action: screenshot
     name: fit_meron_1280x720_en_light-3-details.png
     full_page: false
+  - action: click
+    selector: '[data-qa="booking-step-link"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-steps"][data-step="time"]'
   - action: get_console_errors
   - action: get_network_errors
 - id: fit_meron_1366x768_am_dark
@@ -1052,10 +1320,26 @@ scenarios:
   - action: click
     selector: '[data-qa="booking-continue"]'
   - action: wait_for
-    selector: '#userName'
+    selector: '[data-qa="booking-details-layout"][data-wide="true"][data-qa-fit~="summary"][data-qa-fit~="bar"][data-qa-fit~="go"][data-qa-fit~="footer"][data-qa-fit~="powered"][data-qa-fit~="no-page-scroll"]'
+    assertions:
+    - type: visible_selector
+      value: '#userName'
+    - type: visible_selector
+      value: '[data-qa="booking-confirm-bar"] [data-qa="booking-confirm"]'
+    - type: visible_selector
+      value: '[data-qa="booking-details-footer"] [data-qa="powered-by"]'
+    - type: visible_selector
+      value: '[data-qa="booking-step-link"][data-target="time"]'
   - action: screenshot
     name: fit_meron_1366x768_am_dark-3-details.png
     full_page: false
+  - action: click
+    selector: '[data-qa="booking-step-link"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-steps"][data-step="time"]'
   - action: get_console_errors
   - action: get_network_errors
 - id: fit_meron_1440x900_en_dark
@@ -1109,10 +1393,26 @@ scenarios:
   - action: click
     selector: '[data-qa="booking-continue"]'
   - action: wait_for
-    selector: '#userName'
+    selector: '[data-qa="booking-details-layout"][data-wide="true"][data-qa-fit~="summary"][data-qa-fit~="bar"][data-qa-fit~="go"][data-qa-fit~="footer"][data-qa-fit~="powered"][data-qa-fit~="no-page-scroll"]'
+    assertions:
+    - type: visible_selector
+      value: '#userName'
+    - type: visible_selector
+      value: '[data-qa="booking-confirm-bar"] [data-qa="booking-confirm"]'
+    - type: visible_selector
+      value: '[data-qa="booking-details-footer"] [data-qa="powered-by"]'
+    - type: visible_selector
+      value: '[data-qa="booking-step-link"][data-target="time"]'
   - action: screenshot
     name: fit_meron_1440x900_en_dark-3-details.png
     full_page: false
+  - action: click
+    selector: '[data-qa="booking-step-link"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-steps"][data-step="time"]'
   - action: get_console_errors
   - action: get_network_errors
 - id: fit_meron_390x844_am_light
@@ -1165,10 +1465,24 @@ scenarios:
   - action: click
     selector: '[data-qa="booking-continue"]'
   - action: wait_for
-    selector: '#userName'
+    selector: '[data-qa="booking-details-layout"][data-wide="false"][data-qa-fit~="summary"][data-qa-fit~="bar"][data-qa-fit~="go"]'
+    assertions:
+    - type: visible_selector
+      value: '#userName'
+    - type: visible_selector
+      value: '[data-qa="booking-confirm-bar"] [data-qa="booking-confirm"]'
+    - type: visible_selector
+      value: '[data-qa="booking-step-back"][data-target="time"]'
   - action: screenshot
     name: fit_meron_390x844_am_light-3-details.png
     full_page: false
+  - action: click
+    selector: '[data-qa="booking-step-back"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-steps"][data-step="time"]'
   - action: get_console_errors
   - action: get_network_errors
 - id: fit_rahel_1280x720_am_dark
@@ -1223,10 +1537,26 @@ scenarios:
   - action: click
     selector: '[data-qa="booking-continue"]'
   - action: wait_for
-    selector: '[data-qa="independent-booking-chosen"]'
+    selector: '[data-qa="booking-details-layout"][data-wide="true"][data-qa-fit~="summary"][data-qa-fit~="bar"][data-qa-fit~="go"][data-qa-fit~="footer"][data-qa-fit~="powered"][data-qa-fit~="no-page-scroll"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="independent-booking-name"]'
+    - type: visible_selector
+      value: '[data-qa="booking-confirm-bar"] [data-qa="independent-booking-submit"]'
+    - type: visible_selector
+      value: '[data-qa="booking-details-footer"] [data-qa="powered-by"]'
+    - type: visible_selector
+      value: '[data-qa="booking-step-link"][data-target="time"]'
   - action: screenshot
     name: fit_rahel_1280x720_am_dark-3-details.png
     full_page: false
+  - action: click
+    selector: '[data-qa="booking-step-link"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-steps"][data-step="time"]'
   - action: get_console_errors
   - action: get_network_errors
 - id: fit_rahel_1366x768_en_dark
@@ -1278,10 +1608,26 @@ scenarios:
   - action: click
     selector: '[data-qa="booking-continue"]'
   - action: wait_for
-    selector: '[data-qa="independent-booking-chosen"]'
+    selector: '[data-qa="booking-details-layout"][data-wide="true"][data-qa-fit~="summary"][data-qa-fit~="bar"][data-qa-fit~="go"][data-qa-fit~="footer"][data-qa-fit~="powered"][data-qa-fit~="no-page-scroll"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="independent-booking-name"]'
+    - type: visible_selector
+      value: '[data-qa="booking-confirm-bar"] [data-qa="independent-booking-submit"]'
+    - type: visible_selector
+      value: '[data-qa="booking-details-footer"] [data-qa="powered-by"]'
+    - type: visible_selector
+      value: '[data-qa="booking-step-link"][data-target="time"]'
   - action: screenshot
     name: fit_rahel_1366x768_en_dark-3-details.png
     full_page: false
+  - action: click
+    selector: '[data-qa="booking-step-link"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-steps"][data-step="time"]'
   - action: get_console_errors
   - action: get_network_errors
 - id: fit_rahel_1440x900_am_light
@@ -1336,10 +1682,26 @@ scenarios:
   - action: click
     selector: '[data-qa="booking-continue"]'
   - action: wait_for
-    selector: '[data-qa="independent-booking-chosen"]'
+    selector: '[data-qa="booking-details-layout"][data-wide="true"][data-qa-fit~="summary"][data-qa-fit~="bar"][data-qa-fit~="go"][data-qa-fit~="footer"][data-qa-fit~="powered"][data-qa-fit~="no-page-scroll"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="independent-booking-name"]'
+    - type: visible_selector
+      value: '[data-qa="booking-confirm-bar"] [data-qa="independent-booking-submit"]'
+    - type: visible_selector
+      value: '[data-qa="booking-details-footer"] [data-qa="powered-by"]'
+    - type: visible_selector
+      value: '[data-qa="booking-step-link"][data-target="time"]'
   - action: screenshot
     name: fit_rahel_1440x900_am_light-3-details.png
     full_page: false
+  - action: click
+    selector: '[data-qa="booking-step-link"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-steps"][data-step="time"]'
   - action: get_console_errors
   - action: get_network_errors
 - id: fit_rahel_390x844_en_light
@@ -1389,9 +1751,172 @@ scenarios:
   - action: click
     selector: '[data-qa="booking-continue"]'
   - action: wait_for
-    selector: '[data-qa="independent-booking-chosen"]'
+    selector: '[data-qa="booking-details-layout"][data-wide="false"][data-qa-fit~="summary"][data-qa-fit~="bar"][data-qa-fit~="go"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="independent-booking-name"]'
+    - type: visible_selector
+      value: '[data-qa="booking-confirm-bar"] [data-qa="independent-booking-submit"]'
+    - type: visible_selector
+      value: '[data-qa="booking-step-back"][data-target="time"]'
   - action: screenshot
     name: fit_rahel_390x844_en_light-3-details.png
     full_page: false
+  - action: click
+    selector: '[data-qa="booking-step-back"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-steps"][data-step="time"]'
+  - action: get_console_errors
+  - action: get_network_errors
+- id: fit_selam_1660x880_en_light
+  title: 'Selam: the time picker fits 1660x880 (en, light)'
+  viewport:
+    width: 1660
+    height: 880
+  options:
+    color_scheme: light
+  checks: []
+  routes:
+  - path: /schedule/org/selam-studio?display=light&qa-fit=1
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="booking-service"]'
+  actions:
+  - action: click
+    selector: ':nth-match([data-qa="booking-service"], 1)'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"][data-wide="true"]'
+  - action: click
+    selector: ':nth-match([data-qa="booking-date"]:not([disabled]), 2)'
+  - action: wait_for
+    selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-qa="booking-picker"][data-qa-fit~="summary"][data-qa-fit~="calendar"][data-qa-fit~="format"][data-qa-fit~="zone"][data-qa-fit~="footer"][data-qa-fit~="bar"][data-qa-fit~="no-page-scroll"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-bar-empty"]'
+    - type: visible_selector
+      value: '[data-qa="booking-picker-footer"] [data-qa="booking-info"]'
+    - type: visible_selector
+      value: '[data-qa="booking-picker-footer"] [data-qa="powered-by"]'
+  - action: screenshot
+    name: fit_selam_1660x880_en_light-1-picker.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-slot"]:not([disabled]) >> nth=-1'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"][data-qa-fit~="summary"][data-qa-fit~="calendar"][data-qa-fit~="footer"][data-qa-fit~="bar"][data-qa-fit~="go"][data-qa-fit~="chosen"][data-qa-fit~="no-page-scroll"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-bar"] [data-qa="booking-bar-when"]'
+    - type: visible_selector
+      value: '[data-qa="booking-bar"] [data-qa="booking-continue"]'
+  - action: screenshot
+    name: fit_selam_1660x880_en_light-2-chosen.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-continue"]'
+  - action: wait_for
+    selector: '[data-qa="booking-details-layout"][data-wide="true"][data-qa-fit~="summary"][data-qa-fit~="bar"][data-qa-fit~="go"][data-qa-fit~="footer"][data-qa-fit~="powered"][data-qa-fit~="no-page-scroll"]'
+    assertions:
+    - type: visible_selector
+      value: '#userName'
+    - type: visible_selector
+      value: '[data-qa="booking-confirm-bar"] [data-qa="booking-confirm"]'
+    - type: visible_selector
+      value: '[data-qa="booking-details-footer"] [data-qa="powered-by"]'
+    - type: visible_selector
+      value: '[data-qa="booking-step-link"][data-target="time"]'
+  - action: screenshot
+    name: fit_selam_1660x880_en_light-3-details.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-step-link"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-steps"][data-step="time"]'
+  - action: get_console_errors
+  - action: get_network_errors
+- id: fit_bloom_1920x1080_am_dark
+  title: 'Bloom: the time picker fits 1920x1080 (am, dark)'
+  viewport:
+    width: 1920
+    height: 1080
+  options:
+    color_scheme: dark
+  checks: []
+  routes:
+  - path: /schedule/org/bloom-studio?display=dark&qa-fit=1&lang=am
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="booking-service"]'
+  actions:
+  - action: click
+    selector: ':nth-match([data-qa="booking-service"], 1)'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"][data-wide="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-time-format-option"][data-value="ethiopian"][aria-pressed="true"]'
+  - action: click
+    selector: ':nth-match([data-qa="booking-date"]:not([disabled]), 2)'
+  - action: wait_for
+    selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-qa="booking-picker"][data-qa-fit~="summary"][data-qa-fit~="calendar"][data-qa-fit~="format"][data-qa-fit~="zone"][data-qa-fit~="footer"][data-qa-fit~="bar"][data-qa-fit~="no-page-scroll"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-bar-empty"]'
+    - type: visible_selector
+      value: '[data-qa="booking-picker-footer"] [data-qa="booking-info"]'
+    - type: visible_selector
+      value: '[data-qa="booking-picker-footer"] [data-qa="powered-by"]'
+  - action: screenshot
+    name: fit_bloom_1920x1080_am_dark-1-picker.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-slot"]:not([disabled]) >> nth=-1'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"][data-qa-fit~="summary"][data-qa-fit~="calendar"][data-qa-fit~="footer"][data-qa-fit~="bar"][data-qa-fit~="go"][data-qa-fit~="chosen"][data-qa-fit~="no-page-scroll"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-bar"] [data-qa="booking-bar-when"]'
+    - type: visible_selector
+      value: '[data-qa="booking-bar"] [data-qa="booking-continue"]'
+  - action: screenshot
+    name: fit_bloom_1920x1080_am_dark-2-chosen.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-continue"]'
+  - action: wait_for
+    selector: '[data-qa="booking-details-layout"][data-wide="true"][data-qa-fit~="summary"][data-qa-fit~="bar"][data-qa-fit~="go"][data-qa-fit~="footer"][data-qa-fit~="powered"][data-qa-fit~="no-page-scroll"]'
+    assertions:
+    - type: visible_selector
+      value: '#userName'
+    - type: visible_selector
+      value: '[data-qa="booking-confirm-bar"] [data-qa="booking-confirm"]'
+    - type: visible_selector
+      value: '[data-qa="booking-details-footer"] [data-qa="powered-by"]'
+    - type: visible_selector
+      value: '[data-qa="booking-step-link"][data-target="time"]'
+  - action: screenshot
+    name: fit_bloom_1920x1080_am_dark-3-details.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-step-link"][data-target="time"]'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"] [data-qa="booking-slot"][aria-pressed="true"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-steps"][data-step="time"]'
   - action: get_console_errors
   - action: get_network_errors

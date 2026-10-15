@@ -1,10 +1,9 @@
 /**
- * BookingForm - Phase 3: Confirm
- * Premium contact details form with validation
- * Redesigned with "100 million startup" aesthetic
+ * BookingForm: the details step ("Confirm your booking") with validation.
+ * The frame (fitted wide layout, phone layout, Confirm bar) is DetailsLayout; see docs/growth/BOOKING_LAYOUT.md.
  */
 
-import { useState, type ReactNode } from "react";
+import { useId, useState, type ReactNode } from "react";
 import { ArrowLeft, Calendar, Clock, User, Mail, Phone, MessageSquare, Loader2, CheckCircle2, MapPin, Moon, Sun } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/button";
@@ -17,6 +16,7 @@ import { formatInstant, zoneLabel } from "@/lib/time";
 import { formatBookingDay } from "@/lib/ethiopian-calendar";
 import { priceLabel } from "@/pages/public-experience/provider-core";
 import "../skin/skin.css";
+import { BarAmount, DetailsLayout, focusField } from "./DetailsLayout";
 import { useTheme } from "@/components/theme-provider";
 import { useOnlineLabel } from "@/components/online-session/JoinSession";
 import { intlLocale, useTranslation } from "@/lib/i18n";
@@ -44,6 +44,12 @@ interface BookingFormProps {
   emailRequired?: boolean;
   /** The service photo in the skin's frame; it takes the place of the service icon in the summary. */
   media?: ReactNode;
+  /** Above the fields, inside the scrolling form (the payment summary). */
+  prelude?: ReactNode;
+  /** Quiet links (Powered by): the summary column's footer, or above the Confirm bar on phones. */
+  foot?: ReactNode;
+  /** Fit the window on wide layouts: pages with the booking header (`--bk-top`), which also owns Back. */
+  fit?: boolean;
 }
 
 export function BookingForm({
@@ -60,7 +66,11 @@ export function BookingForm({
   quantity = 1,
   emailRequired = false,
   media,
+  prelude,
+  foot,
+  fit = false,
 }: BookingFormProps) {
+  const formId = `bk-details-${useId().replace(/:/g, "")}`;
   const [formData, setFormData] = useState<BookingFormData>({
     userName: initialData.userName || "",
     userEmail: initialData.userEmail || "",
@@ -136,8 +146,11 @@ export function BookingForm({
       userPhone: true,
     });
 
-    // If there are errors, or a participant number still needs fixing, don't submit
-    if (Object.keys(newErrors).length > 0 || !participantsValid) {
+    // If there are errors, or a participant number still needs fixing, don't submit:
+    // bring the first field to fix into view (inside the form on wide layouts) and focus it.
+    const firstInvalid = (["userName", "userPhone", "userEmail"] as const).find((field) => newErrors[field]);
+    if (firstInvalid || !participantsValid) {
+      focusField(firstInvalid ?? "otherParticipants");
       return;
     }
 
@@ -147,482 +160,288 @@ export function BookingForm({
 
   const startTime = new Date(selectedSlot.start_time);
   // The same clock as the picker and the confirmation (Habesha time on Amharic pages).
-  const formattedTime = formatInstant(startTime, timeFormat, timezone);
+  const formattedTime = formatInstant(startTime, timeFormat, timezone, { language, style: "full" });
   const zone = zoneLabel(timezone, language, t("customerBooking.zoneTime"), (city) => {
     const key = `timeZoneCities.${city}`;
     const name = t(key);
     return name === key ? null : name;
   });
 
-  return (
-    <div 
-      className={cn("w-full relative", className)}
-      data-qa="booking-details"
-    >
+  const dayText = formatBookingDay(selectedDate, language, intlLocale(language), timeFormat);
+  const price = service.price && service.price > 0 ? Number(service.price) : 0;
+  const currency = service.currency || "ETB";
+  const place = service.location ? (service.location.is_online ? onlineLabel(service.location.platform) : service.location.location_name) : "";
+  const quantityText = quantity > 1 ? <span data-qa="booking-summary-quantity"> {t("bookingPicker.times").replace("{0}", String(quantity))}</span> : null;
+  const zoneText = <span data-qa="booking-details-zone" title={timezone}>{zone}</span>;
 
-      {/* Sticky Header with Back Button and Theme Toggle */}
-      <div
-        className="sticky top-0 z-50 w-full backdrop-blur-xl"
-        style={{ 
-          backgroundColor: 'color-mix(in srgb, var(--bg-primary) 95%, transparent)',
-          borderBottom: '1px solid var(--border-subtle)'
-        }}
-      >
-        <div className="w-full max-w-7xl mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={onBack}
-        disabled={loading}
-            className="backdrop-blur-xs"
-            style={{ 
-              color: 'var(--text-secondary)',
-              backgroundColor: 'var(--border-subtle)',
-              border: '1px solid var(--border-default)'
-            }}
-      >
-        <ArrowLeft className="h-4 w-4 mr-2" />
-        {t("bookingForm.changeDateTime")}
-      </Button>
-
-          {/* Theme Toggle */}
-          <button
-            onClick={toggleTheme}
-            className="flex items-center gap-2 px-3 py-2 rounded-lg backdrop-blur-xs transition-all"
-            style={{ 
-              backgroundColor: 'var(--border-subtle)',
-              border: '1px solid var(--border-default)'
-            }}
-            aria-label={t("bookingPicker.switchTheme")}
-          >
-            <span key={theme + "-icon"}>
-                {theme === "light" ? (
-                  <Moon className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
-                ) : (
-                  <Sun className="h-4 w-4" style={{ color: 'var(--accent-primary)' }} />
-                )}
-            </span>
-            <span 
-              className="text-sm font-medium"
-              style={{ color: 'var(--text-secondary)' }}
-            >
-              {theme === "light" ? t("bookingPicker.dark") : t("bookingPicker.light")}
-            </span>
-          </button>
+  // The summary: the full card in the side column, a compact card on top of the form on phones.
+  const summary = (wide: boolean) => wide ? (
+    <section className="bk-card bk-details-summary" data-qa="booking-details-summary" aria-labelledby="bk-details-summary-title">
+      <h2 id="bk-details-summary-title" className="bk-eyebrow mb-4">{t("bookingForm.summary")}</h2>
+      <div className="bk-details-rows">
+        <div className="bk-details-row">
+          {media ? <span className="bk-summary-media shrink-0">{media}</span> : (
+            <span className="bk-summary-icon shrink-0 flex items-center justify-center" aria-hidden="true"><Calendar className="h-[1.125rem] w-[1.125rem]" strokeWidth={1.75} /></span>
+          )}
+          <div className="min-w-0 flex-1">
+            <p className="text-xs" style={{ color: "var(--text-secondary)" }}>{t("customerBooking.service")}</p>
+            <p className="bk-details-summary-title font-semibold leading-snug" style={{ color: "var(--text-primary)" }}>{service.name}{quantityText}</p>
+            {service.provider && <p className="mt-0.5 text-sm" style={{ color: "var(--text-secondary)" }}>{t("bookingPicker.with").replace("{0}", service.provider.name)}</p>}
+          </div>
         </div>
+        <div className="bk-details-row">
+          <span className="bk-summary-icon shrink-0 flex items-center justify-center" aria-hidden="true"><Clock className="h-[1.125rem] w-[1.125rem]" strokeWidth={1.75} /></span>
+          <div className="min-w-0 flex-1">
+            <p className="text-xs" style={{ color: "var(--text-secondary)" }}>{t("customerBooking.dateTime")}</p>
+            <p className="font-semibold leading-snug" style={{ color: "var(--text-primary)" }}>{dayText}</p>
+            <p className="mt-0.5" style={{ color: "var(--text-primary)" }}>{formattedTime}</p>
+            <p className="mt-0.5 text-sm" style={{ color: "var(--text-secondary)" }}>{service.duration} {t("customerBooking.minutes")} · {zoneText}</p>
+          </div>
+        </div>
+        {service.location && (
+          <div className="bk-details-row">
+            <span className="bk-summary-icon shrink-0 flex items-center justify-center" aria-hidden="true"><MapPin className="h-[1.125rem] w-[1.125rem]" strokeWidth={1.75} /></span>
+            <div className="min-w-0 flex-1">
+              <p className="text-xs" style={{ color: "var(--text-secondary)" }}>{t("customerBooking.location")}</p>
+              <p className="font-semibold leading-snug" style={{ color: "var(--text-primary)" }}>
+                {service.location.is_online ? (
+                  <span className="flex items-center gap-2"><span className="h-2 w-2 rounded-full" style={{ backgroundColor: "var(--accent-success)" }} />{place}</span>
+                ) : place}
+              </p>
+              {service.location.address && !service.location.is_online && <p className="mt-0.5 text-sm" style={{ color: "var(--text-secondary)" }}>{service.location.address}</p>}
+              {service.location.phone && !service.location.is_online && <p className="mt-0.5 text-sm" style={{ color: "var(--text-secondary)" }}>{service.location.phone}</p>}
+            </div>
+          </div>
+        )}
+        {price > 0 && (
+          <div className="bk-details-row items-center justify-between">
+            <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{t("publicSite.price")}</span>
+            <span className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>{priceLabel(price, currency, language, "")}</span>
+          </div>
+        )}
+      </div>
+      <p className="bk-details-note">{t("bookingForm.note")}</p>
+    </section>
+  ) : (
+    <section className="bk-card bk-details-compact" data-qa="booking-details-summary" data-media={media ? "true" : "false"} aria-label={t("bookingForm.summary")}>
+      {media && <span className="bk-summary-media">{media}</span>}
+      <div className="min-w-0 space-y-0.5">
+        <p className="font-semibold leading-snug" style={{ color: "var(--text-primary)", fontFamily: "var(--booking-font-display)" }}>{service.name}{quantityText}</p>
+        <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>{dayText} · <span className="tabular-nums">{formattedTime}</span></p>
+        <p className="text-xs leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+          {[`${service.duration} ${t("customerBooking.minutes")}`, service.provider ? t("bookingPicker.with").replace("{0}", service.provider.name) : "", place].filter(Boolean).join(" · ")}
+          {" · "}{zoneText}
+        </p>
+      </div>
+    </section>
+  );
+
+  const fieldStyle = (invalid: boolean) => ({
+    backgroundColor: "var(--bg-secondary)",
+    color: "var(--text-primary)",
+    border: `1px solid ${invalid ? "var(--accent-primary)" : "var(--border-default)"}`,
+  });
+  const nameInvalid = Boolean(errors.userName && touched.userName);
+  const phoneInvalid = Boolean(errors.userPhone && touched.userPhone);
+  const emailInvalid = Boolean(errors.userEmail && touched.userEmail);
+
+  const fields = (
+    <form id={formId} onSubmit={handleSubmit} className="bk-details-fields">
+      {/* Name */}
+      <div className="space-y-2">
+        <Label htmlFor="userName" className="text-base font-medium" style={{ color: "var(--text-primary)" }}>
+          {t("bookingForm.fullName")} <span style={{ color: "var(--accent-primary)" }}>*</span>
+        </Label>
+        <div className="relative">
+          <span className="bk-field-icon pointer-events-none absolute start-3.5 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center" aria-hidden="true">
+            <User className="h-[1.125rem] w-[1.125rem]" strokeWidth={1.75} />
+          </span>
+          <Input
+            id="userName"
+            type="text"
+            autoComplete="name"
+            placeholder={t("bookingForm.namePlaceholder")}
+            value={formData.userName}
+            onChange={(e) => handleChange("userName", e.target.value)}
+            onBlur={() => handleBlur("userName")}
+            disabled={loading}
+            className={cn("pl-12 h-12 text-base transition-all", nameInvalid && "border-red-500 focus:border-red-500")}
+            style={fieldStyle(nameInvalid)}
+            aria-invalid={nameInvalid ? "true" : "false"}
+            aria-describedby={errors.userName ? "userName-error" : undefined}
+          />
+        </div>
+        {nameInvalid && (
+          <p id="userName-error" className="text-sm flex items-center gap-1" style={{ color: "var(--accent-primary)" }}>
+            <span className="text-xs">⚠</span> {errors.userName}
+          </p>
+        )}
       </div>
 
-      <div className="w-full max-w-6xl mx-auto md:px-2 py-2 md:py-6">
-
-        <div className="grid lg:grid-cols-[1fr_400px] gap-6 md:gap-8">
-        {/* Form Section */}
-          <div
-            className="rounded-2xl backdrop-blur-xs p-6 md:p-8"
-            style={{ 
-              backgroundColor: 'var(--bg-elevated)',
-              border: '1px solid var(--border-default)'
-            }}
-          >
-          <div className="mb-6">
-              <h1 
-                className="text-3xl md:text-4xl font-bold mb-2"
-                style={{ color: 'var(--text-primary)' }}
-              >
-              {t("bookingForm.title")}
-            </h1>
-              <p style={{ color: 'var(--text-secondary)' }}>
-              {t("bookingForm.subtitle")}
+      <div className="bk-details-pair">
+        {/* Phone */}
+        <div className="space-y-2">
+          <Label htmlFor="userPhone" className="text-base font-medium" style={{ color: "var(--text-primary)" }}>
+            {t("bookingForm.phone")} <span style={{ color: "var(--accent-primary)" }}>*</span>
+          </Label>
+          <div className="relative">
+            <span className="bk-field-icon pointer-events-none absolute start-3.5 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center" aria-hidden="true">
+              <Phone className="h-[1.125rem] w-[1.125rem]" strokeWidth={1.75} />
+            </span>
+            <PhoneInput
+              id="userPhone"
+              data-qa="booking-phone"
+              required
+              value={formData.userPhone || ""}
+              onChange={(value) => handleChange("userPhone", value)}
+              onBlur={() => handleBlur("userPhone")}
+              disabled={loading}
+              showError={phoneInvalid}
+              className="pl-12 h-12 text-base transition-all"
+              style={fieldStyle(phoneInvalid)}
+              messages={false}
+              aria-describedby={phoneInvalid ? "userPhone-error" : "userPhone-help"}
+            />
+          </div>
+          {phoneInvalid ? (
+            <p id="userPhone-error" role="alert" data-qa="booking-phone-error" className="text-sm flex items-start gap-1" style={{ color: "var(--accent-primary)" }}>
+              <span className="text-xs mt-0.5">⚠</span> <span>{errors.userPhone}</span>
             </p>
+          ) : (
+            <p id="userPhone-help" className="text-sm" style={{ color: "var(--text-secondary)" }}>{t("bookingForm.phoneHint")}</p>
+          )}
+        </div>
+
+        {/* Email */}
+        <div className="space-y-2">
+          <Label htmlFor="userEmail" className="text-base font-medium" style={{ color: "var(--text-primary)" }}>
+            {t("bookingForm.email")} {emailRequired ? <span style={{ color: "var(--accent-primary)" }}>*</span> : <span style={{ color: "var(--text-secondary)" }}>{t("bookingForm.optional")}</span>}
+          </Label>
+          <div className="relative">
+            <span className="bk-field-icon pointer-events-none absolute start-3.5 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center" aria-hidden="true">
+              <Mail className="h-[1.125rem] w-[1.125rem]" strokeWidth={1.75} />
+            </span>
+            <Input
+              id="userEmail"
+              type="email"
+              inputMode="email"
+              autoComplete="email"
+              data-qa="booking-email"
+              placeholder="name@example.com"
+              value={formData.userEmail}
+              onChange={(e) => handleChange("userEmail", e.target.value)}
+              onBlur={() => handleBlur("userEmail")}
+              disabled={loading}
+              className={cn("pl-12 h-12 text-base transition-all", emailInvalid && "border-red-500 focus:border-red-500")}
+              style={fieldStyle(emailInvalid)}
+              aria-invalid={emailInvalid ? "true" : "false"}
+              aria-describedby={errors.userEmail ? "userEmail-error" : undefined}
+            />
           </div>
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Name Field */}
-              <div
-                className="space-y-2"
-              >
-                <Label 
-                  htmlFor="userName" 
-                  className="text-base font-medium"
-                  style={{ color: 'var(--text-primary)' }}
-                >
-                  {t("bookingForm.fullName")} <span style={{ color: 'var(--accent-primary)' }}>*</span>
-              </Label>
-              <div className="relative">
-                  <span className="bk-field-icon pointer-events-none absolute start-3.5 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center" aria-hidden="true">
-                    <User className="h-[1.125rem] w-[1.125rem]" strokeWidth={1.75} />
-                  </span>
-                <Input
-                  id="userName"
-                  type="text"
-                  placeholder={t("bookingForm.namePlaceholder")}
-                  value={formData.userName}
-                  onChange={(e) => handleChange("userName", e.target.value)}
-                  onBlur={() => handleBlur("userName")}
-                  disabled={loading}
-                  className={cn(
-                      "pl-12 h-12 text-base backdrop-blur-xs transition-all",
-                    errors.userName && touched.userName && "border-red-500 focus:border-red-500"
-                  )}
-                    style={{
-                      backgroundColor: 'var(--bg-secondary)',
-                      color: 'var(--text-primary)',
-                      border: `1px solid ${errors.userName && touched.userName ? 'var(--accent-primary)' : 'var(--border-default)'}`,
-                    }}
-                  aria-invalid={errors.userName && touched.userName ? "true" : "false"}
-                  aria-describedby={errors.userName ? "userName-error" : undefined}
-                />
-              </div>
-              {errors.userName && touched.userName && (
-                  <p 
-                    id="userName-error" 
-                    className="text-sm flex items-center gap-1"
-                    style={{ color: 'var(--accent-primary)' }}
-                  >
-                  <span className="text-xs">⚠</span> {errors.userName}
-                </p>
-              )}
-              </div>
-
-            {/* Phone Field */}
-              <div
-                className="space-y-2"
-              >
-                <Label 
-                  htmlFor="userPhone" 
-                  className="text-base font-medium"
-                  style={{ color: 'var(--text-primary)' }}
-                >
-                  {t("bookingForm.phone")} <span style={{ color: 'var(--accent-primary)' }}>*</span>
-              </Label>
-              <div className="relative">
-                  <span className="bk-field-icon pointer-events-none absolute start-3.5 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center" aria-hidden="true">
-                    <Phone className="h-[1.125rem] w-[1.125rem]" strokeWidth={1.75} />
-                  </span>
-                <PhoneInput
-                  id="userPhone"
-                  data-qa="booking-phone"
-                  required
-                  value={formData.userPhone || ""}
-                  onChange={(value) => handleChange("userPhone", value)}
-                  onBlur={() => handleBlur("userPhone")}
-                  disabled={loading}
-                  showError={Boolean(errors.userPhone && touched.userPhone)}
-                  className="pl-12 h-12 text-base backdrop-blur-xs transition-all"
-                  style={{
-                    backgroundColor: 'var(--bg-secondary)',
-                    color: 'var(--text-primary)',
-                    border: `1px solid ${errors.userPhone && touched.userPhone ? 'var(--accent-primary)' : 'var(--border-default)'}`,
-                  }}
-                  messages={false}
-                  aria-describedby={errors.userPhone && touched.userPhone ? "userPhone-error" : "userPhone-help"}
-                />
-              </div>
-              {errors.userPhone && touched.userPhone ? (
-                  <p 
-                    id="userPhone-error" 
-                    role="alert"
-                    data-qa="booking-phone-error"
-                    className="text-sm flex items-start gap-1"
-                    style={{ color: 'var(--accent-primary)' }}
-                  >
-                  <span className="text-xs mt-0.5">⚠</span> <span>{errors.userPhone}</span>
-                </p>
-              ) : (
-                <p id="userPhone-help" className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                  {t("bookingForm.phoneHint")}
-                </p>
-              )}
-              </div>
-
-            {/* Email Field */}
-              <div
-                className="space-y-2"
-              >
-                <Label 
-                  htmlFor="userEmail" 
-                  className="text-base font-medium"
-                  style={{ color: 'var(--text-primary)' }}
-                >
-                  {t("bookingForm.email")} {emailRequired ? <span style={{ color: 'var(--accent-primary)' }}>*</span> : <span style={{ color: 'var(--text-secondary)' }}>{t("bookingForm.optional")}</span>}
-              </Label>
-              <div className="relative">
-                  <span className="bk-field-icon pointer-events-none absolute start-3.5 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center" aria-hidden="true">
-                    <Mail className="h-[1.125rem] w-[1.125rem]" strokeWidth={1.75} />
-                  </span>
-                <Input
-                  id="userEmail"
-                  type="email"
-                  inputMode="email"
-                  autoComplete="email"
-                  data-qa="booking-email"
-                  placeholder="name@example.com"
-                  value={formData.userEmail}
-                  onChange={(e) => handleChange("userEmail", e.target.value)}
-                  onBlur={() => handleBlur("userEmail")}
-                  disabled={loading}
-                  className={cn(
-                      "pl-12 h-12 text-base backdrop-blur-xs transition-all",
-                    errors.userEmail && touched.userEmail && "border-red-500 focus:border-red-500"
-                  )}
-                    style={{
-                      backgroundColor: 'var(--bg-secondary)',
-                      color: 'var(--text-primary)',
-                      border: `1px solid ${errors.userEmail && touched.userEmail ? 'var(--accent-primary)' : 'var(--border-default)'}`,
-                    }}
-                  aria-invalid={errors.userEmail && touched.userEmail ? "true" : "false"}
-                  aria-describedby={errors.userEmail ? "userEmail-error" : undefined}
-                />
-              </div>
-              {errors.userEmail && touched.userEmail && (
-                  <p 
-                    id="userEmail-error" 
-                    className="text-sm flex items-center gap-1"
-                    style={{ color: 'var(--accent-primary)' }}
-                  >
-                  <span className="text-xs">⚠</span> {errors.userEmail}
-                </p>
-              )}
-                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                {emailRequired ? t("bookingForm.emailHint") : t("bookingForm.emailOptionalHint")}
-              </p>
-              </div>
-
-            {/* Additional Participants */}
-              <div
-                className="space-y-2"
-              >
-                <Label 
-                  id="otherParticipants-label"
-                  htmlFor="otherParticipants" 
-                  className="text-base font-medium"
-                  style={{ color: 'var(--text-primary)' }}
-                >
-                  {t("bookingForm.participants")} <span style={{ color: 'var(--text-secondary)' }}>{t("bookingForm.optional")}</span>
-              </Label>
-              <PhoneTagsInput
-                id="otherParticipants"
-                data-qa="booking-participants"
-                aria-labelledby="otherParticipants-label"
-                value={formData.participantPhones || []}
-                onChange={(numbers) => setFormData((prev) => ({ ...prev, participantPhones: numbers }))}
-                onValidityChange={setParticipantsValid}
-                exclude={formData.userPhone}
-                disabled={loading}
-                help={t("bookingForm.participantsPhoneHint")}
-                className="min-h-12 px-3 py-2 backdrop-blur-xs transition-all"
-                style={{
-                  backgroundColor: 'var(--bg-secondary)',
-                  color: 'var(--text-primary)',
-                  border: '1px solid var(--border-default)',
-                }}
-                errorStyle={{ color: 'var(--accent-primary)' }}
-                helpStyle={{ color: 'var(--text-secondary)' }}
-              />
-              </div>
-
-            {/* Notes */}
-              <div
-                className="space-y-2"
-              >
-                <Label 
-                  htmlFor="notes" 
-                  className="text-base font-medium"
-                  style={{ color: 'var(--text-primary)' }}
-                >
-                  {t("bookingForm.notes")} <span style={{ color: 'var(--text-secondary)' }}>{t("bookingForm.optional")}</span>
-              </Label>
-              <div className="relative">
-                  <span className="bk-field-icon pointer-events-none absolute start-3.5 top-3 flex h-6 w-6 items-center justify-center" aria-hidden="true">
-                    <MessageSquare className="h-[1.125rem] w-[1.125rem]" strokeWidth={1.75} />
-                  </span>
-                <Textarea
-                  id="notes"
-                  placeholder={t("bookingForm.notesPlaceholder")}
-                  value={formData.notes}
-                  onChange={(e) => handleChange("notes", e.target.value)}
-                  disabled={loading}
-                    className="pl-12 min-h-[120px] text-base resize-none backdrop-blur-xs transition-all"
-                    style={{
-                      backgroundColor: 'var(--bg-secondary)',
-                      color: 'var(--text-primary)',
-                      border: '1px solid var(--border-default)',
-                    }}
-                  rows={4}
-                />
-              </div>
-              </div>
-
-            {/* Submit Button */}
-              <div
-                className="pt-4"
-              >
-              <Button
-                type="submit"
-                data-qa="booking-confirm"
-                disabled={loading}
-                  className="bk-action w-full h-14 text-lg"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="h-5 w-5 mr-2 animate-spin" />
-                    {t("bookingForm.confirming")}
-                  </>
-                ) : (
-                  <>
-                    <CheckCircle2 className="h-5 w-5 mr-2" />
-                    {t("bookingForm.confirm")}
-                  </>
-                )}
-              </Button>
-              </div>
-          </form>
-          </div>
-
-        {/* Booking Summary Sidebar */}
-          <div
-            className="lg:sticky lg:top-8 h-fit"
-          >
-            <div 
-              className="rounded-2xl backdrop-blur-xs p-6 shadow-lg"
-              style={{ 
-                backgroundColor: 'var(--bg-elevated)',
-                border: '1px solid var(--border-default)'
-              }}
-            >
-              <h3 
-                className="text-lg font-semibold mb-4"
-                style={{ color: 'var(--text-primary)' }}
-              >
-              {t("bookingForm.summary")}
-            </h3>
-
-            <div className="space-y-4">
-              {/* Service */}
-                <div
-                  className="flex items-start gap-3 pb-4"
-                  style={{ borderBottom: '1px solid var(--border-subtle)' }}
-                >
-                  {media ? <span className="bk-summary-media shrink-0">{media}</span> : (
-                  <span className="bk-summary-icon shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" aria-hidden="true">
-                    <Calendar className="h-5 w-5" strokeWidth={1.75} />
-                  </span>
-                  )}
-                <div className="flex-1 min-w-0">
-                    <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t("customerBooking.service")}</p>
-                    <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>
-                    {service.name}
-                    {quantity > 1 && <span data-qa="booking-summary-quantity"> {t("bookingPicker.times").replace("{0}", String(quantity))}</span>}
-                  </p>
-                  {service.provider && (
-                      <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
-                      {t("bookingPicker.with").replace("{0}", service.provider.name)}
-                    </p>
-                  )}
-                </div>
-                </div>
-
-              {/* Date & Time */}
-                <div
-                  className="flex items-start gap-3 pb-4"
-                  style={{ borderBottom: '1px solid var(--border-subtle)' }}
-                >
-                  <span className="bk-summary-icon shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" aria-hidden="true">
-                    <Clock className="h-5 w-5" strokeWidth={1.75} />
-                  </span>
-                <div className="flex-1 min-w-0">
-                    <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t("customerBooking.dateTime")}</p>
-                    <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>
-                    {formatBookingDay(selectedDate, language, intlLocale(language), timeFormat)}
-                  </p>
-                    <p className="mt-1" style={{ color: 'var(--text-primary)' }}>
-                    {formattedTime}
-                  </p>
-                    <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
-                    {service.duration} {t("customerBooking.minutes")}
-                  </p>
-                </div>
-                </div>
-
-              {/* Location */}
-              {service.location && (
-                  <div
-                    className="flex items-start gap-3 pb-4"
-                    style={{ borderBottom: '1px solid var(--border-subtle)' }}
-                  >
-                    <span className="bk-summary-icon shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" aria-hidden="true">
-                    <MapPin className="h-5 w-5" strokeWidth={1.75} />
-                  </span>
-                  <div className="flex-1 min-w-0">
-                      <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t("customerBooking.location")}</p>
-                      <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>
-                      {service.location.is_online ? (
-                        <span className="flex items-center gap-2">
-                            <span 
-                              className="w-2 h-2 rounded-full"
-                              style={{ backgroundColor: 'var(--accent-success)' }}
-                            ></span>
-                          {onlineLabel(service.location.platform)}
-                        </span>
-                      ) : (
-                        service.location.location_name
-                      )}
-                    </p>
-                    {service.location.address && !service.location.is_online && (
-                        <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
-                        {service.location.address}
-                      </p>
-                    )}
-                    {service.location.phone && !service.location.is_online && (
-                        <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
-                        {service.location.phone}
-                      </p>
-                    )}
-                  </div>
-                  </div>
-              )}
-
-              {/* Timezone */}
-                <div
-                  className="text-sm"
-                  style={{ color: 'var(--text-secondary)' }}
-                >
-                <p className="font-medium mb-1">{t("bookingForm.timezone")}</p>
-                <p data-qa="booking-details-zone" title={timezone}>{zone}</p>
-                </div>
-
-              {/* Price (if applicable) */}
-              {service.price && service.price > 0 && (
-                  <div
-                    className="pt-4"
-                    style={{ borderTop: '1px solid var(--border-subtle)' }}
-                  >
-                  <div className="flex items-center justify-between">
-                      <span style={{ color: 'var(--text-secondary)' }}>{t("publicSite.price")}</span>
-                      <span className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>
-                      {priceLabel(Number(service.price), service.currency || "ETB", language, "")}
-                    </span>
-                  </div>
-                  </div>
-              )}
-            </div>
-
-            {/* Info Banner */}
-              <div
-                className="mt-6 p-4 rounded-lg backdrop-blur-xs"
-                style={{ 
-                  backgroundColor: 'var(--bg-secondary)',
-                  border: '1px solid var(--border-default)'
-                }}
-              >
-                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                {t("bookingForm.note")}
-              </p>
-              </div>
-            </div>
-          </div>
+          {emailInvalid && (
+            <p id="userEmail-error" className="text-sm flex items-center gap-1" style={{ color: "var(--accent-primary)" }}>
+              <span className="text-xs">⚠</span> {errors.userEmail}
+            </p>
+          )}
+          <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+            {emailRequired ? t("bookingForm.emailHint") : t("bookingForm.emailOptionalHint")}
+          </p>
         </div>
       </div>
+
+      {/* Additional participants */}
+      <div className="space-y-2">
+        <Label id="otherParticipants-label" htmlFor="otherParticipants" className="text-base font-medium" style={{ color: "var(--text-primary)" }}>
+          {t("bookingForm.participants")} <span style={{ color: "var(--text-secondary)" }}>{t("bookingForm.optional")}</span>
+        </Label>
+        <PhoneTagsInput
+          id="otherParticipants"
+          data-qa="booking-participants"
+          aria-labelledby="otherParticipants-label"
+          value={formData.participantPhones || []}
+          onChange={(numbers) => setFormData((prev) => ({ ...prev, participantPhones: numbers }))}
+          onValidityChange={setParticipantsValid}
+          exclude={formData.userPhone}
+          disabled={loading}
+          help={t("bookingForm.participantsPhoneHint")}
+          className="min-h-12 px-3 py-2 transition-all"
+          style={fieldStyle(false)}
+          errorStyle={{ color: "var(--accent-primary)" }}
+          helpStyle={{ color: "var(--text-secondary)" }}
+        />
+      </div>
+
+      {/* Notes */}
+      <div className="space-y-2">
+        <Label htmlFor="notes" className="text-base font-medium" style={{ color: "var(--text-primary)" }}>
+          {t("bookingForm.notes")} <span style={{ color: "var(--text-secondary)" }}>{t("bookingForm.optional")}</span>
+        </Label>
+        <div className="relative">
+          <span className="bk-field-icon pointer-events-none absolute start-3.5 top-3 flex h-6 w-6 items-center justify-center" aria-hidden="true">
+            <MessageSquare className="h-[1.125rem] w-[1.125rem]" strokeWidth={1.75} />
+          </span>
+          <Textarea
+            id="notes"
+            placeholder={t("bookingForm.notesPlaceholder")}
+            value={formData.notes}
+            onChange={(e) => handleChange("notes", e.target.value)}
+            disabled={loading}
+            className="pl-12 min-h-[104px] text-base resize-none transition-all"
+            style={fieldStyle(false)}
+            rows={3}
+          />
+        </div>
+      </div>
+    </form>
+  );
+
+  // The Confirm bar: the total (or the time of a free booking) and Confirm, always in view.
+  const bar = (
+    <>
+      {price > 0
+        ? <BarAmount label={t("bookingForm.total")} value={priceLabel(price * Math.max(1, quantity), currency, language, "")} />
+        : <BarAmount value={formattedTime} detail={dayText} />}
+      <Button type="submit" form={formId} data-qa="booking-confirm" disabled={loading} className="bk-action h-12 text-base">
+        {loading ? (
+          <><Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />{t("bookingForm.confirming")}</>
+        ) : (
+          <><CheckCircle2 className="h-5 w-5" aria-hidden="true" />{t("bookingForm.confirm")}</>
+        )}
+      </Button>
+    </>
+  );
+
+  return (
+    <div className={cn("w-full relative", className)} data-qa="booking-details">
+      {/* Pages without the booking header (the personal meeting page) keep their own Back and mode switch. */}
+      {!fit && (
+        <div className="sticky top-0 z-50 w-full backdrop-blur-xl mb-4"
+          style={{ backgroundColor: "color-mix(in srgb, var(--bg-primary) 95%, transparent)", borderBottom: "1px solid var(--border-subtle)" }}>
+          <div className="w-full max-w-7xl mx-auto px-5 md:px-6 py-4 flex items-center justify-between">
+            <Button variant="ghost" size="sm" onClick={onBack} disabled={loading}
+              style={{ color: "var(--text-secondary)", backgroundColor: "var(--border-subtle)", border: "1px solid var(--border-default)" }}>
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              {t("bookingForm.changeDateTime")}
+            </Button>
+            <button onClick={toggleTheme} className="flex items-center gap-2 px-3 py-2 rounded-lg transition-all"
+              style={{ backgroundColor: "var(--border-subtle)", border: "1px solid var(--border-default)" }} aria-label={t("bookingPicker.switchTheme")}>
+              {theme === "light" ? <Moon className="h-4 w-4" style={{ color: "var(--accent-primary)" }} /> : <Sun className="h-4 w-4" style={{ color: "var(--accent-primary)" }} />}
+              <span className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{theme === "light" ? t("bookingPicker.dark") : t("bookingPicker.light")}</span>
+            </button>
+          </div>
+        </div>
+      )}
+      <DetailsLayout
+        fit={fit}
+        summary={summary}
+        summaryLabel={t("bookingForm.summary")}
+        head={<><h1>{t("bookingForm.title")}</h1><p>{t("bookingForm.subtitle")}</p></>}
+        bar={bar}
+        foot={foot}
+      >
+        {prelude}
+        {fields}
+      </DetailsLayout>
     </div>
   );
 }
-

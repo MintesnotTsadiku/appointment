@@ -22,7 +22,7 @@ from frappe.rate_limiter import rate_limit
 from frappe.utils import cint, flt, get_datetime, get_url
 from frappe.utils.password import get_encryption_key
 
-from appointment.scheduler import business_owner, online_meeting, payments
+from appointment.scheduler import business_owner, localized_names, online_meeting, payments
 from appointment.scheduler.booking import CUSTOMER_CHANGE, offering, open_slots
 from appointment.scheduler.helpers.policy_engine import get_applicable_policies
 
@@ -263,6 +263,8 @@ def _projection(doc):
             # This customer's own session: platform, private meeting link and join window. None in person.
             online=online,
         ),
+        # The business, provider, place and address as `{en, am}`; Amharic pages show the Amharic names.
+        "local_names": localized_names.booking_names(doc),
         "rules": decide(doc),
         "currency": "ETB",
         "payment": payments.public_view(payments.latest_payment(doc.name)),

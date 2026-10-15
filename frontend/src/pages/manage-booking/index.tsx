@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useFrappeGetCall } from 'frappe-react-sdk';
 import { CheckCircle2, Phone } from 'lucide-react';
@@ -19,7 +19,8 @@ import { CancelPanel, type CancelResult } from './CancelPanel';
 import { fill, formatMoney } from './format';
 import { PaymentPanel, ReceiptLinks } from './PaymentPanel';
 import { ReschedulePanel } from './ReschedulePanel';
-import { SELF_SERVICE_API, type ManageResponse, type ManageView } from './types';
+import { SELF_SERVICE_API, localizeManageView, type ManageResponse, type ManageView } from './types';
+import { siteName } from '@/lib/local-names';
 
 type Mode = 'overview' | 'reschedule' | 'cancel';
 
@@ -28,7 +29,7 @@ type Mode = 'overview' | 'reschedule' | 'cancel';
  * Organizations use `/<slug>/booking/<token>`; independent providers use `/schedule/individual/booking/<token>`.
  */
 export default function ManageBookingPage() {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const navigate = useNavigate();
   const { slug, token } = useParams<{ slug: string; token: string }>();
   const { theme } = useTheme();
@@ -40,7 +41,9 @@ export default function ManageBookingPage() {
     token ? `manage-${token}` : null,
     { revalidateOnFocus: false }
   );
-  const [view, setView] = useState<ManageView | null>(null);
+  const [answer, setView] = useState<ManageView | null>(null);
+  // The business, provider and place in the page language (Amharic names when the business gave them).
+  const view = useMemo(() => (answer ? localizeManageView(answer, language) : null), [answer, language]);
   const [mode, setMode] = useState<Mode>('overview');
   const [moved, setMoved] = useState(false);
   const [cancelled, setCancelled] = useState<CancelResult | null>(null);
@@ -49,7 +52,7 @@ export default function ManageBookingPage() {
     if (data?.message?.valid) setView(data.message);
   }, [data]);
 
-  const businessName = view?.business.name ?? brand.config?.identity.applicationName ?? '';
+  const businessName = view?.business.name ?? (brand.config ? siteName(brand.config.identity.applicationName, brand.config.identity.applicationNameAm, language) : '');
   const bookPath = view?.business.book_path || (slug ? `/${slug}/book` : '');
   const myBookingsPath = view?.business.my_bookings_path || (slug ? `/${slug}/my-bookings` : '');
   let body: ReactNode;

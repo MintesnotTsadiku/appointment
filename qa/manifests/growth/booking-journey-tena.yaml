@@ -62,7 +62,7 @@ scenarios:
     name: journey_en-3-time-any.png
     full_page: false
   - action: click
-    selector: '[data-qa="booking-header"] .booking-back'
+    selector: '[data-qa="booking-step-link"][data-target="service"]'
   # The chooser: one card per service (three services, three clinicians), each with its photo and its team.
   - action: wait_for
     selector: :nth-match([data-qa="booking-service"], 3)
@@ -163,7 +163,7 @@ scenarios:
     name: journey_am-2-time.png
     full_page: false
   - action: click
-    selector: '[data-qa="booking-header"] .booking-back'
+    selector: '[data-qa="booking-step-back"][data-target="service"]'
   - action: wait_for
     selector: :nth-match([data-qa="booking-service"], 3)
   - action: screenshot

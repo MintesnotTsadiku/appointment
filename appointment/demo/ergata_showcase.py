@@ -13,6 +13,8 @@ OWNER = "yared.tesfaye.counselling@example.test"
 BUSINESS = "Yared Tesfaye Counselling"
 PHONE = "+251 11 000 0106"
 OFFICE_ADDRESS = "Cameroon Street, Tsehay Building, second floor, office 204"
+OFFICE_AM = "የቦሌ የምክር ቢሮ"
+OFFICE_ADDRESS_AM = "ካሜሩን ጎዳና፣ ፀሐይ ሕንፃ፣ ሁለተኛ ፎቅ፣ ቢሮ ቁጥር 204፣ ቦሌ፣ አዲስ አበባ"
 # A fictional Google Meet room in the real link shape. Only booked customers get it (docs/growth/ONLINE_LOCATIONS.md).
 MEETING_LINK = "https://meet.google.com/ytc-room-one"
 PLATFORM = "Google Meet"
@@ -102,8 +104,8 @@ def sections(starter, provider, places, services):
                    "በቦሌ በሚገኝ ጸጥ ያለ ቢሮ፣ ወይም ከራስዎ ግላዊ ቦታ በደህንነቱ በተጠበቀ ቪዲዮ ይገናኙ። ሁለቱም አንድ ዓይነት እንክብካቤ እና አንድ ዓይነት ክፍያ አላቸው።"),
         "items": [
             # No `format` on places either: `placeFormats` gives it by location.
-            {"id": places["in_person"][:64], "name": t("Bole counselling office", "የቦሌ የምክር ቢሮ"),
-             "address": t(f"{OFFICE_ADDRESS}, Bole, Addis Ababa", "ካሜሩን ጎዳና፣ ፀሐይ ሕንፃ፣ ሁለተኛ ፎቅ፣ ቢሮ ቁጥር 204፣ ቦሌ፣ አዲስ አበባ"),
+            {"id": places["in_person"][:64], "name": t("Bole counselling office", OFFICE_AM),
+             "address": t(f"{OFFICE_ADDRESS}, Bole, Addis Ababa", OFFICE_ADDRESS_AM),
              "phone": PHONE,
              "hours": t("Monday to Saturday, 09:00–18:00", "ከሰኞ እስከ ቅዳሜ፣ 09:00–18:00"),
              "body": t("A five-minute walk from the Bole Medhane Alem roundabout. The building has a quiet side entrance with a wooden door.",
@@ -168,7 +170,7 @@ def sections(starter, provider, places, services):
 
 SHOWCASE = IndependentShowcase(
     key="ergata",
-    version=5,
+    version=6,
     business=BUSINESS,
     owner_email=OWNER,
     owner_name=("Yared", "Tesfaye"),
@@ -177,8 +179,9 @@ SHOWCASE = IndependentShowcase(
     preferences={"industry": "therapy", "main_action": "booking"},
     open_days=("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"),
     phone=PHONE,
-    office=Place("Bole counselling office", 9, 18, address_line_1=OFFICE_ADDRESS, address_line_2="Bole"),
-    online=Place("Online video room", 8, 20, platform=PLATFORM, meeting_link=MEETING_LINK),
+    office=Place("Bole counselling office", 9, 18, address_line_1=OFFICE_ADDRESS, address_line_2="Bole",
+                 name_am=OFFICE_AM, address_am=OFFICE_ADDRESS_AM),
+    online=Place("Online video room", 8, 20, platform=PLATFORM, meeting_link=MEETING_LINK, name_am="የኦንላይን ቪዲዮ ክፍል"),
     sessions=SESSIONS,
     full_name="Yared Tesfaye",
     full_name_am="ያሬድ ተስፋዬ",

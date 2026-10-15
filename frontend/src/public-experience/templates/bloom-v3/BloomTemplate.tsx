@@ -540,7 +540,7 @@ export function BloomBooking({ snapshot, locale, applicationName, publicRoot, ro
   return <div ref={root} data-motion={design.motion} data-motion-level={level} data-pe-booking data-pe-recipe={snapshot.recipeKey} data-pe-mode={mode}
     data-night={night} lang={locale} className="b3 b3-handoff" data-template="bloom-hair-v3" style={withAccentInk(rootStyle)}>
     <Bar logo={brandLogo(design)} name={applicationName} root={publicRoot} chrome={chrome} mode={mode} toggleMode={toggleMode} level={level}>
-      <a className="b3-link b3-back" href={publicRoot}>{chrome.t("backToSite")}</a>
+      <a className="b3-link b3-back" href={publicRoot} aria-label={chrome.t("backToSite")}><span className="b3-back-full">{chrome.t("backToSite")}</span><span className="b3-back-short" aria-hidden="true">{chrome.t("backToSiteShort")}</span></a>
     </Bar>
     <main className="b3-handoff-stage">
       {image ? <div className="b3-band-photo"><Photo image={image} night={night} eager sizes="100vw" decorative /></div> : null}

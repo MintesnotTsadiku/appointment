@@ -26,12 +26,18 @@ from appointment.public_experience.recipes import (
     RETIRED_VERSIONS, available_recipes, get_recipe, is_retired, latest_version, require_offered,
 )
 from appointment.public_experience.errors import UnknownRecipeError
-from appointment.scheduler import booking, business_owner, independent, localized_names, public_names
+from appointment.growth import touchpoints
+from appointment.scheduler import (
+    booking, business_owner, independent, localized_names, locations, my_bookings, notification_email, notification_sms,
+    public_names, self_service,
+)
 from appointment.tests.test_growth_referrals import ReferralCase
 
 BUSINESS_AM = "ቦሌ ብሉም የፀጉር ስቱዲዮ"
 DESCRIPTION_AM = "የተፈጥሮ ፀጉር እንክብካቤ በቦሌ።"
 PROVIDER_AM = "ሐና ተስፋዬ"
+PLACE_AM = "የቦሌ ዋና ስቱዲዮ"
+ADDRESS_AM = "ቦሌ፣ ከአፍሪካ ጎዳና ገባ ብሎ፣ ዋናው ስቱዲዮ፣ አዲስ አበባ"
 
 
 class TestAmharicNames(ReferralCase):
@@ -135,6 +141,94 @@ class TestAmharicNames(ReferralCase):
         self.assertEqual(saved["titleAm"], "ብሉም")
         self.assertEqual(publisher._local_title(frappe.get_doc("Public Site", draft["site"])), {"am": "ብሉም"})
         self.assertEqual((saved["recipeVersion"], saved["latestRecipeVersion"]), (latest_version("bloom-hair"),) * 2)
+
+    # Places, manage booking, My bookings and messages ------------------------
+    def _named_place(self, business):
+        """The business's place with an Amharic name and address, saved by its owner in Settings › Locations."""
+        place = frappe.db.get_value("EventType", business.offering, "location")
+        row = frappe.db.get_value("Location", place, ["location_name", "timezone"], as_dict=True)
+        frappe.set_user(business.user)
+        saved = locations.save(business.organization, row.location_name, location=place, address_line_1="Bole, off Africa Avenue",
+                               address_line_2="Main studio", city="Addis Ababa", timezone=row.timezone,
+                               location_name_am=f"  {PLACE_AM} ", address_am=ADDRESS_AM)
+        frappe.set_user("Administrator")
+        return place, saved
+
+    def test_owners_name_their_places_in_amharic_and_public_pages_send_both(self):
+        business, _provider, _saved = self._named_business()
+        place, saved = self._named_place(business)
+        self.assertEqual((saved["location_name_am"], saved["address_am"]), (PLACE_AM, ADDRESS_AM))
+        # Saving without the Amharic values (an older client) keeps them.
+        frappe.set_user(business.user)
+        locations.save(business.organization, saved["location_name"], location=place, address_line_1="Bole, off Africa Avenue",
+                       city="Addis Ababa", timezone=saved["timezone"])
+        with self.assertRaises(frappe.ValidationError):
+            locations.save(business.organization, saved["location_name"], location=place, address_line_1="Bole, off Africa Avenue",
+                           city="Addis Ababa", timezone=saved["timezone"], address_am="<b>ቦሌ</b>")
+        frappe.set_user("Guest")
+        windows = personal_meet.get_organization_meeting_windows(business.slug, business.offering)
+        frappe.set_user("Administrator")
+        self.assertEqual(frappe.db.get_value("Location", place, "location_name_am"), PLACE_AM)
+        self.assertEqual(windows["location"]["local_location_name"], {"en": saved["location_name"], "am": PLACE_AM})
+        self.assertEqual(windows["location"]["local_address"], {"en": "Bole, off Africa Avenue, Addis Ababa", "am": ADDRESS_AM})
+        self.assertEqual(windows["offerings"][0]["location"]["local_location_name"]["am"], PLACE_AM)
+
+    def test_an_online_place_has_no_address_in_any_language(self):
+        row = {"location_name": "Online room", "location_name_am": "የኦንላይን ክፍል", "address_line_1": "Bole", "address_am": "ቦሌ",
+               "location_type": "Online"}
+        self.assertEqual(localized_names.place_names(row), {"local_location_name": {"en": "Online room", "am": "የኦንላይን ክፍል"},
+                                                            "local_address": {}})
+        self.assertEqual(localized_names.location_addresses({"address_line_1": "", "city": "Addis Ababa"}), {})
+        self.assertEqual(localized_names.for_language({"am": "ጤና"}, "am", "Tena"), "ጤና")
+        self.assertEqual(localized_names.for_language({"am": "ጤና"}, "en", "Tena"), "Tena")
+        self.assertEqual(localized_names.for_language({}, "am", "Tena"), "Tena")
+
+    def test_an_independent_offering_sends_its_place_in_both_languages(self):
+        solo = self._solo("Rahel Nutrition")
+        place = frappe.db.get_value("EventType", solo.offering, "location")
+        frappe.db.set_value("Location", place, {"address_line_1": "Kazanchis", "location_name_am": "የካዛንቺስ ቢሮ", "address_am": "ካዛንቺስ፣ አዲስ አበባ"})
+        frappe.set_user("Guest")
+        offering = independent.public_offering(solo.offering)
+        frappe.set_user("Administrator")
+        self.assertEqual(offering["location"]["local_location_name"]["am"], "የካዛንቺስ ቢሮ")
+        self.assertEqual(offering["location"]["local_address"]["am"], "ካዛንቺስ፣ አዲስ አበባ")
+
+    def test_manage_booking_and_my_bookings_carry_the_amharic_names(self):
+        business, _provider, _saved = self._named_business()
+        place, _ = self._named_place(business)
+        doc = self._book(business, 0, "Liya Tadesse")
+        view = self_service._projection(doc)
+        self.assertEqual(view["local_names"]["business"]["am"], BUSINESS_AM)
+        self.assertEqual(view["local_names"]["provider"], {"en": "Hanna Tesfaye", "am": PROVIDER_AM})
+        self.assertEqual(view["local_names"]["location"]["am"], PLACE_AM)
+        self.assertEqual(view["local_names"]["address"]["am"], ADDRESS_AM)
+        owner = business_owner.from_key(business.organization)
+        frappe.set_user("Guest")
+        listing = my_bookings.bookings(slug=business.slug, session=my_bookings.session_token(owner.key, doc.client_email),
+                                       email=doc.client_email)
+        frappe.set_user("Administrator")
+        self.assertEqual(listing["local_business_name"]["am"], BUSINESS_AM)
+        self.assertEqual(listing["upcoming"][0]["local_provider"]["am"], PROVIDER_AM)
+        self.assertEqual(frappe.db.get_value("Appointment", doc.name, "location"), place)
+
+    def test_amharic_messages_use_the_amharic_names_and_english_messages_do_not(self):
+        business, _provider, _saved = self._named_business()
+        self._named_place(business)
+        doc = self._book(business, 0, "Liya Tadesse")
+        amharic = notification_email.render("Confirmation", doc, "am", doc.client_email)
+        english = notification_email.render("Confirmation", doc, "en", doc.client_email)
+        for name in (BUSINESS_AM, PROVIDER_AM, PLACE_AM):
+            self.assertIn(name, amharic["html"])
+            self.assertNotIn(name, english["html"])
+        self.assertIn(BUSINESS_AM, amharic["subject"])
+        sms = {language: notification_sms.render("Confirmation", doc, language) for language in ("am", "en")}
+        self.assertIn(BUSINESS_AM, sms["am"])
+        self.assertNotIn(BUSINESS_AM, sms["en"])
+        # The segment guard still holds: Amharic is UCS-2 and stays within two parts.
+        self.assertLessEqual(touchpoints.sms_parts(sms["am"]), 2)
+        with mock.patch("appointment.scheduler.my_bookings.frappe.sendmail") as sendmail:
+            my_bookings._send_link(business_owner.from_key(business.organization), doc.client_email, "am")
+        self.assertIn(BUSINESS_AM, sendmail.call_args.kwargs["subject"])
 
     # Template version 1 -------------------------------------------------------
     def test_retired_versions_render_but_are_not_offered(self):

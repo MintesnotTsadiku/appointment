@@ -12,6 +12,10 @@ export interface Location {
   /** Owner key: the organization, or `Provider:<provider>` for an independent business. */
   owner: string;
   location_name: string;
+  /** The name on Amharic pages and in Amharic messages; empty means the English name. */
+  location_name_am?: string;
+  /** The whole address in Amharic, one line; empty means the English address. */
+  address_am?: string;
   location_type: LocationKind;
   /** Street address of an in-person place; empty online. */
   address: string;
@@ -53,10 +57,12 @@ export interface LocationOverview {
 export interface LocationFormData {
   owner: string;
   location_name: string;
+  location_name_am: string;
   location_type: LocationKind;
   address_line_1: string;
   address_line_2: string;
   city: string;
+  address_am: string;
   phone: string;
   timezone: string;
   video_platform: string;
@@ -78,10 +84,12 @@ export function emptyLocationForm(owner = '', kind: LocationKind = 'In person'):
   return {
     owner,
     location_name: '',
+    location_name_am: '',
     location_type: kind,
     address_line_1: '',
     address_line_2: '',
     city: 'Addis Ababa',
+    address_am: '',
     phone: '',
     timezone: 'Africa/Addis_Ababa',
     video_platform: kind === 'Online' ? 'Google Meet' : '',
@@ -95,6 +103,8 @@ export function formFromLocation(location: Location): LocationFormData {
   return {
     ...emptyLocationForm(location.owner, location.location_type),
     location_name: location.location_name,
+    location_name_am: location.location_name_am || '',
+    address_am: location.address_am || '',
     address_line_1: location.address_line_1 || '',
     address_line_2: location.address_line_2 || '',
     city: location.city || 'Addis Ababa',
@@ -127,10 +137,12 @@ export function payloadFor(form: LocationFormData, location?: string) {
     owner: form.owner,
     location,
     location_name: form.location_name.trim(),
+    location_name_am: form.location_name_am.trim(),
     location_type: form.location_type,
     address_line_1: online ? '' : form.address_line_1.trim(),
     address_line_2: online ? '' : form.address_line_2.trim(),
     city: online ? '' : form.city.trim(),
+    address_am: online ? '' : form.address_am.trim(),
     phone: normalizePhone(form.phone),
     timezone: form.timezone,
     video_platform: online ? form.video_platform.trim() : '',

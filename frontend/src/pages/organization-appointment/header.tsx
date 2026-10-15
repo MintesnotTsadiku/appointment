@@ -4,7 +4,7 @@ import { useTheme } from "@/components/theme-provider";
 import { useTranslation } from "@/lib/i18n";
 
 /**
- * The sticky header of the organization scheduler: back, the business, the step and the mode switch.
+ * The sticky header of the organization scheduler: the business, the steps (done steps link back) and the mode switch.
  * Its height is fixed, so the time picker's sticky columns can start right under it.
  */
 export function BookingHeaderBar({ height, style, branded, recipe, home, homeLabel, name, logo, back, step, steps, actions, skin }: {
@@ -25,7 +25,7 @@ export function BookingHeaderBar({ height, style, branded, recipe, home, homeLab
       style={{ ...style, height }}
     >
       <div className="bk-header-inner mx-auto flex h-full w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
-        <div className="flex min-w-0 items-center gap-3">
+        <div className="bk-header-brand flex min-w-0 items-center gap-3">
           {back}
           <a href={home} className="flex min-w-0 items-center gap-3 no-underline" aria-label={homeLabel}>
             {logo ? <img className="pe-brand-logo shrink-0" src={logo} alt="" /> : <span className="pe-brand-mark shrink-0" aria-hidden="true">✦</span>}

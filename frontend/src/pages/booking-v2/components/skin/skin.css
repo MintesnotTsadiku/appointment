@@ -85,15 +85,65 @@
 .bk-steps li[data-state="current"] .bk-step-mark { color: var(--pe-color-on-primary, #fff); background: var(--accent-primary); border-color: var(--accent-primary); }
 .bk-steps li[data-state="done"] .bk-step-mark { color: var(--accent-primary); border-color: var(--accent-primary); }
 
-/* The header is tight on phones: the steps become a thin progress line along its bottom edge. */
+/* A done step is a link back to it (it replaces the header's Back button). */
+.bk-step-link {
+  display: inline-flex;
+  min-height: 2rem;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 -0.375rem;
+  padding: 0 0.375rem;
+  color: var(--text-secondary);
+  border-radius: 999px;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 140ms ease, background-color 140ms ease;
+}
+.bk-step-link:hover { color: var(--text-primary); background: var(--border-subtle); }
+.bk-step-link:hover .bk-step-label { text-decoration: underline; text-underline-offset: 3px; }
+.bk-step-link:focus-visible,
+.bk-step-back:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 2px; }
+/* Phones only: the step before the current one, at the start of the header. */
+.bk-step-back { display: none; }
+
+/* The header is tight on phones: the steps become a thin progress line along its bottom edge,
+   and the step before the current one is a compact link at the start of the header. */
 @media (max-width: 900px) {
-  .bk-steps { position: absolute; inset: auto 0 -1px 0; height: 3px; pointer-events: none; }
-  .bk-steps ol { height: 100%; gap: 2px; }
+  .bk-steps { position: static; order: -1; flex: none; }
+  .bk-steps[data-back="false"] { position: absolute; inset: auto 0 -1px 0; height: 3px; pointer-events: none; }
+  .bk-steps ol { position: absolute; inset: auto 0 -1px 0; height: 3px; pointer-events: none; }
+  .bk-steps[data-back="false"] ol { inset: 0; }
+  .bk-step-back {
+    display: inline-flex;
+    min-height: 2.5rem;
+    min-width: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.125rem;
+    padding: 0 0.625rem 0 0.375rem;
+    color: var(--text-secondary);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-default);
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .bk-step-back:hover { color: var(--accent-primary); border-color: var(--accent-primary); }
+  .bk-header-brand { flex: 1; }
+  .bk-steps ol { gap: 2px; }
   .bk-steps li { flex: 1; height: 100%; gap: 0; background: var(--border-subtle); }
   .bk-steps li + li::before { display: none; }
   .bk-steps li > * { display: none; }
   .bk-steps li[data-state="done"],
   .bk-steps li[data-state="current"] { background: var(--bk-action-bg, var(--accent-primary)); }
+}
+/* Small phones: the business name needs the room; the link is the chevron (its name says the step). */
+@media (max-width: 479.98px) {
+  .bk-step-back { width: 2.5rem; min-width: 0; padding: 0; }
+  .bk-step-back > span { display: none; }
 }
 
 /* ------------------------------------------------------------- photo frames and avatars */

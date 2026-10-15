@@ -64,7 +64,7 @@ export function BookingSummaryCard({ eyebrow, title, titleQa, facts, children, h
 
 /** 12-hour, 24-hour or Habesha time, as one segmented control. `inline` hides the label (the slot panel header). */
 export function TimeFormatControl({ value, onChange, inline = false }: { value: TimeFormat; onChange: (format: TimeFormat) => void; inline?: boolean }) {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const labelId = useId();
   const formats: Array<{ value: TimeFormat; label: string }> = [
     { value: "12h", label: t("bookingPicker.h12") },
@@ -77,8 +77,8 @@ export function TimeFormatControl({ value, onChange, inline = false }: { value: 
       <div className="bk-segment" role="group" aria-labelledby={labelId} data-qa="booking-time-format" data-inline={inline ? "true" : "false"}>
         {formats.map((format) => (
           <button key={format.value} type="button" aria-pressed={value === format.value} onClick={() => onChange(format.value)}
-            data-qa="booking-time-format-option" data-value={format.value} title={getTimeFormatExample(format.value)}
-            aria-label={`${format.label} · ${getTimeFormatExample(format.value)}`}>
+            data-qa="booking-time-format-option" data-value={format.value} title={getTimeFormatExample(format.value, language)}
+            aria-label={`${format.label} · ${getTimeFormatExample(format.value, language)}`}>
             <span>{format.label}</span>
           </button>
         ))}
@@ -186,7 +186,7 @@ function useChosenText(slot: TimeSlot | null, timeFormat: TimeFormat, timezone: 
   const day = timeFormat === "ethiopian"
     ? formatEthiopianDate(dayInZone(start, timezone || undefined), language, { weekday: "short" })
     : new Intl.DateTimeFormat(intlLocale(language), { weekday: "short", day: "numeric", month: "short", timeZone: timezone || undefined }).format(start);
-  const time = formatInstant(start, timeFormat, timezone);
+  const time = formatInstant(start, timeFormat, timezone, { language, style: "phrase" });
   const who = slot.provider?.name ? t("bookingPicker.with").replace("{0}", shortProviderName(slot.provider.name)) : "";
   return { day, time, who };
 }

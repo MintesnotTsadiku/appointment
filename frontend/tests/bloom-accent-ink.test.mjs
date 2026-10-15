@@ -38,3 +38,15 @@ for (const mode of ['light', 'dark']) {
   assert.ok(contrastRatio(tokens.accent, style['--b3-gold-ink']) >= AA_TEXT, `v3 ${mode}: button text keeps AA`);
 }
 console.log('PASS: Bloom v2 and v3 booking buttons meet 4.5:1 on light and dark accents');
+
+// /book: "Back to site" stays on one line; phones show the short label and keep the full one as the link's name.
+const bloomV3 = (file) => readFileSync(new URL(`../src/public-experience/templates/bloom-v3/${file}`, import.meta.url), 'utf8');
+assert.match(bloomV3('BloomTemplate.tsx'), /className="b3-link b3-back" href=\{publicRoot\} aria-label=\{chrome\.t\("backToSite"\)\}/);
+assert.match(bloomV3('bloom.css'), /\.b3-back \{ flex: none; white-space: nowrap; \}/);
+assert.match(bloomV3('bloom.css'), /@media \(max-width: 760px\) \{[^@]*\.b3-back-full \{ display: none; \}\s*\.b3-back-short \{ display: inline; \}/);
+for (const locale of ['en', 'am']) {
+  const catalog = JSON.parse(readFileSync(new URL(`../src/lib/i18n/translations/${locale}.json`, import.meta.url), 'utf8'));
+  assert.ok(catalog.publicSite.backToSiteShort, `${locale}: short "Back to site"`);
+  assert.ok(catalog.publicSite.backToSite.toLowerCase().includes(catalog.publicSite.backToSiteShort.toLowerCase()), `${locale}: the visible label is part of the link's name`);
+}
+console.log('PASS: Bloom v3 "Back to site" stays on one line on phones');

@@ -1025,11 +1025,15 @@ def _public_location(location):
     """The place's public facts. An online place never sends its meeting link or an address."""
     from appointment.scheduler.online_meeting import is_online, public_place
 
+    from appointment.scheduler import localized_names
+
     online = is_online(location)
     return {"name": location.name, "location_name": location.location_name,
             "timezone": location.timezone, "city": location.city, "is_online": online,
             "address": ", ".join(part for part in (location.address_line_1, location.address_line_2, location.city) if part)
             if location.address_line_1 and not online else "",
+            # The place's name and address in both languages (Location.location_name_am, address_am).
+            **localized_names.place_names(location),
             **public_place(location)}
 
 

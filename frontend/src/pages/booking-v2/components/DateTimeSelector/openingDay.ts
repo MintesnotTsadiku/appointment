@@ -95,5 +95,6 @@ export function useOpeningDay({ selectedDate, list, hasOpenTime, loading, firstO
 
   const current = state.current;
   const waiting = current.active && Boolean(selectedDate) && !loading && !hasOpenTime && current.day !== null && list !== current.list;
-  return { note, release, settling: waiting };
+  // While the first day is still undecided, the note's place is held, so the list does not move when it appears.
+  return { note, release, settling: waiting, searching: current.active && note === null };
 }

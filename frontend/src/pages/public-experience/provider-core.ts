@@ -9,7 +9,11 @@ export const PROVIDER_ROOT = '/schedule/p/';
 export type PlaceType = 'online' | 'in_person';
 export type Texts = Partial<Record<'en' | 'am', string>>;
 
-export interface ProviderPlace { name: string; address: string; location_type: PlaceType; platform: string }
+export interface ProviderPlace {
+  name: string; address: string; location_type: PlaceType; platform: string;
+  /** The place's name and address by language (Location.location_name_am, address_am); see `localizeProviderPlaces`. */
+  local_location_name?: Texts; local_address?: Texts;
+}
 export interface ProviderOffering { offering: string; path: string; duration: number; price: number; location: ProviderPlace }
 export interface ProviderService {
   service: string; name: string; description: string; names?: Texts; descriptions?: Texts;
@@ -30,6 +34,20 @@ export interface ProviderPageData {
 
 /** One way to book a service: a format and, when the formats alone do not tell them apart, a place. */
 export interface FormatChoice { offering: string; path: string; type: PlaceType; platform: string; place: string; duration: number; price: number }
+
+/** The page with every place's name and address in the reader's language. */
+export function localizeProviderPlaces<T extends Pick<ProviderPageData, 'locations' | 'services'>>(page: T, language: string): T {
+  const place = (row: ProviderPlace): ProviderPlace => ({
+    ...row,
+    name: localized(row.local_location_name, language, row.name) || row.name,
+    address: row.address ? localized(row.local_address, language, row.address) || row.address : row.address,
+  });
+  return {
+    ...page,
+    locations: page.locations.map(place),
+    services: page.services.map((service) => ({ ...service, offerings: service.offerings.map((row) => ({ ...row, location: place(row.location) })) })),
+  };
+}
 
 /** Text in the reader's language, else English, else the fallback. */
 export function localized(texts: Texts | undefined, language: string, fallback = ''): string {

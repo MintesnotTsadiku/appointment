@@ -108,6 +108,10 @@
 .b3-brand { display: inline-flex; align-items: center; gap: 10px; margin-right: auto; min-width: 0; font-weight: 800; font-size: 1.125rem; text-decoration: none; }
 .b3-brand img { width: 36px; height: 36px; object-fit: contain; border-radius: 50%; }
 .b3-brand span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* /book: "Back to site" stays on one line; phones show the short label (the full one stays its accessible name). */
+.b3-back { flex: none; white-space: nowrap; }
+.b3-back-short { display: none; }
+.b3-back-short::before { content: "\2190\00a0"; text-decoration: none; display: inline-block; }
 .b3-nav { display: flex; gap: 26px; }
 .b3-nav a { position: relative; font-weight: 700; text-decoration: none; }
 .b3-nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -4px; height: 2px; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform .3s var(--b3-ease); }
@@ -520,6 +524,8 @@ a.b3-handoff-row:hover .b3-handoff-go { transform: translateX(3px); }
   .b3-mode-text { display: none; }
   .b3-mode { width: 44px; padding: 0; justify-content: center; }
   .b3-bar-book { display: none; }
+  .b3-back-full { display: none; }
+  .b3-back-short { display: inline; }
   .b3-hero { padding-bottom: 120px; }
   .b3-hero-grid { grid-template-columns: minmax(0, 1fr); gap: 20px; }
   .b3-word { font-size: clamp(4rem, calc((100vw - 32px) * 1.95 / var(--len, 5)), 10rem); margin: 14px 0 34px; }

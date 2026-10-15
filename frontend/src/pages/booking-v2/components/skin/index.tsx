@@ -4,8 +4,8 @@
  * The flow keeps one interaction model; a skin changes the look only. See docs/growth/BOOKING_LAYOUT.md.
  */
 
-import { useMemo, type CSSProperties } from "react";
-import { Check } from "lucide-react";
+import { useMemo, type CSSProperties, type ReactNode } from "react";
+import { Check, ChevronLeft } from "lucide-react";
 import { useTranslation } from "@/lib/i18n";
 import { BOOKING_STEPS, DEFAULT_BOOKING_SKIN, bookingSkin, loadBookingSkinStyle, type BookingSkin, type BookingStep } from "@/public-experience/templates/booking-skin";
 import { widthSet, type PictureAsset } from "@/public-experience/templates/kit/core/picture";
@@ -85,22 +85,64 @@ const STEP_KEYS: Record<BookingStep, string> = {
   done: "bookingSteps.done",
 };
 
-/** "Service → Time → Details → Done". The current step is announced; the skin may draw each mark. */
-export function BookingSteps({ step, skin }: { step: BookingStep; skin: BookingSkin }) {
+/** A done step the customer can go back to: an address (a real link) and/or the page's own step change. */
+export interface StepLink {
+  href?: string;
+  onSelect?: () => void;
+}
+
+/** A plain click stays in the page (the step change keeps the chosen time); a modified click opens the address. */
+function StepAnchor({ link, label, className, qa, target, children }: {
+  link: StepLink; label: string; className: string; qa: string; target: BookingStep; children: ReactNode;
+}) {
+  const props = { className, "aria-label": label, "data-qa": qa, "data-target": target };
+  if (link.href) {
+    return (
+      <a {...props} href={link.href} onClick={(event) => {
+        if (!link.onSelect || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        link.onSelect();
+      }}>{children}</a>
+    );
+  }
+  return <button type="button" {...props} onClick={link.onSelect}>{children}</button>;
+}
+
+/**
+ * "Service → Time → Details → Done". The current step is announced; the skin may draw each mark.
+ * Done steps with a `links` entry are links back to that step (they replace the header's Back button).
+ * Below 900 px the steps are a thin progress line, so the step just before the current one is also a
+ * compact link at the start of the header (`bk-step-back`).
+ */
+export function BookingSteps({ step, skin, links }: { step: BookingStep; skin: BookingSkin; links?: Partial<Record<BookingStep, StepLink>> }) {
   const { t } = useTranslation();
   const current = BOOKING_STEPS.indexOf(step);
   const Mark = skin.StepMark;
+  const previous = BOOKING_STEPS.slice(0, Math.max(0, current)).reverse().find((key) => links?.[key]);
+  const backLabel = (key: BookingStep) => t("schedulerPage.backTo").replace("{0}", t(STEP_KEYS[key]));
   return (
-    <nav className="bk-steps" aria-label={t("bookingSteps.label")} data-qa="booking-steps" data-step={step}>
+    <nav className="bk-steps" aria-label={t("bookingSteps.label")} data-qa="booking-steps" data-step={step} data-back={previous ? "true" : "false"}>
+      {previous && links?.[previous] && (
+        <StepAnchor link={links[previous]!} label={backLabel(previous)} className="bk-step-back" qa="booking-step-back" target={previous}>
+          <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+          <span>{t(STEP_KEYS[previous])}</span>
+        </StepAnchor>
+      )}
       <ol>
         {BOOKING_STEPS.map((key, index) => {
           const state = index < current ? "done" : index === current ? "current" : "next";
+          const mark = Mark ? <Mark index={index + 1} state={state} /> : (
+            <span className="bk-step-mark" aria-hidden="true">{state === "done" ? <Check className="h-3 w-3" strokeWidth={3} /> : index + 1}</span>
+          );
+          const link = state === "done" ? links?.[key] : undefined;
           return (
             <li key={key} data-state={state} aria-current={state === "current" ? "step" : undefined}>
-              {Mark ? <Mark index={index + 1} state={state} /> : (
-                <span className="bk-step-mark" aria-hidden="true">{state === "done" ? <Check className="h-3 w-3" strokeWidth={3} /> : index + 1}</span>
-              )}
-              <span className="bk-step-label">{t(STEP_KEYS[key])}</span>
+              {link ? (
+                <StepAnchor link={link} label={backLabel(key)} className="bk-step-link" qa="booking-step-link" target={key}>
+                  {mark}
+                  <span className="bk-step-label">{t(STEP_KEYS[key])}</span>
+                </StepAnchor>
+              ) : <>{mark}<span className="bk-step-label">{t(STEP_KEYS[key])}</span></>}
             </li>
           );
         })}

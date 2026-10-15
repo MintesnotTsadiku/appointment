@@ -1,5 +1,5 @@
 # Amharic names on the showcases: the website team section and name, the service chooser (business name, provider chips
-# and avatars), the time picker (provider options), the booking summary and bar, the Bloom details step and confirmation,
+# and avatars), the time picker (provider options), the booking summary (provider and place) and bar, the Bloom details step and confirmation,
 # and the provider pages. Fixtures, in order: appointment.tests.provider_page_qa_fixtures.setup (Rahel Girma's page; never
 # run its cleanup), appointment.tests.template_bloom_v3_qa_fixtures.setup, appointment.tests.amharic_names_qa_fixtures.setup;
 # after the run: appointment.tests.template_bloom_v3_qa_fixtures.cleanup (the Bloom QA client's booking).
@@ -99,6 +99,9 @@ scenarios:
     selector: body:has-text("ከሐና ተስፋዬ ጋር")
   - action: wait_for
     selector: '[data-qa="booking-summary"]:has-text("ሐና ተስፋዬ")'
+  # The place in Amharic (Location.location_name_am, seeded).
+  - action: wait_for
+    selector: '[data-qa="booking-summary-place"]:has-text("የቦሌ")'
   - action: screenshot
     name: names_bloom_am_desktop_light-4-time-picker.png
     full_page: false
@@ -471,6 +474,11 @@ scenarios:
   - action: wait_for
     selector: h1:has-text("ያሬድ ተስፋዬ")
     timeout_ms: 20000
+  # The places and the office address in Amharic (Location.location_name_am, address_am).
+  - action: wait_for
+    selector: body:has-text("የቦሌ የምክር ቢሮ")
+  - action: wait_for
+    selector: body:has-text("ካሜሩን ጎዳና፣ ፀሐይ ሕንፃ")
   - action: screenshot
     name: names_ergata_am_desktop-2-provider-page.png
     full_page: false

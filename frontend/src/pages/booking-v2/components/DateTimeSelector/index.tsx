@@ -118,7 +118,8 @@ interface DateTimeSelectorProps {
   bookingConfig?: unknown;
 }
 
-const WIDE_AT = 900;
+/** The picker and the details step change to the wide layout at this container width. */
+export const WIDE_AT = 900;
 /** Below this window width, Continue sits at the bottom of the screen (thumb reach). */
 const PHONE_QUERY = "(max-width: 899.98px)";
 const NO_SLOTS: TimeSlot[] = [];
@@ -241,6 +242,8 @@ export function DateTimeSelector({
   const toggleSlot = (slot: TimeSlot) => (onSlotClear && isSameSlot(selectedSlot, slot) ? onSlotClear() : onSlotSelect(slot));
   const openingNote = opening.note && selectedDate && sameDay(opening.note.to, selectedDate)
     ? <p className="bk-open-note" role="status" data-qa="booking-next-open-note">{noteText(opening.note, today, ethiopian, language, locale, t)}</p>
+    // The first day's times are loading: hold the note's place (one line), so a note does not push the list down.
+    : opening.searching && busy ? <p className="bk-open-note bk-bone bk-open-note-hold" aria-hidden="true" data-qa="booking-open-note-hold">{"\u00a0"}</p>
     : null;
   const openCount = slots.filter(slotOpen).length;
   const chosen = action && selectedSlot ? availableSlots.find((slot) => slot.start_time === selectedSlot.start_time && (!selectedSlot.provider?.id || slot.provider?.id === selectedSlot.provider.id)) ?? selectedSlot : null;
@@ -294,7 +297,7 @@ export function DateTimeSelector({
           {countLine && <span aria-hidden="true"> · </span>}
           <ZoneLabel zone={zone} timezone={timezone} />
         </p>
-      ) : countLine && <p className="text-sm" style={{ color: "var(--text-secondary)" }} data-qa="booking-open-count">{countLine}</p>}
+      ) : <p className="text-sm" style={{ color: "var(--text-secondary)" }} data-qa={countLine ? "booking-open-count" : undefined}>{countLine || "\u00a0"}</p>}
     </div>
   );
   const dayNav = (
@@ -440,7 +443,7 @@ function anyProvider(list: TimeSlot[]): TimeSlot[] {
 }
 
 /** Whether the picker's own width fits two columns; measured before paint, so there is no flash. */
-function useContainerWide(ref: RefObject<HTMLDivElement | null>, minWidth: number, allowed: boolean) {
+export function useContainerWide(ref: RefObject<HTMLDivElement | null>, minWidth: number, allowed: boolean) {
   const [wide, setWide] = useState(() => allowed && typeof window !== "undefined" && window.innerWidth >= 1024);
   useLayoutEffect(() => {
     const element = ref.current;

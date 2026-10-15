@@ -1250,7 +1250,12 @@
         "providerHint": "ይህ ቦታ የየትኛው አገልግሎት ሰጪ እንደሆነ ይምረጡ",
         "services": "ከአገልግሎቶች ጋር ያገናኙ (አማራጭ)",
         "servicesHint": "በዚህ ቦታ የሚገኙትን አገልግሎቶች ይምረጡ",
-        "onlineNamePlaceholder": "ለምሳሌ፦ የኦንላይን ቪዲዮ ክፍል"
+        "onlineNamePlaceholder": "ለምሳሌ፦ የኦንላይን ቪዲዮ ክፍል",
+        "nameAm": "ስም በአማርኛ (አማራጭ)",
+        "nameAmPlaceholder": "ለምሳሌ፦ ቦሌ ቅርንጫፍ",
+        "addressAm": "አድራሻ በአማርኛ (አማራጭ)",
+        "addressAmPlaceholder": "ለምሳሌ፦ ቦሌ መንገድ፣ ኤድና ሞል አጠገብ፣ አዲስ አበባ",
+        "amharicHint": "የአማርኛ ገጾችና መልዕክቶች የአማርኛውን ስምና አድራሻ ያሳያሉ። ሳጥኑ ባዶ ከሆነ የእንግሊዝኛውን ያሳያሉ።"
       },
       "typeLabel": "ደንበኞች እዚህ እንዴት ይገናኛሉ?",
       "typeInPerson": "በአካል",
@@ -3958,6 +3963,7 @@
     "visit": "ይጎብኙ",
     "questions": "ጥያቄዎች",
     "backToSite": "ወደ ድረ-ገጹ ይመለሱ",
+    "backToSiteShort": "ድረ-ገጹ",
     "dark": "ጨለማ",
     "light": "ብሩህ",
     "switchToDark": "ወደ ጨለማ ገጽታ ይቀይሩ",
@@ -4355,7 +4361,8 @@
     "phoneInvalid": "ትክክለኛ ስልክ ቁጥር ያስገቡ",
     "phoneHint": "ንግዱ ቀጠሮዎን ለማረጋገጥና እርስዎን ለማግኘት ይህን ቁጥር ይጠቀማል።",
     "emailOptionalHint": "አማራጭ። ማረጋገጫውን በኢሜይልም ለመቀበል ያክሉት።",
-    "participantsPhoneHint": "የእያንዳንዱን ሰው ስልክ ቁጥር ይጻፉና Enter ይጫኑ ወይም ኮማ ይጻፉ።"
+    "participantsPhoneHint": "የእያንዳንዱን ሰው ስልክ ቁጥር ይጻፉና Enter ይጫኑ ወይም ኮማ ይጻፉ።",
+    "total": "ጠቅላላ"
   },
   "serviceSelector": {
     "title": "አገልግሎት ይምረጡ",

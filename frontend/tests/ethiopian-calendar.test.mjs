@@ -92,4 +92,7 @@ for (const file of [...pagumeFiles, ...walk(src)]) {
   assert.ok(!/ጳጉሜን|ጷጉሜ|ጳግሜ/.test(readFileSync(file, "utf8")), `${path.relative(path.resolve(here, "../.."), file)} spells Pagume ጳጉሜ`);
 }
 for (const file of pagumeFiles) assert.match(readFileSync(file, "utf8"), /"ጳጉሜ", "Pagume"/, `${path.basename(file)} names month 13 ጳጉሜ`);
+// The opening day's note does not move the list: its place is held while the first day's times load.
+assert.match(picker, /opening\.searching && busy \? <p className="bk-open-note bk-bone bk-open-note-hold" aria-hidden="true"/);
+assert.match(readFileSync(path.join(src, "pages/booking-v2/components/DateTimeSelector/openingDay.ts"), "utf8"), /searching: current\.active && note === null/);
 console.log("ethiopian-calendar: all checks passed");

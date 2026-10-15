@@ -52,6 +52,36 @@ export function toEthiopian(hour24: number, minute: number): EthiopianTime {
   };
 }
 
+/**
+ * How much an English page says about a Habesha time:
+ *  - compact: "6:00 afternoon" (slot buttons)
+ *  - phrase: "6:00 in the afternoon" (the "Your time" bar)
+ *  - full: "6:00 in the afternoon (Habesha time)" (the summary and the confirmation)
+ * Amharic pages always show "ሰዓት 6:00 ከሰዓት".
+ */
+export type HabeshaStyle = 'compact' | 'phrase' | 'full';
+
+/** English words for the periods, as the free time converter says them (morning, afternoon, evening, night). */
+const ENGLISH_PERIODS: Record<string, readonly [string, string]> = {
+  [ETHIOPIAN_PERIODS.night]: ['night', 'at night'],
+  [ETHIOPIAN_PERIODS.morning]: ['morning', 'in the morning'],
+  [ETHIOPIAN_PERIODS.afternoon]: ['afternoon', 'in the afternoon'],
+  [ETHIOPIAN_PERIODS.evening]: ['evening', 'in the evening'],
+};
+
+/**
+ * A Habesha time in the page language: Amharic "ሰዓት 6:00 ከሰዓት", English "6:00 in the afternoon (Habesha time)"
+ * (see `HabeshaStyle`). Any language other than Amharic gets the English words.
+ */
+export function habeshaLabel(hour24: number, minute: number, language: string, style: HabeshaStyle = 'compact'): string {
+  const local = toEthiopian(hour24, minute);
+  if (language === 'am') return local.label;
+  const [word, phrase] = ENGLISH_PERIODS[local.period];
+  const time = `${local.hour}:${String(minute).padStart(2, '0')}`;
+  if (style === 'compact') return `${time} ${word}`;
+  return style === 'full' ? `${time} ${phrase} (Habesha time)` : `${time} ${phrase}`;
+}
+
 /** Parse a stored 24-hour `HH:MM` value; returns null when malformed. */
 export function parseWallTime(value: string): { hour: number; minute: number } | null {
   const match = /^(\d{1,2}):(\d{2})$/.exec((value || '').trim());
@@ -91,18 +121,21 @@ export function wallPartsInZone(
 
 /**
  * Format an instant for display. The instant and its storage are untouched;
- * only the presentation changes with `format` and `timeZone`.
+ * only the presentation changes with `format` and `timeZone`. Public booking pages pass
+ * `habesha` with the page language, so English pages say Habesha time in English.
  */
 export function formatInstant(
   instant: Date | string,
   format: ClockFormat,
-  timeZone?: string
+  timeZone?: string,
+  habesha?: { language: string; style?: HabeshaStyle }
 ): string {
   const date = typeof instant === 'string' ? new Date(instant) : instant;
   if (Number.isNaN(date.getTime())) return '';
   if (format === 'ethiopian') {
     const { hour, minute } = wallPartsInZone(date, timeZone);
-    return toEthiopian(hour, minute).label;
+    // Without a page language (staff screens): the Amharic label.
+    return habesha ? habeshaLabel(hour, minute, habesha.language, habesha.style) : toEthiopian(hour, minute).label;
   }
   return new Intl.DateTimeFormat('en-US', {
     hour: 'numeric',

@@ -20,7 +20,7 @@ from frappe.utils import get_datetime
 from appointment.growth import touchpoints
 from appointment.helpers import phone
 from appointment.helpers.utils import format_ethiopian_time
-from appointment.scheduler import business_owner
+from appointment.scheduler import business_owner, localized_names
 
 TIMEOUT_SECONDS = 15
 # AfroMessage allows 30 status requests a minute; one run stays below that.
@@ -89,7 +89,8 @@ def send_notification(notification):
 
 def render(event, doc, language):
     owner = business_owner.for_booking(doc)
-    business = owner.display_name if owner else ""
+    # An Amharic SMS names the business in Amharic when it has an Amharic name (the segment guard below still applies).
+    business = localized_names.for_language(localized_names.booking_names(doc)["business"], language, owner.display_name) if owner else ""
     service = frappe.db.get_value("Service", doc.service, "service_name") if doc.service else ""
     text = _(COPY[event], lang=language).format(business, service, when(doc, language))
     if event in JOIN_EVENTS and doc.get("is_online") and doc.get("meeting_link"):

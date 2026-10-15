@@ -9,7 +9,7 @@ an offering (EventType) at that place, so customers can book it there.
 import frappe
 import pytz
 from frappe import _
-from appointment.scheduler import business_owner, membership, online_meeting
+from appointment.scheduler import business_owner, localized_names, membership, online_meeting
 
 DAYS = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
 DEFAULT_DAYS = DAYS[:5]
@@ -74,7 +74,8 @@ def overview():
     for row in rows:
         owner = business_owner.from_key(row["key"])
         for location in frappe.get_all("Location", filters=_owner_filters(owner), order_by="creation asc",
-                                       fields=["name", "location_name", "address_line_1", "address_line_2", "city", "phone",
+                                       fields=["name", "location_name", "location_name_am", "address_line_1", "address_line_2",
+                                               "city", "address_am", "phone",
                                                "timezone", "is_active", "location_type", "video_platform",
                                                "meeting_link_mode", "meeting_link"]):
             locations.append(_view(location, row))
@@ -85,8 +86,12 @@ def overview():
 @frappe.whitelist(methods=["POST"])
 def save(owner, location_name, location_type=online_meeting.IN_PERSON, location=None, address_line_1="",
          address_line_2="", city="", phone="", timezone="Africa/Addis_Ababa", video_platform="",
-         meeting_link_mode=online_meeting.FIXED, meeting_link="", sessions=None):
-    """Create a place for `owner`, or update `location`. Independent owners may offer chosen sessions there."""
+         meeting_link_mode=online_meeting.FIXED, meeting_link="", sessions=None, location_name_am=None, address_am=None):
+    """Create a place for `owner`, or update `location`. Independent owners may offer chosen sessions there.
+
+    `location_name_am` and `address_am` are the Amharic name and the whole Amharic address (one line). Amharic
+    pages and messages show them; left out (None), they keep their stored values.
+    """
     business = _require_owner(owner)
     name = " ".join((location_name or "").split())
     if not 2 <= len(name) <= NAME_LIMIT:
@@ -108,6 +113,13 @@ def save(owner, location_name, location_type=online_meeting.IN_PERSON, location=
     if clash and (not doc or clash != doc.name):
         frappe.throw(_("A place with this name already exists. Choose another name."))
     values = {key: value.strip() for key, value in texts.items()}
+    for field, value, limit in (("location_name_am", location_name_am, NAME_LIMIT),
+                                ("address_am", address_am, localized_names.ADDRESS_LIMIT)):
+        if value is None:
+            continue
+        if not isinstance(value, str) or any(character in value for character in "<>\x00"):
+            frappe.throw(_("Use plain text without < or >."))
+        values[field] = " ".join(value.split())[:limit]
     values.update(location_name=name, timezone=timezone, location_type=location_type,
                   video_platform=video_platform if online else "", meeting_link_mode=meeting_link_mode if online else online_meeting.FIXED,
                   meeting_link=meeting_link if online else "")
@@ -148,6 +160,7 @@ def _view(location, owner_row):
     online = online_meeting.is_online(location)
     return {
         "name": location.name, "owner": owner_row["key"], "location_name": location.location_name,
+        "location_name_am": location.get("location_name_am") or "", "address_am": location.get("address_am") or "",
         "location_type": location.get("location_type") or online_meeting.IN_PERSON,
         "address": "" if online else address, "address_line_1": location.address_line_1 or "",
         "address_line_2": location.address_line_2 or "", "city": location.city or "", "phone": location.phone or "",

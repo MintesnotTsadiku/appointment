@@ -26,7 +26,7 @@ from appointment.demo import showcase_public as public_copy
 from appointment.public_experience.publisher import publish_experience
 
 VERSION = 1
-CONTENT_VERSION = 7
+CONTENT_VERSION = 8
 PUBLIC_EXPERIENCE_VERSION = 25
 TZ = "Africa/Addis_Ababa"
 DEMO_BRAND_RECIPES = recipe_assignments()
@@ -610,11 +610,15 @@ def enrich_business_records(key, business):
     for index, location_id in enumerate(business["locations"]):
         location = frappe.get_doc("Location", location_id)
         location_detail = detail["locations"][index]
+        address = ", ".join((location_detail["address_line_1"], location_detail["address_line_2"], "Addis Ababa"))
         location.update(
             {
                 "address_line_1": location_detail["address_line_1"],
                 "address_line_2": location_detail["address_line_2"],
                 "city": "Addis Ababa",
+                # The place's name and whole address in Amharic (the website's own translations).
+                "location_name_am": public_copy.AM.get(location.location_name, ""),
+                "address_am": public_copy.AM.get(address, ""),
                 "phone": location_detail["phone"],
                 "timezone": TZ,
                 "opening_hours": hours(business["days"], business["opens"], business["closes"]),

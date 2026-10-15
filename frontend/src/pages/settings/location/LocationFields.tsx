@@ -37,9 +37,14 @@ export function LocationFields({ form, errors, onChange, owners, platforms, sess
         </Field>
       )}
       <TypeField value={form.location_type} onChange={(location_type) => onChange({ location_type })} />
-      <TextField id="location_name" qa="location-name" label={t('staff.locations.fields.name')} required value={form.location_name}
-        placeholder={t(online ? 'staff.locations.fields.onlineNamePlaceholder' : 'staff.locations.fields.namePlaceholder')}
-        error={errors.location_name} onChange={(v) => onChange({ location_name: v })} />
+      {/* The name in English and Amharic side by side; Amharic pages and messages show the Amharic one. */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <TextField id="location_name" qa="location-name" label={t('staff.locations.fields.name')} required value={form.location_name}
+          placeholder={t(online ? 'staff.locations.fields.onlineNamePlaceholder' : 'staff.locations.fields.namePlaceholder')}
+          error={errors.location_name} onChange={(v) => onChange({ location_name: v })} />
+        <TextField id="location_name_am" qa="location-name-am" lang="am" maxLength={100} label={t('staff.locations.fields.nameAm')} value={form.location_name_am}
+          placeholder={t('staff.locations.fields.nameAmPlaceholder')} onChange={(v) => onChange({ location_name_am: v })} />
+      </div>
       {online ? (
         <OnlineFields form={form} errors={errors} onChange={onChange} platforms={platforms} />
       ) : (
@@ -56,6 +61,9 @@ export function LocationFields({ form, errors, onChange, owners, platforms, sess
                 aria-describedby={errors.phone ? 'phone-error' : undefined} onChange={(phone) => onChange({ phone })} />
             </Field>
           </div>
+          <TextField id="address_am" qa="location-address-am" lang="am" maxLength={280} label={t('staff.locations.fields.addressAm')} value={form.address_am}
+            placeholder={t('staff.locations.fields.addressAmPlaceholder')} hint={t('staff.locations.fields.amharicHint')}
+            onChange={(v) => onChange({ address_am: v })} />
         </>
       )}
       <Field id="timezone" label={t('staff.locations.fields.timezone')}>
@@ -175,21 +183,26 @@ interface TextFieldProps {
   required?: boolean;
   type?: string;
   error?: string;
+  hint?: string;
+  lang?: string;
+  maxLength?: number;
   onChange: (value: string) => void;
 }
 
-function TextField({ id, qa, label, value, placeholder, required, type = 'text', error, onChange }: TextFieldProps) {
+function TextField({ id, qa, label, value, placeholder, required, type = 'text', error, hint, lang, maxLength, onChange }: TextFieldProps) {
   return (
-    <Field id={id} label={label} required={required} error={error}>
+    <Field id={id} label={label} required={required} error={error} hint={hint}>
       <Input
         id={id}
         data-qa={qa}
         type={type}
+        lang={lang}
+        maxLength={maxLength}
         value={value}
         placeholder={placeholder}
         required={required}
         aria-invalid={!!error}
-        aria-describedby={error ? `${id}-error` : undefined}
+        aria-describedby={error ? `${id}-error` : hint ? `${id}-hint` : undefined}
         className={error ? 'border-destructive focus-visible:ring-destructive' : undefined}
         onChange={(event) => onChange(event.target.value)}
       />

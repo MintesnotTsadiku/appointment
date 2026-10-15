@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useFrappeGetCall } from 'frappe-react-sdk';
 import { RotateCw } from 'lucide-react';
@@ -16,7 +16,7 @@ import { BookingBackdrop, useBookingSkin } from '@/pages/booking-v2/components/s
 import { useTranslation } from '@/lib/i18n';
 import { fill } from '@/pages/manage-booking/format';
 import '@/public-experience/platform.css';
-import { PROVIDER_PAGE_API, PROVIDER_ROOT, providerBio, providerName, serviceFormats, type PlaceType, type ProviderPageData } from './provider-core';
+import { PROVIDER_PAGE_API, PROVIDER_ROOT, localizeProviderPlaces, providerBio, providerName, serviceFormats, type PlaceType, type ProviderPageData } from './provider-core';
 import { ProviderHero, ProviderPlaces, ServiceCard } from './provider-page-parts';
 
 /**
@@ -34,7 +34,9 @@ export default function ProviderPage() {
   const { data, error, mutate } = useFrappeGetCall<{ message: ProviderPageData }>(PROVIDER_PAGE_API, { slug: providerSlug }, `provider-page-${providerSlug}`, { revalidateOnFocus: false });
   const preview = previewState();
   const forced = preview === 'loading' || preview === 'error' || preview === 'unavailable' ? preview : null;
-  const page = forced ? undefined : data?.message;
+  const answer = forced ? undefined : data?.message;
+  // Places and addresses in the page language (Location.location_name_am, address_am).
+  const page = useMemo(() => (answer ? localizeProviderPlaces(answer, language) : undefined), [answer, language]);
   const failed = forced === 'error' || Boolean(error && (!error.httpStatus || error.httpStatus >= 500));
   const brand = useBookingBrand(page?.site_slug || undefined, resolvedTheme === 'dark' ? 'dark' : 'light');
   // The template's booking skin (tokens, frames and the faint page background), as on organization pages.

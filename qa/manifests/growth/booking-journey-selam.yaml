@@ -59,7 +59,7 @@ scenarios:
     name: journey_en-3-time.png
     full_page: false
   - action: click
-    selector: '[data-qa="booking-header"] .booking-back'
+    selector: '[data-qa="booking-step-link"][data-target="service"]'
   - action: wait_for
     selector: :nth-match([data-qa="booking-service"], 2)
   - action: wait_for
@@ -161,7 +161,7 @@ scenarios:
     name: journey_am-2-time.png
     full_page: false
   - action: click
-    selector: '[data-qa="booking-header"] .booking-back'
+    selector: '[data-qa="booking-step-back"][data-target="service"]'
   - action: wait_for
     selector: :nth-match([data-qa="booking-service"], 2)
   - action: screenshot

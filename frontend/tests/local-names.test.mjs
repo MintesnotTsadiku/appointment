@@ -12,7 +12,7 @@ const read = (rel) => readFileSync(new URL(`../${rel}`, import.meta.url), 'utf8'
 const exports = {};
 vm.runInNewContext(ts.transpileModule(read('src/lib/local-names.ts'),
   { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 } }).outputText, { exports, Array });
-const { localName, siteName, localizeBookingPayload } = exports;
+const { localName, siteName, localizeBookingPayload, localizePlace, amharicOr } = exports;
 
 // The page language, else the plain field, else the other language.
 assert.equal(localName({ en: 'Hanna Tesfaye', am: 'ሐና ተስፋዬ' }, 'am', 'Hanna Tesfaye'), 'ሐና ተስፋዬ');
@@ -53,9 +53,33 @@ assert.deepEqual(plain(localizeBookingPayload({ error: 'Business not found' }, '
 assert.equal(localizeBookingPayload(undefined, 'am'), undefined);
 assert.equal(plain(localizeBookingPayload({ company: 'Tena', description: 'Clinic' }, 'am')).description, 'Clinic');
 
+// Places: the organization scheduler's place and each offering's place, by language (Location.location_name_am, address_am).
+const place = { name: 'LOC-1', location_name: 'Bole main studio', address: 'Bole, off Africa Avenue, Addis Ababa',
+  local_location_name: { en: 'Bole main studio', am: 'የቦሌ ዋና ስቱዲዮ' }, local_address: { en: 'Bole, off Africa Avenue, Addis Ababa', am: 'ቦሌ፣ ከአፍሪካ ጎዳና ገባ ብሎ፣ አዲስ አበባ' } };
+const placed = plain(localizeBookingPayload({ ...answer, location: place, offerings: [{ id: 'o1', provider: null, location: place }] }, 'am'));
+assert.equal(placed.location.location_name, 'የቦሌ ዋና ስቱዲዮ');
+assert.equal(placed.location.name, 'LOC-1', 'the record id stays');
+assert.equal(placed.location.address, 'ቦሌ፣ ከአፍሪካ ጎዳና ገባ ብሎ፣ አዲስ አበባ');
+assert.equal(placed.offerings[0].location.location_name, 'የቦሌ ዋና ስቱዲዮ');
+assert.equal(plain(localizeBookingPayload({ location: place }, 'en')).location.location_name, 'Bole main studio');
+// Independent pages name the place in `name`; an online place keeps its empty address.
+assert.deepEqual(plain(localizePlace({ name: 'Online room', address: '', local_location_name: { am: 'የኦንላይን ክፍል' }, local_address: {} }, 'am')),
+  { name: 'የኦንላይን ክፍል', address: '', local_location_name: { am: 'የኦንላይን ክፍል' }, local_address: {} });
+assert.deepEqual(plain(localizePlace({ name: 'Bole', address: 'Bole' }, 'am')), { name: 'Bole', address: 'Bole' });
+// Manage booking and My bookings: Amharic when the business gave it, else the field they always showed.
+assert.equal(amharicOr({ en: 'Hanna', am: 'ሐና' }, 'am', 'Hanna Tesfaye'), 'ሐና');
+assert.equal(amharicOr({ en: 'Hanna', am: 'ሐና' }, 'en', 'Hanna Tesfaye'), 'Hanna Tesfaye');
+assert.equal(amharicOr({ en: 'Hanna' }, 'am', 'Hanna Tesfaye'), 'Hanna Tesfaye');
+assert.equal(amharicOr(undefined, 'am', null), '');
+
 // The pages read the names through these helpers.
 const page = read('src/pages/organization-appointment/index.tsx');
 assert.match(page, /localizeBookingPayload\(answer\.message, language\)/);
 assert.match(read('src/pages/booking-v2/hooks/useTimeSlots.ts'), /localName\(slot\.provider_local_name, language, slot\.provider_name\)/);
 assert.match(read('src/public-experience/PublicSiteHome.tsx'), /siteName\(/);
+assert.match(read('src/pages/public-experience/independent-booking.tsx'), /localizePlace\(answer\.location, language\)/);
+assert.match(read('src/pages/public-experience/provider-page.tsx'), /localizeProviderPlaces\(answer, language\)/);
+assert.match(read('src/pages/manage-booking/index.tsx'), /localizeManageView\(answer, language\)/);
+assert.match(read('src/pages/my-bookings/index.tsx'), /amharicOr\(row\.local_provider, language, row\.provider\)/);
+assert.match(read('src/pages/my-bookings/index.tsx'), /amharicOr\(listing\.local_business_name, language, listing\.business_name\)/);
 console.log('local-names: ok');

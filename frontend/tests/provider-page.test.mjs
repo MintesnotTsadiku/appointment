@@ -15,7 +15,7 @@ const exports = {};
 vm.runInNewContext(ts.transpileModule(read('src/pages/public-experience/provider-core.ts'),
   { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 } }).outputText,
 { exports, Intl, URLSearchParams, Map, Set, Number, Array });
-const { localized, priceLabel, formatLabel, groupFormats, serviceFormats, offeringPath, initials, providerBio, providerName, PROVIDER_PAGE_API } = exports;
+const { localized, localizeProviderPlaces, priceLabel, formatLabel, groupFormats, serviceFormats, offeringPath, initials, providerBio, providerName, PROVIDER_PAGE_API } = exports;
 
 // Words in the reader's language, else English, else the record's own text.
 assert.equal(localized({ en: 'Meal plan', am: 'የምግብ እቅድ' }, 'am'), 'የምግብ እቅድ');
@@ -79,4 +79,16 @@ assert.ok(parts.includes("from '@/components/toggle-group'"), 'the format choose
 const scheduler = read('src/pages/public-experience/independent-booking.tsx');
 assert.ok(scheduler.includes('slug: providerSlug') && scheduler.includes('independent-booking-all-services'), 'the scheduler checks the page address and links back');
 
+// Places in the reader's language (Location.location_name_am, address_am); English and empty values stay.
+{
+  const office = { name: 'Bole office', address: 'Cameroon Street, Bole', location_type: 'in_person', platform: '',
+    local_location_name: { en: 'Bole office', am: 'የቦሌ ቢሮ' }, local_address: { en: 'Cameroon Street, Bole', am: 'ካሜሩን ጎዳና፣ ቦሌ' } };
+  const online = { name: 'Online video room', address: '', location_type: 'online', platform: 'Zoom', local_location_name: { am: 'የኦንላይን ቪዲዮ ክፍል' } };
+  const page = { locations: [office, online], services: [{ offerings: [{ offering: 'o1', location: office }, { offering: 'o2', location: online }] }] };
+  const am = JSON.parse(JSON.stringify(localizeProviderPlaces(page, 'am')));
+  assert.deepEqual(am.locations.map((row) => [row.name, row.address]), [['የቦሌ ቢሮ', 'ካሜሩን ጎዳና፣ ቦሌ'], ['የኦንላይን ቪዲዮ ክፍል', '']]);
+  assert.equal(am.services[0].offerings[0].location.name, 'የቦሌ ቢሮ');
+  const en = JSON.parse(JSON.stringify(localizeProviderPlaces(page, 'en')));
+  assert.deepEqual(en.locations.map((row) => row.name), ['Bole office', 'Online video room']);
+}
 console.log('provider-page: ok');

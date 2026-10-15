@@ -1,4 +1,4 @@
-import { toEthiopian } from '@/lib/time';
+import { habeshaLabel, toEthiopian } from '@/lib/time';
 
 /**
  * Ethiopian time conversion utilities
@@ -118,9 +118,10 @@ export const formatWithEthiopicNumerals = (date: Date): string => {
 };
 
 /**
- * Get time format example for UI
+ * Get time format example for UI. With the page language, Habesha time reads in that language
+ * ("8:30 afternoon" on English pages).
  */
-export const getTimeFormatExample = (format: '12h' | '24h' | 'ethiopian'): string => {
+export const getTimeFormatExample = (format: '12h' | '24h' | 'ethiopian', language?: string): string => {
   const exampleDate = new Date();
   exampleDate.setHours(14, 30); // 2:30 PM
   
@@ -130,7 +131,7 @@ export const getTimeFormatExample = (format: '12h' | '24h' | 'ethiopian'): strin
     case '24h':
       return '14:30';
     case 'ethiopian':
-      return formatEthiopianTime(exampleDate);
+      return language ? habeshaLabel(14, 30, language) : formatEthiopianTime(exampleDate);
     default:
       return '';
   }

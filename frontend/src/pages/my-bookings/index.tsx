@@ -12,6 +12,7 @@ import CustomerShareCard from '@/components/growth-referrals/CustomerShareCard';
 import { usePlatformBrand } from '@/lib/platform-brand';
 import { useTheme } from '@/components/theme-provider';
 import { useTranslation } from '@/lib/i18n';
+import { amharicOr, localName, siteName, type LocalNames } from '@/lib/local-names';
 import { serverErrorMessage } from '@/lib/utils';
 import { useBookingBrand } from '@/public-experience/bookingTheme';
 import { brandLogo } from '@/public-experience/templates/content';
@@ -34,6 +35,8 @@ interface BookingRow {
   payment_status: string | null;
   upcoming: boolean;
   manage_path: string | null;
+  /** The provider's public name as `{en, am}`; Amharic pages show the Amharic one. */
+  local_provider?: LocalNames;
   /** Past bookings: the same business and service, when Growth Settings allow it. */
   book_again_path?: string | null;
   location_type?: LocationType;
@@ -45,6 +48,7 @@ interface Listing {
   valid: boolean;
   email?: string;
   business_name?: string;
+  local_business_name?: LocalNames;
   upcoming?: BookingRow[];
   past?: BookingRow[];
 }
@@ -108,7 +112,7 @@ export default function MyBookingsPage() {
   const { theme } = useTheme();
   const { growth } = usePlatformBrand();
   const brand = useBookingBrand(slug || undefined, theme === 'dark' ? 'dark' : 'light');
-  const { data: independent } = useFrappeGetCall<{ message: { business_name: string } }>(
+  const { data: independent } = useFrappeGetCall<{ message: { business_name: string; business_local_name?: LocalNames } }>(
     'appointment.scheduler.independent.public_offering',
     { offering_id: offeringId },
     slug ? null : `my-bookings-offering-${offeringId}`,
@@ -164,7 +168,10 @@ export default function MyBookingsPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scope]);
 
-  const businessName = brand.config?.identity.applicationName ?? independent?.message.business_name ?? listing?.business_name ?? '';
+  // The website's name, else the business name, in the page language.
+  const businessName = (brand.config ? siteName(brand.config.identity.applicationName, brand.config.identity.applicationNameAm, language) : undefined)
+    ?? (independent ? localName(independent.message.business_local_name, language, independent.message.business_name) : undefined)
+    ?? (listing ? amharicOr(listing.local_business_name, language, listing.business_name) : '');
   const signOut = () => {
     writeSession(scope, null);
     setSession(null);
@@ -297,7 +304,9 @@ function Section({ title, rows, qa, muted = false }: { title: string; rows: Book
                   {formatWhen(row.starts_at, row.timezone, language)}
                 </p>
                 {(row.provider || row.resources.length > 0) && (
-                  <p className="text-sm text-theme-secondary">{[row.provider, ...row.resources].filter(Boolean).join(' · ')}</p>
+                  <p className="text-sm text-theme-secondary" data-qa="my-booking-provider">
+                    {[row.provider && amharicOr(row.local_provider, language, row.provider), ...row.resources].filter(Boolean).join(' · ')}
+                  </p>
                 )}
                 {row.location_type === 'online' && (
                   <p className="flex items-center gap-1.5 text-sm text-theme-secondary" data-qa="my-booking-online">

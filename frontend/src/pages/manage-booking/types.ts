@@ -1,4 +1,5 @@
 import type { LocationType, OnlineSession } from '@/lib/online-session';
+import { amharicOr, type LocalNames } from '@/lib/local-names';
 
 /** Shapes returned by appointment.scheduler.self_service. */
 export const SELF_SERVICE_API = 'appointment.scheduler.self_service';
@@ -54,9 +55,28 @@ export interface ManageView {
     /** This customer's own online session (private link and join window); null in person. */
     online?: OnlineSession | null;
   };
+  /** The business, provider, place and address as `{en, am}`; read the view through `localizeManageView`. */
+  local_names?: { business?: LocalNames; provider?: LocalNames; location?: LocalNames; address?: LocalNames };
   rules: ManageRules;
   currency: string;
   payment: PaymentView | null;
+}
+
+/** The view with the business, provider, place and address in Amharic on Amharic pages (when the business named them). */
+export function localizeManageView(view: ManageView, language: string): ManageView {
+  const local = view.local_names;
+  if (!local || language !== 'am') return view;
+  const { booking } = view;
+  return {
+    ...view,
+    business: { ...view.business, name: amharicOr(local.business, language, view.business.name) },
+    booking: {
+      ...booking,
+      provider: booking.provider ? amharicOr(local.provider, language, booking.provider) : booking.provider,
+      location: booking.location ? amharicOr(local.location, language, booking.location) : booking.location,
+      address: booking.address ? amharicOr(local.address, language, booking.address) : booking.address,
+    },
+  };
 }
 
 export interface PaymentView {

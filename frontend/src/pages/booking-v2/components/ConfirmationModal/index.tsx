@@ -66,7 +66,7 @@ export function ConfirmationModal({
   const manageUrl = bookingResponse.managePath ? new URL(bookingResponse.managePath, window.location.origin).toString() : "";
 
   const startTime = new Date(selectedSlot.start_time);
-  const formattedTime = formatInstant(startTime, timeFormat, timezone);
+  const formattedTime = formatInstant(startTime, timeFormat, timezone, { language, style: "full" });
   const timezoneLabel = zoneLabel(timezone, language, t("customerBooking.zoneTime"), (city) => {
     const key = `timeZoneCities.${city}`;
     const name = t(key);

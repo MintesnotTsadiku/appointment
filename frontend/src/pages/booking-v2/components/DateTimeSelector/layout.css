@@ -243,6 +243,8 @@
   line-height: 1.4;
 }
 .bk-picker[data-wide="false"] .bk-open-note { margin-top: 0.25rem; }
+/* The note's place while the first day's times load (a skeleton line of the same height). */
+.bk-open-note.bk-open-note-hold { background: color-mix(in srgb, var(--text-primary, #111827) 7%, transparent); }
 
 .bk-group-head {
   position: sticky;

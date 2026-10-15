@@ -192,6 +192,7 @@ def public_offering(offering_id, slug=None):
             "location": {"name": location.location_name,
                          "address": ", ".join(part for part in (location.address_line_1, location.address_line_2, location.city) if part)
                          if location.address_line_1 and not is_online(location) else "",
+                         **localized_names.place_names(location),
                          **public_place(location)},
             # The published website of this business, so the scheduler can wear its template's design.
             "site_slug": frappe.db.get_value("Public Site", {"owner_type": "Provider", "provider": provider.name, "status": "Published"}, "slug")}

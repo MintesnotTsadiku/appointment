@@ -62,7 +62,7 @@ export function TimeSlotsPanel({ date, slots, selectedSlot, onSlotSelect, timeFo
     key,
     slots: slots.filter((slot) => getTimeOfDay(new Date(slot.start_time)) === key),
   }));
-  const formatSlot = (slot: TimeSlot) => formatInstant(slot.start_time, timeFormat, timezone);
+  const formatSlot = (slot: TimeSlot) => formatInstant(slot.start_time, timeFormat, timezone, { language });
 
   return (
     <div className="w-full" data-qa="booking-slots" data-qa-open={openCount}>

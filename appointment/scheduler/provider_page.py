@@ -244,7 +244,8 @@ def _place(location):
     from appointment.scheduler.online_meeting import is_online, public_place
 
     address = ", ".join(part for part in (location.address_line_1, location.address_line_2, location.city) if part)
-    return {"name": location.location_name, "address": "" if is_online(location) else address, **public_place(location)}
+    return {"name": location.location_name, "address": "" if is_online(location) else address,
+            **localized_names.place_names(location), **public_place(location)}
 
 
 def _published(provider):

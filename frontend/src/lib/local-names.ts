@@ -14,6 +14,33 @@ export function localName(names: LocalNames, language: string, fallback = ""): s
   return (first || "").trim() || (fallback || "").trim() || (second || "").trim();
 }
 
+/**
+ * Booking pages and messages that always showed one English field (manage booking, My bookings): the Amharic
+ * name on Amharic pages when there is one, else that field unchanged.
+ */
+export function amharicOr(names: LocalNames, language: string, plain: string | null | undefined): string {
+  return (language === "am" && names?.am?.trim()) || (plain || "").trim() || localName(names, language);
+}
+
+/**
+ * A place in the page language. Public APIs send `local_location_name` and `local_address` as `{en, am}` next to
+ * the place's name (`location_name`, or `name` on independent pages) and `address`. An online place keeps no address.
+ */
+export type Place = {
+  name?: string; location_name?: string; address?: string;
+  local_location_name?: LocalNames; local_address?: LocalNames; [key: string]: unknown;
+};
+
+export function localizePlace<T extends Place | null | undefined>(place: T, language: string): T {
+  if (!place || (!place.local_location_name && !place.local_address)) return place;
+  const key = "location_name" in place ? "location_name" : "name";
+  return {
+    ...place,
+    [key]: localName(place.local_location_name, language, place[key] as string | undefined),
+    ...(place.address ? { address: localName(place.local_address, language, place.address) } : {}),
+  } as T;
+}
+
 /** The website name on Amharic pages: the published Amharic title, else the design's name. */
 export function siteName(applicationName: string, amharic: string | null | undefined, locale: string): string {
   return locale === "am" && amharic?.trim() ? amharic.trim() : applicationName;
@@ -25,7 +52,8 @@ type Payload = {
   local_company?: LocalNames; local_business_description?: LocalNames;
   providers?: Provider[];
   services?: Array<{ provider_name?: string; provider_local_name?: LocalNames; [key: string]: unknown }>;
-  offerings?: Array<{ provider?: Provider | null; [key: string]: unknown }>;
+  offerings?: Array<{ provider?: Provider | null; location?: Place | null; [key: string]: unknown }>;
+  location?: Place | null;
   [key: string]: unknown;
 };
 
@@ -34,7 +62,7 @@ const provider = <T extends Provider | null | undefined>(row: T, language: strin
 
 /**
  * The organization scheduler's answer (`get_organization_services`, `get_organization_meeting_windows`)
- * with every business and provider name in `language`. Rows without Amharic names keep their fields.
+ * with every business, provider and place name (and address) in `language`. Rows without Amharic names keep their fields.
  */
 export function localizeBookingPayload<T extends Payload | null | undefined>(message: T, language: string): T {
   if (!message || typeof message !== "object") return message;
@@ -48,6 +76,9 @@ export function localizeBookingPayload<T extends Payload | null | undefined>(mes
     ...(Array.isArray(message.services) ? {
       services: message.services.map((row) => row.provider_local_name ? { ...row, provider_name: localName(row.provider_local_name, language, row.provider_name) } : row),
     } : {}),
-    ...(Array.isArray(message.offerings) ? { offerings: message.offerings.map((row) => ({ ...row, provider: provider(row.provider, language) })) } : {}),
+    ...(Array.isArray(message.offerings) ? {
+      offerings: message.offerings.map((row) => ({ ...row, provider: provider(row.provider, language), ...(row.location ? { location: localizePlace(row.location, language) } : {}) })),
+    } : {}),
+    ...(message.location ? { location: localizePlace(message.location, language) } : {}),
   };
 }
