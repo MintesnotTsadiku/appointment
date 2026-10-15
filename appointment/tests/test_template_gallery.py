@@ -35,6 +35,23 @@ class TestTemplateGallery(unittest.TestCase):
         self.assertIsNone(rows["tena-clinic"]["showcase"], "an unpublished showcase still lists the template, without a live link")
         self.assertTrue(rows["tena-clinic"]["previews"])
 
+    def test_a_broken_recipe_is_left_out_and_the_rest_still_list(self):
+        from appointment.public_experience import recipes
+        from appointment.public_experience.errors import DesignManifestError
+
+        real = recipes.get_recipe
+
+        def get_recipe(key, *args, **kwargs):
+            if key == "tena-clinic":
+                raise DesignManifestError("design manifest is missing: imagery/example.v1.json")
+            return real(key, *args, **kwargs)
+
+        with patch.object(recipes, "get_recipe", side_effect=get_recipe), patch("frappe.log_error") as log_error:
+            keys = [row["key"] for row in self.gallery({})]
+        self.assertNotIn("tena-clinic", keys)
+        self.assertIn("bloom-hair", keys)
+        log_error.assert_called_once()
+
     def test_templates_path_is_reserved(self):
         self.assertIn("templates", RESERVED_ROOT_PATHS)
 

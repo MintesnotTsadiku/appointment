@@ -14,7 +14,7 @@ from appointment.public_experience import access, brand_compiler, publisher
 from appointment.public_experience import public_config
 from appointment.public_experience import resolver as resolver_module
 from appointment.public_experience.errors import BrandExperienceError, PublicResolutionError, StaleDraftError
-from appointment.public_experience.recipes import list_recipes
+from appointment.public_experience.recipes import available_recipes, list_recipes
 from appointment.public_experience.reserved import normalize_slug
 
 
@@ -384,7 +384,7 @@ def list_public_sites():
 @frappe.whitelist(methods=["GET"])
 def list_curated_recipes():
     showcases = _recipe_showcases()
-    return {"recipes": [{**recipe.as_summary(), "showcase": showcases.get(recipe.key)} for recipe in list_recipes()]}
+    return {"recipes": [{**recipe.as_summary(), "showcase": showcases.get(recipe.key)} for recipe in available_recipes()]}
 
 
 @frappe.whitelist(allow_guest=True, methods=["GET"])

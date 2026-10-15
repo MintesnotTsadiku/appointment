@@ -11,7 +11,7 @@ from __future__ import annotations
 import frappe
 
 from appointment.public_experience.design_compiler import _load_primitive
-from appointment.public_experience.recipes import RecipeDefinition, list_recipes
+from appointment.public_experience.recipes import RecipeDefinition, available_recipes
 from appointment.public_experience.setup import CATALOG as RECIPE_FOCUS
 from appointment.public_experience.showcase_catalog import load_showcase_catalog
 
@@ -21,7 +21,7 @@ def template_gallery() -> dict[str, list[dict[str, object]]]:
     for site in load_showcase_catalog()["sites"].values():
         showcases.setdefault(site["recipe"], site)
     published = _published_titles([site["slug"] for site in showcases.values()])
-    return {"templates": [_entry(recipe, showcases.get(recipe.key), published) for recipe in list_recipes()]}
+    return {"templates": [_entry(recipe, showcases.get(recipe.key), published) for recipe in available_recipes()]}
 
 
 def _entry(recipe: RecipeDefinition, site: dict | None, published: dict[str, str]) -> dict[str, object]:

@@ -13,7 +13,7 @@ from __future__ import annotations
 import frappe
 from frappe import _
 
-from appointment.public_experience.recipes import list_recipes
+from appointment.public_experience.recipes import available_recipes
 
 GALLERY_SOURCE = "template_gallery"
 
@@ -91,4 +91,4 @@ def _has_site(row) -> bool:
 
 
 def _recipe_labels() -> dict[str, str]:
-    return {recipe.key: recipe.label for recipe in list_recipes()}
+    return {recipe.key: recipe.label for recipe in available_recipes()}

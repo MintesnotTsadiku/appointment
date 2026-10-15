@@ -294,6 +294,24 @@ def list_recipes() -> tuple[RecipeDefinition, ...]:
     return tuple(get_recipe(key) for key in RECIPE_MANIFESTS)
 
 
+def available_recipes() -> tuple[RecipeDefinition, ...]:
+    """Like `list_recipes`, but a recipe whose manifests do not load is left out and logged.
+
+    Owner and visitor screens (the template gallery, the setup chooser) use this, so one
+    broken or unfinished recipe never hides the others. Checks that must fail loudly keep
+    using `list_recipes`.
+    """
+    recipes = []
+    for key in RECIPE_MANIFESTS:
+        try:
+            recipes.append(get_recipe(key))
+        except DesignManifestError:
+            import frappe
+
+            frappe.log_error(title=f"Recipe {key} is not available", message=frappe.get_traceback())
+    return tuple(recipes)
+
+
 def canonical_recipe_contract(recipe: RecipeDefinition) -> str:
     return canonicalize(
         {

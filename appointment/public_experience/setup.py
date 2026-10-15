@@ -11,7 +11,7 @@ from frappe import _
 from appointment.content import entitlements, tenancy
 from appointment.public_experience import brand_compiler, publisher
 from appointment.public_experience.errors import BrandExperienceError, StaleDraftError
-from appointment.public_experience.recipes import get_recipe, list_recipes
+from appointment.public_experience.recipes import available_recipes, get_recipe
 from appointment.public_experience.setup_preview import content_examples
 
 STEPS = ("template", "brand", "content", "features", "readiness", "published", "skipped")
@@ -45,7 +45,7 @@ def validated_preferences(value):
 def ranked_catalog(industry="", mood="", audience="", preferred_density=""):
     catalog = json.loads(files("appointment").joinpath("public_experience/manifest/showcase/catalog.v1.json").read_text())
     rows = []
-    for recipe in list_recipes():
+    for recipe in available_recipes():
         sector, feeling, density = CATALOG[recipe.key]
         target = {"health": "patients", "education": "learners"}.get(sector, "clients")
         score = (4 if sector == industry else 0) + (2 if feeling == mood else 0) + (2 if target == audience else 0) + (1 if density == preferred_density else 0)
