@@ -205,13 +205,38 @@ class TestBookingOptions(unittest.TestCase):
         from appointment.public_experience import setup
 
         doc = SimpleNamespace(booking_json=json.dumps({"showPrices": True}))
-        self.assertEqual(setup.booking_options(doc), {"liveAvailability": False})
+        self.assertEqual(setup.booking_options(doc), {"liveAvailability": False, "holidayGreetings": False})
         setup._set_booking_options(doc, {"liveAvailability": True})
         self.assertEqual(json.loads(doc.booking_json), {"liveAvailability": True, "showPrices": True})
-        self.assertEqual(setup.booking_options(doc), {"liveAvailability": True})
+        self.assertEqual(setup.booking_options(doc), {"liveAvailability": True, "holidayGreetings": False})
         for bad in ({"liveAvailability": "on"}, {"showPrices": False}, ["liveAvailability"]):
             with self.subTest(bad=bad), self.assertRaises(frappe.ValidationError):
                 setup._set_booking_options(doc, bad)
+
+    def test_holiday_greetings_are_off_until_the_owner_turns_them_on(self):
+        from appointment.public_experience import setup
+
+        doc = SimpleNamespace(booking_json=None)
+        self.assertEqual(setup.booking_options(doc), {"liveAvailability": False, "holidayGreetings": False})
+        # Only exactly true counts as on.
+        doc.booking_json = json.dumps({"holidayGreetings": "yes"})
+        self.assertFalse(setup.booking_options(doc)["holidayGreetings"])
+        doc.booking_json = json.dumps({"currency": "ETB"})
+        setup._set_booking_options(doc, {"holidayGreetings": True, "liveAvailability": False})
+        self.assertEqual(json.loads(doc.booking_json), {"currency": "ETB", "holidayGreetings": True, "liveAvailability": False})
+        self.assertEqual(setup.booking_options(doc), {"liveAvailability": False, "holidayGreetings": True})
+        setup._set_booking_options(doc, {"holidayGreetings": False})
+        self.assertFalse(setup.booking_options(doc)["holidayGreetings"])
+        for bad in ({"holidayGreetings": 1}, {"holidayGreetings": "on"}, {"holidayMoments": True}):
+            with self.subTest(bad=bad), self.assertRaises(frappe.ValidationError):
+                setup._set_booking_options(doc, bad)
+
+    def test_showcases_turn_holiday_greetings_on(self):
+        from appointment.demo import ergata_showcase, showcase
+
+        self.assertIs(ergata_showcase.SHOWCASE.booking.get("holidayGreetings"), True)
+        self.assertIs(ergata_showcase.SHOWCASE.booking.get("liveAvailability"), True)
+        self.assertIn('"holidayGreetings": True', showcase.__loader__.get_source(showcase.__name__))
 
 
 if __name__ == "__main__":

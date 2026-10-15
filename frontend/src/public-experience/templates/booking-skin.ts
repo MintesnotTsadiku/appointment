@@ -3,6 +3,7 @@ import type { ComponentType } from "react";
 import type { CompiledDesign } from "../types";
 import { abugidaBookingSkin } from "./abugida-v3/booking";
 import { bloomBookingSkin } from "./bloom-v3/booking";
+import { ergataBookingSkin } from "./ergata-v2/booking";
 import { meronBookingSkin } from "./meron-v3/booking";
 import { selamBookingSkin } from "./selam-v3/booking";
 import { tenaBookingSkin } from "./tena-v3/booking";
@@ -36,12 +37,23 @@ export interface BookingSkin {
   frame: BookingFrame;
   /** Image roles of the compiled design for service photos, used in turn when the business has no photo. */
   servicePhotoRoles: readonly string[];
+  /**
+   * Image roles by how a session meets, for a scheduler that knows the session's place but not its
+   * place on the website (the independent scheduler): the office photo for an office session, the
+   * online desk for a video session. Used before `servicePhotoRoles`.
+   */
+  formatPhotoRoles?: Readonly<Partial<Record<"in_person" | "online", string>>>;
   /** Image role for the faint page background. Its smallest file is used, and its night photo in dark mode. */
   backdropRole?: string;
   /** CSS custom properties for the booking tokens (`--bk-action-*`, `--bk-heading-*`), from the brand tokens. */
   tokens?: (brand: Readonly<Record<string, unknown>>, mode: "light" | "dark") => Record<`--${string}`, string>;
   /** Template-owned slot: the mark of one step in the step indicator. */
   StepMark?: ComponentType<StepMarkProps>;
+  /**
+   * The skin's stylesheet, as `() => import("./booking.css")`. The flow loads it when a page uses the skin,
+   * so each template's booking CSS is its own small file and other templates never download it.
+   */
+  style?: () => Promise<unknown>;
 }
 
 /** The flow without a template skin: brand colours and type only, plain rounded frames, no photo roles. */
@@ -58,13 +70,27 @@ const SKINS: Record<string, BookingSkin> = {
   [abugidaBookingSkin.key]: abugidaBookingSkin,
   [selamBookingSkin.key]: selamBookingSkin,
   [tenaBookingSkin.key]: tenaBookingSkin,
+  [ergataBookingSkin.key]: ergataBookingSkin,
 };
 
-/** The skin of a published design. Templates without a skin (v1, v2, Ergata until phase 3) get the default. */
+/** The skin of a published design. Templates without a skin (v1, v2 and Ergata v1) get the default. */
 export function bookingSkin(design?: Pick<CompiledDesign, "layout"> | null): BookingSkin {
   const layout = design?.layout;
   if (!layout?.rendererKey) return DEFAULT_BOOKING_SKIN;
   return SKINS[`${layout.rendererKey}@${layout.rendererVersion || 1}`] || DEFAULT_BOOKING_SKIN;
+}
+
+const styles = new Map<string, Promise<unknown>>();
+
+/** Starts loading a skin's stylesheet once; later calls reuse the same request. */
+export function loadBookingSkinStyle(skin: BookingSkin): Promise<unknown> | undefined {
+  if (!skin.style) return undefined;
+  let request = styles.get(skin.name);
+  if (!request) {
+    request = skin.style().catch(() => styles.delete(skin.name));
+    styles.set(skin.name, request);
+  }
+  return request;
 }
 
 export function registeredBookingSkins(): string[] {

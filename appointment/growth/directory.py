@@ -20,6 +20,7 @@ from frappe.utils import getdate
 
 from appointment.growth.sharing import require_business
 from appointment.growth.settings import growth
+from appointment.scheduler import localized_names
 from appointment.scheduler.analytics_calculations import BOOKED
 from appointment.scheduler.business_owner import PREFIX
 from appointment.scheduler.provider_page import provider_bio
@@ -107,9 +108,11 @@ def suggest_area(owner) -> str | None:
 # Booking pages and listings
 # ---------------------------------------------------------------------------
 def booking_pages(owner_keys) -> dict[str, dict]:
-    """Published booking page per owner key: `{href, logo, name, description}`.
+    """Published booking page per owner key: `{href, logo, name, names, description, descriptions}`.
 
-    A provider page also has `descriptions` by language ("en", "am"): its bio, each falling back to the other.
+    `names` is the name by language (Organization.organization_name_am, Provider.display_name_am).
+    `descriptions` is by language ("en", "am"): the organization description, or the provider's bio,
+    each falling back to the other.
 
     A published Public Site wins. Without one, the scheduler page counts when
     public booking is on (an organization slug, or an independent offering).
@@ -136,15 +139,17 @@ def booking_pages(owner_keys) -> dict[str, dict]:
         pages[key] = dict(href=f"/{site.slug}", logo=profile.get("logo_compact") or profile.get("logo_primary") or "",
                           name=profile.get("application_name") or site.site_title or "")
     for row in frappe.get_all("Organization", filters={"name": ["in", organizations or [""]], "is_active": 1},
-                              fields=["name", "organization_name", "slug", "logo", "description", "enable_public_booking"]):
+                              fields=["name", "organization_name", "organization_name_am", "slug", "logo", "description", "description_am", "enable_public_booking"]):
         page = pages.get(row.name)
         if not page and row.enable_public_booking and row.slug:
             page = pages[row.name] = dict(href=f"/schedule/org/{row.slug}", logo="", name="")
         if page:
-            page.update(name=page["name"] or row.organization_name or row.name, logo=page["logo"] or row.logo or "",
-                        description=_summary(row.description))
+            name = page["name"] or row.organization_name or row.name
+            descriptions = {"en": _summary(row.description), "am": _summary(row.description_am or row.description)}
+            page.update(name=name, names=localized_names.pair(name, row.organization_name_am), logo=page["logo"] or row.logo or "",
+                        description=descriptions["en"], descriptions=descriptions)
     for row in frappe.get_all("Provider", filters={"name": ["in", providers or [""]], "is_active": 1, "organization": ["is", "not set"]},
-                              fields=["name", "display_name", "provider_name", "profile_photo", "bio", "bio_am", "enable_public_booking", "public_slug"]):
+                              fields=["name", "display_name", "display_name_am", "provider_name", "profile_photo", "bio", "bio_am", "enable_public_booking", "public_slug"]):
         key = PREFIX + row.name
         page = pages.get(key)
         if not page and row.enable_public_booking:
@@ -156,7 +161,8 @@ def booking_pages(owner_keys) -> dict[str, dict]:
         if page:
             # The bio in each language, else the other one (`provider_page.provider_bio`).
             descriptions = {lang: _summary(provider_bio(row, lang)) for lang in ("en", "am")}
-            page.update(name=page["name"] or row.display_name or row.provider_name or row.name,
+            name = page["name"] or row.display_name or row.provider_name or row.name
+            page.update(name=name, names=localized_names.pair(name, row.display_name_am),
                         logo=page["logo"] or row.profile_photo or "", description=descriptions["en"], descriptions=descriptions)
     return pages
 

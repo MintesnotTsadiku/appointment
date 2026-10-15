@@ -1,0 +1,511 @@
+# Habesha time brings the Ethiopian calendar (owner, 2026-10-15). No records: the fixture only gives today's date in the
+# Ethiopian calendar from the Python twin (appointment.tests.booking_ethiopian_qa_fixtures.browser_values; no setup or cleanup).
+# Rahel's provider page needs appointment.tests.provider_page_qa_fixtures.setup to have run once. Each scenario: the Ethiopian
+# grid with today's Ethiopian day and month (checked against the twin), a day and a time, the chosen time unselected and
+# chosen again, the Ethiopian date in the details summary, then Pagume (5 or 6 days) by month navigation.
+# See docs/growth/BOOKING_LAYOUT.md, "Habesha time and the Ethiopian calendar".
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-booking-ethiopian
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.booking_ethiopian_qa_fixtures.browser_values
+scenarios:
+- id: eth_selam_en_desktop_light
+  title: 'Selam: Habesha brings the Ethiopian calendar (en, desktop, light)'
+  viewport:
+    width: 1366
+    height: 768
+  options:
+    color_scheme: light
+  checks: []
+  routes:
+  - path: /schedule/org/selam-studio?display=light
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="booking-service"]'
+  actions:
+  - action: click
+    selector: ':nth-match([data-qa="booking-service"], 1)'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"]'
+  - action: click
+    selector: '[data-qa="booking-time-format-option"][data-value="ethiopian"]'
+  - action: wait_for
+    selector: '[data-qa="booking-time-format-option"][data-value="ethiopian"][aria-pressed="true"]'
+  - action: wait_for
+    selector: '[data-qa="booking-calendar"][data-calendar="ethiopian"][data-qa-month="{qa_eth_month}"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="booking-month"]'
+      value: '{qa_eth_month_en}'
+    - type: visible_selector
+      value: '[data-qa="booking-calendar"] [data-qa-date="{qa_eth_today}"][data-qa-day="{qa_eth_day}"][aria-label^="{qa_eth_label_en}"]'
+  - action: screenshot
+    name: 'eth_selam_en_desktop_light-1-ethiopian-grid.png'
+    full_page: False
+  - action: click
+    selector: ':nth-match([data-qa="booking-calendar"] [data-qa="booking-date"]:not([disabled]), 2)'
+  - action: wait_for
+    selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+    timeout_ms: 20000
+  - action: click
+    selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+  - action: wait_for
+    selector: '[data-qa="booking-bar"] [data-qa="booking-bar-when"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-bar-when"] >> text=/Meskerem|Tikimt|Hidar|Tahsas|Tir|Yekatit|Megabit|Miyazya|Ginbot|Sene|Hamle|Nehase|Pagume/'
+    - type: visible_selector
+      value: '[data-qa="booking-day-title"] >> text=/Meskerem|Tikimt|Hidar|Tahsas|Tir|Yekatit|Megabit|Miyazya|Ginbot|Sene|Hamle|Nehase|Pagume/'
+  - action: screenshot
+    name: 'eth_selam_en_desktop_light-2-chosen.png'
+    full_page: False
+  - action: click
+    selector: '[data-qa="booking-slot"][aria-pressed="true"]'
+  - action: wait_for
+    selector: '[data-qa="booking-bar-empty"]'
+    assertions:
+    - type: visible_selector
+      value: ':nth-match([data-qa="booking-slot"][aria-pressed="false"]:not([disabled]), 1)'
+  - action: wait_for
+    selector: '[data-qa="booking-slot"][aria-pressed="true"]'
+    state: 'detached'
+  - action: screenshot
+    name: 'eth_selam_en_desktop_light-3-unselected.png'
+    full_page: False
+  - action: click
+    selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+  - action: wait_for
+    selector: '[data-qa="booking-bar"]'
+  - action: click
+    selector: '[data-qa="booking-continue"]'
+  - action: wait_for
+    selector: '[data-qa="booking-details"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-details"] >> text=/Meskerem|Tikimt|Hidar|Tahsas|Tir|Yekatit|Megabit|Miyazya|Ginbot|Sene|Hamle|Nehase|Pagume/'
+  - action: screenshot
+    name: 'eth_selam_en_desktop_light-4-details.png'
+    full_page: False
+  - action: click
+    selector: '.booking-back'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"]'
+  - action: wait_for
+    selector: '[data-qa="booking-calendar"][data-calendar="ethiopian"]'
+  - action: click
+    selector: '{qa_eth_step_1}'
+  - action: click
+    selector: '{qa_eth_step_2}'
+  - action: click
+    selector: '{qa_eth_step_3}'
+  - action: click
+    selector: '{qa_eth_step_4}'
+  - action: click
+    selector: '{qa_eth_step_5}'
+  - action: click
+    selector: '{qa_eth_step_6}'
+  - action: click
+    selector: '{qa_eth_step_7}'
+  - action: click
+    selector: '{qa_eth_step_8}'
+  - action: click
+    selector: '{qa_eth_step_9}'
+  - action: click
+    selector: '{qa_eth_step_10}'
+  - action: click
+    selector: '{qa_eth_step_11}'
+  - action: click
+    selector: '{qa_eth_step_12}'
+  - action: wait_for
+    selector: '[data-qa="booking-calendar"][data-qa-month="{qa_eth_pagume}"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-calendar"] [data-qa-date="{qa_eth_pagume_last}"][data-qa-day="{qa_eth_pagume_days}"]'
+    - type: text_contains
+      selector: '[data-qa="booking-month"]'
+      value: 'Pagume'
+  - action: screenshot
+    name: 'eth_selam_en_desktop_light-5-pagume.png'
+    full_page: False
+  - action: get_console_errors
+  - action: get_network_errors
+- id: eth_bloom_am_desktop_dark
+  title: 'Bloom: Amharic starts with Habesha time and the Ethiopian calendar (am, desktop, dark)'
+  viewport:
+    width: 1280
+    height: 720
+  options:
+    color_scheme: dark
+  checks: []
+  routes:
+  - path: /schedule/org/bloom-studio?display=dark&lang=am
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="booking-service"]'
+  actions:
+  - action: click
+    selector: ':nth-match([data-qa="booking-service"], 1)'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"]'
+  - action: wait_for
+    selector: '[data-qa="booking-time-format-option"][data-value="ethiopian"][aria-pressed="true"]'
+  - action: wait_for
+    selector: '[data-qa="booking-calendar"][data-calendar="ethiopian"][data-qa-month="{qa_eth_month}"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="booking-month"]'
+      value: '{qa_eth_month_am}'
+    - type: visible_selector
+      value: '[data-qa="booking-calendar"] [data-qa-date="{qa_eth_today}"][data-qa-day="{qa_eth_day}"][aria-label^="{qa_eth_label_am}"]'
+  - action: screenshot
+    name: 'eth_bloom_am_desktop_dark-1-ethiopian-grid.png'
+    full_page: False
+  - action: click
+    selector: ':nth-match([data-qa="booking-calendar"] [data-qa="booking-date"]:not([disabled]), 2)'
+  - action: wait_for
+    selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+    timeout_ms: 20000
+  - action: click
+    selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+  - action: wait_for
+    selector: '[data-qa="booking-bar"] [data-qa="booking-bar-when"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-bar-when"] >> text=/መስከረም|ጥቅምት|ኅዳር|ታኅሣሥ|ጥር|የካቲት|መጋቢት|ሚያዝያ|ግንቦት|ሰኔ|ሐምሌ|ነሐሴ|ጳጉሜ/'
+    - type: visible_selector
+      value: '[data-qa="booking-day-title"] >> text=/መስከረም|ጥቅምት|ኅዳር|ታኅሣሥ|ጥር|የካቲት|መጋቢት|ሚያዝያ|ግንቦት|ሰኔ|ሐምሌ|ነሐሴ|ጳጉሜ/'
+  - action: screenshot
+    name: 'eth_bloom_am_desktop_dark-2-chosen.png'
+    full_page: False
+  - action: click
+    selector: '[data-qa="booking-slot"][aria-pressed="true"]'
+  - action: wait_for
+    selector: '[data-qa="booking-bar-empty"]'
+    assertions:
+    - type: visible_selector
+      value: ':nth-match([data-qa="booking-slot"][aria-pressed="false"]:not([disabled]), 1)'
+  - action: wait_for
+    selector: '[data-qa="booking-slot"][aria-pressed="true"]'
+    state: 'detached'
+  - action: screenshot
+    name: 'eth_bloom_am_desktop_dark-3-unselected.png'
+    full_page: False
+  - action: click
+    selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+  - action: wait_for
+    selector: '[data-qa="booking-bar"]'
+  - action: click
+    selector: '[data-qa="booking-continue"]'
+  - action: wait_for
+    selector: '[data-qa="booking-details"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-details"] >> text=/መስከረም|ጥቅምት|ኅዳር|ታኅሣሥ|ጥር|የካቲት|መጋቢት|ሚያዝያ|ግንቦት|ሰኔ|ሐምሌ|ነሐሴ|ጳጉሜ/'
+  - action: screenshot
+    name: 'eth_bloom_am_desktop_dark-4-details.png'
+    full_page: False
+  - action: click
+    selector: '.booking-back'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"]'
+  - action: wait_for
+    selector: '[data-qa="booking-calendar"][data-calendar="ethiopian"]'
+  - action: click
+    selector: '{qa_eth_step_1}'
+  - action: click
+    selector: '{qa_eth_step_2}'
+  - action: click
+    selector: '{qa_eth_step_3}'
+  - action: click
+    selector: '{qa_eth_step_4}'
+  - action: click
+    selector: '{qa_eth_step_5}'
+  - action: click
+    selector: '{qa_eth_step_6}'
+  - action: click
+    selector: '{qa_eth_step_7}'
+  - action: click
+    selector: '{qa_eth_step_8}'
+  - action: click
+    selector: '{qa_eth_step_9}'
+  - action: click
+    selector: '{qa_eth_step_10}'
+  - action: click
+    selector: '{qa_eth_step_11}'
+  - action: click
+    selector: '{qa_eth_step_12}'
+  - action: wait_for
+    selector: '[data-qa="booking-calendar"][data-qa-month="{qa_eth_pagume}"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-calendar"] [data-qa-date="{qa_eth_pagume_last}"][data-qa-day="{qa_eth_pagume_days}"]'
+    - type: text_contains
+      selector: '[data-qa="booking-month"]'
+      value: 'ጳጉሜ'
+  - action: screenshot
+    name: 'eth_bloom_am_desktop_dark-5-pagume.png'
+    full_page: False
+  - action: get_console_errors
+  - action: get_network_errors
+- id: eth_tena_en_phone_light
+  title: 'Tena on a phone: Habesha switches the strip and the calendar (en, phone, light)'
+  viewport:
+    width: 390
+    height: 844
+  options:
+    color_scheme: light
+  checks: []
+  routes:
+  - path: /schedule/org/tena-studio?display=light
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="booking-service"]'
+  actions:
+  - action: click
+    selector: ':nth-match([data-qa="booking-service"], 1)'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"]'
+  - action: click
+    selector: '[data-qa="booking-time-format-option"][data-value="ethiopian"]'
+  - action: wait_for
+    selector: '[data-qa="booking-time-format-option"][data-value="ethiopian"][aria-pressed="true"]'
+  - action: click
+    selector: '[data-qa="booking-calendar-toggle"]'
+  - action: wait_for
+    selector: '[data-qa="booking-calendar"][data-calendar="ethiopian"][data-qa-month="{qa_eth_month}"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="booking-month"]'
+      value: '{qa_eth_month_en}'
+    - type: visible_selector
+      value: '[data-qa="booking-calendar"] [data-qa-date="{qa_eth_today}"][data-qa-day="{qa_eth_day}"][aria-label^="{qa_eth_label_en}"]'
+  - action: screenshot
+    name: 'eth_tena_en_phone_light-1-ethiopian-grid.png'
+    full_page: False
+  - action: click
+    selector: ':nth-match([data-qa="booking-calendar"] [data-qa="booking-date"]:not([disabled]), 2)'
+  - action: wait_for
+    selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+    timeout_ms: 20000
+  - action: click
+    selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+  - action: wait_for
+    selector: '[data-qa="booking-bar"] [data-qa="booking-bar-when"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-bar-when"] >> text=/Meskerem|Tikimt|Hidar|Tahsas|Tir|Yekatit|Megabit|Miyazya|Ginbot|Sene|Hamle|Nehase|Pagume/'
+    - type: visible_selector
+      value: '[data-qa="booking-day-title"] >> text=/Meskerem|Tikimt|Hidar|Tahsas|Tir|Yekatit|Megabit|Miyazya|Ginbot|Sene|Hamle|Nehase|Pagume/'
+  - action: screenshot
+    name: 'eth_tena_en_phone_light-2-chosen.png'
+    full_page: False
+  - action: click
+    selector: '[data-qa="booking-slot"][aria-pressed="true"]'
+  - action: wait_for
+    selector: '[data-qa="booking-bar-empty"]'
+    assertions:
+    - type: visible_selector
+      value: ':nth-match([data-qa="booking-slot"][aria-pressed="false"]:not([disabled]), 1)'
+  - action: wait_for
+    selector: '[data-qa="booking-slot"][aria-pressed="true"]'
+    state: 'detached'
+  - action: screenshot
+    name: 'eth_tena_en_phone_light-3-unselected.png'
+    full_page: False
+  - action: click
+    selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+  - action: wait_for
+    selector: '[data-qa="booking-bar"]'
+  - action: click
+    selector: '[data-qa="booking-continue"]'
+  - action: wait_for
+    selector: '[data-qa="booking-details"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-details"] >> text=/Meskerem|Tikimt|Hidar|Tahsas|Tir|Yekatit|Megabit|Miyazya|Ginbot|Sene|Hamle|Nehase|Pagume/'
+  - action: screenshot
+    name: 'eth_tena_en_phone_light-4-details.png'
+    full_page: False
+  - action: click
+    selector: '.booking-back'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"]'
+  - action: click
+    selector: '[data-qa="booking-calendar-toggle"]'
+  - action: wait_for
+    selector: '[data-qa="booking-calendar"][data-calendar="ethiopian"]'
+  - action: click
+    selector: '{qa_eth_step_1}'
+  - action: click
+    selector: '{qa_eth_step_2}'
+  - action: click
+    selector: '{qa_eth_step_3}'
+  - action: click
+    selector: '{qa_eth_step_4}'
+  - action: click
+    selector: '{qa_eth_step_5}'
+  - action: click
+    selector: '{qa_eth_step_6}'
+  - action: click
+    selector: '{qa_eth_step_7}'
+  - action: click
+    selector: '{qa_eth_step_8}'
+  - action: click
+    selector: '{qa_eth_step_9}'
+  - action: click
+    selector: '{qa_eth_step_10}'
+  - action: click
+    selector: '{qa_eth_step_11}'
+  - action: click
+    selector: '{qa_eth_step_12}'
+  - action: wait_for
+    selector: '[data-qa="booking-calendar"][data-qa-month="{qa_eth_pagume}"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-calendar"] [data-qa-date="{qa_eth_pagume_last}"][data-qa-day="{qa_eth_pagume_days}"]'
+    - type: text_contains
+      selector: '[data-qa="booking-month"]'
+      value: 'Pagume'
+  - action: screenshot
+    name: 'eth_tena_en_phone_light-5-pagume.png'
+    full_page: False
+  - action: get_console_errors
+  - action: get_network_errors
+- id: eth_rahel_am_phone_dark
+  title: 'Rahel (provider scheduler) on a phone in Amharic (am, phone, dark)'
+  viewport:
+    width: 390
+    height: 844
+  options:
+    color_scheme: dark
+  checks: []
+  routes:
+  - path: /schedule/p/rahel-nutrition?display=dark&lang=am
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="provider-service-book"]'
+  actions:
+  - action: click
+    selector: ':nth-match([data-qa="provider-service-book"], 1)'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"]'
+  - action: wait_for
+    selector: '[data-qa="booking-time-format-option"][data-value="ethiopian"][aria-pressed="true"]'
+  - action: click
+    selector: '[data-qa="booking-calendar-toggle"]'
+  - action: wait_for
+    selector: '[data-qa="booking-calendar"][data-calendar="ethiopian"][data-qa-month="{qa_eth_month}"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="booking-month"]'
+      value: '{qa_eth_month_am}'
+    - type: visible_selector
+      value: '[data-qa="booking-calendar"] [data-qa-date="{qa_eth_today}"][data-qa-day="{qa_eth_day}"][aria-label^="{qa_eth_label_am}"]'
+  - action: screenshot
+    name: 'eth_rahel_am_phone_dark-1-ethiopian-grid.png'
+    full_page: False
+  - action: click
+    selector: ':nth-match([data-qa="booking-calendar"] [data-qa="booking-date"]:not([disabled]), 2)'
+  - action: wait_for
+    selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+    timeout_ms: 20000
+  - action: click
+    selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+  - action: wait_for
+    selector: '[data-qa="booking-bar"] [data-qa="booking-bar-when"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-bar-when"] >> text=/መስከረም|ጥቅምት|ኅዳር|ታኅሣሥ|ጥር|የካቲት|መጋቢት|ሚያዝያ|ግንቦት|ሰኔ|ሐምሌ|ነሐሴ|ጳጉሜ/'
+    - type: visible_selector
+      value: '[data-qa="booking-day-title"] >> text=/መስከረም|ጥቅምት|ኅዳር|ታኅሣሥ|ጥር|የካቲት|መጋቢት|ሚያዝያ|ግንቦት|ሰኔ|ሐምሌ|ነሐሴ|ጳጉሜ/'
+  - action: screenshot
+    name: 'eth_rahel_am_phone_dark-2-chosen.png'
+    full_page: False
+  - action: click
+    selector: '[data-qa="booking-slot"][aria-pressed="true"]'
+  - action: wait_for
+    selector: '[data-qa="booking-bar-empty"]'
+    assertions:
+    - type: visible_selector
+      value: ':nth-match([data-qa="booking-slot"][aria-pressed="false"]:not([disabled]), 1)'
+  - action: wait_for
+    selector: '[data-qa="booking-slot"][aria-pressed="true"]'
+    state: 'detached'
+  - action: screenshot
+    name: 'eth_rahel_am_phone_dark-3-unselected.png'
+    full_page: False
+  - action: click
+    selector: ':nth-match([data-qa="booking-slot"]:not([disabled]), 1)'
+  - action: wait_for
+    selector: '[data-qa="booking-bar"]'
+  - action: click
+    selector: '[data-qa="booking-continue"]'
+  - action: wait_for
+    selector: '[data-qa="independent-booking-chosen"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="independent-booking-chosen"] >> text=/መስከረም|ጥቅምት|ኅዳር|ታኅሣሥ|ጥር|የካቲት|መጋቢት|ሚያዝያ|ግንቦት|ሰኔ|ሐምሌ|ነሐሴ|ጳጉሜ/'
+  - action: screenshot
+    name: 'eth_rahel_am_phone_dark-4-details.png'
+    full_page: False
+  - action: click
+    selector: '[data-qa="independent-booking-change"]'
+  - action: wait_for
+    selector: '[data-qa="booking-picker"]'
+  - action: click
+    selector: '[data-qa="booking-calendar-toggle"]'
+  - action: wait_for
+    selector: '[data-qa="booking-calendar"][data-calendar="ethiopian"]'
+  - action: click
+    selector: '{qa_eth_step_1}'
+  - action: click
+    selector: '{qa_eth_step_2}'
+  - action: click
+    selector: '{qa_eth_step_3}'
+  - action: click
+    selector: '{qa_eth_step_4}'
+  - action: click
+    selector: '{qa_eth_step_5}'
+  - action: click
+    selector: '{qa_eth_step_6}'
+  - action: click
+    selector: '{qa_eth_step_7}'
+  - action: click
+    selector: '{qa_eth_step_8}'
+  - action: click
+    selector: '{qa_eth_step_9}'
+  - action: click
+    selector: '{qa_eth_step_10}'
+  - action: click
+    selector: '{qa_eth_step_11}'
+  - action: click
+    selector: '{qa_eth_step_12}'
+  - action: wait_for
+    selector: '[data-qa="booking-calendar"][data-qa-month="{qa_eth_pagume}"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-calendar"] [data-qa-date="{qa_eth_pagume_last}"][data-qa-day="{qa_eth_pagume_days}"]'
+    - type: text_contains
+      selector: '[data-qa="booking-month"]'
+      value: 'ጳጉሜ'
+  - action: screenshot
+    name: 'eth_rahel_am_phone_dark-5-pagume.png'
+    full_page: False
+  - action: get_console_errors
+  - action: get_network_errors

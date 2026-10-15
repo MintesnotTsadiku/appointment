@@ -5,9 +5,13 @@ import { strict as assert } from "node:assert";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const templateRoot = path.join(root, "src/public-experience/templates");
-const templates = ["selam", "bloom", "meron", "abugida", "tena", "tena-v2", "selam-v2", "bloom-v2", "meron-v2", "abugida-v2", "ergata", "bloom-v3", "meron-v3", "abugida-v3", "selam-v3", "tena-v3"];
+const templates = ["selam", "bloom", "meron", "abugida", "tena", "tena-v2", "selam-v2", "bloom-v2", "meron-v2", "abugida-v2", "ergata", "bloom-v3", "meron-v3", "abugida-v3", "selam-v3", "tena-v3", "ergata-v2"];
 
 const registry = fs.readFileSync(path.join(templateRoot, "registry.ts"), "utf8");
+// One registry entry: from its `"key@version":` to the next entry.
+const registered = (id) => (registry.split(`"${id}":`)[1] || "").split(/\n\s*"[a-z-]+@\d+":/)[0];
+// Packages load on first use, so a page downloads only its own template (docs/operations/PUBLIC_PERFORMANCE.md).
+assert.ok(!/^import .* from "\.\/[^"]+\/[A-Za-z]+(Template|Content)";$/m.test(registry), "the registry imports no template package statically");
 for (const template of templates) {
   const directory = path.join(templateRoot, template);
   const source = fs.readdirSync(directory).filter((file) => file.endsWith("Template.tsx"));
@@ -63,7 +67,7 @@ for (const template of ["bloom-v3"]) {
   assert.ok(component.includes('section(snapshot.sections, "process")') && component.includes('section(snapshot.sections, "proof")'), `${template} renders the required process and proof sections`);
 }
 // Meron v3 ("The Fitting Room"): an independent package on the headless kit, next to v1 and v2.
-assert.ok(registry.includes(`"meron-atelier@3"`) && registry.includes("MeronV3Loading"), "meron-atelier v3 is registered with its loading screen");
+assert.ok(/Loading: t\.MeronLoading/.test(registered("meron-atelier@3")), "meron-atelier v3 is registered with its loading screen");
 {
   const directory = path.join(templateRoot, "meron-v3");
   for (const file of fs.readdirSync(directory).filter((name) => /\.tsx?$/.test(name))) {
@@ -87,7 +91,7 @@ assert.ok(registry.includes(`"meron-atelier@3"`) && registry.includes("MeronV3Lo
   }
 }
 // Abugida v3 ("Living Manuscript"): an independent package on the headless kit, next to v1 and v2.
-assert.ok(registry.includes(`"abugida-language@3"`) && registry.includes("AbugidaV3Loading"), "abugida-language v3 is registered with its loading screen");
+assert.ok(/Loading: t\.AbugidaLoading/.test(registered("abugida-language@3")), "abugida-language v3 is registered with its loading screen");
 {
   const directory = path.join(templateRoot, "abugida-v3");
   for (const file of fs.readdirSync(directory).filter((name) => /\.tsx?$/.test(name))) {
@@ -111,7 +115,7 @@ assert.ok(registry.includes(`"abugida-language@3"`) && registry.includes("Abugid
   assert.ok(/geez\(/.test(component), "abugida-v3 numbers folios, steps and sections in Ge'ez numerals");
 }
 // Selam v3 ("Tempo"): an independent package on the headless kit, next to v1 and v2.
-assert.ok(registry.includes(`"selam-movement@3"`) && registry.includes("SelamV3Loading"), "selam-movement v3 is registered with its loading screen");
+assert.ok(/Loading: t\.SelamLoading/.test(registered("selam-movement@3")), "selam-movement v3 is registered with its loading screen");
 {
   const directory = path.join(templateRoot, "selam-v3");
   for (const file of fs.readdirSync(directory).filter((name) => /\.tsx?$/.test(name))) {
@@ -134,7 +138,7 @@ assert.ok(registry.includes(`"selam-movement@3"`) && registry.includes("SelamV3L
   }
 }
 // Tena v3 ("Clear Path"): an independent package on the headless kit, next to v1 and v2.
-assert.ok(registry.includes(`"tena-clinic@3"`) && registry.includes("TenaV3Loading"), "tena-clinic v3 is registered with its loading screen");
+assert.ok(/Loading: t\.TenaLoading/.test(registered("tena-clinic@3")), "tena-clinic v3 is registered with its loading screen");
 {
   const directory = path.join(templateRoot, "tena-v3");
   for (const file of fs.readdirSync(directory).filter((name) => /\.tsx?$/.test(name))) {
@@ -158,7 +162,37 @@ assert.ok(registry.includes(`"tena-clinic@3"`) && registry.includes("TenaV3Loadi
   }
   assert.ok(/snapshot\.bookingPaths\?\.\[item\.id\]/.test(component) && /<a className="t3-handoff-row" href=\{href\}/.test(component), "tena-v3 handoff rows link each service's own scheduler");
 }
-assert.ok(!registry.includes(`"ergata-therapy@2"`), "ergata-therapy has no second version yet");
+// Ergata v2 (v3 parity): an independent package on the headless kit, next to Ergata v1.
+assert.ok(/"ergata-therapy@2"[\s\S]*?ErgataLoading/.test(registry), "ergata-therapy v2 is registered with its loading screen");
+assert.ok(registry.includes(`"ergata-therapy@1"`), "ergata-therapy v1 stays registered for releases pinned to it");
+{
+  const directory = path.join(templateRoot, "ergata-v2");
+  for (const file of fs.readdirSync(directory).filter((name) => /\.tsx?$/.test(name))) {
+    const source = fs.readFileSync(path.join(directory, file), "utf8");
+    for (const match of source.matchAll(/from "\.\.\/([^"]+)"/g)) {
+      assert.ok(!/^(selam|bloom|meron|abugida|tena|ergata)(-v\d)?\//.test(match[1]), `ergata-v2/${file} must not import another template package (${match[1]})`);
+    }
+    assert.ok(!/framer-motion/.test(source), `ergata-v2/${file} must not use an animation library`);
+  }
+  const css = fs.readFileSync(path.join(directory, "ergata.css"), "utf8");
+  assert.ok(/prefers-reduced-motion: reduce/.test(css) && /data-motion-level="none"/.test(css), "ergata-v2 stops motion under reduced motion");
+  assert.ok(!/(^|[^-\w])\.eg[ :\[{.,]/m.test(css.replace(/\.eg2\b/g, "")), "ergata-v2 uses its own class prefix (.eg2), so it never styles Ergata v1 pages");
+  assert.ok(/\.eg2-approach \{ color: var\(--e2-on-deep\); background: var\(--e2-deep\); \}/.test(css), "ergata-v2 sets the approaches on one deep-sage band");
+  assert.ok(/\.eg2-rail \{ display: flex !important;[^}]*scroll-snap-type: x mandatory/.test(css), "needs and sessions become swipe rails on phones");
+  assert.ok(/\.eg2-hero-copy \{ display: contents; \}/.test(css), "on phones the hero arch peeks into the first screen");
+  const component = fs.readFileSync(path.join(directory, "ErgataTemplate.tsx"), "utf8");
+  for (const hook of ["useReveal", "useScrollProgress", "usePointerEffects", "useNextAvailability", "useTimeOfDay", "useSectionProgress", "circularModeSwitch", "bookingTransition", "useMotionLevel"]) {
+    assert.ok(component.includes(hook), `ergata-v2 uses the kit's ${hook}`);
+  }
+  for (const role of ["needs.ergata", "approach.ergata", "faq.ergata", "office.ergata", "online.ergata", "band.ergata", "testimonial.ergata", "contact.ergata", "window.ergata"]) {
+    assert.ok(component.includes(`"${role}"`) || fs.readFileSync(path.join(directory, "ErgataTemplate.tsx"), "utf8").includes(role), `ergata-v2 draws its own photo for ${role}`);
+  }
+  assert.ok(/night=\{night\} eager/.test(component) && /mode === "dark" \|\| now\.afterDark/.test(component), "ergata-v2 shows the night photos in dark mode and after dark");
+  assert.ok(/data-qa="ergata-sticky-book"/.test(component) && /data-qa="ergata-dots"/.test(component), "ergata-v2 has the phone booking bar and section dots");
+  assert.ok(!/\b(991|907|939)\b/.test(component), "emergency numbers come from the release, not the template");
+  assert.ok(component.includes("snapshot.bookingPaths"), "each Ergata v2 session card books its own session (online or office)");
+  assert.ok(fs.existsSync(path.join(directory, "ErgataMoment.tsx")) && fs.readFileSync(path.join(templateRoot, "moments.tsx"), "utf8").includes('"ergata-therapy@2"'), "ergata-v2 has its booking-success moment");
+}
 assert.ok(registry.includes("rendererVersion"), "the registry resolves by renderer version");
 
 // Ergata (therapy practices) keeps its safety notice as owner content: numbers are never hard-coded.

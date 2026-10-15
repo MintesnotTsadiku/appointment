@@ -11,7 +11,7 @@ from frappe.model.document import Document
 from appointment.public_experience import access
 from appointment.public_experience.design_compiler import compile_design
 from appointment.public_experience.errors import BrandExperienceError
-from appointment.public_experience.recipes import get_recipe
+from appointment.public_experience.recipes import get_recipe, require_offered
 
 
 class BrandProfile(Document):
@@ -99,6 +99,9 @@ class BrandProfile(Document):
 
     def _validate_recipe(self):
         try:
+            # A retired template version renders what was published on it, but nothing new moves to it.
+            before = self.get_doc_before_save()
+            require_offered(self.recipe_key, self.recipe_version, (before.recipe_key, before.recipe_version) if before else None)
             recipe = get_recipe(self.recipe_key, self.recipe_version or None)
             inputs = self._parse_inputs()
             compile_design(

@@ -33,9 +33,10 @@ scenarios:
     - type: text_contains
       value: QA Independent consultation
   actions:
-  # Step one: the picker asks for a day; the bottom bar appears only once a time is chosen.
+  # Step one: the picker opens on today, or on the next day with an open time (docs/growth/BOOKING_LAYOUT.md,
+  # "The first day"); the bottom bar appears only once a time is chosen.
   - action: wait_for
-    selector: '[data-qa="booking-pick-date"]'
+    selector: '[data-qa="booking-day-title"]'
     assertions:
     - type: visible_selector
       value: '[data-qa="booking-picker"][data-selected="false"]'

@@ -177,7 +177,12 @@ def public_offering(offering_id, slug=None):
         frappe.throw(_("Choose an independent offering."), frappe.PermissionError)
     if slug and owner_for_slug(slug)[0] != provider.name:
         frappe.throw(_("Choose an independent offering."), frappe.PermissionError)
+    from appointment.scheduler import localized_names
+
+    site_am = frappe.db.get_value("Public Site", {"owner_type": "Provider", "provider": provider.name, "status": "Published"}, "site_title_am")
     return {"offering": event.name, "business_name": provider.provider_name, "service": service.service_name,
+            # The business name by language: the website's Amharic name, else the provider's Amharic name.
+            "business_local_name": localized_names.pair(provider.provider_name, site_am or provider.get("display_name_am")),
             # The provider page this offering belongs to: its "All services" link and canonical address.
             "provider_slug": provider.get("public_slug") or None,
             "duration": int(event.duration_override or service.duration), "timezone": location.timezone,

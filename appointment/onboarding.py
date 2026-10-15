@@ -3256,6 +3256,8 @@ def get_provider_profile():
                 "name",
                 "provider_name",
                 "full_name",
+                "display_name",
+                "display_name_am",
                 "email",
                 "phone",
                 "bio",
@@ -3291,7 +3293,8 @@ def get_provider_profile():
 
 
 @frappe.whitelist()
-def update_provider_profile(provider_name=None, full_name=None, phone=None, bio=None, timezone=None, language=None, business_type=None, spoken_languages=None, bio_am=None):
+def update_provider_profile(provider_name=None, full_name=None, phone=None, bio=None, timezone=None, language=None, business_type=None, spoken_languages=None, bio_am=None,
+                            display_name=None, display_name_am=None):
     """
     Update current user's provider profile
     """
@@ -3317,6 +3320,11 @@ def update_provider_profile(provider_name=None, full_name=None, phone=None, bio=
         if bio_am is not None:
             # The Amharic provider page shows it; when it is empty the page shows the English bio.
             provider.bio_am = bio_am
+        if display_name is not None:
+            # The name on public pages; Amharic pages show `display_name_am`, else this one.
+            provider.display_name = " ".join(str(display_name).split())[:140]
+        if display_name_am is not None:
+            provider.display_name_am = " ".join(str(display_name_am).split())[:140]
         if timezone is not None:
             provider.timezone = timezone
         if language is not None:

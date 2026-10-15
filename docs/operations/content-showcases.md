@@ -46,3 +46,58 @@ website. Today there is one, Yared Tesfaye Counselling (Ergata Therapy,
 shared with the QA fixtures. See `docs/growth/TEMPLATE_ERGATA.md`, section
 "Showcase". These showcases get bookings, but no articles, galleries or
 newsletters.
+
+## Amharic names
+
+Amharic pages show the names of the businesses and their people in Ge'ez
+script. The English name stays in the record's own field. The Amharic name is
+next to it:
+
+| Record | Field | Shown on |
+|---|---|---|
+| Provider | `display_name_am` | Service chooser chips and avatars, time picker, booking summary and bar, details step, confirmation, provider page, directory |
+| Organization | `organization_name_am`, `description_am` | Chooser heading and description, booking header, directory, link previews (`og:title`, `og:site_name`) |
+| Public Site | `site_title_am` | Website header and footer on Amharic pages, `/book`, the booking header |
+
+When an Amharic value is empty, the page shows the English value. The public
+APIs send the names as `{en, am}` (`appointment/scheduler/localized_names.py`),
+and the page shows its own language (`frontend/src/lib/local-names.ts`). The
+website name goes into the release (`localTitle`) when the owner publishes: the
+site's Amharic title, else the organization's Amharic name. The team section of
+a website reads its own bilingual content, so the seeder writes the Amharic
+names there too.
+
+Owners edit the names in English and Amharic side by side:
+
+- Settings › Business, "Names on your booking pages": the business name, the
+  description and the name of each provider of the business
+  (`public_names.save_business_names`, managers only).
+- Settings › Profile, "Name on booking pages": the signed-in provider's own name.
+- Website setup, "Website name in Amharic".
+
+The seeder (`CONTENT_VERSION` 7, Ergata showcase version 3) fills the Amharic
+names of the five organization showcases, their ten providers and the Ergata
+practice. A repeat run writes the same values.
+
+### Portraits
+
+The ten staff portraits of the five organization showcases are new photos of
+the same people in each template's v3 art direction, with warm or neutral
+grading. They were made with the Codex CLI (`gpt-6.1-sol`) as edits of the
+earlier portraits, so each person keeps the same face. The files are in
+`appointment/public/brand-experience/providers/warm/`:
+
+- `<name>.webp` and `<name>.avif`, 768 × 768 (the team sections),
+- `<name>-192.webp` / `.avif` and `<name>-96.webp` / `.avif` (avatars).
+
+The Ergata portrait has the same small variants next to it. The scheduler APIs
+send the 192 px file as the avatar (`localized_names.avatar`), about 4–7 KB
+instead of 40–75 KB. Each file and its checksum is in the showcase catalog
+(`providerAssets[].variants`). The earlier portraits stay in place, because old
+releases can point to them.
+
+QA: `qa/manifests/growth/amharic-names.yaml` (each showcase in Amharic) and
+`amharic-names-owner.yaml` (the owner changes a name and changes it back). The
+fixture is `appointment.tests.amharic_names_qa_fixtures`.
+Runs on 2026-10-15: BQA-2026-00414 (`amharic-names`, every scenario passed) and
+BQA-2026-00413 (`amharic-names-owner`, passed).

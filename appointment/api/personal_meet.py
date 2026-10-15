@@ -931,15 +931,21 @@ def get_organization_services(org_slug):
             "allow_quantity": frappe.utils.cint(service.allow_quantity), "max_quantity": max(1, frappe.utils.cint(service.max_quantity)),
             "provider_id": label["id"],
             "provider_name": display_name,
+            "provider_local_name": label.get("local_name", {}),
             # The service photo of the published website and the service's place there; one card per service.
             **_service_photo(photos.get(service.name, {})),
             # How the session meets; public, never the meeting link.
             **public_place(location),
         })
+    from appointment.scheduler import localized_names
+
     return {
         "full_name": org.organization_name,
         "company": org.organization_name,
         "description": org.description,
+        # The business name and description in both languages (Organization.organization_name_am, description_am).
+        "local_company": localized_names.organization_names(org),
+        "local_business_description": localized_names.organization_descriptions(org),
         "profile_pic": org.logo,
         "services": services,
         "providers": list(providers.values()),
@@ -952,10 +958,15 @@ def get_organization_services(org_slug):
 def _offering_label(event, provider):
     """Who or what the customer books: the provider, or the room or machine of a resource-only offering."""
     if provider:
+        from appointment.scheduler import localized_names
+
         return {
             "id": provider.name,
             "name": provider.display_name or provider.full_name or provider.provider_name,
-            "avatar": _public_user_image(provider.user),
+            # The name in both languages; the page shows its own language (Provider.display_name_am).
+            "local_name": localized_names.provider_names(provider),
+            # The small variant of a showcase portrait, for the avatars of the chooser and the time picker.
+            "avatar": localized_names.avatar(_public_user_image(provider.user)),
         }
     return {"id": event.resource, "name": frappe.db.get_value("Resource", event.resource, "resource_name"), "avatar": None}
 
@@ -985,8 +996,11 @@ def get_organization_meeting_windows(org_slug, service_slug):
         }
         for item in siblings
     ]
+    from appointment.scheduler import localized_names
+
     return {
         "full_name": org.organization_name, "company": org.organization_name,
+        "local_company": localized_names.organization_names(org),
         "profile_pic": org.logo, "meeting_provider": "builtin",
         "service_name": service.service_name,
         "durations": [{"id": event.name, "label": f"{duration} min", "duration": duration}],

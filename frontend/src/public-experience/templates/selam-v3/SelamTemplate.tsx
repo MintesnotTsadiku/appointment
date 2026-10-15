@@ -17,6 +17,7 @@ import { BENEFIT_ART, BeatPath, MotionArc, SmallArc, TempoDial } from "./art";
 import { sx } from "./copy";
 import { withLimeInk } from "./ink";
 import { art, CopyChip, Flow, frameLabel, HoursList, NextChip, OpenBadge, Photo, Reviews, role, slotText, type Art, type Frame, type Review } from "./parts";
+import { SelamHoliday } from "./holiday";
 import "./selam.css";
 
 /*
@@ -185,6 +186,7 @@ export function SelamSite({ snapshot, locale, applicationName, publicRoot, rootS
       <section className="s3-hero" id="top" data-section={applicationName} aria-labelledby="s3-hero-title">
         <div className="s3-wrap s3-hero-copy">
           <div className="s3-greet" data-qa="selam-greeting"><span className="s3-greet-word">{greeting(chrome, now)}</span>{days.length ? <OpenBadge days={days} now={now} chrome={chrome} locale={locale} habesha={locale === "am"} /> : null}</div>
+          <SelamHoliday snapshot={snapshot} locale={locale} chrome={chrome} />
           <h1 id="s3-hero-title"><Words text={title} /></h1>
           <div className="s3-hero-row">
             {localized(hero.subtitle || hero.body, locale) ? <p className="s3-lede">{localized(hero.subtitle || hero.body, locale)}</p> : null}
@@ -483,7 +485,7 @@ export function SelamBooking({ snapshot, locale, applicationName, publicRoot, ro
           {localized(booking.body, locale) ? <p className="s3-lede">{localized(booking.body, locale)}</p> : null}
           <div className="s3-actions">
             {bookingPath && label ? <a className="s3-btn" href={bookingPath} onClick={(event) => inApp(event, bookingPath, navigate)} data-magnetic="6" data-qa="selam-handoff-book"><span>{label}</span><span className="s3-btn-go" aria-hidden="true">→</span></a> : null}
-            <NextChip facts={data?.next ? { next: data.next.start, todayLeft: data.todayLeft } : null} data={data} chrome={chrome} locale={locale} href={bookingPath || undefined} qa="selam-handoff-next" />
+            <NextChip facts={data?.next ? { next: data.next.start, todayLeft: data.todayLeft } : null} data={data} chrome={chrome} locale={locale} href={bookingPath || undefined} qa="selam-handoff-next" pending={live.status === "loading"} />
           </div>
         </div>
         {image ? <div className="s3-handoff-photo"><Photo image={image} night={night} eager sizes="(max-width: 760px) 92vw, 46vw" decorative /><MotionArc className="s3-handoff-arc" /></div> : null}

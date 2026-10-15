@@ -19,6 +19,8 @@ from frappe import _
 from frappe.rate_limiter import rate_limit
 from frappe.utils import cint, flt, get_url, nowdate
 
+from appointment.scheduler import localized_names
+
 ALIAS = "Public Site Slug Alias"
 ROOT = "/schedule/p/"
 NOT_FOUND = "This booking page is not available."
@@ -46,6 +48,8 @@ def public_provider(slug: str = ""):
         "canonical_slug": canonical,
         "name": doc.display_name or doc.provider_name or doc.name,
         "business_name": doc.provider_name or doc.name,
+        # The name in both languages (Provider.display_name_am); the page shows its own language.
+        "local_name": localized_names.provider_names(doc),
         "photo": public_photo(doc.profile_photo) or content["person"].get("image", ""),
         # The page picks the bio in its language and falls back to the other one (`provider_bio`).
         "bio": _plain(doc.bio),

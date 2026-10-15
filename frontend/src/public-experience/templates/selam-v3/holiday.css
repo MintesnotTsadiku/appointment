@@ -1,0 +1,32 @@
+/* Selam v3 holiday moment: a long pill, a lime line drawing in a moss circle and the greeting in the
+   magazine face. In the hero copy's flow; it never covers content. */
+.s3-holiday {
+  display: grid; width: fit-content; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 14px;
+  max-width: min(100%, 560px); margin-bottom: clamp(14px, 2vw, 22px); padding: 6px 22px 6px 6px; border-radius: 999px;
+  color: var(--s3-ink); background: color-mix(in srgb, var(--s3-lime) 22%, var(--s3-surface));
+  border: 1px solid color-mix(in srgb, var(--s3-moss) 26%, transparent);
+}
+.s3h-art { display: grid; place-items: center; width: 58px; height: 58px; border-radius: 50%; color: var(--s3-lime); background: var(--s3-deep); flex: none; }
+.s3h-art svg { width: 40px; height: 40px; }
+.s3h-art .s3h-dot { fill: var(--s3-lime); }
+.s3h-art .s3h-flame { stroke: #f4f7e8; }
+.s3h-copy { display: grid; gap: 2px; min-width: 0; line-height: 1.25; }
+.s3h-copy strong { font-family: var(--s3-display); font-size: 1.25rem; font-weight: 900; letter-spacing: -.01em; }
+.s3:lang(am) .s3h-copy strong { font-weight: 700; letter-spacing: 0; }
+.s3h-line { color: var(--s3-muted); font-size: .875rem; font-weight: 600; }
+.s3h-geez { color: var(--s3-moss); }
+.s3[data-pe-mode="dark"] .s3-holiday { color: var(--s3-on-deep); background: color-mix(in srgb, var(--s3-lime) 12%, var(--s3-deep)); }
+.s3[data-pe-mode="dark"] .s3h-line { color: var(--s3-on-deep-muted); }
+.s3[data-pe-mode="dark"] .s3h-geez { color: var(--s3-lime); }
+.s3:is([data-motion-level="standard"], [data-motion-level="expressive"]) .s3h-art svg path:first-child { stroke-dasharray: 160; animation: s3h-draw 2.2s cubic-bezier(.22, .8, .24, 1) both; }
+.s3:is([data-motion-level="standard"], [data-motion-level="expressive"]) .s3h-flame { animation: s3h-breath 3s ease-in-out 2.2s infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+@keyframes s3h-draw { from { stroke-dashoffset: 160; } to { stroke-dashoffset: 0; } }
+@keyframes s3h-breath { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+@media (prefers-reduced-motion: reduce) { .s3-holiday *, .s3-holiday *::before { animation: none !important; } }
+@media (max-width: 760px) {
+  .s3-holiday { gap: 10px; padding: 5px 16px 5px 5px; }
+  .s3h-art { width: 46px; height: 46px; }
+  .s3h-art svg { width: 32px; height: 32px; }
+  .s3h-copy strong { font-size: 1.0625rem; }
+  .s3h-line { font-size: .8125rem; }
+}

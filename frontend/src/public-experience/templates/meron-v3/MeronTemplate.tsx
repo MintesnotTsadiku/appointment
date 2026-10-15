@@ -18,6 +18,7 @@ import {
   art, BeforeAfter, CopyChip, HoursList, KenBurns, mt, NextChip, OpenBadge, Photo, Reviews, role, slotText, smallest,
   type Art, type Review,
 } from "./parts";
+import { MeronHoliday } from "./holiday";
 import "./meron.css";
 
 /*
@@ -207,6 +208,7 @@ export function MeronSite({ snapshot, locale, applicationName, publicRoot, rootS
         <div className="m3-spot" aria-hidden="true" />
         <div className="m3-wrap m3-hero-copy">
           <div className="m3-greet" data-qa="meron-greeting"><span className="m3-eyebrow">{greeting(chrome, now)}</span>{days.length ? <OpenBadge days={days} now={now} chrome={chrome} locale={locale} habesha={locale === "am"} /> : null}</div>
+          <MeronHoliday snapshot={snapshot} locale={locale} chrome={chrome} />
           <div className="m3-title">
             <Stitch d="M4 4H996V196H4Z" viewBox="0 0 1000 200" mode="load" className="m3-title-stitch" />
             <h1 id="m3-hero-title">{localized(hero.title, locale)}</h1>
@@ -564,7 +566,7 @@ export function MeronBooking({ snapshot, locale, applicationName, publicRoot, ro
           <h1>{localized(booking.title, locale)}</h1>
           {localized(booking.body, locale) ? <p>{localized(booking.body, locale)}</p> : null}
           {bookingPath && label ? <a className="m3-btn" href={bookingPath} onClick={(event) => inApp(event, bookingPath, navigate)} data-magnetic="5" data-qa="meron-handoff-book"><span>{label}</span><span className="m3-btn-arrow" aria-hidden="true">→</span></a> : null}
-          <NextChip facts={data?.next ? { next: data.next.start, todayLeft: data.todayLeft } : null} data={data} chrome={chrome} locale={locale} href={bookingPath || undefined} qa="meron-handoff-next" />
+          <NextChip facts={data?.next ? { next: data.next.start, todayLeft: data.todayLeft } : null} data={data} chrome={chrome} locale={locale} href={bookingPath || undefined} qa="meron-handoff-next" pending={live.status === "loading"} />
         </div>
         {tags.length ? <ol className="m3-handoff-tags" aria-label={localized(services.title, locale) || undefined}>{tags.map((item, index) => {
           const photo = art(item, locale, design, SERVICE_ROLES[index % SERVICE_ROLES.length]);

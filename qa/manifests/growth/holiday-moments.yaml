@@ -1,0 +1,314 @@
+# Ethiopian holiday moments (addition A7) in every v3 template and Ergata v2, with the development-only
+# `?preview-holiday=<key>` override, in en (desktop) and am (phone). Also the real date logic (`preview-date`), and no
+# moment on an ordinary day. The showcases have the owner switch on. Fixture: none (public pages; books nothing).
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-holiday-moments
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+scenarios:
+- id: holiday_bloom_en_desktop
+  title: 'bloom: enkutatash (en, desktop, light)'
+  viewport: &id003
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /bloom-studio?display=light&preview-holiday=enkutatash
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="bloom-hair-v3"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"][data-holiday="enkutatash"]:has-text("Melkam Addis Amet")'
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"] [lang="am"]:has-text("መልካም አዲስ ዓመት")'
+  - action: screenshot
+    name: holiday_bloom_en_desktop-1-enkutatash.png
+    full_page: false
+  - &id001
+    action: get_console_errors
+  - &id002
+    action: get_network_errors
+- id: holiday_bloom_am_mobile
+  title: 'bloom: meskel (am, phone, dark)'
+  viewport: &id004
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /bloom-studio/am?display=dark&preview-holiday=meskel
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="bloom-hair-v3"][data-pe-mode="dark"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"][data-holiday="meskel"]:has-text("መልካም የመስቀል በዓል")'
+  - action: screenshot
+    name: holiday_bloom_am_mobile-1-meskel.png
+    full_page: false
+  - *id001
+  - *id002
+  options:
+    color_scheme: dark
+- id: holiday_selam_en_desktop
+  title: 'selam: meskel (en, desktop, light)'
+  viewport: *id003
+  checks: []
+  routes:
+  - path: /selam-studio?display=light&preview-holiday=meskel
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="selam-movement-v3"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"][data-holiday="meskel"]:has-text("Melkam Meskel")'
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"] [lang="am"]:has-text("መልካም የመስቀል በዓል")'
+  - action: screenshot
+    name: holiday_selam_en_desktop-1-meskel.png
+    full_page: false
+  - *id001
+  - *id002
+- id: holiday_selam_am_mobile
+  title: 'selam: timket (am, phone, dark)'
+  viewport: *id004
+  checks: []
+  routes:
+  - path: /selam-studio/am?display=dark&preview-holiday=timket
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="selam-movement-v3"][data-pe-mode="dark"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"][data-holiday="timket"]:has-text("መልካም የጥምቀት በዓል")'
+  - action: screenshot
+    name: holiday_selam_am_mobile-1-timket.png
+    full_page: false
+  - *id001
+  - *id002
+  options:
+    color_scheme: dark
+- id: holiday_tena_en_desktop
+  title: 'tena: genna (en, desktop, light)'
+  viewport: *id003
+  checks: []
+  routes:
+  - path: /tena-studio?display=light&preview-holiday=genna
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="tena-clinic-v3"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"][data-holiday="genna"]:has-text("Melkam Genna")'
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"] [lang="am"]:has-text("መልካም ገና")'
+  - action: screenshot
+    name: holiday_tena_en_desktop-1-genna.png
+    full_page: false
+  - *id001
+  - *id002
+- id: holiday_tena_am_mobile
+  title: 'tena: adwa (am, phone, dark)'
+  viewport: *id004
+  checks: []
+  routes:
+  - path: /tena-studio/am?display=dark&preview-holiday=adwa
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="tena-clinic-v3"][data-pe-mode="dark"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"][data-holiday="adwa"]:has-text("የዓድዋ ድል በዓል")'
+  - action: screenshot
+    name: holiday_tena_am_mobile-1-adwa.png
+    full_page: false
+  - *id001
+  - *id002
+  options:
+    color_scheme: dark
+- id: holiday_abugida_en_desktop
+  title: 'abugida: timket (en, desktop, light)'
+  viewport: *id003
+  checks: []
+  routes:
+  - path: /abugida-studio?display=light&preview-holiday=timket
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="abugida-language-v3"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"][data-holiday="timket"]:has-text("Melkam Timket")'
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"] [lang="am"]:has-text("መልካም የጥምቀት በዓል")'
+  - action: screenshot
+    name: holiday_abugida_en_desktop-1-timket.png
+    full_page: false
+  - *id001
+  - *id002
+- id: holiday_abugida_am_mobile
+  title: 'abugida: enkutatash (am, phone, dark)'
+  viewport: *id004
+  checks: []
+  routes:
+  - path: /abugida-studio/am?display=dark&preview-holiday=enkutatash
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="abugida-language-v3"][data-pe-mode="dark"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"][data-holiday="enkutatash"]:has-text("መልካም አዲስ ዓመት")'
+  - action: screenshot
+    name: holiday_abugida_am_mobile-1-enkutatash.png
+    full_page: false
+  - *id001
+  - *id002
+  options:
+    color_scheme: dark
+- id: holiday_meron_en_desktop
+  title: 'meron: adwa (en, desktop, light)'
+  viewport: *id003
+  checks: []
+  routes:
+  - path: /meron-studio?display=light&preview-holiday=adwa
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="meron-atelier-v3"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"][data-holiday="adwa"]:has-text("Adwa Victory Day")'
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"] [lang="am"]:has-text("የዓድዋ ድል በዓል")'
+  - action: screenshot
+    name: holiday_meron_en_desktop-1-adwa.png
+    full_page: false
+  - *id001
+  - *id002
+- id: holiday_meron_am_mobile
+  title: 'meron: genna (am, phone, dark)'
+  viewport: *id004
+  checks: []
+  routes:
+  - path: /meron-studio/am?display=dark&preview-holiday=genna
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="meron-atelier-v3"][data-pe-mode="dark"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"][data-holiday="genna"]:has-text("መልካም ገና")'
+  - action: screenshot
+    name: holiday_meron_am_mobile-1-genna.png
+    full_page: false
+  - *id001
+  - *id002
+  options:
+    color_scheme: dark
+- id: holiday_ergata_en_desktop
+  title: 'ergata: enkutatash (en, desktop, light)'
+  viewport: *id003
+  checks: []
+  routes:
+  - path: /yared-counselling?display=light&preview-holiday=enkutatash
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="ergata-therapy-v2"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"][data-holiday="enkutatash"]:has-text("Melkam Addis Amet")'
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"] [lang="am"]:has-text("መልካም አዲስ ዓመት")'
+  - action: screenshot
+    name: holiday_ergata_en_desktop-1-enkutatash.png
+    full_page: false
+  - *id001
+  - *id002
+- id: holiday_ergata_am_mobile
+  title: 'ergata: meskel (am, phone, dark)'
+  viewport: *id004
+  checks: []
+  routes:
+  - path: /yared-counselling/am?display=dark&preview-holiday=meskel
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="ergata-therapy-v2"][data-pe-mode="dark"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"][data-holiday="meskel"]:has-text("መልካም የመስቀል በዓል")'
+  - action: screenshot
+    name: holiday_ergata_am_mobile-1-meskel.png
+    full_page: false
+  - *id001
+  - *id002
+  options:
+    color_scheme: dark
+- id: holiday_real_date_new_year
+  title: 'The real date logic: 9 September 2026 is in the Enkutatash window (Bloom)'
+  viewport: *id003
+  checks: []
+  routes:
+  - path: /bloom-studio?display=light&preview-date=2026-09-09
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="bloom-hair-v3"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"][data-holiday="enkutatash"]:has-text("2019")'
+  - action: screenshot
+    name: holiday_real_date-1-enkutatash.png
+    full_page: false
+  - *id001
+  - *id002
+- id: holiday_ordinary_day
+  title: 'An ordinary day (Tena, 15 October 2026): no holiday moment'
+  viewport: *id003
+  checks: []
+  routes:
+  - path: /tena-studio?display=light&preview-date=2026-10-15
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="tena-clinic-v3"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"]'
+    state: detached
+  - action: screenshot
+    name: holiday_ordinary_day-1.png
+    full_page: false
+  - *id001
+  - *id002

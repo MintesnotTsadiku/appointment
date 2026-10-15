@@ -13,7 +13,7 @@ Bloom v3 ("Golden Hour Salon") is the first package that uses the kit. See `BLOO
 - Reduced motion always wins. Under `prefers-reduced-motion`, the motion level is `none`: every reveal shows at once, nothing moves, and a marquee is a still grid. Also stop all animation in CSS under `@media (prefers-reduced-motion: reduce)` and under `[data-motion-level="none"]`.
 - Keep pointer effects for fine pointers. The kit does not run them on touch screens.
 - Keep the kit under 8 KB of gzipped JavaScript. On 2026-10-15 the whole kit, with `lib/time.ts`, is 6.4 KB gzipped (esbuild, minified, React external). A template loads only the parts it imports.
-- Development-only query values (`preview-time`, `preview-availability`, and the existing `preview-state`) read `import.meta.env.DEV`. Production builds ignore them. Keep these reads out of the pure files in `kit/core/`.
+- Development-only query values (`preview-time`, `preview-availability`, `preview-holiday`, `preview-date`, and the existing `preview-state`) read `import.meta.env.DEV`. Production builds ignore them. Keep these reads out of the pure files in `kit/core/`.
 
 ## Files
 
@@ -33,6 +33,8 @@ Bloom v3 ("Golden Hour Salon") is the first package that uses the kit. See `BLOO
 | `kit/availability.ts` | `useNextAvailability`. |
 | `kit/haptics.ts` | `haptic`. |
 | `kit/progress.ts` | `useSectionProgress`. |
+| `kit/core/holidays.ts` | The holiday dates and windows, and the Ethiopian calendar conversion re-exported from `src/lib/ethiopian-calendar.ts` (the JDN twin of `growth/ethiopian_calendar.py`). Pure. |
+| `kit/holidays.ts` | `useHoliday`. |
 | `kit/index.ts` | One import point for all of the above. |
 
 `frontend/tests/template-kit.test.mjs` tests every pure file. It is part of `npm run test:dom`.
@@ -178,11 +180,13 @@ The booking pages (service chooser, time picker, details, confirmation) are one 
 | `name` | Yes | The value of `data-bk-skin` on the booking pages, for example `bloom-v3`. |
 | `frame` | Yes | The shape of service photos and portraits: `rounded`, `mirror`, `arch`, `circle` or `square` (`data-bk-frame`). |
 | `servicePhotoRoles` | Yes | Image roles for service photos when the website item has no photo. The flow uses the role at the item's place in the services section, so the photo is the same as on the landing page. Use `[]` for none. |
+| `formatPhotoRoles` | No | Image roles by how a session meets (`in_person`, `online`). The independent scheduler knows the session's place but not its place on the website, so it shows this photo in the summary. Ergata v2 uses the office door and the quiet desk. |
 | `backdropRole` | No | The image role for the faint page background. The flow uses its smallest width file and its night photo in dark mode. Pick a photo that the handoff already showed. |
 | `tokens(brand, mode)` | No | CSS custom properties from the brand variables: `--bk-action-bg`, `--bk-action-ink`, `--bk-action-radius`, `--bk-action-shadow`. Keep AA contrast for the action label. |
 | `StepMark` | No | A visual slot: the mark of one step (`index`, `state`: `done`, `current` or `next`). Decorative (`aria-hidden`); the flow writes the step names. |
+| `style` | Yes, when the package has `booking.css` | `() => import("./booking.css")`. The flow loads the stylesheet when a page uses the skin, so each template's booking CSS is its own small file (about 1 KB compressed). |
 
-The skin's stylesheet is `booking.css` in the package. Scope every rule under `[data-bk-skin="<name>"]`, or use a class with the package's own prefix and `k-` (Bloom uses `.b3k-`). The CSS can set these tokens and draw these parts:
+The skin's stylesheet is `booking.css` in the package. Do not import it in `booking.tsx`; give it as `style: () => import("./booking.css")` (a static import puts every template's booking CSS in one shared file). Scope every rule under `[data-bk-skin="<name>"]`, or use a class with the package's own prefix and `k-` (Bloom uses `.b3k-`). The CSS can set these tokens and draw these parts:
 
 | Token or part | Use |
 |---|---|
@@ -202,6 +206,52 @@ The skin's stylesheet is `booking.css` in the package. Scope every rule under `[
 - Measure the chooser and the time picker on a phone (390 px, 9 Mbps, 170 ms, CPU 4x) before and after. LCP and CLS must not get worse.
 - A template without a skin gets `DEFAULT_BOOKING_SKIN`: the brand tokens only. Its pages do not change.
 
+## Holiday moments
+
+Around Ethiopian holidays a template can show a small greeting in its own style (addition A7). The kit knows the dates; each template draws its own decoration in `<package>/holiday.tsx` and `holiday.css`.
+
+### Dates
+
+`kit/core/holidays.ts` computes every date; there is no table to update. It converts with `src/lib/ethiopian-calendar.ts` (one conversion for the booking pages and the templates; template packages still import it through the kit). The conversion goes through the Julian Day Number, as `appointment/growth/ethiopian_calendar.py` and its JavaScript twin do, and `frontend/tests/holiday-moments.test.mjs` and `frontend/tests/ethiopian-calendar.test.mjs` check it against the same vectors (`appointment/growth/vectors/ethiopian_calendar.json`).
+
+| Key | Holiday | Rule | Gregorian date | Window (days before / after) |
+|---|---|---|---|---|
+| `enkutatash` | Ethiopian New Year | Meskerem 1 | 11 September, 12 September before a Gregorian leap year | 3 / 3 |
+| `meskel` | Finding of the True Cross (Demera on the eve) | Meskerem 17 | 27 or 28 September | 2 / 1 |
+| `genna` | Ethiopian Christmas | 25 December in the Julian calendar | 7 January (1901–2099) | 2 / 2 |
+| `timket` | Epiphany (Ketera on the eve) | Tir 11 | 19 January, 20 January in a Gregorian leap year | 1 / 2 |
+| `adwa` | Adwa Victory Day | Yekatit 23 | 2 March | 1 / 1 |
+
+Eid al-Fitr and Eid al-Adha are left out on purpose. Their dates follow the moon sighting that the Ethiopian Islamic Affairs Supreme Council announces, and a tabular or Umm al-Qura calculation can be a day early or late. Fasika (Easter) could be computed with the Julian computus; it was not asked for.
+
+- `activeHoliday(date)` returns the holiday whose window holds the date, nearest first, or null. A holiday has `key`, `date` (Gregorian), `ethiopian`, `offset` (days from the holiday: negative before) and `count` (the new Ethiopian year for Enkutatash, the anniversary for Adwa, else the Ethiopian year).
+- `HOLIDAY_GEEZ[key]` is the greeting in Ge'ez script. English pages show it next to the English greeting.
+- `dateIn(now, zone)` is the calendar date in Addis Ababa.
+
+### The hook and the owner setting
+
+`useHoliday(enabled)` returns today's holiday in Addis Ababa, or null; it checks again every hour. Pass `snapshot.booking?.holidayGreetings === true`.
+
+The owner switch is next to live availability: website setup, "Website features" step, "Show Ethiopian holiday greetings on the website" (`setup.save(..., booking={"holidayGreetings": true})`, stored in `Public Site.booking_json`, live with the next publish). It is off for a new site and on for every showcase (the seeder sets it).
+
+In development, `?preview-holiday=<key>` shows the next occurrence of that holiday on any day, and `?preview-date=YYYY-MM-DD` sets the Addis Ababa date for the real date logic. Production builds ignore both.
+
+### Rules for a template's moment
+
+- Render it in the flow of the hero copy (next to the greeting), never as an overlay: it never covers content. `holiday.css` must not use `position: fixed`.
+- The greeting is `publicSite.holiday.<key>` and the line `publicSite.holiday.<key>Line` (`{count}` is the year or the anniversary), in English and Amharic. Give the element `data-qa="holiday-moment"`, `data-holiday=<key>` and `aria-label` from `holiday.label`; the drawing is `aria-hidden`.
+- Draw the decoration in the template's own language. Motion only at `standard` and above, and none under reduced motion.
+- `frontend/tests/holiday-moments.test.mjs` checks the dates and these rules for every v3 package and Ergata v2.
+
+| Template | The moment |
+|---|---|
+| Bloom v3 | A plum glass pill on the hero stage; a small mirror ringed with bulbs holds a glossy marigold drawing (daisies, the Demera flame, a candle, a fringed umbrella, the peaks); the greeting in the poster face. |
+| Selam v3 | A long pill; one continuous lime line drawing in a moss circle, like the motion arc; it draws itself once. |
+| Tena v3 | A wayfinding sign: a yellow pictogram plate beside a teal notice panel with a dashed yellow foot. |
+| Abugida v3 | An illuminated panel: double gold rule, the greeting in Ge'ez in rubric red between ፨ marks on every page, an ink drawing that inks in. |
+| Meron v3 | A navy garment tag with a punched hole and a gold drawing, on a linen slip with a wine stitch line; the tag sways a little. |
+| Ergata v2 | A linen card with a line drawing in a small arched window and the greeting in the soft serif. |
+
 ## Checklist for the next v3 package
 
 1. Add the recipe, layout and surface `v3` manifests, and the imagery manifest with `darkSrc` for the hero and the band. Pin palette and typography versions that exist.
@@ -211,4 +261,5 @@ The skin's stylesheet is `booking.css` in the package. Scope every rule under `[
 5. Generate the images with the Codex CLI method (`BLOOM_V3.md`, "Images"). Record every file with its checksum.
 6. Move the showcase through the seeder: catalog `heroRole`, `detailRole`, `templateAssets`, and a higher `PUBLIC_EXPERIENCE_VERSION`.
 7. Write the three manifests (`template-<name>-v3.yaml`, `-dark`, `-states`), run them, and record the run IDs.
+7a. Add the holiday moment (`holiday.tsx`, `holiday.css`) and a scenario in `holiday-moments.yaml`.
 8. Add the booking skin (`booking.tsx`, `booking.css`, a `SKINS` entry), link each service row on the handoff to `snapshot.bookingPaths[item.id]`, and write `booking-journey-<name>.yaml` like `booking-journey-bloom.yaml`.

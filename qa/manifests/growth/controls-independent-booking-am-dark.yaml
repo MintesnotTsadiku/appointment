@@ -38,7 +38,7 @@ scenarios:
       url_contains: appointment.scheduler.translation
       status: 200
   - action: wait_for
-    selector: '[data-qa="booking-pick-date"]'
+    selector: '[data-qa="booking-day-title"]'
     assertions:
     - type: text_contains
       value: ቀጠሮ ይያዙ

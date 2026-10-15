@@ -1,5 +1,4 @@
 import type { BookingSkin, StepMarkProps } from "../booking-skin";
-import "./booking.css";
 
 /*
  * Meron v3 on the booking pages ("The Fitting Room", continued). Speed and clarity first: no parallax,
@@ -25,6 +24,8 @@ export const meronBookingSkin: BookingSkin = {
   key: "meron-atelier@3",
   name: "meron-v3",
   frame: "square",
+  // The stylesheet loads only on this template's booking pages (kit, "Booking skins").
+  style: () => import("./booking.css"),
   // The same photos as the landing page's garment tags, by the service's place.
   servicePhotoRoles: ["loop1.meron", "story1.meron", "loop3.meron"],
   // The fitting room is the stage of the /book handoff, so the visitor has just seen it.

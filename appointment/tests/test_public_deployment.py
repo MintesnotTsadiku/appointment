@@ -17,6 +17,7 @@ from appointment.public_experience.edge import (
     NginxSelfManagedAdapter,
     render_config,
 )
+from appointment.public_experience.recipes import latest_version
 
 MARKER = "PD8-"
 
@@ -115,7 +116,7 @@ class TestDeploymentApi(unittest.TestCase):
                 "owner_type": "Organization",
                 "organization": org,
                 "recipe_key": "tena-clinic",
-                "recipe_version": 1,
+                "recipe_version": latest_version("tena-clinic"),  # version 1 is retired
                 "content_schema_version": 2,
             }
         ).insert(ignore_permissions=True)

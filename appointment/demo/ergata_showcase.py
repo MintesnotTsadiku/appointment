@@ -56,6 +56,8 @@ def sections(starter, provider, places, services):
         "eyebrow": t("Counselling psychologist · Bole office and online", "የምክር ሥነ-ልቦና ባለሙያ · ቦሌ ቢሮ እና ኦንላይን"),
         "body": t("Confidential. No referral needed. Sessions in Amharic or English.",
                   "ሚስጥራዊ ነው። ሪፈራል አያስፈልግም። ቆይታዎች በአማርኛ ወይም በእንግሊዝኛ።"),
+        # The template's own hero photo (v2 files: AVIF, mobile crop and the lamp-lit night photo).
+        "image": ASSETS + "support/ergata-v2/hero.webp",
     })
     content["hero"] = hero
     content["about"] = {
@@ -66,7 +68,7 @@ def sections(starter, provider, places, services):
                   "ብዙ ሰዎች እርዳታ ከመጠየቃቸው በፊት ረጅም ጊዜ እንደጠበቁ ይነግሩኛል። ይህ የተለመደ ነው። የእኔ ሥራ የመጀመሪያውን እርምጃ ማቅለል ነው፤ በእርስዎ ፍጥነት፣ ይበልጥ በሚገልጽዎ ቋንቋ እንሄዳለን፤ ያለ እርስዎ ፈቃድም ምንም ነገር አይነገርም።"),
         "highlights": [t("Amharic and English", "አማርኛ እና እንግሊዝኛ"), t("At the Bole office or online", "በቦሌ ቢሮ ወይም በኦንላይን"),
                        t("Adults and couples", "አዋቂዎች እና ጥንዶች")],
-        "image": ASSETS + "support/ergata/room.webp",
+        "image": ASSETS + "support/ergata-v2/room.webp",
         "imageAlt": t("Two soft armchairs face each other across a small wooden table in a sunlit counselling room.",
                       "ፀሐይ በገባበት የምክር ክፍል ውስጥ ሁለት ምቹ ወንበሮች በትንሽ የእንጨት ጠረጴዛ ዙሪያ ፊት ለፊት ተቀምጠዋል።"),
     }
@@ -109,7 +111,7 @@ def sections(starter, provider, places, services):
              "notes": [t("Parking in the courtyard and a lift to the second floor", "በግቢው ውስጥ የመኪና ማቆሚያ እና ወደ ሁለተኛ ፎቅ አሳንሰር አለ"),
                        t("A small waiting corner, so you never wait in a corridor", "ትንሽ የመቆያ ቦታ አለ፤ በኮሪደር ላይ አይጠብቁም")],
              "directionsAction": act("directions", "Get directions", "አቅጣጫ ያግኙ"),
-             "image": ASSETS + "support/ergata/office.webp",
+             "image": ASSETS + "support/ergata-v2/office.webp",
              "imageAlt": t("A wooden door with an arched top stands open at the top of stone steps between large potted plants.",
                            "በትላልቅ የሸክላ ተክሎች መካከል ባሉ የድንጋይ ደረጃዎች ላይ ቅስት ያለው የእንጨት በር ተከፍቷል።")},
             {"id": places["online"][:64], "name": t("Online video sessions", "የኦንላይን ቪዲዮ ቆይታዎች"),
@@ -120,7 +122,7 @@ def sections(starter, provider, places, services):
                        t("Open the link a few minutes early on a phone or laptop with a camera.", "ካሜራ ባለው ስልክ ወይም ላፕቶፕ ማስፈንጠሪያውን ጥቂት ደቂቃዎች ቀደም ብለው ይክፈቱ።")],
              "body": t("Sessions are never recorded. Yared joins from a closed, private room.",
                        "ቆይታዎች በፍጹም አይቀረጹም። ያሬድ ዝግ ከሆነ ግላዊ ክፍል ይገናኛል።"),
-             "image": ASSETS + "support/ergata/online.webp",
+             "image": ASSETS + "support/ergata-v2/online.webp",
              "imageAlt": t("A laptop, a cup of tea and a notebook on a wooden desk by a sheer curtain, ready for a video session.",
                            "ለቪዲዮ ቆይታ የተዘጋጀ፣ ቀጭን መጋረጃ አጠገብ ባለ የእንጨት ጠረጴዛ ላይ ላፕቶፕ፣ ሻይ እና ማስታወሻ ደብተር።")},
         ]}
@@ -128,14 +130,37 @@ def sections(starter, provider, places, services):
         "body": t("Call or send a message with any question before you book. Messages are read only by Yared and answered within one working day.",
                   "ከመያዝዎ በፊት ማንኛውም ጥያቄ ካለዎት ይደውሉ ወይም መልእክት ይላኩ። መልእክቶች የሚነበቡት በያሬድ ብቻ ሲሆን በአንድ የሥራ ቀን ውስጥ ምላሽ ያገኛሉ።"),
         "action": act("call", "Call Yared", "ለያሬድ ይደውሉ", "primary")}
-    faq = list(starter["faq"]["items"])
-    faq[-1] = {"question": t("How do I pay?", "እንዴት ነው የምከፍለው?"),
-               "answer": t("Fees are shown next to each session. You can pay by Telebirr or bank transfer, or in cash at the office. If cost is a barrier, ask about the small number of reduced-fee places.",
-                           "ክፍያው ከእያንዳንዱ ቆይታ አጠገብ ይታያል። በቴሌብር፣ በባንክ ዝውውር ወይም በቢሮ በጥሬ ገንዘብ መክፈል ይችላሉ። ወጪው እንቅፋት ከሆነብዎ፣ ስለ ጥቂት የቅናሽ ቦታዎች ይጠይቁ።")}
-    faq.append({"question": t("Is online therapy as helpful as meeting in person?", "የኦንላይን ሕክምና እንደ አካል ቆይታ ይጠቅማል?"),
-                "answer": t("For many people, yes. Choose a quiet, private place with a steady connection. You receive a secure video link before the session, and you can move between online and office sessions at any time.",
-                            "ለብዙ ሰዎች አዎ። ጸጥ ያለ፣ ግላዊ ቦታ እና የተረጋጋ ኢንተርኔት ይምረጡ። ከቆይታው በፊት ደህንነቱ የተጠበቀ የቪዲዮ ማስፈንጠሪያ ይደርስዎታል፤ በማንኛውም ጊዜ በኦንላይን እና በቢሮ ቆይታዎች መካከል መቀያየር ይችላሉ።")})
+    ours = [
+        {"question": t("How do I pay?", "እንዴት ነው የምከፍለው?"),
+         "answer": t("Fees are shown next to each session. You can pay by Telebirr or bank transfer, or in cash at the office. If cost is a barrier, ask about the small number of reduced-fee places.",
+                     "ክፍያው ከእያንዳንዱ ቆይታ አጠገብ ይታያል። በቴሌብር፣ በባንክ ዝውውር ወይም በቢሮ በጥሬ ገንዘብ መክፈል ይችላሉ። ወጪው እንቅፋት ከሆነብዎ፣ ስለ ጥቂት የቅናሽ ቦታዎች ይጠይቁ።")},
+        {"question": t("Is online therapy as helpful as meeting in person?", "የኦንላይን ሕክምና እንደ አካል ቆይታ ይጠቅማል?"),
+         "answer": t("For many people, yes. Choose a quiet, private place with a steady connection. You receive a secure video link before the session, and you can move between online and office sessions at any time.",
+                     "ለብዙ ሰዎች አዎ። ጸጥ ያለ፣ ግላዊ ቦታ እና የተረጋጋ ኢንተርኔት ይምረጡ። ከቆይታው በፊት ደህንነቱ የተጠበቀ የቪዲዮ ማስፈንጠሪያ ይደርስዎታል፤ በማንኛውም ጊዜ በኦንላይን እና በቢሮ ቆይታዎች መካከል መቀያየር ይችላሉ።")},
+    ]
+    # Idempotent: a refresh starts from the published content, which already has these two questions.
+    asked = {item["question"]["en"] for item in ours}
+    starter_faq = list(starter["faq"]["items"])
+    faq = [item for item in starter_faq if (item.get("question") or {}).get("en") not in asked]
+    if len(faq) == len(starter_faq):
+        faq = faq[:-1]  # the recipe's last starter question is about fees; "How do I pay?" answers it for this practice
+    faq += ours
     content["faq"] = {**starter["faq"], "items": faq}
+    # Anonymised client words, shared with consent: first name and a broad description only, never a diagnosis.
+    content["testimonials"] = {**starter["testimonials"], "items": [
+        {"quote": t("I had put off calling for a year. The first session was quieter and kinder than I expected, and I left with one small thing to try.",
+                    "ለመደወል አንድ ዓመት አቆይቼ ነበር። የመጀመሪያው ቆይታ ከጠበቅሁት በላይ የተረጋጋና ደግ ነበር፤ የምሞክረው አንድ ትንሽ ነገር ይዤ ወጣሁ።"),
+         "attribution": t("Selamawit", "ሰላማዊት"), "role": t("Individual sessions, online", "የግል ቆይታዎች፣ በኦንላይን"), "consent": True},
+        {"quote": t("We each had time to speak without being interrupted. That alone changed how we talk at home.",
+                    "እያንዳንዳችን ሳንቋረጥ የምንናገርበት ጊዜ አገኘን። ያ ብቻ በቤት ውስጥ የምንነጋገርበትን መንገድ ለወጠው።"),
+         "attribution": t("Dawit and Hanna", "ዳዊት እና ሐና"), "role": t("Couples sessions at the office", "የጥንዶች ቆይታዎች በቢሮ"), "consent": True},
+        {"quote": t("Being able to speak in Amharic about grief made all the difference. Yared never rushed me.",
+                    "ስለ ሐዘኔ በአማርኛ መናገር መቻሌ ትልቅ ለውጥ አመጣ። ያሬድ በፍጹም አላጣደፈኝም።"),
+         "attribution": t("Meskerem", "መስከረም"), "role": t("Individual sessions at the office", "የግል ቆይታዎች በቢሮ"), "consent": True},
+        {"quote": t("The online sessions fit around my shifts at the hospital. I join from my car on the hard days, and it still feels private.",
+                    "የኦንላይን ቆይታዎቹ ከሆስፒታል ፈረቃዎቼ ጋር ይስማማሉ። በከበዱ ቀናት ከመኪናዬ ውስጥ እገናኛለሁ፤ አሁንም ግላዊነቱ አይጠፋም።"),
+         "attribution": t("Bereket", "በረከት"), "role": t("Individual sessions, online", "የግል ቆይታዎች፣ በኦንላይን"), "consent": True},
+    ]}
     content["footer"] = {"body": t("Counselling and psychotherapy in Amharic and English, at an office in Bole, Addis Ababa, and online.",
                                    "በአማርኛ እና በእንግሊዝኛ የምክር እና የሥነ-ልቦና ሕክምና አገልግሎት፣ በቦሌ፣ አዲስ አበባ በሚገኝ ቢሮ እና በኦንላይን።"), "items": []}
     return content
@@ -143,7 +168,7 @@ def sections(starter, provider, places, services):
 
 SHOWCASE = IndependentShowcase(
     key="ergata",
-    version=2,
+    version=5,
     business=BUSINESS,
     owner_email=OWNER,
     owner_name=("Yared", "Tesfaye"),
@@ -156,6 +181,8 @@ SHOWCASE = IndependentShowcase(
     online=Place("Online video room", 8, 20, platform=PLATFORM, meeting_link=MEETING_LINK),
     sessions=SESSIONS,
     full_name="Yared Tesfaye",
+    full_name_am="ያሬድ ተስፋዬ",
+    business_am="ያሬድ ተስፋዬ የምክር አገልግሎት",
     bio="Counselling psychologist in Addis Ababa. Individual and couples sessions in Amharic and English, at the Bole office or online.",
     bio_am="በአዲስ አበባ የምክር ሥነ-ልቦና ባለሙያ። የግልና የጥንዶች ምክር በአማርኛና በእንግሊዝኛ፣ በቦሌ ቢሮ ወይም በኦንላይን።",
     spoken_languages=("am", "en"),  # chips on the provider page
@@ -168,4 +195,6 @@ SHOWCASE = IndependentShowcase(
     sections=sections,
     persona="Independent counselling psychologist",
     qa_fixture="appointment.tests.template_ergata_qa_fixtures",
+    # The showcase shows live free times and the holiday greetings (both off by default for new sites).
+    booking={"showPrices": True, "currency": "ETB", "liveAvailability": True, "holidayGreetings": True},
 )

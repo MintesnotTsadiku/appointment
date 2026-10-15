@@ -16,3 +16,5 @@ export { useTimeOfDay, type TimeOfDay } from "./time";
 export { useNextAvailability, type AvailabilityStatus } from "./availability";
 export { haptic } from "./haptics";
 export { useSectionProgress } from "./progress";
+export { activeHoliday, dateIn, HOLIDAY_GEEZ, HOLIDAY_KEYS, HOLIDAY_WINDOWS, holidaysOn, isHolidayKey, nextHoliday, toEthiopian, toGregorian, type CalendarDate, type Holiday, type HolidayKey } from "./core/holidays";
+export { useHoliday } from "./holidays";

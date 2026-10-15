@@ -64,7 +64,11 @@ def config_from_resolved(context) -> PublicUIConfig:
     design = snapshot.get("compiledDesign") or {}
     if not context.release_hash or not design or design.get("contentHash") is None:
         raise PublicResolutionError("the active release has no compiled design", details={"reason": "design_missing"})
-    identity = design.get("identity") or {}
+    identity = dict(design.get("identity") or {})
+    # The website name on Amharic pages (`publisher._local_title`), for the booking pages' header.
+    local_title = snapshot.get("localTitle") or {}
+    if local_title.get("am"):
+        identity["applicationNameAm"] = local_title["am"]
     canonical = {
         "contract": PUBLIC_UI_CONFIG_CONTRACT,
         "experienceContract": PUBLIC_EXPERIENCE_CONTRACT,

@@ -3,6 +3,23 @@ import react from "@vitejs/plugin-react";
 import { defineConfig, loadEnv } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
+/**
+ * The code every website page shares (data, page shells, content helpers, the template kit), as one chunk instead
+ * of about twenty small ones. Template packages (loaded per site by the registry) stay out.
+ */
+function publicCoreModule(id: string): boolean {
+  const file = id.split("/frontend/src/")[1];
+  if (!file || file.endsWith(".css")) return false;
+  if (/^pages\/public-experience\/(site|booking)\.tsx$/.test(file)) return true;
+  if (/^lib\/(phone|time|online-session|platform-brand|platform-brand-core)\.tsx?$/.test(file)) return true;
+  if (!file.startsWith("public-experience/")) return false;
+  if (/^public-experience\/templates\/(booking-skin|moments|types)\./.test(file)) return false;
+  return !/^public-experience\/templates\/[^/]+\//.test(file) || file.startsWith("public-experience/templates/kit/");
+}
+
+/** The English translation groups that website pages use (src/lib/i18n/english-site.ts). */
+export const WEBSITE_TRANSLATION_GROUPS = ["publicSite", "bookingStates"];
+
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const isolated = process.env.FRAPPE_WORKTREE_SITE;
@@ -40,9 +57,43 @@ export default defineConfig(({ mode }) => {
       },
     };
   }
+  // A business website page loads a lean entry (site-main.tsx) from its own page, `site.html`, which is
+  // index.html with the other entry script. appointment/www/index.py chooses it for website addresses.
+  const siteHtml = path.resolve(__dirname, "site.html");
   return {
     plugins: [
       react(),
+      {
+        // `virtual:english-site`: only the website groups of en.json, so website pages skip the staff strings.
+        name: "english-site",
+        resolveId(id) {
+          return id === "virtual:english-site" ? "\0virtual:english-site" : null;
+        },
+        async load(id) {
+          if (id !== "\0virtual:english-site") return null;
+          const { readFile } = await import("node:fs/promises");
+          const file = path.resolve(__dirname, "src/lib/i18n/translations/en.json");
+          this.addWatchFile(file);
+          const catalog = JSON.parse(await readFile(file, "utf8"));
+          const groups = Object.fromEntries(WEBSITE_TRANSLATION_GROUPS.map((group) => [group, catalog[group] || {}]));
+          return `export default JSON.parse(${JSON.stringify(JSON.stringify(groups))});`;
+        },
+      },
+      {
+        name: "public-site-entry",
+        apply: "build",
+        enforce: "pre",
+        resolveId(id) {
+          return id === siteHtml ? siteHtml : null;
+        },
+        async load(id) {
+          if (id !== siteHtml) return null;
+          const { readFile } = await import("node:fs/promises");
+          const html = await readFile(path.resolve(__dirname, "index.html"), "utf8");
+          if (!html.includes('src="/src/main.tsx"')) throw new Error("index.html must load /src/main.tsx");
+          return html.replace('src="/src/main.tsx"', 'src="/src/site-main.tsx"');
+        },
+      },
       {
         name: "frappe-development-entry",
         apply: "serve",
@@ -252,7 +303,7 @@ export default defineConfig(({ mode }) => {
           globPatterns: [
             "**/*.{js,css,html,ico,png,svg,woff,woff2}"
           ],
-          globIgnores: ["index.html", "schedule/index.html"],
+          globIgnores: ["index.html", "site.html", "schedule/index.html"],
           
           // Maximum cache size (in bytes)
           maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB
@@ -285,11 +336,26 @@ export default defineConfig(({ mode }) => {
       
       // Optimize bundle size
       rollupOptions: {
+        input: { main: path.resolve(__dirname, "index.html"), site: siteHtml },
         output: {
-          manualChunks: {
-            "react-vendor": ["react", "react-dom", "react-router-dom"],
-            "ui-vendor": ["framer-motion", "lucide-react"],
-            "form-vendor": ["react-hook-form", "@hookform/resolvers", "zod"]
+          // By package folder, so shared helpers (such as react/jsx-runtime) stay with their package and a
+          // website page never loads the motion library through them.
+          manualChunks(id: string) {
+            // Its own chunk, evaluated before the application chunk: see src/early-requests.ts.
+            if (/\/frontend\/src\/(early-requests|lib\/scheduler-prefetch)\.ts$/.test(id)) return "early-requests";
+            // Vite's dynamic-import helper goes where every entry has it, never into the scheduler-only chunk.
+            if (publicCoreModule(id) || id.includes("vite/preload-helper")) return "public-core";
+            const vendor = /node_modules\/((?:@[^/]+\/)?[^/]+)\//.exec(id)?.[1];
+            if (!vendor) return undefined;
+            if (["react", "react-dom", "scheduler", "react-router", "react-router-dom", "@remix-run/router", "cookie", "set-cookie-parser"].includes(vendor)) return "react-vendor";
+            if (["framer-motion", "motion-dom", "motion-utils"].includes(vendor)) return "motion-vendor";
+            if (vendor === "lucide-react") return "icon-vendor";
+            // Its own chunk, so a scheduler can start its data request (lib/scheduler-prefetch.ts) before the
+            // application code evaluates.
+            if (["frappe-react-sdk", "frappe-js-sdk", "axios", "socket.io-client", "engine.io-client", "socket.io-parser",
+              "engine.io-parser", "@socket.io/component-emitter", "xmlhttprequest-ssl", "debug", "ms"].includes(vendor)) return "frappe-vendor";
+            if (["react-hook-form", "@hookform/resolvers", "zod"].includes(vendor)) return "form-vendor";
+            return undefined;
           }
         }
       }

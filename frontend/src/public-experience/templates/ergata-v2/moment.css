@@ -1,0 +1,22 @@
+/* Ergata v2 booking-success moment ("a calm glow"). Loaded only with the confirmation (lazy module). */
+.eg2-moment { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; border-radius: inherit; }
+.eg2-moment-glow {
+  position: absolute; right: -40px; top: 70px; width: 340px; height: 340px; margin-top: -170px; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(233, 178, 84, .42), rgba(233, 178, 84, .14) 55%, transparent 72%);
+  opacity: 0; animation: eg2-moment-bloom 2600ms cubic-bezier(.22, .61, .36, 1) 120ms forwards;
+}
+.eg2-moment-arch { position: absolute; right: 64px; top: 8px; width: 104px; height: 118px; overflow: visible; }
+.eg2-moment-arch path { fill: none; stroke: #6f8f7c; stroke-width: 1.6; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: .75; animation: eg2-moment-draw 1600ms cubic-bezier(.22, .61, .36, 1) 300ms forwards; }
+.eg2-moment-arch .eg2-moment-sill { animation-delay: 1100ms; animation-duration: 700ms; }
+.eg2-mote { position: absolute; left: calc(var(--x) + 30%); top: 120px; width: var(--s); height: var(--s); border-radius: 50%; background: #f2c46d; box-shadow: 0 0 10px 2px rgba(242, 196, 109, .55); opacity: 0;
+  animation: eg2-moment-rise 3200ms ease-out var(--d) forwards; }
+@keyframes eg2-moment-bloom { 0% { opacity: 0; transform: scale(.6); } 60% { opacity: 1; transform: scale(1.04); } 100% { opacity: .8; transform: scale(1); } }
+@keyframes eg2-moment-draw { to { stroke-dashoffset: 0; } }
+@keyframes eg2-moment-rise { 0% { opacity: 0; transform: translateY(0); } 20% { opacity: .9; } 100% { opacity: 0; transform: translateY(-110px); } }
+.dark .eg2-moment-glow, [data-pe-mode="dark"] .eg2-moment-glow { background: radial-gradient(closest-side, rgba(240, 189, 99, .34), rgba(240, 189, 99, .1) 55%, transparent 72%); }
+.dark .eg2-moment-arch path, [data-pe-mode="dark"] .eg2-moment-arch path { stroke: #a9c4b2; }
+@media (prefers-reduced-motion: reduce) {
+  .eg2-moment-glow { animation: none; opacity: .7; }
+  .eg2-moment-arch path { animation: none; stroke-dashoffset: 0; }
+  .eg2-mote { display: none; }
+}

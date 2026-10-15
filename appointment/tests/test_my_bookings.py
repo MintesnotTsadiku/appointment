@@ -44,6 +44,14 @@ class TestMyBookings(BloomBookingCase):
         with self.assertRaises(frappe.PermissionError):
             my_bookings.open_link(self.slug, f"{nonce}.{expires}.{'0' * len(signature)}")
 
+    def test_a_full_cache_clear_keeps_links_already_sent(self):
+        # `frappe.clear_cache()` deletes every site key except the `persistent_cache_keys` patterns.
+        from fnmatch import fnmatch
+
+        nonce = my_bookings.link_token(self.org, self.email).split(".")[0]
+        kept = frappe.get_hooks("persistent_cache_keys")
+        self.assertTrue(any(fnmatch(my_bookings._nonce_key(nonce), pattern) for pattern in kept))
+
     def test_an_expired_link_is_refused(self):
         nonce = "qa-expired-nonce"
         expires = int(time.time()) - 5

@@ -5,6 +5,7 @@ import { lazy } from "react";
 import { Navigate, Route } from "react-router-dom";
 import ErrorFallback from "./components/error-fallback";
 import BusinessOwnerRoute from "./components/workspace/BusinessOwnerRoute";
+import { publicSiteRoutes } from "./public-site-routes";
 
 /**
  * Lazy load components.
@@ -72,9 +73,6 @@ const Assignments = lazy(() => import("@/pages/assistants/assignments"));
 // Landing Pages
 const AssistantLanding = lazy(() => import("@/pages/assistant-landing"));
 
-// Public experience (tenant website + booking entry)
-const PublicSitePage = lazy(() => import("@/pages/public-experience/site"));
-const PublicBookingPage = lazy(() => import("@/pages/public-experience/booking"));
 
 const Router = () => {
   return (
@@ -149,15 +147,9 @@ const Router = () => {
       
       {/* Tenant public website and booking entry. Static routes above win; the
           resolver fails closed for unknown slugs. */}
-      <Route path="/:slug/blog" element={<PublicSitePage />} errorElement={<ErrorFallback />} />
-      <Route path="/:slug/blog/:contentSlug" element={<PublicSitePage />} errorElement={<ErrorFallback />} />
-      <Route path="/:slug/gallery" element={<PublicSitePage />} errorElement={<ErrorFallback />} />
-      <Route path="/:slug/gallery/:contentSlug" element={<PublicSitePage />} errorElement={<ErrorFallback />} />
-      <Route path="/:slug/book" element={<PublicBookingPage />} errorElement={<ErrorFallback />}></Route>
+      {publicSiteRoutes()}
       <Route path="/:slug/booking/:token" element={<ManageBooking />} errorElement={<ErrorFallback />}></Route>
       <Route path="/:slug/my-bookings" element={<MyBookings />} errorElement={<ErrorFallback />}></Route>
-      <Route path="/:slug/:locale" element={<PublicSitePage />} errorElement={<ErrorFallback />}></Route>
-      <Route path="/:slug" element={<PublicSitePage />} errorElement={<ErrorFallback />}></Route>
 
       <Route path="*" element={<NotFound />} />
     </>

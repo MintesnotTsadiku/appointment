@@ -1,0 +1,200 @@
+"""Amharic names on public pages, the owner's name settings, and the retirement of template version 1.
+
+Business and provider names come in both languages from the public APIs (`localized_names`), owners
+edit them side by side (`public_names`, the profile form, website setup), and a retired template
+version still renders but is never offered to a new site. The go-live report names published
+websites on an older version.
+
+Reuses the referral test case: commits are patched and every test rolls back to a savepoint.
+"""
+
+import json
+from types import SimpleNamespace
+from unittest import mock
+
+import frappe
+from frappe.utils import add_days, nowdate
+
+from appointment import onboarding
+from appointment.api import personal_meet
+from appointment.growth import directory, sharing
+from appointment.ops import go_live, readiness_sites
+from appointment.ops.checks import PASS, WARN
+from appointment.public_experience import publisher, setup
+from appointment.public_experience.design_compiler import compile_design
+from appointment.public_experience.recipes import (
+    RETIRED_VERSIONS, available_recipes, get_recipe, is_retired, latest_version, require_offered,
+)
+from appointment.public_experience.errors import UnknownRecipeError
+from appointment.scheduler import booking, business_owner, independent, localized_names, public_names
+from appointment.tests.test_growth_referrals import ReferralCase
+
+BUSINESS_AM = "ቦሌ ብሉም የፀጉር ስቱዲዮ"
+DESCRIPTION_AM = "የተፈጥሮ ፀጉር እንክብካቤ በቦሌ።"
+PROVIDER_AM = "ሐና ተስፋዬ"
+
+
+class TestAmharicNames(ReferralCase):
+    def _named_business(self):
+        business = self._org("Bole Bloom")
+        provider = frappe.db.get_value("EventType", business.offering, "provider")
+        frappe.set_user(business.user)
+        saved = public_names.save_business_names(
+            business.organization, frappe.db.get_value("Organization", business.organization, "organization_name"),
+            BUSINESS_AM, "Natural hair care in Bole.", DESCRIPTION_AM,
+            json.dumps([{"id": provider, "name": "Hanna Tesfaye", "name_am": PROVIDER_AM}]))
+        frappe.set_user("Administrator")
+        return business, provider, saved
+
+    # Public names -----------------------------------------------------------
+    def test_scheduler_answers_carry_the_names_in_both_languages(self):
+        business, provider, saved = self._named_business()
+        self.assertEqual(saved["name"]["am"], BUSINESS_AM)
+        self.assertEqual(saved["providers"], [{"id": provider, "name": {"en": "Hanna Tesfaye", "am": PROVIDER_AM}}])
+        frappe.set_user("Guest")
+        services = personal_meet.get_organization_services(business.slug)
+        windows = personal_meet.get_organization_meeting_windows(business.slug, business.offering)
+        frappe.set_user("Administrator")
+        self.assertEqual(services["local_company"]["am"], BUSINESS_AM)
+        self.assertEqual(services["local_business_description"], {"en": "Natural hair care in Bole.", "am": DESCRIPTION_AM})
+        self.assertEqual(services["providers"][0]["local_name"], {"en": "Hanna Tesfaye", "am": PROVIDER_AM})
+        self.assertEqual(services["services"][0]["provider_local_name"]["am"], PROVIDER_AM)
+        self.assertEqual(windows["local_company"]["am"], BUSINESS_AM)
+        self.assertEqual(windows["offerings"][0]["provider"]["local_name"]["am"], PROVIDER_AM)
+        for offset in range(1, 14):
+            rows = booking.service_slots(business.offering, add_days(nowdate(), offset))["all_available_slots_for_data"]
+            if rows:
+                self.assertEqual(rows[0]["provider_local_name"], {"en": "Hanna Tesfaye", "am": PROVIDER_AM})
+                break
+        else:
+            self.fail("No times in the next two weeks.")
+
+    def test_directory_and_link_previews_use_the_page_language(self):
+        business, _provider, _saved = self._named_business()
+        page = directory.booking_pages([business.organization])[business.organization]
+        self.assertEqual(page["names"]["am"], BUSINESS_AM)
+        self.assertEqual(page["descriptions"]["am"], DESCRIPTION_AM)
+        self.assertEqual(page["descriptions"]["en"], "Natural hair care in Bole.")
+        owner = business_owner.from_key(business.organization)
+        self.assertEqual(sharing._owner_name(owner, "am"), BUSINESS_AM)
+        self.assertEqual(sharing._owner_name(owner, "en"), owner.display_name)
+
+    def test_an_empty_amharic_name_falls_back_to_english(self):
+        row = {"display_name": "Hanna Tesfaye", "display_name_am": "  "}
+        self.assertEqual(localized_names.provider_names(row), {"en": "Hanna Tesfaye"})
+        self.assertEqual(localized_names.in_language(localized_names.provider_names(row), "am"), "Hanna Tesfaye")
+        self.assertEqual(localized_names.in_language({"en": "Tena", "am": "ጤና"}, "am"), "ጤና")
+        self.assertEqual(localized_names.in_language({"am": "ጤና"}, "en"), "ጤና")
+
+    def test_showcase_portraits_offer_the_small_avatar(self):
+        warm = "/assets/appointment/brand-experience/providers/warm/hanna-tesfaye.webp"
+        self.assertEqual(localized_names.avatar(warm), warm.replace(".webp", "-192.webp"))
+        for other in ("/files/owner-photo.webp", "/assets/appointment/brand-experience/providers/missing.webp", None):
+            self.assertEqual(localized_names.avatar(other), other)
+
+    # Owner settings ----------------------------------------------------------
+    def test_only_a_manager_edits_the_names_of_their_own_business_and_providers(self):
+        business, provider, _saved = self._named_business()
+        other = self._org("Tena Clinic")
+        frappe.set_user(other.user)
+        with self.assertRaises(frappe.PermissionError):
+            public_names.save_business_names(business.organization, "Bole Bloom", "ቦሌ")
+        stranger = frappe.db.get_value("EventType", other.offering, "provider")
+        frappe.set_user(business.user)
+        with self.assertRaises(frappe.PermissionError):
+            public_names.save_business_names(business.organization, "Bole Bloom", providers=[{"id": stranger, "name": "X"}])
+        with self.assertRaises(frappe.ValidationError):
+            public_names.save_business_names(business.organization, "  ")
+        with self.assertRaises(frappe.ValidationError):
+            public_names.save_business_names(business.organization, "Bole Bloom", "<b>ቦሌ</b>")
+        self.assertEqual([row["organization"] for row in public_names.business_names()], [business.organization])
+        frappe.set_user("Administrator")
+        self.assertEqual(frappe.db.get_value("Provider", provider, "display_name_am"), PROVIDER_AM)
+
+    def test_a_provider_edits_their_own_public_name_in_both_languages(self):
+        solo = self._solo("Rahel Nutrition")
+        frappe.set_user(solo.user)
+        onboarding.update_provider_profile(display_name="Rahel Girma", display_name_am=" ራሔል  ግርማ ")
+        onboarding.get_provider_profile()
+        profile = frappe.response["message"]
+        frappe.set_user("Guest")
+        offering = independent.public_offering(solo.offering)
+        frappe.set_user("Administrator")
+        self.assertEqual((profile["display_name"], profile["display_name_am"]), ("Rahel Girma", "ራሔል ግርማ"))
+        self.assertEqual(offering["business_local_name"]["am"], "ራሔል ግርማ")
+
+    def test_the_website_keeps_its_amharic_name_for_publishing(self):
+        business, _provider, _saved = self._named_business()
+        frappe.set_user(business.user)
+        draft = setup.start("Organization", business.organization, "Bole Bloom", "bloom-" + frappe.generate_hash(length=8), "bloom-hair")
+        site = frappe.get_doc("Public Site", draft["site"])
+        # Without its own Amharic name, the website takes the business's Amharic name.
+        self.assertEqual(publisher._local_title(site), {"am": BUSINESS_AM})
+        saved = setup.save(draft["site"], draft["draftVersion"], "brand", title_am="ብሉም")
+        frappe.set_user("Administrator")
+        self.assertEqual(saved["titleAm"], "ብሉም")
+        self.assertEqual(publisher._local_title(frappe.get_doc("Public Site", draft["site"])), {"am": "ብሉም"})
+        self.assertEqual((saved["recipeVersion"], saved["latestRecipeVersion"]), (latest_version("bloom-hair"),) * 2)
+
+    # Template version 1 -------------------------------------------------------
+    def test_retired_versions_render_but_are_not_offered(self):
+        offered = {recipe.key: recipe.version for recipe in available_recipes()}
+        for key, retired in RETIRED_VERSIONS.items():
+            self.assertTrue(retired)
+            self.assertNotIn(offered[key], retired, key)
+            for version in retired:
+                self.assertTrue(is_retired(key, version))
+                pinned = get_recipe(key, version)  # still loadable for releases that pin it
+                design = compile_design(key, version, {"motion": "calm"}, None, ["en", "am"]).as_dict()
+                self.assertEqual((pinned.version, design["layout"]["rendererVersion"]), (version, version))
+                with self.assertRaises(UnknownRecipeError):
+                    require_offered(key, version)
+                require_offered(key, version, (key, version))  # a document already on it keeps it
+        self.assertTrue(is_retired("ergata-therapy", 1))
+        self.assertFalse(is_retired("ergata-therapy", 2))
+
+    def test_a_new_site_cannot_start_on_a_retired_version(self):
+        business = self._org("Selam Movement")
+        frappe.set_user(business.user)
+        with self.assertRaises(frappe.ValidationError):
+            frappe.get_doc({"doctype": "Public Site", "owner_type": "Organization", "organization": business.organization,
+                            "site_title": "Selam", "slug": "selam-" + frappe.generate_hash(length=8),
+                            "recipe_key": "selam-movement", "recipe_version": 1}).insert()
+        draft = setup.start("Organization", business.organization, "Selam", "selam-" + frappe.generate_hash(length=8), "selam-movement")
+        frappe.set_user("Administrator")
+        self.assertEqual(frappe.db.get_value("Public Site", draft["site"], "recipe_version"), latest_version("selam-movement"))
+
+    def test_a_draft_profile_on_a_retired_version_starts_the_site_on_the_latest(self):
+        business = self._org("Meron Atelier")
+        frappe.set_user(business.user)
+        draft = setup.start("Organization", business.organization, "Meron", "meron-" + frappe.generate_hash(length=8), "meron-atelier")
+        frappe.set_user("Administrator")
+        # An old profile left from an archived website (written directly, as an old release would have it).
+        frappe.db.set_value("Brand Profile", draft["profile"], "recipe_version", 1)
+        frappe.db.set_value("Public Site", draft["site"], {"status": "Archived", "active_owner_key": None})
+        frappe.set_user(business.user)
+        again = setup.start("Organization", business.organization, "Meron", "meron-" + frappe.generate_hash(length=8), "meron-atelier")
+        frappe.set_user("Administrator")
+        self.assertEqual(frappe.db.get_value("Brand Profile", again["profile"], "recipe_version"), latest_version("meron-atelier"))
+
+    def test_go_live_lists_published_websites_on_an_older_version(self):
+        rows = [frappe._dict(name="s1", slug="old-salon", current_release="r1"), frappe._dict(name="s2", slug="new-salon", current_release="r2")]
+        releases = [frappe._dict(name="r1", recipe_key="bloom-hair", recipe_version=1),
+                    frappe._dict(name="r2", recipe_key="bloom-hair", recipe_version=latest_version("bloom-hair"))]
+        with mock.patch.object(readiness_sites.frappe, "get_all", side_effect=[rows, releases]):
+            row = readiness_sites.PublicSites().template_versions()
+        self.assertEqual(row["status"], WARN)
+        self.assertIn("/old-salon: bloom-hair v1 (retired)", row["detail"])
+        self.assertNotIn("new-salon", row["detail"])
+        self.assertIn("Republish to upgrade", row["fix"])
+        with mock.patch.object(readiness_sites.frappe, "get_all", side_effect=[rows[1:], releases[1:]]):
+            self.assertEqual(readiness_sites.PublicSites().template_versions()["status"], PASS)
+        self.assertIn("template_versions", {row["key"] for row in go_live.report()["checks"]})
+
+
+class TestNamesHelpers(ReferralCase):
+    def test_pair_drops_empty_values_and_limits_length(self):
+        self.assertEqual(localized_names.pair(" Tena  Clinic ", ""), {"en": "Tena Clinic"})
+        self.assertEqual(len(localized_names.pair("x" * 300, None)["en"]), 140)
+        self.assertEqual(localized_names.organization_descriptions(SimpleNamespace(get={"description": "a", "description_am": "ለ"}.get)),
+                         {"en": "a", "am": "ለ"})

@@ -58,7 +58,7 @@ class TestGoLiveReport(unittest.TestCase):
 
     def test_every_plan_area_is_checked(self):
         areas = {row["area"] for row in go_live.report()["checks"]}
-        self.assertEqual(areas, {"Site config", "Email", "SMS", "Payments", "Scheduler", "Translations", "Build", "Data"})
+        self.assertEqual(areas, {"Site config", "Email", "SMS", "Payments", "Scheduler", "Translations", "Build", "Data", "Public sites"})
 
     def test_report_is_not_whitelisted(self):
         self.assertNotIn(go_live.report, frappe.whitelisted)

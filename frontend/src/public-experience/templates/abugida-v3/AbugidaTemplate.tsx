@@ -16,6 +16,7 @@ import {
 import { AratKiloMap, BENEFIT_ART, Corner, HaClip, Rule, Tibeb } from "./art";
 import { abugidaText } from "./copy";
 import { art, CopyChip, FidelTable, geez, HoursList, Marginalia, NextChip, OpenBadge, Photo, PhraseCard, role, slotText, Window, type Art, type Review } from "./parts";
+import { AbugidaHoliday } from "./holiday";
 import "./abugida.css";
 
 /*
@@ -186,6 +187,7 @@ export function AbugidaSite({ snapshot, locale, applicationName, publicRoot, roo
         <div className="a3-wrap a3-hero-grid">
           <div className="a3-hero-copy">
             <div className="a3-greet" data-qa="abugida-greeting"><span className="a3-greet-mark" aria-hidden="true">፨</span><span>{greeting(chrome, now)}</span></div>
+            <AbugidaHoliday snapshot={snapshot} locale={locale} chrome={chrome} />
             <h1 id="a3-hero-title" className="a3-initial" data-reveal="ink">{title}</h1>
             {localized(hero.subtitle || hero.body, locale) ? <p className="a3-lede" data-reveal="rise">{localized(hero.subtitle || hero.body, locale)}</p> : null}
             <div className="a3-actions">
@@ -488,7 +490,7 @@ export function AbugidaBooking({ snapshot, locale, applicationName, publicRoot, 
           <h1 className="a3-initial">{localized(booking.title, locale)}</h1>
           {localized(booking.body, locale) ? <p className="a3-muted">{localized(booking.body, locale)}</p> : null}
           {bookingPath && label ? <a className="a3-btn" href={bookingPath} onClick={(event) => inApp(event, bookingPath, navigate)} data-qa="abugida-handoff-book"><span>{label}</span><span className="a3-btn-mark" aria-hidden="true">፠</span></a> : null}
-          <NextChip facts={data?.next ? { next: data.next.start, todayLeft: data.todayLeft } : null} data={data} chrome={chrome} locale={locale} href={bookingPath || undefined} qa="abugida-handoff-next" />
+          <NextChip facts={data?.next ? { next: data.next.start, todayLeft: data.todayLeft } : null} data={data} chrome={chrome} locale={locale} href={bookingPath || undefined} qa="abugida-handoff-next" pending={live.status === "loading"} />
         </div>
         {lessons.length ? <div className="a3-leaf a3-handoff-contents">
           <p className="a3-eyebrow">{abugidaText(chrome, "contents")}</p>

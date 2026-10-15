@@ -15,6 +15,7 @@ import {
 } from "../kit";
 import { AreaMap, BENEFIT_SIGNS, SignArrow } from "./art";
 import { art, CopyChip, HoursList, NextChip, OpenBadge, Photo, Reviews, slotText, tt, type Art, type Review } from "./parts";
+import { TenaHoliday } from "./holiday";
 import "./tena.css";
 
 /*
@@ -222,6 +223,7 @@ export function TenaSite({ snapshot, locale, applicationName, publicRoot, rootSt
         <div className="t3-hero-grid">
           <div className="t3-hero-copy">
             <div className="t3-greet" data-qa="tena-greeting"><span>{greeting(chrome, now)}</span>{days.length ? <OpenBadge days={days} now={now} chrome={chrome} locale={locale} habesha={locale === "am"} /> : null}</div>
+            <TenaHoliday snapshot={snapshot} locale={locale} chrome={chrome} />
             {localized(hero.eyebrow, locale) ? <p className="t3-eyebrow">{localized(hero.eyebrow, locale)}</p> : null}
             <h1 id="t3-hero-title">{localized(hero.title, locale)}</h1>
             {localized(hero.subtitle || hero.body, locale) ? <p className="t3-lede">{localized(hero.subtitle || hero.body, locale)}</p> : null}
@@ -568,7 +570,7 @@ export function TenaBooking({ snapshot, locale, applicationName, publicRoot, roo
           <h1>{localized(booking.title, locale)}</h1>
           {localized(booking.body, locale) ? <p>{localized(booking.body, locale)}</p> : null}
           {bookingPath && label ? <a className="t3-btn" href={bookingPath} onClick={(event) => inApp(event, bookingPath, navigate)} data-magnetic="5" data-qa="tena-handoff-book"><span>{label}</span><span className="t3-btn-arrow" aria-hidden="true">→</span></a> : null}
-          <NextChip facts={data?.next ? { next: data.next.start, todayLeft: data.todayLeft } : null} data={data} chrome={chrome} locale={locale} href={bookingPath || undefined} qa="tena-handoff-next" />
+          <NextChip facts={data?.next ? { next: data.next.start, todayLeft: data.todayLeft } : null} data={data} chrome={chrome} locale={locale} href={bookingPath || undefined} qa="tena-handoff-next" pending={live.status === "loading"} />
           {place ? <div className="t3-handoff-place">
             <OpenBadge days={placeDays(snapshot, place.id)} now={now} chrome={chrome} locale={locale} habesha={locale === "am"} qa="tena-handoff-open" />
             <p>{localized(place.address, locale)}</p>

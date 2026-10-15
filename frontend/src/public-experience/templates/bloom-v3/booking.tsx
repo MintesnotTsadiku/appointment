@@ -1,6 +1,5 @@
 import type { BookingSkin, StepMarkProps } from "../booking-skin";
 import { accentInk } from "./ink";
-import "./booking.css";
 
 /*
  * Bloom v3 on the booking pages ("Golden Hour Salon", continued). Speed and clarity first: no
@@ -27,6 +26,8 @@ export const bloomBookingSkin: BookingSkin = {
   key: "bloom-hair@3",
   name: "bloom-v3",
   frame: "mirror",
+  // The stylesheet loads only on this template's booking pages (kit, "Booking skins").
+  style: () => import("./booking.css"),
   servicePhotoRoles: ["menu1.bloom", "menu2.bloom", "menu3.bloom"],
   // The booking band is the stage of the /book handoff, so the visitor has just seen it.
   backdropRole: "band.bloom",

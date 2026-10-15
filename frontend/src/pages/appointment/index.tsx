@@ -21,7 +21,7 @@ import Typography from "@/components/typography";
 import { Skeleton } from "@/components/skeleton";
 
 // Import new V2 components
-import { DateTimeSelector } from "@/pages/booking-v2/components/DateTimeSelector";
+import { DateTimeSelector, usePickerTimeFormat } from "@/pages/booking-v2/components/DateTimeSelector";
 import { BookingForm } from "@/pages/booking-v2/components/BookingForm";
 import { ConfirmationModal } from "@/pages/booking-v2/components/ConfirmationModal";
 import { useTimeSlots } from "@/pages/booking-v2/hooks/useTimeSlots";
@@ -60,7 +60,7 @@ const AppointmentV2 = () => {
   const [resolvedType, setResolvedType] = useState<string | null>(null);
   const [currentPhase, setCurrentPhase] = useState<'selection' | 'datetime' | 'form' | 'success'>('selection');
   const [displayMonth, setDisplayMonth] = useState(new Date());
-  const [timeFormat, setTimeFormat] = useState<'12h' | '24h' | 'ethiopian'>('12h');
+  const [timeFormat, setTimeFormat] = usePickerTimeFormat();
   const [bookingResponse, setBookingResponse] = useState<any>(null);
   const { theme, setTheme } = useTheme();
 

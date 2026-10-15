@@ -1,0 +1,61 @@
+/* Ergata v2 on the booking pages. The same quiet room as the landing page, quieter still: no parallax,
+   marquee or moving image. Only rules under [data-bk-skin="ergata-v2"] (and the .eg2k- step marks);
+   the shared flow owns the layout. */
+[data-bk-skin="ergata-v2"] {
+  --eg2k-sage: var(--accent-primary);
+  --eg2k-lamp: #e2a948;
+  --bk-frame-line: color-mix(in srgb, var(--accent-primary) 40%, transparent);
+  --bk-header-bg: color-mix(in srgb, var(--bg-primary) 90%, transparent);
+  --bk-header-line: color-mix(in srgb, var(--accent-primary) 22%, transparent);
+  --bk-backdrop-opacity: 0.22;
+  --bk-backdrop-blur: 24px;
+}
+[data-bk-skin="ergata-v2"][data-pe-mode="dark"],
+.dark [data-bk-skin="ergata-v2"] { --bk-backdrop-opacity: 0.32; --eg2k-lamp: #f0bd63; }
+
+/* The header: linen like the landing bar, with a thin sage line and a small arch over the brand. */
+[data-bk-skin="ergata-v2"].bk-header::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent-primary) 55%, transparent) 20%, color-mix(in srgb, var(--eg2k-lamp) 60%, transparent) 50%, color-mix(in srgb, var(--accent-primary) 55%, transparent) 80%, transparent);
+}
+[data-bk-skin="ergata-v2"].bk-header .pe-brand-logo { border-radius: 999px 999px 8px 8px; }
+
+/* The page: the window's echo replaces the shared grid pattern. */
+.booking-experience[data-bk-skin="ergata-v2"] { background-image: none; }
+.booking-experience[data-bk-skin="ergata-v2"]::before { display: none; }
+
+/* Headings: the soft serif, never heavy; Amharic gets more leading and no tracking. */
+[data-bk-skin="ergata-v2"] h1,
+[data-bk-skin="ergata-v2"] h2 { font-family: var(--booking-font-display, Georgia, serif); font-weight: 500; letter-spacing: -0.01em; }
+[data-bk-skin="ergata-v2"]:lang(am) h1,
+[data-bk-skin="ergata-v2"]:lang(am) h2,
+[data-bk-skin="ergata-v2"] :lang(am) h1,
+[data-bk-skin="ergata-v2"] :lang(am) h2 { letter-spacing: 0; line-height: 1.32; }
+[data-bk-skin="ergata-v2"] .bk-eyebrow { color: color-mix(in srgb, #9c5436 80%, var(--text-primary)); letter-spacing: 0.08em; }
+[data-bk-skin="ergata-v2"] :lang(am) .bk-eyebrow { letter-spacing: 0.02em; }
+
+/* Cards are soft and slightly arched at the top; times are pills; days are small arched windows. */
+[data-bk-skin="ergata-v2"] .bk-card { border-radius: 26px 26px 18px 18px; border-color: color-mix(in srgb, var(--accent-primary) 16%, var(--border-default)); }
+[data-bk-skin="ergata-v2"] .bk-slot { border-radius: 999px; padding-inline: 1.125rem; }
+[data-bk-skin="ergata-v2"] .bk-day { border-radius: 999px 999px 12px 12px; }
+[data-bk-skin="ergata-v2"] .bk-chip { border-radius: 999px; }
+[data-bk-skin="ergata-v2"] .bk-photo { box-shadow: 0 0 0 1px var(--bk-frame-line), 0 0 0 5px color-mix(in srgb, var(--accent-primary) 8%, transparent); }
+
+/* The chosen day and time: deep sage with a small lamp glow, never an alarm colour. */
+[data-bk-skin="ergata-v2"] .bk-slot[aria-pressed="true"],
+[data-bk-skin="ergata-v2"] .bk-day[aria-pressed="true"] {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 18%, transparent), 0 8px 20px -12px color-mix(in srgb, var(--eg2k-lamp) 80%, transparent);
+}
+
+/* Steps: a small arched window per step. */
+.eg2k-mark { flex: none; overflow: visible; }
+.eg2k-mark-frame { fill: none; stroke: currentColor; stroke-width: 1.4; opacity: 0.7; }
+.eg2k-mark-num { fill: currentColor; font: 600 10px/1 var(--booking-font-body, sans-serif); }
+.eg2k-mark-tick { fill: none; stroke: var(--pe-color-on-primary, #fffcf6); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.eg2k-mark[data-state="current"] .eg2k-mark-frame { fill: var(--accent-primary); stroke: var(--accent-primary); opacity: 1; }
+.eg2k-mark[data-state="current"] .eg2k-mark-num { fill: var(--pe-color-on-primary, #fffcf6); }
+.eg2k-mark[data-state="done"] .eg2k-mark-frame { fill: color-mix(in srgb, var(--accent-primary) 70%, var(--eg2k-lamp)); stroke: transparent; opacity: 1; }
+[data-bk-skin="ergata-v2"] .bk-steps li + li::before { background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--accent-primary) 50%, transparent) 0 2px, transparent 2px 6px); }

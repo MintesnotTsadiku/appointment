@@ -1,0 +1,82 @@
+# The Bloom owner edits a stylist's Amharic name in Settings > Business (English and Amharic side by side), sees it on
+# the Amharic service chooser, and changes it back. Fixture: appointment.tests.amharic_names_qa_fixtures (setup before;
+# run its restore() after, in case the run stopped before the name was changed back).
+app: appointment
+base_url: http://localhost:47800
+default_role: Staff
+auth:
+  type: frappe_session
+  username: bloom.owner@example.test
+  verify_path: /api/method/frappe.auth.get_logged_user
+artifact_root: /tmp/agent_browser_qa/appointment-growth-amharic-names-owner
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 300000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.amharic_names_qa_fixtures.browser_values
+scenarios:
+- id: names_owner_edit_desktop
+  title: 'Owner: change a stylist''s Amharic name, see it on the chooser, change it back'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /settings/business
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="business-names"]'
+  actions:
+  - action: wait_for
+    selector: fieldset:has(legend:has-text("Eden Tadesse")) [data-qa$="-am"]
+  - action: click
+    selector: fieldset:has(legend:has-text("Eden Tadesse")) legend
+  - action: screenshot
+    name: names_owner_edit_desktop-1-settings.png
+    full_page: false
+  - action: fill
+    selector: fieldset:has(legend:has-text("Eden Tadesse")) [data-qa$="-am"]
+    value: ኤደን ታደሰ ወልዴ
+  - action: click
+    selector: '[data-qa="business-names"]:has(legend:has-text("Eden Tadesse")) [data-qa="business-names-save"]'
+    assertions:
+    - type: network_request
+      url_contains: save_business_names
+      status: 200
+  - action: screenshot
+    name: names_owner_edit_desktop-2-saved.png
+    full_page: false
+  - action: open_url
+    url: /schedule/org/bloom-studio?lang=am
+  - action: wait_for
+    selector: '[data-qa="booking-provider"]:has-text("ኤደን ታደሰ ወልዴ")'
+    timeout_ms: 20000
+  - action: screenshot
+    name: names_owner_edit_desktop-3-chooser.png
+    full_page: false
+  - action: open_url
+    url: /settings/business
+  - action: wait_for
+    selector: fieldset:has(legend:has-text("Eden Tadesse")) [data-qa$="-am"]
+  - action: fill
+    selector: fieldset:has(legend:has-text("Eden Tadesse")) [data-qa$="-am"]
+    value: ኤደን ታደሰ
+  - action: click
+    selector: '[data-qa="business-names"]:has(legend:has-text("Eden Tadesse")) [data-qa="business-names-save"]'
+    assertions:
+    - type: network_request
+      url_contains: save_business_names
+      status: 200
+  - action: open_url
+    url: /schedule/org/bloom-studio?lang=am
+  - action: wait_for
+    selector: '[data-qa="booking-provider"]:has-text("ኤደን ታደሰ")'
+    timeout_ms: 20000
+  - action: get_console_errors
+  - action: get_network_errors

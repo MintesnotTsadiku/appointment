@@ -16,7 +16,7 @@ import { BookingBackdrop, useBookingSkin } from '@/pages/booking-v2/components/s
 import { useTranslation } from '@/lib/i18n';
 import { fill } from '@/pages/manage-booking/format';
 import '@/public-experience/platform.css';
-import { PROVIDER_PAGE_API, PROVIDER_ROOT, localized, providerBio, serviceFormats, type PlaceType, type ProviderPageData } from './provider-core';
+import { PROVIDER_PAGE_API, PROVIDER_ROOT, providerBio, providerName, serviceFormats, type PlaceType, type ProviderPageData } from './provider-core';
 import { ProviderHero, ProviderPlaces, ServiceCard } from './provider-page-parts';
 
 /**
@@ -67,7 +67,7 @@ export default function ProviderPage() {
   }, { online: 0, in_person: 0 } as Record<PlaceType, number>);
   const showFormatFilter = (page?.services.length ?? 0) >= 4 && formatCounts.online > 0 && formatCounts.in_person > 0;
   const services = (page?.services ?? []).filter((service) => format === 'all' || serviceFormats(service).includes(format));
-  const name = page ? localized(page.person?.name, language, page.name) : '';
+  const name = page ? providerName(page, language) : '';
   const logo = brand.config?.identity?.logoCompact || brand.config?.identity?.logoPrimary || '';
   let body;
   if (error || forced === 'error' || forced === 'unavailable') body = <Unavailable failed={failed} onRetry={() => void mutate()} />;

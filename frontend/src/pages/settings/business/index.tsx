@@ -8,6 +8,7 @@ import { Alert, AlertDescription } from '@/components/alert';
 import { SettingsPage, SettingsSection } from '@/components/settings-layout';
 import { OfferingList, type Offering } from './OfferingList';
 import { CreateBusinessForm, DAYS, type BusinessForm } from './CreateBusinessForm';
+import { BusinessNames } from './BusinessNames';
 
 export default function BusinessSettings() {
   const { t } = useTranslation();
@@ -75,6 +76,7 @@ export default function BusinessSettings() {
             <OfferingList offerings={data?.message ?? []} loading={isLoading} publishing={publishing} onTogglePublish={(row) => void setPublished(row)} />
           </section>
         </SettingsSection>
+        {!error && <BusinessNames />}
         {!error && (
           <SettingsSection title={t('staff.business.createTitle')} description={t('staff.business.createDescription')}>
             <CreateBusinessForm

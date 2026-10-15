@@ -28,6 +28,7 @@ A customer reaches a booking only through its own manage link, which arrives in 
 - **Tokens:**
   - The link token is `<nonce>.<expiry>.<signature>` over the business, email, nonce and expiry, signed with the site's encryption key, as manage links are.
   - The nonce is kept in the cache until it expires; using it deletes it, which makes the link one-time.
+  - A full cache clear (`frappe.clear_cache()`: every migrate and deploy, `bench clear-cache`, and some tests) deletes every site key except the `persistent_cache_keys` hooks. `appointment/hooks.py` lists `appointment:my_bookings:*` there, so links already sent keep working. Before (2026-10-15), a clear made every open link answer "This link no longer works"; the touchpoints browser QA failed when the regression suite cleared the cache during its run.
   - The session token is signed in the same way, with its own purpose and the 7-day expiry. It is stateless.
 - **Who the bookings belong to:** bookings of this business whose `client_email` matches (case-insensitive), plus bookings linked to the customer profile with that `email_key`. Merged profiles follow `merged_into`.
 - **Each row:** reference, service, provider or room, start in the booking's time zone, status, quantity, and the payment status. Open bookings (Pending or Confirmed, not yet started) also carry their manage link, so changes keep using the existing self-service rules.

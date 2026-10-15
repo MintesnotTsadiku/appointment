@@ -1,16 +1,13 @@
-import { StrictMode } from "react";
-import { MotionConfig } from "framer-motion";
-import { createRoot } from "react-dom/client";
+// First: the English catalog, before any module can translate.
+import "./lib/i18n/english";
 import "./fonts.css";
 import "./global.css";
-import "./components/workspace/workspace-controls.css";
-import App from "./app.tsx";
+// Template font faces (and their preloads, shell_boot.py) must be known before the first render.
+import "./public-experience/platform.css";
+// First: a public page starts its requests before the application code below evaluates.
+import "./early-requests";
+import { mountFullApp } from "./full-app";
 import { captureReferralSource } from "./lib/referral-source";
 
 captureReferralSource();
-
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <MotionConfig reducedMotion="user"><App /></MotionConfig>
-  </StrictMode>
-);
+mountFullApp(document.getElementById("root")!);

@@ -7,6 +7,8 @@ import { useFrappeGetCall } from "frappe-react-sdk";
 import { useEffect, useState } from "react";
 import { getTimeZoneOffsetFromTimeZoneString } from "@/lib/utils";
 import type { TimeSlot } from "../types";
+import { useTranslation } from "@/lib/i18n";
+import { localName, type LocalNames } from "@/lib/local-names";
 
 interface UseTimeSlotsParams {
   durationId: string;
@@ -27,6 +29,8 @@ interface TimeSlotsResponse {
     end_time: string;
     provider_id?: string;
     provider_name?: string;
+    /** The provider's public name by language (`localized_names`); the picker shows the page's language. */
+    provider_local_name?: LocalNames;
     /** The offering of this time (service with all providers). */
     offering_id?: string;
     booked?: boolean; // Support for booked status from backend
@@ -59,6 +63,7 @@ export function useTimeSlots({
   quantity = 1,
   allProviders = false,
 }: UseTimeSlotsParams) {
+  const { language } = useTranslation();
   const [slots, setSlots] = useState<TimeSlot[]>([]);
 
   // Format date for API (YYYY-M-D format that backend expects)
@@ -151,7 +156,7 @@ export function useTimeSlots({
             end_time: slot.end_time,
             provider: slot.provider_id && slot.provider_name ? {
               id: slot.provider_id,
-              name: slot.provider_name,
+              name: localName(slot.provider_local_name, language, slot.provider_name),
             } : undefined,
             offeringId: slot.offering_id,
             available: isAvailable,
@@ -169,7 +174,7 @@ export function useTimeSlots({
       setSlots([]);
     }
     // If data is undefined (loading/refetch), keep previous slots - don't clear!
-  }, [data]);
+  }, [data, language]);
 
   return {
     slots,

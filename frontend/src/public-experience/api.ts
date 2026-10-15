@@ -32,6 +32,78 @@ async function fetchJson(path: string): Promise<unknown> {
   return body;
 }
 
+interface ShellBoot {
+  path?: string;
+  locale?: string | null;
+  snapshot?: unknown;
+  config?: unknown;
+  configs?: Record<string, unknown>;
+}
+
+let shellBoot: ShellBoot | null | undefined;
+
+/**
+ * The published snapshot and UI config that the page shell inlined for this address
+ * (appointment/public_experience/shell_boot.py), so the first paint does not wait for the API.
+ */
+function inlineBoot(): ShellBoot | null {
+  if (shellBoot !== undefined) return shellBoot;
+  shellBoot = null;
+  try {
+    const element = typeof document === "undefined" ? null : document.getElementById("pe-boot");
+    const parsed = element?.textContent ? JSON.parse(element.textContent) as unknown : null;
+    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) shellBoot = parsed as ShellBoot;
+  } catch {
+    /* A broken element only costs the API round trip. */
+  }
+  return shellBoot;
+}
+
+/** The inlined value when the page is still at the address the shell rendered, with the same language. */
+function inlineFor(locale?: string): ShellBoot | null {
+  const boot = inlineBoot();
+  if (!boot || typeof window === "undefined" || boot.path !== window.location.pathname) return null;
+  return (boot.locale || undefined) === (locale || undefined) ? boot : null;
+}
+
+function validSnapshot(raw: unknown): PublishedSnapshot | null {
+  if (!raw || typeof raw !== "object") return null;
+  const snapshot = raw as PublishedSnapshot;
+  if (snapshot.contract !== "appointment-public-snapshot.v2") return null;
+  if (!snapshot.compiledDesign || snapshot.compiledDesign.contract !== "appointment-compiled-design.v1") return null;
+  if (!Array.isArray(snapshot.sections)) return null;
+  return snapshot;
+}
+
+/** The inlined snapshot for this address and language; undefined when the shell inlined none. */
+export function inlinePublishedSnapshot(locale?: string): PublishedSnapshot | undefined {
+  const boot = inlineFor(locale);
+  return boot && boot.snapshot !== undefined ? validSnapshot(boot.snapshot) || undefined : undefined;
+}
+
+/** The inlined UI config of this page in the snapshot's language; undefined when the shell inlined none. */
+export function inlinePublicConfig(locale?: string): PublicUIConfig | undefined {
+  const boot = inlineBoot();
+  if (!boot?.config || typeof window === "undefined" || boot.path !== window.location.pathname) return undefined;
+  const snapshot = validSnapshot(boot.snapshot);
+  if ((snapshot?.locale || undefined) !== (locale || undefined)) return undefined;
+  return mergeConfig(boot.config, getFallbackPublicUIConfig(locale));
+}
+
+/**
+ * Start the inlined page's template package and fonts before the application renders. Both requests
+ * then run while the route code loads; the page uses them when it renders.
+ */
+export function prefetchInlinedPage(load: (rendererKey: string, rendererVersion: number) => Promise<unknown>, fonts: (config: PublicUIConfig) => Promise<unknown>): PublishedSnapshot | null {
+  const boot = inlineBoot();
+  if (!boot || typeof window === "undefined" || boot.path !== window.location.pathname) return null;
+  const snapshot = validSnapshot(boot.snapshot);
+  const configs = [boot.config, ...Object.values(boot.configs || {})].filter((item) => item && typeof item === "object");
+  if (snapshot) void load(snapshot.compiledDesign.layout.rendererKey, snapshot.compiledDesign.layout.rendererVersion).catch(() => undefined);
+  for (const raw of configs) void fonts(mergeConfig(raw, getFallbackPublicUIConfig()));
+  return snapshot;
+}
+
 function publicPath(): string | undefined {
   if (typeof window === "undefined") return undefined;
   return window.location.pathname;
@@ -48,6 +120,8 @@ function publicQuery(locale?: string, pathOverride?: string, extra: Record<strin
 }
 
 export async function fetchPublicConfig(locale?: string, pathOverride?: string): Promise<PublicUIConfig> {
+  const inline = pathOverride ? undefined : inlinePublicConfig(locale);
+  if (inline) return inline;
   const raw = await fetchJson(
     "/api/method/appointment.public_experience.api.get_public_ui_config" + publicQuery(locale, pathOverride),
   );
@@ -56,6 +130,9 @@ export async function fetchPublicConfig(locale?: string, pathOverride?: string):
 
 /** The published config of a business site, or null when the path has no published site (no 404). */
 export async function fetchOptionalPublicConfig(path: string): Promise<PublicUIConfig | null> {
+  const boot = inlineBoot();
+  const inline = boot?.configs && typeof window !== "undefined" && boot.path === window.location.pathname ? boot.configs[path] : undefined;
+  if (inline && typeof inline === "object") return mergeConfig(inline, getFallbackPublicUIConfig());
   const raw = await fetchJson(
     "/api/method/appointment.public_experience.api.get_public_ui_config" + publicQuery(undefined, path, { optional: "1" }),
   );
@@ -63,16 +140,13 @@ export async function fetchOptionalPublicConfig(path: string): Promise<PublicUIC
 }
 
 export async function fetchPublishedSnapshot(locale?: string): Promise<PublishedSnapshot | null> {
+  const inline = inlinePublishedSnapshot(locale);
+  if (inline) return inline;
   try {
     const raw = await fetchJson(
       "/api/method/appointment.public_experience.api.get_public_experience_snapshot" + publicQuery(locale, undefined, { optional: "1" }),
     );
-    if (!raw || typeof raw !== "object") return null;
-    const snapshot = raw as PublishedSnapshot;
-    if (snapshot.contract !== "appointment-public-snapshot.v2") return null;
-    if (!snapshot.compiledDesign || snapshot.compiledDesign.contract !== "appointment-compiled-design.v1") return null;
-    if (!Array.isArray(snapshot.sections)) return null;
-    return snapshot;
+    return validSnapshot(raw);
   } catch {
     return null;
   }

@@ -1,5 +1,7 @@
 # Ergata Therapy template
 
+> Ergata v2 (recipe `ergata-therapy` v2, renderer `ergata-therapy@2`) brings this template to v3 parity: night photos, a deep-sage band, gentle parallax, live next free call, kind words, phone booking bar and rails, a booking skin, a loading screen and a success moment. The showcase uses v2. See [ERGATA_V2.md](../design/ERGATA_V2.md). This document describes v1, which stays registered for sites published on it.
+
 Ergata ("እርጋታ", calm) is a public website template for counsellors, psychologists, psychotherapists and small group practices. It is a certified recipe (`ergata-therapy` v1) with its own template package, primitives, starter copy, imagery and fonts. Independent providers and organizations can choose it in website setup.
 
 ## Design decisions

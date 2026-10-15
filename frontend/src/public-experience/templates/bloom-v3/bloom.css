@@ -500,6 +500,9 @@ a.b3-handoff-row:hover .b3-handoff-go { transform: translateX(3px); }
 .b3-handoff-menu .b3-menu-meta { color: var(--b3-on-stage-muted); }
 .b3-handoff-menu .b3-menu-meta > span:first-child { color: inherit; }
 .b3-handoff-menu .b3-menu-live { color: var(--b3-on-stage); }
+/* /book: the places of the live chip and the live lines while the free times load (no layout shift). */
+.b3-hold { visibility: hidden; }
+.b3-chip.b3-hold { width: 12rem; }
 
 /* Tablet and phone */
 @media (max-width: 1080px) {
@@ -558,6 +561,11 @@ a.b3-handoff-row:hover .b3-handoff-go { transform: translateX(3px); }
   .b3-load-hero { grid-template-columns: minmax(0, 1fr); }
   .b3-load-mirror { width: 100%; }
   .b3-handoff-grid { padding-block: 32px 48px; }
+  /* The live line has its own line in a narrow row, loaded or not. */
+  .b3-handoff-menu .b3-menu-live { flex-basis: 100%; }
+  /* The booking action wraps inside the glass panel instead of pushing the panel's column past its edge. */
+  .b3-handoff-panel { grid-template-columns: minmax(0, 1fr); }
+  .b3-handoff-panel .b3-btn { max-width: 100%; padding-block: 10px; white-space: normal; text-align: center; }
 }
 
 /* Dark mode: daylight photos get a soft plum grade (night photos and the hero stay as shot). */

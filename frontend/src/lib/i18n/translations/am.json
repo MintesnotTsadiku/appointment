@@ -907,7 +907,17 @@
       "stored24": "በ24 ሰዓት ቅርጸት ይቀመጣል",
       "operatingDays": "የሥራ ቀናት",
       "firstProvider": "እርስዎ የመጀመሪያው አገልግሎት ሰጪ ይሆናሉ። ይህ ዝግጅት ክፍያ መሰብሰብን አያነቃም።",
-      "saveDraft": "ንግዱን በረቂቅ አስቀምጥ"
+      "saveDraft": "ንግዱን በረቂቅ አስቀምጥ",
+      "namesTitle": "በቀጠሮ ገጾችዎ ላይ ያሉ ስሞች",
+      "namesDescription": "የንግዱ ስም፣ መግለጫውና የእያንዳንዱ ባለሙያ ስም በእንግሊዝኛና በአማርኛ።",
+      "namesBusiness": "የንግድ ስም",
+      "namesDescriptionLabel": "የንግዱ መግለጫ",
+      "namesProvider": "የባለሙያ ስም",
+      "namesHint": "የአማርኛ ገጾች የአማርኛውን ጽሑፍ ያሳያሉ። የአማርኛ ሳጥን ባዶ ከሆነ የእንግሊዝኛውን ያሳያሉ። የታተመ ድረ-ገጽ ለውጡን የሚያሳየው እንደገና ሲያትሙት ነው።",
+      "namesSave": "ስሞቹን አስቀምጥ",
+      "namesSaving": "ስሞቹን በማስቀመጥ ላይ…",
+      "namesDiscard": "የስም ለውጦቹን ተው",
+      "namesSaved": "ስሞቹ ተቀምጠዋል"
     },
     "receptionDesk": {
       "client": "ደንበኛ",
@@ -1307,7 +1317,9 @@
         "timezone": "የሰዓት ሰቅ",
         "language": "ቋንቋ",
         "spokenLanguages": "የሚናገሯቸው ቋንቋዎች",
-        "spokenLanguagesHint": "ደንበኞች በቀጠሮ ገጽዎ ላይ ያዩዋቸዋል።"
+        "spokenLanguagesHint": "ደንበኞች በቀጠሮ ገጽዎ ላይ ያዩዋቸዋል።",
+        "publicName": "በቀጠሮ ገጾች ላይ የሚታየው ስም",
+        "publicNameHint": "ደንበኞች ስሙን በገጹ ቋንቋ ያያሉ። የአማርኛው ሳጥን ባዶ ከሆነ የእንግሊዝኛውን ስም ያያሉ።"
       },
       "details": {
         "title": "የእርስዎ መረጃ",
@@ -3079,7 +3091,14 @@
           "expressive": "ሕያው"
         },
         "liveAvailability": "ቀጣይ ክፍት ሰዓቶቼን በድረ-ገጹ ላይ አሳይ",
-        "liveAvailabilityHelp": "ጎብኚዎች ቀጣዩን ክፍት ሰዓትና ዛሬ ስንት ሰዓቶች እንደቀሩ ያያሉ። ማን እንደያዘ በጭራሽ አያዩም። ለውጡ የሚታየው ሲያትሙ ነው።"
+        "liveAvailabilityHelp": "ጎብኚዎች ቀጣዩን ክፍት ሰዓትና ዛሬ ስንት ሰዓቶች እንደቀሩ ያያሉ። ማን እንደያዘ በጭራሽ አያዩም። ለውጡ የሚታየው ሲያትሙ ነው።",
+        "holidayGreetings": "የኢትዮጵያ በዓላት መልካም ምኞቶችን በድረ-ገጹ ላይ አሳይ",
+        "holidayGreetingsHelp": "በእንቁጣጣሽ፣ በመስቀል፣ በገና፣ በጥምቀት እና በዓድዋ ድል በዓል ሰሞን ድረ-ገጹ በራሱ ዘይቤ ትንሽ መልካም ምኞት ያሳያል። ይዘትዎን በጭራሽ አይሸፍንም። ለውጡ የሚታየው ሲያትሙ ነው።",
+        "websiteNameAm": "የድረ-ገጹ ስም በአማርኛ",
+        "websiteNameAmHelp": "የአማርኛ ገጾች ይህን ስም ያሳያሉ። ባዶ ከሆነ የንግዱን የአማርኛ ስም፣ ያም ከሌለ የድረ-ገጹን ስም ያሳያሉ።",
+        "upgradeTitle": "የአብነትዎ አዲስ ዲዛይን ዝግጁ ነው",
+        "upgradeBody": "ድረ-ገጽዎ የአብነቱን የቆየ ስሪት ይጠቀማል። ረቂቁን ያሻሽሉ፣ ይገምግሙት፣ ከዚያ ያትሙት። እስኪያትሙ ድረስ በሥራ ላይ ያለው ድረ-ገጽዎ አይለወጥም።",
+        "upgradeAction": "ዲዛይኑን አሻሽል"
       },
       "content": {
         "title": "የድረ-ገጽ ይዘት",
@@ -4059,6 +4078,31 @@
       "youAreHere": "እዚህ ነዎት",
       "bookingDesk": "የቀጠሮ መቀበያ",
       "callShort": "ይደውሉ"
+    },
+    "ergata": {
+      "nextIntro": "ቀጣዩ ነጻ የትውውቅ ጥሪ፦ {when} {time}",
+      "nextSession": "ቀጣዩ ክፍት ቆይታ፦ {when} {time}",
+      "nextShort": "ቀጣይ ክፍት፦ {when} {time}",
+      "voices": "የደንበኞች ቃል",
+      "swipeHint": "ለተጨማሪ ያንሸራትቱ",
+      "officeHours": "የቢሮ ሰዓታት",
+      "onlineHours": "የኦንላይን ሰዓታት",
+      "askFirst": "መጀመሪያ ጥያቄ ይጠይቁ",
+      "bookingFor": "ከ{name} ጋር ቀጠሮ",
+      "chooseSession": "እንዴት እንደምንገናኝ ይምረጡ"
+    },
+    "holiday": {
+      "label": "የበዓል መልካም ምኞት",
+      "enkutatash": "መልካም አዲስ ዓመት",
+      "enkutatashLine": "እንኳን ለ{count} ዓ.ም. አዲስ ዓመት በሰላም አደረሳችሁ።",
+      "meskel": "መልካም የመስቀል በዓል",
+      "meskelLine": "እንኳን ለብርሃነ መስቀሉ በዓል በሰላም አደረሳችሁ።",
+      "genna": "መልካም ገና",
+      "gennaLine": "እንኳን ለብርሃነ ልደቱ በዓል በሰላም አደረሳችሁ።",
+      "timket": "መልካም የጥምቀት በዓል",
+      "timketLine": "እንኳን ለብርሃነ ጥምቀቱ በዓል በሰላም አደረሳችሁ።",
+      "adwa": "የዓድዋ ድል በዓል",
+      "adwaLine": "እንኳን ለ{count}ኛው የዓድዋ ድል በዓል በሰላም አደረሳችሁ።"
     }
   },
   "customerEmail": {
@@ -6116,7 +6160,10 @@
     "noMatchTitle": "የሚዛመድ አገልግሎት የለም",
     "noMatchBody": "ሌላ ዓይነት ወይም አገልግሎት ሰጪ ይምረጡ።",
     "noServicesTitle": "እስካሁን የሚያዝ አገልግሎት የለም",
-    "noServicesBody": "ይህ ንግድ ለመስመር ላይ ቀጠሮ አገልግሎቶችን ገና አላተመም። በኋላ እንደገና ይመልከቱ።"
+    "noServicesBody": "ይህ ንግድ ለመስመር ላይ ቀጠሮ አገልግሎቶችን ገና አላተመም። በኋላ እንደገና ይመልከቱ።",
+    "pickTime": "ሰዓት ይምረጡ",
+    "noTimesToday": "ዛሬ የቀረ ክፍት ሰዓት የለም — {0} ይታያል",
+    "noTimesOn": "በ{0} ክፍት ሰዓት የለም — {1} ይታያል"
   },
   "phoneServer": {
     "inviteNeedsEmail": "የኢሜይል አድራሻዎን ያስገቡ። የስብሰባው ግብዣ የሚላከው በኢሜይል ነው።"

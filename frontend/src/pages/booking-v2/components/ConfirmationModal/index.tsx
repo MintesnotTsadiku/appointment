@@ -18,8 +18,8 @@ import { usePlatformBrand } from "@/lib/platform-brand";
 import BusinessPrompt from "@/components/business-prompt";
 import CustomerShareCard from "@/components/growth-referrals/CustomerShareCard";
 import PoweredBy from "@/components/powered-by";
-import { formatDate } from "../../utils/dateHelpers";
-import { clockForLanguage, formatInstant, zoneLabel } from "@/lib/time";
+import { formatInstant, zoneLabel } from "@/lib/time";
+import { formatBookingDay } from "@/lib/ethiopian-calendar";
 import { formatPhone } from "@/lib/phone";
 import type { BookingResponse, Service, TimeSlot } from "../../types";
 
@@ -66,7 +66,7 @@ export function ConfirmationModal({
   const manageUrl = bookingResponse.managePath ? new URL(bookingResponse.managePath, window.location.origin).toString() : "";
 
   const startTime = new Date(selectedSlot.start_time);
-  const formattedTime = formatInstant(startTime, clockForLanguage(language, timeFormat), timezone);
+  const formattedTime = formatInstant(startTime, timeFormat, timezone);
   const timezoneLabel = zoneLabel(timezone, language, t("customerBooking.zoneTime"), (city) => {
     const key = `timeZoneCities.${city}`;
     const name = t(key);
@@ -177,7 +177,7 @@ export function ConfirmationModal({
               <div className="flex-1 min-w-0">
                 <p className="text-sm text-gray-600 dark:text-gray-400">{t("customerBooking.dateTime")}</p>
                 <p className="font-semibold text-gray-900 dark:text-gray-100 text-lg">
-                  {formatDate(selectedDate, 'full', intlLocale(language))}
+                  {formatBookingDay(selectedDate, language, intlLocale(language), timeFormat)}
                 </p>
                 <p data-qa="booking-confirmation-time" className="text-gray-900 dark:text-gray-100 mt-1">
                   {formattedTime} • {service.duration} {t("customerBooking.minutes")}

@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useState, type FormEvent, type ReactNode } from 'react';
 import { CalendarCheck2, CheckCircle2, Copy, ExternalLink, Link2, Loader2, Video } from 'lucide-react';
 import { Button } from '@/components/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/card';
@@ -7,7 +7,8 @@ import { Label } from '@/components/label';
 import { PhoneInput, PhoneTagsInput } from '@/components/phone-input';
 import BusinessPrompt from '@/components/business-prompt';
 import CustomerShareCard from '@/components/growth-referrals/CustomerShareCard';
-import { formatDate, formatTime } from '@/pages/booking-v2/utils/dateHelpers';
+import { formatTime } from '@/pages/booking-v2/utils/dateHelpers';
+import { dayInZone, formatBookingDay } from '@/lib/ethiopian-calendar';
 import { formatEthiopianTime } from '@/pages/booking-v2/utils/ethiopianTime';
 import type { TimeSlot } from '@/pages/booking-v2/types';
 import { fill } from '@/pages/manage-booking/format';
@@ -79,10 +80,10 @@ export function DetailsForm({ slot, timeFormat, timezone, quantity, contact, onC
 }
 
 /** The confirmation: when, the reference, the email status, then the share card and the "your own page" prompt. */
-export function BookingConfirmed({ booking, timeFormat, timezone, online }: { booking: Booked; timeFormat: TimeFormat; timezone: string; online?: string }) {
+export function BookingConfirmed({ booking, timeFormat, timezone, online, moment }: { booking: Booked; timeFormat: TimeFormat; timezone: string; online?: string; moment?: ReactNode }) {
   const { t } = useTranslation();
   return <section role="status" className="mx-auto max-w-2xl space-y-4" data-qa="independent-booking-confirmed">
-    <Card className="rounded-2xl"><CardContent className="space-y-4 p-6 sm:p-8">
+    <Card className="relative overflow-hidden rounded-2xl">{moment}<CardContent className="relative space-y-4 p-6 sm:p-8">
       <div className="flex items-start gap-3">
         <CheckCircle2 className="mt-1 h-7 w-7 shrink-0 text-green-600 dark:text-green-400" aria-hidden="true" />
         <div className="min-w-0 space-y-1">
@@ -107,7 +108,9 @@ function SlotWhen({ slot, timeFormat, timezone, quantity }: { slot: TimeSlot; ti
   const { t, language } = useTranslation();
   const start = new Date(slot.start_time);
   const time = timeFormat === 'ethiopian' ? formatEthiopianTime(start) : formatTime(start, timeFormat, timezone);
-  return <>{formatDate(start, 'full', intlLocale(language))} · <span className="tabular-nums">{time}</span>
+  // Habesha time shows the Ethiopian date of the time's day where the provider is.
+  const day = formatBookingDay(dayInZone(start, timezone), language, intlLocale(language), timeFormat);
+  return <>{day} · <span className="tabular-nums">{time}</span>
     {quantity > 1 && <> · {t('bookingPicker.times').replace('{0}', String(quantity))}</>}</>;
 }
 

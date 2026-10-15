@@ -83,6 +83,7 @@ export function mergeConfig(raw: unknown, fallback: PublicUIConfig): PublicUICon
     compiledDesign: design,
     identity: {
       applicationName: typeof identity.applicationName === "string" ? identity.applicationName : design.identity.applicationName,
+      ...(typeof identity.applicationNameAm === "string" ? { applicationNameAm: identity.applicationNameAm } : {}),
       shortName: typeof identity.shortName === "string" ? identity.shortName : design.identity.shortName,
       logoPrimary: typeof identity.logoPrimary === "string" ? identity.logoPrimary : design.identity.logoPrimary,
       logoCompact: typeof identity.logoCompact === "string" ? identity.logoCompact : design.identity.logoCompact,

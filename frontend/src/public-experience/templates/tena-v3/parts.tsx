@@ -71,10 +71,12 @@ export function slotText(chrome: PublicChrome, iso: string, zone: string, locale
 }
 
 /** The live "next free" plate; renders nothing while loading or when the data has no free time. */
-export function NextChip({ facts, data, chrome, locale, variant = "nextFree", href, qa }: {
-  facts: SlotFacts | null | undefined; data: NextAvailability | null; chrome: PublicChrome; locale: string;
+export function NextChip({ facts, data, chrome, locale, variant = "nextFree", href, qa, pending = false }: {
+  facts: SlotFacts | null | undefined; data: NextAvailability | null; chrome: PublicChrome; locale: string; pending?: boolean;
   variant?: "nextFree" | "short"; href?: string; qa?: string;
 }) {
+  // While the free times load (\`pending\`), an invisible chip keeps its place, so nothing below moves.
+  if (pending && !data) return <p className="t3-chip" aria-hidden="true" style={{ visibility: "hidden" }}><span className="t3-pulse" />&nbsp;</p>;
   if (!data || !facts?.next) return null;
   const text = slotText(chrome, facts.next, data.timezone, locale, variant);
   const body = <><span className="t3-pulse" aria-hidden="true" />{text}</>;

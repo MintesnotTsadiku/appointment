@@ -1,0 +1,53 @@
+/**
+ * Names in the language of the page. Public APIs send a business's and a provider's name as
+ * `{en, am}` next to the plain English field (`appointment.scheduler.localized_names`); a page shows
+ * its own language, else the other one, else the plain field. Pure logic, tested by
+ * `tests/local-names.test.mjs`.
+ */
+
+export type LocalNames = { en?: string; am?: string } | null | undefined;
+
+/** The name in `language`, else the other language, else `fallback`. */
+export function localName(names: LocalNames, language: string, fallback = ""): string {
+  const first = language === "am" ? names?.am : names?.en;
+  const second = language === "am" ? names?.en : names?.am;
+  return (first || "").trim() || (fallback || "").trim() || (second || "").trim();
+}
+
+/** The website name on Amharic pages: the published Amharic title, else the design's name. */
+export function siteName(applicationName: string, amharic: string | null | undefined, locale: string): string {
+  return locale === "am" && amharic?.trim() ? amharic.trim() : applicationName;
+}
+
+type Provider = { name?: string; local_name?: LocalNames; [key: string]: unknown };
+type Payload = {
+  company?: string; full_name?: string; description?: string;
+  local_company?: LocalNames; local_business_description?: LocalNames;
+  providers?: Provider[];
+  services?: Array<{ provider_name?: string; provider_local_name?: LocalNames; [key: string]: unknown }>;
+  offerings?: Array<{ provider?: Provider | null; [key: string]: unknown }>;
+  [key: string]: unknown;
+};
+
+const provider = <T extends Provider | null | undefined>(row: T, language: string): T =>
+  (row && row.local_name ? { ...row, name: localName(row.local_name, language, row.name) } : row);
+
+/**
+ * The organization scheduler's answer (`get_organization_services`, `get_organization_meeting_windows`)
+ * with every business and provider name in `language`. Rows without Amharic names keep their fields.
+ */
+export function localizeBookingPayload<T extends Payload | null | undefined>(message: T, language: string): T {
+  if (!message || typeof message !== "object") return message;
+  const company = message.local_company ? localName(message.local_company, language, message.company) : message.company;
+  return {
+    ...message,
+    ...(message.company !== undefined || message.local_company ? { company } : {}),
+    ...(message.local_company && message.full_name !== undefined ? { full_name: localName(message.local_company, language, message.full_name) } : {}),
+    ...(message.local_business_description ? { description: localName(message.local_business_description, language, message.description) } : {}),
+    ...(Array.isArray(message.providers) ? { providers: message.providers.map((row) => provider(row, language)) } : {}),
+    ...(Array.isArray(message.services) ? {
+      services: message.services.map((row) => row.provider_local_name ? { ...row, provider_name: localName(row.provider_local_name, language, row.provider_name) } : row),
+    } : {}),
+    ...(Array.isArray(message.offerings) ? { offerings: message.offerings.map((row) => ({ ...row, provider: provider(row.provider, language) })) } : {}),
+  };
+}

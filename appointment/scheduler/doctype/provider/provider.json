@@ -10,6 +10,7 @@
   "provider_name",
   "full_name",
   "display_name",
+  "display_name_am",
   "Section Break-1",
   "email",
   "phone",
@@ -73,6 +74,13 @@
    "fieldtype": "Data",
    "label": "Display Name",
    "description": "Short name or preferred name to show publicly (optional). If not provided, uses Full Name or Linked User name."
+  },
+  {
+   "fieldname": "display_name_am",
+   "fieldtype": "Data",
+   "label": "Display Name (Amharic)",
+   "length": 140,
+   "description": "The name on Amharic public pages, in Ge'ez script. When it is empty, they show the display name."
   },
   {
    "fieldname": "Section Break-1",
@@ -350,7 +358,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-14 11:40:00.000000",
+ "modified": "2026-10-15 16:00:00.000000",
  "modified_by": "Administrator",
  "module": "Scheduler",
  "name": "Provider",

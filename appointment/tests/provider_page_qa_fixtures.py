@@ -27,7 +27,7 @@ SLUG = "rahel-nutrition"
 TZ = "Africa/Addis_Ababa"
 DAYS = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
 OPEN_DAYS = [day for day in DAYS if day != "Sunday"]
-PHOTO = "/assets/appointment/brand-experience/providers/rahel-girma.webp"
+PHOTO = "/assets/appointment/brand-experience/providers/warm/rahel-girma.webp"
 OFFICE = "Kazanchis consultation room"
 ONLINE = "Rahel online consultations"
 BIO = ("Registered dietitian in Addis Ababa. Practical eating plans for diabetes, pregnancy, sport and "
@@ -149,7 +149,7 @@ def _shape(provider, first_offering):
                                       "is_active": 1}).insert(ignore_permissions=True)
             offering(created.name)
     doc = frappe.get_doc("Provider", provider)
-    doc.update({"full_name": "Rahel Girma", "display_name": "Rahel Girma", "bio": BIO, "bio_am": BIO_AM, "profile_photo": PHOTO,
+    doc.update({"full_name": "Rahel Girma", "display_name": "Rahel Girma", "display_name_am": "ራሔል ግርማ", "bio": BIO, "bio_am": BIO_AM, "profile_photo": PHOTO,
                 "spoken_languages": json.dumps(["am", "en", "om"]), "timezone": TZ})
     doc.save(ignore_permissions=True)
 

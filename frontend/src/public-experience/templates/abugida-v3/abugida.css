@@ -156,6 +156,10 @@
 .a3 [data-reveal] .a3-rule path, .a3-head .a3-rule path { stroke-dasharray: 1; stroke-dashoffset: 0; }
 
 /* Hero: a fidel table on parchment; one block opens as the ሀ window with the photo. */
+/* Phone speed (docs/operations/PUBLIC_PERFORMANCE.md): the sections under the hero lay out and paint when they
+   come near the screen, not in the first render. The first layout of the page drops from about 0.3 s to 0.14 s
+   at 4x CPU. `auto` keeps the real height of a section once it has rendered; 900px is the estimate before. */
+.a3-hero ~ section, .a3-footer { content-visibility: auto; contain-intrinsic-size: auto 900px; }
 .a3-hero { position: relative; margin-top: calc(-1 * var(--a3-bar)); padding: calc(var(--a3-bar) + clamp(28px, 4vw, 64px)) 0 clamp(64px, 7vw, 104px); }
 .a3-hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.02fr); gap: clamp(32px, 5vw, 88px); align-items: center; }
 .a3-greet { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 22px; color: var(--a3-rubric); font-size: 1.1875rem; font-weight: 700; letter-spacing: .1em; font-variant: all-small-caps; }

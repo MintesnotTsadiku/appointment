@@ -197,7 +197,17 @@ def _snapshot(site, recipe, design, sections) -> dict:
         "seo": _parse_json(site.seo_json),
         "booking": _parse_json(site.booking_json),
         "features": sorted(set(_parse_json(site.get("website_setup_json")).get("features", [])) & {"blog", "gallery", "newsletter"}),
+        # The website name on Amharic pages; without it they show the design's application name.
+        "localTitle": _local_title(site),
     }
+
+
+def _local_title(site) -> dict:
+    """`{"am": …}`: the site's Amharic title, else the Amharic name of the organization that owns it."""
+    amharic = (site.get("site_title_am") or "").strip()
+    if not amharic and site.owner_type == "Organization" and site.organization:
+        amharic = (frappe.db.get_value("Organization", site.organization, "organization_name_am") or "").strip()
+    return {"am": amharic} if amharic else {}
 
 
 def _release_document(site, snapshot, brand_revision, design) -> dict:

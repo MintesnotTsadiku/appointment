@@ -173,6 +173,8 @@ The LCP element of the chooser is the business description, and of the time pick
 
 The phone LCP of the landing page is above 2.5 s, as for every template. The time goes to the app shell (`BLOOM_V3.md`, "Performance"). The first load has 312 KB of images on a phone: the hero mobile AVIF (43 KB), the parchment tile, the logo and the lazy photos that Chrome fetches early on a fast connection.
 
+Phase 3 (2026-10-15): the first layout of the landing page took about 0.3 s of main-thread time at 4x CPU, against about 0.1 s for the other v3 templates, because the browser laid out every section of the long page before the first paint. The sections under the hero (and the footer) now have `content-visibility: auto` with `contain-intrinsic-size: auto 900px` (`abugida.css`), so they lay out and paint when they come near the screen. The first layout drops to about 0.14 s (`~/template-v3-work/phase3-final/scripts/layoutcost.py`), and the phone LCP median drops by about 0.15 s in the same run. The look does not change: a pixel comparison while scrolling through the page (390 light and 1440 dark) shows only sub-pixel (at most 1 px) offsets of edges. See `docs/operations/PUBLIC_PERFORMANCE.md`.
+
 ## Files
 
 - Package: `frontend/src/public-experience/templates/abugida-v3/` (`AbugidaTemplate.tsx`, `parts.tsx`, `art.tsx`, `copy.ts`, `AbugidaMoment.tsx`, `booking.tsx`, `abugida.css`, `booking.css`, `moment.css`), registered as `abugida-language@3` with `Loading`, the skin and the moment.

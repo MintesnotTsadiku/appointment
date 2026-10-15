@@ -15,7 +15,7 @@ const exports = {};
 vm.runInNewContext(ts.transpileModule(read('src/pages/public-experience/provider-core.ts'),
   { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 } }).outputText,
 { exports, Intl, URLSearchParams, Map, Set, Number, Array });
-const { localized, priceLabel, formatLabel, groupFormats, serviceFormats, offeringPath, initials, providerBio, PROVIDER_PAGE_API } = exports;
+const { localized, priceLabel, formatLabel, groupFormats, serviceFormats, offeringPath, initials, providerBio, providerName, PROVIDER_PAGE_API } = exports;
 
 // Words in the reader's language, else English, else the record's own text.
 assert.equal(localized({ en: 'Meal plan', am: 'የምግብ እቅድ' }, 'am'), 'የምግብ እቅድ');
@@ -28,6 +28,12 @@ assert.equal(providerBio({ bio: 'Dietitian', bio_am: 'የሥነ-ምግብ ባለ
 assert.equal(providerBio({ bio: 'Dietitian', bio_am: ' ' }, 'am'), 'Dietitian');
 assert.equal(providerBio({ bio: '', bio_am: 'የሥነ-ምግብ ባለሙያ' }, 'en'), 'የሥነ-ምግብ ባለሙያ');
 assert.equal(providerBio({ bio: '' }, 'am'), '');
+
+// The name: the website's person name in the page language, else the provider's own Amharic name, else the record.
+assert.equal(providerName({ name: 'Rahel Girma', local_name: { en: 'Rahel Girma', am: 'ራሔል ግርማ' } }, 'am'), 'ራሔል ግርማ');
+assert.equal(providerName({ name: 'Rahel Girma', local_name: { en: 'Rahel Girma', am: 'ራሔል ግርማ' } }, 'en'), 'Rahel Girma');
+assert.equal(providerName({ name: 'Rahel Girma', person: { name: { en: 'Rahel G.', am: 'ራሔል ግ.' } }, local_name: { am: 'ራሔል ግርማ' } }, 'am'), 'ራሔል ግ.');
+assert.equal(providerName({ name: 'Rahel Girma' }, 'am'), 'Rahel Girma');
 
 // Prices: free when zero, else the currency code and a grouped amount.
 assert.equal(priceLabel(0, 'ETB', 'en', 'Free'), 'Free');

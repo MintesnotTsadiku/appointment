@@ -6,7 +6,7 @@ It is not whitelisted: only a shell user on the server can run it.
 
 import frappe
 
-from appointment.ops import readiness_config, readiness_services
+from appointment.ops import readiness_config, readiness_services, readiness_sites
 from appointment.ops.checks import FAIL, PASS, WARN
 
 AREAS = (
@@ -18,6 +18,7 @@ AREAS = (
     readiness_services.Translations,
     readiness_config.Build,
     readiness_services.Data,
+    readiness_sites.PublicSites,
 )
 
 

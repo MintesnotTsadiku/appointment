@@ -16,6 +16,7 @@ import {
 import { BENEFIT_ART, Curl, Mirror } from "./art";
 import { art, BeforeAfter, CopyChip, HoursList, LookStack, NextChip, OpenBadge, Photo, Reviews, role, slotText, type Art, type Look, type Review } from "./parts";
 import { withAccentInk } from "./ink";
+import { BloomHoliday } from "./holiday";
 import "./bloom.css";
 
 /*
@@ -205,6 +206,7 @@ export function BloomSite({ snapshot, locale, applicationName, publicRoot, rootS
         <div className="b3-wrap b3-hero-grid">
           <div className="b3-hero-copy">
             <div className="b3-greet" data-qa="bloom-greeting"><span>{greeting(chrome, now)}</span>{days.length ? <OpenBadge days={days} now={now} chrome={chrome} locale={locale} habesha={locale === "am"} /> : null}</div>
+            <BloomHoliday snapshot={snapshot} locale={locale} chrome={chrome} />
             {word ? <p className="b3-word" aria-hidden="true" style={{ "--len": Math.max(4, word.length), ...(wordPhoto ? { "--b3-word-photo": `url("${wordPhoto.widths?.length ? wordPhoto.src.replace(/\.webp$/, `-w${wordPhoto.widths[0]}.webp`) : wordPhoto.src}")` } : {}) } as CSSProperties}>
               <span className="b3-word-fill">{word}</span><span className="b3-word-line">{word}</span>
             </p> : null}
@@ -548,7 +550,10 @@ export function BloomBooking({ snapshot, locale, applicationName, publicRoot, ro
           <h1>{localized(booking.title, locale)}</h1>
           {localized(booking.body, locale) ? <p>{localized(booking.body, locale)}</p> : null}
           {bookingPath && label ? <a className="b3-btn" href={bookingPath} onClick={(event) => inApp(event, bookingPath, navigate)} data-magnetic="6" data-qa="bloom-handoff-book"><span>{label}</span><span className="b3-btn-arrow" aria-hidden="true">→</span></a> : null}
-          <NextChip facts={data?.next ? { next: data.next.start, todayLeft: data.todayLeft } : null} data={data} chrome={chrome} locale={locale} variant="nextFreeChair" href={bookingPath || undefined} qa="bloom-handoff-next" />
+          {live.status === "loading"
+            // The chip's place while the free times load, so the service list below does not move (CLS).
+            ? <span className="b3-chip b3-hold" aria-hidden="true" />
+            : <NextChip facts={data?.next ? { next: data.next.start, todayLeft: data.todayLeft } : null} data={data} chrome={chrome} locale={locale} variant="nextFreeChair" href={bookingPath || undefined} qa="bloom-handoff-next" />}
         </div>
         {menu.length ? <ol className="b3-handoff-menu" aria-label={localized(services.title, locale) || undefined}>{menu.map((item, index) => {
           const photo = art(item, locale, design, `menu${(index % 3) + 1}.bloom`);
@@ -561,7 +566,8 @@ export function BloomBooking({ snapshot, locale, applicationName, publicRoot, ro
             {photo ? <span className="b3-menu-thumb" aria-hidden="true"><Photo image={photo} sizes="72px" decorative /></span> : null}
             <span className="b3-menu-name">{localized(item.name, locale)}</span>
             <span className="b3-menu-meta">{minutes ? chrome.t("minutes", { count: minutes }) : null}{price ? <> · {price}</> : null}
-              {facts?.next && data ? <span className="b3-menu-live"><span className="b3-pulse" aria-hidden="true" />{slotText(chrome, facts.next, data.timezone, locale)}</span> : null}</span>
+              {facts?.next && data ? <span className="b3-menu-live"><span className="b3-pulse" aria-hidden="true" />{slotText(chrome, facts.next, data.timezone, locale)}</span>
+                : live.status === "loading" ? <span className="b3-menu-live b3-hold" aria-hidden="true">&nbsp;</span> : null}</span>
             {href ? <span className="b3-handoff-go" aria-hidden="true">→</span> : null}
           </>;
           return <li key={String(item.id || index)} data-reveal="rise">

@@ -26,8 +26,8 @@ from appointment.demo import showcase_public as public_copy
 from appointment.public_experience.publisher import publish_experience
 
 VERSION = 1
-CONTENT_VERSION = 6
-PUBLIC_EXPERIENCE_VERSION = 24
+CONTENT_VERSION = 7
+PUBLIC_EXPERIENCE_VERSION = 25
 TZ = "Africa/Addis_Ababa"
 DEMO_BRAND_RECIPES = recipe_assignments()
 # The giant word in the Bloom v3 hero and footer is the brand's short name.
@@ -39,21 +39,45 @@ def showcase_motion(recipe_key):
     choices = get_recipe(recipe_key).adjustments.get("motion", {}).get("choices") or []
     return "expressive" if "expressive" in choices else "calm"
 
+# Showcase portraits. The ten staff of the five organization showcases were re-photographed in each
+# template's v3 art direction (warm grading, same people); each has 96 and 192 px avatar variants.
 PROVIDER_PORTRAITS = {
-    "Selam Bekele": "/assets/appointment/brand-experience/providers/selam-bekele.webp",
-    "Meron Alemu": "/assets/appointment/brand-experience/providers/meron-alemu.webp",
-    "Hanna Tesfaye": "/assets/appointment/brand-experience/providers/hanna-tesfaye.webp",
-    "Rahel Girma": "/assets/appointment/brand-experience/providers/rahel-girma.webp",
-    "Eden Tadesse": "/assets/appointment/brand-experience/providers/eden-tadesse.webp",
-    "Dawit Haile": "/assets/appointment/brand-experience/providers/dawit-haile.webp",
-    "Saron Mekonnen": "/assets/appointment/brand-experience/providers/saron-mekonnen.webp",
-    "Yonas Assefa": "/assets/appointment/brand-experience/providers/yonas-assefa.webp",
-    "Kalkidan Getachew": "/assets/appointment/brand-experience/providers/kalkidan-getachew.webp",
-    "Abel Fikru": "/assets/appointment/brand-experience/providers/abel-fikru.webp",
+    "Selam Bekele": "/assets/appointment/brand-experience/providers/warm/selam-bekele.webp",
+    "Meron Alemu": "/assets/appointment/brand-experience/providers/warm/meron-alemu.webp",
+    "Hanna Tesfaye": "/assets/appointment/brand-experience/providers/warm/hanna-tesfaye.webp",
+    "Rahel Girma": "/assets/appointment/brand-experience/providers/warm/rahel-girma.webp",
+    "Eden Tadesse": "/assets/appointment/brand-experience/providers/warm/eden-tadesse.webp",
+    "Dawit Haile": "/assets/appointment/brand-experience/providers/warm/dawit-haile.webp",
+    "Saron Mekonnen": "/assets/appointment/brand-experience/providers/warm/saron-mekonnen.webp",
+    "Yonas Assefa": "/assets/appointment/brand-experience/providers/warm/yonas-assefa.webp",
+    "Kalkidan Getachew": "/assets/appointment/brand-experience/providers/warm/kalkidan-getachew.webp",
+    "Abel Fikru": "/assets/appointment/brand-experience/providers/warm/abel-fikru.webp",
     "Yared Mesfin": "/assets/appointment/brand-experience/providers/yared-mesfin.webp",
     "Bethel Asrat": "/assets/appointment/brand-experience/providers/bethel-asrat.webp",
     "Hiwot Alemayehu": "/assets/appointment/brand-experience/providers/hiwot-alemayehu.webp",
     "Mikiyas Tadele": "/assets/appointment/brand-experience/providers/mikiyas-tadele.webp",
+}
+
+# The public names in Ge'ez script (Provider.display_name_am); Amharic pages show them.
+AMHARIC_NAMES = {
+    "Selam Bekele": "ሰላም በቀለ",
+    "Meron Alemu": "ሜሮን አለሙ",
+    "Hanna Tesfaye": "ሐና ተስፋዬ",
+    "Rahel Girma": "ራሔል ግርማ",
+    "Eden Tadesse": "ኤደን ታደሰ",
+    "Dawit Haile": "ዳዊት ኃይሌ",
+    "Saron Mekonnen": "ሳሮን መኮንን",
+    "Yonas Assefa": "ዮናስ አሰፋ",
+    "Kalkidan Getachew": "ቃልኪዳን ጌታቸው",
+    "Abel Fikru": "አቤል ፍቅሩ",
+}
+# The business names in Amharic (Organization.organization_name_am and the website's Amharic name).
+BUSINESS_NAMES_AM = {
+    "selam": "ሰላም የእንቅስቃሴ ልምምድ",
+    "meron": "ሜሮን የልብስ ስፌት አቴሊየር",
+    "bloom": "ቦሌ ብሉም የፀጉር ስቱዲዮ",
+    "tena": "ጤና የቤተሰብ ክሊኒክ",
+    "abugida": "አቡጊዳ የቋንቋ ስቱዲዮ",
 }
 
 CLIENTS = [
@@ -548,6 +572,8 @@ def enrich_business_records(key, business):
             "language": "en",
             "enable_public_booking": 1,
             "allow_provider_selection": 1,
+            "organization_name_am": BUSINESS_NAMES_AM[key],
+            "description_am": public_copy.AM[detail["description"]],
         }
     )
     organization.save(ignore_permissions=True)
@@ -567,6 +593,7 @@ def enrich_business_records(key, business):
             {
                 "full_name": name_map[key][index],
                 "display_name": name_map[key][index],
+                "display_name_am": AMHARIC_NAMES[name_map[key][index]],
                 "email": business["owner"] if index == 0 else f"{key}.provider{index}@example.test",
                 "bio": detail["provider_bios"][index],
                 "timezone": TZ,
@@ -689,7 +716,7 @@ def _public_section_rows(key, business):
     provider_items = [
         {
             "id": provider.name,
-            "name": _localized(provider.display_name or provider.full_name or provider.provider_name),
+            "name": public_copy.localized(provider.display_name, provider.display_name_am or None),
             "role": _localized(provider_role),
             "specialties": [_localized(value) for value in provider_specialties],
             "credentials": [_localized("Provider profile available before booking")],
@@ -778,7 +805,7 @@ def _public_section_rows(key, business):
         ("faq", {"title": _localized({"selam": "Before your first movement visit", "meron": "Before you come to the atelier", "bloom": "Before your Bole appointment", "tena": "Before a clinic consultation", "abugida": "Before your first practice"}[key]), "items": faq_items}),
         ("contact", {"title": _localized({"selam": "Plan a quieter arrival", "meron": "Plan your fitting visit", "bloom": "Plan your studio visit", "tena": "Know before you arrive", "abugida": "Make the room easy to find"}[key]), "body": public_copy.joined(_localized(detail["locations"][0]["arrival"]), opening_hours), "phone": detail["contact"]["phone"], "email": detail["contact"]["email"], "action": _action("Call to ask a question", "call", "primary")}),
         ("booking_cta", {"title": _localized(detail["cta"]["booking_title"]), "body": _localized(detail["cta"]["booking_subtitle"]), "action": _action(detail["cta"]["booking_primary"], "booking_start", "primary")}),
-        ("footer", {"title": _localized(business["name"]), "body": _localized(detail["trust"]), "items": [{"label": _localized(footer_book), "action": _action(footer_book, "booking_start", "tertiary")}, {"label": _localized("Contact the team"), "action": _action("Contact the team", "contact", "tertiary")}]}),
+        ("footer", {"title": public_copy.localized(business["name"], BUSINESS_NAMES_AM[key]), "body": _localized(detail["trust"]), "items": [{"label": _localized(footer_book), "action": _action(footer_book, "booking_start", "tertiary")}, {"label": _localized("Contact the team"), "action": _action("Contact the team", "contact", "tertiary")}]}),
     ]
     if recipe.version >= 3 and key in public_copy.V3_SCENES:
         # The v3 showcase shows the template's own photos as its content (they keep their night and mobile crops).
@@ -821,6 +848,12 @@ def _rich_release_for(site, headline, recipe_key):
         return None
     # Releases from before the content-ownership pass lack owner photos and Amharic copy.
     if snapshot.get("recipeVersion") != get_recipe(recipe_key).version or not sections.get("about", {}).get("image"):
+        return None
+    # Releases from before the Amharic names lack the website's Amharic name.
+    if not (snapshot.get("localTitle") or {}).get("am"):
+        return None
+    # Releases from before the holiday moments lack the owner switch the showcases turn on.
+    if (snapshot.get("booking") or {}).get("holidayGreetings") is not True:
         return None
     return release
 
@@ -886,6 +919,7 @@ def configure_public_experience(state, keys=None, force=False):
             continue
         public_site_values = {
             "site_title": business["name"],
+            "site_title_am": BUSINESS_NAMES_AM[key],
             "slug": slug,
             "owner_type": "Organization",
             "organization": organization,
@@ -899,8 +933,8 @@ def configure_public_experience(state, keys=None, force=False):
                 {"locale": "am", "enabled": 1, "is_default": 0, "translation_status": "Partial"},
             ],
             "seo_json": json.dumps({"title": f"{business['name']} | {DEMO_CONTENT[key]['headline']}", "description": business["description"]}),
-            # Showcases show live availability (the owner setting is off by default for new sites).
-            "booking_json": json.dumps({"showPrices": True, "currency": "ETB", "timezone": TZ, "arrivalNote": DEMO_CONTENT[key]["locations"][0]["arrival"], "liveAvailability": True}),
+            # Showcases show live availability and the holiday greetings (both off by default for new sites).
+            "booking_json": json.dumps({"showPrices": True, "currency": "ETB", "timezone": TZ, "arrivalNote": DEMO_CONTENT[key]["locations"][0]["arrival"], "liveAvailability": True, "holidayGreetings": True}),
             "public_booking_enabled": 1,
             "sections": [{"section_id": f"{key}-{index}-{section_type}", "section_type": section_type, "order_index": index, "content_json": json.dumps(content)} for index, (section_type, content) in enumerate(section_rows, start=1)],
         }

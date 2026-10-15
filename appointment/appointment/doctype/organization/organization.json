@@ -8,6 +8,7 @@
  "engine": "InnoDB",
  "field_order": [
   "organization_name",
+  "organization_name_am",
   "organization_type",
   "slug",
   "section_break_1",
@@ -36,6 +37,7 @@
   "primary_color",
   "column_break_3",
   "description",
+  "description_am",
   "section_break_5",
   "is_active",
   "setup_complete",
@@ -45,7 +47,14 @@
   "workbook_creation_key"
  ],
  "fields": [
-  {"fieldname": "workbook_creation_key", "fieldtype": "Data", "label": "Workbook Creation Key", "hidden": 1, "read_only": 1, "unique": 1},
+  {
+   "fieldname": "workbook_creation_key",
+   "fieldtype": "Data",
+   "label": "Workbook Creation Key",
+   "hidden": 1,
+   "read_only": 1,
+   "unique": 1
+  },
   {
    "fieldname": "organization_name",
    "fieldtype": "Data",
@@ -53,6 +62,13 @@
    "label": "Organization Name",
    "reqd": 1,
    "unique": 1
+  },
+  {
+   "fieldname": "organization_name_am",
+   "fieldtype": "Data",
+   "label": "Organization Name (Amharic)",
+   "length": 140,
+   "description": "The business name on Amharic public pages. When it is empty, they show the organization name."
   },
   {
    "fieldname": "organization_type",
@@ -213,6 +229,12 @@
    "label": "Description"
   },
   {
+   "fieldname": "description_am",
+   "fieldtype": "Text",
+   "label": "Description (Amharic)",
+   "description": "Shown on Amharic public pages. When it is empty, they show the English description."
+  },
+  {
    "fieldname": "section_break_5",
    "fieldtype": "Section Break",
    "label": "Status"
@@ -262,7 +284,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-29 10:20:09.447200",
+ "modified": "2026-10-15 16:00:00.000000",
  "modified_by": "Administrator",
  "module": "Appointment",
  "name": "Organization",

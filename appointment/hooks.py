@@ -361,6 +361,11 @@ override_whitelisted_methods = {
 # Request Events
 # ----------------
 before_request = ["appointment.content.upstream.block_legacy_public_routes"]
+
+# Cache keys that a full cache clear (`frappe.clear_cache()`: migrate, deploy, `bench clear-cache`) keeps.
+# They hold the one-time links that customers already have in their inbox or on screen: My bookings
+# (30 minutes) and the business prompt prefill (30 minutes). Without this, every clear breaks them.
+persistent_cache_keys = ["appointment:my_bookings:*", "appointment:growth:prefill:*"]
 # after_request = ["appointment.utils.after_request"]
 
 # Job Events

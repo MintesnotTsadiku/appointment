@@ -72,6 +72,8 @@ class IndependentShowcase:
     qa_fixture: str = ""  # a QA fixture that can make its own copy; the seeder names it in a collision
     timezone: str = "Africa/Addis_Ababa"
     booking: dict = field(default_factory=lambda: {"showPrices": True, "currency": "ETB"})
+    full_name_am: str = ""  # the public name in Ge'ez script (Provider.display_name_am)
+    business_am: str = ""  # the website's Amharic name (Public Site.site_title_am)
 
     @property
     def first_session(self):
@@ -159,6 +161,7 @@ def refresh(showcase, built, record):
     try:
         with placeholder_numbers():
             apply_profile(showcase, built["provider"])
+            _upgrade_template(showcase, built["public_site"])
             site = frappe.get_doc("Public Site", built["public_site"])
             starter = {row.section_type: json.loads(row.content_json) for row in site.sections}
             apply_website(showcase, site, built["provider"], built["places"], built["services"], starter)
@@ -170,26 +173,43 @@ def refresh(showcase, built, record):
     return built
 
 
+def _upgrade_template(showcase, site_name):
+    """Move the website to the latest version of its template, as an owner does: switch, then publish."""
+    from appointment.public_experience import template_switch
+    from appointment.public_experience.recipes import get_recipe
+
+    recipe = get_recipe(showcase.recipe)
+    site = frappe.get_doc("Public Site", site_name)
+    if (site.recipe_key, int(site.recipe_version or 0)) != (recipe.key, recipe.version):
+        _as(showcase.owner_email, template_switch.switch, site.name, site.draft_version, recipe.key)
+
+
 def apply_profile(showcase, provider):
     doc = frappe.get_doc("Provider", provider)
     doc.update({"full_name": showcase.full_name, "display_name": showcase.full_name, "timezone": showcase.timezone,
                 "spoken_languages": json.dumps(list(showcase.spoken_languages)),
-                "bio": showcase.bio, "bio_am": showcase.bio_am})
+                "bio": showcase.bio, "bio_am": showcase.bio_am, "display_name_am": showcase.full_name_am})
     doc.save(ignore_permissions=True)
     frappe.db.set_value("User", showcase.owner_email, "user_image", showcase.portrait)
 
 
 def apply_website(showcase, site, provider, places, services, starter):
     """Replace the starter copy with the showcase content, in English and Amharic."""
+    from appointment.demo.showcase import showcase_motion
+
     profile = frappe.get_doc("Brand Profile", site.brand_profile)
+    # Showcases use the most expressive motion their template offers (new sites keep the recipe default).
+    inputs = json.loads(profile.brand_inputs_json or "{}")
     profile.update({"logo_primary": showcase.logo, "logo_compact": showcase.logo, "favicon": showcase.favicon,
-                    "short_name": showcase.short_name})
+                    "short_name": showcase.short_name,
+                    "brand_inputs_json": json.dumps({**inputs, "motion": showcase_motion(showcase.recipe)}, sort_keys=True)})
     profile.save(ignore_permissions=True)
     content = showcase.sections(starter, provider, places, services)
     for row in site.sections:
         row.content_json = json.dumps(content[row.section_type])
     if "am" not in [row.locale for row in site.enabled_locales]:
         site.append("enabled_locales", {"locale": "am", "enabled": 1, "translation_status": "Complete"})
+    site.site_title_am = showcase.business_am
     site.seo_json = json.dumps(showcase.seo)
     site.booking_json = json.dumps({**showcase.booking, "timezone": showcase.timezone})
     site.save(ignore_permissions=True)

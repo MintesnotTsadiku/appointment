@@ -1,0 +1,478 @@
+# Amharic names on the showcases: the website team section and name, the service chooser (business name, provider chips
+# and avatars), the time picker (provider options), the booking summary and bar, the Bloom details step and confirmation,
+# and the provider pages. Fixtures, in order: appointment.tests.provider_page_qa_fixtures.setup (Rahel Girma's page; never
+# run its cleanup), appointment.tests.template_bloom_v3_qa_fixtures.setup, appointment.tests.amharic_names_qa_fixtures.setup;
+# after the run: appointment.tests.template_bloom_v3_qa_fixtures.cleanup (the Bloom QA client's booking).
+# See docs/operations/content-showcases.md, "Amharic names".
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-amharic-names
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 300000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.amharic_names_qa_fixtures.browser_values
+scenarios:
+- id: names_bloom_am_desktop_light
+  title: 'Bloom in Amharic: website team, chooser, time picker, summary'
+  viewport:
+    width: 1440
+    height: 900
+  options:
+    color_scheme: light
+  checks: []
+  routes:
+  - path: /bloom-studio/am?display=light
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: wait_for
+    selector: body:has-text("ቦሌ ብሉም የፀጉር ስቱዲዮ")
+  - action: screenshot
+    name: names_bloom_am_desktop_light-1-landing.png
+    full_page: false
+  - action: click
+    selector: '[id$="-team-title"]'
+  - action: wait_for
+    selector: section:has([id$="-team-title"]):has-text("ሐና ተስፋዬ")
+  - action: screenshot
+    name: names_bloom_am_desktop_light-2-team.png
+    full_page: false
+  - action: open_url
+    url: /schedule/org/bloom-studio?lang=am
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+    timeout_ms: 20000
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="booking-business"]'
+      value: ቦሌ ብሉም የፀጉር ስቱዲዮ
+    - type: text_contains
+      selector: '[data-qa="booking-header"]'
+      value: ቦሌ ብሉም የፀጉር ስቱዲዮ
+  - action: wait_for
+    selector: '[data-qa="booking-provider"]:has-text("ሐና ተስፋዬ")'
+  - action: wait_for
+    selector: '[data-qa="booking-provider"]:has-text("ራሔል ግርማ")'
+  - action: wait_for
+    selector: '[data-qa="booking-provider"]:has-text("ኤደን ታደሰ")'
+  - action: screenshot
+    name: names_bloom_am_desktop_light-3-chooser.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-steps"][data-step="time"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-qa="booking-provider-option"]:has-text("ሐና ተስፋዬ")'
+  - action: wait_for
+    selector: '[data-qa="booking-provider-option"]:has-text("ራሔል ግርማ")'
+  - action: wait_for
+    selector: '[data-qa="booking-provider-option"]:has-text("ኤደን ታደሰ")'
+  - action: click
+    selector: '[data-qa="booking-provider-option"]:has-text("ሐና ተስፋዬ")'
+  - action: wait_for
+    selector: '[data-qa="booking-provider-option"][aria-pressed="true"]:has-text("ሐና ተስፋዬ")'
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_names_bloom_open_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_names_bloom_open_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 2)
+    timeout_ms: 20000
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 2)
+  - action: wait_for
+    selector: '[data-qa="booking-continue"]'
+  - action: wait_for
+    selector: body:has-text("ከሐና ተስፋዬ ጋር")
+  - action: wait_for
+    selector: '[data-qa="booking-summary"]:has-text("ሐና ተስፋዬ")'
+  - action: screenshot
+    name: names_bloom_am_desktop_light-4-time-picker.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-continue"]'
+  - action: wait_for
+    selector: '#userName'
+  - action: wait_for
+    selector: body:has-text("ሐና ተስፋዬ")
+  - action: screenshot
+    name: names_bloom_am_desktop_light-5-details.png
+    full_page: false
+  - action: fill
+    selector: '#userName'
+    value: '{qa_bloom_client}'
+  - action: fill
+    selector: '[data-qa="booking-phone"]'
+    value: '{qa_bloom_phone}'
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+  - action: wait_for
+    selector: '[data-qa="booking-success"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: body:has-text("ሐና ተስፋዬ")
+  - action: screenshot
+    name: names_bloom_am_desktop_light-6-confirmation.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: names_tena_am_desktop_light
+  title: 'Tena in Amharic: website team, chooser, time picker, summary'
+  viewport:
+    width: 1440
+    height: 900
+  options:
+    color_scheme: light
+  checks: []
+  routes:
+  - path: /tena-studio/am?display=light
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: wait_for
+    selector: body:has-text("ጤና የቤተሰብ ክሊኒክ")
+  - action: screenshot
+    name: names_tena_am_desktop_light-1-landing.png
+    full_page: false
+  - action: click
+    selector: '[id$="-team-title"]'
+  - action: wait_for
+    selector: section:has([id$="-team-title"]):has-text("ዳዊት ኃይሌ")
+  - action: screenshot
+    name: names_tena_am_desktop_light-2-team.png
+    full_page: false
+  - action: open_url
+    url: /schedule/org/tena-studio?lang=am
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+    timeout_ms: 20000
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="booking-business"]'
+      value: ጤና የቤተሰብ ክሊኒክ
+    - type: text_contains
+      selector: '[data-qa="booking-header"]'
+      value: ጤና የቤተሰብ ክሊኒክ
+  - action: wait_for
+    selector: '[data-qa="booking-provider"]:has-text("ዳዊት ኃይሌ")'
+  - action: wait_for
+    selector: '[data-qa="booking-provider"]:has-text("ሳሮን መኮንን")'
+  - action: wait_for
+    selector: '[data-qa="booking-provider"]:has-text("ዮናስ አሰፋ")'
+  - action: screenshot
+    name: names_tena_am_desktop_light-3-chooser.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-steps"][data-step="time"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-qa="booking-provider-option"]:has-text("ዳዊት ኃይሌ")'
+  - action: wait_for
+    selector: '[data-qa="booking-provider-option"]:has-text("ሳሮን መኮንን")'
+  - action: wait_for
+    selector: '[data-qa="booking-provider-option"]:has-text("ዮናስ አሰፋ")'
+  - action: click
+    selector: '[data-qa="booking-provider-option"]:has-text("ዳዊት ኃይሌ")'
+  - action: wait_for
+    selector: '[data-qa="booking-provider-option"][aria-pressed="true"]:has-text("ዳዊት ኃይሌ")'
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_names_tena_open_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_names_tena_open_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 2)
+    timeout_ms: 20000
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 2)
+  - action: wait_for
+    selector: '[data-qa="booking-continue"]'
+  - action: wait_for
+    selector: body:has-text("ከዳዊት ኃይሌ ጋር")
+  - action: wait_for
+    selector: '[data-qa="booking-summary"]:has-text("ዳዊት ኃይሌ")'
+  - action: screenshot
+    name: names_tena_am_desktop_light-4-time-picker.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: names_abugida_am_mobile_dark
+  title: 'Abugida in Amharic: website team, chooser, time picker, summary'
+  viewport:
+    width: 390
+    height: 844
+  options:
+    color_scheme: dark
+  checks: []
+  routes:
+  - path: /abugida-studio/am?display=dark
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: wait_for
+    selector: body:has-text("አቡጊዳ የቋንቋ ስቱዲዮ")
+  - action: screenshot
+    name: names_abugida_am_mobile_dark-1-landing.png
+    full_page: false
+  - action: click
+    selector: '[id$="-team-title"]'
+  - action: wait_for
+    selector: section:has([id$="-team-title"]):has-text("ቃልኪዳን ጌታቸው")
+  - action: screenshot
+    name: names_abugida_am_mobile_dark-2-team.png
+    full_page: false
+  - action: open_url
+    url: /schedule/org/abugida-studio?lang=am
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+    timeout_ms: 20000
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="booking-business"]'
+      value: አቡጊዳ የቋንቋ ስቱዲዮ
+    - type: text_contains
+      selector: '[data-qa="booking-header"]'
+      value: አቡጊዳ የቋንቋ ስቱዲዮ
+  - action: wait_for
+    selector: '[data-qa="booking-provider"]:has-text("ቃልኪዳን ጌታቸው")'
+  - action: wait_for
+    selector: '[data-qa="booking-provider"]:has-text("አቤል ፍቅሩ")'
+  - action: screenshot
+    name: names_abugida_am_mobile_dark-3-chooser.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-steps"][data-step="time"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-qa="booking-provider-option"]:has-text("ቃልኪዳን ጌታቸው")'
+  - action: wait_for
+    selector: '[data-qa="booking-provider-option"]:has-text("አቤል ፍቅሩ")'
+  - action: click
+    selector: '[data-qa="booking-provider-option"]:has-text("ቃልኪዳን ጌታቸው")'
+  - action: wait_for
+    selector: '[data-qa="booking-provider-option"][aria-pressed="true"]:has-text("ቃልኪዳን ጌታቸው")'
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_names_abugida_open_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_names_abugida_open_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 2)
+    timeout_ms: 20000
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 2)
+  - action: wait_for
+    selector: '[data-qa="booking-continue"]'
+  - action: wait_for
+    selector: body:has-text("ከቃልኪዳን ጌታቸው ጋር")
+  - action: wait_for
+    selector: '[data-qa="booking-summary"]:has-text("ቃልኪዳን ጌታቸው")'
+  - action: screenshot
+    name: names_abugida_am_mobile_dark-4-time-picker.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: names_selam_am_mobile_dark
+  title: 'Selam in Amharic: website team, chooser, time picker, summary'
+  viewport:
+    width: 390
+    height: 844
+  options:
+    color_scheme: dark
+  checks: []
+  routes:
+  - path: /selam-studio/am?display=dark
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: wait_for
+    selector: body:has-text("ሰላም የእንቅስቃሴ ልምምድ")
+  - action: screenshot
+    name: names_selam_am_mobile_dark-1-landing.png
+    full_page: false
+  - action: click
+    selector: '[id$="-team-title"]'
+  - action: wait_for
+    selector: section:has([id$="-team-title"]):has-text("ሰላም በቀለ")
+  - action: screenshot
+    name: names_selam_am_mobile_dark-2-team.png
+    full_page: false
+  - action: open_url
+    url: /schedule/org/selam-studio?lang=am
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+    timeout_ms: 20000
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="booking-business"]'
+      value: ሰላም የእንቅስቃሴ ልምምድ
+    - type: text_contains
+      selector: '[data-qa="booking-header"]'
+      value: ሰላም የእንቅስቃሴ ልምምድ
+  - action: wait_for
+    selector: '[data-qa="booking-services"]:has-text("ሰላም በቀለ")'
+  - action: screenshot
+    name: names_selam_am_mobile_dark-3-chooser.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-steps"][data-step="time"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_names_selam_open_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_names_selam_open_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 2)
+    timeout_ms: 20000
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 2)
+  - action: wait_for
+    selector: '[data-qa="booking-continue"]'
+  - action: wait_for
+    selector: body:has-text("ከሰላም በቀለ ጋር")
+  - action: wait_for
+    selector: '[data-qa="booking-summary"]:has-text("ሰላም በቀለ")'
+  - action: screenshot
+    name: names_selam_am_mobile_dark-4-time-picker.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: names_meron_am_desktop_dark
+  title: 'Meron in Amharic: website team, chooser, time picker, summary'
+  viewport:
+    width: 1440
+    height: 900
+  options:
+    color_scheme: dark
+  checks: []
+  routes:
+  - path: /meron-studio/am?display=dark
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: wait_for
+    selector: body:has-text("ሜሮን የልብስ ስፌት አቴሊየር")
+  - action: screenshot
+    name: names_meron_am_desktop_dark-1-landing.png
+    full_page: false
+  - action: click
+    selector: '[id$="-team-title"]'
+  - action: wait_for
+    selector: section:has([id$="-team-title"]):has-text("ሜሮን አለሙ")
+  - action: screenshot
+    name: names_meron_am_desktop_dark-2-team.png
+    full_page: false
+  - action: open_url
+    url: /schedule/org/meron-studio?lang=am
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+    timeout_ms: 20000
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="booking-business"]'
+      value: ሜሮን የልብስ ስፌት አቴሊየር
+    - type: text_contains
+      selector: '[data-qa="booking-header"]'
+      value: ሜሮን የልብስ ስፌት አቴሊየር
+  - action: wait_for
+    selector: '[data-qa="booking-services"]:has-text("ሜሮን አለሙ")'
+  - action: screenshot
+    name: names_meron_am_desktop_dark-3-chooser.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-steps"][data-step="time"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_names_meron_open_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_names_meron_open_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 2)
+    timeout_ms: 20000
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 2)
+  - action: wait_for
+    selector: '[data-qa="booking-continue"]'
+  - action: wait_for
+    selector: body:has-text("ከሜሮን አለሙ ጋር")
+  - action: wait_for
+    selector: '[data-qa="booking-summary"]:has-text("ሜሮን አለሙ")'
+  - action: screenshot
+    name: names_meron_am_desktop_dark-4-time-picker.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: names_provider_page_rahel_am_mobile
+  title: 'Provider page in Amharic: the provider''s Amharic name'
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /schedule/p/rahel-nutrition?lang=am
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: wait_for
+    selector: h1:has-text("ራሔል ግርማ")
+    timeout_ms: 20000
+  - action: screenshot
+    name: names_provider_page_rahel_am_mobile-1-provider-page.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: names_ergata_am_desktop
+  title: 'Independent showcase in Amharic: website name and provider page'
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /yared-counselling/am
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+  actions:
+  - action: wait_for
+    selector: body:has-text("ያሬድ ተስፋዬ የምክር አገልግሎት")
+  - action: screenshot
+    name: names_ergata_am_desktop-1-landing.png
+    full_page: false
+  - action: open_url
+    url: /schedule/p/yared-counselling?lang=am
+  - action: wait_for
+    selector: h1:has-text("ያሬድ ተስፋዬ")
+    timeout_ms: 20000
+  - action: screenshot
+    name: names_ergata_am_desktop-2-provider-page.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

@@ -15,7 +15,7 @@ assert.match(registry, /export const DEFAULT_BOOKING_SKIN: BookingSkin = \{[^}]*
 assert.match(registry, /return SKINS\[`\$\{layout\.rendererKey\}@\$\{layout\.rendererVersion \|\| 1\}`\] \|\| DEFAULT_BOOKING_SKIN/, "an unknown design falls back to the default skin");
 const skinPackages = [...registry.matchAll(/^import .* from "\.\/([^/"]+)\/booking";$/gm)].map((match) => match[1]);
 assert.ok(skinPackages.includes("bloom-v3") && skinPackages.includes("meron-v3"), "Bloom v3 and Meron v3 have skins");
-for (const name of skinPackages) assert.ok(/-v3$/.test(name), `${name}: only v3 packages have skins`);
+for (const name of skinPackages) assert.ok(/-v3$/.test(name) || name === "ergata-v2", `${name}: only v3 packages (and Ergata v2, at v3 parity) have skins`);
 
 // Every template's booking skin stays inside its own package.
 for (const directory of fs.readdirSync(templates)) {
@@ -36,7 +36,12 @@ for (const directory of fs.readdirSync(templates)) {
   }
   assert.ok(!/animation\s*:/.test(css) || /prefers-reduced-motion/.test(css), `${directory} skin animations stop with reduced motion`);
   assert.ok(!/useScrollProgress|useMarquee|useCountUp|data-scroll|data-count/.test(source.replace(/\/\*[\s\S]*?\*\//g, "")), `${directory} skin keeps booking pages calm`);
+  // Each template's booking CSS is its own file, loaded only on that template's booking pages.
+  assert.ok(!/^import\s+["']\.\/booking\.css["']/m.test(source), `${directory} skin must not import booking.css statically (use style: () => import("./booking.css"))`);
+  assert.match(source, /style: \(\) => import\("\.\/booking\.css"\)/, `${directory} skin loads its stylesheet lazily`);
 }
+assert.match(registry, /export function loadBookingSkinStyle\(/, "the registry loads a skin's stylesheet on demand");
+assert.match(read("src/pages/booking-v2/components/skin/index.tsx"), /loadBookingSkinStyle\(skin\)/, "the booking pages load the stylesheet of their own skin only");
 
 // The shared flow: one skin hook, the backdrop uses the smallest file and never loads eagerly with high priority.
 const skin = read("src/pages/booking-v2/components/skin/index.tsx");
@@ -72,4 +77,19 @@ assert.match(read("src/public-experience/templates/tena-v3/booking.css"), /\.bk-
 for (const file of ["bloom-v2/BloomTemplate.tsx", "meron-v2/MeronTemplate.tsx", "abugida-v2/AbugidaTemplate.tsx", "tena-v2/TenaTemplate.tsx", "selam-v2/SelamTemplate.tsx"]) {
   assert.match(read(`src/public-experience/templates/${file}`), /paths=\{snapshot\.bookingPaths\}/, `${file} handoff links its services`);
 }
+// Ergata v2: an arched skin; the independent scheduler shows the photo of the place, the steps, haptics and the moment.
+assert.ok(skinPackages.includes("ergata-v2"), "Ergata v2 has a skin");
+const ergataSkin = read("src/public-experience/templates/ergata-v2/booking.tsx");
+assert.match(ergataSkin, /key: "ergata-therapy@2"/, "the Ergata skin is keyed by renderer version 2");
+assert.match(ergataSkin, /frame: "arch"/, "Ergata frames photos in arches");
+assert.match(ergataSkin, /formatPhotoRoles: \{ in_person: "office\.ergata", online: "online\.ergata" \}/, "Ergata shows the place's photo by how the session meets");
+const ergata = read("src/public-experience/templates/ergata-v2/ErgataTemplate.tsx");
+assert.match(ergata, /<a className="eg2-session-book" href=\{href\} lang=\{locale\}/, "Ergata handoff rows are links in the page language");
+assert.match(ergata, /paths=\{snapshot\.bookingPaths\}/, "Ergata handoff rows open each session's own scheduler");
+const independent = read("src/pages/public-experience/independent-booking.tsx");
+assert.match(independent, /<BookingSteps step=/, "the independent scheduler shows the skin's steps");
+assert.match(independent, /formatPhotoSource\(/, "the independent scheduler carries the place's photo into the summary");
+assert.match(independent, /haptic\(['"]select['"]\)/, "choosing a time gives a short tap");
+assert.match(independent, /haptic\(['"]success['"]\)/, "a booking gives the success tap");
+assert.match(independent, /<TemplateMoment /, "the independent confirmation shows the template's moment");
 console.log("booking-skin: all checks passed");

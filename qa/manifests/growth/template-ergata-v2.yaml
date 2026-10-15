@@ -1,0 +1,245 @@
+# Ergata v2 (v3 parity), light, full motion: every section in en (desktop) and am (phone).
+# Fixture: appointment.tests.template_ergata_qa_fixtures.setup, then appointment.tests.template_ergata_v2_qa_fixtures.setup
+# (this manifest books nothing; do not run the Ergata cleanup). `preview-time` holds the Addis clock (development builds only).
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-template-ergata-v2
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.template_ergata_v2_qa_fixtures.browser_values
+scenarios:
+- id: ergata_v2_en_desktop
+  title: Ergata v2 landing (en, desktop, light)
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /{qa_ergata_slug}?display=light&preview-time=10:30
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="ergata-therapy-v2"][data-pe-recipe="ergata-therapy"]'
+    - type: text_contains
+      value: Good morning
+  actions:
+  - action: wait_for
+    selector: .eg2-hero-photo img
+  - action: wait_for
+    selector: '[data-qa="ergata-next-free"]'
+  - action: screenshot
+    name: ergata_v2_en_desktop-1-hero.png
+    full_page: false
+  - action: click
+    selector: '#eg2-needs-title'
+  - action: wait_for
+    selector: :nth-match(.eg2-needs-list > li, 6)
+  - action: screenshot
+    name: ergata_v2_en_desktop-2-needs.png
+    full_page: false
+  - action: click
+    selector: '#eg2-approach-title'
+  - action: wait_for
+    selector: .eg2-approach .eg2-approach-path
+  - action: screenshot
+    name: ergata_v2_en_desktop-3-approach-deep-band.png
+    full_page: false
+  - action: click
+    selector: '#eg2-steps-title'
+  - action: screenshot
+    name: ergata_v2_en_desktop-4-first-session.png
+    full_page: false
+  - action: click
+    selector: '#eg2-sessions-title'
+  - action: wait_for
+    selector: :nth-match([data-qa="ergata-session-book"], 6)
+  - action: wait_for
+    selector: '[data-qa="ergata-session-next-0"]'
+  - action: screenshot
+    name: ergata_v2_en_desktop-5-sessions.png
+    full_page: false
+  - action: click
+    selector: '#eg2-people-title'
+  - action: wait_for
+    selector: '[data-qa="ergata-person-next-0"]'
+  - action: screenshot
+    name: ergata_v2_en_desktop-6-therapist.png
+    full_page: false
+  - action: click
+    selector: '#eg2-voices-title'
+  - action: wait_for
+    selector: '[data-qa="ergata-voices"][data-marquee="running"]'
+  - action: wait_for
+    selector: .eg2-voices-art img
+  - action: click
+    selector: '[data-qa="ergata-voices-pause"]'
+  - action: wait_for
+    selector: '[data-qa="ergata-voices"][data-marquee="paused"]'
+  - action: screenshot
+    name: ergata_v2_en_desktop-7-kind-words-paused.png
+    full_page: false
+  - action: click
+    selector: '#eg2-faq-title'
+  - action: click
+    selector: :nth-match([data-qa="ergata-faq-item"] summary, 2)
+  - action: screenshot
+    name: ergata_v2_en_desktop-8-faq.png
+    full_page: false
+  - action: click
+    selector: '#eg2-visit-title'
+  - action: wait_for
+    selector: '[data-qa="ergata-place-office"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="ergata-open-now"], 2)
+  - action: click
+    selector: '[data-qa="ergata-habesha-toggle"]'
+  - action: wait_for
+    selector: :nth-match(.eg2-hours dd:has-text("ሰዓት"), 1)
+  - action: screenshot
+    name: ergata_v2_en_desktop-9-places-habesha.png
+    full_page: false
+  - action: click
+    selector: '#eg2-band-title'
+  - action: wait_for
+    selector: '[data-qa="ergata-band-next"]'
+  - action: screenshot
+    name: ergata_v2_en_desktop-10-band.png
+    full_page: false
+  - action: click
+    selector: '#eg2-sessions-title'
+  - action: wait_for
+    selector: '[data-qa="ergata-dots"][data-hidden="false"]'
+  - action: screenshot
+    name: ergata_v2_en_desktop-11-section-dots.png
+    full_page: false
+  - action: screenshot
+    name: ergata_v2_en_desktop-12-full.png
+    full_page: true
+  - &id001
+    action: get_console_errors
+  - &id002
+    action: get_network_errors
+- id: ergata_v2_am_mobile
+  title: Ergata v2 landing (am, phone, light)
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /{qa_ergata_slug}/am?display=light&preview-time=10:30
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="ergata-therapy-v2"][data-pe-recipe="ergata-therapy"]'
+    - type: text_contains
+      value: እንደምን አደሩ
+  actions:
+  - action: wait_for
+    selector: .eg2-hero-photo img
+  - action: wait_for
+    selector: '[data-qa="ergata-next-free"]'
+  - action: screenshot
+    name: ergata_v2_am_mobile-1-hero.png
+    full_page: false
+  - action: click
+    selector: '#eg2-needs-title'
+  - action: wait_for
+    selector: :nth-match(.eg2-needs-list > li, 6)
+  - action: screenshot
+    name: ergata_v2_am_mobile-2-needs.png
+    full_page: false
+  - action: click
+    selector: '#eg2-approach-title'
+  - action: wait_for
+    selector: .eg2-approach .eg2-approach-path
+  - action: screenshot
+    name: ergata_v2_am_mobile-3-approach-deep-band.png
+    full_page: false
+  - action: click
+    selector: '#eg2-steps-title'
+  - action: screenshot
+    name: ergata_v2_am_mobile-4-first-session.png
+    full_page: false
+  - action: click
+    selector: '#eg2-sessions-title'
+  - action: wait_for
+    selector: :nth-match([data-qa="ergata-session-book"], 6)
+  - action: wait_for
+    selector: '[data-qa="ergata-session-next-0"]'
+  - action: screenshot
+    name: ergata_v2_am_mobile-5-sessions.png
+    full_page: false
+  - action: click
+    selector: '#eg2-people-title'
+  - action: wait_for
+    selector: '[data-qa="ergata-person-next-0"]'
+  - action: screenshot
+    name: ergata_v2_am_mobile-6-therapist.png
+    full_page: false
+  - action: click
+    selector: '#eg2-voices-title'
+  - action: wait_for
+    selector: '[data-qa="ergata-voices"][data-marquee="running"]'
+  - action: wait_for
+    selector: .eg2-voices-art img
+  - action: click
+    selector: '[data-qa="ergata-voices-pause"]'
+  - action: wait_for
+    selector: '[data-qa="ergata-voices"][data-marquee="paused"]'
+  - action: screenshot
+    name: ergata_v2_am_mobile-7-kind-words-paused.png
+    full_page: false
+  - action: click
+    selector: '#eg2-faq-title'
+  - action: click
+    selector: :nth-match([data-qa="ergata-faq-item"] summary, 2)
+  - action: screenshot
+    name: ergata_v2_am_mobile-8-faq.png
+    full_page: false
+  - action: click
+    selector: '#eg2-visit-title'
+  - action: wait_for
+    selector: '[data-qa="ergata-place-office"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="ergata-open-now"], 2)
+  - action: wait_for
+    selector: '[data-qa="ergata-habesha-toggle"][aria-pressed="true"]'
+  - action: wait_for
+    selector: :nth-match(.eg2-hours dd:has-text("ሰዓት"), 1)
+  - action: screenshot
+    name: ergata_v2_am_mobile-9-places-habesha.png
+    full_page: false
+  - action: click
+    selector: '#eg2-band-title'
+  - action: wait_for
+    selector: '[data-qa="ergata-band-next"]'
+  - action: screenshot
+    name: ergata_v2_am_mobile-10-band.png
+    full_page: false
+  - action: wait_for
+    selector: '[data-qa="ergata-sticky-book"][data-show="false"]'
+  - action: scroll
+    delta_y: -900
+  - action: click
+    selector: '#eg2-sessions-title'
+  - action: wait_for
+    selector: '[data-qa="ergata-sticky-book"][data-show="true"]'
+  - action: screenshot
+    name: ergata_v2_am_mobile-11-sticky-bar.png
+    full_page: false
+  - action: screenshot
+    name: ergata_v2_am_mobile-12-full.png
+    full_page: true
+  - *id001
+  - *id002

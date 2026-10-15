@@ -1,0 +1,426 @@
+{
+  "kind": "imagery",
+  "contract": "appointment-imagery.v1",
+  "key": "ergata-rooms",
+  "version": 2,
+  "assets": {
+    "hero.ergata": {
+      "src": "/assets/appointment/brand-experience/support/ergata-v2/hero.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/ergata-v2/hero-m.webp",
+      "alt": "Morning light through a linen curtain falls on an olive tree, a clay jug and a glass of water in a quiet room.",
+      "focalPoint": {
+        "x": 0.42,
+        "y": 0.6
+      },
+      "fit": "cover",
+      "width": 1040,
+      "height": 1300,
+      "mime": "image/webp",
+      "checksum": "sha256:7a8d0d2449143e481d0c85a7b08eb88fb78646dc21fd97391f4a2932119782cd",
+      "provenance": {
+        "source": "generated",
+        "role": "A calm, private room to talk",
+        "license": "project-generated",
+        "review": "Codex image generation (2026-10-12/13), Ergata art direction; no people, text, logos or screens. v2 copies the v1 WebP files and adds AVIF and smaller widths. Night photo: a Codex edit (gpt-6.1-sol, 2026-10-15) of the day photo, same room and objects at dusk."
+      },
+      "mobileWidth": 640,
+      "mobileHeight": 800,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        800
+      ],
+      "darkSrc": "/assets/appointment/brand-experience/support/ergata-v2/hero-night.webp",
+      "darkMobileSrc": "/assets/appointment/brand-experience/support/ergata-v2/hero-night-m.webp",
+      "checksums": {
+        "hero-m.avif": "sha256:982fa754ed94248f70f49cd5db1c4d11264b27f82f7ca76746f5dbd1797895b5",
+        "hero-m.webp": "sha256:6e5441e81b633bfeed2c58f8f33f1aba228cea9669d0a962c00e8f7c56771f99",
+        "hero-night-m.avif": "sha256:90120bf53b66f25a32610d3c3495879f2442611afecb7e1a28ace8ad93f2249d",
+        "hero-night-m.webp": "sha256:1870f15cb7fe90b950c4e2e7c7bda9d7be785bae096091ca8237e8c1422da7b6",
+        "hero-night-w640.avif": "sha256:67818175ab49c672d67aae1b9d22878686413682c8b5b1e786c23f086b7d70c8",
+        "hero-night-w640.webp": "sha256:1af5f69f8130454c1567f8aa26397be60f65c36e2a3012cd51d00ebe191c3b74",
+        "hero-night-w800.avif": "sha256:105a3b8fa9f16764a5181097ba17762fec50fb59a673c9d8fae2d260704d0896",
+        "hero-night-w800.webp": "sha256:95ff22ec48904fc5d390c0949ed339bdf8623154ce75f6cd3342f32e2398daa2",
+        "hero-night.avif": "sha256:87c17a375647b69c477e47a1686a1e41c78d19323729e1856b2e7f9b70724868",
+        "hero-night.webp": "sha256:afa4c925260dbe9c74d431965893fcbd72418015df08db0c25c6e56c289380b0",
+        "hero-w640.avif": "sha256:cc4f19198207fe0fa54ed7a404b62bf43fb7005fdda3452d6389bb0ac149cd58",
+        "hero-w640.webp": "sha256:e2c2571b7ac58345954d6e322bf159721f71e74ed3c41efdd5ef84422bab1c64",
+        "hero-w800.avif": "sha256:8f1c53cab54aba9a896cd0927d0a8cb546cafb35d2f2b8fccb011d39d174a66b",
+        "hero-w800.webp": "sha256:5617f6bba69fbf45eb70b5773cdd95dd3798093b35072326029a57e9a49d7c21",
+        "hero.avif": "sha256:3545441460b80761149bb30696e5d5e1b0d95fe993b720358895d6de5be1ff12"
+      }
+    },
+    "detail.ergata": {
+      "src": "/assets/appointment/brand-experience/support/ergata-v2/room.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/ergata-v2/room-m.webp",
+      "alt": "Two soft armchairs face each other across a small wooden table in a sunlit counselling room.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.55
+      },
+      "fit": "cover",
+      "width": 1440,
+      "height": 960,
+      "mime": "image/webp",
+      "checksum": "sha256:bc55dee466db3aba5d40f54b8494d37573a22fa3f683d942ab1a613977437d58",
+      "provenance": {
+        "source": "generated",
+        "role": "Where the conversation happens",
+        "license": "project-generated",
+        "review": "Codex image generation (2026-10-12/13), Ergata art direction; no people, text, logos or screens. v2 copies the v1 WebP files and adds AVIF and smaller widths."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 480,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "checksums": {
+        "room-m.avif": "sha256:53a420d7024e9fa2d8a7ecd9559735e92c8fa08d126ae015f3270e164aacf602",
+        "room-m.webp": "sha256:30bf068d419b28470488fc0d6da3751382bee40eb30ee8b0e6f51839de2e4d50",
+        "room-w640.avif": "sha256:7022f2034a277c0ada38b2b1314165ee6b106166e259f0b84798bec1c50d15e8",
+        "room-w640.webp": "sha256:d14faebc31b2ebb8ae9c453bf338a6f6389ab8fff2cd3f75b8586db5c1e1db71",
+        "room-w960.avif": "sha256:c6ec008a3d5279ca8dbb49cd7bc851a1a8adfea8b3021939c5da6d958c054b41",
+        "room-w960.webp": "sha256:a8c05223649ac0a9ee85ba3135d69483f98eeb13b5f50425511354c92c6585ed",
+        "room.avif": "sha256:ebf5b17e3e24505f3adfd873e1631c74daf243e9f3112efa10ca2ab85538ab0b"
+      }
+    },
+    "window.ergata": {
+      "src": "/assets/appointment/brand-experience/support/ergata-v2/window.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/ergata-v2/window-m.webp",
+      "alt": "A small clay cup and a sprig of green leaves on a wooden windowsill in soft light.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1440,
+      "height": 961,
+      "mime": "image/webp",
+      "checksum": "sha256:b4c4a65e4bce7d7f6383b0751ed869c9178eef66c2dcf5cb94b7e405bf3601ec",
+      "provenance": {
+        "source": "generated",
+        "role": "A quiet detail of the room",
+        "license": "project-generated",
+        "review": "Codex image generation (2026-10-12/13), Ergata art direction; no people, text, logos or screens. v2 copies the v1 WebP files and adds AVIF and smaller widths."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 480,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640
+      ],
+      "checksums": {
+        "window-m.avif": "sha256:07db29727c4cd3e92149f6aefd7c83215ea2f30a5dd765c44182617b99fcf77c",
+        "window-m.webp": "sha256:f1a5024e7e47f630ff1082d09086dc90e2ab830817326e306e171ba5031b63a2",
+        "window-w640.avif": "sha256:c08ae673abf9ff0e7ad679f02b8feb90bdc12627279ee0b351885240a98e9493",
+        "window-w640.webp": "sha256:65578fe0072d601d9f5fcd2c9d8f38f6253fca71ebced4ab68d6662f7250cb21",
+        "window.avif": "sha256:37e0dc3270ea670a090c045da9ec3fe1a74c4b85bc8884769e10d7b86f3f2c18"
+      }
+    },
+    "needs.ergata": {
+      "src": "/assets/appointment/brand-experience/support/ergata-v2/needs.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/ergata-v2/needs-m.webp",
+      "alt": "Two hands hold a small clay cup of tea against a soft linen sleeve.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1024,
+      "height": 1024,
+      "mime": "image/webp",
+      "checksum": "sha256:1b0224cfed837fa23c91f5edc7a6cbd7e51baffd63bfa7b41ddc47c3af283dfb",
+      "provenance": {
+        "source": "generated",
+        "role": "You do not need the right words yet",
+        "license": "project-generated",
+        "review": "Codex image generation (2026-10-12/13), Ergata art direction; no people, text, logos or screens. v2 copies the v1 WebP files and adds AVIF and smaller widths."
+      },
+      "mobileWidth": 640,
+      "mobileHeight": 640,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        560
+      ],
+      "checksums": {
+        "needs-m.avif": "sha256:bc3e61f8891493f3a709e1696c7d297210d03d5e6a559a10959cc7599f375e6b",
+        "needs-m.webp": "sha256:8af5c8d090e7810b582a773f7c08af8c4aa3ce69ab4c45ad6380083f389a0176",
+        "needs-w560.avif": "sha256:bc36fc5815eb5b4171ca7e058096a98e157d9aac05c0076b9946d822fc82901f",
+        "needs-w560.webp": "sha256:d0dbdc42e4bc269411ad975a2a116df2bbe9231717ceb82f36ef1c85da240aa5",
+        "needs.avif": "sha256:5dde91aed2ef4f9f1c68c871d86226c9dfdcedc16a62bed19a94eb9cf4d723b7"
+      }
+    },
+    "approach.ergata": {
+      "src": "/assets/appointment/brand-experience/support/ergata-v2/approach.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/ergata-v2/approach-m.webp",
+      "alt": "An earth path winds uphill between tall eucalyptus trees in soft morning light.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.6
+      },
+      "fit": "cover",
+      "width": 880,
+      "height": 1100,
+      "mime": "image/webp",
+      "checksum": "sha256:1158b383795f533dcc97a840e4ad12a26b445136fed30a7b3c9c170ad7decba7",
+      "provenance": {
+        "source": "generated",
+        "role": "A walk at your own pace",
+        "license": "project-generated",
+        "review": "Codex image generation (2026-10-12/13), Ergata art direction; no people, text, logos or screens. v2 copies the v1 WebP files and adds AVIF and smaller widths."
+      },
+      "mobileWidth": 640,
+      "mobileHeight": 800,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        560
+      ],
+      "checksums": {
+        "approach-m.avif": "sha256:4a4fc11d75d583a8bf906c8ebd7775b01e782df5060be010935d86b37a435885",
+        "approach-m.webp": "sha256:3830cb8b6e9c6538cac1773976a56894e09a495631f0d83e67d32190aa8502c3",
+        "approach-w560.avif": "sha256:adf7a6a32048506cad0640024a4efc34a6034e3f78eb46b599f3803563fcf796",
+        "approach-w560.webp": "sha256:977b4bcc121d4cc55b2f45b582175f91bc0f7bc50d970bc5dbf7dabf1c8349a7",
+        "approach.avif": "sha256:2ca57939dda86b2a0564a99f4032e5d20f0be02d5060044d21399521e5bb7667"
+      }
+    },
+    "faq.ergata": {
+      "src": "/assets/appointment/brand-experience/support/ergata-v2/faq.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/ergata-v2/faq-m.webp",
+      "alt": "A black clay coffee pot and two small cups on a low wooden table by a sunlit window.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.65
+      },
+      "fit": "cover",
+      "width": 1024,
+      "height": 1280,
+      "mime": "image/webp",
+      "checksum": "sha256:0d9d67e45e6d84020e8b3ff5912b0aa0173794377c931f4e6676b92f19ae433f",
+      "provenance": {
+        "source": "generated",
+        "role": "Time to ask anything",
+        "license": "project-generated",
+        "review": "Codex image generation (2026-10-12/13), Ergata art direction; no people, text, logos or screens. v2 copies the v1 WebP files and adds AVIF and smaller widths."
+      },
+      "mobileWidth": 640,
+      "mobileHeight": 800,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        560
+      ],
+      "checksums": {
+        "faq-m.avif": "sha256:04abc06fb62d4b62f9c2d3b6c66a118af055093b026e98b8f93764c44b4f6a86",
+        "faq-m.webp": "sha256:e8eb2d29bde53f5bc6b230ded1e719a4c81756ff67b4bed0f387daf88bb213b9",
+        "faq-w560.avif": "sha256:6d85533389e05a10e55ead248c3413942bb17664588a52f4ac6f41ff81045349",
+        "faq-w560.webp": "sha256:f83822d05381df9a1ba257a6770fb1e937a61634eba4a43ff3ad5dfea4ccb4aa",
+        "faq.avif": "sha256:0c4c1e13248f9ec764afc51fce2402865579aaef3238267a9158e916e8e63a28"
+      }
+    },
+    "office.ergata": {
+      "src": "/assets/appointment/brand-experience/support/ergata-v2/office.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/ergata-v2/office-m.webp",
+      "alt": "A wooden door with an arched top stands open at the top of stone steps between large potted plants.",
+      "focalPoint": {
+        "x": 0.45,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1440,
+      "height": 960,
+      "mime": "image/webp",
+      "checksum": "sha256:c73495832e1f5c4406a462eeb426c4737dcc08c78830eb0e627b2ccade01a2bf",
+      "provenance": {
+        "source": "generated",
+        "role": "The office entrance",
+        "license": "project-generated",
+        "review": "Codex image generation (2026-10-12/13), Ergata art direction; no people, text, logos or screens. v2 copies the v1 WebP files and adds AVIF and smaller widths."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 480,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "checksums": {
+        "office-m.avif": "sha256:d298cbae69b6e3b1745413d2eaa21568267048c6db9910f6c2ed7e325852cb6e",
+        "office-m.webp": "sha256:1d97b721c3fe4820d5be788f43d68e7449efdbea137ee940dffb7207693dd343",
+        "office-w640.avif": "sha256:b880941db0762da308c15162f1501f1c6f3a2739e90fd9f2aaa346461be76317",
+        "office-w640.webp": "sha256:ceff1aa0890569cb7b7d55e2b156605c20a681199d254cd116768b8648845a67",
+        "office-w960.avif": "sha256:ba95641848849e01fe854bebc69b2217c41f8cfe157471ee8d1c6cdad72f2057",
+        "office-w960.webp": "sha256:4513e444e9593eec5f7070e9000394b7b236bdd133ec7ca9fbbaf8df51a7cdcd",
+        "office.avif": "sha256:c6d59eb4ea924b6ebe0e6875bd2e73416e655f8e9841f7a8cd74e41df08b0522"
+      }
+    },
+    "online.ergata": {
+      "src": "/assets/appointment/brand-experience/support/ergata-v2/online.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/ergata-v2/online-m.webp",
+      "alt": "A laptop, a cup of tea and a notebook on a wooden desk by a sheer curtain, ready for a video session.",
+      "focalPoint": {
+        "x": 0.6,
+        "y": 0.55
+      },
+      "fit": "cover",
+      "width": 1440,
+      "height": 960,
+      "mime": "image/webp",
+      "checksum": "sha256:bbc8cc94e64310d71afb9ad3ea0844a42e28d07d938e266cc80aa0a6596b27bf",
+      "provenance": {
+        "source": "generated",
+        "role": "A private corner for an online session",
+        "license": "project-generated",
+        "review": "Codex image generation (2026-10-12/13), Ergata art direction; no people, text, logos or screens. v2 copies the v1 WebP files and adds AVIF and smaller widths."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 480,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "checksums": {
+        "online-m.avif": "sha256:9a52cc18300583e884bce3d1085cbeb0ab8917100bfec44783dab2c726accfcd",
+        "online-m.webp": "sha256:0573e10e25e35a5a10a7309c465acf7cac47ca34a4b2481e375aab71a8831c19",
+        "online-w640.avif": "sha256:7fc5218da6883c2b48be5794642fa62db988ff37d8a67aa9da6e949a4e81e0cb",
+        "online-w640.webp": "sha256:798ce46552af518a6b04e7101aee77c9bac285d87f9bbedca15f5d06fa09f66d",
+        "online-w960.avif": "sha256:225b4ff98c927a1dd7cbeb6635dbf3429a7cfef3e65dfe23fcd81648a43c4c86",
+        "online-w960.webp": "sha256:507f1114911eb00890f14ba7402032b423415b595345efc15281cebabaf1d07c",
+        "online.avif": "sha256:e070df37708f660be7fccd18c66f2feee374f5034aa15b735f2e57454de3388b"
+      }
+    },
+    "band.ergata": {
+      "src": "/assets/appointment/brand-experience/support/ergata-v2/band.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/ergata-v2/band-m.webp",
+      "alt": "An arched window opens onto a soft dawn sky over green hills.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.45
+      },
+      "fit": "cover",
+      "width": 960,
+      "height": 1280,
+      "mime": "image/webp",
+      "checksum": "sha256:71f73414e0b642c412dbd6f794d43ca0f232c0abba6c2fad1b0b0d4171ea7e95",
+      "provenance": {
+        "source": "generated",
+        "role": "When you feel ready",
+        "license": "project-generated",
+        "review": "Codex image generation (2026-10-12/13), Ergata art direction; no people, text, logos or screens. v2 copies the v1 WebP files and adds AVIF and smaller widths. Night photo: a Codex edit (gpt-6.1-sol, 2026-10-15) of the day photo, same room and objects at dusk."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 800,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        480
+      ],
+      "darkSrc": "/assets/appointment/brand-experience/support/ergata-v2/band-night.webp",
+      "darkMobileSrc": "/assets/appointment/brand-experience/support/ergata-v2/band-night-m.webp",
+      "checksums": {
+        "band-m.avif": "sha256:56725ecbaf4b3a488496dd3c48c75fc362739a81b06c6d562b59c8b05cf52185",
+        "band-m.webp": "sha256:099ce0a69450aeab83b117249241560c03d070d073ed8db21b3a947a6927ac51",
+        "band-night-m.avif": "sha256:457a1c0cd487f847fcad06e81512de647e713b923c252a3c8d269898326b6dc6",
+        "band-night-m.webp": "sha256:54960ddad548042bfc6a7e03d4e6fe1ae1a4c3dbf9defe8a895b8e0c32fb2e73",
+        "band-night-w480.avif": "sha256:df2692148e2a15e7879451b5a119d130ac97216c9979199bcc2159d25ff01d67",
+        "band-night-w480.webp": "sha256:32d6a354720023a50caedc64b13207953c3ed45d9050383b5b19c0c7d7c19d6d",
+        "band-night.avif": "sha256:fe4c414674aef84d90347b4aeefba08a71e213f25303639417e161a574791b37",
+        "band-night.webp": "sha256:b54c612f501a7901d06aa42fb433edd55e27594aa57090f9d8ad849cdfbaa4f1",
+        "band-w480.avif": "sha256:c5dc16c918db0b5c36bcd1d0c34692d89c6222e0c4bae286dcec6fff6a9dd07d",
+        "band-w480.webp": "sha256:2a018e37f66e1e9ffdaee3a34c53a67a5755e0062ca61f3e8eb72f8167bc5474",
+        "band.avif": "sha256:25981f95b4184382c4b8df649d86c5668248df09ffc5cc95937423c3c8004cf1"
+      }
+    },
+    "testimonial.ergata": {
+      "src": "/assets/appointment/brand-experience/support/ergata-v2/testimonial.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/ergata-v2/testimonial-m.webp",
+      "alt": "Two small cups, one clay and one white, on a wooden windowsill in the late afternoon sun.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.7
+      },
+      "fit": "cover",
+      "width": 960,
+      "height": 960,
+      "mime": "image/webp",
+      "checksum": "sha256:268d2a205ef99a9e0b557d4543815497f4f3d5b13974ef88ebe8615cfbf4b31d",
+      "provenance": {
+        "source": "generated",
+        "role": "Kind words",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Ergata art direction; no faces, text, logos or readable screens."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 600,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        560
+      ],
+      "checksums": {
+        "testimonial-m.avif": "sha256:c08182a01b002355db3d59dc14fa77fff7f4a36f093057967ee4d069092edbe8",
+        "testimonial-m.webp": "sha256:c562d34adec03a41ba8a12f612acc805ca97a443b69189c13c7b76c5a4d7eaf5",
+        "testimonial-w560.avif": "sha256:75827f410097620713c53d25766d0e7595b93994b0d9427bf8315d2b438e571e",
+        "testimonial-w560.webp": "sha256:49d3c9be665a6072c6a5968f9cd9e8091b44cf04ff78dbe667c8a265d35c6785",
+        "testimonial.avif": "sha256:4bd95d598ef3b1c1bbaf2d2165f88e9250c93c78a5bf75441ea632a3d695b1af"
+      }
+    },
+    "contact.ergata": {
+      "src": "/assets/appointment/brand-experience/support/ergata-v2/contact.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/ergata-v2/contact-m.webp",
+      "alt": "A hand writes with a pencil in an open notebook next to a cup of tea and a phone lying face down.",
+      "focalPoint": {
+        "x": 0.6,
+        "y": 0.55
+      },
+      "fit": "cover",
+      "width": 1440,
+      "height": 960,
+      "mime": "image/webp",
+      "checksum": "sha256:7399d89286893cd411e123233f6afbe1523f5d94ceca17139c3ee04755effc11",
+      "provenance": {
+        "source": "generated",
+        "role": "Ask a question first",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Ergata art direction; no faces, text, logos or readable screens."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 540,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "checksums": {
+        "contact-m.avif": "sha256:4d91310d0c89ae27257488ab47f78c6b55d080a00c700795ae68d4bd06b0477c",
+        "contact-m.webp": "sha256:5f8c02cb34e0cff88815a2ca8533b3046f57ec8f9234df25d5688cdbd2dc6a12",
+        "contact-w640.avif": "sha256:747b4b605bdc37e3f8e7f9126f7af96e42dec9d642ea266806c3a3028d91c221",
+        "contact-w640.webp": "sha256:196bd6e3f18e083b0c10fc3a9a0147e7eee2c79de7be86449a6c3193a24894a4",
+        "contact-w960.avif": "sha256:16004503d2ed7f85c54e3ce616df1bdc1dd45731a960a88dffe855da0b15354e",
+        "contact-w960.webp": "sha256:12ee2bb576c08259eb6cf7e01f1b75af279c14b632d8db65b197fbdb231f96be",
+        "contact.avif": "sha256:e1d861429557bb499889974136dd8f6c79aad20155ca2d91a7e66eacaf593144"
+      }
+    }
+  }
+}

@@ -18,7 +18,9 @@ import { CUSTOMER_REFERRAL_SOURCE, customerRefFor } from '@/lib/referral-link';
 import { usePlatformBrand } from '@/lib/platform-brand';
 import { useTheme } from '@/components/theme-provider';
 import { useBookingBrand } from '@/public-experience/bookingTheme';
-import { BookingBackdrop, useBookingSkin } from '@/pages/booking-v2/components/skin';
+import { BookingBackdrop, BookingSteps, ServicePhoto, formatPhotoSource, useBookingSkin } from '@/pages/booking-v2/components/skin';
+import { haptic } from '@/public-experience/templates/kit/haptics';
+import { TemplateMoment } from '@/public-experience/templates/moments';
 import { parseFrappeErrorMsg } from '@/lib/utils';
 import { useTranslation } from '@/lib/i18n';
 import '@/public-experience/platform.css';
@@ -26,8 +28,9 @@ import { useOnlineLabel } from '@/components/online-session/JoinSession';
 import type { LocationType } from '@/lib/online-session';
 import { BookingConfirmed, DetailsForm, type Booked, type Contact, type TimeFormat } from './independent-booking-parts';
 import { normalizePhone } from '@/lib/phone';
+import { localName, type LocalNames } from '@/lib/local-names';
 
-interface Offering { site_slug?: string | null; provider_slug?: string | null; business_name: string; service: string; duration: number; timezone: string; allow_quantity?: number; max_quantity?: number; location?: { name?: string; address?: string; location_type?: LocationType; platform?: string } }
+interface Offering { site_slug?: string | null; provider_slug?: string | null; business_name: string; business_local_name?: LocalNames; service: string; duration: number; timezone: string; allow_quantity?: number; max_quantity?: number; location?: { name?: string; address?: string; location_type?: LocationType; platform?: string } }
 interface SlotRow { start_time: string; end_time: string; available: boolean }
 
 const ALL_DAYS = [0, 1, 2, 3, 4, 5, 6];
@@ -71,6 +74,13 @@ export default function IndependentBooking() {
   const brand = useBookingBrand(offering?.site_slug || undefined, resolvedTheme === 'dark' ? 'dark' : 'light');
   // The template's booking skin (tokens, frames and the faint page background), as on organization pages.
   const skin = useBookingSkin(brand.config, brand.style, resolvedTheme === 'dark' ? 'dark' : 'light');
+  // A template skin draws the steps and frames the photo of the place where the session meets.
+  const skinned = skin.skin.key !== 'default';
+  const placePhoto = formatPhotoSource(skin, offering?.location?.location_type === 'online' ? 'online' : offering?.location ? 'in_person' : undefined);
+  // While a website's design loads, an empty frame keeps the photo's place (no layout shift).
+  const summaryMedia = placePhoto ? <ServicePhoto asset={placePhoto} sizes="88px" />
+    : offering?.site_slug && !brand.resolved ? <span className="bk-photo" aria-hidden="true" /> : undefined;
+  const layout = brand.config?.compiledDesign.layout;
   const { slots, loading: slotsLoading } = useSlots(offeringId, date, quantity);
   const { call, loading } = useFrappePostCall('appointment.scheduler.booking.book');
 
@@ -87,6 +97,7 @@ export default function IndependentBooking() {
         user_phone: normalizePhone(contact.phone), user_email: contact.email.trim(), request_id: requestId,
         ...(contact.participants.length ? { participant_phones: contact.participants.join(',') } : {}),
         ...(quantity > 1 ? { quantity } : {}), ...referralTerms() });
+      haptic('success');
       setBooking({ id: response.message.booking_id, emailed: response.message.notification_status === 'queued', managePath: response.message.manage_path, slot, quantity });
     } catch (reason) { setProblem(parseFrappeErrorMsg(reason as Parameters<typeof parseFrappeErrorMsg>[0])); }
   }
@@ -123,10 +134,11 @@ export default function IndependentBooking() {
         description={failed ? t('bookingStates.errorBody') : t('public.independentBooking.unavailable')} actions={actions} />
     </div>;
   } else if (!offering) body = <TimePickerSkeleton label={t('public.independentBooking.loading')} />;
-  else if (booking) body = <BookingConfirmed booking={booking} timeFormat={timeFormat} timezone={offering.timezone} online={online} />;
+  else if (booking) body = <BookingConfirmed booking={booking} timeFormat={timeFormat} timezone={offering.timezone} online={online}
+    moment={layout ? <TemplateMoment rendererKey={layout.rendererKey} rendererVersion={layout.rendererVersion} /> : null} />;
   else if (step === 'details' && slot) body = <div className="mx-auto grid max-w-5xl gap-5 lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)] lg:items-start">
-    <BookingSummaryCard eyebrow={fill(t('public.independentBooking.title'), offering.business_name)} title={offering.service}
-      titleQa="independent-booking-service" facts={facts} />
+    <BookingSummaryCard eyebrow={fill(t('public.independentBooking.title'), localName(offering.business_local_name, language, offering.business_name))} title={offering.service}
+      titleQa="independent-booking-service" facts={facts} media={summaryMedia} />
     <DetailsForm slot={slot} timeFormat={timeFormat} timezone={offering.timezone} quantity={quantity}
       contact={contact} onContact={setContact} showErrors={showErrors} onPhoneValid={setPhoneValid} onParticipantsValid={setParticipantsValid}
       onChangeTime={() => setStep('time')}
@@ -137,33 +149,35 @@ export default function IndependentBooking() {
     <DateTimeSelector selectedDate={date} displayMonth={month} onMonthChange={setMonth}
       onDateSelect={(next) => { setDate(next); setSlot(null); }}
       availableDays={ALL_DAYS} minDate={new Date()} maxDate={addDays(new Date(), BOOKING_WINDOW_DAYS)}
-      availableSlots={slots} selectedSlot={slot} onSlotSelect={setSlot} loading={slotsLoading}
+      availableSlots={slots} selectedSlot={slot} onSlotSelect={(next) => { setSlot(next); haptic('select'); }} onSlotClear={() => setSlot(null)} loading={slotsLoading}
       timeFormat={timeFormat} onTimeFormatChange={setChosenFormat} timezone={offering.timezone}
       serviceName={offering.service} duration={offering.duration}
-      summary={<>{allServices}<BookingSummaryCard eyebrow={fill(t('public.independentBooking.title'), offering.business_name)} title={offering.service}
-        titleQa="independent-booking-service" facts={facts} /></>}
+      summary={<>{allServices}<BookingSummaryCard eyebrow={fill(t('public.independentBooking.title'), localName(offering.business_local_name, language, offering.business_name))} title={offering.service}
+        titleQa="independent-booking-service" facts={facts} media={summaryMedia} /></>}
       extras={Boolean(offering.allow_quantity) && <QuantityPicker className="bk-card" value={quantity} max={Math.max(1, Number(offering.max_quantity) || 1)}
         onChange={(next) => { setQuantity(next); setSlot(null); }} />}
       action={{ label: t('bookingLayout.continue'), onClick: () => setStep('details') }}
-      footer={myBookings} />
+      footer={<>{myBookings}{growth.poweredByPages && <PoweredBy variant="inline" source="powered_by_page" showCta={false} />}</>} />
   </>;
 
   return <div className="booking-experience min-h-screen text-theme-primary" data-qa="independent-booking"
     data-booking-branded={brand.config ? 'true' : 'false'} data-pe-recipe={brand.config?.recipeKey}
     {...skin.attrs} style={{ ...skin.style, '--bk-top': HEADER_HEIGHT, backgroundColor: 'var(--bg-primary)' } as CSSProperties}>
     <BookingBackdrop active={skin} />
-    <header className="sticky top-0 z-50 border-b border-theme-subtle backdrop-blur-xl" style={{ height: HEADER_HEIGHT, backgroundColor: 'color-mix(in srgb, var(--bg-primary) 92%, transparent)' }}>
-      <div className="mx-auto flex h-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
+    <header className={`sticky top-0 z-50 backdrop-blur-xl ${skinned ? 'bk-header' : 'border-b border-theme-subtle'}`} {...(skinned ? skin.attrs : {})}
+      style={{ height: HEADER_HEIGHT, ...(skinned ? {} : { backgroundColor: 'color-mix(in srgb, var(--bg-primary) 92%, transparent)' }) }}>
+      <div className="bk-header-inner mx-auto flex h-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
         {step === 'details' && !booking ? (
           <button type="button" className="booking-back" onClick={() => setStep('time')} aria-label={t('schedulerPage.previousStep')} data-qa="independent-booking-back">
             <ArrowLeft className="h-4 w-4" aria-hidden="true" /><span>{t('schedulerPage.back')}</span>
           </button>
         ) : null}
         <span className="min-w-0 flex-1 truncate font-semibold" data-qa="independent-booking-business" style={{ fontFamily: 'var(--booking-font-display)' }}>
-          {offering?.business_name ?? (unavailable ? '' : <span className="bk-bone inline-block h-4 w-40 align-middle" aria-hidden="true" />)}
+          {(offering ? localName(offering.business_local_name, language, offering.business_name) : null) ?? (unavailable ? '' : <span className="bk-bone inline-block h-4 w-40 align-middle" aria-hidden="true" />)}
         </span>
+        {skinned && offering && !unavailable && <BookingSteps step={booking ? 'done' : step} skin={skin.skin} />}
         <div className="booking-header-actions">
-          {offering && !booking && <span className="booking-step" aria-live="polite">{t(step === 'time' ? 'schedulerPage.stepTime' : 'schedulerPage.stepDetails')}</span>}
+          {offering && !booking && !skinned && <span className="booking-step" aria-live="polite">{t(step === 'time' ? 'schedulerPage.stepTime' : 'schedulerPage.stepDetails')}</span>}
           <LanguageToggle />
           <ThemeSwitch />
         </div>

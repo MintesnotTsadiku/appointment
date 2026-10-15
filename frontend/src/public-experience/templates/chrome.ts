@@ -33,8 +33,11 @@ export interface PublicChrome {
 }
 
 const catalogs = new Map<string, Promise<Record<string, string>>>();
+// Catalogs that have arrived: a page that renders after its catalog arrived paints its own language at once.
+const loadedCatalogs = new Map<string, Record<string, string>>();
 
-function loadMessages(locale: string): Promise<Record<string, string>> {
+/** The server catalog of a language, requested once per page (prefetch.ts starts it before the first render). */
+export function loadChromeMessages(locale: string): Promise<Record<string, string>> {
   if (locale === "en") return Promise.resolve({});
   let pending = catalogs.get(locale);
   if (!pending) {
@@ -44,18 +47,22 @@ function loadMessages(locale: string): Promise<Record<string, string>> {
     })
       .then((response) => (response.ok ? response.json() : null))
       .then((body) => (body?.message?.messages as Record<string, string> | undefined) || {})
-      .catch(() => ({}));
+      .catch(() => ({}))
+      .then((messages) => {
+        loadedCatalogs.set(locale, messages);
+        return messages;
+      });
     catalogs.set(locale, pending);
   }
   return pending;
 }
 
 export function usePublicChrome(locale: string): PublicChrome {
-  const [messages, setMessages] = useState<Record<string, string>>({});
+  const [messages, setMessages] = useState<Record<string, string>>(() => loadedCatalogs.get(locale) || {});
 
   useEffect(() => {
     let active = true;
-    loadMessages(locale).then((next) => {
+    loadChromeMessages(locale).then((next) => {
       if (active) setMessages(next);
     });
     return () => {

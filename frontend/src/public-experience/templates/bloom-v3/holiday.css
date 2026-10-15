@@ -1,0 +1,41 @@
+/* Bloom v3 holiday moment: a plum glass pill on the hero stage, a bulb-ringed mirror with a glossy
+   drawing, and the greeting in the poster face. In the hero copy's flow; it never covers content. */
+.b3-holiday {
+  display: grid; width: fit-content; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 14px;
+  max-width: min(100%, 540px); margin: 14px 0 clamp(22px, 2.6vw, 34px); padding: 8px 20px 8px 10px; border-radius: 999px;
+  color: var(--b3-on-stage); background: color-mix(in srgb, var(--b3-stage-deep) 70%, transparent);
+  border: 1px solid color-mix(in srgb, var(--b3-gold) 45%, transparent);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  box-shadow: 0 16px 40px -22px color-mix(in srgb, var(--b3-gold) 70%, transparent);
+}
+.b3h-mirror { position: relative; width: 60px; height: 60px; flex: none; }
+.b3h-mirror svg { position: absolute; inset: 7px; width: 46px; height: 46px; border-radius: 999px 999px 14px 14px; background: radial-gradient(circle at 50% 30%, #6a2d78, #2a1430); }
+.b3h-mirror i { position: absolute; width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px; border-radius: 50%; background: #ffd58a; box-shadow: 0 0 6px 1px rgba(255, 196, 92, .8); }
+.b3h-petal { fill: #f5a524; }
+.b3h-daisy:nth-child(2) .b3h-petal { fill: #e7a1a8; }
+.b3h-heart { fill: #ffd58a; }
+.b3h-stem { fill: none; stroke: #9fc48d; stroke-width: 2.2; stroke-linecap: round; }
+.b3h-wood { fill: #d9a07b; }
+.b3h-flame { fill: #f5a524; filter: drop-shadow(0 0 4px rgba(245, 165, 36, .8)); transform-box: fill-box; transform-origin: 50% 100%; }
+.b3h-halo { fill: rgba(255, 213, 138, .28); }
+.b3h-wax { fill: #fff7ee; }
+.b3h-umbrella { fill: #e7a1a8; }
+.b3h-fringe { fill: none; stroke: #f5a524; stroke-width: 2; stroke-linecap: round; }
+.b3h-copy { display: grid; gap: 1px; min-width: 0; line-height: 1.25; }
+.b3h-copy strong { font-family: var(--b3-display); font-size: 1.375rem; font-weight: 400; letter-spacing: .02em; text-transform: uppercase; color: #ffd58a; }
+.b3:lang(am) .b3h-copy strong { font-weight: 900; text-transform: none; letter-spacing: 0; }
+.b3h-geez { font-size: .875rem; color: var(--b3-rose); }
+.b3h-line { font-size: .875rem; color: var(--b3-on-stage-muted); }
+.b3:is([data-motion-level="standard"], [data-motion-level="expressive"]) .b3h-flame { animation: b3h-flicker 2.6s ease-in-out infinite; }
+.b3:is([data-motion-level="standard"], [data-motion-level="expressive"]) .b3h-mirror i { animation: b3h-bulb 2.4s ease-in-out infinite; }
+.b3h-mirror i:nth-child(even) { animation-delay: 1.2s !important; }
+@keyframes b3h-flicker { 0%, 100% { transform: scale(1) rotate(-2deg); } 50% { transform: scale(1.06, 1.12) rotate(2deg); } }
+@keyframes b3h-bulb { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
+@media (prefers-reduced-motion: reduce) { .b3-holiday *, .b3-holiday *::before { animation: none !important; } }
+@media (max-width: 760px) {
+  .b3-holiday { gap: 10px; padding: 6px 14px 6px 8px; }
+  .b3h-mirror { width: 48px; height: 48px; }
+  .b3h-mirror svg { inset: 6px; width: 36px; height: 36px; }
+  .b3h-copy strong { font-size: 1.125rem; }
+  .b3h-line { font-size: .8125rem; }
+}

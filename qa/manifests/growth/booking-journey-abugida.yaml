@@ -173,9 +173,9 @@ scenarios:
     name: journey_am-04-chooser.png
     full_page: false
   - action: click
-    selector: '[data-qa="booking-provider"]:has-text("Abel")'
+    selector: '[data-qa="booking-provider"]:has-text("አቤል")'
   - action: wait_for
-    selector: '[data-qa="booking-provider"][aria-pressed="true"]:has-text("Abel")'
+    selector: '[data-qa="booking-provider"][aria-pressed="true"]:has-text("አቤል")'
   - action: screenshot
     name: journey_am-05-chooser-abel.png
     full_page: false

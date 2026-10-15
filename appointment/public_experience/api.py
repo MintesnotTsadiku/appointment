@@ -89,10 +89,10 @@ def switch_website_template(site: str, expected_version: int, recipe_key: str):
 
 @frappe.whitelist(methods=["POST"])
 def save_website_setup(site: str, expected_version: int, step: str, title=None,
-                       sections=None, features=None, brand_inputs=None, booking=None):
+                       sections=None, features=None, brand_inputs=None, booking=None, title_am=None):
     from appointment.public_experience import setup
 
-    return setup.save(site, expected_version, step, title, sections, features, brand_inputs, booking)
+    return setup.save(site, expected_version, step, title, sections, features, brand_inputs, booking, title_am)
 
 
 @frappe.whitelist(methods=["POST"])
@@ -327,6 +327,7 @@ def get_public_experience_snapshot(locale: str | None = None, public_path: str |
         "seo": snapshot.get("seo", {}),
         "booking": snapshot.get("booking", {}),
         "features": snapshot.get("features", []),
+        "localTitle": snapshot.get("localTitle") or {},
         "siteSlug": frappe.db.get_value("Public Site", context.public_site, "slug"),
     }
 

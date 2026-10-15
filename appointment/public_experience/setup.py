@@ -11,7 +11,7 @@ from frappe import _
 from appointment.content import entitlements, tenancy
 from appointment.public_experience import brand_compiler, publisher
 from appointment.public_experience.errors import BrandExperienceError, StaleDraftError
-from appointment.public_experience.recipes import available_recipes, get_recipe
+from appointment.public_experience.recipes import available_recipes, get_recipe, is_retired, latest_version
 from appointment.public_experience.setup_preview import content_examples
 
 STEPS = ("template", "brand", "content", "features", "readiness", "published", "skipped")
@@ -88,8 +88,10 @@ def state(doc):
     profile = frappe.get_doc("Brand Profile", doc.brand_profile)
     from appointment.public_experience.appearance import options
 
-    return {"appearanceOptions": options(get_recipe(doc.recipe_key, doc.recipe_version or None)), "owner": doc.organization or doc.provider, "site": doc.name, "title": doc.site_title, "slug": doc.slug,
+    return {"appearanceOptions": options(get_recipe(doc.recipe_key, doc.recipe_version or None)), "owner": doc.organization or doc.provider, "site": doc.name, "title": doc.site_title, "titleAm": doc.get("site_title_am") or "", "slug": doc.slug,
             "draftVersion": doc.draft_version, "recipeKey": doc.recipe_key,
+            # A site on an older version of its template can upgrade: switch to the latest, then publish.
+            "recipeVersion": int(doc.recipe_version or 0), "latestRecipeVersion": latest_version(doc.recipe_key),
             "profile": profile.name, "brandVersion": profile.draft_version,
             "brandInputs": json.loads(profile.brand_inputs_json or "{}"),
             "identityAssets": {field: profile.get(field) for field in ("logo_primary", "logo_compact", "favicon")},
@@ -122,6 +124,12 @@ def start(owner_type, owner, title, slug, recipe_key, preferences=None):
     profile_name = frappe.db.get_value("Brand Profile", {**scope, "lifecycle": ["!=", "Archived"]}, "name")
     if profile_name:
         profile = frappe.get_doc("Brand Profile", profile_name)
+        if is_retired(profile.recipe_key, profile.recipe_version):
+            # A retired template version is never offered to a new site: start on the latest version.
+            from appointment.public_experience.template_switch import _switch_profile
+
+            _switch_profile(profile.name, get_recipe(profile.recipe_key))
+            profile.reload()
         recipe = get_recipe(profile.recipe_key, profile.recipe_version or None)
     else:
         # New sites start on the latest certified version; store it, or the doctype default (1) would
@@ -138,21 +146,27 @@ def start(owner_type, owner, title, slug, recipe_key, preferences=None):
     return state(doc)
 
 
-def booking_options(doc):
-    """The owner's booking options for the public website. Live availability is off unless the owner turns it on."""
-    from appointment.public_experience.next_availability import enabled
+# Owner switches in the booking options of the website. Each is off unless the owner turns it on.
+# `liveAvailability`: the next free times (see next_availability.py). `holidayGreetings`: a small
+# greeting around Ethiopian holidays, drawn by the template (docs/design/TEMPLATE_V3_KIT.md, "Holiday moments").
+BOOKING_SWITCHES = ("liveAvailability", "holidayGreetings")
 
-    return {"liveAvailability": enabled(json.loads(doc.booking_json or "{}"))}
+
+def booking_options(doc):
+    """The owner's booking options for the public website. Every switch is off unless the owner turns it on."""
+    stored = json.loads(doc.booking_json or "{}")
+    stored = stored if isinstance(stored, dict) else {}
+    return {name: stored.get(name) is True for name in BOOKING_SWITCHES}
 
 
 def _set_booking_options(doc, booking):
-    if not isinstance(booking, dict) or set(booking) - {"liveAvailability"} or not all(isinstance(value, bool) for value in booking.values()):
+    if not isinstance(booking, dict) or set(booking) - set(BOOKING_SWITCHES) or not all(isinstance(value, bool) for value in booking.values()):
         frappe.throw(_("Choose supported booking options."))
     stored = json.loads(doc.booking_json or "{}")
     doc.booking_json = json.dumps({**(stored if isinstance(stored, dict) else {}), **booking}, sort_keys=True)
 
 
-def save(site, expected_version, step, title=None, sections=None, features=None, brand_inputs=None, booking=None):
+def save(site, expected_version, step, title=None, sections=None, features=None, brand_inputs=None, booking=None, title_am=None):
     if step not in STEPS:
         frappe.throw(_("Choose a website setup step."))
     doc = _locked_site(site, expected_version)
@@ -167,6 +181,11 @@ def save(site, expected_version, step, title=None, sections=None, features=None,
         setup["features"] = sorted(set(features))
     if title is not None:
         doc.site_title = title
+    if title_am is not None:
+        # The website name on Amharic pages; empty shows the business's Amharic name, else the title.
+        if any(character in str(title_am) for character in "<>\x00"):
+            frappe.throw(_("Use plain text without < or >."))
+        doc.site_title_am = " ".join(str(title_am).split())[:140]
     if brand_inputs is not None:
         profile = frappe.get_doc("Brand Profile", doc.brand_profile)
         profile.brand_inputs_json = json.dumps(brand_inputs)

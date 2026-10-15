@@ -1,0 +1,61 @@
+{
+  "kind": "layout",
+  "contract": "appointment-layout.v1",
+  "key": "ergata-therapy",
+  "version": 2,
+  "rendererKey": "ergata-therapy",
+  "contentSchemaVersion": 2,
+  "sections": [
+    "hero",
+    "benefits",
+    "approaches",
+    "about",
+    "process",
+    "services",
+    "providers",
+    "proof",
+    "testimonials",
+    "faq",
+    "notice",
+    "locations",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "requiredSections": [
+    "hero",
+    "benefits",
+    "approaches",
+    "about",
+    "process",
+    "services",
+    "providers",
+    "proof",
+    "testimonials",
+    "faq",
+    "notice",
+    "locations",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "responsive": {
+    "desktop": "ergata-therapy-v2-desktop",
+    "tablet": "ergata-therapy-v2-tablet",
+    "mobile": "ergata-therapy-v2-mobile",
+    "maxContentWidth": 1200
+  },
+  "density": {
+    "content": [
+      "compact",
+      "standard",
+      "rich"
+    ],
+    "presentation": [
+      "comfortable",
+      "spacious"
+    ],
+    "defaultContent": "rich",
+    "defaultPresentation": "spacious"
+  }
+}

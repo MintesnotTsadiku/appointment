@@ -1,5 +1,4 @@
 import type { BookingSkin, StepMarkProps } from "../booking-skin";
-import "./booking.css";
 
 /*
  * Tena v3 on the booking pages ("Clear Path", continued). Speed and clarity first: no parallax,
@@ -27,6 +26,8 @@ export const tenaBookingSkin: BookingSkin = {
   name: "tena-v3",
   // Signage plates: rounded frames, drawn as plates with a yellow tab in booking.css.
   frame: "rounded",
+  // The stylesheet loads only on this template's booking pages (kit, "Booking skins").
+  style: () => import("./booking.css"),
   servicePhotoRoles: ["care1.tena", "care2.tena", "care3.tena"],
   // The clinic front is the stage of the /book handoff, so the visitor has just seen it.
   backdropRole: "band.tena",

@@ -27,8 +27,30 @@
       "providerAssets": [
         {
           "name": "Selam Bekele",
-          "asset": "/assets/appointment/brand-experience/providers/selam-bekele.webp",
-          "checksum": "a9e753e3f319d5e59ae58f3f2e6104fad353bcd294f37f01d88b55a0e2b13012"
+          "asset": "/assets/appointment/brand-experience/providers/warm/selam-bekele.webp",
+          "checksum": "1fe448f57411ecaa798005ef85422015393ed1e46ee63051eac519e861585619",
+          "variants": [
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/selam-bekele.avif",
+              "checksum": "a0b3818cf2c36715ac40a38e9659c325e8a2dc8d3b63d45e0d7d27ff501a7b2b"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/selam-bekele-192.webp",
+              "checksum": "4a4bf852c439a44c92d4f1c760daaf0fdca272dc40ecea8fa4733eed7100f3cf"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/selam-bekele-192.avif",
+              "checksum": "92079c40bd64afaa8c9fbfe0f109685b624a7b53a3a38e2e94e1b8fb60ee4157"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/selam-bekele-96.webp",
+              "checksum": "41a144087a3bd6f3aecd96fcd4abfbe2a61446c2759475853b6c3601dddaf53e"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/selam-bekele-96.avif",
+              "checksum": "9ed382b4bb957d84b407fae70a1403ef5d933c051c6bd54174673fbc28073ab9"
+            }
+          ]
         }
       ],
       "logoAsset": "/assets/appointment/brand-experience/brands/selam-logo.webp",
@@ -691,8 +713,30 @@
       "providerAssets": [
         {
           "name": "Meron Alemu",
-          "asset": "/assets/appointment/brand-experience/providers/meron-alemu.webp",
-          "checksum": "b5925137690ac060561fa2370f0ff752d13c5ff3e0d011721d092e845c8b4702"
+          "asset": "/assets/appointment/brand-experience/providers/warm/meron-alemu.webp",
+          "checksum": "82156d00bbda577fc06e22282c5fa67c8466d6d5c5e9e1971f088cbffb2224bd",
+          "variants": [
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/meron-alemu.avif",
+              "checksum": "96e25a2c5c73a6e5366a73fb4adcc755608eda4a42b66f565dde7866fe1cdd83"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/meron-alemu-192.webp",
+              "checksum": "b272851d8ee25274ee36e403b5d78cd6af2f7b1d24162d25b996548796546cb9"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/meron-alemu-192.avif",
+              "checksum": "e332c7a491da4a005cfff63c3180734b3cd35257c25b32fee560414d65fe8d24"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/meron-alemu-96.webp",
+              "checksum": "fbf198622e110a54cfbfee74aba4e06201a3ed32376572dae61b263c4f3877e4"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/meron-alemu-96.avif",
+              "checksum": "63eec7c883f7131337347339bc8e0bfed9ba87b23eeec00e4d104a077d61b373"
+            }
+          ]
         }
       ],
       "logoAsset": "/assets/appointment/brand-experience/brands/meron-logo.webp",
@@ -1291,18 +1335,84 @@
       "providerAssets": [
         {
           "name": "Hanna Tesfaye",
-          "asset": "/assets/appointment/brand-experience/providers/hanna-tesfaye.webp",
-          "checksum": "f3fb9afbae2a79acdcecd824c38229132e3eedcf8061f3f31632e83ccb92d8f0"
+          "asset": "/assets/appointment/brand-experience/providers/warm/hanna-tesfaye.webp",
+          "checksum": "31f952e6f6beecfb0afdb50ad730c32743128a760936645c52567b797e1a8699",
+          "variants": [
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/hanna-tesfaye.avif",
+              "checksum": "6d2cbb4eae8ca4ff4e044fd6a62cf451fc40f2b147e4e80e6db4375c74a92643"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/hanna-tesfaye-192.webp",
+              "checksum": "ef655196afd2faa8808a11f2632007ad2c3ec83f098edf535436e9f7a5c6777b"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/hanna-tesfaye-192.avif",
+              "checksum": "a07c9dcca1ee40c8a95ff24ae7d00dbb414ced15e54f57dfb0650dcd03de8052"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/hanna-tesfaye-96.webp",
+              "checksum": "cea0ec6a0e284edd2f46b608f92fc0b437a4892aec99fd651ff4916320772571"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/hanna-tesfaye-96.avif",
+              "checksum": "74f1cf4004a9dd984aad84f88dc8635d4d2798bfa0c5295c8d6283de722a0c57"
+            }
+          ]
         },
         {
           "name": "Rahel Girma",
-          "asset": "/assets/appointment/brand-experience/providers/rahel-girma.webp",
-          "checksum": "7bae656bc236ae89517e72d19cc9e827339f14b62a3753f75cedcd514397bf03"
+          "asset": "/assets/appointment/brand-experience/providers/warm/rahel-girma.webp",
+          "checksum": "575af0e7c65a1e9b415ca6b8ad35bdcdb272b0c9fe758398ba5b516679abf91a",
+          "variants": [
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/rahel-girma.avif",
+              "checksum": "65de8897b7b19ae7a6a5948762b6088d7f1ae3d7f1a2a7c79392271e42f20317"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/rahel-girma-192.webp",
+              "checksum": "7f9f1ee4685b63bd7bc5544e865adf70a819850753a9392b6fe7131cd8c1a88a"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/rahel-girma-192.avif",
+              "checksum": "f44fc1eebf6c36c42f1dfa0593c63b2d030e22634555f27af3644fcb96471526"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/rahel-girma-96.webp",
+              "checksum": "4f9904ea9cbaca6d0138a99b685bbc6eef2a0675402b39c897f07ec558e5f919"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/rahel-girma-96.avif",
+              "checksum": "4ba3fcf0dd5a8afa24f127f4964224b73bf4f734d2cb55494d1e369495bd2875"
+            }
+          ]
         },
         {
           "name": "Eden Tadesse",
-          "asset": "/assets/appointment/brand-experience/providers/eden-tadesse.webp",
-          "checksum": "69d7146ad62d6eb8d1a1e8f9c0c2905fe1a42f42eb221102e7bdd2ea76fa0da2"
+          "asset": "/assets/appointment/brand-experience/providers/warm/eden-tadesse.webp",
+          "checksum": "9dcdba43456eb1e45911fcd7b79aac1576c761e4ddf534c6005100c9284dbc59",
+          "variants": [
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/eden-tadesse.avif",
+              "checksum": "71d0ab6ad3262ef6c3b33d680469864c72dc52b3d53348d609d16eae8101d1f1"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/eden-tadesse-192.webp",
+              "checksum": "c6190a41eb0163465a144afa90d753c98320609833c36f4039a9c25eef79fab5"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/eden-tadesse-192.avif",
+              "checksum": "0e732f04c756d5cb889ac0ae95dd1249f198b91f9e9080a609f0773869ff71a3"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/eden-tadesse-96.webp",
+              "checksum": "5fbc807f678e1153108f7f230c052ede85dec872f0a20973d425f8dc274b2d67"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/eden-tadesse-96.avif",
+              "checksum": "e066b03095abdc2c8dc9eceb6492dca7e7c7e7b66a51f6f13b746dc41af834c4"
+            }
+          ]
         }
       ],
       "logoAsset": "/assets/appointment/brand-experience/brands/bloom-logo.webp",
@@ -1765,18 +1875,84 @@
       "providerAssets": [
         {
           "name": "Dawit Haile",
-          "asset": "/assets/appointment/brand-experience/providers/dawit-haile.webp",
-          "checksum": "eb650cd0488fff3c83cf59fc66f414564354eeb3745a0769617bcdbe93ffba56"
+          "asset": "/assets/appointment/brand-experience/providers/warm/dawit-haile.webp",
+          "checksum": "9e2b3c85e66f0660fa24056291ed3f03dde120ba9750f447e8f2b10b57e717ee",
+          "variants": [
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/dawit-haile.avif",
+              "checksum": "e1e0ad18b4232b304836e4549cec1d72988183a8a7d37c346405a8f36bfd98ac"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/dawit-haile-192.webp",
+              "checksum": "dfcd875749ed5e5cdf643a2218fda75426c53d93bbd3785c548b154179b1fd04"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/dawit-haile-192.avif",
+              "checksum": "037619c002c9d044a6768caaf2da4f1b86abe20590de84220efaffe952c83a72"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/dawit-haile-96.webp",
+              "checksum": "1968ec8199b48f3a86e7f89f63b6aa14bf0f442482fd06047a907e1967b0e089"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/dawit-haile-96.avif",
+              "checksum": "ac109714763545f195a398da0f36c28b2a4112b5f4de47ff3b7236199ee4035a"
+            }
+          ]
         },
         {
           "name": "Saron Mekonnen",
-          "asset": "/assets/appointment/brand-experience/providers/saron-mekonnen.webp",
-          "checksum": "31c604c89c91a76cb1b9e7f71a2096d95b444f7d99a3d30d1ff414299e863459"
+          "asset": "/assets/appointment/brand-experience/providers/warm/saron-mekonnen.webp",
+          "checksum": "35383885340e201ee4f35ed84b56d3fe19d5c70fd3794e8a39c485382bbb0760",
+          "variants": [
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/saron-mekonnen.avif",
+              "checksum": "a566f0af54255e0d3fa3000c430c7269141dcdc735fd49902719af939c92916c"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/saron-mekonnen-192.webp",
+              "checksum": "5fa09e888feeedd897d4bce959bcc32e3cf49b98a8acde79f8d77e9b951e9b4d"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/saron-mekonnen-192.avif",
+              "checksum": "cca012f73d9cbac6c6268927636bf1ba80f0bee1cea372ca63e6b4d6f5c3bb3f"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/saron-mekonnen-96.webp",
+              "checksum": "ced23e73c2e4927025bd81228606aaa0f430e3d553b69d79f5772607b3a17d69"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/saron-mekonnen-96.avif",
+              "checksum": "522c8b8d575cd9a85cd1615899f1740f6eeb9aa03ddbc2dabded639ec048b3af"
+            }
+          ]
         },
         {
           "name": "Yonas Assefa",
-          "asset": "/assets/appointment/brand-experience/providers/yonas-assefa.webp",
-          "checksum": "cefe58aa0da04e7f81d8949834c0979fcc64c459c8e879d23ef8da63853e1e13"
+          "asset": "/assets/appointment/brand-experience/providers/warm/yonas-assefa.webp",
+          "checksum": "8a5e4d0005edb52eec2b6909dd6828787bc3a52694b3ab342442bad5f0668c71",
+          "variants": [
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/yonas-assefa.avif",
+              "checksum": "55bc46b7f420fc3380c3c8183b3b702d853764abbda2c9c213ce2bab2c01b8c2"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/yonas-assefa-192.webp",
+              "checksum": "48997eac04c059d54dea4c866d57dc4cae6384ad857d5ff847b5a26e48b51a89"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/yonas-assefa-192.avif",
+              "checksum": "c48320c2077ec150a2ae8848a39e11d42b4e3f659f83aa682d9ece80651718a1"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/yonas-assefa-96.webp",
+              "checksum": "fcb2f7fefabb30832cb04b35bfceafda4b450e35edee00345c535e6cb8f31d2e"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/yonas-assefa-96.avif",
+              "checksum": "b2e9ae7004845fabb55500346c9fc7dbc1b80bfe4045d8d07c83bcd53e2339ba"
+            }
+          ]
         }
       ],
       "logoAsset": "/assets/appointment/brand-experience/brands/tena-logo.webp",
@@ -2327,13 +2503,57 @@
       "providerAssets": [
         {
           "name": "Kalkidan Getachew",
-          "asset": "/assets/appointment/brand-experience/providers/kalkidan-getachew.webp",
-          "checksum": "212ec3e7ed8f1479dabbc22d20308f09732981e40cbe416b5a81dc4db05aa083"
+          "asset": "/assets/appointment/brand-experience/providers/warm/kalkidan-getachew.webp",
+          "checksum": "3580376308524d11d6aff4df72824e1e0cdb547ddc6a6ab9afd44edd320a924f",
+          "variants": [
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/kalkidan-getachew.avif",
+              "checksum": "617b05d3e38a5d9b08efc5d63cd32445cfd888219e26b7758a3e1ce90ae18501"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/kalkidan-getachew-192.webp",
+              "checksum": "37e5b31204e540f013cc150459032870b605c1fcb9641c9c6b1cccf6546d578a"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/kalkidan-getachew-192.avif",
+              "checksum": "c7c65f3b9a34b792eb22368a66a688cc39853d955351a9347a6e1ac3c6659b64"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/kalkidan-getachew-96.webp",
+              "checksum": "313bdcf15e71f2a8134490b439157f20cea04e4189ef27d2146791b26735ebb5"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/kalkidan-getachew-96.avif",
+              "checksum": "80fd92a42e8b64b8eab216950c8cdf3e64fc3d03419ec148a255975fc6103410"
+            }
+          ]
         },
         {
           "name": "Abel Fikru",
-          "asset": "/assets/appointment/brand-experience/providers/abel-fikru.webp",
-          "checksum": "8e691a340165e1c5c222b278144d5f29aa995cb9e49cbc5473a6a3f470ab4f1e"
+          "asset": "/assets/appointment/brand-experience/providers/warm/abel-fikru.webp",
+          "checksum": "1cd44ab60a1ed444046888ef02d16122b6d8b2bcc05a57f8f6bb95016e2b99c9",
+          "variants": [
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/abel-fikru.avif",
+              "checksum": "c82832ace353c0f6fd2c13e5cc77e7916af6c0f82e7ee0f8b2678df932c5d167"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/abel-fikru-192.webp",
+              "checksum": "02429cab332ed1f01f5d7d0a397fe38a175b14d24c480c2c1f71301526a5cce8"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/abel-fikru-192.avif",
+              "checksum": "39bfaa5be1fbd361cdb24f6624c35702211440d3d8faa884baa9b936af922b34"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/abel-fikru-96.webp",
+              "checksum": "c6ea7aae5adb2c108fd45911fb3f604547e00a8179e9223a6117cc57a297e5b2"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/warm/abel-fikru-96.avif",
+              "checksum": "8b80008ac301c66790acaf6d3e6296ff305a70523be497c5e213308abb73600c"
+            }
+          ]
         }
       ],
       "logoAsset": "/assets/appointment/brand-experience/brands/abugida-logo.webp",
@@ -2776,20 +2996,20 @@
       "recipe": "ergata-therapy",
       "heroRole": "hero.ergata",
       "detailRole": "detail.ergata",
-      "heroAsset": "/assets/appointment/brand-experience/heroes/ergata-therapy.webp",
+      "heroAsset": "/assets/appointment/brand-experience/support/ergata-v2/hero.webp",
       "heroChecksum": "7a8d0d2449143e481d0c85a7b08eb88fb78646dc21fd97391f4a2932119782cd",
       "benchmark": "docs/design-references/public-experience/v1/ergata/moodboard-01.webp",
       "supportAssets": [
         {
-          "asset": "/assets/appointment/brand-experience/support/ergata/room.webp",
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/room.webp",
           "checksum": "bc55dee466db3aba5d40f54b8494d37573a22fa3f683d942ab1a613977437d58"
         },
         {
-          "asset": "/assets/appointment/brand-experience/support/ergata/office.webp",
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/office.webp",
           "checksum": "c73495832e1f5c4406a462eeb426c4737dcc08c78830eb0e627b2ccade01a2bf"
         },
         {
-          "asset": "/assets/appointment/brand-experience/support/ergata/online.webp",
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/online.webp",
           "checksum": "bbc8cc94e64310d71afb9ad3ea0844a42e28d07d938e266cc80aa0a6596b27bf"
         }
       ],
@@ -2797,7 +3017,25 @@
         {
           "name": "Yared Tesfaye",
           "asset": "/assets/appointment/brand-experience/providers/yared-tesfaye.webp",
-          "checksum": "38279b7f1198b8e4ffe84d376d6092754ab6c574764598d23f3ad8bb173facd2"
+          "checksum": "38279b7f1198b8e4ffe84d376d6092754ab6c574764598d23f3ad8bb173facd2",
+          "variants": [
+            {
+              "asset": "/assets/appointment/brand-experience/providers/yared-tesfaye-192.webp",
+              "checksum": "a7f39973a03a551793ebd271927bfe0f5fb9a930d02cf23ee8ce256ae1e8c6b9"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/yared-tesfaye-192.avif",
+              "checksum": "07aeeef786a6a19975b5a1aded2425c554b9c8d1f75908181d15b28e014e43be"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/yared-tesfaye-96.webp",
+              "checksum": "bf2cf833c0c94b1fa772e8e2a381a6941d503dad657bc1ad27aafe6da199b22a"
+            },
+            {
+              "asset": "/assets/appointment/brand-experience/providers/yared-tesfaye-96.avif",
+              "checksum": "ee73c97d8a7f74fb59f9170ffdf8219c6acee8750af3072a5937f74b51ce2ad9"
+            }
+          ]
         }
       ],
       "logoAsset": "/assets/appointment/brand-experience/brands/ergata-showcase-logo.webp",
@@ -2808,12 +3046,374 @@
         {
           "viewport": "desktop",
           "asset": "/assets/appointment/brand-experience/template-gallery/ergata-therapy-desktop.webp",
-          "checksum": "6850b91fa07b69b306783415d8370895b794c1e5d31ff421c57dc7c111d59dc1"
+          "checksum": "c7c3268fbdf84ce419aa5975360794dbdcdbd0c34e57f5db83baa705129462ee"
         },
         {
           "viewport": "mobile",
           "asset": "/assets/appointment/brand-experience/template-gallery/ergata-therapy-mobile.webp",
-          "checksum": "215042e9f7be4fdacc8a6be7a3de6a211ca9a417197ef308b8872731c04cc340"
+          "checksum": "e600bcb4d2eceed5ea549605fb16f2ccdeccdbbb9a9f97b90b9a3e8c11cc6334"
+        }
+      ],
+      "templateAssets": [
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/approach-m.avif",
+          "checksum": "4a4fc11d75d583a8bf906c8ebd7775b01e782df5060be010935d86b37a435885"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/approach-m.webp",
+          "checksum": "3830cb8b6e9c6538cac1773976a56894e09a495631f0d83e67d32190aa8502c3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/approach-w560.avif",
+          "checksum": "adf7a6a32048506cad0640024a4efc34a6034e3f78eb46b599f3803563fcf796"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/approach-w560.webp",
+          "checksum": "977b4bcc121d4cc55b2f45b582175f91bc0f7bc50d970bc5dbf7dabf1c8349a7"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/approach.avif",
+          "checksum": "2ca57939dda86b2a0564a99f4032e5d20f0be02d5060044d21399521e5bb7667"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/approach.webp",
+          "checksum": "1158b383795f533dcc97a840e4ad12a26b445136fed30a7b3c9c170ad7decba7"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/band-m.avif",
+          "checksum": "56725ecbaf4b3a488496dd3c48c75fc362739a81b06c6d562b59c8b05cf52185"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/band-m.webp",
+          "checksum": "099ce0a69450aeab83b117249241560c03d070d073ed8db21b3a947a6927ac51"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/band-night-m.avif",
+          "checksum": "457a1c0cd487f847fcad06e81512de647e713b923c252a3c8d269898326b6dc6"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/band-night-m.webp",
+          "checksum": "54960ddad548042bfc6a7e03d4e6fe1ae1a4c3dbf9defe8a895b8e0c32fb2e73"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/band-night-w480.avif",
+          "checksum": "df2692148e2a15e7879451b5a119d130ac97216c9979199bcc2159d25ff01d67"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/band-night-w480.webp",
+          "checksum": "32d6a354720023a50caedc64b13207953c3ed45d9050383b5b19c0c7d7c19d6d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/band-night.avif",
+          "checksum": "fe4c414674aef84d90347b4aeefba08a71e213f25303639417e161a574791b37"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/band-night.webp",
+          "checksum": "b54c612f501a7901d06aa42fb433edd55e27594aa57090f9d8ad849cdfbaa4f1"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/band-w480.avif",
+          "checksum": "c5dc16c918db0b5c36bcd1d0c34692d89c6222e0c4bae286dcec6fff6a9dd07d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/band-w480.webp",
+          "checksum": "2a018e37f66e1e9ffdaee3a34c53a67a5755e0062ca61f3e8eb72f8167bc5474"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/band.avif",
+          "checksum": "25981f95b4184382c4b8df649d86c5668248df09ffc5cc95937423c3c8004cf1"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/band.webp",
+          "checksum": "71f73414e0b642c412dbd6f794d43ca0f232c0abba6c2fad1b0b0d4171ea7e95"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/contact-m.avif",
+          "checksum": "4d91310d0c89ae27257488ab47f78c6b55d080a00c700795ae68d4bd06b0477c"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/contact-m.webp",
+          "checksum": "5f8c02cb34e0cff88815a2ca8533b3046f57ec8f9234df25d5688cdbd2dc6a12"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/contact-w640.avif",
+          "checksum": "747b4b605bdc37e3f8e7f9126f7af96e42dec9d642ea266806c3a3028d91c221"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/contact-w640.webp",
+          "checksum": "196bd6e3f18e083b0c10fc3a9a0147e7eee2c79de7be86449a6c3193a24894a4"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/contact-w960.avif",
+          "checksum": "16004503d2ed7f85c54e3ce616df1bdc1dd45731a960a88dffe855da0b15354e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/contact-w960.webp",
+          "checksum": "12ee2bb576c08259eb6cf7e01f1b75af279c14b632d8db65b197fbdb231f96be"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/contact.avif",
+          "checksum": "e1d861429557bb499889974136dd8f6c79aad20155ca2d91a7e66eacaf593144"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/contact.webp",
+          "checksum": "7399d89286893cd411e123233f6afbe1523f5d94ceca17139c3ee04755effc11"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/faq-m.avif",
+          "checksum": "04abc06fb62d4b62f9c2d3b6c66a118af055093b026e98b8f93764c44b4f6a86"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/faq-m.webp",
+          "checksum": "e8eb2d29bde53f5bc6b230ded1e719a4c81756ff67b4bed0f387daf88bb213b9"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/faq-w560.avif",
+          "checksum": "6d85533389e05a10e55ead248c3413942bb17664588a52f4ac6f41ff81045349"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/faq-w560.webp",
+          "checksum": "f83822d05381df9a1ba257a6770fb1e937a61634eba4a43ff3ad5dfea4ccb4aa"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/faq.avif",
+          "checksum": "0c4c1e13248f9ec764afc51fce2402865579aaef3238267a9158e916e8e63a28"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/faq.webp",
+          "checksum": "0d9d67e45e6d84020e8b3ff5912b0aa0173794377c931f4e6676b92f19ae433f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/hero-m.avif",
+          "checksum": "982fa754ed94248f70f49cd5db1c4d11264b27f82f7ca76746f5dbd1797895b5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/hero-m.webp",
+          "checksum": "6e5441e81b633bfeed2c58f8f33f1aba228cea9669d0a962c00e8f7c56771f99"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/hero-night-m.avif",
+          "checksum": "90120bf53b66f25a32610d3c3495879f2442611afecb7e1a28ace8ad93f2249d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/hero-night-m.webp",
+          "checksum": "1870f15cb7fe90b950c4e2e7c7bda9d7be785bae096091ca8237e8c1422da7b6"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/hero-night-w640.avif",
+          "checksum": "67818175ab49c672d67aae1b9d22878686413682c8b5b1e786c23f086b7d70c8"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/hero-night-w640.webp",
+          "checksum": "1af5f69f8130454c1567f8aa26397be60f65c36e2a3012cd51d00ebe191c3b74"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/hero-night-w800.avif",
+          "checksum": "105a3b8fa9f16764a5181097ba17762fec50fb59a673c9d8fae2d260704d0896"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/hero-night-w800.webp",
+          "checksum": "95ff22ec48904fc5d390c0949ed339bdf8623154ce75f6cd3342f32e2398daa2"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/hero-night.avif",
+          "checksum": "87c17a375647b69c477e47a1686a1e41c78d19323729e1856b2e7f9b70724868"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/hero-night.webp",
+          "checksum": "afa4c925260dbe9c74d431965893fcbd72418015df08db0c25c6e56c289380b0"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/hero-w640.avif",
+          "checksum": "cc4f19198207fe0fa54ed7a404b62bf43fb7005fdda3452d6389bb0ac149cd58"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/hero-w640.webp",
+          "checksum": "e2c2571b7ac58345954d6e322bf159721f71e74ed3c41efdd5ef84422bab1c64"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/hero-w800.avif",
+          "checksum": "8f1c53cab54aba9a896cd0927d0a8cb546cafb35d2f2b8fccb011d39d174a66b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/hero-w800.webp",
+          "checksum": "5617f6bba69fbf45eb70b5773cdd95dd3798093b35072326029a57e9a49d7c21"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/hero.avif",
+          "checksum": "3545441460b80761149bb30696e5d5e1b0d95fe993b720358895d6de5be1ff12"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/hero.webp",
+          "checksum": "7a8d0d2449143e481d0c85a7b08eb88fb78646dc21fd97391f4a2932119782cd"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/needs-m.avif",
+          "checksum": "bc3e61f8891493f3a709e1696c7d297210d03d5e6a559a10959cc7599f375e6b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/needs-m.webp",
+          "checksum": "8af5c8d090e7810b582a773f7c08af8c4aa3ce69ab4c45ad6380083f389a0176"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/needs-w560.avif",
+          "checksum": "bc36fc5815eb5b4171ca7e058096a98e157d9aac05c0076b9946d822fc82901f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/needs-w560.webp",
+          "checksum": "d0dbdc42e4bc269411ad975a2a116df2bbe9231717ceb82f36ef1c85da240aa5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/needs.avif",
+          "checksum": "5dde91aed2ef4f9f1c68c871d86226c9dfdcedc16a62bed19a94eb9cf4d723b7"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/needs.webp",
+          "checksum": "1b0224cfed837fa23c91f5edc7a6cbd7e51baffd63bfa7b41ddc47c3af283dfb"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/office-m.avif",
+          "checksum": "d298cbae69b6e3b1745413d2eaa21568267048c6db9910f6c2ed7e325852cb6e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/office-m.webp",
+          "checksum": "1d97b721c3fe4820d5be788f43d68e7449efdbea137ee940dffb7207693dd343"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/office-w640.avif",
+          "checksum": "b880941db0762da308c15162f1501f1c6f3a2739e90fd9f2aaa346461be76317"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/office-w640.webp",
+          "checksum": "ceff1aa0890569cb7b7d55e2b156605c20a681199d254cd116768b8648845a67"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/office-w960.avif",
+          "checksum": "ba95641848849e01fe854bebc69b2217c41f8cfe157471ee8d1c6cdad72f2057"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/office-w960.webp",
+          "checksum": "4513e444e9593eec5f7070e9000394b7b236bdd133ec7ca9fbbaf8df51a7cdcd"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/office.avif",
+          "checksum": "c6d59eb4ea924b6ebe0e6875bd2e73416e655f8e9841f7a8cd74e41df08b0522"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/office.webp",
+          "checksum": "c73495832e1f5c4406a462eeb426c4737dcc08c78830eb0e627b2ccade01a2bf"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/online-m.avif",
+          "checksum": "9a52cc18300583e884bce3d1085cbeb0ab8917100bfec44783dab2c726accfcd"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/online-m.webp",
+          "checksum": "0573e10e25e35a5a10a7309c465acf7cac47ca34a4b2481e375aab71a8831c19"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/online-w640.avif",
+          "checksum": "7fc5218da6883c2b48be5794642fa62db988ff37d8a67aa9da6e949a4e81e0cb"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/online-w640.webp",
+          "checksum": "798ce46552af518a6b04e7101aee77c9bac285d87f9bbedca15f5d06fa09f66d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/online-w960.avif",
+          "checksum": "225b4ff98c927a1dd7cbeb6635dbf3429a7cfef3e65dfe23fcd81648a43c4c86"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/online-w960.webp",
+          "checksum": "507f1114911eb00890f14ba7402032b423415b595345efc15281cebabaf1d07c"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/online.avif",
+          "checksum": "e070df37708f660be7fccd18c66f2feee374f5034aa15b735f2e57454de3388b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/online.webp",
+          "checksum": "bbc8cc94e64310d71afb9ad3ea0844a42e28d07d938e266cc80aa0a6596b27bf"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/room-m.avif",
+          "checksum": "53a420d7024e9fa2d8a7ecd9559735e92c8fa08d126ae015f3270e164aacf602"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/room-m.webp",
+          "checksum": "30bf068d419b28470488fc0d6da3751382bee40eb30ee8b0e6f51839de2e4d50"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/room-w640.avif",
+          "checksum": "7022f2034a277c0ada38b2b1314165ee6b106166e259f0b84798bec1c50d15e8"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/room-w640.webp",
+          "checksum": "d14faebc31b2ebb8ae9c453bf338a6f6389ab8fff2cd3f75b8586db5c1e1db71"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/room-w960.avif",
+          "checksum": "c6ec008a3d5279ca8dbb49cd7bc851a1a8adfea8b3021939c5da6d958c054b41"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/room-w960.webp",
+          "checksum": "a8c05223649ac0a9ee85ba3135d69483f98eeb13b5f50425511354c92c6585ed"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/room.avif",
+          "checksum": "ebf5b17e3e24505f3adfd873e1631c74daf243e9f3112efa10ca2ab85538ab0b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/room.webp",
+          "checksum": "bc55dee466db3aba5d40f54b8494d37573a22fa3f683d942ab1a613977437d58"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/testimonial-m.avif",
+          "checksum": "c08182a01b002355db3d59dc14fa77fff7f4a36f093057967ee4d069092edbe8"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/testimonial-m.webp",
+          "checksum": "c562d34adec03a41ba8a12f612acc805ca97a443b69189c13c7b76c5a4d7eaf5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/testimonial-w560.avif",
+          "checksum": "75827f410097620713c53d25766d0e7595b93994b0d9427bf8315d2b438e571e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/testimonial-w560.webp",
+          "checksum": "49d3c9be665a6072c6a5968f9cd9e8091b44cf04ff78dbe667c8a265d35c6785"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/testimonial.avif",
+          "checksum": "4bd95d598ef3b1c1bbaf2d2165f88e9250c93c78a5bf75441ea632a3d695b1af"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/testimonial.webp",
+          "checksum": "268d2a205ef99a9e0b557d4543815497f4f3d5b13974ef88ebe8615cfbf4b31d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/window-m.avif",
+          "checksum": "07db29727c4cd3e92149f6aefd7c83215ea2f30a5dd765c44182617b99fcf77c"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/window-m.webp",
+          "checksum": "f1a5024e7e47f630ff1082d09086dc90e2ab830817326e306e171ba5031b63a2"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/window-w640.avif",
+          "checksum": "c08ae673abf9ff0e7ad679f02b8feb90bdc12627279ee0b351885240a98e9493"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/window-w640.webp",
+          "checksum": "65578fe0072d601d9f5fcd2c9d8f38f6253fca71ebced4ab68d6662f7250cb21"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/window.avif",
+          "checksum": "37e0dc3270ea670a090c045da9ec3fe1a74c4b85bc8884769e10d7b86f3f2c18"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/ergata-v2/window.webp",
+          "checksum": "b4c4a65e4bce7d7f6383b0751ed869c9178eef66c2dcf5cb94b7e405bf3601ec"
         }
       ]
     }

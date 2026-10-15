@@ -1,5 +1,4 @@
 import type { BookingSkin, StepMarkProps } from "../booking-skin";
-import "./booking.css";
 
 /*
  * Abugida v3 on the booking pages ("Living Manuscript", continued). Speed and clarity first: no
@@ -27,6 +26,8 @@ export const abugidaBookingSkin: BookingSkin = {
   key: "abugida-language@3",
   name: "abugida-v3",
   frame: "arch",
+  // The stylesheet loads only on this template's booking pages (kit, "Booking skins").
+  style: () => import("./booking.css"),
   servicePhotoRoles: ["lesson1.abugida", "lesson2.abugida"],
   // The handoff stands on the candle-lit desk of the booking band, so the visitor has just seen it.
   backdropRole: "band.abugida",

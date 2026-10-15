@@ -1,0 +1,428 @@
+{
+  "contract": "appointment-starter-content.v1",
+  "recipe": "ergata-therapy",
+  "version": 2,
+  "note": "Starter copy that guided website setup puts into a new draft for this recipe. It never invents credentials, testimonials, addresses or prices; those come from the business records or stay empty until the owner adds them.",
+  "sections": {
+    "hero": {
+      "eyebrow": {
+        "en": "Counselling and psychotherapy",
+        "am": "የምክር እና የሥነ-ልቦና ሕክምና አገልግሎት"
+      },
+      "title": {
+        "en": "A calm space to talk, at your own pace",
+        "am": "በራስዎ ፍጥነት የሚያወሩበት የተረጋጋ ቦታ"
+      },
+      "subtitle": {
+        "en": "Confidential one-to-one sessions for anxiety, low mood, stress, grief and relationships.",
+        "am": "ለጭንቀት፣ ለድብርት፣ ለውጥረት፣ ለሐዘን እና ለግንኙነት ጉዳዮች ሚስጥራዊ የአንድ ለአንድ ቆይታ።"
+      },
+      "body": {
+        "en": "Confidential. No referral needed.",
+        "am": "ሚስጥራዊ ነው። ሪፈራል አያስፈልግም።"
+      },
+      "primaryAction": {
+        "intent": "booking_start",
+        "label": {
+          "en": "Book a first session",
+          "am": "የመጀመሪያ ቀጠሮ ይያዙ"
+        },
+        "placement": "primary"
+      },
+      "secondaryAction": {
+        "intent": "faq_jump",
+        "label": {
+          "en": "Questions before you book",
+          "am": "ከመያዝዎ በፊት ያሉ ጥያቄዎች"
+        },
+        "placement": "secondary"
+      },
+      "introCallAction": {
+        "intent": "service_selection",
+        "label": {
+          "en": "Free 15-minute introductory call",
+          "am": "ነፃ የ15 ደቂቃ የትውውቅ ጥሪ"
+        },
+        "placement": "secondary"
+      },
+      "image": "/assets/appointment/brand-experience/support/ergata-v2/hero.webp",
+      "imageAlt": {
+        "en": "Morning light through a linen curtain falls on an olive tree, a clay jug and a glass of water in a quiet room.",
+        "am": "የጠዋት ብርሃን በቀጭን መጋረጃ አልፎ ጸጥ ባለ ክፍል ውስጥ ባለ የወይራ ዛፍ፣ የሸክላ ማሰሮ እና የውሃ ብርጭቆ ላይ ያርፋል።"
+      }
+    },
+    "benefits": {
+      "title": {
+        "en": "What we can work on together",
+        "am": "አብረን ልንሠራባቸው የምንችላቸው ጉዳዮች"
+      },
+      "intro": {
+        "en": "You do not need the right words yet. Many people come with a feeling that something needs to change.",
+        "am": "ትክክለኛውን ቃል አሁን ማግኘት አያስፈልግዎትም። ብዙ ሰዎች የሚመጡት አንድ ነገር መለወጥ እንዳለበት እየተሰማቸው ነው።"
+      },
+      "items": [
+        {
+          "icon": "wave",
+          "title": {
+            "en": "Anxiety and worry",
+            "am": "ጭንቀት እና ስጋት"
+          },
+          "description": {
+            "en": "Racing thoughts, panic, or a worry that will not switch off.",
+            "am": "የማይቆሙ ሐሳቦች፣ ድንገተኛ ፍርሃት ወይም የማይለቅ ስጋት።"
+          }
+        },
+        {
+          "icon": "cloud",
+          "title": {
+            "en": "Low mood and depression",
+            "am": "የሐዘን ስሜት እና ድብርት"
+          },
+          "description": {
+            "en": "Feeling flat, heavy or far away from the things you used to enjoy.",
+            "am": "የመደንዘዝ፣ የክብደት ወይም ይወዷቸው ከነበሩ ነገሮች የመራቅ ስሜት።"
+          }
+        },
+        {
+          "icon": "flame",
+          "title": {
+            "en": "Stress and burnout",
+            "am": "ውጥረት እና መዛል"
+          },
+          "description": {
+            "en": "When work, study or caring for others has left nothing for you.",
+            "am": "ሥራ፣ ትምህርት ወይም ሌሎችን መንከባከብ ለራስዎ ምንም ሳያስቀር ሲቀር።"
+          }
+        },
+        {
+          "icon": "leaf",
+          "title": {
+            "en": "Grief and loss",
+            "am": "ሐዘን እና ማጣት"
+          },
+          "description": {
+            "en": "Room to carry a loss, at whatever pace it needs.",
+            "am": "ያጡትን ነገር በሚያስፈልገው ፍጥነት የሚሸከሙበት ቦታ።"
+          }
+        },
+        {
+          "icon": "link",
+          "title": {
+            "en": "Relationships and couples",
+            "am": "ግንኙነት እና ጥንዶች"
+          },
+          "description": {
+            "en": "Patterns that keep repeating, distance, conflict or a decision to make together.",
+            "am": "የሚደጋገሙ ልማዶች፣ መራራቅ፣ ግጭት ወይም አብራችሁ የምትወስኑት ውሳኔ።"
+          }
+        },
+        {
+          "icon": "shield",
+          "title": {
+            "en": "Trauma and hard experiences",
+            "am": "ጉዳት እና አስቸጋሪ ገጠመኞች"
+          },
+          "description": {
+            "en": "Gentle, paced support after events that still feel close.",
+            "am": "አሁንም ቅርብ የሚመስሉ ክስተቶችን ተከትሎ ረጋ ያለና ፍጥነትዎን የጠበቀ ድጋፍ።"
+          }
+        },
+        {
+          "icon": "path",
+          "title": {
+            "en": "Life changes",
+            "am": "የሕይወት ለውጦች"
+          },
+          "description": {
+            "en": "A new role, a move, a diagnosis, becoming a parent, or an ending.",
+            "am": "አዲስ ኃላፊነት፣ ቤት መቀየር፣ የጤና ምርመራ ውጤት፣ ወላጅ መሆን ወይም አንድ ነገር ሲያበቃ።"
+          }
+        }
+      ]
+    },
+    "approaches": {
+      "title": {
+        "en": "Approaches, in plain words",
+        "am": "የአሠራር ዘዴዎች፣ በቀላል አገላለጽ"
+      },
+      "intro": {
+        "en": "Sessions draw on well-researched approaches, chosen to fit you rather than the other way round.",
+        "am": "ቆይታዎቹ በጥናት የተደገፉ ዘዴዎችን ይጠቀማሉ። ዘዴው የሚመረጠው ለእርስዎ እንዲስማማ ነው እንጂ እርስዎ ለዘዴው አይደለም።"
+      },
+      "items": [
+        {
+          "title": {
+            "en": "Cognitive behavioural therapy (CBT)",
+            "am": "የአስተሳሰብና የባሕሪ ሕክምና (CBT)"
+          },
+          "description": {
+            "en": "Notice how thoughts, feelings and actions feed each other, and practise small changes that loosen the loop.",
+            "am": "ሐሳብ፣ ስሜት እና ድርጊት እንዴት እርስ በርስ እንደሚመጋገቡ ማስተዋል፣ ዑደቱን የሚያላሉ ትናንሽ ለውጦችንም መለማመድ።"
+          }
+        },
+        {
+          "title": {
+            "en": "Acceptance and commitment therapy (ACT)",
+            "am": "የመቀበልና የቁርጠኝነት ሕክምና (ACT)"
+          },
+          "description": {
+            "en": "Make room for hard feelings without being run by them, and move towards what matters to you.",
+            "am": "አስቸጋሪ ስሜቶች እንዲገዙዎት ሳይፈቅዱ ቦታ መስጠት፣ ለእርስዎ ዋጋ ወዳለው ነገር መራመድ።"
+          }
+        },
+        {
+          "title": {
+            "en": "Person-centred therapy",
+            "am": "ሰውን ማዕከል ያደረገ ሕክምና"
+          },
+          "description": {
+            "en": "You lead, and you are listened to without judgement. The relationship itself is part of the help.",
+            "am": "እርስዎ ይመራሉ፤ ያለ ፍርድ ይደመጣሉ። ግንኙነቱ ራሱ የእርዳታው አካል ነው።"
+          }
+        },
+        {
+          "title": {
+            "en": "EMDR-informed work",
+            "am": "EMDRን መሠረት ያደረገ ሥራ"
+          },
+          "description": {
+            "en": "Paced, structured ways to process memories that still feel raw, used only when you feel ready.",
+            "am": "አሁንም የሚያሙ ትዝታዎችን በሥርዓትና በዝግታ የማስተናገጃ መንገዶች፤ ዝግጁ ሲሆኑ ብቻ።"
+          }
+        },
+        {
+          "title": {
+            "en": "Solution-focused therapy",
+            "am": "መፍትሔ ላይ ያተኮረ ሕክምና"
+          },
+          "description": {
+            "en": "Start from what already works, however small, and build the next step from there.",
+            "am": "ትንሽም ቢሆን አሁን ከሚሠራው ነገር ተነስቶ ቀጣዩን እርምጃ መገንባት።"
+          }
+        }
+      ]
+    },
+    "process": {
+      "title": {
+        "en": "Your first session",
+        "am": "የመጀመሪያው ቆይታዎ"
+      },
+      "intro": {
+        "en": "Starting therapy can feel like a big step. This is what usually happens, so nothing comes as a surprise.",
+        "am": "ሕክምና መጀመር ትልቅ እርምጃ ሊመስል ይችላል። ምንም ነገር እንዳያስደንቅዎ፣ ብዙውን ጊዜ የሚሆነው ይህ ነው።"
+      },
+      "items": [
+        {
+          "step": 1,
+          "title": {
+            "en": "Choose a time that suits you",
+            "am": "የሚመችዎትን ሰዓት ይምረጡ"
+          },
+          "description": {
+            "en": "Book online in a few minutes. You only need your name and a way to reach you. You do not need to explain anything yet.",
+            "am": "በጥቂት ደቂቃዎች በኦንላይን ይያዙ። ስምዎና የሚገኙበት መንገድ ብቻ በቂ ነው። አሁን ምንም ማብራራት አያስፈልግዎትም።"
+          }
+        },
+        {
+          "step": 2,
+          "title": {
+            "en": "Getting to know each other",
+            "am": "መተዋወቅ"
+          },
+          "description": {
+            "en": "We talk about what brings you here and what you hope will change. You decide how much to share.",
+            "am": "ወደዚህ ስላመጣዎት ጉዳይ እና እንዲለወጥ ስለሚፈልጉት ነገር እንነጋገራለን። ምን ያህል እንደሚያካፍሉ እርስዎ ይወስናሉ።"
+          }
+        },
+        {
+          "step": 3,
+          "title": {
+            "en": "Confidentiality and agreement",
+            "am": "ሚስጥራዊነት እና ስምምነት"
+          },
+          "description": {
+            "en": "We go through how confidentiality works, its limits, and practical things like cancellations and fees.",
+            "am": "ሚስጥራዊነት እንዴት እንደሚሠራ፣ ገደቦቹን እንዲሁም እንደ ቀጠሮ መሰረዝ እና ክፍያ ያሉ ተግባራዊ ጉዳዮችን እንመለከታለን።"
+          }
+        },
+        {
+          "step": 4,
+          "title": {
+            "en": "A plan that fits",
+            "am": "የሚስማማ እቅድ"
+          },
+          "description": {
+            "en": "We agree a first focus and how often to meet. There is no obligation to book again.",
+            "am": "የመጀመሪያውን ትኩረት እና በምን ያህል ጊዜ እንደምንገናኝ አብረን እንወስናለን። እንደገና ቀጠሮ የመያዝ ግዴታ የለብዎትም።"
+          }
+        }
+      ]
+    },
+    "services": {
+      "title": {
+        "en": "Sessions and fees",
+        "am": "የቆይታ ዓይነቶች እና ክፍያ"
+      },
+      "intro": {
+        "en": "Choose the session that suits you. The length and fee are shown before you book.",
+        "am": "የሚስማማዎትን ቆይታ ይምረጡ። የቆይታው ርዝመትና ክፍያው ከመያዝዎ በፊት ይታያሉ።"
+      }
+    },
+    "providers": {
+      "title": {
+        "en": "Your therapist",
+        "am": "የእርስዎ ቴራፒስት"
+      },
+      "titleTeam": {
+        "en": "Our therapists",
+        "am": "ቴራፒስቶቻችን"
+      },
+      "role": {
+        "en": "Therapist",
+        "am": "ቴራፒስት"
+      }
+    },
+    "proof": {
+      "title": {
+        "en": "Training and registration",
+        "am": "ሥልጠና እና ምዝገባ"
+      },
+      "intro": {
+        "en": "It is fair to ask who you will be talking to.",
+        "am": "ከማን ጋር እንደሚነጋገሩ መጠየቅ ተገቢ ነው።"
+      }
+    },
+    "testimonials": {
+      "title": {
+        "en": "In clients' words",
+        "am": "ደንበኞች እንዳሉት"
+      },
+      "intro": {
+        "en": "Shared anonymously, with permission.",
+        "am": "ማንነታቸው ሳይገለጽ፣ በፈቃዳቸው የተካፈሉት።"
+      }
+    },
+    "faq": {
+      "title": {
+        "en": "Questions people often ask",
+        "am": "በብዛት የሚጠየቁ ጥያቄዎች"
+      },
+      "items": [
+        {
+          "question": {
+            "en": "How many sessions will I need?",
+            "am": "ስንት ቆይታ ያስፈልገኛል?"
+          },
+          "answer": {
+            "en": "It depends on what you bring. Some people find a few sessions enough; others prefer longer support. We review together regularly, and you can stop at any time.",
+            "am": "ይዘውት በሚመጡት ጉዳይ ይወሰናል። አንዳንዶች ጥቂት ቆይታዎች ይበቃቸዋል፤ ሌሎች ደግሞ ረዘም ያለ ድጋፍ ይመርጣሉ። በየጊዜው አብረን እንገመግማለን፤ በፈለጉት ጊዜም ማቆም ይችላሉ።"
+          }
+        },
+        {
+          "question": {
+            "en": "Is what I say confidential?",
+            "am": "የምናገረው ሚስጥር ሆኖ ይቆያል?"
+          },
+          "answer": {
+            "en": "Yes. What you share stays between you and your therapist. The only exceptions are a serious risk to your life or someone else's, a child at risk, or a court order. Even then, your therapist will talk with you first wherever possible.",
+            "am": "አዎ። የሚያካፍሉት በእርስዎና በቴራፒስትዎ መካከል ይቆያል። ልዩ ሁኔታዎቹ በእርስዎ ወይም በሌላ ሰው ሕይወት ላይ ከባድ አደጋ ሲኖር፣ አንድ ልጅ አደጋ ላይ ሲሆን ወይም ፍርድ ቤት ሲያዝ ብቻ ናቸው። ያኔም ቢሆን በተቻለ መጠን አስቀድሞ ከእርስዎ ጋር ይነጋገራል።"
+          }
+        },
+        {
+          "question": {
+            "en": "Can sessions be in Amharic?",
+            "am": "ቆይታዎቹ በአማርኛ ሊሆኑ ይችላሉ?"
+          },
+          "answer": {
+            "en": "Yes. Sessions can be in Amharic or English, and you can move between the two whenever that feels more natural.",
+            "am": "አዎ። ቆይታዎቹ በአማርኛ ወይም በእንግሊዝኛ ሊሆኑ ይችላሉ፤ ይበልጥ ምቹ ሆኖ ሲሰማዎ በሁለቱ መካከል መቀያየር ይችላሉ።"
+          }
+        },
+        {
+          "question": {
+            "en": "What if I need to cancel?",
+            "am": "ቀጠሮዬን መሰረዝ ብፈልግስ?"
+          },
+          "answer": {
+            "en": "Please cancel or move your session at least 24 hours ahead, using the link in your confirmation. Later cancellations may be charged in full.",
+            "am": "እባክዎ በማረጋገጫ መልእክትዎ ውስጥ ያለውን ማስፈንጠሪያ ተጠቅመው ቢያንስ ከ24 ሰዓት በፊት ቀጠሮዎን ይሰርዙ ወይም ያዛውሩ። ዘግይተው የሚሰረዙ ቆይታዎች ሙሉ ክፍያ ሊጠየቅባቸው ይችላል።"
+          }
+        },
+        {
+          "question": {
+            "en": "How do I pay?",
+            "am": "እንዴት ነው የምከፍለው?"
+          },
+          "answer": {
+            "en": "The fee for each session is shown before you book. Payment details are in your confirmation.",
+            "am": "የእያንዳንዱ ቆይታ ክፍያ ከመያዝዎ በፊት ይታያል። የክፍያ ዝርዝሩ በማረጋገጫ መልእክትዎ ውስጥ አለ።"
+          }
+        }
+      ]
+    },
+    "notice": {
+      "title": {
+        "en": "This is not an emergency service",
+        "am": "ይህ የአስቸኳይ ጊዜ አገልግሎት አይደለም"
+      },
+      "body": {
+        "en": "If you are in danger now, or thinking about ending your life, please do not wait for a session. Call one of these numbers or go to the nearest hospital emergency department.",
+        "am": "አሁን አደጋ ላይ ከሆኑ ወይም ሕይወትዎን ስለማጥፋት እያሰቡ ከሆነ፣ እባክዎ ቀጠሮ አይጠብቁ። ከእነዚህ ቁጥሮች ወደ አንዱ ይደውሉ ወይም በአቅራቢያዎ ወዳለው ሆስፒታል ድንገተኛ ክፍል ይሂዱ።"
+      },
+      "items": [
+        {
+          "label": {
+            "en": "Police",
+            "am": "ፖሊስ"
+          },
+          "phone": "991"
+        },
+        {
+          "label": {
+            "en": "Ambulance",
+            "am": "አምቡላንስ"
+          },
+          "phone": "907"
+        }
+      ]
+    },
+    "locations": {
+      "title": {
+        "en": "Where we meet",
+        "am": "የምንገናኝበት ቦታ"
+      },
+      "intro": {
+        "en": "Address, opening hours and how to find the room.",
+        "am": "አድራሻ፣ የሥራ ሰዓት እና ክፍሉን እንዴት እንደሚያገኙ።"
+      }
+    },
+    "contact": {
+      "title": {
+        "en": "Prefer to ask a question first?",
+        "am": "መጀመሪያ ጥያቄ መጠየቅ ይመርጣሉ?"
+      },
+      "body": {
+        "en": "You are welcome to get in touch before you book.",
+        "am": "ከመያዝዎ በፊት ቢያገኙን ደስ ይለናል።"
+      }
+    },
+    "booking_cta": {
+      "title": {
+        "en": "When you feel ready, we are here",
+        "am": "ዝግጁ ሲሆኑ፣ እዚህ አለን"
+      },
+      "body": {
+        "en": "Choose a time online. You can move or cancel it from your confirmation.",
+        "am": "በኦንላይን ሰዓት ይምረጡ። ከማረጋገጫ መልእክትዎ ማዛወር ወይም መሰረዝ ይችላሉ።"
+      },
+      "action": {
+        "intent": "booking_start",
+        "label": {
+          "en": "Book a first session",
+          "am": "የመጀመሪያ ቀጠሮ ይያዙ"
+        },
+        "placement": "primary"
+      }
+    }
+  }
+}

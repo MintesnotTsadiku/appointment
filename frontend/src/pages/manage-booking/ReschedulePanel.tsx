@@ -4,7 +4,7 @@ import { addDays } from 'date-fns';
 import { Button } from '@/components/button';
 import { useTranslation } from '@/lib/i18n';
 import { serverErrorMessage } from '@/lib/utils';
-import { DateTimeSelector } from '@/pages/booking-v2/components/DateTimeSelector';
+import { DateTimeSelector, usePickerTimeFormat } from '@/pages/booking-v2/components/DateTimeSelector';
 import type { TimeSlot } from '@/pages/booking-v2/types';
 import { fill } from './format';
 import { SELF_SERVICE_API, ownerParams, type ManageView } from './types';
@@ -18,7 +18,7 @@ export function ReschedulePanel({ view, onMoved, onCancel }: { view: ManageView;
   const [date, setDate] = useState<Date | null>(null);
   const [month, setMonth] = useState(new Date());
   const [slot, setSlot] = useState<TimeSlot | null>(null);
-  const [timeFormat, setTimeFormat] = useState<'12h' | '24h' | 'ethiopian'>('12h');
+  const [timeFormat, setTimeFormat] = usePickerTimeFormat();
   const [problem, setProblem] = useState('');
   const { slots, loading } = useOfferingSlots(view, date);
   const { call, loading: saving } = useFrappePostCall<{ message: ManageView }>(`${SELF_SERVICE_API}.reschedule`);
@@ -51,6 +51,7 @@ export function ReschedulePanel({ view, onMoved, onCancel }: { view: ManageView;
         availableSlots={slots}
         selectedSlot={slot}
         onSlotSelect={setSlot}
+        onSlotClear={() => setSlot(null)}
         timeFormat={timeFormat}
         onTimeFormatChange={setTimeFormat}
         timezone={view.booking.timezone}

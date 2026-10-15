@@ -74,6 +74,15 @@ def validate_showcase_catalog() -> dict[str, Any]:
                 raise ValueError(f"Invalid provider asset for {key}")
             _require_text(provider, key, "name", "asset", "checksum")
             _verify_checksum(_asset_path(provider["asset"]), provider["checksum"])
+            # Optional: the AVIF file and the 96 and 192 px avatar files of the portrait.
+            variants = provider.get("variants", [])
+            if not isinstance(variants, list):
+                raise ValueError(f"Invalid portrait variants for {key}")
+            for variant in variants:
+                if not isinstance(variant, dict):
+                    raise ValueError(f"Invalid portrait variant for {key}")
+                _require_text(variant, key, "asset", "checksum")
+                _verify_checksum(_asset_path(variant["asset"]), variant["checksum"])
         # Optional: every file of a template package's imagery (desktop, mobile, night, widths, AVIF).
         template_assets = site.get("templateAssets", [])
         if not isinstance(template_assets, list):

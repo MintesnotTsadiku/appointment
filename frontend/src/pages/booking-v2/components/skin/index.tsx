@@ -7,7 +7,7 @@
 import { useMemo, type CSSProperties } from "react";
 import { Check } from "lucide-react";
 import { useTranslation } from "@/lib/i18n";
-import { BOOKING_STEPS, DEFAULT_BOOKING_SKIN, bookingSkin, type BookingSkin, type BookingStep } from "@/public-experience/templates/booking-skin";
+import { BOOKING_STEPS, DEFAULT_BOOKING_SKIN, bookingSkin, loadBookingSkinStyle, type BookingSkin, type BookingStep } from "@/public-experience/templates/booking-skin";
 import { widthSet, type PictureAsset } from "@/public-experience/templates/kit/core/picture";
 import type { CompiledDesign, PublicUIConfig } from "@/public-experience/types";
 import "./skin.css";
@@ -34,6 +34,8 @@ export function useBookingSkin(config: PublicUIConfig | null | undefined, brandS
   return useMemo(() => {
     const design = config?.compiledDesign ?? null;
     const skin = bookingSkin(design);
+    // The template's booking stylesheet: its own small file, requested as soon as the design is known.
+    void loadBookingSkinStyle(skin);
     const tokens = skin.tokens && brandStyle ? skin.tokens(brandStyle as Record<string, unknown>, mode) : {};
     return {
       skin,
@@ -124,6 +126,16 @@ export function servicePhotoSource(active: ActiveSkin, own: string | undefined, 
   const roles = active.skin.servicePhotoRoles;
   if (!roles.length || !active.design || index < 0) return null;
   const asset = active.design.assets[roles[index % roles.length]] as PictureAsset | undefined;
+  return asset?.src ? asset : null;
+}
+
+/**
+ * The photo of the place where a session meets (`formatPhotoRoles`), for a scheduler that knows the
+ * session's place but not its place on the website (the independent scheduler); else nothing.
+ */
+export function formatPhotoSource(active: ActiveSkin, format: "in_person" | "online" | undefined): PictureAsset | null {
+  const role = format ? active.skin.formatPhotoRoles?.[format] : undefined;
+  const asset = role && active.design ? (active.design.assets[role] as PictureAsset | undefined) : undefined;
   return asset?.src ? asset : null;
 }
 

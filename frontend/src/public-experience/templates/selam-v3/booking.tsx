@@ -1,6 +1,5 @@
 import type { BookingSkin, StepMarkProps } from "../booking-skin";
 import { limeInk } from "./ink";
-import "./booking.css";
 
 /*
  * Selam v3 on the booking pages ("Tempo", continued). Speed and clarity first: no parallax, marquee,
@@ -27,6 +26,8 @@ export const selamBookingSkin: BookingSkin = {
   name: "selam-v3",
   // Tall pills come from booking.css; the shared frame keeps rounded corners for the avatars.
   frame: "rounded",
+  // The stylesheet loads only on this template's booking pages (kit, "Booking skins").
+  style: () => import("./booking.css"),
   servicePhotoRoles: ["session1.selam", "session2.selam"],
   // The handoff shows the booking-band studio, so the visitor has just seen it.
   backdropRole: "band.selam",

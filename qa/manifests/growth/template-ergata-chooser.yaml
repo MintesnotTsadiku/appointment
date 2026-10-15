@@ -30,7 +30,7 @@ scenarios:
     - type: visible_selector
       value: '[data-qa="website-template-ergata-therapy"]'
     - type: visible_selector
-      value: '[data-qa="website-template-ergata-therapy"] img[src*="ergata-therapy.webp"]'
+      value: '[data-qa="website-template-ergata-therapy"] img[src*="ergata-v2/hero"]'
     - type: text_contains
       value: Ergata Therapy
   actions:

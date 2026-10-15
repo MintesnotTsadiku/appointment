@@ -171,9 +171,9 @@ scenarios:
     full_page: false
   # The clinician filter: the card then books with that clinician.
   - action: click
-    selector: '[data-qa="booking-provider"]:has-text("Saron")'
+    selector: '[data-qa="booking-provider"]:has-text("ሳሮን")'
   - action: wait_for
-    selector: '[data-qa="booking-provider"][aria-pressed="true"]:has-text("Saron")'
+    selector: '[data-qa="booking-provider"][aria-pressed="true"]:has-text("ሳሮን")'
   - action: screenshot
     name: journey_am-4-chooser-saron.png
     full_page: false
@@ -183,7 +183,7 @@ scenarios:
     - type: url_contains
       value: with=Saron
   - action: wait_for
-    selector: '[data-qa="booking-provider-option"][aria-pressed="true"]:has-text("Saron")'
+    selector: '[data-qa="booking-provider-option"][aria-pressed="true"]:has-text("ሳሮን")'
     timeout_ms: 20000
   - action: wait_for
     selector: '[data-qa="booking-date"][data-qa-date="{qa_tena_open_day}"]:not([disabled])'

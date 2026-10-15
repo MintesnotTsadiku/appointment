@@ -3,6 +3,9 @@ import type { ProviderProfile } from './useProfileData';
 export interface ProfileFormData {
   provider_name: string;
   full_name: string;
+  /** The name on public pages, and its Amharic form (Amharic pages show it, else the English one). */
+  display_name: string;
+  display_name_am: string;
   phone: string;
   bio: string;
   /** The Amharic bio; the Amharic provider page shows it, else the English one. */
@@ -49,6 +52,8 @@ export function formFromProvider(data?: ProviderProfile): ProfileFormData {
   return {
     provider_name: data?.provider_name || '',
     full_name: data?.full_name || '',
+    display_name: data?.display_name || '',
+    display_name_am: data?.display_name_am || '',
     phone: data?.phone || '',
     bio: data?.bio || '',
     bio_am: data?.bio_am || '',

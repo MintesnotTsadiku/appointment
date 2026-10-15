@@ -11,6 +11,7 @@ const MOMENTS: Record<string, LazyExoticComponent<ComponentType>> = {
   "abugida-language@3": lazy(() => import("./abugida-v3/AbugidaMoment")),
   "selam-movement@3": lazy(() => import("./selam-v3/SelamMoment")),
   "tena-clinic@3": lazy(() => import("./tena-v3/TenaMoment")),
+  "ergata-therapy@2": lazy(() => import("./ergata-v2/ErgataMoment")),
 };
 
 export function hasMoment(rendererKey?: string | null, rendererVersion?: number | null): boolean {

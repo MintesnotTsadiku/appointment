@@ -907,7 +907,17 @@
       "stored24": "stored in 24-hour time",
       "operatingDays": "Operating days",
       "firstProvider": "You will be the first provider. Payment collection is not enabled by this setup.",
-      "saveDraft": "Save draft business"
+      "saveDraft": "Save draft business",
+      "namesTitle": "Names on your booking pages",
+      "namesDescription": "The business name, its description and each provider's name, in English and Amharic.",
+      "namesBusiness": "Business name",
+      "namesDescriptionLabel": "Business description",
+      "namesProvider": "Provider name",
+      "namesHint": "Amharic pages show the Amharic text. When an Amharic box is empty, they show the English text. A published website shows a change after you publish it again.",
+      "namesSave": "Save names",
+      "namesSaving": "Saving names…",
+      "namesDiscard": "Discard name changes",
+      "namesSaved": "Names saved"
     },
     "receptionDesk": {
       "client": "Client",
@@ -1307,7 +1317,9 @@
         "timezone": "Timezone",
         "language": "Language",
         "spokenLanguages": "Languages you speak",
-        "spokenLanguagesHint": "Customers see them on your booking page."
+        "spokenLanguagesHint": "Customers see them on your booking page.",
+        "publicName": "Name on booking pages",
+        "publicNameHint": "Customers see the name in the language of the page. When the Amharic box is empty, they see the English name."
       },
       "details": {
         "title": "Your details",
@@ -3079,7 +3091,14 @@
           "expressive": "Expressive"
         },
         "liveAvailability": "Show my next free times on the website",
-        "liveAvailabilityHelp": "Visitors see the next free time and how many times are left today. They never see who booked. The change goes live when you publish."
+        "liveAvailabilityHelp": "Visitors see the next free time and how many times are left today. They never see who booked. The change goes live when you publish.",
+        "holidayGreetings": "Show Ethiopian holiday greetings on the website",
+        "holidayGreetingsHelp": "Around Enkutatash, Meskel, Genna, Timket and Adwa Victory Day, the website shows a small greeting in its own style. It never covers your content. The change goes live when you publish.",
+        "websiteNameAm": "Website name in Amharic",
+        "websiteNameAmHelp": "Amharic pages show this name. When it is empty, they show the business name in Amharic, else the website name.",
+        "upgradeTitle": "A new design of your template is ready",
+        "upgradeBody": "Your website uses an older version of its template. Upgrade the draft, review it, then publish. Your live website does not change until you publish.",
+        "upgradeAction": "Upgrade the design"
       },
       "content": {
         "title": "Website content",
@@ -4059,6 +4078,31 @@
       "youAreHere": "You are here",
       "bookingDesk": "Booking desk",
       "callShort": "Call"
+    },
+    "ergata": {
+      "nextIntro": "Next free introductory call: {when}, {time}",
+      "nextSession": "Next free session: {when}, {time}",
+      "nextShort": "Next free: {when} {time}",
+      "voices": "Kind words",
+      "swipeHint": "Swipe for more",
+      "officeHours": "Office hours",
+      "onlineHours": "Online hours",
+      "askFirst": "Ask a question first",
+      "bookingFor": "Booking with {name}",
+      "chooseSession": "Choose how we meet"
+    },
+    "holiday": {
+      "label": "Holiday greeting",
+      "enkutatash": "Melkam Addis Amet",
+      "enkutatashLine": "Happy Ethiopian New Year {count}. May it bring you peace.",
+      "meskel": "Melkam Meskel",
+      "meskelLine": "Wishing you a bright Meskel and a warm Demera.",
+      "genna": "Melkam Genna",
+      "gennaLine": "Wishing you a peaceful Ethiopian Christmas with the people you love.",
+      "timket": "Melkam Timket",
+      "timketLine": "Wishing you a joyful Timket, the Ethiopian Epiphany.",
+      "adwa": "Adwa Victory Day",
+      "adwaLine": "Honouring {count} years since the victory of Adwa."
     }
   },
   "customerEmail": {
@@ -6116,7 +6160,10 @@
     "noMatchTitle": "No services match",
     "noMatchBody": "Choose another category or provider.",
     "noServicesTitle": "No services to book yet",
-    "noServicesBody": "This business has not published services for online booking. Check again later."
+    "noServicesBody": "This business has not published services for online booking. Check again later.",
+    "pickTime": "Pick a time",
+    "noTimesToday": "No times left today — showing {0}",
+    "noTimesOn": "No open times on {0} — showing {1}"
   },
   "phoneServer": {
     "inviteNeedsEmail": "Enter your email address. The meeting invitation is sent by email."

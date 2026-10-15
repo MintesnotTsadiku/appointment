@@ -602,6 +602,14 @@ Recommendation:
 3. **Retire v1** from the registry once a query shows no published release uses it. Delete the v1 packages and manifests in the same change. If a release still pins v1, migrate it to v2 first with the existing switch flow.
 4. Republish the six showcases on v3 and rerun `scripts/capture_template_gallery.py`.
 
+**Status (phase 3).** Version 1 of Selam, Bloom, Meron, Abugida, Tena and Ergata is retired (`recipes.RETIRED_VERSIONS`; Ergata v2 is in `docs/design/ERGATA_V2.md`):
+
+- It is not offered: the gallery, the setup chooser, the template choice and `list_curated_recipes` offer the latest version only (`available_recipes`). A new Public Site or Brand Profile cannot be on a retired version, and a document cannot move to one (`recipes.require_offered`). The doctype default for `recipe_version` is now empty, which means the latest version. A new website whose old draft brand profile is on a retired version starts on the latest version.
+- It still renders: its manifests stay in `RECIPE_MANIFESTS`, its packages stay in the frontend registry, and a site already on it can still be edited and published. Do not delete v1 while a release pins it.
+- The go-live report (`bench --site <site> execute appointment.ops.go_live.report`, check `public_sites.template_versions`) lists each published website whose current release is on an older version, marks the retired ones, and gives the fix "Republish to upgrade".
+- Upgrade path for an owner: Website setup shows "A new design of your template is ready" when the draft is on an older version. "Upgrade the design" switches the draft to the latest version of the same template (`switch_website_template`, which keeps the owner's edited sections when they are valid), and the owner publishes. The live site does not change before that.
+- On the development site on 2026-10-15, no Public Site or Experience Release current release is on a retired version. The five organization showcases are on v3 and `/yared-counselling` is on Ergata v2, so `public_sites.template_versions` passes ("All 6 published website(s) use the latest version of their template").
+
 ## 8. Phased plan and effort
 
 Effort is in agent-days (one agent working; parallel phases run at the same time).
@@ -619,6 +627,7 @@ Effort is in agent-days (one agent working; parallel phases run at the same time
 - **Phase 0 and phase 1 are done.** The owner approved every recommendation in section 9 and the additions A1–A7 below. The kit, the next-availability endpoint, the imagery and content-model changes and Bloom v3 are on `develop`. See [TEMPLATE_V3_KIT.md](TEMPLATE_V3_KIT.md) and [BLOOM_V3.md](BLOOM_V3.md).
 - **The booking journey is done for Bloom.** Booking pages now carry a template-owned booking skin. See [BOOKING_LAYOUT.md](../growth/BOOKING_LAYOUT.md) and the "Booking skins" section of [TEMPLATE_V3_KIT.md](TEMPLATE_V3_KIT.md).
 - **Phase 2 is next.** Selam, Tena, Abugida and Meron each get the landing page **and** the booking skin in the same piece of work.
+- **Phase 3, Amharic names and v1 retirement (workstream C).** Amharic pages show the business, website and provider names in Ge'ez script (`Provider.display_name_am`, `Organization.organization_name_am` and `description_am`, `Public Site.site_title_am`), and owners edit them side by side. The ten showcase staff portraits are new, warmer photos of the same people with 96 and 192 px avatar files. See [content-showcases.md](../operations/content-showcases.md), "Amharic names". Version 1 of the five reimagined templates is retired from the offer; see 7.4.
 
 ### Consistency requirements for every v3 template
 

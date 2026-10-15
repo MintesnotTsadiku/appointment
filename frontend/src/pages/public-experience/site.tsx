@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
-import { fetchPublishedSnapshot } from "@/public-experience/api";
+import { fetchPublishedSnapshot, inlinePublishedSnapshot } from "@/public-experience/api";
 import { PublicExperienceProvider } from "@/public-experience/PublicExperienceProvider";
 import { PublicSiteHome } from "@/public-experience/PublicSiteHome";
 import type { PublishedSnapshot } from "@/public-experience/types";
@@ -25,10 +25,17 @@ const PublicSitePage = () => {
   const { pathname, search } = useLocation();
   const navigate = useNavigate();
   const { locale } = useParams<{ slug: string; locale?: string }>();
-  const [snapshot, setSnapshot] = useState<PublishedSnapshot | null>(null);
-  const [resolved, setResolved] = useState(false);
+  // The shell inlines the snapshot for the address it rendered (shell_boot.py), so the first render is the page.
+  const [inline] = useState(() => ({ key: `${pathname}${search}`, snapshot: inlinePublishedSnapshot(locale) }));
+  const [snapshot, setSnapshot] = useState<PublishedSnapshot | null>(inline.snapshot || null);
+  const [resolved, setResolved] = useState(Boolean(inline.snapshot));
 
   useEffect(() => {
+    if (inline.snapshot && inline.key === `${pathname}${search}`) {
+      setSnapshot(inline.snapshot);
+      setResolved(true);
+      return;
+    }
     let active = true;
     setResolved(false);
     fetchPublishedSnapshot(locale).then(async (next) => {
@@ -45,7 +52,7 @@ const PublicSitePage = () => {
     return () => {
       active = false;
     };
-  }, [locale, pathname, search, navigate]);
+  }, [locale, pathname, search, navigate, inline]);
 
   useEffect(() => {
     const title = snapshot?.seo?.title;

@@ -13,7 +13,7 @@ from frappe.rate_limiter import rate_limit
 from frappe.utils import cint, get_datetime, get_time, getdate
 
 from appointment.helpers import phone as phones
-from appointment.scheduler import customer_identity, notifications, online_meeting, resources
+from appointment.scheduler import customer_identity, localized_names, notifications, online_meeting, resources
 from appointment.scheduler.booking_access import require_access
 
 _PUBLIC_CREATE = object()
@@ -605,6 +605,8 @@ def open_slots(parts, date, quantity=1):
     # A resource-only offering shows its resource where a provider would be.
     label_id, label_name = (provider.name, provider.provider_name) if provider else (
         event.resource, frappe.db.get_value("Resource", event.resource, "resource_name"))
+    # The provider's public name in both languages, like the chooser's chips (`localized_names`).
+    local_name = localized_names.provider_names(provider) if provider else {}
     for h in effective_hours(service, location, provider, day):
         start = local_instant(day, h["start_time"], location.timezone) + timedelta(
             minutes=int(service.buffer_before or 0)
@@ -619,6 +621,7 @@ def open_slots(parts, date, quantity=1):
                     end_time=end.isoformat() + "Z",
                     provider_id=label_id,
                     provider_name=label_name,
+                    provider_local_name=local_name,
                     available=available,
                     booked=not available,
                 )

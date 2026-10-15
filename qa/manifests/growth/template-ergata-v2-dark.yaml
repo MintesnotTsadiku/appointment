@@ -1,0 +1,143 @@
+# Ergata v2, dark mode and reduced motion: night photos, the still review grid, the mode switch.
+# Fixture: appointment.tests.template_ergata_v2_qa_fixtures (setup before; this manifest books nothing).
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-template-ergata-v2-dark
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+  color_scheme: dark
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.template_ergata_v2_qa_fixtures.browser_values
+scenarios:
+- id: ergata_v2_en_mobile_dark
+  title: Ergata v2 (en, phone, dark, reduced motion)
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /{qa_ergata_slug}?display=dark&preview-time=10:30
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="ergata-therapy-v2"][data-pe-mode="dark"][data-motion-level="none"]'
+    - type: text_contains
+      value: Good morning
+  actions:
+  - action: wait_for
+    selector: .eg2-hero-photo img[src*="hero-night"]
+  - action: screenshot
+    name: ergata_v2_en_mobile_dark-1-hero-night.png
+    full_page: false
+  - action: click
+    selector: '#eg2-approach-title'
+  - action: screenshot
+    name: ergata_v2_en_mobile_dark-2-deep-band.png
+    full_page: false
+  - action: click
+    selector: '#eg2-voices-title'
+  - action: wait_for
+    selector: '[data-qa="ergata-voices"][data-marquee="static"]'
+  - action: wait_for
+    selector: '[data-qa="ergata-voices-pause"]'
+    state: detached
+  - action: screenshot
+    name: ergata_v2_en_mobile_dark-3-kind-words-still.png
+    full_page: false
+  - action: click
+    selector: '#eg2-visit-title'
+  - action: screenshot
+    name: ergata_v2_en_mobile_dark-4-places.png
+    full_page: false
+  - action: click
+    selector: '#eg2-band-title'
+  - action: wait_for
+    selector: .eg2-band-window img[src*="band-night"]
+  - action: screenshot
+    name: ergata_v2_en_mobile_dark-5-band-night.png
+    full_page: false
+  - action: screenshot
+    name: ergata_v2_en_mobile_dark-6-full.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="ergata-mode"]'
+  - action: wait_for
+    selector: '[data-template="ergata-therapy-v2"][data-pe-mode="light"]'
+  - action: click
+    selector: '[data-qa="ergata-mode"]'
+  - action: wait_for
+    selector: '[data-template="ergata-therapy-v2"][data-pe-mode="dark"]'
+  - &id001
+    action: get_console_errors
+  - &id002
+    action: get_network_errors
+- id: ergata_v2_am_desktop_dark
+  title: Ergata v2 (am, desktop, dark, reduced motion)
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /{qa_ergata_slug}/am?display=dark&preview-time=10:30
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="ergata-therapy-v2"][data-pe-mode="dark"][data-motion-level="none"]'
+    - type: text_contains
+      value: እንደምን አደሩ
+  actions:
+  - action: wait_for
+    selector: .eg2-hero-photo img[src*="hero-night"]
+  - action: screenshot
+    name: ergata_v2_am_desktop_dark-1-hero-night.png
+    full_page: false
+  - action: click
+    selector: '#eg2-approach-title'
+  - action: screenshot
+    name: ergata_v2_am_desktop_dark-2-deep-band.png
+    full_page: false
+  - action: click
+    selector: '#eg2-voices-title'
+  - action: wait_for
+    selector: '[data-qa="ergata-voices"][data-marquee="static"]'
+  - action: wait_for
+    selector: '[data-qa="ergata-voices-pause"]'
+    state: detached
+  - action: screenshot
+    name: ergata_v2_am_desktop_dark-3-kind-words-still.png
+    full_page: false
+  - action: click
+    selector: '#eg2-visit-title'
+  - action: screenshot
+    name: ergata_v2_am_desktop_dark-4-places.png
+    full_page: false
+  - action: click
+    selector: '#eg2-band-title'
+  - action: wait_for
+    selector: .eg2-band-window img[src*="band-night"]
+  - action: screenshot
+    name: ergata_v2_am_desktop_dark-5-band-night.png
+    full_page: false
+  - action: screenshot
+    name: ergata_v2_am_desktop_dark-6-full.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="ergata-mode"]'
+  - action: wait_for
+    selector: '[data-template="ergata-therapy-v2"][data-pe-mode="light"]'
+  - action: click
+    selector: '[data-qa="ergata-mode"]'
+  - action: wait_for
+    selector: '[data-template="ergata-therapy-v2"][data-pe-mode="dark"]'
+  - *id001
+  - *id002

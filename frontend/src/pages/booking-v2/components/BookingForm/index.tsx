@@ -13,8 +13,8 @@ import { Label } from "@/components/label";
 import { Textarea } from "@/components/textarea";
 import { PhoneInput, PhoneTagsInput } from "@/components/phone-input";
 import { normalizePhone } from "@/lib/phone";
-import { formatDate } from "../../utils/dateHelpers";
-import { clockForLanguage, formatInstant, zoneLabel } from "@/lib/time";
+import { formatInstant, zoneLabel } from "@/lib/time";
+import { formatBookingDay } from "@/lib/ethiopian-calendar";
 import { priceLabel } from "@/pages/public-experience/provider-core";
 import "../skin/skin.css";
 import { useTheme } from "@/components/theme-provider";
@@ -147,7 +147,7 @@ export function BookingForm({
 
   const startTime = new Date(selectedSlot.start_time);
   // The same clock as the picker and the confirmation (Habesha time on Amharic pages).
-  const formattedTime = formatInstant(startTime, clockForLanguage(language, timeFormat), timezone);
+  const formattedTime = formatInstant(startTime, timeFormat, timezone);
   const zone = zoneLabel(timezone, language, t("customerBooking.zoneTime"), (city) => {
     const key = `timeZoneCities.${city}`;
     const name = t(key);
@@ -532,7 +532,7 @@ export function BookingForm({
                 <div className="flex-1 min-w-0">
                     <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t("customerBooking.dateTime")}</p>
                     <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>
-                    {formatDate(selectedDate, 'full', intlLocale(language))}
+                    {formatBookingDay(selectedDate, language, intlLocale(language), timeFormat)}
                   </p>
                     <p className="mt-1" style={{ color: 'var(--text-primary)' }}>
                     {formattedTime}

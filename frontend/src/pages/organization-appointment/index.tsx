@@ -5,12 +5,13 @@
  * Layout and states: docs/growth/BOOKING_LAYOUT.md.
  */
 
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useFrappeGetCall } from "frappe-react-sdk";
 import { AnimatePresence } from "framer-motion";
 import { useAppContext } from "@/context/app";
 import { getLocalTimezone } from "@/lib/utils";
+import { localizeBookingPayload, siteName } from "@/lib/local-names";
 import { ArrowLeft, Clock3, LayoutGrid, MapPin, RotateCw, User, Video } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
 import { useTranslation } from "@/lib/i18n";
@@ -21,7 +22,7 @@ import { BookingState, BookingStatePage, ServicesSkeleton, TimePickerSkeleton, p
 import { useOnlineLabel } from "@/components/online-session/JoinSession";
 
 import { ServiceSelector } from "@/pages/booking-v2/components/ServiceSelector";
-import { BookingSummaryCard, DateTimeSelector, type SummaryFact } from "@/pages/booking-v2/components/DateTimeSelector";
+import { BookingSummaryCard, DateTimeSelector, usePickerTimeFormat, type SummaryFact } from "@/pages/booking-v2/components/DateTimeSelector";
 import { shortProviderName } from "@/pages/booking-v2/components/DateTimeSelector/TimeSlotsPanel";
 import { BookingForm } from "@/pages/booking-v2/components/BookingForm";
 import { ConfirmationModal } from "@/pages/booking-v2/components/ConfirmationModal";
@@ -131,7 +132,8 @@ const OrganizationAppointmentV2 = () => {
   const [friendlyError, setFriendlyError] = useState<string>("");
   const [currentPhase, setCurrentPhase] = useState<Phase>("service");
   const [displayMonth, setDisplayMonth] = useState(new Date());
-  const [timeFormat, setTimeFormat] = useState<"12h" | "24h" | "ethiopian">("12h");
+  // Habesha time first in Amharic; the customer's choice in the toggle wins.
+  const [timeFormat, setTimeFormat] = usePickerTimeFormat();
   const [bookingResponse, setBookingResponse] = useState<(BookingResponse & { userEmail?: string; userPhone?: string }) | null>(null);
   // The slot as the picker shows it, with its provider, so it stays highlighted and the bar can name the provider.
   const [chosenSlot, setChosenSlot] = useState<V2TimeSlot | null>(null);
@@ -171,7 +173,7 @@ const OrganizationAppointmentV2 = () => {
     ? { org_slug: orgSlug }
     : undefined;
 
-  const { data, isLoading, error, mutate } = useFrappeGetCall(
+  const { data: answer, isLoading, error, mutate } = useFrappeGetCall(
     apiEndpoint ?? "",
     apiParams,
     undefined,
@@ -185,6 +187,9 @@ const OrganizationAppointmentV2 = () => {
       },
     }
   );
+
+  // Business and provider names in the page language (Amharic names from `localized_names`).
+  const data = useMemo(() => (answer?.message ? { ...answer, message: localizeBookingPayload(answer.message, language) } : answer), [answer, language]);
 
   useEffect(() => {
     if (orgSlug && serviceSlug) {
@@ -423,7 +428,7 @@ const OrganizationAppointmentV2 = () => {
     }
   };
 
-  const brandName = bookingBrand.config?.identity.applicationName || userInfo?.organizationName || "";
+  const brandName = (bookingBrand.config ? siteName(bookingBrand.config.identity.applicationName, bookingBrand.config.identity.applicationNameAm, language) : "") || userInfo?.organizationName || "";
   const logo = bookingBrand.config ? brandLogo(bookingBrand.config.compiledDesign) : "";
   const pageStyle = { ...skin.style, "--bk-top": HEADER_HEIGHT } as CSSProperties;
   const showSteps = !friendlyError && !error;
@@ -513,7 +518,7 @@ const OrganizationAppointmentV2 = () => {
   }
   const photo = currentService && bookingBrand.resolved ? servicePhotoSource(skin, currentService.image, Number(data?.message?.photo_index ?? -1)) : null;
   // While the design loads, an empty frame keeps the photo's place (no shift, no wrong file).
-  const summaryMedia = (wide: boolean) => photo ? <ServicePhoto asset={photo} sizes={wide ? "300px" : "56px"} vt />
+  const summaryMedia = (wide: boolean) => photo ? <ServicePhoto asset={photo} sizes={wide ? "88px" : "56px"} vt />
     : currentService?.image && !bookingBrand.resolved ? <span className="bk-photo" aria-hidden="true" /> : undefined;
 
   return (
@@ -524,9 +529,10 @@ const OrganizationAppointmentV2 = () => {
       />
       {header}
       <div
-        className={`booking-experience min-h-screen text-theme-primary ${currentPhase === "datetime" ? "" : "pb-10"}`}
+        className={`booking-experience text-theme-primary ${currentPhase === "datetime" ? "" : "pb-10"}`}
         {...pageAttrs}
-        style={{ ...pageStyle, backgroundColor: "var(--bg-primary)" }}
+        // The header sits above this block, so the block fills the rest of the window and the time picker fits it.
+        style={{ ...pageStyle, backgroundColor: "var(--bg-primary)", minHeight: `calc(100dvh - ${HEADER_HEIGHT})` }}
       >
         <BookingBackdrop active={skin} />
         <div className="booking-stage relative z-10">
@@ -557,6 +563,7 @@ const OrganizationAppointmentV2 = () => {
                 availableSlots={slots}
                 selectedSlot={chosenSlot}
                 onSlotSelect={handleSlotSelect}
+                onSlotClear={() => setChosenSlot(null)}
                 timeFormat={timeFormat}
                 onTimeFormatChange={setTimeFormat}
                 timezone={timeZone}

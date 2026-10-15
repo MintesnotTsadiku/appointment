@@ -71,6 +71,12 @@ export function ProfileForm({ provider, email, onSaved }: ProfileFormProps) {
           <Field id="full_name" label={t('staff.profile.fields.fullName')}>
             <Input id="full_name" value={form.full_name} onChange={(e) => set('full_name')(e.target.value)} placeholder={t('staff.profile.fields.fullNamePlaceholder')} />
           </Field>
+          {/* The public name, English and Amharic side by side: booking pages show the name in their own language. */}
+          <div className="@container min-w-0 space-y-1.5 sm:col-span-2">
+            <LocalizedInput label={t('staff.profile.fields.publicName')} value={{ en: form.display_name, am: form.display_name_am }} maxLength={140} qa="profile-public-name"
+              onChange={(value) => setForm((prev) => ({ ...prev, display_name: value.en ?? prev.display_name, display_name_am: value.am ?? prev.display_name_am }))} />
+            <FieldHint id="public-name-hint">{t('staff.profile.fields.publicNameHint')}</FieldHint>
+          </div>
           {/* English and Amharic side by side, like the website editor. The public page shows its own language, else the other. */}
           <div className="@container min-w-0 space-y-1.5 sm:col-span-2">
             <LocalizedInput label={t('staff.profile.fields.bio')} value={{ en: form.bio, am: form.bio_am }} long maxLength={500} qa="profile-bio"

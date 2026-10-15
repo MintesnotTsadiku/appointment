@@ -49,7 +49,20 @@ RECIPE_MANIFESTS = {
     },
     "ergata-therapy": {
         1: "public_experience/manifest/design/recipes/ergata-therapy.v1.json",
+        2: "public_experience/manifest/design/recipes/ergata-therapy.v2.json",
     },
+}
+# Retired versions: no longer offered to new sites or chosen in a template switch, but kept in
+# RECIPE_MANIFESTS (and in the frontend registry) so a release that pins one still renders.
+# Owners upgrade by switching to the latest version and publishing again (go-live check
+# "public_sites.template_versions"). Delete a retired version only when no release pins it.
+RETIRED_VERSIONS = {
+    "selam-movement": frozenset({1}),
+    "bloom-hair": frozenset({1}),
+    "meron-atelier": frozenset({1}),
+    "abugida-language": frozenset({1}),
+    "tena-clinic": frozenset({1}),
+    "ergata-therapy": frozenset({1}),
 }
 PRIMITIVE_MANIFESTS = {
     "palette": "public_experience/manifest/design/palettes/{key}.v{version}.json",
@@ -293,6 +306,28 @@ def recipe_versions(recipe_key: str) -> tuple[int, ...]:
     return tuple(sorted(RECIPE_MANIFESTS.get(recipe_key, {})))
 
 
+def latest_version(recipe_key: str) -> int | None:
+    versions = recipe_versions(recipe_key)
+    return versions[-1] if versions else None
+
+
+def is_retired(recipe_key: str, recipe_version: int | None) -> bool:
+    """A retired version still renders the releases that pin it, but no site may start on it or move to it."""
+    return int(recipe_version or 0) in RETIRED_VERSIONS.get(recipe_key, frozenset())
+
+
+def require_offered(recipe_key: str, recipe_version: int | None, current: tuple[str, int] | None = None) -> None:
+    """Refuse a retired version, unless the document is already on it (`current` is its stored key and version)."""
+    if not is_retired(recipe_key, recipe_version):
+        return
+    if current and current[0] == recipe_key and int(current[1] or 0) == int(recipe_version or 0):
+        return
+    raise UnknownRecipeError(
+        f"recipe {recipe_key} version {recipe_version} is retired; choose version {latest_version(recipe_key)}",
+        details={"recipeKey": recipe_key, "requested": recipe_version, "offered": latest_version(recipe_key)},
+    )
+
+
 def list_recipes() -> tuple[RecipeDefinition, ...]:
     """The latest version of every certified recipe, as the gallery offers them."""
     return tuple(get_recipe(key) for key in RECIPE_MANIFESTS)
@@ -307,6 +342,8 @@ def available_recipes() -> tuple[RecipeDefinition, ...]:
     """
     recipes = []
     for key in RECIPE_MANIFESTS:
+        if is_retired(key, latest_version(key)):
+            continue
         try:
             recipes.append(get_recipe(key))
         except DesignManifestError:

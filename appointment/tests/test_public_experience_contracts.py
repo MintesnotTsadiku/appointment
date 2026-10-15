@@ -123,8 +123,8 @@ class TestRecipeCompiler(unittest.TestCase):
         for recipe in list_recipes():
             versions = recipe_versions(recipe.key)
             if recipe.key == "ergata-therapy":
-                # Ergata started after the Taste v1 pass, so its first version is the latest.
-                self.assertEqual(versions, (1,))
+                # Ergata started after the Taste v1 pass; v2 brings it to v3 parity (docs/design/ERGATA_V2.md), v1 stays loadable.
+                self.assertEqual(versions, (1, 2))
             else:
                 # The template reimagination adds v3 packages (Bloom in phase 1, the others in phase 2); v1 and v2 stay loadable.
                 expected = (1, 2, 3) if recipe.key in {"bloom-hair", "selam-movement", "tena-clinic", "meron-atelier", "abugida-language"} else (1, 2)
@@ -221,9 +221,20 @@ class TestTypedContentAndActions(unittest.TestCase):
         self.assertIn("notice", recipe.required_sections)
         design = compile_design(recipe.key, recipe.version, {"motion": "calm"}, None, ["en", "am"]).as_dict()
         self.assertEqual(design["layout"]["rendererKey"], "ergata-therapy")
-        self.assertEqual(design["layout"]["rendererVersion"], 1)
+        self.assertEqual(design["layout"]["rendererVersion"], 2)
         self.assertEqual(set(design["tokens"]), {"light", "dark"})
-        self.assertTrue(design["assets"]["hero.primary"]["src"].endswith("/heroes/ergata-therapy.webp"))
+        hero = design["assets"]["hero.primary"]
+        self.assertTrue(hero["src"].endswith("/support/ergata-v2/hero.webp"))
+        # v2: the hero and the booking band have night photos; every photo has AVIF files and smaller widths.
+        self.assertTrue(hero["darkSrc"].endswith("/support/ergata-v2/hero-night.webp"))
+        self.assertTrue(design["assets"]["band.ergata"]["darkSrc"].endswith("/support/ergata-v2/band-night.webp"))
+        self.assertEqual(hero["formats"], ["avif"])
+        for role in ("testimonial.ergata", "contact.ergata"):
+            self.assertIn(role, design["assets"])
+        # v1 stays loadable for releases that pin it.
+        v1 = compile_design(recipe.key, 1, {"motion": "calm"}, None, ["en", "am"]).as_dict()
+        self.assertEqual(v1["layout"]["rendererVersion"], 1)
+        self.assertTrue(v1["assets"]["hero.primary"]["src"].endswith("/heroes/ergata-therapy.webp"))
         for choice in ("soft", "paper"):
             compile_design(recipe.key, recipe.version, {"paletteChoice": choice}, None, ["en", "am"])
         alternate = compile_design(recipe.key, recipe.version, {"fontChoice": "alternate"}, None, ["en", "am"]).as_dict()

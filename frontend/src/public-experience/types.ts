@@ -57,13 +57,15 @@ export interface CompiledDesign {
   actionIntents: string[];
   contentCapabilities: Record<string, unknown>;
   localeCapabilities: Record<string, unknown>;
-  identity: { applicationName: string; shortName: string; logoPrimary?: string | null; logoCompact?: string | null; favicon?: string | null };
+  identity: { applicationName: string; applicationNameAm?: string; shortName: string; logoPrimary?: string | null; logoCompact?: string | null; favicon?: string | null };
   validation: { ok: boolean; issues?: unknown[]; protectedStateRoles?: string[] };
   contentHash: string;
 }
 
 export interface PublicIdentity {
   applicationName: string;
+  /** The website name on Amharic pages, when the owner gave one (`publisher._local_title`). */
+  applicationNameAm?: string;
   shortName: string;
   logoPrimary?: string | null;
   logoCompact?: string | null;
@@ -105,6 +107,8 @@ export interface PublishedSnapshot {
   previewContent?: { article: import("./contentContract").ContentDetail; gallery: import("./contentContract").ContentDetail };
   siteSlug?: string;
   features?: string[];
+  /** The website name on Amharic pages: `{am}` when the owner gave one. */
+  localTitle?: { am?: string };
   contract: string;
   releaseHash: string | null;
   locale: string;

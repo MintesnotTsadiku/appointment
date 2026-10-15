@@ -3,7 +3,8 @@
  */
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { Error } from "frappe-js-sdk/lib/frappe_app/types";
+// Type only: a value import would bring the Frappe SDK into every page, and shadowed the global Error.
+import type { Error as FrappeError } from "frappe-js-sdk/lib/frappe_app/types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -15,7 +16,7 @@ export const getSiteName = () => {
   return window.frappe?.boot?.sitename ?? import.meta.env.VITE_SITE_NAME;
 };
 
-export const getErrorMessages = (error: Error) => {
+export const getErrorMessages = (error: FrappeError) => {
   let eMessages = error?._server_messages
     ? JSON.parse(error?._server_messages)
     : [];
@@ -62,7 +63,7 @@ export function serverErrorMessage(error: unknown): string {
   if (body && typeof body === "object" && typeof (body as { error?: unknown }).error === "string") {
     return (body as { error: string }).error;
   }
-  const message = getErrorMessages(error as Error)[0]?.message;
+  const message = getErrorMessages(error as FrappeError)[0]?.message;
   return typeof message === "string" ? removeHtmlString(message) : "";
 }
 
@@ -70,7 +71,7 @@ export function removeHtmlString(data: string) {
   return data.replace(/<\/?[^>]+(>|$)/g, "");
 }
 
-export function parseFrappeErrorMsg(error: Error) {
+export function parseFrappeErrorMsg(error: FrappeError) {
   const messages = getErrorMessages(error);
   let message = "";
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

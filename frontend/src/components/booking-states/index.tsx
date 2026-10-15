@@ -316,3 +316,20 @@ export function previewState(): PreviewState | null {
   const value = new URLSearchParams(window.location.search).get('preview-state');
   return value === 'loading' || value === 'error' || value === 'unavailable' || value === 'offline' || value === 'empty' ? value : null;
 }
+
+/**
+ * Development only: `?qa-fit=1` turns on the time picker's fit probe for browser QA (see
+ * `DateTimeSelector/fitProbe.ts`). The flag is kept for the tab's session, because the booking pages change
+ * their address before the picker opens. Production builds ignore it.
+ */
+export function qaFitProbe(): boolean {
+  if (!import.meta.env.DEV || typeof window === 'undefined') return false;
+  const asked = new URLSearchParams(window.location.search).get('qa-fit') === '1';
+  try {
+    if (asked) window.sessionStorage.setItem('qa-fit', '1');
+    return asked || window.sessionStorage.getItem('qa-fit') === '1';
+  } catch {
+    return asked;
+  }
+}
+qaFitProbe();

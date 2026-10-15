@@ -6,7 +6,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 
 import type { ContentState } from "@/public-experience/contentContract";
 import { buildThemeAttributes } from "@/public-experience/firstPaint";
-import { getTemplatePackage } from "@/public-experience/templates/registry";
+import { useTemplatePackage } from "@/public-experience/templates/registry";
 import { getFallbackPublicUIConfig } from "@/public-experience/tokens";
 import type { PublishedSnapshot } from "@/public-experience/types";
 import { useTranslation } from "@/lib/i18n";
@@ -49,7 +49,7 @@ export function WebsitePreview({ snapshot, initialSurface = "landing", savedArti
   }, []);
   const [surface, setSurface] = useState(initialSurface);
   const [locale, setLocale] = useState("en");
-  const template = getTemplatePackage(snapshot.compiledDesign.layout.rendererKey, snapshot.compiledDesign.layout.rendererVersion);
+  const { template, status } = useTemplatePackage(snapshot.compiledDesign.layout.rendererKey, snapshot.compiledDesign.layout.rendererVersion);
   const theme = buildThemeAttributes({ ...getFallbackPublicUIConfig("en"), compiledDesign: snapshot.compiledDesign }, mode, false);
   const kind = ["blog", "article"].includes(surface) ? "blog" : "gallery";
   const release = kind === "blog" ? snapshot.previewContent?.article : snapshot.previewContent?.gallery;
@@ -59,6 +59,7 @@ export function WebsitePreview({ snapshot, initialSurface = "landing", savedArti
     publicRoot: "/website-preview", mode, toggleMode: () => setMode(mode === "light" ? "dark" : "light"),
     rootStyle: theme.variables as CSSProperties };
 
+  if (status === "loading") return <section aria-label={t("staff.website.preview.liveLabel")} aria-busy="true" className="website-preview" />;
   if (!template) return <section aria-label={t("staff.website.preview.liveLabel")}><p>{t("staff.website.preview.unavailable")}</p></section>;
 
   return <section ref={previewRoot} aria-label={t("staff.website.preview.liveLabel")} className={`space-y-4 website-preview${expanded ? " website-preview-expanded" : ""}`} role={expanded ? "dialog" : undefined} aria-modal={expanded || undefined} onKeyDown={event => { if (expanded && event.key === "Escape" && !event.defaultPrevented) { event.preventDefault(); setExpanded(false); } }}>

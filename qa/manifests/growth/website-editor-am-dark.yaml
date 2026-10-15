@@ -186,7 +186,7 @@ scenarios:
     name: website_editor_am_mobile_dark-9-public-faq.png
     full_page: false
   - action: click
-    selector: 'a.eg-faq-ask'
+    selector: 'a.eg2-faq-ask'
   - action: wait_for
     selector: '#contact'
   - action: screenshot

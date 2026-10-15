@@ -171,9 +171,11 @@ class Page:
     def card(self, row) -> dict:
         area, category = self.areas[row["area"]], self.categories[row["category"]]
         description = (row.get("descriptions") or {}).get(self.lang) or row["description"]
-        return dict(**{**row, "description": description}, area_label=self.label(area, "area_name"), city=self.label(area, "city"), region=area.city or "",
+        # The business name in the page language (`directory.booking_pages` names), else the English one.
+        name = (row.get("names") or {}).get(self.lang) or row["name"]
+        return dict(**{**row, "name": name, "description": description}, area_label=self.label(area, "area_name"), city=self.label(area, "city"), region=area.city or "",
                     category_label=self.label(category, "category_name"),
-                    initials="".join(word[0] for word in row["name"].split()[:2]).upper(),
+                    initials="".join(word[0] for word in name.split()[:2]).upper(),
                     logo_url=get_url(row["logo"]) if row["logo"] else "")
 
     def groups(self, rows):

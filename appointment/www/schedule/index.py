@@ -5,11 +5,14 @@ no_cache = 1
 def get_context(context):
     from appointment.growth import sharing, short_links
     from appointment.public_experience.csp import encode_boot_data, shell_nonce
+    from appointment.public_experience.shell_boot import shell_boot_tags
 
     # A former provider page address (`/schedule/p/<old>`) redirects to the current one.
     short_links.shell_redirect()
     # Link previews for provider pages (`/schedule/p/<slug>`) read Open Graph tags without running the SPA.
     context["public_meta_tags"] = sharing.shell_meta_tags()
+    # A business scheduler inlines its website's design and preloads its display font (shell_boot).
+    context["public_meta_tags"] += shell_boot_tags()
 
     context["content_shell_nonce"] = shell_nonce()
     csrf_token = frappe.sessions.get_csrf_token()

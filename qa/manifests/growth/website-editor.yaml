@@ -175,7 +175,7 @@ scenarios:
     - type: text_contains
       value: Free parking in the courtyard and a lift to the second floor
     - type: visible_selector
-      value: '#eg-faq-title'
+      value: '#eg2-faq-title'
     - type: visible_selector
       value: 'img[src^="/files/section-"]'
   - action: wait_for
@@ -195,12 +195,12 @@ scenarios:
     name: website_editor_en_desktop-8-public-faq.png
     full_page: false
   - action: click
-    selector: 'a.eg-faq-ask'
+    selector: 'a.eg2-faq-ask'
   - action: wait_for
     selector: '#contact'
     assertions:
     - type: text_contains
-      selector: '.eg-contact-links a[href="tel:+251911223344"]'
+      selector: '.eg2-contact-links a[href="tel:+251911223344"]'
       value: +251 91 122 3344
   - action: screenshot
     name: website_editor_en_desktop-9-public-places.png

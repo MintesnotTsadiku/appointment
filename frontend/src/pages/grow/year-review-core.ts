@@ -105,7 +105,8 @@ export function dateRange(start: string, end: string, lang: string): string {
     const format = new Intl.DateTimeFormat(lang === 'am' ? 'am-u-ca-ethiopic' : 'en-GB', options) as Intl.DateTimeFormat & {
       formatRange(start: Date, end: Date): string;
     };
-    return format.formatRange(from, to);
+    // The platform spells the 13th month ጳጉሜ (as the booking calendar and the server do); CLDR adds a final ን.
+    return format.formatRange(from, to).replace(/\u1333\u1309\u121C\u1295/g, 'ጳጉሜ');
   } catch {
     return `${start} – ${end}`;
   }

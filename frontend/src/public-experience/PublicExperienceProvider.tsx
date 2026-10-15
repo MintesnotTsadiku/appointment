@@ -4,11 +4,13 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type PropsWithChildren,
 } from "react";
 
-import { fetchPublicConfig } from "./api";
+import { fetchPublicConfig, inlinePublicConfig } from "./api";
+import { designFontsReady, loadDesignFonts } from "./fonts";
 import { buildThemeAttributes, type ThemeAttributes, type ThemePreference } from "./firstPaint";
 import { getFallbackPublicUIConfig } from "./tokens";
 import type { PublicUIConfig } from "./types";
@@ -45,10 +47,12 @@ export const PublicExperienceProvider = ({
   children,
   locale,
 }: PropsWithChildren<{ locale?: string }>) => {
-  const [config, setConfig] = useState<PublicUIConfig>(() => getFallbackPublicUIConfig(locale));
+  // The shell inlines the published config (shell_boot.py); without it the packaged fallback shows until the API answers.
+  const [inline] = useState(() => inlinePublicConfig(locale));
+  const [config, setConfig] = useState<PublicUIConfig>(() => inline || getFallbackPublicUIConfig(locale));
   const [preference, setPreferenceState] = useState<ThemePreference>(() => storedPreference());
   const [dark, setDark] = useState<boolean>(() => systemPrefersDark());
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(() => !(inline && designFontsReady(inline)));
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -64,12 +68,9 @@ export const PublicExperienceProvider = ({
     setLoading(true);
     fetchPublicConfig(locale)
       .then(async (next) => {
-        if (typeof document !== "undefined" && document.fonts) {
-          await Promise.allSettled(Object.values(next.compiledDesign.typography.roles).map(role =>
-            document.fonts.load(`${role.weight} 16px ${JSON.stringify(role.family)}`)));
-        }
+        await loadDesignFonts(next);
         if (!active) return;
-        setConfig(next);
+        setConfig((previous) => previous.releaseHash && previous.releaseHash === next.releaseHash && previous.locale === next.locale ? previous : next);
         setError(null);
       })
       .catch(() => {
@@ -83,7 +84,13 @@ export const PublicExperienceProvider = ({
     };
   }, [locale]);
 
-  useEffect(() => refresh(), [refresh]);
+  // An inlined config whose fonts have loaded is final: the first paint is the page itself.
+  const settled = useRef<string | null>(isLoading ? null : locale ?? "");
+  useEffect(() => {
+    if (settled.current === (locale ?? "")) return;
+    settled.current = null;
+    return refresh();
+  }, [refresh, locale]);
 
   const setPreference = useCallback((next: ThemePreference) => {
     setPreferenceState(next);

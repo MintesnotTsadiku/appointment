@@ -1,5 +1,4 @@
 import { createContext, useContext } from 'react';
-import enTranslations from './translations/en.json';
 
 /**
  * Localisation is backed by the Frappe `Translation` DocType.
@@ -28,10 +27,21 @@ export const useTranslation = () => {
   return context;
 };
 
+/**
+ * The bundled English catalog. Each entry registers it first: the full application the whole file
+ * (./english.ts), a website page only the groups it uses (./english-site.ts), so a phone does not
+ * download the staff strings (docs/operations/PUBLIC_PERFORMANCE.md).
+ */
+let englishCatalog: Record<string, unknown> = {};
+
+export const registerEnglish = (catalog: Record<string, unknown>): void => {
+  englishCatalog = { ...englishCatalog, ...catalog };
+};
+
 /** Resolve a dotted translation key to its English source string. */
 export const englishSource = (key: string): string => {
   const keys = key.split('.');
-  let value: unknown = enTranslations;
+  let value: unknown = englishCatalog;
   for (const part of keys) {
     if (value && typeof value === 'object' && part in (value as Record<string, unknown>)) {
       value = (value as Record<string, unknown>)[part];

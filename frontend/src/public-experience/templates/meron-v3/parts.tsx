@@ -93,10 +93,12 @@ export function slotText(chrome: PublicChrome, iso: string, zone: string, locale
 }
 
 /** The live "next free fitting" chip; renders nothing while loading or when the data has no free time. */
-export function NextChip({ facts, data, chrome, locale, variant = "fitting", href, qa }: {
-  facts: SlotFacts | null | undefined; data: NextAvailability | null; chrome: PublicChrome; locale: string;
+export function NextChip({ facts, data, chrome, locale, variant = "fitting", href, qa, pending = false }: {
+  facts: SlotFacts | null | undefined; data: NextAvailability | null; chrome: PublicChrome; locale: string; pending?: boolean;
   variant?: "fitting" | "plain" | "short"; href?: string; qa?: string;
 }) {
+  // While the free times load (\`pending\`), an invisible chip keeps its place, so nothing below moves.
+  if (pending && !data) return <p className="m3-chip" aria-hidden="true" style={{ visibility: "hidden" }}><span className="m3-knot" />&nbsp;</p>;
   if (!data || !facts?.next) return null;
   const body = <><span className="m3-knot" aria-hidden="true" />{slotText(chrome, facts.next, data.timezone, locale, variant)}</>;
   return href ? <a className="m3-chip" href={href} data-qa={qa}>{body}</a> : <p className="m3-chip" data-qa={qa}>{body}</p>;

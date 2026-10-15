@@ -59,10 +59,21 @@ assert.ok(
   "only the platform homepage may load platform landing settings",
 );
 
-const routes = read("src/route.tsx");
+const fullRoutes = read("src/route.tsx");
+const siteRoutes = read("src/public-site-routes.tsx");
+// The website routes live in public-site-routes.tsx: the full application places them after its own routes.
+const routes = fullRoutes.replace("{publicSiteRoutes()}", siteRoutes);
 for (const expected of ['path="/:slug"', 'path="/:slug/book"', 'path="/:slug/:locale"', 'path="/settings/public-experience"']) {
   assert.ok(routes.includes(expected), `route.tsx must declare ${expected}`);
 }
+for (const expected of ['path="/:slug"', 'path="/:slug/book"', 'path="/:slug/:locale"', 'path="/:slug/blog"', 'path="/:slug/gallery"']) {
+  assert.ok(siteRoutes.includes(expected), `public-site-routes.tsx must declare ${expected}`);
+}
+// The lean website entry serves only these routes and hands every other address to the full application.
+const siteApp = read("src/site-app.tsx");
+assert.ok(siteApp.includes("publicSiteRoutes()") && siteApp.includes('path="*"'), "the website app hands other addresses over");
+assert.ok(!/frappe-react-sdk|framer-motion|RealtimeProvider|SessionProvider/.test(siteApp + read("src/site-main.tsx")), "the website entry carries no staff runtime");
+assert.ok(read("vite.config.ts").includes('site: siteHtml'), "the build emits site.html for website addresses");
 
 // Independent providers' customers: manage link and My bookings live under `/schedule/individual`,
 // which the public site never claims as a business slug.
@@ -91,7 +102,7 @@ const booking = read("src/pages/public-experience/booking.tsx");
 assert.ok(!booking.includes("landingPageSettings"), "booking entry must not read legacy settings");
 assert.ok(booking.includes("PublicExperienceProvider"), "booking entry must use the public provider");
 assert.ok(booking.includes("publicRootForSlug"), "booking entry must link back to its tenant site");
-assert.ok(booking.includes("getTemplatePackage"), "booking entry must delegate to the published template package");
+assert.ok(booking.includes("useTemplatePackage"), "booking entry must delegate to the published template package (loaded on first use)");
 assert.ok(booking.includes("BookingTemplate"), "booking entry must use the template-owned booking handoff");
 
 const bookingTheme = read("src/public-experience/bookingTheme.ts");

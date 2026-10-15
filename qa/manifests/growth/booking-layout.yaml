@@ -1,7 +1,7 @@
 # Booking layout (en, light). No fixture: it reads the Selam, Bloom, Yared and Rahel showcases and books nothing.
 # Desktop: the side column (summary, calendar, time format) and the slot panel stay in place, the slot list scrolls
-# inside the panel, and the bottom bar shows the chosen time with Continue. Phone: a strip of days sticks under the
-# header and only the list scrolls. See docs/growth/BOOKING_LAYOUT.md.
+# inside the panel, and the "Your time" bar at the top of the panel shows the chosen time with Continue. Phone: a strip of
+# days with "Your time" sticks under the header, the list scrolls, Continue is at the bottom. See docs/growth/BOOKING_LAYOUT.md.
 app: appointment
 base_url: http://localhost:47800
 default_role: Guest
@@ -203,7 +203,7 @@ scenarios:
   - action: get_console_errors
   - action: get_network_errors
 - id: layout_selam_en_mobile
-  title: 'Selam on a phone: sticky strip of days, the list scrolls, the bar stays at the bottom (en, mobile, light)'
+  title: 'Selam on a phone: sticky strip of days with "Your time", the list scrolls, Continue stays at the bottom (en, mobile, light)'
   viewport: &mobile
     width: 390
     height: 844
@@ -233,7 +233,10 @@ scenarios:
   - action: scroll
     delta_y: 600
   - action: wait_for
-    selector: '[data-qa="booking-bar"] [data-qa="booking-continue"]'
+    selector: '[data-qa="booking-phone-continue"] [data-qa="booking-continue"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="booking-strip"] [data-qa="booking-bar"] [data-qa="booking-bar-when"]'
   - action: screenshot
     name: layout_selam_en_mobile-3-scrolled-bar.png
     full_page: false

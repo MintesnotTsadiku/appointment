@@ -93,7 +93,7 @@ def profile(owner, lang: str = "en") -> dict:
     return dict(
         key=owner.key,
         kind=owner.kind,
-        name=owner.display_name,
+        name=_owner_name(owner, lang),
         logo=identity.get("logoCompact") or identity.get("logoPrimary") or _profile_logo(site) or owner.logo or "",
         colors=dict(
             background=tokens.get("canvas"), text=tokens.get("text"), muted=tokens.get("textMuted"),
@@ -110,6 +110,17 @@ def profile(owner, lang: str = "en") -> dict:
         url=get_url(path) if path else "",
         short=f"{short_host}/{site.slug}" if published else (f"{short_host}/{page_slug}" if page_slug else ""),
     )
+
+
+def _owner_name(owner, lang: str) -> str:
+    """The business name in `lang`: the Amharic name on Amharic pages when the owner has one (`localized_names`)."""
+    from appointment.scheduler import localized_names
+
+    if lang != "am":
+        return owner.display_name
+    names = localized_names.owner_names("Organization" if owner.kind == "organization" else "Provider",
+                                        owner.organization or owner.provider)
+    return names.get("am") or owner.display_name
 
 
 def dark_colors(owner) -> dict:

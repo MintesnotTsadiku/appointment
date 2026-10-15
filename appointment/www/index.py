@@ -5,11 +5,16 @@ no_cache = 1
 def get_context(context):
     from appointment.growth import sharing, short_links
     from appointment.public_experience.csp import encode_boot_data, shell_nonce
+    from appointment.public_experience.shell_boot import shell_boot_tags, shell_template
 
     # A business's former address (changed on the Grow page) redirects; printed posters keep working.
     short_links.shell_redirect()
     # Link previews (Telegram, Facebook, WhatsApp) read Open Graph tags without running the SPA.
     context["public_meta_tags"] = sharing.shell_meta_tags()
+    # A public site page inlines its published design and preloads its font and hero photo (shell_boot).
+    context["public_meta_tags"] += shell_boot_tags()
+    # A website address loads the lean website entry instead of the full application.
+    context["shell_template"] = shell_template(frappe.local.request.path if getattr(frappe.local, "request", None) else "/")
 
     context["content_shell_nonce"] = shell_nonce()
     csrf_token = frappe.sessions.get_csrf_token()

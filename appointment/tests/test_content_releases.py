@@ -18,6 +18,7 @@ from appointment.content.sanitize import (
     sanitize_html,
 )
 from appointment.tests import isolated_site
+from appointment.public_experience.recipes import latest_version
 
 MARKER = "REL-"
 REQUIRED_SITE_FRAGMENT = "feat-content-publishing"
@@ -150,7 +151,7 @@ class ContentReleaseAcceptance(unittest.TestCase):
                 organization=org.name,
                 slug=f"{marker.lower()}-site-{suffix.lower()}",
                 recipe_key="tena-clinic",
-                recipe_version=1,
+                recipe_version=latest_version("tena-clinic"),  # version 1 is retired
                 default_locale="en",
                 status="Draft",
             )

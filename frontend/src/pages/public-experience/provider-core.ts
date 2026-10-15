@@ -17,6 +17,8 @@ export interface ProviderService {
 }
 export interface ProviderPageData {
   slug: string; canonical_slug: string; name: string; business_name: string; photo: string;
+  /** The provider's name by language (Provider.display_name_am); read it with `providerName`. */
+  local_name?: Texts;
   /** The bio in English and in Amharic; read it with `providerBio`. */
   bio: string; bio_am?: string;
   languages: string[]; timezone: string; site_slug?: string | null;
@@ -33,6 +35,12 @@ export interface FormatChoice { offering: string; path: string; type: PlaceType;
 export function localized(texts: Texts | undefined, language: string, fallback = ''): string {
   const lang = language === 'am' ? 'am' : 'en';
   return (texts?.[lang] || texts?.en || fallback || '').trim();
+}
+
+/** The name in the page language: the website's person name, else the provider's own name, else the record's. */
+export function providerName(page: Pick<ProviderPageData, 'name' | 'local_name' | 'person'>, language: string): string {
+  const lang = language === 'am' ? 'am' : 'en';
+  return (page.person?.name?.[lang] || page.local_name?.[lang] || '').trim() || localized(page.person?.name, language, page.name);
 }
 
 /** The bio in the page language, else the bio in the other language. */

@@ -21,12 +21,15 @@ const check = (label, condition) => {
   if (!condition) failures.push(label);
 };
 
-const main = read("src/main.tsx");
-check("main.tsx must wrap the app in <StrictMode>", main.includes("<StrictMode>"));
+// The full application mounts in full-app.tsx (main.tsx and the website entry's hand-over both use it).
+const main = read("src/full-app.tsx");
+check("full-app.tsx must wrap the app in <StrictMode>", main.includes("<StrictMode>"));
 check(
-  "main.tsx must not branch on VITE_DISABLE_STRICT_MODE",
+  "full-app.tsx must not branch on VITE_DISABLE_STRICT_MODE",
   !main.includes("VITE_DISABLE_STRICT_MODE"),
 );
+check("main.tsx must mount the full application", read("src/main.tsx").includes("mountFullApp("));
+check("the website entry must wrap its app in <StrictMode>", read("src/site-main.tsx").includes("<StrictMode>"));
 
 const app = read("src/app.tsx");
 check("app.tsx must disable the SDK socket", /enableSocket=\{false\}/.test(app));
