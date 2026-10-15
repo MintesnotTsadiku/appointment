@@ -1,0 +1,617 @@
+{
+  "kind": "imagery",
+  "contract": "appointment-imagery.v1",
+  "key": "selam-tempo",
+  "version": 1,
+  "assets": {
+    "hero.selam": {
+      "src": "/assets/appointment/brand-experience/support/selam-v3/hero.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/selam-v3/hero-m.webp",
+      "alt": "A movement coach kneels on a lime mat in a sunlit Gerji studio, with tall windows over the Entoto hills, about to begin.",
+      "focalPoint": {
+        "x": 0.47,
+        "y": 0.55
+      },
+      "fit": "cover",
+      "width": 1536,
+      "height": 864,
+      "mime": "image/webp",
+      "checksum": "sha256:0903c26eb31730278e707c620729d707309e67c99286c777ea39530069ae8461",
+      "provenance": {
+        "source": "generated",
+        "role": "Hero, frame 1 (kneel)",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Selam Tempo art direction; no text, logos or client faces; the coach (staff) may show her face."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 900,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "darkSrc": "/assets/appointment/brand-experience/support/selam-v3/hero-night.webp",
+      "darkMobileSrc": "/assets/appointment/brand-experience/support/selam-v3/hero-night-m.webp",
+      "checksums": {
+        "hero-m.avif": "sha256:560e46ac78638ff6f464db5c9a7d37883cf7a14243ac5bee099ea0b7a406a895",
+        "hero-m.webp": "sha256:9de09113b418da85138d40dae2ffbf964cbc31421926b069893a8a5c6551bd6a",
+        "hero-night-m.avif": "sha256:77fe75d2b45890f54c25565e79c49a40f3daaf6f49f6f92711250aefb69943e3",
+        "hero-night-m.webp": "sha256:4903431255945271699d10ab767e63a213a0de19bbd17cab1e534adeb15a36b0",
+        "hero-night-w640.avif": "sha256:d96d77cd184315413046275bfe94215ee98cbbe27279c2d2a4d90fed7055bc80",
+        "hero-night-w640.webp": "sha256:91af93e4d7638068825dfb97b64697779555508c4b44f0134d505f57bc94cddc",
+        "hero-night-w960.avif": "sha256:5ec6d7c7dfd1557913f30a4146eb94f62f95b0d882b0995e115f07452f35ff48",
+        "hero-night-w960.webp": "sha256:090c36cac2a121f935b3b4d5842c3abae3b25697b7556e5838a527afcdbefc3d",
+        "hero-night.avif": "sha256:b35a2ea877b488fdb333a76c2b37af96790ed0e00aa3bde449386a992d5a5289",
+        "hero-night.webp": "sha256:288c4fd8488679757638d90899a019e881771446480394ec745a5db69f5ba669",
+        "hero-w640.avif": "sha256:99a456a8b9690d90f097fb7214fbe460535fbb6cc12c6eefd860e61c6305af1c",
+        "hero-w640.webp": "sha256:5976bdab697fac4e7823711cb4a4506228489192cdbee228877aa1c1c10c9cfa",
+        "hero-w960.avif": "sha256:30214f35f15da1b02b1f1d5f567cbc2681364250b4c060fe1e8fc171360c632b",
+        "hero-w960.webp": "sha256:9dc248eeaa0a96240f9d5f59bb9998ba1b09ea10b551d03e5fafdc923b7fbe92",
+        "hero.avif": "sha256:71e56efd23fc1fd7e97ea2a20a8bbecce38c5a419f756bc385f665a698005e33"
+      }
+    },
+    "flow2.selam": {
+      "src": "/assets/appointment/brand-experience/support/selam-v3/flow2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/selam-v3/flow2-m.webp",
+      "alt": "The coach reaches both arms overhead from a kneel on the lime mat.",
+      "focalPoint": {
+        "x": 0.47,
+        "y": 0.45
+      },
+      "fit": "cover",
+      "width": 1536,
+      "height": 864,
+      "mime": "image/webp",
+      "checksum": "sha256:5acd75f2d9ee6df1ebb5a4964d5dd7431ee82f8d0377f099f15b5ee8ea8cb100",
+      "provenance": {
+        "source": "generated",
+        "role": "Hero, frame 2 (reach)",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Selam Tempo art direction; no text, logos or client faces; the coach (staff) may show her face."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 900,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "darkSrc": "/assets/appointment/brand-experience/support/selam-v3/flow2-night.webp",
+      "darkMobileSrc": "/assets/appointment/brand-experience/support/selam-v3/flow2-night-m.webp",
+      "checksums": {
+        "flow2-m.avif": "sha256:4fd92c22ca9d76e7f148709d641256ea5946a33b65eef9cdd5c3ba3104e0f6e9",
+        "flow2-m.webp": "sha256:7703efeae0de0c6fcb32c5a26c035c11f45f4c8ebae43e85aa50f491632e16be",
+        "flow2-night-m.avif": "sha256:c944f1a9d167133e10ea6e0fb94e1750c0df6dd44bc0065a153bdf45f0c176b8",
+        "flow2-night-m.webp": "sha256:3923df4e7526a1e7cf886e86b670536e34ec5a0a06c9064d17fcfffb5ed8f739",
+        "flow2-night-w640.avif": "sha256:fec9d8df0fee56fdfe8d0b32d73847a50dd5d00dc97cb9ffdeabd1763b5f70e5",
+        "flow2-night-w640.webp": "sha256:00e1fee2cfec1d45a3de7ba7a0bc63d56148a6aa991cffff051ff6b3626eb04f",
+        "flow2-night-w960.avif": "sha256:fe5e166515a3b6f749994d71b2d2eb064d14de92ca50b417dfc2d020f501d4bc",
+        "flow2-night-w960.webp": "sha256:1f37222b51bcddff22032f51df488540afdfa006bbe277934e088650d2446661",
+        "flow2-night.avif": "sha256:0d86a87d0d09ab61dcdfcb26cdb2d465db76430d281e732d6ea12bc9a62c5679",
+        "flow2-night.webp": "sha256:c69826f15c5f2bda3ed5f3fcef53e0a270b7dbdd2922ceb47398273c35f58e55",
+        "flow2-w640.avif": "sha256:f5ca2cd7fe292cb621c38efa25a426b3d8bedc8b09fb971a04d0869bc420ebbb",
+        "flow2-w640.webp": "sha256:2dc3d519e4968135b6f91478e6b1ba479b98bc63a5fc7401fa4a1a83e5384f1e",
+        "flow2-w960.avif": "sha256:8226eaba62f350a810457cb59f82f7143f6fdb87603c8ee47c939b1399b2f535",
+        "flow2-w960.webp": "sha256:b109c4fabd42ed76bcf996307a696516065ab59535cd06653d9cc61ae7130192",
+        "flow2.avif": "sha256:78bb0fb500802dcbbd1d585b495b37fc7388e76d4d299ece6881502096620aa0"
+      }
+    },
+    "flow3.selam": {
+      "src": "/assets/appointment/brand-experience/support/selam-v3/flow3.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/selam-v3/flow3-m.webp",
+      "alt": "The coach twists open toward the windows in a half-kneeling lunge.",
+      "focalPoint": {
+        "x": 0.47,
+        "y": 0.55
+      },
+      "fit": "cover",
+      "width": 1536,
+      "height": 864,
+      "mime": "image/webp",
+      "checksum": "sha256:cc8a6bf9353d22210280b0088efb124a7b52ee6bd3569af802f149c3c8901349",
+      "provenance": {
+        "source": "generated",
+        "role": "Hero, frame 3 (twist)",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Selam Tempo art direction; no text, logos or client faces; the coach (staff) may show her face."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 900,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "darkSrc": "/assets/appointment/brand-experience/support/selam-v3/flow3-night.webp",
+      "darkMobileSrc": "/assets/appointment/brand-experience/support/selam-v3/flow3-night-m.webp",
+      "checksums": {
+        "flow3-m.avif": "sha256:6d66ee2cb6cb341c1cfb2321852e6dd512c0b661f1727ef4f2c85626703abe7b",
+        "flow3-m.webp": "sha256:961fcd5ec9a300045ed25f04042d321f75264d2d795c01d17b6fd381b19c56e1",
+        "flow3-night-m.avif": "sha256:3498663f05fb2aeb1802d842b8c8385f3c94ce2eb78366b36067f47b4faeb61e",
+        "flow3-night-m.webp": "sha256:99f1490d1919bfbd2146a12e22c92aca1bb9c0518d37b4b2444a0f40e1ef99fd",
+        "flow3-night-w640.avif": "sha256:917abaf3e05717162dfa52c5df4f586e9154182a77ad3ae65c8b37f34f55ce85",
+        "flow3-night-w640.webp": "sha256:f9e40da12827e3f30c150b5801f9b093d373af82b894ec1d24c76b3b35617a08",
+        "flow3-night-w960.avif": "sha256:5e0c01c0e96eb3b496381fb6d274e972ce0878591f739830c746ac0733a3874c",
+        "flow3-night-w960.webp": "sha256:bc71ebac3c31eb71ead3b362d1c8f5e8fb3bd2de6d1ef933fc3dfed1909de124",
+        "flow3-night.avif": "sha256:8f46bc567b1386dbea47c4d3587f3ec78fe92e31271168e2f38e1547dc0a47b2",
+        "flow3-night.webp": "sha256:544669f55db9260e472b4b848a14217f6b904d6aaeb9fb715937c603db69cea3",
+        "flow3-w640.avif": "sha256:db7e9dc3c5b02b66a392248eae8475b508746a8bed534e0ec7b5c08c67e82d6a",
+        "flow3-w640.webp": "sha256:9e197e04414f1378bc6e5b30fa7c2f09166e58d3e73361abaeb2e759030f03d3",
+        "flow3-w960.avif": "sha256:6d9f1ac840e24223ec7439788f86983d1ee82fb8cd8effe70d05bfaf9bd3343c",
+        "flow3-w960.webp": "sha256:55c6060c753609dc78636aa748736fcf28c6d7c927f25152ddd461f3d5e6f742",
+        "flow3.avif": "sha256:03b21f4494cd817d850d4c6041c520515a77fbc913bc6a8940e4746c69a3d13f"
+      }
+    },
+    "flow4.selam": {
+      "src": "/assets/appointment/brand-experience/support/selam-v3/flow4.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/selam-v3/flow4-m.webp",
+      "alt": "The coach rises from the lunge onto her front foot, arms swinging forward.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.55
+      },
+      "fit": "cover",
+      "width": 1536,
+      "height": 864,
+      "mime": "image/webp",
+      "checksum": "sha256:39a05a5b25d807d8857cd03292e0962e3931a61991e72e08b6cdd0e13e82e62e",
+      "provenance": {
+        "source": "generated",
+        "role": "Hero, frame 4 (rise)",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Selam Tempo art direction; no text, logos or client faces; the coach (staff) may show her face."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 900,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "darkSrc": "/assets/appointment/brand-experience/support/selam-v3/flow4-night.webp",
+      "darkMobileSrc": "/assets/appointment/brand-experience/support/selam-v3/flow4-night-m.webp",
+      "checksums": {
+        "flow4-m.avif": "sha256:f8b867abffa1ef9c8b845e6783d9791a808cddb26162b5df5d6df2ac0ebd0451",
+        "flow4-m.webp": "sha256:798c1ee7c33f0530a287c3c5c0c27397871ca149e20e6ca6b71108fe91cdac72",
+        "flow4-night-m.avif": "sha256:dc33ffdf0ae6a75a69bc7d78f9b209ffc6584589fecafedad349c38e9c7ce646",
+        "flow4-night-m.webp": "sha256:1d8373542618a35a8ffce7ddcd3d0c8d7a9fc5cdb235aff89f95ac3c82fdc99d",
+        "flow4-night-w640.avif": "sha256:b8667995c5bfe1d728217d61d2e1f192096991e1cc29c4c3e277792776adfb43",
+        "flow4-night-w640.webp": "sha256:5b7e63d5db149496ac90e4caf3b7c7d63c0066048b74b4729bacb0e504bafee4",
+        "flow4-night-w960.avif": "sha256:f47f487750279f0e81b2db68b2a86710bda751ff3f00c97ebc2990db6af7e230",
+        "flow4-night-w960.webp": "sha256:0137c1a7b867cd693c2c8ff31f3e72a156d0306b78241af1d6baca46171266d2",
+        "flow4-night.avif": "sha256:44cbccbba30c6536b4b2ab957032538ccd7e7873059917ab35fabdfa829ce8e5",
+        "flow4-night.webp": "sha256:f4f9ba80efa227ad49d06e6cf522162374b32596f3cd8ae646d35d6beaeb4448",
+        "flow4-w640.avif": "sha256:072e90a101e462c3fe193e348f1f4694f79ff10a370680098dda6fc17d354fff",
+        "flow4-w640.webp": "sha256:20c44e9547d6165fdd557063b7c125a43cfdb95e907116344e50bb39d08df426",
+        "flow4-w960.avif": "sha256:c186f1ddeed7fc43077cd86563e2098fa082448a509fc7dfb29acaa9dc00bd27",
+        "flow4-w960.webp": "sha256:6e70718ef92d19bb355fb5dc778a4d2451f217fb0739e86086b1d923dc75a6f5",
+        "flow4.avif": "sha256:4fbb89a2f58ff9f69a7585c622cd5056f955e749f784a89be97b8f3a591f858b"
+      }
+    },
+    "flow5.selam": {
+      "src": "/assets/appointment/brand-experience/support/selam-v3/flow5.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/selam-v3/flow5-m.webp",
+      "alt": "The coach stands tall at the centre of the mat and breathes out.",
+      "focalPoint": {
+        "x": 0.47,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1536,
+      "height": 864,
+      "mime": "image/webp",
+      "checksum": "sha256:ab36c26139eb25f664027cdc5c6da01c60e079d789c84fdb88f320e32a9d196e",
+      "provenance": {
+        "source": "generated",
+        "role": "Hero, frame 5 (stand)",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Selam Tempo art direction; no text, logos or client faces; the coach (staff) may show her face."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 900,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "darkSrc": "/assets/appointment/brand-experience/support/selam-v3/flow5-night.webp",
+      "darkMobileSrc": "/assets/appointment/brand-experience/support/selam-v3/flow5-night-m.webp",
+      "checksums": {
+        "flow5-m.avif": "sha256:5f37fdd874d6ab631a89465ea9769aef9e342f53105493ad49b5bd98f76f2c6a",
+        "flow5-m.webp": "sha256:2ce72474ac2ca8895c10d1a36bdf9c46d550da8a84d9e1378a2f3ebeb20a8e0d",
+        "flow5-night-m.avif": "sha256:971a9fa2adee7ca53ab9c3bbe0eec649562d665e8b1203f627742dd35779701d",
+        "flow5-night-m.webp": "sha256:d49671c93c702ecadf979c3b4c0f4a13052ed62e47691e0b848b40064c9f21a8",
+        "flow5-night-w640.avif": "sha256:297811415987f981db37028ccc9010709c3c99589f0f61063fda68e60c1d12a0",
+        "flow5-night-w640.webp": "sha256:4ef3fedc4ff50b792658ebd5032946a30d633f272246a144a39492fed4f8d929",
+        "flow5-night-w960.avif": "sha256:d82787f7cfb20faef90fb3a0a20fa2cdced8894c6715144f9d2a55a5cfa82606",
+        "flow5-night-w960.webp": "sha256:6fd9b9ed819fc13c8676e2ba255f05142a19e2da0d011b858329e830a74726a4",
+        "flow5-night.avif": "sha256:5b510d1ee50ba0aa8ddbd28cd069e8a7a0c979bd9642c7ed2dc665646b2286c4",
+        "flow5-night.webp": "sha256:1dcc3953878676c8508be738e6ee2b295345274c35fa796f75ddddd4490566d9",
+        "flow5-w640.avif": "sha256:77fe69f6a8895f99562f4d10210613d6cd63d5b87094ce0904a7ef005876d862",
+        "flow5-w640.webp": "sha256:7561511808bb2e39d507f3de911f62d0cf412c7932d74957842de0e017ea0a6f",
+        "flow5-w960.avif": "sha256:f002ca9067f09b2bb839546d5be024ac61fcd601a6671c7d12cb05c3b6789b9c",
+        "flow5-w960.webp": "sha256:1ba82a32fbd99634d89dad2795f30411f89dc12b62d8cc29036637c0365651bf",
+        "flow5.avif": "sha256:37c2fa07430ab2cf13bbb55dd40e42043324bec53283d291d644ab6d0ef48085"
+      }
+    },
+    "session1.selam": {
+      "src": "/assets/appointment/brand-experience/support/selam-v3/session1.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/selam-v3/session1-m.webp",
+      "alt": "The coach listens to a client, seen from behind, as they sit on floor cushions with two glasses of water between them.",
+      "focalPoint": {
+        "x": 0.55,
+        "y": 0.45
+      },
+      "fit": "cover",
+      "width": 880,
+      "height": 1320,
+      "mime": "image/webp",
+      "checksum": "sha256:8922b2c84c56a301945fa74f611b245a8e7a61496fd8226d6878bb296872698a",
+      "provenance": {
+        "source": "generated",
+        "role": "Sessions (consultation)",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Selam Tempo art direction; no text, logos or client faces; the coach (staff) may show her face."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 900,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        560
+      ],
+      "checksums": {
+        "session1-m.avif": "sha256:0d65f5dc02108e63e8c1d1983d3b3b0d1e11a79aca57f6a1922e59972bb85d68",
+        "session1-m.webp": "sha256:1e321d0000374fcbe142e4903d93bdc94a593fc2c5dd6a7227fe5ce43c87be62",
+        "session1-w560.avif": "sha256:69f46fd69c3750c0020b938408448bc6f2c0efde4fb339b85e78a897f51328dd",
+        "session1-w560.webp": "sha256:79a120bc7d9023d424565d08dcbbb3ad2453ac22ee5e8f6832df4e1643a9ceda",
+        "session1.avif": "sha256:3aab83e746a49bdbdddd6f938c7b6ee7b015344f5605aa54f6c88b8ff6482cf0"
+      }
+    },
+    "session2.selam": {
+      "src": "/assets/appointment/brand-experience/support/selam-v3/session2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/selam-v3/session2-m.webp",
+      "alt": "The coach guides a client's shoulder and back in a half-kneeling stretch by a tall window.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 880,
+      "height": 1320,
+      "mime": "image/webp",
+      "checksum": "sha256:2a0aa0dcd6fd3825aee4fa8df558677ddf759fe912b4e5a5188ea36ca3a6871a",
+      "provenance": {
+        "source": "generated",
+        "role": "Sessions (mobility)",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Selam Tempo art direction; no text, logos or client faces; the coach (staff) may show her face."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 900,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        560
+      ],
+      "checksums": {
+        "session2-m.avif": "sha256:3762b5cc8106657c56fc2257ce08108ab10522d13c588ebee85d66eb65b9dbb3",
+        "session2-m.webp": "sha256:3a4c1ce5af81dae56cb3ffa607c9c6cf6a20545b0eeeab0a2dfe45f8834968a5",
+        "session2-w560.avif": "sha256:1a456198f44015b9f891a423197449713c055cef62cce569ba02ec13f2692f37",
+        "session2-w560.webp": "sha256:f7d797d50a4af259f209550a206ce8ff5fce369b198123946cafa38a75b72e08",
+        "session2.avif": "sha256:a60ea22dd72094468c6b87ad54d94239cede74951cc6550cbc62acc11a69dbc1"
+      }
+    },
+    "beat1.selam": {
+      "src": "/assets/appointment/brand-experience/support/selam-v3/beat1.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/selam-v3/beat1-m.webp",
+      "alt": "Seen past a client's shoulder, the coach holds a closed notebook on her knee beside a cup of tea.",
+      "focalPoint": {
+        "x": 0.6,
+        "y": 0.4
+      },
+      "fit": "cover",
+      "width": 880,
+      "height": 1320,
+      "mime": "image/webp",
+      "checksum": "sha256:f6c332d6dd6ba18c1c6b1d68885be33322a550c7e024266163fb640a30d22dfd",
+      "provenance": {
+        "source": "generated",
+        "role": "Process, beat 1",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Selam Tempo art direction; no text, logos or client faces; the coach (staff) may show her face."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 900,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        560
+      ],
+      "checksums": {
+        "beat1-m.avif": "sha256:4883c60a4adb47bff1a074791bf83cd01a531be5686f1c000488a78638e61dc5",
+        "beat1-m.webp": "sha256:5bd2aa4721b61f5e2520abcc0d067f765c1a3544bdf8a253777d5af177cabaab",
+        "beat1-w560.avif": "sha256:61903f0de753e1928b1ec454803083a88283c829213fa472d84ac7fa45b88816",
+        "beat1-w560.webp": "sha256:b3dea6f66359dfbed9c9b4339d3360ee9d05c5ccab3c109ae2b0ce87b34aac98",
+        "beat1.avif": "sha256:4862ac298b8faa7f8da9b85abd3b37d7424cd4741a2a81f19b812aecade42fe3"
+      }
+    },
+    "beat2.selam": {
+      "src": "/assets/appointment/brand-experience/support/selam-v3/beat2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/selam-v3/beat2-m.webp",
+      "alt": "The coach's hands adjust a client's knee and ankle on a lime mat.",
+      "focalPoint": {
+        "x": 0.45,
+        "y": 0.6
+      },
+      "fit": "cover",
+      "width": 880,
+      "height": 1320,
+      "mime": "image/webp",
+      "checksum": "sha256:68d2e014a8803d33c97dbdad0c09e11356f8552900323fbaae9cf30e5c2a1b5f",
+      "provenance": {
+        "source": "generated",
+        "role": "Process, beat 2",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Selam Tempo art direction; no text, logos or client faces; the coach (staff) may show her face."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 900,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        560
+      ],
+      "checksums": {
+        "beat2-m.avif": "sha256:51409aee3492182f7bdbec913659cc33f5083a2c04b9c2dfb0ab8e8e8f0d10b3",
+        "beat2-m.webp": "sha256:9c17638b37d974d370062c7cbef91e2b6b10c320f2f924d30c821c1413ee3731",
+        "beat2-w560.avif": "sha256:30d617fb7f8ea7918a0d9829ac6fddef726f971acee1d6aad3415291b9e0b038",
+        "beat2-w560.webp": "sha256:ef1bf177635e9eb77d116d0d94a5b8c7bb8ce607310fe33ed9c08f2f973292c4",
+        "beat2.avif": "sha256:f4251b095a7c5b56eacd5844d7a07e830e5eeaad0c697d190bd9984525e6f744"
+      }
+    },
+    "beat3.selam": {
+      "src": "/assets/appointment/brand-experience/support/selam-v3/beat3.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/selam-v3/beat3-m.webp",
+      "alt": "A client sketches a short routine in a notebook beside a rolled lime mat and a water bottle.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 880,
+      "height": 1320,
+      "mime": "image/webp",
+      "checksum": "sha256:8b6e8fb5ac5f86c8a8f31529efac61176d6c4e5165d0fa9f655eea6b9d5f4f59",
+      "provenance": {
+        "source": "generated",
+        "role": "Process, beat 3",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Selam Tempo art direction; no text, logos or client faces; the coach (staff) may show her face."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 900,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        560
+      ],
+      "checksums": {
+        "beat3-m.avif": "sha256:c653940ba53ae9e35043280d9f4c393adfc1b79e2274da362a8da1c20c9dbda0",
+        "beat3-m.webp": "sha256:13d3b6c672b739ef3a17b15825ced089d1c5de7bdc969f2ad19e4430f188f797",
+        "beat3-w560.avif": "sha256:681dc4bc255e6cc6c7ac651c4691de8e10fd76ad2849728395f141a3ebac67f5",
+        "beat3-w560.webp": "sha256:18f3c0d13908a6be14629d597dac01d8b94d8b9bb78db5acd6368e0f337d49ae",
+        "beat3.avif": "sha256:511bc7827f79c5f721afc0e9eb0ee99bae54b6c0fc07eb9ca26ec565b1768594"
+      }
+    },
+    "benefit.selam": {
+      "src": "/assets/appointment/brand-experience/support/selam-v3/benefit.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/selam-v3/benefit-m.webp",
+      "alt": "A glass water bottle, a folded towel and the edge of a lime mat in morning sun on a wood floor.",
+      "focalPoint": {
+        "x": 0.45,
+        "y": 0.55
+      },
+      "fit": "cover",
+      "width": 900,
+      "height": 900,
+      "mime": "image/webp",
+      "checksum": "sha256:cf95a122bfb622981b97fd68965034c1dd9cecddac186b344119f7862a9b93a2",
+      "provenance": {
+        "source": "generated",
+        "role": "Benefits bento",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Selam Tempo art direction; no text, logos or client faces; the coach (staff) may show her face."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 600,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        480
+      ],
+      "checksums": {
+        "benefit-m.avif": "sha256:2099dc1ffef5391828cc92020d4f3f066b77745b3aa11cb98a995cd373ee9204",
+        "benefit-m.webp": "sha256:0574043158f08c1a98b25660072f4e6721af25a787a8efd5eda4606b8d7d9d3f",
+        "benefit-w480.avif": "sha256:c2db66e8a0f1ea6a20d4ea0889021e8645c36cefc0983fc9f4df72b100bb3044",
+        "benefit-w480.webp": "sha256:c9ab376a5e415201a966f46ae1a045518d0a1929f7529955c6117f1c5d7d1947",
+        "benefit.avif": "sha256:8f012c4cbcae47779c690442db442588c520789ee1910742296d17d43a218cd3"
+      }
+    },
+    "quote.selam": {
+      "src": "/assets/appointment/brand-experience/support/selam-v3/quote.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/selam-v3/quote-m.webp",
+      "alt": "A client, seen from behind, stands at a tall window and looks out at the misty Entoto hills.",
+      "focalPoint": {
+        "x": 0.55,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 880,
+      "height": 1320,
+      "mime": "image/webp",
+      "checksum": "sha256:5f851f2c9a177d74d607f956872551167703b2403be3c059c6884d8132ee11c1",
+      "provenance": {
+        "source": "generated",
+        "role": "Reviews pull quote",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Selam Tempo art direction; no text, logos or client faces; the coach (staff) may show her face."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 900,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        560
+      ],
+      "checksums": {
+        "quote-m.avif": "sha256:9d606ffbfffabd7f4d34b5b88952349c9a7bd8c6cb5a2a7f85767a7680238575",
+        "quote-m.webp": "sha256:7e1180b3b67715f12b1592fdeaafe43ce8ec9c8f7479724503554d5aecf70e9a",
+        "quote-w560.avif": "sha256:76aa83d1b7afc95d4ec3b8df5111ceddd861b7e99caeac91e9fff31ccc2a950c",
+        "quote-w560.webp": "sha256:12551263adb7f572c0b8abc609f1a23f205ef23becb7a24f0516b2242d251cd3",
+        "quote.avif": "sha256:f8c3b764b18769ce58ee28b5af401c54c6b55fae80645422b570dd4f14ed898e"
+      }
+    },
+    "interlude.selam": {
+      "src": "/assets/appointment/brand-experience/support/selam-v3/interlude.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/selam-v3/interlude-m.webp",
+      "alt": "Sunrise over the misty eucalyptus ridges of Entoto above Addis Ababa.",
+      "focalPoint": {
+        "x": 0.45,
+        "y": 0.45
+      },
+      "fit": "cover",
+      "width": 1536,
+      "height": 960,
+      "mime": "image/webp",
+      "checksum": "sha256:cf853656adc0d8b48f2112490f5e08aeb03641317bf38a206c165456a8556ea9",
+      "provenance": {
+        "source": "generated",
+        "role": "Story (Entoto interlude)",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Selam Tempo art direction; no text, logos or client faces; the coach (staff) may show her face."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 900,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "checksums": {
+        "interlude-m.avif": "sha256:2ecbed484483cf4a82076324407926112acc785de3f53e23dcd8db77e3e84e95",
+        "interlude-m.webp": "sha256:efefe6a5e3f9dbdb70d6eb070df299239834664d8272fab9ff079c42b036ee4d",
+        "interlude-w640.avif": "sha256:b26ad7e10a85858fc2f7c5a6955c4c423dd07ae65e29801c54030664b62647a8",
+        "interlude-w640.webp": "sha256:2a449581adcc1677f8bbd8fa267bb673c6185de19375b4e5c52f785adb312b52",
+        "interlude-w960.avif": "sha256:725fb0c23a14d206526ee640cba689e22a70c3fd3168047aa83e3c2bc7780146",
+        "interlude-w960.webp": "sha256:4f77954dac4b1adae64e1af92661a75bce207b4231a163e681359eda90bafe44",
+        "interlude.avif": "sha256:d4a06a7db7bc374e6989ca9c2d51e9f9796fb204435a2732571b713047e1e3ea"
+      }
+    },
+    "studio.selam": {
+      "src": "/assets/appointment/brand-experience/support/selam-v3/studio.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/selam-v3/studio-m.webp",
+      "alt": "A blue gate stands half open in a cream wall with bougainvillea, on a quiet Gerji lane below the green hills.",
+      "focalPoint": {
+        "x": 0.33,
+        "y": 0.6
+      },
+      "fit": "cover",
+      "width": 1536,
+      "height": 864,
+      "mime": "image/webp",
+      "checksum": "sha256:79319b6c6d73184bae05b4dcdee8f92ad5b1fe119f33b8e450fe8461078c9b18",
+      "provenance": {
+        "source": "generated",
+        "role": "Visit",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Selam Tempo art direction; no text, logos or client faces; the coach (staff) may show her face."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 540,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "checksums": {
+        "studio-m.avif": "sha256:b7a253ecd5d0b9f54ac175af5123799989b332d1852cf4d4668ceff55f6d0e2b",
+        "studio-m.webp": "sha256:3c920baf0da4d7e0dadc353e91ef89651887d537c897f7883b5cdd80c090891a",
+        "studio-w640.avif": "sha256:6171f2c0a1870ce4c6ce5540e3882967733ca0e3a1bd0cad4de3afd55cb3ad47",
+        "studio-w640.webp": "sha256:608af5749b3044f131309c646382dc96179c3a1fff964435a992b9b5ab8e69bf",
+        "studio-w960.avif": "sha256:a0234f1feaed6df7fdb9c038a443608fc9149ed222c2b7e2edbf80e6e4e2afd2",
+        "studio-w960.webp": "sha256:236958f6d80298d1bba35fd4862c71084016aed004b34a4dac8bed21a90db179",
+        "studio.avif": "sha256:cf8e263a87bf074eb72cfb05c54248f0a1623d21035d3cfec884c4c3bad984bd"
+      }
+    },
+    "band.selam": {
+      "src": "/assets/appointment/brand-experience/support/selam-v3/band.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/selam-v3/band-m.webp",
+      "alt": "The studio before a session: one lime mat laid out by tall windows, with a cushion, a towel and a glass of water.",
+      "focalPoint": {
+        "x": 0.75,
+        "y": 0.6
+      },
+      "fit": "cover",
+      "width": 1536,
+      "height": 768,
+      "mime": "image/webp",
+      "checksum": "sha256:82c16b312b55d94373b4febc39eae0b1fc06059447f1cb0a34de4badb83f18c3",
+      "provenance": {
+        "source": "generated",
+        "role": "Booking band",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Selam Tempo art direction; no text, logos or client faces; the coach (staff) may show her face."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 900,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "darkSrc": "/assets/appointment/brand-experience/support/selam-v3/band-night.webp",
+      "darkMobileSrc": "/assets/appointment/brand-experience/support/selam-v3/band-night-m.webp",
+      "checksums": {
+        "band-m.avif": "sha256:83bb9f944478affae1c5bd11124ff52952c0448ce256215dc145f9bbadc1cc23",
+        "band-m.webp": "sha256:a69da871560ddef0d149b5997e889593825cf80ae5322220f027e6b096668bf0",
+        "band-night-m.avif": "sha256:6fe9be403d7dd5dbdc22e4ad2d42838ecd05d137492956b75121dee297a7a418",
+        "band-night-m.webp": "sha256:b5c52f50d75d10304f149ba411411a22a60208a6954a346896c9a81d475e5c33",
+        "band-night-w640.avif": "sha256:c640b7dfe1255ba4ba972a3d645d0935e92fcbeaae99d91e40c07d0ef000329d",
+        "band-night-w640.webp": "sha256:1033c4d2e62891096fb56f5562b5476e53fbc67bc1e03460e4ac99f6ad8e7dae",
+        "band-night-w960.avif": "sha256:ecd452fb8fe6c513f6f07c8b0df15b2923d7680c5257f266f9fc36f63b44478f",
+        "band-night-w960.webp": "sha256:ea5cd3b52c06e3483d4b8aaecd1354e07e192f38420592a914fec4237d9558bf",
+        "band-night.avif": "sha256:43b8d9696fe462a312e028b09b55db79ad53c96bffc5a316c2e9e50cb78095ed",
+        "band-night.webp": "sha256:ee275c3280b519ddf09cb3a6093f0a3892cf251c781166c10ff389b824ff27af",
+        "band-w640.avif": "sha256:c6da01dcd1797e7a64e6a2cd0198c293053d74849ab9aea0ef19d185458a2eed",
+        "band-w640.webp": "sha256:2a618a2a51a2dd9a51af4121d09a21a4714e1076d64501d36389ded8362161de",
+        "band-w960.avif": "sha256:42ec29084995d699ed2fd40ca15eb6605b7d4f4a9ee8c04700135268da271d76",
+        "band-w960.webp": "sha256:b3dfeac059a3b3517a4a8a412ad365c0f0293a1ab90dc885bc528255e238a76a",
+        "band.avif": "sha256:289e65c35e27b64c55006902c8907f33f42cd1f1b9b8e9e412ed02cb7e37bf68"
+      }
+    }
+  }
+}

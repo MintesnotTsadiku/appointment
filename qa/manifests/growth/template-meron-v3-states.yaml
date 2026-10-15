@@ -1,0 +1,255 @@
+# Meron v3 states. Fixture: appointment.tests.template_meron_v3_qa_fixtures (setup before, cleanup after; cleanup deletes the booking
+# that the success scenario makes, by the QA client's exact email). Development-only query values: `preview-time` (Addis clock),
+# `preview-availability` (off, empty) and `preview-state=loading` (the template's own loading screen).
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-template-meron-v3-states
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.template_meron_v3_qa_fixtures.browser_values
+scenarios:
+- id: meron_night_light
+  title: 'After dark in light mode: navy velvet hero, night photos'
+  viewport: &id001
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /{qa_meron_slug}?display=light&preview-time=20:30
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="meron-atelier-v3"][data-pe-recipe="meron-atelier"]'
+    - type: text_contains
+      value: Good evening
+  actions:
+  - action: wait_for
+    selector: .m3[data-night="true"]
+  - action: wait_for
+    selector: .m3-film-frame.is-on img[src*="loop1-night"]
+  - action: screenshot
+    name: meron_night_light-1-hero.png
+    full_page: false
+  - action: click
+    selector: '#m3-band-title'
+  - action: wait_for
+    selector: .m3-band-photo img[src*="band-night"]
+  - action: screenshot
+    name: meron_night_light-2-band.png
+    full_page: false
+  - &id002
+    action: get_console_errors
+  - &id003
+    action: get_network_errors
+- id: meron_morning
+  title: 'Morning in light mode: day photos, closed until 10:00'
+  viewport: *id001
+  checks: []
+  routes:
+  - path: /{qa_meron_slug}?display=light&preview-time=08:15
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="meron-atelier-v3"][data-pe-recipe="meron-atelier"]'
+    - type: text_contains
+      value: Good morning
+  actions:
+  - action: wait_for
+    selector: .m3-film-frame.is-on img[src$="/loop1.webp"]
+  - action: wait_for
+    selector: :nth-match([data-qa="meron-open-now"][data-open="false"], 1)
+  - action: screenshot
+    name: meron_morning-1-hero.png
+    full_page: false
+  - *id002
+  - *id003
+- id: meron_availability_on
+  title: Live availability on (the showcase setting)
+  viewport: *id001
+  checks: []
+  routes:
+  - path: /{qa_meron_slug}?display=light&preview-time=16:30
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="meron-atelier-v3"][data-pe-recipe="meron-atelier"]'
+    - type: text_contains
+      value: Next free fitting
+  actions:
+  - action: wait_for
+    selector: '[data-qa="meron-next-free"]'
+  - action: wait_for
+    selector: '[data-qa="meron-maker-next-0"]'
+  - action: click
+    selector: '#m3-tags-title'
+  - action: wait_for
+    selector: :nth-match(.m3-tag-live, 1)
+  - action: screenshot
+    name: meron_availability_on-1-tags.png
+    full_page: false
+  - *id002
+  - *id003
+- id: meron_availability_off
+  title: 'Live availability off: no chip, the page stays complete'
+  viewport: *id001
+  checks: []
+  routes:
+  - path: /{qa_meron_slug}?display=light&preview-time=16:30&preview-availability=off
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="meron-atelier-v3"][data-pe-recipe="meron-atelier"]'
+    - type: text_contains
+      value: Good afternoon
+  actions:
+  - action: wait_for
+    selector: '[data-qa="meron-next-free"]'
+    state: detached
+  - action: wait_for
+    selector: '[data-qa="meron-maker-next-0"]'
+    state: detached
+  - action: screenshot
+    name: meron_availability_off-1-hero.png
+    full_page: false
+  - action: click
+    selector: '#m3-team-title'
+  - action: screenshot
+    name: meron_availability_off-2-maker.png
+    full_page: false
+  - *id002
+  - *id003
+- id: meron_availability_empty
+  title: 'Live availability with nothing free: no chip'
+  viewport: &id004
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /{qa_meron_slug}?display=light&preview-time=16:30&preview-availability=empty
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="meron-atelier-v3"][data-pe-recipe="meron-atelier"]'
+    - type: text_contains
+      value: Good afternoon
+  actions:
+  - action: wait_for
+    selector: '[data-qa="meron-next-free"]'
+    state: detached
+  - action: screenshot
+    name: meron_availability_empty-1-hero.png
+    full_page: false
+  - *id002
+  - *id003
+- id: meron_loading
+  title: The template's own loading screens (site and handoff)
+  viewport: *id001
+  checks: []
+  routes:
+  - path: /{qa_meron_slug}?preview-state=loading&display=light
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="meron-loading"]'
+  actions:
+  - action: screenshot
+    name: meron_loading-1-site.png
+    full_page: false
+  - action: open_url
+    url: /{qa_meron_slug}/book?preview-state=loading&display=dark
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="meron-loading"]'
+  - action: screenshot
+    name: meron_loading-2-handoff-dark.png
+    full_page: false
+  - *id002
+  - *id003
+- id: meron_loading_mobile
+  title: Loading screen on a phone (Amharic, dark)
+  viewport: *id004
+  checks: []
+  routes:
+  - path: /{qa_meron_slug}/am?preview-state=loading&display=dark
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="meron-loading"]'
+  actions:
+  - action: screenshot
+    name: meron_loading_mobile-1.png
+    full_page: false
+  - *id002
+  - *id003
+- id: meron_success
+  title: A guest books from the Meron landing page and sees the stitch
+  viewport: *id001
+  checks: []
+  routes:
+  - path: /{qa_meron_slug}?display=light
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="meron-atelier-v3"][data-pe-recipe="meron-atelier"]'
+  actions:
+  - action: click
+    selector: '[data-qa="meron-hero-book"]'
+  - action: wait_for
+    selector: '[data-qa="meron-handoff-book"]'
+  - action: click
+    selector: '[data-qa="meron-handoff-book"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_meron_open_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_meron_open_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: '[data-qa="booking-continue"]'
+  - action: wait_for
+    selector: '#userName'
+  - action: fill
+    selector: '#userName'
+    value: '{qa_meron_client}'
+  - action: fill
+    selector: '[data-qa="booking-phone"]'
+    value: '{qa_meron_phone}'
+  - action: fill
+    selector: '[data-qa="booking-email"]'
+    value: '{qa_meron_email}'
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+  - action: wait_for
+    selector: '[data-qa="booking-success"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-qa="booking-moment"][data-moment="stitch"]'
+  - action: wait_for
+    selector: .m3-moment-tag
+  - action: screenshot
+    name: meron_success-1-stitch.png
+    full_page: false
+  - *id002
+  - *id003

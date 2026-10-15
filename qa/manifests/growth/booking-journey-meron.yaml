@@ -1,0 +1,222 @@
+# The Meron booking journey as one product: landing -> /book handoff (a garment-tag service row) -> time picker -> back to the service
+# chooser (one card per service) -> time picker -> details (phone first) -> confirmation with the stitch.
+# Fixture: appointment.tests.template_meron_v3_qa_fixtures (setup before, cleanup after; cleanup deletes the bookings that the
+# two scenarios make, by the QA client's exact email or phone and name). See docs/growth/BOOKING_LAYOUT.md, "Booking skins".
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-booking-journey-meron
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 240000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.template_meron_v3_qa_fixtures.browser_values
+scenarios:
+- id: journey_en_desktop_light
+  title: English, desktop, light
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /{qa_meron_slug}?display=light
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="meron-atelier-v3"][data-pe-recipe="meron-atelier"]'
+  actions:
+  - action: screenshot
+    name: journey_en-1-landing.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="meron-hero-book"], 1)
+  - action: wait_for
+    selector: '[data-qa="meron-handoff-service-1"]'
+  - action: screenshot
+    name: journey_en-2-handoff.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="meron-handoff-service-1"]'
+    assertions:
+    - type: url_contains
+      value: with=any
+  - action: wait_for
+    selector: '[data-qa="booking-steps"][data-step="time"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-bk-skin="meron-v3"] [data-qa="booking-summary"] [data-vt-service] img'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+    timeout_ms: 20000
+  - action: screenshot
+    name: journey_en-3-time-any.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-header"] .booking-back'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 2)
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 3)
+    state: detached
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"][data-photo="true"], 2)
+  - action: wait_for
+    selector: '[data-qa="booking-business-logo"][src*="meron-logo"]'
+  - action: screenshot
+    name: journey_en-4-chooser.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_meron_open_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_meron_open_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 2)
+    timeout_ms: 20000
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 2)
+  - action: wait_for
+    selector: '[data-qa="booking-bar"]'
+  - action: screenshot
+    name: journey_en-5-time-chosen.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-continue"]'
+  - action: wait_for
+    selector: '#userName'
+  - action: wait_for
+    selector: '[data-qa="booking-details-zone"]:has-text("Addis Ababa time")'
+  - action: screenshot
+    name: journey_en-6-details.png
+    full_page: false
+  - action: fill
+    selector: '#userName'
+    value: '{qa_meron_client}'
+  - action: fill
+    selector: '[data-qa="booking-phone"]'
+    value: '{qa_meron_phone}'
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+  - action: wait_for
+    selector: '[data-qa="booking-success"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-qa="booking-moment"][data-moment="stitch"]'
+  - action: screenshot
+    name: journey_en-7-stitch.png
+    full_page: false
+  - &id001
+    action: get_console_errors
+  - &id002
+    action: get_network_errors
+- id: journey_am_mobile_dark
+  title: Amharic, phone, dark
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /{qa_meron_slug}/am
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="meron-atelier-v3"][data-pe-mode="dark"]'
+  actions:
+  - action: screenshot
+    name: journey_am-1-landing.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="meron-hero-book"], 1)
+  - action: wait_for
+    selector: '[data-qa="meron-handoff-service-0"]'
+  - action: screenshot
+    name: journey_am-2-handoff.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="meron-handoff-service-0"]'
+    assertions:
+    - type: url_contains
+      value: lang=am
+  - action: wait_for
+    selector: '[data-qa="booking-steps"][data-step="time"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-bk-skin="meron-v3"] [data-qa="booking-summary"] [data-vt-service] img'
+  - action: wait_for
+    selector: '[data-qa="booking-picker-service"]:has-text("የመጀመሪያ ልኬት")'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+    timeout_ms: 20000
+  - action: screenshot
+    name: journey_am-3-time-any.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-header"] .booking-back'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 2)
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 3)
+    state: detached
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"][data-photo="true"], 2)
+  - action: wait_for
+    selector: '[data-qa="booking-business-logo"][src*="meron-logo"]'
+  - action: screenshot
+    name: journey_am-4-chooser.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_meron_open_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_meron_open_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 2)
+    timeout_ms: 20000
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 2)
+  - action: wait_for
+    selector: '[data-qa="booking-bar"]'
+  - action: screenshot
+    name: journey_am-5-time-chosen.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-continue"]'
+  - action: wait_for
+    selector: '#userName'
+  - action: wait_for
+    selector: '[data-qa="booking-details-zone"]:has-text("የአዲስ አበባ ሰዓት")'
+  - action: screenshot
+    name: journey_am-6-details.png
+    full_page: false
+  - action: fill
+    selector: '#userName'
+    value: '{qa_meron_client}'
+  - action: fill
+    selector: '[data-qa="booking-phone"]'
+    value: '{qa_meron_phone}'
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+  - action: wait_for
+    selector: '[data-qa="booking-success"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-qa="booking-moment"][data-moment="stitch"]'
+  - action: screenshot
+    name: journey_am-7-stitch.png
+    full_page: false
+  - *id001
+  - *id002
+  options:
+    color_scheme: dark

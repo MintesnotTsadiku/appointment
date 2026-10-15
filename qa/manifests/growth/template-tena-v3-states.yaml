@@ -1,0 +1,248 @@
+# Tena v3 states. Fixture: appointment.tests.template_tena_v3_qa_fixtures (setup before, cleanup after; cleanup deletes the
+# booking that the success scenario makes, by the QA client's exact email). Development-only query values: `preview-time` (Addis clock),
+# `preview-availability` (off, empty) and `preview-state=loading` (the template's own loading screen).
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-template-tena-v3-states
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.template_tena_v3_qa_fixtures.browser_values
+scenarios:
+- id: tena_night_light
+  title: 'After dark in light mode: night photos, evening greeting'
+  viewport: &id001
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /{qa_tena_slug}?display=light&preview-time=20:30
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="tena-clinic-v3"][data-pe-recipe="tena-clinic"]'
+    - type: text_contains
+      value: Good evening
+  actions:
+  - action: wait_for
+    selector: .t3-hero-photo img[src*="hero-night"]
+  - action: screenshot
+    name: tena_night_light-1-hero.png
+    full_page: false
+  - action: click
+    selector: '#t3-band-title'
+  - action: wait_for
+    selector: .t3-band-photo img[src*="band-night"]
+  - action: screenshot
+    name: tena_night_light-2-band.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: tena_morning
+  title: 'Morning in light mode: day photos'
+  viewport: *id001
+  checks: []
+  routes:
+  - path: /{qa_tena_slug}?display=light&preview-time=07:15
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="tena-clinic-v3"][data-pe-recipe="tena-clinic"]'
+    - type: text_contains
+      value: Good morning
+  actions:
+  - action: wait_for
+    selector: .t3-hero-photo img[src$="/hero.webp"]
+  - action: wait_for
+    selector: :nth-match([data-qa="tena-open-now"][data-open="false"], 1)
+  - action: screenshot
+    name: tena_morning-1-hero.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: tena_availability_on
+  title: Live availability on (the showcase setting)
+  viewport: *id001
+  checks: []
+  routes:
+  - path: /{qa_tena_slug}?display=light&preview-time=16:30
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="tena-clinic-v3"][data-pe-recipe="tena-clinic"]'
+    - type: text_contains
+      value: Next free appointments
+  actions:
+  - action: wait_for
+    selector: '[data-qa="tena-next-card"]'
+  - action: wait_for
+    selector: '[data-qa="tena-person-next-0"]'
+  - action: click
+    selector: '#t3-services-title'
+  - action: wait_for
+    selector: :nth-match(.t3-board-next .t3-pulse, 1)
+  - action: screenshot
+    name: tena_availability_on-1-menu.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: tena_availability_off
+  title: 'Live availability off: no chip, the page stays complete'
+  viewport: *id001
+  checks: []
+  routes:
+  - path: /{qa_tena_slug}?display=light&preview-time=16:30&preview-availability=off
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="tena-clinic-v3"][data-pe-recipe="tena-clinic"]'
+    - type: text_contains
+      value: Good afternoon
+  actions:
+  - action: wait_for
+    selector: '[data-qa="tena-next-card"]'
+    state: detached
+  - action: wait_for
+    selector: '[data-qa="tena-person-next-0"]'
+    state: detached
+  - action: screenshot
+    name: tena_availability_off-1-hero.png
+    full_page: false
+  - action: click
+    selector: '#t3-team-title'
+  - action: screenshot
+    name: tena_availability_off-2-team.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: tena_availability_empty
+  title: 'Live availability with nothing free: no chip'
+  viewport: &id002
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /{qa_tena_slug}?display=light&preview-time=16:30&preview-availability=empty
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="tena-clinic-v3"][data-pe-recipe="tena-clinic"]'
+    - type: text_contains
+      value: Good afternoon
+  actions:
+  - action: wait_for
+    selector: '[data-qa="tena-next-card"]'
+    state: detached
+  - action: screenshot
+    name: tena_availability_empty-1-hero.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: tena_loading
+  title: The template's own loading screens (site and handoff)
+  viewport: *id001
+  checks: []
+  routes:
+  - path: /{qa_tena_slug}?preview-state=loading&display=light
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="tena-loading"]'
+  actions:
+  - action: screenshot
+    name: tena_loading-1-site.png
+    full_page: false
+  - action: open_url
+    url: /{qa_tena_slug}/book?preview-state=loading&display=dark
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="tena-loading"]'
+  - action: screenshot
+    name: tena_loading-2-handoff-dark.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: tena_loading_mobile
+  title: Loading screen on a phone
+  viewport: *id002
+  checks: []
+  routes:
+  - path: /{qa_tena_slug}/am?preview-state=loading&display=dark
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-qa="tena-loading"]'
+  actions:
+  - action: screenshot
+    name: tena_loading_mobile-1.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: tena_success
+  title: A guest books from the Tena landing page and sees the check along the route
+  viewport: *id001
+  checks: []
+  routes:
+  - path: /{qa_tena_slug}?display=light
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[data-template="tena-clinic-v3"][data-pe-recipe="tena-clinic"]'
+  actions:
+  - action: click
+    selector: '[data-qa="tena-hero-book"]'
+  - action: wait_for
+    selector: '[data-qa="tena-handoff-book"]'
+  - action: click
+    selector: '[data-qa="tena-handoff-book"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_tena_open_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_tena_open_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: '[data-qa="booking-continue"]'
+  - action: wait_for
+    selector: '#userName'
+  - action: fill
+    selector: '#userName'
+    value: '{qa_tena_client}'
+  - action: fill
+    selector: '[data-qa="booking-phone"]'
+    value: '{qa_tena_phone}'
+  - action: fill
+    selector: '[data-qa="booking-email"]'
+    value: '{qa_tena_email}'
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+  - action: wait_for
+    selector: '[data-qa="booking-success"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-qa="booking-moment"][data-moment="route"]'
+  - action: screenshot
+    name: tena_success-1-route.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

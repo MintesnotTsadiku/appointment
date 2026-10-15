@@ -1,0 +1,609 @@
+{
+  "kind": "imagery",
+  "contract": "appointment-imagery.v1",
+  "key": "tena-clear-path",
+  "version": 1,
+  "assets": {
+    "hero.tena": {
+      "src": "/assets/appointment/brand-experience/support/tena-v3/hero.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/tena-v3/hero-m.webp",
+      "alt": "A clinician in teal scrubs welcomes a mother and her small daughter, seen from behind, at the glass door of a bright clinic reception.",
+      "focalPoint": {
+        "x": 0.6,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1280,
+      "height": 1024,
+      "mime": "image/webp",
+      "checksum": "sha256:f742cd0235a49f8df56bb3f4f191fdbf01b3d5c6e117336b4592c5433ac9cb7e",
+      "provenance": {
+        "source": "generated",
+        "role": "Hero",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Clear Path art direction; no text, logos or readable screens; no patient faces."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 800,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "darkSrc": "/assets/appointment/brand-experience/support/tena-v3/hero-night.webp",
+      "darkMobileSrc": "/assets/appointment/brand-experience/support/tena-v3/hero-night-m.webp",
+      "checksums": {
+        "hero-m.avif": "sha256:ddcd445594fe5270db67bcf56f5ece7bc5a739050171be63ee7c182dbfdff214",
+        "hero-m.webp": "sha256:759a21c94659aa41026a042c326aabec63499fad1d381d0850d24c8098ffc28a",
+        "hero-night-m.avif": "sha256:6019df0a543fecaf8428b606824e606f76164890011ff66fdc3dfd02126b17f5",
+        "hero-night-m.webp": "sha256:51f361680a94023010f08aa28a5d855b1e314d22071ffa72e030e89714210c0f",
+        "hero-night-w640.avif": "sha256:606aebc4bab0838e6b609f21a623c89bab250531ed58ee875ed41b2e25950a8f",
+        "hero-night-w640.webp": "sha256:eb0c25cf20ea0030d09eda9dadd765c9a52e45e51b7e4df317d492eef04a5d04",
+        "hero-night-w960.avif": "sha256:2e7958ea69e370306c3231403ab9f6817455e2d6e73294fa89433730f3291613",
+        "hero-night-w960.webp": "sha256:6de0aaec210e324acdb0bbbe3f3bdf9b63b6ba357b96ad33da61ab4b9ca1be69",
+        "hero-night.avif": "sha256:9b5f044644aef24f8681e1fa2706ac542f681e733fcd3ee82258a01650432e09",
+        "hero-night.webp": "sha256:f0918197a74f2fcce08870697ffa95295d5ce0c9206ce21ed03cbf1d8b386ee7",
+        "hero-w640.avif": "sha256:26a23bf1c8f355dabe500be572d84a3ffeaf883ce5c31e3890158e06a18aae0b",
+        "hero-w640.webp": "sha256:2290c2470b0732fc6c008c46a8ed362b30eb4dd25ca95d702d1dd8923deb1bbe",
+        "hero-w960.avif": "sha256:8b8bc6ce14cbd368456b8294be3f8228b847bf7a6494d042faf2a857b092c80b",
+        "hero-w960.webp": "sha256:9ce035c8cd2e15d964a23af449dc65074b3e54fd82033c0e08874601fed8de07",
+        "hero.avif": "sha256:ed2da15a7e4b7b256bea0cb78b8ff5a7df4ac22baad43274c156c0052f60977a"
+      }
+    },
+    "band.tena": {
+      "src": "/assets/appointment/brand-experience/support/tena-v3/band.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/tena-v3/band-m.webp",
+      "alt": "The clinic's front window and teal door on a quiet tree-lined street in late afternoon sun, with a yellow bench by the door.",
+      "focalPoint": {
+        "x": 0.55,
+        "y": 0.55
+      },
+      "fit": "cover",
+      "width": 1536,
+      "height": 880,
+      "mime": "image/webp",
+      "checksum": "sha256:d6ec0b010d8a4f8cb2a059c08a2cc572b34df058d6bfae01f270eb0f11c28201",
+      "provenance": {
+        "source": "generated",
+        "role": "Booking band",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Clear Path art direction; no text, logos or readable screens; no patient faces."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 900,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "darkSrc": "/assets/appointment/brand-experience/support/tena-v3/band-night.webp",
+      "darkMobileSrc": "/assets/appointment/brand-experience/support/tena-v3/band-night-m.webp",
+      "checksums": {
+        "band-m.avif": "sha256:3d65c71aaebcdff9f3e1ff59d84e46093e99ad8629498415fb28ff533625b86c",
+        "band-m.webp": "sha256:377967141d3dd02c86ff278c03d3ddc99dc51b5ded8945d4465e703f0fbed026",
+        "band-night-m.avif": "sha256:2eebbb5db48ca83cb565ad3ca2fd1d627eff3c14e0f2ed1d85449d4562a277af",
+        "band-night-m.webp": "sha256:8ef747b21251a5df7d662f729af52086dee100823482f3c96f95191b491ac368",
+        "band-night-w640.avif": "sha256:0a779df556d015153db548de8b60dcaf1e5296fabb4665d46deb575effdb04e9",
+        "band-night-w640.webp": "sha256:dae8b2e70cb9548a6e94d6d538eb2f8e1e2f9363cec3f12b46957a4273798508",
+        "band-night-w960.avif": "sha256:6fb01b7223ea93ae9cf549977c0a06d284fc6f01ce68ed6653b032d39a9b14d3",
+        "band-night-w960.webp": "sha256:ce2f74f9f77870452948af449009d260e6f8273b1d963f06287e7a816bba6aa4",
+        "band-night.avif": "sha256:d1e463544aa10711167f192624c93f2fba19322098af5ba389f879dd8d0ecd85",
+        "band-night.webp": "sha256:f660dcd45fbfe643f4cb849b37429db7b5b526269786b9927c8ad880cc7fec53",
+        "band-w640.avif": "sha256:26ba446721b3726afb650f1b8054bb7ee0c50e11e2ab916d9adb692f5d645cd4",
+        "band-w640.webp": "sha256:468e0b9f25af0893a42ea6317517876342ae36d80f6be1504973af66a15dc417",
+        "band-w960.avif": "sha256:bcf9df9a18dc05191375c7432eedf4932e047d03689c10aa22f3b3cafa33b59c",
+        "band-w960.webp": "sha256:e4385887b9401568e8772c41e9be3809d6d3e6703886806dc9835113f0666b0e",
+        "band.avif": "sha256:c393f0a8e313ba361f5158d40b20ae4aafc64c1743b505b06a0d4b0adf2106e3"
+      }
+    },
+    "proof.tena": {
+      "src": "/assets/appointment/brand-experience/support/tena-v3/proof.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/tena-v3/proof-m.webp",
+      "alt": "A light wooden reception counter with a plant, a teal pen holder and a small yellow bell.",
+      "focalPoint": {
+        "x": 0.6,
+        "y": 0.55
+      },
+      "fit": "cover",
+      "width": 1536,
+      "height": 658,
+      "mime": "image/webp",
+      "checksum": "sha256:4adce270c3317a3129be43a48310129a7674204da6af69d3bbf4a5fbdac0795b",
+      "provenance": {
+        "source": "generated",
+        "role": "Numbers band",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Clear Path art direction; no text, logos or readable screens; no patient faces."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 900,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "checksums": {
+        "proof-m.avif": "sha256:40381194fb2e3036da3393590f61c03076c01bc4184dd6e922f08947e94d56fa",
+        "proof-m.webp": "sha256:6a4f72c510d6c0d4e151f8ba8f401ecee679508622e47fa318d530cc9f6b7566",
+        "proof-w640.avif": "sha256:0576269c8791b0dd487e250dfe5053e4aa7c6b26bea346598e327d484d5f442a",
+        "proof-w640.webp": "sha256:c61214e4433a2d5b0fe9232e9cd8aecbc700ba5ebee65ef539be8271a95e37e4",
+        "proof-w960.avif": "sha256:591862643613452af815d2830cde7682b58cbcdaee9db2334c608aee5135206b",
+        "proof-w960.webp": "sha256:9dfbaa6d282cffc120beda5eff79949f68fdd418825a8a51147226d3f94d224f",
+        "proof.avif": "sha256:27f1c7f135bd82fff907d0224924e963f78c0bf5d454a20cd78239927c311ae1"
+      }
+    },
+    "team.tena": {
+      "src": "/assets/appointment/brand-experience/support/tena-v3/team.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/tena-v3/team-m.webp",
+      "alt": "Three clinicians stand together in the bright clinic corridor.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.3
+      },
+      "fit": "cover",
+      "width": 1536,
+      "height": 658,
+      "mime": "image/webp",
+      "checksum": "sha256:ec610733564f10e3cee5822f6b34655a52d604c8612c845c101c0b945ee03f65",
+      "provenance": {
+        "source": "generated",
+        "role": "Team",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Clear Path art direction; no text, logos or readable screens; no patient faces."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 540,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "checksums": {
+        "team-m.avif": "sha256:42744c35f3ced8da0004686fcd98082121a099b41f81246a08893a549287c726",
+        "team-m.webp": "sha256:0746d30987f90c9b933c4c1c93229c577d1263a4b01e2f7abb8ec932e3d1944e",
+        "team-w640.avif": "sha256:1c3bd22cadea1913f97dadc9cdfb2468ed7c7ed5b1d60d01ece50797b8254347",
+        "team-w640.webp": "sha256:38e9e8879c70e8d901842c6250aa2afc83815cf71a80cd5386c4a69e248c8b97",
+        "team-w960.avif": "sha256:fbf6dd18e55b73ac8626d3221d8dbbad3e54468f42644261fc75fba13777dd2f",
+        "team-w960.webp": "sha256:db716cd19ed9764cfb2fc0dd229901c036181ec3628d175977cece634805805e",
+        "team.avif": "sha256:48adecb7dbb9d53261014aea6bbb14350bc5f097427e4876b9926608ca078347"
+      }
+    },
+    "visit1.tena": {
+      "src": "/assets/appointment/brand-experience/support/tena-v3/visit1.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/tena-v3/visit1-m.webp",
+      "alt": "An open white gate and a short garden path lead to the clinic's teal door.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 880,
+      "height": 1100,
+      "mime": "image/webp",
+      "checksum": "sha256:6402448bf8a3bdb610cdaa690700cc2280b944adfb936ec054a9f0b156c29dd9",
+      "provenance": {
+        "source": "generated",
+        "role": "Visit step: the gate",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Clear Path art direction; no text, logos or readable screens; no patient faces."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 540,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        560
+      ],
+      "checksums": {
+        "visit1-m.avif": "sha256:25d53afff6fd699d76cb16ed22992aecfe473df002540aa440bd2cf300206444",
+        "visit1-m.webp": "sha256:11bf604ccc4be59268d3c8082dbb928cf2a49887879bd053ed843c06e79c569d",
+        "visit1-w560.avif": "sha256:c42c8efb28940810ddb53ffcc1f104c3a5bcaae241d9bad14a1cee4c1c786212",
+        "visit1-w560.webp": "sha256:0fe1932b6dc154f4670720fcec2307102a7f2dc07eddacea90c7a0169cf825c9",
+        "visit1.avif": "sha256:9ec5c78698399f5a3450a74f41f92e2593cbd353c9740816ca8698a1530760de"
+      }
+    },
+    "visit2.tena": {
+      "src": "/assets/appointment/brand-experience/support/tena-v3/visit2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/tena-v3/visit2-m.webp",
+      "alt": "A receptionist in a teal top greets a visitor, seen from behind, at the wooden reception desk.",
+      "focalPoint": {
+        "x": 0.6,
+        "y": 0.4
+      },
+      "fit": "cover",
+      "width": 880,
+      "height": 1100,
+      "mime": "image/webp",
+      "checksum": "sha256:a2ca5d4e3f6b19eddb6762cee04939d5029e333df94cf44acbdeb33c4925281e",
+      "provenance": {
+        "source": "generated",
+        "role": "Visit step: reception",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Clear Path art direction; no text, logos or readable screens; no patient faces."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 540,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        560
+      ],
+      "checksums": {
+        "visit2-m.avif": "sha256:2fae6c286f7262d792b384cd38e09d905d7db05fde0a74d8528b5306caf287e3",
+        "visit2-m.webp": "sha256:50e1e306ca5fc375645504f3d1c52186860524008f9235ffbe5468f6f7dc2e7c",
+        "visit2-w560.avif": "sha256:b9f57a41065f2a634fa1f3edc4091b1999545bd9082c5b30b5265bdbfc01c2a3",
+        "visit2-w560.webp": "sha256:8a2144c512c206360439b1e3c72105018842409336f6d196aad89d660b7bbf8e",
+        "visit2.avif": "sha256:b4159b89edd8f555f508869fac22aaa5bb89177081c11dda8bf0e528daaf5160"
+      }
+    },
+    "visit3.tena": {
+      "src": "/assets/appointment/brand-experience/support/tena-v3/visit3.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/tena-v3/visit3-m.webp",
+      "alt": "The waiting corner: wooden armchairs, a yellow cushion, a water carafe and large plants by a tall window.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 880,
+      "height": 1100,
+      "mime": "image/webp",
+      "checksum": "sha256:d995186909146cd90d7c3b1f551fc3b05044b6f54a9ba26bd26d13825c7ff43d",
+      "provenance": {
+        "source": "generated",
+        "role": "Visit step: waiting corner",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Clear Path art direction; no text, logos or readable screens; no patient faces."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 540,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        560
+      ],
+      "checksums": {
+        "visit3-m.avif": "sha256:43c7d88a7472722be893ed5b74d8c69c672ce9647d53735c031169c21d8cae25",
+        "visit3-m.webp": "sha256:71d326d1477fe9916d86fcbca089d897939e6db8af65652241094b2b15ecb8d9",
+        "visit3-w560.avif": "sha256:d498851257bda7e01aba1d6c9b1aac249d58ab274dc30c018007002f74ef84dd",
+        "visit3-w560.webp": "sha256:ea1533aaa0bbeb4c48b716ef1ac8cbc06e01cf51fa41930126d41d22a995f15c",
+        "visit3.avif": "sha256:64a96c3312fe8846026c77892fc8b68bb0ff48a849f928b8b4408500325391df"
+      }
+    },
+    "visit4.tena": {
+      "src": "/assets/appointment/brand-experience/support/tena-v3/visit4.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/tena-v3/visit4-m.webp",
+      "alt": "A calm consultation room with a wooden desk, two chairs and a window over the city.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 880,
+      "height": 1100,
+      "mime": "image/webp",
+      "checksum": "sha256:3d795f6655761d4681c9fa3f9dc2d57d9813d71e78094a0a5019e3709d8194e6",
+      "provenance": {
+        "source": "generated",
+        "role": "Visit step: consultation room",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Clear Path art direction; no text, logos or readable screens; no patient faces."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 540,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        560
+      ],
+      "checksums": {
+        "visit4-m.avif": "sha256:f07d5e12b9ec3738e6bbe59c50d86d70b18ee52b6e2380bb5d82d6df599adcab",
+        "visit4-m.webp": "sha256:2113b796e8abc8ec0e9b95f71734c4d2e3411fe25982066e997962a755f3b1b9",
+        "visit4-w560.avif": "sha256:6588f92c3214379afd8c597dbe28ebffa46cb60fd929370ec117e6f965fbc950",
+        "visit4-w560.webp": "sha256:02ca221da8c44330358514a0a589b7239240f70ecf7c958d62d5f08f7cc9a8b5",
+        "visit4.avif": "sha256:b09bb848344335f71f6d7fd26e7ae67dacc1a520d5c8422521c68488eb9c24cf"
+      }
+    },
+    "faq.tena": {
+      "src": "/assets/appointment/brand-experience/support/tena-v3/faq.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/tena-v3/faq-m.webp",
+      "alt": "A clipboard with blank paper, a pen and a glass of water on a small wooden table by a window.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.55
+      },
+      "fit": "cover",
+      "width": 960,
+      "height": 720,
+      "mime": "image/webp",
+      "checksum": "sha256:e9cc91764cdfd7a9d5cab4950f7f82536046c46dce5b264037d1867e15a13d4b",
+      "provenance": {
+        "source": "generated",
+        "role": "Questions",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Clear Path art direction; no text, logos or readable screens; no patient faces."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 540,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640
+      ],
+      "checksums": {
+        "faq-m.avif": "sha256:da100c47ebbf7710b69ff89dea74c79c80a4af31cf680004176d02a7dbb388b4",
+        "faq-m.webp": "sha256:bf9e64ee3eef42edf16c273f64c7852edfecf7eece1707e6c2468fc2400a0ded",
+        "faq-w640.avif": "sha256:f17f29cd518c9af33bc32e82c255ae2c86a254d7c1d666c9b3e392058a8b3c14",
+        "faq-w640.webp": "sha256:6c991f62d0680f70546d5f1056da2108b53d6ca05bac8f0c6dba7d903b9741cc",
+        "faq.avif": "sha256:4afb66d03420819097a029ec16a639377436e245e959685f792a03b438fdeeb1"
+      }
+    },
+    "benefit.tena": {
+      "src": "/assets/appointment/brand-experience/support/tena-v3/benefit.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/tena-v3/benefit-m.webp",
+      "alt": "A clinician's hands sketch a simple diagram of circles and arrows while explaining it to a patient.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 900,
+      "height": 900,
+      "mime": "image/webp",
+      "checksum": "sha256:7de55325dc7ec796c395a3c43cfadc8d3fcf567076c0c503cf0d85d8f05c8ef6",
+      "provenance": {
+        "source": "generated",
+        "role": "Benefits",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Clear Path art direction; no text, logos or readable screens; no patient faces."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 540,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        560
+      ],
+      "checksums": {
+        "benefit-m.avif": "sha256:9a03beb7925dfb35546dfd4e227e56ac005fe7386414c0c9f97a56cd0f5ab324",
+        "benefit-m.webp": "sha256:bbb5f4542b8801d87098295891b6c989ffa40bb5f2c39d9db6d21ef224c79e3b",
+        "benefit-w560.avif": "sha256:3f08d6adf1357ca7a820ad6788766ac906ad39ca3f694df8e4d055f027b6fb78",
+        "benefit-w560.webp": "sha256:71830e7b5175c467dc875057101f17378b4b20f456ba98ae0122b4d46a9d5fef",
+        "benefit.avif": "sha256:6132484b28448fcc6da1bd751d67e9eb61d981f3d2c1937b363ef32db61180ea"
+      }
+    },
+    "care1.tena": {
+      "src": "/assets/appointment/brand-experience/support/tena-v3/care1.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/tena-v3/care1-m.webp",
+      "alt": "A clinician in teal scrubs listens across a wooden desk to a patient seen from behind.",
+      "focalPoint": {
+        "x": 0.6,
+        "y": 0.45
+      },
+      "fit": "cover",
+      "width": 900,
+      "height": 900,
+      "mime": "image/webp",
+      "checksum": "sha256:a1f277bfff7349079845bacde5ce9d944e718455de208086c2c6c632b02dbefe",
+      "provenance": {
+        "source": "generated",
+        "role": "Service photo",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Clear Path art direction; no text, logos or readable screens; no patient faces."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 600,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        480
+      ],
+      "checksums": {
+        "care1-m.avif": "sha256:d9db2021ea8b5b83948583ec7e67a96721fd76c452395b4f970f48f4020853ae",
+        "care1-m.webp": "sha256:9488a4f5c8c729915cecced60aaaa9793e06c2ce4688d4e5f76f3c1fddc55673",
+        "care1-w480.avif": "sha256:0421944ae0811176e501bc64cb19bc2d2a3293cd576b03b86fa4e2c432a5afb3",
+        "care1-w480.webp": "sha256:53a5b69153c6f6fbe90315ae3892c6f3c6b62ba75620afad9fe82bb0b7fc4684",
+        "care1.avif": "sha256:4321dfb0b3f3d25bd2f455b578f173d6d431191659c0df58a513c2917511a321"
+      }
+    },
+    "care2.tena": {
+      "src": "/assets/appointment/brand-experience/support/tena-v3/care2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/tena-v3/care2-m.webp",
+      "alt": "A clinician points with a pen to a page in a folder while a patient's hands rest on the desk.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 900,
+      "height": 900,
+      "mime": "image/webp",
+      "checksum": "sha256:87f1dfe9a89bd63c996601d09498b69ebbcff8b5428cf2f89406890e67f7ef4e",
+      "provenance": {
+        "source": "generated",
+        "role": "Service photo",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Clear Path art direction; no text, logos or readable screens; no patient faces."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 600,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        480
+      ],
+      "checksums": {
+        "care2-m.avif": "sha256:02b8f9c83f6131d58314c510bf1574ecd926c8553cd99a2831036e199ce690d5",
+        "care2-m.webp": "sha256:c5f2fe8cd37233eb69d2b3974055758891f70c179ca69fd67d18596b43f8eb44",
+        "care2-w480.avif": "sha256:799ce9c429494af9afbe466c3e9e30e3ea066d93548abf6f600c5aa005274f10",
+        "care2-w480.webp": "sha256:8d11985a4c87f959045e17dc0e11726cdde8d30832c7d2c56364710eca093561",
+        "care2.avif": "sha256:50b1d994590fb3b3685970dc5e61fa44c91345104a86e7c0f6494ae69b1959b6"
+      }
+    },
+    "care3.tena": {
+      "src": "/assets/appointment/brand-experience/support/tena-v3/care3.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/tena-v3/care3-m.webp",
+      "alt": "A clinician in a white coat talks with an older patient, seen from behind, on a garden path beside the clinic.",
+      "focalPoint": {
+        "x": 0.55,
+        "y": 0.45
+      },
+      "fit": "cover",
+      "width": 900,
+      "height": 900,
+      "mime": "image/webp",
+      "checksum": "sha256:3032a49b46311eb31dcb62640efc711b273e31b579673d98de9886cf6b51f5bc",
+      "provenance": {
+        "source": "generated",
+        "role": "Service photo",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Clear Path art direction; no text, logos or readable screens; no patient faces."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 600,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        480
+      ],
+      "checksums": {
+        "care3-m.avif": "sha256:9708347f124f7196b94ee9658424d9797a95e319a041a4cfa004480664fbecd4",
+        "care3-m.webp": "sha256:44578bf9c41fc4b8d77f22b315b56280d7cba03bae97026bd3ebf762f64f9811",
+        "care3-w480.avif": "sha256:d343a7240245fa609179dd484b365e76a6495a6924ede1d4af516f4671195a31",
+        "care3-w480.webp": "sha256:b711c5ab83038620f1e6d6dad0e83ef0354cf1e1f978b61069c29ac881ed5cc5",
+        "care3.avif": "sha256:89205983fe7de37610a287c43422f9d3b622146f8253e8c86a21508135d9d0fc"
+      }
+    },
+    "room1.tena": {
+      "src": "/assets/appointment/brand-experience/support/tena-v3/room1.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/tena-v3/room1-m.webp",
+      "alt": "Consultation room one: a teal chair at a wooden desk, an examination couch with a folded blanket and a yellow stool by a bright window.",
+      "focalPoint": {
+        "x": 0.45,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1440,
+      "height": 960,
+      "mime": "image/webp",
+      "checksum": "sha256:c44b4125cc31614647553599eaa2b2f1088a96b7d9074d996ae387eb447baa88",
+      "provenance": {
+        "source": "generated",
+        "role": "Room",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Clear Path art direction; no text, logos or readable screens; no patient faces."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 540,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "checksums": {
+        "room1-m.avif": "sha256:c23182c31a7934b0e43b9745a6f843dfb6a680578d1db85e03c1c4e53ea5f43e",
+        "room1-m.webp": "sha256:9293106990bd0e45b686bbc44411168ebc3d78c55f7ed1a880262f16451cbe16",
+        "room1-w640.avif": "sha256:3924923982adbcdc6ce306265c73ec8ffd62c1192002f6536cf1bcc79af5564a",
+        "room1-w640.webp": "sha256:a3ada21a51a0028a7fb7687193d23afb238bf40770cc442683d6fbc0cc0d5740",
+        "room1-w960.avif": "sha256:c8735bbc8a1e1ad09b7c8401debc3ab6d67ab11bdb1587e573aeedc526f9fa75",
+        "room1-w960.webp": "sha256:7b2f381ca726c55e9b27b993bae0d6de821f898fc0808045d77fefe3720bc2d1",
+        "room1.avif": "sha256:2f33afd57ea6bd815e6a3ae244d3fe6a2512d5df51fd310d5febe56aa81b70f7"
+      }
+    },
+    "room2.tena": {
+      "src": "/assets/appointment/brand-experience/support/tena-v3/room2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/tena-v3/room2-m.webp",
+      "alt": "Consultation room two: a teal accent wall, a wooden desk, two chairs and a city view.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1440,
+      "height": 960,
+      "mime": "image/webp",
+      "checksum": "sha256:b29a62b4acbbe0824c1a74a7817d738c6e277c81dfcebc4760ffe3ac7c6a38f5",
+      "provenance": {
+        "source": "generated",
+        "role": "Room",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Clear Path art direction; no text, logos or readable screens; no patient faces."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 540,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "checksums": {
+        "room2-m.avif": "sha256:936fdbe2094dc4efbb7284c75e979535fd73ff4c454b05c6e99c9b39c0506cb2",
+        "room2-m.webp": "sha256:73808a95132c440f6eb86fa1f9275d65d71b9d1b1c1402b61db7e53998d13c7c",
+        "room2-w640.avif": "sha256:6bcc5215bdb3d6745c2c1ac23def1c028961535e84c0fc72736e08e89ed64626",
+        "room2-w640.webp": "sha256:be8051d20f015d41a6afa8a9625a0f9f7af2b002c9b30c9704aff50b704aba40",
+        "room2-w960.avif": "sha256:4433e4e1cc3068adbb77b7a8fbc677eba99c952f5648ac1de7f27891d5b60e35",
+        "room2-w960.webp": "sha256:5b2cb24e402ba0f01279ae99fb43daf5a5b6ba020defff1f641fe85046e377ca",
+        "room2.avif": "sha256:feb02b93d0e722633abcf8ffdb8f25e551324f784a6d33366a02d2e0d6d3b778"
+      }
+    },
+    "room3.tena": {
+      "src": "/assets/appointment/brand-experience/support/tena-v3/room3.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/tena-v3/room3-m.webp",
+      "alt": "Consultation room three: a round table with three teal chairs for longer family visits.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1440,
+      "height": 960,
+      "mime": "image/webp",
+      "checksum": "sha256:1caa147dd0d651860d732e025b3924f3933dfc92bb5ac6ebdde29fcd9210cfad",
+      "provenance": {
+        "source": "generated",
+        "role": "Room",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Clear Path art direction; no text, logos or readable screens; no patient faces."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 540,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "checksums": {
+        "room3-m.avif": "sha256:2c90a34bead6767447e8f7d2cecf9d0051cae9b31cc6da38c64e685b013395e3",
+        "room3-m.webp": "sha256:b4aedd7d2ebb3f7dea665211506e9cd202cdf75f953b971c880c9cd7b58e6481",
+        "room3-w640.avif": "sha256:6759e3025fc63cfb3b7a43fce763c2209d4b1338f37b428b2ce4db622546a78f",
+        "room3-w640.webp": "sha256:8053171b30eda66aefaba6cb30674495cf238be0fbc18682eebea910ba537e06",
+        "room3-w960.avif": "sha256:3b7fdd75c6d5d0bb7765e01b2fe837ca46d14c6d4ec5b5109f2ebc49cbb6240a",
+        "room3-w960.webp": "sha256:445eb1a68a7baae04d15e19c90e4882769c1d816a7233b0c75cc1ee57082f0d0",
+        "room3.avif": "sha256:631517985b56ca662ba484120d3de6bd7c996712d312c2feae8543487257e950"
+      }
+    }
+  }
+}

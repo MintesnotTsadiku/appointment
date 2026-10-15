@@ -1,0 +1,22 @@
+{
+  "kind": "surface",
+  "contract": "appointment-surface.v1",
+  "key": "abugida-language",
+  "version": 3,
+  "shape": {
+    "cardRadius": "4px",
+    "controlRadius": "3px",
+    "borderWidth": "1px",
+    "focusRing": "3px"
+  },
+  "elevation": {
+    "card": "0 1px 0 rgba(58, 36, 18, 0.10), 0 10px 26px -14px rgba(58, 36, 18, 0.28)",
+    "raised": "0 2px 0 rgba(58, 36, 18, 0.12), 0 26px 60px -24px rgba(58, 36, 18, 0.40)"
+  },
+  "motion": {
+    "default": "standard",
+    "reduced": "none",
+    "duration": "240ms"
+  },
+  "iconStyle": "line"
+}

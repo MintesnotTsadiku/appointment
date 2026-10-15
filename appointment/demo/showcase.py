@@ -27,11 +27,11 @@ from appointment.public_experience.publisher import publish_experience
 
 VERSION = 1
 CONTENT_VERSION = 6
-PUBLIC_EXPERIENCE_VERSION = 17
+PUBLIC_EXPERIENCE_VERSION = 24
 TZ = "Africa/Addis_Ababa"
 DEMO_BRAND_RECIPES = recipe_assignments()
 # The giant word in the Bloom v3 hero and footer is the brand's short name.
-SHORT_NAMES = {"bloom": "Bloom"}
+SHORT_NAMES = {"bloom": "Bloom", "tena": "Tena"}
 
 
 def showcase_motion(recipe_key):
@@ -750,10 +750,11 @@ def _public_section_rows(key, business):
         "tena": "Follow-up visit patient",
         "abugida": "English conversation learner",
     }[key]
+    proof_rows = detail.get("proof") or public_copy.PROOF.get(key)
     proof_items = [
         {"label": _localized(label), "value": _localized(value), "detail": _localized(note)}
-        for label, value, note in detail["proof"]
-    ] if "proof" in detail else [
+        for label, value, note in proof_rows
+    ] if proof_rows else [
         {"label": _localized("Appointment style"), "value": _localized("One-to-one"), "detail": _localized("A focused visit with a named provider.")},
         {"label": _localized("Service menu"), "value": public_copy.localized(f"{len(service_items)} options", f"{len(service_items)} አማራጮች"), "detail": _localized("A small menu that is easier to compare.")},
         {"label": _localized("Addis locations"), "value": _localized(str(len(location_items))), "detail": _localized("Arrival details are shown before you book.")},
@@ -788,6 +789,8 @@ def _public_section_rows(key, business):
         for item, entry in zip(rows["services"]["items"], scenes_v3["services"]):
             item.update(public_copy.v3_image(entry))
         for item, entry in zip(rows["locations"]["items"], scenes_v3["locations"]):
+            item.update(public_copy.v3_image(entry))
+        for item, entry in zip(rows["process"]["items"], scenes_v3.get("process", [])):
             item.update(public_copy.v3_image(entry))
     if "gallery" in recipe.supported_sections:
         # Empty on purpose: the template shows its own lookbook and the before/after pair.

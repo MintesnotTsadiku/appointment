@@ -88,7 +88,7 @@ def state(doc):
     profile = frappe.get_doc("Brand Profile", doc.brand_profile)
     from appointment.public_experience.appearance import options
 
-    return {"appearanceOptions": options(get_recipe(doc.recipe_key)), "owner": doc.organization or doc.provider, "site": doc.name, "title": doc.site_title, "slug": doc.slug,
+    return {"appearanceOptions": options(get_recipe(doc.recipe_key, doc.recipe_version or None)), "owner": doc.organization or doc.provider, "site": doc.name, "title": doc.site_title, "slug": doc.slug,
             "draftVersion": doc.draft_version, "recipeKey": doc.recipe_key,
             "profile": profile.name, "brandVersion": profile.draft_version,
             "brandInputs": json.loads(profile.brand_inputs_json or "{}"),
@@ -122,13 +122,15 @@ def start(owner_type, owner, title, slug, recipe_key, preferences=None):
     profile_name = frappe.db.get_value("Brand Profile", {**scope, "lifecycle": ["!=", "Archived"]}, "name")
     if profile_name:
         profile = frappe.get_doc("Brand Profile", profile_name)
-        recipe = get_recipe(profile.recipe_key)
+        recipe = get_recipe(profile.recipe_key, profile.recipe_version or None)
     else:
+        # New sites start on the latest certified version; store it, or the doctype default (1) would
+        # validate the latest version's inputs against version 1.
         profile = frappe.get_doc({"doctype": "Brand Profile", **scope, "profile_name": title,
-                                  "application_name": title, "recipe_key": recipe.key,
+                                  "application_name": title, "recipe_key": recipe.key, "recipe_version": recipe.version,
                                   "brand_inputs_json": json.dumps(dict(recipe.default_inputs))}).insert()
     doc = frappe.get_doc({"doctype": "Public Site", **scope, "site_title": title, "slug": slug,
-                          "brand_profile": profile.name, "recipe_key": recipe.key,
+                          "brand_profile": profile.name, "recipe_key": recipe.key, "recipe_version": recipe.version,
                           "website_setup_json": json.dumps({"step": "brand", "features": [], "preferences": preferences})})
     for row in prefill_sections(scope, title, recipe, preferences):
         doc.append("sections", row)
@@ -193,7 +195,7 @@ def _edited_sections(doc, sections):
     from appointment.public_experience.section_schemas import validate_typed_section
 
     stored = {row.section_type: json.loads(row.content_json or "{}") for row in doc.sections}
-    intents = get_recipe(doc.recipe_key).action_intents
+    intents = get_recipe(doc.recipe_key, doc.recipe_version or None).action_intents
     rows = []
     for row in sections:
         if not isinstance(row, dict) or set(row) != {"type", "content"} or not isinstance(row["content"], dict):
@@ -266,7 +268,7 @@ def preview(site, expected_version, brand_inputs=None):
         profile.brand_inputs_json = json.dumps({**inputs, **brand_inputs})
     # Compile drafts without publishing a brand revision or experience release.
     design = brand_compiler.compile_brand(profile, profile.draft_version).as_dict()["compiledDesign"]
-    recipe = get_recipe(doc.recipe_key)
+    recipe = get_recipe(doc.recipe_key, doc.recipe_version or None)
     sections = publisher._compose_sections(doc, recipe, public_path=f"/{doc.slug}")
     return {"contract": "appointment-public-snapshot.v2", "recipeKey": recipe.key,
             "recipeVersion": recipe.version, "compiledDesign": design, "sections": sections,

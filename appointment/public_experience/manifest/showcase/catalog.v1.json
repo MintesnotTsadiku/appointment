@@ -6,9 +6,9 @@
       "slug": "selam-studio",
       "recipe": "selam-movement",
       "heroRole": "hero.selam",
-      "detailRole": "detail.selam",
-      "heroAsset": "/assets/appointment/brand-experience/heroes/selam-movement.webp",
-      "heroChecksum": "f15852ba4b8a7baaa17d9d46b1a64137b22ff00dabee79bf7eeb0209c5e46cd6",
+      "detailRole": "interlude.selam",
+      "heroAsset": "/assets/appointment/brand-experience/support/selam-v3/hero.webp",
+      "heroChecksum": "0903c26eb31730278e707c620729d707309e67c99286c777ea39530069ae8461",
       "benchmark": "docs/design-references/public-experience/v1/warm-vitality/full-page-03.webp",
       "supportAssets": [
         {
@@ -39,22 +39,640 @@
         {
           "viewport": "desktop",
           "asset": "/assets/appointment/brand-experience/template-gallery/selam-movement-desktop.webp",
-          "checksum": "b6036a52142e94805e2f597f739224b1c8a570856f50490cb49fecc591b25723"
+          "checksum": "77e73ee268b5cac8bd7794be4aed96eb959f0b56b12b5cc970623750bd0fbb27"
         },
         {
           "viewport": "mobile",
           "asset": "/assets/appointment/brand-experience/template-gallery/selam-movement-mobile.webp",
-          "checksum": "463ead910ecd01be5631ef0f54ce3b7bfd719db5df68db91cd38dd69aed6067b"
+          "checksum": "9a40ad7222675e7bc80203695cc8624f2f5023ff2a28fa69a32db3225bf01463"
+        }
+      ],
+      "templateAssets": [
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/band-m.avif",
+          "checksum": "83bb9f944478affae1c5bd11124ff52952c0448ce256215dc145f9bbadc1cc23"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/band-m.webp",
+          "checksum": "a69da871560ddef0d149b5997e889593825cf80ae5322220f027e6b096668bf0"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/band-night-m.avif",
+          "checksum": "6fe9be403d7dd5dbdc22e4ad2d42838ecd05d137492956b75121dee297a7a418"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/band-night-m.webp",
+          "checksum": "b5c52f50d75d10304f149ba411411a22a60208a6954a346896c9a81d475e5c33"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/band-night-w640.avif",
+          "checksum": "c640b7dfe1255ba4ba972a3d645d0935e92fcbeaae99d91e40c07d0ef000329d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/band-night-w640.webp",
+          "checksum": "1033c4d2e62891096fb56f5562b5476e53fbc67bc1e03460e4ac99f6ad8e7dae"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/band-night-w960.avif",
+          "checksum": "ecd452fb8fe6c513f6f07c8b0df15b2923d7680c5257f266f9fc36f63b44478f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/band-night-w960.webp",
+          "checksum": "ea5cd3b52c06e3483d4b8aaecd1354e07e192f38420592a914fec4237d9558bf"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/band-night.avif",
+          "checksum": "43b8d9696fe462a312e028b09b55db79ad53c96bffc5a316c2e9e50cb78095ed"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/band-night.webp",
+          "checksum": "ee275c3280b519ddf09cb3a6093f0a3892cf251c781166c10ff389b824ff27af"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/band-w640.avif",
+          "checksum": "c6da01dcd1797e7a64e6a2cd0198c293053d74849ab9aea0ef19d185458a2eed"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/band-w640.webp",
+          "checksum": "2a618a2a51a2dd9a51af4121d09a21a4714e1076d64501d36389ded8362161de"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/band-w960.avif",
+          "checksum": "42ec29084995d699ed2fd40ca15eb6605b7d4f4a9ee8c04700135268da271d76"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/band-w960.webp",
+          "checksum": "b3dfeac059a3b3517a4a8a412ad365c0f0293a1ab90dc885bc528255e238a76a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/band.avif",
+          "checksum": "289e65c35e27b64c55006902c8907f33f42cd1f1b9b8e9e412ed02cb7e37bf68"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/band.webp",
+          "checksum": "82c16b312b55d94373b4febc39eae0b1fc06059447f1cb0a34de4badb83f18c3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/beat1-m.avif",
+          "checksum": "4883c60a4adb47bff1a074791bf83cd01a531be5686f1c000488a78638e61dc5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/beat1-m.webp",
+          "checksum": "5bd2aa4721b61f5e2520abcc0d067f765c1a3544bdf8a253777d5af177cabaab"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/beat1-w560.avif",
+          "checksum": "61903f0de753e1928b1ec454803083a88283c829213fa472d84ac7fa45b88816"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/beat1-w560.webp",
+          "checksum": "b3dea6f66359dfbed9c9b4339d3360ee9d05c5ccab3c109ae2b0ce87b34aac98"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/beat1.avif",
+          "checksum": "4862ac298b8faa7f8da9b85abd3b37d7424cd4741a2a81f19b812aecade42fe3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/beat1.webp",
+          "checksum": "f6c332d6dd6ba18c1c6b1d68885be33322a550c7e024266163fb640a30d22dfd"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/beat2-m.avif",
+          "checksum": "51409aee3492182f7bdbec913659cc33f5083a2c04b9c2dfb0ab8e8e8f0d10b3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/beat2-m.webp",
+          "checksum": "9c17638b37d974d370062c7cbef91e2b6b10c320f2f924d30c821c1413ee3731"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/beat2-w560.avif",
+          "checksum": "30d617fb7f8ea7918a0d9829ac6fddef726f971acee1d6aad3415291b9e0b038"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/beat2-w560.webp",
+          "checksum": "ef1bf177635e9eb77d116d0d94a5b8c7bb8ce607310fe33ed9c08f2f973292c4"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/beat2.avif",
+          "checksum": "f4251b095a7c5b56eacd5844d7a07e830e5eeaad0c697d190bd9984525e6f744"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/beat2.webp",
+          "checksum": "68d2e014a8803d33c97dbdad0c09e11356f8552900323fbaae9cf30e5c2a1b5f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/beat3-m.avif",
+          "checksum": "c653940ba53ae9e35043280d9f4c393adfc1b79e2274da362a8da1c20c9dbda0"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/beat3-m.webp",
+          "checksum": "13d3b6c672b739ef3a17b15825ced089d1c5de7bdc969f2ad19e4430f188f797"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/beat3-w560.avif",
+          "checksum": "681dc4bc255e6cc6c7ac651c4691de8e10fd76ad2849728395f141a3ebac67f5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/beat3-w560.webp",
+          "checksum": "18f3c0d13908a6be14629d597dac01d8b94d8b9bb78db5acd6368e0f337d49ae"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/beat3.avif",
+          "checksum": "511bc7827f79c5f721afc0e9eb0ee99bae54b6c0fc07eb9ca26ec565b1768594"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/beat3.webp",
+          "checksum": "8b6e8fb5ac5f86c8a8f31529efac61176d6c4e5165d0fa9f655eea6b9d5f4f59"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/benefit-m.avif",
+          "checksum": "2099dc1ffef5391828cc92020d4f3f066b77745b3aa11cb98a995cd373ee9204"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/benefit-m.webp",
+          "checksum": "0574043158f08c1a98b25660072f4e6721af25a787a8efd5eda4606b8d7d9d3f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/benefit-w480.avif",
+          "checksum": "c2db66e8a0f1ea6a20d4ea0889021e8645c36cefc0983fc9f4df72b100bb3044"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/benefit-w480.webp",
+          "checksum": "c9ab376a5e415201a966f46ae1a045518d0a1929f7529955c6117f1c5d7d1947"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/benefit.avif",
+          "checksum": "8f012c4cbcae47779c690442db442588c520789ee1910742296d17d43a218cd3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/benefit.webp",
+          "checksum": "cf95a122bfb622981b97fd68965034c1dd9cecddac186b344119f7862a9b93a2"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow2-m.avif",
+          "checksum": "4fd92c22ca9d76e7f148709d641256ea5946a33b65eef9cdd5c3ba3104e0f6e9"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow2-m.webp",
+          "checksum": "7703efeae0de0c6fcb32c5a26c035c11f45f4c8ebae43e85aa50f491632e16be"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow2-night-m.avif",
+          "checksum": "c944f1a9d167133e10ea6e0fb94e1750c0df6dd44bc0065a153bdf45f0c176b8"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow2-night-m.webp",
+          "checksum": "3923df4e7526a1e7cf886e86b670536e34ec5a0a06c9064d17fcfffb5ed8f739"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow2-night-w640.avif",
+          "checksum": "fec9d8df0fee56fdfe8d0b32d73847a50dd5d00dc97cb9ffdeabd1763b5f70e5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow2-night-w640.webp",
+          "checksum": "00e1fee2cfec1d45a3de7ba7a0bc63d56148a6aa991cffff051ff6b3626eb04f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow2-night-w960.avif",
+          "checksum": "fe5e166515a3b6f749994d71b2d2eb064d14de92ca50b417dfc2d020f501d4bc"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow2-night-w960.webp",
+          "checksum": "1f37222b51bcddff22032f51df488540afdfa006bbe277934e088650d2446661"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow2-night.avif",
+          "checksum": "0d86a87d0d09ab61dcdfcb26cdb2d465db76430d281e732d6ea12bc9a62c5679"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow2-night.webp",
+          "checksum": "c69826f15c5f2bda3ed5f3fcef53e0a270b7dbdd2922ceb47398273c35f58e55"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow2-w640.avif",
+          "checksum": "f5ca2cd7fe292cb621c38efa25a426b3d8bedc8b09fb971a04d0869bc420ebbb"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow2-w640.webp",
+          "checksum": "2dc3d519e4968135b6f91478e6b1ba479b98bc63a5fc7401fa4a1a83e5384f1e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow2-w960.avif",
+          "checksum": "8226eaba62f350a810457cb59f82f7143f6fdb87603c8ee47c939b1399b2f535"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow2-w960.webp",
+          "checksum": "b109c4fabd42ed76bcf996307a696516065ab59535cd06653d9cc61ae7130192"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow2.avif",
+          "checksum": "78bb0fb500802dcbbd1d585b495b37fc7388e76d4d299ece6881502096620aa0"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow2.webp",
+          "checksum": "5acd75f2d9ee6df1ebb5a4964d5dd7431ee82f8d0377f099f15b5ee8ea8cb100"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow3-m.avif",
+          "checksum": "6d66ee2cb6cb341c1cfb2321852e6dd512c0b661f1727ef4f2c85626703abe7b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow3-m.webp",
+          "checksum": "961fcd5ec9a300045ed25f04042d321f75264d2d795c01d17b6fd381b19c56e1"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow3-night-m.avif",
+          "checksum": "3498663f05fb2aeb1802d842b8c8385f3c94ce2eb78366b36067f47b4faeb61e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow3-night-m.webp",
+          "checksum": "99f1490d1919bfbd2146a12e22c92aca1bb9c0518d37b4b2444a0f40e1ef99fd"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow3-night-w640.avif",
+          "checksum": "917abaf3e05717162dfa52c5df4f586e9154182a77ad3ae65c8b37f34f55ce85"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow3-night-w640.webp",
+          "checksum": "f9e40da12827e3f30c150b5801f9b093d373af82b894ec1d24c76b3b35617a08"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow3-night-w960.avif",
+          "checksum": "5e0c01c0e96eb3b496381fb6d274e972ce0878591f739830c746ac0733a3874c"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow3-night-w960.webp",
+          "checksum": "bc71ebac3c31eb71ead3b362d1c8f5e8fb3bd2de6d1ef933fc3dfed1909de124"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow3-night.avif",
+          "checksum": "8f46bc567b1386dbea47c4d3587f3ec78fe92e31271168e2f38e1547dc0a47b2"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow3-night.webp",
+          "checksum": "544669f55db9260e472b4b848a14217f6b904d6aaeb9fb715937c603db69cea3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow3-w640.avif",
+          "checksum": "db7e9dc3c5b02b66a392248eae8475b508746a8bed534e0ec7b5c08c67e82d6a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow3-w640.webp",
+          "checksum": "9e197e04414f1378bc6e5b30fa7c2f09166e58d3e73361abaeb2e759030f03d3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow3-w960.avif",
+          "checksum": "6d9f1ac840e24223ec7439788f86983d1ee82fb8cd8effe70d05bfaf9bd3343c"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow3-w960.webp",
+          "checksum": "55c6060c753609dc78636aa748736fcf28c6d7c927f25152ddd461f3d5e6f742"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow3.avif",
+          "checksum": "03b21f4494cd817d850d4c6041c520515a77fbc913bc6a8940e4746c69a3d13f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow3.webp",
+          "checksum": "cc8a6bf9353d22210280b0088efb124a7b52ee6bd3569af802f149c3c8901349"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow4-m.avif",
+          "checksum": "f8b867abffa1ef9c8b845e6783d9791a808cddb26162b5df5d6df2ac0ebd0451"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow4-m.webp",
+          "checksum": "798c1ee7c33f0530a287c3c5c0c27397871ca149e20e6ca6b71108fe91cdac72"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow4-night-m.avif",
+          "checksum": "dc33ffdf0ae6a75a69bc7d78f9b209ffc6584589fecafedad349c38e9c7ce646"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow4-night-m.webp",
+          "checksum": "1d8373542618a35a8ffce7ddcd3d0c8d7a9fc5cdb235aff89f95ac3c82fdc99d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow4-night-w640.avif",
+          "checksum": "b8667995c5bfe1d728217d61d2e1f192096991e1cc29c4c3e277792776adfb43"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow4-night-w640.webp",
+          "checksum": "5b7e63d5db149496ac90e4caf3b7c7d63c0066048b74b4729bacb0e504bafee4"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow4-night-w960.avif",
+          "checksum": "f47f487750279f0e81b2db68b2a86710bda751ff3f00c97ebc2990db6af7e230"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow4-night-w960.webp",
+          "checksum": "0137c1a7b867cd693c2c8ff31f3e72a156d0306b78241af1d6baca46171266d2"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow4-night.avif",
+          "checksum": "44cbccbba30c6536b4b2ab957032538ccd7e7873059917ab35fabdfa829ce8e5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow4-night.webp",
+          "checksum": "f4f9ba80efa227ad49d06e6cf522162374b32596f3cd8ae646d35d6beaeb4448"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow4-w640.avif",
+          "checksum": "072e90a101e462c3fe193e348f1f4694f79ff10a370680098dda6fc17d354fff"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow4-w640.webp",
+          "checksum": "20c44e9547d6165fdd557063b7c125a43cfdb95e907116344e50bb39d08df426"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow4-w960.avif",
+          "checksum": "c186f1ddeed7fc43077cd86563e2098fa082448a509fc7dfb29acaa9dc00bd27"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow4-w960.webp",
+          "checksum": "6e70718ef92d19bb355fb5dc778a4d2451f217fb0739e86086b1d923dc75a6f5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow4.avif",
+          "checksum": "4fbb89a2f58ff9f69a7585c622cd5056f955e749f784a89be97b8f3a591f858b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow4.webp",
+          "checksum": "39a05a5b25d807d8857cd03292e0962e3931a61991e72e08b6cdd0e13e82e62e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow5-m.avif",
+          "checksum": "5f37fdd874d6ab631a89465ea9769aef9e342f53105493ad49b5bd98f76f2c6a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow5-m.webp",
+          "checksum": "2ce72474ac2ca8895c10d1a36bdf9c46d550da8a84d9e1378a2f3ebeb20a8e0d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow5-night-m.avif",
+          "checksum": "971a9fa2adee7ca53ab9c3bbe0eec649562d665e8b1203f627742dd35779701d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow5-night-m.webp",
+          "checksum": "d49671c93c702ecadf979c3b4c0f4a13052ed62e47691e0b848b40064c9f21a8"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow5-night-w640.avif",
+          "checksum": "297811415987f981db37028ccc9010709c3c99589f0f61063fda68e60c1d12a0"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow5-night-w640.webp",
+          "checksum": "4ef3fedc4ff50b792658ebd5032946a30d633f272246a144a39492fed4f8d929"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow5-night-w960.avif",
+          "checksum": "d82787f7cfb20faef90fb3a0a20fa2cdced8894c6715144f9d2a55a5cfa82606"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow5-night-w960.webp",
+          "checksum": "6fd9b9ed819fc13c8676e2ba255f05142a19e2da0d011b858329e830a74726a4"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow5-night.avif",
+          "checksum": "5b510d1ee50ba0aa8ddbd28cd069e8a7a0c979bd9642c7ed2dc665646b2286c4"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow5-night.webp",
+          "checksum": "1dcc3953878676c8508be738e6ee2b295345274c35fa796f75ddddd4490566d9"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow5-w640.avif",
+          "checksum": "77fe69f6a8895f99562f4d10210613d6cd63d5b87094ce0904a7ef005876d862"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow5-w640.webp",
+          "checksum": "7561511808bb2e39d507f3de911f62d0cf412c7932d74957842de0e017ea0a6f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow5-w960.avif",
+          "checksum": "f002ca9067f09b2bb839546d5be024ac61fcd601a6671c7d12cb05c3b6789b9c"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow5-w960.webp",
+          "checksum": "1ba82a32fbd99634d89dad2795f30411f89dc12b62d8cc29036637c0365651bf"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow5.avif",
+          "checksum": "37c2fa07430ab2cf13bbb55dd40e42043324bec53283d291d644ab6d0ef48085"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/flow5.webp",
+          "checksum": "ab36c26139eb25f664027cdc5c6da01c60e079d789c84fdb88f320e32a9d196e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/hero-m.avif",
+          "checksum": "560e46ac78638ff6f464db5c9a7d37883cf7a14243ac5bee099ea0b7a406a895"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/hero-m.webp",
+          "checksum": "9de09113b418da85138d40dae2ffbf964cbc31421926b069893a8a5c6551bd6a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/hero-night-m.avif",
+          "checksum": "77fe75d2b45890f54c25565e79c49a40f3daaf6f49f6f92711250aefb69943e3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/hero-night-m.webp",
+          "checksum": "4903431255945271699d10ab767e63a213a0de19bbd17cab1e534adeb15a36b0"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/hero-night-w640.avif",
+          "checksum": "d96d77cd184315413046275bfe94215ee98cbbe27279c2d2a4d90fed7055bc80"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/hero-night-w640.webp",
+          "checksum": "91af93e4d7638068825dfb97b64697779555508c4b44f0134d505f57bc94cddc"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/hero-night-w960.avif",
+          "checksum": "5ec6d7c7dfd1557913f30a4146eb94f62f95b0d882b0995e115f07452f35ff48"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/hero-night-w960.webp",
+          "checksum": "090c36cac2a121f935b3b4d5842c3abae3b25697b7556e5838a527afcdbefc3d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/hero-night.avif",
+          "checksum": "b35a2ea877b488fdb333a76c2b37af96790ed0e00aa3bde449386a992d5a5289"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/hero-night.webp",
+          "checksum": "288c4fd8488679757638d90899a019e881771446480394ec745a5db69f5ba669"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/hero-w640.avif",
+          "checksum": "99a456a8b9690d90f097fb7214fbe460535fbb6cc12c6eefd860e61c6305af1c"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/hero-w640.webp",
+          "checksum": "5976bdab697fac4e7823711cb4a4506228489192cdbee228877aa1c1c10c9cfa"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/hero-w960.avif",
+          "checksum": "30214f35f15da1b02b1f1d5f567cbc2681364250b4c060fe1e8fc171360c632b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/hero-w960.webp",
+          "checksum": "9dc248eeaa0a96240f9d5f59bb9998ba1b09ea10b551d03e5fafdc923b7fbe92"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/hero.avif",
+          "checksum": "71e56efd23fc1fd7e97ea2a20a8bbecce38c5a419f756bc385f665a698005e33"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/hero.webp",
+          "checksum": "0903c26eb31730278e707c620729d707309e67c99286c777ea39530069ae8461"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/interlude-m.avif",
+          "checksum": "2ecbed484483cf4a82076324407926112acc785de3f53e23dcd8db77e3e84e95"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/interlude-m.webp",
+          "checksum": "efefe6a5e3f9dbdb70d6eb070df299239834664d8272fab9ff079c42b036ee4d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/interlude-w640.avif",
+          "checksum": "b26ad7e10a85858fc2f7c5a6955c4c423dd07ae65e29801c54030664b62647a8"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/interlude-w640.webp",
+          "checksum": "2a449581adcc1677f8bbd8fa267bb673c6185de19375b4e5c52f785adb312b52"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/interlude-w960.avif",
+          "checksum": "725fb0c23a14d206526ee640cba689e22a70c3fd3168047aa83e3c2bc7780146"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/interlude-w960.webp",
+          "checksum": "4f77954dac4b1adae64e1af92661a75bce207b4231a163e681359eda90bafe44"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/interlude.avif",
+          "checksum": "d4a06a7db7bc374e6989ca9c2d51e9f9796fb204435a2732571b713047e1e3ea"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/interlude.webp",
+          "checksum": "cf853656adc0d8b48f2112490f5e08aeb03641317bf38a206c165456a8556ea9"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/quote-m.avif",
+          "checksum": "9d606ffbfffabd7f4d34b5b88952349c9a7bd8c6cb5a2a7f85767a7680238575"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/quote-m.webp",
+          "checksum": "7e1180b3b67715f12b1592fdeaafe43ce8ec9c8f7479724503554d5aecf70e9a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/quote-w560.avif",
+          "checksum": "76aa83d1b7afc95d4ec3b8df5111ceddd861b7e99caeac91e9fff31ccc2a950c"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/quote-w560.webp",
+          "checksum": "12551263adb7f572c0b8abc609f1a23f205ef23becb7a24f0516b2242d251cd3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/quote.avif",
+          "checksum": "f8c3b764b18769ce58ee28b5af401c54c6b55fae80645422b570dd4f14ed898e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/quote.webp",
+          "checksum": "5f851f2c9a177d74d607f956872551167703b2403be3c059c6884d8132ee11c1"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/session1-m.avif",
+          "checksum": "0d65f5dc02108e63e8c1d1983d3b3b0d1e11a79aca57f6a1922e59972bb85d68"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/session1-m.webp",
+          "checksum": "1e321d0000374fcbe142e4903d93bdc94a593fc2c5dd6a7227fe5ce43c87be62"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/session1-w560.avif",
+          "checksum": "69f46fd69c3750c0020b938408448bc6f2c0efde4fb339b85e78a897f51328dd"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/session1-w560.webp",
+          "checksum": "79a120bc7d9023d424565d08dcbbb3ad2453ac22ee5e8f6832df4e1643a9ceda"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/session1.avif",
+          "checksum": "3aab83e746a49bdbdddd6f938c7b6ee7b015344f5605aa54f6c88b8ff6482cf0"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/session1.webp",
+          "checksum": "8922b2c84c56a301945fa74f611b245a8e7a61496fd8226d6878bb296872698a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/session2-m.avif",
+          "checksum": "3762b5cc8106657c56fc2257ce08108ab10522d13c588ebee85d66eb65b9dbb3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/session2-m.webp",
+          "checksum": "3a4c1ce5af81dae56cb3ffa607c9c6cf6a20545b0eeeab0a2dfe45f8834968a5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/session2-w560.avif",
+          "checksum": "1a456198f44015b9f891a423197449713c055cef62cce569ba02ec13f2692f37"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/session2-w560.webp",
+          "checksum": "f7d797d50a4af259f209550a206ce8ff5fce369b198123946cafa38a75b72e08"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/session2.avif",
+          "checksum": "a60ea22dd72094468c6b87ad54d94239cede74951cc6550cbc62acc11a69dbc1"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/session2.webp",
+          "checksum": "2a0aa0dcd6fd3825aee4fa8df558677ddf759fe912b4e5a5188ea36ca3a6871a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/studio-m.avif",
+          "checksum": "b7a253ecd5d0b9f54ac175af5123799989b332d1852cf4d4668ceff55f6d0e2b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/studio-m.webp",
+          "checksum": "3c920baf0da4d7e0dadc353e91ef89651887d537c897f7883b5cdd80c090891a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/studio-w640.avif",
+          "checksum": "6171f2c0a1870ce4c6ce5540e3882967733ca0e3a1bd0cad4de3afd55cb3ad47"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/studio-w640.webp",
+          "checksum": "608af5749b3044f131309c646382dc96179c3a1fff964435a992b9b5ab8e69bf"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/studio-w960.avif",
+          "checksum": "a0234f1feaed6df7fdb9c038a443608fc9149ed222c2b7e2edbf80e6e4e2afd2"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/studio-w960.webp",
+          "checksum": "236958f6d80298d1bba35fd4862c71084016aed004b34a4dac8bed21a90db179"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/studio.avif",
+          "checksum": "cf8e263a87bf074eb72cfb05c54248f0a1623d21035d3cfec884c4c3bad984bd"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/selam-v3/studio.webp",
+          "checksum": "79319b6c6d73184bae05b4dcdee8f92ad5b1fe119f33b8e450fe8461078c9b18"
         }
       ]
     },
     "meron": {
       "slug": "meron-studio",
       "recipe": "meron-atelier",
-      "heroRole": "hero.meron",
-      "detailRole": "detail.meron",
-      "heroAsset": "/assets/appointment/brand-experience/heroes/meron-tailoring.webp",
-      "heroChecksum": "763240df7adba76c94416db3a196692d0ff44ea84828cb2a9f2c94f55df07b56",
+      "heroRole": "loop1.meron",
+      "detailRole": "atelier.meron",
+      "heroAsset": "/assets/appointment/brand-experience/support/meron-v3/loop1.webp",
+      "heroChecksum": "31ae5328942b926a679cbe5e57a894a31959367bd3c167ca6362834cf5b9b02f",
       "benchmark": "docs/design-references/public-experience/v1/crafted-editorial/full-page-01.webp",
       "supportAssets": [
         {
@@ -85,12 +703,566 @@
         {
           "viewport": "desktop",
           "asset": "/assets/appointment/brand-experience/template-gallery/meron-atelier-desktop.webp",
-          "checksum": "918f6b549a2834cd15d810fd30fef2ef6ac0adaf0545e8f483ea9d28d810e061"
+          "checksum": "685b110382db518108bbf1393eb350d584e21160d589b01ea747d96150f5df3a"
         },
         {
           "viewport": "mobile",
           "asset": "/assets/appointment/brand-experience/template-gallery/meron-atelier-mobile.webp",
-          "checksum": "a4567b387fc236d1689a89363225b43aaeb7d1e11ef1390d95e681e6fca84a4d"
+          "checksum": "e841756ea1511b2854ef20a945ba93cdadb8fad0d09058f133de28085b97ac36"
+        }
+      ],
+      "templateAssets": [
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/after-m.avif",
+          "checksum": "5e91acf5896457a78ee79dbda68dd7e912b3fbeee6190221b3068d21d0136495"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/after-m.webp",
+          "checksum": "67f3eb9e7ba5cd21dbc2d5ce4a74560e1edbc394e631a0a4312ea8a7c47ccb4d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/after-w560.avif",
+          "checksum": "8026285409da4d0609537e9a4ae34558acd0ae3d3eb3a0ac02bf543f59843327"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/after-w560.webp",
+          "checksum": "baeaa2bbe411bc76af69baf64a0d1ff3baf5d54a6e2e2221089c386e47f86d66"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/after.avif",
+          "checksum": "9d9e9e41517dd9acfb5e336d55360b1c9308347c3552454144e42ec8d2da14f6"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/after.webp",
+          "checksum": "f1034a8b7e89af1eb6657c47387efea398596dc7fc29ff80416d2f78168665fd"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/atelier-m.avif",
+          "checksum": "ca8ba5d2a9d87efed24051a96cad95c941ff3541f6006a6a5d2f528f57076fec"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/atelier-m.webp",
+          "checksum": "55881c5f3428b3f43cf7fdacdd55464e46f9d2a504f096f1ec92ae3d442b82e2"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/atelier-w640.avif",
+          "checksum": "34f627a1593606e87c03a83c7661ffb0612beca75a2cc64ae1c13c54ff701fb0"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/atelier-w640.webp",
+          "checksum": "c5eed4ae6ecb34320e73c8d10e27264614b83c621dc35f658bdb0a33d5863e47"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/atelier-w960.avif",
+          "checksum": "58c677078b64965b533c5b508a9269c67be100c3641dc3b19fe4b91115f8c3e0"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/atelier-w960.webp",
+          "checksum": "fbd0abdbcd2caea523a0756dd8142be6219f1a4b639224f26551809678c0e5c2"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/atelier.avif",
+          "checksum": "e0ed294008865f0da6538b58055e819118f007326012eaea40298b54b12115cb"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/atelier.webp",
+          "checksum": "70d7ec98b950aec9eb51d8f0435a1d5758a1811aa9ed4d056c0330dab0bc1b94"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/band-m.avif",
+          "checksum": "d81f716aae9837f1027ba0040fd476d6f4a13ea7e440ef3bd129d5e3c466987e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/band-m.webp",
+          "checksum": "ae3814bc83abd653d73025a56b96883656bd98fbfc6b9dcf23327f3ddad3ae02"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/band-night-m.avif",
+          "checksum": "4f9e3d6d1e56b707473bc4f9fbb52b7a578920757733b77e48d67e362398bf5d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/band-night-m.webp",
+          "checksum": "b95d76f074c120206c136f06060ee294348f9b894018db3dd16dd9fe3befd577"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/band-night-w640.avif",
+          "checksum": "ebf8694a839c5bf42cb94b9dadc469693277ef151ae94dcde81d3a4c8c840fcf"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/band-night-w640.webp",
+          "checksum": "d0eb961ab09517cb409ea118f98815d0667859f6879421c4f8ec48c1e448eaa8"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/band-night-w960.avif",
+          "checksum": "8dfa14f5e5fb6fc121eb86d68e0b183837a5926b7426c62f66f9f48453471ffc"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/band-night-w960.webp",
+          "checksum": "7aa955d4ae0d9fe2e161fab49630228b4ccdb9bef810ba3b2599dbe6027201d3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/band-night.avif",
+          "checksum": "d2ff4d5a4f564e391ac3042613b754c0a4240beb04ea0b8ece2d525d3cf3104d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/band-night.webp",
+          "checksum": "387659babfeacc37f027474f4bc394d970a5200f5c82dfe7140b549876b7e820"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/band-w640.avif",
+          "checksum": "9db8fb8c22bd69ea908ab9444afeeb9c4990760ddb1e0de2fddea690e9a3ce76"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/band-w640.webp",
+          "checksum": "d8cf56f7a0defe2b70162dad4ebe47c781fe571a5ed182b98118da67692bc9d6"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/band-w960.avif",
+          "checksum": "7fc5686aa6a427cdff5401a63833d4a889f168a47ed2f4f0e9bf428324881a39"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/band-w960.webp",
+          "checksum": "499c4344066db5b02dd4bdb6f952e0be5055909068ee6a4c70dd128beaf7bf21"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/band.avif",
+          "checksum": "36c0a23d7bd94057eef3908af6295d7905753bb267d95e06f0d4649892ff0ef6"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/band.webp",
+          "checksum": "bb0430d8e8285b99db9d3af4e7deec2ecc6ff16ba20fab80606e071c49b589c9"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/before-m.avif",
+          "checksum": "98f6108605fb41cd9163b28b01ecc237a48f1d9b73c47ca4dea6669985dd5501"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/before-m.webp",
+          "checksum": "4c85ed84d5f1f02e15d81bae6b560a7f3647280b441bb5f39d758bba16420e5d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/before-w560.avif",
+          "checksum": "ccb4685aa222d1cafbae021047128f314c52a4e398e069ddc424d2006879eea4"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/before-w560.webp",
+          "checksum": "0daf7779f893eb540156055bc81ff0db9ddb31b2d2b03d9cfeb956b39d5e7117"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/before.avif",
+          "checksum": "0cf3c1b47b836b883adac9fce349147a46f6bfbc2646e904764e540d3692aa79"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/before.webp",
+          "checksum": "2b8ded952776347b463299bcabce29a253b003ee2f88282ad4990a6e30f734bd"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/look1-m.avif",
+          "checksum": "05b7e05ac1a978af704d9fa5aed735ea036e78476bd0167cfae5632e942e985d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/look1-m.webp",
+          "checksum": "28af7fb43509169147c9c311cd76cfe57d495d57bc5ca210a2962ea99b54e34e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/look1-w480.avif",
+          "checksum": "d1c03a458f038999166708a5f3636e996fa33c4f0e0fd2d044f6b516fefcd3e9"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/look1-w480.webp",
+          "checksum": "a282f4b39e92f93150e9a11439381772c40fd3ece0c1886c7537bdad13caebcc"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/look1-w640.avif",
+          "checksum": "6f571576022d8582d0ec9bd45da2f35da079b9a4672299672256c77cff6f5371"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/look1-w640.webp",
+          "checksum": "643e89cabf8a3620d436dad100423a30a9ac5c6c1538f1881df450577852993a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/look1.avif",
+          "checksum": "a15bf9221ea405f880cc2980cec1a6171f6c17979c902dc2889404d4de067a07"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/look1.webp",
+          "checksum": "216c93d491ec875b49863349ce9a74bbfa5d35077ae557101b8a9be4f38669ef"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/look2-m.avif",
+          "checksum": "d57b995a2d880c49194aafba8a589fcab2d361505bf3759d5d22a49f1fb8aac5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/look2-m.webp",
+          "checksum": "f865cf47e2d97f88a33574b05f211068c4d096a1f2d10e9184f42102621db8c2"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/look2-w480.avif",
+          "checksum": "6c548b5b5c652d571308dd24927316ef793cb4e2865104ec887221871ea8df1b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/look2-w480.webp",
+          "checksum": "a3f6c307cb1267803b5cbd0de513418d185599cf2a7498f2e6661762608d8328"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/look2-w640.avif",
+          "checksum": "d16f154eee6cdc71cb802c635f9a9101ace0997100db7b6f24036ff09edc73a0"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/look2-w640.webp",
+          "checksum": "34ae47407583108a23597202ca00e8f67ab6b55996dfb96036600ab65a15a047"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/look2.avif",
+          "checksum": "5b86204c07f4837f16b8a0c2f4b6b7350bef5220ed838c3b50805c697a6c5dba"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/look2.webp",
+          "checksum": "12110833255e26e0872702051134e89bb67bbbd9396f3feea36ee2402525fb6e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop1-m.avif",
+          "checksum": "3945f08391a988a2e7c3a7d87d4fdddd040827f10c61b9f9e5c857401280e676"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop1-m.webp",
+          "checksum": "120659aeedeb608f159ef2cfb9a9b7cb5004a985aeffd6ba78650f935a3cdf52"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop1-night-m.avif",
+          "checksum": "e0d6165396cacc4a919d300ee498c1764859163c2e74545202f1b8cdb0505fbd"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop1-night-m.webp",
+          "checksum": "cde12e8a89b3e0e35fb55950728cd55d0ce3eb723168f5c93b4fc5f1f8b032a9"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop1-night-w480.avif",
+          "checksum": "f19f9078d84931384b58468b4405b3f0c61960782e981a8867faccc84ee7422b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop1-night-w480.webp",
+          "checksum": "0364a0d5bbca0f42436e554e39930ffea6e50b117809c72bbc1a44e23610dcdc"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop1-night-w720.avif",
+          "checksum": "475c632f49d465265d5a04a46523ab637e73aa0eaf566a07c501b77342280d2a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop1-night-w720.webp",
+          "checksum": "fba1f7badd08bffbdfb360484ef493c1d48ede426126acd9e961012438039ae7"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop1-night.avif",
+          "checksum": "0544b8dc288a7025066bbf9dac40a12b998f0fbf1feb970074bda4eeb235b556"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop1-night.webp",
+          "checksum": "f46948d7975908436e6940039a197723df094ff9461000b6ac929f2f238184f7"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop1-w480.avif",
+          "checksum": "22a43fbf80587be887098c51eefff31c067709f95e3941ee16ed4c80453b86fa"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop1-w480.webp",
+          "checksum": "df28928ffc63fcbe931aa1782865ccba40e17397f378c2f52375f5362f8f379e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop1-w720.avif",
+          "checksum": "ae117910554396ba6b709a63599380284646dd6dfc9d831547b589b746994109"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop1-w720.webp",
+          "checksum": "f67f1df97da5b757279f4bfbb5666e85fbca762f413f6f189fa8d28f9550ecb7"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop1.avif",
+          "checksum": "7f3d355f6cef20007c4864eaf5dd538ab917e0f03028fc8e3a72adabce514544"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop1.webp",
+          "checksum": "31ae5328942b926a679cbe5e57a894a31959367bd3c167ca6362834cf5b9b02f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop2-m.avif",
+          "checksum": "fc53247de07e42687f13690a2f1180d070b009bec059f6c966ec64f22b5a564d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop2-m.webp",
+          "checksum": "3ab0ecd9e4768f1d16c7e3542f35b0c8466ce3627b4dce98f5233bb48ee8b09e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop2-night-m.avif",
+          "checksum": "8a7d3a042b97cad7044674128d0b7553b162e1054428558a2a5d5b561a1a74da"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop2-night-m.webp",
+          "checksum": "90b65ad29f888cafb3f6347bc98320260284f9dcb98e3df582769ba4f2c4080f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop2-night-w480.avif",
+          "checksum": "49865ec54b32e03500d3242e1f5e49bafb81db7ef7a245c6285476205353b5d2"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop2-night-w480.webp",
+          "checksum": "b2d22f97ef1b3fb336fed7d10ec742b32c594bb78c609e4ba58ab2705eb8f87e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop2-night-w720.avif",
+          "checksum": "d5b3be19cdb41f5cdbdb238fa99a4f485e7eadc3144d10fecffd19e48478b355"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop2-night-w720.webp",
+          "checksum": "c429595137947cb946ae0c20c6a992639cb1066565981eb32b41e040d889bc15"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop2-night.avif",
+          "checksum": "19fffb3a2612d8f2924860f054340a0ad2b370ea2b01fb02493a2e51f8fa7768"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop2-night.webp",
+          "checksum": "18164229fa87780921a8b18192063767900d6a0da5de0456dceeb456e1f1083d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop2-w480.avif",
+          "checksum": "13440a43febfd5cc92090afdd7048bd0f9b0b2c72aa8827d043549d3bb27f8f9"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop2-w480.webp",
+          "checksum": "7f08b53bb31b48b7df56412ed5cea22d1dc29b447cbbb4bc8877e568aa536388"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop2-w720.avif",
+          "checksum": "c46fe3ed198e76998ca22e66141a0f4067922925f3ddc8fe1e6c9b3e6dbfa632"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop2-w720.webp",
+          "checksum": "3b2bac75759c2984fc0a7f3acce14af5fd39273df642649b31f3f6db4325bcad"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop2.avif",
+          "checksum": "3e17ffb55287c5a4407a5229e1bd7bb86eb998aa587080a8ea94e3317e864a11"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop2.webp",
+          "checksum": "1cc6b97ea14308360a1affc2d0328afdfa09d85d1db59fd015f998d126e2eb05"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop3-m.avif",
+          "checksum": "6f1f59fc709729c0bcda73b616ad8b8b7e9188295dfc416545f573d19f7e8bec"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop3-m.webp",
+          "checksum": "7040ddaa5b4febb5272d37d4966ccb7716bba0f7172a66413d7ce7944dd9e9b5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop3-night-m.avif",
+          "checksum": "274538078e369989e30fc18721baa75dd83c6a3d1af673639627b4f8f8f66e49"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop3-night-m.webp",
+          "checksum": "26e49eca6f26f56bd62ff4ca2b15eba27a9c13aea5afc82e9ad79135c56fd1b2"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop3-night-w480.avif",
+          "checksum": "baa173fd1f7c5988606f110b305ca5870c086602d4b61e55120792ba66ae79de"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop3-night-w480.webp",
+          "checksum": "56e724ea45e51ece2ac3e1e2982f3b62652bf5d75e587da955e51100fac73995"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop3-night-w720.avif",
+          "checksum": "8336ca9b3aadc806dd93bdca82104018fc61602c5d7abb397896a589a83dd874"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop3-night-w720.webp",
+          "checksum": "5bc1225cb3eed49e48ab885798492c204d142f43d7223b92e2824e9037318bf9"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop3-night.avif",
+          "checksum": "6001a611ed302c838588a26caa44c8195c3ab7a3d6b371cb85f004b1ed1f02c1"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop3-night.webp",
+          "checksum": "efe7c81556c784c6639a03c5089e98518e7c289d7a4c078b0f03ec5670ed8f74"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop3-w480.avif",
+          "checksum": "d055710b45d989b437f44c04ae17007ddd54124a5897a752ad206861002463aa"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop3-w480.webp",
+          "checksum": "d492296016aa8e8ede0df86b6501e340a2fda17aa0724aead870d49d51669edc"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop3-w720.avif",
+          "checksum": "abc022c5e4bd8604ed5002da430fb7c687da2d6b0054b88ea65b87de49cd87c9"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop3-w720.webp",
+          "checksum": "cedcc357dc3001ad14b5d4e3a2635802b35a8245c8b198fbf3860a608f39affb"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop3.avif",
+          "checksum": "0c158955525ccbb92d238afbecb2dc4fae28e12c4a852b7433f117b463d73d97"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/loop3.webp",
+          "checksum": "f8c4f92ef8f8f7b327f7ecec187f5adab1694668d6fc7943b0c8b7d0a96e5296"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story1-m.avif",
+          "checksum": "9f99f4513b781fecf8e9e0e695151ab7445028146dfa6c2f14916e0d81df903a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story1-m.webp",
+          "checksum": "7065d7077f1ac31c99b61a7e56b16698dd283edccc15b9550ae159ea4ed6b478"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story1-w560.avif",
+          "checksum": "df5723b1e9b5cdf97b598eea82b68edbff36256d78a38e2498d82b9c5d492683"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story1-w560.webp",
+          "checksum": "6d4c440b9f1182bd8094ff40a9ee053d1705bc13b86a1366c982084bf9bc69cb"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story1-w800.avif",
+          "checksum": "6f5940a017b5bacae1dcda29c6a130328836f1b733968caf309c517ff8d61b2b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story1-w800.webp",
+          "checksum": "9603408a48ace89079dd32254fe4dd82a2eb6b9e2cb59235d08ecab846a379bb"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story1.avif",
+          "checksum": "b18613c760fc01b8faba587855e78bb089ed80010bb7742a6cdf4adc918aeeb0"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story1.webp",
+          "checksum": "2193d02972ba429b5feee3f8fc09586e111562400e180d3e9f5fd68c996164ba"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story2-m.avif",
+          "checksum": "f5a978c9c4da4d3a2e69b786203cb48726194b1b19b88d1e713f631ab0acbfd1"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story2-m.webp",
+          "checksum": "12e86e2bdae804d664c2c0d44e3c1b08957db7eeca975770576a25023da31f24"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story2-w560.avif",
+          "checksum": "86b6826b1a82fc33a6e6dae4d9838e74698023c7a83391bdf61c3766270cb6b4"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story2-w560.webp",
+          "checksum": "87b9c186df11aadd68b4bcc29f3d3f7f68f436df65496a79912ac6c14760fc89"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story2-w800.avif",
+          "checksum": "02bcde0b9f5bc44b5987a25807aa096511122b1dc68480af75576b057114c5c6"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story2-w800.webp",
+          "checksum": "881e2e183067e47e54699f0179e51cfa718679a4d1250453edbfe3b5d42e5e2c"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story2.avif",
+          "checksum": "235f5e17e273a1854ad90049d38dffb7ae549622ec12b2ecc3672b70b240860a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story2.webp",
+          "checksum": "1ed46f69c53fc19022c846526590aac4d01446f1ac131a8b76ee4e5c41523d27"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story3-m.avif",
+          "checksum": "0d3fb0ee74424ec7d39643a3189e9e3a81576dce2532ad7c0a6a1daa3c0bb746"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story3-m.webp",
+          "checksum": "5456b19a1db4a73fdb83536c98e4bc8b3b17e25139365f61b10ccc383ea21d64"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story3-w560.avif",
+          "checksum": "756e4650d9a7852df4c035a7e5fd7056575ff1fb6f8bf10980377de851621c81"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story3-w560.webp",
+          "checksum": "012a96d6004e5c6c2168d6544611f89c467915160cbedfe42a1b34bca9ee51d4"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story3-w800.avif",
+          "checksum": "93776d69777eb6e27c8089b421805c64249cac60952ab248c86294dc093a83da"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story3-w800.webp",
+          "checksum": "8a4e0d602be314342a079eb395abe309f99742373f633ff835e82acaa8b3729a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story3.avif",
+          "checksum": "e74309c32c9febeed7676ae1536af8166853e9691b35308aca8a2399586660aa"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story3.webp",
+          "checksum": "e5b3646f2a9b1b4f435e26720274ec0d55832ca706dce30a25a7c68a170dcc0d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story4-m.avif",
+          "checksum": "435ef50a19384c60f3d00c90d0e47f0f74261684709d74b67f4645b6e9ca8264"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story4-m.webp",
+          "checksum": "24975ee0aec845cff414dc192685c45674a0120050d87fded60e108f457acd01"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story4-w560.avif",
+          "checksum": "eba27aabee2c64d4e263b167558f60559345fabb7e058c946923fe8950de4485"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story4-w560.webp",
+          "checksum": "b016b3bdb1c6187380c08f8b8e678ad26e27b15616827884b9eb5cafa3269c1d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story4-w800.avif",
+          "checksum": "27d583e827e6ebd75c8b41f54e93780f1a4632d132e5d04a149401e6a925f7ae"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story4-w800.webp",
+          "checksum": "5f429788e65494691f961ac318aec3c21cc26e0e297f64e2b2bb13b9a2e8d39a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story4.avif",
+          "checksum": "61ede366ca60e293f402214b98c0f3ba0bf7cc07eed4104e3237cf02fbc1a72f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/story4.webp",
+          "checksum": "ea1db3f05c2979cb52481010cc69ea6b8429d27939dc21b3049fc564282209b7"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/swatch-m.avif",
+          "checksum": "1864f98ddbe5e37d7e6bd384c9bdd7bf76e914766d24e3a3ed47b3fffbeac57d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/swatch-m.webp",
+          "checksum": "4b0499ef72da9648b04ecf4568353722dee1d8be70858a7e6f8eae32fab81a35"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/swatch-w480.avif",
+          "checksum": "274d9a4194f59332256cb6b89ce1e0ce3be71478e6b7b119c658c822f21fda3a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/swatch-w480.webp",
+          "checksum": "64bb32e6472b87de5aa6bf5fcc473c7d1a7a465b0478ca7326ccb897b90c169a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/swatch.avif",
+          "checksum": "ac1fb86cd0cb5e52d02d1b98a044dba52fce697cafb5b0d0b8d0c8468d6b5878"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meron-v3/swatch.webp",
+          "checksum": "023aa6704956fcb2abe9842e169f962b6eabf6b14c413e0adad01de14519cfb8"
         }
       ]
     },
@@ -572,9 +1744,9 @@
       "slug": "tena-studio",
       "recipe": "tena-clinic",
       "heroRole": "hero.tena",
-      "detailRole": "detail.tena",
-      "heroAsset": "/assets/appointment/brand-experience/heroes/tena-clinic.webp",
-      "heroChecksum": "b5d10927b488561c609db00486bb16106c697ecfd8952ea1c21a1764e455652b",
+      "detailRole": "visit2.tena",
+      "heroAsset": "/assets/appointment/brand-experience/support/tena-v3/hero.webp",
+      "heroChecksum": "f742cd0235a49f8df56bb3f4f191fdbf01b3d5c6e117336b4592c5433ac9cb7e",
       "benchmark": "docs/design-references/public-experience/v1/quiet-trust/full-page-01.webp",
       "supportAssets": [
         {
@@ -615,12 +1787,518 @@
         {
           "viewport": "desktop",
           "asset": "/assets/appointment/brand-experience/template-gallery/tena-clinic-desktop.webp",
-          "checksum": "3451c638f070e6f09c605a81e5861f92531b8329aad11e8af2c2b6685629abf1"
+          "checksum": "7a78ad8b5c3a49ab0423f912854e089092123c5a695804fda137f63ca0e87d97"
         },
         {
           "viewport": "mobile",
           "asset": "/assets/appointment/brand-experience/template-gallery/tena-clinic-mobile.webp",
-          "checksum": "4577ef0e18a605fe0681a409f451538f62430b25a5ba0b2cf82a9581bfd112f1"
+          "checksum": "f9b2f23b2a99fc25f0cf7c84c0d21f7906aca9f9e036439f9b294f35c9dbed18"
+        }
+      ],
+      "templateAssets": [
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/band-m.avif",
+          "checksum": "3d65c71aaebcdff9f3e1ff59d84e46093e99ad8629498415fb28ff533625b86c"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/band-m.webp",
+          "checksum": "377967141d3dd02c86ff278c03d3ddc99dc51b5ded8945d4465e703f0fbed026"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/band-night-m.avif",
+          "checksum": "2eebbb5db48ca83cb565ad3ca2fd1d627eff3c14e0f2ed1d85449d4562a277af"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/band-night-m.webp",
+          "checksum": "8ef747b21251a5df7d662f729af52086dee100823482f3c96f95191b491ac368"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/band-night-w640.avif",
+          "checksum": "0a779df556d015153db548de8b60dcaf1e5296fabb4665d46deb575effdb04e9"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/band-night-w640.webp",
+          "checksum": "dae8b2e70cb9548a6e94d6d538eb2f8e1e2f9363cec3f12b46957a4273798508"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/band-night-w960.avif",
+          "checksum": "6fb01b7223ea93ae9cf549977c0a06d284fc6f01ce68ed6653b032d39a9b14d3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/band-night-w960.webp",
+          "checksum": "ce2f74f9f77870452948af449009d260e6f8273b1d963f06287e7a816bba6aa4"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/band-night.avif",
+          "checksum": "d1e463544aa10711167f192624c93f2fba19322098af5ba389f879dd8d0ecd85"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/band-night.webp",
+          "checksum": "f660dcd45fbfe643f4cb849b37429db7b5b526269786b9927c8ad880cc7fec53"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/band-w640.avif",
+          "checksum": "26ba446721b3726afb650f1b8054bb7ee0c50e11e2ab916d9adb692f5d645cd4"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/band-w640.webp",
+          "checksum": "468e0b9f25af0893a42ea6317517876342ae36d80f6be1504973af66a15dc417"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/band-w960.avif",
+          "checksum": "bcf9df9a18dc05191375c7432eedf4932e047d03689c10aa22f3b3cafa33b59c"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/band-w960.webp",
+          "checksum": "e4385887b9401568e8772c41e9be3809d6d3e6703886806dc9835113f0666b0e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/band.avif",
+          "checksum": "c393f0a8e313ba361f5158d40b20ae4aafc64c1743b505b06a0d4b0adf2106e3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/band.webp",
+          "checksum": "d6ec0b010d8a4f8cb2a059c08a2cc572b34df058d6bfae01f270eb0f11c28201"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/benefit-m.avif",
+          "checksum": "9a03beb7925dfb35546dfd4e227e56ac005fe7386414c0c9f97a56cd0f5ab324"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/benefit-m.webp",
+          "checksum": "bbb5f4542b8801d87098295891b6c989ffa40bb5f2c39d9db6d21ef224c79e3b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/benefit-w560.avif",
+          "checksum": "3f08d6adf1357ca7a820ad6788766ac906ad39ca3f694df8e4d055f027b6fb78"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/benefit-w560.webp",
+          "checksum": "71830e7b5175c467dc875057101f17378b4b20f456ba98ae0122b4d46a9d5fef"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/benefit.avif",
+          "checksum": "6132484b28448fcc6da1bd751d67e9eb61d981f3d2c1937b363ef32db61180ea"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/benefit.webp",
+          "checksum": "7de55325dc7ec796c395a3c43cfadc8d3fcf567076c0c503cf0d85d8f05c8ef6"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/care1-m.avif",
+          "checksum": "d9db2021ea8b5b83948583ec7e67a96721fd76c452395b4f970f48f4020853ae"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/care1-m.webp",
+          "checksum": "9488a4f5c8c729915cecced60aaaa9793e06c2ce4688d4e5f76f3c1fddc55673"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/care1-w480.avif",
+          "checksum": "0421944ae0811176e501bc64cb19bc2d2a3293cd576b03b86fa4e2c432a5afb3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/care1-w480.webp",
+          "checksum": "53a5b69153c6f6fbe90315ae3892c6f3c6b62ba75620afad9fe82bb0b7fc4684"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/care1.avif",
+          "checksum": "4321dfb0b3f3d25bd2f455b578f173d6d431191659c0df58a513c2917511a321"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/care1.webp",
+          "checksum": "a1f277bfff7349079845bacde5ce9d944e718455de208086c2c6c632b02dbefe"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/care2-m.avif",
+          "checksum": "02b8f9c83f6131d58314c510bf1574ecd926c8553cd99a2831036e199ce690d5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/care2-m.webp",
+          "checksum": "c5f2fe8cd37233eb69d2b3974055758891f70c179ca69fd67d18596b43f8eb44"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/care2-w480.avif",
+          "checksum": "799ce9c429494af9afbe466c3e9e30e3ea066d93548abf6f600c5aa005274f10"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/care2-w480.webp",
+          "checksum": "8d11985a4c87f959045e17dc0e11726cdde8d30832c7d2c56364710eca093561"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/care2.avif",
+          "checksum": "50b1d994590fb3b3685970dc5e61fa44c91345104a86e7c0f6494ae69b1959b6"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/care2.webp",
+          "checksum": "87f1dfe9a89bd63c996601d09498b69ebbcff8b5428cf2f89406890e67f7ef4e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/care3-m.avif",
+          "checksum": "9708347f124f7196b94ee9658424d9797a95e319a041a4cfa004480664fbecd4"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/care3-m.webp",
+          "checksum": "44578bf9c41fc4b8d77f22b315b56280d7cba03bae97026bd3ebf762f64f9811"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/care3-w480.avif",
+          "checksum": "d343a7240245fa609179dd484b365e76a6495a6924ede1d4af516f4671195a31"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/care3-w480.webp",
+          "checksum": "b711c5ab83038620f1e6d6dad0e83ef0354cf1e1f978b61069c29ac881ed5cc5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/care3.avif",
+          "checksum": "89205983fe7de37610a287c43422f9d3b622146f8253e8c86a21508135d9d0fc"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/care3.webp",
+          "checksum": "3032a49b46311eb31dcb62640efc711b273e31b579673d98de9886cf6b51f5bc"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/faq-m.avif",
+          "checksum": "da100c47ebbf7710b69ff89dea74c79c80a4af31cf680004176d02a7dbb388b4"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/faq-m.webp",
+          "checksum": "bf9e64ee3eef42edf16c273f64c7852edfecf7eece1707e6c2468fc2400a0ded"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/faq-w640.avif",
+          "checksum": "f17f29cd518c9af33bc32e82c255ae2c86a254d7c1d666c9b3e392058a8b3c14"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/faq-w640.webp",
+          "checksum": "6c991f62d0680f70546d5f1056da2108b53d6ca05bac8f0c6dba7d903b9741cc"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/faq.avif",
+          "checksum": "4afb66d03420819097a029ec16a639377436e245e959685f792a03b438fdeeb1"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/faq.webp",
+          "checksum": "e9cc91764cdfd7a9d5cab4950f7f82536046c46dce5b264037d1867e15a13d4b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/hero-m.avif",
+          "checksum": "ddcd445594fe5270db67bcf56f5ece7bc5a739050171be63ee7c182dbfdff214"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/hero-m.webp",
+          "checksum": "759a21c94659aa41026a042c326aabec63499fad1d381d0850d24c8098ffc28a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/hero-night-m.avif",
+          "checksum": "6019df0a543fecaf8428b606824e606f76164890011ff66fdc3dfd02126b17f5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/hero-night-m.webp",
+          "checksum": "51f361680a94023010f08aa28a5d855b1e314d22071ffa72e030e89714210c0f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/hero-night-w640.avif",
+          "checksum": "606aebc4bab0838e6b609f21a623c89bab250531ed58ee875ed41b2e25950a8f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/hero-night-w640.webp",
+          "checksum": "eb0c25cf20ea0030d09eda9dadd765c9a52e45e51b7e4df317d492eef04a5d04"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/hero-night-w960.avif",
+          "checksum": "2e7958ea69e370306c3231403ab9f6817455e2d6e73294fa89433730f3291613"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/hero-night-w960.webp",
+          "checksum": "6de0aaec210e324acdb0bbbe3f3bdf9b63b6ba357b96ad33da61ab4b9ca1be69"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/hero-night.avif",
+          "checksum": "9b5f044644aef24f8681e1fa2706ac542f681e733fcd3ee82258a01650432e09"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/hero-night.webp",
+          "checksum": "f0918197a74f2fcce08870697ffa95295d5ce0c9206ce21ed03cbf1d8b386ee7"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/hero-w640.avif",
+          "checksum": "26a23bf1c8f355dabe500be572d84a3ffeaf883ce5c31e3890158e06a18aae0b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/hero-w640.webp",
+          "checksum": "2290c2470b0732fc6c008c46a8ed362b30eb4dd25ca95d702d1dd8923deb1bbe"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/hero-w960.avif",
+          "checksum": "8b8bc6ce14cbd368456b8294be3f8228b847bf7a6494d042faf2a857b092c80b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/hero-w960.webp",
+          "checksum": "9ce035c8cd2e15d964a23af449dc65074b3e54fd82033c0e08874601fed8de07"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/hero.avif",
+          "checksum": "ed2da15a7e4b7b256bea0cb78b8ff5a7df4ac22baad43274c156c0052f60977a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/hero.webp",
+          "checksum": "f742cd0235a49f8df56bb3f4f191fdbf01b3d5c6e117336b4592c5433ac9cb7e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/proof-m.avif",
+          "checksum": "40381194fb2e3036da3393590f61c03076c01bc4184dd6e922f08947e94d56fa"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/proof-m.webp",
+          "checksum": "6a4f72c510d6c0d4e151f8ba8f401ecee679508622e47fa318d530cc9f6b7566"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/proof-w640.avif",
+          "checksum": "0576269c8791b0dd487e250dfe5053e4aa7c6b26bea346598e327d484d5f442a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/proof-w640.webp",
+          "checksum": "c61214e4433a2d5b0fe9232e9cd8aecbc700ba5ebee65ef539be8271a95e37e4"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/proof-w960.avif",
+          "checksum": "591862643613452af815d2830cde7682b58cbcdaee9db2334c608aee5135206b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/proof-w960.webp",
+          "checksum": "9dfbaa6d282cffc120beda5eff79949f68fdd418825a8a51147226d3f94d224f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/proof.avif",
+          "checksum": "27f1c7f135bd82fff907d0224924e963f78c0bf5d454a20cd78239927c311ae1"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/proof.webp",
+          "checksum": "4adce270c3317a3129be43a48310129a7674204da6af69d3bbf4a5fbdac0795b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/room1-m.avif",
+          "checksum": "c23182c31a7934b0e43b9745a6f843dfb6a680578d1db85e03c1c4e53ea5f43e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/room1-m.webp",
+          "checksum": "9293106990bd0e45b686bbc44411168ebc3d78c55f7ed1a880262f16451cbe16"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/room1-w640.avif",
+          "checksum": "3924923982adbcdc6ce306265c73ec8ffd62c1192002f6536cf1bcc79af5564a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/room1-w640.webp",
+          "checksum": "a3ada21a51a0028a7fb7687193d23afb238bf40770cc442683d6fbc0cc0d5740"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/room1-w960.avif",
+          "checksum": "c8735bbc8a1e1ad09b7c8401debc3ab6d67ab11bdb1587e573aeedc526f9fa75"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/room1-w960.webp",
+          "checksum": "7b2f381ca726c55e9b27b993bae0d6de821f898fc0808045d77fefe3720bc2d1"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/room1.avif",
+          "checksum": "2f33afd57ea6bd815e6a3ae244d3fe6a2512d5df51fd310d5febe56aa81b70f7"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/room1.webp",
+          "checksum": "c44b4125cc31614647553599eaa2b2f1088a96b7d9074d996ae387eb447baa88"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/room2-m.avif",
+          "checksum": "936fdbe2094dc4efbb7284c75e979535fd73ff4c454b05c6e99c9b39c0506cb2"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/room2-m.webp",
+          "checksum": "73808a95132c440f6eb86fa1f9275d65d71b9d1b1c1402b61db7e53998d13c7c"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/room2-w640.avif",
+          "checksum": "6bcc5215bdb3d6745c2c1ac23def1c028961535e84c0fc72736e08e89ed64626"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/room2-w640.webp",
+          "checksum": "be8051d20f015d41a6afa8a9625a0f9f7af2b002c9b30c9704aff50b704aba40"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/room2-w960.avif",
+          "checksum": "4433e4e1cc3068adbb77b7a8fbc677eba99c952f5648ac1de7f27891d5b60e35"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/room2-w960.webp",
+          "checksum": "5b2cb24e402ba0f01279ae99fb43daf5a5b6ba020defff1f641fe85046e377ca"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/room2.avif",
+          "checksum": "feb02b93d0e722633abcf8ffdb8f25e551324f784a6d33366a02d2e0d6d3b778"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/room2.webp",
+          "checksum": "b29a62b4acbbe0824c1a74a7817d738c6e277c81dfcebc4760ffe3ac7c6a38f5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/room3-m.avif",
+          "checksum": "2c90a34bead6767447e8f7d2cecf9d0051cae9b31cc6da38c64e685b013395e3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/room3-m.webp",
+          "checksum": "b4aedd7d2ebb3f7dea665211506e9cd202cdf75f953b971c880c9cd7b58e6481"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/room3-w640.avif",
+          "checksum": "6759e3025fc63cfb3b7a43fce763c2209d4b1338f37b428b2ce4db622546a78f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/room3-w640.webp",
+          "checksum": "8053171b30eda66aefaba6cb30674495cf238be0fbc18682eebea910ba537e06"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/room3-w960.avif",
+          "checksum": "3b7fdd75c6d5d0bb7765e01b2fe837ca46d14c6d4ec5b5109f2ebc49cbb6240a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/room3-w960.webp",
+          "checksum": "445eb1a68a7baae04d15e19c90e4882769c1d816a7233b0c75cc1ee57082f0d0"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/room3.avif",
+          "checksum": "631517985b56ca662ba484120d3de6bd7c996712d312c2feae8543487257e950"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/room3.webp",
+          "checksum": "1caa147dd0d651860d732e025b3924f3933dfc92bb5ac6ebdde29fcd9210cfad"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/team-m.avif",
+          "checksum": "42744c35f3ced8da0004686fcd98082121a099b41f81246a08893a549287c726"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/team-m.webp",
+          "checksum": "0746d30987f90c9b933c4c1c93229c577d1263a4b01e2f7abb8ec932e3d1944e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/team-w640.avif",
+          "checksum": "1c3bd22cadea1913f97dadc9cdfb2468ed7c7ed5b1d60d01ece50797b8254347"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/team-w640.webp",
+          "checksum": "38e9e8879c70e8d901842c6250aa2afc83815cf71a80cd5386c4a69e248c8b97"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/team-w960.avif",
+          "checksum": "fbf6dd18e55b73ac8626d3221d8dbbad3e54468f42644261fc75fba13777dd2f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/team-w960.webp",
+          "checksum": "db716cd19ed9764cfb2fc0dd229901c036181ec3628d175977cece634805805e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/team.avif",
+          "checksum": "48adecb7dbb9d53261014aea6bbb14350bc5f097427e4876b9926608ca078347"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/team.webp",
+          "checksum": "ec610733564f10e3cee5822f6b34655a52d604c8612c845c101c0b945ee03f65"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/visit1-m.avif",
+          "checksum": "25d53afff6fd699d76cb16ed22992aecfe473df002540aa440bd2cf300206444"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/visit1-m.webp",
+          "checksum": "11bf604ccc4be59268d3c8082dbb928cf2a49887879bd053ed843c06e79c569d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/visit1-w560.avif",
+          "checksum": "c42c8efb28940810ddb53ffcc1f104c3a5bcaae241d9bad14a1cee4c1c786212"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/visit1-w560.webp",
+          "checksum": "0fe1932b6dc154f4670720fcec2307102a7f2dc07eddacea90c7a0169cf825c9"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/visit1.avif",
+          "checksum": "9ec5c78698399f5a3450a74f41f92e2593cbd353c9740816ca8698a1530760de"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/visit1.webp",
+          "checksum": "6402448bf8a3bdb610cdaa690700cc2280b944adfb936ec054a9f0b156c29dd9"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/visit2-m.avif",
+          "checksum": "2fae6c286f7262d792b384cd38e09d905d7db05fde0a74d8528b5306caf287e3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/visit2-m.webp",
+          "checksum": "50e1e306ca5fc375645504f3d1c52186860524008f9235ffbe5468f6f7dc2e7c"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/visit2-w560.avif",
+          "checksum": "b9f57a41065f2a634fa1f3edc4091b1999545bd9082c5b30b5265bdbfc01c2a3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/visit2-w560.webp",
+          "checksum": "8a2144c512c206360439b1e3c72105018842409336f6d196aad89d660b7bbf8e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/visit2.avif",
+          "checksum": "b4159b89edd8f555f508869fac22aaa5bb89177081c11dda8bf0e528daaf5160"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/visit2.webp",
+          "checksum": "a2ca5d4e3f6b19eddb6762cee04939d5029e333df94cf44acbdeb33c4925281e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/visit3-m.avif",
+          "checksum": "43c7d88a7472722be893ed5b74d8c69c672ce9647d53735c031169c21d8cae25"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/visit3-m.webp",
+          "checksum": "71d326d1477fe9916d86fcbca089d897939e6db8af65652241094b2b15ecb8d9"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/visit3-w560.avif",
+          "checksum": "d498851257bda7e01aba1d6c9b1aac249d58ab274dc30c018007002f74ef84dd"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/visit3-w560.webp",
+          "checksum": "ea1533aaa0bbeb4c48b716ef1ac8cbc06e01cf51fa41930126d41d22a995f15c"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/visit3.avif",
+          "checksum": "64a96c3312fe8846026c77892fc8b68bb0ff48a849f928b8b4408500325391df"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/visit3.webp",
+          "checksum": "d995186909146cd90d7c3b1f551fc3b05044b6f54a9ba26bd26d13825c7ff43d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/visit4-m.avif",
+          "checksum": "f07d5e12b9ec3738e6bbe59c50d86d70b18ee52b6e2380bb5d82d6df599adcab"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/visit4-m.webp",
+          "checksum": "2113b796e8abc8ec0e9b95f71734c4d2e3411fe25982066e997962a755f3b1b9"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/visit4-w560.avif",
+          "checksum": "6588f92c3214379afd8c597dbe28ebffa46cb60fd929370ec117e6f965fbc950"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/visit4-w560.webp",
+          "checksum": "02ca221da8c44330358514a0a589b7239240f70ecf7c958d62d5f08f7cc9a8b5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/visit4.avif",
+          "checksum": "b09bb848344335f71f6d7fd26e7ae67dacc1a520d5c8422521c68488eb9c24cf"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/tena-v3/visit4.webp",
+          "checksum": "3d795f6655761d4681c9fa3f9dc2d57d9813d71e78094a0a5019e3709d8194e6"
         }
       ]
     },
@@ -628,9 +2306,9 @@
       "slug": "abugida-studio",
       "recipe": "abugida-language",
       "heroRole": "hero.abugida",
-      "detailRole": "detail.abugida",
-      "heroAsset": "/assets/appointment/brand-experience/heroes/abugida-language.webp",
-      "heroChecksum": "ce8e849c911911c8b61c4c8c0cf09dbce2ac88e65e2ff995ec3500219fd46832",
+      "detailRole": "story.abugida",
+      "heroAsset": "/assets/appointment/brand-experience/support/abugida-v3/hero.webp",
+      "heroChecksum": "9d28bbef75392a56bc1156829daddab6589c96b32fa0fe927bc32570ca17b909",
       "benchmark": "docs/design-references/public-experience/v1/crafted-editorial/full-page-01.webp",
       "supportAssets": [
         {
@@ -666,12 +2344,430 @@
         {
           "viewport": "desktop",
           "asset": "/assets/appointment/brand-experience/template-gallery/abugida-language-desktop.webp",
-          "checksum": "2231358f18363f3d15546822aa6611e9643d0d02527c787922eb416698762095"
+          "checksum": "c443b73b1dcd3db71396ec696697fbf8cce269851edbd1d2f6c5ac85e9063424"
         },
         {
           "viewport": "mobile",
           "asset": "/assets/appointment/brand-experience/template-gallery/abugida-language-mobile.webp",
-          "checksum": "75f7a8b3b248a54fc247d03e93357e6e932e11cdd233ebc668de5fc66cf60260"
+          "checksum": "40a8b3d55904d5080107d99150e30889c71ee9fc6f3d3ad803c338f4eb2784cc"
+        }
+      ],
+      "templateAssets": [
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/band-m.avif",
+          "checksum": "059cab4c0223659d6ad91ca1d7c2837c9869d12fc57812a81c5f5533ae1ca314"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/band-m.webp",
+          "checksum": "3d31d75506a5f82a5dce9e4e08d365da9ee4881dacef8f880196d885cefe7365"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/band-night-m.avif",
+          "checksum": "330ee5828b17c396661f135f9ed8bd76a66b9610a60cf6b4028d0cfbf4a96f1a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/band-night-m.webp",
+          "checksum": "d042a90929ced69dc3da7573302b6a3b75f5f896f081fd59ad176d4794c354a0"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/band-night-w640.avif",
+          "checksum": "14d73ae06cea48c90bca0c8696ae4ac3cbc966f6a758000925a06005d939ec76"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/band-night-w640.webp",
+          "checksum": "85caa5af4ef7a1bcca09d5a6826e321df4a91691df0625bdffa16839c8220272"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/band-night-w960.avif",
+          "checksum": "3e2aac3ed6114e58fca1584da4d7075ee8cebc4fa9adbabd92477edc621a8f5f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/band-night-w960.webp",
+          "checksum": "935a7b907eb699339b22a97c7885d3b4ea452e1aad7eb2a6cf6755cad91d27c2"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/band-night.avif",
+          "checksum": "40a0be2c300d6c37802f759b7a8d7f04931afdc7d1554e58d3d8f180d1b1c74e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/band-night.webp",
+          "checksum": "b762117cd1618a3a5fd26717725fdac5fc38c7cab332a30e09140d22558318a4"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/band-w640.avif",
+          "checksum": "1623b4a0e3c55f5c9b5010dd83235d097ce9d83efe4b392ef6ba4be22715f1f3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/band-w640.webp",
+          "checksum": "3fdb3118872cef77e135f17231cfa4ad109692905f26e72dfce523dfcfb15be0"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/band-w960.avif",
+          "checksum": "d5661b1bc713566c5771a54dc8ef8bf652f9bd3a5b0cffd10bc587bf781fe6c3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/band-w960.webp",
+          "checksum": "3965616919d662b19cd0ed451072b0b8c908a0023a9354c7f96af9897f6a05f3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/band.avif",
+          "checksum": "1dc6c90ebe12c66af27ecf865cfbc0ab7a762ba433763f068511beb027603a5a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/band.webp",
+          "checksum": "fd0ea147c4df235d6752c1c727ea17917b3aa74bf1a7131a3e7e081761141de5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/faq-m.avif",
+          "checksum": "eacc57317bd98f2c3ee19741af5ffc0a1fc718ccd14e406a164b9a53c826d4bb"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/faq-m.webp",
+          "checksum": "22af10fb2a0df22b68bc1c4ea442bd63d6c56720b9b5c9851a7f38b42813b582"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/faq-w480.avif",
+          "checksum": "8397384623860a05df91190e8a0ce539a765793e87826d1cb0d33daa18150a9e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/faq-w480.webp",
+          "checksum": "61b0447cff289b2b886fea0869661d437cf1d8159658c2007fbb5e0548104f31"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/faq.avif",
+          "checksum": "a38c15ce3d0dfb9b63c8bec72d1d5fe3d463b2048aa0873ce876dfc1c2b3161b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/faq.webp",
+          "checksum": "7724f997a835f538b986a18b30a1dec5f2624a154d4b94a3c27eb3ef9cc9aa77"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/hero-m.avif",
+          "checksum": "0779b48a94c9e954bc0b339a63bb3b4cceebf52f1f0f90290dfd932a5e6f08db"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/hero-m.webp",
+          "checksum": "88abcea63563d41566df7d70679ca1e46a950e7e51c297531cc9ae38c818622d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/hero-night-m.avif",
+          "checksum": "987b71b93f26452c7eca3aeda21367c9d525e14c030d685ae5c470e979b8037b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/hero-night-m.webp",
+          "checksum": "41db63b6ebaba2bc78e90b053e4948eb7dfef1406c473ea9a1643b86488a08ff"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/hero-night-w480.avif",
+          "checksum": "6229fd32fc0b458f3d7b86155d91836bee02dea934d4fbf62ef4140d2719dda5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/hero-night-w480.webp",
+          "checksum": "a271d7406b300da013f7cdcceebed04ec26362792d7cabeb3c0fbab47e8d9664"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/hero-night-w640.avif",
+          "checksum": "b077ef034825a96413459ce549066d95e11bafc52ae1abedb37f0bddbbcfc76b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/hero-night-w640.webp",
+          "checksum": "595420b0795f4f47d646e176916e8a7bc3f3645ef691a4126222d63a94a8e84a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/hero-night-w800.avif",
+          "checksum": "43608f1d5db121d13ac5c9b54d97ab8d828ae7d796ede2651879086ff30001ea"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/hero-night-w800.webp",
+          "checksum": "1f116d657328504c4820e6298b0886bc0d9ba35597d4f1df249a273e01ba8b7a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/hero-night.avif",
+          "checksum": "42097e7f27410f346c0e695ee38cc7b708f43402a226ad97da99cfe2be6b24b4"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/hero-night.webp",
+          "checksum": "1178300f5857952a1e899a73e1dee04f9fe1cd9f631154a5e4060554fc99d281"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/hero-w480.avif",
+          "checksum": "8227c1f983a195dc1f3297b9462453cab373c4596da55cc380df2d29b1766595"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/hero-w480.webp",
+          "checksum": "00e1ce428d5092815d1ae8c734787214b9e2a4ab61433a052f1ddd9d66a0ada1"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/hero-w640.avif",
+          "checksum": "ddc834a50665ac2c8ea6f13be6ebe1ce971db1830c39f3abd1a2b6b3549b4d12"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/hero-w640.webp",
+          "checksum": "898680563b3bab53e4604ddc5dc3ffa2631241d616a44a35f1760bdbfc5f5e7e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/hero-w800.avif",
+          "checksum": "5e80e04e136b23a49c48b9cb50def2b3c6eab1772c5f9275e7daef9ee213be88"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/hero-w800.webp",
+          "checksum": "88dfb4c9b590fe9aee220a7e8630c3b518a7a4e990ebb5af837a23c9b6ee22e9"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/hero.avif",
+          "checksum": "de13ff3e5c129640e9b67b038b3caf90f1da5c2266104c24305d67f33acbd409"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/hero.webp",
+          "checksum": "9d28bbef75392a56bc1156829daddab6589c96b32fa0fe927bc32570ca17b909"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/lesson1-m.avif",
+          "checksum": "e2303e8f4000545368680a1569f91d3713f4aea55049534b140e915e02352440"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/lesson1-m.webp",
+          "checksum": "a7aa89d997eaf13e861a2949a03564890035d08c2ddff7d05510d1760b5ab1fe"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/lesson1-w480.avif",
+          "checksum": "8c762af4dd51f2cb1931a4e850acc1f66096a20b3e3c33af4a68ee727de8dc8f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/lesson1-w480.webp",
+          "checksum": "dccc93c55f0e14675e472715eb627bb72cf12368f980b2f7f5e590f4e5b9382f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/lesson1.avif",
+          "checksum": "e456a0b7441393f1603280f0cc4cc5da1ca3ae5d89c88f73d19a0a260a5ad01d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/lesson1.webp",
+          "checksum": "2dea32836b3f339d350ef5a17aaba36fd32e63a474cd76c13cb628107bdcba13"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/lesson2-m.avif",
+          "checksum": "f77a7f91843a170e2dc2598f799f6f823aa5c5b69277f772a481eacbb4492d97"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/lesson2-m.webp",
+          "checksum": "21ceb38e9133ce85bd402f6ef5517efd90215b37d5b69799bc76d9d0d5a7f45d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/lesson2-w480.avif",
+          "checksum": "2607661a1835f18310b0913d72d13bb3f03bea9158b104f5b96d51c295e448ef"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/lesson2-w480.webp",
+          "checksum": "c1563c61797e5beb705cf655d2a73ae65b13a324d75e1aed18025f11420d7464"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/lesson2.avif",
+          "checksum": "e1389d5d626f19e514cf48b137dfe40483168760a6db47f5ef93aab8c62a983e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/lesson2.webp",
+          "checksum": "d9392a9c12206213745145612eb433141a38dcf45e0a1d7bbed64afa612d3ea7"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/parchment.avif",
+          "checksum": "09f3d0e6076b357fcb9f8c08437768a6cdb067458c58298c55426addca4e06ac"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/parchment.webp",
+          "checksum": "120936e6de1a63719c6890b73c93916b17b9317bee6144ad2c49466d9da8419e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/phrase-m.avif",
+          "checksum": "7c632ad42158e21d1c05794ea541c68cf381cd2f76e19c39eca62684a0d50419"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/phrase-m.webp",
+          "checksum": "0f20624a1f49590f517a886b38fc124ae1e7f39a95c460099dab58d85b890323"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/phrase-w480.avif",
+          "checksum": "af3766168557ce79b4a39517a7fb9d466a1f600ad43b324301cec5fc8e7709d2"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/phrase-w480.webp",
+          "checksum": "3d07ced3676964c10ce23e21cf1a23fca44f398ea972216e3eb69d64a5ae7169"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/phrase.avif",
+          "checksum": "2b1752e8a89a2e8bcab4d81a61fa7caaefbacaf7285223b166441a27c936d2ea"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/phrase.webp",
+          "checksum": "8768f080f22f645cd0545f28336bdecdc28876685c4adaedf34b6ebb8ddb9187"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/room1-m.avif",
+          "checksum": "f17624fe4b2891b3cb02b5147f43ac8f4e3ccfffac5b919e284631d49974a203"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/room1-m.webp",
+          "checksum": "57ebbc7a356b330e4b7af25dc6d2864c4d930fa4749df499fb4df9bfe3f01b79"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/room1-w640.avif",
+          "checksum": "dc8a82c05d78c89318f5ae8abbf745174ed59a305f692870ee188a17d242ffdc"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/room1-w640.webp",
+          "checksum": "40ee11d9f3932e62018cbf73f8711951add38cd242bc41189527274344ea7321"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/room1-w960.avif",
+          "checksum": "3a3475f8e892d13e51dc1184ccb0b098002eb7b854b3971fc56b2f9b4a4ec301"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/room1-w960.webp",
+          "checksum": "07fc8eff7ab303763d60fb71eefce055b7a9811625da16d4cfd5a0a0646e9f2c"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/room1.avif",
+          "checksum": "3ac6e5b80bef95e2f9f1116acfa225525bac8345a5427f869cd191b8ee03b292"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/room1.webp",
+          "checksum": "3101571178aaa1702f9b1aaa3a85b4ef787aa5c715f0bc7b82055327bfc2d0d3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/room2-m.avif",
+          "checksum": "a3802f46d3ac5dad67264dd1a2a68962ff63f0cb3b6d3425efd922db1a7c5357"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/room2-m.webp",
+          "checksum": "db4d75ea047ba842b7488c26d2acf04cc8536f44a5702e5db913a1af8d76a673"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/room2-w640.avif",
+          "checksum": "9fcfdc928dba6e34c16d6de3d687831eb5e59d67af2d6c09e5224680904151bf"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/room2-w640.webp",
+          "checksum": "62882a773635e6b3348fba327037ea43a97bdd34bfc6ff30b47faa1751791a78"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/room2-w960.avif",
+          "checksum": "05d0a389a9d077e861ac1159a44ba67a8f3e5e6c660fe99c4802472bcc7f93e9"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/room2-w960.webp",
+          "checksum": "7a220ce828cd306c3a6a3a1b959cbbda9403f2e337a56192db979d881ed4bcad"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/room2.avif",
+          "checksum": "42a9a7cd203d4f949852dd678c2fc6c898b3c28743d4186debc7e916756e9a4e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/room2.webp",
+          "checksum": "204b2365a01fbf2ec6542ba0eb3bc282926c0f26fba3e113de67bfb1d7766e78"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/step1-m.avif",
+          "checksum": "dcdc06aac05c91d6e397636cf0de192181cead578a837b45974f3319efe73eb1"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/step1-m.webp",
+          "checksum": "dae4b56b0ad4b51ca56df0632c18da3e641bb1f1fb2946f772642253d5cf42e1"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/step1-w480.avif",
+          "checksum": "75ff79bc503fb0b37d2550340d031e3a6cddcf1384656098c5527c088e3e2eba"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/step1-w480.webp",
+          "checksum": "0630a713bdd0f82c4934647f3fd8c3fd6112ba8bb58cfec0d6aadc23ae1012ba"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/step1.avif",
+          "checksum": "59a5df8c8759517201e10d3937600ea0ec6fe9a000e90a0de5f6728e3b70e712"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/step1.webp",
+          "checksum": "bb1a81ce6ddb8f425b0e674c2976a52da120dd33ff6e0122fc630cd32fe01218"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/step2-m.avif",
+          "checksum": "ea45b2a7b203fa78e7219e42f6ae324dbdea7058bcbefae89f58ee0d4d12e58f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/step2-m.webp",
+          "checksum": "a644fde3c9e4fb18c19c15cffbd4a6fc9fa0ced96829ac8c6aab01a20378d411"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/step2-w480.avif",
+          "checksum": "31ac43a4d9d774a53bf713d0f4803ce32a61df9279097e4e0dc369ed688d6dfc"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/step2-w480.webp",
+          "checksum": "97b1e9d363d7810c3aefd70f987ade59a59bd566e8488bcfcf4a20d50f32d93b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/step2.avif",
+          "checksum": "1cde8dd5846af6781f128e7502d8ac0dc10a9416af82a674d9b43684689f4b6b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/step2.webp",
+          "checksum": "2fb1fe1e4f9f2c2016eaeffdb5e436e46beac58d751e34378b40f25b4a97cb81"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/step3-m.avif",
+          "checksum": "db0b7def983cc5d03ff1e129f3bdb0de43ac05c1f6552fdb1e31eb1ad44385c3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/step3-m.webp",
+          "checksum": "89c76c729aefc28cebecc382d69455e98c5b178f86ebac7fb96715c3655e0904"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/step3-w480.avif",
+          "checksum": "d84a90f5dc4136c9bd1e5f7448fc43b3f2d19b8eeb653c725daf7ca8677b9f5d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/step3-w480.webp",
+          "checksum": "0e71630133691e062ee4cd141a4c071c4c144b034c0795e2c0e540e43717842c"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/step3.avif",
+          "checksum": "cc189e275e75627dfbd2f9a53621320def9aa65b00c3ec3bbea6bfc9920e5b39"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/step3.webp",
+          "checksum": "5ffe4708d4ebca8dd6539679fb16f442ab5223e846cef9806ec01145c16bdce6"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/story-m.avif",
+          "checksum": "44a4556e0f171cbf56b96dff375fe5c06b71b8c51308111bc329490f9f60e34c"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/story-m.webp",
+          "checksum": "8913afc3a21a38c13530364adb973b23ad063d1b51b691f86ab8fee03b16ebd3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/story-w640.avif",
+          "checksum": "d8340b9633177384109dbab10d487e39f27cab7f87a3107549f954e9b86214ba"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/story-w640.webp",
+          "checksum": "1a1ef265425c657ba1e26961c015deaf06faa9b5cb1a59268ad91330c60a9da5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/story-w960.avif",
+          "checksum": "b466092510ef89e6155824da4f6bd97903f2de47d0cd5884b8b1aa6b3f8e3941"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/story-w960.webp",
+          "checksum": "fd0be32b538a8757eeeb973913851d6fe527c4b40ba08defbd8a8d9721fd1339"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/story.avif",
+          "checksum": "79cc5bde7404823054cfbedfe9f8caf29a1fa3504e27a67c23b784844f3fcfea"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/abugida-v3/story.webp",
+          "checksum": "2073efc21d8555e11bce919e8703c19c45be01eb5c7a07bd2a963ba0f6007023"
         }
       ]
     },

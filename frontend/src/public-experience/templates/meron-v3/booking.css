@@ -1,0 +1,117 @@
+/* Meron v3 on the booking pages. The same fitting room as the landing page, quieter: no parallax,
+   marquee or moving image. Only rules under [data-bk-skin="meron-v3"]; the shared flow owns the layout.
+   Radius 0 everywhere; garment-tag photo frames; navy actions; wine and gold marks. */
+[data-bk-skin="meron-v3"] {
+  --bk-frame-line: #a37b34;
+  --bk-header-bg: #141d33;
+  --bk-header-line: transparent;
+  --bk-backdrop-opacity: 0.18;
+  --bk-backdrop-blur: 20px;
+  --booking-radius: 0px;
+}
+[data-bk-skin="meron-v3"][data-pe-mode="dark"],
+.dark [data-bk-skin="meron-v3"] { --bk-backdrop-opacity: 0.32; --bk-header-bg: #0b1120; }
+
+/* The bar: navy wool in both modes with a gold stitch line along its foot. */
+[data-bk-skin="meron-v3"].bk-header .bk-header-inner {
+  --text-primary: #f3efe6;
+  --text-secondary: rgba(243, 239, 230, 0.82);
+  --text-muted: rgba(243, 239, 230, 0.74);
+  --border-default: rgba(243, 239, 230, 0.26);
+  --border-subtle: rgba(243, 239, 230, 0.16);
+  --bg-elevated: rgba(243, 239, 230, 0.08);
+  --accent-primary: #d6b26a;
+  --pe-color-on-primary: #101a30;
+  color: #f3efe6;
+}
+[data-bk-skin="meron-v3"].bk-header::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 3px 0;
+  height: 0;
+  border-top: 1.5px dashed #d6b26a;
+  opacity: 0.85;
+}
+[data-bk-skin="meron-v3"].bk-header [data-qa="language-toggle"] svg,
+[data-bk-skin="meron-v3"].bk-header [data-qa="language-toggle"] span { color: rgba(243, 239, 230, 0.88); }
+[data-bk-skin="meron-v3"].bk-header [data-qa="language-toggle"]:hover { background: rgba(243, 239, 230, 0.1); }
+[data-bk-skin="meron-v3"].bk-header :focus-visible { outline-color: #f1d79b; }
+[data-bk-skin="meron-v3"].bk-header .pe-brand-logo,
+[data-bk-skin="meron-v3"] .pe-brand-logo { border-radius: 0; }
+
+/* The page: the fitting room's echo replaces the shared grid pattern. */
+.booking-experience[data-bk-skin="meron-v3"] { background-image: none; }
+.booking-experience[data-bk-skin="meron-v3"]::before { display: none; }
+
+/* Headings: Garamond; Amharic gets Noto Serif Ethiopic with more leading. Eyebrows in small caps. */
+[data-bk-skin="meron-v3"] h1,
+[data-bk-skin="meron-v3"] h2 { font-weight: 500; letter-spacing: -0.005em; }
+[data-bk-skin="meron-v3"]:lang(am) h1,
+[data-bk-skin="meron-v3"]:lang(am) h2,
+[data-bk-skin="meron-v3"] :lang(am) h1,
+[data-bk-skin="meron-v3"] :lang(am) h2 { letter-spacing: 0; line-height: 1.3; }
+[data-bk-skin="meron-v3"] .bk-eyebrow { color: #5b1f2b; font-variant-caps: all-small-caps; letter-spacing: 0.16em; }
+[data-bk-skin="meron-v3"][data-pe-mode="dark"] .bk-eyebrow,
+.dark [data-bk-skin="meron-v3"] .bk-eyebrow { color: #d6b26a; }
+[data-bk-skin="meron-v3"] :lang(am) .bk-eyebrow { letter-spacing: 0.02em; font-variant-caps: normal; }
+
+/* Square corners everywhere; a chosen card or time is navy, with a stitched inner line. */
+[data-bk-skin="meron-v3"] .bk-card,
+[data-bk-skin="meron-v3"] .bk-slot,
+[data-bk-skin="meron-v3"] .bk-day,
+[data-bk-skin="meron-v3"] .bk-chip,
+[data-bk-skin="meron-v3"] .bk-avatar,
+[data-bk-skin="meron-v3"] input,
+[data-bk-skin="meron-v3"] textarea,
+[data-bk-skin="meron-v3"] button { border-radius: 0; }
+[data-bk-skin="meron-v3"] .bk-slot[aria-pressed="true"] { box-shadow: inset 0 0 0 3px var(--accent-primary), inset 0 0 0 4px rgba(255, 255, 255, 0.45); }
+[data-bk-skin="meron-v3"] .bk-day[aria-pressed="true"] { box-shadow: inset 0 -3px 0 #5b1f2b; }
+[data-bk-skin="meron-v3"][data-pe-mode="dark"] .bk-day[aria-pressed="true"],
+.dark [data-bk-skin="meron-v3"] .bk-day[aria-pressed="true"] { box-shadow: inset 0 -3px 0 #d6b26a; }
+
+/* Photo frames: a garment tag with cut top corners and a punched hole. */
+[data-bk-skin="meron-v3"] .bk-photo {
+  position: relative;
+  border-radius: 0;
+  clip-path: polygon(16% 0, 84% 0, 100% 12%, 100% 100%, 0 100%, 0 12%);
+}
+[data-bk-skin="meron-v3"] .bk-photo::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 6%;
+  width: 9px;
+  height: 9px;
+  margin-left: -4.5px;
+  border-radius: 50%;
+  background: var(--bg-primary, #f1f1ef);
+  box-shadow: 0 0 0 2px #d6b26a;
+}
+[data-bk-skin="meron-v3"] .bk-photo::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  z-index: 1;
+  border: 1px dashed rgba(255, 255, 255, 0.7);
+  pointer-events: none;
+}
+[data-bk-skin="meron-v3"] .bk-summary-media .bk-photo::before { inset: 3px; }
+
+/* Steps: a small garment tag per step, joined by a stitch line. */
+.m3k-mark { flex: none; overflow: visible; }
+.m3k-mark-tag { fill: none; stroke: currentColor; stroke-width: 1.3; opacity: 0.75; }
+.m3k-mark-hole { fill: currentColor; opacity: 0.6; }
+.m3k-mark-num { fill: currentColor; font: 600 10px/1 var(--booking-font-body, serif); }
+.m3k-mark-cross { fill: none; stroke: #101a30; stroke-width: 2; stroke-linecap: square; }
+.m3k-mark[data-state="current"] .m3k-mark-tag { fill: #d6b26a; stroke: #d6b26a; opacity: 1; }
+.m3k-mark[data-state="current"] .m3k-mark-num { fill: #101a30; }
+.m3k-mark[data-state="current"] .m3k-mark-hole { fill: #101a30; }
+.m3k-mark[data-state="done"] .m3k-mark-tag { fill: #c9d6ea; stroke: #c9d6ea; opacity: 1; }
+.m3k-mark[data-state="done"] .m3k-mark-hole { fill: #101a30; }
+[data-bk-skin="meron-v3"] .bk-steps li + li::before { height: 0; background: none; border-top: 1.5px dashed rgba(214, 178, 106, 0.7); }
+@media (max-width: 900px) {
+  [data-bk-skin="meron-v3"] .bk-steps li { background: rgba(243, 239, 230, 0.18); }
+  [data-bk-skin="meron-v3"] .bk-steps li[data-state="done"],
+  [data-bk-skin="meron-v3"] .bk-steps li[data-state="current"] { background: #d6b26a; }
+  [data-bk-skin="meron-v3"].bk-header::after { display: none; }
+}

@@ -1,0 +1,15 @@
+/* Tena v3 booking-success moment, "a check along the route". Loaded only with the confirmation (lazy module). */
+.t3-moment { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; border-radius: inherit; }
+.t3-moment-art { position: absolute; left: 50%; top: 0; width: min(100%, 600px); height: 160px; transform: translateX(-50%); overflow: visible; }
+.t3-moment-base, .t3-moment-route { fill: none; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.t3-moment-base { stroke: color-mix(in srgb, #0b5563 18%, transparent); stroke-dasharray: 2 10; }
+.t3-moment-route { stroke: #0b5563; stroke-dasharray: 1; stroke-dashoffset: 0; animation: t3-moment-draw 900ms cubic-bezier(.3, .7, .2, 1) 80ms both; }
+[data-pe-mode="dark"] .t3-moment-route, .dark .t3-moment-route { stroke: #86d3dc; }
+.t3-moment-stop { fill: #f2c14e; stroke: #1d1a0e; stroke-width: 1.5; transform-box: fill-box; transform-origin: center; animation: t3-moment-stop 360ms cubic-bezier(.3, 1.6, .5, 1) calc(var(--d) + 200ms) both; }
+.t3-moment-plate { fill: #f2c14e; opacity: .4; transform-box: fill-box; transform-origin: center; animation: t3-moment-plate 520ms cubic-bezier(.3, 1.5, .5, 1) 820ms both; }
+@keyframes t3-moment-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes t3-moment-stop { from { opacity: 0; transform: scale(.2); } to { opacity: 1; transform: none; } }
+@keyframes t3-moment-plate { from { opacity: 0; transform: scale(.6) rotate(-8deg); } to { opacity: .4; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .t3-moment-route, .t3-moment-stop, .t3-moment-plate { animation: none; }
+}

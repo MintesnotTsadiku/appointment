@@ -1,0 +1,652 @@
+# Selam v3 "Tempo" (light, full motion). Fixture: appointment.tests.template_selam_v3_qa_fixtures (setup before, cleanup after).
+# Every section of /selam-studio and /selam-studio/am: hero (greeting, open-now, next free time), one movement in five frames (desktop: the
+# pinned scroll scrub with the drawn arc; phone: the swipe rail with dots), sessions with tempo numerals and pace bars, the Entoto story,
+# the coach, the session beats, proof, benefits bento, pull quote and review marquee with pause, FAQ with the Habesha clock, visit, booking
+# band, footer; then the booking handoff (view transition target) and the scheduler time picker. `?preview-time=` fixes the Addis clock
+# (development builds only). Agent Plane `scroll` ignores `selector`: a heading click brings each section into view. See docs/design/SELAM_V3.md.
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-template-selam-v3
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.template_selam_v3_qa_fixtures.browser_values
+scenarios:
+- id: selam_en_desktop
+  title: Selam v3 (en, desktop, light, afternoon)
+  viewport: &id001
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /{qa_selam_slug}?display=light&preview-time=16:30
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="selam-movement-v3"][data-pe-recipe="selam-movement"]'
+    - type: text_contains
+      value: Good afternoon
+  actions:
+  - action: wait_for
+    selector: .s3-flow-frame:first-child img
+  - action: wait_for
+    selector: '[data-qa="selam-next-free"]'
+  - action: screenshot
+    name: selam_en_desktop-01-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 640
+  - action: scroll
+    delta_y: 520
+  - action: screenshot
+    name: selam_en_desktop-02-frames-twist.png
+    full_page: false
+  - action: scroll
+    delta_y: 520
+  - action: scroll
+    delta_y: 420
+  - action: screenshot
+    name: selam_en_desktop-03-frames-stand.png
+    full_page: false
+  - action: click
+    selector: '#s3-sessions-title'
+  - action: click
+    selector: :nth-match(.s3-session h3, 1)
+  - action: wait_for
+    selector: :nth-match(.s3-session[data-revealed], 1)
+  - action: screenshot
+    name: selam_en_desktop-04-sessions.png
+    full_page: false
+  - action: click
+    selector: '#s3-story-title'
+  - action: click
+    selector: .s3-ledger
+  - action: screenshot
+    name: selam_en_desktop-05-story.png
+    full_page: false
+  - action: click
+    selector: '#s3-team-title'
+  - action: click
+    selector: .s3-coach h3
+  - action: screenshot
+    name: selam_en_desktop-06-coach.png
+    full_page: false
+  - action: click
+    selector: '#s3-beats-title'
+  - action: click
+    selector: :nth-match(.s3-beat-card h3, 2)
+  - action: screenshot
+    name: selam_en_desktop-07-beats.png
+    full_page: false
+  - action: click
+    selector: :nth-match(.s3-proof-label, 1)
+  - action: screenshot
+    name: selam_en_desktop-08-proof.png
+    full_page: false
+  - action: click
+    selector: '#s3-notes-title'
+  - action: click
+    selector: :nth-match(.s3-tile h3, 3)
+  - action: screenshot
+    name: selam_en_desktop-09-benefits.png
+    full_page: false
+  - action: click
+    selector: '#s3-reviews-title'
+  - action: click
+    selector: '[data-qa="selam-reviews-pause"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="selam-reviews-pause"][aria-pressed="true"]'
+  - action: screenshot
+    name: selam_en_desktop-10-reviews-paused.png
+    full_page: false
+  - action: click
+    selector: '#s3-faq-title'
+  - action: click
+    selector: :nth-match(.s3-faq-list summary, 1)
+  - action: click
+    selector: '[data-qa="selam-habesha-toggle"]'
+    assertions:
+    - type: text_contains
+      selector: .s3-hours
+      value: ከጠዋቱ 3 ሰዓት
+  - action: screenshot
+    name: selam_en_desktop-11-faq-hours.png
+    full_page: false
+  - action: click
+    selector: '#s3-visit-title'
+  - action: click
+    selector: .s3-room-card h3
+  - action: wait_for
+    selector: '[data-qa="selam-room-panel"] img'
+  - action: screenshot
+    name: selam_en_desktop-12-visit.png
+    full_page: false
+  - action: click
+    selector: '#s3-band-title'
+  - action: screenshot
+    name: selam_en_desktop-13-band.png
+    full_page: false
+  - action: click
+    selector: .s3-footer-name
+  - action: wait_for
+    selector: '[data-qa="template-credit"]'
+  - action: screenshot
+    name: selam_en_desktop-14-footer.png
+    full_page: false
+  - action: click
+    selector: '#s3-hero-title'
+  - action: screenshot
+    name: selam_en_desktop-15-full.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="selam-hero-book"]'
+  - action: wait_for
+    selector: '[data-vt-book]'
+  - action: wait_for
+    selector: '[data-qa="selam-handoff-book"]'
+  - action: wait_for
+    selector: '[data-qa="selam-handoff-service-0"]'
+  - action: screenshot
+    name: selam_en_desktop-16-handoff.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="selam-handoff-book"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: screenshot
+    name: selam_en_desktop-17-scheduler.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_selam_open_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_selam_open_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: screenshot
+    name: selam_en_desktop-18-time-picker.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: selam_en_mobile
+  title: Selam v3 (en, mobile, light, morning)
+  viewport: &id002
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /{qa_selam_slug}?display=light&preview-time=10:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="selam-movement-v3"][data-pe-recipe="selam-movement"]'
+    - type: text_contains
+      value: Good morning
+  actions:
+  - action: wait_for
+    selector: .s3-flow-frame:first-child img
+  - action: wait_for
+    selector: '[data-qa="selam-next-free"]'
+  - action: screenshot
+    name: selam_en_mobile-01-hero.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="selam-frame-dot-2"]'
+  - action: wait_for
+    selector: '[data-qa="selam-frame-dot-2"][aria-current="true"]'
+  - action: screenshot
+    name: selam_en_mobile-02-frames-swipe.png
+    full_page: false
+  - action: click
+    selector: '#s3-sessions-title'
+  - action: click
+    selector: :nth-match(.s3-session h3, 1)
+  - action: wait_for
+    selector: :nth-match(.s3-session[data-revealed], 1)
+  - action: screenshot
+    name: selam_en_mobile-04-sessions.png
+    full_page: false
+  - action: click
+    selector: '#s3-story-title'
+  - action: click
+    selector: .s3-ledger
+  - action: screenshot
+    name: selam_en_mobile-05-story.png
+    full_page: false
+  - action: click
+    selector: '#s3-team-title'
+  - action: click
+    selector: .s3-coach h3
+  - action: screenshot
+    name: selam_en_mobile-06-coach.png
+    full_page: false
+  - action: click
+    selector: '#s3-beats-title'
+  - action: click
+    selector: :nth-match(.s3-beat-card h3, 2)
+  - action: screenshot
+    name: selam_en_mobile-07-beats.png
+    full_page: false
+  - action: click
+    selector: :nth-match(.s3-proof-label, 1)
+  - action: screenshot
+    name: selam_en_mobile-08-proof.png
+    full_page: false
+  - action: click
+    selector: '#s3-notes-title'
+  - action: click
+    selector: :nth-match(.s3-tile h3, 3)
+  - action: screenshot
+    name: selam_en_mobile-09-benefits.png
+    full_page: false
+  - action: click
+    selector: '#s3-reviews-title'
+  - action: click
+    selector: '[data-qa="selam-reviews-pause"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="selam-reviews-pause"][aria-pressed="true"]'
+  - action: screenshot
+    name: selam_en_mobile-10-reviews-paused.png
+    full_page: false
+  - action: click
+    selector: '#s3-faq-title'
+  - action: click
+    selector: :nth-match(.s3-faq-list summary, 1)
+  - action: click
+    selector: '[data-qa="selam-habesha-toggle"]'
+    assertions:
+    - type: text_contains
+      selector: .s3-hours
+      value: ከጠዋቱ 3 ሰዓት
+  - action: screenshot
+    name: selam_en_mobile-11-faq-hours.png
+    full_page: false
+  - action: click
+    selector: '#s3-visit-title'
+  - action: click
+    selector: .s3-room-card h3
+  - action: wait_for
+    selector: '[data-qa="selam-room-panel"] img'
+  - action: screenshot
+    name: selam_en_mobile-12-visit.png
+    full_page: false
+  - action: click
+    selector: '#s3-band-title'
+  - action: screenshot
+    name: selam_en_mobile-13-band.png
+    full_page: false
+  - action: click
+    selector: .s3-footer-name
+  - action: wait_for
+    selector: '[data-qa="template-credit"]'
+  - action: screenshot
+    name: selam_en_mobile-14-footer.png
+    full_page: false
+  - action: wait_for
+    selector: '[data-qa="selam-sticky-book"]'
+  - action: click
+    selector: '#s3-hero-title'
+  - action: screenshot
+    name: selam_en_mobile-15-full.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="selam-hero-book"]'
+  - action: wait_for
+    selector: '[data-vt-book]'
+  - action: wait_for
+    selector: '[data-qa="selam-handoff-book"]'
+  - action: wait_for
+    selector: '[data-qa="selam-handoff-service-0"]'
+  - action: screenshot
+    name: selam_en_mobile-16-handoff.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="selam-handoff-book"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: screenshot
+    name: selam_en_mobile-17-scheduler.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_selam_open_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_selam_open_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: screenshot
+    name: selam_en_mobile-18-time-picker.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: selam_am_desktop
+  title: Selam v3 (am, desktop, light, morning)
+  viewport: *id001
+  checks: []
+  routes:
+  - path: /{qa_selam_slug}/am?display=light&preview-time=09:30
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="selam-movement-v3"][data-pe-recipe="selam-movement"]'
+    - type: text_contains
+      value: እንደምን አደሩ
+  actions:
+  - action: wait_for
+    selector: .s3-flow-frame:first-child img
+  - action: wait_for
+    selector: '[data-qa="selam-next-free"]'
+  - action: screenshot
+    name: selam_am_desktop-01-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 640
+  - action: scroll
+    delta_y: 520
+  - action: screenshot
+    name: selam_am_desktop-02-frames-twist.png
+    full_page: false
+  - action: scroll
+    delta_y: 520
+  - action: scroll
+    delta_y: 420
+  - action: screenshot
+    name: selam_am_desktop-03-frames-stand.png
+    full_page: false
+  - action: click
+    selector: '#s3-sessions-title'
+  - action: click
+    selector: :nth-match(.s3-session h3, 1)
+  - action: wait_for
+    selector: :nth-match(.s3-session[data-revealed], 1)
+  - action: screenshot
+    name: selam_am_desktop-04-sessions.png
+    full_page: false
+  - action: click
+    selector: '#s3-story-title'
+  - action: click
+    selector: .s3-ledger
+  - action: screenshot
+    name: selam_am_desktop-05-story.png
+    full_page: false
+  - action: click
+    selector: '#s3-team-title'
+  - action: click
+    selector: .s3-coach h3
+  - action: screenshot
+    name: selam_am_desktop-06-coach.png
+    full_page: false
+  - action: click
+    selector: '#s3-beats-title'
+  - action: click
+    selector: :nth-match(.s3-beat-card h3, 2)
+  - action: screenshot
+    name: selam_am_desktop-07-beats.png
+    full_page: false
+  - action: click
+    selector: :nth-match(.s3-proof-label, 1)
+  - action: screenshot
+    name: selam_am_desktop-08-proof.png
+    full_page: false
+  - action: click
+    selector: '#s3-notes-title'
+  - action: click
+    selector: :nth-match(.s3-tile h3, 3)
+  - action: screenshot
+    name: selam_am_desktop-09-benefits.png
+    full_page: false
+  - action: click
+    selector: '#s3-reviews-title'
+  - action: click
+    selector: '[data-qa="selam-reviews-pause"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="selam-reviews-pause"][aria-pressed="true"]'
+  - action: screenshot
+    name: selam_am_desktop-10-reviews-paused.png
+    full_page: false
+  - action: click
+    selector: '#s3-faq-title'
+  - action: click
+    selector: :nth-match(.s3-faq-list summary, 1)
+  - action: get_text
+    selector: .s3-hours
+    assertions:
+    - type: text_contains
+      selector: .s3-hours
+      value: ከጠዋቱ 3 ሰዓት
+    - type: visible_selector
+      value: '[data-qa="selam-habesha-toggle"][aria-pressed="true"]'
+  - action: screenshot
+    name: selam_am_desktop-11-faq-hours.png
+    full_page: false
+  - action: click
+    selector: '#s3-visit-title'
+  - action: click
+    selector: .s3-room-card h3
+  - action: wait_for
+    selector: '[data-qa="selam-room-panel"] img'
+  - action: screenshot
+    name: selam_am_desktop-12-visit.png
+    full_page: false
+  - action: click
+    selector: '#s3-band-title'
+  - action: screenshot
+    name: selam_am_desktop-13-band.png
+    full_page: false
+  - action: click
+    selector: .s3-footer-name
+  - action: wait_for
+    selector: '[data-qa="template-credit"]'
+  - action: screenshot
+    name: selam_am_desktop-14-footer.png
+    full_page: false
+  - action: click
+    selector: '#s3-hero-title'
+  - action: screenshot
+    name: selam_am_desktop-15-full.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="selam-hero-book"]'
+  - action: wait_for
+    selector: '[data-vt-book]'
+  - action: wait_for
+    selector: '[data-qa="selam-handoff-book"]'
+  - action: wait_for
+    selector: '[data-qa="selam-handoff-service-0"]'
+  - action: screenshot
+    name: selam_am_desktop-16-handoff.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="selam-handoff-book"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: screenshot
+    name: selam_am_desktop-17-scheduler.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_selam_open_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_selam_open_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: screenshot
+    name: selam_am_desktop-18-time-picker.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: selam_am_mobile
+  title: Selam v3 (am, mobile, light, afternoon)
+  viewport: *id002
+  checks: []
+  routes:
+  - path: /{qa_selam_slug}/am?display=light&preview-time=15:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="selam-movement-v3"][data-pe-recipe="selam-movement"]'
+    - type: text_contains
+      value: እንደምን ዋሉ
+  actions:
+  - action: wait_for
+    selector: .s3-flow-frame:first-child img
+  - action: wait_for
+    selector: '[data-qa="selam-next-free"]'
+  - action: screenshot
+    name: selam_am_mobile-01-hero.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="selam-frame-dot-2"]'
+  - action: wait_for
+    selector: '[data-qa="selam-frame-dot-2"][aria-current="true"]'
+  - action: screenshot
+    name: selam_am_mobile-02-frames-swipe.png
+    full_page: false
+  - action: click
+    selector: '#s3-sessions-title'
+  - action: click
+    selector: :nth-match(.s3-session h3, 1)
+  - action: wait_for
+    selector: :nth-match(.s3-session[data-revealed], 1)
+  - action: screenshot
+    name: selam_am_mobile-04-sessions.png
+    full_page: false
+  - action: click
+    selector: '#s3-story-title'
+  - action: click
+    selector: .s3-ledger
+  - action: screenshot
+    name: selam_am_mobile-05-story.png
+    full_page: false
+  - action: click
+    selector: '#s3-team-title'
+  - action: click
+    selector: .s3-coach h3
+  - action: screenshot
+    name: selam_am_mobile-06-coach.png
+    full_page: false
+  - action: click
+    selector: '#s3-beats-title'
+  - action: click
+    selector: :nth-match(.s3-beat-card h3, 2)
+  - action: screenshot
+    name: selam_am_mobile-07-beats.png
+    full_page: false
+  - action: click
+    selector: :nth-match(.s3-proof-label, 1)
+  - action: screenshot
+    name: selam_am_mobile-08-proof.png
+    full_page: false
+  - action: click
+    selector: '#s3-notes-title'
+  - action: click
+    selector: :nth-match(.s3-tile h3, 3)
+  - action: screenshot
+    name: selam_am_mobile-09-benefits.png
+    full_page: false
+  - action: click
+    selector: '#s3-reviews-title'
+  - action: click
+    selector: '[data-qa="selam-reviews-pause"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="selam-reviews-pause"][aria-pressed="true"]'
+  - action: screenshot
+    name: selam_am_mobile-10-reviews-paused.png
+    full_page: false
+  - action: click
+    selector: '#s3-faq-title'
+  - action: click
+    selector: :nth-match(.s3-faq-list summary, 1)
+  - action: get_text
+    selector: .s3-hours
+    assertions:
+    - type: text_contains
+      selector: .s3-hours
+      value: ከጠዋቱ 3 ሰዓት
+    - type: visible_selector
+      value: '[data-qa="selam-habesha-toggle"][aria-pressed="true"]'
+  - action: screenshot
+    name: selam_am_mobile-11-faq-hours.png
+    full_page: false
+  - action: click
+    selector: '#s3-visit-title'
+  - action: click
+    selector: .s3-room-card h3
+  - action: wait_for
+    selector: '[data-qa="selam-room-panel"] img'
+  - action: screenshot
+    name: selam_am_mobile-12-visit.png
+    full_page: false
+  - action: click
+    selector: '#s3-band-title'
+  - action: screenshot
+    name: selam_am_mobile-13-band.png
+    full_page: false
+  - action: click
+    selector: .s3-footer-name
+  - action: wait_for
+    selector: '[data-qa="template-credit"]'
+  - action: screenshot
+    name: selam_am_mobile-14-footer.png
+    full_page: false
+  - action: wait_for
+    selector: '[data-qa="selam-sticky-book"]'
+  - action: click
+    selector: '#s3-hero-title'
+  - action: screenshot
+    name: selam_am_mobile-15-full.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="selam-hero-book"]'
+  - action: wait_for
+    selector: '[data-vt-book]'
+  - action: wait_for
+    selector: '[data-qa="selam-handoff-book"]'
+  - action: wait_for
+    selector: '[data-qa="selam-handoff-service-0"]'
+  - action: screenshot
+    name: selam_am_mobile-16-handoff.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="selam-handoff-book"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: screenshot
+    name: selam_am_mobile-17-scheduler.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_selam_open_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_selam_open_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: screenshot
+    name: selam_am_mobile-18-time-picker.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

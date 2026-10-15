@@ -1,0 +1,571 @@
+{
+  "kind": "imagery",
+  "contract": "appointment-imagery.v1",
+  "key": "meron-fitting-room",
+  "version": 1,
+  "assets": {
+    "loop1.meron": {
+      "src": "/assets/appointment/brand-experience/support/meron-v3/loop1.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/meron-v3/loop1-m.webp",
+      "alt": "The tailor measures a client's shoulder; the client, in a white habesha dress with a tibeb stripe, stands with her back to the camera.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.42
+      },
+      "fit": "cover",
+      "width": 960,
+      "height": 1280,
+      "mime": "image/webp",
+      "checksum": "sha256:31ae5328942b926a679cbe5e57a894a31959367bd3c167ca6362834cf5b9b02f",
+      "provenance": {
+        "source": "generated",
+        "role": "Hero film: measure",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Fitting Room art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 800,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        480,
+        720
+      ],
+      "darkSrc": "/assets/appointment/brand-experience/support/meron-v3/loop1-night.webp",
+      "darkMobileSrc": "/assets/appointment/brand-experience/support/meron-v3/loop1-night-m.webp",
+      "checksums": {
+        "loop1-m.avif": "sha256:3945f08391a988a2e7c3a7d87d4fdddd040827f10c61b9f9e5c857401280e676",
+        "loop1-m.webp": "sha256:120659aeedeb608f159ef2cfb9a9b7cb5004a985aeffd6ba78650f935a3cdf52",
+        "loop1-night-m.avif": "sha256:e0d6165396cacc4a919d300ee498c1764859163c2e74545202f1b8cdb0505fbd",
+        "loop1-night-m.webp": "sha256:cde12e8a89b3e0e35fb55950728cd55d0ce3eb723168f5c93b4fc5f1f8b032a9",
+        "loop1-night-w480.avif": "sha256:f19f9078d84931384b58468b4405b3f0c61960782e981a8867faccc84ee7422b",
+        "loop1-night-w480.webp": "sha256:0364a0d5bbca0f42436e554e39930ffea6e50b117809c72bbc1a44e23610dcdc",
+        "loop1-night-w720.avif": "sha256:475c632f49d465265d5a04a46523ab637e73aa0eaf566a07c501b77342280d2a",
+        "loop1-night-w720.webp": "sha256:fba1f7badd08bffbdfb360484ef493c1d48ede426126acd9e961012438039ae7",
+        "loop1-night.avif": "sha256:0544b8dc288a7025066bbf9dac40a12b998f0fbf1feb970074bda4eeb235b556",
+        "loop1-night.webp": "sha256:f46948d7975908436e6940039a197723df094ff9461000b6ac929f2f238184f7",
+        "loop1-w480.avif": "sha256:22a43fbf80587be887098c51eefff31c067709f95e3941ee16ed4c80453b86fa",
+        "loop1-w480.webp": "sha256:df28928ffc63fcbe931aa1782865ccba40e17397f378c2f52375f5362f8f379e",
+        "loop1-w720.avif": "sha256:ae117910554396ba6b709a63599380284646dd6dfc9d831547b589b746994109",
+        "loop1-w720.webp": "sha256:f67f1df97da5b757279f4bfbb5666e85fbca762f413f6f189fa8d28f9550ecb7",
+        "loop1.avif": "sha256:7f3d355f6cef20007c4864eaf5dd538ab917e0f03028fc8e3a72adabce514544"
+      }
+    },
+    "loop2.meron": {
+      "src": "/assets/appointment/brand-experience/support/meron-v3/loop2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/meron-v3/loop2-m.webp",
+      "alt": "Hands cut navy wool along a chalk line with brass-handled shears on a wooden table.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 960,
+      "height": 1280,
+      "mime": "image/webp",
+      "checksum": "sha256:1cc6b97ea14308360a1affc2d0328afdfa09d85d1db59fd015f998d126e2eb05",
+      "provenance": {
+        "source": "generated",
+        "role": "Hero film: cut",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Fitting Room art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 800,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        480,
+        720
+      ],
+      "darkSrc": "/assets/appointment/brand-experience/support/meron-v3/loop2-night.webp",
+      "darkMobileSrc": "/assets/appointment/brand-experience/support/meron-v3/loop2-night-m.webp",
+      "checksums": {
+        "loop2-m.avif": "sha256:fc53247de07e42687f13690a2f1180d070b009bec059f6c966ec64f22b5a564d",
+        "loop2-m.webp": "sha256:3ab0ecd9e4768f1d16c7e3542f35b0c8466ce3627b4dce98f5233bb48ee8b09e",
+        "loop2-night-m.avif": "sha256:8a7d3a042b97cad7044674128d0b7553b162e1054428558a2a5d5b561a1a74da",
+        "loop2-night-m.webp": "sha256:90b65ad29f888cafb3f6347bc98320260284f9dcb98e3df582769ba4f2c4080f",
+        "loop2-night-w480.avif": "sha256:49865ec54b32e03500d3242e1f5e49bafb81db7ef7a245c6285476205353b5d2",
+        "loop2-night-w480.webp": "sha256:b2d22f97ef1b3fb336fed7d10ec742b32c594bb78c609e4ba58ab2705eb8f87e",
+        "loop2-night-w720.avif": "sha256:d5b3be19cdb41f5cdbdb238fa99a4f485e7eadc3144d10fecffd19e48478b355",
+        "loop2-night-w720.webp": "sha256:c429595137947cb946ae0c20c6a992639cb1066565981eb32b41e040d889bc15",
+        "loop2-night.avif": "sha256:19fffb3a2612d8f2924860f054340a0ad2b370ea2b01fb02493a2e51f8fa7768",
+        "loop2-night.webp": "sha256:18164229fa87780921a8b18192063767900d6a0da5de0456dceeb456e1f1083d",
+        "loop2-w480.avif": "sha256:13440a43febfd5cc92090afdd7048bd0f9b0b2c72aa8827d043549d3bb27f8f9",
+        "loop2-w480.webp": "sha256:7f08b53bb31b48b7df56412ed5cea22d1dc29b447cbbb4bc8877e568aa536388",
+        "loop2-w720.avif": "sha256:c46fe3ed198e76998ca22e66141a0f4067922925f3ddc8fe1e6c9b3e6dbfa632",
+        "loop2-w720.webp": "sha256:3b2bac75759c2984fc0a7f3acce14af5fd39273df642649b31f3f6db4325bcad",
+        "loop2.avif": "sha256:3e17ffb55287c5a4407a5229e1bd7bb86eb998aa587080a8ea94e3317e864a11"
+      }
+    },
+    "loop3.meron": {
+      "src": "/assets/appointment/brand-experience/support/meron-v3/loop3.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/meron-v3/loop3-m.webp",
+      "alt": "The tailor kneels to pin the hem of a deep wine dress; the client stands on a fitting block, her head out of frame.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 960,
+      "height": 1280,
+      "mime": "image/webp",
+      "checksum": "sha256:f8c4f92ef8f8f7b327f7ecec187f5adab1694668d6fc7943b0c8b7d0a96e5296",
+      "provenance": {
+        "source": "generated",
+        "role": "Hero film: fit",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Fitting Room art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 800,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        480,
+        720
+      ],
+      "darkSrc": "/assets/appointment/brand-experience/support/meron-v3/loop3-night.webp",
+      "darkMobileSrc": "/assets/appointment/brand-experience/support/meron-v3/loop3-night-m.webp",
+      "checksums": {
+        "loop3-m.avif": "sha256:6f1f59fc709729c0bcda73b616ad8b8b7e9188295dfc416545f573d19f7e8bec",
+        "loop3-m.webp": "sha256:7040ddaa5b4febb5272d37d4966ccb7716bba0f7172a66413d7ce7944dd9e9b5",
+        "loop3-night-m.avif": "sha256:274538078e369989e30fc18721baa75dd83c6a3d1af673639627b4f8f8f66e49",
+        "loop3-night-m.webp": "sha256:26e49eca6f26f56bd62ff4ca2b15eba27a9c13aea5afc82e9ad79135c56fd1b2",
+        "loop3-night-w480.avif": "sha256:baa173fd1f7c5988606f110b305ca5870c086602d4b61e55120792ba66ae79de",
+        "loop3-night-w480.webp": "sha256:56e724ea45e51ece2ac3e1e2982f3b62652bf5d75e587da955e51100fac73995",
+        "loop3-night-w720.avif": "sha256:8336ca9b3aadc806dd93bdca82104018fc61602c5d7abb397896a589a83dd874",
+        "loop3-night-w720.webp": "sha256:5bc1225cb3eed49e48ab885798492c204d142f43d7223b92e2824e9037318bf9",
+        "loop3-night.avif": "sha256:6001a611ed302c838588a26caa44c8195c3ab7a3d6b371cb85f004b1ed1f02c1",
+        "loop3-night.webp": "sha256:efe7c81556c784c6639a03c5089e98518e7c289d7a4c078b0f03ec5670ed8f74",
+        "loop3-w480.avif": "sha256:d055710b45d989b437f44c04ae17007ddd54124a5897a752ad206861002463aa",
+        "loop3-w480.webp": "sha256:d492296016aa8e8ede0df86b6501e340a2fda17aa0724aead870d49d51669edc",
+        "loop3-w720.avif": "sha256:abc022c5e4bd8604ed5002da430fb7c687da2d6b0054b88ea65b87de49cd87c9",
+        "loop3-w720.webp": "sha256:cedcc357dc3001ad14b5d4e3a2635802b35a8245c8b198fbf3860a608f39affb",
+        "loop3.avif": "sha256:0c158955525ccbb92d238afbecb2dc4fae28e12c4a852b7433f117b463d73d97"
+      }
+    },
+    "story1.meron": {
+      "src": "/assets/appointment/brand-experience/support/meron-v3/story1.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/meron-v3/story1-m.webp",
+      "alt": "Hands rest on a fan of swatches: navy wool, grey flannel, wine wool and white cotton with a tibeb border.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1040,
+      "height": 1300,
+      "mime": "image/webp",
+      "checksum": "sha256:2193d02972ba429b5feee3f8fc09586e111562400e180d3e9f5fd68c996164ba",
+      "provenance": {
+        "source": "generated",
+        "role": "Story: fabric",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Fitting Room art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 640,
+      "mobileHeight": 800,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        560,
+        800
+      ],
+      "checksums": {
+        "story1-m.avif": "sha256:9f99f4513b781fecf8e9e0e695151ab7445028146dfa6c2f14916e0d81df903a",
+        "story1-m.webp": "sha256:7065d7077f1ac31c99b61a7e56b16698dd283edccc15b9550ae159ea4ed6b478",
+        "story1-w560.avif": "sha256:df5723b1e9b5cdf97b598eea82b68edbff36256d78a38e2498d82b9c5d492683",
+        "story1-w560.webp": "sha256:6d4c440b9f1182bd8094ff40a9ee053d1705bc13b86a1366c982084bf9bc69cb",
+        "story1-w800.avif": "sha256:6f5940a017b5bacae1dcda29c6a130328836f1b733968caf309c517ff8d61b2b",
+        "story1-w800.webp": "sha256:9603408a48ace89079dd32254fe4dd82a2eb6b9e2cb59235d08ecab846a379bb",
+        "story1.avif": "sha256:b18613c760fc01b8faba587855e78bb089ed80010bb7742a6cdf4adc918aeeb0"
+      }
+    },
+    "story2.meron": {
+      "src": "/assets/appointment/brand-experience/support/meron-v3/story2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/meron-v3/story2-m.webp",
+      "alt": "A hand draws a curved chalk line on pattern paper laid over navy wool.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1040,
+      "height": 1300,
+      "mime": "image/webp",
+      "checksum": "sha256:1ed46f69c53fc19022c846526590aac4d01446f1ac131a8b76ee4e5c41523d27",
+      "provenance": {
+        "source": "generated",
+        "role": "Story: pattern",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Fitting Room art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 640,
+      "mobileHeight": 800,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        560,
+        800
+      ],
+      "checksums": {
+        "story2-m.avif": "sha256:f5a978c9c4da4d3a2e69b786203cb48726194b1b19b88d1e713f631ab0acbfd1",
+        "story2-m.webp": "sha256:12e86e2bdae804d664c2c0d44e3c1b08957db7eeca975770576a25023da31f24",
+        "story2-w560.avif": "sha256:86b6826b1a82fc33a6e6dae4d9838e74698023c7a83391bdf61c3766270cb6b4",
+        "story2-w560.webp": "sha256:87b9c186df11aadd68b4bcc29f3d3f7f68f436df65496a79912ac6c14760fc89",
+        "story2-w800.avif": "sha256:02bcde0b9f5bc44b5987a25807aa096511122b1dc68480af75576b057114c5c6",
+        "story2-w800.webp": "sha256:881e2e183067e47e54699f0179e51cfa718679a4d1250453edbfe3b5d42e5e2c",
+        "story2.avif": "sha256:235f5e17e273a1854ad90049d38dffb7ae549622ec12b2ecc3672b70b240860a"
+      }
+    },
+    "story3.meron": {
+      "src": "/assets/appointment/brand-experience/support/meron-v3/story3.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/meron-v3/story3-m.webp",
+      "alt": "A tailor adjusts the back seam of a basted navy jacket on a client seen from behind.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.45
+      },
+      "fit": "cover",
+      "width": 1040,
+      "height": 1300,
+      "mime": "image/webp",
+      "checksum": "sha256:e5b3646f2a9b1b4f435e26720274ec0d55832ca706dce30a25a7c68a170dcc0d",
+      "provenance": {
+        "source": "generated",
+        "role": "Story: first fitting",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Fitting Room art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 640,
+      "mobileHeight": 800,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        560,
+        800
+      ],
+      "checksums": {
+        "story3-m.avif": "sha256:0d3fb0ee74424ec7d39643a3189e9e3a81576dce2532ad7c0a6a1daa3c0bb746",
+        "story3-m.webp": "sha256:5456b19a1db4a73fdb83536c98e4bc8b3b17e25139365f61b10ccc383ea21d64",
+        "story3-w560.avif": "sha256:756e4650d9a7852df4c035a7e5fd7056575ff1fb6f8bf10980377de851621c81",
+        "story3-w560.webp": "sha256:012a96d6004e5c6c2168d6544611f89c467915160cbedfe42a1b34bca9ee51d4",
+        "story3-w800.avif": "sha256:93776d69777eb6e27c8089b421805c64249cac60952ab248c86294dc093a83da",
+        "story3-w800.webp": "sha256:8a4e0d602be314342a079eb395abe309f99742373f633ff835e82acaa8b3729a",
+        "story3.avif": "sha256:e74309c32c9febeed7676ae1536af8166853e9691b35308aca8a2399586660aa"
+      }
+    },
+    "story4.meron": {
+      "src": "/assets/appointment/brand-experience/support/meron-v3/story4.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/meron-v3/story4-m.webp",
+      "alt": "A finished white habesha kemis with a wine and gold tibeb border on a form in the courtyard doorway.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1040,
+      "height": 1300,
+      "mime": "image/webp",
+      "checksum": "sha256:ea1db3f05c2979cb52481010cc69ea6b8429d27939dc21b3049fc564282209b7",
+      "provenance": {
+        "source": "generated",
+        "role": "Story: finished piece",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Fitting Room art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 640,
+      "mobileHeight": 800,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        560,
+        800
+      ],
+      "checksums": {
+        "story4-m.avif": "sha256:435ef50a19384c60f3d00c90d0e47f0f74261684709d74b67f4645b6e9ca8264",
+        "story4-m.webp": "sha256:24975ee0aec845cff414dc192685c45674a0120050d87fded60e108f457acd01",
+        "story4-w560.avif": "sha256:eba27aabee2c64d4e263b167558f60559345fabb7e058c946923fe8950de4485",
+        "story4-w560.webp": "sha256:b016b3bdb1c6187380c08f8b8e678ad26e27b15616827884b9eb5cafa3269c1d",
+        "story4-w800.avif": "sha256:27d583e827e6ebd75c8b41f54e93780f1a4632d132e5d04a149401e6a925f7ae",
+        "story4-w800.webp": "sha256:5f429788e65494691f961ac318aec3c21cc26e0e297f64e2b2bb13b9a2e8d39a",
+        "story4.avif": "sha256:61ede366ca60e293f402214b98c0f3ba0bf7cc07eed4104e3237cf02fbc1a72f"
+      }
+    },
+    "look1.meron": {
+      "src": "/assets/appointment/brand-experience/support/meron-v3/look1.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/meron-v3/look1-m.webp",
+      "alt": "A finished navy wool suit on a dressmaker's form in the courtyard, with jasmine on the stone wall.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 900,
+      "height": 1200,
+      "mime": "image/webp",
+      "checksum": "sha256:216c93d491ec875b49863349ce9a74bbfa5d35077ae557101b8a9be4f38669ef",
+      "provenance": {
+        "source": "generated",
+        "role": "Lookbook",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Fitting Room art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 800,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        480,
+        640
+      ],
+      "checksums": {
+        "look1-m.avif": "sha256:05b7e05ac1a978af704d9fa5aed735ea036e78476bd0167cfae5632e942e985d",
+        "look1-m.webp": "sha256:28af7fb43509169147c9c311cd76cfe57d495d57bc5ca210a2962ea99b54e34e",
+        "look1-w480.avif": "sha256:d1c03a458f038999166708a5f3636e996fa33c4f0e0fd2d044f6b516fefcd3e9",
+        "look1-w480.webp": "sha256:a282f4b39e92f93150e9a11439381772c40fd3ece0c1886c7537bdad13caebcc",
+        "look1-w640.avif": "sha256:6f571576022d8582d0ec9bd45da2f35da079b9a4672299672256c77cff6f5371",
+        "look1-w640.webp": "sha256:643e89cabf8a3620d436dad100423a30a9ac5c6c1538f1881df450577852993a",
+        "look1.avif": "sha256:a15bf9221ea405f880cc2980cec1a6171f6c17979c902dc2889404d4de067a07"
+      }
+    },
+    "look2.meron": {
+      "src": "/assets/appointment/brand-experience/support/meron-v3/look2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/meron-v3/look2-m.webp",
+      "alt": "A finished deep wine wrap dress with a thin gold tibeb trim on a form under the courtyard arcade.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 900,
+      "height": 1200,
+      "mime": "image/webp",
+      "checksum": "sha256:12110833255e26e0872702051134e89bb67bbbd9396f3feea36ee2402525fb6e",
+      "provenance": {
+        "source": "generated",
+        "role": "Lookbook",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Fitting Room art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 800,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        480,
+        640
+      ],
+      "checksums": {
+        "look2-m.avif": "sha256:d57b995a2d880c49194aafba8a589fcab2d361505bf3759d5d22a49f1fb8aac5",
+        "look2-m.webp": "sha256:f865cf47e2d97f88a33574b05f211068c4d096a1f2d10e9184f42102621db8c2",
+        "look2-w480.avif": "sha256:6c548b5b5c652d571308dd24927316ef793cb4e2865104ec887221871ea8df1b",
+        "look2-w480.webp": "sha256:a3f6c307cb1267803b5cbd0de513418d185599cf2a7498f2e6661762608d8328",
+        "look2-w640.avif": "sha256:d16f154eee6cdc71cb802c635f9a9101ace0997100db7b6f24036ff09edc73a0",
+        "look2-w640.webp": "sha256:34ae47407583108a23597202ca00e8f67ab6b55996dfb96036600ab65a15a047",
+        "look2.avif": "sha256:5b86204c07f4837f16b8a0c2f4b6b7350bef5220ed838c3b50805c697a6c5dba"
+      }
+    },
+    "before.meron": {
+      "src": "/assets/appointment/brand-experience/support/meron-v3/before.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/meron-v3/before-m.webp",
+      "alt": "A navy wool jacket on a form before the alteration: the shoulders drop and the sleeves are too long.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 880,
+      "height": 1100,
+      "mime": "image/webp",
+      "checksum": "sha256:2b8ded952776347b463299bcabce29a253b003ee2f88282ad4990a6e30f734bd",
+      "provenance": {
+        "source": "generated",
+        "role": "Before",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Fitting Room art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 750,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        560
+      ],
+      "checksums": {
+        "before-m.avif": "sha256:98f6108605fb41cd9163b28b01ecc237a48f1d9b73c47ca4dea6669985dd5501",
+        "before-m.webp": "sha256:4c85ed84d5f1f02e15d81bae6b560a7f3647280b441bb5f39d758bba16420e5d",
+        "before-w560.avif": "sha256:ccb4685aa222d1cafbae021047128f314c52a4e398e069ddc424d2006879eea4",
+        "before-w560.webp": "sha256:0daf7779f893eb540156055bc81ff0db9ddb31b2d2b03d9cfeb956b39d5e7117",
+        "before.avif": "sha256:0cf3c1b47b836b883adac9fce349147a46f6bfbc2646e904764e540d3692aa79"
+      }
+    },
+    "after.meron": {
+      "src": "/assets/appointment/brand-experience/support/meron-v3/after.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/meron-v3/after-m.webp",
+      "alt": "The same navy jacket after the alteration: the shoulders sit on the form and the sleeves end at the wrist.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 880,
+      "height": 1100,
+      "mime": "image/webp",
+      "checksum": "sha256:f1034a8b7e89af1eb6657c47387efea398596dc7fc29ff80416d2f78168665fd",
+      "provenance": {
+        "source": "generated",
+        "role": "After",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Fitting Room art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 750,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        560
+      ],
+      "checksums": {
+        "after-m.avif": "sha256:5e91acf5896457a78ee79dbda68dd7e912b3fbeee6190221b3068d21d0136495",
+        "after-m.webp": "sha256:67f3eb9e7ba5cd21dbc2d5ce4a74560e1edbc394e631a0a4312ea8a7c47ccb4d",
+        "after-w560.avif": "sha256:8026285409da4d0609537e9a4ae34558acd0ae3d3eb3a0ac02bf543f59843327",
+        "after-w560.webp": "sha256:baeaa2bbe411bc76af69baf64a0d1ff3baf5d54a6e2e2221089c386e47f86d66",
+        "after.avif": "sha256:9d9e9e41517dd9acfb5e336d55360b1c9308347c3552454144e42ec8d2da14f6"
+      }
+    },
+    "swatch.meron": {
+      "src": "/assets/appointment/brand-experience/support/meron-v3/swatch.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/meron-v3/swatch-m.webp",
+      "alt": "Navy wool twill crossed by a band of white cotton with a woven tibeb border.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 800,
+      "height": 800,
+      "mime": "image/webp",
+      "checksum": "sha256:023aa6704956fcb2abe9842e169f962b6eabf6b14c413e0adad01de14519cfb8",
+      "provenance": {
+        "source": "generated",
+        "role": "Tag swatch",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Fitting Room art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 480,
+      "mobileHeight": 480,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        480
+      ],
+      "checksums": {
+        "swatch-m.avif": "sha256:1864f98ddbe5e37d7e6bd384c9bdd7bf76e914766d24e3a3ed47b3fffbeac57d",
+        "swatch-m.webp": "sha256:4b0499ef72da9648b04ecf4568353722dee1d8be70858a7e6f8eae32fab81a35",
+        "swatch-w480.avif": "sha256:274d9a4194f59332256cb6b89ce1e0ce3be71478e6b7b119c658c822f21fda3a",
+        "swatch-w480.webp": "sha256:64bb32e6472b87de5aa6bf5fcc473c7d1a7a465b0478ca7326ccb897b90c169a",
+        "swatch.avif": "sha256:ac1fb86cd0cb5e52d02d1b98a044dba52fce697cafb5b0d0b8d0c8468d6b5878"
+      }
+    },
+    "band.meron": {
+      "src": "/assets/appointment/brand-experience/support/meron-v3/band.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/meron-v3/band-m.webp",
+      "alt": "An empty fitting room: a brass-framed mirror, a navy garment bag on a rail, a fitting block and a wine velvet curtain.",
+      "focalPoint": {
+        "x": 0.6,
+        "y": 0.6
+      },
+      "fit": "cover",
+      "width": 1536,
+      "height": 658,
+      "mime": "image/webp",
+      "checksum": "sha256:bb0430d8e8285b99db9d3af4e7deec2ecc6ff16ba20fab80606e071c49b589c9",
+      "provenance": {
+        "source": "generated",
+        "role": "Booking band",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Fitting Room art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 900,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "darkSrc": "/assets/appointment/brand-experience/support/meron-v3/band-night.webp",
+      "darkMobileSrc": "/assets/appointment/brand-experience/support/meron-v3/band-night-m.webp",
+      "checksums": {
+        "band-m.avif": "sha256:d81f716aae9837f1027ba0040fd476d6f4a13ea7e440ef3bd129d5e3c466987e",
+        "band-m.webp": "sha256:ae3814bc83abd653d73025a56b96883656bd98fbfc6b9dcf23327f3ddad3ae02",
+        "band-night-m.avif": "sha256:4f9e3d6d1e56b707473bc4f9fbb52b7a578920757733b77e48d67e362398bf5d",
+        "band-night-m.webp": "sha256:b95d76f074c120206c136f06060ee294348f9b894018db3dd16dd9fe3befd577",
+        "band-night-w640.avif": "sha256:ebf8694a839c5bf42cb94b9dadc469693277ef151ae94dcde81d3a4c8c840fcf",
+        "band-night-w640.webp": "sha256:d0eb961ab09517cb409ea118f98815d0667859f6879421c4f8ec48c1e448eaa8",
+        "band-night-w960.avif": "sha256:8dfa14f5e5fb6fc121eb86d68e0b183837a5926b7426c62f66f9f48453471ffc",
+        "band-night-w960.webp": "sha256:7aa955d4ae0d9fe2e161fab49630228b4ccdb9bef810ba3b2599dbe6027201d3",
+        "band-night.avif": "sha256:d2ff4d5a4f564e391ac3042613b754c0a4240beb04ea0b8ece2d525d3cf3104d",
+        "band-night.webp": "sha256:387659babfeacc37f027474f4bc394d970a5200f5c82dfe7140b549876b7e820",
+        "band-w640.avif": "sha256:9db8fb8c22bd69ea908ab9444afeeb9c4990760ddb1e0de2fddea690e9a3ce76",
+        "band-w640.webp": "sha256:d8cf56f7a0defe2b70162dad4ebe47c781fe571a5ed182b98118da67692bc9d6",
+        "band-w960.avif": "sha256:7fc5686aa6a427cdff5401a63833d4a889f168a47ed2f4f0e9bf428324881a39",
+        "band-w960.webp": "sha256:499c4344066db5b02dd4bdb6f952e0be5055909068ee6a4c70dd128beaf7bf21",
+        "band.avif": "sha256:36c0a23d7bd94057eef3908af6295d7905753bb267d95e06f0d4649892ff0ef6"
+      }
+    },
+    "atelier.meron": {
+      "src": "/assets/appointment/brand-experience/support/meron-v3/atelier.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/meron-v3/atelier-m.webp",
+      "alt": "The courtyard atelier in daylight: a long cutting table with rolls of wool, a white dress on a form and open steel windows.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1440,
+      "height": 960,
+      "mime": "image/webp",
+      "checksum": "sha256:70d7ec98b950aec9eb51d8f0435a1d5758a1811aa9ed4d056c0330dab0bc1b94",
+      "provenance": {
+        "source": "generated",
+        "role": "The atelier",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Fitting Room art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 540,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "checksums": {
+        "atelier-m.avif": "sha256:ca8ba5d2a9d87efed24051a96cad95c941ff3541f6006a6a5d2f528f57076fec",
+        "atelier-m.webp": "sha256:55881c5f3428b3f43cf7fdacdd55464e46f9d2a504f096f1ec92ae3d442b82e2",
+        "atelier-w640.avif": "sha256:34f627a1593606e87c03a83c7661ffb0612beca75a2cc64ae1c13c54ff701fb0",
+        "atelier-w640.webp": "sha256:c5eed4ae6ecb34320e73c8d10e27264614b83c621dc35f658bdb0a33d5863e47",
+        "atelier-w960.avif": "sha256:58c677078b64965b533c5b508a9269c67be100c3641dc3b19fe4b91115f8c3e0",
+        "atelier-w960.webp": "sha256:fbd0abdbcd2caea523a0756dd8142be6219f1a4b639224f26551809678c0e5c2",
+        "atelier.avif": "sha256:e0ed294008865f0da6538b58055e819118f007326012eaea40298b54b12115cb"
+      }
+    }
+  }
+}

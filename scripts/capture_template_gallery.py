@@ -10,6 +10,8 @@ site's `previewAssets` in the catalog, which the template gallery reads.
 Run it with the bench Python, which has Playwright and Pillow:
 
     env/bin/python apps/appointment/scripts/capture_template_gallery.py http://localhost:47800
+
+Name recipes after the URL to capture only those (for example `... http://localhost:47800 tena-clinic`).
 """
 
 from __future__ import annotations
@@ -42,13 +44,15 @@ def showcases() -> dict[str, str]:
     return result
 
 
-def capture(base_url: str) -> dict[str, list[dict[str, str]]]:
+def capture(base_url: str, only: set[str] | None = None) -> dict[str, list[dict[str, str]]]:
     """Write the images and return the `previewAssets` rows per recipe."""
     OUTPUT.mkdir(parents=True, exist_ok=True)
     written: dict[str, list[dict[str, str]]] = {}
     with sync_playwright() as playwright:
         browser = playwright.chromium.launch()
         for recipe, slug in showcases().items():
+            if only and recipe not in only:
+                continue
             for name, (width, height, scale, stored) in SIZES.items():
                 page = browser.new_page(
                     viewport={"width": width, "height": height},
@@ -84,7 +88,7 @@ def record(previews: dict[str, list[dict[str, str]]]) -> None:
 
 
 if __name__ == "__main__":
-    captured = capture(sys.argv[1] if len(sys.argv) > 1 else "http://localhost:47800")
+    captured = capture(sys.argv[1] if len(sys.argv) > 1 else "http://localhost:47800", set(sys.argv[2:]) or None)
     record(captured)
     for rows in captured.values():
         for row in rows:

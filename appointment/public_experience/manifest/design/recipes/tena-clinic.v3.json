@@ -1,0 +1,140 @@
+{
+  "kind": "recipe",
+  "contract": "appointment-curated-recipe.v1",
+  "key": "tena-clinic",
+  "version": 3,
+  "label": "Tena Clinic",
+  "description": "For clinics that see patients by appointment. A calm, signposted page in mineral white, scrub teal and signal yellow: a route line that leads from the entrance to the booking desk, a door-to-door visit guide with photos, a lobby directory of the team with their next free time, and the clinic lit at dusk after dark.",
+  "audience": "Family clinics, dental and physiotherapy practices, counselling rooms and other health services with scheduled visits.",
+  "mood": "clinical-calm",
+  "supportedLocales": [
+    "en",
+    "am"
+  ],
+  "accessibility": {
+    "level": "AA",
+    "focusVisible": true,
+    "reducedMotion": true
+  },
+  "primitives": {
+    "palette": {
+      "key": "tena-clinic",
+      "version": 2
+    },
+    "typography": {
+      "key": "tena-clinic",
+      "version": 2
+    },
+    "imagery": {
+      "key": "tena-clear-path",
+      "version": 1
+    },
+    "layout": {
+      "key": "tena-clinic",
+      "version": 3
+    },
+    "surface": {
+      "key": "tena-clinic",
+      "version": 3
+    }
+  },
+  "supportedSections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "benefits",
+    "testimonials",
+    "proof",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "requiredSections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "benefits",
+    "testimonials",
+    "proof",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "defaultInputs": {
+    "motion": "standard",
+    "presentationDensity": "comfortable",
+    "heroAsset": "hero.tena",
+    "detailAsset": "visit2.tena"
+  },
+  "adjustments": {
+    "accentColor": {
+      "type": "hex-color",
+      "optional": true,
+      "protected": false
+    },
+    "motion": {
+      "type": "enum",
+      "choices": [
+        "calm",
+        "standard",
+        "expressive"
+      ],
+      "optional": true
+    },
+    "presentationDensity": {
+      "type": "enum",
+      "choices": [
+        "comfortable",
+        "spacious"
+      ],
+      "optional": true
+    },
+    "heroAsset": {
+      "type": "asset-role",
+      "choices": [
+        "hero.tena"
+      ],
+      "optional": true
+    },
+    "detailAsset": {
+      "type": "asset-role",
+      "choices": [
+        "visit2.tena",
+        "visit4.tena"
+      ],
+      "optional": true
+    }
+  },
+  "actionIntents": [
+    "booking_start",
+    "service_selection",
+    "provider_selection",
+    "call",
+    "directions",
+    "contact",
+    "faq_jump",
+    "back_to_site"
+  ],
+  "contentRichness": {
+    "default": "rich",
+    "choices": [
+      "compact",
+      "standard",
+      "rich"
+    ],
+    "requiredForCertification": [
+      "process",
+      "benefits",
+      "testimonials",
+      "proof"
+    ]
+  }
+}

@@ -7,6 +7,10 @@ import { lazy, Suspense, type ComponentType, type LazyExoticComponent } from "re
  */
 const MOMENTS: Record<string, LazyExoticComponent<ComponentType>> = {
   "bloom-hair@3": lazy(() => import("./bloom-v3/BloomMoment")),
+  "meron-atelier@3": lazy(() => import("./meron-v3/MeronMoment")),
+  "abugida-language@3": lazy(() => import("./abugida-v3/AbugidaMoment")),
+  "selam-movement@3": lazy(() => import("./selam-v3/SelamMoment")),
+  "tena-clinic@3": lazy(() => import("./tena-v3/TenaMoment")),
 };
 
 export function hasMoment(rendererKey?: string | null, rendererVersion?: number | null): boolean {

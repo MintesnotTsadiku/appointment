@@ -1,0 +1,584 @@
+/* Abugida Language v3, "Living Manuscript". An illuminated Ethiopic manuscript come to life; a
+   candle-lit study at night. Parchment, iron-gall ink, one rubric red and a little gold leaf.
+   Shape: the fidel ሀ window and the manuscript arch window with illuminated corners.
+   Signature motion: ink reveals and drawn ornament borders. Animate transform, opacity, clip-path,
+   filter (and stroke-dashoffset on drawn lines) only. */
+.a3 {
+  --a3-ink: var(--pe-color-text, #231a12);
+  --a3-muted: var(--pe-color-text-muted, #5b4a38);
+  --a3-canvas: var(--pe-color-canvas, #f4ecdc);
+  --a3-surface: var(--pe-color-surface, #fbf6ea);
+  --a3-soft: var(--pe-color-surface-muted, #ede2cb);
+  --a3-line: var(--pe-color-border, #d5c4a2);
+  --a3-rubric: var(--pe-color-primary, #9e1c17);
+  --a3-on-rubric: var(--pe-color-on-primary, #fff8ec);
+  --a3-focus: var(--pe-color-focus, #1f5f8f);
+  --a3-ok: var(--pe-color-available, #276749);
+  --a3-gold: #b8892b;
+  --a3-gold-text: #8a6416;
+  --a3-iron: #2a1d13;
+  --a3-on-iron: #f4ead6;
+  --a3-on-iron-muted: rgba(244, 234, 214, 0.8);
+  --a3-paper: image-set(url("/assets/appointment/brand-experience/support/abugida-v3/parchment.avif") type("image/avif"), url("/assets/appointment/brand-experience/support/abugida-v3/parchment.webp") type("image/webp"));
+  --a3-display: var(--pe-font-display, "Abugida Alegreya", serif);
+  --a3-gutter: clamp(16px, 4vw, 64px);
+  --a3-bar: 72px;
+  --a3-radius: 4px;
+  --a3-arch: 999px 999px var(--a3-radius) var(--a3-radius);
+  --a3-ease: cubic-bezier(.2, .7, .2, 1);
+  --a3-rise: 18px;
+  --a3-dur: 900ms;
+  --a3-step: 38ms;
+  position: relative;
+  min-height: 100dvh;
+  color: var(--a3-ink);
+  background-color: var(--a3-canvas);
+  background-image: var(--a3-paper);
+  background-size: 320px 320px;
+  background-blend-mode: multiply;
+  font-family: var(--pe-font-body, "Abugida Alegreya", serif);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  interpolate-size: allow-keywords;
+  overflow-x: clip;
+}
+/* Dark mode: a candle-lit study. Deep ink brown, warm lamp vignettes, gold that glows. */
+.a3[data-pe-mode="dark"] {
+  color-scheme: dark;
+  --a3-gold: #e2b65a;
+  --a3-gold-text: #e9c574;
+  --a3-iron: #0f0906;
+  --a3-on-iron: #f2e6cf;
+  background-image:
+    radial-gradient(60% 50% at 8% 0%, rgba(226, 150, 70, .16), transparent 70%),
+    radial-gradient(50% 40% at 100% 30%, rgba(226, 150, 70, .1), transparent 70%);
+  background-size: auto;
+  background-repeat: no-repeat;
+  background-blend-mode: normal;
+  background-attachment: fixed;
+}
+.a3[data-motion-level="calm"] { --a3-rise: 8px; --a3-dur: 520ms; --a3-step: 22ms; }
+.a3[data-motion-level="expressive"] { --a3-rise: 26px; --a3-dur: 1150ms; --a3-step: 55ms; }
+.a3 *, .a3 *::before, .a3 *::after { box-sizing: border-box; }
+.a3 picture { display: block; width: 100%; height: 100%; }
+.a3 img { display: block; max-width: 100%; }
+.a3 picture img { width: 100%; height: 100%; object-fit: cover; }
+.a3 a:not(.a3-btn) { color: inherit; }
+:where(.a3) :is(h1, h2, h3, p, figure, blockquote) { margin: 0; }
+:where(.a3) :is(ul, ol) { margin: 0; padding: 0; list-style: none; }
+.a3 h1, .a3 h2, .a3 h3 { font-family: var(--a3-display); font-weight: 700; text-wrap: balance; }
+.a3 h2 { font-size: clamp(2.1rem, 1.4rem + 2.2vw, 3.5rem); line-height: 1.06; letter-spacing: -.005em; }
+.a3 h3 { font-size: 1.3rem; line-height: 1.3; }
+.a3 :focus-visible { outline: var(--pe-surface-focus-ring, 3px) solid var(--a3-focus); outline-offset: 3px; }
+.a3[data-pe-mode="dark"] :focus-visible { outline-color: #8fc8ff; }
+.a3-colophon :focus-visible, .a3-band :focus-visible, .a3-footer :focus-visible, .a3-sticky :focus-visible, .a3-handoff-stage :focus-visible { outline-color: #f2cf7c; }
+.a3-wrap { width: 100%; max-width: var(--pe-page-width, 1360px); margin-inline: auto; padding-inline: var(--a3-gutter); }
+.a3-muted { color: var(--a3-muted); }
+.a3-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.a3-skip { position: absolute; left: 16px; top: -80px; z-index: 40; padding: 10px 16px; color: var(--a3-on-rubric); background: var(--a3-rubric); }
+.a3-skip:focus { top: 12px; }
+.a3-eyebrow { margin-bottom: 12px; color: var(--a3-rubric); font-size: 1.0625rem; font-weight: 700; letter-spacing: .16em; font-variant: all-small-caps; }
+.a3-eyebrow::before { content: "፨ "; letter-spacing: 0; }
+.a3-gold-fill { fill: var(--a3-gold); }
+.a3-rubric-fill { fill: var(--a3-rubric); }
+
+/* Amharic: Abyssinica SIL; more leading, no tracking, no small caps. */
+.a3:lang(am) { font-size: 1.125rem; }
+.a3:lang(am) h1, .a3:lang(am) h2, .a3:lang(am) h3 { line-height: 1.3; letter-spacing: 0; font-weight: 400; }
+.a3:lang(am) h1 { line-height: 1.24; }
+.a3:lang(am) .a3-eyebrow { letter-spacing: .04em; font-variant: normal; text-transform: none; }
+.a3:lang(am) .a3-lede, .a3:lang(am) p { line-height: 1.75; }
+
+/* Buttons. Pressed ink: the rubric soaks darker on hover and presses into the paper on click. */
+.a3-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 52px; padding: 0 24px;
+  color: var(--a3-on-rubric); background: var(--a3-rubric); border-radius: 3px; font-weight: 700; font-size: 1.0625rem; text-decoration: none; white-space: nowrap;
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--a3-rubric) 60%, #000), inset 0 0 0 1px color-mix(in srgb, var(--a3-on-rubric) 14%, transparent);
+  background-image: radial-gradient(120% 140% at 30% 20%, rgba(255, 255, 255, .12), transparent 60%);
+  transition: background-color .35s var(--a3-ease), box-shadow .35s var(--a3-ease), transform .15s var(--a3-ease); }
+.a3-btn:hover { background-color: color-mix(in srgb, var(--a3-rubric) 82%, #2a0705); box-shadow: 0 1px 0 color-mix(in srgb, var(--a3-rubric) 50%, #000), inset 0 0 18px rgba(20, 4, 2, .35); }
+.a3-btn:active { transform: translateY(1px); box-shadow: inset 0 2px 10px rgba(20, 4, 2, .55); }
+.a3-btn-mark { color: color-mix(in srgb, var(--a3-on-rubric) 70%, var(--a3-gold)); font-size: 1.1em; transition: transform .35s var(--a3-ease); }
+.a3-btn:hover .a3-btn-mark { transform: rotate(45deg); }
+.a3[data-pe-mode="dark"] .a3-btn { box-shadow: 0 0 0 1px rgba(255, 220, 200, .14), 0 8px 26px -8px color-mix(in srgb, var(--a3-rubric) 60%, transparent); }
+.a3-link { font-weight: 700; text-decoration: underline; text-decoration-color: var(--a3-rubric); text-decoration-thickness: 2px; text-underline-offset: 7px; }
+.a3-ghost { display: inline-flex; align-items: center; min-height: 46px; padding: 0 18px; border: 1.5px solid currentColor; border-radius: 3px; font-weight: 700; text-decoration: none; transition: background-color .25s, color .25s; }
+.a3-ghost:hover { color: var(--a3-canvas); background: var(--a3-ink); }
+.a3-mini { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border: 1px solid var(--a3-line); border-radius: 3px; color: inherit; background: var(--a3-surface); font: inherit; font-size: .9375rem; font-weight: 700; text-decoration: none; cursor: pointer; }
+.a3-mini:hover { border-color: var(--a3-ink); }
+
+/* Chips: live availability and open now. */
+.a3-chip, .a3-open { display: inline-flex; align-items: center; gap: 10px; width: fit-content; min-height: 40px; padding: 6px 14px; border-radius: 3px; font-size: .9375rem; font-weight: 700; text-decoration: none; }
+.a3-chip { color: var(--a3-ink); background: color-mix(in srgb, var(--a3-surface) 80%, transparent); border: 1px solid var(--a3-line); }
+.a3-open { padding-inline: 0; color: var(--a3-muted); }
+.a3-dot { position: relative; flex: none; width: 9px; height: 9px; border-radius: 50%; background: var(--a3-ok); }
+.a3-dot::after { content: ""; position: absolute; inset: -5px; border-radius: 50%; border: 2px solid var(--a3-ok); opacity: 0; animation: a3-ping 2.6s var(--a3-ease) infinite; }
+.a3-open[data-open="false"] .a3-dot { background: var(--a3-gold); }
+.a3-open[data-open="false"] .a3-dot::after { display: none; }
+@keyframes a3-ping { 0% { opacity: .7; transform: scale(.6); } 80%, 100% { opacity: 0; transform: scale(1.6); } }
+
+/* Bar: parchment glass after the hero, with a manuscript rule as the reading progress. */
+.a3-bar { position: sticky; top: 0; z-index: 30; transition: background-color .3s, box-shadow .3s; }
+.a3-bar[data-scrolled="true"] { background: color-mix(in srgb, var(--a3-canvas) 86%, transparent); backdrop-filter: blur(12px) saturate(1.2); box-shadow: 0 1px 0 var(--a3-line); }
+.a3-bar-inner { display: flex; align-items: center; gap: 24px; min-height: var(--a3-bar); }
+.a3-brand { display: inline-flex; align-items: center; gap: 10px; margin-right: auto; min-width: 0; font-family: var(--a3-display); font-weight: 700; font-size: 1.2rem; text-decoration: none; }
+.a3-brand img { width: 36px; height: 36px; object-fit: contain; }
+.a3-brand span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.a3-nav { display: flex; gap: 24px; }
+.a3-nav a { position: relative; font-weight: 700; text-decoration: none; }
+.a3-nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -3px; height: 2px; background: var(--a3-rubric); transform: scaleX(0); transform-origin: right; transition: transform .35s var(--a3-ease); }
+.a3-nav a:hover::after { transform: scaleX(1); transform-origin: left; }
+.a3-bar-book { min-height: 44px; padding: 0 18px; font-size: 1rem; }
+.a3-bar-book .a3-btn-mark { display: none; }
+.a3-mode { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border: 1px solid currentColor; border-radius: 3px; color: inherit; background: transparent; font: inherit; font-size: .9375rem; font-weight: 700; cursor: pointer; }
+.a3-mode-icon { width: 16px; height: 16px; border-radius: 50%; box-shadow: inset -5px -3px 0 0 currentColor; }
+.a3[data-pe-mode="dark"] .a3-mode-icon { width: 10px; height: 16px; border-radius: 50% 50% 40% 40% / 70% 70% 30% 30%; background: var(--a3-gold); box-shadow: 0 0 10px 2px color-mix(in srgb, var(--a3-gold) 60%, transparent); }
+@supports (animation-timeline: scroll()) {
+  .a3-bar::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 5px; border-block: 1.5px solid var(--a3-rubric); transform-origin: left; animation: a3-progress linear both; animation-timeline: scroll(root); }
+  @keyframes a3-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+}
+
+/* Folios: the section dots are Ge'ez numerals in the right margin. */
+.a3-folios { position: fixed; z-index: 25; right: 18px; top: 50%; transform: translateY(-50%); transition: opacity .3s; }
+.a3-folios[data-hidden="true"] { opacity: 0; pointer-events: none; }
+.a3-folios ol { display: grid; gap: 2px; }
+.a3-folios a { position: relative; display: grid; place-items: center; width: 32px; height: 32px; text-decoration: none; }
+.a3-folios i { font-style: normal; font-size: 1.125rem; line-height: 1; color: var(--a3-muted); transition: color .3s, transform .3s var(--a3-ease); }
+.a3-folios a[aria-current="true"] i { color: var(--a3-rubric); transform: scale(1.35); }
+.a3-folios span { position: absolute; right: 38px; padding: 4px 12px; border: 1px solid var(--a3-line); color: var(--a3-ink); background: var(--a3-surface); font-size: .875rem; font-weight: 700; white-space: nowrap; opacity: 0; transform: translateX(6px); transition: opacity .2s, transform .2s; pointer-events: none; }
+.a3-folios a:hover span, .a3-folios a:focus-visible span { opacity: 1; transform: none; }
+@media (max-width: 1240px) { .a3-folios { display: none; } }
+
+/* Section rhythm and headings with a drawn rule. */
+.a3-section { position: relative; padding-block: clamp(56px, 6.4vw, 96px); }
+.a3-head { display: grid; justify-items: start; gap: 4px; max-width: 760px; margin-bottom: clamp(32px, 4vw, 52px); }
+.a3-rule { width: min(340px, 70%); height: 20px; margin-top: 14px; color: var(--a3-rubric); }
+.a3-intro { margin-top: 8px; font-size: 1.125rem; }
+.a3 [data-reveal] .a3-rule path, .a3-head .a3-rule path { stroke-dasharray: 1; stroke-dashoffset: 0; }
+
+/* Hero: a fidel table on parchment; one block opens as the ሀ window with the photo. */
+.a3-hero { position: relative; margin-top: calc(-1 * var(--a3-bar)); padding: calc(var(--a3-bar) + clamp(28px, 4vw, 64px)) 0 clamp(64px, 7vw, 104px); }
+.a3-hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.02fr); gap: clamp(32px, 5vw, 88px); align-items: center; }
+.a3-greet { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 22px; color: var(--a3-rubric); font-size: 1.1875rem; font-weight: 700; letter-spacing: .1em; font-variant: all-small-caps; }
+.a3:lang(am) .a3-greet { letter-spacing: .02em; text-transform: none; font-variant: normal; }
+.a3-greet-mark { color: var(--a3-gold); letter-spacing: 0; }
+.a3-hero h1 { font-size: clamp(2.7rem, 1.5rem + 3.4vw, 5rem); line-height: 1.02; letter-spacing: -.015em; }
+.a3:lang(am) .a3-hero h1 { font-size: clamp(2.3rem, 1.4rem + 2.6vw, 4rem); }
+.a3-initial::first-letter { color: var(--a3-rubric); font-size: 1.22em; line-height: .8; }
+.a3-lede { max-width: 34em; margin-top: 24px; color: var(--a3-muted); font-size: 1.2rem; line-height: 1.6; }
+.a3-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 26px; margin-top: 34px; }
+/* The live chip arrives after the first paint: its row keeps its height, so the fidel table does not move. */
+.a3-hero-facts { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 22px; min-height: 40px; margin-top: 28px; }
+
+.a3-fidel { container-type: inline-size; position: relative; width: min(100%, 620px); margin-left: auto; }
+.a3-fidel-head { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); margin-bottom: 6px; color: var(--a3-rubric); font-size: calc(100cqi / var(--cols) * .26); text-align: center; }
+.a3-fidel-grid { position: relative; display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); grid-template-rows: repeat(var(--rows), minmax(0, 1fr));
+  aspect-ratio: var(--cols) / var(--rows); border-block: 1.5px solid var(--a3-ink); background-image:
+    linear-gradient(90deg, color-mix(in srgb, var(--a3-line) 80%, transparent) 1px, transparent 1px),
+    linear-gradient(0deg, color-mix(in srgb, var(--a3-line) 80%, transparent) 1px, transparent 1px);
+  background-size: calc(100% / var(--cols)) calc(100% / var(--rows)); background-position: -1px 100%; }
+.a3-glyph { --dx: calc((var(--c) + .5) * 100% / var(--cols) - var(--glow-x, -999%)); --dy: calc((var(--r) + .5) * 100% / var(--rows) - var(--glow-y, -999%));
+  --d: calc(max(var(--dx), -1 * var(--dx)) + max(var(--dy), -1 * var(--dy)));
+  grid-column: calc(var(--c) + 1); grid-row: calc(var(--r) + 1); display: grid; place-items: center; font-size: calc(100cqi / var(--cols) * .5); line-height: 1; color: var(--a3-ink);
+  translate: 0 calc(max(0%, 24% - var(--d)) * -.9); transition: translate .3s var(--a3-ease), color .3s; user-select: none; }
+.a3-glyph[data-order="1"] { color: var(--a3-rubric); }
+.a3-fidel-window { position: relative; z-index: 1; margin: 6% 5% 0; }
+.a3-fidel-photo { position: absolute; inset: 0; clip-path: url(#a3-ha); background: var(--a3-soft); }
+.a3-fidel-photo picture { transition: clip-path calc(var(--a3-dur) * 1.5) var(--a3-ease) .25s, transform 1.6s var(--a3-ease); }
+.a3-fidel-ink { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; color: var(--a3-rubric); pointer-events: none; }
+.a3-fidel-ink path { stroke-dasharray: 1; stroke-dashoffset: 0; transition: stroke-dashoffset calc(var(--a3-dur) * 1.8) var(--a3-ease); }
+.a3[data-pe-mode="dark"] .a3-fidel-photo, .a3[data-night="true"] .a3-fidel-photo { box-shadow: none; }
+.a3[data-pe-mode="dark"] .a3-glyph[data-order="1"], .a3[data-pe-mode="dark"] .a3-fidel-head { text-shadow: 0 0 14px color-mix(in srgb, var(--a3-rubric) 45%, transparent); }
+
+/* Illuminated corners and manuscript windows. */
+.a3-corner { position: absolute; width: 34px; height: 34px; color: var(--a3-rubric); pointer-events: none; }
+.a3-corner-tl { top: 8px; left: 8px; }
+.a3-corner-tr { top: 8px; right: 8px; transform: scaleX(-1); }
+.a3-corner-bl { bottom: 8px; left: 8px; transform: scaleY(-1); }
+.a3-corner-br { bottom: 8px; right: 8px; transform: scale(-1, -1); }
+.a3-window { position: relative; }
+.a3-window-frame { position: relative; overflow: hidden; border-radius: var(--a3-arch); background: var(--a3-soft); box-shadow: 0 0 0 1px var(--a3-gold), 0 0 0 6px var(--a3-surface), 0 0 0 7px color-mix(in srgb, var(--a3-gold) 60%, transparent); }
+.a3-window .a3-corner { width: 30px; height: 30px; bottom: -12px; }
+.a3-window .a3-corner-bl { left: -12px; }
+.a3-window .a3-corner-br { right: -12px; }
+@media (hover: hover) and (pointer: fine) {
+  .a3:not([data-motion-level="none"]) [data-pan] img { transition: transform .9s var(--a3-ease); }
+  .a3:not([data-motion-level="none"]) [data-pan]:hover img { transform: scale(1.07) translate(calc(var(--pan-x, 0) * -2.4%), calc(var(--pan-y, 0) * -2.4%)); }
+}
+
+/* Contents: the lessons as a manuscript contents page with Ge'ez folios and a photo in the margin. */
+.a3-page { position: relative; padding: clamp(32px, 5vw, 76px) clamp(22px, 5vw, 80px); background: color-mix(in srgb, var(--a3-surface) 82%, transparent);
+  box-shadow: inset 0 0 0 10px color-mix(in srgb, var(--a3-surface) 82%, transparent), inset 0 0 0 11px color-mix(in srgb, var(--a3-gold) 55%, transparent), 0 30px 60px -40px rgba(58, 36, 18, .45); }
+.a3-page { view-timeline-name: --a3-page; }
+.a3-page-border { position: absolute; inset: 0; pointer-events: none; }
+.a3-edge { position: absolute; background: var(--a3-ink); }
+.a3-edge-t, .a3-edge-b { left: 0; right: 0; height: 1.5px; }
+.a3-edge-l, .a3-edge-r { top: 0; bottom: 0; width: 1.5px; }
+.a3-edge-t { top: 0; transform-origin: left; }
+.a3-edge-b { bottom: 0; transform-origin: right; }
+.a3-edge-l { left: 0; transform-origin: bottom; }
+.a3-edge-r { right: 0; transform-origin: top; }
+.a3-toc { display: grid; gap: 4px; }
+.a3-toc > li { display: grid; grid-template-columns: minmax(0, 1fr) clamp(140px, 16vw, 210px); gap: clamp(20px, 4vw, 64px); align-items: center; padding-block: 18px; border-top: 1px solid var(--a3-line); }
+.a3-toc > li:last-child { border-bottom: 1px solid var(--a3-line); }
+.a3-toc-row { display: grid; grid-template-columns: clamp(56px, 6vw, 84px) auto minmax(24px, 1fr) auto; grid-template-areas: "folio name leader facts" "folio summary summary summary" "folio live live live"; column-gap: 16px; row-gap: 6px; align-items: baseline; padding: 12px 10px; text-decoration: none; transition: background-color .3s; }
+a.a3-toc-row:hover { background: color-mix(in srgb, var(--a3-soft) 70%, transparent); }
+.a3-folio { grid-area: folio; align-self: start; color: var(--a3-rubric); font-size: clamp(2.2rem, 1.6rem + 1.6vw, 3.4rem); line-height: 1; transition: transform .4s var(--a3-ease); }
+a.a3-toc-row:hover .a3-folio { transform: translateX(4px) rotate(-4deg); }
+.a3-toc-name { grid-area: name; font-family: var(--a3-display); font-size: clamp(1.35rem, 1.1rem + .9vw, 1.9rem); font-weight: 700; line-height: 1.2; }
+.a3-leader { grid-area: leader; align-self: end; height: 1px; margin-bottom: .55em; border-bottom: 2px dotted color-mix(in srgb, var(--a3-ink) 50%, transparent); transform-origin: left; }
+.a3-toc-facts { grid-area: facts; display: inline-flex; gap: 14px; white-space: nowrap; color: var(--a3-muted); font-weight: 700; }
+.a3-toc-price { color: var(--a3-ink); }
+.a3-toc-summary { grid-area: summary; max-width: 46em; color: var(--a3-muted); }
+.a3-toc-live { grid-area: live; display: inline-flex; align-items: center; gap: 10px; width: fit-content; font-size: .9375rem; font-weight: 700; color: var(--a3-ok); }
+.a3[data-pe-mode="dark"] .a3-toc-live { color: #8fdcb0; }
+.a3-toc-photo .a3-window-frame { aspect-ratio: 3 / 4; }
+
+/* Coaches in arched manuscript windows. */
+.a3-coach-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); gap: clamp(28px, 4vw, 64px); }
+.a3-coach { display: grid; grid-template-columns: minmax(150px, 220px) minmax(0, 1fr); gap: clamp(20px, 3vw, 36px); align-items: end; }
+.a3-coach-photo .a3-window-frame { aspect-ratio: 4 / 5; }
+.a3-coach-text { display: grid; justify-items: start; gap: 10px; }
+.a3-coach h3 { font-size: 1.7rem; }
+.a3-coach-role { color: var(--a3-rubric); font-weight: 700; }
+.a3-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.a3-tags li { padding: 3px 10px; border: 1px solid var(--a3-line); background: var(--a3-surface); font-size: .875rem; font-weight: 700; }
+
+/* Story: a wide photo with an illuminated text leaf over its edge, opening on a drop cap. */
+.a3-story-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: center; }
+.a3-story-photo { grid-column: 1 / 8; grid-row: 1; aspect-ratio: 4 / 3; overflow: hidden; box-shadow: 0 0 0 1px var(--a3-gold), 0 30px 60px -36px rgba(40, 22, 10, .6); }
+.a3-story-text { position: relative; z-index: 1; grid-column: 7 / 13; grid-row: 1; padding: clamp(28px, 4vw, 52px); background: var(--a3-surface); box-shadow: 0 0 0 1px var(--a3-line), 0 24px 60px -30px rgba(40, 22, 10, .45); }
+.a3-story-text .a3-rule { margin-bottom: 18px; }
+.a3-dropcap::first-letter { initial-letter: 3; -webkit-initial-letter: 3; margin-right: .14em; color: var(--a3-rubric); font-family: var(--a3-display); font-weight: 700; }
+@supports not ((initial-letter: 3) or (-webkit-initial-letter: 3)) { .a3-dropcap::first-letter { float: left; margin: .06em .12em 0 0; font-size: 3.6em; line-height: .8; } }
+.a3-highlights { display: grid; gap: 8px; margin-top: 22px; }
+.a3-highlights li { display: flex; gap: 10px; font-weight: 700; }
+.a3-highlights li::before { content: "፨"; color: var(--a3-rubric); }
+
+/* Phrase of the week and the glosses (benefits). */
+.a3-glosses { background: color-mix(in srgb, var(--a3-soft) 55%, transparent); }
+.a3-glosses-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(36px, 6vw, 96px); align-items: center; }
+.a3-phrase { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); justify-items: start; gap: 18px; }
+.a3-phrase-photo { width: 62%; aspect-ratio: 1; overflow: hidden; border-radius: var(--a3-arch); box-shadow: 0 0 0 1px var(--a3-gold), 0 0 0 6px var(--a3-surface), 0 0 0 7px color-mix(in srgb, var(--a3-gold) 60%, transparent); }
+.a3-phrase-card { display: grid; width: min(100%, 440px); margin: -120px 0 0 auto; perspective: 1400px; }
+.a3-phrase-face { grid-area: 1 / 1; display: grid; align-content: center; gap: 10px; min-height: 250px; padding: 30px 32px; background: var(--a3-surface); border: 1px solid var(--a3-line); box-shadow: inset 0 0 0 6px var(--a3-surface), inset 0 0 0 7px color-mix(in srgb, var(--a3-rubric) 45%, transparent), 0 26px 50px -30px rgba(40, 22, 10, .55);
+  backface-visibility: hidden; transition: transform .9s var(--a3-ease); }
+.a3-phrase-back { transform: rotateY(180deg); }
+.a3-phrase[data-turned="true"] .a3-phrase-front { transform: rotateY(-180deg); }
+.a3-phrase[data-turned="true"] .a3-phrase-back { transform: rotateY(0deg); }
+.a3-phrase-text { font-size: clamp(1.8rem, 1.3rem + 1.4vw, 2.5rem); line-height: 1.35; }
+.a3-phrase-sound { font-size: 1.35rem; font-style: italic; }
+.a3-phrase-meaning { font-size: 1.15rem; }
+.a3-phrase-back .a3-eyebrow { margin: 6px 0 0; }
+.a3-phrase-turn { justify-self: end; }
+.a3-gloss-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px 36px; }
+.a3-gloss-list li { position: relative; display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 16px; padding-left: 18px; border-left: 2px solid var(--a3-rubric); }
+.a3-gloss-art { width: 52px; height: 52px; color: var(--a3-rubric); }
+.a3-gloss-list h3 { margin-bottom: 6px; font-size: 1.2rem; }
+
+/* Steps: Ge'ez numerals on gold discs over small manuscript windows; a ruled line draws across. */
+.a3-step-list { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(24px, 4vw, 56px); }
+.a3-step-list li { position: relative; display: grid; justify-items: start; gap: 10px; container-type: inline-size; view-timeline-name: --a3-step; }
+.a3-step-list li:not(:last-child)::after { content: ""; position: absolute; z-index: 0; top: calc(78cqi - 12px); left: 100px; right: calc(-1 * clamp(24px, 4vw, 56px) + 10px); border-top: 2px dotted color-mix(in srgb, var(--a3-rubric) 65%, transparent); transform-origin: left; }
+.a3-step-photo { width: 78%; }
+.a3-step-photo .a3-window-frame { aspect-ratio: 1; }
+.a3-numeral { display: grid; place-items: center; width: 74px; height: 74px; margin: -48px 0 6px 14px; position: relative; z-index: 1; border-radius: 50%; color: var(--a3-rubric); background: var(--a3-surface);
+  box-shadow: 0 0 0 2px var(--a3-gold), 0 0 0 6px var(--a3-surface), 0 10px 24px -10px rgba(40, 22, 10, .5); font-size: 2.3rem; line-height: 1; }
+.a3[data-pe-mode="dark"] .a3-numeral { box-shadow: 0 0 0 2px var(--a3-gold), 0 0 0 6px var(--a3-surface), 0 0 26px -4px color-mix(in srgb, var(--a3-gold) 55%, transparent); }
+
+/* Colophon (proof): the one deep band; values count up, Ge'ez numerals glow in gold. */
+.a3-colophon { position: relative; padding-block: clamp(56px, 7vw, 96px); color: var(--a3-on-iron); background: var(--a3-iron); }
+.a3-colophon .a3-tibeb { position: absolute; left: 0; right: 0; top: 0; width: 100%; height: 18px; color: var(--a3-gold); }
+.a3-colophon-title { margin-bottom: 36px; color: #e9c574; font-size: clamp(1.3rem, 1rem + 1vw, 1.8rem); }
+.a3-proof-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 28px 48px; }
+.a3-proof-list li { display: grid; gap: 6px; padding-top: 16px; border-top: 1px solid rgba(233, 197, 116, .4); }
+.a3-proof-numeral { color: #e9c574; font-size: 1.5rem; line-height: 1; text-shadow: 0 0 18px rgba(233, 197, 116, .35); }
+.a3-proof-value { font-family: var(--a3-display); font-size: clamp(2.2rem, 1.6rem + 1.8vw, 3.4rem); font-weight: 700; line-height: 1.05; white-space: nowrap; }
+.a3-proof-label { font-weight: 700; }
+.a3-proof-detail { color: var(--a3-on-iron-muted); }
+
+/* Reviews as marginalia: the quote is the page text; the reviewer's name is a note in the margin. */
+.a3-margin { display: grid; gap: 48px; }
+.a3-margin-page { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(200px, 280px); gap: clamp(28px, 5vw, 72px); align-items: center; }
+.a3-quote-mark { position: absolute; left: -.42em; top: -.32em; color: color-mix(in srgb, var(--a3-rubric) 32%, transparent); font-family: var(--a3-display); font-size: clamp(5rem, 4rem + 3vw, 8rem); font-weight: 700; line-height: 1; pointer-events: none; }
+.a3-margin-page blockquote p { position: relative; font-family: var(--a3-display); font-size: clamp(1.6rem, 1.1rem + 1.6vw, 2.6rem); font-style: italic; line-height: 1.3; }
+.a3:lang(am) .a3-margin-page blockquote p { font-style: normal; line-height: 1.5; }
+.a3-margin-note { position: relative; display: grid; gap: 4px; padding: 18px 20px 18px 22px; color: var(--a3-rubric); border-left: 2px solid var(--a3-rubric); transform: rotate(-2deg); font-style: italic; }
+.a3-margin-note strong { color: var(--a3-ink); font-size: 1.2rem; font-style: normal; }
+.a3-margin-note span:last-child { color: var(--a3-muted); }
+.a3-margin-label { font-size: .875rem; font-weight: 700; letter-spacing: .08em; }
+.a3-margin-pointer { position: absolute; left: -128px; top: -34px; width: 120px; height: 60px; color: var(--a3-rubric); }
+.a3-margin-pointer path { stroke-dasharray: 1; stroke-dashoffset: 0; }
+.a3-notes { display: grid; gap: 16px; justify-items: start; }
+.a3-notes-track { display: flex; width: 100%; overflow: hidden; padding-block: 12px; mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); }
+.a3-notes-group { display: flex; flex: none; gap: 22px; padding-right: 22px; }
+.a3-notes-group li { display: grid; align-content: start; gap: 12px; width: min(380px, 78vw); padding: 22px 24px; background: var(--a3-surface); border: 1px solid var(--a3-line); transform: rotate(var(--tilt, 0deg)); box-shadow: 0 16px 34px -26px rgba(40, 22, 10, .6); }
+.a3-notes-group blockquote p { font-style: italic; }
+.a3:lang(am) .a3-notes-group blockquote p { font-style: normal; }
+.a3-note-who { display: grid; color: var(--a3-rubric); font-size: .9375rem; }
+.a3-note-who span { color: var(--a3-muted); }
+.a3-notes-group[aria-hidden="true"] { display: none; }
+.a3-notes-track[data-marquee="running"] .a3-notes-group, .a3-notes-track[data-marquee="paused"] .a3-notes-group { display: flex; animation: a3-marquee 64s linear infinite; }
+.a3-notes-track[data-marquee="paused"] .a3-notes-group { animation-play-state: paused; }
+.a3-notes-track:not([data-marquee="running"]):not([data-marquee="paused"]) { overflow: visible; mask-image: none; }
+.a3-notes-track:not([data-marquee="running"]):not([data-marquee="paused"]) .a3-notes-group { flex-wrap: wrap; flex: 1; }
+@keyframes a3-marquee { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+
+/* FAQ: a glossary with Ge'ez numbers; a card with the photo, the call link and the hours. */
+.a3-faq-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(36px, 5vw, 80px); align-items: start; }
+.a3-faq-list { border-top: 1.5px solid var(--a3-ink); }
+.a3-faq-list details { border-bottom: 1px solid var(--a3-line); }
+.a3-faq-list summary { display: grid; grid-template-columns: 44px minmax(0, 1fr) 24px; gap: 12px; align-items: center; min-height: 64px; padding: 14px 4px; cursor: pointer; list-style: none; font-family: var(--a3-display); font-size: 1.25rem; font-weight: 700; }
+.a3-faq-list summary::-webkit-details-marker { display: none; }
+.a3-faq-no { color: var(--a3-rubric); font-size: 1.35rem; font-weight: 400; }
+.a3-faq-list summary i { position: relative; width: 18px; height: 18px; }
+.a3-faq-list summary i::before, .a3-faq-list summary i::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 2px; margin-top: -1px; background: var(--a3-rubric); transition: transform .35s var(--a3-ease); }
+.a3-faq-list summary i::after { transform: rotate(90deg); }
+.a3-faq-list details[open] summary i::after { transform: rotate(0deg); }
+.a3-faq-list details[open] summary { color: var(--a3-rubric); }
+.a3-faq-list details::details-content { block-size: 0; overflow: clip; transition: block-size .4s var(--a3-ease), content-visibility .4s allow-discrete; }
+.a3-faq-list details[open]::details-content { block-size: auto; }
+.a3-faq-answer { padding: 0 32px 22px 60px; color: var(--a3-muted); }
+.a3-ask { display: grid; grid-template-columns: minmax(120px, .62fr) minmax(0, 1fr); gap: 28px; align-items: start; padding-top: 12px; }
+.a3-ask-photo { width: 100%; }
+.a3-ask-photo .a3-window-frame { aspect-ratio: 3 / 4; }
+.a3-ask-card { display: grid; gap: 16px; padding: 26px; background: var(--a3-surface); border: 1px solid var(--a3-line); }
+.a3-ask-links { display: flex; flex-wrap: wrap; gap: 10px; }
+.a3-hours { display: grid; gap: 14px; }
+.a3-clock { display: inline-flex; width: fit-content; border: 1px solid var(--a3-line); }
+.a3-clock button { min-height: 40px; padding: 0 12px; border: 0; color: inherit; background: transparent; font: inherit; font-size: .875rem; font-weight: 700; cursor: pointer; }
+.a3-clock button[aria-pressed="true"] { color: var(--a3-on-rubric); background: var(--a3-rubric); }
+.a3-hours dl { display: grid; gap: 4px; margin: 0; }
+.a3-hours dl div { display: flex; justify-content: space-between; gap: 12px; padding-bottom: 4px; border-bottom: 1px dotted var(--a3-line); }
+.a3-hours dt { font-weight: 700; }
+.a3-hours dd { margin: 0; color: var(--a3-muted); font-variant-numeric: tabular-nums; }
+
+/* Plates (the owner's gallery): arched plates on a rail. */
+.a3-plate-list { display: flex; gap: 28px; overflow-x: auto; padding: 8px 4px 24px; scroll-snap-type: x mandatory; }
+.a3-plate-list > li { flex: 0 0 min(300px, 72vw); scroll-snap-align: start; }
+.a3-plate .a3-window-frame { aspect-ratio: 3 / 4; }
+.a3-plate-caption { margin-top: 18px; color: var(--a3-muted); font-style: italic; }
+
+/* Visit: room tabs, the room photo and a card with the drawn Arat Kilo map. */
+.a3-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px; }
+.a3-tabs button { min-height: 46px; padding: 0 18px; border: 1px solid var(--a3-line); color: inherit; background: var(--a3-surface); font: inherit; font-weight: 700; cursor: pointer; }
+.a3-tabs button[aria-selected="true"] { color: var(--a3-on-rubric); background: var(--a3-rubric); border-color: var(--a3-rubric); }
+.a3-room { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: 0; align-items: stretch; box-shadow: 0 0 0 1px var(--a3-line); background: var(--a3-surface); }
+.a3-room-photo { position: relative; min-height: 420px; overflow: hidden; }
+.a3-room-photo picture { position: absolute; inset: 0; }
+.a3-room-card { display: grid; align-content: start; gap: 12px; padding: clamp(24px, 3vw, 40px); }
+.a3-room-card h3 { font-size: 1.6rem; }
+.a3-room-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.a3-map { width: 100%; height: auto; margin-bottom: 8px; color: var(--a3-ink); border: 1px solid var(--a3-line); }
+.a3-map-paper { fill: color-mix(in srgb, var(--a3-soft) 70%, var(--a3-surface)); }
+.a3-map-roads { color: color-mix(in srgb, var(--a3-ink) 22%, var(--a3-surface)); }
+.a3-map-roads path { stroke-dasharray: 1; stroke-dashoffset: 0; }
+.a3-map-campus { fill: color-mix(in srgb, var(--a3-gold) 16%, transparent); stroke: color-mix(in srgb, var(--a3-gold) 70%, transparent); stroke-width: 1; }
+.a3-map-ring { fill: var(--a3-surface); stroke: var(--a3-ink); stroke-width: 2; }
+.a3-map-column { stroke: var(--a3-ink); stroke-width: 4; stroke-linecap: round; }
+.a3-map-tree { fill: color-mix(in srgb, #5c7a3a 45%, var(--a3-surface)); }
+.a3-map-pin path { fill: var(--a3-rubric); }
+.a3-map-pin-dot { fill: var(--a3-surface); }
+
+/* Booking band: the candle-lit desk with a manuscript leaf. */
+.a3-band { position: relative; display: flex; align-items: center; min-height: clamp(520px, 62vh, 700px); overflow: clip; background: var(--a3-iron); }
+.a3-band-photo { position: absolute; inset: 0; }
+.a3-band-photo picture { position: absolute; inset: 0; }
+.a3-band-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(20, 12, 6, .35), transparent 60%); }
+.a3-band-inner { position: relative; z-index: 1; padding-block: 72px; }
+.a3-leaf { position: relative; display: grid; justify-items: start; gap: 16px; width: min(100%, 540px); padding: clamp(30px, 4vw, 48px); color: var(--a3-ink); background-color: var(--a3-surface); background-image: var(--a3-paper); background-size: 320px; background-blend-mode: multiply;
+  box-shadow: inset 0 0 0 8px var(--a3-surface), inset 0 0 0 9px color-mix(in srgb, var(--a3-gold) 60%, transparent), 0 40px 80px -30px rgba(10, 5, 2, .7); }
+.a3[data-pe-mode="dark"] .a3-leaf { background-image: none; }
+.a3-leaf h2, .a3-leaf h1 { font-size: clamp(1.9rem, 1.3rem + 1.8vw, 3rem); line-height: 1.08; }
+.a3-band-live { display: grid; gap: 6px; }
+.a3-left { color: var(--a3-rubric); font-weight: 700; }
+.a3[data-scroll="css"] .a3-band-photo img { animation: a3-par-img linear both; animation-timeline: view(); }
+.a3[data-scroll="js"] .a3-band-photo img { transform: scale(1.1) translateY(calc((var(--p, .5) - .5) * -6%)); }
+.a3[data-scroll="css"] .a3-story-photo img { animation: a3-par-img linear both; animation-timeline: view(); }
+.a3[data-scroll="js"] .a3-story-photo img { transform: scale(1.1) translateY(calc((var(--p, .5) - .5) * -6%)); }
+@keyframes a3-par-img { from { transform: scale(1.1) translateY(3%); } to { transform: scale(1.1) translateY(-3%); } }
+.a3[data-pe-mode="dark"] .a3-band-photo::after, .a3[data-night="true"] .a3-band-photo::after { background: radial-gradient(60% 80% at 70% 50%, transparent, rgba(10, 5, 2, .45)), linear-gradient(90deg, rgba(10, 5, 2, .45), transparent 60%); }
+
+/* Footer: a woven border, the name with a section mark, hours and links. */
+.a3-footer { position: relative; padding: 64px 0 40px; color: var(--a3-on-iron); background: var(--a3-iron); }
+.a3-footer .a3-tibeb { position: absolute; left: 0; right: 0; top: 0; width: 100%; height: 18px; color: var(--a3-gold); }
+.a3-footer-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) auto; gap: 40px; align-items: start; }
+.a3-footer .a3-muted, .a3-footer .a3-open { color: var(--a3-on-iron-muted); }
+.a3-footer-name { margin-bottom: 10px; font-family: var(--a3-display); font-size: 1.8rem; font-weight: 700; }
+.a3-footer-name span { color: #e9c574; }
+.a3-footer-links { display: grid; gap: 6px; }
+.a3-footer-links a { text-decoration: none; font-weight: 700; }
+.a3-footer-links a:hover { text-decoration: underline; text-decoration-color: #e9c574; text-underline-offset: 5px; }
+.a3-legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 48px; padding-top: 20px; border-top: 1px solid rgba(233, 197, 116, .3); color: var(--a3-on-iron-muted); font-size: .9375rem; }
+.a3-credit a { color: #f2cf7c; }
+.a3-footer .a3-btn { --a3-rubric: #b8261f; }
+
+/* Phone booking bar in the thumb zone. */
+.a3-sticky { display: none; }
+@media (max-width: 760px) {
+  .a3-sticky { position: fixed; z-index: 28; left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 8px 8px 14px;
+    color: var(--a3-on-iron); background: color-mix(in srgb, var(--a3-iron) 94%, transparent); box-shadow: 0 0 0 1px rgba(233, 197, 116, .35), 0 16px 40px -12px rgba(10, 5, 2, .6); backdrop-filter: blur(10px);
+    transform: translateY(140%); transition: transform .35s var(--a3-ease); }
+  .a3-sticky[data-show="true"] { transform: none; }
+  .a3-sticky .a3-chip { flex: none; min-height: 36px; padding: 2px 4px; border: 0; color: inherit; background: none; font-size: .8125rem; line-height: 1.25; white-space: nowrap; }
+  .a3-sticky .a3-btn { flex: 1 1 auto; min-width: 0; min-height: 48px; padding: 0 16px; }
+  .a3-sticky .a3-btn span:first-child { overflow: hidden; text-overflow: ellipsis; }
+  .a3-sticky .a3-btn-mark { display: none; }
+}
+
+/* Reveal: ink. Text and headings write in from the left like a pen stroke; rules and borders draw. */
+.a3[data-motion-ready] [data-reveal]:not([data-revealed]) { opacity: 0; transform: translateY(var(--a3-rise)); }
+.a3[data-motion-ready] [data-reveal] { transition: opacity calc(var(--a3-dur) * .8) ease, transform var(--a3-dur) var(--a3-ease), clip-path calc(var(--a3-dur) * 1.3) var(--a3-ease), filter var(--a3-dur) ease; transition-delay: var(--reveal-delay, 0ms); }
+/* Never clip the whole element: the reveal observer needs part of it in view. */
+.a3[data-motion-ready] [data-reveal="ink"]:not([data-revealed]) { opacity: .25; transform: none; clip-path: inset(0 82% 0 0); filter: blur(3px); }
+.a3[data-motion-ready] [data-reveal="ink"][data-revealed] { clip-path: inset(0 -2% 0 0); }
+.a3[data-motion-ready] [data-reveal="ink"] + .a3-rule path { transition: stroke-dashoffset calc(var(--a3-dur) * 1.4) var(--a3-ease) .2s; }
+.a3[data-motion-ready] [data-reveal="ink"]:not([data-revealed]) + .a3-rule path { stroke-dashoffset: 1; }
+.a3[data-motion-ready] [data-reveal="fidel"]:not([data-revealed]) { opacity: 1; transform: none; }
+/* The photo starts partly open, so its first paint (the LCP) does not wait for the reveal. */
+.a3[data-motion-ready] [data-reveal="fidel"]:not([data-revealed]) .a3-fidel-photo picture { clip-path: inset(58% 0 0 0); transform: scale(1.08); }
+.a3[data-motion-ready] [data-reveal="fidel"]:not([data-revealed]) .a3-fidel-ink path { stroke-dashoffset: 1; }
+.a3[data-motion-ready] [data-reveal="fidel"] .a3-fidel-photo picture { clip-path: inset(0 0 0 0); }
+.a3[data-motion-ready] [data-reveal="frame"]:not([data-revealed]) { opacity: 1; transform: none; }
+.a3[data-motion-ready] [data-reveal="rise"]:not([data-revealed]) .a3-leader { transform: scaleX(0); }
+.a3[data-motion-ready] [data-reveal="rise"] .a3-leader { transition: transform calc(var(--a3-dur) * 1.2) var(--a3-ease) calc(var(--reveal-delay, 0ms) + 300ms); }
+.a3[data-motion-ready] .a3-glyph { animation: a3-ink-in calc(var(--a3-dur) * .7) var(--a3-ease) calc(180ms + var(--n) * var(--a3-step)) both; }
+@keyframes a3-ink-in { from { opacity: 0; filter: blur(5px); transform: scale(1.18); } 60% { opacity: 1; filter: blur(.5px); } to { opacity: 1; filter: none; transform: none; } }
+.a3[data-motion-ready] .a3-fidel-head li { animation: a3-ink-in var(--a3-dur) var(--a3-ease) both; }
+.a3[data-motion-ready] [data-reveal="ink"].a3-margin-page:not([data-revealed]) .a3-margin-pointer path { stroke-dashoffset: 1; }
+.a3[data-motion-ready] [data-reveal="ink"].a3-margin-page .a3-margin-pointer path { transition: stroke-dashoffset 1.2s var(--a3-ease) .6s; }
+.a3[data-motion-ready] [data-reveal="ink"].a3-margin-page:not([data-revealed]) { clip-path: none; filter: none; opacity: 1; }
+.a3[data-motion-ready] [data-reveal="ink"].a3-margin-page:not([data-revealed]) blockquote { clip-path: inset(0 100% 0 0); }
+.a3[data-motion-ready] [data-reveal="ink"].a3-margin-page blockquote { transition: clip-path calc(var(--a3-dur) * 1.6) var(--a3-ease); }
+/* Drawn on scroll: the contents border, the steps line and the map roads. */
+.a3[data-scroll="js"] :is(.a3-edge-t, .a3-edge-b) { transform: scaleX(min(1, var(--p, 1) * 2.4)); }
+.a3[data-scroll="js"] :is(.a3-edge-l, .a3-edge-r) { transform: scaleY(min(1, var(--p, 1) * 2.4)); }
+.a3[data-scroll="css"] :is(.a3-edge-t, .a3-edge-b) { animation: a3-edge-x linear both; animation-timeline: --a3-page; animation-range: entry 0% cover 40%; }
+.a3[data-scroll="css"] :is(.a3-edge-l, .a3-edge-r) { animation: a3-edge-y linear both; animation-timeline: --a3-page; animation-range: entry 0% cover 40%; }
+@keyframes a3-edge-x { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes a3-edge-y { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+.a3[data-scroll="js"] .a3-step-list li::after { transform: scaleX(min(1, var(--p, 1) * 1.8)); }
+.a3[data-scroll="css"] .a3-step-list li::after { animation: a3-edge-x linear both; animation-timeline: --a3-step; animation-range: entry 10% cover 50%; }
+@keyframes a3-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+.a3[data-motion-level="none"] *, .a3[data-motion-level="none"] *::before, .a3[data-motion-level="none"] *::after { animation: none !important; transition: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .a3 *, .a3 *::before, .a3 *::after { animation: none !important; transition: none !important; }
+  .a3 [data-reveal], .a3 [data-reveal] blockquote, .a3 .a3-fidel-photo picture { opacity: 1 !important; transform: none !important; clip-path: none !important; filter: none !important; }
+  .a3 path, .a3 rect { stroke-dashoffset: 0 !important; }
+  .a3-step-list li::after { transform: none !important; }
+  .a3-edge { transform: none !important; }
+  .a3-glyph { translate: none !important; }
+}
+
+/* Loading: the template's own skeleton, on parchment, with fidel letters that ink in and fade. */
+.a3-loading { min-height: 100svh; color: #231a12; background: #f4ecdc; }
+.a3-loading[data-pe-mode="dark"] { color: #f2e6cf; background: radial-gradient(60% 50% at 10% 0%, rgba(226, 150, 70, .18), transparent 70%), #17100b; }
+.a3-load-bar { display: flex; gap: 18px; align-items: center; justify-content: flex-end; height: 72px; padding-inline: clamp(16px, 4vw, 64px); border-bottom: 3px double rgba(158, 28, 23, .45); }
+.a3-load-bar i { width: 90px; height: 12px; background: rgba(35, 26, 18, .1); }
+.a3-loading[data-pe-mode="dark"] .a3-load-bar i { background: rgba(242, 230, 207, .12); }
+.a3-load-bar i:first-child { margin-right: auto; width: 200px; }
+.a3-load-page { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; padding-block: 56px; }
+.a3-load-copy { display: grid; gap: 18px; }
+.a3-bone { display: block; height: 20px; width: 84%; background: linear-gradient(90deg, rgba(35, 26, 18, .07), rgba(184, 137, 43, .22), rgba(35, 26, 18, .07)); background-size: 220% 100%; animation: a3-shimmer 1.8s ease-in-out infinite; }
+.a3-loading[data-pe-mode="dark"] .a3-bone { background-image: linear-gradient(90deg, rgba(242, 230, 207, .07), rgba(226, 182, 90, .22), rgba(242, 230, 207, .07)); }
+.a3-bone-initial { height: 96px; width: 92%; }
+.a3-bone-short { width: 52%; }
+.a3-bone-btn { width: 220px; height: 52px; margin-top: 10px; background: linear-gradient(90deg, rgba(158, 28, 23, .45), rgba(158, 28, 23, .75), rgba(158, 28, 23, .45)); background-size: 220% 100%; }
+.a3-load-fidel { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); border-block: 1.5px solid currentColor; font-size: clamp(1.4rem, 3.4vw, 2.6rem); text-align: center; }
+.a3-load-fidel span { padding-block: .4em; opacity: .14; animation: a3-load-ink 2.8s ease-in-out calc(var(--n) * 90ms) infinite; }
+.a3-load-fidel span:nth-child(7n + 1) { color: #9e1c17; }
+.a3-loading[data-pe-mode="dark"] .a3-load-fidel span:nth-child(7n + 1) { color: #f07f6b; }
+@keyframes a3-shimmer { from { background-position: 100% 0; } to { background-position: -120% 0; } }
+@keyframes a3-load-ink { 0%, 100% { opacity: .14; filter: blur(2px); } 40%, 60% { opacity: 1; filter: none; } }
+
+/* Booking handoff: the candle-lit desk as the stage; the leaf is where the booking action lands. */
+.a3-handoff-stage { position: relative; min-height: 100svh; margin-top: calc(-1 * var(--a3-bar)); padding-top: var(--a3-bar); background: var(--a3-iron); overflow: clip; }
+.a3-handoff .a3-bar { color: var(--a3-on-iron); }
+.a3-handoff .a3-bar[data-scrolled="true"] { color: var(--a3-ink); }
+.a3-handoff-grid { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(24px, 4vw, 56px); align-items: start; padding-block: clamp(36px, 6vw, 88px); }
+.a3-handoff-panel { view-transition-name: pe-book; }
+.a3-handoff-contents { width: 100%; }
+.a3-handoff-contents .a3-toc > li { display: block; padding: 0; }
+.a3-handoff-row { grid-template-columns: 52px minmax(0, 1fr) auto 64px; grid-template-areas: "folio name name thumb" "folio facts facts thumb" "folio live live thumb"; align-items: center; min-height: 96px; }
+.a3-handoff-row .a3-leader { display: none; }
+.a3-handoff-row .a3-toc-facts { justify-self: start; }
+.a3-toc-thumb { grid-area: thumb; width: 64px; height: 80px; overflow: hidden; border-radius: var(--a3-arch); box-shadow: 0 0 0 1px var(--a3-gold); }
+a.a3-handoff-row { transition: background-color .25s, transform .25s var(--a3-ease); }
+a.a3-handoff-row:hover { transform: translateX(4px); }
+a.a3-handoff-row:active { transform: translateX(2px) scale(.99); }
+@media (prefers-reduced-motion: reduce) { a.a3-handoff-row:hover, a.a3-handoff-row:active { transform: none; } }
+
+/* Tablet and phone */
+@media (max-width: 1080px) {
+  .a3-nav { display: none; }
+  .a3-hero-grid, .a3-glosses-grid, .a3-faq-grid, .a3-room, .a3-handoff-grid { grid-template-columns: minmax(0, 1fr); }
+  .a3-fidel { margin-inline: auto; }
+  .a3-ask { grid-template-columns: minmax(0, 1fr); max-width: 560px; }
+  .a3-ask-photo { width: 56%; }
+  .a3-story-photo { grid-column: 1 / 10; }
+  .a3-story-text { grid-column: 5 / 13; }
+}
+@media (max-width: 760px) {
+  .a3 { --a3-bar: 64px; font-size: 1rem; }
+  .a3-section { padding-block: clamp(56px, 14vw, 72px); }
+  .a3-mode-text { display: none; }
+  .a3-mode { width: 44px; padding: 0; justify-content: center; }
+  .a3-bar-book { display: none; }
+  .a3-hero { padding-top: calc(var(--a3-bar) + 18px); padding-bottom: 48px; }
+  .a3-hero-grid { gap: 28px; }
+  .a3-hero h1 { font-size: clamp(2.1rem, 9.6vw, 2.7rem); }
+  .a3-hero-facts { margin-top: 16px; }
+  .a3-hero-facts .a3-open { display: none; }
+  .a3-actions { gap: 12px 20px; }
+  .a3:lang(am) .a3-hero h1 { font-size: clamp(2rem, 8.6vw, 2.5rem); }
+  .a3-lede { font-size: 1.0625rem; margin-top: 14px; line-height: 1.55; }
+  .a3-actions { margin-top: 20px; }
+  .a3-actions .a3-btn { flex: 1 1 100%; }
+  .a3-greet { margin-bottom: 14px; }
+  .a3-page { padding: 28px 16px 24px; }
+  .a3-toc > li { grid-template-columns: minmax(0, 1fr) 92px; gap: 14px; align-items: start; }
+  .a3-toc-row { grid-template-columns: 40px minmax(0, 1fr); grid-template-areas: "folio name" "folio facts" "folio summary" "folio live"; padding: 6px 0; }
+  .a3-folio { font-size: 2rem; }
+  .a3-leader { display: none; }
+  .a3-toc-facts { flex-wrap: wrap; white-space: normal; }
+  .a3-toc-photo .a3-corner { display: none; }
+  .a3-coach { grid-template-columns: 130px minmax(0, 1fr); align-items: start; }
+  .a3-story-grid { grid-template-columns: minmax(0, 1fr); }
+  .a3-story-photo, .a3-story-text { grid-column: 1; }
+  .a3-story-photo { grid-row: 1; aspect-ratio: 4 / 5; }
+  .a3-story-text { grid-row: 2; margin: -56px 12px 0; padding: 26px 22px; }
+  .a3-phrase-photo { width: 70%; }
+  .a3-phrase-card { margin-top: -90px; }
+  .a3-phrase-face { min-height: 220px; padding: 26px 22px; }
+  .a3-gloss-list { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  .a3-step-list { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+  .a3-step-list li { grid-template-columns: 120px minmax(0, 1fr); column-gap: 18px; align-items: start; }
+  .a3-step-photo { grid-row: 1 / span 3; width: 100%; }
+  .a3-numeral { width: 52px; height: 52px; margin: 0; font-size: 1.7rem; }
+  .a3-step-list li::after { display: none; }
+  .a3-margin-page { grid-template-columns: minmax(0, 1fr); }
+  .a3-margin-note { margin-left: 24px; }
+  .a3-margin-pointer { display: none; }
+  .a3-quote-mark { left: -.06em; top: -.42em; font-size: 4.4rem; }
+  .a3-faq-answer { padding: 0 6px 18px 56px; }
+  .a3-room-photo { min-height: 0; aspect-ratio: 4 / 3; }
+  .a3-band { display: block; min-height: 0; }
+  .a3-band .a3-band-photo { position: relative; inset: auto; aspect-ratio: 1; overflow: hidden; }
+  .a3-band .a3-band-photo::after { background: linear-gradient(0deg, var(--a3-iron) 0%, transparent 35%); }
+  .a3-handoff-stage .a3-band-photo::after { background: linear-gradient(0deg, rgba(15, 9, 6, .72) 20%, rgba(15, 9, 6, .35)); }
+  .a3-back { white-space: nowrap; }
+  .a3-band-inner { margin-top: -110px; padding-top: 0; padding-bottom: 40px; }
+  .a3-footer-grid { grid-template-columns: minmax(0, 1fr); }
+  .a3-footer { padding-bottom: 104px; }
+  .a3-load-page { grid-template-columns: minmax(0, 1fr); }
+  .a3-handoff-grid { padding-block: 28px 48px; }
+  .a3-handoff-row { grid-template-columns: 40px minmax(0, 1fr) 56px; grid-template-areas: "folio name thumb" "folio facts thumb" "folio live live"; }
+  .a3-toc-thumb { width: 56px; height: 70px; }
+}
+
+/* Dark mode: daylight photos get a warm candle grade (night photos stay as shot). */
+.a3[data-pe-mode="dark"] :is(.a3-window-frame, .a3-story-photo, .a3-room-photo, .a3-phrase-photo) img { filter: brightness(.86) saturate(1.04) sepia(.12); }
+.a3[data-pe-mode="dark"] .a3-page, .a3[data-pe-mode="dark"] .a3-story-text, .a3[data-pe-mode="dark"] .a3-ask-card { box-shadow: inset 0 1px 0 rgba(255, 230, 190, .06), 0 0 0 1px var(--a3-line), 0 30px 60px -36px rgba(0, 0, 0, .8); }
+.a3[data-pe-mode="dark"] .a3-page { box-shadow: inset 0 0 0 10px var(--a3-surface), inset 0 0 0 11px color-mix(in srgb, var(--a3-gold) 45%, transparent), 0 30px 60px -36px rgba(0, 0, 0, .8); background: var(--a3-surface); }
+.a3[data-pe-mode="dark"] .a3-edge { background: color-mix(in srgb, var(--a3-gold) 60%, transparent); }
+.a3[data-pe-mode="dark"] .a3-folio, .a3[data-pe-mode="dark"] .a3-numeral, .a3[data-pe-mode="dark"] .a3-faq-no { text-shadow: 0 0 16px color-mix(in srgb, var(--a3-rubric) 40%, transparent); }
+.a3[data-pe-mode="dark"] .a3-glosses { background: color-mix(in srgb, var(--a3-soft) 70%, transparent); }

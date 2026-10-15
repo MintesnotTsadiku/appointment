@@ -1,7 +1,11 @@
 import type { ComponentType } from "react";
 
 import type { CompiledDesign } from "../types";
+import { abugidaBookingSkin } from "./abugida-v3/booking";
 import { bloomBookingSkin } from "./bloom-v3/booking";
+import { meronBookingSkin } from "./meron-v3/booking";
+import { selamBookingSkin } from "./selam-v3/booking";
+import { tenaBookingSkin } from "./tena-v3/booking";
 
 /**
  * Booking skins: how a certified template dresses the one shared booking flow (service chooser, time
@@ -50,6 +54,10 @@ export const DEFAULT_BOOKING_SKIN: BookingSkin = {
 
 const SKINS: Record<string, BookingSkin> = {
   [bloomBookingSkin.key]: bloomBookingSkin,
+  [meronBookingSkin.key]: meronBookingSkin,
+  [abugidaBookingSkin.key]: abugidaBookingSkin,
+  [selamBookingSkin.key]: selamBookingSkin,
+  [tenaBookingSkin.key]: tenaBookingSkin,
 };
 
 /** The skin of a published design. Templates without a skin (v1, v2, Ergata until phase 3) get the default. */

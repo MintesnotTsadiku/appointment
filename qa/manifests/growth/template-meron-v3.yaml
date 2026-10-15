@@ -1,0 +1,566 @@
+# Meron v3 "The Fitting Room" (light, full motion). Fixture: appointment.tests.template_meron_v3_qa_fixtures (setup before, cleanup after).
+# Every section of /meron-studio and /meron-studio/am: hero (greeting, open-now, stitched title, next free fitting, folding-screen triptych
+# with the ken-burns film and its pause button), garment tags, the sticky "cloth to fitting" story, the maker, the lookbook with the
+# before/after alteration, the atelier, proof, benefits, the pull quote and the review row with pause, FAQ with the Habesha clock, the
+# courtyard map, the booking band and the footer; then the booking handoff (view transition target) and the scheduler time picker.
+# `?preview-time=` fixes the Addis clock (development builds only). See docs/design/MERON_V3.md.
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-template-meron-v3
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.template_meron_v3_qa_fixtures.browser_values
+scenarios:
+- id: meron_en_desktop
+  title: Meron v3 (en, desktop, light)
+  viewport: &id003
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /{qa_meron_slug}?display=light&preview-time=16:30
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="meron-atelier-v3"][data-pe-recipe="meron-atelier"]'
+    - type: text_contains
+      value: Good afternoon
+  actions:
+  - action: wait_for
+    selector: .m3-film-frame.is-on img[src*="loop1"]
+  - action: wait_for
+    selector: '[data-qa="meron-next-free"]'
+  - action: wait_for
+    selector: '[data-qa="meron-film-pause"]'
+  - action: screenshot
+    name: meron_en_desktop-01-hero.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="meron-film-pause"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="meron-film-pause"][aria-pressed="true"]'
+  - action: click
+    selector: '#m3-tags-title'
+  - action: screenshot
+    name: meron_en_desktop-02-tags.png
+    full_page: false
+  - action: click
+    selector: '#m3-story-title'
+  - action: screenshot
+    name: meron_en_desktop-03-story.png
+    full_page: false
+  - action: click
+    selector: :nth-match(.m3-story-steps h3, 3)
+  - action: screenshot
+    name: meron_en_desktop-04-story-step-3.png
+    full_page: false
+  - action: click
+    selector: '#m3-team-title'
+  - action: screenshot
+    name: meron_en_desktop-05-maker.png
+    full_page: false
+  - action: click
+    selector: '#m3-looks-title'
+  - action: press
+    selector: '[data-qa="meron-compare-range"]'
+    key: ArrowLeft
+  - action: screenshot
+    name: meron_en_desktop-06-lookbook.png
+    full_page: false
+  - action: click
+    selector: '#m3-about-title'
+  - action: screenshot
+    name: meron_en_desktop-07-atelier.png
+    full_page: false
+  - action: click
+    selector: :nth-match(.m3-proof-label, 1)
+  - action: screenshot
+    name: meron_en_desktop-08-proof.png
+    full_page: false
+  - action: click
+    selector: '#m3-notes-title'
+  - action: screenshot
+    name: meron_en_desktop-09-benefits.png
+    full_page: false
+  - action: click
+    selector: '#m3-reviews-title'
+  - action: click
+    selector: '[data-qa="meron-reviews-pause"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="meron-reviews-pause"][aria-pressed="true"]'
+  - action: screenshot
+    name: meron_en_desktop-10-reviews-paused.png
+    full_page: false
+  - action: click
+    selector: '#m3-faq-title'
+  - action: click
+    selector: :nth-match(.m3-faq-list summary, 1)
+  - action: click
+    selector: '[data-qa="meron-habesha-toggle"]'
+    assertions:
+    - type: text_contains
+      selector: .m3-hours
+      value: ከጠዋቱ 4 ሰዓት
+  - action: screenshot
+    name: meron_en_desktop-11-faq-hours.png
+    full_page: false
+  - action: click
+    selector: '#m3-visit-title'
+  - action: screenshot
+    name: meron_en_desktop-12-visit.png
+    full_page: false
+  - action: click
+    selector: '#m3-band-title'
+  - action: screenshot
+    name: meron_en_desktop-13-band.png
+    full_page: false
+  - action: click
+    selector: .m3-footer-name
+  - action: wait_for
+    selector: '[data-qa="template-credit"]'
+  - action: screenshot
+    name: meron_en_desktop-14-footer.png
+    full_page: false
+  - action: click
+    selector: '#m3-hero-title'
+  - action: screenshot
+    name: meron_en_desktop-15-full.png
+    full_page: true
+  - action: click
+    selector: :nth-match([data-qa="meron-hero-book"], 1)
+  - action: wait_for
+    selector: '[data-vt-book]'
+  - action: wait_for
+    selector: '[data-qa="meron-handoff-book"]'
+  - action: screenshot
+    name: meron_en_desktop-16-handoff.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="meron-handoff-book"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: screenshot
+    name: meron_en_desktop-17-scheduler.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_meron_open_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_meron_open_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: screenshot
+    name: meron_en_desktop-17-time-picker.png
+    full_page: false
+  - &id001
+    action: get_console_errors
+  - &id002
+    action: get_network_errors
+- id: meron_en_mobile
+  title: Meron v3 (en, mobile, light)
+  viewport: &id004
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /{qa_meron_slug}?display=light&preview-time=10:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="meron-atelier-v3"][data-pe-recipe="meron-atelier"]'
+    - type: text_contains
+      value: Good morning
+  actions:
+  - action: wait_for
+    selector: .m3-film-frame.is-on img[src*="loop1"]
+  - action: wait_for
+    selector: '[data-qa="meron-next-free"]'
+  - action: wait_for
+    selector: '[data-qa="meron-film-pause"]'
+  - action: screenshot
+    name: meron_en_mobile-01-hero.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="meron-film-pause"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="meron-film-pause"][aria-pressed="true"]'
+  - action: click
+    selector: '#m3-tags-title'
+  - action: screenshot
+    name: meron_en_mobile-02-tags.png
+    full_page: false
+  - action: click
+    selector: '#m3-story-title'
+  - action: screenshot
+    name: meron_en_mobile-03-story.png
+    full_page: false
+  - action: click
+    selector: :nth-match(.m3-story-steps h3, 3)
+  - action: screenshot
+    name: meron_en_mobile-04-story-step-3.png
+    full_page: false
+  - action: click
+    selector: '#m3-team-title'
+  - action: screenshot
+    name: meron_en_mobile-05-maker.png
+    full_page: false
+  - action: click
+    selector: '#m3-looks-title'
+  - action: press
+    selector: '[data-qa="meron-compare-range"]'
+    key: ArrowLeft
+  - action: screenshot
+    name: meron_en_mobile-06-lookbook.png
+    full_page: false
+  - action: click
+    selector: '#m3-about-title'
+  - action: screenshot
+    name: meron_en_mobile-07-atelier.png
+    full_page: false
+  - action: click
+    selector: :nth-match(.m3-proof-label, 1)
+  - action: screenshot
+    name: meron_en_mobile-08-proof.png
+    full_page: false
+  - action: click
+    selector: '#m3-notes-title'
+  - action: screenshot
+    name: meron_en_mobile-09-benefits.png
+    full_page: false
+  - action: click
+    selector: '#m3-reviews-title'
+  - action: click
+    selector: '[data-qa="meron-reviews-pause"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="meron-reviews-pause"][aria-pressed="true"]'
+  - action: screenshot
+    name: meron_en_mobile-10-reviews-paused.png
+    full_page: false
+  - action: click
+    selector: '#m3-faq-title'
+  - action: click
+    selector: :nth-match(.m3-faq-list summary, 1)
+  - action: click
+    selector: '[data-qa="meron-habesha-toggle"]'
+    assertions:
+    - type: text_contains
+      selector: .m3-hours
+      value: ከጠዋቱ 4 ሰዓት
+  - action: screenshot
+    name: meron_en_mobile-11-faq-hours.png
+    full_page: false
+  - action: click
+    selector: '#m3-visit-title'
+  - action: screenshot
+    name: meron_en_mobile-12-visit.png
+    full_page: false
+  - action: click
+    selector: '#m3-band-title'
+  - action: screenshot
+    name: meron_en_mobile-13-band.png
+    full_page: false
+  - action: click
+    selector: .m3-footer-name
+  - action: wait_for
+    selector: '[data-qa="template-credit"]'
+  - action: screenshot
+    name: meron_en_mobile-14-footer.png
+    full_page: false
+  - action: click
+    selector: '#m3-hero-title'
+  - action: screenshot
+    name: meron_en_mobile-15-full.png
+    full_page: true
+  - action: click
+    selector: :nth-match([data-qa="meron-hero-book"], 1)
+  - action: wait_for
+    selector: '[data-vt-book]'
+  - action: wait_for
+    selector: '[data-qa="meron-handoff-book"]'
+  - action: screenshot
+    name: meron_en_mobile-16-handoff.png
+    full_page: false
+  - *id001
+  - *id002
+- id: meron_am_desktop
+  title: Meron v3 (am, desktop, light)
+  viewport: *id003
+  checks: []
+  routes:
+  - path: /{qa_meron_slug}/am?display=light&preview-time=16:30
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="meron-atelier-v3"][data-pe-recipe="meron-atelier"]'
+    - type: text_contains
+      value: እንደምን ዋሉ
+  actions:
+  - action: wait_for
+    selector: .m3-film-frame.is-on img[src*="loop1"]
+  - action: wait_for
+    selector: '[data-qa="meron-next-free"]'
+  - action: wait_for
+    selector: '[data-qa="meron-film-pause"]'
+  - action: screenshot
+    name: meron_am_desktop-01-hero.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="meron-film-pause"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="meron-film-pause"][aria-pressed="true"]'
+  - action: click
+    selector: '#m3-tags-title'
+  - action: screenshot
+    name: meron_am_desktop-02-tags.png
+    full_page: false
+  - action: click
+    selector: '#m3-story-title'
+  - action: screenshot
+    name: meron_am_desktop-03-story.png
+    full_page: false
+  - action: click
+    selector: :nth-match(.m3-story-steps h3, 3)
+  - action: screenshot
+    name: meron_am_desktop-04-story-step-3.png
+    full_page: false
+  - action: click
+    selector: '#m3-team-title'
+  - action: screenshot
+    name: meron_am_desktop-05-maker.png
+    full_page: false
+  - action: click
+    selector: '#m3-looks-title'
+  - action: press
+    selector: '[data-qa="meron-compare-range"]'
+    key: ArrowLeft
+  - action: screenshot
+    name: meron_am_desktop-06-lookbook.png
+    full_page: false
+  - action: click
+    selector: '#m3-about-title'
+  - action: screenshot
+    name: meron_am_desktop-07-atelier.png
+    full_page: false
+  - action: click
+    selector: :nth-match(.m3-proof-label, 1)
+  - action: screenshot
+    name: meron_am_desktop-08-proof.png
+    full_page: false
+  - action: click
+    selector: '#m3-notes-title'
+  - action: screenshot
+    name: meron_am_desktop-09-benefits.png
+    full_page: false
+  - action: click
+    selector: '#m3-reviews-title'
+  - action: click
+    selector: '[data-qa="meron-reviews-pause"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="meron-reviews-pause"][aria-pressed="true"]'
+  - action: screenshot
+    name: meron_am_desktop-10-reviews-paused.png
+    full_page: false
+  - action: click
+    selector: '#m3-faq-title'
+  - action: click
+    selector: :nth-match(.m3-faq-list summary, 1)
+  - action: wait_for
+    selector: '[data-qa="meron-habesha-toggle"][aria-pressed="true"]'
+  - action: screenshot
+    name: meron_am_desktop-11-faq-hours.png
+    full_page: false
+  - action: click
+    selector: '#m3-visit-title'
+  - action: screenshot
+    name: meron_am_desktop-12-visit.png
+    full_page: false
+  - action: click
+    selector: '#m3-band-title'
+  - action: screenshot
+    name: meron_am_desktop-13-band.png
+    full_page: false
+  - action: click
+    selector: .m3-footer-name
+  - action: wait_for
+    selector: '[data-qa="template-credit"]'
+  - action: screenshot
+    name: meron_am_desktop-14-footer.png
+    full_page: false
+  - action: click
+    selector: '#m3-hero-title'
+  - action: screenshot
+    name: meron_am_desktop-15-full.png
+    full_page: true
+  - action: click
+    selector: :nth-match([data-qa="meron-hero-book"], 1)
+  - action: wait_for
+    selector: '[data-vt-book]'
+  - action: wait_for
+    selector: '[data-qa="meron-handoff-book"]'
+  - action: screenshot
+    name: meron_am_desktop-16-handoff.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="meron-handoff-book"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: screenshot
+    name: meron_am_desktop-17-scheduler.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_meron_open_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_meron_open_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: screenshot
+    name: meron_am_desktop-17-time-picker.png
+    full_page: false
+  - *id001
+  - *id002
+- id: meron_am_mobile
+  title: Meron v3 (am, mobile, light)
+  viewport: *id004
+  checks: []
+  routes:
+  - path: /{qa_meron_slug}/am?display=light&preview-time=10:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="meron-atelier-v3"][data-pe-recipe="meron-atelier"]'
+    - type: text_contains
+      value: እንደምን አደሩ
+  actions:
+  - action: wait_for
+    selector: .m3-film-frame.is-on img[src*="loop1"]
+  - action: wait_for
+    selector: '[data-qa="meron-next-free"]'
+  - action: wait_for
+    selector: '[data-qa="meron-film-pause"]'
+  - action: screenshot
+    name: meron_am_mobile-01-hero.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="meron-film-pause"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="meron-film-pause"][aria-pressed="true"]'
+  - action: click
+    selector: '#m3-tags-title'
+  - action: screenshot
+    name: meron_am_mobile-02-tags.png
+    full_page: false
+  - action: click
+    selector: '#m3-story-title'
+  - action: screenshot
+    name: meron_am_mobile-03-story.png
+    full_page: false
+  - action: click
+    selector: :nth-match(.m3-story-steps h3, 3)
+  - action: screenshot
+    name: meron_am_mobile-04-story-step-3.png
+    full_page: false
+  - action: click
+    selector: '#m3-team-title'
+  - action: screenshot
+    name: meron_am_mobile-05-maker.png
+    full_page: false
+  - action: click
+    selector: '#m3-looks-title'
+  - action: press
+    selector: '[data-qa="meron-compare-range"]'
+    key: ArrowLeft
+  - action: screenshot
+    name: meron_am_mobile-06-lookbook.png
+    full_page: false
+  - action: click
+    selector: '#m3-about-title'
+  - action: screenshot
+    name: meron_am_mobile-07-atelier.png
+    full_page: false
+  - action: click
+    selector: :nth-match(.m3-proof-label, 1)
+  - action: screenshot
+    name: meron_am_mobile-08-proof.png
+    full_page: false
+  - action: click
+    selector: '#m3-notes-title'
+  - action: screenshot
+    name: meron_am_mobile-09-benefits.png
+    full_page: false
+  - action: click
+    selector: '#m3-reviews-title'
+  - action: click
+    selector: '[data-qa="meron-reviews-pause"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="meron-reviews-pause"][aria-pressed="true"]'
+  - action: screenshot
+    name: meron_am_mobile-10-reviews-paused.png
+    full_page: false
+  - action: click
+    selector: '#m3-faq-title'
+  - action: click
+    selector: :nth-match(.m3-faq-list summary, 1)
+  - action: wait_for
+    selector: '[data-qa="meron-habesha-toggle"][aria-pressed="true"]'
+  - action: screenshot
+    name: meron_am_mobile-11-faq-hours.png
+    full_page: false
+  - action: click
+    selector: '#m3-visit-title'
+  - action: screenshot
+    name: meron_am_mobile-12-visit.png
+    full_page: false
+  - action: click
+    selector: '#m3-band-title'
+  - action: screenshot
+    name: meron_am_mobile-13-band.png
+    full_page: false
+  - action: click
+    selector: .m3-footer-name
+  - action: wait_for
+    selector: '[data-qa="template-credit"]'
+  - action: screenshot
+    name: meron_am_mobile-14-footer.png
+    full_page: false
+  - action: click
+    selector: '#m3-hero-title'
+  - action: screenshot
+    name: meron_am_mobile-15-full.png
+    full_page: true
+  - action: click
+    selector: :nth-match([data-qa="meron-hero-book"], 1)
+  - action: wait_for
+    selector: '[data-vt-book]'
+  - action: wait_for
+    selector: '[data-qa="meron-handoff-book"]'
+  - action: screenshot
+    name: meron_am_mobile-16-handoff.png
+    full_page: false
+  - *id001
+  - *id002

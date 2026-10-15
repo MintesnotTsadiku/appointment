@@ -365,8 +365,33 @@ V3_SCENES = {
     },
 }
 
+MERON_V3 = "/assets/appointment/brand-experience/support/meron-v3"
+V3_SCENES["meron"] = {
+    "services": [
+        (f"{MERON_V3}/loop1.webp", "The tailor measures a client's shoulder at the fitting table.", "ልብስ ሰፊዋ በመለኪያ ጠረጴዛው አጠገብ የደንበኛዋን ትከሻ ትለካለች።"),
+        (f"{MERON_V3}/story1.webp", "Hands choose between swatches of navy wool, grey flannel, wine wool and tibeb cotton.", "እጆች ከባሕር ኃይል ሰማያዊ ሱፍ፣ ከግራጫ ፍላኔል፣ ከወይን ጠጅ ሱፍና ከጥበብ ጥጥ ቁርጥራጮች መካከል ይመርጣሉ።"),
+    ],
+    "about": (f"{MERON_V3}/atelier.webp", "The courtyard atelier: a long cutting table with rolls of wool, a white dress on a form and open steel windows.",
+              "የግቢው አቴሊየር፦ የሱፍ ጥቅልሎች ያሉበት ረጅም የመቁረጫ ጠረጴዛ፣ በቅርጽ ላይ ያለ ነጭ ቀሚስና የተከፈቱ የብረት መስኮቶች።"),
+    "locations": [
+        (f"{MERON_V3}/atelier.webp", "The ground-floor atelier, seen from the courtyard door.", "ምድር ቤቱ ላይ ያለው አቴሊየር ከግቢው በር ሲታይ።"),
+    ],
+    "hero": (f"{MERON_V3}/loop1.webp", "The tailor measures a client's shoulder; the client stands with her back to the camera in a white habesha dress.",
+             "ልብስ ሰፊዋ የደንበኛዋን ትከሻ ትለካለች፤ ደንበኛዋ ነጭ የሀበሻ ቀሚስ ለብሳ ጀርባዋን ሰጥታ ቆማለች።"),
+}
+
 # More consented reviews for showcases whose template shows a review marquee: (quote, Amharic, name, role, Amharic role).
 EXTRA_TESTIMONIALS = {
+    "meron": [
+        ("Meron pinned the hem with my own shoes on. The length was right the first time I wore it.", "ሜሮን በራሴ ጫማ ሆኜ ጫፉን በመርፌ ያዘችው። የመጀመሪያ ቀን ስለብሰው ርዝመቱ ትክክል ነበር።",
+         "Tsion Alemayehu", "Occasion dress client", "የበዓል ቀሚስ ደንበኛ"),
+        ("She told me which changes were worth making and which were not. That honesty saved my favourite jacket.", "የትኞቹ ለውጦች እንደሚያስፈልጉና እንደማያስፈልጉ ነገረችኝ። ያ ቅንነት የምወደውን ጃኬቴን አዳነው።",
+         "Henok Wolde", "Alteration client", "የማስተካከያ ደንበኛ"),
+        ("We chose the fabric for my wedding kemis at the first visit, and every fitting had a clear purpose.", "ለሠርግ ቀሚሴ ጨርቁን በመጀመሪያው ጉብኝት መረጥን፤ እያንዳንዱ ልኬትም ግልጽ ዓላማ ነበረው።",
+         "Saba Getahun", "Occasion wear consultation client", "የበዓል ልብስ ምክክር ደንበኛ"),
+        ("Quiet room, no rush, and the trousers finally sit properly at the waist.", "ጸጥ ያለ ክፍል፣ ጥድፊያ የለም፤ ሱሪው በመጨረሻ በወገቤ ላይ በትክክል ይቀመጣል።",
+         "Dawit Kassa", "First fitting client", "የመጀመሪያ ልኬት ደንበኛ"),
+    ],
     "bloom": [
         ("Eden listened before she cut. The shape still sits well a month later.", "ኤደን ከመቁረጧ በፊት አዳመጠችኝ። ከአንድ ወር በኋላም ቅርጹ በደንብ ይቀመጣል።",
          "Mahlet Girma", "Cut and shape client", "የመቁረጥና የቅርጽ ደንበኛ"),
@@ -378,6 +403,41 @@ EXTRA_TESTIMONIALS = {
          "Selamawit Abebe", "Wash and finish client", "የእጥበትና የአጨራረስ ደንበኛ"),
     ],
 }
+
+
+ABUGIDA_V3 = "/assets/appointment/brand-experience/support/abugida-v3"
+V3_SCENES["abugida"] = {
+    "services": [
+        (f"{ABUGIDA_V3}/lesson1.webp", "A coach in a grey scarf listens to a learner, seen from behind, across a café table with two macchiatos.",
+         "ግራጫ ሻርፕ የለበሰ አሠልጣኝ ጀርባዋ የሚታይ ተማሪን ሁለት ማኪያቶ ባለበት የካፌ ጠረጴዛ ዙሪያ ያዳምጣል።"),
+        (f"{ABUGIDA_V3}/lesson2.webp", "A learner's hand traces letters with a pencil in a notebook beside a cup of coffee and a woven basket.",
+         "የተማሪ እጅ ከቡና ስኒና ከሰፌድ ቅርጫት አጠገብ በደብተር ላይ ፊደሎችን በእርሳስ ይጽፋል።"),
+    ],
+    "about": (f"{ABUGIDA_V3}/story.webp", "The learning room: tall bookshelves, a long table, woven baskets and a window toward the trees and the old stone gate of the university.",
+              "የመማሪያ ክፍሉ፦ ረጃጅም የመጽሐፍ መደርደሪያዎች፣ ረጅም ጠረጴዛ፣ የሰፌድ ቅርጫቶችና ወደ ዛፎቹና ወደ ዩኒቨርሲቲው የድንጋይ በር የሚመለከት መስኮት።"),
+    "locations": [
+        (f"{ABUGIDA_V3}/room1.webp", "The learning room seen from the stair: a long wooden table set with notebooks, chairs with woven cushions and low bookshelves.",
+         "የመማሪያ ክፍሉ ከደረጃው ሲታይ፦ ደብተሮች የተቀመጡበት ረጅም የእንጨት ጠረጴዛ፣ የጥለት ትራስ ያላቸው ወንበሮችና ዝቅተኛ የመጽሐፍ መደርደሪያዎች።"),
+        (f"{ABUGIDA_V3}/room2.webp", "The conversation room: two armchairs across a low table with coffee cups, a woven basket and a window with a linen curtain.",
+         "የውይይት ክፍሉ፦ የቡና ስኒዎች ባሉበት ዝቅተኛ ጠረጴዛ ዙሪያ ሁለት ወንበሮች፣ የሰፌድ ቅርጫትና የበፍታ መጋረጃ ያለው መስኮት።"),
+    ],
+    "hero": (f"{ABUGIDA_V3}/hero.webp", "A language coach in a white shawl with a red border talks with a learner across a wooden table by a tall window.",
+             "ቀይ ጥለት ያለው ነጭ ነጠላ የለበሰች የቋንቋ አሠልጣኝ በረጅም መስኮት አጠገብ በእንጨት ጠረጴዛ ዙሪያ ከአንድ ተማሪ ጋር ትነጋገራለች።"),
+}
+EXTRA_TESTIMONIALS["abugida"] = [
+    ("Kalkidan had me rehearse the first two minutes of my interview until they felt like mine.",
+     "ቃልኪዳን የቃለ መጠይቄን የመጀመሪያ ሁለት ደቂቃዎች የራሴ እስኪመስሉኝ ድረስ እንድለማመድ አደረገችኝ።",
+     "Meron Tadesse", "English conversation learner", "የእንግሊዝኛ ውይይት ተማሪ"),
+    ("After three sessions I could greet my colleagues' families and follow the talk over coffee.",
+     "ከሦስት ክፍለ ጊዜዎች በኋላ የሥራ ባልደረቦቼን ቤተሰቦች ሰላም ማለትና በቡና ላይ የሚደረገውን ጨዋታ መከታተል ቻልኩ።",
+     "Daniel Okafor", "Amharic starter learner", "የአማርኛ ጀማሪ ተማሪ"),
+    ("Abel lets me repeat a phrase as often as I need, and I never feel slow.",
+     "አቤል አንድን ሐረግ የፈለግሁትን ያህል እንድደግም ይፈቅድልኛል፤ መቼም የዘገየሁ አይመስለኝም።",
+     "Hiwot Bekele", "English conversation learner", "የእንግሊዝኛ ውይይት ተማሪ"),
+    ("The weekly prompt is small enough that I actually do it before the next session.",
+     "የየሳምንቱ ተግባር ትንሽ በመሆኑ ከሚቀጥለው ክፍለ ጊዜ በፊት በእርግጥ እሠራዋለሁ።",
+     "Sophie Laurent", "Amharic starter learner", "የአማርኛ ጀማሪ ተማሪ"),
+]
 
 
 def v3_image(entry):
@@ -429,10 +489,11 @@ SECTION_COPY = {
         "process_title": ("How a practice session runs", "የልምምድ ክፍለ ጊዜ እንዴት እንደሚካሄድ"),
         "process_intro": ("Three steps, repeated every week.", "በየሳምንቱ የሚደገሙ ሦስት ደረጃዎች።"),
         "benefits_title": ("What the sessions are built on", "ክፍለ ጊዜዎቹ በምን ላይ እንደተገነቡ"),
-        "testimonials_title": ("From a learner", "ከአንድ ተማሪ"),
+        "testimonials_title": ("In the learners' words", "በተማሪዎቹ አንደበት"),
         "proof_title": ("Lessons in short", "ትምህርቶቹ በአጭሩ"),
         "providers_intro": ("Two coaches, two languages.", "ሁለት አሠልጣኞች፣ ሁለት ቋንቋዎች።"),
         "locations_intro": ("Two rooms near the university gate in Arat Kilo.", "በአራት ኪሎ ከዩኒቨርሲቲው በር አጠገብ ሁለት ክፍሎች።"),
+        "gallery_title": ("Plates from the study", "ከጥናት ክፍሉ የተወሰዱ ሥዕሎች"),
     },
 }
 
@@ -448,6 +509,7 @@ PROCESS_STEPS = {
         (("Bring the garment", "ልብሱን ይዘው ይምጡ"), ("Bring it with the shoes and layers you will wear with it.", "አብረው ከሚለብሷቸው ጫማዎችና ልብሶች ጋር ይዘው ይምጡ።")),
         (("Measure and agree", "ይለኩና ይስማሙ"), ("Measurements are taken and the plan is agreed before work begins.", "ሥራው ከመጀመሩ በፊት ልኬቶች ይወሰዳሉ፤ ዕቅዱም ይጸድቃል።")),
         (("Fit again", "እንደገና ይለኩ"), ("A second fitting checks the change before the final finish.", "ሁለተኛው ልኬት ከመጨረሻው ሥራ በፊት ለውጡን ያረጋግጣል።")),
+        (("Collect the finished piece", "የተጠናቀቀውን ልብስ ይውሰዱ"), ("Try it on once more at the fitting table, then take it home.", "በመለኪያ ጠረጴዛው ላይ አንድ ጊዜ እንደገና ይልበሱት፤ ከዚያ ወደ ቤት ይውሰዱት።")),
     ],
     "bloom": [
         (("Choose a stylist and a room", "ፀጉር ሠሪና ክፍል ይምረጡ"), ("Pick the person and the room that suit the visit you want.", "ለሚፈልጉት ጉብኝት የሚስማሙትን ሰውና ክፍል ይምረጡ።")),
@@ -471,3 +533,139 @@ def section_copy(key, field, english_default):
     """A business's own heading or intro, or the shared English default."""
     pair = SECTION_COPY.get(key, {}).get(field)
     return localized(*pair) if pair else localized(english_default)
+
+
+# Tena v3 ("Clear Path"): the template's own photos as content, a door-to-door visit in four steps, the clinic in numbers
+# and more patient reviews. No patient faces in any photo; reviews carry first names and the visit only.
+TENA_V3 = "/assets/appointment/brand-experience/support/tena-v3"
+V3_SCENES["tena"] = {
+    "services": [
+        (f"{TENA_V3}/care1.webp", "A clinician in teal scrubs listens across a wooden desk to a patient seen from behind.",
+         "ሰማያዊ-አረንጓዴ የሥራ ልብስ የለበሰች ባለሙያ በእንጨት ጠረጴዛ ማዶ ጀርባው የሚታይ ታካሚን ታዳምጣለች።"),
+        (f"{TENA_V3}/care2.webp", "A clinician points with a pen to a page in a folder while a patient's hands rest on the desk.",
+         "አንድ ባለሙያ በብዕር በማህደር ውስጥ ያለ ገጽን ያመለክታል፤ የታካሚው እጆች በጠረጴዛው ላይ አርፈዋል።"),
+        (f"{TENA_V3}/care3.webp", "A clinician in a white coat talks with an older patient, seen from behind, on a garden path beside the clinic.",
+         "ነጭ ጋዋን የለበሰ ባለሙያ ከክሊኒኩ አጠገብ ባለው የአትክልት መንገድ ላይ ጀርባቸው ከሚታይ አረጋዊ ታካሚ ጋር ይነጋገራል።"),
+    ],
+    "about": (f"{TENA_V3}/team.webp", "Three clinicians stand together in the bright clinic corridor.",
+              "ሦስት የክሊኒኩ ባለሙያዎች በደማቁ የክሊኒኩ ኮሪደር ውስጥ በአንድ ላይ ቆመዋል።"),
+    "locations": [
+        (f"{TENA_V3}/room1.webp", "Consultation room one: a teal chair at a wooden desk, an examination couch with a folded blanket and a yellow stool by a bright window.",
+         "የመጀመሪያው የምክክር ክፍል፦ ከእንጨት ጠረጴዛ ፊት ሰማያዊ-አረንጓዴ ወንበር፣ የታጠፈ ብርድ ልብስ ያለበት የምርመራ አልጋና ከደማቅ መስኮት አጠገብ ቢጫ በርጩማ።"),
+        (f"{TENA_V3}/room2.webp", "Consultation room two: a teal accent wall, a wooden desk, two chairs and a city view.",
+         "ሁለተኛው የምክክር ክፍል፦ ሰማያዊ-አረንጓዴ ግድግዳ፣ የእንጨት ጠረጴዛ፣ ሁለት ወንበሮችና የከተማ እይታ።"),
+        (f"{TENA_V3}/room3.webp", "Consultation room three: a round table with three teal chairs for longer family visits.",
+         "ሦስተኛው የምክክር ክፍል፦ ለረጅም የቤተሰብ ጉብኝቶች ክብ ጠረጴዛና ሦስት ሰማያዊ-አረንጓዴ ወንበሮች።"),
+    ],
+    "process": [
+        (f"{TENA_V3}/visit1.webp", "An open white gate and a short garden path lead to the clinic's teal door.",
+         "የተከፈተ ነጭ በርና አጭር የአትክልት መንገድ ወደ ክሊኒኩ ሰማያዊ-አረንጓዴ በር ይመራሉ።"),
+        (f"{TENA_V3}/visit2.webp", "A receptionist in a teal top greets a visitor, seen from behind, at the wooden reception desk.",
+         "ሰማያዊ-አረንጓዴ ልብስ የለበሰች እንግዳ ተቀባይ በእንጨት መቀበያ ጠረጴዛው ላይ ጀርባው የሚታይ ጎብኚን ትቀበላለች።"),
+        (f"{TENA_V3}/visit3.webp", "The waiting corner: wooden armchairs, a yellow cushion, a water carafe and large plants by a tall window.",
+         "የመጠበቂያው ጥግ፦ የእንጨት ወንበሮች፣ ቢጫ ትራስ፣ የውሃ ማሰሮና ከረጅም መስኮት አጠገብ ትልልቅ ተክሎች።"),
+        (f"{TENA_V3}/visit4.webp", "A calm consultation room with a wooden desk, two chairs and a window over the city.",
+         "የእንጨት ጠረጴዛ፣ ሁለት ወንበሮችና ወደ ከተማው የሚመለከት መስኮት ያለው ጸጥ ያለ የምክክር ክፍል።"),
+    ],
+    "hero": (f"{TENA_V3}/hero.webp", "A clinician in teal scrubs welcomes a mother and her small daughter, seen from behind, at the glass door of a bright clinic reception.",
+             "ሰማያዊ-አረንጓዴ የሥራ ልብስ የለበሰች ባለሙያ ጀርባቸው የሚታዩ እናትና ትንሽ ልጇን በደማቁ የክሊኒክ መቀበያ የመስታወት በር ላይ ትቀበላለች።"),
+}
+EXTRA_TESTIMONIALS["tena"] = [
+    ("Reception had my room ready, and the doctor explained the next step in plain words.",
+     "መቀበያው ክፍሌን አዘጋጅቶ ጠበቀኝ፤ ሐኪሙም ቀጣዩን እርምጃ በቀላል ቃላት አስረዳኝ።",
+     "Meseret Alemu", "General consultation patient", "የአጠቃላይ ምክክር ታካሚ"),
+    ("I booked an evening follow-up for my father, and we were seen at the time on the booking.",
+     "ለአባቴ የምሽት የክትትል ቀጠሮ ያዝኩ፤ በቀጠሮው ላይ ባለው ሰዓት ተስተናገድን።",
+     "Henok Tadesse", "Follow-up visit, with his father", "የክትትል ጉብኝት፣ ከአባቱ ጋር"),
+    ("The wellness hour did not feel rushed. Saron wrote down what we agreed before I left.",
+     "የጤንነት ምክክሩ ሰዓት የተጣደፈ አልነበረም። ሳሮን ከመሄዴ በፊት የተስማማነውን ጻፈችልኝ።",
+     "Tsehay Bekele", "Wellness consultation patient", "የጤንነት ምክክር ታካሚ"),
+    ("Clear directions from the gate to the room. Easy, even with two small children.",
+     "ከበሩ እስከ ክፍሉ ግልጽ አቅጣጫ። ከሁለት ትናንሽ ልጆች ጋርም ቀላል ነበር።",
+     "Lidya Getachew", "Parent, family visit", "ወላጅ፣ የቤተሰብ ጉብኝት"),
+]
+# The visit, door to door: one step for each photo of the visit (gate, reception, waiting corner, consultation room).
+PROCESS_STEPS["tena"] = [
+    (("Come through the gate", "በበሩ ይግቡ"), ("The clinic is off Equatorial Guinea Street in CMC; follow the garden path to the teal door.",
+                                              "ክሊኒኩ በሲኤምሲ ከኢኳቶሪያል ጊኒ ጎዳና ገባ ብሎ ይገኛል፤ የአትክልቱን መንገድ ተከትለው ወደ ሰማያዊ-አረንጓዴው በር ይምጡ።")),
+    (("Check in at reception", "በመቀበያው ይመዝገቡ"), ("Arrive ten minutes early; reception confirms your room.", "አሥር ደቂቃ ቀደም ብለው ይድረሱ፤ መቀበያው ክፍልዎን ያረጋግጣል።")),
+    (("Wait in the quiet corner", "በጸጥታው ጥግ ይጠብቁ"), ("There is water and a seat by the window; your clinician comes to call you.",
+                                                       "ውሃና በመስኮቱ አጠገብ መቀመጫ አለ፤ ባለሙያዎ መጥተው ይጠሩዎታል።")),
+    (("Leave with a next step", "ቀጣይ እርምጃ ይዘው ይውጡ"), ("The visit ends with the agreed follow-up written down.", "ጉብኝቱ የተስማሙበት ቀጣይ ክትትል ተጽፎ ይጠናቀቃል።")),
+]
+SECTION_COPY["tena"].update({
+    "process_title": ("Your visit, door to door", "ጉብኝትዎ፣ ከበር እስከ ክፍል"),
+    "process_intro": ("What happens from the gate to the consultation room.", "ከበሩ እስከ ምክክር ክፍሉ ድረስ የሚሆነው።"),
+    "testimonials_title": ("Patient feedback", "የታካሚ አስተያየት"),
+})
+# The clinic in numbers (label, value, note); the Amharic comes from the table below.
+PROOF = {
+    "tena": [
+        ("Consultation rooms", "3", "Each booked visit has a room ready before you arrive."),
+        ("Clinicians", "3", "Family consultations and everyday health questions."),
+        ("Arrive early", "10 min", "Reception confirms your room and your clinician."),
+    ],
+}
+AM.update({
+    "Consultation rooms": "የምክክር ክፍሎች",
+    "Each booked visit has a room ready before you arrive.": "እያንዳንዱ ቀጠሮ ከመድረስዎ በፊት የተዘጋጀ ክፍል አለው።",
+    "Clinicians": "ባለሙያዎች",
+    "Family consultations and everyday health questions.": "የቤተሰብ ምክክርና የዕለት ተዕለት የጤና ጥያቄዎች።",
+    "Arrive early": "ቀደም ብለው ይድረሱ",
+    "10 min": "10 ደቂቃ",
+    "Reception confirms your room and your clinician.": "መቀበያው ክፍልዎንና ባለሙያዎን ያረጋግጣል።",
+})
+
+
+SELAM_V3 = "/assets/appointment/brand-experience/support/selam-v3"
+# Selam v3 ("Tempo"): the hero is the first of the five movement frames; the template keeps its night and mobile crops.
+V3_SCENES["selam"] = {
+    "hero": (f"{SELAM_V3}/hero.webp", "A movement coach kneels on a lime mat in a sunlit Gerji studio, with tall windows over the Entoto hills, about to begin.",
+             "አንዲት የእንቅስቃሴ አሠልጣኝ ወደ እንጦጦ ኮረብታዎች በሚመለከቱ ረጃጅም መስኮቶች ባሉት ፀሐያማ የገርጂ ስቱዲዮ ውስጥ በአረንጓዴ ምንጣፍ ላይ ተንበርክካ ለመጀመር ትዘጋጃለች።"),
+    "services": [
+        (f"{SELAM_V3}/session1.webp", "The coach listens to a client, seen from behind, as they sit on floor cushions with two glasses of water between them.",
+         "አሠልጣኟ ጀርባው የሚታይ ደንበኛን ታዳምጣለች፤ በመካከላቸው ሁለት ብርጭቆ ውሃ ይዘው ወለል ላይ ትራስ ላይ ተቀምጠዋል።"),
+        (f"{SELAM_V3}/session2.webp", "The coach guides a client's shoulder and back in a half-kneeling stretch by a tall window.",
+         "አሠልጣኟ በረጅም መስኮት አጠገብ በግማሽ ተንበርክኮ በሚደረግ መለጠጥ የደንበኛዋን ትከሻና ጀርባ ትመራለች።"),
+    ],
+    "about": (f"{SELAM_V3}/interlude.webp", "Sunrise over the misty eucalyptus ridges of Entoto above Addis Ababa.",
+              "ከአዲስ አበባ በላይ ጭጋጋማ በሆኑት የእንጦጦ የባሕር ዛፍ ሸንተረሮች ላይ የፀሐይ መውጫ።"),
+    "locations": [
+        (f"{SELAM_V3}/studio.webp", "A blue gate stands half open in a cream wall with bougainvillea, on a quiet Gerji lane below the green hills.",
+         "በአረንጓዴ ኮረብታዎች ሥር ባለ ጸጥ ያለ የገርጂ መንገድ ላይ፣ ቡገንቪሊያ ባለበት ክሬም ቀለም ግድግዳ ውስጥ ሰማያዊ በር በግማሽ ተከፍቷል።"),
+    ],
+    "process": [
+        (f"{SELAM_V3}/beat1.webp", "Seen past a client's shoulder, the coach holds a closed notebook on her knee beside a cup of tea.",
+         "ከደንበኛው ትከሻ ባሻገር፣ አሠልጣኟ ከሻይ ስኒ አጠገብ የተዘጋ ደብተር በጉልበቷ ላይ ይዛለች።"),
+        (f"{SELAM_V3}/beat2.webp", "The coach's hands adjust a client's knee and ankle on a lime mat.",
+         "የአሠልጣኟ እጆች በአረንጓዴ ምንጣፍ ላይ የደንበኛውን ጉልበትና ቁርጭምጭሚት ያስተካክላሉ።"),
+        (f"{SELAM_V3}/beat3.webp", "A client sketches a short routine in a notebook beside a rolled lime mat and a water bottle.",
+         "አንድ ደንበኛ ከተጠቀለለ አረንጓዴ ምንጣፍና ከውሃ ጠርሙስ አጠገብ አጭር ልምምድን በደብተር ላይ ይስላል።"),
+    ],
+}
+EXTRA_TESTIMONIALS["selam"] = [
+    ("I sit at a desk all day. Selam gave me four moves I can do between meetings, and my back has noticed.",
+     "ቀኑን ሙሉ ጠረጴዛ ላይ ነው የምቀመጠው። ሰላም በስብሰባዎች መካከል የምሠራቸውን አራት እንቅስቃሴዎች ሰጠችኝ፤ ጀርባዬም ለውጡን አስተውሏል።",
+     "Rediet Haile", "Guided mobility client", "የተመራ የእንቅስቃሴ ክፍለ ጊዜ ደንበኛ"),
+    ("No crowded class and no rush. We talked first, and the plan fitted my week instead of the other way round.",
+     "የተጨናነቀ ክፍል የለም፣ ጥድፊያም የለም። መጀመሪያ ተነጋገርን፤ ዕቅዱም ሳምንቴን ተከተለ እንጂ ሳምንቴ ዕቅዱን አልተከተለም።",
+     "Yonatan Desta", "Movement consultation client", "የእንቅስቃሴ ምክክር ደንበኛ"),
+    ("Booking took a minute, the blue gate was easy to find, and I left with a short routine on one page.",
+     "ቀጠሮ መያዝ አንድ ደቂቃ ፈጀ፣ ሰማያዊውን በር ማግኘት ቀላል ነበር፤ በአንድ ገጽ ላይ የተጻፈ አጭር ልምምድ ይዤ ወጣሁ።",
+     "Saba Mengistu", "Movement consultation client", "የእንቅስቃሴ ምክክር ደንበኛ"),
+]
+# The practice in numbers (label, value, note); the Amharic comes from the table below.
+PROOF["selam"] = [
+    ("Clients in the room", "1", "Every session is one to one: no class, no crowd."),
+    ("Longest session", "60 min", "Time to talk, move and write the routine down."),
+    ("Moves to take home", "4", "A short sequence you can repeat at a desk or at home."),
+]
+AM.update({
+    "Clients in the room": "በክፍሉ ያሉ ደንበኞች",
+    "Every session is one to one: no class, no crowd.": "እያንዳንዱ ክፍለ ጊዜ አንድ ለአንድ ነው፤ ክፍል የለም፣ ግርግር የለም።",
+    "Longest session": "ረጅሙ ክፍለ ጊዜ",
+    "60 min": "60 ደቂቃ",
+    "Time to talk, move and write the routine down.": "ለመነጋገር፣ ለመንቀሳቀስና ልምምዱን ለመጻፍ የሚበቃ ጊዜ።",
+    "Moves to take home": "ወደ ቤት የሚወሰዱ እንቅስቃሴዎች",
+    "A short sequence you can repeat at a desk or at home.": "በጠረጴዛ አጠገብ ወይም በቤት ሊደግሙት የሚችሉት አጭር ቅደም ተከተል።",
+})

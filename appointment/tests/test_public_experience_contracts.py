@@ -84,7 +84,8 @@ class TestRecipeCompiler(unittest.TestCase):
             self.assertEqual(len(recipe.required_sections), 15 if recipe.key == "ergata-therapy" else 13)
 
     def test_business_specific_asset_is_projected_to_canonical_slots(self):
-        recipe = get_recipe("abugida-language")
+        # v2 keeps the business-specific detail role; v3 uses its own story roles.
+        recipe = get_recipe("abugida-language", 2)
         result = compile_design(
             recipe.key,
             recipe.version,
@@ -125,8 +126,8 @@ class TestRecipeCompiler(unittest.TestCase):
                 # Ergata started after the Taste v1 pass, so its first version is the latest.
                 self.assertEqual(versions, (1,))
             else:
-                # Bloom is the phase 1 flagship of the template reimagination (v3); v1 and v2 stay loadable.
-                expected = (1, 2, 3) if recipe.key == "bloom-hair" else (1, 2)
+                # The template reimagination adds v3 packages (Bloom in phase 1, the others in phase 2); v1 and v2 stay loadable.
+                expected = (1, 2, 3) if recipe.key in {"bloom-hair", "selam-movement", "tena-clinic", "meron-atelier", "abugida-language"} else (1, 2)
                 self.assertEqual(versions, expected, recipe.key)
                 self.assertEqual(recipe.version, expected[-1], "the gallery offers the latest version")
                 pinned = get_recipe(recipe.key, 1)
@@ -137,7 +138,7 @@ class TestRecipeCompiler(unittest.TestCase):
                 self.assertEqual(design["layout"]["rendererVersion"], version, f"{recipe.key} v{version} renders with its own package")
             self.assertNotIn("independently implemented", recipe.description)
         with self.assertRaises(UnknownRecipeError):
-            get_recipe("tena-clinic", 3)
+            get_recipe("tena-clinic", 9)
 
     def test_taste_v1_typography_is_distinct_and_bundled(self):
         display_faces = set()

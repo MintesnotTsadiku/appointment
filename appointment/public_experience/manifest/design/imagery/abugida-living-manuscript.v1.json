@@ -1,0 +1,495 @@
+{
+  "kind": "imagery",
+  "contract": "appointment-imagery.v1",
+  "key": "abugida-living-manuscript",
+  "version": 1,
+  "assets": {
+    "hero.abugida": {
+      "src": "/assets/appointment/brand-experience/support/abugida-v3/hero.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/abugida-v3/hero-m.webp",
+      "alt": "A language coach in a white shawl with a red border talks with a learner across a wooden table by a tall window.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.42
+      },
+      "fit": "cover",
+      "width": 1024,
+      "height": 1280,
+      "mime": "image/webp",
+      "checksum": "sha256:9d28bbef75392a56bc1156829daddab6589c96b32fa0fe927bc32570ca17b909",
+      "provenance": {
+        "source": "generated",
+        "role": "Hero",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Living Manuscript art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 900,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        480,
+        640,
+        800
+      ],
+      "darkSrc": "/assets/appointment/brand-experience/support/abugida-v3/hero-night.webp",
+      "darkMobileSrc": "/assets/appointment/brand-experience/support/abugida-v3/hero-night-m.webp",
+      "checksums": {
+        "hero-m.avif": "sha256:0779b48a94c9e954bc0b339a63bb3b4cceebf52f1f0f90290dfd932a5e6f08db",
+        "hero-m.webp": "sha256:88abcea63563d41566df7d70679ca1e46a950e7e51c297531cc9ae38c818622d",
+        "hero-night-m.avif": "sha256:987b71b93f26452c7eca3aeda21367c9d525e14c030d685ae5c470e979b8037b",
+        "hero-night-m.webp": "sha256:41db63b6ebaba2bc78e90b053e4948eb7dfef1406c473ea9a1643b86488a08ff",
+        "hero-night-w480.avif": "sha256:6229fd32fc0b458f3d7b86155d91836bee02dea934d4fbf62ef4140d2719dda5",
+        "hero-night-w480.webp": "sha256:a271d7406b300da013f7cdcceebed04ec26362792d7cabeb3c0fbab47e8d9664",
+        "hero-night-w640.avif": "sha256:b077ef034825a96413459ce549066d95e11bafc52ae1abedb37f0bddbbcfc76b",
+        "hero-night-w640.webp": "sha256:595420b0795f4f47d646e176916e8a7bc3f3645ef691a4126222d63a94a8e84a",
+        "hero-night-w800.avif": "sha256:43608f1d5db121d13ac5c9b54d97ab8d828ae7d796ede2651879086ff30001ea",
+        "hero-night-w800.webp": "sha256:1f116d657328504c4820e6298b0886bc0d9ba35597d4f1df249a273e01ba8b7a",
+        "hero-night.avif": "sha256:42097e7f27410f346c0e695ee38cc7b708f43402a226ad97da99cfe2be6b24b4",
+        "hero-night.webp": "sha256:1178300f5857952a1e899a73e1dee04f9fe1cd9f631154a5e4060554fc99d281",
+        "hero-w480.avif": "sha256:8227c1f983a195dc1f3297b9462453cab373c4596da55cc380df2d29b1766595",
+        "hero-w480.webp": "sha256:00e1ce428d5092815d1ae8c734787214b9e2a4ab61433a052f1ddd9d66a0ada1",
+        "hero-w640.avif": "sha256:ddc834a50665ac2c8ea6f13be6ebe1ce971db1830c39f3abd1a2b6b3549b4d12",
+        "hero-w640.webp": "sha256:898680563b3bab53e4604ddc5dc3ffa2631241d616a44a35f1760bdbfc5f5e7e",
+        "hero-w800.avif": "sha256:5e80e04e136b23a49c48b9cb50def2b3c6eab1772c5f9275e7daef9ee213be88",
+        "hero-w800.webp": "sha256:88dfb4c9b590fe9aee220a7e8630c3b518a7a4e990ebb5af837a23c9b6ee22e9",
+        "hero.avif": "sha256:de13ff3e5c129640e9b67b038b3caf90f1da5c2266104c24305d67f33acbd409"
+      }
+    },
+    "band.abugida": {
+      "src": "/assets/appointment/brand-experience/support/abugida-v3/band.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/abugida-v3/band-m.webp",
+      "alt": "A wooden study desk by a window with an open notebook, a pen, an ink pot, two coffee cups and a lit brass lamp.",
+      "focalPoint": {
+        "x": 0.62,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1536,
+      "height": 658,
+      "mime": "image/webp",
+      "checksum": "sha256:fd0ea147c4df235d6752c1c727ea17917b3aa74bf1a7131a3e7e081761141de5",
+      "provenance": {
+        "source": "generated",
+        "role": "Booking band",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Living Manuscript art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 720,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "darkSrc": "/assets/appointment/brand-experience/support/abugida-v3/band-night.webp",
+      "darkMobileSrc": "/assets/appointment/brand-experience/support/abugida-v3/band-night-m.webp",
+      "checksums": {
+        "band-m.avif": "sha256:059cab4c0223659d6ad91ca1d7c2837c9869d12fc57812a81c5f5533ae1ca314",
+        "band-m.webp": "sha256:3d31d75506a5f82a5dce9e4e08d365da9ee4881dacef8f880196d885cefe7365",
+        "band-night-m.avif": "sha256:330ee5828b17c396661f135f9ed8bd76a66b9610a60cf6b4028d0cfbf4a96f1a",
+        "band-night-m.webp": "sha256:d042a90929ced69dc3da7573302b6a3b75f5f896f081fd59ad176d4794c354a0",
+        "band-night-w640.avif": "sha256:14d73ae06cea48c90bca0c8696ae4ac3cbc966f6a758000925a06005d939ec76",
+        "band-night-w640.webp": "sha256:85caa5af4ef7a1bcca09d5a6826e321df4a91691df0625bdffa16839c8220272",
+        "band-night-w960.avif": "sha256:3e2aac3ed6114e58fca1584da4d7075ee8cebc4fa9adbabd92477edc621a8f5f",
+        "band-night-w960.webp": "sha256:935a7b907eb699339b22a97c7885d3b4ea452e1aad7eb2a6cf6755cad91d27c2",
+        "band-night.avif": "sha256:40a0be2c300d6c37802f759b7a8d7f04931afdc7d1554e58d3d8f180d1b1c74e",
+        "band-night.webp": "sha256:b762117cd1618a3a5fd26717725fdac5fc38c7cab332a30e09140d22558318a4",
+        "band-w640.avif": "sha256:1623b4a0e3c55f5c9b5010dd83235d097ce9d83efe4b392ef6ba4be22715f1f3",
+        "band-w640.webp": "sha256:3fdb3118872cef77e135f17231cfa4ad109692905f26e72dfce523dfcfb15be0",
+        "band-w960.avif": "sha256:d5661b1bc713566c5771a54dc8ef8bf652f9bd3a5b0cffd10bc587bf781fe6c3",
+        "band-w960.webp": "sha256:3965616919d662b19cd0ed451072b0b8c908a0023a9354c7f96af9897f6a05f3",
+        "band.avif": "sha256:1dc6c90ebe12c66af27ecf865cfbc0ab7a762ba433763f068511beb027603a5a"
+      }
+    },
+    "story.abugida": {
+      "src": "/assets/appointment/brand-experience/support/abugida-v3/story.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/abugida-v3/story-m.webp",
+      "alt": "The learning room: tall bookshelves, a long table, woven baskets and a window toward the trees and the old stone gate of the university.",
+      "focalPoint": {
+        "x": 0.62,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1440,
+      "height": 960,
+      "mime": "image/webp",
+      "checksum": "sha256:2073efc21d8555e11bce919e8703c19c45be01eb5c7a07bd2a963ba0f6007023",
+      "provenance": {
+        "source": "generated",
+        "role": "Story",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Living Manuscript art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 900,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "checksums": {
+        "story-m.avif": "sha256:44a4556e0f171cbf56b96dff375fe5c06b71b8c51308111bc329490f9f60e34c",
+        "story-m.webp": "sha256:8913afc3a21a38c13530364adb973b23ad063d1b51b691f86ab8fee03b16ebd3",
+        "story-w640.avif": "sha256:d8340b9633177384109dbab10d487e39f27cab7f87a3107549f954e9b86214ba",
+        "story-w640.webp": "sha256:1a1ef265425c657ba1e26961c015deaf06faa9b5cb1a59268ad91330c60a9da5",
+        "story-w960.avif": "sha256:b466092510ef89e6155824da4f6bd97903f2de47d0cd5884b8b1aa6b3f8e3941",
+        "story-w960.webp": "sha256:fd0be32b538a8757eeeb973913851d6fe527c4b40ba08defbd8a8d9721fd1339",
+        "story.avif": "sha256:79cc5bde7404823054cfbedfe9f8caf29a1fa3504e27a67c23b784844f3fcfea"
+      }
+    },
+    "room1.abugida": {
+      "src": "/assets/appointment/brand-experience/support/abugida-v3/room1.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/abugida-v3/room1-m.webp",
+      "alt": "The learning room seen from the stair: a long wooden table set with notebooks, chairs with woven cushions and low bookshelves.",
+      "focalPoint": {
+        "x": 0.55,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1440,
+      "height": 960,
+      "mime": "image/webp",
+      "checksum": "sha256:3101571178aaa1702f9b1aaa3a85b4ef787aa5c715f0bc7b82055327bfc2d0d3",
+      "provenance": {
+        "source": "generated",
+        "role": "Learning room",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Living Manuscript art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 540,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "checksums": {
+        "room1-m.avif": "sha256:f17624fe4b2891b3cb02b5147f43ac8f4e3ccfffac5b919e284631d49974a203",
+        "room1-m.webp": "sha256:57ebbc7a356b330e4b7af25dc6d2864c4d930fa4749df499fb4df9bfe3f01b79",
+        "room1-w640.avif": "sha256:dc8a82c05d78c89318f5ae8abbf745174ed59a305f692870ee188a17d242ffdc",
+        "room1-w640.webp": "sha256:40ee11d9f3932e62018cbf73f8711951add38cd242bc41189527274344ea7321",
+        "room1-w960.avif": "sha256:3a3475f8e892d13e51dc1184ccb0b098002eb7b854b3971fc56b2f9b4a4ec301",
+        "room1-w960.webp": "sha256:07fc8eff7ab303763d60fb71eefce055b7a9811625da16d4cfd5a0a0646e9f2c",
+        "room1.avif": "sha256:3ac6e5b80bef95e2f9f1116acfa225525bac8345a5427f869cd191b8ee03b292"
+      }
+    },
+    "room2.abugida": {
+      "src": "/assets/appointment/brand-experience/support/abugida-v3/room2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/abugida-v3/room2-m.webp",
+      "alt": "The conversation room: two armchairs across a low table with coffee cups, a woven basket and a window with a linen curtain.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.55
+      },
+      "fit": "cover",
+      "width": 1440,
+      "height": 960,
+      "mime": "image/webp",
+      "checksum": "sha256:204b2365a01fbf2ec6542ba0eb3bc282926c0f26fba3e113de67bfb1d7766e78",
+      "provenance": {
+        "source": "generated",
+        "role": "Conversation room",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Living Manuscript art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 720,
+      "mobileHeight": 540,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        640,
+        960
+      ],
+      "checksums": {
+        "room2-m.avif": "sha256:a3802f46d3ac5dad67264dd1a2a68962ff63f0cb3b6d3425efd922db1a7c5357",
+        "room2-m.webp": "sha256:db4d75ea047ba842b7488c26d2acf04cc8536f44a5702e5db913a1af8d76a673",
+        "room2-w640.avif": "sha256:9fcfdc928dba6e34c16d6de3d687831eb5e59d67af2d6c09e5224680904151bf",
+        "room2-w640.webp": "sha256:62882a773635e6b3348fba327037ea43a97bdd34bfc6ff30b47faa1751791a78",
+        "room2-w960.avif": "sha256:05d0a389a9d077e861ac1159a44ba67a8f3e5e6c660fe99c4802472bcc7f93e9",
+        "room2-w960.webp": "sha256:7a220ce828cd306c3a6a3a1b959cbbda9403f2e337a56192db979d881ed4bcad",
+        "room2.avif": "sha256:42a9a7cd203d4f949852dd678c2fc6c898b3c28743d4186debc7e916756e9a4e"
+      }
+    },
+    "lesson1.abugida": {
+      "src": "/assets/appointment/brand-experience/support/abugida-v3/lesson1.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/abugida-v3/lesson1-m.webp",
+      "alt": "A coach in a grey scarf listens to a learner, seen from behind, across a café table with two macchiatos.",
+      "focalPoint": {
+        "x": 0.6,
+        "y": 0.4
+      },
+      "fit": "cover",
+      "width": 720,
+      "height": 960,
+      "mime": "image/webp",
+      "checksum": "sha256:2dea32836b3f339d350ef5a17aaba36fd32e63a474cd76c13cb628107bdcba13",
+      "provenance": {
+        "source": "generated",
+        "role": "Contents margin",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Living Manuscript art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 480,
+      "mobileHeight": 640,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        480
+      ],
+      "checksums": {
+        "lesson1-m.avif": "sha256:e2303e8f4000545368680a1569f91d3713f4aea55049534b140e915e02352440",
+        "lesson1-m.webp": "sha256:a7aa89d997eaf13e861a2949a03564890035d08c2ddff7d05510d1760b5ab1fe",
+        "lesson1-w480.avif": "sha256:8c762af4dd51f2cb1931a4e850acc1f66096a20b3e3c33af4a68ee727de8dc8f",
+        "lesson1-w480.webp": "sha256:dccc93c55f0e14675e472715eb627bb72cf12368f980b2f7f5e590f4e5b9382f",
+        "lesson1.avif": "sha256:e456a0b7441393f1603280f0cc4cc5da1ca3ae5d89c88f73d19a0a260a5ad01d"
+      }
+    },
+    "lesson2.abugida": {
+      "src": "/assets/appointment/brand-experience/support/abugida-v3/lesson2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/abugida-v3/lesson2-m.webp",
+      "alt": "A learner's hand traces letters with a pencil in a notebook beside a cup of coffee and a woven basket.",
+      "focalPoint": {
+        "x": 0.55,
+        "y": 0.55
+      },
+      "fit": "cover",
+      "width": 720,
+      "height": 960,
+      "mime": "image/webp",
+      "checksum": "sha256:d9392a9c12206213745145612eb433141a38dcf45e0a1d7bbed64afa612d3ea7",
+      "provenance": {
+        "source": "generated",
+        "role": "Contents margin",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Living Manuscript art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 480,
+      "mobileHeight": 640,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        480
+      ],
+      "checksums": {
+        "lesson2-m.avif": "sha256:f77a7f91843a170e2dc2598f799f6f823aa5c5b69277f772a481eacbb4492d97",
+        "lesson2-m.webp": "sha256:21ceb38e9133ce85bd402f6ef5517efd90215b37d5b69799bc76d9d0d5a7f45d",
+        "lesson2-w480.avif": "sha256:2607661a1835f18310b0913d72d13bb3f03bea9158b104f5b96d51c295e448ef",
+        "lesson2-w480.webp": "sha256:c1563c61797e5beb705cf655d2a73ae65b13a324d75e1aed18025f11420d7464",
+        "lesson2.avif": "sha256:e1389d5d626f19e514cf48b137dfe40483168760a6db47f5ef93aab8c62a983e"
+      }
+    },
+    "faq.abugida": {
+      "src": "/assets/appointment/brand-experience/support/abugida-v3/faq.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/abugida-v3/faq-m.webp",
+      "alt": "A stack of cloth-bound books, a woven basket and an ink pot with a dip pen by a curtained window.",
+      "focalPoint": {
+        "x": 0.45,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 720,
+      "height": 960,
+      "mime": "image/webp",
+      "checksum": "sha256:7724f997a835f538b986a18b30a1dec5f2624a154d4b94a3c27eb3ef9cc9aa77",
+      "provenance": {
+        "source": "generated",
+        "role": "FAQ",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Living Manuscript art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 480,
+      "mobileHeight": 640,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        480
+      ],
+      "checksums": {
+        "faq-m.avif": "sha256:eacc57317bd98f2c3ee19741af5ffc0a1fc718ccd14e406a164b9a53c826d4bb",
+        "faq-m.webp": "sha256:22af10fb2a0df22b68bc1c4ea442bd63d6c56720b9b5c9851a7f38b42813b582",
+        "faq-w480.avif": "sha256:8397384623860a05df91190e8a0ce539a765793e87826d1cb0d33daa18150a9e",
+        "faq-w480.webp": "sha256:61b0447cff289b2b886fea0869661d437cf1d8159658c2007fbb5e0548104f31",
+        "faq.avif": "sha256:a38c15ce3d0dfb9b63c8bec72d1d5fe3d463b2048aa0873ce876dfc1c2b3161b"
+      }
+    },
+    "phrase.abugida": {
+      "src": "/assets/appointment/brand-experience/support/abugida-v3/phrase.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/abugida-v3/phrase-m.webp",
+      "alt": "A coffee ceremony: a black clay jebena, small cups on a carved tray, roasted beans, fresh grass and incense.",
+      "focalPoint": {
+        "x": 0.45,
+        "y": 0.55
+      },
+      "fit": "cover",
+      "width": 900,
+      "height": 900,
+      "mime": "image/webp",
+      "checksum": "sha256:8768f080f22f645cd0545f28336bdecdc28876685c4adaedf34b6ebb8ddb9187",
+      "provenance": {
+        "source": "generated",
+        "role": "Phrase card",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Living Manuscript art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 600,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        480
+      ],
+      "checksums": {
+        "phrase-m.avif": "sha256:7c632ad42158e21d1c05794ea541c68cf381cd2f76e19c39eca62684a0d50419",
+        "phrase-m.webp": "sha256:0f20624a1f49590f517a886b38fc124ae1e7f39a95c460099dab58d85b890323",
+        "phrase-w480.avif": "sha256:af3766168557ce79b4a39517a7fb9d466a1f600ad43b324301cec5fc8e7709d2",
+        "phrase-w480.webp": "sha256:3d07ced3676964c10ce23e21cf1a23fca44f398ea972216e3eb69d64a5ae7169",
+        "phrase.avif": "sha256:2b1752e8a89a2e8bcab4d81a61fa7caaefbacaf7285223b166441a27c936d2ea"
+      }
+    },
+    "step1.abugida": {
+      "src": "/assets/appointment/brand-experience/support/abugida-v3/step1.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/abugida-v3/step1-m.webp",
+      "alt": "An open notebook with blank pages, a fountain pen and a red pencil on a dark wooden table.",
+      "focalPoint": {
+        "x": 0.55,
+        "y": 0.55
+      },
+      "fit": "cover",
+      "width": 900,
+      "height": 900,
+      "mime": "image/webp",
+      "checksum": "sha256:bb1a81ce6ddb8f425b0e674c2976a52da120dd33ff6e0122fc630cd32fe01218",
+      "provenance": {
+        "source": "generated",
+        "role": "Process",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Living Manuscript art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 600,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        480
+      ],
+      "checksums": {
+        "step1-m.avif": "sha256:dcdc06aac05c91d6e397636cf0de192181cead578a837b45974f3319efe73eb1",
+        "step1-m.webp": "sha256:dae4b56b0ad4b51ca56df0632c18da3e641bb1f1fb2946f772642253d5cf42e1",
+        "step1-w480.avif": "sha256:75ff79bc503fb0b37d2550340d031e3a6cddcf1384656098c5527c088e3e2eba",
+        "step1-w480.webp": "sha256:0630a713bdd0f82c4934647f3fd8c3fd6112ba8bb58cfec0d6aadc23ae1012ba",
+        "step1.avif": "sha256:59a5df8c8759517201e10d3937600ea0ec6fe9a000e90a0de5f6728e3b70e712"
+      }
+    },
+    "step2.abugida": {
+      "src": "/assets/appointment/brand-experience/support/abugida-v3/step2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/abugida-v3/step2-m.webp",
+      "alt": "Two people greet each other across a table in a role-play, their hands about to meet.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 900,
+      "height": 900,
+      "mime": "image/webp",
+      "checksum": "sha256:2fb1fe1e4f9f2c2016eaeffdb5e436e46beac58d751e34378b40f25b4a97cb81",
+      "provenance": {
+        "source": "generated",
+        "role": "Process",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Living Manuscript art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 600,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        480
+      ],
+      "checksums": {
+        "step2-m.avif": "sha256:ea45b2a7b203fa78e7219e42f6ae324dbdea7058bcbefae89f58ee0d4d12e58f",
+        "step2-m.webp": "sha256:a644fde3c9e4fb18c19c15cffbd4a6fc9fa0ced96829ac8c6aab01a20378d411",
+        "step2-w480.avif": "sha256:31ac43a4d9d774a53bf713d0f4803ce32a61df9279097e4e0dc369ed688d6dfc",
+        "step2-w480.webp": "sha256:97b1e9d363d7810c3aefd70f987ade59a59bd566e8488bcfcf4a20d50f32d93b",
+        "step2.avif": "sha256:1cde8dd5846af6781f128e7502d8ac0dc10a9416af82a674d9b43684689f4b6b"
+      }
+    },
+    "step3.abugida": {
+      "src": "/assets/appointment/brand-experience/support/abugida-v3/step3.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/abugida-v3/step3-m.webp",
+      "alt": "A phone with a dark screen lies on a wooden desk next to a blank folded note and a pencil.",
+      "focalPoint": {
+        "x": 0.4,
+        "y": 0.6
+      },
+      "fit": "cover",
+      "width": 900,
+      "height": 900,
+      "mime": "image/webp",
+      "checksum": "sha256:5ffe4708d4ebca8dd6539679fb16f442ab5223e846cef9806ec01145c16bdce6",
+      "provenance": {
+        "source": "generated",
+        "role": "Process",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Living Manuscript art direction; no text, logos or client faces."
+      },
+      "mobileWidth": 600,
+      "mobileHeight": 600,
+      "formats": [
+        "avif"
+      ],
+      "widths": [
+        480
+      ],
+      "checksums": {
+        "step3-m.avif": "sha256:db0b7def983cc5d03ff1e129f3bdb0de43ac05c1f6552fdb1e31eb1ad44385c3",
+        "step3-m.webp": "sha256:89c76c729aefc28cebecc382d69455e98c5b178f86ebac7fb96715c3655e0904",
+        "step3-w480.avif": "sha256:d84a90f5dc4136c9bd1e5f7448fc43b3f2d19b8eeb653c725daf7ca8677b9f5d",
+        "step3-w480.webp": "sha256:0e71630133691e062ee4cd141a4c071c4c144b034c0795e2c0e540e43717842c",
+        "step3.avif": "sha256:cc189e275e75627dfbd2f9a53621320def9aa65b00c3ec3bbea6bfc9920e5b39"
+      }
+    },
+    "parchment.abugida": {
+      "src": "/assets/appointment/brand-experience/support/abugida-v3/parchment.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/abugida-v3/parchment.webp",
+      "alt": "Warm parchment paper.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 320,
+      "height": 320,
+      "mime": "image/webp",
+      "checksum": "sha256:120936e6de1a63719c6890b73c93916b17b9317bee6144ad2c49466d9da8419e",
+      "provenance": {
+        "source": "generated",
+        "role": "Texture",
+        "license": "project-generated",
+        "review": "Codex image generation (gpt-6.1-sol), 2026-10-15, Living Manuscript art direction; no text, logos or client faces."
+      },
+      "formats": [
+        "avif"
+      ],
+      "widths": [],
+      "checksums": {
+        "parchment.avif": "sha256:09f3d0e6076b357fcb9f8c08437768a6cdb067458c58298c55426addca4e06ac"
+      }
+    }
+  }
+}

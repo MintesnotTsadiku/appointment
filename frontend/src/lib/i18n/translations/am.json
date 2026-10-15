@@ -4004,7 +4004,62 @@
     "lookTaper": "የተቀረጸ አቆራረጥ",
     "lookSilk": "ሲልክ ፕሬስ",
     "menu": "የዋጋ ዝርዝር",
-    "stillUnsure": "አሁንም እርግጠኛ አይደሉም? ይጠይቁን"
+    "stillUnsure": "አሁንም እርግጠኛ አይደሉም? ይጠይቁን",
+    "selam": {
+      "flowTitle": "አንድ እንቅስቃሴ፣ አምስት ምስሎች",
+      "frameKneel": "መንበርከክ",
+      "frameReach": "መዘርጋት",
+      "frameTwist": "መጠምዘዝ",
+      "frameRise": "መነሣት",
+      "frameStand": "መቆም",
+      "frameOf": "ምስል {index} ከ{count}",
+      "showFrame": "ምስል {index} አሳይ",
+      "coach": "አሠልጣኝዎ",
+      "beats": "ክፍለ ጊዜው፣ ደረጃ በደረጃ",
+      "moreReviews": "ከደንበኞች ተጨማሪ",
+      "swipeFrames": "እንቅስቃሴውን ለማየት ያንሸራትቱ"
+    },
+    "abugida": {
+      "contents": "ማውጫ",
+      "coaches": "አሠልጣኞች",
+      "phraseTitle": "የሳምንቱ አባባል",
+      "phraseSay": "አነባበቡ",
+      "phraseMeaning": "ትርጉሙ",
+      "phraseGloss": "ቀስ ብሎ የሚሄድ ይደርሳል፤ በትዕግሥት የሚደረግ ልምምድ ፍሬ ያፈራል።",
+      "turnCard": "ካርዱን ያዙሩ",
+      "turnBack": "መልሰው ያዙሩት",
+      "inTheMargin": "በኅዳጉ የተጻፈ",
+      "plates": "ሥዕሎች"
+    },
+    "meron": {
+      "lookSuit": "የባሕር ኃይል ሰማያዊ የሱፍ ሙሉ ልብስ",
+      "lookWrap": "የወይን ጠጅ ቀለም መጠቅለያ ቀሚስ",
+      "lookKemis": "ጥበብ ያለው የሀበሻ ቀሚስ",
+      "alteration": "በትከሻ፣ በእጅጌና በወገብ የጠበበ",
+      "tagNo": "ቁ. {count}",
+      "chooseTime": "ሰዓት ይምረጡ",
+      "clothToFitting": "ከጨርቅ እስከ ልኬት",
+      "theMaker": "ልብስ ሰፊው",
+      "theAtelier": "አቴሊየሩ",
+      "nextFitting": "ቀጣዩ ነፃ ልኬት፦ {when}፣ {time}",
+      "mapStreet": "ዋና መንገድ",
+      "mapGate": "የግቢው በር",
+      "mapCourtyard": "ግቢ",
+      "mapFittingRoom": "የመለኪያ ክፍል",
+      "mapLabel": "በር፣ ግቢና የመለኪያ ክፍል የሚያሳይ የግቢው አቴሊየር የተሳለ ካርታ",
+      "pauseFilm": "የአቴሊየሩን ፊልም ያቁሙ",
+      "playFilm": "የአቴሊየሩን ፊልም ያጫውቱ",
+      "frameOf": "{index} ከ{count}"
+    },
+    "tena": {
+      "nextAppointments": "ቀጣይ ክፍት ቀጠሮዎች",
+      "board": "የቀጠሮ ሰሌዳ",
+      "boardNext": "ቀጣይ ክፍት ሰዓት",
+      "directory": "የክሊኒኩ ማውጫ",
+      "youAreHere": "እዚህ ነዎት",
+      "bookingDesk": "የቀጠሮ መቀበያ",
+      "callShort": "ይደውሉ"
+    }
   },
   "customerEmail": {
     "subjectConfirmation": "ከ{0} ጋር ያለዎት ቀጠሮ ተረጋግጧል",

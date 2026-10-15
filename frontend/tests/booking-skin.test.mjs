@@ -13,7 +13,9 @@ const templates = path.join(root, "src/public-experience/templates");
 const registry = read("src/public-experience/templates/booking-skin.ts");
 assert.match(registry, /export const DEFAULT_BOOKING_SKIN: BookingSkin = \{[^}]*frame: "rounded"/s, "the default skin uses plain rounded frames");
 assert.match(registry, /return SKINS\[`\$\{layout\.rendererKey\}@\$\{layout\.rendererVersion \|\| 1\}`\] \|\| DEFAULT_BOOKING_SKIN/, "an unknown design falls back to the default skin");
-assert.deepEqual([...registry.matchAll(/^import .* from "\.\/([^/"]+)\/booking";$/gm)].map((match) => match[1]), ["bloom-v3"], "only Bloom v3 has a skin in phase 1");
+const skinPackages = [...registry.matchAll(/^import .* from "\.\/([^/"]+)\/booking";$/gm)].map((match) => match[1]);
+assert.ok(skinPackages.includes("bloom-v3") && skinPackages.includes("meron-v3"), "Bloom v3 and Meron v3 have skins");
+for (const name of skinPackages) assert.ok(/-v3$/.test(name), `${name}: only v3 packages have skins`);
 
 // Every template's booking skin stays inside its own package.
 for (const directory of fs.readdirSync(templates)) {
@@ -53,6 +55,20 @@ assert.match(page, /allProviders: offerings\.length > 1/, "the time picker reads
 // Handoff rows are real links (keyboard and screen readers) to each service's scheduler.
 const bloom = read("src/public-experience/templates/bloom-v3/BloomTemplate.tsx");
 assert.match(bloom, /<a className="b3-handoff-row" href=\{href\}/, "Bloom handoff rows are links");
+const meron = read("src/public-experience/templates/meron-v3/MeronTemplate.tsx");
+assert.match(meron, /<a className="m3-handoff-row" href=\{href\}/, "Meron handoff rows are links");
+assert.match(meron, /snapshot\.bookingPaths\?\.\[item\.id\]/, "Meron handoff rows open each service's own scheduler");
+const abugida = read("src/public-experience/templates/abugida-v3/AbugidaTemplate.tsx");
+assert.match(abugida, /<a className="a3-toc-row a3-handoff-row" href=\{href\}/, "Abugida handoff rows are links");
+assert.match(abugida, /snapshot\.bookingPaths\?\.\[item\.id\]/, "Abugida handoff rows open each lesson's own scheduler");
+const selam = read("src/public-experience/templates/selam-v3/SelamTemplate.tsx");
+assert.match(selam, /<a className="s3-handoff-row" href=\{href\} lang=\{locale\}/, "Selam handoff rows are links in the page language");
+assert.match(selam, /snapshot\.bookingPaths\?\.\[item\.id\]/, "Selam handoff rows open each session's own scheduler");
+assert.ok(skinPackages.includes("selam-v3"), "Selam v3 has a skin");
+assert.ok(skinPackages.includes("tena-v3"), "Tena v3 has a skin");
+const tenaSkin = read("src/public-experience/templates/tena-v3/booking.tsx");
+assert.match(tenaSkin, /key: "tena-clinic@3"/, "the Tena skin is keyed by renderer version 3");
+assert.match(read("src/public-experience/templates/tena-v3/booking.css"), /\.bk-slot\[aria-pressed="true"\][\s\S]*background: var\(--t3k-plate\)/, "Tena marks the chosen time with a yellow plate");
 for (const file of ["bloom-v2/BloomTemplate.tsx", "meron-v2/MeronTemplate.tsx", "abugida-v2/AbugidaTemplate.tsx", "tena-v2/TenaTemplate.tsx", "selam-v2/SelamTemplate.tsx"]) {
   assert.match(read(`src/public-experience/templates/${file}`), /paths=\{snapshot\.bookingPaths\}/, `${file} handoff links its services`);
 }

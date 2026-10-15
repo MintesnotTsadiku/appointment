@@ -1,0 +1,70 @@
+/* Selam v3 on the booking pages. The same studio as the landing page, quieter: no parallax, marquee or
+   moving image. Only rules under [data-bk-skin="selam-v3"] (and .s3k- marks); the shared flow owns the layout. */
+[data-bk-skin="selam-v3"] {
+  --bk-frame-line: #9dc23c;
+  --bk-header-bg: #17230f;
+  --bk-header-line: transparent;
+  --bk-backdrop-opacity: 0.22;
+  --bk-backdrop-blur: 10px;
+}
+[data-bk-skin="selam-v3"][data-pe-mode="dark"],
+.dark [data-bk-skin="selam-v3"] { --bk-backdrop-opacity: 0.36; --bk-header-bg: #0b1418; }
+
+/* The bar: deep moss in both modes, with the lime tempo line (ticks, then a lime beat) along its bottom edge. */
+[data-bk-skin="selam-v3"].bk-header .bk-header-inner {
+  --text-primary: #f1f5e6;
+  --text-secondary: rgba(241, 245, 230, 0.82);
+  --text-muted: rgba(241, 245, 230, 0.74);
+  --border-default: rgba(241, 245, 230, 0.24);
+  --border-subtle: rgba(241, 245, 230, 0.16);
+  --bg-elevated: rgba(241, 245, 230, 0.08);
+  --accent-primary: #cde27a;
+  --pe-color-on-primary: #1d2418;
+  color: #f1f5e6;
+}
+[data-bk-skin="selam-v3"].bk-header::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 6px;
+  background:
+    linear-gradient(90deg, #cde27a, #9dc23c) 0 100% / 100% 2px no-repeat,
+    repeating-linear-gradient(90deg, rgba(241, 245, 230, 0.4) 0 1px, transparent 1px 24px) 0 0 / 100% 4px no-repeat;
+}
+[data-bk-skin="selam-v3"].bk-header [data-qa="language-toggle"] svg,
+[data-bk-skin="selam-v3"].bk-header [data-qa="language-toggle"] span { color: rgba(241, 245, 230, 0.86); }
+[data-bk-skin="selam-v3"].bk-header [data-qa="language-toggle"]:hover { background: rgba(241, 245, 230, 0.1); }
+[data-bk-skin="selam-v3"].bk-header :focus-visible { outline-color: #cde27a; }
+[data-bk-skin="selam-v3"].bk-header .pe-brand-logo { border-radius: 999px; }
+
+/* The page: the band photo's echo replaces the shared grid pattern. */
+.booking-experience[data-bk-skin="selam-v3"] { background-image: none; }
+.booking-experience[data-bk-skin="selam-v3"]::before { display: none; }
+
+/* Headings: Figtree Black with tight tracking; Amharic keeps Menbere Bold with more leading. */
+[data-bk-skin="selam-v3"] h1,
+[data-bk-skin="selam-v3"] h2 { font-weight: 900; letter-spacing: -0.03em; }
+[data-bk-skin="selam-v3"]:lang(am) h1,
+[data-bk-skin="selam-v3"]:lang(am) h2,
+[data-bk-skin="selam-v3"] :lang(am) h1,
+[data-bk-skin="selam-v3"] :lang(am) h2 { font-weight: 700; letter-spacing: 0; line-height: 1.22; }
+[data-bk-skin="selam-v3"] .bk-eyebrow { color: var(--accent-primary); letter-spacing: 0.18em; }
+[data-bk-skin="selam-v3"] :lang(am) .bk-eyebrow { letter-spacing: 0.04em; }
+
+/* Cards and controls: the long pill. The chosen time is moss, never lime; lime is the booking action. */
+[data-bk-skin="selam-v3"] .bk-card { border-radius: 28px; }
+[data-bk-skin="selam-v3"] .bk-slot { border-radius: 999px; padding-inline: 1.125rem; }
+[data-bk-skin="selam-v3"] .bk-day { border-radius: 999px; }
+[data-bk-skin="selam-v3"] .bk-chip { border-radius: 999px; }
+[data-bk-skin="selam-v3"] .bk-photo { border-radius: 999px; box-shadow: 0 0 0 1px var(--bk-frame-line), 0 0 0 4px rgba(205, 226, 122, 0.22); }
+[data-bk-skin="selam-v3"] .bk-avatar { border-radius: 999px; }
+
+/* Steps: a small beat pill per step. */
+.s3k-mark { flex: none; overflow: visible; }
+.s3k-mark-pill { fill: none; stroke: currentColor; stroke-width: 1.4; opacity: 0.7; }
+.s3k-mark-num { fill: currentColor; font: 800 10px/1 var(--booking-font-body, sans-serif); }
+.s3k-mark-tick { fill: none; stroke: #1d2418; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.s3k-mark[data-state="current"] .s3k-mark-pill { fill: #cde27a; stroke: #cde27a; opacity: 1; }
+.s3k-mark[data-state="current"] .s3k-mark-num { fill: #1d2418; }
+.s3k-mark[data-state="done"] .s3k-mark-pill { fill: #9dc23c; stroke: #9dc23c; opacity: 1; }
+[data-bk-skin="selam-v3"] .bk-steps li + li::before { background: repeating-linear-gradient(90deg, #cde27a 0 3px, transparent 3px 6px); }

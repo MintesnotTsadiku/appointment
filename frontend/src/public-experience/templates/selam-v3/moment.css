@@ -1,0 +1,30 @@
+/* Selam v3 booking-success moment ("tempo burst"). Loaded only with the confirmation (lazy module).
+   The burst is centred on the confirmation's success icon (64 px from the top of the header). Three lime rings beat out,
+   twelve tempo ticks spring out, and the last ring and the ticks settle as a quiet halo around the icon. */
+.s3-moment { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; border-radius: inherit; }
+.s3-burst { position: absolute; left: 50%; top: 64px; width: 0; height: 0; }
+.s3-burst-ring { position: absolute; left: -60px; top: -60px; width: 120px; height: 120px; border-radius: 50%; border: 3px solid #9dc23c;
+  animation: s3-burst-ring 1600ms cubic-bezier(.2, .7, .2, 1) calc(var(--r) * 240ms) 1 both; }
+.s3-burst-ring:last-child, .s3-burst-ring:nth-child(3) { animation-name: s3-burst-settle; }
+.s3-burst-tick { position: absolute; left: -2px; top: -9px; width: 4px; height: 18px; border-radius: 4px; background: #b5d35a; box-shadow: 0 0 0 1px rgba(59, 90, 28, .3);
+  transform: rotate(var(--a)) translateY(-72px); animation: s3-burst-tick 1100ms cubic-bezier(.2, .8, .2, 1) var(--d) 1 both; }
+.s3-burst-tick[data-long="true"] { height: 28px; top: -14px; background: #8db236; }
+@keyframes s3-burst-ring {
+  0% { opacity: .95; transform: scale(.35); }
+  100% { opacity: 0; transform: scale(3.2); }
+}
+@keyframes s3-burst-settle {
+  0% { opacity: .95; transform: scale(.35); }
+  60% { opacity: .5; transform: scale(1.5); }
+  100% { opacity: .55; transform: scale(1.2); }
+}
+@keyframes s3-burst-tick {
+  0% { opacity: 0; transform: rotate(var(--a)) translateY(-36px) scaleY(.4); }
+  35% { opacity: 1; transform: rotate(var(--a)) translateY(-104px) scaleY(1); }
+  100% { opacity: .75; transform: rotate(var(--a)) translateY(-72px) scaleY(.8); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .s3-burst-ring { animation: none; opacity: 0; }
+  .s3-burst-ring:nth-child(3) { opacity: .45; transform: scale(1.2); }
+  .s3-burst-tick { animation: none; opacity: .6; transform: rotate(var(--a)) translateY(-72px) scaleY(.8); }
+}

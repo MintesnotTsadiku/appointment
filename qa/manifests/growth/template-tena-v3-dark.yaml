@@ -1,0 +1,340 @@
+# Tena v3 "Clear Path" (dark, reduced motion). Fixture: appointment.tests.template_tena_v3_qa_fixtures (setup before, cleanup after).
+# The after-hours clinic: the hero and the booking band show their dusk photos in dark mode. Reduced motion shows every section at once,
+# the route line drawn and the review marquee as a still grid. The mode switch works both ways. English and Amharic, desktop and phone.
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-template-tena-v3-dark
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+  color_scheme: dark
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.template_tena_v3_qa_fixtures.browser_values
+scenarios:
+- id: tena_dark_en_desktop
+  title: Tena v3 (en, desktop, dark, reduced motion)
+  viewport: &id001
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /{qa_tena_slug}?display=dark&preview-time=21:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="tena-clinic-v3"][data-pe-recipe="tena-clinic"]'
+    - type: text_contains
+      value: Good evening
+  actions:
+  - action: wait_for
+    selector: .t3-hero-photo img[src*="hero-night"]
+  - action: wait_for
+    selector: .t3[data-motion-level="none"]
+  - action: screenshot
+    name: tena_dark_en_desktop-01-hero.png
+    full_page: false
+  - action: click
+    selector: '#t3-services-title'
+  - action: screenshot
+    name: tena_dark_en_desktop-02-board.png
+    full_page: false
+  - action: click
+    selector: '#t3-team-title'
+  - action: screenshot
+    name: tena_dark_en_desktop-03-directory.png
+    full_page: false
+  - action: click
+    selector: '#t3-reviews-title'
+  - action: wait_for
+    selector: .t3-marquee-track[data-marquee="static"]
+  - action: screenshot
+    name: tena_dark_en_desktop-04-reviews-still.png
+    full_page: false
+  - action: click
+    selector: '#t3-band-title'
+  - action: wait_for
+    selector: .t3-band-photo img[src*="band-night"]
+  - action: screenshot
+    name: tena_dark_en_desktop-05-band-night.png
+    full_page: false
+  - action: click
+    selector: '#t3-hero-title'
+  - action: screenshot
+    name: tena_dark_en_desktop-06-full.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="tena-mode"]'
+    assertions:
+    - type: visible_selector
+      value: .t3[data-pe-mode="light"]
+  - action: screenshot
+    name: tena_dark_en_desktop-07-light-after-dark.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="tena-mode"]'
+    assertions:
+    - type: visible_selector
+      value: .t3[data-pe-mode="dark"]
+  - action: click
+    selector: '[data-qa="tena-band-book"]'
+  - action: wait_for
+    selector: '[data-vt-book]'
+  - action: screenshot
+    name: tena_dark_en_desktop-08-handoff.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="tena-handoff-book"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: screenshot
+    name: tena_dark_en_desktop-09-chooser.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: tena_dark_en_mobile
+  title: Tena v3 (en, mobile, dark, reduced motion)
+  viewport: &id002
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /{qa_tena_slug}?display=dark&preview-time=21:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="tena-clinic-v3"][data-pe-recipe="tena-clinic"]'
+    - type: text_contains
+      value: Good evening
+  actions:
+  - action: wait_for
+    selector: .t3-hero-photo img[src*="hero-night"]
+  - action: wait_for
+    selector: .t3[data-motion-level="none"]
+  - action: screenshot
+    name: tena_dark_en_mobile-01-hero.png
+    full_page: false
+  - action: click
+    selector: '#t3-services-title'
+  - action: screenshot
+    name: tena_dark_en_mobile-02-board.png
+    full_page: false
+  - action: click
+    selector: '#t3-team-title'
+  - action: screenshot
+    name: tena_dark_en_mobile-03-directory.png
+    full_page: false
+  - action: click
+    selector: '#t3-reviews-title'
+  - action: wait_for
+    selector: .t3-marquee-track[data-marquee="static"]
+  - action: screenshot
+    name: tena_dark_en_mobile-04-reviews-still.png
+    full_page: false
+  - action: click
+    selector: '#t3-band-title'
+  - action: wait_for
+    selector: .t3-band-photo img[src*="band-night"]
+  - action: screenshot
+    name: tena_dark_en_mobile-05-band-night.png
+    full_page: false
+  - action: click
+    selector: '#t3-hero-title'
+  - action: screenshot
+    name: tena_dark_en_mobile-06-full.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="tena-mode"]'
+    assertions:
+    - type: visible_selector
+      value: .t3[data-pe-mode="light"]
+  - action: screenshot
+    name: tena_dark_en_mobile-07-light-after-dark.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="tena-mode"]'
+    assertions:
+    - type: visible_selector
+      value: .t3[data-pe-mode="dark"]
+  - action: click
+    selector: '[data-qa="tena-band-book"]'
+  - action: wait_for
+    selector: '[data-vt-book]'
+  - action: screenshot
+    name: tena_dark_en_mobile-08-handoff.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="tena-handoff-book"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: screenshot
+    name: tena_dark_en_mobile-09-chooser.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: tena_dark_am_desktop
+  title: Tena v3 (am, desktop, dark, reduced motion)
+  viewport: *id001
+  checks: []
+  routes:
+  - path: /{qa_tena_slug}/am?display=dark&preview-time=19:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="tena-clinic-v3"][data-pe-recipe="tena-clinic"]'
+    - type: text_contains
+      value: እንደምን አመሹ
+  actions:
+  - action: wait_for
+    selector: .t3-hero-photo img[src*="hero-night"]
+  - action: wait_for
+    selector: .t3[data-motion-level="none"]
+  - action: screenshot
+    name: tena_dark_am_desktop-01-hero.png
+    full_page: false
+  - action: click
+    selector: '#t3-services-title'
+  - action: screenshot
+    name: tena_dark_am_desktop-02-board.png
+    full_page: false
+  - action: click
+    selector: '#t3-team-title'
+  - action: screenshot
+    name: tena_dark_am_desktop-03-directory.png
+    full_page: false
+  - action: click
+    selector: '#t3-reviews-title'
+  - action: wait_for
+    selector: .t3-marquee-track[data-marquee="static"]
+  - action: screenshot
+    name: tena_dark_am_desktop-04-reviews-still.png
+    full_page: false
+  - action: click
+    selector: '#t3-band-title'
+  - action: wait_for
+    selector: .t3-band-photo img[src*="band-night"]
+  - action: screenshot
+    name: tena_dark_am_desktop-05-band-night.png
+    full_page: false
+  - action: click
+    selector: '#t3-hero-title'
+  - action: screenshot
+    name: tena_dark_am_desktop-06-full.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="tena-mode"]'
+    assertions:
+    - type: visible_selector
+      value: .t3[data-pe-mode="light"]
+  - action: screenshot
+    name: tena_dark_am_desktop-07-light-after-dark.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="tena-mode"]'
+    assertions:
+    - type: visible_selector
+      value: .t3[data-pe-mode="dark"]
+  - action: click
+    selector: '[data-qa="tena-band-book"]'
+  - action: wait_for
+    selector: '[data-vt-book]'
+  - action: screenshot
+    name: tena_dark_am_desktop-08-handoff.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="tena-handoff-book"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: screenshot
+    name: tena_dark_am_desktop-09-chooser.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: tena_dark_am_mobile
+  title: Tena v3 (am, mobile, dark, reduced motion)
+  viewport: *id002
+  checks: []
+  routes:
+  - path: /{qa_tena_slug}/am?display=dark&preview-time=19:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="tena-clinic-v3"][data-pe-recipe="tena-clinic"]'
+    - type: text_contains
+      value: እንደምን አመሹ
+  actions:
+  - action: wait_for
+    selector: .t3-hero-photo img[src*="hero-night"]
+  - action: wait_for
+    selector: .t3[data-motion-level="none"]
+  - action: screenshot
+    name: tena_dark_am_mobile-01-hero.png
+    full_page: false
+  - action: click
+    selector: '#t3-services-title'
+  - action: screenshot
+    name: tena_dark_am_mobile-02-board.png
+    full_page: false
+  - action: click
+    selector: '#t3-team-title'
+  - action: screenshot
+    name: tena_dark_am_mobile-03-directory.png
+    full_page: false
+  - action: click
+    selector: '#t3-reviews-title'
+  - action: wait_for
+    selector: .t3-marquee-track[data-marquee="static"]
+  - action: screenshot
+    name: tena_dark_am_mobile-04-reviews-still.png
+    full_page: false
+  - action: click
+    selector: '#t3-band-title'
+  - action: wait_for
+    selector: .t3-band-photo img[src*="band-night"]
+  - action: screenshot
+    name: tena_dark_am_mobile-05-band-night.png
+    full_page: false
+  - action: click
+    selector: '#t3-hero-title'
+  - action: screenshot
+    name: tena_dark_am_mobile-06-full.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="tena-mode"]'
+    assertions:
+    - type: visible_selector
+      value: .t3[data-pe-mode="light"]
+  - action: screenshot
+    name: tena_dark_am_mobile-07-light-after-dark.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="tena-mode"]'
+    assertions:
+    - type: visible_selector
+      value: .t3[data-pe-mode="dark"]
+  - action: click
+    selector: '[data-qa="tena-band-book"]'
+  - action: wait_for
+    selector: '[data-vt-book]'
+  - action: screenshot
+    name: tena_dark_am_mobile-08-handoff.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="tena-handoff-book"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: screenshot
+    name: tena_dark_am_mobile-09-chooser.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

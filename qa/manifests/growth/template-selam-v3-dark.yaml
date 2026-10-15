@@ -1,0 +1,325 @@
+# Selam v3 "Tempo" (dark, reduced motion). Fixture: appointment.tests.template_selam_v3_qa_fixtures (setup before, cleanup after).
+# "5:30 am": in dark mode the five movement frames and the booking band show their night photos. Reduced motion shows every section at
+# once, the movement as a still contact strip of five tall pills, and the review marquee as a still grid. The mode switch works both ways.
+# English and Amharic, desktop and phone.
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-template-selam-v3-dark
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+  color_scheme: dark
+  reduced_motion: reduce
+fixtures:
+  provider: appointment.tests.template_selam_v3_qa_fixtures.browser_values
+scenarios:
+- id: selam_dark_en_desktop
+  title: Selam v3 (en, desktop, dark, reduced motion)
+  viewport: &id001
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /{qa_selam_slug}?display=dark&preview-time=05:30
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="selam-movement-v3"][data-pe-recipe="selam-movement"]'
+    - type: text_contains
+      value: Good morning
+  actions:
+  - action: wait_for
+    selector: .s3-flow-frame:first-child img[src*="hero-night"]
+  - action: wait_for
+    selector: .s3[data-motion-level="none"]
+  - action: wait_for
+    selector: .s3[data-scroll="off"]
+  - action: screenshot
+    name: selam_dark_en_desktop-01-hero-night.png
+    full_page: false
+  - action: click
+    selector: '#s3-reviews-title'
+  - action: wait_for
+    selector: .s3-marquee-track[data-marquee="static"]
+  - action: screenshot
+    name: selam_dark_en_desktop-02-reviews-still.png
+    full_page: false
+  - action: click
+    selector: '#s3-band-title'
+  - action: wait_for
+    selector: .s3-band-photo img[src*="band-night"]
+  - action: screenshot
+    name: selam_dark_en_desktop-03-band-night.png
+    full_page: false
+  - action: click
+    selector: '#s3-hero-title'
+  - action: screenshot
+    name: selam_dark_en_desktop-04-full.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="selam-mode"]'
+    assertions:
+    - type: visible_selector
+      value: .s3[data-pe-mode="light"]
+  - action: screenshot
+    name: selam_dark_en_desktop-05-light-after-dark.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="selam-mode"]'
+    assertions:
+    - type: visible_selector
+      value: .s3[data-pe-mode="dark"]
+  - action: click
+    selector: '[data-qa="selam-band-book"]'
+  - action: wait_for
+    selector: '[data-vt-book]'
+  - action: wait_for
+    selector: '[data-qa="selam-handoff-book"]'
+  - action: screenshot
+    name: selam_dark_en_desktop-06-handoff.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="selam-handoff-book"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: .booking-experience[data-bk-skin="selam-v3"]
+  - action: screenshot
+    name: selam_dark_en_desktop-07-scheduler.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: selam_dark_en_mobile
+  title: Selam v3 (en, mobile, dark, reduced motion)
+  viewport: &id002
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /{qa_selam_slug}?display=dark&preview-time=21:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="selam-movement-v3"][data-pe-recipe="selam-movement"]'
+    - type: text_contains
+      value: Good evening
+  actions:
+  - action: wait_for
+    selector: .s3-flow-frame:first-child img[src*="hero-night"]
+  - action: wait_for
+    selector: .s3[data-motion-level="none"]
+  - action: wait_for
+    selector: .s3[data-scroll="off"]
+  - action: screenshot
+    name: selam_dark_en_mobile-01-hero-night.png
+    full_page: false
+  - action: click
+    selector: '#s3-reviews-title'
+  - action: wait_for
+    selector: .s3-marquee-track[data-marquee="static"]
+  - action: screenshot
+    name: selam_dark_en_mobile-02-reviews-still.png
+    full_page: false
+  - action: click
+    selector: '#s3-band-title'
+  - action: wait_for
+    selector: .s3-band-photo img[src*="band-night"]
+  - action: screenshot
+    name: selam_dark_en_mobile-03-band-night.png
+    full_page: false
+  - action: click
+    selector: '#s3-hero-title'
+  - action: screenshot
+    name: selam_dark_en_mobile-04-full.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="selam-mode"]'
+    assertions:
+    - type: visible_selector
+      value: .s3[data-pe-mode="light"]
+  - action: screenshot
+    name: selam_dark_en_mobile-05-light-after-dark.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="selam-mode"]'
+    assertions:
+    - type: visible_selector
+      value: .s3[data-pe-mode="dark"]
+  - action: click
+    selector: '[data-qa="selam-band-book"]'
+  - action: wait_for
+    selector: '[data-vt-book]'
+  - action: wait_for
+    selector: '[data-qa="selam-handoff-book"]'
+  - action: screenshot
+    name: selam_dark_en_mobile-06-handoff.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="selam-handoff-book"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: .booking-experience[data-bk-skin="selam-v3"]
+  - action: screenshot
+    name: selam_dark_en_mobile-07-scheduler.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: selam_dark_am_desktop
+  title: Selam v3 (am, desktop, dark, reduced motion)
+  viewport: *id001
+  checks: []
+  routes:
+  - path: /{qa_selam_slug}/am?display=dark&preview-time=21:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="selam-movement-v3"][data-pe-recipe="selam-movement"]'
+    - type: text_contains
+      value: እንደምን አመሹ
+  actions:
+  - action: wait_for
+    selector: .s3-flow-frame:first-child img[src*="hero-night"]
+  - action: wait_for
+    selector: .s3[data-motion-level="none"]
+  - action: wait_for
+    selector: .s3[data-scroll="off"]
+  - action: screenshot
+    name: selam_dark_am_desktop-01-hero-night.png
+    full_page: false
+  - action: click
+    selector: '#s3-reviews-title'
+  - action: wait_for
+    selector: .s3-marquee-track[data-marquee="static"]
+  - action: screenshot
+    name: selam_dark_am_desktop-02-reviews-still.png
+    full_page: false
+  - action: click
+    selector: '#s3-band-title'
+  - action: wait_for
+    selector: .s3-band-photo img[src*="band-night"]
+  - action: screenshot
+    name: selam_dark_am_desktop-03-band-night.png
+    full_page: false
+  - action: click
+    selector: '#s3-hero-title'
+  - action: screenshot
+    name: selam_dark_am_desktop-04-full.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="selam-mode"]'
+    assertions:
+    - type: visible_selector
+      value: .s3[data-pe-mode="light"]
+  - action: screenshot
+    name: selam_dark_am_desktop-05-light-after-dark.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="selam-mode"]'
+    assertions:
+    - type: visible_selector
+      value: .s3[data-pe-mode="dark"]
+  - action: click
+    selector: '[data-qa="selam-band-book"]'
+  - action: wait_for
+    selector: '[data-vt-book]'
+  - action: wait_for
+    selector: '[data-qa="selam-handoff-book"]'
+  - action: screenshot
+    name: selam_dark_am_desktop-06-handoff.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="selam-handoff-book"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: .booking-experience[data-bk-skin="selam-v3"]
+  - action: screenshot
+    name: selam_dark_am_desktop-07-scheduler.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: selam_dark_am_mobile
+  title: Selam v3 (am, mobile, dark, reduced motion)
+  viewport: *id002
+  checks: []
+  routes:
+  - path: /{qa_selam_slug}/am?display=dark&preview-time=05:30
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="selam-movement-v3"][data-pe-recipe="selam-movement"]'
+    - type: text_contains
+      value: እንደምን አደሩ
+  actions:
+  - action: wait_for
+    selector: .s3-flow-frame:first-child img[src*="hero-night"]
+  - action: wait_for
+    selector: .s3[data-motion-level="none"]
+  - action: wait_for
+    selector: .s3[data-scroll="off"]
+  - action: screenshot
+    name: selam_dark_am_mobile-01-hero-night.png
+    full_page: false
+  - action: click
+    selector: '#s3-reviews-title'
+  - action: wait_for
+    selector: .s3-marquee-track[data-marquee="static"]
+  - action: screenshot
+    name: selam_dark_am_mobile-02-reviews-still.png
+    full_page: false
+  - action: click
+    selector: '#s3-band-title'
+  - action: wait_for
+    selector: .s3-band-photo img[src*="band-night"]
+  - action: screenshot
+    name: selam_dark_am_mobile-03-band-night.png
+    full_page: false
+  - action: click
+    selector: '#s3-hero-title'
+  - action: screenshot
+    name: selam_dark_am_mobile-04-full.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="selam-mode"]'
+    assertions:
+    - type: visible_selector
+      value: .s3[data-pe-mode="light"]
+  - action: screenshot
+    name: selam_dark_am_mobile-05-light-after-dark.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="selam-mode"]'
+    assertions:
+    - type: visible_selector
+      value: .s3[data-pe-mode="dark"]
+  - action: click
+    selector: '[data-qa="selam-band-book"]'
+  - action: wait_for
+    selector: '[data-vt-book]'
+  - action: wait_for
+    selector: '[data-qa="selam-handoff-book"]'
+  - action: screenshot
+    name: selam_dark_am_mobile-06-handoff.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="selam-handoff-book"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: .booking-experience[data-bk-skin="selam-v3"]
+  - action: screenshot
+    name: selam_dark_am_mobile-07-scheduler.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

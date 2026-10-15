@@ -1,0 +1,216 @@
+# The Selam booking journey as one product: landing -> /book handoff (a session row) -> time picker -> back to the service
+# chooser (one card per service, with its photo and coach) -> time picker -> details (phone first) -> confirmation with the tempo burst.
+# Fixture: appointment.tests.template_selam_v3_qa_fixtures (setup before, cleanup after; cleanup deletes the bookings that the
+# two scenarios make, by the QA client's exact phone and name). See docs/growth/BOOKING_LAYOUT.md, "Booking skins", and docs/design/SELAM_V3.md.
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-booking-journey-selam
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 240000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.template_selam_v3_qa_fixtures.browser_values
+scenarios:
+- id: journey_en_desktop_light
+  title: English, desktop, light
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /{qa_selam_slug}?display=light
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="selam-movement-v3"][data-pe-recipe="selam-movement"]'
+  actions:
+  - action: screenshot
+    name: journey_en-1-landing.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="selam-hero-book"]'
+  - action: wait_for
+    selector: '[data-qa="selam-handoff-service-1"]'
+  - action: screenshot
+    name: journey_en-2-handoff.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="selam-handoff-service-1"]'
+    assertions:
+    - type: url_contains
+      value: with=any
+  - action: wait_for
+    selector: '[data-qa="booking-steps"][data-step="time"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-bk-skin="selam-v3"] [data-qa="booking-summary"] [data-vt-service] img'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+    timeout_ms: 20000
+  - action: screenshot
+    name: journey_en-3-time.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-header"] .booking-back'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 2)
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 3)
+    state: detached
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"][data-photo="true"], 2)
+  - action: wait_for
+    selector: '[data-qa="booking-business-logo"][src*="selam-logo"]'
+  - action: screenshot
+    name: journey_en-4-chooser.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+    assertions:
+    - type: url_contains
+      value: with=any
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_selam_open_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_selam_open_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 2)
+    timeout_ms: 20000
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 2)
+  - action: wait_for
+    selector: '[data-qa="booking-bar"]'
+  - action: screenshot
+    name: journey_en-5-time-chosen.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-continue"]'
+  - action: wait_for
+    selector: '#userName'
+  - action: wait_for
+    selector: '[data-qa="booking-details-zone"]:has-text("Addis Ababa time")'
+  - action: wait_for
+    selector: .bk-summary-media .bk-photo img
+  - action: screenshot
+    name: journey_en-6-details.png
+    full_page: false
+  - action: fill
+    selector: '#userName'
+    value: '{qa_selam_client}'
+  - action: fill
+    selector: '[data-qa="booking-phone"]'
+    value: '{qa_selam_phone}'
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+  - action: wait_for
+    selector: '[data-qa="booking-success"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-qa="booking-moment"][data-moment="tempo-burst"]'
+  - action: screenshot
+    name: journey_en-7-tempo-burst.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: journey_am_mobile_dark
+  title: Amharic, phone, dark
+  viewport:
+    width: 390
+    height: 844
+  options:
+    color_scheme: dark
+  checks: []
+  routes:
+  - path: /{qa_selam_slug}/am
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="selam-movement-v3"][data-pe-mode="dark"]'
+  actions:
+  - action: click
+    selector: :nth-match([data-qa="selam-hero-book"], 1)
+  - action: wait_for
+    selector: '[data-qa="selam-handoff-service-0"]'
+  - action: screenshot
+    name: journey_am-1-handoff.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="selam-handoff-service-0"]'
+    assertions:
+    - type: url_contains
+      value: lang=am
+  - action: wait_for
+    selector: '[data-qa="booking-steps"][data-step="time"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-qa="booking-picker-service"]:has-text("የእንቅስቃሴ ምክክር")'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+    timeout_ms: 20000
+  - action: screenshot
+    name: journey_am-2-time.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-header"] .booking-back'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 2)
+  - action: screenshot
+    name: journey_am-3-chooser.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+    assertions:
+    - type: url_contains
+      value: with=any
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_selam_open_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_selam_open_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 3)
+    timeout_ms: 20000
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 3)
+  - action: wait_for
+    selector: '[data-qa="booking-bar"]'
+  - action: screenshot
+    name: journey_am-4-time-chosen.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="booking-continue"]'
+  - action: wait_for
+    selector: '#userName'
+  - action: wait_for
+    selector: '[data-qa="booking-details-zone"]:has-text("የአዲስ አበባ ሰዓት")'
+  - action: screenshot
+    name: journey_am-5-details.png
+    full_page: false
+  - action: fill
+    selector: '#userName'
+    value: '{qa_selam_client}'
+  - action: fill
+    selector: '[data-qa="booking-phone"]'
+    value: '{qa_selam_phone}'
+  - action: click
+    selector: '[data-qa="booking-confirm"]'
+  - action: wait_for
+    selector: '[data-qa="booking-success"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-qa="booking-moment"][data-moment="tempo-burst"]'
+  - action: screenshot
+    name: journey_am-6-tempo-burst.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

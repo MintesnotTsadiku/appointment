@@ -1,0 +1,557 @@
+# Tena v3 "Clear Path" (light, full motion). Fixture: appointment.tests.template_tena_v3_qa_fixtures (setup before, cleanup after).
+# Every section of /tena-studio and /tena-studio/am: hero (greeting, open-now, next free appointments, the signage arrow), the appointment
+# board, the door-to-door visit, the clinic directory, the story, the numbers, the benefits, the review marquee with pause, the FAQ with the
+# Habesha clock, the room tabs, the booking band, the footer; then the handoff, the service chooser and the time picker. `?preview-time=`
+# fixes the Addis clock (development builds only). See docs/design/TENA_V3.md.
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-template-tena-v3
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+fixtures:
+  provider: appointment.tests.template_tena_v3_qa_fixtures.browser_values
+scenarios:
+- id: tena_en_desktop
+  title: Tena v3 (en, desktop, light, afternoon)
+  viewport: &id001
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /{qa_tena_slug}?display=light&preview-time=16:30
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="tena-clinic-v3"][data-pe-recipe="tena-clinic"]'
+    - type: text_contains
+      value: Good afternoon
+  actions:
+  - action: wait_for
+    selector: .t3-hero-photo img
+  - action: wait_for
+    selector: '[data-qa="tena-next-card"]'
+  - action: screenshot
+    name: tena_en_desktop-01-hero.png
+    full_page: false
+  - action: click
+    selector: '#t3-services-title'
+  - action: screenshot
+    name: tena_en_desktop-02-board.png
+    full_page: false
+  - action: click
+    selector: '#t3-visit-title'
+  - action: screenshot
+    name: tena_en_desktop-03-visit.png
+    full_page: false
+  - action: click
+    selector: '#t3-team-title'
+  - action: screenshot
+    name: tena_en_desktop-04-directory.png
+    full_page: false
+  - action: click
+    selector: '#t3-story-title'
+  - action: screenshot
+    name: tena_en_desktop-05-story.png
+    full_page: false
+  - action: click
+    selector: :nth-match(.t3-proof-label, 1)
+  - action: screenshot
+    name: tena_en_desktop-06-proof.png
+    full_page: false
+  - action: click
+    selector: '#t3-notes-title'
+  - action: screenshot
+    name: tena_en_desktop-07-benefits.png
+    full_page: false
+  - action: click
+    selector: '#t3-reviews-title'
+  - action: click
+    selector: '[data-qa="tena-reviews-pause"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="tena-reviews-pause"][aria-pressed="true"]'
+  - action: screenshot
+    name: tena_en_desktop-08-reviews-paused.png
+    full_page: false
+  - action: click
+    selector: '#t3-faq-title'
+  - action: click
+    selector: :nth-match(.t3-faq-list summary, 1)
+  - action: click
+    selector: '[data-qa="tena-habesha-toggle"]'
+    assertions:
+    - type: text_contains
+      selector: .t3-hours
+      value: ከጠዋቱ 2 ሰዓት
+  - action: screenshot
+    name: tena_en_desktop-09-faq-hours.png
+    full_page: false
+  - action: click
+    selector: '#t3-rooms-title'
+  - action: click
+    selector: '[data-qa="tena-room-tab-1"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="tena-room-tab-1"][aria-selected="true"]'
+  - action: screenshot
+    name: tena_en_desktop-10-rooms.png
+    full_page: false
+  - action: click
+    selector: '#t3-band-title'
+  - action: screenshot
+    name: tena_en_desktop-11-band.png
+    full_page: false
+  - action: click
+    selector: .t3-footer-name
+  - action: wait_for
+    selector: '[data-qa="template-credit"]'
+  - action: screenshot
+    name: tena_en_desktop-12-footer.png
+    full_page: false
+  - action: click
+    selector: '#t3-hero-title'
+  - action: screenshot
+    name: tena_en_desktop-13-full.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="tena-hero-book"]'
+  - action: wait_for
+    selector: '[data-vt-book]'
+  - action: wait_for
+    selector: '[data-qa="tena-handoff-book"]'
+  - action: screenshot
+    name: tena_en_desktop-14-handoff.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="tena-handoff-book"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: screenshot
+    name: tena_en_desktop-15-chooser.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_tena_open_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_tena_open_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: screenshot
+    name: tena_en_desktop-16-time-picker.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: tena_en_mobile
+  title: Tena v3 (en, mobile, light, morning)
+  viewport: &id002
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /{qa_tena_slug}?display=light&preview-time=10:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="tena-clinic-v3"][data-pe-recipe="tena-clinic"]'
+    - type: text_contains
+      value: Good morning
+  actions:
+  - action: wait_for
+    selector: .t3-hero-photo img
+  - action: wait_for
+    selector: '[data-qa="tena-next-card"]'
+  - action: screenshot
+    name: tena_en_mobile-01-hero.png
+    full_page: false
+  - action: click
+    selector: '#t3-services-title'
+  - action: screenshot
+    name: tena_en_mobile-02-board.png
+    full_page: false
+  - action: click
+    selector: '#t3-visit-title'
+  - action: screenshot
+    name: tena_en_mobile-03-visit.png
+    full_page: false
+  - action: click
+    selector: '#t3-team-title'
+  - action: screenshot
+    name: tena_en_mobile-04-directory.png
+    full_page: false
+  - action: click
+    selector: '#t3-story-title'
+  - action: screenshot
+    name: tena_en_mobile-05-story.png
+    full_page: false
+  - action: click
+    selector: :nth-match(.t3-proof-label, 1)
+  - action: screenshot
+    name: tena_en_mobile-06-proof.png
+    full_page: false
+  - action: click
+    selector: '#t3-notes-title'
+  - action: screenshot
+    name: tena_en_mobile-07-benefits.png
+    full_page: false
+  - action: click
+    selector: '#t3-reviews-title'
+  - action: click
+    selector: '[data-qa="tena-reviews-pause"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="tena-reviews-pause"][aria-pressed="true"]'
+  - action: screenshot
+    name: tena_en_mobile-08-reviews-paused.png
+    full_page: false
+  - action: click
+    selector: '#t3-faq-title'
+  - action: click
+    selector: :nth-match(.t3-faq-list summary, 1)
+  - action: click
+    selector: '[data-qa="tena-habesha-toggle"]'
+    assertions:
+    - type: text_contains
+      selector: .t3-hours
+      value: ከጠዋቱ 2 ሰዓት
+  - action: screenshot
+    name: tena_en_mobile-09-faq-hours.png
+    full_page: false
+  - action: click
+    selector: '#t3-rooms-title'
+  - action: click
+    selector: '[data-qa="tena-room-tab-1"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="tena-room-tab-1"][aria-selected="true"]'
+  - action: screenshot
+    name: tena_en_mobile-10-rooms.png
+    full_page: false
+  - action: click
+    selector: '#t3-band-title'
+  - action: screenshot
+    name: tena_en_mobile-11-band.png
+    full_page: false
+  - action: click
+    selector: .t3-footer-name
+  - action: wait_for
+    selector: '[data-qa="template-credit"]'
+  - action: screenshot
+    name: tena_en_mobile-12-footer.png
+    full_page: false
+  - action: wait_for
+    selector: '[data-qa="tena-sticky-book"]'
+  - action: click
+    selector: '#t3-hero-title'
+  - action: screenshot
+    name: tena_en_mobile-13-full.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="tena-hero-book"]'
+  - action: wait_for
+    selector: '[data-vt-book]'
+  - action: wait_for
+    selector: '[data-qa="tena-handoff-book"]'
+  - action: screenshot
+    name: tena_en_mobile-14-handoff.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="tena-handoff-book"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: screenshot
+    name: tena_en_mobile-15-chooser.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_tena_open_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_tena_open_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: screenshot
+    name: tena_en_mobile-16-time-picker.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: tena_am_desktop
+  title: Tena v3 (am, desktop, light, morning)
+  viewport: *id001
+  checks: []
+  routes:
+  - path: /{qa_tena_slug}/am?display=light&preview-time=09:30
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="tena-clinic-v3"][data-pe-recipe="tena-clinic"]'
+    - type: text_contains
+      value: እንደምን አደሩ
+  actions:
+  - action: wait_for
+    selector: .t3-hero-photo img
+  - action: wait_for
+    selector: '[data-qa="tena-next-card"]'
+  - action: screenshot
+    name: tena_am_desktop-01-hero.png
+    full_page: false
+  - action: click
+    selector: '#t3-services-title'
+  - action: screenshot
+    name: tena_am_desktop-02-board.png
+    full_page: false
+  - action: click
+    selector: '#t3-visit-title'
+  - action: screenshot
+    name: tena_am_desktop-03-visit.png
+    full_page: false
+  - action: click
+    selector: '#t3-team-title'
+  - action: screenshot
+    name: tena_am_desktop-04-directory.png
+    full_page: false
+  - action: click
+    selector: '#t3-story-title'
+  - action: screenshot
+    name: tena_am_desktop-05-story.png
+    full_page: false
+  - action: click
+    selector: :nth-match(.t3-proof-label, 1)
+  - action: screenshot
+    name: tena_am_desktop-06-proof.png
+    full_page: false
+  - action: click
+    selector: '#t3-notes-title'
+  - action: screenshot
+    name: tena_am_desktop-07-benefits.png
+    full_page: false
+  - action: click
+    selector: '#t3-reviews-title'
+  - action: click
+    selector: '[data-qa="tena-reviews-pause"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="tena-reviews-pause"][aria-pressed="true"]'
+  - action: screenshot
+    name: tena_am_desktop-08-reviews-paused.png
+    full_page: false
+  - action: click
+    selector: '#t3-faq-title'
+  - action: click
+    selector: :nth-match(.t3-faq-list summary, 1)
+  - action: get_text
+    selector: .t3-hours
+    assertions:
+    - type: text_contains
+      selector: .t3-hours
+      value: ከጠዋቱ 2 ሰዓት
+    - type: visible_selector
+      value: '[data-qa="tena-habesha-toggle"][aria-pressed="true"]'
+  - action: screenshot
+    name: tena_am_desktop-09-faq-hours.png
+    full_page: false
+  - action: click
+    selector: '#t3-rooms-title'
+  - action: click
+    selector: '[data-qa="tena-room-tab-1"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="tena-room-tab-1"][aria-selected="true"]'
+  - action: screenshot
+    name: tena_am_desktop-10-rooms.png
+    full_page: false
+  - action: click
+    selector: '#t3-band-title'
+  - action: screenshot
+    name: tena_am_desktop-11-band.png
+    full_page: false
+  - action: click
+    selector: .t3-footer-name
+  - action: wait_for
+    selector: '[data-qa="template-credit"]'
+  - action: screenshot
+    name: tena_am_desktop-12-footer.png
+    full_page: false
+  - action: click
+    selector: '#t3-hero-title'
+  - action: screenshot
+    name: tena_am_desktop-13-full.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="tena-hero-book"]'
+  - action: wait_for
+    selector: '[data-vt-book]'
+  - action: wait_for
+    selector: '[data-qa="tena-handoff-book"]'
+  - action: screenshot
+    name: tena_am_desktop-14-handoff.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="tena-handoff-book"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: screenshot
+    name: tena_am_desktop-15-chooser.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_tena_open_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_tena_open_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: screenshot
+    name: tena_am_desktop-16-time-picker.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors
+- id: tena_am_mobile
+  title: Tena v3 (am, mobile, light, afternoon)
+  viewport: *id002
+  checks: []
+  routes:
+  - path: /{qa_tena_slug}/am?display=light&preview-time=15:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="tena-clinic-v3"][data-pe-recipe="tena-clinic"]'
+    - type: text_contains
+      value: እንደምን ዋሉ
+  actions:
+  - action: wait_for
+    selector: .t3-hero-photo img
+  - action: wait_for
+    selector: '[data-qa="tena-next-card"]'
+  - action: screenshot
+    name: tena_am_mobile-01-hero.png
+    full_page: false
+  - action: click
+    selector: '#t3-services-title'
+  - action: screenshot
+    name: tena_am_mobile-02-board.png
+    full_page: false
+  - action: click
+    selector: '#t3-visit-title'
+  - action: screenshot
+    name: tena_am_mobile-03-visit.png
+    full_page: false
+  - action: click
+    selector: '#t3-team-title'
+  - action: screenshot
+    name: tena_am_mobile-04-directory.png
+    full_page: false
+  - action: click
+    selector: '#t3-story-title'
+  - action: screenshot
+    name: tena_am_mobile-05-story.png
+    full_page: false
+  - action: click
+    selector: :nth-match(.t3-proof-label, 1)
+  - action: screenshot
+    name: tena_am_mobile-06-proof.png
+    full_page: false
+  - action: click
+    selector: '#t3-notes-title'
+  - action: screenshot
+    name: tena_am_mobile-07-benefits.png
+    full_page: false
+  - action: click
+    selector: '#t3-reviews-title'
+  - action: click
+    selector: '[data-qa="tena-reviews-pause"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="tena-reviews-pause"][aria-pressed="true"]'
+  - action: screenshot
+    name: tena_am_mobile-08-reviews-paused.png
+    full_page: false
+  - action: click
+    selector: '#t3-faq-title'
+  - action: click
+    selector: :nth-match(.t3-faq-list summary, 1)
+  - action: get_text
+    selector: .t3-hours
+    assertions:
+    - type: text_contains
+      selector: .t3-hours
+      value: ከጠዋቱ 2 ሰዓት
+    - type: visible_selector
+      value: '[data-qa="tena-habesha-toggle"][aria-pressed="true"]'
+  - action: screenshot
+    name: tena_am_mobile-09-faq-hours.png
+    full_page: false
+  - action: click
+    selector: '#t3-rooms-title'
+  - action: click
+    selector: '[data-qa="tena-room-tab-1"]'
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="tena-room-tab-1"][aria-selected="true"]'
+  - action: screenshot
+    name: tena_am_mobile-10-rooms.png
+    full_page: false
+  - action: click
+    selector: '#t3-band-title'
+  - action: screenshot
+    name: tena_am_mobile-11-band.png
+    full_page: false
+  - action: click
+    selector: .t3-footer-name
+  - action: wait_for
+    selector: '[data-qa="template-credit"]'
+  - action: screenshot
+    name: tena_am_mobile-12-footer.png
+    full_page: false
+  - action: wait_for
+    selector: '[data-qa="tena-sticky-book"]'
+  - action: click
+    selector: '#t3-hero-title'
+  - action: screenshot
+    name: tena_am_mobile-13-full.png
+    full_page: true
+  - action: click
+    selector: '[data-qa="tena-hero-book"]'
+  - action: wait_for
+    selector: '[data-vt-book]'
+  - action: wait_for
+    selector: '[data-qa="tena-handoff-book"]'
+  - action: screenshot
+    name: tena_am_mobile-14-handoff.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="tena-handoff-book"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: screenshot
+    name: tena_am_mobile-15-chooser.png
+    full_page: false
+  - action: click
+    selector: :nth-match([data-qa="booking-service"], 1)
+  - action: wait_for
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_tena_open_day}"]:not([disabled])'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-date"][data-qa-date="{qa_tena_open_day}"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: screenshot
+    name: tena_am_mobile-16-time-picker.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

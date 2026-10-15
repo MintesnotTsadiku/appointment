@@ -4004,7 +4004,62 @@
     "lookTaper": "Tapered cut",
     "lookSilk": "Silk press",
     "menu": "Price menu",
-    "stillUnsure": "Still unsure? Ask us"
+    "stillUnsure": "Still unsure? Ask us",
+    "selam": {
+      "flowTitle": "One movement, five frames",
+      "frameKneel": "Kneel",
+      "frameReach": "Reach",
+      "frameTwist": "Twist",
+      "frameRise": "Rise",
+      "frameStand": "Stand",
+      "frameOf": "Frame {index} of {count}",
+      "showFrame": "Show frame {index}",
+      "coach": "Your coach",
+      "beats": "The session, beat by beat",
+      "moreReviews": "More from clients",
+      "swipeFrames": "Swipe through the movement"
+    },
+    "abugida": {
+      "contents": "Contents",
+      "coaches": "Coaches",
+      "phraseTitle": "Phrase of the week",
+      "phraseSay": "How to say it",
+      "phraseMeaning": "Meaning",
+      "phraseGloss": "Little by little, an egg walks on its own legs. Patient practice gets you there.",
+      "turnCard": "Turn the card",
+      "turnBack": "Turn it back",
+      "inTheMargin": "Noted in the margin",
+      "plates": "Plates"
+    },
+    "meron": {
+      "lookSuit": "Navy wool suit",
+      "lookWrap": "Wine wrap dress",
+      "lookKemis": "Habesha kemis with a tibeb border",
+      "alteration": "Taken in at the shoulders, the sleeves and the waist",
+      "tagNo": "No. {count}",
+      "chooseTime": "Choose a time",
+      "clothToFitting": "From cloth to fitting",
+      "theMaker": "The maker",
+      "theAtelier": "The atelier",
+      "nextFitting": "Next free fitting: {when}, {time}",
+      "mapStreet": "Main road",
+      "mapGate": "Courtyard gate",
+      "mapCourtyard": "Courtyard",
+      "mapFittingRoom": "Fitting room",
+      "mapLabel": "Drawn map of the courtyard atelier with the gate, the courtyard and the fitting room",
+      "pauseFilm": "Pause the atelier film",
+      "playFilm": "Play the atelier film",
+      "frameOf": "{index} of {count}"
+    },
+    "tena": {
+      "nextAppointments": "Next free appointments",
+      "board": "Appointment board",
+      "boardNext": "Next free",
+      "directory": "Clinic directory",
+      "youAreHere": "You are here",
+      "bookingDesk": "Booking desk",
+      "callShort": "Call"
+    }
   },
   "customerEmail": {
     "subjectConfirmation": "Your booking with {0} is confirmed",

@@ -1,0 +1,12 @@
+/* Abugida v3 booking-success moment ("ink flourish"). Loaded only with the confirmation (lazy module). */
+.a3m { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; border-radius: inherit; color: var(--accent-primary, #9e1c17); }
+.a3m-flourish { position: absolute; left: 50%; top: 34%; width: min(96%, 600px); height: auto; transform: translate(-50%, -50%); opacity: .34; }
+.a3m-stroke { stroke-dasharray: 1; stroke-dashoffset: 1; animation: a3m-write 1500ms cubic-bezier(.45, .05, .25, 1) 120ms 1 forwards; }
+.a3m-late { animation-delay: 1100ms; animation-duration: 900ms; opacity: .7; }
+.a3m-mark { position: absolute; left: var(--x); top: var(--y); color: #b8892b; font-size: 1.4rem; line-height: 1; opacity: 0; transform: scale(.4) rotate(-30deg); animation: a3m-settle 700ms cubic-bezier(.2, .7, .2, 1) var(--d) 1 forwards; }
+@keyframes a3m-write { to { stroke-dashoffset: 0; } }
+@keyframes a3m-settle { to { opacity: .9; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .a3m-stroke { animation: none; stroke-dashoffset: 0; }
+  .a3m-mark { animation: none; opacity: .9; transform: none; }
+}

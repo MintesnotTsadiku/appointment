@@ -25,6 +25,7 @@ RECIPE_MANIFESTS = {
     "selam-movement": {
         1: "public_experience/manifest/design/recipes/selam-movement.v1.json",
         2: "public_experience/manifest/design/recipes/selam-movement.v2.json",
+        3: "public_experience/manifest/design/recipes/selam-movement.v3.json",
     },
     "bloom-hair": {
         1: "public_experience/manifest/design/recipes/bloom-hair.v1.json",
@@ -34,14 +35,17 @@ RECIPE_MANIFESTS = {
     "meron-atelier": {
         1: "public_experience/manifest/design/recipes/meron-atelier.v1.json",
         2: "public_experience/manifest/design/recipes/meron-atelier.v2.json",
+        3: "public_experience/manifest/design/recipes/meron-atelier.v3.json",
     },
     "abugida-language": {
         1: "public_experience/manifest/design/recipes/abugida-language.v1.json",
         2: "public_experience/manifest/design/recipes/abugida-language.v2.json",
+        3: "public_experience/manifest/design/recipes/abugida-language.v3.json",
     },
     "tena-clinic": {
         1: "public_experience/manifest/design/recipes/tena-clinic.v1.json",
         2: "public_experience/manifest/design/recipes/tena-clinic.v2.json",
+        3: "public_experience/manifest/design/recipes/tena-clinic.v3.json",
     },
     "ergata-therapy": {
         1: "public_experience/manifest/design/recipes/ergata-therapy.v1.json",

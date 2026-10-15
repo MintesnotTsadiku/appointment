@@ -145,7 +145,8 @@ scenarios:
   - action: open_url
     url: /selam-studio?preview-state=loading
   - action: wait_for
-    selector: '[data-pe-loading] [aria-busy="true"]'
+    # A v3 template draws its own loading screen; older templates use the shared skeleton.
+    selector: ':nth-match([role="status"][aria-busy="true"], [data-pe-loading] [aria-busy="true"], 1)'
   - action: screenshot
     name: states_preview_en_desktop-7-site-skeleton.png
     full_page: false
