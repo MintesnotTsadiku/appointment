@@ -11,6 +11,8 @@ capture_instruction_timeline: true
 timeout_ms: 180000
 options:
   ignore_baseline_drift: true
+  show_cursor: false
+  show_action_labels: false
   color_scheme: light
 scenarios:
 - id: meseret_en_1440-states
@@ -180,4 +182,36 @@ scenarios:
   actions:
   - action: screenshot
     name: meseret-loading-am.png
+    full_page: false
+- id: meseret_loading_en_dark
+  title: meseret loading en dark
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /meseret-studio?preview-state=loading&display=dark
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[role="status"][aria-busy="true"]'
+  actions:
+  - action: screenshot
+    name: meseret-loading-en-dark.png
+    full_page: false
+- id: meseret_loading_am_dark
+  title: meseret loading am dark
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /meseret-studio/am?preview-state=loading&display=dark
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[role="status"][aria-busy="true"]'
+  actions:
+  - action: screenshot
+    name: meseret-loading-am-dark.png
     full_page: false

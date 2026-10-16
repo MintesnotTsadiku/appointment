@@ -30,4 +30,4 @@ class TestEnkuaReference(unittest.TestCase):
 
     def test_known_reference_revisions_leave_other_showcases_unchanged(self):
         for showcase in SHOWCASES:
-            self.assertEqual(showcase.version, {"enkua": 7, "mizan": 9}.get(showcase.key, 6))
+            self.assertEqual(showcase.version, {"enkua": 7, "mizan": 9, "meseret": 7}.get(showcase.key, 6))

@@ -1,38 +1,31 @@
 # Meseret Advisory — A Day in Addis
 
-Approved reference: [v2-day-in-addis-desktop.png](../design-references/public-experience/meseret/v2-day-in-addis-desktop.png).
+Approved reference: [v2-day-in-addis-desktop.png](../design-references/public-experience/meseret/v2-day-in-addis-desktop.png). The [comparison analysis](../design-references/public-experience/meseret/REFINEMENT_ANALYSIS.md) records the previous implementation and the rebuild standard.
 
-Package `meseret-v3`, recipe `meseret-advisory@3`, showcase `/meseret-studio`. Rahel Abebe is the independent provider.
+Package `meseret-v3`, recipe `meseret-advisory@3`, showcase `/meseret-studio`. Rahel Abebe remains the independent provider. Revision 7 refreshes only the seeder-owned Meseret business.
 
-## Design and expression
+## Reference rebuild
 
-A shop shutter opening over Addis anchors the page. Serif headings and alternating service photographs follow a working day, with peach and plum sections.
+The page follows the reference's sequence: a bright shop-opening hero; adjoining 09:00, 12:00 and 16:00 scenes; a peach booking band; preparation checklist; four visible FAQs; online and office photo panels; a compact footer. The desktop keeps the reference's alternating proportions and thin seams. Genuine italic EB Garamond carries the English headings. Noto Serif Ethiopic keeps Amharic headings readable without artificial italics.
 
-The recipe declares `imagery: mixed`. Photographs introduce people and places. Type, rules, color fields and spacing carry the remaining sections.
+Seven separate generated photographs replace the square image sheet. The shopkeeper is male; the bookkeeper is female; the adviser scene includes female and male staff with a customer facing away. The phone crop preserves both advisers. These choices follow the approved scenes, rather than imposing a demographic quota. Images are illustrative showcase photographs, not claims about real people or premises.
 
-`motion: calm` uses focus, hover, press and disclosure feedback. Reduced motion removes movement. This keeps the page readable in both languages.
+The necessary adaptations are functional HTML, owner-editable bilingual copy, existing services and prices, the existing bookable provider, correct UTC+3 time, real office hours, live availability, language/theme controls, and working content links. The booking band uses a shadcn service selector and links to the shared scheduler for actual format, date and time choices. It does not show sample appointments as available slots. The colleague is display-only and adds no booking capacity.
 
-`darkMode: tonal` uses dark ink surfaces, pale text and a lighter accent. Day photographs remain day photographs. No night variant is declared.
+On phones the scenes return to reading order, the booking band stacks, and the FAQs remain visible. Dark mode uses plum/ink paper surfaces and light text while retaining the day photographs.
 
-`holiday: greeting` and `greeting: header` place short translated lines in the running header. Holiday greetings follow the owner setting.
+## Expression choices
 
-`success: static`: A ledger mark confirms the appointment. It reinforces the idea of putting the next step in order.
+- `imagery: mixed`: documentary photographs, editorial typography, fine rules and paper color fields. The confirmation uses a small ledger drawing.
+- `motion: calm`: kit reveals and precise hover, focus and press feedback. Reduced motion removes movement; no parallax or animated counters.
+- `darkMode: tonal`: deliberate dark paper and pale plum accents. No night images are required or generated.
+- `holiday: greeting`: the translated greeting appears in the hero when the owner enables it.
+- `success: static`: a ledger check accompanies the scheduler's localized confirmation.
+- `greeting: hero`: the time-of-day greeting sits above the hero title.
 
-The photo fills the phone hero. A dark overlay supports the text. Alternating service rows return to reading order on phones.
+The loading state is a quiet paper ledger with three rules. The booking skin continues the serif typography, plum actions, square photographs and fine borders through scheduling, details and confirmation. The package imports no visual components from other templates.
 
-## Package and content
-
-The package owns its landing page, content pages, booking handoff, booking skin, loading state and confirmation mark. It shares only headless contracts and behavior.
-
-The scheduler retains the shared interaction model. Its typography, colors, borders, service imagery and confirmation match this package.
-
-English and Amharic content comes from the starter manifest, showcase definition and UI catalogs. Availability follows the owner setting. Hours support international and Habesha time.
-
-Images are generated source photographs, separate from the approved concept board. AVIF, WebP and phone crops have checksums in the imagery manifest. `support/meseret-v3/provenance.json` records the source and processing. The collection font manifest records licenses and subsets.
-
-The idempotent `appointment.demo.showcase.seed` command creates and refreshes this business. Gallery previews use the standard capture script and catalog checksums. QA evidence stays in Agent Plane.
-
-## Authored services
+## Content and assets
 
 | Service | Minutes | ETB | Format |
 | --- | ---: | ---: | --- |
@@ -40,25 +33,36 @@ The idempotent `appointment.demo.showcase.seed` command creates and refreshes th
 | Business setup consultation | 90 | 3500 | In person |
 | Introductory conversation | 20 | 0 | Video |
 
-The people, premises and prices are authored showcase content. Owners replace these facts before publishing their own business.
+Business copy comes from the bilingual starter manifest and seeder. UI labels are in both translation catalogs. The current shared independent scheduler still displays the stored English offering name on an Amharic booking page; its controls, business name, location, dates and hours are localized. This pre-existing shared behavior is outside the template-only rebuild and is recorded for review.
 
-## Verification — 2026-10-16
+`asset-prompts-r2.txt` records the Codex CLI image brief. `support/meseret-v3/provenance-r2.json` records processing and checksums. Images use WebP and AVIF, with separate phone derivatives and a portrait hero crop. Font files retain their existing OFL licenses. Meseret owns the font-family declarations and loads the genuine italic asset from the licensed font library.
 
-The light and dark runs cover 1440px desktop and 390px phone in English and Amharic. State runs cover holidays, theme changes and loading. Booking runs capture landing, handoff, scheduler, details and confirmation. They also check the Amharic dark handoff and scheduler.
+Refresh an existing showcase with `appointment.demo.showcase_refinement.refresh` and `{"key":"meseret"}`. Creation remains in the explicit idempotent showcase seeder. QA screenshots stay in Agent Plane; only product gallery previews are shipped.
 
-| Agent Plane run | ID | Result |
+## Verification — 2026-10-17
+
+The frontend DOM suite passes. TypeScript stays at the baseline of 123 errors, with none in the Meseret package. Focused Frappe tests pass: Meseret content/identity preservation (1), collection manifests/checksums/AA palette pairs (5), and showcase revision contracts (2). The full app suite was not rerun.
+
+Agent Plane covers desktop 1440 and phone 390, English and Amharic, light and dark; holiday and loading states; and the complete booking journey. The journey chooses an enabled calendar date rather than assuming tomorrow is open. Fixture cleanup removes only its own records.
+
+| Evidence | Run | Result |
 | --- | --- | --- |
-| Light | BQA-2026-00723 | Passed |
-| Dark | BQA-2026-00724 | Passed |
-| Holiday and loading states | BQA-2026-00711 | Passed |
-| Booking journey | BQA-2026-00710 | Passed |
-| Final collection visual review | BQA-2026-00721 | Passed |
+| Reference comparison, light | BQA-2026-00768 | Passed |
+| Reference comparison, dark | BQA-2026-00770 | Passed |
+| Holiday and loading, including dark loading | BQA-2026-00767 | Passed |
+| Booking through confirmation; Amharic dark scheduler | BQA-2026-00769 | Passed |
 
-Phone measurements use the production build, cache disabled, 390×844, DPR 2, 9 Mbps down, 3 Mbps up, 170 ms latency and 4× CPU throttling. Values are three-load medians. The budget is median LCP ≤ 2500 ms.
+Final phone crop coverage: **BQA-2026-00771 — Passed** (English and Amharic, light and dark). Both advisers remain visible in the phone crop.
 
-| Language | Median LCP (ms) | Range (ms) | Worst CLS |
+The production build passes. Phone measurements use cold caches, 390×844, DPR 2, 9 Mbps down / 3 Mbps up, 170 ms latency and 4× CPU throttling. Three runs per language give:
+
+| Language | Median LCP | Range | Worst CLS |
 | --- | ---: | --- | ---: |
-| English | 1596 | 1500–1760 | 0.0000 |
-| Amharic | 2132 | 1572–2156 | 0.0002 |
+| English | 1580 ms | 1432–1952 ms | 0.0005 |
+| Amharic | 1660 ms | 1496–1960 ms | 0.0001 |
 
-Frontend gates: 123 TypeScript errors, unchanged from baseline. The DOM suite and production build pass. Focused Frappe tests cover collection manifests, section schemas, checksums, AA color pairs, shell boot and gallery contracts. The known full-suite `test_data_preservation` failure is outside this change. The full app suite was not rerun.
+All six measured loads meet the 2500 ms budget. These are controlled local measurements, not field percentiles. A subsequent desktop-only type-size adjustment does not alter the measured phone layout.
+
+Review viewer: `http://localhost:47913/comparison.html`. Persistent captures and review scripts are under `/home/minte/template-new/meseret-review/`. No QA screenshots are committed. No other template package or business definition changed.
+
+Final desktop typography coverage: **BQA-2026-00772 — Passed** (English and Amharic, light and dark). The final English desktop is 1440×4469, approximately 1.8% taller than the reference normalized to the same width. A live browser check confirms that the shadcn selector changes the service destination, preserves Amharic and creates no horizontal overflow at 390px.

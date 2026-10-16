@@ -4214,6 +4214,16 @@
       "openingHours": "የሥራ ሰዓት",
       "convenientLocation": "ለመድረስ አመቺ ቦታ",
       "bookingRecorded": "ቀጣዩ እርምጃዎ ተይዟል።"
+    },
+    "meseret": {
+      "chooseService": "የምክክር አይነት ይምረጡ",
+      "serviceHint": "የሚፈልጉትን ድጋፍ ይምረጡ።",
+      "chooseTime": "የመገናኛ አይነትና ሰዓት ይምረጡ",
+      "timeHint": "በቀጣዩ ደረጃ ክፍት ቀኖችና ሰዓቶችን ይመልከቱ። አዲስ አበባ · UTC+3።",
+      "confirm": "ዝርዝርዎና ማረጋገጫ",
+      "confirmHint": "ስለምን መወያየት እንደሚፈልጉ ይንገሩን።",
+      "continue": "ቀጠሮ ለመያዝ ይቀጥሉ",
+      "prepare": "ዝግጅት"
     }
   },
   "customerEmail": {

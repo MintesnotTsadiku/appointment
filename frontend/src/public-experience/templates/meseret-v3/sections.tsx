@@ -4,52 +4,28 @@ import type { TemplateProps as Props } from "../types";
 import { records, section } from "../content";
 import { usePublicChrome } from "../chrome";
 import { openState, useTimeOfDay } from "../kit";
-import { Book, Photo, words } from "./elements";
+import { Photo, words } from "./elements";
+export { Reservation as Process } from "./Reservation";
 
 export function About({ props }: { props: Props }) {
   const content = section(props.snapshot.sections, "about");
-  const providers = records(
-    section(props.snapshot.sections, "providers").items,
-  );
   return (
-    <section className="meseret3-section meseret3-about" id="about">
-      <div className="meseret3-about-image">
-        <Photo props={props} role="portrait.meseret" item={providers[0]} />
-      </div>
+    <section className="meseret3-prepare" id="prepare">
       <div>
-        <span className="meseret3-index" aria-hidden="true">
-          02 /
-        </span>
         <h2>{words(content.title, props.locale)}</h2>
-        <p className="meseret3-body">{words(content.body, props.locale)}</p>
-        {providers.map((person, index) => (
-          <div className="meseret3-person" key={index}>
-            <h3>{words(person.name, props.locale)}</h3>
-            <p>{words(person.role, props.locale)}</p>
-          </div>
-        ))}
-        <Book props={props} />
+        <p>{words(content.body, props.locale)}</p>
+        <ul>
+          {Array.isArray(content.highlights)
+            ? content.highlights.map((item, i) => (
+                <li key={i}>
+                  <span aria-hidden="true">✓</span>
+                  {words(item, props.locale)}
+                </li>
+              ))
+            : null}
+        </ul>
       </div>
-    </section>
-  );
-}
-
-export function Process({ props }: { props: Props }) {
-  const content = section(props.snapshot.sections, "process");
-  return (
-    <section className="meseret3-section meseret3-process">
-      <h2>{words(content.title, props.locale)}</h2>
-      <div>
-        {records(content.items).map((item, index) => (
-          <article key={index}>
-            <span className="meseret3-number" aria-hidden="true">
-              {String(index + 1).padStart(2, "0")}
-            </span>
-            <h3>{words(item.title, props.locale)}</h3>
-            <p>{words(item.description, props.locale)}</p>
-          </article>
-        ))}
-      </div>
+      <Photo props={props} role="prepare.meseret" decorative />
     </section>
   );
 }
@@ -77,7 +53,7 @@ export function Visit({ props }: { props: Props }) {
         </button>
       </div>
       <div className="meseret3-places">
-        {records(places.items).map((place, index) => {
+        {[...records(places.items)].reverse().map((place, index) => {
           const days =
             typeof place.id === "string"
               ? props.snapshot.placeHours?.[place.id]?.days || []
@@ -85,50 +61,60 @@ export function Visit({ props }: { props: Props }) {
           const state = openState(days, now);
           return (
             <article key={index}>
-              <p>
-                {state.open
-                  ? chrome.t("openNow", { time: clock(state.closes || "") })
-                  : ""}
-              </p>
-              <h3>{words(place.name, props.locale)}</h3>
-              <p>{words(place.address, props.locale)}</p>
-              <p>{words(place.body, props.locale)}</p>
-              {days.length ? (
-                <dl className="meseret3-hours">
-                  {days.map((day, i) => (
-                    <div key={i}>
-                      <dt>
-                        {new Intl.DateTimeFormat(
-                          props.locale === "am" ? "am-ET" : "en-GB",
-                          { weekday: "long", timeZone: "UTC" },
-                        ).format(
-                          new Date(
-                            Date.UTC(
-                              2024,
-                              0,
-                              1 +
-                                [
-                                  "Monday",
-                                  "Tuesday",
-                                  "Wednesday",
-                                  "Thursday",
-                                  "Friday",
-                                  "Saturday",
-                                  "Sunday",
-                                ].indexOf(day.day),
-                            ),
-                          ),
-                        )}
-                      </dt>
-                      <dd>
-                        {clock(day.open)} – {clock(day.close)}
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-              ) : (
-                <p>{words(place.hours, props.locale)}</p>
-              )}
+              <Photo
+                props={props}
+                role={index === 0 ? "online.meseret" : "office.meseret"}
+                decorative
+              />
+              <div className="meseret3-place-caption">
+                <p>
+                  {state.open
+                    ? chrome.t("openNow", { time: clock(state.closes || "") })
+                    : ""}
+                </p>
+                <h3>{words(place.name, props.locale)}</h3>
+                <p>{words(place.address, props.locale)}</p>
+                <p>{words(place.body, props.locale)}</p>
+                {days.length ? (
+                  <details className="meseret3-hours-disclosure">
+                    <summary>{chrome.t("hours")}</summary>
+                    <dl className="meseret3-hours">
+                      {days.map((day, i) => (
+                        <div key={i}>
+                          <dt>
+                            {new Intl.DateTimeFormat(
+                              props.locale === "am" ? "am-ET" : "en-GB",
+                              { weekday: "long", timeZone: "UTC" },
+                            ).format(
+                              new Date(
+                                Date.UTC(
+                                  2024,
+                                  0,
+                                  1 +
+                                    [
+                                      "Monday",
+                                      "Tuesday",
+                                      "Wednesday",
+                                      "Thursday",
+                                      "Friday",
+                                      "Saturday",
+                                      "Sunday",
+                                    ].indexOf(day.day),
+                                ),
+                              ),
+                            )}
+                          </dt>
+                          <dd>
+                            {clock(day.open)} – {clock(day.close)}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </details>
+                ) : (
+                  <p>{words(place.hours, props.locale)}</p>
+                )}
+              </div>
             </article>
           );
         })}

@@ -68,7 +68,7 @@ const calmPackages = new Set(["enkua-v3", "mizan-v3", "meseret-v3", "buna-v3", "
 for (const pkg of packages) {
   assert.ok(pkg.recipe, `${pkg.folder}: a recipe pins renderer ${pkg.id}`);
   same(expressionProblems(pkg.recipe), [], `${pkg.folder} declares a valid expression`);
-  same(pkg.recipe.expression, calmPackages.has(pkg.folder) ? CALM : CURRENT, `${pkg.folder} declares the forms it draws`);
+  same(pkg.recipe.expression, pkg.folder === "meseret-v3" ? { ...CALM, greeting: "hero" } : calmPackages.has(pkg.folder) ? CALM : CURRENT, `${pkg.folder} declares the forms it draws`);
   same(contractFailures(pkg), [], `${pkg.folder} meets the quality bar`);
 }
 

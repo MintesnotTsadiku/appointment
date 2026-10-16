@@ -10,6 +10,7 @@ import { Hero } from "./Hero";
 import { Services } from "./Services";
 import { About, Process, Visit } from "./sections";
 import "./site.css";
+import "./responsive.css";
 export { Header, Footer } from "./chrome";
 export { Photo } from "./elements";
 
@@ -20,7 +21,6 @@ export function Site(props: Props) {
   useReveal(root, level, props.locale);
   const chrome = usePublicChrome(props.locale);
   const faq = section(props.snapshot.sections, "faq");
-  const booking = section(props.snapshot.sections, "booking_cta");
   return (
     <div
       ref={root}
@@ -40,29 +40,20 @@ export function Site(props: Props) {
         <Hero props={props} />
 
         <Services props={props} />
-        <About props={props} />
         <Process props={props} />
+        <About props={props} />
         <section id="faq" className="meseret3-section meseret3-faq">
           <h2>{words(faq.title, props.locale)}</h2>
           <div>
             {records(faq.items).map((item, index) => (
-              <details key={index}>
-                <summary>{words(item.question, props.locale)}</summary>
+              <article key={index}>
+                <h3>{words(item.question, props.locale)}</h3>
                 <p>{words(item.answer, props.locale)}</p>
-              </details>
+              </article>
             ))}
           </div>
         </section>
         <Visit props={props} />
-        <section className="meseret3-section meseret3-booking">
-          <span className="meseret3-index" aria-hidden="true">
-            ↗
-          </span>
-          <h2>{words(booking.title, props.locale)}</h2>
-          <p>{words(booking.body, props.locale)}</p>
-          <Book props={props} />
-          <Live props={props} />
-        </section>
       </main>
       <Footer props={props} />
     </div>

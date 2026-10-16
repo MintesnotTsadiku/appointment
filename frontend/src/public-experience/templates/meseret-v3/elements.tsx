@@ -1,3 +1,4 @@
+import { useTranslation } from "@/lib/i18n";
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import type { TemplateProps as Props } from "../types";
@@ -25,6 +26,8 @@ export const withLocale = (href: string, locale: string) => {
   if (url.pathname.startsWith("/schedule/")) url.searchParams.set("lang", "am");
   else if (/\/(book|blog|gallery)(\/|$)/.test(url.pathname))
     url.searchParams.set("locale", "am");
+  else if (!url.pathname.endsWith("/am"))
+    url.pathname = url.pathname.replace(/\/$/, "") + "/am";
   return url.pathname + url.search + url.hash;
 };
 
@@ -82,6 +85,7 @@ export function Book({
   href?: string;
   children?: ReactNode;
 }) {
+  const { setLanguage } = useTranslation();
   const label = action(
     section(props.snapshot.sections, "hero").primaryAction,
     props.locale,
@@ -92,6 +96,7 @@ export function Book({
       className="meseret3-button"
       to={withLocale(target, props.locale)}
       data-qa="meseret-book"
+      onClick={() => setLanguage(props.locale)}
     >
       {children || label?.label}
       <span aria-hidden="true">↗</span>

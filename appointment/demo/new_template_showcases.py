@@ -52,6 +52,10 @@ def sections(definition, starter, provider, places, services):
     for index, item in enumerate(content["services"]["items"]):
         roles = service_roles[definition["key"]]
         item.update(image=asset + roles[index % len(roles)] + ".webp", imageAlt=item["name"])
+    if definition["key"] == "meseret":
+        from appointment.demo.meseret_showcase import refine_sections
+
+        return refine_sections(content, defaults)
     if definition["key"] == "mizan":
         from appointment.demo.mizan_showcase import refine_sections
 

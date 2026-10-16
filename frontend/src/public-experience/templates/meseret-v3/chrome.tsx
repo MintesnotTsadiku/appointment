@@ -1,16 +1,18 @@
+import { useMeseretCopy } from "./copy";
 import { Link } from "react-router-dom";
 import type { TemplateProps as Props } from "../types";
 import { action, section } from "../content";
 import { usePublicChrome } from "../chrome";
-import { greetingKey, useTimeOfDay } from "../kit";
+import { Sun, Moon } from "lucide-react";
 import { useTemplateCredit } from "../credit";
-import { SiteHoliday } from "./holiday";
+
 import { words, withLocale } from "./elements";
 
 export function Header({ props }: { props: Props }) {
   const { locale, mode } = props;
+  const t = useMeseretCopy(locale);
   const chrome = usePublicChrome(locale);
-  const now = useTimeOfDay();
+
   return (
     <>
       <header className="meseret3-header">
@@ -18,12 +20,24 @@ export function Header({ props }: { props: Props }) {
           className="meseret3-brand"
           to={withLocale(props.publicRoot, props.locale)}
         >
-          {props.applicationName}
+          {props.locale === "am"
+            ? props.applicationName
+            : props.snapshot.compiledDesign.identity.shortName ||
+              props.applicationName}
         </Link>
         <nav aria-label={chrome.t("navLabel")}>
-          <a href={`${props.publicRoot}#services`}>{chrome.t("services")}</a>
-          <a href={`${props.publicRoot}#about`}>{chrome.t("team")}</a>
-          <a href={`${props.publicRoot}#visit`}>{chrome.t("visit")}</a>
+          <a href={`${withLocale(props.publicRoot, props.locale)}#services`}>
+            {chrome.t("services")}
+          </a>
+          <a href={`${withLocale(props.publicRoot, props.locale)}#about`}>
+            {chrome.t("team")}
+          </a>
+          <a href={`${withLocale(props.publicRoot, props.locale)}#prepare`}>
+            {t("prepare")}
+          </a>
+          <a href={`${withLocale(props.publicRoot, props.locale)}#faq`}>
+            {chrome.t("questions")}
+          </a>
         </nav>
         <div className="meseret3-controls">
           <a
@@ -38,16 +52,10 @@ export function Header({ props }: { props: Props }) {
             aria-label={chrome.modeSwitchLabel(mode)}
             data-qa="meseret-mode"
           >
-            {chrome.modeName(props.mode)}
+            {mode === "dark" ? <Sun size={18} /> : <Moon size={18} />}
           </button>
         </div>
       </header>
-      <div className="meseret3-running">
-        <span data-qa="meseret-greeting">
-          {chrome.t(greetingKey(now.part))}
-        </span>
-        <SiteHoliday props={props} />
-      </div>
     </>
   );
 }

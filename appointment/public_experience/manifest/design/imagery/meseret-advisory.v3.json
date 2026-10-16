@@ -5,34 +5,34 @@
   "version": 3,
   "assets": {
     "hero.meseret": {
-      "src": "/assets/appointment/brand-experience/support/meseret-v3/hero.webp",
-      "mobileSrc": "/assets/appointment/brand-experience/support/meseret-v3/hero-m.webp",
-      "alt": "A working day in Addis",
+      "src": "/assets/appointment/brand-experience/support/meseret-v3/hero-r2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/meseret-v3/hero-r2-m.webp",
+      "alt": "A shopkeeper opens his Addis shop at the start of the day",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5
       },
       "fit": "cover",
-      "width": 627,
-      "height": 627,
-      "mime": "image/webp",
-      "checksum": "sha256:61f782653622c5fd8490b43a93e09040e3d1d9d70e726b6aa98535e2f92936f8",
-      "provenance": {
-        "source": "generated",
-        "role": "hero",
-        "license": "project-generated",
-        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Separate photographic sheet, cropped to quadrants. Staff faces; customers turned away. Tonal dark mode."
-      },
+      "width": 1600,
+      "height": 800,
       "mobileWidth": 480,
-      "mobileHeight": 480,
+      "mobileHeight": 640,
+      "mime": "image/webp",
+      "checksum": "sha256:de14e902a72f7ef3199665cc88a3f302b416cd67bed2ccd7b1a73a39d25d0d35",
       "formats": [
         "avif"
       ],
       "checksums": {
-        "hero-m.webp": "sha256:2d0915e9d3974c7e64a1c25d302bbf3317163a98db174783fbef5764d676add3",
-        "hero.avif": "sha256:b890d28693761c8e273215814072f4d7817f4f8d4e2107eed5bfed14801e988b",
-        "hero-m.avif": "sha256:5303cfdc58852ad599625aac4753282e773d3e0c203d15315bdada0dc54b09f9",
-        "hero.webp": "sha256:61f782653622c5fd8490b43a93e09040e3d1d9d70e726b6aa98535e2f92936f8"
+        "hero-r2.webp": "sha256:de14e902a72f7ef3199665cc88a3f302b416cd67bed2ccd7b1a73a39d25d0d35",
+        "hero-r2.avif": "sha256:c2cb651c2c359857b0373ec8b0b385f5860d1b1b62cce3b3640b8d26b67cfac1",
+        "hero-r2-m.webp": "sha256:6f2152463df6642ab7887f137df6fc4816994646e2c23cc76de043140f43cbcd",
+        "hero-r2-m.avif": "sha256:675037777a5ff31ca407556bba71a5ba346613d6a8c882eb8cc17458b8589514"
+      },
+      "provenance": {
+        "source": "generated",
+        "role": "hero",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-17. Individual Ethiopian photographs; customers turned away. Tonal dark mode."
       }
     },
     "portrait.meseret": {
@@ -67,65 +67,251 @@
       }
     },
     "scene1.meseret": {
-      "src": "/assets/appointment/brand-experience/support/meseret-v3/scene1.webp",
-      "mobileSrc": "/assets/appointment/brand-experience/support/meseret-v3/scene1-m.webp",
-      "alt": "A working day in Addis",
+      "src": "/assets/appointment/brand-experience/support/meseret-v3/bookkeeping-r2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/meseret-v3/bookkeeping-r2-m.webp",
+      "alt": "A shopkeeper reviews her records at the counter",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5
       },
       "fit": "cover",
-      "width": 627,
-      "height": 627,
+      "width": 1050,
+      "height": 788,
+      "mobileWidth": 600,
+      "mobileHeight": 450,
       "mime": "image/webp",
-      "checksum": "sha256:7b58db49cb68bdbdde6a20f0ae88cfc96b54e04cae0f2ba66d20e67750c348e5",
-      "provenance": {
-        "source": "generated",
-        "role": "scene1",
-        "license": "project-generated",
-        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Separate photographic sheet, cropped to quadrants. Staff faces; customers turned away. Tonal dark mode."
-      },
-      "mobileWidth": 480,
-      "mobileHeight": 480,
+      "checksum": "sha256:4e31f1354319c0c17257e275f712c01f328518bb96abbd1f152447ed6070a189",
       "formats": [
         "avif"
       ],
       "checksums": {
-        "scene1-m.webp": "sha256:0b575079bbe8e0d2bb9d4db5b4cf06e767b16dfcf3ecd52c48f34c4adc7e4519",
-        "scene1.webp": "sha256:7b58db49cb68bdbdde6a20f0ae88cfc96b54e04cae0f2ba66d20e67750c348e5",
-        "scene1.avif": "sha256:2a1ea185e30c01a2402bc77e39deb9e1909f699712b56bb0707a06449d8e2698",
-        "scene1-m.avif": "sha256:1be85666ceccad04dc0d3413d029f2fc95ea9754e0559526ed985190f052df6f"
+        "bookkeeping-r2.webp": "sha256:4e31f1354319c0c17257e275f712c01f328518bb96abbd1f152447ed6070a189",
+        "bookkeeping-r2.avif": "sha256:8251bb6c99282ff4bb6e0d0b86c8a40a48670a789f7fc22dd8e54bdd5ce25f88",
+        "bookkeeping-r2-m.webp": "sha256:48da8766463fbe4752df34a5917015db206710d050d142cd7c8b372fa7545920",
+        "bookkeeping-r2-m.avif": "sha256:a66b16dd58ecd91291e5c5000b415efd99bd29e26720cc2b6b2a8c7ef4fc1587"
+      },
+      "provenance": {
+        "source": "generated",
+        "role": "bookkeeping",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-17. Individual Ethiopian photographs; customers turned away. Tonal dark mode."
       }
     },
     "scene2.meseret": {
-      "src": "/assets/appointment/brand-experience/support/meseret-v3/scene2.webp",
-      "mobileSrc": "/assets/appointment/brand-experience/support/meseret-v3/scene2-m.webp",
-      "alt": "A working day in Addis",
+      "src": "/assets/appointment/brand-experience/support/meseret-v3/beginning-r2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/meseret-v3/beginning-r2-m.webp",
+      "alt": "A notebook, keys, coffee and a business folder",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5
       },
       "fit": "cover",
-      "width": 627,
-      "height": 627,
+      "width": 1050,
+      "height": 788,
+      "mobileWidth": 600,
+      "mobileHeight": 450,
       "mime": "image/webp",
-      "checksum": "sha256:7cea7d798e6448bf948e613775d35675d9b51e0fed9168f2d7f07fbc6ae365f3",
-      "provenance": {
-        "source": "generated",
-        "role": "scene2",
-        "license": "project-generated",
-        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Separate photographic sheet, cropped to quadrants. Staff faces; customers turned away. Tonal dark mode."
-      },
-      "mobileWidth": 480,
-      "mobileHeight": 480,
+      "checksum": "sha256:c6a0ac840fba1f563985130f8d14a656d9b3cdc83bedf7b02e6aa3244320b10e",
       "formats": [
         "avif"
       ],
       "checksums": {
-        "scene2-m.avif": "sha256:27741cca4b49d9a34f4ae25f543df57c464c4a13490804f336f3f8cbf4b2e8d6",
-        "scene2.webp": "sha256:7cea7d798e6448bf948e613775d35675d9b51e0fed9168f2d7f07fbc6ae365f3",
-        "scene2.avif": "sha256:3eef62e2e9c725753ae601f1f81c08af70a6b4090f3f31c2d1abb280f6689b4f",
-        "scene2-m.webp": "sha256:8e8b1c289cbe927387e72a2d11af00cc6fcae230a9910d6d7fa12ec3bf1722d6"
+        "beginning-r2.webp": "sha256:c6a0ac840fba1f563985130f8d14a656d9b3cdc83bedf7b02e6aa3244320b10e",
+        "beginning-r2.avif": "sha256:b21dfab9d70fb224de93b645f28d0a3d46c9a7cd8903da060d4cf4933224ba3f",
+        "beginning-r2-m.webp": "sha256:223627546bd4f3aefdbf9435150c8aa5ce5ec4d4a4b1d7a69dfb3346a2e6ac0e",
+        "beginning-r2-m.avif": "sha256:a9fd484bab74b3d29ebf65d59cd13b058fa5637cd5d908fe4d13dd0beaadf0b5"
+      },
+      "provenance": {
+        "source": "generated",
+        "role": "beginning",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-17. Individual Ethiopian photographs; customers turned away. Tonal dark mode."
+      }
+    },
+    "bookkeeping.meseret": {
+      "src": "/assets/appointment/brand-experience/support/meseret-v3/bookkeeping-r2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/meseret-v3/bookkeeping-r2-m.webp",
+      "alt": "A shopkeeper reviews her records at the counter",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1050,
+      "height": 788,
+      "mobileWidth": 600,
+      "mobileHeight": 450,
+      "mime": "image/webp",
+      "checksum": "sha256:4e31f1354319c0c17257e275f712c01f328518bb96abbd1f152447ed6070a189",
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "bookkeeping-r2.webp": "sha256:4e31f1354319c0c17257e275f712c01f328518bb96abbd1f152447ed6070a189",
+        "bookkeeping-r2.avif": "sha256:8251bb6c99282ff4bb6e0d0b86c8a40a48670a789f7fc22dd8e54bdd5ce25f88",
+        "bookkeeping-r2-m.webp": "sha256:48da8766463fbe4752df34a5917015db206710d050d142cd7c8b372fa7545920",
+        "bookkeeping-r2-m.avif": "sha256:a66b16dd58ecd91291e5c5000b415efd99bd29e26720cc2b6b2a8c7ef4fc1587"
+      },
+      "provenance": {
+        "source": "generated",
+        "role": "bookkeeping",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-17. Individual Ethiopian photographs; customers turned away. Tonal dark mode."
+      }
+    },
+    "beginning.meseret": {
+      "src": "/assets/appointment/brand-experience/support/meseret-v3/beginning-r2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/meseret-v3/beginning-r2-m.webp",
+      "alt": "A notebook, keys, coffee and a business folder",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1050,
+      "height": 788,
+      "mobileWidth": 600,
+      "mobileHeight": 450,
+      "mime": "image/webp",
+      "checksum": "sha256:c6a0ac840fba1f563985130f8d14a656d9b3cdc83bedf7b02e6aa3244320b10e",
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "beginning-r2.webp": "sha256:c6a0ac840fba1f563985130f8d14a656d9b3cdc83bedf7b02e6aa3244320b10e",
+        "beginning-r2.avif": "sha256:b21dfab9d70fb224de93b645f28d0a3d46c9a7cd8903da060d4cf4933224ba3f",
+        "beginning-r2-m.webp": "sha256:223627546bd4f3aefdbf9435150c8aa5ce5ec4d4a4b1d7a69dfb3346a2e6ac0e",
+        "beginning-r2-m.avif": "sha256:a9fd484bab74b3d29ebf65d59cd13b058fa5637cd5d908fe4d13dd0beaadf0b5"
+      },
+      "provenance": {
+        "source": "generated",
+        "role": "beginning",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-17. Individual Ethiopian photographs; customers turned away. Tonal dark mode."
+      }
+    },
+    "advisers.meseret": {
+      "src": "/assets/appointment/brand-experience/support/meseret-v3/advisers-r2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/meseret-v3/advisers-r2-m.webp",
+      "alt": "Rahel and a colleague listen to a customer",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1600,
+      "height": 800,
+      "mobileWidth": 600,
+      "mobileHeight": 300,
+      "mime": "image/webp",
+      "checksum": "sha256:f43d30f3ec2101a953f7c9268ed61359780d640b836aaffa5090a1592abf63ac",
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "advisers-r2.webp": "sha256:f43d30f3ec2101a953f7c9268ed61359780d640b836aaffa5090a1592abf63ac",
+        "advisers-r2.avif": "sha256:5105f3725fa93041d17f20e1c98fd16fa3b596fb644ad4c368681615b6cdbec6",
+        "advisers-r2-m.webp": "sha256:1bf8ca0c9308450a7cf3a6d5429328f0a37a408bc020a1f587abdd0174476d71",
+        "advisers-r2-m.avif": "sha256:eaf9c3cdeb156f96f016dcd6f4a5be0fed847637c7a2869308df6951aa18e95c"
+      },
+      "provenance": {
+        "source": "generated",
+        "role": "advisers",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-17. Individual Ethiopian photographs; customers turned away. Tonal dark mode."
+      }
+    },
+    "prepare.meseret": {
+      "src": "/assets/appointment/brand-experience/support/meseret-v3/prepare-r2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/meseret-v3/prepare-r2-m.webp",
+      "alt": "A notebook and coffee overlooking Addis Ababa",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1050,
+      "height": 788,
+      "mobileWidth": 600,
+      "mobileHeight": 450,
+      "mime": "image/webp",
+      "checksum": "sha256:45ff50f1b039c992c7f6f66977416e6610c88c29641a9ede39ea17cd8547a099",
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "prepare-r2.webp": "sha256:45ff50f1b039c992c7f6f66977416e6610c88c29641a9ede39ea17cd8547a099",
+        "prepare-r2.avif": "sha256:64d519db30b48874107ad587dfce59e5a52694b8b2039e678486df011a0acb50",
+        "prepare-r2-m.webp": "sha256:78f8be60e672dade8578cc3d63a86e812f63ec6feee99baeaaf010a237ad1287",
+        "prepare-r2-m.avif": "sha256:0cf42eab25796ab5e30e8d0c69545efcb9da62519a87d901e9844bfa94c54160"
+      },
+      "provenance": {
+        "source": "generated",
+        "role": "prepare",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-17. Individual Ethiopian photographs; customers turned away. Tonal dark mode."
+      }
+    },
+    "online.meseret": {
+      "src": "/assets/appointment/brand-experience/support/meseret-v3/online-r2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/meseret-v3/online-r2-m.webp",
+      "alt": "An online conversation from a quiet desk",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1050,
+      "height": 591,
+      "mobileWidth": 600,
+      "mobileHeight": 338,
+      "mime": "image/webp",
+      "checksum": "sha256:a42c8fdc91c7eb467ebad8e17f4ca38882db38bd7cb8480a9618f13cc09e2f63",
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "online-r2.webp": "sha256:a42c8fdc91c7eb467ebad8e17f4ca38882db38bd7cb8480a9618f13cc09e2f63",
+        "online-r2.avif": "sha256:9c647cd806ff8077c3133a5531591a1257bc8b4b25207392e3f2bf82c949d544",
+        "online-r2-m.webp": "sha256:8739a8b8bb394405f1eb464a81141d33baa4cceffc98aa9dcf8aefe6cce284b3",
+        "online-r2-m.avif": "sha256:389ad83e1945ffbe8fb2d98b473184303c50d2085d93de184fd7eed3e4dcf4e2"
+      },
+      "provenance": {
+        "source": "generated",
+        "role": "online",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-17. Individual Ethiopian photographs; customers turned away. Tonal dark mode."
+      }
+    },
+    "office.meseret": {
+      "src": "/assets/appointment/brand-experience/support/meseret-v3/office-r2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/meseret-v3/office-r2-m.webp",
+      "alt": "Trees and buildings in Addis Ababa",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1050,
+      "height": 591,
+      "mobileWidth": 600,
+      "mobileHeight": 338,
+      "mime": "image/webp",
+      "checksum": "sha256:8ebacb927397c4ed6dfc5d50be9787134aba54affea8125459d6c07b745f7c57",
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "office-r2.webp": "sha256:8ebacb927397c4ed6dfc5d50be9787134aba54affea8125459d6c07b745f7c57",
+        "office-r2.avif": "sha256:4eb593cf401af965ee2f7e3847e6601d1b3666d985995713ce0dbab6cf7100b9",
+        "office-r2-m.webp": "sha256:05d96ae5b4998f9f23602a26ee318ca67a0dbcbf8c17f14b5876b7d85b8d5000",
+        "office-r2-m.avif": "sha256:68489712ffe9976554b116e7a3b7770ccc9a1e1932f235da0331b0df125e2a60"
+      },
+      "provenance": {
+        "source": "generated",
+        "role": "office",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-17. Individual Ethiopian photographs; customers turned away. Tonal dark mode."
       }
     }
   }

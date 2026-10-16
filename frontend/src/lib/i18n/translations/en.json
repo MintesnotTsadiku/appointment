@@ -4214,6 +4214,16 @@
       "openingHours": "Opening hours",
       "convenientLocation": "Conveniently located",
       "bookingRecorded": "Your next step is booked."
+    },
+    "meseret": {
+      "chooseService": "Choose a consultation",
+      "serviceHint": "Select the support you need.",
+      "chooseTime": "Choose a format and time",
+      "timeHint": "See live dates and times in the next step. Addis Ababa · UTC+3.",
+      "confirm": "Your details and confirmation",
+      "confirmHint": "Tell us what you would like to discuss.",
+      "continue": "Continue to booking",
+      "prepare": "Prepare"
     }
   },
   "customerEmail": {

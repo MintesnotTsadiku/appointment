@@ -1,8 +1,44 @@
+@import "./fonts.css";
 [data-bk-skin="meseret-v3"] {
-  --bk-heading-font: var(--pe-font-display);
-  --bk-action-radius: 3px;
+  --bk-heading-font: MeseretEditorial, Georgia, serif;
+  --bk-action-radius: 2px;
+  --booking-radius: 2px;
+}
+.booking-experience[data-bk-skin="meseret-v3"] {
+  background-image: none;
+}
+.booking-experience[data-bk-skin="meseret-v3"]::before {
+  display: none;
+}
+[data-bk-skin="meseret-v3"] .bk-card {
+  border-radius: 2px;
+  box-shadow: none;
+}
+[data-bk-skin="meseret-v3"] .bk-summary-title {
+  font-family: MeseretEditorial, Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+}
+[data-bk-skin="meseret-v3"] .bk-photo {
+  border-radius: 0;
+}
+[data-bk-skin="meseret-v3"] .bk-slot {
+  border-radius: 2px;
+}
+[data-bk-skin="meseret-v3"] .bk-slot[aria-pressed="true"] {
+  animation: none;
+}
+[data-bk-skin="meseret-v3"] .bk-details-summary {
+  border-top: 2px solid var(--accent-primary);
 }
 [data-bk-skin="meseret-v3"] [data-bk-frame] {
   border-radius: 0;
-  border-bottom: 3px solid var(--accent-primary);
+  border-bottom: 2px solid var(--accent-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-bk-skin="meseret-v3"] * {
+    animation: none !important;
+    transition: none !important;
+  }
 }

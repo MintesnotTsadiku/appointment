@@ -10,18 +10,18 @@
         "am": "በአዲስ አበባ አንድ የሥራ ቀን"
       },
       "title": {
-        "en": "Your business. Your next chapter.",
-        "am": "የእርስዎ ንግድ። ቀጣዩ ምዕራፍዎ።"
+        "en": "Your business.\nYour next chapter.",
+        "am": "የእርስዎ ንግድ።\nቀጣዩ ምዕራፍዎ።"
       },
       "subtitle": {
-        "en": "Practical accounting and business advice for shop owners, freelancers and growing businesses in Ethiopia.",
-        "am": "ለሱቅ ባለቤቶች፣ ለግል ሠራተኞችና ለሚያድጉ ንግዶች ተግባራዊ የሒሳብና የንግድ ምክር።"
+        "en": "From the first receipt to the next big decision. Thoughtful accounting and business advice, here in Addis.",
+        "am": "ከመጀመሪያው ደረሰኝ እስከ ቀጣዩ ትልቅ ውሳኔ። እዚሁ አዲስ አበባ ውስጥ፣ በጥንቃቄ የሚሰጥ የሒሳብና የንግድ ምክር።"
       },
       "primaryAction": {
         "intent": "booking_start",
         "label": {
-          "en": "Make room for a conversation.",
-          "am": "ለውይይት ጊዜ ይስጡ።"
+          "en": "Book a consultation",
+          "am": "የምክክር ቀጠሮ ይያዙ"
         },
         "placement": "primary"
       },
@@ -46,13 +46,27 @@
     },
     "about": {
       "title": {
-        "en": "A conversation that changes the view.",
-        "am": "አዲስ እይታ የሚሰጥ ውይይት።"
+        "en": "A little preparation. A better conversation.",
+        "am": "ትንሽ ዝግጅት። የተሻለ ውይይት።"
       },
       "body": {
-        "en": "Practical accounting and business advice for shop owners, freelancers and growing businesses in Ethiopia.",
-        "am": "ለሱቅ ባለቤቶች፣ ለግል ሠራተኞችና ለሚያድጉ ንግዶች ተግባራዊ የሒሳብና የንግድ ምክር።"
-      }
+        "en": "Bring what you have. We will find a useful starting point together.",
+        "am": "ያለዎትን ይዘው ይምጡ። ጠቃሚ መነሻ በጋራ እናገኛለን።"
+      },
+      "highlights": [
+        {
+          "en": "Your questions and the decisions ahead",
+          "am": "ጥያቄዎችዎንና የሚጠብቁዎትን ውሳኔዎች"
+        },
+        {
+          "en": "Recent receipts or accounts, if available",
+          "am": "ካሉ፣ የቅርብ ጊዜ ደረሰኞችን ወይም የሒሳብ መዝገቦችን"
+        },
+        {
+          "en": "A notebook and a little room to think",
+          "am": "ማስታወሻ ደብተርና ለማሰብ ጥቂት ጊዜ"
+        }
+      ]
     },
     "providers": {
       "title": {
@@ -67,36 +81,36 @@
       },
       "items": [
         {
-          "title": {
-            "en": "Choose your session",
-            "am": "ቆይታዎን ይምረጡ"
-          },
           "step": 1,
+          "title": {
+            "en": "Opening the books",
+            "am": "ሒሳቡን ስንከፍት"
+          },
           "description": {
-            "en": "Read the scope, duration and fee before choosing.",
-            "am": "ከመምረጥዎ በፊት የአገልግሎቱን ዝርዝር፣ ቆይታ እና ክፍያ ያንብቡ።"
+            "en": "The shutters rise. The kettle warms. Before the day gathers pace, make sense of the numbers behind your work.",
+            "am": "መዝጊያዎቹ ይከፈታሉ። ቡናው ይፈላል። የቀኑ ሥራ ከመጧጧፉ በፊት፣ ከሥራዎ ጀርባ ያሉትን ቁጥሮች እናስተካክል።"
           }
         },
         {
-          "title": {
-            "en": "Find your time",
-            "am": "የሚመችዎን ሰዓት ያግኙ"
-          },
           "step": 2,
+          "title": {
+            "en": "Making a beginning",
+            "am": "አዲስ ጅማሮ"
+          },
           "description": {
-            "en": "The calendar shows the times available to book.",
-            "am": "ቀን መቁጠሪያው ለቀጠሮ ክፍት የሆኑ ሰዓቶችን ያሳያል።"
+            "en": "An idea becomes a plan. A plan becomes a business. Let us work through the practical questions, one clear step at a time.",
+            "am": "ሐሳብ ዕቅድ ይሆናል። ዕቅድም ንግድ ይሆናል። ተግባራዊ ጥያቄዎችዎን በግልጽ ደረጃዎች፣ አንድ በአንድ እንመልከት።"
           }
         },
         {
-          "title": {
-            "en": "Come with your questions",
-            "am": "ጥያቄዎችዎን ይዘው ይምጡ"
-          },
           "step": 3,
+          "title": {
+            "en": "A conversation changes the view",
+            "am": "ውይይት አዲስ እይታ ይሰጣል"
+          },
           "description": {
-            "en": "Use the booking note to tell us what you would like to discuss.",
-            "am": "ስለምን መወያየት እንደሚፈልጉ በቀጠሮ ማስታወሻው ይጻፉ።"
+            "en": "Sometimes a fresh pair of eyes is all it takes. Tell Rahel where you are today and where you would like to go next.",
+            "am": "አንዳንዴ የሚያስፈልገው አዲስ እይታ ብቻ ነው። ዛሬ የት እንዳሉና ወደፊት የት መድረስ እንደሚፈልጉ ለራሔል ይንገሩ።"
           }
         }
       ]
@@ -115,22 +129,42 @@
       "items": [
         {
           "question": {
-            "en": "Can I choose my language?",
-            "am": "ቋንቋ መምረጥ እችላለሁ?"
+            "en": "Can we meet online?",
+            "am": "በኦንላይን መገናኘት እንችላለን?"
           },
           "answer": {
-            "en": "Sessions are available in Amharic and English. Mention your preference when booking.",
-            "am": "ቆይታዎች በአማርኛ እና በእንግሊዝኛ ይካሄዳሉ። ቀጠሮ ሲይዙ ምርጫዎን ይግለጹ።"
+            "en": "Yes. Choose an online appointment where offered. The meeting link appears in your booking details.",
+            "am": "አዎ። በሚገኝበት አገልግሎት የኦንላይን ቀጠሮ ይምረጡ። የመገናኛ ማስፈንጠሪያው በቀጠሮ ዝርዝርዎ ውስጥ ይታያል።"
           }
         },
         {
           "question": {
-            "en": "What if I need a different time?",
-            "am": "ሌላ ሰዓት ብፈልግስ?"
+            "en": "My records are not complete.",
+            "am": "መዝገቦቼ አልተሟሉም።"
           },
           "answer": {
-            "en": "Contact us before your appointment to discuss changing the time.",
-            "am": "ሰዓቱን ለመቀየር ከቀጠሮዎ በፊት ያግኙን።"
+            "en": "That is a useful place to start. Bring what you have and tell us what is missing.",
+            "am": "ይህም ጠቃሚ መነሻ ነው። ያለዎትን ይዘው ይምጡና የጎደለውን ይንገሩን።"
+          }
+        },
+        {
+          "question": {
+            "en": "Can I book from abroad?",
+            "am": "ከውጭ አገር ቀጠሮ መያዝ እችላለሁ?"
+          },
+          "answer": {
+            "en": "Yes. For online sessions, check the calendar time zone before confirming. Addis Ababa is UTC+3.",
+            "am": "አዎ። ለኦንላይን ቆይታ፣ ከማረጋገጥዎ በፊት የቀን መቁጠሪያውን የሰዓት ሰቅ ያረጋግጡ። አዲስ አበባ UTC+3 ነው።"
+          }
+        },
+        {
+          "question": {
+            "en": "Where should I begin?",
+            "am": "ከየት ልጀምር?"
+          },
+          "answer": {
+            "en": "Start with the free 20-minute introduction. Discuss your needs before choosing a longer consultation.",
+            "am": "በነፃው የ20 ደቂቃ የመተዋወቂያ ቆይታ ይጀምሩ። ረዘም ያለ ምክክር ከመምረጥዎ በፊት ስለፍላጎትዎ እንወያይ።"
           }
         }
       ]
@@ -147,8 +181,8 @@
         "am": "ለውይይት ጊዜ ይስጡ።"
       },
       "body": {
-        "en": "Practical accounting and business advice for shop owners, freelancers and growing businesses in Ethiopia.",
-        "am": "ለሱቅ ባለቤቶች፣ ለግል ሠራተኞችና ለሚያድጉ ንግዶች ተግባራዊ የሒሳብና የንግድ ምክር።"
+        "en": "Choose a conversation. Find a time that fits your day. We will take it from there.",
+        "am": "የምክክር አይነት ይምረጡ። ለእርስዎ የሚመች ሰዓት ያግኙ። ቀሪውን አብረን እንቀጥላለን።"
       },
       "action": {
         "intent": "booking_start",
@@ -161,8 +195,8 @@
     },
     "footer": {
       "body": {
-        "en": "Practical accounting and business advice for shop owners, freelancers and growing businesses in Ethiopia.",
-        "am": "ለሱቅ ባለቤቶች፣ ለግል ሠራተኞችና ለሚያድጉ ንግዶች ተግባራዊ የሒሳብና የንግድ ምክር።"
+        "en": "Good work begins with a conversation. Addis Ababa, Ethiopia.",
+        "am": "ጥሩ ሥራ በውይይት ይጀምራል። አዲስ አበባ፣ ኢትዮጵያ።"
       },
       "items": []
     }

@@ -11,6 +11,8 @@ capture_instruction_timeline: true
 timeout_ms: 180000
 options:
   ignore_baseline_drift: true
+  show_cursor: false
+  show_action_labels: false
   color_scheme: light
 scenarios:
 - id: meseret_en_1440

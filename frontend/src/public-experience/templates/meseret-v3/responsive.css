@@ -1,0 +1,258 @@
+@media (max-width: 900px) {
+  .meseret3 .meseret3-header {
+    gap: 20px;
+    padding: 0 20px;
+  }
+  .meseret3 .meseret3-header nav {
+    gap: 15px;
+  }
+  .meseret3 .meseret3-service-copy {
+    padding: 35px;
+  }
+  .meseret3 .meseret3-scene-2 .meseret3-service-copy {
+    padding-right: 70px;
+    width: 55%;
+  }
+  .meseret3 .meseret3-faq article {
+    padding: 0 18px;
+  }
+}
+@media (max-width: 700px) {
+  .meseret3 {
+    font-size: 18px;
+  }
+  .meseret3 .meseret3-header {
+    height: 66px;
+    gap: 15px;
+  }
+  .meseret3 .meseret3-brand {
+    font-size: 23px;
+    white-space: normal;
+    line-height: 1.1;
+    max-width: 210px;
+  }
+  .meseret3 .meseret3-header nav {
+    display: none;
+  }
+  .meseret3 .meseret3-controls {
+    gap: 8px;
+    font-size: 14px;
+  }
+  .meseret3 .meseret3-daybreak {
+    height: auto;
+    min-height: 690px;
+    padding: 260px 18px 24px;
+    align-items: flex-end;
+  }
+  .meseret3 .meseret3-hero-image img {
+    object-position: 72% center;
+  }
+  .meseret3 .meseret3-hero-copy {
+    width: 100%;
+    padding: 24px 20px;
+    background: color-mix(in srgb, var(--paper) 94%, transparent);
+  }
+  .meseret3 .meseret3-greeting {
+    font-size: 23px;
+    margin-bottom: 12px !important;
+  }
+  .meseret3 h1,
+  .meseret3[lang="am"] h1 {
+    font-size: 45px;
+  }
+  .meseret3 .meseret3-lead {
+    font-size: 20px;
+    margin: 18px 0 !important;
+  }
+  .meseret3 .meseret3-service {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .meseret3 .meseret3-service-photo {
+    height: 290px;
+    position: static;
+  }
+  .meseret3 .meseret3-service-copy {
+    padding: 28px 25px;
+    width: 100%;
+    background: var(--paper);
+  }
+  .meseret3 .meseret3-service-copy h2 {
+    font-size: 42px;
+  }
+  .meseret3 .meseret3-number {
+    font-size: 28px;
+  }
+  .meseret3 .meseret3-service-copy > p {
+    font-size: 20px;
+    margin-bottom: 22px;
+  }
+  .meseret3 .meseret3-service-meta {
+    font-size: 19px;
+  }
+  .meseret3 .meseret3-scene-1 .meseret3-service-copy {
+    background: linear-gradient(120deg, var(--paper), var(--peach));
+  }
+  .meseret3 .meseret3-scene-2 .meseret3-service-photo {
+    position: static;
+    order: 1;
+    height: 300px;
+  }
+  .meseret3 .meseret3-scene-2 .meseret3-service-copy {
+    width: 100%;
+    padding: 28px 25px;
+    background: var(--paper);
+    order: 0;
+  }
+  .meseret3 .meseret3-advisers {
+    position: static;
+    order: 2;
+    background: var(--peach);
+    padding: 15px;
+    gap: 12px;
+  }
+  .meseret3 .meseret3-advisers > div {
+    padding: 0;
+    background: none;
+    color: var(--ink);
+    font-size: 14px;
+  }
+  .meseret3 .meseret3-advisers strong {
+    font-size: 18px;
+  }
+  .meseret3 .meseret3-reserve {
+    padding: 32px 24px;
+  }
+  .meseret3 h2 {
+    font-size: 40px;
+  }
+  .meseret3 .meseret3-booking-steps {
+    grid-template-columns: 1fr;
+    margin: 25px 0 0;
+    gap: 3px;
+  }
+  .meseret3 .meseret3-booking-steps li {
+    padding: 18px;
+  }
+  .meseret3 .meseret3-booking-steps p {
+    min-height: 0;
+  }
+  .meseret3 .meseret3-prepare {
+    display: flex;
+    flex-direction: column;
+  }
+  .meseret3 .meseret3-prepare > div {
+    padding: 32px 25px;
+  }
+  .meseret3 .meseret3-prepare h2 {
+    font-size: 40px;
+  }
+  .meseret3 .meseret3-prepare picture {
+    height: 280px;
+  }
+  .meseret3 .meseret3-faq {
+    padding: 32px 25px;
+  }
+  .meseret3 .meseret3-faq h2 {
+    font-size: 40px;
+    margin-bottom: 25px;
+  }
+  .meseret3 .meseret3-faq > div {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .meseret3 .meseret3-faq article {
+    border: 0;
+    border-top: 1px solid var(--line);
+    padding: 20px 0 0;
+  }
+  .meseret3 .meseret3-faq article:first-child {
+    padding: 0;
+  }
+  .meseret3 .meseret3-faq h3 {
+    font-size: 23px;
+  }
+  .meseret3 .meseret3-faq p {
+    font-size: 19px;
+  }
+  .meseret3 .meseret3-places {
+    grid-template-columns: 1fr;
+  }
+  .meseret3 .meseret3-places article {
+    min-height: 350px;
+  }
+  .meseret3 .meseret3-place-caption {
+    padding: 20px 25px;
+  }
+  .meseret3 .meseret3-hours {
+    grid-template-columns: 1fr;
+  }
+  .meseret3 .meseret3-visit > .meseret3-section-head {
+    padding: 15px 25px;
+  }
+  .meseret3 .meseret3-visit h2 {
+    font-size: 25px;
+  }
+  .meseret3 .meseret3-footer {
+    padding: 25px;
+    gap: 15px;
+  }
+  .meseret3 .meseret3-footer > div {
+    margin-left: 0;
+    flex-wrap: wrap;
+  }
+  .meseret3.meseret3-handoff main > .meseret3-hero {
+    grid-template-columns: 1fr;
+  }
+  .meseret3.meseret3-handoff main > .meseret3-hero > div {
+    padding: 35px 25px;
+  }
+  .meseret3.meseret3-handoff .meseret3-hero picture {
+    height: 240px;
+  }
+  .meseret3 .meseret3-entries {
+    grid-template-columns: 1fr;
+  }
+  .meseret3[lang="am"] h1 {
+    font-size: 35px;
+  }
+  .meseret3[lang="am"] h2,
+  .meseret3[lang="am"] .meseret3-service-copy h2 {
+    font-size: 31px;
+  }
+  .meseret3[lang="am"] .meseret3-lead,
+  .meseret3[lang="am"] .meseret3-service-copy > p {
+    font-size: 18px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .meseret3 *,
+  .meseret3 *::before,
+  .meseret3 *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  .meseret3 [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+@media (max-width: 700px) {
+  .meseret3 .meseret3-scene-2 .meseret3-service-copy {
+    height: auto;
+    flex: none;
+  }
+  .meseret3 .meseret3-service-photo {
+    flex: none;
+  }
+}
+@media (max-width: 700px) {
+  .meseret3 .meseret3-scene-2 .meseret3-service-photo img { object-position: right center; }
+}
+@media (min-width: 901px) {
+  .meseret3:not([lang="am"]) .meseret3-service-copy h2,
+  .meseret3:not([lang="am"]) .meseret3-reserve h2 { font-size: 72px; }
+  .meseret3:not([lang="am"]) .meseret3-service-copy > p { font-size: 24px; }
+}
