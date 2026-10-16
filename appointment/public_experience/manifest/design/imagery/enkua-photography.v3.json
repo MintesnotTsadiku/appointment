@@ -1,0 +1,132 @@
+{
+  "kind": "imagery",
+  "contract": "appointment-imagery.v1",
+  "key": "enkua-photography",
+  "version": 3,
+  "assets": {
+    "hero.enkua": {
+      "src": "/assets/appointment/brand-experience/support/enkua-v3/hero.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/enkua-v3/hero-m.webp",
+      "alt": "Portraits · People · Objects",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 627,
+      "height": 627,
+      "mime": "image/webp",
+      "checksum": "sha256:e45500c9a50788d91d02965b01789987821b915945c4ffcad6a0f36b82b98959",
+      "provenance": {
+        "source": "generated",
+        "role": "hero",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Separate photographic sheet, cropped to quadrants. Staff faces; customers turned away. Tonal dark mode."
+      },
+      "mobileWidth": 480,
+      "mobileHeight": 480,
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "hero-m.webp": "sha256:4745871f570768eac36341c6cdd6b9f2871dd264c6e6a42681352b38315351bb",
+        "hero.avif": "sha256:0d815822f9e95f6d773d81ab675fcfafa4e67c64cfb5910f209995efaaf05dfd",
+        "hero-m.avif": "sha256:4585567083facc350355a32a4c65ff1264ce437ea60d9f6a78d67b99f14f77c5",
+        "hero.webp": "sha256:e45500c9a50788d91d02965b01789987821b915945c4ffcad6a0f36b82b98959"
+      }
+    },
+    "portrait.enkua": {
+      "src": "/assets/appointment/brand-experience/support/enkua-v3/portrait.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/enkua-v3/portrait-m.webp",
+      "alt": "Hana Tesfaye",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 627,
+      "height": 627,
+      "mime": "image/webp",
+      "checksum": "sha256:daf3703fee583d74bae19a50d20771ee975ad850edc512783828e425e2de135f",
+      "provenance": {
+        "source": "generated",
+        "role": "portrait",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Separate photographic sheet, cropped to quadrants. Staff faces; customers turned away. Tonal dark mode."
+      },
+      "mobileWidth": 480,
+      "mobileHeight": 480,
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "portrait-m.webp": "sha256:0bd62a27f4e7849937c64f839a376da6a27ef0fcf090955113d6ca376fb8ef0b",
+        "portrait.avif": "sha256:d7e35ed925c6c9924fe1ff0d1d7753ac31c09a2226e30f1b5619390c8a801d46",
+        "portrait-m.avif": "sha256:306fe2fc83b9f7063756cfd746d605bb04c8b7746465717ef1156239f08dbb61",
+        "portrait.webp": "sha256:daf3703fee583d74bae19a50d20771ee975ad850edc512783828e425e2de135f"
+      }
+    },
+    "scene1.enkua": {
+      "src": "/assets/appointment/brand-experience/support/enkua-v3/scene1.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/enkua-v3/scene1-m.webp",
+      "alt": "Portraits · People · Objects",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 627,
+      "height": 627,
+      "mime": "image/webp",
+      "checksum": "sha256:9208a28f990c68529930bd9d07288315ffcf09fca5502ec414b7398e63d950df",
+      "provenance": {
+        "source": "generated",
+        "role": "scene1",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Separate photographic sheet, cropped to quadrants. Staff faces; customers turned away. Tonal dark mode."
+      },
+      "mobileWidth": 480,
+      "mobileHeight": 480,
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "scene1-m.webp": "sha256:abd54f3efa07cd067c00ce9e3a88a839c99984d74b03504fef5f63c8a1953f22",
+        "scene1.webp": "sha256:9208a28f990c68529930bd9d07288315ffcf09fca5502ec414b7398e63d950df",
+        "scene1.avif": "sha256:4816a10a7e4b8649064ae3518d002957a811c005dec0c6e1df87c2ad3b0c67f0",
+        "scene1-m.avif": "sha256:64be4a87922c8c0495451adbb5523852a0bff584af5164fab349730a56a3d85a"
+      }
+    },
+    "scene2.enkua": {
+      "src": "/assets/appointment/brand-experience/support/enkua-v3/scene2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/enkua-v3/scene2-m.webp",
+      "alt": "Portraits · People · Objects",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 627,
+      "height": 627,
+      "mime": "image/webp",
+      "checksum": "sha256:df0addaec950d023490940ca806bfd6102c83c59338dd55b6472b9af037af4e2",
+      "provenance": {
+        "source": "generated",
+        "role": "scene2",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Separate photographic sheet, cropped to quadrants. Staff faces; customers turned away. Tonal dark mode."
+      },
+      "mobileWidth": 480,
+      "mobileHeight": 480,
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "scene2-m.avif": "sha256:aa5608aac82af2f5b2a5d864b9da647ff7b417f834d8f370adbd66d0fce669ad",
+        "scene2.webp": "sha256:df0addaec950d023490940ca806bfd6102c83c59338dd55b6472b9af037af4e2",
+        "scene2.avif": "sha256:6f382352a6dfebd96ff90974f9d750a5427077f67b12ce690ef7afde8b86b1ab",
+        "scene2-m.webp": "sha256:491b68b1d5821be5df547059cfcee6243655150d970d9c046b5b4c171d04b84e"
+      }
+    }
+  }
+}

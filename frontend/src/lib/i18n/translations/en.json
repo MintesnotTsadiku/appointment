@@ -502,7 +502,14 @@
         "creative": "Creative",
         "education": "Education",
         "health": "Health",
-        "therapy": "Counselling and therapy"
+        "therapy": "Counselling and therapy",
+        "photography": "Photography",
+        "automotive": "Vehicle inspection",
+        "accounting": "Accounting and advice",
+        "coffee": "Coffee experiences",
+        "creator": "Creators and conversations",
+        "specialist": "Specialist consultations",
+        "property": "Homes and property"
       },
       "for": {
         "wellness": "For personal trainers, yoga and pilates teachers and small movement studios.",
@@ -510,7 +517,14 @@
         "creative": "For tailors, dressmakers, shoemakers, jewellers and other craft studios.",
         "education": "For teachers, tutors and small language and music schools.",
         "health": "For family clinics, dental and eye clinics and other health practices.",
-        "therapy": "For counsellors, psychologists and group therapy practices."
+        "therapy": "For counsellors, psychologists and group therapy practices.",
+        "photography": "For portrait, event and product photographers.",
+        "automotive": "For vehicle inspectors, diagnostic specialists and workshops.",
+        "accounting": "For accountants, bookkeepers and business advisers.",
+        "coffee": "For coffee tastings, brewing lessons and barista studios.",
+        "creator": "For podcasters, content creators and personal conversations.",
+        "specialist": "For independent specialists and patient consultations.",
+        "property": "For property agents, home viewings and buyer or seller consultations."
       }
     }
   },
@@ -3054,7 +3068,14 @@
           "creative": "Creative",
           "education": "Education",
           "health": "Health",
-          "therapy": "Counselling and therapy"
+          "therapy": "Counselling and therapy",
+          "photography": "Photography",
+          "automotive": "Vehicle inspection",
+          "accounting": "Accounting and advice",
+          "coffee": "Coffee experiences",
+          "creator": "Creators and conversations",
+          "specialist": "Specialist consultations",
+          "property": "Homes and property"
         },
         "mood": {
           "warm": "Warm",

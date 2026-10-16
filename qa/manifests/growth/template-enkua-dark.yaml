@@ -1,0 +1,135 @@
+# Uses the idempotent showcase seeder.
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /home/minte/template-new/evidence/enkua-dark
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+  color_scheme: dark
+scenarios:
+- id: enkua_en_1440-dark
+  title: enkua_en_1440-dark
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /enkua-studio?display=dark&preview-time=10:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="enkua-photography-v3"][lang="en"]'
+  actions:
+  - action: screenshot
+    name: enkua_en_1440-dark-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: screenshot
+    name: enkua_en_1440-dark-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: enkua_en_390-dark
+  title: enkua_en_390-dark
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /enkua-studio?display=dark&preview-time=10:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="enkua-photography-v3"][lang="en"]'
+  actions:
+  - action: screenshot
+    name: enkua_en_390-dark-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: screenshot
+    name: enkua_en_390-dark-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: enkua_am_1440-dark
+  title: enkua_am_1440-dark
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /enkua-studio/am?display=dark&preview-time=10:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="enkua-photography-v3"][lang="am"]'
+  actions:
+  - action: screenshot
+    name: enkua_am_1440-dark-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: screenshot
+    name: enkua_am_1440-dark-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: enkua_am_390-dark
+  title: enkua_am_390-dark
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /enkua-studio/am?display=dark&preview-time=10:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="enkua-photography-v3"][lang="am"]'
+  actions:
+  - action: screenshot
+    name: enkua_am_390-dark-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: screenshot
+    name: enkua_am_390-dark-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors

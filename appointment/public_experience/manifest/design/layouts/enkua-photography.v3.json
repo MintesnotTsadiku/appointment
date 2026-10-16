@@ -1,0 +1,53 @@
+{
+  "kind": "layout",
+  "contract": "appointment-layout.v1",
+  "key": "enkua-photography",
+  "version": 3,
+  "rendererKey": "enkua-photography",
+  "contentSchemaVersion": 2,
+  "sections": [
+    "hero",
+    "services",
+    "gallery",
+    "providers",
+    "process",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "requiredSections": [
+    "hero",
+    "services",
+    "gallery",
+    "providers",
+    "process",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "responsive": {
+    "desktop": "enkua-photography-v3-desktop",
+    "tablet": "enkua-photography-v3-tablet",
+    "mobile": "enkua-photography-v3-mobile",
+    "maxContentWidth": 1320
+  },
+  "density": {
+    "content": [
+      "compact",
+      "standard",
+      "rich"
+    ],
+    "presentation": [
+      "comfortable",
+      "spacious"
+    ],
+    "defaultContent": "rich",
+    "defaultPresentation": "comfortable"
+  }
+}

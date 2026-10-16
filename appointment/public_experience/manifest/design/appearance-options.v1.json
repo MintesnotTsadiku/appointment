@@ -184,5 +184,23 @@
         "primitive": "ergata-therapy-alternate"
       }
     ]
+  },
+  "enkua-photography": {
+    "palettes": [
+      {
+        "key": "default",
+        "label": "Template original",
+        "primitive": "enkua-photography",
+        "version": 3
+      }
+    ],
+    "fonts": [
+      {
+        "key": "default",
+        "label": "Template original",
+        "primitive": "enkua-photography",
+        "version": 3
+      }
+    ]
   }
 }

@@ -3416,6 +3416,126 @@
           "checksum": "b4c4a65e4bce7d7f6383b0751ed869c9178eef66c2dcf5cb94b7e405bf3601ec"
         }
       ]
+    },
+    "enkua": {
+      "slug": "enkua-studio",
+      "recipe": "enkua-photography",
+      "heroRole": "hero.enkua",
+      "detailRole": "scene1.enkua",
+      "heroAsset": "/assets/appointment/brand-experience/support/enkua-v3/hero.webp",
+      "heroChecksum": "e45500c9a50788d91d02965b01789987821b915945c4ffcad6a0f36b82b98959",
+      "logoAsset": "/assets/appointment/brand-experience/support/enkua-v3/logo.webp",
+      "logoChecksum": "678f6962209df84a7cea1eabb91d8900bba3697aa229fb8cc2086d8052186183",
+      "faviconAsset": "/assets/appointment/brand-experience/support/enkua-v3/favicon.png",
+      "faviconChecksum": "ae4b28279abfc688fead94bfe2262a3dc52fa45ec063a7dae0e7b75dd0114e71",
+      "benchmark": "docs/design-references/public-experience/enkua/02-enkua-experimental.png",
+      "supportAssets": [
+        {
+          "asset": "/assets/appointment/brand-experience/support/enkua-v3/portrait.webp",
+          "checksum": "daf3703fee583d74bae19a50d20771ee975ad850edc512783828e425e2de135f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/enkua-v3/scene1.webp",
+          "checksum": "9208a28f990c68529930bd9d07288315ffcf09fca5502ec414b7398e63d950df"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/enkua-v3/scene2.webp",
+          "checksum": "df0addaec950d023490940ca806bfd6102c83c59338dd55b6472b9af037af4e2"
+        }
+      ],
+      "providerAssets": [
+        {
+          "name": "Hana Tesfaye",
+          "asset": "/assets/appointment/brand-experience/support/enkua-v3/portrait.webp",
+          "checksum": "daf3703fee583d74bae19a50d20771ee975ad850edc512783828e425e2de135f"
+        }
+      ],
+      "templateAssets": [
+        {
+          "asset": "/assets/appointment/brand-experience/support/enkua-v3/favicon.png",
+          "checksum": "ae4b28279abfc688fead94bfe2262a3dc52fa45ec063a7dae0e7b75dd0114e71"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/enkua-v3/hero-m.avif",
+          "checksum": "4585567083facc350355a32a4c65ff1264ce437ea60d9f6a78d67b99f14f77c5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/enkua-v3/hero-m.webp",
+          "checksum": "4745871f570768eac36341c6cdd6b9f2871dd264c6e6a42681352b38315351bb"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/enkua-v3/hero.avif",
+          "checksum": "0d815822f9e95f6d773d81ab675fcfafa4e67c64cfb5910f209995efaaf05dfd"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/enkua-v3/hero.webp",
+          "checksum": "e45500c9a50788d91d02965b01789987821b915945c4ffcad6a0f36b82b98959"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/enkua-v3/logo.webp",
+          "checksum": "678f6962209df84a7cea1eabb91d8900bba3697aa229fb8cc2086d8052186183"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/enkua-v3/portrait-m.avif",
+          "checksum": "306fe2fc83b9f7063756cfd746d605bb04c8b7746465717ef1156239f08dbb61"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/enkua-v3/portrait-m.webp",
+          "checksum": "0bd62a27f4e7849937c64f839a376da6a27ef0fcf090955113d6ca376fb8ef0b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/enkua-v3/portrait.avif",
+          "checksum": "d7e35ed925c6c9924fe1ff0d1d7753ac31c09a2226e30f1b5619390c8a801d46"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/enkua-v3/portrait.webp",
+          "checksum": "daf3703fee583d74bae19a50d20771ee975ad850edc512783828e425e2de135f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/enkua-v3/scene1-m.avif",
+          "checksum": "64be4a87922c8c0495451adbb5523852a0bff584af5164fab349730a56a3d85a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/enkua-v3/scene1-m.webp",
+          "checksum": "abd54f3efa07cd067c00ce9e3a88a839c99984d74b03504fef5f63c8a1953f22"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/enkua-v3/scene1.avif",
+          "checksum": "4816a10a7e4b8649064ae3518d002957a811c005dec0c6e1df87c2ad3b0c67f0"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/enkua-v3/scene1.webp",
+          "checksum": "9208a28f990c68529930bd9d07288315ffcf09fca5502ec414b7398e63d950df"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/enkua-v3/scene2-m.avif",
+          "checksum": "aa5608aac82af2f5b2a5d864b9da647ff7b417f834d8f370adbd66d0fce669ad"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/enkua-v3/scene2-m.webp",
+          "checksum": "491b68b1d5821be5df547059cfcee6243655150d970d9c046b5b4c171d04b84e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/enkua-v3/scene2.avif",
+          "checksum": "6f382352a6dfebd96ff90974f9d750a5427077f67b12ce690ef7afde8b86b1ab"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/enkua-v3/scene2.webp",
+          "checksum": "df0addaec950d023490940ca806bfd6102c83c59338dd55b6472b9af037af4e2"
+        }
+      ],
+      "previewAssets": [
+        {
+          "viewport": "desktop",
+          "asset": "/assets/appointment/brand-experience/template-gallery/enkua-photography-desktop.webp",
+          "checksum": "1cfa7208f12361c485c31553b75c0bc386987e11c48b0886c17ba7fc4108886a"
+        },
+        {
+          "viewport": "mobile",
+          "asset": "/assets/appointment/brand-experience/template-gallery/enkua-photography-mobile.webp",
+          "checksum": "91bd81c9810c2da7ea64e43f744e00882481b18347002ddefa0919805fa6eefb"
+        }
+      ]
     }
   }
 }

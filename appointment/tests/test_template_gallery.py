@@ -18,7 +18,7 @@ class TestTemplateGallery(unittest.TestCase):
         rows = self.gallery({})
         self.assertEqual([row["key"] for row in rows], [recipe.key for recipe in list_recipes()])
         for row in rows:
-            self.assertTrue(row["label"] and row["audience"])
+            self.assertTrue(row["label"] and row["audience"] and row["industry"])
             self.assertEqual(row["themes"], ["light", "dark"])
             self.assertIn("en", row["locales"])
 

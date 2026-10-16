@@ -1,0 +1,121 @@
+[
+  {
+    "key": "enkua",
+    "recipe": "enkua-photography",
+    "name": {
+      "en": "Enkua Image Studio",
+      "am": "እንቁ የፎቶ ስቱዲዮ"
+    },
+    "person": {
+      "en": "Hana Tesfaye",
+      "am": "ሐና ተስፋዬ"
+    },
+    "title": {
+      "en": "You. In full colour.",
+      "am": "እርስዎ። በሙሉ ቀለም።"
+    },
+    "subtitle": {
+      "en": "Big moments. Fresh perspectives. Photography with a point of view, made in Addis.",
+      "am": "ትልቅ አጋጣሚዎች። አዲስ እይታዎች። በአዲስ አበባ የሚሠራ ልዩ እይታ ያለው ፎቶግራፍ።"
+    },
+    "eyebrow": {
+      "en": "Portraits · People · Objects",
+      "am": "የግል ፎቶ · ሰዎች · ምርቶች"
+    },
+    "about": {
+      "en": "Good people. Great frames.",
+      "am": "ጥሩ ሰዎች። ድንቅ ፎቶዎች።"
+    },
+    "bio": {
+      "en": "I photograph people, milestones and the things they make. Come as you are. We will find your light together.",
+      "am": "ሰዎችን፣ የሕይወት አጋጣሚዎችንና የሚሠሯቸውን ምርቶች በፎቶ እቀርጻለሁ። እንዳሉ ይምጡ። የእርስዎን ብርሃን አብረን እናገኛለን።"
+    },
+    "menu": {
+      "en": "Pick your spotlight.",
+      "am": "የእርስዎን መድረክ ይምረጡ።"
+    },
+    "cta": {
+      "en": "Your next great frame.",
+      "am": "ቀጣዩ ድንቅ ፎቶዎ።"
+    },
+    "color": "#1247d6",
+    "dark": "#a9c5ff",
+    "soft": "#f6ed46",
+    "font": "bloom-hair.v2",
+    "direction": "Enkua Experimental",
+    "services": [
+      {
+        "name": {
+          "en": "Professional headshots",
+          "am": "የሙያ መገለጫ ፎቶ"
+        },
+        "duration": 30,
+        "price": 2000,
+        "summary": {
+          "en": "Three retouched images. Studio session with clear guidance.",
+          "am": "ሦስት የተስተካከሉ ፎቶዎች። ግልጽ መመሪያ ያለው የስቱዲዮ ቆይታ።"
+        },
+        "meet": "in_person"
+      },
+      {
+        "name": {
+          "en": "Portrait session",
+          "am": "የግል ፎቶ ቆይታ"
+        },
+        "duration": 60,
+        "price": 4000,
+        "summary": {
+          "en": "A relaxed sitting, two looks and eight finished images.",
+          "am": "የተረጋጋ ቆይታ፣ ሁለት አቀራረቦችና ስምንት የተጠናቀቁ ፎቶዎች።"
+        },
+        "meet": "in_person"
+      },
+      {
+        "name": {
+          "en": "Product photography",
+          "am": "የምርት ፎቶግራፍ"
+        },
+        "duration": 120,
+        "price": 6000,
+        "summary": {
+          "en": "Up to six products, with twelve edited images.",
+          "am": "እስከ ስድስት ምርቶች፣ አሥራ ሁለት የተስተካከሉ ፎቶዎች።"
+        },
+        "meet": "in_person"
+      },
+      {
+        "name": {
+          "en": "Planning call",
+          "am": "የዝግጅት ጥሪ"
+        },
+        "duration": 20,
+        "price": 0,
+        "summary": {
+          "en": "Ask a question and plan your visit before coming.",
+          "am": "ከመምጣትዎ በፊት ጥያቄ ይጠይቁና ጉብኝትዎን ያቅዱ።"
+        },
+        "meet": "online"
+      }
+    ],
+    "slug": "enkua-studio",
+    "prefix": "enkua",
+    "galleryCaptions": [
+      {
+        "en": "Graduation, in your own colours.",
+        "am": "ምረቃ፣ በራስዎ ቀለሞች።"
+      },
+      {
+        "en": "Objects with a story.",
+        "am": "ታሪክ ያላቸው እቃዎች።"
+      },
+      {
+        "en": "A little confidence. A new perspective.",
+        "am": "ትንሽ በራስ መተማመን። አዲስ እይታ።"
+      }
+    ],
+    "placeLabel": {
+      "en": "Bole portrait studio",
+      "am": "የቦሌ የፎቶ ስቱዲዮ"
+    }
+  }
+]

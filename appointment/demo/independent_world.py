@@ -17,9 +17,9 @@ from unittest.mock import patch
 import frappe
 from frappe.utils import getdate
 
-from appointment.demo import ergata_showcase, independent_showcase
+from appointment.demo import ergata_showcase, independent_showcase, new_template_showcases
 
-SHOWCASES = {definition.key: definition for definition in (ergata_showcase.SHOWCASE,)}
+SHOWCASES = {definition.key: definition for definition in (ergata_showcase.SHOWCASE, *new_template_showcases.SHOWCASES)}
 # Raise it when the authored booking facts change; the next seed writes them again on the owned bookings.
 FACTS_VERSION = 3
 # Clients of a one-person practice: a smaller, steadier group than a salon's, as in real counselling work.

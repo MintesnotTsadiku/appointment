@@ -60,13 +60,15 @@ for (const key of [genna.key, `${genna.key}Line`, "label"]) assert.ok(english.ho
 
 // 4. Every certified package declares its forms and meets the product contract and its declared forms.
 const packages = certifiedPackages();
-assert.equal(packages.length, 6, "six certified packages have a booking skin");
+assert.equal(packages.length, 7, "all certified packages have a booking skin");
 // The forms the current packages draw today: the declaration describes them, it changes nothing.
 const CURRENT = { imagery: "mixed", motion: "expressive", darkMode: "night-photos", holiday: "decoration", success: "animated", greeting: "hero" };
+const CALM = { imagery: "mixed", motion: "calm", darkMode: "tonal", holiday: "greeting", success: "static", greeting: "header" };
+const calmPackages = new Set(["enkua-v3"]);
 for (const pkg of packages) {
   assert.ok(pkg.recipe, `${pkg.folder}: a recipe pins renderer ${pkg.id}`);
   same(expressionProblems(pkg.recipe), [], `${pkg.folder} declares a valid expression`);
-  same(pkg.recipe.expression, CURRENT, `${pkg.folder} declares the forms it draws`);
+  same(pkg.recipe.expression, calmPackages.has(pkg.folder) ? CALM : CURRENT, `${pkg.folder} declares the forms it draws`);
   same(contractFailures(pkg), [], `${pkg.folder} meets the quality bar`);
 }
 

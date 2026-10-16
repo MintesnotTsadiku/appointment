@@ -29,6 +29,8 @@ function lazyPackage<T, C>(key: string, template: () => Promise<T>, content: () 
  * the owner republishes on the new recipe version. Unknown pairs fail closed.
  */
 const TEMPLATE_PACKAGES: Record<string, PackageLoader> = {
+  "enkua-photography@3": lazyPackage("enkua-photography", () => import("./enkua-v3/Template"), () => import("./enkua-v3/Content"),
+    (t,c) => ({ Site:t.Site, Booking:t.Booking, Content:c.Content, Loading: t.SiteLoading })),
   "selam-movement@1": lazyPackage("selam-movement", () => import("./selam/SelamTemplate"), () => import("./selam/SelamContent"),
     (t, c) => ({ Site: t.SelamSite, Booking: t.SelamBooking, Content: c.SelamContent })),
   "selam-movement@2": lazyPackage("selam-movement", () => import("./selam-v2/SelamTemplate"), () => import("./selam/SelamContent"),

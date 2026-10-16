@@ -16,6 +16,8 @@ from appointment.public_experience.setup_preview import content_examples
 
 STEPS = ("template", "brand", "content", "features", "readiness", "published", "skipped")
 CATALOG = {
+    "enkua-photography": ("photography", "bold", "expressive"),
+
     "selam-movement": ("wellness", "warm", "expressive"),
     "bloom-hair": ("beauty", "bold", "expressive"),
     "meron-atelier": ("creative", "editorial", "spacious"),
@@ -29,7 +31,7 @@ def validated_preferences(value):
     if value is None:
         return {}
     allowed = {
-        "industry": {"", "wellness", "beauty", "creative", "education", "health", "therapy"},
+        "industry": {"", *(row[0] for row in CATALOG.values())},
         "mood": {"", "warm", "bold", "editorial", "friendly", "calm"},
         "audience": {"", "clients", "learners", "patients"},
         "density": {"", "comfortable", "spacious", "expressive"},
@@ -47,7 +49,7 @@ def ranked_catalog(industry="", mood="", audience="", preferred_density=""):
     rows = []
     for recipe in available_recipes():
         sector, feeling, density = CATALOG[recipe.key]
-        target = {"health": "patients", "education": "learners"}.get(sector, "clients")
+        target = {"health": "patients", "specialist": "patients", "education": "learners"}.get(sector, "clients")
         score = (4 if sector == industry else 0) + (2 if feeling == mood else 0) + (2 if target == audience else 0) + (1 if density == preferred_density else 0)
         rows.append({**recipe.as_summary(), "industry": sector, "density": density,
                      "score": score, "audienceAttributes": [target], "imageryIntensity": "high",
