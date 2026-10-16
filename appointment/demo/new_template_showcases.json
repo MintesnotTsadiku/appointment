@@ -117,5 +117,110 @@
       "en": "Bole portrait studio",
       "am": "የቦሌ የፎቶ ስቱዲዮ"
     }
+  },
+  {
+    "key": "mizan",
+    "recipe": "mizan-inspection",
+    "name": {
+      "en": "Mizan Auto Lab",
+      "am": "ሚዛን የመኪና ምርመራ"
+    },
+    "person": {
+      "en": "Dawit Bekele",
+      "am": "ዳዊት በቀለ"
+    },
+    "title": {
+      "en": "Know the car. Know your next move.",
+      "am": "መኪናውን ይወቁ። ቀጣዩን እርምጃ ይወስኑ።"
+    },
+    "subtitle": {
+      "en": "Independent vehicle inspections in Addis Ababa. Real observations, clear explanations and time for your questions.",
+      "am": "በአዲስ አበባ ገለልተኛ የመኪና ምርመራ። ተጨባጭ ግኝቶች፣ ግልጽ ማብራሪያና ለጥያቄዎችዎ ጊዜ።"
+    },
+    "eyebrow": {
+      "en": "Independent vehicle inspection",
+      "am": "ገለልተኛ የመኪና ምርመራ"
+    },
+    "about": {
+      "en": "Experienced. Independent. On your side.",
+      "am": "ልምድ ያለው። ገለልተኛ። ከእርስዎ ጎን።"
+    },
+    "bio": {
+      "en": "We explain what we can inspect and what the findings mean. You receive a written summary and time to discuss the next step.",
+      "am": "ምን ልንመረምር እንደምንችልና ግኝቶቹ ምን ማለት እንደሆኑ እናብራራለን። የጽሑፍ ማጠቃለያና ስለቀጣዩ እርምጃ ለመወያየት ጊዜ ያገኛሉ።"
+    },
+    "menu": {
+      "en": "Choose your inspection",
+      "am": "ምርመራዎን ይምረጡ"
+    },
+    "cta": {
+      "en": "Simple booking. Clear steps.",
+      "am": "ቀላል ቀጠሮ። ግልጽ እርምጃዎች።"
+    },
+    "color": "#1450b8",
+    "dark": "#a6c7ff",
+    "soft": "#e5eefb",
+    "font": "selam-movement.v2",
+    "direction": "Precision Atlas",
+    "services": [
+      {
+        "name": {
+          "en": "Vehicle diagnostics",
+          "am": "የመኪና ምርመራ"
+        },
+        "duration": 45,
+        "price": 2000,
+        "summary": {
+          "en": "Fault-code review and accessible system checks.",
+          "am": "የብልሽት ኮድ ግምገማና ሊደረስባቸው የሚችሉ ሥርዓቶች ምርመራ።"
+        },
+        "meet": "in_person"
+      },
+      {
+        "name": {
+          "en": "Pre-purchase inspection",
+          "am": "ከግዢ በፊት ምርመራ"
+        },
+        "duration": 120,
+        "price": 5000,
+        "summary": {
+          "en": "Body, brakes, visible leaks and a written inspection summary.",
+          "am": "አካል፣ ፍሬን፣ የሚታዩ ፍሳሾችና የጽሑፍ ምርመራ ማጠቃለያ።"
+        },
+        "meet": "in_person"
+      },
+      {
+        "name": {
+          "en": "EV battery assessment",
+          "am": "የኤሌክትሪክ መኪና ባትሪ ግምገማ"
+        },
+        "duration": 60,
+        "price": 3500,
+        "summary": {
+          "en": "Supported battery data. Confirm vehicle compatibility before booking.",
+          "am": "የሚደገፍ የባትሪ መረጃ። ከቀጠሮ በፊት የመኪናዎን ተስማሚነት ያረጋግጡ።"
+        },
+        "meet": "in_person"
+      },
+      {
+        "name": {
+          "en": "Planning call",
+          "am": "የዝግጅት ጥሪ"
+        },
+        "duration": 20,
+        "price": 0,
+        "summary": {
+          "en": "Ask a question and plan your visit before coming.",
+          "am": "ከመምጣትዎ በፊት ጥያቄ ይጠይቁና ጉብኝትዎን ያቅዱ።"
+        },
+        "meet": "online"
+      }
+    ],
+    "slug": "mizan-studio",
+    "prefix": "mizan",
+    "placeLabel": {
+      "en": "Bole inspection workshop",
+      "am": "የቦሌ የተሽከርካሪ ምርመራ ማዕከል"
+    }
   }
 ]

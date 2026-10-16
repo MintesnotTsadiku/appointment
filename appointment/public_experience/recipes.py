@@ -23,6 +23,7 @@ COMPILER_POLICY_VERSION = "curated-brand-policy.v1"
 # its primitives. New sites and the design gallery get the latest version.
 RECIPE_MANIFESTS = {
     "enkua-photography": {3: "public_experience/manifest/design/recipes/enkua-photography.v3.json"},
+    "mizan-inspection": {3: "public_experience/manifest/design/recipes/mizan-inspection.v3.json"},
     "selam-movement": {
         1: "public_experience/manifest/design/recipes/selam-movement.v1.json",
         2: "public_experience/manifest/design/recipes/selam-movement.v2.json",

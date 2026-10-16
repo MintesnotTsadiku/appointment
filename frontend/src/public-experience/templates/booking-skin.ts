@@ -1,4 +1,5 @@
 import { skin as enkuaSkin } from "./enkua-v3/booking";
+import { skin as mizanSkin } from "./mizan-v3/booking";
 import type { ComponentType } from "react";
 
 import type { CompiledDesign } from "../types";
@@ -67,6 +68,7 @@ export const DEFAULT_BOOKING_SKIN: BookingSkin = {
 
 const SKINS: Record<string, BookingSkin> = {
   [enkuaSkin.key]: enkuaSkin,
+  [mizanSkin.key]: mizanSkin,
   [bloomBookingSkin.key]: bloomBookingSkin,
   [meronBookingSkin.key]: meronBookingSkin,
   [abugidaBookingSkin.key]: abugidaBookingSkin,

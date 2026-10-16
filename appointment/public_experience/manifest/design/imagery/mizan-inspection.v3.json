@@ -1,0 +1,132 @@
+{
+  "kind": "imagery",
+  "contract": "appointment-imagery.v1",
+  "key": "mizan-inspection",
+  "version": 3,
+  "assets": {
+    "hero.mizan": {
+      "src": "/assets/appointment/brand-experience/support/mizan-v3/hero.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/mizan-v3/hero-m.webp",
+      "alt": "Independent vehicle inspection",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 627,
+      "height": 627,
+      "mime": "image/webp",
+      "checksum": "sha256:1688245db32b2f97be18e67469c9838ce30f0d109c093fa438262c1e7f8a56a6",
+      "provenance": {
+        "source": "generated",
+        "role": "hero",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Separate photographic sheet, cropped to quadrants. Staff faces; customers turned away. Tonal dark mode."
+      },
+      "mobileWidth": 480,
+      "mobileHeight": 480,
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "hero-m.webp": "sha256:7656e8dc175dfcc6a6a0f8efcca41c9e2e98954b12865d9e6feb3b2bbf10883b",
+        "hero.avif": "sha256:27caf7024afd06f5606fe58156afa419a418cec07f121484a49c586866de35dc",
+        "hero-m.avif": "sha256:b8e2e8f8c773b625106851666c10cab9813b2b568bd0edb0e841df1903234008",
+        "hero.webp": "sha256:1688245db32b2f97be18e67469c9838ce30f0d109c093fa438262c1e7f8a56a6"
+      }
+    },
+    "portrait.mizan": {
+      "src": "/assets/appointment/brand-experience/support/mizan-v3/portrait.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/mizan-v3/portrait-m.webp",
+      "alt": "Dawit Bekele",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 627,
+      "height": 627,
+      "mime": "image/webp",
+      "checksum": "sha256:b376b776cf6c3aa3afb20490247d46ed5bd91f4d8bbb0461df06f3adbeefe4da",
+      "provenance": {
+        "source": "generated",
+        "role": "portrait",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Separate photographic sheet, cropped to quadrants. Staff faces; customers turned away. Tonal dark mode."
+      },
+      "mobileWidth": 480,
+      "mobileHeight": 480,
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "portrait-m.webp": "sha256:e3675fd1c2af6a319a5614856de8df735b4460167bfeb655b367dd95fc657c0e",
+        "portrait.avif": "sha256:a8bbf3d1325bd63f868956999e2bd158cdfcd8ad96d1f165c3cffab7a25588da",
+        "portrait-m.avif": "sha256:a75aad47749f66905e31491b0002943ecabae4c5f14b7b31fd01c4c5fc911114",
+        "portrait.webp": "sha256:b376b776cf6c3aa3afb20490247d46ed5bd91f4d8bbb0461df06f3adbeefe4da"
+      }
+    },
+    "scene1.mizan": {
+      "src": "/assets/appointment/brand-experience/support/mizan-v3/scene1.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/mizan-v3/scene1-m.webp",
+      "alt": "Independent vehicle inspection",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 627,
+      "height": 627,
+      "mime": "image/webp",
+      "checksum": "sha256:d81a1553dad7e97fadc27a7996843a2b60eb723712a41ba31338def828cd6016",
+      "provenance": {
+        "source": "generated",
+        "role": "scene1",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Separate photographic sheet, cropped to quadrants. Staff faces; customers turned away. Tonal dark mode."
+      },
+      "mobileWidth": 480,
+      "mobileHeight": 480,
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "scene1-m.webp": "sha256:11de32428eb25350512e70565708c5adce26173ad2e0be079f3d1cddca4f597e",
+        "scene1.webp": "sha256:d81a1553dad7e97fadc27a7996843a2b60eb723712a41ba31338def828cd6016",
+        "scene1.avif": "sha256:3f4c08051852ad7a2f249ec8a71099e7265e92fd6754fe364226f80ae7530e49",
+        "scene1-m.avif": "sha256:48b6848c4b1cd0d855953a58b3632062657cbdc8cd68c6a9e9ee29369fa0b30e"
+      }
+    },
+    "scene2.mizan": {
+      "src": "/assets/appointment/brand-experience/support/mizan-v3/scene2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/mizan-v3/scene2-m.webp",
+      "alt": "Independent vehicle inspection",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 627,
+      "height": 627,
+      "mime": "image/webp",
+      "checksum": "sha256:856e1c55c6e8b91e54a5b04cebd9c0240afc6fc93afca48214fdb16a9c64b514",
+      "provenance": {
+        "source": "generated",
+        "role": "scene2",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Separate photographic sheet, cropped to quadrants. Staff faces; customers turned away. Tonal dark mode."
+      },
+      "mobileWidth": 480,
+      "mobileHeight": 480,
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "scene2-m.avif": "sha256:561a5c66da4b3bc5efd3fde41def25a701101d2ae734e39fd437710960bc1ace",
+        "scene2.webp": "sha256:856e1c55c6e8b91e54a5b04cebd9c0240afc6fc93afca48214fdb16a9c64b514",
+        "scene2.avif": "sha256:7e1ec5d6baad52d05487564e7e910f9f027266e548ea0a19aa8e19459d340eef",
+        "scene2-m.webp": "sha256:d8e346e14f32577630941af50e96ef2077115457f5a7b8f6565a2a7cdedcc732"
+      }
+    }
+  }
+}

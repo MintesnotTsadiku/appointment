@@ -1,0 +1,137 @@
+{
+  "kind": "recipe",
+  "contract": "appointment-curated-recipe.v1",
+  "key": "mizan-inspection",
+  "version": 3,
+  "label": "Mizan Auto Lab",
+  "description": "Independent vehicle inspections in Addis Ababa. Real observations, clear explanations and time for your questions.",
+  "audience": "Independent vehicle inspection",
+  "mood": "crafted-editorial",
+  "supportedLocales": [
+    "en",
+    "am"
+  ],
+  "accessibility": {
+    "level": "AA",
+    "focusVisible": true,
+    "reducedMotion": true
+  },
+  "expression": {
+    "imagery": "mixed",
+    "motion": "calm",
+    "darkMode": "tonal",
+    "holiday": "greeting",
+    "success": "static",
+    "greeting": "header"
+  },
+  "primitives": {
+    "palette": {
+      "key": "mizan-inspection",
+      "version": 3
+    },
+    "typography": {
+      "key": "mizan-inspection",
+      "version": 3
+    },
+    "imagery": {
+      "key": "mizan-inspection",
+      "version": 3
+    },
+    "layout": {
+      "key": "mizan-inspection",
+      "version": 3
+    },
+    "surface": {
+      "key": "mizan-inspection",
+      "version": 3
+    }
+  },
+  "supportedSections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "requiredSections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "defaultInputs": {
+    "motion": "calm",
+    "presentationDensity": "comfortable",
+    "heroAsset": "hero.mizan",
+    "detailAsset": "scene1.mizan"
+  },
+  "adjustments": {
+    "accentColor": {
+      "type": "hex-color",
+      "optional": true,
+      "protected": false
+    },
+    "motion": {
+      "type": "enum",
+      "choices": [
+        "calm"
+      ],
+      "optional": true
+    },
+    "presentationDensity": {
+      "type": "enum",
+      "choices": [
+        "comfortable",
+        "spacious"
+      ],
+      "optional": true
+    },
+    "heroAsset": {
+      "type": "asset-role",
+      "choices": [
+        "hero.mizan"
+      ],
+      "optional": true
+    },
+    "detailAsset": {
+      "type": "asset-role",
+      "choices": [
+        "scene1.mizan",
+        "scene2.mizan"
+      ],
+      "optional": true
+    }
+  },
+  "actionIntents": [
+    "booking_start",
+    "service_selection",
+    "provider_selection",
+    "call",
+    "directions",
+    "contact",
+    "faq_jump",
+    "back_to_site"
+  ],
+  "contentRichness": {
+    "default": "rich",
+    "choices": [
+      "compact",
+      "standard",
+      "rich"
+    ],
+    "requiredForCertification": [
+      "process"
+    ]
+  }
+}

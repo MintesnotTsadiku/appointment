@@ -1,0 +1,183 @@
+# Seeder-owned showcase; includes deterministic loading and holiday previews.
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /home/minte/template-new/evidence/mizan-states
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+scenarios:
+- id: mizan_en_1440-states
+  title: mizan_en_1440-states
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /mizan-studio?display=light&preview-time=10:00&preview-holiday=meskel
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="mizan-inspection-v3"][lang="en"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"]'
+  - action: click
+    selector: '[data-qa="mizan-mode"]'
+  - action: screenshot
+    name: mizan_en_1440-states-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: screenshot
+    name: mizan_en_1440-states-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: mizan_en_390-states
+  title: mizan_en_390-states
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /mizan-studio?display=light&preview-time=10:00&preview-holiday=meskel
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="mizan-inspection-v3"][lang="en"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"]'
+  - action: click
+    selector: '[data-qa="mizan-mode"]'
+  - action: screenshot
+    name: mizan_en_390-states-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: screenshot
+    name: mizan_en_390-states-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: mizan_am_1440-states
+  title: mizan_am_1440-states
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /mizan-studio/am?display=light&preview-time=10:00&preview-holiday=meskel
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="mizan-inspection-v3"][lang="am"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"]'
+  - action: click
+    selector: '[data-qa="mizan-mode"]'
+  - action: screenshot
+    name: mizan_am_1440-states-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: screenshot
+    name: mizan_am_1440-states-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: mizan_am_390-states
+  title: mizan_am_390-states
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /mizan-studio/am?display=light&preview-time=10:00&preview-holiday=meskel
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="mizan-inspection-v3"][lang="am"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"]'
+  - action: click
+    selector: '[data-qa="mizan-mode"]'
+  - action: screenshot
+    name: mizan_am_390-states-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: screenshot
+    name: mizan_am_390-states-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: mizan_loading_en
+  title: mizan loading en
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /mizan-studio?preview-state=loading
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[role="status"][aria-busy="true"]'
+  actions:
+  - action: screenshot
+    name: mizan-loading-en.png
+    full_page: false
+- id: mizan_loading_am
+  title: mizan loading am
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /mizan-studio/am?preview-state=loading
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[role="status"][aria-busy="true"]'
+  actions:
+  - action: screenshot
+    name: mizan-loading-am.png
+    full_page: false

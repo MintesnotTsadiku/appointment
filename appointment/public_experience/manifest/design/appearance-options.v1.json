@@ -202,5 +202,23 @@
         "version": 3
       }
     ]
+  },
+  "mizan-inspection": {
+    "palettes": [
+      {
+        "key": "default",
+        "label": "Template original",
+        "primitive": "mizan-inspection",
+        "version": 3
+      }
+    ],
+    "fonts": [
+      {
+        "key": "default",
+        "label": "Template original",
+        "primitive": "mizan-inspection",
+        "version": 3
+      }
+    ]
   }
 }

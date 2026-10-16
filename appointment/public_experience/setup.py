@@ -17,6 +17,7 @@ from appointment.public_experience.setup_preview import content_examples
 STEPS = ("template", "brand", "content", "features", "readiness", "published", "skipped")
 CATALOG = {
     "enkua-photography": ("photography", "bold", "expressive"),
+    "mizan-inspection": ("automotive", "bold", "comfortable"),
 
     "selam-movement": ("wellness", "warm", "expressive"),
     "bloom-hair": ("beauty", "bold", "expressive"),
