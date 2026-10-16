@@ -260,16 +260,114 @@ A `.localhost` site with `worktree_development` (the development rule) also
 works on a server when Nginx sends `X-Frappe-Site-Name`, but the named
 `showcase_site` is the clearer choice for a server.
 
+### Refresh around today
+
+The bookings of a seed run from 89 days before its anchor date to 30 days
+after it, with a few older bookings 100 to 180 days before it. Over time they
+move into the past. `appointment.demo.showcase.refresh` removes the showcases
+and seeds them again around a new anchor date (today if you do not give one).
+
+`cleanup` stops when other records link to the showcases, for example the
+bookings that visitors made. `refresh` also removes these records, but only
+the records on the showcase businesses of the journal:
+
+- every record in the private journal, which includes the showcase staff
+  accounts (the new seed makes them again, with new passwords);
+- every record outside the journal that links to a journal record, and the
+  records that link to those: visitor bookings, customer profiles,
+  notifications, payments and receipts, walk-ins, referral rows, staff
+  invitations, and the contacts and user permissions of the showcase staff;
+- the page views of the showcase paths.
+
+Safety rules:
+
+- The guard of the seeder applies (`require_target`: a development site or the
+  site named in `showcase_site`, `rich_demo_enabled`, muted email, a paused
+  scheduler, Administrator). The site must also have the journal, so refresh
+  runs only on a site that the seeder seeded.
+- `dry_run` is `True` by default. The dry run changes nothing. It reports the
+  records per DocType (`journal_records`, `visitor_records`, with examples),
+  the booking dates now (`bookings_before`), what it keeps (`kept`: the
+  records of other businesses, which nothing links to a showcase) and
+  `refused`.
+- Refresh refuses, and changes nothing, when a record to remove links to an
+  Organization, Provider, Location, Service, offering, website, customer,
+  booking or walk-in that is not a showcase record. It never removes an
+  Organization or a User that is not in the journal.
+- All link checks stay on. Records are deleted through their lifecycle, in
+  link order. Only the audit and history records that refuse deletion
+  (releases, revisions, outbox rows, newsletter records, staff invitations,
+  versions) are removed directly, as `cleanup` does. Where an organization and
+  its services link each other, the organization's booking URL rows go first.
+- The removal is one transaction. Files leave the disk only after the commit.
+- After the commit the journal is removed and the seed runs. If the seed
+  stops, the site has no showcases: correct the cause and run `seed`.
+- Each run writes its report to the `appointment.showcase_refresh` log.
+
+Development site (the stack bench, with `PYTHONPATH` set as for any bench
+command):
+
+```bash
+bench --site <dev site> execute appointment.demo.showcase.refresh > refresh-dry-run.json
+bench --site <dev site> execute appointment.demo.showcase.refresh \
+  --kwargs "{'dry_run': False, 'base_url': 'http://localhost:47800'}"
+```
+
+Server showcase site:
+
+```bash
+bench --site showcase.example.com set-config -p rich_demo_enabled 1
+bench --site showcase.example.com backup
+bench --site showcase.example.com execute appointment.demo.showcase.refresh \
+  --kwargs "{'base_url': 'https://showcase.example.com'}"
+# Read the report: refused must be empty and the visitor records must be what you expect.
+bench --site showcase.example.com execute appointment.demo.showcase.refresh \
+  --kwargs "{'dry_run': False, 'base_url': 'https://showcase.example.com'}"
+bench --site showcase.example.com set-config -p rich_demo_enabled 0
+```
+
+`--kwargs` is a Python value: write `False`, not `false`. Give `anchor_date`
+(`'2026-10-16'`) to use another day. The output of the real run adds
+`bookings_after` (earliest and latest booking date) and the seeded counts.
+Then do the checks of step 6.
+
+Warnings:
+
+- Refresh permanently deletes the bookings that visitors made on the
+  showcases. Nobody gets a message, and their booking links stop working.
+- The showcase staff passwords change. Sign-ins with the old journal stop
+  working.
+- The showcases are not there for about 5 minutes (the removal takes about a
+  minute, the seed about 4). On a server, refresh at a quiet time.
+- QA fixtures that use showcase records (`template_bloom_v3_qa_fixtures`,
+  `template_selam_v3_qa_fixtures`, `amharic_names_qa_fixtures`) need their
+  `setup` again after a refresh.
+- Take a backup first. Never set `showcase_site` on the live site.
+
+Results of 2026-10-16:
+
+- Drill on a throwaway site (`refresh-drill.localhost`), seeded with anchor
+  2026-07-01, with a guest booking on Bloom and one on a provider that is not a
+  showcase (Rahel Girma Nutrition): the dry run listed the Bloom booking, its
+  profile and notification; the refresh removed them and kept the other
+  booking; bookings moved from 2026-01-02 – 2026-07-31 to 2026-04-19 –
+  2026-11-15; a repeat seed changed nothing.
+- Development site: anchor 2026-10-13 to 2026-10-16. Visitor records removed:
+  9 bookings, 9 notifications, 7 customer profiles, 4 staff invitations,
+  1 notification setting, 1 contact, 1 former page address, 5 user
+  permissions. Bookings moved from 2026-04-16 – 2026-11-12 to 2026-04-19 –
+  2026-11-15. After the refresh all showcase pages opened (en and am), the
+  directory listed the six showcases, a guest booking on Bloom went through,
+  `appointment.tests.test_rich_demo.verify` passed, and these Agent Plane runs
+  passed: template-gallery BQA-2026-00663, template-bloom-v3 BQA-2026-00664,
+  booking-journey-bloom BQA-2026-00668, booking-journey-selam BQA-2026-00671,
+  amharic-names BQA-2026-00673, provider-page BQA-2026-00674.
+
 ### Refresh and upgrade
 
-To make the data current again (the bookings are around the anchor date):
-
-- On a showcase site that nobody has used, turn `rich_demo_enabled` on, run
-  `appointment.demo.showcase.cleanup` (it deletes only the records in the
-  journal), then `seed` again.
-- When people booked on the showcase site, cleanup stops on their bookings, on
-  purpose. Make a new site instead: `bench drop-site showcase.example.com`
-  (check the name first), then steps 1 to 6.
+To make the data current again (the bookings are around the anchor date), use
+"Refresh around today". `cleanup` (it deletes only the records in the journal)
+stops when people booked on the showcase site, on purpose.
 
 A seed after an app update upgrades the existing showcases in place: each step
 whose version changed writes its new values on the records it owns, and the

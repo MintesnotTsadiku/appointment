@@ -1314,11 +1314,14 @@ def _field_values(doctype, name):
 
 def _delete_journal_entries(entries):
     for dt, name in sorted(entries, key=lambda item: CLEANUP_PRIORITY.get(item[0], 4)):
-        if not frappe.db.exists(dt, name):
-            continue
-        if dt in {"Version", "Public Experience Outbox", "Experience Release", "Brand Revision", "Published Content Release",
-                  "Local Email Message", "Business Newsletter Campaign", "Newsletter Audience Member", "Newsletter Sender Identity"}:
-            if dt == "Newsletter Audience Member":
+        _delete_entry(dt, name)
+
+
+def _delete_entry(dt, name):
+    """Delete one record with its lifecycle; immutable history records are removed directly."""
+    if frappe.db.exists(dt, name):
+        if dt in DIRECT_DELETE:
+            if dt in {"Newsletter Audience Member", "Business Staff Invitation"}:
                 from frappe.utils.password import delete_all_passwords_for
 
                 delete_all_passwords_for(dt, name)
@@ -1343,6 +1346,12 @@ def _forget_businesses(state, keys, retired):
 def _row_name(row):
     return row.get("name") if isinstance(row, dict) else row
 
+
+# Audit and history records refuse deletion through their lifecycle; they go with their business, without
+# a link check. Every other record keeps its link check.
+DIRECT_DELETE = {"Version", "Public Experience Outbox", "Experience Release", "Brand Revision", "Published Content Release",
+                 "Local Email Message", "Business Newsletter Campaign", "Newsletter Audience Member",
+                 "Newsletter Sender Identity", "Business Staff Invitation"}
 
 # Link checks intentionally remain enabled: later user-created dependents block cleanup.
 CLEANUP_PRIORITY = {
@@ -1375,6 +1384,13 @@ CLEANUP_PRIORITY = {
     "Organization": 12,
     "User": 13,
 }
+
+
+def refresh(anchor_date=None, base_url=None, dry_run=True):
+    """Re-centre the showcases on `anchor_date` (default today). A dry run by default; see showcase_refresh."""
+    from appointment.demo import showcase_refresh
+
+    return showcase_refresh.refresh(anchor_date=anchor_date, base_url=base_url, dry_run=dry_run)
 
 
 def cleanup():
