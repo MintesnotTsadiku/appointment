@@ -1,0 +1,8 @@
+{
+  "status": "approved",
+  "source": "/mnt/c/Minte/Website Concepts Images/Photography Studio/02-enkua-experimental.png",
+  "reference": "02-enkua-experimental.png",
+  "sha256": "1e22f1748fc797080523e028356e56cdb80f7ea5b8058f424cbeadcf019624ff",
+  "use": "Visual reference only. Never render as a website asset.",
+  "mobileAndDark": "Implement directly; no separate concept generation requested."
+}

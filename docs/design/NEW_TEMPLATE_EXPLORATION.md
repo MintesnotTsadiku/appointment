@@ -137,3 +137,18 @@ Dark palettes must work across the full page and booking flow. Tonal declaration
 
 Recommended set: photography A, automotive B, accounting D, coffee E, Hana G, Dr. Dawit C.
 Do not generate concepts until the owner selects directions per business.
+
+## Final approval: Stage D
+
+The owner approved seven references, including real estate, and authorized completion of all templates.
+Mobile and dark-mode designs will be developed during implementation, without another concept-generation stage.
+
+- enkua: `Photography Studio/02-enkua-experimental.png`.
+- mizan: `Vehicle Inspection and Diagnostics/precision-atlas-desktop.png`.
+- meseret: `Accounting and Business Advisory/v2-day-in-addis-desktop.png`.
+- buna: `Ethiopian Coffee Tasting Studio/05-Field-Atlas-Desktop.png`.
+- hana: `Podcaster & Content Creator/revision-2-01-addis-field-notebook.png`.
+- dawit: `Internal Medicine Consultation/01-medical-journal-v2.png`.
+- selam-homes: `Real Estate/03-living-gallery.png`.
+
+Implement independent packages and verify each before publishing its commit. Main remains unchanged.

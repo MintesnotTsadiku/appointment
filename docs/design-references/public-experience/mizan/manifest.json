@@ -1,0 +1,8 @@
+{
+  "status": "approved",
+  "source": "/mnt/c/Minte/Website Concepts Images/Vehicle Inspection and Diagnostics/precision-atlas-desktop.png",
+  "reference": "precision-atlas-desktop.png",
+  "sha256": "38cb75c9c0a8c3ea189a440a9271f1b4df77da97fc41ea269b0339ec157e19f4",
+  "use": "Visual reference only. Never render as a website asset.",
+  "mobileAndDark": "Implement directly; no separate concept generation requested."
+}

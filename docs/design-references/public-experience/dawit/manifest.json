@@ -1,0 +1,8 @@
+{
+  "status": "approved",
+  "source": "/mnt/c/Minte/Website Concepts Images/Internal Medicine Consultation/01-medical-journal-v2.png",
+  "reference": "01-medical-journal-v2.png",
+  "sha256": "030f092ba4492b08375f90e03b2c5f5bd8c189ccbe1e360507b60257d2c1afef",
+  "use": "Visual reference only. Never render as a website asset.",
+  "mobileAndDark": "Implement directly; no separate concept generation requested."
+}
