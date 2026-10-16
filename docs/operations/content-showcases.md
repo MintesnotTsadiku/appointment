@@ -267,9 +267,10 @@ after it, with a few older bookings 100 to 180 days before it. Over time they
 move into the past. `appointment.demo.showcase.refresh` removes the showcases
 and seeds them again around a new anchor date (today if you do not give one).
 
-`cleanup` stops when other records link to the showcases, for example the
-bookings that visitors made. `refresh` also removes these records, but only
-the records on the showcase businesses of the journal:
+`cleanup` refuses when other records link to the showcases, for example the
+bookings that visitors made (see "Remove the showcases"). `refresh` also
+removes these records, but only the records on the showcase businesses of the
+journal:
 
 - every record in the private journal, which includes the showcase staff
   accounts (the new seed makes them again, with new passwords);
@@ -297,8 +298,9 @@ Safety rules:
 - All link checks stay on. Records are deleted through their lifecycle, in
   link order. Only the audit and history records that refuse deletion
   (releases, revisions, outbox rows, newsletter records, staff invitations,
-  versions) are removed directly, as `cleanup` does. Where an organization and
-  its services link each other, the organization's booking URL rows go first.
+  versions) are removed directly. Where an organization and its services link
+  each other, the organization's booking URL rows go first. `cleanup` and
+  `retire_businesses` use the same removal.
 - The removal is one transaction. Files leave the disk only after the commit.
 - After the commit the journal is removed and the seed runs. If the seed
   stops, the site has no showcases: correct the cause and run `seed`.
@@ -363,11 +365,81 @@ Results of 2026-10-16:
   booking-journey-bloom BQA-2026-00668, booking-journey-selam BQA-2026-00671,
   amharic-names BQA-2026-00673, provider-page BQA-2026-00674.
 
+### Remove the showcases (cleanup)
+
+`appointment.demo.showcase.cleanup` removes the showcases and does not seed
+again. It removes only the records in the private journal, and then the
+journal. It keeps every other record: when a record outside the journal links
+to a journal record, cleanup refuses and changes nothing.
+
+- The guard of the seeder applies, as for refresh. The site must have the
+  journal.
+- `dry_run` is `False` by default, so that the earlier call
+  (`execute appointment.demo.showcase.cleanup`) works as before. Cleanup
+  checks the links before it deletes a record, so a refused cleanup changes
+  nothing. Do the dry run first all the same: `dry_run=True` changes nothing
+  and reports `journal_records` (per DocType), `journal_records_already_gone`,
+  `removed_with_journal`, `blockers` (per DocType), `blocker_examples` (up to
+  three records per DocType, each with the journal record it links to) and
+  `unbroken_cycle`.
+- Blockers: every record outside the journal that links to a journal record,
+  and the records that link to those. Examples: visitor bookings, their
+  customer profiles and notifications, a contact of a showcase staff member.
+  When there are blockers, cleanup stops with a message that names each
+  blocking DocType with its count, for example `Cleanup refused: other records
+  link to the records to remove (Appointment 1, Appointment Notification 1,
+  Customer Profile 1). ... No data changed.` To remove these records too, use
+  `refresh` (it seeds the showcases again).
+- `removed_with_journal`: two kinds of records that the platform makes for
+  journal records go with them, as the lifecycle of those records would delete
+  them: the user permissions of the showcase staff and the former page
+  addresses (`Public Site Slug Alias`) of the showcase websites. They go only
+  when they link to no business record outside the journal; otherwise they
+  are blockers.
+- The removal is the removal of refresh: link order through the document
+  lifecycle, the organization and service cycle broken through the booking URL
+  rows, direct removal of the audit and history records, one transaction.
+  Files leave the disk only after the commit: if the removal stops, the
+  transaction rolls back and every file stays.
+- After the commit the journal is removed.
+
+```bash
+bench --site <site> execute appointment.demo.showcase.cleanup --kwargs "{'dry_run': True}"
+# blockers must be empty
+bench --site <site> execute appointment.demo.showcase.cleanup
+```
+
+Never run cleanup on a site that people use for QA unless you want the
+showcases gone; the QA fixtures that use showcase records stop working.
+
+`retire_businesses(keys, dry_run=True)` removes some showcase businesses of
+the journal with the same removal. A record that links to a retired record
+and is not retired with it (also a journal record of another business) is a
+blocker, and the call refuses without a change.
+
+Results of 2026-10-16, drill on a throwaway site (`cleanup-drill.localhost`,
+dropped after the drill; a fresh seed with the Ergata showcase, 5,913
+journal records, 15 files):
+
+- The dry run reported no blockers; `removed_with_journal` had 5 user
+  permissions and 1 former page address.
+- A cleanup made to stop at the third organization rolled back: all 5,913
+  records and all 15 files stayed, and the journal stayed.
+- Cleanup removed all 5,913 journal records (about 1.5 minutes); no
+  organization, provider, booking, user permission or page address remained.
+  The 15 files left the disk after the commit.
+- After a new seed and a guest booking on Bloom, the dry run and cleanup
+  reported the blockers `Appointment 1, Appointment Notification 1,
+  Customer Profile 1`. Cleanup refused; all records, the 15 files and the
+  journal stayed.
+- `refresh` then removed the guest booking with the showcases and seeded
+  again.
+
 ### Refresh and upgrade
 
 To make the data current again (the bookings are around the anchor date), use
 "Refresh around today". `cleanup` (it deletes only the records in the journal)
-stops when people booked on the showcase site, on purpose.
+refuses when people booked on the showcase site, on purpose.
 
 A seed after an app update upgrades the existing showcases in place: each step
 whose version changed writes its new values on the records it owns, and the

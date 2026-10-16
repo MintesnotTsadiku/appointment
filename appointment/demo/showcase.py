@@ -1257,31 +1257,33 @@ def retire_businesses(keys, dry_run=True):
 
     Only journal-owned records are touched: a record is retired when it is the
     business's organization or user, or links to an already retired record.
-    Link checks stay enabled, so anything outside the journal that depends on a
-    retired record blocks the removal. Run with ``dry_run=True`` first.
+    It uses the removal of `cleanup` (showcase_refresh.JournalCleanup): any other
+    record that links to a retired record, also a journal record that stays,
+    blocks the removal, and nothing changes. Run with ``dry_run=True`` first.
     """
+    from appointment.demo.showcase_refresh import JournalCleanup
+
     if isinstance(keys, str):
         keys = json.loads(keys) if keys.startswith("[") else [keys]
+    dry_run = frappe.utils.sbool(dry_run)
     with locked():
         state = load_state()
         unknown = [key for key in keys if key not in state["businesses"] and key not in state.get("independents", {})]
         if unknown:
             frappe.throw(f"Not in this journal: {', '.join(unknown)}")
         retired = _retired_entries(state, keys)
-        counts = {}
-        for dt, _name in retired:
-            counts[dt] = counts.get(dt, 0) + 1
+        plan = JournalCleanup(retired)
+        found = plan.report(dry_run)
+        report = {"dry_run": dry_run, "keys": keys, "records": dict(sorted(Counter(dt for dt, _ in retired).items())),
+                  **{key: found[key] for key in ("removed_with_journal", "blockers", "blocker_examples")}}
         if dry_run:
-            return {"dry_run": True, "keys": keys, "records": counts}
-        try:
-            _delete_journal_entries(retired)
-            _forget_businesses(state, keys, retired)
-            frappe.db.commit()
-        except Exception:
-            frappe.db.rollback()
-            raise
+            return report
+        if plan.blocked:
+            frappe.throw(plan.refusal("Retiring the businesses", "Run the dry run and read 'blocker_examples'; "
+                                      "a business that the others link to must be retired with them."))
+        plan.remove(before_commit=lambda: _forget_businesses(state, keys, retired))
         write_state(state)
-        return {"dry_run": False, "keys": keys, "records": counts}
+        return report
 
 
 def _retired_entries(state, keys):
@@ -1310,11 +1312,6 @@ def _field_values(doctype, name):
     row = frappe.db.get_value(doctype, name, "*", as_dict=True) or {}
     skip = {"name", "owner", "modified_by", "creation", "modified"}
     return {value for field, value in row.items() if field not in skip and isinstance(value, str) and value}
-
-
-def _delete_journal_entries(entries):
-    for dt, name in sorted(entries, key=lambda item: CLEANUP_PRIORITY.get(item[0], 4)):
-        _delete_entry(dt, name)
 
 
 def _delete_entry(dt, name):
@@ -1353,7 +1350,7 @@ DIRECT_DELETE = {"Version", "Public Experience Outbox", "Experience Release", "B
                  "Local Email Message", "Business Newsletter Campaign", "Newsletter Audience Member",
                  "Newsletter Sender Identity", "Business Staff Invitation"}
 
-# Link checks intentionally remain enabled: later user-created dependents block cleanup.
+# Ties in the removal order (showcase_refresh.DeletionOrder); the links decide the order first.
 CLEANUP_PRIORITY = {
     "Published Content Release": -8,
     "Local Email Message": -7,
@@ -1393,17 +1390,14 @@ def refresh(anchor_date=None, base_url=None, dry_run=True):
     return showcase_refresh.refresh(anchor_date=anchor_date, base_url=base_url, dry_run=dry_run)
 
 
-def cleanup():
-    with locked():
-        state = load_state()
-        try:
-            _delete_journal_entries(state["created"])
-            frappe.db.commit()
-        except Exception:
-            frappe.db.rollback()
-            raise
-        state_path().unlink()
-        return {"removed": len(state["created"]), "site": frappe.local.site}
+def cleanup(dry_run=False):
+    """Remove the journal records only; refuse, without a change, when other records link to them.
+
+    `dry_run=True` reports what it would remove and what blocks it. See showcase_refresh.cleanup.
+    """
+    from appointment.demo import showcase_refresh
+
+    return showcase_refresh.cleanup(dry_run=dry_run)
 
 
 def browser_values(manifest=None):
