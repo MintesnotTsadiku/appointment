@@ -1,0 +1,132 @@
+{
+  "kind": "imagery",
+  "contract": "appointment-imagery.v1",
+  "key": "selam-homes",
+  "version": 3,
+  "assets": {
+    "hero.selam-homes": {
+      "src": "/assets/appointment/brand-experience/support/selam-homes-v3/hero.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/selam-homes-v3/hero-m.webp",
+      "alt": "Homes · People · Possibilities",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 627,
+      "height": 627,
+      "mime": "image/webp",
+      "checksum": "sha256:756a670756d9f98c72ecbce97f78041a4991426820834eb4055284c990384e61",
+      "provenance": {
+        "source": "generated",
+        "role": "hero",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Separate photographic sheet, cropped to quadrants. Staff faces; customers turned away. Tonal dark mode."
+      },
+      "mobileWidth": 480,
+      "mobileHeight": 480,
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "hero-m.webp": "sha256:ab002322b2e6023fd2ecaf7837511f986de9fa6c74a00029e93206966fbb8923",
+        "hero.avif": "sha256:0bef6975bc34fae4c1151ebaaa9e7fec14f75cfe08ea9092ba61e18402d0875f",
+        "hero-m.avif": "sha256:5bd2ed81d72320b8f45cc36736f02e7a9abfdc5637c6e6d15883db081e6ff207",
+        "hero.webp": "sha256:756a670756d9f98c72ecbce97f78041a4991426820834eb4055284c990384e61"
+      }
+    },
+    "portrait.selam-homes": {
+      "src": "/assets/appointment/brand-experience/support/selam-homes-v3/portrait.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/selam-homes-v3/portrait-m.webp",
+      "alt": "Selam Tesfaye",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 627,
+      "height": 627,
+      "mime": "image/webp",
+      "checksum": "sha256:34114362cd494d834917e2a93819772bb30bf5e45d5ec13b3d1e6a8cfac4d588",
+      "provenance": {
+        "source": "generated",
+        "role": "portrait",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Separate photographic sheet, cropped to quadrants. Staff faces; customers turned away. Tonal dark mode."
+      },
+      "mobileWidth": 480,
+      "mobileHeight": 480,
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "portrait-m.webp": "sha256:e38e0c45ebe0cb2dcd2b94d7082083763059bf752f22c05c245efb680fd8fbcd",
+        "portrait.avif": "sha256:a507ef82c7e8959beec6f10586e517aa27c7d857a0eeabd68010f7153730fe84",
+        "portrait-m.avif": "sha256:8f997a030d2da4079eab7ffe6dd3bf8ecdc9155738bc07a2710ee9d7e533296d",
+        "portrait.webp": "sha256:34114362cd494d834917e2a93819772bb30bf5e45d5ec13b3d1e6a8cfac4d588"
+      }
+    },
+    "scene1.selam-homes": {
+      "src": "/assets/appointment/brand-experience/support/selam-homes-v3/scene1.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/selam-homes-v3/scene1-m.webp",
+      "alt": "Homes · People · Possibilities",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 627,
+      "height": 627,
+      "mime": "image/webp",
+      "checksum": "sha256:a2f90dd97ee64a6a742aee02091de5626415fe84cca61471d5ea237ee31baabb",
+      "provenance": {
+        "source": "generated",
+        "role": "scene1",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Separate photographic sheet, cropped to quadrants. Staff faces; customers turned away. Tonal dark mode."
+      },
+      "mobileWidth": 480,
+      "mobileHeight": 480,
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "scene1-m.webp": "sha256:06d55957c41c185992d92ad4ef07875d146953f4bc3d1d381edbb35bc9e423b0",
+        "scene1.webp": "sha256:a2f90dd97ee64a6a742aee02091de5626415fe84cca61471d5ea237ee31baabb",
+        "scene1.avif": "sha256:73c5d54e599c215530223df968aa6cc32633c8c01d214fdc1fe972ceda69c752",
+        "scene1-m.avif": "sha256:33d38ee3f2c8cc6d11930e1897098e19e99305425633e405fa46cbfce77192dc"
+      }
+    },
+    "scene2.selam-homes": {
+      "src": "/assets/appointment/brand-experience/support/selam-homes-v3/scene2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/selam-homes-v3/scene2-m.webp",
+      "alt": "Homes · People · Possibilities",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 627,
+      "height": 627,
+      "mime": "image/webp",
+      "checksum": "sha256:c2d57784ce58fa393e2585641b667d5f7697da65f5ae7ee5d02ea88966ed7896",
+      "provenance": {
+        "source": "generated",
+        "role": "scene2",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Separate photographic sheet, cropped to quadrants. Staff faces; customers turned away. Tonal dark mode."
+      },
+      "mobileWidth": 480,
+      "mobileHeight": 480,
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "scene2-m.avif": "sha256:1d96207960b86802096716eb4541973a193212048afae5be4b27510aa3474a80",
+        "scene2.webp": "sha256:c2d57784ce58fa393e2585641b667d5f7697da65f5ae7ee5d02ea88966ed7896",
+        "scene2.avif": "sha256:48cbe21aa3280f8b6f9b889a7aa9797b8db099fd13bdd88d3097f8f0ae6d7a7e",
+        "scene2-m.webp": "sha256:52ab31bd9c19af48583514e6cce6b27cb0912af83dbddebb0cc48406972c5c44"
+      }
+    }
+  }
+}

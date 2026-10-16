@@ -41,6 +41,8 @@ const TEMPLATE_PACKAGES: Record<string, PackageLoader> = {
     (t,c) => ({ Site:t.Site, Booking:t.Booking, Content:c.Content, Loading: t.SiteLoading })),
   "dawit-specialist@3": lazyPackage("dawit-specialist", () => import("./dawit-v3/Template"), () => import("./dawit-v3/Content"),
     (t,c) => ({ Site:t.Site, Booking:t.Booking, Content:c.Content, Loading: t.SiteLoading })),
+  "selam-homes@3": lazyPackage("selam-homes", () => import("./selam-homes-v3/Template"), () => import("./selam-homes-v3/Content"),
+    (t,c) => ({ Site:t.Site, Booking:t.Booking, Content:c.Content, Loading: t.SiteLoading })),
   "selam-movement@1": lazyPackage("selam-movement", () => import("./selam/SelamTemplate"), () => import("./selam/SelamContent"),
     (t, c) => ({ Site: t.SelamSite, Booking: t.SelamBooking, Content: c.SelamContent })),
   "selam-movement@2": lazyPackage("selam-movement", () => import("./selam-v2/SelamTemplate"), () => import("./selam/SelamContent"),

@@ -1,0 +1,53 @@
+{
+  "kind": "layout",
+  "contract": "appointment-layout.v1",
+  "key": "selam-homes",
+  "version": 3,
+  "rendererKey": "selam-homes",
+  "contentSchemaVersion": 2,
+  "sections": [
+    "hero",
+    "services",
+    "gallery",
+    "providers",
+    "process",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "requiredSections": [
+    "hero",
+    "services",
+    "gallery",
+    "providers",
+    "process",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "responsive": {
+    "desktop": "selam-homes-v3-desktop",
+    "tablet": "selam-homes-v3-tablet",
+    "mobile": "selam-homes-v3-mobile",
+    "maxContentWidth": 1320
+  },
+  "density": {
+    "content": [
+      "compact",
+      "standard",
+      "rich"
+    ],
+    "presentation": [
+      "comfortable",
+      "spacious"
+    ],
+    "defaultContent": "rich",
+    "defaultPresentation": "comfortable"
+  }
+}

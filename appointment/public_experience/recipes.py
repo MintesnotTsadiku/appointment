@@ -28,6 +28,7 @@ RECIPE_MANIFESTS = {
     "buna-experiences": {3: "public_experience/manifest/design/recipes/buna-experiences.v3.json"},
     "hana-conversations": {3: "public_experience/manifest/design/recipes/hana-conversations.v3.json"},
     "dawit-specialist": {3: "public_experience/manifest/design/recipes/dawit-specialist.v3.json"},
+    "selam-homes": {3: "public_experience/manifest/design/recipes/selam-homes.v3.json"},
     "selam-movement": {
         1: "public_experience/manifest/design/recipes/selam-movement.v1.json",
         2: "public_experience/manifest/design/recipes/selam-movement.v2.json",

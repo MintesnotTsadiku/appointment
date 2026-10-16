@@ -292,5 +292,23 @@
         "version": 3
       }
     ]
+  },
+  "selam-homes": {
+    "palettes": [
+      {
+        "key": "default",
+        "label": "Template original",
+        "primitive": "selam-homes",
+        "version": 3
+      }
+    ],
+    "fonts": [
+      {
+        "key": "default",
+        "label": "Template original",
+        "primitive": "selam-homes",
+        "version": 3
+      }
+    ]
   }
 }

@@ -1,0 +1,183 @@
+# Seeder-owned showcase; includes deterministic loading and holiday previews.
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /home/minte/template-new/evidence/selam-homes-states
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+scenarios:
+- id: selam-homes_en_1440-states
+  title: selam-homes_en_1440-states
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /selam-homes?display=light&preview-time=10:00&preview-holiday=meskel
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="selam-homes-v3"][lang="en"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"]'
+  - action: click
+    selector: '[data-qa="selam-homes-mode"]'
+  - action: screenshot
+    name: selam-homes_en_1440-states-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: screenshot
+    name: selam-homes_en_1440-states-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: selam-homes_en_390-states
+  title: selam-homes_en_390-states
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /selam-homes?display=light&preview-time=10:00&preview-holiday=meskel
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="selam-homes-v3"][lang="en"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"]'
+  - action: click
+    selector: '[data-qa="selam-homes-mode"]'
+  - action: screenshot
+    name: selam-homes_en_390-states-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: screenshot
+    name: selam-homes_en_390-states-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: selam-homes_am_1440-states
+  title: selam-homes_am_1440-states
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /selam-homes/am?display=light&preview-time=10:00&preview-holiday=meskel
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="selam-homes-v3"][lang="am"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"]'
+  - action: click
+    selector: '[data-qa="selam-homes-mode"]'
+  - action: screenshot
+    name: selam-homes_am_1440-states-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: screenshot
+    name: selam-homes_am_1440-states-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: selam-homes_am_390-states
+  title: selam-homes_am_390-states
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /selam-homes/am?display=light&preview-time=10:00&preview-holiday=meskel
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="selam-homes-v3"][lang="am"]'
+  actions:
+  - action: wait_for
+    selector: '[data-qa="holiday-moment"]'
+  - action: click
+    selector: '[data-qa="selam-homes-mode"]'
+  - action: screenshot
+    name: selam-homes_am_390-states-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: screenshot
+    name: selam-homes_am_390-states-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: selam-homes_loading_en
+  title: selam-homes loading en
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /selam-homes?preview-state=loading
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[role="status"][aria-busy="true"]'
+  actions:
+  - action: screenshot
+    name: selam-homes-loading-en.png
+    full_page: false
+- id: selam-homes_loading_am
+  title: selam-homes loading am
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /selam-homes/am?preview-state=loading
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[role="status"][aria-busy="true"]'
+  actions:
+  - action: screenshot
+    name: selam-homes-loading-am.png
+    full_page: false

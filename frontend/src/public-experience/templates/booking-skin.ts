@@ -4,6 +4,7 @@ import { skin as meseretSkin } from "./meseret-v3/booking";
 import { skin as bunaSkin } from "./buna-v3/booking";
 import { skin as hanaSkin } from "./hana-v3/booking";
 import { skin as dawitSkin } from "./dawit-v3/booking";
+import { skin as selamhomesSkin } from "./selam-homes-v3/booking";
 import type { ComponentType } from "react";
 
 import type { CompiledDesign } from "../types";
@@ -77,6 +78,7 @@ const SKINS: Record<string, BookingSkin> = {
   [bunaSkin.key]: bunaSkin,
   [hanaSkin.key]: hanaSkin,
   [dawitSkin.key]: dawitSkin,
+  [selamhomesSkin.key]: selamhomesSkin,
   [bloomBookingSkin.key]: bloomBookingSkin,
   [meronBookingSkin.key]: meronBookingSkin,
   [abugidaBookingSkin.key]: abugidaBookingSkin,

@@ -642,5 +642,124 @@
       19,
       21
     ]
+  },
+  {
+    "key": "selam-homes",
+    "recipe": "selam-homes",
+    "name": {
+      "en": "Selam Homes",
+      "am": "ሰላም ቤቶች"
+    },
+    "person": {
+      "en": "Selam Tesfaye",
+      "am": "ሰላም ተስፋዬ"
+    },
+    "title": {
+      "en": "A place to call yours.",
+      "am": "የእኔ የሚሉት ቦታ።"
+    },
+    "subtitle": {
+      "en": "Independent guidance for buying and selling apartments and privately owned homes in Addis Ababa.",
+      "am": "በአዲስ አበባ አፓርታማዎችንና የግል ቤቶችን ለመግዛትና ለመሸጥ ገለልተኛ መመሪያ።"
+    },
+    "eyebrow": {
+      "en": "Homes · People · Possibilities",
+      "am": "ቤቶች · ሰዎች · አማራጮች"
+    },
+    "about": {
+      "en": "Let's find the home that fits your life.",
+      "am": "ከሕይወትዎ ጋር የሚስማማውን ቤት እናግኝ።"
+    },
+    "bio": {
+      "en": "I am Selam, an independent agent in Addis Ababa. We start with your priorities, compare suitable homes and arrange a visit before you decide.",
+      "am": "ሰላም እባላለሁ፤ በአዲስ አበባ ገለልተኛ የቤት ደላላ ነኝ። ከቅድሚያዎችዎ እንጀምራለን፣ ተስማሚ ቤቶችን እናነጻጽራለን፣ ከመወሰንዎ በፊት ጉብኝት እናዘጋጃለን።"
+    },
+    "menu": {
+      "en": "Buying a home. Selling a home.",
+      "am": "ቤት መግዛት። ቤት መሸጥ።"
+    },
+    "cta": {
+      "en": "Let's make time.",
+      "am": "ጊዜ እንመድብ።"
+    },
+    "color": "#b73614",
+    "dark": "#ffbd9e",
+    "soft": "#fce8d6",
+    "font": "selam-movement.v2",
+    "direction": "Living Gallery",
+    "services": [
+      {
+        "name": {
+          "en": "Buyer consultation",
+          "am": "የገዢ ምክክር"
+        },
+        "duration": 30,
+        "price": 0,
+        "summary": {
+          "en": "Discuss priorities, neighborhoods and the next step.",
+          "am": "ስለቅድሚያዎች፣ ሰፈሮችና ቀጣይ እርምጃ ይወያዩ።"
+        },
+        "meet": "online"
+      },
+      {
+        "name": {
+          "en": "Property viewing",
+          "am": "የቤት ጉብኝት"
+        },
+        "duration": 60,
+        "price": 0,
+        "summary": {
+          "en": "Meet at our office to discuss and arrange a selected property visit.",
+          "am": "የተመረጠ ቤት ጉብኝት ለማዘጋጀት በቢሮአችን እንገናኝ።"
+        },
+        "meet": "in_person"
+      },
+      {
+        "name": {
+          "en": "Online property discussion",
+          "am": "የኦንላይን ቤት ውይይት"
+        },
+        "duration": 45,
+        "price": 0,
+        "summary": {
+          "en": "Explore your options before travelling to Addis.",
+          "am": "ወደ አዲስ አበባ ከመጓዝዎ በፊት አማራጮችዎን ያውቁ።"
+        },
+        "meet": "online"
+      },
+      {
+        "name": {
+          "en": "Seller consultation",
+          "am": "የሻጭ ምክክር"
+        },
+        "duration": 60,
+        "price": 0,
+        "summary": {
+          "en": "Discuss your home, preparation and viewing arrangements.",
+          "am": "ስለቤትዎ፣ ዝግጅትና የጉብኝት አቀራረብ ይወያዩ።"
+        },
+        "meet": "in_person"
+      }
+    ],
+    "slug": "selam-homes",
+    "prefix": "selamhomes",
+    "galleryCaptions": [
+      {
+        "en": "Bole · Apartment living with room to breathe",
+        "am": "ቦሌ · ሰፊ የአፓርታማ ኑሮ"
+      },
+      {
+        "en": "Kazanchis · A warm place to come home to",
+        "am": "ካዛንቺስ · ሞቅ ያለ መኖሪያ"
+      },
+      {
+        "en": "Addis Ababa · A balcony above the city",
+        "am": "አዲስ አበባ · ከከተማው በላይ ያለ በረንዳ"
+      }
+    ],
+    "placeLabel": {
+      "en": "Bole viewing meeting point",
+      "am": "የቦሌ የቤት ጉብኝት መገናኛ ቦታ"
+    }
   }
 ]

@@ -60,11 +60,11 @@ for (const key of [genna.key, `${genna.key}Line`, "label"]) assert.ok(english.ho
 
 // 4. Every certified package declares its forms and meets the product contract and its declared forms.
 const packages = certifiedPackages();
-assert.equal(packages.length, 12, "all certified packages have a booking skin");
+assert.equal(packages.length, 13, "all certified packages have a booking skin");
 // The forms the current packages draw today: the declaration describes them, it changes nothing.
 const CURRENT = { imagery: "mixed", motion: "expressive", darkMode: "night-photos", holiday: "decoration", success: "animated", greeting: "hero" };
 const CALM = { imagery: "mixed", motion: "calm", darkMode: "tonal", holiday: "greeting", success: "static", greeting: "header" };
-const calmPackages = new Set(["enkua-v3", "mizan-v3", "meseret-v3", "buna-v3", "hana-v3", "dawit-v3"]);
+const calmPackages = new Set(["enkua-v3", "mizan-v3", "meseret-v3", "buna-v3", "hana-v3", "dawit-v3", "selam-homes-v3"]);
 for (const pkg of packages) {
   assert.ok(pkg.recipe, `${pkg.folder}: a recipe pins renderer ${pkg.id}`);
   same(expressionProblems(pkg.recipe), [], `${pkg.folder} declares a valid expression`);

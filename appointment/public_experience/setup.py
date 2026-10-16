@@ -22,6 +22,7 @@ CATALOG = {
     "buna-experiences": ("coffee", "warm", "comfortable"),
     "hana-conversations": ("creator", "bold", "expressive"),
     "dawit-specialist": ("specialist", "editorial", "spacious"),
+    "selam-homes": ("property", "editorial", "spacious"),
 
     "selam-movement": ("wellness", "warm", "expressive"),
     "bloom-hair": ("beauty", "bold", "expressive"),
