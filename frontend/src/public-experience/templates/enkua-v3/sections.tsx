@@ -4,57 +4,83 @@ import type { TemplateProps as Props } from "../types";
 import { records, section } from "../content";
 import { usePublicChrome } from "../chrome";
 import { openState, useTimeOfDay } from "../kit";
-import { Book, Photo, words } from "./elements";
+import { Photo, words } from "./elements";
+import { useEnkuaCopy } from "./copy";
 
 export function About({ props }: { props: Props }) {
   const content = section(props.snapshot.sections, "about");
-  const providers = records(
-    section(props.snapshot.sections, "providers").items,
-  );
+  const people = records(section(props.snapshot.sections, "providers").items);
+  const highlights = Array.isArray(content.highlights)
+    ? content.highlights
+    : [];
+  const t = useEnkuaCopy(props.locale);
   return (
-    <section className="enkua3-section enkua3-about" id="about">
-      <div className="enkua3-about-image">
-        <Photo props={props} role="portrait.enkua" item={providers[0]} />
+    <section className="enkua3-about" id="about">
+      <div className="enkua3-working">
+        <Photo props={props} role="working.enkua" item={content} />
+        <svg
+          className="enkua3-big-arrow"
+          viewBox="0 0 100 100"
+          aria-hidden="true"
+        >
+          <path d="M25 0 100 50 25 100 5 75 50 50 5 25Z" fill="currentColor" />
+        </svg>
+        <span className="enkua3-scribble">{t("goodFrames")}</span>
       </div>
-      <div>
-        <span className="enkua3-index" aria-hidden="true">
-          02 /
-        </span>
+      <div className="enkua3-about-copy">
         <h2>{words(content.title, props.locale)}</h2>
-        <p className="enkua3-body">{words(content.body, props.locale)}</p>
-        {providers.map((person, index) => (
-          <div className="enkua3-person" key={index}>
-            <h3>{words(person.name, props.locale)}</h3>
-            <p>{words(person.role, props.locale)}</p>
-          </div>
+        {people.map((person, index) => (
+          <p className="enkua3-mono" key={index}>
+            {words(person.name, props.locale)} /<br />
+            {words(person.role, props.locale)}
+          </p>
         ))}
-        <Book props={props} />
-      </div>
-    </section>
-  );
-}
-
-export function Process({ props }: { props: Props }) {
-  const content = section(props.snapshot.sections, "process");
-  return (
-    <section className="enkua3-section enkua3-process">
-      <h2>{words(content.title, props.locale)}</h2>
-      <div>
-        {records(content.items).map((item, index) => (
-          <article key={index}>
-            <span className="enkua3-number" aria-hidden="true">
-              {String(index + 1).padStart(2, "0")}
-            </span>
-            <h3>{words(item.title, props.locale)}</h3>
-            <p>{words(item.description, props.locale)}</p>
-          </article>
-        ))}
+        <p>{words(content.body, props.locale)}</p>
+        <span className="enkua3-scribble">{t("peopleFuel")}</span>
+        {highlights.length > 0 && (
+          <figure className="enkua3-producer">
+            <Photo props={props} role="hero.enkua" />
+            <figcaption className="enkua3-mono">
+              {highlights.map((line, i) => (
+                <span key={i}>{words(line, props.locale)}</span>
+              ))}
+            </figcaption>
+          </figure>
+        )}
       </div>
     </section>
   );
 }
 
 export function Visit({ props }: { props: Props }) {
+  const content = section(props.snapshot.sections, "locations");
+  const places = records(content.items);
+  const t = useEnkuaCopy(props.locale);
+  return (
+    <section id="visit" className="enkua3-visit">
+      <div className="enkua3-studio-copy">
+        <h2>{words(content.title, props.locale)}</h2>
+        <p>{words(content.intro, props.locale)}</p>
+        <a className="enkua3-text-link" href="#enkua-hours">
+          {t("seeStudio")} ↗
+        </a>
+      </div>
+      <div className="enkua3-studio-photo">
+        <Photo props={props} role="studio.enkua" item={places[0]} />
+      </div>
+      <div className="enkua3-city-photo">
+        <Photo props={props} role="city.enkua" />
+        <span className="enkua3-scribble">{t("moreAngles")}</span>
+      </div>
+      <details className="enkua3-visit-details" id="enkua-hours">
+        <summary>{t("hoursAndDetails")}</summary>
+        <Hours props={props} />
+      </details>
+    </section>
+  );
+}
+
+function Hours({ props }: { props: Props }) {
   const chrome = usePublicChrome(props.locale);
   const [habesha, setHabesha] = useState(props.locale === "am");
   const now = useTimeOfDay();
@@ -62,39 +88,34 @@ export function Visit({ props }: { props: Props }) {
     const [hour, minute] = value.split(":").map(Number);
     return habesha ? habeshaLabel(hour, minute, props.locale) : value;
   };
-  const places = section(props.snapshot.sections, "locations");
   return (
-    <section id="visit" className="enkua3-section enkua3-visit">
-      <div className="enkua3-section-head">
-        <h2>{words(places.title, props.locale)}</h2>
-        <button
-          type="button"
-          className="enkua3-clock"
-          aria-pressed={habesha}
-          onClick={() => setHabesha(!habesha)}
-        >
-          {chrome.t(habesha ? "habeshaTime" : "internationalTime")}
-        </button>
-      </div>
-      <div className="enkua3-places">
-        {records(places.items).map((place, index) => {
-          const days =
-            typeof place.id === "string"
-              ? props.snapshot.placeHours?.[place.id]?.days || []
-              : [];
-          const state = openState(days, now);
-          return (
-            <article key={index}>
-              <p>
-                {state.open
-                  ? chrome.t("openNow", { time: clock(state.closes || "") })
-                  : ""}
-              </p>
-              <h3>{words(place.name, props.locale)}</h3>
-              <p>{words(place.address, props.locale)}</p>
-              <p>{words(place.body, props.locale)}</p>
-              {days.length ? (
-                <dl className="enkua3-hours">
+    <div className="enkua3-hours">
+      <button
+        type="button"
+        aria-pressed={habesha}
+        onClick={() => setHabesha(!habesha)}
+      >
+        {chrome.t(habesha ? "habeshaTime" : "internationalTime")}
+      </button>
+      <div>
+        {records(section(props.snapshot.sections, "locations").items).map(
+          (place, index) => {
+            const days =
+              typeof place.id === "string"
+                ? props.snapshot.placeHours?.[place.id]?.days || []
+                : [];
+            const state = openState(days, now);
+            return (
+              <article key={index}>
+                <h3>{words(place.name, props.locale)}</h3>
+                <p>{words(place.address, props.locale)}</p>
+                <p>{words(place.body, props.locale)}</p>
+                {state.open && (
+                  <p>
+                    {chrome.t("openNow", { time: clock(state.closes || "") })}
+                  </p>
+                )}
+                <dl>
                   {days.map((day, i) => (
                     <div key={i}>
                       <dt>
@@ -126,13 +147,11 @@ export function Visit({ props }: { props: Props }) {
                     </div>
                   ))}
                 </dl>
-              ) : (
-                <p>{words(place.hours, props.locale)}</p>
-              )}
-            </article>
-          );
-        })}
+              </article>
+            );
+          },
+        )}
       </div>
-    </section>
+    </div>
   );
 }

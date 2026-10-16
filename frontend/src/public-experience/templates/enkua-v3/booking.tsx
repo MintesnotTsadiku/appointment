@@ -1,16 +1,21 @@
-import type { BookingSkin } from "../booking-skin";
+import type { BookingSkin, StepMarkProps } from "../booking-skin";
+function StepMark({ index, state }: StepMarkProps) {
+  return <span className="enkua3-step" data-state={state} aria-hidden="true">{state === "done" ? "✓" : String(index).padStart(2, "0")}</span>;
+}
+
 export const skin: BookingSkin = {
   key: "enkua-photography@3",
   name: "enkua-v3",
   frame: "square",
-  servicePhotoRoles: ["scene1.enkua", "scene2.enkua", "portrait.enkua"],
-  formatPhotoRoles: { in_person: "scene1.enkua", online: "scene2.enkua" },
-  backdropRole: "hero.enkua",
+  StepMark,
+  servicePhotoRoles: ["hero.enkua", "founder.enkua", "products.enkua"],
+  formatPhotoRoles: { in_person: "studio.enkua", online: "founder.enkua" },
   style: () => import("./booking.css"),
   tokens: () => ({
     "--bk-action-bg": "var(--accent-primary)",
     "--bk-action-ink": "var(--pe-color-on-primary)",
-    "--bk-action-radius": "3px",
+    "--bk-action-radius": "0px",
+    "--booking-radius": "0px",
     "--bk-action-shadow": "none",
   }),
 };

@@ -10,18 +10,18 @@
         "am": "የግል ፎቶ · ሰዎች · ምርቶች"
       },
       "title": {
-        "en": "You. In full colour.",
-        "am": "እርስዎ። በሙሉ ቀለም።"
+        "en": "You.\nIn full\ncolour.",
+        "am": "እርስዎ።\nበሙሉ\nቀለም።"
       },
       "subtitle": {
-        "en": "Big moments. Fresh perspectives. Photography with a point of view, made in Addis.",
-        "am": "ትልቅ አጋጣሚዎች። አዲስ እይታዎች። በአዲስ አበባ የሚሠራ ልዩ እይታ ያለው ፎቶግራፍ።"
+        "en": "Big moments. Fresh perspectives.\nPhotography with a point of view.",
+        "am": "ትልቅ አጋጣሚዎች። አዲስ እይታዎች።\nልዩ እይታ ያለው ፎቶግራፍ።"
       },
       "primaryAction": {
         "intent": "booking_start",
         "label": {
-          "en": "Your next great frame.",
-          "am": "ቀጣዩ ድንቅ ፎቶዎ።"
+          "en": "Find your session",
+          "am": "የፎቶ ቆይታዎን ይምረጡ"
         },
         "placement": "primary"
       },
@@ -40,19 +40,29 @@
         "am": "የእርስዎን መድረክ ይምረጡ።"
       },
       "intro": {
-        "en": "Choose the time and format that work for you.",
-        "am": "ለእርስዎ የሚመች ሰዓት እና የቆይታ አይነት ይምረጡ።"
+        "en": "At our studio.\nOr at an agreed location.",
+        "am": "በስቱዲዮአችን።\nወይም በተስማማንበት ቦታ።"
       }
     },
     "about": {
       "title": {
-        "en": "Good people. Great frames.",
-        "am": "ጥሩ ሰዎች። ድንቅ ፎቶዎች።"
+        "en": "Meet the eye.",
+        "am": "ከካሜራው ጀርባ።"
       },
       "body": {
-        "en": "Big moments. Fresh perspectives. Photography with a point of view, made in Addis.",
-        "am": "ትልቅ አጋጣሚዎች። አዲስ እይታዎች። በአዲስ አበባ የሚሠራ ልዩ እይታ ያለው ፎቶግራፍ።"
-      }
+        "en": "A good photograph starts with curiosity.\nI bring the light, the ideas and a little music.\nYou bring yourself.",
+        "am": "ጥሩ ፎቶ በጉጉት ይጀምራል።\nእኔ ብርሃኑን፣ ሐሳቡንና ትንሽ ሙዚቃ አዘጋጃለሁ።\nእርስዎ እንዳሉ ይምጡ።"
+      },
+      "highlights": [
+        {
+          "en": "With Liya Tadesse /",
+          "am": "ከሊያ ታደሰ ጋር /"
+        },
+        {
+          "en": "Studio producer",
+          "am": "የስቱዲዮ አዘጋጅ"
+        }
+      ]
     },
     "providers": {
       "title": {
@@ -62,49 +72,64 @@
     },
     "process": {
       "title": {
-        "en": "A little preparation. A better visit.",
-        "am": "ጥቂት ዝግጅት። የተሻለ ቆይታ።"
+        "en": "Make it\na date.",
+        "am": "ቀጠሮ\nይያዙ።"
       },
       "items": [
         {
-          "title": {
-            "en": "Choose your session",
-            "am": "ቆይታዎን ይምረጡ"
-          },
           "step": 1,
+          "title": {
+            "en": "Pick a session",
+            "am": "ቆይታ ይምረጡ"
+          },
           "description": {
-            "en": "Read the scope, duration and fee before choosing.",
-            "am": "ከመምረጥዎ በፊት የአገልግሎቱን ዝርዝር፣ ቆይታ እና ክፍያ ያንብቡ።"
+            "en": "Find the right session for your story.",
+            "am": "ለታሪክዎ የሚስማማ ቆይታ ይምረጡ።"
           }
         },
         {
-          "title": {
-            "en": "Find your time",
-            "am": "የሚመችዎን ሰዓት ያግኙ"
-          },
           "step": 2,
+          "title": {
+            "en": "Choose date & time",
+            "am": "ቀንና ሰዓት ይምረጡ"
+          },
           "description": {
-            "en": "The calendar shows the times available to book.",
-            "am": "ቀን መቁጠሪያው ለቀጠሮ ክፍት የሆኑ ሰዓቶችን ያሳያል።"
+            "en": "Choose from the live calendar.",
+            "am": "ከቀን መቁጠሪያው ክፍት ሰዓት ይምረጡ።"
           }
         },
         {
-          "title": {
-            "en": "Come with your questions",
-            "am": "ጥያቄዎችዎን ይዘው ይምጡ"
-          },
           "step": 3,
+          "title": {
+            "en": "Choose a location",
+            "am": "ቦታ ይምረጡ"
+          },
           "description": {
-            "en": "Use the booking note to tell us what you would like to discuss.",
-            "am": "ስለምን መወያየት እንደሚፈልጉ በቀጠሮ ማስታወሻው ይጻፉ።"
+            "en": "See the available locations for your session.",
+            "am": "ለቆይታዎ የሚገኙ ቦታዎችን ይመልከቱ።"
+          }
+        },
+        {
+          "step": 4,
+          "title": {
+            "en": "Confirm your session",
+            "am": "ቀጠሮዎን ያረጋግጡ"
+          },
+          "description": {
+            "en": "Review your details before confirming.",
+            "am": "ከማረጋገጥዎ በፊት ዝርዝሩን ይመልከቱ።"
           }
         }
       ]
     },
     "locations": {
       "title": {
-        "en": "Where we meet",
-        "am": "የምንገናኝበት ቦታ"
+        "en": "Our space.\nYour energy.",
+        "am": "የእኛ ቦታ።\nየእርስዎ ድምቀት።"
+      },
+      "intro": {
+        "en": "Controlled light in Bole.\nFresh perspectives across Addis.\nWe plan the setting around your story.",
+        "am": "በቦሌ በተዘጋጀ ብርሃን።\nበመላው አዲስ አበባ በአዲስ እይታ።\nቦታውን ከታሪክዎ ጋር እናስማማለን።"
       }
     },
     "faq": {
@@ -139,12 +164,16 @@
       "title": {
         "en": "Let us talk",
         "am": "እንነጋገር"
+      },
+      "body": {
+        "en": "Bole, Addis Ababa",
+        "am": "ቦሌ፣ አዲስ አበባ"
       }
     },
     "booking_cta": {
       "title": {
-        "en": "Your next great frame.",
-        "am": "ቀጣዩ ድንቅ ፎቶዎ።"
+        "en": "Your next\ngreat frame.",
+        "am": "ቀጣዩ\nድንቅ ፎቶዎ።"
       },
       "body": {
         "en": "Big moments. Fresh perspectives. Photography with a point of view, made in Addis.",
@@ -168,12 +197,12 @@
     },
     "gallery": {
       "title": {
-        "en": "Some moments stay.",
-        "am": "አንዳንድ ጊዜያት ይዘከራሉ።"
+        "en": "Good people.\nGreat frames.",
+        "am": "ጥሩ ሰዎች።\nድንቅ ፎቶዎች።"
       },
       "intro": {
-        "en": "A glimpse of the people and objects in our frame.",
-        "am": "በፍሬማችን ውስጥ ያሉ ሰዎችና እቃዎች እይታ።"
+        "en": "Portraits.\nProducts.\nReal life.\nAddis Ababa.",
+        "am": "የግል ፎቶዎች።\nምርቶች።\nእውነተኛ ሕይወት።\nአዲስ አበባ።"
       },
       "items": []
     }

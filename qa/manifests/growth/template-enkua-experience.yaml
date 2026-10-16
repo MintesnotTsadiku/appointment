@@ -1,0 +1,302 @@
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /home/minte/template-new/evidence/enkua-experience
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+scenarios:
+- id: enkua-loading-en-light-390
+  title: enkua-loading-en-light-390
+  viewport:
+    width: 390
+    height: 900
+  checks: []
+  routes:
+  - path: /enkua-studio?display=light&preview-state=loading
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: .enkua3-loading-composition
+  actions:
+  - action: screenshot
+    name: enkua-loading-en-light-390.png
+    full_page: false
+- id: enkua-booking-en-light-390
+  title: enkua-booking-en-light-390
+  viewport:
+    width: 390
+    height: 900
+  checks: []
+  routes:
+  - path: /enkua-studio?display=light
+    assertions:
+    - type: network_idle
+  actions:
+  - action: click
+    selector: '[data-qa="enkua-service-0"]'
+  - action: wait_for
+    selector: '[data-qa="independent-booking"][data-bk-skin="enkua-v3"]'
+    timeout_ms: 20000
+  - action: screenshot
+    name: enkua-booking-en-light-390.png
+    full_page: true
+- id: enkua-loading-en-light-1440
+  title: enkua-loading-en-light-1440
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /enkua-studio?display=light&preview-state=loading
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: .enkua3-loading-composition
+  actions:
+  - action: screenshot
+    name: enkua-loading-en-light-1440.png
+    full_page: false
+- id: enkua-booking-en-light-1440
+  title: enkua-booking-en-light-1440
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /enkua-studio?display=light
+    assertions:
+    - type: network_idle
+  actions:
+  - action: click
+    selector: '[data-qa="enkua-service-0"]'
+  - action: wait_for
+    selector: '[data-qa="independent-booking"][data-bk-skin="enkua-v3"]'
+    timeout_ms: 20000
+  - action: screenshot
+    name: enkua-booking-en-light-1440.png
+    full_page: true
+- id: enkua-loading-en-dark-390
+  title: enkua-loading-en-dark-390
+  viewport:
+    width: 390
+    height: 900
+  checks: []
+  routes:
+  - path: /enkua-studio?display=dark&preview-state=loading
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: .enkua3-loading-composition
+  actions:
+  - action: screenshot
+    name: enkua-loading-en-dark-390.png
+    full_page: false
+- id: enkua-booking-en-dark-390
+  title: enkua-booking-en-dark-390
+  viewport:
+    width: 390
+    height: 900
+  checks: []
+  routes:
+  - path: /enkua-studio?display=dark
+    assertions:
+    - type: network_idle
+  actions:
+  - action: click
+    selector: '[data-qa="enkua-service-0"]'
+  - action: wait_for
+    selector: '[data-qa="independent-booking"][data-bk-skin="enkua-v3"]'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-theme-switch"]'
+  - action: screenshot
+    name: enkua-booking-en-dark-390.png
+    full_page: true
+- id: enkua-loading-en-dark-1440
+  title: enkua-loading-en-dark-1440
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /enkua-studio?display=dark&preview-state=loading
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: .enkua3-loading-composition
+  actions:
+  - action: screenshot
+    name: enkua-loading-en-dark-1440.png
+    full_page: false
+- id: enkua-booking-en-dark-1440
+  title: enkua-booking-en-dark-1440
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /enkua-studio?display=dark
+    assertions:
+    - type: network_idle
+  actions:
+  - action: click
+    selector: '[data-qa="enkua-service-0"]'
+  - action: wait_for
+    selector: '[data-qa="independent-booking"][data-bk-skin="enkua-v3"]'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-theme-switch"]'
+  - action: screenshot
+    name: enkua-booking-en-dark-1440.png
+    full_page: true
+- id: enkua-loading-am-light-390
+  title: enkua-loading-am-light-390
+  viewport:
+    width: 390
+    height: 900
+  checks: []
+  routes:
+  - path: /enkua-studio/am?display=light&preview-state=loading
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: .enkua3-loading-composition
+  actions:
+  - action: screenshot
+    name: enkua-loading-am-light-390.png
+    full_page: false
+- id: enkua-booking-am-light-390
+  title: enkua-booking-am-light-390
+  viewport:
+    width: 390
+    height: 900
+  checks: []
+  routes:
+  - path: /enkua-studio/am?display=light
+    assertions:
+    - type: network_idle
+  actions:
+  - action: click
+    selector: '[data-qa="enkua-service-0"]'
+  - action: wait_for
+    selector: '[data-qa="independent-booking"][data-bk-skin="enkua-v3"]'
+    timeout_ms: 20000
+  - action: screenshot
+    name: enkua-booking-am-light-390.png
+    full_page: true
+- id: enkua-loading-am-light-1440
+  title: enkua-loading-am-light-1440
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /enkua-studio/am?display=light&preview-state=loading
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: .enkua3-loading-composition
+  actions:
+  - action: screenshot
+    name: enkua-loading-am-light-1440.png
+    full_page: false
+- id: enkua-booking-am-light-1440
+  title: enkua-booking-am-light-1440
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /enkua-studio/am?display=light
+    assertions:
+    - type: network_idle
+  actions:
+  - action: click
+    selector: '[data-qa="enkua-service-0"]'
+  - action: wait_for
+    selector: '[data-qa="independent-booking"][data-bk-skin="enkua-v3"]'
+    timeout_ms: 20000
+  - action: screenshot
+    name: enkua-booking-am-light-1440.png
+    full_page: true
+- id: enkua-loading-am-dark-390
+  title: enkua-loading-am-dark-390
+  viewport:
+    width: 390
+    height: 900
+  checks: []
+  routes:
+  - path: /enkua-studio/am?display=dark&preview-state=loading
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: .enkua3-loading-composition
+  actions:
+  - action: screenshot
+    name: enkua-loading-am-dark-390.png
+    full_page: false
+- id: enkua-booking-am-dark-390
+  title: enkua-booking-am-dark-390
+  viewport:
+    width: 390
+    height: 900
+  checks: []
+  routes:
+  - path: /enkua-studio/am?display=dark
+    assertions:
+    - type: network_idle
+  actions:
+  - action: click
+    selector: '[data-qa="enkua-service-0"]'
+  - action: wait_for
+    selector: '[data-qa="independent-booking"][data-bk-skin="enkua-v3"]'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-theme-switch"]'
+  - action: screenshot
+    name: enkua-booking-am-dark-390.png
+    full_page: true
+- id: enkua-loading-am-dark-1440
+  title: enkua-loading-am-dark-1440
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /enkua-studio/am?display=dark&preview-state=loading
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: .enkua3-loading-composition
+  actions:
+  - action: screenshot
+    name: enkua-loading-am-dark-1440.png
+    full_page: false
+- id: enkua-booking-am-dark-1440
+  title: enkua-booking-am-dark-1440
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /enkua-studio/am?display=dark
+    assertions:
+    - type: network_idle
+  actions:
+  - action: click
+    selector: '[data-qa="enkua-service-0"]'
+  - action: wait_for
+    selector: '[data-qa="independent-booking"][data-bk-skin="enkua-v3"]'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-theme-switch"]'
+  - action: screenshot
+    name: enkua-booking-am-dark-1440.png
+    full_page: true

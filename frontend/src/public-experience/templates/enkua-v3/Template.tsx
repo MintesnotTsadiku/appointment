@@ -4,11 +4,13 @@ import type { BookingTemplateProps, TemplateProps as Props } from "../types";
 import { records, section } from "../content";
 import { usePublicChrome } from "../chrome";
 import { useMotionLevel, useReveal } from "../kit";
-import { Book, Live, Photo, words, withLocale } from "./elements";
+import { Book, Photo, words, withLocale } from "./elements";
 import { Header, Footer } from "./chrome";
 import { Hero, Gallery } from "./Hero";
 import { Services } from "./Services";
-import { About, Process, Visit } from "./sections";
+import { About, Visit } from "./sections";
+import { BookingStrip } from "./BookingStrip";
+import { useEnkuaCopy } from "./copy";
 import "./site.css";
 export { Header, Footer } from "./chrome";
 export { Photo } from "./elements";
@@ -19,6 +21,7 @@ export function Site(props: Props) {
   const level = useMotionLevel(props.snapshot.compiledDesign.motion);
   useReveal(root, level, props.locale);
   const chrome = usePublicChrome(props.locale);
+  const t = useEnkuaCopy(props.locale);
   const faq = section(props.snapshot.sections, "faq");
   const booking = section(props.snapshot.sections, "booking_cta");
   return (
@@ -41,27 +44,33 @@ export function Site(props: Props) {
         <Gallery props={props} />
         <Services props={props} />
         <About props={props} />
-        <Process props={props} />
-        <section id="faq" className="enkua3-section enkua3-faq">
-          <h2>{words(faq.title, props.locale)}</h2>
-          <div>
-            {records(faq.items).map((item, index) => (
-              <details key={index}>
-                <summary>{words(item.question, props.locale)}</summary>
-                <p>{words(item.answer, props.locale)}</p>
-              </details>
-            ))}
-          </div>
-        </section>
         <Visit props={props} />
-        <section className="enkua3-section enkua3-booking">
-          <span className="enkua3-index" aria-hidden="true">
-            ↗
-          </span>
+        <BookingStrip props={props} />
+        <section className="enkua3-notes">
+          <div>
+            <Photo props={props} role="business.enkua" />
+            <p>{t("arriveAsYouAre")}</p>
+          </div>
+          <div>
+            <Photo props={props} role="graduation.enkua" />
+            <p>{t("milestonesMatter")}</p>
+          </div>
+          <details id="faq">
+            <summary>{words(faq.title, props.locale)}</summary>
+            {records(faq.items).map((item, i) => (
+              <div key={i}>
+                <h3>{words(item.question, props.locale)}</h3>
+                <p>{words(item.answer, props.locale)}</p>
+              </div>
+            ))}
+          </details>
+        </section>
+        <section className="enkua3-closing">
           <h2>{words(booking.title, props.locale)}</h2>
-          <p>{words(booking.body, props.locale)}</p>
-          <Book props={props} />
-          <Live props={props} />
+          <Book props={props} arrow="→">
+            {t("bookSession")}
+          </Book>
+          <p className="enkua3-scribble">{t("moreGoodPeople")}</p>
         </section>
       </main>
       <Footer props={props} />
@@ -72,7 +81,6 @@ export function Site(props: Props) {
 export function Booking(props: BookingTemplateProps) {
   const { mode } = props;
   const chrome = usePublicChrome(props.locale);
-  const content = section(props.snapshot.sections, "booking_cta");
   return (
     <div
       className="enkua3 enkua3-handoff"
@@ -85,21 +93,13 @@ export function Booking(props: BookingTemplateProps) {
     >
       <Header props={props} />
       <main>
-        <section className="enkua3-hero">
-          <div>
-            <Link
-              className="enkua3-text-link"
-              to={withLocale(props.publicRoot, props.locale)}
-            >
-              {chrome.t("backToSite")}
-            </Link>
-            <h1>{words(content.title, props.locale)}</h1>
-            <p>{words(content.body, props.locale)}</p>
-            <Book props={props} href={props.bookingPath || undefined} />
-            <Live props={props} />
-          </div>
-          <Photo props={props} role="hero.enkua" eager />
-        </section>
+        <Link
+          className="enkua3-text-link"
+          to={withLocale(props.publicRoot, props.locale)}
+        >
+          {chrome.t("backToSite")}
+        </Link>
+        <BookingStrip props={props} />
         <Services props={props} bookingPath={props.bookingPath} />
       </main>
       <Footer props={props} />
@@ -122,12 +122,14 @@ export function SiteLoading({
       role="status"
       aria-busy="true"
     >
-      <span>{chrome.t("loadingSite")}</span>
-      <div aria-hidden="true">
-        <i />
-        <i />
-        <i />
+      <span className="enkua3-loading-label">{chrome.t("loadingSite")}</span>
+      <div className="enkua3-loading-composition" aria-hidden="true">
+        <div className="enkua3-loading-type"><i /><i /><i /></div>
+        <div className="enkua3-loading-sun" />
+        <div className="enkua3-loading-portrait" />
+        <div className="enkua3-loading-frame" />
       </div>
+      <div className="enkua3-loading-ribbon" aria-hidden="true" />
     </div>
   );
 }

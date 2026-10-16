@@ -85,9 +85,7 @@ export function Content(props: ContentTemplateProps) {
         {content.loading ? (
           <p role="status">{chrome.t("loadingSite")}</p>
         ) : null}
-        {content.unavailable ? (
-          <p>{chrome.t("contentUnavailable")}</p>
-        ) : null}
+        {content.unavailable ? <p>{chrome.t("contentUnavailable")}</p> : null}
         {projection ? (
           <>
             <p>{projection.excerpt || projection.summary}</p>

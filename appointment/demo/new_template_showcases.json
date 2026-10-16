@@ -7,8 +7,8 @@
       "am": "እንቁ የፎቶ ስቱዲዮ"
     },
     "person": {
-      "en": "Hana Tesfaye",
-      "am": "ሐና ተስፋዬ"
+      "en": "Dawit Girma",
+      "am": "ዳዊት ግርማ"
     },
     "title": {
       "en": "You. In full colour.",
@@ -27,8 +27,8 @@
       "am": "ጥሩ ሰዎች። ድንቅ ፎቶዎች።"
     },
     "bio": {
-      "en": "I photograph people, milestones and the things they make. Come as you are. We will find your light together.",
-      "am": "ሰዎችን፣ የሕይወት አጋጣሚዎችንና የሚሠሯቸውን ምርቶች በፎቶ እቀርጻለሁ። እንዳሉ ይምጡ። የእርስዎን ብርሃን አብረን እናገኛለን።"
+      "en": "A good photograph starts with curiosity.\nI bring the light, the ideas and a little music.\nYou bring yourself.",
+      "am": "ጥሩ ፎቶ በጉጉት ይጀምራል።\nእኔ ብርሃኑን፣ ሐሳቡንና ትንሽ ሙዚቃ አዘጋጃለሁ።\nእርስዎ እንዳሉ ይምጡ።"
     },
     "menu": {
       "en": "Pick your spotlight.",
@@ -116,7 +116,8 @@
     "placeLabel": {
       "en": "Bole portrait studio",
       "am": "የቦሌ የፎቶ ስቱዲዮ"
-    }
+    },
+    "version": 7
   },
   {
     "key": "mizan",

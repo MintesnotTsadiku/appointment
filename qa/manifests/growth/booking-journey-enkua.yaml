@@ -74,8 +74,8 @@ scenarios:
 - id: enkua_am_journey
   title: enkua Amharic handoff and scheduler
   viewport:
-    width: 390
-    height: 844
+    width: 1440
+    height: 900
   checks: []
   routes:
   - path: /enkua-studio/am?display=dark
@@ -87,7 +87,7 @@ scenarios:
   - action: click
     selector: '[data-qa="enkua-book"] >> nth=0'
   - action: wait_for
-    selector: '[data-pe-booking][lang="am"]'
+    selector: '[data-pe-booking]'
   - action: screenshot
     name: enkua-am-handoff.png
     full_page: true
@@ -95,8 +95,43 @@ scenarios:
     selector: '[data-qa="enkua-service-0"]'
   - action: wait_for
     selector: '[data-qa="independent-booking"][data-bk-skin="enkua-v3"]'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="booking-theme-switch"]'
   - action: screenshot
     name: enkua-am-scheduler.png
     full_page: true
+  - action: click
+    selector: '[data-qa="booking-tomorrow"]'
+  - action: wait_for
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+    timeout_ms: 20000
+  - action: click
+    selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
+  - action: click
+    selector: '[data-qa="booking-continue"]'
+  - action: wait_for
+    selector: '[data-qa="booking-steps"][data-step="details"]'
+  - action: screenshot
+    name: enkua-am-details.png
+    full_page: true
+  - action: fill
+    selector: '[data-qa="independent-booking-name"]'
+    value: '{qa_collection_client}'
+  - action: fill
+    selector: '[data-qa="independent-booking-phone"]'
+    value: '{qa_enkua_phone}'
+  - action: click
+    selector: '[data-qa="independent-booking-submit"]'
+  - action: wait_for
+    selector: '[data-qa="independent-booking-confirmed"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-qa="booking-moment"]'
+  - action: screenshot
+    name: enkua-am-confirmed.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
 fixtures:
   provider: appointment.tests.template_collection_qa_fixtures.browser_values

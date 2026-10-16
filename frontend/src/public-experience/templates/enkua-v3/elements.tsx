@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useTranslation } from "@/lib/i18n";
 import { Link } from "react-router-dom";
 import type { TemplateProps as Props } from "../types";
 import {
@@ -77,11 +78,14 @@ export function Book({
   props,
   href,
   children,
+  arrow = "↗",
 }: {
   props: Props;
   href?: string;
   children?: ReactNode;
+  arrow?: string;
 }) {
+  const { setLanguage } = useTranslation();
   const label = action(
     section(props.snapshot.sections, "hero").primaryAction,
     props.locale,
@@ -91,10 +95,11 @@ export function Book({
     <Link
       className="enkua3-button"
       to={withLocale(target, props.locale)}
+      onClick={() => setLanguage(props.locale)}
       data-qa="enkua-book"
     >
       {children || label?.label}
-      <span aria-hidden="true">↗</span>
+      <span aria-hidden="true">{arrow}</span>
     </Link>
   ) : null;
 }

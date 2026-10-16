@@ -1,0 +1,39 @@
+.enkua3-button span { transition: transform 160ms ease; }
+.enkua3-button:is(:hover, :focus-visible) span { transform: translateX(3px); }
+.enkua3-service { transition: box-shadow 160ms ease; }
+.enkua3-service:has(a:is(:hover, :focus-visible)) { box-shadow: inset 4px 0 var(--accent); }
+@media (prefers-reduced-motion: no-preference) {
+  .enkua3[data-motion-ready="true"]:not([data-motion-level="none"]) [data-reveal="portfolio"] {
+    transition: opacity 320ms ease, translate 320ms ease;
+  }
+  .enkua3[data-motion-ready="true"]:not([data-motion-level="none"]) [data-reveal="portfolio"]:not([data-revealed="true"]) {
+    opacity: 0;
+    translate: 0 10px;
+  }
+}
+.enkua3[data-motion-level="none"] .enkua3-button:is(:hover, :active),
+.enkua3[data-motion-level="none"] .enkua3-button:is(:hover, :focus-visible) span { transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .enkua3-button:is(:hover, :active),
+  .enkua3-button:is(:hover, :focus-visible) span { transform: none; }
+}
+.enkua3-loading { min-height: 100vh; padding: 30px 3% 0; }
+.enkua3-loading[data-pe-mode="dark"] { --paper: #101318; --ink: #f5f5ef; --accent: #8aa8ff; --yellow: #e9db46; }
+.enkua3-loading-label { display: block; padding-bottom: 24px; border-bottom: 1px solid var(--line); font-size: 14px; }
+.enkua3-loading-composition { height: clamp(380px, 42vw, 650px); position: relative; overflow: hidden; }
+.enkua3-loading-type { position: absolute; inset: 12% auto auto 0; width: 43%; z-index: 2; }
+.enkua3-loading-type i { display: block; height: clamp(40px, 6vw, 90px); margin-bottom: 14px; background: color-mix(in srgb, var(--ink) 12%, var(--paper)); }
+.enkua3-loading-type i:first-child { width: 48%; }
+.enkua3-loading-type i:nth-child(2) { width: 80%; }
+.enkua3-loading-sun { position: absolute; width: 37%; aspect-ratio: 1; border-radius: 50%; background: var(--yellow); left: 38%; top: 5%; }
+.enkua3-loading-portrait { position: absolute; background: color-mix(in srgb, var(--accent) 25%, var(--paper)); width: 28%; height: 78%; left: 42%; bottom: 0; }
+.enkua3-loading-frame { position: absolute; right: 0; top: 15%; width: 20%; height: 60%; border: 2px solid var(--accent); background: color-mix(in srgb, var(--ink) 8%, var(--paper)); }
+.enkua3-loading-ribbon { height: 42px; background: var(--accent); margin-inline: -3.2%; }
+@media (max-width: 600px) {
+  .enkua3-loading-composition { height: 520px; }
+  .enkua3-loading-type { width: 76%; top: 6%; }
+  .enkua3-loading-type i { height: 50px; }
+  .enkua3-loading-sun { width: 65%; left: 26%; top: 43%; }
+  .enkua3-loading-portrait { left: 35%; width: 42%; height: 48%; }
+  .enkua3-loading-frame { top: auto; bottom: 8%; width: 23%; height: 30%; }
+}

@@ -52,6 +52,10 @@ def sections(definition, starter, provider, places, services):
     for index, item in enumerate(content["services"]["items"]):
         roles = service_roles[definition["key"]]
         item.update(image=asset + roles[index % len(roles)] + ".webp", imageAlt=item["name"])
+    if definition["key"] == "enkua":
+        from appointment.demo.enkua_showcase import refine_sections
+
+        return refine_sections(content, defaults)
     return content
 
 
@@ -59,7 +63,7 @@ def definition(data, index):
     asset = f'/assets/appointment/brand-experience/support/{data["key"]}-v3/'
     name = data["person"]["en"].split(" ", 1)
     return IndependentShowcase(
-        key=data["key"], version=6, business=data["name"]["en"],
+        key=data["key"], version=data.get("version", 6), business=data["name"]["en"],
         owner_email=f'{data["key"]}.owner@example.test', owner_name=tuple(name),
         slug=data["slug"], recipe=data["recipe"], preferences={"main_action": "booking"},
         open_days=tuple(data.get("openDays", ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))),
@@ -70,7 +74,7 @@ def definition(data, index):
         sessions=tuple(Session(row["name"]["en"], row["duration"], row["price"], row["meet"], row["summary"]["en"], row["name"]["am"], row["summary"]["am"]) for row in data["services"]),
         full_name=data["person"]["en"], full_name_am=data["person"]["am"], business_am=data["name"]["am"],
         bio=data["bio"]["en"], bio_am=data["bio"]["am"], spoken_languages=("en", "am"),
-        portrait=asset+"portrait.webp", logo=asset+"logo.webp", favicon=asset+"favicon.png",
+        portrait=asset+("founder-r2.webp" if data["key"] == "enkua" else "portrait.webp"), logo=asset+"logo.webp", favicon=asset+"favicon.png",
         short_name=data["name"]["en"].split()[0],
         seo={"title": data["name"]["en"]+" | Addis Ababa", "description": data["subtitle"]["en"]},
         sections=partial(sections, data), persona=data["eyebrow"]["en"],

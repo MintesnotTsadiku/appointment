@@ -1,0 +1,233 @@
+@font-face {
+  font-family: "Enkua Notes";
+  src: url("/assets/appointment/fonts/enkua/caveat-brush.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 400;
+}
+.enkua3 {
+  --paper: var(--pe-color-canvas, #fff);
+  --ink: var(--pe-color-text, #080808);
+  --accent: var(--pe-color-primary, #063bff);
+  --yellow: var(--pe-color-surface-muted, #fff52b);
+  --line: var(--pe-color-border, #c6c6c6);
+  --blue-wash: #c1e5f8;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--pe-font-body, sans-serif);
+  font-size: clamp(14px, 1.4vw, 21px);
+  line-height: 1.25;
+  overflow: clip;
+}
+.enkua3[data-pe-mode="dark"] {
+  --blue-wash: #16374a;
+}
+.enkua3 * {
+  box-sizing: border-box;
+}
+.enkua3 h1,
+.enkua3 h2,
+.enkua3 h3,
+.enkua3 p,
+.enkua3 figure {
+  margin: 0;
+}
+.enkua3 h1,
+.enkua3 h2,
+.enkua3 h3,
+.enkua3-wordmark,
+.enkua3-ribbon,
+.enkua3-number,
+.enkua3-price {
+  font-family: var(--pe-font-display, sans-serif);
+  font-weight: 400;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+}
+.enkua3 h2 {
+  font-size: clamp(38px, 6.1vw, 90px);
+  line-height: 0.99;
+  white-space: pre-line;
+}
+.enkua3 h3 {
+  line-height: 1.1;
+}
+.enkua3 a {
+  color: inherit;
+  text-decoration: none;
+}
+.enkua3 button {
+  font: inherit;
+  cursor: pointer;
+  color: inherit;
+}
+.enkua3 a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.enkua3 a:focus-visible,
+.enkua3 button:focus-visible,
+.enkua3 summary:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 4px;
+}
+.enkua3 picture,
+.enkua3 img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.enkua3 img {
+  object-fit: cover;
+}
+.enkua3-mono,
+.enkua3-descriptor,
+.enkua3-duration {
+  font-family: ui-monospace, var(--pe-font-body), monospace;
+  font-size: 0.76em;
+  line-height: 1.35;
+  white-space: pre-line;
+}
+.enkua3-scribble {
+  display: block;
+  width: fit-content;
+  font-family: "Enkua Notes", var(--pe-font-body, sans-serif);
+  font-style: normal;
+  font-weight: 400;
+  text-transform: uppercase;
+  white-space: pre-line;
+  line-height: 1.05;
+  letter-spacing: -0.06em;
+  transform: rotate(-12deg);
+}
+.enkua3-scribble::after {
+  content: "";
+  display: block;
+  width: 65%;
+  height: 4px;
+  background: var(--yellow);
+  margin: 0.35em 0 0 auto;
+  transform: rotate(-8deg);
+}
+.enkua3-button {
+  display: inline-flex;
+  width: fit-content;
+  gap: 1.4em;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7em 1em;
+  min-height: 44px;
+  background: var(--accent);
+  color: var(--pe-color-on-primary, #fff) !important;
+  font-size: 0.85em;
+  line-height: 1.2;
+  transition: transform 0.15s;
+}
+.enkua3-button:hover {
+  transform: translateY(-2px);
+  text-decoration: none !important;
+}
+.enkua3-button:active {
+  transform: translateY(1px);
+}
+.enkua3-button span {
+  font-size: 1.5em;
+}
+.enkua3-live {
+  font-size: 12px;
+  min-height: 16px;
+  margin-top: 0.6rem !important;
+}
+.enkua3-live span {
+  color: var(--accent);
+}
+.enkua3-text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 1em;
+  min-height: 44px;
+  font-family: ui-monospace, var(--pe-font-body), monospace;
+  font-size: 0.75em;
+  text-transform: uppercase;
+}
+.enkua3-section-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+  margin: 1.1vw 0;
+}
+.enkua3-section-head > p {
+  max-width: 17ch;
+  padding-top: 0.4em;
+  text-transform: uppercase;
+}
+.enkua3-skip {
+  position: absolute;
+  top: -100px;
+  left: 20px;
+  z-index: 10;
+  padding: 12px;
+  background: var(--paper);
+}
+.enkua3-skip:focus {
+  top: 10px;
+}
+.enkua3-content {
+  max-width: 1100px;
+  margin: auto;
+  padding: 4rem 5vw;
+}
+.enkua3-content h1 {
+  font-size: clamp(36px, 6vw, 80px);
+}
+.enkua3-content p {
+  margin-block: 1rem;
+}
+.enkua3-content img {
+  height: auto;
+}
+.enkua3-entries {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+.enkua3-entry {
+  border-bottom: 1px solid var(--line);
+  padding: 2rem 0;
+}
+.enkua3-entry img {
+  aspect-ratio: 4/3;
+  object-fit: cover;
+}
+.enkua3-entry h2 {
+  font-size: 2rem;
+  margin: 1rem 0;
+}
+.enkua3-content table {
+  max-width: 100%;
+  border-collapse: collapse;
+}
+.enkua3-content td,
+.enkua3-content th {
+  border: 1px solid var(--line);
+  padding: 0.5rem;
+}
+.enkua3-handoff main > .enkua3-text-link {
+  margin: 1rem 3%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .enkua3 * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
+.enkua3[data-motion-level="none"] * {
+  transition: none !important;
+  animation: none !important;
+}
+
+.enkua3-select [role="option"][data-highlighted] {
+  background: var(--pe-color-surface-muted);
+  color: var(--pe-color-text);
+}

@@ -1,0 +1,657 @@
+.enkua3-header {
+  position: relative;
+  padding: 0.5vw 3% 0;
+  display: flex;
+  gap: 1.5vw;
+  align-items: flex-start;
+  min-height: 8.2vw;
+}
+.enkua3-wordmark {
+  font-size: 6.6vw;
+  line-height: 1;
+  letter-spacing: -0.065em;
+}
+.enkua3-descriptor {
+  text-transform: uppercase;
+  padding-top: 1.1vw;
+}
+.enkua3-header nav {
+  margin-left: auto;
+  display: flex;
+  gap: 1.8vw;
+  align-items: center;
+  padding-top: 1vw;
+  font-size: 0.8em;
+}
+.enkua3-header > .enkua3-button {
+  margin-top: 0.2vw;
+}
+.enkua3-controls {
+  position: absolute;
+  right: 3%;
+  bottom: 0.25vw;
+  display: flex;
+  gap: 1em;
+  align-items: center;
+  font-size: 11px;
+  z-index: 4;
+}
+.enkua3-controls button,
+.enkua3-controls a {
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  background: transparent;
+  border: 0;
+  padding: 0 4px;
+}
+.enkua3-controls > span:first-child {
+  color: var(--ink);
+}
+.enkua3-hero {
+  position: relative;
+  height: 48vw;
+  max-height: 710px;
+  min-height: 550px;
+  border-bottom: 1px solid var(--line);
+  isolation: isolate;
+}
+.enkua3-hero-copy {
+  position: relative;
+  z-index: 3;
+  width: 36%;
+  padding: 1vw 0 0 3%;
+}
+.enkua3-hero h1 {
+  font-size: 9.9vw;
+  line-height: 0.91;
+  letter-spacing: -0.045em;
+}
+.enkua3-hero h1 > span {
+  display: block;
+}
+.enkua3-hero h1 b {
+  color: var(--accent);
+  font-weight: inherit;
+}
+.enkua3-lead {
+  max-width: 25ch;
+  margin: 0.8vw 0 1.3vw !important;
+  font-size: 1.02em;
+}
+.enkua3-hero-person {
+  position: absolute;
+  z-index: 2;
+  left: 28%;
+  bottom: 0;
+  width: 48%;
+  height: calc(100% + 5vw);
+  pointer-events: none;
+}
+.enkua3-hero-person img {
+  object-fit: contain;
+  object-position: bottom;
+}
+.enkua3-sun {
+  position: absolute;
+  z-index: 0;
+  width: 37vw;
+  height: 37vw;
+  background: var(--yellow);
+  border-radius: 50%;
+  top: -1vw;
+  left: 37%;
+}
+.enkua3-made {
+  position: absolute;
+  top: 0;
+  right: 3%;
+  width: 25%;
+  display: flex;
+  align-items: center;
+  gap: 1.6vw;
+}
+.enkua3-made strong {
+  display: grid;
+  align-content: center;
+  flex-shrink: 0;
+  width: 12vw;
+  height: 12vw;
+  border-radius: 50%;
+  background: var(--yellow);
+  color: var(--ink);
+  padding: 2.5vw;
+  white-space: pre-line;
+  font: 400 2.7vw/0.95 var(--pe-font-display);
+  text-transform: uppercase;
+  transform: rotate(-7deg);
+}
+.enkua3-made p {
+  font:
+    0.7em/1.2 ui-monospace,
+    var(--pe-font-body),
+    monospace;
+  text-transform: uppercase;
+  white-space: pre-line;
+}
+.enkua3-hero-secondary {
+  position: absolute;
+  right: 3%;
+  bottom: 0;
+  width: 28%;
+  height: 65%;
+}
+.enkua3-hero-secondary .enkua3-scribble {
+  position: absolute;
+  right: 8%;
+  bottom: 9%;
+  color: white;
+  font-size: 1.5em;
+}
+.enkua3-hero-note {
+  width: 8em;
+  margin: 2vw 0 0 63% !important;
+  font-size: 1.3em;
+}
+.enkua3-gallery,
+.enkua3-services {
+  padding: 0 3%;
+}
+.enkua3-ribbon {
+  color: var(--accent);
+  border-bottom: 1px solid var(--line);
+  font-size: 6.4vw;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+  margin: 0 -3.2% 0 !important;
+  padding: 0 3%;
+}
+.enkua3-gallery .enkua3-section-head {
+  margin: 1.2vw 0;
+}
+.enkua3-mosaic {
+  display: grid;
+  grid-template-columns: 1.24fr 0.61fr 0.39fr 1fr;
+  grid-template-rows: 20vw 28vw;
+  gap: 0.7vw;
+}
+.enkua3-mosaic figure {
+  position: relative;
+  overflow: hidden;
+}
+.enkua3-mosaic figure:first-child {
+  grid-row: span 2;
+}
+.enkua3-mosaic figure:nth-child(2) {
+  grid-column: 2/4;
+}
+.enkua3-mosaic figure:nth-child(3) {
+  grid-column: 4;
+}
+.enkua3-mosaic figure:nth-child(4) {
+  grid-column: 2/4;
+}
+.enkua3-mosaic figure:nth-child(5) {
+  grid-column: 4;
+}
+.enkua3-mosaic figcaption {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0.6vw 1vw;
+  display: grid;
+  gap: 0.2em;
+  max-width: 45%;
+  background: var(--paper);
+  font-size: 0.83em;
+  line-height: 1.08;
+}
+.enkua3-mosaic figcaption b {
+  font: 400 4vw/1 var(--pe-font-display);
+}
+.enkua3-mosaic figure:first-child .enkua3-scribble {
+  position: absolute;
+  bottom: 5%;
+  left: 8%;
+  color: white;
+  font-size: 2em;
+  text-shadow: 0 1px 5px #000;
+}
+.enkua3-services {
+  padding-block: 1vw;
+  border-block: 1px solid var(--line);
+  margin-top: 1vw;
+}
+.enkua3-services h2 {
+  font-size: 5.4vw;
+}
+.enkua3-service {
+  display: grid;
+  grid-template-columns: 7% 22% 14% 25% 15% 17%;
+  align-items: center;
+  min-height: 8.7vw;
+  border: 1px solid var(--line);
+  margin-bottom: 0.4vw;
+}
+.enkua3-service:nth-child(3n + 1) {
+  background: var(--yellow);
+}
+.enkua3-service:nth-child(3n) {
+  background: var(--blue-wash);
+}
+.enkua3-number {
+  font-size: 4.7vw;
+  text-align: center;
+}
+.enkua3-service h3 {
+  font-size: 2.1vw;
+  padding: 0.5vw 1vw;
+}
+.enkua3-duration {
+  padding: 0.5vw;
+  text-transform: uppercase;
+}
+.enkua3-price {
+  padding: 0.5vw 1vw;
+  border-inline: 1px solid var(--ink);
+  font-size: 4.8vw;
+  white-space: nowrap;
+  text-align: center;
+}
+.enkua3-service-book {
+  padding: 1vw;
+  font-weight: 700;
+  font-size: 0.85em;
+}
+.enkua3-service-photo {
+  height: 8.7vw;
+}
+.enkua3-service-photo img {
+  object-position: center 30%;
+}
+.enkua3-about {
+  display: grid;
+  grid-template-columns: 52% 48%;
+  border-bottom: 1px solid var(--line);
+}
+.enkua3-working {
+  position: relative;
+  height: 29vw;
+}
+.enkua3-working img {
+  filter: grayscale(1);
+}
+.enkua3-big-arrow {
+  position: absolute;
+  right: -1vw;
+  top: -4vw;
+  width: 15vw;
+  height: 26vw;
+  color: var(--accent);
+}
+.enkua3-working > .enkua3-scribble {
+  position: absolute;
+  left: 5%;
+  bottom: 7%;
+  color: white;
+  font-size: 1.7em;
+}
+.enkua3-about-copy {
+  position: relative;
+  padding: 1vw 3vw 2vw 2vw;
+}
+.enkua3-about h2 {
+  font-size: 5.5vw;
+  margin-bottom: 0.8vw;
+}
+.enkua3-about-copy > p {
+  max-width: 64%;
+  margin-bottom: 1.5vw;
+}
+.enkua3-about-copy > .enkua3-scribble {
+  font-size: 1.6em;
+  margin-left: 1vw;
+}
+.enkua3-producer {
+  position: absolute;
+  right: 6%;
+  bottom: 5%;
+  width: 28%;
+}
+.enkua3-producer picture {
+  height: 14vw;
+  background: #ddd;
+  overflow: hidden;
+}
+.enkua3-producer img {
+  object-fit: cover;
+  object-position: top;
+  filter: grayscale(1);
+}
+.enkua3-producer figcaption {
+  margin-top: 0.5vw;
+  font-size: 0.65em;
+}
+.enkua3-producer figcaption span {
+  display: block;
+}
+.enkua3-visit {
+  display: grid;
+  grid-template-columns: 30% 45% 23%;
+  gap: 1%;
+  padding: 1vw 3% 0;
+}
+.enkua3-visit h2 {
+  font-size: 4.5vw;
+}
+.enkua3-studio-copy > p {
+  font-size: 0.85em;
+  margin: 1vw 0;
+  white-space: pre-line;
+}
+.enkua3-studio-photo,
+.enkua3-city-photo {
+  height: 23vw;
+  position: relative;
+}
+.enkua3-city-photo .enkua3-scribble {
+  position: absolute;
+  right: 8%;
+  top: 5%;
+  max-width: 75%;
+  font-size: 1em;
+  background: var(--paper);
+  padding: 0.5em;
+}
+.enkua3-visit-details {
+  grid-column: 1/-1;
+  font-size: 0.8em;
+}
+.enkua3-visit-details > summary {
+  cursor: pointer;
+  padding: 0.65em 0;
+}
+.enkua3-hours {
+  padding: 1rem 0;
+}
+.enkua3-hours button {
+  padding: 0.5rem;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+.enkua3-hours > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+.enkua3-hours h3 {
+  font-size: 1.5em;
+}
+.enkua3-hours dl > div {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+  padding: 0.5em 0;
+}
+.enkua3-hours dd {
+  margin: 0;
+}
+.enkua3-booking-strip {
+  background: var(--yellow);
+  display: grid;
+  grid-template-columns: 17% 83%;
+  padding: 1.5vw 3%;
+}
+.enkua3-booking-strip h2 {
+  font-size: 4.2vw;
+  max-width: 9ch;
+}
+.enkua3-booking-options ol {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin: 0 0 1vw;
+  padding: 0;
+}
+.enkua3-booking-options li {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  border-right: 1px solid var(--ink);
+  padding: 0 0.6em;
+  font-size: 0.7em;
+}
+.enkua3-booking-options li:last-child {
+  border: 0;
+}
+.enkua3-booking-options li b {
+  font: 400 4vw/1 var(--pe-font-display);
+}
+.enkua3-booking-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 1vw;
+  align-items: center;
+  background: var(--paper);
+  padding: 0.7vw;
+}
+.enkua3-booking-fields label {
+  display: block;
+  font-size: 0.65em;
+  margin-bottom: 5px;
+}
+.enkua3-booking-fields > p {
+  font-size: 0.75em;
+}
+.enkua3-booking-fields button {
+  border-radius: 0;
+}
+.enkua3-notes {
+  display: grid;
+  grid-template-columns: 44% 44% 12%;
+  padding: 1.5vw 3%;
+  gap: 0;
+  align-items: start;
+}
+.enkua3-notes > div {
+  display: grid;
+  grid-template-columns: 42% 58%;
+  gap: 0;
+  padding-right: 1.5vw;
+  align-items: center;
+}
+.enkua3-notes picture {
+  height: 17vw;
+}
+.enkua3-notes > div > p {
+  font-family: Georgia, "Noto Sans Ethiopic", serif;
+  font-size: 1.4em;
+  padding: 1vw;
+}
+.enkua3-notes details {
+  font-size: 0.7em;
+  padding: 1vw 0;
+}
+.enkua3-notes summary {
+  cursor: pointer;
+  min-height: 44px;
+}
+.enkua3-notes details div {
+  padding-bottom: 1em;
+}
+.enkua3-closing {
+  display: grid;
+  grid-template-columns: 57% 27% 16%;
+  align-items: center;
+  padding: 0 3% 2vw;
+  border-bottom: 1px solid var(--line);
+}
+.enkua3-closing h2 {
+  font-size: 8.3vw;
+  line-height: 0.95;
+  color: var(--accent);
+}
+.enkua3-closing .enkua3-button {
+  color: var(--ink) !important;
+  background: none;
+  padding: 0;
+  gap: 1vw;
+  flex-direction: row-reverse;
+  font-size: 1em;
+}
+.enkua3-closing .enkua3-button > span {
+  display: grid;
+  place-items: center;
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  width: 11vw;
+  height: 11vw;
+  font-size: 8vw;
+  line-height: 1;
+}
+.enkua3-closing > p {
+  font-size: 1.6em;
+  margin-left: 2vw;
+}
+.enkua3-footer {
+  display: grid;
+  grid-template-columns: 55% 19% 10% 16%;
+  padding: 1vw 3%;
+  gap: 0;
+  align-items: center;
+}
+.enkua3-footer .enkua3-wordmark {
+  font-size: 22vw;
+  line-height: 0.9;
+}
+.enkua3-footer-info {
+  display: grid;
+  gap: 1vw;
+  font-size: 0.7em;
+  padding-left: 1vw;
+}
+.enkua3-footer-info .enkua3-descriptor {
+  font-size: 1.2em;
+}
+.enkua3-footer nav {
+  display: grid;
+  gap: 0.2em;
+  font-size: 0.8em;
+  padding-left: 1vw;
+  border-left: 1px solid var(--line);
+}
+.enkua3-footer > .enkua3-scribble {
+  font-size: 1.3em;
+  padding-left: 2vw;
+}
+.enkua3-colophon {
+  grid-column: 1/-1;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 1rem;
+  font-size: 11px;
+}
+
+.enkua3[lang="en"] .enkua3-hero h1 {
+  transform: scaleX(1.25);
+  transform-origin: left;
+}
+.enkua3[lang="en"] .enkua3-gallery h2 {
+  transform: scaleX(1.25);
+  transform-origin: left;
+}
+.enkua3[lang="en"] .enkua3-services h2 {
+  transform: scaleX(1.13);
+  transform-origin: left;
+}
+.enkua3[lang="en"] .enkua3-header .enkua3-wordmark {
+  transform: scaleX(1.5);
+  transform-origin: left;
+  margin-right: 6.8vw;
+}
+.enkua3[lang="en"] .enkua3-closing h2 {
+  transform: scaleX(1.2);
+  transform-origin: left;
+}
+.enkua3[lang="en"] .enkua3-footer .enkua3-wordmark {
+  transform: scaleX(1.18);
+  transform-origin: left;
+}
+.enkua3-price > span {
+  font-size: 0.48em;
+}
+.enkua3-price > b {
+  font-weight: 400;
+}
+.enkua3-extra-services {
+  display: flex;
+  gap: 1rem;
+  padding: 0.3rem 0;
+  font-size: 12px;
+}
+.enkua3-extra-services a {
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.enkua3-hero-secondary img {
+  object-position: 50% 25%;
+}
+.enkua3-working > .enkua3-scribble {
+  background: #0009;
+  padding: 0.15em;
+}
+
+.enkua3-hero-note {
+  position: absolute;
+  left: 70%;
+  top: 34vw;
+  margin: 0 !important;
+  width: 7em;
+}
+.enkua3[lang="en"] .enkua3-gallery h2 {
+  font-size: 6.5vw;
+  transform: scaleX(1.3);
+}
+.enkua3[lang="en"] .enkua3-services h2 {
+  font-size: 5.8vw;
+  transform: scaleX(1.4);
+}
+.enkua3[lang="en"] .enkua3-about h2 {
+  transform: scaleX(1.3);
+  transform-origin: left;
+}
+.enkua3[lang="en"] .enkua3-studio-copy h2 {
+  transform: scaleX(1.12);
+  transform-origin: left;
+}
+.enkua3[lang="en"] .enkua3-closing h2 {
+  transform: scaleX(1.32);
+}
+.enkua3-footer {
+  grid-template-columns: 57% 18% 10% 15%;
+}
+
+@media (min-width: 601px) {
+  .enkua3-service > .enkua3-number {
+    grid-column: 1;
+  }
+  .enkua3-service > h3 {
+    grid-column: 2;
+  }
+  .enkua3-service > .enkua3-duration {
+    grid-column: 3;
+  }
+  .enkua3-service > .enkua3-price {
+    grid-column: 4;
+  }
+  .enkua3-service > .enkua3-service-book {
+    grid-column: 5;
+  }
+  .enkua3-service > .enkua3-service-photo {
+    grid-column: 6;
+  }
+}
