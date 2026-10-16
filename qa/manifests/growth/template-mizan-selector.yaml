@@ -1,0 +1,50 @@
+# Read-only guest journey; requires the seeder-owned Mizan showcase.
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /home/minte/template-new/evidence/mizan-selector
+capture_trace: true
+capture_instruction_timeline: true
+timeout_ms: 90000
+options:
+  ignore_baseline_drift: true
+  show_cursor: false
+  show_action_labels: false
+scenarios:
+- id: mizan_selector
+  title: Mizan deferred service selector preserves the selected offering
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /mizan-studio?display=light
+    assertions:
+    - type: network_idle
+  actions:
+  - action: scroll
+    delta_y: 1800
+  - action: wait_for
+    selector: '[aria-labelledby="mizan-service-label"]'
+  - action: click
+    selector: '[aria-labelledby="mizan-service-label"]'
+  - action: click
+    selector: '[role="option"] >> nth=2'
+  - action: screenshot
+    name: mizan-selected-service.png
+    full_page: false
+  - action: click
+    selector: '#reserve [data-qa="mizan-book"]'
+  - action: wait_for
+    selector: '[data-qa="independent-booking-service"]'
+    assertions:
+    - type: text_contains
+      selector: '[data-qa="independent-booking-service"]'
+      value: EV battery assessment
+  - action: screenshot
+    name: mizan-selected-scheduler.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

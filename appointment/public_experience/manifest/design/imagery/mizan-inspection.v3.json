@@ -5,127 +5,313 @@
   "version": 3,
   "assets": {
     "hero.mizan": {
-      "src": "/assets/appointment/brand-experience/support/mizan-v3/hero.webp",
-      "mobileSrc": "/assets/appointment/brand-experience/support/mizan-v3/hero-m.webp",
-      "alt": "Independent vehicle inspection",
+      "src": "/assets/appointment/brand-experience/support/mizan-v3/hero-r2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/mizan-v3/hero-r2-m.webp",
+      "alt": "Dawit Bekele reads a diagnostic tablet",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5
       },
       "fit": "cover",
-      "width": 627,
-      "height": 627,
+      "width": 1040,
+      "height": 1300,
+      "mobileWidth": 480,
+      "mobileHeight": 600,
       "mime": "image/webp",
-      "checksum": "sha256:1688245db32b2f97be18e67469c9838ce30f0d109c093fa438262c1e7f8a56a6",
+      "checksum": "sha256:7d1b703508e2dd36cb6da66aca755b1baab94f58be3ec00b948fc5cba9d39983",
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "hero-r2.webp": "sha256:7d1b703508e2dd36cb6da66aca755b1baab94f58be3ec00b948fc5cba9d39983",
+        "hero-r2.avif": "sha256:8d53cfae4a513cf3af6a755781d8ac504ad0b04fbf48e6106f378d0a742caba0",
+        "hero-r2-m.webp": "sha256:6ac8ba00d2313ca952198c76d932a990c10adf5b5dd11d5a5f4d56f3f31c836b",
+        "hero-r2-m.avif": "sha256:4f523f628e6a71af5e65b7bcde0318c51a3c4534d1eb57666746675211861779"
+      },
       "provenance": {
         "source": "generated",
         "role": "hero",
         "license": "project-generated",
-        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Separate photographic sheet, cropped to quadrants. Staff faces; customers turned away. Tonal dark mode."
-      },
-      "mobileWidth": 480,
-      "mobileHeight": 480,
-      "formats": [
-        "avif"
-      ],
-      "checksums": {
-        "hero-m.webp": "sha256:7656e8dc175dfcc6a6a0f8efcca41c9e2e98954b12865d9e6feb3b2bbf10883b",
-        "hero.avif": "sha256:27caf7024afd06f5606fe58156afa419a418cec07f121484a49c586866de35dc",
-        "hero-m.avif": "sha256:b8e2e8f8c773b625106851666c10cab9813b2b568bd0edb0e841df1903234008",
-        "hero.webp": "sha256:1688245db32b2f97be18e67469c9838ce30f0d109c093fa438262c1e7f8a56a6"
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Individual photographs. Fictional Ethiopian staff, no customers. Lead identity matched to hero. Tonal dark mode."
       }
     },
     "portrait.mizan": {
-      "src": "/assets/appointment/brand-experience/support/mizan-v3/portrait.webp",
-      "mobileSrc": "/assets/appointment/brand-experience/support/mizan-v3/portrait-m.webp",
-      "alt": "Dawit Bekele",
+      "src": "/assets/appointment/brand-experience/support/mizan-v3/lead-r2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/mizan-v3/lead-r2-m.webp",
+      "alt": "Dawit Bekele, lead diagnostics technician",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5
       },
       "fit": "cover",
-      "width": 627,
-      "height": 627,
-      "mime": "image/webp",
-      "checksum": "sha256:b376b776cf6c3aa3afb20490247d46ed5bd91f4d8bbb0461df06f3adbeefe4da",
-      "provenance": {
-        "source": "generated",
-        "role": "portrait",
-        "license": "project-generated",
-        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Separate photographic sheet, cropped to quadrants. Staff faces; customers turned away. Tonal dark mode."
-      },
+      "width": 1050,
+      "height": 700,
       "mobileWidth": 480,
-      "mobileHeight": 480,
+      "mobileHeight": 320,
+      "mime": "image/webp",
+      "checksum": "sha256:17320f45b98a1d6ab4958f3204bb258ab775ce9ae36ac918e40677a985cb0170",
       "formats": [
         "avif"
       ],
       "checksums": {
-        "portrait-m.webp": "sha256:e3675fd1c2af6a319a5614856de8df735b4460167bfeb655b367dd95fc657c0e",
-        "portrait.avif": "sha256:a8bbf3d1325bd63f868956999e2bd158cdfcd8ad96d1f165c3cffab7a25588da",
-        "portrait-m.avif": "sha256:a75aad47749f66905e31491b0002943ecabae4c5f14b7b31fd01c4c5fc911114",
-        "portrait.webp": "sha256:b376b776cf6c3aa3afb20490247d46ed5bd91f4d8bbb0461df06f3adbeefe4da"
+        "lead-r2.webp": "sha256:17320f45b98a1d6ab4958f3204bb258ab775ce9ae36ac918e40677a985cb0170",
+        "lead-r2.avif": "sha256:dcf63ad86ce2e6c7a052f44bdaad1a413c7be1910320c66506fee22e85b0ffed",
+        "lead-r2-m.webp": "sha256:75047765969077f0e20e797aa79da6c331dda431447ecf0c2b8e5cf3e0b98845",
+        "lead-r2-m.avif": "sha256:887413eaee467cef3ac7f070f3abe21892204943c2b476cb9ecefa7beae30f96"
+      },
+      "provenance": {
+        "source": "generated",
+        "role": "lead",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Individual photographs. Fictional Ethiopian staff, no customers. Lead identity matched to hero. Tonal dark mode."
       }
     },
     "scene1.mizan": {
-      "src": "/assets/appointment/brand-experience/support/mizan-v3/scene1.webp",
-      "mobileSrc": "/assets/appointment/brand-experience/support/mizan-v3/scene1-m.webp",
-      "alt": "Independent vehicle inspection",
+      "src": "/assets/appointment/brand-experience/support/mizan-v3/brake-r2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/mizan-v3/brake-r2-m.webp",
+      "alt": "Front brake disc and caliper, illustrative photo",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5
       },
       "fit": "cover",
-      "width": 627,
-      "height": 627,
-      "mime": "image/webp",
-      "checksum": "sha256:d81a1553dad7e97fadc27a7996843a2b60eb723712a41ba31338def828cd6016",
-      "provenance": {
-        "source": "generated",
-        "role": "scene1",
-        "license": "project-generated",
-        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Separate photographic sheet, cropped to quadrants. Staff faces; customers turned away. Tonal dark mode."
-      },
+      "width": 1050,
+      "height": 700,
       "mobileWidth": 480,
-      "mobileHeight": 480,
+      "mobileHeight": 320,
+      "mime": "image/webp",
+      "checksum": "sha256:a3cd123176a0eafec4070e1a24c3b20b6350ac150df52cad39084397f0a89639",
       "formats": [
         "avif"
       ],
       "checksums": {
-        "scene1-m.webp": "sha256:11de32428eb25350512e70565708c5adce26173ad2e0be079f3d1cddca4f597e",
-        "scene1.webp": "sha256:d81a1553dad7e97fadc27a7996843a2b60eb723712a41ba31338def828cd6016",
-        "scene1.avif": "sha256:3f4c08051852ad7a2f249ec8a71099e7265e92fd6754fe364226f80ae7530e49",
-        "scene1-m.avif": "sha256:48b6848c4b1cd0d855953a58b3632062657cbdc8cd68c6a9e9ee29369fa0b30e"
+        "brake-r2.webp": "sha256:a3cd123176a0eafec4070e1a24c3b20b6350ac150df52cad39084397f0a89639",
+        "brake-r2.avif": "sha256:d4e7e47c3de4b7fba81639889802e78ab44a0163dd9a6a20c03fe3935f711345",
+        "brake-r2-m.webp": "sha256:9ec4a05849a9568a53eded4cf5329bcb9fd1e10a620d5ed98377918576171174",
+        "brake-r2-m.avif": "sha256:2bc7704ba093347232443d2ba96258bc3f1253fa56a2f200d258ebc3878eb472"
+      },
+      "provenance": {
+        "source": "generated",
+        "role": "brake",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Individual photographs. Fictional Ethiopian staff, no customers. Lead identity matched to hero. Tonal dark mode."
       }
     },
     "scene2.mizan": {
-      "src": "/assets/appointment/brand-experience/support/mizan-v3/scene2.webp",
-      "mobileSrc": "/assets/appointment/brand-experience/support/mizan-v3/scene2-m.webp",
-      "alt": "Independent vehicle inspection",
+      "src": "/assets/appointment/brand-experience/support/mizan-v3/engine-r2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/mizan-v3/engine-r2-m.webp",
+      "alt": "Engine-bay inspection detail",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5
       },
       "fit": "cover",
-      "width": 627,
-      "height": 627,
-      "mime": "image/webp",
-      "checksum": "sha256:856e1c55c6e8b91e54a5b04cebd9c0240afc6fc93afca48214fdb16a9c64b514",
-      "provenance": {
-        "source": "generated",
-        "role": "scene2",
-        "license": "project-generated",
-        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Separate photographic sheet, cropped to quadrants. Staff faces; customers turned away. Tonal dark mode."
-      },
+      "width": 1040,
+      "height": 1300,
       "mobileWidth": 480,
-      "mobileHeight": 480,
+      "mobileHeight": 600,
+      "mime": "image/webp",
+      "checksum": "sha256:84ba6d9d60c38079cf78204c975e4d7caa89dc2ff51b4f98d45f03d91a952d84",
       "formats": [
         "avif"
       ],
       "checksums": {
-        "scene2-m.avif": "sha256:561a5c66da4b3bc5efd3fde41def25a701101d2ae734e39fd437710960bc1ace",
-        "scene2.webp": "sha256:856e1c55c6e8b91e54a5b04cebd9c0240afc6fc93afca48214fdb16a9c64b514",
-        "scene2.avif": "sha256:7e1ec5d6baad52d05487564e7e910f9f027266e548ea0a19aa8e19459d340eef",
-        "scene2-m.webp": "sha256:d8e346e14f32577630941af50e96ef2077115457f5a7b8f6565a2a7cdedcc732"
+        "engine-r2.webp": "sha256:84ba6d9d60c38079cf78204c975e4d7caa89dc2ff51b4f98d45f03d91a952d84",
+        "engine-r2.avif": "sha256:d4764b13ad61e419cd8877a6c66938d5a7b6f2fe37ed6eb1cf3b76697d3ca7ea",
+        "engine-r2-m.webp": "sha256:5a5128e4505a91308aa5d1f8d9fd2041129f65670494cfbdf3fbd94c951fcbe7",
+        "engine-r2-m.avif": "sha256:abd4afbaed514610c914f7960181b2531e72fd7811e59afb7f3d2a73982fac7c"
+      },
+      "provenance": {
+        "source": "generated",
+        "role": "engine",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Individual photographs. Fictional Ethiopian staff, no customers. Lead identity matched to hero. Tonal dark mode."
+      }
+    },
+    "lead.mizan": {
+      "src": "/assets/appointment/brand-experience/support/mizan-v3/lead-r2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/mizan-v3/lead-r2-m.webp",
+      "alt": "Dawit Bekele, lead diagnostics technician",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1050,
+      "height": 700,
+      "mobileWidth": 480,
+      "mobileHeight": 320,
+      "mime": "image/webp",
+      "checksum": "sha256:17320f45b98a1d6ab4958f3204bb258ab775ce9ae36ac918e40677a985cb0170",
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "lead-r2.webp": "sha256:17320f45b98a1d6ab4958f3204bb258ab775ce9ae36ac918e40677a985cb0170",
+        "lead-r2.avif": "sha256:dcf63ad86ce2e6c7a052f44bdaad1a413c7be1910320c66506fee22e85b0ffed",
+        "lead-r2-m.webp": "sha256:75047765969077f0e20e797aa79da6c331dda431447ecf0c2b8e5cf3e0b98845",
+        "lead-r2-m.avif": "sha256:887413eaee467cef3ac7f070f3abe21892204943c2b476cb9ecefa7beae30f96"
+      },
+      "provenance": {
+        "source": "generated",
+        "role": "lead",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Individual photographs. Fictional Ethiopian staff, no customers. Lead identity matched to hero. Tonal dark mode."
+      }
+    },
+    "specialist.mizan": {
+      "src": "/assets/appointment/brand-experience/support/mizan-v3/specialist-r2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/mizan-v3/specialist-r2-m.webp",
+      "alt": "Selam Tesfaye, inspection and EV diagnostics",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1050,
+      "height": 700,
+      "mobileWidth": 480,
+      "mobileHeight": 320,
+      "mime": "image/webp",
+      "checksum": "sha256:f525b02472ef8bab9965fce752da56a1c40036b0958dc49c2e9ac0dd9a98c921",
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "specialist-r2.webp": "sha256:f525b02472ef8bab9965fce752da56a1c40036b0958dc49c2e9ac0dd9a98c921",
+        "specialist-r2.avif": "sha256:1a4a48e0906f0c5581094377c773f9abbe22aff595ac2f091676aecf137e1df9",
+        "specialist-r2-m.webp": "sha256:cc517c1d9fe186d9c18682f76319008c882fb484b59d24e3727ce39270d11319",
+        "specialist-r2-m.avif": "sha256:0e57c46b5e0193e3074f273131d13b2eba611f1d908941cd31e8b406b08fee84"
+      },
+      "provenance": {
+        "source": "generated",
+        "role": "specialist",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Individual photographs. Fictional Ethiopian staff, no customers. Lead identity matched to hero. Tonal dark mode."
+      }
+    },
+    "screen.mizan": {
+      "src": "/assets/appointment/brand-experience/support/mizan-v3/screen-r2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/mizan-v3/screen-r2-m.webp",
+      "alt": "Diagnostic tablet readings",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1040,
+      "height": 1300,
+      "mobileWidth": 480,
+      "mobileHeight": 600,
+      "mime": "image/webp",
+      "checksum": "sha256:4f120f4ccbfa6856a6e908fd6c92f40acbe39596741f396c2bf8a5b423d411e3",
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "screen-r2.webp": "sha256:4f120f4ccbfa6856a6e908fd6c92f40acbe39596741f396c2bf8a5b423d411e3",
+        "screen-r2.avif": "sha256:6e9dc46a20316606d3e6c1a4f7cac3fa23a3dac88f650066e170ea11dbc7e279",
+        "screen-r2-m.webp": "sha256:e5b21221eb632c69bb187423b993b6daad12320c0e7872f46d7cdf685a8b2acc",
+        "screen-r2-m.avif": "sha256:732933c75bb50644b000c1fcd5bdf70e8874f3832d97fa5ca0379992616c1d2e"
+      },
+      "provenance": {
+        "source": "generated",
+        "role": "screen",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Individual photographs. Fictional Ethiopian staff, no customers. Lead identity matched to hero. Tonal dark mode."
+      }
+    },
+    "brake.mizan": {
+      "src": "/assets/appointment/brand-experience/support/mizan-v3/brake-r2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/mizan-v3/brake-r2-m.webp",
+      "alt": "Front brake disc and caliper, illustrative photo",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1050,
+      "height": 700,
+      "mobileWidth": 480,
+      "mobileHeight": 320,
+      "mime": "image/webp",
+      "checksum": "sha256:a3cd123176a0eafec4070e1a24c3b20b6350ac150df52cad39084397f0a89639",
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "brake-r2.webp": "sha256:a3cd123176a0eafec4070e1a24c3b20b6350ac150df52cad39084397f0a89639",
+        "brake-r2.avif": "sha256:d4e7e47c3de4b7fba81639889802e78ab44a0163dd9a6a20c03fe3935f711345",
+        "brake-r2-m.webp": "sha256:9ec4a05849a9568a53eded4cf5329bcb9fd1e10a620d5ed98377918576171174",
+        "brake-r2-m.avif": "sha256:2bc7704ba093347232443d2ba96258bc3f1253fa56a2f200d258ebc3878eb472"
+      },
+      "provenance": {
+        "source": "generated",
+        "role": "brake",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Individual photographs. Fictional Ethiopian staff, no customers. Lead identity matched to hero. Tonal dark mode."
+      }
+    },
+    "engine.mizan": {
+      "src": "/assets/appointment/brand-experience/support/mizan-v3/engine-r2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/mizan-v3/engine-r2-m.webp",
+      "alt": "Engine-bay inspection detail",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1040,
+      "height": 1300,
+      "mobileWidth": 480,
+      "mobileHeight": 600,
+      "mime": "image/webp",
+      "checksum": "sha256:84ba6d9d60c38079cf78204c975e4d7caa89dc2ff51b4f98d45f03d91a952d84",
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "engine-r2.webp": "sha256:84ba6d9d60c38079cf78204c975e4d7caa89dc2ff51b4f98d45f03d91a952d84",
+        "engine-r2.avif": "sha256:d4764b13ad61e419cd8877a6c66938d5a7b6f2fe37ed6eb1cf3b76697d3ca7ea",
+        "engine-r2-m.webp": "sha256:5a5128e4505a91308aa5d1f8d9fd2041129f65670494cfbdf3fbd94c951fcbe7",
+        "engine-r2-m.avif": "sha256:abd4afbaed514610c914f7960181b2531e72fd7811e59afb7f3d2a73982fac7c"
+      },
+      "provenance": {
+        "source": "generated",
+        "role": "engine",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Individual photographs. Fictional Ethiopian staff, no customers. Lead identity matched to hero. Tonal dark mode."
+      }
+    },
+    "workshop.mizan": {
+      "src": "/assets/appointment/brand-experience/support/mizan-v3/workshop-r2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/mizan-v3/workshop-r2-m.webp",
+      "alt": "Mizan inspection workshop exterior",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 1050,
+      "height": 700,
+      "mobileWidth": 480,
+      "mobileHeight": 320,
+      "mime": "image/webp",
+      "checksum": "sha256:30d527627102e44ea27b8018f96dcf87b3b851378d0f3919354810d04a903163",
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "workshop-r2.webp": "sha256:30d527627102e44ea27b8018f96dcf87b3b851378d0f3919354810d04a903163",
+        "workshop-r2.avif": "sha256:9ad57352dadd0f3914dcb9bba1132daa3c35b1c704e7735ea762792e1c47ae23",
+        "workshop-r2-m.webp": "sha256:79adf494ca307d87db3e4c4a20dd9a59b91698f96108d2be3fa3bf0cb4a6384d",
+        "workshop-r2-m.avif": "sha256:047358c45e135c4b05a244265aa72797347def1c3b7bbfd565aed6b4c2d0d820"
+      },
+      "provenance": {
+        "source": "generated",
+        "role": "workshop",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Individual photographs. Fictional Ethiopian staff, no customers. Lead identity matched to hero. Tonal dark mode."
       }
     }
   }

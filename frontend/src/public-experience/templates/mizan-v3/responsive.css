@@ -1,0 +1,500 @@
+@media (min-width: 701px) {
+  .mizan3[lang="am"] .mizan3-hero-copy h1 {
+    font-size: clamp(40px, 4.6vw, 66px);
+    width: 140%;
+    line-height: 1.2;
+  }
+  .mizan3[lang="am"] .mizan3-hero-description {
+    margin-top: 35px !important;
+  }
+}
+@media (max-width: 1100px) {
+  .mizan3-header {
+    gap: 12px;
+  }
+  .mizan3-header nav {
+    gap: 16px;
+  }
+  .mizan3-greeting {
+    font-size: 11px;
+    padding-left: 12px;
+  }
+  .mizan3-hero {
+    height: 520px;
+  }
+  .mizan3-hero-image {
+    height: 520px;
+  }
+  .mizan3-hero-copy {
+    padding-top: 40px;
+  }
+  .mizan3-hero-actions {
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  .mizan3-diagnostics {
+    grid-template-rows: 110px auto 100px 110px auto;
+  }
+  .mizan3-team,
+  .mizan3-visit {
+    gap: 20px;
+  }
+  .mizan3-approach > div:nth-child(2),
+  .mizan3-approach > aside {
+    padding-left: 20px;
+  }
+  .mizan3-deliverables li {
+    gap: 12px;
+  }
+  .mizan3-deliverables svg {
+    width: 30px;
+    height: 30px;
+  }
+  .mizan3-booking-steps {
+    gap: 12px;
+  }
+  .mizan3-booking-steps li {
+    gap: 10px;
+  }
+  .mizan3-booking-steps b {
+    width: 32px;
+    height: 32px;
+    font-size: 20px;
+  }
+  .mizan3-next-fields {
+    gap: 10px;
+  }
+  .mizan3-next-fields > span {
+    padding: 8px;
+  }
+}
+@media (max-width: 700px) {
+  .mizan3 {
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .mizan3-header,
+  .mizan3-section,
+  .mizan3-hero,
+  .mizan3-footer,
+  .mizan3-holiday {
+    width: calc(100% - 36px);
+  }
+  .mizan3-header {
+    min-height: 82px;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 12px 0;
+  }
+  .mizan3-mark {
+    width: 34px;
+    height: 38px;
+    font-size: 28px;
+    border-left-width: 3px;
+  }
+  .mizan3-brand {
+    gap: 8px;
+  }
+  .mizan3-brand strong {
+    font-size: 12px;
+  }
+  .mizan3-controls {
+    gap: 7px;
+    font-size: 12px;
+  }
+  .mizan3-controls button {
+    width: 36px;
+  }
+  .mizan3-header nav {
+    order: 3;
+    width: 100%;
+    justify-content: space-between;
+    font-size: 11px;
+    gap: 8px;
+    padding-top: 8px;
+  }
+  .mizan3-greeting {
+    display: block;
+    order: 4;
+    width: 100%;
+    max-width: none;
+    border-left: 0;
+    padding: 0;
+    font-size: 10px;
+  }
+  .mizan3-holiday {
+    font-size: 11px;
+  }
+  .mizan3-section {
+    padding-block: 24px;
+  }
+  .mizan3 .mizan3-eyebrow {
+    font-size: 10px;
+    margin-bottom: 16px;
+  }
+  .mizan3-hero {
+    grid-template-columns: 1fr 66px;
+    height: auto;
+    min-height: 0;
+  }
+  .mizan3-hero-copy {
+    grid-column: 1/-1;
+    padding: 30px 0 22px;
+  }
+  .mizan3-hero-copy h1 {
+    width: 100%;
+    font-size: clamp(34px, 8.7vw, 54px);
+    line-height: 1.08;
+    margin: 18px 0;
+  }
+  .mizan3-hero-copy h1 span:last-child {
+    max-width: 16ch;
+  }
+  .mizan3[lang="am"] .mizan3-hero-copy h1 {
+    font-size: 31px;
+    line-height: 1.2;
+  }
+  .mizan3-lead {
+    font-size: 16px;
+  }
+  .mizan3 .mizan3-am-line {
+    font-size: 29px;
+    margin-top: 7px;
+  }
+  .mizan3-hero-description {
+    max-width: 100%;
+    font-size: 13px;
+    margin-top: 15px !important;
+  }
+  .mizan3-hero-actions {
+    gap: 16px;
+    margin-top: 20px;
+  }
+  .mizan3-button {
+    padding: 12px 16px;
+    font-size: 12px;
+    gap: 14px;
+  }
+  .mizan3-text-link {
+    font-size: 12px;
+  }
+  .mizan3-hero-image {
+    height: 320px;
+    min-height: 0;
+  }
+  .mizan3-hero-image figcaption {
+    font-size: 10px;
+    width: 54%;
+    padding: 12px;
+  }
+  .mizan3-diagnostics {
+    padding-left: 8px;
+    grid-template-rows: 64px auto 68px 74px auto;
+    gap: 5px;
+  }
+  .mizan3-diagnostics p {
+    font-size: 7px;
+    line-height: 1.35;
+    padding: 2px 0;
+  }
+  .mizan3-service-list {
+    grid-template-columns: 1fr;
+  }
+  .mizan3-service {
+    position: relative;
+    padding: 16px 0 18px 55px !important;
+  }
+  .mizan3-service + .mizan3-service {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+  .mizan3-number {
+    position: absolute;
+    left: 0;
+    top: 17px;
+    font-size: 36px;
+  }
+  .mizan3-service h3 {
+    font-size: 19px;
+  }
+  .mizan3-service-meta {
+    font-size: 13px;
+    margin: 8px 0 !important;
+  }
+  .mizan3-service > p:last-child {
+    font-size: 13px;
+  }
+  .mizan3-extra-service {
+    margin-top: 0;
+    font-size: 12px;
+  }
+  .mizan3-approach {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .mizan3-approach > div:nth-child(2),
+  .mizan3-approach > aside {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+    padding: 20px 0 0;
+  }
+  .mizan3-checks {
+    grid-template-columns: 95px 1fr;
+    gap: 28px;
+    padding-right: 0;
+  }
+  .mizan3-diagram {
+    height: 260px;
+  }
+  .mizan3-checks ul {
+    font-size: 12px;
+  }
+  .mizan3-deliverables {
+    grid-template-columns: 1fr 1fr;
+    gap: 22px 14px;
+    padding: 0;
+    font-size: 12px;
+  }
+  .mizan3-deliverables svg {
+    width: 26px;
+    height: 26px;
+  }
+  .mizan3-approach aside {
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    gap: 12px;
+  }
+  .mizan3-approach aside h2 {
+    grid-column: 1/-1;
+    margin-bottom: 0;
+  }
+  .mizan3-approach aside > svg {
+    width: 26px;
+    height: 26px;
+  }
+  .mizan3-approach aside > p {
+    font-size: 13px;
+  }
+  .mizan3-approach aside .mizan3-eyebrow:last-child {
+    grid-column: 2;
+    font-size: 9px;
+    margin: 0;
+  }
+  .mizan3-small-rule {
+    display: none;
+  }
+  .mizan3-team {
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 12px;
+  }
+  .mizan3-team > div {
+    grid-column: 1/-1;
+  }
+  .mizan3-team h2 {
+    font-size: 31px;
+    max-width: 20ch;
+  }
+  .mizan3-team > div > p:not(.mizan3-eyebrow) {
+    margin: 15px 0 3px;
+    font-size: 13px;
+  }
+  .mizan3-team figure > picture {
+    aspect-ratio: 1;
+  }
+  .mizan3-team figcaption {
+    padding: 10px 0 0;
+    font-size: 12px;
+  }
+  .mizan3-team figcaption::before {
+    display: none;
+  }
+  .mizan3-team figcaption span {
+    font-size: 11px;
+  }
+  .mizan3-reserve {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .mizan3-reserve h2 {
+    max-width: none;
+    font-size: 32px;
+    white-space: normal;
+  }
+  .mizan3-booking-steps {
+    font-size: 10px;
+    gap: 8px;
+    margin-bottom: 22px;
+  }
+  .mizan3-booking-steps li {
+    align-items: flex-start;
+    gap: 7px;
+  }
+  .mizan3-booking-steps b {
+    width: 27px;
+    height: 27px;
+    min-width: 27px;
+    font-size: 16px;
+  }
+  .mizan3-booking-steps span {
+    max-width: 9ch;
+  }
+  .mizan3-booking-fields {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .mizan3-booking-fields label {
+    font-size: 13px;
+  }
+  .mizan3-booking-fields [role="combobox"] {
+    font-size: 13px;
+  }
+  .mizan3-booking-hint {
+    font-size: 12px;
+  }
+  .mizan3-next-fields {
+    gap: 7px;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .mizan3-next-fields > span {
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 10px;
+    padding: 10px;
+  }
+  .mizan3-booking-action {
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .mizan3-booking-action p {
+    font-size: 10px;
+    max-width: 12ch;
+  }
+  .mizan3-report-head {
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .mizan3-report-head h2 {
+    font-size: 25px;
+  }
+  .mizan3-report-stamp {
+    font-size: 8px !important;
+    padding: 8px;
+    min-width: 70px;
+  }
+  .mizan3-report-head p:not(.mizan3-eyebrow) {
+    font-size: 11px;
+  }
+  .mizan3-report-body {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  .mizan3-report table {
+    font-size: 10px;
+    table-layout: fixed;
+  }
+  .mizan3-report th,
+  .mizan3-report td {
+    padding: 8px 6px;
+    overflow-wrap: anywhere;
+  }
+  .mizan3-report th:first-child {
+    width: 25%;
+  }
+  .mizan3-report th:nth-child(2) {
+    width: 28%;
+  }
+  .mizan3-finding {
+    display: block;
+  }
+  .mizan3-finding svg {
+    width: 18px;
+    height: 18px;
+    margin-bottom: 4px;
+  }
+  .mizan3-report figure {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 15px;
+    align-items: center;
+  }
+  .mizan3-report figcaption {
+    font-size: 10px;
+  }
+  .mizan3-visit {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .mizan3-visit h2 {
+    font-size: 31px;
+  }
+  .mizan3-visit > div:first-child > p:not(.mizan3-eyebrow) {
+    margin-top: 12px;
+    font-size: 13px;
+  }
+  .mizan3-map {
+    min-height: 280px;
+  }
+  .mizan3-map-card {
+    left: 10%;
+    font-size: 13px;
+  }
+  .mizan3-map small {
+    font-size: 9px;
+  }
+  .mizan3-map-link {
+    font-size: 12px;
+  }
+  .mizan3-visit-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+  }
+  .mizan3-detail {
+    gap: 10px;
+    font-size: 12px;
+    margin: 0;
+  }
+  .mizan3-detail > svg {
+    width: 24px;
+    height: 24px;
+  }
+  .mizan3-workshop {
+    grid-column: 1/-1;
+    aspect-ratio: 2;
+  }
+  .mizan3-footer {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding-block: 25px;
+  }
+  .mizan3-footer > p {
+    max-width: none;
+    font-size: 12px;
+  }
+  .mizan3-footer > div {
+    font-size: 12px;
+  }
+  .mizan3-footer .mizan3-credit {
+    font-size: 10px;
+  }
+  .mizan3-entries {
+    grid-template-columns: 1fr;
+  }
+  .mizan3-loading-sheet {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding-top: 10px;
+  }
+  .mizan3-loading-sheet > div {
+    padding-top: 20px;
+  }
+  .mizan3-loading-sheet i {
+    height: 35px;
+  }
+  .mizan3-loading-sheet b {
+    height: 280px;
+  }
+  .mizan3-loading-columns {
+    gap: 15px;
+  }
+}

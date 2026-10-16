@@ -14,7 +14,7 @@
   ],
   "roles": {
     "display": {
-      "family": "Field Sans",
+      "family": "Mizan Atlas",
       "assetKey": "selam-figtree",
       "weight": 800,
       "sizeScale": "editorial",
@@ -22,7 +22,7 @@
       "letterSpacing": "-0.03em"
     },
     "body": {
-      "family": "Field Sans",
+      "family": "Mizan Atlas",
       "assetKey": "selam-figtree",
       "weight": 400,
       "sizeScale": "comfortable",
@@ -30,7 +30,7 @@
       "letterSpacing": "0"
     },
     "ui": {
-      "family": "Field Sans",
+      "family": "Mizan Atlas",
       "assetKey": "selam-figtree",
       "weight": 600,
       "sizeScale": "compact",
@@ -38,7 +38,7 @@
       "letterSpacing": "0"
     },
     "numeric": {
-      "family": "Field Sans",
+      "family": "Mizan Atlas",
       "assetKey": "selam-figtree",
       "weight": 600,
       "sizeScale": "compact",
@@ -49,7 +49,7 @@
   "fontAssets": [
     {
       "key": "selam-menbere-bold",
-      "family": "Field Sans",
+      "family": "Mizan Atlas",
       "src": "/assets/appointment/fonts/collection/field-sans-bold.woff2",
       "weight": 700,
       "format": "woff2",
@@ -60,7 +60,7 @@
     },
     {
       "key": "selam-figtree",
-      "family": "Field Sans",
+      "family": "Mizan Atlas",
       "src": "/assets/appointment/fonts/selam/figtree.woff2",
       "weight": 400,
       "format": "woff2",
@@ -71,7 +71,7 @@
     },
     {
       "key": "selam-menbere",
-      "family": "Field Sans",
+      "family": "Mizan Atlas",
       "src": "/assets/appointment/fonts/collection/field-sans-regular.woff2",
       "weight": 400,
       "format": "woff2",

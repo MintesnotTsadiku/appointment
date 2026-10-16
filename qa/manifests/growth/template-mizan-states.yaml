@@ -1,4 +1,4 @@
-# Seeder-owned showcase; includes deterministic loading and holiday previews.
+# Seeder-owned showcase; deterministic holiday and loading previews.
 app: appointment
 base_url: http://localhost:47800
 default_role: Guest
@@ -10,6 +10,8 @@ capture_video: false
 capture_instruction_timeline: true
 timeout_ms: 180000
 options:
+  show_cursor: false
+  show_action_labels: false
   ignore_baseline_drift: true
   color_scheme: light
 scenarios:
@@ -180,4 +182,36 @@ scenarios:
   actions:
   - action: screenshot
     name: mizan-loading-am.png
+    full_page: false
+- id: mizan_loading_en_dark
+  title: mizan loading en dark
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /mizan-studio?preview-state=loading&display=dark
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[role="status"][aria-busy="true"]'
+  actions:
+  - action: screenshot
+    name: mizan-loading-en-dark.png
+    full_page: false
+- id: mizan_loading_am_dark
+  title: mizan loading am dark
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /mizan-studio/am?preview-state=loading&display=dark
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[role="status"][aria-busy="true"]'
+  actions:
+  - action: screenshot
+    name: mizan-loading-am-dark.png
     full_page: false

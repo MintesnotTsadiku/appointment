@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useTranslation } from "@/lib/i18n";
 import { Link } from "react-router-dom";
 import type { TemplateProps as Props } from "../types";
 import {
@@ -82,6 +83,7 @@ export function Book({
   href?: string;
   children?: ReactNode;
 }) {
+  const { setLanguage } = useTranslation();
   const label = action(
     section(props.snapshot.sections, "hero").primaryAction,
     props.locale,
@@ -91,10 +93,11 @@ export function Book({
     <Link
       className="mizan3-button"
       to={withLocale(target, props.locale)}
+      onClick={() => setLanguage(props.locale)}
       data-qa="mizan-book"
     >
       {children || label?.label}
-      <span aria-hidden="true">↗</span>
+      <span aria-hidden="true">→</span>
     </Link>
   ) : null;
 }

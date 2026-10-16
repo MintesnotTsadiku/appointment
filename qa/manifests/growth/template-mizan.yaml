@@ -10,6 +10,8 @@ capture_video: false
 capture_instruction_timeline: true
 timeout_ms: 180000
 options:
+  show_cursor: false
+  show_action_labels: false
   ignore_baseline_drift: true
   color_scheme: light
 scenarios:

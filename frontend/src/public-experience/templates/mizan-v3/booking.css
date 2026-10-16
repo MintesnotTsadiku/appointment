@@ -1,8 +1,78 @@
+@import "./fonts.css";
 [data-bk-skin="mizan-v3"] {
-  --bk-heading-font: var(--pe-font-display);
+  --bk-heading-font: var(--booking-font-display);
   --bk-action-radius: 3px;
+  --booking-radius: 3px;
+  --bk-header-line: var(--accent-primary);
 }
-[data-bk-skin="mizan-v3"] [data-bk-frame] {
+.booking-experience[data-bk-skin="mizan-v3"] {
+  background-image: none;
+}
+.booking-experience[data-bk-skin="mizan-v3"]::before {
+  display: none;
+}
+[data-bk-skin="mizan-v3"] .bk-photo {
   border-radius: 0;
-  border-bottom: 3px solid var(--accent-primary);
+  border-bottom: 2px solid var(--accent-primary);
+}
+[data-bk-skin="mizan-v3"] .bk-card {
+  border-radius: 3px;
+  box-shadow: none;
+}
+[data-bk-skin="mizan-v3"] .bk-summary-title {
+  letter-spacing: -0.025em;
+  font-weight: 700;
+}
+[data-bk-skin="mizan-v3"] .bk-slot {
+  border-radius: 3px;
+}
+[data-bk-skin="mizan-v3"] .bk-slot[aria-pressed="true"] {
+  animation: none;
+}
+[data-bk-skin="mizan-v3"] .bk-details-summary {
+  border-top: 3px solid var(--accent-primary);
+}
+.mizan3k-step {
+  display: inline-grid;
+  place-items: center;
+  width: 27px;
+  height: 27px;
+  border: 1px solid var(--border-default);
+  font-size: 12px;
+  border-radius: 50%;
+}
+.mizan3k-step[data-state="current"] {
+  color: var(--pe-color-on-primary);
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+.mizan3k-step[data-state="done"] {
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+.mizan3k-moment {
+  color: var(--accent-primary);
+  padding: 15px 0 24px;
+  text-align: center;
+  border-bottom: 1px solid var(--border-default);
+  margin-bottom: 20px;
+}
+.mizan3k-moment svg {
+  display: block;
+  margin: auto;
+}
+.mizan3k-moment p {
+  font: 700 clamp(24px, 4vw, 34px)/1.2 var(--booking-font-display, sans-serif);
+  margin: 15px 0 0;
+  letter-spacing: -0.025em;
+}
+@media (max-width: 900px) {
+  [data-bk-skin="mizan-v3"] .bk-steps .mizan3k-step {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-bk-skin="mizan-v3"] .bk-action:active {
+    transform: none;
+  }
 }

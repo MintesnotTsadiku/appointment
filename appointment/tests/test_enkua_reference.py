@@ -28,6 +28,6 @@ class TestEnkuaReference(unittest.TestCase):
             with self.subTest(section=kind):
                 self.assertEqual(validate_typed_section(kind, value).issues, ())
 
-    def test_only_enkua_requests_a_new_showcase_release(self):
+    def test_known_reference_revisions_leave_other_showcases_unchanged(self):
         for showcase in SHOWCASES:
-            self.assertEqual(showcase.version, 7 if showcase.key == "enkua" else 6)
+            self.assertEqual(showcase.version, {"enkua": 7, "mizan": 9}.get(showcase.key, 6))

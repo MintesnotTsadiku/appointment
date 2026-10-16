@@ -1,141 +1,36 @@
-import { InspectionDiagram } from "./diagram";
-import { useState } from "react";
-import { habeshaLabel } from "@/lib/time";
 import type { TemplateProps as Props } from "../types";
 import { records, section } from "../content";
-import { usePublicChrome } from "../chrome";
-import { openState, useTimeOfDay } from "../kit";
-import { Book, Photo, words } from "./elements";
+import { Photo, words } from "./elements";
+import { useMizanCopy } from "./copy";
+export { Visit } from "./Visit";
 
 export function About({ props }: { props: Props }) {
   const content = section(props.snapshot.sections, "about");
-  const providers = records(
-    section(props.snapshot.sections, "providers").items,
-  );
+  const people = records(section(props.snapshot.sections, "providers").items);
+  const t = useMizanCopy(props.locale);
   return (
-    <section className="mizan3-section mizan3-about" id="about">
-      <div className="mizan3-about-image">
-        <Photo props={props} role="portrait.mizan" item={providers[0]} />
-      </div>
+    <section id="about" className="mizan3-section mizan3-team">
       <div>
-        <span className="mizan3-index" aria-hidden="true">
-          02 /
-        </span>
+        <p className="mizan3-eyebrow">{t("theTeam")}</p>
         <h2>{words(content.title, props.locale)}</h2>
-        <p className="mizan3-body">{words(content.body, props.locale)}</p>
-        {providers.map((person, index) => (
-          <div className="mizan3-person" key={index}>
-            <h3>{words(person.name, props.locale)}</h3>
-            <p>{words(person.role, props.locale)}</p>
-          </div>
-        ))}
-        <Book props={props} />
+        <p>{words(content.body, props.locale)}</p>
+        <a className="mizan3-text-link" href="#approach">
+          {t("meetApproach")} <span aria-hidden="true">→</span>
+        </a>
       </div>
-    </section>
-  );
-}
-
-export function Process({ props }: { props: Props }) {
-  const content = section(props.snapshot.sections, "process");
-  return (
-    <section className="mizan3-section mizan3-process">
-      <InspectionDiagram />
-      <h2>{words(content.title, props.locale)}</h2>
-      <InspectionDiagram />
-      <div>
-        {records(content.items).map((item, index) => (
-          <article key={index}>
-            <span className="mizan3-number" aria-hidden="true">
-              {String(index + 1).padStart(2, "0")}
-            </span>
-            <h3>{words(item.title, props.locale)}</h3>
-            <p>{words(item.description, props.locale)}</p>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-export function Visit({ props }: { props: Props }) {
-  const chrome = usePublicChrome(props.locale);
-  const [habesha, setHabesha] = useState(props.locale === "am");
-  const now = useTimeOfDay();
-  const clock = (value: string) => {
-    const [hour, minute] = value.split(":").map(Number);
-    return habesha ? habeshaLabel(hour, minute, props.locale) : value;
-  };
-  const places = section(props.snapshot.sections, "locations");
-  return (
-    <section id="visit" className="mizan3-section mizan3-visit">
-      <div className="mizan3-section-head">
-        <h2>{words(places.title, props.locale)}</h2>
-        <button
-          type="button"
-          className="mizan3-clock"
-          aria-pressed={habesha}
-          onClick={() => setHabesha(!habesha)}
-        >
-          {chrome.t(habesha ? "habeshaTime" : "internationalTime")}
-        </button>
-      </div>
-      <div className="mizan3-places">
-        {records(places.items).map((place, index) => {
-          const days =
-            typeof place.id === "string"
-              ? props.snapshot.placeHours?.[place.id]?.days || []
-              : [];
-          const state = openState(days, now);
-          return (
-            <article key={index}>
-              <p>
-                {state.open
-                  ? chrome.t("openNow", { time: clock(state.closes || "") })
-                  : ""}
-              </p>
-              <h3>{words(place.name, props.locale)}</h3>
-              <p>{words(place.address, props.locale)}</p>
-              <p>{words(place.body, props.locale)}</p>
-              {days.length ? (
-                <dl className="mizan3-hours">
-                  {days.map((day, i) => (
-                    <div key={i}>
-                      <dt>
-                        {new Intl.DateTimeFormat(
-                          props.locale === "am" ? "am-ET" : "en-GB",
-                          { weekday: "long", timeZone: "UTC" },
-                        ).format(
-                          new Date(
-                            Date.UTC(
-                              2024,
-                              0,
-                              1 +
-                                [
-                                  "Monday",
-                                  "Tuesday",
-                                  "Wednesday",
-                                  "Thursday",
-                                  "Friday",
-                                  "Saturday",
-                                  "Sunday",
-                                ].indexOf(day.day),
-                            ),
-                          ),
-                        )}
-                      </dt>
-                      <dd>
-                        {clock(day.open)} – {clock(day.close)}
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-              ) : (
-                <p>{words(place.hours, props.locale)}</p>
-              )}
-            </article>
-          );
-        })}
-      </div>
+      {people.slice(0, 2).map((person, i) => (
+        <figure key={String(person.id || i)} data-reveal="report">
+          <Photo
+            props={props}
+            role={i === 0 ? "lead.mizan" : "specialist.mizan"}
+            item={person}
+          />
+          <figcaption>
+            <strong>{words(person.name, props.locale)}</strong>
+            <span>{words(person.role, props.locale)}</span>
+          </figcaption>
+        </figure>
+      ))}
     </section>
   );
 }

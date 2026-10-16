@@ -1,0 +1,583 @@
+.mizan3-hero {
+  display: grid;
+  grid-template-columns: 47.5% 44% 8.5%;
+  position: relative;
+  height: 650px;
+  min-height: 0;
+}
+.mizan3-hero-copy {
+  padding: 65px 0 35px;
+  z-index: 2;
+  position: relative;
+  pointer-events: none;
+}
+.mizan3-hero-copy a {
+  pointer-events: auto;
+}
+.mizan3-hero-copy h1 {
+  font-size: clamp(42px, 5.55vw, 80px);
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  width: 155%;
+  margin: 24px 0;
+}
+.mizan3-hero-copy h1 span {
+  display: block;
+}
+.mizan3-hero-copy h1 span:first-child {
+  color: var(--blue);
+}
+.mizan3-lead {
+  font-size: 1.15em;
+  max-width: 95%;
+}
+.mizan3 .mizan3-am-line {
+  font-size: clamp(26px, 3.7vw, 53px);
+  line-height: 1.25;
+  margin-top: 10px;
+  color: var(--blue);
+  font-weight: 700;
+}
+.mizan3-hero-description {
+  margin-top: 24px !important;
+  max-width: 82%;
+  font-size: 0.9em;
+}
+.mizan3-hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-top: 26px;
+}
+.mizan3-hero-image {
+  position: relative;
+  height: 650px;
+  min-height: 0;
+}
+.mizan3-hero-image img {
+  object-position: 50% 45%;
+}
+.mizan3-hero-image figcaption {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 48%;
+  padding: 20px 14px;
+  background: linear-gradient(0deg, rgba(5, 20, 40, 0.85), rgba(5, 20, 40, 0.4));
+  color: #fff;
+  font-size: 0.72em;
+}
+.mizan3-hero-image figcaption span {
+  display: block;
+}
+.mizan3-diagnostics {
+  display: grid;
+  grid-template-rows: 130px auto 130px 130px auto;
+  gap: 8px;
+  padding-left: 12px;
+}
+.mizan3-diagnostics p {
+  font-size: 0.62em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.6;
+  padding: 8px 0;
+  white-space: pre-line;
+}
+.mizan3-services {
+  padding-top: 20px;
+}
+.mizan3-services .mizan3-eyebrow {
+  margin-bottom: 15px;
+}
+.mizan3-service-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.mizan3-service {
+  padding: 0 30px;
+}
+.mizan3-service:first-child {
+  padding-left: 0;
+}
+.mizan3-service:last-child {
+  padding-right: 0;
+}
+.mizan3-service + .mizan3-service {
+  border-left: 1px solid var(--line);
+}
+.mizan3-number {
+  font-size: clamp(38px, 4.4vw, 64px);
+  line-height: 1;
+  color: var(--blue);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  display: block;
+  margin-bottom: 10px;
+}
+.mizan3-service h3 a {
+  color: var(--ink);
+}
+.mizan3-service-arrow {
+  font-size: 0.75em;
+  color: var(--blue);
+}
+.mizan3-service-meta {
+  color: var(--ink) !important;
+  font-weight: 600;
+  margin: 12px 0 !important;
+}
+.mizan3-service > p:last-child {
+  font-size: 0.94em;
+}
+.mizan3-extra-service {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  font-size: 0.72em;
+  margin-top: 14px;
+}
+.mizan3-approach {
+  display: grid;
+  grid-template-columns: 42% 33% 25%;
+  padding-block: 25px 30px;
+}
+.mizan3-approach > div:nth-child(2),
+.mizan3-approach > aside {
+  border-left: 1px solid var(--line);
+  padding-left: 30px;
+}
+.mizan3-checks {
+  display: grid;
+  grid-template-columns: 34% 1fr;
+  gap: 25px;
+  align-items: stretch;
+  padding-right: 20px;
+}
+.mizan3-diagram {
+  width: 100%;
+  height: 340px;
+  color: var(--blue);
+  stroke-width: 1.1;
+}
+.mizan3-checks ul {
+  list-style: none;
+  padding: 8px 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 0.84em;
+  color: var(--muted);
+}
+.mizan3-checks li {
+  position: relative;
+  padding: 4px 0;
+}
+.mizan3-checks li::before {
+  content: "";
+  position: absolute;
+  left: -38px;
+  top: 50%;
+  height: 1px;
+  width: 26px;
+  background: var(--line);
+}
+.mizan3-checks li::after {
+  content: "";
+  position: absolute;
+  left: -14px;
+  top: calc(50% - 4px);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--blue);
+}
+.mizan3-deliverables {
+  list-style: none;
+  padding: 4px 24px 0 0;
+  margin: 0;
+  display: grid;
+  gap: 28px;
+}
+.mizan3-deliverables li {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+  color: var(--muted);
+}
+.mizan3-deliverables svg {
+  width: 40px;
+  height: 40px;
+  color: var(--blue);
+}
+.mizan3-approach aside > svg {
+  color: var(--blue);
+  width: 38px;
+  height: 38px;
+  margin-bottom: 14px;
+}
+.mizan3-small-rule {
+  display: block;
+  width: 40px;
+  height: 1px;
+  background: var(--line);
+  margin: 30px 0;
+}
+.mizan3-team {
+  display: grid;
+  grid-template-columns: 25% 1fr 1fr;
+  gap: 28px;
+}
+.mizan3-team h2 {
+  font-size: clamp(26px, 3vw, 43px);
+}
+.mizan3-team > div > p:not(.mizan3-eyebrow) {
+  margin: 24px 0 14px;
+  font-size: 0.92em;
+}
+.mizan3-team figure > picture {
+  height: auto;
+  aspect-ratio: 1.55;
+}
+.mizan3-team figcaption {
+  padding: 12px 0 0 42px;
+  position: relative;
+  font-size: 0.85em;
+}
+.mizan3-team figcaption::before {
+  content: "";
+  position: absolute;
+  top: 23px;
+  left: 0;
+  width: 28px;
+  height: 2px;
+  background: var(--ink);
+}
+.mizan3-team figcaption span {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.9em;
+  color: var(--muted);
+}
+.mizan3-reserve {
+  display: grid;
+  grid-template-columns: 22% 1fr;
+  gap: 40px;
+  padding-block: 32px;
+}
+.mizan3-reserve h2 {
+  font-size: clamp(26px, 3vw, 44px);
+  max-width: 9ch;
+}
+.mizan3-booking-steps {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 0;
+  margin: 0 0 25px;
+  list-style: none;
+  font-size: 0.8em;
+}
+.mizan3-booking-steps li {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.mizan3-booking-steps b {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  background: var(--muted);
+  color: var(--paper);
+  border-radius: 50%;
+  font-size: 24px;
+  font-weight: 500;
+}
+.mizan3-booking-steps li:first-child b {
+  background: var(--blue);
+  color: var(--pe-color-on-primary, #fff);
+}
+.mizan3-booking-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 24px;
+}
+.mizan3-booking-fields label {
+  display: block;
+  margin-bottom: 7px;
+  font-weight: 600;
+  font-size: 0.85em;
+}
+.mizan3-booking-fields [role="combobox"] {
+  width: 100%;
+  min-height: 52px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.85em;
+}
+.mizan3-booking-hint {
+  font-size: 0.8em;
+  align-self: end;
+  line-height: 1.5;
+}
+.mizan3-next-fields {
+  grid-column: 1/-1;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 18px;
+}
+.mizan3-next-fields > span {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 10px 14px;
+  font-size: 0.78em;
+  color: var(--muted);
+}
+.mizan3-next-fields svg {
+  width: 19px;
+  height: 19px;
+}
+.mizan3-booking-action {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 20px;
+}
+.mizan3-booking-action > p {
+  font-size: 0.75em;
+}
+.mizan3-select {
+  background: var(--pe-color-canvas);
+  color: var(--pe-color-text);
+  border: 1px solid var(--pe-color-border);
+}
+.mizan3-select [role="option"][data-highlighted] {
+  background: var(--pe-color-surface-muted);
+  color: var(--pe-color-text);
+}
+.mizan3-report-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  gap: 30px;
+}
+.mizan3-report-head h2 {
+  font-size: clamp(28px, 3.5vw, 50px);
+}
+.mizan3-report-head .mizan3-eyebrow {
+  margin-bottom: 10px;
+}
+.mizan3-report-head p:not(.mizan3-eyebrow) {
+  font-size: 0.8em;
+  margin-top: 8px;
+}
+.mizan3-report-stamp {
+  border-left: 2px solid var(--blue);
+  padding: 10px 22px;
+  color: var(--blue) !important;
+  text-transform: uppercase;
+  font-size: 0.65em !important;
+  font-weight: 700;
+}
+.mizan3-report-body {
+  display: grid;
+  grid-template-columns: 1fr 20%;
+  gap: 24px;
+  align-items: start;
+}
+.mizan3-report table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.72em;
+  line-height: 1.4;
+}
+.mizan3-report th,
+.mizan3-report td {
+  border: 1px solid var(--line);
+  padding: 14px;
+  text-align: left;
+}
+.mizan3-report thead {
+  background: var(--soft);
+  text-transform: uppercase;
+  font-size: 0.85em;
+}
+.mizan3-report tbody th {
+  width: 21%;
+}
+.mizan3-finding {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.mizan3-finding svg {
+  width: 25px;
+  height: 25px;
+}
+.mizan3-finding-0 svg {
+  color: var(--pe-color-danger, #b92538);
+}
+.mizan3-report figure picture {
+  height: auto;
+  aspect-ratio: 1.5;
+}
+.mizan3-report figcaption {
+  font-size: 0.62em;
+  margin-top: 7px;
+}
+.mizan3-visit {
+  display: grid;
+  grid-template-columns: 25% 47% 1fr;
+  gap: 28px;
+  padding-block: 30px 45px;
+}
+.mizan3-visit h2 {
+  color: var(--blue);
+  font-size: clamp(27px, 3vw, 43px);
+}
+.mizan3-visit > div:first-child > p:not(.mizan3-eyebrow) {
+  font-size: 0.9em;
+  margin-top: 20px;
+}
+.mizan3-map {
+  position: relative;
+  min-height: 375px;
+  overflow: hidden;
+  background: var(--map-land);
+}
+.mizan3-map > svg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.mizan3-map-card {
+  position: absolute;
+  top: 37%;
+  left: 14%;
+  right: 8%;
+  padding: 18px;
+  background: var(--paper);
+  box-shadow: 0 2px 9px #0002;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.8em;
+}
+.mizan3-map-card svg {
+  width: 34px;
+  height: 40px;
+  color: var(--blue);
+}
+.mizan3-map-card span {
+  display: block;
+  font-size: 0.82em;
+  color: var(--muted);
+}
+.mizan3-map small {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  background: var(--paper);
+  padding: 4px 8px;
+  font-size: 0.6em;
+  color: var(--muted);
+}
+.mizan3-map-link {
+  position: absolute;
+  bottom: 18px;
+  left: 18px;
+  padding: 10px 14px;
+  background: var(--paper);
+  border: 1px solid var(--blue);
+  font-size: 0.75em;
+}
+.mizan3-detail {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 22px;
+  font-size: 0.8em;
+}
+.mizan3-detail > svg {
+  width: 32px;
+  height: 32px;
+  color: var(--blue);
+}
+.mizan3-detail h3 {
+  color: var(--blue);
+  font-size: 1em;
+  margin-bottom: 5px;
+}
+.mizan3-clock {
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  min-height: 44px;
+  padding: 4px 0;
+  font-size: 0.85em !important;
+}
+.mizan3-workshop {
+  aspect-ratio: 1.65;
+}
+.mizan3-faq {
+  margin-top: 20px;
+  font-size: 0.75em;
+}
+.mizan3-faq summary {
+  color: var(--blue);
+  cursor: pointer;
+  min-height: 44px;
+  padding: 10px 0;
+}
+.mizan3-faq div {
+  padding: 10px 0;
+}
+.mizan3-faq h3 {
+  font-size: 1em;
+  margin-bottom: 8px;
+}
+
+.mizan3-report-brand {
+  margin-left: auto;
+}
+.mizan3-report-brand .mizan3-brand strong {
+  font-size: 17px;
+}
+.mizan3-report-brand .mizan3-mark {
+  width: 48px;
+  height: 52px;
+  font-size: 38px;
+}
+@media (max-width: 700px) {
+  .mizan3-report-brand {
+    display: none;
+  }
+}
+
+/* Preserve the reference's sharp photo edge while separating overlapping type. */
+@media (min-width: 701px) {
+  .mizan3-hero-copy h1 span:last-child {
+    paint-order: stroke fill;
+    -webkit-text-stroke: 2px var(--paper);
+  }
+}
+
+.mizan3-reserve-placeholder {
+  height: 400px;
+}
+@media (max-width: 700px) {
+  .mizan3-reserve-placeholder {
+    height: 520px;
+  }
+}

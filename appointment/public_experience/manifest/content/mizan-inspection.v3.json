@@ -10,18 +10,18 @@
         "am": "ገለልተኛ የመኪና ምርመራ"
       },
       "title": {
-        "en": "Know the car. Know your next move.",
-        "am": "መኪናውን ይወቁ። ቀጣዩን እርምጃ ይወስኑ።"
+        "en": "Know the car.\nKnow your next move.",
+        "am": "መኪናውን ይወቁ።\nቀጣዩን እርምጃ ይወስኑ።"
       },
       "subtitle": {
-        "en": "Independent vehicle inspections in Addis Ababa. Real observations, clear explanations and time for your questions.",
-        "am": "በአዲስ አበባ ገለልተኛ የመኪና ምርመራ። ተጨባጭ ግኝቶች፣ ግልጽ ማብራሪያና ለጥያቄዎችዎ ጊዜ።"
+        "en": "Clear, expert vehicle inspection and diagnostics in Addis Ababa. For buyers, owners and businesses who want facts.",
+        "am": "በአዲስ አበባ ግልጽና ሙያዊ የተሽከርካሪ ምርመራ። እውነታውን ማወቅ ለሚፈልጉ ገዢዎች፣ ባለቤቶችና ንግዶች።"
       },
       "primaryAction": {
         "intent": "booking_start",
         "label": {
-          "en": "Simple booking. Clear steps.",
-          "am": "ቀላል ቀጠሮ። ግልጽ እርምጃዎች።"
+          "en": "Book an appointment",
+          "am": "ቀጠሮ ይያዙ"
         },
         "placement": "primary"
       },
@@ -32,12 +32,16 @@
           "am": "ከመያዝዎ በፊት"
         },
         "placement": "secondary"
+      },
+      "body": {
+        "en": "Independent evidence before your next decision.",
+        "am": "ከቀጣዩ ውሳኔዎ በፊት ገለልተኛ መረጃ።"
       }
     },
     "services": {
       "title": {
-        "en": "Choose your inspection",
-        "am": "ምርመራዎን ይምረጡ"
+        "en": "Our services",
+        "am": "አገልግሎቶቻችን"
       },
       "intro": {
         "en": "Choose the time and format that work for you.",
@@ -46,65 +50,98 @@
     },
     "about": {
       "title": {
-        "en": "Experienced. Independent. On your side.",
-        "am": "ልምድ ያለው። ገለልተኛ። ከእርስዎ ጎን።"
+        "en": "Experienced.\nIndependent.\nOn your side.",
+        "am": "ልምድ ያለው።\nገለልተኛ።\nከእርስዎ ጎን።"
       },
       "body": {
-        "en": "Independent vehicle inspections in Addis Ababa. Real observations, clear explanations and time for your questions.",
-        "am": "በአዲስ አበባ ገለልተኛ የመኪና ምርመራ። ተጨባጭ ግኝቶች፣ ግልጽ ማብራሪያና ለጥያቄዎችዎ ጊዜ።"
+        "en": "Skilled technicians, modern tools and a straightforward approach to give you clear, practical answers.",
+        "am": "ግልጽና ተግባራዊ መልሶች ለመስጠት የተዘጋጁ ብቁ ቴክኒሺያኖች፣ ዘመናዊ መሣሪያዎችና ግልጽ አሠራር።"
       }
     },
     "providers": {
       "title": {
-        "en": "The person behind the work",
-        "am": "ከሥራው ጀርባ ያለው ባለሙያ"
+        "en": "The team",
+        "am": "ቡድናችን"
       }
     },
     "process": {
       "title": {
-        "en": "A little preparation. A better visit.",
-        "am": "ጥቂት ዝግጅት። የተሻለ ቆይታ።"
+        "en": "What we check",
+        "am": "የምንመረምረው"
       },
       "items": [
         {
-          "title": {
-            "en": "Choose your session",
-            "am": "ቆይታዎን ይምረጡ"
-          },
           "step": 1,
+          "title": {
+            "en": "Fault codes & live data",
+            "am": "የስህተት ኮዶችና ቀጥታ መረጃ"
+          },
           "description": {
-            "en": "Read the scope, duration and fee before choosing.",
-            "am": "ከመምረጥዎ በፊት የአገልግሎቱን ዝርዝር፣ ቆይታ እና ክፍያ ያንብቡ።"
+            "en": "Fault codes & live data",
+            "am": "የስህተት ኮዶችና ቀጥታ መረጃ"
           }
         },
         {
-          "title": {
-            "en": "Find your time",
-            "am": "የሚመችዎን ሰዓት ያግኙ"
-          },
           "step": 2,
+          "title": {
+            "en": "Brakes & suspension",
+            "am": "ፍሬንና ሳስፔንሽን"
+          },
           "description": {
-            "en": "The calendar shows the times available to book.",
-            "am": "ቀን መቁጠሪያው ለቀጠሮ ክፍት የሆኑ ሰዓቶችን ያሳያል።"
+            "en": "Brakes & suspension",
+            "am": "ፍሬንና ሳስፔንሽን"
           }
         },
         {
-          "title": {
-            "en": "Come with your questions",
-            "am": "ጥያቄዎችዎን ይዘው ይምጡ"
-          },
           "step": 3,
+          "title": {
+            "en": "Body & paint observations",
+            "am": "የአካልና የቀለም ሁኔታ"
+          },
           "description": {
-            "en": "Use the booking note to tell us what you would like to discuss.",
-            "am": "ስለምን መወያየት እንደሚፈልጉ በቀጠሮ ማስታወሻው ይጻፉ።"
+            "en": "Body & paint observations",
+            "am": "የአካልና የቀለም ሁኔታ"
+          }
+        },
+        {
+          "step": 4,
+          "title": {
+            "en": "Fluids & visible leaks",
+            "am": "ፈሳሾችና የሚታዩ ፍሳሾች"
+          },
+          "description": {
+            "en": "Fluids & visible leaks",
+            "am": "ፈሳሾችና የሚታዩ ፍሳሾች"
+          }
+        },
+        {
+          "step": 5,
+          "title": {
+            "en": "Road test when permitted",
+            "am": "ሲፈቀድ የመንገድ ሙከራ"
+          },
+          "description": {
+            "en": "Road test when permitted",
+            "am": "ሲፈቀድ የመንገድ ሙከራ"
+          }
+        },
+        {
+          "step": 6,
+          "title": {
+            "en": "Supported EV battery data",
+            "am": "የሚደገፍ የኤሌክትሪክ መኪና ባትሪ መረጃ"
+          },
+          "description": {
+            "en": "Supported EV battery data",
+            "am": "የሚደገፍ የኤሌክትሪክ መኪና ባትሪ መረጃ"
           }
         }
       ]
     },
     "locations": {
       "title": {
-        "en": "Where we meet",
-        "am": "የምንገናኝበት ቦታ"
+        "en": "Our workshop\nin Bole.",
+        "am": "በቦሌ የሚገኘው\nየምርመራ ማዕከላችን።"
       }
     },
     "faq": {
@@ -143,8 +180,8 @@
     },
     "booking_cta": {
       "title": {
-        "en": "Simple booking. Clear steps.",
-        "am": "ቀላል ቀጠሮ። ግልጽ እርምጃዎች።"
+        "en": "Simple\nbooking.\nClear steps.",
+        "am": "ቀላል\nቀጠሮ።\nግልጽ እርምጃዎች።"
       },
       "body": {
         "en": "Independent vehicle inspections in Addis Ababa. Real observations, clear explanations and time for your questions.",
@@ -161,8 +198,8 @@
     },
     "footer": {
       "body": {
-        "en": "Independent vehicle inspections in Addis Ababa. Real observations, clear explanations and time for your questions.",
-        "am": "በአዲስ አበባ ገለልተኛ የመኪና ምርመራ። ተጨባጭ ግኝቶች፣ ግልጽ ማብራሪያና ለጥያቄዎችዎ ጊዜ።"
+        "en": "Independent vehicle inspection.\nመረጃ ይወስን።",
+        "am": "ገለልተኛ የተሽከርካሪ ምርመራ።\nመረጃ ይወስን።"
       },
       "items": []
     }

@@ -147,8 +147,8 @@
       "am": "ልምድ ያለው። ገለልተኛ። ከእርስዎ ጎን።"
     },
     "bio": {
-      "en": "We explain what we can inspect and what the findings mean. You receive a written summary and time to discuss the next step.",
-      "am": "ምን ልንመረምር እንደምንችልና ግኝቶቹ ምን ማለት እንደሆኑ እናብራራለን። የጽሑፍ ማጠቃለያና ስለቀጣዩ እርምጃ ለመወያየት ጊዜ ያገኛሉ።"
+      "en": "Skilled technicians, modern tools and a straightforward approach to give you clear, practical answers.",
+      "am": "ግልጽና ተግባራዊ መልሶች ለመስጠት የተዘጋጁ ብቁ ቴክኒሺያኖች፣ ዘመናዊ መሣሪያዎችና ግልጽ አሠራር።"
     },
     "menu": {
       "en": "Choose your inspection",
@@ -222,7 +222,8 @@
     "placeLabel": {
       "en": "Bole inspection workshop",
       "am": "የቦሌ የተሽከርካሪ ምርመራ ማዕከል"
-    }
+    },
+    "version": 9
   },
   {
     "key": "meseret",

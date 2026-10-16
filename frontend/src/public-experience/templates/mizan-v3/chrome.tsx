@@ -1,63 +1,93 @@
 import { Link } from "react-router-dom";
+import { Sun, Moon } from "lucide-react";
 import type { TemplateProps as Props } from "../types";
-import { action, section } from "../content";
+import { section } from "../content";
 import { usePublicChrome } from "../chrome";
 import { greetingKey, useTimeOfDay } from "../kit";
 import { useTemplateCredit } from "../credit";
 import { SiteHoliday } from "./holiday";
 import { words, withLocale } from "./elements";
+import { useMizanCopy } from "./copy";
 
+export function Brand({ props }: { props: Props }) {
+  const identity = props.snapshot.compiledDesign.identity;
+  const amharicName =
+    props.snapshot.localTitle?.am || identity.applicationNameAm;
+  return (
+    <Link
+      className="mizan3-brand"
+      to={withLocale(props.publicRoot, props.locale)}
+      aria-label={props.applicationName}
+    >
+      <span className="mizan3-mark" aria-hidden="true">
+        {identity.applicationName.charAt(0)}
+      </span>
+      <span>
+        <strong lang="en">{identity.applicationName}</strong>
+        {amharicName && <strong lang="am">{amharicName}</strong>}
+      </span>
+    </Link>
+  );
+}
 export function Header({ props }: { props: Props }) {
-  const { locale, mode } = props;
-  const chrome = usePublicChrome(locale);
+  const { mode } = props;
+  const chrome = usePublicChrome(props.locale);
+  const t = useMizanCopy(props.locale);
   const now = useTimeOfDay();
   return (
     <>
       <header className="mizan3-header">
-        <Link
-          className="mizan3-brand"
-          to={withLocale(props.publicRoot, props.locale)}
-        >
-          {props.applicationName}
-        </Link>
+        <Brand props={props} />
         <nav aria-label={chrome.t("navLabel")}>
-          <a href={`${props.publicRoot}#services`}>{chrome.t("services")}</a>
-          <a href={`${props.publicRoot}#about`}>{chrome.t("team")}</a>
-          <a href={`${props.publicRoot}#visit`}>{chrome.t("visit")}</a>
+          <a href={`${withLocale(props.publicRoot, props.locale)}#services`}>
+            {chrome.t("services")}
+          </a>
+          <a href={`${withLocale(props.publicRoot, props.locale)}#approach`}>
+            {t("ourApproach")}
+          </a>
+          <a href={`${withLocale(props.publicRoot, props.locale)}#about`}>
+            {t("theTeam")}
+          </a>
+          <a href={`${withLocale(props.publicRoot, props.locale)}#visit`}>
+            {chrome.t("visit")}
+          </a>
         </nav>
         <div className="mizan3-controls">
-          <a
-            href={`${props.publicRoot.replace(/\/(en|am)$/, "")}${props.locale === "am" ? "" : "/am"}`}
-            lang={props.locale === "am" ? "en" : "am"}
-          >
-            {chrome.t("otherLanguage")}
-          </a>
           <button
             type="button"
             onClick={props.toggleMode}
             aria-label={chrome.modeSwitchLabel(mode)}
             data-qa="mizan-mode"
           >
-            {chrome.modeName(props.mode)}
+            {mode === "dark" ? (
+              <Sun aria-hidden="true" />
+            ) : (
+              <Moon aria-hidden="true" />
+            )}
           </button>
+          <a
+            href={`${props.publicRoot.replace(/\/(en|am)$/, "")}${props.locale === "am" ? "" : "/am"}`}
+            lang={props.locale === "am" ? "en" : "am"}
+          >
+            {chrome.t("otherLanguage")}
+          </a>
         </div>
+        <span className="mizan3-greeting" data-qa="mizan-greeting">
+          {chrome.t(greetingKey(now.part))}
+        </span>
       </header>
-      <div className="mizan3-running">
-        <span data-qa="mizan-greeting">{chrome.t(greetingKey(now.part))}</span>
+      <div className="mizan3-holiday">
         <SiteHoliday props={props} />
       </div>
     </>
   );
 }
-
 export function Footer({ props }: { props: Props }) {
   const chrome = usePublicChrome(props.locale);
   const credit = useTemplateCredit(chrome);
-  const contact = section(props.snapshot.sections, "contact");
-  const contactAction = action(contact.action, props.locale);
   return (
     <footer className="mizan3-footer">
-      <strong>{props.applicationName}</strong>
+      <Brand props={props} />
       <p>
         {words(section(props.snapshot.sections, "footer").body, props.locale)}
       </p>
@@ -78,22 +108,19 @@ export function Footer({ props }: { props: Props }) {
         >
           {chrome.t("gallery")}
         </Link>
-        <span>© {new Date().getFullYear()}</span>
+        <span>
+          © {new Date().getFullYear()} {props.applicationName}
+        </span>
       </div>
-      {contactAction ? (
-        <p>
-          <a href={contactAction.href}>{contactAction.label}</a>
-        </p>
-      ) : null}
-      {credit ? (
-        <p data-qa="template-credit">
+      {credit && (
+        <p className="mizan3-credit" data-qa="template-credit">
           {credit.before}
           <a href={credit.href} rel="noopener">
             {credit.product}
           </a>
           {credit.after}
         </p>
-      ) : null}
+      )}
     </footer>
   );
 }
