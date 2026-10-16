@@ -1,0 +1,20 @@
+[
+  {
+    "file": "field-sans-regular.woff2",
+    "source": "fonts/selam/menbere-regular.woff2",
+    "sha256": "610e2d563e3cde089d5dc05966732ceaa4a691a95ff037529a6d4dc9d3081102",
+    "unicodeRange": "U+1200-139F,U+2D80-2DDF,U+AB00-AB2F"
+  },
+  {
+    "file": "field-sans-bold.woff2",
+    "source": "fonts/selam/menbere-bold.woff2",
+    "sha256": "1ad91197610f17e9952e9b2f1f0ead357ec2566a83c9152500a7bfb1ca1f7b48",
+    "unicodeRange": "U+1200-139F,U+2D80-2DDF,U+AB00-AB2F"
+  },
+  {
+    "file": "journal-serif.woff2",
+    "source": "fonts/meron/eb-garamond.woff2",
+    "sha256": "dbac606c4658c3b8b88215ff87ef0ad1911a30814adaf5d0b0139495c5a3a54a",
+    "unicodeRange": "U+0000-024F,U+2000-206F,U+20A0-20CF,U+2190-21FF,U+2212"
+  }
+]

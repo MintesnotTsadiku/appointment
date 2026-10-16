@@ -15,7 +15,7 @@ export type ChromeKey =
   | "navLabel" | "journal" | "gallery" | "services" | "team" | "visit" | "questions" | "backToSite" | "backToSiteShort"
   | "dark" | "light" | "switchToDark" | "switchToLight" | "skip"
   | "minutes" | "duration" | "price" | "phone" | "email" | "hours" | "address" | "step"
-  | "websiteBy"
+  | "websiteBy" | "otherLanguage" | "contentUnavailable" | "watchVideo"
   | "approach" | "sessions" | "free" | "bookThis" | "callNumber"
   | "formatInPerson" | "formatOnline" | "formatPhone" | "areaMap" | "goodToKnow"
   // Template kit (v3): time of day, opening hours, live availability, lookbook, reviews and rooms.

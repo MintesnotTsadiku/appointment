@@ -78,7 +78,7 @@ def boot_parts(path: str, args) -> tuple[dict, list[str]] | None:
     if not route:
         return None
     kind, locale = route
-    if kind == "book" and not locale:
+    if not locale:
         requested = args.get("locale")
         locale = requested if requested in LOCALES else None
     snapshot = _snapshot(path, locale)

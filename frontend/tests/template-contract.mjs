@@ -83,6 +83,26 @@ const file = (pkg, pattern) => Object.entries(pkg.files).find(([name]) => patter
 const entryOf = (text, id) => (text.split(`"${id}":`)[1] || "").split(/\n\s*"[a-z-]+@\d+":/)[0];
 const ANIMATES = /@keyframes|animation\s*:|animation-name\s*:/;
 
+/** Follow local template imports so a header can own the holiday rendering. */
+function landingSource(pkg) {
+  const pending = Object.keys(pkg.files).filter((name) => /Template\.tsx$/.test(name));
+  const visited = new Set();
+  const result = [];
+  while (pending.length) {
+    const name = pending.pop();
+    if (visited.has(name)) continue;
+    visited.add(name);
+    const source = pkg.files[name] || "";
+    result.push(source);
+    for (const match of source.matchAll(/from\s+["']\.\/([^"']+)["']/g)) {
+      for (const extension of [".tsx", ".ts"]) {
+        if (pkg.files[match[1] + extension]) pending.push(match[1] + extension);
+      }
+    }
+  }
+  return result.join("\n");
+}
+
 /** Each check: [what it promises, a test that returns true when the package keeps the promise]. */
 const PRODUCT_CONTRACT = [
   ["declares its expressive forms in the recipe", (pkg) => pkg.recipe && expressionProblems(pkg.recipe).length === 0],
@@ -111,7 +131,7 @@ const PRODUCT_CONTRACT = [
       && /data-holiday=\{/.test(source) && /aria-label=\{[^}]*label/.test(source) && !/position:\s*fixed/.test(holidayCss)
       && (!ANIMATES.test(holidayCss) || /prefers-reduced-motion: reduce/.test(holidayCss));
   }],
-  ["renders its holiday moment on the landing page", (pkg) => /<\w+Holiday\b/.test(sources(pkg, /Template\.tsx$/).join("\n"))],
+  ["renders its holiday moment on the landing page", (pkg) => /<\w+Holiday\b/.test(landingSource(pkg))],
   ["knows the time of day in Addis Ababa", (pkg) => code(pkg).includes("useTimeOfDay(")],
 ];
 

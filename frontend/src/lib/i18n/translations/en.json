@@ -4109,7 +4109,10 @@
       "timketLine": "Wishing you a joyful Timket, the Ethiopian Epiphany.",
       "adwa": "Adwa Victory Day",
       "adwaLine": "Honouring {count} years since the victory of Adwa."
-    }
+    },
+    "contentUnavailable": "This content is currently unavailable.",
+    "watchVideo": "Watch video",
+    "otherLanguage": "Amharic"
   },
   "customerEmail": {
     "subjectConfirmation": "Your booking with {0} is confirmed",

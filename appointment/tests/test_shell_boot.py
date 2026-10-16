@@ -81,6 +81,16 @@ class ShellBootTests(unittest.TestCase):
         self.assertEqual(len(links), 1)
         self.assertIn('href="/assets/appointment/fonts/bloom/anton.woff2"', links[0])
 
+    def test_content_locale_is_preserved_and_path_locale_takes_precedence(self):
+        for path, query, expected in (("/selam-homes/gallery", "am", "am"),
+                                      ("/hana-bekele/blog/first-story", "am", "am"),
+                                      ("/hana-bekele/am", "en", "am")):
+            with self.subTest(path=path), mock.patch.object(api, "get_public_experience_snapshot", return_value=snapshot(locale=expected)) as get_snapshot, \
+                    mock.patch.object(api, "get_public_ui_config", return_value={}):
+                data, _links = shell_boot.boot_parts(path, {"locale": query})
+            get_snapshot.assert_called_once_with(locale=expected, public_path=path, optional=1)
+            self.assertEqual(data["locale"], expected)
+
     def test_unknown_language_and_missing_site_add_nothing(self):
         with mock.patch.object(api, "get_public_experience_snapshot", return_value=None) as get_snapshot:
             self.assertIsNone(shell_boot.boot_parts("/no-such-site", {}))

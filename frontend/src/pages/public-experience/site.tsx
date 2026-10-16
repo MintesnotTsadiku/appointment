@@ -24,7 +24,9 @@ async function formerAddressTarget(pathname: string, search: string): Promise<st
 const PublicSitePage = () => {
   const { pathname, search } = useLocation();
   const navigate = useNavigate();
-  const { locale } = useParams<{ slug: string; locale?: string }>();
+  const { locale: pathLocale } = useParams<{ slug: string; locale?: string }>();
+  const requestedLocale = new URLSearchParams(search).get("locale");
+  const locale = pathLocale || (requestedLocale === "am" || requestedLocale === "en" ? requestedLocale : undefined);
   // The shell inlines the snapshot for the address it rendered (shell_boot.py), so the first render is the page.
   const [inline] = useState(() => ({ key: `${pathname}${search}`, snapshot: inlinePublishedSnapshot(locale) }));
   const [snapshot, setSnapshot] = useState<PublishedSnapshot | null>(inline.snapshot || null);

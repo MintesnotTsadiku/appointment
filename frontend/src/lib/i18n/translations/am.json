@@ -4109,7 +4109,10 @@
       "timketLine": "እንኳን ለብርሃነ ጥምቀቱ በዓል በሰላም አደረሳችሁ።",
       "adwa": "የዓድዋ ድል በዓል",
       "adwaLine": "እንኳን ለ{count}ኛው የዓድዋ ድል በዓል በሰላም አደረሳችሁ።"
-    }
+    },
+    "contentUnavailable": "ይህ ይዘት በአሁኑ ጊዜ አይገኝም።",
+    "watchVideo": "ቪዲዮውን ይመልከቱ",
+    "otherLanguage": "English"
   },
   "customerEmail": {
     "subjectConfirmation": "ከ{0} ጋር ያለዎት ቀጠሮ ተረጋግጧል",
