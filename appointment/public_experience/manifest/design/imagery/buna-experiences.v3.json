@@ -1,0 +1,132 @@
+{
+  "kind": "imagery",
+  "contract": "appointment-imagery.v1",
+  "key": "buna-experiences",
+  "version": 3,
+  "assets": {
+    "hero.buna": {
+      "src": "/assets/appointment/brand-experience/support/buna-v3/hero.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/buna-v3/hero-m.webp",
+      "alt": "Coffee · Tasting · Learning",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 627,
+      "height": 627,
+      "mime": "image/webp",
+      "checksum": "sha256:23053feb1b7eef6debfa9296cca2f4797bfee726256792a3df3f646dceb8c0c6",
+      "provenance": {
+        "source": "generated",
+        "role": "hero",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Separate photographic sheet, cropped to quadrants. Staff faces; customers turned away. Tonal dark mode."
+      },
+      "mobileWidth": 480,
+      "mobileHeight": 480,
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "hero-m.webp": "sha256:7da28af4aec253deac3aff50677bc187f770cadce6d6d2569a74ccb87fda3063",
+        "hero.avif": "sha256:2e168a97f4defa0e77a1666c6f0e718601fc3c69aa455214229efd9b633ef6f0",
+        "hero-m.avif": "sha256:b09eb74474a3ea058ed5e8a64c8758797e4a8cefd7614899611ce1eec6d957cf",
+        "hero.webp": "sha256:23053feb1b7eef6debfa9296cca2f4797bfee726256792a3df3f646dceb8c0c6"
+      }
+    },
+    "portrait.buna": {
+      "src": "/assets/appointment/brand-experience/support/buna-v3/portrait.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/buna-v3/portrait-m.webp",
+      "alt": "Selamawit Bekele",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 627,
+      "height": 627,
+      "mime": "image/webp",
+      "checksum": "sha256:e73cb4433c71009904c44bc8b47de928f70fbe1f240775c3b17698f674c801d1",
+      "provenance": {
+        "source": "generated",
+        "role": "portrait",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Separate photographic sheet, cropped to quadrants. Staff faces; customers turned away. Tonal dark mode."
+      },
+      "mobileWidth": 480,
+      "mobileHeight": 480,
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "portrait-m.webp": "sha256:c8fb06e139cd1f566a7fac0269ffdde6e6beb62b1c6a6e77554d477b771c3621",
+        "portrait.avif": "sha256:38e0f2a22bf7ac30efbf9923d1dd21951917e5ddb425bb65d92f13a00552e9ef",
+        "portrait-m.avif": "sha256:588ed7a45d9f6002f96a475c94c82fce3e78044656dcc11451a3cba7cf354c59",
+        "portrait.webp": "sha256:e73cb4433c71009904c44bc8b47de928f70fbe1f240775c3b17698f674c801d1"
+      }
+    },
+    "scene1.buna": {
+      "src": "/assets/appointment/brand-experience/support/buna-v3/scene1.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/buna-v3/scene1-m.webp",
+      "alt": "Coffee · Tasting · Learning",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 627,
+      "height": 627,
+      "mime": "image/webp",
+      "checksum": "sha256:5e0e91a969261e816bb3aa473e9516837b4462af5d9817b112bddad1a9065f20",
+      "provenance": {
+        "source": "generated",
+        "role": "scene1",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Separate photographic sheet, cropped to quadrants. Staff faces; customers turned away. Tonal dark mode."
+      },
+      "mobileWidth": 480,
+      "mobileHeight": 480,
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "scene1-m.webp": "sha256:2db72c0d92042152cc1c26e18ddd115ac50d6501573fd3b81494584cfbca9509",
+        "scene1.webp": "sha256:5e0e91a969261e816bb3aa473e9516837b4462af5d9817b112bddad1a9065f20",
+        "scene1.avif": "sha256:3f8930d62a45396742f1627fd7bc9e3e23bf25f53d412c1f6e228ad3d90f64fc",
+        "scene1-m.avif": "sha256:d9ad7c2ab9a2ab9edd0f1d45cd8e5e1a94ba9f3cf36a17d941d78c1eff203997"
+      }
+    },
+    "scene2.buna": {
+      "src": "/assets/appointment/brand-experience/support/buna-v3/scene2.webp",
+      "mobileSrc": "/assets/appointment/brand-experience/support/buna-v3/scene2-m.webp",
+      "alt": "Coffee · Tasting · Learning",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "fit": "cover",
+      "width": 627,
+      "height": 627,
+      "mime": "image/webp",
+      "checksum": "sha256:b6e6eb1c3101045ff161a5f1408d0efef897b6dd0a7687f990a12ac1ee599e57",
+      "provenance": {
+        "source": "generated",
+        "role": "scene2",
+        "license": "project-generated",
+        "review": "Codex CLI gpt-6.1-sol, 2026-10-16. Separate photographic sheet, cropped to quadrants. Staff faces; customers turned away. Tonal dark mode."
+      },
+      "mobileWidth": 480,
+      "mobileHeight": 480,
+      "formats": [
+        "avif"
+      ],
+      "checksums": {
+        "scene2-m.avif": "sha256:3f2305ab69b5efad0b0ef0d2d5f744119f28dcfa1b1b181c283d043697f2f223",
+        "scene2.webp": "sha256:b6e6eb1c3101045ff161a5f1408d0efef897b6dd0a7687f990a12ac1ee599e57",
+        "scene2.avif": "sha256:ed4ddea6326ae3c02c1678ac8866dc63a06914a137392b55b11feedc20d1ca3d",
+        "scene2-m.webp": "sha256:98d4fbc050eb1121e1e96dd572a712aacf915799021ab3871384ecad77100ca3"
+      }
+    }
+  }
+}

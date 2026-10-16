@@ -3776,6 +3776,126 @@
           "checksum": "6b531b48533283ccac83cbbda2875eae79384b52254b7aec5ab0bfdc05e90ffe"
         }
       ]
+    },
+    "buna": {
+      "slug": "buna-studio",
+      "recipe": "buna-experiences",
+      "heroRole": "hero.buna",
+      "detailRole": "scene1.buna",
+      "heroAsset": "/assets/appointment/brand-experience/support/buna-v3/hero.webp",
+      "heroChecksum": "23053feb1b7eef6debfa9296cca2f4797bfee726256792a3df3f646dceb8c0c6",
+      "logoAsset": "/assets/appointment/brand-experience/support/buna-v3/logo.webp",
+      "logoChecksum": "3f75ee916eb90c082be5d96b4114fcafc1848ee01b664b3765da7f8a51ec0364",
+      "faviconAsset": "/assets/appointment/brand-experience/support/buna-v3/favicon.png",
+      "faviconChecksum": "efd4316dd3344732b3f9ed1d734d6a6087fccd2e4b516ccff5daf9c3ee4fbd33",
+      "benchmark": "docs/design-references/public-experience/buna/05-Field-Atlas-Desktop.png",
+      "supportAssets": [
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/portrait.webp",
+          "checksum": "e73cb4433c71009904c44bc8b47de928f70fbe1f240775c3b17698f674c801d1"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/scene1.webp",
+          "checksum": "5e0e91a969261e816bb3aa473e9516837b4462af5d9817b112bddad1a9065f20"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/scene2.webp",
+          "checksum": "b6e6eb1c3101045ff161a5f1408d0efef897b6dd0a7687f990a12ac1ee599e57"
+        }
+      ],
+      "providerAssets": [
+        {
+          "name": "Selamawit Bekele",
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/portrait.webp",
+          "checksum": "e73cb4433c71009904c44bc8b47de928f70fbe1f240775c3b17698f674c801d1"
+        }
+      ],
+      "templateAssets": [
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/favicon.png",
+          "checksum": "efd4316dd3344732b3f9ed1d734d6a6087fccd2e4b516ccff5daf9c3ee4fbd33"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/hero-m.avif",
+          "checksum": "b09eb74474a3ea058ed5e8a64c8758797e4a8cefd7614899611ce1eec6d957cf"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/hero-m.webp",
+          "checksum": "7da28af4aec253deac3aff50677bc187f770cadce6d6d2569a74ccb87fda3063"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/hero.avif",
+          "checksum": "2e168a97f4defa0e77a1666c6f0e718601fc3c69aa455214229efd9b633ef6f0"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/hero.webp",
+          "checksum": "23053feb1b7eef6debfa9296cca2f4797bfee726256792a3df3f646dceb8c0c6"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/logo.webp",
+          "checksum": "3f75ee916eb90c082be5d96b4114fcafc1848ee01b664b3765da7f8a51ec0364"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/portrait-m.avif",
+          "checksum": "588ed7a45d9f6002f96a475c94c82fce3e78044656dcc11451a3cba7cf354c59"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/portrait-m.webp",
+          "checksum": "c8fb06e139cd1f566a7fac0269ffdde6e6beb62b1c6a6e77554d477b771c3621"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/portrait.avif",
+          "checksum": "38e0f2a22bf7ac30efbf9923d1dd21951917e5ddb425bb65d92f13a00552e9ef"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/portrait.webp",
+          "checksum": "e73cb4433c71009904c44bc8b47de928f70fbe1f240775c3b17698f674c801d1"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/scene1-m.avif",
+          "checksum": "d9ad7c2ab9a2ab9edd0f1d45cd8e5e1a94ba9f3cf36a17d941d78c1eff203997"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/scene1-m.webp",
+          "checksum": "2db72c0d92042152cc1c26e18ddd115ac50d6501573fd3b81494584cfbca9509"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/scene1.avif",
+          "checksum": "3f8930d62a45396742f1627fd7bc9e3e23bf25f53d412c1f6e228ad3d90f64fc"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/scene1.webp",
+          "checksum": "5e0e91a969261e816bb3aa473e9516837b4462af5d9817b112bddad1a9065f20"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/scene2-m.avif",
+          "checksum": "3f2305ab69b5efad0b0ef0d2d5f744119f28dcfa1b1b181c283d043697f2f223"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/scene2-m.webp",
+          "checksum": "98d4fbc050eb1121e1e96dd572a712aacf915799021ab3871384ecad77100ca3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/scene2.avif",
+          "checksum": "ed4ddea6326ae3c02c1678ac8866dc63a06914a137392b55b11feedc20d1ca3d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/scene2.webp",
+          "checksum": "b6e6eb1c3101045ff161a5f1408d0efef897b6dd0a7687f990a12ac1ee599e57"
+        }
+      ],
+      "previewAssets": [
+        {
+          "viewport": "desktop",
+          "asset": "/assets/appointment/brand-experience/template-gallery/buna-experiences-desktop.webp",
+          "checksum": "4658b0f99c31267559b958ce3b25ffc97e2b7029830600750fde9f44313082f2"
+        },
+        {
+          "viewport": "mobile",
+          "asset": "/assets/appointment/brand-experience/template-gallery/buna-experiences-mobile.webp",
+          "checksum": "80dbb4649d5529514a9211a5e6c0ce2843d888b8891645a66781906f9f5496cb"
+        }
+      ]
     }
   }
 }

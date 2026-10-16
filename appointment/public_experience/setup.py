@@ -19,6 +19,7 @@ CATALOG = {
     "enkua-photography": ("photography", "bold", "expressive"),
     "mizan-inspection": ("automotive", "bold", "comfortable"),
     "meseret-advisory": ("accounting", "editorial", "spacious"),
+    "buna-experiences": ("coffee", "warm", "comfortable"),
 
     "selam-movement": ("wellness", "warm", "expressive"),
     "bloom-hair": ("beauty", "bold", "expressive"),

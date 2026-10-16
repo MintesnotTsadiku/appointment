@@ -35,6 +35,8 @@ const TEMPLATE_PACKAGES: Record<string, PackageLoader> = {
     (t,c) => ({ Site:t.Site, Booking:t.Booking, Content:c.Content, Loading: t.SiteLoading })),
   "meseret-advisory@3": lazyPackage("meseret-advisory", () => import("./meseret-v3/Template"), () => import("./meseret-v3/Content"),
     (t,c) => ({ Site:t.Site, Booking:t.Booking, Content:c.Content, Loading: t.SiteLoading })),
+  "buna-experiences@3": lazyPackage("buna-experiences", () => import("./buna-v3/Template"), () => import("./buna-v3/Content"),
+    (t,c) => ({ Site:t.Site, Booking:t.Booking, Content:c.Content, Loading: t.SiteLoading })),
   "selam-movement@1": lazyPackage("selam-movement", () => import("./selam/SelamTemplate"), () => import("./selam/SelamContent"),
     (t, c) => ({ Site: t.SelamSite, Booking: t.SelamBooking, Content: c.SelamContent })),
   "selam-movement@2": lazyPackage("selam-movement", () => import("./selam-v2/SelamTemplate"), () => import("./selam/SelamContent"),

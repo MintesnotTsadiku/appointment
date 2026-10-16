@@ -238,5 +238,23 @@
         "version": 3
       }
     ]
+  },
+  "buna-experiences": {
+    "palettes": [
+      {
+        "key": "default",
+        "label": "Template original",
+        "primitive": "buna-experiences",
+        "version": 3
+      }
+    ],
+    "fonts": [
+      {
+        "key": "default",
+        "label": "Template original",
+        "primitive": "buna-experiences",
+        "version": 3
+      }
+    ]
   }
 }

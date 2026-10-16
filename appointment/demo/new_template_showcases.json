@@ -314,5 +314,110 @@
       "en": "Bole advisory office",
       "am": "የቦሌ የምክር ቢሮ"
     }
+  },
+  {
+    "key": "buna",
+    "recipe": "buna-experiences",
+    "name": {
+      "en": "Buna Bet",
+      "am": "ቡና ቤት"
+    },
+    "person": {
+      "en": "Selamawit Bekele",
+      "am": "ሰላማዊት በቀለ"
+    },
+    "title": {
+      "en": "Follow a coffee home.",
+      "am": "የቡናን ጉዞ ይከተሉ።"
+    },
+    "subtitle": {
+      "en": "From the highlands to your table in Addis Ababa. Explore the people, places and flavours behind every cup.",
+      "am": "ከደጋማው ምድር እስከ አዲስ አበባ ጠረጴዛዎ። ከእያንዳንዱ ስኒ ጀርባ ያሉትን ሰዎች፣ ቦታዎችና ጣዕሞች ይወቁ።"
+    },
+    "eyebrow": {
+      "en": "Coffee · Tasting · Learning",
+      "am": "ቡና · ቅምሻ · ትምህርት"
+    },
+    "about": {
+      "en": "Meet the people behind your next cup.",
+      "am": "ከቀጣዩ ስኒዎ ጀርባ ያሉትን ሰዎች ይወቁ።"
+    },
+    "bio": {
+      "en": "We share Ethiopian coffee through tasting, brewing and conversation. Beginners are welcome. Curiosity is all you need to bring.",
+      "am": "የኢትዮጵያን ቡና በቅምሻ፣ በአፈላልና በውይይት እናካፍላለን። ጀማሪዎች እንኳን ደህና መጡ። የማወቅ ጉጉትዎን ብቻ ይዘው ይምጡ።"
+    },
+    "menu": {
+      "en": "Three routes into coffee.",
+      "am": "ወደ ቡና ዓለም ሦስት መንገዶች።"
+    },
+    "cta": {
+      "en": "Plan your visit.",
+      "am": "ጉብኝትዎን ያቅዱ።"
+    },
+    "color": "#a92e28",
+    "dark": "#ffb6a5",
+    "soft": "#f2e9d7",
+    "font": "selam-movement.v2",
+    "direction": "Field Atlas",
+    "services": [
+      {
+        "name": {
+          "en": "Guided coffee tasting",
+          "am": "በአስተማሪ የሚመራ የቡና ቅምሻ"
+        },
+        "duration": 90,
+        "price": 1200,
+        "summary": {
+          "en": "A private tasting for one person. Coffee and equipment included.",
+          "am": "ለአንድ ሰው የግል ቅምሻ። ቡናና መሣሪያዎች ተካትተዋል።"
+        },
+        "meet": "in_person"
+      },
+      {
+        "name": {
+          "en": "Private brewing lesson",
+          "am": "የግል የቡና አፈላል ትምህርት"
+        },
+        "duration": 90,
+        "price": 3000,
+        "summary": {
+          "en": "Hands-on practice with brewing methods you can use at home.",
+          "am": "በቤትዎ ሊጠቀሙባቸው በሚችሉ የአፈላል ዘዴዎች ተግባራዊ ልምምድ።"
+        },
+        "meet": "in_person"
+      },
+      {
+        "name": {
+          "en": "Introduction to barista skills",
+          "am": "የባሪስታ ክህሎት መግቢያ"
+        },
+        "duration": 180,
+        "price": 4500,
+        "summary": {
+          "en": "A private introductory workshop. Learn, practise and ask questions.",
+          "am": "የግል የመግቢያ ወርክሾፕ። ይማሩ፣ ይለማመዱ፣ ይጠይቁ።"
+        },
+        "meet": "in_person"
+      },
+      {
+        "name": {
+          "en": "Planning call",
+          "am": "የዝግጅት ጥሪ"
+        },
+        "duration": 20,
+        "price": 0,
+        "summary": {
+          "en": "Ask a question and plan your visit before coming.",
+          "am": "ከመምጣትዎ በፊት ጥያቄ ይጠይቁና ጉብኝትዎን ያቅዱ።"
+        },
+        "meet": "online"
+      }
+    ],
+    "slug": "buna-studio",
+    "prefix": "buna",
+    "placeLabel": {
+      "en": "Bole coffee studio",
+      "am": "የቦሌ የቡና ስቱዲዮ"
+    }
   }
 ]

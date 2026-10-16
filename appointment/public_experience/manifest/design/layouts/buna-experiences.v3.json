@@ -1,0 +1,51 @@
+{
+  "kind": "layout",
+  "contract": "appointment-layout.v1",
+  "key": "buna-experiences",
+  "version": 3,
+  "rendererKey": "buna-experiences",
+  "contentSchemaVersion": 2,
+  "sections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "requiredSections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "responsive": {
+    "desktop": "buna-experiences-v3-desktop",
+    "tablet": "buna-experiences-v3-tablet",
+    "mobile": "buna-experiences-v3-mobile",
+    "maxContentWidth": 1320
+  },
+  "density": {
+    "content": [
+      "compact",
+      "standard",
+      "rich"
+    ],
+    "presentation": [
+      "comfortable",
+      "spacious"
+    ],
+    "defaultContent": "rich",
+    "defaultPresentation": "comfortable"
+  }
+}

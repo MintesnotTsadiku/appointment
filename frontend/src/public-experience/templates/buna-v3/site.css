@@ -1,0 +1,688 @@
+.buna3 {
+  --paper: var(--pe-color-canvas, #fffdf8);
+  --ink: var(--pe-color-text, #231f25);
+  --muted: var(--pe-color-text-muted, #57515a);
+  --accent: var(--pe-color-primary, #a92e28);
+  --soft: var(--pe-color-surface-muted, #f2e9d7);
+  --line: var(--pe-color-border, #bcb4bb);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--pe-font-body, sans-serif);
+  line-height: 1.65;
+  overflow: clip;
+}
+.buna3[data-pe-mode="dark"] {
+  --paper: #17151b;
+  --ink: #fcf7f0;
+  --muted: #c7bdc9;
+  --accent: #ffb6a5;
+  --soft: #302935;
+  --line: #65596b;
+}
+.buna3 * {
+  box-sizing: border-box;
+}
+.buna3 h1,
+.buna3 h2,
+.buna3 h3,
+.buna3 p,
+.buna3 figure {
+  margin: 0;
+}
+.buna3 h1,
+.buna3 h2,
+.buna3 h3 {
+  font-family: var(--pe-font-display, sans-serif);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+.buna3 h1 {
+  font-size: clamp(3.5rem, 7.4vw, 7.5rem);
+}
+.buna3 h2 {
+  font-size: clamp(2.3rem, 4.1vw, 4.2rem);
+}
+.buna3 h3 {
+  font-size: 1.6rem;
+}
+.buna3 p {
+  max-width: 65ch;
+}
+.buna3 a {
+  color: inherit;
+  text-decoration: none;
+}
+.buna3 button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+.buna3 a:focus-visible,
+.buna3 button:focus-visible,
+.buna3 summary:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 6px;
+}
+.buna3 a:hover {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.buna3 picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.buna3 img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.buna3-header,
+.buna3-running,
+.buna3-section,
+.buna3-footer {
+  padding-inline: max(5vw, calc((100vw - 1320px) / 2));
+}
+.buna3-header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  min-height: 88px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--pe-font-ui, sans-serif);
+}
+.buna3-brand {
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  margin-right: auto;
+}
+.buna3-header nav,
+.buna3-controls {
+  display: flex;
+  gap: 1.3rem;
+  align-items: center;
+}
+.buna3-controls button,
+.buna3-clock {
+  border: 1px solid var(--line);
+  padding: 0.5rem 0.8rem;
+  background: transparent;
+  border-radius: 2px;
+  min-height: 44px;
+}
+.buna3-controls a {
+  min-height: 44px;
+  display: grid;
+  align-items: center;
+}
+.buna3-running {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.65rem;
+  font-size: 0.8rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+}
+.buna3-hero {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 5vw;
+  padding: 5vw;
+  align-items: center;
+  max-width: 1500px;
+  margin: auto;
+  min-height: 680px;
+}
+.buna3-hero-copy {
+  display: grid;
+  gap: 1.6rem;
+}
+.buna3-hero-image {
+  position: relative;
+  height: 580px;
+  min-width: 0;
+}
+.buna3-eyebrow,
+.buna3-index {
+  color: var(--accent);
+  font-family: var(--pe-font-ui, sans-serif);
+  font-size: 0.85rem;
+  letter-spacing: 0.09em;
+}
+.buna3-lead {
+  font-size: 1.2rem;
+  line-height: 1.7;
+}
+.buna3-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  width: fit-content;
+  max-width: 100%;
+  background: var(--accent);
+  color: var(--pe-color-on-primary, #fff) !important;
+  padding: 1rem 1.4rem;
+  font-family: var(--pe-font-ui, sans-serif);
+  font-size: 1rem;
+  line-height: 1.5;
+  transition: transform 0.18s;
+}
+.buna3-button:hover {
+  transform: translateY(-3px);
+  text-decoration: none !important;
+}
+.buna3-button:active {
+  transform: translateY(1px);
+}
+.buna3-button span {
+  font-size: 1.4rem;
+}
+.buna3-live {
+  font-size: 0.85rem;
+  min-height: 1.5rem;
+}
+.buna3-live span {
+  color: var(--accent);
+}
+.buna3-section {
+  padding-block: 6rem;
+}
+.buna3-section-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+.buna3-section-head h2 {
+  max-width: 13ch;
+}
+.buna3-section-head > p {
+  max-width: 29ch;
+  color: var(--muted);
+}
+.buna3-service-list {
+  display: grid;
+  gap: 0;
+}
+.buna3-service {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 2rem;
+  border-top: 1px solid var(--line);
+  padding: 2rem 0;
+}
+.buna3-service-photo {
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+.buna3-service-copy {
+  display: grid;
+  grid-template-columns: 40px 1fr 170px;
+  align-items: start;
+  gap: 1rem;
+}
+.buna3-service-copy p {
+  grid-column: 2;
+  max-width: 52ch;
+  color: var(--muted);
+}
+.buna3-service-copy h3 {
+  grid-column: 2;
+  grid-row: 1;
+}
+.buna3-number {
+  font-family: var(--pe-font-ui, sans-serif);
+  color: var(--accent);
+  font-size: 0.9rem;
+}
+.buna3-service-meta {
+  grid-column: 3;
+  grid-row: 1/3;
+  display: grid;
+  gap: 0.75rem;
+  font-family: var(--pe-font-ui, sans-serif);
+}
+.buna3-text-link {
+  grid-column: 2;
+  font-family: var(--pe-font-ui, sans-serif);
+  color: var(--accent) !important;
+  text-decoration: underline !important;
+  text-underline-offset: 5px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+}
+.buna3-about {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7vw;
+  align-items: center;
+  background: var(--soft);
+}
+.buna3-about-image {
+  height: 600px;
+}
+.buna3-about > div:last-child {
+  display: grid;
+  gap: 2rem;
+}
+.buna3-body {
+  font-size: 1.25rem;
+  white-space: pre-line;
+}
+.buna3-person {
+  border-top: 1px solid var(--line);
+  padding-top: 1.5rem;
+}
+.buna3-person p {
+  color: var(--muted);
+  margin-top: 0.6rem;
+}
+.buna3-process h2 {
+  max-width: 17ch;
+  margin-bottom: 3rem;
+}
+.buna3-process > div {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+}
+.buna3-process article {
+  border-top: 1px solid var(--accent);
+  padding-top: 1.5rem;
+}
+.buna3-process h3 {
+  margin: 1.5rem 0 1rem;
+}
+.buna3-process p {
+  color: var(--muted);
+}
+.buna3-faq {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 4rem;
+  background: var(--soft);
+}
+.buna3-faq details {
+  border-top: 1px solid var(--line);
+  padding: 1.3rem 0;
+}
+.buna3-faq summary {
+  cursor: pointer;
+  font-size: 1.15rem;
+}
+.buna3-faq details p {
+  padding-top: 1rem;
+  color: var(--muted);
+}
+.buna3-places {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+}
+.buna3-places h3 {
+  margin-bottom: 1rem;
+}
+.buna3-hours {
+  margin-top: 2rem;
+  font-size: 0.9rem;
+}
+.buna3-hours > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--line);
+  padding: 0.6rem 0;
+}
+.buna3-hours dd {
+  margin: 0;
+  text-align: right;
+}
+.buna3-booking {
+  background: var(--soft);
+  display: grid;
+  gap: 1.5rem;
+  justify-items: center;
+  text-align: center;
+}
+.buna3-booking h2 {
+  max-width: 16ch;
+}
+.buna3-footer {
+  padding-block: 3rem;
+  display: grid;
+  gap: 1.5rem;
+}
+.buna3-footer strong {
+  font-size: 2rem;
+}
+.buna3-footer p {
+  color: var(--muted);
+}
+.buna3-footer > div {
+  display: flex;
+  gap: 2rem;
+  border-top: 1px solid var(--line);
+  padding-top: 1.5rem;
+}
+.buna3-footer > div span {
+  margin-left: auto;
+}
+.buna3-skip {
+  position: absolute;
+  left: 1rem;
+  top: -100px;
+  z-index: 50;
+  background: var(--paper);
+  padding: 1rem;
+}
+.buna3-skip:focus {
+  top: 1rem;
+}
+.buna3-loading {
+  min-height: 75vh;
+  padding: 10vw;
+}
+.buna3-loading > div {
+  display: grid;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+.buna3-loading i {
+  height: 70px;
+  background: var(--soft);
+  width: 70%;
+  border-left: 8px solid var(--accent);
+}
+.buna3-loading i:last-child {
+  height: 220px;
+  width: 100%;
+}
+.buna3-content {
+  max-width: 1000px;
+  margin: auto;
+  padding: 4rem 5vw;
+}
+.buna3-content h1 {
+  font-size: 3.5rem;
+  margin-bottom: 2rem;
+}
+.buna3-content p {
+  margin-block: 1rem;
+}
+.buna3-content img {
+  height: auto;
+}
+.buna3-entries {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+.buna3-entry {
+  border-bottom: 1px solid var(--line);
+  padding-block: 2rem;
+}
+.buna3-entry img {
+  aspect-ratio: 4/3;
+  object-fit: cover;
+}
+.buna3-entry h2 {
+  font-size: 2rem;
+  margin-block: 1rem;
+}
+.buna3-content table {
+  max-width: 100%;
+  border-collapse: collapse;
+}
+.buna3-content td,
+.buna3-content th {
+  border: 1px solid var(--line);
+  padding: 0.5rem;
+}
+.buna3[data-pe-mode="dark"] .buna3-button {
+  color: #211521 !important;
+}
+@media (max-width: 900px) {
+  .buna3-header nav {
+    display: none;
+  }
+  .buna3-hero {
+    gap: 2rem;
+    min-height: auto;
+  }
+  .buna3-hero-image {
+    height: 440px;
+  }
+  .buna3-service-copy {
+    grid-template-columns: 25px 1fr;
+  }
+  .buna3-service-meta {
+    grid-column: 2;
+    grid-row: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .buna3-about-image {
+    height: 430px;
+  }
+  .buna3-service {
+    grid-template-columns: 120px 1fr;
+  }
+  .buna3-section-head {
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 600px) {
+  .buna3-header {
+    padding: 1rem 5vw;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+    min-height: 80px;
+  }
+  .buna3-brand {
+    font-size: 1.2rem;
+  }
+  .buna3-controls {
+    gap: 0.6rem;
+    font-size: 0.8rem;
+  }
+  .buna3-running {
+    font-size: 0.7rem;
+  }
+  .buna3-running > span:last-child {
+    max-width: 50%;
+    text-align: right;
+  }
+  .buna3-hero {
+    grid-template-columns: 1fr;
+    padding-block: 2.5rem;
+    gap: 2rem;
+  }
+  .buna3 h1 {
+    font-size: 3.6rem;
+  }
+  .buna3[lang="am"] h1 {
+    font-size: 2.9rem;
+    line-height: 1.2;
+  }
+  .buna3[lang="am"] h2 {
+    line-height: 1.3;
+  }
+  .buna3-hero-image {
+    height: 390px;
+  }
+  .buna3-section {
+    padding-block: 3.5rem;
+  }
+  .buna3-section-head {
+    display: block;
+    margin-bottom: 2rem;
+  }
+  .buna3-section-head h2 {
+    margin: 0.6rem 0 1rem;
+    max-width: none;
+  }
+  .buna3-section-head > p {
+    max-width: 100%;
+  }
+  .buna3-service {
+    grid-template-columns: 1fr;
+    padding-block: 1.5rem;
+    gap: 1rem;
+  }
+  .buna3-service-photo {
+    height: 230px;
+    aspect-ratio: auto;
+  }
+  .buna3-service-copy {
+    column-gap: 0.6rem;
+  }
+  .buna3-service-copy p {
+    font-size: 0.95rem;
+  }
+  .buna3-about,
+  .buna3-faq,
+  .buna3-places {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .buna3-about-image {
+    height: 380px;
+  }
+  .buna3-process > div {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .buna3-process h2 {
+    max-width: none;
+  }
+  .buna3-process h3 {
+    margin: 0.5rem 0;
+  }
+  .buna3-hours > div {
+    align-items: start;
+  }
+  .buna3-hours dt {
+    max-width: 28%;
+  }
+  .buna3-hours dd {
+    max-width: 70%;
+  }
+  .buna3-entries {
+    grid-template-columns: 1fr;
+  }
+  .buna3-button {
+    padding: 0.9rem 1.1rem;
+  }
+  .buna3[lang="am"] .buna3-button {
+    font-size: 0.95rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .buna3 * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
+}
+.buna3[data-motion-level="none"] * {
+  transition: none !important;
+  animation: none !important;
+}
+.buna3-atlas {
+  position: relative;
+  min-height: 560px;
+  background: var(--soft);
+}
+.buna3-atlas-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.buna3-atlas svg {
+  width: 100%;
+  height: 100%;
+  fill: var(--paper);
+  stroke: var(--line);
+  stroke-width: 2;
+}
+.buna3-atlas svg .buna3-atlas-route {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3;
+  stroke-dasharray: 5 6;
+}
+.buna3-atlas circle {
+  fill: var(--accent);
+  stroke: none;
+}
+.buna3-atlas text {
+  fill: var(--paper);
+  stroke: none;
+  font-size: 13px;
+}
+.buna3-origin-photo {
+  position: absolute;
+  width: 46%;
+  height: 46%;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 10px solid var(--paper);
+}
+.buna3-coordinate {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  font-family: monospace;
+  font-size: 0.7rem;
+}
+.buna3-service-photo {
+  border-radius: 50%;
+}
+.buna3-section {
+  border-left: 1px dashed var(--accent);
+  margin-left: 3vw;
+}
+.buna3-about-image {
+  border-radius: 50% 50% 0 0;
+  overflow: hidden;
+}
+.buna3-number {
+  font-size: 1.6rem;
+}
+.buna3-service {
+  grid-template-columns: 220px 1fr;
+  align-items: center;
+}
+.buna3-service-photo {
+  height: 220px;
+}
+@media (max-width: 600px) {
+  .buna3-atlas {
+    min-height: 360px;
+  }
+  .buna3-service {
+    grid-template-columns: 1fr;
+  }
+  .buna3-service-photo {
+    width: 200px;
+    justify-self: center;
+  }
+  .buna3-section {
+    margin-left: 2vw;
+  }
+}
