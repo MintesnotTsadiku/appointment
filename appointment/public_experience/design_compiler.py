@@ -108,6 +108,8 @@ class CompiledDesign:
     validation: Mapping[str, object]
     canonical: str
     content_hash: str
+    # The recipe's declared expressive forms; None for a recipe without a declaration.
+    expression: Mapping[str, str] | None = None
 
     @property
     def is_valid(self) -> bool:
@@ -135,6 +137,8 @@ class CompiledDesign:
             "validation": dict(self.validation),
             "contentHash": self.content_hash,
         }
+        if self.expression is not None:
+            result["expression"] = dict(self.expression)
         return result
 
 
@@ -607,6 +611,9 @@ def compile_design(
             ],
         },
     }
+    if recipe.expression_declared:
+        # Only declared recipes carry it, so older compiled designs stay byte-identical.
+        artifact["expression"] = dict(recipe.expression)
     canonical = canonicalize(artifact)
     return CompiledDesign(
         contract=COMPILED_DESIGN_CONTRACT,
@@ -632,4 +639,5 @@ def compile_design(
         validation=artifact["validation"],
         canonical=canonical,
         content_hash=hash_document(artifact),
+        expression=artifact.get("expression"),
     )

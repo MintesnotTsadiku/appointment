@@ -5,6 +5,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { strict as assert } from "node:assert";
 
+import { certifiedPackages, contractFailures, expressionOf } from "./template-contract.mjs";
+
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
 const templates = path.join(root, "src/public-experience/templates");
@@ -92,4 +94,10 @@ assert.match(independent, /formatPhotoSource\(/, "the independent scheduler carr
 assert.match(independent, /haptic\(['"]select['"]\)/, "choosing a time gives a short tap");
 assert.match(independent, /haptic\(['"]success['"]\)/, "a booking gives the success tap");
 assert.match(independent, /<TemplateMoment /, "the independent confirmation shows the template's moment");
+// A package with a skin is a certified package: its recipe declares its forms, and its success moment
+// is the declared one (animated and stopped for reduced motion, or a crafted still confirmation).
+for (const pkg of certifiedPackages()) {
+  const success = contractFailures(pkg).filter((failure) => /success|declares its expressive forms/.test(failure));
+  assert.equal(success.length, 0, `${pkg.folder} success moment (${pkg.recipe ? expressionOf(pkg.recipe).success : "no recipe"}): ${success.join("; ")}`);
+}
 console.log("booking-skin: all checks passed");

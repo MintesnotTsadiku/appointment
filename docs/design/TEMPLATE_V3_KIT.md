@@ -35,9 +35,10 @@ Bloom v3 ("Golden Hour Salon") is the first package that uses the kit. See `BLOO
 | `kit/progress.ts` | `useSectionProgress`. |
 | `kit/core/holidays.ts` | The holiday dates and windows, and the Ethiopian calendar conversion re-exported from `src/lib/ethiopian-calendar.ts` (the JDN twin of `growth/ethiopian_calendar.py`). Pure. |
 | `kit/holidays.ts` | `useHoliday`. |
+| `kit/core/expression.ts` | The expression forms, their defaults and `resolveExpression`. Pure. |
 | `kit/index.ts` | One import point for all of the above. |
 
-`frontend/tests/template-kit.test.mjs` tests every pure file. It is part of `npm run test:dom`.
+`frontend/tests/template-kit.test.mjs` tests the pure files. `frontend/tests/template-expression.test.mjs` tests `core/expression.ts`, `holidayGreeting` and `greetingKey`. Both are part of `npm run test:dom`.
 
 ## Motion level
 
@@ -109,7 +110,7 @@ An owner photo (`/files/…`) has none of these. It gives a plain image. `loadin
 ## Time of day and opening hours
 
 - `useTimeOfDay()` returns the Addis Ababa wall clock, `part` (`morning` 05–11, `afternoon` 12–16, `evening` 17–20, `night` 21–04) and `afterDark` (18:00 to 06:00). It updates each minute. In development, `?preview-time=HH:MM` sets the clock.
-- The chrome keys `greetingMorning`, `greetingAfternoon`, `greetingEvening` and `greetingNight` give the greeting in English and Amharic.
+- The chrome keys `greetingMorning`, `greetingAfternoon`, `greetingEvening` and `greetingNight` give the greeting in English and Amharic. `greetingKey(part)` returns the key for a part of the day.
 - `openState(days, clock)` tells if a place is open, when it closes, or when it opens next. The days come from `snapshot.placeHours` (by location id). The guest snapshot API sends the weekly hours of each active place.
 - `habeshaPhrase("13:30")` returns "ከቀኑ 7:30 ሰዓት". Show the Habesha clock by default on Amharic pages and behind a switch on English pages.
 
@@ -208,7 +209,7 @@ The skin's stylesheet is `booking.css` in the package. Do not import it in `book
 
 ## Holiday moments
 
-Around Ethiopian holidays a template can show a small greeting in its own style (addition A7). The kit knows the dates; each template draws its own decoration in `<package>/holiday.tsx` and `holiday.css`.
+Around Ethiopian holidays a template shows a small greeting in its own style (addition A7). The kit knows the dates; each template draws its own moment in `<package>/holiday.tsx` and `holiday.css`, in the form its recipe declares (`expression.holiday`): a drawn decoration next to the greeting, or a greeting line in the template's type.
 
 ### Dates
 
@@ -232,6 +233,8 @@ Eid al-Fitr and Eid al-Adha are left out on purpose. Their dates follow the moon
 
 `useHoliday(enabled)` returns today's holiday in Addis Ababa, or null; it checks again every hour. Pass `snapshot.booking?.holidayGreetings === true`.
 
+`holidayGreeting(holiday, locale)` returns the text of the moment as chrome keys: `label`, `title` (`holiday.<key>`), `line` (`holiday.<key>Line`) with its `values` (`{ count }`), and `geez` (the greeting in Ge'ez script on English pages, else null). A template that declares `holiday: "greeting"` sets these in its own type and needs no drawing.
+
 The owner switch is next to live availability: website setup, "Website features" step, "Show Ethiopian holiday greetings on the website" (`setup.save(..., booking={"holidayGreetings": true})`, stored in `Public Site.booking_json`, live with the next publish). It is off for a new site and on for every showcase (the seeder sets it).
 
 In development, `?preview-holiday=<key>` shows the next occurrence of that holiday on any day, and `?preview-date=YYYY-MM-DD` sets the Addis Ababa date for the real date logic. Production builds ignore both.
@@ -240,8 +243,9 @@ In development, `?preview-holiday=<key>` shows the next occurrence of that holid
 
 - Render it in the flow of the hero copy (next to the greeting), never as an overlay: it never covers content. `holiday.css` must not use `position: fixed`.
 - The greeting is `publicSite.holiday.<key>` and the line `publicSite.holiday.<key>Line` (`{count}` is the year or the anniversary), in English and Amharic. Give the element `data-qa="holiday-moment"`, `data-holiday=<key>` and `aria-label` from `holiday.label`; the drawing is `aria-hidden`.
-- Draw the decoration in the template's own language. Motion only at `standard` and above, and none under reduced motion.
-- `frontend/tests/holiday-moments.test.mjs` checks the dates and these rules for every v3 package and Ergata v2.
+- With `holiday: "decoration"`, draw the decoration in the template's own language, as a decorative (`aria-hidden`) SVG. Motion only at `standard` and above, and none under reduced motion.
+- With `holiday: "greeting"`, set the greeting and its line in the template's type. Any motion in `holiday.css` stops under reduced motion.
+- `frontend/tests/holiday-moments.test.mjs` checks the dates, and these rules for every package with a booking skin in its declared form.
 
 | Template | The moment |
 |---|---|
@@ -252,14 +256,72 @@ In development, `?preview-holiday=<key>` shows the next occurrence of that holid
 | Meron v3 | A navy garment tag with a punched hole and a gold drawing, on a linen slip with a wine stitch line; the tag sways a little. |
 | Ergata v2 | A linen card with a line drawing in a small arched window and the greeting in the soft serif. |
 
+## Expression
+
+A recipe declares how its template meets each expressive quality of the quality bar (`TEMPLATE_REIMAGINATION.md`, section 8, "Expressive qualities (declared)"). The outcome is required; the form is the template's choice. Choose what serves the design direction, do not add an element only to tick a box, and justify each choice in the template's design document.
+
+### The `expression` field
+
+`expression` is an optional object in the recipe manifest (`appointment-curated-recipe.v1`). When it is present, it declares all six qualities:
+
+```json
+"expression": {
+  "imagery": "mixed",
+  "motion": "expressive",
+  "darkMode": "night-photos",
+  "holiday": "decoration",
+  "success": "animated",
+  "greeting": "hero"
+}
+```
+
+| Key | Forms |
+|---|---|
+| `imagery` | `photographic`, `illustrative`, `typographic`, `pattern`, `mixed` |
+| `motion` | `expressive`, `standard`, `calm` (minimal motion with precise micro-feedback only) |
+| `darkMode` | `night-photos`, `tonal`, `graded` |
+| `holiday` | `decoration`, `greeting` (a typographic greeting line) |
+| `success` | `animated`, `static` (a crafted still confirmation) |
+| `greeting` | `hero`, `header`, `tone` |
+
+- `recipes.py` validates it (`EXPRESSION_CHOICES`): an unknown key, an unknown form or a missing quality is a `DesignManifestError`. The declared `motion` must be the highest level that the recipe's `motion` adjustment offers (or its default motion when it has no adjustment).
+- `RecipeDefinition.expression` has the forms with the defaults filled in; `expression_declared` tells if the recipe declares them. `as_summary()` (the template gallery and the setup chooser) includes `expression`.
+- The compiled design carries `expression` only when the recipe declares it, so older compiled designs stay byte-identical. The frontend type is `CompiledDesign.expression`.
+- A recipe without `expression` (the v1 and v2 packages, and Ergata v1) gets `EXPRESSION_DEFAULTS`: `photographic`, `tonal`, `greeting`, `static`, `tone`, and the highest motion level it offers.
+- `resolveExpression(design)` in the kit returns the forms of a compiled design, with the defaults for a release published before the declaration. A template package knows its own forms; use `resolveExpression` in shared code only.
+
+### Headless pieces for each form
+
+The kit stays headless. Each form has the behavior it needs; the template draws everything.
+
+| Form | Kit pieces |
+|---|---|
+| `holiday: "greeting"` | `useHoliday`, `holidayGreeting` |
+| `holiday: "decoration"` | `useHoliday`, `HOLIDAY_GEEZ`; the drawing is the template's |
+| `greeting: "hero"` or `"header"` | `useTimeOfDay`, `greetingKey` |
+| `greeting: "tone"` | `useTimeOfDay`; put `data-day-part={now.part}` on the page and set the tone in CSS |
+| `darkMode: "night-photos"` | `pictureSet(asset, { night })` with `darkSrc` in the imagery manifest |
+| `darkMode: "tonal"` or `"graded"` | None: dark custom properties or a `filter` under `[data-pe-mode="dark"]` |
+| `motion` | `useMotionLevel` and the motion hooks; `calm` uses no scroll, marquee, count-up or pointer hook |
+| `success` | `templates/moments.tsx`; a static moment is a still component |
+
+### How the tests use it
+
+`frontend/tests/template-contract.mjs` holds the checks. A certified package is a package with a booking skin. For each one, it finds the recipe that pins the renderer version (the layout version) and checks:
+
+- the product contract, whatever the forms: the recipe declares a valid `expression` and is AA certified; lazy registration with `Loading`; the booking skin; the success moment in `moments.tsx`; the page language through the chrome; a designed dark mode with a translated switch; the motion level and reduced motion; `useNextAvailability` behind `liveAvailability`; opening hours with `habeshaPhrase`; `useHoliday` behind `holidayGreetings`, in the page flow; `useTimeOfDay`;
+- the declared form of each quality (the table in `TEMPLATE_REIMAGINATION.md`, section 8). For example, it asks for night photos only with `darkMode: "night-photos"`, and for a drawn holiday decoration only with `holiday: "decoration"`.
+
+`public-template-packages.test.mjs` runs all the checks on every certified package, `holiday-moments.test.mjs` the holiday checks, and `booking-skin.test.mjs` the success-moment checks. `template-expression.test.mjs` checks that the vocabulary is the same in `recipes.py`, the kit and the tests, that each current package declares the forms it draws, and that a minimal fixture passes the same contract with no photo and no animation: "Quiet Line" (`frontend/tests/fixtures/minimal-template.mjs`, recipe `appointment/tests/fixtures/expression-minimal.recipe.json`) declares `typographic`, `calm`, `tonal`, `greeting`, `static` and `header`. The test also changes the fixture to show that each check fails when a promise is broken. `appointment/tests/test_template_v3.py` (`TestTemplateExpression`) tests the backend validation, the defaults and the compiled design.
+
 ## Checklist for the next v3 package
 
-1. Add the recipe, layout and surface `v3` manifests, and the imagery manifest with `darkSrc` for the hero and the band. Pin palette and typography versions that exist.
+1. Add the recipe, layout and surface `v3` manifests, and the imagery manifest (with `darkSrc` for the hero and the band when the template declares `darkMode: "night-photos"`). Pin palette and typography versions that exist. Declare `expression` in the recipe and justify each form in the design document.
 2. Register `<key>@3` in `templates/registry.ts`, with `Loading`. Add the moment to `templates/moments.tsx`.
 3. Use the kit for behavior. Draw every visual in the package.
 4. Render every required section, `process` and `proof` included.
-5. Generate the images with the Codex CLI method (`BLOOM_V3.md`, "Images"). Record every file with its checksum.
+5. When the template declares `photographic` or `mixed` imagery, generate the images with the Codex CLI method (`BLOOM_V3.md`, "Images"). Record every file with its checksum.
 6. Move the showcase through the seeder: catalog `heroRole`, `detailRole`, `templateAssets`, and a higher `PUBLIC_EXPERIENCE_VERSION`.
 7. Write the three manifests (`template-<name>-v3.yaml`, `-dark`, `-states`), run them, and record the run IDs.
-7a. Add the holiday moment (`holiday.tsx`, `holiday.css`) and a scenario in `holiday-moments.yaml`.
+7a. Add the holiday moment (`holiday.tsx`, `holiday.css`) in the declared `holiday` form, and a scenario in `holiday-moments.yaml`.
 8. Add the booking skin (`booking.tsx`, `booking.css`, a `SKINS` entry), link each service row on the handoff to `snapshot.bookingPaths[item.id]`, and write `booking-journey-<name>.yaml` like `booking-journey-bloom.yaml`.

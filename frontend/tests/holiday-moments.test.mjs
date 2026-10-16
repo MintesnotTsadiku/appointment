@@ -1,15 +1,18 @@
 /**
  * Ethiopian holiday moments (`src/public-experience/templates/kit/core/holidays.ts`): the calendar
  * conversion that the kit re-exports from `src/lib/ethiopian-calendar.ts`, against the shared vectors, the known holiday dates, and the window on both sides of each
- * holiday. Also checks that every v3 template draws its own holiday moment and that the preview
- * override is development-only. Run with `npm run test:dom`.
+ * holiday. Also checks that every certified template shows its holiday moment in the form its recipe
+ * declares (a drawn decoration or a greeting line) and that the preview override is development-only. Run with `npm run test:dom`.
  */
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
 import { strict as assert } from "node:assert";
 import ts from "typescript";
+
+import { certifiedPackages, expressionOf, holidayFailures } from "./template-contract.mjs";
+import { minimalPackage } from "./fixtures/minimal-template.mjs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const src = path.resolve(here, "../src");
@@ -98,20 +101,18 @@ const hook = readFileSync(path.join(templates, "kit/holidays.ts"), "utf8");
 assert.match(hook, /import\.meta\.env\.DEV/);
 assert.doesNotMatch(readFileSync(path.join(templates, "kit/core/holidays.ts"), "utf8"), /import\.meta|window\./);
 
-// 6. Every v3 template (and Ergata v2) draws its own moment, gated by the owner setting, and stops for reduced motion.
-const PACKAGES = ["bloom-v3", "selam-v3", "tena-v3", "abugida-v3", "meron-v3", "ergata-v2"];
-for (const folder of PACKAGES) {
-  const file = path.join(templates, folder, "holiday.tsx");
-  assert.ok(existsSync(file), `${folder} has its own holiday.tsx`);
-  const code = readFileSync(file, "utf8");
-  assert.doesNotMatch(code, /from "\.\.\/(?!kit|chrome|types)[^"]+"/, `${folder}/holiday.tsx imports only the kit, chrome and types`);
-  assert.match(code, /useHoliday\(/, `${folder} uses the kit's useHoliday`);
-  assert.match(code, /holidayGreetings === true/, `${folder} reads the owner setting`);
-  const css = readFileSync(path.join(templates, folder, "holiday.css"), "utf8");
-  assert.match(css, /prefers-reduced-motion: reduce/, `${folder} holiday CSS stops for reduced motion`);
-  assert.doesNotMatch(css, /position:\s*fixed/, `${folder} holiday moment never floats over content`);
-  const page = readdirSync(path.join(templates, folder)).find((name) => /Template\.tsx$/.test(name));
-  assert.match(readFileSync(path.join(templates, folder, page), "utf8"), /<\w+Holiday\b/, `${folder} renders its holiday moment`);
+// 6. Every certified package (a booking skin, so every v3 package and Ergata v2) shows the greeting when
+// the owner turns it on, in the page flow, and in the form its recipe declares (`expression.holiday`):
+// a drawn decoration that stops for reduced motion, or a greeting line in the template's own type.
+const packages = certifiedPackages();
+assert.ok(packages.length >= 6, "every certified package is checked");
+for (const pkg of packages) {
+  assert.ok(pkg.files["holiday.tsx"], `${pkg.folder} has its own holiday.tsx`);
+  assert.doesNotMatch(pkg.files["holiday.tsx"], /from "\.\.\/(?!kit|chrome|types)[^"]+"/, `${pkg.folder}/holiday.tsx imports only the kit, chrome and types`);
+  same(holidayFailures(pkg), [], `${pkg.folder} holiday moment (${expressionOf(pkg.recipe).holiday})`);
 }
+// A minimal package that declares `holiday: "greeting"` passes without a drawing.
+same(holidayFailures(minimalPackage), [], "a greeting line meets the holiday rule");
+assert.ok(!/<svg\b/.test(minimalPackage.files["holiday.tsx"]));
 
 console.log("holiday moments: ok");

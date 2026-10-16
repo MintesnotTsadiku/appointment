@@ -14,7 +14,14 @@ import frappe
 from appointment.public_experience import next_availability
 from appointment.public_experience.design_compiler import _validate_imagery, compile_design
 from appointment.public_experience.errors import DesignCompilationError, DesignManifestError, PublicResolutionError
-from appointment.public_experience.recipes import _read, get_recipe
+from appointment.public_experience.recipes import (
+    EXPRESSION_CHOICES,
+    EXPRESSION_DEFAULTS,
+    RECIPE_MANIFESTS,
+    _read,
+    _recipe,
+    get_recipe,
+)
 from appointment.public_experience.section_schemas import validate_typed_section
 from appointment.public_experience.showcase_catalog import APP_ROOT
 
@@ -237,6 +244,83 @@ class TestBookingOptions(unittest.TestCase):
         self.assertIs(ergata_showcase.SHOWCASE.booking.get("holidayGreetings"), True)
         self.assertIs(ergata_showcase.SHOWCASE.booking.get("liveAvailability"), True)
         self.assertIn('"holidayGreetings": True', showcase.__loader__.get_source(showcase.__name__))
+
+
+# The forms that the certified packages draw today (docs/design/TEMPLATE_REIMAGINATION.md, section 8).
+CURRENT_EXPRESSION = {
+    "imagery": "mixed",
+    "motion": "expressive",
+    "darkMode": "night-photos",
+    "holiday": "decoration",
+    "success": "animated",
+    "greeting": "hero",
+}
+CERTIFIED = {
+    "bloom-hair": 3,
+    "selam-movement": 3,
+    "tena-clinic": 3,
+    "abugida-language": 3,
+    "meron-atelier": 3,
+    "ergata-therapy": 2,
+}
+FIXTURE = APP_ROOT / "tests" / "fixtures" / "expression-minimal.recipe.json"
+
+
+class TestTemplateExpression(unittest.TestCase):
+    def _document(self, **expression):
+        document = json.loads(FIXTURE.read_text(encoding="utf-8"))
+        document["expression"] = {**document["expression"], **expression}
+        return document
+
+    def test_certified_recipes_declare_the_forms_they_draw(self):
+        for key, version in CERTIFIED.items():
+            with self.subTest(recipe=key):
+                recipe = get_recipe(key, version)
+                self.assertTrue(recipe.expression_declared)
+                self.assertEqual(dict(recipe.expression), CURRENT_EXPRESSION)
+                self.assertEqual(recipe.as_summary()["expression"], CURRENT_EXPRESSION)
+                design = compile_design(key, version, {"motion": "calm"}, None, ["en", "am"]).as_dict()
+                self.assertEqual(design["expression"], CURRENT_EXPRESSION, "the compiled design carries the declaration")
+
+    def test_recipes_without_a_declaration_get_the_defaults_and_keep_their_compiled_shape(self):
+        for key, versions in RECIPE_MANIFESTS.items():
+            for version in versions:
+                if CERTIFIED.get(key) == version:
+                    continue
+                with self.subTest(recipe=key, version=version):
+                    recipe = get_recipe(key, version)
+                    self.assertFalse(recipe.expression_declared)
+                    self.assertEqual(dict(recipe.expression), {**EXPRESSION_DEFAULTS, "motion": "standard"})
+                    design = compile_design(key, version, {"motion": "calm"}, None, ["en", "am"]).as_dict()
+                    self.assertNotIn("expression", design, "older compiled designs stay byte-identical")
+
+    def test_a_minimal_typographic_recipe_is_valid(self):
+        recipe = _recipe(self._document(), "fixture")
+        self.assertEqual(
+            dict(recipe.expression),
+            {"imagery": "typographic", "motion": "calm", "darkMode": "tonal", "holiday": "greeting", "success": "static", "greeting": "header"},
+        )
+        for quality, choices in EXPRESSION_CHOICES.items():
+            for choice in choices:
+                if quality == "motion":
+                    continue
+                self.assertEqual(_recipe(self._document(**{quality: choice}), "fixture").expression[quality], choice)
+
+    def test_the_declaration_is_closed(self):
+        bad = {
+            "unknown quality": self._document(sparkle="yes"),
+            "unknown form": self._document(imagery="neon"),
+            "motion above the offered levels": self._document(motion="expressive"),
+        }
+        missing = self._document()
+        del missing["expression"]["success"]
+        bad["missing quality"] = missing
+        not_object = self._document()
+        not_object["expression"] = ["typographic"]
+        bad["not an object"] = not_object
+        for name, document in bad.items():
+            with self.subTest(case=name), self.assertRaises(DesignManifestError):
+                _recipe(document, "fixture")
 
 
 if __name__ == "__main__":

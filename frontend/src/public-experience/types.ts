@@ -1,3 +1,5 @@
+import type { TemplateExpression } from "./templates/kit/core/expression";
+
 export type DesignTokenValue = string | number;
 /** Frontend shapes for the compiled-design/public-release contracts. */
 
@@ -60,6 +62,8 @@ export interface CompiledDesign {
   identity: { applicationName: string; applicationNameAm?: string; shortName: string; logoPrimary?: string | null; logoCompact?: string | null; favicon?: string | null };
   validation: { ok: boolean; issues?: unknown[]; protectedStateRoles?: string[] };
   contentHash: string;
+  /** The template's declared expressive forms (recipe `expression`). Absent for older recipes and releases; use `resolveExpression`. */
+  expression?: TemplateExpression;
 }
 
 export interface PublicIdentity {

@@ -631,39 +631,71 @@ Effort is in agent-days (one agent working; parallel phases run at the same time
 
 ### Consistency requirements for every v3 template
 
-A template is not done until it meets every item in this list. Bloom v3 is the reference for each item.
+A template is not done until it meets the product contract and gives each expressive quality in the form that its recipe declares. Bloom v3 is the reference for the product contract. It is not the only accepted form of an expressive quality.
+
+The requirements have two parts:
+
+- **The product contract** is never optional. Every certified template version with a booking skin (the v3 packages and Ergata v2) meets all of it.
+- **The expressive qualities** are required as an outcome. Each template chooses the form that serves its design direction and declares it in its recipe manifest under `expression`. The tests check the declared form.
+
+#### Product contract
 
 **Landing page**
 
-1. The concept from section 5, with a photo or a drawing in every section, its own shape language, and its own signature motion.
-2. The additions the owner approved:
-   - A1: a time-of-day greeting, and the night photos after dark (Addis Ababa time). Dark mode always uses the night photos.
-   - A2: a booking-success moment that belongs to the template.
-   - A3: zoom and pan on images under the pointer (fine pointers only).
-   - A4: haptics, on a time pick and on booking.
-   - A5: the template's own loading screen.
-   - A6: section progress dots on long pages.
-   - A7: Ethiopian holiday moments (phase 3).
-3. Live availability ("Next free: …") from `useNextAvailability`. It shows only when the owner setting is on. It is on for showcases.
-4. Opening hours with the International/Habesha switch (the default is Habesha in Amharic).
-5. A review marquee with a pause control, or a pull quote when there is one review.
-6. Images through `pictureSet`: AVIF and WebP, mobile crops, night variants, width and height, lazy below the fold.
-7. Motion through the kit only, with the motion level gate. Reduced motion always wins.
+1. The concept from section 5, with its own shape language, and visual interest in every section in the declared `imagery` form.
+2. Phone speed: LCP at most 2.5 s on the phone preset, CLS at most 0.05 (see "QA per template").
+3. AA contrast for all text, also text over photos, and a visible focus.
+4. Reduced motion always wins: motion goes through the kit's motion level, and CSS stops every animation under `prefers-reduced-motion: reduce` and `[data-motion-level="none"]`.
+5. Amharic throughout: every string in English and Amharic through the template chrome, the Amharic names in Ge'ez script, the Habesha clock by default on Amharic pages.
+6. A loading screen of the template (A5), registered as `Loading` next to the lazy package in `templates/registry.ts`.
+7. Live availability ("Next free: …") from `useNextAvailability`. It shows only when the owner turns it on. It is on for showcases.
+8. Opening hours with the International/Habesha switch (the default is Habesha in Amharic).
+9. The Ethiopian holiday greeting (A7) when the owner turns it on, in the flow of the page, never over content.
+10. A designed dark mode: the template's own dark palette and a translated mode switch. The declared `darkMode` form says how the images change.
+11. Images through `pictureSet` when the template uses packaged photos: AVIF and WebP, mobile crops, width and height, lazy below the fold.
+
+The other approved additions are not part of the contract. Use them where they fit the design direction: zoom and pan on images under a fine pointer (A3), section progress dots on long pages (A6), and a review marquee with a pause control or a pull quote. The shared scheduler gives the haptics (A4) to every template.
 
 **Booking journey: continuity, not spectacle**
 
-8. The `/book` handoff rows are real links to `snapshot.bookingPaths[item.id]`. They work with the keyboard and the screen reader. On Amharic pages they carry `lang=am`.
-9. The service chooser shows one card per service: photo, name, price, duration, stacked provider portraits and "Any provider". The provider chips stay as a filter. The time picker then shows every provider (`?with=any`).
-10. A booking skin in `<package>/booking.tsx` and `booking.css`, registered in `SKINS`, with every CSS rule scoped under `[data-bk-skin=…]`. The skin sets the header, a faint backdrop echo of the hero (the smallest width file, the night file in dark mode), the heading font, the card frame shape, the primary button style and the step marks (Service → Time → Details → Done). It carries the service photo into the time picker and the booking summary. The confirmation also uses the skin.
-11. Booking pages have only three kinds of motion: the landing → handoff view transition, a short pick on the chosen card or time (with `haptic("select")`), and the success moment. They have no parallax, no marquees, no count-ups and no large animated imagery.
-12. The phone-first details form (phone, then email, then participants as tags), friendly time zone labels, the business logo and themed field icons.
-13. Light/dark mode and the language continue from the landing page through to the confirmation.
-14. Performance: the chooser and the time picker must not get slower than the current build. Compare the two builds on the same machine. Service photos are lazy and never become the phone LCP element.
+12. The `/book` handoff rows are real links to `snapshot.bookingPaths[item.id]`. They work with the keyboard and the screen reader. On Amharic pages they carry `lang=am`.
+13. The service chooser shows one card per service: photo, name, price, duration, stacked provider portraits and "Any provider". The provider chips stay as a filter. The time picker then shows every provider (`?with=any`).
+14. A booking skin in `<package>/booking.tsx` and `booking.css`, registered in `SKINS`, with every CSS rule scoped under `[data-bk-skin=…]`. The skin sets the header, a faint backdrop echo of the hero (the smallest width file, the night file in dark mode), the heading font, the card frame shape, the primary button style and the step marks (Service → Time → Details → Done). It carries the service photo into the time picker and the booking summary. The confirmation also uses the skin.
+15. A booking-success acknowledgement that belongs to the template (A2): a moment in `templates/moments.tsx`, in the declared `success` form.
+16. Booking pages have only three kinds of motion: the landing → handoff view transition, a short pick on the chosen card or time (with `haptic("select")`), and the success moment. They have no parallax, no marquees, no count-ups and no large animated imagery.
+17. The phone-first details form (phone, then email, then participants as tags), friendly time zone labels, the business logo and themed field icons.
+18. Light/dark mode and the language continue from the landing page through to the confirmation.
+19. Performance: the chooser and the time picker must not get slower than the current build. Compare the two builds on the same machine. Service photos are lazy and never become the phone LCP element.
 
 **Package rules (AGENTS.md)**
 
-15. Each template is an independent package. It never imports another template's visual components. The kit and the skin contract are imported as headless code or types only. `public-template-packages.test.mjs` and `booking-skin.test.mjs` enforce this.
-16. Images are generated with the Codex CLI (`gpt-6.1-sol`). The prompts state the faces rule, and night photos are edits of the day photos. Every file is checksummed in the imagery manifest and in the showcase catalog. The showcase moves to v3 through the seeder only.
+20. Each template is an independent package. It never imports another template's visual components. The kit and the skin contract are imported as headless code or types only. The package is registered lazily, so a page downloads only its own template. `public-template-packages.test.mjs` and `booking-skin.test.mjs` enforce this.
+21. Generated images are made with the Codex CLI (`gpt-6.1-sol`). The prompts state the faces rule, and night photos are edits of the day photos. Every file is checksummed in the imagery manifest and in the showcase catalog. The showcase moves to v3 through the seeder only.
+
+#### Expressive qualities (declared)
+
+The owner asked for templates that are not plain. The outcome is required: every section has visual interest, the page moves with intent, dark mode is designed, holidays and bookings get a moment, and the page knows the time of day. The form is the template's choice. A minimalist, type-led template meets the bar with type, rules and a tonal dark palette as well as a photographic one meets it with photos.
+
+Choose what serves the design direction. Do not add an element only to tick a box. Justify each choice in the template's design document (for example `BLOOM_V3.md`).
+
+| Quality (`expression` key) | What the outcome is | Forms | What the tests then require |
+|---|---|---|---|
+| `imagery` | Every section has visual interest | `photographic`: packaged or owner photos. `illustrative`: the template's own drawings. `typographic`: type, scale and rules carry the sections. `pattern`: a pattern of the template (for example a tibeb border). `mixed`: photos and drawings. | `photographic`: `pictureSet`. `illustrative`: drawn SVG. `pattern`: an SVG pattern or a CSS pattern. `mixed`: both photos and drawings. `typographic`: nothing more; no photo or drawing is required. |
+| `motion` | The page moves with intent | `expressive`: pinned scenes, parallax, pointer effects. `standard`: reveals and some scroll motion. `calm`: minimal motion, with precise micro-feedback only. | The recipe's `motion` adjustment offers levels up to the declared one, and no higher. `expressive`: reveals and scroll or pointer motion from the kit. `standard`: reveals. `calm`: no scroll, marquee, count-up or pointer motion. |
+| `darkMode` | Dark mode is designed, not inverted | `night-photos`: night variants of the photos (`darkSrc`). `tonal`: a dark palette of the template. `graded`: the day photos graded for night in CSS. | `night-photos`: `darkSrc` in the imagery manifest and `pictureSet(…, { night })`. `tonal`: dark custom properties under `[data-pe-mode="dark"]`. `graded`: a `filter` under `[data-pe-mode="dark"]`. |
+| `holiday` | A holiday gets a greeting in the template's style | `decoration`: a drawn decoration next to the greeting. `greeting`: a typographic greeting line in the template's type. | `decoration`: a decorative (`aria-hidden`) SVG in `holiday.tsx` and a reduced-motion stop in `holiday.css`. `greeting`: the greeting and its line (`holidayGreeting` from the kit). |
+| `success` | A booking gets an acknowledgement of the template | `animated`: a moment that moves once. `static`: a crafted, still confirmation. | `animated`: an animation in `moment.css` that stops for reduced motion. `static`: no animation in `moment.css`. |
+| `greeting` | The page knows the time of day | `hero`: a greeting in the hero. `header`: a greeting in the header. `tone`: no words; the page's tone follows the part of the day. | `hero` and `header`: the greeting text and a `data-qa="…-greeting"` element. `tone`: `data-day-part={now.part}` on the page. |
+
+The product contract still applies to every form. For example, `holiday: "greeting"` still shows the greeting when the owner turns it on, and `success: "static"` is still a moment in `templates/moments.tsx`.
+
+The current packages declare these forms. The declaration describes what they draw today; it does not change them.
+
+| Package | `imagery` | `motion` | `darkMode` | `holiday` | `success` | `greeting` |
+|---|---|---|---|---|---|---|
+| Bloom v3, Selam v3, Tena v3, Abugida v3, Meron v3, Ergata v2 | `mixed` | `expressive` | `night-photos` | `decoration` | `animated` | `hero` |
+
+A recipe without `expression` (the v1 and v2 packages, and Ergata v1) gets the defaults: `photographic`, the highest motion level that the recipe offers, `tonal`, `greeting`, `static` and `tone`. These packages have no booking skin, so the product contract does not apply to them. See [TEMPLATE_V3_KIT.md](TEMPLATE_V3_KIT.md), "Expression".
 
 ### QA per template (at the end of phases 1–3)
 

@@ -3,6 +3,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { strict as assert } from "node:assert";
 
+import { certifiedPackages, contractFailures } from "./template-contract.mjs";
+
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const templateRoot = path.join(root, "src/public-experience/templates");
 const templates = ["selam", "bloom", "meron", "abugida", "tena", "tena-v2", "selam-v2", "bloom-v2", "meron-v2", "abugida-v2", "ergata", "bloom-v3", "meron-v3", "abugida-v3", "selam-v3", "tena-v3", "ergata-v2"];
@@ -194,6 +196,15 @@ assert.ok(registry.includes(`"ergata-therapy@1"`), "ergata-therapy v1 stays regi
   assert.ok(fs.existsSync(path.join(directory, "ErgataMoment.tsx")) && fs.readFileSync(path.join(templateRoot, "moments.tsx"), "utf8").includes('"ergata-therapy@2"'), "ergata-v2 has its booking-success moment");
 }
 assert.ok(registry.includes("rendererVersion"), "the registry resolves by renderer version");
+
+// The quality bar of every certified package (a booking skin): the product contract (booking skin, loading
+// screen, success moment, live availability and holiday greeting behind the owner settings, Habesha hours,
+// reduced motion, Amharic chrome, a designed dark mode, lazy registration) and the expressive forms that
+// its recipe declares under `expression`. See tests/template-contract.mjs and template-expression.test.mjs.
+for (const pkg of certifiedPackages()) {
+  const failures = contractFailures(pkg);
+  assert.equal(failures.length, 0, `${pkg.folder} (${pkg.id}) misses the quality bar: ${failures.join("; ")}`);
+}
 
 // Ergata (therapy practices) keeps its safety notice as owner content: numbers are never hard-coded.
 const ergata = fs.readFileSync(path.join(templateRoot, "ergata", "ErgataTemplate.tsx"), "utf8");

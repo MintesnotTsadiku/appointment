@@ -16,6 +16,14 @@
     "focusVisible": true,
     "reducedMotion": true
   },
+  "expression": {
+    "imagery": "mixed",
+    "motion": "expressive",
+    "darkMode": "night-photos",
+    "holiday": "decoration",
+    "success": "animated",
+    "greeting": "hero"
+  },
   "primitives": {
     "palette": {
       "key": "bloom-hair",

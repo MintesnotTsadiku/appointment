@@ -31,6 +31,11 @@ export function dayPart(hour: number): DayPart {
   return "night";
 }
 
+/** The chrome key of the time-of-day greeting for a part of the day (`greetingMorning` …). */
+export function greetingKey(part: DayPart): "greetingMorning" | "greetingAfternoon" | "greetingEvening" | "greetingNight" {
+  return part === "morning" ? "greetingMorning" : part === "afternoon" ? "greetingAfternoon" : part === "evening" ? "greetingEvening" : "greetingNight";
+}
+
 /** After dark in Addis Ababa: from 18:00 to 06:00 (sunset and sunrise move little near the equator). */
 export function afterDark(hour: number): boolean {
   return hour >= 18 || hour < 6;

@@ -6,7 +6,7 @@ export { allows, easeOut, maskTiming, resolveMotion, revealDelay, viewProgress, 
 export { countFrame, parseCountable, toGeez, type Countable } from "./core/numbers";
 export { coverRadius, glowPosition, magneticOffset, tiltAngles } from "./core/pointer";
 export { loadingAttributes, MOBILE_QUERY, pictureSet, widthSet, type PictureAsset, type PictureSet, type PictureSource } from "./core/picture";
-export { ADDIS, afterDark, clockIn, dayPart, habeshaPhrase, openState, parseClock, WEEKDAYS, type DayPart, type OpenState, type OpeningDay, type Weekday } from "./core/clock";
+export { ADDIS, afterDark, clockIn, dayPart, greetingKey, habeshaPhrase, openState, parseClock, WEEKDAYS, type DayPart, type OpenState, type OpeningDay, type Weekday } from "./core/clock";
 export { parseAvailability, slotLabel, type NextAvailability, type SlotFacts, type SlotLabel } from "./core/availability";
 export { supportsScrollTimeline, useCountUp, useMotionLevel, useReveal, useScrollProgress } from "./motion";
 export { usePointerEffects } from "./pointer";
@@ -16,5 +16,6 @@ export { useTimeOfDay, type TimeOfDay } from "./time";
 export { useNextAvailability, type AvailabilityStatus } from "./availability";
 export { haptic } from "./haptics";
 export { useSectionProgress } from "./progress";
-export { activeHoliday, dateIn, HOLIDAY_GEEZ, HOLIDAY_KEYS, HOLIDAY_WINDOWS, holidaysOn, isHolidayKey, nextHoliday, toEthiopian, toGregorian, type CalendarDate, type Holiday, type HolidayKey } from "./core/holidays";
+export { activeHoliday, dateIn, HOLIDAY_GEEZ, HOLIDAY_KEYS, HOLIDAY_WINDOWS, holidayGreeting, holidaysOn, isHolidayKey, nextHoliday, toEthiopian, toGregorian, type CalendarDate, type Holiday, type HolidayGreeting, type HolidayKey } from "./core/holidays";
 export { useHoliday } from "./holidays";
+export { EXPRESSION_CHOICES, EXPRESSION_DEFAULTS, resolveExpression, type DarkModeForm, type GreetingForm, type HolidayForm, type ImageryForm, type MotionForm, type SuccessForm, type TemplateExpression } from "./core/expression";

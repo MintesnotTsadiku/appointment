@@ -91,8 +91,30 @@ _RECIPE_KEYS = frozenset(
         "adjustments",
         "actionIntents",
         "contentRichness",
+        "expression",
     }
 )
+
+# How a template meets the expressive qualities of the quality bar (docs/design/TEMPLATE_REIMAGINATION.md,
+# section 8). The outcome is required; the form is the template's choice, declared in its recipe.
+EXPRESSION_CHOICES: Mapping[str, tuple[str, ...]] = {
+    "imagery": ("photographic", "illustrative", "typographic", "pattern", "mixed"),
+    "motion": ("expressive", "standard", "calm"),
+    "darkMode": ("night-photos", "tonal", "graded"),
+    "holiday": ("decoration", "greeting"),
+    "success": ("animated", "static"),
+    "greeting": ("hero", "header", "tone"),
+}
+# A recipe without `expression` (the v1 and v2 packages, which predate the declaration) gets these
+# forms. `motion` is not listed: it defaults to the highest level that the recipe offers.
+EXPRESSION_DEFAULTS: Mapping[str, str] = {
+    "imagery": "photographic",
+    "darkMode": "tonal",
+    "holiday": "greeting",
+    "success": "static",
+    "greeting": "tone",
+}
+_MOTION_ORDER = ("calm", "standard", "expressive")
 
 
 @dataclass(frozen=True)
@@ -125,6 +147,10 @@ class RecipeDefinition:
     accessibility: Mapping[str, object]
     document: Mapping[str, object]
     content_hash: str
+    # The declared expressive forms with the defaults filled in; `expression_declared` is false for
+    # a recipe without the `expression` key.
+    expression: Mapping[str, str]
+    expression_declared: bool
 
     def as_summary(self) -> dict[str, object]:
         return {
@@ -146,6 +172,7 @@ class RecipeDefinition:
                 for key, definition in self.adjustments.items()
             },
             "accessibility": dict(self.accessibility),
+            "expression": dict(self.expression),
         }
 
 
@@ -215,6 +242,40 @@ def _ref(kind: str, raw: object, recipe_source: str) -> ManifestRef:
     return ManifestRef(kind, key, version, hash_document(primitive))
 
 
+def _offered_motion(default_inputs: Mapping[str, object], adjustments: Mapping[str, object]) -> str:
+    """The highest motion level a site on this recipe can get."""
+    choices = (adjustments.get("motion") or {}).get("choices") or [default_inputs.get("motion", "calm")]
+    levels = [_MOTION_ORDER.index(value) for value in choices if value in _MOTION_ORDER]
+    return _MOTION_ORDER[max(levels)] if levels else "calm"
+
+
+def _expression(document: Mapping[str, object], offered_motion: str, source: str) -> dict[str, str]:
+    """Validate the optional `expression` declaration and fill in the defaults."""
+    raw = document.get("expression")
+    if raw is None:
+        return {**EXPRESSION_DEFAULTS, "motion": offered_motion}
+    if not isinstance(raw, dict):
+        raise DesignManifestError(f"{source}.expression must be an object")
+    _strict(raw, set(EXPRESSION_CHOICES), f"{source}.expression")
+    missing = sorted(set(EXPRESSION_CHOICES) - set(raw))
+    if missing:
+        raise DesignManifestError(
+            f"{source}.expression must declare every quality", details={"resource": source, "missing": missing}
+        )
+    for quality, choices in EXPRESSION_CHOICES.items():
+        if raw[quality] not in choices:
+            raise DesignManifestError(
+                f"{source}.expression.{quality} must be one of {', '.join(choices)}",
+                details={"resource": source, "quality": quality, "observed": raw[quality]},
+            )
+    if raw["motion"] != offered_motion:
+        raise DesignManifestError(
+            f"{source}.expression.motion is '{raw['motion']}' but the recipe offers motion up to '{offered_motion}'",
+            details={"resource": source, "declared": raw["motion"], "offered": offered_motion},
+        )
+    return {quality: raw[quality] for quality in EXPRESSION_CHOICES}
+
+
 def _recipe(document: Mapping[str, object], source: str) -> RecipeDefinition:
     _strict(document, set(_RECIPE_KEYS), source)
     if document.get("kind") != "recipe" or document.get("contract") != RECIPE_CONTRACT:
@@ -260,6 +321,7 @@ def _recipe(document: Mapping[str, object], source: str) -> RecipeDefinition:
             choices = definition.get("choices")
             if not isinstance(choices, list) or not choices:
                 raise DesignManifestError(f"{source}.adjustments.{name} requires choices")
+    expression = _expression(document, _offered_motion(default_inputs, adjustments), source)
     return RecipeDefinition(
         key=key,
         version=version,
@@ -278,6 +340,8 @@ def _recipe(document: Mapping[str, object], source: str) -> RecipeDefinition:
         accessibility=accessibility,
         document=document,
         content_hash=hash_document(document),
+        expression=expression,
+        expression_declared="expression" in document,
     )
 
 

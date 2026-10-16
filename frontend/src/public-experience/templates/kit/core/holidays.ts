@@ -112,6 +112,35 @@ export function nextHoliday(key: HolidayKey, date: CalendarDate): Holiday {
   return describe(key, jdn, 0);
 }
 
+/** The text of a holiday greeting as chrome keys and values; the template sets it in its own type. */
+export interface HolidayGreeting {
+  key: HolidayKey;
+  /** `aria-label` of the moment. */
+  label: "holiday.label";
+  /** The greeting, for example "Happy New Year". */
+  title: `holiday.${HolidayKey}`;
+  /** The line under it; `{count}` is the year or the anniversary. */
+  line: `holiday.${HolidayKey}Line`;
+  values: { count: number };
+  /** The greeting in Ge'ez script, for English pages; null on Amharic pages (the title is already Amharic). */
+  geez: string | null;
+}
+
+/**
+ * The text of a holiday moment without a drawing. A template that declares `holiday: "greeting"`
+ * sets this as a typographic line in its own style; a template with a decoration can use it too.
+ */
+export function holidayGreeting(holiday: Holiday, locale: string): HolidayGreeting {
+  return {
+    key: holiday.key,
+    label: "holiday.label",
+    title: `holiday.${holiday.key}`,
+    line: `holiday.${holiday.key}Line`,
+    values: { count: holiday.count },
+    geez: locale === "am" ? null : HOLIDAY_GEEZ[holiday.key],
+  };
+}
+
 export function isHolidayKey(value: unknown): value is HolidayKey {
   return typeof value === "string" && (HOLIDAY_KEYS as readonly string[]).includes(value);
 }
