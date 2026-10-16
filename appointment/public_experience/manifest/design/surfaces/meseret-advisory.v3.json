@@ -1,0 +1,22 @@
+{
+  "kind": "surface",
+  "contract": "appointment-surface.v1",
+  "key": "meseret-advisory",
+  "version": 3,
+  "shape": {
+    "cardRadius": "0px",
+    "controlRadius": "4px",
+    "borderWidth": "1px",
+    "focusRing": "3px"
+  },
+  "elevation": {
+    "card": "none",
+    "raised": "0 12px 32px rgba(0,0,0,.12)"
+  },
+  "motion": {
+    "default": "calm",
+    "reduced": "none",
+    "duration": "240ms"
+  },
+  "iconStyle": "line"
+}

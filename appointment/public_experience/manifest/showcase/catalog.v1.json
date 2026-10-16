@@ -3656,6 +3656,126 @@
           "checksum": "ddd0dd88b6010d86ff0d7e9fab0fa2fff0ad37c7fbcc3169422e190998bdfc9b"
         }
       ]
+    },
+    "meseret": {
+      "slug": "meseret-studio",
+      "recipe": "meseret-advisory",
+      "heroRole": "hero.meseret",
+      "detailRole": "scene1.meseret",
+      "heroAsset": "/assets/appointment/brand-experience/support/meseret-v3/hero.webp",
+      "heroChecksum": "61f782653622c5fd8490b43a93e09040e3d1d9d70e726b6aa98535e2f92936f8",
+      "logoAsset": "/assets/appointment/brand-experience/support/meseret-v3/logo.webp",
+      "logoChecksum": "46d41bab8b2eea3523c2ec69c1dd1b0092588f2f1c76974af0fe5f938d22f309",
+      "faviconAsset": "/assets/appointment/brand-experience/support/meseret-v3/favicon.png",
+      "faviconChecksum": "402291502cf690dc9795ca627477f0128190de1314da65602345c6f184142e13",
+      "benchmark": "docs/design-references/public-experience/meseret/v2-day-in-addis-desktop.png",
+      "supportAssets": [
+        {
+          "asset": "/assets/appointment/brand-experience/support/meseret-v3/portrait.webp",
+          "checksum": "9c36e87dadfaec900fe6fdd4c76623c08b9a4fae43a11c2899858d604ac78488"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meseret-v3/scene1.webp",
+          "checksum": "7b58db49cb68bdbdde6a20f0ae88cfc96b54e04cae0f2ba66d20e67750c348e5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meseret-v3/scene2.webp",
+          "checksum": "7cea7d798e6448bf948e613775d35675d9b51e0fed9168f2d7f07fbc6ae365f3"
+        }
+      ],
+      "providerAssets": [
+        {
+          "name": "Rahel Abebe",
+          "asset": "/assets/appointment/brand-experience/support/meseret-v3/portrait.webp",
+          "checksum": "9c36e87dadfaec900fe6fdd4c76623c08b9a4fae43a11c2899858d604ac78488"
+        }
+      ],
+      "templateAssets": [
+        {
+          "asset": "/assets/appointment/brand-experience/support/meseret-v3/favicon.png",
+          "checksum": "402291502cf690dc9795ca627477f0128190de1314da65602345c6f184142e13"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meseret-v3/hero-m.avif",
+          "checksum": "5303cfdc58852ad599625aac4753282e773d3e0c203d15315bdada0dc54b09f9"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meseret-v3/hero-m.webp",
+          "checksum": "2d0915e9d3974c7e64a1c25d302bbf3317163a98db174783fbef5764d676add3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meseret-v3/hero.avif",
+          "checksum": "b890d28693761c8e273215814072f4d7817f4f8d4e2107eed5bfed14801e988b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meseret-v3/hero.webp",
+          "checksum": "61f782653622c5fd8490b43a93e09040e3d1d9d70e726b6aa98535e2f92936f8"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meseret-v3/logo.webp",
+          "checksum": "46d41bab8b2eea3523c2ec69c1dd1b0092588f2f1c76974af0fe5f938d22f309"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meseret-v3/portrait-m.avif",
+          "checksum": "d502e801d2e591478acdb4ba31bf313230694aebc7c5753b296c601974cea292"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meseret-v3/portrait-m.webp",
+          "checksum": "7bd9defb43a6b321ceca51f0dcf5846a04be4f7df4f5a37c8d509c57a19d6ab6"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meseret-v3/portrait.avif",
+          "checksum": "00fcd9b48da4ddf3e2ef01a55daa7412e5c1888fecfc3413bd1ba7a5c798dac7"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meseret-v3/portrait.webp",
+          "checksum": "9c36e87dadfaec900fe6fdd4c76623c08b9a4fae43a11c2899858d604ac78488"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meseret-v3/scene1-m.avif",
+          "checksum": "1be85666ceccad04dc0d3413d029f2fc95ea9754e0559526ed985190f052df6f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meseret-v3/scene1-m.webp",
+          "checksum": "0b575079bbe8e0d2bb9d4db5b4cf06e767b16dfcf3ecd52c48f34c4adc7e4519"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meseret-v3/scene1.avif",
+          "checksum": "2a1ea185e30c01a2402bc77e39deb9e1909f699712b56bb0707a06449d8e2698"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meseret-v3/scene1.webp",
+          "checksum": "7b58db49cb68bdbdde6a20f0ae88cfc96b54e04cae0f2ba66d20e67750c348e5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meseret-v3/scene2-m.avif",
+          "checksum": "27741cca4b49d9a34f4ae25f543df57c464c4a13490804f336f3f8cbf4b2e8d6"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meseret-v3/scene2-m.webp",
+          "checksum": "8e8b1c289cbe927387e72a2d11af00cc6fcae230a9910d6d7fa12ec3bf1722d6"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meseret-v3/scene2.avif",
+          "checksum": "3eef62e2e9c725753ae601f1f81c08af70a6b4090f3f31c2d1abb280f6689b4f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/meseret-v3/scene2.webp",
+          "checksum": "7cea7d798e6448bf948e613775d35675d9b51e0fed9168f2d7f07fbc6ae365f3"
+        }
+      ],
+      "previewAssets": [
+        {
+          "viewport": "desktop",
+          "asset": "/assets/appointment/brand-experience/template-gallery/meseret-advisory-desktop.webp",
+          "checksum": "b6476e107c35b7d3a2565da6163f3abd2a03d697f504cea9c124f31879383c52"
+        },
+        {
+          "viewport": "mobile",
+          "asset": "/assets/appointment/brand-experience/template-gallery/meseret-advisory-mobile.webp",
+          "checksum": "6b531b48533283ccac83cbbda2875eae79384b52254b7aec5ab0bfdc05e90ffe"
+        }
+      ]
     }
   }
 }

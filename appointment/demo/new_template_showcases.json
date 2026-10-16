@@ -222,5 +222,97 @@
       "en": "Bole inspection workshop",
       "am": "የቦሌ የተሽከርካሪ ምርመራ ማዕከል"
     }
+  },
+  {
+    "key": "meseret",
+    "recipe": "meseret-advisory",
+    "name": {
+      "en": "Meseret Advisory",
+      "am": "መሠረት የንግድ ምክር"
+    },
+    "person": {
+      "en": "Rahel Abebe",
+      "am": "ራሄል አበበ"
+    },
+    "title": {
+      "en": "Your business. Your next chapter.",
+      "am": "የእርስዎ ንግድ። ቀጣዩ ምዕራፍዎ።"
+    },
+    "subtitle": {
+      "en": "Practical accounting and business advice for shop owners, freelancers and growing businesses in Ethiopia.",
+      "am": "ለሱቅ ባለቤቶች፣ ለግል ሠራተኞችና ለሚያድጉ ንግዶች ተግባራዊ የሒሳብና የንግድ ምክር።"
+    },
+    "eyebrow": {
+      "en": "A working day in Addis",
+      "am": "በአዲስ አበባ አንድ የሥራ ቀን"
+    },
+    "about": {
+      "en": "A conversation that changes the view.",
+      "am": "አዲስ እይታ የሚሰጥ ውይይት።"
+    },
+    "bio": {
+      "en": "Bring your records, your questions or an idea. We make room to understand your business and agree on practical next steps.",
+      "am": "መዝገቦችዎን፣ ጥያቄዎችዎን ወይም ሐሳብዎን ይዘው ይምጡ። ንግድዎን ለመረዳትና በተግባራዊ ቀጣይ እርምጃዎች ላይ ለመስማማት ጊዜ እንወስዳለን።"
+    },
+    "menu": {
+      "en": "Make room for progress.",
+      "am": "ለዕድገት ጊዜ ይስጡ።"
+    },
+    "cta": {
+      "en": "Make room for a conversation.",
+      "am": "ለውይይት ጊዜ ይስጡ።"
+    },
+    "color": "#632b55",
+    "dark": "#efb9db",
+    "soft": "#f7e1d5",
+    "font": "meron-atelier.v2",
+    "direction": "A Day in Addis",
+    "services": [
+      {
+        "name": {
+          "en": "Bookkeeping review",
+          "am": "የሒሳብ መዝገብ ግምገማ"
+        },
+        "duration": 60,
+        "price": 2000,
+        "summary": {
+          "en": "Bring recent sales and expense records. Leave with a clearer plan.",
+          "am": "የቅርብ ጊዜ ሽያጭና ወጪ መዝገቦችን ይዘው ይምጡ። ግልጽ ዕቅድ ይዘው ይውጡ።"
+        },
+        "meet": "in_person"
+      },
+      {
+        "name": {
+          "en": "Business setup consultation",
+          "am": "የንግድ ማቋቋም ምክክር"
+        },
+        "duration": 90,
+        "price": 3500,
+        "summary": {
+          "en": "Discuss your idea, structure and the records to prepare.",
+          "am": "ስለሐሳብዎ፣ አደረጃጀቱና ማዘጋጀት ስላለብዎት መዝገቦች ይወያዩ።"
+        },
+        "meet": "in_person"
+      },
+      {
+        "name": {
+          "en": "Introductory conversation",
+          "am": "የትውውቅ ውይይት"
+        },
+        "duration": 20,
+        "price": 0,
+        "summary": {
+          "en": "Tell us about your business and the support you need.",
+          "am": "ስለንግድዎና ስለሚፈልጉት ድጋፍ ይንገሩን።"
+        },
+        "meet": "online"
+      }
+    ],
+    "slug": "meseret-studio",
+    "prefix": "meseret",
+    "placeLabel": {
+      "en": "Bole advisory office",
+      "am": "የቦሌ የምክር ቢሮ"
+    }
   }
 ]

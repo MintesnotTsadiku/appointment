@@ -220,5 +220,23 @@
         "version": 3
       }
     ]
+  },
+  "meseret-advisory": {
+    "palettes": [
+      {
+        "key": "default",
+        "label": "Template original",
+        "primitive": "meseret-advisory",
+        "version": 3
+      }
+    ],
+    "fonts": [
+      {
+        "key": "default",
+        "label": "Template original",
+        "primitive": "meseret-advisory",
+        "version": 3
+      }
+    ]
   }
 }

@@ -8,6 +8,7 @@ import { lazy, Suspense, type ComponentType, type LazyExoticComponent } from "re
 const MOMENTS: Record<string, LazyExoticComponent<ComponentType>> = {
   "enkua-photography@3": lazy(() => import("./enkua-v3/Moment")),
   "mizan-inspection@3": lazy(() => import("./mizan-v3/Moment")),
+  "meseret-advisory@3": lazy(() => import("./meseret-v3/Moment")),
   "bloom-hair@3": lazy(() => import("./bloom-v3/BloomMoment")),
   "meron-atelier@3": lazy(() => import("./meron-v3/MeronMoment")),
   "abugida-language@3": lazy(() => import("./abugida-v3/AbugidaMoment")),

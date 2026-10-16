@@ -1,0 +1,137 @@
+{
+  "kind": "recipe",
+  "contract": "appointment-curated-recipe.v1",
+  "key": "meseret-advisory",
+  "version": 3,
+  "label": "Meseret Advisory",
+  "description": "Practical accounting and business advice for shop owners, freelancers and growing businesses in Ethiopia.",
+  "audience": "A working day in Addis",
+  "mood": "crafted-editorial",
+  "supportedLocales": [
+    "en",
+    "am"
+  ],
+  "accessibility": {
+    "level": "AA",
+    "focusVisible": true,
+    "reducedMotion": true
+  },
+  "expression": {
+    "imagery": "mixed",
+    "motion": "calm",
+    "darkMode": "tonal",
+    "holiday": "greeting",
+    "success": "static",
+    "greeting": "header"
+  },
+  "primitives": {
+    "palette": {
+      "key": "meseret-advisory",
+      "version": 3
+    },
+    "typography": {
+      "key": "meseret-advisory",
+      "version": 3
+    },
+    "imagery": {
+      "key": "meseret-advisory",
+      "version": 3
+    },
+    "layout": {
+      "key": "meseret-advisory",
+      "version": 3
+    },
+    "surface": {
+      "key": "meseret-advisory",
+      "version": 3
+    }
+  },
+  "supportedSections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "requiredSections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "defaultInputs": {
+    "motion": "calm",
+    "presentationDensity": "comfortable",
+    "heroAsset": "hero.meseret",
+    "detailAsset": "scene1.meseret"
+  },
+  "adjustments": {
+    "accentColor": {
+      "type": "hex-color",
+      "optional": true,
+      "protected": false
+    },
+    "motion": {
+      "type": "enum",
+      "choices": [
+        "calm"
+      ],
+      "optional": true
+    },
+    "presentationDensity": {
+      "type": "enum",
+      "choices": [
+        "comfortable",
+        "spacious"
+      ],
+      "optional": true
+    },
+    "heroAsset": {
+      "type": "asset-role",
+      "choices": [
+        "hero.meseret"
+      ],
+      "optional": true
+    },
+    "detailAsset": {
+      "type": "asset-role",
+      "choices": [
+        "scene1.meseret",
+        "scene2.meseret"
+      ],
+      "optional": true
+    }
+  },
+  "actionIntents": [
+    "booking_start",
+    "service_selection",
+    "provider_selection",
+    "call",
+    "directions",
+    "contact",
+    "faq_jump",
+    "back_to_site"
+  ],
+  "contentRichness": {
+    "default": "rich",
+    "choices": [
+      "compact",
+      "standard",
+      "rich"
+    ],
+    "requiredForCertification": [
+      "process"
+    ]
+  }
+}
