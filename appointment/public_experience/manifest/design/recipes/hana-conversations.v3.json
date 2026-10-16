@@ -1,0 +1,137 @@
+{
+  "kind": "recipe",
+  "contract": "appointment-curated-recipe.v1",
+  "key": "hana-conversations",
+  "version": 3,
+  "label": "Hana Bekele",
+  "description": "I collect questions, everyday stories and conversations that bring us a little closer.",
+  "audience": "People · Places · Ideas",
+  "mood": "crafted-editorial",
+  "supportedLocales": [
+    "en",
+    "am"
+  ],
+  "accessibility": {
+    "level": "AA",
+    "focusVisible": true,
+    "reducedMotion": true
+  },
+  "expression": {
+    "imagery": "mixed",
+    "motion": "calm",
+    "darkMode": "tonal",
+    "holiday": "greeting",
+    "success": "static",
+    "greeting": "header"
+  },
+  "primitives": {
+    "palette": {
+      "key": "hana-conversations",
+      "version": 3
+    },
+    "typography": {
+      "key": "hana-conversations",
+      "version": 3
+    },
+    "imagery": {
+      "key": "hana-conversations",
+      "version": 3
+    },
+    "layout": {
+      "key": "hana-conversations",
+      "version": 3
+    },
+    "surface": {
+      "key": "hana-conversations",
+      "version": 3
+    }
+  },
+  "supportedSections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "requiredSections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "defaultInputs": {
+    "motion": "calm",
+    "presentationDensity": "comfortable",
+    "heroAsset": "hero.hana",
+    "detailAsset": "scene1.hana"
+  },
+  "adjustments": {
+    "accentColor": {
+      "type": "hex-color",
+      "optional": true,
+      "protected": false
+    },
+    "motion": {
+      "type": "enum",
+      "choices": [
+        "calm"
+      ],
+      "optional": true
+    },
+    "presentationDensity": {
+      "type": "enum",
+      "choices": [
+        "comfortable",
+        "spacious"
+      ],
+      "optional": true
+    },
+    "heroAsset": {
+      "type": "asset-role",
+      "choices": [
+        "hero.hana"
+      ],
+      "optional": true
+    },
+    "detailAsset": {
+      "type": "asset-role",
+      "choices": [
+        "scene1.hana",
+        "scene2.hana"
+      ],
+      "optional": true
+    }
+  },
+  "actionIntents": [
+    "booking_start",
+    "service_selection",
+    "provider_selection",
+    "call",
+    "directions",
+    "contact",
+    "faq_jump",
+    "back_to_site"
+  ],
+  "contentRichness": {
+    "default": "rich",
+    "choices": [
+      "compact",
+      "standard",
+      "rich"
+    ],
+    "requiredForCertification": [
+      "process"
+    ]
+  }
+}

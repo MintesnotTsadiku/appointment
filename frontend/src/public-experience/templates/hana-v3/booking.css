@@ -1,0 +1,8 @@
+[data-bk-skin="hana-v3"] {
+  --bk-heading-font: var(--pe-font-display);
+  --bk-action-radius: 3px;
+}
+[data-bk-skin="hana-v3"] [data-bk-frame] {
+  border-radius: 0;
+  border-bottom: 3px solid var(--accent-primary);
+}

@@ -3896,6 +3896,126 @@
           "checksum": "80dbb4649d5529514a9211a5e6c0ce2843d888b8891645a66781906f9f5496cb"
         }
       ]
+    },
+    "hana": {
+      "slug": "hana-bekele",
+      "recipe": "hana-conversations",
+      "heroRole": "hero.hana",
+      "detailRole": "scene1.hana",
+      "heroAsset": "/assets/appointment/brand-experience/support/hana-v3/hero.webp",
+      "heroChecksum": "14a27a22161ed607af2392fc5524d71f1c426fe800600eeadb52f640cb0d42b6",
+      "logoAsset": "/assets/appointment/brand-experience/support/hana-v3/logo.webp",
+      "logoChecksum": "cb8e9cd1af9164416948e80854ac6a21cb76a8bf8f1ec3bc4ab0f4a64f9b49a1",
+      "faviconAsset": "/assets/appointment/brand-experience/support/hana-v3/favicon.png",
+      "faviconChecksum": "723b55561d03dcf5bb77c3e660c08a0beeb27e827361eb72cf951f253270568f",
+      "benchmark": "docs/design-references/public-experience/hana/revision-2-01-addis-field-notebook.png",
+      "supportAssets": [
+        {
+          "asset": "/assets/appointment/brand-experience/support/hana-v3/portrait.webp",
+          "checksum": "bb23b877b0b7acb5cf6c351c9485aed8e4a86384d3d9ce12660dd8dae3b26749"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/hana-v3/scene1.webp",
+          "checksum": "cfbab0860e80f4a5028f447b15ccbd6ea34f0e4385541615a9e91847161f2385"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/hana-v3/scene2.webp",
+          "checksum": "c506fbc868881d2adeb9bc487a0e4226095fd3ca76acc6b84fe1a9aa44881fd4"
+        }
+      ],
+      "providerAssets": [
+        {
+          "name": "Hana Bekele",
+          "asset": "/assets/appointment/brand-experience/support/hana-v3/portrait.webp",
+          "checksum": "bb23b877b0b7acb5cf6c351c9485aed8e4a86384d3d9ce12660dd8dae3b26749"
+        }
+      ],
+      "templateAssets": [
+        {
+          "asset": "/assets/appointment/brand-experience/support/hana-v3/favicon.png",
+          "checksum": "723b55561d03dcf5bb77c3e660c08a0beeb27e827361eb72cf951f253270568f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/hana-v3/hero-m.avif",
+          "checksum": "034a90a4739666dbc784e7edcc9e91ab703db71e043a60dcb9de2410e1de9c46"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/hana-v3/hero-m.webp",
+          "checksum": "c9f3130456d0ee24c237e3e6558260d1c018ae0ad962ddd97a5411232f84bdaa"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/hana-v3/hero.avif",
+          "checksum": "7eb675cb5dfefe15cd0a1e9149260a9450c9f07ae3b504bda418303cf3fc2d97"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/hana-v3/hero.webp",
+          "checksum": "14a27a22161ed607af2392fc5524d71f1c426fe800600eeadb52f640cb0d42b6"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/hana-v3/logo.webp",
+          "checksum": "cb8e9cd1af9164416948e80854ac6a21cb76a8bf8f1ec3bc4ab0f4a64f9b49a1"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/hana-v3/portrait-m.avif",
+          "checksum": "51bff0ef1ca160af07a0850d3b090102d3ed029336073ed282cdcf21aff0e449"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/hana-v3/portrait-m.webp",
+          "checksum": "26edb983bfbfbada4718179879bd1fe826fab3724b7bd460e3b26e8161eec5c5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/hana-v3/portrait.avif",
+          "checksum": "796d482f77988ea701bb566738342facdf88c9bc6de96feabbbb8a7b20ca32d1"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/hana-v3/portrait.webp",
+          "checksum": "bb23b877b0b7acb5cf6c351c9485aed8e4a86384d3d9ce12660dd8dae3b26749"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/hana-v3/scene1-m.avif",
+          "checksum": "2be5b8421d5f7606cd6966f77c346ebe3050eeef9c4042cc0f117a4d307caad6"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/hana-v3/scene1-m.webp",
+          "checksum": "6cc28b18baf2862a5e1c5bf8941ada72fad214678693232e64d02b1d6b84214f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/hana-v3/scene1.avif",
+          "checksum": "fe63ae44309f5893249339e3f6ca37ddbe50ce8084fed465c32a606cd64d6c0a"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/hana-v3/scene1.webp",
+          "checksum": "cfbab0860e80f4a5028f447b15ccbd6ea34f0e4385541615a9e91847161f2385"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/hana-v3/scene2-m.avif",
+          "checksum": "05bc6fd26263717e88e2df3cf69df726d79a7599b2744af3af4048243df9f59f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/hana-v3/scene2-m.webp",
+          "checksum": "f37cf96365af5ac2fe4bbf7f3139bb4f1a23aa77f3e0508a3245fb5e9eb982ff"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/hana-v3/scene2.avif",
+          "checksum": "740927f552cfc705c412addca3e8f85d4dcbaae62ba11e5318bcec721465ee4b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/hana-v3/scene2.webp",
+          "checksum": "c506fbc868881d2adeb9bc487a0e4226095fd3ca76acc6b84fe1a9aa44881fd4"
+        }
+      ],
+      "previewAssets": [
+        {
+          "viewport": "desktop",
+          "asset": "/assets/appointment/brand-experience/template-gallery/hana-conversations-desktop.webp",
+          "checksum": "4079b4629ea2c628f0e2015755753ea734902f9f79d47245daea8acd99d4260a"
+        },
+        {
+          "viewport": "mobile",
+          "asset": "/assets/appointment/brand-experience/template-gallery/hana-conversations-mobile.webp",
+          "checksum": "1565231354c4f4c1efecb764ae710750b4f2431b3958018145ee85daa23b5239"
+        }
+      ]
     }
   }
 }

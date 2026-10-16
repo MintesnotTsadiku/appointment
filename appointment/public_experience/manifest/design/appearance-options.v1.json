@@ -256,5 +256,23 @@
         "version": 3
       }
     ]
+  },
+  "hana-conversations": {
+    "palettes": [
+      {
+        "key": "default",
+        "label": "Template original",
+        "primitive": "hana-conversations",
+        "version": 3
+      }
+    ],
+    "fonts": [
+      {
+        "key": "default",
+        "label": "Template original",
+        "primitive": "hana-conversations",
+        "version": 3
+      }
+    ]
   }
 }

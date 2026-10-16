@@ -1,0 +1,25 @@
+{
+  "source": "Codex CLI gpt-6.1-sol",
+  "date": "2026-10-16",
+  "processing": "2x2 sheet cropped into four quadrants; WebP and AVIF; 480px phone versions; no upscale",
+  "checksums": {
+    "scene1-m.webp": "6cc28b18baf2862a5e1c5bf8941ada72fad214678693232e64d02b1d6b84214f",
+    "portrait-m.webp": "26edb983bfbfbada4718179879bd1fe826fab3724b7bd460e3b26e8161eec5c5",
+    "hero-m.webp": "c9f3130456d0ee24c237e3e6558260d1c018ae0ad962ddd97a5411232f84bdaa",
+    "scene2-m.avif": "05bc6fd26263717e88e2df3cf69df726d79a7599b2744af3af4048243df9f59f",
+    "portrait.avif": "796d482f77988ea701bb566738342facdf88c9bc6de96feabbbb8a7b20ca32d1",
+    "favicon.png": "723b55561d03dcf5bb77c3e660c08a0beeb27e827361eb72cf951f253270568f",
+    "logo.webp": "cb8e9cd1af9164416948e80854ac6a21cb76a8bf8f1ec3bc4ab0f4a64f9b49a1",
+    "scene1.webp": "cfbab0860e80f4a5028f447b15ccbd6ea34f0e4385541615a9e91847161f2385",
+    "scene1.avif": "fe63ae44309f5893249339e3f6ca37ddbe50ce8084fed465c32a606cd64d6c0a",
+    "hero.avif": "7eb675cb5dfefe15cd0a1e9149260a9450c9f07ae3b504bda418303cf3fc2d97",
+    "portrait-m.avif": "51bff0ef1ca160af07a0850d3b090102d3ed029336073ed282cdcf21aff0e449",
+    "portrait.webp": "bb23b877b0b7acb5cf6c351c9485aed8e4a86384d3d9ce12660dd8dae3b26749",
+    "hero-m.avif": "034a90a4739666dbc784e7edcc9e91ab703db71e043a60dcb9de2410e1de9c46",
+    "scene1-m.avif": "2be5b8421d5f7606cd6966f77c346ebe3050eeef9c4042cc0f117a4d307caad6",
+    "scene2.webp": "c506fbc868881d2adeb9bc487a0e4226095fd3ca76acc6b84fe1a9aa44881fd4",
+    "scene2.avif": "740927f552cfc705c412addca3e8f85d4dcbaae62ba11e5318bcec721465ee4b",
+    "scene2-m.webp": "f37cf96365af5ac2fe4bbf7f3139bb4f1a23aa77f3e0508a3245fb5e9eb982ff",
+    "hero.webp": "14a27a22161ed607af2392fc5524d71f1c426fe800600eeadb52f640cb0d42b6"
+  }
+}

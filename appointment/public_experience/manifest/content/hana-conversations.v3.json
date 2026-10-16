@@ -1,0 +1,170 @@
+{
+  "contract": "appointment-starter-content.v1",
+  "recipe": "hana-conversations",
+  "version": 3,
+  "note": "Owner-editable starter copy. Names, addresses, fees and services come from business records.",
+  "sections": {
+    "hero": {
+      "eyebrow": {
+        "en": "People · Places · Ideas",
+        "am": "ሰዎች · ቦታዎች · ሐሳቦች"
+      },
+      "title": {
+        "en": "Here, in Addis.",
+        "am": "እዚህ፣ በአዲስ አበባ።"
+      },
+      "subtitle": {
+        "en": "I collect questions, everyday stories and conversations that bring us a little closer.",
+        "am": "ጥያቄዎችን፣ የዕለት ተዕለት ታሪኮችንና እርስ በርስ የሚያቀራርቡንን ውይይቶች እሰበስባለሁ።"
+      },
+      "primaryAction": {
+        "intent": "booking_start",
+        "label": {
+          "en": "Pick a moment.",
+          "am": "ጊዜ ይምረጡ።"
+        },
+        "placement": "primary"
+      },
+      "secondaryAction": {
+        "intent": "faq_jump",
+        "label": {
+          "en": "Before you book",
+          "am": "ከመያዝዎ በፊት"
+        },
+        "placement": "secondary"
+      }
+    },
+    "services": {
+      "title": {
+        "en": "Let's compare notes.",
+        "am": "ሐሳብ እንለዋወጥ።"
+      },
+      "intro": {
+        "en": "Choose the time and format that work for you.",
+        "am": "ለእርስዎ የሚመች ሰዓት እና የቆይታ አይነት ይምረጡ።"
+      }
+    },
+    "about": {
+      "title": {
+        "en": "The person behind the questions.",
+        "am": "ከጥያቄዎቹ ጀርባ ያለችው ሰው።"
+      },
+      "body": {
+        "en": "I collect questions, everyday stories and conversations that bring us a little closer.",
+        "am": "ጥያቄዎችን፣ የዕለት ተዕለት ታሪኮችንና እርስ በርስ የሚያቀራርቡንን ውይይቶች እሰበስባለሁ።"
+      }
+    },
+    "providers": {
+      "title": {
+        "en": "The person behind the work",
+        "am": "ከሥራው ጀርባ ያለው ባለሙያ"
+      }
+    },
+    "process": {
+      "title": {
+        "en": "A little preparation. A better visit.",
+        "am": "ጥቂት ዝግጅት። የተሻለ ቆይታ።"
+      },
+      "items": [
+        {
+          "title": {
+            "en": "Choose your session",
+            "am": "ቆይታዎን ይምረጡ"
+          },
+          "step": 1,
+          "description": {
+            "en": "Read the scope, duration and fee before choosing.",
+            "am": "ከመምረጥዎ በፊት የአገልግሎቱን ዝርዝር፣ ቆይታ እና ክፍያ ያንብቡ።"
+          }
+        },
+        {
+          "title": {
+            "en": "Find your time",
+            "am": "የሚመችዎን ሰዓት ያግኙ"
+          },
+          "step": 2,
+          "description": {
+            "en": "The calendar shows the times available to book.",
+            "am": "ቀን መቁጠሪያው ለቀጠሮ ክፍት የሆኑ ሰዓቶችን ያሳያል።"
+          }
+        },
+        {
+          "title": {
+            "en": "Come with your questions",
+            "am": "ጥያቄዎችዎን ይዘው ይምጡ"
+          },
+          "step": 3,
+          "description": {
+            "en": "Use the booking note to tell us what you would like to discuss.",
+            "am": "ስለምን መወያየት እንደሚፈልጉ በቀጠሮ ማስታወሻው ይጻፉ።"
+          }
+        }
+      ]
+    },
+    "locations": {
+      "title": {
+        "en": "Where we meet",
+        "am": "የምንገናኝበት ቦታ"
+      }
+    },
+    "faq": {
+      "title": {
+        "en": "Good to know",
+        "am": "ማወቅ የሚጠቅም"
+      },
+      "items": [
+        {
+          "question": {
+            "en": "Can I choose my language?",
+            "am": "ቋንቋ መምረጥ እችላለሁ?"
+          },
+          "answer": {
+            "en": "Sessions are available in Amharic and English. Mention your preference when booking.",
+            "am": "ቆይታዎች በአማርኛ እና በእንግሊዝኛ ይካሄዳሉ። ቀጠሮ ሲይዙ ምርጫዎን ይግለጹ።"
+          }
+        },
+        {
+          "question": {
+            "en": "What if I need a different time?",
+            "am": "ሌላ ሰዓት ብፈልግስ?"
+          },
+          "answer": {
+            "en": "Contact us before your appointment to discuss changing the time.",
+            "am": "ሰዓቱን ለመቀየር ከቀጠሮዎ በፊት ያግኙን።"
+          }
+        }
+      ]
+    },
+    "contact": {
+      "title": {
+        "en": "Let us talk",
+        "am": "እንነጋገር"
+      }
+    },
+    "booking_cta": {
+      "title": {
+        "en": "Pick a moment.",
+        "am": "ጊዜ ይምረጡ።"
+      },
+      "body": {
+        "en": "I collect questions, everyday stories and conversations that bring us a little closer.",
+        "am": "ጥያቄዎችን፣ የዕለት ተዕለት ታሪኮችንና እርስ በርስ የሚያቀራርቡንን ውይይቶች እሰበስባለሁ።"
+      },
+      "action": {
+        "intent": "booking_start",
+        "label": {
+          "en": "Pick a moment.",
+          "am": "ጊዜ ይምረጡ።"
+        },
+        "placement": "primary"
+      }
+    },
+    "footer": {
+      "body": {
+        "en": "I collect questions, everyday stories and conversations that bring us a little closer.",
+        "am": "ጥያቄዎችን፣ የዕለት ተዕለት ታሪኮችንና እርስ በርስ የሚያቀራርቡንን ውይይቶች እሰበስባለሁ።"
+      },
+      "items": []
+    }
+  }
+}

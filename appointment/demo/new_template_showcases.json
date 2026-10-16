@@ -419,5 +419,110 @@
       "en": "Bole coffee studio",
       "am": "የቦሌ የቡና ስቱዲዮ"
     }
+  },
+  {
+    "key": "hana",
+    "recipe": "hana-conversations",
+    "name": {
+      "en": "Hana Bekele",
+      "am": "ሐና በቀለ"
+    },
+    "person": {
+      "en": "Hana Bekele",
+      "am": "ሐና በቀለ"
+    },
+    "title": {
+      "en": "Here, in Addis.",
+      "am": "እዚህ፣ በአዲስ አበባ።"
+    },
+    "subtitle": {
+      "en": "I collect questions, everyday stories and conversations that bring us a little closer.",
+      "am": "ጥያቄዎችን፣ የዕለት ተዕለት ታሪኮችንና እርስ በርስ የሚያቀራርቡንን ውይይቶች እሰበስባለሁ።"
+    },
+    "eyebrow": {
+      "en": "People · Places · Ideas",
+      "am": "ሰዎች · ቦታዎች · ሐሳቦች"
+    },
+    "about": {
+      "en": "The person behind the questions.",
+      "am": "ከጥያቄዎቹ ጀርባ ያለችው ሰው።"
+    },
+    "bio": {
+      "en": "I am Hana, a podcaster and curious listener in Addis Ababa. From a studio conversation to coffee in the city, there is always more to learn.",
+      "am": "ሐና እባላለሁ፤ በአዲስ አበባ ፖድካስት አዘጋጅና ጉጉት ያላት አዳማጭ ነኝ። ከስቱዲዮ ውይይት እስከ ከተማ ውስጥ ቡና ድረስ፣ ሁልጊዜ የምንማረው አለ።"
+    },
+    "menu": {
+      "en": "Let's compare notes.",
+      "am": "ሐሳብ እንለዋወጥ።"
+    },
+    "cta": {
+      "en": "Pick a moment.",
+      "am": "ጊዜ ይምረጡ።"
+    },
+    "color": "#a74016",
+    "dark": "#ffc291",
+    "soft": "#f2e5d6",
+    "font": "bloom-hair.v2",
+    "direction": "Addis Field Notebook",
+    "services": [
+      {
+        "name": {
+          "en": "Personal conversation",
+          "am": "የግል ውይይት"
+        },
+        "duration": 20,
+        "price": 1500,
+        "summary": {
+          "en": "Bring a topic, a question or a story you want to share.",
+          "am": "ርዕስ፣ ጥያቄ ወይም ሊያካፍሉት የሚፈልጉትን ታሪክ ይዘው ይምጡ።"
+        },
+        "meet": "online"
+      },
+      {
+        "name": {
+          "en": "Podcast and content feedback",
+          "am": "የፖድካስትና ይዘት አስተያየት"
+        },
+        "duration": 45,
+        "price": 4000,
+        "summary": {
+          "en": "Discuss one idea or piece of work and possible next steps.",
+          "am": "ስለአንድ ሐሳብ ወይም ሥራና ስለቀጣይ እርምጃዎች ይወያዩ።"
+        },
+        "meet": "online"
+      },
+      {
+        "name": {
+          "en": "Coffee and conversation",
+          "am": "ቡናና ውይይት"
+        },
+        "duration": 60,
+        "price": 5000,
+        "summary": {
+          "en": "An hour together at the selected Addis meeting place.",
+          "am": "በተመረጠው የአዲስ አበባ መገናኛ ቦታ የአንድ ሰዓት ቆይታ።"
+        },
+        "meet": "in_person"
+      },
+      {
+        "name": {
+          "en": "Lunch conversation",
+          "am": "የምሳ ውይይት"
+        },
+        "duration": 90,
+        "price": 9000,
+        "summary": {
+          "en": "Time together at our meeting place. The meal is charged separately.",
+          "am": "በመገናኛ ቦታችን አብረን የምናሳልፈው ጊዜ። የምግብ ክፍያ በተለየ ነው።"
+        },
+        "meet": "in_person"
+      }
+    ],
+    "slug": "hana-bekele",
+    "prefix": "hana",
+    "placeLabel": {
+      "en": "Bole meeting point",
+      "am": "የቦሌ መገናኛ ቦታ"
+    }
   }
 ]

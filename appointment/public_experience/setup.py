@@ -20,6 +20,7 @@ CATALOG = {
     "mizan-inspection": ("automotive", "bold", "comfortable"),
     "meseret-advisory": ("accounting", "editorial", "spacious"),
     "buna-experiences": ("coffee", "warm", "comfortable"),
+    "hana-conversations": ("creator", "bold", "expressive"),
 
     "selam-movement": ("wellness", "warm", "expressive"),
     "bloom-hair": ("beauty", "bold", "expressive"),
