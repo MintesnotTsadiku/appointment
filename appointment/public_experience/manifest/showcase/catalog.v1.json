@@ -4016,6 +4016,126 @@
           "checksum": "1565231354c4f4c1efecb764ae710750b4f2431b3958018145ee85daa23b5239"
         }
       ]
+    },
+    "dawit": {
+      "slug": "dr-dawit",
+      "recipe": "dawit-specialist",
+      "heroRole": "hero.dawit",
+      "detailRole": "scene1.dawit",
+      "heroAsset": "/assets/appointment/brand-experience/support/dawit-v3/hero.webp",
+      "heroChecksum": "a1f88d1401a8eee5f79286ef5fc5bb4262ad6c6de0d5b5d1d8f06ba87849e91d",
+      "logoAsset": "/assets/appointment/brand-experience/support/dawit-v3/logo.webp",
+      "logoChecksum": "f5d2a245d00dc333f34113f44c561eb1fd03910b2667e759296d52151819585e",
+      "faviconAsset": "/assets/appointment/brand-experience/support/dawit-v3/favicon.png",
+      "faviconChecksum": "6978047bb00a7104bf6e6ec566a7973fc7b7691356581a3e6733244e8f922c46",
+      "benchmark": "docs/design-references/public-experience/dawit/01-medical-journal-v2.png",
+      "supportAssets": [
+        {
+          "asset": "/assets/appointment/brand-experience/support/dawit-v3/portrait.webp",
+          "checksum": "5e8ab6ef04ed23585984c9aa3838a5f918fb03199d7f0b8ca3684f4bd1da2636"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/dawit-v3/scene1.webp",
+          "checksum": "961f9b5a7973f32ae0446aed2be0400790f282f59c9380f5380adcf411ec4116"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/dawit-v3/scene2.webp",
+          "checksum": "499823b05a81c3b1ca537422fdcd2625e252745eb990c67e68fce42894c21c16"
+        }
+      ],
+      "providerAssets": [
+        {
+          "name": "Dawit Tesfaye",
+          "asset": "/assets/appointment/brand-experience/support/dawit-v3/portrait.webp",
+          "checksum": "5e8ab6ef04ed23585984c9aa3838a5f918fb03199d7f0b8ca3684f4bd1da2636"
+        }
+      ],
+      "templateAssets": [
+        {
+          "asset": "/assets/appointment/brand-experience/support/dawit-v3/favicon.png",
+          "checksum": "6978047bb00a7104bf6e6ec566a7973fc7b7691356581a3e6733244e8f922c46"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/dawit-v3/hero-m.avif",
+          "checksum": "63f5dbc0870fe45db0dd7edd59b99ab45f32389ce60e66d7db6fc0bdd4972ca1"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/dawit-v3/hero-m.webp",
+          "checksum": "3945d0593fea7e808d256f0586396d85d132ff20087c159b965abe90d94abb6f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/dawit-v3/hero.avif",
+          "checksum": "5f994f4b6500ff24b3a29f5426f22e5a677e4a2239ff15b45684e758829e1ca0"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/dawit-v3/hero.webp",
+          "checksum": "a1f88d1401a8eee5f79286ef5fc5bb4262ad6c6de0d5b5d1d8f06ba87849e91d"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/dawit-v3/logo.webp",
+          "checksum": "f5d2a245d00dc333f34113f44c561eb1fd03910b2667e759296d52151819585e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/dawit-v3/portrait-m.avif",
+          "checksum": "59ee7972b508d27cbe47254907f525613fb51bb470b524b60e76808e13cfeba4"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/dawit-v3/portrait-m.webp",
+          "checksum": "667d99703b810eeba186f9bfd1826597e8aa3bf5a1f12bf4a630f18a0d58790e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/dawit-v3/portrait.avif",
+          "checksum": "750f6a17a7508f6f5e9aa2ed366b8d7335b5074ce626cdeb4f83b361d9b69d9e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/dawit-v3/portrait.webp",
+          "checksum": "5e8ab6ef04ed23585984c9aa3838a5f918fb03199d7f0b8ca3684f4bd1da2636"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/dawit-v3/scene1-m.avif",
+          "checksum": "19d24472f7df7a8437f9fa7e6d2d4ffdc5461f1e38f833b34465c61aa5428313"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/dawit-v3/scene1-m.webp",
+          "checksum": "22ee581ba58e4a0362c614d3bafa185b77778d7b93e8f18a78c0d3c66aaaa772"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/dawit-v3/scene1.avif",
+          "checksum": "54fc94f4414f3662c4b721f8aee4d1915aa49ad0c3d85c5ce7f33880f3811126"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/dawit-v3/scene1.webp",
+          "checksum": "961f9b5a7973f32ae0446aed2be0400790f282f59c9380f5380adcf411ec4116"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/dawit-v3/scene2-m.avif",
+          "checksum": "e337ed903c63bbc1963b8e7b1f71765c3d3654ffa357d2f47183f3be8dc5655c"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/dawit-v3/scene2-m.webp",
+          "checksum": "40033985ec4a331c2bcbca42139db40f2243b7af392bf6bdf40b66289a454ea5"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/dawit-v3/scene2.avif",
+          "checksum": "0fd7660d8ecc80814cae24a2c67dc663ce35dff7eb8be027ec0f58c95ed9fc24"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/dawit-v3/scene2.webp",
+          "checksum": "499823b05a81c3b1ca537422fdcd2625e252745eb990c67e68fce42894c21c16"
+        }
+      ],
+      "previewAssets": [
+        {
+          "viewport": "desktop",
+          "asset": "/assets/appointment/brand-experience/template-gallery/dawit-specialist-desktop.webp",
+          "checksum": "18111b096c91555a8c99c54b24ec14ae73fdec5f29d65f163cf6622acb89bd2c"
+        },
+        {
+          "viewport": "mobile",
+          "asset": "/assets/appointment/brand-experience/template-gallery/dawit-specialist-mobile.webp",
+          "checksum": "90ee35b8d61cb50fc9c483e36ce5701229562e97b2ba2c4145ed5d25f302852a"
+        }
+      ]
     }
   }
 }

@@ -27,6 +27,7 @@ RECIPE_MANIFESTS = {
     "meseret-advisory": {3: "public_experience/manifest/design/recipes/meseret-advisory.v3.json"},
     "buna-experiences": {3: "public_experience/manifest/design/recipes/buna-experiences.v3.json"},
     "hana-conversations": {3: "public_experience/manifest/design/recipes/hana-conversations.v3.json"},
+    "dawit-specialist": {3: "public_experience/manifest/design/recipes/dawit-specialist.v3.json"},
     "selam-movement": {
         1: "public_experience/manifest/design/recipes/selam-movement.v1.json",
         2: "public_experience/manifest/design/recipes/selam-movement.v2.json",

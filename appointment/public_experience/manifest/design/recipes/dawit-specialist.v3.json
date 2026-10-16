@@ -1,0 +1,137 @@
+{
+  "kind": "recipe",
+  "contract": "appointment-curated-recipe.v1",
+  "key": "dawit-specialist",
+  "version": 3,
+  "label": "Dr. Dawit Tesfaye",
+  "description": "Independent adult medical consultations. Understand today. Plan together.",
+  "audience": "Internal medicine specialist",
+  "mood": "crafted-editorial",
+  "supportedLocales": [
+    "en",
+    "am"
+  ],
+  "accessibility": {
+    "level": "AA",
+    "focusVisible": true,
+    "reducedMotion": true
+  },
+  "expression": {
+    "imagery": "mixed",
+    "motion": "calm",
+    "darkMode": "tonal",
+    "holiday": "greeting",
+    "success": "static",
+    "greeting": "header"
+  },
+  "primitives": {
+    "palette": {
+      "key": "dawit-specialist",
+      "version": 3
+    },
+    "typography": {
+      "key": "dawit-specialist",
+      "version": 3
+    },
+    "imagery": {
+      "key": "dawit-specialist",
+      "version": 3
+    },
+    "layout": {
+      "key": "dawit-specialist",
+      "version": 3
+    },
+    "surface": {
+      "key": "dawit-specialist",
+      "version": 3
+    }
+  },
+  "supportedSections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "requiredSections": [
+    "hero",
+    "services",
+    "providers",
+    "process",
+    "locations",
+    "about",
+    "faq",
+    "contact",
+    "booking_cta",
+    "footer"
+  ],
+  "defaultInputs": {
+    "motion": "calm",
+    "presentationDensity": "comfortable",
+    "heroAsset": "hero.dawit",
+    "detailAsset": "scene1.dawit"
+  },
+  "adjustments": {
+    "accentColor": {
+      "type": "hex-color",
+      "optional": true,
+      "protected": false
+    },
+    "motion": {
+      "type": "enum",
+      "choices": [
+        "calm"
+      ],
+      "optional": true
+    },
+    "presentationDensity": {
+      "type": "enum",
+      "choices": [
+        "comfortable",
+        "spacious"
+      ],
+      "optional": true
+    },
+    "heroAsset": {
+      "type": "asset-role",
+      "choices": [
+        "hero.dawit"
+      ],
+      "optional": true
+    },
+    "detailAsset": {
+      "type": "asset-role",
+      "choices": [
+        "scene1.dawit",
+        "scene2.dawit"
+      ],
+      "optional": true
+    }
+  },
+  "actionIntents": [
+    "booking_start",
+    "service_selection",
+    "provider_selection",
+    "call",
+    "directions",
+    "contact",
+    "faq_jump",
+    "back_to_site"
+  ],
+  "contentRichness": {
+    "default": "rich",
+    "choices": [
+      "compact",
+      "standard",
+      "rich"
+    ],
+    "requiredForCertification": [
+      "process"
+    ]
+  }
+}

@@ -11,6 +11,7 @@ const MOMENTS: Record<string, LazyExoticComponent<ComponentType>> = {
   "meseret-advisory@3": lazy(() => import("./meseret-v3/Moment")),
   "buna-experiences@3": lazy(() => import("./buna-v3/Moment")),
   "hana-conversations@3": lazy(() => import("./hana-v3/Moment")),
+  "dawit-specialist@3": lazy(() => import("./dawit-v3/Moment")),
   "bloom-hair@3": lazy(() => import("./bloom-v3/BloomMoment")),
   "meron-atelier@3": lazy(() => import("./meron-v3/MeronMoment")),
   "abugida-language@3": lazy(() => import("./abugida-v3/AbugidaMoment")),

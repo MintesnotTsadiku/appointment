@@ -524,5 +524,123 @@
       "en": "Bole meeting point",
       "am": "የቦሌ መገናኛ ቦታ"
     }
+  },
+  {
+    "key": "dawit",
+    "recipe": "dawit-specialist",
+    "name": {
+      "en": "Dr. Dawit Tesfaye",
+      "am": "ዶ/ር ዳዊት ተስፋዬ"
+    },
+    "person": {
+      "en": "Dawit Tesfaye",
+      "am": "ዳዊት ተስፋዬ"
+    },
+    "title": {
+      "en": "Time to listen.",
+      "am": "ለማዳመጥ ጊዜ።"
+    },
+    "subtitle": {
+      "en": "Independent adult medical consultations. Understand today. Plan together.",
+      "am": "ገለልተኛ የአዋቂዎች ሕክምና ምክክር። የዛሬውን ሁኔታ እንረዳ። አብረን እናቅድ።"
+    },
+    "eyebrow": {
+      "en": "Internal medicine specialist",
+      "am": "የውስጥ ደዌ ስፔሻሊስት"
+    },
+    "about": {
+      "en": "Ongoing care for adult health.",
+      "am": "ለአዋቂዎች ጤና ቀጣይነት ያለው እንክብካቤ።"
+    },
+    "bio": {
+      "en": "I make time to listen to your concerns, review existing results and discuss the next steps. Only my independent consultation hours appear here.",
+      "am": "ስጋቶችዎን ለማዳመጥ፣ ያሉ የምርመራ ውጤቶችን ለመገምገምና ስለቀጣይ እርምጃዎች ለመወያየት ጊዜ እሰጣለሁ። እዚህ የሚታዩት የግል ምክክር ሰዓቶቼ ብቻ ናቸው።"
+    },
+    "menu": {
+      "en": "Consultation services",
+      "am": "የምክክር አገልግሎቶች"
+    },
+    "cta": {
+      "en": "Independent consultation availability",
+      "am": "የግል ምክክር ክፍት ሰዓቶች"
+    },
+    "color": "#a61920",
+    "dark": "#ffb3b5",
+    "soft": "#f4eeee",
+    "font": "meron-atelier.v2",
+    "direction": "Medical Journal v2",
+    "services": [
+      {
+        "name": {
+          "en": "Video follow-up",
+          "am": "የቪዲዮ ክትትል"
+        },
+        "duration": 20,
+        "price": 1500,
+        "summary": {
+          "en": "A scheduled follow-up for an existing care discussion.",
+          "am": "ለቀድሞ የእንክብካቤ ውይይት በቀጠሮ የሚደረግ ክትትል።"
+        },
+        "meet": "online"
+      },
+      {
+        "name": {
+          "en": "Medical results review",
+          "am": "የምርመራ ውጤት ግምገማ"
+        },
+        "duration": 40,
+        "price": 2500,
+        "summary": {
+          "en": "Review existing results and prepare questions for the next step.",
+          "am": "ያሉ ውጤቶችን ይገምግሙና ለቀጣዩ እርምጃ ጥያቄዎችን ያዘጋጁ።"
+        },
+        "meet": "online"
+      },
+      {
+        "name": {
+          "en": "Patient and family consultation",
+          "am": "የታካሚና ቤተሰብ ምክክር"
+        },
+        "duration": 45,
+        "price": 3000,
+        "summary": {
+          "en": "A conversation with the patient and their chosen family member, with consent.",
+          "am": "በታካሚው ፈቃድ ከታካሚውና ከመረጡት የቤተሰብ አባል ጋር ውይይት።"
+        },
+        "meet": "online"
+      },
+      {
+        "name": {
+          "en": "In-person consultation",
+          "am": "በአካል የሚደረግ ምክክር"
+        },
+        "duration": 60,
+        "price": 5000,
+        "summary": {
+          "en": "A scheduled consultation at the practice. Contact us to discuss home-visit arrangements.",
+          "am": "በምክክር ቢሮ በቀጠሮ የሚደረግ ቆይታ። ስለቤት ጉብኝት ዝግጅት ለመወያየት ያግኙን።"
+        },
+        "meet": "in_person"
+      }
+    ],
+    "slug": "dr-dawit",
+    "prefix": "dawit",
+    "placeLabel": {
+      "en": "Bole consultation office",
+      "am": "የቦሌ የሕክምና ምክር ቢሮ"
+    },
+    "openDays": [
+      "Tuesday",
+      "Thursday",
+      "Saturday"
+    ],
+    "officeHours": [
+      17,
+      19
+    ],
+    "onlineHours": [
+      19,
+      21
+    ]
   }
 ]

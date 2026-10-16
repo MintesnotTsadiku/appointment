@@ -21,6 +21,7 @@ CATALOG = {
     "meseret-advisory": ("accounting", "editorial", "spacious"),
     "buna-experiences": ("coffee", "warm", "comfortable"),
     "hana-conversations": ("creator", "bold", "expressive"),
+    "dawit-specialist": ("specialist", "editorial", "spacious"),
 
     "selam-movement": ("wellness", "warm", "expressive"),
     "bloom-hair": ("beauty", "bold", "expressive"),
