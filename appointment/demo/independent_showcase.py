@@ -198,10 +198,17 @@ def apply_profile(showcase, provider):
 
 
 def apply_places(showcase, places):
-    """The Amharic names (and the office's Amharic address) of the showcase's places."""
+    """Refresh translated names and authored hours on the seeder-owned places."""
     for meet, place in (("in_person", showcase.office), ("online", showcase.online)):
         if places.get(meet):
-            frappe.db.set_value("Location", places[meet], {"location_name_am": place.name_am, "address_am": place.address_am})
+            location = frappe.get_doc("Location", places[meet])
+            location.update({"location_name_am": place.name_am, "address_am": place.address_am})
+            location.set("opening_hours", [
+                {"day_of_week": day, "is_open": int(day in showcase.open_days),
+                 "start_time": f"{place.opens:02}:00", "end_time": f"{place.closes:02}:00"}
+                for day in DAYS
+            ])
+            location.save(ignore_permissions=True)
 
 
 def apply_website(showcase, site, provider, places, services, starter):
@@ -216,6 +223,12 @@ def apply_website(showcase, site, provider, places, services, starter):
                     "brand_inputs_json": json.dumps({**inputs, "motion": showcase_motion(showcase.recipe)}, sort_keys=True)})
     profile.save(ignore_permissions=True)
     content = showcase.sections(starter, provider, places, services)
+    present = {row.section_type for row in site.sections}
+    for kind, value in content.items():
+        if kind not in present:
+            site.append("sections", {"section_id": kind, "section_type": kind, "enabled": 1,
+                                     "order_index": len(site.sections), "schema_version": 2,
+                                     "content_json": json.dumps(value)})
     for row in site.sections:
         row.content_json = json.dumps(content[row.section_type])
     if "am" not in [row.locale for row in site.enabled_locales]:

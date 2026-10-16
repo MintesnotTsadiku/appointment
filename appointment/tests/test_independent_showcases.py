@@ -58,6 +58,29 @@ class TestIndependentShowcases(unittest.TestCase):
         self.assertFalse(hasattr(fixture, "_showcase_sections"), "the fixture keeps no copy of the showcase content")
         self.assertEqual(showcase.qa_fixture, fixture.__name__)
 
+    def test_refresh_replaces_stale_hours_without_duplicate_days(self):
+        from dataclasses import replace
+        from unittest.mock import MagicMock, patch
+
+        source = ergata_showcase.SHOWCASE
+        showcase = replace(source, open_days=("Tuesday", "Thursday", "Saturday"),
+                           office=replace(source.office, opens=17, closes=19))
+        values = {"opening_hours": [{"day_of_week": "Monday", "is_open": 1,
+                                     "start_time": "09:00", "end_time": "18:00"}]}
+        location = MagicMock()
+        location.update.side_effect = values.update
+        location.set.side_effect = values.__setitem__
+        with patch.object(independent_showcase.frappe, "get_doc", return_value=location):
+            for _ in range(2):
+                independent_showcase.apply_places(showcase, {"in_person": source.office.name})
+                hours = values["opening_hours"]
+                self.assertEqual(len(hours), 7)
+                self.assertEqual([row["day_of_week"] for row in hours if row["is_open"]],
+                                 ["Tuesday", "Thursday", "Saturday"])
+                self.assertTrue(all(row["start_time"] == "17:00" and row["end_time"] == "19:00"
+                                    for row in hours))
+        location.save.assert_called_with(ignore_permissions=True)
+
     def test_problems_names_what_is_missing(self):
         from dataclasses import replace
 
