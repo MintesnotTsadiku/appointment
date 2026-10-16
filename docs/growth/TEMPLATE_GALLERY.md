@@ -112,3 +112,13 @@ The gallery manifest checks, in English at desktop 1440 light: every template ca
 | BQA-2026-00151 | `growth/solo-success.yaml` | Passed, no console or network errors |
 
 `template-preselect.yaml`, en desktop 1440 light: a guest clicks "Use this template" on Ergata in the landing gallery, signs up, creates the business, sees "Your website: Ergata Therapy" on the success screen, opens website setup with Ergata selected, the note, the badge and the suggested address, sees the preview drawn with Ergata, changes the business focus (Ergata stays selected) and creates the draft on Ergata. am mobile 390 dark: the same owner signs in, clicks "Use this template" on Bloom Hair in `/templates`, gets the switch offer with Bloom selected and Ergata marked as current, cancels once (nothing changes), then confirms and the draft uses Bloom Hair.
+
+## Seven-template collection — 2026-10-16
+
+The gallery now includes Enkua, Mizan, Meseret, Buna, Hana, Dr. Dawit and Selam Homes. Each has checksummed desktop and phone previews.
+
+The owner chooser also registers photography, automotive, accounting, coffee, creator, specialist and property focuses. English and Amharic catalogs provide their labels and audience descriptions. Install or migrate imports them into the Translation store. For this running site, the existing translation importer was executed directly.
+
+Agent Plane BQA-2026-00728 passed all seven preview dialogs and live-example links in English desktop and Amharic phone views. The first run, BQA-2026-00727, found missing Translation rows. It passed after the import.
+
+See [the collection](../design/NEW_TEMPLATE_COLLECTION.md) for individual design decisions, booking journeys and phone measurements.

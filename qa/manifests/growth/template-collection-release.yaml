@@ -1,0 +1,434 @@
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /home/minte/template-new/evidence/release
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+scenarios:
+- id: enkua_en_1440
+  title: enkua_en_1440
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /enkua-studio?display=light&preview-time=10:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="enkua-photography-v3"][lang="en"]'
+  actions:
+  - action: screenshot
+    name: enkua_en_1440-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: screenshot
+    name: enkua_en_1440-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: enkua_am_390-dark
+  title: enkua_am_390-dark
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /enkua-studio/am?display=dark&preview-time=10:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="enkua-photography-v3"][lang="am"]'
+  actions:
+  - action: screenshot
+    name: enkua_am_390-dark-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: screenshot
+    name: enkua_am_390-dark-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: mizan_en_1440
+  title: mizan_en_1440
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /mizan-studio?display=light&preview-time=10:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="mizan-inspection-v3"][lang="en"]'
+  actions:
+  - action: screenshot
+    name: mizan_en_1440-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: screenshot
+    name: mizan_en_1440-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: mizan_am_390-dark
+  title: mizan_am_390-dark
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /mizan-studio/am?display=dark&preview-time=10:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="mizan-inspection-v3"][lang="am"]'
+  actions:
+  - action: screenshot
+    name: mizan_am_390-dark-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: screenshot
+    name: mizan_am_390-dark-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: meseret_en_1440
+  title: meseret_en_1440
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /meseret-studio?display=light&preview-time=10:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="meseret-advisory-v3"][lang="en"]'
+  actions:
+  - action: screenshot
+    name: meseret_en_1440-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: screenshot
+    name: meseret_en_1440-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: meseret_am_390-dark
+  title: meseret_am_390-dark
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /meseret-studio/am?display=dark&preview-time=10:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="meseret-advisory-v3"][lang="am"]'
+  actions:
+  - action: screenshot
+    name: meseret_am_390-dark-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: screenshot
+    name: meseret_am_390-dark-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: buna_en_1440
+  title: buna_en_1440
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /buna-studio?display=light&preview-time=10:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="buna-experiences-v3"][lang="en"]'
+  actions:
+  - action: screenshot
+    name: buna_en_1440-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: screenshot
+    name: buna_en_1440-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: buna_am_390-dark
+  title: buna_am_390-dark
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /buna-studio/am?display=dark&preview-time=10:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="buna-experiences-v3"][lang="am"]'
+  actions:
+  - action: screenshot
+    name: buna_am_390-dark-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: screenshot
+    name: buna_am_390-dark-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: hana_en_1440
+  title: hana_en_1440
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /hana-bekele?display=light&preview-time=10:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="hana-conversations-v3"][lang="en"]'
+  actions:
+  - action: screenshot
+    name: hana_en_1440-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: screenshot
+    name: hana_en_1440-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: hana_am_390-dark
+  title: hana_am_390-dark
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /hana-bekele/am?display=dark&preview-time=10:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="hana-conversations-v3"][lang="am"]'
+  actions:
+  - action: screenshot
+    name: hana_am_390-dark-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: screenshot
+    name: hana_am_390-dark-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: dawit_en_1440
+  title: dawit_en_1440
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /dr-dawit?display=light&preview-time=10:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="dawit-specialist-v3"][lang="en"]'
+  actions:
+  - action: screenshot
+    name: dawit_en_1440-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: screenshot
+    name: dawit_en_1440-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: dawit_am_390-dark
+  title: dawit_am_390-dark
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /dr-dawit/am?display=dark&preview-time=10:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="dawit-specialist-v3"][lang="am"]'
+  actions:
+  - action: screenshot
+    name: dawit_am_390-dark-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: screenshot
+    name: dawit_am_390-dark-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: selam-homes_en_1440
+  title: selam-homes_en_1440
+  viewport:
+    width: 1440
+    height: 900
+  checks: []
+  routes:
+  - path: /selam-homes?display=light&preview-time=10:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="selam-homes-v3"][lang="en"]'
+  actions:
+  - action: screenshot
+    name: selam-homes_en_1440-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: screenshot
+    name: selam-homes_en_1440-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors
+- id: selam-homes_am_390-dark
+  title: selam-homes_am_390-dark
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /selam-homes/am?display=dark&preview-time=10:00
+    assertions:
+    - type: network_idle
+    - type: no_blank_page
+    - type: visible_selector
+      value: '[data-template="selam-homes-v3"][lang="am"]'
+  actions:
+  - action: screenshot
+    name: selam-homes_am_390-dark-hero.png
+    full_page: false
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: screenshot
+    name: selam-homes_am_390-dark-full.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors

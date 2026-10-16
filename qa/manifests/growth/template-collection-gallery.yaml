@@ -1,0 +1,342 @@
+# Guest only. Requires the published showcases from appointment.demo.showcase.seed.
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /home/minte/template-new/evidence/gallery
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 240000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+scenarios:
+- id: collection_gallery_en
+  title: Seven registered templates and previews in en
+  viewport:
+    width: 1440
+    height: 900
+  options:
+    color_scheme: light
+  checks: []
+  routes:
+  - path: /templates
+    assertions:
+    - type: network_idle
+  actions:
+  - action: wait_for
+    selector: '[data-qa="template-card"][data-template="selam-homes"]'
+    timeout_ms: 20000
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="enkua-photography"] img[src$="enkua-photography-desktop.webp"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="enkua-photography"] a[data-qa="template-live"][href="/enkua-studio"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="mizan-inspection"] img[src$="mizan-inspection-desktop.webp"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="mizan-inspection"] a[data-qa="template-live"][href="/mizan-studio"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="meseret-advisory"] img[src$="meseret-advisory-desktop.webp"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="meseret-advisory"] a[data-qa="template-live"][href="/meseret-studio"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="buna-experiences"] img[src$="buna-experiences-desktop.webp"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="buna-experiences"] a[data-qa="template-live"][href="/buna-studio"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="hana-conversations"] img[src$="hana-conversations-desktop.webp"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="hana-conversations"] a[data-qa="template-live"][href="/hana-bekele"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="dawit-specialist"] img[src$="dawit-specialist-desktop.webp"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="dawit-specialist"] a[data-qa="template-live"][href="/dr-dawit"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="selam-homes"] img[src$="selam-homes-desktop.webp"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="selam-homes"] a[data-qa="template-live"][href="/selam-homes"]'
+  - action: click
+    selector: '[data-qa="template-card"][data-template="enkua-photography"] [data-qa="template-preview-open"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"] iframe[src^="/enkua-studio?"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-qa="template-preview"] .lw-preview-status'
+    state: detached
+    timeout_ms: 15000
+  - action: screenshot
+    name: enkua-en-preview.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="template-preview-close"]'
+  - action: click
+    selector: '[data-qa="template-card"][data-template="mizan-inspection"] [data-qa="template-preview-open"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"] iframe[src^="/mizan-studio?"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-qa="template-preview"] .lw-preview-status'
+    state: detached
+    timeout_ms: 15000
+  - action: screenshot
+    name: mizan-en-preview.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="template-preview-close"]'
+  - action: click
+    selector: '[data-qa="template-card"][data-template="meseret-advisory"] [data-qa="template-preview-open"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"] iframe[src^="/meseret-studio?"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-qa="template-preview"] .lw-preview-status'
+    state: detached
+    timeout_ms: 15000
+  - action: screenshot
+    name: meseret-en-preview.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="template-preview-close"]'
+  - action: click
+    selector: '[data-qa="template-card"][data-template="buna-experiences"] [data-qa="template-preview-open"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"] iframe[src^="/buna-studio?"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-qa="template-preview"] .lw-preview-status'
+    state: detached
+    timeout_ms: 15000
+  - action: screenshot
+    name: buna-en-preview.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="template-preview-close"]'
+  - action: click
+    selector: '[data-qa="template-card"][data-template="hana-conversations"] [data-qa="template-preview-open"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"] iframe[src^="/hana-bekele?"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-qa="template-preview"] .lw-preview-status'
+    state: detached
+    timeout_ms: 15000
+  - action: screenshot
+    name: hana-en-preview.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="template-preview-close"]'
+  - action: click
+    selector: '[data-qa="template-card"][data-template="dawit-specialist"] [data-qa="template-preview-open"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"] iframe[src^="/dr-dawit?"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-qa="template-preview"] .lw-preview-status'
+    state: detached
+    timeout_ms: 15000
+  - action: screenshot
+    name: dawit-en-preview.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="template-preview-close"]'
+  - action: click
+    selector: '[data-qa="template-card"][data-template="selam-homes"] [data-qa="template-preview-open"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"] iframe[src^="/selam-homes?"]'
+    timeout_ms: 20000
+  - action: wait_for
+    selector: '[data-qa="template-preview"] .lw-preview-status'
+    state: detached
+    timeout_ms: 15000
+  - action: screenshot
+    name: selam-homes-en-preview.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="template-preview-close"]'
+  - action: get_console_errors
+  - action: get_network_errors
+- id: collection_gallery_am
+  title: Seven registered templates and previews in am
+  viewport:
+    width: 390
+    height: 844
+  options:
+    color_scheme: dark
+  checks: []
+  routes:
+  - path: /templates
+    assertions:
+    - type: network_idle
+  actions:
+  - action: click
+    selector: '[data-qa="language-toggle"]'
+  - action: wait_for
+    selector: '[data-qa="template-card"][data-template="selam-homes"]'
+    timeout_ms: 20000
+    assertions:
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="enkua-photography"] img[src$="enkua-photography-desktop.webp"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="enkua-photography"] a[data-qa="template-live"][href="/enkua-studio"]'
+    - type: text_contains
+      selector: '[data-qa="template-card"][data-template="enkua-photography"] .lw-template-focus'
+      value: ፎቶግራፊ
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="mizan-inspection"] img[src$="mizan-inspection-desktop.webp"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="mizan-inspection"] a[data-qa="template-live"][href="/mizan-studio"]'
+    - type: text_contains
+      selector: '[data-qa="template-card"][data-template="mizan-inspection"] .lw-template-focus'
+      value: የተሽከርካሪ ምርመራ
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="meseret-advisory"] img[src$="meseret-advisory-desktop.webp"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="meseret-advisory"] a[data-qa="template-live"][href="/meseret-studio"]'
+    - type: text_contains
+      selector: '[data-qa="template-card"][data-template="meseret-advisory"] .lw-template-focus'
+      value: ሂሳብ እና ምክር
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="buna-experiences"] img[src$="buna-experiences-desktop.webp"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="buna-experiences"] a[data-qa="template-live"][href="/buna-studio"]'
+    - type: text_contains
+      selector: '[data-qa="template-card"][data-template="buna-experiences"] .lw-template-focus'
+      value: የቡና ተሞክሮዎች
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="hana-conversations"] img[src$="hana-conversations-desktop.webp"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="hana-conversations"] a[data-qa="template-live"][href="/hana-bekele"]'
+    - type: text_contains
+      selector: '[data-qa="template-card"][data-template="hana-conversations"] .lw-template-focus'
+      value: ፈጣሪዎች እና ውይይቶች
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="dawit-specialist"] img[src$="dawit-specialist-desktop.webp"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="dawit-specialist"] a[data-qa="template-live"][href="/dr-dawit"]'
+    - type: text_contains
+      selector: '[data-qa="template-card"][data-template="dawit-specialist"] .lw-template-focus'
+      value: የስፔሻሊስት ምክክር
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="selam-homes"] img[src$="selam-homes-desktop.webp"]'
+    - type: visible_selector
+      value: '[data-qa="template-card"][data-template="selam-homes"] a[data-qa="template-live"][href="/selam-homes"]'
+    - type: text_contains
+      selector: '[data-qa="template-card"][data-template="selam-homes"] .lw-template-focus'
+      value: ቤቶች እና ንብረት
+  - action: click
+    selector: '[data-qa="template-card"][data-template="enkua-photography"] [data-qa="template-preview-open"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"] iframe[src^="/enkua-studio/am"]'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="template-preview-dark"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"] .lw-preview-status'
+    state: detached
+    timeout_ms: 15000
+  - action: screenshot
+    name: enkua-am-preview.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="template-preview-close"]'
+  - action: click
+    selector: '[data-qa="template-card"][data-template="mizan-inspection"] [data-qa="template-preview-open"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"] iframe[src^="/mizan-studio/am"]'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="template-preview-dark"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"] .lw-preview-status'
+    state: detached
+    timeout_ms: 15000
+  - action: screenshot
+    name: mizan-am-preview.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="template-preview-close"]'
+  - action: click
+    selector: '[data-qa="template-card"][data-template="meseret-advisory"] [data-qa="template-preview-open"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"] iframe[src^="/meseret-studio/am"]'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="template-preview-dark"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"] .lw-preview-status'
+    state: detached
+    timeout_ms: 15000
+  - action: screenshot
+    name: meseret-am-preview.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="template-preview-close"]'
+  - action: click
+    selector: '[data-qa="template-card"][data-template="buna-experiences"] [data-qa="template-preview-open"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"] iframe[src^="/buna-studio/am"]'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="template-preview-dark"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"] .lw-preview-status'
+    state: detached
+    timeout_ms: 15000
+  - action: screenshot
+    name: buna-am-preview.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="template-preview-close"]'
+  - action: click
+    selector: '[data-qa="template-card"][data-template="hana-conversations"] [data-qa="template-preview-open"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"] iframe[src^="/hana-bekele/am"]'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="template-preview-dark"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"] .lw-preview-status'
+    state: detached
+    timeout_ms: 15000
+  - action: screenshot
+    name: hana-am-preview.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="template-preview-close"]'
+  - action: click
+    selector: '[data-qa="template-card"][data-template="dawit-specialist"] [data-qa="template-preview-open"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"] iframe[src^="/dr-dawit/am"]'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="template-preview-dark"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"] .lw-preview-status'
+    state: detached
+    timeout_ms: 15000
+  - action: screenshot
+    name: dawit-am-preview.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="template-preview-close"]'
+  - action: click
+    selector: '[data-qa="template-card"][data-template="selam-homes"] [data-qa="template-preview-open"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"] iframe[src^="/selam-homes/am"]'
+    timeout_ms: 20000
+  - action: click
+    selector: '[data-qa="template-preview-dark"]'
+  - action: wait_for
+    selector: '[data-qa="template-preview"] .lw-preview-status'
+    state: detached
+    timeout_ms: 15000
+  - action: screenshot
+    name: selam-homes-am-preview.png
+    full_page: false
+  - action: click
+    selector: '[data-qa="template-preview-close"]'
+  - action: get_console_errors
+  - action: get_network_errors

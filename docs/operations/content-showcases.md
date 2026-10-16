@@ -41,11 +41,18 @@ separate sites. Full browser, accessibility, and release gates remain required.
 
 The seeder also makes independent-provider showcases: one practitioner who is
 the business, with their own locations, sessions, provider page and published
-website. Today there is one, Yared Tesfaye Counselling (Ergata Therapy,
-`/yared-counselling`). The definitions are in `appointment/demo/` and are
-shared with the QA fixtures. See `docs/growth/TEMPLATE_ERGATA.md`, section
-"Showcase". These showcases get bookings, but no articles, galleries or
-newsletters.
+website. There are eight: Ergata, Enkua, Mizan, Meseret, Buna, Hana,
+Dr. Dawit and Selam Homes. The definitions are in `appointment/demo/` and are
+shared with the QA fixtures. See [the new collection](../design/NEW_TEMPLATE_COLLECTION.md)
+and `docs/growth/TEMPLATE_ERGATA.md`, section "Showcase".
+These showcases get bookings, but no articles, gallery collections or newsletters.
+Enkua and Selam Homes include editable gallery sections on their landing pages.
+
+The seven new definitions live in `new_template_showcases.json` and
+`new_template_showcases.py`. Refresh updates their translated place names, hours,
+website sections and published design through the existing seeder. Dr. Dawit
+uses evening availability on Tuesday, Thursday and Saturday. The other new
+businesses use Monday–Saturday appointment hours.
 
 ## Amharic names
 
@@ -111,9 +118,9 @@ fixture is `appointment.tests.amharic_names_qa_fixtures`.
 Runs on 2026-10-15: BQA-2026-00414 (`amharic-names`, every scenario passed) and
 BQA-2026-00413 (`amharic-names-owner`, passed).
 
-## What the seeder fills
+## Original six-showcase coverage
 
-A fresh seed fills these fields on every showcase where they apply. The
+The table records coverage before the seven-template collection. See its design documents for the added businesses. The
 read-only coverage check of 2026-10-16 found no other gaps (see "Regenerate
 showcase data on a server", step 6).
 
@@ -143,7 +150,7 @@ Not filled, on purpose:
 - Empty image slots (the gallery items, the process steps of Bloom, Meron and
   Abugida, testimonials, contact): the v3 templates show their own packaged
   photos there.
-- Online offerings: only Ergata has an online room. The organization
+- Online offerings: the eight independent showcases have online rooms. The organization
   showcases meet in person.
 - Business referral codes (made when an owner first opens the referral page),
   customer referral offers (an owner opt-in; an active offer makes customer
