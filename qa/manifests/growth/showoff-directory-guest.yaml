@@ -1,4 +1,4 @@
-# Guest browses /directory -> category -> area -> booking page (en desktop, am mobile). Run with fixture appointment.tests.growth_showoff_qa_fixtures.
+# Guest browses /directory -> category -> area -> booking handoff `/<slug>/book` (en desktop, am mobile). Run with fixture appointment.tests.growth_showoff_qa_fixtures.
 app: appointment
 base_url: http://localhost:47800
 default_role: Guest
@@ -57,9 +57,9 @@ scenarios:
     selector: '[data-qa="directory-book"][href*="source=directory"]'
     assertions:
     - type: url_contains
-      value: source=directory
+      value: /book?source=directory
     - type: visible_selector
-      value: '[data-pe-root]'
+      value: '[data-template]'
   - action: screenshot
     name: directory_guest_en_desktop-4-booking-page.png
     full_page: false
@@ -108,9 +108,9 @@ scenarios:
     selector: '[data-qa="directory-book"][href*="source=directory"]'
     assertions:
     - type: url_contains
-      value: source=directory
+      value: /book?source=directory
     - type: visible_selector
-      value: '[data-pe-root]'
+      value: '[data-template]'
   - action: screenshot
     name: directory_guest_am_mobile-4-booking-page.png
     full_page: false

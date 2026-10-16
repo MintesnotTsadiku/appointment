@@ -1,5 +1,6 @@
+{%- from "appointment/templates/directory/art.html" import icon, skyline, city_outline -%}
 <!doctype html>
-<html lang="{{ lang }}">
+<html lang="{{ lang }}" class="no-js">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,161 +18,155 @@
 <meta property="og:description" content="{{ description }}">
 <meta property="og:url" content="{{ canonical_url }}">
 <meta property="og:locale" content="{{ 'am_ET' if lang == 'am' else 'en_US' }}">
+<meta property="og:locale:alternate" content="{{ 'en_US' if lang == 'am' else 'am_ET' }}">
 {% if og_image %}<meta property="og:image" content="{{ og_image }}">{% endif %}
 <meta name="twitter:card" content="{{ 'summary_large_image' if og_image else 'summary' }}">
 <meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f6c9ad" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#070923" media="(prefers-color-scheme: dark)">
 {% if brand.mark %}<link rel="icon" href="{{ brand.mark }}">{% endif %}
+<link rel="preload" href="/assets/appointment/fonts/landing/{{ 'noto-serif-ethiopic' if lang == 'am' else 'fraunces' }}.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/appointment/css/directory.css?v={{ asset_version }}">
 <script type="application/ld+json">{{ json_ld | safe }}</script>
 <script type="application/ld+json">{{ breadcrumb_json_ld | safe }}</script>
-<style>
-@font-face { font-family: "Page Ethiopic"; src: local("Noto Sans Ethiopic"), local("NotoSansEthiopic-Regular"), url("/assets/appointment/fonts/app/noto-sans-ethiopic.woff2") format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+1200-139F, U+2D80-2DDF, U+AB00-AB2F; }
-@font-face { font-family: "Page Sans"; src: url("/assets/appointment/fonts/app/inter.woff2") format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+0000-02FF, U+2000-206F, U+20AC; }
-@font-face { font-family: "Fraunces"; src: url("/assets/appointment/fonts/landing/fraunces.woff2") format("woff2"); font-weight: 300 700; font-display: swap; unicode-range: U+0000-02FF, U+2000-206F; }
-:root {
-  --bg: #fff8f1; --paper: #ffffff; --ink: #2a1712; --muted: #6b4f45; --line: #ead9cc;
-  --accent: #a63d22; --accent-ink: #ffffff; --soft: #fbeadf; --focus: #1d4ed8;
-  --serif: "Fraunces", "Page Ethiopic", Georgia, serif;
-  --sans: "Page Sans", "Page Ethiopic", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  color-scheme: light;
-}
-@media (prefers-color-scheme: dark) {
-  :root { --bg: #14163a; --paper: #1f2150; --ink: #fff7ee; --muted: #d6cbe0; --line: #3a3c72;
-    --accent: #ffc98a; --accent-ink: #1b1640; --soft: #2a2c62; --focus: #9cc2ff; color-scheme: dark; }
-}
-* { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
-body { margin: 0; background: var(--bg); color: var(--ink); font: 400 1rem/1.6 var(--sans); }
-a { color: var(--accent); }
-:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 6px; }
-.wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
-.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 64px; }
-.brand { display: inline-flex; align-items: center; gap: 10px; font: 600 1.15rem/1 var(--serif); color: var(--ink); text-decoration: none; padding: 12px 0; min-width: 0; }
-.brand img { height: 28px; width: auto; }
-.lang { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border: 1px solid var(--line); border-radius: 999px; color: var(--ink); text-decoration: none; font-size: .92rem; }
-.crumbs { margin: 8px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 4px 6px; font-size: .9rem; color: var(--muted); }
-.crumbs li + li::before { content: "/"; margin-right: 6px; color: var(--line); }
-.crumbs a { color: var(--muted); }
-.crumbs [aria-current] { color: var(--ink); }
-.hero { padding: 20px 0 8px; }
-.eyebrow { margin: 0 0 8px; font-size: .85rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
-:lang(am) .eyebrow { letter-spacing: 0; text-transform: none; }
-h1 { margin: 0 0 12px; font: 600 clamp(2rem, 6vw, 3.1rem)/1.12 var(--serif); letter-spacing: -.01em; overflow-wrap: anywhere; }
-h2 { margin: 0 0 12px; font: 600 1.4rem/1.25 var(--serif); }
-.lede { margin: 0; max-width: 62ch; font-size: 1.1rem; color: var(--muted); }
-.count { margin: 14px 0 0; font-weight: 600; }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
-.chips a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border-radius: 999px; background: var(--paper); border: 1px solid var(--line); color: var(--ink); text-decoration: none; }
-.chips a[aria-current] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-.chips small { color: var(--muted); font-size: .82rem; }
-.chips a[aria-current] small { color: inherit; opacity: .8; }
-section.block { margin: 36px 0 0; }
-.groups { display: grid; gap: 16px; }
-@media (min-width: 760px) { .groups { grid-template-columns: 1fr 1fr; } }
-.group { background: var(--paper); border: 1px solid var(--line); border-radius: 20px; padding: 20px; min-width: 0; }
-.group h2 { font-size: 1.3rem; margin: 0 0 4px; }
-.group h2 a { color: var(--ink); text-decoration: none; }
-.group h2 a:hover { text-decoration: underline; }
-.group .meta { margin: 0 0 6px; color: var(--muted); font-size: .92rem; }
-.group p.desc { margin: 0 0 14px; color: var(--muted); }
-.cards { display: grid; gap: 16px; margin: 0; padding: 0; list-style: none; }
-@media (min-width: 680px) { .cards { grid-template-columns: 1fr 1fr; } }
-@media (min-width: 1000px) { .cards { grid-template-columns: 1fr 1fr 1fr; } }
-.card { display: flex; flex-direction: column; gap: 12px; background: var(--paper); border: 1px solid var(--line); border-radius: 20px; padding: 20px; min-width: 0; }
-.card-head { display: flex; align-items: center; gap: 14px; min-width: 0; }
-.logo { flex: none; width: 56px; height: 56px; border-radius: 14px; border: 1px solid var(--line); background: var(--soft); display: grid; place-items: center; overflow: hidden; font: 600 1.1rem/1 var(--serif); color: var(--accent); }
-.logo img { width: 100%; height: 100%; object-fit: contain; background: #fff; }
-.card h3 { margin: 0; font: 600 1.15rem/1.25 var(--serif); overflow-wrap: anywhere; }
-.card .where { margin: 2px 0 0; color: var(--muted); font-size: .9rem; }
-.card .desc { margin: 0; color: var(--muted); font-size: .95rem; }
-.card .svc-label { margin: 0 0 6px; font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
-:lang(am) .card .svc-label { letter-spacing: 0; text-transform: none; }
-.svc { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
-.svc li { padding: 4px 10px; border-radius: 999px; background: var(--soft); font-size: .88rem; overflow-wrap: anywhere; }
-.card .book { position: relative; margin-top: auto; display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 20px; border-radius: 999px; background: var(--accent); color: var(--accent-ink); font-weight: 700; text-decoration: none; }
-.pager { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 28px 0 0; }
-.pager a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border: 1px solid var(--line); border-radius: 999px; color: var(--ink); text-decoration: none; background: var(--paper); }
-.pager span { color: var(--muted); }
-.cta-band { margin: 44px 0 0; padding: 24px 20px; border-radius: 20px; background: var(--ink); color: var(--bg); display: grid; gap: 12px; justify-items: start; }
-.cta-band h2 { margin: 0; }
-.cta-band p { margin: 0; max-width: 56ch; }
-.cta { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 24px; border-radius: 999px; background: var(--accent); color: var(--accent-ink); font-weight: 700; text-decoration: none; max-width: 100%; }
-@media (prefers-color-scheme: dark) { .cta-band { background: var(--paper); color: var(--ink); border: 1px solid var(--line); } }
-@media (min-width: 760px) {
-  .cta-band { grid-template-columns: 1fr auto; align-items: center; column-gap: 24px; padding: 28px 32px; }
-  .cta-band h2, .cta-band p { grid-column: 1; }
-  .cta-band .cta { grid-column: 2; grid-row: 1 / span 2; }
-}
-body .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-footer, footer.wrap { margin-top: 56px; margin-bottom: 0; padding: 20px 16px 32px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
-footer p { margin: 0 0 6px; }
-</style>
+<script>document.documentElement.classList.replace("no-js", "js");</script>
 </head>
-<body data-qa="directory-page" data-directory-kind="{{ kind }}">
-<header class="wrap top">
-  <a class="brand" href="{{ home_href }}">{% if brand.logo %}<img src="{{ brand.logo }}" alt="">{% endif %}<span>{{ product_name }}</span></a>
-  <a class="lang" href="{{ other_language.href }}" hreflang="{{ other_language.lang }}" lang="{{ other_language.lang }}" data-qa="directory-language">{{ other_language.label }}</a>
-</header>
-<main class="wrap">
-  {% if kind != 'index' %}
-  <nav aria-label="{{ t.breadcrumb }}">
-    <ol class="crumbs" data-qa="directory-breadcrumbs">
-      {% for crumb in breadcrumbs %}<li>{% if loop.last %}<span aria-current="page">{{ crumb.label }}</span>{% else %}<a href="{{ crumb.href }}">{{ crumb.label }}</a>{% endif %}</li>
-      {% endfor %}
-    </ol>
-  </nav>
-  {% endif %}
-  <div class="hero">
-    <p class="eyebrow">{{ t.eyebrow }}</p>
-    <h1 data-qa="directory-heading">{{ h1 }}</h1>
-    <p class="lede">{{ description }}</p>
-    <p class="count" data-qa="directory-count">{{ count_label }}</p>
-  </div>
+<body class="dx" data-qa="directory-page" data-directory-kind="{{ kind }}">
+<a class="dx-skip" href="#businesses">{{ t.skip }}</a>
 
-  {% if kind == 'index' %}
-  <section class="block" aria-labelledby="categories-title">
-    <h2 id="categories-title">{{ t.categories }}</h2>
-    <div class="groups">
-      {% for group in groups %}<article class="group" data-qa="directory-category">
-        <h2><a href="{{ group.href }}" data-qa="directory-category-link">{{ group.label }}</a></h2>
-        <p class="meta">{{ group.count_label }}</p>
-        {% if group.description %}<p class="desc">{{ group.description }}</p>{% endif %}
-        <ul class="chips" aria-label="{{ t.areas }}">
-          {% for area in group.areas %}<li><a href="{{ area.href }}" data-qa="directory-area-link">{{ area.label }} <small>{{ area.count }}</small></a></li>
-          {% endfor %}
-        </ul>
-      </article>
-      {% endfor %}
+<header class="dx-bar" data-qa="directory-bar">
+  <a class="dx-brand" href="{{ home_href }}"><span class="dx-brand-mark" aria-hidden="true"></span><span class="dx-brand-name">{{ product_name }}</span></a>
+  <span class="dx-clock" data-qa="directory-clock" title="{{ t.clock }}"><span class="dx-sr">{{ t.clock }}: </span><span data-clock>{{ clock }}</span></span>
+  <span class="dx-bar-spacer"></span>
+  <nav class="dx-bar-actions" aria-label="{{ t.menu }}">
+    <a class="dx-bar-link" href="{{ templates_href }}">{{ t.templates }}</a>
+    <a class="dx-lang" href="{{ other_language.href }}" hreflang="{{ other_language.lang }}" lang="{{ other_language.lang }}" data-qa="directory-language">{{ icon("globe") }}<span>{{ other_language.label }}</span></a>
+    <a class="dx-btn dx-btn-solid dx-btn-small dx-bar-start" href="{{ signup_href }}" data-qa="directory-bar-start">{{ t.owner_cta }}</a>
+  </nav>
+</header>
+
+<main id="main">
+  <section class="dx-hero" aria-labelledby="dx-title">
+    <div class="dx-sky" aria-hidden="true"><span class="dx-stars"></span><span class="dx-orb"></span>{{ skyline() }}</div>
+    <div class="dx-wrap dx-hero-grid">
+      <div class="dx-hero-copy">
+        {% if kind != 'index' %}
+        <nav aria-label="{{ t.breadcrumb }}">
+          <ol class="dx-crumbs" data-qa="directory-breadcrumbs">
+            {% for crumb in breadcrumbs %}<li>{% if loop.last %}<span aria-current="page">{{ crumb.label }}</span>{% else %}<a href="{{ crumb.href }}">{{ crumb.label }}</a>{% endif %}</li>
+            {% endfor %}
+          </ol>
+        </nav>
+        {% endif %}
+        <p class="dx-eyebrow"><span data-clock>{{ clock }}</span> · {{ t.place if kind == 'index' else t.eyebrow }}</p>
+        <h1 id="dx-title" class="dx-display" data-qa="directory-heading">{% for part in h1_parts %}{% if part.em %}<em>{{ part.text }}</em>{% else %}{{ part.text }}{% endif %}{% endfor %}</h1>
+        <p class="dx-lede">{{ description }}</p>
+        {% if missing %}<p class="dx-note" role="status" data-qa="directory-missing">{{ missing }}</p>{% endif %}
+
+        <form class="dx-search" action="{{ search.action }}" method="get" role="search" aria-label="{{ t.search_label }}" data-qa="directory-search">
+          <label class="dx-field">
+            <span class="dx-field-label">{{ icon("search") }}{{ t.service }}</span>
+            <select name="service" data-qa="directory-search-service">
+              <option value="">{{ t.any_service }}</option>
+              {% for option in search.categories %}<option value="{{ option.value }}"{% if option.selected %} selected{% endif %} data-count="{{ option.count }}">{{ option.label }} ({{ option.count }})</option>
+              {% endfor %}
+            </select>
+          </label>
+          <label class="dx-field">
+            <span class="dx-field-label">{{ icon("pin") }}{{ t.where }}</span>
+            <select name="where" data-qa="directory-search-area">
+              <option value="">{{ t.any_area }}</option>
+              {% for option in search.areas %}<option value="{{ option.value }}"{% if option.selected %} selected{% endif %} data-count="{{ option.count }}" data-label="{{ option.label }}">{{ option.label }} ({{ option.count }})</option>
+              {% endfor %}
+            </select>
+          </label>
+          <button class="dx-btn dx-btn-solid dx-search-go" type="submit" data-qa="directory-search-go"><span data-search-label>{{ t.go }}</span>{{ icon("arrow") }}</button>
+        </form>
+
+        {% if kind == 'index' %}<dl class="dx-stats" data-qa="directory-stats">
+          {% for stat in stats %}<div><dt>{{ stat.label }}</dt><dd>{{ stat.value }}</dd></div>{% endfor %}
+        </dl>{% endif %}
+        <p class="dx-sr" data-qa="directory-count">{{ count_label }}</p>
+      </div>
+
+      <aside class="dx-board" aria-labelledby="dx-board-title" data-qa="directory-board">
+        <h2 id="dx-board-title">{{ t.listed }} · {{ count_label }}</h2>
+        <ol>
+          {% for card in cards[:5] %}<li>
+            <a href="{{ card.book_href | e }}"{% if card.live_path %} data-live-path="{{ card.live_path | e }}"{% endif %}>
+              <span class="dx-board-time" data-live-short>{{ icon(card.icon) }}</span>
+              <span class="dx-board-name">{{ card.name | e }}</span>
+              <span class="dx-board-state">{{ card.category_label }}</span>
+            </a>
+          </li>{% endfor %}
+        </ol>
+      </aside>
     </div>
   </section>
-  {% else %}
-  {% if area_links %}
-  <nav class="block" aria-label="{{ t.areas }}" style="margin-top:20px">
-    <ul class="chips">
-      {% if kind == 'area' %}<li><a href="{{ breadcrumbs[1].href }}" data-qa="directory-all-areas">{{ t.all_areas }}</a></li>{% endif %}
-      {% for area in area_links %}<li><a href="{{ area.href }}"{% if area.current %} aria-current="page"{% endif %} data-qa="directory-area-link">{{ area.label }} <small>{{ area.count }}</small></a></li>
-      {% endfor %}
-    </ul>
-  </nav>
-  {% endif %}
 
-  <section class="block" aria-labelledby="listings-title" style="margin-top:24px">
-    <h2 id="listings-title" class="sr">{{ h1 }}</h2>
-    <ul class="cards">
-      {% for card in cards %}<li class="card" data-qa="directory-listing">
-        <div class="card-head">
-          <span class="logo" aria-hidden="true">{% if card.logo %}<img src="{{ card.logo | e }}" alt="" loading="lazy">{% else %}{{ card.initials | e }}{% endif %}</span>
-          <div style="min-width:0">
-            <h3>{{ card.name | e }}</h3>
-            <p class="where">{{ card.category_label }} · {{ card.area_label }}{% if card.city and card.city != card.area_label %}, {{ card.city | e }}{% endif %}</p>
-          </div>
-        </div>
-        {% if card.description %}<p class="desc">{{ card.description | e }}</p>{% endif %}
-        {% if card.services %}<div><p class="svc-label">{{ t.services }}</p><ul class="svc">{% for name in card.services %}<li>{{ name | e }}</li>{% endfor %}</ul></div>{% endif %}
-        <a class="book" href="{{ card.href | e }}" data-qa="directory-book">{{ t.book }}<span class="sr">: {{ card.name | e }}</span></a>
+  {% if kind == 'index' %}
+  <section class="dx-section dx-wrap" aria-labelledby="dx-categories-title">
+    <p class="dx-eyebrow">01 · {{ t.categories }}</p>
+    <h2 id="dx-categories-title" class="dx-title">{{ t.categories }}</h2>
+    <ul class="dx-tiles">
+      {% for group in groups %}<li data-qa="directory-category">
+        <a class="dx-tile" data-world="{{ group.world }}" href="{{ group.href }}" data-qa="directory-category-link">
+          <span class="dx-tile-sky">{{ icon(group.icon) }}<span class="dx-tile-count">{{ group.count }}</span></span>
+          <span class="dx-tile-body">
+            <span class="dx-tile-name">{{ group.label }}</span>
+            <span class="dx-tile-meta">{{ group.count_label }} · {% for area in group.areas %}{{ area.label }}{% if not loop.last %}, {% endif %}{% endfor %}</span>
+          </span>
+        </a>
       </li>
       {% endfor %}
     </ul>
-    {% if pagination %}<nav class="pager" aria-label="{{ pagination.label }}">
+  </section>
+  {% elif area_links %}
+  <nav class="dx-wrap dx-filter" aria-label="{{ t.more_areas }}">
+    <ul class="dx-chips">
+      {% if kind == 'area' %}<li><a href="{{ breadcrumbs[1].href }}" data-qa="directory-all-areas">{{ t.all_areas }}</a></li>{% endif %}
+      {% for area in area_links %}<li><a href="{{ area.href }}"{% if area.current %} aria-current="page"{% endif %} data-qa="directory-area-link">{{ icon("pin") }}{{ area.label }} <small>{{ area.count }}</small></a></li>
+      {% endfor %}
+    </ul>
+  </nav>
+  {% endif %}
+
+  <section id="businesses" class="dx-section dx-wrap" aria-labelledby="dx-listings-title" tabindex="-1">
+    {% if kind == 'index' %}<p class="dx-eyebrow">02 · {{ count_label }}</p>
+    <h2 id="dx-listings-title" class="dx-title">{{ t.listed }}</h2>
+    {% else %}<h2 id="dx-listings-title" class="dx-sr">{{ h1 }}</h2>{% endif %}
+    <ul class="dx-cards">
+      {% for card in cards %}<li class="dx-card" data-qa="directory-listing"{% if card.live_path %} data-live-path="{{ card.live_path | e }}"{% endif %}
+          style="{% if card.accent.light %}--card-accent: {{ card.accent.light }};{% endif %}{% if card.accent.dark %} --card-accent-dark: {{ card.accent.dark }};{% endif %}">
+        <div class="dx-card-media">
+          {% if card.picture %}<picture>
+            {% if card.picture.dark %}{% if card.picture.dark.avif %}<source type="image/avif" media="(prefers-color-scheme: dark)" srcset="{{ card.picture.dark.avif }}" sizes="(min-width: 1180px) 380px, (min-width: 700px) 46vw, 80vw">{% endif %}
+            <source type="image/webp" media="(prefers-color-scheme: dark)" srcset="{{ card.picture.dark.webp }}" sizes="(min-width: 1180px) 380px, (min-width: 700px) 46vw, 80vw">{% endif %}
+            {% if card.picture.light.avif %}<source type="image/avif" srcset="{{ card.picture.light.avif }}" sizes="(min-width: 1180px) 380px, (min-width: 700px) 46vw, 80vw">{% endif %}
+            <img src="{{ card.picture.light.fallback }}" srcset="{{ card.picture.light.webp }}" sizes="(min-width: 1180px) 380px, (min-width: 700px) 46vw, 80vw"
+                 alt="{{ card.picture.alt | e }}" width="640" height="400" style="object-position: {{ card.picture.position }}"
+                 {% if card.picture.eager %}fetchpriority="high"{% else %}loading="lazy"{% endif %} decoding="async">
+          </picture>{% else %}<span class="dx-card-blank" aria-hidden="true">{{ card.initials | e }}</span>{% endif %}
+          <span class="dx-card-logo" aria-hidden="true">{% if card.logo %}<img src="{{ card.logo | e }}" alt="" width="48" height="48" loading="lazy" decoding="async">{% else %}{{ card.initials | e }}{% endif %}</span>
+          {% if card.live_path %}<p class="dx-next" data-live-long data-qa="directory-next-free" hidden></p>{% endif %}
+        </div>
+        <div class="dx-card-body">
+          <p class="dx-card-kicker">{{ card.category_label }} · {{ card.area_label }}{% if card.city and card.city != card.area_label %}, {{ card.city | e }}{% endif %}</p>
+          <h3><a href="{{ card.site_href | e }}" data-qa="directory-site">{{ card.name | e }}</a></h3>
+          {% if card.tagline %}<p class="dx-card-tagline">{{ card.tagline | e }}</p>{% elif card.description %}<p class="dx-card-desc">{{ card.description | e }}</p>{% endif %}
+          {% if card.offers %}<ul class="dx-offers" aria-label="{{ t.services }}">
+            {% for offer in card.offers %}<li><span class="dx-offer-name">{{ offer.name | e }}</span>{% if offer.duration %}<span class="dx-offer-time">{{ offer.duration }}</span>{% endif %}{% if offer.price %}<span class="dx-offer-price">{{ offer.price }}</span>{% endif %}</li>
+            {% endfor %}
+          </ul>{% elif card.services %}<ul class="dx-offers" aria-label="{{ t.services }}">{% for name in card.services %}<li><span class="dx-offer-name">{{ name | e }}</span></li>{% endfor %}</ul>{% endif %}
+          <div class="dx-card-actions">
+            <a class="dx-btn dx-btn-solid" href="{{ card.book_href | e }}" data-qa="directory-book">{{ t.book }}<span class="dx-sr">: {{ card.name | e }}</span>{{ icon("arrow") }}</a>
+            {% if card.site_href != card.book_href %}<a class="dx-card-site" href="{{ card.site_href | e }}">{{ t.website }}<span class="dx-sr">: {{ card.name | e }}</span></a>{% endif %}
+          </div>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+    {% if pagination %}<nav class="dx-pager" aria-label="{{ pagination.label }}">
       {% if pagination.previous %}<a href="{{ pagination.previous }}" rel="prev" data-qa="directory-previous">← {{ t.previous }}</a>{% else %}<span></span>{% endif %}
       <span>{{ pagination.label }}</span>
       {% if pagination.next %}<a href="{{ pagination.next }}" rel="next" data-qa="directory-next">{{ t.next }} →</a>{% else %}<span></span>{% endif %}
@@ -179,25 +174,64 @@ footer p { margin: 0 0 6px; }
   </section>
 
   {% if category_links %}
-  <section class="block" aria-labelledby="more-title">
-    <h2 id="more-title">{{ t.other_categories }}</h2>
-    <ul class="chips">
-      {% for link in category_links %}<li><a href="{{ link.href }}">{{ link.label }} <small>{{ link.count }}</small></a></li>
+  <section class="dx-section dx-wrap" aria-labelledby="dx-more-title">
+    <h2 id="dx-more-title" class="dx-title dx-title-small">{{ t.other_categories }}</h2>
+    <ul class="dx-chips">
+      {% for link in category_links %}<li><a href="{{ link.href }}" data-qa="directory-more-link">{{ icon(link.icon) }}{{ link.label }} <small>{{ link.count }}</small></a></li>
       {% endfor %}
     </ul>
   </section>
   {% endif %}
+
+  {% if map.lit %}
+  <section class="dx-section dx-wrap dx-areas" aria-labelledby="dx-map-title">
+    <div class="dx-areas-copy">
+      <p class="dx-eyebrow">{% if kind == 'index' %}03 · {% endif %}{{ t.areas }}</p>
+      <h2 id="dx-map-title" class="dx-title">{{ t.map_title }}</h2>
+      <p class="dx-lede">{{ t.map_lede }}</p>
+      <ul class="dx-chips" data-qa="directory-areas">
+        {% for pin in map.lit %}<li><a href="{{ pin.href }}"{% if pin.current %} aria-current="page"{% endif %} data-qa="directory-place-link">{{ icon("pin") }}{{ pin.label }} <small>{{ pin.count }}</small></a></li>
+        {% endfor %}
+      </ul>
+      {% if map.towns %}<p class="dx-towns-title">{{ t.beyond }}</p>
+      <ul class="dx-chips">{% for town in map.towns %}<li><a href="{{ town.href }}"{% if town.current %} aria-current="page"{% endif %} data-qa="directory-place-link">{{ town.label }} <small>{{ town.count }}</small></a></li>{% endfor %}</ul>{% endif %}
+    </div>
+    <div class="dx-map" aria-hidden="true">
+      {{ city_outline() }}
+      <ul class="dx-pins">
+        {% for pin in map.pins %}<li class="dx-pin{% if pin.href %} is-lit{% endif %}{% if pin.current %} is-current{% endif %}" style="--x: {{ pin.x }}%; --y: {{ pin.y }}%">{% if pin.href %}<a href="{{ pin.href }}" tabindex="-1"><i></i><span>{{ pin.label }}<b>{{ pin.count }}</b></span></a>{% else %}<i></i><span>{{ pin.label }}</span>{% endif %}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
   {% endif %}
 
-  <aside class="cta-band" aria-labelledby="owner-title">
-    <h2 id="owner-title">{{ t.owner_title }}</h2>
-    <p>{{ t.owner_body }}</p>
-    <a class="cta" href="{{ signup_href }}" data-qa="directory-owner-cta">{{ t.owner_cta }}</a>
-  </aside>
+  <section class="dx-owner" aria-labelledby="dx-owner-title" data-qa="directory-owner">
+    <div class="dx-wrap dx-owner-grid">
+      <div>
+        <p class="dx-eyebrow">{{ t.owner_eyebrow }}</p>
+        <h2 id="dx-owner-title" class="dx-display dx-owner-title">{{ t.owner_title }} <em>{{ t.owner_title_em }}</em></h2>
+        <p class="dx-lede">{{ t.owner_body }}</p>
+        <div class="dx-owner-actions">
+          <a class="dx-btn dx-btn-solid" href="{{ signup_href }}" data-qa="directory-owner-cta">{{ t.owner_cta }}{{ icon("arrow") }}</a>
+          <a class="dx-btn dx-btn-ghost" href="{{ templates_href }}">{{ t.templates }}</a>
+        </div>
+      </div>
+      <ul class="dx-promise">
+        {% for point in t.owner_points %}<li>{{ point }}</li>{% endfor %}
+      </ul>
+    </div>
+    {{ skyline() }}
+  </section>
 </main>
-<footer class="wrap">
-  <p>{{ t.footer }}</p>
-  <p>© {{ product_name }} · <a href="{{ home_href }}">{{ t.home }}</a> · <a href="{{ directory_href }}">{{ t.eyebrow }}</a></p>
+
+<footer class="dx-footer">
+  <div class="dx-wrap">
+    <p>{{ t.footer }}</p>
+    <p>© {{ product_name }} · <a href="{{ home_href }}">{{ t.home }}</a> · <a href="{{ directory_href }}">{{ t.eyebrow }}</a> · <a href="{{ templates_href }}">{{ t.templates }}</a></p>
+  </div>
 </footer>
+<script type="application/json" id="dx-data">{{ script_data | safe }}</script>
+<script src="/assets/appointment/js/directory.js?v={{ asset_version }}" defer></script>
 </body>
 </html>

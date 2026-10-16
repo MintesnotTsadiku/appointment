@@ -3,8 +3,9 @@
 - Lists two showcase businesses in the directory (Tena Family Clinic as a clinic in
   Yeka, Abugida Language Studio as tutoring in Arada) so a guest can browse
   `/directory` -> category -> area -> booking page.
-- Remembers whether Bole Bloom Hair Studio already had a Directory Listing; the owner
-  scenario opts Bloom in from the Grow page.
+- Remembers whether Bole Bloom Hair Studio already had a Directory Listing and turns a
+  listed one off (the showcase seeder lists it), so the owner scenario can opt Bloom in
+  from the Grow page.
 
 `cleanup` removes only the listings this fixture created (by name) and returns Bloom's
 listing to how it was before `setup`. Showcase records are never changed.
@@ -37,6 +38,10 @@ def setup():
         created.append(doc.name)
     bloom = frappe.db.get_value("Directory Listing", {"owner_key": BLOOM}, ["name", *FIELDS], as_dict=True)
     frappe.db.set_default(STATE_KEY, json.dumps({"created": created, "bloom": bloom}, default=str))
+    if bloom and bloom.listed:
+        doc = frappe.get_doc("Directory Listing", bloom.name)
+        doc.listed = 0
+        doc.save(ignore_permissions=True)
     frappe.db.commit()
     return {"created": created}
 

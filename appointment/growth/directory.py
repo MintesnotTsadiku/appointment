@@ -126,7 +126,7 @@ def booking_pages(owner_keys) -> dict[str, dict]:
         "Public Site",
         filters={"status": "Published", "current_release": ["is", "set"]},
         or_filters=_owner_filters(organizations, providers, "provider"),
-        fields=["owner_type", "organization", "provider", "slug", "site_title", "brand_profile", "public_booking_enabled"],
+        fields=["owner_type", "organization", "provider", "slug", "site_title", "brand_profile", "public_booking_enabled", "current_release"],
     )
     profiles = {row.name: row for row in frappe.get_all(
         "Brand Profile", filters={"name": ["in", [site.brand_profile for site in sites if site.brand_profile] or [""]]},
@@ -137,7 +137,7 @@ def booking_pages(owner_keys) -> dict[str, dict]:
             continue
         profile = profiles.get(site.brand_profile) or {}
         pages[key] = dict(href=f"/{site.slug}", logo=profile.get("logo_compact") or profile.get("logo_primary") or "",
-                          name=profile.get("application_name") or site.site_title or "")
+                          name=profile.get("application_name") or site.site_title or "", release=site.current_release)
     for row in frappe.get_all("Organization", filters={"name": ["in", organizations or [""]], "is_active": 1},
                               fields=["name", "organization_name", "organization_name_am", "slug", "logo", "description", "description_am", "enable_public_booking"]):
         page = pages.get(row.name)
@@ -189,8 +189,8 @@ def _summary(text, limit=140) -> str:
     return plain if len(plain) <= limit else plain[: limit - 1].rsplit(" ", 1)[0] + "…"
 
 
-def top_services(owner_keys) -> dict[str, list[str]]:
-    """Up to three service names per owner, most booked in the last year first."""
+def _ranked_services(owner_keys) -> dict[str, list]:
+    """Every active service per owner, most booked in the last year first."""
     keys = set(owner_keys)
     organizations = [key for key in keys if not key.startswith(PREFIX)]
     providers = [key.removeprefix(PREFIX) for key in keys if key.startswith(PREFIX)]
@@ -208,9 +208,7 @@ def top_services(owner_keys) -> dict[str, list[str]]:
     )
     grouped = defaultdict(list)
     for row in sorted(services, key=lambda item: -counts.get(item.name, 0)):
-        names = grouped[owner_of[row.name]]
-        if row.service_name not in names and len(names) < TOP_SERVICES:
-            names.append(row.service_name)
+        grouped[owner_of[row.name]].append(row)
     return grouped
 
 
@@ -240,15 +238,20 @@ def listings(category: str | None = None, area: str | None = None) -> list[dict]
     live_areas = {row.name for row in areas()}
     rows = [row for row in rows if row.category in live_categories and row.area in live_areas]
     pages = booking_pages(row.owner_key for row in rows)
-    services = top_services(pages)
+    ranked_services = _ranked_services(pages)
     result = []
     for row in rows:
         page = pages.get(row.owner_key)
         if page:
+            ranked = ranked_services.get(row.owner_key, [])
+            names = []
+            for service in ranked:
+                if service.service_name not in names and len(names) < TOP_SERVICES:
+                    names.append(service.service_name)
             result.append(dict(owner_key=row.owner_key, category=row.category, area=row.area, name=page["name"],
-                               logo=page["logo"], description=page.get("description") or "",
-                               descriptions=page.get("descriptions") or {},
-                               href=f"{page['href']}?source={SOURCE}", services=services.get(row.owner_key, [])))
+                               names=page.get("names") or {}, logo=page["logo"], description=page.get("description") or "",
+                               descriptions=page.get("descriptions") or {}, path=page["href"], release=page.get("release"),
+                               href=f"{page['href']}?source={SOURCE}", services=names, ranking=[service.name for service in ranked]))
     return sorted(result, key=lambda item: item["name"].lower())
 
 

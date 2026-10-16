@@ -301,9 +301,9 @@ class TestDirectory(ShowoffCase):
         self._list(business, "salon-barber", "bole")
         context = self._page(category="salon-barber", area="bole")
         page = frappe.render_template("appointment/www/directory.html", context)
-        self.assertIn("<h3>Rose &amp; &#34;Lily&#34; Salon</h3>", page)
+        self.assertIn('data-qa="directory-site">Rose &amp; &#34;Lily&#34; Salon</a></h3>', page)
         self.assertNotIn("<b>Lily</b>", page)
-        self.assertIn("<li>&lt;b&gt;Lily&lt;/b&gt; silk press</li>", page)
+        self.assertIn('<span class="dx-offer-name">&lt;b&gt;Lily&lt;/b&gt; silk press</span>', page)
 
     def test_amharic_pages_hreflang_and_json_ld(self):
         business = self._org("Meskerem Beauty Studio")
@@ -323,11 +323,89 @@ class TestDirectory(ShowoffCase):
         self.assertEqual(item["address"]["addressRegion"], "Addis Ababa")
         self.assertEqual(json.loads(page["breadcrumb_json_ld"])["@type"], "BreadcrumbList")
 
+    def test_area_pages_and_the_search_form_without_javascript(self):
+        business = self._org("Mahlet Hair Room")
+        self._list(business, "salon-barber", "bole")
+        place = self._page(category="in", area="bole")
+        self.assertEqual(place["kind"], "place")
+        self.assertEqual(place["h1"], "Book online in Bole")
+        self.assertIn(business.key, [card["owner_key"] for card in place["cards"]])
+        self.assertTrue(any(link["href"] == "/directory/salon-barber/bole" for link in place["category_links"]))
+        self.assertIn("ቦሌ", self._page("am", category="in", area="bole")["h1"])
+        for route in ({"category": "in"}, {"category": "in", "area": "lemi-kura"}):
+            with self.assertRaises(frappe.PageDoesNotExistError, msg=str(route)):
+                self._page(**route)
+        searches = {
+            ("salon-barber", "bole"): "/directory/salon-barber/bole",
+            ("salon-barber", ""): "/directory/salon-barber",
+            ("", "bole"): "/directory/in/bole",
+            ("salon-barber", "lemi-kura"): "/directory/salon-barber?missing=lemi-kura",
+            ("no-such-service", ""): "/directory",
+        }
+        for (service, where), target in searches.items():
+            with self.assertRaises(frappe.Redirect, msg=target):
+                self._page(service=service, where=where)
+            self.assertEqual(frappe.flags.redirect_location, target)
+        with self.assertRaises(frappe.Redirect):
+            self._page("am", service="salon-barber", where="bole")
+        self.assertEqual(frappe.flags.redirect_location, "/am/directory/salon-barber/bole")
+        missing = self._page(category="salon-barber", missing="lemi-kura")
+        self.assertIn("Lemi Kura", missing["missing"])
+        self.assertEqual(missing["canonical_url"], get_url("/directory/salon-barber"))
+
+    def test_cards_link_to_booking_and_show_prices(self):
+        business = self._org("Liya Braiding Studio")
+        frappe.db.set_value("Service", business.service, "price", 750)
+        self._list(business, "salon-barber", "bole")
+        for lang, price in (("en", "ETB 750"), ("am", "750 ብር")):
+            card = next(row for row in self._page(lang, category="salon-barber")["cards"] if row["owner_key"] == business.key)
+            self.assertTrue(card["book_href"].startswith("/schedule/org/"))
+            self.assertIn("source=directory", card["book_href"])
+            self.assertEqual("lang=am" in card["book_href"], lang == "am")
+            self.assertIn(price, [offer["price"] for offer in card["offers"]])
+            self.assertEqual(card["live_path"], "", "A scheduler page has no live availability.")
+        page = directory_page.Page.__new__(directory_page.Page)
+        for lang, book, site in (("en", "/bloom/book?source=directory", "/bloom?source=directory"),
+                                 ("am", "/bloom/book?source=directory&locale=am", "/bloom/am?source=directory")):
+            page.lang = lang
+            self.assertEqual((page.book_href("/bloom", True), page.site_href("/bloom", True)), (book, site))
+
+    def test_card_look_comes_from_the_published_release(self):
+        from appointment.growth import directory_look
+
+        hero = {"src": "/assets/appointment/x/hero.webp", "width": 1280, "widths": [640, 960], "formats": ["avif"],
+                "darkSrc": "/assets/appointment/x/hero-night.webp", "focalPoint": {"x": 0.6, "y": 0.4}, "alt": "A salon"}
+        snapshot = {
+            "compiledDesign": {"assets": {"hero.primary": hero}, "tokens": {"light": {"primary": "#7a2e5c"}, "dark": {"primary": "#f0a6c8"}}},
+            "booking": {"liveAvailability": True, "showPrices": False},
+            "localTitle": {"am": "ብሉም"},
+            "sections": [{"type": "hero", "content": {"title": {"en": "Natural hair care", "am": "የተፈጥሮ ፀጉር"}, "imageAlt": {"am": "ሳሎን"}}},
+                         {"type": "services", "content": {"items": [{"id": "S1", "name": {"en": "Wash", "am": "ማጠብ"}, "price": 900, "durationMinutes": 60},
+                                                                    {"id": "S2", "name": {"en": "Braids"}, "price": 1500}]}}],
+        }
+        frappe.cache.delete_value(directory_look.CACHE_PREFIX + "release-x")
+        with mock.patch("appointment.public_experience.resolver.public_snapshot", return_value=snapshot):
+            look = directory_look.from_release("release-x")
+        frappe.cache.delete_value(directory_look.CACHE_PREFIX + "release-x")
+        picture = look["picture"]
+        self.assertEqual(picture["light"]["fallback"], "/assets/appointment/x/hero-w640.webp")
+        self.assertIn("/assets/appointment/x/hero-w960.avif 960w", picture["light"]["avif"])
+        self.assertIn("/assets/appointment/x/hero-night-w640.webp 640w", picture["dark"]["webp"])
+        self.assertEqual((picture["alt"], picture["position"]), ({"en": "A salon", "am": "ሳሎን"}, "60% 40%"))
+        self.assertEqual(look["accent"], {"light": "#7a2e5c", "dark": "#f0a6c8"})
+        self.assertTrue(look["live"])
+        self.assertEqual((look["local_title"], look["tagline"]["am"]), ("ብሉም", "የተፈጥሮ ፀጉር"))
+        self.assertIsNone(look["offers"][0]["price"], "Prices stay hidden when the site hides them.")
+        self.assertEqual([row["id"] for row in directory_look.ranked_offers(look, ["S2"])], ["S2", "S1"])
+        self.assertEqual(directory_look.safe_asset('/assets/appointment/x/a"b.webp'), "")
+        self.assertEqual(directory_look.safe_asset("https://example.com/a.webp"), "")
+
     def test_sitemap_lists_only_non_empty_pages_in_both_languages(self):
         business = self._org("Eden Hair Atelier")
         self._list(business, "salon-barber", "bole")
         links = {row["loc"]: row for row in directory_page.sitemap_links()}
-        for path in ("/directory", "/directory/salon-barber", "/directory/salon-barber/bole", "/am/directory/salon-barber/bole"):
+        for path in ("/directory", "/directory/salon-barber", "/directory/salon-barber/bole", "/am/directory/salon-barber/bole",
+                     "/directory/in/bole", "/am/directory/in/bole"):
             self.assertIn(get_url(path), links)
         self.assertNotIn(get_url("/directory/salon-barber/lemi-kura"), links)
         self.assertEqual(links[get_url("/directory/salon-barber/bole")]["alternates"]["am"], get_url("/am/directory/salon-barber/bole"))

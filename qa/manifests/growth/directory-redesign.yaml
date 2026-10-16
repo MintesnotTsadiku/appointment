@@ -1,0 +1,180 @@
+# The redesigned public directory: index, category, category + area and area pages, en/am, light/dark, desktop 1440 and phone 390,
+# the search with JavaScript (counts, clean address) and without it (the GET form redirect), live next free times and the Book link.
+# Run with fixture appointment.tests.growth_showoff_qa_fixtures (setup only; it lists Tena as a clinic in Yeka and Abugida as tutoring in Arada
+# when they are not listed yet).
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /tmp/agent_browser_qa/appointment-growth-directory-redesign
+capture_trace: true
+capture_video: false
+capture_instruction_timeline: true
+timeout_ms: 120000
+options:
+  ignore_baseline_drift: true
+  reduced_motion: reduce
+  show_action_labels: false
+  show_cursor: false
+fixtures:
+  provider: appointment.tests.growth_showoff_qa_fixtures.browser_values
+scenarios:
+- id: directory_en_desktop_light
+  title: Index, search with JavaScript, area page, live times and Book (en, desktop, light)
+  viewport: {width: 1440, height: 900}
+  options: {color_scheme: light}
+  checks: []
+  routes:
+  - path: /directory
+    assertions:
+    - {type: network_idle}
+    - {type: visible_selector, value: '[data-qa="directory-search"]'}
+    - {type: visible_selector, value: '[data-qa="directory-category-link"][href="/directory/clinic"]'}
+    - {type: visible_selector, value: '[data-qa="directory-board"]'}
+    - {type: visible_selector, value: '[data-qa="directory-listing"] picture img', min_count: 1}
+    - {type: visible_selector, value: '[data-qa="directory-owner-cta"][href="/signup?source=directory"]'}
+  actions:
+  - action: wait_for
+    selector: ':nth-match([data-qa="directory-next-free"]:not([hidden]), 1)'
+  - {action: screenshot, name: dr-en-desktop-light-1-index.png, full_page: false}
+  - {action: screenshot, name: dr-en-desktop-light-2-index-full.png, full_page: true}
+  - action: select
+    selector: '[data-qa="directory-search-service"]'
+    value: clinic
+    assertions:
+    - {type: text_contains, selector: '[data-qa="directory-search-go"]', value: Show 2 businesses}
+  - action: select
+    selector: '[data-qa="directory-search-area"]'
+    value: yeka
+    assertions:
+    - {type: text_contains, selector: '[data-qa="directory-search-go"]', value: Show 1 business}
+  - action: click
+    selector: '[data-qa="directory-search-go"]'
+    assertions:
+    - {type: url_contains, value: '/directory/clinic/yeka'}
+    - {type: url_not_contains, value: 'service='}
+    - {type: text_contains, selector: '[data-qa="directory-heading"]', value: Book a clinic in Yeka}
+    - {type: visible_selector, value: '[data-qa="directory-breadcrumbs"]'}
+  - {action: screenshot, name: dr-en-desktop-light-3-area.png, full_page: true}
+  # Without JavaScript the form submits ?service=&where= and the server redirects to the clean address.
+  - action: open_url
+    url: /directory?service=tutoring&where=arada
+    assertions:
+    - {type: url_contains, value: '/directory/tutoring/arada'}
+    - {type: text_contains, selector: '[data-qa="directory-heading"]', value: Arada}
+  - action: open_url
+    url: /directory?where=bole
+    assertions:
+    - {type: url_contains, value: '/directory/in/bole'}
+    - {type: text_contains, selector: '[data-qa="directory-heading"]', value: Book online in Bole}
+    - {type: visible_selector, value: '[data-qa="directory-more-link"]'}
+    - {type: visible_selector, value: '[data-qa="directory-place-link"][aria-current="page"]'}
+  - {action: screenshot, name: dr-en-desktop-light-4-place.png, full_page: true}
+  - action: click
+    selector: ':nth-match([data-qa="directory-book"], 1)'
+    assertions:
+    - {type: url_contains, value: '/book?source=directory'}
+    - {type: visible_selector, value: '[data-template]'}
+  - {action: screenshot, name: dr-en-desktop-light-5-booking.png, full_page: false}
+  - {action: get_console_errors}
+  - {action: get_network_errors}
+
+- id: directory_en_desktop_dark
+  title: Index and category page at night (en, desktop, dark)
+  viewport: {width: 1440, height: 900}
+  options: {color_scheme: dark}
+  checks: []
+  routes:
+  - path: /directory
+    assertions:
+    - {type: network_idle}
+    - {type: visible_selector, value: '[data-qa="directory-category"]'}
+  actions:
+  - {action: screenshot, name: dr-en-desktop-dark-1-index.png, full_page: true}
+  - action: click
+    selector: '[data-qa="directory-category-link"][href="/directory/clinic"]'
+    assertions:
+    - {type: url_contains, value: '/directory/clinic'}
+    - {type: text_contains, selector: '[data-qa="directory-heading"]', value: Book a clinic}
+    - {type: visible_selector, value: '[data-qa="directory-area-link"][href="/directory/clinic/yeka"]'}
+  - {action: screenshot, name: dr-en-desktop-dark-2-category.png, full_page: true}
+  - {action: get_console_errors}
+  - {action: get_network_errors}
+
+- id: directory_am_phone_dark
+  title: Amharic index, search and Book on a phone (am, 390, dark)
+  viewport: {width: 390, height: 844}
+  options: {color_scheme: dark, is_mobile: true, has_touch: true, device_scale_factor: 2}
+  checks: []
+  routes:
+  - path: /am/directory
+    assertions:
+    - {type: network_idle}
+    - {type: text_contains, selector: '[data-qa="directory-heading"]', value: ቀጠሮ ይያዙ}
+    - {type: visible_selector, value: '[data-qa="directory-language"][href="/directory"]'}
+    - {type: visible_selector, value: 'html[lang="am"]'}
+  actions:
+  - {action: screenshot, name: dr-am-phone-dark-1-index.png, full_page: false}
+  - {action: screenshot, name: dr-am-phone-dark-2-index-full.png, full_page: true}
+  - action: select
+    selector: '[data-qa="directory-search-service"]'
+    value: clinic
+  - action: click
+    selector: '[data-qa="directory-search-go"]'
+    assertions:
+    - {type: url_contains, value: '/am/directory/clinic'}
+    - {type: text_contains, selector: '[data-qa="directory-heading"]', value: ክሊኒክ}
+  - {action: screenshot, name: dr-am-phone-dark-3-category.png, full_page: true}
+  - action: click
+    selector: '[data-qa="directory-area-link"][href="/am/directory/clinic/yeka"]'
+    assertions:
+    - {type: url_contains, value: '/am/directory/clinic/yeka'}
+    - {type: text_contains, selector: '[data-qa="directory-heading"]', value: የካ}
+  - action: click
+    selector: ':nth-match([data-qa="directory-book"], 1)'
+    assertions:
+    - {type: url_contains, value: 'locale=am'}
+    - {type: url_contains, value: 'source=directory'}
+    - {type: visible_selector, value: '[data-template]'}
+  - {action: screenshot, name: dr-am-phone-dark-4-booking.png, full_page: false}
+  - {action: get_console_errors}
+  - {action: get_network_errors}
+
+- id: directory_am_phone_light
+  title: Amharic area page and an empty search without JavaScript (am, 390, light)
+  viewport: {width: 390, height: 844}
+  options: {color_scheme: light, is_mobile: true, has_touch: true, device_scale_factor: 2}
+  checks: []
+  routes:
+  - path: /am/directory/in/bole
+    assertions:
+    - {type: network_idle}
+    - {type: text_contains, selector: '[data-qa="directory-heading"]', value: ቦሌ}
+    - {type: visible_selector, value: '[data-qa="directory-listing"]'}
+  actions:
+  - {action: screenshot, name: dr-am-phone-light-1-place.png, full_page: true}
+  - action: open_url
+    url: /am/directory?service=clinic&where=lemi-kura
+    assertions:
+    - {type: url_contains, value: '/am/directory/clinic?missing=lemi-kura'}
+    - {type: visible_selector, value: '[data-qa="directory-missing"]'}
+  - {action: screenshot, name: dr-am-phone-light-2-missing.png, full_page: false}
+  - {action: get_console_errors}
+  - {action: get_network_errors}
+
+- id: directory_en_phone_light
+  title: English index on a phone (en, 390, light)
+  viewport: {width: 390, height: 844}
+  options: {color_scheme: light, is_mobile: true, has_touch: true, device_scale_factor: 2}
+  checks: []
+  routes:
+  - path: /directory
+    assertions:
+    - {type: network_idle}
+    - {type: visible_selector, value: '[data-qa="directory-search"]'}
+  actions:
+  - {action: screenshot, name: dr-en-phone-light-1-index.png, full_page: false}
+  - {action: screenshot, name: dr-en-phone-light-2-index-full.png, full_page: true}
+  - {action: get_console_errors}
+  - {action: get_network_errors}

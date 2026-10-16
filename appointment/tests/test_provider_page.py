@@ -273,7 +273,12 @@ class ProviderPageTests(unittest.TestCase):
         self.assertEqual(len(page["services"]), 1)
         service = page["services"][0]
         self.assertEqual([row["offering"] for row in service["offerings"]], [self.offering, online])
-        self.assertEqual(service["offerings"][1]["location"], {"name": f"Video {self.marker}", "address": "", "location_type": "online", "platform": "Zoom"})
+        location = service["offerings"][1]["location"]
+        expected = {"name": f"Video {self.marker}", "address": "", "location_type": "online", "platform": "Zoom"}
+        self.assertEqual({key: location.get(key) for key in expected}, expected)
+        # Only public place facts: the localized names may be added, the meeting link never.
+        self.assertLessEqual(set(location), set(expected) | {"local_location_name", "local_address"})
+        self.assertNotIn("meeting_link", location)
         self.assertTrue(all(row["path"] == f"/schedule/p/{self.slug()}/{row['offering']}" for row in service["offerings"]))
         self.assertNotIn("zoom.example.test", json.dumps(page))
         self.assertNotIn(self.other_offering, json.dumps(page))
