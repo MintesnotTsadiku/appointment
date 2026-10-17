@@ -27,4 +27,3 @@ class TestBunaReference(unittest.TestCase):
         for kind, value in content.items():
             with self.subTest(section=kind):
                 self.assertEqual(validate_typed_section(kind, value).issues, ())
-
