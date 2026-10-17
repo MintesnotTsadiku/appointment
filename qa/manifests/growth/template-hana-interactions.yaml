@@ -1,0 +1,59 @@
+# Existing seeder-owned Hana; read-only controls and scheduler handoff.
+app: appointment
+base_url: http://localhost:47800
+default_role: Guest
+auth:
+  type: none
+artifact_root: /home/minte/template-new/evidence/hana-interactions
+capture_trace: true
+capture_video: false
+timeout_ms: 180000
+options:
+  ignore_baseline_drift: true
+  color_scheme: light
+  show_cursor: false
+  show_action_labels: false
+scenarios:
+- id: hana_phone_controls
+  title: Hana notebook reading, hours and selected service handoff
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /hana-bekele?display=light
+    assertions:
+    - type: network_idle
+  actions:
+  - action: click
+    selector: '.hana3-feature .hana3-note summary'
+  - action: wait_for
+    selector: '.hana3-feature .hana3-note[open] p'
+  - action: screenshot
+    name: hana-field-note-open.png
+    full_page: false
+  - action: click
+    selector: '#visit > summary'
+  - action: click
+    selector: '.hana3-clock'
+  - action: wait_for
+    selector: '.hana3-clock[aria-pressed="true"]'
+  - action: screenshot
+    name: hana-habesha-hours.png
+    full_page: false
+  - action: click
+    selector: '.hana3-planner [role="combobox"]'
+  - action: click
+    selector: ':nth-match([role="option"], 2)'
+  - action: screenshot
+    name: hana-feedback-selected.png
+    full_page: false
+  - action: click
+    selector: '.hana3-planner [data-qa="hana-book"]'
+  - action: wait_for
+    selector: '[data-qa="independent-booking"][data-bk-skin="hana-v3"]'
+  - action: screenshot
+    name: hana-selected-service-scheduler.png
+    full_page: true
+  - action: get_console_errors
+  - action: get_network_errors

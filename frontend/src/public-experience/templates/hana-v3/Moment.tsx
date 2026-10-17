@@ -13,7 +13,7 @@ export default function Moment() {
       strokeWidth="2"
       style={{ color: "var(--accent-primary)", margin: "0 auto" }}
     >
-      <path d="M25 65h45q15 0 15-15V30q0-15 15-15h40" stroke-dasharray="4 5" />
+      <path d="M25 65h45q15 0 15-15V30q0-15 15-15h40" strokeDasharray="4 5" />
       <circle cx="145" cy="20" r="10" />
       <path d="M120 61l12 12 26-29" />
     </svg>

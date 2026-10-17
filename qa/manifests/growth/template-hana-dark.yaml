@@ -1,4 +1,4 @@
-# Uses the idempotent showcase seeder.
+# Seeder-owned Hana. Booking journey fixture setup: appointment.tests.template_collection_qa_fixtures.setup.
 app: appointment
 base_url: http://localhost:47800
 default_role: Guest
@@ -12,6 +12,9 @@ timeout_ms: 180000
 options:
   ignore_baseline_drift: true
   color_scheme: dark
+  show_action_labels: false
+  show_cursor: false
+  reduced_motion: reduce
 scenarios:
 - id: hana_en_1440-dark
   title: hana_en_1440-dark

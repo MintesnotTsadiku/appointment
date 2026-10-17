@@ -89,6 +89,28 @@
         "ethiopic"
       ],
       "license": "SIL Open Font License 1.1 (Noto Sans Ethiopic, Google)"
+    },
+    {
+      "key": "hana-oswald",
+      "family": "HanaField",
+      "src": "/assets/appointment/fonts/hana/oswald.woff2",
+      "weight": 400,
+      "format": "woff2",
+      "scripts": [
+        "latin"
+      ],
+      "license": "SIL Open Font License 1.1 (Oswald, Vernon Adams)"
+    },
+    {
+      "key": "hana-caveat",
+      "family": "HanaNotes",
+      "src": "/assets/appointment/fonts/hana/caveat.woff2",
+      "weight": 400,
+      "format": "woff2",
+      "scripts": [
+        "latin"
+      ],
+      "license": "SIL Open Font License 1.1 (Caveat, Pablo Impallari)"
     }
   ],
   "fallbacks": {

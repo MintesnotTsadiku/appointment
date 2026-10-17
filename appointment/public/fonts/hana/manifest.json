@@ -1,0 +1,19 @@
+{
+  "source": "https://github.com/google/fonts",
+  "date": "2026-10-17",
+  "processing": "Latin and punctuation subset; WOFF2; variable weights retained. OFL license files alongside each font.",
+  "fonts": [
+    {
+      "family": "oswald",
+      "source": "https://github.com/google/fonts/tree/main/ofl/oswald",
+      "asset": "oswald.woff2",
+      "sha256": "60f4627dca5b732dddf69866daaca53eed61f9dd046204c13ef884cee93751aa"
+    },
+    {
+      "family": "caveat",
+      "source": "https://github.com/google/fonts/tree/main/ofl/caveat",
+      "asset": "caveat.woff2",
+      "sha256": "ead80e6bb0aaa02fdabd72d4ecf7f8d068f91d14a39a22b92d79b149a6f7a7ba"
+    }
+  ]
+}

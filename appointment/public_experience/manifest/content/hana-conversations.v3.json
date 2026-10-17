@@ -14,14 +14,14 @@
         "am": "እዚህ፣ በአዲስ አበባ።"
       },
       "subtitle": {
-        "en": "I collect questions, everyday stories and conversations that bring us a little closer.",
-        "am": "ጥያቄዎችን፣ የዕለት ተዕለት ታሪኮችንና እርስ በርስ የሚያቀራርቡንን ውይይቶች እሰበስባለሁ።"
+        "en": "I'm Hana. I collect questions, everyday stories, and conversations about the places we call home.",
+        "am": "እኔ ሐና ነኝ። ጥያቄዎችን፣ የዕለት ተዕለት ታሪኮችንና ቤታችን ስለምንላቸው ቦታዎች ውይይቶችን እሰበስባለሁ።"
       },
       "primaryAction": {
         "intent": "booking_start",
         "label": {
-          "en": "Pick a moment.",
-          "am": "ጊዜ ይምረጡ።"
+          "en": "Book time",
+          "am": "ጊዜ ይያዙ"
         },
         "placement": "primary"
       },
@@ -46,12 +46,12 @@
     },
     "about": {
       "title": {
-        "en": "The person behind the questions.",
-        "am": "ከጥያቄዎቹ ጀርባ ያለችው ሰው።"
+        "en": "In between",
+        "am": "በመሀል"
       },
       "body": {
-        "en": "I collect questions, everyday stories and conversations that bring us a little closer.",
-        "am": "ጥያቄዎችን፣ የዕለት ተዕለት ታሪኮችንና እርስ በርስ የሚያቀራርቡንን ውይይቶች እሰበስባለሁ።"
+        "en": "I notice the daily rituals, the small moments, and the people who make this city extraordinary. Between recordings, I'm out listening — in markets, on buses, in cafés, and everywhere life in Addis happens.",
+        "am": "ይህችን ከተማ ልዩ የሚያደርጓትን የዕለት ተዕለት ልማዶች፣ ትንንሽ አጋጣሚዎችና ሰዎች አስተውላለሁ። በቀረጻዎች መካከል ለማዳመጥ እወጣለሁ፤ በገበያ፣ በአውቶቡስ፣ በቡና ቤትና የአዲስ አበባ ሕይወት በሚካሄድበት ሁሉ።"
       }
     },
     "providers": {
@@ -62,41 +62,41 @@
     },
     "process": {
       "title": {
-        "en": "A little preparation. A better visit.",
-        "am": "ጥቂት ዝግጅት። የተሻለ ቆይታ።"
+        "en": "What we talk about",
+        "am": "የምንወያይባቸው ጉዳዮች"
       },
       "items": [
         {
-          "title": {
-            "en": "Choose your session",
-            "am": "ቆይታዎን ይምረጡ"
-          },
           "step": 1,
+          "title": {
+            "en": "Who gets to call a city home?",
+            "am": "ከተማን ቤቴ የሚለው ማን ነው?"
+          },
           "description": {
-            "en": "Read the scope, duration and fee before choosing.",
-            "am": "ከመምረጥዎ በፊት የአገልግሎቱን ዝርዝር፣ ቆይታ እና ክፍያ ያንብቡ።"
+            "en": "A city becomes familiar in small ways: the person who knows your coffee order, the shortcut you finally learn, a neighbour who stops to ask about your day. Belonging is not only about where we were born. It grows through the attention we give one another. When did Addis begin to feel like home to you?",
+            "am": "አንድ ከተማ በትንንሽ ነገሮች ትለመዳለች፦ የቡና ምርጫዎን በሚያውቅ ሰው፣ በተማሩት አቋራጭ መንገድ፣ ቀንዎ እንዴት እንደነበር በሚጠይቅ ጎረቤት። የአንድ ቦታ ሰው መሆን ስለተወለድንበት ቦታ ብቻ አይደለም። እርስ በርስ በምንሰጠው ትኩረት ያድጋል። አዲስ አበባ መቼ ቤት መሰለችዎ?"
           }
         },
         {
-          "title": {
-            "en": "Find your time",
-            "am": "የሚመችዎን ሰዓት ያግኙ"
-          },
           "step": 2,
+          "title": {
+            "en": "The courage to begin again",
+            "am": "እንደገና የመጀመር ድፍረት"
+          },
           "description": {
-            "en": "The calendar shows the times available to book.",
-            "am": "ቀን መቁጠሪያው ለቀጠሮ ክፍት የሆኑ ሰዓቶችን ያሳያል።"
+            "en": "Starting something new rarely looks brave at first. It can be a quiet question, a first recording, or a conversation you have put off. I like asking people about that first uncertain step. What helped you take yours, and what would you tell someone standing there now?",
+            "am": "አዲስ ነገር መጀመር መጀመሪያ ላይ ድፍረት አይመስልም። ቀስ ብሎ የተጠየቀ ጥያቄ፣ የመጀመሪያ ቅጂ ወይም ለሌላ ጊዜ ያስተላለፉት ውይይት ሊሆን ይችላል። ሰዎችን ስለዚያ የመጀመሪያ እርምጃ መጠየቅ እወዳለሁ። እርምጃዎን እንዲወስዱ ምን ረዳዎት? አሁን እዚያ ላለ ሰው ምን ይሉታል?"
           }
         },
         {
-          "title": {
-            "en": "Come with your questions",
-            "am": "ጥያቄዎችዎን ይዘው ይምጡ"
-          },
           "step": 3,
+          "title": {
+            "en": "What we carry across borders",
+            "am": "ድንበር ስንሻገር የምንይዘው"
+          },
           "description": {
-            "en": "Use the booking note to tell us what you would like to discuss.",
-            "am": "ስለምን መወያየት እንደሚፈልጉ በቀጠሮ ማስታወሻው ይጻፉ።"
+            "en": "A familiar phrase, a recipe, the way we welcome a guest: some things travel without taking space in a suitcase. Conversations between Addis and the diaspora remind me that home can be more than one place. What have you kept, and what have you learned to do differently?",
+            "am": "የለመድነው አባባል፣ የምግብ አሠራር፣ እንግዳ የምንቀበልበት መንገድ፦ አንዳንድ ነገሮች በሻንጣ ቦታ ሳይይዙ አብረውን ይጓዛሉ። በአዲስ አበባና በውጭ አገር ከሚኖሩ ሰዎች ጋር የሚደረጉ ውይይቶች ቤት ከአንድ ቦታ በላይ ሊሆን እንደሚችል ያስታውሱኛል። ምን አስቀሩ? ምንስ በተለየ መንገድ ማድረግ ተማሩ?"
           }
         }
       ]
@@ -147,8 +147,8 @@
         "am": "ጊዜ ይምረጡ።"
       },
       "body": {
-        "en": "I collect questions, everyday stories and conversations that bring us a little closer.",
-        "am": "ጥያቄዎችን፣ የዕለት ተዕለት ታሪኮችንና እርስ በርስ የሚያቀራርቡንን ውይይቶች እሰበስባለሁ።"
+        "en": "Same city. New conversations ahead.",
+        "am": "አንድ ከተማ። አዳዲስ ውይይቶች ይጠብቃሉ።"
       },
       "action": {
         "intent": "booking_start",
@@ -161,8 +161,8 @@
     },
     "footer": {
       "body": {
-        "en": "I collect questions, everyday stories and conversations that bring us a little closer.",
-        "am": "ጥያቄዎችን፣ የዕለት ተዕለት ታሪኮችንና እርስ በርስ የሚያቀራርቡንን ውይይቶች እሰበስባለሁ።"
+        "en": "More stories around the corner.",
+        "am": "በአቅራቢያችን ሌሎች ታሪኮች አሉ።"
       },
       "items": []
     }

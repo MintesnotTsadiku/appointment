@@ -1,4 +1,4 @@
-# Fixture: appointment.tests.template_collection_qa_fixtures; setup before collection, cleanup after.
+# Seeder-owned Hana. Booking journey fixture setup: appointment.tests.template_collection_qa_fixtures.setup.
 app: appointment
 base_url: http://localhost:47800
 default_role: Guest
@@ -12,6 +12,8 @@ timeout_ms: 180000
 options:
   ignore_baseline_drift: true
   color_scheme: light
+  show_action_labels: false
+  show_cursor: false
 scenarios:
 - id: hana_journey
   title: hana landing to appointment details
@@ -40,7 +42,7 @@ scenarios:
     name: hana-scheduler.png
     full_page: true
   - action: click
-    selector: '[data-qa="booking-tomorrow"]'
+    selector: :nth-match([data-qa="booking-date"]:not([disabled]), 1)
   - action: wait_for
     selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
     timeout_ms: 20000

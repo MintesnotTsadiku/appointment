@@ -8,7 +8,10 @@ import { Book, Live, Photo, words, withLocale } from "./elements";
 import { Header, Footer } from "./chrome";
 import { Hero } from "./Hero";
 import { Services } from "./Services";
-import { About, Process, Visit } from "./sections";
+import { Visit } from "./sections";
+import { Notebook, InBetween } from "./Notebook";
+import { BookingPanel } from "./BookingPanel";
+import { useHanaCopy } from "./copy";
 import "./site.css";
 export { Header, Footer } from "./chrome";
 export { Photo } from "./elements";
@@ -20,7 +23,6 @@ export function Site(props: Props) {
   useReveal(root, level, props.locale);
   const chrome = usePublicChrome(props.locale);
   const faq = section(props.snapshot.sections, "faq");
-  const booking = section(props.snapshot.sections, "booking_cta");
   return (
     <div
       ref={root}
@@ -39,30 +41,34 @@ export function Site(props: Props) {
       <main id="hana-main">
         <Hero props={props} />
 
-        <Services props={props} />
-        <About props={props} />
-        <Process props={props} />
-        <section id="faq" className="hana3-section hana3-faq">
-          <h2>{words(faq.title, props.locale)}</h2>
-          <div>
-            {records(faq.items).map((item, index) => (
-              <details key={index}>
-                <summary>{words(item.question, props.locale)}</summary>
-                <p>{words(item.answer, props.locale)}</p>
-              </details>
-            ))}
-          </div>
-        </section>
-        <Visit props={props} />
-        <section className="hana3-section hana3-booking">
-          <span className="hana3-index" aria-hidden="true">
-            ↗
-          </span>
-          <h2>{words(booking.title, props.locale)}</h2>
-          <p>{words(booking.body, props.locale)}</p>
-          <Book props={props} />
-          <Live props={props} />
-        </section>
+        <div className="hana3-route">
+          <Notebook props={props} />
+          <InBetween props={props} />
+          <Services props={props} />
+          <BookingPanel props={props} />
+        </div>
+        <div className="hana3-support">
+          <details id="visit">
+            <summary>
+              {words(
+                section(props.snapshot.sections, "locations").title,
+                props.locale,
+              )}
+            </summary>
+            <Visit props={props} />
+          </details>
+          <details id="faq">
+            <summary>{words(faq.title, props.locale)}</summary>
+            <div className="hana3-faq">
+              {records(faq.items).map((item, index) => (
+                <details key={index}>
+                  <summary>{words(item.question, props.locale)}</summary>
+                  <p>{words(item.answer, props.locale)}</p>
+                </details>
+              ))}
+            </div>
+          </details>
+        </div>
       </main>
       <Footer props={props} />
     </div>
@@ -115,6 +121,7 @@ export function SiteLoading({
   locale?: string;
 }) {
   const chrome = usePublicChrome(locale);
+  const t = useHanaCopy(locale);
   return (
     <div
       className="hana3 hana3-loading"
@@ -122,12 +129,16 @@ export function SiteLoading({
       role="status"
       aria-busy="true"
     >
-      <span>{chrome.t("loadingSite")}</span>
-      <div aria-hidden="true">
-        <i />
-        <i />
-        <i />
-      </div>
+      <span className="hana3-loading-number" aria-hidden="true">
+        01
+      </span>
+      <span>{t("paper")}</span>
+      <span className="sr-only">{chrome.t("loadingSite")}</span>
+      <svg aria-hidden="true" viewBox="0 0 220 80">
+        <path d="M10 65H80V15H210" />
+        <circle cx="10" cy="65" r="5" />
+        <circle cx="210" cy="15" r="5" />
+      </svg>
     </div>
   );
 }

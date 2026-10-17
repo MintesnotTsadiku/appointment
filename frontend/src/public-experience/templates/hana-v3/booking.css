@@ -1,8 +1,38 @@
+@import "./fonts.css";
 [data-bk-skin="hana-v3"] {
-  --bk-heading-font: var(--pe-font-display);
+  --bk-heading-font: HanaPoster, sans-serif;
   --bk-action-radius: 3px;
+  --booking-radius: 3px;
+}
+.booking-experience[data-bk-skin="hana-v3"] {
+  background-image:
+    linear-gradient(#8191840c 1px, transparent 1px), linear-gradient(90deg, #8191840c 1px, transparent 1px);
+  background-size: 12px 12px;
+}
+.booking-experience[data-bk-skin="hana-v3"]::before {
+  display: none;
+}
+[data-bk-skin="hana-v3"] .bk-card {
+  border-radius: 3px;
+  box-shadow: none;
+}
+[data-bk-skin="hana-v3"] .bk-summary-title {
+  font-family: HanaPoster, sans-serif;
+  font-weight: 400;
+}
+[data-bk-skin="hana-v3"] :is(.bk-photo, .bk-slot) {
+  border-radius: 2px;
+}
+[data-bk-skin="hana-v3"] .bk-slot[aria-pressed="true"] {
+  animation: none;
 }
 [data-bk-skin="hana-v3"] [data-bk-frame] {
   border-radius: 0;
-  border-bottom: 3px solid var(--accent-primary);
+  border-bottom: 2px solid var(--pe-color-accent, #bb3909);
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-bk-skin="hana-v3"] * {
+    animation: none !important;
+    transition: none !important;
+  }
 }

@@ -4,55 +4,7 @@ import type { TemplateProps as Props } from "../types";
 import { records, section } from "../content";
 import { usePublicChrome } from "../chrome";
 import { openState, useTimeOfDay } from "../kit";
-import { Book, Photo, words } from "./elements";
-
-export function About({ props }: { props: Props }) {
-  const content = section(props.snapshot.sections, "about");
-  const providers = records(
-    section(props.snapshot.sections, "providers").items,
-  );
-  return (
-    <section className="hana3-section hana3-about" id="about">
-      <div className="hana3-about-image">
-        <Photo props={props} role="portrait.hana" item={providers[0]} />
-      </div>
-      <div>
-        <span className="hana3-index" aria-hidden="true">
-          02 /
-        </span>
-        <h2>{words(content.title, props.locale)}</h2>
-        <p className="hana3-body">{words(content.body, props.locale)}</p>
-        {providers.map((person, index) => (
-          <div className="hana3-person" key={index}>
-            <h3>{words(person.name, props.locale)}</h3>
-            <p>{words(person.role, props.locale)}</p>
-          </div>
-        ))}
-        <Book props={props} />
-      </div>
-    </section>
-  );
-}
-
-export function Process({ props }: { props: Props }) {
-  const content = section(props.snapshot.sections, "process");
-  return (
-    <section className="hana3-section hana3-process">
-      <h2>{words(content.title, props.locale)}</h2>
-      <div>
-        {records(content.items).map((item, index) => (
-          <article key={index}>
-            <span className="hana3-number" aria-hidden="true">
-              {String(index + 1).padStart(2, "0")}
-            </span>
-            <h3>{words(item.title, props.locale)}</h3>
-            <p>{words(item.description, props.locale)}</p>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
+import { words } from "./elements";
 
 export function Visit({ props }: { props: Props }) {
   const chrome = usePublicChrome(props.locale);
@@ -64,7 +16,7 @@ export function Visit({ props }: { props: Props }) {
   };
   const places = section(props.snapshot.sections, "locations");
   return (
-    <section id="visit" className="hana3-section hana3-visit">
+    <section className="hana3-section hana3-visit">
       <div className="hana3-section-head">
         <h2>{words(places.title, props.locale)}</h2>
         <button
