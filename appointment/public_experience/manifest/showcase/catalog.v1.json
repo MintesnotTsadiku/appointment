@@ -4170,8 +4170,8 @@
       "recipe": "buna-experiences",
       "heroRole": "hero.buna",
       "detailRole": "scene1.buna",
-      "heroAsset": "/assets/appointment/brand-experience/support/buna-v3/hero.webp",
-      "heroChecksum": "23053feb1b7eef6debfa9296cca2f4797bfee726256792a3df3f646dceb8c0c6",
+      "heroAsset": "/assets/appointment/brand-experience/support/buna-v3/terrain-r2.webp",
+      "heroChecksum": "04638640109d567518a5cd6fdeea8599498910dc613021503eb12cec32cd1958",
       "logoAsset": "/assets/appointment/brand-experience/support/buna-v3/logo.webp",
       "logoChecksum": "3f75ee916eb90c082be5d96b4114fcafc1848ee01b664b3765da7f8a51ec0364",
       "faviconAsset": "/assets/appointment/brand-experience/support/buna-v3/favicon.png",
@@ -4179,16 +4179,16 @@
       "benchmark": "docs/design-references/public-experience/buna/05-Field-Atlas-Desktop.png",
       "supportAssets": [
         {
-          "asset": "/assets/appointment/brand-experience/support/buna-v3/portrait.webp",
-          "checksum": "e73cb4433c71009904c44bc8b47de928f70fbe1f240775c3b17698f674c801d1"
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/people-r2.webp",
+          "checksum": "b143252f7a8a25aa2c327e417a0811202c316b88ebda1d58890cc467d6ccd7dc"
         },
         {
-          "asset": "/assets/appointment/brand-experience/support/buna-v3/scene1.webp",
-          "checksum": "5e0e91a969261e816bb3aa473e9516837b4462af5d9817b112bddad1a9065f20"
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/pour-r2.webp",
+          "checksum": "19f9a2ceea7c0e4f95fa4acd0e19516a95591990a243fd4493b8cf16ddebd318"
         },
         {
-          "asset": "/assets/appointment/brand-experience/support/buna-v3/scene2.webp",
-          "checksum": "b6e6eb1c3101045ff161a5f1408d0efef897b6dd0a7687f990a12ac1ee599e57"
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/studio-r2.webp",
+          "checksum": "c7195f474c517bf1d352b3757da34acdd4c9e5134e14bc1c52deb9d99de059ce"
         }
       ],
       "providerAssets": [
@@ -4200,8 +4200,104 @@
       ],
       "templateAssets": [
         {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/addis-r2-m.avif",
+          "checksum": "8bf2a0bd09fb68ff06f252a77dc480a75dbeab4f092f713e73700a4a09349937"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/addis-r2-m.webp",
+          "checksum": "c33fbbbf166f053da149fde4f693f58cf8571ff5cf7aaa810d34960784750224"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/addis-r2.avif",
+          "checksum": "41f65f61de1fd0c81df38484f745ac7418b3de8ea06a09daa9f109bfb62a5f9b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/addis-r2.webp",
+          "checksum": "91e64c9c8b3bde69dfbcd5f3d50d134f1f43f1d790dc4261587a66f671d327f6"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/cherry-r2-m.avif",
+          "checksum": "5010bca4a4b62a8326730df9b13ed0c50a4ecae193240a7cd63a491ab44d39e3"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/cherry-r2-m.webp",
+          "checksum": "4537fa13dae174dfcc00c4cdfe974f840163b7582863d034d3dfdef254562700"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/cherry-r2.avif",
+          "checksum": "9a9050e23cfdb4a1f80fdf63a1847b59adc1c68292decb5bbaaf4f766215cefb"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/cherry-r2.webp",
+          "checksum": "d9675a2cb752a263196b29c69de79cc9180a4529c5e11b22f6c462060c4e8737"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/cup-r2-m.avif",
+          "checksum": "ca6e9910dbb842c77f7abcf615a936ee73b51f21188d201d09340b4fff39b533"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/cup-r2-m.webp",
+          "checksum": "3969a831906a8d38e68a946cef14bb5824665a93f4d323aab3ac8fc7dc78204e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/cup-r2.avif",
+          "checksum": "49e2ab844f191df8768ad081012e6f4df8f239536db1378a4efb52b518636680"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/cup-r2.webp",
+          "checksum": "306bd86e0fd61db41d91621b4045037eb7cafb8cc6c43b805383e7c2c722efae"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/espresso-r2-m.avif",
+          "checksum": "e164e0acc22716e5d16c351e1681f846c58bd28f6cae2fcb66f22475b9865900"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/espresso-r2-m.webp",
+          "checksum": "01c9234ab99e484b606c5a951f7ff3d6a5d3d440e21fe297a90606034ff7688c"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/espresso-r2.avif",
+          "checksum": "b520d6b055a98ead30790e3b132f93322122233d2dffd85ed93561c06e0fbc7e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/espresso-r2.webp",
+          "checksum": "dbae0278424c3509c0aa6eccf5c7559519e965752cb38eb98c311aef6d6f9eec"
+        },
+        {
           "asset": "/assets/appointment/brand-experience/support/buna-v3/favicon.png",
           "checksum": "efd4316dd3344732b3f9ed1d734d6a6087fccd2e4b516ccff5daf9c3ee4fbd33"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/green-r2-m.avif",
+          "checksum": "0edb71a870813b51821acfaadd8349a98a28f15a11775e3c32b2370d38bd6534"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/green-r2-m.webp",
+          "checksum": "394deeb034369ace7908656d401abb10e908780a94d7c0f2a1d752cf7fafeff9"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/green-r2.avif",
+          "checksum": "32173189cc489f6ee858edb08ce62675b61940bd0af7ad7f1dab62c19934de15"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/green-r2.webp",
+          "checksum": "6eedca002ade9e0e241a871251bca718d489a05664a2204417b9861572cf01ea"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/guji-r2-m.avif",
+          "checksum": "7360b0a14b6742b2d0d05438b03766ce15a8c175b3cf0c3bb4044e367867be1c"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/guji-r2-m.webp",
+          "checksum": "2bbf7c81649d798cc3bf263ba89c0b5dc80bb2614efddba58d57f1afa2afd857"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/guji-r2.avif",
+          "checksum": "bd38c2f58c640e7f679d33286d7bc6f124f76b2ad895c88aa06c9431142f1b99"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/guji-r2.webp",
+          "checksum": "f6b716b0daf51f5985a0c7de45a1e1a1d7d8d42113507357c6f1e1fedc0c005d"
         },
         {
           "asset": "/assets/appointment/brand-experience/support/buna-v3/hero-m.avif",
@@ -4224,6 +4320,22 @@
           "checksum": "3f75ee916eb90c082be5d96b4114fcafc1848ee01b664b3765da7f8a51ec0364"
         },
         {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/people-r2-m.avif",
+          "checksum": "2ed0e25e41a3e32e57562a1a105f8a69c7127e59c8d79cbfb68781ec0866826f"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/people-r2-m.webp",
+          "checksum": "57b41e7bf682c204a252d691115c73da1f192bc560afbf8fa0e7f03ed701b87c"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/people-r2.avif",
+          "checksum": "c97dafde1c02c95368bdb5fc03ca798889006d4f915b2de179417fb28ec768d1"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/people-r2.webp",
+          "checksum": "b143252f7a8a25aa2c327e417a0811202c316b88ebda1d58890cc467d6ccd7dc"
+        },
+        {
           "asset": "/assets/appointment/brand-experience/support/buna-v3/portrait-m.avif",
           "checksum": "588ed7a45d9f6002f96a475c94c82fce3e78044656dcc11451a3cba7cf354c59"
         },
@@ -4238,6 +4350,38 @@
         {
           "asset": "/assets/appointment/brand-experience/support/buna-v3/portrait.webp",
           "checksum": "e73cb4433c71009904c44bc8b47de928f70fbe1f240775c3b17698f674c801d1"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/pour-r2-m.avif",
+          "checksum": "b92cbe5b42d4a582ad69c076d5286ab09dfa6079ae14c42f8eec0aa382a2fb05"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/pour-r2-m.webp",
+          "checksum": "6fabaf5c2f6c9128d312ac8d24ddea28d9e4cb2d486e3ba374abf0acb8beee73"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/pour-r2.avif",
+          "checksum": "32c86628cee4b0892bf1fc6341d653ececd870346f3248ff37ec398db6c8e3fe"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/pour-r2.webp",
+          "checksum": "19f9a2ceea7c0e4f95fa4acd0e19516a95591990a243fd4493b8cf16ddebd318"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/roasted-r2-m.avif",
+          "checksum": "5d53db1a7960f0d41322c60996cacc406ac8c6fca01fd255658770172f5b0b51"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/roasted-r2-m.webp",
+          "checksum": "dce49c3d95607d85e76fb21834e896611b0e5b5cce3d2ec058267242d6e7bb2e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/roasted-r2.avif",
+          "checksum": "9ec99618655669fdd4385880655ddd121709fc4c2341f0e6e5d7d910b427246e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/roasted-r2.webp",
+          "checksum": "f705900f13af1a9976f1dd03f870da5e7e7f795421c732b35f19f8837ac385a2"
         },
         {
           "asset": "/assets/appointment/brand-experience/support/buna-v3/scene1-m.avif",
@@ -4270,18 +4414,82 @@
         {
           "asset": "/assets/appointment/brand-experience/support/buna-v3/scene2.webp",
           "checksum": "b6e6eb1c3101045ff161a5f1408d0efef897b6dd0a7687f990a12ac1ee599e57"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/sidama-r2-m.avif",
+          "checksum": "8501879825f8b4299aed7af577a74e149cb52330983d3cbb7a2c7e53cfbf8114"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/sidama-r2-m.webp",
+          "checksum": "4491e2f6830c886ebc13ab429b057def80db599f24c6996d5da1e6eb2e183b17"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/sidama-r2.avif",
+          "checksum": "a32cf2a57c51885b4cd4a1f17283a3f8e8b8ce3619ff88b447fcf985b8f629e4"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/sidama-r2.webp",
+          "checksum": "3b2d18ccd86377d1e2e09737f68475bf651dbe2d9ba271fcdff03ca0f8e51d4e"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/studio-r2-m.avif",
+          "checksum": "0f84f00d8526d1118247916904ad5b9e87dc5e36e9d2aeff9afc56724830ff73"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/studio-r2-m.webp",
+          "checksum": "d0798d912233db0539819994829ce92ca378c979895e5be04f6a5c2cc636615b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/studio-r2.avif",
+          "checksum": "b0aa29659b5b79e38bb17fd7902680ed82883b7ef8119510881734eaad2ed10b"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/studio-r2.webp",
+          "checksum": "c7195f474c517bf1d352b3757da34acdd4c9e5134e14bc1c52deb9d99de059ce"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/terrain-r2-m.avif",
+          "checksum": "54e3d9d1c6c1bd1d4c3aa32a48febcc0e25b896a9d5cafc6d73868fe0e07b527"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/terrain-r2-m.webp",
+          "checksum": "1dba2986d13fc077e0061fb66cf406e88b09c5f84f22a2820b2c0a8263612de8"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/terrain-r2.avif",
+          "checksum": "0c97d3ef9a8a4ac3638f0b0188031321d4954ae9aee02338a6865b783d75f9bc"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/terrain-r2.webp",
+          "checksum": "04638640109d567518a5cd6fdeea8599498910dc613021503eb12cec32cd1958"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/yirgacheffe-r2-m.avif",
+          "checksum": "c4ae354d7cefb585f393582ea90347d0a850462aa0f8e7e2d5a4b16d64093c97"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/yirgacheffe-r2-m.webp",
+          "checksum": "73fbe0f46fafa40bff9a3f53e995149d768a15a337c733f0895dc7f998dcdc51"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/yirgacheffe-r2.avif",
+          "checksum": "5b61533d224cbd00bdb3cd57992d2e08df1d70adce07e3b2483f055e9a8a2bb4"
+        },
+        {
+          "asset": "/assets/appointment/brand-experience/support/buna-v3/yirgacheffe-r2.webp",
+          "checksum": "af27914d4be3269f4e962ce1a329ca34b7935b2a6a6fd9f9b5a2a2059b0402f9"
         }
       ],
       "previewAssets": [
         {
           "viewport": "desktop",
           "asset": "/assets/appointment/brand-experience/template-gallery/buna-experiences-desktop.webp",
-          "checksum": "4658b0f99c31267559b958ce3b25ffc97e2b7029830600750fde9f44313082f2"
+          "checksum": "99215da266b1376842ead3e7525b0d204d88dcb912040ce4674eaee4646ff3ab"
         },
         {
           "viewport": "mobile",
           "asset": "/assets/appointment/brand-experience/template-gallery/buna-experiences-mobile.webp",
-          "checksum": "80dbb4649d5529514a9211a5e6c0ce2843d888b8891645a66781906f9f5496cb"
+          "checksum": "f16fbe43cb58c7441d2dd860124d828307f50e5732ff718c0b5495e2a1dadf00"
         }
       ]
     },

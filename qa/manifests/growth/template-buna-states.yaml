@@ -12,6 +12,8 @@ timeout_ms: 180000
 options:
   ignore_baseline_drift: true
   color_scheme: light
+  show_cursor: false
+  show_action_labels: false
 scenarios:
 - id: buna_en_1440-states
   title: buna_en_1440-states
@@ -42,6 +44,10 @@ scenarios:
     delta_y: 850
   - action: scroll
     delta_y: 850
+  - action: scroll
+    delta_y: -5000
+  - action: scroll
+    delta_y: -5000
   - action: screenshot
     name: buna_en_1440-states-full.png
     full_page: true
@@ -76,6 +82,16 @@ scenarios:
     delta_y: 850
   - action: scroll
     delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: -5000
+  - action: scroll
+    delta_y: -5000
   - action: screenshot
     name: buna_en_390-states-full.png
     full_page: true
@@ -110,6 +126,10 @@ scenarios:
     delta_y: 850
   - action: scroll
     delta_y: 850
+  - action: scroll
+    delta_y: -5000
+  - action: scroll
+    delta_y: -5000
   - action: screenshot
     name: buna_am_1440-states-full.png
     full_page: true
@@ -144,6 +164,16 @@ scenarios:
     delta_y: 850
   - action: scroll
     delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: -5000
+  - action: scroll
+    delta_y: -5000
   - action: screenshot
     name: buna_am_390-states-full.png
     full_page: true
@@ -181,3 +211,68 @@ scenarios:
   - action: screenshot
     name: buna-loading-am.png
     full_page: false
+- id: buna_loading_en-dark
+  title: buna loading en dark
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /buna-studio?preview-state=loading&display=dark
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[role="status"][aria-busy="true"]'
+  actions:
+  - action: screenshot
+    name: buna-loading-en-dark.png
+    full_page: false
+- id: buna_loading_am-dark
+  title: buna loading am dark
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /buna-studio/am?preview-state=loading&display=dark
+    assertions:
+    - type: network_idle
+    - type: visible_selector
+      value: '[role="status"][aria-busy="true"]'
+  actions:
+  - action: screenshot
+    name: buna-loading-am-dark.png
+    full_page: false
+- id: buna_phone_controls
+  title: Buna phone navigation, experience selection and hours
+  viewport:
+    width: 390
+    height: 844
+  checks: []
+  routes:
+  - path: /buna-studio?display=light
+    assertions:
+    - type: network_idle
+  actions:
+  - action: click
+    selector: .buna3-menu
+  - action: wait_for
+    selector: '#buna-navigation[data-open="true"]'
+  - action: click
+    selector: '#buna-navigation a[href$="#reserve"]'
+  - action: wait_for
+    selector: .buna3-planner [role="combobox"]
+  - action: click
+    selector: .buna3-planner [role="combobox"]
+  - action: click
+    selector: :nth-match([role="option"], 2)
+  - action: screenshot
+    name: buna-private-brewing-selected.png
+    full_page: false
+  - action: click
+    selector: .buna3-clock
+  - action: screenshot
+    name: buna-habesha-hours.png
+    full_page: false
+  - action: get_console_errors
+  - action: get_network_errors

@@ -22,7 +22,7 @@
     "darkMode": "tonal",
     "holiday": "greeting",
     "success": "static",
-    "greeting": "header"
+    "greeting": "hero"
   },
   "primitives": {
     "palette": {

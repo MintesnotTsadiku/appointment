@@ -6,22 +6,22 @@
   "sections": {
     "hero": {
       "eyebrow": {
-        "en": "Coffee · Tasting · Learning",
-        "am": "ቡና · ቅምሻ · ትምህርት"
+        "en": "Addis.",
+        "am": "አዲስ አበባ።"
       },
       "title": {
         "en": "Follow a coffee home.",
         "am": "የቡናን ጉዞ ይከተሉ።"
       },
       "subtitle": {
-        "en": "From the highlands to your table in Addis Ababa. Explore the people, places and flavours behind every cup.",
-        "am": "ከደጋማው ምድር እስከ አዲስ አበባ ጠረጴዛዎ። ከእያንዳንዱ ስኒ ጀርባ ያሉትን ሰዎች፣ ቦታዎችና ጣዕሞች ይወቁ።"
+        "en": "From highland forests to our table in Addis Ababa, explore the people, places and flavors that make Ethiopian coffee extraordinary.",
+        "am": "ከደጋማ ደኖች እስከ አዲስ አበባ ጠረጴዛችን፣ የኢትዮጵያን ቡና ልዩ የሚያደርጉትን ሰዎች፣ ቦታዎችና ጣዕሞች ይወቁ።"
       },
       "primaryAction": {
         "intent": "booking_start",
         "label": {
-          "en": "Plan your visit.",
-          "am": "ጉብኝትዎን ያቅዱ።"
+          "en": "Begin in Addis",
+          "am": "በአዲስ አበባ ይጀምሩ"
         },
         "placement": "primary"
       },
@@ -40,8 +40,8 @@
         "am": "ወደ ቡና ዓለም ሦስት መንገዶች።"
       },
       "intro": {
-        "en": "Choose the time and format that work for you.",
-        "am": "ለእርስዎ የሚመች ሰዓት እና የቆይታ አይነት ይምረጡ።"
+        "en": "Different paths. The same destination.",
+        "am": "የተለያዩ መንገዶች። አንድ መዳረሻ።"
       }
     },
     "about": {
@@ -50,8 +50,8 @@
         "am": "ከቀጣዩ ስኒዎ ጀርባ ያሉትን ሰዎች ይወቁ።"
       },
       "body": {
-        "en": "From the highlands to your table in Addis Ababa. Explore the people, places and flavours behind every cup.",
-        "am": "ከደጋማው ምድር እስከ አዲስ አበባ ጠረጴዛዎ። ከእያንዳንዱ ስኒ ጀርባ ያሉትን ሰዎች፣ ቦታዎችና ጣዕሞች ይወቁ።"
+        "en": "Same curiosity. A deeper connection.",
+        "am": "ተመሳሳይ ጉጉት። ጥልቅ ትስስር።"
       }
     },
     "providers": {
@@ -62,75 +62,106 @@
     },
     "process": {
       "title": {
-        "en": "A little preparation. A better visit.",
-        "am": "ጥቂት ዝግጅት። የተሻለ ቆይታ።"
+        "en": "Look closer.",
+        "am": "በቅርብ ይመልከቱ።"
       },
       "items": [
         {
-          "title": {
-            "en": "Choose your session",
-            "am": "ቆይታዎን ይምረጡ"
-          },
           "step": 1,
+          "title": {
+            "en": "Coffee cherry",
+            "am": "የቡና ፍሬ"
+          },
           "description": {
-            "en": "Read the scope, duration and fee before choosing.",
-            "am": "ከመምረጥዎ በፊት የአገልግሎቱን ዝርዝር፣ ቆይታ እና ክፍያ ያንብቡ።"
+            "en": "Freshly harvested",
+            "am": "አዲስ የተለቀመ"
           }
         },
         {
-          "title": {
-            "en": "Find your time",
-            "am": "የሚመችዎን ሰዓት ያግኙ"
-          },
           "step": 2,
+          "title": {
+            "en": "Green bean",
+            "am": "ጥሬ ቡና"
+          },
           "description": {
-            "en": "The calendar shows the times available to book.",
-            "am": "ቀን መቁጠሪያው ለቀጠሮ ክፍት የሆኑ ሰዓቶችን ያሳያል።"
+            "en": "Dried and ready",
+            "am": "የደረቀና ዝግጁ"
           }
         },
         {
-          "title": {
-            "en": "Come with your questions",
-            "am": "ጥያቄዎችዎን ይዘው ይምጡ"
-          },
           "step": 3,
+          "title": {
+            "en": "Roasted bean",
+            "am": "የተቆላ ቡና"
+          },
           "description": {
-            "en": "Use the booking note to tell us what you would like to discuss.",
-            "am": "ስለምን መወያየት እንደሚፈልጉ በቀጠሮ ማስታወሻው ይጻፉ።"
+            "en": "Aromas unlocked",
+            "am": "መዓዛው የተከፈተ"
+          }
+        },
+        {
+          "step": 4,
+          "title": {
+            "en": "In your cup",
+            "am": "በስኒዎ ውስጥ"
+          },
+          "description": {
+            "en": "A world of flavor",
+            "am": "የጣዕም ዓለም"
           }
         }
       ]
     },
     "locations": {
       "title": {
-        "en": "Where we meet",
-        "am": "የምንገናኝበት ቦታ"
+        "en": "Arrive curious.",
+        "am": "በጉጉት ይምጡ።"
       }
     },
     "faq": {
       "title": {
-        "en": "Good to know",
-        "am": "ማወቅ የሚጠቅም"
+        "en": "Common questions from first-time visitors.",
+        "am": "ለመጀመሪያ ጊዜ የሚመጡ ሰዎች የሚጠይቋቸው ጥያቄዎች።"
       },
       "items": [
         {
           "question": {
-            "en": "Can I choose my language?",
-            "am": "ቋንቋ መምረጥ እችላለሁ?"
+            "en": "Do I need coffee experience?",
+            "am": "የቡና ልምድ ያስፈልገኛል?"
           },
           "answer": {
-            "en": "Sessions are available in Amharic and English. Mention your preference when booking.",
-            "am": "ቆይታዎች በአማርኛ እና በእንግሊዝኛ ይካሄዳሉ። ቀጠሮ ሲይዙ ምርጫዎን ይግለጹ።"
+            "en": "No. Beginners are welcome. Bring your curiosity and your questions.",
+            "am": "አይ። ጀማሪዎችን በደስታ እንቀበላለን። ጉጉትዎንና ጥያቄዎችዎን ይዘው ይምጡ።"
           }
         },
         {
           "question": {
-            "en": "What if I need a different time?",
-            "am": "ሌላ ሰዓት ብፈልግስ?"
+            "en": "What is included?",
+            "am": "ምን ይካተታል?"
           },
           "answer": {
-            "en": "Contact us before your appointment to discuss changing the time.",
-            "am": "ሰዓቱን ለመቀየር ከቀጠሮዎ በፊት ያግኙን።"
+            "en": "Coffee and equipment are included in the guided tasting. Ask about preparation for your chosen lesson.",
+            "am": "በሚመራው ቅምሻ ቡናና መሣሪያዎች ተካትተዋል። ለመረጡት ትምህርት ስለሚያስፈልገው ዝግጅት ይጠይቁ።"
+          }
+        },
+        {
+          "question": {
+            "en": "Can I come alone?",
+            "am": "ብቻዬን መምጣት እችላለሁ?"
+          },
+          "answer": {
+            "en": "Yes. These are private appointments. The guided tasting is for one person.",
+            "am": "አዎ። እነዚህ የግል ቀጠሮዎች ናቸው። የሚመራው ቅምሻ ለአንድ ሰው ነው።"
+          }
+        },
+        {
+          "question": {
+            "en": "Can we talk before I visit?",
+            "am": "ከመምጣቴ በፊት መነጋገር እንችላለን?"
+          },
+          "answer": {
+            "en": "Book the free 20-minute online planning call to ask questions and choose your experience.",
+            "am": "ጥያቄ ለመጠየቅና ቆይታዎን ለመምረጥ ነፃውን የ20 ደቂቃ የኦንላይን ዝግጅት ጥሪ ይያዙ።"
           }
         }
       ]
@@ -147,8 +178,8 @@
         "am": "ጉብኝትዎን ያቅዱ።"
       },
       "body": {
-        "en": "From the highlands to your table in Addis Ababa. Explore the people, places and flavours behind every cup.",
-        "am": "ከደጋማው ምድር እስከ አዲስ አበባ ጠረጴዛዎ። ከእያንዳንዱ ስኒ ጀርባ ያሉትን ሰዎች፣ ቦታዎችና ጣዕሞች ይወቁ።"
+        "en": "Select an experience and find a time for your private appointment.",
+        "am": "የሚፈልጉትን ቆይታ ይምረጡና ለግል ቀጠሮዎ የሚመች ሰዓት ያግኙ።"
       },
       "action": {
         "intent": "booking_start",
@@ -161,8 +192,8 @@
     },
     "footer": {
       "body": {
-        "en": "From the highlands to your table in Addis Ababa. Explore the people, places and flavours behind every cup.",
-        "am": "ከደጋማው ምድር እስከ አዲስ አበባ ጠረጴዛዎ። ከእያንዳንዱ ስኒ ጀርባ ያሉትን ሰዎች፣ ቦታዎችና ጣዕሞች ይወቁ።"
+        "en": "Independent coffee tasting and learning studio. Addis Ababa, Ethiopia.",
+        "am": "ገለልተኛ የቡና ቅምሻና የትምህርት ስቱዲዮ። አዲስ አበባ፣ ኢትዮጵያ።"
       },
       "items": []
     }

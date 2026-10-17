@@ -1,0 +1,477 @@
+@media (max-width: 1100px) {
+  .buna3 {
+    --rail: 110px;
+  }
+  .buna3-rail {
+    padding: 18px;
+  }
+  .buna3-hero-copy {
+    width: 340px;
+    right: 15px;
+  }
+  .buna3 h1 {
+    font-size: 52px;
+  }
+  .buna3-origin {
+    width: 110px;
+  }
+  .buna3-origin picture {
+    width: 110px;
+    height: 110px;
+  }
+  .buna3-origin figcaption {
+    left: 85px;
+    font-size: 12px;
+  }
+  .buna3-service {
+    grid-template-columns: 23% 1fr 110px 100px;
+  }
+  .buna3-service-note {
+    display: none;
+  }
+  .buna3-person {
+    width: 175px;
+    padding: 15px;
+  }
+  .buna3-people-scene {
+    padding-right: 100px;
+  }
+  .buna3-planner-fields {
+    grid-template-columns: 1fr 1fr;
+  }
+  .buna3-visit-grid {
+    grid-template-columns: 32% 32% 36%;
+  }
+  .buna3-city {
+    display: none;
+  }
+  .buna3-bean-layout {
+    grid-template-columns: 60% 40%;
+  }
+  .buna3-route {
+    padding-left: 65px;
+    padding-right: 25px;
+  }
+  .buna3-stop {
+    left: -52px;
+  }
+  .buna3-stop::before {
+    left: -18px;
+  }
+}
+@media (max-width: 700px) {
+  .buna3 {
+    --rail: 0px;
+    font-size: 16px;
+  }
+  .buna3-rail {
+    position: sticky;
+    inset: 0 0 auto 0;
+    width: 100%;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    padding: 12px 18px;
+    overflow: visible;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    gap: 18px;
+  }
+  .buna3-wordmark {
+    font-size: 17px;
+  }
+  .buna3-wordmark [lang="am"] {
+    font-size: 19px;
+  }
+  .buna3-rail-intro,
+  .buna3-rail-quote {
+    display: none;
+  }
+  .buna3-controls {
+    border: 0;
+    margin: 0 0 0 auto;
+    padding: 0;
+    gap: 18px;
+    align-items: center;
+    font-size: 12px;
+  }
+  .buna3-menu {
+    display: block;
+    border: 0;
+    background: none;
+    padding: 8px;
+    order: 3;
+  }
+  .buna3-rail nav {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 70px;
+    background: var(--paper);
+    padding: 20px;
+    grid-template-columns: repeat(2, 1fr);
+    box-shadow: 0 12px 15px #0002;
+    gap: 18px;
+  }
+  .buna3-rail nav[data-open="true"] {
+    display: grid;
+  }
+  .buna3-rail nav a {
+    display: flex;
+    gap: 12px;
+    font-size: 16px;
+  }
+  .buna3-hero {
+    height: auto;
+    min-height: 820px;
+    padding-top: 465px;
+  }
+  .buna3-terrain {
+    height: 485px;
+  }
+  .buna3-terrain img {
+    object-position: 30% center;
+  }
+  .buna3-origins {
+    height: 485px;
+  }
+  .buna3-map-route {
+    display: none;
+  }
+  .buna3-origin {
+    width: 76px;
+  }
+  .buna3-origin picture {
+    width: 76px;
+    height: 76px;
+    border-width: 3px;
+  }
+  .buna3-origin figcaption {
+    position: static;
+    white-space: normal;
+    font-size: 10px;
+    text-align: center;
+    padding: 3px 4px;
+    line-height: 1.2;
+  }
+  .buna3-origin-0 {
+    left: 40%;
+    top: 9%;
+  }
+  .buna3-origin-1 {
+    left: 18%;
+    top: 37%;
+  }
+  .buna3-origin-2 {
+    left: 14%;
+    top: 63%;
+  }
+  .buna3-origin-3 {
+    left: 61%;
+    top: 65%;
+  }
+  .buna3-map-caption {
+    bottom: 14px;
+    right: 12px;
+    font-size: 10px;
+  }
+  .buna3-hero-copy {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    margin: 0 24px;
+    width: auto;
+    background: var(--paper) !important;
+    padding: 20px 0;
+  }
+  .buna3 h1,
+  .buna3[lang="am"] h1 {
+    font-size: 39px;
+  }
+  .buna3-hero-copy h2 {
+    font-size: 24px;
+    margin: 13px 0 9px;
+  }
+  .buna3-hero-copy > .buna3-note {
+    font-size: 20px;
+    margin-bottom: 18px;
+  }
+  .buna3-map-note {
+    display: none;
+  }
+  .buna3-hero-copy .buna3-live {
+    font-size: 12px;
+  }
+  .buna3-route {
+    padding: 0 18px 0 42px;
+  }
+  .buna3-route::before {
+    left: 14px;
+    top: 0;
+  }
+  .buna3-section {
+    padding: 25px 0;
+    scroll-margin-top: 90px;
+  }
+  .buna3-section-head {
+    display: block;
+    margin-bottom: 20px;
+  }
+  .buna3 h2,
+  .buna3[lang="am"] h2 {
+    font-size: 24px;
+    line-height: 1.3;
+  }
+  .buna3-section-head > .buna3-note {
+    text-align: left;
+    max-width: none;
+    font-size: 18px;
+    margin-top: 9px;
+  }
+  .buna3-stop {
+    left: -29px;
+    top: 3px;
+    font-size: 17px;
+    background: var(--paper);
+    padding: 3px 0;
+  }
+  .buna3-stop::before {
+    display: none;
+  }
+  .buna3-people-scene {
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 0;
+    gap: 15px;
+  }
+  .buna3-people-scene > picture {
+    grid-column: 1/-1;
+    height: 250px;
+    margin-left: -14px;
+  }
+  .buna3-person {
+    position: static;
+    width: auto;
+    padding: 0;
+    background: none;
+    top: auto;
+  }
+  .buna3-person h3 {
+    font-size: 17px;
+  }
+  .buna3-person p {
+    font-size: 13px;
+  }
+  .buna3-person .buna3-person-bio {
+    font-size: 13px;
+    line-height: 1.5;
+    margin-top: 10px !important;
+  }
+  .buna3-bean-layout {
+    display: block;
+    min-height: 0;
+  }
+  .buna3-bean-stages {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0;
+    gap: 20px 18px;
+  }
+  .buna3-bean-stages picture {
+    max-height: 130px;
+  }
+  .buna3-bean-stages figcaption {
+    font-size: 14px;
+  }
+  .buna3-bean-stages .buna3-note {
+    font-size: 17px;
+  }
+  .buna3-pour {
+    margin-top: 25px;
+  }
+  .buna3-pour picture {
+    height: 230px;
+  }
+  .buna3-pour > .buna3-note {
+    font-size: 18px;
+    padding: 12px;
+    width: 145px;
+    bottom: 0;
+  }
+  .buna3-service {
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    align-items: start;
+  }
+  .buna3-service > picture {
+    grid-column: 1/-1;
+    height: 150px;
+  }
+  .buna3-service-copy {
+    grid-column: 1/-1;
+    padding: 16px;
+  }
+  .buna3-service-copy h3 {
+    font-size: 19px;
+  }
+  .buna3-service-copy p {
+    font-size: 14px;
+  }
+  .buna3-service-fact {
+    padding: 5px 16px 16px;
+    font-size: 13px;
+  }
+  .buna3-process {
+    display: block;
+    margin-top: 25px;
+  }
+  .buna3-process h3 {
+    max-width: none;
+    margin-bottom: 20px;
+  }
+  .buna3-process ol {
+    gap: 22px;
+    grid-template-columns: 1fr;
+  }
+  .buna3-process li {
+    display: flex;
+    gap: 15px;
+    text-align: left;
+    align-items: center;
+    font-size: 15px;
+  }
+  .buna3-process svg {
+    margin: 0;
+    width: 24px;
+    flex-shrink: 0;
+  }
+  .buna3-process li::after {
+    display: none;
+  }
+  .buna3-planning {
+    font-size: 14px;
+  }
+  .buna3-planner {
+    padding: 18px;
+  }
+  .buna3-planner-fields {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  .buna3-planner-fields > div {
+    min-width: 0;
+  }
+  .buna3-private {
+    min-height: 25px;
+  }
+  .buna3-availability {
+    padding: 15px;
+    margin-top: 20px;
+  }
+  .buna3-availability .buna3-live {
+    font-size: 13px;
+  }
+  .buna3-reserve-placeholder {
+    height: 500px;
+  }
+  .buna3-visit-grid {
+    grid-template-columns: 1fr;
+  }
+  .buna3-visit-grid > picture {
+    height: 340px;
+  }
+  .buna3-address {
+    padding: 22px 0;
+  }
+  .buna3-address p {
+    margin: 12px 0;
+  }
+  .buna3-hours {
+    padding: 0;
+    font-size: 15px;
+  }
+  .buna3-hours dl {
+    max-width: 260px;
+  }
+  .buna3-hours .buna3-note {
+    max-width: 230px;
+  }
+  .buna3-faq > div:last-child {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+  .buna3-faq h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  .buna3-faq article p {
+    font-size: 15px;
+  }
+  .buna3-footer {
+    padding: 30px 24px;
+    gap: 22px;
+  }
+  .buna3-footer nav {
+    margin: 0;
+    gap: 18px;
+  }
+  .buna3-footer > .buna3-note {
+    max-width: 200px;
+  }
+  .buna3-handoff-intro {
+    grid-template-columns: 1fr;
+  }
+  .buna3-handoff-intro > div {
+    padding: 30px 24px;
+  }
+  .buna3-handoff-intro h1 {
+    font-size: 36px;
+  }
+  .buna3-handoff-intro picture {
+    height: 220px;
+  }
+  .buna3-handoff .buna3-services {
+    margin: 20px 20px 20px 44px;
+  }
+  .buna3-entries {
+    grid-template-columns: 1fr;
+  }
+  .buna3[lang="am"] .buna3-hero-copy > .buna3-note {
+    font-size: 16px;
+  }
+  .buna3[lang="am"] .buna3-hero {
+    height: auto;
+    min-height: 870px;
+  }
+  .buna3[lang="am"] h1 {
+    font-size: 33px;
+  }
+  .buna3[lang="am"] .buna3-note {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 700px) {
+  .buna3-hero-copy h1,
+  .buna3-hero-copy h2,
+  .buna3-hero-copy .buna3-live {
+    text-align: left;
+  }
+  .buna3-hero-copy .buna3-button {
+    margin: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .buna3 #reserve {
+    scroll-margin-top: 90px;
+  }
+}
+
+@media (max-width: 700px) {
+  .buna3[data-pe-mode="dark"] .buna3-terrain::after {
+    background: linear-gradient(0deg, var(--paper), transparent 25%);
+  }
+}

@@ -12,6 +12,8 @@ timeout_ms: 180000
 options:
   ignore_baseline_drift: true
   color_scheme: light
+  show_cursor: false
+  show_action_labels: false
 scenarios:
 - id: buna_journey
   title: buna landing to appointment details
@@ -40,7 +42,7 @@ scenarios:
     name: buna-scheduler.png
     full_page: true
   - action: click
-    selector: '[data-qa="booking-tomorrow"]'
+    selector: :nth-match([data-qa="booking-date"]:not([disabled]), 1)
   - action: wait_for
     selector: :nth-match([data-qa="booking-slot"]:not([disabled]), 1)
     timeout_ms: 20000
@@ -95,6 +97,8 @@ scenarios:
     selector: '[data-qa="buna-service-0"]'
   - action: wait_for
     selector: '[data-qa="independent-booking"][data-bk-skin="buna-v3"]'
+  - action: click
+    selector: '[data-qa="booking-theme-switch"]'
   - action: screenshot
     name: buna-am-scheduler.png
     full_page: true

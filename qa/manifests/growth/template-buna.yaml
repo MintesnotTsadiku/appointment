@@ -12,6 +12,8 @@ timeout_ms: 180000
 options:
   ignore_baseline_drift: true
   color_scheme: light
+  show_cursor: false
+  show_action_labels: false
 scenarios:
 - id: buna_en_1440
   title: buna_en_1440
@@ -38,6 +40,10 @@ scenarios:
     delta_y: 850
   - action: scroll
     delta_y: 850
+  - action: scroll
+    delta_y: -5000
+  - action: scroll
+    delta_y: -5000
   - action: screenshot
     name: buna_en_1440-full.png
     full_page: true
@@ -68,6 +74,16 @@ scenarios:
     delta_y: 850
   - action: scroll
     delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: -5000
+  - action: scroll
+    delta_y: -5000
   - action: screenshot
     name: buna_en_390-full.png
     full_page: true
@@ -98,6 +114,10 @@ scenarios:
     delta_y: 850
   - action: scroll
     delta_y: 850
+  - action: scroll
+    delta_y: -5000
+  - action: scroll
+    delta_y: -5000
   - action: screenshot
     name: buna_am_1440-full.png
     full_page: true
@@ -128,6 +148,16 @@ scenarios:
     delta_y: 850
   - action: scroll
     delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: 850
+  - action: scroll
+    delta_y: -5000
+  - action: scroll
+    delta_y: -5000
   - action: screenshot
     name: buna_am_390-full.png
     full_page: true

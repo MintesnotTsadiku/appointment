@@ -1,26 +1,36 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import type { BookingTemplateProps, TemplateProps as Props } from "../types";
 import { records, section } from "../content";
 import { usePublicChrome } from "../chrome";
 import { useMotionLevel, useReveal } from "../kit";
-import { Book, Live, Photo, words, withLocale } from "./elements";
+import { Book, Photo, words, withLocale } from "./elements";
 import { Header, Footer } from "./chrome";
 import { Hero } from "./Hero";
 import { Services } from "./Services";
-import { About, Process, Visit } from "./sections";
+import { People, Bean, SectionHead } from "./Story";
+import { Visit } from "./Visit";
+import { Reservation } from "./Reservation";
+import { useBunaCopy } from "./copy";
 import "./site.css";
+import "./atlas.css";
+import "./sections.css";
+import "./responsive.css";
 export { Header, Footer } from "./chrome";
 export { Photo } from "./elements";
 
 export function Site(props: Props) {
   const { mode } = props;
   const root = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const target = window.location.hash.slice(1);
+    if (target) document.getElementById(target)?.scrollIntoView();
+  }, []);
   const level = useMotionLevel(props.snapshot.compiledDesign.motion);
   useReveal(root, level, props.locale);
   const chrome = usePublicChrome(props.locale);
+  const t = useBunaCopy(props.locale);
   const faq = section(props.snapshot.sections, "faq");
-  const booking = section(props.snapshot.sections, "booking_cta");
   return (
     <div
       ref={root}
@@ -38,31 +48,27 @@ export function Site(props: Props) {
       <Header props={props} />
       <main id="buna-main">
         <Hero props={props} />
-
-        <Services props={props} />
-        <About props={props} />
-        <Process props={props} />
-        <section id="faq" className="buna3-section buna3-faq">
-          <h2>{words(faq.title, props.locale)}</h2>
-          <div>
-            {records(faq.items).map((item, index) => (
-              <details key={index}>
-                <summary>{words(item.question, props.locale)}</summary>
-                <p>{words(item.answer, props.locale)}</p>
-              </details>
-            ))}
-          </div>
-        </section>
-        <Visit props={props} />
-        <section className="buna3-section buna3-booking">
-          <span className="buna3-index" aria-hidden="true">
-            ↗
-          </span>
-          <h2>{words(booking.title, props.locale)}</h2>
-          <p>{words(booking.body, props.locale)}</p>
-          <Book props={props} />
-          <Live props={props} />
-        </section>
+        <div className="buna3-route">
+          <People props={props} />
+          <Bean props={props} />
+          <Services props={props} />
+          <Reservation props={props} />
+          <Visit props={props} />
+          <section id="faq" className="buna3-section buna3-faq">
+            <SectionHead
+              title={words(faq.title, props.locale)}
+              note={t("curiosity")}
+            />
+            <div>
+              {records(faq.items).map((item, i) => (
+                <article key={i}>
+                  <h3>{words(item.question, props.locale)}</h3>
+                  <p>{words(item.answer, props.locale)}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+        </div>
       </main>
       <Footer props={props} />
     </div>
@@ -84,8 +90,8 @@ export function Booking(props: BookingTemplateProps) {
       lang={props.locale}
     >
       <Header props={props} />
-      <main>
-        <section className="buna3-hero">
+      <main id="buna-main">
+        <section className="buna3-handoff-intro">
           <div>
             <Link
               className="buna3-text-link"
@@ -96,9 +102,8 @@ export function Booking(props: BookingTemplateProps) {
             <h1>{words(content.title, props.locale)}</h1>
             <p>{words(content.body, props.locale)}</p>
             <Book props={props} href={props.bookingPath || undefined} />
-            <Live props={props} />
           </div>
-          <Photo props={props} role="hero.buna" eager />
+          <Photo props={props} role="people.buna" eager />
         </section>
         <Services props={props} bookingPath={props.bookingPath} />
       </main>
@@ -122,12 +127,12 @@ export function SiteLoading({
       role="status"
       aria-busy="true"
     >
+      <svg viewBox="0 0 160 100" aria-hidden="true">
+        <path d="M30 80C20 50 100 65 90 30S125 5 135 20" />
+        <circle cx="30" cy="80" r="6" />
+        <circle cx="135" cy="20" r="6" />
+      </svg>
       <span>{chrome.t("loadingSite")}</span>
-      <div aria-hidden="true">
-        <i />
-        <i />
-        <i />
-      </div>
     </div>
   );
 }
