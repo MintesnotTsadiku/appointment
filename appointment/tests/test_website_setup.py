@@ -139,6 +139,21 @@ class WebsiteSetupTests(unittest.TestCase):
         with self.assertRaises(frappe.ValidationError):
             setup.save(current.name, current.draft_version, "features", features=["arbitrary_script"])
 
+    def test_templates_that_require_a_gallery_list_it_once(self):
+        # selam-homes and enkua-photography v3 require the gallery; it was added again as the optional one.
+        from appointment.public_experience.recipes import get_recipe
+
+        scope = setup.owner_scope("Organization", self.fixture["orgs"]["A"])
+        for key in ("selam-homes", "enkua-photography", "tena-clinic"):
+            with self.subTest(key):
+                rows = setup.prefill_sections(scope, "Website setup test", get_recipe(key), {})
+                ids = [row["section_id"] for row in rows]
+                self.assertEqual(len(ids), len(set(ids)))
+                self.assertEqual(ids.count("gallery"), 1 if "gallery" in get_recipe(key).supported_sections else 0)
+        draft = setup.start("Organization", self.fixture["orgs"]["A"], "Website setup test",
+                            "website-setup-" + frappe.generate_hash(length=8), "selam-homes")
+        self.assertEqual([row["type"] for row in draft["sections"]].count("gallery"), 1)
+
     def test_prefill_never_invents_proof_or_testimonials(self):
         draft = self.start()
         for row in draft["sections"]:

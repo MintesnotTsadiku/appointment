@@ -396,7 +396,9 @@ def prefill_sections(scope, title, recipe, preferences=None):
                                website.pending(scope["organization"]))
         content = {row["type"]: row["content"] for row in merged}
     # An optional gallery starts empty (the template shows its own photos) so the owner can fill it in the editor.
-    kinds = [*recipe.required_sections, *(["gallery"] if "gallery" in recipe.supported_sections else [])]
+    # Some templates require the gallery: it is listed once.
+    optional = ["gallery"] if "gallery" in recipe.supported_sections and "gallery" not in recipe.required_sections else []
+    kinds = [*recipe.required_sections, *optional]
     return [{"section_id": kind, "section_type": kind, "enabled": 1, "order_index": index,
              "schema_version": 2, "content_json": json.dumps(content[kind])}
             for index, kind in enumerate(kinds)]
