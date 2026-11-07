@@ -9,3 +9,11 @@ dist/
 .frappe-semgrep
 appointment/www/schedule/index.html
 appointment/public/frontend/
+# Browser QA output: screenshots and videos stay out of git (manifests and notes may be committed).
+qa/evidence/**/*.png
+qa/evidence/**/*.jpg
+qa/evidence/**/*.jpeg
+qa/evidence/**/*.gif
+qa/evidence/**/*.webm
+qa/evidence/**/*.mp4
+qa/evidence/**/*.zip
